@@ -1,0 +1,80 @@
+<div class="nogutter">
+  <div class="row">
+    <div class="col">
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Name, email, phone or postcode" aria-label="Search criteria" aria-describedby="button-addon2">
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" type="button" id="button-search" data-toggle="collapse" data-target="#searchResults">
+            <i class="fas fa-search"></i>
+          </button>
+          <button class="btn btn-outline-secondary" type="button" id="button-advanced" data-toggle="collapse" data-target="#collapseOne"
+            aria-expanded="false" aria-controls="collapseOne">...</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#button-advanced">
+        <div class="form-group">
+          <label for="type">Type</label>
+          <select class="form-control form-control-sm" id="type">
+            <option></option>
+            <option>Valuation</option>
+            <option>Professional valuation</option>
+            <option>Refurbishment</option>
+            <option>Insurance</option>
+            <option>Remortage</option>
+            <option>Wealth check</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="chaser">Chase by</label>
+          <select class="form-control form-control-sm" id="chaser">
+            <option></option>
+            <option>Alex Turnbull</option>
+            <option>Kate Brogan</option>
+            <option>Peter Doyle</option>
+            <option>Jose Bailao</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row collapse hoverDiv" data-parent="#button-search" id="searchResults">
+    <div class="col">
+      <div class="nogutter">
+        <div class="row">
+          <div class="col">
+            <p>Contact</p>
+          </div>
+          <div class="col">
+            <p>Type</p>
+          </div>
+          <div class="col">
+            <p>Owner</p>
+          </div>
+          <div class="col">
+            <p>Chase</p>
+          </div>
+        </div>
+        <div class="row border-bottom" routerLink="/lead-edit">
+          <div class="col">
+            <p>John Smith</p>
+          </div>
+          <div class="col">
+            <p>Valuation
+              <br> 96 Welbeck Gardens, London, SW12 3JF</p>
+          </div>
+          <div class="col">
+            <p>Alex Turnbull</p>
+          </div>
+          <div class="col">
+            <p>21/11/2019</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
