@@ -1,5 +1,5 @@
 <h2>Contact centre</h2>
-<div class="nogutter">
+<div class="no-gutters">
   <div class="row">
     <div class="col">
       <div class="input-group mb-3">
@@ -35,49 +35,10 @@
     </div>
   </div>
   <div class="row collapse" data-parent="#button-search" id="searchResults">
-    <div class="container-fluid">
-      <div class="row hoverDiv" style="background-color: chocolate" id="rigResult" data-toggle="collapse" data-target="#contactProperties">
-        <div class="col-md-auto">
-          <p>
-            <span style="font-weight: bold">John Smith</span>
-            <br>Michael Brown, Wendy McTavish
-            <br>Susan Smith</p>
-        </div>
-        <div class="col">
-          <p><a href="tel:+447808773822">07808 773822</a></p>
-        </div>
-        <div class="col">
-          <p>jsmith@gmail.com</p>
-        </div>
-      </div>
-      <div class="row hoverDiv">
-        <div class="col-md-auto">
-          <p>
-            <span style="font-weight: bold">Susan Smith</span>
-            <br>John Smith</p>
-        </div>
-        <div class="col">
-          <p>07809 456785</p>
-        </div>
-        <div class="col">
-          <p>jsmith@gmail.com</p>
-        </div>
-      </div>
-      <div class="row hoverDiv">
-        <div class="col-md-auto">
-          <p>
-            <span style="font-weight: bold">Jane Smith</span>
-          </p>
-        </div>
-        <div class="col">
-          <p>07229 432418</p>
-        </div>
-        <div class="col">
-          <p>janesmith@gmail.com</p>
-        </div>
-      </div>
-
+    <div class="col">
+      <app-contactgroup-summary id="rigResult" data-toggle="collapse" data-target="#contactProperties"></app-contactgroup-summary>
     </div>
+
   </div>
   <div class="row collapse" data-parent="#rigResult" id="contactProperties">
     <div class="container-fluid">
@@ -90,8 +51,7 @@
           <div class="form-group form-check">
             <input type="checkbox" class="form-check-input" id="c123456" checked>
             <label class="form-check-label" for="c123456">John Smith, Michael Brown, Wendy McTavish
-              <button class="btn btn-sm btn-outline-primary" id="c123456" data-toggle="collapse"
-                data-target="#contactGroupDetails">
+              <button class="btn btn-sm btn-outline-primary" id="c123456" data-toggle="collapse" data-target="#contactGroupDetails">
                 <i class="fas fa-users"></i>
               </button>
             </label>
@@ -110,14 +70,17 @@
         </div>
       </div>
       <div class="row">
-        <div class="col">
+        <div class="col-12 d-block">
           <div class="accordion" id="leads">
             <div class="card">
               <div class="card-header" id="leads-header">
-                  <button class="btn btn-link collapsed align-middle" type="button" data-toggle="collapse" data-target="#leadslist" aria-expanded="false"
-                    aria-controls="leadslist">
-                    Leads (1)
-                  </button><span class="text-right align-middle"><a  routerLink="/lead-edit">Add</a></span>
+                <button class="btn btn-link collapsed align-middle" type="button" data-toggle="collapse" data-target="#leadslist" aria-expanded="false"
+                  aria-controls="leadslist">
+                  Leads (1)
+                </button>
+                <span class="text-right align-middle">
+                  <a routerLink="/lead-edit">Add</a>
+                </span>
               </div>
               <div id="leadslist" class="collapse hoverDiv" aria-labelledby="leads-header" data-parent="#leads">
                 <div class="container-fluid">
@@ -141,7 +104,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col">
+        <div class="col-12 d-block">
           <div class="accordion" id="notes">
             <div class="card">
               <div class="card-header" id="notes-header">
@@ -149,74 +112,21 @@
                   <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#noteslist" aria-expanded="false"
                     aria-controls="noteslist">
                     Notes (6)
-                  </button><span class="text-right align-middle"><a  routerLink="/home">Add</a></span>
+                  </button>
+                  <span class="text-right align-middle">
+                    <a routerLink="/home">Add</a>
+                  </span>
                 </h5>
               </div>
               <div id="noteslist" class="collapse" aria-labelledby="notes-header" data-parent="#notes">
-                <div class="container-fluid">
-                  <div class="row border-bottom">
-                    <div class="col alert alert-danger">
-                      <p>Date: 14/11/18
-                        <br>Owner: Alex Turnbull</p>
-                    </div>
-                    <div class="col alert alert-danger">
-                      <p>Do not contact, GDPR request pending</p>
-                    </div>
-                  </div>
-                  <div class="row border-bottom">
-                    <div class="col alert alert-secondary">
-                      <p>Date: 14/11/18
-                        <br>Owner: Alex Turnbull</p>
-                    </div>
-                    <div class="col alert alert-secondary">
-                      <p>Don't call before 5pm</p>
-                    </div>
-                  </div>
-                  <div class="row border-bottom">
-                    <div class="col">
-                      <p>Date: 14/11/18
-                        <br>Owner: Alex Turnbull</p>
-                    </div>
-                    <div class="col">
-                      <p>LVM</p>
-                    </div>
-                  </div>
-                  <div class="row border-bottom">
-                    <div class="col">
-                      <p>Date: 21/05/18
-                        <br>Owner: Alex Turnbull</p>
-                    </div>
-                    <div class="col">
-                      <p>Spoke to Mr Smith, May be later in the year</p>
-                    </div>
-                  </div>
-                  <div class="row  border-bottom">
-                    <div class="col">
-                      <p>Date: 14/10/18
-                        <br>Owner: Alex Turnbull</p>
-                    </div>
-                    <div class="col">
-                      <p>Wants val, considering letting</p>
-                    </div>
-                    <hr>
-                  </div>
-                  <div class="row border-bottom">
-                    <div class="col">
-                      <p>Date: 14/11/18
-                        <br>Owner: Henny Irwin</p>
-                    </div>
-                    <div class="col">
-                      <p>LVM</p>
-                    </div>
-                  </div>
-                </div>
+                <app-contact-notes></app-contact-notes>
               </div>
             </div>
           </div>
         </div>
       </div>
       <div class="row">
-        <div class="col">
+        <div class="col-12 d-block">
           <div class="accordion" id="searchCriteria">
             <div class="card">
               <div class="card-header" id="searchCriteria-header">
@@ -224,18 +134,21 @@
                   <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#searchCriterialist" aria-expanded="false"
                     aria-controls="searchCriterialist">
                     Applicants (2)
-                  </button><span class="text-right align-middle"><a  routerLink="/home">Add</a></span>
+                  </button>
+                  <span class="text-right align-middle">
+                    <a routerLink="/home">Add</a>
+                  </span>
                 </h5>
               </div>
               <div id="searchCriterialist" class="collapse" aria-labelledby="searchCriteria-header" data-parent="#searchCriteria-header">
                 <div class="container-fluid">
-                  <div class="row hoverDiv border-bottom">
-                    <div class="col-md">
+                  <div class="row border-bottom">
+                    <div class="col-md hoverDiv" routerlink="/applicant-view-sale" >
                       <p>Sales £750,000 2 Beds
                         <br> Chelsea, Kensington
                         <br> Chiara Tassia, Dave Newport</p>
                     </div>
-                    <div class="col-md" border-bottom>
+                    <div class="col-md hoverDiv" routerlink="/applicant-view-letting">
                       <p>Long Let £1000 2 Beds
                         <br> Chelsea, Kensington
                         <br> Jemma Graham</p>
@@ -248,7 +161,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col">
+        <div class="col-12 d-block">
           <div class="accordion" id="valuations">
             <div class="card">
               <div class="card-header" id="valuations-header">
@@ -256,7 +169,10 @@
                   <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#valuationslist" aria-expanded="false"
                     aria-controls="valuationslist">
                     Valuations (2)
-                  </button><span class="text-right align-middle"><a  routerLink="/home">Add</a></span>
+                  </button>
+                  <span class="text-right align-middle">
+                    <a routerLink="/home">Add</a>
+                  </span>
                 </h5>
               </div>
               <div id="valuationslist" class="collapse" aria-labelledby="valuations-header" data-parent="#valuations">
@@ -298,7 +214,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col">
+        <div class="col-12 d-block">
           <div class="accordion" id="instructionsSales">
             <div class="card">
               <div class="card-header" id="instructionsSales-header">
@@ -346,7 +262,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col">
+        <div class="col-12 d-block">
           <div class="accordion" id="offers">
             <div class="card">
               <div class="card-header" id="offers-header">
@@ -354,7 +270,10 @@
                   <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#offerslist" aria-expanded="false"
                     aria-controls="offerslist">
                     Offers (1)
-                  </button><span class="text-right align-middle"><a  routerLink="/home">Add</a></span>
+                  </button>
+                  <span class="text-right align-middle">
+                    <a routerLink="/home">Add</a>
+                  </span>
                 </h5>
               </div>
               <div id="offerslist" class="collapse" aria-labelledby="offers-header" data-parent="#offers-header">
@@ -383,7 +302,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col">
+        <div class="col-12 d-block">
           <div class="accordion" id="tenancies">
             <div class="card">
               <div class="card-header" id="tenancies-header">
@@ -420,7 +339,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col">
+        <div class="col-12 d-block">
           <div class="accordion" id="lettingManagements">
             <div class="card">
               <div class="card-header" id="lettingManagements-header">
@@ -455,7 +374,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col">
+        <div class="col-12 d-block">
           <div class="accordion" id="homeManagements">
             <div class="card">
               <div class="card-header" id="homeManagements-header">
@@ -463,7 +382,10 @@
                   <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#homeManagementslist" aria-expanded="false"
                     aria-controls="homeManagementslist">
                     Home Managements (1)
-                  </button><span class="text-right align-middle"><a  routerLink="/home">Add</a></span>
+                  </button>
+                  <span class="text-right align-middle">
+                    <a routerLink="/home">Add</a>
+                  </span>
                 </h5>
               </div>
               <div id="homeManagementslist" class="collapse" aria-labelledby="homeManagements-header" data-parent="#homeManagements-header">

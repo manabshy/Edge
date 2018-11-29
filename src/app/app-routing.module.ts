@@ -6,6 +6,9 @@ import { PropertyDetailsLettingComponent }   from './property-details-letting/pr
 import { PropertyDetailsSaleComponent }   from './property-details-sale/property-details-sale.component';
 import { LeadEditComponent }   from './lead-edit/lead-edit.component';
 import { LeadRegisterComponent }   from './lead-register/lead-register.component';
+import { ApplicantRegisterComponent }   from './applicant-register/applicant-register.component';
+import { ApplicantViewLettingComponent }   from './applicant-view-letting/applicant-view-letting.component';
+import { ApplicantViewSaleComponent }   from './applicant-view-sale/applicant-view-sale.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -14,7 +17,10 @@ const routes: Routes = [
   { path: 'property-details-letting', component: PropertyDetailsLettingComponent },
   { path: 'property-details-sale', component: PropertyDetailsSaleComponent },
   { path: 'lead-edit', component: LeadEditComponent },
-  { path: 'lead-register', component: LeadRegisterComponent }
+  { path: 'lead-register', component: LeadRegisterComponent },
+  { path: 'applicant-register', component: ApplicantRegisterComponent },
+  { path: 'applicant-view-letting', component: ApplicantViewLettingComponent },
+  { path: 'applicant-view-sale', component: ApplicantViewSaleComponent }
 
 ];
 

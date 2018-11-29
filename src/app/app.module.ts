@@ -20,6 +20,15 @@ import { DiaryComponent } from './diary/diary.component';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 import { LeadEditComponent } from './lead-edit/lead-edit.component';
 import { LeadRegisterComponent } from './lead-register/lead-register.component';
+import { PropertyFinderComponent } from './property-finder/property-finder.component';
+import { ApplicantRegisterComponent } from './applicant-register/applicant-register.component';
+import { ApplicantViewLettingComponent } from './applicant-view-letting/applicant-view-letting.component';
+import { ContactgroupSummaryComponent } from './contactgroup-summary/contactgroup-summary.component';
+import { ContactNotesComponent } from './contact-notes/contact-notes.component';
+import { ViewingsComponent } from './viewings/viewings.component';
+import { ViewingsContactComponent } from './viewings-contact/viewings-contact.component';
+import { ViewingsPropertyComponent } from './viewings-property/viewings-property.component';
+import { ApplicantViewSaleComponent } from './applicant-view-sale/applicant-view-sale.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +49,16 @@ import { LeadRegisterComponent } from './lead-register/lead-register.component';
     DiaryComponent,
     LeaderboardComponent,
     LeadEditComponent,
-    LeadRegisterComponent
+    LeadRegisterComponent,
+    PropertyFinderComponent,
+    ApplicantRegisterComponent,
+    ApplicantViewLettingComponent,
+    ContactgroupSummaryComponent,
+    ContactNotesComponent,
+    ViewingsComponent,
+    ViewingsContactComponent,
+    ViewingsPropertyComponent,
+    ApplicantViewSaleComponent
   ],
   imports: [
     BrowserModule,

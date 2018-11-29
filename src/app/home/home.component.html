@@ -2,8 +2,10 @@
   <ul class="nav nav-pills" role="tablist">
       <li class="nav-item active"><a class="nav-link active" href="#dash" data-toggle="tab" role="tab">Dashboard</a></li>
       <li class="nav-item"><a class="nav-link" href="#diary" data-toggle="tab" role="tab">Diary</a></li>
-      <li class="nav-item"><a class="nav-link" href="#leaderboard " data-toggle="tab" role="tab">Leaderboards</a></li>
+      <li class="nav-item"><a class="nav-link" href="#leaderboard" data-toggle="tab" role="tab">Leaderboard</a></li>
+      <li class="nav-item"><a class="nav-link" href="#tasks" data-toggle="tab" role="tab">Tasks</a></li>
   </ul>
+  <div class="alert alert-info p-1 d-flex align-items-center justify-content-center"><p>You are currently 31st. Complete 3 tasks for 30th</p></div>
   <div class="tab-content">
     <div id="dash" class="tab-pane fade in show active" role="tabpanel">
       <app-dashboard></app-dashboard>
@@ -13,6 +15,17 @@
     </div>
     <div id="leaderboard" class="tab-pane fade" role="tabpanel">
         <app-leaderboard></app-leaderboard>
+    </div>
+    <div id="tasks" class="tab-pane fade" role="tabpanel">
+      <div class="container-fluid">
+        <div class="row justify-content-center">
+          <div class="col-auto">
+              <button class="btn btn-primary btn-block mb-2">Viewing feedbacks <span class="badge badge-pill badge-light">4</span></button>
+              <button class="btn btn-primary btn-block mb-2">Chase Valuations <span class="badge badge-pill badge-light">6</span></button>
+              <button class="btn btn-primary btn-block mb-2">Complete AML <span class="badge badge-pill badge-light">9</span></button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>        
 </div>
