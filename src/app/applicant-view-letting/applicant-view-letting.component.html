@@ -9,27 +9,35 @@
     <div class="col">
       <h6>Searches</h6>
       <div class="no-gutters">
-        <div class="row">
-          <div class="col-5 col-md-2">
-            <p>Budget: £820,000</p>
+        <div class="row border-bottom">
+          <div class="col-4 col-md-2">
+            <p>£500 <i class="fas fa-bed"></i> 1<i class="fas fa-building"></i></p>
           </div>
-          <div class="col-5 col-md-1">
-            <p>Beds: 1</p>
+          <div class="col-8 col-md-3">
+            <p>Chelsea, Kensington</p>
           </div>
-          <div class="col-11 col-md-3">
-            <p>Area: Chelsea, Kensington</p>
-          </div>
-          <div class="col-5 col-md-1">
+          <div class="col-2 col-md-1">
             <p>Long let</p>
           </div>
-          <div class="col-5 col-md-1">
-            <p>House</p>
-          </div>
-          <div class="col-5 col-md-1">
+          <div class="col-4 col-md-1">
             <p>Furnish: F/PF</p>
           </div>
+          <div class="col-3 col-md-2">
+            <p>Hold Chase 21/11/2019</p>
+          </div>
+          <div class="col-3 col-md-1">
+            <button class="btn btn-sm btn-primary">Edit</button>
+          </div>
+        </div>
+        <div class="row border-bottom">
+          <div class="col-4 col-md-2 pr-0">
+            <p>£820,000 <i class="fas fa-bed"></i> 1<i class="fas fa-home"></i></p>
+          </div>
+          <div class="col-8 col-md-3">
+            <p>Area: Chelsea, Kensington</p>
+          </div>
           <div class="col-6 col-md-2">
-            <p>On hold Chase 21/11/2019</p>
+            <p>Hold Chase 21/11/2019</p>
           </div>
           <div class="col-3 col-md-1">
             <button class="btn btn-sm btn-primary">Edit</button>
@@ -48,7 +56,25 @@
     <div class="col">
       <h6>Matched properties</h6>
     </div>
+    <div class="col">
+        <div class="dropdown">
+            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="false">
+              Actions
+            </button>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" routerLink="/home">Create viewing</a>
+              <a class="dropdown-item" routerLink="/send-edetails">Send eDetails</a>
+              <a class="dropdown-item" routerLink="/home">Set as proposed</a>
+            </div>
+          </div>
+    </div>
   </div>
+  <div class="row">
+      <div class="col">
+        <app-applicant-matching></app-applicant-matching>
+      </div>
+    </div>
   <div class="row">
     <div class="col">
       <h6>Notes</h6>

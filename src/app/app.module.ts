@@ -29,6 +29,10 @@ import { ViewingsComponent } from './viewings/viewings.component';
 import { ViewingsContactComponent } from './viewings-contact/viewings-contact.component';
 import { ViewingsPropertyComponent } from './viewings-property/viewings-property.component';
 import { ApplicantViewSaleComponent } from './applicant-view-sale/applicant-view-sale.component';
+import { ApplicantMatchingComponent } from './applicant-matching/applicant-matching.component';
+import { SendEdetailsComponent } from './send-edetails/send-edetails.component';
+import { PropertyChecklistLettingComponent } from './property-checklist-letting/property-checklist-letting.component';
+import { PropertyChecklistItemComponent } from './property-checklist-item/property-checklist-item.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +62,11 @@ import { ApplicantViewSaleComponent } from './applicant-view-sale/applicant-view
     ViewingsComponent,
     ViewingsContactComponent,
     ViewingsPropertyComponent,
-    ApplicantViewSaleComponent
+    ApplicantViewSaleComponent,
+    ApplicantMatchingComponent,
+    SendEdetailsComponent,
+    PropertyChecklistLettingComponent,
+    PropertyChecklistItemComponent
   ],
   imports: [
     BrowserModule,

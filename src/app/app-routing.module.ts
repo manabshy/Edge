@@ -9,6 +9,7 @@ import { LeadRegisterComponent }   from './lead-register/lead-register.component
 import { ApplicantRegisterComponent }   from './applicant-register/applicant-register.component';
 import { ApplicantViewLettingComponent }   from './applicant-view-letting/applicant-view-letting.component';
 import { ApplicantViewSaleComponent }   from './applicant-view-sale/applicant-view-sale.component';
+import { SendEdetailsComponent }   from './send-edetails/send-edetails.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -20,7 +21,8 @@ const routes: Routes = [
   { path: 'lead-register', component: LeadRegisterComponent },
   { path: 'applicant-register', component: ApplicantRegisterComponent },
   { path: 'applicant-view-letting', component: ApplicantViewLettingComponent },
-  { path: 'applicant-view-sale', component: ApplicantViewSaleComponent }
+  { path: 'applicant-view-sale', component: ApplicantViewSaleComponent },
+  { path: 'send-edetails', component: SendEdetailsComponent }
 
 ];
 

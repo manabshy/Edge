@@ -4,6 +4,9 @@
     <a class="nav-link active" id="main-tab" data-toggle="tab" href="#main" role="tab" aria-controls="main" aria-selected="true">Main</a>
   </li>
   <li class="nav-item">
+      <a class="nav-link" id="checklist-tab" data-toggle="tab" href="#checklist" role="tab" aria-controls="checklist" aria-selected="true">Checklist</a>
+  </li>
+  <li class="nav-item">
     <a class="nav-link" id="history-tab" data-toggle="tab" href="#history" role="tab" aria-controls="history" aria-selected="false">History</a>
   </li>
   <li class="nav-item">
@@ -217,7 +220,10 @@
   <div class="tab-pane fade" id="features" role="tabpanel" aria-labelledby="features-tab">
     <app-property-features></app-property-features>
   </div>
-  <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
+  <div class="tab-pane fade" id="checklist" role="tabpanel" aria-labelledby="checklist-tab">
+      <app-property-checklist-letting></app-property-checklist-letting>
+    </div>
+    <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
     <app-property-history></app-property-history>
   </div>
   <div class="tab-pane fade" id="media" role="tabpanel" aria-labelledby="media-tab">
