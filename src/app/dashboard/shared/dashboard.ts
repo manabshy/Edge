@@ -1,26 +1,26 @@
 export interface Dashboard {
-  Period: string;
-  PeriodStartDate: Date;
-  PeriodEndDate: Date;
-  Valuations: DashboardNumbers;
-  Instructions: DashboardNumbers;
-  Applicants: DashboardNumbers;
-  Viewings: DashboardNumbers;
-  OffersAgreed: DashboardNumbers;
-  OffersReceived: DashboardNumbers;
-  BusinessDevelopment: DashboardNumbers;
-  Exchanges: DashboardNumbers;
-  Pipeline: DashboardNumbers;
-  LiveTenancies: DashboardNumbers;
+  period: string;
+  periodStartDate: Date;
+  periodEndDate: Date;
+  valuations: DashboardNumbers;
+  instructions: DashboardNumbers;
+  applicants: DashboardNumbers;
+  viewings: DashboardNumbers;
+  offersAgreed: DashboardNumbers;
+  offersReceived: DashboardNumbers;
+  businessDevelopment: DashboardNumbers;
+  exchanges: DashboardNumbers;
+  pipeline: DashboardNumbers;
+  liveTenancies: DashboardNumbers;
 }
 export interface DashboardNumbers {
-  PeriodCount?: number;
-  PeriodFees?: number;
-  PeriodPropertyCount?: number;
-  PeriodReLetCount?: number;
-  PeriodNewCount?: number;
-  TotalCount?: number;
-  TotalManagedCount?: number;
-  TotalFees?: number;
-  TotalPropertyCount?: number;
+  periodCount?: number;
+  periodFees?: number;
+  periodPropertyCount?: number;
+  periodReLetCount?: number;
+  periodNewCount?: number;
+  totalCount?: number;
+  totalManagedCount?: number;
+  totalFees?: number;
+  totalPropertyCount?: number;
 }
