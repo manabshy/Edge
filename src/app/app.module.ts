@@ -33,6 +33,7 @@ import { ApplicantMatchingComponent } from './applicant-matching/applicant-match
 import { SendEdetailsComponent } from './send-edetails/send-edetails.component';
 import { PropertyChecklistLettingComponent } from './property-checklist-letting/property-checklist-letting.component';
 import { PropertyChecklistItemComponent } from './property-checklist-item/property-checklist-item.component';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @NgModule({
   declarations: [
@@ -70,7 +71,8 @@ import { PropertyChecklistItemComponent } from './property-checklist-item/proper
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    DashboardModule
     
   ],
   exports: [
