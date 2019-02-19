@@ -34,6 +34,8 @@ import { SendEdetailsComponent } from './send-edetails/send-edetails.component';
 import { PropertyChecklistLettingComponent } from './property-checklist-letting/property-checklist-letting.component';
 import { PropertyChecklistItemComponent } from './property-checklist-item/property-checklist-item.component';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { CoreModule } from './core/core.module';
+import { AccountModule } from './account/account.module';
 
 @NgModule({
   declarations: [
@@ -72,7 +74,9 @@ import { DashboardModule } from './dashboard/dashboard.module';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    DashboardModule
+    DashboardModule,
+    CoreModule,
+    AccountModule
     
   ],
   exports: [
