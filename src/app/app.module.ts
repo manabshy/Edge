@@ -77,7 +77,6 @@ import { AccountModule } from './account/account.module';
     DashboardModule,
     CoreModule,
     AccountModule
-    
   ],
   exports: [
     MainmenuComponent

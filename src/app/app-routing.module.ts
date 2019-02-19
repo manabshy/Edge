@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
 import { HomeComponent }      from './home/home.component';
 import { ContactCentreComponent }   from './contact-centre/contact-centre.component';
 import { PropertyDetailsLettingComponent }   from './property-details-letting/property-details-letting.component';
@@ -10,9 +11,11 @@ import { ApplicantRegisterComponent }   from './applicant-register/applicant-reg
 import { ApplicantViewLettingComponent }   from './applicant-view-letting/applicant-view-letting.component';
 import { ApplicantViewSaleComponent }   from './applicant-view-sale/applicant-view-sale.component';
 import { SendEdetailsComponent }   from './send-edetails/send-edetails.component';
+import { LoginComponent } from './account/login/login.component';
+import { LogoutComponent } from './account/logout/logout.component';
+import { AuthCallbackComponent } from './account/auth-callback/auth-callback.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
   { path: 'contact-centre', component: ContactCentreComponent },
   { path: 'property-details-letting', component: PropertyDetailsLettingComponent },
@@ -22,8 +25,12 @@ const routes: Routes = [
   { path: 'applicant-register', component: ApplicantRegisterComponent },
   { path: 'applicant-view-letting', component: ApplicantViewLettingComponent },
   { path: 'applicant-view-sale', component: ApplicantViewSaleComponent },
-  { path: 'send-edetails', component: SendEdetailsComponent }
-
+  { path: 'send-edetails', component: SendEdetailsComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'logout', component: LogoutComponent },
+  { path: 'auth-callback', component: AuthCallbackComponent },
+  // { path: 'account', loadChildren: './account/account.module#AccountModule' },
+  { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];
 
 @NgModule({
