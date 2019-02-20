@@ -73,10 +73,10 @@ import { AccountModule } from './account/account.module';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
-    DashboardModule,
+    AccountModule,
     CoreModule,
-    AccountModule
+    AppRoutingModule,
+    DashboardModule
   ],
   exports: [
     MainmenuComponent

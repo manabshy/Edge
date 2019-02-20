@@ -5,6 +5,10 @@
       <li class="nav-item"><a class="nav-link" href="#leaderboard" data-toggle="tab" role="tab">Leaderboard</a></li>
       <li class="nav-item"><a class="nav-link" href="#tasks" data-toggle="tab" role="tab">Tasks</a></li>
   </ul>
+  <nav class="nav float-right" style="margin-top:-35px">
+      <a class="nav-link" [routerLink]="['/login']">Login</a>
+      <a class="nav-link" [routerLink]="['/logout']">Logout</a>
+    </nav>
   <div class="alert alert-info p-1 d-flex align-items-center justify-content-center"><p>You are currently 31st. Complete 3 tasks for 30th</p></div>
   <div class="tab-content">
     <div id="dash" class="tab-pane fade in show active" role="tabpanel">
@@ -27,5 +31,5 @@
         </div>
       </div>
     </div>
-  </div>        
+  </div>
 </div>

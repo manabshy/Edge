@@ -5,8 +5,8 @@ import { TeamDashboardComponent } from './team-dashboard/team-dashboard.componen
 
 const routes: Routes = [
   { path: 'staffmembers/:id/dashboard', component: MyDashboardComponent },
-  { path: 'staffmembers/:id/teammembers/dashboard', component: TeamDashboardComponent },
-  { path: '', pathMatch: 'full', redirectTo: 'staffmembers/:id/dashboard' }
+  { path: 'staffmembers/:id/teammembers/dashboard', component: TeamDashboardComponent }
+  // { path: '', pathMatch: 'full', redirectTo: 'staffmembers/:id/dashboard' }
 ];
 
 @NgModule({

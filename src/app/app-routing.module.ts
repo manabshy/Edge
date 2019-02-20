@@ -26,10 +26,9 @@ const routes: Routes = [
   { path: 'applicant-view-letting', component: ApplicantViewLettingComponent },
   { path: 'applicant-view-sale', component: ApplicantViewSaleComponent },
   { path: 'send-edetails', component: SendEdetailsComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'logout', component: LogoutComponent },
-  { path: 'auth-callback', component: AuthCallbackComponent },
-  // { path: 'account', loadChildren: './account/account.module#AccountModule' },
+  // { path: 'login', component: LoginComponent },
+  // { path: 'logout', component: LogoutComponent },
+  // { path: 'auth-callback', component: AuthCallbackComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];
 
