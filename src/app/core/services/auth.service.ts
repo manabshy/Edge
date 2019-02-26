@@ -43,6 +43,10 @@ export class AuthService {
  public getUsername(): string {
    return this.user.userName;
  }
+
+ public getToken() {
+  return this.adalService.acquireToken(this.adalConfig.clientId);
+ }
  public completeAuthentication(): void {
     this.adalService.handleWindowCallback();
     this.adalService.getUser().subscribe(user => {

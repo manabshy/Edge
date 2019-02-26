@@ -31,9 +31,11 @@ export class MyDashboardComponent implements OnInit {
       liveTenancies: 0
     });
     // this.route.paramMap.subscribe(params => { this.id = +params.get('id'); });
+   const dashboard = this.getStaffMemberDashboard(2337, 'salesManager');
+    console.log(dashboard);
   }
-  getStaffMemberDashboard(id: number): void {
-    this.dashboardService.getStaffMemberDashboard(id)
+  getStaffMemberDashboard(id: number, role:string): void {
+    this.dashboardService.getStaffMemberDashboard(id, role)
       .subscribe(data => {
         this.displayDashboardFigures(data);
       });
