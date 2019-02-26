@@ -1,8 +1,11 @@
-import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { Dashboard } from "../shared/dashboard";
-import { DashboardService } from "../shared/dashboard.service";
-import { Router, ActivatedRoute } from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Dashboard } from '../shared/dashboard';
+import { DashboardService } from '../shared/dashboard.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { AuthService } from 'src/app/core/services/auth.service';
+import { User } from 'src/app/core/models/user';
+import { UserService } from 'src/app/core/services/user.service';
 @Component({
   selector: 'app-my-dashboard',
   templateUrl: './my-dashboard.component.html',
@@ -10,9 +13,17 @@ import { Router, ActivatedRoute } from "@angular/router";
 })
 export class MyDashboardComponent implements OnInit {
  dashboard: Dashboard;
+ user: User;
+ private username: string;
   myDashboardForm: FormGroup;
-  constructor(private fb: FormBuilder,
-     private dashboardService: DashboardService, private route: Router) {}
+  userForm: FormGroup;
+  constructor(
+     private fb: FormBuilder,
+     private dashboardService: DashboardService,
+     private router: Router,
+     private authService: AuthService,
+     private userService: UserService
+     ) {}
 
   ngOnInit() {
     this.myDashboardForm = this.fb.group({
@@ -30,11 +41,42 @@ export class MyDashboardComponent implements OnInit {
       pipeline: 0,
       liveTenancies: 0
     });
-    // this.route.paramMap.subscribe(params => { this.id = +params.get('id'); });
-   const dashboard = this.getStaffMemberDashboard(2337, 'salesManager');
-    console.log(dashboard);
+    this.userForm = this.fb.group({
+      firstName: ['', [Validators.required]],
+      surname: ['', [Validators.required]],
+      username: ['', Validators.required],
+      exchangeUsername: ['', Validators.required],
+      staffMemberId: 0
+    });
+   this.username = this.authService.getUsername();
+  //  this.userService.getUserByUsername(this.username).subscribe((user: User) => this.user = user);
+
+  //  const dashboard = this.getStaffMemberDashboard(2337, 'salesManager');
+    this.getUserByUsername(this.username);
+    console.log(this.user);
   }
-  getStaffMemberDashboard(id: number, role:string): void {
+
+  getUserByUsername(username: string): void {
+    this.userService.getUserByUsername(username)
+    .subscribe(user => {this.displayUser(user); this.user = user; },
+      err => console.log(err)
+    );
+  }
+  displayUser(user: User): void {
+    if (this.userForm) {
+      this.userForm.reset();
+    }
+    this.user = user;
+    // console.log(user);
+     this.userForm.patchValue({
+      firstName: this.user.firstName,
+      surname: this.user.surname,
+      username: this.user.username,
+      exchangeUsername: this.user.exchangeUsername,
+      staffMemberId : this.user.staffMemberId
+    });
+  }
+  getStaffMemberDashboard(id: number, role: string): void {
     this.dashboardService.getStaffMemberDashboard(id, role)
       .subscribe(data => {
         this.displayDashboardFigures(data);
@@ -62,4 +104,5 @@ export class MyDashboardComponent implements OnInit {
       liveTenancies: this.dashboard.liveTenancies
     });
   }
+
 }

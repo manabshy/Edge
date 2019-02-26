@@ -1,7 +1,7 @@
 export interface User {
-  id: number;
+  staffMemberId: number;
   username: string;
-  firstname: string;
+  firstName: string;
   surname: string;
   exchangeUsername: string;
   email: string;
