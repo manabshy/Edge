@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from 'src/app/core/services/auth.service';
-import { Leaderboard } from './leaderboard';
+import { Leaderboard, LeaderboardResult } from './leaderboard';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -9,12 +9,12 @@ import { Observable } from 'rxjs';
 })
 export class LeaderboardService {
 
-  private baseUrl = 'http://localhost:51130/v1/staffMembers/leaderboard';
+  private baseUrl = 'http://localhost:57211/v1/staffmembers/leaderboard';
   constructor(private http: HttpClient, private authService: AuthService) {}
   getStaffMemberPipeline(
     role: string
-  ): Observable<Leaderboard[]> {
-    const url = `${this.baseUrl}/dashboard?${role}`;
+  ): Observable<LeaderboardResult> {
+    const url = `${this.baseUrl}/pipeline?role=${role}`;
     const auth_token = this.authService.getToken();
     const headers: HttpHeaders = new HttpHeaders();
     headers.append(
@@ -23,6 +23,6 @@ export class LeaderboardService {
     );
     headers.set('Authorization', `Bearer${auth_token}`);
 
-    return this.http.get<Leaderboard[]>(url, { headers: headers });
+    return this.http.get<LeaderboardResult>(url, { headers: headers });
   }
 }

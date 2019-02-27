@@ -1,3 +1,27 @@
 <p>
   pipeline works!
 </p>
+
+<div class="card">
+    <div class="card-header">
+      Leaderboard
+    </div>
+    <div class="card-body">
+        <div class="table-responsive ">
+            <table class="table table-hover table-striped">
+              <tbody>
+                <tr *ngIf='pipeline'>
+                  <!-- <td>{{user.staffMemberId}}</td> -->
+                  <!-- <td >{{pipeline.staffMemberId}}</td> -->
+                  <td>{{pipeline.fullName}}</td>
+                  <!-- <td>{{user.username}}</td> -->
+                  <td>{{pipeline.totalFees | currency :'GBP'}}</td>
+                  <td>{{pipeline.totalCount}}</td>
+                  <!-- <td><button [routerLink]="['/users', user.staffMemberId]" class="btn btn-primary">View details</button></td> -->
+                  <!-- <td><button [routerLink]="['/userdetails', user.id]" class="btn btn-primary">Edit</button></td> -->
+                </tr>
+              </tbody>
+            </table>
+          </div>
+    </div>
+  </div>

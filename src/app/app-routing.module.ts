@@ -11,9 +11,6 @@ import { ApplicantRegisterComponent }   from './applicant-register/applicant-reg
 import { ApplicantViewLettingComponent }   from './applicant-view-letting/applicant-view-letting.component';
 import { ApplicantViewSaleComponent }   from './applicant-view-sale/applicant-view-sale.component';
 import { SendEdetailsComponent }   from './send-edetails/send-edetails.component';
-import { LoginComponent } from './account/login/login.component';
-import { LogoutComponent } from './account/logout/logout.component';
-import { AuthCallbackComponent } from './account/auth-callback/auth-callback.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -26,10 +23,7 @@ const routes: Routes = [
   { path: 'applicant-view-letting', component: ApplicantViewLettingComponent },
   { path: 'applicant-view-sale', component: ApplicantViewSaleComponent },
   { path: 'send-edetails', component: SendEdetailsComponent },
-  // { path: 'login', component: LoginComponent },
-  // { path: 'logout', component: LogoutComponent },
-  // { path: 'auth-callback', component: AuthCallbackComponent },
-  { path: '', redirectTo: '/home', pathMatch: 'full' }
+  { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];
 
 @NgModule({

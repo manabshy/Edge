@@ -7,7 +7,8 @@ import { PipeResolver } from '@angular/compiler';
 
 const routes: Routes = [
   { path: 'instructions', component: InstructionsComponent },
-  { path: 'pipeline', component: PipelineComponent, resolve:{pipelineResolver: PipeResolver} },
+  { path: 'pipeline', component: PipelineComponent },
+ // { path: 'pipeline', component: PipelineComponent, resolve: {pipelineResolver: PipeResolver} },
   { path: 'exchanges', component: ExchangesComponent },
 ];
 

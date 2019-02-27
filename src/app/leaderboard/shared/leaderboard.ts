@@ -5,3 +5,14 @@ export interface Leaderboard {
   totalCount: number;
   managedCount: number;
 }
+
+export interface LeaderboardResult {
+  result: Leaderboard[];
+  resultCount: number;
+  resultDescription: [];
+  returnCode: number;
+  status: true;
+  page: number;
+  totalPages: number;
+  totalResultCount: number;
+}

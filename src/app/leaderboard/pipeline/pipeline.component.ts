@@ -7,7 +7,7 @@ import { Leaderboard } from '../shared/leaderboard';
   styleUrls: ['./pipeline.component.css']
 })
 export class PipelineComponent implements OnInit {
-@Input() pipeline: Leaderboard[];
+@Input() pipeline: Leaderboard;
   constructor() { }
 
   ngOnInit() {
