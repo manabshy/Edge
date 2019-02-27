@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { LeaderboardService } from './shared/leaderboard.service';
+import { Leaderboard } from './shared/leaderboard';
 
 @Component({
   selector: 'app-leaderboard',
@@ -6,8 +8,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./leaderboard.component.css']
 })
 export class LeaderboardComponent implements OnInit {
+instructions: Leaderboard[] = [];
+pipeline: Leaderboard[] = [];
+exchanges: Leaderboard[] = [];
 
-  constructor() { }
+  constructor(private leaderboardService: LeaderboardService) { }
 
   ngOnInit() {
   }
