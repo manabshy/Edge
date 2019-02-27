@@ -53,7 +53,6 @@ export class MyDashboardComponent implements OnInit {
 
   //  const dashboard = this.getStaffMemberDashboard(2337, 'salesManager');
     this.getUserByUsername(this.username);
-    console.log(this.user);
   }
 
   getUserByUsername(username: string): void {

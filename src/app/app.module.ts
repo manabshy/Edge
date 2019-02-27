@@ -36,6 +36,7 @@ import { PropertyChecklistItemComponent } from './property-checklist-item/proper
 import { DashboardModule } from './dashboard/dashboard.module';
 import { CoreModule } from './core/core.module';
 import { AccountModule } from './account/account.module';
+import { LeaderboardModule } from './leaderboard/leaderboard.module';
 
 @NgModule({
   declarations: [
@@ -76,7 +77,8 @@ import { AccountModule } from './account/account.module';
     AccountModule,
     CoreModule,
     AppRoutingModule,
-    DashboardModule
+    DashboardModule,
+    LeaderboardModule
   ],
   exports: [
     MainmenuComponent
