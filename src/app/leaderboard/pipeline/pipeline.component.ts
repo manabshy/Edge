@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Leaderboard } from '../shared/leaderboard';
 
 @Component({
   selector: 'app-pipeline',
@@ -6,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./pipeline.component.css']
 })
 export class PipelineComponent implements OnInit {
-
+@Input() pipeline: Leaderboard[];
   constructor() { }
 
   ngOnInit() {

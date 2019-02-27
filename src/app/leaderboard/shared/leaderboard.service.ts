@@ -13,7 +13,7 @@ export class LeaderboardService {
   constructor(private http: HttpClient, private authService: AuthService) {}
   getStaffMemberPipeline(
     role: string
-  ): Observable<Leaderboard> {
+  ): Observable<Leaderboard[]> {
     const url = `${this.baseUrl}/dashboard?${role}`;
     const auth_token = this.authService.getToken();
     const headers: HttpHeaders = new HttpHeaders();
@@ -23,6 +23,6 @@ export class LeaderboardService {
     );
     headers.set('Authorization', `Bearer${auth_token}`);
 
-    return this.http.get<Leaderboard>(url, { headers: headers });
+    return this.http.get<Leaderboard[]>(url, { headers: headers });
   }
 }

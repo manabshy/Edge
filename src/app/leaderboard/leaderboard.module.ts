@@ -8,6 +8,7 @@ import { ExchangesComponent } from './exchanges/exchanges.component';
 
 @NgModule({
   declarations: [PipelineComponent, InstructionsComponent, ExchangesComponent],
+  exports : [PipelineComponent, InstructionsComponent, ExchangesComponent],
   imports: [
     CommonModule,
     LeaderboardRoutingModule
