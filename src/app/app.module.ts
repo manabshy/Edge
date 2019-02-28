@@ -37,6 +37,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { CoreModule } from './core/core.module';
 import { AccountModule } from './account/account.module';
 import { LeaderboardModule } from './leaderboard/leaderboard.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import { LeaderboardModule } from './leaderboard/leaderboard.module';
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     AccountModule,
     CoreModule,
     AppRoutingModule,

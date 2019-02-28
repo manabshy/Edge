@@ -16,3 +16,10 @@ export interface LeaderboardResult {
   totalPages: number;
   totalResultCount: number;
 }
+
+export enum Period {
+  ThisWeek = 'ThisWeek',
+  ThisMonth = 'ThisMonth',
+  ThisQuarter = 'ThisQuarter',
+  ThisYear = 'ThisYear',
+}

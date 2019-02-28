@@ -10,12 +10,14 @@
     </li>
     <li>
       <div class="form-group">
-        <select class="form-control" id="sel1">
-          <option>This week</option>
-          <option selected>This month</option>
-          <option>This quarter</option>
-          <option>This year</option>
+        <select [(ngModel)]="period" (ngModelChange)="onOptionsSelected($event)" class="form-control" id="sel1"  >
+          <option >This Week</option>
+          <option selected>This Month</option>
+          <option>This Quarter</option>
+          <option>This Year</option>
+          <!-- <option *ngFor='let periodOption of periodList' [value] = 'periodOption.key'>{{periodOption.value}}</option> -->
         </select>
+        <p>selected value is {{period}}</p>
       </div>
     </li>
   </ul>
