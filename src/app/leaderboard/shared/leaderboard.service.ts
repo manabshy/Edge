@@ -11,9 +11,7 @@ export class LeaderboardService {
 
   private baseUrl = 'http://localhost:57211/v1/staffmembers/leaderboard';
   constructor(private http: HttpClient, private authService: AuthService) {}
-  getStaffMemberPipeline(
-    role: string
-  ): Observable<LeaderboardResult> {
+  getStaffMemberPipeline(role: string): Observable<LeaderboardResult> {
     const url = `${this.baseUrl}/pipeline?role=${role}`;
     const auth_token = this.authService.getToken();
     const headers: HttpHeaders = new HttpHeaders();
@@ -24,5 +22,9 @@ export class LeaderboardService {
     headers.set('Authorization', `Bearer${auth_token}`);
 
     return this.http.get<LeaderboardResult>(url, { headers: headers });
+  }
+  getStaffMemberExchanges(role: string, period: string): Observable<LeaderboardResult> {
+    const url = `${this.baseUrl}/exchanges?role=${role}&period=${period}`;
+    return this.http.get<LeaderboardResult>(url);
   }
 }

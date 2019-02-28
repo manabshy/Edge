@@ -1,3 +1,16 @@
-<p>
-  exchanges works!
-</p>
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive ">
+            <table class="table table-hover table-striped">
+              <tbody>
+                <tr *ngFor="let exchange of exchanges; let i = index;">
+                    <th scope="row">{{i + 1}}</th>
+                    <td>{{exchange.fullName}}</td>
+                    <td>{{exchange.totalFees | currency :'GBP'}}</td>
+                    <td>{{exchange.totalCount}}</td>
+                  </tr>
+              </tbody>
+            </table>
+          </div>
+    </div>
+  </div>

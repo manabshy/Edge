@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Leaderboard } from '../shared/leaderboard';
 
 @Component({
   selector: 'app-exchanges',
@@ -6,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./exchanges.component.css']
 })
 export class ExchangesComponent implements OnInit {
-
+@Input() exchanges: Leaderboard[];
   constructor() { }
 
   ngOnInit() {
