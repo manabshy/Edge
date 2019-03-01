@@ -1,3 +1,5 @@
+import { ResultMetaData } from 'src/app/core/shared/result';
+
 export interface Dashboard {
   period: string;
   periodStartDate: Date;
@@ -23,4 +25,8 @@ export interface DashboardNumbers {
   totalManagedCount?: number;
   totalFees?: number;
   totalPropertyCount?: number;
+}
+
+export interface DashboardResult extends ResultMetaData {
+  result: Dashboard[];
 }

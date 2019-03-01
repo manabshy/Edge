@@ -7,10 +7,6 @@ import { PipeResolver } from '@angular/compiler';
 import { LeaderboardComponent } from './leaderboard.component';
 
 const routes: Routes = [
-//   { path: 'instructions', component: InstructionsComponent },
-//   { path: 'pipeline', component: PipelineComponent },
-//  // { path: 'pipeline', component: PipelineComponent, resolve: {pipelineResolver: PipeResolver} },
-//   { path: 'exchanges', component: ExchangesComponent },
   {
     path: 'leaderboard',
     component: LeaderboardComponent,
@@ -19,6 +15,7 @@ const routes: Routes = [
       { path: 'instructions', component: InstructionsComponent },
       { path: 'pipeline', component: PipelineComponent },
       { path: 'exchanges', component: ExchangesComponent },
+      // { path: 'pipeline', component: PipelineComponent, resolve: {pipelineResolver: PipeResolver} },
     ]
   }
 ];

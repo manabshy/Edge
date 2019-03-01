@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { Dashboard } from './dashboard';
+import { Dashboard, DashboardResult } from './dashboard';
 import { AuthService } from 'src/app/core/services/auth.service';
 @Injectable({
   providedIn: 'root'
@@ -12,10 +12,7 @@ export class DashboardService {
   private baseUrl = 'http://localhost:51130/v1/staffMembers';
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-  getStaffMemberDashboard(
-    staffMemberId: number,
-    role: string
-  ): Observable<Dashboard> {
+  getStaffMemberDashboard( staffMemberId: number, role: string): Observable<DashboardResult> {
     const url = `${this.baseUrl}/${staffMemberId}/dashboard?${role}`;
     const auth_token = this.authService.getToken();
     const headers: HttpHeaders = new HttpHeaders();
@@ -25,11 +22,11 @@ export class DashboardService {
     );
     headers.set('Authorization', `Bearer${auth_token}`);
 
-    return this.http.get<Dashboard>(url, { headers: headers });
+    return this.http.get<DashboardResult>(url, { headers: headers });
   }
 
-  getTeamMemberDashboard(staffMemberId: number): Observable<Dashboard> {
+  getTeamMemberDashboard(staffMemberId: number): Observable<DashboardResult> {
     const url = `${this.baseUrl}/${staffMemberId}/teammembers/dashboard`;
-    return this.http.get<Dashboard>(url);
+    return this.http.get<DashboardResult>(url);
   }
 }

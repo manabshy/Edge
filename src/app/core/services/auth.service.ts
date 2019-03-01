@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AdalService } from 'adal-angular4';
+import { User } from '../models/user';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private user = null;
+  private user: UserAuthentication;
   private adalConfig = {
     tenant: 'ed781348-2f1d-4f1e-bbf8-137da318df39',
     clientId: '03d5d394-2418-42fa-a345-556b8d7ffcdb',
@@ -57,4 +58,18 @@ export class AuthService {
 
  }
 
+}
+
+export interface UserAuthentication {
+  userName: string;
+  profile: Profile;
+  authenticated: any;
+  error: any;
+  token: any;
+  loginCached: boolean;
+}
+
+export interface Profile {
+  given_name: string;
+  name: string;
 }

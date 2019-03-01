@@ -18,8 +18,8 @@ export interface LeaderboardResult {
 }
 
 export enum Period {
-  ThisWeek = 'ThisWeek',
-  ThisMonth = 'ThisMonth',
-  ThisQuarter = 'ThisQuarter',
-  ThisYear = 'ThisYear',
+  ThisWeek = 'This Week',
+  ThisMonth = 'This Month',
+  ThisQuarter = 'This Quarter',
+  ThisYear = 'This Year',
 }
