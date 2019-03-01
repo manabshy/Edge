@@ -1,8 +1,8 @@
-import { Component, OnInit, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { LeaderboardService } from './shared/leaderboard.service';
-import { Leaderboard, LeaderboardResult, Period } from './shared/leaderboard';
-import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import { Leaderboard, LeaderboardResult } from './shared/leaderboard';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-leaderboard',
@@ -27,6 +27,7 @@ periodList = [
  set selectedPeriod(val: string) {
     this._selectedPeriod = val;
     this.getExchanges( this.salesManager, this.selectedPeriod);
+    this.getInstructions(this.salesManager, this.selectedPeriod);
   }
  get selectedPeriod() {
     return this._selectedPeriod;
@@ -39,9 +40,8 @@ periodList = [
       .subscribe(params => this.selectedPeriod = params['period'] || 'ThisQuarter');
     this.leaderboardService.getStaffMemberPipeline(this.salesManager)
       .subscribe(result => {
-      this.leaderboardResult = result;
+        this.leaderboardResult = result;
         this.pipelineList = result.result;
-        console.log(result.result, this.pipelineList);
       });
   }
 
@@ -49,6 +49,12 @@ periodList = [
     this.leaderboardService.getStaffMemberExchanges(role, period).subscribe(data => {
       this.leaderboardResult = data;
       this.exchanges = data.result;
+    });
+  }
+  getInstructions(role: string, period: string) {
+    this.leaderboardService.getStaffMemberInstructions(role, period).subscribe(data => {
+      this.leaderboardResult = data;
+      this.instructions = data.result;
     });
   }
   onOptionsSelected(val: any) {

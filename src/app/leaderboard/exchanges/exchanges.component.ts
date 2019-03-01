@@ -6,15 +6,11 @@ import { Leaderboard } from '../shared/leaderboard';
   templateUrl: './exchanges.component.html',
   styleUrls: ['./exchanges.component.css']
 })
-export class ExchangesComponent implements OnInit, OnChanges {
+export class ExchangesComponent implements OnInit {
   @Input() exchanges: Leaderboard[];
   @Input() selectedPeriod: string;
 
   constructor() {}
-  ngOnChanges(changes: SimpleChanges): void {
-    for (const myKeys of Object.keys(changes)) {
-      console.log(changes[myKeys].currentValue);
-    }
-  }
+
   ngOnInit() {}
 }
