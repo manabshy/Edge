@@ -1,8 +1,8 @@
 <div class="container">
   <ul class="nav nav-pills" role="tablist">
-      <li class="nav-item active"><a class="nav-link active" href="#dash" data-toggle="tab" role="tab">Dashboard</a></li>
-      <li class="nav-item"><a class="nav-link" href="#diary" data-toggle="tab" role="tab">Diary</a></li>
-      <li class="nav-item"><a class="nav-link" href="#leaderboard" data-toggle="tab" role="tab">Leaderboard</a></li>
+      <li class="nav-item active"><a class="nav-link active" href="#dash" data-toggle="tab" role="tab"  [routerLink]="['/dashboard']">Dashboard</a></li>
+      <li class="nav-item"><a class="nav-link" href="#diary" data-toggle="tab" role="tab" [routerLink]="['/diary']">Diary</a></li>
+      <li class="nav-item"><a class="nav-link" href="#leaderboard" data-toggle="tab" role="tab" [routerLink]="['/leaderboard']">Leaderboard</a></li>
       <li class="nav-item"><a class="nav-link" href="#tasks" data-toggle="tab" role="tab">Tasks</a></li>
   </ul>
   <nav class="nav float-right" style="margin-top:-35px">

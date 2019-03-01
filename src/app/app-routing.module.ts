@@ -11,6 +11,9 @@ import { ApplicantRegisterComponent }   from './applicant-register/applicant-reg
 import { ApplicantViewLettingComponent }   from './applicant-view-letting/applicant-view-letting.component';
 import { ApplicantViewSaleComponent }   from './applicant-view-sale/applicant-view-sale.component';
 import { SendEdetailsComponent }   from './send-edetails/send-edetails.component';
+import { LeaderboardComponent } from './leaderboard/leaderboard.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { DiaryComponent } from './diary/diary.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -23,6 +26,9 @@ const routes: Routes = [
   { path: 'applicant-view-letting', component: ApplicantViewLettingComponent },
   { path: 'applicant-view-sale', component: ApplicantViewSaleComponent },
   { path: 'send-edetails', component: SendEdetailsComponent },
+  { path: 'leaderboard', component: LeaderboardComponent },
+  { path: 'dashboard', component: DashboardComponent },
+  { path: 'diary', component: DiaryComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];
 

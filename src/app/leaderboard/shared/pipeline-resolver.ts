@@ -12,7 +12,8 @@ export class PipelineResolver implements Resolve<Leaderboard[]> {
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Leaderboard[] | Observable<Leaderboard[]> {
    const role = 'salesManager';
-    return this.leaderboardService.getStaffMemberPipeline(role);
+    // return this.leaderboardService.getStaffMemberPipeline(role);
+    return null;
   }
 
 }

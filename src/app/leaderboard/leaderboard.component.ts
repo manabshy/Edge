@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, SimpleChanges, OnChanges } from '@angular/core';
 
 import { LeaderboardService } from './shared/leaderboard.service';
 import { Leaderboard, LeaderboardResult, Period } from './shared/leaderboard';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 
 @Component({
   selector: 'app-leaderboard',
@@ -15,8 +15,8 @@ pipelineList: Leaderboard[] = [];
 exchanges: Leaderboard[] = [];
 leaderboardResult: LeaderboardResult;
 resultCount: number;
-period = Period.ThisYear;
-  selectedPeriod: { key: string; value: string; }[];
+private _selectedPeriod: string;
+selectedPeriodArray: { key: string; value: string; }[];
 periodList = [
   {key: 'ThisWeek', value: 'This Week'},
   {key: 'ThisMonth', value: 'This Month'},
@@ -24,34 +24,38 @@ periodList = [
   {key: 'ThisYear', value: 'This Year'}
 ];
   private readonly salesManager = 'salesManager';
-
+ set selectedPeriod(val: string) {
+    this._selectedPeriod = val;
+    this.getExchanges( this.salesManager, this.selectedPeriod);
+  }
+ get selectedPeriod() {
+    return this._selectedPeriod;
+  }
   constructor(private leaderboardService: LeaderboardService, private route: ActivatedRoute) { }
 
   ngOnInit() {
     //  this.route.data.subscribe(data => {this.pipeline = data['pipelineResolver']; });
+    this.route.queryParams
+      .subscribe(params => this.selectedPeriod = params['period'] || 'ThisQuarter');
     this.leaderboardService.getStaffMemberPipeline(this.salesManager)
       .subscribe(result => {
       this.leaderboardResult = result;
         this.pipelineList = result.result;
         console.log(result.result, this.pipelineList);
       });
+  }
 
-    this.leaderboardService.getStaffMemberExchanges(this.salesManager, this.period).subscribe(data => {
+  getExchanges(role: string, period: string) {
+    this.leaderboardService.getStaffMemberExchanges(role, period).subscribe(data => {
       this.leaderboardResult = data;
       this.exchanges = data.result;
-      console.log(this.exchanges);
     });
   }
   onOptionsSelected(val: any) {
-    this.getSelectedPeriod(val);
-    const selectedPeriodArray = this.selectedPeriod[Object.keys(this.selectedPeriod)[0]];
-    const key = Object.values(selectedPeriodArray)[0];
-    // this.period = JSON.stringify(key);
-    
-    console.log( this.period , key);
+    this.selectedPeriod = val;
   }
   getSelectedPeriod(val: any) {
-    this.selectedPeriod = this.periodList.filter(function(data) {
+    this.selectedPeriodArray = this.periodList.filter(function(data) {
       return data.value === val;
     });
   }
