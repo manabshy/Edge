@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class UserService {
-private userUrl = 'http://localhost:59143/api/users/';
+private userUrl = 'http://localhost:57211/v1/staffmembers';
   constructor(private http: HttpClient, private authService: AuthService) { }
 
   public getUserByUsername(username: string): Observable<User> {

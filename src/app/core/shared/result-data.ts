@@ -1,4 +1,4 @@
-export interface ResultMetaData {
+export interface ResultData {
   resultCount: number;
   resultDescription: [];
   returnCode: number;

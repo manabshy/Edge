@@ -1,4 +1,4 @@
-import { ResultMetaData } from 'src/app/core/shared/result';
+import { ResultData } from 'src/app/core/shared/result-data';
 
 export interface Dashboard {
   period: string;
@@ -28,7 +28,7 @@ export interface DashboardNumbers {
   totalPropertyCount?: number;
 }
 
-export interface DashboardResult extends ResultMetaData {
+export interface DashboardResult extends ResultData {
   result: Dashboard;
 }
 

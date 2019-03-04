@@ -42,14 +42,14 @@ export class DashboardComponent implements OnInit {
     //  this.userService.getUserByUsername(this.username).subscribe((user: User) => this.user = user);
 
     //  const dashboard = this.getStaffMemberDashboard(2337, 'salesManager');
-    // this.userService.getUserByUsername(this.authService.getUsername())
-    // .subscribe(user => {this.user = user;
-    //   this.username = user.exchangeUsername;
-    //   this.staffMemberId = user.staffMemberId;
-    //    console.log(user.staffMemberId, user);
-    //    },
-    //   err => console.log(err)
-    // );
+    this.userService.getUserByUsername(this.authService.getUsername())
+    .subscribe(user => {this.user = user;
+      this.username = user.exchangeUsername;
+      this.staffMemberId = user.staffMemberId;
+       console.log(user.staffMemberId, user);
+       },
+      err => console.log(err)
+    );
 
   }
   getUserByUsername(username: string): void {
