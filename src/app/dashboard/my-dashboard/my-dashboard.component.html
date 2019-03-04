@@ -58,19 +58,21 @@ Some live data here ....
           <div class="col col-5 text-center bg-primary p-4 m-1">
             <p>All Instructions</p>
             <h6>{{myDashboard.instructions.totalCount}}</h6>
-            <h6>{{myDashboard.instructions.periodCount}}</h6>
-            <p></p>
           </div>
         </div>
         <div class="row justify-content-center">
           <div class="col col-5 text-center bg-primary p-4 m-1">
             <p>Exchanges</p>
-            <h6>{{myDashboard.exchanges.totalFees}}</h6>
+            <h6>{{myDashboard.exchanges.periodCount}}</h6>
+            <h6>{{myDashboard.exchanges.periodFees | currency:'GBP'}}</h6>
+            <h6>{{myDashboard.exchanges.periodPropertyCount}}</h6>
             <p>{{myDashboard.period}}</p>
           </div>
           <div class="col col-5 text-center bg-primary p-4 m-1">
             <p>Pipeline</p>
-            <h6>{{myDashboard.exchanges.totalFees}}</h6>
+            <h6>{{myDashboard.pipeline.totalCount}}</h6>
+            <h6>{{myDashboard.pipeline.totalFees | currency:'GBP'}}</h6>
+            <h6>{{myDashboard.pipeline.totalPropertyCount}}</h6>
             <p></p>
           </div>
         </div>

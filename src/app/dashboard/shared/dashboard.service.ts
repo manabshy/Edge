@@ -9,11 +9,11 @@ import { AuthService } from 'src/app/core/services/auth.service';
 })
 export class DashboardService {
 
-  private baseUrl = 'http://localhost:51130/v1/staffMembers';
+  private baseUrl = 'http://localhost:57211/v1/staffMembers';
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-  getStaffMemberDashboard( staffMemberId: number, role: string): Observable<DashboardResult> {
-    const url = `${this.baseUrl}/${staffMemberId}/dashboard?${role}`;
+  getStaffMemberDashboard( staffMemberId: number, role: string, period?: string): Observable<DashboardResult> {
+    const url = `${this.baseUrl}/${staffMemberId}/dashboard?period=${period}&role=${role}`;
     const auth_token = this.authService.getToken();
     const headers: HttpHeaders = new HttpHeaders();
     headers.append(

@@ -11,7 +11,7 @@ export class UserService {
 private userUrl = 'http://localhost:57211/v1/staffmembers';
   constructor(private http: HttpClient, private authService: AuthService) { }
 
-  public getUserByUsername(username: string): Observable<User> {
-    return this.http.get<User>(`${this.userUrl}/${username}`);
+  public getUserByEmail(email: string): Observable<User> {
+    return this.http.get<User>(`${this.userUrl}/${email}`);
   }
 }

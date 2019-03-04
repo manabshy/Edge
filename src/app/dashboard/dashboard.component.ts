@@ -29,6 +29,7 @@ export class DashboardComponent implements OnInit {
     private readonly salesManager = 'salesManager';
   set selectedPeriod(val: string) {
     this._selectedPeriod = val;
+    this.getStaffMemberDashboard(2337, this.salesManager, this.selectedPeriod);
   }
   get selectedPeriod() {
     return this._selectedPeriod;
@@ -39,31 +40,33 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.selectedPeriod = 'ThisQuarter';
+
     //  this.userService.getUserByUsername(this.username).subscribe((user: User) => this.user = user);
 
     //  const dashboard = this.getStaffMemberDashboard(2337, 'salesManager');
-    this.userService.getUserByUsername(this.authService.getUsername())
-    .subscribe(user => {this.user = user;
-      this.username = user.exchangeUsername;
-      this.staffMemberId = user.staffMemberId;
-       console.log(user.staffMemberId, user);
-       },
-      err => console.log(err)
-    );
+    // this.userService.getUserByEmail(this.authService.getUsername())
+    // .subscribe(user => {this.user = user;
+    //   this.username = user.exchangeUsername;
+    //   this.staffMemberId = user.staffMemberId;
+    //    console.log(user.staffMemberId, user);
+    //    },
+    //   err => console.log(err)
+    // );
 
   }
   getUserByUsername(username: string): void {
-    this.userService.getUserByUsername(username)
+    this.userService.getUserByEmail(username)
     .subscribe(user => {this.user = user; this.username = user.exchangeUsername; },
       err => console.log(err)
     );
   }
 
-  getStaffMemberDashboard(id: number, role: string): void {
-    this.dashboardService.getStaffMemberDashboard(id, role)
+  getStaffMemberDashboard(id: number, role: string, period?: string): void {
+    this.dashboardService.getStaffMemberDashboard(id, role, period)
       .subscribe(data => {
         this.dashboardResult = data;
         this.myDashboard = data.result;
+        console.log(this.dashboardResult);
       });
   }
 }
