@@ -19,6 +19,6 @@ export class AuthCallbackComponent implements OnInit {
       this._zone.run(
         () => this.router.navigate(['/home'])
       );
-    }, 200);
+    }, 800);
   }
 }

@@ -14,6 +14,7 @@ export interface Dashboard {
   exchanges: DashboardNumbers;
   pipeline: DashboardNumbers;
   liveTenancies: DashboardNumbers;
+  staffMember: StaffMember;
 }
 export interface DashboardNumbers {
   periodCount?: number;
@@ -28,5 +29,11 @@ export interface DashboardNumbers {
 }
 
 export interface DashboardResult extends ResultMetaData {
-  result: Dashboard[];
+  result: Dashboard;
 }
+
+export interface StaffMember {
+  staffMemberId: number;
+  staffMemberFullName: string;
+}
+

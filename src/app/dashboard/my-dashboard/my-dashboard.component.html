@@ -35,3 +35,44 @@
   </div>
 </div>
 
+Some live data here ....
+  <div *ngIf="myDashboard">
+      <div class="row justify-content-center">
+          <div class="col col-5 text-center bg-primary p-4 m-1">
+            <p>Valuations</p>
+            <h6>{{myDashboard.valuations.periodCount}}</h6>
+            <p>{{myDashboard.period}}</p>
+          </div>
+          <div class="col col-5 text-center bg-primary p-4 m-1">
+            <p>Instructions</p>
+            <h6>{{myDashboard.instructions.periodCount}}</h6>
+            <p>{{myDashboard.period}}</p>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col col-5 text-center bg-primary p-3 m-1">
+            <p>Business Development</p>
+            <h6>{{myDashboard.businessDevelopment.totalCount}}</h6>
+            <p>Tickets</p>
+          </div>
+          <div class="col col-5 text-center bg-primary p-4 m-1">
+            <p>All Instructions</p>
+            <h6>{{myDashboard.instructions.totalCount}}</h6>
+            <h6>{{myDashboard.instructions.periodCount}}</h6>
+            <p></p>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col col-5 text-center bg-primary p-4 m-1">
+            <p>Exchanges</p>
+            <h6>{{myDashboard.exchanges.totalFees}}</h6>
+            <p>{{myDashboard.period}}</p>
+          </div>
+          <div class="col col-5 text-center bg-primary p-4 m-1">
+            <p>Pipeline</p>
+            <h6>{{myDashboard.exchanges.totalFees}}</h6>
+            <p></p>
+          </div>
+        </div>
+
+  </div>

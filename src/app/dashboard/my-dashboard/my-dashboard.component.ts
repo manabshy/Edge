@@ -6,7 +6,7 @@ import { Dashboard } from '../shared/dashboard';
   styleUrls: ['./my-dashboard.component.css']
 })
 export class MyDashboardComponent implements OnInit {
-@Input() myDashboard: Dashboard[];
+@Input() myDashboard: Dashboard;
   constructor() { }
 
   ngOnInit() {

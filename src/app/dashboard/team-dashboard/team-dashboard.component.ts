@@ -8,7 +8,7 @@ import { Dashboard } from '../shared/dashboard';
 })
 export class TeamDashboardComponent implements OnInit {
   @Input() teamDashboard: Dashboard[];
-  
+
   constructor() { }
 
   ngOnInit() {
