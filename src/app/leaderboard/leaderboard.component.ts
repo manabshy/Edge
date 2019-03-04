@@ -16,7 +16,7 @@ exchanges: Leaderboard[] = [];
 leaderboardResult: LeaderboardResult;
 resultCount: number;
 private _selectedPeriod: string;
-selectedPeriodArray: { key: string; value: string; }[];
+// selectedPeriodArray: { key: string; value: string; }[];
 periodList = [
   {key: 'ThisWeek', value: 'This Week'},
   {key: 'ThisMonth', value: 'This Month'},

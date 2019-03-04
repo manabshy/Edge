@@ -7,11 +7,8 @@
   </li>
   <li>
     <div class="form-group">
-      <select class="form-control" id="sel1">
-        <option>This week</option>
-        <option selected>This month</option>
-        <option>This quarter</option>
-        <option>This year</option>
+      <select [(ngModel)]="selectedPeriod" class="form-control" id="sel1">
+        <option *ngFor='let periodOption of periodList' [value]='periodOption.key'>{{periodOption.value}}</option>
       </select>
     </div>
   </li>

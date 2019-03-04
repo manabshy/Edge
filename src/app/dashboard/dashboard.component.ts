@@ -18,12 +18,27 @@ export class DashboardComponent implements OnInit {
   user: User;
   private username: string;
   staffMemberId: number;
-
+  private _selectedPeriod: string;
+  // selectedPeriodArray: { key: string; value: string; }[];
+  periodList = [
+    {key: 'ThisWeek', value: 'This Week'},
+    {key: 'ThisMonth', value: 'This Month'},
+    {key: 'ThisQuarter', value: 'This Quarter'},
+    {key: 'ThisYear', value: 'This Year'}
+  ];
+    private readonly salesManager = 'salesManager';
+  set selectedPeriod(val: string) {
+    this._selectedPeriod = val;
+  }
+  get selectedPeriod() {
+    return this._selectedPeriod;
+  }
   constructor( private dashboardService: DashboardService,
     private userService: UserService,
     private authService: AuthService) { }
 
   ngOnInit() {
+    this.selectedPeriod = 'ThisQuarter';
     //  this.userService.getUserByUsername(this.username).subscribe((user: User) => this.user = user);
 
     //  const dashboard = this.getStaffMemberDashboard(2337, 'salesManager');
