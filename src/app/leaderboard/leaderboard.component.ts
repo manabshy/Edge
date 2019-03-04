@@ -57,12 +57,4 @@ periodList = [
       this.instructions = data.result;
     });
   }
-  onOptionsSelected(val: any) {
-    this.selectedPeriod = val;
-  }
-  getSelectedPeriod(val: any) {
-    this.selectedPeriodArray = this.periodList.filter(function(data) {
-      return data.value === val;
-    });
-  }
 }
