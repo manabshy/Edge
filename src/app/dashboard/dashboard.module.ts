@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { MyDashboardComponent } from './my-dashboard/my-dashboard.component';
 import { TeamDashboardComponent } from './team-dashboard/team-dashboard.component';
+import { CoreModule } from '../core/core.module';
 
 @NgModule({
   declarations: [MyDashboardComponent, TeamDashboardComponent],
@@ -13,7 +14,8 @@ import { TeamDashboardComponent } from './team-dashboard/team-dashboard.componen
     CommonModule,
     ReactiveFormsModule,
     HttpClientModule,
-    DashboardRoutingModule
+    DashboardRoutingModule,
+    CoreModule
   ],
   exports: [MyDashboardComponent, TeamDashboardComponent]
 })

@@ -40,7 +40,7 @@ Some live data here ....
       <div class="row justify-content-center">
           <div class="col col-5 text-center bg-primary p-4 m-1">
             <h6>Valuations</h6>
-            <h5>{{myDashboard.valuations.periodCount}}</h5>
+            <h5>{{myDashboard.valuations?.periodCount || 0}}</h5>
             <p>{{period}}</p>
           </div>
           <div class="col col-5 text-center bg-primary p-4 m-1">
@@ -63,12 +63,12 @@ Some live data here ....
         <div class="row justify-content-center">
           <div class="col col-5 text-center bg-primary p-4 m-1">
             <h6>Exchanges</h6>
-            <h5>{{myDashboard.exchanges.periodFees | currency:'GBP'}}</h5>
+            <h5>{{myDashboard.exchanges.periodFees | rounding | currency:'GBP' | truncating}}</h5>
             <p>{{period}}</p>
           </div>
           <div class="col col-5 text-center bg-primary p-4 m-1">
             <h6>Pipeline</h6>
-            <h5>{{myDashboard.pipeline.totalFees | currency:'GBP'}}</h5>
+            <h5>{{myDashboard.pipeline.totalFees | rounding | currency:'GBP'| truncating }}</h5>
             <p></p>
           </div>
         </div>

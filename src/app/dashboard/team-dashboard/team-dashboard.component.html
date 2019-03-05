@@ -192,9 +192,7 @@ More live data
       </thead>
       <tbody>
         <tr class="align-table-row" *ngFor="let member of teamDashboard">
-          <!-- <td>{{ member.exchanges.periodCount }}</td> -->
-          <td>{{ member.exchanges.periodFees | currency: "GBP" }}</td>
-          <!-- <td>{{ member.exchanges.periodPropertyCount }}</td> -->
+          <td>{{ member.exchanges.periodFees | rounding | currency: "GBP" | truncating }}</td>
         </tr>
       </tbody>
     </table>
@@ -212,9 +210,7 @@ More live data
       </thead>
       <tbody>
         <tr class="align-table-row" *ngFor="let member of teamDashboard">
-          <!-- <td>{{ member.pipeline.totalCount }}</td> -->
-          <td>{{ member.pipeline.totalFees | currency: 'GBP' }}</td>
-          <!-- <td>{{ member.pipeline.totalPropertyCount }}</td> -->
+          <td>{{ member.pipeline.totalFees | rounding | currency: 'GBP' | truncating }}</td>
         </tr>
       </tbody>
     </table>

@@ -1,8 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RoundingPipe } from './shared/rounding.pipe';
+import { TruncatingPipe } from './shared/truncating.pipe';
 
 @NgModule({
-  declarations: [],
+  declarations: [RoundingPipe, TruncatingPipe],
+  exports : [RoundingPipe, TruncatingPipe],
   imports: [
     CommonModule
   ]
