@@ -1,6 +1,6 @@
 .align-table-row
 {
-  float: left;
-  padding: 15px;
-  /* display: table-cell; */
+  /* float: left; */
+  padding: 1px;
+  display: table-cell;
 }

@@ -113,12 +113,13 @@ More live data
     <h6>Applicants</h6>
     <table class="table table-sm table-borderless" >
       <thead>
+        <tr class="align-table-row"><th scope="col">Total</th></tr>
         <tr class="align-table-row" *ngFor="let member of teamDashboard">
-          <!-- <th scope="col">Total</th> -->
           <th scope="col">{{ member.staffMember.staffMemberFullName | shortenName}}</th>
         </tr>
       </thead>
       <tbody>
+        <tr class="align-table-row"><td scope="col">Total here...</td></tr>
         <tr class="align-table-row" *ngFor="let member of teamDashboard">
           <td>{{ member.applicants.totalCount }}</td>
         </tr>
@@ -131,12 +132,13 @@ More live data
     <h6>Viewings</h6>
     <table class="table table-sm table-borderless" >
       <thead>
+        <tr class="align-table-row"><th scope="col">Total</th></tr>
         <tr class="align-table-row" *ngFor="let member of teamDashboard">
-          <!-- <th scope="col">Total</th> -->
           <th scope="col">{{ member.staffMember.staffMemberFullName | shortenName }}</th>
         </tr>
       </thead>
       <tbody>
+          <tr class="align-table-row"><td scope="col">Total here...</td></tr>
         <tr class="align-table-row" *ngFor="let member of teamDashboard">
           <td>{{ member.viewings.periodCount  }}</td>
         </tr>
@@ -149,12 +151,13 @@ More live data
     <h6>Offers agreed</h6>
     <table class="table table-sm table-borderless" >
       <thead>
+        <tr class="align-table-row"><th scope="col">Total</th></tr>
         <tr class="align-table-row" *ngFor="let member of teamDashboard">
-          <!-- <th scope="col">Total</th> -->
           <th scope="col">{{ member.staffMember.staffMemberFullName | shortenName}}</th>
         </tr>
       </thead>
       <tbody>
+        <tr class="align-table-row"><td scope="col">Total here...</td></tr>
         <tr class="align-table-row" *ngFor="let member of teamDashboard">
           <td>{{ member.offersAgreed.periodCount }}</td>
         </tr>
@@ -167,12 +170,13 @@ More live data
     <h6>Offers Received</h6>
     <table class="table table-sm table-borderless" >
       <thead>
+        <tr class="align-table-row"><th scope="col">Total</th></tr>
         <tr class="align-table-row" *ngFor="let member of teamDashboard">
-          <!-- <th scope="col">Total</th> -->
           <th scope="col">{{ member.staffMember.staffMemberFullName | shortenName}}</th>
         </tr>
       </thead>
       <tbody>
+        <tr class="align-table-row"><td scope="col">Total here...</td></tr>
         <tr class="align-table-row" *ngFor="let member of teamDashboard">
           <td>{{ member.offersReceived.periodCount }}</td>
         </tr>
@@ -185,12 +189,13 @@ More live data
     <h6>Exchanges</h6>
     <table class="table table-sm table-borderless" >
       <thead>
+        <tr class="align-table-row"><th scope="col">Total</th></tr>
         <tr class="align-table-row" *ngFor="let member of teamDashboard">
-          <!-- <th scope="col">Total</th> -->
           <th scope="col">{{ member.staffMember.staffMemberFullName | shortenName}}</th>
         </tr>
       </thead>
       <tbody>
+        <tr class="align-table-row"><td scope="col">Total here...</td></tr>
         <tr class="align-table-row" *ngFor="let member of teamDashboard">
           <td>{{ member.exchanges.periodFees | rounding | currency: "GBP" | truncating }}</td>
         </tr>
@@ -203,12 +208,13 @@ More live data
     <h6>Pipeline</h6>
     <table class="table table-sm table-borderless" >
       <thead>
+        <tr class="align-table-row"><th scope="col">Total</th></tr>
         <tr class="align-table-row" *ngFor="let member of teamDashboard">
-          <!-- <th scope="col">Total</th> -->
           <th scope="col">{{ member.staffMember.staffMemberFullName | shortenName}}</th>
         </tr>
       </thead>
       <tbody>
+        <tr class="align-table-row"><td scope="col">Total here...</td></tr>
         <tr class="align-table-row" *ngFor="let member of teamDashboard">
           <td>{{ member.pipeline.totalFees | rounding | currency: 'GBP' | truncating }}</td>
         </tr>
