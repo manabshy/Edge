@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { Dashboard, DashboardResult } from './dashboard';
+import { Dashboard, DashboardResult, TeamDashboardResult } from './dashboard';
 import { AuthService } from 'src/app/core/services/auth.service';
 @Injectable({
   providedIn: 'root'
@@ -25,8 +25,8 @@ export class DashboardService {
     return this.http.get<DashboardResult>(url, { headers: headers });
   }
 
-  getTeamMemberDashboard(staffMemberId: number): Observable<DashboardResult> {
-    const url = `${this.baseUrl}/${staffMemberId}/teammembers/dashboard`;
-    return this.http.get<DashboardResult>(url);
+  getTeamMembersDashboard(staffMemberId: number,role: string, period?: string): Observable<TeamDashboardResult> {
+    const url = `${this.baseUrl}/${staffMemberId}/teammembers/dashboard?period=${period}&role=${role}`;
+    return this.http.get<TeamDashboardResult>(url);
   }
 }

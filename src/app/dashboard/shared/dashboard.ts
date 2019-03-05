@@ -27,13 +27,16 @@ export interface DashboardNumbers {
   totalFees?: number;
   totalPropertyCount?: number;
 }
-
-export interface DashboardResult extends ResultData {
-  result: Dashboard;
-}
-
 export interface StaffMember {
   staffMemberId: number;
   staffMemberFullName: string;
 }
+export interface DashboardResult extends ResultData {
+  result: Dashboard;
+}
+export interface TeamDashboardResult extends ResultData {
+  result: Dashboard[];
+}
+
+
 
