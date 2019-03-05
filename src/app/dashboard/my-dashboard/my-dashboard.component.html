@@ -39,40 +39,36 @@ Some live data here ....
   <div *ngIf="myDashboard">
       <div class="row justify-content-center">
           <div class="col col-5 text-center bg-primary p-4 m-1">
-            <p>Valuations</p>
-            <h6>{{myDashboard.valuations.periodCount}}</h6>
-            <p>{{myDashboard.period}}</p>
+            <h6>Valuations</h6>
+            <h5>{{myDashboard.valuations.periodCount}}</h5>
+            <p>{{period}}</p>
           </div>
           <div class="col col-5 text-center bg-primary p-4 m-1">
-            <p>Instructions</p>
-            <h6>{{myDashboard.instructions.periodCount}}</h6>
-            <p>{{myDashboard.period}}</p>
+            <h6>Instructions</h6>
+            <h5>{{myDashboard.instructions.periodCount}}</h5>
+            <p>{{period}}</p>
           </div>
         </div>
         <div class="row justify-content-center">
           <div class="col col-5 text-center bg-primary p-3 m-1">
-            <p>Business Development</p>
-            <h6>{{myDashboard.businessDevelopment.totalCount}}</h6>
+            <h6>Business Development</h6>
+            <h5>{{myDashboard.businessDevelopment.totalCount}}</h5>
             <p>Tickets</p>
           </div>
           <div class="col col-5 text-center bg-primary p-4 m-1">
-            <p>All Instructions</p>
-            <h6>{{myDashboard.instructions.totalCount}}</h6>
+            <h6>All Instructions</h6>
+            <h5>{{myDashboard.instructions.totalCount}}</h5>
           </div>
         </div>
         <div class="row justify-content-center">
           <div class="col col-5 text-center bg-primary p-4 m-1">
-            <p>Exchanges</p>
-            <h6>{{myDashboard.exchanges.periodCount}}</h6>
-            <h6>{{myDashboard.exchanges.periodFees | currency:'GBP'}}</h6>
-            <h6>{{myDashboard.exchanges.periodPropertyCount}}</h6>
-            <p>{{myDashboard.period}}</p>
+            <h6>Exchanges</h6>
+            <h5>{{myDashboard.exchanges.periodFees | currency:'GBP'}}</h5>
+            <p>{{period}}</p>
           </div>
           <div class="col col-5 text-center bg-primary p-4 m-1">
-            <p>Pipeline</p>
-            <h6>{{myDashboard.pipeline.totalCount}}</h6>
-            <h6>{{myDashboard.pipeline.totalFees | currency:'GBP'}}</h6>
-            <h6>{{myDashboard.pipeline.totalPropertyCount}}</h6>
+            <h6>Pipeline</h6>
+            <h5>{{myDashboard.pipeline.totalFees | currency:'GBP'}}</h5>
             <p></p>
           </div>
         </div>

@@ -17,6 +17,7 @@ export class DashboardComponent implements OnInit {
   dashboardResult: DashboardResult;
   teamDashboardResult: TeamDashboardResult;
   user: User;
+  period: string;
   private username: string;
   staffMemberId: number;
   private _selectedPeriod: string;
@@ -30,6 +31,7 @@ export class DashboardComponent implements OnInit {
     private readonly salesManager = 'salesManager';
   set selectedPeriod(val: string) {
     this._selectedPeriod = val;
+    this.period = this.getSelectedPeriod(this._selectedPeriod);
     this.getStaffMemberDashboard(2337, this.salesManager, this.selectedPeriod);
     this.getTeamMembersDashboard(2337, this.salesManager, this.selectedPeriod);
   }
@@ -65,5 +67,10 @@ export class DashboardComponent implements OnInit {
         this.teamDashboard = data.result;
         console.log(this.teamDashboardResult);
       });
+  }
+  getSelectedPeriod(val: string) {
+    const periodArray = this.periodList.filter(x => x.key === val);
+    const periodValue = Object.values(periodArray)[0].value;
+    return periodValue;
   }
 }

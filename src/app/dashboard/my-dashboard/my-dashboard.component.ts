@@ -7,6 +7,7 @@ import { Dashboard } from '../shared/dashboard';
 })
 export class MyDashboardComponent implements OnInit {
 @Input() myDashboard: Dashboard;
+@Input() period: string;
   constructor() { }
 
   ngOnInit() {
