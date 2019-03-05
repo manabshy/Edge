@@ -1,76 +1,51 @@
-<div class="row justify-content-center">
-  <div class="col col-5 text-center bg-primary p-4 m-1">
-    <p>Valuations</p>
-    <h6>7</h6>
-    <p>This month</p>
+<div *ngIf="myDashboard">
+  <div class="row justify-content-center">
+    <div class="col col-5 text-center bg-primary p-4 m-1">
+      <h6>Valuations</h6>
+      <h5>{{ myDashboard.valuations?.periodCount || 0 }}</h5>
+      <p>{{ period }}</p>
+    </div>
+    <div class="col col-5 text-center bg-primary p-4 m-1">
+      <h6>Instructions</h6>
+      <h5>{{ myDashboard.instructions.periodCount }}</h5>
+      <p>{{ period }}</p>
+    </div>
   </div>
-  <div class="col col-5 text-center bg-primary p-4 m-1">
-    <p>Instructions</p>
-    <h6>4</h6>
-    <p>This month</p>
+  <div class="row justify-content-center">
+    <div class="col col-5 text-center bg-primary p-3 m-1">
+      <h6>Business Development</h6>
+      <h5>{{ myDashboard.businessDevelopment.totalCount }}</h5>
+      <p>Tickets</p>
+    </div>
+    <div class="col col-5 text-center bg-primary p-4 m-1">
+      <h6>All Instructions</h6>
+      <h5>{{ myDashboard.instructions.totalCount }}</h5>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col col-5 text-center bg-primary p-4 m-1">
+      <h6>Exchanges</h6>
+      <h5>
+        {{
+          myDashboard.exchanges.periodFees
+            | rounding
+            | currency: "GBP"
+            | truncating
+        }}
+      </h5>
+      <p>{{ period }}</p>
+    </div>
+    <div class="col col-5 text-center bg-primary p-4 m-1">
+      <h6>Pipeline</h6>
+      <h5>
+        {{
+          myDashboard.pipeline.totalFees
+            | rounding
+            | currency: "GBP"
+            | truncating
+        }}
+      </h5>
+      <p></p>
+    </div>
   </div>
 </div>
-<div class="row justify-content-center">
-  <div class="col col-5 text-center bg-primary p-3 m-1">
-    <p>Business Development</p>
-    <h6>200</h6>
-    <p>Tickets</p>
-  </div>
-  <div class="col col-5 text-center bg-primary p-4 m-1">
-    <p>All Instructions</p>
-    <h6>25</h6>
-    <p></p>
-  </div>
-</div>
-<div class="row justify-content-center">
-  <div class="col col-5 text-center bg-primary p-4 m-1">
-    <p>Exchanges</p>
-    <h6>£103 k</h6>
-    <p>This month</p>
-  </div>
-  <div class="col col-5 text-center bg-primary p-4 m-1">
-    <p>Pipeline</p>
-    <h6>£140 k</h6>
-    <p></p>
-  </div>
-</div>
-
-Some live data here ....
-  <div *ngIf="myDashboard">
-      <div class="row justify-content-center">
-          <div class="col col-5 text-center bg-primary p-4 m-1">
-            <h6>Valuations</h6>
-            <h5>{{myDashboard.valuations?.periodCount || 0}}</h5>
-            <p>{{period}}</p>
-          </div>
-          <div class="col col-5 text-center bg-primary p-4 m-1">
-            <h6>Instructions</h6>
-            <h5>{{myDashboard.instructions.periodCount}}</h5>
-            <p>{{period}}</p>
-          </div>
-        </div>
-        <div class="row justify-content-center">
-          <div class="col col-5 text-center bg-primary p-3 m-1">
-            <h6>Business Development</h6>
-            <h5>{{myDashboard.businessDevelopment.totalCount}}</h5>
-            <p>Tickets</p>
-          </div>
-          <div class="col col-5 text-center bg-primary p-4 m-1">
-            <h6>All Instructions</h6>
-            <h5>{{myDashboard.instructions.totalCount}}</h5>
-          </div>
-        </div>
-        <div class="row justify-content-center">
-          <div class="col col-5 text-center bg-primary p-4 m-1">
-            <h6>Exchanges</h6>
-            <h5>{{myDashboard.exchanges.periodFees | rounding | currency:'GBP' | truncating}}</h5>
-            <p>{{period}}</p>
-          </div>
-          <div class="col col-5 text-center bg-primary p-4 m-1">
-            <h6>Pipeline</h6>
-            <h5>{{myDashboard.pipeline.totalFees | rounding | currency:'GBP'| truncating }}</h5>
-            <p></p>
-          </div>
-        </div>
-
-  </div>
