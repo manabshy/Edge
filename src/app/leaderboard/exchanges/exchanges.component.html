@@ -6,7 +6,9 @@
                 <tr *ngFor="let exchange of exchanges; let i = index;">
                     <th scope="row">{{i + 1}}</th>
                     <td>{{exchange.fullName}}</td>
-                    <td>{{exchange.totalFees | currency :'GBP'}}</td>
+                    <td>{{exchange.totalFees | rounding
+                        | currency: "GBP"
+                        | truncating}}</td>
                     <td>{{exchange.totalCount}}</td>
                   </tr>
               </tbody>

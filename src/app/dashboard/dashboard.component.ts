@@ -83,7 +83,7 @@ export class DashboardComponent implements OnInit {
     const periodValue = Object.values(periodArray)[0].value;
     return periodValue;
   }
-  getDashboardTotals(dashboard: Dashboard[]){
+  getDashboardTotals(dashboard: Dashboard[]) {
     const initialValue = 0;
 
     const applicants = dashboard.reduce(

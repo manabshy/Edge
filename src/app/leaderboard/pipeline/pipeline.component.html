@@ -6,7 +6,9 @@
                 <tr *ngFor="let pipeline of pipelineList; let i = index;">
                     <th scope="row">{{i + 1}}</th>
                     <td>{{pipeline.fullName}}</td>
-                    <td>{{pipeline.totalFees | currency :'GBP'}}</td>
+                    <td>{{pipeline.totalFees | rounding
+                        | currency: "GBP"
+                        | truncating}}</td>
                     <td>{{pipeline.totalCount}}</td>
                   </tr>
               </tbody>
