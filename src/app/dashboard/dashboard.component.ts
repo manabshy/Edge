@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DashboardService } from './shared/dashboard.service';
 import { UserService } from '../core/services/user.service';
 import { AuthService } from '../core/services/auth.service';
-import { Dashboard, DashboardResult, TeamDashboardResult } from './shared/dashboard';
+import { Dashboard, DashboardResult, TeamDashboardResult, DashboardTotals } from './shared/dashboard';
 import { User } from '../core/models/user';
 import { AppConstants } from '../core/shared/app-constants';
 
@@ -16,6 +16,14 @@ export class DashboardComponent implements OnInit {
   teamDashboard: Dashboard[];
   dashboardResult: DashboardResult;
   teamDashboardResult: TeamDashboardResult;
+  dashboardTotals: DashboardTotals;
+  totalApplicants: number;
+  totalOffersAgreed: number;
+  totalOffersReceived: number;
+  totalViewings: number;
+  totalExchanges: number;
+  totalPipeline: number;
+
   user: User;
   period: string;
   private username: string;
@@ -65,7 +73,9 @@ export class DashboardComponent implements OnInit {
       .subscribe(data => {
         this.teamDashboardResult = data;
         this.teamDashboard = data.result;
-        console.log(this.teamDashboardResult);
+        this.getDashboardTotals(data.result);
+        console.log(this.teamDashboard);
+        console.log(this.totalViewings);
       });
   }
   getSelectedPeriod(val: string) {
@@ -73,4 +83,46 @@ export class DashboardComponent implements OnInit {
     const periodValue = Object.values(periodArray)[0].value;
     return periodValue;
   }
+  getDashboardTotals(dashboard: Dashboard[]){
+    const initialValue = 0;
+
+    const applicants = dashboard.reduce(
+      (accumulator, currentValue) =>
+        accumulator + currentValue.applicants.totalCount, initialValue);
+    this.totalApplicants = isNaN(applicants) ? 0 : applicants;
+
+    const viewings = dashboard.reduce(
+      (accumulator, currentValue) =>
+        accumulator + currentValue.viewings.periodCount, initialValue);
+    this.totalViewings = isNaN(viewings) ? 0 : viewings;
+
+    const offersAgreed = dashboard.reduce(
+      (accumulator, currentValue) =>
+        accumulator + currentValue.offersAgreed.periodCount, initialValue);
+    this.totalOffersAgreed = isNaN(offersAgreed) ? 0 : offersAgreed;
+
+    const offersReceived = dashboard.reduce(
+      (accumulator, currentValue) =>
+        accumulator + currentValue.offersReceived.periodCount, initialValue);
+    this.totalOffersReceived = isNaN(offersReceived) ? 0 : offersReceived;
+
+    const exchanges = dashboard.reduce(
+      (accumulator, currentValue) =>
+        accumulator + currentValue.exchanges.periodFees, initialValue);
+    this.totalExchanges = isNaN(exchanges) ? 0 : exchanges;
+
+    const pipeline = dashboard.reduce(
+      (accumulator, currentValue) =>
+        accumulator + currentValue.pipeline.totalFees, initialValue);
+    this.totalPipeline = isNaN(pipeline) ? 0 : pipeline;
+  }
+  // calculateTotals(value: []){
+  //   const initialValue = 0;
+
+  //   const applicants = value.reduce(
+  //     (accumulator, currentValue) =>
+  //       accumulator + currentValue, initialValue);
+  //   this.totalApplicants = isNaN(applicants) ? 0 : applicants;
+
+  // }
 }

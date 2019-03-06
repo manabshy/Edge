@@ -38,5 +38,13 @@ export interface TeamDashboardResult extends ResultData {
   result: Dashboard[];
 }
 
+export interface DashboardTotals{
+  applicants: number;
+  viewings: number;
+  offersAgreed: number;
+  offersReceived: number;
+  exchanges: number;
+  pipeline: number;
+}
 
 
