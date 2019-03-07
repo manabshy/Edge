@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { DashboardService } from './shared/dashboard.service';
 import { UserService } from '../core/services/user.service';
 import { AuthService } from '../core/services/auth.service';
@@ -11,7 +11,7 @@ import { AppConstants } from '../core/shared/app-constants';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnChanges {
   myDashboard: Dashboard;
   teamDashboard: Dashboard[];
   dashboardResult: DashboardResult;
@@ -29,7 +29,7 @@ export class DashboardComponent implements OnInit {
   email: string;
   firstName: string;
   staffMemberId: number;
-  userResult: UserResult;
+ @Input() userResult: UserResult;
   user: User;
   private _selectedPeriod: string;
   // selectedPeriodArray: { key: string; value: string; }[];
@@ -55,20 +55,15 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.selectedPeriod = 'ThisQuarter';
-    this.getUserByEmail(this.authService.getUsername());
-  }
-  getUserByEmail(username: string): void {
-    this.userService.getUserByEmail(username)
-      .subscribe(data => {
-        this.userResult = data;
-        this.email = data.result.email;
-        this.staffMemberId = data.result.staffMemberId;
-        console.log( this.staffMemberId);
-      },
-        err => console.log(err)
-      );
   }
 
+  ngOnChanges() {
+    if (this.userResult) {
+      this.staffMemberId = this.userResult.result.staffMemberId;
+      console.log(this.userResult.result.staffMemberId);
+      console.log(this.userResult.result);
+    }
+  }
   getStaffMemberDashboard(id: number, role: string, period?: string): void {
     this.dashboardService.getStaffMemberDashboard(id, role, period)
       .subscribe(data => {
