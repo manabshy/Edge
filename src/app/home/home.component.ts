@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { AuthService } from '../core/services/auth.service';
 
 @Component({
@@ -8,6 +8,7 @@ import { AuthService } from '../core/services/auth.service';
 })
 export class HomeComponent implements OnInit {
   isLoggedIn: boolean;
+ 
   constructor(private authService: AuthService) { }
 
   ngOnInit() {

@@ -3,7 +3,7 @@ import { DashboardService } from './shared/dashboard.service';
 import { UserService } from '../core/services/user.service';
 import { AuthService } from '../core/services/auth.service';
 import { Dashboard, DashboardResult, TeamDashboardResult, DashboardTotals } from './shared/dashboard';
-import { User } from '../core/models/user';
+import { User, UserResult } from '../core/models/user';
 import { AppConstants } from '../core/shared/app-constants';
 
 @Component({
@@ -24,10 +24,13 @@ export class DashboardComponent implements OnInit {
   totalExchanges: number;
   totalPipeline: number;
 
-  user: User;
+
   period: string;
-  private username: string;
+  email: string;
+  firstName: string;
   staffMemberId: number;
+  userResult: UserResult;
+  user: User;
   private _selectedPeriod: string;
   // selectedPeriodArray: { key: string; value: string; }[];
   periodList = [
@@ -52,12 +55,18 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.selectedPeriod = 'ThisQuarter';
+    this.getUserByEmail(this.authService.getUsername());
   }
-  getUserByUsername(username: string): void {
+  getUserByEmail(username: string): void {
     this.userService.getUserByEmail(username)
-    .subscribe(user => {this.user = user; this.username = user.exchangeUsername; },
-      err => console.log(err)
-    );
+      .subscribe(data => {
+        this.userResult = data;
+        this.email = data.result.email;
+        this.staffMemberId = data.result.staffMemberId;
+        console.log( this.staffMemberId);
+      },
+        err => console.log(err)
+      );
   }
 
   getStaffMemberDashboard(id: number, role: string, period?: string): void {
@@ -65,7 +74,6 @@ export class DashboardComponent implements OnInit {
       .subscribe(data => {
         this.dashboardResult = data;
         this.myDashboard = data.result;
-        console.log(this.dashboardResult);
       });
   }
   getTeamMembersDashboard(id: number, role: string, period?: string): void {
@@ -74,8 +82,6 @@ export class DashboardComponent implements OnInit {
         this.teamDashboardResult = data;
         this.teamDashboard = data.result;
         this.getDashboardTotals(data.result);
-        console.log(this.teamDashboard);
-        console.log(this.totalViewings);
       });
   }
   getSelectedPeriod(val: string) {

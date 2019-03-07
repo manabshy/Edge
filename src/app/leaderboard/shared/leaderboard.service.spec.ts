@@ -1,12 +1,21 @@
 import { TestBed } from '@angular/core/testing';
+import {HttpClientTestingModule, HttpTestingController, TestRequest} from '@angular/common/http/testing';
 
 import { LeaderboardService } from './leaderboard.service';
 
 describe('LeaderboardService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+  let leaderboardService: LeaderboardService;
+  let httpTestingController: HttpTestingController;
+  beforeEach(() =>
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      providers: [LeaderboardService]
+    })
+  );
 
   it('should be created', () => {
-    const service: LeaderboardService = TestBed.get(LeaderboardService);
-    expect(service).toBeTruthy();
+    leaderboardService = TestBed.get(LeaderboardService);
+    httpTestingController = TestBed.get(HttpTestingController);
+    expect(leaderboardService).toBeTruthy();
   });
 });
