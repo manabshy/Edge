@@ -5,6 +5,7 @@ import { TruncatingPipe } from './shared/truncating.pipe';
 import { ShortenNamePipe } from './shared/shorten-name.pipe';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AddHeaderInterceptor } from './add-header.interceptor';
+import { CacheInterceptor } from './cache.interceptor';
 
 @NgModule({
   declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe],
@@ -13,7 +14,8 @@ import { AddHeaderInterceptor } from './add-header.interceptor';
     CommonModule
   ],
   providers: [
-    {provide: HTTP_INTERCEPTORS , useClass: AddHeaderInterceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS , useClass: AddHeaderInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS , useClass: CacheInterceptor, multi: true}
   ]
 })
 export class CoreModule { }
