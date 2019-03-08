@@ -1,17 +1,15 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+
 import { DashboardService } from './shared/dashboard.service';
-import { UserService } from '../core/services/user.service';
-import { AuthService } from '../core/services/auth.service';
 import { Dashboard, DashboardResult, TeamDashboardResult, DashboardTotals } from './shared/dashboard';
 import { User, UserResult } from '../core/models/user';
-import { AppConstants } from '../core/shared/app-constants';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit, OnChanges {
+export class DashboardComponent implements OnInit {
   myDashboard: Dashboard;
   teamDashboard: Dashboard[];
   dashboardResult: DashboardResult;
@@ -28,11 +26,10 @@ export class DashboardComponent implements OnInit, OnChanges {
   period: string;
   email: string;
   firstName: string;
-  staffMemberId: number;
- @Input() userResult: UserResult;
+  @Input() userResult: UserResult;
   user: User;
+  @Input() staffMemberId: number;
   private _selectedPeriod: string;
-  // selectedPeriodArray: { key: string; value: string; }[];
   periodList = [
     {key: 'ThisWeek', value: 'This Week'},
     {key: 'ThisMonth', value: 'This Month'},
@@ -49,21 +46,18 @@ export class DashboardComponent implements OnInit, OnChanges {
   get selectedPeriod() {
     return this._selectedPeriod;
   }
-  constructor( private dashboardService: DashboardService,
-    private userService: UserService,
-    private authService: AuthService) { }
+  constructor( private dashboardService: DashboardService) { }
 
   ngOnInit() {
     this.selectedPeriod = 'ThisQuarter';
   }
 
-  ngOnChanges() {
-    if (this.userResult) {
-      this.staffMemberId = this.userResult.result.staffMemberId;
-      console.log(this.userResult.result.staffMemberId);
-      console.log(this.userResult.result);
-    }
-  }
+  // ngOnChanges(changes: SimpleChanges) {
+  //   if (this.staffMemberId) {
+  //     this.getStaffMemberDashboard(this.staffMemberId, this.salesManager, this.selectedPeriod);
+  //     console.log('from me dashboard ' + this.staffMemberId);
+  //   }
+  // }
   getStaffMemberDashboard(id: number, role: string, period?: string): void {
     this.dashboardService.getStaffMemberDashboard(id, role, period)
       .subscribe(data => {
@@ -117,13 +111,4 @@ export class DashboardComponent implements OnInit, OnChanges {
         accumulator + currentValue.pipeline.totalFees, initialValue);
     this.totalPipeline = isNaN(pipeline) ? 0 : pipeline;
   }
-  // calculateTotals(value: []){
-  //   const initialValue = 0;
-
-  //   const applicants = value.reduce(
-  //     (accumulator, currentValue) =>
-  //       accumulator + currentValue, initialValue);
-  //   this.totalApplicants = isNaN(applicants) ? 0 : applicants;
-
-  // }
 }
