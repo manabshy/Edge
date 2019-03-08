@@ -36,12 +36,12 @@ export class DashboardComponent implements OnInit {
     {key: 'ThisQuarter', value: 'This Quarter'},
     {key: 'ThisYear', value: 'This Year'}
   ];
-    private readonly salesManager = 'salesManager';
+    private readonly role = 'salesManager';
   set selectedPeriod(val: string) {
     this._selectedPeriod = val;
     this.period = this.getSelectedPeriod(this._selectedPeriod);
-    this.getStaffMemberDashboard(2337, this.salesManager, this.selectedPeriod);
-    this.getTeamMembersDashboard(2337, this.salesManager, this.selectedPeriod);
+    this.getStaffMemberDashboard(2337, this.role, this.selectedPeriod);
+    this.getTeamMembersDashboard(2337, this.role, this.selectedPeriod);
   }
   get selectedPeriod() {
     return this._selectedPeriod;
