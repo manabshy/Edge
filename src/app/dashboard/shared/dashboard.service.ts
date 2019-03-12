@@ -3,22 +3,21 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 import { DashboardResult, TeamDashboardResult } from './dashboard';
-import { AuthService } from 'src/app/core/services/auth.service';
+import { AppConstants } from 'src/app/core/shared/app-constants';
 @Injectable({
   providedIn: 'root'
 })
 export class DashboardService {
 
-  private baseUrl = 'http://localhost:57211/v1/staffMembers';
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(private http: HttpClient) {}
 
   getStaffMemberDashboard( staffMemberId: number, role: string, period?: string): Observable<DashboardResult> {
-    const url = `${this.baseUrl}/${staffMemberId}/dashboard?period=${period}&role=${role}`;
+    const url = `${AppConstants.baseUrl}/${staffMemberId}/dashboard?period=${period}&role=${role}`;
     return this.http.get<DashboardResult>(url);
   }
 
-  getTeamMembersDashboard(staffMemberId: number,role: string, period?: string): Observable<TeamDashboardResult> {
-    const url = `${this.baseUrl}/${staffMemberId}/teammembers/dashboard?period=${period}&role=${role}`;
+  getTeamMembersDashboard(staffMemberId: number, role: string, period?: string): Observable<TeamDashboardResult> {
+    const url = `${AppConstants.baseUrl}/${staffMemberId}/teammembers/dashboard?period=${period}&role=${role}`;
     return this.http.get<TeamDashboardResult>(url);
   }
 }
