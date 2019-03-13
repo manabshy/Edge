@@ -38,6 +38,7 @@ import { CoreModule } from './core/core.module';
 import { AccountModule } from './account/account.module';
 import { LeaderboardModule } from './leaderboard/leaderboard.module';
 import { FormsModule } from '@angular/forms';
+import { PropertyModule } from './property/property.module';
 
 @NgModule({
   declarations: [
@@ -80,7 +81,8 @@ import { FormsModule } from '@angular/forms';
     CoreModule,
     AppRoutingModule,
     DashboardModule,
-    LeaderboardModule
+    LeaderboardModule,
+    PropertyModule
   ],
   exports: [
     MainmenuComponent
