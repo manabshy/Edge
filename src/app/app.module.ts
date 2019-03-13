@@ -39,6 +39,7 @@ import { AccountModule } from './account/account.module';
 import { LeaderboardModule } from './leaderboard/leaderboard.module';
 import { FormsModule } from '@angular/forms';
 import { PropertyModule } from './property/property.module';
+import { ContactgroupsModule } from './contactgroups/contactgroups.module';
 
 @NgModule({
   declarations: [
@@ -82,7 +83,8 @@ import { PropertyModule } from './property/property.module';
     AppRoutingModule,
     DashboardModule,
     LeaderboardModule,
-    PropertyModule
+    PropertyModule,
+    ContactgroupsModule
   ],
   exports: [
     MainmenuComponent
