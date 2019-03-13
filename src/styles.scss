@@ -1,0 +1,14 @@
+//overrides
+@import "style/bootstrap-overrides";
+
+//bootstrap
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+//partials
+@import "style/partials/nav";
+
+html {
+    @include media-breakpoint-down(sm) {
+        font-size: 0.85rem;
+    }
+}

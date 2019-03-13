@@ -1,46 +1,62 @@
-<h2>Contact centre</h2>
-<div class="no-gutters">
+<app-breadcrumb></app-breadcrumb>
+<div class="container">
+  <h2>Contact centre</h2>
   <div class="row">
     <div class="col">
-      <div class="input-group mb-3">
-        <input type="text" class="form-control" placeholder="Name, email, phone or postcode" aria-label="Search criteria" aria-describedby="button-addon2">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Name, email, phone or postcode"
+          aria-label="Search criteria" aria-describedby="button-addon2">
         <div class="input-group-append">
-          <button class="btn btn-outline-secondary" type="button" id="button-search" data-toggle="collapse" data-target="#searchResults">
+          <button class="btn btn-secondary" type="button" id="button-search" (click)="searchResultCollapsed = !searchResultCollapsed"
+          [attr.aria-expanded]="!searchResultCollapsed" aria-controls="searchResults">
             <i class="fas fa-search"></i>
           </button>
-          <button class="btn btn-outline-secondary" type="button" id="button-advanced" data-toggle="collapse" data-target="#collapseOne"
-            aria-expanded="false" aria-controls="collapseOne">...</button>
         </div>
       </div>
+      <button class="btn btn-link px-0" type="button" id="button-advanced" (click)="advSearchCollapsed = !advSearchCollapsed"
+      [attr.aria-expanded]="!advSearchCollapsed" aria-controls="advSearch">Advanced search</button>
     </div>
   </div>
   <div class="row">
     <div class="col">
-      <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#button-advanced">
-        <p>Must be one of:</p>
-        <div class="form-group form-check">
-          <input type="checkbox" class="form-check-input" id="advLandlord">
-          <label class="form-check-label" for="advLandlord">Landlord</label>
-          <br>
-          <input type="checkbox" class="form-check-input" id="advTenant">
-          <label class="form-check-label" for="advTenant">Tenant</label>
-          <br>
-          <input type="checkbox" class="form-check-input" id="advVendor">
-          <label class="form-check-label" for="advVendor">Vendor</label>
-          <br>
-          <input type="checkbox" class="form-check-input" id="advBuyer">
-          <label class="form-check-label" for="advBuyer">Buyer</label>
+      <div id="advSearch" [collapse]="!advSearchCollapsed">
+        <div class="row">
+          <div class="col-md-auto pr-0">
+            Must be one of:
+          </div>
+          <div class="col">
+            <div class="form-group form-check">
+              <div class="row">
+                <div class="custom-control custom-checkbox col-6 col-md-auto">
+                  <input type="checkbox" class="custom-control-input" id="advLandlord">
+                  <label class="custom-control-label" for="advLandlord">Landlord</label>
+                </div>
+                <div class="custom-control custom-checkbox col-6 col-md-auto">
+                  <input type="checkbox" class="custom-control-input" id="advTenant">
+                  <label class="custom-control-label" for="advTenant">Tenant</label>
+                </div>
+                <div class="custom-control custom-checkbox col-6 col-md-auto">
+                  <input type="checkbox" class="custom-control-input" id="advVendor">
+                  <label class="custom-control-label" for="advVendor">Vendor</label>
+                </div>
+                <div class="custom-control custom-checkbox col-6 col-md-auto">
+                  <input type="checkbox" class="custom-control-input" id="advBuyer">
+                  <label class="custom-control-label" for="advBuyer">Buyer</label>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="row collapse" data-parent="#button-search" id="searchResults">
-    <div class="col">
-      <app-contactgroup-summary id="rigResult" data-toggle="collapse" data-target="#contactProperties"></app-contactgroup-summary>
-    </div>
+  <div [collapse]="!searchResultCollapsed" class="collapse">
+    <app-contactgroup-summary id="rigResult" (click)="contactCollapsed = !contactCollapsed"
+    [attr.aria-expanded]="!contactCollapsed" aria-controls="contactProperties">
+    </app-contactgroup-summary>
 
   </div>
-  <div class="row collapse" data-parent="#rigResult" id="contactProperties">
+  <div class="row collapse" [collapse]="!contactCollapsed" id="contactProperties">
     <div class="container-fluid">
       <div class="alert alert-danger" role="alert">
         <p>Do not contact, GDPR request pending</p>
@@ -51,14 +67,16 @@
           <div class="form-group form-check">
             <input type="checkbox" class="form-check-input" id="c123456" checked>
             <label class="form-check-label" for="c123456">John Smith, Michael Brown, Wendy McTavish
-              <button class="btn btn-sm btn-outline-primary" id="c123456" data-toggle="collapse" data-target="#contactGroupDetails">
+              <button class="btn btn-md btn-outline-primary" id="c123456" data-toggle="collapse"
+                data-target="#contactGroupDetails">
                 <i class="fas fa-users"></i>
               </button>
             </label>
             <br>
             <input type="checkbox" class="form-check-input" id="c341456" checked>
             <label class="form-check-label" for="c341456">John Smith, Susan Smith
-              <button class="btn btn-sm btn-outline-primary" id="c123456" data-toggle="collapse" data-target="#contactGroupDetails">
+              <button class="btn btn-md btn-outline-primary" id="c123456" data-toggle="collapse"
+                data-target="#contactGroupDetails">
                 <i class="fas fa-users"></i>
               </button>
             </label>
@@ -74,8 +92,8 @@
           <div class="accordion" id="leads">
             <div class="card">
               <div class="card-header" id="leads-header">
-                <button class="btn btn-link collapsed align-middle" type="button" data-toggle="collapse" data-target="#leadslist" aria-expanded="false"
-                  aria-controls="leadslist">
+                <button class="btn btn-link collapsed align-middle" type="button" data-toggle="collapse"
+                  data-target="#leadslist" aria-expanded="false" aria-controls="leadslist">
                   Leads (1)
                 </button>
                 <span class="text-right align-middle">
@@ -109,8 +127,8 @@
             <div class="card">
               <div class="card-header" id="notes-header">
                 <h5 class="mb-0">
-                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#noteslist" aria-expanded="false"
-                    aria-controls="noteslist">
+                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#noteslist"
+                    aria-expanded="false" aria-controls="noteslist">
                     Notes (6)
                   </button>
                   <span class="text-right align-middle">
@@ -131,8 +149,8 @@
             <div class="card">
               <div class="card-header" id="searchCriteria-header">
                 <h5 class="mb-0">
-                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#searchCriterialist" aria-expanded="false"
-                    aria-controls="searchCriterialist">
+                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                    data-target="#searchCriterialist" aria-expanded="false" aria-controls="searchCriterialist">
                     Applicants (2)
                   </button>
                   <span class="text-right align-middle">
@@ -140,10 +158,11 @@
                   </span>
                 </h5>
               </div>
-              <div id="searchCriterialist" class="collapse" aria-labelledby="searchCriteria-header" data-parent="#searchCriteria-header">
+              <div id="searchCriterialist" class="collapse" aria-labelledby="searchCriteria-header"
+                data-parent="#searchCriteria-header">
                 <div class="container-fluid">
                   <div class="row border-bottom">
-                    <div class="col-md hoverDiv" routerlink="/applicant-view-sale" >
+                    <div class="col-md hoverDiv" routerlink="/applicant-view-sale">
                       <p>Sales £750,000 2 Beds
                         <br> Chelsea, Kensington
                         <br> Chiara Tassia, Dave Newport</p>
@@ -166,8 +185,8 @@
             <div class="card">
               <div class="card-header" id="valuations-header">
                 <h5 class="mb-0">
-                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#valuationslist" aria-expanded="false"
-                    aria-controls="valuationslist">
+                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                    data-target="#valuationslist" aria-expanded="false" aria-controls="valuationslist">
                     Valuations (2)
                   </button>
                   <span class="text-right align-middle">
@@ -219,13 +238,14 @@
             <div class="card">
               <div class="card-header" id="instructionsSales-header">
                 <h5 class="mb-0">
-                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#instructionsSaleslist" aria-expanded="false"
-                    aria-controls="instructionsSaleslist">
+                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                    data-target="#instructionsSaleslist" aria-expanded="false" aria-controls="instructionsSaleslist">
                     Instructions (2)
                   </button>
                 </h5>
               </div>
-              <div id="instructionsSaleslist" class="collapse" aria-labelledby="instructionsSales-header" data-parent="#instructionsSales">
+              <div id="instructionsSaleslist" class="collapse" aria-labelledby="instructionsSales-header"
+                data-parent="#instructionsSales">
                 <div class="container-fluid">
                   <div class="row hoverDiv border-bottom" routerLink="/property-details-sale">
                     <div class="col-12">
@@ -267,8 +287,8 @@
             <div class="card">
               <div class="card-header" id="offers-header">
                 <h5 class="mb-0">
-                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#offerslist" aria-expanded="false"
-                    aria-controls="offerslist">
+                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#offerslist"
+                    aria-expanded="false" aria-controls="offerslist">
                     Offers (1)
                   </button>
                   <span class="text-right align-middle">
@@ -307,13 +327,14 @@
             <div class="card">
               <div class="card-header" id="tenancies-header">
                 <h5 class="mb-0">
-                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#tenancieslist" aria-expanded="false"
-                    aria-controls="tenancieslist">
+                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                    data-target="#tenancieslist" aria-expanded="false" aria-controls="tenancieslist">
                     Tenancies (1)
                   </button>
                 </h5>
               </div>
-              <div id="tenancieslist" class="collapse" aria-labelledby="tenancies-header" data-parent="#tenancies-header">
+              <div id="tenancieslist" class="collapse" aria-labelledby="tenancies-header"
+                data-parent="#tenancies-header">
                 <div class="container-fluid">
                   <div class="row hoverDiv border-bottom" routerLink="/property-details-letting">
                     <div class="col-12">
@@ -344,13 +365,14 @@
             <div class="card">
               <div class="card-header" id="lettingManagements-header">
                 <h5 class="mb-0">
-                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#lettingManagementslist" aria-expanded="false"
-                    aria-controls="lettingManagementslist">
+                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                    data-target="#lettingManagementslist" aria-expanded="false" aria-controls="lettingManagementslist">
                     Letting Managements (1)
                   </button>
                 </h5>
               </div>
-              <div id="lettingManagementslist" class="collapse" aria-labelledby="lettingManagements-header" data-parent="#lettingManagements-header">
+              <div id="lettingManagementslist" class="collapse" aria-labelledby="lettingManagements-header"
+                data-parent="#lettingManagements-header">
                 <div class="container-fluid">
                   <div class="row hoverDiv border-bottom" routerLink="/property-details-letting">
                     <div class="col-12">
@@ -379,8 +401,8 @@
             <div class="card">
               <div class="card-header" id="homeManagements-header">
                 <h5 class="mb-0">
-                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#homeManagementslist" aria-expanded="false"
-                    aria-controls="homeManagementslist">
+                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                    data-target="#homeManagementslist" aria-expanded="false" aria-controls="homeManagementslist">
                     Home Managements (1)
                   </button>
                   <span class="text-right align-middle">
@@ -388,7 +410,8 @@
                   </span>
                 </h5>
               </div>
-              <div id="homeManagementslist" class="collapse" aria-labelledby="homeManagements-header" data-parent="#homeManagements-header">
+              <div id="homeManagementslist" class="collapse" aria-labelledby="homeManagements-header"
+                data-parent="#homeManagements-header">
                 <div class="container-fluid">
                   <div class="row hoverDiv border-bottom" routerLink="/property-details-letting">
                     <div class="col-12">

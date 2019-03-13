@@ -1,32 +1,23 @@
-<ul class="nav nav-tabs" id="myTab" role="tablist">
-  <li class="nav-item">
-    <a class="nav-link active" id="me-tab" data-toggle="tab" href="#me" role="tab" aria-controls="me" aria-selected="true">Me</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" id="team-tab" data-toggle="tab" href="#team" role="tab" aria-controls="team" aria-selected="false">Team</a>
-  </li>
-  <li>
-    <div class="form-group">
-      <select [(ngModel)]="selectedPeriod" class="form-control" id="sel1">
-        <option *ngFor='let periodOption of periodList' [value]='periodOption.key'>{{periodOption.value}}</option>
-      </select>
-    </div>
-  </li>
-</ul>
-<div class="tab-content" id="myTabContent">
-  <div class="tab-pane fade show active" id="me" role="tabpanel" aria-labelledby="me-tab">
-    <div class="no-gutters">
-      <app-my-dashboard [myDashboard]='myDashboard' [period]='period'></app-my-dashboard>
-    </div>
+<div class="tab-container">
+  <div class="form-group">
+    <select [(ngModel)]="selectedPeriod" class="form-control" id="sel1">
+      <option *ngFor='let periodOption of periodList' [value]='periodOption.key'>{{periodOption.value}}</option>
+    </select>
   </div>
-  <div class="tab-pane fade" id="team" role="tabpanel" aria-labelledby="team-tab">
-    <div class="no-gutters">
-      <app-team-dashboard [teamDashboard]='teamDashboard' [dashboardTotals]='dashboardTotals'
-        [totalApplicants]='totalApplicants' [totalViewings]='totalViewings' [totalOffersAgreed]='totalOffersAgreed'
-        [totalOffersReceived]='totalOffersReceived' [totalExchanges]='totalExchanges' [totalPipeline]='totalPipeline'>
-      </app-team-dashboard>
-    </div>
-  </div>
- <!-- <label class="alert alert-info p-1 d-flex align-items-center justify-content-left">  Logged in user id is: {{staffMemberId}} and email address is: {{email}}</label> -->
+  <tabset>
+    <tab heading="Me">
+      <div class="no-gutters">
+        <app-my-dashboard [myDashboard]='myDashboard' [period]='period'></app-my-dashboard>
+      </div>
+    </tab>
+    <tab heading="Team">
+      <div class="no-gutters">
+        <app-team-dashboard [teamDashboard]='teamDashboard' [dashboardTotals]='dashboardTotals'
+          [totalApplicants]='totalApplicants' [totalViewings]='totalViewings' [totalOffersAgreed]='totalOffersAgreed'
+          [totalOffersReceived]='totalOffersReceived' [totalExchanges]='totalExchanges' [totalPipeline]='totalPipeline'>
+        </app-team-dashboard>
+      </div>
+    </tab>
+  </tabset>
 </div>
-
+ <!-- <label class="alert alert-info p-1 d-flex align-items-center justify-content-left">  Logged in user id is: {{staffMemberId}} and email address is: {{email}}</label> -->

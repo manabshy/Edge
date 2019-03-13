@@ -6,7 +6,7 @@ import { UserService } from '../core/services/user.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
   isLoggedIn: boolean;
@@ -18,10 +18,10 @@ export class HomeComponent implements OnInit {
   constructor(private authService: AuthService, private userService: UserService) { }
 
   ngOnInit() {
-    if (this.authService.isLoggedIn()) {
-      this.isLoggedIn = true;
-      this.getUserByEmail(this.authService.getUsername());
-    }
+    // if (this.authService.isLoggedIn()) {
+    //   this.isLoggedIn = true;
+    //   this.getUserByEmail(this.authService.getUsername());
+    // }
   }
   getUserByEmail(username: string): void {
     this.userService.getUserByEmail(username)

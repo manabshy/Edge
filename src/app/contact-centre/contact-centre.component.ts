@@ -7,6 +7,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ContactCentreComponent implements OnInit {
 
+  searchResultCollapsed = false;
+  advSearchCollapsed = false;
+  contactCollapsed = false;
+
   constructor() { }
 
   ngOnInit() {

@@ -1,0 +1,22 @@
+.nav-pills {
+    @include media-breakpoint-down(sm){
+        justify-content: space-between;
+    }
+}
+
+.tab-pane {
+    padding-top: spacer(3);
+    padding-bottom: spacer(3);
+}
+
+.tab-container {
+    position: relative;
+    .form-group {
+        @include media-breakpoint-up(sm) {
+            position: absolute;
+            right: 0;
+            top: 0;
+            z-index: 1;
+        }
+    }
+}
