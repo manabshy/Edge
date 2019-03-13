@@ -7,9 +7,10 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
 import { MyDashboardComponent } from './my-dashboard/my-dashboard.component';
 import { TeamDashboardComponent } from './team-dashboard/team-dashboard.component';
 import { CoreModule } from '../core/core.module';
+import { OfferListComponent } from './offer-list/offer-list.component';
 
 @NgModule({
-  declarations: [MyDashboardComponent, TeamDashboardComponent],
+  declarations: [MyDashboardComponent, TeamDashboardComponent, OfferListComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
