@@ -3,6 +3,7 @@ import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/cor
 import { DashboardService } from './shared/dashboard.service';
 import { Dashboard, DashboardResult, TeamDashboardResult, DashboardTotals } from './shared/dashboard';
 import { User, UserResult } from '../core/models/user';
+import { Constants } from '../core/shared/period-list';
 
 @Component({
   selector: 'app-dashboard',
@@ -30,13 +31,9 @@ export class DashboardComponent implements OnInit {
   user: User;
   @Input() staffMemberId: number;
   private _selectedPeriod: string;
-  periodList = [
-    {key: 'ThisWeek', value: 'This Week'},
-    {key: 'ThisMonth', value: 'This Month'},
-    {key: 'ThisQuarter', value: 'This Quarter'},
-    {key: 'ThisYear', value: 'This Year'}
-  ];
-    private readonly role = 'salesManager';
+  periodList = Constants.PeriodList;
+  private readonly role = 'salesManager';
+  
   set selectedPeriod(val: string) {
     this._selectedPeriod = val;
     this.period = this.getSelectedPeriod(this._selectedPeriod);
