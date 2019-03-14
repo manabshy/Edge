@@ -12,3 +12,11 @@ html {
         font-size: 0.85rem;
     }
 }
+
+a:not(:disabled) {
+    cursor: pointer;
+}
+
+.list-group-item-action {
+    cursor: pointer;
+}

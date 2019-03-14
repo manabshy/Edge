@@ -1,114 +1,118 @@
 <div class="row">
-  <div class="col col-12 text-left bg-primary mb-2 p-1">
-    <h6>Applicants</h6>
-    <table class="table table-sm table-borderless" >
-      <thead>
-        <tr class="align-table-row"><th scope="col">Total</th></tr>
-        <tr class="align-table-row" *ngFor="let member of teamDashboard">
-          <th scope="col">{{ member.staffMember.staffMemberFullName | shortenName}}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="align-table-row"><td scope="col">{{totalApplicants}}</td></tr>
-        <tr class="align-table-row" *ngFor="let member of teamDashboard">
-          <td>{{ member.applicants.totalCount }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="card">
+    <div class="card-body pb-2">
+      <h5 class="card-title">Applicants</h5>
+      <div class="row align-items-center">
+        <div class="col-4 text-center">
+          <strong class="card-text h3">{{totalApplicants}}</strong>
+          <p><small class="text-muted">Total</small></p>
+        </div>
+        <div class="col-8">
+          <div class="row">
+            <div class="col-6 px-2 text-center" *ngFor="let member of teamDashboard">
+              <strong class="card-text h5">{{ member.applicants.totalCount }}</strong>
+              <p><small class="text-muted">{{ member.staffMember.staffMemberFullName | shortenName}}</small></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
-<div class="row">
-  <div class="col col-12 text-left bg-primary mb-2 p-1">
-    <h6>Viewings</h6>
-    <table class="table table-sm table-borderless" >
-      <thead>
-        <tr class="align-table-row"><th scope="col">Total</th></tr>
-        <tr class="align-table-row" *ngFor="let member of teamDashboard">
-          <th scope="col">{{ member.staffMember.staffMemberFullName | shortenName }}</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="align-table-row"><td scope="col">{{totalViewings}}</td></tr>
-        <tr class="align-table-row" *ngFor="let member of teamDashboard">
-          <td>{{ member.viewings?.periodCount || 0 }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="card">
+    <div class="card-body pb-2">
+      <h5 class="card-title">Viewings</h5>
+      <div class="row align-items-center">
+        <div class="col-4 text-center">
+          <strong class="card-text h3">{{totalViewings}}</strong>
+          <p><small class="text-muted">Total</small></p>
+        </div>
+        <div class="col-8">
+          <div class="row">
+            <div class="col-6 px-2 text-center" *ngFor="let member of teamDashboard">
+              <strong class="card-text h5">{{ member.viewings?.periodCount || 0 }}</strong>
+              <p><small class="text-muted">{{ member.staffMember.staffMemberFullName | shortenName}}</small></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
-<div class="row">
-  <div class="col col-12 text-left bg-primary mb-2 p-1">
-    <h6>Offers agreed</h6>
-    <table class="table table-sm table-borderless" >
-      <thead>
-        <tr class="align-table-row"><th scope="col">Total</th></tr>
-        <tr class="align-table-row" *ngFor="let member of teamDashboard">
-          <th scope="col">{{ member.staffMember.staffMemberFullName | shortenName}}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="align-table-row"><td scope="col">{{totalOffersAgreed}}</td></tr>
-        <tr class="align-table-row" *ngFor="let member of teamDashboard">
-          <td>{{ member.offersAgreed.periodCount }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="card">
+    <div class="card-body pb-2">
+      <h5 class="card-title">Offers Agreed</h5>
+      <div class="row align-items-center">
+        <div class="col-4 text-center">
+          <strong class="card-text h3">{{totalOffersAgreed}}</strong>
+          <p><small class="text-muted">Total</small></p>
+        </div>
+        <div class="col-8">
+          <div class="row">
+            <div class="col-6 px-2 text-center" *ngFor="let member of teamDashboard">
+              <strong class="card-text h5">{{ member.offersAgreed.periodCount }}</strong>
+              <p><small class="text-muted">{{ member.staffMember.staffMemberFullName | shortenName}}</small></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
-<div class="row">
-  <div class="col col-12 text-left bg-primary mb-2 p-1">
-    <h6>Offers Received</h6>
-    <table class="table table-sm table-borderless" >
-      <thead>
-        <tr class="align-table-row"><th scope="col">Total</th></tr>
-        <tr class="align-table-row" *ngFor="let member of teamDashboard">
-          <th scope="col">{{ member.staffMember.staffMemberFullName | shortenName}}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="align-table-row"><td scope="col">{{totalOffersReceived}}</td></tr>
-        <tr class="align-table-row" *ngFor="let member of teamDashboard">
-          <td>{{ member.offersReceived.periodCount }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="card">
+    <div class="card-body pb-2">
+      <h5 class="card-title">Offers Received</h5>
+      <div class="row align-items-center">
+        <div class="col-4 text-center">
+          <strong class="card-text h3">{{totalOffersReceived}}</strong>
+          <p><small class="text-muted">Total</small></p>
+        </div>
+        <div class="col-8">
+          <div class="row">
+            <div class="col-6 px-2 text-center" *ngFor="let member of teamDashboard">
+              <strong class="card-text h5">{{ member.offersReceived.periodCount }}</strong>
+              <p><small class="text-muted">{{ member.staffMember.staffMemberFullName | shortenName}}</small></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
-<div class="row">
-  <div class="col col-12 text-left bg-primary mb-2 p-1">
-    <h6>Exchanges</h6>
-    <table class="table table-sm table-borderless" >
-      <thead>
-        <tr class="align-table-row"><th scope="col">Total</th></tr>
-        <tr class="align-table-row" *ngFor="let member of teamDashboard">
-          <th scope="col">{{ member.staffMember.staffMemberFullName | shortenName}}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="align-table-row"><td scope="col">{{totalExchanges | rounding | currency: 'GBP' }}</td></tr>
-        <tr class="align-table-row" *ngFor="let member of teamDashboard">
-          <td>{{ member.exchanges.periodFees | rounding | currency: "GBP" | truncating }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="card">
+    <div class="card-body pb-2">
+      <h5 class="card-title">Exchanges</h5>
+      <div class="row align-items-center">
+        <div class="col-4 text-center">
+          <strong class="card-text h3">{{totalExchanges | rounding | currency: 'GBP' }}</strong>
+          <p><small class="text-muted">Total</small></p>
+        </div>
+        <div class="col-8">
+          <div class="row">
+            <div class="col-6 px-2 text-center" *ngFor="let member of teamDashboard">
+              <strong
+                class="card-text h5">{{ member.exchanges.periodFees | rounding | currency: "GBP" | truncating }}</strong>
+              <p><small class="text-muted">{{ member.staffMember.staffMemberFullName | shortenName}}</small></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
-<div class="row">
-  <div class="col col-12 text-left bg-primary mb-2 p-1">
-    <h6>Pipeline</h6>
-    <table class="table table-sm table-borderless" >
-      <thead>
-        <tr class="align-table-row"><th scope="col">Total</th></tr>
-        <tr class="align-table-row" *ngFor="let member of teamDashboard">
-          <th scope="col">{{ member.staffMember.staffMemberFullName | shortenName}}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="align-table-row"><td scope="col">{{totalPipeline | rounding | currency: 'GBP' }}</td></tr>
-        <tr class="align-table-row" *ngFor="let member of teamDashboard">
-          <td>{{ member.pipeline.totalFees | rounding | currency: 'GBP' | truncating }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="card">
+    <div class="card-body pb-2">
+      <h5 class="card-title">Pipeline</h5>
+      <div class="row align-items-center">
+        <div class="col-4 text-center">
+          <strong class="card-text h3">{{totalPipeline | rounding | currency: 'GBP' }}</strong>
+          <p><small class="text-muted">Total</small></p>
+        </div>
+        <div class="col-8">
+          <div class="row">
+            <div class="col-6 px-2 text-center" *ngFor="let member of teamDashboard">
+              <strong
+                class="card-text h5">{{ member.pipeline.totalFees | rounding | currency: 'GBP' | truncating }}</strong>
+              <p><small class="text-muted">{{ member.staffMember.staffMemberFullName | shortenName}}</small></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

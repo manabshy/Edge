@@ -1,11 +1,9 @@
-<app-breadcrumb></app-breadcrumb>
-
 <nav class="nav justify-content-end d-none d-sm-flex">
   <a *ngIf="!isLoggedIn" class="nav-link" [routerLink]="['/login']">Login</a>
   <a *ngIf="isLoggedIn" class="nav-link" [routerLink]="['/logout']">Logout</a>
 </nav>
 <div class="container">
-  <div class="alert alert-info">You are currently 31st. Complete 3 tasks for 30th</div>
+  <div class="alert alert-info mt-3">You are currently 31st. Complete 3 tasks for 30th</div>
   <tabset type="pills">
     <tab>
         <ng-template tabHeading>

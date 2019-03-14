@@ -11,12 +11,25 @@
 
 .tab-container {
     position: relative;
+    text-align: right;
+
+    .tab-pane {
+        text-align: left;
+    }
+
     .form-group {
-        @include media-breakpoint-up(sm) {
+        right: 0;
+        top: 0;
+        z-index: 1;
+        display: inline-block;
+        width: auto;
+
+        &.float {
             position: absolute;
-            right: 0;
-            top: 0;
-            z-index: 1;
+        }
+
+        @include media-breakpoint-up("sm") {
+            position: absolute;
         }
     }
 }

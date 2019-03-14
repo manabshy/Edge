@@ -1,5 +1,5 @@
 <div class="tab-container">
-  <div class="form-group">
+  <div class="form-group float">
     <select [(ngModel)]="selectedPeriod" class="form-control" id="sel1">
       <option *ngFor='let periodOption of periodList' [value]='periodOption.key'>{{periodOption.value}}</option>
     </select>

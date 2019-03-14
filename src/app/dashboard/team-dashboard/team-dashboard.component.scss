@@ -1,0 +1,16 @@
+@import "../../../style/bootstrap-overrides";
+
+@import "../../../../node_modules/bootstrap/scss/functions";
+@import "../../../../node_modules/bootstrap/scss/variables";
+@import "../../../../node_modules/bootstrap/scss/mixins";
+
+.card{
+  margin-bottom: spacer(3);
+  width: calc(100% - #{$grid-gutter-width});
+  margin-left: $grid-gutter-width/2;
+  margin-right: $grid-gutter-width/2;
+
+  @include media-breakpoint-up(sm) {
+    width: calc(50% - #{$grid-gutter-width});
+  }
+}
