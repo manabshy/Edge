@@ -39,6 +39,8 @@ import { CoreModule } from './core/core.module';
 import { AccountModule } from './account/account.module';
 import { LeaderboardModule } from './leaderboard/leaderboard.module';
 import { FormsModule } from '@angular/forms';
+import { PropertyModule } from './property/property.module';
+import { ContactgroupsModule } from './contactgroups/contactgroups.module';
 
 //bootstrap modules
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
@@ -88,6 +90,8 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
     AppRoutingModule,
     DashboardModule,
     LeaderboardModule,
+    PropertyModule,
+    ContactgroupsModule,
     BsDropdownModule.forRoot(),
     CollapseModule.forRoot(),
     TabsModule.forRoot()

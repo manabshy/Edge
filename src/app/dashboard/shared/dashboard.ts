@@ -1,4 +1,5 @@
 import { ResultData } from 'src/app/core/shared/result-data';
+import { Address } from 'src/app/core/models/address';
 
 export interface Dashboard {
   period: string;
@@ -38,7 +39,7 @@ export interface TeamDashboardResult extends ResultData {
   result: Dashboard[];
 }
 
-export interface DashboardTotals{
+export interface DashboardTotals {
   applicants: number;
   viewings: number;
   offersAgreed: number;
@@ -47,4 +48,18 @@ export interface DashboardTotals{
   pipeline: number;
 }
 
+export interface OffersResult extends ResultData {
+ result: Offer[];
+}
 
+export interface Offer {
+  propertyId: number;
+  propertyLettingId: number;
+  propertySaleId: number;
+  valuationId: number;
+  propertyAddress: Address;
+  valuationDate: Date;
+  salesValue: number;
+  longLetValue: number;
+  shortLetValue: number;
+}
