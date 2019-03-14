@@ -12,12 +12,12 @@ export class DashboardService {
   constructor(private http: HttpClient) {}
 
   getStaffMemberDashboard( staffMemberId: number, role: string, period?: string): Observable<DashboardResult> {
-    const url = `${AppConstants.baseUrl}/${staffMemberId}/dashboard?period=${period}&role=${role}`;
+    const url = `${AppConstants.baseUrl}/dashboard?period=${period}&role=${role}&staffMemberId=${staffMemberId}`;
     return this.http.get<DashboardResult>(url);
   }
 
   getTeamMembersDashboard(staffMemberId: number, role: string, period?: string): Observable<TeamDashboardResult> {
-    const url = `${AppConstants.baseUrl}/${staffMemberId}/teammembers/dashboard?period=${period}&role=${role}`;
+    const url = `${AppConstants.baseUrl}/teammembers/dashboard?period=${period}&role=${role}&staffMemberId=${staffMemberId}`;
     return this.http.get<TeamDashboardResult>(url);
   }
 }

@@ -1,5 +1,5 @@
 import { ResultData } from 'src/app/core/shared/result-data';
-import { Address } from 'cluster';
+import { Address } from 'src/app/core/models/address';
 
 export interface Dashboard {
   period: string;
