@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Offer } from '../shared/dashboard';
+import { Offer, Pipeline } from '../shared/dashboard';
 
 @Component({
   selector: 'app-dashboard-list',
@@ -7,6 +7,7 @@ import { Offer } from '../shared/dashboard';
   styleUrls: ['./dashboard-list.component.css']
 })
 export class DashboardListComponent implements OnInit {
+  @Input() pipeline: Pipeline[];
   @Input() offers: Offer[];
 
   constructor() { }

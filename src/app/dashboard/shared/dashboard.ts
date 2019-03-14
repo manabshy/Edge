@@ -51,6 +51,9 @@ export interface DashboardTotals {
 export interface OffersResult extends ResultData {
   result: Offer[];
 }
+export interface PipelineResult extends ResultData {
+  result: Pipeline[];
+}
 
 // export interface Offer {
 //   propertyId: number;

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 import { DashboardService } from './shared/dashboard.service';
-import { Dashboard, DashboardResult, TeamDashboardResult, DashboardTotals, OffersResult } from './shared/dashboard';
+import { Dashboard, DashboardResult, TeamDashboardResult, DashboardTotals, OffersResult, Pipeline } from './shared/dashboard';
 import { User, UserResult } from '../core/models/user';
 import { Constants } from '../core/shared/period-list';
 
@@ -15,6 +15,7 @@ export class DashboardComponent implements OnInit {
   teamDashboard: Dashboard[];
   dashboardResult: DashboardResult;
   teamDashboardResult: TeamDashboardResult;
+  pipeline: Pipeline[];
   dashboardTotals: DashboardTotals;
   totalApplicants: number;
   totalOffersAgreed: number;
@@ -39,6 +40,7 @@ export class DashboardComponent implements OnInit {
     this.period = this.getSelectedPeriod(this._selectedPeriod);
     this.getStaffMemberDashboard(2337, this.role, this.selectedPeriod);
     this.getTeamMembersDashboard(2337, this.role, this.selectedPeriod);
+    this.getDashboardPipeline(2337, this.role, this.selectedPeriod);
   }
   get selectedPeriod() {
     return this._selectedPeriod;
@@ -70,6 +72,14 @@ export class DashboardComponent implements OnInit {
         this.getDashboardTotals(data.result);
       });
   }
+  getDashboardPipeline(id: number, role: string, period?: string): void {
+    this.dashboardService.getDashboardPipeline(id, role, period)
+      .subscribe(data => {
+        this.pipeline = data.result;
+        console.log(this.pipeline);
+      });
+  }
+
   getSelectedPeriod(val: string) {
     const periodArray = this.periodList.filter(x => x.key === val);
     const periodValue = Object.values(periodArray)[0].value;
