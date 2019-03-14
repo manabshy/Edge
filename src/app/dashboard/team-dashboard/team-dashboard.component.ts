@@ -15,6 +15,7 @@ export class TeamDashboardComponent implements OnInit {
   @Input() totalOffersAgreed: number;
   @Input() totalOffersReceived: number;
   @Input() totalPipeline: number;
+  @Input() period: string;
 
   constructor() { }
 

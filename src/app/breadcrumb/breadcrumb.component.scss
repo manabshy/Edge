@@ -6,4 +6,8 @@
 
 .breadcrumb {
     border-radius: 0;
+
+    @include media-breakpoint-down(md) {
+        display: none;
+    }
 }

@@ -1,3 +1,12 @@
-<p>
-  diary works!
-</p>
+<div class="btn-group" dropdown [dropup]="isDropup" (window:resize)="setDropup()">
+  <button id="button-dropup" dropdownToggle type="button" class="btn btn-secondary rounded"
+          aria-controls="event-dropup">
+  <i class="fas fa-plus"></i> <span class="d-none d-sm-inline ml-2">Add Event</span>
+  </button>
+  <ul id="event-dropup" *dropdownMenu class="dropdown-menu"
+      role="menu" aria-labelledby="button-dropup">
+    <li role="menuitem"><a class="dropdown-item" href="#"><i class="fas fa-calendar-day fa-fw mr-2"></i>Appointment</a></li>
+    <li role="menuitem"><a class="dropdown-item" href="#"><i class="fas fa-phone fa-fw mr-2"></i>Callback reminder</a>
+    </li>
+  </ul>
+</div>
