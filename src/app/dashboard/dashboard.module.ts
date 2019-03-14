@@ -8,9 +8,10 @@ import { MyDashboardComponent } from './my-dashboard/my-dashboard.component';
 import { TeamDashboardComponent } from './team-dashboard/team-dashboard.component';
 import { CoreModule } from '../core/core.module';
 import { OfferListComponent } from './offer-list/offer-list.component';
+import { DashboardListComponent } from './dashboard-list/dashboard-list.component';
 
 @NgModule({
-  declarations: [MyDashboardComponent, TeamDashboardComponent, OfferListComponent],
+  declarations: [MyDashboardComponent, TeamDashboardComponent, OfferListComponent, DashboardListComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
