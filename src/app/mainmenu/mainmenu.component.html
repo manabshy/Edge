@@ -2,7 +2,8 @@
   <a class="navbar-brand" routerLink="home">Wedge</a>
   <button class="navbar-toggler" type="button" (click)="navbarCollapsed = !navbarCollapsed"
   [attr.aria-expanded]="!navbarCollapsed" aria-controls="navbarNavDropdown">
-    <span class="navbar-toggler-icon"></span>
+    <i class="fas fa-bars fa-lg" *ngIf="!navbarCollapsed"></i>
+    <i class="fas fa-times fa-lg" *ngIf="navbarCollapsed"></i>
   </button>
   <div class="collapse navbar-collapse" id="navbarNavDropdown" [collapse]="!navbarCollapsed">
     <ul class="navbar-nav flex-column">
@@ -50,3 +51,4 @@
     </ul>
   </div>
 </nav>
+<div class="navbar-backdrop" *ngIf="navbarCollapsed" (click)="navbarCollapsed = !navbarCollapsed"></div>

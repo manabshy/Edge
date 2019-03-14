@@ -6,11 +6,25 @@
 
 //partials
 @import "style/partials/nav";
+@import "style/partials/card";
 
 html {
     @include media-breakpoint-down(sm) {
         font-size: 0.85rem;
     }
+}
+
+body {
+    padding-top: 48px;
+
+    @include media-breakpoint-up(sm) {
+        padding-top: 56px;
+    }
+
+    @include media-breakpoint-up(lg) {
+        padding-top: 0;
+    }
+
 }
 
 a:not(:disabled) {

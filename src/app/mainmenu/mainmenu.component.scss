@@ -11,6 +11,17 @@
     }
 }
 
+.navbar {
+    @include media-breakpoint-down(md){
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1030;
+    }
+}
+
+
 .navbar-nav {
     width: 100%;
 
@@ -32,5 +43,25 @@
 
     .dropdown-menu {
         position: static;
+    }
+}
+
+.navbar-toggler {
+    border: none;
+    text-align: center;
+    padding: 0;
+}
+
+.navbar-backdrop {
+    display: none;
+    @include media-breakpoint-down(md){
+        position: fixed;
+        display: block;
+        width: 100vw;
+        height: 100vh;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        background-color: rgba(0,0,0,.5);
     }
 }

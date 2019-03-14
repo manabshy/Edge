@@ -1,16 +1,16 @@
-<div class="row">
+<div class="card-grid">
   <div class="card">
     <div class="card-body pb-2">
-      <h5 class="card-title">Applicants</h5>
+      <h6 class="card-title">Applicants</h6>
       <div class="row align-items-center">
         <div class="col-4 text-center">
-          <strong class="card-text h3">{{totalApplicants}}</strong>
+          <h5 class="m-0 text-secondary">{{totalApplicants}}</h5>
           <p><small class="text-muted">Total</small></p>
         </div>
         <div class="col-8">
           <div class="row">
             <div class="col-6 px-2 text-center" *ngFor="let member of teamDashboard">
-              <strong class="card-text h5">{{ member.applicants.totalCount }}</strong>
+              <h5 class="m-0">{{ member.applicants.totalCount }}</h5>
               <p><small class="text-muted">{{ member.staffMember.staffMemberFullName | shortenName}}</small></p>
             </div>
           </div>
@@ -20,16 +20,16 @@
   </div>
   <div class="card">
     <div class="card-body pb-2">
-      <h5 class="card-title">Viewings</h5>
+      <h6 class="card-title">Viewings</h6>
       <div class="row align-items-center">
         <div class="col-4 text-center">
-          <strong class="card-text h3">{{totalViewings}}</strong>
+          <h5 class="m-0 text-secondary">{{totalViewings}}</h5>
           <p><small class="text-muted">Total</small></p>
         </div>
         <div class="col-8">
           <div class="row">
             <div class="col-6 px-2 text-center" *ngFor="let member of teamDashboard">
-              <strong class="card-text h5">{{ member.viewings?.periodCount || 0 }}</strong>
+              <h5 class="m-0">{{ member.viewings?.periodCount || 0 }}</h5>
               <p><small class="text-muted">{{ member.staffMember.staffMemberFullName | shortenName}}</small></p>
             </div>
           </div>
@@ -39,16 +39,16 @@
   </div>
   <div class="card">
     <div class="card-body pb-2">
-      <h5 class="card-title">Offers Agreed</h5>
+      <h6 class="card-title">Offers Agreed</h6>
       <div class="row align-items-center">
         <div class="col-4 text-center">
-          <strong class="card-text h3">{{totalOffersAgreed}}</strong>
+          <h5 class="m-0 text-secondary">{{totalOffersAgreed}}</h5>
           <p><small class="text-muted">Total</small></p>
         </div>
         <div class="col-8">
           <div class="row">
             <div class="col-6 px-2 text-center" *ngFor="let member of teamDashboard">
-              <strong class="card-text h5">{{ member.offersAgreed.periodCount }}</strong>
+              <h5 class="m-0">{{ member.offersAgreed.periodCount }}</h5>
               <p><small class="text-muted">{{ member.staffMember.staffMemberFullName | shortenName}}</small></p>
             </div>
           </div>
@@ -58,16 +58,16 @@
   </div>
   <div class="card">
     <div class="card-body pb-2">
-      <h5 class="card-title">Offers Received</h5>
+      <h6 class="card-title">Offers Received</h6>
       <div class="row align-items-center">
         <div class="col-4 text-center">
-          <strong class="card-text h3">{{totalOffersReceived}}</strong>
+          <h5 class="m-0 text-secondary">{{totalOffersReceived}}</h5>
           <p><small class="text-muted">Total</small></p>
         </div>
         <div class="col-8">
           <div class="row">
             <div class="col-6 px-2 text-center" *ngFor="let member of teamDashboard">
-              <strong class="card-text h5">{{ member.offersReceived.periodCount }}</strong>
+              <h5 class="m-0">{{ member.offersReceived.periodCount }}</h5>
               <p><small class="text-muted">{{ member.staffMember.staffMemberFullName | shortenName}}</small></p>
             </div>
           </div>
@@ -77,17 +77,16 @@
   </div>
   <div class="card">
     <div class="card-body pb-2">
-      <h5 class="card-title">Exchanges</h5>
+      <h6 class="card-title">Exchanges</h6>
       <div class="row align-items-center">
         <div class="col-4 text-center">
-          <strong class="card-text h3">{{totalExchanges | rounding | currency: 'GBP' }}</strong>
+          <h5 class="m-0 text-secondary">{{totalExchanges | rounding | currency: 'GBP' | truncating }}</h5>
           <p><small class="text-muted">Total</small></p>
         </div>
         <div class="col-8">
           <div class="row">
             <div class="col-6 px-2 text-center" *ngFor="let member of teamDashboard">
-              <strong
-                class="card-text h5">{{ member.exchanges.periodFees | rounding | currency: "GBP" | truncating }}</strong>
+              <h5 class="m-0">{{ member.exchanges.periodFees | rounding | currency: "GBP" | truncating }}</h5>
               <p><small class="text-muted">{{ member.staffMember.staffMemberFullName | shortenName}}</small></p>
             </div>
           </div>
@@ -97,17 +96,16 @@
   </div>
   <div class="card">
     <div class="card-body pb-2">
-      <h5 class="card-title">Pipeline</h5>
+      <h6 class="card-title">Pipeline</h6>
       <div class="row align-items-center">
         <div class="col-4 text-center">
-          <strong class="card-text h3">{{totalPipeline | rounding | currency: 'GBP' }}</strong>
+          <h5 class="m-0 text-secondary">{{totalPipeline | rounding | currency: 'GBP' | truncating }}</h5>
           <p><small class="text-muted">Total</small></p>
         </div>
         <div class="col-8">
           <div class="row">
             <div class="col-6 px-2 text-center" *ngFor="let member of teamDashboard">
-              <strong
-                class="card-text h5">{{ member.pipeline.totalFees | rounding | currency: 'GBP' | truncating }}</strong>
+              <h5 class="m-0">{{ member.pipeline.totalFees | rounding | currency: 'GBP' | truncating }}</h5>
               <p><small class="text-muted">{{ member.staffMember.staffMemberFullName | shortenName}}</small></p>
             </div>
           </div>
