@@ -10,6 +10,13 @@
               <td>{{ item.propertyStatus }}</td>
               <td>{{ item.offerAgreedDate | date }}</td>
             </tr>
+            <tr *ngFor="let instruction of instructions">
+                <td>{{ instruction.propertyAddress }}</td>
+                <td>{{ instruction.contactGroupAddressee }}</td>
+                <td>{{ instruction.salesValue }}</td>
+                <td>{{ instruction.status }}</td>
+                <td>{{ instruction.instructedDate | date }}</td>
+            </tr>
           </tbody>
         </table>
       </div>

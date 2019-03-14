@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 import { DashboardService } from './shared/dashboard.service';
-import { Dashboard, DashboardResult, TeamDashboardResult, DashboardTotals, OffersResult, Pipeline } from './shared/dashboard';
+import { Dashboard, DashboardResult, TeamDashboardResult, DashboardTotals, OffersResult, Pipeline, Instruction } from './shared/dashboard';
 import { User, UserResult } from '../core/models/user';
 import { Constants } from '../core/shared/period-list';
 
@@ -16,6 +16,7 @@ export class DashboardComponent implements OnInit {
   dashboardResult: DashboardResult;
   teamDashboardResult: TeamDashboardResult;
   pipeline: Pipeline[];
+  instructions: Instruction[];
   dashboardTotals: DashboardTotals;
   totalApplicants: number;
   totalOffersAgreed: number;
@@ -41,6 +42,7 @@ export class DashboardComponent implements OnInit {
     this.getStaffMemberDashboard(2337, this.role, this.selectedPeriod);
     this.getTeamMembersDashboard(2337, this.role, this.selectedPeriod);
     this.getDashboardPipeline(2337, this.role, this.selectedPeriod);
+    this.getDashboardInstructions(2337, this.role, this.selectedPeriod);
   }
   get selectedPeriod() {
     return this._selectedPeriod;
@@ -77,6 +79,13 @@ export class DashboardComponent implements OnInit {
       .subscribe(data => {
         this.pipeline = data.result;
         console.log(this.pipeline);
+      });
+  }
+  getDashboardInstructions(id: number, role: string, period?: string): void {
+    this.dashboardService.getDashboardInstructions(id, role, period)
+      .subscribe(data => {
+        this.instructions = data.result;
+        console.log(this.instructions);
       });
   }
 
