@@ -1,24 +1,48 @@
-<div class="card">
-    <div class="card-body">
-      <div class="table-responsive ">
-        <table class="table table-hover table-striped">
-          <tbody>
-            <tr *ngFor="let item of pipeline;">
-              <td>{{ item.propertyAddress }}</td>
-              <td>{{ item.contactGroupAddressee }}</td>
-              <td>{{ item.commissionFees }}</td>
-              <td>{{ item.propertyStatus }}</td>
-              <td>{{ item.offerAgreedDate | date }}</td>
-            </tr>
-            <tr *ngFor="let instruction of instructions">
-                <td>{{ instruction.propertyAddress }}</td>
-                <td>{{ instruction.contactGroupAddressee }}</td>
-                <td>{{ instruction.salesValue }}</td>
-                <td>{{ instruction.status }}</td>
-                <td>{{ instruction.instructedDate | date }}</td>
-            </tr>
-          </tbody>
-        </table>
+<div class="list-group text-left">
+  <div class="list-group-item list-group-item-action pb-1" *ngFor="let item of pipeline;">
+    <div class="row align-items-end align-items-sm-center">
+      <div class="col-12 mb-2">
+        <strong>{{ item.propertyAddress }}</strong>
+      </div>
+      <div class="col-7 col-sm-9">
+        <div class="row align-items-center">
+          <div class="col-sm-6 mb-2">
+            {{ item.contactGroupAddressee }}
+          </div>
+          <div class="col-sm-3 mb-2">
+            {{ item.commissionFees }}
+          </div>
+          <div class="col-sm-3 mb-2">
+            {{ item.propertyStatus }}
+          </div>
+        </div>
+      </div>
+      <div class="col-5 col-sm-3 mb-2 text-right">
+        {{ item.offerAgreedDate | date }}
       </div>
     </div>
   </div>
+  <div class="list-group-item list-group-item-action pb-0" *ngFor="let instruction of instructions">
+    <div class="row align-items-end align-items-sm-center">
+      <div class="col-12 mb-2">
+        <strong>{{ instruction.propertyAddress }}</strong>
+      </div>
+      <div class="col-7 col-sm-9">
+        <div class="row align-items-center">
+          <div class="col-sm-6 mb-2">
+            {{ instruction.contactGroupAddressee }}
+          </div>
+          <div class="col-sm-3 mb-2">
+            {{ instruction.salesValue }}
+          </div>
+          <div class="col-sm-3 mb-2">
+            {{ instruction.status }}
+          </div>
+        </div>
+      </div>
+      <div class="col-5 col-sm-3 mb-2 text-right">
+        {{ instruction.instructedDate | date }}
+      </div>
+    </div>
+  </div>
+</div>
