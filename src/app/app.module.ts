@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { MainmenuComponent } from './mainmenu/mainmenu.component';
@@ -100,6 +100,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
     MainmenuComponent
  ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [NO_ERRORS_SCHEMA]
 })
 export class AppModule { }

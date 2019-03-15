@@ -57,7 +57,9 @@ export interface PipelineResult extends ResultData {
 export interface InstructionResult extends ResultData {
   result: Instruction[];
 }
-
+export interface ApplicantResult extends ResultData {
+  result: Applicant[];
+}
 // export interface Offer {
 //   propertyId: number;
 //   propertyLettingId: number;

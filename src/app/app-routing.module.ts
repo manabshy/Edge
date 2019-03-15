@@ -9,7 +9,7 @@ import { LeadEditComponent }   from './lead-edit/lead-edit.component';
 import { LeadRegisterComponent }   from './lead-register/lead-register.component';
 import { ApplicantRegisterComponent }   from './applicant-register/applicant-register.component';
 import { ApplicantViewLettingComponent }   from './applicant-view-letting/applicant-view-letting.component';
-import { ApplicantViewSaleComponent }   from './applicant-view-sale/applicant-view-sale.component';
+import { ApplicantViewSaleComponent } from './applicant-view-sale/applicant-view-sale.component';
 import { SendEdetailsComponent }   from './send-edetails/send-edetails.component';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -27,7 +27,7 @@ const routes: Routes = [
   { path: 'applicant-view-sale', component: ApplicantViewSaleComponent },
   { path: 'send-edetails', component: SendEdetailsComponent },
   { path: 'leaderboard', component: LeaderboardComponent },
-  { path: 'dashboard', component: DashboardComponent },
+  // { path: 'dashboard', component: DashboardComponent },
   { path: 'diary', component: DiaryComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];

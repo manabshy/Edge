@@ -3,6 +3,10 @@
       <div class="table-responsive ">
         <table class="table table-hover table-striped">
           <tbody>
+            <tr *ngFor="let applicant of applicants;">
+              <td>{{ applicant.contactGroupAddressee }}</td>
+              <td>{{ applicant.lastContactDate }}</td>
+            </tr>
             <tr *ngFor="let item of pipeline;">
               <td>{{ item.propertyAddress }}</td>
               <td>{{ item.contactGroupAddressee }}</td>
