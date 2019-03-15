@@ -8,9 +8,15 @@
         width: calc(50% - #{$grid-gutter-width/2.5});
         margin-left: $grid-gutter-width/5;
         margin-right: $grid-gutter-width/5;
-      
+        
         @include media-breakpoint-up(sm) {
-          width: calc(33.33% - #{$grid-gutter-width/2.5});
+            width: calc(33.33% - #{$grid-gutter-width/2.5});
         }
-      }
+    }
+}
+
+.card-body {
+    @include media-breakpoint-down(sm){
+        padding: spacer(3);
+    }
 }

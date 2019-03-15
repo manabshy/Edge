@@ -2,7 +2,7 @@
   <div class="navbar-back">
       <a class="text-light" *ngIf="router.url !== '/home'" (click)="backClicked() "><i class="fas fa-chevron-left fa-2x"></i></a>
   </div>
-  <a class="navbar-brand" routerLink="home">Wedge</a>
+  <a class="navbar-brand" routerLink="home"><img src="assets/dng_logo.png" width="30" height="30" alt=""></a>
   <button class="navbar-toggler" type="button" (click)="navbarCollapsed = !navbarCollapsed"
   [attr.aria-expanded]="!navbarCollapsed" aria-controls="navbarNavDropdown">
     <i class="fas fa-bars fa-lg" *ngIf="!navbarCollapsed"></i>
