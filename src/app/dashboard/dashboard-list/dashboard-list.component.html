@@ -1,0 +1,24 @@
+<div class="card">
+    <div class="card-body">
+      <div class="table-responsive ">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr *ngFor="let item of pipeline;">
+              <td>{{ item.propertyAddress }}</td>
+              <td>{{ item.contactGroupAddressee }}</td>
+              <td>{{ item.commissionFees }}</td>
+              <td>{{ item.propertyStatus }}</td>
+              <td>{{ item.offerAgreedDate | date }}</td>
+            </tr>
+            <tr *ngFor="let instruction of instructions">
+                <td>{{ instruction.propertyAddress }}</td>
+                <td>{{ instruction.contactGroupAddressee }}</td>
+                <td>{{ instruction.salesValue }}</td>
+                <td>{{ instruction.status }}</td>
+                <td>{{ instruction.instructedDate | date }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
