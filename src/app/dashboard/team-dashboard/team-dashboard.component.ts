@@ -4,7 +4,7 @@ import { Dashboard, DashboardTotals } from '../shared/dashboard';
 @Component({
   selector: 'app-team-dashboard',
   templateUrl: './team-dashboard.component.html',
-  styleUrls: ['./team-dashboard.component.css']
+  styleUrls: ['./team-dashboard.component.scss']
 })
 export class TeamDashboardComponent implements OnInit {
   @Input() teamDashboard: Dashboard[];
@@ -15,6 +15,7 @@ export class TeamDashboardComponent implements OnInit {
   @Input() totalOffersAgreed: number;
   @Input() totalOffersReceived: number;
   @Input() totalPipeline: number;
+  @Input() period: string;
 
   constructor() { }
 

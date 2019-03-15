@@ -1,0 +1,30 @@
+//colors
+$theme-colors: ( "dark": #0a1a4a, "secondary": #dc006a, "primary": #3344dd );
+$primary: #3344dd;
+
+$link-color: $primary;
+$component-active-bg: $primary;
+$link-hover-color: darken($link-color, 15%);
+
+//container
+$container-max-widths: ("md": 959px);
+
+//spacers
+$spacers: (5: (1rem * 3.5));
+
+//navbar    
+$navbar-dark-color: #fff;
+
+//modal
+$modal-inner-padding: 2rem;
+
+//functions
+@function spacer($key: 0) {
+    @return map-get($spacers, $key);
+}
+
+@function container-max-width($key: "lg") {
+    @return map-get($container-max-widths, $key);
+}
+
+$enable-gradients: true;

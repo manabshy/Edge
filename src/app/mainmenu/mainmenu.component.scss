@@ -1,0 +1,76 @@
+@import "../../style/bootstrap-overrides";
+
+@import "../../../node_modules/bootstrap/scss/functions";
+@import "../../../node_modules/bootstrap/scss/variables";
+@import "../../../node_modules/bootstrap/scss/mixins";
+
+.navbar-brand, .navbar-collapse {
+    @include media-breakpoint-up(lg) {
+        width: 100%;
+        margin: 0;
+    }
+}
+
+.navbar {
+    @include media-breakpoint-down(md){
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1030;
+    }
+}
+
+
+.navbar-nav {
+    width: 100%;
+
+    .nav-link {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+
+        padding-top: spacer(3);
+        padding-bottom: spacer(3);
+    }
+
+    .nav-item {
+        & + .nav-item {
+            border-top: 1px solid $gray-700;
+        }
+    }
+
+    .dropdown-menu {
+        position: static;
+    }
+}
+
+.navbar-toggler {
+    border: none;
+    text-align: center;
+    padding: 0;
+    width: 25px;
+}
+
+.navbar-backdrop {
+    display: none;
+    @include media-breakpoint-down(md){
+        position: fixed;
+        display: block;
+        width: 100vw;
+        height: 100vh;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        background-color: rgba(0,0,0,.5);
+    }
+}
+
+.navbar-back {
+    width: 25px;
+
+    @include media-breakpoint-up(lg){
+        display: none;
+    }
+}

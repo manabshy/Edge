@@ -1,0 +1,35 @@
+.nav-pills {
+    @include media-breakpoint-down(sm){
+        justify-content: space-between;
+    }
+}
+
+.tab-pane {
+    padding-top: spacer(3);
+    padding-bottom: spacer(3);
+}
+
+.tab-container {
+    position: relative;
+    text-align: right;
+
+    .tab-pane {
+        text-align: left;
+    }
+
+    .form-group {
+        right: 0;
+        top: 0;
+        z-index: 1;
+        display: inline-block;
+        width: auto;
+
+        &.float {
+            position: absolute;
+        }
+
+        @include media-breakpoint-up("sm") {
+            position: absolute;
+        }
+    }
+}

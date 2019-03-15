@@ -1,26 +1,32 @@
+<nav class="nav justify-content-end d-none d-lg-flex">
+  <a *ngIf="!isLoggedIn" class="nav-link" [routerLink]="['/login']">Login</a>
+  <a *ngIf="isLoggedIn" class="nav-link" [routerLink]="['/logout']">Logout</a>
+</nav>
 <div class="container">
-  <ul class="nav nav-pills" role="tablist">
-      <li class="nav-item active"><a class="nav-link active" href="#dash" data-toggle="tab" role="tab" >Dashboard</a></li>
-      <li class="nav-item"><a class="nav-link" href="#diary" data-toggle="tab" role="tab" [routerLink]="['/diary']">Diary</a></li>
-      <li class="nav-item"><a class="nav-link" href="#leaderboard" data-toggle="tab" role="tab" >Leaderboard</a></li>
-      <li class="nav-item"><a class="nav-link" href="#tasks" data-toggle="tab" role="tab">Tasks</a></li>
-  </ul>
-  <nav class="nav float-right" style="margin-top:-35px">
-      <a *ngIf="!isLoggedIn" class="nav-link" [routerLink]="['/login']">Login</a>
-      <a *ngIf="isLoggedIn" class="nav-link" [routerLink]="['/logout']">Logout</a>
-    </nav>
-  <div class="alert alert-info p-1 d-flex align-items-center justify-content-center"><p>You are currently 31st. Complete 3 tasks for 30th</p></div>
-  <div class="tab-content">
-    <div id="dash" class="tab-pane fade in show active" role="tabpanel">
-      <app-dashboard  [userResult]='userResult' [staffMemberId]='staffMemberId'></app-dashboard>
-    </div>
-    <div id="diary" class="tab-pane fade" role="tabpanel">
+  <div class="alert alert-info mt-3">You are currently 31st. Complete 3 tasks for 30th</div>
+  <tabset type="pills">
+    <tab>
+        <ng-template tabHeading>
+          <i class="fas fa-th-large"></i><span class="d-none d-sm-inline ml-2">Dashboard</span>
+        </ng-template>
+        <app-dashboard  [userResult]='userResult' [staffMemberId]='staffMemberId'></app-dashboard>
+    </tab>
+    <tab>
+        <ng-template tabHeading>
+          <i class="far fa-calendar-alt"></i><span class="d-none d-sm-inline ml-2">Diary</span>
+        </ng-template>
         <app-diary></app-diary>
-    </div>
-    <div id="leaderboard" class="tab-pane fade" role="tabpanel">
+    </tab>
+    <tab>
+        <ng-template tabHeading>
+          <i class="fas fa-chalkboard-teacher"></i><span class="d-none d-sm-inline ml-2">Leaderboard</span>
+        </ng-template>
         <app-leaderboard></app-leaderboard>
-    </div>
-    <div id="tasks" class="tab-pane fade" role="tabpanel">
+    </tab>
+    <tab>
+      <ng-template tabHeading>
+        <i class="fas fa-tasks"></i><span class="d-none d-sm-inline ml-2">Tasks</span>
+      </ng-template>
       <div class="container-fluid">
         <div class="row justify-content-center">
           <div class="col-auto">
@@ -30,6 +36,6 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
+    </tab>
+  </tabset>
 </div>

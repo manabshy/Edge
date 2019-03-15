@@ -70,3 +70,19 @@
 .wizard .active:after {
   border-left-color: #007ACC;
 }
+
+
+@import "../../style/bootstrap-overrides";
+
+@import "../../../node_modules/bootstrap/scss/functions";
+@import "../../../node_modules/bootstrap/scss/variables";
+@import "../../../node_modules/bootstrap/scss/mixins";
+
+:host ::ng-deep .nav-tabs {
+  .nav-link {
+    @include media-breakpoint-down(sm) {
+      padding-left: spacer(2);
+      padding-right: spacer(2);
+    }
+  }
+}
