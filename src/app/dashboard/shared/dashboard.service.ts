@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
-import { DashboardResult, TeamDashboardResult, Pipeline, PipelineResult, InstructionResult } from './dashboard';
+import { DashboardResult, TeamDashboardResult, Pipeline, PipelineResult, InstructionResult, ApplicantResult } from './dashboard';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { map } from 'rxjs/operators';
 @Injectable({
@@ -28,5 +28,9 @@ export class DashboardService {
   getDashboardInstructions(staffMemberId: number, role: string, period?: string): Observable<InstructionResult> {
     const url = `${AppConstants.baseUrl}/dashboard/instructions?period=${period}&role=${role}&staffMemberId=${staffMemberId}`;
     return this.http.get<InstructionResult>(url);
+  }
+  getDashboardApplicants(staffMemberId: number, role: string, period?: string): Observable<ApplicantResult> {
+    const url = `${AppConstants.baseUrl}/dashboard/applicants?role=${role}&staffMemberId=${staffMemberId}`;
+    return this.http.get<ApplicantResult>(url);
   }
 }
