@@ -8,14 +8,19 @@ export interface Person {
   title: string;
   titleOther?: string;
   emailAddresses: Email[];
-  phoneNumbers: PhoneNumbers[];
+  phoneNumbers: PhoneNumber[];
   address: Address;
+  isMainPerson: boolean;
   contactByEmail: boolean;
   contactByPhone: boolean;
   contactByPost: boolean;
   currentUserName: string;
   currentStaffMemberID: number;
+  currentOfficeId?: number;
   neverMarket: boolean;
+  uKResident: boolean;
+  addressFull: string;
+  rawData: any;
 }
 export interface Email {
   emailId: number;
@@ -24,7 +29,7 @@ export interface Email {
   orderNumber: number;
 }
 
-export interface PhoneNumbers {
+export interface PhoneNumber {
   phoneNumberId: number;
   isPreferred: boolean;
   number: string;

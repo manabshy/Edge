@@ -1,6 +1,10 @@
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { isArray } from 'util';
+import { Address } from 'src/app/core/models/address';
+import { PhoneNumber, Person } from 'src/app/core/models/person';
+import { ContactGroup } from 'src/app/contactgroups/shared/contact-group';
+import { Property } from 'src/app/property/shared/property';
 
   export enum DiaryEventTypesEnum {
     ViewingSales = 'Viewing - Sales',
@@ -199,81 +203,76 @@ import { isArray } from 'util';
     staffMembers: Staff[];
   }
 
-  export interface ContactGroup {
-    contactGroupId: number;
-    addressee?: string;
-    relocationContactName?: string;
-    relocationAgent?: string;
-    assignedContactType?: string;
-    contactType?: string;
-    companyId?: number;
-    companyName?: string;
-    companyAddress?: string;
-    salutation?: string;
-    comments?: string;
-    people?: Person[];
-    notes?: string;
-    rawData?: any;
-    currentUserName?: string;
-    currentStaffMemberId?: number;
-    currentOfficeId?: number;
-  }
+  // export interface ContactGroup {
+  //   contactGroupId: number;
+  //   addressee?: string;
+  //   relocationContactName?: string;
+  //   relocationAgent?: string;
+  //   assignedContactType?: string;
+  //   contactType?: string;
+  //   companyId?: number;
+  //   companyName?: string;
+  //   companyAddress?: string;
+  //   salutation?: string;
+  //   comments?: string;
+  //   people?: Person[];
+  //   notes?: string;
+  //   rawData?: any;
+  //   currentUserName?: string;
+  //   currentStaffMemberId?: number;
+  //   currentOfficeId?: number;
+  // }
 
-  export interface Person {
-    personId: number;
-    title: string;
-    titleOther: string;
-    firstName: string;
-    middleName: string;
-    lastName: string;
-    isMainPerson: boolean;
-    contactByEmail: boolean;
-    contactByPhone: boolean;
-    contactByPost: boolean;
-    neverMarket: boolean;
-    uKResident: boolean;
-    address: Address;
-    phoneNumbers: PhoneNumber[];
-    emailAddresses: string;
-    addressFull: string;
-    rawData: any;
-    currentUserName: string;
-    currentStaffMemberId: number;
-    currentOfficeId: number;
-  }
+  // export interface Person {
+  //   personId: number;
+  //   title: string;
+  //   titleOther: string;
+  //   firstName: string;
+  //   middleName: string;
+  //   lastName: string;
+  //   isMainPerson: boolean;
+  //   contactByEmail: boolean;
+  //   contactByPhone: boolean;
+  //   contactByPost: boolean;
+  //   neverMarket: boolean;
+  //   uKResident: boolean;
+  //   address: Address;
+  //   phoneNumbers: PhoneNumber[];
+  //   emailAddresses: string;
+  //   addressFull: string;
+  //   rawData: any;
+  //   currentUserName: string;
+  //   currentStaffMemberId: number;
+  //   currentOfficeId: number;
+  // }
 
-  export interface Address {
-    address1: string;
-    address2: string;
-    address3: string;
-    address4: string;
-    address5: string;
-    inCode: string;
-    outCode: string;
-    town: string;
-    country: string;
-  }
+  // export interface Address {
+  //   address1: string;
+  //   address2: string;
+  //   address3: string;
+  //   address4: string;
+  //   address5: string;
+  //   inCode: string;
+  //   outCode: string;
+  //   town: string;
+  //   country: string;
+  // }
 
-  export interface PhoneNumber {
-    phoneNumberId: number;
-    type: string;
-    number: string;
-    orderNumber: number;
-    isPreferred: boolean;
-    comments: string;
-  }
+  // export interface PhoneNumber {
+  //   phoneNumberId: number;
+  //   type: string;
+  //   number: string;
+  //   orderNumber: number;
+  //   isPreferred: boolean;
+  //   comments: string;
+  // }
 
-  export interface Property {
-    propertyId: number;
+  export interface DiaryProperty extends Property {
     propertyLettingId: number;
     propertySaleId: number;
-    address?: Address;
     contactGroups?: ContactGroup[];
   }
 
-  export function setPostCode(address: Address): string {
-    return address.outCode + ' ' + address.inCode;
-  }
 
   export interface Staff {
     staffMemberId: number;
