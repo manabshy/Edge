@@ -45,8 +45,7 @@ export class DashboardListComponent implements OnInit {
     this.route.params.subscribe(params => {
       const staffMemberId = +this.route.snapshot.paramMap.get('id');
        this.getDashboardInstructions(staffMemberId, this.role, this.selectedPeriod);
-       this.getDashboardApplicants(staffMemberId, this.role);
-        console.log(staffMemberId); });
+      });
   }
   getDashboardInstructions(id: number, role: string, period?: string): void {
     this.dashboardService.getDashboardInstructions(id, role, period)
