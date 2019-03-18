@@ -1,5 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Offer, Pipeline, Instruction, Applicant } from '../shared/dashboard';
+import { Component, OnInit } from '@angular/core';
+
+import { Pipeline, Instruction, Applicant } from '../shared/dashboard';
 import { Constants } from 'src/app/core/shared/period-list';
 import { DashboardService } from '../shared/dashboard.service';
 import { ActivatedRoute } from '@angular/router';
@@ -42,7 +43,7 @@ export class DashboardListComponent implements OnInit {
     // const staffMemberId = +params.get('id');
     //  this.getDashboardInstructions(staffMemberId, this.role);
     //   console.log(+params.get('id')); });
-    this.route.params.subscribe(params => {
+    this.route.params.subscribe(() => {
       const staffMemberId = +this.route.snapshot.paramMap.get('id');
        this.getDashboardInstructions(staffMemberId, this.role, this.selectedPeriod);
       });

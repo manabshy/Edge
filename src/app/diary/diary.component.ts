@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-diary',
@@ -7,17 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DiaryComponent implements OnInit {
   isDropup = false;
-
+diaryEventForm: FormGroup;
   constructor() { }
 
   ngOnInit() {
-
     this.setDropup();
-    
   }
 
   setDropup() {
-    if(window.innerWidth < 576) {
+    if (window.innerWidth < 576) {
       this.isDropup = true;
     } else {
       this.isDropup = false;

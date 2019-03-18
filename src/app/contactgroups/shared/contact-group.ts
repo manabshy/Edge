@@ -6,17 +6,21 @@ export interface ContactGroup {
   contactGroupId: number;
   addressee: string;
   notes: ContactGroupsNote[];
-  companyAddress: Address;
+  // notes?: string;
   people: Person[];
   title?: string;
   comments: string;
   salutation: string;
-  companyId: number;
+  companyId?: number;
   companyName: string;
+  companyAddress: Address;
   relocationContactName?: string;
   relocationAgent?: ContactGroup;
+  assignedContactType?: string;
   currentUserName?: string;
   currentStaffMemberId?: number;
+  currentOfficeId?: number;
+  rawData?: any;
 }
 
 export interface ContactGroupsNote {
