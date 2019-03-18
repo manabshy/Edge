@@ -72,6 +72,7 @@ export class DashboardComponent implements OnInit {
         this.teamDashboardResult = data;
         this.teamDashboard = data.result;
         this.getDashboardTotals(data.result);
+        console.log(this.teamDashboard);
       });
   }
   getDashboardPipeline(id: number, role: string, period?: string): void {

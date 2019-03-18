@@ -1,17 +1,17 @@
 <div class="card-grid" *ngIf="myDashboard">
   <div class="card">
-    <div class="card-body text-center">
+    <div class="card-body text-center" >
       <h6 class="card-title">Valuations</h6>
       <h4 class="text-secondary">{{ myDashboard.valuations?.periodCount || 0 }}</h4>
       <p class="card-text"><small class="text-muted">{{ period }}</small></p>
     </div>
   </div>
   <div class="card">
-    <div class="card-body text-center">
+    <a class="card-body text-center"  [routerLink]="['/list', 2337]" >
       <h6 class="card-title">Instructions</h6>
       <h4 class="text-secondary">{{ myDashboard.instructions.periodCount }}</h4>
       <p class="card-text"><small class="text-muted">{{ period }}</small></p>
-    </div>
+    </a>
   </div>
   <div class="card">
     <div class="card-body text-center">

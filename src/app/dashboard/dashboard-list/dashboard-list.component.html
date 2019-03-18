@@ -1,5 +1,5 @@
 <div class="list-group text-left">
-  <div class="list-group-item list-group-item-action pb-1" *ngFor="let item of pipeline;">
+  <!-- <div class="list-group-item list-group-item-action pb-1" *ngFor="let item of pipeline;">
     <div class="row align-items-end align-items-sm-center">
       <div class="col-12 mb-2">
         <strong>{{ item.propertyAddress }}</strong>
@@ -21,7 +21,7 @@
         {{ item.offerAgreedDate | date }}
       </div>
     </div>
-  </div>
+  </div> -->
   <div class="list-group-item list-group-item-action pb-0" *ngFor="let instruction of instructions">
     <div class="row align-items-end align-items-sm-center">
       <div class="col-12 mb-2">
@@ -46,3 +46,8 @@
     </div>
   </div>
 </div>
+
+<!-- <tr *ngFor="let applicant of applicants;">
+        <td>{{ applicant.contactGroupAddressee }}</td>
+        <td>{{ applicant.lastContactDate }}</td>
+      </tr> -->

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {ReactiveFormsModule} from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -18,6 +18,6 @@ import { DashboardListComponent } from './dashboard-list/dashboard-list.componen
     DashboardRoutingModule,
     CoreModule
   ],
-  exports: [MyDashboardComponent, TeamDashboardComponent, DashboardListComponent]
+  exports: [MyDashboardComponent, TeamDashboardComponent, DashboardListComponent],
 })
 export class DashboardModule { }

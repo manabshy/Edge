@@ -9,10 +9,10 @@
         </div>
         <div class="col-8">
           <div class="row">
-            <div class="col-6 px-2 text-center" *ngFor="let member of teamDashboard">
+            <a class="col-6 px-2 text-center" [routerLink]="['/list', member.staffMember.staffMemberId]" *ngFor="let member of teamDashboard">
               <h5 class="m-0">{{ member.applicants.totalCount }}</h5>
               <p>{{ member.staffMember.staffMemberFullName | shortenName}}</p>
-            </div>
+            </a>
           </div>
         </div>
       </div>
