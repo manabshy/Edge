@@ -1,7 +1,7 @@
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { isArray } from 'util';
-import { Address } from 'src/app/core/models/address';
+import { Address, newPropertyAddress } from 'src/app/core/models/address';
 import { PhoneNumber, Person } from 'src/app/core/models/person';
 import { ContactGroup } from 'src/app/contactgroups/shared/contact-group';
 import { Property } from 'src/app/property/shared/property';
@@ -145,7 +145,7 @@ import { Property } from 'src/app/property/shared/property';
   ];
 
   export interface DiaryResult {
-    results: Event[];
+    results: DiaryEvent[];
   }
 
   export interface CallbackReminder {
@@ -163,7 +163,7 @@ import { Property } from 'src/app/property/shared/property';
     smsMessage: string;
   }
 
-  export interface Event {
+  export interface DiaryEvent {
     diaryEventId: number;
     businessDevelopmentId: number;
     notes: string;
@@ -356,21 +356,6 @@ import { Property } from 'src/app/property/shared/property';
     return form;
   }
 
-  export function newPropertyAddress(data?: Address) {
-    const formGroup = new FormGroup({
-      flatNumber: new FormControl('', [Validators.maxLength(50)]),
-      houseNumber: new FormControl('', [Validators.maxLength(50)]),
-      houseBuildingName: new FormControl('', [Validators.maxLength(50)]),
-      streetName: new FormControl('', [Validators.maxLength(50)]),
-      addressLine2: new FormControl('', [Validators.maxLength(50)]),
-      town: new FormControl('', [Validators.maxLength(50)]),
-      longitude: new FormControl(''),
-      latitude: new FormControl(''),
-      outCode: new FormControl('', [Validators.maxLength(4)]),
-      inCode: new FormControl('', [Validators.maxLength(3)])
-    });
-    return formGroup;
-  }
 
   export function newPropertyForm(data?: Property) {
     const form = new FormGroup({
