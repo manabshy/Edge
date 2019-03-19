@@ -83,7 +83,6 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
     SendEdetailsComponent,
     PropertyChecklistLettingComponent,
     PropertyChecklistItemComponent,
-    AddAppointmentComponent
   ],
   imports: [
     BrowserModule,
