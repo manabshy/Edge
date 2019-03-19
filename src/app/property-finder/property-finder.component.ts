@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PropertyFinderComponent implements OnInit {
 
+  isAddPropertyCollapsed = false;
+
   constructor() { }
 
   ngOnInit() {

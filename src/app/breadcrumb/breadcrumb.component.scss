@@ -10,4 +10,29 @@
     @include media-breakpoint-down(md) {
         display: none;
     }
+
+    :host-context(.side-nav) nav{
+        @include media-breakpoint-down(md) {
+            margin: 0!important;
+        }
+    }
+
+    :host-context(.side-nav) &{
+        @include media-breakpoint-down(md) {
+            display: block;
+            background: transparent;
+            padding: 0;
+            margin: 0!important;
+            color: color("white");
+        }
+
+        .btn-link {
+            @include media-breakpoint-down(md) {
+                color: color("white");
+                font-size: 2rem;
+                line-height: 1;
+            }
+        }
+    }
 }
+

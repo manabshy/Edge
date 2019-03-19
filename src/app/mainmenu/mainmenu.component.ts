@@ -16,7 +16,6 @@ export class MainmenuComponent implements OnInit {
   }
 
   backClicked() {
-    this._location.back();
     this.navbarCollapsed = false;
   }
 

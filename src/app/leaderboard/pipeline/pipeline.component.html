@@ -1,4 +1,4 @@
-<div class="text-center" *ngIf="!pipelineList; else results">
+<div class="text-center" *ngIf="!pipelineList.length; else results">
   <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...
 </div>
 <ng-template #results>

@@ -5,15 +5,16 @@
 @import "../../../node_modules/bootstrap/scss/mixins";
 
 :host ::ng-deep .nav-pills {
-    @include media-breakpoint-down(sm) {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        background: color("white");
-        width: 100vw;
-        padding: $grid-gutter-width/3 $grid-gutter-width/2;
-        z-index: 10;
-        border-top: 1px solid $border-color;
+    @include fixed-bottom('sm');
+}
+
+
+:host ::ng-deep .nav {
+    .badge {
+        position: absolute;
+        top: 0;
+        right: 0;
+        transform: translate(100%, -50%);
     }
 }
 
