@@ -1,5 +1,4 @@
-import {format, compareAsc} from 'date-fns';
-import { isDate } from '@angular/common/src/i18n/format_date';
+import {format, compareAsc, isDate} from 'date-fns';
 export class AppUtils{
   /**
    * Format a date/time into a string
