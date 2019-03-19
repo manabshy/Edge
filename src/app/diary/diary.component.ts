@@ -11,10 +11,10 @@ import { addHours } from 'date-fns';
 })
 export class DiaryComponent implements OnInit {
   isDropup = false;
-  diaryEventForm: FormGroup;
+ public diaryEventForm: FormGroup;
   diaryEvent: DiaryEvent;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(protected fb: FormBuilder) { }
 
   ngOnInit() {
     this.setDropup();
