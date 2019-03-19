@@ -41,11 +41,13 @@ import { LeaderboardModule } from './leaderboard/leaderboard.module';
 import { FormsModule } from '@angular/forms';
 import { PropertyModule } from './property/property.module';
 import { ContactgroupsModule } from './contactgroups/contactgroups.module';
+import { DiaryModule } from './diary/diary.module';
 
 //bootstrap modules
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { TabsModule } from 'ngx-bootstrap/tabs';
+
 
 @NgModule({
   declarations: [
@@ -80,7 +82,8 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
     ApplicantMatchingComponent,
     SendEdetailsComponent,
     PropertyChecklistLettingComponent,
-    PropertyChecklistItemComponent
+    PropertyChecklistItemComponent,
+    AddAppointmentComponent
   ],
   imports: [
     BrowserModule,
@@ -94,7 +97,8 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
     ContactgroupsModule,
     BsDropdownModule.forRoot(),
     CollapseModule.forRoot(),
-    TabsModule.forRoot()
+    TabsModule.forRoot(),
+    DiaryModule
   ],
   exports: [
     MainmenuComponent
