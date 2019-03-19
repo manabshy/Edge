@@ -101,6 +101,7 @@ export class DiaryComponent implements OnInit {
       }
     }
   }
+
   public setValidatorByEventType(): void {
     switch (this.diaryEvent.eventType) {
       case DiaryEventTypesEnum.ViewingSales:

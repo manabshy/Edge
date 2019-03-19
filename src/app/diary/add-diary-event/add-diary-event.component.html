@@ -2,15 +2,11 @@
   <div class="card-body">
     <form [formGroup]="diaryEventForm">
       <div class="form-group row">
-        <label for="appointmentType" class="col-sm-2 col-form-label col-form-label-sm">Type</label>
-        <div ngbDropdown class="d-inline-block col-sm-10">
-          <button class="btn btn-outline-primary" id="appointmentType" ngbDropdownToggle>Select appointment
-            type</button>
-          <div ngbDropdownMenu aria-labelledby="appointmentType">
-            <button ngbDropdownItem>Action - 1</button>
-            <button ngbDropdownItem>Another Action</button>
-            <button ngbDropdownItem>Something else is here</button>
-          </div>
+        <label for="appointmentType" class="col-sm-6 col-form-label col-form-label-sm">Type</label>
+        <div class="d-inline-block col-sm-5">
+          <select class="form-control" formControlName="eventType"  >
+            <option *ngFor="let type of eventTypes" >{{type.name}}</option>
+          </select>
         </div>
       </div>
       <div class="form-group row">
