@@ -1,0 +1,14 @@
+@import "../../../style/bootstrap-overrides";
+
+@import "../../../../node_modules/bootstrap/scss/functions";
+@import "../../../../node_modules/bootstrap/scss/variables";
+@import "../../../../node_modules/bootstrap/scss/mixins";
+
+form {
+    padding-bottom: 50px;
+
+    .form-actions {
+        @include fixed-bottom('sm');
+    }
+
+}

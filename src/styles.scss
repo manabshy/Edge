@@ -5,44 +5,8 @@
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 //partials
+@import "style/partials/layout-overrides";
 @import "style/partials/nav";
 @import "style/partials/card";
 @import "style/partials/table";
-
-html {
-    @include media-breakpoint-down(sm) {
-        font-size: 0.85rem;
-    }
-}
-
-body {
-    padding-top: 48px;
-    background: $white url('./assets/dg_bg.svg') right bottom no-repeat;
-    background-size: cover;
-    background-attachment: fixed;
-    height: 100vh;
-    
-    @include media-breakpoint-up(sm) {
-        padding-top: 56px;
-    }
-
-    @include media-breakpoint-up(lg) {
-        padding-top: 0;
-        background-size: 50%;
-    }
-
-}
-
-a:not(:disabled) {
-    cursor: pointer;
-}
-
-.list-group-item-action {
-    cursor: pointer;
-}
-
-tr:first-child{
-    th, td {
-        border-top: none;
-    }
-}
+@import "style/partials/ngx-bootstrap";

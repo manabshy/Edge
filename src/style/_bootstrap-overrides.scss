@@ -27,6 +27,7 @@ $modal-inner-padding: 2rem;
     @return map-get($container-max-widths, $key);
 }
 
+//others
 $enable-gradients: true;
 
 $side-nav-width: 260px;
@@ -44,15 +45,25 @@ $side-nav-width: 260px;
         border-top: 1px solid $border-color;
     }
 
-    @include media-breakpoint-up(lg){
-        width: calc(100% - #{$side-nav-width});
-        left: auto;
-        right: 0;
+    @if ($breakpoint == "xl") {
+        @include media-breakpoint-up(lg){
+            width: calc(100% - #{$side-nav-width});
+            left: auto;
+            right: 0;
+        }
     }
 
     .container {
-        @include media-breakpoint-down(lg){
-            padding: 0;
+        padding: 0;
+
+        @include media-breakpoint-down(sm){
+            display: flex;
+        }
+
+        .btn {
+            @include media-breakpoint-down(sm){
+                flex: 1;
+            }
         }
     }
 }
