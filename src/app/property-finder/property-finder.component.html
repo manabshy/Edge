@@ -1,16 +1,11 @@
 <div class="form-group">
   <label for="property">Property</label>
-  <div class="input-group">
-    <input type="text" class="form-control" id="property" aria-describedby="emailHelp" placeholder="Property"
-      value="96 Welbeck Gardens, London, SW12 3JF">
-    <div class="input-group-append">
-      <button class="btn btn-primary" type="button" id="addPropertyBtn"
+  <input type="text" class="form-control" id="property" aria-describedby="emailHelp" placeholder="Property" [(ngModel)]="property">
+  <button class="btn btn-link px-0" type="button" id="addPropertyBtn"
         (click)="isAddPropertyCollapsed = !isAddPropertyCollapsed" [attr.aria-expanded]="!isAddPropertyCollapsed"
-        aria-controls="collapseBasic">Add New</button>
-    </div>
-  </div>
+        aria-controls="collapseBasic"><i class="fas fa-plus mr-2"></i> Add New</button>
   <div class="collapse" [collapse]="!isAddPropertyCollapsed" id="addProperty">
-    <div class="form-group mt-3">
+    <div class="form-group mt-2">
       <input type="text" class="form-control" id="flat" aria-describedby="emailHelp" placeholder="Flat number">
     </div>
     <div class="form-group">
@@ -37,6 +32,6 @@
           placeholder="Incode">
       </div>
     </div>
-    <button type="button" class="btn btn-primary">Save</button>
+    <button type="button" class="btn btn-primary">Add</button>
   </div>
 </div>

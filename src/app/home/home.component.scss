@@ -16,6 +16,22 @@
         right: 0;
         transform: translate(100%, -50%);
     }
+
+    .nav-link {
+        @include media-breakpoint-down(sm) {
+            text-align: center;
+        }  
+    }
+
+    .nav-label {
+        @include media-breakpoint-down(sm) {
+            display: none;
+        }
+        @include media-breakpoint-up(sm) {
+            margin-left: spacer(2);
+        }
+    }
+
 }
 
 .container {
