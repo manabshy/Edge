@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Pipeline, Instruction, Applicant } from '../shared/dashboard';
+import { Pipeline, Instruction, Applicant, InstructionResult } from '../shared/dashboard';
 import { Constants } from 'src/app/core/shared/period-list';
 import { DashboardService } from '../shared/dashboard.service';
 import { ActivatedRoute } from '@angular/router';
@@ -26,6 +26,7 @@ export class DashboardListComponent implements OnInit {
   period: string;
   pipeline: Pipeline[];
   instructions: Instruction[];
+  instructedAddresses: any[];
   applicants: Applicant[];
   set selectedPeriod(val: string) {
     this._selectedPeriod = val;
@@ -52,6 +53,7 @@ export class DashboardListComponent implements OnInit {
     this.dashboardService.getDashboardInstructions(id, role, period)
       .subscribe(data => {
         this.instructions = data.result;
+       this.getInstructedAddresses();
         console.log(this.instructions);
       });
   }
@@ -67,5 +69,12 @@ export class DashboardListComponent implements OnInit {
     const periodArray = this.periodList.filter(x => x.key === val);
     const periodValue = Object.values(periodArray)[0].value;
     return periodValue;
+  }
+  getInstructedAddresses() {
+    const addresses = this.instructions.filter(x => x.propertyAddress);
+    this.instructedAddresses = addresses;
+    this.instructions.forEach(function(element) {
+      console.log(element);
+    });
   }
 }

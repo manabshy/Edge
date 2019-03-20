@@ -6,12 +6,19 @@ import { ShortenNamePipe } from './shared/shorten-name.pipe';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AddHeaderInterceptor } from './add-header.interceptor';
 import { CacheInterceptor } from './cache.interceptor';
+import { BasicSearchComponent } from './basic-search/basic-search.component';
+import { ReactiveFormsModule } from '@angular/forms';
+
+// ngx bootstrap imports
+import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 
 @NgModule({
-  declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe],
-  exports : [RoundingPipe, TruncatingPipe, ShortenNamePipe],
+  declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BasicSearchComponent],
+  exports : [RoundingPipe, TruncatingPipe, ShortenNamePipe, BasicSearchComponent],
   imports: [
-    CommonModule
+    CommonModule,
+    ReactiveFormsModule,
+    TypeaheadModule.forRoot()
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS , useClass: AddHeaderInterceptor, multi: true},

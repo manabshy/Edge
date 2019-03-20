@@ -1,0 +1,8 @@
+<form [formGroup]="searchForm">
+    <input formControlName="search"
+           [typeahead]="searchResults"
+           [typeaheadOptionsLimit]="7"
+           [typeaheadMinLength]="0"
+           placeholder="Typeahead inside a form"
+           class="form-control">
+  </form>
