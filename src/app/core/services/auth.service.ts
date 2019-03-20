@@ -10,10 +10,10 @@ export class AuthService {
   private adalConfig = {
     tenant: 'ed781348-2f1d-4f1e-bbf8-137da318df39',
     clientId: '03d5d394-2418-42fa-a345-556b8d7ffcdb',
-    redirectUri: 'https://stagedouglasandgordon-wedge.azurewebsites.net/auth-callback',
-    postLogoutRedirectUri: 'https://stagedouglasandgordon-wedge.azurewebsites.net',
-    // redirectUri: 'http://localhost:4200/auth-callback',
-    // postLogoutRedirectUri: 'http://localhost:4200',
+    // redirectUri: 'https://stagedouglasandgordon-wedge.azurewebsites.net/auth-callback',
+    // postLogoutRedirectUri: 'https://stagedouglasandgordon-wedge.azurewebsites.net',
+    redirectUri: 'http://localhost:4200/auth-callback',
+    postLogoutRedirectUri: 'http://localhost:4200',
     endpoints: {
       'http://localhost:57211': '67f9a9a1-d8de-45bc-af20-43e1e18ccba5'
     }
