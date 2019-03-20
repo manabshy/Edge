@@ -10,7 +10,7 @@ import { Location } from '@angular/common';
 export class MainmenuComponent implements OnInit {
   navbarCollapsed = false;
 
-  constructor(private router: Router, private _location: Location) { }
+  constructor(public router: Router, public _location: Location) { }
 
   ngOnInit() {
   }
