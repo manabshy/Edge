@@ -22,6 +22,7 @@ bs-datepicker-container {
     }
 
     .bs-datepicker-head {
+        height: 55px;
         .current {
             @extend .custom-select;
             width: auto;

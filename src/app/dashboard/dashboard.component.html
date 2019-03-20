@@ -2,23 +2,20 @@
 
 <div class="tab-container">
   <div class="form-group float">
-    <select [(ngModel)]="selectedPeriod" class="form-control" id="sel1">
+    <select [(ngModel)]="selectedPeriod" class="custom-select" id="sel1">
       <option *ngFor='let periodOption of periodList' [value]='periodOption.key'>{{periodOption.value}}</option>
     </select>
   </div>
   <tabset>
     <tab heading="Me">
-      <div class="no-gutters">
-        <app-my-dashboard [myDashboard]='myDashboard' [period]='period'></app-my-dashboard>
-      </div>
+      <app-my-dashboard [myDashboard]='myDashboard' [period]='period'></app-my-dashboard>
     </tab>
     <tab heading="Team">
-      <div class="no-gutters">
-        <app-team-dashboard [teamDashboard]='teamDashboard' [dashboardTotals]='dashboardTotals'
-          [totalApplicants]='totalApplicants' [totalViewings]='totalViewings' [totalOffersAgreed]='totalOffersAgreed'
-          [totalOffersReceived]='totalOffersReceived' [totalExchanges]='totalExchanges' [totalPipeline]='totalPipeline' [period]='period'>
-        </app-team-dashboard>
-      </div>
+      <app-team-dashboard [teamDashboard]='teamDashboard' [dashboardTotals]='dashboardTotals'
+        [totalApplicants]='totalApplicants' [totalViewings]='totalViewings' [totalOffersAgreed]='totalOffersAgreed'
+        [totalOffersReceived]='totalOffersReceived' [totalExchanges]='totalExchanges' [totalPipeline]='totalPipeline'
+        [period]='period'>
+      </app-team-dashboard>
     </tab>
   </tabset>
 </div>
