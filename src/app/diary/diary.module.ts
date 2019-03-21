@@ -11,6 +11,7 @@ import { CoreModule } from '../core/core.module';
   declarations: [AddDiaryEventComponent],
   imports: [
     CommonModule,
+    CoreModule,
     DiaryRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,

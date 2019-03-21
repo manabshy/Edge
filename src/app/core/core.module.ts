@@ -6,6 +6,11 @@ import { ShortenNamePipe } from './shared/shorten-name.pipe';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AddHeaderInterceptor } from './add-header.interceptor';
 import { CacheInterceptor } from './cache.interceptor';
+import { BasicSearchComponent } from './basic-search/basic-search.component';
+import { ReactiveFormsModule } from '@angular/forms';
+
+// ngx bootstrap imports
+import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 
 //bootstrap
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown/';
@@ -18,16 +23,18 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
 
 @NgModule({
-  declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent],
-  exports: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BsDropdownModule,
-    CollapseModule, TimepickerModule, TabsModule, BsDatepickerModule],
+  declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent],
+  exports: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent, BsDropdownModule,
+    CollapseModule, TimepickerModule, TabsModule, TypeaheadModule, BsDatepickerModule],
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     BsDropdownModule.forRoot(),
     CollapseModule.forRoot(),
     TabsModule.forRoot(),
     TimepickerModule.forRoot(),
-    BsDatepickerModule.forRoot()
+    BsDatepickerModule.forRoot(),
+    TypeaheadModule.forRoot()
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AddHeaderInterceptor, multi: true },
