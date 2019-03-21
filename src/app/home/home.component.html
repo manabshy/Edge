@@ -1,29 +1,24 @@
-<nav class="nav justify-content-end d-none d-lg-flex">
-  <a *ngIf="!isLoggedIn" class="nav-link" [routerLink]="['/login']">Login</a>
-  <a *ngIf="isLoggedIn" class="nav-link" [routerLink]="['/logout']">Logout</a>
-</nav>
-<div class="container">
-  <div class="alert alert-info mt-3">You are currently 31st. Complete 3 tasks for 30th</div>
-  <tabset type="pills">
-    <tab>
+<div class="container home-container pt-sm-3" [ngClass]="containerClass" (panend)="onPanEnd($event)" (panleft)="navRightHint($event)" (panright)="navLeftHint($event)">
+  <tabset type="pills" #homeTabs>
+    <tab (select)="onSelect($event)">
         <ng-template tabHeading>
           <i class="fas fa-th-large"></i><span class="nav-label">Dashboard</span>
         </ng-template>
         <app-dashboard  [userResult]='userResult' [staffMemberId]='staffMemberId'></app-dashboard>
     </tab>
-    <tab>
+    <tab (select)="onSelect($event)">
         <ng-template tabHeading>
           <i class="far fa-calendar-alt"></i><span class="nav-label">Diary</span>
         </ng-template>
         <app-diary></app-diary>
     </tab>
-    <tab>
+    <tab (select)="onSelect($event)">
         <ng-template tabHeading>
           <i class="fas fa-chalkboard-teacher"></i><span class="nav-label">Leaderboard</span>
         </ng-template>
         <app-leaderboard></app-leaderboard>
     </tab>
-    <tab>
+    <tab (select)="onSelect($event)">
       <ng-template tabHeading>
         <div class="position-relative">
           <i class="fas fa-tasks"></i>

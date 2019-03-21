@@ -7,15 +7,11 @@ html {
 }
 
 body {
-    padding-top: 48px;
+    padding-top: $top-bar-height;
     background: $white url('./assets/dg_bg.svg') right bottom no-repeat;
     background-size: cover;
     background-attachment: fixed;
     height: 100vh;
-    
-    @include media-breakpoint-up(sm) {
-        padding-top: 56px;
-    }
 
     @include media-breakpoint-up(lg) {
         padding-top: 0;

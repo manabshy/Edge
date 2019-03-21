@@ -6,15 +6,15 @@
   <button class="navbar-toggler" type="button" (click)="navbarCollapsed = !navbarCollapsed"
   [attr.aria-expanded]="!navbarCollapsed" aria-controls="navbarNavDropdown">
     <i class="fas fa-bars fa-lg" *ngIf="!navbarCollapsed"></i>
-    <i class="fas fa-times fa-lg" *ngIf="navbarCollapsed"></i>
+    <i class="fas fa-times fa-lg mt-1" *ngIf="navbarCollapsed"></i>
   </button>
   <div class="collapse navbar-collapse" id="navbarNavDropdown" [collapse]="!navbarCollapsed">
     <ul class="navbar-nav flex-column">
       <li class="nav-item active" (click)="navbarCollapsed = !navbarCollapsed">
-        <a class="nav-link" routerLink="/home">Home</a>
+        <a class="nav-link" routerLink="/home"><div><i class="fas fa-home fa-fw mr-3"></i>Home</div></a>
       </li>
       <li class="nav-item" dropdown [insideClick]="true">
-        <a class="nav-link dropdown-toggle" dropdownToggle (click)="false" role="button" aria-haspopup="true" aria-expanded="false">Contacts</a>
+        <a class="nav-link dropdown-toggle" dropdownToggle (click)="false" role="button" aria-haspopup="true" aria-expanded="false"><div><i class="fas fa-address-book fa-fw mr-3"></i>Contacts</div></a>
         <div class="dropdown-menu" *dropdownMenu (click)="navbarCollapsed = !navbarCollapsed">
           <a class="dropdown-item" routerLink="/contact-centre">Contact centre</a>
           <a class="dropdown-item" routerLink="/applicant-register">Applicants</a>
@@ -22,7 +22,7 @@
         </div>
       </li>
       <li class="nav-item" dropdown [insideClick]="true">
-        <a class="nav-link dropdown-toggle" dropdownToggle (click)="false" role="button" aria-haspopup="true" aria-expanded="false">Properties</a>
+        <a class="nav-link dropdown-toggle" dropdownToggle (click)="false" role="button" aria-haspopup="true" aria-expanded="false"><div><i class="fas fa-city fa-fw mr-3"></i>Properties</div></a>
         <div class="dropdown-menu" *dropdownMenu (click)="navbarCollapsed = !navbarCollapsed">
             <a class="dropdown-item" routerLink="/contact-centre">Property centre</a>
             <a class="dropdown-item" routerLink="/home">Valuations</a>
@@ -34,7 +34,7 @@
         </div>
       </li>
       <li class="nav-item" dropdown [insideClick]="true">
-        <a class="nav-link dropdown-toggle" dropdownToggle (click)="false" role="button" aria-haspopup="true" aria-expanded="false">Accounts</a>
+        <a class="nav-link dropdown-toggle" dropdownToggle (click)="false" role="button" aria-haspopup="true" aria-expanded="false"><div><i class="fas fa-file-invoice fa-fw mr-3"></i>Accounts</div></a>
         <div class="dropdown-menu" *dropdownMenu (click)="navbarCollapsed = !navbarCollapsed">
           <a class="dropdown-item" routerLink="/home">Invoices</a>
           <a class="dropdown-item" routerLink="/home">Works Orders</a>
@@ -42,14 +42,15 @@
         </div>
       </li>
       <li class="nav-item" dropdown [insideClick]="true">
-        <a class="nav-link dropdown-toggle" dropdownToggle (click)="false" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>
+        <a class="nav-link dropdown-toggle" dropdownToggle (click)="false" role="button" aria-haspopup="true" aria-expanded="false"><div><i class="fas fa-users-cog fa-fw mr-3"></i>Admin</div></a>
         <div class="dropdown-menu" *dropdownMenu (click)="navbarCollapsed = !navbarCollapsed">
           <a class="dropdown-item" routerLink="/home">Staff</a>
           <a class="dropdown-item" routerLink="/home">Offices</a>
         </div>
       </li>
-      <li class="nav-item d-lg-none">
-        <a class="nav-link" routerLink="/home">Logout</a>
+      <li class="nav-item">
+        <a *ngIf="!isLoggedIn" class="nav-link" [routerLink]="['/login']"><div><i class="fas fa-sign-in-alt fa-fw mr-3"></i>Login</div></a>
+        <a *ngIf="isLoggedIn" class="nav-link" [routerLink]="['/logout']"><div><i class="fas fa-sign-out-alt mr-3"></i>Logout</div></a>
       </li>
     </ul>
   </div>

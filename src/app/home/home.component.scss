@@ -34,8 +34,46 @@
 
 }
 
-.container {
+.home-container {
     @include media-breakpoint-down(sm) {
         padding-bottom: 30px;
+    }
+
+    @include media-breakpoint-down(md) {
+        min-height: calc(100vh - #{$top-bar-height});
+    }
+
+    
+    &:after {
+        content:none;
+        position: fixed;
+        top: 50%;
+        transform: translateY(-50%);
+        display: block;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: theme-color("dark");
+        opacity: 0.5;
+        color: color("white");
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        font-size: 30px;
+        padding: 3px 18px;
+    }
+
+    &.nav-right {
+        &:after {
+            content:'\f054';
+            right: 10px;
+        }
+    }
+
+    &.nav-left {
+        &:after {
+            content:'\f053';
+            left: 10px;
+            padding: 3px 14px;
+        }
     }
 }

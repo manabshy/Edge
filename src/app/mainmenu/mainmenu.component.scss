@@ -5,6 +5,11 @@
 @import "../../../node_modules/bootstrap/scss/mixins";
 
 .navbar-brand, .navbar-collapse {
+
+    @include media-breakpoint-down(md){
+        margin-top: $top-bar-height / 2;
+    }
+
     @include media-breakpoint-up(lg) {
         width: 100%;
         margin: 0;
@@ -17,10 +22,16 @@
     line-height: 1;
 
     img{
-        width: 105px;
+        width: 160px;
         height: auto;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
 
         @include media-breakpoint-up(lg){
+            position: static;
+            transform: translateX(0);
             width: 200px;
             max-width: 100%;
         }
@@ -34,6 +45,9 @@
         left: 0;
         right: 0;
         z-index: 1030;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        min-height: $top-bar-height;
     }
 }
 
