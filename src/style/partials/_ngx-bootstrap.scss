@@ -1,0 +1,31 @@
+timepicker {
+    .form-control {
+        @extend .form-control-sm;
+    }
+}
+
+bs-datepicker-container {
+
+    @include media-breakpoint-down(sm) {
+        position: fixed!important;
+        top: 50%!important;
+        left: 50%!important;
+        transform: translate(-50%, -50%);
+    }
+
+    .bs-datepicker-body table td span.selected, .bs-datepicker-body table td span[class*=select-]:after, .bs-datepicker-body table td.selected span, .bs-datepicker-body table td[class*=select-] span:after, .bs-datepicker-head {
+        background-color: theme-color("dark")!important;
+    }
+
+    .is-other-month {
+        opacity: 0;
+    }
+
+    .bs-datepicker-head {
+        height: 55px;
+        .current {
+            @extend .custom-select;
+            width: auto;
+        }
+    }
+}

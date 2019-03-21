@@ -7,9 +7,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PropertyFinderComponent implements OnInit {
 
+  property: string;
+
+  isAddPropertyCollapsed = false;
+
   constructor() { }
 
   ngOnInit() {
+    this.property = '96 Welbeck Gardens, London, SW12 3JF';
   }
 
 }

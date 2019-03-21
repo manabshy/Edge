@@ -5,32 +5,8 @@
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 //partials
+@import "style/partials/layout-overrides";
 @import "style/partials/nav";
 @import "style/partials/card";
-
-html {
-    @include media-breakpoint-down(sm) {
-        font-size: 0.85rem;
-    }
-}
-
-body {
-    padding-top: 48px;
-
-    @include media-breakpoint-up(sm) {
-        padding-top: 56px;
-    }
-
-    @include media-breakpoint-up(lg) {
-        padding-top: 0;
-    }
-
-}
-
-a:not(:disabled) {
-    cursor: pointer;
-}
-
-.list-group-item-action {
-    cursor: pointer;
-}
+@import "style/partials/table";
+@import "style/partials/ngx-bootstrap";

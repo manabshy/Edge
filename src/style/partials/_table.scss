@@ -1,0 +1,23 @@
+.table {
+    thead th {
+        border: none;
+    }
+
+    &.table-sortable thead th {
+        &:hover {
+            cursor: pointer;
+        }
+
+        &.active{
+            span{
+                color: theme-color("secondary");
+            }
+        }
+
+        &:not(.active):hover {
+            span:first-child {
+                color: theme-color("secondary");
+            }
+        }
+    }
+}

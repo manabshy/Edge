@@ -9,10 +9,14 @@ import { baseDiaryEventTypes, valuationDiaryEventTypes, feedbackDiaryEventTypes 
   styleUrls: ['./add-diary-event.component.scss']
 })
 export class AddDiaryEventComponent extends DiaryComponent implements OnInit {
- eventTypes =  feedbackDiaryEventTypes;
+  eventTypes = feedbackDiaryEventTypes;
+
+  isMeridian = false;
+  showSpinners = false;
+
   constructor(protected fb: FormBuilder) {
     super(fb);
-   }
+  }
 
   ngOnInit() {
     super.ngOnInit();

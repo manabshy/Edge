@@ -14,7 +14,8 @@ import { CoreModule } from '../core/core.module';
     CoreModule,
     DiaryRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    CoreModule
   ]
 })
 export class DiaryModule { }

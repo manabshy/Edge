@@ -7,25 +7,29 @@
   <tabset type="pills">
     <tab>
         <ng-template tabHeading>
-          <i class="fas fa-th-large"></i><span class="d-none d-sm-inline ml-2">Dashboard</span>
+          <i class="fas fa-th-large"></i><span class="nav-label">Dashboard</span>
         </ng-template>
         <app-dashboard  [userResult]='userResult' [staffMemberId]='staffMemberId'></app-dashboard>
     </tab>
     <tab>
         <ng-template tabHeading>
-          <i class="far fa-calendar-alt"></i><span class="d-none d-sm-inline ml-2">Diary</span>
+          <i class="far fa-calendar-alt"></i><span class="nav-label">Diary</span>
         </ng-template>
         <app-diary></app-diary>
     </tab>
     <tab>
         <ng-template tabHeading>
-          <i class="fas fa-chalkboard-teacher"></i><span class="d-none d-sm-inline ml-2">Leaderboard</span>
+          <i class="fas fa-chalkboard-teacher"></i><span class="nav-label">Leaderboard</span>
         </ng-template>
         <app-leaderboard></app-leaderboard>
     </tab>
     <tab>
       <ng-template tabHeading>
-        <i class="fas fa-tasks"></i><span class="d-none d-sm-inline ml-2">Tasks</span>
+        <div class="position-relative">
+          <i class="fas fa-tasks"></i>
+          <span class="nav-label">Tasks</span>
+          <span class="badge badge-pill badge-secondary">15</span>
+        </div>
       </ng-template>
       <div class="container-fluid">
         <div class="row justify-content-center">

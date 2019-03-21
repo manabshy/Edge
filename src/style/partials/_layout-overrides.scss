@@ -1,0 +1,58 @@
+
+
+html {
+    @media (max-width: 320px) {
+        font-size: 0.85rem;
+    }
+}
+
+body {
+    padding-top: 48px;
+    background: $white url('./assets/dg_bg.svg') right bottom no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    height: 100vh;
+    
+    @include media-breakpoint-up(sm) {
+        padding-top: 56px;
+    }
+
+    @include media-breakpoint-up(lg) {
+        padding-top: 0;
+        background-size: 50%;
+    }
+
+}
+
+a:not(:disabled) {
+    cursor: pointer;
+}
+
+.list-group-item-action {
+    cursor: pointer;
+}
+
+tr:first-child{
+    th, td {
+        border-top: none;
+    }
+}
+
+.col-form-label{
+    text-align: right;
+
+    @include media-breakpoint-down(sm){
+        padding-right: 0;
+    }
+}
+
+.page-title {
+    padding: spacer(3) 0;
+    margin-bottom: spacer(3);
+    border-bottom: 1px solid $border-color;
+    text-align: center;
+
+    @include media-breakpoint-up(lg) {
+        padding-top: 0;
+    }
+}

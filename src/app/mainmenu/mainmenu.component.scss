@@ -11,6 +11,22 @@
     }
 }
 
+.navbar-brand {
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+
+    img{
+        width: 105px;
+        height: auto;
+
+        @include media-breakpoint-up(lg){
+            width: 200px;
+            max-width: 100%;
+        }
+    }
+}
+
 .navbar {
     @include media-breakpoint-down(md){
         position: fixed;

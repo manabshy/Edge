@@ -27,4 +27,43 @@ $modal-inner-padding: 2rem;
     @return map-get($container-max-widths, $key);
 }
 
+//others
 $enable-gradients: true;
+
+$side-nav-width: 260px;
+
+
+@mixin fixed-bottom($breakpoint) {
+    @include media-breakpoint-down($breakpoint) {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        background: color("white");
+        width: 100vw;
+        padding: $grid-gutter-width/3 $grid-gutter-width/2;
+        z-index: 10;
+        border-top: 1px solid $border-color;
+    }
+
+    @if ($breakpoint == "xl") {
+        @include media-breakpoint-up(lg){
+            width: calc(100% - #{$side-nav-width});
+            left: auto;
+            right: 0;
+        }
+    }
+
+    .container {
+        padding: 0;
+
+        @include media-breakpoint-down(sm){
+            display: flex;
+        }
+
+        .btn {
+            @include media-breakpoint-down(sm){
+                flex: 1;
+            }
+        }
+    }
+}

@@ -3,7 +3,6 @@ import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { MainmenuComponent } from './mainmenu/mainmenu.component';
-import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { HomeComponent } from './home/home.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { ContactCentreComponent } from './contact-centre/contact-centre.component';
@@ -43,17 +42,11 @@ import { PropertyModule } from './property/property.module';
 import { ContactgroupsModule } from './contactgroups/contactgroups.module';
 import { DiaryModule } from './diary/diary.module';
 
-//bootstrap modules
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { CollapseModule } from 'ngx-bootstrap/collapse';
-import { TabsModule } from 'ngx-bootstrap/tabs';
-
 
 @NgModule({
   declarations: [
     AppComponent,
     MainmenuComponent,
-    BreadcrumbComponent,
     HomeComponent,
     ContactCentreComponent,
     PropertyDetailsLettingComponent,
@@ -94,9 +87,6 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
     LeaderboardModule,
     PropertyModule,
     ContactgroupsModule,
-    BsDropdownModule.forRoot(),
-    CollapseModule.forRoot(),
-    TabsModule.forRoot(),
     DiaryModule
   ],
   exports: [

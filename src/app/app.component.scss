@@ -9,3 +9,10 @@
         min-height: 100vh;
     }
 }
+
+.side-nav {
+    @include media-breakpoint-up(lg){
+        min-width: $side-nav-width;
+        max-width: $side-nav-width;
+    }
+}

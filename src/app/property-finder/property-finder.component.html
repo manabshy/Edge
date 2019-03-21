@@ -1,20 +1,47 @@
-<div class="input-group">
-  <input type="text" class="form-control form-control-sm" id="property" aria-describedby="emailHelp" placeholder="Property"
-    value="96 Welbeck Gardens, London, SW12 3JF">
-  <button class="btn btn-sm" type="button" id="addPropertyBtn" data-toggle="collapse" data-target="#addProperty">Add</button>
-  <div class="collapse" data-parent="#addPropertyBtn" id="addProperty">
-      <div class="form-group">
-        <input type="text" class="form-control form-control-sm" id="flat" aria-describedby="emailHelp" placeholder="Flat number">
-        <input type="text" class="form-control form-control-sm" id="house" aria-describedby="emailHelp" placeholder="House number">
-        <input type="text" class="form-control form-control-sm" id="building" aria-describedby="emailHelp" placeholder="Building name">
-        <input type="text" class="form-control form-control-sm" id="street" aria-describedby="emailHelp" placeholder="Street">
-        <input type="text" class="form-control form-control-sm" id="addressline2" aria-describedby="emailHelp" placeholder="Address line 2">
-        <input type="text" class="form-control form-control-sm" id="town" aria-describedby="emailHelp" placeholder="Town">
-        <div class="input-group">
-            <input type="text" class="form-control form-control-sm" maxlength="4" id="outcode" aria-describedby="emailHelp" placeholder="Outcode">
-            <input type="text" class="form-control form-control-sm" maxlength="3" id="incode" aria-describedby="emailHelp" placeholder="Incode">
-          </div>
+<div class="form-group row">
+  <label for="property" class="col-3 col-sm-2 col-form-label col-form-label-sm">Property</label>
+  <div class="col-8 col-sm-10">
+    <input type="text" class="form-control form-control-sm" id="property" placeholder="Property"
+      [(ngModel)]="property">
+    <button class="btn btn-sm btn-link px-0" type="button" id="addPropertyBtn"
+      (click)="isAddPropertyCollapsed = !isAddPropertyCollapsed" [attr.aria-expanded]="!isAddPropertyCollapsed"
+      aria-controls="collapseBasic"><i class="fas fa-plus mr-2"></i> Add New</button>
+    <div class="collapse" [collapse]="!isAddPropertyCollapsed" id="addProperty">
+      <div class="form-group mt-2">
+        <label class="small" for="flat">Flat number</label>
+        <input type="text" class="form-control form-control-sm" id="flat" placeholder="Flat number">
       </div>
-      <button type="button" class="btn btn-primary">Save</button>
+      <div class="form-group">
+        <label class="small" for="house">House number</label>
+        <input type="text" class="form-control form-control-sm" id="house" placeholder="House number">
+      </div>
+      <div class="form-group">
+        <label class="small" for="building">Building name</label>
+        <input type="text" class="form-control form-control-sm" id="building" placeholder="Building name">
+      </div>
+      <div class="form-group">
+        <label class="small" for="street">Street</label>
+        <input type="text" class="form-control form-control-sm" id="street" placeholder="Street">
+      </div>
+      <div class="form-group">
+        <label class="small" for="adressline2">Address line 2</label>
+        <input type="text" class="form-control form-control-sm" id="addressline2"
+          placeholder="Address line 2">
+      </div>
+      <div class="form-group">
+        <label class="small" for="town">Town</label>
+        <input type="text" class="form-control form-control-sm" id="town" placeholder="Town">
+      </div>
+      <div class="form-group">
+        <label class="small" for="outcode">Postcode</label>
+        <div class="input-group">
+          <input type="text" class="form-control form-control-sm" maxlength="4" id="outcode"
+            placeholder="Outcode">
+          <input type="text" class="form-control form-control-sm" maxlength="3" id="incode"
+            placeholder="Incode">
+        </div>
+      </div>
+      <button type="button" class="btn btn-primary">Add</button>
+    </div>
   </div>
 </div>

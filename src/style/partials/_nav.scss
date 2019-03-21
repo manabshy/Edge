@@ -7,6 +7,11 @@
 .tab-pane {
     padding-top: spacer(3);
     padding-bottom: spacer(3);
+
+    @include media-breakpoint-up(sm) {
+        padding-top: spacer(4);
+        padding-bottom: spacer(4);
+    }
 }
 
 .tab-container {
