@@ -22,7 +22,7 @@ export class DashboardListComponent implements OnInit {
   private _selectedPeriod: string;
   periodList = Constants.PeriodList;
   private readonly role = 'salesManager';
-  // staffMemberId: number;
+  private instruction;
   period: string;
   pipeline: Pipeline[];
   instructions: Instruction[];
@@ -31,11 +31,18 @@ export class DashboardListComponent implements OnInit {
   set selectedPeriod(val: string) {
     this._selectedPeriod = val;
     this.period = this.getSelectedPeriod(this._selectedPeriod);
-    // this.getDashboardInstructions(this.staffMemberId, this.role, this.selectedPeriod);
   }
   get selectedPeriod() {
     return this._selectedPeriod;
   }
+  set selectedInstruction(address: string) {
+   this.instruction = this.instructions.find(x => x.propertyAddress === address);
+    console.log(this.instruction);
+  }
+  get selectedInstruction() {
+    return this.instruction;
+  }
+
   constructor( private dashboardService: DashboardService, private route: ActivatedRoute) { }
 
   ngOnInit() {
@@ -54,7 +61,7 @@ export class DashboardListComponent implements OnInit {
       .subscribe(data => {
         this.instructions = data.result;
        this.getInstructedAddresses();
-        console.log(this.instructions);
+        console.log(this.instructedAddresses);
       });
   }
   getDashboardApplicants(id: number, role: string): void {
@@ -71,10 +78,7 @@ export class DashboardListComponent implements OnInit {
     return periodValue;
   }
   getInstructedAddresses() {
-    const addresses = this.instructions.filter(x => x.propertyAddress);
-    this.instructedAddresses = addresses;
-    this.instructions.forEach(function(element) {
-      console.log(element);
-    });
+    this.instructedAddresses = Array.from(this.instructions, p => p.propertyAddress);
   }
+
 }

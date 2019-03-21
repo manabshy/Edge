@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { TypeaheadMatch } from 'ngx-bootstrap/typeahead/ngx-bootstrap-typeahead';
+import { Instruction } from 'src/app/dashboard/shared/dashboard';
 
 @Component({
   selector: 'app-basic-search',
@@ -8,6 +10,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 })
 export class BasicSearchComponent implements OnInit {
   @Input() searchResults: [];
+  @Input() selectedInstruction:Instruction;
+  selectedOption: string;
   searchCtrl = new FormControl();
   searchForm: FormGroup;
   constructor() { }
@@ -16,57 +20,9 @@ export class BasicSearchComponent implements OnInit {
     this.searchForm = new FormGroup({
       search: this.searchCtrl
     });
+
   }
-  states = [
-    'Alabama',
-    'Alaska',
-    'Arizona',
-    'Arkansas',
-    'California',
-    'Colorado',
-    'Connecticut',
-    'Delaware',
-    'Florida',
-    'Georgia',
-    'Hawaii',
-    'Idaho',
-    'Illinois',
-    'Indiana',
-    'Iowa',
-    'Kansas',
-    'Kentucky',
-    'Louisiana',
-    'Maine',
-    'Maryland',
-    'Massachusetts',
-    'Michigan',
-    'Minnesota',
-    'Mississippi',
-    'Missouri',
-    'Montana',
-    'Nebraska',
-    'Nevada',
-    'New Hampshire',
-    'New Jersey',
-    'New Mexico',
-    'New York',
-    'North Dakota',
-    'North Carolina',
-    'Ohio',
-    'Oklahoma',
-    'Oregon',
-    'Pennsylvania',
-    'Rhode Island',
-    'South Carolina',
-    'South Dakota',
-    'Tennessee',
-    'Texas',
-    'Utah',
-    'Vermont',
-    'Virginia',
-    'Washington',
-    'West Virginia',
-    'Wisconsin',
-    'Wyoming'
-  ];
+  onSelect(event: TypeaheadMatch): void {
+    this.selectedOption = event.item;
+  }
 }
