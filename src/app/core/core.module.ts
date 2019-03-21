@@ -16,7 +16,6 @@ import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown/';
 import { CollapseModule } from 'ngx-bootstrap/collapse/';
 import { TabsModule } from 'ngx-bootstrap/tabs/';
-import { TimepickerModule } from 'ngx-bootstrap/timepicker';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 //components
@@ -25,14 +24,13 @@ import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
 @NgModule({
   declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent],
   exports: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent, BsDropdownModule,
-    CollapseModule, TimepickerModule, TabsModule, TypeaheadModule, BsDatepickerModule],
+    CollapseModule, TabsModule, TypeaheadModule, BsDatepickerModule],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     BsDropdownModule.forRoot(),
     CollapseModule.forRoot(),
     TabsModule.forRoot(),
-    TimepickerModule.forRoot(),
     BsDatepickerModule.forRoot(),
     TypeaheadModule.forRoot()
   ],
