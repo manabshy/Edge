@@ -10,7 +10,6 @@ import { baseDiaryEventTypes, valuationDiaryEventTypes, feedbackDiaryEventTypes 
 })
 export class AddDiaryEventComponent extends DiaryComponent implements OnInit {
   eventTypes = feedbackDiaryEventTypes;
-
   isMeridian = false;
   showSpinners = false;
 
@@ -24,5 +23,7 @@ export class AddDiaryEventComponent extends DiaryComponent implements OnInit {
     this.eventTypes.push(...baseDiaryEventTypes);
     console.log(this.eventTypes);
   }
-
+  canDeactivate(): boolean {
+    return !!this.diaryEvent;
+  }
 }
