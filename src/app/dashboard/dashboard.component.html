@@ -6,11 +6,11 @@
       <option *ngFor='let periodOption of periodList' [value]='periodOption.key'>{{periodOption.value}}</option>
     </select>
   </div>
-  <tabset>
-    <tab heading="Me">
+  <tabset #dashboardTabs>
+    <tab heading="Me" (select)="onSelect($event)">
       <app-my-dashboard [myDashboard]='myDashboard' [period]='period'></app-my-dashboard>
     </tab>
-    <tab heading="Team">
+    <tab heading="Team" (select)="onSelect($event)">
       <app-team-dashboard [teamDashboard]='teamDashboard' [dashboardTotals]='dashboardTotals'
         [totalApplicants]='totalApplicants' [totalViewings]='totalViewings' [totalOffersAgreed]='totalOffersAgreed'
         [totalOffersReceived]='totalOffersReceived' [totalExchanges]='totalExchanges' [totalPipeline]='totalPipeline'

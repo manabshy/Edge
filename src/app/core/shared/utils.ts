@@ -18,4 +18,8 @@ export class AppUtils{
 
   public static prevRoute: string;
   public static prevRouteBU: string;
+
+  public static homeSelectedTab: number;
+  public static dashboardSelectedTab: number;
+
 }

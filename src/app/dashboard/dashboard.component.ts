@@ -1,9 +1,11 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 
 import { DashboardService } from './shared/dashboard.service';
 import { Dashboard, DashboardResult, TeamDashboardResult, DashboardTotals, OffersResult, Pipeline, Instruction } from './shared/dashboard';
 import { User, UserResult } from '../core/models/user';
 import { Constants } from '../core/shared/period-list';
+import { TabsetComponent, TabDirective } from 'ngx-bootstrap/tabs/';
+import { AppUtils } from '../core/shared/utils';
 
 @Component({
   selector: 'app-dashboard',
@@ -36,6 +38,9 @@ export class DashboardComponent implements OnInit {
   periodList = Constants.PeriodList;
   private readonly role = 'salesManager';
 
+  @ViewChild('dashboardTabs') dashboardTabs: TabsetComponent;
+  selectedTab: number;
+
   set selectedPeriod(val: string) {
     this._selectedPeriod = val;
     this.period = this.getSelectedPeriod(this._selectedPeriod);
@@ -51,6 +56,17 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.selectedPeriod = 'ThisQuarter';
+    if(AppUtils.dashboardSelectedTab) {
+      this.dashboardTabs.tabs[AppUtils.dashboardSelectedTab].active = true;
+    }
+  }
+
+  onSelect(data: TabDirective): void {
+    setTimeout(() => {
+      this.selectedTab = data.tabset.tabs.findIndex(item => item.active);
+      AppUtils.dashboardSelectedTab = this.selectedTab;
+      console.log(AppUtils.dashboardSelectedTab);
+    });
   }
 
   // ngOnChanges(changes: SimpleChanges) {

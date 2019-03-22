@@ -4,6 +4,7 @@ import { UserResult, User } from '../core/models/user';
 import { UserService } from '../core/services/user.service';
 
 import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
+import { AppUtils } from '../core/shared/utils';
 
 @Component({
   selector: 'app-home',
@@ -29,6 +30,10 @@ export class HomeComponent implements OnInit {
     //   this.isLoggedIn = true;
     //   this.getUserByEmail(this.authService.getUsername());
     // }
+
+    if(AppUtils.homeSelectedTab) {
+      this.homeTabs.tabs[AppUtils.homeSelectedTab].active = true;
+    }
   }
   getUserByEmail(username: string): void {
     this.userService.getUserByEmail(username)
@@ -44,6 +49,7 @@ export class HomeComponent implements OnInit {
   onSelect(data: TabDirective): void {
     setTimeout(() => {
       this.selectedTab = data.tabset.tabs.findIndex(item => item.active);
+      AppUtils.homeSelectedTab = this.selectedTab;
     });
   }
 
