@@ -17,14 +17,16 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown/';
 import { CollapseModule } from 'ngx-bootstrap/collapse/';
 import { TabsModule } from 'ngx-bootstrap/tabs/';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { ModalModule } from 'ngx-bootstrap/modal/';
 
 //components
 import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
+import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 
 @NgModule({
-  declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent],
-  exports: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent, BsDropdownModule,
-    CollapseModule, TabsModule, TypeaheadModule, BsDatepickerModule],
+  declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent, ConfirmModalComponent],
+  exports: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent, ConfirmModalComponent, BsDropdownModule,
+    CollapseModule, TabsModule, TypeaheadModule, BsDatepickerModule, ModalModule],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -32,7 +34,11 @@ import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
     CollapseModule.forRoot(),
     TabsModule.forRoot(),
     BsDatepickerModule.forRoot(),
-    TypeaheadModule.forRoot()
+    TypeaheadModule.forRoot(),
+    ModalModule.forRoot()
+  ],
+  entryComponents: [
+    ConfirmModalComponent
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AddHeaderInterceptor, multi: true },

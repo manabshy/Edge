@@ -8,20 +8,18 @@ import { Subject } from 'rxjs';
 })
 export class ConfirmModalComponent implements OnInit {
 
-  public onClose: Subject<boolean>;
+  subject: Subject<boolean>;
 
-  constructor(public bsModalRef: BsModalRef, public modalService: BsModalService) { }
+  constructor(public bsModalRef: BsModalRef) { }
 
   ngOnInit() {
+    console.log(this);
   }
 
-  public onConfirm(): void {
-    this.modalService.setDismissReason('');
+  action(value: boolean) {
     this.bsModalRef.hide();
+    this.subject.next(value);
+    this.subject.complete();
   }
 
-  public onCancel(): void {
-    this.modalService.setDismissReason('stay');
-    this.bsModalRef.hide();
-  }
 }

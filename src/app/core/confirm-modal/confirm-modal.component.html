@@ -1,5 +1,5 @@
 <div class="modal-body text-center">
     <p>{{title}}</p>
-    <button type="button" class="btn btn-light mr-2" (click)="onCancel()">{{actions[0]}}</button>
-    <button type="button" class="btn btn-primary" (click)="onConfirm()">{{actions[1]}}</button>
+    <button type="button" class="btn btn-light mr-2" (click)="action(false)">{{actions[0]}}</button>
+    <button type="button" class="btn btn-primary" (click)="action(true)">{{actions[1]}}</button>
 </div>
