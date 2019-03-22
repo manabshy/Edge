@@ -11,7 +11,7 @@ import { OrderPipe } from 'ngx-order-pipe';
 export class ExchangesComponent implements OnInit {
   @Input() exchanges: Leaderboard[];
   sortedExchanges: any[];
-  @Input() selectedPeriod: string; 
+  @Input() selectedPeriodLabel: string; 
   order: string = 'totalFees';
   reverse: boolean = true;
 

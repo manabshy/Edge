@@ -17,11 +17,14 @@ export class LeaderboardComponent implements OnInit {
   leaderboardResult: LeaderboardResult;
   resultCount: number;
   private _selectedPeriod: string;
+  selectedPeriodLabel: string;
   periodList = Constants.PeriodList;
   private readonly salesManager = 'salesManager';
+  filterVisibility: string = 'visible';
 
  set selectedPeriod(val: string) {
     this._selectedPeriod = val;
+    this.selectedPeriodLabel = this.periodList.find(o => o.key === val).value;
     this.getExchanges( this.salesManager, this.selectedPeriod);
     this.getInstructions(this.salesManager, this.selectedPeriod);
   }
@@ -52,5 +55,9 @@ export class LeaderboardComponent implements OnInit {
       this.leaderboardResult = data;
       this.instructions = data.result;
     });
+  }
+
+  showFilter(val) {
+    this.filterVisibility = val;
   }
 }

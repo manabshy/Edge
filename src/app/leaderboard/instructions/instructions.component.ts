@@ -9,6 +9,7 @@ import { Leaderboard } from '../shared/leaderboard';
 })
 export class InstructionsComponent implements OnInit {
   @Input() instructions: Leaderboard[];
+  @Input() selectedPeriodLabel: string; 
 
   constructor() { }
 
