@@ -1,8 +1,11 @@
-<div class="text-center" *ngIf="!instructions.length; else results">
+<div class="text-center" *ngIf="instructions && !instructions.length; else results">
   <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...
 </div>
+<div class="text-center" *ngIf="!instructions">
+    <i class="far fa-sad-tear"></i> No Instructions {{selectedPeriodLabel}}
+</div>
 <ng-template #results>
-  <div class="table-responsive ">
+  <div class="table-responsive" *ngIf="instructions">
     <table class="table">
       <tbody>
         <tr *ngFor="let instruction of instructions; let i = index;">

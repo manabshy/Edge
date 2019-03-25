@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { DiaryComponent } from '../diary.component';
 import { baseDiaryEventTypes, valuationDiaryEventTypes, feedbackDiaryEventTypes } from '../shared/diary';
+import { SharedService } from 'src/app/core/services/shared.service';
 
 @Component({
   selector: 'app-add-diary-event',
@@ -13,7 +14,7 @@ export class AddDiaryEventComponent extends DiaryComponent implements OnInit {
   isMeridian = false;
   showSpinners = false;
 
-  constructor(protected fb: FormBuilder) {
+  constructor(protected fb: FormBuilder, private sharedService: SharedService) {
     super(fb);
   }
 
@@ -25,5 +26,9 @@ export class AddDiaryEventComponent extends DiaryComponent implements OnInit {
   }
   canDeactivate(): boolean {
     return !!this.diaryEvent;
+  }
+
+  cancel() {
+    this.sharedService.back();
   }
 }

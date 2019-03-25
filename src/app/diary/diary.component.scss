@@ -8,7 +8,7 @@
 .dropup {
     @include media-breakpoint-down(sm){  
         position: fixed;
-        bottom: 65px;
+        bottom: 70px;
         right: $grid-gutter-width/2;
     }
 

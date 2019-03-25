@@ -32,6 +32,8 @@ $enable-gradients: true;
 
 $side-nav-width: 260px;
 
+$top-bar-height: 50px;
+
 
 @mixin fixed-bottom($breakpoint) {
     @include media-breakpoint-down($breakpoint) {

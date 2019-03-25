@@ -15,4 +15,11 @@ export class AppUtils{
     const moDate = isDate(date) ? date : (date);
     return format(moDate, 'HH:mm');
   }
+
+  public static prevRoute: string;
+  public static prevRouteBU: string;
+
+  public static homeSelectedTab: number;
+  public static dashboardSelectedTab: number;
+
 }

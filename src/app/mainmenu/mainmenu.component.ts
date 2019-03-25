@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { AuthService } from '../core/services/auth.service';
 
 @Component({
   selector: 'app-mainmenu',
@@ -9,10 +10,14 @@ import { Location } from '@angular/common';
 })
 export class MainmenuComponent implements OnInit {
   navbarCollapsed = false;
+  isLoggedIn: boolean;
 
-  constructor(public router: Router, public _location: Location) { }
+  constructor(public router: Router, public _location: Location, private authService: AuthService, ) { }
 
   ngOnInit() {
+    if (this.authService.isLoggedIn()) {
+      this.isLoggedIn = true;
+    }
   }
 
   backClicked() {

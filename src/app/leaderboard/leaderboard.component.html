@@ -1,23 +1,23 @@
 <div class="tab-container">
-  <div class="form-group">
-    <select [(ngModel)]="selectedPeriod"  class="form-control" id="sel1"  >
-      <option *ngFor='let periodOption of periodList' [value] = 'periodOption.key'>{{periodOption.value}}</option>
+  <div class="form-group" [ngStyle]="{'visibility': filterVisibility}">
+    <select [(ngModel)]="selectedPeriod" class="form-control" id="sel1">
+      <option *ngFor='let periodOption of periodList' [value]='periodOption.key'>{{periodOption.value}}</option>
     </select>
   </div>
   <tabset>
-    <tab heading="Instructions">
+    <tab heading="Instructions" (select)="showFilter('visible')">
       <div class="no-gutters">
-        <app-instructions [instructions]=instructions></app-instructions>
+        <app-instructions [instructions]=instructions [selectedPeriodLabel]=selectedPeriodLabel></app-instructions>
       </div>
     </tab>
-    <tab heading="Pipeline">
+    <tab heading="Pipeline" (select)="showFilter('hidden')">
       <div class="no-gutters">
         <app-pipeline [pipelineList]=pipelineList></app-pipeline>
       </div>
     </tab>
-    <tab heading="Exchanges">
+    <tab heading="Exchanges" (select)="showFilter('visible')">
       <div class="no-gutters">
-        <app-exchanges [exchanges]=exchanges [selectedPeriod]=selectedPeriod></app-exchanges>
+        <app-exchanges [exchanges]=exchanges [selectedPeriodLabel]=selectedPeriodLabel></app-exchanges>
       </div>
     </tab>
   </tabset>

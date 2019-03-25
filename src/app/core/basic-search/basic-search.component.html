@@ -1,5 +1,5 @@
 <pre class="card card-block card-header mb-3">Selected option: {{selectedOption | json}}</pre>
-<form [formGroup]="searchForm">
+<form [formGroup]="searchForm" class="mb-3">
     <input formControlName="search"
            [typeahead]="searchResults"
            [typeaheadOptionsLimit]="7"

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
-import { Router } from '@angular/router';
+import { SharedService } from '../../core/services/shared.service';
 
 @Component({
   selector: 'app-breadcrumb',
@@ -8,17 +7,13 @@ import { Router } from '@angular/router';
   styleUrls: ['./breadcrumb.component.scss']
 })
 export class BreadcrumbComponent implements OnInit {
-  constructor(private router: Router, private _location: Location) { }
+  constructor(private sharedService: SharedService) { }
 
   ngOnInit() {
   }
 
   backClicked() {
-    if(document.referrer) {
-      this._location.back();
-    } else {
-      this.router.navigate(['/home']);
-    }
+    this.sharedService.back();
   }
 
 }
