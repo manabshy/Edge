@@ -10,19 +10,23 @@ import { Instruction } from 'src/app/dashboard/shared/dashboard';
 })
 export class BasicSearchComponent implements OnInit {
   @Input() searchResults: [];
+  @Input() searchField: string;
   @Input() selectedInstruction: Instruction;
   selectedOption: string;
   searchCtrl = new FormControl();
   searchForm: FormGroup;
+  noResult: boolean;
   constructor() { }
 
   ngOnInit() {
     this.searchForm = new FormGroup({
       search: this.searchCtrl
     });
-
   }
   onSelect(event: TypeaheadMatch): void {
     this.selectedOption = event.item;
+  }
+  typeaheadNoResults(event: boolean): void {
+    this.noResult = event;
   }
 }

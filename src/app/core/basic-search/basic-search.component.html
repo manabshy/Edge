@@ -1,10 +1,13 @@
 <pre class="card card-block card-header mb-3">Selected option: {{selectedOption | json}}</pre>
+<div class="alert alert-danger" *ngIf="noResult">No Results Found</div>
 <form [formGroup]="searchForm" class="mb-3">
     <input formControlName="search"
            [typeahead]="searchResults"
            [typeaheadOptionsLimit]="7"
            [typeaheadMinLength]="0"
+           typeaheadOptionField="propertyAddress"
            (typeaheadOnSelect)="onSelect($event)"
+           (typeaheadNoResults)="typeaheadNoResults($event)"
            placeholder="search"
            class="form-control">
   </form>
