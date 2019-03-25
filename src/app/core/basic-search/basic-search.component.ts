@@ -10,7 +10,7 @@ import { Instruction } from 'src/app/dashboard/shared/dashboard';
 })
 export class BasicSearchComponent implements OnInit {
   @Input() searchResults: [];
-  @Input() selectedInstruction:Instruction;
+  @Input() selectedInstruction: Instruction;
   selectedOption: string;
   searchCtrl = new FormControl();
   searchForm: FormGroup;

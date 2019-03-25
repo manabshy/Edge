@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormArray, Validators, FormBuilder } from '@angular/forms';
 import { DiaryEvent, newEventForm, DiaryEventTypesEnum, newPropertyForm } from './shared/diary';
 import { AppUtils } from '../core/shared/utils';
-import { addHours } from 'date-fns';
+import { addHours , format} from 'date-fns';
 
 @Component({
   selector: 'app-diary',
@@ -47,11 +47,12 @@ export class DiaryComponent implements OnInit {
   }
   // Patch the date/time to the next available hour
   protected patchDateTime() {
-
     this.diaryEventForm.patchValue({
-      startDateTime: AppUtils.getMomentDate(addHours(new Date(), 1)),
-      endDateTime: AppUtils.getMomentDate(addHours(new Date(), 2))
+      startDateTime: format(addHours(Date.now(), 1), 'HH:00'),
+      endDateTime: format(addHours(Date.now(), 2), 'HH:00')
     });
+    console.log(this.diaryEventForm.get('startDateTime').value);
+    console.log(this.diaryEventForm.get('endDateTime').value);
   }
   get canSeeProperty(): boolean {
     const allowed = [
