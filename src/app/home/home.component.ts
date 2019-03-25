@@ -9,17 +9,18 @@ import { UserService } from '../core/services/user.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  isLoggedIn: boolean;
   email: string;
   firstName: string;
   staffMemberId: number;
   userResult: UserResult;
   user: User;
+  get isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
+  }
   constructor(private authService: AuthService, private userService: UserService) { }
 
   ngOnInit() {
     // if (this.authService.isLoggedIn()) {
-    //   this.isLoggedIn = true;
     //   this.getUserByEmail(this.authService.getUsername());
     // }
   }
