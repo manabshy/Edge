@@ -1,4 +1,4 @@
-<div class="tab-container">
+<div class="tab-content-container">
   <div class="form-group" [ngStyle]="{'visibility': filterVisibility}">
     <select [(ngModel)]="selectedPeriod" class="form-control" id="sel1">
       <option *ngFor='let periodOption of periodList' [value]='periodOption.key'>{{periodOption.value}}</option>

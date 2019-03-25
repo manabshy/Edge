@@ -1,12 +1,54 @@
-<div class="btn-group" dropdown [dropup]="isDropup" (window:resize)="setDropup()">
-  <button id="button-dropup" dropdownToggle type="button" class="btn btn-secondary rounded"
-          aria-controls="event-dropup">
-  <i class="fas fa-plus"></i> <span class="d-none d-sm-inline ml-2">Add Event</span>
-  </button>
-  <ul id="event-dropup" *dropdownMenu class="dropdown-menu"
-      role="menu" aria-labelledby="button-dropup">
-    <li role="menuitem"><a class="dropdown-item" [routerLink]="['/add-event']" ><i class="fas fa-calendar-day fa-fw mr-2"></i>Appointment</a></li>
-    <li role="menuitem"><a class="dropdown-item" href="#"><i class="fas fa-phone fa-fw mr-2"></i>Callback reminder</a>
-    </li>
-  </ul>
+<div class="row no-gutters justify-content-between mb-3 diary-header">
+  <div class="col-auto">
+    <div class="row no-gutters align-items-center">
+      <div class="col-auto">
+        <div class="btn-group mr-3" dropdown [dropup]="isDropup" (window:resize)="setDropup()">
+          <button id="button-dropup" dropdownToggle type="button" class="btn btn-secondary rounded"
+            aria-controls="event-dropup">
+            <i class="fas fa-plus"></i> <span class="d-none d-sm-inline ml-2">Add Event</span>
+          </button>
+          <ul id="event-dropup" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-dropup">
+            <li role="menuitem"><a class="dropdown-item" [routerLink]="['/add-event']"><i
+                  class="fas fa-calendar-day fa-fw mr-2"></i>Appointment</a></li>
+            <li role="menuitem"><a class="dropdown-item" href="#"><i class="fas fa-phone fa-fw mr-2"></i>Callback
+                reminder</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col">
+        <button type="button" class="btn btn-light" (click)="prevMonth()"><i class="fas fa-chevron-left"></i></button>
+        <h4 class="d-inline-block m-0 align-middle mx-2">{{months[viewedMonth]}} {{viewedYear}}</h4>
+        <button type="button" class="btn btn-light" (click)="nextMonth()"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </div>
+  </div>
+  <div class="col-auto">
+    <button type="button" class="btn btn-light" (click)="setToday()">Today</button>
+  </div>
+</div>
+
+<div class="card-grid">
+  <div class="card" *ngFor="let day of days" class="{{day.spanClass}}" [ngClass]="{'is-weekend': day.isWeekend, 'no-events': !day.events.length, 'is-today': day.isToday }"
+    [attr.id]="day.isToday ? 'today' : ''">
+    <div class="card-header">
+      <strong [ngClass]="{'text-secondary': day.isToday}">{{day.label}}</strong>
+    </div>
+    
+    <ng-template #popTemplate>
+        <ul class="list-unstyled m-0" tabindex="1">
+          <li><a class="dropdown-item" [routerLink]="['/add-event']"><i
+                class="fas fa-calendar-day fa-fw mr-2"></i>Appointment</a></li>
+          <li><a class="dropdown-item" href="#"><i class="fas fa-phone fa-fw mr-2"></i>Callback
+              reminder</a>
+          </li>
+        </ul>
+    </ng-template>
+    <div class="card-body" [popover]="popTemplate">
+      <div class="row no-gutters event" [ngClass]="{'mb-3': !isLast}" *ngFor="let event of day?.events; last as isLast">
+        <div class="col text-truncate"><span class="text-muted">{{event.time}}</span> {{event.title}}</div>
+        <div class="col-auto"><i class="fas fa-calendar fa-fw" *ngIf="event.type"></i><i class="fas fa-phone fa-fw" *ngIf="!event.type"></i></div>
+      </div>
+    </div>
+  </div>
 </div>

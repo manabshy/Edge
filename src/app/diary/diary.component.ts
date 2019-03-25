@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormArray, Validators, FormBuilder } from '@angular/forms';
 import { DiaryEvent, newEventForm, DiaryEventTypesEnum, newPropertyForm } from './shared/diary';
 import { AppUtils } from '../core/shared/utils';
-import { addHours } from 'date-fns';
+import { addHours, isToday, getDaysInMonth } from 'date-fns';
+import { daysInMonth } from 'ngx-bootstrap/chronos/units/month';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-diary',
@@ -13,6 +15,14 @@ export class DiaryComponent implements OnInit {
   isDropup = false;
  public diaryEventForm: FormGroup;
   diaryEvent: DiaryEvent;
+  days: any[];
+  today = new Date(Date.now());
+  todayMonth = this.today.getMonth();
+  todayYear = this.today.getFullYear();
+  viewedMonth = this.todayMonth;
+  viewedYear = this.todayYear;
+
+  months = ["January","February","March","April","May","June","July","August","September","October","November","December"]
 
   constructor(protected fb: FormBuilder) { }
 
@@ -20,6 +30,8 @@ export class DiaryComponent implements OnInit {
     this.setDropup();
     this.diaryEventForm = newEventForm();
     this.patchDateTime();
+    this.days = this.getDaysInMonth(this.todayMonth,this.todayYear);
+    this.setToday();
   }
 
   setDropup() {
@@ -29,6 +41,79 @@ export class DiaryComponent implements OnInit {
       this.isDropup = false;
     }
   }
+
+  getDaysInMonth(month, year) {
+    let days = [];
+    let date = new Date(year, month, 1);
+    while(date.getMonth() === month){
+      let dayObj = new Object();
+      let day = new Date(date);
+      date.setDate(date.getDate() + 1);
+      if(day.getFullYear() == this.todayYear) {
+        dayObj['label'] = formatDate(day, 'E d MMM', 'en-GB');
+      } else {
+        dayObj['label'] = formatDate(day, 'E d MMM y', 'en-GB');
+      }
+      dayObj['isWeekend'] = formatDate(day, 'E', 'en-GB') == "Sun";
+      dayObj['isToday'] = day.getDate() == this.today.getDate() && day.getMonth() == this.todayMonth && day.getFullYear() == this.todayYear;
+      dayObj['spanClass'] = 'span-'+ day.getDay();
+      dayObj['events'] = this.getEvents();
+
+      days.push(dayObj);
+    }
+    return days;
+  }
+
+  prevMonth() {
+    if(this.viewedMonth === 0) {
+      this.days = this.getDaysInMonth(11, this.viewedYear - 1);
+      this.viewedMonth = 11;
+      this.viewedYear = this.viewedYear - 1;
+    } else {
+      this.days = this.getDaysInMonth(this.viewedMonth - 1, this.viewedYear);
+      this.viewedMonth = this.viewedMonth - 1;
+    }
+  }
+
+  nextMonth() {
+    if(this.viewedMonth === 11) {
+      this.days = this.getDaysInMonth(0, this.viewedYear + 1);
+      this.viewedMonth = 0;
+      this.viewedYear = this.viewedYear + 1;
+    } else {
+      this.days = this.getDaysInMonth(this.viewedMonth + 1, this.viewedYear);
+      this.viewedMonth = this.viewedMonth + 1;
+    }
+  }
+
+  setToday() {
+    this.days = this.getDaysInMonth(this.todayMonth, this.todayYear);
+    this.viewedMonth = this.todayMonth;
+    this.viewedYear = this.todayYear;
+
+    if (window.innerWidth < 576) {
+      document.getElementById('today').scrollIntoView();
+    }
+  }
+
+  getEvents() {
+    let events = [];
+    let counter = Math.floor(Math.random() * Math.floor(3) + 1);
+
+    for(let i = 1; i < counter; i++) {
+      let event = new Object;
+      let counter1 = Math.floor(Math.random() * Math.floor(2));
+      event['type'] = counter1;
+      event['time'] = "00:00";
+      event['title'] = "This is the event title";
+
+      events.push(event);
+
+    }
+
+    return events;
+  }
+
 
   get contactGroups(): FormArray {
     return this.diaryEventForm.get('contactGroups') as FormArray;
