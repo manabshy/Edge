@@ -29,7 +29,6 @@ export class DashboardListComponent implements OnInit {
   }
   set selectedInstruction(address: string) {
    this.instruction = this.instructions.find(x => x.propertyAddress === address);
-    console.log(this.instruction);
   }
   get selectedInstruction() {
     return this.instruction;
@@ -53,7 +52,6 @@ export class DashboardListComponent implements OnInit {
       .subscribe(data => {
         this.instructions = data.result;
        this.getInstructedAddresses();
-        console.log(this.instructedAddresses);
       });
   }
   getDashboardApplicants(id: number, role: string): void {
