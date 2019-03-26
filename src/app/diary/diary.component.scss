@@ -57,11 +57,17 @@
         width: 14.28%;
         margin: 0;
         border-radius: 0;
-        min-height: 150px;
+        min-height: 700px;
     }
     @include media-breakpoint-down("sm") {
         margin-bottom: 0;
         border-radius: 0;
+    }
+
+    .month & {
+        @include media-breakpoint-up(sm) {
+            min-height: 150px;
+        }
     }
 
     &.is-weekend {
@@ -95,7 +101,7 @@
         padding: spacer(2);
         @include media-breakpoint-down("sm") {
             position: sticky;
-            top: $top-bar-height + 55px;
+            top: $top-bar-height + 45px;
             z-index: 2;
         }
     }
