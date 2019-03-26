@@ -22,4 +22,6 @@ export class AppUtils{
   public static homeSelectedTab: number;
   public static dashboardSelectedTab: number;
 
+  public static isDiarySearchVisible: boolean = false;
+
 }

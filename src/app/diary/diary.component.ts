@@ -25,6 +25,8 @@ export class DiaryComponent implements OnInit {
   viewedYear = this.todayYear;
   viewMode = "week";
   monthLabel = dayjs().month(this.viewedMonth).format('MMMM');
+  
+  appUtils = AppUtils;
 
   constructor(protected fb: FormBuilder) { }
 
@@ -150,6 +152,19 @@ export class DiaryComponent implements OnInit {
     }
   }
 
+  toggleSearch() {
+    AppUtils.isDiarySearchVisible = !AppUtils.isDiarySearchVisible;
+  }
+
+  getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+
   getEvents() {
     let events = [];
     let counter = Math.floor(Math.random() * Math.floor(3) + 1);
@@ -160,6 +175,7 @@ export class DiaryComponent implements OnInit {
       event['type'] = counter1;
       event['time'] = "00:00";
       event['title'] = "This is the event title";
+      event['color'] = this.getRandomColor();
 
       events.push(event);
 

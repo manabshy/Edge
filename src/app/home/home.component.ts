@@ -51,6 +51,7 @@ export class HomeComponent implements OnInit {
     setTimeout(() => {
       this.selectedTab = data.tabset.tabs.findIndex(item => item.active);
       AppUtils.homeSelectedTab = this.selectedTab;
+      AppUtils.isDiarySearchVisible = false;
       if (window.innerWidth < 576) {
         if(document.getElementById('today') && this.selectedTab == 1){
           document.getElementById('today').scrollIntoView({block: 'center'});

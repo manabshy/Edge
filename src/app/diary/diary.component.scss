@@ -2,10 +2,8 @@
 @import "../../../node_modules/bootstrap/scss/functions";
 @import "../../../node_modules/bootstrap/scss/variables";
 @import "../../../node_modules/bootstrap/scss/mixins";
-
-
 .diary-header {
-    @include media-breakpoint-down(sm) {  
+    @include media-breakpoint-down(sm) {
         position: fixed;
         width: 100%;
         top: $top-bar-height;
@@ -23,7 +21,7 @@
         bottom: 70px;
         right: $grid-gutter-width/2;
         z-index: 1000;
-        margin: 0!important;
+        margin: 0 !important;
     }
     .btn {
         @include media-breakpoint-down(sm) {
@@ -51,7 +49,7 @@
 }
 
 .card {
-    width: calc(100% - #{$grid-gutter-width/2.5});
+    width: 100%;
     @include media-breakpoint-up(sm) {
         font-size: $font-size-sm;
         width: 14.28%;
@@ -60,29 +58,25 @@
         min-height: 700px;
     }
     @include media-breakpoint-down("sm") {
-        margin-bottom: 0;
+        margin: 0;
         border-radius: 0;
     }
-
     .month & {
         @include media-breakpoint-up(sm) {
             min-height: 150px;
         }
     }
-
     &.is-weekend {
         display: none;
         @include media-breakpoint-up(sm) {
             display: flex;
         }
     }
-
     &.no-events:not(.is-today) {
         @include media-breakpoint-down("sm") {
             display: none;
         }
     }
-
     &.no-events.is-today {
         .card-header {
             @include media-breakpoint-down("sm") {
@@ -95,7 +89,6 @@
             }
         }
     }
-
     .card-header {
         background-color: theme-color("light");
         padding: spacer(2);
@@ -106,7 +99,13 @@
         }
     }
     .card-body {
-        padding: spacer(2);
+        padding: spacer(2) spacer(1);
+        padding-left: 0.8rem;
+
+        @include media-breakpoint-down("sm") {
+            padding: spacer(2);
+            padding-left: 1.2rem;
+        }
     }
 }
 
@@ -121,9 +120,37 @@
 }
 
 @include pushDate();
-
-
 :host ::ng-deep .popover-body {
     padding-left: 0;
     padding-right: 0;
+}
+
+.event {
+    position: relative;
+    .color {
+        position: absolute;
+        display: block;
+        top: 50%;
+        left: -10px;
+        width: 8px;
+        height: 8px;
+        transform: translateY(-50%);
+        border-radius: 50%;
+
+        @include media-breakpoint-down("sm") {
+            left: -12px;
+        }
+    }
+}
+
+.search {
+    @include media-breakpoint-down("sm") {
+        margin-top: 50px;
+    }
+
+    .card {
+        @include media-breakpoint-up(sm) {
+            width: 25%;
+        }
+    }
 }

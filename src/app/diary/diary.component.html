@@ -2,7 +2,7 @@
   <div class="col-auto">
     <div class="row no-gutters align-items-center">
       <div class="col-auto">
-        <div class="btn-group mr-3" dropdown [dropup]="isDropup" (window:resize)="setDropup()">
+        <div class="btn-group mr-2" dropdown [dropup]="isDropup" (window:resize)="setDropup()">
           <button id="button-dropup" dropdownToggle type="button" class="btn btn-secondary rounded"
             aria-controls="event-dropup">
             <i class="fas fa-plus"></i> <span class="d-none d-sm-inline ml-2">Add Event</span>
@@ -16,48 +16,76 @@
           </ul>
         </div>
       </div>
-      <div class="col">
+      <div class="col" *ngIf="!appUtils.isDiarySearchVisible">
         <button type="button" class="btn btn-light" (click)="prevMonth()"><i class="fas fa-chevron-left"></i></button>
-        <h5 class="d-inline-block m-0 align-middle mx-2">{{monthLabel}}</h5>
+        <h6 class="d-inline-block m-0 align-middle mx-2">{{monthLabel}}</h6>
         <button type="button" class="btn btn-light" (click)="nextMonth()"><i class="fas fa-chevron-right"></i></button>
       </div>
     </div>
   </div>
   <div class="col-auto">
     <div class="row no-gutters">
-      <div class="col d-none d-sm-flex pr-2">
-        <select name="viewMode" id="vew-mode" [(ngModel)]="viewMode" (ngModelChange)="changeView()" class="custom-select">
+      <div class="col-auto">
+        <button type="button" (click)="toggleSearch()" class="btn btn-light"><i class="fas fa-search fa-fw"
+            *ngIf="!appUtils.isDiarySearchVisible"></i><span *ngIf="appUtils.isDiarySearchVisible"><i class="fas fa-calendar-alt fa-fw"></i> Calendar</span></button>
+      </div>
+      <div class="col d-none d-sm-flex pl-2" *ngIf="!appUtils.isDiarySearchVisible">
+        <select name="viewMode" id="vew-mode" [(ngModel)]="viewMode" (ngModelChange)="changeView()"
+          class="custom-select">
           <option value="week">Week</option>
           <option value="month">Month</option>
         </select>
       </div>
-      <div class="col-auto">
-          <button type="button" class="btn btn-light" (click)="setToday()">Today</button>
+      <div class="col-auto pl-2" *ngIf="!appUtils.isDiarySearchVisible">
+        <button type="button" class="btn btn-light" (click)="setToday()">Today</button>
       </div>
     </div>
   </div>
 </div>
 
-<div class="card-grid {{viewMode}}">
-  <div class="card" *ngFor="let day of days" class="{{day.spanClass}}" [ngClass]="{'is-weekend': day.isWeekend, 'no-events': !day.events.length, 'is-today': day.isToday }"
+<div class="container p-0 search" *ngIf="appUtils.isDiarySearchVisible">
+  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Search event" autofocus>
+  </div>
+  <div class="card-grid mt-0 month">
+    <div class="card">
+      <div class="card-header">
+        <strong>Sat 30 Mar</strong>
+      </div>
+      <div class="card-body">
+        <div class="row no-gutters event">
+          <span class="color" [ngStyle]="{'background': 'blue'}"></span>
+          <div class="col text-truncate"><span class="text-muted">00.00</span> Searched event</div>
+          <div class="col-auto"><i class="fas fa-calendar fa-fw"></i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card-grid {{viewMode}}" *ngIf="!appUtils.isDiarySearchVisible">
+  <div class="card" *ngFor="let day of days" class="{{day.spanClass}}"
+    [ngClass]="{'is-weekend': day.isWeekend, 'no-events': !day.events.length, 'is-today': day.isToday }"
     [attr.id]="day.isToday ? 'today' : ''">
     <div class="card-header">
       <strong [ngClass]="{'text-secondary': day.isToday}">{{day.label}}</strong>
     </div>
-    
+
     <ng-template #popTemplate>
-        <ul class="list-unstyled m-0" tabindex="1">
-          <li><a class="dropdown-item" [routerLink]="['/add-event']"><i
-                class="fas fa-calendar-day fa-fw mr-2"></i>Appointment</a></li>
-          <li><a class="dropdown-item" href="#"><i class="fas fa-phone fa-fw mr-2"></i>Callback
-              reminder</a>
-          </li>
-        </ul>
+      <ul class="list-unstyled m-0" tabindex="1">
+        <li><a class="dropdown-item" [routerLink]="['/add-event']"><i
+              class="fas fa-calendar-day fa-fw mr-2"></i>Appointment</a></li>
+        <li><a class="dropdown-item" href="#"><i class="fas fa-phone fa-fw mr-2"></i>Callback
+            reminder</a>
+        </li>
+      </ul>
     </ng-template>
     <div class="card-body" [popover]="popTemplate">
-      <div class="row no-gutters event" [ngClass]="{'mb-3': !isLast}" *ngFor="let event of day?.events; last as isLast">
+      <div class="row no-gutters event" [ngClass]="{'mb-2': !isLast}" *ngFor="let event of day?.events; last as isLast">
+        <span class="color" [ngStyle]="{'background': event.color}"></span>
         <div class="col text-truncate"><span class="text-muted">{{event.time}}</span> {{event.title}}</div>
-        <div class="col-auto"><i class="fas fa-calendar fa-fw" *ngIf="event.type"></i><i class="fas fa-phone fa-fw" *ngIf="!event.type"></i></div>
+        <div class="col-auto"><i class="fas fa-calendar fa-fw" *ngIf="event.type"></i><i class="fas fa-phone fa-fw"
+            *ngIf="!event.type"></i></div>
       </div>
     </div>
   </div>
