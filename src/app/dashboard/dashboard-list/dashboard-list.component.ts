@@ -11,14 +11,6 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./dashboard-list.component.css']
 })
 export class DashboardListComponent implements OnInit {
-  // @Input() pipeline: Pipeline[];
-  // @Input()  instructions: Instruction[];
-  // @Input() offers: Offer[];
-
-  // constructor() { }
-
-  // ngOnInit() {
-  // }
   private _selectedPeriod: string;
   periodList = Constants.PeriodList;
   private readonly role = 'salesManager';
