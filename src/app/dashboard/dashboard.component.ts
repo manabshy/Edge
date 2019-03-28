@@ -65,7 +65,6 @@ export class DashboardComponent implements OnInit {
     setTimeout(() => {
       this.selectedTab = data.tabset.tabs.findIndex(item => item.active);
       AppUtils.dashboardSelectedTab = this.selectedTab;
-      console.log(AppUtils.dashboardSelectedTab);
     });
   }
 

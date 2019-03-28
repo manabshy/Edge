@@ -13,6 +13,8 @@ export class AddDiaryEventComponent extends DiaryComponent implements OnInit {
   eventTypes = feedbackDiaryEventTypes;
   isMeridian = false;
   showSpinners = false;
+  public childItems: any[] = [];
+
 
   constructor(protected fb: FormBuilder, private sharedService: SharedService) {
     super(fb);
@@ -30,5 +32,11 @@ export class AddDiaryEventComponent extends DiaryComponent implements OnInit {
 
   cancel() {
     this.sharedService.back();
+  }
+  public onDuplicate() {
+    this.childItems.push(this.childItems.length);
+  }
+  public onRemove() {
+    this.childItems.pop();
   }
 }

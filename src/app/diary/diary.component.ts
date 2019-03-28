@@ -2,9 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormArray, Validators, FormBuilder } from '@angular/forms';
 import { DiaryEvent, newEventForm, DiaryEventTypesEnum, newPropertyForm } from './shared/diary';
 import { AppUtils } from '../core/shared/utils';
-import { addHours, isToday, getDaysInMonth } from 'date-fns';
-import { daysInMonth } from 'ngx-bootstrap/chronos/units/month';
-import { formatDate } from '@angular/common';
+import { addHours , format} from 'date-fns';
 import * as dayjs from 'dayjs';
 
 @Component({
@@ -58,6 +56,7 @@ export class DiaryComponent implements OnInit {
     dayObj['isToday'] = day.date() == this.today.date() && day.month() == this.todayMonth && day.year() == this.todayYear;
     dayObj['spanClass'] = 'span-' + day.day();
     dayObj['events'] = this.getEvents();
+    dayObj['clickable'] = day.date() >= this.today.date();
 
     return dayObj;
   }
@@ -202,11 +201,12 @@ export class DiaryComponent implements OnInit {
   }
   // Patch the date/time to the next available hour
   protected patchDateTime() {
-
     this.diaryEventForm.patchValue({
-      startDateTime: AppUtils.getMomentDate(addHours(new Date(), 1)),
-      endDateTime: AppUtils.getMomentDate(addHours(new Date(), 2))
+      startDateTime: format(addHours(Date.now(), 1), 'HH:00'),
+      endDateTime: format(addHours(Date.now(), 2), 'HH:00')
     });
+    console.log(this.diaryEventForm.get('startDateTime').value);
+    console.log(this.diaryEventForm.get('endDateTime').value);
   }
   get canSeeProperty(): boolean {
     const allowed = [
