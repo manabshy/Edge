@@ -11,7 +11,6 @@ export class InstructionsComponent implements OnInit {
   @Input() instructions: Leaderboard[];
   @Input() originalInstructions: Leaderboard[];
   @Input() selectedPeriodLabel: string;
-  @Input() noInstructions: boolean;
 
 
   constructor() { }

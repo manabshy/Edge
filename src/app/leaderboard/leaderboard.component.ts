@@ -22,7 +22,6 @@ export class LeaderboardComponent implements OnInit {
   periodList = Constants.PeriodList;
   private readonly salesManager = 'salesManager';
   filterVisibility = 'visible';
-  noInstructions = true;
 
  set selectedPeriod(val: string) {
     this._selectedPeriod = val;
@@ -57,15 +56,11 @@ export class LeaderboardComponent implements OnInit {
     this.leaderboardService.getStaffMemberInstructions(role, period, pageSize).subscribe(data => {
       this.leaderboardResult = data;
       this.originalInstructions = data.result;
-      this.instructions = data.result.slice(0, 10);
-      // const len = data.result.length;
-      // if (len > 0) {
-      //   this.instructions = data.result.slice(0, 10);
-      //   this.noInstructions = false;
-      // } else {
-      //   this.instructions = [];
-      // }
-      console.log(this.instructions);
+      if (data.result !== null) {
+        this.instructions = data.result.slice(0, 16);
+      } else {
+        console.log(`No instructions ${this.selectedPeriodLabel}: ${this.instructions}`);
+      }
     });
   }
 
