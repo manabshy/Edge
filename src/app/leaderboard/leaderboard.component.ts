@@ -22,6 +22,7 @@ export class LeaderboardComponent implements OnInit {
   periodList = Constants.PeriodList;
   private readonly salesManager = 'salesManager';
   filterVisibility = 'visible';
+  noInstructions = true;
 
  set selectedPeriod(val: string) {
     this._selectedPeriod = val;
@@ -32,6 +33,7 @@ export class LeaderboardComponent implements OnInit {
  get selectedPeriod() {
     return this._selectedPeriod;
   }
+
   constructor(private leaderboardService: LeaderboardService, private route: ActivatedRoute) { }
 
   ngOnInit() {
@@ -55,11 +57,15 @@ export class LeaderboardComponent implements OnInit {
     this.leaderboardService.getStaffMemberInstructions(role, period, pageSize).subscribe(data => {
       this.leaderboardResult = data;
       this.originalInstructions = data.result;
-      if (data.result.length > 0) {
-        this.instructions = data.result.slice(0, 10);
-      }
+      this.instructions = data.result.slice(0, 10);
+      // const len = data.result.length;
+      // if (len > 0) {
+      //   this.instructions = data.result.slice(0, 10);
+      //   this.noInstructions = false;
+      // } else {
+      //   this.instructions = [];
+      // }
       console.log(this.instructions);
-      console.log(this.originalInstructions);
     });
   }
 
