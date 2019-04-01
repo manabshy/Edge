@@ -6,6 +6,10 @@
 
 :host ::ng-deep .nav-pills {
     @include fixed-bottom('sm');
+    @include media-breakpoint-down(sm){
+        padding-top: 0;
+        padding-bottom: 0;
+    }
 }
 
 
@@ -14,12 +18,13 @@
         position: absolute;
         top: 0;
         right: 0;
-        transform: translate(100%, -50%);
+        transform: translate(100%, -100%);
     }
 
     .nav-link {
         @include media-breakpoint-down(sm) {
             text-align: center;
+            border-radius: 0;
         }  
     }
 
