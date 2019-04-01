@@ -25,7 +25,8 @@
 
     .nav-label {
         @include media-breakpoint-down(sm) {
-            display: none;
+            display: block;
+            font-size: .8rem;
         }
         @include media-breakpoint-up(sm) {
             margin-left: spacer(2);
@@ -76,5 +77,14 @@
             left: 10px;
             padding: 3px 14px;
         }
+    }
+}
+
+.w-50 {
+    @include media-breakpoint-down(lg){
+        width: 75%!important;
+    }
+    @include media-breakpoint-down(sm){
+        width: 100%!important;
     }
 }

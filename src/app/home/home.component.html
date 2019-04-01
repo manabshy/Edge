@@ -1,22 +1,27 @@
-<div class="container-fluid home-container pt-sm-3" [ngClass]="containerClass" (panend)="onPanEnd($event)" (panleft)="navRightHint($event)" (panright)="navLeftHint($event)">
+<div class="container-fluid home-container pt-sm-3" [ngClass]="containerClass" (panend)="onPanEnd($event)"
+  (panleft)="navRightHint($event)" (panright)="navLeftHint($event)">
   <tabset type="pills" #homeTabs>
     <tab (select)="onSelect($event)">
-        <ng-template tabHeading>
-          <i class="fas fa-th-large"></i><span class="nav-label">Dashboard</span>
-        </ng-template>
-        <app-dashboard  [userResult]='userResult' [staffMemberId]='staffMemberId'></app-dashboard>
+      <ng-template tabHeading>
+        <i class="fas fa-th-large"></i><span class="nav-label">Dashboard</span>
+      </ng-template>
+      <div class="container p-0">
+        <app-dashboard [userResult]='userResult' [staffMemberId]='staffMemberId'></app-dashboard>
+      </div>
     </tab>
     <tab (select)="onSelect($event)">
-        <ng-template tabHeading>
-          <i class="far fa-calendar-alt"></i><span class="nav-label">Diary</span>
-        </ng-template>
-        <app-diary></app-diary>
+      <ng-template tabHeading>
+        <i class="far fa-calendar-alt"></i><span class="nav-label">Diary</span>
+      </ng-template>
+      <app-diary></app-diary>
     </tab>
     <tab (select)="onSelect($event)">
-        <ng-template tabHeading>
-          <i class="fas fa-chalkboard-teacher"></i><span class="nav-label">Leaderboard</span>
-        </ng-template>
+      <ng-template tabHeading>
+        <i class="fas fa-chalkboard-teacher"></i><span class="nav-label">Leaderboard</span>
+      </ng-template>
+      <div class="container p-0">
         <app-leaderboard></app-leaderboard>
+      </div>
     </tab>
     <tab (select)="onSelect($event)">
       <ng-template tabHeading>
@@ -26,13 +31,47 @@
           <span class="badge badge-pill badge-secondary">15</span>
         </div>
       </ng-template>
-      <div class="container-fluid">
-        <div class="row justify-content-center">
-          <div class="col-auto">
-              <button class="btn btn-primary btn-block mb-2">Viewing feedbacks <span class="badge badge-pill badge-light">4</span></button>
-              <button class="btn btn-primary btn-block mb-2">Chase Valuations <span class="badge badge-pill badge-light">6</span></button>
-              <button class="btn btn-primary btn-block mb-2">Complete AML <span class="badge badge-pill badge-light">9</span></button>
-          </div>
+      <div class="container p-0">
+        <div class="list-group w-50 mx-auto">
+          <a href="#" class="list-group-item list-group-item-action">
+            <div class="row align-items-center">
+              <div class="col-3 col-sm-2">
+                  <span class="badge badge-primary badge-pill">4</span>
+              </div>
+              <div class="col">
+                Feedbacks
+              </div>
+              <div class="col-4 col-sm-3">
+                <span class="btn-link">View</span>
+              </div>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action">
+            <div class="row align-items-center">
+              <div class="col-3 col-sm-2">
+                  <span class="badge badge-primary badge-pill">6</span>
+              </div>
+              <div class="col">
+                Valuations
+              </div>
+              <div class="col-4 col-sm-3">
+                <span class="btn-link">Chase</span>
+              </div>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action">
+            <div class="row align-items-center">
+              <div class="col-3 col-sm-2">
+                  <span class="badge badge-primary badge-pill">9</span>
+              </div>
+              <div class="col">
+                AML
+              </div>
+              <div class="col-4 col-sm-3">
+                <span class="btn-link">Complete</span>
+              </div>
+            </div>
+          </a>
         </div>
       </div>
     </tab>
