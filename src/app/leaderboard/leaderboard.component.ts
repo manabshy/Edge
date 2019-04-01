@@ -41,23 +41,21 @@ export class LeaderboardComponent implements OnInit {
       .subscribe(params => this.selectedPeriod = params['period'] || 'ThisQuarter');
     this.leaderboardService.getStaffMemberPipeline(this.salesManager)
       .subscribe(result => {
-        this.leaderboardResult = result;
-        this.pipelineList = result.result;
+        this.pipelineList = result;
+        console.log(`The pipeline result is: ${this.pipelineList}`);
       });
   }
 
   getExchanges(role: string, period: string) {
-    this.leaderboardService.getStaffMemberExchanges(role, period).subscribe(data => {
-      this.leaderboardResult = data;
-      this.exchanges = data.result;
+    this.leaderboardService.getStaffMemberExchanges(role, period).subscribe(result => {
+      this.exchanges = result;
     });
   }
   getInstructions(role: string, period: string, pageSize: any) {
-    this.leaderboardService.getStaffMemberInstructions(role, period, pageSize).subscribe(data => {
-      this.leaderboardResult = data;
-      this.originalInstructions = data.result;
-      if (data.result !== null) {
-        this.instructions = data.result.slice(0, 16);
+    this.leaderboardService.getStaffMemberInstructions(role, period, pageSize).subscribe(result => {
+      this.originalInstructions = result;
+      if (result !== null) {
+        this.instructions = result.slice(0, 16);
       } else {
         console.log(`No instructions ${this.selectedPeriodLabel}: ${this.instructions}`);
       }
