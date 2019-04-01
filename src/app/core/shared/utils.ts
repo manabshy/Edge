@@ -1,5 +1,11 @@
 import {format, compareAsc, isDate} from 'date-fns';
-export class AppUtils{
+import { isArray, isPlainObject, mapValues, isNull, isUndefined, random  } from 'lodash';
+export class AppUtils {
+  public static prevRoute: string;
+  public static prevRouteBU: string;
+  public static homeSelectedTab: number;
+  public static dashboardSelectedTab: number;
+
   /**
    * Format a date/time into a string
    */
@@ -16,10 +22,23 @@ export class AppUtils{
     return format(moDate, 'HH:mm');
   }
 
-  public static prevRoute: string;
-  public static prevRouteBU: string;
+  /**
+     * Resolver function for get params
+     * @param queryOptions
+     * @returns {string}
+     */
+  public static resolveGetParams<T>(queryOptions: T): string {
+    // -->Init: param object serializer
+    const params = new URLSearchParams();
 
-  public static homeSelectedTab: number;
-  public static dashboardSelectedTab: number;
+    // -->Serialize: all parameters
+    mapValues(queryOptions, (v, i) => {
+      if (!isUndefined(v) && !isNull(v)) {
+        params.set(i, v.toString());
+      }
+    });
 
+    const strParams = params.toString();
+    return strParams ? `?${strParams}` : '';
+  }
 }
