@@ -18,12 +18,27 @@ export class LeaderboardService {
   }
 
   getStaffMemberExchanges(role: string, period: string): Observable<LeaderboardResult> {
-    const url = `${AppConstants.leaderboardBaseUrl}/exchanges?role=${role}&period=${period}`;
-    return this.http.get<LeaderboardResult>(url);
+    return this.getLeaderboard(role, period, 'exchanges');
   }
 
   getStaffMemberInstructions(role: string, period: string, params?: any): Observable<LeaderboardResult> {
-    const url = `${AppConstants.leaderboardBaseUrl}/instructions?role=${role}&period=${period}&pageSize=${params}`;
+    return this.getLeaderboard(role, period, 'instructions', params);
+  }
+
+  private getLeaderboard(role: string, period: string, endPoint: string, params?: any) {
+    if (params == null) { params = 10; }
+    const url = `${AppConstants.leaderboardBaseUrl}/${endPoint}?role=${role}&period=${period}&pageSize=${params}`;
     return this.http.get<LeaderboardResult>(url);
+  }
+}
+
+export class ApiParams {
+  pageNumber = 1;
+  pageSize = 10;
+  searchTerm: string;
+  constructor(pageNumber: number, pageSize: number, searchTerm: string) {
+    this.pageNumber = pageNumber;
+    this.pageSize = pageSize,
+    this.searchTerm = searchTerm;
   }
 }
