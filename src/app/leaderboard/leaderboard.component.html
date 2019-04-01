@@ -7,7 +7,9 @@
   <tabset>
     <tab heading="Instructions" (select)="showFilter('visible')">
       <div class="no-gutters">
-        <app-instructions [instructions]=instructions [selectedPeriodLabel]=selectedPeriodLabel></app-instructions>
+        <app-instructions [instructions]=instructions [selectedPeriodLabel]=selectedPeriodLabel
+         [originalInstructions]='originalInstructions' [noInstructions]='noInstructions'>
+        </app-instructions>
       </div>
     </tab>
     <tab heading="Pipeline" (select)="showFilter('hidden')">

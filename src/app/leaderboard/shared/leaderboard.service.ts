@@ -22,8 +22,8 @@ export class LeaderboardService {
     return this.http.get<LeaderboardResult>(url);
   }
 
-  getStaffMemberInstructions(role: string, period: string): Observable<LeaderboardResult> {
-    const url = `${AppConstants.leaderboardBaseUrl}/instructions?role=${role}&period=${period}`;
+  getStaffMemberInstructions(role: string, period: string, params?: any): Observable<LeaderboardResult> {
+    const url = `${AppConstants.leaderboardBaseUrl}/instructions?role=${role}&period=${period}&pageSize=${params}`;
     return this.http.get<LeaderboardResult>(url);
   }
 }
