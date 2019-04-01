@@ -11,6 +11,7 @@ import { Constants } from '../core/shared/period-list';
   styleUrls: ['./leaderboard.component.scss']
 })
 export class LeaderboardComponent implements OnInit {
+  originalInstructions: Leaderboard[] = [];
   instructions: Leaderboard[] = [];
   pipelineList: Leaderboard[] = [];
   exchanges: Leaderboard[] = [];
@@ -20,13 +21,13 @@ export class LeaderboardComponent implements OnInit {
   selectedPeriodLabel: string;
   periodList = Constants.PeriodList;
   private readonly salesManager = 'salesManager';
-  filterVisibility: string = 'visible';
+  filterVisibility = 'visible';
 
  set selectedPeriod(val: string) {
     this._selectedPeriod = val;
     this.selectedPeriodLabel = this.periodList.find(o => o.key === val).value;
     this.getExchanges( this.salesManager, this.selectedPeriod);
-    this.getInstructions(this.salesManager, this.selectedPeriod);
+    this.getInstructions(this.salesManager, this.selectedPeriod, 100);
   }
  get selectedPeriod() {
     return this._selectedPeriod;
@@ -50,14 +51,19 @@ export class LeaderboardComponent implements OnInit {
       this.exchanges = data.result;
     });
   }
-  getInstructions(role: string, period: string) {
-    this.leaderboardService.getStaffMemberInstructions(role, period).subscribe(data => {
+  getInstructions(role: string, period: string, pageSize: any) {
+    this.leaderboardService.getStaffMemberInstructions(role, period, pageSize).subscribe(data => {
       this.leaderboardResult = data;
-      this.instructions = data.result;
+      this.originalInstructions = data.result;
+      if (data.result.length > 0) {
+        this.instructions = data.result.slice(0, 10);
+      }
+      console.log(this.instructions);
+      console.log(this.originalInstructions);
     });
   }
 
-  showFilter(val) {
+  showFilter(val: string) {
     this.filterVisibility = val;
   }
 }

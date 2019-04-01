@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 import { LeaderboardRoutingModule } from './leaderboard-routing.module';
 import { PipelineComponent } from './pipeline/pipeline.component';
@@ -19,7 +20,8 @@ import { OrderModule } from 'ngx-order-pipe';
     CommonModule,
     LeaderboardRoutingModule,
     OrderModule,
-    CoreModule
+    CoreModule,
+    InfiniteScrollModule
   ]
 })
 export class LeaderboardModule { }

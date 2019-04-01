@@ -233,3 +233,11 @@ export interface BDTicketHistory {
   propertySaleId: number;
   propertySaleStatus: string;
 }
+
+export enum ApiPeriods {
+  Week = 'ThisWeek',
+  Month = 'ThisMonth',
+  Quarter = 'ThisQuarter',
+  Year = 'ThisYear',
+  All = 'All'
+}
