@@ -71,8 +71,8 @@ export class DiaryComponent implements OnInit {
     this.monthLabel = date.month(month).format('MMMM YYYY');
 
     while (date.month() === month) {
-      date = date.add(1,'day');
       days.push(this.makeDayObj(date));
+      date = date.add(1,'day');
     }
     return days;
   }
