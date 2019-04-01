@@ -80,7 +80,7 @@
         </li>
       </ul>
     </ng-template>
-    <div class="card-body" [popover]="popTemplate">
+    <div class="card-body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">
       <div class="row no-gutters event" [ngClass]="{'mb-2': !isLast}" *ngFor="let event of day?.events; last as isLast">
         <span class="color" [ngStyle]="{'background': event.color}"></span>
         <div class="col text-truncate"><span class="text-muted">{{event.time}}</span> {{event.title}}</div>

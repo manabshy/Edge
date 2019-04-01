@@ -56,7 +56,7 @@ export class DiaryComponent implements OnInit {
     dayObj['isToday'] = day.date() == this.today.date() && day.month() == this.todayMonth && day.year() == this.todayYear;
     dayObj['spanClass'] = 'span-' + day.day();
     dayObj['events'] = this.getEvents();
-    dayObj['clickable'] = day.date() >= this.today.date();
+    dayObj['isClickable'] = day.date() >= this.today.date();
 
     return dayObj;
   }
