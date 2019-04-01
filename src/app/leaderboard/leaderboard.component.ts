@@ -57,7 +57,7 @@ export class LeaderboardComponent implements OnInit {
     this.leaderboardService.getStaffMemberInstructions(role, period, pageSize).subscribe(data => {
       this.leaderboardResult = data;
       this.originalInstructions = data.result;
-      this.instructions = data.result.slice(0, 10);
+      this.instructions = data.result.slice(0, 16);
       // const len = data.result.length;
       // if (len > 0) {
       //   this.instructions = data.result.slice(0, 10);
