@@ -21,16 +21,22 @@ export class DashboardService {
     const url = `${AppConstants.baseUrl}/teammembers/dashboard?period=${period}&role=${role}&staffMemberId=${staffMemberId}`;
     return this.http.get<TeamDashboardResult>(url).pipe(map(response => response.result));
   }
+
   getDashboardPipeline(staffMemberId: number, role: string, period?: string): Observable<Pipeline[]> {
-    const url = `${AppConstants.baseUrl}/dashboard/pipeline?period=${period}&role=${role}&staffMemberId=${staffMemberId}`;
-    return this.http.get<PipelineResult>(url).pipe(map(response => response.result));
+    return this.get(staffMemberId, role, 'pipeline', period );
   }
+
   getDashboardInstructions(staffMemberId: number, role: string, period?: string): Observable<Instruction[]> {
-    const url = `${AppConstants.baseUrl}/dashboard/instructions?period=${period}&role=${role}&staffMemberId=${staffMemberId}`;
-    return this.http.get<InstructionResult>(url).pipe(map(response => response.result));
+   return this.get(staffMemberId, role, 'instructions', period );
   }
+
   getDashboardApplicants(staffMemberId: number, role: string): Observable<ApplicantResult> {
     const url = `${AppConstants.baseUrl}/dashboard/applicants?role=${role}&staffMemberId=${staffMemberId}`;
     return this.http.get<ApplicantResult>(url);
+  }
+
+ private get(staffMemberId: number, role: string, endpoint: string, period?: string): Observable<any> {
+    const url = `${AppConstants.baseUrl}/dashboard/${endpoint}?period=${period}&role=${role}&staffMemberId=${staffMemberId}`;
+    return this.http.get<any>(url).pipe(map(response => response.result));
   }
 }
