@@ -14,22 +14,25 @@ import { SendEdetailsComponent }   from './send-edetails/send-edetails.component
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DiaryComponent } from './diary/diary.component';
+import { AuthGuardService } from './core/services/auth-guard.service';
 
 const routes: Routes = [
-  { path: 'home', component: HomeComponent },
-  { path: 'contact-centre', component: ContactCentreComponent },
-  { path: 'property-details-letting', component: PropertyDetailsLettingComponent },
-  { path: 'property-details-sale', component: PropertyDetailsSaleComponent },
-  { path: 'lead-edit', component: LeadEditComponent },
-  { path: 'lead-register', component: LeadRegisterComponent },
-  { path: 'applicant-register', component: ApplicantRegisterComponent },
-  { path: 'applicant-view-letting', component: ApplicantViewLettingComponent },
-  { path: 'applicant-view-sale', component: ApplicantViewSaleComponent },
-  { path: 'send-edetails', component: SendEdetailsComponent },
-  { path: 'leaderboard', component: LeaderboardComponent },
-  // { path: 'dashboard', component: DashboardComponent },
-  { path: 'diary', component: DiaryComponent },
-  { path: '', redirectTo: 'home', pathMatch: 'full' }
+  { path: '', canActivate: [AuthGuardService], children: [
+    { path: '', redirectTo: 'home', pathMatch: 'full' },
+    { path: 'home', component: HomeComponent },
+    { path: 'contact-centre', component: ContactCentreComponent },
+    { path: 'property-details-letting', component: PropertyDetailsLettingComponent },
+    { path: 'property-details-sale', component: PropertyDetailsSaleComponent },
+    { path: 'lead-edit', component: LeadEditComponent },
+    { path: 'lead-register', component: LeadRegisterComponent },
+    { path: 'applicant-register', component: ApplicantRegisterComponent },
+    { path: 'applicant-view-letting', component: ApplicantViewLettingComponent },
+    { path: 'applicant-view-sale', component: ApplicantViewSaleComponent },
+    { path: 'send-edetails', component: SendEdetailsComponent },
+    { path: 'leaderboard', component: LeaderboardComponent },
+    // { path: 'dashboard', component: DashboardComponent },
+    { path: 'diary', component: DiaryComponent },
+  ] }
 ];
 
 @NgModule({

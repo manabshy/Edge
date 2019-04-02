@@ -12,16 +12,17 @@ export class MainmenuComponent implements OnInit {
   navbarCollapsed = false;
   isLoggedIn: boolean;
 
-  constructor(public router: Router, public _location: Location, private authService: AuthService, ) { }
+  constructor(public router: Router, public _location: Location, public authService: AuthService) { }
 
   ngOnInit() {
-    if (this.authService.isLoggedIn()) {
-      this.isLoggedIn = true;
-    }
   }
 
   backClicked() {
     this.navbarCollapsed = false;
+  }
+
+  logOut() {
+    this.authService.signout();
   }
 
 }

@@ -49,8 +49,7 @@
         </div>
       </li>
       <li class="nav-item">
-        <a *ngIf="!isLoggedIn" class="nav-link" [routerLink]="['/login']"><div><i class="fas fa-sign-in-alt fa-fw mr-3"></i>Login</div></a>
-        <a *ngIf="isLoggedIn" class="nav-link" [routerLink]="['/logout']"><div><i class="fas fa-sign-out-alt mr-3"></i>Logout</div></a>
+        <a class="nav-link" (click)="logOut()"><div><i class="fas fa-sign-out-alt mr-3"></i>Log out</div></a>
       </li>
     </ul>
   </div>

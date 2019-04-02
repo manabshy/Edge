@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AdalService } from 'adal-angular4';
 import { AppConstants } from '../shared/app-constants';
+import { Subject } from 'rxjs';
+import { BsModalService } from 'ngx-bootstrap/modal/';
+import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
 
 
 @Injectable({
@@ -22,14 +25,18 @@ export class AuthService {
     }
   };
 
-  constructor(private adalService: AdalService) { this.adalService.init(this.adalConfig); }
+  constructor(private adalService: AdalService, private modalService: BsModalService) { this.adalService.init(this.adalConfig); }
 
   public isLoggedIn(): boolean {
     return this.adalService.userInfo.authenticated;
  }
 
  public signout(): void {
-    this.adalService.logOut();
+    this.confirmSignOut().subscribe(res => {
+      if(res) {
+        this.adalService.logOut();
+      }
+    })
  }
 
  public startAuthentication(): any {
@@ -58,6 +65,17 @@ export class AuthService {
    // var expireIn=user.profile.exp-newDate().getTime();
  });
 
+ }
+
+ public confirmSignOut() {
+  const subject = new Subject<boolean>();
+  const initialState = {
+    title: 'Are you sure you want to log out? <br /> The ongoing changes will be lost.',
+    actions: ['Stay', 'Log out']
+  };
+  const modal = this.modalService.show(ConfirmModalComponent, {ignoreBackdropClick: true, initialState});
+  modal.content.subject = subject;
+  return subject.asObservable();
  }
 
 }

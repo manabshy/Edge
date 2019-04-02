@@ -4,13 +4,12 @@ import { AdalService, AdalInterceptor } from 'adal-angular4';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { LoginComponent } from './login/login.component';
-import { LogoutComponent } from './logout/logout.component';
 import { AuthCallbackComponent } from './auth-callback/auth-callback.component';
 import { AccountRoutingModule } from './account-routing.module';
 
 @NgModule({
-  declarations: [LoginComponent, LogoutComponent, AuthCallbackComponent],
-  exports: [LoginComponent, LogoutComponent],
+  declarations: [LoginComponent, AuthCallbackComponent],
+  exports: [LoginComponent],
   imports: [
     CommonModule,
     HttpClientModule,

@@ -1,13 +1,20 @@
-<div class="card col-md-3 offset-md-4 signin" style="margin-top: 8px; padding-top: 5px">
-    <div class="card-header">
-        Sign in with your work email! <i class="fa fa-sign-in" aria-hidden="true"></i>
-    </div>
-    <div class="card-body">
-        <div >
-            <button class="btn btn-success form-control" type="submit" (click)="logIn()">Sign in</button>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-5 col-lg-4 mt-lg-5">
+            <img class="img-fluid mb-3" src="assets/dng_logo.png" alt="">
+            <div class="card signin">
+                <div class="card-body text-center">
+                    <p class="card-text">
+                        Sign in with your work email
+                    </p>
+                    <div>
+                        <button class="btn btn-secondary form-control" type="submit" (click)="logIn()">Sign in</button>
+                    </div>
+                    <!-- <div *ngIf="authService.isLoggedIn()">
+                                    <button class="btn btn-success form-control" type="submit" (click)="signOut()"> Sign Out</button>
+                                </div> -->
+                </div>
+            </div>
         </div>
-        <!-- <div *ngIf="authService.isLoggedIn()">
-            <button class="btn btn-success form-control" type="submit" (click)="signOut()"> Sign Out</button>
-        </div> -->
     </div>
 </div>
