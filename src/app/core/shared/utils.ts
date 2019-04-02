@@ -22,24 +22,14 @@ export class AppUtils {
     return format(moDate, 'HH:mm');
   }
 
-  /**
-     * Resolver function for get params
-     * @param queryOptions
-     * @returns {string}
-     */
-  public static resolveGetParams<T>(queryOptions: T): string {
-    // -->Init: param object serializer
-    const params = new URLSearchParams();
+  public static setupInfintiteScroll(originalArray: any[], slicedArray: any[]) {
+    if (slicedArray.length < originalArray.length) {
+      const len = slicedArray.length;
 
-    // -->Serialize: all parameters
-    mapValues(queryOptions, (v, i) => {
-      if (!isUndefined(v) && !isNull(v)) {
-        params.set(i, v.toString());
+      for (let i = len; i <= len; i++) {
+        slicedArray.push(originalArray[i]);
       }
-    });
-
-    const strParams = params.toString();
-    return strParams ? `?${strParams}` : '';
+    }
   }
   
   public static isDiarySearchVisible: boolean = false;
