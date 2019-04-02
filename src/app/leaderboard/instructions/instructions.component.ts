@@ -6,7 +6,7 @@ import { AppUtils } from 'src/app/core/shared/utils';
 @Component({
   selector: 'app-instructions',
   templateUrl: './instructions.component.html',
-  styleUrls: ['./instructions.component.css']
+  styleUrls: ['./instructions.component.scss']
 })
 export class InstructionsComponent implements OnInit {
   @Input() instructions: Leaderboard[];

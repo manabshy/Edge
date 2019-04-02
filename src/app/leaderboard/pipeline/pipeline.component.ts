@@ -6,7 +6,7 @@ import { OrderPipe } from 'ngx-order-pipe';
 @Component({
   selector: 'app-pipeline',
   templateUrl: './pipeline.component.html',
-  styleUrls: ['./pipeline.component.css']
+  styleUrls: ['./pipeline.component.scss']
 })
 export class PipelineComponent implements OnInit {
 @Input() pipelineList: Leaderboard[] = [];

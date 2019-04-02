@@ -1,4 +1,4 @@
-import { Component, Renderer2, ChangeDetectorRef } from '@angular/core';
+import { Component, Renderer2, ChangeDetectorRef, HostListener } from '@angular/core';
 import { Router, RoutesRecognized } from '@angular/router';
 import { filter, pairwise } from 'rxjs/operators';
 import { AppUtils } from './core/shared/utils';
@@ -12,6 +12,7 @@ import { AuthService } from './core/services/auth.service';
 export class AppComponent {
   title = 'Wedge';
   isNavVisible: boolean;
+  isScrollTopVisible: boolean = false;
 
   constructor(private router: Router, public authService: AuthService, private renderer: Renderer2, private cdRef:ChangeDetectorRef) {
     /*  Track previous route for Breadcrumb component  */
@@ -39,6 +40,19 @@ export class AppComponent {
     }
 
     this.cdRef.detectChanges();
+  }
+
+  @HostListener('window:scroll', ['$event'])
+  onScroll(event) {
+    if(window.scrollY > window.innerHeight * 0.25) {
+      this.isScrollTopVisible = true;
+    } else {
+      this.isScrollTopVisible = false;
+    }
+  }
+
+  scrollTop() {
+    document.getElementsByTagName('body')[0].scrollIntoView({behavior: 'smooth', block: 'start'});
   }
 
 }
