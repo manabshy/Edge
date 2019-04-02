@@ -22,51 +22,56 @@ export class LeaderboardComponent implements OnInit {
   periodList = Constants.PeriodList;
   private readonly salesManager = 'salesManager';
   filterVisibility = 'visible';
-  noInstructions = true;
 
- set selectedPeriod(val: string) {
+  set selectedPeriod(val: string) {
     this._selectedPeriod = val;
     this.selectedPeriodLabel = this.periodList.find(o => o.key === val).value;
-    this.getExchanges( this.salesManager, this.selectedPeriod);
+    this.getExchanges(this.salesManager, this.selectedPeriod);
     this.getInstructions(this.salesManager, this.selectedPeriod, 100);
   }
- get selectedPeriod() {
+  get selectedPeriod() {
     return this._selectedPeriod;
   }
 
-  constructor(private leaderboardService: LeaderboardService, private route: ActivatedRoute) { }
+  constructor(
+    private leaderboardService: LeaderboardService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
     //  this.route.data.subscribe(data => {this.pipeline = data['pipelineResolver']; });
-    this.route.queryParams
-      .subscribe(params => this.selectedPeriod = params['period'] || 'ThisQuarter');
-    this.leaderboardService.getStaffMemberPipeline(this.salesManager)
+    this.route.queryParams.subscribe(
+      params => (this.selectedPeriod = params['period'] || 'ThisQuarter')
+    );
+    this.leaderboardService
+      .getStaffMemberPipeline(this.salesManager)
       .subscribe(result => {
-        this.leaderboardResult = result;
-        this.pipelineList = result.result;
+        this.pipelineList = result;
+        console.log(`The pipeline result is: ${this.pipelineList}`);
       });
   }
 
   getExchanges(role: string, period: string) {
-    this.leaderboardService.getStaffMemberExchanges(role, period).subscribe(data => {
-      this.leaderboardResult = data;
-      this.exchanges = data.result;
-    });
+    this.leaderboardService
+      .getStaffMemberExchanges(role, period)
+      .subscribe(result => {
+        this.exchanges = result;
+      });
   }
+
   getInstructions(role: string, period: string, pageSize: any) {
-    this.leaderboardService.getStaffMemberInstructions(role, period, pageSize).subscribe(data => {
-      this.leaderboardResult = data;
-      this.originalInstructions = data.result;
-      this.instructions = data.result.slice(0, 16);
-      // const len = data.result.length;
-      // if (len > 0) {
-      //   this.instructions = data.result.slice(0, 10);
-      //   this.noInstructions = false;
-      // } else {
-      //   this.instructions = [];
-      // }
-      console.log(this.instructions);
-    });
+    this.leaderboardService
+      .getStaffMemberInstructions(role, period, pageSize)
+      .subscribe(result => {
+        this.originalInstructions = result;
+        if (result !== null) {
+          this.instructions = result.slice(0, 16);
+        } else {
+          console.log(
+            `No instructions ${this.selectedPeriodLabel}: ${this.instructions}`
+          );
+        }
+      });
   }
 
   showFilter(val: string) {

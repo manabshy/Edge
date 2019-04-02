@@ -49,9 +49,10 @@ export class DashboardListComponent implements OnInit {
   }
   getDashboardInstructions(id: number, role: string, period?: string): void {
     this.dashboardService.getDashboardInstructions(id, role, period)
-      .subscribe(data => {
-        this.instructions = data.result;
+      .subscribe(result => {
+        this.instructions = result;
        this.getInstructedAddresses();
+       console.log(this.instructions);
       });
   }
   getDashboardApplicants(id: number, role: string): void {
