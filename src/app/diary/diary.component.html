@@ -81,7 +81,7 @@
       </ul>
     </ng-template>
     <div class="card-body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">
-      <div class="row no-gutters event" [ngClass]="{'mb-2': !isLast}" *ngFor="let event of day?.events; last as isLast">
+      <div class="row no-gutters event" [tooltip]="event.title" [ngClass]="{'mb-2': !isLast}" *ngFor="let event of day?.events; last as isLast">
         <span class="color" [ngStyle]="{'background': event.color}"></span>
         <div class="col text-truncate"><span class="text-muted">{{event.time}}</span> {{event.title}}</div>
         <div class="col-auto text-muted"><i class="far fa-calendar fa-fw" *ngIf="event.type"></i><i class="fas fa-phone fa-fw"
