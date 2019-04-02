@@ -11,16 +11,16 @@ import { Constants } from '../core/shared/period-list';
   styleUrls: ['./leaderboard.component.scss']
 })
 export class LeaderboardComponent implements OnInit {
+  private _selectedPeriod: string;
+  private readonly salesManager = 'salesManager';
   originalInstructions: Leaderboard[] = [];
   instructions: Leaderboard[] = [];
   pipelineList: Leaderboard[] = [];
   exchanges: Leaderboard[] = [];
   leaderboardResult: LeaderboardResult;
   resultCount: number;
-  private _selectedPeriod: string;
   selectedPeriodLabel: string;
   periodList = Constants.PeriodList;
-  private readonly salesManager = 'salesManager';
   filterVisibility = 'visible';
 
   set selectedPeriod(val: string) {
