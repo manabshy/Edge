@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { Leaderboard } from '../shared/leaderboard';
+import { AppUtils } from 'src/app/core/shared/utils';
 
 @Component({
   selector: 'app-instructions',
@@ -18,13 +19,7 @@ export class InstructionsComponent implements OnInit {
   ngOnInit() {
   }
   onScrollDown() {
-    if (this.instructions.length < this.originalInstructions.length) {
-      const len = this.instructions.length;
-
-      for (let i = len; i <= len; i++) {
-        this.instructions.push(this.originalInstructions[i]);
-      }
-    }
+    AppUtils.setupInfintiteScroll(this.originalInstructions, this.instructions);
     console.log('scrolled down!!');
   }
 
