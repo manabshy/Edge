@@ -1,6 +1,5 @@
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb mb-3">
-    <li class="breadcrumb-item" *ngIf="isHomeBtnVisible"><button type="button" class="btn btn-link p-0" (click)="backHome()"><i class="fas fa-home"></i> Home</button></li>
-    <li class="breadcrumb-item"><button type="button" class="btn btn-link p-0" (click)="backClicked()"><i class="fas fa-chevron-left"></i><span class="d-none d-lg-inline ml-2">Back</span></button></li>
+    <li class="breadcrumb-item"><button type="button" class="btn btn-link p-0" (click)="backClicked()"><i class="fas fa-chevron-left"></i><span class="d-none d-lg-inline ml-2">Back <span *ngIf="!parentRoute">to homepage</span></span></button></li>
   </ol>
 </nav>

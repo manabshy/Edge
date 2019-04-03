@@ -20,7 +20,6 @@ const routes: Routes = [
   { path: '', canActivate: [AuthGuardService], children: [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
     { path: 'home', component: HomeComponent },
-    { path: 'contact-centre', component: ContactGroupsComponent },
     { path: 'property-details-letting', component: PropertyDetailsLettingComponent },
     { path: 'property-details-sale', component: PropertyDetailsSaleComponent },
     { path: 'lead-edit', component: LeadEditComponent },

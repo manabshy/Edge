@@ -6,11 +6,14 @@ import { ContactgroupsDetailComponent } from './contactgroups-detail/contactgrou
 import { ContactgroupsListComponent } from './contactgroups-list/contactgroups-list.component';
 import { ContactgroupsPeopleComponent } from './contactgroups-people/contactgroups-people.component';
 import { ContactgroupsNotesComponent } from './contactgroups-notes/contactgroups-notes.component';
+import { CoreModule } from '../core/core.module';
+import { ContactgroupsSearchComponent } from './contactgroups-search/contactgroups-search.component';
 
 @NgModule({
-  declarations: [ContactgroupsListComponent, ContactgroupsDetailComponent, ContactgroupsPeopleComponent, ContactgroupsNotesComponent],
+  declarations: [ContactgroupsListComponent, ContactgroupsDetailComponent, ContactgroupsPeopleComponent, ContactgroupsNotesComponent, ContactgroupsSearchComponent],
   imports: [
     CommonModule,
+    CoreModule,
     ContactgroupsRoutingModule
   ],
   exports: [ContactgroupsListComponent, ContactgroupsPeopleComponent, ContactgroupsNotesComponent]
