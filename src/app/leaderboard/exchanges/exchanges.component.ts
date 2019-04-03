@@ -6,7 +6,7 @@ import { OrderPipe } from 'ngx-order-pipe';
 @Component({
   selector: 'app-exchanges',
   templateUrl: './exchanges.component.html',
-  styleUrls: ['./exchanges.component.css']
+  styleUrls: ['./exchanges.component.scss']
 })
 export class ExchangesComponent implements OnInit {
   @Input() exchanges: Leaderboard[];

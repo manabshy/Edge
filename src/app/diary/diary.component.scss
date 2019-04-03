@@ -154,3 +154,9 @@
         }
     }
 }
+
+:host ::ng-deep .tooltip {
+    @include media-breakpoint-down(sm) {
+        display: none!important;
+    }
+}

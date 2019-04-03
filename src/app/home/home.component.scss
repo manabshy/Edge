@@ -10,6 +10,13 @@
         padding-top: 0;
         padding-bottom: 0;
     }
+
+    .nav-link {
+        @include media-breakpoint-down(sm) {
+            text-align: center;
+            border-radius: 0;
+        }  
+    }
 }
 
 
@@ -19,13 +26,6 @@
         top: 0;
         right: 0;
         transform: translate(100%, -100%);
-    }
-
-    .nav-link {
-        @include media-breakpoint-down(sm) {
-            text-align: center;
-            border-radius: 0;
-        }  
     }
 
     .nav-label {
