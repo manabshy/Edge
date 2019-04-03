@@ -14,7 +14,7 @@ export class ContactGroupsService {
 
   // get all the people that belong to a contact group
   getAutocompleteContactGroups(searchTerm: string): Observable<ContactGroupAutoCompleteResult[]> {
-    const url = `${AppConstants.baseContactGroupUrl}/search?${searchTerm}`;
+    const url = `${AppConstants.baseContactGroupUrl}/search?SearchTerm=${searchTerm}`;
     return this.http.get<ContactGroupAutoCompleteData>(url).pipe(map(response => response.result));
   }
 }

@@ -6,11 +6,13 @@ import { ContactgroupsDetailComponent } from './contactgroups-detail/contactgrou
 import { ContactgroupsListComponent } from './contactgroups-list/contactgroups-list.component';
 import { ContactgroupsPeopleComponent } from './contactgroups-people/contactgroups-people.component';
 import { ContactgroupsNotesComponent } from './contactgroups-notes/contactgroups-notes.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [ContactgroupsListComponent, ContactgroupsDetailComponent, ContactgroupsPeopleComponent, ContactgroupsNotesComponent],
   imports: [
     CommonModule,
+    FormsModule,
     ContactgroupsRoutingModule
   ],
   exports: [ContactgroupsListComponent, ContactgroupsPeopleComponent, ContactgroupsNotesComponent]
