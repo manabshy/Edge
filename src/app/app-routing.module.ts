@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { HomeComponent }      from './home/home.component';
-import { ContactCentreComponent }   from './contact-centre/contact-centre.component';
+import { ContactGroupsComponent }   from './contactgroups/contactgroups.component';
 import { PropertyDetailsLettingComponent }   from './property-details-letting/property-details-letting.component';
 import { PropertyDetailsSaleComponent }   from './property-details-sale/property-details-sale.component';
 import { LeadEditComponent }   from './lead-edit/lead-edit.component';
@@ -20,7 +20,7 @@ const routes: Routes = [
   { path: '', canActivate: [AuthGuardService], children: [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
     { path: 'home', component: HomeComponent },
-    { path: 'contact-centre', component: ContactCentreComponent },
+    { path: 'contact-centre', component: ContactGroupsComponent },
     { path: 'property-details-letting', component: PropertyDetailsLettingComponent },
     { path: 'property-details-sale', component: PropertyDetailsSaleComponent },
     { path: 'lead-edit', component: LeadEditComponent },
