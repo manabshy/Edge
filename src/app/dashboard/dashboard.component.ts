@@ -56,7 +56,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.selectedPeriod = 'ThisQuarter';
-    if(AppUtils.dashboardSelectedTab) {
+    if (AppUtils.dashboardSelectedTab) {
       this.dashboardTabs.tabs[AppUtils.dashboardSelectedTab].active = true;
     }
   }
