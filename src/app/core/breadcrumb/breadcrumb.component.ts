@@ -25,10 +25,11 @@ export class BreadcrumbComponent implements OnInit {
           this.parentRoute = parent.parent.url[0].path;
         }
         this.parentRoute = this.parentRoute + '/' + parent.url[0].path;
+        this.isHomeBtnVisible = false;
       } else if(parent.parent.url.length) {
         this.parentRoute = parent.parent.url[0].path;
+        this.isHomeBtnVisible = false;
       }
-      this.isHomeBtnVisible = false;
     }
 
   }
