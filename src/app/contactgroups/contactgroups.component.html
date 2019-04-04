@@ -48,9 +48,12 @@
         </div>
       </div>
     </div>
+  </div>
+  <div class="text-center" *ngIf="isLoading">
+    <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...
   </div>  
   <div class="text-center text-danger" *ngIf="isMessageVisible">
-      <i class="far fa-sad-tear"></i> No results for <strong>{{searchTerm}}</strong>
+      <i class="far fa-sad-tear"></i> No results for '<strong>{{searchTerm || ' '}}</strong>'
   </div>
   <div class="text-center" *ngIf="isHintVisible">
       <i class="far fa-smile-wink"></i> Type at least <strong>3 characters</strong> to get results
