@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { HomeComponent }      from './home/home.component';
-import { ContactGroupsComponent }   from './contactgroups/contactgroups.component';
 import { PropertyDetailsLettingComponent }   from './property-details-letting/property-details-letting.component';
 import { PropertyDetailsSaleComponent }   from './property-details-sale/property-details-sale.component';
 import { LeadEditComponent }   from './lead-edit/lead-edit.component';

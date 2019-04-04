@@ -3,13 +3,16 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuardService } from '../core/services/auth-guard.service';
 import { ContactgroupsDetailComponent } from './contactgroups-detail/contactgroups-detail.component';
 import { ContactGroupsComponent } from './contactgroups.component';
-import { ContactgroupsSearchComponent } from './contactgroups-search/contactgroups-search.component';
+import { ContactgroupsPeopleComponent } from './contactgroups-people/contactgroups-people.component';
 
 const routes: Routes = [
   { path: '', canActivate: [AuthGuardService], children: [
-    { path: 'contact-centre', component: ContactGroupsComponent, children: [
-      { path: '', component: ContactgroupsSearchComponent },
-      { path: 'detail', component: ContactgroupsDetailComponent },
+    { path: 'contact-centre', children: [
+      { path: '', component: ContactGroupsComponent },
+      { path: 'detail', children: [
+        { path: '', component: ContactgroupsDetailComponent },
+        { path: 'people', component: ContactgroupsPeopleComponent },
+      ] },
     ] },
   ] }
 ];
