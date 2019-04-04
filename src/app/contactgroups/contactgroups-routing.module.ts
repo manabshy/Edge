@@ -9,7 +9,7 @@ const routes: Routes = [
   { path: '', canActivate: [AuthGuardService], children: [
     { path: 'contact-centre', children: [
       { path: '', component: ContactGroupsComponent },
-      { path: 'detail', children: [
+      { path: 'detail/:id', children: [
         { path: '', component: ContactgroupsDetailComponent },
         { path: 'people', component: ContactgroupsPeopleComponent },
       ] },

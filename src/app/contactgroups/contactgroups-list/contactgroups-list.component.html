@@ -1,5 +1,5 @@
 <div class="list-group">
-  <a routerLink="detail" class="list-group-item list-group-item-action pb-2"
+  <a  [routerLink]="['detail', contactGroup.contactGroups[0].contactGroupId ]" class="list-group-item list-group-item-action pb-2"
     *ngFor="let contactGroup of contactGroups; let i = index;">
     <div class="row align-items-center">
       <div class="col-sm-6">

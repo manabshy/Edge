@@ -22,18 +22,17 @@ export class ContactGroupsComponent implements OnInit {
   }
 
   contactGroupsAutocomplete(searchTerm: string) {
-    this.contactGroupService.getAutocompleteContactGroups(searchTerm).subscribe(result =>
-      {
+    this.contactGroupService.getAutocompleteContactGroups(searchTerm).subscribe(result => {
         this.contactGroups = result;
         this.isLoading = false;
         console.log(result);
 
-        for(let i = 0; i < this.contactGroups.length; i++) {
-          for(let j = 0; j < this.contactGroups[i].contactGroups.length; j++) {
-            let subContact = this.contactGroups[i].contactGroups[j];
-            let subPeople = subContact.contactPeople;
+        for (let i = 0; i < this.contactGroups.length; i++) {
+          for (let j = 0; j < this.contactGroups[i].contactGroups.length; j++) {
+            const subContact = this.contactGroups[i].contactGroups[j];
+            const subPeople = subContact.contactPeople;
             let visibleFlag = 0;
-            if(subPeople && subPeople.length && !visibleFlag){
+            if (subPeople && subPeople.length && !visibleFlag) {
               this.contactGroups[i]['indexVisibleContactGroup'] = j;
               this.contactGroups[i]['hiddenContactGroups'] = this.contactGroups[i].contactGroups.length - j - 1;
               visibleFlag ++;
@@ -41,8 +40,8 @@ export class ContactGroupsComponent implements OnInit {
           }
         }
 
-        if(this.searchTerm && this.searchTerm.length) {
-          if(!this.contactGroups.length){
+        if (this.searchTerm && this.searchTerm.length) {
+          if (!this.contactGroups.length) {
             this.isMessageVisible = true;
           }
         } else {
@@ -64,10 +63,10 @@ export class ContactGroupsComponent implements OnInit {
   onKeyup() {
     this.isMessageVisible = false;
 
-    if(this.searchTerm && this.searchTerm.length > 2) {
+    if (this.searchTerm && this.searchTerm.length > 2) {
       this.isHintVisible = false;
     } else {
-      if(this.contactGroups && !this.contactGroups.length){
+      if (this.contactGroups && !this.contactGroups.length) {
         this.isHintVisible = true;
       }
     }

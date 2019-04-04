@@ -70,6 +70,9 @@ export interface ContactGroupAutoCompleteResult {
   incode: string;
   postCode: string;
   contactGroups: AutoCompleteContactGroup[];
+  // TODO: Fix asap
+  indexVisibleContactGroup?: any;
+  hiddenContactGroups?: any;
 }
 export interface AutoCompleteContactGroup {
   contactGroupId: number;
@@ -79,6 +82,6 @@ export interface AutoCompleteContactGroup {
   contactPeople: string[];
 }
 
-export interface ContactGroupAutoCompleteData extends ResultData{
+export interface ContactGroupAutoCompleteData extends ResultData {
   result: ContactGroupAutoCompleteResult[];
 }
