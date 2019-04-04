@@ -41,9 +41,6 @@
 }
 
 .home-container {
-    @include media-breakpoint-down(sm) {
-        padding-bottom: 30px;
-    }
 
     @include media-breakpoint-down(md) {
         min-height: calc(100vh - #{$top-bar-height});

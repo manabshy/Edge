@@ -19,8 +19,8 @@
 
 .scroll-top {
     position: fixed;
-    bottom: 70px;
-    left: $grid-gutter-width/2;
+    top: 50%;
+    right: $grid-gutter-width/2;
     z-index: 1000;
     border-radius: 50% !important;
     width: 50px;
@@ -28,6 +28,7 @@
     opacity: .5;
     line-height: spacer(2);
     padding-top: 8px;
+    transform: translateY(-50%);
 
     @include media-breakpoint-up(sm) {
         left: auto;

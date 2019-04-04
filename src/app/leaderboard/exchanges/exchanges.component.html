@@ -1,7 +1,7 @@
 <div class="text-center" *ngIf="exchanges && !exchanges.length; else results">
   <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...
 </div>
-<div class="text-center" *ngIf="!exchanges">
+<div class="text-center text-danger" *ngIf="!exchanges">
     <i class="far fa-sad-tear"></i> No Exchanges {{selectedPeriodLabel}}
 </div>
 <ng-template #results>

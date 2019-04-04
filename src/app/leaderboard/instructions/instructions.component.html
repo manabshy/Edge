@@ -1,7 +1,7 @@
 <div class="text-center" *ngIf="instructions && !instructions.length; else results">
   <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...
 </div>
-<div class="text-center" *ngIf="!originalInstructions">
+<div class="text-center text-danger" *ngIf="!originalInstructions">
     <i class="far fa-sad-tear"></i> No Instructions {{selectedPeriodLabel}}
 </div>
 <ng-template #results>
