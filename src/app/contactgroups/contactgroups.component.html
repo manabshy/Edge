@@ -4,10 +4,10 @@
   <div class="row">
     <div class="col">
       <div class="input-group">
-        <input type="text" class="form-control" placeholder="Name, email, phone or postcode"
+        <input type="text" [(ngModel)]="searchTerm" class="form-control" placeholder="Name, email, phone or postcode"
           aria-label="Search criteria" aria-describedby="button-addon2">
         <div class="input-group-append">
-          <button class="btn btn-secondary" type="button" id="button-search" (click)="searchResultCollapsed = !searchResultCollapsed"
+          <button class="btn btn-secondary" type="button" id="button-search" (click)="searchResultCollapsed = !searchResultCollapsed; searchContactGroup()"
           [attr.aria-expanded]="!searchResultCollapsed" aria-controls="searchResults">
             <i class="fas fa-search"></i>
           </button>
@@ -51,7 +51,7 @@
     </div>
   </div>
   <div [collapse]="!searchResultCollapsed" class="collapse">
-    <app-contactgroups-list>
+    <app-contactgroups-list [contactGroups]='contactGroups'>
     </app-contactgroups-list>
 
   </div>

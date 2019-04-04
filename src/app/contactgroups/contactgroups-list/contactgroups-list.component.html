@@ -1,20 +1,20 @@
 <div class="list-group">
-  <a routerLink="detail" class="list-group-item list-group-item-action pb-0">
+  <a routerLink="detail" class="list-group-item list-group-item-action pb-0" *ngFor="let contactGroup of contactGroups; let i = index;">
     <div class="row align-items-center">
       <div class="col-sm-6">
         <p>
-          <strong>John Smith</strong>
-          <br>Michael Brown, Wendy McTavi...+ 3 <i class="fas fa-users"></i></p>
+          <strong>{{contactGroup.firstName}} {{contactGroup.lastName}}</strong>
+          <br>{{contactGroup?.contactGroups[0]?.contactPeople[0]}}</p>
       </div>
       <div class="col-auto col-sm-3">
-        <p><a href="tel:+447808773822">07808 773822</a></p>
+        <p><a href="">{{contactGroup?.phoneNumbers[0]}}</a></p>
       </div>
       <div class="col col-sm-3 text-right">
-        <p>jsmith@gmail.com</p>
+        <p>{{contactGroup?.emailAddresses[0]}}</p>
       </div>
     </div>
   </a>
-  <a routerLink="detail" class="list-group-item list-group-item-action pb-0">
+  <!-- <a routerLink="detail" class="list-group-item list-group-item-action pb-0">
     <div class="row align-items-center">
       <div class="col-sm-6">
         <p>
@@ -43,5 +43,5 @@
           <p>janesmith@gmail.com</p>
         </div>
       </div>
-  </a>
+  </a> -->
 </div>

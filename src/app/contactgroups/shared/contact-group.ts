@@ -1,5 +1,6 @@
 import { Address } from 'src/app/core/models/address';
 import { Person } from 'src/app/core/models/person';
+import { ResultData } from 'src/app/core/shared/result-data';
 
 export interface ContactGroup {
   contactType: string;
@@ -54,4 +55,30 @@ export interface AutoCompleteResult {
   titleId: number;
   companyId: number;
   companyName: string;
+}
+
+export interface ContactGroupAutoCompleteResult {
+  personId: number;
+  title: string;
+  firstName: string;
+  middleNames: string;
+  lastName: string;
+  fullName: string;
+  emailAddresses: string[];
+  phoneNumbers: string[];
+  outcode: string;
+  incode: string;
+  postCode: string;
+  contactGroups: AutoCompleteContactGroup[];
+}
+export interface AutoCompleteContactGroup {
+  contactGroupId: number;
+  isCompany: boolean;
+  companyId?: number;
+  companyName: string;
+  contactPeople: string[];
+}
+
+export interface ContactGroupAutoCompleteData extends ResultData{
+  result: ContactGroupAutoCompleteResult[];
 }
