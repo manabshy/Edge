@@ -1,19 +1,29 @@
 <div class="list-group">
-  <a routerLink="detail" class="list-group-item list-group-item-action pb-2" *ngFor="let contactGroup of contactGroups; let i = index;">
+  <a routerLink="detail" class="list-group-item list-group-item-action pb-2"
+    *ngFor="let contactGroup of contactGroups; let i = index;">
     <div class="row align-items-center">
       <div class="col-sm-6">
-        <p>
+        <div class="mb-1">
           <strong>{{contactGroup.firstName}} {{contactGroup.lastName}}</strong>
-          <ng-container *ngIf="contactGroup?.contactGroups[0]?.contactPeople">
-              <br>{{contactGroup?.contactGroups[0]?.contactPeople[0]}}
+          <ng-container *ngFor="let subContact of contactGroup?.contactGroups">
+              <ng-container *ngIf="subContact?.isCompany">&nbsp;<span class="badge badge-pill badge-info">{{subContact?.companyName}}</span></ng-container>
           </ng-container>
-        </p>
+          <div class="text-truncate" *ngIf="contactGroup?.contactGroups[contactGroup?.indexVisibleContactGroup]?.contactPeople">
+            <ng-container *ngFor="let people of contactGroup?.contactGroups[contactGroup?.indexVisibleContactGroup]?.contactPeople; last as isLast">
+              {{people}}<ng-container *ngIf="!isLast">, </ng-container>
+            </ng-container>
+          </div>
+          <div *ngIf="contactGroup?.hiddenContactGroups > 0"><span class="badge badge-pill badge-light">+ {{contactGroup?.hiddenContactGroups}} contact
+              group{{contactGroup?.hiddenContactGroups > 1 ? 's' : '' }}</span></div>
+        </div>
       </div>
       <div class="col-12 col-sm-auto" *ngIf="contactGroup?.phoneNumbers[0]">
-        <p><a (click)="$event.stopPropagation()" href="tel:{{contactGroup?.phoneNumbers[0]}}">{{contactGroup?.phoneNumbers[0]}}</a></p>
+        <p><a (click)="$event.stopPropagation()"
+            href="tel:{{contactGroup?.phoneNumbers[0]}}">{{contactGroup?.phoneNumbers[0]}}</a></p>
       </div>
       <div class="col text-sm-right" *ngIf="contactGroup?.emailAddresses[0]">
-        <p><a (click)="$event.stopPropagation()" href="mailto:{{contactGroup?.emailAddresses[0]}}">{{contactGroup?.emailAddresses[0]}}</a></p>
+        <p><a (click)="$event.stopPropagation()"
+            href="mailto:{{contactGroup?.emailAddresses[0]}}">{{contactGroup?.emailAddresses[0]}}</a></p>
       </div>
     </div>
   </a>
