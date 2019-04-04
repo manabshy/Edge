@@ -27,6 +27,20 @@ export class ContactGroupsComponent implements OnInit {
         this.contactGroups = result;
         this.isLoading = false;
         console.log(result);
+
+        for(let i = 0; i < this.contactGroups.length; i++) {
+          for(let j = 0; j < this.contactGroups[i].contactGroups.length; j++) {
+            let subContact = this.contactGroups[i].contactGroups[j];
+            let subPeople = subContact.contactPeople;
+            let visibleFlag = 0;
+            if(subPeople && subPeople.length && !visibleFlag){
+              this.contactGroups[i]['indexVisibleContactGroup'] = j;
+              this.contactGroups[i]['hiddenContactGroups'] = this.contactGroups[i].contactGroups.length - j - 1;
+              visibleFlag ++;
+            }
+          }
+        }
+
         if(this.searchTerm && this.searchTerm.length) {
           if(!this.contactGroups.length){
             this.isMessageVisible = true;

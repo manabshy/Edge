@@ -5,14 +5,16 @@
       <div class="col-sm-6">
         <div class="mb-1">
           <strong>{{contactGroup.firstName}} {{contactGroup.lastName}}</strong>
-          <ng-container *ngIf="contactGroup?.contactGroups[0]?.isCompany">&nbsp;<span class="badge badge-pill badge-info">company</span></ng-container>
-          <div class="text-truncate" *ngIf="contactGroup?.contactGroups[0]?.contactPeople">
-            <ng-container *ngFor="let people of contactGroup?.contactGroups[0]?.contactPeople; last as isLast">
+          <ng-container *ngFor="let subContact of contactGroup?.contactGroups">
+              <ng-container *ngIf="subContact?.isCompany">&nbsp;<span class="badge badge-pill badge-info">{{subContact?.companyName}}</span></ng-container>
+          </ng-container>
+          <div class="text-truncate" *ngIf="contactGroup?.contactGroups[contactGroup?.indexVisibleContactGroup]?.contactPeople">
+            <ng-container *ngFor="let people of contactGroup?.contactGroups[contactGroup?.indexVisibleContactGroup]?.contactPeople; last as isLast">
               {{people}}<ng-container *ngIf="!isLast">, </ng-container>
             </ng-container>
           </div>
-          <div *ngIf="(contactGroup?.contactGroups?.length - 1) > 0"><span class="badge badge-pill badge-light">+ {{contactGroup?.contactGroups?.length - 1}} contact
-              group{{(contactGroup?.contactGroups?.length - 1) > 1 ? 's' : '' }}</span></div>
+          <div *ngIf="contactGroup?.hiddenContactGroups > 0"><span class="badge badge-pill badge-light">+ {{contactGroup?.hiddenContactGroups}} contact
+              group{{contactGroup?.hiddenContactGroups > 1 ? 's' : '' }}</span></div>
         </div>
       </div>
       <div class="col-12 col-sm-auto" *ngIf="contactGroup?.phoneNumbers[0]">
