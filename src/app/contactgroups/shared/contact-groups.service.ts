@@ -15,13 +15,13 @@ private contactGroups: ContactGroupAutoCompleteResult[];
   // get all the people that belong to a contact group
   getAutocompleteContactGroups(searchTerm: string): Observable<ContactGroupAutoCompleteResult[]> {
     const url = `${AppConstants.baseContactGroupUrl}/search?SearchTerm=${searchTerm}`;
-    if (this.contactGroups) {
-      return of(this.contactGroups);
-    }
+    // if (this.contactGroups) {
+    //   return of(this.contactGroups);
+    // }
     return this.http.get<ContactGroupAutoCompleteData>(url)
     .pipe(
          map(response => response.result),
-         tap(data => this.contactGroups = data),
+        //  tap(data => this.contactGroups = data),
          tap(data => console.log(JSON.stringify(data)))
       );
   }
