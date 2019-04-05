@@ -9,6 +9,7 @@ import { ContactGroupAutoCompleteResult } from '../shared/contact-group';
 })
 export class ContactgroupsListComponent implements OnInit {
 @Input()  contactGroups: ContactGroupAutoCompleteResult[];
+@Input() searchTerm: string;
   constructor() { }
 
   ngOnInit() {

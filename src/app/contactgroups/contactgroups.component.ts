@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ContactGroupsService } from './shared/contact-groups.service';
 import { ContactGroupAutoCompleteResult } from './shared/contact-group';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-contactgroups',
@@ -8,17 +9,25 @@ import { ContactGroupAutoCompleteResult } from './shared/contact-group';
   styleUrls: ['./contactgroups.component.scss']
 })
 export class ContactGroupsComponent implements OnInit {
+  private _searchTerm: string;
   advSearchCollapsed = false;
   isMessageVisible = false;
   isHintVisible = false;
   isLoading = false;
-  searchTerm: string;
+  set searchTerm(val: string) {
+    this._searchTerm = val;
+  }
+  get searchTerm(): string {
+    return this._searchTerm;
+  }
   contactGroups: ContactGroupAutoCompleteResult[];
   contactPeople: any[];
 
-  constructor(private contactGroupService: ContactGroupsService) { }
+  constructor(private contactGroupService: ContactGroupsService, private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.searchTerm = this.route.snapshot.queryParamMap.get('searchTerm') || '';
+    this.contactGroupsAutocomplete(this.searchTerm);
   }
 
   contactGroupsAutocomplete(searchTerm: string) {
@@ -61,6 +70,7 @@ export class ContactGroupsComponent implements OnInit {
   }
 
   private getHiddenContactGroups() {
+   if (this.contactGroups !== null) {
     for (let i = 0; i < this.contactGroups.length; i++) {
       for (let j = 0; j < this.contactGroups[i].contactGroups.length; j++) {
         const subContact = this.contactGroups[i].contactGroups[j];
@@ -73,5 +83,6 @@ export class ContactGroupsComponent implements OnInit {
         }
       }
     }
+   }
   }
 }

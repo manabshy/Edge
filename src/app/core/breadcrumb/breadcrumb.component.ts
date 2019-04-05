@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 
 @Component({
   selector: 'app-breadcrumb',
@@ -8,7 +8,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class BreadcrumbComponent implements OnInit {
 
-  isHomeBtnVisible: boolean = true;
+  isHomeBtnVisible = true;
   parentRoute: string;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute) { }
@@ -16,17 +16,17 @@ export class BreadcrumbComponent implements OnInit {
   ngOnInit() {
     this.parentRoute = '';
 
-    let current = this.activatedRoute.snapshot;
-    let parent = current.parent;
+    const current = this.activatedRoute.snapshot;
+    const parent = current.parent;
 
-    if(parent){
-      if(current.url.length && parent.url.length){
-        if(parent.parent.url.length){
+    if (parent) {
+      if (current.url.length && parent.url.length) {
+        if (parent.parent.url.length) {
           this.parentRoute = parent.parent.url[0].path;
         }
         this.parentRoute = this.parentRoute + '/' + parent.url[0].path;
         this.isHomeBtnVisible = false;
-      } else if(parent.parent.url.length) {
+      } else if (parent.parent.url.length) {
         this.parentRoute = parent.parent.url[0].path;
         this.isHomeBtnVisible = false;
       }
@@ -35,10 +35,10 @@ export class BreadcrumbComponent implements OnInit {
   }
 
   backClicked() {
-    if(this.parentRoute) {
-      this.router.navigate(["../../" + this.parentRoute])
+    if (this.parentRoute) {
+      this.router.navigate(['../../' + this.parentRoute], {queryParamsHandling: 'preserve'});
     } else {
-      this.router.navigate(["/home"]);
+      this.router.navigate(['/home']);
     }
   }
 
