@@ -89,7 +89,7 @@ export class DiaryComponent implements OnInit {
       let first = curr.date() - curr.day() + i;
       let firstDate = curr.date(first);
       if(this.viewedMonth !== firstDate.month()) {
-        if(this.viewedYear <= firstDate.year()) {
+        if(this.viewedYear < firstDate.year()) {
           this.monthLabel = this.viewedDate.format('MMM YYYY') + ' - ' + firstDate.format('MMM YYYY');
         } else {
           this.monthLabel = firstDate.format('MMM YYYY') + ' - ' + this.viewedDate.format('MMM YYYY');
