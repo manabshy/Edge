@@ -16,6 +16,9 @@
           </ul>
         </div>
       </div>
+      <div class="col-auto pr-2" *ngIf="!appUtils.isDiarySearchVisible">
+        <button type="button" class="btn btn-light" (click)="setToday()">Today</button>
+      </div>
       <div class="col" *ngIf="!appUtils.isDiarySearchVisible">
         <button type="button" class="btn btn-light" (click)="prevMonth()"><i class="fas fa-chevron-left"></i></button>
         <h6 class="d-inline-block m-0 align-middle mx-2">{{monthLabel}}</h6>
@@ -26,18 +29,16 @@
   <div class="col-auto">
     <div class="row no-gutters">
       <div class="col-auto">
-        <button type="button" (click)="toggleSearch()" class="btn btn-light"><i class="fas fa-search fa-fw"
-            *ngIf="!appUtils.isDiarySearchVisible"></i><span *ngIf="appUtils.isDiarySearchVisible"><i class="fas fa-calendar-alt fa-fw"></i> Calendar</span></button>
+        <button type="button" (click)="toggleSearch()" class="btn btn-light">
+          <ng-container *ngIf="!appUtils.isDiarySearchVisible"><i class="fas fa-search fa-fw"></i> <span class="d-none d-sm-inline ml-2">Search</span></ng-container><ng-container *ngIf="appUtils.isDiarySearchVisible"><i class="fas fa-calendar-alt fa-fw mr-2"></i> Calendar</ng-container></button>
       </div>
       <div class="col d-none d-sm-flex pl-2" *ngIf="!appUtils.isDiarySearchVisible">
         <select name="viewMode" id="vew-mode" [(ngModel)]="viewMode" (ngModelChange)="changeView()"
           class="custom-select">
+          <option value="day">Day</option>
           <option value="week">Week</option>
           <option value="month">Month</option>
         </select>
-      </div>
-      <div class="col-auto pl-2" *ngIf="!appUtils.isDiarySearchVisible">
-        <button type="button" class="btn btn-light" (click)="setToday()">Today</button>
       </div>
     </div>
   </div>
@@ -65,9 +66,10 @@
 
 <div class="card-grid {{viewMode}}" *ngIf="!appUtils.isDiarySearchVisible">
   <div class="card" *ngFor="let day of days" class="{{day.spanClass}}"
-    [ngClass]="{'is-weekend': day.isWeekend, 'no-events': !day.events.length, 'is-today': day.isToday }"
+    [ngClass]="{'is-weekend': day.isWeekend, 'no-events': !day.events.length && viewMode != 'day', 'is-today': day.isToday }"
     [attr.id]="day.isToday ? 'today' : ''">
-    <div class="card-header">
+    <div class="card-header clearfix" (click)="enterView(day.date, 'day')">
+      <button type="button" class="btn btn-link p-0 d-sm-none mr-3" *ngIf="viewMode == 'day'" (click)="enterView(day.date,'month')"><i class="fas fa-chevron-left"></i> Month</button>
       <strong [ngClass]="{'text-secondary': day.isToday}">{{day.label}}</strong>
     </div>
 
@@ -83,7 +85,7 @@
     <div class="card-body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">
       <div class="row no-gutters event" [tooltip]="event.title" [ngClass]="{'mb-2': !isLast}" *ngFor="let event of day?.events; last as isLast">
         <span class="color" [ngStyle]="{'background': event.color}"></span>
-        <div class="col text-truncate"><span class="text-muted">{{event.time}}</span> {{event.title}}</div>
+        <div class="col text-truncate" [ngClass]="{'col-sm-auto': viewMode == 'day'}"><span class="text-muted">{{event.time}}</span> {{event.title}}</div>
         <div class="col-auto text-muted"><i class="far fa-calendar fa-fw" *ngIf="event.type"></i><i class="fas fa-phone fa-fw"
             *ngIf="!event.type"></i></div>
       </div>

@@ -47,6 +47,8 @@ export class DiaryComponent implements OnInit {
     let dayObj = new Object();
     let day = date;
     
+    dayObj['date'] = day;
+
     if (day.year() == this.todayYear) {
       dayObj['label'] = day.format('ddd D MMM');
     } else {
@@ -102,28 +104,50 @@ export class DiaryComponent implements OnInit {
     return week;
   }
 
+  getDay(date) {
+    let curr = date;
+    let day = new Array();
+    this.monthLabel = curr.format('MMMM YYYY')
+    day.push(this.makeDayObj(curr));
+    this.viewedDate = curr;
+    this.viewedMonth = curr.month();
+    this.viewedYear = curr.year();
+
+    return day;
+  }
+
   prevMonth() {
-    if(this.viewMode == "month") {
-      if (this.viewedMonth === 0) {
-        this.days = this.getDaysInMonth(11, this.viewedYear - 1);
-      } else {
-        this.days = this.getDaysInMonth(this.viewedMonth - 1, this.viewedYear);
-      }
-    } else {
-      this.days = this.getDaysInWeek(this.viewedDate.subtract(7,'day'));
+    switch(this.viewMode) {
+      case 'month':
+        if (this.viewedMonth === 0) {
+          this.days = this.getDaysInMonth(11, this.viewedYear - 1);
+        } else {
+          this.days = this.getDaysInMonth(this.viewedMonth - 1, this.viewedYear);
+        }
+        break;
+      case 'week':
+        this.days = this.getDaysInWeek(this.viewedDate.subtract(7,'day'));
+        break;
+      default:
+        this.days = this.getDay(this.viewedDate.subtract(1,'day'));  
     }
     window.scrollTo(0,0);
   }
 
   nextMonth() {
-    if(this.viewMode == "month") {
-      if (this.viewedMonth === 11) {
-        this.days = this.getDaysInMonth(0, this.viewedYear + 1);
-      } else {
-        this.days = this.getDaysInMonth(this.viewedMonth + 1, this.viewedYear);
-      }
-    } else {
-      this.days = this.getDaysInWeek(this.viewedDate.add(7,'day'));
+    switch(this.viewMode) {
+      case 'month':
+        if (this.viewedMonth === 11) {
+          this.days = this.getDaysInMonth(0, this.viewedYear + 1);
+        } else {
+          this.days = this.getDaysInMonth(this.viewedMonth + 1, this.viewedYear);
+        }
+        break;
+      case 'week':
+        this.days = this.getDaysInWeek(this.viewedDate.add(7,'day'));
+        break;
+      default:
+        this.days = this.getDay(this.viewedDate.add(1,'day'));  
     }
     window.scrollTo(0,0);
   }
@@ -134,20 +158,35 @@ export class DiaryComponent implements OnInit {
     this.viewedYear = this.todayYear;
     
     if (window.innerWidth < 576) {
-      this.viewMode = 'month';
-      setTimeout(() => {
-        document.getElementById('today').scrollIntoView({block: 'center'});
-      })
+      if(this.viewMode != 'day'){
+        this.viewMode = 'month';
+        setTimeout(() => {
+          document.getElementById('today').scrollIntoView({block: 'center'});
+        });
+      }
     }
 
     this.changeView();
   }
 
+  enterView(date, mode) {
+    this.viewedDate = date;
+    this.viewMode = mode;
+    this.changeView();
+    window.scrollTo(0,0);
+  }
+
   changeView() {
-    if(this.viewMode == 'month') {
-      this.days = this.getDaysInMonth(this.viewedMonth, this.viewedYear);
-    } else {
-      this.days = this.getDaysInWeek(this.viewedDate);
+
+    switch(this.viewMode) {
+      case 'month':
+        this.days = this.getDaysInMonth(this.viewedMonth, this.viewedYear);
+        break;
+      case 'week':
+        this.days = this.getDaysInWeek(this.viewedDate);
+        break;
+      default:
+        this.days = this.getDay(this.viewedDate);
     }
   }
 
