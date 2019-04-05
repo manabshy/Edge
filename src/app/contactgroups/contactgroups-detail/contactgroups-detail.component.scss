@@ -1,26 +1,15 @@
-@import "../../../style/bootstrap-overrides";
-
-@import "../../../../node_modules/bootstrap/scss/functions";
-@import "../../../../node_modules/bootstrap/scss/variables";
-@import "../../../../node_modules/bootstrap/scss/mixins";
-
-.list-group-item {
-    @include media-breakpoint-down(sm){
-        padding-left: 0;
-        padding-right: 0;
+:host ::ng-deep accordion {
+    .card-body {
+        padding: 0;
     }
 
-    &:not(.list-group-item-action) + .list-group-item-action {
-        @include media-breakpoint-down(sm){
-            border-top: 0;
+    .list-group-item {
+        & > .row {
+            margin: 0;
+
+            & > .col, & > [class*="col-"] {
+                padding: 0;
+            }
         }
     }
-}
-
-dl {
-    margin-bottom: spacer(2);
-
-    dd, dt {
-        margin: 0;
-    }
-}
+} 
