@@ -1,376 +1,263 @@
 <app-breadcrumb></app-breadcrumb>
 <div class="container">
   <h4 class="page-title">Title</h4>
+  <div class="alert alert-danger" role="alert">
+    <p>Do not contact, GDPR request pending</p>
+  </div>
   <div class="row">
-    <div class="container-fluid">
-      <div class="alert alert-danger" role="alert">
-        <p>Do not contact, GDPR request pending</p>
-      </div>
-      <div class="row">
-        <div class="col-12">
-          <p>Displaying properties for:</p>
-          <div class="form-group form-check">
-            <input type="checkbox" class="form-check-input" id="c123456" checked>
-            <label class="form-check-label" for="c123456">John Smith, Michael Brown, Wendy McTavish
-              <a routerLink="../people" class="btn btn-md btn-outline-primary">
-                <i class="fas fa-users"></i>
-              </a>
-            </label>
-            <br>
-            <input type="checkbox" class="form-check-input" id="c341456" checked>
-            <label class="form-check-label" for="c341456">John Smith, Susan Smith
-              <a routerLink="../people" class="btn btn-md btn-outline-primary">
-                <i class="fas fa-users"></i>
-              </a>
-            </label>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-12 d-block">
-          <div class="accordion" id="leads">
-            <div class="card">
-              <div class="card-header" id="leads-header">
-                <button class="btn btn-link collapsed align-middle" type="button" data-toggle="collapse"
-                  data-target="#leadslist" aria-expanded="false" aria-controls="leadslist">
-                  Leads (1)
-                </button>
-                <span class="text-right align-middle">
-                  <a routerLink="/lead-edit">Add</a>
-                </span>
-              </div>
-              <div id="leadslist" class="collapse hoverDiv" aria-labelledby="leads-header" data-parent="#leads">
-                <div class="container-fluid">
-                  <div class="row border-bottom" routerLink="/lead-edit">
-                    <div class="col">
-                      <p>Chase: 14/5/18
-                        <br>Owner: Alex Turnbull
-                        <br>Type: Valuation
-                        <br>Status: Active</p>
-                    </div>
-                    <div class="col">
-                      <p>91A Abbeville Road
-                        <br>London
-                        <br>SW4 9LP</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-12 d-block">
-          <div class="accordion" id="notes">
-            <div class="card">
-              <div class="card-header" id="notes-header">
-                <h5 class="mb-0">
-                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#noteslist"
-                    aria-expanded="false" aria-controls="noteslist">
-                    Notes (6)
-                  </button>
-                  <span class="text-right align-middle">
-                    <a routerLink="/home">Add</a>
-                  </span>
-                </h5>
-              </div>
-              <div id="noteslist" class="collapse" aria-labelledby="notes-header" data-parent="#notes">
-                <app-contactgroups-notes></app-contactgroups-notes>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-12 d-block">
-          <div class="accordion" id="searchCriteria">
-            <div class="card">
-              <div class="card-header" id="searchCriteria-header">
-                <h5 class="mb-0">
-                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-                    data-target="#searchCriterialist" aria-expanded="false" aria-controls="searchCriterialist">
-                    Applicants (2)
-                  </button>
-                  <span class="text-right align-middle">
-                    <a routerLink="/home">Add</a>
-                  </span>
-                </h5>
-              </div>
-              <div id="searchCriterialist" class="collapse" aria-labelledby="searchCriteria-header"
-                data-parent="#searchCriteria-header">
-                <div class="container-fluid">
-                  <div class="row border-bottom">
-                    <div class="col-md hoverDiv" routerlink="/applicant-view-sale">
-                      <p>Sales £750,000 2 Beds
-                        <br> Chelsea, Kensington
-                        <br> Chiara Tassia, Dave Newport</p>
-                    </div>
-                    <div class="col-md hoverDiv" routerlink="/applicant-view-letting">
-                      <p>Long Let £1000 2 Beds
-                        <br> Chelsea, Kensington
-                        <br> Jemma Graham</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-12 d-block">
-          <div class="accordion" id="valuations">
-            <div class="card">
-              <div class="card-header" id="valuations-header">
-                <h5 class="mb-0">
-                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-                    data-target="#valuationslist" aria-expanded="false" aria-controls="valuationslist">
-                    Valuations (2)
-                  </button>
-                  <span class="text-right align-middle">
-                    <a routerLink="/home">Add</a>
-                  </span>
-                </h5>
-              </div>
-              <div id="valuationslist" class="collapse" aria-labelledby="valuations-header" data-parent="#valuations">
-                <div class="container-fluid">
-                  <div class="row hoverDiv border-bottom">
-                    <div class="col-12">
-                      <h6>23 Prince of Wales Crescent, SW6</h6>
-                    </div>
-                    <div class="col">
-                      <p>Valued: 14/5/18
-                        <br>Lister: Chiara Tassia
-                        <br>Status: UO</p>
-                    </div>
-                    <div class="col">
-                      <p>Sales: £820,000
-                        <br>Long let: £650
-                        <br>Short let: £980</p>
-                    </div>
-                  </div>
-                  <div class="row hoverDiv border-bottom">
-                    <div class="col-12">
-                      <h6>23 Prince of Wales Crescent, SW6</h6>
-                    </div>
-                    <div class="col">
-                      <p>Valued: 14/5/16
-                        <br>Lister: Jon Cooke
-                        <br>Status: LPSD</p>
-                    </div>
-                    <div class="col">
-                      <p>Sales: £750,000
-                        <br>Long let: £600
-                        <br>Short let: £900</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-12 d-block">
-          <div class="accordion" id="instructionsSales">
-            <div class="card">
-              <div class="card-header" id="instructionsSales-header">
-                <h5 class="mb-0">
-                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-                    data-target="#instructionsSaleslist" aria-expanded="false" aria-controls="instructionsSaleslist">
-                    Instructions (2)
-                  </button>
-                </h5>
-              </div>
-              <div id="instructionsSaleslist" class="collapse" aria-labelledby="instructionsSales-header"
-                data-parent="#instructionsSales">
-                <div class="container-fluid">
-                  <div class="row hoverDiv border-bottom" routerLink="/property-details-sale">
-                    <div class="col-12">
-                      <h6>23 Prince of Wales Crescent, SW6</h6>
-                    </div>
-                    <div class="col">
-                      <p>Instructed: 14/5/18
-                        <br>Lister: Chiara Tassia
-                        <br>Status: UO</p>
-                    </div>
-                    <div class="col">
-                      <p>Price: £820,000
-                        <br>Type: Sale Sole</p>
-                    </div>
-                  </div>
-                  <div class="row hoverDiv border-bottom" routerLink="/property-details-letting">
-                    <div class="col-12">
-                      <h6>23 Prince of Wales Crescent, SW6</h6>
-                    </div>
-                    <div class="col">
-                      <p>Instructed: 14/5/18
-                        <br>Lister: Henny Irwin
-                        <br>Status: INST</p>
-                    </div>
-                    <div class="col">
-                      <p>Price: £650
-                        <br>Type: Long Let Multi</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-12 d-block">
-          <div class="accordion" id="offers">
-            <div class="card">
-              <div class="card-header" id="offers-header">
-                <h5 class="mb-0">
-                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#offerslist"
-                    aria-expanded="false" aria-controls="offerslist">
-                    Offers (1)
-                  </button>
-                  <span class="text-right align-middle">
-                    <a routerLink="/home">Add</a>
-                  </span>
-                </h5>
-              </div>
-              <div id="offerslist" class="collapse" aria-labelledby="offers-header" data-parent="#offers-header">
-                <div class="container-fluid">
-                  <div class="row hoverDiv border-bottom" routerLink="/property-details-letting">
-                    <div class="col-12">
-                      <h6>23 Prince of Wales Crescent, SW6</h6>
-                    </div>
-                    <div class="col">
-                      <p>Type: Long Let
-                        <br>Price: £650
-                        <br>Status: UO</p>
-                    </div>
-                    <div class="col-8">
-                      <p>Received: 14/5/18
-                        <br>Agreed: 15/5/18
-                        <br>Move in: 15/5/18
-                        <br>Lister: Henny Irwin
-                        <br>Negotiator: Lucinda Arundell</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-12 d-block">
-          <div class="accordion" id="tenancies">
-            <div class="card">
-              <div class="card-header" id="tenancies-header">
-                <h5 class="mb-0">
-                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-                    data-target="#tenancieslist" aria-expanded="false" aria-controls="tenancieslist">
-                    Tenancies (1)
-                  </button>
-                </h5>
-              </div>
-              <div id="tenancieslist" class="collapse" aria-labelledby="tenancies-header"
-                data-parent="#tenancies-header">
-                <div class="container-fluid">
-                  <div class="row hoverDiv border-bottom" routerLink="/property-details-letting">
-                    <div class="col-12">
-                      <h6>23 Prince of Wales Crescent, SW6</h6>
-                    </div>
-                    <div class="col-md">
-                      <p>Start date: 12/01/15
-                        <br>End date: 12/01/19
-                        <br>Current rent: £650
-                        <br>Status: Landlord LET</p>
-                    </div>
-                    <div class="col-md">
-                      <p>Lister: Henny Irwin
-                        <br>Tenancy Manager: Rachel Seymour
-                        <br>Property Manager: Peter Roberts
-                        <br>Accounts: Sasha Ford</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-12 d-block">
-          <div class="accordion" id="lettingManagements">
-            <div class="card">
-              <div class="card-header" id="lettingManagements-header">
-                <h5 class="mb-0">
-                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-                    data-target="#lettingManagementslist" aria-expanded="false" aria-controls="lettingManagementslist">
-                    Letting Managements (1)
-                  </button>
-                </h5>
-              </div>
-              <div id="lettingManagementslist" class="collapse" aria-labelledby="lettingManagements-header"
-                data-parent="#lettingManagements-header">
-                <div class="container-fluid">
-                  <div class="row hoverDiv border-bottom" routerLink="/property-details-letting">
-                    <div class="col-12">
-                      <h6>23 Prince of Wales Crescent, SW6</h6>
-                    </div>
-                    <div class="col-md">
-                      <p>Start date: 12/01/15
-                        <br>End date: 12/01/19
-                        <br>Current rent: £650
-                        <br>Status: Landlord LET</p>
-                    </div>
-                    <div class="col-md">
-                      <p>Lister: Henny Irwin
-                        <br>Property Manager: Peter Roberts</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-12 d-block">
-          <div class="accordion" id="homeManagements">
-            <div class="card">
-              <div class="card-header" id="homeManagements-header">
-                <h5 class="mb-0">
-                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-                    data-target="#homeManagementslist" aria-expanded="false" aria-controls="homeManagementslist">
-                    Home Managements (1)
-                  </button>
-                  <span class="text-right align-middle">
-                    <a routerLink="/home">Add</a>
-                  </span>
-                </h5>
-              </div>
-              <div id="homeManagementslist" class="collapse" aria-labelledby="homeManagements-header"
-                data-parent="#homeManagements-header">
-                <div class="container-fluid">
-                  <div class="row hoverDiv border-bottom" routerLink="/property-details-letting">
-                    <div class="col-12">
-                      <h6>23 Prince of Wales Crescent, SW6</h6>
-                    </div>
-                    <div class="col-md">
-                      <p>Start date: 12/01/15
-                        <br>End date: 12/01/19</p>
-                    </div>
-                    <div class="col-md">
-                      <p>Status: MNG
-                        <br>Property Manager: Emily Plane</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div class="col-12">
+      <p>Displaying properties for:</p>
+      <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="c123456" checked>
+        <label class="form-check-label" for="c123456">John Smith, Michael Brown, Wendy McTavish
+          <a routerLink="../people" class="btn btn-md btn-outline-primary">
+            <i class="fas fa-users"></i>
+          </a>
+        </label>
+        <br>
+        <input type="checkbox" class="form-check-input" id="c341456" checked>
+        <label class="form-check-label" for="c341456">John Smith, Susan Smith
+          <a routerLink="../people" class="btn btn-md btn-outline-primary">
+            <i class="fas fa-users"></i>
+          </a>
+        </label>
       </div>
     </div>
   </div>
+  <accordion [closeOthers]="true">
+    <accordion-group class="mb-2">
+      <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
+        <div class="pull-left float-left">Leads <span class="badge badge-pill badge-primary">1</span></div>
+        <a class="float-right pull-right" routerLink="/lead-edit">Add Lead <i class="fas fa-plus"></i></a>
+      </button>
+      <div class="list-group list-group-flush">
+        <div class="list-group-item d-none d-sm-block">
+          <div class="row">
+            <div class="col-sm"><strong>Status</strong></div>
+            <div class="col-sm"><strong>Chase</strong></div>
+            <div class="col-sm"><strong>Owner</strong></div>
+            <div class="col-sm"><strong>Type</strong></div>
+            <div class="col-sm-5"><strong>Address</strong></div>
+          </div>
+        </div>
+        <a routerLink="/lead-edit" class="list-group-item list-group-item-action">
+          <div class="row">
+            <div class="col-sm">
+              <dl class="row">
+                <dt class="col-4 d-sm-none">Status</dt>
+                <dd class="col text-success">Active</dd>
+              </dl>
+            </div>
+            <div class="col-sm">
+              <dl class="row">
+                <dt class="col-4 d-sm-none">Chase</dt>
+                <dd class="col">14/05/18</dd>
+              </dl>
+            </div>
+            <div class="col-sm">
+              <dl class="row">
+                <dt class="col-4 d-sm-none">Owner</dt>
+                <dd class="col">Alex Turnbull</dd>
+              </dl>
+            </div>
+            <div class="col-sm">
+              <dl class="row">
+                <dt class="col-4 d-sm-none">Type</dt>
+                <dd class="col">Valuation</dd>
+              </dl>
+            </div>
+            <div class="col-sm-5">
+              <dl class="row">
+                <dt class="col-4 d-sm-none">Address</dt>
+                <dd class="col">91A Abbeville Road, London, SW4 9LP</dd>
+              </dl>
+            </div>
+          </div>
+        </a>
+      </div>
+    </accordion-group>
+    <accordion-group class="mb-2">
+      <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
+        <div class="pull-left float-left">Notes <span class="badge badge-pill badge-primary">6</span></div>
+        <a class="float-right pull-right" routerLink="/home">Add Note <i class="fas fa-plus"></i></a>
+      </button>
+      <app-contactgroups-notes></app-contactgroups-notes>
+    </accordion-group>
+    <accordion-group class="mb-2">
+      <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
+        <div class="pull-left float-left">Applicants <span class="badge badge-pill badge-primary">2</span></div>
+        <a class="float-right pull-right" routerLink="/home">Add Appl. <i class="fas fa-plus"></i></a>
+      </button>
+      <div class="row border-bottom">
+        <div class="col-md hoverDiv" routerlink="/applicant-view-sale">
+          <p>Sales £750,000 2 Beds
+            <br> Chelsea, Kensington
+            <br> Chiara Tassia, Dave Newport</p>
+        </div>
+        <div class="col-md hoverDiv" routerlink="/applicant-view-letting">
+          <p>Long Let £1000 2 Beds
+            <br> Chelsea, Kensington
+            <br> Jemma Graham</p>
+        </div>
+      </div>
+    </accordion-group>
+    <accordion-group class="mb-2">
+      <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
+        <div class="pull-left float-left">Valuations <span class="badge badge-pill badge-primary">2</span></div>
+        <a class="float-right pull-right" routerLink="/home">Add Val. <i class="fas fa-plus"></i></a>
+      </button>
+      <div class="row hoverDiv border-bottom">
+        <div class="col-12">
+          <h6>23 Prince of Wales Crescent, SW6</h6>
+        </div>
+        <div class="col">
+          <p>Valued: 14/5/18
+            <br>Lister: Chiara Tassia
+            <br>Status: UO</p>
+        </div>
+        <div class="col">
+          <p>Sales: £820,000
+            <br>Long let: £650
+            <br>Short let: £980</p>
+        </div>
+      </div>
+      <div class="row hoverDiv border-bottom">
+        <div class="col-12">
+          <h6>23 Prince of Wales Crescent, SW6</h6>
+        </div>
+        <div class="col">
+          <p>Valued: 14/5/16
+            <br>Lister: Jon Cooke
+            <br>Status: LPSD</p>
+        </div>
+        <div class="col">
+          <p>Sales: £750,000
+            <br>Long let: £600
+            <br>Short let: £900</p>
+        </div>
+      </div>
+    </accordion-group>
+    <accordion-group class="mb-2">
+      <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
+        <div class="pull-left float-left">Instructions <span class="badge badge-pill badge-primary">2</span></div>
+        <a class="float-right pull-right" routerLink="/home">Add Ins. <i class="fas fa-plus"></i></a>
+      </button>
+      <div class="row hoverDiv border-bottom" routerLink="/property-details-sale">
+        <div class="col-12">
+          <h6>23 Prince of Wales Crescent, SW6</h6>
+        </div>
+        <div class="col">
+          <p>Instructed: 14/5/18
+            <br>Lister: Chiara Tassia
+            <br>Status: UO</p>
+        </div>
+        <div class="col">
+          <p>Price: £820,000
+            <br>Type: Sale Sole</p>
+        </div>
+      </div>
+      <div class="row hoverDiv border-bottom" routerLink="/property-details-letting">
+        <div class="col-12">
+          <h6>23 Prince of Wales Crescent, SW6</h6>
+        </div>
+        <div class="col">
+          <p>Instructed: 14/5/18
+            <br>Lister: Henny Irwin
+            <br>Status: INST</p>
+        </div>
+        <div class="col">
+          <p>Price: £650
+            <br>Type: Long Let Multi</p>
+        </div>
+      </div>
+    </accordion-group>
+    <accordion-group class="mb-2">
+      <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
+        <div class="pull-left float-left">Offers <span class="badge badge-pill badge-primary">1</span></div>
+        <a class="float-right pull-right" routerLink="/home">Add Offer <i class="fas fa-plus"></i></a>
+      </button>
+      <div class="row hoverDiv border-bottom" routerLink="/property-details-letting">
+        <div class="col-12">
+          <h6>23 Prince of Wales Crescent, SW6</h6>
+        </div>
+        <div class="col">
+          <p>Type: Long Let
+            <br>Price: £650
+            <br>Status: UO</p>
+        </div>
+        <div class="col-8">
+          <p>Received: 14/5/18
+            <br>Agreed: 15/5/18
+            <br>Move in: 15/5/18
+            <br>Lister: Henny Irwin
+            <br>Negotiator: Lucinda Arundell</p>
+        </div>
+      </div>
+    </accordion-group>
+    <accordion-group class="mb-2">
+      <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
+        <div class="pull-left float-left">Tenancies <span class="badge badge-pill badge-primary">1</span></div>
+        <a class="float-right pull-right" routerLink="/home">Add Tenan. <i class="fas fa-plus"></i></a>
+      </button>
+      <div class="row hoverDiv border-bottom" routerLink="/property-details-letting">
+        <div class="col-12">
+          <h6>23 Prince of Wales Crescent, SW6</h6>
+        </div>
+        <div class="col-md">
+          <p>Start date: 12/01/15
+            <br>End date: 12/01/19
+            <br>Current rent: £650
+            <br>Status: Landlord LET</p>
+        </div>
+        <div class="col-md">
+          <p>Lister: Henny Irwin
+            <br>Tenancy Manager: Rachel Seymour
+            <br>Property Manager: Peter Roberts
+            <br>Accounts: Sasha Ford</p>
+        </div>
+      </div>
+    </accordion-group>
+    <accordion-group class="mb-2">
+      <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
+        <div class="pull-left float-left">Letting Managements <span class="badge badge-pill badge-primary">1</span>
+        </div>
+        <a class="float-right pull-right" routerLink="/home">Add L.M. <i class="fas fa-plus"></i></a>
+      </button>
+      <div class="row hoverDiv border-bottom" routerLink="/property-details-letting">
+        <div class="col-12">
+          <h6>23 Prince of Wales Crescent, SW6</h6>
+        </div>
+        <div class="col-md">
+          <p>Start date: 12/01/15
+            <br>End date: 12/01/19
+            <br>Current rent: £650
+            <br>Status: Landlord LET</p>
+        </div>
+        <div class="col-md">
+          <p>Lister: Henny Irwin
+            <br>Property Manager: Peter Roberts</p>
+        </div>
+      </div>
+    </accordion-group>
+    <accordion-group class="mb-2">
+      <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
+        <div class="pull-left float-left">Home Managements <span class="badge badge-pill badge-primary">1</span></div>
+        <a class="float-right pull-right" routerLink="/home">Add H.M. <i class="fas fa-plus"></i></a>
+      </button>
+      <div class="row hoverDiv border-bottom" routerLink="/property-details-letting">
+        <div class="col-12">
+          <h6>23 Prince of Wales Crescent, SW6</h6>
+        </div>
+        <div class="col-md">
+          <p>Start date: 12/01/15
+            <br>End date: 12/01/19</p>
+        </div>
+        <div class="col-md">
+          <p>Status: MNG
+            <br>Property Manager: Emily Plane</p>
+        </div>
+      </div>
+    </accordion-group>
+
+  </accordion>
 </div>

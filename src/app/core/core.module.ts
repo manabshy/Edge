@@ -20,6 +20,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ModalModule } from 'ngx-bootstrap/modal/';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { AccordionModule } from 'ngx-bootstrap/accordion';
 
 //components
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
@@ -28,7 +29,7 @@ import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 @NgModule({
   declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent, ConfirmModalComponent],
   exports: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent, ConfirmModalComponent, BsDropdownModule,
-    CollapseModule, TabsModule, TypeaheadModule, BsDatepickerModule, ModalModule, PopoverModule, TooltipModule],
+    CollapseModule, TabsModule, TypeaheadModule, BsDatepickerModule, ModalModule, PopoverModule, TooltipModule, AccordionModule],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -39,7 +40,8 @@ import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
     TypeaheadModule.forRoot(),
     ModalModule.forRoot(),
     PopoverModule.forRoot(),
-    TooltipModule.forRoot()
+    TooltipModule.forRoot(),
+    AccordionModule.forRoot()
   ],
   entryComponents: [
     ConfirmModalComponent
