@@ -3,8 +3,8 @@
   class="list-group-item list-group-item-action pb-2"
     *ngFor="let contactGroup of contactGroups; let i = index;">
     <div class="row align-items-center">
-      <div class="col-sm-6">
-        <div class="mb-1">
+      <div class="col-sm-5">
+        <div class="mb-1 text-truncate">
           <strong>{{contactGroup.firstName}} {{contactGroup.lastName}}</strong>
           <ng-container *ngFor="let subContact of contactGroup?.contactGroups">
               <ng-container *ngIf="subContact?.isCompany">&nbsp;<span class="badge badge-pill badge-info">{{subContact?.companyName}}</span></ng-container>
@@ -23,7 +23,7 @@
             href="tel:{{contactGroup?.phoneNumbers[0]}}">{{contactGroup?.phoneNumbers[0]}}</a></p>
       </div>
       <div class="col text-sm-right" *ngIf="contactGroup?.emailAddresses[0]">
-        <p><a (click)="$event.stopPropagation()"
+        <p class="text-truncate"><a (click)="$event.stopPropagation()"
             href="mailto:{{contactGroup?.emailAddresses[0]}}">{{contactGroup?.emailAddresses[0]}}</a></p>
       </div>
     </div>
