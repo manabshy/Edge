@@ -57,7 +57,7 @@ export interface AutoCompleteResult {
   companyName: string;
 }
 
-export interface ContactGroupAutoCompleteResult {
+export interface ContactGroupAutoCompleteResult extends ContactGroupMetaDeta{
   personId: number;
   title: string;
   firstName: string;
@@ -70,9 +70,6 @@ export interface ContactGroupAutoCompleteResult {
   incode: string;
   postCode: string;
   contactGroups: AutoCompleteContactGroup[];
-  // TODO: Fix asap
-  indexVisibleContactGroup?: any;
-  hiddenContactGroups?: any;
 }
 export interface AutoCompleteContactGroup {
   contactGroupId: number;
@@ -84,4 +81,9 @@ export interface AutoCompleteContactGroup {
 
 export interface ContactGroupAutoCompleteData extends ResultData {
   result: ContactGroupAutoCompleteResult[];
+}
+
+export interface ContactGroupMetaDeta{
+  indexVisibleContactGroup?: any;
+  hiddenContactGroups?: any;
 }
