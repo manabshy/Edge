@@ -21,9 +21,9 @@ export class DiaryComponent implements OnInit {
   viewedDate = this.today;
   viewedMonth = this.todayMonth;
   viewedYear = this.todayYear;
-  viewMode = "week";
+  viewMode = 'week';
   monthLabel = dayjs().month(this.viewedMonth).format('MMMM');
-  
+
   appUtils = AppUtils;
 
   constructor(protected fb: FormBuilder) { }
@@ -44,16 +44,16 @@ export class DiaryComponent implements OnInit {
   }
 
   makeDayObj(date) {
-    let dayObj = new Object();
-    let day = date;
-    
-    if (day.year() == this.todayYear) {
+    const dayObj = new Object();
+    const day = date;
+
+    if (day.year() === this.todayYear) {
       dayObj['label'] = day.format('ddd D MMM');
     } else {
       dayObj['label'] = day.format('ddd D MMM YYYY');
     }
-    dayObj['isWeekend'] = day.day() == 0;
-    dayObj['isToday'] = day.date() == this.today.date() && day.month() == this.todayMonth && day.year() == this.todayYear;
+    dayObj['isWeekend'] = day.day() === 0;
+    dayObj['isToday'] = day.date() === this.today.date() && day.month() === this.todayMonth && day.year() === this.todayYear;
     dayObj['spanClass'] = 'span-' + day.day();
     dayObj['events'] = this.getEvents();
     dayObj['isClickable'] = day.date() >= this.today.date();
@@ -62,7 +62,7 @@ export class DiaryComponent implements OnInit {
   }
 
   getDaysInMonth(month, year) {
-    let days = [];
+    const days = [];
     let date = dayjs(new Date(year, month, 1));
 
     this.viewedMonth = month;
@@ -72,24 +72,24 @@ export class DiaryComponent implements OnInit {
 
     while (date.month() === month) {
       days.push(this.makeDayObj(date));
-      date = date.add(1,'day');
+      date = date.add(1, 'day');
     }
     return days;
   }
 
   getDaysInWeek(date) {
-    let curr = date;
-    var week = new Array();
+    const curr = date;
+    const week = new Array();
     this.viewedDate = curr;
     this.viewedMonth = curr.month();
     this.viewedYear = curr.year();
     this.monthLabel = curr.month(this.viewedMonth).format('MMMM YYYY');
 
-    for (var i = 0; i < 7; i++) {
-      let first = curr.date() - curr.day() + i;
-      let firstDate = curr.date(first);
-      if(this.viewedMonth !== firstDate.month()) {
-        if(this.viewedYear < firstDate.year()) {
+    for (let i = 0; i < 7; i++) {
+      const first = curr.date() - curr.day() + i;
+      const firstDate = curr.date(first);
+      if (this.viewedMonth !== firstDate.month()) {
+        if (this.viewedYear < firstDate.year()) {
           this.monthLabel = this.viewedDate.format('MMM YYYY') + ' - ' + firstDate.format('MMM YYYY');
         } else {
           this.monthLabel = firstDate.format('MMM YYYY') + ' - ' + this.viewedDate.format('MMM YYYY');
@@ -97,54 +97,54 @@ export class DiaryComponent implements OnInit {
       }
       week.push(
         this.makeDayObj(firstDate)
-      )
+      );
     }
     return week;
   }
 
   prevMonth() {
-    if(this.viewMode == "month") {
+    if (this.viewMode === 'month') {
       if (this.viewedMonth === 0) {
         this.days = this.getDaysInMonth(11, this.viewedYear - 1);
       } else {
         this.days = this.getDaysInMonth(this.viewedMonth - 1, this.viewedYear);
       }
     } else {
-      this.days = this.getDaysInWeek(this.viewedDate.subtract(7,'day'));
+      this.days = this.getDaysInWeek(this.viewedDate.subtract(7, 'day'));
     }
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
   }
 
   nextMonth() {
-    if(this.viewMode == "month") {
+    if (this.viewMode === 'month') {
       if (this.viewedMonth === 11) {
         this.days = this.getDaysInMonth(0, this.viewedYear + 1);
       } else {
         this.days = this.getDaysInMonth(this.viewedMonth + 1, this.viewedYear);
       }
     } else {
-      this.days = this.getDaysInWeek(this.viewedDate.add(7,'day'));
+      this.days = this.getDaysInWeek(this.viewedDate.add(7, 'day'));
     }
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
   }
 
   setToday() {
     this.viewedDate = this.today;
     this.viewedMonth = this.todayMonth;
     this.viewedYear = this.todayYear;
-    
+
     if (window.innerWidth < 576) {
       this.viewMode = 'month';
       setTimeout(() => {
         document.getElementById('today').scrollIntoView({block: 'center'});
-      })
+      });
     }
 
     this.changeView();
   }
 
   changeView() {
-    if(this.viewMode == 'month') {
+    if (this.viewMode === 'month') {
       this.days = this.getDaysInMonth(this.viewedMonth, this.viewedYear);
     } else {
       this.days = this.getDaysInWeek(this.viewedDate);
@@ -156,24 +156,24 @@ export class DiaryComponent implements OnInit {
   }
 
   getRandomColor() {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
       color += letters[Math.floor(Math.random() * 16)];
     }
     return color;
   }
 
   getEvents() {
-    let events = [];
-    let counter = Math.floor(Math.random() * Math.floor(3) + 1);
+    const events = [];
+    const counter = Math.floor(Math.random() * Math.floor(3) + 1);
 
     for (let i = 1; i < counter; i++) {
-      let event = new Object;
-      let counter1 = Math.floor(Math.random() * Math.floor(2));
+      const event = new Object;
+      const counter1 = Math.floor(Math.random() * Math.floor(2));
       event['type'] = counter1;
-      event['time'] = "00:00";
-      event['title'] = "This is the event title";
+      event['time'] = '00:00';
+      event['title'] = 'This is the event title';
       event['color'] = this.getRandomColor();
 
       events.push(event);
@@ -205,8 +205,6 @@ export class DiaryComponent implements OnInit {
       startDateTime: format(addHours(Date.now(), 1), 'HH:00'),
       endDateTime: format(addHours(Date.now(), 2), 'HH:00')
     });
-    console.log(this.diaryEventForm.get('startDateTime').value);
-    console.log(this.diaryEventForm.get('endDateTime').value);
   }
   get canSeeProperty(): boolean {
     const allowed = [

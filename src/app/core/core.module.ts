@@ -28,8 +28,14 @@ import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 
 @NgModule({
   declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent, ConfirmModalComponent],
-  exports: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent, ConfirmModalComponent, BsDropdownModule,
-    CollapseModule, TabsModule, TypeaheadModule, BsDatepickerModule, ModalModule, PopoverModule, TooltipModule, AccordionModule],
+  exports: [
+    RoundingPipe, TruncatingPipe, ShortenNamePipe,
+    BreadcrumbComponent, BasicSearchComponent,
+    ConfirmModalComponent, BsDropdownModule,
+    CollapseModule, TabsModule, TypeaheadModule,
+    BsDatepickerModule, ModalModule, PopoverModule,
+    TooltipModule, AccordionModule
+  ],
   imports: [
     CommonModule,
     ReactiveFormsModule,

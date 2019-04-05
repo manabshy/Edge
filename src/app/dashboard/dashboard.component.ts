@@ -85,21 +85,18 @@ export class DashboardComponent implements OnInit {
       .subscribe(result => {
         this.teamDashboard = result;
         this.getDashboardTotals(result);
-        console.log(this.teamDashboard);
       });
   }
   getDashboardPipeline(id: number, role: string, period?: string): void {
     this.dashboardService.getDashboardPipeline(id, role, period)
       .subscribe(result => {
         this.pipeline = result;
-        console.log(this.pipeline);
       });
   }
   getDashboardInstructions(id: number, role: string, period?: string): void {
     this.dashboardService.getDashboardInstructions(id, role, period)
       .subscribe(result => {
         this.instructions = result;
-        console.log(this.instructions);
       });
   }
 
