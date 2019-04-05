@@ -1,8 +1,30 @@
 <app-breadcrumb></app-breadcrumb>
 <div class="container">
-  <h4 class="page-title">Title</h4>
-  <div class="alert alert-danger" role="alert">
+  <h4 class="page-title m-0">Contact Detail</h4>
+  <div class="alert alert-danger mt-3" role="alert">
     Do not contact, GDPR request pending
+  </div>
+  <div class="bg-light text-right pt-3 px-3">
+    <a routerLink="/home"><i class="fas fa-edit"></i> Edit</a>
+  </div>
+  <div class="row align-items-center mx-0 mb-3 pb-3 bg-light">
+    <div class="col-sm-5">
+      <p class="mb-1">
+        <strong>James Gordon</strong><br /><span class="badge badge-pill badge-info">Coca Cola</span>&nbsp;<span
+          class="badge badge-pill badge-info">John Lewis</span>&nbsp;<span
+          class="badge badge-pill badge-info">Manchester United</span>
+      </p>
+      <p class="mb-1">23 Prince of Wales Crescent, SW6</p>
+    </div>
+    <div class="col-12 col-sm-auto">
+      <p class="mb-1"><a (click)="$event.stopPropagation()" href="tel:071212312412334">071212312412334</a></p>
+    </div>
+    <div class="col text-sm-right">
+      <p class="mb-1 text-truncate"><a (click)="$event.stopPropagation()"
+          href="mailto:jamesgordon@jamesgordon.com">jamesgordon@jamesgordon.com</a></p>
+      <p class="mb-1 text-truncate"><a (click)="$event.stopPropagation()"
+          href="mailto:jamesgordon@jamesgordon.com">jamesgordon@jamesgordon.com</a></p>
+    </div>
   </div>
   <div class="row">
     <div class="col-12">
@@ -15,7 +37,7 @@
               </label></div>
             <div class="col-auto">
               <a routerLink="../people" class="btn btn-link py-0">
-                <i class="fas fa-edit"></i> Edit Group
+                <i class="fas fa-users"></i> View Group
               </a>
             </div>
           </div>
@@ -28,7 +50,7 @@
               </label></div>
             <div class="col-auto">
               <a routerLink="../people" class="btn btn-link py-0">
-                <i class="fas fa-edit"></i> Edit Group
+                <i class="fas fa-users"></i> View Group
               </a>
             </div>
           </div>
