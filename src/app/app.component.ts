@@ -44,7 +44,7 @@ export class AppComponent {
 
   @HostListener('window:scroll', ['$event'])
   onScroll(event) {
-    if(window.scrollY > window.innerHeight * 0.25) {
+    if(window.scrollY > window.innerHeight * 0.35) {
       this.isScrollTopVisible = true;
     } else {
       this.isScrollTopVisible = false;

@@ -55,6 +55,12 @@ tr:first-child{
     @include media-breakpoint-up(lg) {
         padding-top: 0;
     }
+
+    &.row {
+        @extend .no-gutters;
+        text-align: left;
+        align-items: center;
+    }
 }
 
 .list-group-item {

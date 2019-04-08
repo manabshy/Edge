@@ -1,216 +1,134 @@
 <app-breadcrumb></app-breadcrumb>
 <div class="container">
-  <h4 class="page-title">Contact group</h4>
-
-    <div class="row">
-  
-      <div class="col">
-  
-        <div class="container-fluid">
-  
-          <div class="row">
-  
-            <div class="col">
-  
-              <p style="font-weight: bold">John Smith&nbsp;
-  
-                <i class="fas fa-phone"></i>&nbsp;
-  
-                <i class="fas fa-envelope"></i>&nbsp;
-  
-                <span class="badge badge-success">AML Valid</span>
-  
-              </p>
-  
-              <p>
-  
-                <a href="tel:+447808773822">07808 773822</a> (Mobile)
-  
-                <br> 0207 913 5642 (Home)
-  
-                <br> jsmith@gmail.com
-  
-              </p>
-  
-              <address>
-  
-                56B Gloucester Terrace, London, SW7 2HS
-  
-              </address>
-  
-              <div class="accordion" id="mkt1">
-  
-                <p id="headingMkt1">
-  
-                  <button class="btn btn-sm collapsed" type="button" data-toggle="collapse" data-target="#collapseMk1" aria-expanded="false"
-  
-                    aria-controls="collapseMk1">
-  
-                    Marketing Prefs (5)
-  
-                  </button>
-  
-                </p>
-  
-                <div id="collapseMk1" class="collapse" aria-labelledby="headingMkt1" data-parent="#mkt1">
-  
-                  <div class="card-body">
-  
-                    <p>Quarterly bulletin
-  
-                      <br>Special offers
-  
-                      <br>Landlord/investor events
-  
-                      <br>New homes/investments
-  
-                      <br>Other occasional marketing</p>
-  
-                  </div>
-  
-                </div>
-  
-              </div>
-  
-            </div>
-  
-            <div class="col">
-  
-              <p style="font-weight: bold">Michael Brown&nbsp;
-  
-                <i class="fas fa-phone"></i>&nbsp;
-  
-                <i class="fas fa-envelope"></i>&nbsp;
-  
-                <span class="badge badge-success">AML Valid</span>
-  
-              </p>
-  
-              <p>07779 245877 (Mobile)
-  
-                <br> mbrown33@gmail.com
-  
-              </p>
-  
-              <div class="accordion" id="mkt2">
-  
-                <p id="headingmkt2">
-  
-                  <button class="btn btn-sm collapsed" type="button" data-toggle="collapse" data-target="#collapseMkt2" aria-expanded="false"
-  
-                    aria-controls="collapseMkt2">
-  
-                    Marketing Prefs (5)
-  
-                  </button>
-  
-                </p>
-  
-                <div id="collapseMkt2" class="collapse" aria-labelledby="headingmkt2" data-parent="#mkt2">
-  
-                  <div class="card-body">
-  
-                    <p>Quarterly bulletin
-  
-                      <br>Special offers
-  
-                      <br>Landlord/investor events
-  
-                      <br>New homes/investments
-  
-                      <br>Other occasional marketing</p>
-  
-                  </div>
-  
-                </div>
-  
-              </div>
-  
-            </div>
-  
-            <div class="col">
-  
-              <p style="font-weight: bold">Wendy McTavish&nbsp;
-  
-                <i class="fas fa-phone-slash"></i>&nbsp;
-  
-                <span class="badge badge-danger">No AML</span>
-  
-              </p>
-  
-              <p>07844 521541 (Mobile)
-  
-                <br> 0208 123 5422 (Home)
-  
-                <br> tav888@gmail.com
-  
-              </p>
-  
-              <div class="accordion" id="mkt3">
-  
-                <p id="headingMkt3">
-  
-                  <button class="btn btn-sm collapsed" type="button" data-toggle="collapse" data-target="#collapseMkt3" aria-expanded="false"
-  
-                    aria-controls="collapseMkt3">
-  
-                    Marketing Prefs (2)
-  
-                  </button>
-  
-                </p>
-  
-                <div id="collapseMkt3" class="collapse" aria-labelledby="headingMkt3" data-parent="#mkt3">
-  
-                  <div class="card-body">
-  
-                    <p>Quarterly bulletin
-  
-                      <br>Special offers</p>
-  
-                  </div>
-  
-                </div>
-  
-              </div>
-  
-            </div>
-  
-          </div>
-  
-        </div>
-  
-      </div>
-  
-      <div class="col-auto">
-  
-        <div class="dropdown">
-  
-          <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-  
-            aria-expanded="false">
-  
-            Actions
-  
-          </button>
-  
-          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-  
-            <a class="dropdown-item" routerLink="/home">Edit contact group</a>
-  
-            <a class="dropdown-item" routerLink="/home">Send Letting Terms of Business</a>
-  
-            <a class="dropdown-item" routerLink="/home">Send Sales Terms of Business</a>
-  
-            <a class="dropdown-item" routerLink="/home">Refer</a>
-  
-          </div>
-  
-        </div>
-  
-      </div>
-  
+  <div class="row page-title">
+    <div class="col">
+      <h4 class="m-0">Contact group</h4>
     </div>
-  
+    <div class="col-auto">
+      <div class="btn-group" dropdown placement="bottom right">
+        <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
+          aria-controls="dropdown-basic">
+          Actions <span class="caret"></span>
+        </button>
+        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-basic">
+          <li role="menuitem"><a class="dropdown-item" routerLink="/home">Edit contact group</a></li>
+          <li role="menuitem"><a class="dropdown-item" routerLink="/home">Send Letting Terms of Business</a></li>
+          <li role="menuitem"><a class="dropdown-item" routerLink="/home">Send Sales Terms of Business</a></li>
+          <li role="menuitem"><a class="dropdown-item" routerLink="/home">Refer</a></li>
+        </ul>
+      </div>
+    </div>
   </div>
-  
+  <div class="list-group">
+    <div class="list-group-item list-group-item-action">
+      <div class="row">
+        <div class="col-12 text-right">
+          <a routerLink="/home"><i class="fas fa-edit"></i> Edit</a>
+        </div>
+        <div class="col-12 mb-2">
+          <strong>John Smith</strong>&nbsp;
+
+          <i class="fas fa-phone"></i>&nbsp;
+
+          <i class="fas fa-envelope"></i>&nbsp;
+
+          <span class="badge badge-success">AML Valid</span>
+        </div>
+        <div class="col-sm-4 mb-2">56B Gloucester Terrace, London, SW7 2HS</div>
+        <div class="col-sm-2 mb-2"><a href="tel:+447808773822">07808 773822</a> (Mobile)</div>
+        <div class="col-sm-2 mb-2"><a href="tel:+442079135642">0207 913 5642</a> (Home)</div>
+        <div class="col-sm-4 mb-2"><a href="mailto:jsmith@gmail.com">jsmith@gmail.com</a></div>
+        <div class="col-12">
+          <hr class="my-1">
+        </div>
+        <div class="col-12">
+          <button type="button" class="btn btn-link px-0" (click)="isCollapsed = !isCollapsed"
+            [attr.aria-expanded]="!isCollapsed" aria-controls="collapseBasic">Marketing Prefs <span
+              class="badge badge-pill badge-primary">5</span>
+          </button>
+          <div id="collapseBasic" [collapse]="!isCollapsed">
+            <ul>
+              <li>Quarterly bulletin</li>
+              <li>Special offers</li>
+              <li>Landlord/investor events</li>
+              <li>New homes/investments</li>
+              <li>Other occasional marketing</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="list-group-item list-group-item-action">
+      <div class="row">
+        <div class="col-12 text-right">
+          <a routerLink="/home"><i class="fas fa-edit"></i> Edit</a>
+        </div>
+        <div class="col-12 mb-2">
+          <strong>Michael Brown</strong>&nbsp;
+
+          <i class="fas fa-phone"></i>&nbsp;
+
+          <i class="fas fa-envelope"></i>&nbsp;
+
+          <span class="badge badge-success">AML Valid</span>
+        </div>
+        <div class="col-sm-4 mb-2"></div>
+        <div class="col-sm-2 mb-2"><a href="tel:+447779245877">07779 245877</a> (Mobile)</div>
+        <div class="col-sm-2 mb-2"></div>
+        <div class="col-sm-4 mb-2"><a href="mailto:mbrown33@gmail.com">mbrown33@gmail.com</a></div>
+        <div class="col-12">
+          <hr class="my-1">
+        </div>
+        <div class="col-12">
+          <button type="button" class="btn btn-link px-0" (click)="isCollapsed1 = !isCollapsed1"
+            [attr.aria-expanded]="!isCollapsed1" aria-controls="collapseBasic1">Marketing Prefs <span
+              class="badge badge-pill badge-primary">5</span>
+          </button>
+          <div id="collapseBasic1" [collapse]="!isCollapsed1">
+            <ul>
+              <li>Quarterly bulletin</li>
+              <li>Special offers</li>
+              <li>Landlord/investor events</li>
+              <li>New homes/investments</li>
+              <li>Other occasional marketing</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="list-group-item list-group-item-action">
+      <div class="row">
+        <div class="col-12 text-right">
+          <a routerLink="/home"><i class="fas fa-edit"></i> Edit</a>
+        </div>
+        <div class="col-12 mb-2">
+          <strong>Wendy McTavish</strong>&nbsp;
+
+          <i class="fas fa-phone-slash"></i>&nbsp;
+
+          <span class="badge badge-danger">No AML</span>
+        </div>
+        <div class="col-sm-4 mb-2"></div>
+        <div class="col-sm-2 mb-2"><a href="tel:+447844521541">07844 521541</a> (Mobile)</div>
+        <div class="col-sm-2 mb-2"><a href="tel:+442081235422">0208 123 5422</a> (Home)</div>
+        <div class="col-sm-4 mb-2"><a href="mailto:tav888@gmail.com">tav888@gmail.com</a></div>
+        <div class="col-12">
+          <hr class="my-1">
+        </div>
+        <div class="col-12">
+          <button type="button" class="btn btn-link px-0" (click)="isCollapsed2 = !isCollapsed2"
+            [attr.aria-expanded]="!isCollapsed2" aria-controls="collapseBasic2">Marketing Prefs <span
+              class="badge badge-pill badge-primary">2</span>
+          </button>
+          <div id="collapseBasic2" [collapse]="!isCollapsed2">
+            <ul>
+              <li>Quarterly bulletin</li>
+              <li>Special offers</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

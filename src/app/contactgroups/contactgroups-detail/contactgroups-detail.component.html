@@ -7,23 +7,51 @@
   <div class="bg-light text-right pt-3 px-3">
     <a routerLink="/home"><i class="fas fa-edit"></i> Edit</a>
   </div>
-  <div class="row align-items-center mx-0 mb-3 pb-3 bg-light">
-    <div class="col-sm-5">
-      <p class="mb-1">
-        <strong>James Gordon</strong><br /><span class="badge badge-pill badge-info">Coca Cola</span>&nbsp;<span
-          class="badge badge-pill badge-info">John Lewis</span>&nbsp;<span
+  <div class="row align-items-center mx-0 mb-4 pb-3 bg-light">
+    <div class="col-12">
+      <p class="mb-2">
+        <strong>James Gordon</strong>&nbsp;
+
+        <i class="fas fa-phone"></i>&nbsp;
+
+        <i class="fas fa-envelope"></i>&nbsp;
+
+        <span class="badge badge-success">AML Valid</span><br /><span class="badge badge-pill badge-info">Coca
+          Cola</span>&nbsp;<span class="badge badge-pill badge-info">John Lewis</span>&nbsp;<span
           class="badge badge-pill badge-info">Manchester United</span>
       </p>
-      <p class="mb-1">23 Prince of Wales Crescent, SW6</p>
     </div>
-    <div class="col-12 col-sm-auto">
-      <p class="mb-1"><a (click)="$event.stopPropagation()" href="tel:071212312412334">071212312412334</a></p>
+    <div class="col-sm-4">
+        <p class="mb-2">23 Prince of Wales Crescent, SW6</p>
     </div>
-    <div class="col text-sm-right">
-      <p class="mb-1 text-truncate"><a (click)="$event.stopPropagation()"
+    <div class="col-12 col-sm-2">
+      <p class="mb-2"><a (click)="$event.stopPropagation()" href="tel:071212312412334">071212312412334</a> (Mobile)</p>
+    </div>
+    <div class="col-12 col-sm-2">
+      <p class="mb-2"><a (click)="$event.stopPropagation()" href="tel:071212312412334">071212312412334</a> (Home)</p>
+    </div>
+    <div class="col-sm-4">
+      <p class="mb-2 text-truncate"><a (click)="$event.stopPropagation()"
           href="mailto:jamesgordon@jamesgordon.com">jamesgordon@jamesgordon.com</a></p>
-      <p class="mb-1 text-truncate"><a (click)="$event.stopPropagation()"
+      <p class="mb-2 text-truncate"><a (click)="$event.stopPropagation()"
           href="mailto:jamesgordon@jamesgordon.com">jamesgordon@jamesgordon.com</a></p>
+    </div>
+    <div class="col-12">
+      <hr class="my-1">
+    </div>
+    <div class="col-12">
+        <button type="button" class="btn btn-link px-0" (click)="isCollapsed = !isCollapsed"
+        [attr.aria-expanded]="!isCollapsed" aria-controls="collapseBasic">Marketing Prefs <span class="badge badge-pill badge-primary">5</span>
+        </button>
+        <div id="collapseBasic" [collapse]="!isCollapsed">
+          <ul>
+            <li>Quarterly bulletin</li>
+            <li>Special offers</li>
+            <li>Landlord/investor events</li>
+            <li>New homes/investments</li>
+            <li>Other occasional marketing</li>
+          </ul>
+        </div>
     </div>
   </div>
   <div class="row">
