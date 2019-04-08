@@ -16,17 +16,20 @@
           </ul>
         </div>
       </div>
-      <div class="col-auto pr-2" *ngIf="!appUtils.isDiarySearchVisible">
+      <div class="col-auto d-sm-none" *ngIf="viewMode == 'day'" >
+          <button type="button" class="btn btn-link px-0" (click)="enterView('','month')"><i class="fas fa-chevron-left"></i> {{monthLabel}}</button>
+      </div>
+      <div class="col-auto d-sm-block pr-2" *ngIf="!appUtils.isDiarySearchVisible" [ngClass]="{'d-none': viewMode == 'day'}">
         <button type="button" class="btn btn-light" (click)="setToday()">Today</button>
       </div>
-      <div class="col" *ngIf="!appUtils.isDiarySearchVisible">
+      <div class="col d-sm-block" *ngIf="!appUtils.isDiarySearchVisible" [ngClass]="{'d-none': viewMode == 'day'}">
         <button type="button" class="btn btn-light" (click)="prevMonth()"><i class="fas fa-chevron-left"></i></button>
         <h6 class="d-inline-block m-0 align-middle mx-2">{{monthLabel}}</h6>
         <button type="button" class="btn btn-light" (click)="nextMonth()"><i class="fas fa-chevron-right"></i></button>
       </div>
     </div>
   </div>
-  <div class="col-auto">
+  <div class="col-auto d-sm-block" [ngClass]="{'d-none': viewMode == 'day'}">
     <div class="row no-gutters">
       <div class="col-auto">
         <button type="button" (click)="toggleSearch()" class="btn btn-light">
@@ -69,7 +72,6 @@
     [ngClass]="{'is-weekend': day.isWeekend, 'no-events': !day.events.length && viewMode != 'day', 'is-today': day.isToday }"
     [attr.id]="day.isToday ? 'today' : ''">
     <div class="card-header clearfix" (click)="enterView(day.date, 'day')">
-      <button type="button" class="btn btn-link p-0 d-sm-none mr-3" *ngIf="viewMode == 'day'" (click)="enterView(day.date,'month')"><i class="fas fa-chevron-left"></i> Month</button>
       <strong [ngClass]="{'text-secondary': day.isToday}">{{day.label}}</strong>
     </div>
 

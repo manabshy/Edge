@@ -170,7 +170,7 @@ export class DiaryComponent implements OnInit {
   }
 
   enterView(date, mode) {
-    this.viewedDate = date;
+    this.viewedDate = date || this.viewedDate;
     this.viewMode = mode;
     this.changeView();
     window.scrollTo(0,0);
