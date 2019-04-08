@@ -8,14 +8,19 @@ import { AppUtils } from '../shared/utils';
   styleUrls: ['./breadcrumb.component.scss']
 })
 export class BreadcrumbComponent implements OnInit {
-  
+
   constructor(private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
-    AppUtils.parentRoute = '';
-
     const current = this.activatedRoute.snapshot;
+    let currentUrl = this.router.url;
+    currentUrl = currentUrl.indexOf('?') > 0 ? currentUrl.substring(0, currentUrl.indexOf('?')) : currentUrl;
     const parent = current.parent;
+
+    if('/' + AppUtils.parentRoute == currentUrl){
+      AppUtils.parentRoute = '/home';
+    }
+
 
     if (parent) {
       if (current.url.length && parent.url.length) {

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AppUtils } from '../core/shared/utils';
 
 @Component({
   selector: 'app-lead-edit',
@@ -10,6 +11,9 @@ export class LeadEditComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    AppUtils.parentRoute = AppUtils.prevRoute;
+
+    console.log(AppUtils.parentRoute);
   }
 
 }
