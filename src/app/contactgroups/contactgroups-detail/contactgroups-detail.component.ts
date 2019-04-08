@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-contactgroups-detail',
@@ -8,7 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ContactgroupsDetailComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute) { }
+  constructor() { }
 
   ngOnInit() {
   }

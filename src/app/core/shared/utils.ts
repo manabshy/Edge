@@ -1,8 +1,8 @@
 import {format, compareAsc, isDate} from 'date-fns';
 import { isArray, isPlainObject, mapValues, isNull, isUndefined, random  } from 'lodash';
 export class AppUtils {
-  public static prevRoute: string;
-  public static prevRouteBU: string;
+  public static prevRoute: string = '';
+  public static prevRouteBU: string = '';
   public static homeSelectedTab: number;
   public static dashboardSelectedTab: number;
 
@@ -33,5 +33,9 @@ export class AppUtils {
   }
   
   public static isDiarySearchVisible: boolean = false;
+
+  public static parentRoute: string = '';
+
+  public static searchTerm: string;
   
 }

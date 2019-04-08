@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ContactGroupsService } from './shared/contact-groups.service';
 import { ContactGroupAutoCompleteResult } from './shared/contact-group';
 import { ActivatedRoute } from '@angular/router';
+import { AppUtils } from '../core/shared/utils';
 
 @Component({
   selector: 'app-contactgroups',
@@ -26,7 +27,7 @@ export class ContactGroupsComponent implements OnInit {
   constructor(private contactGroupService: ContactGroupsService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.searchTerm = this.route.snapshot.queryParamMap.get('searchTerm') || '';
+    this.searchTerm = this.route.snapshot.queryParamMap.get('searchTerm') || AppUtils.searchTerm || '';
     this.contactGroupsAutocomplete(this.searchTerm);
   }
 
@@ -59,6 +60,7 @@ export class ContactGroupsComponent implements OnInit {
 
   onKeyup() {
     this.isMessageVisible = false;
+    AppUtils.searchTerm = this.searchTerm;
 
     if (this.searchTerm && this.searchTerm.length > 2) {
       this.isHintVisible = false;
