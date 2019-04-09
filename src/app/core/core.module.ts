@@ -28,8 +28,14 @@ import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 
 @NgModule({
   declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent, ConfirmModalComponent],
-  exports: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent, ConfirmModalComponent, BsDropdownModule,
-    CollapseModule, TabsModule, TypeaheadModule, BsDatepickerModule, ModalModule, PopoverModule, TooltipModule, AccordionModule],
+  exports: [
+    RoundingPipe, TruncatingPipe, ShortenNamePipe,
+    BreadcrumbComponent, BasicSearchComponent,
+    ConfirmModalComponent, BsDropdownModule,
+    CollapseModule, TabsModule, TypeaheadModule,
+    BsDatepickerModule, ModalModule, PopoverModule,
+    TooltipModule, AccordionModule
+  ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -47,8 +53,8 @@ import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
     ConfirmModalComponent
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AddHeaderInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AddHeaderInterceptor, multi: true }
+    // { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true }
   ]
 })
 export class CoreModule { }

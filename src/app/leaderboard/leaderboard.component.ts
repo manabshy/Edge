@@ -47,7 +47,6 @@ export class LeaderboardComponent implements OnInit {
       .getStaffMemberPipeline(this.salesManager)
       .subscribe(result => {
         this.pipelineList = result;
-        console.log(`The pipeline result is: ${this.pipelineList}`);
       });
   }
 
@@ -66,10 +65,6 @@ export class LeaderboardComponent implements OnInit {
         this.originalInstructions = result;
         if (result !== null) {
           this.instructions = result.slice(0, 16);
-        } else {
-          console.log(
-            `No instructions ${this.selectedPeriodLabel}: ${this.instructions}`
-          );
         }
       });
   }
