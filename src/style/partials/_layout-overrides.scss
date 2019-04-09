@@ -58,6 +58,7 @@ tr:first-child{
 
     &.row {
         @extend .no-gutters;
+        padding-bottom: spacer(2);
         text-align: left;
         align-items: center;
     }
@@ -81,5 +82,14 @@ dl {
 
     dd, dt {
         margin: 0;
+    }
+}
+
+.telephone {
+    @include media-breakpoint-up(md){
+        @include make-col(12);
+    }
+    @include media-breakpoint-up(xl){
+        @include make-col(6);
     }
 }

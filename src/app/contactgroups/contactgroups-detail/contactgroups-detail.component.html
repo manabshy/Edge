@@ -7,16 +7,14 @@
   <div class="bg-light text-right pt-3 px-3">
     <a routerLink="/home"><i class="fas fa-edit"></i> Edit</a>
   </div>
-  <div class="row align-items-center mx-0 mb-4 pb-3 bg-light">
+  <div class="row mx-0 mb-4 pb-3 bg-light">
     <div class="col-12">
       <p class="mb-2">
         <strong>James Gordon</strong>&nbsp;
 
-        <i class="fas fa-phone"></i>&nbsp;
+        <i class="fas fa-phone-slash"></i>&nbsp;
 
-        <i class="fas fa-envelope"></i>&nbsp;
-
-        <span class="badge badge-success">AML Valid</span><br /><span class="badge badge-pill badge-info">Coca
+        <span class="badge badge-danger mr-1">GDPR</span><span class="badge badge-success">AML Valid</span><br /><span class="badge badge-pill badge-info">Coca
           Cola</span>&nbsp;<span class="badge badge-pill badge-info">John Lewis</span>&nbsp;<span
           class="badge badge-pill badge-info">Manchester United</span>
       </p>
@@ -24,13 +22,13 @@
     <div class="col-sm-4">
         <p class="mb-2">23 Prince of Wales Crescent, SW6</p>
     </div>
-    <div class="col-12 col-sm-2">
-      <p class="mb-2"><a (click)="$event.stopPropagation()" href="tel:071212312412334">071212312412334</a> (Mobile)</p>
+    <div class="col-12 col-sm-3 col-xl-4">
+      <div class="row">
+        <div class="col-6 telephone"><p class="mb-2"><a (click)="$event.stopPropagation()" href="tel:071212312412334">071212312412334</a><br />(Mobile)</p></div>
+        <div class="col-6 telephone"><p class="mb-2"><a (click)="$event.stopPropagation()" href="tel:071212312412334">071212312412334</a><br />(Home)</p></div>
+      </div>
     </div>
-    <div class="col-12 col-sm-2">
-      <p class="mb-2"><a (click)="$event.stopPropagation()" href="tel:071212312412334">071212312412334</a> (Home)</p>
-    </div>
-    <div class="col-sm-4">
+    <div class="col-sm-5 col-xl-4">
       <p class="mb-2 text-truncate"><a (click)="$event.stopPropagation()"
           href="mailto:jamesgordon@jamesgordon.com">jamesgordon@jamesgordon.com</a></p>
       <p class="mb-2 text-truncate"><a (click)="$event.stopPropagation()"
