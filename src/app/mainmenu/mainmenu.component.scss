@@ -39,15 +39,18 @@
 }
 
 .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: $side-nav-width;
+
     @include media-breakpoint-down(md){
-        position: fixed;
-        top: 0;
-        left: 0;
         right: 0;
         z-index: 1030;
         padding-top: 1rem;
         padding-bottom: 1rem;
         min-height: $top-bar-height;
+        width: 100%;
     }
 }
 
