@@ -1,0 +1,119 @@
+<app-breadcrumb></app-breadcrumb>
+<div class="container">
+  <h4 class="page-title">Edit Contact</h4>
+  <form>
+    <div class="form-group row">
+      <label for="title" class="col-sm-2 col-form-label col-form-label-sm">Title</label>
+      <div class="col-sm-3">
+        <select class="custom-select custom-select-sm" id="title">
+          <option selected>Mrs</option>
+          <option>...</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="name" class="col-sm-2 col-form-label col-form-label-sm">Name</label>
+      <div class="col-sm-10">
+        <input type="text" id="name" class="form-control form-control-sm">
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="middle-names" class="col-sm-2 col-form-label col-form-label-sm">Middle Names</label>
+      <div class="col-sm-10">
+        <input type="text" id="middle-names" class="form-control form-control-sm">
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="surname" class="col-sm-2 col-form-label col-form-label-sm">Surname</label>
+      <div class="col-sm-10">
+        <input type="text" id="surname" class="form-control form-control-sm">
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-2 col-form-label col-form-label-sm">Contact by</label>
+      <div class="col-sm-10">
+        <div class="custom-control custom-checkbox">
+          <input class="custom-control-input" type="checkbox" name="examplecheckboxs" id="examplecheckboxs1"
+            value="option1" checked>
+          <label class="custom-control-label" for="examplecheckboxs1">
+            Email
+          </label>
+        </div>
+        <div class="custom-control custom-checkbox">
+          <input class="custom-control-input" type="checkbox" name="examplecheckboxs" id="examplecheckboxs2"
+            value="option2">
+          <label class="custom-control-label" for="examplecheckboxs2">
+            Post
+          </label>
+        </div>
+        <div class="custom-control custom-checkbox">
+          <input class="custom-control-input" type="checkbox" name="examplecheckboxs" id="examplecheckboxs3"
+            value="option3">
+          <label class="custom-control-label" for="examplecheckboxs3">
+            Phone
+          </label>
+        </div>
+      </div>
+    </div>
+    <app-property-finder></app-property-finder>
+    <div class="form-group row">
+      <label for="country" class="col-sm-2 col-form-label col-form-label-sm">Country</label>
+      <div class="col-sm-3">
+        <select class="custom-select custom-select-sm" id="country">
+          <option selected>United Kingdom</option>
+          <option>...</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="email" placeholder="" class="col-sm-2 col-form-label col-form-label-sm">Email</label>
+      <div class="col-sm-10">
+        <input type="text" id="email" placeholder="" class="form-control form-control-sm">
+        <input type="text" id="email1" placeholder="Other Email" class="form-control form-control-sm mt-2">
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="phone" placeholder="" class="col-sm-2 col-form-label col-form-label-sm">Phone</label>
+      <div class="col-sm-10">
+        <div class="input-group">
+          <input type="text" class="form-control form-control-sm" id="phone"
+            placeholder="">
+          <select class="custom-select custom-select-sm" id="phoneType">
+            <option selected>Mobile</option>
+            <option>...</option>
+          </select>
+        </div>
+        <div class="input-group mt-2">
+            <input type="text" class="form-control form-control-sm" id="phone2"
+              placeholder="Other Phone">
+            <select class="custom-select custom-select-sm" id="phone2Type">
+              <option selected>Mobile</option>
+              <option>...</option>
+            </select>
+          </div>
+      </div>
+    </div>
+    <div class="form-group row justify-content-end">
+      <div class="col-sm-10">
+        <div class="custom-control custom-checkbox">
+          <input class="custom-control-input" type="checkbox" name="noMarketing" id="noMarketing"
+            value="option1" checked>
+          <label class="custom-control-label" for="noMarketing">
+            No Marketing
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <div class="container px-lg-4">
+        <div class="row justify-content-end w-100 no-gutters">
+          <div class="col-sm-10 d-flex">
+            <button routerLink="/contact-centre" type="button" class="btn btn-light mr-2">Cancel</button>
+            <button routerLink="/contact-centre" type="submit" class="btn btn-secondary">Edit Contact</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

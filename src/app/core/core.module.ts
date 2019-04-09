@@ -7,7 +7,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AddHeaderInterceptor } from './add-header.interceptor';
 import { CacheInterceptor } from './cache.interceptor';
 import { BasicSearchComponent } from './basic-search/basic-search.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 // ngx bootstrap imports
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
@@ -25,20 +25,22 @@ import { AccordionModule } from 'ngx-bootstrap/accordion';
 //components
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
+import { PropertyFinderComponent } from './property-finder/property-finder.component';
 
 @NgModule({
-  declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent, ConfirmModalComponent],
+  declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent, ConfirmModalComponent, PropertyFinderComponent],
   exports: [
     RoundingPipe, TruncatingPipe, ShortenNamePipe,
     BreadcrumbComponent, BasicSearchComponent,
-    ConfirmModalComponent, BsDropdownModule,
+    ConfirmModalComponent, PropertyFinderComponent, BsDropdownModule,
     CollapseModule, TabsModule, TypeaheadModule,
     BsDatepickerModule, ModalModule, PopoverModule,
-    TooltipModule, AccordionModule
+    TooltipModule, AccordionModule, ReactiveFormsModule, FormsModule
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     BsDropdownModule.forRoot(),
     CollapseModule.forRoot(),
     TabsModule.forRoot(),

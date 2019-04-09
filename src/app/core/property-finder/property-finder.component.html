@@ -1,12 +1,12 @@
 <div class="form-group row">
-  <label for="property" class="col-3 col-sm-2 col-form-label col-form-label-sm">Property</label>
-  <div class="col-8 col-sm-10">
+  <label for="property" class="col-sm-2 col-form-label col-form-label-sm">Property</label>
+  <div class="col-sm-10">
     <input type="text" class="form-control form-control-sm" id="property" placeholder="Property"
       [(ngModel)]="property">
-    <button class="btn btn-sm btn-link px-0" type="button" id="addPropertyBtn"
-      (click)="isAddPropertyCollapsed = !isAddPropertyCollapsed" [attr.aria-expanded]="!isAddPropertyCollapsed"
-      aria-controls="collapseBasic"><i class="fas fa-plus mr-2"></i> Add New</button>
-    <div class="collapse" [collapse]="!isAddPropertyCollapsed" id="addProperty">
+    <button class="btn btn-sm btn-link px-0" type="button" id="manAddressBtn"
+      (click)="isManAddressCollapsed = !isManAddressCollapsed" [attr.aria-expanded]="!isManAddressCollapsed"
+      aria-controls="collapseBasic">Enter address manually</button>
+    <div class="collapse" [collapse]="!isManAddressCollapsed" id="manAddress">
       <div class="form-group mt-2">
         <label class="small" for="flat">Flat number</label>
         <input type="text" class="form-control form-control-sm" id="flat" placeholder="Flat number">
@@ -41,7 +41,6 @@
             placeholder="Incode">
         </div>
       </div>
-      <button type="button" class="btn btn-primary">Add</button>
     </div>
   </div>
 </div>

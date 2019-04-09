@@ -4,6 +4,7 @@ import { AuthGuardService } from '../core/services/auth-guard.service';
 import { ContactgroupsDetailComponent } from './contactgroups-detail/contactgroups-detail.component';
 import { ContactGroupsComponent } from './contactgroups.component';
 import { ContactgroupsPeopleComponent } from './contactgroups-people/contactgroups-people.component';
+import { ContactgroupsDetailEditComponent } from './contactgroups-detail-edit/contactgroups-detail-edit.component';
 
 const routes: Routes = [
   { path: '', canActivate: [AuthGuardService], children: [
@@ -12,6 +13,7 @@ const routes: Routes = [
       { path: 'detail/:id', children: [
         { path: '', component: ContactgroupsDetailComponent },
         { path: 'people', component: ContactgroupsPeopleComponent },
+        {path: 'edit', component: ContactgroupsDetailEditComponent}
       ] },
     ] },
   ] }

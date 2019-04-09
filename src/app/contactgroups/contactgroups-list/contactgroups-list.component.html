@@ -34,7 +34,7 @@
         </div>
       </div>
       <div class="col-auto">
-        <a routerLink="/home"><i class="fas fa-edit"></i> Edit</a>
+        <a [routerLink]="['detail', contactGroup.contactGroups[0].contactGroupId, 'edit' ]"><i class="fas fa-edit"></i> Edit</a>
       </div>
     </div>
   </a>
