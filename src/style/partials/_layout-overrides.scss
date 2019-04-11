@@ -56,11 +56,25 @@ tr:first-child{
         padding-top: 0;
     }
 
+    @include media-breakpoint-down(sm) {
+        position: sticky;
+        background: color('white');
+        top: $top-bar-height;
+        z-index: 100;
+        font-size: $h5-font-size;
+    }
+
     &.row {
         @extend .no-gutters;
         padding-bottom: spacer(2);
         text-align: left;
         align-items: center;
+
+        h4 {
+            @include media-breakpoint-down(sm) {
+                font-size: $h5-font-size;
+            }
+        }
     }
 }
 
