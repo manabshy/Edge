@@ -161,7 +161,11 @@ export class DiaryComponent implements OnInit {
       if(this.viewMode !== 'day'){
         this.viewMode = 'month';
         setTimeout(() => {
-          document.getElementById('today').scrollIntoView({block: 'center'});
+          if(document.getElementById('today')){
+            document.getElementById('today').scrollIntoView({block: 'center'});
+          } else {
+            window.scrollTo(0,0);
+          }
         });
       }
     }
