@@ -53,8 +53,12 @@ export class HomeComponent implements OnInit {
       this.selectedTab = data.tabset.tabs.findIndex(item => item.active);
       AppUtils.homeSelectedTab = this.selectedTab;
       AppUtils.isDiarySearchVisible = false;
-      this.sharedService.scrollTodayIntoView();
-      this.sharedService.scrollCurrentHourIntoView();
+      if(this.selectedTab === 1) {
+        this.sharedService.scrollTodayIntoView();
+        this.sharedService.scrollCurrentHourIntoView();
+      } else {
+        window.scrollTo(0,0);
+      }
     });
   }
 
