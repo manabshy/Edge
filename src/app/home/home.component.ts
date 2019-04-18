@@ -5,6 +5,7 @@ import { UserService } from '../core/services/user.service';
 
 import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
 import { AppUtils } from '../core/shared/utils';
+import { SharedService } from '../core/services/shared.service';
 
 @Component({
   selector: 'app-home',
@@ -25,7 +26,7 @@ export class HomeComponent implements OnInit {
 
   @ViewChild('homeTabs') homeTabs: TabsetComponent;
 
-  constructor(private authService: AuthService, private userService: UserService) { }
+  constructor(private authService: AuthService, private userService: UserService, private sharedService: SharedService) { }
 
   ngOnInit() {
     // if (this.authService.isLoggedIn()) {
@@ -52,13 +53,8 @@ export class HomeComponent implements OnInit {
       this.selectedTab = data.tabset.tabs.findIndex(item => item.active);
       AppUtils.homeSelectedTab = this.selectedTab;
       AppUtils.isDiarySearchVisible = false;
-      if (window.innerWidth < 576) {
-        if(document.getElementById('today') && this.selectedTab == 1){
-          document.getElementById('today').scrollIntoView({block: 'center'});
-        } else {
-          window.scrollTo(0,0);
-        }
-      }
+      this.sharedService.scrollTodayIntoView();
+      this.sharedService.scrollCurrentHourIntoView();
     });
   }
 
