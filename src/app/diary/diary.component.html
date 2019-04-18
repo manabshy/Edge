@@ -84,11 +84,11 @@
         </li>
       </ul>
     </ng-template>
-    <div class="card-body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">
-      <div class="row no-gutters event" [tooltip]="event.title" [ngClass]="{'mb-2': !isLast}" *ngFor="let event of day?.events; last as isLast">
-        <span class="color" [ngStyle]="{'background': event.color}"></span>
-        <div class="col text-truncate" [ngClass]="{'col-sm-auto': viewMode == 'day'}"><span class="text-muted">{{event.time}}</span> {{event.title}}</div>
-        <div class="col-auto text-muted"><i class="far fa-calendar fa-fw" *ngIf="event.type"></i><i class="fas fa-phone fa-fw"
+    <div class="card-body" [ngClass]="{'pl-2 pl-lg-1': viewMode !== 'month'}" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">
+      <div class="row no-gutters event" [tooltip]="event.title" [ngClass]="{'mb-2': !isLast}" [ngStyle]="{'background-color': event.color, 'height': event.duration, 'top': event.position}" *ngFor="let event of day?.events; last as isLast">
+        <span class="color" [ngStyle]="{'background': event.color}" *ngIf="viewMode === 'month'"></span>
+        <div class="col text-truncate"><span [ngClass]="{'text-muted': viewMode === 'month'}">{{event.time}}</span> {{event.title}}</div>
+        <div class="col-auto" [ngClass]="{'text-muted': viewMode === 'month'}"><i class="far fa-calendar fa-fw" *ngIf="event.type"></i><i class="fas fa-phone fa-fw"
             *ngIf="!event.type"></i></div>
       </div>
     </div>

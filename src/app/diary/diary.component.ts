@@ -216,6 +216,8 @@ export class DiaryComponent implements OnInit {
       const counter1 = Math.floor(Math.random() * Math.floor(2));
       event['type'] = counter1;
       event['time'] = '00:00';
+      event['duration'] = Math.random() * Math.floor(4) * 10 + 10 + '%';
+      event['position'] = Math.random() * Math.floor(3) * 10 + '%';
       event['title'] = 'This is the event title';
       event['color'] = this.getRandomColor();
 

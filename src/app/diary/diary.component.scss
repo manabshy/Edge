@@ -100,10 +100,13 @@
     .card-header {
         background-color: theme-color("light");
         padding: spacer(2);
-        @include media-breakpoint-down("sm") {
-            position: sticky;
-            top: $top-bar-height + 45px;
-            z-index: 2;
+        
+        .month & {
+            @include media-breakpoint-down("sm") {
+                position: sticky;
+                top: $top-bar-height + 45px;
+                z-index: 2;
+            }
         }
     }
     .card-body {
@@ -135,6 +138,19 @@
 
 .event {
     position: relative;
+
+    .month & {
+        background-color: transparent!important;
+        height: auto!important;
+        top: auto!important;
+    }
+
+    .day &, .week & {
+        padding: spacer(1);
+        @include border-radius(spacer(1));
+        color: color("white");
+    }
+
     .color {
         position: absolute;
         display: block;
