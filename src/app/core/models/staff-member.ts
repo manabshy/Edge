@@ -84,3 +84,7 @@ export enum ApiRole {
   SalesNegotiator = 'SalesNegotiator',
   LettingsNegotiator = 'LettingsNegotiator'
 }
+
+export interface StaffMemberResult {
+  result: StaffMember;
+}

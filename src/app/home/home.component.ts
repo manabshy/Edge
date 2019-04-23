@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { AuthService } from '../core/services/auth.service';
 import { UserResult, User } from '../core/models/user';
-import { UserService } from '../core/services/user.service';
+import { StaffMemberService } from '../core/services/staff-member.service';
 
 import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
 import { AppUtils } from '../core/shared/utils';
+import { StaffMember } from '../core/models/staff-member';
 
 @Component({
   selector: 'app-home',
@@ -12,11 +13,7 @@ import { AppUtils } from '../core/shared/utils';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  email: string;
-  firstName: string;
-  staffMemberId: number;
-  userResult: UserResult;
-  user: User;
+  staffMember: StaffMember;
   get isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
   }
@@ -25,23 +22,20 @@ export class HomeComponent implements OnInit {
 
   @ViewChild('homeTabs') homeTabs: TabsetComponent;
 
-  constructor(private authService: AuthService, private userService: UserService) { }
+  constructor(private authService: AuthService, private userService: StaffMemberService) { }
 
   ngOnInit() {
-    // if (this.authService.isLoggedIn()) {
-    //   this.getUserByEmail(this.authService.getUsername());
-    // }
-
+    this.getCurrentStaffMember();
     if (AppUtils.homeSelectedTab) {
       this.homeTabs.tabs[AppUtils.homeSelectedTab].active = true;
     }
   }
-  getUserByEmail(username: string): void {
-    this.userService.getUserByEmail(username)
+  getCurrentStaffMember(): void {
+    this.userService.getStaffMember()
       .subscribe(data => {
-        this.userResult = data;
-        this.email = data.result.email;
-        this.staffMemberId = data.result.staffMemberId;
+        this.staffMember = data;
+        console.log(this.staffMember);
+        console.log(this.staffMember.staffMemberId);
       },
         err => console.log(err)
       );
@@ -53,10 +47,10 @@ export class HomeComponent implements OnInit {
       AppUtils.homeSelectedTab = this.selectedTab;
       AppUtils.isDiarySearchVisible = false;
       if (window.innerWidth < 576) {
-        if(document.getElementById('today') && this.selectedTab == 1){
+        if (document.getElementById('today') && this.selectedTab === 1) {
           document.getElementById('today').scrollIntoView({block: 'center'});
         } else {
-          window.scrollTo(0,0);
+          window.scrollTo(0, 0);
         }
       }
     });
