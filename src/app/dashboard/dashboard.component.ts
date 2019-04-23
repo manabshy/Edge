@@ -6,6 +6,7 @@ import { User, UserResult } from '../core/models/user';
 import { Constants } from '../core/shared/period-list';
 import { TabsetComponent, TabDirective } from 'ngx-bootstrap/tabs/';
 import { AppUtils } from '../core/shared/utils';
+import { StaffMember } from '../core/models/staff-member';
 
 @Component({
   selector: 'app-dashboard',
@@ -31,9 +32,8 @@ export class DashboardComponent implements OnInit {
   period: string;
   email: string;
   firstName: string;
-  @Input() userResult: UserResult;
+  @Input() currentStaffMember: StaffMember;
   user: User;
-  @Input() staffMemberId: number;
   private _selectedPeriod: string;
   periodList = Constants.PeriodList;
   private readonly role = 'salesManager';
@@ -44,6 +44,7 @@ export class DashboardComponent implements OnInit {
   set selectedPeriod(val: string) {
     this._selectedPeriod = val;
     this.period = this.getSelectedPeriod(this._selectedPeriod);
+    // this.getStaffMemberDashboard(this.staffMember.staffMemberId, this.role, this.selectedPeriod);
     this.getStaffMemberDashboard(2337, this.role, this.selectedPeriod);
     this.getTeamMembersDashboard(2337, this.role, this.selectedPeriod);
     this.getDashboardPipeline(2337, this.role, this.selectedPeriod);
@@ -56,6 +57,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.selectedPeriod = 'ThisQuarter';
+    console.log('delayed staffMember', this.currentStaffMember);
     if (AppUtils.dashboardSelectedTab) {
       this.dashboardTabs.tabs[AppUtils.dashboardSelectedTab].active = true;
     }
@@ -69,9 +71,9 @@ export class DashboardComponent implements OnInit {
   }
 
   // ngOnChanges(changes: SimpleChanges) {
-  //   if (this.staffMemberId) {
-  //     this.getStaffMemberDashboard(this.staffMemberId, this.salesManager, this.selectedPeriod);
-  //     console.log('from me dashboard ' + this.staffMemberId);
+  //   if (this.staffMember.staffMemberId) {
+  //     // this.getStaffMemberDashboard(this.staffMemberId, this.salesManager, this.selectedPeriod);
+  //     console.log('from me dashboard ' + this.staffMember.staffMemberId);
   //   }
   // }
   getStaffMemberDashboard(id: number, role: string, period?: string): void {

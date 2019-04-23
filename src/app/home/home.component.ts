@@ -13,7 +13,7 @@ import { StaffMember } from '../core/models/staff-member';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  staffMember: StaffMember;
+  currentStaffMember: StaffMember;
   get isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
   }
@@ -31,11 +31,11 @@ export class HomeComponent implements OnInit {
     }
   }
   getCurrentStaffMember(): void {
-    this.userService.getStaffMember()
+    this.userService.getCurrentStaffMember()
       .subscribe(data => {
-        this.staffMember = data;
-        console.log(this.staffMember);
-        console.log(this.staffMember.staffMemberId);
+        this.currentStaffMember = data;
+        console.log(this.currentStaffMember);
+        console.log(this.currentStaffMember.staffMemberId);
       },
         err => console.log(err)
       );

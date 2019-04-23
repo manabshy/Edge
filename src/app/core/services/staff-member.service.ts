@@ -12,7 +12,7 @@ import { StaffMember, StaffMemberResult } from '../models/staff-member';
 export class StaffMemberService {
   constructor(private http: HttpClient, private authService: AuthService) { }
 
-  public getStaffMember(): Observable<StaffMember> {
+  public getCurrentStaffMember(): Observable<StaffMember> {
     return this.http.get<StaffMemberResult>(`${AppConstants.baseUrl}/currentUser`)
     .pipe(
       map(response => response.result),

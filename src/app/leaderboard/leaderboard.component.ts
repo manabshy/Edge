@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 import { LeaderboardService } from './shared/leaderboard.service';
 import { Leaderboard, LeaderboardResult } from './shared/leaderboard';
 import { ActivatedRoute } from '@angular/router';
 import { Constants } from '../core/shared/period-list';
+import { StaffMember } from '../core/models/staff-member';
 
 @Component({
   selector: 'app-leaderboard',
@@ -22,6 +23,7 @@ export class LeaderboardComponent implements OnInit {
   selectedPeriodLabel: string;
   periodList = Constants.PeriodList;
   filterVisibility = 'visible';
+  @Input() currentStaffMember: StaffMember;
 
   set selectedPeriod(val: string) {
     this._selectedPeriod = val;
