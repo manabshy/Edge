@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import {map} from 'rxjs/operators';
+import {map, tap} from 'rxjs/operators';
 import { DashboardResult, TeamDashboardResult, PipelineResult,
         InstructionResult, ApplicantResult, Dashboard, Pipeline, Instruction } from './dashboard';
 import { AppConstants } from 'src/app/core/shared/app-constants';
@@ -26,8 +26,8 @@ export class DashboardService {
     return this.get(staffMemberId, role, 'pipeline', period );
   }
 
-  getDashboardInstructions(staffMemberId: number, role: string, period?: string): Observable<Instruction[]> {
-   return this.get(staffMemberId, role, 'instructions', period );
+  getDashboardInstructions(staffMemberId: number, role: string, period?: string, pageSize?: number): Observable<Instruction[]> {
+   return this.get(staffMemberId, role, 'instructions', period, pageSize ).pipe(tap(data => console.log(JSON.stringify(data))));
   }
 
   getDashboardApplicants(staffMemberId: number, role: string): Observable<ApplicantResult> {
@@ -35,8 +35,8 @@ export class DashboardService {
     return this.http.get<ApplicantResult>(url);
   }
 
- private get(staffMemberId: number, role: string, endpoint: string, period?: string): Observable<any> {
-    const url = `${AppConstants.baseUrl}/dashboard/${endpoint}?period=${period}&role=${role}&staffMemberId=${staffMemberId}`;
+ private get(staffMemberId: number, role: string, endpoint: string, period?: string, pageSize: number= 10): Observable<any> {
+    const url = `${AppConstants.baseUrl}/dashboard/${endpoint}?period=${period}&role=${role}&staffMemberId=${staffMemberId}&pageSize=${pageSize}`;
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
 }

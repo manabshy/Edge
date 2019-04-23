@@ -20,9 +20,13 @@ export class DashboardListComponent implements OnInit {
   instructions: Instruction[];
   instructedAddresses: any[];
   applicants: Applicant[];
+  staffMemberId: number;
+
   set selectedPeriod(val: string) {
     this._selectedPeriod = val;
     this.period = this.getSelectedPeriod(this._selectedPeriod);
+    this.getDashboardInstructions(this.staffMemberId, this.role, this.selectedPeriod, 100);
+    console.log('selected period is: ', this.period);
   }
   get selectedPeriod() {
     return this._selectedPeriod;
@@ -43,12 +47,13 @@ export class DashboardListComponent implements OnInit {
     //  this.getDashboardInstructions(staffMemberId, this.role);
     //   console.log(+params.get('id')); });
     this.route.params.subscribe(() => {
-      const staffMemberId = +this.route.snapshot.paramMap.get('id');
-       this.getDashboardInstructions(staffMemberId, this.role, this.selectedPeriod);
+       this.staffMemberId = +this.route.snapshot.paramMap.get('id') || 0;
+       this.getDashboardInstructions(this.staffMemberId, this.role, this.selectedPeriod, 100);
+       console.log('this should not be undefined', this.staffMemberId);
       });
   }
-  getDashboardInstructions(id: number, role: string, period?: string): void {
-    this.dashboardService.getDashboardInstructions(id, role, period)
+  getDashboardInstructions(id: number, role: string, period?: string, pageSize?: number): void {
+    this.dashboardService.getDashboardInstructions(id, role, period, pageSize)
       .subscribe(result => {
         this.instructions = result;
        this.getInstructedAddresses();
@@ -69,7 +74,9 @@ export class DashboardListComponent implements OnInit {
     return periodValue;
   }
   getInstructedAddresses() {
+   if (this.instructions !== null) {
     this.instructedAddresses = Array.from(this.instructions, p => p.propertyAddress);
+   }
   }
 
 }
