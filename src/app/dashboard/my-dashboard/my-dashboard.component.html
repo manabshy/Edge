@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="card">
-      <a class="card-body text-center" [routerLink]="['/list', 2337]">
+      <a class="card-body text-center" [routerLink]="['/list', 2337]" [queryParams]="{periodFilter: periodKey}">
         <h6 class="card-title">Instructions</h6>
         <h4 class="text-secondary">{{ myDashboard.instructions.periodCount }}</h4>
         <p class="card-text"><small class="text-muted">{{ period }}</small></p>

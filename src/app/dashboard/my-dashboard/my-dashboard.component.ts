@@ -9,6 +9,7 @@ import {RoundingPipe} from '../../core/shared/rounding.pipe';
 export class MyDashboardComponent implements OnInit {
 @Input() myDashboard: Dashboard;
 @Input() period: string;
+@Input() periodKey: string;
   constructor() { }
 
   ngOnInit() {
