@@ -28,7 +28,7 @@ export class DiaryComponent implements OnInit {
 
   appUtils = AppUtils;
 
-  constructor(protected fb: FormBuilder, private sharedService: SharedService) { }
+  constructor(protected fb: FormBuilder, protected sharedService: SharedService) { }
 
   ngOnInit() {
     this.setDropup();
