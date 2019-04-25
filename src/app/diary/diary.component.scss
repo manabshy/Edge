@@ -109,12 +109,12 @@
         background-color: theme-color("light");
         padding: spacer(2);
         border-radius: 0;
-        border-top: 1px solid $border-color;
         z-index: 2;
         
         .week &, .day & {
             position: sticky;
             margin-top: -1px;
+            border-top: 1px solid $border-color;
 
             @include media-breakpoint-up("sm") {  
                 top: 0;
@@ -124,7 +124,10 @@
         @include media-breakpoint-down("sm") {
             position: sticky;
             top: $top-bar-height + 54px;
-            margin-top: -1px;
+        }
+
+        @media (max-width: 320px) {
+            top: $top-bar-height + 45px;
         }
     }
     .card-body {
