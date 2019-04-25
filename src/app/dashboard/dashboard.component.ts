@@ -144,4 +144,12 @@ export class DashboardComponent implements OnInit {
         accumulator + currentValue.pipeline.totalFees, initialValue);
     this.totalPipeline = isNaN(pipeline) ? 0 : pipeline;
   }
+
+  // private getTotals(dashboard: any) {
+  //   const initialValue = 0;
+  //    const result = dashboard.reduce(
+  //      (accumulator, currentValue) =>
+  //       accumulator + currentValue, initialValue);
+  //       return result;
+  // }
 }

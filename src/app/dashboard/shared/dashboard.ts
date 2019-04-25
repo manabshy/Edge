@@ -241,3 +241,23 @@ export enum ApiPeriods {
   Year = 'ThisYear',
   All = 'All'
 }
+
+export enum OfferLettingStatus{
+  OfferReceived = 1,
+  OfferNotAgreed = 2,
+  OfferAgreed = 4,
+  FallenThrough = 8,
+  Exchanged = 12,
+  Let = 16,
+  LetEnded = 32
+}
+export enum OfferSaleStatus{
+  OfferReceived = 1,
+  OfferNotAgreed = 2,
+  SaleAgreed = 4,
+  SaleAgreedCR = 8,
+  SaleFallenThrough = 16,
+  Exchanged = 32,
+  Completed = 64,
+  FailedToComplete = 128
+}
