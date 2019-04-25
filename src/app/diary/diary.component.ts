@@ -57,10 +57,12 @@ export class DiaryComponent implements OnInit {
       dayObj['label'] = day.format('ddd D MMM YYYY');
     }
     dayObj['isWeekend'] = day.day() === 0;
-    dayObj['isToday'] = day.isSame(this.today);
+    console.log(day, this.today);
+    console.log(day.isSame(this.today));
+    dayObj['isToday'] = day.isSame(this.today, 'day');
     dayObj['spanClass'] = 'span-' + day.day();
     dayObj['events'] = this.getEvents();
-    dayObj['isClickable'] = day.isAfter(this.today);
+    dayObj['isClickable'] = day.isSame(this.today, 'day') || day.isAfter(this.today, 'day');
 
     return dayObj;
   }
