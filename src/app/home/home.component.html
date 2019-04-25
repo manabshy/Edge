@@ -6,7 +6,7 @@
         <i class="fas fa-th-large"></i><span class="nav-label">Dashboard</span>
       </ng-template>
       <div class="container p-0">
-        <app-dashboard [userResult]='userResult' [staffMemberId]='staffMemberId'></app-dashboard>
+        <app-dashboard *ngIf='currentStaffMember' [currentStaffMember]='currentStaffMember'></app-dashboard>
       </div>
     </tab>
     <tab (select)="onSelect($event)">
@@ -20,7 +20,7 @@
         <i class="fas fa-chalkboard-teacher"></i><span class="nav-label">Leaderboard</span>
       </ng-template>
       <div class="container p-0">
-        <app-leaderboard></app-leaderboard>
+        <app-leaderboard  *ngIf='currentStaffMember' [currentStaffMember]='currentStaffMember'></app-leaderboard>
       </div>
     </tab>
     <tab (select)="onSelect($event)">

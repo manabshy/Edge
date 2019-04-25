@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { AuthService } from '../core/services/auth.service';
 import { UserResult, User } from '../core/models/user';
-import { UserService } from '../core/services/user.service';
+import { StaffMemberService } from '../core/services/staff-member.service';
 
 import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
 import { AppUtils } from '../core/shared/utils';
+import { StaffMember } from '../core/models/staff-member';
 import { SharedService } from '../core/services/shared.service';
 
 @Component({
@@ -13,11 +14,7 @@ import { SharedService } from '../core/services/shared.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  email: string;
-  firstName: string;
-  staffMemberId: number;
-  userResult: UserResult;
-  user: User;
+  currentStaffMember: StaffMember;
   get isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
   }
@@ -26,23 +23,20 @@ export class HomeComponent implements OnInit {
 
   @ViewChild('homeTabs') homeTabs: TabsetComponent;
 
-  constructor(private authService: AuthService, private userService: UserService, private sharedService: SharedService) { }
+  constructor(private authService: AuthService, private staffMemberService: StaffMemberService, private sharedService: SharedService) { }
 
   ngOnInit() {
-    // if (this.authService.isLoggedIn()) {
-    //   this.getUserByEmail(this.authService.getUsername());
-    // }
-
+    this.getCurrentStaffMember();
     if (AppUtils.homeSelectedTab) {
       this.homeTabs.tabs[AppUtils.homeSelectedTab].active = true;
     }
   }
-  getUserByEmail(username: string): void {
-    this.userService.getUserByEmail(username)
+  getCurrentStaffMember(): void {
+    this.staffMemberService.getCurrentStaffMember()
       .subscribe(data => {
-        this.userResult = data;
-        this.email = data.result.email;
-        this.staffMemberId = data.result.staffMemberId;
+        this.currentStaffMember = data;
+        console.log(this.currentStaffMember);
+        console.log(this.currentStaffMember.staffMemberId);
       },
         err => console.log(err)
       );
@@ -53,11 +47,11 @@ export class HomeComponent implements OnInit {
       this.selectedTab = data.tabset.tabs.findIndex(item => item.active);
       AppUtils.homeSelectedTab = this.selectedTab;
       AppUtils.isDiarySearchVisible = false;
-      if(this.selectedTab === 1) {
+      if (this.selectedTab === 1) {
         this.sharedService.scrollTodayIntoView();
         this.sharedService.scrollCurrentHourIntoView();
       } else {
-        window.scrollTo(0,0);
+        window.scrollTo(0, 0);
       }
     });
   }

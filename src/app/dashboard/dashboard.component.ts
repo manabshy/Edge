@@ -6,6 +6,8 @@ import { User, UserResult } from '../core/models/user';
 import { Constants } from '../core/shared/period-list';
 import { TabsetComponent, TabDirective } from 'ngx-bootstrap/tabs/';
 import { AppUtils } from '../core/shared/utils';
+import { StaffMember } from '../core/models/staff-member';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -29,11 +31,11 @@ export class DashboardComponent implements OnInit {
   offerResult: OffersResult;
 
   period: string;
+  periodKey: string;
   email: string;
   firstName: string;
-  @Input() userResult: UserResult;
+  @Input() currentStaffMember: StaffMember;
   user: User;
-  @Input() staffMemberId: number;
   private _selectedPeriod: string;
   periodList = Constants.PeriodList;
   private readonly role = 'salesManager';
@@ -44,6 +46,8 @@ export class DashboardComponent implements OnInit {
   set selectedPeriod(val: string) {
     this._selectedPeriod = val;
     this.period = this.getSelectedPeriod(this._selectedPeriod);
+    this.periodKey = this.getSelectedPeriodKey(this._selectedPeriod);
+    // this.getStaffMemberDashboard(this.staffMember.staffMemberId, this.role, this.selectedPeriod);
     this.getStaffMemberDashboard(2337, this.role, this.selectedPeriod);
     this.getTeamMembersDashboard(2337, this.role, this.selectedPeriod);
     this.getDashboardPipeline(2337, this.role, this.selectedPeriod);
@@ -52,10 +56,13 @@ export class DashboardComponent implements OnInit {
   get selectedPeriod() {
     return this._selectedPeriod;
   }
-  constructor( private dashboardService: DashboardService) { }
+  constructor( private dashboardService: DashboardService, protected route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.selectedPeriod = 'ThisQuarter';
+      this.route.queryParams.subscribe(params =>  {
+      this.selectedPeriod = params['periodFilter'] || 'ThisQuarter';}
+      );
+    console.log('delayed staffMember', this.currentStaffMember);
     if (AppUtils.dashboardSelectedTab) {
       this.dashboardTabs.tabs[AppUtils.dashboardSelectedTab].active = true;
     }
@@ -68,12 +75,6 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  // ngOnChanges(changes: SimpleChanges) {
-  //   if (this.staffMemberId) {
-  //     this.getStaffMemberDashboard(this.staffMemberId, this.salesManager, this.selectedPeriod);
-  //     console.log('from me dashboard ' + this.staffMemberId);
-  //   }
-  // }
   getStaffMemberDashboard(id: number, role: string, period?: string): void {
     this.dashboardService.getStaffMemberDashboard(id, role, period)
       .subscribe(result => {
@@ -104,6 +105,11 @@ export class DashboardComponent implements OnInit {
     const periodArray = this.periodList.filter(x => x.key === val);
     const periodValue = Object.values(periodArray)[0].value;
     return periodValue;
+  }
+  getSelectedPeriodKey(val: string) {
+    const periodArray = this.periodList.filter(x => x.key === val);
+    const periodKey = Object.values(periodArray)[0].key;
+    return periodKey;
   }
   getDashboardTotals(dashboard: Dashboard[]) {
     const initialValue = 0;
@@ -138,4 +144,12 @@ export class DashboardComponent implements OnInit {
         accumulator + currentValue.pipeline.totalFees, initialValue);
     this.totalPipeline = isNaN(pipeline) ? 0 : pipeline;
   }
+
+  // private getTotals(dashboard: any) {
+  //   const initialValue = 0;
+  //    const result = dashboard.reduce(
+  //      (accumulator, currentValue) =>
+  //       accumulator + currentValue, initialValue);
+  //       return result;
+  // }
 }

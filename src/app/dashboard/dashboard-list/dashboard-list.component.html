@@ -6,13 +6,13 @@
     </div>
     <div class="col-auto">
       <div class="form-group">
-        <select class="custom-select">
-          <option>Period</option>
+        <select [(ngModel)]="selectedPeriod" class="custom-select" id="sel1">
+          <option *ngFor='let periodOption of periodList' [value]='periodOption.key'>{{periodOption.value}}</option>
         </select>
       </div>
     </div>
   </div>
-  <app-basic-search [searchResults] = "instructions"  [selectedInstruction]= "selectedInstruction | async"></app-basic-search>
+  <!-- <app-basic-search [searchResults] = "instructions"  [selectedInstruction]= "selectedInstruction | async"></app-basic-search> -->
   <div class="list-group text-left">
     <!-- <div class="list-group-item list-group-item-action pb-1" *ngFor="let item of pipeline;">
           <div class="row align-items-end align-items-sm-center">
@@ -37,6 +37,9 @@
             </div>
           </div>
         </div> -->
+    <div class="text-center text-danger" *ngIf="!instructions">
+      <i class="far fa-sad-tear"></i> No Instructions {{period}}
+   </div>
     <div class="list-group-item list-group-item-action pb-0" *ngFor="let instruction of instructions">
       <div class="row align-items-end align-items-sm-center">
         <div class="col-12 mb-2">
@@ -48,7 +51,7 @@
               {{ instruction.contactGroupAddressee }}
             </div>
             <div class="col-sm-3 mb-2">
-              {{ instruction.salesValue }}
+              {{ instruction.salesValue || instruction.shortLetValue || instruction.longLetValue  | currency: "GBP" }}
             </div>
             <div class="col-sm-3 mb-2">
               {{ instruction.status }}
@@ -56,7 +59,7 @@
           </div>
         </div>
         <div class="col-5 col-sm-3 mb-2 text-right">
-          {{ instruction.instructedDate | date }}
+          {{ instruction.instructedDate | date: 'EEE d MMM y' }}
         </div>
       </div>
     </div>
