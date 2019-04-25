@@ -23,6 +23,7 @@ export class DiaryComponent implements OnInit {
   viewedMonth = this.todayMonth;
   viewedYear = this.todayYear;
   viewMode = 'week';
+  setTodayLabel = 'This ' + this.viewMode;
   monthLabel = dayjs().month(this.viewedMonth).format('MMMM');
 
   appUtils = AppUtils;
@@ -185,12 +186,15 @@ export class DiaryComponent implements OnInit {
     switch(this.viewMode) {
       case 'month':
         this.days = this.getDaysInMonth(this.viewedMonth, this.viewedYear);
+        this.setTodayLabel = 'This ' + this.viewMode;
         break;
       case 'week':
         this.days = this.getDaysInWeek(this.viewedDate);
+        this.setTodayLabel = 'This ' + this.viewMode;
         break;
       default:
         this.days = this.getDay(this.viewedDate);
+        this.setTodayLabel = 'Today';
     }
   }
 
@@ -216,8 +220,8 @@ export class DiaryComponent implements OnInit {
       const counter1 = Math.floor(Math.random() * Math.floor(2));
       event['type'] = counter1;
       event['time'] = '00:00';
-      event['duration'] = Math.random() * Math.floor(3) * 10 + 10 + '%';
-      event['position'] = Math.random() * Math.floor(14) * 10 + '%';
+      event['duration'] = Math.random() * Math.floor(3) * 4.17 + 4.17 + '%';
+      event['position'] = Math.random() * Math.floor(18) * 4.17 + '%';
       event['title'] = 'This is the event title';
       event['color'] = this.getRandomColor();
 

@@ -20,7 +20,7 @@
           <button type="button" class="btn btn-link px-0" (click)="enterView('','month')"><i class="fas fa-chevron-left"></i> {{monthLabel}}</button>
       </div>
       <div class="col-auto d-sm-block pr-2" *ngIf="!appUtils.isDiarySearchVisible" [ngClass]="{'d-none': viewMode == 'day'}">
-        <button type="button" class="btn btn-light" (click)="setToday()">Today</button>
+        <button type="button" class="btn btn-light" (click)="setToday()">{{setTodayLabel}}</button>
       </div>
       <div class="col d-sm-block" *ngIf="!appUtils.isDiarySearchVisible" [ngClass]="{'d-none': viewMode == 'day'}">
         <button type="button" class="btn btn-light" (click)="prevMonth()"><i class="fas fa-chevron-left"></i></button>
@@ -68,7 +68,7 @@
 </div>
 
 <div class="card-grid {{viewMode}}" *ngIf="!appUtils.isDiarySearchVisible">
-  <div class="card" *ngFor="let day of days" class="{{day.spanClass}}"
+  <div class="card" *ngFor="let day of days; first as isFirst" class="{{day.spanClass}}"
     [ngClass]="{'is-weekend': day.isWeekend, 'no-events': !day.events.length && viewMode != 'day', 'is-today': day.isToday }"
     [attr.id]="day.isToday ? 'today' : ''">
     <div class="card-header clearfix" (click)="enterView(day.date, 'day')">
@@ -86,30 +86,30 @@
     </ng-template>
     <div class="card-body" [ngClass]="{'pl-2 pl-lg-1': viewMode !== 'month'}" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">
       <div class="day-grid" *ngIf="viewMode !== 'month'">
-        <div class="border-bottom hour-00" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">00:00</div>
-        <div class="border-bottom hour-01" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">01:00</div>
-        <div class="border-bottom hour-02" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">02:00</div>
-        <div class="border-bottom hour-03" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">03:00</div>
-        <div class="border-bottom hour-04" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">04:00</div>
-        <div class="border-bottom hour-05" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">05:00</div>
-        <div class="border-bottom hour-06" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">06:00</div>
-        <div class="border-bottom hour-07" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">07:00</div>
-        <div class="border-bottom hour-08" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">08:00</div>
-        <div class="border-bottom hour-09" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">09:00</div>
-        <div class="border-bottom hour-10" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">10:00</div>
-        <div class="border-bottom hour-11" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">11:00</div>
-        <div class="border-bottom hour-12" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">12:00</div>
-        <div class="border-bottom hour-13" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">13:00</div>
-        <div class="border-bottom hour-14" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">14:00</div>
-        <div class="border-bottom hour-15" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">15:00</div>
-        <div class="border-bottom hour-16" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">16:00</div>
-        <div class="border-bottom hour-17" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">17:00</div>
-        <div class="border-bottom hour-18" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">18:00</div>
-        <div class="border-bottom hour-19" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">19:00</div>
-        <div class="border-bottom hour-20" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">20:00</div>
-        <div class="border-bottom hour-21" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">21:00</div>
-        <div class="border-bottom hour-22" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">22:00</div>
-        <div class="hour-23" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">23:00</div>
+        <div class="border-bottom hour-00" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">{{isFirst ? '00:00' : ''}}</div>
+        <div class="border-bottom hour-01" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">{{isFirst ? '01:00' : ''}}</div>
+        <div class="border-bottom hour-02" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">{{isFirst ? '02:00' : ''}}</div>
+        <div class="border-bottom hour-03" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">{{isFirst ? '03:00' : ''}}</div>
+        <div class="border-bottom hour-04" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">{{isFirst ? '04:00' : ''}}</div>
+        <div class="border-bottom hour-05" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">{{isFirst ? '05:00' : ''}}</div>
+        <div class="border-bottom hour-06" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">{{isFirst ? '06:00' : ''}}</div>
+        <div class="border-bottom hour-07" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">{{isFirst ? '07:00' : ''}}</div>
+        <div class="border-bottom hour-08" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">{{isFirst ? '08:00' : ''}}</div>
+        <div class="border-bottom hour-09" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">{{isFirst ? '09:00' : ''}}</div>
+        <div class="border-bottom hour-10" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">{{isFirst ? '10:00' : ''}}</div>
+        <div class="border-bottom hour-11" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">{{isFirst ? '11:00' : ''}}</div>
+        <div class="border-bottom hour-12" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">{{isFirst ? '12:00' : ''}}</div>
+        <div class="border-bottom hour-13" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">{{isFirst ? '13:00' : ''}}</div>
+        <div class="border-bottom hour-14" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">{{isFirst ? '14:00' : ''}}</div>
+        <div class="border-bottom hour-15" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">{{isFirst ? '15:00' : ''}}</div>
+        <div class="border-bottom hour-16" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">{{isFirst ? '16:00' : ''}}</div>
+        <div class="border-bottom hour-17" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">{{isFirst ? '17:00' : ''}}</div>
+        <div class="border-bottom hour-18" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">{{isFirst ? '18:00' : ''}}</div>
+        <div class="border-bottom hour-19" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">{{isFirst ? '19:00' : ''}}</div>
+        <div class="border-bottom hour-20" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">{{isFirst ? '20:00' : ''}}</div>
+        <div class="border-bottom hour-21" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">{{isFirst ? '21:00' : ''}}</div>
+        <div class="border-bottom hour-22" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">{{isFirst ? '22:00' : ''}}</div>
+        <div class="hour-23" (click)="$event.stopPropagation()" container="body" [popover]="popTemplate" [containerClass]="day.isClickable ? '' : 'd-none'" [outsideClick]="true">{{isFirst ? '23:00' : ''}}</div>
       </div>
       <div class="row no-gutters event" [tooltip]="event.title" [ngClass]="{'mb-2': !isLast}" [ngStyle]="{'background-color': event.color, 'height': event.duration, 'top': event.position}" *ngFor="let event of day?.events; last as isLast">
         <span class="color" [ngStyle]="{'background': event.color}" *ngIf="viewMode === 'month'"></span>
