@@ -21,6 +21,7 @@ export class AddDiaryEventComponent extends DiaryComponent implements OnInit {
   }
 
   ngOnInit() {
+    window.scrollTo(0,0);
     super.ngOnInit();
     this.eventTypes.push(...valuationDiaryEventTypes);
     this.eventTypes.push(...baseDiaryEventTypes);

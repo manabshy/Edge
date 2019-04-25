@@ -4,6 +4,7 @@ import { DiaryEvent, newEventForm, DiaryEventTypesEnum, newPropertyForm } from '
 import { AppUtils } from '../core/shared/utils';
 import { addHours , format} from 'date-fns';
 import * as dayjs from 'dayjs';
+import { SharedService } from '../core/services/shared.service';
 
 @Component({
   selector: 'app-diary',
@@ -26,7 +27,7 @@ export class DiaryComponent implements OnInit {
 
   appUtils = AppUtils;
 
-  constructor(protected fb: FormBuilder) { }
+  constructor(protected fb: FormBuilder, private sharedService: SharedService) { }
 
   ngOnInit() {
     this.setDropup();
@@ -101,6 +102,9 @@ export class DiaryComponent implements OnInit {
         this.makeDayObj(firstDate)
       );
     }
+
+    this.sharedService.scrollCurrentHourIntoView();
+
     return week;
   }
 
@@ -112,6 +116,8 @@ export class DiaryComponent implements OnInit {
     this.viewedDate = curr;
     this.viewedMonth = curr.month();
     this.viewedYear = curr.year();
+
+    this.sharedService.scrollCurrentHourIntoView();
 
     return day;
   }
@@ -157,15 +163,6 @@ export class DiaryComponent implements OnInit {
     this.viewedMonth = this.todayMonth;
     this.viewedYear = this.todayYear;
 
-    if (window.innerWidth < 576) {
-      if(this.viewMode !== 'day'){
-        this.viewMode = 'month';
-        setTimeout(() => {
-          document.getElementById('today').scrollIntoView({block: 'center'});
-        });
-      }
-    }
-
     this.changeView();
   }
 
@@ -177,6 +174,13 @@ export class DiaryComponent implements OnInit {
   }
 
   changeView() {
+    if (window.innerWidth < 576) {
+      if(this.viewMode !== 'day'){
+        this.viewMode = 'month';
+        
+        this.sharedService.scrollTodayIntoView();
+      }
+    }
 
     switch(this.viewMode) {
       case 'month':
@@ -212,6 +216,8 @@ export class DiaryComponent implements OnInit {
       const counter1 = Math.floor(Math.random() * Math.floor(2));
       event['type'] = counter1;
       event['time'] = '00:00';
+      event['duration'] = Math.random() * Math.floor(3) * 10 + 10 + '%';
+      event['position'] = Math.random() * Math.floor(14) * 10 + '%';
       event['title'] = 'This is the event title';
       event['color'] = this.getRandomColor();
 

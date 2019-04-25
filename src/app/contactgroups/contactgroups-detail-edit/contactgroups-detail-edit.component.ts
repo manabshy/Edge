@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SharedService } from 'src/app/core/services/shared.service';
 
 @Component({
   selector: 'app-contactgroups-detail-edit',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ContactgroupsDetailEditComponent implements OnInit {
 
-  constructor() { }
+  constructor(public sharedService: SharedService) { }
 
   ngOnInit() {
+  }
+
+  cancel() {
+    this.sharedService.back();
   }
 
 }

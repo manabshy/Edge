@@ -100,15 +100,23 @@
     .card-header {
         background-color: theme-color("light");
         padding: spacer(2);
-        @include media-breakpoint-down("sm") {
-            position: sticky;
-            top: $top-bar-height + 45px;
-            z-index: 2;
+        
+        .month & {
+            @include media-breakpoint-down("sm") {
+                position: sticky;
+                top: $top-bar-height + 45px;
+                z-index: 2;
+            }
         }
     }
     .card-body {
         padding: spacer(2) spacer(1);
         padding-left: 0.8rem;
+
+        .day &, .week & {
+            overflow: auto;
+            position: relative;
+        }
 
         @include media-breakpoint-down("sm") {
             padding: spacer(2);
@@ -133,8 +141,35 @@
     padding-right: 0;
 }
 
+.day-grid {
+    position: absolute;
+    top: auto;
+    left: 0;
+    right: 0;
+    height: calc(100% - 45px);
+
+    & > div {
+        height: 10%;
+        padding: 0 spacer(1);
+        opacity: 0.5;
+    }
+}
+
 .event {
     position: relative;
+
+    .month & {
+        background-color: transparent!important;
+        height: auto!important;
+        top: auto!important;
+    }
+
+    .day &, .week & {
+        padding: spacer(1);
+        @include border-radius(spacer(1));
+        color: color("white");
+    }
+
     .color {
         position: absolute;
         display: block;

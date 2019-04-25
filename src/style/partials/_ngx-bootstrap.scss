@@ -21,6 +21,10 @@ bs-datepicker-container {
         opacity: 0;
     }
 
+    .bs-datepicker-container {
+        padding: 0;
+    }
+
     .bs-datepicker-head {
         height: 55px;
         .current {

@@ -6,6 +6,7 @@ import { StaffMemberService } from '../core/services/staff-member.service';
 import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
 import { AppUtils } from '../core/shared/utils';
 import { StaffMember } from '../core/models/staff-member';
+import { SharedService } from '../core/services/shared.service';
 
 @Component({
   selector: 'app-home',
@@ -22,7 +23,7 @@ export class HomeComponent implements OnInit {
 
   @ViewChild('homeTabs') homeTabs: TabsetComponent;
 
-  constructor(private authService: AuthService, private userService: StaffMemberService) { }
+  constructor(private authService: AuthService, private staffMemberService: StaffMemberService, private sharedService: SharedService) { }
 
   ngOnInit() {
     this.getCurrentStaffMember();
@@ -31,7 +32,7 @@ export class HomeComponent implements OnInit {
     }
   }
   getCurrentStaffMember(): void {
-    this.userService.getCurrentStaffMember()
+    this.staffMemberService.getCurrentStaffMember()
       .subscribe(data => {
         this.currentStaffMember = data;
         console.log(this.currentStaffMember);
@@ -46,12 +47,11 @@ export class HomeComponent implements OnInit {
       this.selectedTab = data.tabset.tabs.findIndex(item => item.active);
       AppUtils.homeSelectedTab = this.selectedTab;
       AppUtils.isDiarySearchVisible = false;
-      if (window.innerWidth < 576) {
-        if (document.getElementById('today') && this.selectedTab === 1) {
-          document.getElementById('today').scrollIntoView({block: 'center'});
-        } else {
-          window.scrollTo(0, 0);
-        }
+      if (this.selectedTab === 1) {
+        this.sharedService.scrollTodayIntoView();
+        this.sharedService.scrollCurrentHourIntoView();
+      } else {
+        window.scrollTo(0, 0);
       }
     });
   }
