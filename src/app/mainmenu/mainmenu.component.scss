@@ -43,6 +43,8 @@
     top: 0;
     left: 0;
     width: $side-nav-width;
+    height: calc(100vh - 205px);
+    overflow: auto;
 
     @include media-breakpoint-down(md){
         right: 0;
@@ -51,6 +53,13 @@
         padding-bottom: 1rem;
         min-height: $top-bar-height;
         width: 100%;
+        max-height: 100vh;
+    }
+
+    .navbar-collapse {
+        @include media-breakpoint-up(lg){
+            align-items: flex-start;
+        }
     }
 }
 
@@ -105,5 +114,18 @@
 
     @include media-breakpoint-up(lg){
         display: none;
+    }
+}
+
+.user-menu {
+    text-align: center;
+    padding-top: spacer(3);
+
+    @include media-breakpoint-up(lg){
+        position: fixed;
+        left: auto;
+        bottom: 0;
+        width: $side-nav-width - $grid-gutter-width;
+        background-color: theme-color("dark");
     }
 }

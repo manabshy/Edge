@@ -23,11 +23,12 @@ export class DiaryComponent implements OnInit {
   viewedMonth = this.todayMonth;
   viewedYear = this.todayYear;
   viewMode = 'week';
+  setTodayLabel = 'This ' + this.viewMode;
   monthLabel = dayjs().month(this.viewedMonth).format('MMMM');
 
   appUtils = AppUtils;
 
-  constructor(protected fb: FormBuilder, private sharedService: SharedService) { }
+  constructor(protected fb: FormBuilder, protected sharedService: SharedService) { }
 
   ngOnInit() {
     this.setDropup();
@@ -56,10 +57,12 @@ export class DiaryComponent implements OnInit {
       dayObj['label'] = day.format('ddd D MMM YYYY');
     }
     dayObj['isWeekend'] = day.day() === 0;
-    dayObj['isToday'] = day.date() === this.today.date() && day.month() === this.todayMonth && day.year() === this.todayYear;
+    console.log(day, this.today);
+    console.log(day.isSame(this.today));
+    dayObj['isToday'] = day.isSame(this.today, 'day');
     dayObj['spanClass'] = 'span-' + day.day();
     dayObj['events'] = this.getEvents();
-    dayObj['isClickable'] = day.date() >= this.today.date();
+    dayObj['isClickable'] = day.isSame(this.today, 'day') || day.isAfter(this.today, 'day');
 
     return dayObj;
   }
@@ -185,12 +188,15 @@ export class DiaryComponent implements OnInit {
     switch(this.viewMode) {
       case 'month':
         this.days = this.getDaysInMonth(this.viewedMonth, this.viewedYear);
+        this.setTodayLabel = 'This ' + this.viewMode;
         break;
       case 'week':
         this.days = this.getDaysInWeek(this.viewedDate);
+        this.setTodayLabel = 'This ' + this.viewMode;
         break;
       default:
         this.days = this.getDay(this.viewedDate);
+        this.setTodayLabel = 'Today';
     }
   }
 
@@ -216,8 +222,8 @@ export class DiaryComponent implements OnInit {
       const counter1 = Math.floor(Math.random() * Math.floor(2));
       event['type'] = counter1;
       event['time'] = '00:00';
-      event['duration'] = Math.random() * Math.floor(3) * 10 + 10 + '%';
-      event['position'] = Math.random() * Math.floor(14) * 10 + '%';
+      event['duration'] = Math.random() * Math.floor(3) * 4.17 + 4.17 + '%';
+      event['position'] = Math.random() * Math.floor(18) * 4.17 + '%';
       event['title'] = 'This is the event title';
       event['color'] = this.getRandomColor();
 

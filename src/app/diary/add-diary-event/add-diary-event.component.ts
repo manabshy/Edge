@@ -16,8 +16,8 @@ export class AddDiaryEventComponent extends DiaryComponent implements OnInit {
   public childItems: any[] = [];
 
 
-  constructor(protected fb: FormBuilder, private sharedService: SharedService) {
-    super(fb);
+  constructor(protected fb: FormBuilder, protected sharedService: SharedService) {
+    super(fb, sharedService);
   }
 
   ngOnInit() {
