@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 
 import { DashboardService } from './shared/dashboard.service';
-import { Dashboard, DashboardResult, TeamDashboardResult, DashboardTotals, OffersResult, Pipeline, Instruction } from './shared/dashboard';
+import { Dashboard, DashboardResult, TeamDashboardResult, DashboardTotals, OffersResult, Pipeline, Instruction, Tiles, SalesManagerTiles } from './shared/dashboard';
 import { User, UserResult } from '../core/models/user';
 import { Constants } from '../core/shared/period-list';
 import { TabsetComponent, TabDirective } from 'ngx-bootstrap/tabs/';
@@ -39,10 +39,15 @@ export class DashboardComponent implements OnInit {
   private _selectedPeriod: string;
   periodList = Constants.PeriodList;
   private readonly role = 'salesManager';
-
+   valuationTile: Tiles = Tiles.Valuations;
   @ViewChild('dashboardTabs') dashboardTabs: TabsetComponent;
   selectedTab: number;
-
+  get valuations(): string {
+    return this.valuationTile = Tiles.Valuations;
+  }
+  get isValuation(): boolean {
+    return this.valuationTile === Tiles.Valuations;
+  }
   set selectedPeriod(val: string) {
     this._selectedPeriod = val;
     this.period = this.getSelectedPeriod(this._selectedPeriod);
@@ -60,9 +65,11 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
       this.route.queryParams.subscribe(params =>  {
-      this.selectedPeriod = params['periodFilter'] || 'ThisQuarter';}
+      this.selectedPeriod = params['periodFilter'] || 'ThisQuarter'; }
       );
-    console.log('delayed staffMember', this.currentStaffMember);
+    console.log('tile condition', this.isValuation);
+    console.log('tile name', this.valuations);
+    console.log('tile type', this.valuationTile);
     if (AppUtils.dashboardSelectedTab) {
       this.dashboardTabs.tabs[AppUtils.dashboardSelectedTab].active = true;
     }

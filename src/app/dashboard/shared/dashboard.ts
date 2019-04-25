@@ -72,18 +72,6 @@ export interface ApplicantResult extends ResultData {
 //   shortLetValue: number;
 // }
 
-export enum InstructionStatus {
-  All = 'All',
-  Relet = 'ReLet',
-  New = 'New'
-}
-
-export enum OfferStatus {
-  All = 'All',
-  OffersAgreed = 'OffersAgreed',
-  OffersReceived = 'OffersReceived'
-}
-
 export interface Applicant {
   contactGroupId: number;
   contactGroupAddressee: string;
@@ -233,6 +221,133 @@ export interface BDTicketHistory {
   propertySaleId: number;
   propertySaleStatus: string;
 }
+
+
+export enum Tiles {
+  AllInstructions = 'All Instructions',
+  Applicants = 'All applicants',
+  BusinessDevelopment = 'Business Development',
+  Exchanges = 'Exchanges',
+  Instructions = 'Instructions',
+  LiveTenancies = 'Live Tenancies',
+  Managed = 'Managed',
+  NewInstructions = 'New Instructions',
+  OffersAgreed = 'Offers Agreed',
+  OffersReceived = 'Offers Received',
+  Pipeline = 'Pipeline',
+  ReletInstructions = 'Relet Instructions',
+  Valuations = 'Valuations',
+  Viewings = 'Viewings',
+}
+
+export enum InstructionStatus {
+  All = 'All',
+  Relet = 'ReLet',
+  New = 'New'
+}
+
+export enum OfferStatus {
+  All = 'All',
+  OffersAgreed = 'OffersAgreed',
+  OffersReceived = 'OffersReceived'
+}
+
+  /**
+   * Tiles available to the sales manager
+   */
+  export const SalesManagerTiles = [
+    [
+      Tiles.Valuations,
+      Tiles.Instructions,
+    ],
+    [
+      Tiles.BusinessDevelopment,
+      Tiles.AllInstructions
+    ],
+    [
+      Tiles.Exchanges,
+      Tiles.Pipeline
+    ]
+  ];
+
+  /**
+   * Available team metrics for the sales manager
+   */
+  export const SalesManagerTeamTiles = [
+    Tiles.Valuations,
+    Tiles.Instructions,
+    Tiles.BusinessDevelopment,
+    Tiles.AllInstructions,
+    Tiles.Exchanges,
+    Tiles.Pipeline,
+
+  ];
+
+  /**
+   * Tiles available to the lettings manager
+   */
+  export const LettingsManagerTiles = [
+    [
+      Tiles.Valuations,
+      Tiles.NewInstructions,
+      Tiles.ReletInstructions
+    ],
+    [
+      Tiles.BusinessDevelopment,
+      Tiles.AllInstructions
+    ],
+    [
+      Tiles.Exchanges,
+      Tiles.Pipeline
+    ],
+    [
+      Tiles.LiveTenancies
+    ]
+  ];
+
+  /**
+   * Available metrics for the lettings manager
+   */
+  export const LettingsManagerTeamTiles = [
+    Tiles.Valuations,
+    Tiles.NewInstructions,
+    Tiles.ReletInstructions,
+    Tiles.BusinessDevelopment,
+    Tiles.AllInstructions,
+    Tiles.Exchanges,
+    Tiles.Pipeline,
+    Tiles.LiveTenancies,
+  ];
+
+  /**
+   * Tiles available to the negotiator
+   */
+  export const NegotiatorTiles = [
+    [
+      Tiles.Applicants,
+      Tiles.Viewings
+    ],
+    [
+      Tiles.OffersReceived,
+      Tiles.OffersAgreed
+    ],
+    [
+      Tiles.Exchanges,
+      Tiles.Pipeline
+    ]
+  ];
+
+  /**
+   * Available metrics for the lettings manager
+   */
+  export const NegotiatorTeamTiles = [
+    Tiles.Applicants,
+    Tiles.Viewings,
+    Tiles.OffersReceived,
+    Tiles.OffersAgreed,
+    Tiles.Exchanges,
+    Tiles.Pipeline,
+  ];
 
 export enum ApiPeriods {
   Week = 'ThisWeek',
