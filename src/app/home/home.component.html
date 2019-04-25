@@ -6,6 +6,9 @@
         <i class="fas fa-th-large"></i><span class="nav-label">Dashboard</span>
       </ng-template>
       <div class="container p-0">
+        <div class="text-center" *ngIf="!currentStaffMember">
+          <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...
+        </div>
         <app-dashboard *ngIf='currentStaffMember' [currentStaffMember]='currentStaffMember'></app-dashboard>
       </div>
     </tab>
@@ -20,6 +23,9 @@
         <i class="fas fa-chalkboard-teacher"></i><span class="nav-label">Leaderboard</span>
       </ng-template>
       <div class="container p-0">
+        <div class="text-center" *ngIf="!currentStaffMember">
+          <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...
+        </div>
         <app-leaderboard  *ngIf='currentStaffMember' [currentStaffMember]='currentStaffMember'></app-leaderboard>
       </div>
     </tab>
