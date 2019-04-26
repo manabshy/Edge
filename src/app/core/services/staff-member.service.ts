@@ -10,12 +10,17 @@ import { StaffMember, StaffMemberResult } from '../models/staff-member';
   providedIn: 'root'
 })
 export class StaffMemberService {
+  get currentStaffMember() {
+    const member = localStorage.getItem('currentUser');
+    return JSON.parse(member);
+  }
   constructor(private http: HttpClient, private authService: AuthService) { }
 
   public getCurrentStaffMember(): Observable<StaffMember> {
     return this.http.get<StaffMemberResult>(`${AppConstants.baseUrl}/currentUser`)
     .pipe(
       map(response => response.result),
+      tap(data => localStorage.setItem('currentUser', JSON.stringify(data))),
       tap(data => console.log(JSON.stringify(data)))
    );
   }
