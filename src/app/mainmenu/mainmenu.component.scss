@@ -43,7 +43,7 @@
     top: 0;
     left: 0;
     width: $side-nav-width;
-    max-height: calc(100vh - 205px);
+    max-height: calc(100vh - 230px);
     overflow: auto;
 
     @include media-breakpoint-down(md){
@@ -127,5 +127,12 @@
         bottom: 0;
         width: $side-nav-width - $grid-gutter-width;
         background-color: theme-color("dark");
+    }
+
+    .role {
+        @include media-breakpoint-up(lg){
+            @include text-truncate();
+            display: block;
+        }
     }
 }
