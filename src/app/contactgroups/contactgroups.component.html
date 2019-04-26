@@ -1,6 +1,22 @@
 <app-breadcrumb></app-breadcrumb>
 <div class="container">
-  <h4 class="page-title">Contact centre</h4>
+  <div class="row page-title">
+    <div class="col">
+      <h4 class="m-0">Contact centre</h4>
+    </div>
+    <div class="col-auto">
+      <div class="btn-group" dropdown placement="bottom right">
+        <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
+          aria-controls="dropdown-basic">
+          Actions <span class="caret"></span>
+        </button>
+        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-basic">
+          <li role="menuitem"><a class="dropdown-item" routerLink="/home">New Contact Group</a></li>
+          <li role="menuitem"><a class="dropdown-item" routerLink="/home">New Company</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
   <div class="row">
     <div class="col">
       <div class="input-group">

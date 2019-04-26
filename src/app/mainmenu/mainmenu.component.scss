@@ -43,7 +43,7 @@
     top: 0;
     left: 0;
     width: $side-nav-width;
-    height: calc(100vh - 205px);
+    max-height: calc(100vh - 205px);
     overflow: auto;
 
     @include media-breakpoint-down(md){
