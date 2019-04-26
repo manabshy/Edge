@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
 import { FormGroup, FormArray, Validators, FormBuilder } from '@angular/forms';
 import { DiaryEvent, newEventForm, DiaryEventTypesEnum, newPropertyForm } from './shared/diary';
 import { AppUtils } from '../core/shared/utils';
 import { addHours , format} from 'date-fns';
 import * as dayjs from 'dayjs';
 import { SharedService } from '../core/services/shared.service';
+import { PopoverDirective } from 'ngx-bootstrap/popover';
 
 @Component({
   selector: 'app-diary',
@@ -25,6 +26,7 @@ export class DiaryComponent implements OnInit {
   viewMode = 'week';
   setTodayLabel = 'This ' + this.viewMode;
   monthLabel = dayjs().month(this.viewedMonth).format('MMMM');
+  @ViewChildren(PopoverDirective) popovers: QueryList<PopoverDirective>;
 
   appUtils = AppUtils;
 
@@ -35,6 +37,16 @@ export class DiaryComponent implements OnInit {
     this.diaryEventForm = newEventForm();
     this.patchDateTime();
     this.setToday();
+  }
+
+  ngAfterViewInit() {
+    this.popovers.forEach((popover: PopoverDirective) => {
+      popover.onShown.subscribe(() => {
+        this.popovers
+        .filter(p => p !== popover)
+        .forEach(p => p.hide());
+      });
+    });
   }
 
   setDropup() {
