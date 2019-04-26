@@ -14,6 +14,7 @@ import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DiaryComponent } from './diary/diary.component';
 import { AuthGuardService } from './core/services/auth-guard.service';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 const routes: Routes = [
   { path: '', canActivate: [AuthGuardService], children: [
@@ -30,7 +31,8 @@ const routes: Routes = [
     { path: 'leaderboard', component: LeaderboardComponent },
     // { path: 'dashboard', component: DashboardComponent },
     { path: 'diary', component: DiaryComponent },
-  ] }
+  ] },
+  { path: '**', component: NotFoundComponent }
 ];
 
 @NgModule({

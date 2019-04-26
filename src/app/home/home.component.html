@@ -7,7 +7,7 @@
       </ng-template>
       <div class="container p-0">
         <div class="text-center" *ngIf="!currentStaffMember">
-          <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...
+          <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading dashboard ...
         </div>
         <app-dashboard *ngIf='currentStaffMember' [currentStaffMember]='currentStaffMember'></app-dashboard>
       </div>
@@ -24,7 +24,7 @@
       </ng-template>
       <div class="container p-0">
         <div class="text-center" *ngIf="!currentStaffMember">
-          <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...
+          <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading leaderboard ...
         </div>
         <app-leaderboard  *ngIf='currentStaffMember' [currentStaffMember]='currentStaffMember'></app-leaderboard>
       </div>

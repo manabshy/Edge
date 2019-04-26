@@ -37,6 +37,7 @@ import { FormsModule } from '@angular/forms';
 import { PropertyModule } from './property/property.module';
 import { ContactgroupsModule } from './contactgroups/contactgroups.module';
 import { DiaryModule } from './diary/diary.module';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 
 @NgModule({
@@ -68,18 +69,19 @@ import { DiaryModule } from './diary/diary.module';
     SendEdetailsComponent,
     PropertyChecklistLettingComponent,
     PropertyChecklistItemComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     AccountModule,
     CoreModule,
-    AppRoutingModule,
     DashboardModule,
     LeaderboardModule,
     PropertyModule,
     ContactgroupsModule,
-    DiaryModule
+    DiaryModule,
+    AppRoutingModule
   ],
   exports: [
     MainmenuComponent
