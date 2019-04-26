@@ -67,9 +67,7 @@ export class DashboardComponent implements OnInit {
       this.route.queryParams.subscribe(params =>  {
       this.selectedPeriod = params['periodFilter'] || 'ThisQuarter'; }
       );
-    console.log('tile condition', this.isValuation);
-    console.log('tile name', this.valuations);
-    console.log('tile type', this.valuationTile);
+
     if (AppUtils.dashboardSelectedTab) {
       this.dashboardTabs.tabs[AppUtils.dashboardSelectedTab].active = true;
     }
