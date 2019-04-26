@@ -8,7 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-dashboard-list',
   templateUrl: './dashboard-list.component.html',
-  styleUrls: ['./dashboard-list.component.css']
+  styleUrls: ['./dashboard-list.component.scss']
 })
 export class DashboardListComponent implements OnInit {
   private _selectedPeriod: string;
