@@ -36,16 +36,15 @@ export class DashboardListComponent implements OnInit {
   constructor( private dashboardService: DashboardService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.staffMemberId = 0;
     this.route.queryParams.subscribe(params =>  {
       this.selectedPeriod = params['periodFilter'] || 'ThisQuarter';
       this.isValuation = params['isValuation'];  } );
 
     this.route.params.subscribe(() => {
-       this.staffMemberId = +this.route.snapshot.paramMap.get('id') || 0;
-       this.getDashboardInstructions(this.staffMemberId, this.role, this.selectedPeriod, 100);
-       this.getDashboardValuations(this.staffMemberId, this.role, this.selectedPeriod, 100);
-      });
+      this.staffMemberId = +this.route.snapshot.paramMap.get('id') || 0;
+    });
+    this.getDashboardInstructions(this.staffMemberId, this.role, this.selectedPeriod, 100);
+    this.getDashboardValuations(this.staffMemberId, this.role, this.selectedPeriod, 100);
   }
   getDashboardInstructions(id: number, role: string, period?: string, pageSize?: number): void {
     this.dashboardService.getDashboardInstructions(id, role, period, pageSize)
