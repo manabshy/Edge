@@ -14,7 +14,7 @@
   </div>
   <ng-container *ngIf="isValuation; then valuationsList; else instructionsList">
   </ng-container>
-   <ng-template #instructionsList>
+  <ng-template #instructionsList>
       <div class="list-group text-left">
         <div class="text-center text-danger" *ngIf="!instructions">
           <i class="far fa-sad-tear"></i> No Instructions {{period}}
@@ -43,7 +43,7 @@
           </div>
         </div>
       </div>
-   </ng-template>
+  </ng-template>
   <ng-template #valuationsList>
     <div class="list-group text-left">
       <div class="text-center text-danger" *ngIf="!valuations">
