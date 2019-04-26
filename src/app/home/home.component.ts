@@ -26,20 +26,10 @@ export class HomeComponent implements OnInit {
   constructor(private authService: AuthService, private staffMemberService: StaffMemberService, private sharedService: SharedService) { }
 
   ngOnInit() {
-    this.getCurrentStaffMember();
+    this.currentStaffMember = this.staffMemberService.currentStaffMember;
     if (AppUtils.homeSelectedTab) {
       this.homeTabs.tabs[AppUtils.homeSelectedTab].active = true;
     }
-  }
-  getCurrentStaffMember(): void {
-    this.staffMemberService.getCurrentStaffMember()
-      .subscribe(data => {
-        this.currentStaffMember = data;
-        console.log(this.currentStaffMember);
-        console.log(this.currentStaffMember.staffMemberId);
-      },
-        err => console.log(err)
-      );
   }
 
   onSelect(data: TabDirective): void {
