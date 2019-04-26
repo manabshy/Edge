@@ -14,6 +14,17 @@
     @include media-breakpoint-up(lg){
         min-width: $side-nav-width;
         max-width: $side-nav-width;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        z-index: 1;
+    }
+
+    + div {
+        @include media-breakpoint-up(lg){
+            padding-left: $side-nav-width;
+        }
     }
 }
 
