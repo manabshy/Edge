@@ -12,56 +12,66 @@
       </div>
     </div>
   </div>
-  <!-- <app-basic-search [searchResults] = "instructions"  [selectedInstruction]= "selectedInstruction | async"></app-basic-search> -->
-  <div class="list-group text-left">
-    <!-- <div class="list-group-item list-group-item-action pb-1" *ngFor="let item of pipeline;">
+  <ng-container *ngIf="isValuation; then valuationsList; else instructionsList">
+  </ng-container>
+   <ng-template #instructionsList>
+      <div class="list-group text-left">
+        <div class="text-center text-danger" *ngIf="!instructions">
+          <i class="far fa-sad-tear"></i> No Instructions {{period}}
+       </div>
+        <div class="list-group-item list-group-item-action pb-0" *ngFor="let instruction of instructions">
           <div class="row align-items-end align-items-sm-center">
             <div class="col-12 mb-2">
-              <strong>{{ item.propertyAddress }}</strong>
+              <strong>{{ instruction.propertyAddress }}</strong>
             </div>
             <div class="col-7 col-sm-9">
               <div class="row align-items-center">
                 <div class="col-sm-6 mb-2">
-                  {{ item.contactGroupAddressee }}
+                  {{ instruction.contactGroupAddressee }}
                 </div>
                 <div class="col-sm-3 mb-2">
-                  {{ item.commissionFees }}
+                  {{ instruction.salesValue || instruction.shortLetValue || instruction.longLetValue  | currency: "GBP" }}
                 </div>
                 <div class="col-sm-3 mb-2">
-                  {{ item.propertyStatus }}
+                  {{ instruction.status }}
                 </div>
               </div>
             </div>
             <div class="col-5 col-sm-3 mb-2 text-right">
-              {{ item.offerAgreedDate | date }}
-            </div>
-          </div>
-        </div> -->
-    <div class="text-center text-danger" *ngIf="!instructions">
-      <i class="far fa-sad-tear"></i> No Instructions {{period}}
-   </div>
-    <div class="list-group-item list-group-item-action pb-0" *ngFor="let instruction of instructions">
-      <div class="row align-items-end align-items-sm-center">
-        <div class="col-12 mb-2">
-          <strong>{{ instruction.propertyAddress }}</strong>
-        </div>
-        <div class="col-7 col-sm-9">
-          <div class="row align-items-center">
-            <div class="col-sm-6 mb-2">
-              {{ instruction.contactGroupAddressee }}
-            </div>
-            <div class="col-sm-3 mb-2">
-              {{ instruction.salesValue || instruction.shortLetValue || instruction.longLetValue  | currency: "GBP" }}
-            </div>
-            <div class="col-sm-3 mb-2">
-              {{ instruction.status }}
+              {{ instruction.instructedDate | date: 'EEE d MMM y' }}
             </div>
           </div>
         </div>
-        <div class="col-5 col-sm-3 mb-2 text-right">
-          {{ instruction.instructedDate | date: 'EEE d MMM y' }}
+      </div>
+   </ng-template>
+  <ng-template #valuationsList>
+    <div class="list-group text-left">
+      <div class="text-center text-danger" *ngIf="!valuations">
+        <i class="far fa-sad-tear"></i> No valuations {{period}}
+     </div>
+      <div class="list-group-item list-group-item-action pb-0" *ngFor="let valuation of valuations">
+        <div class="row align-items-end align-items-sm-center">
+          <div class="col-12 mb-2">
+            <strong>{{ valuation.propertyAddress }}</strong>
+          </div>
+          <div class="col-7 col-sm-9">
+            <div class="row align-items-center">
+              <div class="col-sm-3 mb-2">
+              Sales:  {{ valuation?.salesValue | currency: "GBP" }}
+              </div>
+              <div class="col-sm-3 mb-2">
+              Lettings:  {{ valuation?.shortLetValue || valuation?.longLetValue  | currency: "GBP" }}
+              </div>
+              <div class="col-sm-3 mb-2">
+                {{ valuation.saleStatus || valuation.saleStatus }}
+              </div>
+            </div>
+          </div>
+          <div class="col-5 col-sm-3 mb-2 text-right">
+            {{ valuation.valuationDate | date: 'EEE d MMM y' }}
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </ng-template>
 </div>
