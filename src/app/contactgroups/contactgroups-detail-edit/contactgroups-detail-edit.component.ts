@@ -11,6 +11,8 @@ countries: any;
 titles: any;
 telephoneTypes: any;
 listInfo: any;
+titleSelected: number = 1;
+coutrySelected: number = 232;
 
   constructor(public sharedService: SharedService) { }
 

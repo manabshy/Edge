@@ -107,3 +107,12 @@ dl {
         @include make-col(6);
     }
 }
+
+.input-group {
+    input + select {
+        @include media-breakpoint-down(sm) {
+            flex: 0 0 auto!important;
+            width: auto!important;
+        }
+    }
+}
