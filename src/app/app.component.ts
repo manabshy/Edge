@@ -34,8 +34,6 @@ export class AppComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit() {
-  this.sharedService.getDropdownListInfo().subscribe();
-  this.staffMemberService.getCurrentStaffMember().subscribe();
   }
 
   ngAfterViewChecked() {
