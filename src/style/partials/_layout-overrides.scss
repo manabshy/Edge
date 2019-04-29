@@ -80,7 +80,7 @@ tr:first-child{
 
 .list-group-item {
 
-    &.list-header + .list-group-item {
+    .card-body &.list-header + .list-group-item {
         @include media-breakpoint-down(sm){
             border-top: 0;
         }
