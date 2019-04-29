@@ -13,6 +13,7 @@ telephoneTypes: any;
 listInfo: any;
 titleSelected: number = 1;
 coutrySelected: number = 232;
+public keepOriginalOrder = (a, b) => a.key
 
   constructor(public sharedService: SharedService) { }
 
