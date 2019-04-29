@@ -11,6 +11,7 @@ countries: any;
 titles: any;
 telephoneTypes: any;
 listInfo: any;
+public keepOriginalOrder = (a, b) => a.key
 
   constructor(public sharedService: SharedService) { }
 

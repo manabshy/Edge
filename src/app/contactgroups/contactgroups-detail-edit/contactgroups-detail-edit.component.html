@@ -6,7 +6,7 @@
       <label for="title" class="col-sm-2 col-form-label col-form-label-sm">Title</label>
       <div class="col-sm-3">
         <select class="custom-select custom-select-sm" id="title">
-          <option selected *ngFor="let title of titles | keyvalue" [value]=title.key>{{title.value}}</option>
+          <option *ngFor="let title of titles | keyvalue:keepOriginalOrder" [value]=title.key>{{title.value}}</option>
         </select>
       </div>
     </div>
@@ -59,7 +59,7 @@
       <label for="country" class="col-sm-2 col-form-label col-form-label-sm">Country</label>
       <div class="col-sm-3">
         <select class="custom-select custom-select-sm" id="country">
-          <option selected *ngFor="let country of countries | keyvalue" [value]=country.key>{{country.value}}</option>
+          <option *ngFor="let country of countries | keyvalue:keepOriginalOrder" [value]=country.key>{{country.value}}</option>
         </select>
       </div>
     </div>
@@ -76,7 +76,7 @@
         <div class="input-group input-group-sm">
           <input type="text" class="form-control" id="phone" placeholder="">
           <select class="custom-select" id="phoneType">
-            <option selected *ngFor="let telephoneType of telephoneTypes | keyvalue" [value] = telephoneType.key>{{telephoneType.value}}</option>
+            <option *ngFor="let telephoneType of telephoneTypes | keyvalue:keepOriginalOrder" [value] = telephoneType.key>{{telephoneType.value}}</option>
           </select>
           <div class="input-group-append">
             <button type="button" class="btn btn-light active" data-toggle="button" aria-pressed="true"
