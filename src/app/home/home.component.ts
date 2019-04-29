@@ -26,6 +26,7 @@ export class HomeComponent implements OnInit {
   constructor(private authService: AuthService, private staffMemberService: StaffMemberService, private sharedService: SharedService) { }
 
   ngOnInit() {
+    console.log('this is from the getter',this.sharedService.dropdownListInfo);
     this.currentStaffMember = this.staffMemberService.currentStaffMember;
     if (AppUtils.homeSelectedTab) {
       this.homeTabs.tabs[AppUtils.homeSelectedTab].active = true;
