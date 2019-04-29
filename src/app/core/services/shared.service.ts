@@ -2,12 +2,21 @@ import { Injectable } from '@angular/core';
 import { AppUtils } from '../shared/utils';
 import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { AppConstants } from '../shared/app-constants';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SharedService {
-  constructor(private router: Router) { }
+
+  get dropdownListInfo() {
+    const listInfo = localStorage.getItem('dropdownListInfo');
+    return JSON.parse(listInfo);
+  }
+  constructor(private router: Router, private http: HttpClient) { }
 
   back() {
     if (AppUtils.prevRoute) {
@@ -40,4 +49,18 @@ export class SharedService {
       }
     });
   }
+
+  getDropdownListInfo(): Observable<DropdownListInfo> {
+  return  this.http.get<DropdownListInfo>(AppConstants.baseInfoUrl)
+  .pipe(
+    tap(data => console.log(JSON.stringify(data))),
+    tap(data => localStorage.setItem('dropdownListInfo', JSON.stringify(data))));
+  }
+
+}
+
+export interface DropdownListInfo {
+ Countries: Record<number, string>;
+ Titles: Record<number, string>;
+ TelephoneTypes: Record<number, string>;
 }

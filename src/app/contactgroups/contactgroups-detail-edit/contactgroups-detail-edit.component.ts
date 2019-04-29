@@ -7,10 +7,18 @@ import { SharedService } from 'src/app/core/services/shared.service';
   styleUrls: ['./contactgroups-detail-edit.component.scss']
 })
 export class ContactgroupsDetailEditComponent implements OnInit {
+countries: any;
+titles: any;
+telephoneTypes: any;
+listInfo: any;
 
   constructor(public sharedService: SharedService) { }
 
   ngOnInit() {
+    this.listInfo = this.sharedService.dropdownListInfo;
+    this.countries = Object.values(this.listInfo)[0];
+    this.titles = Object.values(this.listInfo)[1];
+    this.telephoneTypes = Object.values(this.listInfo)[2];
   }
 
   cancel() {
