@@ -47,7 +47,7 @@
         margin: 50px 0 70px;
     }
 
-    &.day, &.week {
+    &.day, &.workingWeek, &.week {
         @include media-breakpoint-up(sm){
             overflow: auto;
             position: relative;
@@ -76,6 +76,11 @@
             min-height: 150px;
         }
     }
+
+    .workingWeek & {
+        width: 16.66%;
+    }
+
     .day & {
         @include media-breakpoint-up(sm) {
             width: 100%;
@@ -87,7 +92,12 @@
         @include media-breakpoint-up(sm) {
             display: flex;
         }
+
+        .workingWeek & {
+            display: none;
+        }
     }
+
     &.no-events:not(.is-today) {
         @include media-breakpoint-down("sm") {
             display: none;
@@ -111,7 +121,7 @@
         border-radius: 0;
         z-index: 2;
         
-        .week &, .day & {
+        .workingWeek &, .week &, .day & {
             position: sticky;
             margin-top: -1px;
             border-top: 1px solid $border-color;
@@ -189,7 +199,7 @@
         top: auto!important;
     }
 
-    .day &, .week & {
+    .day &, .workingWeek &, .week & {
         padding: spacer(1);
         @include border-radius(spacer(1));
         color: color("white");
