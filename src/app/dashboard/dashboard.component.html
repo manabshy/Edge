@@ -7,7 +7,7 @@
     </select>
   </div>
   <tabset #dashboardTabs>
-    <tab heading="Me" (select)="onSelect($event)">
+    <!-- <tab heading="Me" (select)="onSelect($event)">
       <app-my-dashboard [myDashboard]='myDashboard'
        [isValuation]='isValuation'
        [valuationTile]='valuationTile'
@@ -21,6 +21,11 @@
        [isExchanges]='isExchanges'
        [pipelineTile]= 'pipelineTile'
        [isPipeline]='isPipeline'
+       [period]='period'
+       [periodKey]='periodKey'></app-my-dashboard>
+    </tab> -->
+    <tab heading="Me" (select)="onSelect($event)">
+      <app-my-dashboard [myDashboard]='myDashboard'
        [period]='period'
        [periodKey]='periodKey'></app-my-dashboard>
     </tab>
