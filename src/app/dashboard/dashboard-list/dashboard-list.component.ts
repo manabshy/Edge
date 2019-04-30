@@ -18,10 +18,15 @@ export class DashboardListComponent implements OnInit {
   instructions: Instruction[];
   valuations: Valuation[];
   applicants: Applicant[];
+  allInstructions: Instruction[];
   staffMemberId =  0;
   periodKey: string;
   isValuation: boolean;
-  allInstructions: Instruction[];
+  isAllInstructions: boolean;
+  isInstructions: boolean;
+  isExchanges: boolean;
+  isPipeline: boolean;
+  isBdd: boolean;
 
   set selectedPeriod(val: string) {
     this._selectedPeriod = val;
@@ -39,7 +44,13 @@ export class DashboardListComponent implements OnInit {
   ngOnInit() {
     this.route.queryParams.subscribe(params =>  {
       this.selectedPeriod = params['periodFilter'] || 'ThisQuarter';
-      this.isValuation = params['isValuation'];  } );
+      this.isValuation = params['isValuation'];
+      this.isAllInstructions = params['isAllInstructions'];
+      this.isInstructions = params['isInstructions'];
+      this.isBdd = params['isBdd'];
+      this.isExchanges = params['isExchanges'];
+      this.isPipeline = params['isPipeline'];
+     } );
 
     this.route.params.subscribe(() => {
       this.staffMemberId = +this.route.snapshot.paramMap.get('id') || 0;

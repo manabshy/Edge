@@ -1,6 +1,6 @@
 <app-breadcrumb></app-breadcrumb>
 <div class="container pb-3">
-  <div class="row page-title mb-0">
+  <!-- <div class="row page-title mb-0">
     <div class="col">
       <h4 class="m-0"><span class="text-secondary">#</span> Title</h4>
     </div>
@@ -9,8 +9,8 @@
         <option *ngFor='let periodOption of periodList' [value]='periodOption.key'>{{periodOption.value}}</option>
       </select>
     </div>
-  </div>
-  <ng-container *ngIf="isValuation; then valuationsList; else instructionsList">
+  </div> -->
+  <!-- <ng-container *ngIf="isValuation; then valuationsList; else instructionsList">
   </ng-container>
   <ng-template #instructionsList>
     <div class="list-group">
@@ -111,5 +111,12 @@
         </div>
       </a>
     </div>
-  </ng-template>
+  </ng-template> -->
+  <app-valuations-and-instructions *ngIf="isInstructions || isValuation "
+  [selectedPeriod]='selectedPeriod'
+   [periodList]='periodList' [period]='period' [instructions]='instructions' 
+   [valuations]='valuations' [isValuations]='isValuation'></app-valuations-and-instructions>
+  <app-instructions-and-business-development *ngIf="isAllInstructions"
+  [period]='period' [allInstructions]='allInstructions || isBdd'></app-instructions-and-business-development>
+  <app-exchanges-and-pipeline *ngIf="isExchanges || isPipeline"></app-exchanges-and-pipeline>
 </div>

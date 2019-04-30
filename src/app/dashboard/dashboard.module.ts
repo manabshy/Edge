@@ -13,7 +13,8 @@ import { InstructionsAndBusinessDevelopmentComponent } from './dashboard-list/in
 import { ExchangesAndPipelineComponent } from './dashboard-list/exchanges-and-pipeline/exchanges-and-pipeline.component';
 
 @NgModule({
-  declarations: [MyDashboardComponent, TeamDashboardComponent, DashboardListComponent, ValuationsAndInstructionsComponent, InstructionsAndBusinessDevelopmentComponent, ExchangesAndPipelineComponent],
+  declarations: [MyDashboardComponent, TeamDashboardComponent, DashboardListComponent,
+    ValuationsAndInstructionsComponent, InstructionsAndBusinessDevelopmentComponent, ExchangesAndPipelineComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -21,6 +22,7 @@ import { ExchangesAndPipelineComponent } from './dashboard-list/exchanges-and-pi
     DashboardRoutingModule,
     CoreModule
   ],
-  exports: [MyDashboardComponent, TeamDashboardComponent, DashboardListComponent],
+  exports: [MyDashboardComponent, TeamDashboardComponent, DashboardListComponent,
+    ValuationsAndInstructionsComponent, ExchangesAndPipelineComponent, InstructionsAndBusinessDevelopmentComponent],
 })
 export class DashboardModule { }

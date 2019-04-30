@@ -11,28 +11,28 @@
       </a>
     </div>
     <div class="card">
-      <a class="card-body text-center" [routerLink]="['/list', 2337]" [queryParams]="{periodFilter: periodKey}">
-        <h6 class="card-title">Instructions</h6>
+      <a class="card-body text-center" [routerLink]="['/list', 2337]" [queryParams]="{periodFilter: periodKey, isInstructions:isInstructions}">
+        <h6 class="card-title">{{instructionsTile}}</h6>
         <h4 class="text-secondary">{{ myDashboard.instructions.periodCount }}</h4>
         <p class="card-text"><small class="text-muted">{{ period }}</small></p>
       </a>
     </div>
     <div class="card">
-      <div class="card-body text-center">
+      <a class="card-body text-center"  [routerLink]="['/list', 2337]" [queryParams]="{ isAllInstructions:isAllInstructions, isBdd:isBdd}">
         <h6 class="card-title">Business Development</h6>
         <h4 class="text-secondary">{{ myDashboard.businessDevelopment.totalCount }}</h4>
         <p class="card-text"><small class="text-muted">Tickets</small></p>
-      </div>
+      </a>
     </div>
     <div class="card">
-      <div class="card-body text-center">
-        <h6 class="card-title">All Instructions</h6>
+      <a class="card-body text-center" [routerLink]="['/list', 2337]" [queryParams]="{ isAllInstructions:isAllInstructions, isBdd:isBdd}" >
+        <h6 class="card-title">{{allInstructionsTile}}</h6>
         <h4 class="text-secondary m-0">{{ myDashboard.instructions.totalCount }}</h4>
-      </div>
+      </a>
     </div>
     <div class="card">
-      <div class="card-body text-center">
-        <h6 class="card-title">Exchanges</h6>
+      <a class="card-body text-center"  [routerLink]="['/list', 2337]" [queryParams]="{ isExchanges:isExchanges, isPipeline:isPipeline}">
+        <h6 class="card-title">{{exchangesTile}}</h6>
         <h4 class="text-secondary">
           {{
                 myDashboard.exchanges.periodFees
@@ -42,11 +42,11 @@
               }}
         </h4>
         <p class="card-text"><small class="text-muted">{{ period }}</small></p>
-      </div>
+      </a>
     </div>
-    <div class="card">
-      <div class="card-body text-center">
-        <h6 class="card-title">Pipeline</h6>
+    <div class="card"  >
+      <a class="card-body text-center" [routerLink]="['/list', 2337]"  [queryParams]="{ isExchanges:isExchanges, isPipeline:isPipeline}" >
+        <h6 class="card-title">{{pipelineTile}}</h6>
         <h4 class="text-secondary m-0">
           {{
                     myDashboard.pipeline.totalFees
@@ -55,7 +55,7 @@
                       | truncating
                   }}
         </h4>
-      </div>
+      </a>
     </div>
   </div>
 </ng-template>

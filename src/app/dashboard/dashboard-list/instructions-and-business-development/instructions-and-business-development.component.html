@@ -1,16 +1,16 @@
-<!-- <app-breadcrumb></app-breadcrumb>
+<app-breadcrumb></app-breadcrumb>
 <div class="container pb-3">
   <div class="row page-title mb-0">
     <div class="col">
       <h4 class="m-0"><span class="text-secondary">#</span> Title</h4>
     </div>
-    <div class="col-auto">
+    <!-- <div class="col-auto">
       <select [(ngModel)]="selectedPeriod" class="custom-select" id="sel1">
         <option *ngFor='let periodOption of periodList' [value]='periodOption.key'>{{periodOption.value}}</option>
       </select>
-    </div>
+    </div> -->
   </div>
-  <ng-container *ngIf="isBdd; then bddTickets; else allInstructions">
+  <ng-container *ngIf="allInstructions; then  instructionsList">
   </ng-container>
   <ng-template #instructionsList>
     <div class="list-group">
@@ -23,7 +23,7 @@
           <div class="col-sm"><strong>Date</strong></div>
         </div>
       </div>
-      <div class="list-group-item text-center text-danger" *ngIf="!instructions">
+      <div class="list-group-item text-center text-danger" *ngIf="!allInstructions">
         <i class="far fa-sad-tear"></i> No Instructions {{period}}
       </div>
       <a routerLink="/home" class="list-group-item list-group-item-action" *ngFor="let instruction of allInstructions">
@@ -62,7 +62,7 @@
       </a>
     </div>
   </ng-template>
-  <ng-template #allInstructions>
+  <!-- <ng-template #bddTickets>
     <div class="list-group">
       <div class="list-group-item list-header d-none d-sm-block border-top-0">
         <div class="row">
@@ -111,5 +111,6 @@
         </div>
       </a>
     </div>
-  </ng-template>
-</div> -->
+  </ng-template> -->
+</div>
+
