@@ -11,7 +11,17 @@ export class MyDashboardComponent implements OnInit {
 @Input() period: string;
 @Input() periodKey: string;
 @Input() valuationTile: Tiles;
+@Input() allInstructionsTile: Tiles;
+@Input() instructionsTile: Tiles;
+@Input() exchangesTile: Tiles;
+@Input() bddTile: Tiles;
+@Input() pipelineTile: Tiles;
 @Input() isValuation: boolean;
+@Input() isAllInstructions: boolean;
+@Input() isInstructions: boolean;
+@Input() isBdd: boolean;
+@Input() isExchanges: boolean;
+@Input() isPipeline: boolean;
 
   constructor() { }
 

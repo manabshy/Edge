@@ -37,6 +37,10 @@ export class DashboardService {
     const url = `${AppConstants.baseUrl}/dashboard/applicants?role=${role}&staffMemberId=${staffMemberId}`;
     return this.http.get<ApplicantResult>(url);
   }
+  // getDashboardBddTickets(staffMemberId: number, role: string): Observable<ApplicantResult> {
+  //   const url = `${AppConstants.baseUrl}/dashboard/applicants?role=${role}&staffMemberId=${staffMemberId}`;
+  //   return this.http.get<ApplicantResult>(url);
+  // }
 
  private get(staffMemberId: number, role: string, endpoint: string, period?: string, pageSize: number= 10): Observable<any> {
     const url = `${AppConstants.baseUrl}/dashboard/${endpoint}?period=${period}&role=${role}&staffMemberId=${staffMemberId}&pageSize=${pageSize}`;

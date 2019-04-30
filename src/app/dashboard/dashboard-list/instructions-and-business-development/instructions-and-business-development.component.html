@@ -1,20 +1,20 @@
 <app-breadcrumb></app-breadcrumb>
 <div class="container pb-3">
-  <!-- <div class="row page-title mb-0">
+  <div class="row page-title mb-0">
     <div class="col">
       <h4 class="m-0"><span class="text-secondary">#</span> Title</h4>
     </div>
-    <div class="col-auto">
+    <!-- <div class="col-auto">
       <select [(ngModel)]="selectedPeriod" class="custom-select" id="sel1">
         <option *ngFor='let periodOption of periodList' [value]='periodOption.key'>{{periodOption.value}}</option>
       </select>
-    </div>
-  </div> -->
-  <!-- <ng-container *ngIf="isValuation; then valuationsList; else instructionsList">
+    </div> -->
+  </div>
+  <ng-container *ngIf="allInstructions; then  instructionsList">
   </ng-container>
   <ng-template #instructionsList>
     <div class="list-group">
-      <div class="list-group-item list-header d-none d-sm-block border-top-0 border-bottom m-0">
+      <div class="list-group-item list-header d-none d-sm-block border-top-0">
         <div class="row">
           <div class="col-sm-3"><strong>Address</strong></div>
           <div class="col-sm"><strong>Contact group</strong></div>
@@ -23,10 +23,10 @@
           <div class="col-sm"><strong>Date</strong></div>
         </div>
       </div>
-      <div class="list-group-item text-center text-danger" *ngIf="!instructions">
+      <div class="list-group-item text-center text-danger" *ngIf="!allInstructions">
         <i class="far fa-sad-tear"></i> No Instructions {{period}}
       </div>
-      <a routerLink="/home" class="list-group-item list-group-item-action" *ngFor="let instruction of instructions; first as isFirst" [ngClass]="{'border-top-0':isFirst}">
+      <a routerLink="/home" class="list-group-item list-group-item-action" *ngFor="let instruction of allInstructions">
         <div class="row align-items-end align-items-sm-center">
           <div class="col-sm-3">
             <dl class="row">
@@ -62,9 +62,9 @@
       </a>
     </div>
   </ng-template>
-  <ng-template #valuationsList>
+  <!-- <ng-template #bddTickets>
     <div class="list-group">
-      <div class="list-group-item list-header d-none d-sm-block border-top-0 border-bottom m-0">
+      <div class="list-group-item list-header d-none d-sm-block border-top-0">
         <div class="row">
           <div class="col-sm-3"><strong>Address</strong></div>
           <div class="col-sm"><strong>Sales</strong></div>
@@ -76,7 +76,7 @@
       <div class="list-group-item text-center text-danger" *ngIf="!valuations">
         <i class="far fa-sad-tear"></i> No Valuations {{period}}
       </div>
-      <a routerLink="/home" class="list-group-item list-group-item-action" *ngFor="let valuation of valuations; first as isFirst" [ngClass]="{'border-top-0':isFirst}">
+      <a routerLink="/home" class="list-group-item list-group-item-action" *ngFor="let valuation of valuations">
         <div class="row align-items-end align-items-sm-center">
           <div class="col-sm-3">
             <dl class="row">
@@ -112,11 +112,5 @@
       </a>
     </div>
   </ng-template> -->
-  <app-valuations-and-instructions *ngIf="isInstructions || isValuation "
-  [selectedPeriod]='selectedPeriod'
-   [periodList]='periodList' [period]='period' [instructions]='instructions' 
-   [valuations]='valuations' [isValuations]='isValuation'></app-valuations-and-instructions>
-  <app-instructions-and-business-development *ngIf="isAllInstructions"
-  [period]='period' [allInstructions]='allInstructions || isBdd'></app-instructions-and-business-development>
-  <app-exchanges-and-pipeline *ngIf="isExchanges || isPipeline"></app-exchanges-and-pipeline>
 </div>
+

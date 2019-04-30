@@ -8,7 +8,21 @@
   </div>
   <tabset #dashboardTabs>
     <tab heading="Me" (select)="onSelect($event)">
-      <app-my-dashboard [myDashboard]='myDashboard' [isValuation]='isValuation' [valuationTile]='valuationTile' [period]='period' [periodKey]='periodKey'></app-my-dashboard>
+      <app-my-dashboard [myDashboard]='myDashboard'
+       [isValuation]='isValuation'
+       [valuationTile]='valuationTile'
+       [instructionsTile]='instructionsTile'
+       [isInstructions]='isInstructions'
+       [allInstructionsTile]='allInstructionsTile'
+       [isAllInstructions]='isAllInstructions'
+       [bddTile]='bddTile'
+       [isBdd]='isBdd'
+       [exchangesTile]='exchangesTile'
+       [isExchanges]='isExchanges'
+       [pipelineTile]= 'pipelineTile'
+       [isPipeline]='isPipeline'
+       [period]='period'
+       [periodKey]='periodKey'></app-my-dashboard>
     </tab>
     <tab heading="Team" (select)="onSelect($event)">
       <app-team-dashboard [teamDashboard]='teamDashboard' [dashboardTotals]='dashboardTotals'

@@ -8,9 +8,13 @@ import { MyDashboardComponent } from './my-dashboard/my-dashboard.component';
 import { TeamDashboardComponent } from './team-dashboard/team-dashboard.component';
 import { CoreModule } from '../core/core.module';
 import { DashboardListComponent } from './dashboard-list/dashboard-list.component';
+import { ValuationsAndInstructionsComponent } from './dashboard-list/valuations-and-instructions/valuations-and-instructions.component';
+import { InstructionsAndBusinessDevelopmentComponent } from './dashboard-list/instructions-and-business-development/instructions-and-business-development.component';
+import { ExchangesAndPipelineComponent } from './dashboard-list/exchanges-and-pipeline/exchanges-and-pipeline.component';
 
 @NgModule({
-  declarations: [MyDashboardComponent, TeamDashboardComponent, DashboardListComponent],
+  declarations: [MyDashboardComponent, TeamDashboardComponent, DashboardListComponent,
+    ValuationsAndInstructionsComponent, InstructionsAndBusinessDevelopmentComponent, ExchangesAndPipelineComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -18,6 +22,7 @@ import { DashboardListComponent } from './dashboard-list/dashboard-list.componen
     DashboardRoutingModule,
     CoreModule
   ],
-  exports: [MyDashboardComponent, TeamDashboardComponent, DashboardListComponent],
+  exports: [MyDashboardComponent, TeamDashboardComponent, DashboardListComponent,
+    ValuationsAndInstructionsComponent, ExchangesAndPipelineComponent, InstructionsAndBusinessDevelopmentComponent],
 })
 export class DashboardModule { }
