@@ -5,11 +5,15 @@ import { ContactgroupsDetailComponent } from './contactgroups-detail/contactgrou
 import { ContactGroupsComponent } from './contactgroups.component';
 import { ContactgroupsPeopleComponent } from './contactgroups-people/contactgroups-people.component';
 import { ContactgroupsDetailEditComponent } from './contactgroups-detail-edit/contactgroups-detail-edit.component';
+import { ContactgroupsCompanyEditComponent } from './contactgroups-company-edit/contactgroups-company-edit.component';
 
 const routes: Routes = [
   { path: '', canActivate: [AuthGuardService], children: [
     { path: 'contact-centre', children: [
       { path: '', component: ContactGroupsComponent },
+      { path: 'company', children: [
+        { path: '', component: ContactgroupsCompanyEditComponent }
+      ] },
       { path: 'detail/:id', children: [
         { path: '', component: ContactgroupsDetailComponent },
         { path: 'people', component: ContactgroupsPeopleComponent },

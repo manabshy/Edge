@@ -80,7 +80,7 @@ tr:first-child{
 
 .list-group-item {
 
-    &.list-header + .list-group-item {
+    .card-body &.list-header + .list-group-item {
         @include media-breakpoint-down(sm){
             border-top: 0;
         }
@@ -105,5 +105,14 @@ dl {
     }
     @include media-breakpoint-up(xl){
         @include make-col(6);
+    }
+}
+
+.input-group {
+    input + select {
+        @include media-breakpoint-down(sm) {
+            flex: 0 0 auto!important;
+            width: auto!important;
+        }
     }
 }

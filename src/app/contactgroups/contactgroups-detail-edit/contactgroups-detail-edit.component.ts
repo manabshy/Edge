@@ -11,7 +11,9 @@ countries: any;
 titles: any;
 telephoneTypes: any;
 listInfo: any;
-public keepOriginalOrder = (a, b) => a.key;
+titleSelected: number = 1;
+coutrySelected: number = 232;
+public keepOriginalOrder = (a, b) => a.key
 
   constructor(public sharedService: SharedService) { }
 

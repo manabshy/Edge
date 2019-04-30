@@ -5,8 +5,8 @@
     <div class="form-group row">
       <label for="title" class="col-sm-2 col-form-label col-form-label-sm">Title</label>
       <div class="col-sm-3">
-        <select class="custom-select custom-select-sm" id="title">
-          <option *ngFor="let title of titles | keyvalue:keepOriginalOrder" [value]=title.key>{{title.value}}</option>
+        <select class="custom-select custom-select-sm" id="title" name="title" [(ngModel)]="titleSelected">
+          <option selected *ngFor="let title of titles | keyvalue:keepOriginalOrder" [value]=title.key>{{title.value}}</option>
         </select>
       </div>
     </div>
@@ -58,8 +58,8 @@
     <div class="form-group row">
       <label for="country" class="col-sm-2 col-form-label col-form-label-sm">Country</label>
       <div class="col-sm-3">
-        <select class="custom-select custom-select-sm" id="country">
-          <option *ngFor="let country of countries | keyvalue:keepOriginalOrder" [value]=country.key>{{country.value}}</option>
+        <select class="custom-select custom-select-sm" id="country" name="country" [(ngModel)]="coutrySelected">
+          <option selected *ngFor="let country of countries | keyvalue:keepOriginalOrder" [value]=country.key>{{country.value}}</option>
         </select>
       </div>
     </div>
@@ -81,7 +81,7 @@
           <div class="input-group-append">
             <button type="button" class="btn btn-light active" data-toggle="button" aria-pressed="true"
               autocomplete="off">
-              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i> Fav
             </button>
           </div>
         </div>
@@ -92,7 +92,7 @@
           </select>
           <div class="input-group-append">
             <button type="button" class="btn btn-light" data-toggle="button" aria-pressed="false" autocomplete="off">
-              <i class="far fa-star"></i>
+              <i class="far fa-star"></i> Fav
             </button>
           </div>
         </div>

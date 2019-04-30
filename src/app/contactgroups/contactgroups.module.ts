@@ -9,9 +9,10 @@ import { ContactgroupsNotesComponent } from './contactgroups-notes/contactgroups
 import { CoreModule } from '../core/core.module';
 import { FormsModule } from '@angular/forms';
 import { ContactgroupsDetailEditComponent } from './contactgroups-detail-edit/contactgroups-detail-edit.component';
+import { ContactgroupsCompanyEditComponent } from './contactgroups-company-edit/contactgroups-company-edit.component';
 
 @NgModule({
-  declarations: [ContactgroupsListComponent, ContactgroupsDetailComponent, ContactgroupsPeopleComponent, ContactgroupsNotesComponent, ContactgroupsDetailEditComponent],
+  declarations: [ContactgroupsListComponent, ContactgroupsDetailComponent, ContactgroupsPeopleComponent, ContactgroupsNotesComponent, ContactgroupsDetailEditComponent, ContactgroupsCompanyEditComponent],
   imports: [
     CommonModule,
     CoreModule,

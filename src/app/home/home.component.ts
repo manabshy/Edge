@@ -7,6 +7,7 @@ import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
 import { AppUtils } from '../core/shared/utils';
 import { StaffMember } from '../core/models/staff-member';
 import { SharedService } from '../core/services/shared.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -23,7 +24,7 @@ export class HomeComponent implements OnInit {
 
   @ViewChild('homeTabs') homeTabs: TabsetComponent;
 
-  constructor(private authService: AuthService, private staffMemberService: StaffMemberService, private sharedService: SharedService) { }
+  constructor(private authService: AuthService, private staffMemberService: StaffMemberService, private sharedService: SharedService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
     console.log('this is from the getter',this.sharedService.dropdownListInfo);
@@ -31,14 +32,16 @@ export class HomeComponent implements OnInit {
     this.sharedService.getDropdownListInfo().subscribe();
     this.staffMemberService.getCurrentStaffMember().subscribe();
     this.currentStaffMember = this.staffMemberService.currentStaffMember;
-    
-    if (AppUtils.homeSelectedTab) {
-      this.homeTabs.tabs[AppUtils.homeSelectedTab].active = true;
-    }
+
+    this.route.queryParams.subscribe(params =>  {
+      this.selectedTab = params['selectedTab'] || AppUtils.homeSelectedTab || 0;
+      this.homeTabs.tabs[this.selectedTab].active = true;
+    });
   }
 
   onSelect(data: TabDirective): void {
     setTimeout(() => {
+      this.router.navigate(['/home']);
       this.selectedTab = data.tabset.tabs.findIndex(item => item.active);
       AppUtils.homeSelectedTab = this.selectedTab;
       AppUtils.isDiarySearchVisible = false;
