@@ -18,20 +18,20 @@
       </a>
     </div>
     <div class="card">
-      <a class="card-body text-center"  [routerLink]="['/list', 2337]" [queryParams]="{ isAllInstructions:isAllInstructions, isBdd:isBdd}">
+      <a class="card-body text-center"  [routerLink]="['/list', 2337]" [queryParams]="{ isBdd:isBdd}">
         <h6 class="card-title">Business Development</h6>
         <h4 class="text-secondary">{{ myDashboard.businessDevelopment.totalCount }}</h4>
         <p class="card-text"><small class="text-muted">Tickets</small></p>
       </a>
     </div>
     <div class="card">
-      <a class="card-body text-center" [routerLink]="['/list', 2337]" [queryParams]="{ isAllInstructions:isAllInstructions, isBdd:isBdd}" >
+      <a class="card-body text-center" [routerLink]="['/list', 2337]" [queryParams]="{ isAllInstructions:isAllInstructions}" >
         <h6 class="card-title">{{allInstructionsTile}}</h6>
         <h4 class="text-secondary m-0">{{ myDashboard.instructions.totalCount }}</h4>
       </a>
     </div>
     <div class="card">
-      <a class="card-body text-center"  [routerLink]="['/list', 2337]" [queryParams]="{ isExchanges:isExchanges, isPipeline:isPipeline}">
+      <a class="card-body text-center"  [routerLink]="['/list', 2337]" [queryParams]="{ isExchanges:isExchanges}">
         <h6 class="card-title">{{exchangesTile}}</h6>
         <h4 class="text-secondary">
           {{
@@ -45,7 +45,7 @@
       </a>
     </div>
     <div class="card"  >
-      <a class="card-body text-center" [routerLink]="['/list', 2337]"  [queryParams]="{ isExchanges:isExchanges, isPipeline:isPipeline}" >
+      <a class="card-body text-center" [routerLink]="['/list', 2337]"  [queryParams]="{isPipeline:isPipeline}" >
         <h6 class="card-title">{{pipelineTile}}</h6>
         <h4 class="text-secondary m-0">
           {{
