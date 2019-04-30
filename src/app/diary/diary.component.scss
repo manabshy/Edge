@@ -175,10 +175,14 @@
     height: calc(100% - 45px);
 
     & > div {
-        height: 4.17%;
+        height: 2.085%;
         padding: 0 spacer(1);
         opacity: 0.5;
         cursor: not-allowed;
+
+        &:nth-child(even) {
+            border-color: rgba(theme-color("dark"), 0.4)!important;
+        }
 
         &.clickable {
             cursor: pointer;
