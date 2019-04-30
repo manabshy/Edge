@@ -29,25 +29,17 @@
 }
 
 .scroll-top {
-    position: fixed;
-    top: 50%;
-    right: $grid-gutter-width/2;
+    display: block;
     z-index: 1000;
     border-radius: 50% !important;
     width: 50px;
     height: 50px;
-    opacity: .5;
     line-height: spacer(2);
     padding-top: 8px;
-    transform: translateY(-50%);
+    margin: 0 auto $grid-gutter-width;
 
     @include media-breakpoint-up(sm) {
-        left: auto;
-        right: $grid-gutter-width/2;
-    }
-
-    &:hover {
-        opacity: 1;
+        margin: 0 $grid-gutter-width $grid-gutter-width auto;
     }
 
 }

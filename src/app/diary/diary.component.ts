@@ -23,9 +23,10 @@ export class DiaryComponent implements OnInit {
   viewedDate = this.today;
   viewedMonth = this.todayMonth;
   viewedYear = this.todayYear;
-  viewMode = 'week';
+  viewMode = 'workingWeek';
   setTodayLabel = 'This ' + this.viewMode;
   monthLabel = dayjs().month(this.viewedMonth).format('MMMM');
+  hours: any[] = ['00','01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23'];
   @ViewChildren(PopoverDirective) popovers: QueryList<PopoverDirective>;
 
   appUtils = AppUtils;
@@ -144,11 +145,11 @@ export class DiaryComponent implements OnInit {
           this.days = this.getDaysInMonth(this.viewedMonth - 1, this.viewedYear);
         }
         break;
-      case 'week':
-        this.days = this.getDaysInWeek(this.viewedDate.subtract(7,'day'));
+      case 'day':
+        this.days = this.getDay(this.viewedDate.subtract(1,'day'));  
         break;
       default:
-        this.days = this.getDay(this.viewedDate.subtract(1,'day'));  
+        this.days = this.getDaysInWeek(this.viewedDate.subtract(7,'day')); 
     }
     window.scrollTo(0, 0);
   }
@@ -162,11 +163,11 @@ export class DiaryComponent implements OnInit {
           this.days = this.getDaysInMonth(this.viewedMonth + 1, this.viewedYear);
         }
         break;
-      case 'week':
-        this.days = this.getDaysInWeek(this.viewedDate.add(7,'day'));
+      case 'day':
+        this.days = this.getDay(this.viewedDate.add(1,'day'));  
         break;
       default:
-        this.days = this.getDay(this.viewedDate.add(1,'day'));  
+        this.days = this.getDaysInWeek(this.viewedDate.add(7,'day'));
     }
     window.scrollTo(0, 0);
   }
@@ -200,13 +201,13 @@ export class DiaryComponent implements OnInit {
         this.days = this.getDaysInMonth(this.viewedMonth, this.viewedYear);
         this.setTodayLabel = 'This ' + this.viewMode;
         break;
-      case 'week':
-        this.days = this.getDaysInWeek(this.viewedDate);
-        this.setTodayLabel = 'This ' + this.viewMode;
-        break;
-      default:
+      case 'day':
         this.days = this.getDay(this.viewedDate);
         this.setTodayLabel = 'Today';
+        break;
+      default:
+        this.days = this.getDaysInWeek(this.viewedDate);
+        this.setTodayLabel = 'This week';
     }
   }
 

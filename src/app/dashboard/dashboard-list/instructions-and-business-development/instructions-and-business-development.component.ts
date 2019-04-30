@@ -8,6 +8,7 @@ import { Instruction } from '../../shared/dashboard';
 })
 export class InstructionsAndBusinessDevelopmentComponent implements OnInit {
 @Input() period: string;
+@Input() searchTerm: string;
 @Input() allInstructions: Instruction[];
   constructor() { }
 

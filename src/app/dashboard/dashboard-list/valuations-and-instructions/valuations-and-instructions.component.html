@@ -13,7 +13,7 @@
     </ng-container>
     <ng-template #instructionsList>
       <div class="list-group">
-        <div class="list-group-item list-header d-none d-sm-block border-top-0 border-bottom m-0">
+        <div class="list-group-item list-header d-none d-sm-block border-top-0 border-bottom rounded-0 m-0">
           <div class="row">
             <div class="col-sm-3"><strong>Address</strong></div>
             <div class="col-sm"><strong>Contact group</strong></div>
@@ -22,7 +22,7 @@
             <div class="col-sm"><strong>Date</strong></div>
           </div>
         </div>
-        <div class="list-group-item text-center text-danger" *ngIf="!instructions">
+        <div class="list-group-item text-center text-danger border-top-0" *ngIf="!instructions">
           <i class="far fa-sad-tear"></i> No Instructions {{period}}
         </div>
         <a routerLink="/home" class="list-group-item list-group-item-action" *ngFor="let instruction of instructions; first as isFirst" [ngClass]="{'border-top-0':isFirst}">
@@ -63,7 +63,7 @@
     </ng-template>
     <ng-template #valuationsList>
       <div class="list-group">
-        <div class="list-group-item list-header d-none d-sm-block border-top-0 border-bottom m-0">
+        <div class="list-group-item list-header d-none d-sm-block border-top-0 border-bottom rounded-0 m-0">
           <div class="row">
             <div class="col-sm-3"><strong>Address</strong></div>
             <div class="col-sm"><strong>Sales</strong></div>
@@ -72,7 +72,7 @@
             <div class="col-sm"><strong>Date</strong></div>
           </div>
         </div>
-        <div class="list-group-item text-center text-danger" *ngIf="!valuations">
+        <div class="list-group-item text-center text-danger border-top-0" *ngIf="!valuations">
           <i class="far fa-sad-tear"></i> No Valuations {{period}}
         </div>
         <a routerLink="/home" class="list-group-item list-group-item-action" *ngFor="let valuation of valuations; first as isFirst" [ngClass]="{'border-top-0':isFirst}">

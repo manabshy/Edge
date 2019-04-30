@@ -15,6 +15,6 @@
    [periodList]='periodList' [period]='period' [instructions]='instructions'
    [valuations]='valuations' [isValuations]='isValuation'></app-valuations-and-instructions>
   <app-instructions-and-business-development *ngIf="isAllInstructions"
-  [period]='period' [allInstructions]='allInstructions || isBdd'></app-instructions-and-business-development>
+  [period]='period' [searchTerm]='searchTerm' [allInstructions]='allInstructions || isBdd'></app-instructions-and-business-development>
   <app-exchanges-and-pipeline *ngIf="isExchanges || isPipeline"></app-exchanges-and-pipeline>
 </div>
