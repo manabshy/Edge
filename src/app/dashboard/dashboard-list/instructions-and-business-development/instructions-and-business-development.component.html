@@ -20,22 +20,26 @@
       <div class="row mt-1 mb-2">
         <div class="col-sm-6">
           <div class="input-group">
-            <select class="custom-select" name="minPrice" id="minPrice">
+            <select [(ngModel)]="minPrice" class="custom-select" name="minPrice" id="minPrice">
               <option value="0">Min Price</option>
+              <option *ngFor="let salePrice of priceRangeSale" [value]='salePrice'>{{salePrice | currency: 'GBP'}}</option>
             </select>
-            <select class="custom-select" name="maxPrice" id="maxPrice">
+            <select  [(ngModel)]="maxPrice" class="custom-select" name="maxPrice" id="maxPrice">
               <option value="0">Max Price</option>
+              <option *ngFor="let salePrice of priceRangeSale" [value]='salePrice'>{{salePrice | currency: 'GBP'}}</option>
             </select>
           </div>
         </div>
         <div class="col-sm-6 mt-2 mt-sm-0">
           <div class="input-group">
-            <select class="custom-select" name="minBedrooms" id="minBedrooms">
+            <select  class="custom-select" name="minBedrooms" id="minBedrooms">
               <option value="0">Min Bedrooms</option>
+              <option *ngFor="let bedroom of bedroomValues" [value]='bedroom.id' > {{bedroom.name}}</option>
             </select>
-            <select class="custom-select" name="maxBedrooms" id="maxBedrooms">
+            <!-- <select class="custom-select" name="maxBedrooms" id="maxBedrooms">
               <option value="0">Max Bedrooms</option>
-            </select>
+              <option *ngFor="let bedroom of bedroomValues" [value]='bedroom.id' > {{bedroom.name}}</option>
+            </select> -->
           </div>
         </div>
       </div>
