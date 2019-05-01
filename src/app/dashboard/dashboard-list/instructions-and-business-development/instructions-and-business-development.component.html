@@ -57,7 +57,8 @@
       <div class="list-group-item text-center text-danger border-top-0" *ngIf="!allInstructions">
         <i class="far fa-sad-tear"></i> No Instructions {{period}}
       </div>
-      <a routerLink="/home" class="list-group-item list-group-item-action" *ngFor="let instruction of allInstructions; first as isFirst" [ngClass]="{'border-top-0':isFirst}">
+      <!-- <a routerLink="/home" class="list-group-item list-group-item-action" *ngFor="let instruction of allInstructions; first as isFirst" [ngClass]="{'border-top-0':isFirst}"> -->
+      <a routerLink="/home" class="list-group-item list-group-item-action" *ngFor="let instruction of filteredInstructions; first as isFirst" [ngClass]="{'border-top-0':isFirst}">
         <div class="row align-items-end align-items-sm-center">
           <div class="col-sm-3">
             <dl class="row">

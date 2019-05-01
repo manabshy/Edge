@@ -13,7 +13,6 @@ import { ActivatedRoute } from '@angular/router';
 export class DashboardListComponent implements OnInit {
   private _selectedPeriod: string;
   periodList = Constants.PeriodList;
-  private _searchTerm: string;
   private readonly role = 'salesManager';
   period: string;
   instructions: Instruction[];
@@ -40,12 +39,7 @@ export class DashboardListComponent implements OnInit {
   get selectedPeriod() {
     return this._selectedPeriod;
   }
-  set searchTerm(val: string) {
-    this._searchTerm = val;
-  }
-  get searchTerm(): string {
-    return this._searchTerm;
-  }
+
 
 
   constructor( private dashboardService: DashboardService, private route: ActivatedRoute) { }
