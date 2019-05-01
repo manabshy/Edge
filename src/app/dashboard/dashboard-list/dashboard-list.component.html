@@ -2,7 +2,7 @@
 <div class="container pb-3">
   <div class="row page-title mb-0">
     <div class="col">
-      <h4 class="m-0"><span class="text-secondary">#</span> Title</h4>
+      <h4 class="m-0"><span class="text-secondary">#</span> Title </h4>
     </div>
     <div class="col-auto" *ngIf="!isAllInstructions">
       <select [(ngModel)]="selectedPeriod" class="custom-select" id="sel1">
@@ -15,6 +15,6 @@
    [periodList]='periodList' [period]='period' [instructions]='instructions'
    [valuations]='valuations' [isValuations]='isValuation'></app-valuations-and-instructions>
   <app-instructions-and-business-development *ngIf="isAllInstructions"
-  [period]='period' [searchTerm]='searchTerm' [allInstructions]='allInstructions || isBdd'></app-instructions-and-business-development>
+  [period]='period' [allInstructions]='allInstructions || isBdd'></app-instructions-and-business-development>
   <app-exchanges-and-pipeline *ngIf="isExchanges || isPipeline"></app-exchanges-and-pipeline>
 </div>

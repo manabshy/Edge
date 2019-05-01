@@ -16,6 +16,7 @@ export class ValuationsAndInstructionsComponent implements OnInit {
 @Input() isValuations: boolean;
 @Input() isBdd: boolean;
 @Input() isInstructions: boolean;
+@Input() tileNames: string;
 
 
   constructor() { }
