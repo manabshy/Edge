@@ -9,3 +9,17 @@ export interface Property {
   numberOfFloors: number;
 }
 
+export interface MinBedroom {
+  id: number;
+  name: string;
+}
+
+export const MinBedrooms = <MinBedroom[]> [
+  // {id: 0, name: 'Any'},
+  {id: 1, name: '1'},
+  {id: 2, name: '2'},
+  {id: 3, name: '3'},
+  {id: 4, name: '4'},
+  {id: 5, name: '5'},
+  {id: 6, name: '6+'}
+];
