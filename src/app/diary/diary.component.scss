@@ -143,6 +143,7 @@
     .card-body {
         padding: spacer(2) spacer(1);
         padding-left: 0.8rem;
+        position: relative;
 
         @include media-breakpoint-down("sm") {
             padding: spacer(2);
@@ -169,10 +170,10 @@
 
 .day-grid {
     position: absolute;
-    top: auto;
+    top: 0;
     left: 0;
     right: 0;
-    height: calc(100% - 45px);
+    height: 100%;
 
     & > div {
         height: 2.085%;
@@ -194,12 +195,17 @@
 }
 
 .event {
-    position: relative;
+    position: absolute;
     cursor: pointer;
+    right: spacer(1);
+    left: spacer(1);
 
     .month & {
         background-color: transparent!important;
         height: auto!important;
+        left: auto;
+        right: auto;
+        position: relative;
         top: auto!important;
     }
 
