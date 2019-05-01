@@ -25,6 +25,9 @@ export class DashboardService {
   getDashboardPipeline(staffMemberId: number, role: string, period?: string): Observable<Pipeline[]> {
     return this.get(staffMemberId, role, 'pipeline', period );
   }
+  getDashboardExchanges(staffMemberId: number, role: string, period?: string): Observable<Pipeline[]> {
+    return this.get(staffMemberId, role, 'exchanges', period );
+  }
 
   getDashboardInstructions(staffMemberId: number, role: string, period?: string, pageSize?: number): Observable<Instruction[]> {
    return this.get(staffMemberId, role, 'instructions', period, pageSize ).pipe(tap(data => console.log(JSON.stringify(data))));
@@ -43,6 +46,7 @@ export class DashboardService {
   // }
 
  private get(staffMemberId: number, role: string, endpoint: string, period?: string, pageSize: number= 10): Observable<any> {
+    // tslint:disable-next-line:max-line-length
     const url = `${AppConstants.baseUrl}/dashboard/${endpoint}?period=${period}&role=${role}&staffMemberId=${staffMemberId}&pageSize=${pageSize}`;
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
