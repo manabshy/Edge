@@ -26,20 +26,23 @@ set searchTerm(val: string) {
   this._searchTerm = val;
   this.filteredInstructions = this.searchTerm ? this.performFilter(this.searchTerm) : this.allInstructions;
 }
+
 get minPrice() {
   return this._minPrice;
 }
 set minPrice(val: number) {
   this._minPrice = val;
-  this.filteredInstructions = this.minPrice ? this.performMinPriceFilter(this.minPrice) : this.allInstructions;
+  this.filteredInstructions = this.minPrice != 0 ? this.performMinPriceFilter(this.minPrice) : this.allInstructions;
 }
+
 get maxPrice() {
   return this._maxPrice;
 }
 set maxPrice(val: number) {
   this._maxPrice = val;
-  this.filteredInstructions = this.maxPrice ? this.performMaxPriceFilter(this.maxPrice) : this.allInstructions;
+  this.filteredInstructions = this.maxPrice!= 0 ? this.performMaxPriceFilter(this.maxPrice) : this.allInstructions;
 }
+
 get bedroomValues() {
   return MinBedrooms;
 }
@@ -53,7 +56,7 @@ get bedroomValues() {
   }
 
 ngOnChanges() {
-  if (this.allInstructions || this.searchTerm) {
+  if (this.allInstructions) {
     this.filteredInstructions = this.allInstructions;
   }
 }
@@ -79,13 +82,6 @@ ngOnChanges() {
       this.isFakeLoadingVisible = false;
     }, 500);
   }
-
-  // onSelectedMaxPrice(val: any) {
-  //   console.log(val);
-  //   console.log('all instructions', this.allInstructions);
-  //   console.log('selected filtered list', this.allInstructions.filter(instruction => instruction.salesValue === val));
-  //  this.filteredInstructions = this.allInstructions.filter(instruction => instruction.salesValue === val);
-  // }
 /**
    * Determine if the filter has a value different to "empty" values
    */
