@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Instruction, Applicant, Valuation } from '../shared/dashboard';
+import { Instruction, Applicant, Valuation, Tiles } from '../shared/dashboard';
 import { Constants } from 'src/app/core/shared/period-list';
 import { DashboardService } from '../shared/dashboard.service';
 import { ActivatedRoute } from '@angular/router';
@@ -28,6 +28,7 @@ export class DashboardListComponent implements OnInit {
   isExchanges: boolean;
   isPipeline: boolean;
   isBdd: boolean;
+  typeType: Tiles;
 
   set selectedPeriod(val: string) {
     this._selectedPeriod = val;
@@ -45,6 +46,8 @@ export class DashboardListComponent implements OnInit {
   get searchTerm(): string {
     return this._searchTerm;
   }
+
+
   constructor( private dashboardService: DashboardService, private route: ActivatedRoute) { }
 
   ngOnInit() {
@@ -75,7 +78,6 @@ export class DashboardListComponent implements OnInit {
     this.dashboardService.getDashboardInstructions(id, role, period, pageSize)
       .subscribe(result => {
         this.allInstructions = result;
-        console.log('all instructions', this.allInstructions);
       });
   }
   getDashboardValuations(id: number, role: string, period?: string, pageSize?: number): void {
@@ -101,4 +103,44 @@ export class DashboardListComponent implements OnInit {
     const periodKey = Object.values(periodArray)[0].key;
     return periodKey;
   }
+
+  getTileName(val: string) {
+    switch (val) {
+      case Tiles.AllInstructions:
+      case Tiles.Instructions:
+      case Tiles.NewInstructions:
+        return 'Instructions';
+
+      case Tiles.Applicants:
+        return 'All applicants';
+
+      case Tiles.BusinessDevelopment:
+        return 'Bus. Dev. Tickets';
+
+      case Tiles.Exchanges:
+        return 'Exchanged';
+
+      case Tiles.LiveTenancies:
+        return 'Live Tenancies';
+
+      case Tiles.OffersAgreed:
+        return 'Offers agreed';
+
+      case Tiles.OffersReceived:
+        return 'Offers received';
+
+      case Tiles.Pipeline:
+        return 'Total in Pipeline';
+
+      case Tiles.ReletInstructions:
+        return 'Relets';
+
+      case Tiles.Valuations:
+        return 'Valuations';
+
+      case Tiles.Viewings:
+        return 'Viewings';
+    }
+
+    }
 }

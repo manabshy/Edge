@@ -28,11 +28,11 @@ allInstructionsTile: Tiles = Tiles.AllInstructions;
 exchangesTile = Tiles.Exchanges;
 pipelineTile = Tiles.Pipeline;
 instructionsTile = Tiles.Instructions;
-
+typeType: Tiles;
 get valuations(): string {
  return this.valuationTile = Tiles.Valuations;
 }
-get allInstructions(): string{
+get allInstructions(): string {
  return this.allInstructionsTile = Tiles.AllInstructions;
 }
 get bdd(): string {
@@ -57,10 +57,11 @@ get isExchanges(): boolean {
  return this.exchangesTile === Tiles.Exchanges;
 }
 
+
   constructor() { }
 
   ngOnInit() {
   }
 
-
+ 
 }
