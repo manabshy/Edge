@@ -6,6 +6,7 @@ import { addHours , format} from 'date-fns';
 import * as dayjs from 'dayjs';
 import { SharedService } from '../core/services/shared.service';
 import { PopoverDirective } from 'ngx-bootstrap/popover';
+import { TooltipDirective } from 'ngx-bootstrap/tooltip';
 
 @Component({
   selector: 'app-diary',
@@ -28,6 +29,7 @@ export class DiaryComponent implements OnInit {
   monthLabel = dayjs().month(this.viewedMonth).format('MMMM');
   hours: any[] = ['00','01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23'];
   @ViewChildren(PopoverDirective) popovers: QueryList<PopoverDirective>;
+  @ViewChildren(TooltipDirective) tooltips: QueryList<TooltipDirective>;
 
   appUtils = AppUtils;
 
@@ -41,11 +43,17 @@ export class DiaryComponent implements OnInit {
   }
 
   ngAfterViewInit() {
+    this.popoverSubscribe();
+  }
+
+  popoverSubscribe() {
     this.popovers.forEach((popover: PopoverDirective) => {
       popover.onShown.subscribe(() => {
         this.popovers
         .filter(p => p !== popover)
         .forEach(p => p.hide());
+        this.tooltips
+        .forEach(t => t.hide());
       });
     });
   }
@@ -152,6 +160,9 @@ export class DiaryComponent implements OnInit {
         this.days = this.getDaysInWeek(this.viewedDate.subtract(7,'day')); 
     }
     window.scrollTo(0, 0);
+    setTimeout(()=>{
+      this.popoverSubscribe();
+    })
   }
 
   nextMonth() {
@@ -170,6 +181,9 @@ export class DiaryComponent implements OnInit {
         this.days = this.getDaysInWeek(this.viewedDate.add(7,'day'));
     }
     window.scrollTo(0, 0);
+    setTimeout(()=>{
+      this.popoverSubscribe();
+    })
   }
 
   setToday() {
@@ -209,6 +223,9 @@ export class DiaryComponent implements OnInit {
         this.days = this.getDaysInWeek(this.viewedDate);
         this.setTodayLabel = 'This week';
     }
+    setTimeout(()=>{
+      this.popoverSubscribe();
+    })
   }
 
   toggleSearch() {
@@ -236,6 +253,7 @@ export class DiaryComponent implements OnInit {
       event['duration'] = Math.random() * Math.floor(6) * 2.085 + 2.085 + '%';
       event['position'] = Math.random() * Math.floor(36) * 2.085 + '%';
       event['title'] = 'This is the event title';
+      event['notes'] = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
       event['color'] = this.getRandomColor();
 
       events.push(event);
