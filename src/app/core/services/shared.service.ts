@@ -5,6 +5,7 @@ import * as dayjs from 'dayjs';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AppConstants } from '../shared/app-constants';
+import { map, fill } from 'lodash';
 import { tap } from 'rxjs/operators';
 
 @Injectable({
@@ -49,7 +50,41 @@ export class SharedService {
       }
     });
   }
+/**
+   * Generate an array of exponential values for letting prices
+   *
+   * @returns {number[]}
+   */
+  public priceRangeLet(): number[] {
+    let pv = 0;
 
+    return map(fill((new Array(30)), 0), (v, i) => {
+      v = pv;
+      if (v < 1000) { v += 50; }
+      else if (v >= 1000 && v < 2000) { v += 250; }
+      else if (v >= 2000 && v < 5000) { v += 500; }
+      pv = v;
+      return pv;
+    });
+  }
+
+  /**
+   * Generate an array of exponential values for sale prices
+   *
+   * @returns {number[]}
+   */
+  public priceRangeSale(): number[] {
+    let pv = 0;
+
+    return map(fill((new Array(30)), 0), (vv, i) => {
+      vv = pv;
+      if (vv < 1000000) { vv += 50000; }
+      else if (vv >= 1000000 && vv < 2000000) { vv += 250000; }
+      else if (vv >= 2000000 && vv < 5000000) { vv += 500000; }
+      pv = vv;
+      return pv;
+    });
+  }
   getDropdownListInfo(): Observable<DropdownListInfo> {
   return  this.http.get<DropdownListInfo>(AppConstants.baseInfoUrl)
   .pipe(
