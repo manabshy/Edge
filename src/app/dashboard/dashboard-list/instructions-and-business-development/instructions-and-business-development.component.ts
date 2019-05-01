@@ -17,6 +17,7 @@ private _maxPrice = 0;
 priceRangeSale: number[];
 priceRangeLet: number[];
 filteredInstructions: Instruction[] = [];
+isFakeLoadingVisible = false;
 keepOriginalOrder = (a, b) => a.key;
 get searchTerm(): string {
   return this._searchTerm;
@@ -59,14 +60,24 @@ ngOnChanges() {
 
   performFilter(filterBy: string): Instruction[] {
   filterBy = filterBy.toLocaleLowerCase();
+  this.fakeLoading();
   return this.allInstructions.filter((instruction: Instruction) =>
   instruction.propertyAddress.toLocaleLowerCase().indexOf(filterBy) !== -1);
   }
   performMaxPriceFilter(filterBy: number): Instruction[] {
+    this.fakeLoading()
   return this.allInstructions.filter(instruction => instruction.salesValue < filterBy || instruction.salesValue == filterBy);
   }
   performMinPriceFilter(filterBy: number): Instruction[] {
+    this.fakeLoading();
   return this.allInstructions.filter(instruction => instruction.salesValue > filterBy || instruction.salesValue == filterBy );
+  }
+
+  fakeLoading() {
+    this.isFakeLoadingVisible = true;
+    setTimeout(()=>{
+      this.isFakeLoadingVisible = false;
+    }, 500);
   }
 
   // onSelectedMaxPrice(val: any) {
