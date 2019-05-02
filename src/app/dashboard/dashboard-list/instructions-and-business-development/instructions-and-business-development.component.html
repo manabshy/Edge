@@ -1,4 +1,4 @@
-  <div class="row page-title justify-content-end mb-0 pb-0 mt-2">
+  <div class="row page-title justify-content-end mb-0 pb-0 pt-2">
     <div class="col-12">
       <div class="input-group">
         <input type="text" [(ngModel)]="searchTerm" class="form-control" placeholder="Search"
@@ -19,21 +19,23 @@
     <div class="col-12" id="collapseBasic" [collapse]="!isAdvSearchCollapsed">
       <div class="row mt-1 mb-2">
         <div class="col-sm-8">
+          <label for="minPrice">Price range</label>
           <div class="input-group">
             <select [(ngModel)]="minPrice" class="custom-select" name="minPrice" id="minPrice">
-              <option value="0">Min Price</option>
+              <option value="0">No Min</option>
               <option *ngFor="let salePrice of priceRangeSale" [value]='salePrice'>{{salePrice | currency: 'GBP'}}</option>
             </select>
             <select  [(ngModel)]="maxPrice" class="custom-select" name="maxPrice" id="maxPrice">
-              <option value="0">Max Price</option>
+              <option value="0">No Max</option>
               <option *ngFor="let salePrice of priceRangeSale" [value]='salePrice'>{{salePrice | currency: 'GBP'}}</option>
             </select>
           </div>
         </div>
         <div class="col-sm-4 mt-2 mt-sm-0">
+          <label for="minBedrooms">Min Bedrooms</label>
           <div class="input-group">
             <select  class="custom-select" name="minBedrooms" id="minBedrooms">
-              <option value="0">Min Bedrooms</option>
+              <option value="0">No Min</option>
               <option *ngFor="let bedroom of bedroomValues" [value]='bedroom.id' > {{bedroom.name}}</option>
             </select>
             <!-- <select class="custom-select" name="maxBedrooms" id="maxBedrooms">

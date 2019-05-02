@@ -61,7 +61,12 @@ tr:first-child{
         background: color('white');
         top: $top-bar-height;
         z-index: 100;
-        font-size: $h5-font-size;
+    }
+
+    &:not(.row) {
+        @include media-breakpoint-down(sm) {
+            font-size: $h5-font-size;
+        }  
     }
 
     &.row {
