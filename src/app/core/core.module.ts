@@ -11,7 +11,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 // ngx bootstrap imports
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
-
+import {NgPipesModule} from 'ngx-pipes';
 //bootstrap
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown/';
 import { CollapseModule } from 'ngx-bootstrap/collapse/';
@@ -34,7 +34,7 @@ import { PropertyFinderComponent } from './property-finder/property-finder.compo
     BreadcrumbComponent, BasicSearchComponent,
     ConfirmModalComponent, PropertyFinderComponent, BsDropdownModule,
     CollapseModule, TabsModule, TypeaheadModule,
-    BsDatepickerModule, ModalModule, PopoverModule,
+    BsDatepickerModule, ModalModule, PopoverModule,  NgPipesModule,
     TooltipModule, AccordionModule, ReactiveFormsModule, FormsModule
   ],
   imports: [
