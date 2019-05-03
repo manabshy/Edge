@@ -24,7 +24,7 @@ get searchTerm(): string {
 }
 set searchTerm(val: string) {
   this._searchTerm = val;
-  this.filteredInstructions = this.searchTerm ? this.performFilter(this.searchTerm) : this.allInstructions;
+ // this.filteredInstructions = this.searchTerm ? this.performFilter(this.searchTerm) : this.allInstructions;
 }
 
 get minPrice() {
@@ -32,7 +32,7 @@ get minPrice() {
 }
 set minPrice(val: number) {
   this._minPrice = val;
-  this.filteredInstructions = this.minPrice > 0 ? this.performMinPriceFilter(this.minPrice) : this.allInstructions;
+ // this.filteredInstructions = this.minPrice > 0 ? this.performMinPriceFilter(this.minPrice) : this.allInstructions;
 }
 
 get maxPrice() {
@@ -41,7 +41,7 @@ get maxPrice() {
 set maxPrice(val: number) {
   this._maxPrice = val;
 
-  this.filteredInstructions = this.maxPrice > 0 ? this.performMaxPriceFilter(this.maxPrice) : this.allInstructions;
+ // this.filteredInstructions = this.maxPrice > 0 ? this.performMaxPriceFilter(this.maxPrice) : this.allInstructions;
 }
 
 get bedroomValues() {
@@ -89,37 +89,18 @@ ngOnChanges() {
    return this.allInstructions.filter(instruction => instruction.salesValue > filterBy || instruction.salesValue == filterBy );
   }
 
-  searchInstruction(maxPriceFilter?: number, minPriceFilter?: number, searchTermFilter?: string): Instruction[] {
-  //  if (maxPriceFilter > 0) {
-  //   this.filteredInstructions = this.allInstructions.filter(instruction => instruction.salesValue == maxPriceFilter ||
-  //     instruction.salesValue < maxPriceFilter);
-  //   console.log('from search instructions', this.filteredInstructions);
-  //   return this.filteredInstructions;
-  //  }
-  //  if (minPriceFilter > 0) {
-  //   return  this.filteredInstructions = this.allInstructions.filter(instruction => instruction.salesValue == maxPriceFilter);
-  //  }
-  //  if (searchTermFilter) {
-  //   searchTermFilter = searchTermFilter.toLocaleLowerCase();
-  //   return  this.filteredInstructions = this.allInstructions.filter((instruction: Instruction) =>
-  //   instruction.propertyAddress.toLocaleLowerCase().indexOf(searchTermFilter) !== -1);
-  //  }
-  //  if (minPriceFilter > 0 && maxPriceFilter > 0) {
-  //   return  this.filteredInstructions = this.allInstructions.filter(instruction =>
-  //     (instruction.salesValue == minPriceFilter ||  instruction.salesValue > minPriceFilter) &&
-  //     (instruction.salesValue == maxPriceFilter ||  instruction.salesValue < maxPriceFilter)
-  //     );
-  //  }
-  //  if (minPriceFilter > 0 && maxPriceFilter > 0 && searchTermFilter) {
-  //   searchTermFilter = searchTermFilter.toLocaleLowerCase();
-  //   return this.filteredInstructions = this.allInstructions.filter(instruction =>
-  //     (instruction.salesValue == minPriceFilter ||  instruction.salesValue > minPriceFilter) &&
-  //     (instruction.salesValue == maxPriceFilter ||  instruction.salesValue < maxPriceFilter) &&
-  //     ( instruction.propertyAddress.toLocaleLowerCase().indexOf(searchTermFilter) !== -1)
-  //     );
-  //  }
-    // return this.allInstructions;
-    return []
+  searchInstructions(maxPriceFilter?: number, minPriceFilter?: number, searchTermFilter?: string): Instruction[] {
+    this.fakeLoading();
+    if (minPriceFilter == 0 && maxPriceFilter == 0 && !searchTermFilter) {
+     return this.allInstructions;
+   }
+    searchTermFilter = searchTermFilter.toLocaleLowerCase();
+    return this.filteredInstructions = this.allInstructions.filter(instruction =>
+      (instruction.salesValue >= minPriceFilter || minPriceFilter == 0) &&
+      (instruction.salesValue <= maxPriceFilter || maxPriceFilter == 0 ) &&
+      (instruction.propertyAddress.toLocaleLowerCase().indexOf(searchTermFilter) !== -1 ||
+      !searchTermFilter)
+      );
   }
 
   fakeLoading() {

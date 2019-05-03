@@ -30,10 +30,10 @@ export class DashboardService {
   }
 
   getDashboardInstructions(staffMemberId: number, role: string, period?: string, pageSize?: number): Observable<Instruction[]> {
-   return this.get(staffMemberId, role, 'instructions', period, pageSize ).pipe(tap(data => console.log(JSON.stringify(data))));
+   return this.get(staffMemberId, role, 'instructions', period, pageSize );
   }
   getDashboardValuations(staffMemberId: number, role: string, period?: string, pageSize?: number): Observable<Valuation[]> {
-   return this.get(staffMemberId, role, 'valuations', period, pageSize ).pipe(tap(data => console.log(JSON.stringify(data))));
+   return this.get(staffMemberId, role, 'valuations', period, pageSize );
   }
 
   getDashboardApplicants(staffMemberId: number, role: string): Observable<ApplicantResult> {
