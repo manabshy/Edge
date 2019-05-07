@@ -22,11 +22,13 @@ export class ContactGroupsComponent implements OnInit {
     return this._searchTerm;
   }
   contactGroups: ContactGroupAutoCompleteResult[];
+  contactGroupDetails: ContactGroupAutoCompleteResult[];
   contactPeople: any[];
-
+  contactGroupId: number;
   constructor(private contactGroupService: ContactGroupsService, private route: ActivatedRoute) { }
 
   ngOnInit() {
+    // this.route.params.subscribe(params => {this.contactGroupId = params['id']; });
     this.searchTerm = this.route.snapshot.queryParamMap.get('searchTerm') || AppUtils.searchTerm || '';
     this.contactGroupsAutocomplete(this.searchTerm);
   }

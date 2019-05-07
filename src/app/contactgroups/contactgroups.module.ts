@@ -12,7 +12,8 @@ import { ContactgroupsDetailEditComponent } from './contactgroups-detail-edit/co
 import { ContactgroupsCompanyEditComponent } from './contactgroups-company-edit/contactgroups-company-edit.component';
 
 @NgModule({
-  declarations: [ContactgroupsListComponent, ContactgroupsDetailComponent, ContactgroupsPeopleComponent, ContactgroupsNotesComponent, ContactgroupsDetailEditComponent, ContactgroupsCompanyEditComponent],
+  declarations: [ContactgroupsListComponent, ContactgroupsDetailComponent, ContactgroupsPeopleComponent,
+    ContactgroupsNotesComponent, ContactgroupsDetailEditComponent, ContactgroupsCompanyEditComponent],
   imports: [
     CommonModule,
     CoreModule,

@@ -21,7 +21,7 @@ export class ContactGroupsService {
       );
   }
   getContactGroupbyId(contactGroupId: number): Observable<ContactGroupAutoCompleteResult[]> {
-    const url = `${AppConstants.baseContactGroupUrl}/{ContactGroupId}?ContactGroupId=${contactGroupId}`;
+    const url = `${AppConstants.baseContactGroupUrl}/${contactGroupId}`;
     return this.http.get<ContactGroupAutoCompleteData>(url).pipe(map(response => response.result));
   }
 }

@@ -87,3 +87,4 @@ export interface ContactGroupMetaDeta{
   indexVisibleContactGroup?: any;
   hiddenContactGroups?: any;
 }
+

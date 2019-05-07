@@ -29,7 +29,6 @@ export class DashboardComponent implements OnInit {
   totalExchanges: number;
   totalPipeline: number;
   offerResult: OffersResult;
-
   period: string;
   periodKey: string;
   email: string;
@@ -39,41 +38,8 @@ export class DashboardComponent implements OnInit {
   private _selectedPeriod: string;
   periodList = Constants.PeriodList;
   private readonly role = 'salesManager';
-  //  valuationTile: Tiles = Tiles.Valuations;
-  //  bddTile: Tiles = Tiles.BusinessDevelopment;
-  //  allInstructionsTile: Tiles = Tiles.AllInstructions;
-  //  exchangesTile = Tiles.Exchanges;
-  //  pipelineTile = Tiles.Pipeline;
-  //  instructionsTile = Tiles.Instructions;
   @ViewChild('dashboardTabs') dashboardTabs: TabsetComponent;
   selectedTab: number;
-  // get valuations(): string {
-  //   return this.valuationTile = Tiles.Valuations;
-  // }
-  // get allInstructions(): string{
-  //   return this.allInstructionsTile = Tiles.AllInstructions;
-  // }
-  // get bdd(): string {
-  //   return this.bddTile = Tiles.BusinessDevelopment;
-  // }
-  // get isValuation(): boolean {
-  //   return this.valuationTile === Tiles.Valuations;
-  // }
-  // get isInstructions(): boolean {
-  //   return this.instructionsTile === Tiles.Instructions;
-  // }
-  // get isAllInstructions(): boolean {
-  //   return this.allInstructions === Tiles.AllInstructions;
-  // }
-  // get isBdd(): boolean {
-  //   return this.bddTile === Tiles.BusinessDevelopment;
-  // }
-  // get isPipeline(): boolean {
-  //   return this.pipelineTile === Tiles.Pipeline;
-  // }
-  // get isExchanges(): boolean {
-  //   return this.exchangesTile === Tiles.Exchanges;
-  // }
 
   set selectedPeriod(val: string) {
     this._selectedPeriod = val;
