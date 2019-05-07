@@ -11,10 +11,11 @@ import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component'
 })
 export class AuthService {
   private user: UserForAuthentication;
-  endpointUrl = AppConstants.endpointUrl;
   private adalConfig = {
-    tenant: 'ed781348-2f1d-4f1e-bbf8-137da318df39',
-    clientId: '03d5d394-2418-42fa-a345-556b8d7ffcdb',
+    tenant: AppConstants.tenant,
+    clientId: AppConstants.clientId,
+    // tenant: 'ed781348-2f1d-4f1e-bbf8-137da318df39',
+    // clientId: '03d5d394-2418-42fa-a345-556b8d7ffcdb',
     // redirectUri: 'https://stagedouglasandgordon-wedge.azurewebsites.net/auth-callback',
     // postLogoutRedirectUri: 'https://stagedouglasandgordon-wedge.azurewebsites.net',
     redirectUri: 'http://localhost:4200/auth-callback',
