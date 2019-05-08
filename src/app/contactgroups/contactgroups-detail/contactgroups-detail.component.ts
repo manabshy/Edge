@@ -11,6 +11,8 @@ import { ActivatedRoute } from '@angular/router';
 export class ContactgroupsDetailComponent implements OnInit {
   contactGroupDetails: ContactGroupAutoCompleteResult[];
   contactGroupId: number;
+  isCollapsed: boolean;
+  // closeOthers: boolean;
   constructor(private contactGroupService: ContactGroupsService, private route: ActivatedRoute) { }
 
   ngOnInit() {

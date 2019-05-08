@@ -10,7 +10,7 @@ import { AppUtils } from 'src/app/core/shared/utils';
   providedIn: 'root'
 })
 export class AddDiaryEventGuard implements CanDeactivate<AddDiaryEventComponent> {
-
+ 
   constructor(public modalService: BsModalService) {
   }
 
@@ -23,7 +23,7 @@ export class AddDiaryEventGuard implements CanDeactivate<AddDiaryEventComponent>
       console.log(currentState.url);
 
       AppUtils.prevRoute = AppUtils.prevRouteBU;
-      
+
       if(!component.canDeactivate()) {
         const subject = new Subject<boolean>();
         const initialState = {

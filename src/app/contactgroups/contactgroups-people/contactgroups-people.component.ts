@@ -6,7 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./contactgroups-people.component.scss']
 })
 export class ContactgroupsPeopleComponent implements OnInit {
-
+  isCollapsed: boolean;
+  isCollapsed1: boolean;
+  isCollapsed2: boolean;
   constructor() { }
 
   ngOnInit() {

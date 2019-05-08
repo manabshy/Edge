@@ -7,7 +7,8 @@ import { Subject } from 'rxjs';
   styleUrls: ['./confirm-modal.component.scss']
 })
 export class ConfirmModalComponent implements OnInit {
-
+  @Input() title;
+  @Input() actions = [];
   subject: Subject<boolean>;
 
   constructor(public bsModalRef: BsModalRef) { }

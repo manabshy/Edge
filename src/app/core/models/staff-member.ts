@@ -10,6 +10,7 @@ export interface StaffMember {
   staffMemberId: number;
   firstName: string;
   surname: string;
+  fullName: string;
 }
 
 export interface Permission {

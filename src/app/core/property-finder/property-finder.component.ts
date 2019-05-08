@@ -10,7 +10,8 @@ export class PropertyFinderComponent implements OnInit {
   property: string;
 
   isAddPropertyCollapsed = false;
-
+  isManAddressCollapsed = false;
+  
   constructor() { }
 
   ngOnInit() {

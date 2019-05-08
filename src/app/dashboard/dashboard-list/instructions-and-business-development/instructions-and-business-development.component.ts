@@ -18,7 +18,7 @@ priceRangeSale: number[];
 priceRangeLet: number[];
 filteredInstructions: Instruction[] = [];
 isFakeLoadingVisible = false;
-
+isAdvSearchCollapsed = false;
   get searchTerm(): string {
     return this._searchTerm;
   }

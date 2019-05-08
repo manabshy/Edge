@@ -21,7 +21,7 @@ export class AuthService {
     redirectUri: 'http://localhost:4200/auth-callback',
     postLogoutRedirectUri: 'http://localhost:4200',
     endpoints: {
-      'http://localhost:57211': '67f9a9a1-d8de-45bc-af20-43e1e18ccba5',
+      // 'http://localhost:57211': '67f9a9a1-d8de-45bc-af20-43e1e18ccba5',
       'https://dandg-api-wedge.azurewebsites.net': '67f9a9a1-d8de-45bc-af20-43e1e18ccba5'
     }
   };
