@@ -26,11 +26,13 @@ import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 import { PropertyFinderComponent } from './property-finder/property-finder.component';
+import { FormatAddressPipe } from './shared/format-address.pipe';
 
 @NgModule({
-  declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent, ConfirmModalComponent, PropertyFinderComponent],
+  declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent,
+    ConfirmModalComponent, PropertyFinderComponent, FormatAddressPipe],
   exports: [
-    RoundingPipe, TruncatingPipe, ShortenNamePipe,
+    RoundingPipe, TruncatingPipe, ShortenNamePipe, FormatAddressPipe,
     BreadcrumbComponent, BasicSearchComponent,
     ConfirmModalComponent, PropertyFinderComponent, BsDropdownModule,
     CollapseModule, TabsModule, TypeaheadModule,
