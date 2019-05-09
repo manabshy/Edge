@@ -1,6 +1,6 @@
 <app-breadcrumb></app-breadcrumb>
 <div class="container">
-  <h4 class="page-title m-0">Contact Detail</h4>
+  <h4 class="page-title m-0">Person Detail</h4>
   <!-- <div class="alert alert-danger mt-3" role="alert">
     Do not contact, GDPR request pending
   </div> -->
@@ -45,20 +45,20 @@
     <div class="col-12" >
         <button type="button" class="btn btn-link px-0" (click)="isCollapsed = !isCollapsed"
         [attr.aria-expanded]="!isCollapsed" aria-controls="collapseBasic">Marketing Prefs <span class="badge badge-pill badge-primary">
-         5 </span>
+         {{searchedPersonDetails.marketingPreferences?.count || 0}} </span>
         </button>
         <div id="collapseBasic" [collapse]="!isCollapsed">
           <ul>
-            <!-- <li *ngIf="searchedPersonDetails.marketingPreferences.marketBulletin">Quarterly bulletin</li>
-            <li >Special offers</li>
+            <li *ngIf="searchedPersonDetails.marketingPreferences?.marketBulletin">Quarterly bulletin</li>
+            <li *ngIf="searchedPersonDetails.marketingPreferences?.general" >Special offers</li>
             <li *ngIf="searchedPersonDetails.marketingPreferences?.events">Landlord/investor events</li>
             <li *ngIf="searchedPersonDetails.marketingPreferences?.newHomes">New homes/investments</li>
-            <li *ngIf="searchedPersonDetails.marketingPreferences?.general">Other occasional marketing</li> -->
-            <li>Quarterly bulletin</li>
+            <li *ngIf="searchedPersonDetails.marketingPreferences?.general">Other occasional marketing</li>
+            <!-- <li>Quarterly bulletin</li>
             <li>Special offers</li>
             <li>Landlord/investor events</li>
             <li>New homes/investments</li>
-            <li>Other occasional marketing</li>
+            <li>Other occasional marketing</li> -->
           </ul>
         </div>
     </div>
