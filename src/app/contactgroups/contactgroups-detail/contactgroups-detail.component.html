@@ -1,6 +1,105 @@
 <app-breadcrumb></app-breadcrumb>
 <div class="container">
   <h4 class="page-title m-0">Contact Detail</h4>
+  <!-- <div class="alert alert-danger mt-3" role="alert">
+    Do not contact, GDPR request pending
+  </div> -->
+  <div class="bg-light text-right pt-3 px-3">
+    <a routerLink="edit"><i class="fas fa-edit"></i> Edit</a>
+  </div>
+  <div class="row mx-0 mb-4 pb-3 bg-light" *ngIf="searchedPersonDetails">
+    <div class="col-12">
+      <p class="mb-2">
+        <strong>{{searchedPersonDetails.firstName}} {{searchedPersonDetails.lastName}}</strong>&nbsp;
+
+        <!-- <i class="fas fa-phone-slash"></i>&nbsp;
+
+        <span class="badge badge-danger mr-1">GDPR</span><span class="badge badge-success">AML Valid</span><br /><span class="badge badge-pill badge-info">Coca
+          Cola</span>&nbsp;<span class="badge badge-pill badge-info">John Lewis</span>&nbsp;<span
+          class="badge badge-pill badge-info">Manchester United</span> -->
+          <ng-container *ngIf="contactGroupDetails?.companyId > 0">&nbsp;<span
+            class="badge badge-pill badge-info">{{contactGroupDetails?.companyName}}</span></ng-container>
+      </p>
+    </div>
+    <ng-container>
+    <!-- <ng-container *ngFor="let subContact of contactGroup?.contactGroups">
+        <ng-container *ngIf="subContact?.isCompany">&nbsp;<span
+            class="badge badge-pill badge-info">{{subContact?.companyName}}</span></ng-container>
+      </ng-container> -->
+    </ng-container>
+    <div class="col-sm-4">
+        <p class="mb-2">{{searchedPersonDetails.address | formatAddress}}</p>
+    </div>
+    <div class="col-12 col-sm-3 col-xl-4">
+      <div class="row" *ngFor="let phoneNumber of searchedPersonDetails.phoneNumbers; let i = index;">
+        <div class="col-6 telephone"><p class="mb-2"><a (click)="$event.stopPropagation()" href="{{phoneNumber.number}}">{{phoneNumber.number}}</a><br /></p></div>
+      </div>
+    </div>
+    <div class="col-sm-5 col-xl-4" *ngFor="let emailAddresses of searchedPersonDetails.emailAddresses">
+      <p class="mb-2 text-truncate"><a (click)="$event.stopPropagation()"
+          href="{{emailAddresses.email}}">{{emailAddresses.email}}</a></p>
+    </div>
+    <div class="col-12">
+      <hr class="my-1">
+    </div>
+    <div class="col-12" >
+        <button type="button" class="btn btn-link px-0" (click)="isCollapsed = !isCollapsed"
+        [attr.aria-expanded]="!isCollapsed" aria-controls="collapseBasic">Marketing Prefs <span class="badge badge-pill badge-primary">
+         5 </span>
+        </button>
+        <div id="collapseBasic" [collapse]="!isCollapsed">
+          <ul>
+            <!-- <li *ngIf="searchedPersonDetails.marketingPreferences.marketBulletin">Quarterly bulletin</li>
+            <li >Special offers</li>
+            <li *ngIf="searchedPersonDetails.marketingPreferences?.events">Landlord/investor events</li>
+            <li *ngIf="searchedPersonDetails.marketingPreferences?.newHomes">New homes/investments</li>
+            <li *ngIf="searchedPersonDetails.marketingPreferences?.general">Other occasional marketing</li> -->
+            <li>Quarterly bulletin</li>
+            <li>Special offers</li>
+            <li>Landlord/investor events</li>
+            <li>New homes/investments</li>
+            <li>Other occasional marketing</li>
+          </ul>
+        </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12" *ngIf="contactGroupDetails">
+      <ul class="list-group list-group-flush mb-3">
+        <li class="list-group-item border-top-0">
+          <div class="row">
+            <div class="col col-sm-auto form-group custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" id="c123456" checked>
+               <ng-container *ngFor="let contactPerson of contactGroupDetails.contactPeople; last as isLast">
+                    <label  for="c123456">{{contactPerson.firstName}} {{contactPerson.lastName}} </label>
+                    <ng-container *ngIf="!isLast">, </ng-container>
+               </ng-container>
+            </div>
+            <div class="col-auto">
+              <a routerLink="../people" class="btn btn-link py-0">
+                <i class="fas fa-users"></i> View Group
+              </a>
+            </div>
+          </div>
+        </li>
+        <!-- <li class="list-group-item">
+          <div class="row">
+            <div class="col col-sm-auto form-group custom-control custom-checkbox ">
+              <input type="checkbox" class="custom-control-input" id="c341456" checked>
+              <label class="custom-control-label" for="c341456">John Smith, Susan Smith
+              </label></div>
+            <div class="col-auto">
+              <a routerLink="../people" class="btn btn-link py-0">
+                <i class="fas fa-users"></i> View Group
+              </a>
+            </div>
+          </div>
+        </li> -->
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <h4 class="page-title m-0">Contact Detail</h4>
   <div class="alert alert-danger mt-3" role="alert">
     Do not contact, GDPR request pending
   </div>
@@ -84,6 +183,7 @@
       </ul>
     </div>
   </div>
+
   <accordion [closeOthers]="true">
     <accordion-group class="mb-2">
       <button class="btn btn-link btn-block clearfix p-0" accordion-heading>

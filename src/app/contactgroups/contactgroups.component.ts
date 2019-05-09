@@ -28,7 +28,6 @@ export class ContactGroupsComponent implements OnInit {
   constructor(private contactGroupService: ContactGroupsService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    // this.route.params.subscribe(params => {this.contactGroupId = params['id']; });
     this.searchTerm = this.route.snapshot.queryParamMap.get('searchTerm') || AppUtils.searchTerm || '';
     this.contactGroupsAutocomplete(this.searchTerm);
   }
@@ -37,8 +36,8 @@ export class ContactGroupsComponent implements OnInit {
     this.contactGroupService.getAutocompleteContactGroups(searchTerm).subscribe(result => {
         this.contactGroups = result;
         this.isLoading = false;
-        console.log(result);
         this.getHiddenContactGroups();
+        console.log('contact groups',this.contactGroups);
 
         if (this.searchTerm && this.searchTerm.length) {
           if (!this.contactGroups.length) {
@@ -72,7 +71,6 @@ export class ContactGroupsComponent implements OnInit {
       }
     }
   }
-
   private getHiddenContactGroups() {
    if (this.contactGroups !== null) {
     for (let i = 0; i < this.contactGroups.length; i++) {
@@ -89,4 +87,6 @@ export class ContactGroupsComponent implements OnInit {
     }
    }
   }
+
+
 }

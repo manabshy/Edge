@@ -8,7 +8,7 @@ export interface ContactGroup {
   addressee: string;
   notes: ContactGroupsNote[];
   // notes?: string;
-  people: Person[];
+  contactPeople: Person[];
   title?: string;
   comments: string;
   salutation: string;
@@ -24,6 +24,10 @@ export interface ContactGroup {
   rawData?: any;
 }
 
+export interface ContactAddress extends Address {
+  postCode: string;
+  countryId: number;
+}
 export interface ContactGroupsNote {
   contactGroupId: number;
   noteId: number;
@@ -81,6 +85,12 @@ export interface AutoCompleteContactGroup {
 
 export interface ContactGroupAutoCompleteData extends ResultData {
   result: ContactGroupAutoCompleteResult[];
+}
+export interface ContactGroupData extends ResultData {
+  result: ContactGroup;
+}
+export interface PersonContactData extends ResultData {
+  result: Person;
 }
 
 export interface ContactGroupMetaDeta{

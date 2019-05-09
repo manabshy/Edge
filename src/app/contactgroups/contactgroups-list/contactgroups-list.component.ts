@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ContactGroupAutoCompleteResult } from '../shared/contact-group';
 
 @Component({
@@ -10,8 +9,10 @@ import { ContactGroupAutoCompleteResult } from '../shared/contact-group';
 export class ContactgroupsListComponent implements OnInit {
 @Input()  contactGroups: ContactGroupAutoCompleteResult[];
 @Input() searchTerm: string;
+
   constructor() { }
 
   ngOnInit() {
   }
+
 }

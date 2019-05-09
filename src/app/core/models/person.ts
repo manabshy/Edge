@@ -17,6 +17,9 @@ export interface Person {
   currentUserName: string;
   currentStaffMemberID: number;
   currentOfficeId?: number;
+  amlCompleted: boolean;
+  amlCompletedDate?: Date;
+  marketingPreferences: MarketingPreferences;
   neverMarket: boolean;
   uKResident: boolean;
   addressFull: string;
@@ -86,5 +89,12 @@ export interface MarketType {
   id: string;
   name: string;
   selected: boolean;
-
+}
+export interface MarketingPreferences {
+  marketBulletin: boolean;
+  events: boolean;
+  newHomes: boolean;
+  offerSurveys: boolean;
+  general: boolean;
+  count: number;
 }
