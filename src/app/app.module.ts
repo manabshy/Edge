@@ -33,7 +33,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { CoreModule } from './core/core.module';
 import { AccountModule } from './account/account.module';
 import { LeaderboardModule } from './leaderboard/leaderboard.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PropertyModule } from './property/property.module';
 import { ContactgroupsModule } from './contactgroups/contactgroups.module';
 import { DiaryModule } from './diary/diary.module';
@@ -74,6 +74,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     AccountModule,
     CoreModule,
     DashboardModule,

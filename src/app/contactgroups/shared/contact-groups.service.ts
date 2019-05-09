@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AppConstants } from 'src/app/core/shared/app-constants';
-import { ContactGroupAutoCompleteResult, ContactGroupAutoCompleteData, PersonContactData, ContactGroupData, ContactGroup } from './contact-group';
+import { ContactGroupAutoCompleteResult, ContactGroupAutoCompleteData,
+         PersonContactData, ContactGroupData, ContactGroup, BasicContactGroup, BasicContactGroupData } from './contact-group';
 import { map, tap } from 'rxjs/operators';
 import { Person } from 'src/app/core/models/person';
 
@@ -28,5 +29,13 @@ export class ContactGroupsService {
   getContactPerson(contactGroupId: number, personId: number): Observable<Person> {
     const url = `${AppConstants.baseContactGroupUrl}/${contactGroupId}/person/${personId}`;
     return this.http.get<PersonContactData>(url).pipe(map(response => response.result));
+  }
+  getPerson( personId: number): Observable<Person> {
+    const url = `${AppConstants.basePersonUrl}/${personId}`;
+    return this.http.get<PersonContactData>(url).pipe(map(response => response.result));
+  }
+  getPersonContactGroups( personId: number): Observable<BasicContactGroup[]> {
+    const url = `${AppConstants.basePersonUrl}/${personId}/contactGroups`;
+    return this.http.get<BasicContactGroupData>(url).pipe(map(response => response.result));
   }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ContactGroupAutoCompleteResult, ContactGroup } from '../shared/contact-group';
+import { ContactGroupAutoCompleteResult, ContactGroup, BasicContactGroup } from '../shared/contact-group';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ActivatedRoute } from '@angular/router';
 import { Person } from 'src/app/core/models/person';
@@ -12,7 +12,7 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./contactgroups-detail.component.scss']
 })
 export class ContactgroupsDetailComponent implements OnInit {
-  searchedPersonContactGroups: ContactGroupAutoCompleteResult[];
+  searchedPersonContactGroups: BasicContactGroup[];
   contactGroupDetails: ContactGroup;
   searchedPersonDetails: Person;
   searchedPersonCompanyName: string;
@@ -22,10 +22,11 @@ export class ContactgroupsDetailComponent implements OnInit {
   constructor(private contactGroupService: ContactGroupsService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {this.contactGroupId = params['id']; });
+    // this.route.params.subscribe(params => {this.contactGroupId = params['id']; });
     this.route.params.subscribe(params => {this.personId = params['personId'] || 0; });
-    this.getContactGroupById(this.contactGroupId);
-    this.getSearchedPersonDetails(this.contactGroupId, this.personId);
+    // this.getContactGroupById(this.contactGroupId);
+    this.getSearchedPersonDetails(this.personId);
+    this.getSearchedPersonContactGroups(this.personId);
   }
 
   getContactGroupById(contactGroupId: number) {
@@ -35,15 +36,18 @@ export class ContactgroupsDetailComponent implements OnInit {
     });
   }
 
-  getSearchedPersonDetails(contactGroupId: number, personId: number) {
-    this.contactGroupService.getContactPerson(contactGroupId, personId).subscribe(data => {
+  getSearchedPersonDetails(personId: number) {
+    this.contactGroupService.getPerson(personId).subscribe(data => {
       this.searchedPersonDetails = data;
       console.log('this is contact person details', this.searchedPersonDetails);
     });
   }
 
   getSearchedPersonContactGroups(personId: number) {
-    let groups = this.searchedPersonContactGroups.filter(group=>group.personId == personId);
-    console.log(groups);
+    this.contactGroupService.getPersonContactGroups(personId).subscribe(data => {
+      this.searchedPersonContactGroups = data;
+      console.log('this is contact groups data', data);
+      console.log('this is contact groups for person', this.searchedPersonContactGroups);
+    });
   }
 }

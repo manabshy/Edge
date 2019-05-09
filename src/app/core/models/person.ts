@@ -5,6 +5,7 @@ export interface Person {
   firstName: string;
   lastName: string;
   middleName: string;
+  fullName: string;
   title: string;
   titleOther?: string;
   emailAddresses: Email[];
@@ -24,6 +25,15 @@ export interface Person {
   uKResident: boolean;
   addressFull: string;
   rawData: any;
+}
+
+export interface BasicPerson{
+  personId: number;
+  firstName: string;
+  lastName: string;
+  middleName: string;
+  fullName: string;
+  title: string;
 }
 export interface Email {
   emailId: number;

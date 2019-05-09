@@ -11,22 +11,13 @@
     <div class="col-12">
       <p class="mb-2">
         <strong>{{searchedPersonDetails.firstName}} {{searchedPersonDetails.lastName}}</strong>&nbsp;
-
-        <!-- <i class="fas fa-phone-slash"></i>&nbsp;
-
-        <span class="badge badge-danger mr-1">GDPR</span><span class="badge badge-success">AML Valid</span><br /><span class="badge badge-pill badge-info">Coca
-          Cola</span>&nbsp;<span class="badge badge-pill badge-info">John Lewis</span>&nbsp;<span
-          class="badge badge-pill badge-info">Manchester United</span> -->
-          <ng-container *ngIf="contactGroupDetails?.companyId > 0">&nbsp;<span
-            class="badge badge-pill badge-info">{{contactGroupDetails?.companyName}}</span></ng-container>
+          <ng-container *ngFor="let searchedPersonContactGroup of searchedPersonContactGroups" >
+                  <ng-container *ngIf="searchedPersonContactGroup?.isCompany">&nbsp;
+                      <span class="badge badge-pill badge-info">{{searchedPersonContactGroup?.companyName}}</span>
+                  </ng-container>
+          </ng-container>
       </p>
     </div>
-    <ng-container>
-    <!-- <ng-container *ngFor="let subContact of contactGroup?.contactGroups">
-        <ng-container *ngIf="subContact?.isCompany">&nbsp;<span
-            class="badge badge-pill badge-info">{{subContact?.companyName}}</span></ng-container>
-      </ng-container> -->
-    </ng-container>
     <div class="col-sm-4">
         <p class="mb-2">{{searchedPersonDetails.address | formatAddress}}</p>
     </div>
@@ -54,23 +45,18 @@
             <li *ngIf="searchedPersonDetails.marketingPreferences?.events">Landlord/investor events</li>
             <li *ngIf="searchedPersonDetails.marketingPreferences?.newHomes">New homes/investments</li>
             <li *ngIf="searchedPersonDetails.marketingPreferences?.general">Other occasional marketing</li>
-            <!-- <li>Quarterly bulletin</li>
-            <li>Special offers</li>
-            <li>Landlord/investor events</li>
-            <li>New homes/investments</li>
-            <li>Other occasional marketing</li> -->
           </ul>
         </div>
     </div>
   </div>
   <div class="row">
-    <div class="col-12" *ngIf="contactGroupDetails">
+    <div class="col-12" *ngIf="searchedPersonContactGroups">
       <ul class="list-group list-group-flush mb-3">
         <li class="list-group-item border-top-0">
-          <div class="row">
-            <div class="col col-sm-auto form-group custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" id="c123456" checked>
-               <ng-container *ngFor="let contactPerson of contactGroupDetails.contactPeople; last as isLast">
-                    <label  for="c123456">{{contactPerson.firstName}} {{contactPerson.lastName}} </label>
+          <div class="row" *ngFor="let searchedPersonContactGroup of searchedPersonContactGroups">
+            <div class="col col-sm-auto form-group ">
+               <ng-container *ngFor="let contactPerson of searchedPersonContactGroup.contactPeople; last as isLast">
+                    {{contactPerson.fullName}}
                     <ng-container *ngIf="!isLast">, </ng-container>
                </ng-container>
             </div>
@@ -81,636 +67,536 @@
             </div>
           </div>
         </li>
-        <!-- <li class="list-group-item">
-          <div class="row">
-            <div class="col col-sm-auto form-group custom-control custom-checkbox ">
-              <input type="checkbox" class="custom-control-input" id="c341456" checked>
-              <label class="custom-control-label" for="c341456">John Smith, Susan Smith
-              </label></div>
-            <div class="col-auto">
-              <a routerLink="../people" class="btn btn-link py-0">
-                <i class="fas fa-users"></i> View Group
-              </a>
-            </div>
-          </div>
-        </li> -->
       </ul>
     </div>
   </div>
-</div>
-<div class="container">
-  <h4 class="page-title m-0">Contact Detail</h4>
-  <div class="alert alert-danger mt-3" role="alert">
-    Do not contact, GDPR request pending
-  </div>
-  <div class="bg-light text-right pt-3 px-3">
-    <a routerLink="edit"><i class="fas fa-edit"></i> Edit</a>
-  </div>
-  <div class="row mx-0 mb-4 pb-3 bg-light">
-    <div class="col-12">
-      <p class="mb-2">
-        <strong>James Gordon</strong>&nbsp;
-
-        <i class="fas fa-phone-slash"></i>&nbsp;
-
-        <span class="badge badge-danger mr-1">GDPR</span><span class="badge badge-success">AML Valid</span><br /><span class="badge badge-pill badge-info">Coca
-          Cola</span>&nbsp;<span class="badge badge-pill badge-info">John Lewis</span>&nbsp;<span
-          class="badge badge-pill badge-info">Manchester United</span>
-      </p>
-    </div>
-    <div class="col-sm-4">
-        <p class="mb-2">23 Prince of Wales Crescent, SW6</p>
-    </div>
-    <div class="col-12 col-sm-3 col-xl-4">
-      <div class="row">
-        <div class="col-6 telephone"><p class="mb-2"><a (click)="$event.stopPropagation()" href="tel:071212312412334">071212312412334</a><br />(Mobile)</p></div>
-        <div class="col-6 telephone"><p class="mb-2"><a (click)="$event.stopPropagation()" href="tel:071212312412334">071212312412334</a><br />(Home)</p></div>
-      </div>
-    </div>
-    <div class="col-sm-5 col-xl-4">
-      <p class="mb-2 text-truncate"><a (click)="$event.stopPropagation()"
-          href="mailto:jamesgordon@jamesgordon.com">jamesgordon@jamesgordon.com</a></p>
-      <p class="mb-2 text-truncate"><a (click)="$event.stopPropagation()"
-          href="mailto:jamesgordon@jamesgordon.com">jamesgordon@jamesgordon.com</a></p>
-    </div>
-    <div class="col-12">
-      <hr class="my-1">
-    </div>
-    <div class="col-12">
-        <button type="button" class="btn btn-link px-0" (click)="isCollapsed = !isCollapsed"
-        [attr.aria-expanded]="!isCollapsed" aria-controls="collapseBasic">Marketing Prefs <span class="badge badge-pill badge-primary">5</span>
-        </button>
-        <div id="collapseBasic" [collapse]="!isCollapsed">
-          <ul>
-            <li>Quarterly bulletin</li>
-            <li>Special offers</li>
-            <li>Landlord/investor events</li>
-            <li>New homes/investments</li>
-            <li>Other occasional marketing</li>
-          </ul>
-        </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-12">
-      <p>Displaying info for:</p>
-      <ul class="list-group list-group-flush mb-3">
-        <li class="list-group-item border-top-0">
-          <div class="row">
-            <div class="col col-sm-auto form-group custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" id="c123456" checked>
-              <label class="custom-control-label" for="c123456">John Smith, Michael Brown, Wendy McTavish
-              </label></div>
-            <div class="col-auto">
-              <a routerLink="../people" class="btn btn-link py-0">
-                <i class="fas fa-users"></i> View Group
-              </a>
-            </div>
-          </div>
-        </li>
-        <li class="list-group-item">
-          <div class="row">
-            <div class="col col-sm-auto form-group custom-control custom-checkbox ">
-              <input type="checkbox" class="custom-control-input" id="c341456" checked>
-              <label class="custom-control-label" for="c341456">John Smith, Susan Smith
-              </label></div>
-            <div class="col-auto">
-              <a routerLink="../people" class="btn btn-link py-0">
-                <i class="fas fa-users"></i> View Group
-              </a>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </div>
-
   <accordion [closeOthers]="true">
-    <accordion-group class="mb-2">
-      <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
-        <div class="pull-left float-left">Leads <span class="badge badge-pill badge-primary">1</span></div>
-        <a class="float-right pull-right" routerLink="/lead-edit">Add Lead <i class="fas fa-plus"></i></a>
-      </button>
-      <div class="list-group list-group-flush">
-        <div class="list-group-item list-header d-none d-sm-block">
-          <div class="row">
-            <div class="col-sm"><strong>Status</strong></div>
-            <div class="col-sm"><strong>Chase</strong></div>
-            <div class="col-sm"><strong>Owner</strong></div>
-            <div class="col-sm"><strong>Type</strong></div>
-            <div class="col-sm-3"><strong>Address</strong></div>
+      <accordion-group class="mb-2">
+        <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
+          <div class="pull-left float-left">Leads <span class="badge badge-pill badge-primary">1</span></div>
+          <a class="float-right pull-right" routerLink="/lead-edit">Add Lead <i class="fas fa-plus"></i></a>
+        </button>
+        <div class="list-group list-group-flush">
+          <div class="list-group-item list-header d-none d-sm-block">
+            <div class="row">
+              <div class="col-sm"><strong>Status</strong></div>
+              <div class="col-sm"><strong>Chase</strong></div>
+              <div class="col-sm"><strong>Owner</strong></div>
+              <div class="col-sm"><strong>Type</strong></div>
+              <div class="col-sm-3"><strong>Address</strong></div>
+            </div>
+          </div>
+          <a routerLink="/lead-edit" class="list-group-item list-group-item-action">
+            <div class="row">
+              <div class="col-sm">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Status</dt>
+                  <dd class="col text-success">Active</dd>
+                </dl>
+              </div>
+              <div class="col-sm">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Chase</dt>
+                  <dd class="col">14/05/18</dd>
+                </dl>
+              </div>
+              <div class="col-sm">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Owner</dt>
+                  <dd class="col">Alex Turnbull</dd>
+                </dl>
+              </div>
+              <div class="col-sm">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Type</dt>
+                  <dd class="col">Valuation</dd>
+                </dl>
+              </div>
+              <div class="col-sm-3">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Address</dt>
+                  <dd class="col">91A Abbeville Road, London, SW4 9LP</dd>
+                </dl>
+              </div>
+            </div>
+          </a>
+        </div>
+      </accordion-group>
+      <accordion-group class="mb-2">
+        <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
+          <div class="pull-left float-left">Notes <span class="badge badge-pill badge-primary">3</span></div>
+          <a class="float-right pull-right" routerLink="/home">Add Note <i class="fas fa-plus"></i></a>
+        </button>
+        <app-contactgroups-notes></app-contactgroups-notes>
+      </accordion-group>
+      <accordion-group class="mb-2">
+        <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
+          <div class="pull-left float-left">Applicants <span class="badge badge-pill badge-primary">2</span></div>
+          <a class="float-right pull-right" routerLink="/home">Add Appl. <i class="fas fa-plus"></i></a>
+        </button>
+        <div class="list-group list-group-flush">
+          <div class="list-group-item list-header d-none d-sm-block">
+            <div class="row">
+              <div class="col-sm"><strong>Request</strong></div>
+              <div class="col-sm"><strong>Areas</strong></div>
+              <div class="col-sm"><strong>Neg.</strong></div>
+            </div>
+          </div>
+          <a routerLink="/applicant-view-sale" class="list-group-item list-group-item-action">
+            <div class="row">
+              <div class="col-sm">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Request</dt>
+                  <dd class="col">Sales £750,000 2 Beds</dd>
+                </dl>
+              </div>
+              <div class="col-sm">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Areas</dt>
+                  <dd class="col">Chelsea, Kensington</dd>
+                </dl>
+              </div>
+              <div class="col-sm">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Neg.</dt>
+                  <dd class="col">Chiara Tassia, Dave Newport</dd>
+                </dl>
+              </div>
+            </div>
+          </a>
+          <a routerLink="/applicant-view-letting" class="list-group-item list-group-item-action">
+            <div class="row">
+              <div class="col-sm">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Request</dt>
+                  <dd class="col">Long Let £1000 2 Beds</dd>
+                </dl>
+              </div>
+              <div class="col-sm">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Areas</dt>
+                  <dd class="col">Chelsea, Kensington</dd>
+                </dl>
+              </div>
+              <div class="col-sm">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Neg.</dt>
+                  <dd class="col">Jemma Graham</dd>
+                </dl>
+              </div>
+            </div>
+          </a>
+        </div>
+      </accordion-group>
+      <accordion-group class="mb-2">
+        <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
+          <div class="pull-left float-left">Valuations <span class="badge badge-pill badge-primary">1</span></div>
+          <a class="float-right pull-right" routerLink="/home">Add Val. <i class="fas fa-plus"></i></a>
+        </button>
+        <div class="list-group list-group-flush">
+          <div class="list-group-item list-header d-none d-sm-block">
+            <div class="row">
+              <div class="col-sm-3"><strong>Address</strong></div>
+              <div class="col-sm"><strong>Status</strong></div>
+              <div class="col-sm"><strong>Lister</strong></div>
+              <div class="col-sm"><strong>Valued</strong></div>
+              <div class="col-sm"><strong>Outcomes</strong></div>
+            </div>
+          </div>
+          <div class="list-group-item">
+            <div class="row">
+              <div class="col-sm-3">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Address</dt>
+                  <dd class="col">23 Prince of Wales Crescent, SW6</dd>
+                </dl>
+              </div>
+              <div class="col-sm">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Status</dt>
+                  <dd class="col">U/O</dd>
+                </dl>
+              </div>
+              <div class="col-sm">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Lister</dt>
+                  <dd class="col">Chiara Tassia</dd>
+                </dl>
+              </div>
+              <div class="col-sm">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Valued</dt>
+                  <dd class="col">14/05/18</dd>
+                </dl>
+              </div>
+              <div class="col-sm">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Outcomes</dt>
+                  <dd class="col">
+                    <div>
+                      <strong>Sales: </strong> £820,000
+                    </div>
+                    <div>
+                      <strong>Long let:</strong> £650
+                    </div>
+                    <div>
+                      <strong>Short let:</strong> £980
+                    </div>
+                  </dd>
+                </dl>
+              </div>
+            </div>
           </div>
         </div>
-        <a routerLink="/lead-edit" class="list-group-item list-group-item-action">
-          <div class="row">
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Status</dt>
-                <dd class="col text-success">Active</dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Chase</dt>
-                <dd class="col">14/05/18</dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Owner</dt>
-                <dd class="col">Alex Turnbull</dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Type</dt>
-                <dd class="col">Valuation</dd>
-              </dl>
-            </div>
-            <div class="col-sm-3">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Address</dt>
-                <dd class="col">91A Abbeville Road, London, SW4 9LP</dd>
-              </dl>
+      </accordion-group>
+      <accordion-group class="mb-2">
+        <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
+          <div class="pull-left float-left">Instructions <span class="badge badge-pill badge-primary">2</span></div>
+          <a class="float-right pull-right" routerLink="/home">Add Ins. <i class="fas fa-plus"></i></a>
+        </button>
+        <div class="list-group list-group-flush">
+          <div class="list-group-item list-header d-none d-sm-block">
+            <div class="row">
+              <div class="col-sm-3"><strong>Address</strong></div>
+              <div class="col-sm"><strong>Status</strong></div>
+              <div class="col-sm"><strong>Lister</strong></div>
+              <div class="col-sm"><strong>Instructed</strong></div>
+              <div class="col-sm"><strong>Price</strong></div>
+              <div class="col-sm"><strong>Type</strong></div>
             </div>
           </div>
-        </a>
-      </div>
-    </accordion-group>
-    <accordion-group class="mb-2">
-      <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
-        <div class="pull-left float-left">Notes <span class="badge badge-pill badge-primary">3</span></div>
-        <a class="float-right pull-right" routerLink="/home">Add Note <i class="fas fa-plus"></i></a>
-      </button>
-      <app-contactgroups-notes></app-contactgroups-notes>
-    </accordion-group>
-    <accordion-group class="mb-2">
-      <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
-        <div class="pull-left float-left">Applicants <span class="badge badge-pill badge-primary">2</span></div>
-        <a class="float-right pull-right" routerLink="/home">Add Appl. <i class="fas fa-plus"></i></a>
-      </button>
-      <div class="list-group list-group-flush">
-        <div class="list-group-item list-header d-none d-sm-block">
-          <div class="row">
-            <div class="col-sm"><strong>Request</strong></div>
-            <div class="col-sm"><strong>Areas</strong></div>
-            <div class="col-sm"><strong>Neg.</strong></div>
-          </div>
+          <a routerLink="/property-details-sale" class="list-group-item list-group-item-action">
+            <div class="row">
+              <div class="col-sm-3">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Address</dt>
+                  <dd class="col">23 Prince of Wales Crescent, SW6</dd>
+                </dl>
+              </div>
+              <div class="col-sm">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Status</dt>
+                  <dd class="col">U/O</dd>
+                </dl>
+              </div>
+              <div class="col-sm">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Lister</dt>
+                  <dd class="col">Chiara Tassia</dd>
+                </dl>
+              </div>
+              <div class="col-sm">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Instructed</dt>
+                  <dd class="col">14/05/18</dd>
+                </dl>
+              </div>
+              <div class="col-sm">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Price</dt>
+                  <dd class="col">£820,000</dd>
+                </dl>
+              </div>
+              <div class="col-sm">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Type</dt>
+                  <dd class="col">Sale Sole</dd>
+                </dl>
+              </div>
+            </div>
+          </a>
+          <a routerLink="/property-details-letting" class="list-group-item list-group-item-action">
+            <div class="row">
+              <div class="col-sm-3">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Address</dt>
+                  <dd class="col">23 Prince of Wales Crescent, SW6</dd>
+                </dl>
+              </div>
+              <div class="col-sm">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Status</dt>
+                  <dd class="col">INST</dd>
+                </dl>
+              </div>
+              <div class="col-sm">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Lister</dt>
+                  <dd class="col">Henny Irwin</dd>
+                </dl>
+              </div>
+              <div class="col-sm">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Instructed</dt>
+                  <dd class="col">14/05/18</dd>
+                </dl>
+              </div>
+              <div class="col-sm">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Price</dt>
+                  <dd class="col">£650</dd>
+                </dl>
+              </div>
+              <div class="col-sm">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Type</dt>
+                  <dd class="col">Long Let Multi</dd>
+                </dl>
+              </div>
+            </div>
+          </a>
         </div>
-        <a routerLink="/applicant-view-sale" class="list-group-item list-group-item-action">
-          <div class="row">
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Request</dt>
-                <dd class="col">Sales £750,000 2 Beds</dd>
-              </dl>
+      </accordion-group>
+      <accordion-group class="mb-2">
+        <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
+          <div class="pull-left float-left">Offers <span class="badge badge-pill badge-primary">1</span></div>
+          <a class="float-right pull-right" routerLink="/home">Add Offer <i class="fas fa-plus"></i></a>
+        </button>
+        <div class="list-group list-group-flush">
+          <a routerLink="/property-details-letting" class="list-group-item list-group-item-action">
+            <div class="row">
+              <div class="col-sm-4 mb-sm-2">
+                <dl class="row no-gutters">
+                  <dt class="col-4">Address</dt>
+                  <dd class="col">23 Prince of Wales Crescent, SW6</dd>
+                </dl>
+              </div>
+              <div class="col-sm-4 mb-sm-2">
+                <dl class="row no-gutters">
+                  <dt class="col-4">Type</dt>
+                  <dd class="col">Long Let</dd>
+                </dl>
+              </div>
+
+              <div class="col-sm-4 mb-sm-2">
+                <dl class="row no-gutters">
+                  <dt class="col-4">Price</dt>
+                  <dd class="col">£650</dd>
+                </dl>
+              </div>
+              <div class="col-sm-4 mb-sm-2">
+                <dl class="row no-gutters">
+                  <dt class="col-4">Received</dt>
+                  <dd class="col">14/05/18</dd>
+                </dl>
+              </div>
+
+              <div class="col-sm-4 mb-sm-2">
+                <dl class="row no-gutters">
+                  <dt class="col-4">Agreed</dt>
+                  <dd class="col">15/05/18</dd>
+                </dl>
+              </div>
+
+              <div class="col-sm-4 mb-sm-2">
+                <dl class="row no-gutters">
+                  <dt class="col-4">Move in</dt>
+                  <dd class="col">15/05/18</dd>
+                </dl>
+              </div>
+
+              <div class="col-sm-4 mb-sm-2">
+                <dl class="row no-gutters">
+                  <dt class="col-4">Status</dt>
+                  <dd class="col">U/O</dd>
+                </dl>
+              </div>
+
+              <div class="col-sm-4 mb-sm-2">
+                <dl class="row no-gutters">
+                  <dt class="col-4">Lister</dt>
+                  <dd class="col">Henny Irwin</dd>
+                </dl>
+              </div>
+              <div class="col-sm-4 mb-sm-2">
+                <dl class="row no-gutters">
+                  <dt class="col-4">Neg.</dt>
+                  <dd class="col">Lucinda Arundell</dd>
+                </dl>
+              </div>
             </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Areas</dt>
-                <dd class="col">Chelsea, Kensington</dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Neg.</dt>
-                <dd class="col">Chiara Tassia, Dave Newport</dd>
-              </dl>
-            </div>
-          </div>
-        </a>
-        <a routerLink="/applicant-view-letting" class="list-group-item list-group-item-action">
-          <div class="row">
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Request</dt>
-                <dd class="col">Long Let £1000 2 Beds</dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Areas</dt>
-                <dd class="col">Chelsea, Kensington</dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Neg.</dt>
-                <dd class="col">Jemma Graham</dd>
-              </dl>
-            </div>
-          </div>
-        </a>
-      </div>
-    </accordion-group>
-    <accordion-group class="mb-2">
-      <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
-        <div class="pull-left float-left">Valuations <span class="badge badge-pill badge-primary">1</span></div>
-        <a class="float-right pull-right" routerLink="/home">Add Val. <i class="fas fa-plus"></i></a>
-      </button>
-      <div class="list-group list-group-flush">
-        <div class="list-group-item list-header d-none d-sm-block">
-          <div class="row">
-            <div class="col-sm-3"><strong>Address</strong></div>
-            <div class="col-sm"><strong>Status</strong></div>
-            <div class="col-sm"><strong>Lister</strong></div>
-            <div class="col-sm"><strong>Valued</strong></div>
-            <div class="col-sm"><strong>Outcomes</strong></div>
-          </div>
+          </a>
         </div>
-        <div class="list-group-item">
-          <div class="row">
-            <div class="col-sm-3">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Address</dt>
-                <dd class="col">23 Prince of Wales Crescent, SW6</dd>
-              </dl>
+      </accordion-group>
+      <accordion-group class="mb-2">
+        <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
+          <div class="pull-left float-left">Tenancies <span class="badge badge-pill badge-primary">1</span></div>
+          <a class="float-right pull-right" routerLink="/home">Add Tenan. <i class="fas fa-plus"></i></a>
+        </button>
+        <div class="list-group list-group-flush">
+          <a routerLink="/property-details-letting" class="list-group-item list-group-item-action">
+            <div class="row">
+              <div class="col-sm-4 mb-sm-2">
+                <dl class="row no-gutters">
+                  <dt class="col-4">Address</dt>
+                  <dd class="col">23 Prince of Wales Crescent, SW6</dd>
+                </dl>
+              </div>
+              <div class="col-sm-4 mb-sm-2">
+                <dl class="row no-gutters">
+                  <dt class="col-4">Start date</dt>
+                  <dd class="col">12/01/05</dd>
+                </dl>
+              </div>
+
+              <div class="col-sm-4 mb-sm-2">
+                <dl class="row no-gutters">
+                  <dt class="col-4">End date</dt>
+                  <dd class="col">12/01/19</dd>
+                </dl>
+              </div>
+              <div class="col-sm-4 mb-sm-2">
+                <dl class="row no-gutters">
+                  <dt class="col-4">Curr. rent</dt>
+                  <dd class="col">£650</dd>
+                </dl>
+              </div>
+
+              <div class="col-sm-4 mb-sm-2">
+                <dl class="row no-gutters">
+                  <dt class="col-4">Status</dt>
+                  <dd class="col">Landlord LET</dd>
+                </dl>
+              </div>
+
+              <div class="col-sm-4 mb-sm-2">
+                <dl class="row no-gutters">
+                  <dt class="col-4">Lister</dt>
+                  <dd class="col">Henny Irwin</dd>
+                </dl>
+              </div>
+              <div class="col-sm-4 mb-sm-2">
+                <dl class="row no-gutters">
+                  <dt class="col-4">Ten. Man.</dt>
+                  <dd class="col">Rachel Seymour</dd>
+                </dl>
+              </div>
+              <div class="col-sm-4 mb-sm-2">
+                <dl class="row no-gutters">
+                  <dt class="col-4">Prop. Man.</dt>
+                  <dd class="col">Peter Roberts</dd>
+                </dl>
+              </div>
+              <div class="col-sm-4 mb-sm-2">
+                <dl class="row no-gutters">
+                  <dt class="col-4">Accounts</dt>
+                  <dd class="col">Sasha Ford</dd>
+                </dl>
+              </div>
             </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Status</dt>
-                <dd class="col">U/O</dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Lister</dt>
-                <dd class="col">Chiara Tassia</dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Valued</dt>
-                <dd class="col">14/05/18</dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Outcomes</dt>
-                <dd class="col">
-                  <div>
-                    <strong>Sales: </strong> £820,000
-                  </div>
-                  <div>
-                    <strong>Long let:</strong> £650
-                  </div>
-                  <div>
-                    <strong>Short let:</strong> £980
-                  </div>
-                </dd>
-              </dl>
-            </div>
-          </div>
+          </a>
         </div>
-      </div>
-    </accordion-group>
-    <accordion-group class="mb-2">
-      <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
-        <div class="pull-left float-left">Instructions <span class="badge badge-pill badge-primary">2</span></div>
-        <a class="float-right pull-right" routerLink="/home">Add Ins. <i class="fas fa-plus"></i></a>
-      </button>
-      <div class="list-group list-group-flush">
-        <div class="list-group-item list-header d-none d-sm-block">
-          <div class="row">
-            <div class="col-sm-3"><strong>Address</strong></div>
-            <div class="col-sm"><strong>Status</strong></div>
-            <div class="col-sm"><strong>Lister</strong></div>
-            <div class="col-sm"><strong>Instructed</strong></div>
-            <div class="col-sm"><strong>Price</strong></div>
-            <div class="col-sm"><strong>Type</strong></div>
+      </accordion-group>
+      <accordion-group class="mb-2">
+        <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
+          <div class="pull-left float-left">Letting Managements <span class="badge badge-pill badge-primary">1</span>
           </div>
+          <a class="float-right pull-right" routerLink="/home">Add L.M. <i class="fas fa-plus"></i></a>
+        </button>
+        <div class="list-group list-group-flush">
+          <a routerLink="/property-details-letting" class="list-group-item list-group-item-action">
+            <div class="row">
+              <div class="col-sm-4 mb-sm-2">
+                <dl class="row no-gutters">
+                  <dt class="col-4">Address</dt>
+                  <dd class="col">23 Prince of Wales Crescent, SW6</dd>
+                </dl>
+              </div>
+              <div class="col-sm-4 mb-sm-2">
+                <dl class="row no-gutters">
+                  <dt class="col-4">Start date</dt>
+                  <dd class="col">12/01/05</dd>
+                </dl>
+              </div>
+
+              <div class="col-sm-4 mb-sm-2">
+                <dl class="row no-gutters">
+                  <dt class="col-4">End date</dt>
+                  <dd class="col">12/01/19</dd>
+                </dl>
+              </div>
+              <div class="col-sm-4 mb-sm-2">
+                <dl class="row no-gutters">
+                  <dt class="col-4">Curr. rent</dt>
+                  <dd class="col">£650</dd>
+                </dl>
+              </div>
+
+              <div class="col-sm-4 mb-sm-2">
+                <dl class="row no-gutters">
+                  <dt class="col-4">Status</dt>
+                  <dd class="col">Landlord LET</dd>
+                </dl>
+              </div>
+
+              <div class="col-sm-4 mb-sm-2">
+                <dl class="row no-gutters">
+                  <dt class="col-4">Lister</dt>
+                  <dd class="col">Henny Irwin</dd>
+                </dl>
+              </div>
+              <div class="col-sm-4 mb-sm-2">
+                <dl class="row no-gutters">
+                  <dt class="col-4">Prop. Man.</dt>
+                  <dd class="col">Peter Roberts</dd>
+                </dl>
+              </div>
+            </div>
+          </a>
         </div>
-        <a routerLink="/property-details-sale" class="list-group-item list-group-item-action">
-          <div class="row">
-            <div class="col-sm-3">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Address</dt>
-                <dd class="col">23 Prince of Wales Crescent, SW6</dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Status</dt>
-                <dd class="col">U/O</dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Lister</dt>
-                <dd class="col">Chiara Tassia</dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Instructed</dt>
-                <dd class="col">14/05/18</dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Price</dt>
-                <dd class="col">£820,000</dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Type</dt>
-                <dd class="col">Sale Sole</dd>
-              </dl>
+      </accordion-group>
+      <accordion-group class="mb-2">
+        <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
+          <div class="pull-left float-left">Home Managements <span class="badge badge-pill badge-primary">1</span></div>
+          <a class="float-right pull-right" routerLink="/home">Add H.M. <i class="fas fa-plus"></i></a>
+        </button>
+        <div class="list-group list-group-flush">
+          <div class="list-group-item list-header d-none d-sm-block">
+            <div class="row">
+              <div class="col-sm-3"><strong>Address</strong></div>
+              <div class="col-sm"><strong>Start date</strong></div>
+              <div class="col-sm"><strong>End date</strong></div>
+              <div class="col-sm"><strong>Status</strong></div>
+              <div class="col-sm"><strong>Prop. Man.</strong></div>
             </div>
           </div>
-        </a>
-        <a routerLink="/property-details-letting" class="list-group-item list-group-item-action">
-          <div class="row">
-            <div class="col-sm-3">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Address</dt>
-                <dd class="col">23 Prince of Wales Crescent, SW6</dd>
-              </dl>
+          <a routerLink="/property-details-letting" class="list-group-item list-group-item-action">
+            <div class="row">
+              <div class="col-sm-3">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Address</dt>
+                  <dd class="col">23 Prince of Wales Crescent, SW6</dd>
+                </dl>
+              </div>
+              <div class="col-sm">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Start date</dt>
+                  <dd class="col">12/01/15</dd>
+                </dl>
+              </div>
+              <div class="col-sm">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">End date</dt>
+                  <dd class="col">12/01/19</dd>
+                </dl>
+              </div>
+              <div class="col-sm">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Status</dt>
+                  <dd class="col">MNG</dd>
+                </dl>
+              </div>
+              <div class="col-sm">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Prop. Man.</dt>
+                  <dd class="col">Emily Plane</dd>
+                </dl>
+              </div>
             </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Status</dt>
-                <dd class="col">INST</dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Lister</dt>
-                <dd class="col">Henny Irwin</dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Instructed</dt>
-                <dd class="col">14/05/18</dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Price</dt>
-                <dd class="col">£650</dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Type</dt>
-                <dd class="col">Long Let Multi</dd>
-              </dl>
-            </div>
-          </div>
-        </a>
-      </div>
-    </accordion-group>
-    <accordion-group class="mb-2">
-      <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
-        <div class="pull-left float-left">Offers <span class="badge badge-pill badge-primary">1</span></div>
-        <a class="float-right pull-right" routerLink="/home">Add Offer <i class="fas fa-plus"></i></a>
-      </button>
-      <div class="list-group list-group-flush">
-        <a routerLink="/property-details-letting" class="list-group-item list-group-item-action">
-          <div class="row">
-            <div class="col-sm-4 mb-sm-2">
-              <dl class="row no-gutters">
-                <dt class="col-4">Address</dt>
-                <dd class="col">23 Prince of Wales Crescent, SW6</dd>
-              </dl>
-            </div>
-            <div class="col-sm-4 mb-sm-2">
-              <dl class="row no-gutters">
-                <dt class="col-4">Type</dt>
-                <dd class="col">Long Let</dd>
-              </dl>
-            </div>
-
-            <div class="col-sm-4 mb-sm-2">
-              <dl class="row no-gutters">
-                <dt class="col-4">Price</dt>
-                <dd class="col">£650</dd>
-              </dl>
-            </div>
-            <div class="col-sm-4 mb-sm-2">
-              <dl class="row no-gutters">
-                <dt class="col-4">Received</dt>
-                <dd class="col">14/05/18</dd>
-              </dl>
-            </div>
-
-            <div class="col-sm-4 mb-sm-2">
-              <dl class="row no-gutters">
-                <dt class="col-4">Agreed</dt>
-                <dd class="col">15/05/18</dd>
-              </dl>
-            </div>
-
-            <div class="col-sm-4 mb-sm-2">
-              <dl class="row no-gutters">
-                <dt class="col-4">Move in</dt>
-                <dd class="col">15/05/18</dd>
-              </dl>
-            </div>
-
-            <div class="col-sm-4 mb-sm-2">
-              <dl class="row no-gutters">
-                <dt class="col-4">Status</dt>
-                <dd class="col">U/O</dd>
-              </dl>
-            </div>
-
-            <div class="col-sm-4 mb-sm-2">
-              <dl class="row no-gutters">
-                <dt class="col-4">Lister</dt>
-                <dd class="col">Henny Irwin</dd>
-              </dl>
-            </div>
-            <div class="col-sm-4 mb-sm-2">
-              <dl class="row no-gutters">
-                <dt class="col-4">Neg.</dt>
-                <dd class="col">Lucinda Arundell</dd>
-              </dl>
-            </div>
-          </div>
-        </a>
-      </div>
-
-    </accordion-group>
-    <accordion-group class="mb-2">
-      <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
-        <div class="pull-left float-left">Tenancies <span class="badge badge-pill badge-primary">1</span></div>
-        <a class="float-right pull-right" routerLink="/home">Add Tenan. <i class="fas fa-plus"></i></a>
-      </button>
-      <div class="list-group list-group-flush">
-        <a routerLink="/property-details-letting" class="list-group-item list-group-item-action">
-          <div class="row">
-            <div class="col-sm-4 mb-sm-2">
-              <dl class="row no-gutters">
-                <dt class="col-4">Address</dt>
-                <dd class="col">23 Prince of Wales Crescent, SW6</dd>
-              </dl>
-            </div>
-            <div class="col-sm-4 mb-sm-2">
-              <dl class="row no-gutters">
-                <dt class="col-4">Start date</dt>
-                <dd class="col">12/01/05</dd>
-              </dl>
-            </div>
-
-            <div class="col-sm-4 mb-sm-2">
-              <dl class="row no-gutters">
-                <dt class="col-4">End date</dt>
-                <dd class="col">12/01/19</dd>
-              </dl>
-            </div>
-            <div class="col-sm-4 mb-sm-2">
-              <dl class="row no-gutters">
-                <dt class="col-4">Curr. rent</dt>
-                <dd class="col">£650</dd>
-              </dl>
-            </div>
-
-            <div class="col-sm-4 mb-sm-2">
-              <dl class="row no-gutters">
-                <dt class="col-4">Status</dt>
-                <dd class="col">Landlord LET</dd>
-              </dl>
-            </div>
-
-            <div class="col-sm-4 mb-sm-2">
-              <dl class="row no-gutters">
-                <dt class="col-4">Lister</dt>
-                <dd class="col">Henny Irwin</dd>
-              </dl>
-            </div>
-            <div class="col-sm-4 mb-sm-2">
-              <dl class="row no-gutters">
-                <dt class="col-4">Ten. Man.</dt>
-                <dd class="col">Rachel Seymour</dd>
-              </dl>
-            </div>
-            <div class="col-sm-4 mb-sm-2">
-              <dl class="row no-gutters">
-                <dt class="col-4">Prop. Man.</dt>
-                <dd class="col">Peter Roberts</dd>
-              </dl>
-            </div>
-            <div class="col-sm-4 mb-sm-2">
-              <dl class="row no-gutters">
-                <dt class="col-4">Accounts</dt>
-                <dd class="col">Sasha Ford</dd>
-              </dl>
-            </div>
-          </div>
-        </a>
-      </div>
-    </accordion-group>
-    <accordion-group class="mb-2">
-      <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
-        <div class="pull-left float-left">Letting Managements <span class="badge badge-pill badge-primary">1</span>
+          </a>
         </div>
-        <a class="float-right pull-right" routerLink="/home">Add L.M. <i class="fas fa-plus"></i></a>
-      </button>
-      <div class="list-group list-group-flush">
-        <a routerLink="/property-details-letting" class="list-group-item list-group-item-action">
-          <div class="row">
-            <div class="col-sm-4 mb-sm-2">
-              <dl class="row no-gutters">
-                <dt class="col-4">Address</dt>
-                <dd class="col">23 Prince of Wales Crescent, SW6</dd>
-              </dl>
-            </div>
-            <div class="col-sm-4 mb-sm-2">
-              <dl class="row no-gutters">
-                <dt class="col-4">Start date</dt>
-                <dd class="col">12/01/05</dd>
-              </dl>
-            </div>
-
-            <div class="col-sm-4 mb-sm-2">
-              <dl class="row no-gutters">
-                <dt class="col-4">End date</dt>
-                <dd class="col">12/01/19</dd>
-              </dl>
-            </div>
-            <div class="col-sm-4 mb-sm-2">
-              <dl class="row no-gutters">
-                <dt class="col-4">Curr. rent</dt>
-                <dd class="col">£650</dd>
-              </dl>
-            </div>
-
-            <div class="col-sm-4 mb-sm-2">
-              <dl class="row no-gutters">
-                <dt class="col-4">Status</dt>
-                <dd class="col">Landlord LET</dd>
-              </dl>
-            </div>
-
-            <div class="col-sm-4 mb-sm-2">
-              <dl class="row no-gutters">
-                <dt class="col-4">Lister</dt>
-                <dd class="col">Henny Irwin</dd>
-              </dl>
-            </div>
-            <div class="col-sm-4 mb-sm-2">
-              <dl class="row no-gutters">
-                <dt class="col-4">Prop. Man.</dt>
-                <dd class="col">Peter Roberts</dd>
-              </dl>
-            </div>
-          </div>
-        </a>
-      </div>
-    </accordion-group>
-    <accordion-group class="mb-2">
-      <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
-        <div class="pull-left float-left">Home Managements <span class="badge badge-pill badge-primary">1</span></div>
-        <a class="float-right pull-right" routerLink="/home">Add H.M. <i class="fas fa-plus"></i></a>
-      </button>
-      <div class="list-group list-group-flush">
-        <div class="list-group-item list-header d-none d-sm-block">
-          <div class="row">
-            <div class="col-sm-3"><strong>Address</strong></div>
-            <div class="col-sm"><strong>Start date</strong></div>
-            <div class="col-sm"><strong>End date</strong></div>
-            <div class="col-sm"><strong>Status</strong></div>
-            <div class="col-sm"><strong>Prop. Man.</strong></div>
-          </div>
-        </div>
-        <a routerLink="/property-details-letting" class="list-group-item list-group-item-action">
-          <div class="row">
-            <div class="col-sm-3">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Address</dt>
-                <dd class="col">23 Prince of Wales Crescent, SW6</dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Start date</dt>
-                <dd class="col">12/01/15</dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">End date</dt>
-                <dd class="col">12/01/19</dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Status</dt>
-                <dd class="col">MNG</dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Prop. Man.</dt>
-                <dd class="col">Emily Plane</dd>
-              </dl>
-            </div>
-          </div>
-        </a>
-      </div>
-    </accordion-group>
+      </accordion-group>
 
   </accordion>
 </div>
+

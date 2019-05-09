@@ -9,14 +9,16 @@ import { ContactgroupsCompanyEditComponent } from './contactgroups-company-edit/
 
 const routes: Routes = [
   { path: '', canActivate: [AuthGuardService], children: [
-    { path: 'contact-centre', children: [
+    { path: 'contact-centre',
+    children: [
       { path: '', component: ContactGroupsComponent },
       { path: 'company', children: [
         { path: '', component: ContactgroupsCompanyEditComponent }
       ] },
-      { path: 'detail/:id', children: [
+      { path: 'detail/:personId',
+      children: [
         { path: '', component: ContactgroupsDetailComponent },
-        { path: 'search/:personId', component: ContactgroupsDetailComponent },
+        // { path: 'search/:personId', component: ContactgroupsDetailComponent },
         { path: 'people', component: ContactgroupsPeopleComponent },
         {path: 'edit', component: ContactgroupsDetailEditComponent}
       ] },

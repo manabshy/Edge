@@ -1,5 +1,5 @@
 import { Address } from 'src/app/core/models/address';
-import { Person } from 'src/app/core/models/person';
+import { Person, BasicPerson } from 'src/app/core/models/person';
 import { ResultData } from 'src/app/core/shared/result-data';
 
 export interface ContactGroup {
@@ -73,14 +73,14 @@ export interface ContactGroupAutoCompleteResult extends ContactGroupMetaDeta{
   outcode: string;
   incode: string;
   postCode: string;
-  contactGroups: AutoCompleteContactGroup[];
+  contactGroups: BasicContactGroup[];
 }
-export interface AutoCompleteContactGroup {
+export interface BasicContactGroup {
   contactGroupId: number;
   isCompany: boolean;
   companyId?: number;
   companyName: string;
-  contactPeople: string[];
+  contactPeople: Person[];
 }
 
 export interface ContactGroupAutoCompleteData extends ResultData {
@@ -88,6 +88,9 @@ export interface ContactGroupAutoCompleteData extends ResultData {
 }
 export interface ContactGroupData extends ResultData {
   result: ContactGroup;
+}
+export interface BasicContactGroupData extends ResultData {
+  result: BasicContactGroup[];
 }
 export interface PersonContactData extends ResultData {
   result: Person;
