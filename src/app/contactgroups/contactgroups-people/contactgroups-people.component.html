@@ -23,8 +23,7 @@
     <div class="list-group-item list-group-item-action" *ngFor="let person of contactGroupDetails?.contactPeople">
       <div class="row">
         <div class="col-12 text-right">
-          <a  [routerLink]="['../../edit']"  ><i class="fas fa-edit"></i> Edit</a>
-          <!-- <a  [routerLink]="['contact-edit', person.personId]"  ><i class="fas fa-edit"></i> Edit</a> -->
+          <a  [routerLink]="['../../edit']"  [queryParams]="{groupPersonId: person.personId }" ><i class="fas fa-edit"></i> Edit</a>
         </div>
         <div class="col-12 mb-2">
           <strong>{{person.firstName}} {{person.lastName}}</strong>&nbsp;

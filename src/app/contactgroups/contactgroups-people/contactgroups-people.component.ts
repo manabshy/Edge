@@ -14,14 +14,18 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isCollapsed1: boolean;
   isCollapsed2: boolean;
   personId: number;
+  groupPersonId: number;
   contactGroupId: number;
   contactPeople: Person[];
   contactGroupDetails: ContactGroup;
   constructor(private contactGroupService: ContactGroupsService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-     this.route.params.subscribe(params => {this.contactGroupId = +params['contactGroupId'] || 0; });
-     this.route.params.subscribe(params => {this.personId = +params['personId'] || 0; });
+     this.route.params.subscribe(params => {
+       this.contactGroupId = +params['contactGroupId'] || 0;
+       this.groupPersonId = +params['groupPersonId'] || 0;
+       this.personId = +params['personId'] || 0;
+      });
      this.getContactGroupById(this.contactGroupId);
   }
 
