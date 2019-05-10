@@ -108,3 +108,15 @@ export interface MarketingPreferences {
   general: boolean;
   count: number;
 }
+
+export enum Title {
+  Mr = 1,
+  Mrs = 2,
+  Miss = 3,
+  Ms = 4,
+  Lady = 5,
+  Sir = 6,
+  Dr = 7,
+  Lord = 8,
+  Other = 100
+}

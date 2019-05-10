@@ -5,6 +5,9 @@ export class AppUtils {
   public static prevRouteBU: string = '';
   public static homeSelectedTab: number;
   public static dashboardSelectedTab: number;
+  public static isDiarySearchVisible: boolean = false;
+  public static parentRoute: string = '';
+  public static searchTerm: string;
 
   /**
    * Format a date/time into a string
@@ -31,11 +34,6 @@ export class AppUtils {
       }
     }
   }
-  
-  public static isDiarySearchVisible: boolean = false;
 
-  public static parentRoute: string = '';
 
-  public static searchTerm: string;
-  
 }

@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ContactGroupsService } from '../shared/contact-groups.service';
-import { Person } from 'src/app/core/models/person';
-import { Router } from '@angular/router';
+import { Person, Email, PhoneNumber } from 'src/app/core/models/person';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-contactgroups-detail-edit',
@@ -19,23 +19,26 @@ titleSelected = 1;
 coutrySelected = 232;
 personDetails: Person;
 personForm: FormGroup;
+personId: number;
 get emailAddresses(): FormArray {
   return <FormArray> this.personForm.get('emailAddresses');
 }
 get phoneNumbers(): FormArray {
   return <FormArray> this.personForm.get('phoneNumbers');
 }
-public keepOriginalOrder = (a, b) => a.key;
+public keepOriginalOrder = (a) => a.key;
   constructor(public sharedService: SharedService,
               private contactGroupService: ContactGroupsService,
               private fb: FormBuilder,
-              private route: Router) { }
+              private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.listInfo = this.sharedService.dropdownListInfo;
     this.countries = Object.values(this.listInfo)[0];
     this.titles = Object.values(this.listInfo)[1];
     this.telephoneTypes = Object.values(this.listInfo)[2];
+    this.route.params.subscribe(params => this.personId = +params['personId'] || 0);
+    this.getPersonDetails(this.personId);
     this.setupEditForm();
   }
 
@@ -59,8 +62,31 @@ public keepOriginalOrder = (a, b) => a.key;
        title: person.title,
        firstname: person.firstName,
        middlename: person.middleName,
-       lastname: person.lastName
+       lastname: person.lastName,
+      //  contactBy: person.contactByEmail
+      amlCompletedDate: person.amlCompletedDate,
+      marketingPreferences: {events: person.marketingPreferences.events}
      });
+     this.personForm.setControl('emailAddresses', this.setExistingEmailAddresses(person.emailAddresses));
+     this.personForm.setControl('phoneNumbers', this.setExistingPhoneNumbers(person.phoneNumbers));
+
+  }
+  setExistingPhoneNumbers(phoneNumbers: PhoneNumber[]): FormArray {
+    const phoneArray = new FormArray([]);
+    phoneNumbers.forEach(x => {
+      phoneArray.push(this.fb.group({
+        phoneNumber: x.number,
+        phoneNumberType: x.type
+      }));
+    });
+    return phoneArray;
+  }
+  setExistingEmailAddresses(emailAddresses: Email[]): FormArray {
+    const emailFormArray = new FormArray([]);
+      emailAddresses.forEach(x => {
+        emailFormArray.push(this.fb.group({email: x.email}));
+      });
+      return emailFormArray;
   }
 
     setupEditForm() {
@@ -77,17 +103,22 @@ public keepOriginalOrder = (a, b) => a.key;
           address5: ['', Validators.maxLength(80)],
           country: ['United Kingdom', [Validators.required, Validators.maxLength(50)]],
           postCode: ['', Validators.maxLength(6)] }),
-        contactBy: this.fb.group({
-          email: [true],
-          post: [false],
-          phone: [false]
-        }),
+        // contactBy: this.fb.group({
+        //   email: [true],
+        //   post: [false],
+        //   phone: [false]
+        // }),
+        contactByEmail: true,
+        contactByPhone: true,
+        contactByPost: true,
         marketingPreferences: this.fb.group({
-          bulletin: [true],
+          marketBulletin: [false],
           offers: [false],
+          offersSurveys: [false],
           events: [false],
           newHomes: [false],
-          other: [false]
+          general: [false],
+          count: 0
         }),
         amlCompletedDate: [''],
         emailAddresses: this.fb.array([this.createEmailItem()]),
@@ -99,7 +130,11 @@ public keepOriginalOrder = (a, b) => a.key;
     this.phoneNumbers.push(this.createPhoneNumberItem());
   }
   createPhoneNumberItem(): FormGroup {
-    return this.fb.group({phoneNumber: ['']});
+    return this.fb.group({
+      phoneNumber: [''],
+      phoneNumberType: ['']
+      // favourite: ['']
+    });
   }
 
   addEmailItem() {
@@ -107,5 +142,9 @@ public keepOriginalOrder = (a, b) => a.key;
   }
   createEmailItem(): FormGroup {
     return this.fb.group({email: ['', [Validators.email]]});
+  }
+
+  savePerson() {
+
   }
 }
