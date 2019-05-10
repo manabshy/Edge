@@ -61,7 +61,7 @@
                </ng-container>
             </div>
             <div class="col-auto">
-              <a routerLink="../people" class="btn btn-link py-0">
+              <a  [routerLink]="['people', searchedPersonContactGroup.contactGroupId]" class="btn btn-link py-0">
                 <i class="fas fa-users"></i> View Group
               </a>
             </div>

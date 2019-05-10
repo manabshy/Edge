@@ -20,126 +20,51 @@
     </div>
   </div>
   <div class="list-group">
-    <div class="list-group-item list-group-item-action">
+    <div class="list-group-item list-group-item-action" *ngFor="let person of contactGroupDetails?.contactPeople">
       <div class="row">
         <div class="col-12 text-right">
-          <a routerLink="../edit"><i class="fas fa-edit"></i> Edit</a>
+          <a  [routerLink]="['../../edit']"  ><i class="fas fa-edit"></i> Edit</a>
+          <!-- <a  [routerLink]="['contact-edit', person.personId]"  ><i class="fas fa-edit"></i> Edit</a> -->
         </div>
         <div class="col-12 mb-2">
-          <strong>John Smith</strong>&nbsp;
-
-          <i class="fas fa-phone"></i>&nbsp;
+          <strong>{{person.firstName}} {{person.lastName}}</strong>&nbsp;
+            <ng-container *ngIf="contactGroupDetails.contactType === 4">&nbsp;
+                <span class="badge badge-pill badge-info">{{contactGroupDetails?.companyName}}</span>
+            </ng-container>
+          <!-- <i class="fas fa-phone"></i>&nbsp;
 
           <i class="fas fa-envelope"></i>&nbsp;
 
-          <span class="badge badge-success">AML Valid</span>
+          <span class="badge badge-success">AML Valid</span> -->
         </div>
-        <div class="col-sm-4 mb-2">56B Gloucester Terrace, London, SW7 2HS</div>
+        <div class="col-sm-4 mb-2">{{person.address | formatAddress}}</div>
         <div class="col-sm-3 col-xl-4">
-          <div class="row">
-            <div class="col-6 mb-2 telephone"><a href="tel:+447808773822">07808 773822</a><br />(Mobile)</div>
-            <div class="col-6 mb-2 telephone"><a href="tel:+442079135642">0207 913 5642</a><br />(Home)</div>
+          <div class="row" *ngFor="let phoneNumber of person.phoneNumbers">
+            <div class="col-6 mb-2 telephone"><a href="phoneNumber.number">{{phoneNumber?.number}}</a><br />{{phoneNumber?.telephoneId}}</div>
           </div>
         </div>
-        <div class="col-sm-5 col-xl-4"><a class="mb-2" href="mailto:jsmith@gmail.com">jsmith@gmail.com</a></div>
+        <div  *ngFor="let emailAddress of person.emailAddresses">
+          <div class="col-sm-5 col-xl-4"><a class="mb-2" href="emailAddress.email">{{emailAddress.email}}</a></div>
+        </div>
         <div class="col-12">
           <hr class="my-1">
         </div>
         <div class="col-12">
           <button type="button" class="btn btn-link px-0" (click)="isCollapsed = !isCollapsed"
             [attr.aria-expanded]="!isCollapsed" aria-controls="collapseBasic">Marketing Prefs <span
-              class="badge badge-pill badge-primary">5</span>
+              class="badge badge-pill badge-primary">{{person.marketingPreferences?.count || 0}}</span>
           </button>
           <div id="collapseBasic" [collapse]="!isCollapsed">
             <ul>
-              <li>Quarterly bulletin</li>
-              <li>Special offers</li>
-              <li>Landlord/investor events</li>
-              <li>New homes/investments</li>
-              <li>Other occasional marketing</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="list-group-item list-group-item-action">
-      <div class="row">
-        <div class="col-12 text-right">
-          <a routerLink="../edit"><i class="fas fa-edit"></i> Edit</a>
-        </div>
-        <div class="col-12 mb-2">
-          <strong>Michael Brown</strong>&nbsp;
-
-          <i class="fas fa-phone"></i>&nbsp;
-
-          <i class="fas fa-envelope"></i>&nbsp;
-
-          <span class="badge badge-success">AML Valid</span>
-        </div>
-        <div class="col-sm-4 mb-2"></div>
-        <div class="col-sm-3 col-xl-4">
-          <div class="row">
-            <div class="col-6 mb-2 telephone"><a href="tel:+447779245877">07779 245877</a><br />(Mobile)</div>
-          </div>
-        </div>
-        <div class="col-sm-5 col-xl-4"><a href="mailto:mbrown33@gmail.com">mbrown33@gmail.com</a></div>
-        <div class="col-12">
-          <hr class="my-1">
-        </div>
-        <div class="col-12">
-          <button type="button" class="btn btn-link px-0" (click)="isCollapsed1 = !isCollapsed1"
-            [attr.aria-expanded]="!isCollapsed1" aria-controls="collapseBasic1">Marketing Prefs <span
-              class="badge badge-pill badge-primary">5</span>
-          </button>
-          <div id="collapseBasic1" [collapse]="!isCollapsed1">
-            <ul>
-              <li>Quarterly bulletin</li>
-              <li>Special offers</li>
-              <li>Landlord/investor events</li>
-              <li>New homes/investments</li>
-              <li>Other occasional marketing</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="list-group-item list-group-item-action">
-      <div class="row">
-        <div class="col-12 text-right">
-          <a routerLink="../edit"><i class="fas fa-edit"></i> Edit</a>
-        </div>
-        <div class="col-12 mb-2">
-          <strong>Wendy McTavish</strong>&nbsp;
-
-          <i class="fas fa-phone-slash"></i>&nbsp;
-
-          <span class="badge badge-danger">No AML</span>
-        </div>
-        <div class="col-sm-4 mb-2"></div>
-        <div class="col-sm-3 col-xl-4">
-          <div class="row">
-            <div class="col-6 mb-2 telephone"><a href="tel:+447844521541">07844 521541</a><br />(Mobile)</div>
-            <div class="col-6 mb-2 telephone"><a href="tel:+442081235422">0208 123 5422</a><br />(Home)</div>
-          </div>
-        </div>
-        <div class="col-sm-5 col-xl-4 mb-2"><a href="mailto:tav888@gmail.com">tav888@gmail.com</a></div>
-        <div class="col-12">
-          <hr class="my-1">
-        </div>
-        <div class="col-12">
-          <button type="button" class="btn btn-link px-0" (click)="isCollapsed2 = !isCollapsed2"
-            [attr.aria-expanded]="!isCollapsed2" aria-controls="collapseBasic2">Marketing Prefs <span
-              class="badge badge-pill badge-primary">2</span>
-          </button>
-          <div id="collapseBasic2" [collapse]="!isCollapsed2">
-            <ul>
-              <li>Quarterly bulletin</li>
-              <li>Special offers</li>
+                <li *ngIf="person.marketingPreferences?.marketBulletin">Quarterly bulletin</li>
+                <li *ngIf="person.marketingPreferences?.general" >Special offers</li>
+                <li *ngIf="person.marketingPreferences?.events">Landlord/investor events</li>
+                <li *ngIf="person.marketingPreferences?.newHomes">New homes/investments</li>
+                <li *ngIf="person.marketingPreferences?.general">Other occasional marketing</li>
             </ul>
           </div>
         </div>
       </div>
     </div>
   </div>
-
 </div>

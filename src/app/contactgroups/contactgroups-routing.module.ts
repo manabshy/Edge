@@ -18,9 +18,9 @@ const routes: Routes = [
       { path: 'detail/:personId',
       children: [
         { path: '', component: ContactgroupsDetailComponent },
-        // { path: 'search/:personId', component: ContactgroupsDetailComponent },
-        { path: 'people', component: ContactgroupsPeopleComponent },
-        {path: 'edit', component: ContactgroupsDetailEditComponent}
+        { path: 'people/:contactGroupId', component: ContactgroupsPeopleComponent },
+        {path: 'edit', component: ContactgroupsDetailEditComponent},
+        // {path: 'edit:/id', component: ContactgroupsDetailEditComponent}
       ] },
     ] },
   ] }

@@ -3,7 +3,7 @@ import { Person, BasicPerson } from 'src/app/core/models/person';
 import { ResultData } from 'src/app/core/shared/result-data';
 
 export interface ContactGroup {
-  contactType: string;
+  contactType: ContactType;
   contactGroupId: number;
   addressee: string;
   notes: ContactGroupsNote[];
@@ -82,7 +82,12 @@ export interface BasicContactGroup {
   companyName: string;
   contactPeople: Person[];
 }
-
+export enum ContactType {
+  Individual = 1,
+  Sharers = 2,
+  CompanyContact = 4,
+  ReloContact = 8
+}
 export interface ContactGroupAutoCompleteData extends ResultData {
   result: ContactGroupAutoCompleteResult[];
 }
