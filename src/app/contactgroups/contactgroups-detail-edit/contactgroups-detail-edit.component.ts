@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SharedService } from 'src/app/core/services/shared.service';
+import { SharedService, Country } from 'src/app/core/services/shared.service';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { Person, Email, PhoneNumber } from 'src/app/core/models/person';
@@ -11,12 +11,14 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./contactgroups-detail-edit.component.scss']
 })
 export class ContactgroupsDetailEditComponent implements OnInit {
+// countries: any;
 countries: any;
 titles: any;
 telephoneTypes: any;
 listInfo: any;
 titleSelected = 1;
-coutrySelected = 232;
+defaultCountryCode = 232;
+telephoneTypeSelected = 1;
 personDetails: Person;
 personForm: FormGroup;
 personId: number;
@@ -59,13 +61,31 @@ public keepOriginalOrder = (a) => a.key;
      }
      this.personDetails = person;
      this.personForm.patchValue({
-       title: person.title,
+      titleSelected: person.titleId,
+      //  title: person.title,
        firstname: person.firstName,
        middlename: person.middleName,
        lastname: person.lastName,
-      //  contactBy: person.contactByEmail
-      amlCompletedDate: person.amlCompletedDate,
-      marketingPreferences: {events: person.marketingPreferences.events}
+       amlCompletedDate: person.amlCompletedDate,
+       addresses: {
+        address1: person.address.address1,
+        address2: person.address.address2,
+        address3: person.address.address3,
+        address4: person.address.address4,
+        address5: person.address.address5,
+        town: person.address.town,
+        outCode: person.address.outCode,
+        inCode: person.address.inCode,
+        country: person.address.country
+       },
+       contactBy: {email: person.contactByEmail, phone: person.contactByPhone},
+       marketingPreferences: {
+        marketBulletin: person.marketingPreferences.marketBulletin,
+        offerSurveys: person.marketingPreferences.offerSurveys,
+        events: person.marketingPreferences.events,
+        newHomes: person.marketingPreferences.newHomes,
+        general: person.marketingPreferences.general
+      }
      });
      this.personForm.setControl('emailAddresses', this.setExistingEmailAddresses(person.emailAddresses));
      this.personForm.setControl('phoneNumbers', this.setExistingPhoneNumbers(person.phoneNumbers));
@@ -76,8 +96,10 @@ public keepOriginalOrder = (a) => a.key;
     phoneNumbers.forEach(x => {
       phoneArray.push(this.fb.group({
         phoneNumber: x.number,
-        phoneNumberType: x.type
+        phoneNumberType: x.telephoneTypeId,
+        isPreferred: x.isPreferred
       }));
+      console.log('this is isPreferred', x.number, x.isPreferred);
     });
     return phoneArray;
   }
@@ -91,29 +113,28 @@ public keepOriginalOrder = (a) => a.key;
 
     setupEditForm() {
       this.personForm = this.fb.group({
-        title: [''],
+        titleSelected: [''],
         firstname: ['', [Validators.required, Validators.maxLength(40)]],
         middlename: ['', Validators.maxLength(50)],
         lastname: ['', [Validators.required, Validators.maxLength(80)]],
+        fullAddress: [''],
         addresses: this.fb.group({
           address1: ['', Validators.maxLength(80)],
           address2: ['', Validators.maxLength(80)],
           address3: ['', Validators.maxLength(80)],
           address4: ['', Validators.maxLength(80)],
           address5: ['', Validators.maxLength(80)],
+          town: ['', Validators.maxLength(80)],
           country: ['United Kingdom', [Validators.required, Validators.maxLength(50)]],
-          postCode: ['', Validators.maxLength(6)] }),
-        // contactBy: this.fb.group({
-        //   email: [true],
-        //   post: [false],
-        //   phone: [false]
-        // }),
-        contactByEmail: true,
-        contactByPhone: true,
-        contactByPost: true,
+          inCode: ['', [Validators.required, Validators.maxLength(3)]],
+          outCode: ['', [Validators.required, Validators.maxLength(4)]],
+          postCode: ['', [Validators.required, Validators.maxLength(6)]] }),
+        contactBy: this.fb.group({
+          email: [false],
+          phone: [false]
+        }),
         marketingPreferences: this.fb.group({
           marketBulletin: [false],
-          offers: [false],
           offersSurveys: [false],
           events: [false],
           newHomes: [false],
@@ -132,8 +153,8 @@ public keepOriginalOrder = (a) => a.key;
   createPhoneNumberItem(): FormGroup {
     return this.fb.group({
       phoneNumber: [''],
-      phoneNumberType: ['']
-      // favourite: ['']
+      phoneNumberType: 3,
+      isPreferred: [false]
     });
   }
 

@@ -5,7 +5,7 @@
     <div class="form-group row">
       <label for="title" class="col-sm-2 col-form-label col-form-label-sm">Title</label>
       <div class="col-sm-3">
-        <select class="custom-select custom-select-sm" id="title" name="title" formControlName="title">
+        <select class="custom-select custom-select-sm" id="title" name="title" formControlName="titleSelected">
           <option selected *ngFor="let title of titles | keyvalue:keepOriginalOrder" [value]=title.key>{{title.value}}</option>
         </select>
       </div>
@@ -28,82 +28,70 @@
         <input type="text" id="surname" class="form-control form-control-sm" formControlName="lastname">
       </div>
     </div>
-      <div class="form-group row">
-        <label class="col-sm-2 col-form-label col-form-label-sm">Contact by</label>
-        <div class="col-sm-10">
-          <div class="custom-control custom-checkbox">
-            <input class="custom-control-input" type="checkbox" name="examplecheckboxs" id="examplecheckboxs1"
-              value="option1" checked>
-            <label class="custom-control-label" for="examplecheckboxs1">
-              Email
-            </label>
-          </div>
-          <div class="custom-control custom-checkbox">
-            <input class="custom-control-input" type="checkbox" name="examplecheckboxs" id="examplecheckboxs2"
-              value="option2">
-            <label class="custom-control-label" for="examplecheckboxs2">
-              Post
-            </label>
-          </div>
-          <div class="custom-control custom-checkbox">
-            <input class="custom-control-input" type="checkbox" name="examplecheckboxs" id="examplecheckboxs3"
-              value="option3">
-            <label class="custom-control-label" for="examplecheckboxs3">
-              Phone
-            </label>
-          </div>
-        </div>
-      </div>
-    <!-- <app-property-finder></app-property-finder> -->
-    <div class="form-group row">
-        <label for="property" class="col-sm-2 col-form-label col-form-label-sm">Address</label>
-        <div class="col-sm-10">
-          <!-- <input type="text" class="form-control form-control-sm" id="property" placeholder="Property"
-            [(ngModel)]="property"> -->
-          <button class="btn btn-sm btn-link px-0" type="button" id="manAddressBtn"
-            (click)="isManAddressCollapsed = !isManAddressCollapsed" [attr.aria-expanded]="!isManAddressCollapsed"
-            aria-controls="collapseBasic">Enter address manually</button>
-          <div class="collapse" [collapse]="!isManAddressCollapsed" id="manAddress">
-            <div class="form-group">
-              <label class="small" for="street">Street</label>
-              <input type="text" class="form-control form-control-sm" id="street" placeholder="Street">
-            </div>
-            <div class="form-group">
-              <label class="small" for="adressline1">Address line 1</label>
-              <input type="text" class="form-control form-control-sm" id="addressline1"
-                placeholder="Address line 1">
-            </div>
-            <div class="form-group">
-              <label class="small" for="adressline2">Address line 2</label>
-              <input type="text" class="form-control form-control-sm" id="addressline2"
-                placeholder="Address line 2">
-            </div>
-            <div class="form-group">
-              <label class="small" for="town">Town</label>
-              <input type="text" class="form-control form-control-sm" id="town" placeholder="Town">
-            </div>
-            <div class="form-group">
-              <label class="small" for="outcode">Postcode</label>
-              <div class="input-group">
-                <input type="text" class="form-control form-control-sm" maxlength="4" id="outcode"
-                  placeholder="Outcode">
-                <input type="text" class="form-control form-control-sm" maxlength="3" id="incode"
-                  placeholder="Incode">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    <div formGroupName="addresses">
-      <div class="form-group row">
+    <div formGroupName="addresses" class="form-group row">
         <label for="country" class="col-sm-2 col-form-label col-form-label-sm">Country</label>
         <div class="col-sm-3">
           <select class="custom-select custom-select-sm" id="country" name="country" formControlName="country">
-            <option selected *ngFor="let country of countries | keyvalue:keepOriginalOrder" [value]=country.key>{{country.value}}</option>
+            <option selected *ngFor="let country of countries " [value]=country.key>{{country.value}}</option>
           </select>
         </div>
+     </div>
+     <div class="form-group row">
+        <label for="fullAddress" class="col-sm-2 col-form-label col-form-label-sm"></label>
+        <div class="col-sm-10">
+          <input type="text" id="fullAddress" class="form-control form-control-sm" formControlName="fullAddress">
+        </div>
       </div>
-    </div>
+   <div formGroupName="addresses">
+      <div class="form-group row">
+          <label for="property" class="col-sm-2 col-form-label col-form-label-sm">Address</label>
+          <div class="col-sm-10">
+            <button class="btn btn-sm btn-link px-0" type="button" id="manAddressBtn"
+              (click)="isManAddressCollapsed = !isManAddressCollapsed" [attr.aria-expanded]="!isManAddressCollapsed"
+              aria-controls="collapseBasic">Enter address manually</button>
+            <div class="collapse" [collapse]="!isManAddressCollapsed" id="manAddress">
+              <div class="form-group">
+                <label class="small" for="adressline1">Address line 1</label>
+                <input type="text" class="form-control form-control-sm" id="addressline1"
+                  placeholder="Address line 1" formControlName="address1">
+              </div>
+              <div class="form-group">
+                <label class="small" for="adressline2">Address line 2</label>
+                <input type="text" class="form-control form-control-sm" id="addressline2"
+                  placeholder="Address line 2"  formControlName="address2">
+              </div>
+              <div class="form-group">
+                <label class="small" for="adressline3">Address line 3</label>
+                <input type="text" class="form-control form-control-sm" id="addressline3"
+                  placeholder="Address line 3" formControlName="address3">
+              </div>
+              <div class="form-group">
+                <label class="small" for="adressline4">Address line 4</label>
+                <input type="text" class="form-control form-control-sm" id="addressline4"
+                  placeholder="Address line 4" formControlName="address4">
+              </div>
+              <div class="form-group">
+                <label class="small" for="adressline5">Address line 5</label>
+                <input type="text" class="form-control form-control-sm" id="addressline5"
+                  placeholder="Address line 5" formControlName="address5">
+              </div>
+              <div class="form-group">
+                <label class="small" for="town">Town</label>
+                <input type="text" class="form-control form-control-sm" id="town" placeholder="Town"  formControlName="town">
+              </div>
+              <div class="form-group">
+                <label class="small" for="outcode">Postcode</label>
+                <div class="input-group">
+                  <input type="text" class="form-control form-control-sm" maxlength="4" id="outcode"
+                    placeholder="Outcode" formControlName="outCode">
+                  <input type="text" class="form-control form-control-sm" maxlength="3" id="incode"
+                    placeholder="Incode" formControlName="inCode">
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+   </div>
    <div formArrayName="emailAddresses" *ngFor="let emailAddress of emailAddresses.controls; let i = index">
       <div [formGroupName]="i">
         <div class="form-group row">
@@ -121,17 +109,49 @@
           <div class="col-sm-10">
             <div class="input-group input-group-sm">
               <input type="text" class="form-control" id="phone" placeholder="" formControlName="phoneNumber">
-              <select class="custom-select" id="phoneType" formControlName="phoneNumberType">
-                <option *ngFor="let telephoneType of telephoneTypes | keyvalue:keepOriginalOrder" [value] = telephoneType.key>{{telephoneType.value}}</option>
+              <select class="custom-select" id="phoneType"  formControlName="phoneNumberType">
+                <option *ngFor="let telephoneType of telephoneTypes | keyvalue:keepOriginalOrder" [value] = telephoneType.key>{{telephoneType.value}} </option>
               </select>
+              <!-- <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" id="{{'customRadioInline' + i}}" class="custom-control-input" formControlName="isPreferred">
+                  <label class="custom-control-label" attr.for="{{'customRadioInline' + i}} "></label>
+              </div> -->
               <div class="input-group-append">
-                <!-- <button type="button" class="btn btn-light active" data-toggle="button" aria-pressed="true" formControlName="favourite"
+                <!-- <button type="button" class="btn btn-light active" data-toggle="button" aria-pressed="true" formControlName="isPreferred"
                   autocomplete="off">
                   <i class="fas fa-star"></i> Fav
                 </button> -->
-                <button (click)="addPhoneNumberItem()">Add another number</button>
+                <div class="custom-control custom-checkbox">
+                    <input class="custom-control-input" type="checkbox" name="examplecheckboxs" id="examplecheckboxs1"
+                      value="option1" formControlName="isPreferred">
+                    <label class="custom-control-label" for="examplecheckboxs1">
+                      Fav
+                    </label>
+                  </div>
+                <!-- <button (click)="addPhoneNumberItem()">Add another number</button> -->
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+   </div>
+   <div formGroupName="contactBy">
+     <div class="form-group row">
+        <label class="col-sm-2 col-form-label col-form-label-sm">Contact by</label>
+        <div class="col-sm-10">
+          <div class="custom-control custom-checkbox">
+            <input class="custom-control-input" type="checkbox" name="examplecheckboxs" id="examplecheckboxs1"
+              value="option1" formControlName="email">
+            <label class="custom-control-label" for="examplecheckboxs1">
+              Email
+            </label>
+          </div>
+          <div class="custom-control custom-checkbox">
+            <input class="custom-control-input" type="checkbox" name="examplecheckboxs" id="examplecheckboxs3"
+              value="option3" formControlName="phone">
+            <label class="custom-control-label" for="examplecheckboxs3">
+              Phone
+            </label>
           </div>
         </div>
       </div>
@@ -143,32 +163,32 @@
           <div class="custom-control custom-checkbox">
             <input class="custom-control-input" type="checkbox" name="quarterly" id="quarterly" value="option1" checked formControlName="marketBulletin">
             <label class="custom-control-label" for="quarterly">
-              Quarterly bulletin
-            </label>
-          </div>
-          <div class="custom-control custom-checkbox">
-            <input class="custom-control-input" type="checkbox" name="specialOffers" id="specialOffers" value="option1"
-               formControlName="offers">
-            <label class="custom-control-label" for="specialOffers">
-              Special offers
+              Quarterly Market Bulletin
             </label>
           </div>
           <div class="custom-control custom-checkbox">
             <input class="custom-control-input" type="checkbox" name="events" id="events" value="option1" checked formControlName="events">
             <label class="custom-control-label" for="events">
-              Landlord/investor events
+              Landlord & Investor Events
             </label>
           </div>
           <div class="custom-control custom-checkbox">
             <input class="custom-control-input" type="checkbox" name="newHomes" id="newHomes" value="option1" checked formControlName="newHomes">
             <label class="custom-control-label" for="newHomes">
-              New homes/investments
+              New Home and Investments
+            </label>
+          </div>
+          <div class="custom-control custom-checkbox">
+            <input class="custom-control-input" type="checkbox" name="specialOffers" id="specialOffers" value="option1"
+                formControlName="offersSurveys">
+            <label class="custom-control-label" for="specialOffers">
+              Special Offers and Surveys
             </label>
           </div>
           <div class="custom-control custom-checkbox">
             <input class="custom-control-input" type="checkbox" name="occasional" id="occasional" value="option1" checked formControlName="general">
             <label class="custom-control-label" for="occasional">
-              Other occasional marketing
+              Other Occasional Marketing
             </label>
           </div>
         </div>
