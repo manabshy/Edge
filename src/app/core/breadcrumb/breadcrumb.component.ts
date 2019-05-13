@@ -10,6 +10,8 @@ import { Location } from '@angular/common';
   styleUrls: ['./breadcrumb.component.scss']
 })
 export class BreadcrumbComponent implements OnInit {
+  
+  prevRoute = AppUtils.prevRoute;
 
   constructor(private _location: Location) { }
 
