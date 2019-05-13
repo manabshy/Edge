@@ -20,7 +20,12 @@
     </div>
   </div>
   <div class="list-group">
-    <div class="list-group-item list-group-item-action" *ngFor="let person of contactGroupDetails?.contactPeople">
+    <div class="list-group-item" *ngIf="!contactGroupDetails?.contactPeople">
+      <div class="text-center" *ngIf="!searchedPersonDetails">
+        <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading contacts ...
+      </div>
+    </div>
+    <div class="list-group-item list-group-item-action" *ngFor="let person of contactGroupDetails?.contactPeople; index as i">
       <div class="row">
         <div class="col-12 text-right">
           <a  [routerLink]="['../../edit']"  [queryParams]="{groupPersonId: person.personId }" ><i class="fas fa-edit"></i> Edit</a>
@@ -38,22 +43,22 @@
         </div>
         <div class="col-sm-4 mb-2">{{person.address | formatAddress}}</div>
         <div class="col-sm-3 col-xl-4">
-          <div class="row" *ngFor="let phoneNumber of person.phoneNumbers">
-            <div class="col-6 mb-2 telephone"><a href="phoneNumber.number">{{phoneNumber?.number}}</a><br />{{phoneNumber?.telephoneId}}</div>
+          <div class="row">
+            <div class="col-6 telephone"><p class="mb-2" *ngFor="let phoneNumber of person.phoneNumbers"><a href="phoneNumber.number">{{phoneNumber?.number}}</a><br />{{phoneNumber?.telephoneId}}</p></div>
           </div>
         </div>
-        <div  *ngFor="let emailAddress of person.emailAddresses">
-          <div class="col-sm-5 col-xl-4"><a class="mb-2" href="emailAddress.email">{{emailAddress.email}}</a></div>
+        <div>
+          <div class="col-sm-5 col-xl-4"><p class="mb-2" *ngFor="let emailAddress of person.emailAddresses"><a href="emailAddress.email">{{emailAddress.email}}</a></p></div>
         </div>
         <div class="col-12">
           <hr class="my-1">
         </div>
         <div class="col-12">
-          <button type="button" class="btn btn-link px-0" (click)="isCollapsed = !isCollapsed"
-            [attr.aria-expanded]="!isCollapsed" aria-controls="collapseBasic">Marketing Prefs <span
+          <button type="button" class="btn btn-link px-0" (click)="isCollapsed[i] = !isCollapsed[i]"
+            [attr.aria-expanded]="!isCollapsed[i]" [attr.aria-controls]="'collapseMark' + i">Marketing Prefs <span
               class="badge badge-pill badge-primary">{{person.marketingPreferences?.count || 0}}</span>
           </button>
-          <div id="collapseBasic" [collapse]="!isCollapsed">
+          <div [id]="'collapseMark' + i" [collapse]="!isCollapsed[i]">
             <ul>
                 <li *ngIf="person.marketingPreferences?.marketBulletin">Quarterly bulletin</li>
                 <li *ngIf="person.marketingPreferences?.general" >Special offers</li>

@@ -4,7 +4,10 @@
   <!-- <div class="alert alert-danger mt-3" role="alert">
     Do not contact, GDPR request pending
   </div> -->
-  <div class="bg-light text-right pt-3 px-3">
+  <div class="text-center py-3" *ngIf="!searchedPersonDetails">
+    <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading info ...
+  </div>
+  <div class="bg-light text-right pt-3 px-3" *ngIf="searchedPersonDetails">
     <a routerLink="edit"><i class="fas fa-edit"></i> Edit</a>
   </div>
   <div class="row mx-0 mb-4 pb-3 bg-light" *ngIf="searchedPersonDetails">
@@ -22,12 +25,12 @@
         <p class="mb-2">{{searchedPersonDetails.address | formatAddress}}</p>
     </div>
     <div class="col-12 col-sm-3 col-xl-4">
-      <div class="row" *ngFor="let phoneNumber of searchedPersonDetails.phoneNumbers; let i = index;">
-        <div class="col-6 telephone"><p class="mb-2"><a (click)="$event.stopPropagation()" href="{{phoneNumber.number}}">{{phoneNumber.number}}</a><br /></p></div>
+      <div class="row">
+        <div class="col-6 telephone"><p class="mb-2" *ngFor="let phoneNumber of searchedPersonDetails.phoneNumbers; let i = index;"><a (click)="$event.stopPropagation()" href="{{phoneNumber.number}}">{{phoneNumber.number}}</a><br /></p></div>
       </div>
     </div>
-    <div class="col-sm-5 col-xl-4" *ngFor="let emailAddresses of searchedPersonDetails.emailAddresses">
-      <p class="mb-2 text-truncate"><a (click)="$event.stopPropagation()"
+    <div class="col-sm-5 col-xl-4">
+      <p class="mb-2 text-truncate" *ngFor="let emailAddresses of searchedPersonDetails.emailAddresses"><a (click)="$event.stopPropagation()"
           href="{{emailAddresses.email}}">{{emailAddresses.email}}</a></p>
     </div>
     <div class="col-12">
@@ -51,23 +54,25 @@
   </div>
   <div class="row">
     <div class="col-12" *ngIf="searchedPersonContactGroups">
-      <ul class="list-group list-group-flush mb-3">
-        <li class="list-group-item border-top-0">
-          <div class="row" *ngFor="let searchedPersonContactGroup of searchedPersonContactGroups">
-            <div class="col col-sm-auto form-group ">
-               <ng-container *ngFor="let contactPerson of searchedPersonContactGroup.contactPeople; last as isLast">
-                    {{contactPerson.fullName}}
-                    <ng-container *ngIf="!isLast">, </ng-container>
-               </ng-container>
+      <div class="list-group mb-3">
+        <ng-container *ngFor="let searchedPersonContactGroup of searchedPersonContactGroups">
+          <a [routerLink]="['people', searchedPersonContactGroup.contactGroupId]" class="list-group-item list-group-item-action">
+            <div class="row">
+              <div class="col">
+                  <ng-container *ngFor="let contactPerson of searchedPersonContactGroup.contactPeople; last as isLast">
+                      {{contactPerson.fullName}}
+                      <ng-container *ngIf="!isLast">, </ng-container>
+                  </ng-container>
+              </div>
+              <div class="col-auto">
+                <span class="btn-link py-0">
+                  <i class="fas fa-users"></i> View Group
+                </span>
+              </div>
             </div>
-            <div class="col-auto">
-              <a  [routerLink]="['people', searchedPersonContactGroup.contactGroupId]" class="btn btn-link py-0">
-                <i class="fas fa-users"></i> View Group
-              </a>
-            </div>
-          </div>
-        </li>
-      </ul>
+          </a>
+        </ng-container>
+      </div>
     </div>
   </div>
   <accordion [closeOthers]="true">

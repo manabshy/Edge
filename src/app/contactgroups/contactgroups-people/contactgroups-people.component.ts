@@ -10,9 +10,7 @@ import { ContactGroup } from '../shared/contact-group';
   styleUrls: ['./contactgroups-people.component.scss']
 })
 export class ContactgroupsPeopleComponent implements OnInit {
-  isCollapsed: boolean;
-  isCollapsed1: boolean;
-  isCollapsed2: boolean;
+  isCollapsed = {};
   personId: number;
   groupPersonId: number;
   contactGroupId: number;
