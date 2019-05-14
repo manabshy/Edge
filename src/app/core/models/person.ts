@@ -6,7 +6,7 @@ export interface Person {
   lastName: string;
   middleName: string;
   fullName: string;
-  title: string;
+  titleId: TitleId;
   titleOther?: string;
   emailAddresses: Email[];
   phoneNumbers: PhoneNumber[];
@@ -47,7 +47,7 @@ export interface PhoneNumber {
   isPreferred: boolean;
   number: string;
   orderNumber: number;
-  type: PhoneType;
+  telephoneTypeId: TelephoneTypeId;
   comments: string;
 }
 
@@ -109,7 +109,7 @@ export interface MarketingPreferences {
   count: number;
 }
 
-export enum Title {
+export enum TitleId {
   Mr = 1,
   Mrs = 2,
   Miss = 3,
@@ -120,3 +120,17 @@ export enum Title {
   Lord = 8,
   Other = 100
 }
+export enum TelephoneTypeId {
+  Home = 1,
+  Work = 2,
+  Mobile = 3,
+  Fax = 4,
+  Other = 5
+}
+export const PhoneTypes = <PhoneType[]> [
+  { id: 1, name: 'Home', valueStr: 'Home'},
+  { id: 2, name: 'Work', valueStr: 'Work'},
+  { id: 3, name: 'Mobile', valueStr: 'Mobile'},
+  { id: 4, name: 'Fax', valueStr: 'Fax'},
+  { id: 5, name: 'Other', valueStr: 'Other'}
+];

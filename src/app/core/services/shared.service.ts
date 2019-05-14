@@ -95,7 +95,14 @@ export class SharedService {
 }
 
 export interface DropdownListInfo {
- Countries: Record<number, string>;
+//  Countries: Record<number, string>;
+//  Countries: Record<number, string>;
+ Countries: Country[];
  Titles: Record<number, string>;
  TelephoneTypes: Record<number, string>;
+}
+
+export interface Country {
+  id: number;
+  value: string;
 }
