@@ -121,13 +121,15 @@
                   autocomplete="off">
                   <i class="fas fa-star"></i> Fav
                 </button> -->
-                <div class="custom-control custom-checkbox">
-                    <input class="custom-control-input" type="checkbox" name="examplecheckboxs" id="examplecheckboxs1"
-                      value="option1" formControlName="isPreferred">
-                    <label class="custom-control-label" for="examplecheckboxs1">
-                      Fav
-                    </label>
-                  </div>
+                <label class="btn btn-light" btnCheckbox formControlName="isPreferred" tabindex="0"
+                  role="button"><i class="fa-star mr-1" [ngClass]="personForm.controls.phoneNumbers.controls[i].controls.isPreferred.value ? 'fas' : 'far'"></i>Fav</label>
+                <!-- <div class="custom-control custom-checkbox">
+                  <input class="custom-control-input" type="checkbox" [id]="'phoneCheck' + i"
+                    value="option1" formControlName="isPreferred">
+                  <label class="custom-control-label" [for]="'phoneCheck' + i">
+                    Fav
+                  </label>
+                </div> -->
                 <!-- <button (click)="addPhoneNumberItem()">Add another number</button> -->
               </div>
             </div>
