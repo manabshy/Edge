@@ -70,9 +70,9 @@ public keepOriginalOrder = (a) => a.key;
      this.personForm.patchValue({
       titleSelected: person.titleId,
       //  title: person.title,
-       firstname: person.firstName,
-       middlename: person.middleName,
-       lastname: person.lastName,
+       firstName: person.firstName,
+       middleName: person.middleName,
+       lastName: person.lastName,
        amlCompletedDate: person.amlCompletedDate,
        addresses: {
         address1: person.address.address1,
@@ -123,9 +123,9 @@ public keepOriginalOrder = (a) => a.key;
     setupEditForm() {
       this.personForm = this.fb.group({
         titleSelected: [''],
-        firstname: ['', [Validators.required, Validators.maxLength(40)]],
-        middlename: ['', Validators.maxLength(50)],
-        lastname: ['', [Validators.required, Validators.maxLength(80)]],
+        firstName: ['', [Validators.required, Validators.maxLength(40)]],
+        middleName: ['', Validators.maxLength(50)],
+        lastName: ['', [Validators.required, Validators.maxLength(80)]],
         fullAddress: [''],
         addresses: this.fb.group({
           address1: ['', Validators.maxLength(80)],
