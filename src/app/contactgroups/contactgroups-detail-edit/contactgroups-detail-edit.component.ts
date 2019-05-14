@@ -3,7 +3,7 @@ import { SharedService, Country } from 'src/app/core/services/shared.service';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { Person, Email, PhoneNumber } from 'src/app/core/models/person';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { WedgeValidators } from 'src/app/core/shared/wedge-validators';
 
 @Component({
@@ -23,6 +23,7 @@ telephoneTypeSelected = 1;
 personDetails: Person;
 personForm: FormGroup;
 personId: number;
+groupPersonId: number;
 errorMessage: string;
 get showFullAddress(): boolean {
  return this.addresses.get('countryId').value === this.defaultCountryCode;
@@ -40,17 +41,19 @@ public keepOriginalOrder = (a) => a.key;
   constructor(public sharedService: SharedService,
               private contactGroupService: ContactGroupsService,
               private fb: FormBuilder,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              private router: Router) { }
 
   ngOnInit() {
     this.listInfo = this.sharedService.dropdownListInfo;
     this.countries = Object.values(this.listInfo)[0];
     this.titles = Object.values(this.listInfo)[1];
     this.telephoneTypes = Object.values(this.listInfo)[2];
-    // console.log('show full address getter', this.showFullAddress);
     this.route.params.subscribe(params => this.personId = +params['personId'] || 0);
+    this.route.queryParams.subscribe(params => this.groupPersonId = +params['groupPersonId'] || 0);
     this.setupEditForm();
-    this.getPersonDetails(this.personId);
+    const id = this.groupPersonId !== 0 ? this.groupPersonId : this.personId;
+    this.getPersonDetails(id);
   }
 
   cancel() {
@@ -97,7 +100,6 @@ public keepOriginalOrder = (a) => a.key;
         general: person.marketingPreferences.general
       }
      });
-     console.log('address values', this.personForm.get('addresses').value);
      this.personForm.setControl('emailAddresses', this.setExistingEmailAddresses(person.emailAddresses));
      this.personForm.setControl('phoneNumbers', this.setExistingPhoneNumbers(person.phoneNumbers));
 
@@ -185,10 +187,12 @@ public keepOriginalOrder = (a) => a.key;
           this.onSaveComplete();
         }
      } else {
-      this.errorMessage = 'Please fix errors before saving person details';
+      this.errorMessage = 'Please correct validation errors';
     }
   }
   onSaveComplete() {
-    throw new Error('Method not implemented.');
+    // tslint:disable-next-line:no-unused-expression
+    this.personForm.reset;
+    this.router.navigateByUrl('/home');
   }
 }
