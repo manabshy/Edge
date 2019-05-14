@@ -1,4 +1,5 @@
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { Country } from '../services/shared.service';
 
 export interface Address {
   flatNumber: string;
@@ -15,6 +16,7 @@ export interface Address {
   latitude: string;
   outCode: string;
   inCode: string;
+  countryId: number;
   country: string;
 }
 

@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { Person, Email, PhoneNumber } from 'src/app/core/models/person';
 import { ActivatedRoute } from '@angular/router';
+import { WedgeValidators } from 'src/app/core/shared/wedge-validators';
 
 @Component({
   selector: 'app-contactgroups-detail-edit',
@@ -22,6 +23,13 @@ telephoneTypeSelected = 1;
 personDetails: Person;
 personForm: FormGroup;
 personId: number;
+errorMessage: string;
+get showFullAddress(): boolean {
+ return this.addresses.get('countryId').value === this.defaultCountryCode;
+}
+get addresses():  FormGroup {
+  return <FormGroup> this.personForm.get('addresses');
+}
 get emailAddresses(): FormArray {
   return <FormArray> this.personForm.get('emailAddresses');
 }
@@ -39,9 +47,10 @@ public keepOriginalOrder = (a) => a.key;
     this.countries = Object.values(this.listInfo)[0];
     this.titles = Object.values(this.listInfo)[1];
     this.telephoneTypes = Object.values(this.listInfo)[2];
+    // console.log('show full address getter', this.showFullAddress);
     this.route.params.subscribe(params => this.personId = +params['personId'] || 0);
-    this.getPersonDetails(this.personId);
     this.setupEditForm();
+    this.getPersonDetails(this.personId);
   }
 
   cancel() {
@@ -63,9 +72,9 @@ public keepOriginalOrder = (a) => a.key;
      this.personForm.patchValue({
       titleSelected: person.titleId,
       //  title: person.title,
-       firstname: person.firstName,
-       middlename: person.middleName,
-       lastname: person.lastName,
+       firstName: person.firstName,
+       middleName: person.middleName,
+       lastName: person.lastName,
        amlCompletedDate: person.amlCompletedDate,
        addresses: {
         address1: person.address.address1,
@@ -76,7 +85,8 @@ public keepOriginalOrder = (a) => a.key;
         town: person.address.town,
         outCode: person.address.outCode,
         inCode: person.address.inCode,
-        country: person.address.country
+        countryId: person.address.countryId,
+        country: person.address.country,
        },
        contactBy: {email: person.contactByEmail, phone: person.contactByPhone},
        marketingPreferences: {
@@ -87,6 +97,7 @@ public keepOriginalOrder = (a) => a.key;
         general: person.marketingPreferences.general
       }
      });
+     console.log('address values', this.personForm.get('addresses').value);
      this.personForm.setControl('emailAddresses', this.setExistingEmailAddresses(person.emailAddresses));
      this.personForm.setControl('phoneNumbers', this.setExistingPhoneNumbers(person.phoneNumbers));
 
@@ -101,22 +112,27 @@ public keepOriginalOrder = (a) => a.key;
       }));
       console.log('this is isPreferred', x.number, x.isPreferred);
     });
+    phoneArray.push(this.createPhoneNumberItem());
     return phoneArray;
   }
   setExistingEmailAddresses(emailAddresses: Email[]): FormArray {
     const emailFormArray = new FormArray([]);
       emailAddresses.forEach(x => {
-        emailFormArray.push(this.fb.group({email: x.email}));
+        emailFormArray.push(this.fb.group({
+          email: x.email,
+          isPrimaryWebEmail: x.isPrimaryWebEmail
+        }));
       });
+      emailFormArray.push(this.createEmailItem());
       return emailFormArray;
   }
 
     setupEditForm() {
       this.personForm = this.fb.group({
         titleSelected: [''],
-        firstname: ['', [Validators.required, Validators.maxLength(40)]],
-        middlename: ['', Validators.maxLength(50)],
-        lastname: ['', [Validators.required, Validators.maxLength(80)]],
+        firstName: ['', [Validators.required, Validators.maxLength(40)]],
+        middleName: ['', Validators.maxLength(50)],
+        lastName: ['', [Validators.required, Validators.maxLength(80)]],
         fullAddress: [''],
         addresses: this.fb.group({
           address1: ['', Validators.maxLength(80)],
@@ -125,6 +141,7 @@ public keepOriginalOrder = (a) => a.key;
           address4: ['', Validators.maxLength(80)],
           address5: ['', Validators.maxLength(80)],
           town: ['', Validators.maxLength(80)],
+          countryId: 0,
           country: ['United Kingdom', [Validators.required, Validators.maxLength(50)]],
           inCode: ['', [Validators.required, Validators.maxLength(3)]],
           outCode: ['', [Validators.required, Validators.maxLength(4)]],
@@ -147,25 +164,54 @@ public keepOriginalOrder = (a) => a.key;
   });
  }
 
-  addPhoneNumberItem() {
-    this.phoneNumbers.push(this.createPhoneNumberItem());
+  addPhoneNumberItem(i) {
+    const currPhoneNumber = this.phoneNumbers.controls[i];
+    const lastPhoneNumber = this.phoneNumbers.controls[this.phoneNumbers.controls.length - 1];
+    if(lastPhoneNumber.value.phoneNumber) {
+      this.phoneNumbers.push(this.createPhoneNumberItem());
+    }
+    if(!currPhoneNumber.value.phoneNumber && currPhoneNumber !== lastPhoneNumber) {
+      this.phoneNumbers.removeAt(i);
+    }
   }
   createPhoneNumberItem(): FormGroup {
     return this.fb.group({
-      phoneNumber: [''],
+      phoneNumber: ['', [Validators.required, WedgeValidators.peoplePhone]],
       phoneNumberType: 3,
       isPreferred: [false]
     });
   }
 
-  addEmailItem() {
-   this.emailAddresses.push(this.createEmailItem());
+  addEmailItem(i) {
+    const currEmail = this.emailAddresses.controls[i];
+    const lastEmail = this.emailAddresses.controls[this.emailAddresses.controls.length - 1];
+    if(lastEmail.value.email) {
+      this.emailAddresses.push(this.createEmailItem());
+    }
+    if(!currEmail.value.email && currEmail !== lastEmail) {
+      this.emailAddresses.removeAt(i);
+    }
   }
+
   createEmailItem(): FormGroup {
-    return this.fb.group({email: ['', [Validators.email]]});
+    return this.fb.group({
+      email: ['', [Validators.email]],
+      isPrimaryWebEmail: [false]
+    });
   }
 
   savePerson() {
+    if (this.personForm.valid) {
+        if (this.personForm.dirty) {
 
+        } else {
+          this.onSaveComplete();
+        }
+     } else {
+      this.errorMessage = 'Please fix errors before saving person details';
+    }
+  }
+  onSaveComplete() {
+    throw new Error('Method not implemented.');
   }
 }
