@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { Person, Email, PhoneNumber } from 'src/app/core/models/person';
 import { ActivatedRoute } from '@angular/router';
+import { WedgeValidators } from 'src/app/core/shared/wedge-validators';
 
 @Component({
   selector: 'app-contactgroups-detail-edit',
@@ -22,6 +23,7 @@ telephoneTypeSelected = 1;
 personDetails: Person;
 personForm: FormGroup;
 personId: number;
+errorMessage: string;
 get showFullAddress(): boolean {
  return this.addresses.get('countryId').value === this.defaultCountryCode;
 }
@@ -95,7 +97,7 @@ public keepOriginalOrder = (a) => a.key;
         general: person.marketingPreferences.general
       }
      });
-     console.log('address values',this.personForm.get('addresses').value);
+     console.log('address values', this.personForm.get('addresses').value);
      this.personForm.setControl('emailAddresses', this.setExistingEmailAddresses(person.emailAddresses));
      this.personForm.setControl('phoneNumbers', this.setExistingPhoneNumbers(person.phoneNumbers));
 
@@ -162,7 +164,7 @@ public keepOriginalOrder = (a) => a.key;
   }
   createPhoneNumberItem(): FormGroup {
     return this.fb.group({
-      phoneNumber: [''],
+      phoneNumber: ['', [Validators.required, WedgeValidators.peoplePhone]],
       phoneNumberType: 3,
       isPreferred: [false]
     });
@@ -176,6 +178,17 @@ public keepOriginalOrder = (a) => a.key;
   }
 
   savePerson() {
+    if (this.personForm.valid) {
+        if (this.personForm.dirty) {
 
+        } else {
+          this.onSaveComplete();
+        }
+     } else {
+      this.errorMessage = 'Please fix errors before saving person details';
+    }
+  }
+  onSaveComplete() {
+    throw new Error('Method not implemented.');
   }
 }
