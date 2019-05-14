@@ -36,18 +36,18 @@ export interface BasicPerson{
   title: string;
 }
 export interface Email {
-  emailId: number;
+  id?: number;
   email: string;
-  isPrimaryWebEmail: boolean;
   orderNumber: number;
+  isPrimaryWebEmail: boolean;
 }
 
 export interface PhoneNumber {
-  phoneNumberId: number;
-  isPreferred: boolean;
+  id?: number;
+  typeId: TelephoneTypeId;
   number: string;
   orderNumber: number;
-  telephoneTypeId: TelephoneTypeId;
+  isPreferred: boolean;
   comments: string;
 }
 
