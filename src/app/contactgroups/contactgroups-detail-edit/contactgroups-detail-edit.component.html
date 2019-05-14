@@ -31,25 +31,25 @@
     <div formGroupName="addresses" class="form-group row">
         <label for="country" class="col-sm-2 col-form-label col-form-label-sm">Country</label>
         <div class="col-sm-3">
-          <select class="custom-select custom-select-sm" id="country" name="country" formControlName="country">
-            <option selected *ngFor="let country of countries " [value]=country.key>{{country.value}}</option>
+          <select class="custom-select custom-select-sm" id="country" formControlName="countryId">
+            <option selected *ngFor="let country of countries " [value]=country.id>{{country.value}}</option>
           </select>
         </div>
      </div>
-     <div class="form-group row">
+     <div class="form-group row" *ngIf="showFullAddress">
         <label for="fullAddress" class="col-sm-2 col-form-label col-form-label-sm"></label>
         <div class="col-sm-10">
-          <input type="text" id="fullAddress" class="form-control form-control-sm" formControlName="fullAddress">
+          <input type="text" id="fullAddress" class="form-control form-control-sm"  placeholder="search address" formControlName="fullAddress">
         </div>
       </div>
    <div formGroupName="addresses">
       <div class="form-group row">
           <label for="property" class="col-sm-2 col-form-label col-form-label-sm">Address</label>
           <div class="col-sm-10">
-            <button class="btn btn-sm btn-link px-0" type="button" id="manAddressBtn"
+            <!-- <button class="btn btn-sm btn-link px-0" type="button" id="manAddressBtn"
               (click)="isManAddressCollapsed = !isManAddressCollapsed" [attr.aria-expanded]="!isManAddressCollapsed"
-              aria-controls="collapseBasic">Enter address manually</button>
-            <div class="collapse" [collapse]="!isManAddressCollapsed" id="manAddress">
+              aria-controls="collapseBasic">Enter address manually</button> -->
+            <div >
               <div class="form-group">
                 <label class="small" for="adressline1">Address line 1</label>
                 <input type="text" class="form-control form-control-sm" id="addressline1"
@@ -112,10 +112,6 @@
               <select class="custom-select" id="phoneType"  formControlName="phoneNumberType">
                 <option *ngFor="let telephoneType of telephoneTypes | keyvalue:keepOriginalOrder" [value] = telephoneType.key>{{telephoneType.value}} </option>
               </select>
-              <!-- <div class="custom-control custom-radio custom-control-inline">
-                  <input type="radio" id="{{'customRadioInline' + i}}" class="custom-control-input" formControlName="isPreferred">
-                  <label class="custom-control-label" attr.for="{{'customRadioInline' + i}} "></label>
-              </div> -->
               <div class="input-group-append">
                 <!-- <button type="button" class="btn btn-light active" data-toggle="button" aria-pressed="true" formControlName="isPreferred"
                   autocomplete="off">
@@ -128,7 +124,6 @@
                       Fav
                     </label>
                   </div>
-                <!-- <button (click)="addPhoneNumberItem()">Add another number</button> -->
               </div>
             </div>
           </div>

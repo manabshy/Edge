@@ -22,6 +22,12 @@ telephoneTypeSelected = 1;
 personDetails: Person;
 personForm: FormGroup;
 personId: number;
+get showFullAddress(): boolean {
+ return this.addresses.get('countryId').value === this.defaultCountryCode;
+}
+get addresses():  FormGroup {
+  return <FormGroup> this.personForm.get('addresses');
+}
 get emailAddresses(): FormArray {
   return <FormArray> this.personForm.get('emailAddresses');
 }
@@ -39,9 +45,10 @@ public keepOriginalOrder = (a) => a.key;
     this.countries = Object.values(this.listInfo)[0];
     this.titles = Object.values(this.listInfo)[1];
     this.telephoneTypes = Object.values(this.listInfo)[2];
+    // console.log('show full address getter', this.showFullAddress);
     this.route.params.subscribe(params => this.personId = +params['personId'] || 0);
-    this.getPersonDetails(this.personId);
     this.setupEditForm();
+    this.getPersonDetails(this.personId);
   }
 
   cancel() {
@@ -76,7 +83,8 @@ public keepOriginalOrder = (a) => a.key;
         town: person.address.town,
         outCode: person.address.outCode,
         inCode: person.address.inCode,
-        country: person.address.country
+        countryId: person.address.countryId,
+        country: person.address.country,
        },
        contactBy: {email: person.contactByEmail, phone: person.contactByPhone},
        marketingPreferences: {
@@ -87,6 +95,7 @@ public keepOriginalOrder = (a) => a.key;
         general: person.marketingPreferences.general
       }
      });
+     console.log('address values',this.personForm.get('addresses').value);
      this.personForm.setControl('emailAddresses', this.setExistingEmailAddresses(person.emailAddresses));
      this.personForm.setControl('phoneNumbers', this.setExistingPhoneNumbers(person.phoneNumbers));
 
@@ -125,6 +134,7 @@ public keepOriginalOrder = (a) => a.key;
           address4: ['', Validators.maxLength(80)],
           address5: ['', Validators.maxLength(80)],
           town: ['', Validators.maxLength(80)],
+          countryId: 0,
           country: ['United Kingdom', [Validators.required, Validators.maxLength(50)]],
           inCode: ['', [Validators.required, Validators.maxLength(3)]],
           outCode: ['', [Validators.required, Validators.maxLength(4)]],
