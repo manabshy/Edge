@@ -26,11 +26,10 @@ personForm: FormGroup;
 personId: number;
 groupPersonId: number;
 errorMessage: string;
-nameMessage: string;
+errorsMessage: any = [];
 validationMessages = {
-    required: 'Full Name is required.',
-    minlength: 'Full Name must be greater than 2 characters',
-    maxlength: 'Full Name must be less than 10 characters.',
+    required: 'is required.',
+    maxlength: 'must be less than # characters.',
 };
 // validationMessages = {
 //   name: {
@@ -78,15 +77,25 @@ public keepOriginalOrder = (a) => a.key;
     const id = this.groupPersonId !== 0 ? this.groupPersonId : this.personId;
     this.getPersonDetails(id);
     const firstNameControl = this.personForm.get('firstName');
-    firstNameControl.valueChanges.pipe(debounceTime(1000)).subscribe(data => this.logValidationErrors(firstNameControl));
+    firstNameControl.valueChanges.pipe(debounceTime(1000)).subscribe(data => this.logValidationErrors(firstNameControl, 'firstName', 40));
+    const middleNameControl = this.personForm.get('middleName');
+    middleNameControl.valueChanges.pipe(debounceTime(1000)).subscribe(data => this.logValidationErrors(middleNameControl, 'middleName', 50));
+    const lastNameControl = this.personForm.get('lastName');
+    lastNameControl.valueChanges.pipe(debounceTime(1000)).subscribe(data => this.logValidationErrors(lastNameControl, 'lastName', 80));
   }
 
-  logValidationErrors(c: AbstractControl) {
-   this.nameMessage = '';
+  logValidationErrors(c: AbstractControl, name: string, maxLength: number) {
+   this.errorsMessage[name] = '';
    if ((c.dirty || c.touched) && c.errors) {
-    this.nameMessage = Object.keys(c.errors).map(key =>
-       this.nameMessage += this.validationMessages[key]).join('');
+    this.errorsMessage[name] = Object.keys(c.errors).map(key =>
+       this.errorsMessage[name] +=  this.labelGen(name) + ' ' + this.validationMessages[key].replace('#', maxLength)).join('');
    }
+  }
+
+  labelGen(name) {
+    name = name.split(/(?=[A-Z])/).join(' ');
+    name = name.charAt(0).toUpperCase() + name.slice(1)
+    return name;
   }
 
   cancel() {

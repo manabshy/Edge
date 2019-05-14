@@ -13,20 +13,22 @@
     <div class="form-group row">
       <label for="name" class="col-sm-2 col-form-label col-form-label-sm">First Name</label>
       <div class="col-sm-10">
-        <input type="text" id="name" class="form-control form-control-sm" formControlName="firstName" [ngClass]="{'is-invalid':nameMessage}" >
-        <span class="invalid-feedback">{{nameMessage}}</span>
+        <input type="text" id="name" class="form-control form-control-sm" formControlName="firstName" [ngClass]="{'is-invalid':errorsMessage?.firstName}" >
+        <span class="invalid-feedback">{{errorsMessage?.firstName}}</span>
       </div>
     </div>
     <div class="form-group row">
-      <label for="middle-names" class="col-sm-2 col-form-label col-form-label-sm">Middle Names</label>
+      <label for="middleName" class="col-sm-2 col-form-label col-form-label-sm">Middle Name</label>
       <div class="col-sm-10">
-        <input type="text" id="middle-names" class="form-control form-control-sm" formControlName="middleName">
+        <input type="text" id="middleName" class="form-control form-control-sm" formControlName="middleName" [ngClass]="{'is-invalid':errorsMessage?.middleName}" >
+        <span class="invalid-feedback">{{errorsMessage?.middleName}}</span>
       </div>
     </div>
     <div class="form-group row">
-      <label for="surname" class="col-sm-2 col-form-label col-form-label-sm">Surname</label>
+      <label for="lastName" class="col-sm-2 col-form-label col-form-label-sm">Last Name</label>
       <div class="col-sm-10">
-        <input type="text" id="surname" class="form-control form-control-sm" formControlName="lastName">
+        <input type="text" id="lastName" class="form-control form-control-sm" formControlName="lastName" [ngClass]="{'is-invalid':errorsMessage?.lastName}" >
+        <span class="invalid-feedback">{{errorsMessage?.lastName}}</span>
       </div>
     </div>
     <div formGroupName="addresses" class="form-group row">
