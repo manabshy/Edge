@@ -49,10 +49,10 @@ validationMessages = {
 //   },
 // };
 get showFullAddress(): boolean {
- return this.addresses.get('countryId').value === this.defaultCountryCode;
+ return this.address.get('countryId').value === this.defaultCountryCode;
 }
-get addresses():  FormGroup {
-  return <FormGroup> this.personForm.get('addresses');
+get address():  FormGroup {
+  return <FormGroup> this.personForm.get('address');
 }
 get emailAddresses(): FormArray {
   return <FormArray> this.personForm.get('emailAddresses');
@@ -111,7 +111,7 @@ public keepOriginalOrder = (a) => a.key;
        middleName: person.middleName,
        lastName: person.lastName,
        amlCompletedDate: person.amlCompletedDate,
-       addresses: {
+       address: {
         address1: person.address.address1,
         address2: person.address.address2,
         address3: person.address.address3,
@@ -140,8 +140,8 @@ public keepOriginalOrder = (a) => a.key;
     const phoneArray = new FormArray([]);
     phoneNumbers.forEach(x => {
       phoneArray.push(this.fb.group({
-        phoneNumber: x.number,
-        phoneNumberType: x.telephoneTypeId,
+        number: x.number,
+        typeId: x.typeId,
         isPreferred: x.isPreferred
       }));
     });
@@ -162,7 +162,7 @@ public keepOriginalOrder = (a) => a.key;
         middleName: ['', Validators.maxLength(50)],
         lastName: ['', [Validators.required, Validators.maxLength(80)]],
         fullAddress: [''],
-        addresses: this.fb.group({
+        address: this.fb.group({
           address1: ['', Validators.maxLength(80)],
           address2: ['', Validators.maxLength(80)],
           address3: ['', Validators.maxLength(80)],
@@ -170,10 +170,11 @@ public keepOriginalOrder = (a) => a.key;
           address5: ['', Validators.maxLength(80)],
           town: ['', Validators.maxLength(80)],
           countryId: 0,
-          country: ['United Kingdom', [Validators.required, Validators.maxLength(50)]],
+          // country: ['United Kingdom', [Validators.required, Validators.maxLength(50)]],
           inCode: ['', [Validators.required, Validators.maxLength(3)]],
           outCode: ['', [Validators.required, Validators.maxLength(4)]],
-          postCode: ['', [Validators.required, Validators.maxLength(6)]] }),
+          // postCode: ['', [Validators.required, Validators.maxLength(6)]]
+        }),
         contactBy: this.fb.group({
           email: [false],
           phone: [false]
@@ -197,8 +198,10 @@ public keepOriginalOrder = (a) => a.key;
   }
   createPhoneNumberItem(): FormGroup {
     return this.fb.group({
-      phoneNumber: ['', [Validators.required, WedgeValidators.peoplePhone]],
-      phoneNumberType: 3,
+      id: 0,
+      typeId: 3,
+      number: ['', [Validators.required, WedgeValidators.peoplePhone]],
+      orderNumber: 0,
       isPreferred: [false]
     });
   }
@@ -216,12 +219,15 @@ public keepOriginalOrder = (a) => a.key;
           const p = {...this.personDetails, ...this.personForm.value};
           this.contactGroupService.updatePerson(p).subscribe(() => this.onSaveComplete(),
           (error: any) => this.errorMessage = <any>error );
+          console.log('person details to post', p);
         } else {
           this.onSaveComplete();
         }
      } else {
       this.errorMessage = 'Please correct validation errors';
     }
+
+    console.log(this.personForm);
     console.log(this.errorMessage);
   }
   onSaveComplete() {

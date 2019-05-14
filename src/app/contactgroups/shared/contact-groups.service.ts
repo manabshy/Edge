@@ -42,7 +42,7 @@ export class ContactGroupsService {
     const url = `${AppConstants.basePersonUrl}/${person.personId}`;
     return this.http.put(url, person).pipe(
       map(response => response),
-      tap(data => console.log(JSON.stringify(data)))
+      tap(data => console.log('updated person details here...',JSON.stringify(data)))
       );
   }
 }
