@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppUtils } from '../shared/utils';
+import { SharedService } from '../services/shared.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-breadcrumb',
@@ -8,42 +10,16 @@ import { AppUtils } from '../shared/utils';
   styleUrls: ['./breadcrumb.component.scss']
 })
 export class BreadcrumbComponent implements OnInit {
+  
+  prevRoute = AppUtils.prevRoute;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute) { }
+  constructor(private _location: Location) { }
 
   ngOnInit() {
-    const current = this.activatedRoute.snapshot;
-    let currentUrl = this.router.url;
-    currentUrl = currentUrl.indexOf('?') > 0 ? currentUrl.substring(0, currentUrl.indexOf('?')) : currentUrl;
-    const parent = current.parent;
-
-    if('/' + AppUtils.parentRoute == currentUrl){
-      AppUtils.parentRoute = '/home';
-    }
-
-
-    if (parent) {
-      if (current.url.length && parent.url.length) {
-        if (parent.parent.url.length) {
-          AppUtils.parentRoute = parent.parent.url[0].path;
-        }
-        AppUtils.parentRoute = AppUtils.parentRoute + '/' + parent.url[0].path;
-        if(parent.params){
-          AppUtils.parentRoute = AppUtils.parentRoute + '/' + parent.params.id;
-        }
-      } else if (parent.parent.url.length) {
-        AppUtils.parentRoute = parent.parent.url[0].path;
-      }
-    }
-
   }
 
   backClicked() {
-    if (AppUtils.parentRoute) {
-      this.router.navigate(['../../' + AppUtils.parentRoute], {queryParamsHandling: 'preserve'});
-    } else {
-      this.router.navigate(['/home']);
-    }
+    this._location.back();
   }
 
 }
