@@ -33,18 +33,18 @@ validationMessages = {
     maxlength: 'Full Name must be less than 10 characters.',
 };
 // validationMessages = {
-//   'name': {
-//     'required': 'Full Name is required.',
-//     'minlength': 'Full Name must be greater than 2 characters',
-//     'maxlength': 'Full Name must be less than 10 characters.',
+//   name: {
+//     required: 'Full Name is required.',
+//     minlength: 'Full Name must be greater than 2 characters',
+//     maxlength: 'Full Name must be less than 10 characters.',
 //   },
-//   'email': {
-//     'required': ' Email is required.'
+//   email: {
+//     required: ' Email is required.'
 //   },
-//   'address': {
-//     'required': 'Address is required.'
+//   address: {
+//     required: 'Address is required.'
 //   },
-//   'phone': {
+//   phone: {
 //     'required': 'Phone is required.'
 //   },
 // };
