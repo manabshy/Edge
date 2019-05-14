@@ -13,7 +13,8 @@
     <div class="form-group row">
       <label for="name" class="col-sm-2 col-form-label col-form-label-sm">First Name</label>
       <div class="col-sm-10">
-        <input type="text" id="name" class="form-control form-control-sm" formControlName="firstName" >
+        <input type="text" id="name" class="form-control form-control-sm" formControlName="firstName" [ngClass]="{'is-invalid':nameMessage}" >
+        <span class="invalid-feedback">{{nameMessage}}</span>
       </div>
     </div>
     <div class="form-group row">
@@ -202,7 +203,7 @@
         <div class="row justify-content-end w-100 no-gutters">
           <div class="col-sm-10 d-flex">
             <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
-            <button routerLink="/contact-centre" type="submit" class="btn btn-secondary" [disabled]="!personForm.valid">Edit Contact</button>
+            <button type="submit" class="btn btn-secondary" >Edit Contact</button>
           </div>
         </div>
       </div>

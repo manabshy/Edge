@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedService, Country } from 'src/app/core/services/shared.service';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { Person, Email, PhoneNumber } from 'src/app/core/models/person';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WedgeValidators } from 'src/app/core/shared/wedge-validators';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-contactgroups-detail-edit',
@@ -25,6 +26,28 @@ personForm: FormGroup;
 personId: number;
 groupPersonId: number;
 errorMessage: string;
+nameMessage: string;
+validationMessages = {
+    required: 'Full Name is required.',
+    minlength: 'Full Name must be greater than 2 characters',
+    maxlength: 'Full Name must be less than 10 characters.',
+};
+// validationMessages = {
+//   'name': {
+//     'required': 'Full Name is required.',
+//     'minlength': 'Full Name must be greater than 2 characters',
+//     'maxlength': 'Full Name must be less than 10 characters.',
+//   },
+//   'email': {
+//     'required': ' Email is required.'
+//   },
+//   'address': {
+//     'required': 'Address is required.'
+//   },
+//   'phone': {
+//     'required': 'Phone is required.'
+//   },
+// };
 get showFullAddress(): boolean {
  return this.addresses.get('countryId').value === this.defaultCountryCode;
 }
@@ -54,6 +77,16 @@ public keepOriginalOrder = (a) => a.key;
     this.setupEditForm();
     const id = this.groupPersonId !== 0 ? this.groupPersonId : this.personId;
     this.getPersonDetails(id);
+    const firstNameControl = this.personForm.get('firstName');
+    firstNameControl.valueChanges.pipe(debounceTime(1000)).subscribe(data => this.logValidationErrors(firstNameControl));
+  }
+
+  logValidationErrors(c: AbstractControl) {
+   this.nameMessage = '';
+   if ((c.dirty || c.touched) && c.errors) {
+    this.nameMessage = Object.keys(c.errors).map(key =>
+       this.nameMessage += this.validationMessages[key]).join('');
+   }
   }
 
   cancel() {
@@ -64,7 +97,6 @@ public keepOriginalOrder = (a) => a.key;
     this.contactGroupService.getPerson(personId).subscribe(data => {
       this.personDetails = data;
      this.displayPersonDetails(data);
-      console.log('this is  person details', this.personDetails);
     });
   }
   displayPersonDetails(person: Person) {
@@ -112,7 +144,6 @@ public keepOriginalOrder = (a) => a.key;
         phoneNumberType: x.telephoneTypeId,
         isPreferred: x.isPreferred
       }));
-      console.log('this is isPreferred', x.number, x.isPreferred);
     });
     return phoneArray;
   }
@@ -159,7 +190,7 @@ public keepOriginalOrder = (a) => a.key;
         emailAddresses: this.fb.array([this.createEmailItem()]),
         phoneNumbers: this.fb.array([this.createPhoneNumberItem()])
   });
- }
+  }
 
   addPhoneNumberItem() {
     this.phoneNumbers.push(this.createPhoneNumberItem());
@@ -182,17 +213,20 @@ public keepOriginalOrder = (a) => a.key;
   savePerson() {
     if (this.personForm.valid) {
         if (this.personForm.dirty) {
-
+          const p = {...this.personDetails, ...this.personForm.value};
+          this.contactGroupService.updatePerson(p).subscribe(() => this.onSaveComplete(),
+          (error: any) => this.errorMessage = <any>error );
         } else {
           this.onSaveComplete();
         }
      } else {
       this.errorMessage = 'Please correct validation errors';
     }
+    console.log(this.errorMessage);
   }
   onSaveComplete() {
     // tslint:disable-next-line:no-unused-expression
     this.personForm.reset;
-    this.router.navigateByUrl('/home');
+    this.router.navigateByUrl('/contact-centre');
   }
 }

@@ -38,4 +38,11 @@ export class ContactGroupsService {
     const url = `${AppConstants.basePersonUrl}/${personId}/contactGroups`;
     return this.http.get<BasicContactGroupData>(url).pipe(map(response => response.result));
   }
+  updatePerson(person: Person): Observable<any> {
+    const url = `${AppConstants.basePersonUrl}/${person.personId}`;
+    return this.http.put(url, person).pipe(
+      map(response => response),
+      tap(data => console.log(JSON.stringify(data)))
+      );
+  }
 }
