@@ -1,7 +1,10 @@
 <app-breadcrumb></app-breadcrumb>
 <div class="container">
   <h4 class="page-title">Edit Contact</h4>
-  <form [formGroup]="personForm" (ngSubmit)="savePerson()">
+  <div class="text-center" *ngIf="!personDetails">
+    <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading details ...
+  </div>
+  <form *ngIf="personDetails" [formGroup]="personForm" (ngSubmit)="savePerson()">
     <div class="form-group row">
       <label for="title" class="col-sm-2 col-form-label col-form-label-sm">Title</label>
       <div class="col-sm-3">
