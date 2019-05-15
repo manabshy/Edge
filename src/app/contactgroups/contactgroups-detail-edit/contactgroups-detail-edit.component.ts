@@ -263,7 +263,7 @@ public keepOriginalOrder = (a) => a.key;
   });
   }
 
-  setValidationForGroups() {
+  removeValidationForAdditionalFields() {
     const lastPhoneNumber = this.phoneNumbers.controls[this.phoneNumbers.controls.length - 1];
     const lastEmail = this.emailAddresses.controls[this.emailAddresses.controls.length - 1];
     if (lastPhoneNumber.get('number').value === '') {
@@ -315,7 +315,7 @@ public keepOriginalOrder = (a) => a.key;
   }
 
   savePerson() {
-    this.setValidationForGroups();
+    this.removeValidationForAdditionalFields();
     if (this.personForm.valid) {
         if (this.personForm.dirty) {
           const p = {...this.personDetails, ...this.personForm.value};
