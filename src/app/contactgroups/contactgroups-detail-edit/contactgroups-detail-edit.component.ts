@@ -26,11 +26,10 @@ personForm: FormGroup;
 personId: number;
 groupPersonId: number;
 errorMessage: string;
-nameMessage: string;
+errorsMessage: any = [];
 validationMessages = {
-    required: 'Full Name is required.',
-    minlength: 'Full Name must be greater than 2 characters',
-    maxlength: 'Full Name must be less than 10 characters.',
+    required: 'is required.',
+    maxlength: 'must be less than # characters.',
 };
 // validationMessages = {
 //   name: {
@@ -78,15 +77,25 @@ public keepOriginalOrder = (a) => a.key;
     const id = this.groupPersonId !== 0 ? this.groupPersonId : this.personId;
     this.getPersonDetails(id);
     const firstNameControl = this.personForm.get('firstName');
-    firstNameControl.valueChanges.pipe(debounceTime(1000)).subscribe(data => this.logValidationErrors(firstNameControl));
+    firstNameControl.valueChanges.pipe(debounceTime(1000)).subscribe(data => this.logValidationErrors(firstNameControl, 'firstName', 40));
+    const middleNameControl = this.personForm.get('middleName');
+    middleNameControl.valueChanges.pipe(debounceTime(1000)).subscribe(data => this.logValidationErrors(middleNameControl, 'middleName', 50));
+    const lastNameControl = this.personForm.get('lastName');
+    lastNameControl.valueChanges.pipe(debounceTime(1000)).subscribe(data => this.logValidationErrors(lastNameControl, 'lastName', 80));
   }
 
-  logValidationErrors(c: AbstractControl) {
-   this.nameMessage = '';
+  logValidationErrors(c: AbstractControl, name: string, maxLength: number) {
+   this.errorsMessage[name] = '';
    if ((c.dirty || c.touched) && c.errors) {
-    this.nameMessage = Object.keys(c.errors).map(key =>
-       this.nameMessage += this.validationMessages[key]).join('');
+    this.errorsMessage[name] = Object.keys(c.errors).map(key =>
+       this.errorsMessage[name] +=  this.labelGen(name) + ' ' + this.validationMessages[key].replace('#', maxLength)).join('');
    }
+  }
+
+  labelGen(name) {
+    name = name.split(/(?=[A-Z])/).join(' ');
+    name = name.charAt(0).toUpperCase() + name.slice(1)
+    return name;
   }
 
   cancel() {
@@ -145,13 +154,18 @@ public keepOriginalOrder = (a) => a.key;
         isPreferred: x.isPreferred
       }));
     });
+    phoneArray.push(this.createPhoneNumberItem());
     return phoneArray;
   }
   setExistingEmailAddresses(emailAddresses: Email[]): FormArray {
     const emailFormArray = new FormArray([]);
       emailAddresses.forEach(x => {
-        emailFormArray.push(this.fb.group({email: x.email}));
+        emailFormArray.push(this.fb.group({
+          email: x.email,
+          isPrimaryWebEmail: x.isPrimaryWebEmail
+        }));
       });
+      emailFormArray.push(this.createEmailItem());
       return emailFormArray;
   }
 
@@ -193,8 +207,15 @@ public keepOriginalOrder = (a) => a.key;
   });
   }
 
-  addPhoneNumberItem() {
-    this.phoneNumbers.push(this.createPhoneNumberItem());
+  addPhoneNumberItem(i) {
+    const currPhoneNumber = this.phoneNumbers.controls[i];
+    const lastPhoneNumber = this.phoneNumbers.controls[this.phoneNumbers.controls.length - 1];
+    if(lastPhoneNumber.value.phoneNumber) {
+      this.phoneNumbers.push(this.createPhoneNumberItem());
+    }
+    if(!currPhoneNumber.value.phoneNumber && currPhoneNumber !== lastPhoneNumber) {
+      this.phoneNumbers.removeAt(i);
+    }
   }
   createPhoneNumberItem(): FormGroup {
     return this.fb.group({
@@ -206,11 +227,22 @@ public keepOriginalOrder = (a) => a.key;
     });
   }
 
-  addEmailItem() {
-   this.emailAddresses.push(this.createEmailItem());
+  addEmailItem(i) {
+    const currEmail = this.emailAddresses.controls[i];
+    const lastEmail = this.emailAddresses.controls[this.emailAddresses.controls.length - 1];
+    if(lastEmail.value.email) {
+      this.emailAddresses.push(this.createEmailItem());
+    }
+    if(!currEmail.value.email && currEmail !== lastEmail) {
+      this.emailAddresses.removeAt(i);
+    }
   }
+
   createEmailItem(): FormGroup {
-    return this.fb.group({email: ['', [Validators.email]]});
+    return this.fb.group({
+      email: ['', [Validators.email]],
+      isPrimaryWebEmail: [false]
+    });
   }
 
   savePerson() {

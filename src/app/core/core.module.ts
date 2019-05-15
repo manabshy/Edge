@@ -21,6 +21,7 @@ import { ModalModule } from 'ngx-bootstrap/modal/';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
 
 //components
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
@@ -37,7 +38,7 @@ import { FormatAddressPipe } from './shared/format-address.pipe';
     ConfirmModalComponent, PropertyFinderComponent, BsDropdownModule,
     CollapseModule, TabsModule, TypeaheadModule,
     BsDatepickerModule, ModalModule, PopoverModule,  NgPipesModule,
-    TooltipModule, AccordionModule, ReactiveFormsModule, FormsModule
+    TooltipModule, AccordionModule, ButtonsModule, ReactiveFormsModule, FormsModule
   ],
   imports: [
     CommonModule,
@@ -51,7 +52,8 @@ import { FormatAddressPipe } from './shared/format-address.pipe';
     ModalModule.forRoot(),
     PopoverModule.forRoot(),
     TooltipModule.forRoot(),
-    AccordionModule.forRoot()
+    AccordionModule.forRoot(),
+    ButtonsModule.forRoot()
   ],
   entryComponents: [
     ConfirmModalComponent

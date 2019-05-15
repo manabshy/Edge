@@ -13,20 +13,22 @@
     <div class="form-group row">
       <label for="name" class="col-sm-2 col-form-label col-form-label-sm">First Name</label>
       <div class="col-sm-10">
-        <input type="text" id="name" class="form-control form-control-sm" formControlName="firstName" [ngClass]="{'is-invalid':nameMessage}" >
-        <span class="invalid-feedback">{{nameMessage}}</span>
+        <input type="text" id="name" class="form-control form-control-sm" formControlName="firstName" [ngClass]="{'is-invalid':errorsMessage?.firstName}" >
+        <span class="invalid-feedback">{{errorsMessage?.firstName}}</span>
       </div>
     </div>
     <div class="form-group row">
-      <label for="middle-names" class="col-sm-2 col-form-label col-form-label-sm">Middle Names</label>
+      <label for="middleName" class="col-sm-2 col-form-label col-form-label-sm">Middle Name</label>
       <div class="col-sm-10">
-        <input type="text" id="middle-names" class="form-control form-control-sm" formControlName="middleName">
+        <input type="text" id="middleName" class="form-control form-control-sm" formControlName="middleName" [ngClass]="{'is-invalid':errorsMessage?.middleName}" >
+        <span class="invalid-feedback">{{errorsMessage?.middleName}}</span>
       </div>
     </div>
     <div class="form-group row">
-      <label for="surname" class="col-sm-2 col-form-label col-form-label-sm">Surname</label>
+      <label for="lastName" class="col-sm-2 col-form-label col-form-label-sm">Last Name</label>
       <div class="col-sm-10">
-        <input type="text" id="surname" class="form-control form-control-sm" formControlName="lastName">
+        <input type="text" id="lastName" class="form-control form-control-sm" formControlName="lastName" [ngClass]="{'is-invalid':errorsMessage?.lastName}" >
+        <span class="invalid-feedback">{{errorsMessage?.lastName}}</span>
       </div>
     </div>
     <div formGroupName="address" class="form-group row">
@@ -93,38 +95,35 @@
           </div>
       </div>
    </div>
-   <div formArrayName="emailAddresses" *ngFor="let emailAddress of emailAddresses.controls; let i = index">
+   <div formArrayName="emailAddresses" *ngFor="let emailAddress of emailAddresses.controls; let i = index; first as isFirst">
       <div [formGroupName]="i">
         <div class="form-group row">
-          <label for="email" class="col-sm-2 col-form-label col-form-label-sm">Email</label>
+          <label for="email" class="col-sm-2 col-form-label col-form-label-sm">Email {{i + 1}}</label>
           <div class="col-sm-10">
-            <input type="text" id="email" placeholder="" class="form-control form-control-sm" formControlName="email">
+              <div class="input-group input-group-sm">
+                <input type="text" [placeholder]="!isFirst ? '(optional)' : ''" class="form-control" formControlName="email" (keyup)="addEmailItem(i)">
+                <div class="input-group-append">
+                  <label class="btn btn-light" btnCheckbox formControlName="isPrimaryWebEmail" tabindex="0"
+                    role="button"><i class="fa-star mr-1" [ngClass]="personForm.controls.emailAddresses.controls[i].controls.isPrimaryWebEmail.value ? 'fas' : 'far'"></i>Fav</label>
+                </div>
+              </div>
           </div>
         </div>
       </div>
     </div>
-   <div formArrayName="phoneNumbers" *ngFor="let phoneNumber of phoneNumbers.controls; let i = index">
+   <div formArrayName="phoneNumbers" *ngFor="let phoneNumber of phoneNumbers.controls; let i = index; first as isFirst;">
       <div [formGroupName]="i">
         <div class="form-group row">
-          <label for="phone" class="col-sm-2 col-form-label col-form-label-sm">Phone</label>
+          <label for="phone" class="col-sm-2 col-form-label col-form-label-sm">Phone {{i + 1}}</label>
           <div class="col-sm-10">
             <div class="input-group input-group-sm">
-              <input type="text" class="form-control" id="phone" placeholder="" formControlName="number">
+              <input type="text" class="form-control" [placeholder]="!isFirst ? '(optional)' : ''" formControlName="number" (keyup)="addPhoneNumberItem(i)">
               <select class="custom-select" id="phoneType"  formControlName="typeId">
-                <option *ngFor="let telephoneType of telephoneTypes | keyvalue:keepOriginalOrder" [value] = telephoneType.key>{{telephoneType.value}} </option>
+                <option *ngFor="let telephoneType of telephoneTypes | keyvalue:keepOriginalOrder" [value] = telephoneType.key>{{telephoneType.value}}</option>
               </select>
               <div class="input-group-append">
-                <!-- <button type="button" class="btn btn-light active" data-toggle="button" aria-pressed="true" formControlName="isPreferred"
-                  autocomplete="off">
-                  <i class="fas fa-star"></i> Fav
-                </button> -->
-                <div class="custom-control custom-checkbox">
-                    <input class="custom-control-input" type="checkbox" name="examplecheckboxs" id="examplecheckboxs1"
-                      value="option1" formControlName="isPreferred">
-                    <label class="custom-control-label" for="examplecheckboxs1">
-                      Fav
-                    </label>
-                  </div>
+                <label class="btn btn-light" btnCheckbox formControlName="isPreferred" tabindex="0"
+                  role="button"><i class="fa-star mr-1" [ngClass]="personForm.controls.phoneNumbers.controls[i].controls.isPreferred.value ? 'fas' : 'far'"></i>Fav</label>
               </div>
             </div>
           </div>
