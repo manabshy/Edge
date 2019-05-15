@@ -28,7 +28,16 @@
     <div class="list-group-item list-group-item-action" *ngFor="let person of contactGroupDetails?.contactPeople; index as i">
       <div class="row">
         <div class="col-12 text-right">
-          <a  [routerLink]="['../../edit']"  [queryParams]="{groupPersonId: person.personId }" ><i class="fas fa-edit"></i> Edit</a>
+          <div class="btn-group" dropdown placement="bottom right">
+            <button [id]="'button' + i" dropdownToggle type="button" class="btn btn-link dropdown-toggle"
+              [attr.aria-controls]="'dropdown' + i">
+              Actions <span class="caret"></span>
+            </button>
+            <ul [id]="'dropdown' + i" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" [attr.aria-labelledby]="'button' + i">
+              <li role="menuitem"><a class="dropdown-item"  [routerLink]="['../../edit']"  [queryParams]="{groupPersonId: person.personId }" ><i class="fas fa-edit"></i> Edit</a></li>
+              <li role="menuitem"><a class="dropdown-item"><i class="fas fa-user-times"></i> Remove</a></li>
+            </ul>
+          </div>
         </div>
         <div class="col-12 mb-2">
           <strong>{{person.firstName}} {{person.lastName}}</strong>&nbsp;
@@ -70,5 +79,10 @@
         </div>
       </div>
     </div>
+    <a href="#" class="list-group-item list-group-item-action text-center py-4">
+      <span class="btn-link">
+        <i class="fas fa-user-plus"></i> New Person
+      </span>
+    </a>
   </div>
 </div>
