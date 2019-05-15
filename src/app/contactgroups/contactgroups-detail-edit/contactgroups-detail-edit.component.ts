@@ -27,26 +27,52 @@ personId: number;
 groupPersonId: number;
 errorMessage: string;
 errorsMessage: any = [];
-validationMessages = {
+validationMessagesSimple = {
     required: 'is required.',
     maxlength: 'must be less than # characters.',
 };
-// validationMessages = {
-//   name: {
-//     required: 'Full Name is required.',
-//     minlength: 'Full Name must be greater than 2 characters',
-//     maxlength: 'Full Name must be less than 10 characters.',
-//   },
-//   email: {
-//     required: ' Email is required.'
-//   },
-//   address: {
-//     required: 'Address is required.'
-//   },
-//   phone: {
-//     'required': 'Phone is required.'
-//   },
-// };
+validationMessages = {
+  'firstName': {
+    required: 'First name is required.',
+    minlength: 'First name must be greater than 2 characters',
+    maxlength: 'First name must be less than 40 characters.',
+  },
+  'lastName': {
+    required: 'Last name is required.',
+    minlength: 'Last name must be greater than 2 characters',
+    maxlength: 'Last name must be less than 80 characters.',
+  },
+  'email': {
+    required: ' Email is required.'
+  },
+  'address': {
+    required: 'Address is required.'
+  },
+  'number': {
+    required: 'Phone is required.'
+  },
+  'inCode': {
+    required: 'Postcode is required.',
+    minlength: 'Incode must be 3 characters.',
+    maxlength: 'Incode cannot be more than 3 characters.',
+  },
+  'outCode': {
+    required: 'Postcode is required.',
+    minlength: 'outCode must be 3 characters or more.',
+    maxlength: 'outCode cannot be more than 4 characters.',
+  },
+};
+
+formErrors = {
+  'firstName': '',
+  'lastName': '',
+  'email': '',
+  'emailAddresses': '',
+  'address': '',
+  'number' : '',
+  'inCode' : '',
+  'outCode' : ''
+};
 get showFullAddress(): boolean {
  return this.address.get('countryId').value === this.defaultCountryCode;
 }
@@ -76,26 +102,49 @@ public keepOriginalOrder = (a) => a.key;
     this.setupEditForm();
     const id = this.groupPersonId !== 0 ? this.groupPersonId : this.personId;
     this.getPersonDetails(id);
-    const firstNameControl = this.personForm.get('firstName');
-    firstNameControl.valueChanges.pipe(debounceTime(1000)).subscribe(data => this.logValidationErrors(firstNameControl, 'firstName', 40));
-    const middleNameControl = this.personForm.get('middleName');
-    middleNameControl.valueChanges.pipe(debounceTime(1000)).subscribe(data => this.logValidationErrors(middleNameControl, 'middleName', 50));
-    const lastNameControl = this.personForm.get('lastName');
-    lastNameControl.valueChanges.pipe(debounceTime(1000)).subscribe(data => this.logValidationErrors(lastNameControl, 'lastName', 80));
+    this.personForm.valueChanges
+    .subscribe(data => this.logValidationErrors(this.personForm));
+    // const firstNameControl = this.personForm.get('firstName');
+    // firstNameControl.valueChanges.pipe(debounceTime(1000))
+    // .subscribe(data => this.logValidationErrorsSimple(firstNameControl, 'firstName', 40));
+    // const middleNameControl = this.personForm.get('middleName');
+    // middleNameControl.valueChanges.pipe(debounceTime(1000))
+    // .subscribe(data => this.logValidationErrorsSimple(middleNameControl, 'middleName', 50));
+    // const lastNameControl = this.personForm.get('lastName');
+    // lastNameControl.valueChanges.pipe(debounceTime(1000))
+    // .subscribe(data => this.logValidationErrorsSimple(lastNameControl, 'lastName', 80));
   }
 
-  logValidationErrors(c: AbstractControl, name: string, maxLength: number) {
+  logValidationErrorsSimple(c: AbstractControl, name: string, maxLength: number) {
    this.errorsMessage[name] = '';
    if ((c.dirty || c.touched) && c.errors) {
     this.errorsMessage[name] = Object.keys(c.errors).map(key =>
-       this.errorsMessage[name] +=  this.labelGen(name) + ' ' + this.validationMessages[key].replace('#', maxLength)).join('');
+       this.errorsMessage[name] +=  this.labelGen(name) + ' ' + this.validationMessagesSimple[key].replace('#', maxLength)).join('');
    }
   }
 
   labelGen(name) {
     name = name.split(/(?=[A-Z])/).join(' ');
-    name = name.charAt(0).toUpperCase() + name.slice(1)
+    name = name.charAt(0).toUpperCase() + name.slice(1);
     return name;
+  }
+
+  logValidationErrors(group: FormGroup = this.personForm) {
+    Object.keys(group.controls).forEach((key: string) => {
+      const control = group.get(key);
+      const messages = this.validationMessages[key];
+      this.formErrors[key] = '';
+      if (control && !control.valid && (control.touched || control.dirty)) {
+        for (const errorKey  in control.errors) {
+          if (errorKey) {
+            this.formErrors[key] += messages[errorKey] + '';
+          }
+        }
+      }
+      if (control instanceof FormGroup) {
+       this.logValidationErrors(control);
+      }
+    });
   }
 
   cancel() {
@@ -105,6 +154,7 @@ public keepOriginalOrder = (a) => a.key;
   getPersonDetails(personId: number) {
     this.contactGroupService.getPerson(personId).subscribe(data => {
       this.personDetails = data;
+      console.log('person details', this.personDetails);
      this.displayPersonDetails(data);
     });
   }
@@ -135,7 +185,7 @@ public keepOriginalOrder = (a) => a.key;
        contactBy: {email: person.contactByEmail, phone: person.contactByPhone},
        marketingPreferences: {
         marketBulletin: person.marketingPreferences.marketBulletin,
-        offerSurveys: person.marketingPreferences.offerSurveys,
+        offersSurveys: person.marketingPreferences.offersSurveys,
         events: person.marketingPreferences.events,
         newHomes: person.marketingPreferences.newHomes,
         general: person.marketingPreferences.general
@@ -185,8 +235,8 @@ public keepOriginalOrder = (a) => a.key;
           town: ['', Validators.maxLength(80)],
           countryId: 0,
           // country: ['United Kingdom', [Validators.required, Validators.maxLength(50)]],
-          inCode: ['', [Validators.required, Validators.maxLength(3)]],
-          outCode: ['', [Validators.required, Validators.maxLength(4)]],
+          inCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
+          outCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(4)]],
           // postCode: ['', [Validators.required, Validators.maxLength(6)]]
         }),
         contactBy: this.fb.group({
@@ -210,10 +260,10 @@ public keepOriginalOrder = (a) => a.key;
   addPhoneNumberItem(i) {
     const currPhoneNumber = this.phoneNumbers.controls[i];
     const lastPhoneNumber = this.phoneNumbers.controls[this.phoneNumbers.controls.length - 1];
-    if(lastPhoneNumber.value.phoneNumber) {
+    if (lastPhoneNumber.value.number) {
       this.phoneNumbers.push(this.createPhoneNumberItem());
     }
-    if(!currPhoneNumber.value.phoneNumber && currPhoneNumber !== lastPhoneNumber) {
+    if (!currPhoneNumber.value.number && currPhoneNumber !== lastPhoneNumber) {
       this.phoneNumbers.removeAt(i);
     }
   }
@@ -230,17 +280,17 @@ public keepOriginalOrder = (a) => a.key;
   addEmailItem(i) {
     const currEmail = this.emailAddresses.controls[i];
     const lastEmail = this.emailAddresses.controls[this.emailAddresses.controls.length - 1];
-    if(lastEmail.value.email) {
+    if (lastEmail.value.email) {
       this.emailAddresses.push(this.createEmailItem());
     }
-    if(!currEmail.value.email && currEmail !== lastEmail) {
+    if (!currEmail.value.email && currEmail !== lastEmail) {
       this.emailAddresses.removeAt(i);
     }
   }
 
   createEmailItem(): FormGroup {
     return this.fb.group({
-      email: ['', [Validators.email]],
+      email: ['', [Validators.required, Validators.email]],
       isPrimaryWebEmail: [false]
     });
   }

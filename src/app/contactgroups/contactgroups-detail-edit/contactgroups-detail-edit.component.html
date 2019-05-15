@@ -16,8 +16,8 @@
     <div class="form-group row">
       <label for="name" class="col-sm-2 col-form-label col-form-label-sm">First Name</label>
       <div class="col-sm-10">
-        <input type="text" id="name" class="form-control form-control-sm" formControlName="firstName" [ngClass]="{'is-invalid':errorsMessage?.firstName}" >
-        <span class="invalid-feedback">{{errorsMessage?.firstName}}</span>
+        <input type="text" id="name" class="form-control form-control-sm" formControlName="firstName" [ngClass]="{'is-invalid':formErrors.firstName}" >
+        <span class="invalid-feedback">{{formErrors.firstName}}</span>
       </div>
     </div>
     <div class="form-group row">
@@ -30,8 +30,8 @@
     <div class="form-group row">
       <label for="lastName" class="col-sm-2 col-form-label col-form-label-sm">Last Name</label>
       <div class="col-sm-10">
-        <input type="text" id="lastName" class="form-control form-control-sm" formControlName="lastName" [ngClass]="{'is-invalid':errorsMessage?.lastName}" >
-        <span class="invalid-feedback">{{errorsMessage?.lastName}}</span>
+        <input type="text" id="lastName" class="form-control form-control-sm" formControlName="lastName" [ngClass]="{'is-invalid':formErrors?.lastName}" >
+        <span class="invalid-feedback">{{formErrors?.lastName}}</span>
       </div>
     </div>
     <div formGroupName="address" class="form-group row">
@@ -88,10 +88,11 @@
               <div class="form-group">
                 <label class="small" for="outcode">Postcode</label>
                 <div class="input-group">
-                  <input type="text" class="form-control form-control-sm" maxlength="4" id="outcode"
-                    placeholder="Outcode" formControlName="outCode">
-                  <input type="text" class="form-control form-control-sm" maxlength="3" id="incode"
-                    placeholder="Incode" formControlName="inCode">
+                  <input type="text" class="form-control form-control-sm"  id="outcode"
+                    placeholder="Outcode" formControlName="outCode" [ngClass]="{'is-invalid': formErrors.outCode}">
+                  <input type="text" class="form-control form-control-sm"  id="incode"
+                    placeholder="Incode" formControlName="inCode" [ngClass]="{'is-invalid': formErrors.inCode}">
+                    <span class="invalid-feedback">{{formErrors.inCode || formErrors.outCode}}</span>
                 </div>
               </div>
             </div>
@@ -104,11 +105,13 @@
           <label for="email" class="col-sm-2 col-form-label col-form-label-sm">Email {{i + 1}}</label>
           <div class="col-sm-10">
               <div class="input-group input-group-sm">
-                <input type="text" [placeholder]="!isFirst ? '(optional)' : ''" class="form-control" formControlName="email" (keyup)="addEmailItem(i)">
+                <input type="text" [placeholder]="!isFirst ? '(optional)' : ''" class="form-control" formControlName="email"
+                (keyup)="addEmailItem(i)" >
                 <div class="input-group-append">
                   <label class="btn btn-light" btnCheckbox formControlName="isPrimaryWebEmail" tabindex="0"
                     role="button"><i class="fa-star mr-1" [ngClass]="personForm.controls.emailAddresses.controls[i].controls.isPrimaryWebEmail.value ? 'fas' : 'far'"></i>Fav</label>
                 </div>
+                <span class="invalid-feedback">{{formErrors.email}}</span>
               </div>
           </div>
         </div>
@@ -159,32 +162,32 @@
         <label class="col-sm-2 col-form-label col-form-label-sm">Marketing</label>
         <div class="col-sm-10">
           <div class="custom-control custom-checkbox">
-            <input class="custom-control-input" type="checkbox" name="quarterly" id="quarterly" value="option1" checked formControlName="marketBulletin">
+            <input class="custom-control-input" type="checkbox" name="marketBulletin" id="quarterly"   formControlName="marketBulletin">
             <label class="custom-control-label" for="quarterly">
               Quarterly Market Bulletin
             </label>
           </div>
           <div class="custom-control custom-checkbox">
-            <input class="custom-control-input" type="checkbox" name="events" id="events" value="option1" checked formControlName="events">
+            <input class="custom-control-input" type="checkbox" name="events" id="events"   formControlName="events">
             <label class="custom-control-label" for="events">
               Landlord & Investor Events
             </label>
           </div>
           <div class="custom-control custom-checkbox">
-            <input class="custom-control-input" type="checkbox" name="newHomes" id="newHomes" value="option1" checked formControlName="newHomes">
+            <input class="custom-control-input" type="checkbox" name="newHomes" id="newHomes"  formControlName="newHomes">
             <label class="custom-control-label" for="newHomes">
               New Home and Investments
             </label>
           </div>
           <div class="custom-control custom-checkbox">
-            <input class="custom-control-input" type="checkbox" name="specialOffers" id="specialOffers" value="option1"
+            <input class="custom-control-input" type="checkbox" name="offersSurveys" id="offersSurveys"
                 formControlName="offersSurveys">
-            <label class="custom-control-label" for="specialOffers">
+            <label class="custom-control-label" for="offersSurveys">
               Special Offers and Surveys
             </label>
           </div>
           <div class="custom-control custom-checkbox">
-            <input class="custom-control-input" type="checkbox" name="occasional" id="occasional" value="option1" checked formControlName="general">
+            <input class="custom-control-input" type="checkbox" name="general" id="occasional" formControlName="general">
             <label class="custom-control-label" for="occasional">
               Other Occasional Marketing
             </label>

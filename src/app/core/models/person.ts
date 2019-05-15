@@ -104,7 +104,7 @@ export interface MarketingPreferences {
   marketBulletin: boolean;
   events: boolean;
   newHomes: boolean;
-  offerSurveys: boolean;
+  offersSurveys: boolean;
   general: boolean;
   count: number;
 }
