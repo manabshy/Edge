@@ -106,7 +106,7 @@
           <div class="col-sm-10">
               <div class="input-group input-group-sm">
                 <input type="text" [placeholder]="!isFirst ? '(optional)' : ''" class="form-control" formControlName="email"
-                (keyup)="addEmailItem(i)" >
+                (keyup)="addEmailItem(i)" [ngClass]="{'is-invalid':formErrors?.email}"  >
                 <div class="input-group-append">
                   <label class="btn btn-light" btnCheckbox formControlName="isPrimaryWebEmail" tabindex="0"
                     role="button"><i class="fa-star mr-1" [ngClass]="personForm.controls.emailAddresses.controls[i].controls.isPrimaryWebEmail.value ? 'fas' : 'far'"></i>Fav</label>
