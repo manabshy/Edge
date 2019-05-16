@@ -110,9 +110,7 @@
           <div class="col-sm-10">
               <div class="input-group input-group-sm">
                 <input type="text" [id]="'email' + i" [placeholder]="!isFirst ? 'Additional Email' : ''" class="form-control" formControlName="email"
-                (keyup)="addEmailItem(i)"  [ngClass]="{'is-invalid': (personForm.controls.emailAddresses.controls[i].controls.email.touched ||
-                                                                      personForm.controls.emailAddresses.controls[i].controls.email.dirty) &&
-                                                                      !personForm.controls.emailAddresses.controls[i].controls.email.valid }" >
+                (keyup)="addEmailItem(i)"  (blur)="isValid($event, personForm.controls.emailAddresses.controls[i].controls.email)" >
                 <div class="input-group-append">
                   <label class="btn btn-light" btnCheckbox formControlName="isPrimaryWebEmail" tabindex="0"
                     role="button"><i class="fa-star" [ngClass]="personForm.controls.emailAddresses.controls[i].controls.isPrimaryWebEmail.value ? 'fas' : 'far'"></i></label>
@@ -138,9 +136,7 @@
           <div class="col-sm-10">
             <div class="input-group input-group-sm">
               <input type="text" [id]="'phone' + i" class="form-control" [placeholder]="!isFirst ? 'Additional phone' : ''" formControlName="number" (keyup)="addPhoneNumberItem(i)"
-              [ngClass]="{'is-invalid': (personForm.controls.phoneNumbers.controls[i].controls.number.touched ||
-                                          personForm.controls.phoneNumbers.controls[i].controls.number.dirty) &&
-                                          !personForm.controls.phoneNumbers.controls[i].controls.number.valid }" >
+              (blur)="isValid($event, personForm.controls.phoneNumbers.controls[i].controls.number)" >
               <select class="custom-select" formControlName="typeId">
                 <option *ngFor="let telephoneType of telephoneTypes | keyvalue:keepOriginalOrder" [value] = telephoneType.key>{{telephoneType.value}} </option>
               </select>

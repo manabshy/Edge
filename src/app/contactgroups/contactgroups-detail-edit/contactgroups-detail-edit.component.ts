@@ -369,6 +369,14 @@ public keepOriginalOrder = (a) => a.key;
     }
   }
 
+  isValid(event, el) {
+    if(el.invalid) {
+      event.target.classList.add('is-invalid');
+    } else {
+      event.target.classList.remove('is-invalid');
+    }
+  }
+
   addPhoneNumberItem(i) {
     const currPhoneNumber = this.phoneNumbers.controls[i];
     const lastPhoneNumber = this.phoneNumbers.controls[this.phoneNumbers.controls.length - 1];
