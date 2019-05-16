@@ -1,24 +1,6 @@
 <app-breadcrumb></app-breadcrumb>
 <div class="container">
-  <div class="row page-title">
-    <div class="col">
-      <h4 class="m-0">Contact group</h4>
-    </div>
-    <div class="col-auto">
-      <div class="btn-group" dropdown placement="bottom right">
-        <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
-          aria-controls="dropdown-basic">
-          Actions <span class="caret"></span>
-        </button>
-        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-basic">
-          <li role="menuitem"><a class="dropdown-item" routerLink="../edit">Edit contact group</a></li>
-          <li role="menuitem"><a class="dropdown-item" routerLink="../edit">Send Letting Terms of Business</a></li>
-          <li role="menuitem"><a class="dropdown-item" routerLink="../edit">Send Sales Terms of Business</a></li>
-          <li role="menuitem"><a class="dropdown-item" routerLink="../edit">Refer</a></li>
-        </ul>
-      </div>
-    </div>
-  </div>
+  <h4 class="page-title">Contact group</h4>
   <div class="list-group">
     <div class="list-group-item" *ngIf="!contactGroupDetails?.contactPeople">
       <div class="text-center" *ngIf="!searchedPersonDetails">
@@ -81,7 +63,7 @@
     </div>
     <a href="#" class="list-group-item list-group-item-action text-center py-4">
       <span class="btn-link">
-        <i class="fas fa-user-plus"></i> New Person
+        <i class="fas fa-user-plus"></i> Add Person
       </span>
     </a>
   </div>
