@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedService, Country } from 'src/app/core/services/shared.service';
-import { FormBuilder, FormGroup, Validators, FormArray, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, AbstractControl, FormControl, ValidationErrors, EmailValidator } from '@angular/forms';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { Person, Email, PhoneNumber } from 'src/app/core/models/person';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WedgeValidators } from 'src/app/core/shared/wedge-validators';
 import { debounceTime } from 'rxjs/operators';
+import { mapValues, filter, isArray, isPlainObject, keys, merge, last } from 'lodash';
 
 @Component({
   selector: 'app-contactgroups-detail-edit',
@@ -27,6 +28,7 @@ personId: number;
 groupPersonId: number;
 errorMessage: string;
 errorsMessage: any = [];
+emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 validationMessagesSimple = {
     required: 'is required.',
     maxlength: 'must be less than # characters.',
@@ -41,6 +43,11 @@ validationMessages = {
     required: 'Last name is required.',
     minlength: 'Last name must be greater than 2 characters',
     maxlength: 'Last name must be less than 80 characters.',
+  },
+  'emailAddress': {
+    'email': {
+      required: ' Email is required.'
+    },
   },
   'email': {
     required: ' Email is required.'
@@ -67,7 +74,9 @@ formErrors = {
   'firstName': '',
   'lastName': '',
   'email': '',
-  'emailAddresses': '',
+  'emailAddresses': {
+    'email': '',
+  },
   'address': '',
   'number' : '',
   'inCode' : '',
@@ -102,9 +111,18 @@ public keepOriginalOrder = (a) => a.key;
     this.setupEditForm();
     const id = this.groupPersonId !== 0 ? this.groupPersonId : this.personId;
     this.getPersonDetails(id);
-    // this.personForm.get('contactBy').valueChanges.subscribe(data => this.setValidationForContactPreference(data));
     this.personForm.valueChanges
     .subscribe(data => this.logValidationErrors(this.personForm));
+    // this.personForm.valueChanges
+    // .subscribe(data => {
+    //  const errs = this.logValidationErrorsDemo(this.personForm);
+    //   Object.keys(errs).forEach(key => {
+    //     // for(const errorKey in )
+    //     this.formErrors[key] = '';
+    //     this.formErrors[key] += this.validationMessages[key] + '';
+    //   });
+    //   console.log('all errors are here', errs);
+    // });
   }
 
   logValidationErrorsSimple(c: AbstractControl, name: string, maxLength: number) {
@@ -138,7 +156,88 @@ public keepOriginalOrder = (a) => a.key;
       }
     });
   }
+  logValidationErrorsTry(formEl: AbstractControl) {
+    if (formEl instanceof FormGroup) {
+      Object.keys(formEl.controls).forEach((key: string) => {
+        const control = formEl.get(key);
+        const messages = this.validationMessages[key];
+        this.formErrors[key] = '';
+        if (control && !control.valid && (control.touched || control.dirty)) {
+          for (const errorKey  in control.errors) {
+            if (errorKey) {
+              this.formErrors[key] += messages[errorKey] + '';
+            }
+          }
+        }
+        if (control instanceof FormGroup || control instanceof FormArray ) {
+         this.logValidationErrorsTry(control);
+        }
+      });
+    }
+  }
+  getAllFormErrors(formEl: AbstractControl) {
+    let errs = {};
+    if (formEl instanceof FormGroup) {
 
+      // -->Get: all errors
+      errs = mapValues(formEl.controls, (vv, cc) => {
+        const err = this.getAllFormErrors(vv);
+        return (err) ? err : null;
+      });
+      // -->Eliminate: null values
+      keys(errs)
+        .map(k => {
+          if (!errs[k]) { delete errs[k]; }
+          if (isArray(errs[k]) && errs[k].length === 0) { delete errs[k]; }
+        });
+
+    } else if (formEl instanceof FormArray) {
+
+      errs = formEl.controls.map(el => {
+        return this.getAllFormErrors(el);
+      })
+      .filter(s => isPlainObject(s))
+      .filter(s => keys(s).length);
+
+    } else if (formEl instanceof FormControl) {
+      errs = <ValidationErrors>formEl.errors || null;
+    }
+
+    return errs;
+  }
+  getAllErrorsFlat(formEl: AbstractControl, path = '') {
+    const errs2 = {};
+
+    const walk = (fEl, p) => {
+      let errs = {};
+
+      if (fEl instanceof FormGroup || fEl instanceof FormArray) {
+        const ks = keys(fEl.controls);
+        const isArr = fEl instanceof FormArray;
+
+        ks.map(k => {
+          const newKey = (isArr) ? '[' + k + ']' : k;
+          const newPath = (isArr) ? (p) ? p + newKey : newKey : (p) ? p + '.' + newKey : newKey;
+
+          const err = walk(fEl.get(k), newPath);
+          errs[newPath] =  err ;
+        });
+        // -->Eliminate: null values
+        keys(errs)
+          .map(k => {
+            if (!errs[k]) { delete errs[k]; }
+            if (isArray(errs[k]) && errs[k].length === 0) { delete errs[k]; }
+          });
+
+      } else if (fEl instanceof FormControl) {
+        errs = <ValidationErrors>fEl.errors || null;
+        if (errs) { errs2[p] = errs; }
+      }
+    };
+    walk(formEl, path);
+
+    return errs2;
+  }
   cancel() {
     this.sharedService.back();
   }
@@ -264,13 +363,15 @@ public keepOriginalOrder = (a) => a.key;
   }
 
   removeValidationForAdditionalFields() {
+    const currPhoneNumber = this.phoneNumbers.controls[0];
+    const currEmail = this.emailAddresses.controls[0];
     const lastPhoneNumber = this.phoneNumbers.controls[this.phoneNumbers.controls.length - 1];
     const lastEmail = this.emailAddresses.controls[this.emailAddresses.controls.length - 1];
-    if (lastPhoneNumber.get('number').value === '') {
+    if (lastPhoneNumber.get('number').value === '' && currPhoneNumber !== lastEmail) {
       lastPhoneNumber.get('number').clearValidators();
       lastPhoneNumber.get('number').updateValueAndValidity();
     }
-    if (lastEmail.get('email').value === '') {
+    if (lastEmail.get('email').value === '' && currEmail !== lastEmail || currEmail.get('email').value !== '') {
       lastEmail.get('email').clearValidators();
       lastEmail.get('email').updateValueAndValidity();
     }
@@ -290,7 +391,7 @@ public keepOriginalOrder = (a) => a.key;
     return this.fb.group({
       id: 0,
       typeId: 3,
-      number: ['', [Validators.required, WedgeValidators.peoplePhone]],
+      number: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(16), Validators.pattern(/^\+?[ \d]+$/g)]],
       orderNumber: 0,
       isPreferred: [false]
     });
@@ -309,7 +410,7 @@ public keepOriginalOrder = (a) => a.key;
 
   createEmailItem(): FormGroup {
     return this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.pattern(this.emailPattern)]],
       isPrimaryWebEmail: [false]
     });
   }
