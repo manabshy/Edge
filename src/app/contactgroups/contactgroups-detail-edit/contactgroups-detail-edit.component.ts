@@ -113,16 +113,6 @@ public keepOriginalOrder = (a) => a.key;
     this.getPersonDetails(id);
     this.personForm.valueChanges
     .subscribe(data => this.logValidationErrors(this.personForm));
-    // this.personForm.valueChanges
-    // .subscribe(data => {
-    //  const errs = this.logValidationErrorsDemo(this.personForm);
-    //   Object.keys(errs).forEach(key => {
-    //     // for(const errorKey in )
-    //     this.formErrors[key] = '';
-    //     this.formErrors[key] += this.validationMessages[key] + '';
-    //   });
-    //   console.log('all errors are here', errs);
-    // });
   }
 
   logValidationErrorsSimple(c: AbstractControl, name: string, maxLength: number) {
@@ -238,6 +228,7 @@ public keepOriginalOrder = (a) => a.key;
 
     return errs2;
   }
+
   cancel() {
     this.sharedService.back();
   }
