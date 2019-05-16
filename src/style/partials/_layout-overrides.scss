@@ -126,6 +126,7 @@ dl {
         }
 
         & + input, & + select, & + textarea {
+            margin-left: -1px!important;
 
             @include media-breakpoint-down(sm) {
                 border-top-left-radius: $border-radius !important;
