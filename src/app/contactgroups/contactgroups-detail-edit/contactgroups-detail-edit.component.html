@@ -151,17 +151,17 @@
                   role="button"><i class="fa-star" [ngClass]="personForm.controls.phoneNumbers.controls[i].controls.isPreferred.value ? 'fas' : 'far'"></i></label>
               </div>
               <input type="text" class="form-control order-sm-1" placeholder="Comments" formControlName="comments">
-               <span class="invalid-feedback">
-                  <span *ngIf="personForm.controls.phoneNumbers.controls[i].controls.number.errors?.required">
-                    Please enter a valid telephone number.
-                  </span>
-                  <span *ngIf="personForm.controls.phoneNumbers.controls[i].controls.number.errors?.minLength">
-                      Telephone number be at least 7 characters.
-                  </span>
-                  <span *ngIf="personForm.controls.phoneNumbers.controls[i].controls.number.errors?.maxLength">
-                    Telephone number be less 16 characters.
-                  </span>
-                </span>
+               <div class="invalid-feedback order-sm-3">
+                  <div *ngIf="personForm.controls.phoneNumbers.controls[i].controls.number.errors?.pattern">
+                    Please enter a telephone number.
+                  </div>
+                  <div *ngIf="personForm.controls.phoneNumbers.controls[i].controls.number.errors?.minlength">
+                      Telephone number must be at least 7 characters.
+                  </div>
+                  <div *ngIf="personForm.controls.phoneNumbers.controls[i].controls.number.errors?.maxlength">
+                    Telephone number must be less than 16 characters.
+                  </div>
+                </div>
             </div>
           </div>
         </div>
