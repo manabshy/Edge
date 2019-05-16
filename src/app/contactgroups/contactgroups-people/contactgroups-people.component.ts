@@ -30,7 +30,11 @@ export class ContactgroupsPeopleComponent implements OnInit {
   getContactGroupById(contactGroupId: number) {
     this.contactGroupService.getContactGroupbyId(contactGroupId).subscribe(data => {
       this.contactGroupDetails = data;
-      console.log('contact group people',this.contactGroupDetails);
+      console.log('contact group people', this.contactGroupDetails);
     });
+  }
+
+  removePerson(id: number) {
+    console.log('id of person to be removed is:', id);
   }
 }
