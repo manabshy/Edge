@@ -201,7 +201,8 @@ public keepOriginalOrder = (a) => a.key;
       phoneArray.push(this.fb.group({
         number: x.number,
         typeId: x.typeId,
-        isPreferred: x.isPreferred
+        isPreferred: x.isPreferred,
+        comments: x.comments
       }));
     });
     phoneArray.push(this.createPhoneNumberItem());
@@ -273,7 +274,8 @@ public keepOriginalOrder = (a) => a.key;
       typeId: 3,
       number: ['', [WedgeValidators.peoplePhone]],
       orderNumber: 0,
-      isPreferred: [false]
+      isPreferred: [false],
+      comments: ['']
     });
   }
 

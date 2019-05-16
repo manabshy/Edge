@@ -115,9 +115,24 @@ dl {
 
 .input-group {
     input + select {
-        @include media-breakpoint-down(sm) {
-            flex: 0 0 auto!important;
-            width: auto!important;
+        flex: 0 0 auto!important;
+        width: auto!important;
+    }
+
+    .input-group-append {
+        .btn:last-child {
+            border-top-right-radius: $border-radius !important;
+            border-bottom-right-radius: $border-radius !important;
+        }
+
+        & + input, & + select, & + textarea {
+
+            @include media-breakpoint-down(sm) {
+                border-top-left-radius: $border-radius !important;
+                border-bottom-left-radius: $border-radius !important;
+                flex: 0 0 100%!important;
+                width: 100%!important;
+            }
         }
     }
 }

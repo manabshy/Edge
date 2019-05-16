@@ -30,6 +30,7 @@ export class AppComponent implements OnInit, AfterViewChecked {
     ).subscribe((event: any[]) => {
       AppUtils.prevRouteBU = AppUtils.prevRoute || '';
       AppUtils.prevRoute = event[0].urlAfterRedirects;
+      this.isScrollTopVisible = false;
     });
   }
 
@@ -50,10 +51,8 @@ export class AppComponent implements OnInit, AfterViewChecked {
 
   @HostListener('window:scroll', ['$event'])
   onScroll(event) {
-    if (window.scrollY > window.innerHeight * 0.80) {
+    if (window.innerHeight < document.body.scrollHeight) {
       this.isScrollTopVisible = true;
-    } else {
-      this.isScrollTopVisible = false;
     }
   }
 
