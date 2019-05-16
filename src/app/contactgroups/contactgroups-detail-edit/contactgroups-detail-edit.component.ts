@@ -102,17 +102,9 @@ public keepOriginalOrder = (a) => a.key;
     this.setupEditForm();
     const id = this.groupPersonId !== 0 ? this.groupPersonId : this.personId;
     this.getPersonDetails(id);
+    // this.personForm.get('contactBy').valueChanges.subscribe(data => this.setValidationForContactPreference(data));
     this.personForm.valueChanges
     .subscribe(data => this.logValidationErrors(this.personForm));
-    // const firstNameControl = this.personForm.get('firstName');
-    // firstNameControl.valueChanges.pipe(debounceTime(1000))
-    // .subscribe(data => this.logValidationErrorsSimple(firstNameControl, 'firstName', 40));
-    // const middleNameControl = this.personForm.get('middleName');
-    // middleNameControl.valueChanges.pipe(debounceTime(1000))
-    // .subscribe(data => this.logValidationErrorsSimple(middleNameControl, 'middleName', 50));
-    // const lastNameControl = this.personForm.get('lastName');
-    // lastNameControl.valueChanges.pipe(debounceTime(1000))
-    // .subscribe(data => this.logValidationErrorsSimple(lastNameControl, 'lastName', 80));
   }
 
   logValidationErrorsSimple(c: AbstractControl, name: string, maxLength: number) {
@@ -150,7 +142,18 @@ public keepOriginalOrder = (a) => a.key;
   cancel() {
     this.sharedService.back();
   }
+  setValidationForContactPreference(option: string) {
+    const emailFormArray = this.personForm.get('emailAddresses');
+    const phonesFormArray = this.personForm.get('phoneNumbers');
 
+    if (option === 'email') {
+      emailFormArray.setValidators(Validators.required);
+    } else {
+      emailFormArray.clearValidators();
+    }
+    emailFormArray.updateValueAndValidity();
+    console.log('email address with validation set', emailFormArray);
+  }
   getPersonDetails(personId: number) {
     this.contactGroupService.getPerson(personId).subscribe(data => {
       this.personDetails = data;
@@ -158,6 +161,7 @@ public keepOriginalOrder = (a) => a.key;
      this.displayPersonDetails(data);
     });
   }
+
   displayPersonDetails(person: Person) {
     if (this.personForm) {
       this.personForm.reset();
@@ -195,6 +199,7 @@ public keepOriginalOrder = (a) => a.key;
      this.personForm.setControl('phoneNumbers', this.setExistingPhoneNumbers(person.phoneNumbers));
 
   }
+
   setExistingPhoneNumbers(phoneNumbers: PhoneNumber[]): FormArray {
     const phoneArray = new FormArray([]);
     phoneNumbers.forEach(x => {
@@ -208,6 +213,7 @@ public keepOriginalOrder = (a) => a.key;
     phoneArray.push(this.createPhoneNumberItem());
     return phoneArray;
   }
+
   setExistingEmailAddresses(emailAddresses: Email[]): FormArray {
     const emailFormArray = new FormArray([]);
       emailAddresses.forEach(x => {
@@ -258,6 +264,19 @@ public keepOriginalOrder = (a) => a.key;
   });
   }
 
+  removeValidationForAdditionalFields() {
+    const lastPhoneNumber = this.phoneNumbers.controls[this.phoneNumbers.controls.length - 1];
+    const lastEmail = this.emailAddresses.controls[this.emailAddresses.controls.length - 1];
+    if (lastPhoneNumber.get('number').value === '') {
+      lastPhoneNumber.get('number').clearValidators();
+      lastPhoneNumber.get('number').updateValueAndValidity();
+    }
+    if (lastEmail.get('email').value === '') {
+      lastEmail.get('email').clearValidators();
+      lastEmail.get('email').updateValueAndValidity();
+    }
+  }
+
   addPhoneNumberItem(i) {
     const currPhoneNumber = this.phoneNumbers.controls[i];
     const lastPhoneNumber = this.phoneNumbers.controls[this.phoneNumbers.controls.length - 1];
@@ -272,7 +291,7 @@ public keepOriginalOrder = (a) => a.key;
     return this.fb.group({
       id: 0,
       typeId: 3,
-      number: ['', [WedgeValidators.peoplePhone]],
+      number: ['', [Validators.required, WedgeValidators.peoplePhone]],
       orderNumber: 0,
       isPreferred: [false],
       comments: ['']
@@ -298,6 +317,7 @@ public keepOriginalOrder = (a) => a.key;
   }
 
   savePerson() {
+    this.removeValidationForAdditionalFields();
     if (this.personForm.valid) {
         if (this.personForm.dirty) {
           const p = {...this.personDetails, ...this.personForm.value};
