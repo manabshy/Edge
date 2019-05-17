@@ -82,7 +82,7 @@ formErrors = {
   'inCode' : '',
   'outCode' : ''
 };
-get showFullAddress(): boolean {
+get showPostCode(): boolean {
  return this.address.get('countryId').value === this.defaultCountryCode;
 }
 get address():  FormGroup {
@@ -115,20 +115,6 @@ public keepOriginalOrder = (a) => a.key;
     .subscribe(data => this.logValidationErrors(this.personForm));
   }
 
-  logValidationErrorsSimple(c: AbstractControl, name: string, maxLength: number) {
-   this.errorsMessage[name] = '';
-   if ((c.dirty || c.touched) && c.errors) {
-    this.errorsMessage[name] = Object.keys(c.errors).map(key =>
-       this.errorsMessage[name] +=  this.labelGen(name) + ' ' + this.validationMessagesSimple[key].replace('#', maxLength)).join('');
-   }
-  }
-
-  labelGen(name) {
-    name = name.split(/(?=[A-Z])/).join(' ');
-    name = name.charAt(0).toUpperCase() + name.slice(1);
-    return name;
-  }
-
   logValidationErrors(group: FormGroup = this.personForm) {
     Object.keys(group.controls).forEach((key: string) => {
       const control = group.get(key);
@@ -145,88 +131,6 @@ public keepOriginalOrder = (a) => a.key;
        this.logValidationErrors(control);
       }
     });
-  }
-  logValidationErrorsTry(formEl: AbstractControl) {
-    if (formEl instanceof FormGroup) {
-      Object.keys(formEl.controls).forEach((key: string) => {
-        const control = formEl.get(key);
-        const messages = this.validationMessages[key];
-        this.formErrors[key] = '';
-        if (control && !control.valid && (control.touched || control.dirty)) {
-          for (const errorKey  in control.errors) {
-            if (errorKey) {
-              this.formErrors[key] += messages[errorKey] + '';
-            }
-          }
-        }
-        if (control instanceof FormGroup || control instanceof FormArray ) {
-         this.logValidationErrorsTry(control);
-        }
-      });
-    }
-  }
-  getAllFormErrors(formEl: AbstractControl) {
-    let errs = {};
-    if (formEl instanceof FormGroup) {
-
-      // -->Get: all errors
-      errs = mapValues(formEl.controls, (vv, cc) => {
-        const err = this.getAllFormErrors(vv);
-        return (err) ? err : null;
-      });
-      // -->Eliminate: null values
-      keys(errs)
-        .map(k => {
-          if (!errs[k]) { delete errs[k]; }
-          if (isArray(errs[k]) && errs[k].length === 0) { delete errs[k]; }
-        });
-
-    } else if (formEl instanceof FormArray) {
-
-      errs = formEl.controls.map(el => {
-        return this.getAllFormErrors(el);
-      })
-      .filter(s => isPlainObject(s))
-      .filter(s => keys(s).length);
-
-    } else if (formEl instanceof FormControl) {
-      errs = <ValidationErrors>formEl.errors || null;
-    }
-
-    return errs;
-  }
-  getAllErrorsFlat(formEl: AbstractControl, path = '') {
-    const errs2 = {};
-
-    const walk = (fEl, p) => {
-      let errs = {};
-
-      if (fEl instanceof FormGroup || fEl instanceof FormArray) {
-        const ks = keys(fEl.controls);
-        const isArr = fEl instanceof FormArray;
-
-        ks.map(k => {
-          const newKey = (isArr) ? '[' + k + ']' : k;
-          const newPath = (isArr) ? (p) ? p + newKey : newKey : (p) ? p + '.' + newKey : newKey;
-
-          const err = walk(fEl.get(k), newPath);
-          errs[newPath] =  err ;
-        });
-        // -->Eliminate: null values
-        keys(errs)
-          .map(k => {
-            if (!errs[k]) { delete errs[k]; }
-            if (isArray(errs[k]) && errs[k].length === 0) { delete errs[k]; }
-          });
-
-      } else if (fEl instanceof FormControl) {
-        errs = <ValidationErrors>fEl.errors || null;
-        if (errs) { errs2[p] = errs; }
-      }
-    };
-    walk(formEl, path);
-
-    return errs2;
   }
 
   cancel() {
@@ -249,7 +153,7 @@ public keepOriginalOrder = (a) => a.key;
       this.personDetails = data;
       console.log('person details', this.personDetails);
      this.displayPersonDetails(data);
-    });
+    }, error => this.errorMessage = <any>error);
   }
 
   displayPersonDetails(person: Person) {
@@ -265,12 +169,7 @@ public keepOriginalOrder = (a) => a.key;
        lastName: person.lastName,
        amlCompletedDate: person.amlCompletedDate,
        address: {
-        address1: person.address.address1,
-        address2: person.address.address2,
-        address3: person.address.address3,
-        address4: person.address.address4,
-        address5: person.address.address5,
-        town: person.address.town,
+        addressLines: person.address.addressLines,
         outCode: person.address.outCode,
         inCode: person.address.inCode,
         countryId: person.address.countryId,
@@ -324,17 +223,10 @@ public keepOriginalOrder = (a) => a.key;
         lastName: ['', [Validators.required, Validators.maxLength(80)]],
         fullAddress: [''],
         address: this.fb.group({
-          address1: ['', Validators.maxLength(80)],
-          address2: ['', Validators.maxLength(80)],
-          address3: ['', Validators.maxLength(80)],
-          address4: ['', Validators.maxLength(80)],
-          address5: ['', Validators.maxLength(80)],
-          town: ['', Validators.maxLength(80)],
+          addressLines: ['', Validators.maxLength(500)],
           countryId: 0,
-          // country: ['United Kingdom', [Validators.required, Validators.maxLength(50)]],
           inCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
           outCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(4)]],
-          // postCode: ['', [Validators.required, Validators.maxLength(6)]]
         }),
         contactBy: this.fb.group({
           email: [false],
@@ -370,7 +262,7 @@ public keepOriginalOrder = (a) => a.key;
   }
 
   isValid(event, el) {
-    if(el.invalid) {
+    if (el.invalid) {
       event.target.classList.add('is-invalid');
     } else {
       event.target.classList.remove('is-invalid');
@@ -435,8 +327,7 @@ public keepOriginalOrder = (a) => a.key;
     console.log(this.errorMessage);
   }
   onSaveComplete() {
-    // tslint:disable-next-line:no-unused-expression
-    this.personForm.reset;
+    this.personForm.reset();
     this.router.navigateByUrl('/contact-centre');
   }
 }

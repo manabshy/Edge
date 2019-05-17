@@ -75,6 +75,23 @@ export interface ContactGroupAutoCompleteResult extends ContactGroupMetaDeta{
   postCode: string;
   contactGroups: BasicContactGroup[];
 }
+export interface BasicPerson {
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  emailAddress: string;
+  phoneNumber: string;
+}
+export interface PeopleAutoCompleteResult {
+  personId: number;
+  title: string;
+  firstName: string;
+  middleNames: string;
+  lastName: string;
+  fullName: string;
+  emailAddresses: string[];
+  phoneNumbers: string[];
+}
 export interface BasicContactGroup {
   contactGroupId: number;
   isCompany: boolean;
@@ -90,6 +107,9 @@ export enum ContactType {
 }
 export interface ContactGroupAutoCompleteData extends ResultData {
   result: ContactGroupAutoCompleteResult[];
+}
+export interface PeopleAutoCompleteData extends ResultData {
+  result: PeopleAutoCompleteResult[];
 }
 export interface ContactGroupData extends ResultData {
   result: ContactGroup;

@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { ContactGroupAutoCompleteResult, ContactGroupAutoCompleteData,
-         PersonContactData, ContactGroupData, ContactGroup, BasicContactGroup, BasicContactGroupData } from './contact-group';
-import { map, tap } from 'rxjs/operators';
+         PersonContactData, ContactGroupData, ContactGroup, BasicContactGroup, BasicContactGroupData, PeopleAutoCompleteResult, PeopleAutoCompleteData } from './contact-group';
+import { map, tap, catchError } from 'rxjs/operators';
 import { Person } from 'src/app/core/models/person';
 
 @Injectable({
@@ -38,11 +38,34 @@ export class ContactGroupsService {
     const url = `${AppConstants.basePersonUrl}/${personId}/contactGroups`;
     return this.http.get<BasicContactGroupData>(url).pipe(map(response => response.result));
   }
+  getAutocompletePeople(params: string[]): Observable<any> {
+    const url = `${AppConstants.basePersonUrl}/${params}`;
+    return this.http.get<PeopleAutoCompleteData>(url).pipe(
+      map(response => response),
+      tap(data => console.log('found people...', JSON.stringify(data))),
+      catchError(this.handleError)
+      );
+  }
   updatePerson(person: Person): Observable<any> {
     const url = `${AppConstants.basePersonUrl}/${person.personId}`;
     return this.http.put(url, person).pipe(
       map(response => response),
-      tap(data => console.log('updated person details here...',JSON.stringify(data)))
+      tap(data => console.log('updated person details here...', JSON.stringify(data))),
+      catchError(this.handleError)
       );
+  }
+
+  private handleError(err: HttpErrorResponse) {
+    let errorMessage = '';
+    if (err.error instanceof ErrorEvent) {
+      // A client-side or network error occurred. Handle it accordingly.
+      errorMessage = `An error occurred: ${err.error.message}`;
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong,
+      errorMessage = `Server returned code: ${err.status}, error message is: ${err.message}`;
+    }
+    console.error(errorMessage);
+    return throwError(errorMessage);
   }
 }
