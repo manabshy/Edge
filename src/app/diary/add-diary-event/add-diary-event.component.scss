@@ -5,7 +5,7 @@
 @import "../../../../node_modules/bootstrap/scss/mixins";
 
 form {
-    padding-bottom: 50px;
+    padding-bottom: spacer(5);
 
     .form-actions {
         @include fixed-bottom('sm');

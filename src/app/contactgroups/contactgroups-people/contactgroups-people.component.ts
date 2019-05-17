@@ -37,4 +37,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
   removePerson(id: number) {
     console.log('id of person to be removed is:', id);
   }
+
+  showHideMarkPrefs(event, i) {
+    event.preventDefault(); 
+    event.stopPropagation(); 
+    this.isCollapsed[i] = !this.isCollapsed[i]
+  }
 }
