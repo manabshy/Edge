@@ -82,7 +82,7 @@ formErrors = {
   'inCode' : '',
   'outCode' : ''
 };
-get showFullAddress(): boolean {
+get showPostCode(): boolean {
  return this.address.get('countryId').value === this.defaultCountryCode;
 }
 get address():  FormGroup {
@@ -132,7 +132,7 @@ public keepOriginalOrder = (a) => a.key;
       }
     });
   }
- 
+
   cancel() {
     this.sharedService.back();
   }
@@ -169,12 +169,7 @@ public keepOriginalOrder = (a) => a.key;
        lastName: person.lastName,
        amlCompletedDate: person.amlCompletedDate,
        address: {
-        address1: person.address.address1,
-        address2: person.address.address2,
-        address3: person.address.address3,
-        address4: person.address.address4,
-        address5: person.address.address5,
-        town: person.address.town,
+        addressLines: person.address.addressLines,
         outCode: person.address.outCode,
         inCode: person.address.inCode,
         countryId: person.address.countryId,
@@ -228,12 +223,7 @@ public keepOriginalOrder = (a) => a.key;
         lastName: ['', [Validators.required, Validators.maxLength(80)]],
         fullAddress: [''],
         address: this.fb.group({
-          address1: ['', Validators.maxLength(80)],
-          address2: ['', Validators.maxLength(80)],
-          address3: ['', Validators.maxLength(80)],
-          address4: ['', Validators.maxLength(80)],
-          address5: ['', Validators.maxLength(80)],
-          town: ['', Validators.maxLength(80)],
+          addressLines: ['', Validators.maxLength(500)],
           countryId: 0,
           // country: ['United Kingdom', [Validators.required, Validators.maxLength(50)]],
           inCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
