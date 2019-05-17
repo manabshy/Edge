@@ -49,9 +49,9 @@
                   <span class="badge badge-pill badge-info">{{contactGroupDetails?.companyName}}</span>
               </ng-container>
             <!-- <i class="fas fa-phone"></i>&nbsp;
-  
+
             <i class="fas fa-envelope"></i>&nbsp;
-  
+
             <span class="badge badge-success">AML Valid</span> -->
           </div>
           <div class="col-sm-4 mb-2">{{person.address | formatAddress}}<span class="text-muted" *ngIf="!(person.address | formatAddress)">No address</span></div>
@@ -94,24 +94,26 @@
       </a>
     </div>
     <h5>Details</h5>
-    <div class="form-group row">
-      <label for="salutation" class="col-sm-2 col-form-label col-form-label-sm">Salutation</label>
-      <div class="col-sm-10">
-        <input type="text" id="salutation" class="form-control form-control-sm">
+   <form [formGroup]="contactGroupDetailsForm">
+      <div class="form-group row">
+        <label for="salutation" class="col-sm-2 col-form-label col-form-label-sm">Salutation</label>
+        <div class="col-sm-10">
+          <input type="text" id="salutation" class="form-control form-control-sm" formControlName="salutation">
+        </div>
       </div>
-    </div>
-    <div class="form-group row">
-      <label for="addressee" class="col-sm-2 col-form-label col-form-label-sm">Addressee</label>
-      <div class="col-sm-10">
-        <input type="text" id="addressee" class="form-control form-control-sm">
+      <div class="form-group row">
+        <label for="addressee" class="col-sm-2 col-form-label col-form-label-sm">Addressee</label>
+        <div class="col-sm-10">
+          <input type="text" id="addressee" class="form-control form-control-sm" formControlName="addressee">
+        </div>
       </div>
-    </div>
-    <div class="form-group row">
-      <label for="comments" class="col-sm-2 col-form-label col-form-label-sm">Comments</label>
-      <div class="col-sm-10">
-        <textarea id="comments" class="form-control form-control-sm"></textarea>
+      <div class="form-group row">
+        <label for="comments" class="col-sm-2 col-form-label col-form-label-sm">Comments</label>
+        <div class="col-sm-10">
+          <textarea id="comments" class="form-control form-control-sm" formControlName="comments"></textarea>
+        </div>
       </div>
-    </div>
+   </form>
     <div class="form-actions">
       <div class="container px-lg-4">
         <div class="row justify-content-end w-100 no-gutters">
