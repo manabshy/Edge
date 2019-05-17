@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 import { AppUtils } from '../shared/utils';
-import { SharedService } from '../services/shared.service';
 import { Location } from '@angular/common';
 
 @Component({

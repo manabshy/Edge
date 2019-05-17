@@ -1,0 +1,20 @@
+@import "../../../style/bootstrap-overrides";
+
+@import "../../../../node_modules/bootstrap/scss/functions";
+@import "../../../../node_modules/bootstrap/scss/variables";
+@import "../../../../node_modules/bootstrap/scss/mixins";
+
+form {
+    padding-bottom: spacer(5);
+
+    .form-actions {
+        @include fixed-bottom('xl');
+    }
+
+}
+
+.type-col {
+    @include media-breakpoint-up('sm'){
+        border-left: 1px solid $border-color;
+    }
+}

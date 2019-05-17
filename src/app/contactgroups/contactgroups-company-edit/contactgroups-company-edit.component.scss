@@ -5,6 +5,7 @@
 @import "../../../../node_modules/bootstrap/scss/mixins";
 
 form {
+    padding-bottom: spacer(5);
 
     .form-actions {
         @include fixed-bottom('xl');
