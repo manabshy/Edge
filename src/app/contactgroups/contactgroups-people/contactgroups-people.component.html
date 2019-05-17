@@ -141,13 +141,13 @@
     <div class="form-group row">
       <label for="firstName" class="col-sm-2 col-form-label col-form-label-sm">First Name</label>
       <div class="col-sm-10">
-        <input type="text" id="firstName" class="form-control form-control-sm" autofocus>
+        <input type="text" id="firstName" class="form-control form-control-sm" autofocus formControlName="firstName">
       </div>
     </div>
     <div class="form-group row">
       <label for="lastName" class="col-sm-2 col-form-label col-form-label-sm">Last Name</label>
       <div class="col-sm-10">
-        <input type="text" id="lastName" class="form-control form-control-sm">
+        <input type="text" id="lastName" class="form-control form-control-sm" formControlName="lastName">
       </div>
     </div>
     <div class="form-group row">
@@ -157,14 +157,14 @@
           <select name="type" id="type" class="custom-select">
             <option value="">Mobile</option>
           </select>
-          <input type="text" id="phone" class="form-control">
+          <input type="text" id="phone" class="form-control" formControlName="phoneNumber">
         </div>
       </div>
     </div>
     <div class="form-group row">
       <label for="email" class="col-sm-2 col-form-label col-form-label-sm">Email</label>
       <div class="col-sm-10">
-        <input type="text" id="email" class="form-control form-control-sm">
+        <input type="text" id="email" class="form-control form-control-sm" formControlName="email">
       </div>
     </div>
     <div class="form-group row justify-content-end">

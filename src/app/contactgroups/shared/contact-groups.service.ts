@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { ContactGroupAutoCompleteResult, ContactGroupAutoCompleteData,
-         PersonContactData, ContactGroupData, ContactGroup, BasicContactGroup, BasicContactGroupData } from './contact-group';
+         PersonContactData, ContactGroupData, ContactGroup, BasicContactGroup, BasicContactGroupData, PeopleAutoCompleteResult, PeopleAutoCompleteData } from './contact-group';
 import { map, tap, catchError } from 'rxjs/operators';
 import { Person } from 'src/app/core/models/person';
 
@@ -37,6 +37,14 @@ export class ContactGroupsService {
   getPersonContactGroups( personId: number): Observable<BasicContactGroup[]> {
     const url = `${AppConstants.basePersonUrl}/${personId}/contactGroups`;
     return this.http.get<BasicContactGroupData>(url).pipe(map(response => response.result));
+  }
+  getAutocompletePeople(params: string[]): Observable<any> {
+    const url = `${AppConstants.basePersonUrl}/${params}`;
+    return this.http.get<PeopleAutoCompleteData>(url).pipe(
+      map(response => response),
+      tap(data => console.log('found people...', JSON.stringify(data))),
+      catchError(this.handleError)
+      );
   }
   updatePerson(person: Person): Observable<any> {
     const url = `${AppConstants.basePersonUrl}/${person.personId}`;

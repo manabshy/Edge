@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ActivatedRoute } from '@angular/router';
-import { Person } from 'src/app/core/models/person';
+import { Person, BasicPerson } from 'src/app/core/models/person';
 import { ContactGroup } from '../shared/contact-group';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
@@ -17,8 +17,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
   groupPersonId: number;
   contactGroupId: number;
   contactPeople: Person[];
+  foundPerson: BasicPerson;
   contactGroupDetails: ContactGroup;
   contactGroupDetailsForm: FormGroup;
+  personFinderForm: FormGroup;
   constructor(private contactGroupService: ContactGroupsService, private fb: FormBuilder, private route: ActivatedRoute) { }
 
   ngOnInit() {
@@ -32,7 +34,14 @@ export class ContactgroupsPeopleComponent implements OnInit {
        addressee: [''],
        comments: ['']
       });
+      this.personFinderForm = this.fb.group({
+       firstName: [''],
+       lastName: [''],
+       email: [''],
+       phoneNumber: ['']
+      });
      this.getContactGroupById(this.contactGroupId);
+     this.personFinderForm.valueChanges.subscribe(data => this.findPerson(data));
   }
 
   getContactGroupById(contactGroupId: number) {
@@ -42,6 +51,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       console.log('contact group people', this.contactGroupDetails);
     });
   }
+
   populateFormDetails(contactGroup: ContactGroup) {
     if (this.contactGroupDetailsForm) {
       this.contactGroupDetailsForm.reset();
@@ -52,6 +62,13 @@ export class ContactgroupsPeopleComponent implements OnInit {
         addressee : contactGroup.addressee,
         comments: contactGroup.comments
       });
+  }
+
+  findPerson(...value: string[]) {
+    this.contactGroupService.getAutocompletePeople(value).subscribe(data => {
+      this.foundPerson = data;
+      console.log('found person', this.foundPerson);
+    });
   }
 
   removePerson(event, id: number) {
@@ -67,8 +84,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   showHideOffCanvas(event) {
-    event.preventDefault(); 
+    event.preventDefault();
     event.stopPropagation();
-    this.isOffCanvasVisible = !this.isOffCanvasVisible; 
+    this.isOffCanvasVisible = !this.isOffCanvasVisible;
   }
 }
