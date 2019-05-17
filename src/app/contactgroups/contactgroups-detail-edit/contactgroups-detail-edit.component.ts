@@ -153,7 +153,7 @@ public keepOriginalOrder = (a) => a.key;
       this.personDetails = data;
       console.log('person details', this.personDetails);
      this.displayPersonDetails(data);
-    });
+    }, error => this.errorMessage = <any>error);
   }
 
   displayPersonDetails(person: Person) {
@@ -264,7 +264,7 @@ public keepOriginalOrder = (a) => a.key;
   }
 
   isValid(event, el) {
-    if(el.invalid) {
+    if (el.invalid) {
       event.target.classList.add('is-invalid');
     } else {
       event.target.classList.remove('is-invalid');
