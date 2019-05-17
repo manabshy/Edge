@@ -3,3 +3,13 @@
   <div class="col"><router-outlet></router-outlet></div>
 </div>
 <a role="button" class="btn btn-primary scroll-top text-center text-white" (click)="scrollTop()" *ngIf="isScrollTopVisible"><i class="fas fa-chevron-up"></i><br>up</a>
+<!-- TODO fix getcurrentuser -->
+<div class="loader" *ngIf="!currentStaffMember && isNavVisible">
+  <video autoplay loop>
+    <source src="assets/Boy-21827.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+  </video>
+  <div class="loader-message">
+    Getting your account info
+  </div>
+</div>

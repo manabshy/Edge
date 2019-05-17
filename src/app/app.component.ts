@@ -5,6 +5,7 @@ import { AppUtils } from './core/shared/utils';
 import { AuthService } from './core/services/auth.service';
 import { SharedService } from './core/services/shared.service';
 import { StaffMemberService } from './core/services/staff-member.service';
+import { StaffMember } from './core/models/staff-member';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +16,7 @@ export class AppComponent implements OnInit, AfterViewChecked {
   title = 'Wedge';
   isNavVisible: boolean;
   isScrollTopVisible = false;
+  currentStaffMember: StaffMember;
 
   constructor(private router: Router,
     public authService: AuthService,
@@ -35,6 +37,7 @@ export class AppComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit() {
+    this.currentStaffMember = this.staffMemberService.currentStaffMember;
   }
 
   ngAfterViewChecked() {
