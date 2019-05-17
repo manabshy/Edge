@@ -34,7 +34,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
     });
   }
 
-  removePerson(id: number) {
+  removePerson(event, id: number) {
+    event.preventDefault(); 
+    event.stopPropagation(); 
     console.log('id of person to be removed is:', id);
   }
 
