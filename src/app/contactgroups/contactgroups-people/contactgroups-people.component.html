@@ -2,28 +2,6 @@
 <div class="container">
   <h4 class="page-title">Contact group</h4>
   <form action="">
-    <div class="row">
-      <div class="form-group col-sm-auto">
-        <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" id="relAgent">
-          <label class="custom-control-label" for="relAgent">Is Relocation Agent</label>
-        </div>
-      </div>
-      <div class="form-group col type-col">
-        <div class="custom-control custom-radio custom-control-inline">
-          <input type="radio" id="individual" name="type" class="custom-control-input">
-          <label class="custom-control-label" for="individual">Individual/Joint</label>
-        </div>
-        <div class="custom-control custom-radio custom-control-inline">
-          <input type="radio" id="multi" name="type" class="custom-control-input">
-          <label class="custom-control-label" for="multi">Multi/Shares</label>
-        </div>
-        <div class="custom-control custom-radio custom-control-inline">
-          <input type="radio" id="company" name="type" class="custom-control-input">
-          <label class="custom-control-label" for="company">Company contact</label>
-        </div>
-      </div>
-    </div>
     <h5>People</h5>
     <div class="list-group mb-3">
       <div class="list-group-item" *ngIf="!contactGroupDetails?.contactPeople">
@@ -87,7 +65,7 @@
           </div>
         </div>
       </a>
-      <a href="#" class="list-group-item list-group-item-action text-center py-4">
+      <a href (click)="showHideOffCanvas($event)" class="list-group-item list-group-item-action text-center py-4">
         <span class="btn-link">
           <i class="fas fa-user-plus"></i> Add Person
         </span>
@@ -112,6 +90,32 @@
         <textarea id="comments" class="form-control form-control-sm"></textarea>
       </div>
     </div>
+    <div class="row mt-3 justify-content-end">
+      <div class="col-sm-10">
+        <div class="row">
+          <div class="form-group col-sm-auto">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="relAgent">
+              <label class="custom-control-label" for="relAgent">Is Relocation Agent</label>
+            </div>
+          </div>
+          <div class="form-group col type-col">
+            <div class="custom-control custom-radio custom-control-inline">
+              <input type="radio" id="individual" name="type" class="custom-control-input">
+              <label class="custom-control-label" for="individual">Individual/Joint</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline">
+              <input type="radio" id="multi" name="type" class="custom-control-input">
+              <label class="custom-control-label" for="multi">Multi/Shares</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline">
+              <input type="radio" id="company" name="type" class="custom-control-input">
+              <label class="custom-control-label" for="company">Company contact</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="form-actions">
       <div class="container px-lg-4">
         <div class="row justify-content-end w-100 no-gutters">
@@ -123,4 +127,102 @@
       </div>
     </div>
   </form>
+</div>
+<div class="off-canvas" [hidden]="!isOffCanvasVisible" (click)="showHideOffCanvas($event)">
+  <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()">
+    <h4 class="page-title text-left">
+      Find person
+      <button type="button" class="close mr-2" aria-label="Close" (click)="showHideOffCanvas($event)">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </h4>
+    <div class="form-group row">
+      <label for="firstName" class="col-sm-2 col-form-label col-form-label-sm">First Name</label>
+      <div class="col-sm-10">
+        <input type="text" id="firstName" class="form-control form-control-sm" autofocus>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="lastName" class="col-sm-2 col-form-label col-form-label-sm">Last Name</label>
+      <div class="col-sm-10">
+        <input type="text" id="lastName" class="form-control form-control-sm">
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="phone" class="col-sm-2 col-form-label col-form-label-sm">Phone</label>
+      <div class="col-sm-10">
+        <div class="input-group input-group-sm">
+          <select name="type" id="type" class="custom-select">
+            <option value="">Mobile</option>
+          </select>
+          <input type="text" id="phone" class="form-control">
+        </div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="email" class="col-sm-2 col-form-label col-form-label-sm">Email</label>
+      <div class="col-sm-10">
+        <input type="text" id="email" class="form-control form-control-sm">
+      </div>
+    </div>
+    <div class="form-group row justify-content-end">
+        <div class="col-sm-10">
+          <div class="row">
+            <div class="col">
+              <h5>Quick Finder</h5>
+            </div>
+            <div class="col-auto d-none d-sm-block">
+                <!-- TODO Get colours -->
+                <span class="badge badge-success mr-1">Part Match</span>
+                <span class="badge badge-success mr-1">Good Match</span>
+                <span class="badge badge-success">Full Match</span>
+            </div>
+          </div>
+          <div class="list-group small">
+            <div class="list-group-item list-header d-none d-sm-block">
+              <div class="row">
+                <div class="col-sm"><strong>Full Name</strong></div>
+                <div class="col-sm"><strong>Email</strong></div>
+                <div class="col-sm"><strong>Telephone</strong></div>
+                <div class="col-sm col-lg-2"></div>
+              </div>
+            </div>
+            <div class="list-group-item">
+              <div class="row align-items-end align-items-sm-center">
+                <div class="col d-sm-none">
+                  <h6><span class="badge badge-success">Full Match</span></h6>
+                </div>
+                <div class="col-sm">
+                  <dl class="row">
+                    <dt class="col-4 d-sm-none">Full Name</dt>
+                    <dd class="col"></dd>
+                  </dl>
+                </div>
+                <div class="col-sm">
+                  <dl class="row">
+                    <dt class="col-4 d-sm-none">Email</dt>
+                    <dd class="col"></dd>
+                  </dl>
+                </div>
+                <div class="col-sm">
+                  <dl class="row">
+                    <dt class="col-4 d-sm-none">Telephone</dt>
+                    <dd class="col"></dd>
+                  </dl>
+                </div>
+                <div class="col-sm col-lg-2">
+                  <button class="btn btn-block btn-sm btn-primary">Select</button>
+                </div>
+              </div>
+            </div>
+            <!-- TODO Show only if you have name, last name and phone/email -->
+            <a href class="list-group-item list-group-item-action text-center py-4">
+              <span class="btn-link">
+                <i class="fas fa-user-plus"></i> Create New Person
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+  </div>
 </div>

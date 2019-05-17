@@ -114,7 +114,7 @@ dl {
 }
 
 .input-group {
-    input + select {
+    select {
         flex: 0 0 auto!important;
         width: auto!important;
     }
