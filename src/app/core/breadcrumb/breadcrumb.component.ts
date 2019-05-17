@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AppUtils } from '../shared/utils';
 import { Location } from '@angular/common';
 
@@ -11,13 +12,17 @@ export class BreadcrumbComponent implements OnInit {
   
   prevRoute = AppUtils.prevRoute;
 
-  constructor(private _location: Location) { }
+  constructor(private _location: Location, private router: Router) { }
 
   ngOnInit() {
   }
 
   backClicked() {
-    this._location.back();
+    if(!this.prevRoute) {
+      this.router.navigate(['/home']);
+    } else {
+      this._location.back();
+    }
   }
 
 }

@@ -225,10 +225,8 @@ public keepOriginalOrder = (a) => a.key;
         address: this.fb.group({
           addressLines: ['', Validators.maxLength(500)],
           countryId: 0,
-          // country: ['United Kingdom', [Validators.required, Validators.maxLength(50)]],
           inCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
           outCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(4)]],
-          // postCode: ['', [Validators.required, Validators.maxLength(6)]]
         }),
         contactBy: this.fb.group({
           email: [false],
@@ -329,8 +327,7 @@ public keepOriginalOrder = (a) => a.key;
     console.log(this.errorMessage);
   }
   onSaveComplete() {
-    // tslint:disable-next-line:no-unused-expression
-    this.personForm.reset;
+    this.personForm.reset();
     this.router.navigateByUrl('/contact-centre');
   }
 }

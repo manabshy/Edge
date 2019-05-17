@@ -12,6 +12,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 })
 export class ContactgroupsPeopleComponent implements OnInit {
   isCollapsed = {};
+  isOffCanvasVisible = false;
   personId: number;
   groupPersonId: number;
   contactGroupId: number;
@@ -63,5 +64,11 @@ export class ContactgroupsPeopleComponent implements OnInit {
     event.preventDefault();
     event.stopPropagation();
     this.isCollapsed[i] = !this.isCollapsed[i];
+  }
+
+  showHideOffCanvas(event) {
+    event.preventDefault(); 
+    event.stopPropagation();
+    this.isOffCanvasVisible = !this.isOffCanvasVisible; 
   }
 }
