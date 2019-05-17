@@ -58,7 +58,8 @@
         top: 0;
         left: 50%;
         width: auto;
-        height: 100vh;
+        min-width: 100vw;
+        min-height: 100vh;
         transform: translateX(-50%);
     }
 

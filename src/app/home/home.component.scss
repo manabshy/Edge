@@ -43,7 +43,7 @@
 .home-container {
 
     @include media-breakpoint-down(md) {
-        min-height: calc(100vh - #{$top-bar-height});
+        min-height: calc(100vh - (#{$top-bar-height} + 70px));
     }
 
     
