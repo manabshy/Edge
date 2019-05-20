@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ContactGroupsService } from '../shared/contact-groups.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Person, BasicPerson } from 'src/app/core/models/person';
 import { ContactGroup, PeopleAutoCompleteResult } from '../shared/contact-group';
 import { FormGroup, FormBuilder } from '@angular/forms';
@@ -22,7 +22,11 @@ export class ContactgroupsPeopleComponent implements OnInit {
   contactGroupDetails: ContactGroup;
   contactGroupDetailsForm: FormGroup;
   personFinderForm: FormGroup;
-  constructor(private contactGroupService: ContactGroupsService, private fb: FormBuilder, private route: ActivatedRoute) { }
+  selectedPerson: Person;
+  constructor(private contactGroupService: ContactGroupsService,
+              private fb: FormBuilder,
+              private router: Router,
+              private route: ActivatedRoute) { }
 
   ngOnInit() {
      this.route.params.subscribe(params => {
@@ -44,7 +48,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
      this.getContactGroupById(this.contactGroupId);
      this.personFinderForm.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
        this.findPerson(data);
-       console.log('from person finder', data);
       });
 
   }
@@ -53,10 +56,13 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.contactGroupService.getContactGroupbyId(contactGroupId).subscribe(data => {
       this.contactGroupDetails = data;
       this.populateFormDetails(data);
-      console.log('contact group people', this.contactGroupDetails);
     });
   }
-
+  getPersonDetails(personId: number) {
+    this.contactGroupService.getPerson(personId).subscribe(data => {
+      this.selectedPerson = data;
+    });
+  }
   populateFormDetails(contactGroup: ContactGroup) {
     if (this.contactGroupDetailsForm) {
       this.contactGroupDetailsForm.reset();
@@ -72,14 +78,12 @@ export class ContactgroupsPeopleComponent implements OnInit {
   findPerson(person: BasicPerson) {
     this.contactGroupService.getAutocompletePeople(person).subscribe(data => {
       this.foundPeople = data;
-      console.log('found people', this.foundPeople);
     });
   }
 
   removePerson(event, id: number) {
     event.preventDefault();
     event.stopPropagation();
-    console.log('id of person to be removed is:', id);
   }
 
   showHideMarkPrefs(event, i) {
@@ -93,4 +97,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
     event.stopPropagation();
     this.isOffCanvasVisible = !this.isOffCanvasVisible;
   }
+ selectPerson(id: number ) {
+  console.log('selected person id', id);
+  this.getPersonDetails(id);
+ }
 }

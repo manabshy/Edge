@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { SharedService, Country } from 'src/app/core/services/shared.service';
-import { FormBuilder, FormGroup, Validators, FormArray, AbstractControl, FormControl, ValidationErrors, EmailValidator } from '@angular/forms';
+import { SharedService } from 'src/app/core/services/shared.service';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { Person, Email, PhoneNumber } from 'src/app/core/models/person';
 import { ActivatedRoute, Router } from '@angular/router';
-import { WedgeValidators } from 'src/app/core/shared/wedge-validators';
-import { debounceTime } from 'rxjs/operators';
-import { mapValues, filter, isArray, isPlainObject, keys, merge, last } from 'lodash';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-contactgroups-detail-edit',
@@ -25,7 +23,10 @@ telephoneTypeSelected = 1;
 personDetails: Person;
 personForm: FormGroup;
 personId: number;
+id: number;
 groupPersonId: number;
+foundPersonId: number;
+returnUrl: string;
 errorMessage: string;
 errorsMessage: any = [];
 emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -82,6 +83,7 @@ formErrors = {
   'inCode' : '',
   'outCode' : ''
 };
+
 get showPostCode(): boolean {
  return this.address.get('countryId').value === this.defaultCountryCode;
 }
@@ -99,6 +101,7 @@ public keepOriginalOrder = (a) => a.key;
               private contactGroupService: ContactGroupsService,
               private fb: FormBuilder,
               private route: ActivatedRoute,
+              private location: Location,
               private router: Router) { }
 
   ngOnInit() {
@@ -107,12 +110,22 @@ public keepOriginalOrder = (a) => a.key;
     this.titles = Object.values(this.listInfo)[1];
     this.telephoneTypes = Object.values(this.listInfo)[2];
     this.route.params.subscribe(params => this.personId = +params['personId'] || 0);
-    this.route.queryParams.subscribe(params => this.groupPersonId = +params['groupPersonId'] || 0);
+    this.route.queryParams.subscribe(params => {
+      this.groupPersonId = +params['groupPersonId'] || 0;
+      this.foundPersonId = +params['foundPersonId'] || 0;
+    });
     this.setupEditForm();
-    const id = this.groupPersonId !== 0 ? this.groupPersonId : this.personId;
-    this.getPersonDetails(id);
+    if (this.foundPersonId !== 0) {
+      this.id = this.foundPersonId;
+    } else if (this.groupPersonId !== 0) {
+      this.id = this.groupPersonId;
+    } else {
+      this.id = this.personId;
+    }
+    // const id = this.groupPersonId !== 0 ? this.groupPersonId : this.personId;
+    this.getPersonDetails(this.id);
     this.personForm.valueChanges
-    .subscribe(data => this.logValidationErrors(this.personForm));
+    .subscribe(() => this.logValidationErrors(this.personForm));
   }
 
   logValidationErrors(group: FormGroup = this.personForm) {
@@ -138,7 +151,6 @@ public keepOriginalOrder = (a) => a.key;
   }
   setValidationForContactPreference(option: string) {
     const emailFormArray = this.personForm.get('emailAddresses');
-    const phonesFormArray = this.personForm.get('phoneNumbers');
 
     if (option === 'email') {
       emailFormArray.setValidators(Validators.required);
@@ -303,6 +315,8 @@ public keepOriginalOrder = (a) => a.key;
 
   createEmailItem(): FormGroup {
     return this.fb.group({
+      id: 0,
+      orderNumber: 0,
       email: ['', [Validators.required, Validators.pattern(this.emailPattern)]],
       isPrimaryWebEmail: [false]
     });
@@ -328,6 +342,9 @@ public keepOriginalOrder = (a) => a.key;
   }
   onSaveComplete() {
     this.personForm.reset();
+    if (this.foundPersonId !== 0) {
+      this.location.back();
+    }
     this.router.navigateByUrl('/contact-centre');
   }
 }
