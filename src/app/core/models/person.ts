@@ -27,13 +27,15 @@ export interface Person {
   rawData: any;
 }
 
-export interface BasicPerson{
+export interface BasicPerson {
   personId: number;
   firstName: string;
   lastName: string;
   middleName: string;
   fullName: string;
   title: string;
+  emailAddress: string;
+  phoneNumber: string;
 }
 export interface Email {
   id?: number;

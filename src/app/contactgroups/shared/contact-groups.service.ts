@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { ContactGroupAutoCompleteResult, ContactGroupAutoCompleteData,
-         PersonContactData, ContactGroupData, ContactGroup, BasicContactGroup, BasicContactGroupData, PeopleAutoCompleteResult, PeopleAutoCompleteData } from './contact-group';
+         PersonContactData, ContactGroupData, ContactGroup, BasicContactGroup,
+          BasicContactGroupData, PeopleAutoCompleteResult, PeopleAutoCompleteData } from './contact-group';
 import { map, tap, catchError } from 'rxjs/operators';
-import { Person } from 'src/app/core/models/person';
+import { Person, BasicPerson } from 'src/app/core/models/person';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,8 @@ export class ContactGroupsService {
 
   // get all the people that belong to a contact group
   getAutocompleteContactGroups(searchTerm: string): Observable<ContactGroupAutoCompleteResult[]> {
+    // const options =  {params: new HttpParams().set('searchTerm', term)};
+    // const url = `${AppConstants.baseContactGroupUrl}/search`;
     const url = `${AppConstants.baseContactGroupUrl}/search?SearchTerm=${searchTerm}`;
     return this.http.get<ContactGroupAutoCompleteData>(url)
     .pipe(
@@ -38,11 +41,16 @@ export class ContactGroupsService {
     const url = `${AppConstants.basePersonUrl}/${personId}/contactGroups`;
     return this.http.get<BasicContactGroupData>(url).pipe(map(response => response.result));
   }
-  getAutocompletePeople(params: string[]): Observable<any> {
-    const url = `${AppConstants.basePersonUrl}/${params}`;
-    return this.http.get<PeopleAutoCompleteData>(url).pipe(
-      map(response => response),
-      tap(data => console.log('found people...', JSON.stringify(data))),
+  getAutocompletePeople(person: BasicPerson): Observable<PeopleAutoCompleteResult[]> {
+    const options = new HttpParams()
+                    .set('firstName', person.firstName)
+                    .set('lastName', person.lastName)
+                    .set('phoneNumber', person.phoneNumber)
+                    .set('email', person.emailAddress);
+    const url = `${AppConstants.basePersonUrl}/search`;
+    return this.http.get<PeopleAutoCompleteData>(url, {params: options}).pipe(
+      map(response => response.result),
+      tap(data => console.log('found people...', data)),
       catchError(this.handleError)
       );
   }

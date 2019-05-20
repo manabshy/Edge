@@ -20,11 +20,11 @@ export class FormatAddressPipe implements PipeTransform {
     fullAddress += address.houseBuildingName + ', ';
   }
 
-  if (!!(address.address1 && address.address2)) {
-    fullAddress += `${address.address1}, ${address.address2}, `;
-  } else if (address.address1) {
-    fullAddress += `${address.address1}, `;
-  }
+  // if (!!(address.address1 && address.address2)) {
+  //   fullAddress += `${address.address1}, ${address.address2}, `;
+  // } else if (address.address1) {
+  //   fullAddress += `${address.address1}, `;
+  // }
   if (!!(address.houseNumber && address.streetName)) {
     fullAddress += `${address.houseNumber} ${address.streetName}, `;
   } else if (address.streetName) {

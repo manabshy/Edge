@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ActivatedRoute } from '@angular/router';
 import { Person, BasicPerson } from 'src/app/core/models/person';
-import { ContactGroup } from '../shared/contact-group';
+import { ContactGroup, PeopleAutoCompleteResult } from '../shared/contact-group';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
@@ -17,7 +17,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   groupPersonId: number;
   contactGroupId: number;
   contactPeople: Person[];
-  foundPerson: BasicPerson;
+  foundPeople: PeopleAutoCompleteResult[];
   contactGroupDetails: ContactGroup;
   contactGroupDetailsForm: FormGroup;
   personFinderForm: FormGroup;
@@ -41,7 +41,11 @@ export class ContactgroupsPeopleComponent implements OnInit {
        phoneNumber: ['']
       });
      this.getContactGroupById(this.contactGroupId);
-     this.personFinderForm.valueChanges.subscribe(data => this.findPerson(data));
+     this.personFinderForm.valueChanges.subscribe(data => {
+       this.findPerson(data);
+       console.log('from person finder',data);
+      });
+
   }
 
   getContactGroupById(contactGroupId: number) {
@@ -64,10 +68,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
       });
   }
 
-  findPerson(...value: string[]) {
-    this.contactGroupService.getAutocompletePeople(value).subscribe(data => {
-      this.foundPerson = data;
-      console.log('found person', this.foundPerson);
+  findPerson(person: BasicPerson) {
+    this.contactGroupService.getAutocompletePeople(person).subscribe(data => {
+      this.foundPeople = data;
+      console.log('found people', this.foundPeople);
     });
   }
 

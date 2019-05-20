@@ -75,13 +75,6 @@ export interface ContactGroupAutoCompleteResult extends ContactGroupMetaDeta{
   postCode: string;
   contactGroups: BasicContactGroup[];
 }
-export interface BasicPerson {
-  firstName: string;
-  lastName: string;
-  fullName: string;
-  emailAddress: string;
-  phoneNumber: string;
-}
 export interface PeopleAutoCompleteResult {
   personId: number;
   title: string;
