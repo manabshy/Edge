@@ -165,7 +165,7 @@
       <div class="form-group row">
         <label for="email" class="col-sm-2 col-form-label col-form-label-sm">Email</label>
         <div class="col-sm-10">
-          <input type="text" id="email" class="form-control form-control-sm" formControlName="email">
+          <input type="text" id="email" class="form-control form-control-sm" formControlName="emailAddress">
         </div>
       </div>
    </form>
@@ -191,7 +191,6 @@
                 <div class="col-sm col-lg-2"></div>
               </div>
             </div>
-            <!-- <div *ngFor="let person of foundPeople"> -->
             <div class="list-group-item"  *ngFor="let person of foundPeople">
               <div class="row align-items-end align-items-sm-center">
                 <div class="col d-sm-none">
@@ -206,19 +205,22 @@
                 <div class="col-sm">
                   <dl class="row">
                     <dt class="col-4 d-sm-none">Email</dt>
-                    <dd class="col"></dd>
+                  <ng-container *ngFor="let email of person.emailAddresses">
+                    <dd class="col">{{email}}</dd>
+                  </ng-container>
                   </dl>
                 </div>
                 <div class="col-sm">
                   <dl class="row">
                     <dt class="col-4 d-sm-none">Telephone</dt>
-                    <dd class="col"></dd>
+                   <ng-container *ngFor="let phoneNumber of person.phoneNumbers">
+                     <dd class="col">{{phoneNumber}}</dd>
+                  </ng-container>
                   </dl>
                 </div>
                 <div class="col-sm col-lg-2">
                   <button class="btn btn-block btn-sm btn-primary">Select</button>
                 </div>
-              <!-- </div> -->
               </div>
             </div>
             <!-- TODO Show only if you have name, last name and phone/email -->

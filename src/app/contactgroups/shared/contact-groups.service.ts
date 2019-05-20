@@ -46,7 +46,7 @@ export class ContactGroupsService {
                     .set('firstName', person.firstName)
                     .set('lastName', person.lastName)
                     .set('phoneNumber', person.phoneNumber)
-                    .set('email', person.emailAddress);
+                    .set('emailAddress', person.emailAddress);
     const url = `${AppConstants.basePersonUrl}/search`;
     return this.http.get<PeopleAutoCompleteData>(url, {params: options}).pipe(
       map(response => response.result),

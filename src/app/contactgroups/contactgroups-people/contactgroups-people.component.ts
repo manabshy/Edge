@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Person, BasicPerson } from 'src/app/core/models/person';
 import { ContactGroup, PeopleAutoCompleteResult } from '../shared/contact-group';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-contactgroups-people',
@@ -37,13 +38,13 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.personFinderForm = this.fb.group({
        firstName: [''],
        lastName: [''],
-       email: [''],
+       emailAddress: [''],
        phoneNumber: ['']
       });
      this.getContactGroupById(this.contactGroupId);
-     this.personFinderForm.valueChanges.subscribe(data => {
+     this.personFinderForm.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
        this.findPerson(data);
-       console.log('from person finder',data);
+       console.log('from person finder', data);
       });
 
   }
