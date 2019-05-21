@@ -242,7 +242,7 @@
         </div>
     </ng-container>
       <ng-template #editPerson>
-      <app-contactgroups-detail-edit></app-contactgroups-detail-edit>
+      <app-contactgroups-detail-edit *ngIf="foundPersonId" [foundPersonId]="foundPersonId"></app-contactgroups-detail-edit>
       </ng-template>
   </div>
 </div>

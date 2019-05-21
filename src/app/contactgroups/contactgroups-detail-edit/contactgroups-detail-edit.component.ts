@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ContactGroupsService } from '../shared/contact-groups.service';
@@ -25,7 +25,7 @@ personForm: FormGroup;
 personId: number;
 id: number;
 groupPersonId: number;
-foundPersonId: number;
+@Input() foundPersonId: number;
 returnUrl: string;
 errorMessage: string;
 errorsMessage: any = [];
@@ -112,7 +112,7 @@ public keepOriginalOrder = (a) => a.key;
     this.route.params.subscribe(params => this.personId = +params['personId'] || 0);
     this.route.queryParams.subscribe(params => {
       this.groupPersonId = +params['groupPersonId'] || 0;
-      this.foundPersonId = +params['foundPersonId'] || 0;
+      // this.foundPersonId = +params['foundPersonId'] || 0;
     });
     this.setupEditForm();
     if (this.foundPersonId !== 0) {
