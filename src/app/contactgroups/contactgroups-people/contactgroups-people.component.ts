@@ -23,6 +23,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   contactGroupDetailsForm: FormGroup;
   personFinderForm: FormGroup;
   selectedPerson: Person;
+  foundPersonId: number;
   constructor(private contactGroupService: ContactGroupsService,
               private fb: FormBuilder,
               private router: Router,
@@ -99,6 +100,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
  selectPerson(id: number ) {
   console.log('selected person id', id);
+  this.foundPersonId = id;
   this.getPersonDetails(id);
  }
 }
