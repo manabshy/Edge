@@ -73,7 +73,7 @@
       </a>
     </div>
     <h5>Details</h5>
-   <form [formGroup]="contactGroupDetailsForm">
+   <form [formGroup]="contactGroupDetailsForm" class="pb-3">
       <div class="form-group row">
         <label for="salutation" class="col-sm-2 col-form-label col-form-label-sm">Salutation</label>
         <div class="col-sm-10">
@@ -133,14 +133,14 @@
 </div>
 <div class="off-canvas" [hidden]="!isOffCanvasVisible" (click)="showHideOffCanvas($event)">
   <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()">
-    <h4 class="page-title text-left">
-      Find person
+    <h4 class="page-title text-left pt-3">
+      <ng-container *ngIf="!foundPersonId; else selectedLabel">Find</ng-container><ng-template #selectedLabel>Selected</ng-template> Person
       <button type="button" class="close mr-2" aria-label="Close" (click)="showHideOffCanvas($event)">
         <span aria-hidden="true">&times;</span>
       </button>
     </h4>
     <ng-container *ngIf="!foundPersonId; else editPerson">
-        <form [formGroup]="personFinderForm">
+        <form [formGroup]="personFinderForm" class="pb-3">
             <div class="form-group row">
               <label for="firstName" class="col-sm-2 col-form-label col-form-label-sm">First Name</label>
               <div class="col-sm-10">
@@ -156,12 +156,7 @@
             <div class="form-group row">
               <label for="phone" class="col-sm-2 col-form-label col-form-label-sm">Phone</label>
               <div class="col-sm-10">
-                <div class="input-group input-group-sm">
-                  <select name="type" id="type" class="custom-select">
-                    <option value="">Mobile</option>
-                  </select>
-                  <input type="text" id="phone" class="form-control" formControlName="phoneNumber">
-                </div>
+                <input type="text" id="phone" class="form-control form-control-sm" formControlName="phoneNumber">
               </div>
             </div>
             <div class="form-group row">
@@ -177,27 +172,18 @@
                   <div class="col">
                     <h5>Quick Finder</h5>
                   </div>
-                  <div class="col-auto d-none d-sm-block">
-                      <!-- TODO Get colours -->
-                      <span class="badge badge-success mr-1">Part Match</span>
-                      <span class="badge badge-success mr-1">Good Match</span>
-                      <span class="badge badge-success">Full Match</span>
-                  </div>
                 </div>
                 <div class="list-group small">
                   <div class="list-group-item list-header d-none d-sm-block">
                     <div class="row">
                       <div class="col-sm"><strong>Full Name</strong></div>
-                      <div class="col-sm"><strong>Email</strong></div>
                       <div class="col-sm"><strong>Telephone</strong></div>
+                      <div class="col-sm-4"><strong>Email</strong></div>
                       <div class="col-sm col-lg-2"></div>
                     </div>
                   </div>
                   <div class="list-group-item"  *ngFor="let foundPerson of foundPeople">
                     <div class="row align-items-end align-items-sm-center">
-                      <div class="col d-sm-none">
-                        <h6><span class="badge badge-success">Full Match</span></h6>
-                      </div>
                       <div class="col-sm">
                         <dl class="row">
                           <dt class="col-4 d-sm-none">Full Name</dt>
@@ -206,18 +192,24 @@
                       </div>
                       <div class="col-sm">
                         <dl class="row">
-                          <dt class="col-4 d-sm-none">Email</dt>
-                        <ng-container *ngFor="let email of foundPerson.emailAddresses">
-                          <dd class="col">{{email}}</dd>
-                        </ng-container>
+                          <dt class="col-4 d-sm-none">Telephone</dt>
+                          <dd class="col text-truncate">
+                            <ng-container *ngFor="let phoneNumber of foundPerson.phoneNumbers">
+                              <div class="text-truncate">{{phoneNumber}}</div>
+                            </ng-container>
+                          </dd>
                         </dl>
                       </div>
-                      <div class="col-sm">
+                      <div class="col-sm-4">
                         <dl class="row">
-                          <dt class="col-4 d-sm-none">Telephone</dt>
-                          <ng-container *ngFor="let phoneNumber of foundPerson.phoneNumbers">
-                            <dd class="col">{{phoneNumber}}</dd>
-                        </ng-container>
+                          <dt class="col-4 d-sm-none">Email</dt>
+                          <dd class="col text-truncate">
+                            <ng-container *ngFor="let email of foundPerson.emailAddresses">
+                              <div class="text-truncate">
+                                {{email}}
+                              </div>
+                            </ng-container>
+                          </dd>
                         </dl>
                       </div>
                       <div class="col-sm col-lg-2">
@@ -231,8 +223,10 @@
                       </div> -->
                     </div>
                   </div>
-                  <!-- TODO Show only if you have name, last name and phone/email -->
-                  <a href class="list-group-item list-group-item-action text-center py-4">
+                  <div class="list-group-item list-group-item-action text-center py-4" *ngIf="showCreateNewPerson">
+                      No Person found. Create a new one with the above details.
+                  </div>
+                  <a href class="list-group-item list-group-item-action text-center py-4" *ngIf="showCreateNewPerson">
                     <span class="btn-link">
                       <i class="fas fa-user-plus"></i> Create New Person
                     </span>

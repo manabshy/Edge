@@ -24,6 +24,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   personFinderForm: FormGroup;
   selectedPerson: Person;
   foundPersonId: number;
+  showCreateNewPerson: boolean = false;
   constructor(private contactGroupService: ContactGroupsService,
               private fb: FormBuilder,
               private router: Router,
@@ -48,6 +49,11 @@ export class ContactgroupsPeopleComponent implements OnInit {
       });
      this.getContactGroupById(this.contactGroupId);
      this.personFinderForm.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
+       if(data.firstName && data.lastName && (data.phoneNumber || data.emailAddress)) {
+        this.showCreateNewPerson = true;
+       } else {
+        this.showCreateNewPerson = false;
+       }
        this.findPerson(data);
       });
 

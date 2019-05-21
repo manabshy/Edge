@@ -33,6 +33,7 @@ export class AppComponent implements OnInit, AfterViewChecked {
       AppUtils.prevRouteBU = AppUtils.prevRoute || '';
       AppUtils.prevRoute = event[0].urlAfterRedirects;
       this.isScrollTopVisible = false;
+      window.scrollTo(0,0);
     });
   }
 

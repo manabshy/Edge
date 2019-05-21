@@ -1,6 +1,6 @@
-<app-breadcrumb></app-breadcrumb>
+<app-breadcrumb *ngIf="!foundPersonId"></app-breadcrumb>
 <div class="container">
-  <h4 class="page-title">Edit Contact</h4>
+  <h4 class="page-title" *ngIf="!foundPersonId">Edit Person</h4>
   <div class="text-center" *ngIf="!personDetails">
     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading details ...
   </div>
@@ -207,7 +207,7 @@
         <div class="row justify-content-end w-100 no-gutters">
           <div class="col-sm-10 d-flex">
             <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
-            <button type="submit" class="btn btn-secondary" >Edit Contact</button>
+            <button type="submit" class="btn btn-secondary" ><ng-container *ngIf="!foundPersonId; else addPersonLabel">Save</ng-container><ng-template #addPersonLabel>Add Person</ng-template></button>
           </div>
         </div>
       </div>
