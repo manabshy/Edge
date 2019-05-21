@@ -223,7 +223,7 @@
                       </div> -->
                     </div>
                   </div>
-                  <div class="list-group-item list-group-item-action text-center py-4" *ngIf="showCreateNewPerson">
+                  <div class="list-group-item list-group-item-action text-center py-4" *ngIf="(foundPeople && !foundPeople.length)">
                       No Person found. Create a new one with the above details.
                   </div>
                   <a href class="list-group-item list-group-item-action text-center py-4" *ngIf="showCreateNewPerson">
