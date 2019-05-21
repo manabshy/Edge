@@ -62,6 +62,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   getPersonDetails(personId: number) {
     this.contactGroupService.getPerson(personId).subscribe(data => {
       this.selectedPerson = data;
+      console.log('selected person details here', this.selectedPerson);
     });
   }
   populateFormDetails(contactGroup: ContactGroup) {
@@ -101,6 +102,17 @@ export class ContactgroupsPeopleComponent implements OnInit {
  selectPerson(id: number ) {
   console.log('selected person id', id);
   this.foundPersonId = id;
-  this.getPersonDetails(id);
+ }
+
+ showEditedPersonDetails(id) {
+  console.log('id from child', id);
+  if (id !== 0) {
+    this.getPersonDetails(id);
+   console.log(this.isOffCanvasVisible);
+  }
+ }
+
+ hideCanvas(event) {
+   this.isOffCanvasVisible = event;
  }
 }

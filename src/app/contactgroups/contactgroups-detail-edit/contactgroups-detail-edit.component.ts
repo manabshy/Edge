@@ -1,10 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output } from '@angular/core';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { Person, Email, PhoneNumber } from 'src/app/core/models/person';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-contactgroups-detail-edit',
@@ -12,7 +13,9 @@ import { Location } from '@angular/common';
   styleUrls: ['./contactgroups-detail-edit.component.scss']
 })
 export class ContactgroupsDetailEditComponent implements OnInit {
-// countries: any;
+@Output() editedPersonId = new EventEmitter<number>();
+@Output() hideCanvas = new EventEmitter<boolean>();
+@Input() foundPersonId: number;
 countries: any;
 titles: any;
 telephoneTypes: any;
@@ -25,7 +28,7 @@ personForm: FormGroup;
 personId: number;
 id: number;
 groupPersonId: number;
-@Input() foundPersonId: number;
+isOffCanvasVisible = false;
 returnUrl: string;
 errorMessage: string;
 errorsMessage: any = [];
@@ -115,12 +118,14 @@ public keepOriginalOrder = (a) => a.key;
       // this.foundPersonId = +params['foundPersonId'] || 0;
     });
     this.setupEditForm();
-    if (this.foundPersonId !== 0) {
-      this.id = this.foundPersonId;
-    } else if (this.groupPersonId !== 0) {
-      this.id = this.groupPersonId;
-    } else {
+    if (this.personId) {
       this.id = this.personId;
+    }
+    if (this.groupPersonId && this.personId) {
+      this.id = this.groupPersonId;
+    }
+    if (this.foundPersonId && this.personId) {
+      this.id = this.foundPersonId;
     }
     // const id = this.groupPersonId !== 0 ? this.groupPersonId : this.personId;
     this.getPersonDetails(this.id);
@@ -342,9 +347,17 @@ public keepOriginalOrder = (a) => a.key;
   }
   onSaveComplete() {
     this.personForm.reset();
+    this.editSelectPerson(this.foundPersonId);
     if (this.foundPersonId !== 0) {
-      this.location.back();
-    }
+      this.makeCanvasInvisible(this.isOffCanvasVisible);
+    } else {
     this.router.navigateByUrl('/contact-centre');
+   }
+  }
+  editSelectPerson(id: number) {
+    this.editedPersonId.emit(id);
+  }
+  makeCanvasInvisible(close: boolean) {
+    this.hideCanvas.emit(close);
   }
 }
