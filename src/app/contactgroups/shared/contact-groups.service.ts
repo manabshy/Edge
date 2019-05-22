@@ -5,7 +5,7 @@ import { AppConstants } from 'src/app/core/shared/app-constants';
 import { ContactGroupAutoCompleteResult, ContactGroupAutoCompleteData,
          PersonContactData, ContactGroupData, ContactGroup, BasicContactGroup,
           BasicContactGroupData, PeopleAutoCompleteResult, PeopleAutoCompleteData } from './contact-group';
-import { map, tap, catchError } from 'rxjs/operators';
+import { map, tap, catchError, retry } from 'rxjs/operators';
 import { Person, BasicPerson } from 'src/app/core/models/person';
 
 @Injectable({
@@ -43,13 +43,15 @@ export class ContactGroupsService {
   }
   getAutocompletePeople(person: BasicPerson): Observable<PeopleAutoCompleteResult[]> {
     const options = new HttpParams()
-                    .set('firstName', person.firstName)
-                    .set('lastName', person.lastName)
-                    .set('phoneNumber', person.phoneNumber)
-                    .set('emailAddress', person.emailAddress);
+                    .set('firstName', person.firstName = null || '')
+                    .set('lastName', person.lastName = null || '')
+                    .set('phoneNumber', person.phoneNumber = null || '')
+                    .set('emailAddress', person.emailAddress = null || '') ;
+                    console.log('options sent...', options);
     const url = `${AppConstants.basePersonUrl}/search`;
     return this.http.get<PeopleAutoCompleteData>(url, {params: options}).pipe(
       map(response => response.result),
+      tap(() => console.log('input parameter...', person)),
       tap(data => console.log('found people...', data)),
       catchError(this.handleError)
       );
@@ -58,6 +60,7 @@ export class ContactGroupsService {
     const url = `${AppConstants.basePersonUrl}/${person.personId}`;
     return this.http.put(url, person).pipe(
       map(response => response),
+      retry(3),
       tap(data => console.log('updated person details here...', JSON.stringify(data))),
       catchError(this.handleError)
       );

@@ -25,7 +25,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   personFinderForm: FormGroup;
   selectedPerson: Person;
   foundPersonId: number;
-  isCreateNewPersonVisible: boolean = false;
+  isCreateNewPersonVisible = false;
   constructor(private contactGroupService: ContactGroupsService,
               private fb: FormBuilder,
               private router: Router,
@@ -50,7 +50,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
       });
      this.getContactGroupById(this.contactGroupId);
      this.personFinderForm.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
-       if(data.firstName && data.lastName && (data.phoneNumber || data.emailAddress)) {
+       console.log('value from form', data);
+       if (data.firstName && data.lastName && (data.phoneNumber || data.emailAddress)) {
         this.isCreateNewPersonVisible = true;
        } else {
         this.isCreateNewPersonVisible = false;
@@ -113,12 +114,18 @@ export class ContactgroupsPeopleComponent implements OnInit {
  selectPerson(id: number ) {
   console.log('selected person id', id);
   this.foundPersonId = id;
+  if (id !== 0) {
+    this.getPersonDetails(id);
+   this.personFinderForm.reset();
+  }
+  this.isOffCanvasVisible = false;
+  this.foundPersonId = 0;
  }
 
  showEditedPersonDetails(id) {
   console.log('id from child', id);
   if (id !== 0) {
-    this.getPersonDetails(id);
+    // this.getPersonDetails(id);
    console.log(this.isOffCanvasVisible);
    this.personFinderForm.reset();
   }
@@ -130,7 +137,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
  }
 
  backToFinder(event) {
-   if(event) {
+   if (event) {
     this.foundPersonId = 0;
   }
  }
