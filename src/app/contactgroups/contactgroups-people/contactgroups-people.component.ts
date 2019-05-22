@@ -28,7 +28,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isCreateNewPersonVisible = false;
   constructor(private contactGroupService: ContactGroupsService,
               private fb: FormBuilder,
-              private router: Router,
               private route: ActivatedRoute) { }
 
   ngOnInit() {
@@ -49,8 +48,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
        phoneNumber: ['']
       });
      this.getContactGroupById(this.contactGroupId);
-     this.personFinderForm.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
-       console.log('value from form', data);
+     this.personFinderForm.valueChanges.pipe(debounceTime(400)).subscribe(data => {
        if (data.firstName && data.lastName && (data.phoneNumber || data.emailAddress)) {
         this.isCreateNewPersonVisible = true;
        } else {
@@ -58,13 +56,13 @@ export class ContactgroupsPeopleComponent implements OnInit {
        }
        this.findPerson(data);
       });
-
   }
 
   getContactGroupById(contactGroupId: number) {
     this.contactGroupService.getContactGroupbyId(contactGroupId).subscribe(data => {
       this.contactGroupDetails = data;
       this.populateFormDetails(data);
+      console.log('contact group people', this.contactGroupDetails);
     });
   }
   getPersonDetails(personId: number) {
@@ -116,6 +114,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
   this.foundPersonId = id;
   if (id !== 0) {
     this.getPersonDetails(id);
+    if (this.selectedPerson !== undefined) {
+      this.contactGroupDetails.contactPeople.push(this.selectedPerson);
+      console.log('selected person added to group', this.contactGroupDetails.contactPeople);
+    }
    this.personFinderForm.reset();
   }
   this.isOffCanvasVisible = false;

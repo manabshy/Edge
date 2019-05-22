@@ -43,15 +43,13 @@ export class ContactGroupsService {
   }
   getAutocompletePeople(person: BasicPerson): Observable<PeopleAutoCompleteResult[]> {
     const options = new HttpParams()
-                    .set('firstName', person.firstName = null || '')
-                    .set('lastName', person.lastName = null || '')
-                    .set('phoneNumber', person.phoneNumber = null || '')
-                    .set('emailAddress', person.emailAddress = null || '') ;
-                    console.log('options sent...', options);
+                    .set('firstName', person.firstName  || '')
+                    .set('lastName', person.lastName  || '')
+                    .set('phoneNumber', person.phoneNumber  || '')
+                    .set('emailAddress', person.emailAddress  || '') ;
     const url = `${AppConstants.basePersonUrl}/search`;
     return this.http.get<PeopleAutoCompleteData>(url, {params: options}).pipe(
       map(response => response.result),
-      tap(() => console.log('input parameter...', person)),
       tap(data => console.log('found people...', data)),
       catchError(this.handleError)
       );
