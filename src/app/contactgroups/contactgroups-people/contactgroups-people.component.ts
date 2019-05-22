@@ -128,4 +128,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
  hideCanvas(event) {
    this.isOffCanvasVisible = event;
  }
+
+ backToFinder(event) {
+   if(event) {
+    this.foundPersonId = 0;
+  }
+ }
 }

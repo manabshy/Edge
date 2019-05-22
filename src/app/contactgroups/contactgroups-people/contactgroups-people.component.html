@@ -233,7 +233,7 @@
                 </div>
               </div>
             </div>
-            <div class="list-group-item" *ngIf="foundPeople && !foundPeople.length">
+            <div class="list-group-item text-center" *ngIf="foundPeople && !foundPeople.length">
               No Person found. Create a new one with the details provided above.
             </div>
             <a href class="list-group-item list-group-item-action text-center py-4" *ngIf="isCreateNewPersonVisible">
@@ -246,14 +246,14 @@
       </div>
     </ng-container>
     <ng-template #editPerson>
-      <app-contactgroups-detail-edit (editedPersonId)="showEditedPersonDetails($event)" (hideCanvas)="hideCanvas($event)"
+      <app-contactgroups-detail-edit (editedPersonId)="showEditedPersonDetails($event)" (hideCanvas)="hideCanvas($event)" (backToFinder)="backToFinder($event)"
          *ngIf="foundPersonId" [foundPersonId]="foundPersonId">
       </app-contactgroups-detail-edit>
     </ng-template>
   </div>
 </div>
 <ng-template #selectedPersonDetails>
-  <a  class="list-group-item list-group-item-action" *ngIf="selectedPerson">
+  <div class="list-group-item new-person" *ngIf="selectedPerson">
       <div class="row">
         <div class="col-12 mb-2">
           <strong>{{selectedPerson.firstName}} {{selectedPerson.lastName}}</strong>&nbsp;
@@ -298,5 +298,5 @@
           </div>
         </div>
       </div>
-  </a>
+    </div>
 </ng-template>

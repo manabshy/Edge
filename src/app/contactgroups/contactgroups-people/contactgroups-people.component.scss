@@ -18,3 +18,7 @@ form {
         border-left: 1px solid $border-color;
     }
 }
+
+.new-person {
+    background: rgba(theme-color('info'), .2);
+}

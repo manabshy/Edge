@@ -15,6 +15,7 @@ import { EventEmitter } from '@angular/core';
 export class ContactgroupsDetailEditComponent implements OnInit {
 @Output() editedPersonId = new EventEmitter<number>();
 @Output() hideCanvas = new EventEmitter<boolean>();
+@Output() backToFinder = new EventEmitter<boolean>();
 @Input() foundPersonId: number;
 countries: any;
 titles: any;
@@ -104,7 +105,7 @@ public keepOriginalOrder = (a) => a.key;
               private contactGroupService: ContactGroupsService,
               private fb: FormBuilder,
               private route: ActivatedRoute,
-              private location: Location,
+              private _location: Location,
               private router: Router) { }
 
   ngOnInit() {
@@ -152,7 +153,11 @@ public keepOriginalOrder = (a) => a.key;
   }
 
   cancel() {
-    this.sharedService.back();
+    if (this.foundPersonId && this.foundPersonId !== 0) {
+      this.backToFinder.emit(true);
+    } else {
+      this._location.back();
+    }
   }
   setValidationForContactPreference(option: string) {
     const emailFormArray = this.personForm.get('emailAddresses');
@@ -351,8 +356,8 @@ public keepOriginalOrder = (a) => a.key;
     if (this.foundPersonId !== 0) {
       this.makeCanvasInvisible(this.isOffCanvasVisible);
     } else {
-    this.router.navigateByUrl('/contact-centre');
-   }
+      this.router.navigateByUrl('/contact-centre');
+    }
   }
   editSelectPerson(id: number) {
     this.editedPersonId.emit(id);
