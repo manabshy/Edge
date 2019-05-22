@@ -270,7 +270,7 @@
               <p class="mb-2 text-muted" *ngIf="!selectedPerson.phoneNumbers.length">No phone</p>
               <p class="mb-2" *ngFor="let phoneNumber of selectedPerson?.phoneNumbers"><a
                   (click)="$event.stopPropagation()"
-                  href="tel:{{phoneNumber.number}}" *ngIf="phoneNumber?.number; else noPhone">{{phoneNumber?.number}}</a><span class="text-muted">No Phone</span><br /></p>
+                  href="tel:{{phoneNumber.number}}" *ngIf="phoneNumber?.number; else noPhone">{{phoneNumber?.number}}</a><ng-template #noPhone><span class="text-muted">No Phone</span></ng-template><br /></p>
             </div>
           </div>
         </div>
