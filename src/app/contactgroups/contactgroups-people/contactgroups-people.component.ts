@@ -24,7 +24,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   contactGroupDetailsForm: FormGroup;
   personFinderForm: FormGroup;
   selectedPerson: Person;
-  foundPersonId: number;
+  selectedPersonId: number;
   isCreateNewPersonVisible = false;
   constructor(private contactGroupService: ContactGroupsService,
               private fb: FormBuilder,
@@ -111,7 +111,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
  selectPerson(id: number ) {
   console.log('selected person id', id);
-  this.foundPersonId = id;
+  this.selectedPersonId = id;
   if (id !== 0) {
     this.getPersonDetails(id);
     if (this.selectedPerson !== undefined) {
@@ -121,7 +121,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
    this.personFinderForm.reset();
   }
   this.isOffCanvasVisible = false;
-  this.foundPersonId = 0;
+  this.selectedPersonId = 0;
  }
 
  showEditedPersonDetails(id) {
@@ -131,7 +131,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
    console.log(this.isOffCanvasVisible);
    this.personFinderForm.reset();
   }
-  this.foundPersonId = 0;
+  this.selectedPersonId = 0;
  }
 
  hideCanvas(event) {
@@ -140,7 +140,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
  backToFinder(event) {
    if (event) {
-    this.foundPersonId = 0;
+    this.selectedPersonId = 0;
   }
  }
 }

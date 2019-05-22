@@ -139,7 +139,7 @@
         <div class="row justify-content-end w-100 no-gutters">
           <div class="col-sm-10 d-flex">
             <button type="button" class="btn btn-light mr-2">Cancel</button>
-            <button routerLink="/contact-centre" type="submit" class="btn btn-secondary">Edit contact group</button>
+            <button routerLink="/contact-centre" type="submit" class="btn btn-secondary">Save</button>
           </div>
         </div>
       </div>
@@ -149,12 +149,12 @@
 <div class="off-canvas" [hidden]="!isOffCanvasVisible" (click)="showHideOffCanvas($event)">
   <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()">
     <h4 class="page-title text-left pt-3">
-      <ng-container *ngIf="!foundPersonId; else selectedLabel">Find</ng-container><ng-template #selectedLabel>Selected</ng-template> Person
+      <ng-container *ngIf="!selectedPersonId; else selectedLabel">Find</ng-container><ng-template #selectedLabel>Selected</ng-template> Person
       <button type="button" class="close mr-2" aria-label="Close" (click)="showHideOffCanvas($event)">
         <span aria-hidden="true">&times;</span>
       </button>
     </h4>
-    <ng-container *ngIf="!foundPersonId; else editPerson">
+    <ng-container *ngIf="!selectedPersonId; else editPerson">
       <form [formGroup]="personFinderForm" class="pb-3">
         <div class="form-group row">
           <label for="firstName" class="col-sm-2 col-form-label col-form-label-sm">First Name</label>
@@ -246,7 +246,7 @@
     </ng-container>
     <ng-template #editPerson>
       <app-contactgroups-detail-edit (editedPersonId)="showEditedPersonDetails($event)" (hideCanvas)="hideCanvas($event)" (backToFinder)="backToFinder($event)"
-         *ngIf="foundPersonId" [foundPersonId]="foundPersonId">
+         *ngIf="selectedPersonId" [foundPersonId]="selectedPersonId">
       </app-contactgroups-detail-edit>
     </ng-template>
   </div>
