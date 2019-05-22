@@ -12,7 +12,10 @@
       <a [routerLink]="['../../../../detail', person.personId ]" class="list-group-item list-group-item-action"
         *ngFor="let person of contactGroupDetails?.contactPeople; index as i">
         <div class="row">
-          <div class="col-12 text-right">
+          <div class="col-auto">
+            <span class="badge badge-pill badge-info mb-2">Main Person</span>
+          </div>
+          <div class="col text-right">
             <div dropdown placement="bottom right">
               <a class="dropdown-toggle" href [id]="'button' + i" dropdownToggle
                 (click)="$event.stopPropagation(); false" [attr.aria-controls]="'dropdown' + i">Actions <span
@@ -22,6 +25,9 @@
                 <li role="menuitem"><a class="dropdown-item" (click)="$event.stopPropagation();"
                     [routerLink]="['../../edit']" [queryParams]="{groupPersonId: person.personId }"><i
                       class="fas fa-edit"></i> Edit</a></li>
+                <li role="menuitem">
+                  <a class="dropdown-item" href="#"><i class="fas fa-user-shield"></i> Set Main Person</a>
+                </li>
                 <li role="menuitem"><a class="dropdown-item" href (click)="removePerson($event, person.personId)"><i
                       class="fas fa-user-times"></i> Remove</a></li>
               </ul>
@@ -150,7 +156,7 @@
       </button>
     </h4>
     <ng-container *ngIf="!foundPersonId; else editPerson">
-      <form [formGroup]="personFinderForm">
+      <form [formGroup]="personFinderForm" class="pb-3">
         <div class="form-group row">
           <label for="firstName" class="col-sm-2 col-form-label col-form-label-sm">First Name</label>
           <div class="col-sm-10">
@@ -167,12 +173,7 @@
         <div class="form-group row">
           <label for="phone" class="col-sm-2 col-form-label col-form-label-sm">Phone</label>
           <div class="col-sm-10">
-            <div class="input-group input-group-sm">
-              <select name="type" id="type" class="custom-select">
-                <option value="">Mobile</option>
-              </select>
-              <input type="text" id="phone" class="form-control" formControlName="phoneNumber">
-            </div>
+            <input type="text" id="phone" class="form-control form-control-sm" formControlName="phoneNumber">
           </div>
         </div>
         <div class="form-group row">
@@ -193,16 +194,13 @@
             <div class="list-group-item list-header d-none d-sm-block">
               <div class="row">
                 <div class="col-sm"><strong>Full Name</strong></div>
-                <div class="col-sm"><strong>Email</strong></div>
                 <div class="col-sm"><strong>Telephone</strong></div>
+                <div class="col-sm-4"><strong>Email</strong></div>
                 <div class="col-sm col-lg-2"></div>
               </div>
             </div>
             <div class="list-group-item" *ngFor="let foundPerson of foundPeople">
               <div class="row align-items-end align-items-sm-center">
-                <div class="col d-sm-none">
-                  <h6><span class="badge badge-success">Full Match</span></h6>
-                </div>
                 <div class="col-sm">
                   <dl class="row">
                     <dt class="col-4 d-sm-none">Full Name</dt>
@@ -211,33 +209,34 @@
                 </div>
                 <div class="col-sm">
                   <dl class="row">
-                    <dt class="col-4 d-sm-none">Email</dt>
-                    <ng-container *ngFor="let email of foundPerson?.emailAddresses">
-                      <dd class="col">{{email}}</dd>
-                    </ng-container>
+                    <dt class="col-4 d-sm-none">Telephone</dt>
+                    <dd class="col">
+                      <ng-container *ngFor="let phoneNumber of foundPerson?.phoneNumbers">
+                        <div>{{phoneNumber}}</div>
+                      </ng-container>
+                    </dd>
                   </dl>
                 </div>
-                <div class="col-sm">
+                <div class="col-sm-4">
                   <dl class="row">
-                    <dt class="col-4 d-sm-none">Telephone</dt>
-                    <ng-container *ngFor="let phoneNumber of foundPerson?.phoneNumbers">
-                      <dd class="col">{{phoneNumber}}</dd>
-                    </ng-container>
+                    <dt class="col-4 d-sm-none">Email</dt>
+                    <dd class="col text-truncate">
+                      <ng-container *ngFor="let email of foundPerson?.emailAddresses">
+                        <div class="text-truncate">{{email}}</div>
+                      </ng-container>
+                    </dd>
                   </dl>
                 </div>
                 <div class="col-sm col-lg-2">
                   <button class="btn btn-block btn-sm btn-primary"
                     (click)="selectPerson(foundPerson.personId)">Select</button>
                 </div>
-                <!-- <div class="col-sm col-lg-2">
-                        <button class="btn btn-block btn-sm btn-primary" [routerLink]="['../../edit']"
-                        [queryParams]="{foundPersonId:foundPerson.personId, contactGroupId:contactGroupDetails.contactGroupId}"
-                        (click)="selectPerson(foundPerson.personId)">Select</button>
-                      </div> -->
               </div>
             </div>
-            <!-- TODO Show only if you have name, last name and phone/email -->
-            <a href class="list-group-item list-group-item-action text-center py-4">
+            <div class="list-group-item" *ngIf="foundPeople && !foundPeople.length">
+              No Person found. Create a new one with the details provided above.
+            </div>
+            <a href class="list-group-item list-group-item-action text-center py-4" *ngIf="isCreateNewPersonVisible">
               <span class="btn-link">
                 <i class="fas fa-user-plus"></i> Create New Person
               </span>
@@ -271,14 +270,14 @@
               <p class="mb-2 text-muted" *ngIf="!selectedPerson.phoneNumbers.length">No phone</p>
               <p class="mb-2" *ngFor="let phoneNumber of selectedPerson?.phoneNumbers"><a
                   (click)="$event.stopPropagation()"
-                  href="tel:{{phoneNumber.number}}">{{phoneNumber?.number || 'No phone'}}</a><br /></p>
+                  href="tel:{{phoneNumber.number}}" *ngIf="phoneNumber?.number; else noPhone">{{phoneNumber?.number}}</a><span class="text-muted">No Phone</span><br /></p>
             </div>
           </div>
         </div>
         <div class="col-sm-5 col-xl-4">
           <p class="mb-2 text-muted" *ngIf="!selectedPerson.emailAddresses.length">No email</p>
           <p class="mb-2" *ngFor="let emailAddress of selectedPerson?.emailAddresses"><a (click)="$event.stopPropagation()"
-              href="mailto:{{emailAddress.email}}">{{emailAddress?.email}}</a></p>
+              href="mailto:{{emailAddress.email}}" *ngIf="emailAddress?.email; else noEmail">{{emailAddress?.email}}</a><ng-template #noEmail><span class="text-muted">No Email</span></ng-template></p>
         </div>
         <div class="col-12">
           <hr class="my-1">
