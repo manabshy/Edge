@@ -13,6 +13,7 @@ import { debounceTime } from 'rxjs/operators';
 })
 export class ContactgroupsPeopleComponent implements OnInit {
   isCollapsed = {};
+  isSelectedCollapsed = false;
   isOffCanvasVisible = false;
   personId: number;
   groupPersonId: number;
@@ -24,6 +25,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   personFinderForm: FormGroup;
   selectedPerson: Person;
   foundPersonId: number;
+  showCreateNewPerson: boolean = false;
   constructor(private contactGroupService: ContactGroupsService,
               private fb: FormBuilder,
               private router: Router,
@@ -48,6 +50,11 @@ export class ContactgroupsPeopleComponent implements OnInit {
       });
      this.getContactGroupById(this.contactGroupId);
      this.personFinderForm.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
+       if(data.firstName && data.lastName && (data.phoneNumber || data.emailAddress)) {
+        this.showCreateNewPerson = true;
+       } else {
+        this.showCreateNewPerson = false;
+       }
        this.findPerson(data);
       });
 
@@ -91,7 +98,11 @@ export class ContactgroupsPeopleComponent implements OnInit {
   showHideMarkPrefs(event, i) {
     event.preventDefault();
     event.stopPropagation();
-    this.isCollapsed[i] = !this.isCollapsed[i];
+    if (i >= 0) {
+      this.isCollapsed[i] = !this.isCollapsed[i];
+    } else {
+      this.isSelectedCollapsed = !this.isSelectedCollapsed;
+    }
   }
 
   showHideOffCanvas(event) {
@@ -109,7 +120,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
   if (id !== 0) {
     this.getPersonDetails(id);
    console.log(this.isOffCanvasVisible);
+   this.personFinderForm.reset();
   }
+  this.foundPersonId = 0;
  }
 
  hideCanvas(event) {

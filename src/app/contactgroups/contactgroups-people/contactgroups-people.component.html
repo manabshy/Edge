@@ -83,7 +83,7 @@
       </a>
     </div>
     <h5>Details</h5>
-    <form [formGroup]="contactGroupDetailsForm">
+   <form [formGroup]="contactGroupDetailsForm" class="pb-3">
       <div class="form-group row">
         <label for="salutation" class="col-sm-2 col-form-label col-form-label-sm">Salutation</label>
         <div class="col-sm-10">
@@ -143,8 +143,8 @@
 </div>
 <div class="off-canvas" [hidden]="!isOffCanvasVisible" (click)="showHideOffCanvas($event)">
   <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()">
-    <h4 class="page-title text-left">
-      Find person
+    <h4 class="page-title text-left pt-3">
+      <ng-container *ngIf="!foundPersonId; else selectedLabel">Find</ng-container><ng-template #selectedLabel>Selected</ng-template> Person
       <button type="button" class="close mr-2" aria-label="Close" (click)="showHideOffCanvas($event)">
         <span aria-hidden="true">&times;</span>
       </button>
@@ -187,12 +187,6 @@
           <div class="row">
             <div class="col">
               <h5>Quick Finder</h5>
-            </div>
-            <div class="col-auto d-none d-sm-block">
-              <!-- TODO Get colours -->
-              <span class="badge badge-success mr-1">Part Match</span>
-              <span class="badge badge-success mr-1">Good Match</span>
-              <span class="badge badge-success">Full Match</span>
             </div>
           </div>
           <div class="list-group small">
@@ -281,20 +275,20 @@
             </div>
           </div>
         </div>
-        <!-- <div class="col-sm-5 col-xl-4">
-          <p class="mb-2 text-muted" *ngIf="!person.emailAddresses.length">No email</p>
+        <div class="col-sm-5 col-xl-4">
+          <p class="mb-2 text-muted" *ngIf="!selectedPerson.emailAddresses.length">No email</p>
           <p class="mb-2" *ngFor="let emailAddress of selectedPerson?.emailAddresses"><a (click)="$event.stopPropagation()"
               href="mailto:{{emailAddress.email}}">{{emailAddress?.email}}</a></p>
-        </div> -->
+        </div>
         <div class="col-12">
           <hr class="my-1">
         </div>
-        <!-- <div class="col-12">
-          <a href class="btn btn-link px-0" (click)="showHideMarkPrefs($event)" [attr.aria-expanded]="!isCollapsed[i]"
-            [attr.aria-controls]="'collapseMark'">Marketing Prefs <span
+        <div class="col-12">
+          <a href class="btn btn-link px-0" (click)="showHideMarkPrefs($event)" [attr.aria-expanded]="!isSelectedCollapsed"
+            aria-controls="collapseSelectedMark">Marketing Prefs <span
               class="badge badge-pill badge-primary">{{selectedPerson.marketingPreferences?.count || 0}}</span>
           </a>
-          <div [id]="'collapseMark'" [collapse]="!isCollapsed[i]">
+          <div id="collapseSelectedMark" [collapse]="!isSelectedCollapsed">
             <ul>
               <li *ngIf="selectedPerson.marketingPreferences?.marketBulletin">Quarterly bulletin</li>
               <li *ngIf="selectedPerson.marketingPreferences?.general">Special offers</li>
@@ -303,7 +297,7 @@
               <li *ngIf="selectedPerson.marketingPreferences?.general">Other occasional marketing</li>
             </ul>
           </div>
-        </div> -->
+        </div>
       </div>
   </a>
 </ng-template>

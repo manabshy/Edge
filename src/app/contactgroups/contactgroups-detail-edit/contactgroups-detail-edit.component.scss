@@ -12,3 +12,11 @@ form {
     }
 
 }
+
+:host-context(.off-canvas) {
+    .form-actions {
+        position: sticky;
+        width: 100%;
+        bottom: - $card-spacer-x;
+    }
+}
