@@ -137,12 +137,15 @@
                   </div>
                 </div>
                 <div class="form-group col type-col">
-                  <div class="custom-control custom-radio custom-control-inline" *ngFor="let type of contactGroupTypes | keyvalue:keepOriginalOrder; let i = index; last as isLast">
-                    <ng-container *ngIf="!isLast">
-                      <input type="radio" [id]="'individual' + i" name="contactType" class="custom-control-input" [value]="type.key" formControlName="contactType">
+                  <ng-container *ngFor="let type of contactGroupTypes | keyvalue:keepOriginalOrder; let i = index; last as isLast">
+                    <div class="custom-control custom-radio custom-control-inline" *ngIf="!isLast" 
+                      tooltip="Add 2 or more people to select this option" [containerClass]="type.key === 2 && contactGroupDetails?.contactPeople.length < 1 ? '' : 'd-none'">
+                      <input type="radio" [id]="'individual' + i" name="contactType" class="custom-control-input" 
+                        [value]="type.key" formControlName="contactType" 
+                        [attr.disabled]="type.key === 2 && contactGroupDetails?.contactPeople.length < 1 ? '' : null">
                       <label class="custom-control-label" [attr.for]="'individual' + i">{{type.value}}</label>
-                    </ng-container>
-                  </div>
+                    </div>
+                  </ng-container>
                 </div>
             </div>
           </div>
