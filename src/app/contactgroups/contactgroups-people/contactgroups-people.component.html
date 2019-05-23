@@ -12,13 +12,13 @@
           <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading contacts ...
         </div>
       </div>
-      <a [routerLink]="['../../../../detail', person?.personId ]" class="list-group-item list-group-item-action"
+      <a [routerLink]="person.isNewPerson ? null : ['../../../../detail', person?.personId ]" class="list-group-item list-group-item-action"
         *ngFor="let person of contactGroupDetails?.contactPeople ; index as i" [ngClass]="{'new-person': person.isNewPerson}">
         <div class="row">
           <div class="col-auto">
             <span class="badge badge-pill badge-info mb-2">Main Person</span>
           </div>
-          <div class="col text-right">
+          <div class="col text-right" *ngIf="!person.isNewPerson; else removePerson">
             <div dropdown placement="bottom right">
               <a class="dropdown-toggle" href [id]="'button' + i" dropdownToggle
                 (click)="$event.stopPropagation(); false" [attr.aria-controls]="'dropdown' + i">Actions <span
@@ -36,6 +36,12 @@
               </ul>
             </div>
           </div>
+          <ng-template #removePerson>
+            <div class="col text-right">
+              <a href (click)="removePerson($event, person.personId)"><i
+                class="fas fa-user-times"></i> Remove</a>
+            </div>
+          </ng-template>
           <div class="col-12 mb-2">
             <strong>{{person?.firstName}} {{person?.lastName}}</strong>&nbsp;
             <ng-container *ngIf="contactGroupDetails?.contactType === 4">&nbsp;
