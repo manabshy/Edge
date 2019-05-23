@@ -27,6 +27,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   selectedPersonId: number;
   isCreateNewPersonVisible = false;
   isLoadingNewPersonVisible = false;
+  initialContactGroupLength = 0;
   errorMessage: any;
   constructor(
     private contactGroupService: ContactGroupsService,
@@ -73,6 +74,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       .getContactGroupbyId(contactGroupId)
       .subscribe(data => {
         this.contactGroupDetails = data;
+        this.initialContactGroupLength = this.contactGroupDetails.contactPeople.length;
         this.populateFormDetails(data);
         this.addSelectedPeople();
         console.log('contact group people', this.contactGroupDetails);
@@ -81,6 +83,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
   getPersonDetails(personId: number) {
     this.contactGroupService.getPerson(personId).subscribe(data => {
+      data.isNewPerson = true;
       this.selectedPerson = data;
       this.collectSelectedPeople(data);
       console.log('selected person details here', this.selectedPerson);
@@ -112,8 +115,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
   selectPerson(id: number) {
     console.log('selected person id', id);
     this.selectedPersonId = id;
+    this.isLoadingNewPersonVisible = true;
     if (id !== 0) {
-      this.isLoadingNewPersonVisible = true;
       this.getPersonDetails(id);
       this.getContactGroupById(this.contactGroupId);
       this.personFinderForm.reset();

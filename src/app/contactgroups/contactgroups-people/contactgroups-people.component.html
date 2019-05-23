@@ -1,6 +1,9 @@
 <app-breadcrumb></app-breadcrumb>
 <div class="container">
   <h4 class="page-title">Contact group</h4>
+  <div class="alert alert-info" *ngIf="contactGroupDetails?.contactPeople.length > initialContactGroupLength">
+    There are pending changes on the people list. Save to make them effective.
+  </div>
   <form action="">
     <h5>People</h5>
     <div class="list-group mb-3">
@@ -10,7 +13,7 @@
         </div>
       </div>
       <a [routerLink]="['../../../../detail', person?.personId ]" class="list-group-item list-group-item-action"
-        *ngFor="let person of contactGroupDetails?.contactPeople ; index as i">
+        *ngFor="let person of contactGroupDetails?.contactPeople ; index as i" [ngClass]="{'new-person': person.isNewPerson}">
         <div class="row">
           <div class="col-auto">
             <span class="badge badge-pill badge-info mb-2">Main Person</span>

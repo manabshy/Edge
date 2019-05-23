@@ -25,6 +25,7 @@ export interface Person {
   uKResident: boolean;
   addressFull: string;
   rawData: any;
+  isNewPerson: boolean;
 }
 
 export interface BasicPerson {
