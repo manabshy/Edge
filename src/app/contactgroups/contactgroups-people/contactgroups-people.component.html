@@ -87,11 +87,16 @@
         <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading person details ...
       </div>
       <!-- <ng-container *ngTemplateOutlet="selectedPersonDetails" ></ng-container> -->
-      <a href (click)="showHideOffCanvas($event)" class="list-group-item list-group-item-action text-center py-4">
+      <a href (click)="showHideOffCanvas($event)" class="list-group-item list-group-item-action text-center py-4" *ngIf="contactGroupDetails?.contactPeople.length < 8; else maxLimit">
         <span class="btn-link">
           <i class="fas fa-user-plus"></i> Add Person
         </span>
       </a>
+      <ng-template #maxLimit>
+        <div class="list-group-item list-group-item-warning text-center">
+          You can add max 8 People per contact group.
+        </div>
+      </ng-template>
     </div>
     <h5>Details</h5>
    <form [formGroup]="contactGroupDetailsForm" class="pb-3">
