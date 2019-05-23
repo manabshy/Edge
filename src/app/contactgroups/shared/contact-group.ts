@@ -16,7 +16,7 @@ export interface ContactGroup {
   companyName: string;
   companyAddress: Address;
   relocationContactName?: string;
-  relocationAgent?: ContactGroup;
+  isRelocationAgent: boolean;
   assignedContactType?: string;
   currentUserName?: string;
   currentStaffMemberId?: number;
@@ -68,6 +68,8 @@ export interface ContactGroupAutoCompleteResult extends ContactGroupMetaDeta{
   middleNames: string;
   lastName: string;
   fullName: string;
+  addressee: string;
+  salution: string;
   emailAddresses: string[];
   phoneNumbers: string[];
   outcode: string;
@@ -82,6 +84,8 @@ export interface PeopleAutoCompleteResult {
   middleNames: string;
   lastName: string;
   fullName: string;
+  addressee: string;
+  salution: string;
   emailAddresses: string[];
   phoneNumbers: string[];
 }
@@ -97,6 +101,16 @@ export enum ContactType {
   Sharers = 2,
   CompanyContact = 4,
   ReloContact = 8
+}
+export const ContactGroupsTypes = new Map( [
+  [ContactType.Individual,  'Individual/Joint'],
+  [ContactType.Sharers,  'Multi/Sharer'],
+  [ContactType.CompanyContact,  'Company Contact'],
+  [ContactType.ReloContact,  'Relo Agent']
+]);
+export interface ContactGroupsType {
+  id: string;
+  name: string;
 }
 export interface ContactGroupAutoCompleteData extends ResultData {
   result: ContactGroupAutoCompleteResult[];

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Person, BasicPerson } from 'src/app/core/models/person';
-import { ContactGroup, PeopleAutoCompleteResult } from '../shared/contact-group';
+import { ContactGroup, PeopleAutoCompleteResult, ContactGroupsTypes, ContactType } from '../shared/contact-group';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 
@@ -44,7 +44,11 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.contactGroupDetailsForm = this.fb.group({
       salutation: [''],
       addressee: [''],
-      comments: ['']
+      comments: [''],
+      contactGroupTypes: this.fb.group({
+       isRelocationAgent: false,
+       groupType: 0
+      })
     });
     this.personFinderForm = this.fb.group({
       firstName: [''],
@@ -97,7 +101,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.contactGroupDetailsForm.patchValue({
       salutation: contactGroup.salutation,
       addressee: contactGroup.addressee,
-      comments: contactGroup.comments
+      comments: contactGroup.comments,
+      contactGroupTypes : {isRelocationAgent: contactGroup.isRelocationAgent, groupType: contactGroup.contactType}
     });
   }
 
@@ -119,6 +124,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     if (id !== 0) {
       this.getPersonDetails(id);
       this.getContactGroupById(this.contactGroupId);
+
       this.personFinderForm.reset();
     }
     this.isOffCanvasVisible = false;
@@ -135,6 +141,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     if (this.selectedPeople.length) {
       this.selectedPeople.forEach(x => {
         this.contactGroupDetails.contactPeople.push(x);
+        this.setSalution();
       });
     }
   }
@@ -162,6 +169,86 @@ export class ContactgroupsPeopleComponent implements OnInit {
   onSaveComplete(): void {
     console.log('contacts saved', this.contactGroupDetails);
     window.history.back();
+  }
+
+   /**
+   * Set the salutation and addressee based on contact type
+   */
+   setSalutationMobileApp(): void {
+    const people = this.contactGroupDetails.contactPeople;
+    let salutation = '';
+    let addressee = '';
+    // -->Set: people based on the fields
+    const setNames = function (person, ...fields): string {
+      return (person) ? fields
+        .filter(i => person[i])
+        .map(i => person[i])
+        .join(' ') : '';
+    };
+    // -->Set: salutation and addressee based on the contact type group
+    if (this.contactGroupDetails.contactType === ContactType.Individual) { // individual group
+      // -->Set: 1 people case
+      if (people.length === 1) {
+        salutation = setNames(people[0], 'title', 'lastName');
+        addressee = setNames(people[0], 'title', 'firstName', 'lastName');
+      }
+      // -->Set: 2 people group
+      if (people.length === 2) {
+        if (setNames(people[0], 'lastName') === setNames(people[1], 'lastName')) {
+          salutation = setNames(people[0], 'title') + ' & ' + setNames(people[1], 'title') + ' ' + setNames(people[0], 'lastName');
+          addressee = setNames(people[0], 'title') + ' & ' + setNames(people[1], 'title') + ' ' + setNames(people[0], 'firstName', 'lastName');
+        } else {
+          salutation = setNames(people[0], 'title', 'lastName') + ' & ' + setNames(people[1], 'title', 'lastName');
+
+          addressee = setNames(people[0], 'title', 'firstName', 'lastName') + ' & '
+            + setNames(people[1], 'title', 'firstName', 'lastName');
+        }
+      }
+    } else if (this.contactGroupDetails.contactType === ContactType.Sharers) { // share group
+      // Set: multiple people
+      if (people.length > 0) {
+        people.map(p => {
+          if (salutation.length <= 0) {
+            salutation += setNames(p, 'title', 'lastName');
+            addressee += setNames(p, 'title', 'firstName', 'lastName');
+          } else {
+            salutation += ' & ' + setNames(p, 'title', 'lastName');
+            addressee += ' & ' + setNames(p, 'title', 'firstName', 'lastName');
+          }
+        });
+      }
+    } else if (this.contactGroupDetails.contactType === ContactType.CompanyContact ||
+      this.contactGroupDetails.contactType === ContactType.ReloContact) { // company && relo company
+      // -->Set: 1 people case
+      if (people.length >= 1) {
+        salutation = setNames(people[0], 'title', 'lastName');
+        addressee = setNames(people[0], 'title', 'firstName', 'lastName');
+      }
+    }
+    // -->Set: salutation
+    this.contactGroupDetailsForm.patchValue({
+      salutation: salutation,
+      addressee: addressee
+    }, {onlySelf: false});
+    console.log('salution:', salutation, 'addressee:', addressee);
+  }
+  setSalution() {
+    const people = this.contactGroupDetails.contactPeople;
+    let salutation = '';
+    let addressee = '';
+    let counter = 0;
+    let seperator = '';
+    people.forEach(person => {
+      seperator = counter === 0 ? '' : (counter === people.length - 1 ? ' & ' : ' , ');
+      addressee += seperator + person.addressee;
+      salutation += seperator + person.title + ' ' + person.lastName;
+      counter++;
+    });
+    this.contactGroupDetailsForm.patchValue({
+      salutation: salutation,
+      addressee: addressee
+    }, {onlySelf: false});
+    console.log('salution:', salutation, 'addressee:', addressee);
   }
 
   hideCanvas(event) {

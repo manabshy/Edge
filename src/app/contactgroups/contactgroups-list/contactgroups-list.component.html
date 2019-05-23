@@ -32,7 +32,7 @@
                 </ng-container>
                 <ng-container
                   *ngFor="let people of cG.contactPeople; last as isLast">
-                  {{people.fullName}}<ng-container *ngIf="!isLast">, </ng-container>
+                  {{people.addressee}}<ng-container *ngIf="!isLast">, </ng-container>
                 </ng-container>
               </div>
           </div>

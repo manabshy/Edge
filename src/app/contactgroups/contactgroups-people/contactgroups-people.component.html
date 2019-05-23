@@ -117,26 +117,28 @@
     <div class="row mt-3 justify-content-end">
       <div class="col-sm-10">
         <div class="row">
-          <div class="form-group col-sm-auto">
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input" id="relAgent">
-              <label class="custom-control-label" for="relAgent">Is Relocation Agent</label>
+         <!-- <div formGroupName="contactGroupTypes">
+            <div class="form-group col-sm-auto">
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="relAgent" formControlName="isRelocationAgent">
+                <label class="custom-control-label" for="relAgent" >Is Relocation Agent</label>
+              </div>
             </div>
-          </div>
-          <div class="form-group col type-col">
-            <div class="custom-control custom-radio custom-control-inline">
-              <input type="radio" id="individual" name="type" class="custom-control-input">
-              <label class="custom-control-label" for="individual">Individual/Joint</label>
+            <div class="form-group col type-col">
+              <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="individual" name="groupType" class="custom-control-input" formControlName="groupType">
+                <label class="custom-control-label" for="individual" >Individual/Joint</label>
+              </div>
+              <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="multi" name="groupType" class="custom-control-input"  formControlName="groupType">
+                <label class="custom-control-label" for="multi">Multi/Shares</label>
+              </div>
+              <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="company" name="groupType" class="custom-control-input" formControlName="groupType">
+                <label class="custom-control-label" for="company" >Company contact</label>
+              </div>
             </div>
-            <div class="custom-control custom-radio custom-control-inline">
-              <input type="radio" id="multi" name="type" class="custom-control-input">
-              <label class="custom-control-label" for="multi">Multi/Shares</label>
-            </div>
-            <div class="custom-control custom-radio custom-control-inline">
-              <input type="radio" id="company" name="type" class="custom-control-input">
-              <label class="custom-control-label" for="company">Company contact</label>
-            </div>
-          </div>
+         </div> -->
         </div>
       </div>
     </div>
@@ -209,7 +211,7 @@
                 <div class="col-sm">
                   <dl class="row">
                     <dt class="col-4 d-sm-none">Full Name</dt>
-                    <dd class="col">{{foundPerson.fullName}}</dd>
+                    <dd class="col">{{foundPerson.addressee}}</dd>
                   </dl>
                 </div>
                 <div class="col-sm">
