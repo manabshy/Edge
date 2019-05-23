@@ -63,6 +63,15 @@ export class ContactGroupsService {
       catchError(this.handleError)
       );
   }
+  updateContactGroup(contactGroup: ContactGroup): Observable<any> {
+    const url = `${AppConstants.baseContactGroupUrl}/${contactGroup.contactGroupId}`;
+    return this.http.put(url, contactGroup).pipe(
+      map(response => response),
+      retry(3),
+      tap(data => console.log('updated contact details here...', JSON.stringify(data))),
+      catchError(this.handleError)
+      );
+  }
 
   private handleError(err: HttpErrorResponse) {
     let errorMessage = '';
