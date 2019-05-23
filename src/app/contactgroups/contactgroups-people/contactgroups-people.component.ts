@@ -18,7 +18,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   personId: number;
   groupPersonId: number;
   contactGroupId: number;
-  contactPeople: Person[];
+  selectedPeople: Person[] = [];
   foundPeople: PeopleAutoCompleteResult[];
   contactGroupDetails: ContactGroup;
   contactGroupDetailsForm: FormGroup;
@@ -62,12 +62,14 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.contactGroupService.getContactGroupbyId(contactGroupId).subscribe(data => {
       this.contactGroupDetails = data;
       this.populateFormDetails(data);
+      this.addSelectedPeople();
       console.log('contact group people', this.contactGroupDetails);
     });
   }
   getPersonDetails(personId: number) {
     this.contactGroupService.getPerson(personId).subscribe(data => {
       this.selectedPerson = data;
+      this.collectSelectedPeople(data);
       console.log('selected person details here', this.selectedPerson);
     });
   }
@@ -109,19 +111,31 @@ export class ContactgroupsPeopleComponent implements OnInit {
     event.stopPropagation();
     this.isOffCanvasVisible = !this.isOffCanvasVisible;
   }
+
  selectPerson(id: number ) {
   console.log('selected person id', id);
   this.selectedPersonId = id;
   if (id !== 0) {
     this.getPersonDetails(id);
-    if (this.selectedPerson !== undefined) {
-      this.contactGroupDetails.contactPeople.push(this.selectedPerson);
-      console.log('selected person added to group', this.contactGroupDetails.contactPeople);
-    }
-   this.personFinderForm.reset();
+    this.getContactGroupById(this.contactGroupId);
+    this.personFinderForm.reset();
   }
   this.isOffCanvasVisible = false;
   this.selectedPersonId = 0;
+ }
+
+ collectSelectedPeople(person: Person) {
+  if (this.selectedPeople) {
+    this.selectedPeople.push(person);
+  }
+ }
+
+ addSelectedPeople() {
+  if (this.selectedPeople.length) {
+      this.selectedPeople.forEach(x => {
+      this.contactGroupDetails.contactPeople.push(x);
+    });
+  }
  }
 
  showEditedPersonDetails(id) {
