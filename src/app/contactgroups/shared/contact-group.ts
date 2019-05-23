@@ -15,6 +15,7 @@ export interface ContactGroup {
   companyId?: number;
   companyName: string;
   companyAddress: Address;
+  referenceCount: number;
   relocationContactName?: string;
   isRelocationAgent: boolean;
   assignedContactType?: string;

@@ -161,8 +161,14 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   saveContactGroup() {
-    if (this.selectedPeople.length) {
+    if (this.selectedPeople.length && this.contactGroupDetails.referenceCount === 0) {
       const contactGroup = {...this.contactGroupDetails, ...this.contactGroupDetailsForm.value};
+      const contactPeople = this.contactGroupDetails.contactPeople.length;
+      if (contactPeople > 2 && contactGroup.contactType === ContactType.Individual) {
+        contactGroup.contactType = ContactType.Sharers;
+      } else  if (contactPeople < 2 && contactGroup.contactType === ContactType.Sharers) {
+        contactGroup.contactType = ContactType.Individual;
+      }
       console.log('contact to add', contactGroup);
       this.contactGroupService
         .updateContactGroup(contactGroup)
@@ -170,7 +176,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
           () => this.onSaveComplete(),
           (error: any) => (this.errorMessage = <any>error)
         );
-
     }
   }
   onSaveComplete(): void {
@@ -178,67 +183,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
     window.history.back();
   }
 
-   /**
-   * Set the salutation and addressee based on contact type
-   */
-   setSalutationMobileApp(): void {
-    const people = this.contactGroupDetails.contactPeople;
-    let salutation = '';
-    let addressee = '';
-    // -->Set: people based on the fields
-    const setNames = function (person, ...fields): string {
-      return (person) ? fields
-        .filter(i => person[i])
-        .map(i => person[i])
-        .join(' ') : '';
-    };
-    // -->Set: salutation and addressee based on the contact type group
-    if (this.contactGroupDetails.contactType === ContactType.Individual) { // individual group
-      // -->Set: 1 people case
-      if (people.length === 1) {
-        salutation = setNames(people[0], 'title', 'lastName');
-        addressee = setNames(people[0], 'title', 'firstName', 'lastName');
-      }
-      // -->Set: 2 people group
-      if (people.length === 2) {
-        if (setNames(people[0], 'lastName') === setNames(people[1], 'lastName')) {
-          salutation = setNames(people[0], 'title') + ' & ' + setNames(people[1], 'title') + ' ' + setNames(people[0], 'lastName');
-          addressee = setNames(people[0], 'title') + ' & ' + setNames(people[1], 'title') + ' ' + setNames(people[0], 'firstName', 'lastName');
-        } else {
-          salutation = setNames(people[0], 'title', 'lastName') + ' & ' + setNames(people[1], 'title', 'lastName');
-
-          addressee = setNames(people[0], 'title', 'firstName', 'lastName') + ' & '
-            + setNames(people[1], 'title', 'firstName', 'lastName');
-        }
-      }
-    } else if (this.contactGroupDetails.contactType === ContactType.Sharers) { // share group
-      // Set: multiple people
-      if (people.length > 0) {
-        people.map(p => {
-          if (salutation.length <= 0) {
-            salutation += setNames(p, 'title', 'lastName');
-            addressee += setNames(p, 'title', 'firstName', 'lastName');
-          } else {
-            salutation += ' & ' + setNames(p, 'title', 'lastName');
-            addressee += ' & ' + setNames(p, 'title', 'firstName', 'lastName');
-          }
-        });
-      }
-    } else if (this.contactGroupDetails.contactType === ContactType.CompanyContact ||
-      this.contactGroupDetails.contactType === ContactType.ReloContact) { // company && relo company
-      // -->Set: 1 people case
-      if (people.length >= 1) {
-        salutation = setNames(people[0], 'title', 'lastName');
-        addressee = setNames(people[0], 'title', 'firstName', 'lastName');
-      }
-    }
-    // -->Set: salutation
-    this.contactGroupDetailsForm.patchValue({
-      salutation: salutation,
-      addressee: addressee
-    }, {onlySelf: false});
-    console.log('salution:', salutation, 'addressee:', addressee);
-  }
   setSalution() {
     const people = this.contactGroupDetails.contactPeople;
     let salutation = '';
