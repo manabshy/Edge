@@ -70,7 +70,7 @@
             <div class="row">
               <div class="col">
                   <ng-container *ngFor="let contactPerson of searchedPersonContactGroup.contactPeople; last as isLast">
-                      {{contactPerson.fullName}}
+                      {{contactPerson.addressee}}
                       <ng-container *ngIf="!isLast">, </ng-container>
                   </ng-container>
               </div>

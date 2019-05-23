@@ -15,6 +15,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isCollapsed = {};
   isSelectedCollapsed = false;
   isOffCanvasVisible = false;
+  contactGroupTypes: any;
   personId: number;
   groupPersonId: number;
   contactGroupId: number;
@@ -29,6 +30,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isLoadingNewPersonVisible = false;
   initialContactGroupLength = 0;
   errorMessage: any;
+  public keepOriginalOrder = (a) => a.key;
   constructor(
     private contactGroupService: ContactGroupsService,
     private fb: FormBuilder,
@@ -36,6 +38,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.contactGroupTypes =  ContactGroupsTypes;
+    console.log('contact types here', this.contactGroupTypes);
     this.route.params.subscribe(params => {
       this.contactGroupId = +params['contactGroupId'] || 0;
       this.groupPersonId = +params['groupPersonId'] || 0;
@@ -45,10 +49,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
       salutation: [''],
       addressee: [''],
       comments: [''],
-      contactGroupTypes: this.fb.group({
-       isRelocationAgent: false,
-       groupType: 0
-      })
+      isRelocationAgent: false,
+      contactType: 0
     });
     this.personFinderForm = this.fb.group({
       firstName: [''],
@@ -102,8 +104,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
       salutation: contactGroup.salutation,
       addressee: contactGroup.addressee,
       comments: contactGroup.comments,
-      contactGroupTypes : {isRelocationAgent: contactGroup.isRelocationAgent, groupType: contactGroup.contactType}
+      isRelocationAgent: contactGroup.isRelocationAgent,
+      contactType: contactGroup.contactType
     });
+    console.log('contact type', this.contactGroupDetailsForm);
   }
 
   findPerson(person: BasicPerson) {
@@ -158,12 +162,15 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   saveContactGroup() {
     if (this.selectedPeople.length) {
+      const contactGroup = {...this.contactGroupDetails, ...this.contactGroupDetailsForm.value};
+      console.log('contact to add', contactGroup);
       this.contactGroupService
-        .updateContactGroup(this.contactGroupDetails)
+        .updateContactGroup(contactGroup)
         .subscribe(
           () => this.onSaveComplete(),
           (error: any) => (this.errorMessage = <any>error)
         );
+
     }
   }
   onSaveComplete(): void {
