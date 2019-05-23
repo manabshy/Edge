@@ -80,6 +80,9 @@
           </div>
         </div>
       </a>
+      <div class="list-group-item text-center" *ngIf="isLoadingNewPersonVisible">
+        <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading person details ...
+      </div>
       <!-- <ng-container *ngTemplateOutlet="selectedPersonDetails" ></ng-container> -->
       <a href (click)="showHideOffCanvas($event)" class="list-group-item list-group-item-action text-center py-4">
         <span class="btn-link">

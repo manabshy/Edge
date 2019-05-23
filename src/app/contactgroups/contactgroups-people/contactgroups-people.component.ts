@@ -26,6 +26,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   selectedPerson: Person;
   selectedPersonId: number;
   isCreateNewPersonVisible = false;
+  isLoadingNewPersonVisible = false;
   errorMessage: any;
   constructor(
     private contactGroupService: ContactGroupsService,
@@ -75,6 +76,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.populateFormDetails(data);
         this.addSelectedPeople();
         console.log('contact group people', this.contactGroupDetails);
+        this.isLoadingNewPersonVisible = false;
       });
   }
   getPersonDetails(personId: number) {
@@ -111,6 +113,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     console.log('selected person id', id);
     this.selectedPersonId = id;
     if (id !== 0) {
+      this.isLoadingNewPersonVisible = true;
       this.getPersonDetails(id);
       this.getContactGroupById(this.contactGroupId);
       this.personFinderForm.reset();
