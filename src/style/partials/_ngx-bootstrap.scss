@@ -33,3 +33,14 @@ bs-datepicker-container {
         }
     }
 }
+
+
+popover-container {
+    &.alert-warning {
+        .arrow{
+            &::after {
+                border-top-color: theme-color-level('warning', $alert-bg-level);
+            }
+        }
+    }
+}

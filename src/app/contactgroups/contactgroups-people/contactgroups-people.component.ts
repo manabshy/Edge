@@ -132,6 +132,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.personFinderForm.reset();
     }
     this.isOffCanvasVisible = false;
+    window.scrollTo(0,0);
     this.selectedPersonId = 0;
   }
 
