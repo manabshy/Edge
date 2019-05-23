@@ -6,7 +6,9 @@ export interface Person {
   lastName: string;
   middleName: string;
   fullName: string;
+  addressee: string;
   titleId: TitleId;
+  title?: string;
   titleOther?: string;
   emailAddresses: Email[];
   phoneNumbers: PhoneNumber[];
@@ -86,6 +88,7 @@ export const PeopleTitles  = <PersonTitle[]>[
   {id: 'Other', name: 'Other'},
 ];
 
+
 export interface PersonTitle {
   id: string;
   name: string;
@@ -122,6 +125,10 @@ export enum TitleId {
   Lord = 8,
   Other = 100
 }
+export const Titles  = new Map<number, string>([
+  [TitleId.Mr, 'Mr'],
+]);
+
 export enum TelephoneTypeId {
   Home = 1,
   Work = 2,
