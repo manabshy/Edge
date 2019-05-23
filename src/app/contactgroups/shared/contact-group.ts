@@ -105,8 +105,8 @@ export enum ContactType {
 export const ContactGroupsTypes = new Map( [
   [ContactType.Individual,  'Individual/Joint'],
   [ContactType.Sharers,  'Multi/Sharer'],
-  [ContactType.CompanyContact,  'Company Contact'],
-  [ContactType.ReloContact,  'Relo Agent']
+  [ContactType.CompanyContact,  'Company Contact']
+  // [ContactType.ReloContact,  'Relo Agent']
 ]);
 export interface ContactGroupsType {
   id: string;
