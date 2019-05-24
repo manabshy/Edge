@@ -144,7 +144,8 @@
                 <div class="form-group col type-col">
                   <ng-container *ngFor="let type of contactGroupTypes | keyvalue:keepOriginalOrder; let i = index; last as isLast">
                     <div class="custom-control custom-radio custom-control-inline" *ngIf="!isLast" 
-                      [tooltip]="type.key === 1 ? 'Remove people to select this option' : 'Add 2 or more people to select this option'" [containerClass]="isTypeDisabled(type.key) ? '' : 'd-none'">
+                      [tooltip]="type.key === 1 ? 'Remove people to select this option' : 'Add 2 or more people to select this option'" 
+                      [containerClass]="isTypeDisabled(type.key) ? '' : 'd-none'" placement="auto">
                       <input type="radio" [id]="'individual' + i" name="contactType" class="custom-control-input" 
                         [value]="type.key" formControlName="contactType" 
                         [attr.disabled]="isTypeDisabled(type.key) ? '' : null">
