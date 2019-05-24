@@ -20,10 +20,11 @@
           <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading contacts ...
         </div>
       </div>
-      <a [routerLink]="person.isNewPerson ? null : ['../../../../detail', person?.personId ]" class="list-group-item list-group-item-action"
+      <div class="list-group-item"
         *ngFor="let person of contactGroupDetails?.contactPeople ; index as i" [ngClass]="{'new-person': person.isNewPerson}">
         <div class="row">
           <div class="col-auto">
+            <app-score-badge [person]="person"></app-score-badge>
             <span class="badge badge-pill badge-info mb-2">Main Person</span>
           </div>
           <div class="col text-right" *ngIf="!person.isNewPerson; else removeSelectedPerson">
@@ -36,6 +37,9 @@
                 <li role="menuitem"><a class="dropdown-item" (click)="$event.stopPropagation();"
                     [routerLink]="['../../edit']" [queryParams]="{groupPersonId: person.personId }"><i
                       class="fas fa-edit"></i> Edit</a></li>
+                <li role="menuitem"><a class="dropdown-item" (click)="$event.stopPropagation();"
+                  [routerLink]="person.isNewPerson ? null : ['../../../../detail', person?.personId ]">
+                  <i class="fas fa-address-card"></i> View</a></li>
                 <li role="menuitem">
                   <a class="dropdown-item" href="#"><i class="fas fa-user-shield"></i> Set Main Person</a>
                 </li>
@@ -61,19 +65,19 @@
 
             <span class="badge badge-success">AML Valid</span> -->
           </div>
-          <div class="col-sm-4 mb-2">{{person?.address | formatAddress}}<span class="text-muted"
+          <div class="col-sm-4 mb-2">{{person?.address | formatAddress}}<span class="text-danger"
               *ngIf="!(person.address | formatAddress)">No address</span></div>
           <div class="col-sm-3 col-xl-4">
             <div class="row">
               <div class="col-6 telephone">
-                <p class="mb-2 text-muted" *ngIf="!person.phoneNumbers.length">No phone</p>
+                <p class="mb-2 text-danger" *ngIf="!person.phoneNumbers.length">No phone</p>
                 <p class="mb-2" *ngFor="let phoneNumber of person?.phoneNumbers"><a (click)="$event.stopPropagation()"
                     href="tel:{{phoneNumber.number}}">{{phoneNumber?.number}}</a><br />{{phoneNumber?.telephoneId}}</p>
               </div>
             </div>
           </div>
           <div class="col-sm-5 col-xl-4">
-            <p class="mb-2 text-muted" *ngIf="!person.emailAddresses.length">No email</p>
+            <p class="mb-2 text-danger" *ngIf="!person.emailAddresses.length">No email</p>
             <p class="mb-2" *ngFor="let emailAddress of person?.emailAddresses"><a (click)="$event.stopPropagation()"
                 href="mailto:{{emailAddress.email}}">{{emailAddress?.email}}</a></p>
           </div>
@@ -96,7 +100,7 @@
             </div>
           </div>
         </div>
-      </a>
+      </div>
       <div class="list-group-item text-center" *ngIf="isLoadingNewPersonVisible">
         <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading person details ...
       </div>
@@ -292,23 +296,23 @@
             <span class="badge badge-pill badge-info">{{contactGroupDetails?.companyName}}</span>
           </ng-container>
         </div>
-        <div class="col-sm-4 mb-2">{{selectedPerson.address | formatAddress}}<span class="text-muted"
+        <div class="col-sm-4 mb-2">{{selectedPerson.address | formatAddress}}<span class="text-danger"
               *ngIf="!(selectedPerson.address | formatAddress)">No address</span>
         </div>
         <div class="col-sm-3 col-xl-4">
           <div class="row">
             <div class="col-6 telephone">
-              <p class="mb-2 text-muted" *ngIf="!selectedPerson.phoneNumbers.length">No phone</p>
+              <p class="mb-2 text-danger" *ngIf="!selectedPerson.phoneNumbers.length">No phone</p>
               <p class="mb-2" *ngFor="let phoneNumber of selectedPerson?.phoneNumbers"><a
                   (click)="$event.stopPropagation()"
-                  href="tel:{{phoneNumber.number}}" *ngIf="phoneNumber?.number; else noPhone">{{phoneNumber?.number}}</a><ng-template #noPhone><span class="text-muted">No Phone</span></ng-template><br /></p>
+                  href="tel:{{phoneNumber.number}}" *ngIf="phoneNumber?.number; else noPhone">{{phoneNumber?.number}}</a><ng-template #noPhone><span class="text-danger">No Phone</span></ng-template><br /></p>
             </div>
           </div>
         </div>
         <div class="col-sm-5 col-xl-4">
-          <p class="mb-2 text-muted" *ngIf="!selectedPerson.emailAddresses.length">No email</p>
+          <p class="mb-2 text-danger" *ngIf="!selectedPerson.emailAddresses.length">No email</p>
           <p class="mb-2" *ngFor="let emailAddress of selectedPerson?.emailAddresses"><a (click)="$event.stopPropagation()"
-              href="mailto:{{emailAddress.email}}" *ngIf="emailAddress?.email; else noEmail">{{emailAddress?.email}}</a><ng-template #noEmail><span class="text-muted">No Email</span></ng-template></p>
+              href="mailto:{{emailAddress.email}}" *ngIf="emailAddress?.email; else noEmail">{{emailAddress?.email}}</a><ng-template #noEmail><span class="text-danger">No Email</span></ng-template></p>
         </div>
         <div class="col-12">
           <hr class="my-1">

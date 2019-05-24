@@ -28,14 +28,15 @@ import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 import { PropertyFinderComponent } from './property-finder/property-finder.component';
 import { FormatAddressPipe } from './shared/format-address.pipe';
+import { ScoreBadgeComponent } from './score-badge/score-badge.component';
 
 @NgModule({
   declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent,
-    ConfirmModalComponent, PropertyFinderComponent, FormatAddressPipe],
+    ConfirmModalComponent, PropertyFinderComponent, FormatAddressPipe, ScoreBadgeComponent],
   exports: [
     RoundingPipe, TruncatingPipe, ShortenNamePipe, FormatAddressPipe,
     BreadcrumbComponent, BasicSearchComponent,
-    ConfirmModalComponent, PropertyFinderComponent, BsDropdownModule,
+    ConfirmModalComponent, PropertyFinderComponent,ScoreBadgeComponent, BsDropdownModule,
     CollapseModule, TabsModule, TypeaheadModule,
     BsDatepickerModule, ModalModule, PopoverModule,  NgPipesModule,
     TooltipModule, AccordionModule, ButtonsModule, ReactiveFormsModule, FormsModule
