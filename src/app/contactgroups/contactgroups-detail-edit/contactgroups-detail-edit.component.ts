@@ -2,10 +2,11 @@ import { Component, OnInit, Input, Output } from '@angular/core';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ContactGroupsService } from '../shared/contact-groups.service';
-import { Person, Email, PhoneNumber } from 'src/app/core/models/person';
+import { Person, Email, PhoneNumber, BasicPerson } from 'src/app/core/models/person';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { EventEmitter } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-contactgroups-detail-edit',
@@ -13,100 +14,101 @@ import { EventEmitter } from '@angular/core';
   styleUrls: ['./contactgroups-detail-edit.component.scss']
 })
 export class ContactgroupsDetailEditComponent implements OnInit {
-@Output() editedPersonId = new EventEmitter<number>();
-@Output() hideCanvas = new EventEmitter<boolean>();
-@Output() backToFinder = new EventEmitter<boolean>();
-@Input() foundPersonId: number;
-countries: any;
-titles: any;
-telephoneTypes: any;
-listInfo: any;
-titleSelected = 1;
-defaultCountryCode = 232;
-telephoneTypeSelected = 1;
-personDetails: Person;
-personForm: FormGroup;
-personId: number;
-id: number;
-groupPersonId: number;
-isOffCanvasVisible = false;
-returnUrl: string;
-errorMessage: string;
-errorsMessage: any = [];
-emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-validationMessagesSimple = {
+  @Output() editedPersonId = new EventEmitter<number>();
+  @Output() hideCanvas = new EventEmitter<boolean>();
+  @Output() backToFinder = new EventEmitter<boolean>();
+  @Input() foundPersonId: number;
+  @Input() basicPerson: BasicPerson;
+  countries: any;
+  titles: any;
+  telephoneTypes: any;
+  listInfo: any;
+  titleSelected = 1;
+  defaultCountryCode = 232;
+  telephoneTypeSelected = 1;
+  personDetails: Person;
+  personForm: FormGroup;
+  personId: number;
+  id: number;
+  groupPersonId: number;
+  isOffCanvasVisible = false;
+  returnUrl: string;
+  errorMessage: string;
+  errorsMessage: any = [];
+  emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  validationMessagesSimple = {
     required: 'is required.',
     maxlength: 'must be less than # characters.',
-};
-validationMessages = {
-  'firstName': {
-    required: 'First name is required.',
-    minlength: 'First name must be greater than 2 characters',
-    maxlength: 'First name must be less than 40 characters.',
-  },
-  'lastName': {
-    required: 'Last name is required.',
-    minlength: 'Last name must be greater than 2 characters',
-    maxlength: 'Last name must be less than 80 characters.',
-  },
-  'emailAddress': {
+  };
+  validationMessages = {
+    'firstName': {
+      required: 'First name is required.',
+      minlength: 'First name must be greater than 2 characters',
+      maxlength: 'First name must be less than 40 characters.',
+    },
+    'lastName': {
+      required: 'Last name is required.',
+      minlength: 'Last name must be greater than 2 characters',
+      maxlength: 'Last name must be less than 80 characters.',
+    },
+    'emailAddress': {
+      'email': {
+        required: ' Email is required.'
+      },
+    },
     'email': {
       required: ' Email is required.'
     },
-  },
-  'email': {
-    required: ' Email is required.'
-  },
-  'address': {
-    required: 'Address is required.'
-  },
-  'number': {
-    required: 'Phone is required.'
-  },
-  'inCode': {
-    required: 'Postcode is required.',
-    minlength: 'Incode must be 3 characters.',
-    maxlength: 'Incode cannot be more than 3 characters.',
-  },
-  'outCode': {
-    required: 'Postcode is required.',
-    minlength: 'outCode must be 3 characters or more.',
-    maxlength: 'outCode cannot be more than 4 characters.',
-  },
-};
+    'address': {
+      required: 'Address is required.'
+    },
+    'number': {
+      required: 'Phone is required.'
+    },
+    'inCode': {
+      required: 'Postcode is required.',
+      minlength: 'Incode must be 3 characters.',
+      maxlength: 'Incode cannot be more than 3 characters.',
+    },
+    'outCode': {
+      required: 'Postcode is required.',
+      minlength: 'outCode must be 3 characters or more.',
+      maxlength: 'outCode cannot be more than 4 characters.',
+    },
+  };
 
-formErrors = {
-  'firstName': '',
-  'lastName': '',
-  'email': '',
-  'emailAddresses': {
+  formErrors = {
+    'firstName': '',
+    'lastName': '',
     'email': '',
-  },
-  'address': '',
-  'number' : '',
-  'inCode' : '',
-  'outCode' : ''
-};
+    'emailAddresses': {
+      'email': '',
+    },
+    'address': '',
+    'number': '',
+    'inCode': '',
+    'outCode': ''
+  };
 
-get showPostCode(): boolean {
- return this.address.get('countryId').value === this.defaultCountryCode;
-}
-get address():  FormGroup {
-  return <FormGroup> this.personForm.get('address');
-}
-get emailAddresses(): FormArray {
-  return <FormArray> this.personForm.get('emailAddresses');
-}
-get phoneNumbers(): FormArray {
-  return <FormArray> this.personForm.get('phoneNumbers');
-}
-public keepOriginalOrder = (a) => a.key;
+  get showPostCode(): boolean {
+    return this.address.get('countryId').value === this.defaultCountryCode;
+  }
+  get address(): FormGroup {
+    return <FormGroup>this.personForm.get('address');
+  }
+  get emailAddresses(): FormArray {
+    return <FormArray>this.personForm.get('emailAddresses');
+  }
+  get phoneNumbers(): FormArray {
+    return <FormArray>this.personForm.get('phoneNumbers');
+  }
+  public keepOriginalOrder = (a) => a.key;
   constructor(public sharedService: SharedService,
-              private contactGroupService: ContactGroupsService,
-              private fb: FormBuilder,
-              private route: ActivatedRoute,
-              private _location: Location,
-              private router: Router) { }
+    private contactGroupService: ContactGroupsService,
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private _location: Location,
+    private router: Router) { }
 
   ngOnInit() {
     this.listInfo = this.sharedService.dropdownListInfo;
@@ -116,22 +118,16 @@ public keepOriginalOrder = (a) => a.key;
     this.route.params.subscribe(params => this.personId = +params['personId'] || 0);
     this.route.queryParams.subscribe(params => {
       this.groupPersonId = +params['groupPersonId'] || 0;
-      // this.foundPersonId = +params['foundPersonId'] || 0;
     });
     this.setupEditForm();
-    if (this.personId) {
-      this.id = this.personId;
+    const id = this.groupPersonId !== 0 ? this.groupPersonId : this.personId;
+    if (this.basicPerson !== undefined) {
+      this.populateNewPersonDetails();
+    } else {
+      this.getPersonDetails(id);
     }
-    if (this.groupPersonId && this.personId) {
-      this.id = this.groupPersonId;
-    }
-    if (this.foundPersonId && this.personId) {
-      this.id = this.foundPersonId;
-    }
-    // const id = this.groupPersonId !== 0 ? this.groupPersonId : this.personId;
-    this.getPersonDetails(this.id);
     this.personForm.valueChanges
-    .subscribe(() => this.logValidationErrors(this.personForm));
+      .subscribe(() => this.logValidationErrors(this.personForm));
   }
 
   logValidationErrors(group: FormGroup = this.personForm) {
@@ -140,14 +136,14 @@ public keepOriginalOrder = (a) => a.key;
       const messages = this.validationMessages[key];
       this.formErrors[key] = '';
       if (control && !control.valid && (control.touched || control.dirty)) {
-        for (const errorKey  in control.errors) {
+        for (const errorKey in control.errors) {
           if (errorKey) {
             this.formErrors[key] += messages[errorKey] + '';
           }
         }
       }
       if (control instanceof FormGroup) {
-       this.logValidationErrors(control);
+        this.logValidationErrors(control);
       }
     });
   }
@@ -174,41 +170,51 @@ public keepOriginalOrder = (a) => a.key;
     this.contactGroupService.getPerson(personId).subscribe(data => {
       this.personDetails = data;
       console.log('person details', this.personDetails);
-     this.displayPersonDetails(data);
+      this.displayPersonDetails(data);
     }, error => this.errorMessage = <any>error);
+  }
+
+  populateNewPersonDetails() {
+    if (this.personForm) {
+      this.personForm.reset();
+    }
+    this.personForm.patchValue({
+      firstName: this.basicPerson.firstName,
+      lastName: this.basicPerson.lastName
+    });
+    console.log('this is called', this.personForm.value);
   }
 
   displayPersonDetails(person: Person) {
     if (this.personForm) {
       this.personForm.reset();
-     }
-     this.personDetails = person;
-     this.personForm.patchValue({
-      titleSelected: person.titleId,
+    }
+    this.personDetails = person;
+    this.personForm.patchValue({
+      titleSelected: person.titleId !== null ? person.titleId : 1,
       //  title: person.title,
-       firstName: person.firstName,
-       middleName: person.middleName,
-       lastName: person.lastName,
-       amlCompletedDate: person.amlCompletedDate,
-       address: {
+      firstName: person.firstName,
+      middleName: person.middleName,
+      lastName: person.lastName,
+      amlCompletedDate: person.amlCompletedDate,
+      address: {
         addressLines: person.address.addressLines,
         outCode: person.address.outCode,
         inCode: person.address.inCode,
         countryId: person.address.countryId,
         country: person.address.country,
-       },
-       contactBy: {email: person.contactByEmail, phone: person.contactByPhone},
-       marketingPreferences: {
+      },
+      contactBy: { email: person.contactByEmail, phone: person.contactByPhone },
+      marketingPreferences: {
         marketBulletin: person.marketingPreferences.marketBulletin,
         offersSurveys: person.marketingPreferences.offersSurveys,
         events: person.marketingPreferences.events,
         newHomes: person.marketingPreferences.newHomes,
         general: person.marketingPreferences.general
       }
-     });
-     this.personForm.setControl('emailAddresses', this.setExistingEmailAddresses(person.emailAddresses));
-     this.personForm.setControl('phoneNumbers', this.setExistingPhoneNumbers(person.phoneNumbers));
-
+    });
+    this.personForm.setControl('emailAddresses', this.setExistingEmailAddresses(person.emailAddresses));
+    this.personForm.setControl('phoneNumbers', this.setExistingPhoneNumbers(person.phoneNumbers));
   }
 
   setExistingPhoneNumbers(phoneNumbers: PhoneNumber[]): FormArray {
@@ -227,45 +233,45 @@ public keepOriginalOrder = (a) => a.key;
 
   setExistingEmailAddresses(emailAddresses: Email[]): FormArray {
     const emailFormArray = new FormArray([]);
-      emailAddresses.forEach(x => {
-        emailFormArray.push(this.fb.group({
-          email: x.email,
-          isPrimaryWebEmail: x.isPrimaryWebEmail
-        }));
-      });
-      emailFormArray.push(this.createEmailItem());
-      return emailFormArray;
+    emailAddresses.forEach(x => {
+      emailFormArray.push(this.fb.group({
+        email: x.email,
+        isPrimaryWebEmail: x.isPrimaryWebEmail
+      }));
+    });
+    emailFormArray.push(this.createEmailItem());
+    return emailFormArray;
   }
 
-    setupEditForm() {
-      this.personForm = this.fb.group({
-        titleSelected: [''],
-        firstName: ['', [Validators.required, Validators.maxLength(40)]],
-        middleName: ['', Validators.maxLength(50)],
-        lastName: ['', [Validators.required, Validators.maxLength(80)]],
-        fullAddress: [''],
-        address: this.fb.group({
-          addressLines: ['', Validators.maxLength(500)],
-          countryId: 0,
-          inCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
-          outCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(4)]],
-        }),
-        contactBy: this.fb.group({
-          email: [false],
-          phone: [false]
-        }),
-        marketingPreferences: this.fb.group({
-          marketBulletin: [false],
-          offersSurveys: [false],
-          events: [false],
-          newHomes: [false],
-          general: [false],
-          count: 0
-        }),
-        amlCompletedDate: [''],
-        emailAddresses: this.fb.array([this.createEmailItem()]),
-        phoneNumbers: this.fb.array([this.createPhoneNumberItem()])
-  });
+  setupEditForm() {
+    this.personForm = this.fb.group({
+      titleSelected: [''],
+      firstName: ['', [Validators.required, Validators.maxLength(40)]],
+      middleName: ['', Validators.maxLength(50)],
+      lastName: ['', [Validators.required, Validators.maxLength(80)]],
+      fullAddress: [''],
+      address: this.fb.group({
+        addressLines: ['', Validators.maxLength(500)],
+        countryId: 0,
+        inCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
+        outCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(4)]],
+      }),
+      contactBy: this.fb.group({
+        email: [false],
+        phone: [false]
+      }),
+      marketingPreferences: this.fb.group({
+        marketBulletin: [false],
+        offersSurveys: [false],
+        events: [false],
+        newHomes: [false],
+        general: [false],
+        count: 0
+      }),
+      amlCompletedDate: [''],
+      emailAddresses: this.fb.array([this.createEmailItem()]),
+      phoneNumbers: this.fb.array([this.createPhoneNumberItem()])
+    });
   }
 
   removeValidationForAdditionalFields() {
@@ -335,15 +341,15 @@ public keepOriginalOrder = (a) => a.key;
   savePerson() {
     this.removeValidationForAdditionalFields();
     if (this.personForm.valid) {
-        if (this.personForm.dirty) {
-          const p = {...this.personDetails, ...this.personForm.value};
-          this.contactGroupService.updatePerson(p).subscribe(() => this.onSaveComplete(),
-          (error: any) => this.errorMessage = <any>error );
-          console.log('person details to post', p);
-        } else {
-          this.onSaveComplete();
-        }
-     } else {
+      if (this.personForm.dirty) {
+        const p = { ...this.personDetails, ...this.personForm.value };
+        this.contactGroupService.updatePerson(p).subscribe(() => this.onSaveComplete(),
+          (error: any) => this.errorMessage = <any>error);
+        console.log('person details to post', p);
+      } else {
+        this.onSaveComplete();
+      }
+    } else {
       this.errorMessage = 'Please correct validation errors';
     }
 
