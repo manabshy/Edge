@@ -2,7 +2,7 @@
   <span class="badge badge-pill badge-{{bg}} mb-2 mr-2" [tooltip]="message" placement="right" container="body">{{percent}}</span>
 </ng-container>
 <ng-template #progessBar>
-  <div class="progress" [tooltip]="message" placement="top">
+  <div class="progress" [tooltip]="message" placement="bottom">
     <div class="progress-bar bg-{{bg}}" role="progressbar" [style.width]="percent" aria-valuenow="percent" aria-valuemin="0" aria-valuemax="100">{{percent}}</div>
   </div>
 </ng-template>

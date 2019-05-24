@@ -1,11 +1,9 @@
 <app-breadcrumb *ngIf="!foundPersonId"></app-breadcrumb>
 <div class="container">
-  <div class="page-title">
+  <div class="page-title sticky-top">
     <h4 *ngIf="!foundPersonId">Edit Person</h4>
-    <div class="col-12">
-      <!-- TODO change info on value changes  -->
-      <app-score-badge [bar]="true" [person]="personDetails"></app-score-badge>
-    </div>
+    <!-- TODO change info on value changes  -->
+    <app-score-badge [bar]="true" [person]="personDetails"></app-score-badge>
   </div>
   <div class="text-center" *ngIf="!personDetails">
     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading details ...

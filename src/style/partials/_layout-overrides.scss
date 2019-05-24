@@ -52,6 +52,11 @@ tr:first-child{
     border-bottom: 1px solid $border-color;
     text-align: center;
 
+    &.sticky-top {
+        background: color('white');
+        z-index: 100;
+    }
+
     @include media-breakpoint-up(lg) {
         padding-top: 0;
     }

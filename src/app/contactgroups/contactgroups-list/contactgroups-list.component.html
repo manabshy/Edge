@@ -1,17 +1,12 @@
-<div class="list-group">
+<div class="list-group mb-5">
   <a [routerLink]="['detail', contactGroup.personId ]"
    [queryParams]="{searchTerm: searchTerm}"
     class="list-group-item list-group-item-action pb-2" *ngFor="let contactGroup of contactGroups; let i = index;">
     <div class="row">
-      <div class="col-auto">
-        <app-score-badge [person]="contactGroup"></app-score-badge>
-      </div>
-      <div class="col text-right">
+      <div class="col-sm-auto text-right order-sm-2">
         <a [routerLink]="['detail', contactGroup.personId, 'edit' ]"><i class="fas fa-edit"></i> Edit</a>
       </div>
-    </div>
-    <div class="row">
-      <div class="col text-truncate">
+      <div class="col text-truncate order-sm-1">
         <div class="row align-items-center">
           <div class="col-sm-5">
             <div class="mb-1 text-truncate">
@@ -24,7 +19,7 @@
           </div>
           <div class="col-12 col-sm-auto">
             <p><a (click)="$event.stopPropagation()"
-                href="tel:{{contactGroup?.phoneNumbers[0]}}">{{contactGroup?.phoneNumbers[0]}}</a><span class="text-danger" *ngIf="!contactGroup?.phoneNumbers[0]">No Phone</span></p>
+                href="tel:{{contactGroup?.phoneNumbers[0]}}">{{contactGroup?.phoneNumbers[0]}}</a><span class="text-danger" *ngIf="!contactGroup?.phoneNumbers[0]">No Email</span></p>
           </div>
           <div class="col text-sm-right">
             <p class="text-truncate"><a (click)="$event.stopPropagation()"
