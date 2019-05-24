@@ -22,11 +22,11 @@
               </ng-container>
             </div>
           </div>
-          <div class="col-12 col-sm-auto" *ngIf="contactGroup?.phoneNumbers[0]">
+          <div class="col-12 col-sm-auto">
             <p><a (click)="$event.stopPropagation()"
                 href="tel:{{contactGroup?.phoneNumbers[0]}}">{{contactGroup?.phoneNumbers[0]}}</a><span class="text-danger" *ngIf="!contactGroup?.phoneNumbers[0]">No Phone</span></p>
           </div>
-          <div class="col text-sm-right" *ngIf="contactGroup?.emailAddresses[0]">
+          <div class="col text-sm-right">
             <p class="text-truncate"><a (click)="$event.stopPropagation()"
                 href="mailto:{{contactGroup?.emailAddresses[0]}}">{{contactGroup?.emailAddresses[0]}}</a><span class="text-danger" *ngIf="!contactGroup?.emailAddresses[0]">No Email</span></p>
           </div>
