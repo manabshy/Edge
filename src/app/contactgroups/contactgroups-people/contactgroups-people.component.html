@@ -4,8 +4,13 @@
   <div class="alert alert-info" *ngIf="contactGroupDetails?.contactPeople.length > initialContactGroupLength">
     There are pending changes on the people list. Save to make them effective.
   </div>
-  <div class="alert alert-warning" *ngIf="contactGroupDetails?.contactPeople.length > 2 && contactGroupDetailsForm.controls.contactType.value === 1">
-    You can't have more than <b>2</b> people in an <b>Individual/Joint</b> contact group. We have switched to <b>Multi/Sharer</b>.
+  <div class="alert alert-warning" *ngIf="isTypeDisabled(contactGroupDetailsForm.controls.contactType.value)">
+    <ng-container *ngIf="contactGroupDetailsForm.controls.contactType.value === 1; else swithToIndividual">
+      You can't have more than <b>2</b> people in an <b>Individual/Joint</b> contact group. We have switched to <b>Multi/Sharer</b>.
+    </ng-container>
+    <ng-template #switchToIndividual>
+      You can't have less than <b>2</b> people in an <b>Multi/Sharer</b> contact group. We have switched to <b>Individual/Joint</b>.
+    </ng-template>
   </div>
   <form action="">
     <h5>People</h5>
@@ -139,10 +144,10 @@
                 <div class="form-group col type-col">
                   <ng-container *ngFor="let type of contactGroupTypes | keyvalue:keepOriginalOrder; let i = index; last as isLast">
                     <div class="custom-control custom-radio custom-control-inline" *ngIf="!isLast" 
-                      tooltip="Add 2 or more people to select this option" [containerClass]="type.key === 2 && contactGroupDetails?.contactPeople.length < 1 ? '' : 'd-none'">
+                      [tooltip]="type.key === 1 ? 'Remove people to select this option' : 'Add 2 or more people to select this option'" [containerClass]="isTypeDisabled(type.key) ? '' : 'd-none'">
                       <input type="radio" [id]="'individual' + i" name="contactType" class="custom-control-input" 
                         [value]="type.key" formControlName="contactType" 
-                        [attr.disabled]="type.key === 2 && contactGroupDetails?.contactPeople.length < 1 ? '' : null">
+                        [attr.disabled]="isTypeDisabled(type.key) ? '' : null">
                       <label class="custom-control-label" [attr.for]="'individual' + i">{{type.value}}</label>
                     </div>
                   </ng-container>

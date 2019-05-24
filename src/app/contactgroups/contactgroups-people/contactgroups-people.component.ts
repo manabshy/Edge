@@ -284,4 +284,17 @@ export class ContactgroupsPeopleComponent implements OnInit {
     event.stopPropagation();
     this.isOffCanvasVisible = !this.isOffCanvasVisible;
   }
+
+  isTypeDisabled(key) {
+    if(this.contactGroupDetails) {;
+      if(key === 2 && this.contactGroupDetails.contactPeople.length < 2) {
+        return true;
+      } else if (key === 1 && this.contactGroupDetails.contactPeople.length > 2) {
+        return true;
+      }
+      return false;
+    } else {
+      return false;
+    }
+  }
 }
