@@ -153,7 +153,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
   removeSelectedPeople(id: number) {
     if (this.selectedPeople.length) {
       const index = this.selectedPeople.findIndex(x => x.personId === id);
-     if (index !== -1) {  this.selectedPeople.splice(index, 1); }
+    //  if (index !== -1) {  this.selectedPeople.splice(index, 1); }
+     this.selectedPeople.splice(index, 1);
       this.setSalution();
     } else {
      const index = this.contactGroupDetails.contactPeople.findIndex(x => x.personId === id);
