@@ -26,8 +26,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
   personFinderForm: FormGroup;
   selectedPerson: Person;
   selectedPersonId: number;
+  newPerson: BasicPerson;
   isCreateNewPersonVisible = false;
   isLoadingNewPersonVisible = false;
+  isCreateNewPerson = false;
   initialContactGroupLength = 0;
   errorMessage: any;
   public keepOriginalOrder = (a) => a.key;
@@ -71,6 +73,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         } else {
           this.isCreateNewPersonVisible = false;
         }
+        this.newPerson = data;
         this.findPerson(data);
       });
   }
@@ -115,6 +118,15 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.foundPeople = data;
     });
   }
+  createNewContactGroupPerson(event) {
+    event.preventDefault();
+    event.stopPropagation();
+   this.isCreateNewPerson = true;
+   if (this.isCreateNewPerson) {
+     this.newPerson;
+   }
+   console.log('person from finder form 1', this.newPerson);
+  }
 
   removePerson(event, id: number) {
     event.preventDefault();
@@ -133,7 +145,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.personFinderForm.reset();
     }
     this.isOffCanvasVisible = false;
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
     this.selectedPersonId = 0;
   }
 
@@ -214,7 +226,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
       salutation: salutation,
       addressee: addressee
     }, {onlySelf: false});
-    console.log('salution:', salutation, 'addressee:', addressee);
   }
 
   hideCanvas(event) {
@@ -244,8 +255,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   isTypeDisabled(key) {
-    if(this.contactGroupDetails) {;
-      if(key === 2 && this.contactGroupDetails.contactPeople.length < 2) {
+    if (this.contactGroupDetails) {
+      if (key === 2 && this.contactGroupDetails.contactPeople.length < 2) {
         return true;
       } else if (key === 1 && this.contactGroupDetails.contactPeople.length > 2) {
         return true;

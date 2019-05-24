@@ -1,10 +1,10 @@
 <app-breadcrumb *ngIf="!foundPersonId"></app-breadcrumb>
 <div class="container">
   <h4 class="page-title" *ngIf="!foundPersonId">Edit Person</h4>
-  <div class="text-center" *ngIf="!personDetails">
+  <div class="text-center" *ngIf="!personDetails && !basicPerson">
     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading details ...
   </div>
-  <form *ngIf="personDetails" [formGroup]="personForm" (ngSubmit)="savePerson()">
+  <form *ngIf="personDetails || basicPerson" [formGroup]="personForm" (ngSubmit)="savePerson()">
     <div class="form-group row">
       <label for="title" class="col-sm-2 col-form-label col-form-label-sm">Title</label>
       <div class="col-sm-3">
