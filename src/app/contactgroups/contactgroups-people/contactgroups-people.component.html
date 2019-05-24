@@ -1,11 +1,11 @@
 <app-breadcrumb></app-breadcrumb>
 <div class="container">
   <h4 class="page-title">Contact group</h4>
-  <div class="alert alert-info" *ngIf="contactGroupDetails?.contactPeople.length > initialContactGroupLength">
+  <div class="alert alert-info" *ngIf="contactGroupDetails?.contactPeople.length !== initialContactGroupLength">
     There are pending changes on the people list. Save to make them effective.
   </div>
-  <div class="alert alert-warning" *ngIf="isTypeDisabled(contactGroupDetailsForm.controls.contactType.value)">
-    <ng-container *ngIf="contactGroupDetailsForm.controls.contactType.value === 1; else swithToIndividual">
+  <div class="alert alert-warning" *ngIf="!!isTypeDisabled(contactGroupDetailsForm.controls.contactType.value)">
+    <ng-container *ngIf="!!(contactGroupDetailsForm.controls.contactType.value === 1); else !!swithToIndividual">
       You can't have more than <b>2</b> people in an <b>Individual/Joint</b> contact group. We have switched to <b>Multi/Sharer</b>.
     </ng-container>
     <ng-template #switchToIndividual>
@@ -143,11 +143,11 @@
                 </div>
                 <div class="form-group col type-col">
                   <ng-container *ngFor="let type of contactGroupTypes | keyvalue:keepOriginalOrder; let i = index; last as isLast">
-                    <div class="custom-control custom-radio custom-control-inline" *ngIf="!isLast" 
-                      [tooltip]="type.key === 1 ? 'Remove people to select this option' : 'Add 2 or more people to select this option'" 
+                    <div class="custom-control custom-radio custom-control-inline" *ngIf="!isLast"
+                      [tooltip]="type.key === 1 ? 'Remove people to select this option' : 'Add 2 or more people to select this option'"
                       [containerClass]="isTypeDisabled(type.key) ? '' : 'd-none'" placement="auto">
-                      <input type="radio" [id]="'individual' + i" name="contactType" class="custom-control-input" 
-                        [value]="type.key" formControlName="contactType" 
+                      <input type="radio" [id]="'individual' + i" name="contactType" class="custom-control-input"
+                        [value]="type.key" formControlName="contactType"
                         [attr.disabled]="isTypeDisabled(type.key) ? '' : null">
                       <label class="custom-control-label" [attr.for]="'individual' + i">{{type.value}}</label>
                     </div>
@@ -166,9 +166,9 @@
               Save
             </button>
             <!-- <ng-template #warningTemplate>You can't have more than <b>2</b> people in <b>Individual/Joint</b> contact group.<br>We switched to <b>Multi/Sharer</b></ng-template>
-            <button  type="submit" class="btn btn-secondary" (click)="saveContactGroup()" 
-              [popover]="warningTemplate" 
-              [isOpen]="contactGroupDetails?.contactPeople.length > 2 && contactGroupDetailsForm.controls.contactType.value === 1" 
+            <button  type="submit" class="btn btn-secondary" (click)="saveContactGroup()"
+              [popover]="warningTemplate"
+              [isOpen]="contactGroupDetails?.contactPeople.length > 2 && contactGroupDetailsForm.controls.contactType.value === 1"
               [containerClass]="'alert alert-warning'" [outsideClick]="true" triggers="">
               Save
             </button> -->
