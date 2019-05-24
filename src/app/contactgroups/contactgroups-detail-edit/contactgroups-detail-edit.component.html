@@ -1,6 +1,12 @@
 <app-breadcrumb *ngIf="!foundPersonId"></app-breadcrumb>
 <div class="container">
-  <h4 class="page-title" *ngIf="!foundPersonId">Edit Person</h4>
+  <div class="page-title">
+    <h4 *ngIf="!foundPersonId">Edit Person</h4>
+    <div class="col-12">
+      <!-- TODO change info on value changes  -->
+      <app-score-badge [bar]="true" [person]="personDetails"></app-score-badge>
+    </div>
+  </div>
   <div class="text-center" *ngIf="!personDetails && !basicPerson">
     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading details ...
   </div>

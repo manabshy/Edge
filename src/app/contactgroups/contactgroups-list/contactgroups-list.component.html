@@ -3,10 +3,15 @@
    [queryParams]="{searchTerm: searchTerm}"
     class="list-group-item list-group-item-action pb-2" *ngFor="let contactGroup of contactGroups; let i = index;">
     <div class="row">
-      <div class="col-sm-auto text-right order-sm-2">
+      <div class="col-auto">
+        <app-score-badge [person]="contactGroup"></app-score-badge>
+      </div>
+      <div class="col text-right">
         <a [routerLink]="['detail', contactGroup.personId, 'edit' ]"><i class="fas fa-edit"></i> Edit</a>
       </div>
-      <div class="col text-truncate order-sm-1">
+    </div>
+    <div class="row">
+      <div class="col text-truncate">
         <div class="row align-items-center">
           <div class="col-sm-5">
             <div class="mb-1 text-truncate">
@@ -19,11 +24,11 @@
           </div>
           <div class="col-12 col-sm-auto" *ngIf="contactGroup?.phoneNumbers[0]">
             <p><a (click)="$event.stopPropagation()"
-                href="tel:{{contactGroup?.phoneNumbers[0]}}">{{contactGroup?.phoneNumbers[0]}}</a></p>
+                href="tel:{{contactGroup?.phoneNumbers[0]}}">{{contactGroup?.phoneNumbers[0]}}</a><span class="text-danger" *ngIf="!contactGroup?.phoneNumbers[0]">No Phone</span></p>
           </div>
           <div class="col text-sm-right" *ngIf="contactGroup?.emailAddresses[0]">
             <p class="text-truncate"><a (click)="$event.stopPropagation()"
-                href="mailto:{{contactGroup?.emailAddresses[0]}}">{{contactGroup?.emailAddresses[0]}}</a></p>
+                href="mailto:{{contactGroup?.emailAddresses[0]}}">{{contactGroup?.emailAddresses[0]}}</a><span class="text-danger" *ngIf="!contactGroup?.emailAddresses[0]">No Email</span></p>
           </div>
           <div class="col-12">
               <div *ngFor="let cG of contactGroup?.contactGroups" class="text-truncate">
