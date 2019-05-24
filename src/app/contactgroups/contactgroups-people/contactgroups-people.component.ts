@@ -119,6 +119,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   removePerson(event, id: number) {
     event.preventDefault();
     event.stopPropagation();
+    this.removeSelectedPeople(id);
   }
 
   selectPerson(id: number) {
@@ -149,6 +150,17 @@ export class ContactgroupsPeopleComponent implements OnInit {
       });
     }
   }
+  removeSelectedPeople(id: number) {
+    if (this.selectedPeople.length) {
+      const index = this.selectedPeople.findIndex(x => x.personId === id);
+     if (index !== -1) {  this.selectedPeople.splice(index, 1); }
+      this.setSalution();
+    } else {
+     const index = this.contactGroupDetails.contactPeople.findIndex(x => x.personId === id);
+     this.contactGroupDetails.contactPeople.splice(index, 1);
+     this.setSalution();
+    }
+  }
 
   showEditedPersonDetails(id) {
     console.log('id from child', id);
@@ -161,9 +173,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   saveContactGroup() {
-    if (this.selectedPeople.length && this.contactGroupDetails.referenceCount === 0) {
+    const contactPeople = this.contactGroupDetails.contactPeople.length;
+    const hasNoTransaction = this.contactGroupDetails.referenceCount === 0;
+    if (this.selectedPeople.length && hasNoTransaction || contactPeople && hasNoTransaction ) {
       const contactGroup = {...this.contactGroupDetails, ...this.contactGroupDetailsForm.value};
-      const contactPeople = this.contactGroupDetails.contactPeople.length;
       if (contactPeople > 2 && contactGroup.contactType === ContactType.Individual) {
         contactGroup.contactType = ContactType.Sharers;
       } else  if (contactPeople < 2 && contactGroup.contactType === ContactType.Sharers) {
