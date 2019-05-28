@@ -41,7 +41,7 @@ export class ScoreBadgeComponent implements OnInit {
       if(this.person.address){
         address = new FormatAddressPipe().transform(this.person.address);
       } else {
-        address = this.person.address.postCode;
+        address = this.person.address.inCode;
       }
 
       if(address) {
