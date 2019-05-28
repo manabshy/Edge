@@ -248,6 +248,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     if (this.selectedPeople.length || contactPeople) {
       const contactGroup = {...this.contactGroupDetails, ...this.contactGroupDetailsForm.value};
       this.isSubmitting = true;
+      this.errorMessage = '';
       console.log('contact to add', contactGroup);
       this.contactGroupService
         .updateContactGroup(contactGroup)
@@ -255,7 +256,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
           (error: any) => {
             this.errorMessage = error.resultDescription;
             this.isSubmitting = false;
-            this.errorMessage = '';
           },
           () => this.onSaveComplete()
         );
