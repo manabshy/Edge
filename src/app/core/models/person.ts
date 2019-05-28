@@ -28,7 +28,6 @@ export interface Person {
   addressFull: string;
   rawData: any;
   isNewPerson: boolean;
-  postCode: string;
 }
 
 export interface BasicPerson {

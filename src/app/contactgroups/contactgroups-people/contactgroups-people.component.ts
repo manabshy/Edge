@@ -30,6 +30,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   personFinderForm: FormGroup;
   selectedPerson: Person;
   selectedPersonId: number;
+  removedPersonId: number;
   newPerson: BasicPerson;
   isCreateNewPersonVisible = false;
   isLoadingNewPersonVisible = false;
@@ -94,8 +95,11 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.initialContactGroupLength = this.contactGroupDetails.contactPeople.length;
         this.populateFormDetails(data);
         this.addSelectedPeople();
-        console.log('contact group people', this.contactGroupDetails);
+        if (this.removedPersonId) {
+          this.removePerson(this.removedPersonId, false);
+        }
         this.isLoadingNewPersonVisible = false;
+        console.log('removed person id', this.removedPersonId);
       });
   }
   getPersonDetails(personId: number) {
@@ -103,7 +107,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
       data.isNewPerson = true;
       this.selectedPerson = data;
       this.collectSelectedPeople(data);
-      console.log('selected person details here', this.selectedPerson);
     });
   }
   populateFormDetails(contactGroup: ContactGroup) {
@@ -118,7 +121,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
       isRelocationAgent: contactGroup.isRelocationAgent,
       contactType: contactGroup.contactType
     });
-    console.log('contact type', this.contactGroupDetailsForm);
   }
 
   findPerson(person: BasicPerson) {
@@ -136,25 +138,29 @@ export class ContactgroupsPeopleComponent implements OnInit {
    console.log('person from finder form 1', this.newPerson);
   }
 
-  removePerson(event, id: number) {
+  removePerson(id: number, isDialogVisible) {
     event.preventDefault();
     event.stopPropagation();
+    this.removedPersonId = id;
     let index;
     if (this.selectedPeople.length) {
       index = this.selectedPeople.findIndex(x => x.personId === id);
       this.removeSelectedPeople(index);
+      this.removedPersonId = 0;
     }
     index = this.contactGroupDetails.contactPeople.findIndex(x => x.personId === id);
-    const fullName = this.contactGroupDetails.contactPeople[index].firstName + ' ' + this.contactGroupDetails.contactPeople[index].lastName;
-
-    this.confirmRemove(fullName).subscribe(res => {
-      if(res) {
-        this.removeSelectedPeople(index);
-      }
-    })
+    const fullName = this.contactGroupDetails.contactPeople[index] !== undefined ?
+      this.contactGroupDetails.contactPeople[index].firstName + ' ' + this.contactGroupDetails.contactPeople[index].lastName : '';
+    if (isDialogVisible) {
+      this.confirmRemove(fullName).subscribe(res => {
+        if (res) {
+          this.removeSelectedPeople(index);
+        }
+      });
+    } else { this.removeSelectedPeople(index); }
   }
 
-  confirmRemove(fullName) {
+  confirmRemove(fullName: string) {
     const subject = new Subject<boolean>();
     const initialState = {
       title: 'Are you sure you want to remove ' + fullName + '?',
@@ -166,7 +172,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
    }
 
   selectPerson(id: number) {
-    console.log('selected person id', id);
     this.selectedPersonId = id;
     this.isLoadingNewPersonVisible = true;
     if (id !== 0) {
@@ -199,8 +204,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
   removeSelectedPeople(index: number) {
     if (this.selectedPeople.length) {
       this.selectedPeople.splice(index, 1);
+      console.log('selected people', this.selectedPeople);
     } else {
       this.contactGroupDetails.contactPeople.splice(index, 1);
+      console.log('contact group people', this.contactGroupDetails.contactPeople);
     }
     this.errorMessage = null;
     this.changeType();
@@ -237,7 +244,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     if (this.selectedPeople.length && hasNoTransaction || contactPeople && hasNoTransaction ) {
       const contactGroup = {...this.contactGroupDetails, ...this.contactGroupDetailsForm.value};
       this.isSubmitting = true;
-      this.errorMessage = null;
+      this.errorMessage = '';
       console.log('contact to add', contactGroup);
       this.contactGroupService
         .updateContactGroup(contactGroup)

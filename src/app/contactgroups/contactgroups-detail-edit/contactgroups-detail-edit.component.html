@@ -62,13 +62,13 @@
                 placeholder="Address line" rows="5"  cols="10" maxlength="500"></textarea>
               </div>
               <div class="form-group" *ngIf="showPostCode">
-                <label class="small" for="outcode">Postcode</label>
+                <label class="small" for="postcode">Postcode</label>
                 <div class="input-group">
-                  <input type="text" class="form-control form-control-sm"  id="outcode"
-                    placeholder="Outcode" formControlName="outCode" [ngClass]="{'is-invalid': formErrors.outCode}">
-                  <input type="text" class="form-control form-control-sm"  id="incode"
-                    placeholder="Incode" formControlName="inCode" [ngClass]="{'is-invalid': formErrors.inCode}">
-                    <span class="invalid-feedback">{{formErrors.inCode || formErrors.outCode}}</span>
+                  <input type="text" class="form-control form-control-sm"  id="postcode"
+                    placeholder="Outcode" formControlName="postCode" [ngClass]="{'is-invalid': formErrors.postCode}">
+                  <!-- <input type="text" class="form-control form-control-sm"  id="incode"
+                    placeholder="Incode" formControlName="inCode" [ngClass]="{'is-invalid': formErrors.inCode}"> -->
+                    <span class="invalid-feedback">{{formErrors.postCode}}</span>
                 </div>
               </div>
             </div>

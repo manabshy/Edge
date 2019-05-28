@@ -1,12 +1,13 @@
 import { Component, OnInit, Input, Output } from '@angular/core';
 import { SharedService } from 'src/app/core/services/shared.service';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { Person, Email, PhoneNumber, BasicPerson } from 'src/app/core/models/person';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { EventEmitter } from '@angular/core';
 import { Title } from '@angular/platform-browser';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-contactgroups-detail-edit',
@@ -35,6 +36,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   returnUrl: string;
   errorMessage: string;
   errorsMessage: any = [];
+  postCodePattern = /^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]?[\s]+?[0-9][A-Za-z]{2}|[Gg][Ii][Rr][\s]+?0[Aa]{2})$/;
   emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   validationMessagesSimple = {
     required: 'is required.',
@@ -57,7 +59,8 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       },
     },
     'email': {
-      required: ' Email is required.'
+      required: ' Email is required.',
+      pattern: 'Email is not valid'
     },
     'address': {
       required: 'Address is required.'
@@ -65,16 +68,12 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     'number': {
       required: 'Phone is required.'
     },
-    'inCode': {
+    'postCode': {
       required: 'Postcode is required.',
-      minlength: 'Incode must be 3 characters.',
-      maxlength: 'Incode cannot be more than 3 characters.',
-    },
-    'outCode': {
-      required: 'Postcode is required.',
-      minlength: 'outCode must be 3 characters or more.',
-      maxlength: 'outCode cannot be more than 4 characters.',
-    },
+      minlength: 'Postcode must be at least 5 characters.',
+      maxlength: 'Postcode cannot be more than 7 characters.',
+      pattern: 'Postcode is not valid'
+    }
   };
 
   formErrors = {
@@ -86,12 +85,14 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     },
     'address': '',
     'number': '',
-    'inCode': '',
-    'outCode': ''
+    'postCode': ''
   };
 
   get showPostCode(): boolean {
     return this.address.get('countryId').value === this.defaultCountryCode;
+  }
+  get postCode(): FormControl {
+    return <FormControl>this.address.get('postCode');
   }
   get address(): FormGroup {
     return <FormGroup>this.personForm.get('address');
@@ -126,8 +127,12 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     } else {
       this.getPersonDetails(id);
     }
-    this.personForm.valueChanges
-      .subscribe(() => this.logValidationErrors(this.personForm));
+    this.personForm.valueChanges.pipe(debounceTime(1000))
+      .subscribe((data) => {
+        this.postCode.setValue(this.sharedService.formatPostCode(data.address.postCode), {emitEvent: false});
+        this.logValidationErrors(this.personForm);
+        console.log('formatted data', this.sharedService.formatPostCode(data.address.postCode));
+      });
   }
 
   logValidationErrors(group: FormGroup = this.personForm) {
@@ -199,8 +204,9 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       amlCompletedDate: person.amlCompletedDate,
       address: {
         addressLines: person.address.addressLines,
-        outCode: person.address.outCode,
-        inCode: person.address.inCode,
+        // outCode: person.address.outCode,
+        // inCode: person.address.inCode,
+        postCode: person.address.postCode,
         countryId: person.address.countryId,
         country: person.address.country,
       },
@@ -253,8 +259,9 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       address: this.fb.group({
         addressLines: ['', Validators.maxLength(500)],
         countryId: 0,
-        inCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
-        outCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(4)]],
+        postCode: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(8), Validators.pattern(this.postCodePattern)]],
+        // inCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
+        // outCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(4)]],
       }),
       contactBy: this.fb.group({
         email: [false],
@@ -342,10 +349,15 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     this.removeValidationForAdditionalFields();
     if (this.personForm.valid) {
       if (this.personForm.dirty) {
-        const p = { ...this.personDetails, ...this.personForm.value };
-        this.contactGroupService.updatePerson(p).subscribe(() => this.onSaveComplete(),
+        const person = { ...this.personDetails, ...this.personForm.value };
+        const postCode =  this.sharedService.splitPostCode(person.address.postCode);
+        person.address.outCode = postCode[0];
+        person.address.inCode = postCode[1];
+        this.contactGroupService.updatePerson(person).subscribe(() => this.onSaveComplete(),
           (error: any) => this.errorMessage = <any>error);
-        console.log('person details to post', p);
+        console.log('post code details to post', this.sharedService.splitPostCode(person.address.postCode));
+        console.log('person details to post', person);
+        // console.log('Post code formatted here', this.sharedService.formatPostcode(this.personForm.controls.get('postCode').value));
       } else {
         this.onSaveComplete();
       }
