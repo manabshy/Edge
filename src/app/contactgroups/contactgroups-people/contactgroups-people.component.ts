@@ -9,6 +9,7 @@ import { Subject } from 'rxjs';
 import { BsModalService } from 'ngx-bootstrap/modal/';
 import { ConfirmModalComponent } from 'src/app/core/confirm-modal/confirm-modal.component';
 import { Location } from '@angular/common';
+import { ResultData } from 'src/app/core/shared/result-data';
 
 @Component({
   selector: 'app-contactgroups-people',
@@ -37,7 +38,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isCreateNewPerson = false;
   initialContactGroupLength = 0;
   isSubmitting = false;
-  errorMessage: any;
+  errorMessage: string;
   isSwitchTypeMsgVisible = false;
   public keepOriginalOrder = (a) => a.key;
   constructor(
@@ -97,6 +98,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.addSelectedPeople();
         if (this.removedPersonId) {
           this.removePerson(this.removedPersonId, false);
+        }
+
+        if(this.contactGroupDetails.referenceCount) {
+          this.errorMessage = 'Ongoing Transaction. You can\'t edit the info of this Contact Group';
         }
         this.isLoadingNewPersonVisible = false;
         console.log('removed person id', this.removedPersonId);
@@ -197,7 +202,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.contactGroupDetails.contactPeople.push(x);
         this.setSalution();
       });
-      this.errorMessage = null;
+      this.errorMessage = '';
       this.changeType();
     }
   }
@@ -209,7 +214,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.contactGroupDetails.contactPeople.splice(index, 1);
       console.log('contact group people', this.contactGroupDetails.contactPeople);
     }
-    this.errorMessage = null;
+    this.errorMessage = '';
     this.changeType();
     this.setSalution();
   }
@@ -240,18 +245,17 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   saveContactGroup() {
     const contactPeople = this.contactGroupDetails.contactPeople.length;
-    const hasNoTransaction = this.contactGroupDetails.referenceCount === 0;
-    if (this.selectedPeople.length && hasNoTransaction || contactPeople && hasNoTransaction ) {
+    if (this.selectedPeople.length || contactPeople) {
       const contactGroup = {...this.contactGroupDetails, ...this.contactGroupDetailsForm.value};
       this.isSubmitting = true;
-      this.errorMessage = '';
       console.log('contact to add', contactGroup);
       this.contactGroupService
         .updateContactGroup(contactGroup)
         .subscribe(
           (error: any) => {
-            this.errorMessage = <any>error;
+            this.errorMessage = error.resultDescription;
             this.isSubmitting = false;
+            this.errorMessage = '';
           },
           () => this.onSaveComplete()
         );
