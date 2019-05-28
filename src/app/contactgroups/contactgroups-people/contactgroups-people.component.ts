@@ -34,6 +34,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isLoadingNewPersonVisible = false;
   isCreateNewPerson = false;
   initialContactGroupLength = 0;
+  isSubmitting = false;
   errorMessage: any;
   isSwitchTypeMsgVisible = false;
   public keepOriginalOrder = (a) => a.key;
@@ -231,6 +232,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
     const hasNoTransaction = this.contactGroupDetails.referenceCount === 0;
     if (this.selectedPeople.length && hasNoTransaction || contactPeople && hasNoTransaction ) {
       const contactGroup = {...this.contactGroupDetails, ...this.contactGroupDetailsForm.value};
+      this.isSubmitting = true;
+      this.errorMessage = '';
       console.log('contact to add', contactGroup);
       this.contactGroupService
         .updateContactGroup(contactGroup)

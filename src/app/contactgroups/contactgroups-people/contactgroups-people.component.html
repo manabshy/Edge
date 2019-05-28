@@ -172,8 +172,8 @@
         <div class="row justify-content-end w-100 no-gutters">
           <div class="col-sm-10 d-flex">
             <button type="button" class="btn btn-light mr-2">Cancel</button>
-            <button type="submit" class="btn btn-secondary" (click)="saveContactGroup()" [attr.disabled]="!contactGroupDetails?.contactPeople.length ? '' : null">
-              Save
+            <button type="submit" class="btn btn-secondary" (click)="saveContactGroup()" [attr.disabled]="!contactGroupDetails?.contactPeople.length || (isSubmitting && !errorMessage) ? '' : null">
+              <i class="fas fa-spinner fa-pulse d-inline-block mr-2" *ngIf="isSubmitting && !errorMessage"></i>Save
             </button>
             <!-- <ng-template #warningTemplate>You can't have more than <b>2</b> people in <b>Individual/Joint</b> contact group.<br>We switched to <b>Multi/Sharer</b></ng-template>
             <button  type="submit" class="btn btn-secondary" (click)="saveContactGroup()"
