@@ -12,6 +12,7 @@ export interface Address {
   latitude: string;
   outCode: string;
   inCode: string;
+  postCode: string;
   countryId: number;
   country: string;
 }
