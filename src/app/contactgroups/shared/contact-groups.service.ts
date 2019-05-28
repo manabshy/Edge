@@ -58,7 +58,6 @@ export class ContactGroupsService {
     const url = `${AppConstants.basePersonUrl}/${person.personId}`;
     return this.http.put(url, person).pipe(
       map(response => response),
-      retry(3),
       tap(data => console.log('updated person details here...', JSON.stringify(data))),
       catchError(this.handleError)
       );
@@ -67,7 +66,6 @@ export class ContactGroupsService {
     const url = `${AppConstants.baseContactGroupUrl}/${contactGroup.contactGroupId}`;
     return this.http.put(url, contactGroup).pipe(
       map(response => response),
-      retry(3),
       tap(data => console.log('updated contact details here...', JSON.stringify(data))),
       catchError(this.handleError)
       );

@@ -137,7 +137,6 @@ export class SharedService {
         break;
       }
     }
-
     // Return with either the reformatted valid postcode or the original invalid postcode
     if (valid) { return postCode; } else { return postCodeToCheck; }
   }
