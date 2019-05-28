@@ -254,8 +254,12 @@ export class ContactgroupsPeopleComponent implements OnInit {
         .updateContactGroup(contactGroup)
         .subscribe(
           (error: any) => {
-            this.errorMessage = error.resultDescription;
-            this.isSubmitting = false;
+            if(!error.status){
+              this.errorMessage = error.resultDescription;
+              this.isSubmitting = false;
+            } else {
+              this.onSaveComplete();
+            }
           },
           () => this.onSaveComplete()
         );
