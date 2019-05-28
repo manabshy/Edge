@@ -17,6 +17,9 @@
   <div class="alert alert-danger" *ngIf="contactGroupDetails?.contactPeople && !contactGroupDetails?.contactPeople.length">
     You must add at least <b>1</b> person in the contact group.
   </div>
+  <div class="alert alert-danger" *ngIf="errorMessage">
+    {{errorMessage.resultDescription}}
+  </div>
   <form action="">
     <h5>People</h5>
     <div class="list-group mb-3">
