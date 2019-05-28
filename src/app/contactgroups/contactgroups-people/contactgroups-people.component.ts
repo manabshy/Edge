@@ -8,6 +8,7 @@ import { debounceTime } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { BsModalService } from 'ngx-bootstrap/modal/';
 import { ConfirmModalComponent } from 'src/app/core/confirm-modal/confirm-modal.component';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-contactgroups-people',
@@ -42,7 +43,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
     private contactGroupService: ContactGroupsService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private modalService: BsModalService
+    private modalService: BsModalService,
+    private _location: Location
   ) {}
 
   ngOnInit() {
@@ -190,6 +192,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.contactGroupDetails.contactPeople.push(x);
         this.setSalution();
       });
+      this.errorMessage = null;
       this.changeType();
     }
   }
@@ -199,6 +202,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     } else {
       this.contactGroupDetails.contactPeople.splice(index, 1);
     }
+    this.errorMessage = null;
     this.changeType();
     this.setSalution();
   }
@@ -233,19 +237,22 @@ export class ContactgroupsPeopleComponent implements OnInit {
     if (this.selectedPeople.length && hasNoTransaction || contactPeople && hasNoTransaction ) {
       const contactGroup = {...this.contactGroupDetails, ...this.contactGroupDetailsForm.value};
       this.isSubmitting = true;
-      this.errorMessage = '';
+      this.errorMessage = null;
       console.log('contact to add', contactGroup);
       this.contactGroupService
         .updateContactGroup(contactGroup)
         .subscribe(
-          () => this.onSaveComplete(),
-          (error: any) => (this.errorMessage = <any>error)
+          (error: any) => {
+            this.errorMessage = <any>error;
+            this.isSubmitting = false;
+          },
+          () => this.onSaveComplete()
         );
     }
   }
   onSaveComplete(): void {
     console.log('contacts saved', this.contactGroupDetails);
-    window.history.back();
+    this._location.back();
   }
 
   setSalution() {
