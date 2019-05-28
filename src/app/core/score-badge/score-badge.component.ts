@@ -28,13 +28,13 @@ export class ScoreBadgeComponent implements OnInit {
 
   calculateScore() {
     let percent = 0;
-    let message = 'Complete '
+    let message = 'Complete'
 
     if(this.person) {
       if(this.person.firstName && this.person.lastName) {
         percent += 25;
       } else {
-        message += 'Profile, ';
+        message += ', Profile';
       }
 
       let address;
@@ -47,25 +47,25 @@ export class ScoreBadgeComponent implements OnInit {
       if(address) {
         percent += 25;
       } else {
-        message += 'Address, ';
+        message += ', Address';
       }
 
       if(this.person.phoneNumbers.length) {
         percent += 25;
       } else {
-        message += 'Phone number, ';
+        message += ', Phone number';
       }
 
       if(this.person.emailAddresses.length) {
         percent += 25;
       } else {
-        message += 'Email address, ';
+        message += ', Email address';
       }
     }
 
-    message += 'to have a 100% score';
+    message += ' to have a 100% score';
 
-    this.message = message;
+    this.message = message.replace(',','');
 
     this.percent = (percent || 15) + '%';
 
