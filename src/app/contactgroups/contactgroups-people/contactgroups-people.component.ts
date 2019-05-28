@@ -5,6 +5,9 @@ import { Person, BasicPerson } from 'src/app/core/models/person';
 import { ContactGroup, PeopleAutoCompleteResult, ContactGroupsTypes, ContactType } from '../shared/contact-group';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { BsModalService } from 'ngx-bootstrap/modal/';
+import { ConfirmModalComponent } from 'src/app/core/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-contactgroups-people',
@@ -32,11 +35,13 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isCreateNewPerson = false;
   initialContactGroupLength = 0;
   errorMessage: any;
+  isSwitchTypeMsgVisible = false;
   public keepOriginalOrder = (a) => a.key;
   constructor(
     private contactGroupService: ContactGroupsService,
     private fb: FormBuilder,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private modalService: BsModalService
   ) {}
 
   ngOnInit() {
@@ -131,8 +136,31 @@ export class ContactgroupsPeopleComponent implements OnInit {
   removePerson(event, id: number) {
     event.preventDefault();
     event.stopPropagation();
-    this.removeSelectedPeople(id);
+    let index;
+    if (this.selectedPeople.length) {
+      index = this.selectedPeople.findIndex(x => x.personId === id);
+      this.removeSelectedPeople(index);
+    }
+    index = this.contactGroupDetails.contactPeople.findIndex(x => x.personId === id);
+    const fullName = this.contactGroupDetails.contactPeople[index].firstName + ' ' + this.contactGroupDetails.contactPeople[index].lastName;
+
+    this.confirmRemove(fullName).subscribe(res => {
+      if(res) {
+        this.removeSelectedPeople(index);
+      }
+    })
   }
+
+  confirmRemove(fullName) {
+    const subject = new Subject<boolean>();
+    const initialState = {
+      title: 'Are you sure you want to remove ' + fullName + '?',
+      actions: ['No', 'Remove']
+    };
+    const modal = this.modalService.show(ConfirmModalComponent, {ignoreBackdropClick: true, initialState});
+    modal.content.subject = subject;
+    return subject.asObservable();
+   }
 
   selectPerson(id: number) {
     console.log('selected person id', id);
@@ -161,19 +189,17 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.contactGroupDetails.contactPeople.push(x);
         this.setSalution();
       });
+      this.changeType();
     }
   }
-  removeSelectedPeople(id: number) {
+  removeSelectedPeople(index: number) {
     if (this.selectedPeople.length) {
-      const index = this.selectedPeople.findIndex(x => x.personId === id);
-    //  if (index !== -1) {  this.selectedPeople.splice(index, 1); }
-     this.selectedPeople.splice(index, 1);
-      this.setSalution();
+      this.selectedPeople.splice(index, 1);
     } else {
-     const index = this.contactGroupDetails.contactPeople.findIndex(x => x.personId === id);
-     this.contactGroupDetails.contactPeople.splice(index, 1);
-     this.setSalution();
+      this.contactGroupDetails.contactPeople.splice(index, 1);
     }
+    this.changeType();
+    this.setSalution();
   }
 
   showEditedPersonDetails(id) {
@@ -186,16 +212,25 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.selectedPersonId = 0;
   }
 
+  changeType() {
+    const contactPeople = this.contactGroupDetails.contactPeople.length;
+    const contactGroupType = this.contactGroupDetailsForm.controls['contactType'];
+    if (contactPeople > 2 && contactGroupType.value === ContactType.Individual) {
+      contactGroupType.setValue(ContactType.Sharers);
+      this.isSwitchTypeMsgVisible = true;
+    } else  if (contactPeople < 2 && contactGroupType.value === ContactType.Sharers) {
+      contactGroupType.setValue(ContactType.Individual);
+      this.isSwitchTypeMsgVisible = true;
+    } else {
+      this.isSwitchTypeMsgVisible = false;
+    }
+  }
+
   saveContactGroup() {
     const contactPeople = this.contactGroupDetails.contactPeople.length;
     const hasNoTransaction = this.contactGroupDetails.referenceCount === 0;
     if (this.selectedPeople.length && hasNoTransaction || contactPeople && hasNoTransaction ) {
       const contactGroup = {...this.contactGroupDetails, ...this.contactGroupDetailsForm.value};
-      if (contactPeople > 2 && contactGroup.contactType === ContactType.Individual) {
-        contactGroup.contactType = ContactType.Sharers;
-      } else  if (contactPeople < 2 && contactGroup.contactType === ContactType.Sharers) {
-        contactGroup.contactType = ContactType.Individual;
-      }
       console.log('contact to add', contactGroup);
       this.contactGroupService
         .updateContactGroup(contactGroup)
