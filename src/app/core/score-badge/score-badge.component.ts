@@ -24,7 +24,6 @@ export class ScoreBadgeComponent implements OnInit {
 
   ngOnChanges() {
     this.calculateScore();
-    console.log(this.person);
   }
 
   calculateScore() {

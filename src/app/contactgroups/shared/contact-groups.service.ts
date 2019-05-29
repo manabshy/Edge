@@ -42,7 +42,7 @@ export class ContactGroupsService {
     const url = `${AppConstants.basePersonUrl}/${personId}/contactGroups`;
     return this.http.get<BasicContactGroupData>(url).pipe(map(response => response.result));
   }
-  getAutocompletePeople(person: BasicPerson): Observable<PeopleAutoCompleteResult[] | WedgeError> {
+  getAutocompletePeople(person: BasicPerson): Observable<PeopleAutoCompleteResult[]> {
     const options = new HttpParams()
                     .set('firstName', person.firstName  || '')
                     .set('lastName', person.lastName  || '')

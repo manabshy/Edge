@@ -130,12 +130,10 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     }
     this.personForm.valueChanges.pipe(debounceTime(1000))
       .subscribe((data) => {
-        this.postCode.setValue(this.sharedService.formatPostCode(data.address.postCode), {emitEvent: false});
+        this.postCode.setValue(this.sharedService.formatPostCode(data.address.postCode), { emitEvent: false });
         this.logValidationErrors(this.personForm);
-        console.log('formatted data', this.sharedService.formatPostCode(data.address.postCode));
       });
-
-      console.log(this.personForm);
+    console.log(this.personForm);
   }
 
   logValidationErrors(group: FormGroup = this.personForm) {
@@ -321,10 +319,6 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   otherPhones.forEach(x => {
     x.isPreferred = false;
   });
-  console.log('phone number controls', numberFormGroups);
-  console.log('selected phone', selectedPhone);
-  console.log('other phones', otherPhones);
-  console.log('phone preferences', phoneNumberPrefs);
  }
 
   addPhoneNumberItem(i) {
