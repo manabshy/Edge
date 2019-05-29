@@ -38,10 +38,9 @@ export class ScoreBadgeComponent implements OnInit {
         message += ', Profile';
       }
 
-      if(this.person.address.addressLines && this.person.address.postCode) {
+      if(this.person.address.addressLines) {
         percent += 25;
       } else {
-        percent += 12.5;
         message += ', Address';
       }
 
