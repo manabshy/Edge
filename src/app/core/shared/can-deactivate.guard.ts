@@ -1,20 +1,24 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, CanDeactivate } from '@angular/router';
+import { CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
-import { AddDiaryEventComponent } from '../add-diary-event/add-diary-event.component';
+import { AppUtils } from './utils';
 import { BsModalService } from 'ngx-bootstrap/modal/';
-import { ConfirmModalComponent } from 'src/app/core/confirm-modal/confirm-modal.component';
-import { AppUtils } from 'src/app/core/shared/utils';
+import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
+
+export interface CanComponentDeactivate {
+  canDeactivate: () => Observable<boolean> | Promise<boolean> | boolean;
+}
 
 @Injectable({
   providedIn: 'root'
 })
-export class AddDiaryEventGuard implements CanDeactivate<AddDiaryEventComponent> {
- 
+
+export class CanDeactivateGuard implements CanDeactivate<CanComponentDeactivate> {
+
   constructor(public modalService: BsModalService) {
   }
 
-  canDeactivate(component: AddDiaryEventComponent,
+  canDeactivate(component: CanComponentDeactivate,
     currentRoute: ActivatedRouteSnapshot,
     currentState: RouterStateSnapshot,
     nextState?: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
@@ -36,5 +40,4 @@ export class AddDiaryEventGuard implements CanDeactivate<AddDiaryEventComponent>
       }
       return true;
   }
-
 }

@@ -29,6 +29,7 @@ import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 import { PropertyFinderComponent } from './property-finder/property-finder.component';
 import { FormatAddressPipe } from './shared/format-address.pipe';
 import { ScoreBadgeComponent } from './score-badge/score-badge.component';
+import { CanDeactivateGuard } from './shared/can-deactivate.guard';
 
 @NgModule({
   declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent,
@@ -60,6 +61,7 @@ import { ScoreBadgeComponent } from './score-badge/score-badge.component';
     ConfirmModalComponent
   ],
   providers: [
+    CanDeactivateGuard,
     { provide: HTTP_INTERCEPTORS, useClass: AddHeaderInterceptor, multi: true }
     // { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true }
   ]

@@ -6,6 +6,7 @@ import { ContactGroupsComponent } from './contactgroups.component';
 import { ContactgroupsPeopleComponent } from './contactgroups-people/contactgroups-people.component';
 import { ContactgroupsDetailEditComponent } from './contactgroups-detail-edit/contactgroups-detail-edit.component';
 import { ContactgroupsCompanyEditComponent } from './contactgroups-company-edit/contactgroups-company-edit.component';
+import { CanDeactivateGuard } from '../core/shared/can-deactivate.guard';
 
 const routes: Routes = [
   { path: '', canActivate: [AuthGuardService], children: [
@@ -18,7 +19,7 @@ const routes: Routes = [
       { path: 'detail/:personId',
       children: [
         { path: '', component: ContactgroupsDetailComponent },
-        { path: 'people/:contactGroupId', component: ContactgroupsPeopleComponent },
+        { path: 'people/:contactGroupId', component: ContactgroupsPeopleComponent, canDeactivate: [CanDeactivateGuard] },
         {path: 'edit', component: ContactgroupsDetailEditComponent},
         // {path: 'edit:/id', component: ContactgroupsDetailEditComponent}
       ] },
