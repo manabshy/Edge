@@ -10,6 +10,7 @@ import { BsModalService } from 'ngx-bootstrap/modal/';
 import { ConfirmModalComponent } from 'src/app/core/confirm-modal/confirm-modal.component';
 import { Location } from '@angular/common';
 import { ResultData } from 'src/app/core/shared/result-data';
+import { WedgeError } from 'src/app/core/services/shared.service';
 
 @Component({
   selector: 'app-contactgroups-people',
@@ -51,7 +52,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   ngOnInit() {
     this.contactGroupTypes =  ContactGroupsTypes;
-    console.log('contact types here', this.contactGroupTypes);
     this.route.params.subscribe(params => {
       this.contactGroupId = +params['contactGroupId'] || 0;
       this.groupPersonId = +params['groupPersonId'] || 0;
@@ -99,8 +99,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         if (this.removedPersonId) {
           this.removePerson(this.removedPersonId, false);
         }
-
-        if(this.contactGroupDetails.referenceCount) {
+        if (this.contactGroupDetails.referenceCount) {
           this.errorMessage = 'Ongoing Transaction. You can\'t edit the info of this Contact Group';
         }
         this.isLoadingNewPersonVisible = false;
@@ -249,20 +248,13 @@ export class ContactgroupsPeopleComponent implements OnInit {
       const contactGroup = {...this.contactGroupDetails, ...this.contactGroupDetailsForm.value};
       this.isSubmitting = true;
       this.errorMessage = '';
-      console.log('contact to add', contactGroup);
       this.contactGroupService
         .updateContactGroup(contactGroup)
-        .subscribe(
-          (error: any) => {
-            if(!error.status){
-              this.errorMessage = error.resultDescription;
+        .subscribe( () => this.onSaveComplete(),
+          (error: WedgeError) => {
+              this.errorMessage = error.displayMessage;
               this.isSubmitting = false;
-            } else {
-              this.onSaveComplete();
-            }
-          },
-          () => this.onSaveComplete()
-        );
+          });
     }
   }
   onSaveComplete(): void {

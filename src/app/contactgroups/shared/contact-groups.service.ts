@@ -5,8 +5,9 @@ import { AppConstants } from 'src/app/core/shared/app-constants';
 import { ContactGroupAutoCompleteResult, ContactGroupAutoCompleteData,
          PersonContactData, ContactGroupData, ContactGroup, BasicContactGroup,
           BasicContactGroupData, PeopleAutoCompleteResult, PeopleAutoCompleteData } from './contact-group';
-import { map, tap, catchError, retry } from 'rxjs/operators';
+import { map, tap, catchError } from 'rxjs/operators';
 import { Person, BasicPerson } from 'src/app/core/models/person';
+import { WedgeError } from 'src/app/core/services/shared.service';
 
 @Injectable({
   providedIn: 'root'
@@ -67,21 +68,21 @@ export class ContactGroupsService {
     return this.http.put(url, contactGroup).pipe(
       map(response => response),
       tap(data => console.log('updated contact details here...', JSON.stringify(data))),
-      catchError(this.handleError)
+      catchError(err => this.handleError(err))
       );
   }
 
-  private handleError(err: HttpErrorResponse) {
-    let errorMessage = '';
+  private handleError(err: HttpErrorResponse): Observable<WedgeError> {
+    const wedgeError = new WedgeError();
     if (err.error instanceof ErrorEvent) {
-      // A client-side or network error occurred. Handle it accordingly.
-      errorMessage = `An error occurred: ${err.error.message}`;
+      wedgeError.displayMessage = `An error occurred: ${err.error.message}`;
     } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong,
-      errorMessage = `Server returned code: ${err.status}, error message is: ${err.message}`;
+      wedgeError.errorCode = err.status;
+      wedgeError.message = err.message;
+      wedgeError.displayMessage = 'An error occurred retrieving data';
     }
-    console.error(errorMessage);
-    return throwError(errorMessage);
+    console.error(wedgeError);
+    return throwError(wedgeError);
   }
 }
+
