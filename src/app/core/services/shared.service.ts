@@ -50,21 +50,7 @@ export class SharedService {
       }
     });
   }
-  /* tests to see if string is in correct UK style postcode: AL1 1AB, BM1 5YZ etc. */
-  // public isValidPostcode(p: string) {
-  //   const postcodeRegEx = /^[A-Z]{1,2}[A-Z0-9]{1,2} ?[0-9][A-Z]{2}$/i;
-  //   return postcodeRegEx.test(p);
-  // }
 
-  // /*	formats a VALID postcode nicely: AB120XY -> AB1 0XY */
-  // public formatPostcode(p: string) {
-  //   if (this.isValidPostcode(p)) {
-  //     const postcodeRegEx = /(^[A-Z]{1,2}[A-Z0-9]{1,2})([0-9][A-Z]{2}$)/i;
-  //     return p.replace(postcodeRegEx, '$1 $2');
-  //   } else {
-  //     return p;
-  //   }
-  // }
   formatPostCode(postCodeToCheck: string) {
 
     // Permitted letters depend upon their position in the postcode.
@@ -162,7 +148,9 @@ export class SharedService {
     let pv = 0;
     return map(fill((new Array(30)), 0), (v, i) => {
       v = pv;
-      if (v < 1000) { v += 50; } else if (v >= 1000 && v < 2000) { v += 250; } else if (v >= 2000 && v < 5000) { v += 500; }
+      if (v < 1000) { v += 50; }
+      else if (v >= 1000 && v < 2000) { v += 250; }
+      else if (v >= 2000 && v < 5000) { v += 500; }
       pv = v;
       return pv;
     });
@@ -177,7 +165,9 @@ export class SharedService {
     let pv = 0;
     return map(fill((new Array(30)), 0), (vv, i) => {
       vv = pv;
-      if (vv < 1000000) { vv += 50000; } else if (vv >= 1000000 && vv < 2000000) { vv += 250000; } else if (vv >= 2000000 && vv < 5000000) { vv += 500000; }
+      if (vv < 1000000) { vv += 50000; }
+      else if (vv >= 1000000 && vv < 2000000) { vv += 250000; }
+      else if (vv >= 2000000 && vv < 5000000) { vv += 500000; }
       pv = vv;
       return pv;
     });
@@ -200,4 +190,10 @@ export interface DropdownListInfo {
 export interface Country {
   id: number;
   value: string;
+}
+
+export class WedgeError {
+  errorCode: number;
+  message: string;
+  displayMessage: string;
 }
