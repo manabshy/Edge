@@ -20,11 +20,10 @@ export class FormatAddressPipe implements PipeTransform {
     fullAddress += address.houseBuildingName + ', ';
   }
 
-  // if (!!(address.address1 && address.address2)) {
-  //   fullAddress += `${address.address1}, ${address.address2}, `;
-  // } else if (address.address1) {
-  //   fullAddress += `${address.address1}, `;
-  // }
+  if (!!address.addressLines) {
+    fullAddress += `${address.addressLines} `;
+  }
+
   if (!!(address.houseNumber && address.streetName)) {
     fullAddress += `${address.houseNumber} ${address.streetName}, `;
   } else if (address.streetName) {
@@ -35,8 +34,12 @@ export class FormatAddressPipe implements PipeTransform {
     fullAddress += address.town + ', ';
   }
 
-  if (address.outCode && address.inCode) {
-    fullAddress += address.outCode + ' ' + address.inCode;
+  // if (address.outCode && address.inCode) {
+  //   fullAddress += address.outCode + ' ' + address.inCode;
+  // }
+
+  if (!!address.postCode) {
+    fullAddress += address.postCode;
   }
 
   fullAddress = fullAddress.replace(/,\s*$/, '');

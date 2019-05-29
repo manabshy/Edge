@@ -133,6 +133,8 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         this.logValidationErrors(this.personForm);
         console.log('formatted data', this.sharedService.formatPostCode(data.address.postCode));
       });
+
+      console.log(this.personForm);
   }
 
   logValidationErrors(group: FormGroup = this.personForm) {

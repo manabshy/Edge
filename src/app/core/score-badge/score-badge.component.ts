@@ -24,6 +24,7 @@ export class ScoreBadgeComponent implements OnInit {
 
   ngOnChanges() {
     this.calculateScore();
+    console.log(this.person);
   }
 
   calculateScore() {
@@ -37,26 +38,20 @@ export class ScoreBadgeComponent implements OnInit {
         message += ', Profile';
       }
 
-      let address;
-      if(this.person.address){
-        address = new FormatAddressPipe().transform(this.person.address);
-      } else {
-        address = this.person.address.inCode;
-      }
-
-      if(address) {
+      if(this.person.address.addressLines && this.person.address.postCode) {
         percent += 25;
       } else {
+        percent += 12.5;
         message += ', Address';
       }
 
-      if(this.person.phoneNumbers.length) {
+      if(this.person.phoneNumbers.length  && this.person.phoneNumbers[0].number) {
         percent += 25;
       } else {
         message += ', Phone number';
       }
 
-      if(this.person.emailAddresses.length) {
+      if(this.person.emailAddresses.length && this.person.emailAddresses[0].email) {
         percent += 25;
       } else {
         message += ', Email address';
@@ -70,16 +65,16 @@ export class ScoreBadgeComponent implements OnInit {
     this.percent = (percent || 15) + '%';
 
 
-    switch(percent) {
-      case 100:
-        this.bg = 'success';
-        this.message = 'Good Job! You\'ve completed this person details.';
-        break;
-      case 75:
+    switch(true) {
+      case percent < 100:
         this.bg = 'warning';
         break;
-      default:
+      case percent < 75:
         this.bg = 'danger';
+        break;
+      default:
+        this.bg = 'success';
+        this.message = 'Good Job! You\'ve completed this person details.';
     }
   }
 
