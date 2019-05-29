@@ -44,6 +44,7 @@ export interface Email {
   id?: number;
   email: string;
   orderNumber: number;
+  isPreferred: boolean;
   isPrimaryWebEmail: boolean;
 }
 

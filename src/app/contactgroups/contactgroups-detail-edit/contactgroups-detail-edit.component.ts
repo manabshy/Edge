@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output } from '@angular/core';
-import { SharedService } from 'src/app/core/services/shared.service';
+import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { Person, Email, PhoneNumber, BasicPerson } from 'src/app/core/models/person';
@@ -20,6 +20,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   @Output() backToFinder = new EventEmitter<boolean>();
   @Input() foundPersonId: number;
   @Input() basicPerson: BasicPerson;
+  prefToggleStatus = false;
   countries: any;
   titles: any;
   telephoneTypes: any;
@@ -162,17 +163,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       this._location.back();
     }
   }
-  setValidationForContactPreference(option: string) {
-    const emailFormArray = this.personForm.get('emailAddresses');
 
-    if (option === 'email') {
-      emailFormArray.setValidators(Validators.required);
-    } else {
-      emailFormArray.clearValidators();
-    }
-    emailFormArray.updateValueAndValidity();
-    console.log('email address with validation set', emailFormArray);
-  }
   getPersonDetails(personId: number) {
     this.contactGroupService.getPerson(personId).subscribe(data => {
       this.personDetails = data;
@@ -243,7 +234,9 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     const emailFormArray = new FormArray([]);
     emailAddresses.forEach(x => {
       emailFormArray.push(this.fb.group({
+        id: x.id,
         email: x.email,
+        isPreferred: x.isPreferred,
         isPrimaryWebEmail: x.isPrimaryWebEmail
       }));
     });
@@ -283,6 +276,18 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     });
   }
 
+  setValidationForContactPreference(option: string) {
+    const emailFormArray = this.personForm.get('emailAddresses');
+
+    if (option === 'email') {
+      emailFormArray.setValidators(Validators.required);
+    } else {
+      emailFormArray.clearValidators();
+    }
+    emailFormArray.updateValueAndValidity();
+    console.log('email address with validation set', emailFormArray);
+  }
+
   removeValidationForAdditionalFields() {
     const currPhoneNumber = this.phoneNumbers.controls[0];
     const currEmail = this.emailAddresses.controls[0];
@@ -305,6 +310,22 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       event.target.classList.remove('is-invalid');
     }
   }
+ togglePreferences(index: number) {
+  const phoneNumberPrefs = [] ;
+  const  numberFormGroups = this.phoneNumbers.controls;
+  const selectedPhone = numberFormGroups[index].value;
+   for (let i = 0; i < numberFormGroups.length; i++) {
+     phoneNumberPrefs.push(numberFormGroups[i].value);
+   }
+  const otherPhones = phoneNumberPrefs.filter(x => x !== selectedPhone);
+  otherPhones.forEach(x => {
+    x.isPreferred = false;
+  });
+  console.log('phone number controls', numberFormGroups);
+  console.log('selected phone', selectedPhone);
+  console.log('other phones', otherPhones);
+  console.log('phone preferences', phoneNumberPrefs);
+ }
 
   addPhoneNumberItem(i) {
     const currPhoneNumber = this.phoneNumbers.controls[i];
@@ -343,6 +364,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       id: 0,
       orderNumber: 0,
       email: ['', [Validators.required, Validators.pattern(this.emailPattern)]],
+      isPreferred: [false],
       isPrimaryWebEmail: [false]
     });
   }
@@ -356,8 +378,9 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         person.address.outCode = postCode[0];
         person.address.inCode = postCode[1];
         this.contactGroupService.updatePerson(person).subscribe(() => this.onSaveComplete(),
-          (error: any) => this.errorMessage = <any>error);
+          (error: WedgeError) => this.errorMessage = error.displayMessage);
         console.log('post code details to post', this.sharedService.splitPostCode(person.address.postCode));
+        console.log('person details form values', this.personForm.value);
         console.log('person details to post', person);
         // console.log('Post code formatted here', this.sharedService.formatPostcode(this.personForm.controls.get('postCode').value));
       } else {

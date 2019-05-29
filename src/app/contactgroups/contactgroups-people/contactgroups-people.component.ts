@@ -9,7 +9,6 @@ import { Subject } from 'rxjs';
 import { BsModalService } from 'ngx-bootstrap/modal/';
 import { ConfirmModalComponent } from 'src/app/core/confirm-modal/confirm-modal.component';
 import { Location } from '@angular/common';
-import { ResultData } from 'src/app/core/shared/result-data';
 import { WedgeError } from 'src/app/core/services/shared.service';
 
 @Component({
