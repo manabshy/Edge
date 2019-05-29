@@ -5,7 +5,7 @@
     There are pending changes on the people list. Save to make them effective.
   </div>
   <div class="alert alert-warning" *ngIf="isSwitchTypeMsgVisible">
-    <ng-container *ngIf="!!(contactGroupDetailsForm.controls.contactType.value === 1); else !!swithToMulti">
+    <ng-container *ngIf="contactGroupDetailsForm.controls.contactType.value === 1; else switchToMulti">
       You can't have less than <b>2</b> people in an <b>Multi/Sharer</b> contact group. We have switched to
       <b>Individual/Joint</b>.
     </ng-container>
@@ -172,7 +172,7 @@
       <div class="container px-lg-4">
         <div class="row justify-content-end w-100 no-gutters">
           <div class="col-sm-10 d-flex">
-            <button type="button" class="btn btn-light mr-2">Cancel</button>
+            <button type="button" class="btn btn-light mr-2" (click)="cancel()">Cancel</button>
             <button type="submit" class="btn btn-secondary" (click)="saveContactGroup()" [attr.disabled]="!contactGroupDetails?.contactPeople.length || (isSubmitting && !errorMessage) ? '' : null">
               <i class="fas fa-spinner fa-pulse d-inline-block mr-2" *ngIf="isSubmitting && !errorMessage"></i>Save
             </button>

@@ -119,7 +119,7 @@
               <div class="input-group-append order-sm-2">
                 <label class="btn btn-light" btnCheckbox tabindex="0"
                   role="button">SMS</label>
-                <label class="btn btn-light" btnCheckbox formControlName="isPreferred" tabindex="0"
+                <label class="btn btn-light" btnCheckbox formControlName="isPreferred" tabindex="0" (click)="togglePreferences(i)"
                   role="button"><i class="fa-star" [ngClass]="!!personForm.controls.phoneNumbers.controls[i].controls.isPreferred.value ? 'fas' : 'far'"></i></label>
               </div>
               <input type="text" class="form-control order-sm-1" placeholder="Comments" formControlName="comments">

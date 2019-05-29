@@ -9,7 +9,6 @@ import { Subject } from 'rxjs';
 import { BsModalService } from 'ngx-bootstrap/modal/';
 import { ConfirmModalComponent } from 'src/app/core/confirm-modal/confirm-modal.component';
 import { Location } from '@angular/common';
-import { ResultData } from 'src/app/core/shared/result-data';
 import { WedgeError } from 'src/app/core/services/shared.service';
 
 @Component({
@@ -278,6 +277,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
       salutation: salutation,
       addressee: addressee
     }, {onlySelf: false});
+
+    this.contactGroupDetailsForm.markAsDirty();
   }
 
   hideCanvas(event) {
@@ -317,5 +318,16 @@ export class ContactgroupsPeopleComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  canDeactivate(): boolean {
+    if(this.contactGroupDetailsForm.dirty && !this.isSubmitting) {
+      return false;
+    }
+    return true;
+  }
+
+  cancel() {
+    this._location.back();
   }
 }

@@ -160,17 +160,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       this._location.back();
     }
   }
-  setValidationForContactPreference(option: string) {
-    const emailFormArray = this.personForm.get('emailAddresses');
 
-    if (option === 'email') {
-      emailFormArray.setValidators(Validators.required);
-    } else {
-      emailFormArray.clearValidators();
-    }
-    emailFormArray.updateValueAndValidity();
-    console.log('email address with validation set', emailFormArray);
-  }
   getPersonDetails(personId: number) {
     this.contactGroupService.getPerson(personId).subscribe(data => {
       this.personDetails = data;
@@ -281,6 +271,18 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     });
   }
 
+  setValidationForContactPreference(option: string) {
+    const emailFormArray = this.personForm.get('emailAddresses');
+
+    if (option === 'email') {
+      emailFormArray.setValidators(Validators.required);
+    } else {
+      emailFormArray.clearValidators();
+    }
+    emailFormArray.updateValueAndValidity();
+    console.log('email address with validation set', emailFormArray);
+  }
+
   removeValidationForAdditionalFields() {
     const currPhoneNumber = this.phoneNumbers.controls[0];
     const currEmail = this.emailAddresses.controls[0];
@@ -303,7 +305,23 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       event.target.classList.remove('is-invalid');
     }
   }
-
+ togglePreferences(index: number) {
+  const prefs = [] ;
+  const  numberFormGroups = this.phoneNumbers.controls;
+  for (const i of numberFormGroups) {
+    prefs.push(this.phoneNumbers.controls[index].value.isPreferred);
+  }
+  // numberFormGroups.forEach(()=>{
+  //   prefs.push(this.phoneNumbers.controls[index].value.isPreferred);
+  // });
+  // prefs.push(this.phoneNumbers.controls[index].value.isPreferred);
+  if (prefs) {
+    prefs[index] = !prefs[index];
+  }
+  console.log('phone number controls', numberFormGroups);
+  console.log('phone preferences', prefs);
+  console.log('phone pref', prefs[index]);
+ }
   addPhoneNumberItem(i) {
     const currPhoneNumber = this.phoneNumbers.controls[i];
     const lastPhoneNumber = this.phoneNumbers.controls[this.phoneNumbers.controls.length - 1];
