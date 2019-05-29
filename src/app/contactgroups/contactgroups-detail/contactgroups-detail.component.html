@@ -34,15 +34,19 @@
     <div class="col-12 col-sm-3 col-xl-4">
       <div class="row">
         <div class="col-6 telephone">
-          <p class="mb-2 text-danger" *ngIf="!searchedPersonDetails.phoneNumbers.length">No phone</p>
-          <p class="mb-2" *ngFor="let phoneNumber of searchedPersonDetails.phoneNumbers; let i = index;"><a href="tel:{{phoneNumber.number}}">{{phoneNumber.number}}</a></p>
+          <p class="mb-2 text-danger" *ngIf="!searchedPersonDetails.phoneNumbers.length || !searchedPersonDetails.phoneNumbers[0].number">No phone</p>
+          <ng-container *ngFor="let phoneNumber of searchedPersonDetails.phoneNumbers">
+            <p class="mb-2" *ngIf="phoneNumber.number"><a href="tel:{{phoneNumber.number}}">{{phoneNumber.number}}</a></p>
+          </ng-container>
         </div>
       </div>
     </div>
     <div class="col-sm-5 col-xl-4">
-      <p class="mb-2 text-danger" *ngIf="!searchedPersonDetails.emailAddresses.length">No phone</p>
-      <p class="mb-2 text-truncate" *ngFor="let emailAddresses of searchedPersonDetails.emailAddresses"><a
+      <p class="mb-2 text-danger" *ngIf="!searchedPersonDetails.emailAddresses.length || !searchedPersonDetails.emailAddresses[0].length">No email</p>
+      <ng-container *ngFor="let emailAddresses of searchedPersonDetails.emailAddresses">
+        <p class="mb-2 text-truncate" *ngIf="emailAddresses.email"><a
           href="mailto:{{emailAddresses.email}}">{{emailAddresses.email}}</a></p>
+      </ng-container>
     </div>
     <div class="col-12">
       <hr class="my-1">

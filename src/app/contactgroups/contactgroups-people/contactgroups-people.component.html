@@ -77,16 +77,20 @@
           <div class="col-sm-3 col-xl-4">
             <div class="row">
               <div class="col-6 telephone">
-                <p class="mb-2 text-danger" *ngIf="!person.phoneNumbers.length">No phone</p>
-                <p class="mb-2" *ngFor="let phoneNumber of person?.phoneNumbers"><a (click)="$event.stopPropagation()"
+                <p class="mb-2 text-danger" *ngIf="!person.phoneNumbers.length || !person.phoneNumbers[0].number">No phone</p>
+                <ng-container *ngFor="let phoneNumber of person?.phoneNumbers">
+                  <p class="mb-2" *ngIf="phoneNumber?.number"><a (click)="$event.stopPropagation()"
                     href="tel:{{phoneNumber.number}}">{{phoneNumber?.number}}</a><br />{{phoneNumber?.telephoneId}}</p>
+                </ng-container>
               </div>
             </div>
           </div>
           <div class="col-sm-5 col-xl-4">
-            <p class="mb-2 text-danger" *ngIf="!person.emailAddresses.length">No email</p>
-            <p class="mb-2" *ngFor="let emailAddress of person?.emailAddresses"><a (click)="$event.stopPropagation()"
-                href="mailto:{{emailAddress.email}}">{{emailAddress?.email}}</a></p>
+            <p class="mb-2 text-danger" *ngIf="!person.emailAddresses.length || !person.emailAddresses[0].email">No email</p>
+            <ng-container *ngFor="let emailAddress of person?.emailAddresses">
+              <p class="mb-2" *ngIf="emailAddress?.email"><a (click)="$event.stopPropagation()"
+                  href="mailto:{{emailAddress.email}}">{{emailAddress?.email}}</a></p>
+            </ng-container>
           </div>
           <div class="col-12">
             <hr class="my-1">

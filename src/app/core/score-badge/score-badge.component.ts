@@ -64,16 +64,16 @@ export class ScoreBadgeComponent implements OnInit {
     this.percent = (percent || 15) + '%';
 
 
-    switch(true) {
-      case percent < 100:
-        this.bg = 'warning';
-        break;
-      case percent < 75:
-        this.bg = 'danger';
-        break;
-      default:
+    switch(percent) {
+      case 100:
         this.bg = 'success';
         this.message = 'Good Job! You\'ve completed this person details.';
+        break;
+      case 75:
+        this.bg = 'warning';
+        break;
+      default:
+        this.bg = 'danger';
     }
   }
 
