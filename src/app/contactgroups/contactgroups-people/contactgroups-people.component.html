@@ -195,9 +195,9 @@
 </div>
 <div class="off-canvas" [hidden]="!isOffCanvasVisible" (click)="showHideOffCanvas($event)">
   <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()">
-    <h4 class="page-title text-left pt-3">
-      <ng-container *ngIf="!selectedPersonId; else selectedLabel">Find</ng-container>
-      <ng-template #selectedLabel>Selected</ng-template> Person
+    <h4 class="page-title text-left pt-3" [ngClass]="{'m-0': isCreateNewPerson}">
+      <ng-container *ngIf="!isCreateNewPerson; else createLabel">Find</ng-container>
+      <ng-template #createLabel>New </ng-template> Person
       <button type="button" class="close mr-2" aria-label="Close" (click)="showHideOffCanvas($event)">
         <span aria-hidden="true">&times;</span>
       </button>

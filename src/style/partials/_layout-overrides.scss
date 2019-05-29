@@ -54,7 +54,7 @@ tr:first-child{
 
     &.sticky-top {
         background: color('white');
-        z-index: 100;
+        z-index: 99;
     }
 
     @include media-breakpoint-up(lg) {

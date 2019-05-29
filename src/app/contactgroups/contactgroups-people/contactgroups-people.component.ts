@@ -287,7 +287,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   backToFinder(event) {
     if (event) {
-      this.selectedPersonId = 0;
+      this.isCreateNewPerson = false;
     }
   }
 

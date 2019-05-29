@@ -155,7 +155,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   }
 
   cancel() {
-    if (this.foundPersonId && this.foundPersonId !== 0) {
+    if (this.basicPerson) {
       this.backToFinder.emit(true);
     } else {
       this._location.back();

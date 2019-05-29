@@ -1,8 +1,7 @@
-<app-breadcrumb *ngIf="!foundPersonId"></app-breadcrumb>
-<div class="container">
-  <div class="page-title sticky-top">
-    <h4 *ngIf="!foundPersonId">Edit Person</h4>
-    <!-- TODO change info on value changes  -->
+<app-breadcrumb *ngIf="!basicPerson"></app-breadcrumb>
+<div class="container" [ngClass]="{'p-0': basicPerson}">
+  <div class="page-title sticky-top" [ngClass]="{'pt-3': basicPerson}">
+    <h4 *ngIf="!basicPerson">Edit Person</h4>
     <app-score-badge [bar]="true" [person]="personForm.value"></app-score-badge>
   </div>
   <div class="text-center" *ngIf="!personDetails && !basicPerson">
@@ -211,12 +210,12 @@
       </div>
     </div>
 
-    <div class="form-actions">
+    <div class="form-actions" [ngClass]="{'px-0': basicPerson}">
       <div class="container px-lg-4">
         <div class="row justify-content-end w-100 no-gutters">
           <div class="col-sm-10 d-flex">
             <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
-            <button type="submit" class="btn btn-secondary" ><ng-container *ngIf="!foundPersonId; else addPersonLabel">Save</ng-container><ng-template #addPersonLabel>Add Person</ng-template></button>
+            <button type="submit" class="btn btn-secondary" ><ng-container *ngIf="!basicPerson; else addPersonLabel">Save</ng-container><ng-template #addPersonLabel>Create</ng-template></button>
           </div>
         </div>
       </div>
