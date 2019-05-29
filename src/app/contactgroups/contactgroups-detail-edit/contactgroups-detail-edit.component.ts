@@ -402,4 +402,11 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   makeCanvasInvisible(close: boolean) {
     this.hideCanvas.emit(close);
   }
+
+  canDeactivate(): boolean {
+    if(this.personForm.dirty) {
+      return false;
+    }
+    return true;
+  }
 }

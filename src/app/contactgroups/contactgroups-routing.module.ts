@@ -20,7 +20,7 @@ const routes: Routes = [
       children: [
         { path: '', component: ContactgroupsDetailComponent },
         { path: 'people/:contactGroupId', component: ContactgroupsPeopleComponent, canDeactivate: [CanDeactivateGuard] },
-        {path: 'edit', component: ContactgroupsDetailEditComponent},
+        {path: 'edit', component: ContactgroupsDetailEditComponent, canDeactivate: [CanDeactivateGuard]},
         // {path: 'edit:/id', component: ContactgroupsDetailEditComponent}
       ] },
     ] },
