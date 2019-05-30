@@ -66,8 +66,7 @@
               <div class="form-group" *ngIf="showPostCode">
                 <label class="small" for="postcode">Postcode</label>
                 <div class="input-group">
-                  <input type="text" class="form-control form-control-sm"  id="postcode"
-                    placeholder="Outcode" formControlName="postCode" [ngClass]="{'is-invalid': formErrors.postCode}">
+                  <input type="text" class="form-control form-control-sm"  id="postcode" formControlName="postCode" [ngClass]="{'is-invalid': formErrors.postCode}">
                   <!-- <input type="text" class="form-control form-control-sm"  id="incode"
                     placeholder="Incode" formControlName="inCode" [ngClass]="{'is-invalid': formErrors.inCode}"> -->
                     <span class="invalid-feedback">{{formErrors.postCode}}</span>

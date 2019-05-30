@@ -90,7 +90,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   };
 
   get showPostCode(): boolean {
-    return this.address.get('countryId').value === this.defaultCountryCode;
+    return this.address.get('countryId').value == this.defaultCountryCode;
   }
   get postCode(): FormControl {
     return <FormControl>this.address.get('postCode');
