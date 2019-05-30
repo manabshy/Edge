@@ -89,8 +89,8 @@
                 <input type="text" [id]="'email' + i" [placeholder]="!isFirst ? 'Additional Email' : ''" class="form-control" formControlName="email"
                 (keyup)="addEmailItem(i)"  (blur)="isValid($event, !!personForm.controls.emailAddresses.controls[i].controls.email)"  [ngClass]="{'border border-warning': !personForm.controls.emailAddresses.controls[0].controls.email.value && isFirst}">
                 <div class="input-group-append">
-                  <label class="btn btn-light" btnCheckbox formControlName="isPreferred" tabindex="0"
-                    role="button"><i class="fa-star" [ngClass]="!!personForm.controls.emailAddresses.controls[i].controls.isPreferred.value ? 'fas' : 'far'"></i></label>
+                  <label class="btn btn-light" btnCheckbox formControlName="isPreferred" tabindex="0" (click)="togglePreferences(i, emailAddresses)"
+                    role="button"  [class.active]="personForm.value.emailAddresses[i].isPreferred"><i class="fa-star" [ngClass]="!!personForm.value.emailAddresses[i].isPreferred ? 'fas' : 'far'"></i></label>
                 </div>
                 <span class="invalid-feedback">
                   <span *ngIf="!!personForm.controls.emailAddresses.controls[i].controls.email.errors">
@@ -121,7 +121,7 @@
               <div class="input-group-append order-sm-2">
                 <label class="btn btn-light" btnCheckbox tabindex="0"
                   role="button">SMS</label>
-                <label class="btn btn-light" btnCheckbox formControlName="isPreferred" tabindex="0" (click)="togglePreferences(i)"
+                <label class="btn btn-light" btnCheckbox formControlName="isPreferred" tabindex="0" (click)="togglePreferences(i, phoneNumbers)"
                   role="button" [class.active]="personForm.value.phoneNumbers[i].isPreferred"><i class="fa-star" [ngClass]="personForm.value.phoneNumbers[i].isPreferred ? 'fas' : 'far'"></i></label>
               </div>
               <input type="text" class="form-control order-sm-1" placeholder="Comments" formControlName="comments">

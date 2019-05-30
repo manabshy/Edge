@@ -324,17 +324,33 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       event.target.classList.remove('is-invalid');
     }
   }
- togglePreferences(index: number) {
-  const phoneNumberPrefs = [] ;
-  const  numberFormGroups = this.phoneNumbers.controls;
-  const selectedPhone = numberFormGroups[index].value;
-   for (let i = 0; i < numberFormGroups.length; i++) {
-     phoneNumberPrefs.push(numberFormGroups[i].value);
-   }
-  const otherPhones = phoneNumberPrefs.filter(x => x !== selectedPhone);
-  otherPhones.forEach(x => {
-    x.isPreferred = false;
-  });
+ togglePreferences(index: number, group: FormArray) {
+
+  if (group === this.phoneNumbers) {
+    const phoneNumberPrefs = [] ;
+    const numberFormGroups = this.phoneNumbers.controls;
+    const selectedPhoneNumber = numberFormGroups[index].value;
+    for (let i = 0; i < numberFormGroups.length; i++) {
+      phoneNumberPrefs.push(numberFormGroups[i].value);
+    }
+    const otherPhoneNumbers = phoneNumberPrefs.filter(x => x !== selectedPhoneNumber);
+    otherPhoneNumbers.forEach(x => {
+      x.isPreferred = false;
+    });
+    console.log('group here phone numbers ');
+  } else {
+    const emailPrefs = [] ;
+    const emailFormGroups = this.emailAddresses.controls;
+    const selectedEmail = emailFormGroups[index].value;
+    for (let i = 0; i < emailFormGroups.length; i++) {
+      emailPrefs.push(emailFormGroups[i].value);
+    }
+    const otherEmails = emailPrefs.filter(x => x !== selectedEmail);
+    otherEmails.forEach(x => {
+      x.isPreferred = false;
+    });
+    console.log('emails group here');
+  }
  }
 
   addPhoneNumberItem(i) {
