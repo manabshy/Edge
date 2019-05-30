@@ -179,6 +179,13 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       lastName: this.basicPerson.lastName,
       address: {
         countryId: this.defaultCountryCode
+      },
+      marketingPreferences: {
+        marketBulletin: false,
+        offersSurveys: false,
+        events: false,
+        newHomes: false,
+        general: false
       }
     });
     this.personForm.setControl('emailAddresses', this.setExistingEmailAddresses(this.basicPerson.emailAddresses));
