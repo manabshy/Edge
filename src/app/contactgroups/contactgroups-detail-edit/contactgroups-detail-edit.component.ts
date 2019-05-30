@@ -176,8 +176,11 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     this.sharedService.findAddress(searchTerm).subscribe(data => {
       this.foundAddress = data;
       console.log('id here', data.Items[0].Id);
-      data.Items.forEach(x=>console.log(x.Description));
-      this.retrieveAddress(data.Items[0].Id);
+      data.Items.forEach(x=>{
+        console.log(x.Description);
+        console.log(x.Id);
+        this.retrieveAddress(x.Id);
+      });
     });
   }
   private retrieveAddress(id: string) {

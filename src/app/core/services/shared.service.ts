@@ -210,8 +210,6 @@ export class SharedService {
     return this.http.get<any>(`${AppConstants.addressCaptureBaseUrl}/Retrieve/v1.10/json3.ws`, options)
     .pipe(
       // map(response => response.items),
-      tap(data => console.log('address request here', addressRequest)),
-      tap(data => console.log('address params here', params)),
       tap(data => console.log('retrieve address here', data)),
       );
   }
