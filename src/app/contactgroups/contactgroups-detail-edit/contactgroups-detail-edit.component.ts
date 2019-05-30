@@ -18,7 +18,6 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   @Output() editedPersonId = new EventEmitter<number>();
   @Output() hideCanvas = new EventEmitter<boolean>();
   @Output() backToFinder = new EventEmitter<boolean>();
-  @Input() foundPersonId: number;
   @Input() basicPerson: BasicPerson;
   prefToggleStatus = false;
   countries: any;
@@ -37,6 +36,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   returnUrl: string;
   errorMessage: string;
   errorsMessage: any = [];
+  isSubmitting = false;
   postCodePattern = /^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]?[\s]+?[0-9][A-Za-z]{2}|[Gg][Ii][Rr][\s]+?0[Aa]{2})$/;
   emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   validationMessagesSimple = {
@@ -367,12 +367,16 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     this.removeValidationForAdditionalFields();
     if (this.personForm.valid) {
       if (this.personForm.dirty) {
+        this.isSubmitting = true;
         const person = { ...this.personDetails, ...this.personForm.value };
         const postCode =  this.sharedService.splitPostCode(person.address.postCode);
         person.address.outCode = postCode[0];
         person.address.inCode = postCode[1];
         this.contactGroupService.updatePerson(person).subscribe(() => this.onSaveComplete(),
-          (error: WedgeError) => this.errorMessage = error.displayMessage);
+          (error: WedgeError) => {
+            this.errorMessage = error.displayMessage;
+            this.isSubmitting = false;
+          });
         console.log('post code details to post', this.sharedService.splitPostCode(person.address.postCode));
         console.log('person details form values', this.personForm.value);
         console.log('person details to post', person);
@@ -389,11 +393,11 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   }
   onSaveComplete() {
     this.personForm.reset();
-    this.editSelectPerson(this.foundPersonId);
-    if (this.foundPersonId !== 0) {
+    // this.editSelectPerson(this.foundPersonId);
+    if (this.basicPerson) {
       this.makeCanvasInvisible(this.isOffCanvasVisible);
     } else {
-      this.router.navigateByUrl('/contact-centre');
+      this._location.back();
     }
   }
   editSelectPerson(id: number) {
@@ -404,7 +408,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   }
 
   canDeactivate(): boolean {
-    if(this.personForm.dirty) {
+    if(this.personForm.dirty  && !this.isSubmitting) {
       return false;
     }
     return true;

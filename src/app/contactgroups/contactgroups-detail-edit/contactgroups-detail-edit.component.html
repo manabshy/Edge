@@ -215,7 +215,7 @@
         <div class="row justify-content-end w-100 no-gutters">
           <div class="col-sm-10 d-flex">
             <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
-            <button type="submit" class="btn btn-secondary" ><ng-container *ngIf="!basicPerson; else addPersonLabel">Save</ng-container><ng-template #addPersonLabel>Create</ng-template></button>
+            <button type="submit" class="btn btn-secondary" [attr.disabled]="isSubmitting && !errorMessage ? '' : null"><i class="fas fa-spinner fa-pulse d-inline-block mr-2" *ngIf="isSubmitting && !errorMessage"></i><ng-container *ngIf="!basicPerson; else addPersonLabel">Save</ng-container><ng-template #addPersonLabel>Create</ng-template></button>
           </div>
         </div>
       </div>
