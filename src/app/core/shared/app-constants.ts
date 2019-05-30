@@ -1,4 +1,5 @@
 export class AppConstants {
+  public static get addressCaptureBaseUrl(): string { return 'https://services.postcodeanywhere.co.uk/Capture/Interactive';}
   public static get leaderboardBaseUrl(): string { return 'https://dandg-api-wedge.azurewebsites.net/v10/staffmembers/leaderboard'; }
   public static get baseUrl(): string { return'https://dandg-api-wedge.azurewebsites.net/v10/staffmembers'; }
   public static get  baseContactGroupUrl(): string { return'https://dandg-api-wedge.azurewebsites.net/v10/contactGroups'; }

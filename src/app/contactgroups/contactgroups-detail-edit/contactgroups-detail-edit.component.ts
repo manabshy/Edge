@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output } from '@angular/core';
-import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
+import { SharedService, WedgeError, AddressAutoCompleteData } from 'src/app/core/services/shared.service';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { Person, Email, PhoneNumber, BasicPerson } from 'src/app/core/models/person';
@@ -28,6 +28,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   titleSelected = 1;
   defaultCountryCode = 232;
   telephoneTypeSelected = 1;
+  retrievedAddresses: AddressAutoCompleteData;
   personDetails: Person;
   personForm: FormGroup;
   personId: number;
@@ -36,13 +37,8 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   isOffCanvasVisible = false;
   returnUrl: string;
   errorMessage: string;
-  errorsMessage: any = [];
   postCodePattern = /^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]?[\s]+?[0-9][A-Za-z]{2}|[Gg][Ii][Rr][\s]+?0[Aa]{2})$/;
   emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  validationMessagesSimple = {
-    required: 'is required.',
-    maxlength: 'must be less than # characters.',
-  };
   validationMessages = {
     'firstName': {
       required: 'First name is required.',
@@ -88,6 +84,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     'number': '',
     'postCode': ''
   };
+  foundAddress: AddressAutoCompleteData;
 
   get showPostCode(): boolean {
     return this.address.get('countryId').value === this.defaultCountryCode;
@@ -134,6 +131,11 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         this.logValidationErrors(this.personForm);
       });
     console.log(this.personForm);
+
+    const addressControl = this.personForm.get('fullAddress');
+    addressControl.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
+      this.findAddress(data);
+    });
   }
 
   logValidationErrors(group: FormGroup = this.personForm) {
@@ -168,6 +170,23 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       console.log('person details', this.personDetails);
       this.displayPersonDetails(data);
     }, error => this.errorMessage = <any>error);
+  }
+
+  findAddress(searchTerm: string) {
+    this.sharedService.findAddress(searchTerm).subscribe(data => {
+      this.foundAddress = data;
+      console.log('id here', data.Items[0].Id);
+      data.Items.forEach(x=>console.log(x.Description));
+      this.retrieveAddress(data.Items[0].Id);
+    });
+  }
+  private retrieveAddress(id: string) {
+    if (this.foundAddress) {
+      this.sharedService.getAddress(id).subscribe(data => {
+        this.retrievedAddresses = data;
+        console.log('found addresses here', data);
+      });
+    }
   }
 
   populateNewPersonDetails() {
@@ -212,6 +231,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     });
     this.personForm.setControl('emailAddresses', this.setExistingEmailAddresses(person.emailAddresses));
     this.personForm.setControl('phoneNumbers', this.setExistingPhoneNumbers(person.phoneNumbers));
+
   }
 
   setExistingPhoneNumbers(phoneNumbers: PhoneNumber[]): FormArray {
@@ -308,35 +328,48 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       event.target.classList.remove('is-invalid');
     }
   }
- togglePreferences(index: number, group: FormArray) {
-
-  if (group === this.phoneNumbers) {
-    const phoneNumberPrefs = [] ;
-    const numberFormGroups = this.phoneNumbers.controls;
-    const selectedPhoneNumber = numberFormGroups[index].value;
-    for (let i = 0; i < numberFormGroups.length; i++) {
-      phoneNumberPrefs.push(numberFormGroups[i].value);
+  togglePreferences(index: number, group: FormArray) {
+    if (group === this.phoneNumbers) {
+      const phoneNumberPrefs = [];
+      const numberFormGroups = this.phoneNumbers.controls;
+      const selectedPhoneNumber = numberFormGroups[index].value;
+      for (let i = 0; i < numberFormGroups.length; i++) {
+        phoneNumberPrefs.push(numberFormGroups[i].value);
+      }
+      const otherPhoneNumbers = phoneNumberPrefs.filter(x => x !== selectedPhoneNumber);
+      otherPhoneNumbers.forEach(x => {
+        x.isPreferred = false;
+      });
+      console.log('group here phone numbers ');
+    } else {
+      const emailPrefs = [];
+      const emailFormGroups = this.emailAddresses.controls;
+      const selectedEmail = emailFormGroups[index].value;
+      for (let i = 0; i < emailFormGroups.length; i++) {
+        emailPrefs.push(emailFormGroups[i].value);
+      }
+      const otherEmails = emailPrefs.filter(x => x !== selectedEmail);
+      otherEmails.forEach(x => {
+        x.isPreferred = false;
+      });
+      console.log('emails group here');
     }
-    const otherPhoneNumbers = phoneNumberPrefs.filter(x => x !== selectedPhoneNumber);
-    otherPhoneNumbers.forEach(x => {
-      x.isPreferred = false;
-    });
-    console.log('group here phone numbers ');
-  } else {
-    const emailPrefs = [] ;
-    const emailFormGroups = this.emailAddresses.controls;
-    const selectedEmail = emailFormGroups[index].value;
-    for (let i = 0; i < emailFormGroups.length; i++) {
-      emailPrefs.push(emailFormGroups[i].value);
-    }
-    const otherEmails = emailPrefs.filter(x => x !== selectedEmail);
-    otherEmails.forEach(x => {
-      x.isPreferred = false;
-    });
-    console.log('emails group here');
   }
- }
 
+  checkDuplicateAdressLines(address: string, postcode: string, country: string) {
+    const addressLines = [];
+    let duplicateErrorMessage = '';
+    addressLines.push(address.split('\n'));
+    addressLines.forEach(x => {
+      if (x === postcode) {
+        duplicateErrorMessage = 'Address lines should not contain post code';
+        console.log('addres parts here...', x);
+      } else if (x === country) {
+        duplicateErrorMessage = 'Address lines should not contain country';
+      }
+      console.log('addres parts here...', x);
+    });
+  }
   addPhoneNumberItem(i) {
     const currPhoneNumber = this.phoneNumbers.controls[i];
     const lastPhoneNumber = this.phoneNumbers.controls[this.phoneNumbers.controls.length - 1];
@@ -392,7 +425,6 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         console.log('post code details to post', this.sharedService.splitPostCode(person.address.postCode));
         console.log('person details form values', this.personForm.value);
         console.log('person details to post', person);
-        // console.log('Post code formatted here', this.sharedService.formatPostcode(this.personForm.controls.get('postCode').value));
       } else {
         this.onSaveComplete();
       }
