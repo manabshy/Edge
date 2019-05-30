@@ -39,6 +39,8 @@ export interface BasicPerson {
   title: string;
   emailAddress: string;
   phoneNumber: string;
+  emailAddresses: Email[];
+  phoneNumbers: PhoneNumber[];
 }
 export interface Email {
   id?: number;

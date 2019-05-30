@@ -82,6 +82,20 @@ export class ContactgroupsPeopleComponent implements OnInit {
         } else {
           this.isCreateNewPersonVisible = false;
         }
+        data.emailAddresses = [];
+        data.emailAddresses.push({
+          id: 0,
+          email: data.emailAddress,
+          isPreferred: true,
+          isPrimaryWebEmail: true
+        });
+        data.phoneNumbers = [];
+        data.phoneNumbers.push({
+          number: data.phoneNumber,
+          typeId: 3,
+          isPreferred: true,
+          comments: ''
+        });
         this.newPerson = data;
         this.findPerson(data);
       });

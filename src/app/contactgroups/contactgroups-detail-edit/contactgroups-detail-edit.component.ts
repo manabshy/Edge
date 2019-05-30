@@ -176,8 +176,13 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     }
     this.personForm.patchValue({
       firstName: this.basicPerson.firstName,
-      lastName: this.basicPerson.lastName
+      lastName: this.basicPerson.lastName,
+      address: {
+        countryId: this.defaultCountryCode
+      }
     });
+    this.personForm.setControl('emailAddresses', this.setExistingEmailAddresses(this.basicPerson.emailAddresses));
+    this.personForm.setControl('phoneNumbers', this.setExistingPhoneNumbers(this.basicPerson.phoneNumbers));
     console.log('this is called', this.personForm.value);
   }
 
