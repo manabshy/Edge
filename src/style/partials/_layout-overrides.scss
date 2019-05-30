@@ -50,7 +50,6 @@ tr:first-child{
     padding: spacer(3) 0;
     margin-bottom: spacer(3);
     border-bottom: 1px solid $border-color;
-    text-align: center;
 
     &.sticky-top {
         background: color('white');
@@ -68,23 +67,10 @@ tr:first-child{
         z-index: 100;
     }
 
-    &:not(.row) {
-        @include media-breakpoint-down(sm) {
-            font-size: $h5-font-size;
-        }  
-    }
-
     &.row {
         @extend .no-gutters;
         padding-bottom: spacer(2);
-        text-align: left;
         align-items: center;
-
-        h4 {
-            @include media-breakpoint-down(sm) {
-                font-size: $h5-font-size;
-            }
-        }
     }
 }
 

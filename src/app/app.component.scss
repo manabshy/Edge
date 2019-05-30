@@ -36,10 +36,10 @@
     height: 50px;
     line-height: spacer(2);
     padding-top: 8px;
-    margin: 0 auto 70px;
+    margin: spacer(4) auto 70px;
 
     @include media-breakpoint-up(sm) {
-        margin: 0 $grid-gutter-width 70px auto;
+        margin: spacer(4) $grid-gutter-width 70px auto;
     }
 
 }
