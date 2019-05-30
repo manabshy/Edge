@@ -45,9 +45,12 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   };
   validationMessages = {
     'firstName': {
-      required: 'First name is required.',
-      minlength: 'First name must be greater than 2 characters',
-      maxlength: 'First name must be less than 40 characters.',
+      required: 'First Name is required.',
+      minlength: 'First Name must be greater than 2 characters',
+      maxlength: 'First Name must be less than 40 characters.',
+    },
+    'middleName': {
+      maxlength: 'Middle Name must be less than 50 characters'
     },
     'lastName': {
       required: 'Last name is required.',
@@ -131,25 +134,26 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     this.personForm.valueChanges.pipe(debounceTime(1000))
       .subscribe((data) => {
         this.postCode.setValue(this.sharedService.formatPostCode(data.address.postCode), { emitEvent: false });
-        this.logValidationErrors(this.personForm);
+        this.logValidationErrors(this.personForm, false);
       });
     console.log(this.personForm);
   }
 
-  logValidationErrors(group: FormGroup = this.personForm) {
+  logValidationErrors(group: FormGroup = this.personForm, fakeTouched: boolean) {
     Object.keys(group.controls).forEach((key: string) => {
       const control = group.get(key);
       const messages = this.validationMessages[key];
       this.formErrors[key] = '';
-      if (control && !control.valid && (control.touched || control.dirty)) {
+      fakeTouched = fakeTouched || control.touched || control.dirty;
+      if (control && !control.valid && fakeTouched) {
         for (const errorKey in control.errors) {
           if (errorKey) {
-            this.formErrors[key] += messages[errorKey] + '';
+            this.formErrors[key] += messages[errorKey] + '\n';
           }
         }
       }
       if (control instanceof FormGroup) {
-        this.logValidationErrors(control);
+        this.logValidationErrors(control, false);
       }
     });
   }
@@ -376,10 +380,12 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   }
 
   savePerson() {
+    this.isSubmitting = true;
+    this.errorMessage = '';
     this.removeValidationForAdditionalFields();
+    this.logValidationErrors(this.personForm, true);
     if (this.personForm.valid) {
       if (this.personForm.dirty) {
-        this.isSubmitting = true;
         const person = { ...this.personDetails, ...this.personForm.value };
         const postCode =  this.sharedService.splitPostCode(person.address.postCode);
         person.address.outCode = postCode[0];
