@@ -10,6 +10,7 @@ export class AppConstants {
   public static get redirectUri(): string { return 'https://stagedouglasandgordon-wedge.azurewebsites.net/auth-callback'; }
   public static get postLogoutRedirectUri(): string { return 'https://stagedouglasandgordon-wedge.azurewebsites.net'; }
   public static get azureEndpointUrl(): string { return 'https://dandg-api-wedge.azurewebsites.net'; }
+  public static get addressApiKey(): string { return 'EW85-YA52-FM38-RB26'; }
   // public static get redirectUri(): string { return 'http://localhost:4200/auth-callback'; }
   // public static get postLogoutRedirectUri(): string { return  'http://localhost:4200'; }
    public static get localEndpointUrl(): string { return '\'http://localhost:57211\': \'67f9a9a1-d8de-45bc-af20-43e1e18ccba5\''; }

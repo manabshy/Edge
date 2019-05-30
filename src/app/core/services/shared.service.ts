@@ -181,7 +181,7 @@ export class SharedService {
     const headers = new HttpHeaders({
       'Content-type': 'application/x-www-form-urlencoded'
     });
-    
+
     const params = new HttpParams()
                     .set('Key', addressRequest.key  || '')
                     .set('Text', addressRequest.text || '')
@@ -247,10 +247,7 @@ export interface AddressAutoCompleteData {
 }
 
 export class AddressRequest {
-    // key = 'AA11-AA11-AA11-AA11';
-    // key = 'XX97-RY99-ZN59-DR86';
-    // key = 'FU19-ZE57-DB27-GT24';
-    key = 'EW85-YA52-FM38-RB26';
+    key = AppConstants.addressApiKey;
     text = '';
     isMiddleware = false;
     origin = '';
