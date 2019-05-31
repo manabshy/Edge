@@ -175,9 +175,10 @@ export class SharedService {
     tap(data => localStorage.setItem('dropdownListInfo', JSON.stringify(data))));
   }
 
-  findAddress(searchTerm: string): Observable<AddressAutoCompleteData> {
+  findAddress(searchTerm: string, container: string): Observable<AddressAutoCompleteData> {
     const addressRequest = new AddressRequest();
     addressRequest.text = searchTerm;
+    addressRequest.container = container;
     const headers = new HttpHeaders({
       'Content-type': 'application/x-www-form-urlencoded'
     });

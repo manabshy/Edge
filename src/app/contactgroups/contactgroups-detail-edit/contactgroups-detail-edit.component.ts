@@ -136,8 +136,8 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     console.log(this.personForm);
 
     const addressControl = this.personForm.get('fullAddress');
-    addressControl.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
-      this.findAddress(data);
+    addressControl.valueChanges.pipe(debounceTime(500)).subscribe(data => {
+      this.findAddress(data, '');
     });
   }
 
@@ -175,14 +175,17 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     }, error => this.errorMessage = <any>error);
   }
 
-  findAddress(searchTerm: string) {
-    this.sharedService.findAddress(searchTerm).subscribe(data => {
+  findAddress(searchTerm: string, container: string) {
+    this.sharedService.findAddress(searchTerm, container).subscribe(data => {
       this.foundAddress = data;
       console.log('id here', data.Items[0].Id);
       data.Items.forEach(x=>{
         console.log(x.Description);
-        console.log(x.Id);
-        this.retrieveAddress(x.Id);
+        if(x.Id) {
+          if(!x.Id.includes('|B|')) {
+            this.findAddress(searchTerm, x.Id);
+          }
+        }
       });
     });
   }
