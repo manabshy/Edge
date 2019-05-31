@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { AppUtils } from '../shared/utils';
 import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AppConstants } from '../shared/app-constants';
 import { map, fill } from 'lodash';
-import { tap } from 'rxjs/operators';
+import { tap} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -148,9 +148,7 @@ export class SharedService {
     let pv = 0;
     return map(fill((new Array(30)), 0), (v, i) => {
       v = pv;
-      if (v < 1000) { v += 50; }
-      else if (v >= 1000 && v < 2000) { v += 250; }
-      else if (v >= 2000 && v < 5000) { v += 500; }
+      if (v < 1000) { v += 50; } else if (v >= 1000 && v < 2000) { v += 250; } else if (v >= 2000 && v < 5000) { v += 500; }
       pv = v;
       return pv;
     });
@@ -165,9 +163,7 @@ export class SharedService {
     let pv = 0;
     return map(fill((new Array(30)), 0), (vv, i) => {
       vv = pv;
-      if (vv < 1000000) { vv += 50000; }
-      else if (vv >= 1000000 && vv < 2000000) { vv += 250000; }
-      else if (vv >= 2000000 && vv < 5000000) { vv += 500000; }
+      if (vv < 1000000) { vv += 50000; } else if (vv >= 1000000 && vv < 2000000) { vv += 250000; } else if (vv >= 2000000 && vv < 5000000) { vv += 500000; }
       pv = vv;
       return pv;
     });
@@ -179,6 +175,44 @@ export class SharedService {
     tap(data => localStorage.setItem('dropdownListInfo', JSON.stringify(data))));
   }
 
+  findAddress(searchTerm: string): Observable<AddressAutoCompleteData> {
+    const addressRequest = new AddressRequest();
+    addressRequest.text = searchTerm;
+    const headers = new HttpHeaders({
+      'Content-type': 'application/x-www-form-urlencoded'
+    });
+
+    const params = new HttpParams()
+                    .set('Key', addressRequest.key  || '')
+                    .set('Text', addressRequest.text || '')
+                    .set('IsMiddleware', addressRequest.isMiddleware.toString()  || '')
+                    .set('Container', addressRequest.container  || '')
+                    .set('Origin', addressRequest.origin  || '')
+                    .set('Countries', addressRequest.countries  || '')
+                    .set('Language', addressRequest.language  || '');
+    const options = { headers: headers, params: params };
+    return this.http.get<AddressAutoCompleteData>(`${AppConstants.addressCaptureBaseUrl}/Find/v1.10/json3.ws`, options)
+    .pipe(
+      // map(response => response.items),
+      tap(data => console.log('address here', JSON.stringify(data))),
+      tap(data => console.log('address here', data)),
+      );
+  }
+  getAddress(id: string): Observable<any> {
+    const addressRequest = new AddressRequest();
+    const headers = new HttpHeaders({
+      'Content-type': 'application/x-www-form-urlencoded'
+    });
+    const params = new HttpParams()
+                    .set('Key', addressRequest.key  || '')
+                    .set('Id', id  || '');
+    const options = { headers: headers, params: params };
+    return this.http.get<any>(`${AppConstants.addressCaptureBaseUrl}/Retrieve/v1.10/json3.ws`, options)
+    .pipe(
+      // map(response => response.items),
+      tap(data => console.log('retrieve address here', data)),
+      );
+  }
 }
 
 export interface DropdownListInfo {
@@ -196,4 +230,27 @@ export class WedgeError {
   errorCode: number;
   message: string;
   displayMessage: string;
+}
+
+export interface AddressAutoCompleteResult {
+  Id: string;
+  type: string;
+  Text: string;
+  Highlight: string;
+  Description: string;
+}
+
+export interface AddressAutoCompleteData {
+  Items: AddressAutoCompleteResult[];
+}
+
+export class AddressRequest {
+    key = AppConstants.addressApiKey;
+    text = '';
+    isMiddleware = false;
+    origin = '';
+    countries = 'GBR';
+    limit = '10';
+    language = 'en-gb';
+    container = '';
 }
