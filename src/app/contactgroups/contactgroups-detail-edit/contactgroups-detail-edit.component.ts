@@ -143,9 +143,8 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     Object.keys(group.controls).forEach((key: string) => {
       const control = group.get(key);
       const messages = this.validationMessages[key];
-      this.formErrors[key] = '';
-      fakeTouched = fakeTouched || control.touched || control.dirty;
-      if (control && !control.valid && fakeTouched) {
+      if (control && !control.valid && (fakeTouched || control.touched)) {
+        this.formErrors[key] = '';
         for (const errorKey in control.errors) {
           if (errorKey) {
             this.formErrors[key] += messages[errorKey] + '\n';
@@ -153,7 +152,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         }
       }
       if (control instanceof FormGroup) {
-        this.logValidationErrors(control, false);
+        this.logValidationErrors(control, fakeTouched);
       }
     });
   }
