@@ -35,6 +35,7 @@ export class AuthService {
  public signout(): void {
     this.confirmSignOut().subscribe(res => {
       if(res) {
+        localStorage.removeItem('currentUser');
         this.adalService.logOut();
       }
     })
