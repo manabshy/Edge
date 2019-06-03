@@ -37,6 +37,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   returnUrl: string;
   errorMessage: string;
   isSubmitting = false;
+  isLoadingAddressVisible = false;
   postCodePattern = /^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]?[\s]+?[0-9][A-Za-z]{2}|[Gg][Ii][Rr][\s]+?0[Aa]{2})$/;
   emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   validationMessages = {
@@ -135,10 +136,10 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       });
     console.log(this.personForm);
 
-    const addressControl = this.personForm.get('fullAddress');
-    addressControl.valueChanges.pipe(debounceTime(500)).subscribe(data => {
-      this.findAddress(data, '');
-    });
+    // const addressControl = this.personForm.get('fullAddress');
+    // addressControl.valueChanges.pipe(debounceTime(500)).subscribe(data => {
+    //   this.findAddress(data, '');
+    // });
   }
 
   logValidationErrors(group: FormGroup = this.personForm, fakeTouched: boolean) {
@@ -175,9 +176,16 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     }, error => this.errorMessage = <any>error);
   }
 
+  searchAddress() {
+    const addressSearchTerm = this.personForm.get('fullAddress').value;
+    this.isLoadingAddressVisible = true;
+    this.findAddress(addressSearchTerm, '');
+  }
+
   findAddress(searchTerm: string, container: string) {
     this.sharedService.findAddress(searchTerm, container).subscribe(data => {
       this.foundAddress = data;
+      this.isLoadingAddressVisible = false;
       console.log('id here', data.Items[0].Id);
       data.Items.forEach(x=>{
         console.log(x.Description);
