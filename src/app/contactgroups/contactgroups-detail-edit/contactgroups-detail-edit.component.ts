@@ -234,6 +234,9 @@ export class ContactgroupsDetailEditComponent implements OnInit {
             postCode: retrievedAddress.PostalCode
           }
         });
+        setTimeout(()=>{
+          document.getElementById('addressLines').scrollIntoView({block: 'center'});
+        });
       });
     }
   }
