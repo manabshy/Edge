@@ -54,7 +54,7 @@
               <button type="button" class="btn btn-secondary" (click)="searchAddress()">Search</button>
             </div>
           </div>
-          <ng-container *ngIf="foundAddress">
+          <ng-container *ngIf="foundAddress && !retrievedAddresses">
             <h5 class="mt-3">Select Address</h5>
             <div class="list-group small">
               <div class="list-group-item" *ngIf="backToAddressesList" (click)="findAddress(searchTermBK, '')">

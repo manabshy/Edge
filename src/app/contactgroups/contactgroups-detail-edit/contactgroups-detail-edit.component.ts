@@ -184,8 +184,9 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   }
 
   findAddress(searchTerm: string, container: string) {
+    this.retrievedAddresses = null;
     this.isLoadingAddressVisible = true;
-    
+
     if(container) {
       this.backToAddressesList = true;
     } else {
@@ -217,7 +218,22 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     if (this.foundAddress) {
       this.sharedService.getAddress(id).subscribe(data => {
         this.retrievedAddresses = data;
-        console.log('found addresses here', data);
+        const retrievedAddress = this.retrievedAddresses.Items[0];
+        const keys = Object.keys(retrievedAddress);
+        let retAddressLines = '';
+        keys.forEach(x=>{
+          if(x.includes('Line') && retrievedAddress[x]) {
+            retAddressLines += retrievedAddress[x] + '\n';
+          }
+        });
+
+        this.personForm.patchValue({
+          fullAddress: '',
+          address: {
+            addressLines: (retrievedAddress.Company ? retrievedAddress.Company + '\n' : '') + retAddressLines + retrievedAddress.City,
+            postCode: retrievedAddress.PostalCode
+          }
+        });
       });
     }
   }
