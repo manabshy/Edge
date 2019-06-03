@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, Renderer2 } from '@angular/core';
-import { SharedService, WedgeError, AddressAutoCompleteData } from 'src/app/core/services/shared.service';
+import { SharedService, WedgeError, AddressAutoCompleteData, Country } from 'src/app/core/services/shared.service';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { Person, Email, PhoneNumber, BasicPerson } from 'src/app/core/models/person';
@@ -94,10 +94,16 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   foundAddress: AddressAutoCompleteData;
 
   get showPostCode(): boolean {
-    return this.address.get('countryId').value == this.defaultCountryCode;
+    return this.address.get('countryId').value === this.defaultCountryCode;
+  }
+  get addressLines(): FormControl {
+    return <FormControl>this.address.get('addressLines');
   }
   get postCode(): FormControl {
     return <FormControl>this.address.get('postCode');
+  }
+  get countryId(): FormControl {
+    return <FormControl>this.address.get('countryId');
   }
   get address(): FormGroup {
     return <FormGroup>this.personForm.get('address');
@@ -197,15 +203,15 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     this.retrievedAddresses = null;
     this.isLoadingAddressVisible = true;
 
-    if(container) {
+    if (container) {
       this.backToAddressesList = true;
     } else {
       this.backToAddressesList = false;
     }
     this.sharedService.findAddress(searchTerm, container).subscribe(data => {
-      data.Items.forEach(x=>{
-        if(x.Id) {
-          if(!x.Id.includes('|B|')) {
+      data.Items.forEach(x => {
+        if (x.Id) {
+          if (!x.Id.includes('|B|')) {
             x.Action = 'View all';
             this.searchTermBK = searchTerm;
           }
@@ -231,8 +237,8 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         const retrievedAddress = this.retrievedAddresses.Items[0];
         const keys = Object.keys(retrievedAddress);
         let retAddressLines = '';
-        keys.forEach(x=>{
-          if(x.includes('Line') && retrievedAddress[x]) {
+        keys.forEach(x => {
+          if (x.includes('Line') && retrievedAddress[x]) {
             retAddressLines += retrievedAddress[x] + '\n';
           }
         });
@@ -244,7 +250,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
             postCode: retrievedAddress.PostalCode
           }
         });
-        setTimeout(()=>{
+        setTimeout(() => {
           document.getElementById('addressLines').scrollIntoView({block: 'center'});
         });
       });
@@ -430,20 +436,27 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     }
   }
 
-  checkDuplicateAdressLines(address: string, postcode: string, country: string) {
-    const addressLines = [];
-    let duplicateErrorMessage = '';
-    addressLines.push(address.split('\n'));
+  checkDuplicateAdressLines() {
+   const addressLines = [];
+   const countryName = this.getCountryName(this.countryId.value);
+  //  this.errorMessage = '';
+    addressLines.push(this.addressLines.value.split('\n'));
     addressLines.forEach(x => {
-      if (x === postcode) {
-        duplicateErrorMessage = 'Address lines should not contain post code';
-        console.log('addres parts here...', x);
-      } else if (x === country) {
-        duplicateErrorMessage = 'Address lines should not contain country';
+      for (const value of  Object.values(addressLines[0])) {
+        if (value === this.postCode.value) {
+          this.errorMessage = 'Address lines should not contain post code';
+        } else if (countryName !== undefined && value !== null && value === countryName) {
+          this.errorMessage = 'Address lines should not contain country';
+        }
       }
-      console.log('addres parts here...', x);
+      console.log('errors here...', this.errorMessage);
     });
   }
+   getCountryName(id: number) {
+    const country = this.countries.filter((x: Country) => x.id === id);
+    return country[0].value;
+  }
+
   addPhoneNumberItem(i) {
     const currPhoneNumber = this.phoneNumbers.controls[i];
     const lastPhoneNumber = this.phoneNumbers.controls[this.phoneNumbers.controls.length - 1];
@@ -491,6 +504,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     this.errorMessage = '';
     this.removeValidationForAdditionalFields();
     this.logValidationErrors(this.personForm, true);
+    this.checkDuplicateAdressLines();
     if (this.personForm.valid) {
       if (this.personForm.dirty) {
         const person = { ...this.personDetails, ...this.personForm.value };
@@ -532,7 +546,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   }
 
   canDeactivate(): boolean {
-    if(this.personForm.dirty  && !this.isSubmitting) {
+    if (this.personForm.dirty  && !this.isSubmitting) {
       return false;
     }
     return true;
