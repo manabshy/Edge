@@ -15,7 +15,7 @@
     </ng-template>
   </div>
   <div class="alert alert-warning" *ngIf="contactGroupDetails?.referenceCount">
-    Transaction history present. You can't add or remove person from this Contact Group.<br>If you want to add or remove a person, <a href="#">create a new Contact Group</a>
+    Transaction history present. You can't add or remove people from this Contact Group.<br>If you want to add or remove a person, <a href="#">create a new Contact Group</a>
   </div>
   <div class="alert alert-danger" *ngIf="contactGroupDetails?.contactPeople && !contactGroupDetails?.contactPeople.length">
     You must add at least <b>1</b> person in the contact group.
