@@ -239,6 +239,7 @@ export interface AddressAutoCompleteResult {
   Text: string;
   Highlight: string;
   Description: string;
+  Action: string;
 }
 
 export interface AddressAutoCompleteData {

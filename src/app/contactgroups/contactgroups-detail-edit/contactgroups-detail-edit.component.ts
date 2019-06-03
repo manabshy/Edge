@@ -38,6 +38,8 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   errorMessage: string;
   isSubmitting = false;
   isLoadingAddressVisible = false;
+  backToAddressesList = false;
+  searchTermBK = '';
   postCodePattern = /^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]?[\s]+?[0-9][A-Za-z]{2}|[Gg][Ii][Rr][\s]+?0[Aa]{2})$/;
   emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   validationMessages = {
@@ -183,18 +185,31 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   }
 
   findAddress(searchTerm: string, container: string) {
+    if(container) {
+      this.backToAddressesList = true;
+    } else {
+      this.backToAddressesList = false;
+    }
     this.sharedService.findAddress(searchTerm, container).subscribe(data => {
-      this.foundAddress = data;
-      this.isLoadingAddressVisible = false;
-      console.log('id here', data.Items[0].Id);
       data.Items.forEach(x=>{
-        console.log(x.Description);
         if(x.Id) {
           if(!x.Id.includes('|B|')) {
-            this.findAddress(searchTerm, x.Id);
+            x.Action = 'View all';
+            this.searchTermBK = searchTerm;
           }
         }
       });
+      this.foundAddress = data;
+      this.isLoadingAddressVisible = false;
+      console.log('id here', data.Items[0].Id);
+      // data.Items.forEach(x=>{
+      //   console.log(x.Description);
+      //   if(x.Id) {
+      //     if(!x.Id.includes('|B|')) {
+      //       this.findAddress(searchTerm, x.Id);
+      //     }
+      //   }
+      // });
     });
   }
   private retrieveAddress(id: string) {
