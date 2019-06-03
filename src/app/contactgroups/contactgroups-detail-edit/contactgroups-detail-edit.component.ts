@@ -180,11 +180,12 @@ export class ContactgroupsDetailEditComponent implements OnInit {
 
   searchAddress() {
     const addressSearchTerm = this.personForm.get('fullAddress').value;
-    this.isLoadingAddressVisible = true;
     this.findAddress(addressSearchTerm, '');
   }
 
   findAddress(searchTerm: string, container: string) {
+    this.isLoadingAddressVisible = true;
+    
     if(container) {
       this.backToAddressesList = true;
     } else {
