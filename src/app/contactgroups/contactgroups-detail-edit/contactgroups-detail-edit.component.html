@@ -46,13 +46,18 @@
         </div>
      </div>
      <div class="form-group row" >
-        <label for="fullAddress" class="col-sm-2 col-form-label col-form-label-sm"></label>
-        <div class="col-sm-8">
+        <label for="property" class="col-sm-2 col-form-label col-form-label-sm">
+          Address
+        </label>
+        <div class="col-sm-10">
           <div class="input-group input-group-sm">
-            <input type="text" id="fullAddress" class="form-control"  placeholder="Search address" formControlName="fullAddress" (keyup.enter)="$event.stopPropagation(); searchAddress()">
+            <input type="text" id="fullAddress" class="form-control"  placeholder="Search address"
+              [ngClass]="{'border border-warning': !personForm.controls.address.controls.addressLines.value && !enterAddressManually}" 
+              formControlName="fullAddress" (keyup.enter)="$event.stopPropagation(); searchAddress()">
             <div class="input-group-append">
               <button type="button" class="btn btn-secondary" (click)="searchAddress()">Search</button>
             </div>
+            <small class="form-text w-100" *ngIf="!personForm.controls.address.controls.addressLines.value && !enterAddressManually"><i class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your score</span></small>
           </div>
           <ng-container *ngIf="foundAddress && !retrievedAddresses">
             <h5 class="mt-3">Select Address</h5>
@@ -74,14 +79,14 @@
                       </div>
                     </div>
                     <div class="list-group-item" *ngIf="address?.Error || isLast">
-                      No Address Found? Try again or Type it in the box "Address" below.
+                      No Address Found? Try again or <a href (click)="enterAddress($event)">enter it manually</a>.
                     </div>
                   </ng-container>
                 </ng-container>
               </ng-container>
               <ng-template #noAddress>
                 <div class="list-group-item">
-                  No Address Found. Try again or Type it in the box "Address" below.
+                  No Address Found. Try again or <a href (click)="enterAddress($event)">enter it manually</a>.
                 </div>
               </ng-template>
               <ng-container *ngIf="isLoadingAddressVisible">
@@ -94,26 +99,24 @@
         </div>
      </div>
    <div formGroupName="address">
-      <div class="form-group row">
-          <label for="property" class="col-sm-2 col-form-label col-form-label-sm">
+      <div class="form-group row justify-content-end">
+          <!-- <label for="property" class="col-sm-2 col-form-label col-form-label-sm">
             Address
-          </label>
+          </label> -->
           <div class="col-sm-10">
-            <div >
-              <div class="form-group">
-                <textarea type="textarea" class="form-control form-control-sm" formControlName="addressLines" id="addressLines"
-                (keydown.enter)="$event.stopPropagation()"
-                placeholder="Address line" rows="5"  cols="10" maxlength="500" [ngClass]="{'border border-warning': !personForm.controls.address.controls.addressLines.value}"></textarea>
-                <small class="form-text" *ngIf="!personForm.controls.address.controls.addressLines.value"><i class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your score</span></small>
-              </div>
-              <div class="form-group" *ngIf="showPostCode">
-                <label class="small" for="postcode">Postcode</label>
-                <div class="input-group">
-                  <input type="text" class="form-control form-control-sm"  id="postcode" formControlName="postCode" [ngClass]="{'is-invalid': formErrors.postCode}">
-                  <!-- <input type="text" class="form-control form-control-sm"  id="incode"
-                    placeholder="Incode" formControlName="inCode" [ngClass]="{'is-invalid': formErrors.inCode}"> -->
-                    <span class="invalid-feedback">{{formErrors.postCode}}</span>
-                </div>
+            <div class="form-group" *ngIf="personForm.controls.address.controls.addressLines.value || enterAddressManually">
+              <label class="small" for="postcode">Address Lines</label>
+              <textarea type="textarea" class="form-control form-control-sm" formControlName="addressLines" id="addressLines"
+              (keydown.enter)="$event.stopPropagation()" rows="5"  cols="10" maxlength="500" [ngClass]="{'border border-warning': !personForm.controls.address.controls.addressLines.value && enterAddressManually}"></textarea>
+              <small class="form-text" *ngIf="!personForm.controls.address.controls.addressLines.value && enterAddressManually"><i class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your score</span></small>
+            </div>
+            <div class="form-group" *ngIf="showPostCode">
+              <label class="small" for="postcode">Postcode</label>
+              <div class="input-group">
+                <input type="text" class="form-control form-control-sm"  id="postcode" formControlName="postCode" [ngClass]="{'is-invalid': formErrors.postCode}">
+                <!-- <input type="text" class="form-control form-control-sm"  id="incode"
+                  placeholder="Incode" formControlName="inCode" [ngClass]="{'is-invalid': formErrors.inCode}"> -->
+                  <span class="invalid-feedback">{{formErrors.postCode}}</span>
               </div>
             </div>
           </div>
