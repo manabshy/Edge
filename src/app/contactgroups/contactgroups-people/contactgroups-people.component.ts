@@ -112,9 +112,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
         if (this.removedPersonId) {
           this.removePerson(this.removedPersonId, false);
         }
-        if (this.contactGroupDetails.referenceCount) {
-          this.errorMessage = 'Ongoing Transaction. You can\'t edit the info of this Contact Group';
-        }
         this.isLoadingNewPersonVisible = false;
         console.log('removed person id', this.removedPersonId);
       });
