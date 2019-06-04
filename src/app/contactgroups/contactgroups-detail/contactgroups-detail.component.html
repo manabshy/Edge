@@ -30,7 +30,7 @@
         </p>
       </div>
       <div class="col-sm-4">
-          <p class="mb-2">{{searchedPersonDetails.address | formatAddress}}<span class="text-danger" *ngIf="!(searchedPersonDetails.address | formatAddress)">No address</span></p>
+          <div class="mb-2"><pre>{{searchedPersonDetails.address | formatAddress}}</pre><span class="text-danger" *ngIf="!(searchedPersonDetails.address | formatAddress)">No address</span></div>
       </div>
       <div class="col-12 col-sm-3 col-xl-4">
         <div class="row">

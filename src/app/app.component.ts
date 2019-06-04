@@ -16,7 +16,9 @@ export class AppComponent implements OnInit, AfterViewChecked {
   title = 'Wedge';
   isNavVisible: boolean;
   isScrollTopVisible = false;
-  currentStaffMember: StaffMember;
+  get currentStaffMember(): StaffMember {
+    return this.staffMemberService.currentStaffMember;
+  }
 
   constructor(private router: Router,
     public authService: AuthService,
@@ -38,7 +40,6 @@ export class AppComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit() {
-    this.currentStaffMember = this.staffMemberService.currentStaffMember;
   }
 
   ngAfterViewChecked() {

@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, Output } from '@angular/core';
-import { SharedService, WedgeError, AddressAutoCompleteData, Country, DropdownListInfo, DropdownListInfoData } from 'src/app/core/services/shared.service';
+import { Component, OnInit, Input, Output, Renderer2 } from '@angular/core';
+import { SharedService, WedgeError, AddressAutoCompleteData, Country } from 'src/app/core/services/shared.service';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { Person, Email, PhoneNumber, BasicPerson } from 'src/app/core/models/person';
@@ -39,6 +39,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   isSubmitting = false;
   isLoadingAddressVisible = false;
   backToAddressesList = false;
+  enterAddressManually = false;
   searchTermBK = '';
   postCodePattern = /^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]?[\s]+?[0-9][A-Za-z]{2}|[Gg][Ii][Rr][\s]+?0[Aa]{2})$/;
   emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -69,7 +70,10 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       required: 'Address is required.'
     },
     'number': {
-      required: 'Phone is required.'
+      required: 'Phone is required.',
+      minlength: 'Phone number must be at least 7 characters.',
+      maxlength: 'Phone number cannot be more than 16 characters.',
+      pattern: 'Phone number is not valid'
     },
     'postCode': {
       required: 'Postcode is required.',
@@ -115,11 +119,12 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   }
   public keepOriginalOrder = (a) => a.key;
   constructor(public sharedService: SharedService,
-              private contactGroupService: ContactGroupsService,
-              private fb: FormBuilder,
-              private route: ActivatedRoute,
-              private _location: Location,
-              private router: Router) { }
+    private contactGroupService: ContactGroupsService,
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private _location: Location,
+    private renderer: Renderer2,
+    private router: Router) { }
 
   ngOnInit() {
     this.listInfo = this.sharedService.dropdownListInfo;
@@ -187,6 +192,14 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   searchAddress() {
     const addressSearchTerm = this.personForm.get('fullAddress').value;
     this.findAddress(addressSearchTerm, '');
+  }
+
+  enterAddress(event) {
+    event.preventDefault();
+    this.enterAddressManually = true;
+    setTimeout(()=> {
+      this.renderer.selectRootElement('#addressLines').focus();
+    });
   }
 
   findAddress(searchTerm: string, container: string) {

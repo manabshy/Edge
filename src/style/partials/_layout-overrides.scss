@@ -136,3 +136,9 @@ dl {
 .invalid-feedback {
     white-space: pre;
 }
+
+pre {
+    margin-bottom: 0;
+    font-family: inherit;
+    font-size: $font-size-base;
+}

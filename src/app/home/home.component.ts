@@ -15,7 +15,9 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  currentStaffMember: StaffMember;
+  get currentStaffMember(): StaffMember {
+    return this.staffMemberService.currentStaffMember;
+  }
   get isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
   }
@@ -31,7 +33,6 @@ export class HomeComponent implements OnInit {
     console.log('current user', this.staffMemberService.currentStaffMember);
     this.sharedService.getDropdownListInfo().subscribe();
     this.staffMemberService.getCurrentStaffMember().subscribe();
-    this.currentStaffMember = this.staffMemberService.currentStaffMember;
 
     this.route.queryParams.subscribe(params =>  {
       this.selectedTab = params['selectedTab'] || AppUtils.homeSelectedTab || 0;
