@@ -197,7 +197,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   enterAddress(event) {
     event.preventDefault();
     this.enterAddressManually = true;
-    setTimeout(()=> {
+    setTimeout(() => {
       this.renderer.selectRootElement('#addressLines').focus();
     });
   }
@@ -464,6 +464,8 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       for (const value of  Object.values(addressLines[0])) {
         if (value === this.postCode.value) {
         newAddress =  this.addressLines.value.replace(value, ' ');
+        } else {
+          newAddress = this.addressLines.value;
         }
         //  if ( value === countryName) {
         //   newAddress =  this.addressLines.value.replace(value, ' ');
