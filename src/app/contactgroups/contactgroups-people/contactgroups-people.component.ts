@@ -186,13 +186,15 @@ export class ContactgroupsPeopleComponent implements OnInit {
    }
 
   selectPerson(id: number) {
-    this.selectedPersonId = id;
-    this.isLoadingNewPersonVisible = true;
-    if (id !== 0) {
+    if (id !== 0 && !this.checkDuplicateInContactGroup(id)) {
+      this.selectedPersonId = id;
+      this.isLoadingNewPersonVisible = true;
       this.getPersonDetails(id);
       this.getContactGroupById(this.contactGroupId);
 
       this.personFinderForm.reset();
+    } else {
+      return false;
     }
     this.isOffCanvasVisible = false;
     window.scrollTo(0, 0);
@@ -203,6 +205,17 @@ export class ContactgroupsPeopleComponent implements OnInit {
     if (this.selectedPeople) {
       this.selectedPeople.push(person);
     }
+  }
+
+  checkDuplicateInContactGroup(id) {
+    let isDuplicate = false;
+    this.contactGroupDetails.contactPeople.forEach(x=>{
+      if(x.personId === id) {
+        isDuplicate = true;
+      }
+    })
+
+    return isDuplicate;
   }
 
   addSelectedPeople() {

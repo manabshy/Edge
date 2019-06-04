@@ -249,8 +249,9 @@
                 <div class="col-sm col-lg-2"></div>
               </div>
             </div>
-            <div class="list-group-item" *ngFor="let foundPerson of foundPeople">
-              <div class="row align-items-end align-items-sm-center">
+            <div class="list-group-item list-group-item-action" *ngFor="let foundPerson of foundPeople" [ngClass]="{'disabled': checkDuplicateInContactGroup(foundPerson.personId)}">
+              <div class="row align-items-end align-items-sm-center" 
+              (click)="selectPerson(foundPerson.personId)">
                 <div class="col-sm">
                   <dl class="row">
                     <dt class="col-4 d-sm-none">Full Name</dt>
@@ -277,14 +278,19 @@
                     </dd>
                   </dl>
                 </div>
-                <div class="col-sm col-lg-2">
-                  <button class="btn btn-block btn-sm btn-primary"
-                    (click)="selectPerson(foundPerson.personId)">Select</button>
+                <div class="col-sm col-lg-2 text-center">
+                  <ng-container *ngIf="checkDuplicateInContactGroup(foundPerson.personId); else selectBtn">
+                    <i class="fas fa-exclamation-triangle mr-1"></i> Already in this C.G.
+                  </ng-container>
+                  <ng-template #selectBtn>
+                    <button class="btn btn-block btn-sm btn-link">Select</button>
+                  </ng-template>
                 </div>
               </div>
             </div>
             <div class="list-group-item text-center" *ngIf="foundPeople && !foundPeople.length">
-              No Person found. Create a new one with the details provided above.
+              No Person found. <ng-container *ngIf="isCreateNewPersonVisible; else fillDetails">Create a new one with the details provided above</ng-container>
+              <ng-template #fillDetails>Fill the details above to continue</ng-template>.
             </div>
             <a href class="list-group-item list-group-item-action text-center py-4" *ngIf="isCreateNewPersonVisible"
               (click)="createNewContactGroupPerson($event)">
