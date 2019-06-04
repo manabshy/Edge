@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, Renderer2 } from '@angular/core';
 import { SharedService, WedgeError, AddressAutoCompleteData, Country } from 'src/app/core/services/shared.service';
-import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractControl } from '@angular/forms';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { Person, Email, PhoneNumber, BasicPerson } from 'src/app/core/models/person';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -36,6 +36,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   isOffCanvasVisible = false;
   returnUrl: string;
   errorMessage: string;
+  formArraryErrors: string;
   isSubmitting = false;
   isLoadingAddressVisible = false;
   backToAddressesList = false;
@@ -86,6 +87,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   formErrors = {
     'firstName': '',
     'lastName': '',
+    'middleName': '',
     'email': '',
     'emailAddresses': {
       'email': '',
@@ -147,6 +149,9 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         this.postCode.setValue(this.sharedService.formatPostCode(data.address.postCode), { emitEvent: false });
         this.logValidationErrors(this.personForm, false);
       });
+    const emailControl = this.emailAddresses.get('email');
+    const phoneControl = this.phoneNumbers.get('number');
+    emailControl.valueChanges.subscribe(data=>this.logValidationErrorsFormArray(emailControl));
     console.log(this.personForm);
 
     // const addressControl = this.personForm.get('fullAddress');
@@ -171,6 +176,15 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         this.logValidationErrors(control, fakeTouched);
       }
     });
+  }
+
+  logValidationErrorsFormArray(control: AbstractControl) {
+      this.formArraryErrors = '';
+      if ((control.touched || control.dirty) && control.errors) {
+        this.formArraryErrors = Object.keys(control.errors).map(
+          key => this.validationMessages[key]).join(' ');
+      }
+      console.log('form array errors', this.formArraryErrors);
   }
 
   cancel() {
