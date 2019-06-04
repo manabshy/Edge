@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output } from '@angular/core';
-import { SharedService, WedgeError, AddressAutoCompleteData, Country } from 'src/app/core/services/shared.service';
+import { SharedService, WedgeError, AddressAutoCompleteData, Country, DropdownListInfo, DropdownListInfoData } from 'src/app/core/services/shared.service';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { Person, Email, PhoneNumber, BasicPerson } from 'src/app/core/models/person';
@@ -123,9 +123,9 @@ export class ContactgroupsDetailEditComponent implements OnInit {
 
   ngOnInit() {
     this.listInfo = this.sharedService.dropdownListInfo;
-    this.countries = Object.values(this.listInfo)[0];
-    this.titles = Object.values(this.listInfo)[1];
-    this.telephoneTypes = Object.values(this.listInfo)[2];
+    this.countries = this.listInfo.result.countries;
+    this.titles = this.listInfo.result.titles;
+    this.telephoneTypes = this.listInfo.result.telephoneTypes;
     this.route.params.subscribe(params => this.personId = +params['personId'] || 0);
     this.route.queryParams.subscribe(params => {
       this.groupPersonId = +params['groupPersonId'] || 0;
@@ -442,6 +442,23 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       console.log('errors here...', this.errorMessage);
     });
   }
+  removeDuplicateAdressLines(): string {
+   let newAddress = '';
+   const addressLines = [];
+   const countryName = this.getCountryName(this.countryId.value);
+    addressLines.push(this.addressLines.value.split('\n'));
+    addressLines.forEach(x => {
+      for (const value of  Object.values(addressLines[0])) {
+        if (value === this.postCode.value) {
+        newAddress =  this.addressLines.value.replace(value, ' ');
+        }
+        //  if ( value === countryName) {
+        //   newAddress =  this.addressLines.value.replace(value, ' ');
+        // }
+      }
+    });
+    return newAddress;
+  }
    getCountryName(id: number) {
     const country = this.countries.filter((x: Country) => x.id === id);
     return country[0].value;
@@ -494,13 +511,13 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     this.errorMessage = '';
     this.removeValidationForAdditionalFields();
     this.logValidationErrors(this.personForm, true);
-    this.checkDuplicateAdressLines();
     if (this.personForm.valid) {
       if (this.personForm.dirty) {
         const person = { ...this.personDetails, ...this.personForm.value };
         const postCode =  this.sharedService.splitPostCode(person.address.postCode);
         person.address.outCode = postCode[0];
         person.address.inCode = postCode[1];
+        person.address.addressLines = this.removeDuplicateAdressLines();
         this.contactGroupService.updatePerson(person).subscribe(() => this.onSaveComplete(),
           (error: WedgeError) => {
             this.errorMessage = error.displayMessage;
