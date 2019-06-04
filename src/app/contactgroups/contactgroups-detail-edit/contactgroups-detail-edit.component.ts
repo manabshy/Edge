@@ -60,7 +60,8 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     },
     'emailAddress': {
       'email': {
-        required: ' Email is required.'
+        required: ' Email is required.',
+        pattern: 'Email is not valid.'
       },
     },
     'email': {
@@ -144,7 +145,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     } else {
       this.getPersonDetails(id);
     }
-    this.personForm.valueChanges.pipe(debounceTime(1000))
+    this.personForm.valueChanges.pipe(debounceTime(500))
       .subscribe((data) => {
         this.postCode.setValue(this.sharedService.formatPostCode(data.address.postCode), { emitEvent: false });
         this.logValidationErrors(this.personForm, false);
@@ -164,6 +165,9 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     Object.keys(group.controls).forEach((key: string) => {
       const control = group.get(key);
       const messages = this.validationMessages[key];
+      if(control.valid) {
+        this.formErrors[key] = '';
+      }
       if (control && !control.valid && (fakeTouched || control.touched)) {
         this.formErrors[key] = '';
         for (const errorKey in control.errors) {
