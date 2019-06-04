@@ -150,9 +150,15 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         this.postCode.setValue(this.sharedService.formatPostCode(data.address.postCode), { emitEvent: false });
         this.logValidationErrors(this.personForm, false);
       });
-    const emailControl = this.emailAddresses.get('email');
-    const phoneControl = this.phoneNumbers.get('number');
-    emailControl.valueChanges.subscribe(data=>this.logValidationErrorsFormArray(emailControl));
+     this.emailAddresses.controls.forEach(x=> {
+       x.get('email').valueChanges.subscribe(data=>{
+        this.logValidationErrorsFormArray(x.get('email'));
+        console.log('email control from email addresses',x.get('email'));
+        console.log('all controls from email addresses',x);
+      });
+    });
+    // const phoneControl = this.phoneNumbers.get('number');
+    // emailControl.valueChanges.subscribe(data=>this.logValidationErrorsFormArray(emailControl));
     console.log(this.personForm);
 
     // const addressControl = this.personForm.get('fullAddress');
@@ -186,7 +192,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       this.formArraryErrors = '';
       if ((control.touched || control.dirty) && control.errors) {
         this.formArraryErrors = Object.keys(control.errors).map(
-          key => this.validationMessages[key]).join(' ');
+          key => this.validationMessages[key][key]).join(' ');
       }
       console.log('form array errors', this.formArraryErrors);
   }
