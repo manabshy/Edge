@@ -100,7 +100,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   foundAddress: AddressAutoCompleteData;
 
   get showPostCode(): boolean {
-    return this.address.get('countryId').value === this.defaultCountryCode;
+    return this.address.get('countryId').value == this.defaultCountryCode;
   }
   get addressLines(): FormControl {
     return <FormControl>this.address.get('addressLines');
@@ -329,7 +329,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         addressLines: person.address.addressLines,
         // outCode: person.address.outCode,
         // inCode: person.address.inCode,
-        postCode: person.address.postCode,
+        postCode: person.address.postCode.trim(),
         countryId: person.address.countryId,
         country: person.address.country,
       },
@@ -385,7 +385,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       address: this.fb.group({
         addressLines: ['', Validators.maxLength(500)],
         countryId: 0,
-        postCode: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(8), Validators.pattern(this.postCodePattern)]],
+        postCode: ['', [Validators.minLength(5), Validators.maxLength(8), Validators.pattern(this.postCodePattern)]],
         // inCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
         // outCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(4)]],
       }),
@@ -561,7 +561,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     return this.fb.group({
       id: 0,
       orderNumber: 0,
-      email: ['', [Validators.pattern(this.emailPattern)]],
+      email: ['', [Validators.required, Validators.pattern(this.emailPattern)]],
       isPreferred: [false],
       isPrimaryWebEmail: [false]
     });

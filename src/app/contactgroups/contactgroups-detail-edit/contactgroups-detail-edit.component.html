@@ -113,10 +113,10 @@
             <div class="form-group" *ngIf="showPostCode">
               <label class="small" for="postcode">Postcode</label>
               <div class="input-group">
-                <input type="text" class="form-control form-control-sm"  id="postcode" formControlName="postCode" [ngClass]="{'is-invalid': formErrors.postCode}">
-                <!-- <input type="text" class="form-control form-control-sm"  id="incode"
-                  placeholder="Incode" formControlName="inCode" [ngClass]="{'is-invalid': formErrors.inCode}"> -->
+                <input type="text" class="form-control form-control-sm"  id="postcode" formControlName="postCode" 
+                [ngClass]="{'is-invalid': formErrors.postCode, 'border border-warning': !personForm.controls.address.controls.postCode.value}">
                   <span class="invalid-feedback">{{formErrors.postCode}}</span>
+                  <small class="form-text w-100" *ngIf="!personForm.controls.address.controls.postCode.value"><i class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your score</span></small>
               </div>
             </div>
           </div>

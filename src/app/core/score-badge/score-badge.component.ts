@@ -28,29 +28,41 @@ export class ScoreBadgeComponent implements OnInit {
 
   calculateScore() {
     let percent = 0;
+    let percentRange = 20;
     let message = 'Complete'
 
     if(this.person) {
+      
+      if(this.person.address.countryId != 232) {
+        percentRange = 25;
+      } else {
+        if(this.person.address.postCode) {
+          percent += percentRange;
+        } else {
+          message += ', Postcode';
+        }
+      }
+
       if(this.person.firstName && this.person.lastName) {
-        percent += 25;
+        percent += percentRange;
       } else {
         message += ', Profile';
       }
 
       if(this.person.address.addressLines) {
-        percent += 25;
+        percent += percentRange;
       } else {
         message += ', Address';
       }
 
       if(this.person.phoneNumbers.length  && this.person.phoneNumbers[0].number) {
-        percent += 25;
+        percent += percentRange;
       } else {
         message += ', Phone number';
       }
 
       if(this.person.emailAddresses.length && this.person.emailAddresses[0].email) {
-        percent += 25;
+        percent += percentRange;
       } else {
         message += ', Email address';
       }
@@ -63,12 +75,12 @@ export class ScoreBadgeComponent implements OnInit {
     this.percent = (percent || 15) + '%';
 
 
-    switch(percent) {
-      case 100:
+    switch(true) {
+      case percent == 100:
         this.bg = 'success';
         this.message = 'Good Job! You\'ve completed this person details.';
         break;
-      case 75:
+      case percent > 75:
         this.bg = 'warning';
         break;
       default:
