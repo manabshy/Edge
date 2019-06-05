@@ -9,7 +9,7 @@ import { Subject } from 'rxjs';
 import { BsModalService } from 'ngx-bootstrap/modal/';
 import { ConfirmModalComponent } from 'src/app/core/confirm-modal/confirm-modal.component';
 import { Location } from '@angular/common';
-import { WedgeError } from 'src/app/core/services/shared.service';
+import { WedgeError, SharedService } from 'src/app/core/services/shared.service';
 
 @Component({
   selector: 'app-contactgroups-people',
@@ -46,7 +46,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private modalService: BsModalService,
-    private _location: Location
+    private _location: Location,
+    private sharedService: SharedService
   ) {}
 
   ngOnInit() {
@@ -276,6 +277,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         .subscribe( () => this.onSaveComplete(),
           (error: WedgeError) => {
               this.errorMessage = error.displayMessage;
+              this.sharedService.showError(this.errorMessage);
               this.isSubmitting = false;
           });
     }

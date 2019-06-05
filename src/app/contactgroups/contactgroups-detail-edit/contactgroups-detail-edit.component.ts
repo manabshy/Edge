@@ -211,7 +211,10 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       this.personDetails = data;
       console.log('person details', this.personDetails);
       this.displayPersonDetails(data);
-    }, error => this.errorMessage = <any>error);
+    }, error => {
+      this.errorMessage = <any>error
+      this.sharedService.showError(this.errorMessage);
+    });
   }
 
   searchAddress() {
@@ -561,6 +564,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         this.contactGroupService.updatePerson(person).subscribe(() => this.onSaveComplete(),
           (error: WedgeError) => {
             this.errorMessage = error.displayMessage;
+            this.sharedService.showError(this.errorMessage);
             this.isSubmitting = false;
           });
         console.log('post code details to post', this.sharedService.splitPostCode(person.address.postCode));

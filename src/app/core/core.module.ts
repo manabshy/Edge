@@ -30,14 +30,15 @@ import { PropertyFinderComponent } from './property-finder/property-finder.compo
 import { FormatAddressPipe } from './shared/format-address.pipe';
 import { ScoreBadgeComponent } from './score-badge/score-badge.component';
 import { CanDeactivateGuard } from './shared/can-deactivate.guard';
+import { ErrorModalComponent } from './error-modal/error-modal.component';
 
 @NgModule({
   declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent,
-    ConfirmModalComponent, PropertyFinderComponent, FormatAddressPipe, ScoreBadgeComponent],
+    ConfirmModalComponent, PropertyFinderComponent, FormatAddressPipe, ScoreBadgeComponent, ErrorModalComponent],
   exports: [
     RoundingPipe, TruncatingPipe, ShortenNamePipe, FormatAddressPipe,
     BreadcrumbComponent, BasicSearchComponent,
-    ConfirmModalComponent, PropertyFinderComponent,ScoreBadgeComponent, BsDropdownModule,
+    ConfirmModalComponent, ErrorModalComponent, PropertyFinderComponent,ScoreBadgeComponent, BsDropdownModule,
     CollapseModule, TabsModule, TypeaheadModule,
     BsDatepickerModule, ModalModule, PopoverModule,  NgPipesModule,
     TooltipModule, AccordionModule, ButtonsModule, ReactiveFormsModule, FormsModule
@@ -58,7 +59,8 @@ import { CanDeactivateGuard } from './shared/can-deactivate.guard';
     ButtonsModule.forRoot()
   ],
   entryComponents: [
-    ConfirmModalComponent
+    ConfirmModalComponent,
+    ErrorModalComponent
   ],
   providers: [
     CanDeactivateGuard,

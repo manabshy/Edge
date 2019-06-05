@@ -3,10 +3,12 @@ import { AppUtils } from '../shared/utils';
 import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { AppConstants } from '../shared/app-constants';
 import { map, fill } from 'lodash';
 import { tap} from 'rxjs/operators';
+import { BsModalService } from 'ngx-bootstrap/modal/';
+import { ErrorModalComponent } from '../error-modal/error-modal.component';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +19,7 @@ export class SharedService {
     const listInfo = localStorage.getItem('dropdownListInfo');
     return JSON.parse(listInfo);
   }
-  constructor(private router: Router, private http: HttpClient) { }
+  constructor(private router: Router, private http: HttpClient, private modalService: BsModalService) { }
 
   back() {
     if (AppUtils.prevRoute) {
@@ -25,6 +27,16 @@ export class SharedService {
     } else {
       this.router.navigate(['/home']);
     }
+  }
+
+  showError(message) {
+    const subject = new Subject<boolean>();
+        const initialState = {
+          title: message
+        };
+        const modal = this.modalService.show(ErrorModalComponent, {ignoreBackdropClick: true, initialState});
+        modal.content.subject = subject;
+        return subject.asObservable();
   }
 
   scrollTodayIntoView() {
