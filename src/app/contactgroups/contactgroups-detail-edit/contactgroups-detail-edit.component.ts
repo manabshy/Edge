@@ -149,14 +149,15 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       .subscribe((data) => {
         this.postCode.setValue(this.sharedService.formatPostCode(data.address.postCode), { emitEvent: false });
         this.logValidationErrors(this.personForm, false);
+        this.logValidationErrorsFormArray(this.personForm);
       });
-     this.emailAddresses.controls.forEach(x=> {
-       x.get('email').valueChanges.subscribe(data=>{
-        this.logValidationErrorsFormArray(x.get('email'));
-        // console.log('email control from email addresses',x.get('email'));
-        // console.log('all controls from email addresses',x);
-      });
-    });
+    //  this.emailAddresses.controls.forEach(x=> {
+    //    x.get('email').valueChanges.subscribe(data=>{
+    //     this.logValidationErrorsFormArray(x.get('email'));
+    //     // console.log('email control from email addresses',x.get('email'));
+    //     // console.log('all controls from email addresses',x);
+    //   });
+    // });
     // const phoneControl = this.phoneNumbers.get('number');
     // emailControl.valueChanges.subscribe(data=>this.logValidationErrorsFormArray(emailControl));
     console.log(this.personForm);
@@ -190,12 +191,13 @@ export class ContactgroupsDetailEditComponent implements OnInit {
 
   logValidationErrorsFormArray(control: AbstractControl) {
       this.formArraryErrors = '';
+      let message = '';
       if ((control.touched || control.dirty) && control.errors) {
-        this.formArraryErrors = Object.keys(control.errors).map(
-          key => this.validationMessages[key]).join(' ');
-          console.log('erro keys', this.formArraryErrors);
+         message += this.validationMessages[control.value];
+          console.log('erro keys', message);
       }
-      console.log('form array errors', this.validationMessages);
+      console.log('form errors', message);
+      // console.log('form array errors', this.validationMessages['number']);
   }
 
   cancel() {
@@ -414,6 +416,22 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     console.log('email address with validation set', emailFormArray);
   }
 
+  removeValidationForPhoneAndEmail() {
+    const phoneNumber = this.phoneNumbers.controls[0];
+    const currentNumber = phoneNumber.get('number');
+    const email = this.emailAddresses.controls[0];
+    const currentEmail = email.get('email');
+    if (currentNumber.value === '' && currentEmail.value !== '') {
+      console.log('empty numbers');
+      currentNumber.clearValidators();
+      currentNumber.updateValueAndValidity();
+    }
+    if (currentEmail.value === '' && currentNumber.value !== '') {
+      console.log('empty numbers');
+      currentEmail.clearValidators();
+      currentEmail.updateValueAndValidity();
+    }
+  }
   removeValidationForAdditionalFields() {
     const currPhoneNumber = this.phoneNumbers.controls[0];
     const currEmail = this.emailAddresses.controls[0];
@@ -540,7 +558,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     return this.fb.group({
       id: 0,
       orderNumber: 0,
-      email: ['', [Validators.required, Validators.pattern(this.emailPattern)]],
+      email: ['', [Validators.pattern(this.emailPattern)]],
       isPreferred: [false],
       isPrimaryWebEmail: [false]
     });
@@ -549,6 +567,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   savePerson() {
     this.isSubmitting = true;
     this.errorMessage = '';
+    this.removeValidationForPhoneAndEmail();
     this.removeValidationForAdditionalFields();
     this.logValidationErrors(this.personForm, true);
     if (this.personForm.valid) {
@@ -563,9 +582,6 @@ export class ContactgroupsDetailEditComponent implements OnInit {
             this.errorMessage = error.displayMessage;
             this.isSubmitting = false;
           });
-        console.log('post code details to post', this.sharedService.splitPostCode(person.address.postCode));
-        console.log('person details form values', this.personForm.value);
-        console.log('person details to post', person);
       } else {
         this.onSaveComplete();
       }
