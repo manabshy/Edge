@@ -153,8 +153,8 @@ export class ContactgroupsDetailEditComponent implements OnInit {
      this.emailAddresses.controls.forEach(x=> {
        x.get('email').valueChanges.subscribe(data=>{
         this.logValidationErrorsFormArray(x.get('email'));
-        console.log('email control from email addresses',x.get('email'));
-        console.log('all controls from email addresses',x);
+        // console.log('email control from email addresses',x.get('email'));
+        // console.log('all controls from email addresses',x);
       });
     });
     // const phoneControl = this.phoneNumbers.get('number');
@@ -192,9 +192,10 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       this.formArraryErrors = '';
       if ((control.touched || control.dirty) && control.errors) {
         this.formArraryErrors = Object.keys(control.errors).map(
-          key => this.validationMessages[key][key]).join(' ');
+          key => this.validationMessages[key]).join(' ');
+          console.log('erro keys', this.formArraryErrors);
       }
-      console.log('form array errors', this.formArraryErrors);
+      console.log('form array errors', this.validationMessages);
   }
 
   cancel() {
