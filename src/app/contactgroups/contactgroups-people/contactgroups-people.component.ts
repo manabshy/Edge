@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges } from '@angular/core';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Person, BasicPerson } from 'src/app/core/models/person';
@@ -30,7 +30,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   contactGroupDetailsForm: FormGroup;
   personFinderForm: FormGroup;
   selectedPerson: Person;
-  firstContactGroupPerson : Person;
+  firstContactGroupPerson: Person;
   selectedPersonId: number;
   removedPersonId: number;
   newPerson: BasicPerson;
@@ -71,12 +71,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
       emailAddress: [''],
       phoneNumber: ['']
     });
-
-    if (this.contactGroupId === 0){
-      this.getContactGroupFirstPerson(this.personId);
-    }
-   this.contactGroupId ? this.getContactGroupById(this.contactGroupId) : '';
-   this.personFinderForm.valueChanges
+    this.contactGroupId ? this.getContactGroupById(this.contactGroupId) : {};
+    this.personFinderForm.valueChanges
       .pipe(debounceTime(400))
       .subscribe(data => {
         if (
@@ -105,13 +101,17 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.newPerson = data;
         this.findPerson(data);
       });
-  }
 
+      if (this.contactGroupId === 0){
+        this.getContactGroupFirstPerson(this.personId);
+      }
+  }
   getContactGroupById(contactGroupId: number) {
     this.contactGroupService
       .getContactGroupbyId(contactGroupId)
       .subscribe(data => {
         this.contactGroupDetails = data;
+        console.log('contact group details',  this.contactGroupDetails);
         this.initialContactGroupLength = this.contactGroupDetails.contactPeople.length;
         this.populateFormDetails(data);
         this.addSelectedPeople();
@@ -124,6 +124,16 @@ export class ContactgroupsPeopleComponent implements OnInit {
   getContactGroupFirstPerson(personId: number) {
     this.contactGroupService.getPerson(personId).subscribe(data => {
       this.firstContactGroupPerson = data;
+      if(this.contactGroupId === 0){
+        this.contactGroupDetails = {} as ContactGroup;
+        if(this.contactGroupDetails){
+          this.contactGroupDetails.contactType = ContactType.Individual;
+          this.contactGroupDetails.contactPeople = [];
+          this.contactGroupDetails.contactPeople.push(this.firstContactGroupPerson);
+          this.setSalution();
+          console.log('get group details', this.contactGroupDetails);
+        }
+      }
       console.log('get person details here', this.firstContactGroupPerson);
       console.log('get person id', this.personId);
     });
@@ -136,11 +146,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.collectSelectedPeople(data);
     });
   }
-  populateFormDetails(contactGroup?: ContactGroup, person?: Person) {
+  populateFormDetails(contactGroup: ContactGroup) {
     if (this.contactGroupDetailsForm) {
       this.contactGroupDetailsForm.reset();
     }
-   if(contactGroup) {
       this.contactGroupDetails = contactGroup;
       this.contactGroupDetailsForm.patchValue({
         salutation: contactGroup.salutation,
@@ -149,9 +158,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
         isRelocationAgent: contactGroup.isRelocationAgent,
         contactType: contactGroup.contactType
       });
-   } else {
-    
-   }
   }
 
   findPerson(person: BasicPerson) {

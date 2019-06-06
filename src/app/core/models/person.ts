@@ -7,6 +7,7 @@ export interface Person {
   middleName: string;
   fullName: string;
   addressee: string;
+  salutation: string;
   titleId: TitleId;
   title?: string;
   titleOther?: string;
