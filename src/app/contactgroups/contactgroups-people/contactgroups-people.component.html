@@ -300,7 +300,7 @@
       </div>
     </ng-container>
     <ng-template #createNewPerson>
-      <app-contactgroups-detail-edit (editedPersonId)="showEditedPersonDetails($event)"
+      <app-contactgroups-detail-edit (addedPersonId)="showAddedPersonDetails($event)"
         (hideCanvas)="hideCanvas($event)" (backToFinder)="backToFinder($event)" *ngIf="isCreateNewPerson"
         [basicPerson]="newPerson">
       </app-contactgroups-detail-edit>

@@ -56,10 +56,10 @@ export class ContactGroupsService {
       // catchError(this.handleError)
       );
   }
-  addPerson(person: Person): Observable<any> {
+  addPerson(person: Person): Observable<Person | any> {
     const url = `${AppConstants.basePersonUrl}`;
-    return this.http.post(url, person).pipe(
-      map(response => response),
+    return this.http.post<PersonContactData>(url, person).pipe(
+      map(response => response.result),
       tap(data => console.log('updated person details here...', JSON.stringify(data))),
       catchError(this.handleError)
       );

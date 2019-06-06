@@ -30,6 +30,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   contactGroupDetailsForm: FormGroup;
   personFinderForm: FormGroup;
   selectedPerson: Person;
+  addedPerson: Person;
   firstContactGroupPerson: Person;
   selectedPersonId: number;
   removedPersonId: number;
@@ -140,9 +141,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
   getPersonDetails(personId: number) {
     this.contactGroupService.getPerson(personId).subscribe(data => {
-      // this.firstContactGroupPerson = data;
       data.isNewPerson = true;
       this.selectedPerson = data;
+      this.addedPerson = data;
+      console.log('added person here.....', this.addedPerson);
       this.collectSelectedPeople(data);
     });
   }
@@ -273,12 +275,13 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.setSalution();
   }
 
-  showEditedPersonDetails(id) {
+  showAddedPersonDetails(id) {
     console.log('id from child', id);
     if (id !== 0) {
-      // this.getPersonDetails(id);
+      this.selectedPersonId = id;
+      this.getPersonDetails(id);
+      console.log('selected person id', this.selectedPersonId);
       console.log(this.isOffCanvasVisible);
-      this.personFinderForm.reset();
     }
     this.selectedPersonId = 0;
   }
