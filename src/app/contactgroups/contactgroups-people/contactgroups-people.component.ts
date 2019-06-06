@@ -175,6 +175,15 @@ export class ContactgroupsPeopleComponent implements OnInit {
    console.log('person from finder form 1', this.newPerson);
   }
 
+  setMainPerson(id: number) {
+   this.contactGroupDetails.contactPeople.forEach((x: Person) => {
+    if (x.personId === id) {
+      x.isMainPerson = true;
+    } else {
+      x.isMainPerson = false;
+    }
+   });
+  }
   removePerson(id: number, isDialogVisible) {
     event.preventDefault();
     event.stopPropagation();

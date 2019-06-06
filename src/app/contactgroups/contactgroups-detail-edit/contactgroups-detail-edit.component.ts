@@ -387,8 +387,6 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         addressLines: ['', Validators.maxLength(500)],
         countryId: 0,
         postCode: ['', [Validators.minLength(5), Validators.maxLength(8), Validators.pattern(this.postCodePattern)]],
-        // inCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
-        // outCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(4)]],
       }),
       contactBy: this.fb.group({
         email: [false],

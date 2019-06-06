@@ -33,7 +33,7 @@
         <div class="row">
           <div class="col-auto">
             <app-score-badge [person]="person"></app-score-badge>
-            <span class="badge badge-pill badge-info mb-2" *ngIf="contactGroupDetails?.contactType !== 4">Main Person</span>
+            <span class="badge badge-pill badge-info mb-2" *ngIf="person.isMainPerson">Main Person</span>
           </div>
           <div class="col text-right" *ngIf="!person.isNewPerson; else removeSelectedPerson">
             <div dropdown placement="bottom right">
@@ -49,7 +49,7 @@
                   [routerLink]="person.isNewPerson ? null : ['../../../../detail', person?.personId ]">
                   <i class="fas fa-address-card"></i> View</a></li>
                 <li role="menuitem">
-                  <a class="dropdown-item" href="#"><i class="fas fa-user-shield"></i> Set Main Person</a>
+                  <a class="dropdown-item" (click)="setMainPerson(person.personId)"><i class="fas fa-user-shield"></i> Set Main Person</a>
                 </li>
                 <li role="menuitem"><a class="dropdown-item" href (click)="removePerson(person.personId, true)" *ngIf="!contactGroupDetails?.referenceCount"><i
                       class="fas fa-user-times"></i> Remove</a></li>
