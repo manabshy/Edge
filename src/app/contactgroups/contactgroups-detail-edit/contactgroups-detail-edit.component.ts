@@ -320,7 +320,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     }
     this.personDetails = person;
     this.personForm.patchValue({
-      titleSelected: person.titleId !== null ? person.titleId : 1,
+      titleId: person.titleId !== null ? person.titleId : 1,
       //  title: person.title,
       firstName: person.firstName,
       middleName: person.middleName,
@@ -378,7 +378,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
 
   setupEditForm() {
     this.personForm = this.fb.group({
-      titleSelected: [''],
+      titleId: [''],
       firstName: ['', [Validators.required, Validators.maxLength(40)]],
       middleName: ['', Validators.maxLength(50)],
       lastName: ['', [Validators.required, Validators.maxLength(80)]],

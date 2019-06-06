@@ -11,7 +11,7 @@
     <div class="form-group row">
       <label for="title" class="col-sm-2 col-form-label col-form-label-sm">Title</label>
       <div class="col-sm-3">
-        <select class="custom-select custom-select-sm" id="title" name="title" formControlName="titleSelected">
+        <select class="custom-select custom-select-sm" id="title" name="title" formControlName="titleId">
           <option selected *ngFor="let title of titles | keyvalue:keepOriginalOrder" [value]=title.key>{{title.value}}</option>
         </select>
       </div>
@@ -113,7 +113,7 @@
             <div class="form-group" *ngIf="showPostCode">
               <label class="small" for="postcode">Postcode</label>
               <div class="input-group">
-                <input type="text" class="form-control form-control-sm"  id="postcode" formControlName="postCode" 
+                <input type="text" class="form-control form-control-sm"  id="postcode" formControlName="postCode"
                 [ngClass]="{'is-invalid': formErrors.postCode, 'border border-warning': !personForm.controls.address.controls.postCode.value}">
                   <span class="invalid-feedback">{{formErrors.postCode}}</span>
                   <small class="form-text w-100" *ngIf="!personForm.controls.address.controls.postCode.value"><i class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your score</span></small>
