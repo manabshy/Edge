@@ -102,7 +102,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.findPerson(data);
       });
 
-      if (this.contactGroupId === 0){
+      if (this.contactGroupId === 0) {
         this.getContactGroupFirstPerson(this.personId);
       }
   }
@@ -124,10 +124,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
   getContactGroupFirstPerson(personId: number) {
     this.contactGroupService.getPerson(personId).subscribe(data => {
       this.firstContactGroupPerson = data;
-      if(this.contactGroupId === 0){
+      if (this.contactGroupId === 0) {
         this.contactGroupDetails = {} as ContactGroup;
-        if(this.contactGroupDetails){
-          this.contactGroupDetails.contactType = ContactType.Individual;
+        if (this.contactGroupDetails) {
+          // this.contactGroupDetails.contactType = ContactType.Individual;
           this.contactGroupDetails.contactPeople = [];
           this.contactGroupDetails.contactPeople.push(this.firstContactGroupPerson);
           this.setSalution();

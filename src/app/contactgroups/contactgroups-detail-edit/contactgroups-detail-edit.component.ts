@@ -581,12 +581,21 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         person.address.outCode = postCode[0];
         person.address.inCode = postCode[1];
         person.address.addressLines = this.removeDuplicateAdressLines();
-        this.contactGroupService.updatePerson(person).subscribe(() => this.onSaveComplete(),
-          (error: WedgeError) => {
-            this.errorMessage = error.displayMessage;
-            this.sharedService.showError(this.errorMessage);
-            this.isSubmitting = false;
-          });
+        if (person.personId > 0) {
+          this.contactGroupService.updatePerson(person).subscribe(() => this.onSaveComplete(),
+            (error: WedgeError) => {
+              this.errorMessage = error.displayMessage;
+              this.sharedService.showError(this.errorMessage);
+              this.isSubmitting = false;
+            });
+        } else {
+          this.contactGroupService.addPerson(person).subscribe(() => this.onSaveComplete(),
+            (error: WedgeError) => {
+              this.errorMessage = error.displayMessage;
+              this.sharedService.showError(this.errorMessage);
+              this.isSubmitting = false;
+            });
+        }
       } else {
         this.onSaveComplete();
       }

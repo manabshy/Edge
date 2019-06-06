@@ -13,6 +13,7 @@ import { WedgeError } from 'src/app/core/services/shared.service';
   providedIn: 'root'
 })
 export class ContactGroupsService {
+
   constructor(private http: HttpClient) { }
 
   // get all the people that belong to a contact group
@@ -53,6 +54,14 @@ export class ContactGroupsService {
       map(response => response.result),
       tap(data => console.log('found people...', data)),
       // catchError(this.handleError)
+      );
+  }
+  addPerson(person: Person): Observable<any> {
+    const url = `${AppConstants.basePersonUrl}`;
+    return this.http.post(url, person).pipe(
+      map(response => response),
+      tap(data => console.log('updated person details here...', JSON.stringify(data))),
+      catchError(this.handleError)
       );
   }
   updatePerson(person: Person): Observable<any> {
