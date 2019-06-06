@@ -33,6 +33,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   personId: number;
   id: number;
   groupPersonId: number;
+  isNewContactGroup = false;
   isOffCanvasVisible = false;
   returnUrl: string;
   errorMessage: string;

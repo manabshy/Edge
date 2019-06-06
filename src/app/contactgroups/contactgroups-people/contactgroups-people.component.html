@@ -23,7 +23,7 @@
   <form action="">
     <h5>People</h5>
     <div class="list-group mb-3">
-      <div class="list-group-item" *ngIf="!contactGroupDetails?.contactPeople">
+      <div class="list-group-item" *ngIf="!contactGroupDetails?.contactPeople || !firstContactGroupPerson">
         <div class="text-center">
           <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading contacts ...
         </div>
@@ -247,7 +247,7 @@
               </div>
             </div>
             <div class="list-group-item list-group-item-action" *ngFor="let foundPerson of foundPeople" [ngClass]="{'disabled': checkDuplicateInContactGroup(foundPerson.personId)}">
-              <div class="row align-items-end align-items-sm-center" 
+              <div class="row align-items-end align-items-sm-center"
               (click)="selectPerson(foundPerson.personId)">
                 <div class="col-sm">
                   <dl class="row">
@@ -309,6 +309,54 @@
 </div>
 <ng-template #selectedPersonDetails>
   <div class="list-group-item new-person" *ngIf="selectedPerson">
+      <div class="row">
+        <div class="col-12 mb-2">
+          <strong>{{selectedPerson.firstName}} {{selectedPerson.lastName}}</strong>&nbsp;
+          <ng-container *ngIf="contactGroupDetails.contactType === 4">&nbsp;
+            <span class="badge badge-pill badge-info">{{contactGroupDetails?.companyName}}</span>
+          </ng-container>
+        </div>
+        <div class="col-sm-4 mb-2">{{selectedPerson.address | formatAddress}}<span class="text-danger"
+              *ngIf="!(selectedPerson.address | formatAddress)">No address</span>
+        </div>
+        <div class="col-sm-3 col-xl-4">
+          <div class="row">
+            <div class="col-6 telephone">
+              <p class="mb-2 text-danger" *ngIf="!selectedPerson.phoneNumbers.length">No phone</p>
+              <p class="mb-2" *ngFor="let phoneNumber of selectedPerson?.phoneNumbers"><a
+                  (click)="$event.stopPropagation()"
+                  href="tel:{{phoneNumber.number}}" *ngIf="phoneNumber?.number; else noPhone">{{phoneNumber?.number}}</a><ng-template #noPhone><span class="text-danger">No Phone</span></ng-template><br /></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-5 col-xl-4">
+          <p class="mb-2 text-danger" *ngIf="!selectedPerson.emailAddresses.length">No email</p>
+          <p class="mb-2" *ngFor="let emailAddress of selectedPerson?.emailAddresses"><a (click)="$event.stopPropagation()"
+              href="mailto:{{emailAddress.email}}" *ngIf="emailAddress?.email; else noEmail">{{emailAddress?.email}}</a><ng-template #noEmail><span class="text-danger">No Email</span></ng-template></p>
+        </div>
+        <div class="col-12">
+          <hr class="my-1">
+        </div>
+        <div class="col-12">
+          <a href class="btn btn-link px-0" (click)="showHideMarkPrefs($event)" [attr.aria-expanded]="!isSelectedCollapsed"
+            aria-controls="collapseSelectedMark">Marketing Prefs <span
+              class="badge badge-pill badge-primary">{{selectedPerson.marketingPreferences?.count || 0}}</span>
+          </a>
+          <div id="collapseSelectedMark" [collapse]="!isSelectedCollapsed">
+            <ul>
+              <li *ngIf="selectedPerson.marketingPreferences?.marketBulletin">Quarterly bulletin</li>
+              <li *ngIf="selectedPerson.marketingPreferences?.general">Special offers</li>
+              <li *ngIf="selectedPerson.marketingPreferences?.events">Landlord/investor events</li>
+              <li *ngIf="selectedPerson.marketingPreferences?.newHomes">New homes/investments</li>
+              <li *ngIf="selectedPerson.marketingPreferences?.general">Other occasional marketing</li>
+            </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<ng-template #firstPersonDetails>
+  <div class="list-group-item new-person" *ngIf="firstContactGroupPerson">
       <div class="row">
         <div class="col-12 mb-2">
           <strong>{{selectedPerson.firstName}} {{selectedPerson.lastName}}</strong>&nbsp;
