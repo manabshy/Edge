@@ -30,6 +30,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   contactGroupDetailsForm: FormGroup;
   personFinderForm: FormGroup;
   selectedPerson: Person;
+  firstContactGroupPerson : Person;
   selectedPersonId: number;
   removedPersonId: number;
   newPerson: BasicPerson;
@@ -70,8 +71,12 @@ export class ContactgroupsPeopleComponent implements OnInit {
       emailAddress: [''],
       phoneNumber: ['']
     });
-    this.getContactGroupById(this.contactGroupId);
-    this.personFinderForm.valueChanges
+
+    if (this.contactGroupId === 0){
+      this.getContactGroupFirstPerson(this.personId);
+    }
+   this.contactGroupId ? this.getContactGroupById(this.contactGroupId) : '';
+   this.personFinderForm.valueChanges
       .pipe(debounceTime(400))
       .subscribe(data => {
         if (
@@ -114,28 +119,39 @@ export class ContactgroupsPeopleComponent implements OnInit {
           this.removePerson(this.removedPersonId, false);
         }
         this.isLoadingNewPersonVisible = false;
-        console.log('removed person id', this.removedPersonId);
       });
+  }
+  getContactGroupFirstPerson(personId: number) {
+    this.contactGroupService.getPerson(personId).subscribe(data => {
+      this.firstContactGroupPerson = data;
+      console.log('get person details here', this.firstContactGroupPerson);
+      console.log('get person id', this.personId);
+    });
   }
   getPersonDetails(personId: number) {
     this.contactGroupService.getPerson(personId).subscribe(data => {
+      // this.firstContactGroupPerson = data;
       data.isNewPerson = true;
       this.selectedPerson = data;
       this.collectSelectedPeople(data);
     });
   }
-  populateFormDetails(contactGroup: ContactGroup) {
+  populateFormDetails(contactGroup?: ContactGroup, person?: Person) {
     if (this.contactGroupDetailsForm) {
       this.contactGroupDetailsForm.reset();
     }
-    this.contactGroupDetails = contactGroup;
-    this.contactGroupDetailsForm.patchValue({
-      salutation: contactGroup.salutation,
-      addressee: contactGroup.addressee,
-      comments: contactGroup.comments,
-      isRelocationAgent: contactGroup.isRelocationAgent,
-      contactType: contactGroup.contactType
-    });
+   if(contactGroup) {
+      this.contactGroupDetails = contactGroup;
+      this.contactGroupDetailsForm.patchValue({
+        salutation: contactGroup.salutation,
+        addressee: contactGroup.addressee,
+        comments: contactGroup.comments,
+        isRelocationAgent: contactGroup.isRelocationAgent,
+        contactType: contactGroup.contactType
+      });
+   } else {
+    
+   }
   }
 
   findPerson(person: BasicPerson) {
@@ -210,8 +226,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   checkDuplicateInContactGroup(id) {
     let isDuplicate = false;
-    this.contactGroupDetails.contactPeople.forEach(x=>{
-      if(x.personId === id) {
+    this.contactGroupDetails.contactPeople.forEach(x => {
+      if (x.personId === id) {
         isDuplicate = true;
       }
     })
@@ -347,7 +363,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   canDeactivate(): boolean {
-    if(this.contactGroupDetailsForm.dirty && !this.isSubmitting) {
+    if (this.contactGroupDetailsForm.dirty && !this.isSubmitting) {
       return false;
     }
     return true;

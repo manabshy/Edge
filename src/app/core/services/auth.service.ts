@@ -16,6 +16,8 @@ export class AuthService {
     clientId: AppConstants.clientId,
     // tenant: 'ed781348-2f1d-4f1e-bbf8-137da318df39',
     // clientId: '03d5d394-2418-42fa-a345-556b8d7ffcdb',
+    // redirectUri: 'https://dandg-edge-test.azurewebsites.net/auth-callback',
+    // postLogoutRedirectUri: 'https://dandg-edge-test.azurewebsites.net',
     // redirectUri: 'https://stagedouglasandgordon-wedge.azurewebsites.net/auth-callback',
     // postLogoutRedirectUri: 'https://stagedouglasandgordon-wedge.azurewebsites.net',
     redirectUri: 'http://localhost:4200/auth-callback',
