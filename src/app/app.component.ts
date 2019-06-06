@@ -62,7 +62,7 @@ export class AppComponent implements OnInit, AfterViewChecked {
   }
 
   scrollTop() {
-    document.getElementsByTagName('body')[0].scrollIntoView({behavior: 'smooth', block: 'start'});
+    window.scrollTo(0,0);
   }
 
 }

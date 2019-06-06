@@ -1,5 +1,4 @@
-<div class="container-fluid home-container pt-sm-3" [ngClass]="containerClass" (panend)="onPanEnd($event)"
-  (panleft)="navRightHint($event)" (panright)="navLeftHint($event)">
+<div class="container-fluid home-container pt-sm-3" [ngClass]="containerClass">
   <tabset type="pills" #homeTabs>
     <tab (select)="onSelect($event)">
       <ng-template tabHeading>
