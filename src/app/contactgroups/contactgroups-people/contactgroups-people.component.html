@@ -203,7 +203,7 @@
       </button>
     </h4>
     <ng-container *ngIf="!selectedPersonId && !isCreateNewPerson; else createNewPerson">
-      <form [formGroup]="personFinderForm" class="pb-3">
+      <form [formGroup]="personFinderForm" [ngClass]="foundPeople?.length ? 'pb-0 pb-sm-3' : 'pb-3'">
         <div class="form-group row">
           <label for="firstName" class="col-sm-2 col-form-label col-form-label-sm">First Name</label>
           <div class="col-sm-10">
@@ -230,6 +230,11 @@
           </div>
         </div>
       </form>
+      <div class="row results-chip" *ngIf="foundPeople?.length">
+        <div class="col-sm-12 text-center">
+          <small><i class="fas fa-arrow-down mr-2"></i> {{foundPeople?.length}} Results found</small>
+        </div>
+      </div>
       <div class="form-group row justify-content-end">
         <div class="col-sm-10">
           <div class="row">

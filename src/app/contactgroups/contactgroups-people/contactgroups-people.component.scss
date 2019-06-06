@@ -22,3 +22,15 @@ form {
 .new-person {
     background: rgba(theme-color('info'), .2);
 }
+
+.results-chip {
+    position: sticky;
+    bottom: - spacer(3);
+    background: rgba(color("white"), .7);
+    z-index: 50;
+    padding: spacer(2) 0 spacer(3);
+
+    @include media-breakpoint-up(sm){
+        display: none;
+    }
+}

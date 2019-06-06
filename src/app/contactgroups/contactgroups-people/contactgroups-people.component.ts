@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Person, BasicPerson } from 'src/app/core/models/person';
@@ -48,7 +48,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
     private route: ActivatedRoute,
     private modalService: BsModalService,
     private _location: Location,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private renderer: Renderer2
   ) {}
 
   ngOnInit() {
@@ -214,6 +215,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       return false;
     }
     this.isOffCanvasVisible = false;
+    this.renderer.removeClass(document.body, 'no-scroll');
     window.scrollTo(0, 0);
     this.selectedPersonId = 0;
   }
@@ -325,6 +327,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   hideCanvas(event) {
     this.isOffCanvasVisible = event;
+    this.renderer.removeClass(document.body, 'no-scroll');
   }
 
   backToFinder(event) {
@@ -347,6 +350,11 @@ export class ContactgroupsPeopleComponent implements OnInit {
     event.preventDefault();
     event.stopPropagation();
     this.isOffCanvasVisible = !this.isOffCanvasVisible;
+    if(this.isOffCanvasVisible) {
+      this.renderer.addClass(document.body, 'no-scroll');
+    } else {
+      this.renderer.removeClass(document.body, 'no-scroll');
+    }
   }
 
   isTypeDisabled(key) {
