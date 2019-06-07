@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit, OnChanges, Renderer2 } from '@angular/core';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Person, BasicPerson } from 'src/app/core/models/person';
@@ -30,7 +30,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
   contactGroupDetailsForm: FormGroup;
   personFinderForm: FormGroup;
   selectedPerson: Person;
-  firstContactGroupPerson : Person;
+  addedPerson: Person;
+  firstContactGroupPerson: Person;
   selectedPersonId: number;
   removedPersonId: number;
   newPerson: BasicPerson;
@@ -72,12 +73,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
       emailAddress: [''],
       phoneNumber: ['']
     });
-
-    if (this.contactGroupId === 0){
-      this.getContactGroupFirstPerson(this.personId);
-    }
-   this.contactGroupId ? this.getContactGroupById(this.contactGroupId) : '';
-   this.personFinderForm.valueChanges
+    this.contactGroupId ? this.getContactGroupById(this.contactGroupId) : {};
+    this.personFinderForm.valueChanges
       .pipe(debounceTime(400))
       .subscribe(data => {
         if (
@@ -106,13 +103,17 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.newPerson = data;
         this.findPerson(data);
       });
-  }
 
+      if (this.contactGroupId === 0) {
+        this.getContactGroupFirstPerson(this.personId);
+      }
+  }
   getContactGroupById(contactGroupId: number) {
     this.contactGroupService
       .getContactGroupbyId(contactGroupId)
       .subscribe(data => {
         this.contactGroupDetails = data;
+        console.log('contact group details',  this.contactGroupDetails);
         this.initialContactGroupLength = this.contactGroupDetails.contactPeople.length;
         this.populateFormDetails(data);
         this.addSelectedPeople();
@@ -125,23 +126,33 @@ export class ContactgroupsPeopleComponent implements OnInit {
   getContactGroupFirstPerson(personId: number) {
     this.contactGroupService.getPerson(personId).subscribe(data => {
       this.firstContactGroupPerson = data;
+      if (this.contactGroupId === 0) {
+        this.contactGroupDetails = {} as ContactGroup;
+        if (this.contactGroupDetails) {
+          // this.contactGroupDetails.contactType = ContactType.Individual;
+          this.contactGroupDetails.contactPeople = [];
+          this.contactGroupDetails.contactPeople.push(this.firstContactGroupPerson);
+          this.setSalution();
+          console.log('get group details', this.contactGroupDetails);
+        }
+      }
       console.log('get person details here', this.firstContactGroupPerson);
       console.log('get person id', this.personId);
     });
   }
   getPersonDetails(personId: number) {
     this.contactGroupService.getPerson(personId).subscribe(data => {
-      // this.firstContactGroupPerson = data;
       data.isNewPerson = true;
       this.selectedPerson = data;
+      this.addedPerson = data;
+      console.log('added person here.....', this.addedPerson);
       this.collectSelectedPeople(data);
     });
   }
-  populateFormDetails(contactGroup?: ContactGroup, person?: Person) {
+  populateFormDetails(contactGroup: ContactGroup) {
     if (this.contactGroupDetailsForm) {
       this.contactGroupDetailsForm.reset();
     }
-   if(contactGroup) {
       this.contactGroupDetails = contactGroup;
       this.contactGroupDetailsForm.patchValue({
         salutation: contactGroup.salutation,
@@ -150,9 +161,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
         isRelocationAgent: contactGroup.isRelocationAgent,
         contactType: contactGroup.contactType
       });
-   } else {
-    
-   }
   }
 
   findPerson(person: BasicPerson) {
@@ -170,6 +178,15 @@ export class ContactgroupsPeopleComponent implements OnInit {
    console.log('person from finder form 1', this.newPerson);
   }
 
+  setMainPerson(id: number) {
+   this.contactGroupDetails.contactPeople.forEach((x: Person) => {
+    if (x.personId === id) {
+      x.isMainPerson = true;
+    } else {
+      x.isMainPerson = false;
+    }
+   });
+  }
   removePerson(id: number, isDialogVisible) {
     event.preventDefault();
     event.stopPropagation();
@@ -260,12 +277,13 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.setSalution();
   }
 
-  showEditedPersonDetails(id) {
+  showAddedPersonDetails(id) {
     console.log('id from child', id);
     if (id !== 0) {
-      // this.getPersonDetails(id);
+      this.selectedPersonId = id;
+      this.getPersonDetails(id);
+      console.log('selected person id', this.selectedPersonId);
       console.log(this.isOffCanvasVisible);
-      this.personFinderForm.reset();
     }
     this.selectedPersonId = 0;
   }

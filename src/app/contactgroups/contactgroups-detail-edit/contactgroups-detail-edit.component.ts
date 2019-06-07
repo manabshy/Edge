@@ -15,7 +15,7 @@ import { debounceTime } from 'rxjs/operators';
   styleUrls: ['./contactgroups-detail-edit.component.scss']
 })
 export class ContactgroupsDetailEditComponent implements OnInit {
-  @Output() editedPersonId = new EventEmitter<number>();
+  @Output() addedPersonId = new EventEmitter<number>();
   @Output() hideCanvas = new EventEmitter<boolean>();
   @Output() backToFinder = new EventEmitter<boolean>();
   @Input() basicPerson: BasicPerson;
@@ -31,6 +31,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   personDetails: Person;
   personForm: FormGroup;
   personId: number;
+  newPersonId: number;
   id: number;
   groupPersonId: number;
   isNewContactGroup = false;
@@ -320,7 +321,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     }
     this.personDetails = person;
     this.personForm.patchValue({
-      titleSelected: person.titleId !== null ? person.titleId : 1,
+      titleId: person.titleId !== null ? person.titleId : 1,
       //  title: person.title,
       firstName: person.firstName,
       middleName: person.middleName,
@@ -378,7 +379,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
 
   setupEditForm() {
     this.personForm = this.fb.group({
-      titleSelected: [''],
+      titleId: [''],
       firstName: ['', [Validators.required, Validators.maxLength(40)]],
       middleName: ['', Validators.maxLength(50)],
       lastName: ['', [Validators.required, Validators.maxLength(80)]],
@@ -387,8 +388,6 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         addressLines: ['', Validators.maxLength(500)],
         countryId: 0,
         postCode: ['', [Validators.minLength(5), Validators.maxLength(8), Validators.pattern(this.postCodePattern)]],
-        // inCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
-        // outCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(4)]],
       }),
       contactBy: this.fb.group({
         email: [false],
@@ -581,12 +580,23 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         person.address.outCode = postCode[0];
         person.address.inCode = postCode[1];
         person.address.addressLines = this.removeDuplicateAdressLines();
-        this.contactGroupService.updatePerson(person).subscribe(() => this.onSaveComplete(),
-          (error: WedgeError) => {
-            this.errorMessage = error.displayMessage;
-            this.sharedService.showError(this.errorMessage);
-            this.isSubmitting = false;
-          });
+        if (person.personId > 0) {
+          this.contactGroupService.updatePerson(person).subscribe(() => this.onSaveComplete(),
+            (error: WedgeError) => {
+              this.errorMessage = error.displayMessage;
+              this.sharedService.showError(this.errorMessage);
+              this.isSubmitting = false;
+            });
+        } else {
+          this.contactGroupService.addPerson(person).subscribe((data) => {
+             this.newPersonId = data.personId;
+             this.onSaveComplete(); },
+            (error: WedgeError) => {
+              this.errorMessage = error.displayMessage;
+              this.sharedService.showError(this.errorMessage);
+              this.isSubmitting = false;
+            });
+        }
       } else {
         this.onSaveComplete();
       }
@@ -599,15 +609,17 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   }
   onSaveComplete() {
     this.personForm.reset();
-    // this.editSelectPerson(this.foundPersonId);
+    if(this.newPersonId) {
+      this.addNewPerson(this.newPersonId);
+    }
     if (this.basicPerson) {
       this.makeCanvasInvisible(this.isOffCanvasVisible);
     } else {
       this._location.back();
     }
   }
-  editSelectPerson(id: number) {
-    this.editedPersonId.emit(id);
+  addNewPerson(id: number) {
+    this.addedPersonId.emit(id);
   }
   makeCanvasInvisible(close: boolean) {
     this.hideCanvas.emit(close);
