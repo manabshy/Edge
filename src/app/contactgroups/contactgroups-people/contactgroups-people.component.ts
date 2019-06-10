@@ -33,7 +33,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   addedPerson: Person;
   firstContactGroupPerson: Person;
   selectedPersonId: number;
-  removedPersonId: number;
+  removedPersonIds: any[] = [];
   newPerson: BasicPerson;
   isCreateNewPersonVisible = false;
   isLoadingNewPersonVisible = false;
@@ -117,8 +117,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.initialContactGroupLength = this.contactGroupDetails.contactPeople.length;
         this.populateFormDetails(data);
         this.addSelectedPeople();
-        if (this.removedPersonId) {
-          this.removePerson(this.removedPersonId, false);
+        if (this.removedPersonIds.length) {
+          this.removedPersonIds.forEach(x=> {
+            this.removePerson(x, false);
+          })
         }
         this.isLoadingNewPersonVisible = false;
       });
@@ -133,6 +135,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
           this.contactGroupDetails.contactPeople = [];
           this.contactGroupDetails.contactPeople.push(this.firstContactGroupPerson);
           this.setSalution();
+          this.changeType();
           console.log('get group details', this.contactGroupDetails);
         }
       }
@@ -154,6 +157,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.contactGroupDetailsForm.reset();
     }
       this.contactGroupDetails = contactGroup;
+      this.changeType();
       this.contactGroupDetailsForm.patchValue({
         salutation: contactGroup.salutation,
         addressee: contactGroup.addressee,
@@ -190,23 +194,23 @@ export class ContactgroupsPeopleComponent implements OnInit {
   removePerson(id: number, isDialogVisible) {
     event.preventDefault();
     event.stopPropagation();
-    this.removedPersonId = id;
     let index;
-    if (this.selectedPeople.length) {
-      index = this.selectedPeople.findIndex(x => x.personId === id);
-      this.removeSelectedPeople(index);
-      this.removedPersonId = 0;
-    }
     index = this.contactGroupDetails.contactPeople.findIndex(x => x.personId === id);
     const fullName = this.contactGroupDetails.contactPeople[index] !== undefined ?
       this.contactGroupDetails.contactPeople[index].firstName + ' ' + this.contactGroupDetails.contactPeople[index].lastName : '';
     if (isDialogVisible) {
       this.confirmRemove(fullName).subscribe(res => {
         if (res) {
-          this.removeSelectedPeople(index);
+          this.removeSelectedPeople(this.contactGroupDetails.contactPeople, index);
+          this.removedPersonIds.push(id);
         }
       });
-    } else { this.removeSelectedPeople(index); }
+    } else {
+      this.removeSelectedPeople(this.contactGroupDetails.contactPeople, index);
+      if(this.removedPersonIds.indexOf(id) < 0) {
+        this.removedPersonIds.push(id);
+      }
+    }
   }
 
   confirmRemove(fullName: string) {
@@ -261,19 +265,11 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.setSalution();
       });
       this.errorMessage = '';
-      this.changeType();
     }
   }
-  removeSelectedPeople(index: number) {
-    if (this.selectedPeople.length) {
-      this.selectedPeople.splice(index, 1);
-      console.log('selected people', this.selectedPeople);
-    } else {
-      this.contactGroupDetails.contactPeople.splice(index, 1);
-      console.log('contact group people', this.contactGroupDetails.contactPeople);
-    }
+  removeSelectedPeople(people, index: number) {
+    people.splice(index, 1);
     this.errorMessage = '';
-    this.changeType();
     this.setSalution();
   }
 
@@ -292,10 +288,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
     const contactPeople = this.contactGroupDetails.contactPeople.length;
     const contactGroupType = this.contactGroupDetailsForm.controls['contactType'];
     if (contactPeople > 2 && contactGroupType.value === ContactType.Individual) {
-      contactGroupType.setValue(ContactType.Sharers);
       this.isSwitchTypeMsgVisible = true;
     } else  if (contactPeople < 2 && contactGroupType.value === ContactType.Sharers) {
-      contactGroupType.setValue(ContactType.Individual);
       this.isSwitchTypeMsgVisible = true;
     } else {
       this.isSwitchTypeMsgVisible = false;
