@@ -132,7 +132,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
             this.removePerson(x, false);
           })
         }
-        this.isLoadingNewPersonVisible = false;
       });
   }
   getContactGroupFirstPerson(personId: number) {
@@ -146,6 +145,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
           this.contactGroupDetails.contactPeople = [];
           this.contactGroupDetails.contactPeople.push(this.firstContactGroupPerson);
           this.setSalution();
+          this.isSwitchTypeMsgVisible = false;
           console.log('get group details', this.contactGroupDetails);
         }
       }
@@ -274,6 +274,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         if(!this.checkDuplicateInContactGroup(x.personId)){
           this.contactGroupDetails.contactPeople.push(x);
           this.setSalution();
+          this.isLoadingNewPersonVisible = false;
         }
       });
       this.errorMessage = '';
