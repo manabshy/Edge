@@ -252,6 +252,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   collectSelectedPeople(person: Person) {
     if (this.selectedPeople) {
       this.selectedPeople.push(person);
+      this.addSelectedPeople();
     }
   }
 
@@ -269,8 +270,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
   addSelectedPeople() {
     if (this.selectedPeople.length) {
       this.selectedPeople.forEach(x => {
-        this.contactGroupDetails.contactPeople.push(x);
-        this.setSalution();
+        if(!this.checkDuplicateInContactGroup(x.personId)){
+          this.contactGroupDetails.contactPeople.push(x);
+          this.setSalution();
+        }
       });
       this.errorMessage = '';
     }

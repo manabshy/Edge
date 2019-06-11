@@ -312,6 +312,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     });
     this.personForm.setControl('emailAddresses', this.setExistingEmailAddresses(this.basicPerson.emailAddresses));
     this.personForm.setControl('phoneNumbers', this.setExistingPhoneNumbers(this.basicPerson.phoneNumbers));
+    this.personForm.markAsDirty();
     console.log('this is called', this.personForm.value);
   }
 
@@ -502,23 +503,27 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     });
   }
   removeDuplicateAdressLines(): string {
-   let newAddress = '';
-   const addressLines = [];
-   const countryName = this.getCountryName(this.countryId.value);
-    addressLines.push(this.addressLines.value.split('\n'));
-    addressLines.forEach(x => {
-      for (const value of  Object.values(addressLines[0])) {
-        if (value === this.postCode.value) {
-        newAddress =  this.addressLines.value.replace(value, ' ');
-        } else {
-          newAddress = this.addressLines.value;
-        }
-        //  if ( value === countryName) {
-        //   newAddress =  this.addressLines.value.replace(value, ' ');
-        // }
-      }
-    });
-    return newAddress;
+    if(this.addressLines.value){
+      let newAddress = '';
+      const addressLines = [];
+      const countryName = this.getCountryName(this.countryId.value);
+       addressLines.push(this.addressLines.value.split('\n'));
+       addressLines.forEach(x => {
+         for (const value of  Object.values(addressLines[0])) {
+           if (value === this.postCode.value) {
+           newAddress =  this.addressLines.value.replace(value, ' ');
+           } else {
+             newAddress = this.addressLines.value;
+           }
+           //  if ( value === countryName) {
+           //   newAddress =  this.addressLines.value.replace(value, ' ');
+           // }
+         }
+       });
+       return newAddress; 
+    } else {
+      return '';
+    }
   }
    getCountryName(id: number) {
     const country = this.countries.filter((x: Country) => x.id === id);
@@ -577,10 +582,13 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       if (this.personForm.dirty) {
         const person = { ...this.personDetails, ...this.personForm.value };
         const postCode =  this.sharedService.splitPostCode(person.address.postCode);
+        if(!person.titleId) {
+          person.titleId = 100;
+        }
         person.address.outCode = postCode[0];
         person.address.inCode = postCode[1];
         person.address.addressLines = this.removeDuplicateAdressLines();
-        if (person.personId > 0) {
+        if (!this.basicPerson) {
           this.contactGroupService.updatePerson(person).subscribe(() => this.onSaveComplete(),
             (error: WedgeError) => {
               this.errorMessage = error.displayMessage;
@@ -589,6 +597,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
             });
         } else {
           this.contactGroupService.addPerson(person).subscribe((data) => {
+            console.log(data);
              this.newPersonId = data.personId;
              this.onSaveComplete(); },
             (error: WedgeError) => {
@@ -611,8 +620,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     this.personForm.reset();
     if(this.newPersonId) {
       this.addNewPerson(this.newPersonId);
-    }
-    if (this.basicPerson) {
+      this.backToFinder.emit(true);
       this.makeCanvasInvisible(this.isOffCanvasVisible);
     } else {
       this._location.back();
