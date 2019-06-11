@@ -137,6 +137,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
   getContactGroupFirstPerson(personId: number) {
     this.contactGroupService.getPerson(personId).subscribe(data => {
+      data.isMainPerson = true;
       this.firstContactGroupPerson = data;
       if (this.contactGroupId === 0) {
         this.contactGroupDetails = {} as ContactGroup;
