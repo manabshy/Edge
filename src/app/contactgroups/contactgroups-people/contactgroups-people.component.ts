@@ -104,6 +104,16 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.findPerson(data);
       });
 
+      let contactTypeField = this.contactGroupDetailsForm.controls.contactType;
+      contactTypeField.valueChanges
+        .subscribe(data=>{
+          if(data && data !== this.contactGroupDetails.contactType && contactTypeField.pristine) {
+            this.isSwitchTypeMsgVisible = true;
+          } else {
+            this.isSwitchTypeMsgVisible = false;
+          }
+        })
+
       if (this.contactGroupId === 0) {
         this.getContactGroupFirstPerson(this.personId);
       }
@@ -135,7 +145,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
           this.contactGroupDetails.contactPeople = [];
           this.contactGroupDetails.contactPeople.push(this.firstContactGroupPerson);
           this.setSalution();
-          this.changeType();
           console.log('get group details', this.contactGroupDetails);
         }
       }
@@ -157,7 +166,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.contactGroupDetailsForm.reset();
     }
       this.contactGroupDetails = contactGroup;
-      this.changeType();
       this.contactGroupDetailsForm.patchValue({
         salutation: contactGroup.salutation,
         addressee: contactGroup.addressee,
@@ -284,18 +292,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.selectedPersonId = 0;
   }
 
-  changeType() {
-    const contactPeople = this.contactGroupDetails.contactPeople.length;
-    const contactGroupType = this.contactGroupDetailsForm.controls['contactType'];
-    if (contactPeople > 2 && contactGroupType.value === ContactType.Individual) {
-      this.isSwitchTypeMsgVisible = true;
-    } else  if (contactPeople < 2 && contactGroupType.value === ContactType.Sharers) {
-      this.isSwitchTypeMsgVisible = true;
-    } else {
-      this.isSwitchTypeMsgVisible = false;
-    }
-  }
-
   saveContactGroup() {
     const contactPeople = this.contactGroupDetails.contactPeople.length;
     if (this.selectedPeople.length || contactPeople) {
@@ -323,15 +319,31 @@ export class ContactgroupsPeopleComponent implements OnInit {
     let addressee = '';
     let counter = 0;
     let seperator = '';
+    let type = 0;
     people.forEach(person => {
       seperator = counter === 0 ? '' : (counter === people.length - 1 ? ' & ' : ' , ');
       addressee += seperator + person.addressee;
       salutation += seperator + person.title + ' ' + person.lastName;
       counter++;
     });
+    
+    if(this.contactGroupDetails.contactType !== ContactType.CompanyContact) {
+      switch(true) {
+        case people.length > 2:
+        case people.length === 2 && this.contactGroupDetails.contactType === ContactType.Sharers:
+          type = 2;
+          break;
+        default:
+          type = 1;
+      }
+    } else {
+      type = 3;
+    }
+
     this.contactGroupDetailsForm.patchValue({
       salutation: salutation,
-      addressee: addressee
+      addressee: addressee,
+      contactType: type
     }, {onlySelf: false});
 
     this.contactGroupDetailsForm.markAsDirty();
