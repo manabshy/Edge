@@ -72,6 +72,14 @@ export class ContactGroupsService {
       catchError(this.handleError)
       );
   }
+  addContactGroup(contactGroup: ContactGroup): Observable<any> {
+    const url = `${AppConstants.baseContactGroupUrl}`;
+    return this.http.post(url, contactGroup).pipe(
+      map(response => response),
+      tap(data => console.log('updated contact details here...', JSON.stringify(data))),
+      catchError(err => this.handleError(err))
+      );
+  }
   updateContactGroup(contactGroup: ContactGroup): Observable<any> {
     const url = `${AppConstants.baseContactGroupUrl}/${contactGroup.contactGroupId}`;
     return this.http.put(url, contactGroup).pipe(

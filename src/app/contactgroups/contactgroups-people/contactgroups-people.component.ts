@@ -303,7 +303,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
       const contactGroup = {...this.contactGroupDetails, ...this.contactGroupDetailsForm.value};
       this.isSubmitting = true;
       this.errorMessage = '';
-      this.contactGroupService
+      if(this.contactGroupDetails.contactGroupId) {
+        this.contactGroupService
         .updateContactGroup(contactGroup)
         .subscribe( () => this.onSaveComplete(),
           (error: WedgeError) => {
@@ -311,6 +312,16 @@ export class ContactgroupsPeopleComponent implements OnInit {
               this.sharedService.showError(this.errorMessage);
               this.isSubmitting = false;
           });
+      } else {
+        this.contactGroupService
+        .addContactGroup(contactGroup)
+        .subscribe( () => this.onSaveComplete(),
+          (error: WedgeError) => {
+              this.errorMessage = error.displayMessage;
+              this.sharedService.showError(this.errorMessage);
+              this.isSubmitting = false;
+          });
+      }
     }
   }
   onSaveComplete(): void {
