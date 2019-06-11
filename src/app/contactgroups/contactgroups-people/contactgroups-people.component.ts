@@ -141,7 +141,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       if (this.contactGroupId === 0) {
         this.contactGroupDetails = {} as ContactGroup;
         if (this.contactGroupDetails) {
-          // this.contactGroupDetails.contactType = ContactType.Individual;
+          this.contactGroupDetails.contactType = ContactType.Individual;
           this.contactGroupDetails.contactPeople = [];
           this.contactGroupDetails.contactPeople.push(this.firstContactGroupPerson);
           this.setSalution();
