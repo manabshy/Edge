@@ -1,7 +1,7 @@
 import { Component, OnInit, OnChanges, Renderer2 } from '@angular/core';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Person, BasicPerson } from 'src/app/core/models/person';
+import { Person, BasicPerson, Email } from 'src/app/core/models/person';
 import { ContactGroup, PeopleAutoCompleteResult, ContactGroupsTypes, ContactType } from '../shared/contact-group';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
@@ -44,6 +44,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isSubmitting = false;
   errorMessage: string;
   isSwitchTypeMsgVisible = false;
+  fullMatch = false;
+  goodMatch = false;
   public keepOriginalOrder = (a) => a.key;
 
   constructor(
@@ -108,11 +110,12 @@ export class ContactgroupsPeopleComponent implements OnInit {
         });
         this.newPerson = data;
         this.findPerson(data);
+        // this.rankFoundPeople(data);
       });
-      
+
       let contactTypeField = this.contactGroupDetailsForm.controls.contactType;
       contactTypeField.valueChanges
-        .subscribe(data=>{
+        .subscribe(data => {
           if(data && data !== this.contactGroupDetails.contactType && contactTypeField.pristine) {
             this.isSwitchTypeMsgVisible = true;
           } else {
@@ -185,7 +188,38 @@ export class ContactgroupsPeopleComponent implements OnInit {
   findPerson(person: BasicPerson) {
     this.contactGroupService.getAutocompletePeople(person).subscribe(data => {
       this.foundPeople = data;
+      // this.checkDuplicatePeople(person);
     });
+  }
+  checkDuplicatePeople(person: BasicPerson){
+   if (this.foundPeople) {
+      //  this.foundPeople = [];
+      this.foundPeople.forEach((x) => {
+        const sameName = x.firstName.toLowerCase() === person.firstName.toLowerCase() &&
+        x.lastName.toLowerCase() === person.lastName.toLowerCase();
+        // const email = x.emailAddresses.filter(x=>x === person.emailAddress);
+        // const phone = x.phoneNumbers.filter(x=>x === person.phoneNumber);
+        // console.log('email:', email , 'and phone:', phone)
+        if (sameName) {
+          x.duplicateScore = 10;
+
+          this.foundPeople.push(x);
+        }else{
+          x.duplicateScore = 5;
+          this.foundPeople.push(x);
+        }
+      })
+      console.log('people', this.foundPeople);
+      this.foundPeople.forEach(x=>{
+        if(x.duplicateScore === 10){
+          this.fullMatch=true;
+          this.goodMatch = false;
+        }else{
+          this.goodMatch = true;
+          this.fullMatch = false;
+        }
+      })
+   }
   }
   createNewContactGroupPerson(event) {
     event.preventDefault();
@@ -222,7 +256,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       });
     } else {
       this.removeSelectedPeople(this.contactGroupDetails.contactPeople, index);
-      if(this.removedPersonIds.indexOf(id) < 0) {
+      if (this.removedPersonIds.indexOf(id) < 0) {
         this.removedPersonIds.push(id);
       }
     }
