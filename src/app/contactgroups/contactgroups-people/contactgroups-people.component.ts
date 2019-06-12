@@ -31,6 +31,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   personFinderForm: FormGroup;
   selectedPerson: Person;
   addedPerson: Person;
+  addedContactGroup: any;
   firstContactGroupPerson: Person;
   selectedPersonId: number;
   removedPersonIds: any[] = [];
@@ -38,11 +39,13 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isCreateNewPersonVisible = false;
   isLoadingNewPersonVisible = false;
   isCreateNewPerson = false;
+  isNewContactGroup = false;
   initialContactGroupLength = 0;
   isSubmitting = false;
   errorMessage: string;
   isSwitchTypeMsgVisible = false;
   public keepOriginalOrder = (a) => a.key;
+
   constructor(
     private contactGroupService: ContactGroupsService,
     private fb: FormBuilder,
@@ -59,6 +62,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.contactGroupId = +params['contactGroupId'] || 0;
       this.groupPersonId = +params['groupPersonId'] || 0;
       this.personId = +params['personId'] || 0;
+    });
+    this.route.queryParams.subscribe(params => {
+      this.isNewContactGroup = params['isNewContactGroup'] || false;
     });
     this.contactGroupDetailsForm = this.fb.group({
       salutation: [''],
@@ -128,7 +134,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.populateFormDetails(data);
         this.addSelectedPeople();
         if (this.removedPersonIds.length) {
-          this.removedPersonIds.forEach(x=> {
+          this.removedPersonIds.forEach(x => {
             this.removePerson(x, false);
           })
         }
@@ -158,7 +164,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       data.isNewPerson = true;
       this.selectedPerson = data;
       this.addedPerson = data;
-      console.log('added person here.....', this.addedPerson);
+      console.log('selected person here.....', this.selectedPerson);
       this.collectSelectedPeople(data);
     });
   }
@@ -234,7 +240,18 @@ export class ContactgroupsPeopleComponent implements OnInit {
    }
 
   selectPerson(id: number) {
-    if (id !== 0 && !this.checkDuplicateInContactGroup(id)) {
+    if (this.isNewContactGroup) {
+      this.selectedPersonId = id;
+      this.isLoadingNewPersonVisible = true;
+      this.getPersonDetails(id);
+      this.contactGroupDetails = {} as ContactGroup;
+      this.contactGroupDetails.contactPeople = [];
+      if (this.selectedPerson) {
+         this.contactGroupDetails.contactPeople.push(this.selectedPerson);
+      }
+      this.isNewContactGroup = false;
+    }
+     else if (id !== 0 && !this.checkDuplicateInContactGroup(id)) {
       this.selectedPersonId = id;
       this.isLoadingNewPersonVisible = true;
       this.getPersonDetails(id);
@@ -259,19 +276,21 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   checkDuplicateInContactGroup(id) {
     let isDuplicate = false;
-    this.contactGroupDetails.contactPeople.forEach(x => {
-      if (x.personId === id) {
-        isDuplicate = true;
-      }
-    })
+    if (!this.isNewContactGroup) {
+      this.contactGroupDetails.contactPeople.forEach(x => {
+        if (x.personId === id) {
+          isDuplicate = true;
+        }
+      })
 
+    }
     return isDuplicate;
   }
 
   addSelectedPeople() {
     if (this.selectedPeople.length) {
       this.selectedPeople.forEach(x => {
-        if(!this.checkDuplicateInContactGroup(x.personId)){
+        if (!this.checkDuplicateInContactGroup(x.personId)){
           this.contactGroupDetails.contactPeople.push(x);
           this.setSalution();
           this.isLoadingNewPersonVisible = false;
@@ -303,7 +322,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       const contactGroup = {...this.contactGroupDetails, ...this.contactGroupDetailsForm.value};
       this.isSubmitting = true;
       this.errorMessage = '';
-      if(this.contactGroupDetails.contactGroupId) {
+      if (this.contactGroupDetails.contactGroupId) {
         this.contactGroupService
         .updateContactGroup(contactGroup)
         .subscribe( () => this.onSaveComplete(),
@@ -330,7 +349,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   setSalution() {
-    const people = this.contactGroupDetails.contactPeople;
+    let people = this.contactGroupDetails.contactPeople;
     let salutation = '';
     let addressee = '';
     let counter = 0;
@@ -342,9 +361,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
       salutation += seperator + person.title + ' ' + person.lastName;
       counter++;
     });
-    
-    if(this.contactGroupDetails.contactType !== ContactType.CompanyContact) {
-      switch(true) {
+
+    if (this.contactGroupDetails.contactType !== ContactType.CompanyContact) {
+      switch (true) {
         case people.length > 2:
         case people.length === 2 && this.contactGroupDetails.contactType === ContactType.Sharers:
           type = 2;
@@ -390,7 +409,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     event.preventDefault();
     event.stopPropagation();
     this.isOffCanvasVisible = !this.isOffCanvasVisible;
-    if(this.isOffCanvasVisible) {
+    if (this.isOffCanvasVisible) {
       this.renderer.addClass(document.body, 'no-scroll');
     } else {
       this.renderer.removeClass(document.body, 'no-scroll');

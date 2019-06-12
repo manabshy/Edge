@@ -23,97 +23,99 @@
   <form action="">
     <h5>People</h5>
     <div class="list-group mb-3">
-      <div class="list-group-item" *ngIf="!contactGroupDetails?.contactPeople">
-        <div class="text-center">
-          <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading contacts ...
+      <div *ngIf="!isNewContactGroup">
+        <div class="list-group-item" *ngIf="!contactGroupDetails?.contactPeople">
+          <div class="text-center">
+            <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading contacts ...
+          </div>
         </div>
-      </div>
-      <div class="list-group-item"
-        *ngFor="let person of contactGroupDetails?.contactPeople ; index as i" [ngClass]="{'new-person': person.isNewPerson}">
-        <div class="row">
-          <div class="col-auto">
-            <app-score-badge [person]="person"></app-score-badge>
-            <span class="badge badge-pill badge-info mb-2" *ngIf="person.isMainPerson">Main Person</span>
-          </div>
-          <div class="col text-right" *ngIf="!person.isNewPerson; else removeSelectedPerson">
-            <div dropdown placement="bottom right">
-              <a class="dropdown-toggle" href [id]="'button' + i" dropdownToggle
-                (click)="$event.stopPropagation(); false" [attr.aria-controls]="'dropdown' + i">Actions <span
-                  class="caret"></span></a>
-              <ul [id]="'dropdown' + i" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
-                [attr.aria-labelledby]="'button' + i">
-                <li role="menuitem"><a class="dropdown-item" (click)="$event.stopPropagation();"
-                    [routerLink]="['../../edit']" [queryParams]="{groupPersonId: person.personId }"><i
-                      class="fas fa-edit"></i> Edit</a></li>
-                <li role="menuitem"><a class="dropdown-item" (click)="$event.stopPropagation();"
-                  [routerLink]="person.isNewPerson ? null : ['../../../../detail', person?.personId ]">
-                  <i class="fas fa-address-card"></i> View</a></li>
-                <li role="menuitem">
-                  <a class="dropdown-item" (click)="setMainPerson(person.personId)" *ngIf="!person.isMainPerson"><i class="fas fa-user-shield"></i> Set Main Person</a>
-                </li>
-                <li role="menuitem"><a class="dropdown-item" href (click)="removePerson(person.personId, true)" *ngIf="!contactGroupDetails?.referenceCount"><i
-                      class="fas fa-user-times"></i> Remove</a></li>
-              </ul>
+        <div class="list-group-item"
+          *ngFor="let person of contactGroupDetails?.contactPeople ; index as i" [ngClass]="{'new-person': person.isNewPerson}">
+          <div class="row">
+            <div class="col-auto">
+              <app-score-badge [person]="person"></app-score-badge>
+              <span class="badge badge-pill badge-info mb-2" *ngIf="person.isMainPerson">Main Person</span>
             </div>
-          </div>
-          <ng-template #removeSelectedPerson>
-            <div class="col text-right">
-              <a href (click)="removePerson(person.personId, false)"><i class="fas fa-user-times"></i> Remove</a>
+            <div class="col text-right" *ngIf="!person.isNewPerson; else removeSelectedPerson">
+              <div dropdown placement="bottom right">
+                <a class="dropdown-toggle" href [id]="'button' + i" dropdownToggle
+                  (click)="$event.stopPropagation(); false" [attr.aria-controls]="'dropdown' + i">Actions <span
+                    class="caret"></span></a>
+                <ul [id]="'dropdown' + i" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+                  [attr.aria-labelledby]="'button' + i">
+                  <li role="menuitem"><a class="dropdown-item" (click)="$event.stopPropagation();"
+                      [routerLink]="['../../edit']" [queryParams]="{groupPersonId: person.personId }"><i
+                        class="fas fa-edit"></i> Edit</a></li>
+                  <li role="menuitem"><a class="dropdown-item" (click)="$event.stopPropagation();"
+                    [routerLink]="person.isNewPerson ? null : ['../../../../detail', person?.personId ]">
+                    <i class="fas fa-address-card"></i> View</a></li>
+                  <li role="menuitem">
+                    <a class="dropdown-item" (click)="setMainPerson(person.personId)" *ngIf="!person.isMainPerson"><i class="fas fa-user-shield"></i> Set Main Person</a>
+                  </li>
+                  <li role="menuitem"><a class="dropdown-item" href (click)="removePerson(person.personId, true)" *ngIf="!contactGroupDetails?.referenceCount"><i
+                        class="fas fa-user-times"></i> Remove</a></li>
+                </ul>
+              </div>
             </div>
-          </ng-template>
-          <div class="col-12 mb-2">
-            <strong>{{person?.firstName}} {{person?.lastName}}</strong>&nbsp;
-            <ng-container *ngIf="contactGroupDetails?.contactType === 4">&nbsp;
-              <span class="badge badge-pill badge-info">{{contactGroupDetails?.companyName}}</span>
-            </ng-container>
-            <!-- <i class="fas fa-phone"></i>&nbsp;
+            <ng-template #removeSelectedPerson>
+              <div class="col text-right">
+                <a href (click)="removePerson(person.personId, false)"><i class="fas fa-user-times"></i> Remove</a>
+              </div>
+            </ng-template>
+            <div class="col-12 mb-2">
+              <strong>{{person?.firstName}} {{person?.lastName}}</strong>&nbsp;
+              <ng-container *ngIf="contactGroupDetails?.contactType === 4">&nbsp;
+                <span class="badge badge-pill badge-info">{{contactGroupDetails?.companyName}}</span>
+              </ng-container>
+              <!-- <i class="fas fa-phone"></i>&nbsp;
 
-            <i class="fas fa-envelope"></i>&nbsp;
+              <i class="fas fa-envelope"></i>&nbsp;
 
-            <span class="badge badge-success">AML Valid</span> -->
-          </div>
-          <div class="col-sm-4 mb-2"><pre>{{person?.address | formatAddress}}</pre><span class="text-danger"
-              *ngIf="!(person.address | formatAddress)">No address</span></div>
-          <div class="col-sm-3 col-xl-4">
-            <div class="row">
-              <div class="col-6 telephone">
-                <p class="mb-2 text-danger" *ngIf="!person.phoneNumbers.length || !person.phoneNumbers[0].number">No phone</p>
-                <ng-container *ngFor="let phoneNumber of person?.phoneNumbers">
-                  <p class="mb-2" *ngIf="phoneNumber?.number"><a (click)="$event.stopPropagation()"
-                    href="tel:{{phoneNumber.number}}">{{phoneNumber?.number}}</a><br />{{phoneNumber?.telephoneId}}</p>
-                </ng-container>
+              <span class="badge badge-success">AML Valid</span> -->
+            </div>
+            <div class="col-sm-4 mb-2"><pre>{{person?.address | formatAddress}}</pre><span class="text-danger"
+                *ngIf="!(person.address | formatAddress)">No address</span></div>
+            <div class="col-sm-3 col-xl-4">
+              <div class="row">
+                <div class="col-6 telephone">
+                  <p class="mb-2 text-danger" *ngIf="!person.phoneNumbers.length || !person.phoneNumbers[0].number">No phone</p>
+                  <ng-container *ngFor="let phoneNumber of person?.phoneNumbers">
+                    <p class="mb-2" *ngIf="phoneNumber?.number"><a (click)="$event.stopPropagation()"
+                      href="tel:{{phoneNumber.number}}">{{phoneNumber?.number}}</a><br />{{phoneNumber?.telephoneId}}</p>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-5 col-xl-4">
+              <p class="mb-2 text-danger" *ngIf="!person.emailAddresses.length || !person.emailAddresses[0].email">No email</p>
+              <ng-container *ngFor="let emailAddress of person?.emailAddresses">
+                <p class="mb-2" *ngIf="emailAddress?.email"><a (click)="$event.stopPropagation()"
+                    href="mailto:{{emailAddress.email}}">{{emailAddress?.email}}</a></p>
+              </ng-container>
+            </div>
+            <div class="col-12">
+              <hr class="my-1">
+            </div>
+            <div class="col-12">
+              <a href class="btn btn-link px-0" (click)="showHideMarkPrefs($event, i)"
+                [attr.aria-expanded]="!isCollapsed[i]" [attr.aria-controls]="'collapseMark' + i">Marketing Prefs <span
+                  class="badge badge-pill badge-primary">{{person.marketingPreferences?.count || 0}}</span>
+              </a>
+              <div [id]="'collapseMark' + i" [collapse]="!isCollapsed[i]">
+                <ul>
+                  <li *ngIf="person.marketingPreferences?.marketBulletin">Quarterly bulletin</li>
+                  <li *ngIf="person.marketingPreferences?.general">Special offers</li>
+                  <li *ngIf="person.marketingPreferences?.events">Landlord/investor events</li>
+                  <li *ngIf="person.marketingPreferences?.newHomes">New homes/investments</li>
+                  <li *ngIf="person.marketingPreferences?.general">Other occasional marketing</li>
+                </ul>
               </div>
             </div>
           </div>
-          <div class="col-sm-5 col-xl-4">
-            <p class="mb-2 text-danger" *ngIf="!person.emailAddresses.length || !person.emailAddresses[0].email">No email</p>
-            <ng-container *ngFor="let emailAddress of person?.emailAddresses">
-              <p class="mb-2" *ngIf="emailAddress?.email"><a (click)="$event.stopPropagation()"
-                  href="mailto:{{emailAddress.email}}">{{emailAddress?.email}}</a></p>
-            </ng-container>
-          </div>
-          <div class="col-12">
-            <hr class="my-1">
-          </div>
-          <div class="col-12">
-            <a href class="btn btn-link px-0" (click)="showHideMarkPrefs($event, i)"
-              [attr.aria-expanded]="!isCollapsed[i]" [attr.aria-controls]="'collapseMark' + i">Marketing Prefs <span
-                class="badge badge-pill badge-primary">{{person.marketingPreferences?.count || 0}}</span>
-            </a>
-            <div [id]="'collapseMark' + i" [collapse]="!isCollapsed[i]">
-              <ul>
-                <li *ngIf="person.marketingPreferences?.marketBulletin">Quarterly bulletin</li>
-                <li *ngIf="person.marketingPreferences?.general">Special offers</li>
-                <li *ngIf="person.marketingPreferences?.events">Landlord/investor events</li>
-                <li *ngIf="person.marketingPreferences?.newHomes">New homes/investments</li>
-                <li *ngIf="person.marketingPreferences?.general">Other occasional marketing</li>
-              </ul>
-            </div>
-          </div>
         </div>
-      </div>
-      <div class="list-group-item text-center" *ngIf="isLoadingNewPersonVisible">
-        <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading person details ...
+        <div class="list-group-item text-center" *ngIf="isLoadingNewPersonVisible">
+          <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading person details ...
+        </div>
       </div>
       <!-- <ng-container *ngTemplateOutlet="selectedPersonDetails" ></ng-container> -->
       <a href (click)="showHideOffCanvas($event)" class="list-group-item list-group-item-action text-center py-4"
