@@ -138,7 +138,7 @@
           <div class="col-sm-10">
               <div class="input-group input-group-sm">
                 <input type="text" [id]="'email' + i" [placeholder]="!isFirst ? 'Additional Email' : ''" class="form-control" formControlName="email"
-                (keyup)="addEmailItem(i)" (blur)="addEmailItem(i)"
+                (keyup)="addRemoveEmailItem(i, false)" (blur)="addRemoveEmailItem(i, true)"
                 [ngClass]="{'border border-warning': !personForm.controls.emailAddresses.controls[0].controls.email.value && isFirst && !isContactErrorVisible,
                             'is-invalid': (personForm.controls.emailAddresses.controls[i].controls.email.value && !!personForm.controls.emailAddresses.controls[i].controls.email.errors) 
                             || isContactErrorVisible}">
@@ -167,7 +167,7 @@
           <div class="col-auto d-sm-none mr-2" *ngIf="isFirst"><small>Pref</small></div>
           <div class="col-sm-10">
             <div class="input-group input-group-sm">
-              <input type="text" [id]="'phone' + i" class="form-control" [placeholder]="!isFirst ? 'Additional phone' : ''" formControlName="number" (keyup)="addPhoneNumberItem(i)" (blur)="addPhoneNumberItem(i)"
+              <input type="text" [id]="'phone' + i" class="form-control" [placeholder]="!isFirst ? 'Additional phone' : ''" formControlName="number" (keyup)="addRemovePhoneNumberItem(i, false)" (blur)="addRemovePhoneNumberItem(i, true)"
               [ngClass]="{'border border-warning': !personForm.controls.phoneNumbers.controls[0].controls.number.value && isFirst && !isContactErrorVisible,
                         'is-invalid': (personForm.controls.phoneNumbers.controls[i].controls.number.value && !!personForm.controls.phoneNumbers.controls[i].controls.number.errors)
                         || isContactErrorVisible}">
