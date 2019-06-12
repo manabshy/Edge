@@ -313,6 +313,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     });
     this.personForm.setControl('emailAddresses', this.setExistingEmailAddresses(this.basicPerson.emailAddresses));
     this.personForm.setControl('phoneNumbers', this.setExistingPhoneNumbers(this.basicPerson.phoneNumbers));
+    this.personForm.updateValueAndValidity();
     this.personForm.markAsDirty();
     console.log('this is called', this.personForm.value);
   }
@@ -358,7 +359,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     const phoneArray = new FormArray([]);
     phoneNumbers.forEach(x => {
       phoneArray.push(this.fb.group({
-        number: x.number,
+        number: [x.number, { validators: [Validators.required, Validators.minLength(7), Validators.maxLength(16), Validators.pattern(/^\+?[ \d]+$/g)], updateOn: 'blur'}],
         typeId: x.typeId,
         isPreferred: x.isPreferred,
         comments: x.comments
@@ -373,7 +374,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     emailAddresses.forEach(x => {
       emailFormArray.push(this.fb.group({
         id: x.id,
-        email: x.email,
+        email: [x.email, { validators: [Validators.required, Validators.pattern(this.emailPattern)], updateOn: 'blur'}],
         isPreferred: x.isPreferred,
         isPrimaryWebEmail: x.isPrimaryWebEmail
       }));
@@ -455,14 +456,6 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     }
   }
 
-  isValid(event, errors) {
-    console.log(errors);
-    if (errors) {
-      event.target.classList.add('is-invalid');
-    } else {
-      event.target.classList.remove('is-invalid');
-    }
-  }
   togglePreferences(index: number, group: FormArray) {
     if (group === this.phoneNumbers) {
       const phoneNumberPrefs = [];
@@ -549,7 +542,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     return this.fb.group({
       id: 0,
       typeId: 3,
-      number: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(16), Validators.pattern(/^\+?[ \d]+$/g)]],
+      number: ['', { validators: [Validators.required, Validators.minLength(7), Validators.maxLength(16), Validators.pattern(/^\+?[ \d]+$/g)], updateOn: 'blur'}],
       orderNumber: 0,
       isPreferred: [false],
       comments: ['']
@@ -571,7 +564,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     return this.fb.group({
       id: 0,
       orderNumber: 0,
-      email: ['', [Validators.required, Validators.pattern(this.emailPattern)]],
+      email: ['', { validators: [Validators.required, Validators.pattern(this.emailPattern)], updateOn: 'blur'}],
       isPreferred: [false],
       isPrimaryWebEmail: [false]
     });
@@ -616,7 +609,8 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       }
     } else {
       this.errorMessage = 'Please correct validation errors';
-      if(this.personForm.controls.emailAddresses.invalid){
+      console.log(this.personForm.value)
+      if(!this.personForm.value.emailAddresses[0].email && !this.personForm.value.phoneNumbers[0].number){
         this.isContactErrorVisible = true;
         setTimeout(()=>{
           document.getElementById('contact-error').scrollIntoView({block: 'center'});
