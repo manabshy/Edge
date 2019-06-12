@@ -23,7 +23,7 @@
   <form action="">
     <h5>People</h5>
     <div class="list-group mb-3">
-      <div *ngIf="!isNewContactGroup">
+      <ng-container *ngIf="!isNewContactGroup">
         <div class="list-group-item" *ngIf="!contactGroupDetails?.contactPeople">
           <div class="text-center">
             <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading contacts ...
@@ -116,7 +116,7 @@
         <div class="list-group-item text-center" *ngIf="isLoadingNewPersonVisible">
           <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading person details ...
         </div>
-      </div>
+      </ng-container>
       <!-- <ng-container *ngTemplateOutlet="selectedPersonDetails" ></ng-container> -->
       <a href (click)="showHideOffCanvas($event)" class="list-group-item list-group-item-action text-center py-4"
         *ngIf="contactGroupDetails?.contactPeople.length < 8 && !contactGroupDetails?.referenceCount">
@@ -128,52 +128,54 @@
         You can add max 8 People per contact group.
       </div>
     </div>
-    <h5>Details</h5>
-    <form [formGroup]="contactGroupDetailsForm" class="pb-3">
-      <div class="form-group row">
-        <label for="salutation" class="col-sm-2 col-form-label col-form-label-sm">Salutation</label>
-        <div class="col-sm-10">
-          <input type="text" id="salutation" class="form-control form-control-sm" formControlName="salutation">
+    <ng-container *ngIf="contactGroupDetails?.contactPeople.length">
+      <h5>Details</h5>
+      <form [formGroup]="contactGroupDetailsForm" class="pb-3">
+        <div class="form-group row">
+          <label for="salutation" class="col-sm-2 col-form-label col-form-label-sm">Salutation</label>
+          <div class="col-sm-10">
+            <input type="text" id="salutation" class="form-control form-control-sm" formControlName="salutation">
+          </div>
         </div>
-      </div>
-      <div class="form-group row">
-        <label for="addressee" class="col-sm-2 col-form-label col-form-label-sm">Addressee</label>
-        <div class="col-sm-10">
-          <input type="text" id="addressee" class="form-control form-control-sm" formControlName="addressee">
+        <div class="form-group row">
+          <label for="addressee" class="col-sm-2 col-form-label col-form-label-sm">Addressee</label>
+          <div class="col-sm-10">
+            <input type="text" id="addressee" class="form-control form-control-sm" formControlName="addressee">
+          </div>
         </div>
-      </div>
-      <div class="form-group row">
-        <label for="comments" class="col-sm-2 col-form-label col-form-label-sm">Comments</label>
-        <div class="col-sm-10">
-          <textarea id="comments" class="form-control form-control-sm" formControlName="comments" rows="6"></textarea>
+        <div class="form-group row">
+          <label for="comments" class="col-sm-2 col-form-label col-form-label-sm">Comments</label>
+          <div class="col-sm-10">
+            <textarea id="comments" class="form-control form-control-sm" formControlName="comments" rows="6"></textarea>
+          </div>
         </div>
-      </div>
-      <div class="row mt-3 justify-content-end">
-        <div class="col-sm-10">
-          <div class="row">
-            <div class="form-group col-sm-auto">
-              <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="relAgent">
-                <label class="custom-control-label" for="relAgent">Is Relocation Agent</label>
-              </div>
-            </div>
-            <div class="form-group col type-col" *ngIf="contactGroupDetails?.contactType !== 4">
-              <ng-container
-                *ngFor="let type of contactGroupTypes | keyvalue:keepOriginalOrder; let i = index; last as isLast">
-                <div class="custom-control custom-radio custom-control-inline" *ngIf="!isLast"
-                  [tooltip]="type.key === 1 ? 'Remove people to select this option' : 'Add 2 or more people to select this option'"
-                  [containerClass]="isTypeDisabled(type.key) ? '' : 'd-none'" placement="auto">
-                  <input type="radio" [id]="'individual' + i" name="contactType" class="custom-control-input"
-                    [value]="type.key" formControlName="contactType"
-                    [attr.disabled]="isTypeDisabled(type.key) || contactGroupDetails?.referenceCount ? '' : null">
-                  <label class="custom-control-label" [attr.for]="'individual' + i">{{type.value}}</label>
+        <div class="row mt-3 justify-content-end">
+          <div class="col-sm-10">
+            <div class="row">
+              <div class="form-group col-sm-auto">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="relAgent">
+                  <label class="custom-control-label" for="relAgent">Is Relocation Agent</label>
                 </div>
-              </ng-container>
+              </div>
+              <div class="form-group col type-col" *ngIf="contactGroupDetails?.contactType !== 4">
+                <ng-container
+                  *ngFor="let type of contactGroupTypes | keyvalue:keepOriginalOrder; let i = index; last as isLast">
+                  <div class="custom-control custom-radio custom-control-inline" *ngIf="!isLast"
+                    [tooltip]="type.key === 1 ? 'Remove people to select this option' : 'Add 2 or more people to select this option'"
+                    [containerClass]="isTypeDisabled(type.key) ? '' : 'd-none'" placement="auto">
+                    <input type="radio" [id]="'individual' + i" name="contactType" class="custom-control-input"
+                      [value]="type.key" formControlName="contactType"
+                      [attr.disabled]="isTypeDisabled(type.key) || contactGroupDetails?.referenceCount ? '' : null">
+                    <label class="custom-control-label" [attr.for]="'individual' + i">{{type.value}}</label>
+                  </div>
+                </ng-container>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </ng-container>
     <div class="form-actions">
       <div class="container px-lg-4">
         <div class="row justify-content-end w-100 no-gutters">

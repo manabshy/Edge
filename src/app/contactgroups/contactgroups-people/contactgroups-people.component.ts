@@ -109,7 +109,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.newPerson = data;
         this.findPerson(data);
       });
-
+      
       let contactTypeField = this.contactGroupDetailsForm.controls.contactType;
       contactTypeField.valueChanges
         .subscribe(data=>{
@@ -246,9 +246,11 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.getPersonDetails(id);
       this.contactGroupDetails = {} as ContactGroup;
       this.contactGroupDetails.contactPeople = [];
+      this.contactGroupDetails.contactType = ContactType.Individual;
       if (this.selectedPerson) {
          this.contactGroupDetails.contactPeople.push(this.selectedPerson);
       }
+      this.personFinderForm.reset();
       this.isNewContactGroup = false;
     }
      else if (id !== 0 && !this.checkDuplicateInContactGroup(id)) {
