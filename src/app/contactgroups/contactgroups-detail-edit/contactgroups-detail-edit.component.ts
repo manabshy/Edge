@@ -321,6 +321,9 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       this.personForm.reset();
     }
     this.personDetails = person;
+    if(person.address.postCode){
+      person.address.postCode = person.address.postCode.trim();
+    }
     this.personForm.patchValue({
       titleId: person.titleId !== null ? person.titleId : 1,
       //  title: person.title,
@@ -332,7 +335,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         addressLines: person.address.addressLines,
         // outCode: person.address.outCode,
         // inCode: person.address.inCode,
-        postCode: person.address.postCode.trim(),
+        postCode: person.address.postCode,
         countryId: person.address.countryId,
         country: person.address.country,
       },
