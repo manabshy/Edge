@@ -528,13 +528,13 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     return country[0].value;
   }
 
-  addPhoneNumberItem(i) {
+  addRemovePhoneNumberItem(i, remove) {
     const currPhoneNumber = this.phoneNumbers.controls[i];
     const lastPhoneNumber = this.phoneNumbers.controls[this.phoneNumbers.controls.length - 1];
-    if (lastPhoneNumber.value.number) {
+    if (currPhoneNumber === lastPhoneNumber) {
       this.phoneNumbers.push(this.createPhoneNumberItem());
     }
-    if (!currPhoneNumber.value.number && currPhoneNumber !== lastPhoneNumber) {
+    if (!currPhoneNumber.value.number && currPhoneNumber !== lastPhoneNumber && remove) {
       this.phoneNumbers.removeAt(i);
     }
   }
@@ -549,13 +549,13 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     });
   }
 
-  addEmailItem(i) {
+  addRemoveEmailItem(i, remove) {
     const currEmail = this.emailAddresses.controls[i];
     const lastEmail = this.emailAddresses.controls[this.emailAddresses.controls.length - 1];
-    if (lastEmail.value.email) {
+    if (currEmail === lastEmail) {
       this.emailAddresses.push(this.createEmailItem());
     }
-    if (!currEmail.value.email && currEmail !== lastEmail) {
+    if (!currEmail.value.email && currEmail !== lastEmail && remove) {
       this.emailAddresses.removeAt(i);
     }
   }
