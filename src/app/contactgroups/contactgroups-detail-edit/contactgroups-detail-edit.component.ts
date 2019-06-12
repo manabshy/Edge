@@ -148,7 +148,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     } else {
       this.getPersonDetails(id);
     }
-    this.personForm.valueChanges.pipe(debounceTime(500))
+    this.personForm.valueChanges
       .subscribe((data) => {
         this.postCode.setValue(this.sharedService.formatPostCode(data.address.postCode), { emitEvent: false });
         this.logValidationErrors(this.personForm, false);
@@ -178,7 +178,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       if(control.valid) {
         this.formErrors[key] = '';
       }
-      if (control && !control.valid && (fakeTouched || control.touched)) {
+      if (control && !control.valid && (fakeTouched || control.dirty)) {
         this.formErrors[key] = '';
         for (const errorKey in control.errors) {
           if (errorKey) {
@@ -386,14 +386,14 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   setupEditForm() {
     this.personForm = this.fb.group({
       titleId: [''],
-      firstName: ['', [Validators.required, Validators.maxLength(40)]],
-      middleName: ['', Validators.maxLength(50)],
-      lastName: ['', [Validators.required, Validators.maxLength(80)]],
+      firstName: ['', {validators:[Validators.required, Validators.maxLength(40)], updateOn: 'blur'}],
+      middleName: ['', {validators: Validators.maxLength(50), updateOn: 'blur'}],
+      lastName: ['', {validators:[Validators.required, Validators.maxLength(80)], updateOn: 'blur'}],
       fullAddress: [''],
       address: this.fb.group({
-        addressLines: ['', Validators.maxLength(500)],
+        addressLines: ['', {validators: Validators.maxLength(500), updateOn: 'blur'}],
         countryId: 0,
-        postCode: ['', [Validators.minLength(5), Validators.maxLength(8), Validators.pattern(this.postCodePattern)]],
+        postCode: ['', {validators: [Validators.minLength(5), Validators.maxLength(8), Validators.pattern(this.postCodePattern)], updateOn: 'blur'}],
       }),
       contactBy: this.fb.group({
         email: [false],
