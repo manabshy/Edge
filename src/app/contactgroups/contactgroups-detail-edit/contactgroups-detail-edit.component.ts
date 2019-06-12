@@ -41,6 +41,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   formArraryErrors: string;
   isSubmitting = false;
   isLoadingAddressVisible = false;
+  isContactErrorVisible = false;
   backToAddressesList = false;
   enterAddressManually = false;
   searchTermBK = '';
@@ -454,8 +455,9 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     }
   }
 
-  isValid(event, el) {
-    if (el.invalid) {
+  isValid(event, errors) {
+    console.log(errors);
+    if (errors) {
       event.target.classList.add('is-invalid');
     } else {
       event.target.classList.remove('is-invalid');
@@ -614,6 +616,12 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       }
     } else {
       this.errorMessage = 'Please correct validation errors';
+      if(this.personForm.controls.emailAddresses.invalid){
+        this.isContactErrorVisible = true;
+        setTimeout(()=>{
+          document.getElementById('contact-error').scrollIntoView({block: 'center'});
+        })
+      }
     }
 
     console.log(this.personForm);
