@@ -388,6 +388,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   hideCanvas(event) {
     this.isOffCanvasVisible = event;
+    this.personFinderForm.reset();
     this.renderer.removeClass(document.body, 'no-scroll');
   }
 
