@@ -89,7 +89,7 @@ export interface PeopleAutoCompleteResult {
   salution: string;
   emailAddresses: string[];
   phoneNumbers: string[];
-  duplicateScore:number;
+  matchScore:number;
 }
 export interface BasicContactGroup {
   contactGroupId: number;
