@@ -32,6 +32,9 @@ import { ScoreBadgeComponent } from './score-badge/score-badge.component';
 import { CanDeactivateGuard } from './shared/can-deactivate.guard';
 import { ErrorModalComponent } from './error-modal/error-modal.component';
 
+//vendor
+import { OrderModule } from 'ngx-order-pipe';
+
 @NgModule({
   declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent,
     ConfirmModalComponent, PropertyFinderComponent, FormatAddressPipe, ScoreBadgeComponent, ErrorModalComponent],
@@ -41,12 +44,13 @@ import { ErrorModalComponent } from './error-modal/error-modal.component';
     ConfirmModalComponent, ErrorModalComponent, PropertyFinderComponent,ScoreBadgeComponent, BsDropdownModule,
     CollapseModule, TabsModule, TypeaheadModule,
     BsDatepickerModule, ModalModule, PopoverModule,  NgPipesModule,
-    TooltipModule, AccordionModule, ButtonsModule, ReactiveFormsModule, FormsModule
+    TooltipModule, AccordionModule, ButtonsModule, ReactiveFormsModule, FormsModule, OrderModule
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
+    OrderModule,
     BsDropdownModule.forRoot(),
     CollapseModule.forRoot(),
     TabsModule.forRoot(),

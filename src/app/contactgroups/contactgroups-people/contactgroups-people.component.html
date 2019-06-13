@@ -255,10 +255,10 @@
                 <div class="col-sm col-lg-2"></div>
               </div>
             </div>
-            <div class="list-group-item list-group-item-action" *ngFor="let foundPerson of foundPeople" [ngClass]="{'disabled': checkDuplicateInContactGroup(foundPerson.personId)}">
+            <div class="list-group-item list-group-item-action" *ngFor="let foundPerson of foundPeople | orderBy: orderFoundPeople:reverse" [ngClass]="{'disabled': checkDuplicateInContactGroup(foundPerson.personId)}">
               <div class="row align-items-end align-items-sm-center"
               (click)="selectPerson(foundPerson.personId)">
-                <div class="col-12 mb-2 mb-sm-0">
+                <div class="col-12 mb-2 mb-sm-0" *ngIf="foundPerson.matchScore">
                   <span class="badge badge-pill badge-success" *ngIf="foundPerson.matchScore === 10">Full Match</span>
                   <span class="badge badge-pill badge-warning" *ngIf="foundPerson.matchScore === 5">Good Match</span>
                 </div>

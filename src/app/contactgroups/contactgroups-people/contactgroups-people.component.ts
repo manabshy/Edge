@@ -44,6 +44,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isSubmitting = false;
   errorMessage: string;
   isSwitchTypeMsgVisible = false;
+  orderFoundPeople = 'matchScore';
+  reverse= true;
   public keepOriginalOrder = (a) => a.key;
 
   constructor(
@@ -199,12 +201,22 @@ export class ContactgroupsPeopleComponent implements OnInit {
         const samePhone = phone[0] ? phone[0].toString() === person.phoneNumber : false;
         console.log('email:', email , 'and phone:', phone);
         const sameEmail = email[0] ? email[0].toLowerCase() === person.emailAddress : false;
-        if (sameName && (sameEmail || samePhone )) {
-          x.matchScore = 10;
-          matchedPeople.push(x);
-        } else {
-          x.matchScore = 5;
-          matchedPeople.push(x);
+        switch(true) {
+          case sameName && sameEmail && samePhone:
+            x.matchScore = 10;
+            matchedPeople.push(x);
+            break;
+          case sameName && (sameEmail || samePhone):
+            x.matchScore = 5;
+            matchedPeople.push(x);
+            break;
+          case sameName:
+            x.matchScore = 2;
+            matchedPeople.push(x);
+            break;
+          default:
+            x.matchScore = 0;
+            matchedPeople.push(x);
         }
       });
       this.foundPeople = matchedPeople;
