@@ -1,7 +1,7 @@
 import { Component, OnInit, OnChanges, Renderer2 } from '@angular/core';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Person, BasicPerson } from 'src/app/core/models/person';
+import { Person, BasicPerson, Email } from 'src/app/core/models/person';
 import { ContactGroup, PeopleAutoCompleteResult, ContactGroupsTypes, ContactType } from '../shared/contact-group';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
@@ -109,11 +109,11 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.newPerson = data;
         this.findPerson(data);
       });
-      
+
       let contactTypeField = this.contactGroupDetailsForm.controls.contactType;
       contactTypeField.valueChanges
-        .subscribe(data=>{
-          if(data && data !== this.contactGroupDetails.contactType && contactTypeField.pristine) {
+        .subscribe(data => {
+          if (data && data !== this.contactGroupDetails.contactType && contactTypeField.pristine) {
             this.isSwitchTypeMsgVisible = true;
           } else {
             this.isSwitchTypeMsgVisible = false;
@@ -185,7 +185,31 @@ export class ContactgroupsPeopleComponent implements OnInit {
   findPerson(person: BasicPerson) {
     this.contactGroupService.getAutocompletePeople(person).subscribe(data => {
       this.foundPeople = data;
+      this.checkDuplicatePeople(person);
     });
+  }
+  checkDuplicatePeople(person: BasicPerson){
+   const matchedPeople = [];
+   if (this.foundPeople) {
+      this.foundPeople.forEach((x) => {
+        const sameName = x.firstName.toLowerCase() === person.firstName.toLowerCase() &&
+        x.lastName.toLowerCase() === person.lastName.toLowerCase();
+        const email = x.emailAddresses.filter(x => x === person.emailAddress);
+        const phone = x.phoneNumbers.filter(x => x === person.phoneNumber);
+        const samePhone = phone[0] ? phone[0].toString() === person.phoneNumber : false;
+        console.log('email:', email , 'and phone:', phone);
+        const sameEmail = email[0] ? email[0].toLowerCase() === person.emailAddress : false;
+        if (sameName && (sameEmail || samePhone )) {
+          x.matchScore = 10;
+          matchedPeople.push(x);
+        } else {
+          x.matchScore = 5;
+          matchedPeople.push(x);
+        }
+      });
+      this.foundPeople = matchedPeople;
+      console.table('matched people', matchedPeople);
+   }
   }
   createNewContactGroupPerson(event) {
     event.preventDefault();
@@ -222,7 +246,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       });
     } else {
       this.removeSelectedPeople(this.contactGroupDetails.contactPeople, index);
-      if(this.removedPersonIds.indexOf(id) < 0) {
+      if (this.removedPersonIds.indexOf(id) < 0) {
         this.removedPersonIds.push(id);
       }
     }

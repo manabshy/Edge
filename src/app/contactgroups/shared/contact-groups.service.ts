@@ -51,8 +51,7 @@ export class ContactGroupsService {
                     .set('emailAddress', person.emailAddress  || '') ;
     const url = `${AppConstants.basePersonUrl}/search`;
     return this.http.get<PeopleAutoCompleteData>(url, {params: options}).pipe(
-      map(response => response.result),
-      tap(data => console.log('found people...', data)),
+      map(response => response.result)
       // catchError(this.handleError)
       );
   }
