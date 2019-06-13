@@ -46,6 +46,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isSwitchTypeMsgVisible = false;
   orderFoundPeople = 'matchScore';
   reverse= true;
+  isTypePicked = false; 
   public keepOriginalOrder = (a) => a.key;
 
   constructor(
@@ -126,6 +127,22 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.getContactGroupFirstPerson(this.personId);
       }
   }
+
+  isCompanyContactGroup(bool) {
+    
+    this.contactGroupDetails = {} as ContactGroup;
+    this.contactGroupDetails.contactPeople = [];
+
+    if(bool){
+      this.contactGroupDetails.contactType = ContactType.CompanyContact;
+    } else {
+      this.contactGroupDetails.contactType = ContactType.Individual;
+    }
+
+    this.isTypePicked = true;
+
+  }
+
   getContactGroupById(contactGroupId: number) {
     this.contactGroupService
       .getContactGroupbyId(contactGroupId)
@@ -147,7 +164,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
       data.isMainPerson = true;
       this.firstContactGroupPerson = data;
       if (this.contactGroupId === 0) {
-        this.contactGroupDetails = {} as ContactGroup;
+        if(!this.contactGroupDetails){
+          this.contactGroupDetails = {} as ContactGroup;
+        }
         if (this.contactGroupDetails) {
           this.contactGroupDetails.contactType = ContactType.Individual;
           this.contactGroupDetails.contactPeople = [];
@@ -280,9 +299,11 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.selectedPersonId = id;
       this.isLoadingNewPersonVisible = true;
       this.getPersonDetails(id);
-      this.contactGroupDetails = {} as ContactGroup;
-      this.contactGroupDetails.contactPeople = [];
-      this.contactGroupDetails.contactType = ContactType.Individual;
+      if(!this.contactGroupDetails){
+        this.contactGroupDetails = {} as ContactGroup;
+        this.contactGroupDetails.contactPeople = [];
+        this.contactGroupDetails.contactType = ContactType.Individual;
+      }
       if (this.selectedPerson) {
          this.contactGroupDetails.contactPeople.push(this.selectedPerson);
       }
