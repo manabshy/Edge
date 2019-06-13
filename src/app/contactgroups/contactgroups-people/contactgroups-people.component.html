@@ -38,6 +38,49 @@
         </div>
       </div>
     </ng-container>
+    <ng-container *ngIf="contactGroupDetails?.contactType === 4">
+      <h5>Company</h5>
+      <form class="pb-3">
+        <div class="form-group row">
+          <label for="company" class="col-sm-2 col-form-label col-form-label-sm">Name</label>
+          <div class="col-sm-10">
+            <div class="input-group input-group-sm form-group">
+              <input type="text" id="company" class="form-control">
+              <div class="input-group-append">
+                <button type="button" class="btn btn-secondary">Search</button>
+              </div>
+            </div>
+            <h5>Quick Finder</h5>
+            <div class="list-group small">
+              <!-- TODO Conditionally show action -->
+              <div class="list-group-item list-group-item-action text-center">
+                <span class="btn btn-link"><i class="fas fa-plus mr-2"></i>New Company</span>
+              </div>
+              <div class="list-group-item list-group-item-action text-center">
+                <span class="btn btn-link"><i class="fas fa-search mr-2"></i>Lookup Company</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row justify-content-end">
+          <label class="col-sm-2 col-form-label col-form-label-sm">Type</label>
+          <div class="col-sm-10">
+            <div class="row">
+              <div class="form-group col-sm-auto">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="solicitor">
+                  <label class="custom-control-label" for="solicitor">Solicitor</label>
+                </div>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="invClerk">
+                  <label class="custom-control-label" for="invClerk">Inventory Clerk</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </ng-container>
     <ng-container *ngIf="!isNewContactGroup || isTypePicked">
       <h5>People</h5>
       <div class="list-group mb-3">
