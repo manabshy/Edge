@@ -106,6 +106,15 @@ export class ContactGroupsService {
       catchError(this.handleError)
       );
   }
+  // TODO: FIX THIS.......
+  addCompanyContactGroup(contactGroup: ContactGroup): Observable<any> {
+    const url = `${AppConstants.baseCompanyUrl}`;
+    return this.http.post(url, contactGroup).pipe(
+      map(response => response),
+      tap(data => console.log('updated company contact details here...', JSON.stringify(data))),
+      catchError(err => this.handleError(err))
+      );
+  }
   private handleError(err: HttpErrorResponse): Observable<WedgeError> {
     const wedgeError = new WedgeError();
     if (err.error instanceof ErrorEvent) {

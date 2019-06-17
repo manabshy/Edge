@@ -47,7 +47,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   orderFoundPeople = 'matchScore';
   reverse = true;
   isTypePicked = false;
-  isCompanyContact = false;
+  isNewCompanyContact = false;
   foundCompanies: CompanyAutoCompleteResult[];
   selectedCompany: Company;
   selectedCompanyId: number;
@@ -145,7 +145,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
     if (isSelectedTypeCompany){
       this.contactGroupDetails.contactType = ContactType.CompanyContact;
-      this.isCompanyContact = true;
+      this.isNewCompanyContact = true;
     } else {
       this.contactGroupDetails.contactType = ContactType.Individual;
     }
@@ -407,26 +407,50 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.isSubmitting = true;
       this.errorMessage = '';
       if (this.contactGroupDetails.contactGroupId) {
-        this.contactGroupService
-        .updateContactGroup(contactGroup)
-        .subscribe( () => this.onSaveComplete(),
-          (error: WedgeError) => {
-              this.errorMessage = error.displayMessage;
-              this.sharedService.showError(this.errorMessage);
-              this.isSubmitting = false;
-          });
+        this.updateContactGroup(contactGroup);
       } else {
-        this.contactGroupService
-        .addContactGroup(contactGroup)
-        .subscribe( () => this.onSaveComplete(),
-          (error: WedgeError) => {
-              this.errorMessage = error.displayMessage;
-              this.sharedService.showError(this.errorMessage);
-              this.isSubmitting = false;
-          });
+        this.addNewContactGroup(contactGroup);
       }
     }
   }
+  private addNewContactGroup(contactGroup: ContactGroup) {
+    if (this.isNewCompanyContact) {
+      this.contactGroupDetails = {} as ContactGroup;
+      this.contactGroupDetails.contactPeople = [];
+      contactGroup.companyId = this.selectedCompany.companyId;
+      contactGroup.contactType = ContactType.CompanyContact;
+      this.contactGroupDetails.contactPeople.push(this.selectedPerson);
+      console.log('selected company ..................', this.selectedCompany);
+      console.log('selected company ..................', this.selectedPerson);
+      console.log('contact to save for new company contact', contactGroup);
+      this.contactGroupService
+      .addContactGroup(contactGroup)
+      .subscribe(() => this.onSaveComplete(), (error: WedgeError) => {
+        this.errorMessage = error.displayMessage;
+        this.sharedService.showError(this.errorMessage);
+        this.isSubmitting = false;
+      });
+    } else {
+    this.contactGroupService
+      .addContactGroup(contactGroup)
+      .subscribe(() => this.onSaveComplete(), (error: WedgeError) => {
+        this.errorMessage = error.displayMessage;
+        this.sharedService.showError(this.errorMessage);
+        this.isSubmitting = false;
+      });
+    }
+  }
+
+  private updateContactGroup(contactGroup: any) {
+    this.contactGroupService
+      .updateContactGroup(contactGroup)
+      .subscribe(() => this.onSaveComplete(), (error: WedgeError) => {
+        this.errorMessage = error.displayMessage;
+        this.sharedService.showError(this.errorMessage);
+        this.isSubmitting = false;
+      });
+  }
+
   onSaveComplete(): void {
     console.log('contacts saved', this.contactGroupDetails);
     this._location.back();
