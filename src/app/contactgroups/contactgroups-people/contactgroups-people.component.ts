@@ -131,9 +131,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
           }
         })
 
-      if (this.contactGroupId === 0) {
-        this.getContactGroupFirstPerson(this.personId);
-      }
+      // if (this.personId ) {
+      //   this.getContactGroupFirstPerson(this.personId);
+      // }
     this.companyFinderForm.valueChanges.pipe(debounceTime(400)).subscribe(data => {
       this.findCompany(data);
       console.log('search term', data); });
@@ -148,6 +148,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.isNewCompanyContact = true;
     } else {
       this.contactGroupDetails.contactType = ContactType.Individual;
+      this.getContactGroupFirstPerson(this.personId);
     }
 
     this.isTypePicked = true;
@@ -420,9 +421,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
       contactGroup.companyId = this.selectedCompany.companyId;
       contactGroup.contactType = ContactType.CompanyContact;
       this.contactGroupDetails.contactPeople.push(this.selectedPerson);
-      console.log('selected company ..................', this.selectedCompany);
-      console.log('selected company ..................', this.selectedPerson);
-      console.log('contact to save for new company contact', contactGroup);
       this.contactGroupService
       .addContactGroup(contactGroup)
       .subscribe(() => this.onSaveComplete(), (error: WedgeError) => {

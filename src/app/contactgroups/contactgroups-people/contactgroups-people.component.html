@@ -89,12 +89,11 @@
         </div>
       </form>
     </ng-container>
-    <!-- <h5>Company</h5> -->
     <ng-container *ngTemplateOutlet="selectedCompanyDetails" ></ng-container>
-    <ng-container *ngIf="!isNewContactGroup || isTypePicked">
+    <ng-container *ngIf="!isNewContactGroup  || isTypePicked">
       <h5>People</h5>
       <div class="list-group mb-3">
-        <ng-container *ngIf="!isNewContactGroup">
+        <ng-container >
           <div class="list-group-item" *ngIf="!contactGroupDetails?.contactPeople">
             <div class="text-center">
               <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading contacts ...

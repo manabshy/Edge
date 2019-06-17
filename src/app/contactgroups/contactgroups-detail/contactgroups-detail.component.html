@@ -96,11 +96,17 @@
           </a>
         </ng-container>
         <a class="list-group-item list-group-item-action text-center py-4"  (click)="createNewContactGroup(); $event.stopPropagation()"
-       *ngIf="searchedPersonDetails" [routerLink]="['people', 0]">
+          *ngIf="searchedPersonDetails" [routerLink]="['people', 0]" [queryParams]="{isNewContactGroup: true}">
           <span class="btn-link">
             <i class="fas fa-users"></i><i class="fas fa-plus fa-xs align-text-top"></i> New Contact Group
           </span>
         </a>
+        <!-- <a class="list-group-item list-group-item-action text-center py-4"  (click)="createNewContactGroup(); $event.stopPropagation()"
+       *ngIf="searchedPersonDetails" [routerLink]="['people', 0]">
+          <span class="btn-link">
+            <i class="fas fa-users"></i><i class="fas fa-plus fa-xs align-text-top"></i> New Contact Group
+          </span>
+        </a> -->
       </div>
     </div>
   </div>
