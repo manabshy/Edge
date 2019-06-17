@@ -4,7 +4,7 @@
   <div class="alert alert-info" *ngIf="contactGroupDetails?.contactPeople && (contactGroupDetails?.contactPeople.length !== initialContactGroupLength)">
     There are pending changes on the people list. Save to make them effective.
   </div>
-  <div class="alert alert-warning" *ngIf="isSwitchTypeMsgVisible">
+  <div class="alert alert-warning" *ngIf="isSwitchTypeMsgVisible && contactGroupDetails?.contactType !== 4">
     <ng-container *ngIf="contactGroupDetails?.contactPeople.length < 2; else switchToMulti">
       You can't have less than <b>2</b> people in an <b>Multi/Sharer</b> contact group. We have switched to
       <b>Individual/Joint</b>.
@@ -53,11 +53,11 @@
             <h5>Quick Finder</h5>
             <div class="list-group small">
               <!-- TODO Conditionally show action -->
-              <div class="list-group-item list-group-item-action text-center">
-                <span class="btn btn-link"><i class="fas fa-plus mr-2"></i>New Company</span>
+              <div class="list-group-item list-group-item-action text-center py-4">
+                <span class="btn-link"><i class="fas fa-plus mr-2"></i>New Company</span>
               </div>
-              <div class="list-group-item list-group-item-action text-center">
-                <span class="btn btn-link"><i class="fas fa-search mr-2"></i>Lookup Company</span>
+              <div class="list-group-item list-group-item-action text-center py-4">
+                <span class="btn-link"><i class="fas fa-search mr-2"></i>Lookup Company</span>
               </div>
             </div>
           </div>
