@@ -21,12 +21,7 @@
     <div class="row mx-0 pb-3" *ngIf="searchedPersonDetails">
       <div class="col-12">
         <p class="mb-2">
-          <strong>{{searchedPersonDetails.firstName}} {{searchedPersonDetails.lastName}}</strong>&nbsp;
-            <ng-container *ngFor="let searchedPersonContactGroup of searchedPersonContactGroups" >
-                    <ng-container *ngIf="searchedPersonContactGroup?.isCompany">&nbsp;
-                        <span class="badge badge-pill badge-info">{{searchedPersonContactGroup?.companyName}}</span>
-                    </ng-container>
-            </ng-container>
+          <strong>{{searchedPersonDetails.firstName}} {{searchedPersonDetails.lastName}}</strong>
         </p>
       </div>
       <div class="col-sm-4">
@@ -86,10 +81,16 @@
                       {{contactPerson.addressee}}
                       <ng-container *ngIf="!isLast">, </ng-container>
                   </ng-container>
+                  <ng-container *ngIf="searchedPersonContactGroup?.isCompany">
+                    <span class="badge badge-pill badge-info">{{searchedPersonContactGroup?.companyName}}</span>
+                  </ng-container>
               </div>
               <div class="col-auto">
                 <span class="btn-link py-0">
-                  <i class="fas fa-users"></i> View Group
+                  <i class="fas fa-user-tie mr-1 fa-fw" *ngIf="searchedPersonContactGroup?.isCompany; else peopleIcon"></i>
+                  <ng-template #peopleIcon>
+                    <i class="fas fa-users mr-1 fa-fw"></i>
+                  </ng-template> View Group
                 </span>
               </div>
             </div>
