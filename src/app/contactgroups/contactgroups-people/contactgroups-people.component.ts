@@ -148,7 +148,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.isNewCompanyContact = true;
     } else {
       this.contactGroupDetails.contactType = ContactType.Individual;
-      this.getContactGroupFirstPerson(this.personId);
+     if(this.personId) {
+        this.getContactGroupFirstPerson(this.personId);
+     }
     }
 
     this.isTypePicked = true;
