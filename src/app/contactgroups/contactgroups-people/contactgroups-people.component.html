@@ -40,12 +40,12 @@
     </ng-container>
     <ng-container *ngIf="contactGroupDetails?.contactType === 4">
       <h5>Company</h5>
-      <form class="pb-3">
+      <form class="pb-3" [formGroup]="companyFinderForm">
         <div class="form-group row">
           <label for="company" class="col-sm-2 col-form-label col-form-label-sm">Name</label>
           <div class="col-sm-10">
             <div class="input-group input-group-sm form-group">
-              <input type="text" id="company" class="form-control">
+              <input type="text" id="company" class="form-control" formControlName="companyName">
               <div class="input-group-append">
                 <button type="button" class="btn btn-secondary">Search</button>
               </div>
@@ -53,6 +53,14 @@
             <h5>Quick Finder</h5>
             <div class="list-group small">
               <!-- TODO Conditionally show action -->
+              <div class="list-group-item list-group-item-action text-center" *ngFor="let company of foundCompanies">
+               <div class="row align-items-end align-items-sm-center">
+                <div class="col-sm"> {{company.companyName}}</div>
+                <div class="col-sm">
+                  <button class="btn btn-block btn-sm btn-link" (click)="selectCompany(company.companyId)">Select</button>
+                </div>
+               </div>
+              </div>
               <div class="list-group-item list-group-item-action text-center">
                 <span class="btn btn-link"><i class="fas fa-plus mr-2"></i>New Company</span>
               </div>
@@ -81,6 +89,8 @@
         </div>
       </form>
     </ng-container>
+    <!-- <h5>Company</h5> -->
+    <ng-container *ngTemplateOutlet="selectedCompanyDetails" ></ng-container>
     <ng-container *ngIf="!isNewContactGroup || isTypePicked">
       <h5>People</h5>
       <div class="list-group mb-3">
@@ -129,9 +139,9 @@
                   <span class="badge badge-pill badge-info">{{contactGroupDetails?.companyName}}</span>
                 </ng-container>
                 <!-- <i class="fas fa-phone"></i>&nbsp;
-  
+
                 <i class="fas fa-envelope"></i>&nbsp;
-  
+
                 <span class="badge badge-success">AML Valid</span> -->
               </div>
               <div class="col-sm-4 mb-2"><pre>{{person?.address | formatAddress}}</pre><span class="text-danger"
@@ -178,7 +188,7 @@
             <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading person details ...
           </div>
         </ng-container>
-        <!-- <ng-container *ngTemplateOutlet="selectedPersonDetails" ></ng-container> -->
+
         <a href (click)="showHideOffCanvas($event)" class="list-group-item list-group-item-action text-center py-4"
           *ngIf="contactGroupDetails?.contactPeople.length < 8 && !contactGroupDetails?.referenceCount">
           <span class="btn-link">
@@ -382,19 +392,16 @@
     </ng-template>
   </div>
 </div>
-<ng-template #selectedPersonDetails>
-  <div class="list-group-item new-person" *ngIf="selectedPerson">
+<ng-template #selectedCompanyDetails>
+  <div class="list-group-item new-person" *ngIf="selectedCompany">
       <div class="row">
         <div class="col-12 mb-2">
-          <strong>{{selectedPerson.firstName}} {{selectedPerson.lastName}}</strong>&nbsp;
-          <ng-container *ngIf="contactGroupDetails.contactType === 4">&nbsp;
-            <span class="badge badge-pill badge-info">{{contactGroupDetails?.companyName}}</span>
-          </ng-container>
+          <strong> {{selectedCompany.companyName}}</strong>&nbsp;
         </div>
-        <div class="col-sm-4 mb-2">{{selectedPerson.address | formatAddress}}<span class="text-danger"
-              *ngIf="!(selectedPerson.address | formatAddress)">No address</span>
+        <div class="col-sm-4 mb-2">{{selectedCompany.addressLines | formatAddress}}<span class="text-danger"
+              *ngIf="!(selectedCompany.addressLines | formatAddress)">No address</span>
         </div>
-        <div class="col-sm-3 col-xl-4">
+        <!-- <div class="col-sm-3 col-xl-4">
           <div class="row">
             <div class="col-6 telephone">
               <p class="mb-2 text-danger" *ngIf="!selectedPerson.phoneNumbers.length">No phone</p>
@@ -403,30 +410,15 @@
                   href="tel:{{phoneNumber.number}}" *ngIf="phoneNumber?.number; else noPhone">{{phoneNumber?.number}}</a><ng-template #noPhone><span class="text-danger">No Phone</span></ng-template><br /></p>
             </div>
           </div>
-        </div>
-        <div class="col-sm-5 col-xl-4">
+        </div> -->
+        <!-- <div class="col-sm-5 col-xl-4">
           <p class="mb-2 text-danger" *ngIf="!selectedPerson.emailAddresses.length">No email</p>
           <p class="mb-2" *ngFor="let emailAddress of selectedPerson?.emailAddresses"><a (click)="$event.stopPropagation()"
               href="mailto:{{emailAddress.email}}" *ngIf="emailAddress?.email; else noEmail">{{emailAddress?.email}}</a><ng-template #noEmail><span class="text-danger">No Email</span></ng-template></p>
-        </div>
+        </div> -->
         <div class="col-12">
           <hr class="my-1">
         </div>
-        <div class="col-12">
-          <a href class="btn btn-link px-0" (click)="showHideMarkPrefs($event)" [attr.aria-expanded]="!isSelectedCollapsed"
-            aria-controls="collapseSelectedMark">Marketing Prefs <span
-              class="badge badge-pill badge-primary">{{selectedPerson.marketingPreferences?.count || 0}}</span>
-          </a>
-          <div id="collapseSelectedMark" [collapse]="!isSelectedCollapsed">
-            <ul>
-              <li *ngIf="selectedPerson.marketingPreferences?.marketBulletin">Quarterly bulletin</li>
-              <li *ngIf="selectedPerson.marketingPreferences?.general">Special offers</li>
-              <li *ngIf="selectedPerson.marketingPreferences?.events">Landlord/investor events</li>
-              <li *ngIf="selectedPerson.marketingPreferences?.newHomes">New homes/investments</li>
-              <li *ngIf="selectedPerson.marketingPreferences?.general">Other occasional marketing</li>
-            </ul>
-        </div>
-      </div>
     </div>
   </div>
 </ng-template>

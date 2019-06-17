@@ -2,7 +2,7 @@ import { Component, OnInit, OnChanges, Renderer2 } from '@angular/core';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Person, BasicPerson, Email } from 'src/app/core/models/person';
-import { ContactGroup, PeopleAutoCompleteResult, ContactGroupsTypes, ContactType } from '../shared/contact-group';
+import { ContactGroup, PeopleAutoCompleteResult, ContactGroupsTypes, ContactType, AutoCompleteResult, CompanyAutoCompleteResult, Company } from '../shared/contact-group';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -45,8 +45,12 @@ export class ContactgroupsPeopleComponent implements OnInit {
   errorMessage: string;
   isSwitchTypeMsgVisible = false;
   orderFoundPeople = 'matchScore';
-  reverse= true;
-  isTypePicked = false; 
+  reverse = true;
+  isTypePicked = false;
+  foundCompanies: CompanyAutoCompleteResult[];
+  selectedCompany: Company;
+  selectedCompanyId: number;
+  companyFinderForm: FormGroup;
   public keepOriginalOrder = (a) => a.key;
 
   constructor(
@@ -68,6 +72,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
     });
     this.route.queryParams.subscribe(params => {
       this.isNewContactGroup = params['isNewContactGroup'] || false;
+    });
+    this.companyFinderForm = this.fb.group({
+      companyName: [''],
     });
     this.contactGroupDetailsForm = this.fb.group({
       salutation: [''],
@@ -113,7 +120,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.findPerson(data);
       });
 
-      let contactTypeField = this.contactGroupDetailsForm.controls.contactType;
+      const contactTypeField = this.contactGroupDetailsForm.controls.contactType;
       contactTypeField.valueChanges
         .subscribe(data => {
           if (data && data !== this.contactGroupDetails.contactType && contactTypeField.pristine) {
@@ -126,14 +133,17 @@ export class ContactgroupsPeopleComponent implements OnInit {
       if (this.contactGroupId === 0) {
         this.getContactGroupFirstPerson(this.personId);
       }
+    this.companyFinderForm.valueChanges.pipe(debounceTime(400)).subscribe(data => {
+      this.findCompany(data);
+      console.log('search term', data); });
   }
 
   isCompanyContactGroup(bool) {
-    
+
     this.contactGroupDetails = {} as ContactGroup;
     this.contactGroupDetails.contactPeople = [];
 
-    if(bool){
+    if (bool){
       this.contactGroupDetails.contactType = ContactType.CompanyContact;
     } else {
       this.contactGroupDetails.contactType = ContactType.Individual;
@@ -164,7 +174,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       data.isMainPerson = true;
       this.firstContactGroupPerson = data;
       if (this.contactGroupId === 0) {
-        if(!this.contactGroupDetails){
+        if (!this.contactGroupDetails){
           this.contactGroupDetails = {} as ContactGroup;
         }
         if (this.contactGroupDetails) {
@@ -189,6 +199,12 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.collectSelectedPeople(data);
     });
   }
+  getCompanyDetails(companyId: number) {
+    this.contactGroupService.getCompany(companyId).subscribe(data => {
+      this.selectedCompany = data;
+      console.log('selected person here.....', this.selectedCompany);
+    });
+  }
   populateFormDetails(contactGroup: ContactGroup) {
     if (this.contactGroupDetailsForm) {
       this.contactGroupDetailsForm.reset();
@@ -202,7 +218,12 @@ export class ContactgroupsPeopleComponent implements OnInit {
         contactType: contactGroup.contactType
       });
   }
-
+  findCompany(searchTerm: string){
+    this.contactGroupService.getAutocompleteCompany(searchTerm).subscribe(data => {
+      this.foundCompanies = data;
+      console.log('found companies', data);
+    });
+  }
   findPerson(person: BasicPerson) {
     this.contactGroupService.getAutocompletePeople(person).subscribe(data => {
       this.foundPeople = data;
@@ -220,7 +241,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         const samePhone = phone[0] ? phone[0].toString() === person.phoneNumber : false;
         console.log('email:', email , 'and phone:', phone);
         const sameEmail = email[0] ? email[0].toLowerCase() === person.emailAddress : false;
-        switch(true) {
+        switch (true) {
           case sameName && sameEmail && samePhone:
             x.matchScore = 10;
             matchedPeople.push(x);
@@ -294,12 +315,16 @@ export class ContactgroupsPeopleComponent implements OnInit {
     return subject.asObservable();
    }
 
+   selectCompany(id: number) {
+     this.selectedCompanyId = id;
+     this.getCompanyDetails(id);
+   }
   selectPerson(id: number) {
     if (this.isNewContactGroup) {
       this.selectedPersonId = id;
       this.isLoadingNewPersonVisible = true;
       this.getPersonDetails(id);
-      if(!this.contactGroupDetails){
+      if (!this.contactGroupDetails) {
         this.contactGroupDetails = {} as ContactGroup;
         this.contactGroupDetails.contactPeople = [];
         this.contactGroupDetails.contactType = ContactType.Individual;

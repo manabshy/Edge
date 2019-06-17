@@ -24,6 +24,11 @@ export interface ContactGroup {
   currentOfficeId?: number;
   rawData?: any;
 }
+export interface Company {
+  companyId: number;
+  companyName: string;
+  addressLines: Address;
+}
 
 export interface ContactAddress extends Address {
   postCode: string;
@@ -61,6 +66,10 @@ export interface AutoCompleteResult {
   companyId: number;
   companyName: string;
 }
+export interface CompanyAutoCompleteResult {
+  companyId: number;
+  companyName: string;
+}
 
 export interface ContactGroupAutoCompleteResult extends ContactGroupMetaDeta{
   personId: number;
@@ -89,7 +98,7 @@ export interface PeopleAutoCompleteResult {
   salution: string;
   emailAddresses: string[];
   phoneNumbers: string[];
-  matchScore:number;
+  matchScore: number;
 }
 export interface BasicContactGroup {
   contactGroupId: number;
@@ -114,11 +123,17 @@ export interface ContactGroupsType {
   id: string;
   name: string;
 }
+export interface CompanyContactGroupAutoCompleteData extends ResultData {
+  result: CompanyAutoCompleteResult[];
+}
 export interface ContactGroupAutoCompleteData extends ResultData {
   result: ContactGroupAutoCompleteResult[];
 }
 export interface PeopleAutoCompleteData extends ResultData {
   result: PeopleAutoCompleteResult[];
+}
+export interface CompanyData extends ResultData {
+  result: Company;
 }
 export interface ContactGroupData extends ResultData {
   result: ContactGroup;

@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { ContactGroupAutoCompleteResult, ContactGroupAutoCompleteData,
          PersonContactData, ContactGroupData, ContactGroup, BasicContactGroup,
-          BasicContactGroupData, PeopleAutoCompleteResult, PeopleAutoCompleteData } from './contact-group';
+          BasicContactGroupData, PeopleAutoCompleteResult, PeopleAutoCompleteData, AutoCompleteResult, CompanyAutoCompleteResult, CompanyContactGroupAutoCompleteData as CompanyAutoCompleteData, Company, CompanyData } from './contact-group';
 import { map, tap, catchError } from 'rxjs/operators';
 import { Person, BasicPerson } from 'src/app/core/models/person';
 import { WedgeError } from 'src/app/core/services/shared.service';
@@ -88,6 +88,23 @@ export class ContactGroupsService {
       );
   }
 
+  getAutocompleteCompany(company: any): Observable<CompanyAutoCompleteResult[]> {
+    const options = new HttpParams()
+                    .set('searchTerm', company.companyName  || '') ;
+    const url = `${AppConstants.baseCompanyUrl}/search`;
+    return this.http.get<CompanyAutoCompleteData>(url, {params: options}).pipe(
+      map(response => response.result),
+      // catchError(this.handleError)
+      tap(data => console.log('company list here here...', JSON.stringify(data)))
+      );
+  }
+  getCompany( companyId: number): Observable<Company | any> {
+    const url = `${AppConstants.baseCompanyUrl}/${companyId}`;
+    return this.http.get<CompanyData>(url).pipe(
+      map(response => response.result),
+      catchError(this.handleError)
+      );
+  }
   private handleError(err: HttpErrorResponse): Observable<WedgeError> {
     const wedgeError = new WedgeError();
     if (err.error instanceof ErrorEvent) {
