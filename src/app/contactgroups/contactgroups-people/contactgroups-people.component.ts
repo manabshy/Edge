@@ -47,6 +47,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   orderFoundPeople = 'matchScore';
   reverse = true;
   isTypePicked = false;
+  isCompanyContact = false;
   foundCompanies: CompanyAutoCompleteResult[];
   selectedCompany: Company;
   selectedCompanyId: number;
@@ -138,19 +139,18 @@ export class ContactgroupsPeopleComponent implements OnInit {
       console.log('search term', data); });
   }
 
-  isCompanyContactGroup(bool) {
-
+  isCompanyContactGroup(isSelectedTypeCompany: boolean) {
     this.contactGroupDetails = {} as ContactGroup;
     this.contactGroupDetails.contactPeople = [];
 
-    if (bool){
+    if (isSelectedTypeCompany){
       this.contactGroupDetails.contactType = ContactType.CompanyContact;
+      this.isCompanyContact = true;
     } else {
       this.contactGroupDetails.contactType = ContactType.Individual;
     }
 
     this.isTypePicked = true;
-
   }
 
   getContactGroupById(contactGroupId: number) {

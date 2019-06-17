@@ -27,7 +27,7 @@ export interface ContactGroup {
 export interface Company {
   companyId: number;
   companyName: string;
-  addressLines: Address;
+  companyAddress: Address;
 }
 
 export interface ContactAddress extends Address {

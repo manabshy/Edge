@@ -398,24 +398,9 @@
         <div class="col-12 mb-2">
           <strong> {{selectedCompany.companyName}}</strong>&nbsp;
         </div>
-        <div class="col-sm-4 mb-2">{{selectedCompany.addressLines | formatAddress}}<span class="text-danger"
-              *ngIf="!(selectedCompany.addressLines | formatAddress)">No address</span>
+        <div class="col-sm-4 mb-2">{{selectedCompany.companyAddress | formatAddress}}<span class="text-danger"
+              *ngIf="!(selectedCompany.companyAddress | formatAddress)">No address</span>
         </div>
-        <!-- <div class="col-sm-3 col-xl-4">
-          <div class="row">
-            <div class="col-6 telephone">
-              <p class="mb-2 text-danger" *ngIf="!selectedPerson.phoneNumbers.length">No phone</p>
-              <p class="mb-2" *ngFor="let phoneNumber of selectedPerson?.phoneNumbers"><a
-                  (click)="$event.stopPropagation()"
-                  href="tel:{{phoneNumber.number}}" *ngIf="phoneNumber?.number; else noPhone">{{phoneNumber?.number}}</a><ng-template #noPhone><span class="text-danger">No Phone</span></ng-template><br /></p>
-            </div>
-          </div>
-        </div> -->
-        <!-- <div class="col-sm-5 col-xl-4">
-          <p class="mb-2 text-danger" *ngIf="!selectedPerson.emailAddresses.length">No email</p>
-          <p class="mb-2" *ngFor="let emailAddress of selectedPerson?.emailAddresses"><a (click)="$event.stopPropagation()"
-              href="mailto:{{emailAddress.email}}" *ngIf="emailAddress?.email; else noEmail">{{emailAddress?.email}}</a><ng-template #noEmail><span class="text-danger">No Email</span></ng-template></p>
-        </div> -->
         <div class="col-12">
           <hr class="my-1">
         </div>

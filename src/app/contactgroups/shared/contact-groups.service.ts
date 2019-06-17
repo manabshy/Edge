@@ -102,6 +102,7 @@ export class ContactGroupsService {
     const url = `${AppConstants.baseCompanyUrl}/${companyId}`;
     return this.http.get<CompanyData>(url).pipe(
       map(response => response.result),
+      tap(data => console.log('company details here...', JSON.stringify(data))),
       catchError(this.handleError)
       );
   }
