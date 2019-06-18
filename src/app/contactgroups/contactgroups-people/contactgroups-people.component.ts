@@ -137,9 +137,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
       // if (this.personId ) {
       //   this.getContactGroupFirstPerson(this.personId);
       // }
-    // this.companyFinderForm.valueChanges.pipe(debounceTime(400)).subscribe(data => {
-    //   this.findCompany(data);
-    //   console.log('search term', data); });
+    this.companyFinderForm.valueChanges.subscribe(data => {
+      this.findCompany(data);
+      console.log('search term', data); });
   }
 
   isCompanyContactGroup(isSelectedTypeCompany: boolean) {
