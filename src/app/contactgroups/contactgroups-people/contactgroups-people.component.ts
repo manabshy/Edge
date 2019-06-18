@@ -45,6 +45,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isSubmitting = false;
   errorMessage: string;
   isSwitchTypeMsgVisible = false;
+  isLoadingCompaniesVisible = false;
   orderFoundPeople = 'matchScore';
   reverse = true;
   isTypePicked = false;
@@ -135,9 +136,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
       // if (this.personId ) {
       //   this.getContactGroupFirstPerson(this.personId);
       // }
-    this.companyFinderForm.valueChanges.pipe(debounceTime(400)).subscribe(data => {
-      this.findCompany(data);
-      console.log('search term', data); });
+    // this.companyFinderForm.valueChanges.pipe(debounceTime(400)).subscribe(data => {
+    //   this.findCompany(data);
+    //   console.log('search term', data); });
   }
 
   isCompanyContactGroup(isSelectedTypeCompany: boolean) {
@@ -223,9 +224,11 @@ export class ContactgroupsPeopleComponent implements OnInit {
       });
   }
   findCompany(searchTerm: string){
+    this.isLoadingCompaniesVisible = true;
     this.contactGroupService.getAutocompleteCompany(searchTerm).subscribe(data => {
       this.foundCompanies = data;
       console.log('found companies', data);
+      this.isLoadingCompaniesVisible = false;
     });
   }
   findPerson(person: BasicPerson) {
@@ -320,6 +323,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
    }
 
    selectCompany(id: number) {
+     this.foundCompanies = null;
+     this.companyFinderForm.reset();
      this.selectedCompanyId = id;
      this.getCompanyDetails(id);
    }
