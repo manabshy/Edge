@@ -565,7 +565,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     return this.fb.group({
       id: 0,
       orderNumber: 0,
-      email: ['', { validators: [Validators.required, Validators.pattern(this.emailPattern)], updateOn: 'blur'}],
+      email: ['', { validators: [Validators.required, Validators.pattern(AppConstants.emailPattern)], updateOn: 'blur'}],
       isPreferred: [false],
       isPrimaryWebEmail: [false]
     });
