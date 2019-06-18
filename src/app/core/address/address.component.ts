@@ -24,7 +24,7 @@ export class AddressComponent implements OnInit {
   searchTermBK = '';
 
   get showPostCode(): boolean {
-    return this.address.get('countryId').value == this.defaultCountryCode;
+    return this.addressForm.get('countryId').value == this.defaultCountryCode;
   }
   get addressLines(): FormControl {
     return <FormControl>this.addressForm.get('addressLines');
@@ -140,7 +140,6 @@ export class AddressComponent implements OnInit {
       person.address.postCode = person.address.postCode.trim();
     }
     this.addressForm.patchValue({
-
         addressLines: person.address.addressLines,
         postCode: person.address.postCode,
         countryId: person.address.countryId,

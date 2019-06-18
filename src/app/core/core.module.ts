@@ -42,8 +42,8 @@ import { AddressComponent } from './address/address.component';
   exports: [
     RoundingPipe, TruncatingPipe, ShortenNamePipe, FormatAddressPipe,
     BreadcrumbComponent, BasicSearchComponent,
-    ConfirmModalComponent, ErrorModalComponent, PropertyFinderComponent,ScoreBadgeComponent, BsDropdownModule,
-    CollapseModule, TabsModule, TypeaheadModule,
+    ConfirmModalComponent, ErrorModalComponent, PropertyFinderComponent, ScoreBadgeComponent, AddressComponent,
+    CollapseModule, TabsModule, TypeaheadModule, BsDropdownModule,
     BsDatepickerModule, ModalModule, PopoverModule,  NgPipesModule,
     TooltipModule, AccordionModule, ButtonsModule, ReactiveFormsModule, FormsModule, OrderModule
   ],

@@ -1,11 +1,10 @@
-<app-breadcrumb *ngIf="!basicPerson"></app-breadcrumb>
-<div class="container" [ngClass]="{'p-0': basicPerson}">
-  <div class="page-title sticky-top" [ngClass]="{'pt-3': basicPerson}">
+<div class="container">
+  <!-- <div class="page-title sticky-top" [ngClass]="{'pt-3': basicPerson}">
     <h4 *ngIf="!basicPerson">Edit Person</h4>
     <app-score-badge [bar]="true" [person]="personDetails"></app-score-badge>
-  </div>
+  </div> -->
   <form *ngIf="personDetails" [formGroup]="addressForm" (keydown.enter)="$event.preventDefault()">
-    <div formGroupName="address" class="form-group row">
+    <div class="form-group row">
         <label for="country" class="col-sm-2 col-form-label col-form-label-sm">Country</label>
         <div class="col-sm-3">
           <select class="custom-select custom-select-sm" id="country" formControlName="countryId">
@@ -66,26 +65,24 @@
           </ng-container>
         </div>
      </div>
-   <div [formGroup]="addressForm">
-      <div class="form-group row justify-content-end">
-          <div class="col-sm-10">
-            <div class="form-group" *ngIf="addressLines.value || enterAddressManually">
-              <label class="small" for="postcode">Address Lines</label>
-              <textarea type="textarea" class="form-control form-control-sm" formControlName="addressLines" id="addressLines"
-              (keydown.enter)="$event.stopPropagation()" rows="5"  cols="10" maxlength="500" [ngClass]="{'border border-warning': !addressLines.value && enterAddressManually}"></textarea>
-              <small class="form-text" *ngIf="!addressLines.value && enterAddressManually"><i class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your score</span></small>
-            </div>
-            <div class="form-group" *ngIf="showPostCode">
-              <label class="small" for="postcode">Postcode</label>
-              <div class="input-group">
-                <input type="text" class="form-control form-control-sm"  id="postcode" formControlName="postCode"
-                [ngClass]="{'is-invalid': formErrors.postCode, 'border border-warning': !postCode.value}">
-                  <!-- <span class="invalid-feedback">{{formErrors.postCode}}</span> -->
-                  <small class="form-text w-100" *ngIf="!postCode.value"><i class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your score</span></small>
-              </div>
+    <div class="form-group row justify-content-end">
+        <div class="col-sm-10">
+          <div class="form-group" *ngIf="addressLines.value || enterAddressManually">
+            <label class="small" for="postcode">Address Lines</label>
+            <textarea type="textarea" class="form-control form-control-sm" formControlName="addressLines" id="addressLines"
+            (keydown.enter)="$event.stopPropagation()" rows="5"  cols="10" maxlength="500" [ngClass]="{'border border-warning': !addressLines.value && enterAddressManually}"></textarea>
+            <small class="form-text" *ngIf="!addressLines.value && enterAddressManually"><i class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your score</span></small>
+          </div>
+          <div class="form-group" *ngIf="showPostCode">
+            <label class="small" for="postcode">Postcode</label>
+            <div class="input-group">
+              <input type="text" class="form-control form-control-sm"  id="postcode" formControlName="postCode"
+              [ngClass]="{'is-invalid': formErrors.postCode, 'border border-warning': !postCode.value}">
+                <!-- <span class="invalid-feedback">{{formErrors.postCode}}</span> -->
+                <small class="form-text w-100" *ngIf="!postCode.value"><i class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your score</span></small>
             </div>
           </div>
-      </div>
-   </div>
+        </div>
+    </div>
   </form>
 </div>
