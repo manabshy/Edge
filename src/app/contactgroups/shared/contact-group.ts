@@ -161,8 +161,3 @@ export interface PersonContactData extends ResultData {
   result: Person;
 }
 
-export interface ContactGroupMetaDeta{
-  indexVisibleContactGroup?: any;
-  hiddenContactGroups?: any;
-}
-
