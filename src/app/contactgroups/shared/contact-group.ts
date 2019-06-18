@@ -74,7 +74,7 @@ export interface CompanyAutoCompleteResult {
   companyName: string;
 }
 
-export interface ContactGroupAutoCompleteResult extends ContactGroupMetaDeta{
+export interface ContactGroupAutoCompleteResult{
   personId: number;
   title: string;
   firstName: string;
