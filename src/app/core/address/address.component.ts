@@ -26,6 +26,9 @@ export class AddressComponent implements OnInit {
   get showPostCode(): boolean {
     return this.addressForm.get('countryId').value == this.defaultCountryCode;
   }
+  get fullAddress(): FormControl {
+    return <FormControl>this.addressForm.get('fullAddress');
+  }
   get addressLines(): FormControl {
     return <FormControl>this.addressForm.get('addressLines');
   }
@@ -48,6 +51,7 @@ export class AddressComponent implements OnInit {
     this.listInfo = this.sharedService.dropdownListInfo;
     this.countries = this.listInfo.result.countries;
     this.addressForm = this.fb.group({
+      fullAddress: [''],
       addressLines: ['', {validators: Validators.maxLength(500), updateOn: 'blur'}],
       countryId: 0,
       postCode: ['', {validators: [Validators.minLength(5), Validators.maxLength(8), Validators.pattern(AppConstants.postCodePattern)], updateOn: 'blur'}],
