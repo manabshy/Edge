@@ -111,7 +111,7 @@
                 <div class="row">
                   <div class="col-auto">
                     <app-score-badge [person]="person"></app-score-badge>
-                    <span class="badge badge-pill badge-info mb-2" *ngIf="person.isMainPerson">Main Person</span>
+                    <span class="badge badge-pill badge-info mb-2" *ngIf="person.isMainPerson && !contactGroupDetails.companyName">Main Person</span>
                   </div>
                   <div class="col text-right" *ngIf="!person.isNewPerson; else removeSelectedPerson">
                     <div dropdown placement="bottom right">
@@ -142,9 +142,9 @@
                   <div class="col-12 mb-2">
                     <strong>{{person?.firstName}} {{person?.lastName}}</strong>
                     <!-- <i class="fas fa-phone"></i>&nbsp;
-    
+
                     <i class="fas fa-envelope"></i>&nbsp;
-    
+
                     <span class="badge badge-success">AML Valid</span> -->
                   </div>
                   <div class="col-sm-4 mb-2"><pre>{{person?.address | formatAddress}}</pre><span class="text-danger"
@@ -191,7 +191,7 @@
                 <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading person details ...
               </div>
             </ng-container>
-    
+
             <a href (click)="showHideOffCanvas($event)" class="list-group-item list-group-item-action text-center py-4"
               *ngIf="contactGroupDetails?.contactPeople.length < 8 && !contactGroupDetails?.referenceCount && !isMaxPeople">
               <span class="btn-link">
