@@ -45,6 +45,7 @@ export class ContactgroupsDetailComponent implements OnInit {
 
   getSearchedPersonContactGroups(personId: number) {
     this.contactGroupService.getPersonContactGroups(personId).subscribe(data => {
+      console.log(data);
       this.searchedPersonContactGroups = data;
     });
   }

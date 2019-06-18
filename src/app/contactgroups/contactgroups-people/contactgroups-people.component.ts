@@ -167,6 +167,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.initialContactGroupLength = this.contactGroupDetails.contactPeople.length;
         this.populateFormDetails(data);
         this.addSelectedPeople();
+        if(this.contactGroupDetails.contactType === ContactType.CompanyContact) {
+          this.isMaxPeople = true;
+        }
         if (this.removedPersonIds.length) {
           this.removedPersonIds.forEach(x => {
             this.removePerson(x, false);
@@ -325,6 +328,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
    selectCompany(id: number) {
      this.foundCompanies = null;
      this.companyFinderForm.reset();
+     this.companyFinderForm.markAsDirty();
      this.selectedCompanyId = id;
      this.getCompanyDetails(id);
    }
@@ -546,7 +550,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   canDeactivate(): boolean {
-    if (this.contactGroupDetailsForm.dirty && !this.isSubmitting) {
+    if ((this.contactGroupDetailsForm.dirty || this.companyFinderForm.dirty) && !this.isSubmitting) {
       return false;
     }
     return true;
