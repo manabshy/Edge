@@ -134,12 +134,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
           }
         })
 
-      // if (this.personId ) {
-      //   this.getContactGroupFirstPerson(this.personId);
-      // }
-    // this.companyFinderForm.valueChanges.pipe(debounceTime(400)).subscribe(data => {
-    //   this.findCompany(data);
-    //   console.log('search term', data); });
+     this.companyFinderForm.valueChanges.pipe(debounceTime(400)).subscribe(data => {
+      this.findCompany(data);
+      console.log('search term', data); });
   }
 
   isCompanyContactGroup(isSelectedTypeCompany: boolean) {
@@ -151,7 +148,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.isNewCompanyContact = true;
     } else {
       this.contactGroupDetails.contactType = ContactType.Individual;
-     if(this.personId) {
+     if (this.personId) {
         this.getContactGroupFirstPerson(this.personId);
      }
     }
@@ -192,11 +189,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
           this.contactGroupDetails.contactPeople.push(this.firstContactGroupPerson);
           this.setSalution();
           this.isSwitchTypeMsgVisible = false;
-          console.log('get group details', this.contactGroupDetails);
         }
       }
-      console.log('get person details here', this.firstContactGroupPerson);
-      console.log('get person id', this.personId);
     });
   }
   getPersonDetails(personId: number) {
