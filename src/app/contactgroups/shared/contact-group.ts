@@ -27,7 +27,10 @@ export interface ContactGroup {
 export interface Company {
   companyId: number;
   companyName: string;
+  companyType: CompanyType;
+  signers: ContactGroup[];
   companyAddress: Address;
+  contactDetails: CompanyContactDetails;
 }
 
 export interface ContactAddress extends Address {
@@ -122,6 +125,19 @@ export const ContactGroupsTypes = new Map( [
 export interface ContactGroupsType {
   id: string;
   name: string;
+}
+export enum CompanyType{
+  Company,
+  OtherAgent,
+  PropertyDeveloper,
+  ReloAgent,
+  Tradesmen
+}
+export interface CompanyContactDetails{
+  telephone: string;
+  fax: string;
+  website: string;
+  email: string;
 }
 export interface CompanyContactGroupAutoCompleteData extends ResultData {
   result: CompanyAutoCompleteResult[];

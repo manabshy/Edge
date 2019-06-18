@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from 'src/app/core/services/shared.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ContactGroupsService } from '../shared/contact-groups.service';
+import { AppConstants } from 'src/app/core/shared/app-constants';
 
 @Component({
   selector: 'app-contactgroups-company-edit',
@@ -7,10 +10,37 @@ import { SharedService } from 'src/app/core/services/shared.service';
   styleUrls: ['./contactgroups-company-edit.component.scss']
 })
 export class ContactgroupsCompanyEditComponent implements OnInit {
+  companyForm: FormGroup;
 
-  constructor(public sharedService:SharedService) { }
+  constructor(
+              private contactGroupService: ContactGroupsService,
+              private fb: FormBuilder,
+              public sharedService: SharedService
+            ) { }
 
   ngOnInit() {
+    this.setupCompanyForm();
+
+  }
+
+  private setupCompanyForm() {
+    this.companyForm = this.fb.group({
+      companyName: [''],
+      companyType: [''],
+      signers: [''],
+      fullAddress: [''],
+      address: this.fb.group({
+        addressLines: ['', { validators: Validators.maxLength(500), updateOn: 'blur' }],
+        countryId: 0,
+        postCode: ['', { validators: [Validators.minLength(5), Validators.maxLength(8)], updateOn: 'blur' }],
+      }),
+      contactDetails: this.fb.group({
+        telephone: ['', { validators: [Validators.required, Validators.minLength(7), Validators.maxLength(16), Validators.pattern(/^\+?[ \d]+$/g)], updateOn: 'blur' }],
+        fax: [''],
+        email: ['', { validators: [Validators.required, Validators.pattern(AppConstants.emailPattern)], updateOn: 'blur' }],
+        website: [''],
+      })
+    });
   }
 
   cancel() {

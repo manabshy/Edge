@@ -8,6 +8,7 @@ import { Location } from '@angular/common';
 import { EventEmitter } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { debounceTime } from 'rxjs/operators';
+import { AppConstants } from 'src/app/core/shared/app-constants';
 
 @Component({
   selector: 'app-contactgroups-detail-edit',
@@ -45,8 +46,8 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   backToAddressesList = false;
   enterAddressManually = false;
   searchTermBK = '';
-  postCodePattern = /^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]?[\s]+?[0-9][A-Za-z]{2}|[Gg][Ii][Rr][\s]+?0[Aa]{2})$/;
-  emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  // postCodePattern = /^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]?[\s]+?[0-9][A-Za-z]{2}|[Gg][Ii][Rr][\s]+?0[Aa]{2})$/;
+  // emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   validationMessages = {
     'firstName': {
       required: 'First Name is required.',
@@ -374,7 +375,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     emailAddresses.forEach(x => {
       emailFormArray.push(this.fb.group({
         id: x.id,
-        email: [x.email, { validators: [Validators.required, Validators.pattern(this.emailPattern)], updateOn: 'blur'}],
+        email: [x.email, { validators: [Validators.required, Validators.pattern(AppConstants.emailPattern)], updateOn: 'blur'}],
         isPreferred: x.isPreferred,
         isPrimaryWebEmail: x.isPrimaryWebEmail
       }));
@@ -393,7 +394,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       address: this.fb.group({
         addressLines: ['', {validators: Validators.maxLength(500), updateOn: 'blur'}],
         countryId: 0,
-        postCode: ['', {validators: [Validators.minLength(5), Validators.maxLength(8), Validators.pattern(this.postCodePattern)], updateOn: 'blur'}],
+        postCode: ['', {validators: [Validators.minLength(5), Validators.maxLength(8), Validators.pattern(AppConstants.postCodePattern)], updateOn: 'blur'}],
       }),
       contactBy: this.fb.group({
         email: [false],
@@ -518,7 +519,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
            // }
          }
        });
-       return newAddress; 
+       return newAddress;
     } else {
       return '';
     }
@@ -564,7 +565,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     return this.fb.group({
       id: 0,
       orderNumber: 0,
-      email: ['', { validators: [Validators.required, Validators.pattern(this.emailPattern)], updateOn: 'blur'}],
+      email: ['', { validators: [Validators.required, Validators.pattern(AppConstants.emailPattern)], updateOn: 'blur'}],
       isPreferred: [false],
       isPrimaryWebEmail: [false]
     });

@@ -1,8 +1,9 @@
-import { Component, OnInit, OnChanges, Renderer2 } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { ContactGroupsService } from '../shared/contact-groups.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Person, BasicPerson, Email } from 'src/app/core/models/person';
-import { ContactGroup, PeopleAutoCompleteResult, ContactGroupsTypes, ContactType, AutoCompleteResult, CompanyAutoCompleteResult, Company } from '../shared/contact-group';
+import { ActivatedRoute } from '@angular/router';
+import { Person, BasicPerson } from 'src/app/core/models/person';
+import { ContactGroup, PeopleAutoCompleteResult, ContactGroupsTypes,
+         ContactType, CompanyAutoCompleteResult, Company } from '../shared/contact-group';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { Subject } from 'rxjs';
