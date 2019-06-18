@@ -337,9 +337,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
          this.contactGroupDetails.contactPeople.push(this.selectedPerson);
       }
       (this.isNewCompanyContact && this.contactGroupDetails.contactPeople) ? this.isMaxPeople = true : this.isMaxPeople = false;
-      console.log('is new company contact', this.isNewCompanyContact);
-      console.log('max people', this.isMaxPeople);
-      console.log('contact group people', this.contactGroupDetails.contactPeople);
       this.personFinderForm.reset();
       this.isNewContactGroup = false;
     }
