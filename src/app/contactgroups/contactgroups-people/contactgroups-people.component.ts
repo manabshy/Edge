@@ -133,10 +133,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
             this.isSwitchTypeMsgVisible = false;
           }
         })
-
-      // if (this.personId ) {
-      //   this.getContactGroupFirstPerson(this.personId);
-      // }
+        
     this.companyFinderForm.valueChanges.subscribe(data => {
       this.findCompany(data);
       console.log('search term', data); });
@@ -194,11 +191,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
           this.setSalution();
           this.isLoadingNewPersonVisible = false;
           this.isSwitchTypeMsgVisible = false;
-          console.log('get group details', this.contactGroupDetails);
         }
       }
-      console.log('get person details here', this.firstContactGroupPerson);
-      console.log('get person id', this.personId);
     });
   }
   getPersonDetails(personId: number) {
