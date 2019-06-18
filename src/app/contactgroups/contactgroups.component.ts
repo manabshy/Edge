@@ -3,6 +3,8 @@ import { ContactGroupsService } from './shared/contact-groups.service';
 import { ContactGroupAutoCompleteResult } from './shared/contact-group';
 import { ActivatedRoute } from '@angular/router';
 import { AppUtils } from '../core/shared/utils';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-contactgroups',
@@ -10,38 +12,41 @@ import { AppUtils } from '../core/shared/utils';
   styleUrls: ['./contactgroups.component.scss']
 })
 export class ContactGroupsComponent implements OnInit {
-  private _searchTerm: string;
   advSearchCollapsed = false;
   isMessageVisible = false;
   isHintVisible = false;
   isLoading = false;
-  set searchTerm(val: string) {
-    this._searchTerm = val;
-  }
-  get searchTerm(): string {
-    return this._searchTerm;
-  }
+  contactFinderForm: FormGroup;
   contactGroups: ContactGroupAutoCompleteResult[];
   contactGroupDetails: ContactGroupAutoCompleteResult[];
   contactPeople: any[];
   contactGroupId: number;
-  constructor(private contactGroupService: ContactGroupsService, private route: ActivatedRoute) { }
+  constructor(private contactGroupService: ContactGroupsService, private route: ActivatedRoute, private fb: FormBuilder) { }
 
   ngOnInit() {
-    this.searchTerm = this.route.snapshot.queryParamMap.get('searchTerm') || AppUtils.searchTerm || '';
-    this.contactGroupsAutocomplete(this.searchTerm);
+    this.contactFinderForm = this.fb.group({
+      searchTerm: [this.route.snapshot.queryParamMap.get('searchTerm') || AppUtils.searchTerm || ''],
+    });
+    this.contactFinderForm.valueChanges.subscribe(data => {
+      this.contactGroupsAutocomplete(data.searchTerm);
+    });
+    if(this.contactFinderForm.value.searchTerm){
+      this.contactGroupsAutocomplete(this.contactFinderForm.value.searchTerm);
+    }
   }
 
   contactGroupsAutocomplete(searchTerm: string) {
+    this.isLoading = true;
     this.contactGroupService.getAutocompleteContactGroups(searchTerm).subscribe(result => {
         this.contactGroups = result;
         this.isLoading = false;
-        this.getHiddenContactGroups();
         console.log('contact groups',this.contactGroups);
 
-        if (this.searchTerm && this.searchTerm.length) {
+        if (this.contactFinderForm.value.searchTerm && this.contactFinderForm.value.searchTerm.length) {
           if (!this.contactGroups.length) {
             this.isMessageVisible = true;
+          } else {
+            this.isMessageVisible = false;
           }
         } else {
           this.isHintVisible = true;
@@ -53,39 +58,16 @@ export class ContactGroupsComponent implements OnInit {
       });
   }
 
-  searchContactGroup() {
-    this.contactGroups = [];
-    this.isLoading = true;
-    this.contactGroupsAutocomplete(this.searchTerm);
-  }
-
   onKeyup() {
-    this.isMessageVisible = false;
-    AppUtils.searchTerm = this.searchTerm;
+    AppUtils.searchTerm = this.contactFinderForm.value.searchTerm;
 
-    if (this.searchTerm && this.searchTerm.length > 2) {
+    if (this.contactFinderForm.value.searchTerm && this.contactFinderForm.value.searchTerm.length > 2) {
       this.isHintVisible = false;
     } else {
       if (this.contactGroups && !this.contactGroups.length) {
         this.isHintVisible = true;
       }
     }
-  }
-  private getHiddenContactGroups() {
-   if (this.contactGroups !== null) {
-    for (let i = 0; i < this.contactGroups.length; i++) {
-      for (let j = 0; j < this.contactGroups[i].contactGroups.length; j++) {
-        const subContact = this.contactGroups[i].contactGroups[j];
-        const subPeople = subContact.contactPeople;
-        let visibleFlag = 0;
-        if (subPeople && subPeople.length && !visibleFlag) {
-          this.contactGroups[i]['indexVisibleContactGroup'] = j;
-          this.contactGroups[i]['hiddenContactGroups'] = this.contactGroups[i].contactGroups.length - j - 1;
-          visibleFlag++;
-        }
-      }
-    }
-   }
   }
 
 

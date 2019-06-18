@@ -74,7 +74,7 @@ export interface CompanyAutoCompleteResult {
   companyName: string;
 }
 
-export interface ContactGroupAutoCompleteResult extends ContactGroupMetaDeta{
+export interface ContactGroupAutoCompleteResult{
   personId: number;
   title: string;
   firstName: string;
@@ -159,10 +159,5 @@ export interface BasicContactGroupData extends ResultData {
 }
 export interface PersonContactData extends ResultData {
   result: Person;
-}
-
-export interface ContactGroupMetaDeta{
-  indexVisibleContactGroup?: any;
-  hiddenContactGroups?: any;
 }
 

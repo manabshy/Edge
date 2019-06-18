@@ -133,8 +133,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
             this.isSwitchTypeMsgVisible = false;
           }
         })
-
-     this.companyFinderForm.valueChanges.pipe(debounceTime(400)).subscribe(data => {
+        
+    this.companyFinderForm.valueChanges.subscribe(data => {
       this.findCompany(data);
       console.log('search term', data); });
   }
@@ -148,9 +148,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.isNewCompanyContact = true;
     } else {
       this.contactGroupDetails.contactType = ContactType.Individual;
-     if (this.personId) {
-        this.getContactGroupFirstPerson(this.personId);
-     }
+    }
+
+    if(this.personId) {
+      this.getContactGroupFirstPerson(this.personId, isSelectedTypeCompany);
     }
 
     this.isTypePicked = true;
@@ -175,19 +176,20 @@ export class ContactgroupsPeopleComponent implements OnInit {
         }
       });
   }
-  getContactGroupFirstPerson(personId: number) {
+  getContactGroupFirstPerson(personId: number, isSelectedTypeCompany: boolean) {
+    this.isLoadingNewPersonVisible = true;
     this.contactGroupService.getPerson(personId).subscribe(data => {
       data.isMainPerson = true;
       this.firstContactGroupPerson = data;
       if (this.contactGroupId === 0) {
-        if (!this.contactGroupDetails){
-          this.contactGroupDetails = {} as ContactGroup;
-        }
         if (this.contactGroupDetails) {
-          this.contactGroupDetails.contactType = ContactType.Individual;
+          if(!isSelectedTypeCompany){
+            this.contactGroupDetails.contactType = ContactType.Individual;
+          }
           this.contactGroupDetails.contactPeople = [];
           this.contactGroupDetails.contactPeople.push(this.firstContactGroupPerson);
           this.setSalution();
+          this.isLoadingNewPersonVisible = false;
           this.isSwitchTypeMsgVisible = false;
         }
       }
