@@ -27,17 +27,17 @@ export class AddressComponent implements OnInit {
     return this.address.get('countryId').value == this.defaultCountryCode;
   }
   get addressLines(): FormControl {
-    return <FormControl>this.address.get('addressLines');
+    return <FormControl>this.addressForm.get('addressLines');
   }
   get postCode(): FormControl {
-    return <FormControl>this.address.get('postCode');
+    return <FormControl>this.addressForm.get('postCode');
   }
   get countryId(): FormControl {
-    return <FormControl>this.address.get('countryId');
+    return <FormControl>this.addressForm.get('countryId');
   }
-  get address(): FormGroup {
-    return <FormGroup>this.addressForm.get('address');
-  }
+  // get address(): FormGroup {
+  //   return <FormGroup>this.addressForm.get('address');
+  // }
   constructor(private sharedService: SharedService,
               private contactGroupService: ContactGroupsService,
               private fb: FormBuilder,
@@ -142,8 +142,6 @@ export class AddressComponent implements OnInit {
     this.addressForm.patchValue({
 
         addressLines: person.address.addressLines,
-        // outCode: person.address.outCode,
-        // inCode: person.address.inCode,
         postCode: person.address.postCode,
         countryId: person.address.countryId,
         country: person.address.country,
