@@ -415,27 +415,11 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   cloneContactGroup() {
      this.isCloned = true;
-    const newPeople =  this.contactGroupDetails.contactPeople;
-    const addressee = this.contactGroupDetails.addressee;
-    const salutation = this.contactGroupDetails.salutation;
-    const comments = this.contactGroupDetails.comments;
-     console.log('before new contact group', this.contactGroupDetails);
     if (this.isCloned) {
-      // this.contactGroupDetails = {} as ContactGroup;
       this.contactGroupDetails.contactGroupId = 0;
       this.contactGroupDetails.referenceCount = 0;
-
-      // this.contactGroupDetails.salutation = salutation;
-      // this.contactGroupDetails.addressee = addressee;
-      // this.contactGroupDetails.comments = comments;
-      // this.contactGroupDetails.contactPeople = [];
     }
-    // newPeople.forEach(x=>{
-    //   this.contactGroupDetails.contactPeople.push(x);
-    // });
-    console.log('new contact group', this.contactGroupDetails);
     this.clonedContact = this.contactGroupDetails;
-    console.log('cloned contact group', this.clonedContact);
   }
   saveContactGroup() {
     const contactPeople = this.contactGroupDetails.contactPeople.length;
@@ -453,7 +437,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
       if (contactGroup.contactGroupId) {
         this.updateContactGroup(contactGroup);
       } else {
-        console.log('cloned contacts here...................', contactGroup);
         this.addNewContactGroup(contactGroup);
       }
     }
