@@ -56,6 +56,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   selectedCompanyId: number;
   companyFinderForm: FormGroup;
   public keepOriginalOrder = (a) => a.key;
+  hasTrasactionHistory: boolean;
 
   constructor(
     private contactGroupService: ContactGroupsService,
@@ -133,7 +134,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
             this.isSwitchTypeMsgVisible = false;
           }
         })
-        
+
     this.companyFinderForm.valueChanges.subscribe(data => {
       this.findCompany(data);
       console.log('search term', data); });
@@ -411,6 +412,19 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.selectedPersonId = 0;
   }
 
+  cloneContactGroup() {
+     this.hasTrasactionHistory = true;
+     this.isNewContactGroup = true;
+     const newPeople =  this.contactGroupDetails.contactPeople;
+    if (this.hasTrasactionHistory) {
+      this.contactGroupDetails = {} as ContactGroup;
+      this.contactGroupDetails.contactPeople = [];
+    }
+    newPeople.forEach(x=>{
+      this.contactGroupDetails.contactPeople.push(x);
+    })
+    console.log(this.contactGroupDetails.contactPeople);
+  }
   saveContactGroup() {
     const contactPeople = this.contactGroupDetails.contactPeople.length;
     if (this.selectedPeople.length || contactPeople) {
