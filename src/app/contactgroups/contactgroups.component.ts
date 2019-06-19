@@ -25,13 +25,13 @@ export class ContactGroupsComponent implements OnInit {
 
   ngOnInit() {
     this.contactFinderForm = this.fb.group({
-      searchTerm: [this.route.snapshot.queryParamMap.get('searchTerm') || AppUtils.searchTerm || ''],
+      searchTerm: [''],
     });
     this.contactFinderForm.valueChanges.subscribe(data => {
       this.contactGroupsAutocomplete(data.searchTerm);
     });
-    if(this.contactFinderForm.value.searchTerm){
-      this.contactGroupsAutocomplete(this.contactFinderForm.value.searchTerm);
+    if(this.route.snapshot.queryParamMap.get('searchTerm') || AppUtils.searchTerm ){
+      this.contactGroupsAutocomplete(this.route.snapshot.queryParamMap.get('searchTerm') || AppUtils.searchTerm );
     }
   }
 
@@ -48,9 +48,8 @@ export class ContactGroupsComponent implements OnInit {
           } else {
             this.isMessageVisible = false;
           }
-        } else {
-          this.isHintVisible = true;
         }
+        
       }, error => {
         this.contactGroups = [];
         this.isLoading = false;
