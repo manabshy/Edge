@@ -55,8 +55,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
   selectedCompany: Company;
   selectedCompanyId: number;
   companyFinderForm: FormGroup;
+  isCloned: boolean;
+  clonedContact: ContactGroup;
   public keepOriginalOrder = (a) => a.key;
-  hasTrasactionHistory: boolean;
 
   constructor(
     private contactGroupService: ContactGroupsService,
@@ -352,7 +353,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.isLoadingNewPersonVisible = true;
       this.getPersonDetails(id);
       this.getContactGroupById(this.contactGroupId);
-
+      console.log('contact group has transaction history', this.contactGroupDetails);
       this.personFinderForm.reset();
     } else {
       return false;
@@ -413,25 +414,27 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   cloneContactGroup() {
-     this.hasTrasactionHistory = true;
-     this.isNewContactGroup = true;
-     const newPeople =  this.contactGroupDetails.contactPeople;
-    if (this.hasTrasactionHistory) {
-      this.contactGroupDetails = {} as ContactGroup;
-      this.contactGroupDetails.contactPeople = [];
+     this.isCloned = true;
+    if (this.isCloned) {
+      this.contactGroupDetails.contactGroupId = 0;
+      this.contactGroupDetails.referenceCount = 0;
     }
-    newPeople.forEach(x=>{
-      this.contactGroupDetails.contactPeople.push(x);
-    })
-    console.log(this.contactGroupDetails.contactPeople);
+    this.clonedContact = this.contactGroupDetails;
   }
   saveContactGroup() {
     const contactPeople = this.contactGroupDetails.contactPeople.length;
     if (this.selectedPeople.length || contactPeople) {
-      const contactGroup = {...this.contactGroupDetails, ...this.contactGroupDetailsForm.value};
+      let contactGroup = {...this.contactGroupDetails, ...this.contactGroupDetailsForm.value};
       this.isSubmitting = true;
       this.errorMessage = '';
-      if (this.contactGroupDetails.contactGroupId) {
+      this.isCloned ? contactGroup = this.clonedContact : contactGroup = contactGroup;
+      if (this.isCloned) {
+        this.clonedContact.contactType = this.contactGroupDetailsForm.get('contactType').value;
+        this.clonedContact.salutation = this.contactGroupDetailsForm.get('salutation').value;
+        this.clonedContact.addressee = this.contactGroupDetailsForm.get('addressee').value;
+        this.clonedContact.comments = this.contactGroupDetailsForm.get('comments').value;
+      }
+      if (contactGroup.contactGroupId) {
         this.updateContactGroup(contactGroup);
       } else {
         this.addNewContactGroup(contactGroup);
