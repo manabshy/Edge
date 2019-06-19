@@ -24,7 +24,17 @@ export class ContactgroupsDetailComponent implements OnInit {
 
   ngOnInit() {
     // this.route.params.subscribe(params => {this.contactGroupId = params['id']; });
-    this.route.params.subscribe(params => {this.personId = params['personId'] || 0; });
+    this.route.params.subscribe(params => {
+      this.personId = params['personId'] || 0;
+      this.searchedPersonDetails = null;
+      this.searchedPersonContactGroups = null;
+      this.init(); 
+    });
+    this.init();
+
+  }
+
+  init() {
     // this.getContactGroupById(this.contactGroupId);
     this.getSearchedPersonDetails(this.personId);
     this.getSearchedPersonContactGroups(this.personId);

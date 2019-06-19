@@ -10,7 +10,9 @@ import { Location } from '@angular/common';
 })
 export class BreadcrumbComponent implements OnInit {
 
-  prevRoute = AppUtils.prevRoute;
+  get prevRoute() {
+    return AppUtils.prevRoute;
+  }
 
   constructor(private _location: Location, private router: Router) { }
 
