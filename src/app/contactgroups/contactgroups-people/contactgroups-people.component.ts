@@ -446,6 +446,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.isCloned ? contactGroup = this.clonedContact : contactGroup = contactGroup;
       if (this.isCloned) {
         this.clonedContact.contactType = this.contactGroupDetailsForm.get('contactType').value;
+        this.clonedContact.salutation = this.contactGroupDetailsForm.get('salutation').value;
+        this.clonedContact.addressee = this.contactGroupDetailsForm.get('addressee').value;
+        this.clonedContact.comments = this.contactGroupDetailsForm.get('comments').value;
       }
       if (contactGroup.contactGroupId) {
         this.updateContactGroup(contactGroup);
