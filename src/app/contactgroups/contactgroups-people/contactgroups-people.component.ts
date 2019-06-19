@@ -55,8 +55,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
   selectedCompany: Company;
   selectedCompanyId: number;
   companyFinderForm: FormGroup;
+  isCloned: boolean;
+  clonedContact: ContactGroup;
   public keepOriginalOrder = (a) => a.key;
-  hasTrasactionHistory: boolean;
 
   constructor(
     private contactGroupService: ContactGroupsService,
@@ -352,7 +353,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.isLoadingNewPersonVisible = true;
       this.getPersonDetails(id);
       this.getContactGroupById(this.contactGroupId);
-
+      console.log('contact group has transaction history', this.contactGroupDetails);
       this.personFinderForm.reset();
     } else {
       return false;
@@ -413,27 +414,43 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   cloneContactGroup() {
-     this.hasTrasactionHistory = true;
-     this.isNewContactGroup = true;
-     const newPeople =  this.contactGroupDetails.contactPeople;
-    if (this.hasTrasactionHistory) {
-      this.contactGroupDetails = {} as ContactGroup;
-      this.contactGroupDetails.contactPeople = [];
+     this.isCloned = true;
+    const newPeople =  this.contactGroupDetails.contactPeople;
+    const addressee = this.contactGroupDetails.addressee;
+    const salutation = this.contactGroupDetails.salutation;
+    const comments = this.contactGroupDetails.comments;
+     console.log('before new contact group', this.contactGroupDetails);
+    if (this.isCloned) {
+      // this.contactGroupDetails = {} as ContactGroup;
+      this.contactGroupDetails.contactGroupId = 0;
+      this.contactGroupDetails.referenceCount = 0;
+
+      // this.contactGroupDetails.salutation = salutation;
+      // this.contactGroupDetails.addressee = addressee;
+      // this.contactGroupDetails.comments = comments;
+      // this.contactGroupDetails.contactPeople = [];
     }
-    newPeople.forEach(x=>{
-      this.contactGroupDetails.contactPeople.push(x);
-    })
-    console.log(this.contactGroupDetails.contactPeople);
+    // newPeople.forEach(x=>{
+    //   this.contactGroupDetails.contactPeople.push(x);
+    // });
+    console.log('new contact group', this.contactGroupDetails);
+    this.clonedContact = this.contactGroupDetails;
+    console.log('cloned contact group', this.clonedContact);
   }
   saveContactGroup() {
     const contactPeople = this.contactGroupDetails.contactPeople.length;
     if (this.selectedPeople.length || contactPeople) {
-      const contactGroup = {...this.contactGroupDetails, ...this.contactGroupDetailsForm.value};
+      let contactGroup = {...this.contactGroupDetails, ...this.contactGroupDetailsForm.value};
       this.isSubmitting = true;
       this.errorMessage = '';
-      if (this.contactGroupDetails.contactGroupId) {
+      this.isCloned ? contactGroup = this.clonedContact : contactGroup = contactGroup;
+      if (this.isCloned) {
+        this.clonedContact.contactType = this.contactGroupDetailsForm.get('contactType').value;
+      }
+      if (contactGroup.contactGroupId) {
         this.updateContactGroup(contactGroup);
       } else {
+        console.log('cloned contacts here...................', contactGroup);
         this.addNewContactGroup(contactGroup);
       }
     }
