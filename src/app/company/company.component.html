@@ -1,3 +1,80 @@
-<p>
-  company works!
-</p>
+<app-breadcrumb></app-breadcrumb>
+<div class="container">
+  <div class="row page-title">
+    <div class="col">
+      <h4 class="m-0">Company centre</h4>
+    </div>
+    <div class="col-auto">
+      <div class="btn-group" dropdown placement="bottom right">
+        <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
+          aria-controls="dropdown-basic">
+          Actions <span class="caret"></span>
+        </button>
+        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-basic">
+          <li role="menuitem"><a class="dropdown-item" [routerLink]="['detail/0/people', 0]"  [queryParams]="{isNewCompany: true}" >New Company</a></li>
+          <!-- <li role="menuitem"><a class="dropdown-item" routerLink="company">New Company</a></li> -->
+        </ul>
+      </div>
+    </div>
+  </div>
+  <form [formGroup]="companyFinderForm">
+    <div class="row">
+      <div class="col">
+        <input type="text" class="form-control" formControlName="companyName" placeholder="Name, email, phone or postcode"
+        aria-label="Search criteria" (keyup)="onKeyup()">
+        <button class="btn btn-link px-0" type="button" id="button-advanced" (click)="advSearchCollapsed = !advSearchCollapsed"
+        [attr.aria-expanded]="!advSearchCollapsed" aria-controls="advSearch">Advanced search</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div id="advSearch" [collapse]="!advSearchCollapsed">
+          <div class="row">
+            <div class="col-md-auto pr-0">
+              Must be one of:
+            </div>
+            <!-- TODO: Change to populate from list -->
+            <div class="col">
+              <div class="form-group form-check">
+                <div class="row">
+                  <div class="custom-control custom-checkbox col-6 col-md-auto">
+                    <input type="checkbox" class="custom-control-input" id="advLandlord">
+                    <label class="custom-control-label" for="advLandlord">Company</label>
+                  </div>
+                  <div class="custom-control custom-checkbox col-6 col-md-auto">
+                    <input type="checkbox" class="custom-control-input" id="advTenant">
+                    <label class="custom-control-label" for="advTenant">Other Agent</label>
+                  </div>
+                  <div class="custom-control custom-checkbox col-6 col-md-auto">
+                    <input type="checkbox" class="custom-control-input" id="advVendor">
+                    <label class="custom-control-label" for="advVendor">Relocation Agent</label>
+                  </div>
+                  <div class="custom-control custom-checkbox col-6 col-md-auto">
+                    <input type="checkbox" class="custom-control-input" id="advBuyer">
+                    <label class="custom-control-label" for="advBuyer">Property Developer</label>
+                  </div>
+                  <div class="custom-control custom-checkbox col-6 col-md-auto">
+                    <input type="checkbox" class="custom-control-input" id="advBuyer">
+                    <label class="custom-control-label" for="advBuyer">Tradesman</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="text-center" *ngIf="isLoading && !isHintVisible">
+    <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...
+  </div>
+  <div class="text-center text-danger" *ngIf="isMessageVisible">
+      <i class="far fa-sad-tear"></i> No results for '<strong>{{companyFinderForm.value.companyName || ' '}}</strong>'
+  </div>
+  <div class="text-center" *ngIf="isHintVisible">
+      <i class="far fa-smile-wink"></i> Type at least <strong>3 characters</strong> to get results
+  </div>
+  <!-- <app-contactgroups-list [contactGroups]='contactGroups' [searchTerm]='contactFinderForm.value.searchTerm' *ngIf="!isLoading && !isHintVisible"> -->
+  <!-- </app-contactgroups-list> -->
+  <app-company-list [companies]='companies' [companyName]='companyFinderForm.value.companyName' *ngIf="!isLoading && !isHintVisible" ></app-company-list>
+</div>

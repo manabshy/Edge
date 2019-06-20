@@ -38,6 +38,7 @@ import { PropertyModule } from './property/property.module';
 import { ContactgroupsModule } from './contactgroups/contactgroups.module';
 import { DiaryModule } from './diary/diary.module';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { CompanyModule } from './company/company.module';
 
 
 @NgModule({
@@ -82,6 +83,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
     PropertyModule,
     ContactgroupsModule,
     DiaryModule,
+    CompanyModule,
     AppRoutingModule
   ],
   exports: [
