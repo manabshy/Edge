@@ -304,6 +304,10 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       address: {
         countryId: this.defaultCountryCode
       },
+      contactBy: {
+        email: true,
+        phone: true
+      },
       marketingPreferences: {
         marketBulletin: false,
         offersSurveys: false,
@@ -397,8 +401,8 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         postCode: ['', {validators: [Validators.minLength(5), Validators.maxLength(8), Validators.pattern(AppConstants.postCodePattern)], updateOn: 'blur'}],
       }),
       contactBy: this.fb.group({
-        email: [false],
-        phone: [false]
+        email: [true],
+        phone: [true]
       }),
       marketingPreferences: this.fb.group({
         marketBulletin: [false],

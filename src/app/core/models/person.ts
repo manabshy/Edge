@@ -100,9 +100,9 @@ export interface PersonTitle {
 }
 
 export const MarketTypes = <MarketType[]> [
-  {id: 'contactByEmail', name: 'Email', selected: false},
+  {id: 'contactByEmail', name: 'Email', selected: true},
   {id: 'contactByPost', name: 'Post', selected: false},
-  {id: 'contactByPhone', name: 'Phone', selected: false}
+  {id: 'contactByPhone', name: 'Phone', selected: true}
 ];
 
 export interface MarketType {
