@@ -74,7 +74,5 @@
   <div class="text-center" *ngIf="isHintVisible">
       <i class="far fa-smile-wink"></i> Type at least <strong>3 characters</strong> to get results
   </div>
-  <!-- <app-contactgroups-list [contactGroups]='contactGroups' [searchTerm]='contactFinderForm.value.searchTerm' *ngIf="!isLoading && !isHintVisible"> -->
-  <!-- </app-contactgroups-list> -->
-  <app-company-list [companies]='companies' [companyName]='companyFinderForm.value.companyName' *ngIf="!isLoading && !isHintVisible" ></app-company-list>
+  <app-company-list *ngIf="companies" [companies]='companies' ></app-company-list>
 </div>
