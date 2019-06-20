@@ -337,7 +337,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       firstName: person.firstName,
       middleName: person.middleName,
       lastName: person.lastName,
-      amlCompletedDate: person.amlCompletedDate,
+      amlCompletedDate: this.sharedService.formatDate(person.amlCompletedDate),
       address: {
         addressLines: person.address.addressLines,
         // outCode: person.address.outCode,

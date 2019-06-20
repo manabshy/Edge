@@ -63,6 +63,14 @@ export class SharedService {
     });
   }
 
+  formatDate(date: Date) {
+    let formattedDate = null;
+    if(date) {
+      formattedDate = dayjs(date).format('DD/MM/YYYY');
+    }
+    return formattedDate || '';
+  }
+
   formatPostCode(postCodeToCheck: string) {
 
     // Permitted letters depend upon their position in the postcode.
