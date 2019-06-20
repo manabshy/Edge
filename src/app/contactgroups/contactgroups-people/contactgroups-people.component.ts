@@ -190,6 +190,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
           }
           this.contactGroupDetails.contactPeople = [];
           this.contactGroupDetails.contactPeople.push(this.firstContactGroupPerson);
+          if(this.contactGroupDetails.contactType === ContactType.CompanyContact) {
+            this.isMaxPeople = true;
+          }
           this.setSalution();
           this.isLoadingNewPersonVisible = false;
           this.isSwitchTypeMsgVisible = false;
