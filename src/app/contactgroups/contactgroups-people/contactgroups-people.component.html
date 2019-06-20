@@ -337,18 +337,18 @@
               (click)="selectPerson(foundPerson.personId)">
                 <div class="col-12 mb-2 mb-sm-0" *ngIf="foundPerson.matchScore">
                   <span class="badge badge-pill badge-success" *ngIf="foundPerson.matchScore === 10">Full Match</span>
-                  <span class="badge badge-pill badge-warning" *ngIf="foundPerson.matchScore === 5">Good Match</span>
+                  <span class="badge badge-pill badge-warning" *ngIf="foundPerson.matchScore <= 7">Good Match</span>
                 </div>
                 <div class="col-sm">
                   <dl class="row">
                     <dt class="col-4 d-sm-none">Full Name</dt>
-                    <dd class="col">{{foundPerson.addressee}}</dd>
+                    <dd class="col" [ngClass]="{'font-weight-bold': foundPerson?.matchFields[0]}">{{foundPerson.addressee}}</dd>
                   </dl>
                 </div>
                 <div class="col-sm">
                   <dl class="row">
                     <dt class="col-4 d-sm-none">Telephone</dt>
-                    <dd class="col">
+                    <dd class="col" [ngClass]="{'font-weight-bold': foundPerson?.matchFields[1]}">
                       <ng-container *ngFor="let phoneNumber of foundPerson?.phoneNumbers">
                         <div>{{phoneNumber}}</div>
                       </ng-container>
@@ -358,7 +358,7 @@
                 <div class="col-sm-4">
                   <dl class="row">
                     <dt class="col-4 d-sm-none">Email</dt>
-                    <dd class="col text-truncate">
+                    <dd class="col text-truncate" [ngClass]="{'font-weight-bold': foundPerson?.matchFields[2]}">
                       <ng-container *ngFor="let email of foundPerson?.emailAddresses">
                         <div class="text-truncate">{{email}}</div>
                       </ng-container>

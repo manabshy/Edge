@@ -243,30 +243,36 @@ export class ContactgroupsPeopleComponent implements OnInit {
    const matchedPeople = [];
    if (this.foundPeople) {
       this.foundPeople.forEach((x) => {
-        const sameName = x.firstName.toLowerCase() === person.firstName.toLowerCase() &&
-        x.lastName.toLowerCase() === person.lastName.toLowerCase();
+        const sameFirstName = x.firstName.toLowerCase() === person.firstName.toLowerCase();
+        const sameLastName = x.lastName.toLowerCase() === person.lastName.toLowerCase();
         const email = x.emailAddresses.filter(x => x === person.emailAddress);
         const phone = x.phoneNumbers.filter(x => x === person.phoneNumber);
         const samePhone = phone[0] ? phone[0].toString() === person.phoneNumber : false;
         console.log('email:', email , 'and phone:', phone);
         const sameEmail = email[0] ? email[0].toLowerCase() === person.emailAddress : false;
+        x.matchFields = [(sameFirstName && sameLastName), samePhone, sameEmail];
         switch (true) {
-          case sameName && sameEmail && samePhone:
+          case sameFirstName && sameLastName && (sameEmail || samePhone):
             x.matchScore = 10;
-            matchedPeople.push(x);
             break;
-          case sameName && (sameEmail || samePhone):
-            x.matchScore = 5;
-            matchedPeople.push(x);
+          case (sameFirstName || sameLastName) && (sameEmail || samePhone):
+            if(sameEmail && samePhone){
+              x.matchScore = 7;
+            } else {
+              x.matchScore = 5;
+            }
             break;
-          case sameName:
-            x.matchScore = 2;
-            matchedPeople.push(x);
+          case (sameFirstName && sameLastName) || sameEmail || samePhone:
+            if(sameEmail && samePhone){
+              x.matchScore = 6;
+            } else {
+              x.matchScore = 2;
+            }
             break;
           default:
             x.matchScore = 0;
-            matchedPeople.push(x);
         }
+        matchedPeople.push(x);
       });
       this.foundPeople = matchedPeople;
       console.table('matched people', matchedPeople);
