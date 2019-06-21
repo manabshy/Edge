@@ -58,7 +58,10 @@ export class AddressComponent implements OnInit {
     });
     this.addressForm.valueChanges
     .subscribe((data) => {
-      this.postCode.setValue(this.sharedService.formatPostCode(data.address.postCode), { emitEvent: false });
+      console.log('data from form', data);
+      if (data.postCode) {
+        this.postCode.setValue(this.sharedService.formatPostCode(data.postCode), { emitEvent: false });
+      }
       // this.logValidationErrors(this.personForm, false);
       // this.logValidationErrorsFormArray(this.personForm);
     });

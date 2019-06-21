@@ -14,7 +14,18 @@ export class CompanyEditComponent implements OnInit {
   isSubmitting: boolean;
   listInfo: any;
   companyTypes: any;
-
+  formErrors = {
+    'firstName': '',
+    'lastName': '',
+    'middleName': '',
+    'email': '',
+    'emailAddresses': {
+      'email': '',
+    },
+    'address': '',
+    'number': '',
+    'postCode': ''
+  };
   constructor( private contactGroupService: ContactGroupsService,
               private fb: FormBuilder,
               private sharedService: SharedService
