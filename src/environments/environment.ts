@@ -6,8 +6,8 @@ export const environment = {
   production: false,
   baseUrl: 'https://dandg-api-wedge-dev.azurewebsites.net/v10',
   baseRedirectUri: 'http://localhost:4200',
-  // endpointUrl: ' \'https://dandg-api-wedge-dev.azurewebsites.net\': \'67f9a9a1-d8de-45bc-af20-43e1e18ccba5\''
   endpointUrl: 'https://dandg-api-wedge-dev.azurewebsites.net'
+  // endpointUrl: ' \'https://dandg-api-wedge-dev.azurewebsites.net\': \'67f9a9a1-d8de-45bc-af20-43e1e18ccba5\''
 };
 
 /*
