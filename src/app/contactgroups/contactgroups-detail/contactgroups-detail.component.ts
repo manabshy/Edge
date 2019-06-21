@@ -50,6 +50,7 @@ export class ContactgroupsDetailComponent implements OnInit {
   getSearchedPersonDetails(personId: number) {
     this.contactGroupService.getPerson(personId).subscribe(data => {
       this.searchedPersonDetails = data;
+      console.log(this.searchedPersonDetails);
     });
   }
 

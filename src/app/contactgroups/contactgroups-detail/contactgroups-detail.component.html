@@ -32,7 +32,7 @@
           <div class="col-6 telephone">
             <p class="mb-2 text-danger" *ngIf="!searchedPersonDetails.phoneNumbers.length || !searchedPersonDetails.phoneNumbers[0].number">No phone</p>
             <ng-container *ngFor="let phoneNumber of searchedPersonDetails.phoneNumbers">
-              <p class="mb-2" *ngIf="phoneNumber.number"><a href="tel:{{phoneNumber.number}}">{{phoneNumber.number}}</a></p>
+              <p class="mb-2" *ngIf="phoneNumber.number"><a href="tel:{{phoneNumber.number}}">{{phoneNumber.number}} <ng-container *ngIf="phoneNumber.sendSMS">(sms)</ng-container></a></p>
             </ng-container>
           </div>
         </div>

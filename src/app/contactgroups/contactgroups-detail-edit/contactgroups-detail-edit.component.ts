@@ -337,7 +337,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       firstName: person.firstName,
       middleName: person.middleName,
       lastName: person.lastName,
-      amlCompletedDate: this.sharedService.formatDate(person.amlCompletedDate),
+      amlCompletedDate: this.sharedService.ISOToDate(person.amlCompletedDate),
       address: {
         addressLines: person.address.addressLines,
         // outCode: person.address.outCode,
@@ -366,6 +366,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       phoneArray.push(this.fb.group({
         number: [x.number, { validators: [Validators.required, Validators.minLength(7), Validators.maxLength(16), Validators.pattern(/^\+?[ \d]+$/g)], updateOn: 'blur'}],
         typeId: x.typeId,
+        sendSMS: x.sendSMS,
         isPreferred: x.isPreferred,
         comments: x.comments
       }));
@@ -451,6 +452,15 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     const currEmail = this.emailAddresses.controls[0];
     const lastPhoneNumber = this.phoneNumbers.controls[this.phoneNumbers.controls.length - 1];
     const lastEmail = this.emailAddresses.controls[this.emailAddresses.controls.length - 1];
+    
+    this.phoneNumbers.controls.forEach(x=>{
+      if(x.value.typeId != 3) {
+        x.patchValue({
+          sendSMS: false
+        })
+      }
+    })
+
     if (lastPhoneNumber.get('number').value === '' && currPhoneNumber !== lastEmail) {
       lastPhoneNumber.get('number').clearValidators();
       lastPhoneNumber.get('number').updateValueAndValidity();
@@ -549,6 +559,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       typeId: 3,
       number: ['', { validators: [Validators.required, Validators.minLength(7), Validators.maxLength(16), Validators.pattern(/^\+?[ \d]+$/g)], updateOn: 'blur'}],
       orderNumber: 0,
+      sendSMS: [false],
       isPreferred: [false],
       comments: ['']
     });

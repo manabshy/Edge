@@ -56,6 +56,7 @@ export interface PhoneNumber {
   typeId: TelephoneTypeId;
   number: string;
   orderNumber: number;
+  sendSMS: boolean;
   isPreferred: boolean;
   comments: string;
 }

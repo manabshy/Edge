@@ -63,12 +63,12 @@ export class SharedService {
     });
   }
 
-  formatDate(date: Date) {
+  ISOToDate(date: Date): Date {
     let formattedDate = null;
     if(date) {
-      formattedDate = dayjs(date).format('DD/MM/YYYY');
+      formattedDate = dayjs(date).toDate();
     }
-    return formattedDate || '';
+    return formattedDate;
   }
 
   formatPostCode(postCodeToCheck: string) {
