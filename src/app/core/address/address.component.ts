@@ -17,7 +17,7 @@ export class AddressComponent implements OnInit {
   addressForm: FormGroup;
   listInfo: any;
   countries: any;
-  enterAddressManually: boolean;
+  enterAddressManually: boolean = false;
   isLoadingAddressVisible: boolean;
   retrievedAddresses: AddressAutoCompleteData;
   backToAddressesList: boolean;
@@ -126,10 +126,8 @@ export class AddressComponent implements OnInit {
 
         this.addressForm.patchValue({
           fullAddress: '',
-          address: {
-            addressLines: (retrievedAddress.Company ? retrievedAddress.Company + '\n' : '') + retAddressLines + retrievedAddress.City,
-            postCode: retrievedAddress.PostalCode
-          }
+          addressLines: (retrievedAddress.Company ? retrievedAddress.Company + '\n' : '') + retAddressLines + retrievedAddress.City,
+          postCode: retrievedAddress.PostalCode
         });
         setTimeout(() => {
           document.getElementById('addressLines').scrollIntoView({block: 'center'});
