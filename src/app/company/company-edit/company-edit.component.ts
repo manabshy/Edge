@@ -10,9 +10,10 @@ import { AppConstants } from 'src/app/core/shared/app-constants';
   styleUrls: ['./company-edit.component.scss']
 })
 export class CompanyEditComponent implements OnInit {
-  isSubmitting: boolean;
-
   companyForm: FormGroup;
+  isSubmitting: boolean;
+  listInfo: any;
+  companyTypes: any;
 
   constructor( private contactGroupService: ContactGroupsService,
               private fb: FormBuilder,
@@ -20,6 +21,8 @@ export class CompanyEditComponent implements OnInit {
             ) { }
 
   ngOnInit() {
+    this.listInfo = this.sharedService.dropdownListInfo;
+    this.companyTypes = this.listInfo.result.companyTypes;
     this.setupCompanyForm();
   }
 

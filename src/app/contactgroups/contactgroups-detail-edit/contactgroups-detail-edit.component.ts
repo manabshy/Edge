@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, Renderer2 } from '@angular/core';
-import { SharedService, WedgeError, AddressAutoCompleteData, Country } from 'src/app/core/services/shared.service';
+import { SharedService, WedgeError, AddressAutoCompleteData, InfoDetail } from 'src/app/core/services/shared.service';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractControl } from '@angular/forms';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { Person, Email, PhoneNumber, BasicPerson } from 'src/app/core/models/person';
@@ -529,7 +529,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     }
   }
    getCountryName(id: number) {
-    const country = this.countries.filter((x: Country) => x.id === id);
+    const country = this.countries.filter((x: InfoDetail) => x.id === id);
     return country[0].value;
   }
 

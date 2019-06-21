@@ -237,12 +237,13 @@ export class SharedService {
 }
 
 export interface DropdownListInfo {
- Countries: Country[];
+ Countries: InfoDetail[];
+ CompanyTypes: InfoDetail[];
  Titles: Record<number, string>;
  TelephoneTypes: Record<number, string>;
 }
 
-export interface Country {
+export interface InfoDetail {
   id: number;
   value: string;
 }
