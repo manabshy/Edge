@@ -8,6 +8,7 @@ import { AppUtils } from '../core/shared/utils';
 import { StaffMember } from '../core/models/staff-member';
 import { SharedService } from '../core/services/shared.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -29,6 +30,7 @@ export class HomeComponent implements OnInit {
   constructor(private authService: AuthService, private staffMemberService: StaffMemberService, private sharedService: SharedService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
+    console.log('this is working environment',environment);
     console.log('this is from the getter',this.sharedService.dropdownListInfo);
     console.log('current user', this.staffMemberService.currentStaffMember);
     this.sharedService.getDropdownListInfo().subscribe();

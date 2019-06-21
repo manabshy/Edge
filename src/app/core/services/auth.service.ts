@@ -11,21 +11,26 @@ import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component'
 })
 export class AuthService {
   private user: UserForAuthentication;
+  endPointUrl = AppConstants.endpointUrl;
   private adalConfig = {
     tenant: AppConstants.tenant,
     clientId: AppConstants.clientId,
+    redirectUri: AppConstants.redirectUri,
+    postLogoutRedirectUri: AppConstants.postLogoutRedirectUri,
+    endpoints: {
+      'https://dandg-api-wedge.azurewebsites.net': '67f9a9a1-d8de-45bc-af20-43e1e18ccba5',
+      'https://dandg-api-wedge-dev.azurewebsites.net': '67f9a9a1-d8de-45bc-af20-43e1e18ccba5',
+      'https://dandg-api-wedge-test.azurewebsites.net': '67f9a9a1-d8de-45bc-af20-43e1e18ccba5'
+      //  endPointUrl : '67f9a9a1-d8de-45bc-af20-43e1e18ccba5'
+    }
     // tenant: 'ed781348-2f1d-4f1e-bbf8-137da318df39',
     // clientId: '03d5d394-2418-42fa-a345-556b8d7ffcdb',
     // redirectUri: 'https://dandg-edge-test.azurewebsites.net/auth-callback',
     // postLogoutRedirectUri: 'https://dandg-edge-test.azurewebsites.net',
     // redirectUri: 'https://stagedouglasandgordon-wedge.azurewebsites.net/auth-callback',
     // postLogoutRedirectUri: 'https://stagedouglasandgordon-wedge.azurewebsites.net',
-    redirectUri: 'http://localhost:4200/auth-callback',
-    postLogoutRedirectUri: 'http://localhost:4200',
-    endpoints: {
-      // 'http://localhost:57211': '67f9a9a1-d8de-45bc-af20-43e1e18ccba5',
-      'https://dandg-api-wedge.azurewebsites.net': '67f9a9a1-d8de-45bc-af20-43e1e18ccba5'
-    }
+    // redirectUri: 'http://localhost:4200/auth-callback',
+    // postLogoutRedirectUri: 'http://localhost:4200',
   };
 
   constructor(private adalService: AdalService, private modalService: BsModalService) { this.adalService.init(this.adalConfig); }
