@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { CompanyAutoCompleteResult } from 'src/app/contactgroups/shared/contact-group';
 
 @Component({
   selector: 'app-company-list',
@@ -7,6 +8,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CompanyListComponent implements OnInit {
 
+@Input()  companies: CompanyAutoCompleteResult[];
+@Input() companyName: string;
   constructor() { }
 
   ngOnInit() {
