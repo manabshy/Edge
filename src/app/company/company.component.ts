@@ -16,7 +16,7 @@ export class CompanyComponent implements OnInit {
   isHintVisible: boolean;
   companies: CompanyAutoCompleteResult[];
   isMessageVisible: boolean;
-
+  advSearchCollapsed = false;
   constructor(private contactGroupService: ContactGroupsService, private route: ActivatedRoute, private fb: FormBuilder) { }
 
   ngOnInit() {
