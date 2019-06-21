@@ -21,7 +21,7 @@
     <div class="row">
       <div class="col">
         <input type="text" class="form-control" formControlName="companyName" placeholder="Company Name"
-        aria-label="Search criteria" (keyup)="onKeyup()">
+        aria-label="Company Name" (keyup)="onKeyup()">
         <button class="btn btn-link px-0" type="button" id="button-advanced" (click)="advSearchCollapsed = !advSearchCollapsed"
         [attr.aria-expanded]="!advSearchCollapsed" aria-controls="advSearch">Advanced search</button>
       </div>
@@ -68,11 +68,11 @@
   <div class="text-center" *ngIf="isLoading && !isHintVisible">
     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...
   </div>
-  <div class="text-center text-danger" *ngIf="isMessageVisible">
+  <div class="text-center text-danger" *ngIf="isMessageVisible && !isLoading">
       <i class="far fa-sad-tear"></i> No results for '<strong>{{companyFinderForm.value.companyName || ' '}}</strong>'
   </div>
   <div class="text-center" *ngIf="isHintVisible">
       <i class="far fa-smile-wink"></i> Type at least <strong>3 characters</strong> to get results
   </div>
-  <app-company-list *ngIf="companies" [companies]='companies' ></app-company-list>
+  <app-company-list *ngIf="!isLoading && !isHintVisible" [companies]='companies'></app-company-list>
 </div>
