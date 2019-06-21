@@ -8,6 +8,7 @@ export class AppUtils {
   public static isDiarySearchVisible: boolean = false;
   public static parentRoute: string = '';
   public static searchTerm: string;
+  public static companySearchTerm: string;
 
   /**
    * Format a date/time into a string

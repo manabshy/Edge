@@ -20,7 +20,7 @@
   <form [formGroup]="companyFinderForm">
     <div class="row">
       <div class="col">
-        <input type="text" class="form-control" formControlName="companyName" placeholder="Name, email, phone or postcode"
+        <input type="text" class="form-control" formControlName="companyName" placeholder="Company Name"
         aria-label="Search criteria" (keyup)="onKeyup()">
         <button class="btn btn-link px-0" type="button" id="button-advanced" (click)="advSearchCollapsed = !advSearchCollapsed"
         [attr.aria-expanded]="!advSearchCollapsed" aria-controls="advSearch">Advanced search</button>
