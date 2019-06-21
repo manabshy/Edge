@@ -90,10 +90,12 @@ export class ContactGroupsService {
 
   getAutocompleteCompany(company: any): Observable<CompanyAutoCompleteResult[]> {
    let options;
-    if (company && company.companyName.length >= 3) {
-       options = new HttpParams()
+  //   if (company && company.companyName.length >= 3) {
+  //      options = new HttpParams()
+  //                     .set('searchTerm', company.companyName  || '') ;
+  //  }
+   options = new HttpParams()
                       .set('searchTerm', company.companyName  || '') ;
-   }
     const url = `${AppConstants.baseCompanyUrl}/search`;
     return this.http.get<CompanyAutoCompleteData>(url, {params: options}).pipe(
       map(response => response.result),
