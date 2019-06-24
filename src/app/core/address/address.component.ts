@@ -17,7 +17,7 @@ export class AddressComponent implements OnInit {
   addressForm: FormGroup;
   listInfo: any;
   countries: any;
-  enterAddressManually: boolean = false;
+  enterAddressManually = false;
   isLoadingAddressVisible: boolean;
   retrievedAddresses: AddressAutoCompleteData;
   backToAddressesList: boolean;
