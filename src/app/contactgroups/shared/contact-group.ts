@@ -28,7 +28,7 @@ export interface Company {
   companyId: number;
   companyName: string;
   companyTypeId: CompanyTypeId;
-  signers: ContactGroup[];
+  signer: ContactGroup[];
   companyAddress: Address;
   telephone: string;
   fax: string;
@@ -162,6 +162,9 @@ export interface ContactGroupData extends ResultData {
 export interface BasicContactGroupData extends ResultData {
   result: BasicContactGroup[];
 }
+// export interface SignersData extends ResultData {
+//   result: BasicContactGroup[] | BasicContactGroup;
+// }
 export interface PersonContactData extends ResultData {
   result: Person;
 }

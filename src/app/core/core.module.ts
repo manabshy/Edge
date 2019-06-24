@@ -35,14 +35,16 @@ import { ErrorModalComponent } from './error-modal/error-modal.component';
 //vendor
 import { OrderModule } from 'ngx-order-pipe';
 import { AddressComponent } from './address/address.component';
+import { SignerComponent } from './signer/signer.component';
 
 @NgModule({
   declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent,
-    ConfirmModalComponent, PropertyFinderComponent, FormatAddressPipe, ScoreBadgeComponent, ErrorModalComponent, AddressComponent],
+    ConfirmModalComponent, PropertyFinderComponent, FormatAddressPipe, ScoreBadgeComponent,
+    ErrorModalComponent, AddressComponent, SignerComponent],
   exports: [
     RoundingPipe, TruncatingPipe, ShortenNamePipe, FormatAddressPipe,
     BreadcrumbComponent, BasicSearchComponent,
-    ConfirmModalComponent, ErrorModalComponent, PropertyFinderComponent, ScoreBadgeComponent, AddressComponent,
+    ConfirmModalComponent, ErrorModalComponent, PropertyFinderComponent, ScoreBadgeComponent, AddressComponent, SignerComponent,
     CollapseModule, TabsModule, TypeaheadModule, BsDropdownModule,
     BsDatepickerModule, ModalModule, PopoverModule,  NgPipesModule,
     TooltipModule, AccordionModule, ButtonsModule, ReactiveFormsModule, FormsModule, OrderModule

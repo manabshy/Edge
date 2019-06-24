@@ -1,0 +1,64 @@
+<ng-container>
+    <form class="pb-3" [formGroup]="signerFinderForm">
+      <div class="row">
+        <label for="searchTerm" class="col-sm-2 col-form-label col-form-label-sm">Signers</label>
+        <div class="col-sm-10">
+          <div class="form-group">
+            <input type="text" id="searchTerm" class="form-control form-control-sm" formControlName="searchTerm" (keydown.enter)="$event.preventDefault();">
+          </div>
+          <ng-container *ngIf="signers">
+            <h5>Quick Finder</h5>
+            <div class="list-group small mb-3">
+              <div *ngFor="let signer of signers" >
+                <div class="list-group-item list-group-item-action" *ngFor="let contactGroup of signer?.contactGroups; last as isLast"
+                    (click)="selectSigner(contactGroup.contactGroupId)">
+                  <div *ngFor="let person of contactGroup.contactPeople">
+                    <div class="row align-items-center">
+                      <div class="col"> {{person?.addressee}}
+                          <!-- <ng-container *ngIf="!isLast">, </ng-container> -->
+                      </div>
+                      <div class="col-auto">
+                        <button class="btn btn-block btn-sm btn-link">Select</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="selectedSigner">
+            <ng-container *ngTemplateOutlet="selectedSignerDetails"></ng-container>
+          </ng-container>
+        </div>
+      </div>
+      <!-- <div class="row justify-content-end">
+        <label class="col-sm-2 col-form-label col-form-label-sm">Type</label>
+        <div class="col-sm-10">
+          <div class="row">
+            <div class="form-group col-sm-auto">
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="solicitor">
+                <label class="custom-control-label" for="solicitor">Solicitor</label>
+              </div>
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="invClerk">
+                <label class="custom-control-label" for="invClerk">Inventory Clerk</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+    </form>
+</ng-container>
+<ng-template #selectedSignerDetails>
+    <h5>Selected Company</h5>
+    <div class="list-group mb-3">
+      <div class="list-group-item" [ngClass]="{'new-person': selectedCompany}">
+        <div class="row">
+          <div class="col-12">
+            <strong>{{selectedSigner?.addressee}}</strong>
+          </div>
+      </div>
+    </div>
+    </div>
+  </ng-template>

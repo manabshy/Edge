@@ -4,7 +4,7 @@ import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-group
 import { SharedService } from 'src/app/core/services/shared.service';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { ActivatedRoute } from '@angular/router';
-import { Company } from 'src/app/contactgroups/shared/contact-group';
+import { Company, ContactGroup } from 'src/app/contactgroups/shared/contact-group';
 
 @Component({
   selector: 'app-company-edit',
@@ -19,6 +19,7 @@ export class CompanyEditComponent implements OnInit {
   companyId: number;
   isNewCompany: boolean;
   companyDetails: Company;
+  signers: ContactGroup;
   errorMessage: any;
   defaultCountryCode = 232;
   formErrors = {
@@ -48,7 +49,6 @@ export class CompanyEditComponent implements OnInit {
     });
     this.setupCompanyForm();
     const id = this.isNewCompany ? 0 : this.companyId;
-    console.log('company id',id);
     if (id) {
       this.getCompanyDetails(id);
     }
@@ -56,6 +56,7 @@ export class CompanyEditComponent implements OnInit {
   getCompanyDetails(id: number) {
     this.contactGroupService.getCompany(id).subscribe(data => {
       this.companyDetails = data;
+      this.signers = data.signer;
       this.displayCompanyDetails(data);
     }, error => {
       this.errorMessage = <any>error;
@@ -70,7 +71,7 @@ export class CompanyEditComponent implements OnInit {
     this.companyForm.patchValue({
       companyName: company.companyName,
       companyType: company.companyTypeId,
-      signers: company.signers,
+      signers: company.signer,
       address: {
         postCode: company.companyAddress.postCode,
         countryId: company.companyAddress.countryId,
@@ -97,7 +98,7 @@ export class CompanyEditComponent implements OnInit {
     this.companyForm.patchValue({
       // companyName: this.companyDetails.companyName,
       companyType: this.companyDetails.companyTypeId,
-      signers: this.companyDetails.signers,
+      signers: this.companyDetails.signer,
       address: {
         postCode: this.companyDetails.companyAddress.postCode,
         countryId: this.defaultCountryCode,

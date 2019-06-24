@@ -17,11 +17,20 @@ export class ContactGroupsService {
   constructor(private http: HttpClient) { }
 
   // get all the people that belong to a contact group
-  getAutocompleteContactGroups(searchTerm: string): Observable<ContactGroupAutoCompleteResult[]> {
+  getAutocompleteContactGroups(searchTerm: string): Observable<ContactGroupAutoCompleteResult[] > {
     // const options =  {params: new HttpParams().set('searchTerm', term)};
     // const url = `${AppConstants.baseContactGroupUrl}/search`;
     const url = `${AppConstants.baseContactGroupUrl}/search?SearchTerm=${searchTerm}`;
     return this.http.get<ContactGroupAutoCompleteData>(url)
+    .pipe(
+         map(response => response.result),
+         tap(data => console.log(JSON.stringify(data)))
+      );
+  }
+  // TODO: FIX THIS ASAP
+  getAutocompleteSigners(searchTerm: string): Observable<| BasicContactGroup[]> {
+    const url = `${AppConstants.baseContactGroupUrl}/search?SearchTerm=${searchTerm}`;
+    return this.http.get<BasicContactGroupData>(url)
     .pipe(
          map(response => response.result),
          tap(data => console.log(JSON.stringify(data)))
