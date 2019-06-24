@@ -27,10 +27,14 @@ export interface ContactGroup {
 export interface Company {
   companyId: number;
   companyName: string;
-  companyType: CompanyType;
+  companyTypeId: CompanyTypeId;
   signers: ContactGroup[];
   companyAddress: Address;
-  contactDetails: CompanyContactDetails;
+  telephone: string;
+  fax: string;
+  website: string;
+  email: string;
+  // contactDetails: CompanyContactDetails;
 }
 
 export interface ContactAddress extends Address {
@@ -127,12 +131,12 @@ export interface ContactGroupsType {
   id: string;
   name: string;
 }
-export enum CompanyType{
-  Company,
-  OtherAgent,
-  PropertyDeveloper,
-  ReloAgent,
-  Tradesmen
+export enum CompanyTypeId{
+  Company = 1,
+  OtherAgent = 2,
+  PropertyDeveloper = 16,
+  ReloAgent = 4,
+  Tradesmen = 8
 }
 export interface CompanyContactDetails{
   telephone: string;

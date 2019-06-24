@@ -48,6 +48,7 @@ export class CompanyEditComponent implements OnInit {
     });
     this.setupCompanyForm();
     const id = this.isNewCompany ? 0 : this.companyId;
+    console.log('company id',id);
     if (id) {
       this.getCompanyDetails(id);
     }
@@ -55,7 +56,6 @@ export class CompanyEditComponent implements OnInit {
   getCompanyDetails(id: number) {
     this.contactGroupService.getCompany(id).subscribe(data => {
       this.companyDetails = data;
-      console.log('person details', this.companyDetails);
       this.displayCompanyDetails(data);
     }, error => {
       this.errorMessage = <any>error;
@@ -69,7 +69,7 @@ export class CompanyEditComponent implements OnInit {
     this.companyDetails = company;
     this.companyForm.patchValue({
       companyName: company.companyName,
-      companyType: company.companyType,
+      companyType: company.companyTypeId,
       signers: company.signers,
       address: {
         postCode: company.companyAddress.postCode,
@@ -77,11 +77,17 @@ export class CompanyEditComponent implements OnInit {
         country: company.companyAddress.country,
       },
       contactDetails: {
-        telephone: company.contactDetails.telephone,
-        fax: company.contactDetails.fax,
-        website: company.contactDetails.website,
-        email: company.contactDetails.email,
+        telephone: company.telephone,
+        fax: company.fax,
+        website: company.website,
+        email: company.email
       }
+      // contactDetails: {
+      //   telephone: company.contactDetails.telephone,
+      //   fax: company.contactDetails.fax,
+      //   website: company.contactDetails.website,
+      //   email: company.contactDetails.email,
+      // }
     });
   }
   populateNewCompanyDetails() {
@@ -90,7 +96,7 @@ export class CompanyEditComponent implements OnInit {
     }
     this.companyForm.patchValue({
       // companyName: this.companyDetails.companyName,
-      companyType: this.companyDetails.companyType,
+      companyType: this.companyDetails.companyTypeId,
       signers: this.companyDetails.signers,
       address: {
         postCode: this.companyDetails.companyAddress.postCode,
@@ -98,10 +104,10 @@ export class CompanyEditComponent implements OnInit {
         country: this.companyDetails.companyAddress.country,
       },
       contactDetails: {
-        telephone: this.companyDetails.contactDetails.telephone,
-        fax: this.companyDetails.contactDetails.fax,
-        website: this.companyDetails.contactDetails.website,
-        email: this.companyDetails.contactDetails.email,
+        telephone: this.companyDetails.telephone,
+        fax: this.companyDetails.fax,
+        website: this.companyDetails.website,
+        email: this.companyDetails.email,
       }
     });
   }

@@ -16,7 +16,7 @@ const routes: Routes = [
       // ] },
       { path: 'detail/:id',
       children: [
-        { path: '', component: CompanyDetailComponent },
+        // { path: '', component: CompanyDetailComponent },
         {path: 'edit', component: CompanyEditComponent, canDeactivate: [CanDeactivateGuard]},
       ] }
     ]
