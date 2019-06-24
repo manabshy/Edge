@@ -4,6 +4,7 @@ import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { AppConstants } from '../shared/app-constants';
 import { Person } from '../models/person';
+import { Company } from 'src/app/contactgroups/shared/contact-group';
 
 @Component({
   selector: 'app-address',
@@ -12,6 +13,7 @@ import { Person } from '../models/person';
 })
 export class AddressComponent implements OnInit {
   @Input() personDetails: Person;
+  @Input() companyDetails: Company;
   foundAddress: AddressAutoCompleteData;
   defaultCountryCode = 232;
   addressForm: FormGroup;
@@ -56,6 +58,9 @@ export class AddressComponent implements OnInit {
       countryId: 0,
       postCode: ['', {validators: [Validators.minLength(5), Validators.maxLength(8), Validators.pattern(AppConstants.postCodePattern)], updateOn: 'blur'}],
     });
+    if (this.companyDetails || this.personDetails) {
+        this.populateAddressForm(this.personDetails, this.companyDetails);
+    }
     this.addressForm.valueChanges
     .subscribe((data) => {
       console.log('data from form', data);
@@ -136,19 +141,32 @@ export class AddressComponent implements OnInit {
     }
   }
 
-  populateAddressForm(person: Person) {
+  populateAddressForm(person?: Person, company?: Company) {
     if (this.addressForm) {
       this.addressForm.reset();
     }
-    this.personDetails = person;
-    if (person.address.postCode) {
-      person.address.postCode = person.address.postCode.trim();
-    }
-    this.addressForm.patchValue({
-        addressLines: person.address.addressLines,
-        postCode: person.address.postCode,
-        countryId: person.address.countryId,
-        country: person.address.country,
-    });
+   if(this.personDetails) {
+      this.personDetails = person;
+      if (person.address.postCode) {
+        person.address.postCode = person.address.postCode.trim();
+      }
+      this.addressForm.patchValue({
+          addressLines: person.address.addressLines,
+          postCode: person.address.postCode,
+          countryId: person.address.countryId,
+          country: person.address.country,
+      });
+   } else {
+      this.companyDetails = company;
+      if (company.companyAddress.postCode) {
+        company.companyAddress.postCode = company.companyAddress.postCode.trim();
+      }
+      this.addressForm.patchValue({
+          addressLines: company.companyAddress.addressLines,
+          postCode: company.companyAddress.postCode,
+          countryId: company.companyAddress.countryId,
+          country: company.companyAddress.country,
+      });
+   }
   }
 }
