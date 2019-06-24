@@ -1,5 +1,5 @@
 <div class="list-group mb-5">
-    <a [routerLink]="['detail', company.companyId ]"
+    <a [routerLink]="['detail', company.companyId, 'edit' ]"
      [queryParams]="{searchTerm: companyName}"
       class="list-group-item list-group-item-action pb-2" *ngFor="let company of companies; let i = index;">
       <div class="row">
