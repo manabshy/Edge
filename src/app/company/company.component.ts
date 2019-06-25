@@ -24,18 +24,20 @@ export class CompanyComponent implements OnInit {
     this.companyFinderForm = this.fb.group({
       companyName: [''],
     });
+    
+    this.companyFinderForm.valueChanges.pipe(debounceTime(400)).subscribe(data => this.companiesAutocomplete(data));
+
     if (this.route.snapshot.queryParamMap.get('companyName') || AppUtils.companySearchTerm ) {
       this.companiesAutocomplete(this.route.snapshot.queryParamMap.get('companyName') || AppUtils.companySearchTerm );
     }
-    this.companyFinderForm.valueChanges.pipe(debounceTime(400)).subscribe(data => this.companiesAutocomplete(data));
   }
 
   companiesAutocomplete(searchTerm: string) {
+    console.log(searchTerm);
     this.isLoading = true;
     this.contactGroupService.getAutocompleteCompany(searchTerm).subscribe(result => {
         this.companies = result;
         this.isLoading = false;
-        console.log('companies', result);
 
         if (this.companyFinderForm.value.companyName && this.companyFinderForm.value.companyName.length) {
           if (!this.companies.length) {
@@ -53,7 +55,7 @@ export class CompanyComponent implements OnInit {
   }
 
   onKeyup() {
-    AppUtils.companySearchTerm = this.companyFinderForm.value.companyName;
+    AppUtils.companySearchTerm = this.companyFinderForm.value;
 
     if (this.companyFinderForm.value.companyName && this.companyFinderForm.value.companyName.length > 2) {
       this.isHintVisible = false;

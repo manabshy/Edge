@@ -40,7 +40,7 @@
     </ng-container>
     <ng-container *ngIf="contactGroupDetails?.contactType === 4">
       <h5>Company</h5>
-      <form class="pb-3" [formGroup]="companyFinderForm">
+      <form class="pb-3" [formGroup]="companyFinderForm" autocompleteOff>
         <div class="row">
           <label for="company" class="col-sm-2 col-form-label col-form-label-sm">Name</label>
           <div class="col-sm-10">
