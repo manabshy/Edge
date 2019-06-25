@@ -11,7 +11,7 @@ import { HttpClient } from '@angular/common/http';
 export class CompanyService {
 
   constructor(private http: HttpClient) { }
-  
+
   addCompany(company: Company): Observable<any> {
     const url = `${AppConstants.baseCompanyUrl}`;
     return this.http.post(url, company).pipe(
