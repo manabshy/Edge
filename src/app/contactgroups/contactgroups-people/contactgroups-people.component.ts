@@ -41,7 +41,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isLoadingNewPersonVisible = false;
   isCreateNewPerson = false;
   isNewContactGroup = false;
+  // TODO use get 
   isMaxPeople = false;
+  //
   initialContactGroupLength = 0;
   isSubmitting = false;
   errorMessage: string;
