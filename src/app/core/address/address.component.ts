@@ -97,7 +97,7 @@ export class AddressComponent implements OnInit {
     this.sharedService.findAddress(searchTerm, container).subscribe(data => {
       data.Items.forEach(x => {
         if (x.Id) {
-          if (!x.Id.includes('|B|')) {
+          if (x.Type !== 'Address') {
             x.Action = 'View all';
             this.searchTermBK = searchTerm;
           }
@@ -105,18 +105,10 @@ export class AddressComponent implements OnInit {
       });
       this.foundAddress = data;
       this.isLoadingAddressVisible = false;
-      console.log('id here', data.Items[0].Id);
-      // data.Items.forEach(x=>{
-      //   console.log(x.Description);
-      //   if(x.Id) {
-      //     if(!x.Id.includes('|B|')) {
-      //       this.findAddress(searchTerm, x.Id);
-      //     }
-      //   }
-      // });
     });
   }
   private retrieveAddress(id: string) {
+    console.log('retrieve');
     if (this.foundAddress) {
       this.sharedService.getAddress(id).subscribe(data => {
         this.retrievedAddresses = data;

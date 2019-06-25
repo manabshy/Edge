@@ -1,88 +1,91 @@
-<div class="container">
-  <!-- <div class="page-title sticky-top" [ngClass]="{'pt-3': basicPerson}">
-    <h4 *ngIf="!basicPerson">Edit Person</h4>
-    <app-score-badge [bar]="true" [person]="personDetails"></app-score-badge>
-  </div> -->
-  <form  [formGroup]="addressForm" (keydown.enter)="$event.preventDefault()">
-    <div class="form-group row">
-        <label for="country" class="col-sm-2 col-form-label col-form-label-sm">Country</label>
-        <div class="col-sm-3">
-          <select class="custom-select custom-select-sm" id="country" formControlName="countryId">
-            <option selected *ngFor="let country of countries " [value]=country.id>{{country.value}}</option>
-          </select>
+<form [formGroup]="addressForm" (keydown.enter)="$event.preventDefault()">
+  <div class="form-group row">
+    <label for="country" class="col-sm-2 col-form-label col-form-label-sm">Country</label>
+    <div class="col-sm-3">
+      <select class="custom-select custom-select-sm" id="country" formControlName="countryId">
+        <option selected *ngFor="let country of countries " [value]=country.id>{{country.value}}</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="property" class="col-sm-2 col-form-label col-form-label-sm">
+      Address
+    </label>
+    <div class="col-sm-10">
+      <div class="input-group input-group-sm">
+        <input type="text" id="fullAddress" class="form-control" placeholder="Search address"
+          [ngClass]="{'border border-warning': personDetails && !addressLines.value && !enterAddressManually}"
+          formControlName="fullAddress" (keyup.enter)="$event.stopPropagation(); searchAddress()">
+        <div class="input-group-append">
+          <button type="button" class="btn btn-secondary" (click)="searchAddress()">Search</button>
         </div>
-     </div>
-     <div class="form-group row" >
-        <label for="property" class="col-sm-2 col-form-label col-form-label-sm">
-          Address
-        </label>
-        <div class="col-sm-10">
-          <div class="input-group input-group-sm">
-            <input type="text" id="fullAddress" class="form-control"  placeholder="Search address"
-              [ngClass]="{'border border-warning': personDetails && !addressLines.value && !enterAddressManually}"
-              formControlName="fullAddress" (keyup.enter)="$event.stopPropagation(); searchAddress()">
-            <div class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="searchAddress()">Search</button>
-            </div>
-            <small class="form-text w-100" *ngIf="personDetails && !addressLines.value && !enterAddressManually"><i class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your score</span></small>
+        <small class="form-text w-100" *ngIf="personDetails && !addressLines.value && !enterAddressManually"><i
+            class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your
+            score</span></small>
+      </div>
+      <ng-container *ngIf="foundAddress && !retrievedAddresses">
+        <h5 class="mt-3">Select Address</h5>
+        <div class="list-group small">
+          <div class="list-group-item" *ngIf="backToAddressesList" (click)="findAddress(searchTermBK, '')">
+            <button type="button" class="btn btn-sm btn-link p-0"><i class="fas fa-chevron-left mr-2"></i> Back</button>
           </div>
-          <ng-container *ngIf="foundAddress && !retrievedAddresses">
-            <h5 class="mt-3">Select Address</h5>
-            <div class="list-group small">
-              <div class="list-group-item" *ngIf="backToAddressesList" (click)="findAddress(searchTermBK, '')">
-                <button type="button" class="btn btn-sm btn-link p-0"><i class="fas fa-chevron-left mr-2"></i> Back</button>
-              </div>
-              <ng-container *ngIf="foundAddress?.Items?.length; else noAddress">
-                <ng-container *ngIf="!isLoadingAddressVisible">
-                  <ng-container  *ngFor="let address of foundAddress?.Items; last as isLast">
-                    <div class="list-group-item list-group-item-action" (click)="address?.Action ? findAddress(searchTermBK, address?.Id) : retrieveAddress(address?.Id)" *ngIf="!address?.Error">
-                      <div class="row align-items-center">
-                        <div class="col">
-                          {{address?.Text}}, {{address?.Description}}
-                        </div>
-                        <div class="col-auto">
-                          <button type="button" class="btn btn-sm btn-link">{{address?.Action || 'Select'}}</button>
-                        </div>
-                      </div>
+          <ng-container *ngIf="foundAddress?.Items?.length; else noAddress">
+            <ng-container *ngIf="!isLoadingAddressVisible">
+              <ng-container *ngFor="let address of foundAddress?.Items; last as isLast">
+                <div class="list-group-item list-group-item-action"
+                  (click)="address?.Action ? findAddress(searchTermBK, address?.Id) : retrieveAddress(address?.Id)"
+                  *ngIf="!address?.Error">
+                  <div class="row align-items-center">
+                    <div class="col">
+                      {{address?.Text}}, {{address?.Description}}
                     </div>
-                    <div class="list-group-item" *ngIf="address?.Error || isLast">
-                      No Address Found? Try again or <a href (click)="enterAddress($event)">enter it manually</a>.
+                    <div class="col-auto">
+                      <button type="button" class="btn btn-sm btn-link">{{address?.Action || 'Select'}}</button>
                     </div>
-                  </ng-container>
-                </ng-container>
-              </ng-container>
-              <ng-template #noAddress>
-                <div class="list-group-item">
-                  No Address Found. Try again or <a href (click)="enterAddress($event)">enter it manually</a>.
+                  </div>
                 </div>
-              </ng-template>
-              <ng-container *ngIf="isLoadingAddressVisible">
-                <div class="list-group-item">
-                  <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading addresses ...
+                <div class="list-group-item" *ngIf="address?.Error || isLast">
+                  No Address Found? Try again or <a href (click)="enterAddress($event)">enter it manually</a>.
                 </div>
               </ng-container>
+            </ng-container>
+          </ng-container>
+          <ng-template #noAddress>
+            <div class="list-group-item">
+              No Address Found. Try again or <a href (click)="enterAddress($event)">enter it manually</a>.
+            </div>
+          </ng-template>
+          <ng-container *ngIf="isLoadingAddressVisible">
+            <div class="list-group-item">
+              <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading addresses ...
             </div>
           </ng-container>
         </div>
-     </div>
-    <div class="form-group row justify-content-end">
-        <div class="col-sm-10">
-          <div class="form-group" *ngIf="addressLines.value || enterAddressManually">
-            <label class="small" for="postcode">Address Lines</label>
-            <textarea type="textarea" class="form-control form-control-sm" formControlName="addressLines" id="addressLines"
-            (keydown.enter)="$event.stopPropagation()" rows="5"  cols="10" maxlength="500" [ngClass]="{'border border-warning': personDetails && !addressLines.value && enterAddressManually}"></textarea>
-            <small class="form-text" *ngIf="personDetails && !addressLines.value && enterAddressManually"><i class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your score</span></small>
-          </div>
-          <div class="form-group" *ngIf="showPostCode">
-            <label class="small" for="postcode">Postcode</label>
-            <div class="input-group">
-              <input type="text" class="form-control form-control-sm"  id="postcode" formControlName="postCode"
-              [ngClass]="{'border border-warning': personDetails && !postCode.value}" >
-                <!-- <span class="invalid-feedback">{{formErrors.postCode}}</span> -->
-                <small class="form-text w-100" *ngIf="personDetails && !postCode.value"><i class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your score</span></small>
-            </div>
-          </div>
-        </div>
+      </ng-container>
     </div>
+  </div>
+  <div class="form-group row justify-content-end">
+    <div class="col-sm-10">
+      <div class="form-group" *ngIf="addressLines.value || enterAddressManually">
+        <label class="small" for="postcode">Address Lines</label>
+        <textarea type="textarea" class="form-control form-control-sm" formControlName="addressLines" id="addressLines"
+          (keydown.enter)="$event.stopPropagation()" rows="5" cols="10" maxlength="500"
+          [ngClass]="{'border border-warning': personDetails && !addressLines.value && enterAddressManually}"></textarea>
+        <small class="form-text" *ngIf="personDetails && !addressLines.value && enterAddressManually"><i
+            class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your
+            score</span></small>
+      </div>
+      <div class="form-group" *ngIf="showPostCode">
+        <label class="small" for="postcode">Postcode</label>
+        <div class="input-group">
+          <input type="text" class="form-control form-control-sm" id="postcode" formControlName="postCode"
+            [ngClass]="{'border border-warning': personDetails && !postCode.value}">
+          <!-- <span class="invalid-feedback">{{formErrors.postCode}}</span> -->
+          <small class="form-text w-100" *ngIf="personDetails && !postCode.value"><i
+              class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your
+              score</span></small>
+        </div>
+      </div>
+    </div>
+  </div>
   </form>
-</div>

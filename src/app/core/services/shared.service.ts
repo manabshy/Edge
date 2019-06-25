@@ -269,6 +269,7 @@ export interface AddressAutoCompleteResult {
   Company: string;
   City: string;
   PostalCode: string;
+  Type: string;
 }
 
 export interface AddressAutoCompleteData {
