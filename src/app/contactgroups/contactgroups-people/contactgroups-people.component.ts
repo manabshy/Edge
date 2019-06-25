@@ -168,13 +168,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.initialContactGroupLength = this.contactGroupDetails.contactPeople.length;
         this.populateFormDetails(data);
         this.addSelectedPeople();
-        if(this.contactGroupDetails.contactType === ContactType.CompanyContact) {
-          this.isMaxPeople = true;
-        }
-        if (this.removedPersonIds.length) {
-          this.removedPersonIds.forEach(x => {
-            this.removePerson(x, false);
-          })
+
+        if(this.isCloned) {
+          this.contactGroupDetails.referenceCount = 0;
         }
       });
   }
@@ -190,9 +186,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
           }
           this.contactGroupDetails.contactPeople = [];
           this.contactGroupDetails.contactPeople.push(this.firstContactGroupPerson);
-          if(this.contactGroupDetails.contactType === ContactType.CompanyContact) {
-            this.isMaxPeople = true;
-          }
           this.setSalution();
           this.isLoadingNewPersonVisible = false;
           this.isSwitchTypeMsgVisible = false;
@@ -320,6 +313,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.removedPersonIds.push(id);
       }
     }
+
+    if(this.contactGroupDetails.contactType === ContactType.CompanyContact) {
+      this.isMaxPeople = false;
+    }
   }
 
   confirmRemove(fullName: string) {
@@ -353,7 +350,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       if (this.selectedPerson) {
          this.contactGroupDetails.contactPeople.push(this.selectedPerson);
       }
-      (this.isNewCompanyContact && this.contactGroupDetails.contactPeople) ? this.isMaxPeople = true : this.isMaxPeople = false;
+
       this.personFinderForm.reset();
       this.isNewContactGroup = false;
     }
@@ -361,12 +358,15 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.selectedPersonId = id;
       this.isLoadingNewPersonVisible = true;
       this.getPersonDetails(id);
-      this.getContactGroupById(this.contactGroupId);
+      if(this.contactGroupId) {
+        this.getContactGroupById(this.contactGroupId);
+      }
       console.log('contact group has transaction history', this.contactGroupDetails);
       this.personFinderForm.reset();
     } else {
       return false;
     }
+
     this.isOffCanvasVisible = false;
     this.renderer.removeClass(document.body, 'no-scroll');
     window.scrollTo(0, 0);
@@ -394,6 +394,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   addSelectedPeople() {
+
     if (this.selectedPeople.length) {
       this.selectedPeople.forEach(x => {
         if (!this.checkDuplicateInContactGroup(x.personId)){
@@ -402,6 +403,20 @@ export class ContactgroupsPeopleComponent implements OnInit {
           this.isLoadingNewPersonVisible = false;
         }
       });
+
+      if (this.removedPersonIds.length) {
+        this.removedPersonIds.forEach(x => {
+          this.removePerson(x, false);
+        })
+      }
+
+      
+      if(this.contactGroupDetails.contactType === ContactType.CompanyContact && this.contactGroupDetails.contactPeople.length) {
+        this.isMaxPeople = true;
+      } else {
+        this.isMaxPeople = false;
+      }
+
       this.errorMessage = '';
     }
   }
@@ -427,6 +442,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
     if (this.isCloned) {
       this.contactGroupDetails.contactGroupId = 0;
       this.contactGroupDetails.referenceCount = 0;
+      if(this.contactGroupDetails.contactType === ContactType.CompanyContact) {
+        this.isMaxPeople = true;
+      }
     }
     this.clonedContact = this.contactGroupDetails;
   }
