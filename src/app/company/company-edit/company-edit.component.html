@@ -1,10 +1,10 @@
 <app-breadcrumb></app-breadcrumb>
 <div class="container">
   <h4 class="page-title">New/Edit Company</h4>
-  <div class="text-center" *ngIf="!companyDetails">
+  <div class="text-center" *ngIf="!companyDetails && !isNewCompany">
     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading details ...
   </div>
-  <ng-container *ngIf="companyDetails">
+  <ng-container *ngIf="companyDetails || isNewCompany">
     <form [formGroup]="companyForm">
       <fieldset>
         <legend>Company</legend>
