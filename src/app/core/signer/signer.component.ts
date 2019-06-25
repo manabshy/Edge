@@ -27,9 +27,6 @@ export class SignerComponent implements OnInit {
       console.log('characters entered', data.searchTerm);
       this.signersAutocomplete(data.searchTerm);
     });
-    if (this.route.snapshot.queryParamMap.get('searchTerm') || AppUtils.searchTerm ){
-      this.signersAutocomplete(this.route.snapshot.queryParamMap.get('searchTerm') || AppUtils.searchTerm );
-    }
   }
 
   signersAutocomplete(searchTerm: string) {
