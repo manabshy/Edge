@@ -443,7 +443,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     const currEmail = this.emailAddresses.controls[0];
     const lastPhoneNumber = this.phoneNumbers.controls[this.phoneNumbers.controls.length - 1];
     const lastEmail = this.emailAddresses.controls[this.emailAddresses.controls.length - 1];
-    
+
     this.phoneNumbers.controls.forEach(x=>{
       if(x.value.typeId != 3) {
         x.patchValue({
@@ -587,7 +587,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       if (this.personForm.dirty) {
         const person = { ...this.personDetails, ...this.personForm.value };
         const postCode =  this.sharedService.splitPostCode(person.address.postCode);
-        if(!person.titleId) {
+        if (!person.titleId) {
           person.titleId = 100;
         }
         person.address.outCode = postCode[0];

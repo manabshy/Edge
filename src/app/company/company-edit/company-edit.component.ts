@@ -125,7 +125,8 @@ export class CompanyEditComponent implements OnInit {
         postCode: ['', { validators: [Validators.minLength(5), Validators.maxLength(8)], updateOn: 'blur' }],
       }),
       contactDetails: this.fb.group({
-        telephone: ['', { validators: [Validators.required, Validators.minLength(7), Validators.maxLength(16), Validators.pattern(/^\+?[ \d]+$/g)], updateOn: 'blur' }],
+        telephone: ['', { validators: [Validators.required, Validators.minLength(7),
+                          Validators.maxLength(16), Validators.pattern(/^\+?[ \d]+$/g)], updateOn: 'blur' }],
         fax: [''],
         email: ['', { validators: [Validators.required, Validators.pattern(AppConstants.emailPattern)], updateOn: 'blur' }],
         website: [''],
@@ -133,6 +134,19 @@ export class CompanyEditComponent implements OnInit {
     });
   }
 
+  saveCompany() {
+    if (this.companyForm.valid) {
+      if (this.companyForm.dirty) {
+      } else {
+        this.onSaveComplete();
+      }
+    } else {
+      this.errorMessage = 'Please correct validation errors';
+    }
+  }
+  onSaveComplete() {
+   console.log('complete');
+  }
   canDeactivate(): boolean {
     if (this.companyForm.dirty  && !this.isSubmitting) {
       return false;
