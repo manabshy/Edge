@@ -1,4 +1,4 @@
-import { AddHeader.Interceptor } from './add-header.interceptor';
+import { App.Interceptor } from './app.interceptor';
 
 describe('AddHeader.Interceptor', () => {
   it('should create an instance', () => {

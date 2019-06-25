@@ -4,7 +4,7 @@ import { RoundingPipe } from './shared/rounding.pipe';
 import { TruncatingPipe } from './shared/truncating.pipe';
 import { ShortenNamePipe } from './shared/shorten-name.pipe';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AddHeaderInterceptor } from './add-header.interceptor';
+import { AppInterceptor } from './app.interceptor';
 import { CacheInterceptor } from './cache.interceptor';
 import { BasicSearchComponent } from './basic-search/basic-search.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -71,7 +71,7 @@ import { SignerComponent } from './signer/signer.component';
   ],
   providers: [
     CanDeactivateGuard,
-    { provide: HTTP_INTERCEPTORS, useClass: AddHeaderInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true }
     // { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true }
   ]
 })
