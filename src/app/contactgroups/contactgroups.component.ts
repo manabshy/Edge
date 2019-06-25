@@ -27,7 +27,7 @@ export class ContactGroupsComponent implements OnInit {
     this.contactFinderForm = this.fb.group({
       searchTerm: [''],
     });
-    this.contactFinderForm.valueChanges.subscribe(data => {
+    this.contactFinderForm.valueChanges.pipe(debounceTime(400)).subscribe(data => {
       this.contactGroupsAutocomplete(data.searchTerm);
     });
     if(this.route.snapshot.queryParamMap.get('searchTerm') || AppUtils.searchTerm ){
