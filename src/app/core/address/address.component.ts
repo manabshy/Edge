@@ -1,10 +1,11 @@
-import { Component, OnInit, Renderer2, Input } from '@angular/core';
+import { Component, OnInit, Renderer2, Input, Output, EventEmitter } from '@angular/core';
 import { AddressAutoCompleteData, SharedService } from '../services/shared.service';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { AppConstants } from '../shared/app-constants';
 import { Person } from '../models/person';
 import { Company } from 'src/app/contactgroups/shared/contact-group';
+import { Address } from '../models/address';
 
 @Component({
   selector: 'app-address',
@@ -14,6 +15,7 @@ import { Company } from 'src/app/contactgroups/shared/contact-group';
 export class AddressComponent implements OnInit {
   @Input() personDetails: Person;
   @Input() companyDetails: Company;
+  @Output() addressDetails = new EventEmitter<any>();
   foundAddress: AddressAutoCompleteData;
   defaultCountryCode = 232;
   addressForm: FormGroup;
@@ -120,16 +122,29 @@ export class AddressComponent implements OnInit {
             retAddressLines += retrievedAddress[x] + '\n';
           }
         });
-
         this.addressForm.patchValue({
           fullAddress: '',
           addressLines: (retrievedAddress.Company ? retrievedAddress.Company + '\n' : '') + retAddressLines + retrievedAddress.City,
           postCode: retrievedAddress.PostalCode
         });
+        this.emitAddress();
         setTimeout(() => {
           document.getElementById('addressLines').scrollIntoView({block: 'center'});
         });
       });
+    }
+  }
+
+  private emitAddress() {
+    const addressData = this.addressForm.value;
+    if (addressData) {
+      const address = {
+        addressLines: addressData.addressLines,
+        postCode: addressData.postCode,
+        countryId: addressData.countryId
+      };
+      this.addressDetails.emit(address);
+      console.log('address data 2', address);
     }
   }
 

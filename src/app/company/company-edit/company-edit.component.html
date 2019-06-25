@@ -5,7 +5,7 @@
     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading details ...
   </div>
   <ng-container *ngIf="companyDetails || isNewCompany">
-    <form [formGroup]="companyForm">
+    <form [formGroup]="companyForm" (ngSubmit)="saveCompany()">
       <fieldset>
         <legend>Company</legend>
         <div class="form-group row">
@@ -23,18 +23,18 @@
           </div>
         </div>
         <!-- TODO: FIX ASAP -->
-  
+
         <!-- <div class="form-group row">
-          <label for="signers" class="col-sm-2 col-form-label col-form-label-sm">Signers</label>
+          <label for="signer" class="col-sm-2 col-form-label col-form-label-sm">Signers</label>
           <div class="col-sm-10">
-            <input type="text" id="signers" class="form-control form-control-sm" formControlName="signers">
+            <input type="text" id="signer" class="form-control form-control-sm" formControlName="signer">
           </div>
         </div> -->
         <app-signer></app-signer>
       </fieldset>
       <fieldset>
         <legend>Head Office Address</legend>
-        <app-address [companyDetails]="companyDetails"></app-address>
+        <app-address [companyDetails]="companyDetails" (addressDetails)="getAddress($event)"></app-address>
       </fieldset>
       <fieldset formGroupName="contactDetails">
         <legend>Head Office Contact Details</legend>
@@ -68,7 +68,7 @@
           <div class="row justify-content-end w-100 no-gutters">
             <div class="col-sm-10 d-flex">
               <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
-              <button routerLink="/contact-centre" type="submit" class="btn btn-secondary">Save</button>
+              <button type="submit" class="btn btn-secondary">Save</button>
             </div>
           </div>
         </div>
