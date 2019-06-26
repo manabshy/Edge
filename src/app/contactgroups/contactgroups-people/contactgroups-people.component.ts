@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Person, BasicPerson } from 'src/app/core/models/person';
 import { ContactGroup, PeopleAutoCompleteResult, ContactGroupsTypes,
          ContactType, CompanyAutoCompleteResult, Company } from '../shared/contact-group';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { BsModalService } from 'ngx-bootstrap/modal/';
@@ -55,6 +55,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isTypePicked = false;
   isNewCompanyContact = false;
   foundCompanies: CompanyAutoCompleteResult[];
+  searchCompanyTermBK: string = '';
   selectedCompany: Company;
   selectedCompanyId: number;
   companyFinderForm: FormGroup;
@@ -83,7 +84,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.isNewContactGroup = params['isNewContactGroup'] || false;
     });
     this.companyFinderForm = this.fb.group({
-      companyName: [''],
+      companyName: ['', Validators.required],
     });
     this.contactGroupDetailsForm = this.fb.group({
       salutation: [''],
@@ -205,12 +206,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.collectSelectedPeople(data);
     });
   }
-  getCompanyDetails(companyId: number) {
-    this.contactGroupService.getCompany(companyId).subscribe(data => {
-      this.selectedCompany = data;
-      console.log('selected person here.....', this.selectedCompany);
-    });
-  }
+  
   populateFormDetails(contactGroup: ContactGroup) {
     if (this.contactGroupDetailsForm) {
       this.contactGroupDetailsForm.reset();
@@ -335,12 +331,16 @@ export class ContactgroupsPeopleComponent implements OnInit {
     return subject.asObservable();
    }
 
-   selectCompany(id: number) {
-     this.foundCompanies = null;
-     this.companyFinderForm.reset();
-     this.companyFinderForm.markAsDirty();
-     this.selectedCompanyId = id;
-     this.getCompanyDetails(id);
+   initCompanySearch() {
+    this.selectedCompany = null;
+    this.companyFinderForm.get('companyName').setValue(this.searchCompanyTermBK);
+   }
+
+   selectCompany(company: Company) {
+    this.foundCompanies = null;
+    this.selectedCompany = company;
+    this.searchCompanyTermBK = this.companyFinderForm.get('companyName').value;
+    this.companyFinderForm.get('companyName').setValue(company.companyName);
    }
   selectPerson(id: number) {
     if (this.isNewContactGroup) {
@@ -477,7 +477,11 @@ export class ContactgroupsPeopleComponent implements OnInit {
     if (this.isNewCompanyContact) {
       this.contactGroupDetails = {} as ContactGroup;
       this.contactGroupDetails.contactPeople = [];
-      contactGroup.companyId = this.selectedCompany.companyId;
+      if(this.selectedCompany) {
+        contactGroup.companyId = this.selectedCompany.companyId;
+      } else {
+        this.companyFinderForm.reset();
+      }
       contactGroup.contactType = ContactType.CompanyContact;
       this.contactGroupDetails.contactPeople.push(this.selectedPerson);
       this.contactGroupService
