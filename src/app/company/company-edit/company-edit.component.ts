@@ -4,9 +4,8 @@ import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-group
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { AppConstants, FormErrors, ValidationMessages } from 'src/app/core/shared/app-constants';
 import { ActivatedRoute } from '@angular/router';
-import { Company, ContactGroup } from 'src/app/contactgroups/shared/contact-group';
+import { Company, ContactGroup, Signer } from 'src/app/contactgroups/shared/contact-group';
 import { CompanyService } from '../shared/company.service';
-import { Signer } from 'crypto';
 import { debounceTime } from 'rxjs/operators';
 
 @Component({
@@ -23,7 +22,7 @@ export class CompanyEditComponent implements OnInit {
   companyId: number;
   isNewCompany: boolean;
   companyDetails: Company;
-  existingSigner: any;
+  existingSigner: Signer;
   signer: Signer;
   errorMessage: any;
   defaultCountryCode = 232;
@@ -113,7 +112,7 @@ export class CompanyEditComponent implements OnInit {
       }),
         telephone: ['', { validators: [Validators.minLength(7),
                           Validators.maxLength(16), Validators.pattern(/^\+?[ \d]+$/g)], updateOn: 'blur' }],
-        fax: [''],
+        fax: ['', { validators: [Validators.minLength(7), Validators.maxLength(16), Validators.pattern(/^\+?[ \d]+$/g)], updateOn: 'blur' }],
         email: ['', { validators: [Validators.pattern(AppConstants.emailPattern)], updateOn: 'blur' }],
         website: [''],
     });
