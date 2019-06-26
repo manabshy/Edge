@@ -29,6 +29,7 @@ export class AppConstants {
 export const FormErrors = {
   'telephone': '',
   'email': '',
+  'fax': ''
 };
 export const ValidationMessages = {
   'email': {
@@ -40,5 +41,11 @@ export const ValidationMessages = {
     minlength: 'Phone number must be at least 7 characters.',
     maxlength: 'Phone number cannot be more than 16 characters.',
     pattern: 'Phone number is not valid'
+  },
+  'fax': {
+    required: 'Fax is required.',
+    minlength: 'Fax number must be at least 7 characters.',
+    maxlength: 'Fax number cannot be more than 16 characters.',
+    pattern: 'Fax number is not valid'
   }
 };
