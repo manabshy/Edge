@@ -53,7 +53,7 @@
                 <ng-container *ngIf="!isLoadingCompaniesVisible">
                   <div class="list-group-item list-group-item-action" *ngFor="let company of foundCompanies" (click)="selectCompany(company.companyId)">
                     <div class="row align-items-center">
-                      <div class="col"> {{company.companyName}}</div>
+                      <div class="col" [innerHTML]="company.companyName | highlight : companyFinderForm.value.companyName"></div>
                       <div class="col-auto">
                         <button class="btn btn-block btn-sm btn-link">Select</button>
                       </div>
@@ -274,7 +274,7 @@
   </form>
 </div>
 <div class="off-canvas" [hidden]="!isOffCanvasVisible" (click)="showHideOffCanvas($event)">
-  <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()">
+  <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
     <h4 class="page-title text-left pt-3" [ngClass]="{'m-0': isCreateNewPerson}">
       <ng-container *ngIf="!isCreateNewPerson; else createLabel">Find</ng-container>
       <ng-template #createLabel>New </ng-template> Person
@@ -341,15 +341,19 @@
                 <div class="col-sm">
                   <dl class="row">
                     <dt class="col-4 d-sm-none">Full Name</dt>
-                    <dd class="col" [ngClass]="{'font-weight-bold': foundPerson?.matchFields[0]}">{{foundPerson.addressee}}</dd>
+                    <dd class="col">
+                      {{foundPerson.title}}
+                      <span [innerHTML]="foundPerson.firstName | highlight : personFinderForm.value.firstName"></span> 
+                      <span [innerHTML]="foundPerson.lastName | highlight : personFinderForm.value.lastName"></span>
+                    </dd>
                   </dl>
                 </div>
                 <div class="col-sm">
                   <dl class="row">
                     <dt class="col-4 d-sm-none">Telephone</dt>
-                    <dd class="col" [ngClass]="{'font-weight-bold': foundPerson?.matchFields[1]}">
+                    <dd class="col">
                       <ng-container *ngFor="let phoneNumber of foundPerson?.phoneNumbers">
-                        <div>{{phoneNumber}}</div>
+                        <div [innerHTML]="phoneNumber | highlight : personFinderForm.value.phoneNumber"></div>
                       </ng-container>
                     </dd>
                   </dl>
@@ -357,9 +361,9 @@
                 <div class="col-sm-4">
                   <dl class="row">
                     <dt class="col-4 d-sm-none">Email</dt>
-                    <dd class="col text-truncate" [ngClass]="{'font-weight-bold': foundPerson?.matchFields[2]}">
+                    <dd class="col text-truncate">
                       <ng-container *ngFor="let email of foundPerson?.emailAddresses">
-                        <div class="text-truncate">{{email}}</div>
+                        <div class="text-truncate" [innerHTML]="email | highlight : personFinderForm.value.emailAddress"></div>
                       </ng-container>
                     </dd>
                   </dl>

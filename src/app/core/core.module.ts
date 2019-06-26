@@ -37,13 +37,14 @@ import { OrderModule } from 'ngx-order-pipe';
 import { AddressComponent } from './address/address.component';
 import { SignerComponent } from './signer/signer.component';
 import { AutocompleteOffDirective } from './shared/autocomplete-off.directive';
+import { HighlightPipe } from './shared/highlight.pipe';
 
 @NgModule({
   declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent,
     ConfirmModalComponent, PropertyFinderComponent, FormatAddressPipe, ScoreBadgeComponent,
-    ErrorModalComponent, AddressComponent, SignerComponent, AutocompleteOffDirective],
+    ErrorModalComponent, AddressComponent, SignerComponent, AutocompleteOffDirective, HighlightPipe],
   exports: [
-    RoundingPipe, TruncatingPipe, ShortenNamePipe, FormatAddressPipe, AutocompleteOffDirective,
+    RoundingPipe, TruncatingPipe, ShortenNamePipe, FormatAddressPipe, HighlightPipe, AutocompleteOffDirective,
     BreadcrumbComponent, BasicSearchComponent,
     ConfirmModalComponent, ErrorModalComponent, PropertyFinderComponent, ScoreBadgeComponent, AddressComponent, SignerComponent,
     CollapseModule, TabsModule, TypeaheadModule, BsDropdownModule,

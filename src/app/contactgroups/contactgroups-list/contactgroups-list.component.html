@@ -10,26 +10,26 @@
         <div class="row align-items-center">
           <div class="col-sm-5">
             <div class="mb-1 text-truncate">
-              <strong>{{contactGroup.firstName}} {{contactGroup.lastName}}</strong>
+              <strong [innerHTML]="contactGroup.addressee | highlight : searchTerm"></strong>
             </div>
           </div>
           <div class="col-12 col-sm-auto">
             <p><a (click)="$event.stopPropagation()"
-                href="tel:{{contactGroup?.phoneNumbers[0]}}">{{contactGroup?.phoneNumbers[0]}}</a><span class="text-danger" *ngIf="!contactGroup?.phoneNumbers[0]">No Phone</span></p>
+                href="tel:{{contactGroup?.phoneNumbers[0]}}" [innerHTML]="contactGroup?.phoneNumbers[0] | highlight : searchTerm"></a><span class="text-danger" *ngIf="!contactGroup?.phoneNumbers[0]">No Phone</span></p>
           </div>
           <div class="col text-sm-right">
             <p class="text-truncate"><a (click)="$event.stopPropagation()"
-                href="mailto:{{contactGroup?.emailAddresses[0]}}">{{contactGroup?.emailAddresses[0]}}</a><span class="text-danger" *ngIf="!contactGroup?.emailAddresses[0]">No Email</span></p>
+                href="mailto:{{contactGroup?.emailAddresses[0]}}" [innerHTML]="contactGroup?.emailAddresses[0] | highlight : searchTerm"></a><span class="text-danger" *ngIf="!contactGroup?.emailAddresses[0]">No Email</span></p>
           </div>
           <div class="col-12">
               <div *ngFor="let cG of contactGroup?.contactGroups" class="text-truncate">
                 <ng-container *ngIf="cG?.isCompany">
-                  <i class="fas fa-user-tie mr-1 fa-fw"></i> {{cG?.companyName}}
+                  <i class="fas fa-user-tie mr-1 fa-fw"></i> <span [innerHTML]="cG?.companyName | highlight : searchTerm"></span>
                 </ng-container>
                 <i class="fas fa-users mr-1 fa-fw" *ngIf="cG?.contactPeople.length"></i>
                 <ng-container
                   *ngFor="let people of cG.contactPeople; last as isLast">
-                  {{people.addressee}}<ng-container *ngIf="!isLast">, </ng-container>
+                  <span [innerHTML]="people.addressee | highlight : searchTerm"></span><ng-container *ngIf="!isLast">, </ng-container>
                 </ng-container>
               </div>
           </div>
