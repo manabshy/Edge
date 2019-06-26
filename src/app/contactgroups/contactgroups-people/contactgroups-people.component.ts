@@ -211,6 +211,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
     if (this.contactGroupDetailsForm) {
       this.contactGroupDetailsForm.reset();
     }
+    if(contactGroup.companyName) {
+      this.companyFinderForm.get('companyName').setValue(contactGroup.companyName);
+      this.getCompanyDetails(contactGroup.companyId);
+    }
       this.contactGroupDetails = contactGroup;
       this.contactGroupDetailsForm.patchValue({
         salutation: contactGroup.salutation,
@@ -344,6 +348,13 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.searchCompanyTermBK = this.companyFinderForm.get('companyName').value;
     this.companyFinderForm.get('companyName').setValue(company.companyName);
    }
+   
+  getCompanyDetails(companyId: number) {
+    this.contactGroupService.getCompany(companyId).subscribe(data => {
+      this.selectedCompany = data;
+    });
+  }
+
   selectPerson(id: number) {
     if (this.isNewContactGroup) {
       this.selectedPersonId = id;
