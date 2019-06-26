@@ -333,7 +333,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
    initCompanySearch() {
     this.selectedCompany = null;
-    this.companyFinderForm.get('companyName').setValue(this.searchCompanyTermBK);
+    if(this.companyFinderForm.get('companyName').value){
+      this.companyFinderForm.get('companyName').setValue(this.searchCompanyTermBK);
+    }
    }
 
    selectCompany(company: Company) {

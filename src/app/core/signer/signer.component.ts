@@ -81,7 +81,9 @@ export class SignerComponent implements OnInit {
 
   initSearch() {
     this.selectedSignerDetails = null;
-    this.signerFinderForm.get('searchTerm').setValue(this.searchTermBK);
+    if(this.signerFinderForm.get('searchTerm').value){
+      this.signerFinderForm.get('searchTerm').setValue(this.searchTermBK);
+    }
     this.selectedSigner.emit(null);
   }
 
