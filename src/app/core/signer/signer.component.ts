@@ -1,7 +1,7 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { AppUtils } from '../shared/utils';
 import { ContactGroupAutoCompleteResult, BasicContactGroup, ContactGroup, Signer } from 'src/app/contactgroups/shared/contact-group';
 import { debounceTime } from 'rxjs/operators';
@@ -13,22 +13,38 @@ import { debounceTime } from 'rxjs/operators';
 })
 export class SignerComponent implements OnInit {
   @Output() selectedSigner = new EventEmitter<Signer>();
+  @Input() existingSigner: Signer;
   signerFinderForm: FormGroup;
   selectedSignerDetails: Signer;
   signers: Signer[];
   isLoading: boolean;
   isMessageVisible: boolean;
   isHintVisible: boolean;
+  get signerNames(): FormControl {
+    return <FormControl> this.signerFinderForm.get('searchTerm');
+  }
   constructor(private contactGroupService: ContactGroupsService, private route: ActivatedRoute, private fb: FormBuilder) { }
 
   ngOnInit() {
     this.signerFinderForm = this.fb.group({
       searchTerm: [''],
     });
+    this.displayExistingSigners();
     this.signerFinderForm.valueChanges.pipe(debounceTime(400)).subscribe(data => {
       console.log('characters entered', data.searchTerm);
       this.signersAutocomplete(data.searchTerm);
     });
+  }
+
+  private displayExistingSigners() {
+    if (this.existingSigner) {
+      console.log('existing.....', this.existingSigner);
+      let displayName: string;
+      const names = this.existingSigner.contactNames;
+      const namesWithCompany = this.existingSigner.contactNames + ' (' + this.existingSigner.companyName + ')';
+      this.existingSigner.companyName ? displayName = namesWithCompany : displayName = names;
+      this.signerNames.setValue(displayName);
+    }
   }
 
   signersAutocomplete(searchTerm: string) {
