@@ -55,13 +55,6 @@ export class SignerComponent implements OnInit {
         this.signers = result;
         this.isLoading = false;
         console.log('signers here', this.signers);
-        if (this.signerFinderForm.value.searchTerm && this.signerFinderForm.value.searchTerm.length) {
-          if (!this.signers.length) {
-            this.isMessageVisible = true;
-          } else {
-            this.isMessageVisible = false;
-          }
-        }
       }, error => {
         this.signers = [];
         this.isLoading = false;
@@ -79,7 +72,7 @@ export class SignerComponent implements OnInit {
       this.searchTermBK = this.signerFinderForm.get('searchTerm').value;
       this.signerFinderForm.get('searchTerm').setValue(displayName);
       this.selectedSigner.emit(this.selectedSignerDetails);
-      this.searchTermInput.nativeElement.scrollIntoView();
+      this.searchTermInput.nativeElement.scrollIntoView({block: 'center'});
     }
     console.log('selected signer ', this.selectedSignerDetails.contactNames);
     console.log('selected  signer company name', this.selectedSignerDetails.companyName);
@@ -89,6 +82,7 @@ export class SignerComponent implements OnInit {
   initSearch() {
     this.selectedSignerDetails = null;
     this.signerFinderForm.get('searchTerm').setValue(this.searchTermBK);
+    this.selectedSigner.emit(null);
   }
 
   resetSearch() {
