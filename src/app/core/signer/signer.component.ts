@@ -70,10 +70,15 @@ export class SignerComponent implements OnInit {
   selectSigner(id: number) {
     this.selectedSignerDetails = this.signers.find(x => x.contactGroupId === id);
     if (this.selectedSignerDetails) {
-      this.signerFinderForm.get('searchTerm').setValue(this.selectedSignerDetails.contactNames);
+      let displayName: string;
+      const names = this.selectedSignerDetails.contactNames;
+      const namesWithCompany = this.selectedSignerDetails.contactNames + ' (' + this.selectedSignerDetails.companyName + ')';
+      this.selectedSignerDetails.companyName ? displayName = namesWithCompany : displayName = names;
+      this.signerFinderForm.get('searchTerm').setValue(displayName);
       this.selectedSigner.emit(this.selectedSignerDetails);
     }
     console.log('selected signer ', this.selectedSignerDetails.contactNames);
+    console.log('selected  signer company name', this.selectedSignerDetails.companyName);
     console.log('selected signer id', id);
   }
   onKeyup() {
