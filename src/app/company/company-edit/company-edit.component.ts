@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { ActivatedRoute } from '@angular/router';
 import { Company, ContactGroup } from 'src/app/contactgroups/shared/contact-group';
 import { CompanyService } from '../shared/company.service';
+import { Signer } from 'crypto';
 
 @Component({
   selector: 'app-company-edit',
@@ -17,12 +18,17 @@ export class CompanyEditComponent implements OnInit {
   isSubmitting: boolean;
   listInfo: any;
   companyTypes: any;
+  address: any;
   companyId: number;
   isNewCompany: boolean;
   companyDetails: Company;
-  signers: ContactGroup;
+  existingSigner: Signer;
+  signer: Signer;
   errorMessage: any;
   defaultCountryCode = 232;
+  // get signer(): FormControl {
+  //   return <FormControl> this.companyForm.get('signer');
+  // }
   formErrors = {
     'firstName': '',
     'lastName': '',
@@ -58,7 +64,7 @@ export class CompanyEditComponent implements OnInit {
   getCompanyDetails(id: number) {
     this.contactGroupService.getCompany(id).subscribe(data => {
       this.companyDetails = data;
-      this.signers = data.signer;
+      // this.signers = data.signer;
       this.displayCompanyDetails(data);
     }, error => {
       this.errorMessage = <any>error;
@@ -73,7 +79,7 @@ export class CompanyEditComponent implements OnInit {
     this.companyForm.patchValue({
       companyName: company.companyName,
       companyType: company.companyTypeId,
-      signers: company.signer,
+      signer: company.signer,
       address: {
         postCode: company.companyAddress.postCode,
         countryId: company.companyAddress.countryId,
@@ -92,6 +98,7 @@ export class CompanyEditComponent implements OnInit {
       //   email: company.contactDetails.email,
       // }
     });
+    this.existingSigner = company.signer;
   }
   populateNewCompanyDetails() {
     if (this.companyForm) {
@@ -136,8 +143,15 @@ export class CompanyEditComponent implements OnInit {
     });
   }
 
-  getAddress(address: any){
-    console.log('address from component', address);
+  getSelectedSigner(signer: any) {
+    this.signer = signer;
+    console.log('signers', this.signer);
+    console.log('signer from signer component', signer);
+  }
+
+  getAddress(address: any) {
+    this.address = address;
+    console.log('address from address component', address);
   }
   saveCompany() {
     if (this.companyForm.valid) {
@@ -154,14 +168,14 @@ export class CompanyEditComponent implements OnInit {
     const company = { ...this.companyDetails, ...this.companyForm.value };
     if (this.isNewCompany) {
       console.log('add company', company);
-      // this.companyService.updateCompany(company).subscribe(() => this.onSaveComplete(), (error: WedgeError) => {
+      // this.companyService.addCompany(company).subscribe(() => this.onSaveComplete(), (error: WedgeError) => {
       //   this.errorMessage = error.displayMessage;
       //   this.sharedService.showError(this.errorMessage);
       //   this.isSubmitting = false;
       // });
     } else {
-      console.log('update company here...',company);
-      // this.companyService.addCompany(company).subscribe(() => this.onSaveComplete(), (error: WedgeError) => {
+      console.log('update company here...', company);
+      // this.companyService.updateCompany(company).subscribe(() => this.onSaveComplete(), (error: WedgeError) => {
       //   this.errorMessage = error.displayMessage;
       //   this.sharedService.showError(this.errorMessage);
       //   this.isSubmitting = false;

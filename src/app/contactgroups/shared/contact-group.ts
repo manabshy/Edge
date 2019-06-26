@@ -43,7 +43,7 @@ export interface Company {
   companyId: number;
   companyName: string;
   companyTypeId: CompanyTypeId;
-  signer: ContactGroup[];
+  signer: Signer;
   companyAddress: Address;
   telephone: string;
   fax: string;

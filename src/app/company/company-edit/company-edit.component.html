@@ -22,15 +22,13 @@
             </select>
           </div>
         </div>
-        <!-- TODO: FIX ASAP -->
-
         <!-- <div class="form-group row">
           <label for="signer" class="col-sm-2 col-form-label col-form-label-sm">Signers</label>
           <div class="col-sm-10">
             <input type="text" id="signer" class="form-control form-control-sm" formControlName="signer">
           </div>
         </div> -->
-        <app-signer></app-signer>
+        <app-signer (selectedSigner)="getSelectedSigner($event)" [existingSigner]="existingSigner"></app-signer>
       </fieldset>
       <fieldset>
         <legend>Head Office Address</legend>
