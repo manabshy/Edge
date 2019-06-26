@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit, Renderer2, ViewChild, ElementRef } from '@angular/core';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ActivatedRoute } from '@angular/router';
 import { Person, BasicPerson } from 'src/app/core/models/person';
@@ -20,6 +20,7 @@ import { WedgeError, SharedService } from 'src/app/core/services/shared.service'
 export class ContactgroupsPeopleComponent implements OnInit {
   isCollapsed = {};
   isSelectedCollapsed = false;
+  @ViewChild('offCanvasContent') offCanvasContent: ElementRef;
   isOffCanvasVisible = false;
   contactGroupTypes: any;
   personId: number;
@@ -248,7 +249,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
         const samePhone = phone[0] ? phone[0].toString() === person.phoneNumber : false;
         console.log('email:', email , 'and phone:', phone);
         const sameEmail = email[0] ? email[0].toLowerCase() === person.emailAddress : false;
-        x.matchFields = [(sameFirstName && sameLastName), samePhone, sameEmail];
         switch (true) {
           case sameFirstName && sameLastName && (sameEmail || samePhone):
             x.matchScore = 10;
@@ -279,11 +279,14 @@ export class ContactgroupsPeopleComponent implements OnInit {
   createNewContactGroupPerson(event) {
     event.preventDefault();
     event.stopPropagation();
-   this.isCreateNewPerson = true;
-   if (this.isCreateNewPerson) {
-     this.newPerson;
-   }
-   console.log('person from finder form 1', this.newPerson);
+    this.isCreateNewPerson = true;
+    if (this.isCreateNewPerson) {
+      this.newPerson;
+    }
+    setTimeout(()=>{
+      this.offCanvasContent.nativeElement.scrollTo(0,0);
+    })
+    console.log('person from finder form 1', this.newPerson);
   }
 
   setMainPerson(id: number) {

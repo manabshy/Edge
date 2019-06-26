@@ -120,7 +120,6 @@ export interface PeopleAutoCompleteResult {
   salution: string;
   emailAddresses: string[];
   phoneNumbers: string[];
-  matchFields: boolean[];
   matchScore: number;
 }
 export interface BasicContactGroup {
