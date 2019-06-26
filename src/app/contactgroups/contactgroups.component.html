@@ -54,7 +54,7 @@
   <div class="text-center" *ngIf="isLoading && !isHintVisible">
     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...
   </div>
-  <div class="text-center text-danger" *ngIf="isMessageVisible && !isLoading">
+  <div class="text-center text-danger" *ngIf="isMessageVisible && !isLoading && !isHintVisible">
       <i class="far fa-sad-tear"></i> No results for '<strong>{{contactFinderForm.value.searchTerm || ' '}}</strong>'
   </div>
   <div class="text-center" *ngIf="isHintVisible">

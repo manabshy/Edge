@@ -1,32 +1,28 @@
 <ng-container>
-    <form class="pb-3" [formGroup]="signerFinderForm">
+    <form class="pb-3" [formGroup]="signerFinderForm" autocompleteOff>
       <div class="row">
         <label for="searchTerm" class="col-sm-2 col-form-label col-form-label-sm">Signers</label>
         <div class="col-sm-10">
           <div class="form-group">
-            <input type="text" id="searchTerm" class="form-control form-control-sm" formControlName="searchTerm" (keydown.enter)="$event.preventDefault();">
+            <div class="input-group input-group-sm" (click)="initSearch()">
+              <input #searchTermInput type="text" id="searchTerm" class="form-control" formControlName="searchTerm" 
+                (keydown.enter)="$event.preventDefault();" [attr.readonly]="selectedSignerDetails ? '' : null">
+              <div class="input-group-append" *ngIf="selectedSignerDetails">
+                <button type="button" class="btn btn-primary">
+                  Edit
+                </button>
+              </div>
+            </div>
           </div>
-          <ng-container *ngIf="signers">
+          <ng-container *ngIf="signers && !selectedSignerDetails && signerFinderForm.value.searchTerm">
             <h5>Quick Finder</h5>
             <div class="list-group small mb-3">
-              <ng-container *ngFor="let signer of signers">
-                <ng-container *ngIf="!signer?.contactNames; else contactGroup">
-                  <div class="list-group-item list-group-item-action">
-                    <div class="row align-items-center">
-                      <div class="col">
-                        No contact people
-                      </div>
-                      <!-- <div class="col-auto">
-                        <button class="btn btn-block btn-sm btn-link">Select</button>
-                      </div> -->
-                    </div>
-                  </div>
-                </ng-container>
-                <ng-template #contactGroup>
+              <ng-container *ngIf="!isLoading">
+                <ng-container *ngFor="let signer of signers">
                   <div class="list-group-item list-group-item-action" (click)="selectSigner(signer.contactGroupId)">
                     <div class="row align-items-center">
                       <div class="col">
-                        {{signer.contactNames}}
+                        <span [innerHTML]="signer.contactNames | highlight : signerFinderForm.value.searchTerm"></span>
                         <ng-container *ngIf="signer?.companyName">
                           <span class="badge badge-pill badge-info ml-2">{{signer?.companyName}}</span>
                         </ng-container>
@@ -36,28 +32,17 @@
                       </div>
                     </div>
                   </div>
-                </ng-template>
+                </ng-container>
               </ng-container>
+              <div class="list-group-item text-center" *ngIf="!signers?.length && !isLoading">
+                No signers found
+              </div>
+              <div class="list-group-item text-center" *ngIf="isLoading">
+                <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...
+              </div>
             </div>
           </ng-container>
         </div>
       </div>
-      <!-- <div class="row justify-content-end">
-        <label class="col-sm-2 col-form-label col-form-label-sm">Type</label>
-        <div class="col-sm-10">
-          <div class="row">
-            <div class="form-group col-sm-auto">
-              <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="solicitor">
-                <label class="custom-control-label" for="solicitor">Solicitor</label>
-              </div>
-              <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="invClerk">
-                <label class="custom-control-label" for="invClerk">Inventory Clerk</label>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> -->
     </form>
 </ng-container>
