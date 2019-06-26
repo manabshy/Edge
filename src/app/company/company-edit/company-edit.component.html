@@ -17,7 +17,7 @@
         <div class="form-group row">
           <label for="companyType" class="col-sm-2 col-form-label col-form-label-sm">Company Type</label>
           <div class="col-sm-3">
-            <select class="custom-select custom-select-sm" id="companyType" formControlName="companyType">
+            <select class="custom-select custom-select-sm" id="companyType" formControlName="companyTypeId">
               <option *ngFor="let type of companyTypes" [value]=type.id>{{type.value}}</option>
             </select>
           </div>
@@ -34,7 +34,7 @@
         <legend>Head Office Address</legend>
         <app-address [companyDetails]="companyDetails" (addressDetails)="getAddress($event)"></app-address>
       </fieldset>
-      <fieldset formGroupName="contactDetails">
+      <fieldset>
         <legend>Head Office Contact Details</legend>
         <div class="form-group row">
           <label for="companyTelephone" class="col-sm-2 col-form-label col-form-label-sm">Telephone</label>

@@ -20,7 +20,7 @@ export class CompanyService {
       );
   }
   updateCompany(company: Company): Observable<any> {
-    const url = `${AppConstants.baseContactGroupUrl}/${company.companyId}`;
+    const url = `${AppConstants.baseCompanyUrl}/${company.companyId}`;
     return this.http.put(url, company).pipe(
       map(response => response),
       tap(data => console.log('updated company details here...', JSON.stringify(data)))

@@ -22,7 +22,7 @@ export class CompanyEditComponent implements OnInit {
   companyId: number;
   isNewCompany: boolean;
   companyDetails: Company;
-  existingSigner: Signer;
+  existingSigner: any;
   signer: Signer;
   errorMessage: any;
   defaultCountryCode = 232;
@@ -64,7 +64,6 @@ export class CompanyEditComponent implements OnInit {
   getCompanyDetails(id: number) {
     this.contactGroupService.getCompany(id).subscribe(data => {
       this.companyDetails = data;
-      // this.signers = data.signer;
       this.displayCompanyDetails(data);
     }, error => {
       this.errorMessage = <any>error;
@@ -78,54 +77,42 @@ export class CompanyEditComponent implements OnInit {
     this.companyDetails = company;
     this.companyForm.patchValue({
       companyName: company.companyName,
-      companyType: company.companyTypeId,
-      signer: company.signer,
+      companyTypeId: company.companyTypeId,
       address: {
         postCode: company.companyAddress.postCode,
         countryId: company.companyAddress.countryId,
         country: company.companyAddress.country,
       },
-      contactDetails: {
         telephone: company.telephone,
         fax: company.fax,
         website: company.website,
         email: company.email
-      }
-      // contactDetails: {
-      //   telephone: company.contactDetails.telephone,
-      //   fax: company.contactDetails.fax,
-      //   website: company.contactDetails.website,
-      //   email: company.contactDetails.email,
-      // }
     });
-    this.existingSigner = company.signer;
+     this.existingSigner = company.signer;
   }
   populateNewCompanyDetails() {
     if (this.companyForm) {
       this.companyForm.reset();
     }
     this.companyForm.patchValue({
-      // companyName: this.companyDetails.companyName,
-      companyType: this.companyDetails.companyTypeId,
+      companyTypeId: this.companyDetails.companyTypeId,
       signer: this.companyDetails.signer,
       address: {
         postCode: this.companyDetails.companyAddress.postCode,
         countryId: this.defaultCountryCode,
         country: this.companyDetails.companyAddress.country,
       },
-      contactDetails: {
         telephone: this.companyDetails.telephone,
         fax: this.companyDetails.fax,
         website: this.companyDetails.website,
         email: this.companyDetails.email,
-      }
     });
   }
 
   private setupCompanyForm() {
     this.companyForm = this.fb.group({
       companyName: [''],
-      companyType: [''],
+      companyTypeId: 0,
       signer: [''],
       fullAddress: [''],
       address: this.fb.group({
@@ -133,13 +120,11 @@ export class CompanyEditComponent implements OnInit {
         countryId: 0,
         postCode: ['', { validators: [Validators.minLength(5), Validators.maxLength(8)], updateOn: 'blur' }],
       }),
-      contactDetails: this.fb.group({
         telephone: ['', { validators: [Validators.minLength(7),
                           Validators.maxLength(16), Validators.pattern(/^\+?[ \d]+$/g)], updateOn: 'blur' }],
         fax: [''],
         email: ['', { validators: [Validators.pattern(AppConstants.emailPattern)], updateOn: 'blur' }],
         website: [''],
-      })
     });
   }
 
@@ -165,21 +150,35 @@ export class CompanyEditComponent implements OnInit {
     }
   }
   private AddOrUpdateCompany() {
+    let companySigner;
+    let companyAddress;
+    console.log('company details before update...', this.companyDetails);
     const company = { ...this.companyDetails, ...this.companyForm.value };
+    if (this.companyDetails) {
+      companyAddress = { ...this.companyDetails.companyAddress, ...this.address };
+      companySigner = { ...this.companyDetails.signer, ...this.signer };
+      company.signer = companySigner;
+      company.companyAddress = companyAddress;
+    } else {
+      company.signer = this.signer;
+      company.companyAddress = this.address;
+    }
     if (this.isNewCompany) {
       console.log('add company', company);
-      // this.companyService.addCompany(company).subscribe(() => this.onSaveComplete(), (error: WedgeError) => {
-      //   this.errorMessage = error.displayMessage;
-      //   this.sharedService.showError(this.errorMessage);
-      //   this.isSubmitting = false;
-      // });
+      this.companyService.addCompany(company).subscribe(() => this.onSaveComplete(), (error: WedgeError) => {
+        this.errorMessage = error.displayMessage;
+        this.sharedService.showError(this.errorMessage);
+        this.isSubmitting = false;
+      });
     } else {
+      console.log('company address from component...', this.address);
+      console.log('company address to update here...', companyAddress);
       console.log('update company here...', company);
-      // this.companyService.updateCompany(company).subscribe(() => this.onSaveComplete(), (error: WedgeError) => {
-      //   this.errorMessage = error.displayMessage;
-      //   this.sharedService.showError(this.errorMessage);
-      //   this.isSubmitting = false;
-      // });
+      this.companyService.updateCompany(company).subscribe(() => this.onSaveComplete(), (error: WedgeError) => {
+        this.errorMessage = error.displayMessage;
+        this.sharedService.showError(this.errorMessage);
+        this.isSubmitting = false;
+      });
     }
   }
   onSaveComplete() {
