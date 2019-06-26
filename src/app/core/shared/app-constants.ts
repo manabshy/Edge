@@ -25,3 +25,20 @@ export class AppConstants {
   // public static get baseUrl(): string { return'http://localhost:57211/v10/staffMembers'; }
   // public static get baseContactGroupUrl(): string { return'http://localhost:57211/v10/contactGroups'; }
 }
+
+export const FormErrors = {
+  'telephone': '',
+  'email': '',
+};
+export const ValidationMessages = {
+  'email': {
+    required: ' Email is required.',
+    pattern: 'Email is not valid'
+  },
+  'telephone': {
+    required: 'Phone is required.',
+    minlength: 'Phone number must be at least 7 characters.',
+    maxlength: 'Phone number cannot be more than 16 characters.',
+    pattern: 'Phone number is not valid'
+  }
+};
