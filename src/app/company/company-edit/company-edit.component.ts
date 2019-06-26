@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
-import { AppConstants } from 'src/app/core/shared/app-constants';
+import { AppConstants, FormErrors, ValidationMessages } from 'src/app/core/shared/app-constants';
 import { ActivatedRoute } from '@angular/router';
 import { Company, ContactGroup } from 'src/app/contactgroups/shared/contact-group';
 import { CompanyService } from '../shared/company.service';
 import { Signer } from 'crypto';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-company-edit',
@@ -26,21 +27,10 @@ export class CompanyEditComponent implements OnInit {
   signer: Signer;
   errorMessage: any;
   defaultCountryCode = 232;
+  formErrors = FormErrors;
   // get signer(): FormControl {
   //   return <FormControl> this.companyForm.get('signer');
   // }
-  formErrors = {
-    'firstName': '',
-    'lastName': '',
-    'middleName': '',
-    'email': '',
-    'emailAddresses': {
-      'email': '',
-    },
-    'address': '',
-    'number': '',
-    'postCode': ''
-  };
   constructor(private contactGroupService: ContactGroupsService,
               private companyService: CompanyService,
               private fb: FormBuilder,
@@ -60,6 +50,7 @@ export class CompanyEditComponent implements OnInit {
     if (id) {
       this.getCompanyDetails(id);
     }
+    this.companyForm.valueChanges.pipe(debounceTime(400)).subscribe(data => this.logValidationErrors(this.companyForm, false));
   }
   getCompanyDetails(id: number) {
     this.contactGroupService.getCompany(id).subscribe(data => {
@@ -128,6 +119,26 @@ export class CompanyEditComponent implements OnInit {
     });
   }
 
+  logValidationErrors(group: FormGroup = this.companyForm, fakeTouched: boolean) {
+    Object.keys(group.controls).forEach((key: string) => {
+      const control = group.get(key);
+      const messages = ValidationMessages[key];
+      if(control.valid) {
+       FormErrors[key] = '';
+      }
+      if (control && !control.valid && (fakeTouched || control.dirty)) {
+        FormErrors[key] = '';
+        for (const errorKey in control.errors) {
+          if (errorKey) {
+            FormErrors[key] += messages[errorKey] + '\n';
+          }
+        }
+      }
+      if (control instanceof FormGroup) {
+        this.logValidationErrors(control, fakeTouched);
+      }
+    });
+  }
   getSelectedSigner(signer: any) {
     this.signer = signer;
     console.log('signers', this.signer);
