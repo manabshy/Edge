@@ -24,6 +24,21 @@ export interface ContactGroup {
   currentOfficeId?: number;
   rawData?: any;
 }
+export interface Signer {
+  contactGroupId: number;
+  contactNames: string;
+  companyName: string;
+  phoneNumber: string;
+  emailAddress: string;
+}
+export class SignerRequest {
+  searchTerm: string;
+  isSolicitor: boolean;
+  isRelocationAgent: boolean;
+  isMortgageAdvisor: boolean;
+  isEstateAgent: boolean;
+  isInventoryClerk: boolean;
+}
 export interface Company {
   companyId: number;
   companyName: string;
@@ -149,6 +164,9 @@ export interface CompanyContactGroupAutoCompleteData extends ResultData {
 }
 export interface ContactGroupAutoCompleteData extends ResultData {
   result: ContactGroupAutoCompleteResult[];
+}
+export interface SignerAutoCompleteData extends ResultData {
+  result: Signer[];
 }
 export interface PeopleAutoCompleteData extends ResultData {
   result: PeopleAutoCompleteResult[];

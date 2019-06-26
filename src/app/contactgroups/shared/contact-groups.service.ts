@@ -4,10 +4,11 @@ import { Observable, throwError } from 'rxjs';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { ContactGroupAutoCompleteResult, ContactGroupAutoCompleteData,
          PersonContactData, ContactGroupData, ContactGroup, BasicContactGroup,
-          BasicContactGroupData, PeopleAutoCompleteResult, PeopleAutoCompleteData, AutoCompleteResult, CompanyAutoCompleteResult, CompanyContactGroupAutoCompleteData as CompanyAutoCompleteData, Company, CompanyData } from './contact-group';
+          BasicContactGroupData, PeopleAutoCompleteResult, PeopleAutoCompleteData, AutoCompleteResult, CompanyAutoCompleteResult, CompanyContactGroupAutoCompleteData as CompanyAutoCompleteData, Company, CompanyData, SignerRequest, SignerAutoCompleteData, Signer } from './contact-group';
 import { map, tap, catchError } from 'rxjs/operators';
 import { Person, BasicPerson } from 'src/app/core/models/person';
 import { WedgeError } from 'src/app/core/services/shared.service';
+import { SignerComponent } from 'src/app/core/signer/signer.component';
 
 @Injectable({
   providedIn: 'root'
@@ -27,10 +28,9 @@ export class ContactGroupsService {
          tap(data => console.log(JSON.stringify(data)))
       );
   }
-  // TODO: FIX THIS ASAP
-  getAutocompleteSigners(searchTerm: string): Observable<| BasicContactGroup[]> {
-    const url = `${AppConstants.baseContactGroupUrl}/search?SearchTerm=${searchTerm}`;
-    return this.http.get<BasicContactGroupData>(url)
+  getAutocompleteSigners(searchTerm: string): Observable<Signer[]> {
+    const url = `${AppConstants.baseContactGroupUrl}/autocomplete?SearchTerm=${searchTerm}`;
+    return this.http.get<SignerAutoCompleteData>(url)
     .pipe(
          map(response => response.result),
          tap(data => console.log(JSON.stringify(data)))
