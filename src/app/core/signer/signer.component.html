@@ -10,53 +10,35 @@
             <h5>Quick Finder</h5>
             <div class="list-group small mb-3">
               <ng-container *ngFor="let signer of signers">
-                <ng-container *ngIf="!signer?.contactGroups?.length; else contactGroup">
-                  <div class="list-group-item list-group-item-action"
-                    (click)="selectSigner(signer?.personId)">
+                <ng-container *ngIf="!signer?.contactNames; else contactGroup">
+                  <div class="list-group-item list-group-item-action">
                     <div class="row align-items-center">
                       <div class="col">
-                        {{signer?.addressee}}
+                        No contact people
                       </div>
-                      <div class="col-auto">
+                      <!-- <div class="col-auto">
                         <button class="btn btn-block btn-sm btn-link">Select</button>
-                      </div>
+                      </div> -->
                     </div>
                   </div>
                 </ng-container>
                 <ng-template #contactGroup>
-                  <div class="list-group-item list-group-item-action" *ngFor="let contactGroup of signer?.contactGroups; last as isLast"
-                    (click)="selectSigner(contactGroup.contactGroupId)">
+                  <div class="list-group-item list-group-item-action" (click)="selectSigner(signer.contactGroupId)">
                     <div class="row align-items-center">
                       <div class="col">
-                        <ng-container *ngIf="contactGroup?.contactPeople?.length; else noContactPeople">
-                          {{signer?.addressee}},
-                          <ng-container *ngFor="let person of contactGroup.contactPeople; last as isLast">
-                            {{person?.addressee}}
-                            <ng-container *ngIf="!isLast">, </ng-container>
-                          </ng-container>
+                        {{signer.contactNames}}
+                        <ng-container *ngIf="signer?.companyName">
+                          <span class="badge badge-pill badge-info ml-2">{{signer?.companyName}}</span>
                         </ng-container>
-
-                        <ng-template #noContactPeople>
-                          {{signer?.addressee}}
-                        </ng-template>
-                        
-                        <ng-container *ngIf="contactGroup?.isCompany">
-                          <span class="badge badge-pill badge-info ml-2">{{contactGroup?.companyName}}</span>
-                        </ng-container>
-
                       </div>
                       <div class="col-auto">
                         <button class="btn btn-block btn-sm btn-link">Select</button>
                       </div>
                     </div>
-                
                   </div>
                 </ng-template>
               </ng-container>
             </div>
-          </ng-container>
-          <ng-container *ngIf="selectedSigner">
-            <ng-container *ngTemplateOutlet="selectedSignerDetails"></ng-container>
           </ng-container>
         </div>
       </div>
@@ -79,15 +61,3 @@
       </div> -->
     </form>
 </ng-container>
-<ng-template #selectedSignerDetails>
-    <h5>Selected Company</h5>
-    <div class="list-group mb-3">
-      <div class="list-group-item" [ngClass]="{'new-person': selectedCompany}">
-        <div class="row">
-          <div class="col-12">
-            <strong>{{selectedSigner?.addressee}}</strong>
-          </div>
-      </div>
-    </div>
-    </div>
-  </ng-template>
