@@ -142,17 +142,15 @@ export class CompanyEditComponent implements OnInit {
   }
   getSelectedSigner(signer: any) {
     this.signer = signer;
-    console.log('signers', this.signer);
-    console.log('signer from signer component', signer);
   }
 
   getAddress(address: any) {
     this.address = address;
-    console.log('address from address component', address);
   }
   saveCompany() {
+    const isSignerChanged = this.signer || this.signer == null;
     if (this.companyForm.valid) {
-      if (this.companyForm.dirty) {
+      if (this.companyForm.dirty || isSignerChanged ) {
         this.AddOrUpdateCompany();
       } else {
         this.onSaveComplete();
@@ -164,11 +162,12 @@ export class CompanyEditComponent implements OnInit {
   private AddOrUpdateCompany() {
     let companySigner;
     let companyAddress;
-    console.log('company details before update...', this.companyDetails);
     const company = { ...this.companyDetails, ...this.companyForm.value };
     if (this.companyDetails) {
       companyAddress = { ...this.companyDetails.companyAddress, ...this.address };
-      companySigner = { ...this.companyDetails.signer, ...this.signer };
+     if (this.signer) {
+        companySigner = { ...this.companyDetails.signer, ...this.signer };
+     }
       company.signer = companySigner;
       company.companyAddress = companyAddress;
     } else {
@@ -183,9 +182,6 @@ export class CompanyEditComponent implements OnInit {
         this.isSubmitting = false;
       });
     } else {
-      console.log('company address from component...', this.address);
-      console.log('company address to update here...', companyAddress);
-      console.log('update company here...', company);
       this.companyService.updateCompany(company).subscribe(() => this.onSaveComplete(), (error: WedgeError) => {
         this.errorMessage = error;
         this.sharedService.showError(this.errorMessage);
