@@ -37,7 +37,11 @@ export class SharedService {
           desc: error.displayMessage,
           techDet: error.technicalDetails
         };
-        const modal = this.modalService.show(ErrorModalComponent, {initialState});
+        let modalClass = '';
+        if(initialState.techDet){
+          modalClass = 'modal-lg';
+        }
+        const modal = this.modalService.show(ErrorModalComponent, {ignoreBackdropClick: true, class: modalClass, initialState});
         modal.content.subject = subject;
         return subject.asObservable();
   }

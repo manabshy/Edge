@@ -2,7 +2,7 @@
   Error {{title}}
 </div>
 <div class="modal-body text-center">
-  <p class="lead" [innerHtml]="desc"></p>
+  <p [innerHtml]="desc"></p>
   <p class="tech" *ngIf="techDet" [innerHtml]="techDet"></p>
   <button type="button" class="btn btn-primary" (click)="action(false)">OK</button>
 </div>
