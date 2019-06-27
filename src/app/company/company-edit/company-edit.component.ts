@@ -24,7 +24,7 @@ export class CompanyEditComponent implements OnInit {
   companyDetails: Company;
   existingSigner: Signer;
   signer: Signer;
-  errorMessage: any;
+  errorMessage: WedgeError;
   defaultCountryCode = 232;
   formErrors = FormErrors;
   // get signer(): FormControl {
@@ -156,7 +156,7 @@ export class CompanyEditComponent implements OnInit {
         this.onSaveComplete();
       }
     } else {
-      this.errorMessage = 'Please correct validation errors';
+      this.errorMessage.displayMessage = 'Please correct validation errors';
     }
   }
   private AddOrUpdateCompany() {
@@ -176,7 +176,7 @@ export class CompanyEditComponent implements OnInit {
     if (this.isNewCompany) {
       console.log('add company', company);
       this.companyService.addCompany(company).subscribe(() => this.onSaveComplete(), (error: WedgeError) => {
-        this.errorMessage = error.displayMessage;
+        this.errorMessage = error;
         this.sharedService.showError(this.errorMessage);
         this.isSubmitting = false;
       });
@@ -185,7 +185,7 @@ export class CompanyEditComponent implements OnInit {
       console.log('company address to update here...', companyAddress);
       console.log('update company here...', company);
       this.companyService.updateCompany(company).subscribe(() => this.onSaveComplete(), (error: WedgeError) => {
-        this.errorMessage = error.displayMessage;
+        this.errorMessage = error;
         this.sharedService.showError(this.errorMessage);
         this.isSubmitting = false;
       });

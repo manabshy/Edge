@@ -38,7 +38,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   isNewContactGroup = false;
   isOffCanvasVisible = false;
   returnUrl: string;
-  errorMessage: string;
+  errorMessage: WedgeError;
   formArraryErrors: string;
   isSubmitting = false;
   isLoadingAddressVisible = false;
@@ -493,14 +493,13 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   checkDuplicateAdressLines() {
    const addressLines = [];
    const countryName = this.getCountryName(this.countryId.value);
-  //  this.errorMessage = '';
     addressLines.push(this.addressLines.value.split('\n'));
     addressLines.forEach(x => {
       for (const value of  Object.values(addressLines[0])) {
         if (value === this.postCode.value) {
-          this.errorMessage = 'Address lines should not contain post code';
+          this.errorMessage.displayMessage = 'Address lines should not contain post code';
         } else if (countryName !== undefined && value !== null && value === countryName) {
-          this.errorMessage = 'Address lines should not contain country';
+          this.errorMessage.displayMessage = 'Address lines should not contain country';
         }
       }
       console.log('errors here...', this.errorMessage);
@@ -579,7 +578,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
 
   savePerson() {
     this.isSubmitting = true;
-    this.errorMessage = '';
+    this.errorMessage = null;
     this.removeValidationForPhoneAndEmail();
     this.removeValidationForAdditionalFields();
     this.logValidationErrors(this.personForm, true);
@@ -596,7 +595,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         if (!this.basicPerson) {
           this.contactGroupService.updatePerson(person).subscribe(() => this.onSaveComplete(),
             (error: WedgeError) => {
-              this.errorMessage = error.displayMessage;
+              this.errorMessage = error;
               this.sharedService.showError(this.errorMessage);
               this.isSubmitting = false;
             });
@@ -606,7 +605,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
              this.newPersonId = data.personId;
              this.onSaveComplete(); },
             (error: WedgeError) => {
-              this.errorMessage = error.displayMessage;
+              this.errorMessage = error;
               this.sharedService.showError(this.errorMessage);
               this.isSubmitting = false;
             });
@@ -615,7 +614,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         this.onSaveComplete();
       }
     } else {
-      this.errorMessage = 'Please correct validation errors';
+      this.errorMessage.displayMessage = 'Please correct validation errors';
       console.log(this.personForm.value)
       if(!this.personForm.value.emailAddresses[0].email && !this.personForm.value.phoneNumbers[0].number){
         this.isContactErrorVisible = true;

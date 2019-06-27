@@ -54,7 +54,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
   initialContactGroupLength = 0;
   isSubmitting = false;
-  errorMessage: string;
+  errorMessage: WedgeError;
   isSwitchTypeMsgVisible = false;
   isLoadingCompaniesVisible = false;
   orderFoundPeople = 'matchScore';
@@ -427,12 +427,12 @@ export class ContactgroupsPeopleComponent implements OnInit {
           this.removePerson(x, false);
         });
       }
-      this.errorMessage = '';
+      this.errorMessage = null;
     }
   }
   removeSelectedPeople(people, index: number) {
     people.splice(index, 1);
-    this.errorMessage = '';
+    this.errorMessage = null;
     this.setSalution();
   }
 
@@ -466,7 +466,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         if (this.selectedPeople.length || contactPeople) {
           let contactGroup = {...this.contactGroupDetails, ...this.contactGroupDetailsForm.value};
           this.isSubmitting = true;
-          this.errorMessage = '';
+          this.errorMessage = null;
           this.isCloned ? contactGroup = this.clonedContact : contactGroup = contactGroup;
           if (this.isCloned) {
             this.clonedContact.contactType = this.contactGroupDetailsForm.get('contactType').value;
@@ -484,7 +484,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.onSaveComplete();
      }
    } else {
-    this.errorMessage = 'Please correct validation errors';
+    this.errorMessage.displayMessage = 'Please correct validation errors';
    }
   }
   private addNewContactGroup(contactGroup: ContactGroup) {
@@ -505,7 +505,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.contactGroupService
         .addContactGroup(contactGroup)
         .subscribe(() => this.onSaveComplete(), (error: WedgeError) => {
-          this.errorMessage = error.displayMessage;
+          this.errorMessage = error;
           this.sharedService.showError(this.errorMessage);
           this.isSubmitting = false;
         });
@@ -522,7 +522,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.contactGroupService
       .addContactGroup(contactGroup)
       .subscribe(() => this.onSaveComplete(), (error: WedgeError) => {
-        this.errorMessage = error.displayMessage;
+        this.errorMessage = error;
         this.sharedService.showError(this.errorMessage);
         this.isSubmitting = false;
       });
@@ -537,7 +537,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.contactGroupService
       .updateContactGroup(contactGroup)
       .subscribe(() => this.onSaveComplete(), (error: WedgeError) => {
-        this.errorMessage = error.displayMessage;
+        this.errorMessage = error;
         this.sharedService.showError(this.errorMessage);
         this.isSubmitting = false;
       });

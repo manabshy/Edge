@@ -23,12 +23,9 @@ export class AppInterceptor implements HttpInterceptor {
       wedgeError.technicalDetails = err.error.technicalDetails;
       wedgeError.message = err.error.message;
       if (wedgeError.technicalDetails) {
-        wedgeError.displayMessage = `${wedgeError.message}
-        Helpdesk ref number: ${wedgeError.requestId}
-        Technical details: ${wedgeError.requestId}`;
+        wedgeError.displayMessage = `${wedgeError.message}`;
       } else {
-        wedgeError.displayMessage = `${wedgeError.message}
-        Helpdesk ref number: ${wedgeError.requestId}`;
+        wedgeError.displayMessage = `${wedgeError.message}`;
       }
     }
     console.error('errors from api', err);
