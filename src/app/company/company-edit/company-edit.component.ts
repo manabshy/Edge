@@ -160,15 +160,11 @@ export class CompanyEditComponent implements OnInit {
     }
   }
   private AddOrUpdateCompany() {
-    let companySigner;
     let companyAddress;
     const company = { ...this.companyDetails, ...this.companyForm.value };
     if (this.companyDetails) {
       companyAddress = { ...this.companyDetails.companyAddress, ...this.address };
-     if (this.signer) {
-        companySigner = { ...this.companyDetails.signer, ...this.signer };
-     }
-      company.signer = companySigner;
+      this.signer ? company.signer = this.signer : company.signer = this.companyDetails.signer;
       company.companyAddress = companyAddress;
     } else {
       company.signer = this.signer;
@@ -188,6 +184,8 @@ export class CompanyEditComponent implements OnInit {
         this.isSubmitting = false;
       });
     }
+    console.log('company address.......', company.companyAddress);
+    console.log(' address 2.......', this.address);
   }
   onSaveComplete() {
     this.companyForm.reset();
