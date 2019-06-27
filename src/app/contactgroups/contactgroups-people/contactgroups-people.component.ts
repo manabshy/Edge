@@ -44,7 +44,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isCreateNewPerson = false;
   isNewContactGroup = false;
   get isMaxPeople() {
-    return this.contactGroupDetails.contactPeople.length && this.contactGroupDetails.contactType === ContactType.CompanyContact;
+    if(this.contactGroupDetails){
+      return this.contactGroupDetails.contactPeople.length && this.contactGroupDetails.contactType === ContactType.CompanyContact;
+    }
+    return false;
   }
   get companyAlert() {
     return this.contactGroupDetails.contactType === ContactType.CompanyContact && !this.selectedCompanyDetails;
