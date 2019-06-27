@@ -55,6 +55,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isTypePicked = false;
   isNewCompanyContact = false;
   foundCompanies: CompanyAutoCompleteResult[];
+  @ViewChild('companyNameInput') companyNameInput : ElementRef;
   searchCompanyTermBK: string = '';
   selectedCompany: Company;
   selectedCompanyId: number;
@@ -336,6 +337,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
    }
 
    initCompanySearch() {
+    if(this.contactGroupDetails && this.contactGroupDetails.referenceCount){
+      return;
+    }
     this.selectedCompany = null;
     if(this.companyFinderForm.get('companyName').value){
       this.companyFinderForm.get('companyName').setValue(this.searchCompanyTermBK);
@@ -347,6 +351,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.selectedCompany = company;
     this.searchCompanyTermBK = this.companyFinderForm.get('companyName').value;
     this.companyFinderForm.get('companyName').setValue(company.companyName);
+    this.companyNameInput.nativeElement.scrollIntoView({block: 'center'});
    }
    
   getCompanyDetails(companyId: number) {
