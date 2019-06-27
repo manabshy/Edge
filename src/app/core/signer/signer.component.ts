@@ -46,6 +46,7 @@ export class SignerComponent implements OnInit {
       const namesWithCompany = this.existingSigner.contactNames + ' (' + this.existingSigner.companyName + ')';
       this.existingSigner.companyName ? displayName = namesWithCompany : displayName = names;
       this.signerNames.setValue(displayName);
+      this.selectedSignerDetails = this.existingSigner;
     }
   }
 
