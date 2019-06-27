@@ -39,6 +39,22 @@ export class SignerRequest {
   isEstateAgent: boolean;
   isInventoryClerk: boolean;
 }
+export interface Summary {
+  active: number;
+  total: number;
+}
+export interface PersonSummaryFigures {
+  personId: number;
+  leads: number;
+  notes: number;
+  searches: number;
+  valuations: Summary;
+  instructions: Summary;
+  offers: Summary;
+  tenancies: Summary;
+  lettingsManagements: number;
+  homeManagements: number;
+}
 export interface Company {
   companyId: number;
   companyName: string;
