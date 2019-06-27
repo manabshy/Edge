@@ -4,6 +4,7 @@ import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-group
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { AppConstants, FormErrors, ValidationMessages } from 'src/app/core/shared/app-constants';
 import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 import { Company, ContactGroup, Signer } from 'src/app/contactgroups/shared/contact-group';
 import { CompanyService } from '../shared/company.service';
 import { debounceTime } from 'rxjs/operators';
@@ -34,6 +35,7 @@ export class CompanyEditComponent implements OnInit {
               private companyService: CompanyService,
               private fb: FormBuilder,
               private sharedService: SharedService,
+              private _location: Location,
               private route: ActivatedRoute
             ) { }
 
@@ -192,6 +194,8 @@ export class CompanyEditComponent implements OnInit {
     }
   }
   onSaveComplete() {
+    this.companyForm.reset();
+    this._location.back();
    console.log('complete');
   }
   canDeactivate(): boolean {
