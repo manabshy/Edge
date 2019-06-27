@@ -68,33 +68,25 @@ export class ContactGroupsService {
     const url = `${AppConstants.basePersonUrl}`;
     return this.http.post<PersonContactData>(url, person).pipe(
       map(response => response.result),
-      tap(data => console.log('updated person details here...', JSON.stringify(data))),
-      catchError(this.handleError)
-      );
+      tap(data => console.log('updated person details here...', JSON.stringify(data))));
   }
   updatePerson(person: Person): Observable<any> {
     const url = `${AppConstants.basePersonUrl}/${person.personId}`;
     return this.http.put(url, person).pipe(
       map(response => response),
-      tap(data => console.log('updated person details here...', JSON.stringify(data))),
-      catchError(this.handleError)
-      );
+      tap(data => console.log('updated person details here...', JSON.stringify(data))));
   }
   addContactGroup(contactGroup: ContactGroup): Observable<any> {
     const url = `${AppConstants.baseContactGroupUrl}`;
     return this.http.post(url, contactGroup).pipe(
       map(response => response),
-      tap(data => console.log('updated contact details here...', JSON.stringify(data))),
-      catchError(err => this.handleError(err))
-      );
+      tap(data => console.log('updated contact details here...', JSON.stringify(data))));
   }
   updateContactGroup(contactGroup: ContactGroup): Observable<any> {
     const url = `${AppConstants.baseContactGroupUrl}/${contactGroup.contactGroupId}`;
     return this.http.put(url, contactGroup).pipe(
       map(response => response),
-      tap(data => console.log('updated contact details here...', JSON.stringify(data))),
-      catchError(err => this.handleError(err))
-      );
+      tap(data => console.log('updated contact details here...', JSON.stringify(data))));
   }
 
   getAutocompleteCompany(company: any): Observable<CompanyAutoCompleteResult[]> {
@@ -108,7 +100,6 @@ export class ContactGroupsService {
     const url = `${AppConstants.baseCompanyUrl}/search`;
     return this.http.get<CompanyAutoCompleteData>(url, {params: options}).pipe(
       map(response => response.result),
-      // catchError(this.handleError)
       tap(data => console.log('company list here here...', JSON.stringify(data)))
       );
   }
@@ -116,30 +107,13 @@ export class ContactGroupsService {
     const url = `${AppConstants.baseCompanyUrl}/${companyId}`;
     return this.http.get<CompanyData>(url).pipe(
       map(response => response.result),
-      tap(data => console.log('company details here...', JSON.stringify(data))),
-      catchError(this.handleError)
-      );
+      tap(data => console.log('company details here...', JSON.stringify(data))));
   }
-  // TODO: FIX THIS.......
   addCompanyContactGroup(contactGroup: ContactGroup): Observable<any> {
     const url = `${AppConstants.baseCompanyUrl}`;
     return this.http.post(url, contactGroup).pipe(
       map(response => response),
-      tap(data => console.log('updated company contact details here...', JSON.stringify(data))),
-      catchError(err => this.handleError(err))
-      );
-  }
-  private handleError(err: HttpErrorResponse): Observable<WedgeError> {
-    const wedgeError = new WedgeError();
-    if (err.error instanceof ErrorEvent) {
-      wedgeError.displayMessage = `An error occurred: ${err.error.message}`;
-    } else {
-      wedgeError.errorCode = err.status;
-      wedgeError.message = err.message;
-      wedgeError.displayMessage = 'An error occurred retrieving data';
-    }
-    console.error(wedgeError);
-    return throwError(wedgeError);
+      tap(data => console.log('updated company contact details here...', JSON.stringify(data))));
   }
 }
 

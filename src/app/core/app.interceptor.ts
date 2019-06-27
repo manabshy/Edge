@@ -19,9 +19,19 @@ export class AppInterceptor implements HttpInterceptor {
       wedgeError.displayMessage = `An error occurred: ${err.error.message}`;
     } else {
       wedgeError.errorCode = err.status;
-      wedgeError.message = err.message;
-      wedgeError.displayMessage = 'An error occurred retrieving data';
+      wedgeError.requestId = err.error.requestId;
+      wedgeError.technicalDetails = err.error.technicalDetails;
+      wedgeError.message = err.error.message;
+      if (wedgeError.technicalDetails) {
+        wedgeError.displayMessage = `${wedgeError.message}
+        Helpdesk ref number: ${wedgeError.requestId}
+        Technical details: ${wedgeError.requestId}`;
+      } else {
+        wedgeError.displayMessage = `${wedgeError.message}
+        Helpdesk ref number: ${wedgeError.requestId}`;
+      }
     }
+    console.error('errors from api', err);
     console.error(wedgeError);
     return throwError(wedgeError);
   }

@@ -273,6 +273,8 @@ export interface InfoDetail {
 
 export class WedgeError {
   errorCode: number;
+  requestId: string;
+  technicalDetails: string;
   message: string;
   displayMessage: string;
 }
