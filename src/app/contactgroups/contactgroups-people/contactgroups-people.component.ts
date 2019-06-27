@@ -47,7 +47,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     return this.contactGroupDetails.contactPeople.length && this.contactGroupDetails.contactType === ContactType.CompanyContact;
   }
   get companyAlert() {
-    return this.contactGroupDetails.contactType === ContactType.CompanyContact && !this.selectedCompany;
+    return this.contactGroupDetails.contactType === ContactType.CompanyContact && !this.selectedCompanyDetails;
   }
   initialContactGroupLength = 0;
   isSubmitting = false;
@@ -61,7 +61,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   foundCompanies: CompanyAutoCompleteResult[];
   @ViewChild('companyNameInput') companyNameInput : ElementRef;
   searchCompanyTermBK: string = '';
-  selectedCompany: Company;
+  selectedCompanyDetails: Company;
   selectedCompanyId: number;
   companyFinderForm: FormGroup;
   isCloned: boolean;
@@ -336,7 +336,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     if(this.contactGroupDetails && this.contactGroupDetails.referenceCount){
       return;
     }
-    this.selectedCompany = null;
+    this.selectedCompanyDetails = null;
     this.isCompanyAdded = false;
     if(this.companyFinderForm.get('companyName').value){
       this.companyFinderForm.get('companyName').setValue(this.searchCompanyTermBK);
@@ -345,7 +345,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
    selectCompany(company: Company) {
     this.foundCompanies = null;
-    this.selectedCompany = company;
+    this.selectedCompanyDetails = company;
     this.searchCompanyTermBK = this.companyFinderForm.get('companyName').value;
     this.companyFinderForm.get('companyName').setValue(company.companyName);
     this.companyNameInput.nativeElement.scrollIntoView({block: 'center'});
@@ -353,7 +353,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   getCompanyDetails(companyId: number) {
     this.contactGroupService.getCompany(companyId).subscribe(data => {
-      this.selectedCompany = data;
+      this.selectedCompanyDetails = data;
     });
   }
 
@@ -488,9 +488,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
     if (this.isNewCompanyContact) {
       this.contactGroupDetails = {} as ContactGroup;
       this.contactGroupDetails.contactPeople = [];
-      if (this.selectedCompany) {
+      if (this.selectedCompanyDetails) {
         this.isCompanyAdded = true;
-        contactGroup.companyId = this.selectedCompany.companyId;
+        contactGroup.companyId = this.selectedCompanyDetails.companyId;
         contactGroup.contactType = ContactType.CompanyContact;
         this.contactGroupDetails.contactPeople.push(this.selectedPerson);
         console.log('added company name',  this.contactGroupDetails.companyName);
@@ -524,7 +524,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   private updateContactGroup(contactGroup: ContactGroup) {
     if(contactGroup.companyName) {
-      contactGroup.companyId = this.selectedCompany.companyId;
+      contactGroup.companyId = this.selectedCompanyDetails.companyId;
     }
     this.contactGroupService
       .updateContactGroup(contactGroup)

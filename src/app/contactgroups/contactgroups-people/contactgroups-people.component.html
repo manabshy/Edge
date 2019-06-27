@@ -50,15 +50,15 @@
             <div class="form-group">
               <div class="input-group input-group-sm" (click)="initCompanySearch()">
                 <input #companyNameInput type="text" id="company" class="form-control" formControlName="companyName"
-                (keydown.enter)="$event.preventDefault();" [attr.readonly]="selectedCompany ? '' : null">
-                <div class="input-group-append" *ngIf="selectedCompany && !contactGroupDetails?.referenceCount">
+                (keydown.enter)="$event.preventDefault();" [attr.readonly]="selectedCompanyDetails ? '' : null">
+                <div class="input-group-append" *ngIf="selectedCompanyDetails && !contactGroupDetails?.referenceCount">
                   <button type="button" class="btn btn-primary">
                     Edit
                   </button>
                 </div>
               </div>
             </div>
-            <ng-container *ngIf="foundCompanies && !selectedCompany">
+            <ng-container *ngIf="foundCompanies && !selectedCompanyDetails">
               <h5>Quick Finder</h5>
               <div class="list-group small mb-3">
                 <ng-container *ngIf="!isLoadingCompaniesVisible">
@@ -409,61 +409,3 @@
     </ng-template>
   </div>
 </div>
-<ng-template #selectedCompanyDetails>
-  <h5>Selected Company</h5>
-  <div class="list-group mb-3">
-    <div class="list-group-item" [ngClass]="{'new-person': selectedCompany}">
-      <div class="row">
-        <div class="col-12">
-          <strong>{{selectedCompany?.companyName || contactGroupDetails?.companyName}}</strong> <div class="d-sm-inline ml-sm-2">{{selectedCompany?.companyAddress || contactGroupDetails?.companyAddress | formatAddress}}<span class="text-danger"
-            *ngIf="!(selectedCompany?.companyAddress || contactGroupDetails?.companyAddress | formatAddress)">No address</span></div>
-        </div>
-    </div>
-  </div>
-  </div>
-</ng-template>
-<ng-template #firstPersonDetails>
-  <div class="list-group-item new-person" *ngIf="firstContactGroupPerson">
-      <div class="row">
-        <div class="col-12 mb-2">
-          <strong>{{selectedPerson.firstName}} {{selectedPerson.lastName}}</strong>
-        </div>
-        <div class="col-sm-4 mb-2">{{selectedPerson.address | formatAddress}}<span class="text-danger"
-              *ngIf="!(selectedPerson.address | formatAddress)">No address</span>
-        </div>
-        <div class="col-sm-3 col-xl-4">
-          <div class="row">
-            <div class="col-6 telephone">
-              <p class="mb-2 text-danger" *ngIf="!selectedPerson.phoneNumbers.length">No phone</p>
-              <p class="mb-2" *ngFor="let phoneNumber of selectedPerson?.phoneNumbers"><a
-                  (click)="$event.stopPropagation()"
-                  href="tel:{{phoneNumber.number}}" *ngIf="phoneNumber?.number; else noPhone">{{phoneNumber?.number}}</a><ng-template #noPhone><span class="text-danger">No Phone</span></ng-template><br /></p>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-5 col-xl-4">
-          <p class="mb-2 text-danger" *ngIf="!selectedPerson.emailAddresses.length">No email</p>
-          <p class="mb-2" *ngFor="let emailAddress of selectedPerson?.emailAddresses"><a (click)="$event.stopPropagation()"
-              href="mailto:{{emailAddress.email}}" *ngIf="emailAddress?.email; else noEmail">{{emailAddress?.email}}</a><ng-template #noEmail><span class="text-danger">No Email</span></ng-template></p>
-        </div>
-        <div class="col-12">
-          <hr class="my-1">
-        </div>
-        <div class="col-12">
-          <a href class="btn btn-link px-0" (click)="showHideMarkPrefs($event)" [attr.aria-expanded]="!isSelectedCollapsed"
-            aria-controls="collapseSelectedMark">Marketing Prefs <span
-              class="badge badge-pill badge-primary">{{selectedPerson.marketingPreferences?.count || 0}}</span>
-          </a>
-          <div id="collapseSelectedMark" [collapse]="!isSelectedCollapsed">
-            <ul>
-              <li *ngIf="selectedPerson.marketingPreferences?.marketBulletin">Quarterly bulletin</li>
-              <li *ngIf="selectedPerson.marketingPreferences?.general">Special offers</li>
-              <li *ngIf="selectedPerson.marketingPreferences?.events">Landlord/investor events</li>
-              <li *ngIf="selectedPerson.marketingPreferences?.newHomes">New homes/investments</li>
-              <li *ngIf="selectedPerson.marketingPreferences?.general">Other occasional marketing</li>
-            </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-</ng-template>
