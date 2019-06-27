@@ -20,7 +20,7 @@
   <div class="alert alert-danger" *ngIf="contactGroupDetails?.contactPeople && !contactGroupDetails?.contactPeople.length && !isNewContactGroup && !isLoadingNewPersonVisible">
     You must add at least <b>1</b> person in the contact group.
   </div>
-  <div class="alert alert-danger" *ngIf="contactGroupDetails?.contactPeople && isNewCompanyContact && !isCompanyAdded">
+  <div class="alert alert-danger" *ngIf="contactGroupDetails?.contactPeople && companyAlert">
     You must add <b>1</b> company for a company contact.
   </div>
   <form action="">
@@ -200,7 +200,8 @@
               </div>
             </ng-container>
             <a href (click)="showHideOffCanvas($event)" class="list-group-item list-group-item-action text-center py-4"
-              *ngIf="contactGroupDetails?.contactPeople.length < 8 && !contactGroupDetails?.referenceCount && !isMaxPeople">
+              *ngIf="contactGroupDetails?.contactPeople.length < 8 && !contactGroupDetails?.referenceCount 
+                && !isMaxPeople">
               <span class="btn-link">
                 <i class="fas fa-user-plus"></i>Add Person
               </span>

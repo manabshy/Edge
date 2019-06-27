@@ -43,9 +43,12 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isLoadingNewPersonVisible = false;
   isCreateNewPerson = false;
   isNewContactGroup = false;
-  // TODO use get
-  isMaxPeople = false;
-  //
+  get isMaxPeople() {
+    return this.contactGroupDetails.contactPeople.length && this.contactGroupDetails.contactType === ContactType.CompanyContact;
+  }
+  get companyAlert() {
+    return this.contactGroupDetails.contactType === ContactType.CompanyContact && !this.selectedCompany;
+  }
   initialContactGroupLength = 0;
   isSubmitting = false;
   errorMessage: string;
@@ -316,10 +319,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.removedPersonIds.push(id);
       }
     }
-
-    if (this.contactGroupDetails.contactType === ContactType.CompanyContact) {
-      this.isMaxPeople = false;
-    }
   }
 
   confirmRemove(fullName: string) {
@@ -338,6 +337,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       return;
     }
     this.selectedCompany = null;
+    this.isCompanyAdded = false;
     if(this.companyFinderForm.get('companyName').value){
       this.companyFinderForm.get('companyName').setValue(this.searchCompanyTermBK);
     }
@@ -424,11 +424,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
           this.removePerson(x, false);
         });
       }
-      if (this.contactGroupDetails.contactType === ContactType.CompanyContact && this.contactGroupDetails.contactPeople.length) {
-        this.isMaxPeople = true;
-      } else {
-        this.isMaxPeople = false;
-      }
       this.errorMessage = '';
     }
   }
@@ -454,15 +449,16 @@ export class ContactgroupsPeopleComponent implements OnInit {
     if (this.isCloned) {
       this.contactGroupDetails.contactGroupId = 0;
       this.contactGroupDetails.referenceCount = 0;
-      if (this.contactGroupDetails.contactType === ContactType.CompanyContact) {
-        this.isMaxPeople = true;
-      }
     }
     this.clonedContact = this.contactGroupDetails;
   }
   saveContactGroup() {
-   if (this.contactGroupDetailsForm.valid) {
-     if (this.contactGroupDetailsForm.dirty) {
+    let validityCondition = this.contactGroupDetailsForm.valid;
+    if(this.contactGroupDetails.contactType === ContactType.CompanyContact) {
+      validityCondition = this.contactGroupDetailsForm.valid && this.companyFinderForm.valid;
+    }
+   if (validityCondition) {
+     if (this.contactGroupDetailsForm.dirty || this.companyFinderForm.dirty) {
         const contactPeople = this.contactGroupDetails.contactPeople.length;
         if (this.selectedPeople.length || contactPeople) {
           let contactGroup = {...this.contactGroupDetails, ...this.contactGroupDetailsForm.value};
@@ -526,7 +522,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.companyFinderForm.reset();
   }
 
-  private updateContactGroup(contactGroup: any) {
+  private updateContactGroup(contactGroup: ContactGroup) {
+    if(contactGroup.companyName) {
+      contactGroup.companyId = this.selectedCompany.companyId;
+    }
     this.contactGroupService
       .updateContactGroup(contactGroup)
       .subscribe(() => this.onSaveComplete(), (error: WedgeError) => {
