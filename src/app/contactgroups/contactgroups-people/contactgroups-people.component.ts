@@ -56,7 +56,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isTypePicked = false;
   isNewCompanyContact = false;
   foundCompanies: CompanyAutoCompleteResult[];
-  searchCompanyTermBK = '';
+  @ViewChild('companyNameInput') companyNameInput : ElementRef;
+  searchCompanyTermBK: string = '';
   selectedCompany: Company;
   selectedCompanyId: number;
   companyFinderForm: FormGroup;
@@ -208,6 +209,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
     if (this.contactGroupDetailsForm) {
       this.contactGroupDetailsForm.reset();
     }
+    if(contactGroup.companyName) {
+      this.companyFinderForm.get('companyName').setValue(contactGroup.companyName);
+      this.getCompanyDetails(contactGroup.companyId);
+    }
       this.contactGroupDetails = contactGroup;
       this.contactGroupDetailsForm.patchValue({
         salutation: contactGroup.salutation,
@@ -329,8 +334,13 @@ export class ContactgroupsPeopleComponent implements OnInit {
    }
 
    initCompanySearch() {
+    if(this.contactGroupDetails && this.contactGroupDetails.referenceCount){
+      return;
+    }
     this.selectedCompany = null;
-    this.companyFinderForm.get('companyName').setValue(this.searchCompanyTermBK);
+    if(this.companyFinderForm.get('companyName').value){
+      this.companyFinderForm.get('companyName').setValue(this.searchCompanyTermBK);
+    }
    }
 
    selectCompany(company: Company) {
@@ -338,7 +348,15 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.selectedCompany = company;
     this.searchCompanyTermBK = this.companyFinderForm.get('companyName').value;
     this.companyFinderForm.get('companyName').setValue(company.companyName);
+    this.companyNameInput.nativeElement.scrollIntoView({block: 'center'});
    }
+
+  getCompanyDetails(companyId: number) {
+    this.contactGroupService.getCompany(companyId).subscribe(data => {
+      this.selectedCompany = data;
+    });
+  }
+
   selectPerson(id: number) {
     if (this.isNewContactGroup) {
       this.selectedPersonId = id;

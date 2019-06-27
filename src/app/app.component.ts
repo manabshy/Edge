@@ -1,4 +1,4 @@
-import { Component, Renderer2, ChangeDetectorRef, HostListener, OnInit, AfterViewChecked } from '@angular/core';
+import { Component, Renderer2, ChangeDetectorRef, HostListener, OnInit, AfterViewChecked, ViewChild, ElementRef } from '@angular/core';
 import { Router, RoutesRecognized } from '@angular/router';
 import { filter, pairwise } from 'rxjs/operators';
 import { AppUtils } from './core/shared/utils';
@@ -6,6 +6,7 @@ import { AuthService } from './core/services/auth.service';
 import { SharedService } from './core/services/shared.service';
 import { StaffMemberService } from './core/services/staff-member.service';
 import { StaffMember } from './core/models/staff-member';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,8 @@ export class AppComponent implements OnInit, AfterViewChecked {
   title = 'Wedge';
   isNavVisible: boolean;
   isScrollTopVisible = false;
+  @ViewChild('appContainer') appContainer : ElementRef;
+  appHeightObservable;
   get currentStaffMember(): StaffMember {
     return this.staffMemberService.currentStaffMember;
   }
@@ -40,6 +43,10 @@ export class AppComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit() {
+    this.appHeightObservable = new MutationObserver(()=>{
+      this.toggleScrollTop();
+    });
+    this.appHeightObservable.observe(this.appContainer.nativeElement, {childList: true, subtree: true});
   }
 
   ngAfterViewChecked() {
@@ -56,8 +63,14 @@ export class AppComponent implements OnInit, AfterViewChecked {
 
   @HostListener('window:scroll', ['$event'])
   onScroll(event) {
-    if (window.innerHeight < document.body.scrollHeight) {
+    this.toggleScrollTop();
+  }
+
+  toggleScrollTop() {
+    if (window.innerHeight < this.appContainer.nativeElement.scrollHeight) {
       this.isScrollTopVisible = true;
+    } else {
+      this.isScrollTopVisible = false;
     }
   }
 

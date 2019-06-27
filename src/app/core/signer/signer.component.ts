@@ -46,6 +46,7 @@ export class SignerComponent implements OnInit {
       const namesWithCompany = this.existingSigner.contactNames + ' (' + this.existingSigner.companyName + ')';
       this.existingSigner.companyName ? displayName = namesWithCompany : displayName = names;
       this.signerNames.setValue(displayName);
+      this.selectedSignerDetails = this.existingSigner;
     }
   }
 
@@ -81,7 +82,9 @@ export class SignerComponent implements OnInit {
 
   initSearch() {
     this.selectedSignerDetails = null;
-    this.signerFinderForm.get('searchTerm').setValue(this.searchTermBK);
+    if(this.signerFinderForm.get('searchTerm').value){
+      this.signerFinderForm.get('searchTerm').setValue(this.searchTermBK);
+    }
     this.selectedSigner.emit(null);
   }
 
