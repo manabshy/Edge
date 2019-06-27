@@ -1,6 +1,6 @@
 import { Component, OnInit, Renderer2, ViewChild, ElementRef } from '@angular/core';
 import { ContactGroupsService } from '../shared/contact-groups.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Person, BasicPerson } from 'src/app/core/models/person';
 import { ContactGroup, PeopleAutoCompleteResult, ContactGroupsTypes,
          ContactType, CompanyAutoCompleteResult, Company } from '../shared/contact-group';
@@ -39,6 +39,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   selectedPersonId: number;
   removedPersonIds: any[] = [];
   newPerson: BasicPerson;
+  isLoadingDetails = false;
   isCreateNewPersonVisible = false;
   isLoadingNewPersonVisible = false;
   isCreateNewPerson = false;
@@ -76,6 +77,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   constructor(
     private contactGroupService: ContactGroupsService,
     private fb: FormBuilder,
+    private _router: Router,
     private route: ActivatedRoute,
     private modalService: BsModalService,
     private _location: Location,
@@ -90,9 +92,16 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.groupPersonId = +params['groupPersonId'] || 0;
       this.personId = +params['personId'] || 0;
     });
-    this.route.queryParams.subscribe(params => {
-      this.isNewContactGroup = params['isNewContactGroup'] || false;
-    });
+    this.init();
+  }
+
+  init() {
+    if(!this.contactGroupId) {  
+      this.route.queryParams.subscribe(params => {
+        this.isNewContactGroup = params['isNewContactGroup'] || false;
+      });
+    }
+    this.isSubmitting = false;
     this.companyFinderForm = this.fb.group({
       companyName: ['', Validators.required],
     });
@@ -171,6 +180,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   getContactGroupById(contactGroupId: number) {
+    this.isLoadingDetails = true;
     this.contactGroupService
       .getContactGroupbyId(contactGroupId)
       .subscribe(data => {
@@ -181,6 +191,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         if (this.isCloned) {
           this.contactGroupDetails.referenceCount = 0;
         }
+        this.isLoadingDetails = false;
       });
   }
   getContactGroupFirstPerson(personId: number, isSelectedTypeCompany: boolean) {
@@ -481,7 +492,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
           }
         }
      } else {
-      this.onSaveComplete();
+      this.onSaveComplete(this.contactGroupId);
      }
    } else {
     this.errorMessage.displayMessage = 'Please correct validation errors';
@@ -504,7 +515,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
         console.log('added company name',  this.contactGroupDetails.companyName);
         this.contactGroupService
         .addContactGroup(contactGroup)
-        .subscribe(() => this.onSaveComplete(), (error: WedgeError) => {
+        .subscribe(res => {
+          this.onSaveComplete(res.result.contactGroupId);
+        }, (error: WedgeError) => {
           this.errorMessage = error;
           this.sharedService.showError(this.errorMessage);
           this.isSubmitting = false;
@@ -521,7 +534,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
     } else {
     this.contactGroupService
       .addContactGroup(contactGroup)
-      .subscribe(() => this.onSaveComplete(), (error: WedgeError) => {
+      .subscribe(res => {
+        this.onSaveComplete(res.result.contactGroupId);
+      }, (error: WedgeError) => {
         this.errorMessage = error;
         this.sharedService.showError(this.errorMessage);
         this.isSubmitting = false;
@@ -536,16 +551,27 @@ export class ContactgroupsPeopleComponent implements OnInit {
     }
     this.contactGroupService
       .updateContactGroup(contactGroup)
-      .subscribe(() => this.onSaveComplete(), (error: WedgeError) => {
+      .subscribe(res => {
+        this.onSaveComplete(res.result.contactGroupId);
+      }, (error: WedgeError) => {
         this.errorMessage = error;
         this.sharedService.showError(this.errorMessage);
         this.isSubmitting = false;
       });
   }
 
-  onSaveComplete(): void {
+  onSaveComplete(contactGroupId): void {
     console.log('contacts saved', this.contactGroupDetails);
-    this._location.back();
+    console.log(contactGroupId);
+    if(!contactGroupId) {
+      this._location.back();
+    } else {
+      let url = this._router.url.substring(0,this._router.url.indexOf("?"));
+      url = url.replace('people/'+this.contactGroupId, 'people/'+contactGroupId);
+      this._location.replaceState(url);
+      this.contactGroupId = contactGroupId;
+      this.init();
+    }
   }
 
   setSalution() {

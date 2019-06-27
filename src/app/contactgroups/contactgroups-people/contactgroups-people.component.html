@@ -1,286 +1,310 @@
 <app-breadcrumb></app-breadcrumb>
 <div class="container">
   <h4 class="page-title"><ng-container *ngIf="contactGroupDetails?.contactType === 4; else peopleCG">Company</ng-container><ng-template #peopleCG>People</ng-template> Contact group</h4>
-  <div class="alert alert-info" *ngIf="contactGroupDetails?.contactPeople && (contactGroupDetails?.contactPeople.length !== initialContactGroupLength)">
-    There are pending changes on the people list. Save to make them effective.
+  <div class="text-center" *ngIf="isLoadingDetails">
+    <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading details ...
   </div>
-  <div class="alert alert-warning" *ngIf="isSwitchTypeMsgVisible && contactGroupDetails?.contactType !== 4">
-    <ng-container *ngIf="contactGroupDetails?.contactPeople.length < 2; else switchToMulti">
-      You can't have less than <b>2</b> people in an <b>Multi/Sharer</b> contact group. We have switched to
-      <b>Individual/Joint</b>.
-    </ng-container>
-    <ng-template #switchToMulti>
-      You can't have more than <b>2</b> people in an <b>Individual/Joint</b> contact group. We have switched to
-      <b>Multi/Sharer</b>.
-    </ng-template>
-  </div>
-  <div class="alert alert-warning" *ngIf="contactGroupDetails?.referenceCount && !isCloned" (click)="cloneContactGroup()">
-    Transaction history present. You can't add or remove people from this Contact Group.<br>If you want to add or remove a person, <a [routerLink]="['../', contactGroupId]">create a new Contact Group</a>
-  </div>
-  <div class="alert alert-danger" *ngIf="contactGroupDetails?.contactPeople && !contactGroupDetails?.contactPeople.length && !isNewContactGroup && !isLoadingNewPersonVisible">
-    You must add at least <b>1</b> person in the contact group.
-  </div>
-  <div class="alert alert-danger" *ngIf="contactGroupDetails?.contactPeople && companyAlert">
-    You must add <b>1</b> company for a company contact.
-  </div>
-  <form action="">
-    <ng-container *ngIf="isNewContactGroup && !isTypePicked">
-      <h5>Type of Contact Group?</h5>
-      <div class="list-group list-group-horizontal-sm mb-3">
-        <div class="list-group-item list-group-item-action text-center" (click)="isCompanyContactGroup(true)">
-          <span class="btn btn-link">
-            <i class="fas fa-user-tie fa-lg"></i><br>
-            Company Contact Group
-          </span>
+  <ng-container *ngIf="!isLoadingDetails">
+    <div class="alert alert-info"
+      *ngIf="contactGroupDetails?.contactPeople && (contactGroupDetails?.contactPeople.length !== initialContactGroupLength)">
+      There are pending changes on the people list. Save to make them effective.
+    </div>
+    <div class="alert alert-warning" *ngIf="isSwitchTypeMsgVisible && contactGroupDetails?.contactType !== 4">
+      <ng-container *ngIf="contactGroupDetails?.contactPeople.length < 2; else switchToMulti">
+        You can't have less than <b>2</b> people in an <b>Multi/Sharer</b> contact group. We have switched to
+        <b>Individual/Joint</b>.
+      </ng-container>
+      <ng-template #switchToMulti>
+        You can't have more than <b>2</b> people in an <b>Individual/Joint</b> contact group. We have switched to
+        <b>Multi/Sharer</b>.
+      </ng-template>
+    </div>
+    <div class="alert alert-warning" *ngIf="contactGroupDetails?.referenceCount && !isCloned"
+      (click)="cloneContactGroup()">
+      Transaction history present. You can't add or remove people from this Contact Group.<br>If you want to add or remove
+      a person, <a [routerLink]="['../', contactGroupId]">create a new Contact Group</a>
+    </div>
+    <div class="alert alert-danger"
+      *ngIf="contactGroupDetails?.contactPeople && !contactGroupDetails?.contactPeople.length && !isNewContactGroup && !isLoadingNewPersonVisible">
+      You must add at least <b>1</b> person in the contact group.
+    </div>
+    <div class="alert alert-danger" *ngIf="contactGroupDetails?.contactPeople && companyAlert">
+      You must add <b>1</b> company for a company contact.
+    </div>
+    <form action="">
+      <ng-container *ngIf="isNewContactGroup && !isTypePicked">
+        <h5>Type of Contact Group?</h5>
+        <div class="list-group list-group-horizontal-sm mb-3">
+          <div class="list-group-item list-group-item-action text-center" (click)="isCompanyContactGroup(true)">
+            <span class="btn btn-link">
+              <i class="fas fa-user-tie fa-lg"></i><br>
+              Company Contact Group
+            </span>
+          </div>
+          <div class="list-group-item list-group-item-action text-center" (click)="isCompanyContactGroup(false)">
+            <span class="btn btn-link">
+              <i class="fas fa-users fa-lg"></i><br>
+              People Contact Group
+            </span>
+          </div>
         </div>
-        <div class="list-group-item list-group-item-action text-center" (click)="isCompanyContactGroup(false)">
-          <span class="btn btn-link">
-            <i class="fas fa-users fa-lg"></i><br>
-            People Contact Group
-          </span>
-        </div>
-      </div>
-    </ng-container>
-    <ng-container *ngIf="contactGroupDetails?.contactType === 4">
-      <h5>Company</h5>
-      <form class="pb-3" [formGroup]="companyFinderForm" autocompleteOff>
-        <div class="row">
-          <label for="company" class="col-sm-2 col-form-label col-form-label-sm">Name</label>
-          <div class="col-sm-10">
-            <div class="form-group">
-              <div class="input-group input-group-sm" (click)="initCompanySearch()">
-                <input #companyNameInput type="text" id="company" class="form-control" formControlName="companyName"
-                (keydown.enter)="$event.preventDefault();" [attr.readonly]="selectedCompanyDetails ? '' : null">
-                <div class="input-group-append" *ngIf="selectedCompanyDetails && !contactGroupDetails?.referenceCount">
-                  <button type="button" class="btn btn-primary">
-                    Edit
-                  </button>
+      </ng-container>
+      <ng-container *ngIf="contactGroupDetails?.contactType === 4">
+        <h5>Company</h5>
+        <form class="pb-3" [formGroup]="companyFinderForm" autocompleteOff>
+          <div class="row">
+            <label for="company" class="col-sm-2 col-form-label col-form-label-sm">Name</label>
+            <div class="col-sm-10">
+              <div class="form-group">
+                <div class="input-group input-group-sm" (click)="initCompanySearch()">
+                  <input #companyNameInput type="text" id="company" class="form-control" formControlName="companyName"
+                    (keydown.enter)="$event.preventDefault();" [attr.readonly]="selectedCompanyDetails ? '' : null">
+                  <div class="input-group-append" *ngIf="selectedCompanyDetails && !contactGroupDetails?.referenceCount">
+                    <button type="button" class="btn btn-primary">
+                      Edit
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-            <ng-container *ngIf="foundCompanies && !selectedCompanyDetails">
-              <h5>Quick Finder</h5>
-              <div class="list-group small mb-3">
-                <ng-container *ngIf="!isLoadingCompaniesVisible">
-                  <div class="list-group-item list-group-item-action" *ngFor="let company of foundCompanies" (click)="selectCompany(company)">
-                    <div class="row align-items-center">
-                      <div class="col" [innerHTML]="company.companyName | highlight : companyFinderForm.value.companyName"></div>
-                      <div class="col-auto">
-                        <button class="btn btn-block btn-sm btn-link">Select</button>
+              <ng-container *ngIf="foundCompanies && !selectedCompanyDetails">
+                <h5>Quick Finder</h5>
+                <div class="list-group small mb-3">
+                  <ng-container *ngIf="!isLoadingCompaniesVisible">
+                    <div class="list-group-item list-group-item-action" *ngFor="let company of foundCompanies"
+                      (click)="selectCompany(company)">
+                      <div class="row align-items-center">
+                        <div class="col"
+                          [innerHTML]="company.companyName | highlight : companyFinderForm.value.companyName"></div>
+                        <div class="col-auto">
+                          <button class="btn btn-block btn-sm btn-link">Select</button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </ng-container>
-                <div class="list-group-item text-center" *ngIf="isLoadingCompaniesVisible">
+                  </ng-container>
+                  <div class="list-group-item text-center" *ngIf="isLoadingCompaniesVisible">
                     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading companies ...
+                  </div>
+                  <div class="list-group-item list-group-item-action text-center"
+                    *ngIf="!foundCompanies?.length && companyFinderForm.value.companyName && !isLoadingCompaniesVisible">
+                    No company found. Try again or create a new one.
+                  </div>
+                  <div class="list-group-item list-group-item-action text-center py-4">
+                    <span class="btn-link" [routerLink]="['/company-centre/detail', 0, 'edit']"
+                      [queryParams]="{isNewCompany: true}"><i class="fas fa-plus mr-2"></i>New Company</span>
+                  </div>
                 </div>
-                <div class="list-group-item list-group-item-action text-center" *ngIf="!foundCompanies?.length && companyFinderForm.value.companyName && !isLoadingCompaniesVisible">
-                  No company found. Try again or create a new one.
-                </div>
-                <div class="list-group-item list-group-item-action text-center py-4">
-                  <span class="btn-link" [routerLink]="['/company-centre/detail', 0, 'edit']"  [queryParams]="{isNewCompany: true}" ><i class="fas fa-plus mr-2"></i>New Company</span>
-                </div>
-              </div>
-            </ng-container>
-          </div>
-        </div>
-        <div class="row justify-content-end">
-          <label class="col-sm-2 col-form-label col-form-label-sm">Type</label>
-          <div class="col-sm-10">
-            <div class="row">
-              <div class="form-group col-sm-auto">
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="solicitor">
-                  <label class="custom-control-label" for="solicitor">Solicitor</label>
-                </div>
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="invClerk">
-                  <label class="custom-control-label" for="invClerk">Inventory Clerk</label>
-                </div>
-              </div>
+              </ng-container>
             </div>
           </div>
-        </div>
-      </form>
-    </ng-container>
-    <ng-container *ngIf="!isNewContactGroup  || isTypePicked">
-      <h5>People</h5>
-      <div class="row justify-content-end">
-        <div class="col-sm-10">
-          <div class="list-group mb-3">
-            <ng-container >
-              <div class="list-group-item" *ngIf="!contactGroupDetails?.contactPeople">
-                <div class="text-center">
-                  <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading contacts ...
-                </div>
-              </div>
-              <div class="list-group-item"
-                *ngFor="let person of contactGroupDetails?.contactPeople ; index as i" [ngClass]="{'new-person': person?.isNewPerson}">
-                <div class="row">
-                  <div class="col-auto">
-                    <app-score-badge [person]="person"></app-score-badge>
-                    <span class="badge badge-pill badge-info mb-2" *ngIf="person?.isMainPerson && contactGroupDetails.contactType !== 4">Main Person</span>
-                  </div>
-                  <div class="col text-right" *ngIf="!person?.isNewPerson; else removeSelectedPerson">
-                    <div dropdown placement="bottom right">
-                      <a class="dropdown-toggle" href [id]="'button' + i" dropdownToggle
-                        (click)="$event.stopPropagation(); false" [attr.aria-controls]="'dropdown' + i">Actions <span
-                          class="caret"></span></a>
-                      <ul [id]="'dropdown' + i" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
-                        [attr.aria-labelledby]="'button' + i">
-                        <li role="menuitem"><a class="dropdown-item" (click)="$event.stopPropagation();"
-                            [routerLink]="['../../edit']" [queryParams]="{groupPersonId: person?.personId }"><i
-                              class="fas fa-edit"></i> Edit</a></li>
-                        <li role="menuitem"><a class="dropdown-item" (click)="$event.stopPropagation();"
-                          [routerLink]="person?.isNewPerson ? null : ['../../../../detail', person?.personId ]">
-                          <i class="fas fa-address-card"></i> View</a></li>
-                        <li role="menuitem">
-                          <a class="dropdown-item" (click)="setMainPerson(person?.personId)" *ngIf="!person?.isMainPerson"><i class="fas fa-user-shield"></i> Set Main Person</a>
-                        </li>
-                        <li role="menuitem"><a class="dropdown-item" href (click)="removePerson(person?.personId, true)" *ngIf="!contactGroupDetails?.referenceCount"><i
-                              class="fas fa-user-times"></i> Remove</a></li>
-                      </ul>
-                    </div>
-                  </div>
-                  <ng-template #removeSelectedPerson>
-                    <div class="col text-right">
-                      <a href (click)="removePerson(person?.personId, false)"><i class="fas fa-user-times"></i> Remove</a>
-                    </div>
-                  </ng-template>
-                  <div class="col-12 mb-2">
-                    <strong>{{person?.firstName}} {{person?.lastName}}</strong>
-                    <!-- <i class="fas fa-phone"></i>&nbsp;
-
-                    <i class="fas fa-envelope"></i>&nbsp;
-
-                    <span class="badge badge-success">AML Valid</span> -->
-                  </div>
-                  <div class="col-sm-4 mb-2"><pre>{{person?.address | formatAddress}}</pre><span class="text-danger"
-                      *ngIf="!(person?.address | formatAddress)">No address</span></div>
-                  <div class="col-sm-3 col-xl-4">
-                    <div class="row">
-                      <div class="col-6 telephone">
-                        <p class="mb-2 text-danger" *ngIf="!person?.phoneNumbers.length || !person?.phoneNumbers[0].number">No phone</p>
-                        <ng-container *ngFor="let phoneNumber of person?.phoneNumbers">
-                          <p class="mb-2" *ngIf="phoneNumber?.number"><a (click)="$event.stopPropagation()"
-                            href="tel:{{phoneNumber.number}}">{{phoneNumber?.number}}</a><br />{{phoneNumber?.telephoneId}}</p>
-                        </ng-container>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-sm-5 col-xl-4">
-                    <p class="mb-2 text-danger" *ngIf="!person?.emailAddresses.length || !person?.emailAddresses[0].email">No email</p>
-                    <ng-container *ngFor="let emailAddress of person?.emailAddresses">
-                      <p class="mb-2" *ngIf="emailAddress?.email"><a (click)="$event.stopPropagation()"
-                          href="mailto:{{emailAddress.email}}">{{emailAddress?.email}}</a></p>
-                    </ng-container>
-                  </div>
-                  <div class="col-12">
-                    <hr class="my-1">
-                  </div>
-                  <div class="col-12">
-                    <a href class="btn btn-link px-0" (click)="showHideMarkPrefs($event, i)"
-                      [attr.aria-expanded]="!isCollapsed[i]" [attr.aria-controls]="'collapseMark' + i">Marketing Prefs <span
-                        class="badge badge-pill badge-primary">{{person?.marketingPreferences?.count || 0}}</span>
-                    </a>
-                    <div [id]="'collapseMark' + i" [collapse]="!isCollapsed[i]">
-                      <ul>
-                        <li *ngIf="person?.marketingPreferences?.marketBulletin">Quarterly bulletin</li>
-                        <li *ngIf="person?.marketingPreferences?.general">Special offers</li>
-                        <li *ngIf="person?.marketingPreferences?.events">Landlord/investor events</li>
-                        <li *ngIf="person?.marketingPreferences?.newHomes">New homes/investments</li>
-                        <li *ngIf="person?.marketingPreferences?.general">Other occasional marketing</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="list-group-item text-center" *ngIf="isLoadingNewPersonVisible">
-                <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading person details ...
-              </div>
-            </ng-container>
-            <a href (click)="showHideOffCanvas($event)" class="list-group-item list-group-item-action text-center py-4"
-              *ngIf="contactGroupDetails?.contactPeople.length < 8 && !contactGroupDetails?.referenceCount 
-                && !isMaxPeople">
-              <span class="btn-link">
-                <i class="fas fa-user-plus"></i>Add Person
-              </span>
-            </a>
-            <div class="list-group-item list-group-item-warning text-center" *ngIf="!(contactGroupDetails?.contactPeople.length < 8)">
-              You can add max 8 People per contact group.
-            </div>
-          </div>
-        </div>
-      </div>
-      <ng-container *ngIf="contactGroupDetails?.contactPeople.length">
-        <h5>Details</h5>
-        <form [formGroup]="contactGroupDetailsForm" class="pb-3">
-          <div class="form-group row">
-            <label for="salutation" class="col-sm-2 col-form-label col-form-label-sm">Salutation</label>
-            <div class="col-sm-10">
-              <input type="text" id="salutation" class="form-control form-control-sm" formControlName="salutation">
-            </div>
-          </div>
-          <div class="form-group row">
-            <label for="addressee" class="col-sm-2 col-form-label col-form-label-sm">Addressee</label>
-            <div class="col-sm-10">
-              <input type="text" id="addressee" class="form-control form-control-sm" formControlName="addressee">
-            </div>
-          </div>
-          <div class="form-group row">
-            <label for="comments" class="col-sm-2 col-form-label col-form-label-sm">Comments</label>
-            <div class="col-sm-10">
-              <textarea id="comments" class="form-control form-control-sm" formControlName="comments" rows="6"></textarea>
-            </div>
-          </div>
-          <div class="row mt-3 justify-content-end">
+          <div class="row justify-content-end">
+            <label class="col-sm-2 col-form-label col-form-label-sm">Type</label>
             <div class="col-sm-10">
               <div class="row">
                 <div class="form-group col-sm-auto">
                   <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="relAgent">
-                    <label class="custom-control-label" for="relAgent">Is Relocation Agent</label>
+                    <input type="checkbox" class="custom-control-input" id="solicitor">
+                    <label class="custom-control-label" for="solicitor">Solicitor</label>
                   </div>
-                </div>
-                <div class="form-group col type-col" *ngIf="contactGroupDetails?.contactType !== 4">
-                  <ng-container
-                    *ngFor="let type of contactGroupTypes | keyvalue:keepOriginalOrder; let i = index; last as isLast">
-                    <div class="custom-control custom-radio custom-control-inline" *ngIf="!isLast"
-                      [tooltip]="type.key === 1 ? 'Remove people to select this option' : 'Add 2 or more people to select this option'"
-                      [containerClass]="isTypeDisabled(type.key) ? '' : 'd-none'" placement="auto">
-                      <input type="radio" [id]="'individual' + i" name="contactType" class="custom-control-input"
-                        [value]="type.key" formControlName="contactType"
-                        [attr.disabled]="isTypeDisabled(type.key) || contactGroupDetails?.referenceCount ? '' : null">
-                      <label class="custom-control-label" [attr.for]="'individual' + i">{{type.value}}</label>
-                    </div>
-                  </ng-container>
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="invClerk">
+                    <label class="custom-control-label" for="invClerk">Inventory Clerk</label>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </form>
       </ng-container>
-    </ng-container>
-    <div class="form-actions">
-      <div class="container px-lg-4">
-        <div class="row justify-content-end w-100 no-gutters">
-          <div class="col-sm-10 d-flex">
-            <button type="button" class="btn btn-light mr-2" (click)="cancel()">Cancel</button>
-            <button type="submit" class="btn btn-secondary" (click)="saveContactGroup()" [attr.disabled]="!contactGroupDetails?.contactPeople.length || (isSubmitting && !errorMessage) ? '' : null">
-              <i class="fas fa-spinner fa-pulse d-inline-block mr-2" *ngIf="isSubmitting && !errorMessage"></i>Save
-            </button>
-            <!-- <ng-template #warningTemplate>You can't have more than <b>2</b> people in <b>Individual/Joint</b> contact group.<br>We switched to <b>Multi/Sharer</b></ng-template>
-            <button  type="submit" class="btn btn-secondary" (click)="saveContactGroup()"
-              [popover]="warningTemplate"
-              [isOpen]="contactGroupDetails?.contactPeople.length > 2 && contactGroupDetailsForm.controls.contactType.value === 1"
-              [containerClass]="'alert alert-warning'" [outsideClick]="true" triggers="">
-              Save
-            </button> -->
+      <ng-container *ngIf="!isNewContactGroup  || isTypePicked">
+        <h5>People</h5>
+        <div class="row justify-content-end">
+          <div class="col-sm-10">
+            <div class="list-group mb-3">
+              <ng-container>
+                <div class="list-group-item" *ngIf="!contactGroupDetails?.contactPeople">
+                  <div class="text-center">
+                    <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading contacts ...
+                  </div>
+                </div>
+                <div class="list-group-item" *ngFor="let person of contactGroupDetails?.contactPeople ; index as i"
+                  [ngClass]="{'new-person': person?.isNewPerson}">
+                  <div class="row">
+                    <div class="col-auto">
+                      <app-score-badge [person]="person"></app-score-badge>
+                      <span class="badge badge-pill badge-info mb-2"
+                        *ngIf="person?.isMainPerson && contactGroupDetails.contactType !== 4">Main Person</span>
+                    </div>
+                    <div class="col text-right" *ngIf="!person?.isNewPerson; else removeSelectedPerson">
+                      <div dropdown placement="bottom right">
+                        <a class="dropdown-toggle" href [id]="'button' + i" dropdownToggle
+                          (click)="$event.stopPropagation(); false" [attr.aria-controls]="'dropdown' + i">Actions <span
+                            class="caret"></span></a>
+                        <ul [id]="'dropdown' + i" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+                          [attr.aria-labelledby]="'button' + i">
+                          <li role="menuitem"><a class="dropdown-item" (click)="$event.stopPropagation();"
+                              [routerLink]="['../../edit']" [queryParams]="{groupPersonId: person?.personId }"><i
+                                class="fas fa-edit"></i> Edit</a></li>
+                          <li role="menuitem"><a class="dropdown-item" (click)="$event.stopPropagation();"
+                              [routerLink]="person?.isNewPerson ? null : ['../../../../detail', person?.personId ]">
+                              <i class="fas fa-address-card"></i> View</a></li>
+                          <li role="menuitem">
+                            <a class="dropdown-item" (click)="setMainPerson(person?.personId)"
+                              *ngIf="!person?.isMainPerson"><i class="fas fa-user-shield"></i> Set Main Person</a>
+                          </li>
+                          <li role="menuitem"><a class="dropdown-item" href (click)="removePerson(person?.personId, true)"
+                              *ngIf="!contactGroupDetails?.referenceCount"><i class="fas fa-user-times"></i> Remove</a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <ng-template #removeSelectedPerson>
+                      <div class="col text-right">
+                        <a href (click)="removePerson(person?.personId, false)"><i class="fas fa-user-times"></i>
+                          Remove</a>
+                      </div>
+                    </ng-template>
+                    <div class="col-12 mb-2">
+                      <strong>{{person?.firstName}} {{person?.lastName}}</strong>
+                      <!-- <i class="fas fa-phone"></i>&nbsp;
+        
+                            <i class="fas fa-envelope"></i>&nbsp;
+        
+                            <span class="badge badge-success">AML Valid</span> -->
+                    </div>
+                    <div class="col-sm-4 mb-2">
+                      <pre>{{person?.address | formatAddress}}</pre><span class="text-danger"
+                        *ngIf="!(person?.address | formatAddress)">No address</span></div>
+                    <div class="col-sm-3 col-xl-4">
+                      <div class="row">
+                        <div class="col-6 telephone">
+                          <p class="mb-2 text-danger"
+                            *ngIf="!person?.phoneNumbers.length || !person?.phoneNumbers[0].number">No phone</p>
+                          <ng-container *ngFor="let phoneNumber of person?.phoneNumbers">
+                            <p class="mb-2" *ngIf="phoneNumber?.number"><a (click)="$event.stopPropagation()"
+                                href="tel:{{phoneNumber.number}}">{{phoneNumber?.number}}</a><br />{{phoneNumber?.telephoneId}}
+                            </p>
+                          </ng-container>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-5 col-xl-4">
+                      <p class="mb-2 text-danger"
+                        *ngIf="!person?.emailAddresses.length || !person?.emailAddresses[0].email">No email</p>
+                      <ng-container *ngFor="let emailAddress of person?.emailAddresses">
+                        <p class="mb-2" *ngIf="emailAddress?.email"><a (click)="$event.stopPropagation()"
+                            href="mailto:{{emailAddress.email}}">{{emailAddress?.email}}</a></p>
+                      </ng-container>
+                    </div>
+                    <div class="col-12">
+                      <hr class="my-1">
+                    </div>
+                    <div class="col-12">
+                      <a href class="btn btn-link px-0" (click)="showHideMarkPrefs($event, i)"
+                        [attr.aria-expanded]="!isCollapsed[i]" [attr.aria-controls]="'collapseMark' + i">Marketing Prefs
+                        <span class="badge badge-pill badge-primary">{{person?.marketingPreferences?.count || 0}}</span>
+                      </a>
+                      <div [id]="'collapseMark' + i" [collapse]="!isCollapsed[i]">
+                        <ul>
+                          <li *ngIf="person?.marketingPreferences?.marketBulletin">Quarterly bulletin</li>
+                          <li *ngIf="person?.marketingPreferences?.general">Special offers</li>
+                          <li *ngIf="person?.marketingPreferences?.events">Landlord/investor events</li>
+                          <li *ngIf="person?.marketingPreferences?.newHomes">New homes/investments</li>
+                          <li *ngIf="person?.marketingPreferences?.general">Other occasional marketing</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="list-group-item text-center" *ngIf="isLoadingNewPersonVisible">
+                  <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading person details ...
+                </div>
+              </ng-container>
+              <a href (click)="showHideOffCanvas($event)" class="list-group-item list-group-item-action text-center py-4"
+                *ngIf="contactGroupDetails?.contactPeople.length < 8 && !contactGroupDetails?.referenceCount 
+                        && !isMaxPeople">
+                <span class="btn-link">
+                  <i class="fas fa-user-plus"></i>Add Person
+                </span>
+              </a>
+              <div class="list-group-item list-group-item-warning text-center"
+                *ngIf="!(contactGroupDetails?.contactPeople.length < 8)">
+                You can add max 8 People per contact group.
+              </div>
+            </div>
+          </div>
+        </div>
+        <ng-container *ngIf="contactGroupDetails?.contactPeople.length">
+          <h5>Details</h5>
+          <form [formGroup]="contactGroupDetailsForm" class="pb-3">
+            <div class="form-group row">
+              <label for="salutation" class="col-sm-2 col-form-label col-form-label-sm">Salutation</label>
+              <div class="col-sm-10">
+                <input type="text" id="salutation" class="form-control form-control-sm" formControlName="salutation">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="addressee" class="col-sm-2 col-form-label col-form-label-sm">Addressee</label>
+              <div class="col-sm-10">
+                <input type="text" id="addressee" class="form-control form-control-sm" formControlName="addressee">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="comments" class="col-sm-2 col-form-label col-form-label-sm">Comments</label>
+              <div class="col-sm-10">
+                <textarea id="comments" class="form-control form-control-sm" formControlName="comments"
+                  rows="6"></textarea>
+              </div>
+            </div>
+            <div class="row mt-3 justify-content-end">
+              <div class="col-sm-10">
+                <div class="row">
+                  <div class="form-group col-sm-auto">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="relAgent">
+                      <label class="custom-control-label" for="relAgent">Is Relocation Agent</label>
+                    </div>
+                  </div>
+                  <div class="form-group col type-col" *ngIf="contactGroupDetails?.contactType !== 4">
+                    <ng-container
+                      *ngFor="let type of contactGroupTypes | keyvalue:keepOriginalOrder; let i = index; last as isLast">
+                      <div class="custom-control custom-radio custom-control-inline" *ngIf="!isLast"
+                        [tooltip]="type.key === 1 ? 'Remove people to select this option' : 'Add 2 or more people to select this option'"
+                        [containerClass]="isTypeDisabled(type.key) ? '' : 'd-none'" placement="auto">
+                        <input type="radio" [id]="'individual' + i" name="contactType" class="custom-control-input"
+                          [value]="type.key" formControlName="contactType"
+                          [attr.disabled]="isTypeDisabled(type.key) || contactGroupDetails?.referenceCount ? '' : null">
+                        <label class="custom-control-label" [attr.for]="'individual' + i">{{type.value}}</label>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </ng-container>
+      </ng-container>
+      <div class="form-actions">
+        <div class="container px-lg-4">
+          <div class="row justify-content-end w-100 no-gutters">
+            <div class="col-sm-10 d-flex">
+              <button type="button" class="btn btn-light mr-2" (click)="cancel()">Cancel</button>
+              <button type="submit" class="btn btn-secondary" (click)="saveContactGroup()"
+                [attr.disabled]="!contactGroupDetails?.contactPeople.length || (isSubmitting && !errorMessage) ? '' : null">
+                <i class="fas fa-spinner fa-pulse d-inline-block mr-2" *ngIf="isSubmitting && !errorMessage"></i>Save
+              </button>
+              <!-- <ng-template #warningTemplate>You can't have more than <b>2</b> people in <b>Individual/Joint</b> contact group.<br>We switched to <b>Multi/Sharer</b></ng-template>
+                    <button  type="submit" class="btn btn-secondary" (click)="saveContactGroup()"
+                      [popover]="warningTemplate"
+                      [isOpen]="contactGroupDetails?.contactPeople.length > 2 && contactGroupDetailsForm.controls.contactType.value === 1"
+                      [containerClass]="'alert alert-warning'" [outsideClick]="true" triggers="">
+                      Save
+                    </button> -->
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </form>
+    </form>
+  </ng-container>
 </div>
 <div class="off-canvas" [hidden]="!isOffCanvasVisible" (click)="showHideOffCanvas($event)">
   <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
