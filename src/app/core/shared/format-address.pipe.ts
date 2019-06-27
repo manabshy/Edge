@@ -8,6 +8,9 @@ export class FormatAddressPipe implements PipeTransform {
 
   transform(address: Address): string {
     let fullAddress = '';
+    if(!address){
+      return;
+    }
   if (!!address.flatNumber) {
     if (address.flatNumber.indexOf('Flat') === -1) {
       fullAddress += fullAddress += 'Flat ' + address.flatNumber + ', ';

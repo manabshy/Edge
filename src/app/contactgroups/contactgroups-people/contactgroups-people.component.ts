@@ -489,13 +489,18 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
   private addNewContactGroup(contactGroup: ContactGroup) {
     if (this.isNewCompanyContact) {
-      this.contactGroupDetails = {} as ContactGroup;
-      this.contactGroupDetails.contactPeople = [];
+      if(!this.contactGroupDetails){
+        this.contactGroupDetails = {} as ContactGroup;
+        this.contactGroupDetails.contactPeople = [];
+      }
       if (this.selectedCompanyDetails) {
         this.isCompanyAdded = true;
         contactGroup.companyId = this.selectedCompanyDetails.companyId;
+        contactGroup.companyName = this.selectedCompanyDetails.companyName;
         contactGroup.contactType = ContactType.CompanyContact;
-        this.contactGroupDetails.contactPeople.push(this.selectedPerson);
+        if(!this.contactGroupDetails.contactPeople.length) {
+          this.contactGroupDetails.contactPeople.push(this.selectedPerson);
+        }
         console.log('added company name',  this.contactGroupDetails.companyName);
         this.contactGroupService
         .addContactGroup(contactGroup)
@@ -522,12 +527,12 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.isSubmitting = false;
       });
     }
-    this.companyFinderForm.reset();
   }
 
   private updateContactGroup(contactGroup: ContactGroup) {
     if(contactGroup.companyName) {
       contactGroup.companyId = this.selectedCompanyDetails.companyId;
+      contactGroup.companyName = this.selectedCompanyDetails.companyName;
     }
     this.contactGroupService
       .updateContactGroup(contactGroup)
