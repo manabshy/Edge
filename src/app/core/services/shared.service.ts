@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
-import { AppConstants } from '../shared/app-constants';
+import { AppConstants, FormErrors, ValidationMessages } from '../shared/app-constants';
 import { map, fill } from 'lodash';
 import { tap} from 'rxjs/operators';
 import { BsModalService } from 'ngx-bootstrap/modal/';
 import { ErrorModalComponent } from '../error-modal/error-modal.component';
+import { FormGroup } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -186,6 +187,28 @@ export class SharedService {
       if (vv < 1000000) { vv += 50000; } else if (vv >= 1000000 && vv < 2000000) { vv += 250000; } else if (vv >= 2000000 && vv < 5000000) { vv += 500000; }
       pv = vv;
       return pv;
+    });
+  }
+
+  logValidationErrors(group: FormGroup, fakeTouched: boolean) {
+    console.log('val.....................')
+    Object.keys(group.controls).forEach((key: string) => {
+      const control = group.get(key);
+      const messages = ValidationMessages[key];
+      if (control.valid) {
+       FormErrors[key] = '';
+      }
+      if (control && !control.valid && (fakeTouched || control.dirty)) {
+        FormErrors[key] = '';
+        for (const errorKey in control.errors) {
+          if (errorKey) {
+            FormErrors[key] += messages[errorKey] + '\n';
+          }
+        }
+      }
+      if (control instanceof FormGroup) {
+        this.logValidationErrors(control, fakeTouched);
+      }
     });
   }
   getDropdownListInfo(): Observable<DropdownListInfo> {

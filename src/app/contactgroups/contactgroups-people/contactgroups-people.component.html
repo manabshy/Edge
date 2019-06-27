@@ -20,6 +20,9 @@
   <div class="alert alert-danger" *ngIf="contactGroupDetails?.contactPeople && !contactGroupDetails?.contactPeople.length && !isNewContactGroup && !isLoadingNewPersonVisible">
     You must add at least <b>1</b> person in the contact group.
   </div>
+  <div class="alert alert-danger" *ngIf="contactGroupDetails?.contactPeople && isNewCompanyContact && !isCompanyAdded">
+    You must add <b>1</b> company for a company contact.
+  </div>
   <form action="">
     <ng-container *ngIf="isNewContactGroup && !isTypePicked">
       <h5>Type of Contact Group?</h5>
@@ -46,8 +49,9 @@
           <div class="col-sm-10">
             <div class="form-group">
               <div class="input-group input-group-sm" (click)="initCompanySearch()">
-                <input type="text" id="company" class="form-control" formControlName="companyName" 
-                (keydown.enter)="$event.preventDefault();" [attr.readonly]="selectedCompany ? '' : null">
+                <input type="text" id="company" class="form-control" formControlName="companyName"
+                (keydown.enter)="$event.preventDefault();" [attr.readonly]="selectedCompany ? '' : null" [ngClass]="{'is-invalid':formErrors.companyName}">
+                <span class="invalid-feedback">{{formErrors?.companyName}}</span>
                 <div class="input-group-append" *ngIf="selectedCompany">
                   <button type="button" class="btn btn-primary">
                     Edit
@@ -75,7 +79,7 @@
                   No company found. Try again or create a new one.
                 </div>
                 <div class="list-group-item list-group-item-action text-center py-4">
-                  <span class="btn-link" [routerLink]="['/contact-centre/company']" ><i class="fas fa-plus mr-2"></i>New Company</span>
+                  <span class="btn-link" [routerLink]="['/company-centre/detail', 0, 'edit']"  [queryParams]="{isNewCompany: true}" ><i class="fas fa-plus mr-2"></i>New Company</span>
                 </div>
               </div>
             </ng-container>
@@ -348,7 +352,7 @@
                     <dt class="col-4 d-sm-none">Full Name</dt>
                     <dd class="col">
                       {{foundPerson.title}}
-                      <span [innerHTML]="foundPerson.firstName | highlight : personFinderForm.value.firstName"></span> 
+                      <span [innerHTML]="foundPerson.firstName | highlight : personFinderForm.value.firstName"></span>
                       <span [innerHTML]="foundPerson.lastName | highlight : personFinderForm.value.lastName"></span>
                     </dd>
                   </dl>

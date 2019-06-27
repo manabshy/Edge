@@ -122,7 +122,7 @@ export class CompanyEditComponent implements OnInit {
     Object.keys(group.controls).forEach((key: string) => {
       const control = group.get(key);
       const messages = ValidationMessages[key];
-      if(control.valid) {
+      if (control.valid) {
        FormErrors[key] = '';
       }
       if (control && !control.valid && (fakeTouched || control.dirty)) {

@@ -27,11 +27,19 @@ export class AppConstants {
 }
 
 export const FormErrors = {
+  'companyName': '',
+  'searchTerm': '',
   'telephone': '',
   'email': '',
   'fax': ''
 };
 export const ValidationMessages = {
+  'searchTerm': {
+    required: ' This field is required.',
+  },
+  'companyName': {
+    required: ' Company name is required.',
+  },
   'email': {
     required: ' Email is required.',
     pattern: 'Email is not valid'
