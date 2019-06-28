@@ -112,8 +112,6 @@ export class CompanyEditComponent implements OnInit {
       }),
         telephone: ['', { validators: [Validators.minLength(7),
                           Validators.maxLength(16), Validators.pattern(/^\+44\s?\d{10}|0044\s?\d{10}|0\s?\d{10}/)], updateOn: 'blur' }],
-        // telephone: ['', { validators: [Validators.minLength(7),
-        //                   Validators.maxLength(16), Validators.pattern(/^\+?[ \d]+$/g)], updateOn: 'blur' }],
         fax: ['', { validators: [Validators.minLength(7), Validators.maxLength(16), Validators.pattern(/^\+44\s?\d{10}|0044\s?\d{10}|0\s?\d{10}/)], updateOn: 'blur' }],
         email: ['', { validators: [Validators.pattern(AppConstants.emailPattern)], updateOn: 'blur' }],
         website: [''],
