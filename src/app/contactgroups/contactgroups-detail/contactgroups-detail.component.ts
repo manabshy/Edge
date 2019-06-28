@@ -28,10 +28,9 @@ export class ContactgroupsDetailComponent implements OnInit {
       this.personId = params['personId'] || 0;
       this.searchedPersonDetails = null;
       this.searchedPersonContactGroups = null;
-      this.init(); 
+      this.init();
     });
     this.init();
-
   }
 
   init() {
@@ -61,7 +60,7 @@ export class ContactgroupsDetailComponent implements OnInit {
     });
   }
 
-  
+
   createNewContactGroup(){
     this.isNewContactGroup = true;
   }

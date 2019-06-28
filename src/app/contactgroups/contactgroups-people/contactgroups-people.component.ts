@@ -71,8 +71,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isCloned: boolean;
   clonedContact: ContactGroup;
   formErrors = FormErrors;
-  public keepOriginalOrder = (a) => a.key;
   isCompanyAdded = true;
+  public keepOriginalOrder = (a) => a.key;
 
   constructor(
     private contactGroupService: ContactGroupsService,
@@ -96,7 +96,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   init() {
-    if(!this.contactGroupId) {  
+    if(!this.contactGroupId) {
       this.route.queryParams.subscribe(params => {
         this.isNewContactGroup = params['isNewContactGroup'] || false;
       });
@@ -262,7 +262,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
         const email = x.emailAddresses.filter(x => x === person.emailAddress);
         const phone = x.phoneNumbers.filter(x => x === person.phoneNumber);
         const samePhone = phone[0] ? phone[0].toString() === person.phoneNumber : false;
-        console.log('email:', email , 'and phone:', phone);
         const sameEmail = email[0] ? email[0].toLowerCase() === person.emailAddress : false;
         switch (true) {
           case sameFirstName && sameLastName && (sameEmail || samePhone):
@@ -288,7 +287,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
         matchedPeople.push(x);
       });
       this.foundPeople = matchedPeople;
-      console.table('matched people', matchedPeople);
    }
   }
   createNewContactGroupPerson(event) {
@@ -301,7 +299,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
     setTimeout(() => {
       this.offCanvasContent.nativeElement.scrollTo(0, 0);
     });
-    console.log('person from finder form 1', this.newPerson);
   }
 
   setMainPerson(id: number) {
@@ -393,7 +390,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
       if (this.contactGroupId) {
         this.getContactGroupById(this.contactGroupId);
       }
-      console.log('contact group has transaction history', this.contactGroupDetails);
       this.personFinderForm.reset();
     } else {
       return false;
@@ -448,12 +444,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   showAddedPersonDetails(id) {
-    console.log('id from child', id);
     if (id !== 0) {
       this.selectedPersonId = id;
       this.getPersonDetails(id);
-      console.log('selected person id', this.selectedPersonId);
-      console.log(this.isOffCanvasVisible);
     }
     this.selectedPersonId = 0;
   }
