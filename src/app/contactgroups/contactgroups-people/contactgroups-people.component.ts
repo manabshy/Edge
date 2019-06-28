@@ -495,6 +495,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.onSaveComplete(this.contactGroupId);
      }
    } else {
+     this.errorMessage = {} as WedgeError;
     this.errorMessage.displayMessage = 'Please correct validation errors';
    }
   }

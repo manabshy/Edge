@@ -156,6 +156,7 @@ export class CompanyEditComponent implements OnInit {
         this.onSaveComplete();
       }
     } else {
+      this.errorMessage = {} as WedgeError;
       this.errorMessage.displayMessage = 'Please correct validation errors';
     }
   }
