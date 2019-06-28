@@ -25,7 +25,7 @@ export class CompanyEditComponent implements OnInit {
   companyDetails: Company;
   existingSigner: Signer;
   signer: Signer;
-  errorMessage = new WedgeError();
+  errorMessage: WedgeError;
   defaultCountryCode = 232;
   formErrors = FormErrors;
   // get signer(): FormControl {
@@ -156,6 +156,7 @@ export class CompanyEditComponent implements OnInit {
         this.onSaveComplete();
       }
     } else {
+      this.errorMessage = {} as WedgeError;
       this.errorMessage.displayMessage = 'Please correct validation errors';
     }
   }

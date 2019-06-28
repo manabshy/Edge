@@ -38,7 +38,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   isNewContactGroup = false;
   isOffCanvasVisible = false;
   returnUrl: string;
-  errorMessage = new WedgeError();
+  errorMessage: WedgeError;
   formArraryErrors: string;
   isSubmitting = false;
   isLoadingAddressVisible = false;
@@ -493,6 +493,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   checkDuplicateAdressLines() {
    const addressLines = [];
    const countryName = this.getCountryName(this.countryId.value);
+   this.errorMessage = {} as WedgeError;
     addressLines.push(this.addressLines.value.split('\n'));
     addressLines.forEach(x => {
       for (const value of  Object.values(addressLines[0])) {
@@ -614,6 +615,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         this.onSaveComplete();
       }
     } else {
+      this.errorMessage = {} as WedgeError;
       this.errorMessage.displayMessage = 'Please correct validation errors';
       console.log(this.personForm.value)
       if(!this.personForm.value.emailAddresses[0].email && !this.personForm.value.phoneNumbers[0].number){

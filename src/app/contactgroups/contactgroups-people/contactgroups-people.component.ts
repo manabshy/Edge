@@ -55,7 +55,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
   initialContactGroupLength = 0;
   isSubmitting = false;
-  errorMessage = new WedgeError();
+  errorMessage: WedgeError;
   isSwitchTypeMsgVisible = false;
   isLoadingCompaniesVisible = false;
   orderFoundPeople = 'matchScore';
@@ -495,6 +495,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.onSaveComplete(this.contactGroupId);
      }
    } else {
+     this.errorMessage = {} as WedgeError;
     this.errorMessage.displayMessage = 'Please correct validation errors';
    }
   }
