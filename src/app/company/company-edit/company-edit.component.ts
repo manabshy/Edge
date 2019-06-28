@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { AppConstants, FormErrors, ValidationMessages } from 'src/app/core/shared/app-constants';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import { Company, ContactGroup, Signer } from 'src/app/contactgroups/shared/contact-group';
+import { Company, Signer } from 'src/app/contactgroups/shared/contact-group';
 import { CompanyService } from '../shared/company.service';
 import { debounceTime } from 'rxjs/operators';
 
@@ -28,9 +28,7 @@ export class CompanyEditComponent implements OnInit {
   errorMessage: WedgeError;
   defaultCountryCode = 232;
   formErrors = FormErrors;
-  // get signer(): FormControl {
-  //   return <FormControl> this.companyForm.get('signer');
-  // }
+
   constructor(private contactGroupService: ContactGroupsService,
               private companyService: CompanyService,
               private fb: FormBuilder,
@@ -51,7 +49,7 @@ export class CompanyEditComponent implements OnInit {
     if (id) {
       this.getCompanyDetails(id);
     }
-    this.companyForm.valueChanges.pipe(debounceTime(400)).subscribe(data => this.logValidationErrors(this.companyForm, false));
+    this.companyForm.valueChanges.pipe(debounceTime(400)).subscribe(() => this.logValidationErrors(this.companyForm, false));
   }
   getCompanyDetails(id: number) {
     this.contactGroupService.getCompany(id).subscribe(data => {
@@ -113,8 +111,10 @@ export class CompanyEditComponent implements OnInit {
         postCode: ['', { validators: [Validators.minLength(5), Validators.maxLength(8)], updateOn: 'blur' }],
       }),
         telephone: ['', { validators: [Validators.minLength(7),
-                          Validators.maxLength(16), Validators.pattern(/^\+?[ \d]+$/g)], updateOn: 'blur' }],
-        fax: ['', { validators: [Validators.minLength(7), Validators.maxLength(16), Validators.pattern(/^\+?[ \d]+$/g)], updateOn: 'blur' }],
+                          Validators.maxLength(16), Validators.pattern(/^\+44\s?\d{10}|0044\s?\d{10}|0\s?\d{10}/)], updateOn: 'blur' }],
+        // telephone: ['', { validators: [Validators.minLength(7),
+        //                   Validators.maxLength(16), Validators.pattern(/^\+?[ \d]+$/g)], updateOn: 'blur' }],
+        fax: ['', { validators: [Validators.minLength(7), Validators.maxLength(16), Validators.pattern(/^\+44\s?\d{10}|0044\s?\d{10}|0\s?\d{10}/)], updateOn: 'blur' }],
         email: ['', { validators: [Validators.pattern(AppConstants.emailPattern)], updateOn: 'blur' }],
         website: [''],
     });
@@ -184,8 +184,6 @@ export class CompanyEditComponent implements OnInit {
         this.isSubmitting = false;
       });
     }
-    console.log('company address.......', company.companyAddress);
-    console.log(' address 2.......', this.address);
   }
   onSaveComplete() {
     this.companyForm.reset();
