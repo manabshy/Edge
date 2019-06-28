@@ -56,9 +56,9 @@ export class AddressComponent implements OnInit {
     this.countries = this.listInfo.result.countries;
     this.addressForm = this.fb.group({
       fullAddress: [''],
-      addressLines: ['', {validators: Validators.maxLength(500), updateOn: 'blur'}],
+      addressLines: ['', {validators: Validators.maxLength(500)}],
       countryId: 0,
-      postCode: ['', {validators: [Validators.minLength(5), Validators.maxLength(8), Validators.pattern(AppConstants.postCodePattern)], updateOn: 'blur'}],
+      postCode: ['', {validators: [Validators.minLength(5), Validators.maxLength(8), Validators.pattern(AppConstants.postCodePattern)]}],
     });
     if (this.companyDetails || this.personDetails) {
         this.populateAddressForm(this.personDetails, this.companyDetails);
