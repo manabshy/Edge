@@ -195,7 +195,7 @@ export interface BasicContactGroupData extends ResultData {
   result: BasicContactGroup[];
 }
 export interface PersonSummaryFiguresData extends ResultData {
-  result: PersonSummaryFigures[];
+  result: PersonSummaryFigures;
 }
 
 export interface PersonContactData extends ResultData {

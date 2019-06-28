@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ContactGroup, BasicContactGroup } from '../shared/contact-group';
+import { ContactGroup, BasicContactGroup, PersonSummaryFigures } from '../shared/contact-group';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ActivatedRoute } from '@angular/router';
 import { Person } from 'src/app/core/models/person';
@@ -19,6 +19,7 @@ export class ContactgroupsDetailComponent implements OnInit {
   personId = 0;
   isNewContactGroup = false;
   isCollapsed: boolean;
+  summaryTotals: PersonSummaryFigures;
   constructor(private contactGroupService: ContactGroupsService,
               private route: ActivatedRoute) { }
 
@@ -37,6 +38,7 @@ export class ContactgroupsDetailComponent implements OnInit {
     // this.getContactGroupById(this.contactGroupId);
     this.getSearchedPersonDetails(this.personId);
     this.getSearchedPersonContactGroups(this.personId);
+    this.getSearchedPersonSummaryInfo(this.personId);
   }
 
   getContactGroupById(contactGroupId: number) {
@@ -50,6 +52,12 @@ export class ContactgroupsDetailComponent implements OnInit {
     this.contactGroupService.getPerson(personId).subscribe(data => {
       this.searchedPersonDetails = data;
       console.log(this.searchedPersonDetails);
+    });
+  }
+  getSearchedPersonSummaryInfo(personId: number) {
+    this.contactGroupService.getPersonInfo(personId).subscribe(data => {
+      this.summaryTotals = data;
+      console.log('summary info', data);
     });
   }
 

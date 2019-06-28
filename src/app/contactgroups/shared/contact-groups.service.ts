@@ -52,7 +52,7 @@ export class ContactGroupsService {
     const url = `${AppConstants.basePersonUrl}/${personId}/contactGroups`;
     return this.http.get<BasicContactGroupData>(url).pipe(map(response => response.result));
   }
-  getPersonInfo( personId: number): Observable<PersonSummaryFigures[]> {
+  getPersonInfo( personId: number): Observable<PersonSummaryFigures> {
     const url = `${AppConstants.basePersonUrl}/${personId}/info`;
     return this.http.get<PersonSummaryFiguresData>(url).pipe(map(response => response.result));
   }
