@@ -154,6 +154,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     } else {
       this.getPersonDetails(id);
     }
+    this.logValidationErrors(this.personForm, false);
     this.personForm.valueChanges
       .pipe(debounceTime(400)).subscribe((data) => {
         this.postCode.setValue(this.sharedService.formatPostCode(data.address.postCode), { emitEvent: false });
