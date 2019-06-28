@@ -155,7 +155,6 @@ export const ContactGroupsTypes = new Map( [
   [ContactType.Individual,  'Individual/Joint'],
   [ContactType.Sharers,  'Multi/Sharer'],
   [ContactType.CompanyContact,  'Company Contact']
-  // [ContactType.ReloContact,  'Relo Agent']
 ]);
 export interface ContactGroupsType {
   id: string;
@@ -195,9 +194,10 @@ export interface ContactGroupData extends ResultData {
 export interface BasicContactGroupData extends ResultData {
   result: BasicContactGroup[];
 }
-// export interface SignersData extends ResultData {
-//   result: BasicContactGroup[] | BasicContactGroup;
-// }
+export interface PersonSummaryFiguresData extends ResultData {
+  result: PersonSummaryFigures[];
+}
+
 export interface PersonContactData extends ResultData {
   result: Person;
 }
