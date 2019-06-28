@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { ContactGroupAutoCompleteResult, ContactGroupAutoCompleteData,
          PersonContactData, ContactGroupData, ContactGroup, BasicContactGroup,
-          BasicContactGroupData, PeopleAutoCompleteResult, PeopleAutoCompleteData, AutoCompleteResult, CompanyAutoCompleteResult, CompanyContactGroupAutoCompleteData as CompanyAutoCompleteData, Company, CompanyData, SignerRequest, SignerAutoCompleteData, Signer } from './contact-group';
+          BasicContactGroupData, PeopleAutoCompleteResult, PeopleAutoCompleteData, AutoCompleteResult, CompanyAutoCompleteResult, CompanyContactGroupAutoCompleteData as CompanyAutoCompleteData, Company, CompanyData, SignerRequest, SignerAutoCompleteData, Signer, PersonSummaryFiguresData, PersonSummaryFigures } from './contact-group';
 import { map, tap, catchError } from 'rxjs/operators';
 import { Person, BasicPerson } from 'src/app/core/models/person';
 import { WedgeError } from 'src/app/core/services/shared.service';
@@ -52,9 +52,9 @@ export class ContactGroupsService {
     const url = `${AppConstants.basePersonUrl}/${personId}/contactGroups`;
     return this.http.get<BasicContactGroupData>(url).pipe(map(response => response.result));
   }
-  getPersonInfo( personId: number): Observable<BasicContactGroup[]> {
+  getPersonInfo( personId: number): Observable<PersonSummaryFigures> {
     const url = `${AppConstants.basePersonUrl}/${personId}/info`;
-    return this.http.get<BasicContactGroupData>(url).pipe(map(response => response.result));
+    return this.http.get<PersonSummaryFiguresData>(url).pipe(map(response => response.result));
   }
   getAutocompletePeople(person: BasicPerson): Observable<PeopleAutoCompleteResult[]> {
     const options = new HttpParams()

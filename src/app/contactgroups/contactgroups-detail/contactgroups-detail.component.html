@@ -25,42 +25,50 @@
         </p>
       </div>
       <div class="col-sm-4">
-          <div class="mb-2"><pre>{{searchedPersonDetails.address | formatAddress}}</pre><span class="text-danger" *ngIf="!(searchedPersonDetails.address | formatAddress)">No address</span></div>
+        <div class="mb-2">
+          <pre>{{searchedPersonDetails.address | formatAddress}}</pre><span class="text-danger"
+            *ngIf="!(searchedPersonDetails.address | formatAddress)">No address</span></div>
       </div>
       <div class="col-12 col-sm-3 col-xl-4">
         <div class="row">
           <div class="col-6 telephone">
-            <p class="mb-2 text-danger" *ngIf="!searchedPersonDetails.phoneNumbers.length || !searchedPersonDetails.phoneNumbers[0].number">No phone</p>
+            <p class="mb-2 text-danger"
+              *ngIf="!searchedPersonDetails.phoneNumbers.length || !searchedPersonDetails.phoneNumbers[0].number">No
+              phone</p>
             <ng-container *ngFor="let phoneNumber of searchedPersonDetails.phoneNumbers">
-              <p class="mb-2" *ngIf="phoneNumber.number"><a href="tel:{{phoneNumber.number}}">{{phoneNumber.number}} <ng-container *ngIf="phoneNumber.sendSMS">(sms)</ng-container></a></p>
+              <p class="mb-2" *ngIf="phoneNumber.number"><a href="tel:{{phoneNumber.number}}">{{phoneNumber.number}}
+                  <ng-container *ngIf="phoneNumber.sendSMS">(sms)</ng-container></a></p>
             </ng-container>
           </div>
         </div>
       </div>
       <div class="col-sm-5 col-xl-4">
-        <p class="mb-2 text-danger" *ngIf="!searchedPersonDetails.emailAddresses.length || !searchedPersonDetails.emailAddresses[0].email">No email</p>
+        <p class="mb-2 text-danger"
+          *ngIf="!searchedPersonDetails.emailAddresses.length || !searchedPersonDetails.emailAddresses[0].email">No
+          email</p>
         <ng-container *ngFor="let emailAddresses of searchedPersonDetails.emailAddresses">
           <p class="mb-2 text-truncate" *ngIf="emailAddresses.email"><a
-            href="mailto:{{emailAddresses.email}}">{{emailAddresses.email}}</a></p>
+              href="mailto:{{emailAddresses.email}}">{{emailAddresses.email}}</a></p>
         </ng-container>
       </div>
       <div class="col-12">
         <hr class="my-1">
       </div>
-      <div class="col-12" >
-          <button type="button" class="btn btn-link px-0" (click)="isCollapsed = !isCollapsed"
-          [attr.aria-expanded]="!isCollapsed" aria-controls="collapseBasic">Marketing Prefs <span class="badge badge-pill badge-primary">
+      <div class="col-12">
+        <button type="button" class="btn btn-link px-0" (click)="isCollapsed = !isCollapsed"
+          [attr.aria-expanded]="!isCollapsed" aria-controls="collapseBasic">Marketing Prefs <span
+            class="badge badge-pill badge-primary">
             {{searchedPersonDetails.marketingPreferences?.count || 0}} </span>
-          </button>
-          <div id="collapseBasic" [collapse]="!isCollapsed">
-            <ul>
-              <li *ngIf="searchedPersonDetails.marketingPreferences?.marketBulletin">Quarterly bulletin</li>
-              <li *ngIf="searchedPersonDetails.marketingPreferences?.general" >Special offers</li>
-              <li *ngIf="searchedPersonDetails.marketingPreferences?.events">Landlord/investor events</li>
-              <li *ngIf="searchedPersonDetails.marketingPreferences?.newHomes">New homes/investments</li>
-              <li *ngIf="searchedPersonDetails.marketingPreferences?.general">Other occasional marketing</li>
-            </ul>
-          </div>
+        </button>
+        <div id="collapseBasic" [collapse]="!isCollapsed">
+          <ul>
+            <li *ngIf="searchedPersonDetails.marketingPreferences?.marketBulletin">Quarterly bulletin</li>
+            <li *ngIf="searchedPersonDetails.marketingPreferences?.general">Special offers</li>
+            <li *ngIf="searchedPersonDetails.marketingPreferences?.events">Landlord/investor events</li>
+            <li *ngIf="searchedPersonDetails.marketingPreferences?.newHomes">New homes/investments</li>
+            <li *ngIf="searchedPersonDetails.marketingPreferences?.general">Other occasional marketing</li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -74,25 +82,28 @@
           </div>
         </div>
         <ng-container *ngFor="let searchedPersonContactGroup of searchedPersonContactGroups">
-          <a [routerLink]="['people', searchedPersonContactGroup.contactGroupId]" class="list-group-item list-group-item-action">
+          <a [routerLink]="['people', searchedPersonContactGroup.contactGroupId]"
+            class="list-group-item list-group-item-action">
             <div class="row">
               <div class="col">
-                  <ng-container *ngFor="let contactPerson of searchedPersonContactGroup.contactPeople; last as isLast">
-                    <ng-container *ngIf="contactPerson?.personId === searchedPersonDetails?.personId; else link">
-                        {{contactPerson.addressee}}
-                    </ng-container>
-                    <ng-template #link>
-                        <a [routerLink]="['../../../detail', contactPerson.personId ]" (click)="$event.stopPropagation();">{{contactPerson.addressee}}</a>
-                    </ng-template>
-                    <ng-container *ngIf="!isLast">, </ng-container>
+                <ng-container *ngFor="let contactPerson of searchedPersonContactGroup.contactPeople; last as isLast">
+                  <ng-container *ngIf="contactPerson?.personId === searchedPersonDetails?.personId; else link">
+                    {{contactPerson.addressee}}
                   </ng-container>
-                  <ng-container *ngIf="searchedPersonContactGroup?.isCompany">
-                    <span class="badge badge-pill badge-info ml-2">{{searchedPersonContactGroup?.companyName}}</span>
-                  </ng-container>
+                  <ng-template #link>
+                    <a [routerLink]="['../../../detail', contactPerson.personId ]"
+                      (click)="$event.stopPropagation();">{{contactPerson.addressee}}</a>
+                  </ng-template>
+                  <ng-container *ngIf="!isLast">, </ng-container>
+                </ng-container>
+                <ng-container *ngIf="searchedPersonContactGroup?.isCompany">
+                  <span class="badge badge-pill badge-info ml-2">{{searchedPersonContactGroup?.companyName}}</span>
+                </ng-container>
               </div>
               <div class="col-auto">
                 <span class="btn-link py-0">
-                  <i class="fas fa-user-tie mr-1 fa-fw" *ngIf="searchedPersonContactGroup?.isCompany; else peopleIcon"></i>
+                  <i class="fas fa-user-tie mr-1 fa-fw"
+                    *ngIf="searchedPersonContactGroup?.isCompany; else peopleIcon"></i>
                   <ng-template #peopleIcon>
                     <i class="fas fa-users mr-1 fa-fw"></i>
                   </ng-template> View Group
@@ -101,26 +112,23 @@
             </div>
           </a>
         </ng-container>
-        <a class="list-group-item list-group-item-action text-center py-4"  (click)="createNewContactGroup(); $event.stopPropagation()"
-          *ngIf="searchedPersonDetails" [routerLink]="['people', 0]" [queryParams]="{isNewContactGroup: true}">
+        <a class="list-group-item list-group-item-action text-center py-4"
+          (click)="createNewContactGroup(); $event.stopPropagation()" *ngIf="searchedPersonDetails"
+          [routerLink]="['people', 0]" [queryParams]="{isNewContactGroup: true}">
           <span class="btn-link">
             <i class="fas fa-users"></i><i class="fas fa-plus fa-xs align-text-top"></i> New Contact Group
           </span>
         </a>
-        <!-- <a class="list-group-item list-group-item-action text-center py-4"  (click)="createNewContactGroup(); $event.stopPropagation()"
-       *ngIf="searchedPersonDetails" [routerLink]="['people', 0]">
-          <span class="btn-link">
-            <i class="fas fa-users"></i><i class="fas fa-plus fa-xs align-text-top"></i> New Contact Group
-          </span>
-        </a> -->
       </div>
     </div>
   </div>
-  <h5>Info</h5>
-  <accordion [closeOthers]="true">
+  <div *ngIf="summaryTotals">
+    <h5>Info</h5>
+    <accordion [closeOthers]="true">
       <accordion-group class="mb-2">
         <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
-          <div class="pull-left float-left">Leads <span class="badge badge-pill badge-primary">1</span></div>
+          <div class="pull-left float-left">Leads <span
+              class="badge badge-pill badge-primary">{{summaryTotals.leads}}</span></div>
           <a class="float-right pull-right" routerLink="/lead-edit">Add Lead <i class="fas fa-plus"></i></a>
         </button>
         <div class="list-group list-group-flush">
@@ -171,14 +179,16 @@
       </accordion-group>
       <accordion-group class="mb-2">
         <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
-          <div class="pull-left float-left">Notes <span class="badge badge-pill badge-primary">3</span></div>
+          <div class="pull-left float-left">Notes <span
+              class="badge badge-pill badge-primary">{{summaryTotals.notes}}</span></div>
           <a class="float-right pull-right" routerLink="/home">Add Note <i class="fas fa-plus"></i></a>
         </button>
         <app-contactgroups-notes></app-contactgroups-notes>
       </accordion-group>
       <accordion-group class="mb-2">
         <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
-          <div class="pull-left float-left">Applicants <span class="badge badge-pill badge-primary">2</span></div>
+          <div class="pull-left float-left">Applicants <span
+              class="badge badge-pill badge-primary">{{summaryTotals.searches}}</span></div>
           <a class="float-right pull-right" routerLink="/home">Add Appl. <i class="fas fa-plus"></i></a>
         </button>
         <div class="list-group list-group-flush">
@@ -237,7 +247,8 @@
       </accordion-group>
       <accordion-group class="mb-2">
         <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
-          <div class="pull-left float-left">Valuations <span class="badge badge-pill badge-primary">1</span></div>
+          <div class="pull-left float-left">Valuations <span
+              class="badge badge-pill badge-primary">{{summaryTotals.valuations.total}}</span></div>
           <a class="float-right pull-right" routerLink="/home">Add Val. <i class="fas fa-plus"></i></a>
         </button>
         <div class="list-group list-group-flush">
@@ -298,7 +309,8 @@
       </accordion-group>
       <accordion-group class="mb-2">
         <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
-          <div class="pull-left float-left">Instructions <span class="badge badge-pill badge-primary">2</span></div>
+          <div class="pull-left float-left">Instructions <span
+              class="badge badge-pill badge-primary">{{summaryTotals.instructions.total}}</span></div>
           <a class="float-right pull-right" routerLink="/home">Add Ins. <i class="fas fa-plus"></i></a>
         </button>
         <div class="list-group list-group-flush">
@@ -396,7 +408,8 @@
       </accordion-group>
       <accordion-group class="mb-2">
         <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
-          <div class="pull-left float-left">Offers <span class="badge badge-pill badge-primary">1</span></div>
+          <div class="pull-left float-left">Offers <span
+              class="badge badge-pill badge-primary">{{summaryTotals.offers.total}}</span></div>
           <a class="float-right pull-right" routerLink="/home">Add Offer <i class="fas fa-plus"></i></a>
         </button>
         <div class="list-group list-group-flush">
@@ -467,7 +480,8 @@
       </accordion-group>
       <accordion-group class="mb-2">
         <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
-          <div class="pull-left float-left">Tenancies <span class="badge badge-pill badge-primary">1</span></div>
+          <div class="pull-left float-left">Tenancies <span
+              class="badge badge-pill badge-primary">{{summaryTotals.tenancies.total}}</span></div>
           <a class="float-right pull-right" routerLink="/home">Add Tenan. <i class="fas fa-plus"></i></a>
         </button>
         <div class="list-group list-group-flush">
@@ -536,7 +550,8 @@
       </accordion-group>
       <accordion-group class="mb-2">
         <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
-          <div class="pull-left float-left">Letting Managements <span class="badge badge-pill badge-primary">1</span>
+          <div class="pull-left float-left">Letting Managements <span
+              class="badge badge-pill badge-primary">{{summaryTotals.lettingsManagements}}</span>
           </div>
           <a class="float-right pull-right" routerLink="/home">Add L.M. <i class="fas fa-plus"></i></a>
         </button>
@@ -594,7 +609,8 @@
       </accordion-group>
       <accordion-group class="mb-2">
         <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
-          <div class="pull-left float-left">Home Managements <span class="badge badge-pill badge-primary">1</span></div>
+          <div class="pull-left float-left">Home Managements <span
+              class="badge badge-pill badge-primary">{{summaryTotals.homeManagements}}</span></div>
           <a class="float-right pull-right" routerLink="/home">Add H.M. <i class="fas fa-plus"></i></a>
         </button>
         <div class="list-group list-group-flush">
@@ -643,7 +659,6 @@
           </a>
         </div>
       </accordion-group>
-
-  </accordion>
+    </accordion>
+  </div>
 </div>
-

@@ -19,6 +19,10 @@ export class AppConstants {
   public static get emailPattern(): any {
     return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; }
   public static get telephonePattern(): any { return /^\+?[ \d]+$/g; }
+  public static get ukTelephonePattern(): any {
+    return /^((\(?0\d{4}\)?\s?\d{3}\s?\d{3})|(\(?0\d{3}\)?\s?\d{3}\s?\d{4})|(\(?0\d{2}\)?\s?\d{4}\s?\d{4}))(\s?\#(\d{4}|\d{3}))?$/;
+    // return /^\+?[ \d]+$/g;
+    }
   // public static get redirectUri(): string { return 'http://localhost:4200/auth-callback'; }
   // public static get postLogoutRedirectUri(): string { return  'http://localhost:4200'; }
   // public static get leaderboardBaseUrl(): string { return 'http://localhost:57211/v10/staffmembers/leaderboard'; }
