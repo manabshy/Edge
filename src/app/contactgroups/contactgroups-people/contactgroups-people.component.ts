@@ -55,7 +55,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
   initialContactGroupLength = 0;
   isSubmitting = false;
-  errorMessage: WedgeError;
+  errorMessage = new WedgeError();
   isSwitchTypeMsgVisible = false;
   isLoadingCompaniesVisible = false;
   orderFoundPeople = 'matchScore';

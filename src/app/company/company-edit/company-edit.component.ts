@@ -25,7 +25,7 @@ export class CompanyEditComponent implements OnInit {
   companyDetails: Company;
   existingSigner: Signer;
   signer: Signer;
-  errorMessage: WedgeError;
+  errorMessage = new WedgeError();
   defaultCountryCode = 232;
   formErrors = FormErrors;
   // get signer(): FormControl {

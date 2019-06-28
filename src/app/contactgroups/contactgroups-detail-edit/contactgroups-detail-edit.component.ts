@@ -38,7 +38,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   isNewContactGroup = false;
   isOffCanvasVisible = false;
   returnUrl: string;
-  errorMessage: WedgeError;
+  errorMessage = new WedgeError();
   formArraryErrors: string;
   isSubmitting = false;
   isLoadingAddressVisible = false;
