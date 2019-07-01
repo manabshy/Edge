@@ -154,3 +154,7 @@ fieldset {
         line-height: $headings-line-height;
     }
 }
+
+.form-control[readonly]{
+    background-color: $input-bg;
+}

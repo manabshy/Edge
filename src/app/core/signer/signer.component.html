@@ -7,11 +7,6 @@
             <div class="input-group input-group-sm" (click)="initSearch()">
               <input #searchTermInput type="text" id="searchTerm" class="form-control" formControlName="searchTerm" 
                 (keydown.enter)="$event.preventDefault();" [attr.readonly]="selectedSignerDetails ? '' : null">
-              <div class="input-group-append" *ngIf="selectedSignerDetails">
-                <button type="button" class="btn btn-primary">
-                  Edit
-                </button>
-              </div>
             </div>
           </div>
           <ng-container *ngIf="signers && !selectedSignerDetails && signerFinderForm.value.searchTerm">

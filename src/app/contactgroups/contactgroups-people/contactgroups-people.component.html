@@ -74,11 +74,6 @@
                 <div class="input-group input-group-sm" (click)="initCompanySearch()">
                   <input #companyNameInput type="text" id="company" class="form-control" formControlName="companyName"
                     (keydown.enter)="$event.preventDefault();" [attr.readonly]="selectedCompanyDetails ? '' : null">
-                  <div class="input-group-append" *ngIf="selectedCompanyDetails && !contactGroupDetails?.referenceCount">
-                    <button type="button" class="btn btn-primary">
-                      Edit
-                    </button>
-                  </div>
                 </div>
               </div>
               <ng-container *ngIf="foundCompanies && !selectedCompanyDetails">
