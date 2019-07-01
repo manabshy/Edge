@@ -103,7 +103,7 @@ export class CompanyEditComponent implements OnInit {
 
   private setupCompanyForm() {
     this.companyForm = this.fb.group({
-      companyName: [''],
+      companyName: ['', Validators.required],
       companyTypeId: 0,
       signer: [''],
       fullAddress: [''],
