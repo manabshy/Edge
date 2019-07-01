@@ -30,14 +30,14 @@ export class ContactgroupsCompanyEditComponent implements OnInit {
       signers: [''],
       fullAddress: [''],
       address: this.fb.group({
-        addressLines: ['', { validators: Validators.maxLength(500), updateOn: 'blur' }],
+        addressLines: ['', { validators: Validators.maxLength(500)}],
         countryId: 0,
-        postCode: ['', { validators: [Validators.minLength(5), Validators.maxLength(8)], updateOn: 'blur' }],
+        postCode: ['', { validators: [Validators.minLength(5), Validators.maxLength(8)]}],
       }),
       contactDetails: this.fb.group({
-        telephone: ['', { validators: [Validators.required, Validators.minLength(7), Validators.maxLength(16), Validators.pattern(/^\+?[ \d]+$/g)], updateOn: 'blur' }],
+        telephone: ['', { validators: [Validators.required, Validators.minLength(7), Validators.maxLength(16), Validators.pattern(/^\+?[ \d]+$/g)]}],
         fax: [''],
-        email: ['', { validators: [Validators.required, Validators.pattern(AppConstants.emailPattern)], updateOn: 'blur' }],
+        email: ['', { validators: [Validators.required, Validators.pattern(AppConstants.emailPattern)]}],
         website: [''],
       })
     });

@@ -140,7 +140,7 @@
                 <input type="text" [id]="'email' + i" [placeholder]="!isFirst ? 'Additional Email' : ''" class="form-control" formControlName="email"
                 (keyup)="addRemoveEmailItem(i, false)" (blur)="addRemoveEmailItem(i, true)"
                 [ngClass]="{'border border-warning': !personForm.controls.emailAddresses.controls[0].controls.email.value && isFirst && !isContactErrorVisible,
-                            'is-invalid': (personForm.controls.emailAddresses.controls[i].controls.email.value && !!personForm.controls.emailAddresses.controls[i].controls.email.errors) 
+                            'is-invalid': isValid('email', i) 
                             || isContactErrorVisible}">
                 <div class="input-group-append">
                   <label class="btn btn-light" btnCheckbox formControlName="isPreferred" tabindex="0" (click)="togglePreferences(i, emailAddresses)"
@@ -169,7 +169,7 @@
             <div class="input-group input-group-sm">
               <input type="text" [id]="'phone' + i" class="form-control" [placeholder]="!isFirst ? 'Additional phone' : ''" formControlName="number" (keyup)="addRemovePhoneNumberItem(i, false)" (blur)="addRemovePhoneNumberItem(i, true)"
               [ngClass]="{'border border-warning': !personForm.controls.phoneNumbers.controls[0].controls.number.value && isFirst && !isContactErrorVisible,
-                        'is-invalid': (personForm.controls.phoneNumbers.controls[i].controls.number.value && !!personForm.controls.phoneNumbers.controls[i].controls.number.errors)
+                        'is-invalid': isValid('number', i)
                         || isContactErrorVisible}">
               <select class="custom-select" formControlName="typeId">
                 <option *ngFor="let telephoneType of telephoneTypes | keyvalue:keepOriginalOrder" [value] = telephoneType.key>{{telephoneType.value}} </option>

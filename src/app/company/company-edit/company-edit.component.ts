@@ -109,13 +109,13 @@ export class CompanyEditComponent implements OnInit {
       signer: [''],
       fullAddress: [''],
       address: this.fb.group({
-        addressLines: ['', { validators: Validators.maxLength(500), updateOn: 'blur' }],
+        addressLines: ['', { validators: Validators.maxLength(500)}],
         countryId: 0,
-        postCode: ['', { validators: [Validators.minLength(5), Validators.maxLength(8)], updateOn: 'blur' }],
+        postCode: ['', { validators: [Validators.minLength(5), Validators.maxLength(8)]}],
       }),
-        telephone: ['', { validators: WedgeValidators.phoneNumberValidator() , updateOn: 'blur' }],
-        fax: ['', { validators: WedgeValidators.phoneNumberValidator(), updateOn: 'blur' }],
-        email: ['', { validators: [Validators.pattern(AppConstants.emailPattern)], updateOn: 'blur' }],
+        telephone: ['', { validators: WedgeValidators.phoneNumberValidator()}],
+        fax: ['', { validators: WedgeValidators.phoneNumberValidator()}],
+        email: ['', { validators: Validators.pattern(AppConstants.emailPattern)}],
         website: [''],
     });
   }

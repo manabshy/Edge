@@ -102,6 +102,11 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     'postCode': ''
   };
   foundAddress: AddressAutoCompleteData;
+  
+  invalidFormArrayControls = {
+    number: [],
+    email: []
+  };
 
   get showPostCode(): boolean {
     return this.address.get('countryId').value == this.defaultCountryCode;
@@ -149,11 +154,11 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     } else {
       this.getPersonDetails(id);
     }
+    this.logValidationErrors(this.personForm, false);
     this.personForm.valueChanges
-      .subscribe((data) => {
+      .pipe(debounceTime(400)).subscribe((data) => {
         this.postCode.setValue(this.sharedService.formatPostCode(data.address.postCode), { emitEvent: false });
         this.logValidationErrors(this.personForm, false);
-        this.logValidationErrorsFormArray(this.personForm);
       });
     //  this.emailAddresses.controls.forEach(x=> {
     //    x.get('email').valueChanges.subscribe(data=>{
@@ -190,18 +195,42 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       if (control instanceof FormGroup) {
         this.logValidationErrors(control, fakeTouched);
       }
+
+      if(control instanceof FormArray){
+        this.logValidationErrorsFormArray(control);
+      }
     });
   }
 
   logValidationErrorsFormArray(control: AbstractControl) {
       this.formArraryErrors = '';
-      let message = '';
-      if ((control.touched || control.dirty) && control.errors) {
-         message += this.validationMessages[control.value];
-          console.log('erro keys', message);
-      }
-      console.log('form errors', message);
+      console.log(control['controls']);
+      control['controls'].forEach((x,i)=>{
+        const field = x.get('number') || x.get('email');
+        const parent = field['parent']['controls'];
+
+        Object.keys(parent).forEach((name)=>{
+          if (field === parent[name])
+          {
+            if (field.value && !field.valid) {
+              if(!this.invalidFormArrayControls[name].includes(i)){
+                this.invalidFormArrayControls[name].push(i);
+              }
+            } else {
+              const index = this.invalidFormArrayControls[name].indexOf(i);
+              if(index >= 0) {
+                this.invalidFormArrayControls[name].splice(index, 1);
+              }
+            }
+          }
+        })
+      })
+      console.log('form errors', this.invalidFormArrayControls);
       // console.log('form array errors', this.validationMessages['number']);
+  }
+
+  isValid(type, i) {
+    return this.invalidFormArrayControls[type].includes(i);
   }
 
   cancel() {
@@ -353,9 +382,9 @@ export class ContactgroupsDetailEditComponent implements OnInit {
 
   setExistingPhoneNumbers(phoneNumbers: PhoneNumber[]): FormArray {
     const phoneArray = new FormArray([]);
-    phoneNumbers.forEach(x => {
+    phoneNumbers.forEach((x, i) => {
       phoneArray.push(this.fb.group({
-        number: [x.number, { validators: [Validators.required, Validators.minLength(7), Validators.maxLength(16), Validators.pattern(/^\+?[ \d]+$/g)], updateOn: 'blur'}],
+        number: [x.number, { validators: [Validators.required, Validators.minLength(7), Validators.maxLength(16), Validators.pattern(/^\+?[ \d]+$/g)]}],
         typeId: x.typeId,
         sendSMS: x.sendSMS,
         isPreferred: x.isPreferred,
@@ -371,7 +400,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     emailAddresses.forEach(x => {
       emailFormArray.push(this.fb.group({
         id: x.id,
-        email: [x.email, { validators: [Validators.required, Validators.pattern(AppConstants.emailPattern)], updateOn: 'blur'}],
+        email: [x.email, { validators: [Validators.required, Validators.pattern(AppConstants.emailPattern)]}],
         isPreferred: x.isPreferred,
         isPrimaryWebEmail: x.isPrimaryWebEmail
       }));
@@ -383,14 +412,14 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   setupEditForm() {
     this.personForm = this.fb.group({
       titleId: [''],
-      firstName: ['', {validators:[Validators.required, Validators.maxLength(40)], updateOn: 'blur'}],
-      middleName: ['', {validators: Validators.maxLength(50), updateOn: 'blur'}],
-      lastName: ['', {validators:[Validators.required, Validators.maxLength(80)], updateOn: 'blur'}],
+      firstName: ['', {validators:[Validators.required, Validators.maxLength(40)]}],
+      middleName: ['', {validators: Validators.maxLength(50)}],
+      lastName: ['', {validators:[Validators.required, Validators.maxLength(80)]}],
       fullAddress: [''],
       address: this.fb.group({
-        addressLines: ['', {validators: Validators.maxLength(500), updateOn: 'blur'}],
+        addressLines: ['', {validators: Validators.maxLength(500)}],
         countryId: 0,
-        postCode: ['', {validators: [Validators.minLength(5), Validators.maxLength(8), Validators.pattern(AppConstants.postCodePattern)], updateOn: 'blur'}],
+        postCode: ['', {validators: [Validators.minLength(5), Validators.maxLength(8), Validators.pattern(AppConstants.postCodePattern)]}],
       }),
       contactBy: this.fb.group({
         email: [true],
@@ -537,6 +566,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   addRemovePhoneNumberItem(i, remove) {
     const currPhoneNumber = this.phoneNumbers.controls[i];
     const lastPhoneNumber = this.phoneNumbers.controls[this.phoneNumbers.controls.length - 1];
+    
     if (currPhoneNumber === lastPhoneNumber) {
       this.phoneNumbers.push(this.createPhoneNumberItem());
     }
@@ -548,7 +578,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     return this.fb.group({
       id: 0,
       typeId: 3,
-      number: ['', { validators: [Validators.required, Validators.minLength(7), Validators.maxLength(16), Validators.pattern(/^\+?[ \d]+$/g)], updateOn: 'blur'}],
+      number: ['', { validators: [Validators.required, Validators.minLength(7), Validators.maxLength(16), Validators.pattern(/^\+?[ \d]+$/g)]}],
       orderNumber: 0,
       sendSMS: [false],
       isPreferred: [false],
@@ -571,7 +601,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     return this.fb.group({
       id: 0,
       orderNumber: 0,
-      email: ['', { validators: [Validators.required, Validators.pattern(AppConstants.emailPattern)], updateOn: 'blur'}],
+      email: ['', { validators: [Validators.required, Validators.pattern(AppConstants.emailPattern)]}],
       isPreferred: [false],
       isPrimaryWebEmail: [false]
     });
