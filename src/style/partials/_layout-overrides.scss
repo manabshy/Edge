@@ -155,6 +155,6 @@ fieldset {
     }
 }
 
-.form-control[readonly]{
+.fake-readonly[readonly]{
     background-color: $input-bg;
 }
