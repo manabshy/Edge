@@ -11,6 +11,8 @@ import { BsModalService } from 'ngx-bootstrap/modal/';
 import { ErrorModalComponent } from '../error-modal/error-modal.component';
 import { FormGroup } from '@angular/forms';
 import { NoteModalComponent } from '../note-modal/note-modal.component';
+import { PhoneNumberUtil, PhoneNumber, PhoneNumberFormat } from 'google-libphonenumber';
+
 
 @Injectable({
   providedIn: 'root'
@@ -39,7 +41,7 @@ export class SharedService {
           techDet: error.technicalDetails
         };
         let modalClass = '';
-        if(initialState.techDet){
+        if (initialState.techDet) {
           modalClass = 'modal-lg';
         }
         const modal = this.modalService.show(ErrorModalComponent, {ignoreBackdropClick: true, class: modalClass, initialState});
@@ -84,7 +86,7 @@ export class SharedService {
 
   ISOToDate(date: Date): Date {
     let formattedDate = null;
-    if(date) {
+    if (date) {
       formattedDate = dayjs(date).toDate();
     }
     return formattedDate;
@@ -208,8 +210,22 @@ export class SharedService {
     });
   }
 
+  isUKMobile(number: string) {
+    const formattedNumber = number.replace(' ', '');
+    return  (formattedNumber.startsWith('07') || formattedNumber.startsWith('00') || formattedNumber.startsWith('+'))  &&
+    !formattedNumber.startsWith('070') && !formattedNumber.startsWith('076');
+  }
+  isInternationNumber(number: string) {
+    const formattedNumber = number.replace(' ', '');
+    return  formattedNumber.startsWith('00') || formattedNumber.startsWith('+');
+  }
+  getRegionCode(number: string) {
+    const phoneUtil: PhoneNumberUtil = PhoneNumberUtil.getInstance();
+        const rawNumber = phoneUtil.parseAndKeepRawInput(number, 'GB');
+        return this.isInternationNumber(number) ? phoneUtil.getRegionCodeForNumber(rawNumber) : 'GB';
+  }
   logValidationErrors(group: FormGroup, fakeTouched: boolean) {
-    console.log('val.....................')
+    console.log('val.....................');
     Object.keys(group.controls).forEach((key: string) => {
       const control = group.get(key);
       const messages = ValidationMessages[key];

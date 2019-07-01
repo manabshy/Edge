@@ -1,9 +1,13 @@
 import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { PhoneNumberUtil, PhoneNumber, PhoneNumberFormat } from 'google-libphonenumber';
+import { SharedService } from '../services/shared.service';
 
 export class WedgeValidators {
+  // static sharedService: SharedService;
   /**
    * Validator that requires controls to have a value greater than a number.
    */
+   constructor(private sharedService: SharedService){}
   static min(min: number): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (isEmptyInputValue(control.value) || isEmptyInputValue(min)) {
@@ -41,6 +45,22 @@ export class WedgeValidators {
     }
   }
 
+  static phoneNumberValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } => {
+      let validNumber = false;
+      const regionCode = 'GB';
+      // let regionCode = this.sharedService.getRegionCode(control.value);
+      const phoneNumberUtil = PhoneNumberUtil.getInstance();
+      try {
+        const phoneNumber = phoneNumberUtil.parseAndKeepRawInput(
+          control.value, regionCode
+        );
+        validNumber = phoneNumberUtil.isValidNumber(phoneNumber);
+      } catch (e) { }
+
+      return validNumber ? null : { 'invalidPhoneNumber': { value: control.value } };
+    }
+  }
   /**
    * Validator for valuations - requiring EITHER a letting value OR sales value
    */

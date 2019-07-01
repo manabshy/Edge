@@ -49,15 +49,15 @@ export const ValidationMessages = {
     pattern: 'Email is not valid'
   },
   'telephone': {
-    required: 'Phone is required.',
-    minlength: 'Phone number must be at least 7 characters.',
-    maxlength: 'Phone number cannot be more than 16 characters.',
-    pattern: 'Phone number is not valid'
+    invalidPhoneNumber: 'Phone number is not valid'
   },
   'fax': {
-    required: 'Fax is required.',
-    minlength: 'Fax number must be at least 7 characters.',
-    maxlength: 'Fax number cannot be more than 16 characters.',
-    pattern: 'Fax number is not valid'
+    invalidPhoneNumber: 'Fax number is not valid'
   }
+  // 'invalidPhoneNumber': {
+  //   required: 'Phone is required.',
+  //   minlength: 'Phone number must be at least 7 characters.',
+  //   maxlength: 'Phone number cannot be more than 16 characters.',
+  //   pattern: 'Phone number is not valid'
+  // }
 };
