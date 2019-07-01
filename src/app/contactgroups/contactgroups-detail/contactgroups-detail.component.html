@@ -181,7 +181,7 @@
         <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
           <div class="pull-left float-left">Notes <span
               class="badge badge-pill badge-primary">{{summaryTotals.notes}}</span></div>
-          <a class="float-right pull-right" routerLink="/home">Add Note <i class="fas fa-plus"></i></a>
+          <button type="button" class="float-right pull-right btn btn-link p-0" (click)="addNote()">Add Note <i class="fas fa-plus"></i></button>
         </button>
         <app-contactgroups-notes></app-contactgroups-notes>
       </accordion-group>

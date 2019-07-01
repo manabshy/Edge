@@ -38,14 +38,15 @@ import { AddressComponent } from './address/address.component';
 import { SignerComponent } from './signer/signer.component';
 import { AutocompleteOffDirective } from './shared/autocomplete-off.directive';
 import { HighlightPipe } from './shared/highlight.pipe';
+import { NoteModalComponent } from './note-modal/note-modal.component';
 
 @NgModule({
   declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent,
     ConfirmModalComponent, PropertyFinderComponent, FormatAddressPipe, ScoreBadgeComponent,
-    ErrorModalComponent, AddressComponent, SignerComponent, AutocompleteOffDirective, HighlightPipe],
+    ErrorModalComponent, AddressComponent, SignerComponent, AutocompleteOffDirective, HighlightPipe, NoteModalComponent],
   exports: [
     RoundingPipe, TruncatingPipe, ShortenNamePipe, FormatAddressPipe, HighlightPipe, AutocompleteOffDirective,
-    BreadcrumbComponent, BasicSearchComponent,
+    BreadcrumbComponent, BasicSearchComponent, NoteModalComponent,
     ConfirmModalComponent, ErrorModalComponent, PropertyFinderComponent, ScoreBadgeComponent, AddressComponent, SignerComponent,
     CollapseModule, TabsModule, TypeaheadModule, BsDropdownModule,
     BsDatepickerModule, ModalModule, PopoverModule,  NgPipesModule,
@@ -69,7 +70,8 @@ import { HighlightPipe } from './shared/highlight.pipe';
   ],
   entryComponents: [
     ConfirmModalComponent,
-    ErrorModalComponent
+    ErrorModalComponent,
+    NoteModalComponent
   ],
   providers: [
     CanDeactivateGuard,

@@ -650,6 +650,14 @@ export class ContactgroupsPeopleComponent implements OnInit {
     }
   }
 
+  addNote() {
+    const data = {
+      group: this.contactGroupDetails,
+      people: this.contactGroupDetails.contactPeople
+    }
+    this.sharedService.addNote(data);
+  }
+
   canDeactivate(): boolean {
     if ((this.contactGroupDetailsForm.dirty || this.companyFinderForm.dirty) && !this.isSubmitting) {
       return false;
