@@ -1,6 +1,21 @@
 <app-breadcrumb></app-breadcrumb>
 <div class="container">
-  <h4 class="page-title"><ng-container *ngIf="contactGroupDetails?.contactType === 4; else peopleCG">Company</ng-container><ng-template #peopleCG>People</ng-template> Contact group</h4>
+  <div class="row page-title">
+    <div class="col">
+      <h4 class="mb-0"><ng-container *ngIf="contactGroupDetails?.contactType === 4; else peopleCG">Company</ng-container><ng-template #peopleCG>People</ng-template> Contact group</h4>
+    </div>
+    <div class="col-auto">
+      <div class="btn-group" dropdown placement="bottom right">
+        <button id="actionsToggle" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
+          aria-controls="actionsList">
+          Actions <span class="caret"></span>
+        </button>
+        <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="actionsToggle">
+          <li role="menuitem"><button type="button" class="dropdown-item" (click)="addNote()"><i class="fas fa-sticky-note mr-2"></i> Add Note</button></li>
+        </ul>
+      </div>
+    </div>
+  </div>
   <div class="text-center" *ngIf="isLoadingDetails">
     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading details ...
   </div>
@@ -37,7 +52,7 @@
         <div class="list-group list-group-horizontal-sm mb-3">
           <div class="list-group-item list-group-item-action text-center" (click)="isCompanyContactGroup(true)">
             <span class="btn btn-link">
-              <i class="fas fa-user-tie fa-lg"></i><br>
+              <i class="fas fa-briefcase fa-lg"></i><br>
               Company Contact Group
             </span>
           </div>
@@ -223,7 +238,7 @@
                 *ngIf="contactGroupDetails?.contactPeople.length < 8 && !contactGroupDetails?.referenceCount 
                         && !isMaxPeople">
                 <span class="btn-link">
-                  <i class="fas fa-user-plus"></i>Add Person
+                  <i class="fas fa-user-plus mr-2"></i>Add Person
                 </span>
               </a>
               <div class="list-group-item list-group-item-warning text-center"
@@ -276,6 +291,13 @@
                         <label class="custom-control-label" [attr.for]="'individual' + i">{{type.value}}</label>
                       </div>
                     </ng-container>
+                  </div>
+                </div>
+                <div class="list-group">
+                  <div class="list-group-item list-group-item-action text-center py-4" (click)="addNote()">
+                    <span class="btn-link">
+                      <i class="fas fa-sticky-note mr-2"></i> Add Note
+                    </span>
                   </div>
                 </div>
               </div>

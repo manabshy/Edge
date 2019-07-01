@@ -1,0 +1,48 @@
+<div class="modal-header">
+  <div>
+    Add Note
+    <ng-container *ngIf="!data?.group || step2">
+      for 
+      <ng-container *ngIf="selectedPerson; else noPerson"><strong>{{selectedPerson?.firstName}} {{selectedPerson?.lastName}}</strong></ng-container>
+      <ng-template #noPerson>this Contact Group</ng-template>
+    </ng-container>
+  </div>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="action(false)">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body text-center">
+  <ng-container *ngIf="data?.group && !step2">
+    <p>Pick a person or add a group note</p>
+    <div class="list-group mb-4">
+      <div class="list-group-item list-group-item-action" *ngFor="let person of data?.people" (click)="select(person)">
+        {{person?.firstName}} {{person?.lastName}}
+      </div>
+      <div class="list-group-item list-group-item-action" (click)="select(null)">
+        <i class="fas fa-users mr-2"></i> Group Note
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="!data?.group || step2">
+    <form action="" class="text-left">
+      <div class="form-group">
+        <div class="custom-control custom-checkbox custom-control-inline">
+          <input type="checkbox" class="custom-control-input" id="important">
+          <label class="custom-control-label" for="important">Set as important</label>
+        </div>
+        <div class="custom-control custom-checkbox custom-control-inline">
+          <input type="checkbox" class="custom-control-input" id="topPinned">
+          <label class="custom-control-label" for="topPinned">Pin to top</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="note">Note</label>
+        <textarea class="form-control" name="note" id="note" cols="30" rows="5"></textarea>
+      </div>
+      <div class="text-center mt-4">
+        <button type="button" class="btn btn-light mr-2" (click)="action(false)">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="action(false)">Add Note</button>
+      </div>
+    </form>
+  </ng-container>
+</div>

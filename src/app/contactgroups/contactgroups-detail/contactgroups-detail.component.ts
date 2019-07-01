@@ -3,6 +3,7 @@ import { ContactGroup, BasicContactGroup, PersonSummaryFigures } from '../shared
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ActivatedRoute } from '@angular/router';
 import { Person } from 'src/app/core/models/person';
+import { SharedService } from 'src/app/core/services/shared.service';
 
 @Component({
   selector: 'app-contactgroups-detail',
@@ -21,6 +22,7 @@ export class ContactgroupsDetailComponent implements OnInit {
   isCollapsed: boolean;
   summaryTotals: PersonSummaryFigures;
   constructor(private contactGroupService: ContactGroupsService,
+              private sharedService: SharedService,
               private route: ActivatedRoute) { }
 
   ngOnInit() {
@@ -71,6 +73,14 @@ export class ContactgroupsDetailComponent implements OnInit {
 
   createNewContactGroup(){
     this.isNewContactGroup = true;
+  }
+
+  addNote() {
+    event.stopPropagation();
+    const data = {
+      person: this.searchedPersonDetails
+    }
+    this.sharedService.addNote(data);
   }
 
   ngOnDestroy(){

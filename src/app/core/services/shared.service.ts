@@ -10,6 +10,7 @@ import { tap} from 'rxjs/operators';
 import { BsModalService } from 'ngx-bootstrap/modal/';
 import { ErrorModalComponent } from '../error-modal/error-modal.component';
 import { FormGroup } from '@angular/forms';
+import { NoteModalComponent } from '../note-modal/note-modal.component';
 import { PhoneNumberUtil, PhoneNumber, PhoneNumberFormat } from 'google-libphonenumber';
 
 
@@ -44,6 +45,17 @@ export class SharedService {
           modalClass = 'modal-lg';
         }
         const modal = this.modalService.show(ErrorModalComponent, {ignoreBackdropClick: true, class: modalClass, initialState});
+        modal.content.subject = subject;
+        return subject.asObservable();
+  }
+
+  addNote(data: any) {
+    const subject = new Subject<boolean>();
+        const initialState = {
+          data: data
+        };
+        let modalClass = 'modal-lg';
+        const modal = this.modalService.show(NoteModalComponent, {class: modalClass, initialState});
         modal.content.subject = subject;
         return subject.asObservable();
   }
