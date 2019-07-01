@@ -149,6 +149,7 @@ export class CompanyEditComponent implements OnInit {
   }
   saveCompany() {
     const isSignerChanged = this.signer || this.signer == null;
+    this.logValidationErrors(this.companyForm, true);
     if (this.companyForm.valid) {
       if (this.companyForm.dirty || isSignerChanged ) {
         this.AddOrUpdateCompany();
