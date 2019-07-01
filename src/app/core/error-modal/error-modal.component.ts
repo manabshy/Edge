@@ -9,6 +9,8 @@ import { Subject } from 'rxjs';
 })
 export class ErrorModalComponent implements OnInit {
   @Input() title;
+  @Input() desc;
+  @Input() techDet;
   subject: Subject<boolean>;
 
   constructor(public bsModalRef: BsModalRef) { }
