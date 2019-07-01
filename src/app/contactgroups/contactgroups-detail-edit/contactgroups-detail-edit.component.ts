@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, Renderer2 } from '@angular/core';
 import { SharedService, WedgeError, AddressAutoCompleteData, InfoDetail } from 'src/app/core/services/shared.service';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractControl } from '@angular/forms';
 import { ContactGroupsService } from '../shared/contact-groups.service';
-import { Person, Email, PhoneNumber, BasicPerson } from 'src/app/core/models/person';
+import { Person, Email, PhoneNumber, BasicPerson, TelephoneTypeId } from 'src/app/core/models/person';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { EventEmitter } from '@angular/core';
@@ -102,14 +102,14 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     'postCode': ''
   };
   foundAddress: AddressAutoCompleteData;
-  
+
   invalidFormArrayControls = {
     number: [],
     email: []
   };
 
   get showPostCode(): boolean {
-    return this.address.get('countryId').value == this.defaultCountryCode;
+    return this.address.get('countryId').value === this.defaultCountryCode;
   }
   get addressLines(): FormControl {
     return <FormControl>this.address.get('addressLines');
@@ -181,7 +181,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     Object.keys(group.controls).forEach((key: string) => {
       const control = group.get(key);
       const messages = this.validationMessages[key];
-      if(control.valid) {
+      if (control.valid) {
         this.formErrors[key] = '';
       }
       if (control && !control.valid && (fakeTouched || control.dirty)) {
@@ -196,7 +196,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         this.logValidationErrors(control, fakeTouched);
       }
 
-      if(control instanceof FormArray){
+      if (control instanceof FormArray) {
         this.logValidationErrorsFormArray(control);
       }
     });
@@ -204,34 +204,34 @@ export class ContactgroupsDetailEditComponent implements OnInit {
 
   logValidationErrorsFormArray(control: AbstractControl) {
       this.formArraryErrors = '';
-      console.log(control['controls']);
-      control['controls'].forEach((x,i)=>{
+      // console.log(control['controls']);
+      control['controls'].forEach((x, i) => {
         const field = x.get('number') || x.get('email');
         const parent = field['parent']['controls'];
 
-        Object.keys(parent).forEach((name)=>{
-          if (field === parent[name])
-          {
+        Object.keys(parent).forEach((name) => {
+          if (field === parent[name]) {
             if (field.value && !field.valid) {
-              if(!this.invalidFormArrayControls[name].includes(i)){
+              if (!this.invalidFormArrayControls[name].includes(i)) {
                 this.invalidFormArrayControls[name].push(i);
               }
             } else {
               const index = this.invalidFormArrayControls[name].indexOf(i);
-              if(index >= 0) {
+              if (index >= 0) {
                 this.invalidFormArrayControls[name].splice(index, 1);
               }
             }
           }
-        })
-      })
-      console.log('form errors', this.invalidFormArrayControls);
+        });
+      });
+      // console.log('form errors', this.invalidFormArrayControls);
       // console.log('form array errors', this.validationMessages['number']);
   }
 
   isValid(type, i) {
     return this.invalidFormArrayControls[type].includes(i);
   }
+
 
   cancel() {
     if (this.basicPerson) {
@@ -247,7 +247,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       console.log('person details', this.personDetails);
       this.displayPersonDetails(data);
     }, error => {
-      this.errorMessage = <any>error
+      this.errorMessage = <any>error;
       this.sharedService.showError(this.errorMessage);
     });
   }
@@ -340,7 +340,6 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     this.personForm.setControl('phoneNumbers', this.setExistingPhoneNumbers(this.basicPerson.phoneNumbers));
     this.personForm.updateValueAndValidity();
     this.personForm.markAsDirty();
-    console.log('this is called', this.personForm.value);
   }
 
   displayPersonDetails(person: Person) {
@@ -348,20 +347,17 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       this.personForm.reset();
     }
     this.personDetails = person;
-    if(person.address.postCode){
+    if (person.address.postCode) {
       person.address.postCode = person.address.postCode.trim();
     }
     this.personForm.patchValue({
       titleId: person.titleId !== null ? person.titleId : 1,
-      //  title: person.title,
       firstName: person.firstName,
       middleName: person.middleName,
       lastName: person.lastName,
       amlCompletedDate: this.sharedService.ISOToDate(person.amlCompletedDate),
       address: {
         addressLines: person.address.addressLines,
-        // outCode: person.address.outCode,
-        // inCode: person.address.inCode,
         postCode: person.address.postCode,
         countryId: person.address.countryId,
         country: person.address.country,
@@ -412,9 +408,9 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   setupEditForm() {
     this.personForm = this.fb.group({
       titleId: [''],
-      firstName: ['', {validators:[Validators.required, Validators.maxLength(40)]}],
+      firstName: ['', {validators: [Validators.required, Validators.maxLength(40)]}],
       middleName: ['', {validators: Validators.maxLength(50)}],
-      lastName: ['', {validators:[Validators.required, Validators.maxLength(80)]}],
+      lastName: ['', {validators: [Validators.required, Validators.maxLength(80)]}],
       fullAddress: [''],
       address: this.fb.group({
         addressLines: ['', {validators: Validators.maxLength(500)}],
@@ -448,7 +444,6 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       emailFormArray.clearValidators();
     }
     emailFormArray.updateValueAndValidity();
-    console.log('email address with validation set', emailFormArray);
   }
 
   removeValidationForPhoneAndEmail() {
@@ -457,12 +452,10 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     const email = this.emailAddresses.controls[0];
     const currentEmail = email.get('email');
     if (currentNumber.value === '' && currentEmail.value !== '') {
-      console.log('empty numbers');
       currentNumber.clearValidators();
       currentNumber.updateValueAndValidity();
     }
     if (currentEmail.value === '' && currentNumber.value !== '') {
-      console.log('empty numbers');
       currentEmail.clearValidators();
       currentEmail.updateValueAndValidity();
     }
@@ -473,13 +466,13 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     const lastPhoneNumber = this.phoneNumbers.controls[this.phoneNumbers.controls.length - 1];
     const lastEmail = this.emailAddresses.controls[this.emailAddresses.controls.length - 1];
 
-    this.phoneNumbers.controls.forEach(x=>{
-      if(x.value.typeId != 3) {
+    this.phoneNumbers.controls.forEach(x => {
+      if (x.value.typeId !== 3) {
         x.patchValue({
           sendSMS: false
-        })
+        });
       }
-    })
+    });
 
     if (lastPhoneNumber.get('number').value === '' && currPhoneNumber !== lastEmail) {
       lastPhoneNumber.get('number').clearValidators();
@@ -503,7 +496,6 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       otherPhoneNumbers.forEach(x => {
         x.isPreferred = false;
       });
-      console.log('group here phone numbers ');
     } else {
       const emailPrefs = [];
       const emailFormGroups = this.emailAddresses.controls;
@@ -536,7 +528,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     });
   }
   removeDuplicateAdressLines(): string {
-    if(this.addressLines.value){
+    if (this.addressLines.value) {
       let newAddress = '';
       const addressLines = [];
       const countryName = this.getCountryName(this.countryId.value);
@@ -566,7 +558,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   addRemovePhoneNumberItem(i, remove) {
     const currPhoneNumber = this.phoneNumbers.controls[i];
     const lastPhoneNumber = this.phoneNumbers.controls[this.phoneNumbers.controls.length - 1];
-    
+
     if (currPhoneNumber === lastPhoneNumber) {
       this.phoneNumbers.push(this.createPhoneNumberItem());
     }
@@ -607,9 +599,23 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     });
   }
 
+  checkPhoneType(index: number) {
+    const currPhoneNumberControl = this.phoneNumbers.controls[index];
+    const phoneNumber = currPhoneNumberControl.value.number;
+    const phoneNumberType = currPhoneNumberControl.value.typeId;
+    const inValidMobileNumber = !this.sharedService.isUKMobile(phoneNumber);
+    if (phoneNumberType == TelephoneTypeId.Mobile && inValidMobileNumber) {
+      this.errorMessage = { } as WedgeError;
+      this.errorMessage.displayMessage = `Telephone number ${phoneNumber} is not a valid mobile number`;
+    }
+  }
   savePerson() {
     this.isSubmitting = true;
     this.errorMessage = null;
+    const allPhoneNumbers =  this.phoneNumbers.controls.length - 1;
+    for (let index = 0; index < allPhoneNumbers; index++) {
+      this.checkPhoneType(index);
+    }
     this.removeValidationForPhoneAndEmail();
     this.removeValidationForAdditionalFields();
     this.logValidationErrors(this.personForm, true);
@@ -647,21 +653,21 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     } else {
       this.errorMessage = {} as WedgeError;
       this.errorMessage.displayMessage = 'Please correct validation errors';
-      console.log(this.personForm.value)
-      if(!this.personForm.value.emailAddresses[0].email && !this.personForm.value.phoneNumbers[0].number){
+      console.log(this.personForm.value);
+      if (!this.personForm.value.emailAddresses[0].email && !this.personForm.value.phoneNumbers[0].number) {
         this.isContactErrorVisible = true;
-        setTimeout(()=>{
+        setTimeout(() => {
           document.getElementById('contact-error').scrollIntoView({block: 'center'});
-        })
+        });
       }
     }
 
     console.log(this.personForm);
-    console.log(this.errorMessage);
+    console.log(this.errorMessage.displayMessage);
   }
   onSaveComplete() {
     this.personForm.reset();
-    if(this.newPersonId) {
+    if (this.newPersonId) {
       this.addNewPerson(this.newPersonId);
       this.backToFinder.emit(true);
       this.makeCanvasInvisible(this.isOffCanvasVisible);

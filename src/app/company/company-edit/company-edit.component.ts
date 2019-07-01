@@ -8,7 +8,6 @@ import { Location } from '@angular/common';
 import { Company, Signer } from 'src/app/contactgroups/shared/contact-group';
 import { CompanyService } from '../shared/company.service';
 import { debounceTime } from 'rxjs/operators';
-import { PhoneNumberUtil, PhoneNumber, PhoneNumberFormat } from 'google-libphonenumber';
 import { WedgeValidators } from 'src/app/core/shared/wedge-validators';
 
 
@@ -138,7 +137,6 @@ export class CompanyEditComponent implements OnInit {
       if (control instanceof FormGroup) {
         this.logValidationErrors(control, fakeTouched);
       }
-      console.log('errors......', control.errors);
     });
   }
 
