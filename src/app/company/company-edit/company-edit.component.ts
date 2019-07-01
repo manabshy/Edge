@@ -8,6 +8,9 @@ import { Location } from '@angular/common';
 import { Company, Signer } from 'src/app/contactgroups/shared/contact-group';
 import { CompanyService } from '../shared/company.service';
 import { debounceTime } from 'rxjs/operators';
+import { PhoneNumberUtil, PhoneNumber, PhoneNumberFormat } from 'google-libphonenumber';
+import { WedgeValidators } from 'src/app/core/shared/wedge-validators';
+
 
 @Component({
   selector: 'app-company-edit',
@@ -110,10 +113,8 @@ export class CompanyEditComponent implements OnInit {
         countryId: 0,
         postCode: ['', { validators: [Validators.minLength(5), Validators.maxLength(8)], updateOn: 'blur' }],
       }),
-        telephone: ['', { validators: [Validators.minLength(7),
-                          Validators.maxLength(16), Validators.pattern(AppConstants.ukTelephonePattern)], updateOn: 'blur' }],
-        fax: ['', { validators: [Validators.minLength(7),
-                    Validators.maxLength(16), Validators.pattern(AppConstants.ukTelephonePattern)], updateOn: 'blur' }],
+        telephone: ['', { validators: WedgeValidators.phoneNumberValidator() , updateOn: 'blur' }],
+        fax: ['', { validators: WedgeValidators.phoneNumberValidator(), updateOn: 'blur' }],
         email: ['', { validators: [Validators.pattern(AppConstants.emailPattern)], updateOn: 'blur' }],
         website: [''],
     });
@@ -137,8 +138,10 @@ export class CompanyEditComponent implements OnInit {
       if (control instanceof FormGroup) {
         this.logValidationErrors(control, fakeTouched);
       }
+      console.log('errors......', control.errors);
     });
   }
+
   getSelectedSigner(signer: any) {
     this.signer = signer;
   }
