@@ -393,7 +393,7 @@
                     <dt class="col-4 d-sm-none">Full Name</dt>
                     <dd class="col">
                       {{foundPerson?.title}}
-                      <span [innerHTML]="foundPerson?.firstName | highlight : personFinderForm.value.firstName"></span>
+                      <span class="mr-1" [innerHTML]="foundPerson?.firstName | highlight : personFinderForm.value.firstName"></span>
                       <span [innerHTML]="foundPerson?.lastName | highlight : personFinderForm.value.lastName"></span>
                     </dd>
                   </dl>
