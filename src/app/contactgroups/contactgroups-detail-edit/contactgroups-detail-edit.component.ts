@@ -663,7 +663,6 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     }
 
     console.log(this.personForm);
-    console.log(this.errorMessage.displayMessage);
   }
   onSaveComplete() {
     this.personForm.reset();

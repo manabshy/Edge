@@ -17,6 +17,7 @@ export class AppComponent implements OnInit, AfterViewChecked {
   title = 'Wedge';
   isNavVisible: boolean;
   isScrollTopVisible = false;
+  isContentVisible = true;
   @ViewChild('appContainer') appContainer : ElementRef;
   appHeightObservable;
   get currentStaffMember(): StaffMember {
@@ -38,6 +39,10 @@ export class AppComponent implements OnInit, AfterViewChecked {
       AppUtils.prevRouteBU = AppUtils.prevRoute || '';
       AppUtils.prevRoute = event[0].urlAfterRedirects;
       this.isScrollTopVisible = false;
+      this.isContentVisible = false;
+      setTimeout(()=>{
+        this.isContentVisible = true;
+      })
       window.scrollTo(0,0);
     });
   }

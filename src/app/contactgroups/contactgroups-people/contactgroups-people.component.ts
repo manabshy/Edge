@@ -12,6 +12,7 @@ import { ConfirmModalComponent } from 'src/app/core/confirm-modal/confirm-modal.
 import { Location } from '@angular/common';
 import { WedgeError, SharedService } from 'src/app/core/services/shared.service';
 import { FormErrors, ValidationMessages } from 'src/app/core/shared/app-constants';
+import { AppUtils } from 'src/app/core/shared/utils';
 
 @Component({
   selector: 'app-contactgroups-people',
@@ -44,6 +45,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isLoadingNewPersonVisible = false;
   isCreateNewPerson = false;
   isNewContactGroup = false;
+  isSigner = false;
   get isMaxPeople() {
     if(this.contactGroupDetails){
       return this.contactGroupDetails.contactPeople.length && this.contactGroupDetails.contactType === ContactType.CompanyContact;
@@ -99,6 +101,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     if(!this.contactGroupId) {
       this.route.queryParams.subscribe(params => {
         this.isNewContactGroup = params['isNewContactGroup'] || false;
+        this.isSigner = params['isSigner'] || false;
       });
     }
     this.isSubmitting = false;
@@ -560,6 +563,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
     if(!contactGroupId) {
       this._location.back();
     } else {
+      if(this.isSigner) {
+        AppUtils.newSigner = this.contactGroupDetails;
+        this._location.back();
+      }
       let url = this._router.url.substring(0,this._router.url.indexOf("?"));
       url = url.replace('people/'+this.contactGroupId, 'people/'+contactGroupId);
       this._location.replaceState(url);

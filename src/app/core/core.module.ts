@@ -39,6 +39,7 @@ import { SignerComponent } from './signer/signer.component';
 import { AutocompleteOffDirective } from './shared/autocomplete-off.directive';
 import { HighlightPipe } from './shared/highlight.pipe';
 import { NoteModalComponent } from './note-modal/note-modal.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent,
@@ -48,7 +49,7 @@ import { NoteModalComponent } from './note-modal/note-modal.component';
     RoundingPipe, TruncatingPipe, ShortenNamePipe, FormatAddressPipe, HighlightPipe, AutocompleteOffDirective,
     BreadcrumbComponent, BasicSearchComponent, NoteModalComponent,
     ConfirmModalComponent, ErrorModalComponent, PropertyFinderComponent, ScoreBadgeComponent, AddressComponent, SignerComponent,
-    CollapseModule, TabsModule, TypeaheadModule, BsDropdownModule,
+    RouterModule, CollapseModule, TabsModule, TypeaheadModule, BsDropdownModule,
     BsDatepickerModule, ModalModule, PopoverModule,  NgPipesModule,
     TooltipModule, AccordionModule, ButtonsModule, ReactiveFormsModule, FormsModule, OrderModule
   ],
@@ -57,6 +58,7 @@ import { NoteModalComponent } from './note-modal/note-modal.component';
     ReactiveFormsModule,
     FormsModule,
     OrderModule,
+    RouterModule,
     BsDropdownModule.forRoot(),
     CollapseModule.forRoot(),
     TabsModule.forRoot(),

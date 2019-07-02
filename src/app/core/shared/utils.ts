@@ -1,5 +1,6 @@
 import {format, compareAsc, isDate} from 'date-fns';
 import { isArray, isPlainObject, mapValues, isNull, isUndefined, random  } from 'lodash';
+import { ContactGroup } from 'src/app/contactgroups/shared/contact-group';
 export class AppUtils {
   public static prevRoute: string = '';
   public static prevRouteBU: string = '';
@@ -9,6 +10,7 @@ export class AppUtils {
   public static parentRoute: string = '';
   public static searchTerm: string;
   public static companySearchTerm: any;
+  public static newSigner: ContactGroup;
 
   /**
    * Format a date/time into a string

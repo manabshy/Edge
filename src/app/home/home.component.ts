@@ -37,8 +37,14 @@ export class HomeComponent implements OnInit {
     this.staffMemberService.getCurrentStaffMember().subscribe();
 
     this.route.queryParams.subscribe(params =>  {
-      this.selectedTab = params['selectedTab'] || AppUtils.homeSelectedTab || 0;
-      this.homeTabs.tabs[this.selectedTab].active = true;
+      if(params['selectedTab']) {
+        AppUtils.homeSelectedTab = params['selectedTab'];
+      }
+      this.selectedTab = AppUtils.homeSelectedTab || 0;
+      console.log(this.selectedTab);
+      if(this.homeTabs.tabs[this.selectedTab]) {
+        this.homeTabs.tabs[this.selectedTab].active = true;
+      }
     });
   }
 
@@ -46,7 +52,9 @@ export class HomeComponent implements OnInit {
     setTimeout(() => {
       this.router.navigate(['/home']);
       this.selectedTab = data.tabset.tabs.findIndex(item => item.active);
-      AppUtils.homeSelectedTab = this.selectedTab;
+      if(this.selectedTab >= 0){
+        AppUtils.homeSelectedTab = this.selectedTab;
+      }
       AppUtils.isDiarySearchVisible = false;
       if (this.selectedTab === 1) {
         this.sharedService.scrollTodayIntoView();
