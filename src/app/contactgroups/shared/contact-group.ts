@@ -182,6 +182,9 @@ export interface ContactGroupAutoCompleteData extends ResultData {
 export interface SignerAutoCompleteData extends ResultData {
   result: Signer[];
 }
+export interface SignerData extends ResultData {
+  result: Signer;
+}
 export interface PeopleAutoCompleteData extends ResultData {
   result: PeopleAutoCompleteResult[];
 }

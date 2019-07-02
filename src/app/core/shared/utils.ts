@@ -10,7 +10,7 @@ export class AppUtils {
   public static parentRoute: string = '';
   public static searchTerm: string;
   public static companySearchTerm: any;
-  public static newSigner: ContactGroup;
+  public static newSignerId: number;
 
   /**
    * Format a date/time into a string

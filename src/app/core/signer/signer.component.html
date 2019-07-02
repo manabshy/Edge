@@ -29,17 +29,17 @@
                   </div>
                 </ng-container>
               </ng-container>
-              <a [routerLink]="['/contact-centre/detail/0/people', 0]" [queryParams]="{isNewContactGroup: true, isSigner: true}" class="list-group-item list-group-item-action text-center py-4">
-                <span class="btn-link">
-                  <i class="fas fa-plus mr-2"></i> New Contact Group
-                </span>
-              </a>
               <div class="list-group-item text-center" *ngIf="!signers?.length && !isLoading">
                 No signers found
               </div>
               <div class="list-group-item text-center" *ngIf="isLoading">
                 <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...
               </div>
+              <a [routerLink]="['/contact-centre/detail/0/people', 0]" [queryParams]="{isNewContactGroup: true, isSigner: true}" class="list-group-item list-group-item-action text-center py-4">
+                <span class="btn-link">
+                  <i class="fas fa-plus mr-2"></i> New Contact Group
+                </span>
+              </a>
             </div>
           </ng-container>
         </div>

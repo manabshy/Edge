@@ -564,7 +564,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this._location.back();
     } else {
       if(this.isSigner) {
-        AppUtils.newSigner = this.contactGroupDetails;
+        AppUtils.newSignerId = contactGroupId;
         this._location.back();
       }
       let url = this._router.url.substring(0,this._router.url.indexOf("?"));

@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { ContactGroupAutoCompleteResult, ContactGroupAutoCompleteData,
          PersonContactData, ContactGroupData, ContactGroup, BasicContactGroup,
-          BasicContactGroupData, PeopleAutoCompleteResult, PeopleAutoCompleteData, AutoCompleteResult, CompanyAutoCompleteResult, CompanyContactGroupAutoCompleteData as CompanyAutoCompleteData, Company, CompanyData, SignerRequest, SignerAutoCompleteData, Signer, PersonSummaryFiguresData, PersonSummaryFigures } from './contact-group';
+          BasicContactGroupData, PeopleAutoCompleteResult, PeopleAutoCompleteData, AutoCompleteResult, CompanyAutoCompleteResult, CompanyContactGroupAutoCompleteData as CompanyAutoCompleteData, Company, CompanyData, SignerRequest, SignerAutoCompleteData, Signer, PersonSummaryFiguresData, PersonSummaryFigures, SignerData } from './contact-group';
 import { map, tap, catchError } from 'rxjs/operators';
 import { Person, BasicPerson } from 'src/app/core/models/person';
 import { WedgeError } from 'src/app/core/services/shared.service';
@@ -36,6 +36,12 @@ export class ContactGroupsService {
          tap(data => console.log(JSON.stringify(data)))
       );
   }
+
+  getSignerbyId(contactGroupId: number): Observable<Signer> {
+    const url = `${AppConstants.baseContactGroupUrl}/${contactGroupId}/contactNames`;
+    return this.http.get<SignerData>(url).pipe(map(response => response.result));
+  }
+
   getContactGroupbyId(contactGroupId: number): Observable<ContactGroup> {
     const url = `${AppConstants.baseContactGroupUrl}/${contactGroupId}`;
     return this.http.get<ContactGroupData>(url).pipe(map(response => response.result));
