@@ -13,6 +13,12 @@
                <a > <strong>{{company.companyName}}</strong></a>
               </div>
             </div>
+            <div class="col-sm-5">
+              <div class="mb-1 text-truncate">
+                <pre>{{company.companyAddress | formatAddress}}</pre><span class="text-danger"
+                *ngIf="!(company.companyAddress | formatAddress)">No address</span>
+              </div>
+            </div>
             <!-- <div class="col-12 col-sm-auto">
               <p><a (click)="$event.stopPropagation()"
                   href="tel:{{contactGroup?.phoneNumbers[0]}}">{{contactGroup?.phoneNumbers[0]}}</a><span class="text-danger" *ngIf="!contactGroup?.phoneNumbers[0]">No Phone</span></p>
