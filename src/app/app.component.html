@@ -1,7 +1,6 @@
 <div class="row no-gutters app-container" #appContainer>
-  <div class="loader-bar" *ngIf="!isContentVisible"></div>
   <div class="col-lg-3 col-xl-2 bg-dark side-nav" *ngIf="isNavVisible"><app-mainmenu></app-mainmenu></div>
-  <div class="col fade-in" *ngIf="isContentVisible"><router-outlet></router-outlet></div>
+  <div class="col" [ngClass]="{'fade-in': isFading}"><router-outlet></router-outlet></div>
 </div>
 <a role="button" class="btn btn-primary scroll-top text-center text-white" (click)="scrollTop()" *ngIf="isScrollTopVisible"><i class="fas fa-chevron-up"></i><br>up</a>
 <!-- TODO fix getcurrentuser -->

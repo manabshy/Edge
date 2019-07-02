@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnChanges, Output, EventEmitter, Input, ViewChild, ElementRef } from '@angular/core';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
@@ -23,7 +23,9 @@ export class SignerComponent implements OnInit {
   isHintVisible: boolean;
   searchTermBK: string = '';
   get signerNames(): FormControl {
-    return <FormControl> this.signerFinderForm.get('searchTerm');
+    if(this.signerFinderForm){
+      return <FormControl> this.signerFinderForm.get('searchTerm');
+    }
   }
   constructor(private contactGroupService: ContactGroupsService, private route: ActivatedRoute, private fb: FormBuilder) { }
 
@@ -38,8 +40,12 @@ export class SignerComponent implements OnInit {
     });
   }
 
+  ngOnChanges() {
+    this.displayExistingSigners();
+  }
+
   private displayExistingSigners() {
-    if (this.existingSigner) {
+    if (this.existingSigner && this.signerFinderForm) {
       console.log('existing.....', this.existingSigner);
       let displayName: string;
       const names = this.existingSigner.contactNames;
@@ -47,6 +53,7 @@ export class SignerComponent implements OnInit {
       this.existingSigner.companyName ? displayName = namesWithCompany : displayName = names;
       this.signerNames.setValue(displayName);
       this.selectedSignerDetails = this.existingSigner;
+      this.selectedSigner.emit(this.selectedSignerDetails);
     }
   }
 

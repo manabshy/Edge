@@ -9,6 +9,7 @@ import { Company, Signer } from 'src/app/contactgroups/shared/contact-group';
 import { CompanyService } from '../shared/company.service';
 import { debounceTime } from 'rxjs/operators';
 import { WedgeValidators } from 'src/app/core/shared/wedge-validators';
+import { AppUtils } from 'src/app/core/shared/utils';
 
 
 @Component({
@@ -51,6 +52,9 @@ export class CompanyEditComponent implements OnInit {
     if (id) {
       this.getCompanyDetails(id);
     }
+    if(AppUtils.newSignerId) {
+      this.getSignerDetails(AppUtils.newSignerId);
+    }
     this.companyForm.valueChanges.pipe(debounceTime(400)).subscribe(() => this.logValidationErrors(this.companyForm, false));
   }
   getCompanyDetails(id: number) {
@@ -62,6 +66,18 @@ export class CompanyEditComponent implements OnInit {
       this.sharedService.showError(this.errorMessage);
     });
   }
+
+  getSignerDetails(id: number) {
+    this.contactGroupService.getSignerbyId(id).subscribe(data => {
+      this.existingSigner = data;
+      this.companyForm.markAsDirty();
+      AppUtils.newSignerId = null;
+    }, error => {
+      this.errorMessage = <any>error;
+      this.sharedService.showError(this.errorMessage);
+    });
+  }
+
   displayCompanyDetails(company: Company) {
     if (this.companyForm) {
       this.companyForm.reset();
