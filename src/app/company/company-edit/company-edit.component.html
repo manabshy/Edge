@@ -32,11 +32,11 @@
         <app-signer (selectedSigner)="getSelectedSigner($event)" [existingSigner]="existingSigner"></app-signer>
       </fieldset>
       <fieldset>
-        <legend>Office Address</legend>
+        <legend>Address</legend>
         <app-address [companyDetails]="companyDetails" (addressDetails)="getAddress($event)"></app-address>
       </fieldset>
       <fieldset>
-        <legend>Office Contact Details</legend>
+        <legend>Contact Details</legend>
         <div class="form-group row">
           <label for="companyTelephone" class="col-sm-2 col-form-label col-form-label-sm">Telephone</label>
           <div class="col-sm-10">
