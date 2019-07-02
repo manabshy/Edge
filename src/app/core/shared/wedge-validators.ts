@@ -7,7 +7,7 @@ export class WedgeValidators {
   /**
    * Validator that requires controls to have a value greater than a number.
    */
-   constructor(private sharedService: SharedService){}
+   constructor(private sharedService: SharedService) {}
   static min(min: number): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (isEmptyInputValue(control.value) || isEmptyInputValue(min)) {
@@ -42,7 +42,7 @@ export class WedgeValidators {
         'RegExp': '/^\\+?[ \\d]+$/g',
         'actualValue': control.value
       } : null;
-    }
+    };
   }
 
   static phoneNumberValidator(): ValidatorFn {
@@ -50,6 +50,9 @@ export class WedgeValidators {
       let validNumber = false;
       const regionCode = 'GB';
       // let regionCode = this.sharedService.getRegionCode(control.value);
+      if (control.value === '') {
+        return null;
+      }
       const phoneNumberUtil = PhoneNumberUtil.getInstance();
       try {
         const phoneNumber = phoneNumberUtil.parseAndKeepRawInput(
@@ -59,7 +62,7 @@ export class WedgeValidators {
       } catch (e) { }
 
       return validNumber ? null : { 'invalidPhoneNumber': { value: control.value } };
-    }
+    };
   }
   /**
    * Validator for valuations - requiring EITHER a letting value OR sales value
