@@ -461,6 +461,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.contactGroupDetails.referenceCount = 0;
     }
     this.clonedContact = this.contactGroupDetails;
+    this.contactGroupDetailsForm.markAsDirty();
   }
   saveContactGroup() {
     let validityCondition = this.contactGroupDetailsForm.valid;
@@ -568,7 +569,13 @@ export class ContactgroupsPeopleComponent implements OnInit {
         AppUtils.newSignerId = contactGroupId;
         this._location.back();
       }
-      let url = this._router.url.substring(0,this._router.url.indexOf("?"));
+      
+      let url = this._router.url;
+
+      if(url.indexOf("?") >= 0) {
+        url = url.substring(0,url.indexOf("?"));
+      }
+
       url = url.replace('people/'+this.contactGroupId, 'people/'+contactGroupId);
       this._location.replaceState(url);
       this.contactGroupId = contactGroupId;
