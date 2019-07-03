@@ -43,6 +43,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isLoadingDetails = false;
   isCreateNewPersonVisible = false;
   isLoadingNewPersonVisible = false;
+  isEditingSelectedPerson = false;
   isCreateNewPerson = false;
   isNewContactGroup = false;
   isSigner = false;
@@ -99,6 +100,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   init() {
     this.removedPersonIds = [];
+    this.selectedPeople = [];
     if(!this.contactGroupId) {
       this.route.queryParams.subscribe(params => {
         this.isNewContactGroup = params['isNewContactGroup'] || false;
@@ -122,7 +124,13 @@ export class ContactgroupsPeopleComponent implements OnInit {
       emailAddress: [''],
       phoneNumber: ['']
     });
-    this.contactGroupId ? this.getContactGroupById(this.contactGroupId) : {};
+    if(AppUtils.holdingSelectedPeople) {
+      this.selectedPeople = AppUtils.holdingSelectedPeople;
+      AppUtils.holdingSelectedPeople = null;
+    }
+    if(this.contactGroupId) {
+      this.getContactGroupById(this.contactGroupId)
+    }
     this.personFinderForm.valueChanges
       .pipe(debounceTime(400))
       .subscribe(data => {
@@ -312,6 +320,14 @@ export class ContactgroupsPeopleComponent implements OnInit {
     }
    });
   }
+
+
+  editSelectedPerson(id: number) {
+    this.isEditingSelectedPerson = true;
+    AppUtils.holdingSelectedPeople = this.selectedPeople;
+    this._router.navigate(['../../edit'], {queryParams: {groupPersonId: id, isEditingSelectedPerson: true}, relativeTo: this.route});
+  }
+
   removePerson(id: number, isDialogVisible) {
     event.preventDefault();
     event.stopPropagation();
@@ -599,7 +615,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.contactGroupDetailsForm.patchValue({
       salutation: salutation,
       addressee: addressee,
-      contactType: type
+      contactType: type,
+      comments: this.contactGroupDetails.comments
     }, {onlySelf: false});
 
     this.contactGroupDetailsForm.markAsDirty();
@@ -660,7 +677,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   canDeactivate(): boolean {
-    if ((this.contactGroupDetailsForm.dirty || this.companyFinderForm.dirty) && !this.isSubmitting) {
+    if ((this.contactGroupDetailsForm.dirty || this.companyFinderForm.dirty) && !this.isSubmitting && !this.isEditingSelectedPerson) {
       return false;
     }
     return true;

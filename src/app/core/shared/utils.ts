@@ -1,6 +1,7 @@
 import {format, compareAsc, isDate} from 'date-fns';
 import { isArray, isPlainObject, mapValues, isNull, isUndefined, random  } from 'lodash';
 import { ContactGroup } from 'src/app/contactgroups/shared/contact-group';
+import { Person } from '../models/person';
 export class AppUtils {
   public static prevRoute: string = '';
   public static prevRouteBU: string = '';
@@ -11,6 +12,7 @@ export class AppUtils {
   public static searchTerm: string;
   public static companySearchTerm: any;
   public static newSignerId: number;
+  public static holdingSelectedPeople: Person[];
 
   /**
    * Format a date/time into a string
