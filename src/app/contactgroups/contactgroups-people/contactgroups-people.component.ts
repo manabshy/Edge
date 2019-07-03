@@ -98,6 +98,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   init() {
+    this.removedPersonIds = [];
     if(!this.contactGroupId) {
       this.route.queryParams.subscribe(params => {
         this.isNewContactGroup = params['isNewContactGroup'] || false;
@@ -162,9 +163,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
           }
         });
 
-    this.companyFinderForm.valueChanges.subscribe(data => {
-      this.findCompany(data);
-      console.log('search term', data); });
+    this.companyFinderForm.valueChanges.subscribe(data => this.findCompany(data));
   }
 
   isCompanyContactGroup(isSelectedTypeCompany: boolean) {
@@ -193,6 +192,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.addSelectedPeople();
         if (this.isCloned) {
           this.contactGroupDetails.referenceCount = 0;
+          this.contactGroupDetails.contactGroupId = 0;
         }
         this.isLoadingDetails = false;
       });
@@ -246,7 +246,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.isLoadingCompaniesVisible = true;
     this.contactGroupService.getAutocompleteCompany(searchTerm).subscribe(data => {
       this.foundCompanies = data;
-      console.log('found companies', data);
       this.isLoadingCompaniesVisible = false;
     });
   }
@@ -460,7 +459,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.contactGroupDetails.contactGroupId = 0;
       this.contactGroupDetails.referenceCount = 0;
     }
-    this.clonedContact = this.contactGroupDetails;
     this.contactGroupDetailsForm.markAsDirty();
   }
   saveContactGroup() {
@@ -475,13 +473,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
           let contactGroup = {...this.contactGroupDetails, ...this.contactGroupDetailsForm.value};
           this.isSubmitting = true;
           this.errorMessage = null;
-          this.isCloned ? contactGroup = this.clonedContact : contactGroup = contactGroup;
-          if (this.isCloned) {
-            this.clonedContact.contactType = this.contactGroupDetailsForm.get('contactType').value;
-            this.clonedContact.salutation = this.contactGroupDetailsForm.get('salutation').value;
-            this.clonedContact.addressee = this.contactGroupDetailsForm.get('addressee').value;
-            this.clonedContact.comments = this.contactGroupDetailsForm.get('comments').value;
-          }
           if (contactGroup.contactGroupId) {
             this.updateContactGroup(contactGroup);
           } else {
@@ -510,7 +501,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
         if(!this.contactGroupDetails.contactPeople.length) {
           this.contactGroupDetails.contactPeople.push(this.selectedPerson);
         }
-        console.log('added company name',  this.contactGroupDetails.companyName);
         this.contactGroupService
         .addContactGroup(contactGroup)
         .subscribe(res => {
@@ -525,8 +515,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.isCompanyAdded = false;
         this.isSubmitting = false;
         this.contactGroupDetails.contactType = ContactType.CompanyContact;
-        console.log('submit', this.isSubmitting);
-        console.log('no company added',  this.contactGroupDetails);
       }
 
     } else {
@@ -559,8 +547,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   onSaveComplete(contactGroupId): void {
-    console.log('contacts saved', this.contactGroupDetails);
-    console.log(contactGroupId);
     this.sharedService.showSuccess('Contact Group successfully saved');
     if(!contactGroupId) {
       this._location.back();
