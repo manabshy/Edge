@@ -13,6 +13,7 @@ export class AppUtils {
   public static companySearchTerm: any;
   public static newSignerId: number;
   public static holdingSelectedPeople: Person[];
+  public static holdingRemovedPeople: number[];
 
   /**
    * Format a date/time into a string

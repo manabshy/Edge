@@ -126,7 +126,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
     });
     if(AppUtils.holdingSelectedPeople) {
       this.selectedPeople = AppUtils.holdingSelectedPeople;
+      this.removedPersonIds = AppUtils.holdingRemovedPeople;
       AppUtils.holdingSelectedPeople = null;
+      AppUtils.holdingRemovedPeople = null;
     }
     if(this.contactGroupId) {
       this.getContactGroupById(this.contactGroupId)
@@ -325,6 +327,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   editSelectedPerson(id: number) {
     this.isEditingSelectedPerson = true;
     AppUtils.holdingSelectedPeople = this.selectedPeople;
+    AppUtils.holdingRemovedPeople = this.removedPersonIds;
     this._router.navigate(['../../edit'], {queryParams: {groupPersonId: id, isEditingSelectedPerson: true}, relativeTo: this.route});
   }
 
