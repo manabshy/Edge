@@ -8,6 +8,7 @@ import { AppInterceptor } from './app.interceptor';
 import { CacheInterceptor } from './cache.interceptor';
 import { BasicSearchComponent } from './basic-search/basic-search.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 // ngx bootstrap imports
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
@@ -31,15 +32,17 @@ import { FormatAddressPipe } from './shared/format-address.pipe';
 import { ScoreBadgeComponent } from './score-badge/score-badge.component';
 import { CanDeactivateGuard } from './shared/can-deactivate.guard';
 import { ErrorModalComponent } from './error-modal/error-modal.component';
+import { NoteModalComponent } from './note-modal/note-modal.component';
+import { AddressComponent } from './address/address.component';
+import { SignerComponent } from './signer/signer.component';
 
 //vendor
 import { OrderModule } from 'ngx-order-pipe';
-import { AddressComponent } from './address/address.component';
-import { SignerComponent } from './signer/signer.component';
+import { ToastNoAnimationModule } from 'ngx-toastr';
+
+//various
 import { AutocompleteOffDirective } from './shared/autocomplete-off.directive';
 import { HighlightPipe } from './shared/highlight.pipe';
-import { NoteModalComponent } from './note-modal/note-modal.component';
-import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent,
@@ -51,7 +54,7 @@ import { RouterModule } from '@angular/router';
     ConfirmModalComponent, ErrorModalComponent, PropertyFinderComponent, ScoreBadgeComponent, AddressComponent, SignerComponent,
     RouterModule, CollapseModule, TabsModule, TypeaheadModule, BsDropdownModule,
     BsDatepickerModule, ModalModule, PopoverModule,  NgPipesModule,
-    TooltipModule, AccordionModule, ButtonsModule, ReactiveFormsModule, FormsModule, OrderModule
+    TooltipModule, AccordionModule, ButtonsModule, ReactiveFormsModule, FormsModule, OrderModule, ToastNoAnimationModule
   ],
   imports: [
     CommonModule,
@@ -68,7 +71,8 @@ import { RouterModule } from '@angular/router';
     PopoverModule.forRoot(),
     TooltipModule.forRoot(),
     AccordionModule.forRoot(),
-    ButtonsModule.forRoot()
+    ButtonsModule.forRoot(),
+    ToastNoAnimationModule.forRoot(),
   ],
   entryComponents: [
     ConfirmModalComponent,

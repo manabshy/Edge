@@ -9,6 +9,7 @@ import { EventEmitter } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { debounceTime } from 'rxjs/operators';
 import { AppConstants } from 'src/app/core/shared/app-constants';
+import { AppUtils } from 'src/app/core/shared/utils';
 
 @Component({
   selector: 'app-contactgroups-detail-edit',
@@ -45,6 +46,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   isContactErrorVisible = false;
   backToAddressesList = false;
   enterAddressManually = false;
+  isEditingSelectedPerson = false;
   searchTermBK = '';
   // postCodePattern = /^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]?[\s]+?[0-9][A-Za-z]{2}|[Gg][Ii][Rr][\s]+?0[Aa]{2})$/;
   // emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -146,6 +148,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     this.route.params.subscribe(params => this.personId = +params['personId'] || 0);
     this.route.queryParams.subscribe(params => {
       this.groupPersonId = +params['groupPersonId'] || 0;
+      this.isEditingSelectedPerson = params['isEditingSelectedPerson'] || false;
     });
     this.setupEditForm();
     const id = this.groupPersonId !== 0 ? this.groupPersonId : this.personId;
@@ -630,7 +633,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         person.address.inCode = postCode[1];
         person.address.addressLines = this.removeDuplicateAdressLines();
         if (!this.basicPerson) {
-          this.contactGroupService.updatePerson(person).subscribe(() => this.onSaveComplete(),
+          this.contactGroupService.updatePerson(person).subscribe(res => this.onSaveComplete(res.result),
             (error: WedgeError) => {
               this.errorMessage = error;
               this.sharedService.showError(this.errorMessage);
@@ -648,7 +651,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
             });
         }
       } else {
-        this.onSaveComplete();
+        this.onSaveComplete(this.personDetails);
       }
     } else {
       this.errorMessage = {} as WedgeError;
@@ -664,8 +667,18 @@ export class ContactgroupsDetailEditComponent implements OnInit {
 
     console.log(this.personForm);
   }
-  onSaveComplete() {
+  onSaveComplete(person?: Person) {
     this.personForm.reset();
+    this.sharedService.showSuccess('Person successfully saved');
+    if(this.isEditingSelectedPerson && AppUtils.holdingSelectedPeople) {
+      const holdingPeople = AppUtils.holdingSelectedPeople;
+      holdingPeople.forEach((x,index)=>{
+        if(x.personId === person.personId) {
+          person.isNewPerson = true;
+          holdingPeople[index] = person;
+        }
+      })
+    }
     if (this.newPersonId) {
       this.addNewPerson(this.newPersonId);
       this.backToFinder.emit(true);

@@ -4,6 +4,9 @@
 //bootstrap
 @import "../node_modules/bootstrap/scss/bootstrap";
 
+//toastr
+@import '~ngx-toastr/toastr-bs4-alert';
+
 //partials
 @import "style/partials/layout-overrides";
 @import "style/partials/animation";
