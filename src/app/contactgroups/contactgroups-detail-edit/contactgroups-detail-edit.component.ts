@@ -666,6 +666,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   }
   onSaveComplete() {
     this.personForm.reset();
+    this.sharedService.showSuccess('Person successfully saved');
     if (this.newPersonId) {
       this.addNewPerson(this.newPersonId);
       this.backToFinder.emit(true);

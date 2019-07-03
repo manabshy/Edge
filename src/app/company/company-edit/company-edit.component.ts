@@ -205,6 +205,7 @@ export class CompanyEditComponent implements OnInit {
   }
   onSaveComplete() {
     this.companyForm.reset();
+    this.sharedService.showSuccess('Company successfully saved');
     this._location.back();
    console.log('complete');
   }

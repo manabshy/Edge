@@ -560,6 +560,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   onSaveComplete(contactGroupId): void {
     console.log('contacts saved', this.contactGroupDetails);
     console.log(contactGroupId);
+    this.sharedService.showSuccess('Contact Group successfully saved');
     if(!contactGroupId) {
       this._location.back();
     } else {

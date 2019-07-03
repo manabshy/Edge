@@ -12,6 +12,7 @@ import { ErrorModalComponent } from '../error-modal/error-modal.component';
 import { FormGroup } from '@angular/forms';
 import { NoteModalComponent } from '../note-modal/note-modal.component';
 import { PhoneNumberUtil, PhoneNumber, PhoneNumberFormat } from 'google-libphonenumber';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Injectable({
@@ -23,7 +24,7 @@ export class SharedService {
     const listInfo = localStorage.getItem('dropdownListInfo');
     return JSON.parse(listInfo);
   }
-  constructor(private router: Router, private http: HttpClient, private modalService: BsModalService) { }
+  constructor(private router: Router, private http: HttpClient, private modalService: BsModalService, private toastr: ToastrService) { }
 
   back() {
     if (AppUtils.prevRoute) {
@@ -31,6 +32,10 @@ export class SharedService {
     } else {
       this.router.navigate(['/home']);
     }
+  }
+
+  showSuccess(message?: string) {
+    this.toastr.success(message, 'You\'ve done it!');
   }
 
   showError(error: WedgeError) {
