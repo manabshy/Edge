@@ -263,8 +263,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
         const sameFirstName = x.firstName.toLowerCase() === person.firstName.toLowerCase();
         const sameLastName = x.lastName.toLowerCase() === person.lastName.toLowerCase();
         const email = x.emailAddresses.filter(x => x === person.emailAddress);
-        const phone = x.phoneNumbers.filter(x => x === person.phoneNumber);
-        const samePhone = phone[0] ? phone[0].toString() === person.phoneNumber : false;
+        const phone = x.phoneNumbers.filter(x => x === person.phoneNumber.replace(/\s+/g, ''));
+        const samePhone = phone[0] ? phone[0].toString() === person.phoneNumber.replace(/\s+/g, '') : false;
         const sameEmail = email[0] ? email[0].toLowerCase() === person.emailAddress : false;
         switch (true) {
           case sameFirstName && sameLastName && (sameEmail || samePhone):
