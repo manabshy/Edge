@@ -23,7 +23,6 @@ export class HomeComponent implements OnInit {
   get isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
   }
-  infoDetail: DropdownListInfo;
   selectedTab = 0;
   containerClass = '';
 
@@ -37,11 +36,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.staffMemberService.getCurrentStaffMember().subscribe();
-    console.log('drop down list info for user', this.sharedService.dropdownListInfo);
-    console.log('current user', this.staffMemberService.currentStaffMember);
-    // this.sharedService.getDropdownListInfo().subscribe(data => {this.infoDetail = data; console.log('info', this.infoDetail)});
-  //  this.sharedService.getDropdownListInfo().subscribe(data=>console.log('detail info',data));
-
+    this.sharedService.getDropdownListInfo().subscribe();
     this.route.queryParams.subscribe(params =>  {
       if(params['selectedTab']) {
         AppUtils.homeSelectedTab = params['selectedTab'];

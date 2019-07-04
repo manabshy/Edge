@@ -20,18 +20,18 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class SharedService {
 
-  private infoDetail: DropdownListInfo;
-  get dropdownListInfo() {
-    this.getDropdownListInfo().subscribe(data =>{
-      this.infoDetail = data;
-      console.log('data from getter', this.infoDetail)
-    });
-    return this.infoDetail;
-  }
+  // private infoDetail: DropdownListInfo;
   // get dropdownListInfo() {
-  //   const listInfo = localStorage.getItem('dropdownListInfo');
-  //   return JSON.parse(listInfo);
+  //   this.getDropdownListInfo().subscribe(data =>{
+  //     this.infoDetail = data;
+  //     console.log('data from getter', this.infoDetail)
+  //   });
+  //   return this.infoDetail;
   // }
+  get dropdownListInfo() {
+    const listInfo = localStorage.getItem('dropdownListInfo');
+    return JSON.parse(listInfo);
+  }
   constructor(private router: Router, private http: HttpClient, private modalService: BsModalService, private toastr: ToastrService) {
 
   }
@@ -261,25 +261,24 @@ export class SharedService {
     });
   }
 
-  // getDropdownListInfo(): Observable<DropdownListInfo> {
-  // return  this.http.get<DropdownListInfo>(AppConstants.baseInfoUrl)
-  // .pipe(
-  //   tap(data => console.log(JSON.stringify(data))),
-  //   tap(data => localStorage.setItem('dropdownListInfo', JSON.stringify(data))));
-  // }
-  getDropdownListInfo() {
-    console.log('detail', this.infoDetail)
-    if(this.infoDetail){
-      console.log('cache')
-      return of(this.infoDetail)
-    }
-    console.log('from database')
-    return  this.http.get<DropdownListInfo>(AppConstants.baseInfoUrl)
-    .pipe(
-      tap(data => this.infoDetail = data)
-      // tap(data => console.log('info from db',JSON.stringify(data)))
-    );
+  getDropdownListInfo(): Observable<DropdownListInfo> {
+  return  this.http.get<DropdownListInfo>(AppConstants.baseInfoUrl)
+  .pipe(
+    tap(data => localStorage.setItem('dropdownListInfo', JSON.stringify(data))));
   }
+  // getDropdownListInfo2() {
+  //   console.log('detail', this.infoDetail)
+  //   if(this.infoDetail){
+  //     console.log('cache')
+  //     return of(this.infoDetail)
+  //   }
+  //   console.log('from database')
+  //   return  this.http.get<DropdownListInfo>(AppConstants.baseInfoUrl)
+  //   .pipe(
+  //     tap(data => this.infoDetail = data)
+  //     // tap(data => console.log('info from db',JSON.stringify(data)))
+  //   );
+  // }
 
   findAddress(searchTerm: string, container: string): Observable<AddressAutoCompleteData> {
     const addressRequest = new AddressRequest();

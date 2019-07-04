@@ -20,8 +20,7 @@ export class StaffMemberService {
     return this.http.get<StaffMemberResult>(`${AppConstants.baseUrl}/currentUser`)
     .pipe(
       map(response => response.result),
-      tap(data => localStorage.setItem('currentUser', JSON.stringify(data))),
-      tap(data => console.log(JSON.stringify(data)))
+      tap(data => localStorage.setItem('currentUser', JSON.stringify(data)))
    );
   }
 }
