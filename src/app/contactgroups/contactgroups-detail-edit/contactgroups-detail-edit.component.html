@@ -170,7 +170,7 @@
               <input type="text" [id]="'phone' + i" class="form-control" [placeholder]="!isFirst ? 'Additional phone' : ''" formControlName="number" (keyup)="addRemovePhoneNumberItem(i, false)" (blur)="addRemovePhoneNumberItem(i, true)"
               [ngClass]="{'border border-warning': !personForm.controls.phoneNumbers.controls[0].controls.number.value && isFirst && !isContactErrorVisible,
                         'is-invalid': isValid('number', i)
-                        || isContactErrorVisible}">
+                        || isContactErrorVisible }">
               <select class="custom-select" formControlName="typeId" (change)="checkPhoneType(i)">
                 <option *ngFor="let telephoneType of telephoneTypes | keyvalue:keepOriginalOrder" [value] = telephoneType.key >{{telephoneType.value}} </option>
               </select>
@@ -190,6 +190,9 @@
                   </div>
                   <div *ngIf="personForm.controls.phoneNumbers.controls[i].controls.number.errors?.maxlength">
                     Telephone number must be less than 16 characters.
+                  </div>
+                  <div *ngIf="personForm.controls.phoneNumbers.controls[i].controls.number.errors?.invalidMobileType">
+                    Telephone number {{currentPhoneNumber}} is not a valid mobile number`
                   </div>
                 </div>
               <small class="form-text w-100 order-sm-4" *ngIf="!personForm.controls.phoneNumbers.controls[0].controls.number.value && isFirst"><i class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your score</span></small>

@@ -1,6 +1,7 @@
 import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { PhoneNumberUtil, PhoneNumber, PhoneNumberFormat } from 'google-libphonenumber';
 import { SharedService } from '../services/shared.service';
+import { TelephoneTypeId } from '../models/person';
 
 export class WedgeValidators {
   // static sharedService: SharedService;
@@ -62,6 +63,18 @@ export class WedgeValidators {
       } catch (e) { }
 
       return validNumber ? null : { 'invalidPhoneNumber': { value: control.value } };
+    };
+  }
+  static phoneTypeValidator(number: string): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } => {
+      let validNumber = false;
+      let validUKMobileNumber = false;
+      const formattedNumber = number.replace(' ', '');
+      validUKMobileNumber = (formattedNumber.startsWith('07') || formattedNumber.startsWith('00') || formattedNumber.startsWith('+')) &&
+        !formattedNumber.startsWith('070') && !formattedNumber.startsWith('076');
+       validNumber = validUKMobileNumber && control.value == TelephoneTypeId.Mobile;
+
+      return validNumber ? null : { 'invalidMobileType': { value: control.value } };
     };
   }
   /**

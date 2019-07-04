@@ -10,6 +10,7 @@ import { Title } from '@angular/platform-browser';
 import { debounceTime } from 'rxjs/operators';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { AppUtils } from 'src/app/core/shared/utils';
+import { WedgeValidators } from 'src/app/core/shared/wedge-validators';
 
 @Component({
   selector: 'app-contactgroups-detail-edit',
@@ -48,6 +49,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   enterAddressManually = false;
   isEditingSelectedPerson = false;
   searchTermBK = '';
+  invalidPhoneType: boolean;
   // postCodePattern = /^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]?[\s]+?[0-9][A-Za-z]{2}|[Gg][Ii][Rr][\s]+?0[Aa]{2})$/;
   // emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   validationMessages = {
@@ -81,7 +83,8 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       required: 'Phone is required.',
       minlength: 'Phone number must be at least 7 characters.',
       maxlength: 'Phone number cannot be more than 16 characters.',
-      pattern: 'Phone number is not valid'
+      pattern: 'Phone number is not valid',
+      invalidMobileType: `Telephone number ${this.currentPhoneNumber} is not a valid mobile number`
     },
     'postCode': {
       required: 'Postcode is required.',
@@ -109,7 +112,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     number: [],
     email: []
   };
-
+  number: string;
   get showPostCode(): boolean {
     return this.address.get('countryId').value === this.defaultCountryCode;
   }
@@ -130,6 +133,9 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   }
   get phoneNumbers(): FormArray {
     return <FormArray>this.personForm.get('phoneNumbers');
+  }
+  get currentPhoneNumber() {
+    return this.number;
   }
   public keepOriginalOrder = (a) => a.key;
   constructor(public sharedService: SharedService,
@@ -605,12 +611,16 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   checkPhoneType(index: number) {
     const currPhoneNumberControl = this.phoneNumbers.controls[index];
     const phoneNumber = currPhoneNumberControl.value.number;
+    this.number = phoneNumber;
     const phoneNumberType = currPhoneNumberControl.value.typeId;
     const inValidMobileNumber = !this.sharedService.isUKMobile(phoneNumber);
     if (phoneNumberType == TelephoneTypeId.Mobile && inValidMobileNumber) {
+      this.invalidPhoneType = true;
       this.errorMessage = { } as WedgeError;
       this.errorMessage.displayMessage = `Telephone number ${phoneNumber} is not a valid mobile number`;
+      console.log('error message to display', this.errorMessage.displayMessage);
     }
+    console.log('current phone number', this.currentPhoneNumber);
   }
   savePerson() {
     this.isSubmitting = true;
