@@ -3,14 +3,12 @@ import { SharedService, WedgeError, AddressAutoCompleteData, InfoDetail } from '
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractControl } from '@angular/forms';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { Person, Email, PhoneNumber, BasicPerson, TelephoneTypeId } from 'src/app/core/models/person';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { EventEmitter } from '@angular/core';
-import { Title } from '@angular/platform-browser';
 import { debounceTime } from 'rxjs/operators';
 import { AppConstants, FormErrors, ValidationMessages } from 'src/app/core/shared/app-constants';
 import { AppUtils } from 'src/app/core/shared/utils';
-import { WedgeValidators } from 'src/app/core/shared/wedge-validators';
 
 @Component({
   selector: 'app-contactgroups-detail-edit',
@@ -50,53 +48,8 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   isEditingSelectedPerson = false;
   searchTermBK = '';
   invalidPhoneType: boolean;
-  // postCodePattern = /^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]?[\s]+?[0-9][A-Za-z]{2}|[Gg][Ii][Rr][\s]+?0[Aa]{2})$/;
-  // emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  // validationMessages = {
-  //   'firstName': {
-  //     required: 'First Name is required.',
-  //     minlength: 'First Name must be greater than 2 characters',
-  //     maxlength: 'First Name must be less than 40 characters.',
-  //   },
-  //   'middleName': {
-  //     maxlength: 'Middle Name must be less than 50 characters'
-  //   },
-  //   'lastName': {
-  //     required: 'Last name is required.',
-  //     minlength: 'Last name must be greater than 2 characters',
-  //     maxlength: 'Last name must be less than 80 characters.',
-  //   },
-  //   'emailAddress': {
-  //     'email': {
-  //       required: ' Email is required.',
-  //       pattern: 'Email is not valid.'
-  //     },
-  //   },
-  //   'email': {
-  //     required: ' Email is required.',
-  //     pattern: 'Email is not valid'
-  //   },
-  //   'address': {
-  //     required: 'Address is required.'
-  //   },
-  //   'number': {
-  //     required: 'Phone is required.',
-  //     minlength: 'Phone number must be at least 7 characters.',
-  //     maxlength: 'Phone number cannot be more than 16 characters.',
-  //     pattern: 'Phone number is not valid',
-  //     invalidMobileType: `Telephone number ${this.currentPhoneNumber} is not a valid mobile number`
-  //   },
-  //   'postCode': {
-  //     required: 'Postcode is required.',
-  //     minlength: 'Postcode must be at least 5 characters.',
-  //     maxlength: 'Postcode cannot be more than 7 characters.',
-  //     pattern: 'Postcode is not valid'
-  //   }
-  // };
-
   formErrors = FormErrors;
   foundAddress: AddressAutoCompleteData;
-
   invalidFormArrayControls = {
     number: [],
     email: []
@@ -132,8 +85,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private _location: Location,
-    private renderer: Renderer2,
-    private router: Router) { }
+    private renderer: Renderer2) { }
 
   ngOnInit() {
     this.listInfo = this.sharedService.dropdownListInfo;
@@ -158,21 +110,6 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         this.postCode.setValue(this.sharedService.formatPostCode(data.address.postCode), { emitEvent: false });
         this.logValidationErrors(this.personForm, false);
       });
-    //  this.emailAddresses.controls.forEach(x=> {
-    //    x.get('email').valueChanges.subscribe(data=>{
-    //     this.logValidationErrorsFormArray(x.get('email'));
-    //     // console.log('email control from email addresses',x.get('email'));
-    //     // console.log('all controls from email addresses',x);
-    //   });
-    // });
-    // const phoneControl = this.phoneNumbers.get('number');
-    // emailControl.valueChanges.subscribe(data=>this.logValidationErrorsFormArray(emailControl));
-    console.log(this.personForm);
-
-    // const addressControl = this.personForm.get('fullAddress');
-    // addressControl.valueChanges.pipe(debounceTime(500)).subscribe(data => {
-    //   this.findAddress(data, '');
-    // });
   }
 
   logValidationErrors(group: FormGroup = this.personForm, fakeTouched: boolean) {
@@ -202,7 +139,6 @@ export class ContactgroupsDetailEditComponent implements OnInit {
 
   logValidationErrorsFormArray(control: AbstractControl) {
       this.formArraryErrors = '';
-      // console.log(control['controls']);
       control['controls'].forEach((x, i) => {
         const field = x.get('number') || x.get('email');
         const parent = field['parent']['controls'];
@@ -222,8 +158,6 @@ export class ContactgroupsDetailEditComponent implements OnInit {
           }
         });
       });
-      // console.log('form errors', this.invalidFormArrayControls);
-      // console.log('form array errors', this.validationMessages['number']);
   }
 
   isValid(type, i) {
@@ -284,32 +218,6 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       this.foundAddress = data;
       this.isLoadingAddressVisible = false;
     });
-  }
-  private retrieveAddress(id: string) {
-    if (this.foundAddress) {
-      this.sharedService.getAddress(id).subscribe(data => {
-        this.retrievedAddresses = data;
-        const retrievedAddress = this.retrievedAddresses.Items[0];
-        const keys = Object.keys(retrievedAddress);
-        let retAddressLines = '';
-        keys.forEach(x => {
-          if (x.includes('Line') && retrievedAddress[x]) {
-            retAddressLines += retrievedAddress[x] + '\n';
-          }
-        });
-
-        this.personForm.patchValue({
-          fullAddress: '',
-          address: {
-            addressLines: (retrievedAddress.Company ? retrievedAddress.Company + '\n' : '') + retAddressLines + retrievedAddress.City,
-            postCode: retrievedAddress.PostalCode
-          }
-        });
-        setTimeout(() => {
-          document.getElementById('addressLines').scrollIntoView({block: 'center'});
-        });
-      });
-    }
   }
 
   populateNewPersonDetails() {
@@ -376,7 +284,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
 
   setExistingPhoneNumbers(phoneNumbers: PhoneNumber[]): FormArray {
     const phoneArray = new FormArray([]);
-    phoneNumbers.forEach((x, i) => {
+    phoneNumbers.forEach((x) => {
       phoneArray.push(this.fb.group({
         number: [x.number, { validators: [Validators.required, Validators.minLength(7), Validators.maxLength(16), Validators.pattern(/^\+?[ \d]+$/g)]}],
         typeId: x.typeId,
@@ -505,7 +413,6 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       otherEmails.forEach(x => {
         x.isPreferred = false;
       });
-      console.log('emails group here');
     }
   }
 
@@ -514,7 +421,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
    const countryName = this.getCountryName(this.countryId.value);
    this.errorMessage = {} as WedgeError;
     addressLines.push(this.addressLines.value.split('\n'));
-    addressLines.forEach(x => {
+    addressLines.forEach(() => {
       for (const value of  Object.values(addressLines[0])) {
         if (value === this.postCode.value) {
           this.errorMessage.displayMessage = 'Address lines should not contain post code';
@@ -529,18 +436,14 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     if (this.addressLines.value) {
       let newAddress = '';
       const addressLines = [];
-      const countryName = this.getCountryName(this.countryId.value);
        addressLines.push(this.addressLines.value.split('\n'));
-       addressLines.forEach(x => {
+       addressLines.forEach(() => {
          for (const value of  Object.values(addressLines[0])) {
            if (value === this.postCode.value) {
            newAddress =  this.addressLines.value.replace(value, ' ');
            } else {
              newAddress = this.addressLines.value;
            }
-           //  if ( value === countryName) {
-           //   newAddress =  this.addressLines.value.replace(value, ' ');
-           // }
          }
        });
        return newAddress;
@@ -609,7 +512,6 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       this.errorMessage.displayMessage = `Telephone number ${phoneNumber} is not a valid mobile number`;
       console.log('error message to display', this.errorMessage.displayMessage);
     }
-    console.log('current phone number', this.currentPhoneNumber);
   }
   savePerson() {
     this.isSubmitting = true;
@@ -655,7 +557,6 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     } else {
       this.errorMessage = {} as WedgeError;
       this.errorMessage.displayMessage = 'Please correct validation errors';
-      console.log(this.personForm.value);
       if (!this.personForm.value.emailAddresses[0].email && !this.personForm.value.phoneNumbers[0].number) {
         this.isContactErrorVisible = true;
         setTimeout(() => {
@@ -663,8 +564,6 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         });
       }
     }
-
-    console.log(this.personForm);
   }
   onSaveComplete(person?: Person) {
     this.personForm.reset();
