@@ -170,13 +170,13 @@
               <input type="text" [id]="'phone' + i" class="form-control" [placeholder]="!isFirst ? 'Additional phone' : ''" formControlName="number" (keyup)="addRemovePhoneNumberItem(i, false)" (blur)="addRemovePhoneNumberItem(i, true)"
               [ngClass]="{'border border-warning': !personForm.controls.phoneNumbers.controls[0].controls.number.value && isFirst && !isContactErrorVisible,
                         'is-invalid': isValid('number', i)
-                        || isContactErrorVisible }">
-              <select class="custom-select" formControlName="typeId" (change)="checkPhoneType(i)">
+                        || isContactErrorVisible || personForm.controls.phoneNumbers.controls[i].errors?.mismatch}">
+              <select class="custom-select" formControlName="typeId" [ngClass]="{'is-invalid': personForm.controls.phoneNumbers.controls[i].errors?.mismatch}">
                 <option *ngFor="let telephoneType of telephoneTypes | keyvalue:keepOriginalOrder" [value] = telephoneType.key >{{telephoneType.value}} </option>
               </select>
               <div class="input-group-append order-sm-2">
                 <label class="btn btn-light" btnCheckbox formControlName="sendSMS" tabindex="0"
-                  role="button" [ngClass]="{'font-weight-bold': personForm.value.phoneNumbers[i].sendSMS}" [style.visibility]="personForm.value.phoneNumbers[i].typeId != 3 ? 'hidden' : 'visible'">SMS</label>
+                  role="button" [ngClass]="{'font-weight-bold': personForm.value.phoneNumbers[i].sendSMS}" [style.visibility]="!sharedService.isUKMobile(personForm.value.phoneNumbers[i].number) ? 'hidden' : 'visible'">SMS</label>
                 <label class="btn btn-light" btnCheckbox formControlName="isPreferred" tabindex="0" (click)="togglePreferences(i, phoneNumbers)"
                   role="button" [class.active]="personForm.value.phoneNumbers[i].isPreferred"><i class="fa-star" [ngClass]="personForm.value.phoneNumbers[i].isPreferred ? 'fas' : 'far'"></i></label>
               </div>
@@ -193,6 +193,9 @@
                   </div>
                   <div *ngIf="personForm.controls.phoneNumbers.controls[i].controls.number.errors?.invalidMobileType">
                     Telephone number {{currentPhoneNumber}} is not a valid mobile number`
+                  </div>
+                  <div *ngIf="personForm.controls.phoneNumbers.controls[i].errors?.mismatch">
+                    Telephone number doesn't match the type
                   </div>
                 </div>
               <small class="form-text w-100 order-sm-4" *ngIf="!personForm.controls.phoneNumbers.controls[0].controls.number.value && isFirst"><i class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your score</span></small>

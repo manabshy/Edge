@@ -65,18 +65,54 @@ export class WedgeValidators {
       return validNumber ? null : { 'invalidPhoneNumber': { value: control.value } };
     };
   }
-  static phoneTypeValidator(number: string): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: any } => {
-      let validNumber = false;
-      let validUKMobileNumber = false;
-      const formattedNumber = number.replace(' ', '');
-      validUKMobileNumber = (formattedNumber.startsWith('07') || formattedNumber.startsWith('00') || formattedNumber.startsWith('+')) &&
-        !formattedNumber.startsWith('070') && !formattedNumber.startsWith('076');
-       validNumber = validUKMobileNumber && control.value == TelephoneTypeId.Mobile;
+  // static phoneTypeValidator(number: string): ValidatorFn {
+  //   return (control: AbstractControl): { [key: string]: any } => {
+  //     let validNumber = false;
+  //     let validUKMobileNumber = false;
+  //     const formattedNumber = number.replace(' ', '');
+  //     validUKMobileNumber = (formattedNumber.startsWith('07') || formattedNumber.startsWith('00') || formattedNumber.startsWith('+')) &&
+  //       !formattedNumber.startsWith('070') && !formattedNumber.startsWith('076');
+  //      validNumber = validUKMobileNumber && control.value == TelephoneTypeId.Mobile;
 
-      return validNumber ? null : { 'invalidMobileType': { value: control.value } };
+  //     return validNumber ? null : { 'invalidMobileType': { value: control.value } };
+  //   };
+  // }
+
+  static phoneTypeValidator(_this): ValidatorFn {
+    return (control: AbstractControl): { [key: string]:boolean } | null => {
+      const phoneNumber = control.get('number');
+      const typeId = control.get('typeId');
+
+      if(phoneNumber && typeId) {
+
+        const number = phoneNumber.value;
+        const type = typeId.value;
+        
+        if(number) {
+          switch(+type){
+            case TelephoneTypeId.Home:
+            case TelephoneTypeId.Fax:
+              if(_this.sharedService.isUKMobile(number)) {
+                return { 'mismatch': true };
+              } else {
+                return null;
+              }
+            default: 
+            if(_this.sharedService.isUKMobile(number)) {
+              return null;
+            } else {
+              return { 'mismatch': true };
+            }
+          }
+        }
+      }
+      return null;
     };
   }
+
+
+
+
   /**
    * Validator for valuations - requiring EITHER a letting value OR sales value
    */

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, Renderer2 } from '@angular/core';
 import { SharedService, WedgeError, AddressAutoCompleteData, InfoDetail } from 'src/app/core/services/shared.service';
-import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractControl, ValidatorFn } from '@angular/forms';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { Person, Email, PhoneNumber, BasicPerson, TelephoneTypeId } from 'src/app/core/models/person';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -110,7 +110,8 @@ export class ContactgroupsDetailEditComponent implements OnInit {
 
   invalidFormArrayControls = {
     number: [],
-    email: []
+    email: [],
+    typeId: []
   };
   number: string;
   get showPostCode(): boolean {
@@ -213,25 +214,29 @@ export class ContactgroupsDetailEditComponent implements OnInit {
 
   logValidationErrorsFormArray(control: AbstractControl) {
       this.formArraryErrors = '';
-      // console.log(control['controls']);
-      control['controls'].forEach((x, i) => {
-        const field = x.get('number') || x.get('email');
-        const parent = field['parent']['controls'];
-
-        Object.keys(parent).forEach((name) => {
-          if (field === parent[name]) {
-            if (field.value && !field.valid) {
-              if (!this.invalidFormArrayControls[name].includes(i)) {
-                this.invalidFormArrayControls[name].push(i);
+      //console.log(control['controls']);
+      control['controls'].forEach((x:AbstractControl, i) => {
+        const fields = ['number', 'email'];
+        fields.forEach(label => {
+          const field = x.get(label);
+          if(field) {
+            const parent = field['parent']['controls'];
+            Object.keys(parent).forEach((name) => {
+              if (field === parent[name]) {
+                if (field.value && !field.valid) {
+                  if (!this.invalidFormArrayControls[name].includes(i)) {
+                    this.invalidFormArrayControls[name].push(i);
+                  }
+                } else {
+                  const index = this.invalidFormArrayControls[name].indexOf(i);
+                  if (index >= 0) {
+                    this.invalidFormArrayControls[name].splice(index, 1);
+                  }
+                }
               }
-            } else {
-              const index = this.invalidFormArrayControls[name].indexOf(i);
-              if (index >= 0) {
-                this.invalidFormArrayControls[name].splice(index, 1);
-              }
-            }
+            });
           }
-        });
+        })
       });
       // console.log('form errors', this.invalidFormArrayControls);
       // console.log('form array errors', this.validationMessages['number']);
@@ -394,7 +399,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         sendSMS: x.sendSMS,
         isPreferred: x.isPreferred,
         comments: x.comments
-      }));
+      }, {validators: WedgeValidators.phoneTypeValidator(this)}));
     });
     phoneArray.push(this.createPhoneNumberItem());
     return phoneArray;
@@ -476,7 +481,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     const lastEmail = this.emailAddresses.controls[this.emailAddresses.controls.length - 1];
 
     this.phoneNumbers.controls.forEach(x => {
-      if (x.value.typeId !== 3) {
+      if (!this.sharedService.isUKMobile(x.value.number)) {
         x.patchValue({
           sendSMS: false
         });
@@ -584,7 +589,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       sendSMS: [false],
       isPreferred: [false],
       comments: ['']
-    });
+    }, {validators: WedgeValidators.phoneTypeValidator(this)});
   }
 
   addRemoveEmailItem(i, remove) {
@@ -608,27 +613,26 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     });
   }
 
-  checkPhoneType(index: number) {
-    const currPhoneNumberControl = this.phoneNumbers.controls[index];
-    const phoneNumber = currPhoneNumberControl.value.number;
-    this.number = phoneNumber;
-    const phoneNumberType = currPhoneNumberControl.value.typeId;
-    const inValidMobileNumber = !this.sharedService.isUKMobile(phoneNumber);
-    if (phoneNumberType == TelephoneTypeId.Mobile && inValidMobileNumber) {
-      this.invalidPhoneType = true;
-      this.errorMessage = { } as WedgeError;
-      this.errorMessage.displayMessage = `Telephone number ${phoneNumber} is not a valid mobile number`;
-      console.log('error message to display', this.errorMessage.displayMessage);
-    }
-    console.log('current phone number', this.currentPhoneNumber);
-  }
+  // isInvalidPhoneType(index: number) {
+  //   const currPhoneNumberControl = this.phoneNumbers.controls[index];
+  //   const phoneNumber = currPhoneNumberControl.value.number;
+  //   this.number = phoneNumber;
+  //   const phoneNumberType = currPhoneNumberControl.value.typeId;
+  //   const validMobileNumber = this.sharedService.isUKMobile(phoneNumber);
+  //   if ((phoneNumberType == TelephoneTypeId.Home || phoneNumberType == TelephoneTypeId.Fax) && validMobileNumber) {
+  //     return true;
+  //   }
+  //   return false;
+  //   console.log('current phone number', this.currentPhoneNumber);
+  // }
+
   savePerson() {
     this.isSubmitting = true;
     this.errorMessage = null;
     const allPhoneNumbers =  this.phoneNumbers.controls.length - 1;
-    for (let index = 0; index < allPhoneNumbers; index++) {
-      this.checkPhoneType(index);
-    }
+    // for (let index = 0; index < allPhoneNumbers; index++) {
+    //   this.checkPhoneType(index);
+    // }
     this.removeValidationForPhoneAndEmail();
     this.removeValidationForAdditionalFields();
     this.logValidationErrors(this.personForm, true);

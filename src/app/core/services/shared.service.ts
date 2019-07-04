@@ -226,9 +226,13 @@ export class SharedService {
   }
 
   isUKMobile(number: string) {
-    const formattedNumber = number.replace(' ', '');
-    return  (formattedNumber.startsWith('07') || formattedNumber.startsWith('00') || formattedNumber.startsWith('+'))  &&
-    !formattedNumber.startsWith('070') && !formattedNumber.startsWith('076');
+    if(number){
+      const formattedNumber = number.replace(' ', '');
+      return  (formattedNumber.startsWith('07') || formattedNumber.startsWith('00') || formattedNumber.startsWith('+'))  &&
+      !formattedNumber.startsWith('070') && !formattedNumber.startsWith('076');
+    } else {
+      return false;
+    }
   }
   isInternationNumber(number: string) {
     const formattedNumber = number.replace(' ', '');
