@@ -8,7 +8,7 @@ import { Location } from '@angular/common';
 import { EventEmitter } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { debounceTime } from 'rxjs/operators';
-import { AppConstants } from 'src/app/core/shared/app-constants';
+import { AppConstants, FormErrors, ValidationMessages } from 'src/app/core/shared/app-constants';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { WedgeValidators } from 'src/app/core/shared/wedge-validators';
 
@@ -52,60 +52,49 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   invalidPhoneType: boolean;
   // postCodePattern = /^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]?[\s]+?[0-9][A-Za-z]{2}|[Gg][Ii][Rr][\s]+?0[Aa]{2})$/;
   // emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  validationMessages = {
-    'firstName': {
-      required: 'First Name is required.',
-      minlength: 'First Name must be greater than 2 characters',
-      maxlength: 'First Name must be less than 40 characters.',
-    },
-    'middleName': {
-      maxlength: 'Middle Name must be less than 50 characters'
-    },
-    'lastName': {
-      required: 'Last name is required.',
-      minlength: 'Last name must be greater than 2 characters',
-      maxlength: 'Last name must be less than 80 characters.',
-    },
-    'emailAddress': {
-      'email': {
-        required: ' Email is required.',
-        pattern: 'Email is not valid.'
-      },
-    },
-    'email': {
-      required: ' Email is required.',
-      pattern: 'Email is not valid'
-    },
-    'address': {
-      required: 'Address is required.'
-    },
-    'number': {
-      required: 'Phone is required.',
-      minlength: 'Phone number must be at least 7 characters.',
-      maxlength: 'Phone number cannot be more than 16 characters.',
-      pattern: 'Phone number is not valid',
-      invalidMobileType: `Telephone number ${this.currentPhoneNumber} is not a valid mobile number`
-    },
-    'postCode': {
-      required: 'Postcode is required.',
-      minlength: 'Postcode must be at least 5 characters.',
-      maxlength: 'Postcode cannot be more than 7 characters.',
-      pattern: 'Postcode is not valid'
-    }
-  };
+  // validationMessages = {
+  //   'firstName': {
+  //     required: 'First Name is required.',
+  //     minlength: 'First Name must be greater than 2 characters',
+  //     maxlength: 'First Name must be less than 40 characters.',
+  //   },
+  //   'middleName': {
+  //     maxlength: 'Middle Name must be less than 50 characters'
+  //   },
+  //   'lastName': {
+  //     required: 'Last name is required.',
+  //     minlength: 'Last name must be greater than 2 characters',
+  //     maxlength: 'Last name must be less than 80 characters.',
+  //   },
+  //   'emailAddress': {
+  //     'email': {
+  //       required: ' Email is required.',
+  //       pattern: 'Email is not valid.'
+  //     },
+  //   },
+  //   'email': {
+  //     required: ' Email is required.',
+  //     pattern: 'Email is not valid'
+  //   },
+  //   'address': {
+  //     required: 'Address is required.'
+  //   },
+  //   'number': {
+  //     required: 'Phone is required.',
+  //     minlength: 'Phone number must be at least 7 characters.',
+  //     maxlength: 'Phone number cannot be more than 16 characters.',
+  //     pattern: 'Phone number is not valid',
+  //     invalidMobileType: `Telephone number ${this.currentPhoneNumber} is not a valid mobile number`
+  //   },
+  //   'postCode': {
+  //     required: 'Postcode is required.',
+  //     minlength: 'Postcode must be at least 5 characters.',
+  //     maxlength: 'Postcode cannot be more than 7 characters.',
+  //     pattern: 'Postcode is not valid'
+  //   }
+  // };
 
-  formErrors = {
-    'firstName': '',
-    'lastName': '',
-    'middleName': '',
-    'email': '',
-    'emailAddresses': {
-      'email': '',
-    },
-    'address': '',
-    'number': '',
-    'postCode': ''
-  };
+  formErrors = FormErrors;
   foundAddress: AddressAutoCompleteData;
 
   invalidFormArrayControls = {
@@ -189,7 +178,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   logValidationErrors(group: FormGroup = this.personForm, fakeTouched: boolean) {
     Object.keys(group.controls).forEach((key: string) => {
       const control = group.get(key);
-      const messages = this.validationMessages[key];
+      const messages = ValidationMessages[key];
       if (control.valid) {
         this.formErrors[key] = '';
       }
