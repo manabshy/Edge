@@ -14,6 +14,8 @@ export class AppUtils {
   public static newSignerId: number;
   public static holdingSelectedPeople: Person[];
   public static holdingRemovedPeople: number[];
+  public static holdingContactType: number;
+  public static holdingCloned: boolean;
 
   /**
    * Format a date/time into a string

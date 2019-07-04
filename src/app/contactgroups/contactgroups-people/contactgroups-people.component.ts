@@ -103,7 +103,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.selectedPeople = [];
     if(!this.contactGroupId) {
       this.route.queryParams.subscribe(params => {
-        this.isNewContactGroup = params['isNewContactGroup'] || false;
+        this.isNewContactGroup = (!AppUtils.holdingSelectedPeople && params['isNewContactGroup']) || false;
         this.isSigner = params['isSigner'] || false;
       });
     }
@@ -127,11 +127,20 @@ export class ContactgroupsPeopleComponent implements OnInit {
     if(AppUtils.holdingSelectedPeople) {
       this.selectedPeople = AppUtils.holdingSelectedPeople;
       this.removedPersonIds = AppUtils.holdingRemovedPeople;
+      this.isCloned = AppUtils.holdingCloned;
       AppUtils.holdingSelectedPeople = null;
       AppUtils.holdingRemovedPeople = null;
+      AppUtils.holdingCloned = false;
+      this.isTypePicked = true;
     }
     if(this.contactGroupId) {
       this.getContactGroupById(this.contactGroupId)
+    } else {
+      this.contactGroupDetails = {} as ContactGroup;
+      this.contactGroupDetails.contactPeople = [];
+      this.contactGroupDetails.contactType = AppUtils.holdingContactType || ContactType.Individual;
+      AppUtils.holdingContactType = null;
+      this.addSelectedPeople();
     }
     this.personFinderForm.valueChanges
       .pipe(debounceTime(400))
@@ -328,6 +337,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.isEditingSelectedPerson = true;
     AppUtils.holdingSelectedPeople = this.selectedPeople;
     AppUtils.holdingRemovedPeople = this.removedPersonIds;
+    AppUtils.holdingContactType = this.contactGroupDetails.contactType;
+    AppUtils.holdingCloned = this.isCloned;
     this._router.navigate(['../../edit'], {queryParams: {groupPersonId: id, isEditingSelectedPerson: true}, relativeTo: this.route});
   }
 
@@ -390,6 +401,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   selectPerson(id: number) {
+    if(this.removedPersonIds.indexOf(id) >= 0 ){
+      this.removedPersonIds.splice(this.removedPersonIds.indexOf(id),1);
+    }
     if (this.isNewContactGroup) {
       this.selectedPersonId = id;
       this.isLoadingNewPersonVisible = true;
