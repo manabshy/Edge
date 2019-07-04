@@ -35,7 +35,16 @@ export const FormErrors = {
   'searchTerm': '',
   'telephone': '',
   'email': '',
-  'fax': ''
+  'fax': '',
+  'firstName': '',
+  'lastName': '',
+  'middleName': '',
+  'emailAddresses': {
+    'email': '',
+  },
+  'address': '',
+  'number': '',
+  'postCode': ''
 };
 export const ValidationMessages = {
   'searchTerm': {
@@ -53,6 +62,41 @@ export const ValidationMessages = {
   },
   'fax': {
     invalidPhoneNumber: 'Fax number is not valid'
+  },
+  'firstName': {
+    required: 'First Name is required.',
+    minlength: 'First Name must be greater than 2 characters',
+    maxlength: 'First Name must be less than 40 characters.',
+  },
+  'middleName': {
+    maxlength: 'Middle Name must be less than 50 characters'
+  },
+  'lastName': {
+    required: 'Last name is required.',
+    minlength: 'Last name must be greater than 2 characters',
+    maxlength: 'Last name must be less than 80 characters.',
+  },
+  'emailAddress': {
+    'email': {
+      required: ' Email is required.',
+      pattern: 'Email is not valid.'
+    },
+  },
+  'address': {
+    required: 'Address is required.'
+  },
+  'number': {
+    required: 'Phone is required.',
+    minlength: 'Phone number must be at least 7 characters.',
+    maxlength: 'Phone number cannot be more than 16 characters.',
+    pattern: 'Phone number is not valid',
+    invalidMobileType: `Telephone number is not a valid mobile number`
+  },
+  'postCode': {
+    required: 'Postcode is required.',
+    minlength: 'Postcode must be at least 5 characters.',
+    maxlength: 'Postcode cannot be more than 7 characters.',
+    pattern: 'Postcode is not valid'
   }
   // 'invalidPhoneNumber': {
   //   required: 'Phone is required.',
