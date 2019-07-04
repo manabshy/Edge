@@ -54,6 +54,7 @@ export class AppComponent implements OnInit, AfterViewChecked {
     this.appHeightObservable.observe(this.appContainer.nativeElement, {childList: true, subtree: true});
   }
 
+
   ngAfterViewChecked() {
     this.isNavVisible = this.authService.isLoggedIn();
 

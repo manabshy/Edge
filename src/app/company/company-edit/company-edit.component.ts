@@ -41,8 +41,9 @@ export class CompanyEditComponent implements OnInit {
             ) { }
 
   ngOnInit() {
+    console.log('from shared ', this.sharedService.dropdownListInfo);
     this.listInfo = this.sharedService.dropdownListInfo;
-    this.companyTypes = this.listInfo.result.companyTypes;
+    this.companyTypes = this.listInfo.result !== undefined ? this.listInfo.result.companyTypes : {};
     this.route.params.subscribe(params => this.companyId = +params['id'] || 0);
     this.route.queryParams.subscribe(params => {
       this.isNewCompany = params['isNewCompany'] || false;
