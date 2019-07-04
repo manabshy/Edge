@@ -335,9 +335,13 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   editSelectedPerson(id: number) {
     this.isEditingSelectedPerson = true;
+      if(this.firstContactGroupPerson) {
+        this.selectedPeople.push(this.firstContactGroupPerson);
+      }
     AppUtils.holdingSelectedPeople = this.selectedPeople;
     AppUtils.holdingRemovedPeople = this.removedPersonIds;
     AppUtils.holdingContactType = this.contactGroupDetails.contactType;
+    AppUtils.firstContactPerson = this.firstContactGroupPerson;
     AppUtils.holdingCloned = this.isCloned;
     this._router.navigate(['../../edit'], {queryParams: {groupPersonId: id, isEditingSelectedPerson: true}, relativeTo: this.route});
   }
@@ -588,7 +592,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         AppUtils.newSignerId = contactGroupId;
         this._location.back();
       }
-      
+
       let url = this._router.url;
 
       if(url.indexOf("?") >= 0) {

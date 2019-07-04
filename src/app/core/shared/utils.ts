@@ -16,6 +16,7 @@ export class AppUtils {
   public static holdingRemovedPeople: number[];
   public static holdingContactType: number;
   public static holdingCloned: boolean;
+  static firstContactPerson: Person;
 
   /**
    * Format a date/time into a string
