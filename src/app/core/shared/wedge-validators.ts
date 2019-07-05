@@ -97,15 +97,14 @@ export class WedgeValidators {
               } else {
                 return null;
               }
-            case TelephoneTypeId.Work:
-            case TelephoneTypeId.Other:
-              return null;
-            default: 
+            case TelephoneTypeId.Mobile:
             if(_this.sharedService.isUKMobile(number)) {
               return null;
             } else {
               return { 'mismatch': true };
             }
+            default:
+              return null;
           }
         }
       }
