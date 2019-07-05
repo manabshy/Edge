@@ -1,6 +1,28 @@
 <app-breadcrumb></app-breadcrumb>
 <div class="container">
-  <h4 class="page-title m-0">Person Detail</h4>
+  <div class="row page-title mb-0">
+    <div class="col">
+      <h4 class="mb-0">Person Detail</h4>
+    </div>
+    <div class="col-auto">
+      <div class="btn-group" dropdown placement="bottom right">
+        <button id="actionsToggle" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
+          aria-controls="actionsList">
+          Actions <span class="caret"></span>
+        </button>
+        <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="actionsToggle">
+          <li role="menuitem" *ngIf="searchedPersonDetails">
+            <a class="dropdown-item"
+              (click)="createNewContactGroup(); $event.stopPropagation()"
+              [routerLink]="['people', 0]" [queryParams]="{isNewContactGroup: true}">
+              <i class="fas fa-users"></i><i class="fas fa-plus fa-xs align-text-top"></i> New Contact Group
+            </a>
+          </li>
+          <li role="menuitem"><button type="button" class="dropdown-item" (click)="addNote()"><i class="fas fa-sticky-note mr-2"></i> Add Note</button></li>
+        </ul>
+      </div>
+    </div>
+  </div>
   <!-- <div class="alert alert-danger mt-3" role="alert">
     Do not contact, GDPR request pending
   </div> -->

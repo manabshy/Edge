@@ -11,6 +11,12 @@
           Actions <span class="caret"></span>
         </button>
         <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="actionsToggle">
+          <li role="menuitem" *ngIf="contactGroupDetails?.contactPeople.length < 8 && !contactGroupDetails?.referenceCount 
+          && !isMaxPeople">
+            <button type="button" class="dropdown-item" (click)="showHideOffCanvas($event)">
+              <i class="fas fa-user-plus mr-2"></i> Add Person
+            </button>
+          </li>
           <li role="menuitem"><button type="button" class="dropdown-item" (click)="addNote()"><i class="fas fa-sticky-note mr-2"></i> Add Note</button></li>
         </ul>
       </div>
