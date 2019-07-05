@@ -4,6 +4,8 @@
 @import "../../../node_modules/bootstrap/scss/variables";
 @import "../../../node_modules/bootstrap/scss/mixins";
 
+@import "../../style/partials/mixins";
+
 .navbar-brand, .navbar-collapse {
 
     @include media-breakpoint-down(md){
@@ -89,10 +91,7 @@
 }
 
 .navbar-toggler {
-    border: none;
-    text-align: center;
-    padding: 0;
-    width: 25px;
+    @include navbar-mobile-btn($right: true);
 }
 
 .navbar-backdrop {
