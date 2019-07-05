@@ -213,6 +213,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
           this.contactGroupDetails.referenceCount = 0;
           this.contactGroupDetails.contactGroupId = 0;
         }
+        this.isTypePicked = true;
         this.isLoadingDetails = false;
       });
   }
