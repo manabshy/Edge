@@ -4,7 +4,7 @@
     <div class="col">
       <h4 class="mb-0"><ng-container *ngIf="contactGroupDetails?.contactType === 4; else peopleCG">Company</ng-container><ng-template #peopleCG>People</ng-template> Contact group</h4>
     </div>
-    <div class="col-auto">
+    <div class="col-auto" *ngIf="isTypePicked">
       <div class="btn-group" dropdown placement="bottom right">
         <button id="actionsToggle" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
           aria-controls="actionsList">

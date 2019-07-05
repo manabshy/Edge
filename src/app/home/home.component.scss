@@ -11,10 +11,20 @@
         padding-bottom: 0;
     }
 
+    .nav-item {
+        &:first-child {
+            margin-left: 0;
+        }
+        @include media-breakpoint-down(sm) {
+            margin: 0;
+        }  
+    }
+
     .nav-link {
         @include media-breakpoint-down(sm) {
             text-align: center;
             border-radius: 0;
+            border: none;
         }  
     }
 }

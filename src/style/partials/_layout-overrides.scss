@@ -158,3 +158,35 @@ fieldset {
 .fake-readonly[readonly]{
     background-color: $input-bg;
 }
+
+.nav-pills {
+    .nav-link {
+        border: 1px solid $border-color;
+    }
+
+    .nav-item {
+        margin-left: spacer(2);
+        margin-bottom: spacer(1);
+    }
+
+    &.nav-responsive {
+        padding: 0 spacer(1);
+
+        @include media-breakpoint-down(lg){
+            padding: 0;
+            position: relative;
+            white-space: nowrap;
+            flex-wrap: nowrap;
+            overflow-y: hidden;
+            padding-right: spacer(5);
+        }
+
+        .nav-item {
+            &:first-child {
+                @include media-breakpoint-down(lg) {
+                    margin-left: 0;
+                }
+            }
+        }
+    }
+}
