@@ -7,14 +7,15 @@ import { CompanyListComponent } from './company-list/company-list.component';
 import { CompanyEditComponent } from './company-edit/company-edit.component';
 import { CompanyDetailComponent } from './company-detail/company-detail.component';
 import { CoreModule } from '../core/core.module';
+import { CompanyFinderComponent } from './shared/company-finder/company-finder.component';
 
 @NgModule({
-  declarations: [CompanyComponent, CompanyListComponent, CompanyEditComponent, CompanyDetailComponent],
+  declarations: [CompanyComponent, CompanyListComponent, CompanyEditComponent, CompanyDetailComponent, CompanyFinderComponent],
   imports: [
     CommonModule,
     CoreModule,
     CompanyRoutingModule
   ],
-  exports: [CompanyListComponent]
+  exports: [CompanyListComponent, CompanyFinderComponent]
 })
 export class CompanyModule { }

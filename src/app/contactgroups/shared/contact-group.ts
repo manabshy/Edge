@@ -104,7 +104,8 @@ export interface AutoCompleteResult {
   companyId: number;
   companyName: string;
 }
-export interface CompanyAutoCompleteResult {
+export interface CompanyAutoCompleteResult extends Company {
+  matchScore: number;
   companyId: number;
   companyName: string;
 }
