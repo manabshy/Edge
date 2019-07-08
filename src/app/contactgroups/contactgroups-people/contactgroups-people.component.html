@@ -106,6 +106,7 @@
               </ng-container>
             </div>
           </div>
+          <app-address *ngIf="isCompanyAdded && companyFinderForm.value.companyName" [companyDetails]="selectedCompanyDetails" (addressDetails)="getAddress($event)"></app-address>
           <div class="row justify-content-end">
             <label class="col-sm-2 col-form-label col-form-label-sm">Type</label>
             <div class="col-sm-10">
@@ -192,7 +193,7 @@
         
                             <span class="badge badge-success">AML Valid</span> -->
                     </div>
-                    <div class="col-sm-4 mb-2">
+                    <div class="col-sm-4 mb-2" *ngIf="contactGroupDetails?.contactType !== 4">
                       <pre>{{person?.address | formatAddress}}</pre><span class="text-danger"
                         *ngIf="!(person?.address | formatAddress)">No address</span></div>
                     <div class="col-sm-3 col-xl-4">
