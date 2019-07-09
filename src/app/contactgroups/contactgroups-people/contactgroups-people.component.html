@@ -221,10 +221,17 @@
                       <hr class="my-1">
                     </div>
                     <div class="col-12">
-                      <a href class="btn btn-link px-0" (click)="showHideMarkPrefs($event, i)"
-                        [attr.aria-expanded]="!isCollapsed[i]" [attr.aria-controls]="'collapseMark' + i">Marketing Prefs
-                        <span class="badge badge-pill badge-primary">{{person?.marketingPreferences?.count || 0}}</span>
-                      </a>
+                      <div class="row align-items-center">
+                        <div class="col">
+                          <a href class="btn btn-link px-0" (click)="showHideMarkPrefs($event, i)"
+                            [attr.aria-expanded]="!isCollapsed[i]" [attr.aria-controls]="'collapseMark' + i">Marketing Prefs
+                            <span class="badge badge-pill badge-primary">{{person?.marketingPreferences?.count || 0}}</span>
+                          </a>
+                        </div>
+                        <div class="col-auto">
+                          <small class="text-muted">ID: {{person?.personId}}</small>
+                        </div>
+                      </div>
                       <div [id]="'collapseMark' + i" [collapse]="!isCollapsed[i]">
                         <ul>
                           <li *ngIf="person?.marketingPreferences?.marketBulletin">Quarterly bulletin</li>
