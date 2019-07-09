@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnChanges, Renderer2, Input, Output, EventEmitter } from '@angular/core';
 import { AddressAutoCompleteData, SharedService } from '../services/shared.service';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
@@ -52,6 +52,14 @@ export class AddressComponent implements OnInit {
              ) { }
 
   ngOnInit() {
+    this.init();
+  }
+
+  ngOnChanges() {
+    this.init()
+  }
+
+  init() {
     this.listInfo = this.sharedService.dropdownListInfo;
     this.countries = this.listInfo.result.countries;
     this.addressForm = this.fb.group({
@@ -61,7 +69,7 @@ export class AddressComponent implements OnInit {
       postCode: ['', {validators: [Validators.minLength(5), Validators.maxLength(8), Validators.pattern(AppConstants.postCodePattern)]}],
     });
     if (this.companyDetails || this.personDetails) {
-        this.populateAddressForm(this.personDetails, this.companyDetails);
+      this.populateAddressForm(this.personDetails, this.companyDetails);
     }
     this.addressForm.valueChanges
     .subscribe((data) => {
@@ -175,5 +183,6 @@ export class AddressComponent implements OnInit {
           country: company.companyAddress.country,
       });
    }
+   this.emitAddress();
   }
 }

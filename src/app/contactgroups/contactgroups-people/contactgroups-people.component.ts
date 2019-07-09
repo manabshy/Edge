@@ -182,7 +182,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
           }
         });
 
-    this.companyFinderForm.valueChanges.subscribe(data => this.findCompany(data));
+    this.companyFinderForm.valueChanges.pipe(debounceTime(400)).subscribe(data => this.findCompany(data));
   }
 
   isCompanyContactGroup(isSelectedTypeCompany: boolean) {
@@ -394,6 +394,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
    selectCompany(company: Company) {
     this.foundCompanies = null;
     this.selectedCompanyDetails = company;
+    this.isCompanyAdded = true;
     this.searchCompanyTermBK = this.companyFinderForm.get('companyName').value;
     this.companyFinderForm.get('companyName').setValue(company.companyName);
     this.companyNameInput.nativeElement.scrollIntoView({block: 'center'});
@@ -403,6 +404,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.contactGroupService.getCompany(companyId).subscribe(data => {
       this.selectedCompanyDetails = data;
     });
+  }
+
+  getAddress(address: any) {
+    this.contactGroupDetails.companyAddress = address;
   }
 
   selectPerson(id: number) {

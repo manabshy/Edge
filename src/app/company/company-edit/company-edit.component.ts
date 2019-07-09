@@ -3,13 +3,14 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { AppConstants, FormErrors, ValidationMessages } from 'src/app/core/shared/app-constants';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { Company, Signer } from 'src/app/contactgroups/shared/contact-group';
 import { CompanyService } from '../shared/company.service';
 import { debounceTime } from 'rxjs/operators';
 import { WedgeValidators } from 'src/app/core/shared/wedge-validators';
 import { AppUtils } from 'src/app/core/shared/utils';
+import { Address } from 'src/app/core/models/address';
 
 
 @Component({
@@ -22,7 +23,7 @@ export class CompanyEditComponent implements OnInit {
   isSubmitting: boolean;
   listInfo: any;
   companyTypes: any;
-  address: any;
+  address: Address;
   companyId: number;
   isNewCompany: boolean;
   companyDetails: Company;
@@ -37,15 +38,20 @@ export class CompanyEditComponent implements OnInit {
               private fb: FormBuilder,
               private sharedService: SharedService,
               private _location: Location,
-              private route: ActivatedRoute
+              private route: ActivatedRoute,
+              private _router: Router
             ) { }
 
   ngOnInit() {
+    this.init();
+  }
+
+  init() {
     this.listInfo = this.sharedService.dropdownListInfo;
     this.companyTypes = this.listInfo.result.companyTypes;
-    this.route.params.subscribe(params => this.companyId = +params['id'] || 0);
+    this.route.params.subscribe(params => this.companyId = this.companyId || +params['id'] || 0);
     this.route.queryParams.subscribe(params => {
-      this.isNewCompany = params['isNewCompany'] || false;
+      this.isNewCompany = this.companyId ? false : params['isNewCompany'];
     });
     this.setupCompanyForm();
     const id = this.isNewCompany ? 0 : this.companyId;
@@ -57,6 +63,7 @@ export class CompanyEditComponent implements OnInit {
     }
     this.companyForm.valueChanges.pipe(debounceTime(400)).subscribe(() => this.logValidationErrors(this.companyForm, false));
   }
+
   getCompanyDetails(id: number) {
     this.contactGroupService.getCompany(id).subscribe(data => {
       this.companyDetails = data;
@@ -71,7 +78,6 @@ export class CompanyEditComponent implements OnInit {
     this.contactGroupService.getSignerbyId(id).subscribe(data => {
       this.existingSigner = data;
       this.companyForm.markAsDirty();
-      AppUtils.newSignerId = null;
     }, error => {
       this.errorMessage = <any>error;
       this.sharedService.showError(this.errorMessage);
@@ -94,7 +100,8 @@ export class CompanyEditComponent implements OnInit {
         telephone: company.telephone,
         fax: company.fax,
         website: company.website,
-        email: company.email
+        email: company.email,
+        amlCompletedDate: this.sharedService.ISOToDate(this.companyDetails.amlCompletedDate)
     });
      this.existingSigner = company.signer;
   }
@@ -114,6 +121,7 @@ export class CompanyEditComponent implements OnInit {
         fax: this.companyDetails.fax,
         website: this.companyDetails.website,
         email: this.companyDetails.email,
+        amlCompletedDate: this.companyDetails.amlCompletedDate
     });
   }
 
@@ -132,6 +140,7 @@ export class CompanyEditComponent implements OnInit {
         fax: ['', { validators: WedgeValidators.phoneNumberValidator()}],
         email: ['', { validators: Validators.pattern(AppConstants.emailPattern)}],
         website: [''],
+        amlCompletedDate: ['']
     });
   }
 
@@ -156,13 +165,43 @@ export class CompanyEditComponent implements OnInit {
     });
   }
 
-  getSelectedSigner(signer: any) {
+  getSelectedSigner(signer: Signer) {
+    if(this.signer !== signer) {
+      this.companyForm.markAsDirty();
+    } else {
+      this.companyForm.markAsPristine();
+    }
     this.signer = signer;
   }
 
-  getAddress(address: any) {
+  getAddress(address: Address) {
+    if(this.address !== address) {
+      this.companyForm.markAsDirty();
+    } else {
+      this.companyForm.markAsPristine();
+    }
     this.address = address;
   }
+
+  getCompanyName(name: any){
+    this.companyForm.get('companyName').setValue(name.companyName);
+  }
+
+  navigateToCompany(company: Company) {
+    this.companyDetails = null;
+    let url = this._router.url;
+
+    if(url.indexOf("?") >= 0) {
+      url = url.substring(0,url.indexOf("?"));
+    }
+
+    url = url.replace('detail/0', 'detail/'+this.companyId);
+    url = url.replace('detail/'+this.companyId, 'detail/'+company.companyId);
+    this._location.replaceState(url);
+    this.companyId = company.companyId;
+    this.init();
+  }
+
   saveCompany() {
     const isSignerChanged = this.signer || this.signer == null;
     this.logValidationErrors(this.companyForm, true);
@@ -216,6 +255,6 @@ export class CompanyEditComponent implements OnInit {
     return true;
   }
   cancel() {
-    this.sharedService.back();
+    this._location.back();
   }
 }

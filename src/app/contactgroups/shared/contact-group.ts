@@ -65,7 +65,8 @@ export interface Company {
   fax: string;
   website: string;
   email: string;
-  // contactDetails: CompanyContactDetails;
+  amlCompleted: boolean;
+  amlCompletedDate?: Date;
 }
 
 export interface ContactAddress extends Address {
@@ -104,7 +105,8 @@ export interface AutoCompleteResult {
   companyId: number;
   companyName: string;
 }
-export interface CompanyAutoCompleteResult {
+export interface CompanyAutoCompleteResult extends Company {
+  matchScore: number;
   companyId: number;
   companyName: string;
 }

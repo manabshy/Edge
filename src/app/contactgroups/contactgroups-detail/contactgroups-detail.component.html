@@ -81,7 +81,7 @@
     <div class="row mx-0 pb-3" *ngIf="searchedPersonDetails">
       <div class="col-12">
         <p class="mb-2">
-          <strong>{{searchedPersonDetails.firstName}} {{searchedPersonDetails.lastName}}</strong>
+          <strong>{{searchedPersonDetails.addressee}}</strong>
         </p>
       </div>
       <div class="col-sm-4">
@@ -115,11 +115,18 @@
         <hr class="my-1">
       </div>
       <div class="col-12">
-        <button type="button" class="btn btn-link px-0" (click)="isCollapsed = !isCollapsed"
-          [attr.aria-expanded]="!isCollapsed" aria-controls="collapseBasic">Marketing Prefs <span
-            class="badge badge-pill badge-primary">
-            {{searchedPersonDetails.marketingPreferences?.count || 0}} </span>
-        </button>
+        <div class="row align-items-center">
+          <div class="col">
+            <button type="button" class="btn btn-link px-0" (click)="isCollapsed = !isCollapsed"
+              [attr.aria-expanded]="!isCollapsed" aria-controls="collapseBasic">Marketing Prefs <span
+                class="badge badge-pill badge-primary">
+                {{searchedPersonDetails.marketingPreferences?.count || 0}} </span>
+            </button>
+          </div>
+          <div class="col-auto">
+            <small class="text-muted">ID: {{searchedPersonDetails?.personId}}</small>
+          </div>
+        </div>
         <div id="collapseBasic" [collapse]="!isCollapsed">
           <ul>
             <li *ngIf="searchedPersonDetails.marketingPreferences?.marketBulletin">Quarterly bulletin</li>
