@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { PropertyAutoComplete } from '../shared/property';
 
 @Component({
   selector: 'app-property-list',
@@ -6,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./property-list.component.scss']
 })
 export class PropertyListComponent implements OnInit {
-
+@Input()  properties: PropertyAutoComplete[];
   constructor() { }
 
   ngOnInit() {

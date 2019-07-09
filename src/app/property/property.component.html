@@ -1,3 +1,32 @@
-<p>
-  property works!
-</p>
+<app-breadcrumb></app-breadcrumb>
+<div class="container">
+  <div class="row page-title">
+    <div class="col">
+      <h4 class="m-0">Property centre</h4>
+    </div>
+    <!-- <div class="col-auto">
+      <a class="btn btn-primary" [routerLink]="['detail', 0 , 'edit' ]"  [queryParams]="{isNewCompany: true}" >New Company</a>
+    </div> -->
+  </div>
+  <form [formGroup]="propertyFinderForm">
+    <div class="row">
+      <div class="col">
+        <input type="text" class="form-control" formControlName="propertyAddress" placeholder="Property Address"
+        aria-label="Property Address" (keyup)="onKeyup()">
+        <button class="btn btn-link px-0" type="button" id="button-advanced" (click)="advSearchCollapsed = !advSearchCollapsed"
+        [attr.aria-expanded]="!advSearchCollapsed" aria-controls="advSearch">Advanced search</button>
+      </div>
+    </div>
+
+  </form>
+  <div class="text-center" *ngIf="isLoading && !isHintVisible">
+    <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...
+  </div>
+  <div class="text-center text-danger" *ngIf="isMessageVisible && !isLoading && !isHintVisible">
+      <i class="far fa-sad-tear"></i> No results for '<strong>{{propertyFinderForm.value.propertyAddress || ' '}}</strong>'
+  </div>
+  <div class="text-center" *ngIf="isHintVisible">
+      <i class="far fa-smile-wink"></i> Type at least <strong>3 characters</strong> to get results
+  </div>
+  <app-property-list *ngIf="!isLoading && !isHintVisible" [properties]='properties'></app-property-list>
+</div>

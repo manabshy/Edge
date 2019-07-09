@@ -1,3 +1,26 @@
-<p>
-  property-list works!
-</p>
+<div class="list-group mb-5">
+  <a [routerLink]="['detail', property.propertyId, 'edit' ]"
+   [queryParams]="{searchTerm: propertyAddress}"
+    class="list-group-item list-group-item-action pb-2" *ngFor="let property of properties; let i = index;">
+    <div class="row">
+      <!-- <div class="col-sm-auto text-right order-sm-2">
+        <a [routerLink]="['detail', property.propertyId, 'edit' ]"><i class="fas fa-edit"></i> Edit</a>
+      </div> -->
+      <div class="col text-truncate order-sm-1">
+        <div class="row align-items-center">
+          <div class="col-sm-2">
+            <div class="mb-1 text-truncate">
+             <strong>{{property.propertyId}}</strong>
+            </div>
+          </div>
+          <div class="col-sm-8">
+            <div class="mb-1">
+              <pre>{{property.propertyAddress }}</pre><span class="text-danger"
+              *ngIf="!(property.propertyAddress )">No address</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </a>
+</div>

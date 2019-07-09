@@ -17,6 +17,7 @@ export class AppUtils {
   public static holdingContactType: number;
   public static holdingCloned: boolean;
   static firstContactPerson: Person;
+  static propertySearchTerm: string;
 
   /**
    * Format a date/time into a string
