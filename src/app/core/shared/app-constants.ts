@@ -4,6 +4,7 @@ export class AppConstants {
   public static get addressCaptureBaseUrl(): string { return 'https://services.postcodeanywhere.co.uk/Capture/Interactive'; }
   public static get leaderboardBaseUrl(): string { return `${environment.baseUrl}/staffmembers/leaderboard`; }
   public static get baseUrl(): string { return `${environment.baseUrl}/staffmembers`; }
+  public static get basePropertyUrl(): string { return `${environment.baseUrl}/properties`; }
   public static get baseContactGroupUrl(): string { return `${environment.baseUrl}/contactGroups`; }
   public static get baseCompanyUrl(): string { return `${environment.baseUrl}/companies`; }
   public static get basePersonUrl(): string { return `${environment.baseUrl}/people`; }
