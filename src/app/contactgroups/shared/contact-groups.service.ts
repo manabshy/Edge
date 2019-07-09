@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { ContactGroupAutoCompleteResult, ContactGroupAutoCompleteData,
          PersonContactData, ContactGroupData, ContactGroup, BasicContactGroup,
-          BasicContactGroupData, PeopleAutoCompleteResult, PeopleAutoCompleteData, AutoCompleteResult, CompanyAutoCompleteResult, CompanyContactGroupAutoCompleteData as CompanyAutoCompleteData, Company, CompanyData, SignerRequest, SignerAutoCompleteData, Signer, PersonSummaryFiguresData, PersonSummaryFigures, SignerData } from './contact-group';
-import { map, tap, catchError } from 'rxjs/operators';
+         BasicContactGroupData, PeopleAutoCompleteResult, PeopleAutoCompleteData,
+         CompanyAutoCompleteResult, CompanyContactGroupAutoCompleteData as CompanyAutoCompleteData,
+         Company, CompanyData, SignerAutoCompleteData, Signer, PersonSummaryFiguresData,
+         PersonSummaryFigures, SignerData } from './contact-group';
+import { map, tap } from 'rxjs/operators';
 import { Person, BasicPerson } from 'src/app/core/models/person';
-import { WedgeError } from 'src/app/core/services/shared.service';
-import { SignerComponent } from 'src/app/core/signer/signer.component';
 
 @Injectable({
   providedIn: 'root'
