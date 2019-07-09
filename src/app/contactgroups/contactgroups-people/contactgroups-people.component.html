@@ -43,7 +43,7 @@
       *ngIf="contactGroupDetails?.contactPeople && !contactGroupDetails?.contactPeople.length && !isNewContactGroup && !isLoadingNewPersonVisible">
       You must add at least <b>1</b> person in the contact group.
     </div>
-    <div class="alert alert-danger" *ngIf="contactGroupDetails?.contactPeople && companyAlert">
+    <div class="alert alert-danger" *ngIf="contactGroupDetails?.contactPeople && companyAlert && !isNewContactGroup">
       You must add <b>1</b> company for a company contact.
     </div>
     <form action="">

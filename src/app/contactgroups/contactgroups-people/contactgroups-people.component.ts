@@ -182,7 +182,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
           }
         });
 
-    this.companyFinderForm.valueChanges.subscribe(data => this.findCompany(data));
+    this.companyFinderForm.valueChanges.pipe(debounceTime(400)).subscribe(data => this.findCompany(data));
   }
 
   isCompanyContactGroup(isSelectedTypeCompany: boolean) {

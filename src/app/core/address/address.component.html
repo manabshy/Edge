@@ -44,19 +44,19 @@
                     </div>
                   </div>
                 </div>
-                <div class="list-group-item" *ngIf="address?.Error || isLast">
+                <div class="list-group-item text-center" *ngIf="address?.Error || isLast">
                   No Address Found? Try again or <a href (click)="enterAddress($event)">enter it manually</a>.
                 </div>
               </ng-container>
             </ng-container>
           </ng-container>
           <ng-template #noAddress>
-            <div class="list-group-item">
+            <div class="list-group-item text-center">
               No Address Found. Try again or <a href (click)="enterAddress($event)">enter it manually</a>.
             </div>
           </ng-template>
           <ng-container *ngIf="isLoadingAddressVisible">
-            <div class="list-group-item">
+            <div class="list-group-item text-center">
               <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading addresses ...
             </div>
           </ng-container>

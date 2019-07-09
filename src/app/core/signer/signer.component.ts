@@ -34,7 +34,7 @@ export class SignerComponent implements OnInit {
       searchTerm: [''],
     });
     this.displayExistingSigners();
-    this.signerFinderForm.valueChanges.subscribe(data => {
+    this.signerFinderForm.valueChanges.pipe(debounceTime(400)).subscribe(data => {
       console.log('characters entered', data.searchTerm);
       this.signersAutocomplete(data.searchTerm);
     });
