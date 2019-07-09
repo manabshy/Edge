@@ -100,7 +100,8 @@ export class CompanyEditComponent implements OnInit {
         telephone: company.telephone,
         fax: company.fax,
         website: company.website,
-        email: company.email
+        email: company.email,
+        amlCompletedDate: this.sharedService.ISOToDate(this.companyDetails.amlCompletedDate)
     });
      this.existingSigner = company.signer;
   }
@@ -120,6 +121,7 @@ export class CompanyEditComponent implements OnInit {
         fax: this.companyDetails.fax,
         website: this.companyDetails.website,
         email: this.companyDetails.email,
+        amlCompletedDate: this.companyDetails.amlCompletedDate
     });
   }
 
@@ -138,6 +140,7 @@ export class CompanyEditComponent implements OnInit {
         fax: ['', { validators: WedgeValidators.phoneNumberValidator()}],
         email: ['', { validators: Validators.pattern(AppConstants.emailPattern)}],
         website: [''],
+        amlCompletedDate: ['']
     });
   }
 

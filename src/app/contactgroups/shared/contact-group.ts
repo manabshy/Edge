@@ -65,7 +65,8 @@ export interface Company {
   fax: string;
   website: string;
   email: string;
-  // contactDetails: CompanyContactDetails;
+  amlCompleted: boolean;
+  amlCompletedDate?: Date;
 }
 
 export interface ContactAddress extends Address {
