@@ -58,6 +58,13 @@
         max-height: 100vh;
     }
 
+    @include media-breakpoint-down(sm) {
+        @media (orientation: landscape) {
+            position: static;
+            max-height: none;
+        }
+    }
+
     .navbar-collapse {
         @include media-breakpoint-up(lg){
             align-items: flex-start;
@@ -105,6 +112,11 @@
         left: 0;
         z-index: 1000;
         background-color: rgba(0,0,0,.5);
+    }
+    @include media-breakpoint-down(sm) {
+        @media (orientation: landscape) {
+            display: none;
+        }
     }
 }
 

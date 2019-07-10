@@ -15,6 +15,9 @@ body {
 
     @include media-breakpoint-down(sm) {
         padding-bottom: 30px;
+        @media (orientation: landscape) {
+            padding-top: 0;
+        }
     }
 
     @include media-breakpoint-up(lg) {
@@ -65,6 +68,10 @@ tr:first-child{
         background: color('white');
         top: $top-bar-height;
         z-index: 100;
+
+        @media (orientation: landscape) {
+            position: static;
+        }
     }
 
     &.row {
