@@ -10,9 +10,11 @@ import { PropertyDetailSalesLettingsComponent } from './property-detail-sales-le
 import { PropertyDetailOffersComponent } from './property-detail-offers/property-detail-offers.component';
 import { PropertyDetailNotesComponent } from './property-detail-notes/property-detail-notes.component';
 import { PropertyDetailDocumentsComponent } from './property-detail-documents/property-detail-documents.component';
+import { PropertyDetailPhotosComponent } from './property-detail-photos/property-detail-photos.component';
+import { PropertyDetailMapComponent } from './property-detail-map/property-detail-map.component';
 
 @NgModule({
-  declarations: [PropertyListComponent, PropertyComponent, PropertyDetailComponent, PropertyDetailSalesLettingsComponent, PropertyDetailOffersComponent, PropertyDetailNotesComponent, PropertyDetailDocumentsComponent],
+  declarations: [PropertyListComponent, PropertyComponent, PropertyDetailComponent, PropertyDetailSalesLettingsComponent, PropertyDetailOffersComponent, PropertyDetailNotesComponent, PropertyDetailDocumentsComponent, PropertyDetailPhotosComponent, PropertyDetailMapComponent],
   imports: [
     CommonModule,
     PropertyRoutingModule,

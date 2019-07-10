@@ -9,7 +9,7 @@
     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading info ...
   </div>
  
-  <div class="bg-light border border-top-0">
+  <div class="bg-light border border-top-0 mb-4">
     <div class="row mx-0 py-3" *ngIf="searchedPropertyDetails">
       <div class="col-12">
         <p class="m-0">
@@ -17,25 +17,6 @@
         </p>
       </div>
     </div>
-  </div>
-  <div class="mb-4">
-    <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom">
-      <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
-    </agm-map>
-  </div>
-  <h5>Photos</h5>
-  <div class="mb-4 position-relative">
-      <carousel [itemsPerSlide]="itemsPerSlide"
-      [singleSlideOffset]="singleSlideOffset"
-      [interval]="false"
-      [noWrap]="noWrap">
-        <slide *ngFor="let slide of slides; let index=index">
-        <img [src]="slide.image" alt="image slide" style="display: block; width: 100%;">
-        <div class="carousel-caption">
-          <h4>Slide {{index}}</h4>
-        </div>
-        </slide>
-      </carousel>
   </div>
   <h5>Info</h5>
     <div class="list-group">
@@ -57,6 +38,14 @@
       <a [routerLink]="['documents']" class="list-group-item list-group-item-action clearfix">
         <div class="pull-left float-left btn-link">Documents <span
           class="badge badge-pill badge-primary">0</span></div>
+        <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
+      </a>
+      <a [routerLink]="['map']" class="list-group-item list-group-item-action clearfix">
+        <div class="pull-left float-left btn-link">Map</div>
+        <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
+      </a>
+      <a [routerLink]="['photos']" class="list-group-item list-group-item-action clearfix">
+        <div class="pull-left float-left btn-link">Photos</div>
         <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
       </a>
     </div>
