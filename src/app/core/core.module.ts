@@ -9,6 +9,7 @@ import { CacheInterceptor } from './cache.interceptor';
 import { BasicSearchComponent } from './basic-search/basic-search.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // ngx bootstrap imports
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
@@ -23,6 +24,7 @@ import { PopoverModule } from 'ngx-bootstrap/popover';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
+import { CarouselModule } from 'ngx-bootstrap/carousel';
 
 //components
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
@@ -39,6 +41,7 @@ import { SignerComponent } from './signer/signer.component';
 //vendor
 import { OrderModule } from 'ngx-order-pipe';
 import { ToastNoAnimationModule } from 'ngx-toastr';
+import { AgmCoreModule } from '@agm/core';
 
 //various
 import { AutocompleteOffDirective } from './shared/autocomplete-off.directive';
@@ -52,9 +55,9 @@ import { HighlightPipe } from './shared/highlight.pipe';
     RoundingPipe, TruncatingPipe, ShortenNamePipe, FormatAddressPipe, HighlightPipe, AutocompleteOffDirective,
     BreadcrumbComponent, BasicSearchComponent, NoteModalComponent,
     ConfirmModalComponent, ErrorModalComponent, PropertyFinderComponent, ScoreBadgeComponent, AddressComponent, SignerComponent,
-    RouterModule, CollapseModule, TabsModule, TypeaheadModule, BsDropdownModule,
+    RouterModule, BrowserAnimationsModule, CollapseModule, TabsModule, TypeaheadModule, BsDropdownModule,
     BsDatepickerModule, ModalModule, PopoverModule,  NgPipesModule,
-    TooltipModule, AccordionModule, ButtonsModule, ReactiveFormsModule, FormsModule, OrderModule, ToastNoAnimationModule
+    TooltipModule, AccordionModule, ButtonsModule, ReactiveFormsModule, FormsModule, OrderModule, ToastNoAnimationModule, AgmCoreModule, CarouselModule
   ],
   imports: [
     CommonModule,
@@ -62,6 +65,7 @@ import { HighlightPipe } from './shared/highlight.pipe';
     FormsModule,
     OrderModule,
     RouterModule,
+    BrowserAnimationsModule,
     BsDropdownModule.forRoot(),
     CollapseModule.forRoot(),
     TabsModule.forRoot(),
@@ -73,6 +77,10 @@ import { HighlightPipe } from './shared/highlight.pipe';
     AccordionModule.forRoot(),
     ButtonsModule.forRoot(),
     ToastNoAnimationModule.forRoot(),
+    CarouselModule.forRoot(),
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyC1Hv_vNkUxvvRibyjPbfgNhrTNi30jNtQ'
+    })
   ],
   entryComponents: [
     ConfirmModalComponent,

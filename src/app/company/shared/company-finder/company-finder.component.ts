@@ -1,7 +1,6 @@
 import { Component, OnInit, OnChanges, Renderer2, ViewChild, ElementRef, Output, EventEmitter, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
-import { BsModalService } from 'ngx-bootstrap/modal/public_api';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { Company, CompanyAutoCompleteResult } from 'src/app/contactgroups/shared/contact-group';
 import { debounceTime } from 'rxjs/operators';
