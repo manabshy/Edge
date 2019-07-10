@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { AppUtils } from '../shared/utils';
 import { Location } from '@angular/common';
 
 @Component({
@@ -9,22 +7,13 @@ import { Location } from '@angular/common';
   styleUrls: ['./breadcrumb.component.scss']
 })
 export class BreadcrumbComponent implements OnInit {
-
-  get prevRoute() {
-    return AppUtils.prevRoute;
-  }
-
-  constructor(private _location: Location, private router: Router) { }
+  constructor(private _location: Location) { }
 
   ngOnInit() {
   }
 
   backClicked() {
-    if(!this.prevRoute) {
-      this.router.navigate(['/home']);
-    } else {
-      this._location.back();
-    }
+    this._location.back();
   }
 
 }

@@ -7,6 +7,15 @@ import { ContactgroupsPeopleComponent } from './contactgroups-people/contactgrou
 import { ContactgroupsDetailEditComponent } from './contactgroups-detail-edit/contactgroups-detail-edit.component';
 import { ContactgroupsCompanyEditComponent } from './contactgroups-company-edit/contactgroups-company-edit.component';
 import { CanDeactivateGuard } from '../core/shared/can-deactivate.guard';
+import { ContactgroupsDetailLeadsComponent } from './contactgroups-detail-leads/contactgroups-detail-leads.component';
+import { ContactgroupsDetailNotesComponent } from './contactgroups-detail-notes/contactgroups-detail-notes.component';
+import { ContactgroupsDetailSearchesComponent } from './contactgroups-detail-searches/contactgroups-detail-searches.component';
+import { ContactgroupsDetailValuationsComponent } from './contactgroups-detail-valuations/contactgroups-detail-valuations.component';
+import { ContactgroupsDetailInstructionsComponent } from './contactgroups-detail-instructions/contactgroups-detail-instructions.component';
+import { ContactgroupsDetailOffersComponent } from './contactgroups-detail-offers/contactgroups-detail-offers.component';
+import { ContactgroupsDetailTenanciesComponent } from './contactgroups-detail-tenancies/contactgroups-detail-tenancies.component';
+import { ContactgroupsDetailLettingManagementsComponent } from './contactgroups-detail-letting-managements/contactgroups-detail-letting-managements.component';
+import { ContactgroupsDetailHomeManagementsComponent } from './contactgroups-detail-home-managements/contactgroups-detail-home-managements.component';
 
 const routes: Routes = [
   { path: '', canActivate: [AuthGuardService], children: [
@@ -21,6 +30,15 @@ const routes: Routes = [
         { path: '', component: ContactgroupsDetailComponent },
         { path: 'people/:contactGroupId', component: ContactgroupsPeopleComponent, canDeactivate: [CanDeactivateGuard] },
         {path: 'edit', component: ContactgroupsDetailEditComponent, canDeactivate: [CanDeactivateGuard]},
+        {path: 'leads', component: ContactgroupsDetailLeadsComponent},
+        {path: 'notes', component: ContactgroupsDetailNotesComponent},
+        {path: 'searches', component: ContactgroupsDetailSearchesComponent},
+        {path: 'valuations', component: ContactgroupsDetailValuationsComponent},
+        {path: 'instructions', component: ContactgroupsDetailInstructionsComponent},
+        {path: 'offers', component: ContactgroupsDetailOffersComponent},
+        {path: 'tenancies', component: ContactgroupsDetailTenanciesComponent},
+        {path: 'letting-managements', component: ContactgroupsDetailLettingManagementsComponent},
+        {path: 'home-managements', component: ContactgroupsDetailHomeManagementsComponent},
         // {path: 'edit:/id', component: ContactgroupsDetailEditComponent}
       ] },
     ] },

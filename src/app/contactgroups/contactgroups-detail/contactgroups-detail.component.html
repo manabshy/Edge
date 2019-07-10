@@ -90,17 +90,13 @@
             *ngIf="!(searchedPersonDetails.address | formatAddress)">No address</span></div>
       </div>
       <div class="col-12 col-sm-3 col-xl-4">
-        <div class="row">
-          <div class="col-6 telephone">
-            <p class="mb-2 text-danger"
-              *ngIf="!searchedPersonDetails.phoneNumbers.length || !searchedPersonDetails.phoneNumbers[0].number">No
-              phone</p>
-            <ng-container *ngFor="let phoneNumber of searchedPersonDetails.phoneNumbers">
-              <p class="mb-2" *ngIf="phoneNumber.number"><a href="tel:{{phoneNumber.number}}">{{phoneNumber.number}}
-                  <ng-container *ngIf="phoneNumber.sendSMS">(sms)</ng-container></a></p>
-            </ng-container>
-          </div>
-        </div>
+        <p class="mb-2 text-danger"
+        *ngIf="!searchedPersonDetails.phoneNumbers.length || !searchedPersonDetails.phoneNumbers[0].number">No
+        phone</p>
+        <ng-container *ngFor="let phoneNumber of searchedPersonDetails.phoneNumbers">
+          <p class="mb-2" *ngIf="phoneNumber.number"><a href="tel:{{phoneNumber.number}}">{{phoneNumber.number}}
+              <ng-container *ngIf="phoneNumber.sendSMS"><small class="badge badge-pill badge-success">sms</small></ng-container></a></p>
+        </ng-container>
       </div>
       <div class="col-sm-5 col-xl-4">
         <p class="mb-2 text-danger"
@@ -191,541 +187,52 @@
   </div>
   <div *ngIf="summaryTotals">
     <h5>Info</h5>
-    <accordion [closeOthers]="true">
-      <accordion-group class="mb-2">
-        <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
-          <div class="pull-left float-left">Leads <span
-              class="badge badge-pill badge-primary">{{summaryTotals.leads}}</span></div>
-          <a class="float-right pull-right" routerLink="/lead-edit">Add Lead <i class="fas fa-plus"></i></a>
-        </button>
-        <div class="list-group list-group-flush">
-          <div class="list-group-item list-header d-none d-sm-block">
-            <div class="row">
-              <div class="col-sm"><strong>Status</strong></div>
-              <div class="col-sm"><strong>Chase</strong></div>
-              <div class="col-sm"><strong>Owner</strong></div>
-              <div class="col-sm"><strong>Type</strong></div>
-              <div class="col-sm-3"><strong>Address</strong></div>
-            </div>
-          </div>
-          <a routerLink="/lead-edit" class="list-group-item list-group-item-action">
-            <div class="row">
-              <div class="col-sm">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">Status</dt>
-                  <dd class="col text-success">Active</dd>
-                </dl>
-              </div>
-              <div class="col-sm">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">Chase</dt>
-                  <dd class="col">14/05/18</dd>
-                </dl>
-              </div>
-              <div class="col-sm">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">Owner</dt>
-                  <dd class="col">Alex Turnbull</dd>
-                </dl>
-              </div>
-              <div class="col-sm">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">Type</dt>
-                  <dd class="col">Valuation</dd>
-                </dl>
-              </div>
-              <div class="col-sm-3">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">Address</dt>
-                  <dd class="col">91A Abbeville Road, London, SW4 9LP</dd>
-                </dl>
-              </div>
-            </div>
-          </a>
-        </div>
-      </accordion-group>
-      <accordion-group class="mb-2">
-        <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
-          <div class="pull-left float-left">Notes <span
-              class="badge badge-pill badge-primary">{{summaryTotals.notes}}</span></div>
-          <button type="button" class="float-right pull-right btn btn-link p-0" (click)="addNote()">Add Note <i class="fas fa-plus"></i></button>
-        </button>
-        <app-contactgroups-notes></app-contactgroups-notes>
-      </accordion-group>
-      <accordion-group class="mb-2">
-        <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
-          <div class="pull-left float-left">Applicants <span
-              class="badge badge-pill badge-primary">{{summaryTotals.searches}}</span></div>
-          <a class="float-right pull-right" routerLink="/home">Add Appl. <i class="fas fa-plus"></i></a>
-        </button>
-        <div class="list-group list-group-flush">
-          <div class="list-group-item list-header d-none d-sm-block">
-            <div class="row">
-              <div class="col-sm"><strong>Request</strong></div>
-              <div class="col-sm"><strong>Areas</strong></div>
-              <div class="col-sm"><strong>Neg.</strong></div>
-            </div>
-          </div>
-          <a routerLink="/applicant-view-sale" class="list-group-item list-group-item-action">
-            <div class="row">
-              <div class="col-sm">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">Request</dt>
-                  <dd class="col">Sales £750,000 2 Beds</dd>
-                </dl>
-              </div>
-              <div class="col-sm">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">Areas</dt>
-                  <dd class="col">Chelsea, Kensington</dd>
-                </dl>
-              </div>
-              <div class="col-sm">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">Neg.</dt>
-                  <dd class="col">Chiara Tassia, Dave Newport</dd>
-                </dl>
-              </div>
-            </div>
-          </a>
-          <a routerLink="/applicant-view-letting" class="list-group-item list-group-item-action">
-            <div class="row">
-              <div class="col-sm">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">Request</dt>
-                  <dd class="col">Long Let £1000 2 Beds</dd>
-                </dl>
-              </div>
-              <div class="col-sm">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">Areas</dt>
-                  <dd class="col">Chelsea, Kensington</dd>
-                </dl>
-              </div>
-              <div class="col-sm">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">Neg.</dt>
-                  <dd class="col">Jemma Graham</dd>
-                </dl>
-              </div>
-            </div>
-          </a>
-        </div>
-      </accordion-group>
-      <accordion-group class="mb-2">
-        <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
-          <div class="pull-left float-left">Valuations <span
-              class="badge badge-pill badge-primary">{{summaryTotals.valuations.total}}</span></div>
-          <a class="float-right pull-right" routerLink="/home">Add Val. <i class="fas fa-plus"></i></a>
-        </button>
-        <div class="list-group list-group-flush">
-          <div class="list-group-item list-header d-none d-sm-block">
-            <div class="row">
-              <div class="col-sm-3"><strong>Address</strong></div>
-              <div class="col-sm"><strong>Status</strong></div>
-              <div class="col-sm"><strong>Lister</strong></div>
-              <div class="col-sm"><strong>Valued</strong></div>
-              <div class="col-sm"><strong>Outcomes</strong></div>
-            </div>
-          </div>
-          <div class="list-group-item">
-            <div class="row">
-              <div class="col-sm-3">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">Address</dt>
-                  <dd class="col">23 Prince of Wales Crescent, SW6</dd>
-                </dl>
-              </div>
-              <div class="col-sm">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">Status</dt>
-                  <dd class="col">U/O</dd>
-                </dl>
-              </div>
-              <div class="col-sm">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">Lister</dt>
-                  <dd class="col">Chiara Tassia</dd>
-                </dl>
-              </div>
-              <div class="col-sm">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">Valued</dt>
-                  <dd class="col">14/05/18</dd>
-                </dl>
-              </div>
-              <div class="col-sm">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">Outcomes</dt>
-                  <dd class="col">
-                    <div>
-                      <strong>Sales: </strong> £820,000
-                    </div>
-                    <div>
-                      <strong>Long let:</strong> £650
-                    </div>
-                    <div>
-                      <strong>Short let:</strong> £980
-                    </div>
-                  </dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
-      </accordion-group>
-      <accordion-group class="mb-2">
-        <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
-          <div class="pull-left float-left">Instructions <span
-              class="badge badge-pill badge-primary">{{summaryTotals.instructions.total}}</span></div>
-          <a class="float-right pull-right" routerLink="/home">Add Ins. <i class="fas fa-plus"></i></a>
-        </button>
-        <div class="list-group list-group-flush">
-          <div class="list-group-item list-header d-none d-sm-block">
-            <div class="row">
-              <div class="col-sm-3"><strong>Address</strong></div>
-              <div class="col-sm"><strong>Status</strong></div>
-              <div class="col-sm"><strong>Lister</strong></div>
-              <div class="col-sm"><strong>Instructed</strong></div>
-              <div class="col-sm"><strong>Price</strong></div>
-              <div class="col-sm"><strong>Type</strong></div>
-            </div>
-          </div>
-          <a routerLink="/property-details-sale" class="list-group-item list-group-item-action">
-            <div class="row">
-              <div class="col-sm-3">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">Address</dt>
-                  <dd class="col">23 Prince of Wales Crescent, SW6</dd>
-                </dl>
-              </div>
-              <div class="col-sm">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">Status</dt>
-                  <dd class="col">U/O</dd>
-                </dl>
-              </div>
-              <div class="col-sm">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">Lister</dt>
-                  <dd class="col">Chiara Tassia</dd>
-                </dl>
-              </div>
-              <div class="col-sm">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">Instructed</dt>
-                  <dd class="col">14/05/18</dd>
-                </dl>
-              </div>
-              <div class="col-sm">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">Price</dt>
-                  <dd class="col">£820,000</dd>
-                </dl>
-              </div>
-              <div class="col-sm">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">Type</dt>
-                  <dd class="col">Sale Sole</dd>
-                </dl>
-              </div>
-            </div>
-          </a>
-          <a routerLink="/property-details-letting" class="list-group-item list-group-item-action">
-            <div class="row">
-              <div class="col-sm-3">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">Address</dt>
-                  <dd class="col">23 Prince of Wales Crescent, SW6</dd>
-                </dl>
-              </div>
-              <div class="col-sm">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">Status</dt>
-                  <dd class="col">INST</dd>
-                </dl>
-              </div>
-              <div class="col-sm">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">Lister</dt>
-                  <dd class="col">Henny Irwin</dd>
-                </dl>
-              </div>
-              <div class="col-sm">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">Instructed</dt>
-                  <dd class="col">14/05/18</dd>
-                </dl>
-              </div>
-              <div class="col-sm">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">Price</dt>
-                  <dd class="col">£650</dd>
-                </dl>
-              </div>
-              <div class="col-sm">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">Type</dt>
-                  <dd class="col">Long Let Multi</dd>
-                </dl>
-              </div>
-            </div>
-          </a>
-        </div>
-      </accordion-group>
-      <accordion-group class="mb-2">
-        <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
-          <div class="pull-left float-left">Offers <span
-              class="badge badge-pill badge-primary">{{summaryTotals.offers.total}}</span></div>
-          <a class="float-right pull-right" routerLink="/home">Add Offer <i class="fas fa-plus"></i></a>
-        </button>
-        <div class="list-group list-group-flush">
-          <a routerLink="/property-details-letting" class="list-group-item list-group-item-action">
-            <div class="row">
-              <div class="col-sm-4 mb-sm-2">
-                <dl class="row no-gutters">
-                  <dt class="col-4">Address</dt>
-                  <dd class="col">23 Prince of Wales Crescent, SW6</dd>
-                </dl>
-              </div>
-              <div class="col-sm-4 mb-sm-2">
-                <dl class="row no-gutters">
-                  <dt class="col-4">Type</dt>
-                  <dd class="col">Long Let</dd>
-                </dl>
-              </div>
-
-              <div class="col-sm-4 mb-sm-2">
-                <dl class="row no-gutters">
-                  <dt class="col-4">Price</dt>
-                  <dd class="col">£650</dd>
-                </dl>
-              </div>
-              <div class="col-sm-4 mb-sm-2">
-                <dl class="row no-gutters">
-                  <dt class="col-4">Received</dt>
-                  <dd class="col">14/05/18</dd>
-                </dl>
-              </div>
-
-              <div class="col-sm-4 mb-sm-2">
-                <dl class="row no-gutters">
-                  <dt class="col-4">Agreed</dt>
-                  <dd class="col">15/05/18</dd>
-                </dl>
-              </div>
-
-              <div class="col-sm-4 mb-sm-2">
-                <dl class="row no-gutters">
-                  <dt class="col-4">Move in</dt>
-                  <dd class="col">15/05/18</dd>
-                </dl>
-              </div>
-
-              <div class="col-sm-4 mb-sm-2">
-                <dl class="row no-gutters">
-                  <dt class="col-4">Status</dt>
-                  <dd class="col">U/O</dd>
-                </dl>
-              </div>
-
-              <div class="col-sm-4 mb-sm-2">
-                <dl class="row no-gutters">
-                  <dt class="col-4">Lister</dt>
-                  <dd class="col">Henny Irwin</dd>
-                </dl>
-              </div>
-              <div class="col-sm-4 mb-sm-2">
-                <dl class="row no-gutters">
-                  <dt class="col-4">Neg.</dt>
-                  <dd class="col">Lucinda Arundell</dd>
-                </dl>
-              </div>
-            </div>
-          </a>
-        </div>
-      </accordion-group>
-      <accordion-group class="mb-2">
-        <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
-          <div class="pull-left float-left">Tenancies <span
-              class="badge badge-pill badge-primary">{{summaryTotals.tenancies.total}}</span></div>
-          <a class="float-right pull-right" routerLink="/home">Add Tenan. <i class="fas fa-plus"></i></a>
-        </button>
-        <div class="list-group list-group-flush">
-          <a routerLink="/property-details-letting" class="list-group-item list-group-item-action">
-            <div class="row">
-              <div class="col-sm-4 mb-sm-2">
-                <dl class="row no-gutters">
-                  <dt class="col-4">Address</dt>
-                  <dd class="col">23 Prince of Wales Crescent, SW6</dd>
-                </dl>
-              </div>
-              <div class="col-sm-4 mb-sm-2">
-                <dl class="row no-gutters">
-                  <dt class="col-4">Start date</dt>
-                  <dd class="col">12/01/05</dd>
-                </dl>
-              </div>
-
-              <div class="col-sm-4 mb-sm-2">
-                <dl class="row no-gutters">
-                  <dt class="col-4">End date</dt>
-                  <dd class="col">12/01/19</dd>
-                </dl>
-              </div>
-              <div class="col-sm-4 mb-sm-2">
-                <dl class="row no-gutters">
-                  <dt class="col-4">Curr. rent</dt>
-                  <dd class="col">£650</dd>
-                </dl>
-              </div>
-
-              <div class="col-sm-4 mb-sm-2">
-                <dl class="row no-gutters">
-                  <dt class="col-4">Status</dt>
-                  <dd class="col">Landlord LET</dd>
-                </dl>
-              </div>
-
-              <div class="col-sm-4 mb-sm-2">
-                <dl class="row no-gutters">
-                  <dt class="col-4">Lister</dt>
-                  <dd class="col">Henny Irwin</dd>
-                </dl>
-              </div>
-              <div class="col-sm-4 mb-sm-2">
-                <dl class="row no-gutters">
-                  <dt class="col-4">Ten. Man.</dt>
-                  <dd class="col">Rachel Seymour</dd>
-                </dl>
-              </div>
-              <div class="col-sm-4 mb-sm-2">
-                <dl class="row no-gutters">
-                  <dt class="col-4">Prop. Man.</dt>
-                  <dd class="col">Peter Roberts</dd>
-                </dl>
-              </div>
-              <div class="col-sm-4 mb-sm-2">
-                <dl class="row no-gutters">
-                  <dt class="col-4">Accounts</dt>
-                  <dd class="col">Sasha Ford</dd>
-                </dl>
-              </div>
-            </div>
-          </a>
-        </div>
-      </accordion-group>
-      <accordion-group class="mb-2">
-        <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
-          <div class="pull-left float-left">Letting Managements <span
-              class="badge badge-pill badge-primary">{{summaryTotals.lettingsManagements}}</span>
-          </div>
-          <a class="float-right pull-right" routerLink="/home">Add L.M. <i class="fas fa-plus"></i></a>
-        </button>
-        <div class="list-group list-group-flush">
-          <a routerLink="/property-details-letting" class="list-group-item list-group-item-action">
-            <div class="row">
-              <div class="col-sm-4 mb-sm-2">
-                <dl class="row no-gutters">
-                  <dt class="col-4">Address</dt>
-                  <dd class="col">23 Prince of Wales Crescent, SW6</dd>
-                </dl>
-              </div>
-              <div class="col-sm-4 mb-sm-2">
-                <dl class="row no-gutters">
-                  <dt class="col-4">Start date</dt>
-                  <dd class="col">12/01/05</dd>
-                </dl>
-              </div>
-
-              <div class="col-sm-4 mb-sm-2">
-                <dl class="row no-gutters">
-                  <dt class="col-4">End date</dt>
-                  <dd class="col">12/01/19</dd>
-                </dl>
-              </div>
-              <div class="col-sm-4 mb-sm-2">
-                <dl class="row no-gutters">
-                  <dt class="col-4">Curr. rent</dt>
-                  <dd class="col">£650</dd>
-                </dl>
-              </div>
-
-              <div class="col-sm-4 mb-sm-2">
-                <dl class="row no-gutters">
-                  <dt class="col-4">Status</dt>
-                  <dd class="col">Landlord LET</dd>
-                </dl>
-              </div>
-
-              <div class="col-sm-4 mb-sm-2">
-                <dl class="row no-gutters">
-                  <dt class="col-4">Lister</dt>
-                  <dd class="col">Henny Irwin</dd>
-                </dl>
-              </div>
-              <div class="col-sm-4 mb-sm-2">
-                <dl class="row no-gutters">
-                  <dt class="col-4">Prop. Man.</dt>
-                  <dd class="col">Peter Roberts</dd>
-                </dl>
-              </div>
-            </div>
-          </a>
-        </div>
-      </accordion-group>
-      <accordion-group class="mb-2">
-        <button class="btn btn-link btn-block clearfix p-0" accordion-heading>
-          <div class="pull-left float-left">Home Managements <span
-              class="badge badge-pill badge-primary">{{summaryTotals.homeManagements}}</span></div>
-          <a class="float-right pull-right" routerLink="/home">Add H.M. <i class="fas fa-plus"></i></a>
-        </button>
-        <div class="list-group list-group-flush">
-          <div class="list-group-item list-header d-none d-sm-block">
-            <div class="row">
-              <div class="col-sm-3"><strong>Address</strong></div>
-              <div class="col-sm"><strong>Start date</strong></div>
-              <div class="col-sm"><strong>End date</strong></div>
-              <div class="col-sm"><strong>Status</strong></div>
-              <div class="col-sm"><strong>Prop. Man.</strong></div>
-            </div>
-          </div>
-          <a routerLink="/property-details-letting" class="list-group-item list-group-item-action">
-            <div class="row">
-              <div class="col-sm-3">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">Address</dt>
-                  <dd class="col">23 Prince of Wales Crescent, SW6</dd>
-                </dl>
-              </div>
-              <div class="col-sm">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">Start date</dt>
-                  <dd class="col">12/01/15</dd>
-                </dl>
-              </div>
-              <div class="col-sm">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">End date</dt>
-                  <dd class="col">12/01/19</dd>
-                </dl>
-              </div>
-              <div class="col-sm">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">Status</dt>
-                  <dd class="col">MNG</dd>
-                </dl>
-              </div>
-              <div class="col-sm">
-                <dl class="row">
-                  <dt class="col-4 d-sm-none">Prop. Man.</dt>
-                  <dd class="col">Emily Plane</dd>
-                </dl>
-              </div>
-            </div>
-          </a>
-        </div>
-      </accordion-group>
-    </accordion>
+    <div class="list-group">
+      <a [routerLink]="['leads']" class="list-group-item list-group-item-action clearfix">
+        <div class="pull-left float-left btn-link">Leads <span
+          class="badge badge-pill badge-primary">{{summaryTotals.leads}}</span></div>
+        <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
+      </a>
+      <a [routerLink]="['notes']" [queryParams]="{person:searchedPersonDetails | json }" class="list-group-item list-group-item-action clearfix">
+        <div class="pull-left float-left btn-link">Notes <span
+          class="badge badge-pill badge-primary">{{summaryTotals.notes}}</span></div>
+        <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
+      </a>
+      <a [routerLink]="['searches']" class="list-group-item list-group-item-action clearfix">
+        <div class="pull-left float-left btn-link">Searches <span
+          class="badge badge-pill badge-primary">{{summaryTotals.searches}}</span></div>
+        <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
+      </a>
+      <a [routerLink]="['valuations']" class="list-group-item list-group-item-action clearfix">
+        <div class="pull-left float-left btn-link">Valuations <span
+          class="badge badge-pill badge-primary">{{summaryTotals.valuations.total}}</span></div>
+        <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
+      </a>
+      <a [routerLink]="['instructions']" class="list-group-item list-group-item-action clearfix">
+        <div class="pull-left float-left btn-link">Instructions <span
+          class="badge badge-pill badge-primary">{{summaryTotals.instructions.total}}</span></div>
+        <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
+      </a>
+      <a [routerLink]="['offers']" class="list-group-item list-group-item-action clearfix">
+        <div class="pull-left float-left btn-link">Offers <span
+          class="badge badge-pill badge-primary">{{summaryTotals.offers.total}}</span></div>
+        <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
+      </a>
+      <a [routerLink]="['tenancies']" class="list-group-item list-group-item-action clearfix">
+        <div class="pull-left float-left btn-link">Tenancies <span
+          class="badge badge-pill badge-primary">{{summaryTotals.tenancies.total}}</span></div>
+        <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
+      </a>
+      <a [routerLink]="['letting-managements']" class="list-group-item list-group-item-action clearfix">
+        <div class="pull-left float-left btn-link">Letting Managements <span
+          class="badge badge-pill badge-primary">{{summaryTotals.lettingsManagements}}</span></div>
+        <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
+      </a>
+      <a [routerLink]="['home-managements']" class="list-group-item list-group-item-action clearfix">
+        <div class="pull-left float-left btn-link">Home Managements <span
+          class="badge badge-pill badge-primary">{{summaryTotals.homeManagements}}</span></div>
+        <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
+      </a>
+    </div>
   </div>
 </div>

@@ -203,17 +203,13 @@
                       <pre>{{person?.address | formatAddress}}</pre><span class="text-danger"
                         *ngIf="!(person?.address | formatAddress)">No address</span></div>
                     <div class="col-sm-3 col-xl-4">
-                      <div class="row">
-                        <div class="col-6 telephone">
-                          <p class="mb-2 text-danger"
-                            *ngIf="!person?.phoneNumbers.length || !person?.phoneNumbers[0].number">No phone</p>
-                          <ng-container *ngFor="let phoneNumber of person?.phoneNumbers">
-                            <p class="mb-2" *ngIf="phoneNumber?.number"><a (click)="$event.stopPropagation()"
-                                href="tel:{{phoneNumber.number}}">{{phoneNumber?.number}}</a><br />{{phoneNumber?.telephoneId}}
-                            </p>
-                          </ng-container>
-                        </div>
-                      </div>
+                        <p class="mb-2 text-danger"
+                        *ngIf="!person?.phoneNumbers.length || !person?.phoneNumbers[0].number">No phone</p>
+                        <ng-container *ngFor="let phoneNumber of person?.phoneNumbers">
+                          <p class="mb-2" *ngIf="phoneNumber?.number"><a (click)="$event.stopPropagation()"
+                              href="tel:{{phoneNumber.number}}">{{phoneNumber?.number}} <ng-container *ngIf="phoneNumber.sendSMS"><small class="badge badge-pill badge-success">sms</small></ng-container></a>
+                          </p>
+                        </ng-container>
                     </div>
                     <div class="col-sm-5 col-xl-4">
                       <p class="mb-2 text-danger"
