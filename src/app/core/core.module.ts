@@ -46,14 +46,15 @@ import { AgmCoreModule } from '@agm/core';
 //various
 import { AutocompleteOffDirective } from './shared/autocomplete-off.directive';
 import { HighlightPipe } from './shared/highlight.pipe';
+import { NotesComponent } from './notes/notes.component';
 
 @NgModule({
   declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent,
     ConfirmModalComponent, PropertyFinderComponent, FormatAddressPipe, ScoreBadgeComponent,
-    ErrorModalComponent, AddressComponent, SignerComponent, AutocompleteOffDirective, HighlightPipe, NoteModalComponent],
+    ErrorModalComponent, AddressComponent, SignerComponent, AutocompleteOffDirective, HighlightPipe, NoteModalComponent, NotesComponent],
   exports: [
     RoundingPipe, TruncatingPipe, ShortenNamePipe, FormatAddressPipe, HighlightPipe, AutocompleteOffDirective,
-    BreadcrumbComponent, BasicSearchComponent, NoteModalComponent,
+    BreadcrumbComponent, BasicSearchComponent, NoteModalComponent, NotesComponent,
     ConfirmModalComponent, ErrorModalComponent, PropertyFinderComponent, ScoreBadgeComponent, AddressComponent, SignerComponent,
     RouterModule, BrowserAnimationsModule, CollapseModule, TabsModule, TypeaheadModule, BsDropdownModule,
     BsDatepickerModule, ModalModule, PopoverModule,  NgPipesModule,
