@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuardService } from '../core/services/auth-guard.service';
 import { PropertyComponent } from './property.component';
 import { CanDeactivateGuard } from '../core/shared/can-deactivate.guard';
+import { PropertyDetailComponent } from './property-detail/property-detail.component';
 
 
 const routes: Routes = [
@@ -15,7 +16,7 @@ const routes: Routes = [
       // ] },
       { path: 'detail/:id',
       children: [
-        // { path: '', component: CompanyDetailComponent },
+        { path: '', component: PropertyDetailComponent }
         // {path: 'edit', component: CompanyEditComponent, canDeactivate: [CanDeactivateGuard]},
       ] }
     ]

@@ -8,6 +8,9 @@ export interface Property {
   floorType: string;
   numberOfFloors: number;
 }
+export interface PropertyData {
+ result: Property;
+}
 export interface PropertyAutoComplete {
   propertyId: number;
   propertyAddress: string;

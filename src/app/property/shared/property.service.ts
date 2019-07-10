@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { PropertyAutoComplete, PropertyAutoCompleteData } from './property';
+import { PropertyAutoComplete, PropertyAutoCompleteData, Property, PropertyData } from './property';
 import { map, tap } from 'rxjs/operators';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 
@@ -9,6 +9,7 @@ import { AppConstants } from 'src/app/core/shared/app-constants';
   providedIn: 'root'
 })
 export class PropertyService {
+currentProperty: PropertyAutoComplete | null;
 
   constructor(private http: HttpClient) { }
 
@@ -21,5 +22,9 @@ export class PropertyService {
          map(response => response.result),
          tap(data => console.log(JSON.stringify(data)))
       );
+  }
+  getProperty(propertyId: number): Observable<Property> {
+    const url = `${AppConstants.basePropertyUrl}/${propertyId}`;
+    return this.http.get<PropertyData>(url).pipe(map(response => response.result));
   }
 }

@@ -1,0 +1,26 @@
+<app-breadcrumb></app-breadcrumb>
+<div class="container">
+  <div class="row page-title mb-0">
+    <div class="col">
+      <h4 class="mb-0">Property Detail</h4>
+    </div>
+  </div>
+  <div class="text-center py-3" *ngIf="!searchedPropertyDetails">
+    <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading info ...
+  </div>
+ 
+  <div class="bg-light border border-top-0 mb-4">
+    <div class="row mx-0 pb-3" *ngIf="searchedPropertyDetails">
+      <div class="col-12">
+        <p class="mb-2">
+          <strong>{{searchedPropertyDetails?.address | formatAddress}}</strong>
+        </p>
+      </div>
+      <!-- <div class="col-sm-4">
+        <div class="mb-2">
+          <pre>{{searchedPropertyDetails?.address | formatAddress}}</pre><span class="text-danger"
+            *ngIf="!(searchedPersonDetails?.address | formatAddress)">No address</span></div>
+      </div> -->
+    </div>
+  </div>
+</div>
