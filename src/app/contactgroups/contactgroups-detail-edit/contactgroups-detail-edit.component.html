@@ -7,7 +7,7 @@
   <div class="text-center" *ngIf="!personDetails && !basicPerson">
     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading details ...
   </div>
-  <form *ngIf="personDetails || basicPerson" [formGroup]="personForm" (ngSubmit)="savePerson()" (keydown.enter)="$event.preventDefault()">
+  <form *ngIf="personDetails || basicPerson" [formGroup]="personForm" (ngSubmit)="savePerson()" (keydown.enter)="$event.preventDefault()" autocompleteOff>
     <div class="form-group row">
       <label for="title" class="col-sm-2 col-form-label col-form-label-sm">Title</label>
       <div class="col-sm-3">
@@ -264,8 +264,8 @@
     <div class="form-group row">
       <label for="amlDate" class="col-sm-2 col-form-label col-form-label-sm">AML Completed</label>
       <div class="col-sm-3">
-          <input type="text" id="amlDate" placeholder="dd/mm/yyyy" class="form-control form-control-sm" formControlName="amlCompletedDate"
-          [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY'}" bsDatepicker>
+          <input type="text" id="amlDate" placeholder="dd/mm/yyyy" class="form-control form-control-sm fake-readonly" formControlName="amlCompletedDate"
+          [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY'}" bsDatepicker readonly>
       </div>
     </div>
 
