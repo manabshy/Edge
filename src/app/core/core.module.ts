@@ -47,15 +47,17 @@ import { AgmCoreModule } from '@agm/core';
 import { AutocompleteOffDirective } from './shared/autocomplete-off.directive';
 import { HighlightPipe } from './shared/highlight.pipe';
 import { NotesComponent } from './notes/notes.component';
+import { TelephoneComponent } from './telephone/telephone.component';
+import { TelephoneModalComponent } from './telephone-modal/telephone-modal.component';
 
 @NgModule({
   declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent,
     ConfirmModalComponent, PropertyFinderComponent, FormatAddressPipe, ScoreBadgeComponent,
-    ErrorModalComponent, AddressComponent, SignerComponent, AutocompleteOffDirective, HighlightPipe, NoteModalComponent, NotesComponent],
+    ErrorModalComponent, AddressComponent, SignerComponent, AutocompleteOffDirective, HighlightPipe, NoteModalComponent, NotesComponent, TelephoneComponent, TelephoneModalComponent],
   exports: [
     RoundingPipe, TruncatingPipe, ShortenNamePipe, FormatAddressPipe, HighlightPipe, AutocompleteOffDirective,
     BreadcrumbComponent, BasicSearchComponent, NoteModalComponent, NotesComponent,
-    ConfirmModalComponent, ErrorModalComponent, PropertyFinderComponent, ScoreBadgeComponent, AddressComponent, SignerComponent,
+    ConfirmModalComponent, ErrorModalComponent, PropertyFinderComponent, ScoreBadgeComponent, AddressComponent, SignerComponent, TelephoneComponent, TelephoneModalComponent,
     RouterModule, BrowserAnimationsModule, CollapseModule, TabsModule, TypeaheadModule, BsDropdownModule,
     BsDatepickerModule, ModalModule, PopoverModule,  NgPipesModule,
     TooltipModule, AccordionModule, ButtonsModule, ReactiveFormsModule, FormsModule, OrderModule, ToastNoAnimationModule, AgmCoreModule, CarouselModule
@@ -86,7 +88,8 @@ import { NotesComponent } from './notes/notes.component';
   entryComponents: [
     ConfirmModalComponent,
     ErrorModalComponent,
-    NoteModalComponent
+    NoteModalComponent,
+    TelephoneModalComponent
   ],
   providers: [
     CanDeactivateGuard,
