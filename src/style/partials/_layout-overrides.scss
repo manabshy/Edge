@@ -197,3 +197,13 @@ fieldset {
         }
     }
 }
+
+.embed-responsive {
+    &:before {
+        @include media-breakpoint-down(sm){
+            @media (orientation: portrait) {
+                padding-top: 100%;
+            }
+        }
+    }
+}
