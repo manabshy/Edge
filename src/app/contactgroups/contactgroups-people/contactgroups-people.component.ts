@@ -606,13 +606,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
         AppUtils.newSignerId = contactGroupId;
         this._location.back();
       }
-
       let url = this._router.url;
-
       if(url.indexOf("?") >= 0) {
         url = url.substring(0,url.indexOf("?"));
       }
-
       url = url.replace('people/'+this.contactGroupId, 'people/'+contactGroupId);
       this._location.replaceState(url);
       this.contactGroupId = contactGroupId;
@@ -630,10 +627,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
     people.forEach(person => {
       seperator = counter === 0 ? '' : (counter === people.length - 1 ? ' & ' : ' , ');
       addressee += seperator + person.addressee;
-      salutation += seperator + person.title + ' ' + person.lastName;
+      salutation += seperator + person.salutation;
       counter++;
     });
-
     if (this.contactGroupDetails.contactType !== ContactType.CompanyContact) {
       switch (true) {
         case people.length > 2:
@@ -646,14 +642,12 @@ export class ContactgroupsPeopleComponent implements OnInit {
     } else {
       type = 3;
     }
-
     this.contactGroupDetailsForm.patchValue({
       salutation: salutation,
       addressee: addressee,
       contactType: type,
       comments: this.contactGroupDetails.comments
     }, {onlySelf: false});
-    console.log('salution', salutation);
     this.contactGroupDetailsForm.markAsDirty();
   }
 
