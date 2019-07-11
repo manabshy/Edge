@@ -6,13 +6,6 @@ timepicker {
 
 bs-datepicker-container {
 
-    @include media-breakpoint-down(sm) {
-        position: fixed!important;
-        top: 50%!important;
-        left: 50%!important;
-        transform: translate(-50%, -50%);
-    }
-
     .bs-datepicker-body table td span.selected, .bs-datepicker-body table td span[class*=select-]:after, .bs-datepicker-body table td.selected span, .bs-datepicker-body table td[class*=select-] span:after, .bs-datepicker-head {
         background-color: theme-color("dark")!important;
     }
