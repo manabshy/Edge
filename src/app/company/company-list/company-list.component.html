@@ -19,26 +19,6 @@
                 *ngIf="!(company.companyAddress | formatAddress)">No address</span>
               </div>
             </div>
-            <!-- <div class="col-12 col-sm-auto">
-              <p><a (click)="$event.stopPropagation()"
-                  href="tel:{{contactGroup?.phoneNumbers[0]}}">{{contactGroup?.phoneNumbers[0]}}</a><span class="text-danger" *ngIf="!contactGroup?.phoneNumbers[0]">No Phone</span></p>
-            </div>
-            <div class="col text-sm-right">
-              <p class="text-truncate"><a (click)="$event.stopPropagation()"
-                  href="mailto:{{contactGroup?.emailAddresses[0]}}">{{contactGroup?.emailAddresses[0]}}</a><span class="text-danger" *ngIf="!contactGroup?.emailAddresses[0]">No Email</span></p>
-            </div> -->
-            <!-- <div class="col-12">
-                <div *ngFor="let cG of contactGroup?.contactGroups" class="text-truncate">
-                  <ng-container *ngIf="cG?.isCompany">
-                    <i class="fas fa-briefcase mr-1 fa-fw"></i> {{cG?.companyName}}
-                  </ng-container>
-                  <i class="fas fa-users mr-1 fa-fw" *ngIf="cG?.contactPeople.length"></i>
-                  <ng-container
-                    *ngFor="let people of cG.contactPeople; last as isLast">
-                    {{people.addressee}}<ng-container *ngIf="!isLast">, </ng-container>
-                  </ng-container>
-                </div>
-            </div> -->
           </div>
         </div>
       </div>

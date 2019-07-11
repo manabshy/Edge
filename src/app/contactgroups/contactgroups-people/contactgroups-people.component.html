@@ -206,8 +206,8 @@
                         <p class="mb-2 text-danger"
                         *ngIf="!person?.phoneNumbers.length || !person?.phoneNumbers[0].number">No phone</p>
                         <ng-container *ngFor="let phoneNumber of person?.phoneNumbers">
-                          <p class="mb-2" *ngIf="phoneNumber?.number"><a (click)="$event.stopPropagation()"
-                              href="tel:{{phoneNumber.number}}">{{phoneNumber?.number}} <ng-container *ngIf="phoneNumber.sendSMS"><small class="badge badge-pill badge-success">sms</small></ng-container></a>
+                          <p class="mb-2" *ngIf="phoneNumber?.number">
+                            <app-telephone [number]="phoneNumber.number" [sms]="phoneNumber.sendSMS"></app-telephone>
                           </p>
                         </ng-container>
                     </div>
