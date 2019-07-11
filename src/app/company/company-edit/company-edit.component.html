@@ -5,7 +5,7 @@
     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading details ...
   </div>
   <ng-container *ngIf="companyDetails || isNewCompany">
-    <form [formGroup]="companyForm" (ngSubmit)="saveCompany()">
+    <form [formGroup]="companyForm" (ngSubmit)="saveCompany()" autocompleteOff>
       <fieldset>
         <legend>Company</legend>
         <app-company-finder [existingCompany]="companyDetails" [companyNameError]="formErrors.companyName" (companyName)="getCompanyName($event)" (selectedCompanyDetails)="navigateToCompany($event)"></app-company-finder>
