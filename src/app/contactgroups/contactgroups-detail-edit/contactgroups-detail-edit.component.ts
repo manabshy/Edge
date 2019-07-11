@@ -10,6 +10,7 @@ import { debounceTime } from 'rxjs/operators';
 import { AppConstants, FormErrors, ValidationMessages } from 'src/app/core/shared/app-constants';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { WedgeValidators } from 'src/app/core/shared/wedge-validators';
+import { Address } from 'src/app/core/models/address';
 
 @Component({
   selector: 'app-contactgroups-detail-edit',
@@ -57,6 +58,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     typeId: []
   };
   number: string;
+  personAddress: Address;
   get showPostCode(): boolean {
     return this.address.get('countryId').value === this.defaultCountryCode;
   }
@@ -140,31 +142,31 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   }
 
   logValidationErrorsFormArray(control: AbstractControl) {
-      this.formArraryErrors = '';
-      //console.log(control['controls']);
-      control['controls'].forEach((x:AbstractControl, i) => {
-        const fields = ['number', 'email'];
-        fields.forEach(label => {
-          const field = x.get(label);
-          if(field) {
-            const parent = field['parent']['controls'];
-            Object.keys(parent).forEach((name) => {
-              if (field === parent[name]) {
-                if (field.value && !field.valid) {
-                  if (!this.invalidFormArrayControls[name].includes(i)) {
-                    this.invalidFormArrayControls[name].push(i);
-                  }
-                } else {
-                  const index = this.invalidFormArrayControls[name].indexOf(i);
-                  if (index >= 0) {
-                    this.invalidFormArrayControls[name].splice(index, 1);
-                  }
+    this.formArraryErrors = '';
+    //console.log(control['controls']);
+    control['controls'].forEach((x: AbstractControl, i) => {
+      const fields = ['number', 'email'];
+      fields.forEach(label => {
+        const field = x.get(label);
+        if (field) {
+          const parent = field['parent']['controls'];
+          Object.keys(parent).forEach((name) => {
+            if (field === parent[name]) {
+              if (field.value && !field.valid) {
+                if (!this.invalidFormArrayControls[name].includes(i)) {
+                  this.invalidFormArrayControls[name].push(i);
+                }
+              } else {
+                const index = this.invalidFormArrayControls[name].indexOf(i);
+                if (index >= 0) {
+                  this.invalidFormArrayControls[name].splice(index, 1);
                 }
               }
-            });
-          }
-        })
-      });
+            }
+          });
+        }
+      })
+    });
   }
 
   isValid(type, i) {
@@ -507,39 +509,28 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     });
   }
 
-  // checkPhoneType(index: number) {
-  //   const currPhoneNumberControl = this.phoneNumbers.controls[index];
-  //   const phoneNumber = currPhoneNumberControl.value.number;
-  //   this.number = phoneNumber;
-  //   const phoneNumberType = currPhoneNumberControl.value.typeId;
-  //   const inValidMobileNumber = !this.sharedService.isUKMobile(phoneNumber);
-  //   if (phoneNumberType == TelephoneTypeId.Mobile && inValidMobileNumber) {
-  //     this.invalidPhoneType = true;
-  //     this.errorMessage = { } as WedgeError;
-  //     this.errorMessage.displayMessage = `Telephone number ${phoneNumber} is not a valid mobile number`;
-  //     console.log('error message to display', this.errorMessage.displayMessage);
-  //   }
-  // }
+  getAddress(address: Address) {
+    if (this.personAddress !== address) {
+      this.personForm.markAsDirty();
+    } else {
+      this.personForm.markAsPristine();
+    }
+    this.personAddress = address;
+  }
   savePerson() {
     this.isSubmitting = true;
     this.errorMessage = null;
-    const allPhoneNumbers =  this.phoneNumbers.controls.length - 1;
-    // for (let index = 0; index < allPhoneNumbers; index++) {
-    //   this.checkPhoneType(index);
-    // }
     this.removeValidationForPhoneAndEmail();
     this.removeValidationForAdditionalFields();
     this.logValidationErrors(this.personForm, true);
     if (this.personForm.valid) {
       if (this.personForm.dirty) {
         const person = { ...this.personDetails, ...this.personForm.value };
-        const postCode =  this.sharedService.splitPostCode(person.address.postCode);
+        person.address = this.personAddress;
         if (!person.titleId) {
           person.titleId = 100;
         }
-        person.address.outCode = postCode[0];
-        person.address.inCode = postCode[1];
-        person.address.addressLines = this.removeDuplicateAdressLines();
+        // person.address.addressLines = this.removeDuplicateAdressLines();
         if (!this.basicPerson) {
           this.contactGroupService.updatePerson(person).subscribe(res => this.onSaveComplete(res.result),
             (error: WedgeError) => {
@@ -549,7 +540,6 @@ export class ContactgroupsDetailEditComponent implements OnInit {
             });
         } else {
           this.contactGroupService.addPerson(person).subscribe((data) => {
-            console.log(data);
              this.newPersonId = data.personId;
              this.onSaveComplete(); },
             (error: WedgeError) => {
@@ -575,10 +565,10 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   onSaveComplete(person?: Person) {
     this.personForm.reset();
     this.sharedService.showSuccess('Person successfully saved');
-    if(this.isEditingSelectedPerson && AppUtils.holdingSelectedPeople) {
+    if (this.isEditingSelectedPerson && AppUtils.holdingSelectedPeople) {
       const holdingPeople = AppUtils.holdingSelectedPeople;
-      holdingPeople.forEach((x,index)=>{
-        if(x.personId === person.personId) {
+      holdingPeople.forEach((x, index) => {
+        if (x.personId === person.personId) {
           person.isNewPerson = true;
           holdingPeople[index] = person;
         }

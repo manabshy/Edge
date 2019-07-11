@@ -152,7 +152,6 @@ export class AddressComponent implements OnInit {
         countryId: addressData.countryId
       };
       this.addressDetails.emit(address);
-      console.log('address data 2', address);
     }
   }
 
