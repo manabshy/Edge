@@ -37,7 +37,7 @@
         <span class="invalid-feedback">{{formErrors?.lastName}}</span>
       </div>
     </div>
-    <div formGroupName="address" class="form-group row">
+    <!-- <div formGroupName="address" class="form-group row">
         <label for="country" class="col-sm-2 col-form-label col-form-label-sm">Country</label>
         <div class="col-sm-3">
           <select class="custom-select custom-select-sm" id="country" formControlName="countryId">
@@ -100,9 +100,6 @@
      </div>
    <div formGroupName="address">
       <div class="form-group row justify-content-end">
-          <!-- <label for="property" class="col-sm-2 col-form-label col-form-label-sm">
-            Address
-          </label> -->
           <div class="col-sm-10">
             <div class="form-group" *ngIf="personForm.controls.address.controls.addressLines.value || enterAddressManually">
               <label class="small" for="postcode">Address Lines</label>
@@ -121,7 +118,8 @@
             </div>
           </div>
       </div>
-   </div>
+   </div> -->
+   <app-address [personDetails]="personDetails" (addressDetails)="getAddress($event)"></app-address>
    <div class="row justify-content-end" *ngIf="isContactErrorVisible" id="contact-error">
      <div class="col-sm-10">
         <div class="alert alert-danger">Please enter an email OR a phone number</div>
