@@ -190,6 +190,16 @@ export interface SignerData extends ResultData {
 export interface PeopleAutoCompleteData extends ResultData {
   result: PeopleAutoCompleteResult[];
 }
+export interface PeopleAutoCompleteData2 extends ResultData {
+  result: PotentialDuplicateResult;
+}
+export interface PotentialDuplicateResult {
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  fullName: string;
+  matches: PeopleAutoCompleteResult[];
+}
 export interface CompanyData extends ResultData {
   result: Company;
 }

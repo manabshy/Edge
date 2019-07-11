@@ -7,7 +7,7 @@ import { ContactGroupAutoCompleteResult, ContactGroupAutoCompleteData,
          BasicContactGroupData, PeopleAutoCompleteResult, PeopleAutoCompleteData,
          CompanyAutoCompleteResult, CompanyContactGroupAutoCompleteData as CompanyAutoCompleteData,
          Company, CompanyData, SignerAutoCompleteData, Signer, PersonSummaryFiguresData,
-         PersonSummaryFigures, SignerData } from './contact-group';
+         PersonSummaryFigures, SignerData, PotentialDuplicateResult, PeopleAutoCompleteData2 } from './contact-group';
 import { map, tap } from 'rxjs/operators';
 import { Person, BasicPerson } from 'src/app/core/models/person';
 
@@ -62,6 +62,17 @@ export class ContactGroupsService {
   getPersonInfo( personId: number): Observable<PersonSummaryFigures> {
     const url = `${AppConstants.basePersonUrl}/${personId}/info`;
     return this.http.get<PersonSummaryFiguresData>(url).pipe(map(response => response.result));
+  }
+  getPotentialDuplicatePeople(person: BasicPerson): Observable<PotentialDuplicateResult> {
+    const options = new HttpParams()
+                    .set('fullName', person.fullName  || '')
+                    .set('phoneNumber', person.phoneNumber  || '')
+                    .set('emailAddress', person.emailAddress  || '') ;
+    const url = `${AppConstants.basePersonUrl}/duplicates`;
+    return this.http.get<PeopleAutoCompleteData2>(url, {params: options}).pipe(
+      map(response => response.result),
+      tap(data => console.log('results for duplicates', data))
+      );
   }
   getAutocompletePeople(person: BasicPerson): Observable<PeopleAutoCompleteResult[]> {
     const options = new HttpParams()
