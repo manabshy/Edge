@@ -13,14 +13,14 @@ export class FormatAddressPipe implements PipeTransform {
     }
   if (!!address.flatNumber) {
     if (address.flatNumber.indexOf('Flat') === -1) {
-      fullAddress += fullAddress += 'Flat ' + address.flatNumber + ', ';
+      fullAddress += fullAddress += 'Flat ' + address.flatNumber + ', \n';
     } else {
-      fullAddress += address.flatNumber + ', ';
+      fullAddress += address.flatNumber + ', \n';
     }
   }
 
   if (!!address.houseBuildingName) {
-    fullAddress += address.houseBuildingName + ', ';
+    fullAddress += address.houseBuildingName + ', \n';
   }
 
   if (!!address.addressLines) {
@@ -28,22 +28,20 @@ export class FormatAddressPipe implements PipeTransform {
   }
 
   if (!!(address.houseNumber && address.streetName)) {
-    fullAddress += `${address.houseNumber} ${address.streetName}, `;
+    fullAddress += `${address.houseNumber} ${address.streetName}, \n`;
   } else if (address.streetName) {
-    fullAddress += `${address.streetName}, `;
+    fullAddress += `${address.streetName}, \n`;
   }
 
   if (!!address.town) {
-    fullAddress += address.town + ', ';
+    fullAddress += address.town + ', \n';
   }
-
-  // if (address.outCode && address.inCode) {
-  //   fullAddress += address.outCode + ' ' + address.inCode;
-  // }
-
+  
   if (!!address.postCode) {
     fullAddress += address.postCode;
-  }
+  } else if (address.outCode && address.inCode) {
+      fullAddress += address.outCode + ' ' + address.inCode;
+    }
 
   fullAddress = fullAddress.replace(/,\s*$/, '');
   return fullAddress;

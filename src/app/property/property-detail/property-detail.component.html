@@ -10,11 +10,35 @@
   </div>
  
   <div class="bg-light border border-top-0 mb-4">
-    <div class="row mx-0 py-3" *ngIf="searchedPropertyDetails">
+    <div class="text-right pt-3 px-3" *ngIf="searchedPropertyDetails">
+      <div class="row mb-2">
+        <div class="col-auto">
+          <span class="badge badge-pill badge-primary mr-1">Flat</span>
+          <span class="badge badge-pill badge-primary">Period Purpose Built</span>
+        </div>
+        <div class="col text-right">
+          <a routerLink="edit"><i class="fas fa-edit"></i> Edit</a>
+        </div>
+      </div>
+    </div>
+    <div class="row mx-0 pb-3" *ngIf="searchedPropertyDetails">
       <div class="col-12">
-        <p class="m-0">
-          <strong>{{searchedPropertyDetails?.address | formatAddress}}</strong>
-        </p>
+        <pre><strong>{{searchedPropertyDetails?.address | formatAddress}}</strong></pre>
+      </div>
+      <div class="col-12">
+        <hr class="mb-2">
+      </div>
+      <div class="col-12">
+        <div class="row align-items-center">
+          <div class="col">
+            <span class="badge badge-pill badge-info mr-1">London</span>
+            <span class="badge badge-pill badge-info mr-1">Chelsea</span>
+            <span class="badge badge-pill badge-info">SW6</span>
+          </div>
+          <div class="col-auto">
+            <small class="text-muted">ID: {{searchedPropertyDetails?.propertyId}}</small>
+          </div>
+        </div>
       </div>
     </div>
   </div>

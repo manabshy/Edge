@@ -8,6 +8,7 @@ import { PropertyAutoComplete } from '../shared/property';
 })
 export class PropertyListComponent implements OnInit {
 @Input()  properties: PropertyAutoComplete[];
+@Input() searchTerm: string;
   constructor() { }
 
   ngOnInit() {

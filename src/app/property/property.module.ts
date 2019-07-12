@@ -12,9 +12,10 @@ import { PropertyDetailNotesComponent } from './property-detail-notes/property-d
 import { PropertyDetailDocumentsComponent } from './property-detail-documents/property-detail-documents.component';
 import { PropertyDetailPhotosComponent } from './property-detail-photos/property-detail-photos.component';
 import { PropertyDetailMapComponent } from './property-detail-map/property-detail-map.component';
+import { PropertyDetailEditComponent } from './property-detail-edit/property-detail-edit.component';
 
 @NgModule({
-  declarations: [PropertyListComponent, PropertyComponent, PropertyDetailComponent, PropertyDetailSalesLettingsComponent, PropertyDetailOffersComponent, PropertyDetailNotesComponent, PropertyDetailDocumentsComponent, PropertyDetailPhotosComponent, PropertyDetailMapComponent],
+  declarations: [PropertyListComponent, PropertyComponent, PropertyDetailComponent, PropertyDetailSalesLettingsComponent, PropertyDetailOffersComponent, PropertyDetailNotesComponent, PropertyDetailDocumentsComponent, PropertyDetailPhotosComponent, PropertyDetailMapComponent, PropertyDetailEditComponent],
   imports: [
     CommonModule,
     PropertyRoutingModule,

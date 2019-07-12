@@ -10,6 +10,7 @@ import { PropertyDetailNotesComponent } from './property-detail-notes/property-d
 import { PropertyDetailDocumentsComponent } from './property-detail-documents/property-detail-documents.component';
 import { PropertyDetailPhotosComponent } from './property-detail-photos/property-detail-photos.component';
 import { PropertyDetailMapComponent } from './property-detail-map/property-detail-map.component';
+import { PropertyDetailEditComponent } from './property-detail-edit/property-detail-edit.component';
 
 
 const routes: Routes = [
@@ -23,6 +24,7 @@ const routes: Routes = [
       { path: 'detail/:id',
       children: [
         { path: '', component: PropertyDetailComponent },
+        {path: 'edit', component: PropertyDetailEditComponent},
         {path: 'sales-lettings', component: PropertyDetailSalesLettingsComponent},
         {path: 'offers', component: PropertyDetailOffersComponent},
         {path: 'notes', component: PropertyDetailNotesComponent},
