@@ -511,7 +511,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   }
 
   getAddress(address: Address) {
-    if (this.personAddress !== address) {
+    if (this.personAddress && JSON.stringify(this.personAddress) != JSON.stringify(address)) {
       this.personForm.markAsDirty();
     } else {
       this.personForm.markAsPristine();

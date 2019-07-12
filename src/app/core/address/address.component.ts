@@ -156,7 +156,11 @@ export class AddressComponent implements OnInit {
         }
         this.emitAddress();
         setTimeout(() => {
-          document.getElementById('addressLines').scrollIntoView({block: 'center'});
+          let element = 'addressLines';
+          if(this.propertyDetails) {
+            element = 'flatNumber';
+          }
+          document.getElementById(element).scrollIntoView({block: 'center'});
         });
       });
     }
@@ -164,12 +168,25 @@ export class AddressComponent implements OnInit {
 
   private emitAddress() {
     const addressData = this.addressForm.value;
+    let address;
     if (addressData) {
-      const address = {
-        addressLines: addressData.addressLines,
-        postCode: addressData.postCode,
-        countryId: addressData.countryId
-      };
+        if(!this.propertyDetails) {
+          address = {
+          addressLines: addressData.addressLines,
+          postCode: addressData.postCode,
+          countryId: addressData.countryId
+        }
+      } else {
+        address = {
+          addressLine2: addressData.addressLine2,
+          flatNumber: addressData.flatNumber,
+          houseNumber: addressData.houseNumber,
+          houseBuildingName: addressData.houseBuildingName,
+          streetName: addressData.streetName,
+          town: addressData.town,
+          postCode: addressData.postCode
+        }
+      }
       this.addressDetails.emit(address);
     }
   }

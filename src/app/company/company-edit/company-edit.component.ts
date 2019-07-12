@@ -175,7 +175,7 @@ export class CompanyEditComponent implements OnInit {
   }
 
   getAddress(address: Address) {
-    if(this.address !== address) {
+    if(this.address && JSON.stringify(this.address) != JSON.stringify(address)) {
       this.companyForm.markAsDirty();
     } else {
       this.companyForm.markAsPristine();

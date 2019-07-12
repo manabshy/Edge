@@ -52,7 +52,7 @@ export class PropertyDetailEditComponent implements OnInit {
   }
 
   getAddress(address: Address) {
-    if (this.propertyAddress !== address) {
+    if (this.propertyAddress && JSON.stringify(this.propertyAddress) != JSON.stringify(address)) {
       this.propertyForm.markAsDirty();
     } else {
       this.propertyForm.markAsPristine();
