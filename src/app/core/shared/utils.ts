@@ -34,6 +34,12 @@ export class AppUtils {
     const moDate = isDate(date) ? date : (date);
     return format(moDate, 'HH:mm');
   }
+  public static capitaliseFirstLetter<T>(value: string): string{
+    if (value) {
+      const result = value.charAt(0).toLocaleUpperCase();
+      return result.concat(value.substr(1));
+    }
+  }
 
   public static setupInfintiteScroll(originalArray: any[], slicedArray: any[]) {
     if (slicedArray.length < originalArray.length) {

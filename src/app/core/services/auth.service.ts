@@ -70,7 +70,7 @@ export class AuthService {
     this.adalService.handleWindowCallback();
     this.adalService.getUser().subscribe(user => {
     this.user = user;
-    console.log(this.adalService.userInfo);
+    // console.log(this.adalService.userInfo);
    // var expireIn=user.profile.exp-newDate().getTime();
  });
 

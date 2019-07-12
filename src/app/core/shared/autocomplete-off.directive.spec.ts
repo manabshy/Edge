@@ -2,7 +2,7 @@ import { AutocompleteOffDirective } from './autocomplete-off.directive';
 
 describe('AutocompleteOffDirective', () => {
   it('should create an instance', () => {
-    const directive = new AutocompleteOffDirective();
+    const directive =null;
     expect(directive).toBeTruthy();
   });
 });
