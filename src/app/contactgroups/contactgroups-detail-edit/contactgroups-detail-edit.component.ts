@@ -235,6 +235,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     }
     this.personForm.patchValue({
       firstName: this.basicPerson.firstName,
+      middleName: this.basicPerson.middleName,
       lastName: this.basicPerson.lastName,
       address: {
         countryId: this.defaultCountryCode

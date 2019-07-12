@@ -11,7 +11,7 @@
           Actions <span class="caret"></span>
         </button>
         <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="actionsToggle">
-          <li role="menuitem" *ngIf="contactGroupDetails?.contactPeople.length < 8 && !contactGroupDetails?.referenceCount 
+          <li role="menuitem" *ngIf="contactGroupDetails?.contactPeople.length < 8 && !contactGroupDetails?.referenceCount
           && !isMaxPeople">
             <button type="button" class="dropdown-item" (click)="showHideOffCanvas($event)">
               <i class="fas fa-user-plus mr-2"></i> Add Person
@@ -194,9 +194,9 @@
                     <div class="col-12 mb-2">
                       <strong>{{person?.firstName}} {{person?.lastName}}</strong>
                       <!-- <i class="fas fa-phone"></i>&nbsp;
-        
+
                             <i class="fas fa-envelope"></i>&nbsp;
-        
+
                             <span class="badge badge-success">AML Valid</span> -->
                     </div>
                     <div class="col-sm-4 mb-2" *ngIf="contactGroupDetails?.contactType !== 4">
@@ -251,7 +251,7 @@
                 </div>
               </ng-container>
               <a href (click)="showHideOffCanvas($event)" class="list-group-item list-group-item-action text-center py-4"
-                *ngIf="contactGroupDetails?.contactPeople.length < 8 && !contactGroupDetails?.referenceCount 
+                *ngIf="contactGroupDetails?.contactPeople.length < 8 && !contactGroupDetails?.referenceCount
                         && !isMaxPeople">
                 <span class="btn-link">
                   <i class="fas fa-user-plus mr-2"></i>Add Person
@@ -354,8 +354,15 @@
       </button>
     </h4>
     <ng-container *ngIf="!selectedPersonId && !isCreateNewPerson; else createNewPerson">
-      <form [formGroup]="personFinderForm" [ngClass]="foundPeople?.length ? 'pb-0 pb-sm-3' : 'pb-3'">
+      <form [formGroup]="personFinderForm" [ngClass]="potentialDuplicatePeople?.matches?.length ? 'pb-0 pb-sm-3' : 'pb-3'">
         <div class="form-group row">
+          <label for="fullName" class="col-sm-2 col-form-label col-form-label-sm">Full Name</label>
+          <div class="col-sm-10">
+            <input type="text" id="fullName" class="form-control form-control-sm" autofocus
+              formControlName="fullName" autocompleteOff>
+          </div>
+        </div>
+        <!-- <div class="form-group row">
           <label for="firstName" class="col-sm-2 col-form-label col-form-label-sm">First Name</label>
           <div class="col-sm-10">
             <input type="text" id="firstName" class="form-control form-control-sm" autofocus
@@ -367,7 +374,7 @@
           <div class="col-sm-10">
             <input type="text" id="lastName" class="form-control form-control-sm" formControlName="lastName">
           </div>
-        </div>
+        </div> -->
         <div class="form-group row">
           <label for="phone" class="col-sm-2 col-form-label col-form-label-sm">Phone</label>
           <div class="col-sm-10">
@@ -381,9 +388,9 @@
           </div>
         </div>
       </form>
-      <div class="row results-chip" *ngIf="foundPeople?.length">
+      <div class="row results-chip" *ngIf="potentialDuplicatePeople?.matches?.length">
         <div class="col-sm-12 text-center">
-          <small><i class="fas fa-arrow-down mr-2"></i> {{foundPeople?.length}} Results found</small>
+          <small><i class="fas fa-arrow-down mr-2"></i> {{potentialDuplicatePeople?.matches?.length}} Results found</small>
         </div>
       </div>
       <div class="form-group row justify-content-end">
@@ -402,7 +409,7 @@
                 <div class="col-sm col-lg-2"></div>
               </div>
             </div>
-            <div class="list-group-item list-group-item-action" *ngFor="let foundPerson of foundPeople | orderBy: orderFoundPeople:reverse" [ngClass]="{'disabled': checkDuplicateInContactGroup(foundPerson?.personId)}">
+            <div class="list-group-item list-group-item-action" *ngFor="let foundPerson of potentialDuplicatePeople?.matches | orderBy: orderFoundPeople:reverse" [ngClass]="{'disabled': checkDuplicateInContactGroup(foundPerson?.personId)}">
               <div class="row align-items-end align-items-sm-center"
               (click)="selectPerson(foundPerson?.personId)">
                 <div class="col-12 mb-2 mb-sm-0" *ngIf="foundPerson?.matchScore">
@@ -449,7 +456,7 @@
                 </div>
               </div>
             </div>
-            <div class="list-group-item text-center" *ngIf="foundPeople && !foundPeople.length">
+            <div class="list-group-item text-center" *ngIf="potentialDuplicatePeople && !potentialDuplicatePeople?.matches?.length">
               No Person found. <ng-container *ngIf="isCreateNewPersonVisible; else fillDetails">Create a new one with the details provided above</ng-container>
               <ng-template #fillDetails>Fill the details above to continue</ng-template>.
             </div>
