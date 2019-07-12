@@ -4,8 +4,8 @@ import { PropertyService } from '../shared/property.service';
 import { Property } from '../shared/property';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AppConstants } from 'src/app/core/shared/app-constants';
-import { Address } from 'cluster';
 import { Location } from '@angular/common';
+import { Address } from '../../core/models/address';
 
 @Component({
   selector: 'app-property-detail-edit',
@@ -19,7 +19,10 @@ export class PropertyDetailEditComponent implements OnInit {
   propertyAddress: Address;
   isSubmitting: false;
 
-  constructor(private route: ActivatedRoute, private propertyService: PropertyService, private fb: FormBuilder, private _location: Location) {}
+  constructor(private route: ActivatedRoute,
+              private propertyService: PropertyService,
+              private fb: FormBuilder,
+              private _location: Location) {}
 
   ngOnInit() {
     this.route.params.subscribe(params => {
