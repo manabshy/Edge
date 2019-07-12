@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment.test';
 import { Property } from './property';
 import { Address } from 'src/app/core/models/address';
 
-fdescribe('PropertyService', () => {
+describe('PropertyService', () => {
   let httpTestingController: HttpTestingController;
   let service: PropertyService;
   const baseUrl = `https://dandg-api-wedge-dev.azurewebsites.net/v10/properties`;
@@ -50,7 +50,7 @@ fdescribe('PropertyService', () => {
     expect(service).toBeTruthy();
   });
 
-  fit('should return the matching property', () => {
+  it('should return the matching property', () => {
     console.log('address here.....', address);
     service.getProperty(1).subscribe(data => {
       console.log('data returned from test', data);
