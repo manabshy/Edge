@@ -1,8 +1,9 @@
 import { Address } from 'src/app/core/models/address';
 
 export interface Property {
-  propertyType: string;
   propertyId: number;
+  propertyTypeId: PropertyType;
+  propertyStyleId: PropertyStyle;
   address: Address;
   floorOther: string;
   floorType: string;
@@ -33,3 +34,22 @@ export const MinBedrooms = <MinBedroom[]> [
   {id: 5, name: '5'},
   {id: 6, name: '6+'}
 ];
+export enum PropertyType {
+  Flat = 1,
+  House = 2
+}
+export enum PropertyStyle {
+  SemiDetached = 1,
+  Detached = 2,
+  Terraced = 3,
+  EndOfTerrace = 4,
+  Mews = 6,
+  Mansion = 5,
+  PurposeBuilt = 7,
+  Conversion = 8,
+  PeriodPurposeBuilt = 9,
+  Houseboat = 12,
+  Garage = 10,
+  Land = 13,
+  ParkingSpace = 11,
+}

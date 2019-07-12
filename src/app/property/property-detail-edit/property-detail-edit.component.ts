@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { Location } from '@angular/common';
 import { Address } from '../../core/models/address';
+import { SharedService, InfoDetail } from '../../core/services/shared.service';
 
 @Component({
   selector: 'app-property-detail-edit',
@@ -18,13 +19,21 @@ export class PropertyDetailEditComponent implements OnInit {
   propertyForm: FormGroup;
   propertyAddress: Address;
   isSubmitting: false;
+  listInfo: any;
+  propertyTypes: any;
+  allPropertyStyles: any;
+  propertyStyles: InfoDetail[];
 
   constructor(private route: ActivatedRoute,
               private propertyService: PropertyService,
+              private sharedService: SharedService,
               private fb: FormBuilder,
               private _location: Location) {}
 
   ngOnInit() {
+    this.listInfo = this.sharedService.dropdownListInfo;
+    this.propertyTypes = this.listInfo.result.propertyTypes;
+    this.allPropertyStyles = this.listInfo.result.propertyStyles;
     this.route.params.subscribe(params => {
       this.propertyId = +params['id'] || 0;
     });
@@ -37,10 +46,20 @@ export class PropertyDetailEditComponent implements OnInit {
   getPropertyDetails(propertyId: number) {
     this.propertyService.getProperty(propertyId).subscribe(data => {
       this.propertyDetails = data;
+      this.onSelectType(data.propertyTypeId);
+      this.propertyForm.patchValue({
+        propertyTypeId: data.propertyTypeId,
+        propertyStyleId: data.propertyStyleId
+      });
       console.log(this.propertyDetails);
     });
   }
-
+  onSelectType(propertyTypeId){
+    console.log('selected type id', propertyTypeId );
+    console.log('selected styles', this.allPropertyStyles );
+    this.propertyStyles = this.allPropertyStyles.filter((x:InfoDetail)=>x.parentId==propertyTypeId);
+    console.log('selected styles', this.propertyStyles );
+  }
   setupEditForm() {
     this.propertyForm = this.fb.group({
       propertyTypeId: [''],

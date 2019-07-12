@@ -10,8 +10,8 @@
     <div class="form-group row">
       <label for="propertyTypeId" class="col-sm-2 col-form-label col-form-label-sm">Property Type</label>
       <div class="col-sm-3">
-        <select class="custom-select custom-select-sm" id="propertyTypeId" name="propertyTypeId" formControlName="propertyTypeId">
-          <option selected *ngFor="let title of titles | keyvalue:keepOriginalOrder" [value]=title.key>{{title.value}}</option>
+        <select class="custom-select custom-select-sm" id="propertyTypeId" name="propertyTypeId" formControlName="propertyTypeId" (change)="onSelectType($event.target.value)">
+          <option selected *ngFor="let propertyType of propertyTypes " [value]=propertyType.id>{{propertyType.value}}</option>
         </select>
       </div>
     </div>
@@ -19,7 +19,7 @@
       <label for="propertyTypeId" class="col-sm-2 col-form-label col-form-label-sm">Property Style</label>
       <div class="col-sm-3">
         <select class="custom-select custom-select-sm" id="propertyStyleId" name="propertyStyleId" formControlName="propertyStyleId">
-          <option selected *ngFor="let title of titles | keyvalue:keepOriginalOrder" [value]=title.key>{{title.value}}</option>
+          <option selected *ngFor="let propertyStyle of propertyStyles " [value]=propertyStyle.id>{{propertyStyle.value}}</option>
         </select>
       </div>
     </div>
