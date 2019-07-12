@@ -330,6 +330,8 @@ export interface DropdownListInfo {
  CompanyTypes: InfoDetail[];
  Titles: Record<number, string>;
  TelephoneTypes: Record<number, string>;
+ PropertyStyles: Record<number, string>;
+ PropertyTypes: Record<number, string>;
 }
 
 export interface InfoDetail {
