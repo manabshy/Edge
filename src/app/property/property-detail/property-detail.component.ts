@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PropertyService } from '../shared/property.service';
 import { ActivatedRoute } from '@angular/router';
-import { Property } from '../shared/property';
+import { Property, PropertyTypes, PropertyStyles } from '../shared/property';
 
 @Component({
   selector: 'app-property-detail',
@@ -11,11 +11,14 @@ import { Property } from '../shared/property';
 export class PropertyDetailComponent implements OnInit {
   propertyId: number;
   searchedPropertyDetails: Property;
+  propertyTypes = PropertyTypes;
+  propertyStyles = PropertyStyles;
 
   constructor(private propertyService: PropertyService,
               private route: ActivatedRoute) { }
 
   ngOnInit() {
+    console.log('types', this.propertyTypes.get(1));
     this.route.params.subscribe(params => {
       this.propertyId = +params['id'] || 0;
     });

@@ -8,13 +8,13 @@
   <div class="text-center py-3" *ngIf="!searchedPropertyDetails">
     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading info ...
   </div>
- 
+
   <div class="bg-light border border-top-0 mb-4">
     <div class="text-right pt-3 px-3" *ngIf="searchedPropertyDetails">
       <div class="row mb-2">
         <div class="col-auto">
-          <span class="badge badge-pill badge-primary mr-1">Flat</span>
-          <span class="badge badge-pill badge-primary">Period Purpose Built</span>
+          <span class="badge badge-pill badge-primary mr-1">{{propertyTypes.get(searchedPropertyDetails?.propertyTypeId)}}</span>
+          <span class="badge badge-pill badge-primary">{{propertyStyles.get(searchedPropertyDetails?.propertyStyleId)}}</span>
         </div>
         <div class="col text-right">
           <a routerLink="edit"><i class="fas fa-edit"></i> Edit</a>

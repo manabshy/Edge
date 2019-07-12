@@ -35,8 +35,8 @@ export const MinBedrooms = <MinBedroom[]> [
   {id: 6, name: '6+'}
 ];
 export enum PropertyType {
-  Flat = 1,
-  House = 2
+  House = 1,
+  Flat = 2
 }
 export enum PropertyStyle {
   SemiDetached = 1,
@@ -53,3 +53,22 @@ export enum PropertyStyle {
   Land = 13,
   ParkingSpace = 11,
 }
+export const PropertyTypes = new Map([
+  [PropertyType.Flat, 'Flat'],
+  [PropertyType.House, 'House']
+]);
+
+export const PropertyStyles = new Map([
+  [PropertyStyle.SemiDetached, 'Semi-Detached'],
+  [PropertyStyle.Detached, 'Detached'],
+  [PropertyStyle.Terraced, 'Terraced'],
+  [PropertyStyle.EndOfTerrace, 'End Of Terrace'],
+  [PropertyStyle.Mews, 'Mews'],
+  [PropertyStyle.Mansion, 'Mansion'],
+  [PropertyStyle.PurposeBuilt, 'Purpose Built'],
+  [PropertyStyle.Conversion, 'Conversion'],
+  [PropertyStyle.Houseboat, 'Houseboat'],
+  [PropertyStyle.Garage, 'Garage'],
+  [PropertyStyle.Land, 'Land'],
+  [PropertyStyle.ParkingSpace, 'Parking Space'],
+]);
