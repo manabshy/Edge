@@ -352,6 +352,10 @@ export interface AddressAutoCompleteResult {
   Highlight: string;
   Description: string;
   Action: string;
+  BuildingName: string;
+  BuildingNumber: string;
+  SubBuilding: string;
+  Street: string;
   Line1: string;
   Line2: string;
   Line3: string;

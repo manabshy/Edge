@@ -7,6 +7,7 @@ export interface Address {
   houseBuildingName: string;
   streetName: string;
   addressLines: string;
+  addressLine2: string;
   town: string;
   longitude: string;
   latitude: string;

@@ -8,190 +8,28 @@
   </div>
   <form *ngIf="propertyDetails" [formGroup]="propertyForm" (ngSubmit)="saveProperty()" (keydown.enter)="$event.preventDefault()" autocompleteOff>
     <div class="form-group row">
-      <label for="title" class="col-sm-2 col-form-label col-form-label-sm">Property Type</label>
+      <label for="propertyTypeId" class="col-sm-2 col-form-label col-form-label-sm">Property Type</label>
       <div class="col-sm-3">
-        <select class="custom-select custom-select-sm" id="title" name="title" formControlName="titleId">
+        <select class="custom-select custom-select-sm" id="propertyTypeId" name="propertyTypeId" formControlName="propertyTypeId">
           <option selected *ngFor="let title of titles | keyvalue:keepOriginalOrder" [value]=title.key>{{title.value}}</option>
         </select>
       </div>
     </div>
     <div class="form-group row">
-      <label for="name" class="col-sm-2 col-form-label col-form-label-sm">First Name</label>
-      <div class="col-sm-10">
-        <input type="text" id="name" class="form-control form-control-sm" formControlName="firstName" [ngClass]="{'is-invalid':formErrors.firstName}" >
-        <span class="invalid-feedback">{{formErrors.firstName}}</span>
-      </div>
-    </div>
-    <div class="form-group row">
-      <label for="middleName" class="col-sm-2 col-form-label col-form-label-sm">Middle Name</label>
-      <div class="col-sm-10">
-        <input type="text" id="middleName" class="form-control form-control-sm" formControlName="middleName" [ngClass]="{'is-invalid':formErrors.middleName}" >
-        <span class="invalid-feedback">{{formErrors.middleName}}</span>
-      </div>
-    </div>
-    <div class="form-group row">
-      <label for="lastName" class="col-sm-2 col-form-label col-form-label-sm">Last Name</label>
-      <div class="col-sm-10">
-        <input type="text" id="lastName" class="form-control form-control-sm" formControlName="lastName" [ngClass]="{'is-invalid':formErrors?.lastName}" autocomplete="false">
-        <span class="invalid-feedback">{{formErrors?.lastName}}</span>
-      </div>
-    </div>
-   <app-address [personDetails]="propertyDetails" (addressDetails)="getAddress($event)"></app-address>
-   <div class="row justify-content-end" *ngIf="isContactErrorVisible" id="contact-error">
-     <div class="col-sm-10">
-        <div class="alert alert-danger">Please enter an email OR a phone number</div>
-     </div>
-   </div>
-   <div class="row justify-content-end">
-     <div class="col-auto mr-2 d-none d-sm-block mb-1"><small>Pref</small></div>
-   </div>
-   <div formArrayName="emailAddresses" *ngFor="let emailAddress of emailAddresses.controls; let i = index; first as isFirst">
-      <div [formGroupName]="i">
-        <div class="form-group row justify-content-end">
-          <label [for]="'email' + i" class="col col-sm-2 col-form-label col-form-label-sm" [ngClass]="{'sr-only': !isFirst}">Email</label>
-          <div class="col-auto d-sm-none mr-2" *ngIf="isFirst"><small>Pref</small></div>
-          <div class="col-sm-10">
-              <div class="input-group input-group-sm">
-                <input type="text" [id]="'email' + i" [placeholder]="!isFirst ? 'Additional Email' : ''" class="form-control" formControlName="email"
-                (keyup)="addRemoveEmailItem(i, false)" (blur)="addRemoveEmailItem(i, true)"
-                [ngClass]="{'border border-warning': !personForm.controls.emailAddresses.controls[0].controls.email.value && isFirst && !isContactErrorVisible,
-                            'is-invalid': isValid('email', i)
-                            || isContactErrorVisible}">
-                <div class="input-group-append">
-                  <label class="btn btn-light" btnCheckbox formControlName="isPreferred" tabindex="0" (click)="togglePreferences(i, emailAddresses)"
-                    role="button"  [class.active]="personForm.value.emailAddresses[i].isPreferred"><i class="fa-star" [ngClass]="!!personForm.value.emailAddresses[i].isPreferred ? 'fas' : 'far'"></i></label>
-                </div>
-                <span class="invalid-feedback">
-                  <span *ngIf="personForm.controls.emailAddresses.controls[i].controls.email.value && !!personForm.controls.emailAddresses.controls[i].controls.email.errors">
-                    Please enter a valid email address.
-                  </span>
-                </span>
-                <small class="form-text w-100" *ngIf="!personForm.controls.emailAddresses.controls[0].controls.email.value && isFirst"><i class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your score</span></small>
-              </div>
-          </div>
-        </div>
-      </div>
-    </div>
-   <div class="row justify-content-end">
-      <div class="col-auto mr-2 d-none d-sm-block mb-1"><small>Pref</small></div>
-    </div>
-   <div formArrayName="phoneNumbers" *ngFor="let phoneNumber of phoneNumbers.controls; let i = index; first as isFirst;">
-      <div [formGroupName]="i">
-        <div class="form-group row justify-content-end">
-          <label [for]="'phone' + i" class="col col-sm-2 col-form-label col-form-label-sm" [ngClass]="{'sr-only': !isFirst}">Phone</label>
-          <div class="col-auto d-sm-none mr-2" *ngIf="isFirst"><small>Pref</small></div>
-          <div class="col-sm-10">
-            <div class="input-group input-group-sm">
-              <input type="text" [id]="'phone' + i" class="form-control" [placeholder]="!isFirst ? 'Additional phone' : ''" formControlName="number" (keyup)="addRemovePhoneNumberItem(i, false)" (blur)="addRemovePhoneNumberItem(i, true)"
-              [ngClass]="{'border border-warning': !personForm.controls.phoneNumbers.controls[0].controls.number.value && isFirst && !isContactErrorVisible,
-                        'is-invalid': isValid('number', i)
-                        || isContactErrorVisible || personForm.controls.phoneNumbers.controls[i].errors?.mismatch}">
-              <select class="custom-select" formControlName="typeId" [ngClass]="{'is-invalid': personForm.controls.phoneNumbers.controls[i].errors?.mismatch}">
-                <option *ngFor="let telephoneType of telephoneTypes | keyvalue:keepOriginalOrder" [value] = telephoneType.key >{{telephoneType.value}} </option>
-              </select>
-              <div class="input-group-append order-sm-2">
-                <label class="btn btn-light" btnCheckbox formControlName="sendSMS" tabindex="0"
-                  role="button" [ngClass]="{'font-weight-bold': personForm.value.phoneNumbers[i].sendSMS}" [style.visibility]="!sharedService.isUKMobile(personForm.value.phoneNumbers[i].number) ? 'hidden' : 'visible'">SMS</label>
-                <label class="btn btn-light" btnCheckbox formControlName="isPreferred" tabindex="0" (click)="togglePreferences(i, phoneNumbers)"
-                  role="button" [class.active]="personForm.value.phoneNumbers[i].isPreferred"><i class="fa-star" [ngClass]="personForm.value.phoneNumbers[i].isPreferred ? 'fas' : 'far'"></i></label>
-              </div>
-              <input type="text" class="form-control order-sm-1" placeholder="Comments" formControlName="comments">
-                <div class="invalid-feedback order-sm-3">
-                  <div *ngIf="personForm.controls.phoneNumbers.controls[i].controls.number.errors?.pattern">
-                    Please enter a valid telephone number.
-                  </div>
-                  <div *ngIf="personForm.controls.phoneNumbers.controls[i].controls.number.errors?.minlength">
-                      Telephone number must be at least 7 characters.
-                  </div>
-                  <div *ngIf="personForm.controls.phoneNumbers.controls[i].controls.number.errors?.maxlength">
-                    Telephone number must be less than 16 characters.
-                  </div>
-                  <div *ngIf="personForm.controls.phoneNumbers.controls[i].controls.number.errors?.invalidMobileType">
-                    Telephone number {{currentPhoneNumber}} is not a valid mobile number`
-                  </div>
-                  <div *ngIf="personForm.controls.phoneNumbers.controls[i].errors?.mismatch">
-                    Telephone number doesn't match the type
-                  </div>
-                </div>
-              <small class="form-text w-100 order-sm-4" *ngIf="!personForm.controls.phoneNumbers.controls[0].controls.number.value && isFirst"><i class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your score</span></small>
-            </div>
-          </div>
-        </div>
-      </div>
-   </div>
-   <div formGroupName="contactBy">
-     <div class="form-group row">
-        <label class="col-sm-2 col-form-label col-form-label-sm">Contact by</label>
-        <div class="col-sm-10">
-          <div class="custom-control custom-checkbox">
-            <input class="custom-control-input" type="checkbox" name="examplecheckboxs" id="examplecheckboxs1"
-              value="option1" formControlName="email">
-            <label class="custom-control-label" for="examplecheckboxs1">
-              Email
-            </label>
-          </div>
-          <div class="custom-control custom-checkbox">
-            <input class="custom-control-input" type="checkbox" name="examplecheckboxs" id="examplecheckboxs3"
-              value="option3" formControlName="phone">
-            <label class="custom-control-label" for="examplecheckboxs3">
-              Phone
-            </label>
-          </div>
-        </div>
-      </div>
-   </div>
-  <div formGroupName="marketingPreferences">
-      <div class="form-group row">
-        <label class="col-sm-2 col-form-label col-form-label-sm">Marketing</label>
-        <div class="col-sm-10">
-          <div class="custom-control custom-checkbox">
-            <input class="custom-control-input" type="checkbox" name="marketBulletin" id="quarterly"   formControlName="marketBulletin">
-            <label class="custom-control-label" for="quarterly">
-              Quarterly Market Bulletin
-            </label>
-          </div>
-          <div class="custom-control custom-checkbox">
-            <input class="custom-control-input" type="checkbox" name="events" id="events"   formControlName="events">
-            <label class="custom-control-label" for="events">
-              Landlord & Investor Events
-            </label>
-          </div>
-          <div class="custom-control custom-checkbox">
-            <input class="custom-control-input" type="checkbox" name="newHomes" id="newHomes"  formControlName="newHomes">
-            <label class="custom-control-label" for="newHomes">
-              New Home and Investments
-            </label>
-          </div>
-          <div class="custom-control custom-checkbox">
-            <input class="custom-control-input" type="checkbox" name="offersSurveys" id="offersSurveys"
-                formControlName="offersSurveys">
-            <label class="custom-control-label" for="offersSurveys">
-              Special Offers and Surveys
-            </label>
-          </div>
-          <div class="custom-control custom-checkbox">
-            <input class="custom-control-input" type="checkbox" name="general" id="occasional" formControlName="general">
-            <label class="custom-control-label" for="occasional">
-              Other Occasional Marketing
-            </label>
-          </div>
-        </div>
-      </div>
-  </div>
-    <div class="form-group row">
-      <label for="amlDate" class="col-sm-2 col-form-label col-form-label-sm">AML Completed</label>
+      <label for="propertyTypeId" class="col-sm-2 col-form-label col-form-label-sm">Property Style</label>
       <div class="col-sm-3">
-          <input type="text" id="amlDate" placeholder="dd/mm/yyyy" class="form-control form-control-sm fake-readonly" formControlName="amlCompletedDate"
-          [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY'}" bsDatepicker readonly>
+        <select class="custom-select custom-select-sm" id="propertyStyleId" name="propertyStyleId" formControlName="propertyStyleId">
+          <option selected *ngFor="let title of titles | keyvalue:keepOriginalOrder" [value]=title.key>{{title.value}}</option>
+        </select>
       </div>
     </div>
-
-    <div class="form-actions" [ngClass]="{'px-0': basicPerson}">
+    <app-address [propertyDetails]="propertyDetails" (addressDetails)="getAddress($event)"></app-address>
+    <div class="form-actions">
       <div class="container px-lg-4">
         <div class="row justify-content-end w-100 no-gutters">
           <div class="col-sm-10 d-flex">
             <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
-            <button type="submit" class="btn btn-secondary" [tooltip]="!personForm.valid ? errorMessage?.displayMessage : ''" placement="top" [attr.disabled]="isSubmitting ? '' : null"><i class="fas fa-spinner fa-pulse d-inline-block mr-2" *ngIf="isSubmitting"></i><ng-container *ngIf="!basicPerson; else addPersonLabel">Save</ng-container><ng-template #addPersonLabel>Create</ng-template></button>
+            <button type="submit" class="btn btn-secondary" [tooltip]="!propertyForm.valid ? errorMessage?.displayMessage : ''" placement="top" [attr.disabled]="isSubmitting ? '' : null"><i class="fas fa-spinner fa-pulse d-inline-block mr-2" *ngIf="isSubmitting"></i>Save</button>
           </div>
         </div>
       </div>

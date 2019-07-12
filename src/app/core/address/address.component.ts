@@ -6,6 +6,7 @@ import { AppConstants } from '../shared/app-constants';
 import { Person } from '../models/person';
 import { Company } from 'src/app/contactgroups/shared/contact-group';
 import { Address } from '../models/address';
+import { Property } from 'src/app/property/shared/property';
 
 @Component({
   selector: 'app-address',
@@ -14,6 +15,7 @@ import { Address } from '../models/address';
 })
 export class AddressComponent implements OnInit {
   @Input() personDetails: Person;
+  @Input() propertyDetails: Property;
   @Input() companyDetails: Company;
   @Output() addressDetails = new EventEmitter<any>();
   foundAddress: AddressAutoCompleteData;
@@ -66,10 +68,16 @@ export class AddressComponent implements OnInit {
       fullAddress: [''],
       addressLines: ['', {validators: Validators.maxLength(500)}],
       countryId: 0,
+      addressLine2: [''],
+      flatNumber: [''],
+      houseNumber: [''],
+      houseBuildingName: [''],
+      streetName: [''],
+      town: [''],
       postCode: ['', {validators: [Validators.minLength(5), Validators.maxLength(8), Validators.pattern(AppConstants.postCodePattern)]}],
     });
-    if (this.companyDetails || this.personDetails) {
-      this.populateAddressForm(this.personDetails, this.companyDetails);
+    if (this.companyDetails || this.personDetails || this.propertyDetails) {
+      this.populateAddressForm(this.personDetails, this.companyDetails, this.propertyDetails);
     }
     this.addressForm.valueChanges
     .subscribe((data) => {
@@ -130,11 +138,22 @@ export class AddressComponent implements OnInit {
             retAddressLines += retrievedAddress[x] + '\n';
           }
         });
-        this.addressForm.patchValue({
-          fullAddress: '',
-          addressLines: (retrievedAddress.Company ? retrievedAddress.Company + '\n' : '') + retAddressLines + retrievedAddress.City,
-          postCode: retrievedAddress.PostalCode
-        });
+        if(!this.propertyDetails) {
+          this.addressForm.patchValue({
+            fullAddress: '',
+            addressLines: (retrievedAddress.Company ? retrievedAddress.Company + '\n' : '') + retAddressLines + retrievedAddress.City,
+            postCode: retrievedAddress.PostalCode
+          });
+        } else {
+          this.addressForm.patchValue({
+            flatNumber: retrievedAddress.SubBuilding.replace(/flat/gi, '').trim(),
+            houseNumber: retrievedAddress.BuildingNumber,
+            houseBuildingName: retrievedAddress.BuildingName,
+            streetName: retrievedAddress.Street,
+            town: retrievedAddress.City,
+            postCode: retrievedAddress.PostalCode
+          });
+        }
         this.emitAddress();
         setTimeout(() => {
           document.getElementById('addressLines').scrollIntoView({block: 'center'});
@@ -155,33 +174,49 @@ export class AddressComponent implements OnInit {
     }
   }
 
-  populateAddressForm(person?: Person, company?: Company) {
+  populateAddressForm(person?: Person, company?: Company, property?: Property) {
     if (this.addressForm) {
       this.addressForm.reset();
     }
-   if(this.personDetails) {
-      this.personDetails = person;
-      if (person.address.postCode) {
-        person.address.postCode = person.address.postCode.trim();
-      }
+
+    switch(true) {
+      case !!this.personDetails:
+        this.personDetails = person;
+        if (person.address.postCode) {
+          person.address.postCode = person.address.postCode.trim();
+        }
+        this.addressForm.patchValue({
+            addressLines: person.address.addressLines,
+            postCode: person.address.postCode,
+            countryId: person.address.countryId,
+            country: person.address.country,
+        });
+        break;
+      case !!this.companyDetails:
+        this.companyDetails = company;
+        if (company.companyAddress.postCode) {
+          company.companyAddress.postCode = company.companyAddress.postCode.trim();
+        }
+        this.addressForm.patchValue({
+            addressLines: company.companyAddress.addressLines,
+            postCode: company.companyAddress.postCode,
+            countryId: company.companyAddress.countryId,
+            country: company.companyAddress.country,
+        });
+        break;
+      case !!this.propertyDetails:
+      this.propertyDetails = property;
       this.addressForm.patchValue({
-          addressLines: person.address.addressLines,
-          postCode: person.address.postCode,
-          countryId: person.address.countryId,
-          country: person.address.country,
-      });
-   } else {
-      this.companyDetails = company;
-      if (company.companyAddress.postCode) {
-        company.companyAddress.postCode = company.companyAddress.postCode.trim();
-      }
-      this.addressForm.patchValue({
-          addressLines: company.companyAddress.addressLines,
-          postCode: company.companyAddress.postCode,
-          countryId: company.companyAddress.countryId,
-          country: company.companyAddress.country,
-      });
-   }
+        addressLine2: property.address.addressLine2,
+        flatNumber: property.address.flatNumber,
+        houseNumber: property.address.houseNumber,
+        houseBuildingName: property.address.houseBuildingName,
+        streetName: property.address.streetName,
+        town: property.address.town,
+        postCode: property.address.inCode + ' ' + property.address.outCode,
+        countryId: 232
+    });
+    }
    this.emitAddress();
   }
 }

@@ -23,8 +23,8 @@ const routes: Routes = [
       // ] },
       { path: 'detail/:id',
       children: [
-        { path: '', component: PropertyDetailComponent },
-        {path: 'edit', component: PropertyDetailEditComponent},
+        { path: '', component: PropertyDetailComponent},
+        {path: 'edit', component: PropertyDetailEditComponent, canDeactivate: [CanDeactivateGuard] },
         {path: 'sales-lettings', component: PropertyDetailSalesLettingsComponent},
         {path: 'offers', component: PropertyDetailOffersComponent},
         {path: 'notes', component: PropertyDetailNotesComponent},
