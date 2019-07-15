@@ -22,10 +22,6 @@ export class CanDeactivateGuard implements CanDeactivate<CanComponentDeactivate>
     currentRoute: ActivatedRouteSnapshot,
     currentState: RouterStateSnapshot,
     nextState?: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
-      console.log(component);
-      console.log(currentRoute.params);
-      console.log(currentState.url);
-
       AppUtils.prevRoute = AppUtils.prevRouteBU;
 
       if(!component.canDeactivate()) {

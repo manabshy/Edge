@@ -103,7 +103,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   init() {
-    this.listInfo = this.sharedService.dropdownListInfo;
+    // this.listInfo = this.sharedService.dropdownListInfo;
+    this.sharedService.getDropdownListInfo().subscribe(data=> this.listInfo = data);
     this.warnings = this.listInfo.result.personWarningStatuses;
     this.removedPersonIds = [];
     this.selectedPeople = [];

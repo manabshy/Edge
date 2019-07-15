@@ -88,6 +88,7 @@ export class CompanyEditComponent implements OnInit {
   }
 
   displayCompanyDetails(company: Company) {
+    console.log('aml completed date', this.sharedService.ISOToDate(company.amlCompletedDate));
     if (this.companyForm) {
       this.companyForm.reset();
     }
@@ -104,7 +105,7 @@ export class CompanyEditComponent implements OnInit {
         fax: company.fax,
         website: company.website,
         email: company.email,
-        amlCompletedDate: this.sharedService.ISOToDate(this.companyDetails.amlCompletedDate)
+        amlCompletedDate: this.sharedService.ISOToDate(company.amlCompletedDate)
     });
      this.existingSigner = company.signer;
   }
