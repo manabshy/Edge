@@ -62,7 +62,9 @@ export class AddressComponent implements OnInit {
   }
 
   init() {
-    this.listInfo = this.sharedService.dropdownListInfo;
+    this.sharedService.getDropdownListInfo().subscribe(data => this.listInfo = data);
+    console.log('info detail in address component', this.listInfo );
+    // this.listInfo = this.sharedService.dropdownListInfo;
     this.countries = this.listInfo.result.countries;
     this.addressForm = this.fb.group({
       fullAddress: [''],

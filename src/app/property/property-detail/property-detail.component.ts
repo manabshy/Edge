@@ -18,7 +18,6 @@ export class PropertyDetailComponent implements OnInit {
               private route: ActivatedRoute) { }
 
   ngOnInit() {
-    console.log('types', this.propertyTypes.get(1));
     this.route.params.subscribe(params => {
       this.propertyId = +params['id'] || 0;
     });

@@ -31,7 +31,8 @@ export class PropertyDetailEditComponent implements OnInit {
               private _location: Location) {}
 
   ngOnInit() {
-    this.listInfo = this.sharedService.dropdownListInfo;
+    // this.listInfo = this.sharedService.dropdownListInfo;
+    this.sharedService.getDropdownListInfo().subscribe(data => this.listInfo = data);
     this.propertyTypes = this.listInfo.result.propertyTypes;
     this.allPropertyStyles = this.listInfo.result.propertyStyles;
     this.route.params.subscribe(params => {

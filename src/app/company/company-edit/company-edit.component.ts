@@ -32,6 +32,7 @@ export class CompanyEditComponent implements OnInit {
   errorMessage: WedgeError;
   defaultCountryCode = 232;
   formErrors = FormErrors;
+  info: any;
 
   constructor(private contactGroupService: ContactGroupsService,
               private companyService: CompanyService,
@@ -47,8 +48,10 @@ export class CompanyEditComponent implements OnInit {
   }
 
   init() {
-    this.listInfo = this.sharedService.dropdownListInfo;
+    this.sharedService.getDropdownListInfo().subscribe(data=> this.listInfo = data);
+    // this.listInfo = this.sharedService.dropdownListInfo;
     this.companyTypes = this.listInfo.result.companyTypes;
+    console.log('list info in company edit component', this.listInfo );
     this.route.params.subscribe(params => this.companyId = this.companyId || +params['id'] || 0);
     this.route.queryParams.subscribe(params => {
       this.isNewCompany = this.companyId ? false : params['isNewCompany'];

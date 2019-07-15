@@ -17,6 +17,7 @@ import { CompanyDetailComponent } from '../company/company-detail/company-detail
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  info: DropdownListInfo;
   get currentStaffMember(): StaffMember {
     return this.staffMemberService.currentStaffMember;
   }
@@ -36,7 +37,9 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.staffMemberService.getCurrentStaffMember().subscribe();
-    this.sharedService.getDropdownListInfo().subscribe();
+    this.sharedService.getDropdownListInfo().subscribe(data=> this.info = data);
+    // this.sharedService.getDropdownListInfo().subscribe();
+    // console.log('info detail in home component', this.info );
     this.route.queryParams.subscribe(params =>  {
       if(params['selectedTab']) {
         AppUtils.homeSelectedTab = params['selectedTab'];
