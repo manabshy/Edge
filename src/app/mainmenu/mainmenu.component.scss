@@ -9,7 +9,7 @@
 .navbar-brand, .navbar-collapse {
 
     @include media-breakpoint-down(md){
-        margin-top: $top-bar-height / 2;
+        margin-top: $top-bar-height / 1.5;
     }
 
     @include media-breakpoint-up(lg) {

@@ -71,7 +71,7 @@
     <div class="text-right pt-3 px-3" *ngIf="searchedPersonDetails">
       <div class="row">
         <div class="col-auto">
-          <app-score-badge [person]="searchedPersonDetails"></app-score-badge>
+          <app-score-badge [person]="searchedPersonDetails"></app-score-badge> <span class="badge badge-pill badge-danger" *ngIf="warning">{{warning?.value}}</span>
         </div>
         <div class="col text-right">
           <a routerLink="edit"><i class="fas fa-edit"></i> Edit</a>

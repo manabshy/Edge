@@ -25,6 +25,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   prefToggleStatus = false;
   countries: any;
   titles: any;
+  warnings: any;
   telephoneTypes: any;
   listInfo: any;
   titleSelected = 1;
@@ -95,6 +96,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     this.listInfo = this.sharedService.dropdownListInfo;
     this.countries = this.listInfo.result.countries;
     this.titles = this.listInfo.result.titles;
+    this.warnings = this.listInfo.result.personWarningStatuses;
     this.telephoneTypes = this.listInfo.result.telephoneTypes;
     this.route.params.subscribe(params => this.personId = +params['personId'] || 0);
     this.route.queryParams.subscribe(params => {
@@ -184,6 +186,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
 
   getPersonDetails(personId: number) {
     this.contactGroupService.getPerson(personId).subscribe(data => {
+      console.log(data);
       this.personDetails = data;
       console.log('person details', this.personDetails);
       this.displayPersonDetails(data);
@@ -267,6 +270,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       person.address.postCode = person.address.postCode.trim();
     }
     this.personForm.patchValue({
+      warningStatusId: person.warningStatusId !== null ? person.warningStatusId : 1,
       titleId: person.titleId !== null ? person.titleId : 1,
       firstName: person.firstName,
       middleName: person.middleName,
@@ -323,6 +327,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
 
   setupEditForm() {
     this.personForm = this.fb.group({
+      warningStatusId: [''],
       titleId: [''],
       firstName: ['', {validators: [Validators.required, Validators.maxLength(40)]}],
       middleName: ['', {validators: Validators.maxLength(50)}],

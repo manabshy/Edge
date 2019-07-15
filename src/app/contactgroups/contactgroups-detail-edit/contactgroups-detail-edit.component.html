@@ -9,6 +9,14 @@
   </div>
   <form *ngIf="personDetails || basicPerson" [formGroup]="personForm" (ngSubmit)="savePerson()" (keydown.enter)="$event.preventDefault()" autocompleteOff>
     <div class="form-group row">
+      <label for="warningStatus" class="col-sm-2 col-form-label col-form-label-sm">Warning</label>
+      <div class="col-sm-3">
+        <select class="custom-select custom-select-sm" id="warningStatus" name="warningStatus" formControlName="warningStatusId">
+          <option selected *ngFor="let warning of warnings | keyvalue:keepOriginalOrder" [value]=warning.value.id>{{warning.value.value}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group row">
       <label for="title" class="col-sm-2 col-form-label col-form-label-sm">Title</label>
       <div class="col-sm-3">
         <select class="custom-select custom-select-sm" id="title" name="title" formControlName="titleId">
