@@ -29,6 +29,8 @@ export interface Person {
   addressFull: string;
   rawData: any;
   isNewPerson: boolean;
+  warningStatusId: number;
+  warningStatusComment: string;
 }
 
 export interface BasicPerson {

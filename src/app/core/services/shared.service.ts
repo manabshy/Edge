@@ -342,6 +342,7 @@ export interface DropdownListInfo {
  TelephoneTypes: Record<number, string>;
  PropertyStyles: InfoDetail[];
  PropertyTypes: InfoDetail[];
+ PersonWarningStatuses: InfoDetail[];
 }
 
 export interface InfoDetail {
