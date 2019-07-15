@@ -19,6 +19,7 @@ import { ToastrService } from 'ngx-toastr';
   providedIn: 'root'
 })
 export class SharedService {
+  infoDetail: DropdownListInfo;
 
   // private infoDetail: DropdownListInfo;
   // get dropdownListInfo() {
@@ -69,7 +70,7 @@ export class SharedService {
         const initialState = {
           data: data
         };
-        let modalClass = 'modal-lg';
+        const modalClass = 'modal-lg';
         const modal = this.modalService.show(NoteModalComponent, {class: modalClass, initialState});
         modal.content.subject = subject;
         return subject.asObservable();
@@ -226,7 +227,7 @@ export class SharedService {
   }
 
   isUKMobile(number: string) {
-    if(number){
+    if (number) {
       const formattedNumber = number.replace(' ', '');
       return  (formattedNumber.startsWith('07') || formattedNumber.startsWith('00') || formattedNumber.startsWith('+'))  &&
       !formattedNumber.startsWith('070') && !formattedNumber.startsWith('076');
@@ -265,24 +266,33 @@ export class SharedService {
     });
   }
 
-  getDropdownListInfo(): Observable<DropdownListInfo> {
+  getDropdownListInfo2(): Observable<DropdownListInfo> {
+    // const fromLocal = localStorage.getItem('dropdownListInfo');
+    // console.log('from storage', fromLocal);
+    // if(fromLocal){
+    //   console.log('here.....');
+    //   return;
+    // }
+    // console.log('not here.....');
+
   return  this.http.get<DropdownListInfo>(AppConstants.baseInfoUrl)
   .pipe(
+    tap(() => console.log('from db for localstorage')),
     tap(data => localStorage.setItem('dropdownListInfo', JSON.stringify(data))));
   }
-  // getDropdownListInfo2() {
-  //   console.log('detail', this.infoDetail)
-  //   if(this.infoDetail){
-  //     console.log('cache')
-  //     return of(this.infoDetail)
-  //   }
-  //   console.log('from database')
-  //   return  this.http.get<DropdownListInfo>(AppConstants.baseInfoUrl)
-  //   .pipe(
-  //     tap(data => this.infoDetail = data)
-  //     // tap(data => console.log('info from db',JSON.stringify(data)))
-  //   );
-  // }
+  getDropdownListInfo(): Observable<DropdownListInfo> {
+    if (this.infoDetail) {
+      console.log('cache');
+      return of(this.infoDetail);
+    }
+    console.log('from database');
+    return  this.http.get<DropdownListInfo>(AppConstants.baseInfoUrl)
+    .pipe(
+      tap(data => {
+        if (data) {
+          this.infoDetail = data;
+        }}));
+  }
 
   findAddress(searchTerm: string, container: string): Observable<AddressAutoCompleteData> {
     const addressRequest = new AddressRequest();

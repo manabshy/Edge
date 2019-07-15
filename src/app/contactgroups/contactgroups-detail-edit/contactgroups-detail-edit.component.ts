@@ -92,7 +92,9 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     private renderer: Renderer2) { }
 
   ngOnInit() {
-    this.listInfo = this.sharedService.dropdownListInfo;
+    // this.listInfo = this.sharedService.dropdownListInfo;
+    this.sharedService.getDropdownListInfo().subscribe(data => this.listInfo = data);
+    console.log('info detail in address component', this.listInfo );
     this.countries = this.listInfo.result.countries;
     this.titles = this.listInfo.result.titles;
     this.telephoneTypes = this.listInfo.result.telephoneTypes;
