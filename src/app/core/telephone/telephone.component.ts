@@ -21,10 +21,10 @@ export class TelephoneComponent implements OnInit {
   }
 
   callOrText() {
-    if(this.sms) {
-      if(this.warning) {
-        this.showWarning().subscribe(res =>{
-          if(res) {
+    if (this.sms) {
+      if (this.warning) {
+        this.showWarning().subscribe(res => {
+          if (res) {
             this.callOrTextChoice();
           }
         });
@@ -32,9 +32,9 @@ export class TelephoneComponent implements OnInit {
         this.callOrTextChoice();
       }
     } else {
-      if(this.warning) {
-        this.showWarning().subscribe(res =>{
-          if(res) {
+      if (this.warning) {
+        this.showWarning().subscribe(res => {
+          if (res) {
             this.call();
           }
         });
@@ -60,11 +60,11 @@ export class TelephoneComponent implements OnInit {
     const subject = new Subject<string>();
     const initialState = {
       warning: this.warning
-    }
+    };
     const modal = this.modalService.show(TelephoneModalComponent, {initialState: initialState});
     modal.content.subject = subject;
     subject.asObservable().subscribe(res => {
-      if(res === 'call') {
+      if (res === 'call') {
         this.call();
       } else {
         alert('SMS');
@@ -73,8 +73,8 @@ export class TelephoneComponent implements OnInit {
   }
 
   call() {
-    if(window.innerWidth < 576) {
-      window.open('tel:'+ this.number);
+    if (window.innerWidth < 576) {
+      window.open('tel:' + this.number);
     } else {
       alert('TAPI');
     }
