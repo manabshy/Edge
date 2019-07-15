@@ -1,11 +1,9 @@
-import { Component, OnInit, OnChanges, Renderer2, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Renderer2, Input, Output, EventEmitter } from '@angular/core';
 import { AddressAutoCompleteData, SharedService } from '../services/shared.service';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { AppConstants } from '../shared/app-constants';
 import { Person } from '../models/person';
 import { Company } from 'src/app/contactgroups/shared/contact-group';
-import { Address } from '../models/address';
 import { Property } from 'src/app/property/shared/property';
 
 @Component({
@@ -48,7 +46,6 @@ export class AddressComponent implements OnInit {
   //   return <FormGroup>this.addressForm.get('address');
   // }
   constructor(private sharedService: SharedService,
-              private contactGroupService: ContactGroupsService,
               private fb: FormBuilder,
               private renderer: Renderer2,
              ) { }
@@ -58,14 +55,15 @@ export class AddressComponent implements OnInit {
   }
 
   ngOnChanges() {
-    this.init()
+    this.init();
   }
 
   init() {
-    this.sharedService.getDropdownListInfo().subscribe(data => this.listInfo = data);
-    console.log('info detail in address component', this.listInfo );
     // this.listInfo = this.sharedService.dropdownListInfo;
-    this.countries = this.listInfo.result.countries;
+    this.sharedService.getDropdownListInfo().subscribe(data => {
+      this.listInfo = data;
+      this.countries = this.listInfo.result.countries;
+    });
     this.addressForm = this.fb.group({
       fullAddress: [''],
       addressLines: ['', {validators: Validators.maxLength(500)}],
@@ -126,46 +124,6 @@ export class AddressComponent implements OnInit {
       this.foundAddress = data;
       this.isLoadingAddressVisible = false;
     });
-  }
-  private retrieveAddress(id: string) {
-    console.log('retrieve');
-    if (this.foundAddress) {
-      this.sharedService.getAddress(id).subscribe(data => {
-        this.retrievedAddresses = data;
-        const retrievedAddress = this.retrievedAddresses.Items[0];
-        const keys = Object.keys(retrievedAddress);
-        let retAddressLines = '';
-        keys.forEach(x => {
-          if (x.includes('Line') && retrievedAddress[x]) {
-            retAddressLines += retrievedAddress[x] + '\n';
-          }
-        });
-        if(!this.propertyDetails) {
-          this.addressForm.patchValue({
-            fullAddress: '',
-            addressLines: (retrievedAddress.Company ? retrievedAddress.Company + '\n' : '') + retAddressLines + retrievedAddress.City,
-            postCode: retrievedAddress.PostalCode
-          });
-        } else {
-          this.addressForm.patchValue({
-            flatNumber: retrievedAddress.SubBuilding.replace(/flat/gi, '').trim(),
-            houseNumber: retrievedAddress.BuildingNumber,
-            houseBuildingName: retrievedAddress.BuildingName,
-            streetName: retrievedAddress.Street,
-            town: retrievedAddress.City,
-            postCode: retrievedAddress.PostalCode
-          });
-        }
-        this.emitAddress();
-        setTimeout(() => {
-          let element = 'addressLines';
-          if(this.propertyDetails) {
-            element = 'flatNumber';
-          }
-          document.getElementById(element).scrollIntoView({block: 'center'});
-        });
-      });
-    }
   }
 
   private emitAddress() {

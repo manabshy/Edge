@@ -94,12 +94,13 @@ export class ContactgroupsDetailEditComponent implements OnInit {
 
   ngOnInit() {
     // this.listInfo = this.sharedService.dropdownListInfo;
-    this.sharedService.getDropdownListInfo().subscribe(data => this.listInfo = data);
-    console.log('info detail in address component', this.listInfo );
-    this.countries = this.listInfo.result.countries;
-    this.titles = this.listInfo.result.titles;
-    this.warnings = this.listInfo.result.personWarningStatuses;
-    this.telephoneTypes = this.listInfo.result.telephoneTypes;
+    this.sharedService.getDropdownListInfo().subscribe(data => {
+      this.listInfo = data;
+      this.countries = this.listInfo.result.countries;
+      this.titles = this.listInfo.result.titles;
+      this.warnings = this.listInfo.result.personWarningStatuses;
+      this.telephoneTypes = this.listInfo.result.telephoneTypes;
+    });
     this.route.params.subscribe(params => this.personId = +params['personId'] || 0);
     this.route.queryParams.subscribe(params => {
       this.groupPersonId = +params['groupPersonId'] || 0;
