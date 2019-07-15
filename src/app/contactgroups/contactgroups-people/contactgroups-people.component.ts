@@ -20,6 +20,9 @@ import { AppUtils } from 'src/app/core/shared/utils';
   styleUrls: ['./contactgroups-people.component.scss']
 })
 export class ContactgroupsPeopleComponent implements OnInit {
+  listInfo: any;
+  warnings: any;
+  warning: any;
   isCollapsed = {};
   isSelectedCollapsed = false;
   @ViewChild('offCanvasContent') offCanvasContent: ElementRef;
@@ -100,6 +103,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   init() {
+    this.listInfo = this.sharedService.dropdownListInfo;
+    this.warnings = this.listInfo.result.personWarningStatuses;
     this.removedPersonIds = [];
     this.selectedPeople = [];
     if(!this.contactGroupId) {
@@ -714,5 +719,17 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   cancel() {
     this._location.back();
+  }
+
+  showWarning(id):any {
+    let warning = null;
+    if(this.warnings) {
+      this.warnings.forEach(x=>{
+        if(x.id === id) {
+          warning = x;
+        }
+      })
+    }
+    return warning;
   }
 }
