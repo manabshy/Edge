@@ -109,7 +109,6 @@ export class SharedService {
   }
 
   formatPostCode(postCodeToCheck: string) {
-
     // Permitted letters depend upon their position in the postcode.
     const alpha1 = '[abcdefghijklmnoprstuwyz]';                       // Character 1
     const alpha2 = '[abcdefghklmnopqrstuvwxy]';                       // Character 2

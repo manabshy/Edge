@@ -148,6 +148,7 @@
                   <div class="row">
                     <div class="col-auto">
                       <app-score-badge [person]="person"></app-score-badge>
+                      <span class="badge badge-pill badge-danger mb-2 mr-2" *ngIf="person?.warningStatusId !== 1">{{showWarning(person?.warningStatusId)?.value}}</span>
                       <span class="badge badge-pill badge-info mb-2"
                         *ngIf="person?.isMainPerson && contactGroupDetails.contactType !== 4">Main Person</span>
                     </div>
@@ -207,7 +208,7 @@
                         *ngIf="!person?.phoneNumbers.length || !person?.phoneNumbers[0].number">No phone</p>
                         <ng-container *ngFor="let phoneNumber of person?.phoneNumbers">
                           <p class="mb-2" *ngIf="phoneNumber?.number">
-                            <app-telephone [number]="phoneNumber.number" [sms]="phoneNumber.sendSMS"></app-telephone>
+                            <app-telephone [number]="phoneNumber.number" [sms]="phoneNumber.sendSMS" [warning]="showWarning(person?.warningStatusId)"></app-telephone>
                           </p>
                         </ng-container>
                     </div>
@@ -409,12 +410,12 @@
                 <div class="col-sm col-lg-2"></div>
               </div>
             </div>
-            <div class="list-group-item list-group-item-action" *ngFor="let foundPerson of potentialDuplicatePeople?.matches | orderBy: orderFoundPeople:reverse" [ngClass]="{'disabled': checkDuplicateInContactGroup(foundPerson?.personId)}">
+            <div class="list-group-item list-group-item-action" *ngFor="let foundPerson of potentialDuplicatePeople?.matches" [ngClass]="{'disabled': checkDuplicateInContactGroup(foundPerson?.personId)}">
               <div class="row align-items-end align-items-sm-center"
               (click)="selectPerson(foundPerson?.personId)">
-                <div class="col-12 mb-2 mb-sm-0" *ngIf="foundPerson?.matchScore">
-                  <span class="badge badge-pill badge-success" *ngIf="foundPerson?.matchScore === 10">Full Match</span>
-                  <span class="badge badge-pill badge-warning" *ngIf="foundPerson?.matchScore <= 7">Good Match</span>
+                <div class="col-12 mb-2 mb-sm-0" *ngIf="foundPerson?.ranking > 150">
+                  <span class="badge badge-pill badge-success" *ngIf="foundPerson?.ranking > 500">Full Match</span>
+                  <span class="badge badge-pill badge-warning" *ngIf="foundPerson?.ranking > 300 && foundPerson?.ranking < 500">Good Match</span>
                 </div>
                 <div class="col-sm">
                   <dl class="row">

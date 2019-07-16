@@ -1,11 +1,9 @@
-import { Component, OnInit, OnChanges, Renderer2, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Renderer2, Input, Output, EventEmitter } from '@angular/core';
 import { AddressAutoCompleteData, SharedService } from '../services/shared.service';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { AppConstants } from '../shared/app-constants';
 import { Person } from '../models/person';
 import { Company } from 'src/app/contactgroups/shared/contact-group';
-import { Address } from '../models/address';
 import { Property } from 'src/app/property/shared/property';
 
 @Component({
@@ -48,7 +46,6 @@ export class AddressComponent implements OnInit {
   //   return <FormGroup>this.addressForm.get('address');
   // }
   constructor(private sharedService: SharedService,
-              private contactGroupService: ContactGroupsService,
               private fb: FormBuilder,
               private renderer: Renderer2,
              ) { }
@@ -58,14 +55,15 @@ export class AddressComponent implements OnInit {
   }
 
   ngOnChanges() {
-    this.init()
+    this.init();
   }
 
   init() {
-    this.sharedService.getDropdownListInfo().subscribe(data => this.listInfo = data);
-    console.log('info detail in address component', this.listInfo );
     // this.listInfo = this.sharedService.dropdownListInfo;
-    this.countries = this.listInfo.result.countries;
+    this.sharedService.getDropdownListInfo().subscribe(data => {
+      this.listInfo = data;
+      this.countries = this.listInfo.result.countries;
+    });
     this.addressForm = this.fb.group({
       fullAddress: [''],
       addressLines: ['', {validators: Validators.maxLength(500)}],
@@ -127,8 +125,8 @@ export class AddressComponent implements OnInit {
       this.isLoadingAddressVisible = false;
     });
   }
-  private retrieveAddress(id: string) {
-    console.log('retrieve');
+
+  retrieveAddress(id: string) {
     if (this.foundAddress) {
       this.sharedService.getAddress(id).subscribe(data => {
         this.retrievedAddresses = data;
@@ -140,7 +138,7 @@ export class AddressComponent implements OnInit {
             retAddressLines += retrievedAddress[x] + '\n';
           }
         });
-        if(!this.propertyDetails) {
+        if (!this.propertyDetails) {
           this.addressForm.patchValue({
             fullAddress: '',
             addressLines: (retrievedAddress.Company ? retrievedAddress.Company + '\n' : '') + retAddressLines + retrievedAddress.City,
@@ -159,10 +157,10 @@ export class AddressComponent implements OnInit {
         this.emitAddress();
         setTimeout(() => {
           let element = 'addressLines';
-          if(this.propertyDetails) {
+          if (this.propertyDetails) {
             element = 'flatNumber';
           }
-          document.getElementById(element).scrollIntoView({block: 'center'});
+          document.getElementById(element).scrollIntoView({ block: 'center' });
         });
       });
     }
@@ -201,15 +199,17 @@ export class AddressComponent implements OnInit {
     switch(true) {
       case !!this.personDetails:
         this.personDetails = person;
-        if (person.address.postCode) {
-          person.address.postCode = person.address.postCode.trim();
+        if(person.address){
+          if (person.address.postCode) {
+            person.address.postCode = person.address.postCode.trim();
+          }
+          this.addressForm.patchValue({
+              addressLines: person.address.addressLines,
+              postCode: person.address.postCode,
+              countryId: person.address.countryId,
+              country: person.address.country,
+          });
         }
-        this.addressForm.patchValue({
-            addressLines: person.address.addressLines,
-            postCode: person.address.postCode,
-            countryId: person.address.countryId,
-            country: person.address.country,
-        });
         break;
       case !!this.companyDetails:
         this.companyDetails = company;

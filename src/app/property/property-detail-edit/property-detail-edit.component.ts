@@ -32,9 +32,11 @@ export class PropertyDetailEditComponent implements OnInit {
 
   ngOnInit() {
     // this.listInfo = this.sharedService.dropdownListInfo;
-    this.sharedService.getDropdownListInfo().subscribe(data => this.listInfo = data);
-    this.propertyTypes = this.listInfo.result.propertyTypes;
-    this.allPropertyStyles = this.listInfo.result.propertyStyles;
+    this.sharedService.getDropdownListInfo().subscribe(data => {
+      this.listInfo = data;
+      this.propertyTypes = this.listInfo.result.propertyTypes;
+      this.allPropertyStyles = this.listInfo.result.propertyStyles;
+    });
     this.route.params.subscribe(params => {
       this.propertyId = +params['id'] || 0;
     });

@@ -42,8 +42,10 @@ export class ContactgroupsDetailComponent implements OnInit {
   init() {
     // this.getContactGroupById(this.contactGroupId);
     // this.listInfo = this.sharedService.dropdownListInfo;
-    this.sharedService.getDropdownListInfo().subscribe(data=> this.listInfo = data);
-    this.warnings = this.listInfo.result.personWarningStatuses;
+    this.sharedService.getDropdownListInfo().subscribe(data=> {
+      this.listInfo = data;
+      this.warnings = this.listInfo.result.personWarningStatuses;
+    });
     this.getSearchedPersonDetails(this.personId);
     this.getSearchedPersonContactGroups(this.personId);
     this.getSearchedPersonSummaryInfo(this.personId);
@@ -60,8 +62,8 @@ export class ContactgroupsDetailComponent implements OnInit {
     this.contactGroupService.getPerson(personId).subscribe(data => {
       this.searchedPersonDetails = data;
       if(this.searchedPersonDetails.warningStatusId !== 1) {
-        this.warnings.forEach(x=>{
-          if(x.id === this.searchedPersonDetails.warningStatusId) {
+        this.warnings.forEach(x => {
+          if (x.id === this.searchedPersonDetails.warningStatusId) {
             this.warning = x;
           }
         })
