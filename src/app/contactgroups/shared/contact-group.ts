@@ -139,6 +139,7 @@ export interface PeopleAutoCompleteResult {
   emailAddresses: string[];
   phoneNumbers: string[];
   matchScore: number;
+  ranking: number;
 }
 export interface BasicContactGroup {
   contactGroupId: number;
