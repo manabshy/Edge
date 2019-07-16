@@ -3,6 +3,8 @@ import { Subject } from 'rxjs';
 import { BsModalService } from 'ngx-bootstrap/modal/';
 import { TelephoneModalComponent } from '../telephone-modal/telephone-modal.component';
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
+import { TapiService } from '../services/tapi.service';
+import { TapiInfo } from '../models/tapi-info';
 
 @Component({
   selector: 'app-telephone',
@@ -15,7 +17,7 @@ export class TelephoneComponent implements OnInit {
   @Input() sms: boolean;
   @Input() warning: any;
 
-  constructor(private modalService: BsModalService) { }
+  constructor(private modalService: BsModalService, private tapiService: TapiService) { }
 
   ngOnInit() {
   }
@@ -76,7 +78,16 @@ export class TelephoneComponent implements OnInit {
     if (window.innerWidth < 576) {
       window.open('tel:' + this.number);
     } else {
-      alert('TAPI');
+      // alert('TAPI');
+
+      const tapiInfo: TapiInfo = { officeId: 10,
+        staffId: 10,
+        isOutGoingCall : true,
+        callerNmber: '4629',
+        calledNumber: '07718702809',
+        ipAddress: '192.168.10.29'};
+
+      this.tapiService.putCallRequest(tapiInfo);
     }
   }
 }
