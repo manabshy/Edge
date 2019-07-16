@@ -45,6 +45,18 @@ export class SharedService {
     }
   }
 
+  showWarning(id, warnings):any {
+    let warning = null;
+    if(warnings) {
+      warnings.forEach(x=>{
+        if(x.id === id) {
+          warning = x;
+        }
+      })
+    }
+    return warning;
+  }
+
   showSuccess(message?: string) {
     this.toastr.success(message, 'You\'ve done it!');
   }
