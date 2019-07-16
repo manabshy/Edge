@@ -725,14 +725,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   showWarning(id):any {
-    let warning = null;
-    if(this.warnings) {
-      this.warnings.forEach(x=>{
-        if(x.id === id) {
-          warning = x;
-        }
-      })
-    }
-    return warning;
+    return this.sharedService.showWarning(id, this.warnings);
   }
 }

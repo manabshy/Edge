@@ -305,7 +305,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       phoneArray.push(this.fb.group({
         number: [x.number, { validators: [Validators.required, Validators.minLength(7), Validators.maxLength(16), Validators.pattern(/^\+?[ \d]+$/g)]}],
         typeId: x.typeId,
-        sendSMS: x.sendSMS,
+        sendSMS: x.sendSMS || false,
         isPreferred: x.isPreferred,
         comments: x.comments
       }, {validators: WedgeValidators.phoneTypeValidator(this)}));
