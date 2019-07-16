@@ -16,7 +16,7 @@ export class TapiService {
 
   putCallRequest(tapiInfo: TapiInfo): Observable<any> {
     const url = `${AppConstants.baseTapiUrl}`;
-    console.log('ttapi info', tapiInfo);
+    console.log('tapi info', tapiInfo);
     return this.http.post<TapiInfo>(url, tapiInfo).pipe(tap(data => console.log('result', data)));
     // return false;
   }

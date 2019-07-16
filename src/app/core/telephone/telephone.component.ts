@@ -79,7 +79,7 @@ export class TelephoneComponent implements OnInit {
       window.open('tel:' + this.number);
     } else {
       // alert('TAPI');
-
+      console.log('tapi call here');
       const tapiInfo: TapiInfo = { officeId: 10,
         staffId: 10,
         isOutGoingCall : true,
@@ -87,7 +87,8 @@ export class TelephoneComponent implements OnInit {
         calledNumber: '07718702809',
         ipAddress: '192.168.10.29'};
 
-      this.tapiService.putCallRequest(tapiInfo);
+      this.tapiService.putCallRequest(tapiInfo).subscribe(data => console.log(data));
+      console.log('tapi call here called');
     }
   }
 }
