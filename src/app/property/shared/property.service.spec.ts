@@ -10,31 +10,31 @@ fdescribe('PropertyService', () => {
   let httpTestingController: HttpTestingController;
   let service: PropertyService;
   const baseUrl = `https://dandg-api-wedge-dev.azurewebsites.net/v10/properties`;
- const address: Address = {
-                  addressLines: '413 test address',
-                  addressLine2: '413 test address',
-                  flatNumber: '88',
-                  houseBuildingName: 'Aurora Apartments',
-                  houseNumber: null,
-                  inCode: '4FW',
-                  latitude: null,
-                  longitude: null,
-                  outCode: 'SW18',
-                  streetName: '10 Buckhold Road',
-                  town: 'London',
-                  postCode: null,
-                  countryId: 0,
-                  country: null
-                };
+  const address: Address = {
+    addressLines: '413 test address',
+    addressLine2: '413 test address',
+    flatNumber: '88',
+    houseBuildingName: 'Aurora Apartments',
+    houseNumber: null,
+    inCode: '4FW',
+    latitude: null,
+    longitude: null,
+    outCode: 'SW18',
+    streetName: '10 Buckhold Road',
+    town: 'London',
+    postCode: null,
+    countryId: 0,
+    country: null
+  };
   const mockProperty: Property = {
-                                  propertyId: 1,
-                                  address: address,
-                                  floorOther: null,
-                                  floorType: null,
-                                  numberOfFloors: 2,
-                                  propertyTypeId: PropertyType.Flat,
-                                  propertyStyleId: PropertyStyle.Houseboat
-                                };
+    propertyId: 1,
+    address: address,
+    floorOther: null,
+    floorType: null,
+    numberOfFloors: 2,
+    propertyTypeId: PropertyType.Flat,
+    propertyStyleId: PropertyStyle.Houseboat
+  };
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [PropertyService],
