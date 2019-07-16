@@ -17,16 +17,16 @@ export class NoteModalComponent implements OnInit {
   selectedPerson: Person;
   noteForm: FormGroup;
   shortcuts = {
-    'LVM': 'left voice mail',
-    'LVMTCB': 'left voice mail to call back',
-    'SW': 'spoke with',
-    'FDT': 'foreign dial tone',
-    'SMS\'D': 'sent an SMS',
-    'RO': 'rang off/out',
-    'STVM': 'straight to voice mail',
-    'EA/OA': 'external/enemy agent or other agent',
-    'UO': 'under offer',
-    'NNW': 'number not working'
+    'LVM': 'Left voice mail',
+    'LVMTCB': 'Left voice mail to call back',
+    'SW': 'Spoke with',
+    'FDT': 'Foreign dial tone',
+    'SMS\'D': 'Sent an SMS',
+    'RO': 'Rang off/out',
+    'STVM': 'Straight to voice mail',
+    'EA/OA': 'External/enemy agent or other agent',
+    'UO': 'Under offer',
+    'NNW': 'Number not working'
   };
   shortcutsAdded: any[] = [];
   public keepOriginalOrder = (a) => a.key;
