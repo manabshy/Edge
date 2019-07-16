@@ -125,6 +125,8 @@ export interface ContactGroupAutoCompleteResult{
   outcode: string;
   incode: string;
   postCode: string;
+  warningStatusId: number;
+  warningStatusComment: string;
   contactGroups: BasicContactGroup[];
 }
 export interface PeopleAutoCompleteResult {

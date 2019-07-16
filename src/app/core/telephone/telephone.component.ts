@@ -23,6 +23,9 @@ export class TelephoneComponent implements OnInit {
   }
 
   callOrText() {
+    event.stopPropagation();
+    event.preventDefault();
+
     if (this.sms) {
       if (this.warning) {
         this.showWarning().subscribe(res => {
