@@ -126,6 +126,46 @@ export class AddressComponent implements OnInit {
     });
   }
 
+  retrieveAddress(id: string) {
+    if (this.foundAddress) {
+      this.sharedService.getAddress(id).subscribe(data => {
+        this.retrievedAddresses = data;
+        const retrievedAddress = this.retrievedAddresses.Items[0];
+        const keys = Object.keys(retrievedAddress);
+        let retAddressLines = '';
+        keys.forEach(x => {
+          if (x.includes('Line') && retrievedAddress[x]) {
+            retAddressLines += retrievedAddress[x] + '\n';
+          }
+        });
+        if (!this.propertyDetails) {
+          this.addressForm.patchValue({
+            fullAddress: '',
+            addressLines: (retrievedAddress.Company ? retrievedAddress.Company + '\n' : '') + retAddressLines + retrievedAddress.City,
+            postCode: retrievedAddress.PostalCode
+          });
+        } else {
+          this.addressForm.patchValue({
+            flatNumber: retrievedAddress.SubBuilding.replace(/flat/gi, '').trim(),
+            houseNumber: retrievedAddress.BuildingNumber,
+            houseBuildingName: retrievedAddress.BuildingName,
+            streetName: retrievedAddress.Street,
+            town: retrievedAddress.City,
+            postCode: retrievedAddress.PostalCode
+          });
+        }
+        this.emitAddress();
+        setTimeout(() => {
+          let element = 'addressLines';
+          if (this.propertyDetails) {
+            element = 'flatNumber';
+          }
+          document.getElementById(element).scrollIntoView({ block: 'center' });
+        });
+      });
+    }
+  }
+
   private emitAddress() {
     const addressData = this.addressForm.value;
     let address;
@@ -159,15 +199,17 @@ export class AddressComponent implements OnInit {
     switch(true) {
       case !!this.personDetails:
         this.personDetails = person;
-        if (person.address.postCode) {
-          person.address.postCode = person.address.postCode.trim();
+        if(person.address){
+          if (person.address.postCode) {
+            person.address.postCode = person.address.postCode.trim();
+          }
+          this.addressForm.patchValue({
+              addressLines: person.address.addressLines,
+              postCode: person.address.postCode,
+              countryId: person.address.countryId,
+              country: person.address.country,
+          });
         }
-        this.addressForm.patchValue({
-            addressLines: person.address.addressLines,
-            postCode: person.address.postCode,
-            countryId: person.address.countryId,
-            country: person.address.country,
-        });
         break;
       case !!this.companyDetails:
         this.companyDetails = company;

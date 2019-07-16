@@ -2,7 +2,7 @@
 <div class="container" [ngClass]="{'p-0': basicPerson}">
   <div class="page-title sticky-top" [ngClass]="{'pt-3': basicPerson}">
     <h4 *ngIf="!basicPerson">Edit Person</h4>
-    <app-score-badge [bar]="true" [person]="personForm.value"></app-score-badge>
+    <app-score-badge [bar]="true" [person]="personForm?.value"></app-score-badge>
   </div>
   <div class="text-center" *ngIf="!personDetails && !basicPerson">
     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading details ...
@@ -127,7 +127,7 @@
           </div>
       </div>
    </div> -->
-   <app-address [personDetails]="personDetails" (addressDetails)="getAddress($event)"></app-address>
+   <app-address [personDetails]="personDetails || basicPerson" (addressDetails)="getAddress($event)"></app-address>
    <div class="row justify-content-end" *ngIf="isContactErrorVisible" id="contact-error">
      <div class="col-sm-10">
         <div class="alert alert-danger">Please enter an email OR a phone number</div>
