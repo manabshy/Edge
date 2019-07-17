@@ -4,6 +4,8 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { Subject } from 'rxjs';
 import { Person } from '../models/person';
 import { TargetLocator } from 'selenium-webdriver';
+import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
+import { PersonNote } from 'src/app/contactgroups/shared/contact-group';
 
 @Component({
   selector: 'app-note-modal',
@@ -13,8 +15,9 @@ import { TargetLocator } from 'selenium-webdriver';
 export class NoteModalComponent implements OnInit {
   @Input() data;
   subject: Subject<boolean>;
-  step2: boolean = false;
+  step2 = false;
   selectedPerson: Person;
+  personNote: PersonNote;
   noteForm: FormGroup;
   shortcuts = {
     'LVM': 'Left voice mail',
@@ -30,7 +33,7 @@ export class NoteModalComponent implements OnInit {
   };
   shortcutsAdded: any[] = [];
   public keepOriginalOrder = (a) => a.key;
-  constructor(public bsModalRef: BsModalRef, private fb: FormBuilder) { }
+  constructor(public bsModalRef: BsModalRef, private fb: FormBuilder, private contactGroupService: ContactGroupsService) { }
 
   ngOnInit() {
     this.selectedPerson = this.data.person || null;
@@ -42,8 +45,8 @@ export class NoteModalComponent implements OnInit {
   }
 
   select(person: Person) {
-    if(person) {
-      this.selectedPerson = person
+    if (person) {
+      this.selectedPerson = person;
     }
     this.step2 = true;
   }
@@ -56,17 +59,41 @@ export class NoteModalComponent implements OnInit {
     } else {
       this.shortcutsAdded.push(shortcut);
     }
-    this.shortcutsAdded.forEach(x=>{
+    this.shortcutsAdded.forEach(x => {
       text += x + ', ';
-    })
-    text = text.replace(/,\s*$/, "");
+    });
+    text = text.replace(/,\s*$/, '');
     this.noteForm.get('text').setValue(text);
   }
 
   action(value: boolean) {
+    this.saveNote();
     this.bsModalRef.hide();
     this.subject.next(value);
     this.subject.complete();
   }
 
+  saveNote() {
+    const note = {...this.personNote, ...this.noteForm.value};
+    console.log('here............', note);
+    if(note && this.selectedPerson){
+      note.personId = this.selectedPerson.personId;
+      this.contactGroupService.addPersonNote(note).subscribe(data=>{
+        console.log('added  person note', data);
+      })
+    }
+    // if (this.noteForm) {
+    //   this.noteForm.reset();
+    // }
+    // if (this.noteForm.valid) {
+    //   if (this.noteForm.dirty) {
+    //     const note = {...this.personNote, ...this.noteForm.value};
+    //     if (note && this.selectedPerson) {
+    //       this.contactGroupService.addPersonNotes(note).subscribe(data => {
+    //         console.log('added  person note', data);
+    //       });
+    //     }
+    //   }
+    // }
+  }
 }
