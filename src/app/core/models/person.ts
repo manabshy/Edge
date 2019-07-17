@@ -68,7 +68,6 @@ export interface PhoneType {
   name: string;
   valueStr: string;
 }
-
 export interface Referees {
   referralCompanyId: number;
   name: string;

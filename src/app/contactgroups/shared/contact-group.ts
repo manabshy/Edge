@@ -74,17 +74,17 @@ export interface ContactAddress extends Address {
   countryId: number;
 }
 export interface ContactGroupsNote {
+  contactNoteId: number;
   contactGroupId: number;
-  noteId: number;
-  note: string;
-  noteDateTime: string;
-  noteType: string;
+  text: string;
   isImportant: boolean;
-  isPublic: boolean;
-  currentUserName: string;
-  currentStaffMemberId: number;
 }
-
+export interface PersonNote {
+  personNoteId: number;
+  personId: number;
+  text: string;
+  isImportant: boolean;
+}
 export interface AutoCompleteOption {
   isNameSearch: boolean;
   searchTerm: string;
@@ -218,5 +218,11 @@ export interface PersonSummaryFiguresData extends ResultData {
 
 export interface PersonContactData extends ResultData {
   result: Person;
+}
+export interface ContactGroupsNoteData extends ResultData {
+  result: ContactGroupsNote;
+}
+export interface PersonNoteData extends ResultData {
+  result: PersonNote[];
 }
 

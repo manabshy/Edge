@@ -7,7 +7,7 @@ import { ContactGroupAutoCompleteResult, ContactGroupAutoCompleteData,
          BasicContactGroupData, PeopleAutoCompleteResult, PeopleAutoCompleteData,
          CompanyAutoCompleteResult, CompanyContactGroupAutoCompleteData as CompanyAutoCompleteData,
          Company, CompanyData, SignerAutoCompleteData, Signer, PersonSummaryFiguresData,
-         PersonSummaryFigures, SignerData, PotentialDuplicateResult, PeopleAutoCompleteData2 } from './contact-group';
+         PersonSummaryFigures, SignerData, PotentialDuplicateResult, PeopleAutoCompleteData2, PersonNoteData, PersonNote } from './contact-group';
 import { map, tap } from 'rxjs/operators';
 import { Person, BasicPerson } from 'src/app/core/models/person';
 
@@ -136,6 +136,13 @@ export class ContactGroupsService {
     return this.http.post(url, contactGroup).pipe(
       map(response => response),
       tap(data => console.log('updated company contact details here...', JSON.stringify(data))));
+  }
+
+  getPersonNotes(personId: number): Observable<PersonNote[]> {
+    const url = `${AppConstants.basePersonUrl}/${personId}/personNotes`;
+    return this.http.get<PersonNoteData>(url).pipe(
+      map(response => response.result),
+      tap(data => console.log('notes here...', JSON.stringify(data))));
   }
 }
 
