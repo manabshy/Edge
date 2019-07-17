@@ -7,7 +7,7 @@ import { ContactGroupAutoCompleteResult, ContactGroupAutoCompleteData,
          BasicContactGroupData, PeopleAutoCompleteResult, PeopleAutoCompleteData,
          CompanyAutoCompleteResult, CompanyContactGroupAutoCompleteData as CompanyAutoCompleteData,
          Company, CompanyData, SignerAutoCompleteData, Signer, PersonSummaryFiguresData,
-         PersonSummaryFigures, SignerData, PotentialDuplicateResult, PeopleAutoCompleteData2, PersonNoteData, PersonNote } from './contact-group';
+         PersonSummaryFigures, SignerData, PotentialDuplicateResult, PeopleAutoCompleteData2, PersonNoteData, PersonNote, ContactGroupsNoteData, ContactGroupsNote } from './contact-group';
 import { map, tap } from 'rxjs/operators';
 import { Person, BasicPerson } from 'src/app/core/models/person';
 
@@ -143,6 +143,24 @@ export class ContactGroupsService {
     return this.http.get<PersonNoteData>(url).pipe(
       map(response => response.result),
       tap(data => console.log('notes here...', JSON.stringify(data))));
+  }
+  getContactGroupNotes(contactGroupId: number): Observable<ContactGroupsNote[]> {
+    const url = `${AppConstants.baseContactGroupUrl}/${contactGroupId}/contactNotes`;
+    return this.http.get<ContactGroupsNoteData>(url).pipe(
+      map(response => response.result),
+      tap(data => console.log('group notes here...', JSON.stringify(data))));
+  }
+  addPersonNote(personNote: PersonNote): Observable<any> {
+    const url = `${AppConstants.basePersonUrl}/${personNote.personId}/personNotes`;
+    return this.http.post(url, personNote).pipe(
+      map(response => response),
+      tap(data => console.log('added  person note here...', JSON.stringify(data))));
+  }
+  addContactGroupNote(contactGroupNote: ContactGroupsNote): Observable<any> {
+    const url = `${AppConstants.basePersonUrl}/${contactGroupNote.contactGroupId}/contactNotes`;
+    return this.http.post(url, contactGroupNote).pipe(
+      map(response => response),
+      tap(data => console.log('added  contactgroup note here...', JSON.stringify(data))));
   }
 }
 
