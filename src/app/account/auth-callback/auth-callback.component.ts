@@ -17,7 +17,12 @@ export class AuthCallbackComponent implements OnInit {
 
     setTimeout(() => {
       this._zone.run(
-        () => this.router.navigate(['/home'])
+        () => {
+          const prev = localStorage.getItem('prev');
+          const url = prev && prev !== '/' ? prev : '/home';
+
+          this.router.navigateByUrl(url)
+        }
       );
     }, 200);
   }

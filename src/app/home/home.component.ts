@@ -36,7 +36,6 @@ export class HomeComponent implements OnInit {
               private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.staffMemberService.getCurrentStaffMember().subscribe();
     this.sharedService.getDropdownListInfo().subscribe(data=> this.info = data);
     // this.sharedService.getDropdownListInfo().subscribe();
     // console.log('info detail in home component', this.info );

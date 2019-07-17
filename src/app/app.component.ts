@@ -15,13 +15,16 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class AppComponent implements OnInit, AfterViewChecked {
   title = 'Wedge';
-  isNavVisible: boolean;
   isScrollTopVisible = false;
   isFading = false;
   @ViewChild('appContainer') appContainer : ElementRef;
   appHeightObservable;
   get currentStaffMember(): StaffMember {
     return this.staffMemberService.currentStaffMember;
+  }
+
+  get isNavVisible(): boolean {
+    return this.authService.isLoggedIn();
   }
 
   constructor(private router: Router,
@@ -38,6 +41,11 @@ export class AppComponent implements OnInit, AfterViewChecked {
     ).subscribe((event: any[]) => {
       AppUtils.prevRouteBU = AppUtils.prevRoute || '';
       AppUtils.prevRoute = event[0].urlAfterRedirects;
+
+      if(AppUtils.prevRoute !== '/login' && !AppUtils.prevRoute.includes('/auth-callback')){
+        localStorage.setItem('prev', AppUtils.prevRoute);
+      }
+
       this.isScrollTopVisible = false;
       this.isFading = true;
       setTimeout(()=>{
@@ -48,6 +56,9 @@ export class AppComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit() {
+    if(this.isNavVisible) {
+      this.staffMemberService.getCurrentStaffMember().subscribe();
+    }
     this.appHeightObservable = new MutationObserver(()=>{
       this.toggleScrollTop();
     });
@@ -56,7 +67,6 @@ export class AppComponent implements OnInit, AfterViewChecked {
 
 
   ngAfterViewChecked() {
-    this.isNavVisible = this.authService.isLoggedIn();
 
     if (!this.isNavVisible) {
       this.renderer.addClass(document.body, 'bg-dark');
