@@ -112,6 +112,19 @@ export class SharedService {
     });
   }
 
+  objectToMap(o) {
+    let m = new Map()
+    for(let k of Object.keys(o)) {
+        if(o[k] instanceof Object) {
+            m.set(k, this.objectToMap(o[k]))   
+        }
+        else {
+            m.set(k, o[k])
+        }    
+    }
+      return m
+  }
+
   ISOToDate(date: Date): Date {
     let formattedDate = null;
     if (date) {

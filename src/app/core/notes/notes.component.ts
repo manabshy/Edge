@@ -47,7 +47,6 @@ export class NotesComponent implements OnInit {
   }
 
   addNote(dataNote) {
-    console.log('info for note', dataNote);
     this.sharedService.addNote(this.dataNote);
   }
 

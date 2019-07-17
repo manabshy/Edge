@@ -40,7 +40,10 @@ export const mockProperty: Property = {
   floorType: null,
   numberOfFloors: 2,
   propertyTypeId: PropertyType.Flat,
-  propertyStyleId: PropertyStyle.Houseboat
+  propertyStyleId: PropertyStyle.Houseboat,
+  regionId: 1,
+  areaId: 1,
+  subAreaId: 2,
 };
 export const mockProperty2: Property = {
   propertyId: 2,
@@ -49,6 +52,9 @@ export const mockProperty2: Property = {
   floorType: null,
   numberOfFloors: 2,
   propertyTypeId: PropertyType.House,
-  propertyStyleId: PropertyStyle.Detached
+  propertyStyleId: PropertyStyle.Detached,
+  regionId: 1,
+  areaId: 1,
+  subAreaId: 2,
 };
 export const MockProperties = [mockProperty, mockProperty2];

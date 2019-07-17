@@ -53,9 +53,9 @@ export class NoteModalComponent implements OnInit {
 
   consumeShortcut(shortcut: string) {
     const index = this.shortcutsAdded.indexOf(shortcut);
-    const text = '';
-    if (index >= 0) {
-      this.shortcutsAdded.splice(index, 1);
+    let text = '';
+    if(index >= 0) {
+      this.shortcutsAdded.splice(index,1);
     } else {
       this.shortcutsAdded.push(shortcut);
     }

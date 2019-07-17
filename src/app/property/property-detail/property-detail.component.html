@@ -31,9 +31,9 @@
       <div class="col-12">
         <div class="row align-items-center">
           <div class="col">
-            <span class="badge badge-pill badge-info mr-1">London</span>
-            <span class="badge badge-pill badge-info mr-1">Chelsea</span>
-            <span class="badge badge-pill badge-info">SW6</span>
+            <span class="badge badge-pill badge-info mr-1">{{region}}</span>
+            <span class="badge badge-pill badge-info mr-1">{{area}}</span>
+            <span class="badge badge-pill badge-info">{{subArea}}</span>
           </div>
           <div class="col-auto">
             <small class="text-muted">ID: {{searchedPropertyDetails?.propertyId}}</small>
@@ -56,11 +56,6 @@
       </a>
       <a [routerLink]="['notes']" class="list-group-item list-group-item-action clearfix">
         <div class="pull-left float-left btn-link">Notes <span
-          class="badge badge-pill badge-primary">0</span></div>
-        <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
-      </a>
-      <a [routerLink]="['documents']" class="list-group-item list-group-item-action clearfix">
-        <div class="pull-left float-left btn-link">Documents <span
           class="badge badge-pill badge-primary">0</span></div>
         <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
       </a>
