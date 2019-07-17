@@ -56,7 +56,7 @@ export class TelephoneComponent implements OnInit {
       title: this.warning.value,
       actions: ['Leave', 'Proceed']
     };
-    const modal = this.modalService.show(ConfirmModalComponent, {ignoreBackdropClick: true, initialState});
+    const modal = this.modalService.show(ConfirmModalComponent, { ignoreBackdropClick: true, initialState });
     modal.content.subject = subject;
     return subject.asObservable();
   }
@@ -66,7 +66,7 @@ export class TelephoneComponent implements OnInit {
     const initialState = {
       warning: this.warning
     };
-    const modal = this.modalService.show(TelephoneModalComponent, {initialState: initialState});
+    const modal = this.modalService.show(TelephoneModalComponent, { initialState: initialState });
     modal.content.subject = subject;
     subject.asObservable().subscribe(res => {
       if (res === 'call') {
@@ -81,17 +81,18 @@ export class TelephoneComponent implements OnInit {
     if (window.innerWidth < 576) {
       window.open('tel:' + this.number);
     } else {
-      // alert('TAPI');
-      console.log('tapi call here');
-      const tapiInfo: TapiInfo = { officeId: 10,
+      // alert('Calling...');
+      const tapiInfo: TapiInfo = {
+        officeId: 10,
         staffId: 10,
-        isOutGoingCall : true,
+        isOutGoingCall: true,
         callerNmber: '4629',
         calledNumber: '07718702809',
-        ipAddress: '192.168.10.29'};
+        IP: '192.168.10.29'
+      };
 
       this.tapiService.putCallRequest(tapiInfo).subscribe(data => console.log(data));
-      console.log('tapi call here called');
+
     }
   }
 }

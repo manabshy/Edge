@@ -3,6 +3,6 @@ export interface TapiInfo {
     staffId: number;
     calledNumber: string;
     callerNmber: string;
-    ipAddress: string;
+    IP: string;
     isOutGoingCall: boolean;
   }
