@@ -146,13 +146,13 @@
                 <div class="list-group-item" *ngFor="let person of contactGroupDetails?.contactPeople ; index as i"
                   [ngClass]="{'new-person': person?.isNewPerson}">
                   <div class="row">
-                    <div class="col-auto">
+                    <div class="col">
                       <app-score-badge [person]="person"></app-score-badge>
                       <span class="badge badge-pill badge-danger mb-2 mr-2" *ngIf="person?.warningStatusId !== 1">{{showWarning(person?.warningStatusId)?.value}}</span>
                       <span class="badge badge-pill badge-info mb-2"
                         *ngIf="person?.isMainPerson && contactGroupDetails.contactType !== 4">Main Person</span>
                     </div>
-                    <div class="col text-right" *ngIf="!person?.isNewPerson; else removeSelectedPerson">
+                    <div class="col-auto" *ngIf="!person?.isNewPerson; else removeSelectedPerson">
                       <div dropdown placement="bottom right">
                         <a class="dropdown-toggle" href [id]="'button' + i" dropdownToggle
                           (click)="$event.stopPropagation(); false" [attr.aria-controls]="'dropdown' + i">Actions <span
@@ -161,16 +161,19 @@
                           [attr.aria-labelledby]="'button' + i">
                           <li role="menuitem"><a class="dropdown-item" (click)="$event.stopPropagation();"
                               [routerLink]="['../../edit']" [queryParams]="{groupPersonId: person?.personId }"><i
-                                class="fas fa-edit"></i> Edit</a></li>
+                                class="fas fa-edit fa-fw"></i> Edit</a></li>
                           <li role="menuitem"><a class="dropdown-item" (click)="$event.stopPropagation();"
                               [routerLink]="person?.isNewPerson ? null : ['../../../../detail', person?.personId ]">
-                              <i class="fas fa-address-card"></i> View</a></li>
+                              <i class="fas fa-address-card fa-fw"></i> View</a></li>
+                          <li role="menuitem"><a class="dropdown-item" (click)="$event.stopPropagation();"
+                            [routerLink]="person?.isNewPerson ? null : ['../../../../detail/', person?.personId, 'notes' ]">
+                            <i class="fas fa-sticky-note fa-fw"></i> View All Notes</a></li>
                           <li role="menuitem">
                             <a class="dropdown-item" (click)="setMainPerson(person?.personId)"
-                              *ngIf="!person?.isMainPerson"><i class="fas fa-user-shield"></i> Set Main Person</a>
+                              *ngIf="!person?.isMainPerson"><i class="fas fa-user-shield fa-fw"></i> Set Main Person</a>
                           </li>
                           <li role="menuitem"><a class="dropdown-item" href (click)="removePerson(person?.personId, true)"
-                              *ngIf="!contactGroupDetails?.referenceCount"><i class="fas fa-user-times"></i> Remove</a>
+                              *ngIf="!contactGroupDetails?.referenceCount"><i class="fas fa-user-times fa-fw"></i> Remove</a>
                           </li>
                         </ul>
                       </div>
@@ -192,6 +195,30 @@
                         </div>
                       </div>
                     </ng-template>
+                    <!-- <div class="col-12">
+                      <div class="alert alert-danger small mb-2">
+                        Important note
+                      </div>
+                      <div class="alert alert-danger small mb-2">
+                        Important note
+                      </div>
+                      <div class="alert alert-danger small mb-2">
+                        Important note
+                      </div>
+                      <div class="text-center mb-2">
+                        <a class="small" [routerLink]="['../../../../detail/', person?.personId, 'notes' ]">
+                          View All Notes
+                        </a>
+                      </div>
+                    </div> -->
+                    <!-- <div class="col-12">
+                      <div class="alert alert-danger small mb-2">
+                        <a [routerLink]="['../../../../detail/', person?.personId, 'notes' ]"><i
+                          class="fas fa-exclamation-circle fa-fw text-danger"></i> Important notes
+                          <span class="badge badge-pill badge-primary">{{person?.marketingPreferences?.count || 0}}</span>
+                        </a>
+                      </div>
+                    </div> -->
                     <div class="col-12 mb-2">
                       <strong>{{person?.firstName | titlecase}} {{person?.lastName | titlecase}}</strong>
                       <!-- <i class="fas fa-phone"></i>&nbsp;

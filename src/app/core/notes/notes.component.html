@@ -22,14 +22,14 @@
         </div>
         <div class="col order-sm-1">
           <div class="row">
-            <div class="col-sm-auto">
-              <dl class="row visible">
-                <dt class="col-4 col-sm-auto text-danger" *ngIf="note.isImportant" [tooltip]="'Important'"><i
-                    class="fas fa-exclamation-circle fa-fw"></i></dt>
-                <dd class="col d-sm-none">Important</dd>
-                <dt class="col-4 col-sm-auto" *ngIf="note.isPinned" [tooltip]="'Pin to top'"><i
-                    class="fas fa-thumbtack fa-fw mr-2"></i></dt>
-                <dd class="col d-sm-none">Pin to top</dd>
+            <div class="col-sm-auto" [ngClass]="note.isImportant || note.isPinned ? '' : 'd-none d-sm-block'" >
+              <dl class="row" [ngClass]="note.isImportant || note.isPinned ? 'visible' : 'invisible'" >
+                <dt class="col-4 col-sm-auto" [tooltip]="note.isImportant ? 'Important' : 'Pinned to top'">
+                  <i class="fas fa-exclamation-circle text-danger fa-fw" *ngIf="note.isImportant"></i>
+                  <i class="fas fa-thumbtack fa-fw" *ngIf="!note.isImportant"></i>
+                </dt>
+                <dd class="col d-sm-none" *ngIf="note.isImportant">Important</dd>
+                <dd class="col d-sm-none" *ngIf="!note.isImportant">Pinned to top</dd>
               </dl>
             </div>
             <div class="col-sm-6">
