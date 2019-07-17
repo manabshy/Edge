@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { PersonNote } from 'src/app/contactgroups/shared/contact-group';
@@ -9,7 +9,7 @@ import { SharedService } from 'src/app/core/services/shared.service';
   templateUrl: './notes.component.html',
   styleUrls: ['./notes.component.scss']
 })
-export class NotesComponent implements OnInit {
+export class NotesComponent implements OnInit, OnChanges {
   @Input() dataNote: any;
   personId: number;
   personNotes: PersonNote[];
@@ -34,7 +34,9 @@ export class NotesComponent implements OnInit {
       this.getPersonNotes(this.personId);
     }
   }
-
+ngOnChanges(){
+  // console.log('input data for notes in child', this.dataNote)
+}
   getPersonNotes(personId: number){
     this.contactGroupService.getPersonNotes(personId).subscribe(data => {
       this.personNotes = data;
