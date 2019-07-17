@@ -70,6 +70,16 @@ export class ContactgroupsPeopleComponent implements OnInit {
   clonedContact: ContactGroup;
   formErrors = FormErrors;
   isCompanyAdded = true;
+  get dataNote() {
+    if(this.contactGroupDetails) {
+      return {
+        group: this.contactGroupDetails,
+        people: this.contactGroupDetails.contactPeople
+      }
+    }
+    return null;
+  }
+
   get isMaxPeople() {
     if(this.contactGroupDetails){
       return this.contactGroupDetails.contactPeople.length && this.contactGroupDetails.contactType === ContactType.CompanyContact;
@@ -706,11 +716,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   addNote() {
-    const data = {
-      group: this.contactGroupDetails,
-      people: this.contactGroupDetails.contactPeople
-    }
-    this.sharedService.addNote(data);
+    this.sharedService.addNote(this.dataNote);
   }
 
   canDeactivate(): boolean {

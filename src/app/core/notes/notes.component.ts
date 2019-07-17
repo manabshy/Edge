@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { PersonNote } from 'src/app/contactgroups/shared/contact-group';
+import { SharedService } from 'src/app/core/services/shared.service';
 
 @Component({
   selector: 'app-notes',
@@ -9,10 +10,11 @@ import { PersonNote } from 'src/app/contactgroups/shared/contact-group';
   styleUrls: ['./notes.component.scss']
 })
 export class NotesComponent implements OnInit {
+  @Input() dataNote: any;
   personId: number;
   personNotes: PersonNote[];
 
-  constructor(private contactGroupService: ContactGroupsService, private route: ActivatedRoute) { }
+  constructor(private contactGroupService: ContactGroupsService, private route: ActivatedRoute, private sharedService: SharedService) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => this.personId = +params['personId'] || 0);
@@ -26,4 +28,10 @@ export class NotesComponent implements OnInit {
       this.personNotes = data;
     });
   }
+
+  addNote(dataNote) {
+    console.log(this.dateNote);
+    this.sharedService.addNote(this.dataNote);
+  }
+
 }
