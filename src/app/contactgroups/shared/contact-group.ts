@@ -78,12 +78,16 @@ export interface ContactGroupsNote {
   contactGroupId: number;
   text: string;
   isImportant: boolean;
+  createDate: Date;
+  createdBy: number;
 }
 export interface PersonNote {
   personNoteId: number;
   personId: number;
   text: string;
   isImportant: boolean;
+  createDate: Date;
+  createdBy: number;
 }
 export interface AutoCompleteOption {
   isNameSearch: boolean;
