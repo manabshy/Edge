@@ -30,7 +30,6 @@ export class NotesComponent implements OnInit {
   }
 
   addNote(dataNote) {
-    console.log(this.dateNote);
     this.sharedService.addNote(this.dataNote);
   }
 
