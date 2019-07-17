@@ -157,7 +157,7 @@ export class ContactGroupsService {
       tap(data => console.log('added  person note here...', JSON.stringify(data))));
   }
   addContactGroupNote(contactGroupNote: ContactGroupsNote): Observable<any> {
-    const url = `${AppConstants.basePersonUrl}/${contactGroupNote.contactGroupId}/contactNotes`;
+    const url = `${AppConstants.baseContactGroupUrl}/${contactGroupNote.contactGroupId}/contactNotes`;
     return this.http.post(url, contactGroupNote).pipe(
       map(response => response),
       tap(data => console.log('added  contactgroup note here...', JSON.stringify(data))));

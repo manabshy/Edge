@@ -27,6 +27,9 @@
                 <dt class="col-4 col-sm-auto text-danger" *ngIf="note.isImportant" [tooltip]="'Important'"><i
                     class="fas fa-exclamation-circle fa-fw"></i></dt>
                 <dd class="col d-sm-none">Important</dd>
+                <dt class="col-4 col-sm-auto" *ngIf="note.isPinned" [tooltip]="'Pin to top'"><i
+                    class="fas fa-thumbtack fa-fw mr-2"></i></dt>
+                <dd class="col d-sm-none">Pin to top</dd>
               </dl>
             </div>
             <div class="col-sm-6">
