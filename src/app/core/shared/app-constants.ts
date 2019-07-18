@@ -36,6 +36,7 @@ export const FormErrors = {
   'telephone': '',
   'email': '',
   'fax': '',
+  'titleId': '',
   'firstName': '',
   'lastName': '',
   'middleName': '',
@@ -48,13 +49,13 @@ export const FormErrors = {
 };
 export const ValidationMessages = {
   'searchTerm': {
-    required: ' This field is required.',
+    required: ' This field is required',
   },
   'companyName': {
-    required: ' Company name is required.',
+    required: ' Company name is required',
   },
   'email': {
-    required: ' Email is required.',
+    required: ' Email is required',
     pattern: 'Email is not valid'
   },
   'telephone': {
@@ -64,45 +65,48 @@ export const ValidationMessages = {
   'fax': {
     invalidPhoneNumber: 'Fax number is not valid'
   },
+  'titleId': {
+    required: 'Title is required'
+  },
   'firstName': {
-    required: 'First Name is required.',
+    required: 'First Name is required',
     minlength: 'First Name must be greater than 2 characters',
-    maxlength: 'First Name must be less than 40 characters.',
+    maxlength: 'First Name must be less than 40 characters',
   },
   'middleName': {
     maxlength: 'Middle Name must be less than 50 characters'
   },
   'lastName': {
-    required: 'Last name is required.',
+    required: 'Last name is required',
     minlength: 'Last name must be greater than 2 characters',
-    maxlength: 'Last name must be less than 80 characters.',
+    maxlength: 'Last name must be less than 80 characters',
   },
   'emailAddress': {
     'email': {
-      required: ' Email is required.',
-      pattern: 'Email is not valid.'
+      required: ' Email is required',
+      pattern: 'Email is not valid'
     },
   },
   'address': {
-    required: 'Address is required.'
+    required: 'Address is required'
   },
   'number': {
-    required: 'Phone is required.',
-    minlength: 'Phone number must be at least 7 characters.',
-    maxlength: 'Phone number cannot be more than 16 characters.',
+    required: 'Phone is required',
+    minlength: 'Phone number must be at least 7 characters',
+    maxlength: 'Phone number cannot be more than 16 characters',
     pattern: 'Phone number is not valid',
     invalidMobileType: `Telephone number is not a valid mobile number`
   },
   'postCode': {
-    required: 'Postcode is required.',
-    minlength: 'Postcode must be at least 5 characters.',
-    maxlength: 'Postcode cannot be more than 7 characters.',
+    required: 'Postcode is required',
+    minlength: 'Postcode must be at least 5 characters',
+    maxlength: 'Postcode cannot be more than 7 characters',
     pattern: 'Postcode is not valid'
   }
   // 'invalidPhoneNumber': {
-  //   required: 'Phone is required.',
-  //   minlength: 'Phone number must be at least 7 characters.',
-  //   maxlength: 'Phone number cannot be more than 16 characters.',
+  //   required: 'Phone is required',
+  //   minlength: 'Phone number must be at least 7 characters',
+  //   maxlength: 'Phone number cannot be more than 16 characters',
   //   pattern: 'Phone number is not valid'
   // }
 };
