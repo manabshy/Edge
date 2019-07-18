@@ -269,11 +269,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
     });
   }
 
-  clearPersonForm() {
-    event.preventDefault();
-    this.personFinderForm.reset();
-  }
-
   findPerson(person: BasicPerson) {
     this.contactGroupService.getAutocompletePeople(person).subscribe(data => {
       this.foundPeople = data;
