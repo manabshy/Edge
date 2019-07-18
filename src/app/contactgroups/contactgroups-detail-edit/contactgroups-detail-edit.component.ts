@@ -303,7 +303,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     const phoneArray = new FormArray([]);
     phoneNumbers.forEach((x) => {
       phoneArray.push(this.fb.group({
-        number: [x.number, { validators: [Validators.required, Validators.minLength(7), Validators.maxLength(16), Validators.pattern(/^\+?[ \d]+$/g)]}],
+        number: [x.number, { validators: [Validators.required, WedgeValidators.phoneNumberValidator()]}],
         typeId: x.typeId,
         sendSMS: x.sendSMS || false,
         isPreferred: x.isPreferred,
@@ -489,7 +489,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     return this.fb.group({
       id: 0,
       typeId: 3,
-      number: ['', { validators: [Validators.required, Validators.minLength(7), Validators.maxLength(16), Validators.pattern(/^\+?[ \d]+$/g)]}],
+      number: ['', { validators: [Validators.required, WedgeValidators.phoneNumberValidator()]}],
       orderNumber: 0,
       sendSMS: [false],
       isPreferred: [false],
@@ -527,12 +527,12 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     this.personAddress = address;
   }
   savePerson() {
-    this.isSubmitting = true;
     this.errorMessage = null;
     this.removeValidationForPhoneAndEmail();
     this.removeValidationForAdditionalFields();
     this.logValidationErrors(this.personForm, true);
     if (this.personForm.valid) {
+      this.isSubmitting = true;
       if (this.personForm.dirty) {
         const person = { ...this.personDetails, ...this.personForm.value };
         person.address = this.personAddress;

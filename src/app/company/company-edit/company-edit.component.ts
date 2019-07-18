@@ -233,6 +233,7 @@ export class CompanyEditComponent implements OnInit {
       company.signer = this.signer;
       company.companyAddress = this.address;
     }
+    this.isSubmitting = true;
     if (this.isNewCompany) {
       console.log('add company', company);
       this.companyService.addCompany(company).subscribe(() => this.onSaveComplete(), (error: WedgeError) => {
