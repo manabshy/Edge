@@ -3,7 +3,7 @@ import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Person, BasicPerson } from 'src/app/core/models/person';
 import { ContactGroup, PeopleAutoCompleteResult, ContactGroupsTypes,
-         ContactType, CompanyAutoCompleteResult, Company, PotentialDuplicateResult } from '../shared/contact-group';
+         ContactType, CompanyAutoCompleteResult, Company, PotentialDuplicateResult, ContactGroupsNote } from '../shared/contact-group';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -68,13 +68,15 @@ export class ContactgroupsPeopleComponent implements OnInit {
   companyFinderForm: FormGroup;
   isCloned: boolean;
   clonedContact: ContactGroup;
+  contactGroupNotes: ContactGroupsNote[];
   formErrors = FormErrors;
   isCompanyAdded = true;
   get dataNote() {
     if(this.contactGroupDetails) {
       return {
         group: this.contactGroupDetails,
-        people: this.contactGroupDetails.contactPeople
+        people: this.contactGroupDetails.contactPeople,
+        notes: this.contactGroupNotes
       }
     }
     return null;
@@ -203,6 +205,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         });
 
     this.companyFinderForm.valueChanges.pipe(debounceTime(400)).subscribe(data => this.findCompany(data));
+    this.getContactGroupNotes(this.contactGroupId);
   }
 
   isCompanyContactGroup(isSelectedTypeCompany: boolean) {
@@ -236,6 +239,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.isTypePicked = true;
         this.isLoadingDetails = false;
       });
+  }
+  getContactGroupNotes(contactGroupId: number){
+    this.contactGroupService.getContactGroupNotes(contactGroupId).subscribe(data=> this.contactGroupNotes = data);
   }
   getContactGroupFirstPerson(personId: number, isSelectedTypeCompany: boolean) {
     this.isLoadingNewPersonVisible = true;

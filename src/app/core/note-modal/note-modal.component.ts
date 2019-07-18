@@ -51,7 +51,7 @@ export class NoteModalComponent implements OnInit {
   }
 
   select(person: Person) {
-    console.log('selected person', person)
+    console.log('selected person', person);
     if (person) {
       this.selectedPerson = person;
       this.isPersonNote = true;
@@ -59,7 +59,7 @@ export class NoteModalComponent implements OnInit {
     this.step2 = true;
   }
   selectGroup(group: ContactGroup) {
-    console.log('selected group', group)
+    console.log('selected group', group);
     if (group) {
       this.selectedContactGroup = group;
     }
@@ -69,8 +69,8 @@ export class NoteModalComponent implements OnInit {
   consumeShortcut(shortcut: string) {
     const index = this.shortcutsAdded.indexOf(shortcut);
     let text = '';
-    if(index >= 0) {
-      this.shortcutsAdded.splice(index,1);
+    if (index >= 0) {
+      this.shortcutsAdded.splice(index, 1);
     } else {
       this.shortcutsAdded.push(shortcut);
     }
@@ -82,22 +82,19 @@ export class NoteModalComponent implements OnInit {
   }
 
   action(value: boolean) {
-    this.addNote();
+   if (value) {
+      this.saveNote();
+   }
     this.bsModalRef.hide();
     this.subject.next(value);
     this.subject.complete();
   }
 
-  addNote() {
-    console.log('is person note condition', this.isPersonNote);
-    console.log('is person note condition from detail comp', this.data.isPersonNote);
+  saveNote() {
     this.isPersonNote || this.data.isPersonNote || this.data.personId ? this.addPersonNote() : this.addContactNote();
-    // if (this.noteForm) {
-    //   this.noteForm.reset();
-    // }
     // if (this.noteForm.valid) {
     //   if (this.noteForm.dirty) {
-    //     this.selectedContactGroup ? this.addContactNote() : this.addPersonNote();
+    //     this.isPersonNote || this.data.isPersonNote || this.data.personId ? this.addPersonNote() : this.addContactNote();
     //   }
     // }
   }
@@ -109,7 +106,7 @@ export class NoteModalComponent implements OnInit {
       this.contactGroupService.addPersonNote(note).subscribe(data => {
         console.log('added  person note', data);
       });
-    } else if(note && this.data.personId){
+    } else if (note && this.data.personId) {
       note.personId = this.data.personId;
       this.contactGroupService.addPersonNote(note).subscribe(data => {
         console.log('added person note with id', data);

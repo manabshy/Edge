@@ -15,6 +15,7 @@ export class ContactgroupsDetailNotesComponent implements OnInit {
   personId: number;
   personNotes: PersonNote[];
   contactGroupId: number;
+  contactGroupNotes: PersonNote[];
   constructor(private contactGroupService: ContactGroupsService, private route: ActivatedRoute, private sharedService: SharedService) { }
   // ngOnInit() {
   //   // let personParams = this.route.snapshot.queryParamMap.get('person');
@@ -53,7 +54,7 @@ export class ContactgroupsDetailNotesComponent implements OnInit {
   }
   getContactGroupNotes(personId: number){
     this.contactGroupService.getPersonNotes(personId).subscribe(data => {
-      this.personNotes = data;
+      this.contactGroupNotes = data;
     });
   }
 
