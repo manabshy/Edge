@@ -480,7 +480,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       typeId: 3,
       number: ['', { validators: [Validators.required, WedgeValidators.phoneNumberValidator()]}],
       orderNumber: 0,
-      sendSMS: [false],
+      sendSMS: [true],
       isPreferred: [false],
       comments: ['']
     }, {validators: WedgeValidators.phoneTypeValidator(this)});
