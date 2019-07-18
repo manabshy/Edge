@@ -94,8 +94,9 @@ export class ContactgroupsDetailComponent implements OnInit {
     event.stopPropagation();
     const data = {
       person: this.searchedPersonDetails,
-      contactGroup: this.contactGroupDetails
+      isPersonNote: true
     }
+    console.log('for notes',data);
     this.sharedService.addNote(data);
   }
 

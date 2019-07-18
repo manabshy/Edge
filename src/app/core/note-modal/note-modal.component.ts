@@ -90,7 +90,8 @@ export class NoteModalComponent implements OnInit {
 
   addNote() {
     console.log('is person note condition', this.isPersonNote);
-    this.isPersonNote ? this.addPersonNote() : this.addContactNote();
+    console.log('is person note condition from detail comp', this.data.isPersonNote);
+    this.isPersonNote || this.data.isPersonNote || this.data.personId ? this.addPersonNote() : this.addContactNote();
     // if (this.noteForm) {
     //   this.noteForm.reset();
     // }
@@ -107,6 +108,11 @@ export class NoteModalComponent implements OnInit {
       note.personId = this.selectedPerson.personId;
       this.contactGroupService.addPersonNote(note).subscribe(data => {
         console.log('added  person note', data);
+      });
+    } else if(note && this.data.personId){
+      note.personId = this.data.personId;
+      this.contactGroupService.addPersonNote(note).subscribe(data => {
+        console.log('added person note with id', data);
       });
     }
   }
