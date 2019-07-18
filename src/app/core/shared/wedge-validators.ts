@@ -50,18 +50,22 @@ export class WedgeValidators {
     return (control: AbstractControl): { [key: string]: any } => {
       let validNumber = false;
       const regionCode = 'GB';
+      const isNumber = /^([+]?[0-9 ]*)$/.test(control.value);
       // let regionCode = this.sharedService.getRegionCode(control.value);
       if (control.value === '') {
         return null;
       }
-      const phoneNumberUtil = PhoneNumberUtil.getInstance();
-      try {
-        const phoneNumber = phoneNumberUtil.parseAndKeepRawInput(
-          control.value, regionCode
-        );
-        validNumber = phoneNumberUtil.isValidNumber(phoneNumber);
-      } catch (e) { }
 
+      if(isNumber){
+        const phoneNumberUtil = PhoneNumberUtil.getInstance();
+        try {
+          const phoneNumber = phoneNumberUtil.parseAndKeepRawInput(
+            control.value, regionCode
+          );
+          validNumber = phoneNumberUtil.isValidNumber(phoneNumber);
+        } catch (e) { }
+      }
+      
       return validNumber ? null : { 'invalidPhoneNumber': { value: control.value } };
     };
   }

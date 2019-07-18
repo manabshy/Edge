@@ -182,17 +182,8 @@
               </div>
               <input type="text" class="form-control order-sm-1" placeholder="Comments" formControlName="comments">
                 <div class="invalid-feedback order-sm-3">
-                  <div *ngIf="personForm.controls.phoneNumbers.controls[i].controls.number.errors?.pattern">
-                    Please enter a valid telephone number.
-                  </div>
-                  <div *ngIf="personForm.controls.phoneNumbers.controls[i].controls.number.errors?.minlength">
-                      Telephone number must be at least 7 characters.
-                  </div>
-                  <div *ngIf="personForm.controls.phoneNumbers.controls[i].controls.number.errors?.maxlength">
-                    Telephone number must be less than 16 characters.
-                  </div>
-                  <div *ngIf="personForm.controls.phoneNumbers.controls[i].controls.number.errors?.invalidMobileType">
-                    Telephone number {{currentPhoneNumber}} is not a valid mobile number`
+                  <div *ngIf="personForm.controls.phoneNumbers.controls[i].controls.number.errors?.invalidPhoneNumber">
+                    Please enter a valid telephone number
                   </div>
                   <div *ngIf="personForm.controls.phoneNumbers.controls[i].errors?.mismatch">
                     Telephone number doesn't match the type
