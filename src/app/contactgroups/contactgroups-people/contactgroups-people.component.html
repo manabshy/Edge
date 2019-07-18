@@ -81,6 +81,9 @@
                   <input #companyNameInput type="text" id="company" class="form-control fake-readonly" formControlName="companyName"
                     (keydown.enter)="$event.preventDefault();" [attr.readonly]="selectedCompanyDetails ? '' : null">
                 </div>
+                <div class="form-text small" *ngIf="selectedCompanyDetails">
+                  <a href (click)="editSelectedCompany(selectedCompanyDetails?.companyId)">View/Edit Company Info</a>
+                </div>
               </div>
               <ng-container *ngIf="foundCompanies && !selectedCompanyDetails">
                 <h5>Quick Finder</h5>
@@ -160,7 +163,7 @@
                         <ul [id]="'dropdown' + i" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
                           [attr.aria-labelledby]="'button' + i">
                           <li role="menuitem"><a class="dropdown-item" (click)="$event.stopPropagation();"
-                              [routerLink]="['../../edit']" [queryParams]="{groupPersonId: person?.personId }"><i
+                            (click)="editSelectedPerson(person?.personId)"><i
                                 class="fas fa-edit fa-fw"></i> Edit</a></li>
                           <li role="menuitem"><a class="dropdown-item" (click)="$event.stopPropagation();"
                               [routerLink]="person?.isNewPerson ? null : ['../../../../detail', person?.personId ]">
