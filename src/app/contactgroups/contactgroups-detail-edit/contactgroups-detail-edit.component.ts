@@ -521,7 +521,6 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   //   }
   // }
   savePerson() {
-    this.isSubmitting = true;
     this.errorMessage = null;
     const allPhoneNumbers =  this.phoneNumbers.controls.length - 1;
     // for (let index = 0; index < allPhoneNumbers; index++) {
@@ -531,6 +530,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     this.removeValidationForAdditionalFields();
     this.logValidationErrors(this.personForm, true);
     if (this.personForm.valid) {
+      this.isSubmitting = true;
       if (this.personForm.dirty) {
         const person = { ...this.personDetails, ...this.personForm.value };
         const postCode =  this.sharedService.splitPostCode(person.address.postCode);
