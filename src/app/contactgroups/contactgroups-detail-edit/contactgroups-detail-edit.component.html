@@ -183,7 +183,10 @@
               <input type="text" class="form-control order-sm-1" placeholder="Comments" formControlName="comments">
                 <div class="invalid-feedback order-sm-3">
                   <div *ngIf="personForm.controls.phoneNumbers.controls[i].controls.number.errors?.invalidPhoneNumber">
-                    Please enter a valid telephone number
+                    {{validationMessages.telephone.invalidPhoneNumber}}
+                  </div>
+                  <div *ngIf="personForm.controls.phoneNumbers.controls[i].controls.number.errors?.international">
+                    {{validationMessages.telephone.international}}
                   </div>
                   <div *ngIf="personForm.controls.phoneNumbers.controls[i].errors?.mismatch">
                     Telephone number doesn't match the type

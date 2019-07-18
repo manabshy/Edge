@@ -50,6 +50,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   searchTermBK = '';
   invalidPhoneType: boolean;
   formErrors = FormErrors;
+  validationMessages = ValidationMessages;
   foundAddress: AddressAutoCompleteData;
   invalidFormArrayControls = {
     number: [],

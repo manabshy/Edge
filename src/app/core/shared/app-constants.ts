@@ -58,6 +58,7 @@ export const ValidationMessages = {
     pattern: 'Email is not valid'
   },
   'telephone': {
+    international: 'Not UK number, please enter the international prefix',
     invalidPhoneNumber: 'Please enter a valid phone number'
   },
   'fax': {

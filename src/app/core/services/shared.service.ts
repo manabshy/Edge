@@ -234,14 +234,14 @@ export class SharedService {
       return false;
     }
   }
-  isInternationNumber(number: string) {
-    const formattedNumber = number.replace(' ', '');
+  isInternationalNumber(number: string) {
+    const formattedNumber = number.replace(' ', '').replace('+44','');
     return  formattedNumber.startsWith('00') || formattedNumber.startsWith('+');
   }
   getRegionCode(number: string) {
     const phoneUtil: PhoneNumberUtil = PhoneNumberUtil.getInstance();
         const rawNumber = phoneUtil.parseAndKeepRawInput(number, 'GB');
-        return this.isInternationNumber(number) ? phoneUtil.getRegionCodeForNumber(rawNumber) : 'GB';
+        return this.isInternationalNumber(number) ? phoneUtil.getRegionCodeForNumber(rawNumber) : 'GB';
   }
   logValidationErrors(group: FormGroup, fakeTouched: boolean) {
     console.log('val.....................');
