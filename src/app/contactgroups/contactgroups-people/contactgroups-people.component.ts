@@ -268,6 +268,12 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.isLoadingCompaniesVisible = false;
     });
   }
+
+  clearPersonForm() {
+    event.preventDefault();
+    this.personFinderForm.reset();
+  }
+
   findPerson(person: BasicPerson) {
     this.contactGroupService.getAutocompletePeople(person).subscribe(data => {
       this.foundPeople = data;

@@ -378,6 +378,9 @@
             <input type="text" id="email" class="form-control form-control-sm" formControlName="emailAddress">
           </div>
         </div>
+        <div class="form-group text-right small">
+          <a href (click)="clearPersonForm()">Clear Form</a>
+        </div>
       </form>
       <div class="row results-chip" *ngIf="foundPeople?.length">
         <div class="col-sm-12 text-center">
