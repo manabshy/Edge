@@ -1,6 +1,6 @@
 import {format, compareAsc, isDate} from 'date-fns';
 import { isArray, isPlainObject, mapValues, isNull, isUndefined, random  } from 'lodash';
-import { ContactGroup } from 'src/app/contactgroups/shared/contact-group';
+import { ContactGroup, Company } from 'src/app/contactgroups/shared/contact-group';
 import { Person } from '../models/person';
 export class AppUtils {
   public static prevRoute: string = '';
@@ -12,6 +12,7 @@ export class AppUtils {
   public static searchTerm: string;
   public static companySearchTerm: any;
   public static newSignerId: number;
+  public static holdingSelectedCompany: Company;
   public static holdingSelectedPeople: Person[];
   public static holdingRemovedPeople: number[];
   public static holdingContactType: number;

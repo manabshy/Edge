@@ -47,6 +47,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isCreateNewPersonVisible = false;
   isLoadingNewPersonVisible = false;
   isEditingSelectedPerson = false;
+  isEditingSelectedCompany = false;
   isCreateNewPerson = false;
   isNewContactGroup = false;
   isSigner = false;
@@ -144,15 +145,19 @@ export class ContactgroupsPeopleComponent implements OnInit {
       emailAddress: [''],
       phoneNumber: ['']
     });
-    if(AppUtils.holdingSelectedPeople) {
-      this.selectedPeople = AppUtils.holdingSelectedPeople;
+    if(AppUtils.holdingSelectedPeople || AppUtils.holdingSelectedCompany) {
+      AppUtils.holdingSelectedPeople ? this.selectedPeople = AppUtils.holdingSelectedPeople : null;
+      AppUtils.holdingSelectedCompany ? this.selectedCompanyDetails = AppUtils.holdingSelectedCompany : null;
+      AppUtils.holdingSelectedCompany ? this.selectCompany(this.selectedCompanyDetails) : null;
       this.removedPersonIds = AppUtils.holdingRemovedPeople;
       this.isCloned = AppUtils.holdingCloned;
       AppUtils.holdingSelectedPeople = null;
+      AppUtils.holdingSelectedCompany = null;
       AppUtils.holdingRemovedPeople = null;
       AppUtils.holdingCloned = false;
       this.isTypePicked = true;
     }
+
     if(this.contactGroupId) {
       this.getContactGroupById(this.contactGroupId)
     } else {
@@ -359,18 +364,29 @@ export class ContactgroupsPeopleComponent implements OnInit {
    });
   }
 
+  editSelectedCompany(id: number) {
+    event.preventDefault();
+    this.isEditingSelectedCompany = true;
+    this.contactGroupBackUp();
+    this._router.navigate(['/company-centre/detail', id, 'edit']);
+  }
 
   editSelectedPerson(id: number) {
     this.isEditingSelectedPerson = true;
-      if(this.firstContactGroupPerson) {
-        this.selectedPeople.push(this.firstContactGroupPerson);
-      }
+    this.contactGroupBackUp();
+    this._router.navigate(['../../edit'], {queryParams: {groupPersonId: id, isEditingSelectedPerson: true}, relativeTo: this.route});
+  }
+
+  contactGroupBackUp() {
+    if(this.firstContactGroupPerson) {
+      this.selectedPeople.push(this.firstContactGroupPerson);
+    }
     AppUtils.holdingSelectedPeople = this.selectedPeople;
+    AppUtils.holdingSelectedCompany = this.selectedCompanyDetails;
     AppUtils.holdingRemovedPeople = this.removedPersonIds;
     AppUtils.holdingContactType = this.contactGroupDetails.contactType;
     AppUtils.firstContactPerson = this.firstContactGroupPerson;
     AppUtils.holdingCloned = this.isCloned;
-    this._router.navigate(['../../edit'], {queryParams: {groupPersonId: id, isEditingSelectedPerson: true}, relativeTo: this.route});
   }
 
   removePerson(id: number, isDialogVisible) {
@@ -423,7 +439,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.isCompanyAdded = true;
     this.searchCompanyTermBK = this.companyFinderForm.get('companyName').value;
     this.companyFinderForm.get('companyName').setValue(company.companyName);
-    this.companyNameInput.nativeElement.scrollIntoView({block: 'center'});
+    setTimeout(()=>{
+      this.companyNameInput.nativeElement.scrollIntoView({block: 'center'});
+    })
    }
 
   getCompanyDetails(companyId: number) {
@@ -720,7 +738,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   canDeactivate(): boolean {
-    if ((this.contactGroupDetailsForm.dirty || this.companyFinderForm.dirty) && !this.isSubmitting && !this.isEditingSelectedPerson) {
+    if ((this.contactGroupDetailsForm.dirty || this.companyFinderForm.dirty) && !this.isSubmitting && !this.isEditingSelectedPerson && !this.isEditingSelectedCompany) {
       return false;
     }
     return true;
