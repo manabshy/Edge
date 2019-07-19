@@ -19,13 +19,14 @@ export class AppComponent implements OnInit, AfterViewChecked {
   isFading = false;
   @ViewChild('appContainer') appContainer : ElementRef;
   appHeightObservable;
-  get currentStaffMember(): StaffMember {
-    return this.staffMemberService.currentStaffMember;
-  }
+  // get currentStaffMember(): StaffMember {
+    //   return this.staffMemberService.currentStaffMember;
+    // }
 
-  get isNavVisible(): boolean {
-    return this.authService.isLoggedIn();
-  }
+    get isNavVisible(): boolean {
+      return this.authService.isLoggedIn();
+    }
+    currentStaffMember: StaffMember;
 
   constructor(private router: Router,
     public authService: AuthService,
@@ -57,7 +58,7 @@ export class AppComponent implements OnInit, AfterViewChecked {
 
   ngOnInit() {
     if(this.isNavVisible) {
-      this.staffMemberService.getCurrentStaffMember().subscribe();
+      this.staffMemberService.getCurrentStaffMember().subscribe(data => this.currentStaffMember = data);
     }
     this.appHeightObservable = new MutationObserver(()=>{
       this.toggleScrollTop();
