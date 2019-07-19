@@ -6,7 +6,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, Subject, of } from 'rxjs';
 import { AppConstants, FormErrors, ValidationMessages } from '../shared/app-constants';
 import { map, fill } from 'lodash';
-import { tap, startWith} from 'rxjs/operators';
+import { tap, startWith, publishReplay, refCount, take} from 'rxjs/operators';
 import { BsModalService } from 'ngx-bootstrap/modal/';
 import { ErrorModalComponent } from '../error-modal/error-modal.component';
 import { FormGroup } from '@angular/forms';
@@ -48,7 +48,7 @@ export class SharedService {
   showWarning(id, warnings):any {
     let warning = null;
     if(warnings) {
-      warnings.forEach(x=>{
+      warnings.forEach(x => {
         if(x.id === id) {
           warning = x;
         }
@@ -116,11 +116,11 @@ export class SharedService {
     let m = new Map()
     for(let k of Object.keys(o)) {
         if(o[k] instanceof Object) {
-            m.set(k, this.objectToMap(o[k]))   
+            m.set(k, this.objectToMap(o[k]))
         }
         else {
             m.set(k, o[k])
-        }    
+        }
     }
       return m
   }
@@ -306,16 +306,21 @@ export class SharedService {
   }
   getDropdownListInfo(): Observable<DropdownListInfo> {
     if (this.infoDetail) {
-      console.log('cache');
+      console.log('info cache', this.infoDetail);
       return of(this.infoDetail);
     }
-    console.log('from database');
-    return  this.http.get<DropdownListInfo>(AppConstants.baseInfoUrl)
-    .pipe(
-      tap(data => {
-        if (data) {
-          this.infoDetail = data;
-        }}));
+
+    return this.http.get<DropdownListInfo>(AppConstants.baseInfoUrl)
+      .pipe(
+        tap(data => {
+          if (data) {
+            this.infoDetail = data;
+          }}),
+        publishReplay(1),
+        refCount(),
+        take(1),
+        tap((data) => console.log('info from db', data))
+      );
   }
 
   findAddress(searchTerm: string, container: string): Observable<AddressAutoCompleteData> {
