@@ -1,56 +1,114 @@
 <div class="list-group">
-  <div class="list-group-item text-center text-danger" *ngIf="!personNotes?.length; else results">
+  <div class="list-group-item text-center text-danger" *ngIf="!personNotes?.length && !contactGroupNotes?.length; else results">
     <i class="far fa-sad-tear"></i> No notes
   </div>
   <ng-template #results>
-    <div class="list-group-item" *ngFor="let note of personNotes">
-      <div class="row">
-        <div class="col-sm-auto text-right order-sm-2">
-          <div class="btn-group" dropdown placement="bottom right">
-            <button id="actionsToggle" dropdownToggle type="button" class="btn btn-link p-0 dropdown-toggle"
-              aria-controls="actionsList">
-              Actions <span class="caret"></span>
-            </button>
-            <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
-              aria-labelledby="actionsToggle">
-              <li role="menuitem"><button type="button" class="dropdown-item"><i
-                    class="fas fa-exclamation-circle fa-fw mr-2 text-danger"></i> Set as important</button></li>
-              <li role="menuitem"><button type="button" class="dropdown-item"><i
-                    class="fas fa-thumbtack fa-fw mr-2"></i> Pin to top</button></li>
-            </ul>
+   <ng-container *ngIf="personNotes">
+      <div class="list-group-item" *ngFor="let note of personNotes">
+        <div class="row">
+          <div class="col-sm-auto text-right order-sm-2">
+            <div class="btn-group" dropdown placement="bottom right">
+              <button id="actionsToggle" dropdownToggle type="button" class="btn btn-link p-0 dropdown-toggle"
+                aria-controls="actionsList">
+                Actions <span class="caret"></span>
+              </button>
+              <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+                aria-labelledby="actionsToggle">
+                <li role="menuitem"><button type="button" class="dropdown-item"><i
+                      class="fas fa-exclamation-circle fa-fw mr-2 text-danger"></i> Set as important</button></li>
+                <li role="menuitem"><button type="button" class="dropdown-item"><i
+                      class="fas fa-thumbtack fa-fw mr-2"></i> Pin to top</button></li>
+              </ul>
+            </div>
           </div>
-        </div>
-        <div class="col order-sm-1">
-          <div class="row">
-            <div class="col-sm-auto">
-              <dl class="row visible">
-                <dt class="col-4 col-sm-auto text-danger" *ngIf="note.isImportant" [tooltip]="'Important'"><i
-                    class="fas fa-exclamation-circle fa-fw"></i></dt>
-                <dd class="col d-sm-none">Important</dd>
-              </dl>
-            </div>
-            <div class="col-sm-6">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Note</dt>
-                <dd class="col">{{note?.text}}</dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Date</dt>
-                <dd class="col">{{note?.createDate | date: 'EEE d MMM y'}}</dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Owner</dt>
-                <dd class="col">{{note?.createdBy}}</dd>
-              </dl>
+          <div class="col order-sm-1">
+            <div class="row">
+              <div class="col-sm-auto" [ngClass]="note.isImportant || note.isPinned ? '' : 'd-none d-sm-block'" >
+                <dl class="row" [ngClass]="note.isImportant || note.isPinned ? 'visible' : 'invisible'" >
+                  <dt class="col-4 col-sm-auto" [tooltip]="note.isImportant ? 'Important' : 'Pinned to top'">
+                    <i class="fas fa-exclamation-circle text-danger fa-fw" *ngIf="note.isImportant"></i>
+                    <i class="fas fa-thumbtack fa-fw" *ngIf="!note.isImportant"></i>
+                  </dt>
+                  <dd class="col d-sm-none" *ngIf="note.isImportant">Important</dd>
+                  <dd class="col d-sm-none" *ngIf="!note.isImportant">Pinned to top</dd>
+                </dl>
+              </div>
+              <div class="col-sm-6">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Note</dt>
+                  <dd class="col">{{note?.text}}</dd>
+                </dl>
+              </div>
+              <div class="col-sm">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Date</dt>
+                  <dd class="col">{{note?.createDate | date: 'd/MM/yyyy'}}</dd>
+                </dl>
+              </div>
+              <div class="col-sm">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Owner</dt>
+                  <dd class="col">{{note?.createdBy}}</dd>
+                </dl>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+   </ng-container>
+   <ng-container *ngIf="contactGroupNotes">
+      <div class="list-group-item" *ngFor="let note of contactGroupNotes">
+        <div class="row">
+          <div class="col-sm-auto text-right order-sm-2">
+            <div class="btn-group" dropdown placement="bottom right">
+              <button id="actionsToggle" dropdownToggle type="button" class="btn btn-link p-0 dropdown-toggle"
+                aria-controls="actionsList">
+                Actions <span class="caret"></span>
+              </button>
+              <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+                aria-labelledby="actionsToggle">
+                <li role="menuitem"><button type="button" class="dropdown-item"><i
+                      class="fas fa-exclamation-circle fa-fw mr-2 text-danger"></i> Set as important</button></li>
+                <li role="menuitem"><button type="button" class="dropdown-item"><i
+                      class="fas fa-thumbtack fa-fw mr-2"></i> Pin to top</button></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col order-sm-1">
+            <div class="row">
+              <div class="col-sm-auto" [ngClass]="note.isImportant || note.isPinned ? '' : 'd-none d-sm-block'" >
+                <dl class="row" [ngClass]="note.isImportant || note.isPinned ? 'visible' : 'invisible'" >
+                  <dt class="col-4 col-sm-auto" [tooltip]="note.isImportant ? 'Important' : 'Pinned to top'">
+                    <i class="fas fa-exclamation-circle text-danger fa-fw" *ngIf="note.isImportant"></i>
+                    <i class="fas fa-thumbtack fa-fw" *ngIf="!note.isImportant"></i>
+                  </dt>
+                  <dd class="col d-sm-none" *ngIf="note.isImportant">Important</dd>
+                  <dd class="col d-sm-none" *ngIf="!note.isImportant">Pinned to top</dd>
+                </dl>
+              </div>
+              <div class="col-sm-6">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Note</dt>
+                  <dd class="col">{{note?.text}}</dd>
+                </dl>
+              </div>
+              <div class="col-sm">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Date</dt>
+                  <dd class="col">{{note?.createDate | date: 'd/MM/yyyy'}}</dd>
+                </dl>
+              </div>
+              <div class="col-sm">
+                <dl class="row">
+                  <dt class="col-4 d-sm-none">Owner</dt>
+                  <dd class="col">{{note?.createdBy}}</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+   </ng-container>
   </ng-template>
   <div class="list-group-item list-group-item-action text-center py-4" *ngIf="dataNote" (click)="addNote()">
     <span class="btn-link">

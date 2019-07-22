@@ -17,6 +17,7 @@ export class PropertyComponent implements OnInit {
   properties: PropertyAutoComplete[];
   isMessageVisible: boolean;
   isHintVisible: boolean;
+  advSearchCollapsed = false;
 
   constructor(private propertyService: PropertyService, private route: ActivatedRoute, private fb: FormBuilder) { }
 

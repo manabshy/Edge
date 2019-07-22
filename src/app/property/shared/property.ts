@@ -8,6 +8,9 @@ export interface Property {
   floorOther: string;
   floorType: string;
   numberOfFloors: number;
+  regionId: number;
+  areaId: number;
+  subAreaId: number;
 }
 export interface PropertyData {
  result: Property;

@@ -60,7 +60,7 @@ export const ValidationMessages = {
     pattern: 'Email is not valid'
   },
   'telephone': {
-    invalidPhoneNumber: 'Phone number is not valid'
+    invalidPhoneNumber: 'Please enter a valid phone number'
   },
   'fax': {
     invalidPhoneNumber: 'Fax number is not valid'

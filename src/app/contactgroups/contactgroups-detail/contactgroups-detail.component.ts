@@ -93,8 +93,10 @@ export class ContactgroupsDetailComponent implements OnInit {
   addNote() {
     event.stopPropagation();
     const data = {
-      person: this.searchedPersonDetails
+      person: this.searchedPersonDetails,
+      isPersonNote: true
     }
+    console.log('for notes',data);
     this.sharedService.addNote(data);
   }
 

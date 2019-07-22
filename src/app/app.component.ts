@@ -15,14 +15,23 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class AppComponent implements OnInit, AfterViewChecked {
   title = 'Wedge';
-  isNavVisible: boolean;
   isScrollTopVisible = false;
   isFading = false;
   @ViewChild('appContainer') appContainer : ElementRef;
   appHeightObservable;
-  get currentStaffMember(): StaffMember {
-    return this.staffMemberService.currentStaffMember;
-  }
+  // get currentStaffMember(): StaffMember {
+    //   return this.staffMemberService.currentStaffMember;
+    // }
+
+    get isLoggedIn(): boolean {
+      return this.authService.isLoggedIn();
+    }
+
+    get isLoadVisible(): boolean {
+      return !(!!this.currentStaffMember);
+    }
+
+    currentStaffMember: StaffMember;
 
   constructor(private router: Router,
     public authService: AuthService,
@@ -38,6 +47,11 @@ export class AppComponent implements OnInit, AfterViewChecked {
     ).subscribe((event: any[]) => {
       AppUtils.prevRouteBU = AppUtils.prevRoute || '';
       AppUtils.prevRoute = event[0].urlAfterRedirects;
+
+      if(AppUtils.prevRoute !== '/login' && !AppUtils.prevRoute.includes('/auth-callback')){
+        localStorage.setItem('prev', AppUtils.prevRoute);
+      }
+
       this.isScrollTopVisible = false;
       this.isFading = true;
       setTimeout(()=>{
@@ -48,6 +62,13 @@ export class AppComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit() {
+    if (this.isLoggedIn) {
+      console.log('current user in app comp', this.currentStaffMember)
+      this.staffMemberService.getCurrentStaffMember().subscribe(data => {
+      this.currentStaffMember = data;
+        console.log('current user in app comp in ngOnInit', this.currentStaffMember);
+      });
+    }
     this.appHeightObservable = new MutationObserver(()=>{
       this.toggleScrollTop();
     });
@@ -56,9 +77,8 @@ export class AppComponent implements OnInit, AfterViewChecked {
 
 
   ngAfterViewChecked() {
-    this.isNavVisible = this.authService.isLoggedIn();
 
-    if (!this.isNavVisible) {
+    if (!this.isLoggedIn) {
       this.renderer.addClass(document.body, 'bg-dark');
     } else {
       this.renderer.removeClass(document.body, 'bg-dark');

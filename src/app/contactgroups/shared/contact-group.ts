@@ -78,6 +78,7 @@ export interface ContactGroupsNote {
   contactGroupId: number;
   text: string;
   isImportant: boolean;
+  isPinned: boolean;
   createDate: Date;
   createdBy: number;
 }
@@ -86,6 +87,7 @@ export interface PersonNote {
   personId: number;
   text: string;
   isImportant: boolean;
+  isPinned: boolean;
   createDate: Date;
   createdBy: number;
 }
@@ -224,7 +226,7 @@ export interface PersonContactData extends ResultData {
   result: Person;
 }
 export interface ContactGroupsNoteData extends ResultData {
-  result: ContactGroupsNote;
+  result: ContactGroupsNote[];
 }
 export interface PersonNoteData extends ResultData {
   result: PersonNote[];

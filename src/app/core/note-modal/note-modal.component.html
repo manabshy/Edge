@@ -2,7 +2,7 @@
   <div>
     Add Note
     <ng-container *ngIf="!data?.group || step2">
-      for 
+      for
       <ng-container *ngIf="selectedPerson; else noPerson"><strong>{{selectedPerson?.firstName}} {{selectedPerson?.lastName}}</strong></ng-container>
       <ng-template #noPerson>this Contact Group</ng-template>
     </ng-container>
@@ -18,7 +18,7 @@
       <div class="list-group-item list-group-item-action" *ngFor="let person of data?.people" (click)="select(person)">
         {{person?.firstName}} {{person?.lastName}}
       </div>
-      <div class="list-group-item list-group-item-action" (click)="select(null)">
+      <div class="list-group-item list-group-item-action" (click)="selectGroup(data?.group)">
         <i class="fas fa-users mr-2"></i> Group Note
       </div>
     </div>
@@ -30,10 +30,10 @@
           <input type="checkbox" class="custom-control-input" id="important" formControlName="isImportant">
           <label class="custom-control-label" for="important">Set as important</label>
         </div>
-        <!-- <div class="custom-control custom-checkbox custom-control-inline">
-          <input type="checkbox" class="custom-control-input" id="topPinned">
+        <div class="custom-control custom-checkbox custom-control-inline">
+          <input type="checkbox" class="custom-control-input" id="topPinned" formControlName="isPinned">
           <label class="custom-control-label" for="topPinned">Pin to top</label>
-        </div> -->
+        </div>
       </div>
       <div class="form-group">
         <div class="row mb-2">
@@ -101,7 +101,7 @@
       </div>
       <div class="text-center mt-4">
         <button type="button" class="btn btn-light mr-2" (click)="action(false)">Cancel</button>
-        <button type="button" class="btn btn-primary" (click)="action(false)">Add Note</button>
+        <button type="button" class="btn btn-primary" (click)="action(true)">Add Note</button>
       </div>
     </form>
   </ng-container>

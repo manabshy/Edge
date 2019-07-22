@@ -37,6 +37,9 @@ import { ErrorModalComponent } from './error-modal/error-modal.component';
 import { NoteModalComponent } from './note-modal/note-modal.component';
 import { AddressComponent } from './address/address.component';
 import { SignerComponent } from './signer/signer.component';
+import { NotesComponent } from './notes/notes.component';
+import { TelephoneComponent } from './telephone/telephone.component';
+import { TelephoneModalComponent } from './telephone-modal/telephone-modal.component';
 
 //vendor
 import { OrderModule } from 'ngx-order-pipe';
@@ -46,9 +49,6 @@ import { AgmCoreModule } from '@agm/core';
 //various
 import { AutocompleteOffDirective } from './shared/autocomplete-off.directive';
 import { HighlightPipe } from './shared/highlight.pipe';
-import { NotesComponent } from './notes/notes.component';
-import { TelephoneComponent } from './telephone/telephone.component';
-import { TelephoneModalComponent } from './telephone-modal/telephone-modal.component';
 
 @NgModule({
   declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent,

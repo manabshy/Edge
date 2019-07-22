@@ -18,15 +18,15 @@ import { CompanyDetailComponent } from '../company/company-detail/company-detail
 })
 export class HomeComponent implements OnInit {
   info: DropdownListInfo;
-  get currentStaffMember(): StaffMember {
-    return this.staffMemberService.currentStaffMember;
-  }
+  // get currentStaffMember(): StaffMember {
+  //   return this.staffMemberService.currentStaffMember;
+  // }
+  currentStaffMember: StaffMember;
   get isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
   }
   selectedTab = 0;
   containerClass = '';
-
   @ViewChild('homeTabs') homeTabs: TabsetComponent;
 
   constructor(private authService: AuthService,
@@ -36,17 +36,17 @@ export class HomeComponent implements OnInit {
               private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.staffMemberService.getCurrentStaffMember().subscribe();
-    this.sharedService.getDropdownListInfo().subscribe(data=> this.info = data);
+    this.staffMemberService.getCurrentStaffMember().subscribe(data => this.currentStaffMember = data);
+    this.sharedService.getDropdownListInfo().subscribe(data => this.info = data);
     // this.sharedService.getDropdownListInfo().subscribe();
     // console.log('info detail in home component', this.info );
     this.route.queryParams.subscribe(params =>  {
-      if(params['selectedTab']) {
+      if (params['selectedTab']) {
         AppUtils.homeSelectedTab = params['selectedTab'];
       }
       this.selectedTab = AppUtils.homeSelectedTab || 0;
       console.log(this.selectedTab);
-      if(this.homeTabs.tabs[this.selectedTab]) {
+      if (this.homeTabs.tabs[this.selectedTab]) {
         this.homeTabs.tabs[this.selectedTab].active = true;
       }
     });
@@ -56,7 +56,7 @@ export class HomeComponent implements OnInit {
     setTimeout(() => {
       this.router.navigate(['/home']);
       this.selectedTab = data.tabset.tabs.findIndex(item => item.active);
-      if(this.selectedTab >= 0){
+      if (this.selectedTab >= 0) {
         AppUtils.homeSelectedTab = this.selectedTab;
       }
       AppUtils.isDiarySearchVisible = false;
