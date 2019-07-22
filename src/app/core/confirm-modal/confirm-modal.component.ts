@@ -8,6 +8,7 @@ import { Subject } from 'rxjs';
 })
 export class ConfirmModalComponent implements OnInit {
   @Input() title;
+  @Input() danger;
   @Input() actions = [];
   subject: Subject<boolean>;
 
