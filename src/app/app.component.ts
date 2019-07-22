@@ -23,9 +23,14 @@ export class AppComponent implements OnInit, AfterViewChecked {
     //   return this.staffMemberService.currentStaffMember;
     // }
 
-    get isNavVisible(): boolean {
+    get isLoggedIn(): boolean {
       return this.authService.isLoggedIn();
     }
+
+    get isLoadVisible(): boolean {
+      return !(!!this.currentStaffMember);
+    }
+
     currentStaffMember: StaffMember;
 
   constructor(private router: Router,
@@ -57,8 +62,12 @@ export class AppComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit() {
-    if(this.isNavVisible) {
-      this.staffMemberService.getCurrentStaffMember().subscribe(data => this.currentStaffMember = data);
+    if (this.isLoggedIn) {
+      console.log('current user in app comp', this.currentStaffMember)
+      this.staffMemberService.getCurrentStaffMember().subscribe(data => {
+      this.currentStaffMember = data;
+        console.log('current user in app comp in ngOnInit', this.currentStaffMember);
+      });
     }
     this.appHeightObservable = new MutationObserver(()=>{
       this.toggleScrollTop();
@@ -69,7 +78,7 @@ export class AppComponent implements OnInit, AfterViewChecked {
 
   ngAfterViewChecked() {
 
-    if (!this.isNavVisible) {
+    if (!this.isLoggedIn) {
       this.renderer.addClass(document.body, 'bg-dark');
     } else {
       this.renderer.removeClass(document.body, 'bg-dark');
