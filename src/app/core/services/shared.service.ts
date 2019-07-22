@@ -265,6 +265,15 @@ export class SharedService {
     });
   }
 
+  scrollToFirstIvalidField() {
+    const invalidFields = document.getElementsByClassName('is-invalid');
+    if(invalidFields.length){
+      setTimeout(()=>{
+        invalidFields[0].scrollIntoView({block: 'center'});
+      })
+    }
+  }
+
   getDropdownListInfo(): Observable<DropdownListInfo> {
   return  this.http.get<DropdownListInfo>(AppConstants.baseInfoUrl)
   .pipe(

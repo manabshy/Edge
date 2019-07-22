@@ -163,6 +163,7 @@ export class CompanyEditComponent implements OnInit {
         this.logValidationErrors(control, fakeTouched);
       }
     });
+    this.sharedService.scrollToFirstIvalidField();
   }
 
   getSelectedSigner(signer: Signer) {

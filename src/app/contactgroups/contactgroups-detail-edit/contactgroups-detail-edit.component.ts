@@ -138,6 +138,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         this.logValidationErrorsFormArray(control);
       }
     });
+    this.sharedService.scrollToFirstIvalidField();
   }
 
   logValidationErrorsFormArray(control: AbstractControl) {
@@ -295,7 +296,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       phoneArray.push(this.fb.group({
         number: [x.number, { validators: [Validators.required, WedgeValidators.phoneNumberValidator()]}],
         typeId: x.typeId,
-        sendSMS: x.sendSMS || false,
+        sendSMS: x.sendSMS || true,
         isPreferred: x.isPreferred,
         comments: x.comments
       }, {validators: WedgeValidators.phoneTypeValidator(this)}));
