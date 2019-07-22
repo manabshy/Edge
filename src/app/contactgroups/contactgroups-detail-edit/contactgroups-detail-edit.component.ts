@@ -238,10 +238,8 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       address: {
         countryId: this.defaultCountryCode
       },
-      contactBy: {
-        email: true,
-        phone: true
-      },
+      contactByEmail: true,
+      contactByPhone: true,
       marketingPreferences: {
         marketBulletin: false,
         offersSurveys: false,
@@ -276,7 +274,8 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         countryId: person.address.countryId,
         country: person.address.country,
       },
-      contactBy: { email: person.contactByEmail, phone: person.contactByPhone },
+      contactByEmail: person.contactByEmail,
+      contactByPhone: person.contactByPhone,
       marketingPreferences: {
         marketBulletin: person.marketingPreferences.marketBulletin,
         offersSurveys: person.marketingPreferences.offersSurveys,
@@ -331,10 +330,8 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         countryId: 0,
         postCode: ['', {validators: [Validators.minLength(5), Validators.maxLength(8), Validators.pattern(AppConstants.postCodePattern)]}],
       }),
-      contactBy: this.fb.group({
-        email: [true],
-        phone: [true]
-      }),
+      contactByEmail: [true],
+      contactByPhone: [true],
       marketingPreferences: this.fb.group({
         marketBulletin: [false],
         offersSurveys: [false],

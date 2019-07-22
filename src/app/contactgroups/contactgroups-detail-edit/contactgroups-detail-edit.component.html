@@ -199,27 +199,23 @@
         </div>
       </div>
    </div>
-   <div formGroupName="contactBy">
-     <div class="form-group row">
-        <label class="col-sm-2 col-form-label col-form-label-sm">Contact by</label>
-        <div class="col-sm-10">
-          <div class="custom-control custom-checkbox">
-            <input class="custom-control-input" type="checkbox" name="examplecheckboxs" id="examplecheckboxs1"
-              value="option1" formControlName="email">
-            <label class="custom-control-label" for="examplecheckboxs1">
-              Email
-            </label>
-          </div>
-          <div class="custom-control custom-checkbox">
-            <input class="custom-control-input" type="checkbox" name="examplecheckboxs" id="examplecheckboxs3"
-              value="option3" formControlName="phone">
-            <label class="custom-control-label" for="examplecheckboxs3">
-              Phone
-            </label>
-          </div>
-        </div>
+   <div class="form-group row">
+    <label class="col-sm-2 col-form-label col-form-label-sm">Contact by</label>
+    <div class="col-sm-10">
+      <div class="custom-control custom-checkbox">
+        <input class="custom-control-input" type="checkbox" id="contactByEmail" formControlName="contactByEmail">
+        <label class="custom-control-label" for="examplecheckboxs1">
+          Email
+        </label>
       </div>
-   </div>
+      <div class="custom-control custom-checkbox">
+        <input class="custom-control-input" type="checkbox" id="contactByPhone" formControlName="contactByPhone">
+        <label class="custom-control-label" for="examplecheckboxs3">
+          Phone
+        </label>
+      </div>
+    </div>
+  </div>
   <div formGroupName="marketingPreferences">
       <div class="form-group row">
         <label class="col-sm-2 col-form-label col-form-label-sm">Marketing</label>
