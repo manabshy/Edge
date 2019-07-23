@@ -122,6 +122,19 @@ export class WedgeValidators {
     };
   }
 
+  static emailPhoneValidator(): ValidatorFn {
+    
+    return (control: AbstractControl): { [key: string]:boolean } | null => {
+      const email = control.get('emailAddresses').value[0].email;
+      const phone = control.get('phoneNumbers').value[0].number;
+      
+      if(!(!!email) && !(!!phone)) {
+        return { 'emailOrPhone': true };
+      }
+      return null;
+    };
+  }
+
 
 
 

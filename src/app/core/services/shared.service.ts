@@ -265,11 +265,13 @@ export class SharedService {
     });
   }
 
-  scrollToFirstIvalidField() {
+  scrollToFirstInvalidField() {
     const invalidFields = document.getElementsByClassName('is-invalid');
     if(invalidFields.length){
       setTimeout(()=>{
-        invalidFields[0].scrollIntoView({block: 'center'});
+        if(invalidFields[0]){
+          invalidFields[0].scrollIntoView({block: 'center'});
+        }
       })
     }
   }

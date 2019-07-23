@@ -622,7 +622,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     people.forEach(person => {
       seperator = counter === 0 ? '' : (counter === people.length - 1 ? ' & ' : ' , ');
       addressee += seperator + person.addressee;
-      salutation += seperator + person.title + ' ' + person.lastName;
+      salutation += seperator + person.salutation;
       counter++;
     });
 
