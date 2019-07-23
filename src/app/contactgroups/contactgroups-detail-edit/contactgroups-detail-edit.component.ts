@@ -451,9 +451,19 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       isPrimaryWebEmail: [false]
     });
   }
-  
+  removeSMSLandlines() {
+    this.phoneNumbers.controls.forEach(x => {
+      if (!this.sharedService.isUKMobile(x.value.number)) {
+        x.patchValue({
+          sendSMS: false
+        });
+      }
+    });
+  }
+
   savePerson() {
     this.errorMessage = null;
+    this.removeSMSLandlines();
     this.logValidationErrors(this.personForm, true);
     if (this.personForm.valid) {
       this.isSubmitting = true;
