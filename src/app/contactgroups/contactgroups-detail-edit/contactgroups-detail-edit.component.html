@@ -140,9 +140,9 @@
               <div class="input-group input-group-sm">
                 <input type="text" [id]="'email' + i" [placeholder]="!isFirst ? 'Additional Email' : ''" class="form-control" formControlName="email"
                 (keyup)="addRemoveEmailItem(i, false)" (blur)="addRemoveEmailItem(i, true)"
-                [ngClass]="{'border border-warning': !personForm.controls.emailAddresses.controls[0].controls.email.value && isFirst && !isContactErrorVisible,
+                [ngClass]="{'border border-warning': !personForm.controls.emailAddresses.controls[0].controls.email.value && isFirst && !personForm.errors?.emailOrPhone,
                             'is-invalid': isValid('email', i)
-                            || isContactErrorVisible}">
+                            || personForm.errors?.emailOrPhone}">
                 <div class="input-group-append">
                   <label class="btn btn-light" btnCheckbox formControlName="isPreferred" tabindex="0" (click)="togglePreferences(i, emailAddresses)"
                     role="button"  [class.active]="personForm.value.emailAddresses[i].isPreferred"><i class="fa-star" [ngClass]="!!personForm.value.emailAddresses[i].isPreferred ? 'fas' : 'far'"></i></label>
@@ -169,9 +169,9 @@
           <div class="col-sm-10">
             <div class="input-group input-group-sm">
               <input type="text" [id]="'phone' + i" class="form-control" [placeholder]="!isFirst ? 'Additional phone' : ''" formControlName="number" (keyup)="addRemovePhoneNumberItem(i, false)" (blur)="addRemovePhoneNumberItem(i, true)"
-              [ngClass]="{'border border-warning': !personForm.controls.phoneNumbers.controls[0].controls.number.value && isFirst && !isContactErrorVisible,
+              [ngClass]="{'border border-warning': !personForm.controls.phoneNumbers.controls[0].controls.number.value && isFirst && !personForm.errors?.emailOrPhone,
                         'is-invalid': isValid('number', i)
-                        || isContactErrorVisible || personForm.controls.phoneNumbers.controls[i].errors?.mismatch}">
+                        || personForm.errors?.emailOrPhone || personForm.controls.phoneNumbers.controls[i].errors?.mismatch}">
               <select class="custom-select" formControlName="typeId" [ngClass]="{'is-invalid': personForm.controls.phoneNumbers.controls[i].errors?.mismatch}">
                 <option *ngFor="let telephoneType of telephoneTypes | keyvalue:keepOriginalOrder" [value] = telephoneType.key >{{telephoneType.value}} </option>
               </select>
