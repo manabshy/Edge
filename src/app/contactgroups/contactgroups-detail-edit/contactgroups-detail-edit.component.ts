@@ -45,13 +45,13 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   formArraryErrors: string;
   isSubmitting = false;
   isLoadingAddressVisible = false;
-  isContactErrorVisible = false;
   backToAddressesList = false;
   enterAddressManually = false;
   isEditingSelectedPerson = false;
   searchTermBK = '';
   invalidPhoneType: boolean;
   formErrors = FormErrors;
+  validationMessages = ValidationMessages;
   foundAddress: AddressAutoCompleteData;
   invalidFormArrayControls = {
     number: [],
@@ -132,6 +132,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         this.formErrors[key] = '';
         for (const errorKey in control.errors) {
           if (errorKey) {
+            console.log(messages);
             this.formErrors[key] += messages[errorKey] + '\n';
           }
         }
@@ -144,6 +145,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         this.logValidationErrorsFormArray(control);
       }
     });
+    this.sharedService.scrollToFirstInvalidField();
   }
 
   logValidationErrorsFormArray(control: AbstractControl) {
@@ -236,20 +238,16 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   }
 
   populateNewPersonDetails() {
-    if (this.personForm) {
-      this.personForm.reset();
-    }
     this.personForm.patchValue({
+      warningStatusId: 1,
       firstName: this.basicPerson.firstName,
       middleName: this.basicPerson.middleName,
       lastName: this.basicPerson.lastName,
       address: {
         countryId: this.defaultCountryCode
       },
-      contactBy: {
-        email: true,
-        phone: true
-      },
+      contactByEmail: true,
+      contactByPhone: true,
       marketingPreferences: {
         marketBulletin: false,
         offersSurveys: false,
@@ -272,6 +270,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     if (person.address.postCode) {
       person.address.postCode = person.address.postCode.trim();
     }
+    console.log('warning status', person.warningStatusId);
     this.personForm.patchValue({
       warningStatusId: person.warningStatusId !== null ? person.warningStatusId : 1,
       titleId: person.titleId !== null ? person.titleId : 1,
@@ -285,7 +284,8 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         countryId: person.address.countryId,
         country: person.address.country,
       },
-      contactBy: { email: person.contactByEmail, phone: person.contactByPhone },
+      contactByEmail: person.contactByEmail,
+      contactByPhone: person.contactByPhone,
       marketingPreferences: {
         marketBulletin: person.marketingPreferences.marketBulletin,
         offersSurveys: person.marketingPreferences.offersSurveys,
@@ -303,9 +303,9 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     const phoneArray = new FormArray([]);
     phoneNumbers.forEach((x) => {
       phoneArray.push(this.fb.group({
-        number: [x.number, { validators: [Validators.required, WedgeValidators.phoneNumberValidator()]}],
+        number: [x.number, { validators: [WedgeValidators.phoneNumberValidator()]}],
         typeId: x.typeId,
-        sendSMS: x.sendSMS || false,
+        sendSMS: x.sendSMS || true,
         isPreferred: x.isPreferred,
         comments: x.comments
       }, {validators: WedgeValidators.phoneTypeValidator(this)}));
@@ -319,7 +319,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     emailAddresses.forEach(x => {
       emailFormArray.push(this.fb.group({
         id: x.id,
-        email: [x.email, { validators: [Validators.required, Validators.pattern(AppConstants.emailPattern)]}],
+        email: [x.email, { validators: [Validators.pattern(AppConstants.emailPattern)]}],
         isPreferred: x.isPreferred,
         isPrimaryWebEmail: x.isPrimaryWebEmail
       }));
@@ -331,7 +331,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   setupEditForm() {
     this.personForm = this.fb.group({
       warningStatusId: [''],
-      titleId: [''],
+      titleId: ['', {validators: [Validators.required]}],
       firstName: ['', {validators: [Validators.required, Validators.maxLength(40)]}],
       middleName: ['', {validators: Validators.maxLength(50)}],
       lastName: ['', {validators: [Validators.required, Validators.maxLength(80)]}],
@@ -341,10 +341,8 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         countryId: 0,
         postCode: ['', {validators: [Validators.minLength(5), Validators.maxLength(8), Validators.pattern(AppConstants.postCodePattern)]}],
       }),
-      contactBy: this.fb.group({
-        email: [true],
-        phone: [true]
-      }),
+      contactByEmail: [true],
+      contactByPhone: [true],
       marketingPreferences: this.fb.group({
         marketBulletin: [false],
         offersSurveys: [false],
@@ -356,56 +354,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       amlCompletedDate: [''],
       emailAddresses: this.fb.array([this.createEmailItem()]),
       phoneNumbers: this.fb.array([this.createPhoneNumberItem()])
-    });
-  }
-
-  setValidationForContactPreference(option: string) {
-    const emailFormArray = this.personForm.get('emailAddresses');
-
-    if (option === 'email') {
-      emailFormArray.setValidators(Validators.required);
-    } else {
-      emailFormArray.clearValidators();
-    }
-    emailFormArray.updateValueAndValidity();
-  }
-
-  removeValidationForPhoneAndEmail() {
-    const phoneNumber = this.phoneNumbers.controls[0];
-    const currentNumber = phoneNumber.get('number');
-    const email = this.emailAddresses.controls[0];
-    const currentEmail = email.get('email');
-    if (currentNumber.value === '' && currentEmail.value !== '') {
-      currentNumber.clearValidators();
-      currentNumber.updateValueAndValidity();
-    }
-    if (currentEmail.value === '' && currentNumber.value !== '') {
-      currentEmail.clearValidators();
-      currentEmail.updateValueAndValidity();
-    }
-  }
-  removeValidationForAdditionalFields() {
-    const currPhoneNumber = this.phoneNumbers.controls[0];
-    const currEmail = this.emailAddresses.controls[0];
-    const lastPhoneNumber = this.phoneNumbers.controls[this.phoneNumbers.controls.length - 1];
-    const lastEmail = this.emailAddresses.controls[this.emailAddresses.controls.length - 1];
-
-    this.phoneNumbers.controls.forEach(x => {
-      if (!this.sharedService.isUKMobile(x.value.number)) {
-        x.patchValue({
-          sendSMS: false
-        });
-      }
-    });
-
-    if (lastPhoneNumber.get('number').value === '' && currPhoneNumber !== lastEmail) {
-      lastPhoneNumber.get('number').clearValidators();
-      lastPhoneNumber.get('number').updateValueAndValidity();
-    }
-    if (lastEmail.get('email').value === '' && currEmail !== lastEmail || currEmail.get('email').value !== '') {
-      lastEmail.get('email').clearValidators();
-      lastEmail.get('email').updateValueAndValidity();
-    }
+    }, {validators: WedgeValidators.emailPhoneValidator()});
   }
 
   togglePreferences(index: number, group: FormArray) {
@@ -489,9 +438,9 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     return this.fb.group({
       id: 0,
       typeId: 3,
-      number: ['', { validators: [Validators.required, WedgeValidators.phoneNumberValidator()]}],
+      number: ['', { validators: [WedgeValidators.phoneNumberValidator()]}],
       orderNumber: 0,
-      sendSMS: [false],
+      sendSMS: [true],
       isPreferred: [false],
       comments: ['']
     }, {validators: WedgeValidators.phoneTypeValidator(this)});
@@ -512,7 +461,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     return this.fb.group({
       id: 0,
       orderNumber: 0,
-      email: ['', { validators: [Validators.required, Validators.pattern(AppConstants.emailPattern)]}],
+      email: ['', { validators: [Validators.pattern(AppConstants.emailPattern)]}],
       isPreferred: [false],
       isPrimaryWebEmail: [false]
     });
@@ -528,8 +477,6 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   }
   savePerson() {
     this.errorMessage = null;
-    this.removeValidationForPhoneAndEmail();
-    this.removeValidationForAdditionalFields();
     this.logValidationErrors(this.personForm, true);
     if (this.personForm.valid) {
       this.isSubmitting = true;
@@ -563,16 +510,11 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     } else {
       this.errorMessage = {} as WedgeError;
       this.errorMessage.displayMessage = 'Please correct validation errors';
-      if (!this.personForm.value.emailAddresses[0].email && !this.personForm.value.phoneNumbers[0].number) {
-        this.isContactErrorVisible = true;
-        setTimeout(() => {
-          document.getElementById('contact-error').scrollIntoView({block: 'center'});
-        });
-      }
     }
   }
   onSaveComplete(person?: Person) {
     this.personForm.reset();
+    this.errorMessage = null;
     this.sharedService.showSuccess('Person successfully saved');
     if (this.isEditingSelectedPerson && AppUtils.holdingSelectedPeople) {
       const holdingPeople = AppUtils.holdingSelectedPeople;

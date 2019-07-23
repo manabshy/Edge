@@ -19,9 +19,10 @@
     <div class="form-group row">
       <label for="title" class="col-sm-2 col-form-label col-form-label-sm">Title</label>
       <div class="col-sm-3">
-        <select class="custom-select custom-select-sm" id="title" name="title" formControlName="titleId">
+        <select class="custom-select custom-select-sm" id="title" name="title" formControlName="titleId" [ngClass]="{'is-invalid':formErrors.titleId}" >
           <option selected *ngFor="let title of titles | keyvalue:keepOriginalOrder" [value]=title.key>{{title.value}}</option>
         </select>
+        <span class="invalid-feedback">{{formErrors.titleId}}</span>
       </div>
     </div>
     <div class="form-group row">
@@ -45,90 +46,8 @@
         <span class="invalid-feedback">{{formErrors?.lastName}}</span>
       </div>
     </div>
-    <!-- <div formGroupName="address" class="form-group row">
-        <label for="country" class="col-sm-2 col-form-label col-form-label-sm">Country</label>
-        <div class="col-sm-3">
-          <select class="custom-select custom-select-sm" id="country" formControlName="countryId">
-            <option selected *ngFor="let country of countries " [value]=country.id>{{country.value}}</option>
-          </select>
-        </div>
-     </div>
-     <div class="form-group row" >
-        <label for="property" class="col-sm-2 col-form-label col-form-label-sm">
-          Address
-        </label>
-        <div class="col-sm-10">
-          <div class="input-group input-group-sm">
-            <input type="text" id="fullAddress" class="form-control"  placeholder="Search address"
-              [ngClass]="{'border border-warning': !personForm.controls.address.controls.addressLines.value && !enterAddressManually}"
-              formControlName="fullAddress" (keyup.enter)="$event.stopPropagation(); searchAddress()">
-            <div class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="searchAddress()">Search</button>
-            </div>
-            <small class="form-text w-100" *ngIf="!personForm.controls.address.controls.addressLines.value && !enterAddressManually"><i class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your score</span></small>
-          </div>
-          <ng-container *ngIf="foundAddress && !retrievedAddresses">
-            <h5 class="mt-3">Select Address</h5>
-            <div class="list-group small">
-              <div class="list-group-item" *ngIf="backToAddressesList" (click)="findAddress(searchTermBK, '')">
-                <button type="button" class="btn btn-sm btn-link p-0"><i class="fas fa-chevron-left mr-2"></i> Back</button>
-              </div>
-              <ng-container *ngIf="foundAddress?.Items?.length; else noAddress">
-                <ng-container *ngIf="!isLoadingAddressVisible">
-                  <ng-container  *ngFor="let address of foundAddress?.Items; last as isLast">
-                    <div class="list-group-item list-group-item-action" (click)="address?.Action ? findAddress(searchTermBK, address?.Id) : retrieveAddress(address?.Id)" *ngIf="!address?.Error">
-                      <div class="row align-items-center">
-                        <div class="col">
-                          {{address?.Text}}, {{address?.Description}}
-                        </div>
-                        <div class="col-auto">
-                          <button type="button" class="btn btn-sm btn-link">{{address?.Action || 'Select'}}</button>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="list-group-item" *ngIf="address?.Error || isLast">
-                      No Address Found? Try again or <a href (click)="enterAddress($event)">enter it manually</a>.
-                    </div>
-                  </ng-container>
-                </ng-container>
-              </ng-container>
-              <ng-template #noAddress>
-                <div class="list-group-item">
-                  No Address Found. Try again or <a href (click)="enterAddress($event)">enter it manually</a>.
-                </div>
-              </ng-template>
-              <ng-container *ngIf="isLoadingAddressVisible">
-                <div class="list-group-item">
-                  <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading addresses ...
-                </div>
-              </ng-container>
-            </div>
-          </ng-container>
-        </div>
-     </div>
-   <div formGroupName="address">
-      <div class="form-group row justify-content-end">
-          <div class="col-sm-10">
-            <div class="form-group" *ngIf="personForm.controls.address.controls.addressLines.value || enterAddressManually">
-              <label class="small" for="postcode">Address Lines</label>
-              <textarea type="textarea" class="form-control form-control-sm" formControlName="addressLines" id="addressLines"
-              (keydown.enter)="$event.stopPropagation()" rows="5"  cols="10" maxlength="500" [ngClass]="{'border border-warning': !personForm.controls.address.controls.addressLines.value && enterAddressManually}"></textarea>
-              <small class="form-text" *ngIf="!personForm.controls.address.controls.addressLines.value && enterAddressManually"><i class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your score</span></small>
-            </div>
-            <div class="form-group" *ngIf="showPostCode">
-              <label class="small" for="postcode">Postcode</label>
-              <div class="input-group">
-                <input type="text" class="form-control form-control-sm"  id="postcode" formControlName="postCode"
-                [ngClass]="{'is-invalid': formErrors.postCode, 'border border-warning': !personForm.controls.address.controls.postCode.value}">
-                  <span class="invalid-feedback">{{formErrors.postCode}}</span>
-                  <small class="form-text w-100" *ngIf="!personForm.controls.address.controls.postCode.value"><i class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your score</span></small>
-              </div>
-            </div>
-          </div>
-      </div>
-   </div> -->
    <app-address [personDetails]="personDetails || basicPerson" (addressDetails)="getAddress($event)"></app-address>
-   <div class="row justify-content-end" *ngIf="isContactErrorVisible" id="contact-error">
+   <div class="row justify-content-end" *ngIf="personForm.errors?.emailOrPhone" id="contact-error">
      <div class="col-sm-10">
         <div class="alert alert-danger">Please enter an email OR a phone number</div>
      </div>
@@ -145,9 +64,9 @@
               <div class="input-group input-group-sm">
                 <input type="text" [id]="'email' + i" [placeholder]="!isFirst ? 'Additional Email' : ''" class="form-control" formControlName="email"
                 (keyup)="addRemoveEmailItem(i, false)" (blur)="addRemoveEmailItem(i, true)"
-                [ngClass]="{'border border-warning': !personForm.controls.emailAddresses.controls[0].controls.email.value && isFirst && !isContactErrorVisible,
+                [ngClass]="{'border border-warning': !personForm.controls.emailAddresses.controls[0].controls.email.value && isFirst && !personForm.errors?.emailOrPhone,
                             'is-invalid': isValid('email', i)
-                            || isContactErrorVisible}">
+                            || personForm.errors?.emailOrPhone}">
                 <div class="input-group-append">
                   <label class="btn btn-light" btnCheckbox formControlName="isPreferred" tabindex="0" (click)="togglePreferences(i, emailAddresses)"
                     role="button"  [class.active]="personForm.value.emailAddresses[i].isPreferred"><i class="fa-star" [ngClass]="!!personForm.value.emailAddresses[i].isPreferred ? 'fas' : 'far'"></i></label>
@@ -174,9 +93,9 @@
           <div class="col-sm-10">
             <div class="input-group input-group-sm">
               <input type="text" [id]="'phone' + i" class="form-control" [placeholder]="!isFirst ? 'Additional phone' : ''" formControlName="number" (keyup)="addRemovePhoneNumberItem(i, false)" (blur)="addRemovePhoneNumberItem(i, true)"
-              [ngClass]="{'border border-warning': !personForm.controls.phoneNumbers.controls[0].controls.number.value && isFirst && !isContactErrorVisible,
+              [ngClass]="{'border border-warning': !personForm.controls.phoneNumbers.controls[0].controls.number.value && isFirst && !personForm.errors?.emailOrPhone,
                         'is-invalid': isValid('number', i)
-                        || isContactErrorVisible || personForm.controls.phoneNumbers.controls[i].errors?.mismatch}">
+                        || personForm.errors?.emailOrPhone || personForm.controls.phoneNumbers.controls[i].errors?.mismatch}">
               <select class="custom-select" formControlName="typeId" [ngClass]="{'is-invalid': personForm.controls.phoneNumbers.controls[i].errors?.mismatch}">
                 <option *ngFor="let telephoneType of telephoneTypes | keyvalue:keepOriginalOrder" [value] = telephoneType.key >{{telephoneType.value}} </option>
               </select>
@@ -189,7 +108,10 @@
               <input type="text" class="form-control order-sm-1" placeholder="Comments" formControlName="comments">
                 <div class="invalid-feedback order-sm-3">
                   <div *ngIf="personForm.controls.phoneNumbers.controls[i].controls.number.errors?.invalidPhoneNumber">
-                    Please enter a valid telephone number
+                    {{validationMessages.telephone.invalidPhoneNumber}}
+                  </div>
+                  <div *ngIf="personForm.controls.phoneNumbers.controls[i].controls.number.errors?.international">
+                    {{validationMessages.telephone.international}}
                   </div>
                   <div *ngIf="personForm.controls.phoneNumbers.controls[i].errors?.mismatch">
                     Telephone number doesn't match the type
@@ -201,27 +123,23 @@
         </div>
       </div>
    </div>
-   <div formGroupName="contactBy">
-     <div class="form-group row">
-        <label class="col-sm-2 col-form-label col-form-label-sm">Contact by</label>
-        <div class="col-sm-10">
-          <div class="custom-control custom-checkbox">
-            <input class="custom-control-input" type="checkbox" name="examplecheckboxs" id="examplecheckboxs1"
-              value="option1" formControlName="email">
-            <label class="custom-control-label" for="examplecheckboxs1">
-              Email
-            </label>
-          </div>
-          <div class="custom-control custom-checkbox">
-            <input class="custom-control-input" type="checkbox" name="examplecheckboxs" id="examplecheckboxs3"
-              value="option3" formControlName="phone">
-            <label class="custom-control-label" for="examplecheckboxs3">
-              Phone
-            </label>
-          </div>
-        </div>
+   <div class="form-group row">
+    <label class="col-sm-2 col-form-label col-form-label-sm">Contact by</label>
+    <div class="col-sm-10">
+      <div class="custom-control custom-checkbox">
+        <input class="custom-control-input" type="checkbox" id="contactByEmail" formControlName="contactByEmail">
+        <label class="custom-control-label" for="examplecheckboxs1">
+          Email
+        </label>
       </div>
-   </div>
+      <div class="custom-control custom-checkbox">
+        <input class="custom-control-input" type="checkbox" id="contactByPhone" formControlName="contactByPhone">
+        <label class="custom-control-label" for="examplecheckboxs3">
+          Phone
+        </label>
+      </div>
+    </div>
+  </div>
   <div formGroupName="marketingPreferences">
       <div class="form-group row">
         <label class="col-sm-2 col-form-label col-form-label-sm">Marketing</label>

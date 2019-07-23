@@ -16,6 +16,7 @@ export class AppUtils {
   public static holdingSelectedPeople: Person[];
   public static holdingRemovedPeople: number[];
   public static holdingContactType: number;
+  public static holdingCompany: Company;
   public static holdingCloned: boolean;
   static firstContactPerson: Person;
   static propertySearchTerm: string;

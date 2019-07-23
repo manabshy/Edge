@@ -166,6 +166,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.contactGroupDetails = {} as ContactGroup;
       this.contactGroupDetails.contactPeople = [];
       this.contactGroupDetails.contactType = AppUtils.holdingContactType || ContactType.Individual;
+      if(AppUtils.holdingContactType === ContactType.CompanyContact) {
+        this.isNewCompanyContact = true;
+      }
       AppUtils.holdingContactType = null;
       this.addSelectedPeople();
     }
@@ -300,6 +303,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.isLoadingCompaniesVisible = false;
     });
   }
+
   findPerson(person: BasicPerson) {
     this.contactGroupService.getAutocompletePeople(person).subscribe(data => {
       this.foundPeople = data;
@@ -464,21 +468,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     if(this.removedPersonIds.indexOf(id) >= 0 ){
       this.removedPersonIds.splice(this.removedPersonIds.indexOf(id),1);
     }
-    if (this.isNewContactGroup) {
-      this.selectedPersonId = id;
-      this.isLoadingNewPersonVisible = true;
-      this.getPersonDetails(id);
-      if (!this.contactGroupDetails) {
-        this.contactGroupDetails = {} as ContactGroup;
-        this.contactGroupDetails.contactPeople = [];
-        this.contactGroupDetails.contactType = ContactType.Individual;
-      }
-      if (this.selectedPerson) {
-         this.contactGroupDetails.contactPeople.push(this.selectedPerson);
-      }
-      this.personFinderForm.reset();
-      this.isNewContactGroup = false;
-    } else if (id !== 0 && !this.checkDuplicateInContactGroup(id)) {
+    if (id !== 0 && !this.checkDuplicateInContactGroup(id)) {
       this.selectedPersonId = id;
       this.isLoadingNewPersonVisible = true;
       this.getPersonDetails(id);
@@ -505,13 +495,11 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   checkDuplicateInContactGroup(id) {
     let isDuplicate = false;
-    if (!this.isNewContactGroup) {
-      this.contactGroupDetails.contactPeople.forEach(x => {
-        if (x.personId === id) {
-          isDuplicate = true;
-        }
-      });
-    }
+    this.contactGroupDetails.contactPeople.forEach(x => {
+      if (x.personId === id) {
+        isDuplicate = true;
+      }
+    });
     return isDuplicate;
   }
 
@@ -587,6 +575,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.contactGroupDetails.contactPeople = [];
       }
       if (this.selectedCompanyDetails) {
+        console.log(this.selectedCompanyDetails);
         this.isCompanyAdded = true;
         contactGroup.companyId = this.selectedCompanyDetails.companyId;
         contactGroup.companyName = this.selectedCompanyDetails.companyName;
@@ -649,10 +638,18 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this._location.back();
       }
       let url = this._router.url;
+      let replacedId = this.contactGroupId;
+
+      if(url.indexOf("people/"+replacedId) === -1) {
+        replacedId = 0;
+      } 
+
       if(url.indexOf("?") >= 0) {
         url = url.substring(0,url.indexOf("?"));
       }
-      url = url.replace('people/'+this.contactGroupId, 'people/'+contactGroupId);
+
+      url = url.replace('people/'+replacedId, 'people/'+contactGroupId);
+
       this._location.replaceState(url);
       this.contactGroupId = contactGroupId;
       this.init();
