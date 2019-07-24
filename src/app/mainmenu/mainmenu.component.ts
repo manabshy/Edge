@@ -13,13 +13,22 @@ import { StaffMember } from '../core/models/staff-member';
 export class MainmenuComponent implements OnInit {
   navbarCollapsed = false;
   isLoggedIn: boolean;
-  get currentStaffMember(): StaffMember {
-    return this.staffMemberService.currentStaffMember;
-  }
+  currentStaffMember: StaffMember;
+  // get currentStaffMember(): StaffMember {
+  //   return this.staffMemberService.currentStaffMember;
+  // }
 
-  constructor(public router: Router, public _location: Location, public authService: AuthService, public staffMemberService: StaffMemberService) { }
+  constructor(public router: Router,
+              public _location: Location,
+              public authService: AuthService,
+              public staffMemberService: StaffMemberService) { }
 
   ngOnInit() {
+    this.staffMemberService.getCurrentStaffMember().subscribe(data => {
+      if (data) {
+         this.currentStaffMember = data;
+      }
+       });
   }
 
   backClicked() {
