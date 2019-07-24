@@ -49,6 +49,7 @@ export class WedgeValidators {
   static phoneNumberValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
       let validNumber = false;
+      let errors = { 'invalidPhoneNumber': { value: control.value } }
       const regionCode = 'GB';
       const isNumber = /^([+]?[0-9 ]*)$/.test(control.value);
       // let regionCode = this.sharedService.getRegionCode(control.value);
@@ -63,10 +64,15 @@ export class WedgeValidators {
             control.value, regionCode
           );
           validNumber = phoneNumberUtil.isValidNumber(phoneNumber);
+          if(!validNumber){
+            if(!isInternationalNumber(control.value)) {
+              errors['international'] = true;
+            }
+          }
         } catch (e) { }
       }
       
-      return validNumber ? null : { 'invalidPhoneNumber': { value: control.value } };
+      return validNumber ? null : errors;
     };
   }
   // static phoneTypeValidator(number: string): ValidatorFn {
@@ -116,6 +122,19 @@ export class WedgeValidators {
     };
   }
 
+  static emailPhoneValidator(): ValidatorFn {
+    
+    return (control: AbstractControl): { [key: string]:boolean } | null => {
+      const email = control.get('emailAddresses').value[0].email;
+      const phone = control.get('phoneNumbers').value[0].number;
+      
+      if(!(!!email) && !(!!phone)) {
+        return { 'emailOrPhone': true };
+      }
+      return null;
+    };
+  }
+
 
 
 
@@ -142,4 +161,9 @@ export class WedgeValidators {
 function isEmptyInputValue(value: any): boolean {
   // we don't check for string here so it also works with arrays
   return value == null || value.length === 0;
+}
+
+function isInternationalNumber(number: string) {
+  const formattedNumber = number.replace(' ', '').replace('+44','');
+  return  formattedNumber.startsWith('00') || formattedNumber.startsWith('+');
 }

@@ -259,14 +259,14 @@ export class SharedService {
       return false;
     }
   }
-  isInternationNumber(number: string) {
-    const formattedNumber = number.replace(' ', '');
+  isInternationalNumber(number: string) {
+    const formattedNumber = number.replace(' ', '').replace('+44','');
     return  formattedNumber.startsWith('00') || formattedNumber.startsWith('+');
   }
   getRegionCode(number: string) {
     const phoneUtil: PhoneNumberUtil = PhoneNumberUtil.getInstance();
         const rawNumber = phoneUtil.parseAndKeepRawInput(number, 'GB');
-        return this.isInternationNumber(number) ? phoneUtil.getRegionCodeForNumber(rawNumber) : 'GB';
+        return this.isInternationalNumber(number) ? phoneUtil.getRegionCodeForNumber(rawNumber) : 'GB';
   }
   logValidationErrors(group: FormGroup, fakeTouched: boolean) {
     console.log('val.....................');
@@ -290,20 +290,17 @@ export class SharedService {
     });
   }
 
-  getDropdownListInfo2(): Observable<DropdownListInfo> {
-    // const fromLocal = localStorage.getItem('dropdownListInfo');
-    // console.log('from storage', fromLocal);
-    // if(fromLocal){
-    //   console.log('here.....');
-    //   return;
-    // }
-    // console.log('not here.....');
-
-  return  this.http.get<DropdownListInfo>(AppConstants.baseInfoUrl)
-  .pipe(
-    tap(() => console.log('from db for localstorage')),
-    tap(data => localStorage.setItem('dropdownListInfo', JSON.stringify(data))));
+  scrollToFirstInvalidField() {
+    const invalidFields = document.getElementsByClassName('is-invalid');
+    if(invalidFields.length){
+      setTimeout(()=>{
+        if(invalidFields[0]){
+          invalidFields[0].scrollIntoView({block: 'center'});
+        }
+      })
+    }
   }
+  
   getDropdownListInfo(): Observable<DropdownListInfo> {
     if (this.infoDetail) {
       console.log('info cache', this.infoDetail);

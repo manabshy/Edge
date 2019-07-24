@@ -5,6 +5,7 @@ import { TelephoneModalComponent } from '../telephone-modal/telephone-modal.comp
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
 import { TapiService } from '../services/tapi.service';
 import { TapiInfo } from '../models/tapi-info';
+import { SharedService } from '../services/shared.service';
 
 @Component({
   selector: 'app-telephone',
@@ -17,9 +18,12 @@ export class TelephoneComponent implements OnInit {
   @Input() sms: boolean;
   @Input() warning: any;
 
-  constructor(private modalService: BsModalService, private tapiService: TapiService) { }
+  constructor(private modalService: BsModalService, private tapiService: TapiService, private sharedService: SharedService) { }
 
   ngOnInit() {
+    if(!this.sharedService.isUKMobile(this.number)){
+      this.sms = false;
+    }
   }
 
   callOrText() {
