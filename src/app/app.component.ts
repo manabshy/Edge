@@ -17,6 +17,8 @@ export class AppComponent implements OnInit, AfterViewChecked {
   title = 'Wedge';
   isScrollTopVisible = false;
   isFading = false;
+  isCurrentUserAvailable = false;
+  currentStaffMember: StaffMember;
   @ViewChild('appContainer') appContainer : ElementRef;
   appHeightObservable;
   // get currentStaffMember(): StaffMember {
@@ -27,11 +29,10 @@ export class AppComponent implements OnInit, AfterViewChecked {
       return this.authService.isLoggedIn();
     }
 
-    get isLoadVisible(): boolean {
-      return !(!!this.currentStaffMember);
-    }
+    // get isLoadVisible(): boolean {
+    //   return !(!!this.currentStaffMember);
+    // }
 
-    currentStaffMember: StaffMember;
 
   constructor(private router: Router,
     public authService: AuthService,
@@ -64,9 +65,14 @@ export class AppComponent implements OnInit, AfterViewChecked {
   ngOnInit() {
     if (this.isLoggedIn) {
       console.log('current user in app comp', this.currentStaffMember)
+      console.log('is current user available flag 1', this.isCurrentUserAvailable);
       this.staffMemberService.getCurrentStaffMember().subscribe(data => {
-      this.currentStaffMember = data;
+     if(data) {
+        this.currentStaffMember = data;
+        this.isCurrentUserAvailable = true;
+     }
         console.log('current user in app comp in ngOnInit', this.currentStaffMember);
+        console.log('is current user available flag 2', this.isCurrentUserAvailable);
       });
     }
     this.appHeightObservable = new MutationObserver(()=>{

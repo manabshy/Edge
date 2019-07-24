@@ -26,9 +26,9 @@ export class MainmenuComponent implements OnInit {
   ngOnInit() {
     this.staffMemberService.getCurrentStaffMember().subscribe(data => {
       if (data) {
-         this.currentStaffMember = data;
+        this.currentStaffMember = data;
       }
-       });
+    });
   }
 
   backClicked() {

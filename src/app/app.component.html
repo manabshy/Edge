@@ -4,7 +4,7 @@
 </div>
 <a role="button" class="btn btn-primary scroll-top text-center text-white" (click)="scrollTop()" *ngIf="isScrollTopVisible"><i class="fas fa-chevron-up"></i><br>up</a>
 <!-- TODO fix getcurrentuser -->
-<!-- <div class="loader" *ngIf="isLoadVisible && isLoggedIn"> -->
+<!-- <div class="loader" *ngIf="!isCurrentUserAvailable && isLoggedIn">
 <div class="loader" *ngIf="!currentStaffMember && isLoggedIn">
   <video autoplay loop>
     <source src="assets/Boy-21827.mp4" type="video/mp4">
@@ -13,4 +13,4 @@
   <div class="loader-message" data-text="Logging in ...">
     Logging in ...
   </div>
-</div>
+</div> -->
