@@ -150,16 +150,16 @@ export class ContactGroupsService {
       map(response => response.result),
       tap(data => console.log('group notes here...', JSON.stringify(data))));
   }
-  addPersonNote(personNote: PersonNote): Observable<any> {
+  addPersonNote(personNote: PersonNote): Observable< PersonNote|any> {
     const url = `${AppConstants.basePersonUrl}/${personNote.personId}/personNotes`;
-    return this.http.post(url, personNote).pipe(
-      map(response => response),
+    return this.http.post<PersonNoteData>(url, personNote).pipe(
+      map(response => response.result),
       tap(data => console.log('added  person note here...', JSON.stringify(data))));
   }
-  addContactGroupNote(contactGroupNote: ContactGroupsNote): Observable<any> {
+  addContactGroupNote(contactGroupNote: ContactGroupsNote): Observable<ContactGroupsNote | any> {
     const url = `${AppConstants.baseContactGroupUrl}/${contactGroupNote.contactGroupId}/contactNotes`;
-    return this.http.post(url, contactGroupNote).pipe(
-      map(response => response),
+    return this.http.post<ContactGroupsNoteData>(url, contactGroupNote).pipe(
+      map(response => response.result),
       tap(data => console.log('added  contactgroup note here...', JSON.stringify(data))));
   }
 }

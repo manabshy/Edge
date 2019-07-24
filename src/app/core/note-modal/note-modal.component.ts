@@ -110,6 +110,8 @@ export class NoteModalComponent implements OnInit {
     if (note && this.selectedPerson) {
       note.personId = this.selectedPerson.personId;
       this.contactGroupService.addPersonNote(note).subscribe(data => {
+        this.personNote = data;
+        console.log(' person note to add', this.personNote);
         console.log('added  person note', data);
       });
     } else if (note && this.data.personId) {
