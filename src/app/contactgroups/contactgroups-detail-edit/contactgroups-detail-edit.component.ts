@@ -92,7 +92,6 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     private renderer: Renderer2) { }
 
   ngOnInit() {
-    console.log('todays date', new Date());
     this.listInfo = this.sharedService.dropdownListInfo;
     this.countries = this.listInfo.result.countries;
     this.titles = this.listInfo.result.titles;
