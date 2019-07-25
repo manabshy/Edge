@@ -31,6 +31,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   titleSelected = 1;
   defaultCountryCode = 232;
   telephoneTypeSelected = 1;
+  todaysDate = new Date();
   retrievedAddresses: AddressAutoCompleteData;
   personDetails: Person;
   personForm: FormGroup;

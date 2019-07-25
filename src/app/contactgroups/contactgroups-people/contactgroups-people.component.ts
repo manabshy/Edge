@@ -304,12 +304,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
     });
   }
 
-  findPerson(person: BasicPerson) {
-    this.contactGroupService.getAutocompletePeople(person).subscribe(data => {
-      this.foundPeople = data;
-      this.checkDuplicatePeople(person);
-    });
-  }
   findPotentialDuplicatePerson(person: BasicPerson) {
     this.contactGroupService.getPotentialDuplicatePeople(person).subscribe(data => {
       this.potentialDuplicatePeople = data;
@@ -648,7 +642,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
       if(url.indexOf("people/"+replacedId) === -1) {
         replacedId = 0;
-      } 
+      }
 
       if(url.indexOf("?") >= 0) {
         url = url.substring(0,url.indexOf("?"));

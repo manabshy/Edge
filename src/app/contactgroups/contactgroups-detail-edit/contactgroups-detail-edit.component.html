@@ -182,7 +182,7 @@
       <label for="amlDate" class="col-sm-2 col-form-label col-form-label-sm">AML Completed</label>
       <div class="col-sm-3">
           <input type="text" id="amlDate" placeholder="dd/mm/yyyy" class="form-control form-control-sm fake-readonly" formControlName="amlCompletedDate"
-          [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY'}" bsDatepicker readonly>
+          [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', maxDate:todaysDate}" bsDatepicker readonly>
       </div>
     </div>
 
