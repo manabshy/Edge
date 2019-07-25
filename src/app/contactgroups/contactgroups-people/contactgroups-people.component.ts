@@ -374,11 +374,15 @@ export class ContactgroupsPeopleComponent implements OnInit {
    });
   }
 
-  editSelectedCompany(id: number) {
+  editSelectedCompany(id: number, newCompany?: boolean) {
     event.preventDefault();
     this.isEditingSelectedCompany = true;
     this.contactGroupBackUp();
-    this._router.navigate(['/company-centre/detail', id, 'edit']);
+    let companyName;
+    if(newCompany) {
+      companyName = this.companyFinderForm.get("companyName").value;
+    }
+    this._router.navigate(['/company-centre/detail', id, 'edit'], {queryParams: {isNewCompany: newCompany, isEditingSelectedCompany: true, companyName: companyName }});
   }
 
   editSelectedPerson(id: number) {
@@ -450,7 +454,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.searchCompanyTermBK = this.companyFinderForm.get('companyName').value;
     this.companyFinderForm.get('companyName').setValue(company.companyName);
     setTimeout(()=>{
-      this.companyNameInput.nativeElement.scrollIntoView({block: 'center'});
+      if(this.companyNameInput) {
+        this.companyNameInput.nativeElement.scrollIntoView({block: 'center'});
+      }
     })
    }
 

@@ -213,15 +213,17 @@ export class AddressComponent implements OnInit {
         break;
       case !!this.companyDetails:
         this.companyDetails = company;
-        if (company.companyAddress.postCode) {
-          company.companyAddress.postCode = company.companyAddress.postCode.trim();
-        }
-        this.addressForm.patchValue({
+        if(company.companyAddress){
+          if (company.companyAddress.postCode) {
+            company.companyAddress.postCode = company.companyAddress.postCode.trim();
+          }
+          this.addressForm.patchValue({
             addressLines: company.companyAddress.addressLines,
             postCode: company.companyAddress.postCode,
             countryId: company.companyAddress.countryId,
             country: company.companyAddress.country,
-        });
+          });
+        }
         break;
       case !!this.propertyDetails:
       this.propertyDetails = property;

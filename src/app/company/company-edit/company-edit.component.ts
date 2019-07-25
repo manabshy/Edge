@@ -26,6 +26,8 @@ export class CompanyEditComponent implements OnInit {
   address: Address;
   companyId: number;
   isNewCompany: boolean;
+  isEditingSelectedCompany: boolean;
+  companyName: string;
   companyDetails: Company;
   existingSigner: Signer;
   signer: Signer;
@@ -57,8 +59,10 @@ export class CompanyEditComponent implements OnInit {
     this.route.params.subscribe(params => this.companyId = this.companyId || +params['id'] || 0);
     this.route.queryParams.subscribe(params => {
       this.isNewCompany = this.companyId ? false : params['isNewCompany'];
+      this.isEditingSelectedCompany = params['isEditingSelectedCompany'] || false;
+      this.companyName = params['companyName'] || null;
     });
-    this.setupCompanyForm();
+    this.setupCompanyForm(this.companyName);
     const id = this.isNewCompany ? 0 : this.companyId;
     if (id) {
       this.getCompanyDetails(id);
@@ -131,9 +135,9 @@ export class CompanyEditComponent implements OnInit {
     });
   }
 
-  private setupCompanyForm() {
+  private setupCompanyForm(companyName: string) {
     this.companyForm = this.fb.group({
-      companyName: ['', Validators.required],
+      companyName: [companyName || '', Validators.required],
       companyTypeId: 0,
       signer: [''],
       fullAddress: [''],
@@ -148,6 +152,11 @@ export class CompanyEditComponent implements OnInit {
         website: [''],
         amlCompletedDate: ['']
     });
+
+    if(companyName) {
+      this.companyDetails = {} as Company;
+      this.companyDetails.companyName = companyName;
+    }
   }
 
   logValidationErrors(group: FormGroup = this.companyForm, fakeTouched: boolean) {
@@ -237,20 +246,24 @@ export class CompanyEditComponent implements OnInit {
     this.isSubmitting = true;
     if (this.isNewCompany) {
       console.log('add company', company);
-      this.companyService.addCompany(company).subscribe(() => this.onSaveComplete(), (error: WedgeError) => {
+      this.companyService.addCompany(company).subscribe(res => this.onSaveComplete(res.result), (error: WedgeError) => {
         this.errorMessage = error;
         this.sharedService.showError(this.errorMessage);
         this.isSubmitting = false;
       });
     } else {
-      this.companyService.updateCompany(company).subscribe(() => this.onSaveComplete(), (error: WedgeError) => {
+      this.companyService.updateCompany(company).subscribe(res => this.onSaveComplete(res.result), (error: WedgeError) => {
         this.errorMessage = error;
         this.sharedService.showError(this.errorMessage);
         this.isSubmitting = false;
       });
     }
   }
-  onSaveComplete() {
+  onSaveComplete(company?: Company) {
+    if(this.isEditingSelectedCompany && company){
+      AppUtils.holdingSelectedCompany = company;
+      console.log(AppUtils.holdingSelectedCompany);
+    }
     this.companyForm.reset();
     this.sharedService.showSuccess('Company successfully saved');
     this._location.back();
