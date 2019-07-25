@@ -14,9 +14,9 @@
               </button>
               <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
                 aria-labelledby="actionsToggle">
-                <li role="menuitem"><button type="button" class="dropdown-item"><i
+                <li role="menuitem"><button type="button" class="dropdown-item" (click)="setImportantFlag(note?.personNoteId, true)"><i
                       class="fas fa-exclamation-circle fa-fw mr-2 text-danger"></i> Set as important</button></li>
-                <li role="menuitem"><button type="button" class="dropdown-item"><i
+                <li role="menuitem"><button type="button" class="dropdown-item" (click)="setPinnedFlag(note?.personNoteId, true)"><i
                       class="fas fa-thumbtack fa-fw mr-2"></i> Pin to top</button></li>
               </ul>
             </div>
@@ -67,9 +67,9 @@
               </button>
               <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
                 aria-labelledby="actionsToggle">
-                <li role="menuitem"><button type="button" class="dropdown-item"><i
-                      class="fas fa-exclamation-circle fa-fw mr-2 text-danger"></i> Set as important</button></li>
-                <li role="menuitem"><button type="button" class="dropdown-item"><i
+                <li role="menuitem"><button type="button" class="dropdown-item" (click)="setImportantFlag(note.contactNoteId)"><i
+                      class="fas fa-exclamation-circle fa-fw mr-2 text-danger" ></i> Set as important</button></li>
+                <li role="menuitem"><button type="button" class="dropdown-item" (click)="setPinnedFlag(note.contactNoteId)"><i
                       class="fas fa-thumbtack fa-fw mr-2"></i> Pin to top</button></li>
               </ul>
             </div>

@@ -172,11 +172,20 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
   }
 
   personNotesChanged(personNote: PersonNote) {
+   if (personNote.isPinned) {
+      this.personNotes.unshift(personNote);
+   } else {
     this.personNotes.push(personNote);
+   }
     this.personNotesSubject.next(personNote);
   }
+
   contactGroupNotesChanged(contactGroupNote: ContactGroupsNote) {
+   if (contactGroupNote.isPinned) {
+      this.contactGroupNotes.unshift(contactGroupNote);
+   } else {
     this.contactGroupNotes.push(contactGroupNote);
+   }
     this.contactGroupNotesSubject.next(contactGroupNote);
   }
 }

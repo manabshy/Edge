@@ -18,7 +18,38 @@ export class NotesComponent implements OnInit {
   ngOnInit() {
   }
 
+  setImportantFlag(noteId: number, isPersonNote?: boolean) {
+    if (isPersonNote) {
+      this.personNotes.forEach(x => {
+        if (x.personNoteId === noteId) {
+          x.isImportant = true;
+        }
+      });
+    } else {
+      this.contactGroupNotes.forEach(x => {
+        if (x.contactNoteId === noteId) {
+          x.isImportant = true;
+        }
+      });
+    }
+  }
 
+  setPinnedFlag(noteId: number, isPersonNote?: boolean) {
+    if (isPersonNote) {
+      this.personNotes.forEach(x => {
+        if (x.personNoteId === noteId) {
+          x.isPinned = true;
+        }
+      });
+    } else {
+      this.contactGroupNotes.forEach(x => {
+        if (x.contactNoteId === noteId) {
+          x.isPinned = true;
+        }
+      });
+    }
+  }
+ 
  addNote(dataNote) {
    if (this.dataNote) {
       this.sharedService.addNote(this.dataNote);
