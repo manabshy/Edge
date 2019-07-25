@@ -115,13 +115,18 @@ export class NoteModalComponent implements OnInit {
     if (note && this.selectedPerson) {
       note.personId = this.selectedPerson.personId;
       this.contactGroupService.addPersonNote(note).subscribe(data => {
-        this.personNote = data;
-        console.log(' person note to add', this.personNote);
-        console.log('added  person note', data);
+        // if(data) {
+        //   this.personNote = data;
+        //   this.contactGroupService.personNotesChanged(this.personNote);
+        // }
       });
     } else if (note && this.data.personId) {
       note.personId = this.data.personId;
       this.contactGroupService.addPersonNote(note).subscribe(data => {
+        if(data) {
+          this.personNote = data;
+          this.contactGroupService.personNotesChanged(this.personNote);
+        }
         console.log('added person note with id', data);
       });
     }
@@ -131,6 +136,10 @@ export class NoteModalComponent implements OnInit {
     if (note && this.selectedContactGroup) {
       note.contactGroupId = this.selectedContactGroup.contactGroupId;
       this.contactGroupService.addContactGroupNote(note).subscribe(data => {
+        if(data){
+          this.contactGroupNote = data;
+          this.contactGroupService.contactGroupNotesChanged(this.contactGroupNote);
+        }
         console.log('added  contact group note', data);
       });
     }

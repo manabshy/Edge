@@ -52,9 +52,12 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
   }
 
   getPersonNotes(personId: number) {
-    this.contactGroupService.getPersonNotes(personId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
+    this.contactGroupService.getPersonNotes(personId).subscribe(data => {
       this.personNotes = data;
     });
+    // this.contactGroupService.getPersonNotes(personId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
+    //   this.personNotes = data;
+    // });
   }
   getContactGroupNotes(personId: number) {
     this.contactGroupService.getPersonNotes(personId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
