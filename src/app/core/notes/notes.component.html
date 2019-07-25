@@ -1,4 +1,9 @@
 <div class="list-group">
+  <div class="list-group-item list-group-item-action text-center py-4" *ngIf="dataNote" (click)="addNote()">
+    <span class="btn-link">
+      <i class="fas fa-sticky-note mr-2"></i> Add Note
+    </span>
+  </div>
   <div class="list-group-item text-center text-danger" *ngIf="!personNotes?.length && !contactGroupNotes?.length; else results">
     <i class="far fa-sad-tear"></i> No notes
   </div>
@@ -110,9 +115,4 @@
       </div>
    </ng-container>
   </ng-template>
-  <div class="list-group-item list-group-item-action text-center py-4" *ngIf="dataNote" (click)="addNote()">
-    <span class="btn-link">
-      <i class="fas fa-sticky-note mr-2"></i> Add Note
-    </span>
-  </div>
 </div>
