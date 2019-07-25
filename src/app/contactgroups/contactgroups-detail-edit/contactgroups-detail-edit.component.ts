@@ -305,6 +305,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     phoneNumbers.forEach((x) => {
       phoneArray.push(this.fb.group({
         number: [x.number, { validators: [WedgeValidators.phoneNumberValidator()]}],
+        id: x.id,
         typeId: x.typeId,
         sendSMS: x.sendSMS || true,
         isPreferred: x.isPreferred,
