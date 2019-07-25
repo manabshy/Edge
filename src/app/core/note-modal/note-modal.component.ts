@@ -50,10 +50,10 @@ export class NoteModalComponent implements OnInit {
     });
 
     this.noteForm.get('text').valueChanges.subscribe(res => {
-      if(!res){
+      if (!res) {
         this.shortcutsAdded = [];
       }
-    })
+    });
   }
 
   select(person: Person) {
@@ -84,7 +84,12 @@ export class NoteModalComponent implements OnInit {
       text += x + ', ';
     });
     text = text.replace(/,\s*$/, '');
-    this.noteForm.get('text').setValue(text);
+    const enteredText =  this.noteForm.get('text').value;
+    if (enteredText) {
+      this.noteForm.get('text').setValue(`${enteredText} ${text}`);
+    } else {
+      this.noteForm.get('text').setValue(text);
+    }
   }
 
   action(value: boolean) {
