@@ -29,6 +29,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   titleSelected = 1;
   defaultCountryCode = 232;
   telephoneTypeSelected = 1;
+  todaysDate = new Date();
   retrievedAddresses: AddressAutoCompleteData;
   personDetails: Person;
   personForm: FormGroup;
@@ -57,6 +58,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     typeId: []
   };
   number: string;
+
   get showPostCode(): boolean {
     return this.address.get('countryId').value === this.defaultCountryCode;
   }
@@ -90,6 +92,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     private renderer: Renderer2) { }
 
   ngOnInit() {
+    console.log('todays date', new Date());
     this.listInfo = this.sharedService.dropdownListInfo;
     this.countries = this.listInfo.result.countries;
     this.titles = this.listInfo.result.titles;

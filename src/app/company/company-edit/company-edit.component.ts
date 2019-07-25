@@ -31,6 +31,7 @@ export class CompanyEditComponent implements OnInit {
   signer: Signer;
   errorMessage: WedgeError;
   defaultCountryCode = 232;
+  todaysDate = new Date();
   formErrors = FormErrors;
 
   constructor(private contactGroupService: ContactGroupsService,
