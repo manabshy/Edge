@@ -12,14 +12,18 @@ export class NotesComponent implements OnInit, OnChanges {
   @Input() personNotes: PersonNote[];
   @Input() contactGroupNotes: ContactGroupsNote[];
   notes: any;
+  order = ['isPinned', 'createDate'];
+  reverse = true;
 
   constructor(private sharedService: SharedService) { }
 
   ngOnInit() {
+    console.log('init',this.personNotes)
     this.init();
   }
 
   ngOnChanges() {
+    console.log('changes', this.personNotes);
     this.init();
   }
 

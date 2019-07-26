@@ -49,6 +49,7 @@ import { AgmCoreModule } from '@agm/core';
 //various
 import { AutocompleteOffDirective } from './shared/autocomplete-off.directive';
 import { HighlightPipe } from './shared/highlight.pipe';
+import { AppConstants } from './shared/app-constants';
 
 @NgModule({
   declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent,
@@ -82,7 +83,7 @@ import { HighlightPipe } from './shared/highlight.pipe';
     ToastNoAnimationModule.forRoot(),
     CarouselModule.forRoot(),
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyC1Hv_vNkUxvvRibyjPbfgNhrTNi30jNtQ'
+      apiKey: AppConstants.googleApiKey
     })
   ],
   entryComponents: [

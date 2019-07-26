@@ -16,6 +16,7 @@ export class AppConstants {
   public static get clientId(): string { return'03d5d394-2418-42fa-a345-556b8d7ffcdb'; }
   public static get endpointUrl(): string { return `${environment.endpointUrl}` ; }
   public static get addressApiKey(): string { return 'EW85-YA52-FM38-RB26'; }
+  public static get googleApiKey(): string { return 'AIzaSyC1Hv_vNkUxvvRibyjPbfgNhrTNi30jNtQ'; }
   public static get postCodePattern(): any {
     return /^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]?[\s]+?[0-9][A-Za-z]{2}|[Gg][Ii][Rr][\s]+?0[Aa]{2})$/; }
   public static get emailPattern(): any {

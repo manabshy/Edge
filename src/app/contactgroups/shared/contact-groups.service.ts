@@ -180,6 +180,7 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
     } else {
       this.personNotes.push(personNote);
     }
+    this.sortByPinnedAndDate(this.personNotes);
     this.personNotesSubject.next(personNote);
   }
 
@@ -189,7 +190,20 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
     } else {
       this.contactGroupNotes.push(contactGroupNote);
     }
+    this.sortByPinnedAndDate(this.contactGroupNotes);
     this.contactGroupNotesSubject.next(contactGroupNote);
+  }
+
+  sortByPinnedAndDate(notes) {
+    if(notes){
+      notes.sort((a,b)=> {
+        if(a.isPinned === b.isPinned) {
+          return a.createDate > b.createDate;
+        }
+        return a.isPinned !== b.isPinned;
+      })
+      notes.reverse();
+    }
   }
 }
 
