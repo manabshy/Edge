@@ -84,12 +84,7 @@ export class NoteModalComponent implements OnInit {
       text += x + ', ';
     });
     text = text.replace(/,\s*$/, '');
-    const enteredText =  this.noteForm.get('text').value;
-    if (enteredText) {
-      this.noteForm.get('text').setValue(`${enteredText} ${text}`);
-    } else {
-      this.noteForm.get('text').setValue(text);
-    }
+    this.noteForm.get('text').setValue(text);
   }
 
   action(value: boolean) {
