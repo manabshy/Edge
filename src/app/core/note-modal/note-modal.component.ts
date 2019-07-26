@@ -6,6 +6,7 @@ import { Person } from '../models/person';
 import { TargetLocator } from 'selenium-webdriver';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { PersonNote, ContactGroup, ContactGroupsNote } from 'src/app/contactgroups/shared/contact-group';
+import { text } from '@angular/core/src/render3';
 
 @Component({
   selector: 'app-note-modal',
@@ -34,7 +35,6 @@ export class NoteModalComponent implements OnInit {
     'UO': 'Under offer',
     'NNW': 'Number not working'
   };
-  shortcutsAdded: any[] = [];
   public keepOriginalOrder = (a) => a.key;
 
   constructor(public bsModalRef: BsModalRef, private fb: FormBuilder, private contactGroupService: ContactGroupsService) { }
@@ -73,18 +73,32 @@ export class NoteModalComponent implements OnInit {
   }
 
   consumeShortcut(shortcut: string) {
-    const index = this.shortcutsAdded.indexOf(shortcut);
-    let text = '';
-    if (index >= 0) {
-      this.shortcutsAdded.splice(index, 1);
-    } else {
-      this.shortcutsAdded.push(shortcut);
+    const textControl = this.noteForm.get('text');
+    let textValue = textControl.value;
+    switch(shortcut){
+      case this.shortcuts.LVM:
+        textValue = textValue.replace(this.shortcuts.LVMTCB, shortcut);
+        textValue += textValue ? '' : shortcut;
+        break;
+      case this.shortcuts.LVMTCB:
+        if(!textValue.includes(this.shortcuts.LVMTCB)) {
+          textValue = textValue.replace(this.shortcuts.LVM, shortcut);
+          textValue += textValue ? '' : shortcut;
+        }
+        break;
+      default:
+        if(textValue.includes(shortcut)) {
+          if(textValue.includes(shortcut + ', ')){
+            textValue = textValue.replace(shortcut + ', ','');
+          } else {
+            textValue = textValue.replace(shortcut,'');
+          }
+        } else {
+          textValue = textValue.slice(0, 0) + shortcut + ', ' + textValue.slice(0);
+        } 
     }
-    this.shortcutsAdded.forEach(x => {
-      text += x + ', ';
-    });
-    text = text.replace(/,\s*$/, '');
-    this.noteForm.get('text').setValue(text);
+    textValue = textValue.replace(/,\s*$/, '');
+    textControl.setValue(textValue);
   }
 
   action(value: boolean) {
