@@ -211,12 +211,16 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
   sortByPinnedAndDate(notes) {
     if(notes){
       notes.sort((a,b)=> {
-        if(a.isPinned === b.isPinned) {
-          return a.createDate > b.createDate;
+        const dateA = new Date(a.createDate);
+        const dateB = new Date(b.createDate);
+        if(a.isPinned !== b.isPinned) {
+          return b.isPinned - a.isPinned
+        } else {
+          if(dateA < dateB) return 1;
+          if(dateA > dateB) return -1;
         }
-        return a.isPinned !== b.isPinned;
+        return 0;
       })
-      notes.reverse();
     }
   }
 }
