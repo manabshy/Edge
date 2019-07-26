@@ -174,6 +174,20 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
       tap(data => console.log('added  contactgroup note here...', JSON.stringify(data))));
   }
 
+  updatePersonNote(personNote: PersonNote): Observable< PersonNote|any> {
+    const url = `${AppConstants.basePersonUrl}/${personNote.personId}/personNotes/${personNote.personNoteId}`;
+    return this.http.put<PersonNoteData>(url, personNote).pipe(
+      map(response => response.result),
+      tap(data => console.log('updated note  person note here...', JSON.stringify(data))));
+  }
+
+  updateContactGroupNote(contactGroupNote: ContactGroupsNote): Observable<ContactGroupsNote | any> {
+    const url = `${AppConstants.baseContactGroupUrl}/${contactGroupNote.contactGroupId}/contactNotes/${contactGroupNote.contactNoteId}`;
+    return this.http.put<ContactGroupsNoteData>(url, contactGroupNote).pipe(
+      map(response => response.result),
+      tap(data => console.log('updated contactgroup note here...', JSON.stringify(data))));
+  }
+
   personNotesChanged(personNote: PersonNote) {
     if (personNote.isPinned) {
       this.personNotes.unshift(personNote);
