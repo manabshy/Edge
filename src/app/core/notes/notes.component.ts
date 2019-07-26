@@ -7,47 +7,40 @@ import { SharedService } from 'src/app/core/services/shared.service';
   templateUrl: './notes.component.html',
   styleUrls: ['./notes.component.scss']
 })
-export class NotesComponent implements OnInit {
+export class NotesComponent implements OnInit, OnChanges {
   @Input() dataNote: any;
   @Input() personNotes: PersonNote[];
   @Input() contactGroupNotes: ContactGroupsNote[];
-  notes: ContactGroupsNote[];
+  notes: any;
 
   constructor(private sharedService: SharedService) { }
 
   ngOnInit() {
+    this.init();
   }
 
-  setImportantFlag(noteId: number, isPersonNote?: boolean) {
-    if (isPersonNote) {
-      this.personNotes.forEach(x => {
-        if (x.personNoteId === noteId) {
-          x.isImportant = true;
-        }
-      });
-    } else {
-      this.contactGroupNotes.forEach(x => {
-        if (x.contactNoteId === noteId) {
-          x.isImportant = true;
-        }
-      });
-    }
+  ngOnChanges() {
+    this.init();
   }
 
-  setPinnedFlag(noteId: number, isPersonNote?: boolean) {
-    if (isPersonNote) {
-      this.personNotes.forEach(x => {
-        if (x.personNoteId === noteId) {
-          x.isPinned = true;
-        }
-      });
-    } else {
-      this.contactGroupNotes.forEach(x => {
-        if (x.contactNoteId === noteId) {
-          x.isPinned = true;
-        }
-      });
-    }
+  init() {
+    this.notes = this.personNotes || this.contactGroupNotes;
+  }
+
+  setImportantFlag(noteId: number) {
+    this.notes.forEach(x => {
+      if (x.contactNoteId === noteId || x.personNoteId === noteId) {
+        x.isImportant = true;
+      }
+    });
+  }
+
+  setPinnedFlag(noteId: number) {
+    this.notes.forEach(x => {
+      if (x.contactNoteId === noteId || x.personNoteId === noteId) {
+        x.isPinned = true;
+      }
+    });
   }
  
  addNote(dataNote) {
