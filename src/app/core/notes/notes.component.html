@@ -20,12 +20,12 @@
               aria-labelledby="actionsToggle">
               <li role="menuitem"><button type="button" class="dropdown-item"
                   (click)="setFlag(note?.personNoteId || note?.contactNoteId, true)"><i
-                    class="fas fa-exclamation-circle fa-fw mr-2 text-danger"></i> Set as <ng-container *ngIf="note?.isImportant; else important ">unimportant</ng-container>
+                    class="fas fa-exclamation-circle fa-fw mr-2 text-danger" [style.opacity]="note?.isImportant ? '.3' : null"></i>Set as <ng-container *ngIf="note?.isImportant; else important ">unimportant</ng-container>
                     <ng-template  #important>important</ng-template></button></li>
               <li role="menuitem"><button type="button" class="dropdown-item"
-                  (click)="setFlag(note?.personNoteId || note?.contactNoteId, false)"><i class="fas fa-thumbtack fa-fw mr-2"></i>
-                  <ng-container *ngIf="note?.isPinned; else pin "> unpin </ng-container>
-                  <ng-template  #pin>pin </ng-template>to top</button></li>
+                  (click)="setFlag(note?.personNoteId || note?.contactNoteId, false)"><i class="fas fa-thumbtack fa-fw mr-2" [style.opacity]="note?.isPinned ? '.3' : null"></i>
+                  <ng-container *ngIf="note?.isPinned; else pin ">Unpin </ng-container>
+                  <ng-template  #pin>Pin to top</ng-template></button></li>
             </ul>
           </div>
         </div>
