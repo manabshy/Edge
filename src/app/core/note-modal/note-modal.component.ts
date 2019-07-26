@@ -48,12 +48,6 @@ export class NoteModalComponent implements OnInit {
       isPinned: false,
       text: ['']
     });
-
-    this.noteForm.get('text').valueChanges.subscribe(res => {
-      if (!res) {
-        this.shortcutsAdded = [];
-      }
-    });
   }
 
   select(person: Person) {
