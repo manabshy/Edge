@@ -189,8 +189,9 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
   }
 
   personNotesChanged(personNote: PersonNote) {
-    if (personNote.isPinned) {
-      this.personNotes.unshift(personNote);
+    const index = this.personNotes.findIndex(x => x.personNoteId === personNote.personNoteId);
+    if (index !== -1) {
+      this.personNotes[index] = personNote;
     } else {
       this.personNotes.push(personNote);
     }
@@ -199,8 +200,9 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
   }
 
   contactGroupNotesChanged(contactGroupNote: ContactGroupsNote) {
-    if (contactGroupNote.isPinned) {
-      this.contactGroupNotes.unshift(contactGroupNote);
+    const index = this.contactGroupNotes.findIndex(x => x.contactNoteId === contactGroupNote.contactNoteId);
+    if (index !== -1) {
+      this.contactGroupNotes[index] = contactGroupNote;
     } else {
       this.contactGroupNotes.push(contactGroupNote);
     }
@@ -209,18 +211,18 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
   }
 
   sortByPinnedAndDate(notes) {
-    if(notes){
-      notes.sort((a,b)=> {
+    if (notes) {
+      notes.sort((a, b) => {
         const dateA = new Date(a.createDate);
         const dateB = new Date(b.createDate);
-        if(a.isPinned !== b.isPinned) {
-          return b.isPinned - a.isPinned
+        if (a.isPinned !== b.isPinned) {
+          return b.isPinned - a.isPinned;
         } else {
-          if(dateA < dateB) return 1;
-          if(dateA > dateB) return -1;
+          if (dateA < dateB) { return 1; }
+          if (dateA > dateB) { return -1; }
         }
         return 0;
-      })
+      });
     }
   }
 }

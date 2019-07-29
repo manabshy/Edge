@@ -38,25 +38,15 @@ export class NotesComponent implements OnInit, OnChanges {
         } else {
           x.isPinned ? x.isPinned = false : x.isPinned = true;
         }
-        x.contactNoteId ? this.contactGroupService.updateContactGroupNote(x).subscribe()
-                        : this.contactGroupService.updatePersonNote(x).subscribe();
+       if (x.contactNoteId) {
+          this.contactGroupService.updateContactGroupNote(x).subscribe(() => this.contactGroupService.contactGroupNotesChanged(x));
+       } else {
+         this.contactGroupService.updatePersonNote(x).subscribe(() => this.contactGroupService.personNotesChanged(x));
+       }
+        // x.contactNoteId ? this.contactGroupService.updateContactGroupNote(x).subscribe()
+        //                 : this.contactGroupService.updatePersonNote(x).subscribe();
       }});
   }
-  // setImportantFlag(noteId: number) {
-  //   this.notes.forEach(x => {
-  //     if (x.contactNoteId === noteId || x.personNoteId === noteId) {
-  //       x.isImportant ? x.isImportant = false : x.isImportant = true;
-  //     }
-  //   });
-  // }
-
-  // setPinnedFlag(noteId: number) {
-  //   this.notes.forEach(x => {
-  //     if (x.contactNoteId === noteId || x.personNoteId === noteId) {
-  //       x.isPinned = true;
-  //     }
-  //   });
-  // }
 
  addNote(dataNote) {
    if (this.dataNote) {
