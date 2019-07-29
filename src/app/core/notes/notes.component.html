@@ -4,10 +4,13 @@
       <i class="fas fa-sticky-note mr-2"></i> Add Note
     </span>
   </div>
-  <div class="list-group-item text-center text-danger" *ngIf="!personNotes?.length && !contactGroupNotes?.length; else results">
-    <i class="far fa-sad-tear"></i> No notes
+  <div class="text-center" *ngIf="!notes || isUpdating; else results">
+    <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading notes ...
   </div>
   <ng-template #results>
+    <div class="list-group-item text-center text-danger" *ngIf="!notes?.length">
+      <i class="far fa-sad-tear"></i> No notes
+    </div>
     <div class="list-group-item" *ngFor="let note of notes">
       <div class="row">
         <div class="col-sm-2 text-right order-sm-2">
@@ -47,7 +50,7 @@
             <div class="col-sm">
               <dl class="row">
                 <dt class="col-4 d-sm-none">Date</dt>
-                <dd class="col">{{note?.createDate | date: 'd/MM/yyyy'}}</dd>
+                <dd class="col"><pre>{{note?.createDate | date: 'HH:mm\nd/MM/yyyy'}}</pre></dd>
               </dl>
             </div>
             <div class="col-sm text-truncate">

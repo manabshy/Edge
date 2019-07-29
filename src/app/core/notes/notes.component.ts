@@ -15,6 +15,7 @@ export class NotesComponent implements OnInit, OnChanges {
   notes: any;
   order = ['isPinned', 'createDate'];
   reverse = true;
+  isUpdating = false;
 
   constructor(private sharedService: SharedService, private contactGroupService: ContactGroupsService) { }
 
@@ -37,11 +38,18 @@ export class NotesComponent implements OnInit, OnChanges {
           x.isImportant ? x.isImportant = false : x.isImportant = true;
         } else {
           x.isPinned ? x.isPinned = false : x.isPinned = true;
+          this.isUpdating = true;
         }
        if (x.contactNoteId) {
-          this.contactGroupService.updateContactGroupNote(x).subscribe(() => this.contactGroupService.contactGroupNotesChanged(x));
+          this.contactGroupService.updateContactGroupNote(x).subscribe(() => {
+            this.contactGroupService.contactGroupNotesChanged(x)
+            this.isUpdating = false;            
+          });
        } else {
-         this.contactGroupService.updatePersonNote(x).subscribe(() => this.contactGroupService.personNotesChanged(x));
+         this.contactGroupService.updatePersonNote(x).subscribe(() => {
+           this.contactGroupService.personNotesChanged(x)
+            this.isUpdating = false;
+          });
        }
         // x.contactNoteId ? this.contactGroupService.updateContactGroupNote(x).subscribe()
         //                 : this.contactGroupService.updatePersonNote(x).subscribe();
