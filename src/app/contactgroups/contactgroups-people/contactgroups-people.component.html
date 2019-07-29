@@ -30,16 +30,6 @@
       *ngIf="contactGroupDetails?.contactPeople && (contactGroupDetails?.contactPeople.length !== initialContactGroupLength) && isTypePicked">
       There are pending changes on the people list. Save to make them effective.
     </div>
-    <div class="alert alert-warning" *ngIf="isSwitchTypeMsgVisible && contactGroupDetails?.contactType !== 4">
-      <ng-container *ngIf="contactGroupDetails?.contactPeople.length < 2; else switchToMulti">
-        You can't have less than <b>2</b> people in an <b>Multi/Sharer</b> contact group. We have switched to
-        <b>Individual/Joint</b>.
-      </ng-container>
-      <ng-template #switchToMulti>
-        You can't have more than <b>2</b> people in an <b>Individual/Joint</b> contact group. We have switched to
-        <b>Multi/Sharer</b>.
-      </ng-template>
-    </div>
     <div class="alert alert-warning" *ngIf="contactGroupDetails?.referenceCount && !isCloned"
       (click)="cloneContactGroup()">
       Transaction history present. You can't add or remove people from this Contact Group.<br>If you want to add or remove
@@ -324,19 +314,6 @@
                       <input type="checkbox" class="custom-control-input" id="isRelocationAgent" formControlName="isRelocationAgent">
                       <label class="custom-control-label" for="isRelocationAgent">Is Relocation Agent</label>
                     </div>
-                  </div>
-                  <div class="form-group col type-col" *ngIf="contactGroupDetails?.contactType !== 4">
-                    <ng-container
-                      *ngFor="let type of contactGroupTypes | keyvalue:keepOriginalOrder; let i = index; last as isLast">
-                      <div class="custom-control custom-radio custom-control-inline" *ngIf="!isLast"
-                        [tooltip]="type.key === 1 ? 'Remove people to select this option' : 'Add 2 or more people to select this option'"
-                        [containerClass]="isTypeDisabled(type.key) ? '' : 'd-none'" placement="auto">
-                        <input type="radio" [id]="'individual' + i" name="contactType" class="custom-control-input"
-                          [value]="type.key" formControlName="contactType"
-                          [attr.disabled]="isTypeDisabled(type.key) || contactGroupDetails?.referenceCount ? '' : null">
-                        <label class="custom-control-label" [attr.for]="'individual' + i">{{type.value}}</label>
-                      </div>
-                    </ng-container>
                   </div>
                 </div>
               </div>

@@ -55,7 +55,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
   initialContactGroupLength = 0;
   isSubmitting = false;
   errorMessage: WedgeError;
-  isSwitchTypeMsgVisible = false;
   isLoadingCompaniesVisible = false;
   orderFoundPeople = 'matchScore';
   reverse = true;
@@ -138,7 +137,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       addressee: [''],
       comments: [''],
       isRelocationAgent: false,
-      contactType: 0
+      contactType: ContactType.Individual
     });
     this.personFinderForm = this.fb.group({
       firstName: [''],
@@ -202,16 +201,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.findPotentialDuplicatePerson(data);
       });
 
-      const contactTypeField = this.contactGroupDetailsForm.controls.contactType;
-      contactTypeField.valueChanges
-        .subscribe(data => {
-          if (data && data !== this.contactGroupDetails.contactType && contactTypeField.pristine) {
-            this.isSwitchTypeMsgVisible = true;
-          } else {
-            this.isSwitchTypeMsgVisible = false;
-          }
-        });
-
     this.companyFinderForm.valueChanges.pipe(debounceTime(400)).subscribe(data => this.findCompany(data));
     this.getContactGroupNotes(this.contactGroupId);
   }
@@ -263,9 +252,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
           }
           this.contactGroupDetails.contactPeople = [];
           this.contactGroupDetails.contactPeople.push(this.firstContactGroupPerson);
-          this.setSalution();
+          this.setSalutation();
           this.isLoadingNewPersonVisible = false;
-          this.isSwitchTypeMsgVisible = false;
         }
       }
     });
@@ -508,7 +496,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.selectedPeople.forEach(x => {
         if (!this.checkDuplicateInContactGroup(x.personId)) {
           this.contactGroupDetails.contactPeople.push(x);
-          this.setSalution();
+          this.setSalutation();
           this.isLoadingNewPersonVisible = false;
         }
       });
@@ -523,7 +511,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   removeSelectedPeople(people, index: number) {
     people.splice(index, 1);
     this.errorMessage = null;
-    this.setSalution();
+    this.setSalutation();
   }
 
   showAddedPersonDetails(id) {
@@ -656,30 +644,21 @@ export class ContactgroupsPeopleComponent implements OnInit {
     }
   }
 
-  setSalution() {
+  setSalutation() {
     const people = this.contactGroupDetails.contactPeople;
     let salutation = '';
     let addressee = '';
     let counter = 0;
     let seperator = '';
-    let type = 0;
+    let type = ContactType.Individual;
     people.forEach(person => {
       seperator = counter === 0 ? '' : (counter === people.length - 1 ? ' & ' : ' , ');
       addressee += seperator + person.addressee;
       salutation += seperator + person.salutation;
       counter++;
     });
-    if (this.contactGroupDetails.contactType !== ContactType.CompanyContact) {
-      switch (true) {
-        case people.length > 2:
-        case people.length === 2 && this.contactGroupDetails.contactType === ContactType.Sharers:
-          type = 2;
-          break;
-        default:
-          type = 1;
-      }
-    } else {
-      type = 3;
+    if (this.contactGroupDetails.contactType === ContactType.CompanyContact) {
+      type = ContactType.CompanyContact
     }
     this.contactGroupDetailsForm.patchValue({
       salutation: salutation,
@@ -720,19 +699,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.renderer.addClass(document.body, 'no-scroll');
     } else {
       this.renderer.removeClass(document.body, 'no-scroll');
-    }
-  }
-
-  isTypeDisabled(key) {
-    if (this.contactGroupDetails) {
-      if (key === 2 && this.contactGroupDetails.contactPeople.length < 2) {
-        return true;
-      } else if (key === 1 && this.contactGroupDetails.contactPeople.length > 2) {
-        return true;
-      }
-      return false;
-    } else {
-      return false;
     }
   }
 
