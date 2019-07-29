@@ -42,17 +42,15 @@ export class NotesComponent implements OnInit, OnChanges {
         }
        if (x.contactNoteId) {
           this.contactGroupService.updateContactGroupNote(x).subscribe(() => {
-            this.contactGroupService.contactGroupNotesChanged(x)
-            this.isUpdating = false;            
+            this.contactGroupService.contactGroupNotesChanged(x);
+            this.isUpdating = false;
           });
        } else {
          this.contactGroupService.updatePersonNote(x).subscribe(() => {
-           this.contactGroupService.personNotesChanged(x)
+           this.contactGroupService.personNotesChanged(x);
             this.isUpdating = false;
           });
        }
-        // x.contactNoteId ? this.contactGroupService.updateContactGroupNote(x).subscribe()
-        //                 : this.contactGroupService.updatePersonNote(x).subscribe();
       }});
   }
 
