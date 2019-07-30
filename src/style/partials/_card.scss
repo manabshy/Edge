@@ -37,3 +37,10 @@
         padding: spacer(3);
     }
 }
+
+.card-img-overlay {
+    top: auto;
+    background-color: rgba(theme-color("dark"), .6);
+    padding-bottom: spacer(2);
+    padding-top: spacer(2);
+}

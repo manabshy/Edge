@@ -22,7 +22,18 @@
       </div>
     </div>
     <div class="row mx-0 pb-3" *ngIf="searchedPropertyDetails">
-      <div class="col-12">
+      <div class="col-sm-4 mb-2 mb-sm-0">
+        <a [routerLink]="['photos']">
+          <div class="card bg-dark text-white">
+            <img class="card-img" src="https://placeimg.com/640/480/arch" alt="">
+            <div class="card-img-overlay clearfix">
+              <span class="float left pull-left">15 Photos</span>
+              <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="col">
         <pre><strong>{{searchedPropertyDetails?.address | formatAddress}}</strong></pre>
       </div>
       <div class="col-12">
