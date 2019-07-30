@@ -4,26 +4,26 @@ import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { AppUtils } from '../shared/utils';
 import { ContactGroupAutoCompleteResult, BasicContactGroup, ContactGroup, Signer } from 'src/app/contactgroups/shared/contact-group';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-signer',
   templateUrl: './signer.component.html',
   styleUrls: ['./signer.component.scss']
 })
-export class SignerComponent implements OnInit {
+export class SignerComponent implements OnInit, OnChanges {
   @Output() selectedSigner = new EventEmitter<Signer>();
   @Input() existingSigner: Signer;
-  @ViewChild('searchTermInput') searchTermInput: ElementRef; 
+  @ViewChild('searchTermInput') searchTermInput: ElementRef;
   signerFinderForm: FormGroup;
   selectedSignerDetails: Signer;
   signers: Signer[];
   isLoading: boolean;
   isMessageVisible: boolean;
   isHintVisible: boolean;
-  searchTermBK: string = '';
+  searchTermBK = '';
   get signerNames(): FormControl {
-    if(this.signerFinderForm){
+    if (this.signerFinderForm) {
       return <FormControl> this.signerFinderForm.get('searchTerm');
     }
   }
@@ -34,10 +34,9 @@ export class SignerComponent implements OnInit {
       searchTerm: [''],
     });
     this.displayExistingSigners();
-    this.signerFinderForm.valueChanges.pipe(debounceTime(400)).subscribe(data => {
-      console.log('characters entered', data.searchTerm);
-      this.signersAutocomplete(data.searchTerm);
-    });
+    this.signerFinderForm.valueChanges
+      .pipe(debounceTime(1000), distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)))
+      .subscribe(data => this.signersAutocomplete(data.searchTerm));
   }
 
   ngOnChanges() {
@@ -101,7 +100,7 @@ export class SignerComponent implements OnInit {
 
   onKeyup() {
     AppUtils.searchTerm = this.signerFinderForm.value.searchTerm;
-    
+
     if (this.signerFinderForm.value.searchTerm && this.signerFinderForm.value.searchTerm.length > 2) {
       this.isHintVisible = false;
     } else {

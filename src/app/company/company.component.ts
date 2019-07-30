@@ -4,7 +4,7 @@ import { ContactGroupsService } from '../contactgroups/shared/contact-groups.ser
 import { ActivatedRoute } from '@angular/router';
 import { CompanyAutoCompleteResult } from '../contactgroups/shared/contact-group';
 import { AppUtils } from '../core/shared/utils';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-company',
@@ -24,8 +24,10 @@ export class CompanyComponent implements OnInit {
     this.companyFinderForm = this.fb.group({
       companyName: [''],
     });
-    
-    this.companyFinderForm.valueChanges.pipe(debounceTime(400)).subscribe(data => this.companiesAutocomplete(data));
+
+    this.companyFinderForm.valueChanges
+      .pipe(debounceTime(1000), distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)))
+      .subscribe(data => this.companiesAutocomplete(data));
 
     if (this.route.snapshot.queryParamMap.get('companyName') || AppUtils.companySearchTerm ) {
       this.companiesAutocomplete(this.route.snapshot.queryParamMap.get('companyName') || AppUtils.companySearchTerm );

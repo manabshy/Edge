@@ -5,7 +5,7 @@ import { Person, BasicPerson } from 'src/app/core/models/person';
 import { ContactGroup, PeopleAutoCompleteResult, ContactGroupsTypes,
          ContactType, CompanyAutoCompleteResult, Company, PotentialDuplicateResult, ContactGroupsNote } from '../shared/contact-group';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { BsModalService } from 'ngx-bootstrap/modal/';
 import { ConfirmModalComponent } from 'src/app/core/confirm-modal/confirm-modal.component';
@@ -205,7 +205,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.findPotentialDuplicatePerson(data);
       });
 
-    this.companyFinderForm.valueChanges.pipe(debounceTime(400)).subscribe(data => this.findCompany(data));
+    this.companyFinderForm.valueChanges
+      .pipe(debounceTime(1000), distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)))
+      .subscribe(data => this.findCompany(data));
     this.getContactGroupNotes(this.contactGroupId);
   }
 

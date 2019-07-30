@@ -4,7 +4,8 @@ import { ContactGroupAutoCompleteResult } from './shared/contact-group';
 import { ActivatedRoute } from '@angular/router';
 import { AppUtils } from '../core/shared/utils';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-contactgroups',
@@ -27,10 +28,11 @@ export class ContactGroupsComponent implements OnInit {
     this.contactFinderForm = this.fb.group({
       searchTerm: [''],
     });
-    this.contactFinderForm.valueChanges.pipe(debounceTime(400)).subscribe(data => {
-      this.contactGroupsAutocomplete(data.searchTerm);
-    });
-    if(this.route.snapshot.queryParamMap.get('searchTerm') || AppUtils.searchTerm ){
+    this.contactFinderForm.valueChanges
+      .pipe(debounceTime(1000), distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)))
+      .subscribe(data => this.contactGroupsAutocomplete(data.searchTerm));
+
+    if (this.route.snapshot.queryParamMap.get('searchTerm') || AppUtils.searchTerm ) {
       this.contactGroupsAutocomplete(this.route.snapshot.queryParamMap.get('searchTerm') || AppUtils.searchTerm );
     }
   }
@@ -40,7 +42,7 @@ export class ContactGroupsComponent implements OnInit {
     this.contactGroupService.getAutocompleteContactGroups(searchTerm).subscribe(result => {
         this.contactGroups = result;
         this.isLoading = false;
-        console.log('contact groups',this.contactGroups);
+        console.log('contact groups', this.contactGroups);
 
         if (this.contactFinderForm.value.searchTerm && this.contactFinderForm.value.searchTerm.length) {
           if (!this.contactGroups.length) {
@@ -49,7 +51,7 @@ export class ContactGroupsComponent implements OnInit {
             this.isMessageVisible = false;
           }
         }
-        
+
       }, error => {
         this.contactGroups = [];
         this.isLoading = false;
