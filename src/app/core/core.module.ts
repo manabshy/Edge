@@ -50,15 +50,16 @@ import { AgmCoreModule } from '@agm/core';
 import { AutocompleteOffDirective } from './shared/autocomplete-off.directive';
 import { HighlightPipe } from './shared/highlight.pipe';
 import { AppConstants } from './shared/app-constants';
+import { SubnavItemComponent } from './subnav-item/subnav-item.component';
 
 @NgModule({
   declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent,
     ConfirmModalComponent, PropertyFinderComponent, FormatAddressPipe, ScoreBadgeComponent,
-    ErrorModalComponent, AddressComponent, SignerComponent, AutocompleteOffDirective, HighlightPipe, NoteModalComponent, NotesComponent, TelephoneComponent, TelephoneModalComponent],
+    ErrorModalComponent, AddressComponent, SignerComponent, AutocompleteOffDirective, HighlightPipe, NoteModalComponent, NotesComponent, TelephoneComponent, TelephoneModalComponent, SubnavItemComponent],
   exports: [
     RoundingPipe, TruncatingPipe, ShortenNamePipe, FormatAddressPipe, HighlightPipe, AutocompleteOffDirective,
     BreadcrumbComponent, BasicSearchComponent, NoteModalComponent, NotesComponent,
-    ConfirmModalComponent, ErrorModalComponent, PropertyFinderComponent, ScoreBadgeComponent, AddressComponent, SignerComponent, TelephoneComponent, TelephoneModalComponent,
+    ConfirmModalComponent, ErrorModalComponent, PropertyFinderComponent, ScoreBadgeComponent, AddressComponent, SignerComponent, TelephoneComponent, TelephoneModalComponent, SubnavItemComponent,
     RouterModule, BrowserAnimationsModule, CollapseModule, TabsModule, TypeaheadModule, BsDropdownModule,
     BsDatepickerModule, ModalModule, PopoverModule,  NgPipesModule,
     TooltipModule, AccordionModule, ButtonsModule, ReactiveFormsModule, FormsModule, OrderModule, ToastNoAnimationModule, AgmCoreModule, CarouselModule

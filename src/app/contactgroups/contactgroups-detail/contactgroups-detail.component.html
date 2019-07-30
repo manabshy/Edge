@@ -189,51 +189,33 @@
   <div *ngIf="summaryTotals">
     <h5>Info</h5>
     <div class="list-group">
-      <a [routerLink]="['leads']" class="list-group-item list-group-item-action clearfix">
-        <div class="pull-left float-left btn-link">Leads <span
-          class="badge badge-pill badge-primary">{{summaryTotals.leads}}</span></div>
-        <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
-      </a>
-      <a [routerLink]="['notes']"  class="list-group-item list-group-item-action clearfix"[queryParams]="{personId: searchedPersonDetails?.personId}">
-        <div class="pull-left float-left btn-link">Notes <span
-          class="badge badge-pill badge-primary">{{summaryTotals.notes}}</span></div>
-        <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
-      </a>
-      <a [routerLink]="['searches']" class="list-group-item list-group-item-action clearfix">
-        <div class="pull-left float-left btn-link">Searches <span
-          class="badge badge-pill badge-primary">{{summaryTotals.searches}}</span></div>
-        <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
-      </a>
-      <a [routerLink]="['valuations']" class="list-group-item list-group-item-action clearfix">
-        <div class="pull-left float-left btn-link">Valuations <span
-          class="badge badge-pill badge-primary">{{summaryTotals.valuations.total}}</span></div>
-        <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
-      </a>
-      <a [routerLink]="['instructions']" class="list-group-item list-group-item-action clearfix">
-        <div class="pull-left float-left btn-link">Instructions <span
-          class="badge badge-pill badge-primary">{{summaryTotals.instructions.total}}</span></div>
-        <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
-      </a>
-      <a [routerLink]="['offers']" class="list-group-item list-group-item-action clearfix">
-        <div class="pull-left float-left btn-link">Offers <span
-          class="badge badge-pill badge-primary">{{summaryTotals.offers.total}}</span></div>
-        <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
-      </a>
-      <a [routerLink]="['tenancies']" class="list-group-item list-group-item-action clearfix">
-        <div class="pull-left float-left btn-link">Tenancies <span
-          class="badge badge-pill badge-primary">{{summaryTotals.tenancies.total}}</span></div>
-        <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
-      </a>
-      <a [routerLink]="['letting-managements']" class="list-group-item list-group-item-action clearfix">
-        <div class="pull-left float-left btn-link">Letting Managements <span
-          class="badge badge-pill badge-primary">{{summaryTotals.lettingsManagements}}</span></div>
-        <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
-      </a>
-      <a [routerLink]="['home-managements']" class="list-group-item list-group-item-action clearfix">
-        <div class="pull-left float-left btn-link">Home Managements <span
-          class="badge badge-pill badge-primary">{{summaryTotals.homeManagements}}</span></div>
-        <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
-      </a>
+      <app-subnav-item [navLink]="['leads']">
+        Leads <span class="badge badge-pill badge-primary">{{summaryTotals.leads}}</span>
+      </app-subnav-item>
+      <app-subnav-item [navLink]="['notes']">
+        Notes <span class="badge badge-pill badge-primary">{{summaryTotals.notes}}</span>
+      </app-subnav-item>
+      <app-subnav-item [navLink]="['searches']">
+        Searches <span class="badge badge-pill badge-primary">{{summaryTotals.searches}}</span>
+      </app-subnav-item>
+      <app-subnav-item [navLink]="['valuations']">
+        Valuations <span class="badge badge-pill badge-primary">{{summaryTotals.valuations.total}}</span>
+      </app-subnav-item>
+      <app-subnav-item [navLink]="['instructions']">
+        Instructions <span class="badge badge-pill badge-primary">{{summaryTotals.instructions.total}}</span>
+      </app-subnav-item>
+      <app-subnav-item [navLink]="['offers']">
+        Offers <span class="badge badge-pill badge-primary">{{summaryTotals.offers.total}}</span>
+      </app-subnav-item>
+      <app-subnav-item [navLink]="['tenancies']">
+        Tenancies <span class="badge badge-pill badge-primary">{{summaryTotals.tenancies.total}}</span>
+      </app-subnav-item>
+      <app-subnav-item [navLink]="['letting-managements']">
+        Letting Managements <span class="badge badge-pill badge-primary">{{summaryTotals.lettingsManagements}}</span>
+      </app-subnav-item>
+      <app-subnav-item [navLink]="['home-managements']">
+        Home Managements <span class="badge badge-pill badge-primary">{{summaryTotals.homeManagements}}</span>
+      </app-subnav-item>
     </div>
   </div>
 </div>

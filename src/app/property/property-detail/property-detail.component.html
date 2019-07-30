@@ -55,28 +55,20 @@
   </div>
   <h5>Info</h5>
     <div class="list-group">
-      <a [routerLink]="['sales-lettings']" class="list-group-item list-group-item-action clearfix">
-        <div class="pull-left float-left btn-link">Sales/Lettings <span
-          class="badge badge-pill badge-primary">0</span></div>
-        <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
-      </a>
-      <a [routerLink]="['offers']" class="list-group-item list-group-item-action clearfix">
-        <div class="pull-left float-left btn-link">Offers <span
-          class="badge badge-pill badge-primary">0</span></div>
-        <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
-      </a>
-      <a [routerLink]="['notes']" class="list-group-item list-group-item-action clearfix">
-        <div class="pull-left float-left btn-link">Notes <span
-          class="badge badge-pill badge-primary">0</span></div>
-        <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
-      </a>
-      <a [routerLink]="['map']" class="list-group-item list-group-item-action clearfix">
-        <div class="pull-left float-left btn-link">Map</div>
-        <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
-      </a>
-      <a [routerLink]="['photos']" class="list-group-item list-group-item-action clearfix">
-        <div class="pull-left float-left btn-link">Photos</div>
-        <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
-      </a>
+      <app-subnav-item [navLink]="['sales-lettings']">
+          Sales/Lettings <span class="badge badge-pill badge-primary">0</span>
+      </app-subnav-item>
+      <app-subnav-item [navLink]="['offers']">
+          Offers <span class="badge badge-pill badge-primary">0</span>
+      </app-subnav-item>
+      <app-subnav-item [navLink]="['notes']">
+          Notes <span class="badge badge-pill badge-primary">0</span>
+      </app-subnav-item>
+      <app-subnav-item [navLink]="['map']">
+          Map
+      </app-subnav-item>
+      <app-subnav-item [navLink]="['photos']">
+          Photos <span class="badge badge-pill badge-primary">0</span>
+      </app-subnav-item>
     </div>
 </div>
