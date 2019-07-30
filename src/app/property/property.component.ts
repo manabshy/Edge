@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { PropertyService } from './shared/property.service';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { PropertyAutoComplete } from './shared/property';
 import { AppUtils } from '../core/shared/utils';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-property',
@@ -18,6 +19,7 @@ export class PropertyComponent implements OnInit {
   isMessageVisible: boolean;
   isHintVisible: boolean;
   advSearchCollapsed = false;
+  // properties$ = new Observable<PropertyAutoComplete[]>();
 
   constructor(private propertyService: PropertyService, private route: ActivatedRoute, private fb: FormBuilder) { }
 
@@ -25,16 +27,21 @@ export class PropertyComponent implements OnInit {
     this.propertyFinderForm = this.fb.group({
       propertyAddress: [''],
     });
-    this.propertyFinderForm.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
-     if (data.propertyAddress) {
-        this.propertiesAutocomplete(data);
-     }});
+    this.propertyFinderForm.valueChanges
+      .pipe(debounceTime(1000),
+        distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)))
+      .subscribe(data => {
+        if (data.propertyAddress) {
+          this.propertiesAutocomplete(data);
+          // this.properties$ = this.propertyService.autocompleteProperties(data);
+        }
+      });
     if (this.route.snapshot.queryParamMap.get('propertyAddress') || AppUtils.propertySearchTerm ) {
       this.propertiesAutocomplete(this.route.snapshot.queryParamMap.get('propertyAddress') || AppUtils.propertySearchTerm || '');
     }
 
   }
-  propertiesAutocomplete(searchTerm: string): void {
+  propertiesAutocomplete(searchTerm: string) {
     this.isLoading = true;
     this.propertyService.autocompleteProperties(searchTerm).subscribe(result => {
       this.properties = result;
