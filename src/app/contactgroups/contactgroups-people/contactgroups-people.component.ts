@@ -91,6 +91,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
   get companyAlert() {
     return this.contactGroupDetails.contactType === ContactType.CompanyContact && !this.selectedCompanyDetails;
   }
+
+  get isAMLCompleted() {
+    return this.contactGroupDetails && !!this.contactGroupDetails.companyAmlCompletedDate
+  }
   public keepOriginalOrder = (a) => a.key;
 
   constructor(

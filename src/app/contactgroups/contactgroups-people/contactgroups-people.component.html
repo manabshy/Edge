@@ -2,7 +2,11 @@
 <div class="container">
   <div class="row page-title">
     <div class="col">
-      <h4 class="mb-0"><ng-container *ngIf="contactGroupDetails?.contactType === 4; else peopleCG">Company</ng-container><ng-template #peopleCG>People</ng-template> Contact group</h4>
+      <h4 class="mb-0"><ng-container *ngIf="contactGroupDetails?.contactType === 4; else peopleCG">
+        Company</ng-container><ng-template #peopleCG>People</ng-template> Contact group
+        <span class="badge badge-pill badge-success"
+                        *ngIf="isAMLCompleted">AML Completed</span>
+      </h4>
     </div>
     <div class="col-auto" *ngIf="isTypePicked">
       <div class="btn-group" dropdown placement="bottom right">

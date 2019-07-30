@@ -23,6 +23,7 @@ export interface ContactGroup {
   currentStaffMemberId?: number;
   currentOfficeId?: number;
   rawData?: any;
+  companyAmlCompletedDate?: string;
 }
 export interface Signer {
   contactGroupId: number;
