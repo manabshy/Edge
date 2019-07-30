@@ -26,7 +26,7 @@ export class DiaryComponent implements OnInit {
   viewedYear = this.todayYear;
   viewMode = 'workingWeek';
   setTodayLabel = 'This ' + this.viewMode;
-  monthLabel = dayjs().month(this.viewedMonth).format('MMMM');
+  monthLabel = dayjs().month(this.viewedMonth).format('MMM');
   hours: any[] = ['00','01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23'];
   @ViewChildren(PopoverDirective) popovers: QueryList<PopoverDirective>;
   @ViewChildren(TooltipDirective) tooltips: QueryList<TooltipDirective>;
@@ -93,7 +93,7 @@ export class DiaryComponent implements OnInit {
     this.viewedMonth = month;
     this.viewedYear = year;
     this.viewedDate = date;
-    this.monthLabel = date.month(month).format('MMMM YYYY');
+    this.monthLabel = date.month(month).format('MMM YYYY');
 
     while (date.month() === month) {
       days.push(this.makeDayObj(date));
@@ -108,7 +108,7 @@ export class DiaryComponent implements OnInit {
     this.viewedDate = curr;
     this.viewedMonth = curr.month();
     this.viewedYear = curr.year();
-    this.monthLabel = curr.month(this.viewedMonth).format('MMMM YYYY');
+    this.monthLabel = curr.month(this.viewedMonth).format('MMM YYYY');
 
     for (let i = 0; i < 7; i++) {
       const first = curr.date() - curr.day() + i;
@@ -133,7 +133,7 @@ export class DiaryComponent implements OnInit {
   getDay(date) {
     let curr = date;
     let day = new Array();
-    this.monthLabel = curr.format('MMMM YYYY')
+    this.monthLabel = curr.format('MMM YYYY')
     day.push(this.makeDayObj(curr));
     this.viewedDate = curr;
     this.viewedMonth = curr.month();
@@ -159,7 +159,7 @@ export class DiaryComponent implements OnInit {
       default:
         this.days = this.getDaysInWeek(this.viewedDate.subtract(7,'day')); 
     }
-    window.scrollTo(0, 0);
+    //window.scrollTo(0, 0);
     setTimeout(()=>{
       this.popoverSubscribe();
     })
@@ -180,7 +180,7 @@ export class DiaryComponent implements OnInit {
       default:
         this.days = this.getDaysInWeek(this.viewedDate.add(7,'day'));
     }
-    window.scrollTo(0, 0);
+    //window.scrollTo(0, 0);
     setTimeout(()=>{
       this.popoverSubscribe();
     })
