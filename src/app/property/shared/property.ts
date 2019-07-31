@@ -12,6 +12,39 @@ export interface Property {
   regionId: number;
   areaId: number;
   subAreaId: number;
+  mapCentre: MapCentre;
+  photo: Photo;
+  info: PropertySummaryFigures;
+}
+export interface MapCentre {
+  longitude: string;
+  latitude: string;
+}
+export interface Photo {
+  propertyId: number;
+  mediaId: number;
+  mediaDescriptionId: number;
+  azureResourceURL: string;
+}
+export interface Summary {
+  active: number;
+  total: number;
+}
+export interface PropertySummaryFigures {
+  propertyId: number;
+  lettingInstructions: Summary;
+  saleInstructions: Summary;
+  instructions: Summary;
+  lettingOffers: Summary;
+  saleOffers: Summary;
+  offers: Summary;
+  propertyLettingNotes: number;
+  propertySaleNotes: number;
+  offerLettingNotes: number;
+  offerSaleNotes: number;
+  managementNotes: number;
+  propertyNotes: number;
+  propertyPhotos: number;
 }
 export interface PropertyData {
  result: Property;
