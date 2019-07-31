@@ -55,7 +55,8 @@ export class PropertyDetailComponent implements OnInit {
     this.propertyDetails$ = this.propertyService.propertyDetails$
       .pipe
       (
-        tap(data => this.searchedPropertyDetails = data)
+        tap(data => this.searchedPropertyDetails = data),
+        tap(data => console.log('details', data))
       );
 
     if (this.propertyId) {
