@@ -3,6 +3,6 @@
 </div>
 <div class="modal-body text-center">
   <p [innerHtml]="desc"></p>
-  <p class="tech" *ngIf="techDet" [innerHtml]="techDet"></p>
+  <pre class="tech mb-3" *ngIf="techDet" [innerHtml]="techDet"></pre>
   <button type="button" class="btn btn-primary" (click)="action(false)">OK</button>
 </div>
