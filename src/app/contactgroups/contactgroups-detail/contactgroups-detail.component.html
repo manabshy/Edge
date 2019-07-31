@@ -190,7 +190,7 @@
     <h5>Info</h5>
     <app-subnav>
       <app-subnav-item *ngFor="let item of subNav" [navLink]="[item?.link]">
-        {{item?.label}} <span class="badge badge-pill badge-primary">{{summaryTotals[item?.value]?.total || summaryTotals[item?.value]}}</span>
+        {{item?.label}} <span class="badge badge-pill badge-primary">{{ (summaryTotals[item?.value]?.total || '0') || summaryTotals[item?.value]}}</span>
       </app-subnav-item>
     </app-subnav>
   </div>
