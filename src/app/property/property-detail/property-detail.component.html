@@ -54,21 +54,9 @@
     </div>
   </div>
   <h5>Info</h5>
-    <div class="list-group">
-      <app-subnav-item [navLink]="['sales-lettings']">
-          Sales/Lettings <span class="badge badge-pill badge-primary">0</span>
-      </app-subnav-item>
-      <app-subnav-item [navLink]="['offers']">
-          Offers <span class="badge badge-pill badge-primary">0</span>
-      </app-subnav-item>
-      <app-subnav-item [navLink]="['notes']">
-          Notes <span class="badge badge-pill badge-primary">0</span>
-      </app-subnav-item>
-      <app-subnav-item [navLink]="['map']">
-          Map
-      </app-subnav-item>
-      <app-subnav-item [navLink]="['photos']">
-          Photos <span class="badge badge-pill badge-primary">0</span>
-      </app-subnav-item>
-    </div>
+  <app-subnav>
+    <app-subnav-item *ngFor="let item of subNav" [navLink]="[item?.link]">
+      {{item?.label}} <span class="badge badge-pill badge-primary">0</span>
+    </app-subnav-item>
+  </app-subnav>
 </div>

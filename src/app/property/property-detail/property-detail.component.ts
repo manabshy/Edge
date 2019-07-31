@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PropertyService } from '../shared/property.service';
 import { ActivatedRoute } from '@angular/router';
-import { Property, PropertyTypes, PropertyStyles } from '../shared/property';
+import { Property, PropertyTypes, PropertyStyles, PropertyDetailsSubNav, PropertyDetailsSubNavItems } from '../shared/property';
 import { SharedService, InfoDetail } from 'src/app/core/services/shared.service';
 
 @Component({
@@ -18,6 +18,7 @@ export class PropertyDetailComponent implements OnInit {
   regions: any;
   allAreas: any;
   allSubAreas: any;
+  subNav = PropertyDetailsSubNavItems;
 
   get region() {
     if(this.searchedPropertyDetails && this.regions) {

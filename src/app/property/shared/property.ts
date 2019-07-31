@@ -1,4 +1,5 @@
 import { Address } from 'src/app/core/models/address';
+import { SubNavItem, SubNav } from 'src/app/core/shared/subnav';
 
 export interface Property {
   propertyId: number;
@@ -75,3 +76,12 @@ export const PropertyStyles = new Map([
   [PropertyStyle.Land, 'Land'],
   [PropertyStyle.ParkingSpace, 'Parking Space'],
 ]);
+
+export const PropertyDetailsSubNav = ['instructions','offers','notes','map','photos'];
+
+export const PropertyDetailsSubNavItems: SubNavItem[] = PropertyDetailsSubNav.map(x=>({
+  link: x,
+  label: SubNav.subNavLabel(x),
+  value: SubNav.subNavValue(x)
+}));
+

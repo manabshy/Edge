@@ -1,6 +1,7 @@
 import { Address } from 'src/app/core/models/address';
 import { Person, BasicPerson } from 'src/app/core/models/person';
 import { ResultData } from 'src/app/core/shared/result-data';
+import { SubNavItem, SubNav } from 'src/app/core/shared/subnav';
 
 export interface ContactGroup {
   contactType: ContactType;
@@ -25,6 +26,16 @@ export interface ContactGroup {
   rawData?: any;
   companyAmlCompletedDate?: string;
 }
+export const ContactGroupDetailsSubNav = ['leads','notes','searches','valuations', 'instructions', 'offers', 'tenancies', 'lettings-managements', 'home-managements'];
+
+export const ContactGroupDetailsSubNavItems: SubNavItem[] = ContactGroupDetailsSubNav.map(x=>({
+  link: x,
+  label: SubNav.subNavLabel(x),
+  value:  SubNav.subNavValue(x),
+}));
+
+
+
 export interface Signer {
   contactGroupId: number;
   contactNames: string;

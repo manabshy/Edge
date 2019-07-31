@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ContactGroup, BasicContactGroup, PersonSummaryFigures } from '../shared/contact-group';
+import { ContactGroup, BasicContactGroup, PersonSummaryFigures, ContactGroupDetailsSubNav, ContactGroupDetailsSubNavItems } from '../shared/contact-group';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ActivatedRoute } from '@angular/router';
 import { Person } from 'src/app/core/models/person';
@@ -24,11 +24,13 @@ export class ContactgroupsDetailComponent implements OnInit {
   isNewContactGroup = false;
   isCollapsed: boolean;
   summaryTotals: PersonSummaryFigures;
+  subNav = ContactGroupDetailsSubNavItems;
   constructor(private contactGroupService: ContactGroupsService,
               private sharedService: SharedService,
               private route: ActivatedRoute) { }
 
   ngOnInit() {
+    console.log(this.subNav);
     // this.route.params.subscribe(params => {this.contactGroupId = params['id']; });
     this.route.params.subscribe(params => {
       this.personId = params['personId'] || 0;

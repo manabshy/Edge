@@ -40,6 +40,7 @@ import { SignerComponent } from './signer/signer.component';
 import { NotesComponent } from './notes/notes.component';
 import { TelephoneComponent } from './telephone/telephone.component';
 import { TelephoneModalComponent } from './telephone-modal/telephone-modal.component';
+import { SubnavComponent } from './subnav/subnav.component';
 
 //vendor
 import { OrderModule } from 'ngx-order-pipe';
@@ -55,11 +56,11 @@ import { SubnavItemComponent } from './subnav-item/subnav-item.component';
 @NgModule({
   declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent,
     ConfirmModalComponent, PropertyFinderComponent, FormatAddressPipe, ScoreBadgeComponent,
-    ErrorModalComponent, AddressComponent, SignerComponent, AutocompleteOffDirective, HighlightPipe, NoteModalComponent, NotesComponent, TelephoneComponent, TelephoneModalComponent, SubnavItemComponent],
+    ErrorModalComponent, AddressComponent, SignerComponent, AutocompleteOffDirective, HighlightPipe, NoteModalComponent, NotesComponent, TelephoneComponent, TelephoneModalComponent, SubnavItemComponent, SubnavComponent],
   exports: [
     RoundingPipe, TruncatingPipe, ShortenNamePipe, FormatAddressPipe, HighlightPipe, AutocompleteOffDirective,
     BreadcrumbComponent, BasicSearchComponent, NoteModalComponent, NotesComponent,
-    ConfirmModalComponent, ErrorModalComponent, PropertyFinderComponent, ScoreBadgeComponent, AddressComponent, SignerComponent, TelephoneComponent, TelephoneModalComponent, SubnavItemComponent,
+    ConfirmModalComponent, ErrorModalComponent, PropertyFinderComponent, ScoreBadgeComponent, AddressComponent, SignerComponent, TelephoneComponent, TelephoneModalComponent, SubnavComponent, SubnavItemComponent,
     RouterModule, BrowserAnimationsModule, CollapseModule, TabsModule, TypeaheadModule, BsDropdownModule,
     BsDatepickerModule, ModalModule, PopoverModule,  NgPipesModule,
     TooltipModule, AccordionModule, ButtonsModule, ReactiveFormsModule, FormsModule, OrderModule, ToastNoAnimationModule, AgmCoreModule, CarouselModule

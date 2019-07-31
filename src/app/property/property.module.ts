@@ -6,7 +6,7 @@ import { PropertyListComponent } from './property-list/property-list.component';
 import { PropertyComponent } from './property.component';
 import { CoreModule } from '../core/core.module';
 import { PropertyDetailComponent } from './property-detail/property-detail.component';
-import { PropertyDetailSalesLettingsComponent } from './property-detail-sales-lettings/property-detail-sales-lettings.component';
+import { PropertyDetailInstructionsComponent } from './property-detail-instructions/property-detail-instructions.component';
 import { PropertyDetailOffersComponent } from './property-detail-offers/property-detail-offers.component';
 import { PropertyDetailNotesComponent } from './property-detail-notes/property-detail-notes.component';
 import { PropertyDetailDocumentsComponent } from './property-detail-documents/property-detail-documents.component';
@@ -15,7 +15,7 @@ import { PropertyDetailMapComponent } from './property-detail-map/property-detai
 import { PropertyDetailEditComponent } from './property-detail-edit/property-detail-edit.component';
 
 @NgModule({
-  declarations: [PropertyListComponent, PropertyComponent, PropertyDetailComponent, PropertyDetailSalesLettingsComponent, PropertyDetailOffersComponent, PropertyDetailNotesComponent, PropertyDetailDocumentsComponent, PropertyDetailPhotosComponent, PropertyDetailMapComponent, PropertyDetailEditComponent],
+  declarations: [PropertyListComponent, PropertyComponent, PropertyDetailComponent, PropertyDetailInstructionsComponent, PropertyDetailOffersComponent, PropertyDetailNotesComponent, PropertyDetailDocumentsComponent, PropertyDetailPhotosComponent, PropertyDetailMapComponent, PropertyDetailEditComponent],
   imports: [
     CommonModule,
     PropertyRoutingModule,

@@ -188,34 +188,10 @@
   </div>
   <div *ngIf="summaryTotals">
     <h5>Info</h5>
-    <div class="list-group">
-      <app-subnav-item [navLink]="['leads']">
-        Leads <span class="badge badge-pill badge-primary">{{summaryTotals.leads}}</span>
+    <app-subnav>
+      <app-subnav-item *ngFor="let item of subNav" [navLink]="[item?.link]">
+        {{item?.label}} <span class="badge badge-pill badge-primary">{{summaryTotals[item?.value]?.total || summaryTotals[item?.value]}}</span>
       </app-subnav-item>
-      <app-subnav-item [navLink]="['notes']">
-        Notes <span class="badge badge-pill badge-primary">{{summaryTotals.notes}}</span>
-      </app-subnav-item>
-      <app-subnav-item [navLink]="['searches']">
-        Searches <span class="badge badge-pill badge-primary">{{summaryTotals.searches}}</span>
-      </app-subnav-item>
-      <app-subnav-item [navLink]="['valuations']">
-        Valuations <span class="badge badge-pill badge-primary">{{summaryTotals.valuations.total}}</span>
-      </app-subnav-item>
-      <app-subnav-item [navLink]="['instructions']">
-        Instructions <span class="badge badge-pill badge-primary">{{summaryTotals.instructions.total}}</span>
-      </app-subnav-item>
-      <app-subnav-item [navLink]="['offers']">
-        Offers <span class="badge badge-pill badge-primary">{{summaryTotals.offers.total}}</span>
-      </app-subnav-item>
-      <app-subnav-item [navLink]="['tenancies']">
-        Tenancies <span class="badge badge-pill badge-primary">{{summaryTotals.tenancies.total}}</span>
-      </app-subnav-item>
-      <app-subnav-item [navLink]="['letting-managements']">
-        Letting Managements <span class="badge badge-pill badge-primary">{{summaryTotals.lettingsManagements}}</span>
-      </app-subnav-item>
-      <app-subnav-item [navLink]="['home-managements']">
-        Home Managements <span class="badge badge-pill badge-primary">{{summaryTotals.homeManagements}}</span>
-      </app-subnav-item>
-    </div>
+    </app-subnav>
   </div>
 </div>

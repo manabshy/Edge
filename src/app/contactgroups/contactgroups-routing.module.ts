@@ -14,7 +14,7 @@ import { ContactgroupsDetailValuationsComponent } from './contactgroups-detail-v
 import { ContactgroupsDetailInstructionsComponent } from './contactgroups-detail-instructions/contactgroups-detail-instructions.component';
 import { ContactgroupsDetailOffersComponent } from './contactgroups-detail-offers/contactgroups-detail-offers.component';
 import { ContactgroupsDetailTenanciesComponent } from './contactgroups-detail-tenancies/contactgroups-detail-tenancies.component';
-import { ContactgroupsDetailLettingManagementsComponent } from './contactgroups-detail-letting-managements/contactgroups-detail-letting-managements.component';
+import { ContactgroupsDetaillettingsManagementsComponent } from './contactgroups-detail-lettings-managements/contactgroups-detail-lettings-managements.component';
 import { ContactgroupsDetailHomeManagementsComponent } from './contactgroups-detail-home-managements/contactgroups-detail-home-managements.component';
 
 const routes: Routes = [
@@ -37,7 +37,7 @@ const routes: Routes = [
         {path: 'instructions', component: ContactgroupsDetailInstructionsComponent},
         {path: 'offers', component: ContactgroupsDetailOffersComponent},
         {path: 'tenancies', component: ContactgroupsDetailTenanciesComponent},
-        {path: 'letting-managements', component: ContactgroupsDetailLettingManagementsComponent},
+        {path: 'lettings-managements', component: ContactgroupsDetaillettingsManagementsComponent},
         {path: 'home-managements', component: ContactgroupsDetailHomeManagementsComponent},
         // {path: 'edit:/id', component: ContactgroupsDetailEditComponent}
       ] },

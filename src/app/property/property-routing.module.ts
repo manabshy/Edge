@@ -4,7 +4,7 @@ import { AuthGuardService } from '../core/services/auth-guard.service';
 import { PropertyComponent } from './property.component';
 import { CanDeactivateGuard } from '../core/shared/can-deactivate.guard';
 import { PropertyDetailComponent } from './property-detail/property-detail.component';
-import { PropertyDetailSalesLettingsComponent } from './property-detail-sales-lettings/property-detail-sales-lettings.component';
+import { PropertyDetailInstructionsComponent } from './property-detail-instructions/property-detail-instructions.component';
 import { PropertyDetailOffersComponent } from './property-detail-offers/property-detail-offers.component';
 import { PropertyDetailNotesComponent } from './property-detail-notes/property-detail-notes.component';
 import { PropertyDetailDocumentsComponent } from './property-detail-documents/property-detail-documents.component';
@@ -25,7 +25,7 @@ const routes: Routes = [
       children: [
         { path: '', component: PropertyDetailComponent},
         {path: 'edit', component: PropertyDetailEditComponent, canDeactivate: [CanDeactivateGuard] },
-        {path: 'sales-lettings', component: PropertyDetailSalesLettingsComponent},
+        {path: 'instructions', component: PropertyDetailInstructionsComponent},
         {path: 'offers', component: PropertyDetailOffersComponent},
         {path: 'notes', component: PropertyDetailNotesComponent},
         {path: 'documents', component: PropertyDetailDocumentsComponent},
