@@ -1,5 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PropertyAutoComplete } from '../shared/property';
+import { PropertyAutoComplete, Property } from '../shared/property';
+import { Observable } from 'rxjs';
+import { PropertyService } from '../shared/property.service';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-property-list',
@@ -9,9 +12,15 @@ import { PropertyAutoComplete } from '../shared/property';
 export class PropertyListComponent implements OnInit {
 @Input()  properties: PropertyAutoComplete[];
 @Input() searchTerm: string;
-  constructor() { }
+
+
+  constructor(private propertyService: PropertyService) { }
 
   ngOnInit() {
   }
+
+onPropertySelected(propertyId: string){
+  this.propertyService.currentPropertyChanged(+propertyId);
+}
 
 }

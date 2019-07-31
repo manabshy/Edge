@@ -5,23 +5,23 @@
       <h4 class="mb-0">Property Detail</h4>
     </div>
   </div>
-  <div class="text-center py-3" *ngIf="!searchedPropertyDetails">
+  <div *ngIf="propertyDetails$ | async as propertyDetails">
+  <div class="text-center py-3" *ngIf="!propertyDetails">
     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading info ...
   </div>
-
   <div class="bg-light border border-top-0 mb-4">
-    <div class="text-right pt-3 px-3" *ngIf="searchedPropertyDetails">
+    <div class="text-right pt-3 px-3" *ngIf="propertyDetails">
       <div class="row mb-2">
         <div class="col-auto">
-          <span class="badge badge-pill badge-primary mr-1">{{propertyTypes.get(searchedPropertyDetails?.propertyTypeId)}}</span>
-          <span class="badge badge-pill badge-primary">{{propertyStyles.get(searchedPropertyDetails?.propertyStyleId)}}</span>
+          <span class="badge badge-pill badge-primary mr-1">{{propertyTypes.get(propertyDetails?.propertyTypeId)}}</span>
+          <span class="badge badge-pill badge-primary">{{propertyStyles.get(propertyDetails?.propertyStyleId)}}</span>
         </div>
         <div class="col text-right">
           <a routerLink="edit"><i class="fas fa-edit"></i> Edit</a>
         </div>
       </div>
     </div>
-    <div class="row mx-0 pb-3" *ngIf="searchedPropertyDetails">
+    <div class="row mx-0 pb-3" *ngIf="propertyDetails">
       <div class="col-sm-4 mb-2 mb-sm-0">
         <a [routerLink]="['photos']">
           <div class="card bg-dark text-white">
@@ -34,7 +34,7 @@
         </a>
       </div>
       <div class="col">
-        <pre><strong>{{searchedPropertyDetails?.address | formatAddress}}</strong></pre>
+        <pre><strong>{{propertyDetails?.address | formatAddress}}</strong></pre>
       </div>
       <div class="col-12">
         <hr class="mb-2">
@@ -47,12 +47,13 @@
             <span class="badge badge-pill badge-info">{{subArea}}</span>
           </div>
           <div class="col-auto">
-            <small class="text-muted">ID: {{searchedPropertyDetails?.propertyId}}</small>
+            <small class="text-muted">ID: {{propertyDetails?.propertyId}}</small>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
   <h5>Info</h5>
   <app-subnav>
     <app-subnav-item *ngFor="let item of subNav" [navLink]="[item?.link]">

@@ -1,15 +1,19 @@
-import { Injectable } from '@angular/core';
+ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject, combineLatest, Subject } from 'rxjs';
 import { PropertyAutoComplete, PropertyAutoCompleteData, Property, PropertyData } from './property';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, switchMap, filter, first } from 'rxjs/operators';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PropertyService {
-currentProperty: PropertyAutoComplete | null;
+currentPropertyIdSubject = new BehaviorSubject<number | null>(0);
+currentPropertyId$ = this.currentPropertyIdSubject.asObservable();
+currentPropertyChanged(propertyId: number) {
+  this.currentPropertyIdSubject.next(propertyId);
+}
 
   constructor(private http: HttpClient) { }
 
@@ -27,4 +31,36 @@ currentProperty: PropertyAutoComplete | null;
     const url = `${AppConstants.basePropertyUrl}/${propertyId}`;
     return this.http.get<PropertyData>(url).pipe(map(response => response.result));
   }
+  // tslint:disable-next-line:member-ordering
+  propertyDetails$ = this.currentPropertyId$
+    .pipe(
+      filter(propertyId => Boolean(propertyId)),
+      switchMap(propertyId => this.http.get<PropertyData>(`${AppConstants.basePropertyUrl}/${propertyId}`)
+        .pipe(
+          map(response => response.result),
+        )
+      ));
+  // dataForProperty$ =  this.currentPropertyId$
+  // .pipe(
+  //   filter(propertyId => Boolean(propertyId)),
+  //   switchMap(propertyId => this.http.get<PropertyData>(`${AppConstants.basePropertyUrl}/${propertyId}`)
+  //   .pipe(
+  //     map(properties => properties.result[0]),
+  //     switchMap(property =>
+  //       combineLatest([
+  //         this.http.get<PropertyData>(`${AppConstants.basePropertyUrl}/${propertyId}/1`),
+  //         this.http.get<PropertyData>(`${AppConstants.basePropertyUrl}/${propertyId}/2`)
+  //       ])
+  //       .pipe(
+  //       //   map(([properties, photos]) =>{
+  //       //     propertyAddress: property.propertyAddress
+  //       //     photos: photos
+  //       //   })
+  //       //  as PropData)
+  //       tap(data => console.log(data))
+  //       )
+  //   )
+  //   )
+  // )); // fix this
 }
+

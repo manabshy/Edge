@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { PropertyService } from '../shared/property.service';
 import { ActivatedRoute } from '@angular/router';
-import { Property, PropertyTypes, PropertyStyles, PropertyDetailsSubNav, PropertyDetailsSubNavItems } from '../shared/property';
-import { SharedService, InfoDetail } from 'src/app/core/services/shared.service';
+import { Property, PropertyTypes, PropertyStyles, PropertyDetailsSubNavItems } from '../shared/property';
+import { SharedService } from 'src/app/core/services/shared.service';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-property-detail',
@@ -19,24 +21,25 @@ export class PropertyDetailComponent implements OnInit {
   allAreas: any;
   allSubAreas: any;
   subNav = PropertyDetailsSubNavItems;
+  propertyDetails$ = new Observable<any>();
 
   get region() {
-    if(this.searchedPropertyDetails && this.regions) {
-      let getRegion = this.regions.get(this.searchedPropertyDetails.regionId.toString()).get('value');
+    if (this.searchedPropertyDetails && this.regions) {
+      const getRegion = this.regions.get(this.searchedPropertyDetails.regionId.toString()).get('value');
       return getRegion;
     }
   }
 
   get area() {
-    if(this.searchedPropertyDetails && this.allAreas) {
-      let getArea = this.allAreas.get(this.searchedPropertyDetails.areaId.toString()).get('value');
+    if (this.searchedPropertyDetails && this.allAreas) {
+      const getArea = this.allAreas.get(this.searchedPropertyDetails.areaId.toString()).get('value');
       return getArea;
     }
   }
 
   get subArea() {
-    if(this.searchedPropertyDetails && this.allSubAreas) {
-      let getSubArea = this.allSubAreas.get(this.searchedPropertyDetails.subAreaId.toString()).get('value');
+    if (this.searchedPropertyDetails && this.allSubAreas) {
+      const getSubArea = this.allSubAreas.get(this.searchedPropertyDetails.subAreaId.toString()).get('value');
       return getSubArea;
     }
   }
@@ -49,8 +52,14 @@ export class PropertyDetailComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.propertyId = +params['id'] || 0;
     });
+    this.propertyDetails$ = this.propertyService.propertyDetails$
+      .pipe
+      (
+        tap(data => this.searchedPropertyDetails = data)
+      );
+
     if (this.propertyId) {
-      this.getPropertyDetails(this.propertyId);
+      this.propertyService.currentPropertyChanged(this.propertyId);
     }
     this.sharedService.getDropdownListInfo().subscribe(data => {
       this.listInfo = data;
@@ -60,11 +69,11 @@ export class PropertyDetailComponent implements OnInit {
     });
   }
 
-  getPropertyDetails(propertyId: number) {
-    this.propertyService.getProperty(propertyId).subscribe(data => {
-      this.searchedPropertyDetails = data;
-      console.log(this.searchedPropertyDetails);
-    });
-  }
+  // getPropertyDetails(propertyId: number) {
+  //   this.propertyService.getProperty(propertyId).subscribe(data => {
+  //     // this.searchedPropertyDetails = data;
+  //     console.log(this.searchedPropertyDetails);
+  //   });
+  // }
 
 }
