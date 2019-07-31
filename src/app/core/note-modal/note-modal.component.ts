@@ -69,27 +69,14 @@ export class NoteModalComponent implements OnInit {
   consumeShortcut(shortcut: string) {
     const textControl = this.noteForm.get('text');
     let textValue = textControl.value;
-    switch(shortcut){
-      case this.shortcuts.LVM:
-        textValue = textValue.replace(this.shortcuts.LVMTCB, shortcut);
-        textValue += textValue ? '' : shortcut;
-        break;
-      case this.shortcuts.LVMTCB:
-        if(!textValue.includes(this.shortcuts.LVMTCB)) {
-          textValue = textValue.replace(this.shortcuts.LVM, shortcut);
-          textValue += textValue ? '' : shortcut;
-        }
-        break;
-      default:
-        if(textValue.includes(shortcut)) {
-          if(textValue.includes(shortcut + ', ')){
-            textValue = textValue.replace(shortcut + ', ','');
-          } else {
-            textValue = textValue.replace(shortcut,'');
-          }
-        } else {
-          textValue = textValue.slice(0, 0) + shortcut + ', ' + textValue.slice(0);
-        } 
+    if(textValue.includes(shortcut)) {
+      if(textValue.includes(shortcut + ', ')){
+        textValue = textValue.replace(shortcut + ', ','');
+      } else {
+        textValue = textValue.replace(shortcut,'');
+      }
+    } else {
+      textValue = textValue.slice(0, 0) + shortcut + ', ' + textValue.slice(0);
     }
     textValue = textValue.replace(/,\s*$/, '');
     textControl.setValue(textValue);
