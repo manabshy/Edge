@@ -190,7 +190,16 @@
     <h5>Info</h5>
     <app-subnav>
       <app-subnav-item *ngFor="let item of subNav" [navLink]="[item?.link]">
-        {{item?.label}} <span class="badge badge-pill badge-primary">{{ (summaryTotals[item?.value]?.total || '0') || summaryTotals[item?.value]}}</span>
+        {{item?.label}}
+        <span class="badge badge-pill badge-primary" [tooltip]="isObject(summaryTotals[item?.value]) ? 'active/total' : ''">
+          
+          <ng-container *ngIf="isObject(summaryTotals[item?.value]); else simpleValue">
+            {{summaryTotals[item?.value]?.active}}/{{summaryTotals[item?.value]?.total}}
+          </ng-container>
+          <ng-template #simpleValue>
+              {{summaryTotals[item?.value] || '0'}}
+          </ng-template>
+        </span>
       </app-subnav-item>
     </app-subnav>
   </div>

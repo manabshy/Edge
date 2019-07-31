@@ -102,6 +102,10 @@ export class ContactgroupsDetailComponent implements OnInit {
     this.sharedService.addNote(data);
   }
 
+  isObject(val) {
+    return val instanceof Object;
+  }
+
   ngOnDestroy(){
 
   }
