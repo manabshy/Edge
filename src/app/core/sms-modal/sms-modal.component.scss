@@ -6,29 +6,51 @@
 
 .fixed-text {
     position: relative;
+    width: 100%;
 
-    label {
-        position: absolute;
-        top: 0;
-        left: 0;
+    &-header, &-footer {
+        background: color("white");
+        border: 1px solid $input-border-color;
+    }
+
+    &-header {
         padding: $input-padding-y $input-padding-x;
+        position: absolute;
+        width: 100%;
+        left: 0;
+        top: 0;
+        border-bottom: none;
+        @include border-top-radius($input-border-radius);
+    }
+
+    &-footer {
+        padding-left: $input-padding-x;
+        border-top: none;
+        @include border-bottom-radius($input-border-radius);
+
+        label {
+            width: 4rem;
+        }
+
+        .form-control {
+            border-right: none;
+            @include border-right-radius(0);
+            @include border-bottom-radius(0);
+        }
+
+        .form-row:not(:first-child){
+            .form-control {
+                border-top: none;
+                border-bottom: none;
+                @include border-top-radius(0);
+                @include border-bottom-right-radius($input-border-radius);
+            }
+        }
     }
 
     textarea {
-        padding-top: $input-padding-y*4.5;
-    }
-}
-
-
-.sms-header {
-    label {
-        width: 3rem;
-    }
-
-    input {
-        padding: 0;
-        display: inline-block;
-        width: auto;
-        height: auto;
+        padding-top: $input-padding-y*6;
+        border-bottom: none;
+        @include border-bottom-radius(0);
     }
 }

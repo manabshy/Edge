@@ -3,42 +3,38 @@
 </div>
 <div class="modal-body text-center">
     <form [formGroup]="smsForm" action="" class="text-left">
-      <div class="sms-header">
-        <div class="form-group form-row">
-          <div class="col">
-            <div class="form-row">
-              <label>
-                From:
+      <div class="form-group">
+        To: <strong class="mr-1">{{salutation}}</strong> - <br class="d-sm-none" /><span class="text-muted">{{number}}</span>
+        <input type="hidden" name="number">
+      </div>
+      <div class="form-group mb-5">
+        <div class="fixed-text">
+          <label class="fixed-text-header">From D & G</label>
+          <textarea formControlName="text" class="form-control" id="text" cols="30" rows="5" [maxlength]="smsMaxLength" placeholder="Message ..."></textarea>
+          <div class="fixed-text-footer">
+            <div class="form-row align-items-center">
+              <label class="col-auto m-0">
+                Contact
               </label>
               <div class="col">
-                <span class="mr-1">Alex Agyapong</span> - <br class="d-sm-none" />
-                <input type="text" #numberInput
-                  [attr.readonly]="!isNumberEditable ? true : null" 
-                  [ngClass]="isNumberEditable ? 'form-control px-1' : 'form-control-plaintext text-muted'" 
-                  id="userNumber" value="098234023423" placeholder="Number">
+                <input type="text"
+                  id="user" value="Alex Agyapong" class="form-control" placeholder="Name">
+              </div>
+            </div>
+            <div class="form-row align-items-center">
+              <label class="col-auto m-0">
+                On
+              </label>
+              <div class="col">
+                <input type="text"
+                  id="userNumber" value="098234023423" class="form-control" placeholder="Number">
               </div>
             </div>
           </div>
-          <div class="col-auto">
-            <a href (click)="toggleNumberEdit()"><i class="fas fa-edit"></i> Edit</a>
-          </div>
         </div>
-        <hr>
-        <div class="form-group form-row">
-          <label>
-            To:
-          </label>
-          <div class="col-auto">
-            <strong class="mr-1">{{salutation}}</strong> - <br class="d-sm-none" /><span class="text-muted">{{number}}</span>
-          </div>
-          <input type="hidden" name="number">
-        </div>
-      </div>
-      <div class="form-group fixed-text mb-4">
-        <label>From D & G</label>
-        <textarea formControlName="text" class="form-control" id="text" cols="30" rows="5" [maxlength]="smsMaxLength" placeholder="Message ..."></textarea>
         <small class="form-text" [ngClass]="smsLength === smsMaxLength ? 'text-danger' : 'text-muted'">{{smsLength}}/{{smsMaxLength}}</small>
       </div>
+
     </form>
     <button type="button" class="btn btn-light mr-2" (click)="action(false)">{{actions[0]}}</button>
     <button type="button" class="btn btn-primary" (click)="action(true)">{{actions[1]}}</button>
