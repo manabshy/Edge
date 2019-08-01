@@ -31,7 +31,7 @@ export class TelephoneComponent implements OnInit {
     event.preventDefault();
 
     if (this.sms) {
-      if (this.warning) {
+      if (this.warning && this.warning.value !== 'None') {
         this.showWarning().subscribe(res => {
           if (res) {
             this.callOrTextChoice();
@@ -41,7 +41,7 @@ export class TelephoneComponent implements OnInit {
         this.callOrTextChoice();
       }
     } else {
-      if (this.warning) {
+      if (this.warning && this.warning.value !== 'None') {
         this.showWarning().subscribe(res => {
           if (res) {
             this.call();
@@ -82,21 +82,6 @@ export class TelephoneComponent implements OnInit {
   }
 
   call() {
-    if (window.innerWidth < 576) {
-      window.open('tel:' + this.number);
-    } else {
-      // alert('Calling...');
-      const tapiInfo: TapiInfo = {
-        officeId: 10,
-        staffId: 10,
-        isOutGoingCall: true,
-        callerNmber: '4629',
-        calledNumber: '07718702809',
-        IP: '192.168.10.29'
-      };
-
-      this.tapiService.putCallRequest(tapiInfo).subscribe(data => console.log(data));
-
-    }
+    this.tapiService.call(this.number);
   }
 }
