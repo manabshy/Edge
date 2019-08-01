@@ -93,7 +93,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   get isAMLCompleted() {
-    return this.contactGroupDetails && !!this.contactGroupDetails.companyAmlCompletedDate
+    return this.contactGroupDetails && (!!this.contactGroupDetails.companyAmlCompletedDate || this.contactGroupDetails.isAmlCompleted)
   }
   public keepOriginalOrder = (a) => a.key;
 

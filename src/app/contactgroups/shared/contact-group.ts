@@ -25,6 +25,7 @@ export interface ContactGroup {
   currentOfficeId?: number;
   rawData?: any;
   companyAmlCompletedDate?: string;
+  isAmlCompleted: boolean;
 }
 export const ContactGroupDetailsSubNav = ['leads','notes','searches','valuations', 'instructions', 'offers', 'tenancies', 'lettings-managements', 'home-managements'];
 
