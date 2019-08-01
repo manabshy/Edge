@@ -3,12 +3,12 @@
 </div>
 <div class="modal-body text-center">
     <form [formGroup]="smsForm" action="" class="text-left">
-      <div class="form-group form-row align-items-center">
+      <div class="form-group form-row">
         <div class="col-auto">
-          <label for="" class="m-0">To:</label>
+          To:
         </div>
         <div class="col-auto">
-          <strong>{{salutation}}</strong> ({{number}})
+          <strong>{{salutation}}</strong> <span class="text-muted ml-1">({{number}})</span>
         </div>
         <input type="hidden" name="number">
       </div>
@@ -16,8 +16,13 @@
         <textarea formControlName="text" class="form-control" id="text" cols="30" rows="5" [maxlength]="smsMaxLength" placeholder="Message ..."></textarea>
         <small class="form-text" [ngClass]="smsLength === smsMaxLength ? 'text-danger' : 'text-muted'">{{smsLength}}/{{smsMaxLength}}</small>
       </div>
-      <div class="form-group mb-4">
-        From: Alex (098234023423)
+      <div class="form-group form-row mb-4">
+        <div class="col-auto">
+          From:
+        </div>
+        <div class="col">
+          Alex<span class="text-muted ml-1">(098234023423)</span>
+        </div>
       </div>
     </form>
     <button type="button" class="btn btn-light mr-2" (click)="action(false)">{{actions[0]}}</button>
