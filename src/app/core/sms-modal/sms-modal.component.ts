@@ -38,7 +38,7 @@ export class SmsModalComponent implements OnInit {
     });
     this.smsForm.patchValue({
       senderName: this.currentStaffMember.fullName,
-      senderPhoneNumber: this.number,
+      senderPhoneNumber: this.currentStaffMember.mobile,
     });
   }
 
