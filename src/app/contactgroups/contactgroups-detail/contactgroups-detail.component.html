@@ -191,15 +191,13 @@
     <app-subnav>
       <app-subnav-item *ngFor="let item of subNav" [navLink]="[item?.link]">
         {{item?.label}}
-        <span class="badge badge-pill badge-primary" [tooltip]="isObject(summaryTotals[item?.value]) ? 'active/total' : ''">
-          
-          <ng-container *ngIf="isObject(summaryTotals[item?.value]); else simpleValue">
-            {{summaryTotals[item?.value]?.active}}/{{summaryTotals[item?.value]?.total}}
-          </ng-container>
-          <ng-template #simpleValue>
-              {{summaryTotals[item?.value] || '0'}}
-          </ng-template>
-        </span>
+        <ng-container *ngIf="isObject(summaryTotals[item?.value]); else simpleValue">
+          <span class="badge badge-pill badge-success mr-1"> {{summaryTotals[item?.value]?.active}} </span>
+          <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value]?.total}}</span>
+        </ng-container>
+        <ng-template #simpleValue>
+          <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value] || '0'}}</span>
+        </ng-template>
       </app-subnav-item>
     </app-subnav>
   </div>
