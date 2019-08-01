@@ -6,6 +6,7 @@ import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component'
 import { TapiService } from '../services/tapi.service';
 import { TapiInfo } from '../models/tapi-info';
 import { SharedService } from '../services/shared.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-telephone',
@@ -17,8 +18,9 @@ export class TelephoneComponent implements OnInit {
   @Input() searchTerm: string;
   @Input() sms: boolean;
   @Input() warning: any;
+  isCalling: boolean = false;
 
-  constructor(private modalService: BsModalService, private tapiService: TapiService, private sharedService: SharedService) { }
+  constructor(private modalService: BsModalService, private tapiService: TapiService, private sharedService: SharedService, private toastr: ToastrService) { }
 
   ngOnInit() {
     if(!this.sharedService.isUKMobile(this.number)){
@@ -82,6 +84,27 @@ export class TelephoneComponent implements OnInit {
   }
 
   call() {
-    this.tapiService.call(this.number);
+    if (window.innerWidth < 576) {
+      window.open('tel:' + this.number);
+    } else {
+      this.isCalling = true;
+      const tapiInfo: TapiInfo = {
+        officeId: 10,
+        staffId: 10,
+        isOutGoingCall: true,
+        callerNmber: '4629',
+        calledNumber: '07718702809',
+        IP: '192.168.10.29'
+      };
+
+      this.tapiService.putCallRequest(tapiInfo).subscribe(data => {
+        this.isCalling = false;
+        this.toastr.success('Dialing ...', '', {
+          toastClass: 'ngx-toastr toast-call'
+        });
+        console.log(data)
+      });
+
+    }
   }
 }
