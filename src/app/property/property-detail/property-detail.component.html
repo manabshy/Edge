@@ -25,7 +25,8 @@
       <div class="col-sm-4 mb-2 mb-sm-0">
         <a [routerLink]="['photos']">
           <div class="card bg-dark text-white">
-            <img class="card-img" src="https://placeimg.com/640/480/arch" alt="">
+            <img class="card-img" [src]="propertyDetails?.photo?.azureResourceURL" alt="">
+            <!-- <img class="card-img" src="https://placeimg.com/640/480/arch" alt=""> -->
             <div class="card-img-overlay clearfix">
               <span class="float left pull-left">15 Photos</span>
               <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
@@ -54,10 +55,22 @@
     </div>
   </div>
 </div>
-  <h5>Info</h5>
-  <app-subnav>
-    <app-subnav-item *ngFor="let item of subNav" [navLink]="[item?.link]">
-      {{item?.label}} <span class="badge badge-pill badge-primary">0</span>
-    </app-subnav-item>
-  </app-subnav>
+ <div *ngIf="summaryTotals">
+    <h5>Info</h5>
+    <app-subnav>
+      <app-subnav-item *ngFor="let item of subNav" [navLink]="[item?.link]">
+        {{item?.label}}
+        <span>
+          <ng-container *ngIf="isObject(summaryTotals[item?.value]); else simpleValue">
+           <span class="badge badge-pill badge-success mr-1"> {{summaryTotals[item?.value]?.active}} </span>
+           <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value]?.total}}</span>
+          </ng-container>
+          <ng-template #simpleValue>
+             <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value] || '0'}}</span>
+          </ng-template>
+        </span>
+      </app-subnav-item>
+      <app-subnav-item  [navLink]="['map']">Map</app-subnav-item>
+    </app-subnav>
+ </div>
 </div>

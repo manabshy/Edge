@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PropertyService } from '../shared/property.service';
 import { ActivatedRoute } from '@angular/router';
-import { Property, PropertyTypes, PropertyStyles, PropertyDetailsSubNavItems } from '../shared/property';
+import { Property, PropertyTypes, PropertyStyles, PropertyDetailsSubNavItems, PropertySummaryFigures } from '../shared/property';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -14,6 +14,7 @@ import { tap } from 'rxjs/operators';
 export class PropertyDetailComponent implements OnInit {
   propertyId: number;
   searchedPropertyDetails: Property;
+  summaryTotals: PropertySummaryFigures;
   propertyTypes = PropertyTypes;
   propertyStyles = PropertyStyles;
   listInfo: any;
@@ -54,8 +55,8 @@ export class PropertyDetailComponent implements OnInit {
     });
     this.propertyDetails$ = this.propertyService.propertyDetails$
       .pipe
-      (
-        tap(data => this.searchedPropertyDetails = data),
+      ( tap(data => this.searchedPropertyDetails = data),
+        tap(data => this.summaryTotals = data.info),
         tap(data => console.log('details', data))
       );
 
@@ -69,7 +70,9 @@ export class PropertyDetailComponent implements OnInit {
       this.allSubAreas = this.sharedService.objectToMap(this.listInfo.result.subAreas);
     });
   }
-
+    isObject(val) {
+      return val instanceof Object;
+    }
   // getPropertyDetails(propertyId: number) {
   //   this.propertyService.getProperty(propertyId).subscribe(data => {
   //     // this.searchedPropertyDetails = data;

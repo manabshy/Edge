@@ -110,9 +110,9 @@ export const PropertyStyles = new Map([
   [PropertyStyle.ParkingSpace, 'Parking Space'],
 ]);
 
-export const PropertyDetailsSubNav = ['instructions','offers','notes','map','photos'];
+export const PropertyDetailsSubNav = ['instructions', 'offers', 'propertyNotes', 'propertyPhotos', 'managementNotes'];
 
-export const PropertyDetailsSubNavItems: SubNavItem[] = PropertyDetailsSubNav.map(x=>({
+export const PropertyDetailsSubNavItems: SubNavItem[] = PropertyDetailsSubNav.map(x => ({
   link: x,
   label: SubNav.subNavLabel(x),
   value: SubNav.subNavValue(x)
