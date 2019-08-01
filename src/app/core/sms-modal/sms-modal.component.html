@@ -8,12 +8,12 @@
     <form [formGroup]="smsForm" action="" class="text-left">
       <div class="form-group">
         To: <strong class="mr-1">{{salutation}}</strong> - <br class="d-sm-none" /><span class="text-muted">{{number}}</span>
-        <input type="hidden" name="number">
+        <input type="hidden" formControlName="phoneNumber" name="number">
       </div>
       <div class="form-group mb-4">
         <div class="fixed-text">
-          <label class="fixed-text-header">From D & G</label>
-          <textarea formControlName="text" class="form-control" id="text" cols="30" rows="5" [maxlength]="smsMaxLength" placeholder="Message ..."></textarea>
+          <label class="fixed-text-header">{{header}}</label>
+          <textarea formControlName="message" class="form-control" cols="30" rows="5" [maxlength]="smsMaxLength" placeholder="Message ..."></textarea>
           <div class="fixed-text-footer">
             <div class="form-row align-items-center">
               <label class="col-auto m-0">
@@ -21,7 +21,7 @@
               </label>
               <div class="col">
                 <input type="text"
-                  id="user" value="Alex Agyapong" class="form-control" placeholder="Name">
+                  id="user" formControlName="senderName" class="form-control" placeholder="Name">
               </div>
             </div>
             <div class="form-row align-items-center">
@@ -30,7 +30,7 @@
               </label>
               <div class="col">
                 <input type="text"
-                  id="userNumber" value="098234023423" class="form-control" placeholder="Number">
+                  id="userNumber" formControlName="senderPhoneNumber" class="form-control" placeholder="Number">
               </div>
             </div>
           </div>

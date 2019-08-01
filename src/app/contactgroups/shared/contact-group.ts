@@ -184,14 +184,14 @@ export interface ContactGroupsType {
   id: string;
   name: string;
 }
-export enum CompanyTypeId{
+export enum CompanyTypeId {
   Company = 1,
   OtherAgent = 2,
   PropertyDeveloper = 16,
   ReloAgent = 4,
   Tradesmen = 8
 }
-export interface CompanyContactDetails{
+export interface CompanyContactDetails {
   telephone: string;
   fax: string;
   website: string;
