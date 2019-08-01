@@ -3,26 +3,41 @@
 </div>
 <div class="modal-body text-center">
     <form [formGroup]="smsForm" action="" class="text-left">
-      <div class="form-group form-row">
-        <div class="col-auto">
-          To:
+      <div class="sms-header">
+        <div class="form-group form-row">
+          <div class="col">
+            <div class="form-row">
+              <label>
+                From:
+              </label>
+              <div class="col">
+                <span class="mr-1">Alex Agyapong</span> - <br class="d-sm-none" />
+                <input type="text" #numberInput
+                  [attr.readonly]="!isNumberEditable ? true : null" 
+                  [ngClass]="isNumberEditable ? 'form-control px-1' : 'form-control-plaintext text-muted'" 
+                  id="userNumber" value="098234023423" placeholder="Number">
+              </div>
+            </div>
+          </div>
+          <div class="col-auto">
+            <a href (click)="toggleNumberEdit()"><i class="fas fa-edit"></i> Edit</a>
+          </div>
         </div>
-        <div class="col-auto">
-          <strong>{{salutation}}</strong> <span class="text-muted ml-1">({{number}})</span>
+        <hr>
+        <div class="form-group form-row">
+          <label>
+            To:
+          </label>
+          <div class="col-auto">
+            <strong class="mr-1">{{salutation}}</strong> - <br class="d-sm-none" /><span class="text-muted">{{number}}</span>
+          </div>
+          <input type="hidden" name="number">
         </div>
-        <input type="hidden" name="number">
       </div>
-      <div class="form-group">
+      <div class="form-group fixed-text mb-4">
+        <label>From D & G</label>
         <textarea formControlName="text" class="form-control" id="text" cols="30" rows="5" [maxlength]="smsMaxLength" placeholder="Message ..."></textarea>
         <small class="form-text" [ngClass]="smsLength === smsMaxLength ? 'text-danger' : 'text-muted'">{{smsLength}}/{{smsMaxLength}}</small>
-      </div>
-      <div class="form-group form-row mb-4">
-        <div class="col-auto">
-          From:
-        </div>
-        <div class="col">
-          Alex<span class="text-muted ml-1">(098234023423)</span>
-        </div>
       </div>
     </form>
     <button type="button" class="btn btn-light mr-2" (click)="action(false)">{{actions[0]}}</button>

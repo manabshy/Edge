@@ -1,0 +1,34 @@
+@import "../../../style/bootstrap-overrides";
+
+@import "../../../../node_modules/bootstrap/scss/functions";
+@import "../../../../node_modules/bootstrap/scss/variables";
+@import "../../../../node_modules/bootstrap/scss/mixins";
+
+.fixed-text {
+    position: relative;
+
+    label {
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: $input-padding-y $input-padding-x;
+    }
+
+    textarea {
+        padding-top: $input-padding-y*4.5;
+    }
+}
+
+
+.sms-header {
+    label {
+        width: 3rem;
+    }
+
+    input {
+        padding: 0;
+        display: inline-block;
+        width: auto;
+        height: auto;
+    }
+}
