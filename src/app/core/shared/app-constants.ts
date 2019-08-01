@@ -10,6 +10,7 @@ export class AppConstants {
   public static get basePersonUrl(): string { return `${environment.baseUrl}/people`; }
   public static get baseInfoUrl(): string { return `${environment.baseUrl}/info`; }
   public static get baseTapiUrl(): string { return `${environment.baseUrl}/tapi`; }
+  public static get baseSmsUrl(): string { return `${environment.baseUrl}/sms`; }
   public static get redirectUri(): string { return `${environment.baseRedirectUri}/auth-callback`; }
   public static get postLogoutRedirectUri(): string { return `${environment.baseRedirectUri}`; }
   public static get tenant(): string { return'ed781348-2f1d-4f1e-bbf8-137da318df39'; }

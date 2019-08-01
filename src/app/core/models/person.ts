@@ -82,7 +82,14 @@ export interface Referral {
   referredTo: string;
   currentStaffMemberId: number;
 }
-
+export interface SmsInfo {
+  personId: string;
+  phoneNumber: string;
+  header: string;
+  message: string;
+  senderName: string;
+  senderPhoneNumber: string;
+}
 export const PeopleTitles  = <PersonTitle[]>[
   {id: 'Mr', name: 'Mr'},
   {id: 'Mrs', name: 'Mrs'},
