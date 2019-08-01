@@ -7,6 +7,7 @@ import { TapiService } from '../services/tapi.service';
 import { TapiInfo } from '../models/tapi-info';
 import { SharedService } from '../services/shared.service';
 import { ToastrService } from 'ngx-toastr';
+import { SmsModalComponent } from '../sms-modal/sms-modal.component';
 
 @Component({
   selector: 'app-telephone',
@@ -14,6 +15,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./telephone.component.scss']
 })
 export class TelephoneComponent implements OnInit {
+  @Input() salutation: string;
   @Input() number: string;
   @Input() searchTerm: string;
   @Input() sms: boolean;
@@ -78,9 +80,21 @@ export class TelephoneComponent implements OnInit {
       if (res === 'call') {
         this.call();
       } else {
-        alert('SMS');
+        this.sendSMS();
       }
     });
+  }
+
+  sendSMS() {
+    const subject = new Subject<boolean>();
+    const initialState = {
+      number: this.number,
+      salutation: this.salutation,
+      actions: ['Cancel', 'Send SMS']
+    };
+    const modal = this.modalService.show(SmsModalComponent, {initialState });
+    modal.content.subject = subject;
+    return subject.asObservable();
   }
 
   call() {

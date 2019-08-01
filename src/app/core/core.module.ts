@@ -52,14 +52,16 @@ import { AutocompleteOffDirective } from './shared/autocomplete-off.directive';
 import { HighlightPipe } from './shared/highlight.pipe';
 import { AppConstants } from './shared/app-constants';
 import { SubnavItemComponent } from './subnav-item/subnav-item.component';
+import { SmsModalComponent } from './sms-modal/sms-modal.component';
 
 @NgModule({
   declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent,
     ConfirmModalComponent, PropertyFinderComponent, FormatAddressPipe, ScoreBadgeComponent,
-    ErrorModalComponent, AddressComponent, SignerComponent, AutocompleteOffDirective, HighlightPipe, NoteModalComponent, NotesComponent, TelephoneComponent, TelephoneModalComponent, SubnavItemComponent, SubnavComponent],
+    ErrorModalComponent, AddressComponent, SignerComponent, AutocompleteOffDirective, HighlightPipe, 
+    NoteModalComponent, NotesComponent, TelephoneComponent, TelephoneModalComponent, SubnavItemComponent, SubnavComponent, SmsModalComponent],
   exports: [
     RoundingPipe, TruncatingPipe, ShortenNamePipe, FormatAddressPipe, HighlightPipe, AutocompleteOffDirective,
-    BreadcrumbComponent, BasicSearchComponent, NoteModalComponent, NotesComponent,
+    BreadcrumbComponent, BasicSearchComponent, NoteModalComponent, NotesComponent, SmsModalComponent,
     ConfirmModalComponent, ErrorModalComponent, PropertyFinderComponent, ScoreBadgeComponent, AddressComponent, SignerComponent, TelephoneComponent, TelephoneModalComponent, SubnavComponent, SubnavItemComponent,
     RouterModule, BrowserAnimationsModule, CollapseModule, TabsModule, TypeaheadModule, BsDropdownModule,
     BsDatepickerModule, ModalModule, PopoverModule,  NgPipesModule,
@@ -92,7 +94,8 @@ import { SubnavItemComponent } from './subnav-item/subnav-item.component';
     ConfirmModalComponent,
     ErrorModalComponent,
     NoteModalComponent,
-    TelephoneModalComponent
+    TelephoneModalComponent,
+    SmsModalComponent
   ],
   providers: [
     CanDeactivateGuard,
