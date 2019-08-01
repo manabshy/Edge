@@ -15,7 +15,8 @@ export class SmsService {
   sendSMS(sms: SmsInfo): Observable< SmsInfo|any> {
     const url = `${AppConstants.baseSmsUrl}`;
     return this.http.post<any>(url, sms).pipe(
+      tap(data => console.log('sent...', JSON.stringify(data))),
       map(response => response.status),
-      tap(data => console.log('sent...', JSON.stringify(data))));
+      tap(data => console.log('status received...', JSON.stringify(data))));
   }
 }
