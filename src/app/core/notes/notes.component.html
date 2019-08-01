@@ -21,14 +21,28 @@
             </button>
             <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
               aria-labelledby="actionsToggle">
-              <li role="menuitem"><button type="button" class="dropdown-item"
-                  (click)="setFlag(note?.personNoteId || note?.contactNoteId, true)"><i
-                    class="fas fa-exclamation-circle fa-fw mr-2 text-danger" [style.opacity]="note?.isImportant ? '.3' : null"></i>Set as <ng-container *ngIf="note?.isImportant; else important ">unimportant</ng-container>
-                    <ng-template  #important>important</ng-template></button></li>
-              <li role="menuitem"><button type="button" class="dropdown-item"
-                  (click)="setFlag(note?.personNoteId || note?.contactNoteId, false)"><i class="fas fa-thumbtack fa-fw mr-2" [style.opacity]="note?.isPinned ? '.3' : null"></i>
-                  <ng-container *ngIf="note?.isPinned; else pin ">Unpin </ng-container>
-                  <ng-template  #pin>Pin to top</ng-template></button></li>
+              <li role="menuitem">
+                <button type="button" class="dropdown-item"
+                  (click)="setFlag(note?.personNoteId || note?.contactNoteId, true)">
+                  <i class="fas fa-exclamation-circle fa-fw text-danger"></i>
+                  <i class="fas fa-times fa-xs align-text-top" *ngIf="note?.isImportant"></i>
+                  <span class="ml-2">Set as 
+                    <ng-container *ngIf="note?.isImportant; else important ">unimportant</ng-container>
+                    <ng-template  #important>important</ng-template>
+                  </span>
+                </button>
+              </li>
+              <li role="menuitem">
+                <button type="button" class="dropdown-item"
+                  (click)="setFlag(note?.personNoteId || note?.contactNoteId, false)">
+                  <i class="fas fa-thumbtack fa-fw"></i>
+                  <i class="fas fa-times fa-xs align-text-top" *ngIf="note?.isPinned"></i>
+                  <span class="ml-2">
+                    <ng-container *ngIf="note?.isPinned; else pin ">Unpin </ng-container>
+                    <ng-template  #pin>Pin to top</ng-template>
+                  </span>
+                </button>
+              </li>
             </ul>
           </div>
         </div>
