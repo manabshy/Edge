@@ -7,6 +7,7 @@ import { SharedService } from './core/services/shared.service';
 import { StaffMemberService } from './core/services/staff-member.service';
 import { StaffMember } from './core/models/staff-member';
 import { BehaviorSubject } from 'rxjs';
+import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +21,7 @@ export class AppComponent implements OnInit, AfterViewChecked {
   isCurrentUserAvailable = false;
   currentStaffMember: StaffMember;
   @ViewChild('appContainer') appContainer : ElementRef;
+  @ViewChild(ToastContainerDirective) toastContainer: ToastContainerDirective;
   appHeightObservable;
   // get currentStaffMember(): StaffMember {
     //   return this.staffMemberService.currentStaffMember;
@@ -39,6 +41,7 @@ export class AppComponent implements OnInit, AfterViewChecked {
     protected sharedService: SharedService,
     protected staffMemberService: StaffMemberService,
     private renderer: Renderer2,
+    private toastrService: ToastrService,
     private cdRef: ChangeDetectorRef) {
     /*  Track previous route for Breadcrumb component  */
     this.router.events.pipe(
@@ -63,6 +66,7 @@ export class AppComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit() {
+    this.toastrService.overlayContainer = this.toastContainer;
     if (this.isLoggedIn) {
       console.log('current user in app comp', this.currentStaffMember)
       console.log('is current user available flag 1', this.isCurrentUserAvailable);

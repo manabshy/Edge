@@ -8,6 +8,12 @@
     @include media-breakpoint-up(lg) {
         min-height: 100vh;
     }
+
+    & > div:not(.side-nav) {
+        @include media-breakpoint-up(lg){
+            padding-left: $side-nav-width;
+        }
+    }
 }
 
 .side-nav {
@@ -19,12 +25,6 @@
         left: 0;
         height: 100vh;
         z-index: 1;
-    }
-
-    + div {
-        @include media-breakpoint-up(lg){
-            padding-left: $side-nav-width;
-        }
     }
 }
 

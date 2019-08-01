@@ -44,7 +44,7 @@ import { SubnavComponent } from './subnav/subnav.component';
 
 //vendor
 import { OrderModule } from 'ngx-order-pipe';
-import { ToastNoAnimationModule } from 'ngx-toastr';
+import { ToastrModule, ToastContainerModule } from 'ngx-toastr';
 import { AgmCoreModule } from '@agm/core';
 
 //various
@@ -65,7 +65,7 @@ import { SmsModalComponent } from './sms-modal/sms-modal.component';
     ConfirmModalComponent, ErrorModalComponent, PropertyFinderComponent, ScoreBadgeComponent, AddressComponent, SignerComponent, TelephoneComponent, TelephoneModalComponent, SubnavComponent, SubnavItemComponent,
     RouterModule, BrowserAnimationsModule, CollapseModule, TabsModule, TypeaheadModule, BsDropdownModule,
     BsDatepickerModule, ModalModule, PopoverModule,  NgPipesModule,
-    TooltipModule, AccordionModule, ButtonsModule, ReactiveFormsModule, FormsModule, OrderModule, ToastNoAnimationModule, AgmCoreModule, CarouselModule
+    TooltipModule, AccordionModule, ButtonsModule, ReactiveFormsModule, FormsModule, OrderModule, ToastrModule, ToastContainerModule, AgmCoreModule, CarouselModule
   ],
   imports: [
     CommonModule,
@@ -84,7 +84,8 @@ import { SmsModalComponent } from './sms-modal/sms-modal.component';
     TooltipModule.forRoot(),
     AccordionModule.forRoot(),
     ButtonsModule.forRoot(),
-    ToastNoAnimationModule.forRoot(),
+    ToastrModule.forRoot({ positionClass: 'inline' }),
+    ToastContainerModule,
     CarouselModule.forRoot(),
     AgmCoreModule.forRoot({
       apiKey: AppConstants.googleApiKey
