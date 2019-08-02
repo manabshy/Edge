@@ -5,7 +5,7 @@ import { TelephoneModalComponent } from '../telephone-modal/telephone-modal.comp
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
 import { TapiService } from '../services/tapi.service';
 import { TapiInfo } from '../models/tapi-info';
-import { SharedService } from '../services/shared.service';
+import { SharedService, WedgeError } from '../services/shared.service';
 import { ToastrService } from 'ngx-toastr';
 import { SmsModalComponent } from '../sms-modal/sms-modal.component';
 
@@ -117,6 +117,10 @@ export class TelephoneComponent implements OnInit {
           toastClass: 'ngx-toastr toast-call'
         });
         console.log(data)
+      },
+      (error: WedgeError) => {
+        this.sharedService.showError(error);
+        this.isCalling = false;
       });
 
     }
