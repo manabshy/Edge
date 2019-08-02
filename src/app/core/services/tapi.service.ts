@@ -29,15 +29,16 @@ export class TapiService {
     // }
 
     // getting callRequestsSubscriptionAddress if already exists
-    let callRequestsSubscriptionAddress = localStorage.getItem('callRequestsSubscriptionAddress');
+    let callRequestsSubscriptionAddress = sessionStorage.getItem('callRequestsSubscriptionAddress');
 
     // If callRequestsSubscriptionAddress is empty then generate GUID to use as a Call Requests Subscription Address
     if (callRequestsSubscriptionAddress === '' || callRequestsSubscriptionAddress == null) {
       const guid = Guid.create().toString();
-      localStorage.setItem('callRequestsSubscriptionAddress', guid);
+      sessionStorage.setItem('callRequestsSubscriptionAddress', guid);
       tapiInfo.guid = guid;
     } else {
-      callRequestsSubscriptionAddress = localStorage.getItem('callRequestsSubscriptionAddress');
+      callRequestsSubscriptionAddress = sessionStorage.getItem('callRequestsSubscriptionAddress');
+      tapiInfo.guid = callRequestsSubscriptionAddress;
     }
 
     return this.http.post<TapiInfo>(url, tapiInfo).pipe(tap(data => console.log('result', data)));
