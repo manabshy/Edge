@@ -2,7 +2,14 @@
 @import "style/bootstrap-overrides";
 
 //bootstrap
-@import "../node_modules/bootstrap/scss/bootstrap";
+@import "~bootstrap/scss/bootstrap";
+
+
+//fontAwesome
+$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+@import "~@fortawesome/fontawesome-free/scss/regular";
 
 //toastr
 @import '~ngx-toastr/toastr-bs4-alert';

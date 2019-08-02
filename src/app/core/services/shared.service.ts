@@ -20,6 +20,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class SharedService {
   infoDetail: DropdownListInfo;
+  lastCallNoteToast: any;
 
   // private infoDetail: DropdownListInfo;
   // get dropdownListInfo() {

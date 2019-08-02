@@ -10,7 +10,7 @@
           <ul id="event-dropup" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-dropup">
             <li role="menuitem"><a class="dropdown-item" [routerLink]="['/add-event']"><i
                   class="fas fa-calendar-day fa-fw mr-2"></i>Appointment</a></li>
-            <li role="menuitem"><a class="dropdown-item" href="#"><i class="fas fa-phone fa-fw mr-2"></i>Callback
+            <li role="menuitem"><a class="dropdown-item" href="#"><i class="fas fa-phone-alt fa-fw mr-2"></i>Callback
                 reminder</a>
             </li>
           </ul>
@@ -80,7 +80,7 @@
       <ul class="list-unstyled m-0" tabindex="1">
         <li><a class="dropdown-item" [routerLink]="['/add-event']"><i
               class="fas fa-calendar-day fa-fw mr-2"></i>Add Appointment</a></li>
-        <li><a class="dropdown-item" href="#"><i class="fas fa-phone fa-fw mr-2"></i>Add Callback
+        <li><a class="dropdown-item" href="#"><i class="fas fa-phone-alt fa-fw mr-2"></i>Add Callback
             reminder</a>
         </li>
       </ul>
@@ -106,7 +106,7 @@
           <div class="row no-gutters">
             <span class="color" [ngStyle]="{'background': event.color}" *ngIf="viewMode === 'month'"></span>
             <div class="col text-truncate"><span [ngClass]="{'text-muted': viewMode === 'month'}">{{event.time}}</span>&nbsp;<strong>{{event.title}}</strong></div>
-            <div class="col-auto" [ngClass]="{'text-muted': viewMode === 'month'}"><i class="far fa-calendar fa-fw" *ngIf="event.type"></i><i class="fas fa-phone fa-fw"
+            <div class="col-auto" [ngClass]="{'text-muted': viewMode === 'month'}"><i class="far fa-calendar fa-fw" *ngIf="event.type"></i><i class="-alt fa-fw"
                 *ngIf="!event.type"></i></div>
             <div class="col-12" *ngIf="viewMode !== 'month'">
               {{event.notes}}

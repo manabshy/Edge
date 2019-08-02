@@ -84,7 +84,7 @@ import { SmsModalComponent } from './sms-modal/sms-modal.component';
     TooltipModule.forRoot(),
     AccordionModule.forRoot(),
     ButtonsModule.forRoot(),
-    ToastrModule.forRoot({ positionClass: 'inline' }),
+    ToastrModule.forRoot({ positionClass: 'inline', enableHtml: true }),
     ToastContainerModule,
     CarouselModule.forRoot(),
     AgmCoreModule.forRoot({

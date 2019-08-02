@@ -95,7 +95,7 @@
         phone</p>
         <ng-container *ngFor="let phoneNumber of searchedPersonDetails.phoneNumbers">
           <p class="mb-2" *ngIf="phoneNumber.number">
-            <app-telephone [salutation]="searchedPersonDetails?.salutation" [number]="phoneNumber.number" [sms]="phoneNumber.sendSMS" [warning]="warning"></app-telephone>
+            <app-telephone [person]="searchedPersonDetails" [number]="phoneNumber.number" [sms]="phoneNumber.sendSMS" [warning]="warning"></app-telephone>
           </p>
         </ng-container>
       </div>

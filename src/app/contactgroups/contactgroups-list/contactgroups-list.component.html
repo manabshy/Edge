@@ -21,7 +21,7 @@
           </div>
           <div class="col-12 col-sm-auto">
             <p>
-              <app-telephone [salutation]="contactGroup?.salutation" [number]="contactGroup?.phoneNumbers[0]" [searchTerm]="searchTerm" [warning]="showWarning(contactGroup?.warningStatusId)"></app-telephone>
+              <app-telephone [person]="contactGroup" [number]="contactGroup?.phoneNumbers[0]" [searchTerm]="searchTerm" [warning]="showWarning(contactGroup?.warningStatusId)"></app-telephone>
               <span class="text-danger" *ngIf="!contactGroup?.phoneNumbers[0]">No Phone</span>
             </p>
           </div>

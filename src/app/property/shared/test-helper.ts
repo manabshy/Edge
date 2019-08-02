@@ -1,5 +1,5 @@
 import { Address } from 'src/app/core/models/address';
-import { Property, PropertyType, PropertyStyle } from './property';
+import { Property, PropertyType, PropertyStyle, MapCentre, Photo, PropertySummaryFigures } from './property';
 
 export const mockAddress: Address = {
   addressLines: '413 test address',
@@ -44,6 +44,9 @@ export const mockProperty: Property = {
   regionId: 1,
   areaId: 1,
   subAreaId: 2,
+  mapCentre: {} as MapCentre,
+  photo: {} as Photo,
+  info: {} as PropertySummaryFigures
 };
 export const mockProperty2: Property = {
   propertyId: 2,
@@ -56,5 +59,8 @@ export const mockProperty2: Property = {
   regionId: 1,
   areaId: 1,
   subAreaId: 2,
+  mapCentre: {} as MapCentre,
+  photo: {} as Photo,
+  info: {} as PropertySummaryFigures
 };
 export const MockProperties = [mockProperty, mockProperty2];

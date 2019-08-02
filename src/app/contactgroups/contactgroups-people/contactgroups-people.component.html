@@ -217,7 +217,7 @@
                     </div> -->
                     <div class="col-12 mb-2">
                       <strong>{{person?.firstName | titlecase}} {{person?.lastName | titlecase}}</strong>
-                      <!-- <i class="fas fa-phone"></i>&nbsp;
+                      <!-- <i class="fas fa-phone-alt"></i>&nbsp;
 
                             <i class="fas fa-envelope"></i>&nbsp;
 
@@ -231,7 +231,7 @@
                         *ngIf="!person?.phoneNumbers.length || !person?.phoneNumbers[0].number">No phone</p>
                         <ng-container *ngFor="let phoneNumber of person?.phoneNumbers">
                           <p class="mb-2" *ngIf="phoneNumber?.number">
-                            <app-telephone [salutation]="person?.salutation"  [number]="phoneNumber.number" [sms]="phoneNumber.sendSMS" [warning]="showWarning(person?.warningStatusId)"></app-telephone>
+                            <app-telephone [person]="person"  [number]="phoneNumber.number" [sms]="phoneNumber.sendSMS" [warning]="showWarning(person?.warningStatusId)"></app-telephone>
                           </p>
                         </ng-container>
                     </div>
