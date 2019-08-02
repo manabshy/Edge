@@ -11,7 +11,7 @@
   <form [formGroup]="companyFinderForm">
     <div class="row">
       <div class="col">
-        <input type="text" class="form-control" formControlName="companyName" placeholder="Company Name"
+        <input type="search" class="form-control" formControlName="companyName" placeholder="Company Name"
         aria-label="Company Name" (keyup)="onKeyup()">
         <button class="btn btn-link px-0" type="button" id="button-advanced" (click)="advSearchCollapsed = !advSearchCollapsed"
         [attr.aria-expanded]="!advSearchCollapsed" aria-controls="advSearch">Advanced search</button>
