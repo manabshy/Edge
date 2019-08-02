@@ -3,10 +3,9 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { Subject } from 'rxjs';
 import { Person } from '../models/person';
-import { TargetLocator } from 'selenium-webdriver';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { PersonNote, ContactGroup, ContactGroupsNote } from 'src/app/contactgroups/shared/contact-group';
-import { text } from '@angular/core/src/render3';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-note-modal',
@@ -37,7 +36,7 @@ export class NoteModalComponent implements OnInit {
   };
   public keepOriginalOrder = (a) => a.key;
 
-  constructor(public bsModalRef: BsModalRef, private fb: FormBuilder, private contactGroupService: ContactGroupsService) { }
+  constructor(public bsModalRef: BsModalRef, private fb: FormBuilder, private contactGroupService: ContactGroupsService, private toastr: ToastrService) { }
 
   ngOnInit() {
     this.selectedPerson = this.data.person || null;
@@ -105,10 +104,9 @@ export class NoteModalComponent implements OnInit {
     if (note && this.selectedPerson) {
       note.personId = this.selectedPerson.personId;
       this.contactGroupService.addPersonNote(note).subscribe(data => {
-        // if(data) {
-        //   this.personNote = data;
-        //   this.contactGroupService.personNotesChanged(this.personNote);
-        // }
+        if(data) {
+          this.toastr.success('Note successfully added');
+        }
       });
     } else if (note && this.data.personId) {
       note.personId = this.data.personId;
@@ -116,6 +114,7 @@ export class NoteModalComponent implements OnInit {
         if(data) {
           this.personNote = data;
           this.contactGroupService.personNotesChanged(this.personNote);
+          this.toastr.success('Note successfully added');
         }
         console.log('added person note with id', data);
       });
@@ -129,6 +128,7 @@ export class NoteModalComponent implements OnInit {
         if(data){
           this.contactGroupNote = data;
           this.contactGroupService.contactGroupNotesChanged(this.contactGroupNote);
+          this.toastr.success('Note successfully added');
         }
         console.log('added  contact group note', data);
       });

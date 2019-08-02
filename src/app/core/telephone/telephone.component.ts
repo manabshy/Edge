@@ -6,7 +6,7 @@ import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component'
 import { TapiService } from '../services/tapi.service';
 import { TapiInfo } from '../models/tapi-info';
 import { SharedService, WedgeError } from '../services/shared.service';
-import { ToastrService, ToastRef } from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
 import { SmsModalComponent } from '../sms-modal/sms-modal.component';
 import { take } from 'rxjs/operators';
 import { Person } from '../models/person';

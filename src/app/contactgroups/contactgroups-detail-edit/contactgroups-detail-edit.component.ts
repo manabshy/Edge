@@ -11,6 +11,7 @@ import { AppConstants, FormErrors, ValidationMessages } from 'src/app/core/share
 import { AppUtils } from 'src/app/core/shared/utils';
 import { WedgeValidators } from 'src/app/core/shared/wedge-validators';
 import { Address } from 'src/app/core/models/address';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-contactgroups-detail-edit',
@@ -87,6 +88,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   }
   public keepOriginalOrder = (a) => a.key;
   constructor(public sharedService: SharedService,
+    private toastr: ToastrService,
     private contactGroupService: ContactGroupsService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -528,7 +530,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   onSaveComplete(person?: Person) {
     this.personForm.reset();
     this.errorMessage = null;
-    this.sharedService.showSuccess('Person successfully saved');
+    this.toastr.success('Person successfully saved');
     if (this.isEditingSelectedPerson && AppUtils.holdingSelectedPeople) {
       const holdingPeople = AppUtils.holdingSelectedPeople;
       holdingPeople.forEach((x, index) => {

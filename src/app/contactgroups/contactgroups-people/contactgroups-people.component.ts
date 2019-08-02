@@ -13,6 +13,7 @@ import { Location } from '@angular/common';
 import { WedgeError, SharedService } from 'src/app/core/services/shared.service';
 import { FormErrors, ValidationMessages } from 'src/app/core/shared/app-constants';
 import { AppUtils } from 'src/app/core/shared/utils';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-contactgroups-people',
@@ -105,6 +106,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     private modalService: BsModalService,
     private _location: Location,
     private sharedService: SharedService,
+    private toastr: ToastrService,
     private renderer: Renderer2
   ) {}
 
@@ -623,7 +625,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   onSaveComplete(contactGroupId): void {
-    this.sharedService.showSuccess('Contact Group successfully saved');
+    this.toastr.success('Contact Group successfully saved');
     if(!contactGroupId) {
       this._location.back();
     } else {

@@ -11,6 +11,7 @@ import { debounceTime } from 'rxjs/operators';
 import { WedgeValidators } from 'src/app/core/shared/wedge-validators';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { Address } from 'src/app/core/models/address';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -41,6 +42,7 @@ export class CompanyEditComponent implements OnInit {
               private companyService: CompanyService,
               private fb: FormBuilder,
               private sharedService: SharedService,
+              private toastr: ToastrService,
               private _location: Location,
               private route: ActivatedRoute,
               private _router: Router
@@ -266,7 +268,7 @@ export class CompanyEditComponent implements OnInit {
       console.log(AppUtils.holdingSelectedCompany);
     }
     this.companyForm.reset();
-    this.sharedService.showSuccess('Company successfully saved');
+    this.toastr.success('Company successfully saved');
     this._location.back();
    console.log('complete');
   }
