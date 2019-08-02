@@ -109,10 +109,10 @@ export class TelephoneComponent implements OnInit {
         isOutGoingCall: true,
         callerNmber: '4629',
         calledNumber: '07718702809',
-        IP: '192.168.10.29'
+        guid: ''
       };
 
-      this.isDialing = true
+      this.isDialing = true;
       this.tapiService.putCallRequest(tapiInfo).subscribe(data => {
         this.calling();
         console.log(data);

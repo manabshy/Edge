@@ -19,17 +19,32 @@ export class TapiService {
 
   putCallRequest(tapiInfo: TapiInfo): Observable<any> {
     const url = `${AppConstants.baseTapiUrl}`;
-    let serviceBusAddressGuid: string;
+    // let serviceBusAddressGuid: string;
 
-    serviceBusAddressGuid = this.cookiesService.getCookie('CurrentServiceBusAddress');
+    // serviceBusAddressGuid = this.cookiesService.getCookie('CurrentServiceBusAddress');
 
-    if (serviceBusAddressGuid == null || serviceBusAddressGuid === '') {
-      serviceBusAddressGuid = Guid.create().toString();
-      this.cookiesService.setCookie('CurrentServiceBusAddress', serviceBusAddressGuid, 1);
+    // if (serviceBusAddressGuid == null || serviceBusAddressGuid === '') {
+    //   serviceBusAddressGuid = Guid.create().toString();
+    //   this.cookiesService.setCookie('CurrentServiceBusAddress', serviceBusAddressGuid, 1);
+    // }
+
+    // getting callRequestsSubscriptionAddress if already exists
+    let callRequestsSubscriptionAddress = localStorage.getItem('callRequestsSubscriptionAddress');
+
+    // If callRequestsSubscriptionAddress is empty then generate GUID to use as a Call Requests Subscription Address
+    if (callRequestsSubscriptionAddress === '') {
+      const guid = Guid.create().toString();
+      localStorage.setItem('callRequestsSubscriptionAddress', guid);
+      tapiInfo.guid = guid;
+    } else {
+      callRequestsSubscriptionAddress = localStorage.getItem('callRequestsSubscriptionAddress');
     }
 
     return this.http.post<TapiInfo>(url, tapiInfo).pipe(tap(data => console.log('result', data)));
   }
+
+
+
 
 }
 
