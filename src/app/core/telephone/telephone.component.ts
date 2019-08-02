@@ -118,8 +118,8 @@ export class TelephoneComponent implements OnInit {
         console.log(data);
       },
       (error: WedgeError) => {
-        this.sharedService.showError(error);
         this.isDialing = false;
+        this.sharedService.showError(error);
       });
 
     }
