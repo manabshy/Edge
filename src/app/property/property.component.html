@@ -11,7 +11,7 @@
   <form [formGroup]="propertyFinderForm">
     <div class="row">
       <div class="col">
-        <input type="text" class="form-control" formControlName="propertyAddress" placeholder="Property Address"
+        <input type="search" class="form-control" formControlName="propertyAddress" placeholder="Property Address"
         aria-label="Property Address" (keyup)="onKeyup()">
         <button class="btn btn-link px-0" type="button" id="button-advanced" (click)="advSearchCollapsed = !advSearchCollapsed"
         [attr.aria-expanded]="!advSearchCollapsed" aria-controls="advSearch">Advanced search</button>
