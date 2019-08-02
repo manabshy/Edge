@@ -32,7 +32,7 @@ export class TapiService {
     let callRequestsSubscriptionAddress = localStorage.getItem('callRequestsSubscriptionAddress');
 
     // If callRequestsSubscriptionAddress is empty then generate GUID to use as a Call Requests Subscription Address
-    if (callRequestsSubscriptionAddress === '') {
+    if (callRequestsSubscriptionAddress === '' || callRequestsSubscriptionAddress == null) {
       const guid = Guid.create().toString();
       localStorage.setItem('callRequestsSubscriptionAddress', guid);
       tapiInfo.guid = guid;
