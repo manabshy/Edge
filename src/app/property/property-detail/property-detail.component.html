@@ -26,9 +26,11 @@
         <div class="col-sm-4 mb-2 mb-sm-0">
           <a [routerLink]="['photos']">
             <div class="card bg-dark text-white">
-              <img class="card-img" [src]="propertyDetails?.photo?.azureResourceURL" alt="">
-              <!-- <img class="card-img" src="https://placeimg.com/640/480/arch" alt=""> -->
-              <div class="card-img-overlay clearfix">
+              <img class="card-img" [src]="propertyDetails?.photo?.azureResourceURL" alt="" *ngIf="propertyDetails?.photo?.azureResourceURL; else noPhoto">
+              <ng-template #noPhoto>
+                <img class="card-img" src="https://dummyimage.com/400x300/e9ecef/212529&text=no+photos" alt="">
+              </ng-template>
+              <div class="card-img-overlay clearfix" *ngIf="propertyDetails?.photo?.azureResourceURL">
                 <span class="float left pull-left">15 Photos</span>
                 <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
               </div>
