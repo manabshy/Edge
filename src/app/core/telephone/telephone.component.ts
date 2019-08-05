@@ -90,6 +90,7 @@ export class TelephoneComponent implements OnInit {
   sendSMS() {
     const subject = new Subject<boolean>();
     const initialState = {
+      person: this.person,
       number: this.number,
       salutation: this.person.salutation,
       actions: ['Cancel', 'Send SMS']

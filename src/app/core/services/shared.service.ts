@@ -20,6 +20,7 @@ import { PhoneNumberUtil, PhoneNumber, PhoneNumberFormat } from 'google-libphone
 export class SharedService {
   infoDetail: DropdownListInfo;
   lastCallNoteToast: any;
+  formErrors: any;
 
   // private infoDetail: DropdownListInfo;
   // get dropdownListInfo() {
@@ -260,27 +261,6 @@ export class SharedService {
         const rawNumber = phoneUtil.parseAndKeepRawInput(number, 'GB');
         return this.isInternationalNumber(number) ? phoneUtil.getRegionCodeForNumber(rawNumber) : 'GB';
   }
-  logValidationErrors(group: FormGroup, fakeTouched: boolean) {
-    console.log('val.....................');
-    Object.keys(group.controls).forEach((key: string) => {
-      const control = group.get(key);
-      const messages = ValidationMessages[key];
-      if (control.valid) {
-       FormErrors[key] = '';
-      }
-      if (control && !control.valid && (fakeTouched || control.dirty)) {
-        FormErrors[key] = '';
-        for (const errorKey in control.errors) {
-          if (errorKey) {
-            FormErrors[key] += messages[errorKey] + '\n';
-          }
-        }
-      }
-      if (control instanceof FormGroup) {
-        this.logValidationErrors(control, fakeTouched);
-      }
-    });
-  }
 
   scrollToFirstInvalidField() {
     const invalidFields = document.getElementsByClassName('is-invalid');
@@ -292,7 +272,7 @@ export class SharedService {
       })
     }
   }
-  
+
   getDropdownListInfo(): Observable<DropdownListInfo> {
     if (this.infoDetail) {
       console.log('info cache', this.infoDetail);

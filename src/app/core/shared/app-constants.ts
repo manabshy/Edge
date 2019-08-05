@@ -49,7 +49,11 @@ export const FormErrors = {
   },
   'address': '',
   'number': '',
-  'postCode': ''
+  'postCode': '',
+  'senderPhoneNumber': '',
+  'senderName': '',
+  'message': '',
+  'phoneNumber': '',
 };
 export const ValidationMessages = {
   'searchTerm': {
@@ -106,7 +110,16 @@ export const ValidationMessages = {
     minlength: 'Postcode must be at least 5 characters',
     maxlength: 'Postcode cannot be more than 7 characters',
     pattern: 'Postcode is not valid'
-  }
+  },
+  'senderPhoneNumber': {
+    required: 'Sender phone number is required'
+  },
+  'senderName': {
+    required: 'Sender name is required'
+  },
+  'message': {
+    required: 'message is required'
+  },
   // 'invalidPhoneNumber': {
   //   required: 'Phone is required',
   //   minlength: 'Phone number must be at least 7 characters',
