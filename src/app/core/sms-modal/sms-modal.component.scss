@@ -15,11 +15,9 @@
 
     &-header {
         padding: $input-padding-y $input-padding-x;
-        position: absolute;
         width: 100%;
-        left: 0;
-        top: 0;
         border-bottom: none;
+        margin: 0;
         @include border-top-radius($input-border-radius);
     }
 
@@ -49,8 +47,17 @@
     }
 
     textarea {
-        padding-top: $input-padding-y*6;
+        border-top: none;
         border-bottom: none;
-        @include border-bottom-radius(0);
+        @include border-radius(0);
+    }
+
+    &.is-invalid {
+        .is-invalid {
+            border: 1px solid theme-color("danger")!important;
+        }
+        & ~ .invalid-feedback {
+            display: block;
+        }
     }
 }

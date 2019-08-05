@@ -12,7 +12,7 @@
         <input type="hidden" formControlName="phoneNumber" name="number">
       </div>
       <div class="form-group mb-4">
-        <div class="fixed-text">
+        <div class="fixed-text" [ngClass]="{'is-invalid':formErrors.message || formErrors.senderName || formErrors.senderPhoneNumber}">
           <label class="fixed-text-header">{{header}}</label>
           <input type="hidden" formControlName="header">
           <textarea formControlName="message" class="form-control" cols="30" rows="5" [maxlength]="smsMaxLength" placeholder="Message ..." [ngClass]="{'is-invalid':formErrors.message}"></textarea>
@@ -38,11 +38,9 @@
           </div>
         </div>
         <small class="form-text" [ngClass]="smsLength === smsMaxLength ? 'text-danger' : 'text-muted'">{{smsLength}}/{{smsMaxLength}}</small>
-        <div>
-          <span class="invalid-feedback">{{formErrors.message}}</span>
-          <span class="invalid-feedback">{{formErrors.senderPhoneNumber}}</span>
-          <span class="invalid-feedback">{{formErrors.senderName}}</span>
-        </div>
+        <span class="invalid-feedback">{{formErrors?.message}}</span>
+        <span class="invalid-feedback">{{formErrors?.senderPhoneNumber}}</span>
+        <span class="invalid-feedback">{{formErrors?.senderName}}</span>
       </div>
 
     </form>

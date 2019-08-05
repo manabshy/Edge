@@ -112,13 +112,14 @@ export const ValidationMessages = {
     pattern: 'Postcode is not valid'
   },
   'senderPhoneNumber': {
-    required: 'Sender phone number is required'
+    required: 'Sender phone number is required',
+    invalidPhoneNumber: 'Please enter a valid phone number'
   },
   'senderName': {
     required: 'Sender name is required'
   },
   'message': {
-    required: 'message is required'
+    required: 'Message is required'
   },
   // 'invalidPhoneNumber': {
   //   required: 'Phone is required',

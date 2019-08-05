@@ -10,6 +10,7 @@ import { SmsInfo } from '../models/person';
 import { SmsService } from '../services/sms.service';
 import { WedgeError, SharedService } from '../services/shared.service';
 import { FormErrors, ValidationMessages } from '../shared/app-constants';
+import { WedgeValidators } from '../shared/wedge-validators';
 
 @Component({
   selector: 'app-sms-modal',
@@ -51,7 +52,7 @@ export class SmsModalComponent implements OnInit {
       message: ['', [Validators.required, Validators.maxLength(700)]],
       senderName: ['', Validators.required],
       phoneNumber: ['', Validators.required],
-      senderPhoneNumber: ['', Validators.required],
+      senderPhoneNumber: ['', [Validators.required, WedgeValidators.phoneNumberValidator()]],
     });
     this.smsForm.patchValue({
       senderName: this.currentStaffMember.fullName,
