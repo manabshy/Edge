@@ -8,10 +8,10 @@ import { OrderPipe } from 'ngx-order-pipe';
   templateUrl: './exchanges.component.html',
   styleUrls: ['./exchanges.component.scss']
 })
-export class ExchangesComponent implements OnInit {
+export class ExchangesComponent implements OnInit, OnChanges {
   @Input() exchanges: Leaderboard[];
+  @Input() selectedPeriodLabel: string;
   sortedExchanges: any[];
-  @Input() selectedPeriodLabel: string; 
   order: string = 'totalFees';
   reverse: boolean = true;
 
@@ -19,7 +19,15 @@ export class ExchangesComponent implements OnInit {
     this.sortedExchanges = orderPipe.transform(this.exchanges, 'totalFees');
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log('exchange', this.exchanges);
+    console.log('selected label', this.selectedPeriodLabel);
+  }
+
+  ngOnChanges(){
+    console.log('exchange 1', this.exchanges);
+    console.log('selected label 1', this.selectedPeriodLabel);
+  }
 
   setOrder(value: string) {
     if (this.order === value) {

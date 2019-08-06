@@ -19,15 +19,15 @@ export class LeaderboardService {
     .pipe(map(response => response.result));
   }
 
-  getStaffMemberExchanges(role: string, period: string): Observable<Leaderboard[]> {
+  getStaffMemberExchanges(role: string, period: any): Observable<Leaderboard[]> {
     return this.getLeaderboard(role, period, 'exchanges');
   }
 
-  getStaffMemberInstructions(role: string, period: string, params?: any): Observable<Leaderboard[]> {
+  getStaffMemberInstructions(role: string, period: any, params?: any): Observable<Leaderboard[]> {
     return this.getLeaderboard(role, period, 'instructions', params);
   }
 
-  private getLeaderboard(role: string, period: string, endPoint: string, params?: any) {
+  private getLeaderboard(role: string, period: any, endPoint: string, params?: any) {
     if (params == null) { params = 10; }
     const url = `${AppConstants.leaderboardBaseUrl}/${endPoint}?role=${role}&period=${period}&pageSize=${params}`;
     return this.http.get<LeaderboardResult>(url).pipe(map(response => response.result));

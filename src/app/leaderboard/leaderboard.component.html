@@ -1,9 +1,11 @@
 <div class="tab-content-container">
-  <div class="form-group" [ngStyle]="{'visibility': filterVisibility}">
-    <select [(ngModel)]="selectedPeriod" class="form-control" id="sel1">
-      <option *ngFor='let periodOption of periodList' [value]='periodOption.key'>{{periodOption.value}}</option>
-    </select>
-  </div>
+  <form [formGroup]="leaderboardForm">
+    <div class="form-group" [ngStyle]="{'visibility': filterVisibility}">
+      <select class="form-control" formControlName="period">
+        <option *ngFor='let item of periods | keyvalue:keepOriginalOrder' [value]='item.key'>{{item.value}}</option>
+      </select>
+    </div>
+  </form>
   <tabset>
     <tab heading="Instructions" (select)="showFilter('visible')">
       <div class="no-gutters">
@@ -19,7 +21,7 @@
     </tab>
     <tab heading="Exchanges" (select)="showFilter('visible')">
       <div class="no-gutters">
-        <app-exchanges [exchanges]=exchanges [selectedPeriodLabel]=selectedPeriodLabel></app-exchanges>
+        <app-exchanges [exchanges]=exchanges [selectedPeriodLabel]=selectedPeriodLabel ></app-exchanges>
       </div>
     </tab>
   </tabset>

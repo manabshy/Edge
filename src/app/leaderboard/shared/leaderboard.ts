@@ -18,8 +18,22 @@ export interface LeaderboardResult {
 }
 
 export enum Period {
-  ThisWeek = 'This Week',
-  ThisMonth = 'This Month',
-  ThisQuarter = 'This Quarter',
-  ThisYear = 'This Year',
+  ThisWeek ,
+  ThisMonth,
+  ThisQuarter,
+  ThisYear,
 }
+// export enum Period {
+//   ThisWeek = 'This Week',
+//   ThisMonth = 'This Month',
+//   ThisQuarter = 'This Quarter',
+//   ThisYear = 'This Year',
+// }
+
+export const PeriodMap = new Map([
+  [Period.ThisWeek, 'This Week'],
+  [Period.ThisMonth, 'This Month'],
+  [Period.ThisQuarter, 'This Quarter'],
+  [Period.ThisYear, 'This Year'],
+]);
+

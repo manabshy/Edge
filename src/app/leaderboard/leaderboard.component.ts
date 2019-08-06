@@ -1,10 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { LeaderboardService } from './shared/leaderboard.service';
-import { Leaderboard, LeaderboardResult } from './shared/leaderboard';
-import { ActivatedRoute } from '@angular/router';
+import { Leaderboard, LeaderboardResult, PeriodMap, Period } from './shared/leaderboard';
 import { Constants } from '../core/shared/period-list';
 import { StaffMember } from '../core/models/staff-member';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-leaderboard',
@@ -12,8 +12,8 @@ import { StaffMember } from '../core/models/staff-member';
   styleUrls: ['./leaderboard.component.scss']
 })
 export class LeaderboardComponent implements OnInit {
-  private _selectedPeriod: string;
   private readonly salesManager = 'salesManager';
+  @Input() currentStaffMember: StaffMember;
   originalInstructions: Leaderboard[] = [];
   instructions: Leaderboard[] = [];
   pipelineList: Leaderboard[] = [];
@@ -22,34 +22,48 @@ export class LeaderboardComponent implements OnInit {
   resultCount: number;
   selectedPeriodLabel: string;
   periodList = Constants.PeriodList;
+  periods = PeriodMap;
   filterVisibility = 'visible';
-  @Input() currentStaffMember: StaffMember;
-
-  set selectedPeriod(val: string) {
-    this._selectedPeriod = val;
-    this.selectedPeriodLabel = this.periodList.find(o => o.key === val).value;
-    this.getExchanges(this.salesManager, this.selectedPeriod);
-    this.getInstructions(this.salesManager, this.selectedPeriod, 100);
+  leaderboardForm: FormGroup;
+  get periodControl(): FormControl {
+    return <FormControl> this.leaderboardForm.get('period');
   }
-  get selectedPeriod() {
-    return this._selectedPeriod;
-  }
+  public keepOriginalOrder = (a) => a.key;
 
   constructor(
     private leaderboardService: LeaderboardService,
-    private route: ActivatedRoute
-  ) {}
+    private fb: FormBuilder
+  ) { }
 
   ngOnInit() {
-    //  this.route.data.subscribe(data => {this.pipeline = data['pipelineResolver']; });
-    this.route.queryParams.subscribe(
-      params => (this.selectedPeriod = params['period'] || 'ThisQuarter')
-    );
+    this.setupForm();
+    if (this.periodControl.value) {
+      this.getExchanges(this.salesManager, Period[this.periodControl.value] );
+      this.getInstructions(this.salesManager, Period[this.periodControl.value], 100);
+    }
+    this.leaderboardForm.valueChanges.subscribe(data => {
+      console.log('input', Period[data.period]);
+      console.log('key', data.period);
+      this.selectedPeriodLabel = this.periods.get(+data.period);
+      console.log('label', this.selectedPeriodLabel);
+      this.getExchanges(this.salesManager, Period[data.period]);
+      this.getInstructions(this.salesManager, Period[data.period], 100);
+    });
+    this.getPipeline();
+  }
+
+   getPipeline() {
     this.leaderboardService
       .getStaffMemberPipeline(this.salesManager)
       .subscribe(result => {
         this.pipelineList = result;
+        console.log('pipeline results', result);
       });
+  }
+
+  setupForm() {
+    this.leaderboardForm = this.fb.group({ period: [''] });
+    this.leaderboardForm.patchValue({ period: Period.ThisYear});
   }
 
   getExchanges(role: string, period: string) {
@@ -57,6 +71,7 @@ export class LeaderboardComponent implements OnInit {
       .getStaffMemberExchanges(role, period)
       .subscribe(result => {
         this.exchanges = result;
+        console.log('exchanges results', result);
       });
   }
 
