@@ -23,14 +23,14 @@
                 <th scope="row" class="font-weight-normal">{{i + 1}}<span class="d-sm-none">. {{person?.name}}</span>
                 </th>
                 <td class="d-none d-sm-table-cell">{{person?.name}}</td>
-                <span [ngSwitch]="managedOrFees">
-                  <span  *ngSwitchCase="'currency'">
+                <ng-container [ngSwitch]="managedOrFees">
+                  <ng-container  *ngSwitchCase="'currency'">
                     <td class="text-right" *ngIf="person?.managedOrFees" [ngClass]="{'font-weight-bold': order === 'totalFees'}" >{{person?.managedOrFees | rounding | currency: "GBP" | truncating}}</td>
-                  </span>
-                  <span  *ngSwitchCase="'percent'">
+                  </ng-container>
+                  <ng-container  *ngSwitchCase="'percent'">
                     <td class="text-right" *ngIf="person?.managedOrFees" [ngClass]="{'font-weight-bold': order === 'totalFees'}" >{{person?.managedOrFees | percent}}</td>
-                  </span>
-                </span>
+                  </ng-container>
+                </ng-container>
                 <td class="text-right" *ngIf="person?.total" [ngClass]="{'font-weight-bold': order === 'totalCount'}">{{person?.total}}</td>
               </tr>
             </tbody>
