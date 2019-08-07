@@ -229,6 +229,32 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     });
   }
 
+  private retrieveAddress(id: string) {
+    if (this.foundAddress) {
+      this.sharedService.getAddress(id).subscribe(data => {
+        this.retrievedAddresses = data;
+        const retrievedAddress = this.retrievedAddresses.Items[0];
+        const keys = Object.keys(retrievedAddress);
+        let retAddressLines = '';
+        keys.forEach(x => {
+          if (x.includes('Line') && retrievedAddress[x]) {
+            retAddressLines += retrievedAddress[x] + '\n';
+          }
+        });
+        this.personForm.patchValue({
+          fullAddress: '',
+          address: {
+            addressLines: (retrievedAddress.Company ? retrievedAddress.Company + '\n' : '') + retAddressLines + retrievedAddress.City,
+            postCode: retrievedAddress.PostalCode
+          }
+        });
+        setTimeout(() => {
+          document.getElementById('addressLines').scrollIntoView({block: 'center'});
+        });
+      });
+    }
+  }
+
   populateNewPersonDetails() {
     this.personForm.patchValue({
       firstName: this.basicPerson.firstName,
