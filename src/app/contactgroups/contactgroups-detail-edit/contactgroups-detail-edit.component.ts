@@ -506,7 +506,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     }
   }
   onSaveComplete(person?: Person) {
-    //this.personForm.reset();
+    this.personForm.markAsPristine();
     this.isSubmitting = false;
     this.errorMessage = null;
     this.sharedService.showSuccess('Person successfully saved');
