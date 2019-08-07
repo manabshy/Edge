@@ -17,6 +17,7 @@ export class AuthService {
     clientId: AppConstants.clientId,
     redirectUri: AppConstants.redirectUri,
     postLogoutRedirectUri: AppConstants.postLogoutRedirectUri,
+    cacheLocation: 'localStorage',
     endpoints: {
       'https://dandg-api-wedge.azurewebsites.net': '67f9a9a1-d8de-45bc-af20-43e1e18ccba5',
       'https://dandg-api-wedge-dev.azurewebsites.net': '67f9a9a1-d8de-45bc-af20-43e1e18ccba5',
@@ -70,7 +71,7 @@ export class AuthService {
     this.adalService.handleWindowCallback();
     this.adalService.getUser().subscribe(user => {
     this.user = user;
-    console.log(this.adalService.userInfo);
+    // console.log(this.adalService.userInfo);
    // var expireIn=user.profile.exp-newDate().getTime();
  });
 

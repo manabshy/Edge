@@ -178,7 +178,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     if (this.basicPerson) {
       this.backToFinder.emit(true);
     } else {
-      this._location.back();
+      this.sharedService.back();
     }
   }
 
@@ -506,7 +506,8 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     }
   }
   onSaveComplete(person?: Person) {
-    this.personForm.reset();
+    //this.personForm.reset();
+    this.isSubmitting = false;
     this.errorMessage = null;
     this.sharedService.showSuccess('Person successfully saved');
     if(this.isEditingSelectedPerson && AppUtils.holdingSelectedPeople) {

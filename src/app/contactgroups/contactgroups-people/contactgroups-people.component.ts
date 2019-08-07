@@ -587,11 +587,11 @@ export class ContactgroupsPeopleComponent implements OnInit {
   onSaveComplete(contactGroupId): void {
     this.sharedService.showSuccess('Contact Group successfully saved');
     if(!contactGroupId) {
-      this._location.back();
+      this.sharedService.back();
     } else {
       if(this.isSigner) {
         AppUtils.newSignerId = contactGroupId;
-        this._location.back();
+        this.sharedService.back();
       }
 
       let url = this._router.url;
@@ -712,6 +712,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   cancel() {
-    this._location.back();
+    this.sharedService.back();
   }
 }
