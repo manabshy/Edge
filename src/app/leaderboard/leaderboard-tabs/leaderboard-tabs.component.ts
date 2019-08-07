@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output, OnChanges } from '@angular/core';
-import { LeaderboardSort } from '../shared/leaderboard';
+import { LeaderboardSort, Leaderboard } from '../shared/leaderboard';
 import { OrderPipe } from 'ngx-order-pipe';
 
 @Component({
@@ -11,12 +11,12 @@ export class LeaderboardTabsComponent implements OnInit, OnChanges {
   @Input() tabs: any;
   @Input() active: any;
   @Input() managedOrFees: any;
-  @Input() data: any[];
+  @Input() data: Leaderboard[];
   @Output() tabChange: EventEmitter<any> = new EventEmitter<any>();
   order = 'totalFees';
   reverse = true;
   leaderboardSort = LeaderboardSort;
-  sortedData: any[];
+  sortedData: Leaderboard[];
  
   constructor(private orderPipe: OrderPipe) {this.sortedData = orderPipe.transform(this.data, 'totalFees'); }
 

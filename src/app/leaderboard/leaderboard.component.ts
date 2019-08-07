@@ -159,7 +159,7 @@ export class LeaderboardComponent implements OnInit, OnChanges, AfterViewInit {
   downloadLeaderboard(period: string) {
     // clear the data
     if (Array.isArray(this.data) && this.data.length) {
-      this.data = [];
+      this.data = null;
     }
 
     let leaderboard$: Observable<Leaderboard[]>;
