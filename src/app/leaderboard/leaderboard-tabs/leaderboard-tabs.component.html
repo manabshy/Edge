@@ -1,0 +1,42 @@
+<tabset>
+  <tab *ngFor="let item of tabs" [heading]=item (selectTab)="changeTab(item)">
+    <div class="no-gutters">
+      <div class="text-center" *ngIf="data && !data.length; else results">
+        <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...
+      </div>
+      <div class="text-center text-danger" *ngIf="!data" >
+        <i class="far fa-sad-tear"></i> No {{item}}
+      </div>
+      <ng-template #results>
+        <div class="table-responsive" *ngIf="data">
+          <table class="table table-sortable">
+            <thead *ngIf="item==='Pipeline' || item==='Exchanges'">
+                <th></th>
+                <th class="d-none d-sm-table-cell"></th>
+                <th class="text-right" [class.active]="order === 'totalFees'" (click)="setOrder('totalFees')"><span
+                    class="mr-3" [hidden]="order === 'totalFees' && !reverse">▼</span><span class="mr-3" [hidden]="order !== 'totalFees' || reverse">▲</span></th>
+                <th class="text-right" [class.active]="order === 'totalCount'" (click)="setOrder('totalCount')"><span
+                    [hidden]="order === 'totalCount' && !reverse">▼</span><span [hidden]="order !== 'totalCount' || reverse">▲</span></th>
+            </thead>
+            <tbody>
+              <tr *ngFor="let person of data | orderBy: order:reverse; let i = index;">
+                <th scope="row" class="font-weight-normal">{{i + 1}}<span class="d-sm-none">. {{person?.name}}</span>
+                </th>
+                <td class="d-none d-sm-table-cell">{{person?.name}}</td>
+                <span [ngSwitch]="managedOrFees">
+                  <span  *ngSwitchCase="'currency'">
+                    <td class="text-right" *ngIf="person?.managedOrFees" [ngClass]="{'font-weight-bold': order === 'totalFees'}" >{{person?.managedOrFees | rounding | currency: "GBP" | truncating}}</td>
+                  </span>
+                  <span  *ngSwitchCase="'percent'">
+                    <td class="text-right" *ngIf="person?.managedOrFees" [ngClass]="{'font-weight-bold': order === 'totalFees'}" >{{person?.managedOrFees | percent}}</td>
+                  </span>
+                </span>
+                <td class="text-right" *ngIf="person?.total" [ngClass]="{'font-weight-bold': order === 'totalCount'}">{{person?.total}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </ng-template>
+    </div>
+  </tab>
+</tabset>

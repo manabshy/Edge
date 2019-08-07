@@ -26,7 +26,7 @@ export class LeaderboardService {
   getStaffMemberInstructions(role: string, period: any, params?: any): Observable<Leaderboard[] | any> {
     return this.getLeaderboard(role, period, 'instructions', params);
   }
-  
+
   getStaffMemberViewingsCompleted(role: string, period: any, params?: any): Observable<Leaderboard[] | any> {
     return this.getLeaderboard(role, period, 'viewings', params);
   }

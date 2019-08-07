@@ -16,9 +16,12 @@ export interface LeaderboardResult {
   totalPages: number;
   totalResultCount: number;
 }
-
+export enum LeaderboardSort {
+  Fees,
+  TotalCount
+}
 export enum Period {
-  ThisWeek ,
+  ThisWeek,
   ThisMonth,
   ThisQuarter,
   ThisYear,
@@ -36,4 +39,38 @@ export const PeriodMap = new Map([
   [Period.ThisQuarter, 'This Quarter'],
   [Period.ThisYear, 'This Year'],
 ]);
+
+export enum LeaderboardColumns {
+  Exchanges = 'Exchanges',
+  Instructions = 'Instructions',
+  Managed = 'Managed',
+  Pipeline = 'Pipeline',
+  ViewingsCompleted = 'Viewings Completed'
+}
+
+const shared = [LeaderboardColumns.Pipeline, LeaderboardColumns.Exchanges];
+
+/**
+ * Columns available to the sales manager
+ */
+export const SalesManagerColumns = [
+  LeaderboardColumns.Instructions,
+  ...shared
+];
+
+/**
+ * Columns available to the sales manager
+ */
+export const LettingsManagerColumns = [
+  ...SalesManagerColumns,
+  LeaderboardColumns.Managed
+];
+
+/**
+ * Columns available to the sales manager
+ */
+export const NegotiatorColumns = [
+  LeaderboardColumns.ViewingsCompleted,
+  ...shared
+];
 

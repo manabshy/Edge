@@ -7,10 +7,11 @@ import { PipelineComponent } from './pipeline/pipeline.component';
 import { InstructionsComponent } from './instructions/instructions.component';
 import { ExchangesComponent } from './exchanges/exchanges.component';
 import { CoreModule } from '../core/core.module';
+import { LeaderboardTabsComponent } from './leaderboard-tabs/leaderboard-tabs.component';
 
 @NgModule({
-  declarations: [PipelineComponent, InstructionsComponent, ExchangesComponent],
-  exports : [PipelineComponent, InstructionsComponent, ExchangesComponent],
+  declarations: [PipelineComponent, InstructionsComponent, ExchangesComponent, LeaderboardTabsComponent],
+  exports : [PipelineComponent, InstructionsComponent, ExchangesComponent,LeaderboardTabsComponent],
   imports: [
     CommonModule,
     LeaderboardRoutingModule,
