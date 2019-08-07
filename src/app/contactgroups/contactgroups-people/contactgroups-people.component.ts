@@ -44,7 +44,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
   selectedPersonId: number;
   removedPersonIds: any[] = [];
   newPerson: BasicPerson;
-  isLoadingDetails = false;
   isCreateNewPersonVisible = false;
   isLoadingNewPersonVisible = false;
   isEditingSelectedPerson = false;
@@ -96,6 +95,11 @@ export class ContactgroupsPeopleComponent implements OnInit {
   get isAMLCompleted() {
     return this.contactGroupDetails && (!!this.contactGroupDetails.companyAmlCompletedDate || this.contactGroupDetails.isAmlCompleted)
   }
+
+  get isLoadingDetails() {
+    return this.contactGroupId && !this.contactGroupDetails
+  }
+
   public keepOriginalOrder = (a) => a.key;
 
   constructor(
@@ -229,7 +233,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   getContactGroupById(contactGroupId: number) {
-    this.isLoadingDetails = true;
     this.contactGroupService
       .getContactGroupbyId(contactGroupId)
       .subscribe(data => {
@@ -242,7 +245,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
           this.contactGroupDetails.contactGroupId = 0;
         }
         this.isTypePicked = true;
-        this.isLoadingDetails = false;
       });
   }
   getContactGroupNotes(contactGroupId: number){
