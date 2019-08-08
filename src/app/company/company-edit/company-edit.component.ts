@@ -267,7 +267,8 @@ export class CompanyEditComponent implements OnInit {
       AppUtils.holdingSelectedCompany = company;
       console.log(AppUtils.holdingSelectedCompany);
     }
-    this.companyForm.reset();
+    this.companyForm.markAsPristine();
+    this.isSubmitting = false;
     this.toastr.success('Company successfully saved');
     this._location.back();
    console.log('complete');
@@ -279,6 +280,6 @@ export class CompanyEditComponent implements OnInit {
     return true;
   }
   cancel() {
-    this._location.back();
+    this.sharedService.back();
   }
 }

@@ -12,6 +12,7 @@ import { ErrorModalComponent } from '../error-modal/error-modal.component';
 import { FormGroup } from '@angular/forms';
 import { NoteModalComponent } from '../note-modal/note-modal.component';
 import { PhoneNumberUtil, PhoneNumber, PhoneNumberFormat } from 'google-libphonenumber';
+import { Location } from '@angular/common';
 
 
 @Injectable({
@@ -34,15 +35,18 @@ export class SharedService {
     const listInfo = localStorage.getItem('dropdownListInfo');
     return JSON.parse(listInfo);
   }
-  constructor(private router: Router, private http: HttpClient, private modalService: BsModalService) {
+  constructor(private router: Router,
+              private http: HttpClient,
+              private _location: Location,
+              private modalService: BsModalService) {
 
   }
 
   back() {
     if (AppUtils.prevRoute) {
-      this.router.navigate([AppUtils.prevRoute]);
+      this._location.back();
     } else {
-      this.router.navigate(['/home']);
+      window.close();
     }
   }
 

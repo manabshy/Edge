@@ -66,9 +66,9 @@
       <div class="list-group-item text-center text-danger border-top-0" *ngIf="!filteredInstructions.length && !isFakeLoadingVisible">
         <i class="far fa-sad-tear"></i> No Instructions found
       </div>
-      <!-- <a routerLink="/home" class="list-group-item list-group-item-action" *ngFor="let instruction of allInstructions; first as isFirst" [ngClass]="{'border-top-0':isFirst}"> -->
+      <!-- <a routerLink="/" class="list-group-item list-group-item-action" *ngFor="let instruction of allInstructions; first as isFirst" [ngClass]="{'border-top-0':isFirst}"> -->
       <ng-container *ngIf="!isFakeLoadingVisible">
-        <a routerLink="/home" class="list-group-item list-group-item-action" *ngFor="let instruction of filteredInstructions ; first as isFirst" [ngClass]="{'border-top-0':isFirst}">
+        <a routerLink="/" class="list-group-item list-group-item-action" *ngFor="let instruction of filteredInstructions ; first as isFirst" [ngClass]="{'border-top-0':isFirst}">
           <div class="row align-items-end align-items-sm-center">
             <div class="col-sm-3">
               <dl class="row">
@@ -119,7 +119,7 @@
       <div class="list-group-item text-center text-danger" *ngIf="!valuations">
         <i class="far fa-sad-tear"></i> No Valuations {{period}}
       </div>
-      <a routerLink="/home" class="list-group-item list-group-item-action" *ngFor="let valuation of valuations">
+      <a routerLink="/" class="list-group-item list-group-item-action" *ngFor="let valuation of valuations">
         <div class="row align-items-end align-items-sm-center">
           <div class="col-sm-3">
             <dl class="row">

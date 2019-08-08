@@ -15,6 +15,6 @@ export class LoginComponent implements OnInit {
   }
   logIn(): void {
     this.authService.startAuthentication();
-    this.route.navigateByUrl('/home');
+    this.route.navigateByUrl('/');
   }
 }

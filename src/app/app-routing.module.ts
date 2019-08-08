@@ -17,21 +17,18 @@ import { AuthGuardService } from './core/services/auth-guard.service';
 import { NotFoundComponent } from './not-found/not-found.component';
 
 const routes: Routes = [
-  { path: '', canActivate: [AuthGuardService], children: [
-    { path: '', redirectTo: 'home', pathMatch: 'full' },
-    { path: 'home', component: HomeComponent },
-    { path: 'property-details-letting', component: PropertyDetailsLettingComponent },
-    { path: 'property-details-sale', component: PropertyDetailsSaleComponent },
-    { path: 'lead-edit', component: LeadEditComponent },
-    { path: 'lead-register', component: LeadRegisterComponent },
-    { path: 'applicant-register', component: ApplicantRegisterComponent },
-    { path: 'applicant-view-letting', component: ApplicantViewLettingComponent },
-    { path: 'applicant-view-sale', component: ApplicantViewSaleComponent },
-    { path: 'send-edetails', component: SendEdetailsComponent },
-    { path: 'leaderboard', component: LeaderboardComponent },
-    // { path: 'dashboard', component: DashboardComponent },
-    { path: 'diary', component: DiaryComponent },
-  ] },
+  { path: 'property-details-letting', component: PropertyDetailsLettingComponent, canActivate: [AuthGuardService]},
+  { path: 'property-details-sale', component: PropertyDetailsSaleComponent, canActivate: [AuthGuardService]},
+  { path: 'lead-edit', component: LeadEditComponent, canActivate: [AuthGuardService]},
+  { path: 'lead-register', component: LeadRegisterComponent, canActivate: [AuthGuardService]},
+  { path: 'applicant-register', component: ApplicantRegisterComponent, canActivate: [AuthGuardService]},
+  { path: 'applicant-view-letting', component: ApplicantViewLettingComponent, canActivate: [AuthGuardService]},
+  { path: 'applicant-view-sale', component: ApplicantViewSaleComponent, canActivate: [AuthGuardService]},
+  { path: 'send-edetails', component: SendEdetailsComponent, canActivate: [AuthGuardService]},
+  //{ path: 'leaderboard', component: LeaderboardComponent, canActivate: [AuthGuardService]},
+  // { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuardService]},
+  //{ path: 'diary', component: DiaryComponent, canActivate: [AuthGuardService]},
+  { path: '', component: HomeComponent, canActivate: [AuthGuardService]},
   { path: '**', component: NotFoundComponent }
 ];
 

@@ -14,7 +14,7 @@
     <div class="list-group-item text-center text-danger border-top-0" *ngIf="!instructions">
       <i class="far fa-sad-tear"></i> No Instructions {{period}}
     </div>
-    <a routerLink="/home" class="list-group-item list-group-item-action"
+    <a routerLink="/" class="list-group-item list-group-item-action"
       *ngFor="let instruction of instructions; first as isFirst" [ngClass]="{'border-top-0':isFirst}">
       <div class="row align-items-end align-items-sm-center">
         <div class="col-sm-3">
@@ -67,7 +67,7 @@
     <div class="list-group-item text-center text-danger border-top-0" *ngIf="!valuations">
       <i class="far fa-sad-tear"></i> No Valuations {{period}}
     </div>
-    <a routerLink="/home" class="list-group-item list-group-item-action"
+    <a routerLink="/" class="list-group-item list-group-item-action"
       *ngFor="let valuation of valuations; first as isFirst" [ngClass]="{'border-top-0':isFirst}">
       <div class="row align-items-end align-items-sm-center">
         <div class="col-sm-3">
