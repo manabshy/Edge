@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { AuthService } from '../core/services/auth.service';
 import { UserResult, User } from '../core/models/user';
 import { StaffMemberService } from '../core/services/staff-member.service';
@@ -36,9 +36,18 @@ export class HomeComponent implements OnInit {
               private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.staffMemberService.getCurrentStaffMember().subscribe(data => this.currentStaffMember = data,(error: WedgeError) => {
-      this.sharedService.showError(error);
-    });
+    if (AppUtils.currentStaffMemberGlobal) {
+      this.currentStaffMember = AppUtils.currentStaffMemberGlobal;
+      console.log('global staff member in home in ngOnInit', this.currentStaffMember);
+    } else {
+      this.staffMemberService.getCurrentStaffMember().subscribe(data => {
+      this.currentStaffMember = data;
+        console.log('global staff member in home from new sub', this.currentStaffMember);
+      }, (error: WedgeError) => {
+        this.sharedService.showError(error);
+      });
+    }
+
     this.sharedService.getDropdownListInfo().subscribe(data => this.info = data);
     // this.sharedService.getDropdownListInfo().subscribe();
     // console.log('info detail in home component', this.info );
