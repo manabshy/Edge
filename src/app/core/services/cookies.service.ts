@@ -3,7 +3,6 @@ import { HttpBackend } from '@angular/common/http';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { map, tap } from 'rxjs/operators';
 import { AppConstants } from '../shared/app-constants';
-import { TapiInfo } from '../models/tapi-info';
 import { Observable } from 'rxjs';
 
 @Injectable({

@@ -88,7 +88,7 @@ import { SmsModalComponent } from './sms-modal/sms-modal.component';
     ToastContainerModule,
     CarouselModule.forRoot(),
     AgmCoreModule.forRoot({
-      apiKey: AppConstants.googleApiKey
+      apiKey: 'AIzaSyC1Hv_vNkUxvvRibyjPbfgNhrTNi30jNtQ'
     })
   ],
   entryComponents: [

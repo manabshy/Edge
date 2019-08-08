@@ -4,7 +4,7 @@ import { BsModalService } from 'ngx-bootstrap/modal/';
 import { TelephoneModalComponent } from '../telephone-modal/telephone-modal.component';
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
 import { TapiService } from '../services/tapi.service';
-import { TapiInfo } from '../models/tapi-info';
+import { TapiRequestInfo } from '../models/tapi-request-info';
 import { SharedService, WedgeError } from '../services/shared.service';
 import { ToastrService } from 'ngx-toastr';
 import { SmsModalComponent } from '../sms-modal/sms-modal.component';
@@ -104,13 +104,15 @@ export class TelephoneComponent implements OnInit {
     if (window.innerWidth < 576) {
       window.open('tel:' + this.number);
     } else {
-      const tapiInfo: TapiInfo = {
+      const tapiInfo: TapiRequestInfo = {
         officeId: 10,
         staffId: 10,
         isOutGoingCall: true,
         callerNmber: '4629',
         calledNumber: '07718702809',
-        guid: ''
+        guid: '',
+        machineName: '',
+        userName: ''
       };
 
       this.isDialing = true;
