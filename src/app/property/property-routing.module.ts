@@ -14,8 +14,7 @@ import { PropertyDetailEditComponent } from './property-detail-edit/property-det
 
 
 const routes: Routes = [
-  { path: '', canActivate: [AuthGuardService], children: [
-    { path: 'property-centre',
+  { path: 'property-centre', canActivate: [AuthGuardService],
     children: [
       { path: '', component: PropertyComponent },
       // { path: 'company', children: [
@@ -34,8 +33,7 @@ const routes: Routes = [
       ] }
     ]
   }
-
-]}]
+]
 
 
 @NgModule({

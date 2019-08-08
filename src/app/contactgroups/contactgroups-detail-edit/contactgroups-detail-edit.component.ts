@@ -188,7 +188,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     if (this.basicPerson) {
       this.backToFinder.emit(true);
     } else {
-      this._location.back();
+      this.sharedService.back();
     }
   }
 
@@ -238,6 +238,32 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       this.foundAddress = data;
       this.isLoadingAddressVisible = false;
     });
+  }
+
+  private retrieveAddress(id: string) {
+    if (this.foundAddress) {
+      this.sharedService.getAddress(id).subscribe(data => {
+        this.retrievedAddresses = data;
+        const retrievedAddress = this.retrievedAddresses.Items[0];
+        const keys = Object.keys(retrievedAddress);
+        let retAddressLines = '';
+        keys.forEach(x => {
+          if (x.includes('Line') && retrievedAddress[x]) {
+            retAddressLines += retrievedAddress[x] + '\n';
+          }
+        });
+        this.personForm.patchValue({
+          fullAddress: '',
+          address: {
+            addressLines: (retrievedAddress.Company ? retrievedAddress.Company + '\n' : '') + retAddressLines + retrievedAddress.City,
+            postCode: retrievedAddress.PostalCode
+          }
+        });
+        setTimeout(() => {
+          document.getElementById('addressLines').scrollIntoView({block: 'center'});
+        });
+      });
+    }
   }
 
   populateNewPersonDetails() {
@@ -528,7 +554,8 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     }
   }
   onSaveComplete(person?: Person) {
-    this.personForm.reset();
+    this.personForm.markAsPristine();
+    this.isSubmitting = false;
     this.errorMessage = null;
     this.toastr.success('Person successfully saved');
     if (this.isEditingSelectedPerson && AppUtils.holdingSelectedPeople) {

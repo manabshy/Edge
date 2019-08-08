@@ -18,14 +18,10 @@ import { ContactgroupsDetaillettingsManagementsComponent } from './contactgroups
 import { ContactgroupsDetailHomeManagementsComponent } from './contactgroups-detail-home-managements/contactgroups-detail-home-managements.component';
 
 const routes: Routes = [
-  { path: '', canActivate: [AuthGuardService], children: [
-    { path: 'contact-centre',
+  { path: 'contact-centre', canActivate: [AuthGuardService],
     children: [
-      { path: '', component: ContactGroupsComponent },
-      { path: 'company', children: [
-        { path: '', component: ContactgroupsCompanyEditComponent }
-      ] },
-      { path: 'detail/:personId',
+    { path: '', component: ContactGroupsComponent },
+    { path: 'detail/:personId',
       children: [
         { path: '', component: ContactgroupsDetailComponent },
         { path: 'people/:contactGroupId', component: ContactgroupsPeopleComponent, canDeactivate: [CanDeactivateGuard] },
@@ -40,9 +36,8 @@ const routes: Routes = [
         {path: 'lettings-managements', component: ContactgroupsDetaillettingsManagementsComponent},
         {path: 'home-managements', component: ContactgroupsDetailHomeManagementsComponent},
         // {path: 'edit:/id', component: ContactgroupsDetailEditComponent}
-      ] },
-    ] },
-  ] }
+      ]},
+  ]},
 ];
 
 @NgModule({

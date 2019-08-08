@@ -6,7 +6,7 @@ import { StaffMemberService } from '../core/services/staff-member.service';
 import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
 import { AppUtils } from '../core/shared/utils';
 import { StaffMember } from '../core/models/staff-member';
-import { SharedService, DropdownListInfo } from '../core/services/shared.service';
+import { SharedService, DropdownListInfo, WedgeError } from '../core/services/shared.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { CompanyDetailComponent } from '../company/company-detail/company-detail.component';
@@ -36,7 +36,9 @@ export class HomeComponent implements OnInit {
               private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.staffMemberService.getCurrentStaffMember().subscribe(data => this.currentStaffMember = data);
+    this.staffMemberService.getCurrentStaffMember().subscribe(data => this.currentStaffMember = data,(error: WedgeError) => {
+      this.sharedService.showError(error);
+    });
     this.sharedService.getDropdownListInfo().subscribe(data => this.info = data);
     // this.sharedService.getDropdownListInfo().subscribe();
     // console.log('info detail in home component', this.info );
@@ -54,7 +56,7 @@ export class HomeComponent implements OnInit {
 
   onSelect(data: TabDirective): void {
     setTimeout(() => {
-      this.router.navigate(['/home']);
+      this.router.navigate(['/']);
       this.selectedTab = data.tabset.tabs.findIndex(item => item.active);
       if (this.selectedTab >= 0) {
         AppUtils.homeSelectedTab = this.selectedTab;

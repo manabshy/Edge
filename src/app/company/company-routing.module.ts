@@ -7,8 +7,7 @@ import { CompanyEditComponent } from './company-edit/company-edit.component';
 import { CanDeactivateGuard } from '../core/shared/can-deactivate.guard';
 
 const routes: Routes = [
-  { path: '', canActivate: [AuthGuardService], children: [
-    { path: 'company-centre',
+  { path: 'company-centre', canActivate: [AuthGuardService],
     children: [
       { path: '', component: CompanyComponent },
       // { path: 'company', children: [
@@ -21,8 +20,7 @@ const routes: Routes = [
       ] }
     ]
   }
-
-]}]
+]
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
