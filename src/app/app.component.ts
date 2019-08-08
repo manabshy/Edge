@@ -52,10 +52,6 @@ export class AppComponent implements OnInit, AfterViewChecked {
       AppUtils.prevRouteBU = AppUtils.prevRoute || '';
       AppUtils.prevRoute = event[0].urlAfterRedirects;
 
-      if(AppUtils.prevRoute !== '/login' && !AppUtils.prevRoute.includes('/auth-callback')){
-        localStorage.setItem('prev', AppUtils.prevRoute);
-      }
-
       this.isScrollTopVisible = false;
       this.isFading = true;
       setTimeout(()=>{

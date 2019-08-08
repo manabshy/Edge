@@ -4,6 +4,7 @@ import { AppConstants } from '../shared/app-constants';
 import { Subject } from 'rxjs';
 import { BsModalService } from 'ngx-bootstrap/modal/';
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
+import { Router } from '@angular/router';
 
 
 @Injectable({
@@ -34,7 +35,7 @@ export class AuthService {
     // postLogoutRedirectUri: 'http://localhost:4200',
   };
 
-  constructor(private adalService: AdalService, private modalService: BsModalService) { this.adalService.init(this.adalConfig); }
+  constructor(private adalService: AdalService, private modalService: BsModalService, private _router: Router) { this.adalService.init(this.adalConfig); }
 
   public isLoggedIn(): boolean {
     return this.adalService.userInfo.authenticated;
@@ -44,6 +45,7 @@ export class AuthService {
     this.confirmSignOut().subscribe(res => {
       if(res) {
         localStorage.removeItem('currentUser');
+        localStorage.setItem('prev', this._router.url)
         this.adalService.logOut();
       }
     })

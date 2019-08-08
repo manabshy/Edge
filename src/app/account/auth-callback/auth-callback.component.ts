@@ -19,7 +19,7 @@ export class AuthCallbackComponent implements OnInit {
       this._zone.run(
         () => {
           const prev = localStorage.getItem('prev');
-          const url = prev && prev !== '/' ? prev : '/home';
+          const url = prev && prev !== '/' ? prev : '/';
 
           this.router.navigateByUrl(url)
         }
