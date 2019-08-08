@@ -3,10 +3,12 @@ import { HttpBackend } from '@angular/common/http';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { map, tap } from 'rxjs/operators';
 import { AppConstants } from '../shared/app-constants';
-import { TapiInfo } from '../models/tapi-info';
+import { TapiRequestInfo } from '../models/tapi-request-info';
 import { Observable } from 'rxjs';
 import { CookieService } from './cookies.service';
 import { Guid } from 'guid-typescript';
+import { StaffMemberService } from './staff-member.service';
+import { StaffMember } from '../models/staff-member';
 
 
 
@@ -15,18 +17,15 @@ import { Guid } from 'guid-typescript';
 })
 export class TapiService {
 
-  constructor(private http: HttpClient, private cookiesService: CookieService) { }
+  currentStaffMember: StaffMember;
+  constructor(private http: HttpClient, private staffMemberService: StaffMemberService) { }
 
-  putCallRequest(tapiInfo: TapiInfo): Observable<any> {
+  putCallRequest(tapiRequestInfo: TapiRequestInfo): Observable<any> {
     const url = `${AppConstants.baseTapiUrl}`;
-    // let serviceBusAddressGuid: string;
 
-    // serviceBusAddressGuid = this.cookiesService.getCookie('CurrentServiceBusAddress');
-
-    // if (serviceBusAddressGuid == null || serviceBusAddressGuid === '') {
-    //   serviceBusAddressGuid = Guid.create().toString();
-    //   this.cookiesService.setCookie('CurrentServiceBusAddress', serviceBusAddressGuid, 1);
-    // }
+    // User Name
+    this.staffMemberService.getCurrentStaffMember().subscribe(data => this.currentStaffMember = data);
+    tapiRequestInfo.userName = this.currentStaffMember.username;
 
     // getting callRequestsSubscriptionAddress if already exists
     let callRequestsSubscriptionAddress = sessionStorage.getItem('callRequestsSubscriptionAddress');
@@ -35,13 +34,13 @@ export class TapiService {
     if (callRequestsSubscriptionAddress === '' || callRequestsSubscriptionAddress == null) {
       const guid = Guid.create().toString();
       sessionStorage.setItem('callRequestsSubscriptionAddress', guid);
-      tapiInfo.guid = guid;
+      tapiRequestInfo.guid = guid;
     } else {
       callRequestsSubscriptionAddress = sessionStorage.getItem('callRequestsSubscriptionAddress');
-      tapiInfo.guid = callRequestsSubscriptionAddress;
+      tapiRequestInfo.guid = callRequestsSubscriptionAddress;
     }
 
-    return this.http.post<TapiInfo>(url, tapiInfo).pipe(tap(data => console.log('result', data)));
+    return this.http.post<TapiRequestInfo>(url, tapiRequestInfo).pipe(tap(data => console.log('result', data)));
   }
 
 
