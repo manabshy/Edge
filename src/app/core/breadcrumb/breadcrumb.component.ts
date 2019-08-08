@@ -21,7 +21,7 @@ export class BreadcrumbComponent implements OnInit {
 
   backClicked() {
     if(!this.prevRoute) {
-      this.router.navigate(['/home']);
+      this.router.navigate(['/']);
     } else {
       this._location.back();
     }

@@ -5,9 +5,7 @@ import { AuthGuardService } from '../core/services/auth-guard.service';
 import { CanDeactivateGuard } from '../core/shared/can-deactivate.guard';
 
 const routes: Routes = [
-  { path: '', canActivate: [AuthGuardService], children: [
-    { path: 'add-event', component: AddDiaryEventComponent, canDeactivate: [CanDeactivateGuard] },
-  ] }
+  { path: 'add-event', component: AddDiaryEventComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateGuard] },
 ];
 
 @NgModule({

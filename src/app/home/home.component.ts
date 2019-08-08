@@ -51,7 +51,7 @@ export class HomeComponent implements OnInit {
 
   onSelect(data: TabDirective): void {
     setTimeout(() => {
-      this.router.navigate(['/home']);
+      this.router.navigate(['/']);
       this.selectedTab = data.tabset.tabs.findIndex(item => item.active);
       if(this.selectedTab >= 0){
         AppUtils.homeSelectedTab = this.selectedTab;

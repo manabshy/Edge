@@ -17,7 +17,7 @@ export class AuthCallbackComponent implements OnInit {
 
     setTimeout(() => {
       this._zone.run(
-        () => this.router.navigate(['/home'])
+        () => this.router.navigate(['/'])
       );
     }, 200);
   }

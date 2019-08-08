@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark flex-lg-column">
   <div class="navbar-back">
-      <app-breadcrumb *ngIf="router.url !== '/home'" (click)="backClicked()"></app-breadcrumb>
+      <app-breadcrumb *ngIf="router.url !== '/'" (click)="backClicked()"></app-breadcrumb>
   </div>
   <a class="navbar-brand" routerLink="home"><img src="assets/dng_logo.png" width="30" height="30" alt=""></a>
   <button class="navbar-toggler" type="button" (click)="navbarCollapsed = !navbarCollapsed"
@@ -11,16 +11,16 @@
   <div class="collapse navbar-collapse" id="navbarNavDropdown" [collapse]="!navbarCollapsed">
     <ul class="navbar-nav flex-column">
       <li class="nav-item active" (click)="navbarCollapsed = !navbarCollapsed">
-        <a class="nav-link" routerLink="/home" [queryParams]="{selectedTab: 0}"><div><i class="fas fa-th-large fa-fw mr-3"></i>Dashboard</div></a>
+        <a class="nav-link" routerLink="/" [queryParams]="{selectedTab: 0}"><div><i class="fas fa-th-large fa-fw mr-3"></i>Dashboard</div></a>
       </li>
       <li class="nav-item active" (click)="navbarCollapsed = !navbarCollapsed">
-        <a class="nav-link" routerLink="/home" [queryParams]="{selectedTab: 1}"><div><i class="fas fa-calendar-alt fa-fw mr-3"></i>Diary</div></a>
+        <a class="nav-link" routerLink="/" [queryParams]="{selectedTab: 1}"><div><i class="fas fa-calendar-alt fa-fw mr-3"></i>Diary</div></a>
       </li>
       <li class="nav-item active" (click)="navbarCollapsed = !navbarCollapsed">
-        <a class="nav-link" routerLink="/home" [queryParams]="{selectedTab: 2}"><div><i class="fas fa-chalkboard-teacher fa-fw mr-3"></i>Leaderboard</div></a>
+        <a class="nav-link" routerLink="/" [queryParams]="{selectedTab: 2}"><div><i class="fas fa-chalkboard-teacher fa-fw mr-3"></i>Leaderboard</div></a>
       </li>
       <li class="nav-item active" (click)="navbarCollapsed = !navbarCollapsed">
-        <a class="nav-link" routerLink="/home" [queryParams]="{selectedTab: 3}"><div><i class="fas fa-tasks fa-fw mr-3"></i>Tasks<span class="badge badge-pill badge-secondary ml-3">15</span></div></a>
+        <a class="nav-link" routerLink="/" [queryParams]="{selectedTab: 3}"><div><i class="fas fa-tasks fa-fw mr-3"></i>Tasks<span class="badge badge-pill badge-secondary ml-3">15</span></div></a>
       </li>
       <li class="nav-item" dropdown [insideClick]="true">
         <a class="nav-link dropdown-toggle" dropdownToggle (click)="false" role="button" aria-haspopup="true" aria-expanded="false"><div><i class="fas fa-address-book fa-fw mr-3"></i>Contacts</div></a>
@@ -35,27 +35,27 @@
         <a class="nav-link dropdown-toggle" dropdownToggle (click)="false" role="button" aria-haspopup="true" aria-expanded="false"><div><i class="fas fa-city fa-fw mr-3"></i>Properties</div></a>
         <div class="dropdown-menu" *dropdownMenu (click)="navbarCollapsed = !navbarCollapsed">
             <a class="dropdown-item" routerLink="/contact-centre">Property centre</a>
-            <a class="dropdown-item" routerLink="/home">Valuations</a>
-          <a class="dropdown-item" routerLink="/home">Instructions</a>
-          <a class="dropdown-item" routerLink="/home">Offers</a>
-          <a class="dropdown-item" routerLink="/home">Tenancies</a>
-          <a class="dropdown-item" routerLink="/home">Letting Managements</a>
-          <a class="dropdown-item" routerLink="/home">Home Managements</a>
+            <a class="dropdown-item" routerLink="/">Valuations</a>
+          <a class="dropdown-item" routerLink="/">Instructions</a>
+          <a class="dropdown-item" routerLink="/">Offers</a>
+          <a class="dropdown-item" routerLink="/">Tenancies</a>
+          <a class="dropdown-item" routerLink="/">Letting Managements</a>
+          <a class="dropdown-item" routerLink="/">Home Managements</a>
         </div>
       </li>
       <li class="nav-item" dropdown [insideClick]="true">
         <a class="nav-link dropdown-toggle" dropdownToggle (click)="false" role="button" aria-haspopup="true" aria-expanded="false"><div><i class="fas fa-file-invoice fa-fw mr-3"></i>Accounts</div></a>
         <div class="dropdown-menu" *dropdownMenu (click)="navbarCollapsed = !navbarCollapsed">
-          <a class="dropdown-item" routerLink="/home">Invoices</a>
-          <a class="dropdown-item" routerLink="/home">Works Orders</a>
-          <a class="dropdown-item" routerLink="/home">Quick Bills</a>
+          <a class="dropdown-item" routerLink="/">Invoices</a>
+          <a class="dropdown-item" routerLink="/">Works Orders</a>
+          <a class="dropdown-item" routerLink="/">Quick Bills</a>
         </div>
       </li>
       <li class="nav-item" dropdown [insideClick]="true">
         <a class="nav-link dropdown-toggle" dropdownToggle (click)="false" role="button" aria-haspopup="true" aria-expanded="false"><div><i class="fas fa-users-cog fa-fw mr-3"></i>Admin</div></a>
         <div class="dropdown-menu" *dropdownMenu (click)="navbarCollapsed = !navbarCollapsed">
-          <a class="dropdown-item" routerLink="/home">Staff</a>
-          <a class="dropdown-item" routerLink="/home">Offices</a>
+          <a class="dropdown-item" routerLink="/">Staff</a>
+          <a class="dropdown-item" routerLink="/">Offices</a>
         </div>
       </li>
       <li class="nav-item user-menu">

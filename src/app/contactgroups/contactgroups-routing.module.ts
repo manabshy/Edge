@@ -9,22 +9,20 @@ import { ContactgroupsCompanyEditComponent } from './contactgroups-company-edit/
 import { CanDeactivateGuard } from '../core/shared/can-deactivate.guard';
 
 const routes: Routes = [
-  { path: '', canActivate: [AuthGuardService], children: [
-    { path: 'contact-centre',
+  { path: 'contact-centre', canActivate: [AuthGuardService],
     children: [
-      { path: '', component: ContactGroupsComponent },
-      { path: 'company', children: [
-        { path: '', component: ContactgroupsCompanyEditComponent }
-      ] },
-      { path: 'detail/:personId',
-      children: [
-        { path: '', component: ContactgroupsDetailComponent },
-        { path: 'people/:contactGroupId', component: ContactgroupsPeopleComponent, canDeactivate: [CanDeactivateGuard] },
-        {path: 'edit', component: ContactgroupsDetailEditComponent, canDeactivate: [CanDeactivateGuard]},
-        // {path: 'edit:/id', component: ContactgroupsDetailEditComponent}
-      ] },
+    { path: '', component: ContactGroupsComponent },
+    { path: 'company', children: [
+      { path: '', component: ContactgroupsCompanyEditComponent }
     ] },
-  ] }
+    { path: 'detail/:personId',
+    children: [
+      { path: '', component: ContactgroupsDetailComponent },
+      { path: 'people/:contactGroupId', component: ContactgroupsPeopleComponent, canDeactivate: [CanDeactivateGuard] },
+      {path: 'edit', component: ContactgroupsDetailEditComponent, canDeactivate: [CanDeactivateGuard]},
+      // {path: 'edit:/id', component: ContactgroupsDetailEditComponent}
+    ] },
+  ]},
 ];
 
 @NgModule({
