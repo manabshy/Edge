@@ -2,7 +2,7 @@
   <div class="navbar-back">
       <app-breadcrumb *ngIf="router.url !== '/'" (click)="backClicked()"></app-breadcrumb>
   </div>
-  <a class="navbar-brand" routerLink="home"><img src="assets/dng_logo.png" width="30" height="30" alt=""></a>
+  <a class="navbar-brand" routerLink="/"><img src="assets/dng_logo.png" width="30" height="30" alt=""></a>
   <button class="navbar-toggler" type="button" (click)="navbarCollapsed = !navbarCollapsed"
   [attr.aria-expanded]="!navbarCollapsed" aria-controls="navbarNavDropdown">
     <i class="fas fa-bars fa-lg fa-fw" *ngIf="!navbarCollapsed"></i>
