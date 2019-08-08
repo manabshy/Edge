@@ -59,7 +59,10 @@
         </div>
       </li>
       <li class="nav-item user-menu">
-        <img src="https://placeimg.com/75/75/arch" alt="" class="rounded-circle">
+        <img [src]="currentStaffMember?.thumbnailUrl" alt="" class="rounded-circle" *ngIf="currentStaffMember?.thumbnailUrl; else noPhoto">
+        <ng-template #noPhoto>
+          <img class="rounded-circle" src="https://dummyimage.com/75x75/e9ecef/212529&text=no+photo" alt="">
+        </ng-template>
         <div class="mt-3 text-light">{{currentStaffMember?.fullName}}<br />
           <small>{{currentStaffMember?.homeOffice?.name}}</small><br />
           <small [tooltip]="'Job Title'" class="role">
