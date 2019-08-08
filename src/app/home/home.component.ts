@@ -6,7 +6,7 @@ import { StaffMemberService } from '../core/services/staff-member.service';
 import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
 import { AppUtils } from '../core/shared/utils';
 import { StaffMember } from '../core/models/staff-member';
-import { SharedService, DropdownListInfo } from '../core/services/shared.service';
+import { SharedService, DropdownListInfo, WedgeError } from '../core/services/shared.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { CompanyDetailComponent } from '../company/company-detail/company-detail.component';
@@ -35,7 +35,9 @@ export class HomeComponent implements OnInit {
               private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.staffMemberService.getCurrentStaffMember().subscribe();
+    this.staffMemberService.getCurrentStaffMember().subscribe(()=>{},(error: WedgeError) => {
+      this.sharedService.showError(error);
+    });
     this.sharedService.getDropdownListInfo().subscribe();
     this.route.queryParams.subscribe(params =>  {
       if(params['selectedTab']) {
