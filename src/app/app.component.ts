@@ -106,7 +106,7 @@ export class AppComponent implements OnInit, AfterViewChecked {
   }
 
   scrollTop() {
-    //window.scrollTo(0,0);
+    window.scrollTo(0,0);
   }
 
 }
