@@ -24,8 +24,7 @@ export class TapiService {
     const url = `${AppConstants.baseTapiUrl}`;
 
     // User Name
-    this.staffMemberService.getCurrentStaffMember().subscribe(data => this.currentStaffMember = data);
-    tapiRequestInfo.userName = this.currentStaffMember.username;
+    this.staffMemberService.getCurrentStaffMember().subscribe(data => this.currentStaffMember = data);    
 
     // getting callRequestsSubscriptionAddress if already exists
     let callRequestsSubscriptionAddress = sessionStorage.getItem('callRequestsSubscriptionAddress');

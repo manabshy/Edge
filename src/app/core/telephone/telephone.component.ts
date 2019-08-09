@@ -110,9 +110,7 @@ export class TelephoneComponent implements OnInit {
         isOutGoingCall: true,
         callerNmber: '4629',
         calledNumber: '07718702809',
-        guid: '',
-        machineName: '',
-        userName: ''
+        guid: ''
       };
 
       this.isDialing = true;

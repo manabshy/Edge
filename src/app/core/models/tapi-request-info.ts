@@ -5,6 +5,4 @@ export interface TapiRequestInfo {
     callerNmber: string;
     guid: string;
     isOutGoingCall: boolean;
-    machineName: string;
-    userName: string;
   }
