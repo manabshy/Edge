@@ -11,6 +11,8 @@ export interface StaffMember {
   firstName: string;
   surname: string;
   fullName: string;
+  thumbnailUrl: string;
+  photoUrl: string;
 }
 
 export interface Permission {

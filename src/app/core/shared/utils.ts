@@ -2,6 +2,7 @@ import {format, compareAsc, isDate} from 'date-fns';
 import { isArray, isPlainObject, mapValues, isNull, isUndefined, random  } from 'lodash';
 import { ContactGroup, Company } from 'src/app/contactgroups/shared/contact-group';
 import { Person } from '../models/person';
+import { StaffMember } from '../models/staff-member';
 export class AppUtils {
   public static prevRoute: string = '';
   public static prevRouteBU: string = '';
@@ -20,6 +21,7 @@ export class AppUtils {
   public static holdingCloned: boolean;
   static firstContactPerson: Person;
   static propertySearchTerm: string;
+  static currentStaffMemberGlobal: StaffMember;
 
   /**
    * Format a date/time into a string

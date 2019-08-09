@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { SharedService } from '../core/services/shared.service';
 import { ToastrService } from 'ngx-toastr';
+import { AppUtils } from '../core/shared/utils';
 
 @Component({
   selector: 'app-leaderboard',
@@ -96,6 +97,7 @@ export class LeaderboardComponent implements OnInit, OnChanges, AfterViewInit {
       this.downloadLeaderboard(Period[this.periodControl.value]);
       // this.getExchanges(this.salesManager, Period[this.periodControl.value]);
       // this.getInstructions(this.salesManager, Period[this.periodControl.value], 100);
+
     }
 
     this.leaderboardForm.valueChanges.subscribe(data => {

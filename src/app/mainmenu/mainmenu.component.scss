@@ -140,6 +140,11 @@
         background-color: theme-color("dark");
     }
 
+    img {
+        max-height: 75px;
+        max-width: 75px;
+    }
+
     .role {
         @include media-breakpoint-up(lg){
             @include text-truncate();
