@@ -57,7 +57,7 @@ export class AppComponent implements OnInit, AfterViewChecked {
       setTimeout(()=>{
         this.isFading = false;
       }, 1200)
-      window.scrollTo(0,0);
+      //window.scrollTo(0,0);
     });
   }
 
@@ -106,7 +106,7 @@ export class AppComponent implements OnInit, AfterViewChecked {
   }
 
   scrollTop() {
-    window.scrollTo(0,0);
+    //window.scrollTo(0,0);
   }
 
 }
