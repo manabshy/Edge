@@ -9,7 +9,7 @@
         min-height: 100vh;
     }
 
-    & > div:not(.side-nav) {
+    .side-nav + div {
         @include media-breakpoint-up(lg){
             padding-left: $side-nav-width;
         }
