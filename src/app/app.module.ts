@@ -39,6 +39,8 @@ import { ContactgroupsModule } from './contactgroups/contactgroups.module';
 import { DiaryModule } from './diary/diary.module';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { CompanyModule } from './company/company.module';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 
 @NgModule({
@@ -84,7 +86,8 @@ import { CompanyModule } from './company/company.module';
     ContactgroupsModule,
     DiaryModule,
     CompanyModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   exports: [
     MainmenuComponent
