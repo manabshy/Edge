@@ -5,6 +5,7 @@ import { AppConstants } from '../shared/app-constants';
 import { Person } from '../models/person';
 import { Company } from 'src/app/contactgroups/shared/contact-group';
 import { Property } from 'src/app/property/shared/property';
+import { Address } from '../models/address';
 
 @Component({
   selector: 'app-address',
@@ -87,6 +88,7 @@ export class AddressComponent implements OnInit {
       }
       // this.logValidationErrors(this.personForm, false);
       // this.logValidationErrorsFormArray(this.personForm);
+      this.emitAddress();
     });
   }
 
@@ -154,7 +156,6 @@ export class AddressComponent implements OnInit {
             postCode: retrievedAddress.PostalCode
           });
         }
-        this.emitAddress();
         setTimeout(() => {
           let element = 'addressLines';
           if (this.propertyDetails) {
@@ -172,10 +173,18 @@ export class AddressComponent implements OnInit {
     if (addressData) {
         if(!this.propertyDetails) {
           address = {
-          addressLines: addressData.addressLines,
-          postCode: addressData.postCode,
-          countryId: addressData.countryId
+            addressLines: addressData.addressLines,
+            postCode: addressData.postCode,
+            countryId: addressData.countryId
+          }
+        if(!address.addressLines) {
+          address = {
+            addressLines: '',
+            postCode: '',
+            countryId: this.defaultCountryCode
+          }
         }
+
       } else {
         address = {
           addressLine2: addressData.addressLine2,
@@ -187,8 +196,8 @@ export class AddressComponent implements OnInit {
           postCode: addressData.postCode
         }
       }
-      this.addressDetails.emit(address);
     }
+    this.addressDetails.emit(address);
   }
 
   populateAddressForm(person?: Person, company?: Company, property?: Property) {
@@ -235,9 +244,8 @@ export class AddressComponent implements OnInit {
         streetName: property.address.streetName,
         town: property.address.town,
         postCode: property.address.inCode + ' ' + property.address.outCode,
-        countryId: 232
+        countryId: this.defaultCountryCode
     });
     }
-   this.emitAddress();
   }
 }

@@ -61,7 +61,6 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     typeId: []
   };
   number: string;
-  personAddress: Address;
   get showPostCode(): boolean {
     return this.address.get('countryId').value === this.defaultCountryCode;
   }
@@ -498,12 +497,13 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   }
 
   getAddress(address: Address) {
-    if (this.personAddress && JSON.stringify(this.personAddress) != JSON.stringify(address)) {
+    const personAddress = this.personForm.get('address');
+    if (JSON.stringify(personAddress.value) !== JSON.stringify(address)) {
       this.personForm.markAsDirty();
     } else {
       this.personForm.markAsPristine();
     }
-    this.personAddress = address;
+    personAddress.setValue(address);
   }
   removeSMSLandlines() {
     this.phoneNumbers.controls.forEach(x => {
@@ -523,7 +523,6 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       this.isSubmitting = true;
       if (this.personForm.dirty) {
         const person = { ...this.personDetails, ...this.personForm.value };
-        person.address = this.personAddress;
         if (!person.titleId) {
           person.titleId = 100;
         }
