@@ -1,11 +1,12 @@
 {
-  "name": "wedge",
-  "short_name": "wedge",
+  "name": "Edge 4",
+  "short_name": "Edge 4",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",
+  "orientation": "any",
   "scope": "/",
-  "start_url": "/",
+  "start_url": "https://dandg-edge-dev.azurewebsites.net/",
   "icons": [
     {
       "src": "assets/icons/icon-72x72.png",
