@@ -102,7 +102,7 @@ export class TelephoneComponent implements OnInit {
 
   call() {
     if (window.innerWidth < 576) {
-      window.open('tel:' + this.number);
+      window.open('wtai://wp/mc;' + this.number);
     } else {
       const tapiInfo: TapiRequestInfo = {
         officeId: 10,
