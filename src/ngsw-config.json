@@ -27,7 +27,7 @@
   "dataGroups": [
     {
       "name": "from-api",
-      "urls": ["https://dandg-api-wedge-dev.azurewebsites.net/v10/staffmembers/dashboard/**", "https://dandg-api-wedge-dev.azurewebsites.net/v10/staffmembers/leaderboard/**"],
+      "urls": ["/dashboard/**", "/leaderboard/**"],
       "cacheConfig": {
         "strategy": "freshness",
         "maxSize": 15,
