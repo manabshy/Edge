@@ -372,7 +372,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   setupEditForm() {
     this.personForm = this.fb.group({
       warningStatusId: [''],
-      warningStatusComment: [''],
+      warningStatusComment: ['', {validators: [Validators.maxLength(20)]}],
       titleId: ['', {validators: [Validators.required]}],
       firstName: ['', {validators: [Validators.required, Validators.maxLength(40)]}],
       middleName: ['', {validators: Validators.maxLength(50)}],

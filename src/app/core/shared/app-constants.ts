@@ -121,6 +121,9 @@ export const ValidationMessages = {
   'message': {
     required: 'Message is required'
   },
+  'warningStatusComment': {
+    maxlength: 'Comment cannot be more than 20 characters',
+  }
   // 'invalidPhoneNumber': {
   //   required: 'Phone is required',
   //   minlength: 'Phone number must be at least 7 characters',
