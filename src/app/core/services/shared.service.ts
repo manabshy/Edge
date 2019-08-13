@@ -55,9 +55,6 @@ export class SharedService {
     if(warnings) {
       warns = warnings.filter(x => x.id === id)
     }
-    if(comment) {
-      warns[0].value = comment;
-    }
     return warns[0];
   }
 

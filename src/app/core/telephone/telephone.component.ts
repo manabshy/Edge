@@ -63,7 +63,7 @@ export class TelephoneComponent implements OnInit {
     const subject = new Subject<boolean>();
     const initialState = {
       danger: this.warning,
-      title: this.warning.value,
+      title: this.warning,
       actions: ['Leave', 'Proceed']
     };
     const modal = this.modalService.show(ConfirmModalComponent, { ignoreBackdropClick: true, initialState });

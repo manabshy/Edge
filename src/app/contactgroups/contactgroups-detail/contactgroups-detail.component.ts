@@ -38,7 +38,6 @@ export class ContactgroupsDetailComponent implements OnInit {
       this.searchedPersonContactGroups = null;
       this.init();
     });
-    this.init();
   }
 
   init() {
@@ -72,7 +71,6 @@ export class ContactgroupsDetailComponent implements OnInit {
     this.contactGroupService.getPerson(personId).subscribe(data => {
       this.searchedPersonDetails = data;
       this.searchedPersonDetails.warning = this.sharedService.showWarning(this.searchedPersonDetails.warningStatusId, this.warnings, this.searchedPersonDetails.warningStatusComment);
-      console.log(this.searchedPersonDetails);
     });
   }
   getSearchedPersonSummaryInfo(personId: number) {
