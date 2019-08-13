@@ -135,6 +135,19 @@ export class WedgeValidators {
     };
   }
 
+  static warningStatusValidator(): ValidatorFn {
+    
+    return (control: AbstractControl): { [key: string]:boolean } | null => {
+      const id = control.get('warningStatusId').value;
+      const comment = control.get('warningStatusComment').value;
+      
+      if(+id === 100 && !(!!comment)) {
+        return { 'warningStatusRequired': true };
+      }
+      return null;
+    };
+  }
+
 
 
 

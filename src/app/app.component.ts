@@ -73,6 +73,11 @@ export class AppComponent implements OnInit, AfterViewChecked {
       }, (error: WedgeError) => {
         this.sharedService.showError(error);
       });
+
+      this.sharedService.getDropdownListInfo().subscribe(data => {
+        AppUtils.listInfo = data;
+        console.log('app list info', data);
+      });
     }
     this.appHeightObservable = new MutationObserver(() => {
       this.toggleScrollTop();

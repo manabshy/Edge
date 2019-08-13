@@ -5,6 +5,7 @@ import { Property, PropertyTypes, PropertyStyles, PropertyDetailsSubNavItems, Pr
 import { SharedService } from 'src/app/core/services/shared.service';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { AppUtils } from 'src/app/core/shared/utils';
 
 @Component({
   selector: 'app-property-detail',
@@ -63,12 +64,21 @@ export class PropertyDetailComponent implements OnInit {
     if (this.propertyId) {
       this.propertyService.currentPropertyChanged(this.propertyId);
     }
-    this.sharedService.getDropdownListInfo().subscribe(data => {
-      this.listInfo = data;
-      this.regions = this.sharedService.objectToMap(this.listInfo.result.regions);
-      this.allAreas = this.sharedService.objectToMap(this.listInfo.result.areas);
-      this.allSubAreas = this.sharedService.objectToMap(this.listInfo.result.subAreas);
-    });
+    if(AppUtils.listInfo) {
+      this.listInfo = AppUtils.listInfo;
+      this.setDropdownLists();
+    } else {
+      this.sharedService.getDropdownListInfo().subscribe(data=> {
+        this.listInfo = data;
+        this.setDropdownLists();
+      });
+    }
+  }
+
+  setDropdownLists() {
+    this.regions = this.sharedService.objectToMap(this.listInfo.result.regions);
+    this.allAreas = this.sharedService.objectToMap(this.listInfo.result.areas);
+    this.allSubAreas = this.sharedService.objectToMap(this.listInfo.result.subAreas);
   }
     isObject(val) {
       return val instanceof Object;

@@ -5,7 +5,7 @@
     <div class="row mb-1">
       <div class="col">
         <small class="text-muted mr-2">ID: {{contactGroup?.personId}}</small><br class="d-sm-none" />
-        <span class="badge badge-pill badge-danger mb-2" *ngIf="contactGroup?.warningStatusId !== 1">{{showWarning(contactGroup?.warningStatusId)?.value}}</span>
+        <span class="badge badge-pill badge-danger mb-2" *ngIf="contactGroup?.warning?.id !== 1">{{contactGroup?.warning?.value}}</span>
       </div>
       <div class="col-auto text-right">
         <a [routerLink]="['detail', contactGroup.personId, 'edit' ]"><i class="fas fa-edit"></i> Edit</a>
@@ -21,7 +21,7 @@
           </div>
           <div class="col-12 col-sm-auto">
             <p>
-              <app-telephone [person]="contactGroup" [number]="contactGroup?.phoneNumbers[0]" [searchTerm]="searchTerm" [warning]="showWarning(contactGroup?.warningStatusId)"></app-telephone>
+              <app-telephone [person]="contactGroup" [number]="contactGroup?.phoneNumbers[0]" [searchTerm]="searchTerm" [warning]="contactGroup?.warning"></app-telephone>
               <span class="text-danger" *ngIf="!contactGroup?.phoneNumbers[0]">No Phone</span>
             </p>
           </div>

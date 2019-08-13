@@ -144,7 +144,7 @@
                   <div class="row">
                     <div class="col">
                       <app-score-badge [person]="person"></app-score-badge>
-                      <span class="badge badge-pill badge-danger mb-2 mr-2" *ngIf="person?.warningStatusId !== 1">{{showWarning(person?.warningStatusId)?.value}}</span>
+                      <span class="badge badge-pill badge-danger mb-2 mr-2" *ngIf="person?.warning?.id !== 1">{{person?.warning?.value}}</span>
                       <span class="badge badge-pill badge-info mb-2"
                         *ngIf="person?.isMainPerson && contactGroupDetails.contactType !== 4">Main Person</span>
                     </div>
@@ -231,7 +231,7 @@
                         *ngIf="!person?.phoneNumbers.length || !person?.phoneNumbers[0].number">No phone</p>
                         <ng-container *ngFor="let phoneNumber of person?.phoneNumbers">
                           <p class="mb-2" *ngIf="phoneNumber?.number">
-                            <app-telephone [person]="person"  [number]="phoneNumber.number" [sms]="phoneNumber.sendSMS" [warning]="showWarning(person?.warningStatusId)"></app-telephone>
+                            <app-telephone [person]="person"  [number]="phoneNumber.number" [sms]="phoneNumber.sendSMS" [warning]="person?.warning"></app-telephone>
                           </p>
                         </ng-container>
                     </div>

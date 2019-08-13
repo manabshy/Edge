@@ -6,6 +6,7 @@ import { Person } from '../models/person';
 import { Company } from 'src/app/contactgroups/shared/contact-group';
 import { Property } from 'src/app/property/shared/property';
 import { Address } from '../models/address';
+import { AppUtils } from '../shared/utils';
 
 @Component({
   selector: 'app-address',
@@ -60,11 +61,15 @@ export class AddressComponent implements OnInit {
   }
 
   init() {
-    // this.listInfo = this.sharedService.dropdownListInfo;
-    this.sharedService.getDropdownListInfo().subscribe(data => {
-      this.listInfo = data;
-      this.countries = this.listInfo.result.countries;
-    });
+    if(AppUtils.listInfo) {
+      this.listInfo = AppUtils.listInfo;
+      this.setDropdownLists();
+    } else {
+      this.sharedService.getDropdownListInfo().subscribe(data=> {
+        this.listInfo = data;
+        this.setDropdownLists();
+      });
+    }
     this.addressForm = this.fb.group({
       fullAddress: [''],
       addressLines: ['', {validators: Validators.maxLength(500)}],
@@ -90,6 +95,10 @@ export class AddressComponent implements OnInit {
       // this.logValidationErrorsFormArray(this.personForm);
       this.emitAddress();
     });
+  }
+
+  setDropdownLists() {
+    this.countries = this.listInfo.result.countries;
   }
 
   searchAddress() {

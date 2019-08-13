@@ -4,6 +4,7 @@ import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ActivatedRoute } from '@angular/router';
 import { Person } from 'src/app/core/models/person';
 import { SharedService } from 'src/app/core/services/shared.service';
+import { AppUtils } from 'src/app/core/shared/utils';
 
 @Component({
   selector: 'app-contactgroups-detail',
@@ -13,7 +14,6 @@ import { SharedService } from 'src/app/core/services/shared.service';
 export class ContactgroupsDetailComponent implements OnInit {
   listInfo: any;
   warnings: any;
-  warning: any;
   searchedPersonContactGroups: BasicContactGroup[];
   contactGroupDetails: ContactGroup;
   searchedPersonDetails: Person;
@@ -42,15 +42,23 @@ export class ContactgroupsDetailComponent implements OnInit {
   }
 
   init() {
-    // this.getContactGroupById(this.contactGroupId);
-    // this.listInfo = this.sharedService.dropdownListInfo;
-    this.sharedService.getDropdownListInfo().subscribe(data=> {
-      this.listInfo = data;
-      this.warnings = this.listInfo.result.personWarningStatuses;
-    });
+    if(AppUtils.listInfo) {
+      this.listInfo = AppUtils.listInfo;
+      this.setDropdownLists();
+    } else {
+      this.sharedService.getDropdownListInfo().subscribe(data=> {
+        this.listInfo = data;
+        this.setDropdownLists();
+      });
+    }
+    console.log('detail list info', this.listInfo);
     this.getSearchedPersonDetails(this.personId);
     this.getSearchedPersonContactGroups(this.personId);
     this.getSearchedPersonSummaryInfo(this.personId);
+  }
+
+  setDropdownLists() {
+    this.warnings = this.listInfo.result.personWarningStatuses;
   }
 
   getContactGroupById(contactGroupId: number) {
@@ -63,13 +71,7 @@ export class ContactgroupsDetailComponent implements OnInit {
   getSearchedPersonDetails(personId: number) {
     this.contactGroupService.getPerson(personId).subscribe(data => {
       this.searchedPersonDetails = data;
-      if(this.searchedPersonDetails.warningStatusId !== 1) {
-        this.warnings.forEach(x => {
-          if (x.id === this.searchedPersonDetails.warningStatusId) {
-            this.warning = x;
-          }
-        })
-      }
+      this.searchedPersonDetails.warning = this.sharedService.showWarning(this.searchedPersonDetails.warningStatusId, this.warnings, this.searchedPersonDetails.warningStatusComment);
       console.log(this.searchedPersonDetails);
     });
   }

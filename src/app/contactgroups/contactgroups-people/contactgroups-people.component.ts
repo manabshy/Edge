@@ -23,7 +23,6 @@ import { ToastrService } from 'ngx-toastr';
 export class ContactgroupsPeopleComponent implements OnInit {
   listInfo: any;
   warnings: any;
-  warning: any;
   isCollapsed = {};
   isSelectedCollapsed = false;
   @ViewChild('offCanvasContent') offCanvasContent: ElementRef;
@@ -125,11 +124,15 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   init() {
-    // this.listInfo = this.sharedService.dropdownListInfo;
-    this.sharedService.getDropdownListInfo().subscribe(data=>{
-      this.listInfo = data;
-      this.warnings = this.listInfo.result.personWarningStatuses;
-    });
+    if(AppUtils.listInfo) {
+      this.listInfo = AppUtils.listInfo;
+      this.setDropdownLists();
+    } else {
+      this.sharedService.getDropdownListInfo().subscribe(data=> {
+        this.listInfo = data;
+        this.setDropdownLists();
+      });
+    }
     this.removedPersonIds = [];
     this.selectedPeople = [];
     if(!this.contactGroupId) {
@@ -215,6 +218,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
       .pipe(debounceTime(1000), distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)))
       .subscribe(data => this.findCompany(data));
     this.getContactGroupNotes(this.contactGroupId);
+  }
+
+  setDropdownLists(){
+    this.warnings = this.listInfo.result.personWarningStatuses;
   }
 
   isCompanyContactGroup(isSelectedTypeCompany: boolean) {
@@ -501,6 +508,12 @@ export class ContactgroupsPeopleComponent implements OnInit {
     return isDuplicate;
   }
 
+  showPersonWarning() {
+    this.contactGroupDetails.contactPeople.forEach(x=>{
+      x.warning = this.sharedService.showWarning(x.warningStatusId, this.warnings, x.warningStatusComment)
+    }); 
+  }
+
   addSelectedPeople() {
     if (this.selectedPeople.length) {
       this.selectedPeople.forEach(x => {
@@ -517,6 +530,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       }
       this.errorMessage = null;
     }
+    this.showPersonWarning();
   }
   removeSelectedPeople(people, index: number) {
     people.splice(index, 1);
@@ -725,9 +739,5 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   cancel() {
     this.sharedService.back();
-  }
-
-  showWarning(id):any {
-    return this.sharedService.showWarning(id, this.warnings);
   }
 }

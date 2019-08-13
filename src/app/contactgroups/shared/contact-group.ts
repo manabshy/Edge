@@ -1,5 +1,5 @@
 import { Address } from 'src/app/core/models/address';
-import { Person, BasicPerson } from 'src/app/core/models/person';
+import { Person, BasicPerson, PersonWarning } from 'src/app/core/models/person';
 import { ResultData } from 'src/app/core/shared/result-data';
 import { SubNavItem, SubNav } from 'src/app/core/shared/subnav';
 
@@ -130,7 +130,7 @@ export interface CompanyAutoCompleteResult extends Company {
   companyName: string;
 }
 
-export interface ContactGroupAutoCompleteResult{
+export interface ContactGroupAutoCompleteResult extends PersonWarning{
   personId: number;
   title: string;
   firstName: string;

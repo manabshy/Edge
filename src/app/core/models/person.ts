@@ -1,6 +1,6 @@
 import { Address } from './address';
 
-export interface Person {
+export interface Person extends PersonWarning{
   personId: number;
   firstName: string;
   lastName: string;
@@ -31,6 +31,10 @@ export interface Person {
   isNewPerson: boolean;
   warningStatusId: number;
   warningStatusComment: string;
+}
+
+export interface PersonWarning {
+  warning: any;
 }
 
 export interface BasicPerson {

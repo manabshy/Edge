@@ -85,6 +85,9 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   get currentPhoneNumber() {
     return this.number;
   }
+  get isWarningCommentVisible() {
+    return +this.personForm.get('warningStatusId').value === 100;
+  }
   public keepOriginalOrder = (a) => a.key;
   constructor(public sharedService: SharedService,
     private toastr: ToastrService,
@@ -95,14 +98,15 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     private renderer: Renderer2) { }
 
   ngOnInit() {
-    // this.listInfo = this.sharedService.dropdownListInfo;
-    this.sharedService.getDropdownListInfo().subscribe(data => {
-      this.listInfo = data;
-      this.countries = this.listInfo.result.countries;
-      this.titles = this.listInfo.result.titles;
-      this.warnings = this.listInfo.result.personWarningStatuses;
-      this.telephoneTypes = this.listInfo.result.telephoneTypes;
-    });
+    if(AppUtils.listInfo) {
+      this.listInfo = AppUtils.listInfo;
+      this.setDropdownLists();
+    } else {
+      this.sharedService.getDropdownListInfo().subscribe(data=> {
+        this.listInfo = data;
+        this.setDropdownLists();
+      });
+    }
     this.route.params.subscribe(params => this.personId = +params['personId'] || 0);
     this.route.queryParams.subscribe(params => {
       this.groupPersonId = +params['groupPersonId'] || 0;
@@ -121,6 +125,13 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         this.postCode.setValue(this.sharedService.formatPostCode(data.address.postCode), { emitEvent: false });
         this.logValidationErrors(this.personForm, false);
       });
+  }
+
+  setDropdownLists() {
+    this.countries = this.listInfo.result.countries;
+    this.titles = this.listInfo.result.titles;
+    this.warnings = this.listInfo.result.personWarningStatuses;
+    this.telephoneTypes = this.listInfo.result.telephoneTypes;
   }
 
   logValidationErrors(group: FormGroup = this.personForm, fakeTouched: boolean) {
@@ -301,6 +312,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     console.log('warning status', person.warningStatusId);
     this.personForm.patchValue({
       warningStatusId: person.warningStatusId !== null ? person.warningStatusId : 1,
+      warningStatusComment: person.warningStatusComment,
       titleId: person.titleId !== null ? person.titleId : 1,
       firstName: person.firstName,
       middleName: person.middleName,
@@ -360,6 +372,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   setupEditForm() {
     this.personForm = this.fb.group({
       warningStatusId: [''],
+      warningStatusComment: [''],
       titleId: ['', {validators: [Validators.required]}],
       firstName: ['', {validators: [Validators.required, Validators.maxLength(40)]}],
       middleName: ['', {validators: Validators.maxLength(50)}],
@@ -383,7 +396,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       amlCompletedDate: [''],
       emailAddresses: this.fb.array([this.createEmailItem()]),
       phoneNumbers: this.fb.array([this.createPhoneNumberItem()])
-    }, {validators: WedgeValidators.emailPhoneValidator()});
+    }, {validators: [WedgeValidators.emailPhoneValidator(), WedgeValidators.warningStatusValidator()]});
   }
 
   togglePreferences(index: number, group: FormArray) {
@@ -515,9 +528,16 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     });
   }
 
+  removeWarningComment() {
+    if(+this.personForm.get('warningStatusId').value !== 100) {
+      this.personForm.get('warningStatusComment').setValue('');
+    }
+  }
+
   savePerson() {
     this.errorMessage = null;
     this.removeSMSLandlines();
+    this.removeWarningComment();
     this.logValidationErrors(this.personForm, true);
     if (this.personForm.valid) {
       this.isSubmitting = true;

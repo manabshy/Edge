@@ -48,7 +48,7 @@ export class HomeComponent implements OnInit {
       });
     }
 
-    this.sharedService.getDropdownListInfo().subscribe(data => this.info = data);
+    //this.sharedService.getDropdownListInfo().subscribe(data => this.info = data);
     // this.sharedService.getDropdownListInfo().subscribe();
     // console.log('info detail in home component', this.info );
     this.route.queryParams.subscribe(params =>  {

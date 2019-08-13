@@ -6,6 +6,7 @@ import { AppUtils } from '../core/shared/utils';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { JsonPipe } from '@angular/common';
+import { SharedService } from '../core/services/shared.service';
 
 @Component({
   selector: 'app-contactgroups',
@@ -22,7 +23,9 @@ export class ContactGroupsComponent implements OnInit {
   contactGroupDetails: ContactGroupAutoCompleteResult[];
   contactPeople: any[];
   contactGroupId: number;
-  constructor(private contactGroupService: ContactGroupsService, private route: ActivatedRoute, private fb: FormBuilder) { }
+  listInfo: any;
+  warnings: any;
+  constructor(private contactGroupService: ContactGroupsService, private route: ActivatedRoute, private fb: FormBuilder, private sharedService: SharedService) { }
 
   ngOnInit() {
     this.contactFinderForm = this.fb.group({
@@ -35,12 +38,29 @@ export class ContactGroupsComponent implements OnInit {
     if (this.route.snapshot.queryParamMap.get('searchTerm') || AppUtils.searchTerm ) {
       this.contactGroupsAutocomplete(this.route.snapshot.queryParamMap.get('searchTerm') || AppUtils.searchTerm );
     }
+    
+    if(AppUtils.listInfo) {
+      this.listInfo = AppUtils.listInfo;
+      this.setDropdownLists();
+    } else {
+      this.sharedService.getDropdownListInfo().subscribe(data=> {
+        this.listInfo = data;
+        this.setDropdownLists();
+      });
+    }
+  }
+
+  setDropdownLists() {
+    this.warnings = this.listInfo.result.personWarningStatuses;
   }
 
   contactGroupsAutocomplete(searchTerm: string) {
     this.isLoading = true;
     this.contactGroupService.getAutocompleteContactGroups(searchTerm).subscribe(result => {
         this.contactGroups = result;
+        this.contactGroups.forEach(x => {
+          x.warning = this.sharedService.showWarning(x.warningStatusId, this.warnings, x.warningStatusComment);
+        })
         this.isLoading = false;
         console.log('contact groups', this.contactGroups);
 

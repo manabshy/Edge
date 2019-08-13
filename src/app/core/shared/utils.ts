@@ -3,6 +3,7 @@ import { isArray, isPlainObject, mapValues, isNull, isUndefined, random  } from 
 import { ContactGroup, Company } from 'src/app/contactgroups/shared/contact-group';
 import { Person } from '../models/person';
 import { StaffMember } from '../models/staff-member';
+import { DropdownListInfo } from '../services/shared.service';
 export class AppUtils {
   public static prevRoute: string = '';
   public static prevRouteBU: string = '';
@@ -22,6 +23,7 @@ export class AppUtils {
   static firstContactPerson: Person;
   static propertySearchTerm: string;
   static currentStaffMemberGlobal: StaffMember;
+  static listInfo: any;
 
   /**
    * Format a date/time into a string

@@ -7,6 +7,7 @@ import { AppConstants } from 'src/app/core/shared/app-constants';
 import { Location } from '@angular/common';
 import { Address } from '../../core/models/address';
 import { SharedService, InfoDetail } from '../../core/services/shared.service';
+import { AppUtils } from 'src/app/core/shared/utils';
 
 @Component({
   selector: 'app-property-detail-edit',
@@ -36,15 +37,15 @@ export class PropertyDetailEditComponent implements OnInit {
               private _location: Location) {}
 
   ngOnInit() {
-    // this.listInfo = this.sharedService.dropdownListInfo;
-    this.sharedService.getDropdownListInfo().subscribe(data => {
-      this.listInfo = data;
-      this.propertyTypes = this.listInfo.result.propertyTypes;
-      this.allPropertyStyles = this.listInfo.result.propertyStyles;
-      this.regions = this.listInfo.result.regions;
-      this.allAreas = this.listInfo.result.areas;
-      this.allSubAreas = this.listInfo.result.subAreas;
-    });
+    if(AppUtils.listInfo) {
+      this.listInfo = AppUtils.listInfo;
+      this.setDropdownLists();
+    } else {
+      this.sharedService.getDropdownListInfo().subscribe(data=> {
+        this.listInfo = data;
+        this.setDropdownLists();
+      });
+    }
     this.route.params.subscribe(params => {
       this.propertyId = +params['id'] || 0;
     });
@@ -52,6 +53,14 @@ export class PropertyDetailEditComponent implements OnInit {
     if (this.propertyId) {
       this.getPropertyDetails(this.propertyId);
     }
+  }
+
+  setDropdownLists() {
+    this.propertyTypes = this.listInfo.result.propertyTypes;
+    this.allPropertyStyles = this.listInfo.result.propertyStyles;
+    this.regions = this.listInfo.result.regions;
+    this.allAreas = this.listInfo.result.areas;
+    this.allSubAreas = this.listInfo.result.subAreas;
   }
 
   getPropertyDetails(propertyId: number) {

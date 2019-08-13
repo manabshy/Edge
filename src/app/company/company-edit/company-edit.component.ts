@@ -53,11 +53,15 @@ export class CompanyEditComponent implements OnInit {
   }
 
   init() {
-    // this.listInfo = this.sharedService.dropdownListInfo;
-    this.sharedService.getDropdownListInfo().subscribe(data=> {
-      this.listInfo = data;
-      this.companyTypes = this.listInfo.result.companyTypes;
-    });
+    if(AppUtils.listInfo) {
+      this.listInfo = AppUtils.listInfo;
+      this.setDropdownLists();
+    } else {
+      this.sharedService.getDropdownListInfo().subscribe(data=> {
+        this.listInfo = data;
+        this.setDropdownLists();
+      });
+    }
     console.log('list info in company edit component', this.listInfo );
     this.route.params.subscribe(params => this.companyId = this.companyId || +params['id'] || 0);
     this.route.queryParams.subscribe(params => {
@@ -74,6 +78,10 @@ export class CompanyEditComponent implements OnInit {
       this.getSignerDetails(AppUtils.newSignerId);
     }
     this.companyForm.valueChanges.pipe(debounceTime(400)).subscribe(() => this.logValidationErrors(this.companyForm, false));
+  }
+
+  setDropdownLists() {
+    this.companyTypes = this.listInfo.result.companyTypes;
   }
 
   getCompanyDetails(id: number) {

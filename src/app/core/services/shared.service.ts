@@ -30,11 +30,11 @@ export class SharedService {
   //     console.log('data from getter', this.infoDetail)
   //   });
   //   return this.infoDetail;
+  // // }
+  // get dropdownListInfo() {
+  //   const listInfo = localStorage.getItem('dropdownListInfo');
+  //   return JSON.parse(listInfo);
   // }
-  get dropdownListInfo() {
-    const listInfo = localStorage.getItem('dropdownListInfo');
-    return JSON.parse(listInfo);
-  }
   constructor(private router: Router,
               private http: HttpClient,
               private _location: Location,
@@ -50,16 +50,15 @@ export class SharedService {
     }
   }
 
-  showWarning(id, warnings):any {
-    let warning = null;
+  showWarning(id:number, warnings: any, comment?: string):any {
+    let warns = [];
     if(warnings) {
-      warnings.forEach(x => {
-        if(x.id === id) {
-          warning = x;
-        }
-      })
+      warns = warnings.filter(x => x.id === id)
     }
-    return warning;
+    if(comment) {
+      warns[0].value = comment;
+    }
+    return warns[0];
   }
 
   showError(error: WedgeError) {
