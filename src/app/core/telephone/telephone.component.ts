@@ -103,6 +103,7 @@ export class TelephoneComponent implements OnInit {
   call() {
     if (window.innerWidth < 576) {
       document.location.href='tel:' + this.number;
+      this.leaveANoteBanner();
     } else {
       const tapiInfo: TapiRequestInfo = {
         officeId: 10,
@@ -127,9 +128,6 @@ export class TelephoneComponent implements OnInit {
   }
 
   calling() {
-    if(this.sharedService.lastCallNoteToast) {
-      this.toastr.clear(this.sharedService.lastCallNoteToast.toastId);
-    }
     this.isDialing = false;
     this.toastr.success('Dialing ...', '', {
       toastClass: 'ngx-toastr toast-call'
@@ -137,20 +135,27 @@ export class TelephoneComponent implements OnInit {
     .onHidden
     .pipe(take(1))
     .subscribe(()=>{
-      this.sharedService.lastCallNoteToast = this.toastr.info('<u>Leave a note</u> for the last call with ' + this.person.salutation, '', {
-        toastClass: 'ngx-toastr toast-notes',
-        disableTimeOut: true,
-        closeButton: true
-      })
-      .onTap
-      .pipe(take(1))
-      .subscribe(()=>{
-        const data = {
-          person: this.person,
-          isPersonNote: true
-        }
-        this.sharedService.addNote(data);
-      })
+      this.leaveANoteBanner();
     });
+  }
+
+  leaveANoteBanner() {
+    if(this.sharedService.lastCallNoteToast) {
+      this.toastr.clear(this.sharedService.lastCallNoteToast.toastId);
+    }
+    this.sharedService.lastCallNoteToast = this.toastr.info('<u>Leave a note</u> for the last call with ' + this.person.salutation, '', {
+      toastClass: 'ngx-toastr toast-notes',
+      disableTimeOut: true,
+      closeButton: true
+    })
+    .onTap
+    .pipe(take(1))
+    .subscribe(()=>{
+      const data = {
+        person: this.person,
+        isPersonNote: true
+      }
+      this.sharedService.addNote(data);
+    })
   }
 }

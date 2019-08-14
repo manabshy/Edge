@@ -1,3 +1,12 @@
+[toastcontainer] {
+    position: sticky;
+    z-index: 150;
+    top: $top-bar-height;
+
+    @include media-breakpoint-up(lg){
+        top: 0;
+    }
+}
 #toast-container {
     position: static;
     .ngx-toastr {
