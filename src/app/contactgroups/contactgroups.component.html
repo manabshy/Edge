@@ -5,7 +5,7 @@
       <h4 class="m-0">Contact centre</h4>
     </div>
     <div class="col-auto">
-      <a class="btn btn-primary" [routerLink]="['detail/0/people', 0]"  [queryParams]="{isNewContactGroup: true}" >New Group</a>
+      <a class="btn btn-primary" [routerLink]="['detail/0/people', 0]"  [queryParams]="{isNewContactGroup: true}" >New Contact Group</a>
     </div>
   </div>
   <form [formGroup]="contactFinderForm">
@@ -54,9 +54,18 @@
   <div class="text-center" *ngIf="isLoading && !isHintVisible">
     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...
   </div>
-  <div class="text-center text-danger" *ngIf="isMessageVisible && !isLoading && !isHintVisible">
-      <i class="far fa-sad-tear"></i> No results for '<strong>{{contactFinderForm.value.searchTerm || ' '}}</strong>'
-  </div>
+  <ng-container *ngIf="isMessageVisible && !isLoading && !isHintVisible">
+      <div class="text-center text-danger">
+        <i class="far fa-sad-tear"></i> No results for '<strong>{{contactFinderForm.value.searchTerm || ' '}}</strong>'
+      </div>  
+      <div class="mt-3 text-left" *ngIf="differentSearchSuggestions?.length > 1">
+        <div class="mb-2" *ngFor="let sug of differentSearchSuggestions">
+          <a routerLink="./" [queryParams]="{searchTerm: sug}">
+            Search for <b>"{{sug}}"</b>
+          </a>
+        </div>
+      </div>
+    </ng-container>
   <div class="text-center" *ngIf="isHintVisible">
       <i class="far fa-smile-wink"></i> Type at least <strong>3 characters</strong> to get results
   </div>

@@ -7,6 +7,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { JsonPipe } from '@angular/common';
 import { SharedService } from '../core/services/shared.service';
+import { AppConstants } from '../core/shared/app-constants';
 
 @Component({
   selector: 'app-contactgroups',
@@ -25,6 +26,7 @@ export class ContactGroupsComponent implements OnInit {
   contactGroupId: number;
   listInfo: any;
   warnings: any;
+  differentSearchSuggestions: string[];
   constructor(private contactGroupService: ContactGroupsService, private route: ActivatedRoute, private fb: FormBuilder, private sharedService: SharedService) { }
 
   ngOnInit() {
@@ -32,12 +34,16 @@ export class ContactGroupsComponent implements OnInit {
       searchTerm: [''],
     });
     this.contactFinderForm.valueChanges
-      .pipe(debounceTime(1000), distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)))
+      .pipe(debounceTime(500), distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)))
       .subscribe(data => this.contactGroupsAutocomplete(data.searchTerm));
 
-    if (this.route.snapshot.queryParamMap.get('searchTerm') || AppUtils.searchTerm ) {
-      this.contactGroupsAutocomplete(this.route.snapshot.queryParamMap.get('searchTerm') || AppUtils.searchTerm );
-    }
+    this.route.queryParams.subscribe(params=>{
+      if(params['searchTerm']) {
+        this.contactFinderForm.get('searchTerm').setValue(params['searchTerm'] || AppUtils.searchTerm);
+        this.isHintVisible = false;
+        this.isMessageVisible = false;
+      }
+    })
     
     if(AppUtils.listInfo) {
       this.listInfo = AppUtils.listInfo;
@@ -55,21 +61,28 @@ export class ContactGroupsComponent implements OnInit {
   }
 
   contactGroupsAutocomplete(searchTerm: string) {
-    this.isLoading = true;
+    if(searchTerm) {
+      this.isLoading = true;
+    }
     this.contactGroupService.getAutocompleteContactGroups(searchTerm).subscribe(result => {
         this.contactGroups = result;
-        this.contactGroups.forEach(x => {
-          x.warning = this.sharedService.showWarning(x.warningStatusId, this.warnings, x.warningStatusComment);
-        })
+        if(this.contactGroups && this.contactGroups.length) {
+          this.contactGroups.forEach(x => {
+            x.warning = this.sharedService.showWarning(x.warningStatusId, this.warnings, x.warningStatusComment);
+          })
+        }
         this.isLoading = false;
         console.log('contact groups', this.contactGroups);
 
-        if (this.contactFinderForm.value.searchTerm && this.contactFinderForm.value.searchTerm.length) {
+        if (searchTerm && searchTerm.length) {
           if (!this.contactGroups.length) {
             this.isMessageVisible = true;
+            this.getDifferentSearchSuggestions(searchTerm);
           } else {
             this.isMessageVisible = false;
           }
+        } else {
+          this.isMessageVisible = false;
         }
 
       }, error => {
@@ -77,6 +90,15 @@ export class ContactGroupsComponent implements OnInit {
         this.isLoading = false;
         this.isHintVisible = true;
       });
+  }
+
+  getDifferentSearchSuggestions(searchTerm: string) {
+    const telIndex = searchTerm.search(AppConstants.telephonePattern);
+    this.differentSearchSuggestions = [];
+    if(telIndex > 0){
+      this.differentSearchSuggestions.push(searchTerm.substring(0, telIndex).trim());
+    }
+    this.differentSearchSuggestions.push(searchTerm.substring(telIndex).trim());
   }
 
   onKeyup() {
