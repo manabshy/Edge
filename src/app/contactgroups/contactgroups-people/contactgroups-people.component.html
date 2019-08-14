@@ -140,7 +140,7 @@
                   </div>
                 </div>
                 <div class="list-group-item" *ngFor="let person of contactGroupDetails?.contactPeople ; index as i"
-                  [ngClass]="{'new-person': person?.isNewPerson}">
+                  [ngClass]="{'new-person': person?.isNewPerson, 'list-group-item-danger': person?.warning?.id !== 1}">
                   <div class="row">
                     <div class="col">
                       <app-score-badge [person]="person"></app-score-badge>

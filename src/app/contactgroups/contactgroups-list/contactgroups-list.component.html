@@ -1,7 +1,9 @@
 <div class="list-group mb-5">
   <a [routerLink]="['detail', contactGroup.personId ]"
    [queryParams]="{searchTerm: searchTerm}"
-    class="list-group-item list-group-item-action" *ngFor="let contactGroup of contactGroups; let i = index;">
+    class="list-group-item list-group-item-action" 
+    [ngClass]="{'list-group-item-danger': contactGroup?.warning?.id !== 1}"
+    *ngFor="let contactGroup of contactGroups; let i = index;">
     <div class="row mb-1">
       <div class="col">
         <small class="text-muted mr-2">ID: {{contactGroup?.personId}}</small><br class="d-sm-none" />
