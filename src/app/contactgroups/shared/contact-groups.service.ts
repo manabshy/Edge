@@ -24,15 +24,13 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
 
   constructor(private http: HttpClient) { }
 
-  // get all the people that belong to a contact group
-  getAutocompleteContactGroups(searchTerm: any): Observable<ContactGroupAutoCompleteResult[] > {
-    const options = new HttpParams().set('searchTerm', searchTerm);
-    const url = `${AppConstants.baseContactGroupUrl}/search`;
-    // const url = `${AppConstants.baseContactGroupUrl}/search?SearchTerm=${searchTerm}`;
-    return this.http.get<ContactGroupAutoCompleteData>(url, {params: options})
-    .pipe(
-         map(response => response.result),
-         tap(data => console.log(JSON.stringify(data)))
+  getAutocompleteContactGroups(searchTerm: any): Observable<ContactGroupAutoCompleteResult[]> {
+    let url = `${AppConstants.baseContactGroupUrl}/search?SearchTerm=${searchTerm}`;
+    url = url.replace(/\+/gi, '%2B');
+    return this.http.get<ContactGroupAutoCompleteData>(url)
+      .pipe(
+        map(response => response.result),
+        tap(data => console.log(JSON.stringify(data)))
       );
   }
 
