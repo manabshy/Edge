@@ -8,6 +8,7 @@ import { StaffMemberService } from './core/services/staff-member.service';
 import { StaffMember } from './core/models/staff-member';
 import { BehaviorSubject } from 'rxjs';
 import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
+import { EdgeServiceWorkerService } from './core/services/edge-service-worker.service';
 
 @Component({
   selector: 'app-root',
@@ -40,6 +41,7 @@ export class AppComponent implements OnInit, AfterViewChecked {
     public authService: AuthService,
     protected sharedService: SharedService,
     protected staffMemberService: StaffMemberService,
+    private edgeServiceWorker: EdgeServiceWorkerService,
     private renderer: Renderer2,
     private toastr: ToastrService,
     private cdRef: ChangeDetectorRef) {
@@ -95,6 +97,7 @@ export class AppComponent implements OnInit, AfterViewChecked {
     }
 
     this.cdRef.detectChanges();
+    this.edgeServiceWorker.forceUpdate();
   }
 
   @HostListener('window:scroll', ['$event'])
