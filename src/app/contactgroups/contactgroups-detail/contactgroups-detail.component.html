@@ -136,46 +136,38 @@
       </div>
     </div>
   </div>
-  <div class="row">
+  <div class="row mb-3">
     <div class="col-12">
       <h5>Contact groups</h5>
-      <div class="list-group mb-3">
+      <app-subnav>
         <div class="list-group-item" *ngIf="!searchedPersonContactGroups">
           <div class="text-center">
             <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading contact groups ...
           </div>
         </div>
-        <ng-container *ngFor="let searchedPersonContactGroup of searchedPersonContactGroups">
-          <a [routerLink]="['people', searchedPersonContactGroup.contactGroupId]"
-            class="list-group-item list-group-item-action">
-            <div class="row">
-              <div class="col">
-                <ng-container *ngFor="let contactPerson of searchedPersonContactGroup.contactPeople; last as isLast">
-                  <ng-container *ngIf="contactPerson?.personId === searchedPersonDetails?.personId; else link">
-                    {{contactPerson.addressee}}
-                  </ng-container>
-                  <ng-template #link>
-                    <a [routerLink]="['../../../detail', contactPerson.personId ]"
-                      (click)="$event.stopPropagation();">{{contactPerson.addressee}}</a>
-                  </ng-template>
-                  <ng-container *ngIf="!isLast">, </ng-container>
-                </ng-container>
-                <ng-container *ngIf="searchedPersonContactGroup?.isCompany">
-                  <span class="badge badge-pill badge-info ml-2">{{searchedPersonContactGroup?.companyName}}</span>
-                </ng-container>
-              </div>
-              <div class="col-auto">
-                <span class="btn-link py-0">
-                  <i class="fas fa-briefcase mr-1 fa-fw"
-                    *ngIf="searchedPersonContactGroup?.isCompany; else peopleIcon"></i>
-                  <ng-template #peopleIcon>
-                    <i class="fas fa-users mr-1 fa-fw"></i>
-                  </ng-template> View Group
-                </span>
-              </div>
-            </div>
-          </a>
-        </ng-container>
+        <app-subnav-item *ngFor="let searchedPersonContactGroup of searchedPersonContactGroups" [navLink]="['people', searchedPersonContactGroup.contactGroupId]">
+          <i class="fas fa-briefcase mr-2 fa-fw"
+          *ngIf="searchedPersonContactGroup?.isCompany; else peopleIcon"></i>
+          <ng-template #peopleIcon>
+            <i class="fas fa-users mr-2 fa-fw"></i>
+          </ng-template>
+          <span class="d-inline-block mr-2 align-top">
+            <ng-container *ngFor="let contactPerson of searchedPersonContactGroup.contactPeople; last as isLast; first as isFirst">
+              <br class="d-sm-none" *ngIf="!isFirst" />
+              <ng-container *ngIf="contactPerson?.personId === searchedPersonDetails?.personId; else link">
+                {{contactPerson.addressee}}
+              </ng-container>
+              <ng-template #link>
+                <a [routerLink]="['../../../detail', contactPerson.personId ]"
+                  (click)="$event.stopPropagation();">{{contactPerson.addressee}}</a>
+              </ng-template>
+              <ng-container *ngIf="!isLast">, </ng-container>
+            </ng-container>
+            <ng-container *ngIf="searchedPersonContactGroup?.isCompany">
+              <br class="d-sm-none" /><span class="badge badge-pill badge-info">{{searchedPersonContactGroup?.companyName}}</span>
+            </ng-container>
+          </span>
+        </app-subnav-item>
         <a class="list-group-item list-group-item-action text-center py-4"
           (click)="createNewContactGroup(); $event.stopPropagation()" *ngIf="searchedPersonDetails"
           [routerLink]="['people', 0]" [queryParams]="{isNewContactGroup: true}">
@@ -183,7 +175,7 @@
             <i class="fas fa-users"></i><i class="fas fa-plus fa-xs align-text-top"></i> New Contact Group
           </span>
         </a>
-      </div>
+      </app-subnav>
     </div>
   </div>
   <div *ngIf="summaryTotals">
