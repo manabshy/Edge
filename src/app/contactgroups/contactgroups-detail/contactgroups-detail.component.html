@@ -178,7 +178,7 @@
       </app-subnav>
     </div>
   </div>
-  <div *ngIf="summaryTotals">
+  <div *ngIf="summaryTotals" class="mb-3">
     <h5>Info</h5>
     <app-subnav>
       <app-subnav-item *ngFor="let item of subNav" [navLink]="[item?.link]">
