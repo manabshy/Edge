@@ -29,7 +29,7 @@ const routes: Routes = [
         {path: 'notes', component: PropertyDetailNotesComponent},
         {path: 'documents', component: PropertyDetailDocumentsComponent},
         {path: 'photos', component: PropertyDetailPhotosComponent},
-        {path: 'map', component: PropertyDetailMapComponent},
+        {path: 'map/:lat/:lng', component: PropertyDetailMapComponent},
       ] }
     ]
   }

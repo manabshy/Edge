@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-property-detail-map',
@@ -11,9 +12,15 @@ export class PropertyDetailMapComponent implements OnInit {
   lat: number = 51.678418;
   lng: number = 7.809007;
   
-  constructor() { }
+  constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.route.params.subscribe(params => {
+      if(params["lat"] && params["lng"]) {
+        this.lat = +params["lat"];
+        this.lng = +params["lng"];
+      }
+    })
   }
 
 }
