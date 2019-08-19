@@ -8,11 +8,16 @@
       <a class="btn btn-primary" [routerLink]="['detail', 0 , 'edit' ]"  [queryParams]="{isNewProperty: true}" >New Property</a>
     </div>
   </div>
-  <form [formGroup]="propertyFinderForm">
+  <form [formGroup]="propertyFinderForm" (ngSubmit)="propertiesResults()">
     <div class="row">
       <div class="col">
-        <input type="search" class="form-control" formControlName="propertyAddress" placeholder="Property Address"
-        aria-label="Property Address" (keyup)="onKeyup()">
+        <div class="input-group">
+          <input type="search" class="form-control" formControlName="propertyAddress" placeholder="Property Address"
+          aria-label="Property Address" (keyup)="onKeyup()">
+          <div class="input-group-append">
+            <button class="btn btn-secondary">Search</button>
+          </div>
+        </div>
         <button class="btn btn-link px-0" type="button" id="button-advanced" (click)="advSearchCollapsed = !advSearchCollapsed"
         [attr.aria-expanded]="!advSearchCollapsed" aria-controls="advSearch">Advanced search</button>
       </div>

@@ -32,16 +32,38 @@ export class PropertyComponent implements OnInit {
         distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)))
       .subscribe(data => {
         if (data.propertyAddress) {
-          this.propertiesAutocomplete(data);
+          //this.propertiesAutocomplete(data);
           // this.properties$ = this.propertyService.autocompleteProperties(data);
         }
       });
     if (this.route.snapshot.queryParamMap.get('propertyAddress') || AppUtils.propertySearchTerm ) {
-      this.propertiesAutocomplete(this.route.snapshot.queryParamMap.get('propertyAddress') || AppUtils.propertySearchTerm || '');
+      this.propertiesResults(this.route.snapshot.queryParamMap.get('propertyAddress') || AppUtils.propertySearchTerm || '');
     }
 
   }
-  propertiesAutocomplete(searchTerm: string) {
+  // propertiesAutocomplete(searchTerm: string) {
+  //   this.isLoading = true;
+  //   this.propertyService.autocompleteProperties(searchTerm).subscribe(result => {
+  //     this.properties = result;
+  //     this.isLoading = false;
+  //     if (this.propertyFinderForm.value.propertyAddress && this.propertyFinderForm.value.propertyAddress.length) {
+  //       if (!this.properties.length) {
+  //         this.isMessageVisible = true;
+  //       } else {
+  //         this.isMessageVisible = false;
+  //       }
+  //     }
+  //   }, error => {
+  //     this.properties = [];
+  //     this.isLoading = false;
+  //     this.isHintVisible = true;
+  //   });
+  // }
+
+  propertiesResults(searchTerm: any) {
+    if(!searchTerm) {
+      searchTerm = this.propertyFinderForm.value;
+    }
     this.isLoading = true;
     this.propertyService.autocompleteProperties(searchTerm).subscribe(result => {
       this.properties = result;
@@ -61,6 +83,9 @@ export class PropertyComponent implements OnInit {
   }
 
   onKeyup() {
+    if(event.key !== 'Enter') {
+      this.isMessageVisible = false;
+    }
     AppUtils.propertySearchTerm = this.propertyFinderForm.value;
     if (this.propertyFinderForm.value.propertyAddress && this.propertyFinderForm.value.propertyAddress.length > 2) {
       this.isHintVisible = false;

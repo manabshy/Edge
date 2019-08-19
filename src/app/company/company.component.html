@@ -8,11 +8,16 @@
       <a class="btn btn-primary" [routerLink]="['detail', 0 , 'edit' ]"  [queryParams]="{isNewCompany: true}" >New Company</a>
     </div>
   </div>
-  <form [formGroup]="companyFinderForm">
+  <form [formGroup]="companyFinderForm" (ngSubmit)="companiesResults()">
     <div class="row">
       <div class="col">
-        <input type="search" class="form-control" formControlName="companyName" placeholder="Company Name"
-        aria-label="Company Name" (keyup)="onKeyup()">
+        <div class="input-group">
+          <input type="search" class="form-control" formControlName="companyName" placeholder="Company Name"
+          aria-label="Company Name" (keyup)="onKeyup()">
+          <div class="input-group-append">
+            <button class="btn btn-secondary">Search</button>
+          </div>
+        </div>
         <button class="btn btn-link px-0" type="button" id="button-advanced" (click)="advSearchCollapsed = !advSearchCollapsed"
         [attr.aria-expanded]="!advSearchCollapsed" aria-controls="advSearch">Advanced search</button>
       </div>

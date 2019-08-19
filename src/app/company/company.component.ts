@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, AbstractControl } from '@angular/forms';
 import { ContactGroupsService } from '../contactgroups/shared/contact-groups.service';
 import { ActivatedRoute } from '@angular/router';
 import { CompanyAutoCompleteResult } from '../contactgroups/shared/contact-group';
@@ -27,15 +27,42 @@ export class CompanyComponent implements OnInit {
 
     this.companyFinderForm.valueChanges
       .pipe(debounceTime(1000), distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)))
-      .subscribe(data => this.companiesAutocomplete(data));
+      .subscribe(data => {
+        console.log(data);
+        // this.companiesAutocomplete(data)
+      });
 
     if (this.route.snapshot.queryParamMap.get('companyName') || AppUtils.companySearchTerm ) {
-      this.companiesAutocomplete(this.route.snapshot.queryParamMap.get('companyName') || AppUtils.companySearchTerm );
+      this.companiesResults(this.route.snapshot.queryParamMap.get('companyName') || AppUtils.companySearchTerm );
     }
   }
 
-  companiesAutocomplete(searchTerm: string) {
-    console.log(searchTerm);
+  // companiesAutocomplete(searchTerm: string) {
+  //   console.log(searchTerm);
+  //   this.isLoading = true;
+  //   this.contactGroupService.getAutocompleteCompany(searchTerm).subscribe(result => {
+  //       this.companies = result;
+  //       this.isLoading = false;
+
+  //       if (this.companyFinderForm.value.companyName && this.companyFinderForm.value.companyName.length) {
+  //         if (!this.companies.length) {
+  //           this.isMessageVisible = true;
+  //         } else {
+  //           this.isMessageVisible = false;
+  //         }
+  //       }
+
+  //     }, error => {
+  //       this.companies = [];
+  //       this.isLoading = false;
+  //       this.isHintVisible = true;
+  //     });
+  // }
+
+  companiesResults(searchTerm: any) {
+    if(!searchTerm) {
+      searchTerm = this.companyFinderForm.value;
+    }
     this.isLoading = true;
     this.contactGroupService.getAutocompleteCompany(searchTerm).subscribe(result => {
         this.companies = result;
@@ -57,6 +84,9 @@ export class CompanyComponent implements OnInit {
   }
 
   onKeyup() {
+    if(event.key !== 'Enter') {
+      this.isMessageVisible = false;
+    }
     AppUtils.companySearchTerm = this.companyFinderForm.value;
 
     if (this.companyFinderForm.value.companyName && this.companyFinderForm.value.companyName.length > 2) {

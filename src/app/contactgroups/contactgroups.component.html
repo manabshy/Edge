@@ -8,11 +8,16 @@
       <a class="btn btn-primary" [routerLink]="['detail/0/people', 0]"  [queryParams]="{isNewContactGroup: true}" >New Contact Group</a>
     </div>
   </div>
-  <form [formGroup]="contactFinderForm">
+  <form [formGroup]="contactFinderForm" (ngSubmit)="contactGroupsResults()">
     <div class="row">
       <div class="col">
-        <input type="search" class="form-control" formControlName="searchTerm" placeholder="Name, email, phone or postcode"
-        aria-label="Search criteria" (keyup)="onKeyup()">
+        <div class="input-group">
+          <input type="search" class="form-control" formControlName="searchTerm" placeholder="Name, email, phone or postcode"
+          aria-label="Search criteria" (keyup)="onKeyup()">
+          <div class="input-group-append">
+            <button class="btn btn-secondary">Search</button>
+          </div>
+        </div>
         <button class="btn btn-link px-0" type="button" id="button-advanced" (click)="advSearchCollapsed = !advSearchCollapsed"
         [attr.aria-expanded]="!advSearchCollapsed" aria-controls="advSearch">Advanced search</button>
       </div>

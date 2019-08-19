@@ -35,11 +35,14 @@ export class ContactGroupsComponent implements OnInit {
     });
     this.contactFinderForm.valueChanges
       .pipe(debounceTime(500), distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)))
-      .subscribe(data => this.contactGroupsAutocomplete(data.searchTerm));
+      .subscribe(data => {
+        // this.contactGroupsAutocomplete(data.searchTerm)
+      });
 
     this.route.queryParams.subscribe(params=>{
-      if(params['searchTerm']) {
+      if(params['searchTerm'] || AppUtils.searchTerm) {
         this.contactFinderForm.get('searchTerm').setValue(params['searchTerm'] || AppUtils.searchTerm);
+        this.contactGroupsResults();
         this.isHintVisible = false;
         this.isMessageVisible = false;
       }
@@ -60,7 +63,40 @@ export class ContactGroupsComponent implements OnInit {
     this.warnings = this.listInfo.result.personWarningStatuses;
   }
 
-  contactGroupsAutocomplete(searchTerm: string) {
+  // contactGroupsAutocomplete(searchTerm: string) {
+  //   if(searchTerm) {
+  //     this.isLoading = true;
+  //   }
+  //   this.contactGroupService.getAutocompleteContactGroups(searchTerm).subscribe(result => {
+  //       this.contactGroups = result;
+  //       if(this.contactGroups && this.contactGroups.length) {
+  //         this.contactGroups.forEach(x => {
+  //           x.warning = this.sharedService.showWarning(x.warningStatusId, this.warnings, x.warningStatusComment);
+  //         })
+  //       }
+  //       this.isLoading = false;
+  //       console.log('contact groups', this.contactGroups);
+
+  //       if (searchTerm && searchTerm.length) {
+  //         if (!this.contactGroups.length) {
+  //           this.isMessageVisible = true;
+  //           this.getDifferentSearchSuggestions(searchTerm);
+  //         } else {
+  //           this.isMessageVisible = false;
+  //         }
+  //       } else {
+  //         this.isMessageVisible = false;
+  //       }
+
+  //     }, error => {
+  //       this.contactGroups = [];
+  //       this.isLoading = false;
+  //       this.isHintVisible = true;
+  //     });
+  // }
+
+  contactGroupsResults() {
+    const searchTerm = this.contactFinderForm.get('searchTerm').value;
     if(searchTerm) {
       this.isLoading = true;
     }
@@ -102,6 +138,9 @@ export class ContactGroupsComponent implements OnInit {
   }
 
   onKeyup() {
+    if(event.key !== 'Enter') {
+      this.isMessageVisible = false;
+    }
     AppUtils.searchTerm = this.contactFinderForm.value.searchTerm;
 
     if (this.contactFinderForm.value.searchTerm && this.contactFinderForm.value.searchTerm.length > 2) {
