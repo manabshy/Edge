@@ -137,7 +137,7 @@ export class ContactGroupsComponent implements OnInit {
     this.differentSearchSuggestions.push(searchTerm.substring(telIndex).trim());
   }
 
-  onKeyup() {
+  onKeyup(event: KeyboardEvent) {
     if(event.key !== 'Enter') {
       this.isMessageVisible = false;
     }

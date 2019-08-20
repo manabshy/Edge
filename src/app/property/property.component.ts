@@ -82,7 +82,7 @@ export class PropertyComponent implements OnInit {
     });
   }
 
-  onKeyup() {
+  onKeyup(event: KeyboardEvent) {
     if(event.key !== 'Enter') {
       this.isMessageVisible = false;
     }
