@@ -13,7 +13,7 @@
       <div class="col">
         <div class="input-group">
           <input type="search" class="form-control" formControlName="searchTerm" placeholder="Name, email, phone or postcode"
-          aria-label="Search criteria" (keyup)="onKeyup()">
+          aria-label="Search criteria" (keyup)="onKeyup($event)">
           <div class="input-group-append">
             <button class="btn btn-secondary">Search</button>
           </div>
