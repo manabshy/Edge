@@ -145,7 +145,7 @@
             <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading contact groups ...
           </div>
         </div>
-        <app-subnav-item *ngFor="let searchedPersonContactGroup of searchedPersonContactGroups" [navLink]="'people/'+searchedPersonContactGroup.contactGroupId">
+        <app-subnav-item *ngFor="let searchedPersonContactGroup of searchedPersonContactGroups" [navLink]="'people/'+searchedPersonContactGroup.contactGroupId+'?docTitle=Contact Group | '+searchedPersonDetails?.addressee">
           <i class="fas fa-briefcase mr-2 fa-fw"
           *ngIf="searchedPersonContactGroup?.isCompany; else peopleIcon"></i>
           <ng-template #peopleIcon>
@@ -181,7 +181,7 @@
   <div *ngIf="summaryTotals" class="mb-3">
     <h5>Info</h5>
     <app-subnav>
-      <app-subnav-item *ngFor="let item of subNav" [navLink]="item?.link">
+      <app-subnav-item *ngFor="let item of subNav" [navLink]="item?.link+'?docTitle='+item?.label+' | '+searchedPersonDetails?.addressee">
         {{item?.label}}
         <ng-container *ngIf="isObject(summaryTotals[item?.value]); else simpleValue">
           <span class="badge badge-pill badge-success mr-1"> {{summaryTotals[item?.value]?.active}} </span>

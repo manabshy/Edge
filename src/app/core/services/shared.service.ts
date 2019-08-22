@@ -13,6 +13,7 @@ import { FormGroup } from '@angular/forms';
 import { NoteModalComponent } from '../note-modal/note-modal.component';
 import { PhoneNumberUtil, PhoneNumber, PhoneNumberFormat } from 'google-libphonenumber';
 import { Location } from '@angular/common';
+import { Title } from '@angular/platform-browser';
 
 
 @Injectable({
@@ -38,6 +39,7 @@ export class SharedService {
   constructor(private router: Router,
               private http: HttpClient,
               private _location: Location,
+              private titleService: Title,
               private modalService: BsModalService) {
 
   }
@@ -48,6 +50,10 @@ export class SharedService {
     } else {
       window.close();
     }
+  }
+
+  setTitle(title: string) {
+    this.titleService.setTitle(title);
   }
 
   showWarning(id:number, warnings: any, comment?: string):any {

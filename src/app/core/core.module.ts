@@ -100,6 +100,7 @@ import { SmsModalComponent } from './sms-modal/sms-modal.component';
   ],
   providers: [
     CanDeactivateGuard,
+    FormatAddressPipe,
     { provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true }
     // { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true }
   ]

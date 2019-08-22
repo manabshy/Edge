@@ -61,7 +61,7 @@
   <div *ngIf="summaryTotals">
     <h5>Info</h5>
     <app-subnav>
-      <app-subnav-item *ngFor="let item of subNav" [navLink]="item?.link">
+      <app-subnav-item *ngFor="let item of subNav" [navLink]="item?.link+'?docTitle='+item?.label+' | '+(searchedPropertyDetails?.address | formatAddress)">
         {{item?.label}}
         <ng-container *ngIf="isObject(summaryTotals[item?.value]); else simpleValue">
           <span class="badge badge-pill badge-success mr-1"> {{summaryTotals[item?.value]?.active}} </span>
@@ -71,7 +71,9 @@
           <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value] || '0'}}</span>
         </ng-template>
       </app-subnav-item>
-      <app-subnav-item [navLink]="'map/'+searchedPropertyDetails?.mapCenter?.latitude+'/'+searchedPropertyDetails?.mapCenter?.longitude">Map</app-subnav-item>
+      <app-subnav-item [navLink]="'map/'+searchedPropertyDetails?.mapCenter?.latitude+'/'+searchedPropertyDetails?.mapCenter?.longitude+'?docTitle=Map | '+(searchedPropertyDetails?.address | formatAddress)">
+        Map
+      </app-subnav-item>
     </app-subnav>
   </div>
 </div>

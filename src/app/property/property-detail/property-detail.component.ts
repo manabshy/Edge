@@ -6,6 +6,7 @@ import { SharedService } from 'src/app/core/services/shared.service';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { AppUtils } from 'src/app/core/shared/utils';
+import { FormatAddressPipe } from 'src/app/core/shared/format-address.pipe';
 
 @Component({
   selector: 'app-property-detail',
@@ -48,6 +49,7 @@ export class PropertyDetailComponent implements OnInit {
 
 
   constructor(private propertyService: PropertyService,
+              private formatAddressPipe: FormatAddressPipe,
               private route: ActivatedRoute, private sharedService: SharedService) { }
 
   ngOnInit() {
@@ -56,7 +58,10 @@ export class PropertyDetailComponent implements OnInit {
     });
     this.propertyDetails$ = this.propertyService.propertyDetails$
       .pipe
-      ( tap(data => this.searchedPropertyDetails = data),
+      ( tap(data => {
+        this.searchedPropertyDetails = data;
+        this.sharedService.setTitle(this.formatAddressPipe.transform(this.searchedPropertyDetails.address))
+      }),
         tap(data => this.summaryTotals = data.info),
         tap(data => console.log('details', data))
       );
