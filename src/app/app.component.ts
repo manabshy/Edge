@@ -24,6 +24,7 @@ export class AppComponent implements OnInit, AfterViewChecked {
   @ViewChild('appContainer') appContainer : ElementRef;
   @ViewChild(ToastContainerDirective) toastContainer: ToastContainerDirective;
   appHeightObservable;
+  navPlaceholder: string;
   //  get currentStaffMemberGetter(): StaffMember {
   //     return this.currentStaffMember;
   //   }
@@ -66,6 +67,8 @@ export class AppComponent implements OnInit, AfterViewChecked {
     this.route.queryParams.subscribe(params => {
       if(params['docTitle']) {
         this.sharedService.setTitle(params['docTitle']);
+        this.navPlaceholder = params['docTitle'];
+        this.navPlaceholder = this.navPlaceholder.substring(this.navPlaceholder.indexOf('|') + 1).trim();
       }
     })
   }

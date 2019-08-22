@@ -56,6 +56,20 @@ export class SharedService {
     this.titleService.setTitle(title);
   }
 
+  openLinkWindow(link: string) {
+    const width = Math.floor(Math.random() * 100) + 860;
+    const height = Math.floor(Math.random() * 100) + 500;
+    const left = window.top.outerWidth / 2 + window.top.screenX - ( 960 / 2);
+    const top = window.top.outerHeight / 2 + window.top.screenY - ( 600 / 2);
+    const w = window.open(link, '_blank', "width="+width+",height="+height+",top="+top+",left="+left);
+    AppUtils.openedWindows.push(w);
+    setTimeout(()=>{
+      AppUtils.openedWindows.forEach(x=>{
+        x.focus();
+      })
+    })
+  }
+
   showWarning(id:number, warnings: any, comment?: string):any {
     let warns = [];
     if(warnings) {
