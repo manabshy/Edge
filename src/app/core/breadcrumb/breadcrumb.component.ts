@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
+import { SharedService } from '../services/shared.service';
 
 @Component({
   selector: 'app-breadcrumb',
@@ -7,13 +7,13 @@ import { Location } from '@angular/common';
   styleUrls: ['./breadcrumb.component.scss']
 })
 export class BreadcrumbComponent implements OnInit {
-  constructor(private _location: Location) { }
+  constructor(private sharedService: SharedService) { }
 
   ngOnInit() {
   }
 
   backClicked() {
-    this._location.back();
+    this.sharedService.back();
   }
 
 }
