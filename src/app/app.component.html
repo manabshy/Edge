@@ -2,7 +2,7 @@
   <div class="col-lg-3 col-xl-2 bg-dark side-nav" *ngIf="isLoggedIn"><app-mainmenu></app-mainmenu></div>
   <div class="col" [ngClass]="{'fade-in': isFading}">
     <div toastContainer></div>
-    <div class="col text-muted d-lg-none" *ngIf="navPlaceholder">
+    <div class="col text-muted nav-placeholder" *ngIf="navPlaceholder">
       <small>{{navPlaceholder}}</small>
     </div>
     <router-outlet></router-outlet>

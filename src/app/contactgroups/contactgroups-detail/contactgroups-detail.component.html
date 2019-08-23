@@ -105,7 +105,7 @@
           email</p>
         <ng-container *ngFor="let emailAddresses of searchedPersonDetails.emailAddresses">
           <p class="mb-2 text-truncate" *ngIf="emailAddresses.email"><a
-              href="mailto:{{emailAddresses.email}}">{{emailAddresses.email}}</a></p>
+              class="mobile-btn" href="mailto:{{emailAddresses.email}}">{{emailAddresses.email}}</a></p>
         </ng-container>
       </div>
       <div class="col-12">

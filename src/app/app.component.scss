@@ -28,6 +28,12 @@
     }
 }
 
+.nav-placeholder {
+    @include media-breakpoint-up(lg) {
+        background-color: $breadcrumb-bg;
+    }
+}
+
 .scroll-top {
     display: block;
     z-index: 1000;

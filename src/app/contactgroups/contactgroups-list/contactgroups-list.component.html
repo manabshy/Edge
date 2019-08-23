@@ -29,7 +29,8 @@
           </div>
           <div class="col text-sm-right">
             <p class="text-truncate"><a (click)="$event.stopPropagation()"
-                href="mailto:{{contactGroup?.emailAddresses[0]}}" [innerHTML]="contactGroup?.emailAddresses[0] | highlight : searchTerm"></a><span class="text-danger" *ngIf="!contactGroup?.emailAddresses[0]">No Email</span></p>
+                *ngIf="contactGroup?.emailAddresses[0]"
+                class="mobile-btn" href="mailto:{{contactGroup?.emailAddresses[0]}}" [innerHTML]="contactGroup?.emailAddresses[0] | highlight : searchTerm"></a><span class="text-danger" *ngIf="!contactGroup?.emailAddresses[0]">No Email</span></p>
           </div>
           <div class="col-12">
               <div *ngFor="let cG of contactGroup?.contactGroups" class="text-truncate">

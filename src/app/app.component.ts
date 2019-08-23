@@ -63,14 +63,6 @@ export class AppComponent implements OnInit, AfterViewChecked {
       }, 1200)
       //window.scrollTo(0,0);
     });
-
-    this.route.queryParams.subscribe(params => {
-      if(params['docTitle']) {
-        this.sharedService.setTitle(params['docTitle']);
-        this.navPlaceholder = params['docTitle'];
-        this.navPlaceholder = this.navPlaceholder.substring(this.navPlaceholder.indexOf('|') + 1).trim();
-      }
-    })
   }
 
   ngOnInit() {
@@ -95,6 +87,15 @@ export class AppComponent implements OnInit, AfterViewChecked {
       this.toggleScrollTop();
     });
     this.appHeightObservable.observe(this.appContainer.nativeElement, { childList: true, subtree: true });
+    
+
+    this.route.queryParams.subscribe(params => {
+      if(params['docTitle']) {
+        this.sharedService.setTitle(params['docTitle']);
+        this.navPlaceholder = params['docTitle'];
+        this.navPlaceholder = this.navPlaceholder.substring(this.navPlaceholder.indexOf('|') + 1).trim();
+      }
+    })
   }
 
 
