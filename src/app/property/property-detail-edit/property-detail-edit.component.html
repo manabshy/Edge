@@ -1,12 +1,15 @@
 <app-breadcrumb></app-breadcrumb>
 <div class="container">
   <div class="page-title sticky-top">
-    <h4>Edit Property</h4>
+    <h4>
+      <ng-container *ngIf="propertyDetails else newProperty ">Edit</ng-container> Property
+      <ng-template #newProperty>Add</ng-template>
+    </h4>
   </div>
-  <div class="text-center" *ngIf="!propertyDetails">
+  <div class="text-center" *ngIf="!propertyDetails && !isNewProperty">
     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading details ...
   </div>
-  <form *ngIf="propertyDetails" [formGroup]="propertyForm" (ngSubmit)="saveProperty()" (keydown.enter)="$event.preventDefault()" autocompleteOff>
+  <form *ngIf="propertyDetails || isNewProperty" [formGroup]="propertyForm" (ngSubmit)="saveProperty()" (keydown.enter)="$event.preventDefault()" autocompleteOff>
     <div class="form-group row">
       <label for="propertyTypeId" class="col-sm-2 col-form-label col-form-label-sm">Property Type</label>
       <div class="col-sm-3">
@@ -19,7 +22,7 @@
       <label for="propertyTypeId" class="col-sm-2 col-form-label col-form-label-sm">Property Style</label>
       <div class="col-sm-3">
         <select class="custom-select custom-select-sm" id="propertyStyleId" name="propertyStyleId" formControlName="propertyStyleId">
-          <option selected *ngFor="let propertyStyle of propertyStyles " [value]=propertyStyle.id>{{propertyStyle.value}}</option>
+          <option selected *ngFor="let propertyStyle of selectedStyles " [value]=propertyStyle.id>{{propertyStyle.value}}</option>
         </select>
       </div>
     </div>
@@ -36,7 +39,7 @@
       <label for="area" class="col-sm-2 col-form-label col-form-label-sm">Area</label>
       <div class="col-sm-3">
         <select class="custom-select custom-select-sm" id="area" name="area" formControlName="areaId" (change)="onSelectArea($event.target.value)">
-          <option selected *ngFor="let area of areas " [value]=area.id>{{area.value}}</option>
+          <option selected *ngFor="let area of selectedAreas " [value]=area.id>{{area.value}}</option>
         </select>
       </div>
     </div>
@@ -44,7 +47,7 @@
       <label for="subArea" class="col-sm-2 col-form-label col-form-label-sm">Sub-Area</label>
       <div class="col-sm-3">
         <select class="custom-select custom-select-sm" id="subArea" name="subArea" formControlName="subAreaId">
-          <option selected *ngFor="let subArea of subAreas " [value]=subArea.id>{{subArea.value}}</option>
+          <option selected *ngFor="let subArea of selectedSubAreas " [value]=subArea.id>{{subArea.value}}</option>
         </select>
       </div>
     </div>
