@@ -6,9 +6,10 @@ import { environment } from 'src/environments/environment.test';
 import { Property, PropertyType, PropertyStyle } from './property';
 import { Address } from 'src/app/core/models/address';
 
-fdescribe('PropertyService', () => {
+describe('PropertyService', () => {
   let httpTestingController: HttpTestingController;
   let service: PropertyService;
+  // const fixture = new AutoFixture();
   const baseUrl = `https://dandg-api-wedge-dev.azurewebsites.net/v10/properties`;
   const address: Address = {
     addressLines: '413 test address',
@@ -33,7 +34,13 @@ fdescribe('PropertyService', () => {
     floorType: null,
     numberOfFloors: 2,
     propertyTypeId: PropertyType.Flat,
-    propertyStyleId: PropertyStyle.Houseboat
+    propertyStyleId: PropertyStyle.Houseboat,
+    regionId: 1,
+    areaId: 1,
+    subAreaId: 1,
+    mapCentre: null,
+    photo: null,
+    info: null
   };
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -52,12 +59,22 @@ fdescribe('PropertyService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should return the matching property', () => {
+  it('should make one api call and return a matching property', () => {
     service.getProperty(1).subscribe();
 
     const req: TestRequest = httpTestingController.expectOne(`${baseUrl}/1`);
 
     req.flush(mockProperty);
   });
+  // it('should return empty object when parameters are not given', () => {
+  //   const myMockProperty = fixture.create(mockProperty);
+  //   console.log('...............', myMockProperty);
+
+  //   service.getProperty(2).subscribe();
+
+  //   const req = httpTestingController.expectOne(`${baseUrl}/2`);
+  //   expect(req.request.url).toContain('2');
+  //   req.flush({});
+  // });
 
 });
