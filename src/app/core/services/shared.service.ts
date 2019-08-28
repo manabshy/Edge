@@ -1,18 +1,17 @@
 import { Injectable } from '@angular/core';
 import { AppUtils } from '../shared/utils';
-import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, Subject, of } from 'rxjs';
-import { AppConstants, FormErrors, ValidationMessages } from '../shared/app-constants';
+import { AppConstants} from '../shared/app-constants';
 import { map, fill } from 'lodash';
-import { tap, startWith, publishReplay, refCount, take} from 'rxjs/operators';
+import { tap, publishReplay, refCount, take} from 'rxjs/operators';
 import { BsModalService } from 'ngx-bootstrap/modal/';
 import { ErrorModalComponent } from '../error-modal/error-modal.component';
-import { FormGroup } from '@angular/forms';
 import { NoteModalComponent } from '../note-modal/note-modal.component';
-import { PhoneNumberUtil, PhoneNumber, PhoneNumberFormat } from 'google-libphonenumber';
+import { PhoneNumberUtil } from 'google-libphonenumber';
 import { Location } from '@angular/common';
+import { Title } from '@angular/platform-browser';
 
 
 @Injectable({
@@ -35,19 +34,37 @@ export class SharedService {
   //   const listInfo = localStorage.getItem('dropdownListInfo');
   //   return JSON.parse(listInfo);
   // }
-  constructor(private router: Router,
-              private http: HttpClient,
+  constructor(private http: HttpClient,
               private _location: Location,
+              private titleService: Title,
               private modalService: BsModalService) {
 
   }
 
   back() {
-    if (AppUtils.prevRoute) {
+    if (!(window.opener && window.opener !== window)) {
       this._location.back();
     } else {
       window.close();
     }
+  }
+
+  setTitle(title: string) {
+    this.titleService.setTitle(title);
+  }
+
+  openLinkWindow(link: string) {
+    const width = Math.floor(Math.random() * 100) + 860;
+    const height = Math.floor(Math.random() * 100) + 500;
+    const left = window.top.outerWidth / 2 + window.top.screenX - ( 960 / 2);
+    const top = window.top.outerHeight / 2 + window.top.screenY - ( 600 / 2);
+    const w = window.open(link, '_blank', "width="+width+",height="+height+",top="+top+",left="+left);
+    AppUtils.openedWindows.push(w);
+    setTimeout(()=>{
+      AppUtils.openedWindows.forEach(x=>{
+        x.focus();
+      })
+    })
   }
 
   showWarning(id:number, warnings: any, comment?: string):any {

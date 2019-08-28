@@ -54,7 +54,7 @@ export class NotesComponent implements OnInit, OnChanges {
       }});
   }
 
- addNote(dataNote) {
+ addNote() {
    if (this.dataNote) {
       this.sharedService.addNote(this.dataNote);
    }

@@ -70,6 +70,7 @@ export class ContactgroupsDetailComponent implements OnInit {
   getSearchedPersonDetails(personId: number) {
     this.contactGroupService.getPerson(personId).subscribe(data => {
       this.searchedPersonDetails = data;
+      this.sharedService.setTitle(this.searchedPersonDetails.addressee);
       this.searchedPersonDetails.warning = this.sharedService.showWarning(this.searchedPersonDetails.warningStatusId, this.warnings, this.searchedPersonDetails.warningStatusComment);
     });
   }

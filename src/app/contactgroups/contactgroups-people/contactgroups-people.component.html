@@ -240,6 +240,7 @@
                         *ngIf="!person?.emailAddresses.length || !person?.emailAddresses[0].email">No email</p>
                       <ng-container *ngFor="let emailAddress of person?.emailAddresses">
                         <p class="mb-2 text-truncate" *ngIf="emailAddress?.email"><a (click)="$event.stopPropagation()"
+                            class="mobile-btn"
                             href="mailto:{{emailAddress.email}}">{{emailAddress?.email}}</a></p>
                       </ng-container>
                     </div>

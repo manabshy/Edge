@@ -1,5 +1,5 @@
 import { Component, Renderer2, ChangeDetectorRef, HostListener, OnInit, AfterViewChecked, ViewChild, ElementRef } from '@angular/core';
-import { Router, RoutesRecognized } from '@angular/router';
+import { Router, RoutesRecognized, ActivatedRoute } from '@angular/router';
 import { filter, pairwise } from 'rxjs/operators';
 import { AppUtils } from './core/shared/utils';
 import { AuthService } from './core/services/auth.service';
@@ -24,6 +24,7 @@ export class AppComponent implements OnInit, AfterViewChecked {
   @ViewChild('appContainer') appContainer : ElementRef;
   @ViewChild(ToastContainerDirective) toastContainer: ToastContainerDirective;
   appHeightObservable;
+  navPlaceholder: string;
   //  get currentStaffMemberGetter(): StaffMember {
   //     return this.currentStaffMember;
   //   }
@@ -38,6 +39,7 @@ export class AppComponent implements OnInit, AfterViewChecked {
 
 
   constructor(private router: Router,
+    private route: ActivatedRoute,
     public authService: AuthService,
     protected sharedService: SharedService,
     protected staffMemberService: StaffMemberService,
@@ -85,6 +87,15 @@ export class AppComponent implements OnInit, AfterViewChecked {
       this.toggleScrollTop();
     });
     this.appHeightObservable.observe(this.appContainer.nativeElement, { childList: true, subtree: true });
+    
+
+    this.route.queryParams.subscribe(params => {
+      if(params['docTitle']) {
+        this.sharedService.setTitle(params['docTitle']);
+        this.navPlaceholder = params['docTitle'];
+        this.navPlaceholder = this.navPlaceholder.substring(this.navPlaceholder.indexOf('|') + 1).trim();
+      }
+    })
   }
 
 

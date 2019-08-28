@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PropertyService } from '../shared/property.service';
-import { Property } from '../shared/property';
+import { Property, PropertyStyle, PropertyType } from '../shared/property';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { Location } from '@angular/common';
@@ -20,6 +20,7 @@ export class PropertyDetailEditComponent implements OnInit {
   propertyForm: FormGroup;
   propertyAddress: Address;
   isSubmitting: false;
+  isNewProperty: boolean;
   listInfo: any;
   propertyTypes: any;
   allPropertyStyles: any;
@@ -29,6 +30,9 @@ export class PropertyDetailEditComponent implements OnInit {
   areas: InfoDetail[];
   allSubAreas: InfoDetail[];
   subAreas: InfoDetail[];
+  selectedStyles: InfoDetail[];
+  selectedAreas: InfoDetail[];
+  selectedSubAreas: InfoDetail[];
 
   constructor(private route: ActivatedRoute,
               private propertyService: PropertyService,
@@ -37,22 +41,35 @@ export class PropertyDetailEditComponent implements OnInit {
               private _location: Location) {}
 
   ngOnInit() {
-    if(AppUtils.listInfo) {
+    if (AppUtils.listInfo) {
       this.listInfo = AppUtils.listInfo;
       this.setDropdownLists();
     } else {
-      this.sharedService.getDropdownListInfo().subscribe(data=> {
+      this.sharedService.getDropdownListInfo().subscribe(data => {
         this.listInfo = data;
         this.setDropdownLists();
       });
     }
+    this.setupEditForm();
     this.route.params.subscribe(params => {
       this.propertyId = +params['id'] || 0;
     });
-    this.setupEditForm();
+    this.route.queryParams.subscribe(params => {
+      this.isNewProperty = this.propertyId ? this.isNewProperty = false : params['isNewProperty'];
+    });
     if (this.propertyId) {
       this.getPropertyDetails(this.propertyId);
     }
+
+    this.propertyForm.valueChanges.subscribe(data =>{
+      this.onSelectType(+data.propertyTypeId);
+      this.selectedStyles = this.propertyStyles;
+      this.onSelectRegion(+data.regionId);
+      this.selectedAreas = this.areas;
+      this.onSelectArea(+data.areaId);
+      this.selectedSubAreas = this.subAreas;
+      console.log('sub area after selection...', this.subAreas);
+    })
   }
 
   setDropdownLists() {
@@ -69,27 +86,32 @@ export class PropertyDetailEditComponent implements OnInit {
       this.onSelectType(data.propertyTypeId);
       this.onSelectRegion(data.regionId);
       this.onSelectArea(data.areaId);
-      this.propertyForm.patchValue({
-        propertyTypeId: data.propertyTypeId,
-        propertyStyleId: data.propertyStyleId,
-        regionId: data.regionId,
-        areaId: data.areaId,
-        subAreaId: data.subAreaId,
-      });
+      this.displayPropertyDetails(data);
       console.log(this.propertyDetails);
     });
   }
-  onSelectType(propertyTypeId){
-    console.log('selected type id', propertyTypeId );
-    console.log('selected styles', this.allPropertyStyles );
-    this.propertyStyles = this.allPropertyStyles.filter((x:InfoDetail)=>x.parentId==propertyTypeId);
+  private displayPropertyDetails(data: Property) {
+    if(this.propertyForm){
+      this.propertyForm.reset();
+    }
+    this.propertyForm.patchValue({
+      propertyTypeId: data.propertyTypeId,
+      propertyStyleId: data.propertyStyleId,
+      regionId: data.regionId,
+      areaId: data.areaId,
+      subAreaId: data.subAreaId,
+    });
+  }
+
+  onSelectType(propertyTypeId: number) {
+    this.propertyStyles = this.allPropertyStyles.filter((x: InfoDetail) => x.parentId === propertyTypeId);
     console.log('selected styles', this.propertyStyles );
   }
-  onSelectRegion(regionId) {
-    this.areas = this.allAreas.filter((x:InfoDetail)=>x.parentId==regionId);
+  onSelectRegion(regionId: number) {
+    this.areas = this.allAreas.filter((x: InfoDetail) => x.parentId === regionId);
   }
-  onSelectArea(areaId) {
-    this.subAreas = this.allSubAreas.filter((x:InfoDetail)=>x.parentId==areaId);
+  onSelectArea(areaId: number) {
+    this.subAreas = this.allSubAreas.filter((x: InfoDetail) => x.parentId === areaId);
   }
   setupEditForm() {
     this.propertyForm = this.fb.group({
@@ -108,7 +130,7 @@ export class PropertyDetailEditComponent implements OnInit {
   }
 
   getAddress(address: Address) {
-    if (this.propertyAddress && JSON.stringify(this.propertyAddress) != JSON.stringify(address)) {
+    if (this.propertyAddress && JSON.stringify(this.propertyAddress) !== JSON.stringify(address)) {
       this.propertyForm.markAsDirty();
     } else {
       this.propertyForm.markAsPristine();

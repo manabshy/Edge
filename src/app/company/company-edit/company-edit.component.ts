@@ -87,6 +87,7 @@ export class CompanyEditComponent implements OnInit {
   getCompanyDetails(id: number) {
     this.contactGroupService.getCompany(id).subscribe(data => {
       this.companyDetails = data;
+      this.sharedService.setTitle(this.companyDetails.companyName);
       this.displayCompanyDetails(data);
     }, error => {
       this.errorMessage = <any>error;

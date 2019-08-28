@@ -24,6 +24,7 @@ export class AppUtils {
   static propertySearchTerm: string;
   static currentStaffMemberGlobal: StaffMember;
   static listInfo: any;
+  static openedWindows: any[] = [];
 
   /**
    * Format a date/time into a string
