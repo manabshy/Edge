@@ -10,6 +10,10 @@ import { ToastrService } from 'ngx-toastr';
 import { SmsModalComponent } from '../sms-modal/sms-modal.component';
 import { take } from 'rxjs/operators';
 import { Person } from '../models/person';
+import { StaffMember } from '../models/staff-member';
+import { utils } from 'protractor';
+import { AppUtils } from '../shared/utils';
+import { StaffMemberService } from '../services/staff-member.service';
 
 @Component({
   selector: 'app-telephone',
@@ -17,14 +21,20 @@ import { Person } from '../models/person';
   styleUrls: ['./telephone.component.scss']
 })
 export class TelephoneComponent implements OnInit {
-  @Input() person: Person;
+  @Input() person: Person;  
   @Input() number: string;
+  @Input() staffMember: StaffMember;
   @Input() searchTerm: string;
   @Input() sms: boolean;
   @Input() warning: any;
   isDialing: boolean = false;
+  currentStaffMember: StaffMember;
 
-  constructor(private modalService: BsModalService, private tapiService: TapiService, private sharedService: SharedService, private toastr: ToastrService) { }
+  constructor(private modalService: BsModalService,
+              private tapiService: TapiService,
+              private sharedService: SharedService,
+              private toastr: ToastrService,
+              private staffMemberService: StaffMemberService) { }
 
   ngOnInit() {
     if(!this.sharedService.isUKMobile(this.number)){
@@ -102,15 +112,27 @@ export class TelephoneComponent implements OnInit {
 
   call() {
     if (window.innerWidth < 576) {
-      document.location.href='tel:' + this.number;
+      document.location.href = 'tel:' + this.number;
       this.leaveANoteBanner();
     } else {
+
+      if (AppUtils.currentStaffMemberGlobal) {
+        this.currentStaffMember = AppUtils.currentStaffMemberGlobal;
+        console.log('global staff member in home in ngOnInit', this.currentStaffMember);
+      } else {
+        this.staffMemberService.getCurrentStaffMember().subscribe(data => {
+        this.currentStaffMember = data;
+        }, (error: WedgeError) => {
+          this.sharedService.showError(error);
+        });
+      }
+
       const tapiInfo: TapiRequestInfo = {
-        officeId: 10,
-        staffId: 10,
+        officeId: this.currentStaffMember.homeOffice.officeId,
+        staffId: this.currentStaffMember.staffMemberId,
         isOutGoingCall: true,
-        callerNmber: '4629',
-        calledNumber: '07718702809',
+        callerNmber: this.currentStaffMember.phone,
+        calledNumber: this.number,
         guid: ''
       };
 
