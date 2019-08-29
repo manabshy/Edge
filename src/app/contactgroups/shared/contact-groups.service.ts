@@ -58,9 +58,13 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
     return this.http.get<PersonContactData>(url).pipe(map(response => response.result));
   }
 
-  getPerson( personId: number): Observable<Person> {
+  getPerson(personId: number): Observable<Person> {
     const url = `${AppConstants.basePersonUrl}/${personId}`;
-    return this.http.get<PersonContactData>(url).pipe(map(response => response.result));
+    return this.http.get<PersonContactData>(url)
+      .pipe(
+        map(response => response.result),
+        tap(data => console.log('person details here...', JSON.stringify(data)))
+      );
   }
 
   getPersonContactGroups( personId: number): Observable<BasicContactGroup[]> {
