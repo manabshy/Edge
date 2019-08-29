@@ -16,7 +16,7 @@ import { AppRoutingModule } from 'src/app/app-routing.module';
 import { CoreModule } from 'src/app/core/core.module';
 import { ContactgroupsRoutingModule } from '../contactgroups-routing.module';
 import { ContactGroupsComponent } from '../contactgroups.component';
-import { timer, of, EMPTY } from 'rxjs';
+import { timer, of, EMPTY, Observable, from } from 'rxjs';
 import { mapTo, first } from 'rxjs/operators';
 import { MockCountries, mockDropdownListInfo } from '../shared/test-helper/dropdown-list-data.json';
 
@@ -29,6 +29,7 @@ fdescribe('ContactgroupsDetailEditComponent', () => {
       firstNameControl: AbstractControl,
       saveButton: DebugElement;
 
+  let personSpy: any;
   let contactGroupService: ContactGroupsService,
     mockSharedService = {
       getDropdownListInfo: () => of(mockDropdownListInfo),
@@ -68,28 +69,42 @@ fdescribe('ContactgroupsDetailEditComponent', () => {
     debugEl = fixture.debugElement;
     // personForm = component.personForm;
     // firstName = fixture.debugElement.query(By.css('#name')).nativeElement;
-
     fixture.detectChanges();
+    personSpy = spyOn(contactGroupService, 'getPerson').and.returnValue(of(MockPerson));
+    personForm = component.personForm;
+    firstNameControl = personForm.get('firstName');
+  });
+
+  afterEach(()=>{
+    fixture = undefined;
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  // it('should have person details', (done) => {
-  //   component.countries = MockCountries;
-  //   const spy = spyOn(contactGroupService, 'getPerson').and
-  //   .returnValue(timer(1000).pipe(mapTo(MockPerson)));
-  //  component.ngOnInit();
+  it('should have person details', async(() => {
+    component.ngOnInit();
+    const response = component.personDetails;
 
+    expect(response).toEqual(MockPerson);
+  }));
 
-  // });
-  it('should display the correct firstName', async( () => {
+  it('form should display the correct firstName', async( () => {
     fixture.detectChanges();
-    personForm = component.personForm;
-    firstNameControl = personForm.get('firstName');
+    // personForm = component.personForm;
+    // firstNameControl = personForm.get('firstName');
     component.personDetails = MockPerson as any;
     personForm.patchValue(MockPerson);
+
+    fixture.whenStable().then(() => {
+      expect(firstNameControl.value).toContain(component.personDetails.firstName);
+    });
+  }));
+  
+  //TODO
+  it('form should show validators when invalid', async( () => {
+    fixture.detectChanges();
 
     fixture.whenStable().then(() => {
       expect(firstNameControl.value).toContain(component.personDetails.firstName);
