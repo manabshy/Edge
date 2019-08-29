@@ -9,15 +9,15 @@ import { SharedService } from 'src/app/core/services/shared.service';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { MockBasicPerson, MockPerson } from '../shared/test-helper/person-data.json';
 import { ToastrService } from 'ngx-toastr';
-import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule, By } from '@angular/platform-browser';
+import { FormsModule, ReactiveFormsModule, FormGroup, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { CoreModule } from 'src/app/core/core.module';
 import { ContactgroupsRoutingModule } from '../contactgroups-routing.module';
 import { ContactGroupsComponent } from '../contactgroups.component';
 import { timer, of, EMPTY } from 'rxjs';
-import { mapTo } from 'rxjs/operators';
+import { mapTo, first } from 'rxjs/operators';
 import { MockCountries, mockDropdownListInfo } from '../shared/test-helper/dropdown-list-data.json';
 
 fdescribe('ContactgroupsDetailEditComponent', () => {
@@ -25,13 +25,17 @@ fdescribe('ContactgroupsDetailEditComponent', () => {
   let fixture: ComponentFixture<ContactgroupsDetailEditComponent>;
   let debugEl: DebugElement;
   let element: HTMLElement;
+  let personForm: FormGroup,
+      firstNameControl: AbstractControl,
+      saveButton: DebugElement;
+
   let contactGroupService: ContactGroupsService,
     mockSharedService = {
       getDropdownListInfo: () => of(mockDropdownListInfo),
       scrollToFirstInvalidField: () => null,
       ISOToDate: () => Date(),
       isUKMobile: () => false,
-      formatPostCode: ()=> ''
+      formatPostCode: () => ''
     },
     mockToastrService = {};
 
@@ -62,6 +66,9 @@ fdescribe('ContactgroupsDetailEditComponent', () => {
     component = fixture.componentInstance;
     element = fixture.nativeElement;
     debugEl = fixture.debugElement;
+    // personForm = component.personForm;
+    // firstName = fixture.debugElement.query(By.css('#name')).nativeElement;
+
     fixture.detectChanges();
   });
 
@@ -77,13 +84,15 @@ fdescribe('ContactgroupsDetailEditComponent', () => {
 
 
   // });
-  // it('should have the correct name person', () => {
-  //   component.countries = MockCountries;
-  //  component.personDetails = MockPerson as any;
-  //  component.ngOnInit();
-  //  fixture.detectChanges();
+  it('should display the correct firstName', async( () => {
+    fixture.detectChanges();
+    personForm = component.personForm;
+    firstNameControl = personForm.get('firstName');
+    component.personDetails = MockPerson as any;
+    personForm.patchValue(MockPerson);
 
-  //  expect(element.querySelector('[name]').textContent).toContain(MockBasicPerson.firstName);
-
-  // });
+    fixture.whenStable().then(() => {
+      expect(firstNameControl.value).toContain(component.personDetails.firstName);
+    });
+  }));
 });
