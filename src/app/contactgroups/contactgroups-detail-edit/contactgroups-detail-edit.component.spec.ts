@@ -10,7 +10,7 @@ import { ContactGroupsService } from '../shared/contact-groups.service';
 import { MockBasicPerson, MockPerson } from '../shared/test-helper/person-data.json';
 import { ToastrService } from 'ngx-toastr';
 import { BrowserModule, By } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule, FormGroup, AbstractControl } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormGroup, AbstractControl, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { CoreModule } from 'src/app/core/core.module';
@@ -19,6 +19,8 @@ import { ContactGroupsComponent } from '../contactgroups.component';
 import { timer, of, EMPTY, Observable, from } from 'rxjs';
 import { mapTo, first } from 'rxjs/operators';
 import { MockCountries, mockDropdownListInfo } from '../shared/test-helper/dropdown-list-data.json';
+import { Mock } from 'protractor/built/driverProviders';
+import { ValidationMessages } from 'src/app/core/shared/app-constants';
 
 fdescribe('ContactgroupsDetailEditComponent', () => {
   let component: ContactgroupsDetailEditComponent;
@@ -67,6 +69,9 @@ fdescribe('ContactgroupsDetailEditComponent', () => {
     component = fixture.componentInstance;
     element = fixture.nativeElement;
     debugEl = fixture.debugElement;
+    const clickButton = () => {
+      fixture.debugElement.query(By.css('.btn-secondary')).triggerEventHandler('click', null);
+    };
     // personForm = component.personForm;
     // firstName = fixture.debugElement.query(By.css('#name')).nativeElement;
     fixture.detectChanges();
@@ -75,15 +80,11 @@ fdescribe('ContactgroupsDetailEditComponent', () => {
     firstNameControl = personForm.get('firstName');
   });
 
-  afterEach(()=>{
-    fixture = undefined;
-  });
-
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have person details', async(() => {
+  it('should get person details on initialisation', async(() => {
     component.ngOnInit();
     const response = component.personDetails;
 
@@ -91,23 +92,27 @@ fdescribe('ContactgroupsDetailEditComponent', () => {
   }));
 
   it('form should display the correct firstName', async( () => {
-    fixture.detectChanges();
-    // personForm = component.personForm;
-    // firstNameControl = personForm.get('firstName');
-    component.personDetails = MockPerson as any;
+    component.ngOnInit();
+    const response = component.personDetails;
     personForm.patchValue(MockPerson);
 
     fixture.whenStable().then(() => {
-      expect(firstNameControl.value).toContain(component.personDetails.firstName);
+      expect(firstNameControl.value).toContain(response.firstName);
     });
   }));
-  
-  //TODO
-  it('form should show validators when invalid', async( () => {
-    fixture.detectChanges();
 
-    fixture.whenStable().then(() => {
-      expect(firstNameControl.value).toContain(component.personDetails.firstName);
-    });
-  }));
+  // it('form should display the correct firstName', async( () => {
+  //   component.getPersonDetails(MockPerson.personId);
+
+  //   const emailAddressFormArray = personForm.get('emailAddresses');
+  //   console.log('email group 1..',emailAddressFormArray);
+  //   fixture.detectChanges();
+  //   personForm.patchValue(MockPerson);
+  //   console.log('email group',personForm.value);
+
+  //   fixture.whenStable().then(() => {
+  //     expect(firstNameControl.value).toContain(component.personDetails.firstName);
+  //   });
+  // }));
+
 });
