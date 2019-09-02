@@ -3,7 +3,7 @@
   <div class="row page-title">
     <div class="col">
       <h4 class="mb-0"><ng-container *ngIf="contactGroupDetails?.contactType === 4; else peopleCG">
-        Company</ng-container><ng-template #peopleCG>People</ng-template> Contact group
+        Company</ng-container><ng-template #peopleCG>Personal</ng-template> Contact group
         <span class="badge badge-pill badge-success"
                         *ngIf="isAMLCompleted">AML Completed</span>
       </h4>
@@ -59,7 +59,7 @@
           <div class="list-group-item list-group-item-action text-center" (click)="isCompanyContactGroup(false)">
             <span class="btn btn-link">
               <i class="fas fa-users fa-lg"></i><br>
-              People Contact Group
+              Personal Contact Group
             </span>
           </div>
         </div>
