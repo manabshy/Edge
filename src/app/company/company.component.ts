@@ -59,7 +59,7 @@ export class CompanyComponent implements OnInit {
   //     });
   // }
 
-  companiesResults(searchTerm: any) {
+  companiesResults(searchTerm?: any) {
     if(!searchTerm) {
       searchTerm = this.companyFinderForm.value;
     }

@@ -60,7 +60,7 @@ export class PropertyComponent implements OnInit {
   //   });
   // }
 
-  propertiesResults(searchTerm: any) {
+  propertiesResults(searchTerm?: any) {
     if(!searchTerm) {
       searchTerm = this.propertyFinderForm.value;
     }
