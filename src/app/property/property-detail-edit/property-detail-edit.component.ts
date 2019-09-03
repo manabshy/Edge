@@ -6,9 +6,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { Location } from '@angular/common';
 import { Address } from '../../core/models/address';
-import { SharedService, InfoDetail } from '../../core/services/shared.service';
+import { SharedService, InfoDetail, WedgeError } from '../../core/services/shared.service';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { Signer } from 'src/app/contactgroups/shared/contact-group';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-property-detail-edit',
@@ -20,7 +21,7 @@ export class PropertyDetailEditComponent implements OnInit {
   propertyDetails: Property;
   propertyForm: FormGroup;
   propertyAddress: Address;
-  isSubmitting: false;
+  isSubmitting: boolean;
   isNewProperty: boolean;
   listInfo: any;
   propertyTypes: any;
@@ -35,10 +36,12 @@ export class PropertyDetailEditComponent implements OnInit {
   selectedAreas: InfoDetail[];
   selectedSubAreas: InfoDetail[];
   lastKnownOwner: Signer;
+  errorMessage: any;
 
   constructor(private route: ActivatedRoute,
               private propertyService: PropertyService,
               private sharedService: SharedService,
+              private toastr: ToastrService,
               private fb: FormBuilder,
               private _location: Location) {}
 
@@ -85,7 +88,6 @@ export class PropertyDetailEditComponent implements OnInit {
   getPropertyDetails(propertyId: number) {
     this.propertyService.getProperty(propertyId).subscribe(data => {
       this.propertyDetails = data;
-      this.lastKnownOwner = data.lastKnownOwner;
       console.log('property here.....',this.propertyDetails.lastKnownOwner);
       this.onSelectType(data.propertyTypeId);
       this.onSelectRegion(data.regionId);
@@ -105,6 +107,7 @@ export class PropertyDetailEditComponent implements OnInit {
       areaId: data.areaId,
       subAreaId: data.subAreaId,
     });
+    this.lastKnownOwner = data.lastKnownOwner;
   }
 
   onSelectType(propertyTypeId: number) {
@@ -142,6 +145,44 @@ export class PropertyDetailEditComponent implements OnInit {
     this.propertyAddress = address;
   }
 
+  saveProperty() {
+    if (this.propertyForm.valid) {
+      if (this.propertyForm.dirty) {
+        this.AddOrUpdateProperty();
+      } else {
+        this.onSaveComplete();
+      }
+    } else {
+      this.errorMessage = {} as WedgeError;
+      this.errorMessage.displayMessage = 'Please correct validation errors';
+    }
+  }
+
+  AddOrUpdateProperty() {
+    const property = { ...this.propertyDetails, ...this.propertyForm.value };
+    this.isSubmitting = true;
+    if (this.isNewProperty) {
+      this.propertyService.addProperty(property).subscribe(res => this.onSaveComplete(res.result), (error: WedgeError) => {
+        this.errorMessage = error;
+        this.sharedService.showError(this.errorMessage);
+        this.isSubmitting = false;
+      });
+    } else {
+      this.propertyService.updateProperty(property).subscribe(res => this.onSaveComplete(res.result), (error: WedgeError) => {
+        this.errorMessage = error;
+        this.sharedService.showError(this.errorMessage);
+        this.isSubmitting = false;
+      });
+    }
+  }
+
+  onSaveComplete(property?: Property) {
+    this.propertyForm.markAsPristine();
+    this.isSubmitting = false;
+    this.toastr.success('Property successfully saved');
+    this._location.back();
+    console.log('complete');
+  }
   canDeactivate(): boolean {
     if (this.propertyForm.dirty  && !this.isSubmitting) {
       return false;
