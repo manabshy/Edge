@@ -8,6 +8,7 @@ import { Location } from '@angular/common';
 import { Address } from '../../core/models/address';
 import { SharedService, InfoDetail } from '../../core/services/shared.service';
 import { AppUtils } from 'src/app/core/shared/utils';
+import { Signer } from 'src/app/contactgroups/shared/contact-group';
 
 @Component({
   selector: 'app-property-detail-edit',
@@ -33,6 +34,7 @@ export class PropertyDetailEditComponent implements OnInit {
   selectedStyles: InfoDetail[];
   selectedAreas: InfoDetail[];
   selectedSubAreas: InfoDetail[];
+  lastKnownOwner: Signer;
 
   constructor(private route: ActivatedRoute,
               private propertyService: PropertyService,
@@ -83,6 +85,8 @@ export class PropertyDetailEditComponent implements OnInit {
   getPropertyDetails(propertyId: number) {
     this.propertyService.getProperty(propertyId).subscribe(data => {
       this.propertyDetails = data;
+      this.lastKnownOwner = data.lastKnownOwner;
+      console.log('property here.....',this.propertyDetails.lastKnownOwner);
       this.onSelectType(data.propertyTypeId);
       this.onSelectRegion(data.regionId);
       this.onSelectArea(data.areaId);

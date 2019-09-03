@@ -16,7 +16,7 @@ export interface Property {
   mapCentre: MapCentre;
   photo: Photo;
   info: PropertySummaryFigures;
-  lastKnownOwener: Signer;
+  lastKnownOwner: Signer;
 }
 export interface MapCentre {
   longitude: string;
