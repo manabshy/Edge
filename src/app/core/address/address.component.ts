@@ -110,7 +110,11 @@ export class AddressComponent implements OnInit {
     event.preventDefault();
     this.enterAddressManually = true;
     setTimeout(() => {
-      this.renderer.selectRootElement('#addressLines').focus();
+     if(!this.propertyDetails) {
+        this.renderer.selectRootElement('#addressLines').focus();
+     } else {
+      this.renderer.selectRootElement('#flatNumber').focus();
+     }
     });
   }
 
