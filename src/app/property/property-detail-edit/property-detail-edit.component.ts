@@ -10,6 +10,7 @@ import { SharedService, InfoDetail, WedgeError } from '../../core/services/share
 import { AppUtils } from 'src/app/core/shared/utils';
 import { Signer } from 'src/app/contactgroups/shared/contact-group';
 import { ToastrService } from 'ngx-toastr';
+import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 
 @Component({
   selector: 'app-property-detail-edit',
@@ -41,6 +42,7 @@ export class PropertyDetailEditComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private propertyService: PropertyService,
               private sharedService: SharedService,
+              private contactGroupService: ContactGroupsService,
               private toastr: ToastrService,
               private fb: FormBuilder,
               private _location: Location) {}
@@ -65,8 +67,11 @@ export class PropertyDetailEditComponent implements OnInit {
     if (this.propertyId) {
       this.getPropertyDetails(this.propertyId);
     }
+    if(AppUtils.newSignerId) {
+      this.getSignerDetails(AppUtils.newSignerId);
+    }
 
-    this.propertyForm.valueChanges.subscribe(data =>{
+    this.propertyForm.valueChanges.subscribe(data => {
       this.onSelectType(+data.propertyTypeId);
       this.selectedStyles = this.propertyStyles;
       this.onSelectRegion(+data.regionId);
@@ -74,7 +79,7 @@ export class PropertyDetailEditComponent implements OnInit {
       this.onSelectArea(+data.areaId);
       this.selectedSubAreas = this.subAreas;
       console.log('sub area after selection...', this.subAreas);
-    })
+    });
   }
 
   setDropdownLists() {
@@ -85,10 +90,20 @@ export class PropertyDetailEditComponent implements OnInit {
     this.allSubAreas = this.listInfo.result.subAreas;
   }
 
+ getSignerDetails(id: number) {
+    this.contactGroupService.getSignerbyId(id).subscribe(data => {
+      this.lastKnownOwner = data;
+      this.propertyForm.markAsDirty();
+    }, error => {
+      this.errorMessage = <any>error;
+      this.sharedService.showError(this.errorMessage);
+    });
+  }
+
   getPropertyDetails(propertyId: number) {
     this.propertyService.getProperty(propertyId).subscribe(data => {
       this.propertyDetails = data;
-      console.log('property here.....',this.propertyDetails.lastKnownOwner);
+      console.log('property here.....', this.propertyDetails.lastKnownOwner);
       this.onSelectType(data.propertyTypeId);
       this.onSelectRegion(data.regionId);
       this.onSelectArea(data.areaId);
@@ -97,7 +112,7 @@ export class PropertyDetailEditComponent implements OnInit {
     });
   }
   private displayPropertyDetails(data: Property) {
-    if(this.propertyForm){
+    if (this.propertyForm) {
       this.propertyForm.reset();
     }
     this.propertyForm.patchValue({
@@ -108,6 +123,7 @@ export class PropertyDetailEditComponent implements OnInit {
       subAreaId: data.subAreaId,
     });
     this.lastKnownOwner = data.lastKnownOwner;
+    this.propertyAddress = data.address;
   }
 
   onSelectType(propertyTypeId: number) {
@@ -143,11 +159,22 @@ export class PropertyDetailEditComponent implements OnInit {
       this.propertyForm.markAsPristine();
     }
     this.propertyAddress = address;
+    console.log('selected property address here...', this.propertyAddress);
   }
 
+  getSelectedOwner(owner: Signer) {
+    if (this.lastKnownOwner !== owner) {
+      this.propertyForm.markAsDirty();
+    } else {
+      this.propertyForm.markAsPristine();
+    }
+    this.lastKnownOwner = owner;
+    console.log('selected owner here...', this.lastKnownOwner);
+  }
   saveProperty() {
+    const isOwnerChanged = this.lastKnownOwner || this.lastKnownOwner == null;
     if (this.propertyForm.valid) {
-      if (this.propertyForm.dirty) {
+      if (this.propertyForm.dirty || isOwnerChanged) {
         this.AddOrUpdateProperty();
       } else {
         this.onSaveComplete();
@@ -159,7 +186,16 @@ export class PropertyDetailEditComponent implements OnInit {
   }
 
   AddOrUpdateProperty() {
+    let propertyAddress;
     const property = { ...this.propertyDetails, ...this.propertyForm.value };
+    if (this.propertyDetails) {
+      propertyAddress = { ...this.propertyDetails.address, ...this.propertyAddress };
+      this.lastKnownOwner ? property.lastKnownOwner = this.lastKnownOwner :  property.lastKnownOwner = this.propertyDetails.lastKnownOwner;
+      property.address = propertyAddress;
+    } else {
+      property.lastKnownOwner = this.lastKnownOwner;
+     property.address = this.propertyAddress;
+    }
     this.isSubmitting = true;
     if (this.isNewProperty) {
       this.propertyService.addProperty(property).subscribe(res => this.onSaveComplete(res.result), (error: WedgeError) => {
