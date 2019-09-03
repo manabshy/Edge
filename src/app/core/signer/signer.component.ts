@@ -14,6 +14,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 export class SignerComponent implements OnInit, OnChanges {
   @Output() selectedSigner = new EventEmitter<Signer>();
   @Input() existingSigner: Signer;
+  @Input() label: string;
   @ViewChild('searchTermInput') searchTermInput: ElementRef;
   signerFinderForm: FormGroup;
   selectedSignerDetails: Signer;

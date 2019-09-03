@@ -1,5 +1,6 @@
 import { Address } from 'src/app/core/models/address';
 import { SubNavItem, SubNav } from 'src/app/core/shared/subnav';
+import { Signer } from 'src/app/contactgroups/shared/contact-group';
 
 export interface Property {
   propertyId: number;
@@ -15,6 +16,7 @@ export interface Property {
   mapCentre: MapCentre;
   photo: Photo;
   info: PropertySummaryFigures;
+  lastKnownOwener: Signer;
 }
 export interface MapCentre {
   longitude: string;

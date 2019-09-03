@@ -17,14 +17,14 @@ currentPropertyChanged(propertyId: number) {
 
   constructor(private http: HttpClient) { }
 
-    autocompleteProperties(property: any): Observable<PropertyAutoComplete[] > {
-    const  options = new HttpParams()
-      .set('searchTerm', property.propertyAddress  || '') ;
+  autocompleteProperties(property: any): Observable<PropertyAutoComplete[]> {
+    const options = new HttpParams()
+      .set('searchTerm', property.propertyAddress || '');
     const url = `${AppConstants.basePropertyUrl}/autocomplete`;
-    return this.http.get<PropertyAutoCompleteData>(url, {params: options})
-    .pipe(
-         map(response => response.result),
-         tap(data => console.log(JSON.stringify(data)))
+    return this.http.get<PropertyAutoCompleteData>(url, { params: options })
+      .pipe(
+        map(response => response.result),
+        tap(data => console.log(JSON.stringify(data)))
       );
   }
   getProperty(propertyId: number): Observable<Property> {

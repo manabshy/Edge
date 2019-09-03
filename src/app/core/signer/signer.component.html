@@ -1,11 +1,12 @@
 <ng-container>
     <form class="pb-0" [formGroup]="signerFinderForm" autocompleteOff>
       <div class="row">
-        <label for="searchTerm" class="col-sm-2 col-form-label col-form-label-sm">Signers</label>
+        <ng-container *ngIf="!label; else givenLabel "><label for="searchTerm" class="col-sm-2 col-form-label col-form-label-sm">Signers</label></ng-container>
+        <ng-template #givenLabel><label for="searchTerm" class="col-sm-2 col-form-label col-form-label-sm">{{label}}</label></ng-template>
         <div class="col-sm-10">
           <div class="form-group">
             <div (click)="initSearch()">
-              <input #searchTermInput type="search" id="searchTerm" class="form-control form-control-sm fake-readonly" formControlName="searchTerm" 
+              <input #searchTermInput type="search" id="searchTerm" class="form-control form-control-sm fake-readonly" formControlName="searchTerm"
                 (keydown.enter)="$event.preventDefault();" [attr.readonly]="selectedSignerDetails ? '' : null">
             </div>
           </div>

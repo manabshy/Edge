@@ -1,5 +1,6 @@
 import { Address } from 'src/app/core/models/address';
 import { Property, PropertyType, PropertyStyle, MapCentre, Photo, PropertySummaryFigures } from './property';
+import { Signer } from 'src/app/contactgroups/shared/contact-group';
 
 export const mockAddress: Address = {
   addressLines: '413 test address',
@@ -46,7 +47,8 @@ export const mockProperty: Property = {
   subAreaId: 2,
   mapCentre: {} as MapCentre,
   photo: {} as Photo,
-  info: {} as PropertySummaryFigures
+  info: {} as PropertySummaryFigures,
+  lastKnownOwener: {} as Signer
 };
 export const mockProperty2: Property = {
   propertyId: 2,
@@ -61,6 +63,7 @@ export const mockProperty2: Property = {
   subAreaId: 2,
   mapCentre: {} as MapCentre,
   photo: {} as Photo,
-  info: {} as PropertySummaryFigures
+  info: {} as PropertySummaryFigures,
+  lastKnownOwener: {} as Signer
 };
 export const MockProperties = [mockProperty, mockProperty2];
