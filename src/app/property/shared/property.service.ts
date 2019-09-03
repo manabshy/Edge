@@ -9,6 +9,7 @@ import { AppConstants } from 'src/app/core/shared/app-constants';
   providedIn: 'root'
 })
 export class PropertyService {
+
 currentPropertyIdSubject = new BehaviorSubject<number | null>(0);
 currentPropertyId$ = this.currentPropertyIdSubject.asObservable();
 currentPropertyChanged(propertyId: number) {
@@ -30,6 +31,20 @@ currentPropertyChanged(propertyId: number) {
   getProperty(propertyId: number): Observable<Property> {
     const url = `${AppConstants.basePropertyUrl}/${propertyId}`;
     return this.http.get<PropertyData>(url).pipe(map(response => response.result));
+  }
+
+  addProperty(property: Property): Observable<Property | any> {
+    const url = `${AppConstants.basePropertyUrl}`;
+    return this.http.post<PropertyData>(url, property).pipe(
+      map(response => response.result),
+      tap(data => console.log('added property details here...', JSON.stringify(data))));
+  }
+
+  updateProperty(property: Property): Observable<any> {
+    const url = `${AppConstants.basePropertyUrl}/${property.propertyId}`;
+    return this.http.put(url, property).pipe(
+      map(response => response),
+      tap(data => console.log('updated property details here...', JSON.stringify(data))));
   }
   // tslint:disable-next-line:member-ordering
   propertyDetails$ = this.currentPropertyId$
