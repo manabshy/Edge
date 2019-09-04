@@ -199,8 +199,9 @@ export class PropertyDetailEditComponent implements OnInit {
     const isOwnerChanged = this.lastKnownOwner || this.lastKnownOwner == null;
     this.logValidationErrors(this.propertyForm, true);
     this.propertyAddress ? this.isAddressFormValid = true : this.isAddressFormValid = false;
-    console.log('property form...... ', this.propertyForm)
-    if (this.propertyForm.valid) {
+    console.log('is address form valid...... ', this.isAddressFormValid)
+    if (this.propertyForm.valid && this.isAddressFormValid) {
+      console.log('valid property form...... ', this.propertyForm)
       if (this.propertyForm.dirty || isOwnerChanged) {
         this.AddOrUpdateProperty();
       } else {
@@ -208,7 +209,7 @@ export class PropertyDetailEditComponent implements OnInit {
       }
     } else {
       this.errorMessage = {} as WedgeError;
-      console.log('form ', this.propertyForm)
+      console.log('invalid form ', this.propertyForm)
       this.errorMessage.displayMessage = 'Please correct validation errors';
     }
   }
