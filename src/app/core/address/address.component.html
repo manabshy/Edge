@@ -1,5 +1,5 @@
 <form [formGroup]="addressForm" (keydown.enter)="$event.preventDefault()" autocompleteOff>
-  <div class="form-group row" *ngIf="!propertyDetails">
+  <div class="form-group row" *ngIf="!(propertyDetails || isNewProperty)">
     <label for="country" class="col-sm-2 col-form-label col-form-label-sm">Country</label>
     <div class="col-sm-3">
       <select class="custom-select custom-select-sm" id="country" formControlName="countryId">
