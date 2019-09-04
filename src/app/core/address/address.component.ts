@@ -16,6 +16,7 @@ import { AppUtils } from '../shared/utils';
 export class AddressComponent implements OnInit {
   @Input() personDetails: Person;
   @Input() propertyDetails: Property;
+  @Input() isNewProperty: boolean;
   @Input() companyDetails: Company;
   @Output() addressDetails = new EventEmitter<any>();
   foundAddress: AddressAutoCompleteData;
@@ -61,11 +62,11 @@ export class AddressComponent implements OnInit {
   }
 
   init() {
-    if(AppUtils.listInfo) {
+    if (AppUtils.listInfo) {
       this.listInfo = AppUtils.listInfo;
       this.setDropdownLists();
     } else {
-      this.sharedService.getDropdownListInfo().subscribe(data=> {
+      this.sharedService.getDropdownListInfo().subscribe(data => {
         this.listInfo = data;
         this.setDropdownLists();
       });
@@ -110,7 +111,7 @@ export class AddressComponent implements OnInit {
     event.preventDefault();
     this.enterAddressManually = true;
     setTimeout(() => {
-     if(!this.propertyDetails) {
+     if (!this.propertyDetails) {
         this.renderer.selectRootElement('#addressLines').focus();
      } else {
       this.renderer.selectRootElement('#flatNumber').focus();
@@ -153,7 +154,7 @@ export class AddressComponent implements OnInit {
             retAddressLines += retrievedAddress[x] + '\n';
           }
         });
-        if (!this.propertyDetails) {
+        if (!(this.isNewProperty || this.propertyDetails)) {
           this.addressForm.patchValue({
             fullAddress: '',
             addressLines: (retrievedAddress.Company ? retrievedAddress.Company + '\n' : '') + retAddressLines + retrievedAddress.City,
@@ -169,6 +170,10 @@ export class AddressComponent implements OnInit {
             postCode: retrievedAddress.PostalCode
           });
         }
+
+       if (this.isNewProperty || this.propertyDetails) {
+          this.propertyDetails = this.addressForm.value;
+       }
         setTimeout(() => {
           let element = 'addressLines';
           if (this.propertyDetails) {
@@ -184,21 +189,22 @@ export class AddressComponent implements OnInit {
     const addressData = this.addressForm.value;
     let address;
     if (addressData) {
-        if(!this.propertyDetails) {
+        if (!(this.isNewProperty || this.propertyDetails)) {
           address = {
             addressLines: addressData.addressLines,
             postCode: addressData.postCode,
             countryId: addressData.countryId
-          }
-        if(!address.addressLines) {
+          };
+        if (!address.addressLines) {
           address = {
             addressLines: '',
             postCode: '',
             countryId: this.defaultCountryCode
-          }
+          };
         }
 
       } else {
+        console.log('should be here for flats', addressData);
         address = {
           addressLine2: addressData.addressLine2,
           flatNumber: addressData.flatNumber,
@@ -207,7 +213,7 @@ export class AddressComponent implements OnInit {
           streetName: addressData.streetName,
           town: addressData.town,
           postCode: addressData.postCode
-        }
+        };
       }
     }
     this.addressDetails.emit(address);
@@ -218,10 +224,10 @@ export class AddressComponent implements OnInit {
       this.addressForm.reset();
     }
 
-    switch(true) {
+    switch (true) {
       case !!this.personDetails:
         this.personDetails = person;
-        if(person.address){
+        if (person.address) {
           if (person.address.postCode) {
             person.address.postCode = person.address.postCode.trim();
           }
@@ -235,7 +241,7 @@ export class AddressComponent implements OnInit {
         break;
       case !!this.companyDetails:
         this.companyDetails = company;
-        if(company.companyAddress){
+        if (company.companyAddress) {
           if (company.companyAddress.postCode) {
             company.companyAddress.postCode = company.companyAddress.postCode.trim();
           }
