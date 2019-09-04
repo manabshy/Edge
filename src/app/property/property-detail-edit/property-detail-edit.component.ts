@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { PropertyService } from '../shared/property.service';
 import { Property, PropertyStyle, PropertyType } from '../shared/property';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AppConstants } from 'src/app/core/shared/app-constants';
+import { AppConstants, ValidationMessages, FormErrors } from 'src/app/core/shared/app-constants';
 import { Location } from '@angular/common';
 import { Address } from '../../core/models/address';
 import { SharedService, InfoDetail, WedgeError } from '../../core/services/shared.service';
@@ -38,6 +38,8 @@ export class PropertyDetailEditComponent implements OnInit {
   selectedSubAreas: InfoDetail[];
   lastKnownOwner: Signer;
   errorMessage: any;
+  formErrors = FormErrors;
+  isAddressFormValid: boolean;
 
   constructor(private route: ActivatedRoute,
               private propertyService: PropertyService,
@@ -78,6 +80,7 @@ export class PropertyDetailEditComponent implements OnInit {
       this.selectedAreas = this.areas;
       this.onSelectArea(+data.areaId);
       this.selectedSubAreas = this.subAreas;
+      // this.logValidationErrors(this.propertyForm, false);
       console.log('sub area after selection...', this.subAreas);
     });
   }
@@ -138,17 +141,17 @@ export class PropertyDetailEditComponent implements OnInit {
   }
   setupEditForm() {
     this.propertyForm = this.fb.group({
-      propertyTypeId: [''],
-      propertyStyleId: [''],
-      fullAddress: [''],
-      regionId: 0,
-      areaId: 0,
-      subAreaId: 0,
-      address: this.fb.group({
-        addressLines: ['', {validators: Validators.maxLength(500)}],
-        countryId: 0,
-        postCode: ['', {validators: [Validators.minLength(5), Validators.maxLength(8), Validators.pattern(AppConstants.postCodePattern)]}],
-      })
+      propertyTypeId: ['', Validators.required],
+      propertyStyleId: ['', Validators.required],
+      regionId: [0, Validators.required],
+      areaId: [0, Validators.required],
+      subAreaId: [0, Validators.required],
+      // fullAddress: [''],
+      // address: this.fb.group({
+      //   addressLines: ['', {validators: [Validators.maxLength(500)]}],
+      //   countryId: [0],
+      //   postCode: ['', {validators: [Validators.minLength(5), Validators.maxLength(8), Validators.pattern(AppConstants.postCodePattern)]}],
+      // })
     });
   }
 
@@ -169,10 +172,34 @@ export class PropertyDetailEditComponent implements OnInit {
       this.propertyForm.markAsPristine();
     }
     this.lastKnownOwner = owner;
-    console.log('selected owner here...', this.lastKnownOwner);
+  }
+
+  logValidationErrors(group: FormGroup = this.propertyForm, fakeTouched: boolean) {
+    Object.keys(group.controls).forEach((key: string) => {
+      const control = group.get(key);
+      const messages = ValidationMessages[key];
+      if (control.valid) {
+       FormErrors[key] = '';
+      }
+      if (control && !control.valid && (fakeTouched || control.dirty)) {
+        FormErrors[key] = '';
+        for (const errorKey in control.errors) {
+          if (errorKey) {
+            FormErrors[key] += messages[errorKey] + '\n';
+          }
+        }
+      }
+      if (control instanceof FormGroup) {
+        this.logValidationErrors(control, fakeTouched);
+      }
+    });
+    this.sharedService.scrollToFirstInvalidField();
   }
   saveProperty() {
     const isOwnerChanged = this.lastKnownOwner || this.lastKnownOwner == null;
+    this.logValidationErrors(this.propertyForm, true);
+    this.propertyAddress ? this.isAddressFormValid = true : this.isAddressFormValid = false;
+    console.log('property form...... ', this.propertyForm)
     if (this.propertyForm.valid) {
       if (this.propertyForm.dirty || isOwnerChanged) {
         this.AddOrUpdateProperty();
@@ -181,6 +208,7 @@ export class PropertyDetailEditComponent implements OnInit {
       }
     } else {
       this.errorMessage = {} as WedgeError;
+      console.log('form ', this.propertyForm)
       this.errorMessage.displayMessage = 'Please correct validation errors';
     }
   }

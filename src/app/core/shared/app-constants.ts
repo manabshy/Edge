@@ -1,4 +1,5 @@
 import { environment } from 'src/environments/environment';
+import { FormGroup } from '@angular/forms';
 
 export class AppConstants {
   public static get addressCaptureBaseUrl(): string { return 'https://services.postcodeanywhere.co.uk/Capture/Interactive'; }
@@ -54,6 +55,11 @@ export const FormErrors = {
   'senderName': '',
   'message': '',
   'phoneNumber': '',
+  'propertyTypeId': '',
+  'propertyStyleId': '',
+  'regionId': '',
+  'areaId': '',
+  'subAreaId': '',
 };
 export const ValidationMessages = {
   'searchTerm': {
@@ -123,6 +129,21 @@ export const ValidationMessages = {
   },
   'warningStatusComment': {
     maxlength: 'Comment cannot be more than 20 characters',
+  },
+  'propertyTypeId': {
+    required: 'Property Type is required'
+  },
+  'propertyStyleId': {
+    required: 'Property Style is required'
+  },
+  'regionId': {
+    required: 'Region is required'
+  },
+  'areaId': {
+    required: 'Area is required'
+  },
+  'subAreaId': {
+    required: 'Sub Area is required'
   }
   // 'invalidPhoneNumber': {
   //   required: 'Phone is required',
@@ -131,3 +152,4 @@ export const ValidationMessages = {
   //   pattern: 'Phone number is not valid'
   // }
 };
+
