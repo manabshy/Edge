@@ -45,6 +45,7 @@ export const mockProperty: Property = {
   areaId: 1,
   subAreaId: 2,
   mapCentre: {} as MapCentre,
+  map: {} as Photo,
   photo: {} as Photo,
   info: {} as PropertySummaryFigures
 };
@@ -60,6 +61,7 @@ export const mockProperty2: Property = {
   areaId: 1,
   subAreaId: 2,
   mapCentre: {} as MapCentre,
+  map: {} as Photo,
   photo: {} as Photo,
   info: {} as PropertySummaryFigures
 };

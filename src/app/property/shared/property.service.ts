@@ -1,7 +1,7 @@
  import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, BehaviorSubject, combineLatest, Subject } from 'rxjs';
-import { PropertyAutoComplete, PropertyAutoCompleteData, Property, PropertyData } from './property';
+import { PropertyAutoComplete, PropertyAutoCompleteData, Property, PropertyData, PropertyPhotoData, Photo, PropertyWithPhotos } from './property';
 import { map, tap, switchMap, filter, first } from 'rxjs/operators';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 
@@ -31,7 +31,7 @@ currentPropertyChanged(propertyId: number) {
     const url = `${AppConstants.basePropertyUrl}/${propertyId}`;
     return this.http.get<PropertyData>(url).pipe(map(response => response.result));
   }
-  // tslint:disable-next-line:member-ordering
+
   propertyDetails$ = this.currentPropertyId$
     .pipe(
       filter(propertyId => Boolean(propertyId)),
@@ -41,6 +41,23 @@ currentPropertyChanged(propertyId: number) {
           tap(data => console.log('details returned', JSON.stringify(data)))
         )
       ));
+
+  propertyPhotos$ = this.currentPropertyId$
+  .pipe(
+    filter(propertyId => Boolean(propertyId)),
+    switchMap(propertyId => this.http.get<PropertyPhotoData>(`${AppConstants.basePropertyUrl}/${propertyId}/photos`)
+      .pipe(
+        map(response => response.result),
+        tap(data => console.log('photos returned', JSON.stringify(data)))
+      )
+    ));
+
+    propertyDetailsWithPhotos$ = combineLatest(this.propertyDetails$, this.propertyPhotos$)
+    .pipe(map(([detail, photos]) => ({
+      propertyDetails: detail,
+      photos: photos
+    })));
+
   // dataForProperty$ =  this.currentPropertyId$
   // .pipe(
   //   filter(propertyId => Boolean(propertyId)),
