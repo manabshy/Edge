@@ -28,7 +28,7 @@ const routes: Routes = [
         {path: 'offers', component: PropertyDetailOffersComponent},
         {path: 'notes', component: PropertyDetailNotesComponent},
         {path: 'documents', component: PropertyDetailDocumentsComponent},
-        {path: 'photos', component: PropertyDetailPhotosComponent},
+        {path: 'property-photos', component: PropertyDetailPhotosComponent},
         {path: 'map/:lat/:lng', component: PropertyDetailMapComponent},
       ] }
     ]

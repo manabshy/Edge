@@ -50,7 +50,8 @@ export class PropertyDetailComponent implements OnInit {
 
   constructor(private propertyService: PropertyService,
               private formatAddressPipe: FormatAddressPipe,
-              private route: ActivatedRoute, private sharedService: SharedService) { }
+              private route: ActivatedRoute,
+              private sharedService: SharedService) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
