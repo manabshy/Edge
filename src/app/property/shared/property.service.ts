@@ -32,6 +32,11 @@ currentPropertyChanged(propertyId: number) {
     return this.http.get<PropertyData>(url).pipe(map(response => response.result));
   }
 
+  getPropertyPhoto(propertyId: number): Observable<Photo[]> {
+    const url = `${AppConstants.basePropertyUrl}/${propertyId}/photos`;
+    return this.http.get<PropertyPhotoData>(url).pipe(map(response => response.result));
+  }
+
   propertyDetails$ = this.currentPropertyId$
     .pipe(
       filter(propertyId => Boolean(propertyId)),
@@ -42,43 +47,20 @@ currentPropertyChanged(propertyId: number) {
         )
       ));
 
-  propertyPhotos$ = this.currentPropertyId$
-  .pipe(
-    filter(propertyId => Boolean(propertyId)),
-    switchMap(propertyId => this.http.get<PropertyPhotoData>(`${AppConstants.basePropertyUrl}/${propertyId}/photos`)
-      .pipe(
-        map(response => response.result),
-        tap(data => console.log('photos returned', JSON.stringify(data)))
-      )
-    ));
-
-    propertyDetailsWithPhotos$ = combineLatest(this.propertyDetails$, this.propertyPhotos$)
-    .pipe(map(([detail, photos]) => ({
-      propertyDetails: detail,
-      photos: photos
-    })));
-
-  // dataForProperty$ =  this.currentPropertyId$
+  // propertyPhotos$ = this.currentPropertyId$
   // .pipe(
   //   filter(propertyId => Boolean(propertyId)),
-  //   switchMap(propertyId => this.http.get<PropertyData>(`${AppConstants.basePropertyUrl}/${propertyId}`)
-  //   .pipe(
-  //     map(properties => properties.result[0]),
-  //     switchMap(property =>
-  //       combineLatest([
-  //         this.http.get<PropertyData>(`${AppConstants.basePropertyUrl}/${propertyId}/1`),
-  //         this.http.get<PropertyData>(`${AppConstants.basePropertyUrl}/${propertyId}/2`)
-  //       ])
-  //       .pipe(
-  //       //   map(([properties, photos]) =>{
-  //       //     propertyAddress: property.propertyAddress
-  //       //     photos: photos
-  //       //   })
-  //       //  as PropData)
-  //       tap(data => console.log(data))
-  //       )
-  //   )
-  //   )
-  // )); // fix this
+  //   switchMap(propertyId => this.http.get<PropertyPhotoData>(`${AppConstants.basePropertyUrl}/${propertyId}/photos`)
+  //     .pipe(
+  //       map(response => response.result),
+  //       tap(data => console.log('photos returned', JSON.stringify(data)))
+  //     )
+  //   ));
+
+  //   propertyDetailsWithPhotos$ = combineLatest(this.propertyDetails$, this.propertyPhotos$)
+  //   .pipe(map(([detail, photos]) => ({
+  //     propertyDetails: detail,
+  //     photos: photos
+  //   })));
 }
 
