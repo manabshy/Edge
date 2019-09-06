@@ -45,7 +45,7 @@ currentPropertyChanged(propertyId: number) {
   propertyDetails$ = this.currentPropertyId$
     .pipe(
       filter(propertyId => Boolean(propertyId)),
-      switchMap(propertyId => this.http.get<PropertyData>(`${AppConstants.basePropertyUrl}/${propertyId}?includeInfo=true&includePhoto=true&includeMap=true`)
+      switchMap(propertyId => this.http.get<PropertyData>(`${AppConstants.basePropertyUrl}/${propertyId}?includeInfo=true&includePhoto=true`)
         .pipe(
           map(response => response.result),
           tap(data => console.log('details returned', JSON.stringify(data)))
