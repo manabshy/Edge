@@ -11,7 +11,6 @@ import { SmsModalComponent } from '../sms-modal/sms-modal.component';
 import { take } from 'rxjs/operators';
 import { Person } from '../models/person';
 import { StaffMember } from '../models/staff-member';
-import { utils } from 'protractor';
 import { AppUtils } from '../shared/utils';
 import { StaffMemberService } from '../services/staff-member.service';
 
@@ -21,13 +20,13 @@ import { StaffMemberService } from '../services/staff-member.service';
   styleUrls: ['./telephone.component.scss']
 })
 export class TelephoneComponent implements OnInit {
-  @Input() person: Person;  
+  @Input() person: Person;
   @Input() number: string;
   @Input() staffMember: StaffMember;
   @Input() searchTerm: string;
   @Input() sms: boolean;
   @Input() warning: any;
-  isDialing: boolean = false;
+  isDialing: boolean;
   currentStaffMember: StaffMember;
 
   constructor(private modalService: BsModalService,
@@ -37,7 +36,7 @@ export class TelephoneComponent implements OnInit {
               private staffMemberService: StaffMemberService) { }
 
   ngOnInit() {
-    if(!this.sharedService.isUKMobile(this.number)){
+    if (!this.sharedService.isUKMobile(this.number)) {
       this.sms = false;
     }
   }
@@ -45,9 +44,8 @@ export class TelephoneComponent implements OnInit {
   callOrText() {
     event.stopPropagation();
     event.preventDefault();
-
     if (this.sms) {
-      if (this.warning && this.warning.value !== 'None') {
+      if (this.warning && this.warning !== 'None') {
         this.showWarning().subscribe(res => {
           if (res) {
             this.callOrTextChoice();
@@ -57,7 +55,7 @@ export class TelephoneComponent implements OnInit {
         this.callOrTextChoice();
       }
     } else {
-      if (this.warning && this.warning.value !== 'None') {
+      if (this.warning && this.warning !== 'None') {
         this.showWarning().subscribe(res => {
           if (res) {
             this.call();
@@ -156,13 +154,13 @@ export class TelephoneComponent implements OnInit {
     })
     .onHidden
     .pipe(take(1))
-    .subscribe(()=>{
+    .subscribe(() => {
       this.leaveANoteBanner();
     });
   }
 
   leaveANoteBanner() {
-    if(this.sharedService.lastCallNoteToast) {
+    if (this.sharedService.lastCallNoteToast) {
       this.toastr.clear(this.sharedService.lastCallNoteToast.toastId);
     }
     this.sharedService.lastCallNoteToast = this.toastr.info('<u>Leave a note</u> for the last call with ' + this.person.salutation, '', {
@@ -172,12 +170,12 @@ export class TelephoneComponent implements OnInit {
     })
     .onTap
     .pipe(take(1))
-    .subscribe(()=>{
+    .subscribe(() => {
       const data = {
         person: this.person,
         isPersonNote: true
-      }
+      };
       this.sharedService.addNote(data);
-    })
+    });
   }
 }
