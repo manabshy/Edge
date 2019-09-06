@@ -6,9 +6,13 @@
     </div>
   </div>
 
-  <div class="embed-responsive embed-responsive-16by9">
-    <agm-map class="embed-responsive-item" [latitude]="lat" [longitude]="lng" [zoom]="zoom">
+  <div *ngIf="propertyMap$ | async as map">
+    <!-- <agm-map class="embed-responsive-item" [latitude]="lat" [longitude]="lng" [zoom]="zoom">
       <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
-    </agm-map>
+    </agm-map> -->
+    <img [src]="map.azureResourceURL" alt="property map" *ngIf="map?.azureResourceURL; else noMap" style="display: block; width: 100%;">
+    <ng-template #noMap>
+        <img class="card-img" src="https://dummyimage.com/400x300/e9ecef/212529&text=no+map" alt="">
+      </ng-template>
   </div>
 </div>

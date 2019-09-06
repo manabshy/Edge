@@ -1,8 +1,8 @@
  import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, BehaviorSubject, combineLatest, Subject } from 'rxjs';
-import { PropertyAutoComplete, PropertyAutoCompleteData, Property, PropertyData, PropertyPhotoData, Photo, PropertyWithPhotos } from './property';
-import { map, tap, switchMap, filter, first } from 'rxjs/operators';
+import { PropertyAutoComplete, PropertyAutoCompleteData, Property, PropertyData, PropertyPhotoData, Photo } from './property';
+import { map, tap, switchMap, filter } from 'rxjs/operators';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 
 @Injectable({
@@ -36,11 +36,16 @@ currentPropertyChanged(propertyId: number) {
     const url = `${AppConstants.basePropertyUrl}/${propertyId}/photos`;
     return this.http.get<PropertyPhotoData>(url).pipe(map(response => response.result));
   }
+  // TODO: temp
+  getPropertyMap(propertyId: number): Observable<Photo> {
+    const url = `${AppConstants.basePropertyUrl}/${propertyId}/map`;
+    return this.http.get<any>(url).pipe(map(response => response.result));
+  }
 
   propertyDetails$ = this.currentPropertyId$
     .pipe(
       filter(propertyId => Boolean(propertyId)),
-      switchMap(propertyId => this.http.get<PropertyData>(`${AppConstants.basePropertyUrl}/${propertyId}?includeInfo=true&includePhoto=true`)
+      switchMap(propertyId => this.http.get<PropertyData>(`${AppConstants.basePropertyUrl}/${propertyId}?includeInfo=true&includePhoto=true&includeMap=true`)
         .pipe(
           map(response => response.result),
           tap(data => console.log('details returned', JSON.stringify(data)))

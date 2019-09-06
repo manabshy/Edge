@@ -61,7 +61,7 @@ export class PropertyDetailComponent implements OnInit {
       .pipe
       ( tap(data => {
         this.searchedPropertyDetails = data;
-        this.sharedService.setTitle(this.formatAddressPipe.transform(this.searchedPropertyDetails.address))
+        this.sharedService.setTitle(this.formatAddressPipe.transform(this.searchedPropertyDetails.address));
       }),
         tap(data => this.summaryTotals = data.info),
         tap(data => console.log('details', data))

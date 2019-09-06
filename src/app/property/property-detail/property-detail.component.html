@@ -71,7 +71,7 @@
           <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value] || '0'}}</span>
         </ng-template>
       </app-subnav-item>
-      <app-subnav-item [navLink]="'map/'+searchedPropertyDetails?.mapCenter?.latitude+'/'+searchedPropertyDetails?.mapCenter?.longitude+'?docTitle=Map | '+(searchedPropertyDetails?.address | formatAddress)">
+      <app-subnav-item [navLink]="'map?docTitle=Map | '+(searchedPropertyDetails?.address | formatAddress)">
         Map
       </app-subnav-item>
     </app-subnav>
