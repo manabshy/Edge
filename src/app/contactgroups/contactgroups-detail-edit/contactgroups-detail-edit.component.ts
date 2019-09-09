@@ -106,6 +106,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
     private renderer: Renderer2) { }
 
   ngOnInit() {
+    console.log('list info Global in contact group edit component', AppUtils.listInfo);
     if (AppUtils.listInfo) {
       this.listInfo = AppUtils.listInfo;
       this.setDropdownLists();
