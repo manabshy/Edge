@@ -37,11 +37,11 @@ export class StaffMemberService {
       .pipe(
         map(response => response.result),
         tap(data => this.staffMember = data),
-        publishReplay(1),
-        refCount(),
-        take(1),
-        tap((data)=>console.log('current user from db', data))
-        // tap(data => localStorage.setItem('currentUser', JSON.stringify(data)))
+        shareReplay(1)
+        // publishReplay(1),
+        // refCount(),
+        // take(1),
+        // tap((data)=>console.log('current user from db', data)),
       );
   }
 }

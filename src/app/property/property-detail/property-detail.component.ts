@@ -50,7 +50,8 @@ export class PropertyDetailComponent implements OnInit {
 
   constructor(private propertyService: PropertyService,
               private formatAddressPipe: FormatAddressPipe,
-              private route: ActivatedRoute, private sharedService: SharedService) { }
+              private route: ActivatedRoute,
+              private sharedService: SharedService) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -60,7 +61,7 @@ export class PropertyDetailComponent implements OnInit {
       .pipe
       ( tap(data => {
         this.searchedPropertyDetails = data;
-        this.sharedService.setTitle(this.formatAddressPipe.transform(this.searchedPropertyDetails.address))
+        this.sharedService.setTitle(this.formatAddressPipe.transform(this.searchedPropertyDetails.address));
       }),
         tap(data => this.summaryTotals = data.info),
         tap(data => console.log('details', data))

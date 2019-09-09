@@ -53,16 +53,18 @@ export class CompanyEditComponent implements OnInit {
   }
 
   init() {
+    console.log('list info Global in company edit component', AppUtils.listInfo);
     if(AppUtils.listInfo) {
       this.listInfo = AppUtils.listInfo;
       this.setDropdownLists();
     } else {
       this.sharedService.getDropdownListInfo().subscribe(data=> {
         this.listInfo = data;
+        console.log('list info in company edit component from new sub', data);
         this.setDropdownLists();
       });
     }
-    console.log('list info in company edit component', this.listInfo );
+
     this.route.params.subscribe(params => this.companyId = this.companyId || +params['id'] || 0);
     this.route.queryParams.subscribe(params => {
       this.isNewCompany = this.companyId ? false : params['isNewCompany'];

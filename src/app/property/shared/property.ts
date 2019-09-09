@@ -14,6 +14,7 @@ export interface Property {
   areaId: number;
   subAreaId: number;
   mapCentre: MapCentre;
+  map: Photo;
   photo: Photo;
   info: PropertySummaryFigures;
   lastKnownOwner: Signer;
@@ -51,6 +52,14 @@ export interface PropertySummaryFigures {
 export interface PropertyData {
  result: Property;
 }
+export interface PropertyPhotoData {
+ result: Photo[];
+}
+export interface PropertyWithPhotos {
+  details: Property;
+  photos: Photo[];
+}
+
 export interface PropertyAutoComplete {
   propertyId: number;
   propertyAddress: string;
@@ -112,7 +121,7 @@ export const PropertyStyles = new Map([
   [PropertyStyle.ParkingSpace, 'Parking Space'],
 ]);
 
-export const PropertyDetailsSubNav = ['instructions', 'offers', 'notes', 'photos'];
+export const PropertyDetailsSubNav = ['instructions', 'offers', 'notes', 'property-photos'];
 
 export const PropertyDetailsSubNavItems: SubNavItem[] = PropertyDetailsSubNav.map(x => ({
   link: x,

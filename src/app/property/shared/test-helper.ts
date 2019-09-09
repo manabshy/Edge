@@ -91,6 +91,7 @@ export const mockProperty100: Property = {
   areaId: 1,
   subAreaId: 2,
   mapCentre: {} as MapCentre,
+  map: {} as Photo,
   photo: {} as Photo,
   info: {} as PropertySummaryFigures,
   lastKnownOwner: {} as Signer
@@ -107,6 +108,7 @@ export const mockProperty200: Property = {
   areaId: 1,
   subAreaId: 2,
   mapCentre: {} as MapCentre,
+  map: {} as Photo,
   photo: {} as Photo,
   info: {} as PropertySummaryFigures,
   lastKnownOwner: {} as Signer

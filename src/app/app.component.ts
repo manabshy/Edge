@@ -1,6 +1,6 @@
 import { Component, Renderer2, ChangeDetectorRef, HostListener, OnInit, AfterViewChecked, ViewChild, ElementRef } from '@angular/core';
 import { Router, RoutesRecognized, ActivatedRoute } from '@angular/router';
-import { filter, pairwise } from 'rxjs/operators';
+import { filter, pairwise, takeUntil } from 'rxjs/operators';
 import { AppUtils } from './core/shared/utils';
 import { AuthService } from './core/services/auth.service';
 import { SharedService, WedgeError } from './core/services/shared.service';
@@ -9,13 +9,14 @@ import { StaffMember } from './core/models/staff-member';
 import { BehaviorSubject } from 'rxjs';
 import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
 import { EdgeServiceWorkerService } from './core/services/edge-service-worker.service';
+import { BaseComponent } from './core/models/base-component';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, AfterViewChecked {
+export class AppComponent extends BaseComponent implements OnInit, AfterViewChecked {
   title = 'Wedge';
   isScrollTopVisible = false;
   isFading = false;
@@ -47,6 +48,7 @@ export class AppComponent implements OnInit, AfterViewChecked {
     private renderer: Renderer2,
     private toastr: ToastrService,
     private cdRef: ChangeDetectorRef) {
+      super();
     /*  Track previous route for Breadcrumb component  */
     this.router.events.pipe(
       filter(e => e instanceof RoutesRecognized)
@@ -68,26 +70,27 @@ export class AppComponent implements OnInit, AfterViewChecked {
   ngOnInit() {
     this.toastr.overlayContainer = this.toastContainer;
     if (this.isLoggedIn) {
-      this.staffMemberService.getCurrentStaffMember().subscribe(data => {
+      this.staffMemberService.getCurrentStaffMember().pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
         if (data) {
           this.currentStaffMember = data;
           this.isCurrentUserAvailable = true;
           AppUtils.currentStaffMemberGlobal = data;
+          console.log('app component current user', data);
         }
       }, (error: WedgeError) => {
         this.sharedService.showError(error);
       });
 
-      this.sharedService.getDropdownListInfo().subscribe(data => {
+      this.sharedService.getDropdownListInfo().pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
         AppUtils.listInfo = data;
-        console.log('app list info', data);
+        console.log('app component list info', data);
       });
     }
     this.appHeightObservable = new MutationObserver(() => {
       this.toggleScrollTop();
     });
     this.appHeightObservable.observe(this.appContainer.nativeElement, { childList: true, subtree: true });
-    
+
 
     this.route.queryParams.subscribe(params => {
       if(params['docTitle']) {

@@ -5,7 +5,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, Subject, of } from 'rxjs';
 import { AppConstants} from '../shared/app-constants';
 import { map, fill } from 'lodash';
-import { tap, publishReplay, refCount, take} from 'rxjs/operators';
+import { tap, publishReplay, refCount, take, shareReplay} from 'rxjs/operators';
 import { BsModalService } from 'ngx-bootstrap/modal/';
 import { ErrorModalComponent } from '../error-modal/error-modal.component';
 import { NoteModalComponent } from '../note-modal/note-modal.component';
@@ -58,7 +58,7 @@ export class SharedService {
     const height = Math.floor(Math.random() * 100) + 500;
     const left = window.top.outerWidth / 2 + window.top.screenX - ( 960 / 2);
     const top = window.top.outerHeight / 2 + window.top.screenY - ( 600 / 2);
-    const w = window.open(link, '_blank', "width="+width+",height="+height+",top="+top+",left="+left);
+    const w = window.open(link, '_blank');
     AppUtils.openedWindows.push(w);
     setTimeout(()=>{
       AppUtils.openedWindows.forEach(x=>{
@@ -302,10 +302,11 @@ export class SharedService {
           if (data) {
             this.infoDetail = data;
           }}),
-        publishReplay(1),
-        refCount(),
-        take(1),
-        tap((data) => console.log('info from db', data))
+          shareReplay(1)
+        // publishReplay(1),
+        // refCount(),
+        // take(1),
+        // tap((data) => console.log('info from db', data))
       );
   }
 

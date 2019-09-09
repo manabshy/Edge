@@ -11,8 +11,8 @@
     <div class="form-group row">
       <label for="warningStatus" class="col-sm-2 col-form-label col-form-label-sm">Warning</label>
       <div class="col-sm-3">
-        <select class="custom-select custom-select-sm" id="warningStatus" name="warningStatus" formControlName="warningStatusId">
-          <option selected *ngFor="let warning of warnings | keyvalue:keepOriginalOrder" [value]=warning.value.id>{{warning.value.value}}</option>
+        <select class="custom-select custom-select-sm" id="warningStatus" name="warningStatus" formControlName="warningStatusId" >
+          <option selected *ngFor="let warning of warnings | keyvalue:keepOriginalOrder" [value]=warning.value.id [attr.disabled]="(isWarningsDisabled) ? '' : null">{{warning.value.value}}</option>
         </select>
         <input type="text" class="form-control form-control-sm mt-2" [ngClass]="{'is-invalid': formErrors.warningStatusComment || personForm.errors?.warningStatusRequired}" formControlName="warningStatusComment" placeholder="Comment ..." *ngIf="isWarningCommentVisible">
         <div class="invalid-feedback">{{formErrors.warningStatusComment}}</div>

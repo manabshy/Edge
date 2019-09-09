@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, Renderer2 } from '@angular/core';
+import { Component, OnInit, Input, Output, Renderer2, AfterViewInit, AfterContentInit, AfterContentChecked } from '@angular/core';
 import { SharedService, WedgeError, AddressAutoCompleteData, InfoDetail } from 'src/app/core/services/shared.service';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractControl, ValidatorFn } from '@angular/forms';
 import { ContactGroupsService } from '../shared/contact-groups.service';
@@ -12,13 +12,15 @@ import { AppUtils } from 'src/app/core/shared/utils';
 import { WedgeValidators } from 'src/app/core/shared/wedge-validators';
 import { Address } from 'src/app/core/models/address';
 import { ToastrService } from 'ngx-toastr';
+import { StaffMemberService } from 'src/app/core/services/staff-member.service';
+import { StaffMember } from 'src/app/core/models/staff-member';
 
 @Component({
   selector: 'app-contactgroups-detail-edit',
   templateUrl: './contactgroups-detail-edit.component.html',
   styleUrls: ['./contactgroups-detail-edit.component.scss']
 })
-export class ContactgroupsDetailEditComponent implements OnInit {
+export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChecked {
   @Output() addedPersonId = new EventEmitter<number>();
   @Output() hideCanvas = new EventEmitter<boolean>();
   @Output() backToFinder = new EventEmitter<boolean>();
@@ -61,6 +63,10 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     typeId: []
   };
   number: string;
+  currentStaffMember: StaffMember;
+  isWarningsDisabled: boolean;
+  warningStatus: number;
+
   get showPostCode(): boolean {
     return this.address.get('countryId').value === this.defaultCountryCode;
   }
@@ -88,23 +94,35 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   get isWarningCommentVisible() {
     return +this.personForm.get('warningStatusId').value === 100;
   }
+
   public keepOriginalOrder = (a) => a.key;
   constructor(public sharedService: SharedService,
     private toastr: ToastrService,
     private contactGroupService: ContactGroupsService,
+    private staffMemberService: StaffMemberService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private _location: Location,
     private renderer: Renderer2) { }
 
   ngOnInit() {
-    if(AppUtils.listInfo) {
+    console.log('list info Global in contact group edit component', AppUtils.listInfo);
+    if (AppUtils.listInfo) {
       this.listInfo = AppUtils.listInfo;
       this.setDropdownLists();
     } else {
-      this.sharedService.getDropdownListInfo().subscribe(data=> {
+      this.sharedService.getDropdownListInfo().subscribe(data => {
         this.listInfo = data;
         this.setDropdownLists();
+      });
+    }
+    if (AppUtils.currentStaffMemberGlobal) {
+      this.currentStaffMember = AppUtils.currentStaffMemberGlobal;
+    } else {
+      this.staffMemberService.getCurrentStaffMember().subscribe(data => {
+      this.currentStaffMember = data;
+      }, (error: WedgeError) => {
+        this.sharedService.showError(error);
       });
     }
     this.route.params.subscribe(params => this.personId = +params['personId'] || 0);
@@ -127,6 +145,9 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       });
   }
 
+  ngAfterContentChecked() {
+    this.disablePersonWarnings();
+  }
   setDropdownLists() {
     this.countries = this.listInfo.result.countries;
     this.titles = this.listInfo.result.titles;
@@ -134,6 +155,40 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     this.telephoneTypes = this.listInfo.result.telephoneTypes;
   }
 
+  disablePersonWarnings() {
+    let setPermission;
+    let clearPermission;
+    let warning;
+    if (this.currentStaffMember) {
+      if (this.currentStaffMember.permissions) {
+        setPermission = this.currentStaffMember.permissions.find(x => x.permissionId === 67);
+        clearPermission = this.currentStaffMember.permissions.find(x => x.permissionId === 68);
+      }
+    }
+    if (this.warningStatus) {
+      warning = +this.warningStatus !== 1;
+    }
+    switch (true) {
+      case !!!setPermission:
+      case !!!clearPermission:
+      case !!warning:
+          this.isWarningsDisabled = true;
+          break;
+      default:
+        this.isWarningsDisabled = false;
+
+      // case !!!clearPermission:
+      //     this.isWarningsDisabled = true;
+      //     break;
+      // case !!warning:
+      //     this.isWarningsDisabled = true;
+      //     break;
+      // case !!!this.basicPerson:
+      //   this.isWarningsDisabled = true;
+      //   console.log('warning 4.....', this.isWarningsDisabled);
+      //   break;
+    }
+  }
   logValidationErrors(group: FormGroup = this.personForm, fakeTouched: boolean) {
     Object.keys(group.controls).forEach((key: string) => {
       const control = group.get(key);
@@ -206,6 +261,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     this.contactGroupService.getPerson(personId).subscribe(data => {
       console.log(data);
       this.personDetails = data;
+      this.warningStatus = this.personDetails.warningStatusId;
       console.log('person details', this.personDetails);
       this.displayPersonDetails(data);
     }, error => {
@@ -529,7 +585,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   }
 
   removeWarningComment() {
-    if(+this.personForm.get('warningStatusId').value !== 100) {
+    if (+this.personForm.get('warningStatusId').value !== 100) {
       this.personForm.get('warningStatusComment').setValue('');
     }
   }
