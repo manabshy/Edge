@@ -95,7 +95,7 @@ export const mockProperty100 = {
   photo: {} as Photo,
   info: {} as PropertySummaryFigures,
   lastKnownOwner: {} as Signer
-}  as Property;
+};
 export const mockProperty200 = {
   propertyId: 2,
   address: mockAddress2,
@@ -112,7 +112,7 @@ export const mockProperty200 = {
   photo: {} as Photo,
   info: {} as PropertySummaryFigures,
   lastKnownOwner: {} as Signer
-} as Property;
+};
 
 export const MockProperties = [mockProperty100, mockProperty200];
 
