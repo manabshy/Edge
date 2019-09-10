@@ -22,7 +22,7 @@ export class CompanyFinderComponent implements OnInit {
   @Output() selectedCompanyDetails = new EventEmitter<Company>();
   @Input() companyNameError: boolean = false;
   @Input() existingCompany: Company;
-  @ViewChild('companyNameInput') companyNameInput: ElementRef;
+  @ViewChild('companyNameInput', {static: true}) companyNameInput: ElementRef;
 
   constructor(
     private contactGroupService: ContactGroupsService,

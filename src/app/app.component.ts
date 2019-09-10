@@ -22,8 +22,8 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
   isFading = false;
   isCurrentUserAvailable = false;
   currentStaffMember: StaffMember;
-  @ViewChild('appContainer') appContainer : ElementRef;
-  @ViewChild(ToastContainerDirective) toastContainer: ToastContainerDirective;
+  @ViewChild('appContainer', {static: true}) appContainer : ElementRef;
+  @ViewChild(ToastContainerDirective, {static: true}) toastContainer: ToastContainerDirective;
   appHeightObservable;
   navPlaceholder: string;
   //  get currentStaffMemberGetter(): StaffMember {

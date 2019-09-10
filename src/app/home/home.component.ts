@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit {
   }
   selectedTab = 0;
   containerClass = '';
-  @ViewChild('homeTabs') homeTabs: TabsetComponent;
+  @ViewChild('homeTabs', {static: true}) homeTabs: TabsetComponent;
 
   constructor(private authService: AuthService,
               private staffMemberService: StaffMemberService,
