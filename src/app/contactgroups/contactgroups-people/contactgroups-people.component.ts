@@ -25,7 +25,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   warnings: any;
   isCollapsed = {};
   isSelectedCollapsed = false;
-  @ViewChild('offCanvasContent') offCanvasContent: ElementRef;
+  @ViewChild('offCanvasContent', { static: true }) offCanvasContent: ElementRef;
   isOffCanvasVisible = false;
   contactGroupTypes: any;
   personId: number;
@@ -60,7 +60,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isTypePicked = false;
   isNewCompanyContact = false;
   foundCompanies: CompanyAutoCompleteResult[];
-  @ViewChild('companyNameInput') companyNameInput : ElementRef;
+  @ViewChild('companyNameInput', { static: false }) companyNameInput : ElementRef;
   searchCompanyTermBK: string = '';
   selectedCompanyDetails: Company;
   selectedCompanyId: number;

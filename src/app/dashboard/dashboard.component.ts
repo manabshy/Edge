@@ -38,7 +38,7 @@ export class DashboardComponent implements OnInit {
   private _selectedPeriod: string;
   periodList = Constants.PeriodList;
   private readonly role = 'salesManager';
-  @ViewChild('dashboardTabs') dashboardTabs: TabsetComponent;
+  @ViewChild('dashboardTabs', { static: true }) dashboardTabs: TabsetComponent;
   selectedTab: number;
 
   set selectedPeriod(val: string) {

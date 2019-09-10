@@ -15,7 +15,7 @@ export class SignerComponent implements OnInit, OnChanges {
   @Output() selectedSigner = new EventEmitter<Signer>();
   @Input() existingSigner: Signer;
   @Input() label: string;
-  @ViewChild('searchTermInput') searchTermInput: ElementRef;
+  @ViewChild('searchTermInput', { static: true }) searchTermInput: ElementRef;
   signerFinderForm: FormGroup;
   selectedSignerDetails: Signer;
   signers: Signer[];
