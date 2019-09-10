@@ -22,6 +22,8 @@ import { MockCountries, mockDropdownListInfo } from '../shared/test-helper/dropd
 import { Mock } from 'protractor/built/driverProviders';
 import { ValidationMessages } from 'src/app/core/shared/app-constants';
 import { RouterTestingModule } from '@angular/router/testing';
+import { Property } from 'src/app/property/shared/property';
+import { MockProperty } from 'src/app/property/shared/test-helper';
 
 describe('ContactgroupsDetailEditComponent', () => {
   let component: ContactgroupsDetailEditComponent;
@@ -33,6 +35,7 @@ describe('ContactgroupsDetailEditComponent', () => {
       saveButton: DebugElement;
 
   let personSpy: any;
+  const person = <Person> <unknown>MockPerson;
   let contactGroupService: ContactGroupsService,
     mockSharedService = {
       getDropdownListInfo: () => of(mockDropdownListInfo),
@@ -89,7 +92,7 @@ describe('ContactgroupsDetailEditComponent', () => {
     component.ngOnInit();
     const response = component.personDetails;
 
-    expect(response).toEqual(MockPerson);
+    expect(response).toEqual(person);
   }));
 
   it('form should display the correct firstName', async( () => {
