@@ -2,53 +2,22 @@ import { TestBed } from '@angular/core/testing';
 
 import { PropertyService } from './property.service';
 import { HttpClientTestingModule, HttpTestingController, TestRequest  } from '@angular/common/http/testing';
-import { environment } from 'src/environments/environment.test';
 import { Property, PropertyType, PropertyStyle } from './property';
 import { Address } from 'src/app/core/models/address';
+import { MockProperty } from './test-helper';
 
-describe('PropertyService', () => {
+fdescribe('PropertyService', () => {
   let httpTestingController: HttpTestingController;
   let service: PropertyService;
-  // const fixture = new AutoFixture();
   const baseUrl = `https://dandg-api-wedge-dev.azurewebsites.net/v10/properties`;
-  const address: Address = {
-    addressLines: '413 test address',
-    addressLine2: '413 test address',
-    flatNumber: '88',
-    houseBuildingName: 'Aurora Apartments',
-    houseNumber: null,
-    inCode: '4FW',
-    latitude: null,
-    longitude: null,
-    outCode: 'SW18',
-    streetName: '10 Buckhold Road',
-    town: 'London',
-    postCode: null,
-    countryId: 0,
-    country: null
-  };
-  const mockProperty: Property = {
-    propertyId: 1,
-    address: address,
-    floorOther: null,
-    floorType: null,
-    numberOfFloors: 2,
-    propertyTypeId: PropertyType.Flat,
-    propertyStyleId: PropertyStyle.Houseboat,
-    regionId: 1,
-    areaId: 1,
-    subAreaId: 1,
-    mapCentre: null,
-    photo: null,
-    info: null
-  };
+  let property = <Property> <unknown>MockProperty;
+
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [PropertyService],
       imports: [HttpClientTestingModule]
     });
-    httpTestingController = TestBed.get(HttpTestingController);
     service = TestBed.get(PropertyService);
+    httpTestingController = TestBed.get(HttpTestingController);
   });
 
   afterEach(() => {
@@ -60,21 +29,24 @@ describe('PropertyService', () => {
   });
 
   it('should make one api call and return a matching property', () => {
-    service.getProperty(1).subscribe();
+    // let response: any;
+    // service.getProperty(property.propertyId).subscribe(res => response = res);
+    service.getProperty(property.propertyId).subscribe();
 
-    const req: TestRequest = httpTestingController.expectOne(`${baseUrl}/1`);
+    const req: TestRequest = httpTestingController.expectOne(`${baseUrl}/${property.propertyId}`);
 
-    req.flush(mockProperty);
+    req.flush(property);
+    expect(req.request.method).toEqual('GET');
+    // expect(response).toEqual(property);
   });
-  // it('should return empty object when parameters are not given', () => {
-  //   const myMockProperty = fixture.create(mockProperty);
-  //   console.log('...............', myMockProperty);
 
-  //   service.getProperty(2).subscribe();
+  it('should add and return a new property', () => {
+    service.addProperty(property).subscribe();
 
-  //   const req = httpTestingController.expectOne(`${baseUrl}/2`);
-  //   expect(req.request.url).toContain('2');
-  //   req.flush({});
-  // });
+    const req: TestRequest = httpTestingController.expectOne(`${baseUrl}`);
+
+    req.flush(property);
+    expect(req.request.method).toEqual('POST');
+  });
 
 });

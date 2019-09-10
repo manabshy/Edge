@@ -4,21 +4,25 @@ import { PropertyDetailEditComponent } from './property-detail-edit.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule, ActivatedRoute } from '@angular/router';
+import { RouterModule, ActivatedRoute, Router, Data, convertToParamMap } from '@angular/router';
+import { Location } from '@angular/common';
+import { RouterTestingModule } from '@angular/router/testing';
 import { FormatAddressPipe } from 'src/app/core/shared/format-address.pipe';
 import { PropertyService } from '../shared/property.service';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { ToastrService } from 'ngx-toastr';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MockProperty } from '../shared/test-helper';
-import { of, Observable } from 'rxjs';
+import { of, Observable, from } from 'rxjs';
 import { mockDropdownListInfo } from 'src/app/contactgroups/shared/test-helper/dropdown-list-data.json';
 import { Property } from '../shared/property';
+import { ActivatedRouteStub } from 'src/testing/activated-route-stub';
 
 fdescribe('PropertyDetailEditComponent', () => {
   let component: PropertyDetailEditComponent;
   let fixture: ComponentFixture<PropertyDetailEditComponent>;
   let propertyService: PropertyService;
+  let activedRouteStub: ActivatedRouteStub;
   let propertyServiceSpy;
   let mockSharedService = {
     getDropdownListInfo: () => of(mockDropdownListInfo),
@@ -28,10 +32,14 @@ fdescribe('PropertyDetailEditComponent', () => {
       formatPostCode: () => ''
   };
   let property = <Property> <unknown>MockProperty;
+  const routerSpy = createRouterSpy();
+
   let mockToastrService = {};
-  let activedRouteMock = {
-      params: of(property.propertyId)
-  };
+
+  // activedRouteStub.setParamMap({id: property.propertyId});
+  // the `id` value is irrelevant because ignored by service stub
+  // beforeEach(() =>  activedRouteStub.setParamMap({id: property.propertyId}));
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ PropertyDetailEditComponent ],
@@ -40,15 +48,20 @@ fdescribe('PropertyDetailEditComponent', () => {
         BrowserModule,
         FormsModule,
         ReactiveFormsModule,
-        RouterModule.forRoot([])
+        RouterTestingModule.withRoutes([])
       ],
       providers: [
         PropertyService,
         FormatAddressPipe,
-        // {provide: PropertyService, useValue: mockPropertyService},
         {provide: SharedService, useValue: mockSharedService},
         {provide: ToastrService, useValue: mockToastrService},
-        // {provide: ActivatedRoute, useValue: activedRouteMock}
+        // {
+        //   provide: ActivatedRoute,
+        //   useValue: {
+        //     'params': from([{id: 1}])}
+        // }
+        // {provide: Router, useValue: routerSpy},
+        // {provide: ActivatedRoute, useValue: ActivatedRouteStub}
       ],
       schemas: [NO_ERRORS_SCHEMA]
     })
@@ -65,7 +78,6 @@ fdescribe('PropertyDetailEditComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // TODO: setup activedRoute mock for this to work
   // it('set property details correctly from service', async(() => {
   //   const spy = spyOn(propertyService, 'getProperty').and.returnValue(of(property));
   //   let response;
@@ -92,3 +104,10 @@ fdescribe('PropertyDetailEditComponent', () => {
     });
   }));
 });
+
+function createRouterSpy() {
+  return jasmine.createSpyObj('Router', ['navigate']);
+}
+function createAdalServiceSpy() {
+  return jasmine.createSpyObj('AdalService', ['']);
+}

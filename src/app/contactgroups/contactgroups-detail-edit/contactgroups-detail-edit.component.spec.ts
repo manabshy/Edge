@@ -21,8 +21,9 @@ import { mapTo, first } from 'rxjs/operators';
 import { MockCountries, mockDropdownListInfo } from '../shared/test-helper/dropdown-list-data.json';
 import { Mock } from 'protractor/built/driverProviders';
 import { ValidationMessages } from 'src/app/core/shared/app-constants';
+import { RouterTestingModule } from '@angular/router/testing';
 
-fdescribe('ContactgroupsDetailEditComponent', () => {
+describe('ContactgroupsDetailEditComponent', () => {
   let component: ContactgroupsDetailEditComponent;
   let fixture: ComponentFixture<ContactgroupsDetailEditComponent>;
   let debugEl: DebugElement;
@@ -50,7 +51,7 @@ fdescribe('ContactgroupsDetailEditComponent', () => {
         BrowserModule,
         FormsModule,
         ReactiveFormsModule,
-        RouterModule.forRoot([])
+        RouterTestingModule.withRoutes([])
       ],
       providers: [
         // {provide: ContactGroupsService, useValue: mockContactGroupService},
