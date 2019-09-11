@@ -3,7 +3,7 @@ import { Person } from 'src/app/core/models/person';
 import { ActivatedRoute } from '@angular/router';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { ContactGroupsService } from '../shared/contact-groups.service';
-import { PersonNote } from '../shared/contact-group';
+import { ContactNote } from '../shared/contact-group';
 import { BaseComponent } from 'src/app/core/models/base-component';
 import { takeUntil } from 'rxjs/operators';
 
@@ -15,9 +15,9 @@ import { takeUntil } from 'rxjs/operators';
 export class ContactgroupsDetailNotesComponent extends BaseComponent implements OnInit  {
   person: Person;
   personId: number;
-  personNotes: PersonNote[];
+  personNotes: ContactNote[];
   contactGroupId: number;
-  contactGroupNotes: PersonNote[];
+  contactGroupNotes: ContactNote[];
   constructor(private contactGroupService: ContactGroupsService,
               private route: ActivatedRoute,
               private sharedService: SharedService) {super(); }

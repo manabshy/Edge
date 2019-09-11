@@ -4,7 +4,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { Subject } from 'rxjs';
 import { Person } from '../models/person';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
-import { PersonNote, ContactGroup, ContactGroupsNote } from 'src/app/contactgroups/shared/contact-group';
+import { ContactGroup, ContactNote } from 'src/app/contactgroups/shared/contact-group';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -19,8 +19,8 @@ export class NoteModalComponent implements OnInit {
   selectedPerson: Person;
   selectedContactGroup: ContactGroup;
   isPersonNote: boolean;
-  personNote: PersonNote;
-  contactGroupNote: ContactGroupsNote;
+  personNote: ContactNote;
+  contactGroupNote: ContactNote;
   noteForm: FormGroup;
   shortcuts = {
     'LVM': 'Left voice mail',
@@ -112,8 +112,9 @@ export class NoteModalComponent implements OnInit {
       note.personId = this.data.personId;
       this.contactGroupService.addPersonNote(note).subscribe(data => {
         if(data) {
-          this.personNote = data;
-          this.contactGroupService.personNotesChanged(this.personNote);
+          // this.personNote = data;
+          // this.contactGroupService.personNotesChanged(this.personNote);
+          location.reload(true);
           this.toastr.success('Note successfully added');
         }
         console.log('added person note with id', data);
@@ -126,8 +127,9 @@ export class NoteModalComponent implements OnInit {
       note.contactGroupId = this.selectedContactGroup.contactGroupId;
       this.contactGroupService.addContactGroupNote(note).subscribe(data => {
         if(data){
-          this.contactGroupNote = data;
-          this.contactGroupService.contactGroupNotesChanged(this.contactGroupNote);
+          // this.contactGroupNote = data;
+          // this.contactGroupService.contactGroupNotesChanged(this.contactGroupNote);
+          location.reload(true);
           this.toastr.success('Note successfully added');
         }
         console.log('added  contact group note', data);

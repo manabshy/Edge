@@ -4,10 +4,9 @@ import { Observable, Subject } from 'rxjs';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { ContactGroupAutoCompleteResult, ContactGroupAutoCompleteData,
          PersonContactData, ContactGroupData, ContactGroup, BasicContactGroup,
-         BasicContactGroupData, PeopleAutoCompleteResult, PeopleAutoCompleteData,
-         CompanyAutoCompleteResult, CompanyContactGroupAutoCompleteData as CompanyAutoCompleteData,
+         BasicContactGroupData, CompanyAutoCompleteResult, CompanyContactGroupAutoCompleteData as CompanyAutoCompleteData,
          Company, CompanyData, SignerAutoCompleteData, Signer, PersonSummaryFiguresData,
-         PersonSummaryFigures, SignerData, PotentialDuplicateResult, PeopleAutoCompleteData2, PersonNoteData, PersonNote, ContactGroupsNoteData, ContactGroupsNote } from './contact-group';
+         PersonSummaryFigures, SignerData, PotentialDuplicateResult, PeopleAutoCompleteData2,  ContactNote, ContactNoteData } from './contact-group';
 import { map, tap } from 'rxjs/operators';
 import { Person, BasicPerson } from 'src/app/core/models/person';
 
@@ -15,10 +14,10 @@ import { Person, BasicPerson } from 'src/app/core/models/person';
   providedIn: 'root'
 })
 export class ContactGroupsService {
-personNotes: PersonNote[];
-contactGroupNotes: ContactGroupsNote[];
-private personNotesSubject = new Subject<PersonNote | null>();
-private contactGroupNotesSubject = new Subject<ContactGroupsNote | null>();
+personNotes: ContactNote[];
+contactGroupNotes: ContactNote[];
+private personNotesSubject = new Subject<ContactNote | null>();
+private contactGroupNotesSubject = new Subject<ContactNote | null>();
 personNotesChanges$ = this.personNotesSubject.asObservable();
 contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
 
@@ -50,7 +49,11 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
 
   getContactGroupbyId(contactGroupId: number): Observable<ContactGroup> {
     const url = `${AppConstants.baseContactGroupUrl}/${contactGroupId}`;
-    return this.http.get<ContactGroupData>(url).pipe(map(response => response.result));
+    return this.http.get<ContactGroupData>(url)
+      .pipe(
+        map(response => response.result),
+        tap(data => console.log('contact group details here...', JSON.stringify(data)))
+      );
   }
 
   getContactPerson(contactGroupId: number, personId: number): Observable<Person> {
@@ -146,63 +149,65 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
       tap(data => console.log('updated company contact details here...', JSON.stringify(data))));
   }
 
-  getPersonNotes(personId: number): Observable<PersonNote[]> {
+  getPersonNotes(personId: number): Observable<ContactNote[]> {
     const url = `${AppConstants.basePersonUrl}/${personId}/personNotes`;
-    return this.http.get<PersonNoteData>(url).pipe(
+    return this.http.get<ContactNoteData>(url).pipe(
       map(response => response.result),
       tap(data => this.personNotes = data),
       tap(data => console.log('notes here...', JSON.stringify(data))));
   }
 
-  getContactGroupNotes(contactGroupId: number): Observable<ContactGroupsNote[]> {
+  getContactGroupNotes(contactGroupId: number): Observable<ContactNote[]> {
     const url = `${AppConstants.baseContactGroupUrl}/${contactGroupId}/contactNotes`;
-    return this.http.get<ContactGroupsNoteData>(url).pipe(
+    return this.http.get<ContactNoteData>(url).pipe(
       map(response => response.result),
       tap(data => this.contactGroupNotes = data),
       tap(data => console.log('group notes here...', JSON.stringify(data))));
   }
 
-  addPersonNote(personNote: PersonNote): Observable< PersonNote|any> {
+  addPersonNote(personNote: ContactNote): Observable< ContactNote|any> {
     const url = `${AppConstants.basePersonUrl}/${personNote.personId}/personNotes`;
-    return this.http.post<PersonNoteData>(url, personNote).pipe(
+    return this.http.post<ContactNoteData>(url, personNote).pipe(
       map(response => response.result),
       tap(data => console.log('added  person note here...', JSON.stringify(data))));
   }
 
-  addContactGroupNote(contactGroupNote: ContactGroupsNote): Observable<ContactGroupsNote | any> {
+  addContactGroupNote(contactGroupNote: ContactNote): Observable<ContactNote | any> {
     const url = `${AppConstants.baseContactGroupUrl}/${contactGroupNote.contactGroupId}/contactNotes`;
-    return this.http.post<ContactGroupsNoteData>(url, contactGroupNote).pipe(
+    return this.http.post<ContactNoteData>(url, contactGroupNote).pipe(
       map(response => response.result),
       tap(data => console.log('added  contactgroup note here...', JSON.stringify(data))));
   }
 
-  updatePersonNote(personNote: PersonNote): Observable< PersonNote|any> {
+  updatePersonNote(personNote: ContactNote): Observable< ContactNote|any> {
     const url = `${AppConstants.basePersonUrl}/${personNote.personId}/personNotes/${personNote.id}`;
-    return this.http.put<PersonNoteData>(url, personNote).pipe(
+    return this.http.put<ContactNoteData>(url, personNote).pipe(
       map(response => response.result),
       tap(data => console.log('updated note  person note here...', JSON.stringify(data))));
   }
 
-  updateContactGroupNote(contactGroupNote: ContactGroupsNote): Observable<ContactGroupsNote | any> {
+  updateContactGroupNote(contactGroupNote: ContactNote): Observable<ContactNote | any> {
     const url = `${AppConstants.baseContactGroupUrl}/${contactGroupNote.contactGroupId}/contactNotes/${contactGroupNote.id}`;
-    return this.http.put<ContactGroupsNoteData>(url, contactGroupNote).pipe(
+    return this.http.put<ContactNoteData>(url, contactGroupNote).pipe(
       map(response => response.result),
       tap(data => console.log('updated contactgroup note here...', JSON.stringify(data))));
   }
 
-  personNotesChanged(personNote: PersonNote) {
-    const index = this.personNotes.findIndex(x => x.id === personNote.id);
+  personNotesChanged(note: ContactNote) {
+    let index;
+    this.personNotes ? index = this.personNotes.findIndex(x => x.id === note.id) : index = -1;
     if (index !== -1) {
-      this.personNotes[index] = personNote;
+      this.personNotes[index] = note;
     } else {
-      this.personNotes.push(personNote);
+      this.personNotes.push(note);
     }
     this.sortByPinnedAndDate(this.personNotes);
-    this.personNotesSubject.next(personNote);
+    this.personNotesSubject.next(note);
   }
 
-  contactGroupNotesChanged(contactGroupNote: ContactGroupsNote) {
-    const index = this.contactGroupNotes.findIndex(x => x.id === contactGroupNote.id);
+  contactGroupNotesChanged(contactGroupNote: ContactNote) {
+    let index;
+    this.contactGroupNotes ? index = this.contactGroupNotes.findIndex(x => x.id === contactGroupNote.id) : index = -1;
     if (index !== -1) {
       this.contactGroupNotes[index] = contactGroupNote;
     } else {

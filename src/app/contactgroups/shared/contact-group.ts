@@ -7,7 +7,7 @@ export interface ContactGroup {
   contactType: ContactType;
   contactGroupId: number;
   addressee: string;
-  notes: ContactGroupsNote[];
+  notes: ContactNote[];
   // notes?: string;
   contactPeople: Person[];
   title?: string;
@@ -94,8 +94,9 @@ export interface BaseNote {
   createDate: Date;
   createdBy: number;
 }
-export interface ContactGroupsNote extends BaseNote {
-  contactGroupId: number;
+export interface ContactNote extends BaseNote {
+  contactGroupId?: number;
+  personId?: number;
 }
 export interface PersonNote extends BaseNote {
   personId: number;
@@ -234,8 +235,8 @@ export interface PersonSummaryFiguresData extends ResultData {
 export interface PersonContactData extends ResultData {
   result: Person;
 }
-export interface ContactGroupsNoteData extends ResultData {
-  result: ContactGroupsNote[];
+export interface ContactNoteData extends ResultData {
+  result: ContactNote[];
 }
 export interface PersonNoteData extends ResultData {
   result: PersonNote[];

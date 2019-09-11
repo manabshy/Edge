@@ -3,7 +3,7 @@ import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Person, BasicPerson } from 'src/app/core/models/person';
 import { ContactGroup, PeopleAutoCompleteResult, ContactGroupsTypes,
-         ContactType, CompanyAutoCompleteResult, Company, PotentialDuplicateResult, ContactGroupsNote } from '../shared/contact-group';
+         ContactType, CompanyAutoCompleteResult, Company, PotentialDuplicateResult, ContactNote } from '../shared/contact-group';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -67,7 +67,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   companyFinderForm: FormGroup;
   isCloned: boolean;
   clonedContact: ContactGroup;
-  contactGroupNotes: ContactGroupsNote[];
+  contactGroupNotes: ContactNote[];
   formErrors = FormErrors;
   isCompanyAdded = true;
   get dataNote() {

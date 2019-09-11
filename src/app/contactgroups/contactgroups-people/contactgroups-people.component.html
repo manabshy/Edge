@@ -191,7 +191,7 @@
                         </div>
                       </div>
                     </ng-template>
-                    <!-- <div class="col-12">
+                    <div class="col-12">
                       <div class="alert alert-danger small mb-2">
                         Important note
                       </div>
@@ -206,7 +206,7 @@
                           View All Notes
                         </a>
                       </div>
-                    </div> -->
+                    </div>
                     <!-- <div class="col-12">
                       <div class="alert alert-danger small mb-2">
                         <a [routerLink]="['../../../../detail/', person?.personId, 'notes' ]"><i
@@ -326,7 +326,7 @@
             <div class="row">
               <label class="col-sm-2 col-form-label col-form-label-sm">Notes</label>
               <div class="col-sm-10">
-                <app-notes [dataNote]="dataNote" [contactGroupNotes]="dataNote?.notes"></app-notes>
+                <app-notes [dataNote]="dataNote" [personName]="" [contactGroupNotes]="dataNote?.notes"></app-notes>
               </div>
             </div>
           </form>
