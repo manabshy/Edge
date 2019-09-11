@@ -58,7 +58,7 @@ export class SharedService {
     const height = Math.floor(Math.random() * 100) + 500;
     const left = window.top.outerWidth / 2 + window.top.screenX - ( 960 / 2);
     const top = window.top.outerHeight / 2 + window.top.screenY - ( 600 / 2);
-    const w = window.open(link, '_blank');
+    const w = window.open(link, '_self');
     AppUtils.openedWindows.push(w);
     setTimeout(()=>{
       AppUtils.openedWindows.forEach(x=>{

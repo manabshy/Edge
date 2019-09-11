@@ -23,10 +23,10 @@
               aria-labelledby="actionsToggle">
               <li role="menuitem">
                 <button type="button" class="dropdown-item"
-                  (click)="setFlag(note?.personNoteId || note?.contactNoteId, true)">
+                  (click)="setFlag(note?.id, true)">
                   <i class="fas fa-exclamation-circle fa-fw text-danger"></i>
                   <i class="fas fa-times fa-xs align-text-top" *ngIf="note?.isImportant"></i>
-                  <span class="ml-2">Set as 
+                  <span class="ml-2">Set as
                     <ng-container *ngIf="note?.isImportant; else important ">unimportant</ng-container>
                     <ng-template  #important>important</ng-template>
                   </span>
@@ -34,7 +34,7 @@
               </li>
               <li role="menuitem">
                 <button type="button" class="dropdown-item"
-                  (click)="setFlag(note?.personNoteId || note?.contactNoteId, false)">
+                  (click)="setFlag(note?.id, false)">
                   <i class="fas fa-thumbtack fa-fw"></i>
                   <i class="fas fa-times fa-xs align-text-top" *ngIf="note?.isPinned"></i>
                   <span class="ml-2">

@@ -86,23 +86,19 @@ export interface ContactAddress extends Address {
   postCode: string;
   countryId: number;
 }
-export interface ContactGroupsNote {
-  contactNoteId: number;
-  contactGroupId: number;
+export interface BaseNote {
+  id: number;
   text: string;
   isImportant: boolean;
   isPinned: boolean;
   createDate: Date;
   createdBy: number;
 }
-export interface PersonNote {
-  personNoteId: number;
+export interface ContactGroupsNote extends BaseNote {
+  contactGroupId: number;
+}
+export interface PersonNote extends BaseNote {
   personId: number;
-  text: string;
-  isImportant: boolean;
-  isPinned: boolean;
-  createDate: Date;
-  createdBy: number;
 }
 export interface AutoCompleteOption {
   isNameSearch: boolean;

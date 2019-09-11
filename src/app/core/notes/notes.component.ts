@@ -32,20 +32,25 @@ export class NotesComponent implements OnInit, OnChanges {
   }
 
   setFlag(noteId: number, isImportantFlag: boolean) {
+    console.log('note id here.....', noteId);
     this.notes.forEach(x => {
-      if (x.contactNoteId === noteId || x.personNoteId === noteId) {
+      if (x.id === noteId) {
         if (isImportantFlag) {
           x.isImportant ? x.isImportant = false : x.isImportant = true;
         } else {
           x.isPinned ? x.isPinned = false : x.isPinned = true;
           this.isUpdating = true;
         }
-       if (x.contactNoteId) {
+        console.log('contact groupid here.....',x.contactGroupId);
+        console.log('personid here.....',x.personId);
+       if (x.contactGroupId) {
+        console.log('contact note here.....',x);
           this.contactGroupService.updateContactGroupNote(x).subscribe(() => {
             this.contactGroupService.contactGroupNotesChanged(x);
             this.isUpdating = false;
           });
        } else {
+        console.log('person note here.....',x);
          this.contactGroupService.updatePersonNote(x).subscribe(() => {
            this.contactGroupService.personNotesChanged(x);
             this.isUpdating = false;
