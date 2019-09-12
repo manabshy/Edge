@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { ContactGroupAutoCompleteResult, ContactGroupAutoCompleteData,
          PersonContactData, ContactGroupData, ContactGroup, BasicContactGroup,
@@ -16,8 +16,10 @@ import { Person, BasicPerson } from 'src/app/core/models/person';
 export class ContactGroupsService {
 personNotes: ContactNote[];
 contactGroupNotes: ContactNote[];
+private contactInfoAction$ = new Subject<BasicContactGroup[] | null >();
 private personNotesSubject = new Subject<ContactNote | null>();
 private contactGroupNotesSubject = new Subject<ContactNote | null>();
+contactInfoForNotes$ = this.contactInfoAction$.asObservable();
 personNotesChanges$ = this.personNotesSubject.asObservable();
 contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
 
@@ -191,6 +193,10 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
     return this.http.put<ContactNoteData>(url, contactGroupNote).pipe(
       map(response => response.result),
       tap(data => console.log('updated contactgroup note here...', JSON.stringify(data))));
+  }
+
+  contactInfoChanged(info: BasicContactGroup[]){
+    this.contactInfoAction$.next(info);
   }
 
   personNotesChanged(note: ContactNote) {

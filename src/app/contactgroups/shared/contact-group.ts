@@ -8,6 +8,7 @@ export interface ContactGroup {
   contactGroupId: number;
   addressee: string;
   notes: ContactNote[];
+  contactNotes: ContactNote[];
   // notes?: string;
   contactPeople: Person[];
   title?: string;

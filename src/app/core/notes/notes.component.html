@@ -56,10 +56,25 @@
         <div class="col-12">
           <div class="row">
             <div class="col-sm" *ngIf="note?.contactGroupId || note?.personId">
-              <strong>
-                <ng-container *ngIf="note?.contactGroupId else personNote">Contact group: {{note?.contactGroupId}}</ng-container>
-                <ng-template #personNote>Person: {{note?.personId}}</ng-template>
-              </strong>
+              <ng-container *ngIf="groupAddressee; else groupsInfo">
+                <ng-container *ngIf="note?.contactGroupId; else personNote">{{groupAddressee || note?.contactGroupId}}
+                </ng-container>
+                <ng-template #personNote>
+                  <div *ngIf="contactPeople">
+                    <div *ngFor="let person of contactPeople">
+                      <div *ngIf="person.personId === note?.personId">{{person.addressee}}</div>
+                    </div>
+                  </div>
+                </ng-template>
+              </ng-container>
+              <ng-template #groupsInfo>
+                <div *ngIf="contactGroups">
+                  <div *ngFor="let person of contact">
+                    <div *ngIf="person.personId === note?.personId">{{person.addressee}}</div>
+                  </div>
+                  <div *ngIf="note?.contactGroupId">{{addressee}}</div>
+                </div>
+              </ng-template>
             </div>
             <div class="col-sm mb-2">
               {{note?.text}}
@@ -69,11 +84,11 @@
               {{note?.createDate | date: 'HH:mm d/MM/yyyy'}}
             </div>
             <!-- <div class="col-sm text-truncate">
-              <dl class="row text-truncate">
-                <dt class="col-4 d-sm-none">Owner</dt>
-                <dd class="col text-truncate">{{note?.createdBy}}</dd>
-              </dl>
-            </div> -->
+                    <dl class="row text-truncate">
+                      <dt class="col-4 d-sm-none">Owner</dt>
+                      <dd class="col text-truncate">{{note?.createdBy}}</dd>
+                    </dl>
+                  </div> -->
           </div>
         </div>
       </div>

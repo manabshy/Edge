@@ -1,4 +1,5 @@
 import { Address } from './address';
+import { ContactNote } from 'src/app/contactgroups/shared/contact-group';
 
 export interface Person extends PersonWarning{
   personId: number;
@@ -13,6 +14,7 @@ export interface Person extends PersonWarning{
   titleOther?: string;
   emailAddresses: Email[];
   phoneNumbers: PhoneNumber[];
+  personNotes: ContactNote[];
   address: Address;
   isMainPerson: boolean;
   contactByEmail: boolean;

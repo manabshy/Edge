@@ -78,6 +78,18 @@
         </div>
       </div>
     </div>
+    <div class="col-12">
+        <ng-container *ngIf="importantPersonNotes">
+          <div class="alert alert-danger small mb-2" *ngFor="let importantNote of importantPersonNotes">
+            <i class="fas fa-exclamation-circle fa-fw text-danger mr-1"></i> {{importantNote.text}}
+          </div>
+          <div class="text-center mb-2">
+            <a class="small" [routerLink]="['../../../../detail/', searchedPersonDetails?.personId, 'notes' ]">
+              View All Notes
+            </a>
+          </div>
+        </ng-container>
+      </div>
     <div class="row mx-0 pb-3" *ngIf="searchedPersonDetails">
       <div class="col-12">
         <p class="mb-2">

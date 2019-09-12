@@ -25,6 +25,7 @@ export class AppUtils {
   static currentStaffMemberGlobal: StaffMember;
   static listInfo: any;
   static openedWindows: any[] = [];
+  static contactInfoForNotes: any;
 
   /**
    * Format a date/time into a string

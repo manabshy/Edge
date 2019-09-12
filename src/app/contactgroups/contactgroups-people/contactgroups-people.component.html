@@ -129,6 +129,13 @@
         </form>
       </ng-container>
       <ng-container *ngIf="!isNewContactGroup  || isTypePicked">
+        <div class="row mb-3">
+          <div class="col-12">
+            <div class="alert alert-danger small mb-2" *ngFor="let importantNote of importantContactNotes">
+                <i class="fas fa-exclamation-circle fa-fw text-danger mr-1"></i> {{importantNote.text}}
+            </div>
+          </div>
+        </div>
         <h5>People</h5>
         <div class="row justify-content-end">
           <div class="col-sm-10">
@@ -192,29 +199,17 @@
                       </div>
                     </ng-template>
                     <div class="col-12">
-                      <div class="alert alert-danger small mb-2">
-                        Important note
-                      </div>
-                      <div class="alert alert-danger small mb-2">
-                        Important note
-                      </div>
-                      <div class="alert alert-danger small mb-2">
-                        Important note
-                      </div>
-                      <div class="text-center mb-2">
-                        <a class="small" [routerLink]="['../../../../detail/', person?.personId, 'notes' ]">
-                          View All Notes
-                        </a>
-                      </div>
+                      <ng-container *ngIf="person?.personNotes?.length">
+                        <div class="alert alert-danger small mb-2" *ngFor="let importantNote of person?.personNotes">
+                          <i class="fas fa-exclamation-circle fa-fw text-danger mr-1"></i> {{importantNote.text}}
+                        </div>
+                        <div class="text-center mb-2">
+                          <a class="small" [routerLink]="['../../../../detail/', person?.personId, 'notes' ]">
+                            View All Notes
+                          </a>
+                        </div>
+                      </ng-container>
                     </div>
-                    <!-- <div class="col-12">
-                      <div class="alert alert-danger small mb-2">
-                        <a [routerLink]="['../../../../detail/', person?.personId, 'notes' ]"><i
-                          class="fas fa-exclamation-circle fa-fw text-danger"></i> Important notes
-                          <span class="badge badge-pill badge-primary">{{person?.marketingPreferences?.count || 0}}</span>
-                        </a>
-                      </div>
-                    </div> -->
                     <div class="col-12 mb-2">
                       <strong>{{person?.firstName | titlecase}} {{person?.lastName | titlecase}}</strong>
                       <!-- <i class="fas fa-phone-alt"></i>&nbsp;
@@ -326,7 +321,7 @@
             <div class="row">
               <label class="col-sm-2 col-form-label col-form-label-sm">Notes</label>
               <div class="col-sm-10">
-                <app-notes [dataNote]="dataNote" [personName]="" [contactGroupNotes]="dataNote?.notes"></app-notes>
+                <app-notes [noteData]="dataNote" [personName]="" [contactGroupNotes]="dataNote?.notes"></app-notes>
               </div>
             </div>
           </form>
