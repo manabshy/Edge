@@ -196,7 +196,7 @@ export class CompanyEditComponent implements OnInit {
   }
 
   getSelectedSigner(signer: Signer) {
-    if(this.signer !== signer) {
+    if(this.signer && this.signer !== signer) {
       this.companyForm.markAsDirty();
     } else {
       this.companyForm.markAsPristine();
