@@ -8,7 +8,7 @@ import { AppInterceptor } from './app.interceptor';
 import { CacheInterceptor } from './cache.interceptor';
 import { BasicSearchComponent } from './basic-search/basic-search.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, RouteReuseStrategy } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // ngx bootstrap imports
@@ -53,6 +53,7 @@ import { HighlightPipe } from './shared/highlight.pipe';
 import { AppConstants } from './shared/app-constants';
 import { SubnavItemComponent } from './subnav-item/subnav-item.component';
 import { SmsModalComponent } from './sms-modal/sms-modal.component';
+import { CustomReuseStrategy } from './share/custom-reuse-strategy';
 
 @NgModule({
   declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent,
@@ -101,7 +102,8 @@ import { SmsModalComponent } from './sms-modal/sms-modal.component';
   providers: [
     CanDeactivateGuard,
     FormatAddressPipe,
-    { provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true },
+    { provide: RouteReuseStrategy, useClass: CustomReuseStrategy }
     // { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true }
   ]
 })

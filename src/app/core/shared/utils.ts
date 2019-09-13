@@ -4,6 +4,7 @@ import { ContactGroup, Company } from 'src/app/contactgroups/shared/contact-grou
 import { Person } from '../models/person';
 import { StaffMember } from '../models/staff-member';
 import { DropdownListInfo } from '../services/shared.service';
+import { DetachedRouteHandle } from '@angular/router';
 export class AppUtils {
   public static prevRoute: string = '';
   public static prevRouteBU: string = '';
@@ -26,6 +27,7 @@ export class AppUtils {
   static listInfo: any;
   static openedWindows: any[] = [];
   static contactInfoForNotes: any;
+  static routeHandlers: {[key: string]: DetachedRouteHandle} = {};
 
   /**
    * Format a date/time into a string

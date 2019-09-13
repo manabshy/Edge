@@ -20,10 +20,10 @@ import { ContactgroupsDetailHomeManagementsComponent } from './contactgroups-det
 const routes: Routes = [
   { path: 'contact-centre', canActivate: [AuthGuardService],
     children: [
-    { path: '', component: ContactGroupsComponent },
+    { path: '', component: ContactGroupsComponent, data: { shouldDetach: true } },
     { path: 'detail/:personId',
       children: [
-        { path: '', component: ContactgroupsDetailComponent },
+        { path: '', component: ContactgroupsDetailComponent, data: { shouldDetach: true } },
         { path: 'people/:contactGroupId', component: ContactgroupsPeopleComponent, canDeactivate: [CanDeactivateGuard] },
         {path: 'edit', component: ContactgroupsDetailEditComponent, canDeactivate: [CanDeactivateGuard]},
         {path: 'leads', component: ContactgroupsDetailLeadsComponent},

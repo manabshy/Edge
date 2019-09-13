@@ -9,7 +9,7 @@ import { CanDeactivateGuard } from '../core/shared/can-deactivate.guard';
 const routes: Routes = [
   { path: 'company-centre', canActivate: [AuthGuardService],
     children: [
-      { path: '', component: CompanyComponent },
+      { path: '', component: CompanyComponent, data: { shouldDetach: true } },
       // { path: 'company', children: [
       //   { path: '', component: ContactgroupsCompanyEditComponent }
       // ] },

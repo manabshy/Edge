@@ -16,13 +16,13 @@ import { PropertyDetailEditComponent } from './property-detail-edit/property-det
 const routes: Routes = [
   { path: 'property-centre', canActivate: [AuthGuardService],
     children: [
-      { path: '', component: PropertyComponent },
+      { path: '', component: PropertyComponent, data: { shouldDetach: true } },
       // { path: 'company', children: [
       //   { path: '', component: ContactgroupsCompanyEditComponent }
       // ] },
       { path: 'detail/:id',
       children: [
-        { path: '', component: PropertyDetailComponent},
+        { path: '', component: PropertyDetailComponent, data: { shouldDetach: true }},
         {path: 'edit', component: PropertyDetailEditComponent, canDeactivate: [CanDeactivateGuard] },
         {path: 'instructions', component: PropertyDetailInstructionsComponent},
         {path: 'offers', component: PropertyDetailOffersComponent},
