@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Renderer2 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { Subject } from 'rxjs';
@@ -36,7 +36,7 @@ export class NoteModalComponent implements OnInit {
   };
   public keepOriginalOrder = (a) => a.key;
 
-  constructor(public bsModalRef: BsModalRef, private fb: FormBuilder, private contactGroupService: ContactGroupsService, private toastr: ToastrService) { }
+  constructor(public bsModalRef: BsModalRef, private fb: FormBuilder, private contactGroupService: ContactGroupsService, private toastr: ToastrService, private renderer: Renderer2) { }
 
   ngOnInit() {
     this.selectedPerson = this.data.person || null;
@@ -78,7 +78,8 @@ export class NoteModalComponent implements OnInit {
       textValue = textValue.slice(0, 0) + shortcut + ', ' + textValue.slice(0);
     }
     textValue = textValue.replace(/,\s*$/, '');
-    textControl.setValue(textValue);
+    textControl.setValue(textValue.trimEnd() + ' ');
+    this.renderer.selectRootElement('#note').focus();
   }
 
   action(value: boolean) {
