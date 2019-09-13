@@ -21,7 +21,8 @@ export class SubnavItemComponent implements OnInit {
   onClick() {
     const baseLink = this._router.url.substring(0, this._router.url.indexOf('?')) || this._router.url;
     const link = baseLink + '/'+ this.navLink;
-    this.sharedService.openLinkWindow(link);
+    this._router.navigateByUrl(link);
+    //this.sharedService.openLinkWindow(link);
   }
 
 }
