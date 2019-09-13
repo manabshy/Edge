@@ -80,12 +80,12 @@
     </div>
     <div class="col-12">
         <ng-container *ngIf="importantPersonNotes">
-          <div class="alert alert-danger small mb-2" *ngFor="let importantNote of importantPersonNotes">
+          <div class="alert alert-danger small mb-2 mr-2 d-inline-block" *ngFor="let importantNote of importantPersonNotes">
             <i class="fas fa-exclamation-circle fa-fw text-danger mr-1"></i> {{importantNote.text}}
           </div>
-          <div class="text-center mb-2">
-            <a class="small" [routerLink]="['../../../../detail/', searchedPersonDetails?.personId, 'notes' ]">
-              View All Notes
+          <div class="mb-2 d-inline-block">
+            <a class="small" [routerLink]="['notes']">
+              All Notes
             </a>
           </div>
         </ng-container>
@@ -190,19 +190,24 @@
       </app-subnav>
     </div>
   </div>
-  <div *ngIf="summaryTotals" class="mb-3">
+  <div class="mb-3">
     <h5>Info</h5>
-    <app-subnav>
-      <app-subnav-item *ngFor="let item of subNav" [navLink]="item?.link+'?docTitle='+item?.label+' | '+searchedPersonDetails?.addressee">
-        {{item?.label}}
-        <ng-container *ngIf="isObject(summaryTotals[item?.value]); else simpleValue">
-          <span class="badge badge-pill badge-success mr-1"> {{summaryTotals[item?.value]?.active}} </span>
-          <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value]?.total}}</span>
-        </ng-container>
-        <ng-template #simpleValue>
-          <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value] || '0'}}</span>
-        </ng-template>
-      </app-subnav-item>
-    </app-subnav>
+    <div class="text-center" *ngIf="!summaryTotals">
+      <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading info ...
+    </div>
+    <ng-container *ngIf="summaryTotals">
+      <app-subnav>
+        <app-subnav-item *ngFor="let item of subNav" [navLink]="item?.link+'?docTitle='+item?.label+' | '+searchedPersonDetails?.addressee">
+          {{item?.label}}
+          <ng-container *ngIf="isObject(summaryTotals[item?.value]); else simpleValue">
+            <span class="badge badge-pill badge-success mr-1"> {{summaryTotals[item?.value]?.active}} </span>
+            <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value]?.total}}</span>
+          </ng-container>
+          <ng-template #simpleValue>
+            <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value] || '0'}}</span>
+          </ng-template>
+        </app-subnav-item>
+      </app-subnav>
+    </ng-container>
   </div>
 </div>

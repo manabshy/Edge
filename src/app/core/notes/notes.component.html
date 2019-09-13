@@ -13,11 +13,10 @@
     </div>
     <div class="list-group-item" *ngFor="let note of notes">
       <div class="row">
-        <div class="col-auto pr-sm-0"
-          [ngClass]="(note?.isPinned ? '' : 'd-none d-sm-block') + ' ' + (note?.isPinned ? 'visible' : 'invisible')">
+        <div class="col-auto pr-0" *ngIf="note?.isPinned">
           <i class="fas fa-thumbtack fa-fw" tooltip="Pinned to top"></i>
         </div>
-        <div class="col-auto p-sm-0" [ngClass]="(note?.isImportant ? '' : 'd-none d-sm-block') + ' ' + (note?.isImportant ? 'visible' : 'invisible')">
+        <div class="col-auto" *ngIf="note?.isImportant">
           <i class="fas fa-exclamation-circle text-danger fa-fw" tooltip="Important"></i>
         </div>
         <div class="col text-right">

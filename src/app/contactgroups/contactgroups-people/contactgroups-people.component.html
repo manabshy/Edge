@@ -131,7 +131,7 @@
       <ng-container *ngIf="!isNewContactGroup  || isTypePicked">
         <div class="row mb-3">
           <div class="col-12">
-            <div class="alert alert-danger small mb-2" *ngFor="let importantNote of importantContactNotes">
+            <div class="alert alert-danger small mb-2 mr-2 d-inline-block" *ngFor="let importantNote of importantContactNotes">
                 <i class="fas fa-exclamation-circle fa-fw text-danger mr-1"></i> {{importantNote.text}}
             </div>
           </div>
@@ -200,12 +200,12 @@
                     </ng-template>
                     <div class="col-12">
                       <ng-container *ngIf="person?.personNotes?.length">
-                        <div class="alert alert-danger small mb-2" *ngFor="let importantNote of person?.personNotes">
+                        <div class="alert alert-danger small mb-2 mr-2 d-inline-block" *ngFor="let importantNote of person?.personNotes">
                           <i class="fas fa-exclamation-circle fa-fw text-danger mr-1"></i> {{importantNote.text}}
                         </div>
-                        <div class="text-center mb-2">
+                        <div class="mb-2 d-inline-block">
                           <a class="small" [routerLink]="['../../../../detail/', person?.personId, 'notes' ]">
-                            View All Notes
+                            All Notes
                           </a>
                         </div>
                       </ng-container>
