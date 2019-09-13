@@ -5,6 +5,17 @@ import { Person } from '../models/person';
 import { StaffMember } from '../models/staff-member';
 import { DropdownListInfo } from '../services/shared.service';
 import { DetachedRouteHandle } from '@angular/router';
+
+
+export interface IRouteConfigData {
+  shouldDetach: boolean;
+}
+
+export interface ICachedRoute {
+  handle: DetachedRouteHandle;
+  data: IRouteConfigData;
+}
+
 export class AppUtils {
   public static prevRoute: string = '';
   public static prevRouteBU: string = '';
@@ -27,7 +38,7 @@ export class AppUtils {
   static listInfo: any;
   static openedWindows: any[] = [];
   static contactInfoForNotes: any;
-  static routeHandlers: {[key: string]: DetachedRouteHandle} = {};
+  static routeCache = new Map<string, ICachedRoute>();
 
   /**
    * Format a date/time into a string

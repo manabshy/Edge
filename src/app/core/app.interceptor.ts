@@ -3,7 +3,7 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse
 import { Observable, throwError } from 'rxjs';
 import { WedgeError } from './services/shared.service';
 import { catchError } from 'rxjs/operators';
-import { AppUtils } from './shared/utils';
+import { AppUtils, ICachedRoute } from './shared/utils';
 
 @Injectable()
 export class AppInterceptor implements HttpInterceptor {
@@ -12,7 +12,7 @@ export class AppInterceptor implements HttpInterceptor {
       setHeaders : {'Content-Type': 'application/json'}
     });
     if(req.method !== "GET") {
-      AppUtils.routeHandlers = {};
+      AppUtils.routeCache = new Map<string, ICachedRoute>();
     }
     return next.handle(jsonReq).pipe(catchError(err => this.handleError(err)));
   }
