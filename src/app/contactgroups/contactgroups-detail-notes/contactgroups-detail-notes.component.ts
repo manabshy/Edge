@@ -19,6 +19,8 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
   contactGroupId: number;
   contactGroupNotes: ContactNote[];
   contactGroups: BasicContactGroup[];
+  contactGroupIds: number[];
+  contactGroupInfo: BasicContactGroup[];
   constructor(private contactGroupService: ContactGroupsService,
               private route: ActivatedRoute,
               private sharedService: SharedService) {super(); }
@@ -63,6 +65,17 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
        }
       }
     });
+
+    this.contactGroupService.contactInfoForNotes$.subscribe(data => {
+      this.contactGroupInfo = data;
+      console.log('contact groups on detail notes page....', data)
+    });
+    // if(this.personNotes){
+    //    this.personNotes.forEach(x=>{
+    //     this.contactGroupIds.push(+x.contactGroupId);
+    //   })
+    //   console.log('contactgroup ids for notes', this.contactGroupIds);
+    // }
   }
 
   getPersonNotes(personId: number) {
@@ -77,7 +90,7 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
     });
   }
   getContactGroups(personId: number) {
-    this.contactGroupService.getPersonContactGroups(personId).subscribe(data => {
+    this.contactGroupService.getPersonContactGroups(personId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
      if(data) {
        console.log('here notes details......', data)
         this.contactGroups = data;

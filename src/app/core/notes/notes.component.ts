@@ -21,7 +21,7 @@ export class NotesComponent implements OnInit, OnChanges {
   tests: any;
   contactPeople: Person[];
   contact: Person[];
-  
+  contactGroupIds: number[] = [];
   groupAddressee: any;
   addressee: any;
   order = ['isPinned', 'createDate'];
@@ -56,6 +56,19 @@ export class NotesComponent implements OnInit, OnChanges {
       this.noteData.people !== undefined ? this.contactPeople = this.noteData.people : this.contactPeople = [];
       this.noteData.group ? this.groupAddressee = this.noteData.group.addressee : this.groupAddressee = [];
    }
+   if(this.personNotes){
+    this.personNotes.forEach(x=>{
+     if(+x.contactGroupId!==0) {
+       this.contactGroupIds.push(+x.contactGroupId);
+     }
+   })
+   console.log('contactgroup ids for notes', this.contactGroupIds);
+   let id =  new Set(this.contactGroupIds);
+   console.log('contactgroup ids for notes', id);
+  //  let people = this.contactGroups.filter(x=>x.contactGroupId==id.entries['0'].value)
+   console.log('ids',id)
+   
+ }
   }
 
 

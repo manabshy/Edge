@@ -40,6 +40,7 @@ export class ContactgroupsDetailComponent implements OnInit {
       this.searchedPersonDetails = null;
       this.searchedPersonContactGroups = null;
       this.init();
+     
     });
   }
 
@@ -57,10 +58,11 @@ export class ContactgroupsDetailComponent implements OnInit {
     this.getSearchedPersonDetails(this.personId);
     this.getSearchedPersonContactGroups(this.personId);
     this.getSearchedPersonSummaryInfo(this.personId);
+    console.log('contact groups on detail page....', this.searchedPersonContactGroups)
     if(this.searchedPersonContactGroups){
       AppUtils.contactInfoForNotes = this.searchedPersonContactGroups;
+      // this.contactGroupService.contactInfoForNotes$.subscribe(data => console.log('contact groups on detail page....', data));
     }
-    this.contactGroupService.contactInfoForNotes$.subscribe(data => console.log('in detail page....', data));
   }
 
   setDropdownLists() {
@@ -102,8 +104,8 @@ export class ContactgroupsDetailComponent implements OnInit {
 
   getSearchedPersonContactGroups(personId: number) {
     this.contactGroupService.getPersonContactGroups(personId).subscribe(data => {
-      console.log(data);
      if (data) {
+       console.log('........', data)
         this.searchedPersonContactGroups = data;
         this.contactGroupService.contactInfoChanged(data);
      }
