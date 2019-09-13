@@ -20,6 +20,7 @@ export class NotesComponent implements OnInit, OnChanges {
   notes: any;
   tests: any;
   contactPeople: Person[];
+  personNoteAddressees = [];
   contact: Person[];
   contactGroupIds: number[] = [];
   groupAddressee: any;
@@ -28,6 +29,7 @@ export class NotesComponent implements OnInit, OnChanges {
   reverse = true;
   isUpdating = false;
   contactGroups: BasicContactGroup[];
+  personId: number;
 
   constructor(private sharedService: SharedService, private contactGroupService: ContactGroupsService) { }
 
@@ -39,6 +41,8 @@ export class NotesComponent implements OnInit, OnChanges {
           this.contactGroups.forEach(x=>{
             this.contact = x.contactPeople;
           })
+          this.setPersonNoteAddressees();
+          this.setAddressees();
         }
          this.addressee = this.contact.map(x=>x.addressee);
     });
@@ -61,17 +65,53 @@ export class NotesComponent implements OnInit, OnChanges {
      if(+x.contactGroupId!==0) {
        this.contactGroupIds.push(+x.contactGroupId);
      }
+     this.personId = this.personNotes.find(x=>x.personId).personId;
    })
-   console.log('contactgroup ids for notes', this.contactGroupIds);
-   let id =  new Set(this.contactGroupIds);
-   console.log('contactgroup ids for notes', id);
-  //  let people = this.contactGroups.filter(x=>x.contactGroupId==id.entries['0'].value)
-   console.log('ids',id)
-   
+   console.log('personid for...', this.personId)
+   console.log('ids for...', this.contactGroupIds)
  }
   }
 
-
+  private setPersonNoteAddressees() {
+    console.log('contactgroup ids for notes', this.contactGroupIds);
+    let id = new Set(this.contactGroupIds);
+    let output;
+    console.log('contactgroups for notes...', this.contactGroups);
+    for (const item of this.contactGroups) {
+      if (id.has(item.contactGroupId)) {
+        id.forEach(x => {
+          console.log('noooooooo....................')
+          if (+item.contactGroupId === +x) {
+            console.log('contact people here...', item.contactPeople, 'id:', item.contactGroupId);
+            output = {
+              addressee: item.contactPeople.map(x => x.addressee),
+              groupId: item.contactGroupId
+            }
+            this.personNoteAddressees.push(output);
+          }
+        })
+      }
+    }
+    console.log('result.....', this.personNoteAddressees);
+  }
+  private setAddressees() {
+    let output;
+    let person;
+    this.contactGroups.forEach(c=>{
+      c.contactPeople.forEach(x=>{
+        person = x;
+      });
+    });
+    output = {
+      addressee:'',
+      groupId: 0,
+      personId: this.personId,
+      personAddressee: person.addressee
+    };
+    this.personNoteAddressees.push(output);
+    console.log('person output', output);
+  }
+  
   setFlag(noteId: number, isImportantFlag: boolean) {
     console.log('note id here.....', noteId);
     this.notes.forEach((x: ContactNote) => {
