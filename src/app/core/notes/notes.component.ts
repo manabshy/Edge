@@ -74,15 +74,15 @@ export class NotesComponent implements OnInit, OnChanges {
        if (x.contactGroupId) {
         console.log('contact note here.....', x);
           this.contactGroupService.updateContactGroupNote(x).subscribe((data) => {
-            if (data) { location.reload(); }
-            // this.contactGroupService.contactGroupNotesChanged(x);
+            // if (data) { location.reload(); }
+            this.contactGroupService.notesChanged(x);
             this.isUpdating = false;
           });
        } else {
         console.log('person note here.....', x);
          this.contactGroupService.updatePersonNote(x).subscribe((data) => {
-          if (data) { location.reload(); }
-          //  this.contactGroupService.personNotesChanged(x);
+          // if (data) { location.reload(); }
+           this.contactGroupService.notesChanged(x);
             this.isUpdating = false;
           });
        }

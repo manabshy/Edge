@@ -41,9 +41,9 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
     this.route.params.subscribe(params => {
       this.contactGroupId = +params['contactGroupId'] || 0;
       this.personId = +params['personId'] || 0;
-      
     });
 
+    
     if (this.contactGroupId) {
       console.log('contact group id', this.contactGroupId);
       this.getContactGroupNotes(this.contactGroupId);
@@ -52,6 +52,17 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
       this.getPersonNotes(this.personId);
       this.getContactGroups(this.personId);
     }
+    
+    this.contactGroupService.noteChanges$.subscribe(data => {
+      if (data) {
+        this.getPersonNotes(this.personId);
+        console.log('updated notes here', this.personNotes);
+       if(this.contactGroupId) {
+          this.getContactGroupNotes(this.contactGroupId);
+          console.log('updated notes here', this.contactGroupNotes);
+       }
+      }
+    });
   }
 
   getPersonNotes(personId: number) {

@@ -122,6 +122,16 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.personId = +params['personId'] || 0;
     });
     this.init();
+    this.contactGroupService.noteChanges$.subscribe(data => {
+      if (data) {
+        this.setImportantNotes();
+        this.contactGroupService.getContactGroupbyId(this.contactGroupId).subscribe(x => {
+          this.contactGroupDetails.contactNotes = x.contactNotes;
+        });
+        console.log('updated notes here', this.contactGroupDetails.contactNotes);
+      }
+      console.log('note changes here....', data);
+    });
   }
 
   init() {
@@ -377,7 +387,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
 setImportantNotes(){
   this.importantContactNotes = this.contactGroupDetails.contactNotes.filter(x=>x.isImportant && +x.contactGroupId === this.contactGroupId);
   this.importantPeopleNotes = this.contactGroupDetails.contactNotes.filter(x=>x.isImportant);
-  console.log('people notes', this.importantPeopleNotes);
+  console.log('important contact notes', this.importantContactNotes);
+  console.log('important people notes', this.importantPeopleNotes);
   this.contactGroupDetails.contactPeople.forEach(x => {
     x.personNotes = this.importantPeopleNotes.filter(p => p.personId === x.personId);
   });

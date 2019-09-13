@@ -19,6 +19,8 @@ contactGroupNotes: ContactNote[];
 private contactInfoAction$ = new Subject<BasicContactGroup[] | null >();
 private personNotesSubject = new Subject<ContactNote | null>();
 private contactGroupNotesSubject = new Subject<ContactNote | null>();
+private notesSubject = new Subject<ContactNote | null>();
+noteChanges$ = this.notesSubject.asObservable();
 contactInfoForNotes$ = this.contactInfoAction$.asObservable();
 personNotesChanges$ = this.personNotesSubject.asObservable();
 contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
@@ -54,6 +56,8 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
     return this.http.get<ContactGroupData>(url)
       .pipe(
         map(response => response.result),
+        tap(data => this.contactGroupNotes = data.contactNotes),
+        tap(data => console.log('contact notes here...', this.contactGroupNotes )),
         tap(data => console.log('contact group details here...', JSON.stringify(data)))
       );
   }
@@ -68,6 +72,8 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
     return this.http.get<PersonContactData>(url)
       .pipe(
         map(response => response.result),
+        tap(data => this.personNotes = data.personNotes),
+        tap(data => console.log('person notes here...', this.personNotes )),
         tap(data => console.log('person details here...', JSON.stringify(data)))
       );
   }
@@ -156,6 +162,7 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
     return this.http.get<ContactNoteData>(url).pipe(
       map(response => response.result),
       tap(data => this.personNotes = data),
+      tap(data => console.log('person notes here...', this.personNotes )),
       tap(data => console.log('notes here...', JSON.stringify(data))));
   }
 
@@ -190,7 +197,8 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
 
   updateContactGroupNote(contactGroupNote: ContactNote): Observable<ContactNote | any> {
     const url = `${AppConstants.baseContactGroupUrl}/${contactGroupNote.contactGroupId}/contactNotes/${contactGroupNote.id}`;
-    return this.http.put<ContactNoteData>(url, contactGroupNote).pipe(
+    return this.http.put<ContactNoteData>(url, contactGroupNote)
+    .pipe(
       map(response => response.result),
       tap(data => console.log('updated contactgroup note here...', JSON.stringify(data))));
   }
@@ -199,32 +207,44 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
     this.contactInfoAction$.next(info);
   }
 
-  personNotesChanged(note: ContactNote) {
-    let index;
-    this.personNotes ? index = this.personNotes.findIndex(x => x.id === note.id) : index = -1;
-    if (index !== -1) {
-      this.personNotes[index] = note;
-    } else {
-      this.personNotes.push(note);
+  // personNotesChanged(note: ContactNote) {
+  //   let index;
+  //   this.personNotes ? index = this.personNotes.findIndex(x => x.id === note.id) : index = -1;
+  //   if (index !== -1) {
+  //     this.personNotes[index] = note;
+  //   } else {
+  //    note.personId ? this.personNotes.push(note) : this.contactGroupNotes.push(note);
+  //   }
+  //   this.sortByPinnedAndDate(this.personNotes);
+  //   this.personNotesSubject.next(note);
+  // }
+  notesChanged(note: ContactNote) {
+    switch(true){
+      case !!note.personId:
+        console.log('personal notes in switch', this.personNotes);
+        this.notesSubject.next(note);
+        break;
+      case !!note.contactGroupId:
+        console.log('contact notes in switch', this.contactGroupNotes);
+          this.notesSubject.next(note);
     }
-    this.sortByPinnedAndDate(this.personNotes);
-    this.personNotesSubject.next(note);
   }
 
-  contactGroupNotesChanged(contactGroupNote: ContactNote) {
+  contactGroupNotesChanged(note: ContactNote) {
     let index;
-    this.contactGroupNotes ? index = this.contactGroupNotes.findIndex(x => x.id === contactGroupNote.id) : index = -1;
+    this.contactGroupNotes ? index = this.contactGroupNotes.findIndex(x => x.id === note.id) : index = -1;
     if (index !== -1) {
-      this.contactGroupNotes[index] = contactGroupNote;
+      this.contactGroupNotes[index] = note;
     } else {
-      this.contactGroupNotes.push(contactGroupNote);
+      note.contactGroupId ? this.contactGroupNotes.push(note) : this.personNotes.push(note);
     }
     this.sortByPinnedAndDate(this.contactGroupNotes);
-    this.contactGroupNotesSubject.next(contactGroupNote);
+    this.contactGroupNotesSubject.next(note);
   }
 
   sortByPinnedAndDate(notes) {
     if (notes) {
+      console.log('note for pinning', notes);
       notes.sort((a, b) => {
         const dateA = new Date(a.createDate);
         const dateB = new Date(b.createDate);

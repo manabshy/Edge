@@ -114,7 +114,8 @@ export class NoteModalComponent implements OnInit {
         if(data) {
           // this.personNote = data;
           // this.contactGroupService.personNotesChanged(this.personNote);
-          location.reload(true);
+         // location.reload(true);
+         this.contactGroupService.notesChanged(data);
           this.toastr.success('Note successfully added');
         }
         console.log('added person note with id', data);
@@ -129,7 +130,8 @@ export class NoteModalComponent implements OnInit {
         if(data){
           // this.contactGroupNote = data;
           // this.contactGroupService.contactGroupNotesChanged(this.contactGroupNote);
-          location.reload(true);
+        //  location.reload(true);
+        this.contactGroupService.notesChanged(data);
           this.toastr.success('Note successfully added');
         }
         console.log('added  contact group note', data);

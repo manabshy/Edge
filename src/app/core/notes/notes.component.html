@@ -1,5 +1,5 @@
 <div class="list-group">
-  <div class="list-group-item list-group-item-action text-center py-4" *ngIf="dataNote" (click)="addNote()">
+  <div class="list-group-item list-group-item-action text-center py-4" *ngIf="noteData" (click)="addNote()">
     <span class="btn-link">
       <i class="fas fa-sticky-note mr-2"></i> Add Note
     </span>
@@ -14,10 +14,10 @@
     <div class="list-group-item" *ngFor="let note of notes">
       <div class="row">
         <div class="col-auto pr-sm-0"
-          [ngClass]="(note.isPinned ? '' : 'd-none d-sm-block') + ' ' + (note.isPinned ? 'visible' : 'invisible')">
+          [ngClass]="(note?.isPinned ? '' : 'd-none d-sm-block') + ' ' + (note?.isPinned ? 'visible' : 'invisible')">
           <i class="fas fa-thumbtack fa-fw" tooltip="Pinned to top"></i>
         </div>
-        <div class="col-auto p-sm-0" [ngClass]="(note.isImportant ? '' : 'd-none d-sm-block') + ' ' + (note.isImportant ? 'visible' : 'invisible')">
+        <div class="col-auto p-sm-0" [ngClass]="(note?.isImportant ? '' : 'd-none d-sm-block') + ' ' + (note?.isImportant ? 'visible' : 'invisible')">
           <i class="fas fa-exclamation-circle text-danger fa-fw" tooltip="Important"></i>
         </div>
         <div class="col text-right">
