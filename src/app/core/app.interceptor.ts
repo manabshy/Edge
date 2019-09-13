@@ -12,7 +12,7 @@ export class AppInterceptor implements HttpInterceptor {
       setHeaders : {'Content-Type': 'application/json'}
     });
     if(req.method !== "GET") {
-      AppUtils.handlers = {};
+      AppUtils.routeHandlers = {};
     }
     return next.handle(jsonReq).pipe(catchError(err => this.handleError(err)));
   }
