@@ -17,7 +17,7 @@ export class NotesComponent implements OnInit, OnChanges {
   @Input() personName: string;
   @Input() personNotes: ContactNote[];
   @Input() contactGroupNotes: ContactNote[];
-  notes: any;
+  originalNotes: any;
   tests: any;
   contactPeople: Person[];
   personNoteAddressees = [];
@@ -30,11 +30,12 @@ export class NotesComponent implements OnInit, OnChanges {
   isUpdating = false;
   contactGroups: BasicContactGroup[];
   personId: number;
+  notes: any;
 
   constructor(private sharedService: SharedService, private contactGroupService: ContactGroupsService) { }
 
   ngOnInit() {
-    this.contactGroupService.contactInfoForNotes$.subscribe(data => 
+    this.contactGroupService.contactInfoForNotes$.subscribe(data =>
       {
         this.contactGroups = data; console.log('info here....', data);
         if(this.contactGroups){
@@ -46,7 +47,7 @@ export class NotesComponent implements OnInit, OnChanges {
         }
          this.addressee = this.contact.map(x=>x.addressee);
     });
-    
+
     this.init();
   }
 
@@ -55,7 +56,11 @@ export class NotesComponent implements OnInit, OnChanges {
   }
 
   init() {
-    this.notes = this.personNotes || this.contactGroupNotes;
+    this.originalNotes = this.personNotes || this.contactGroupNotes;
+    if(this.originalNotes) {
+      this.notes = this.originalNotes.slice(0,16);
+      console.log('scrolled notes', this.notes);
+    }
    if (this.noteData) {
       this.noteData.people !== undefined ? this.contactPeople = this.noteData.people : this.contactPeople = [];
       this.noteData.group ? this.groupAddressee = this.noteData.group.addressee : this.groupAddressee = [];
@@ -111,10 +116,10 @@ export class NotesComponent implements OnInit, OnChanges {
     this.personNoteAddressees.push(output);
     console.log('person output', output);
   }
-  
+
   setFlag(noteId: number, isImportantFlag: boolean) {
     console.log('note id here.....', noteId);
-    this.notes.forEach((x: ContactNote) => {
+    this.originalNotes.forEach((x: ContactNote) => {
       if (x.id === noteId) {
         if (isImportantFlag) {
           x.isImportant ? x.isImportant = false : x.isImportant = true;
@@ -142,6 +147,14 @@ export class NotesComponent implements OnInit, OnChanges {
       }});
   }
 
+  onScrollDown() {
+    AppUtils.setupInfintiteScroll(this.originalNotes, this.notes);
+    console.log('scrolled down!!');
+  }
+
+  onScrollUp() {
+    console.log('scrolled up!!');
+  }
  addNote() {
    if (this.noteData) {
       this.sharedService.addNote(this.noteData);

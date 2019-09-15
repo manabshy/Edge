@@ -54,11 +54,12 @@ import { AppConstants } from './shared/app-constants';
 import { SubnavItemComponent } from './subnav-item/subnav-item.component';
 import { SmsModalComponent } from './sms-modal/sms-modal.component';
 import { CustomReuseStrategy } from './share/custom-reuse-strategy';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 @NgModule({
   declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent,
     ConfirmModalComponent, PropertyFinderComponent, FormatAddressPipe, ScoreBadgeComponent,
-    ErrorModalComponent, AddressComponent, SignerComponent, AutocompleteOffDirective, HighlightPipe, 
+    ErrorModalComponent, AddressComponent, SignerComponent, AutocompleteOffDirective, HighlightPipe,
     NoteModalComponent, NotesComponent, TelephoneComponent, TelephoneModalComponent, SubnavItemComponent, SubnavComponent, SmsModalComponent],
   exports: [
     RoundingPipe, TruncatingPipe, ShortenNamePipe, FormatAddressPipe, HighlightPipe, AutocompleteOffDirective,
@@ -75,6 +76,7 @@ import { CustomReuseStrategy } from './share/custom-reuse-strategy';
     OrderModule,
     RouterModule,
     BrowserAnimationsModule,
+    InfiniteScrollModule,
     BsDropdownModule.forRoot(),
     CollapseModule.forRoot(),
     TabsModule.forRoot(),
