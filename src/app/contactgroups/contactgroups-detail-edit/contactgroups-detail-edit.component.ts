@@ -642,7 +642,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
       this.backToFinder.emit(true);
       this.makeCanvasInvisible(this.isOffCanvasVisible);
     } else {
-      this._location.back();
+      this.sharedService.back();
     }
   }
   addNewPerson(id: number) {

@@ -19,6 +19,7 @@ export interface ICachedRoute {
 export class AppUtils {
   public static prevRoute: string = '';
   public static prevRouteBU: string = '';
+  public static deactivateRoute: string = '';
   public static homeSelectedTab: number;
   public static dashboardSelectedTab: number;
   public static isDiarySearchVisible: boolean = false;

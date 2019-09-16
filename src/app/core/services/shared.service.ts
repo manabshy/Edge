@@ -13,6 +13,7 @@ import { PhoneNumberUtil } from 'google-libphonenumber';
 import { Location } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { AbstractControl } from '@angular/forms';
+import { Router } from '@angular/router';
 
 
 @Injectable({
@@ -37,6 +38,7 @@ export class SharedService {
   // }
   constructor(private http: HttpClient,
               private _location: Location,
+              private _router: Router,
               private titleService: Title,
               private modalService: BsModalService) {
 
@@ -44,7 +46,12 @@ export class SharedService {
 
   back() {
     if (!(window.opener && window.opener !== window)) {
-      this._location.back();
+      if(AppUtils.deactivateRoute) {
+        this._router.navigate([AppUtils.deactivateRoute]);
+        AppUtils.deactivateRoute = '';
+      } else {
+        this._location.back();
+      }
     } else {
       window.close();
     }

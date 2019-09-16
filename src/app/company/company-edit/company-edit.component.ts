@@ -281,7 +281,7 @@ export class CompanyEditComponent implements OnInit {
     this.companyForm.markAsPristine();
     this.isSubmitting = false;
     this.toastr.success('Company successfully saved');
-    this._location.back();
+    this.sharedService.back();
    console.log('complete');
   }
   canDeactivate(): boolean {
