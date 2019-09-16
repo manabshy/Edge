@@ -256,7 +256,7 @@ export class PropertyDetailEditComponent implements OnInit {
   }
 
   cancel() {
-    this._location.back();
+    this.sharedService.back();
   }
 
 }

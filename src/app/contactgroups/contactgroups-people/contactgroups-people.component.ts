@@ -3,7 +3,7 @@ import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Person, BasicPerson } from 'src/app/core/models/person';
 import { ContactGroup, PeopleAutoCompleteResult, ContactGroupsTypes,
-         ContactType, CompanyAutoCompleteResult, Company, PotentialDuplicateResult, ContactGroupsNote } from '../shared/contact-group';
+         ContactType, CompanyAutoCompleteResult, Company, PotentialDuplicateResult, ContactNote } from '../shared/contact-group';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -34,6 +34,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   selectedPeople: Person[] = [];
   foundPeople: PeopleAutoCompleteResult[];
   contactGroupDetails: ContactGroup;
+  importantContactNotes: ContactNote[];
   contactGroupDetailsForm: FormGroup;
   personFinderForm: FormGroup;
   selectedPerson: Person;
@@ -67,15 +68,15 @@ export class ContactgroupsPeopleComponent implements OnInit {
   companyFinderForm: FormGroup;
   isCloned: boolean;
   clonedContact: ContactGroup;
-  contactGroupNotes: ContactGroupsNote[];
   formErrors = FormErrors;
   isCompanyAdded = true;
+  importantPeopleNotes: ContactNote[];
   get dataNote() {
     if(this.contactGroupDetails) {
       return {
         group: this.contactGroupDetails,
         people: this.contactGroupDetails.contactPeople,
-        notes: this.contactGroupNotes
+        notes: this.contactGroupDetails.contactNotes
       }
     }
     return null;
@@ -121,6 +122,16 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.personId = +params['personId'] || 0;
     });
     this.init();
+    this.contactGroupService.noteChanges$.subscribe(data => {
+      if (data) {
+        this.setImportantNotes();
+        this.contactGroupService.getContactGroupbyId(this.contactGroupId).subscribe(x => {
+          this.contactGroupDetails.contactNotes = x.contactNotes;
+        });
+        console.log('updated notes here', this.contactGroupDetails.contactNotes);
+      }
+      console.log('note changes here....', data);
+    });
   }
 
   init() {
@@ -174,6 +185,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
     if(this.contactGroupId) {
       this.getContactGroupById(this.contactGroupId)
+
     } else {
       this.contactGroupDetails = {} as ContactGroup;
       this.contactGroupDetails.contactPeople = [];
@@ -217,7 +229,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.companyFinderForm.valueChanges
       .pipe(debounceTime(1000), distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)))
       .subscribe(data => this.findCompany(data));
-    this.getContactGroupNotes(this.contactGroupId);
   }
 
   setDropdownLists(){
@@ -244,6 +255,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
       .getContactGroupbyId(contactGroupId)
       .subscribe(data => {
         this.contactGroupDetails = data;
+        this.setImportantNotes();
+        console.log('contact people', this.contactGroupDetails);
         this.initialContactGroupLength = this.contactGroupDetails.contactPeople.length;
         this.populateFormDetails(data);
         this.addSelectedPeople();
@@ -254,9 +267,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.isTypePicked = true;
       });
   }
-  getContactGroupNotes(contactGroupId: number){
-    this.contactGroupService.getContactGroupNotes(contactGroupId).subscribe(data=> this.contactGroupNotes = data);
-  }
+
   getContactGroupFirstPerson(personId: number, isSelectedTypeCompany: boolean) {
     this.isLoadingNewPersonVisible = true;
     this.contactGroupService.getPerson(personId).subscribe(data => {
@@ -372,6 +383,16 @@ export class ContactgroupsPeopleComponent implements OnInit {
     }
    });
   }
+
+setImportantNotes(){
+  this.importantContactNotes = this.contactGroupDetails.contactNotes.filter(x=>x.isImportant && +x.contactGroupId === this.contactGroupId);
+  this.importantPeopleNotes = this.contactGroupDetails.contactNotes.filter(x=>x.isImportant);
+  console.log('important contact notes', this.importantContactNotes);
+  console.log('important people notes', this.importantPeopleNotes);
+  this.contactGroupDetails.contactPeople.forEach(x => {
+    x.personNotes = this.importantPeopleNotes.filter(p => p.personId === x.personId);
+  });
+}
 
   editSelectedCompany(id: number, newCompany?: boolean) {
     event.preventDefault();
@@ -511,7 +532,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   showPersonWarning() {
     this.contactGroupDetails.contactPeople.forEach(x=>{
       x.warning = this.sharedService.showWarning(x.warningStatusId, this.warnings, x.warningStatusComment)
-    }); 
+    });
   }
 
   addSelectedPeople() {

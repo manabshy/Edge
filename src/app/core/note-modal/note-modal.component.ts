@@ -1,10 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Renderer2 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { Subject } from 'rxjs';
 import { Person } from '../models/person';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
-import { PersonNote, ContactGroup, ContactGroupsNote } from 'src/app/contactgroups/shared/contact-group';
+import { ContactGroup, ContactNote } from 'src/app/contactgroups/shared/contact-group';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -19,8 +19,8 @@ export class NoteModalComponent implements OnInit {
   selectedPerson: Person;
   selectedContactGroup: ContactGroup;
   isPersonNote: boolean;
-  personNote: PersonNote;
-  contactGroupNote: ContactGroupsNote;
+  personNote: ContactNote;
+  contactGroupNote: ContactNote;
   noteForm: FormGroup;
   shortcuts = {
     'LVM': 'Left voice mail',
@@ -36,7 +36,7 @@ export class NoteModalComponent implements OnInit {
   };
   public keepOriginalOrder = (a) => a.key;
 
-  constructor(public bsModalRef: BsModalRef, private fb: FormBuilder, private contactGroupService: ContactGroupsService, private toastr: ToastrService) { }
+  constructor(public bsModalRef: BsModalRef, private fb: FormBuilder, private contactGroupService: ContactGroupsService, private toastr: ToastrService, private renderer: Renderer2) { }
 
   ngOnInit() {
     this.selectedPerson = this.data.person || null;
@@ -78,7 +78,8 @@ export class NoteModalComponent implements OnInit {
       textValue = textValue.slice(0, 0) + shortcut + ', ' + textValue.slice(0);
     }
     textValue = textValue.replace(/,\s*$/, '');
-    textControl.setValue(textValue);
+    textControl.setValue(textValue.trimEnd() + ' ');
+    this.renderer.selectRootElement('#note').focus();
   }
 
   action(value: boolean) {
@@ -104,16 +105,15 @@ export class NoteModalComponent implements OnInit {
     if (note && this.selectedPerson) {
       note.personId = this.selectedPerson.personId;
       this.contactGroupService.addPersonNote(note).subscribe(data => {
-        if(data) {
+        if (data) {
           this.toastr.success('Note successfully added');
         }
       });
     } else if (note && this.data.personId) {
       note.personId = this.data.personId;
       this.contactGroupService.addPersonNote(note).subscribe(data => {
-        if(data) {
-          this.personNote = data;
-          this.contactGroupService.personNotesChanged(this.personNote);
+        if (data) {
+         this.contactGroupService.notesChanged(data);
           this.toastr.success('Note successfully added');
         }
         console.log('added person note with id', data);
@@ -125,9 +125,8 @@ export class NoteModalComponent implements OnInit {
     if (note && this.selectedContactGroup) {
       note.contactGroupId = this.selectedContactGroup.contactGroupId;
       this.contactGroupService.addContactGroupNote(note).subscribe(data => {
-        if(data){
-          this.contactGroupNote = data;
-          this.contactGroupService.contactGroupNotesChanged(this.contactGroupNote);
+        if (data) {
+        this.contactGroupService.notesChanged(data);
           this.toastr.success('Note successfully added');
         }
         console.log('added  contact group note', data);

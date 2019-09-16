@@ -2,9 +2,9 @@
   <div class="col-lg-3 col-xl-2 bg-dark side-nav" *ngIf="isLoggedIn"><app-mainmenu></app-mainmenu></div>
   <div class="col" [ngClass]="{'fade-in': isFading}">
     <div toastContainer></div>
-    <div class="col text-muted nav-placeholder" *ngIf="navPlaceholder">
+    <!-- <div class="col text-muted nav-placeholder" *ngIf="navPlaceholder">
       <small>{{navPlaceholder}}</small>
-    </div>
+    </div> -->
     <router-outlet></router-outlet>
     <button type="button" class="btn btn-link scroll-top text-center" (click)="scrollTop()" *ngIf="isScrollTopVisible"><i class="fas fa-chevron-up"></i><br>Scroll top</button>
   </div>

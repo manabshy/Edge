@@ -7,7 +7,8 @@ export interface ContactGroup {
   contactType: ContactType;
   contactGroupId: number;
   addressee: string;
-  notes: ContactGroupsNote[];
+  notes: ContactNote[];
+  contactNotes: ContactNote[];
   // notes?: string;
   contactPeople: Person[];
   title?: string;
@@ -86,23 +87,20 @@ export interface ContactAddress extends Address {
   postCode: string;
   countryId: number;
 }
-export interface ContactGroupsNote {
-  contactNoteId: number;
-  contactGroupId: number;
+export interface BaseNote {
+  id: number;
   text: string;
   isImportant: boolean;
   isPinned: boolean;
   createDate: Date;
   createdBy: number;
 }
-export interface PersonNote {
-  personNoteId: number;
+export interface ContactNote extends BaseNote {
+  contactGroupId?: number;
+  personId?: number;
+}
+export interface PersonNote extends BaseNote {
   personId: number;
-  text: string;
-  isImportant: boolean;
-  isPinned: boolean;
-  createDate: Date;
-  createdBy: number;
 }
 export interface AutoCompleteOption {
   isNameSearch: boolean;
@@ -238,8 +236,8 @@ export interface PersonSummaryFiguresData extends ResultData {
 export interface PersonContactData extends ResultData {
   result: Person;
 }
-export interface ContactGroupsNoteData extends ResultData {
-  result: ContactGroupsNote[];
+export interface ContactNoteData extends ResultData {
+  result: ContactNote[];
 }
 export interface PersonNoteData extends ResultData {
   result: PersonNote[];

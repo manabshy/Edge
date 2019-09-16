@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { AppConstants, FormErrors, ValidationMessages } from 'src/app/core/shared/app-constants';
@@ -281,7 +281,7 @@ export class CompanyEditComponent implements OnInit {
     this.companyForm.markAsPristine();
     this.isSubmitting = false;
     this.toastr.success('Company successfully saved');
-    this._location.back();
+    this.sharedService.back();
    console.log('complete');
   }
   canDeactivate(): boolean {
@@ -292,5 +292,9 @@ export class CompanyEditComponent implements OnInit {
   }
   cancel() {
     this.sharedService.back();
+  }
+
+  clearControlValue(control:AbstractControl){
+    this.sharedService.clearControlValue(control);
   }
 }

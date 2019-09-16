@@ -25,6 +25,7 @@ export class CanDeactivateGuard implements CanDeactivate<CanComponentDeactivate>
       AppUtils.prevRoute = AppUtils.prevRouteBU;
 
       if(!component.canDeactivate()) {
+        AppUtils.deactivateRoute = AppUtils.prevRoute;
         const subject = new Subject<boolean>();
         const initialState = {
           title: 'If you leave your current changes will be lost',

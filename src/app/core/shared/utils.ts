@@ -4,9 +4,22 @@ import { ContactGroup, Company } from 'src/app/contactgroups/shared/contact-grou
 import { Person } from '../models/person';
 import { StaffMember } from '../models/staff-member';
 import { DropdownListInfo } from '../services/shared.service';
+import { DetachedRouteHandle } from '@angular/router';
+
+
+export interface IRouteConfigData {
+  shouldDetach: boolean;
+}
+
+export interface ICachedRoute {
+  handle: DetachedRouteHandle;
+  data: IRouteConfigData;
+}
+
 export class AppUtils {
   public static prevRoute: string = '';
   public static prevRouteBU: string = '';
+  public static deactivateRoute: string = '';
   public static homeSelectedTab: number;
   public static dashboardSelectedTab: number;
   public static isDiarySearchVisible: boolean = false;
@@ -25,6 +38,8 @@ export class AppUtils {
   static currentStaffMemberGlobal: StaffMember;
   static listInfo: any;
   static openedWindows: any[] = [];
+  static contactInfoForNotes: any;
+  static routeCache = new Map<string, ICachedRoute>();
 
   /**
    * Format a date/time into a string

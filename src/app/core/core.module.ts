@@ -8,7 +8,7 @@ import { AppInterceptor } from './app.interceptor';
 import { CacheInterceptor } from './cache.interceptor';
 import { BasicSearchComponent } from './basic-search/basic-search.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, RouteReuseStrategy } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // ngx bootstrap imports
@@ -53,11 +53,13 @@ import { HighlightPipe } from './shared/highlight.pipe';
 import { AppConstants } from './shared/app-constants';
 import { SubnavItemComponent } from './subnav-item/subnav-item.component';
 import { SmsModalComponent } from './sms-modal/sms-modal.component';
+import { CustomReuseStrategy } from './share/custom-reuse-strategy';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 @NgModule({
   declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent,
     ConfirmModalComponent, PropertyFinderComponent, FormatAddressPipe, ScoreBadgeComponent,
-    ErrorModalComponent, AddressComponent, SignerComponent, AutocompleteOffDirective, HighlightPipe, 
+    ErrorModalComponent, AddressComponent, SignerComponent, AutocompleteOffDirective, HighlightPipe,
     NoteModalComponent, NotesComponent, TelephoneComponent, TelephoneModalComponent, SubnavItemComponent, SubnavComponent, SmsModalComponent],
   exports: [
     RoundingPipe, TruncatingPipe, ShortenNamePipe, FormatAddressPipe, HighlightPipe, AutocompleteOffDirective,
@@ -74,6 +76,7 @@ import { SmsModalComponent } from './sms-modal/sms-modal.component';
     OrderModule,
     RouterModule,
     BrowserAnimationsModule,
+    InfiniteScrollModule,
     BsDropdownModule.forRoot(),
     CollapseModule.forRoot(),
     TabsModule.forRoot(),
@@ -101,7 +104,8 @@ import { SmsModalComponent } from './sms-modal/sms-modal.component';
   providers: [
     CanDeactivateGuard,
     FormatAddressPipe,
-    { provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true },
+    { provide: RouteReuseStrategy, useClass: CustomReuseStrategy }
     // { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true }
   ]
 })

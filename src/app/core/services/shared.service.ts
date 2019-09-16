@@ -12,6 +12,8 @@ import { NoteModalComponent } from '../note-modal/note-modal.component';
 import { PhoneNumberUtil } from 'google-libphonenumber';
 import { Location } from '@angular/common';
 import { Title } from '@angular/platform-browser';
+import { AbstractControl } from '@angular/forms';
+import { Router } from '@angular/router';
 
 
 @Injectable({
@@ -36,6 +38,7 @@ export class SharedService {
   // }
   constructor(private http: HttpClient,
               private _location: Location,
+              private _router: Router,
               private titleService: Title,
               private modalService: BsModalService) {
 
@@ -43,7 +46,12 @@ export class SharedService {
 
   back() {
     if (!(window.opener && window.opener !== window)) {
-      this._location.back();
+      if(AppUtils.deactivateRoute) {
+        this._router.navigate([AppUtils.deactivateRoute]);
+        AppUtils.deactivateRoute = '';
+      } else {
+        this._location.back();
+      }
     } else {
       window.close();
     }
@@ -53,12 +61,20 @@ export class SharedService {
     this.titleService.setTitle(title);
   }
 
+  clearControlValue(control: AbstractControl){
+    if(control.value){
+      control.setValue('');
+      control.updateValueAndValidity();
+      control.parent.markAsDirty();
+    }
+  }
+
   openLinkWindow(link: string) {
     const width = Math.floor(Math.random() * 100) + 860;
     const height = Math.floor(Math.random() * 100) + 500;
     const left = window.top.outerWidth / 2 + window.top.screenX - ( 960 / 2);
     const top = window.top.outerHeight / 2 + window.top.screenY - ( 600 / 2);
-    const w = window.open(link, '_blank');
+    const w = window.open(link, '_self');
     AppUtils.openedWindows.push(w);
     setTimeout(()=>{
       AppUtils.openedWindows.forEach(x=>{
