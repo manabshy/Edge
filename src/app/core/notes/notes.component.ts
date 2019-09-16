@@ -58,7 +58,7 @@ export class NotesComponent implements OnInit, OnChanges {
   init() {
     this.originalNotes = this.personNotes || this.contactGroupNotes;
     if(this.originalNotes) {
-      this.notes = this.originalNotes.slice(0,16);
+      this.notes = this.originalNotes.slice(0,10);
       console.log('scrolled notes', this.notes);
     }
    if (this.noteData) {
@@ -72,8 +72,6 @@ export class NotesComponent implements OnInit, OnChanges {
      }
      this.personId = this.personNotes.find(x=>x.personId).personId;
    })
-   console.log('personid for...', this.personId)
-   console.log('ids for...', this.contactGroupIds)
  }
   }
 
@@ -85,7 +83,6 @@ export class NotesComponent implements OnInit, OnChanges {
     for (const item of this.contactGroups) {
       if (id.has(item.contactGroupId)) {
         id.forEach(x => {
-          console.log('noooooooo....................')
           if (+item.contactGroupId === +x) {
             console.log('contact people here...', item.contactPeople, 'id:', item.contactGroupId);
             output = {
