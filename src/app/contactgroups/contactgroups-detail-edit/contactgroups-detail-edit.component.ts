@@ -247,6 +247,13 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
     }
   }
 
+  clearAmlDate(){
+    const amlCompletedDate = this.personForm.get('amlCompletedDate');
+    console.log('enter....')
+    if(amlCompletedDate.value){
+      amlCompletedDate.setValue('');
+    }
+  }
   getPersonDetails(personId: number) {
     this.contactGroupService.getPerson(personId).subscribe(data => {
       console.log(data);
