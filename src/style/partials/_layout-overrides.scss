@@ -195,3 +195,7 @@ fieldset {
         border: 1px solid $border-color;
     }
 }
+
+.mark, mark {
+    padding: 0;
+}
