@@ -26,8 +26,15 @@
         <div class="form-group row">
           <label for="amlDate" class="col-sm-2 col-form-label col-form-label-sm">AML Completed</label>
           <div class="col-sm-3">
-              <input type="text" id="amlDate" placeholder="dd/mm/yyyy" class="form-control form-control-sm fake-readonly" formControlName="amlCompletedDate"
+            <div class="input-group input-group-sm">
+              <input type="text" id="amlDate" placeholder="dd/mm/yyyy" class="form-control fake-readonly" formControlName="amlCompletedDate"
               [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', maxDate:todaysDate}" bsDatepicker readonly>
+              <div class="input-group-append" *ngIf="companyForm.value.amlCompletedDate">
+                <button type="button" class="btn btn-primary" aria-label="clear AML" (click)="clearControlValue(companyForm.get('amlCompletedDate'))">
+                    <span aria-hidden="true">&times;</span>
+                </button>  
+              </div>
+            </div>
           </div>
         </div>
       </fieldset>

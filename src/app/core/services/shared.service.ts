@@ -12,6 +12,7 @@ import { NoteModalComponent } from '../note-modal/note-modal.component';
 import { PhoneNumberUtil } from 'google-libphonenumber';
 import { Location } from '@angular/common';
 import { Title } from '@angular/platform-browser';
+import { AbstractControl } from '@angular/forms';
 
 
 @Injectable({
@@ -51,6 +52,14 @@ export class SharedService {
 
   setTitle(title: string) {
     this.titleService.setTitle(title);
+  }
+
+  clearControlValue(control: AbstractControl){
+    if(control.value){
+      control.setValue('');
+      control.updateValueAndValidity();
+      control.parent.markAsDirty();
+    }
   }
 
   openLinkWindow(link: string) {
