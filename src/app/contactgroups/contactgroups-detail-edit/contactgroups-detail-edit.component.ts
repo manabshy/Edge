@@ -64,7 +64,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
   };
   number: string;
   currentStaffMember: StaffMember;
-  isWarningsDisabled: boolean;
+  isWarningsEnabled: boolean;
   warningStatus: number;
 
   get showPostCode(): boolean {
@@ -78,6 +78,9 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
   }
   get countryId(): FormControl {
     return <FormControl>this.address.get('countryId');
+  }
+  get warningStatusId(): FormControl {
+    return <FormControl>this.personForm.get('warningStatusId');
   }
   get address(): FormGroup {
     return <FormGroup>this.personForm.get('address');
@@ -146,7 +149,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
   }
 
   ngAfterContentChecked() {
-    this.disablePersonWarnings();
+    this.enablePersonWarnings();
   }
   setDropdownLists() {
     this.countries = this.listInfo.result.countries;
@@ -155,40 +158,27 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
     this.telephoneTypes = this.listInfo.result.telephoneTypes;
   }
 
-  disablePersonWarnings() {
+  enablePersonWarnings() {
     let setPermission;
     let clearPermission;
-    let warning;
+    let isEnabled = false;
     if (this.currentStaffMember) {
       if (this.currentStaffMember.permissions) {
         setPermission = this.currentStaffMember.permissions.find(x => x.permissionId === 67);
         clearPermission = this.currentStaffMember.permissions.find(x => x.permissionId === 68);
       }
     }
-    if (this.warningStatus) {
-      warning = +this.warningStatus !== 1;
+    if (+this.warningStatusId.value > 1) {
+      isEnabled = !!clearPermission;
+    } else {
+      isEnabled = !!setPermission;
     }
-    switch (true) {
-      case !!!setPermission:
-      case !!!clearPermission:
-      case !!warning:
-          this.isWarningsDisabled = true;
-          break;
-      default:
-        this.isWarningsDisabled = false;
-
-      // case !!!clearPermission:
-      //     this.isWarningsDisabled = true;
-      //     break;
-      // case !!warning:
-      //     this.isWarningsDisabled = true;
-      //     break;
-      // case !!!this.basicPerson:
-      //   this.isWarningsDisabled = true;
-      //   console.log('warning 4.....', this.isWarningsDisabled);
-      //   break;
+    this.isWarningsEnabled = isEnabled;
+    if (this.isWarningsEnabled) {
+      this.warningStatusId.enable();
     }
   }
+
   logValidationErrors(group: FormGroup = this.personForm, fakeTouched: boolean) {
     Object.keys(group.controls).forEach((key: string) => {
       const control = group.get(key);
@@ -453,6 +443,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
       emailAddresses: this.fb.array([this.createEmailItem()]),
       phoneNumbers: this.fb.array([this.createPhoneNumberItem()])
     }, {validators: [WedgeValidators.emailPhoneValidator(), WedgeValidators.warningStatusValidator()]});
+    // this.warningStatusId.disable();
   }
 
   togglePreferences(index: number, group: FormArray) {
