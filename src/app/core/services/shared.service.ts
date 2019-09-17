@@ -22,6 +22,7 @@ const CACHE_SIZE = 1;
 export class SharedService {
   infoDetail$: Observable<DropdownListInfo>;
   lastCallNoteToast: any;
+  lastCallEndCallToast: any;
   formErrors: any;
 
   constructor(private http: HttpClient,

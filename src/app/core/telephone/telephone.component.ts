@@ -150,12 +150,29 @@ export class TelephoneComponent implements OnInit {
   calling() {
     this.isDialing = false;
     this.toastr.success('Dialing ...', '', {
-      toastClass: 'ngx-toastr toast-call'
+      toastClass: 'ngx-toastr toast-call',
+      timeOut: 2000
     })
     .onHidden
     .pipe(take(1))
     .subscribe(() => {
+      this.endCallBanner()
       this.leaveANoteBanner();
+    });
+  }
+
+  endCallBanner() {
+    if (this.sharedService.lastCallEndCallToast) {
+      this.toastr.clear(this.sharedService.lastCallEndCallToast.toastId);
+    }
+    this.sharedService.lastCallEndCallToast = this.toastr.info('<a class="btn btn-danger text-white">Hang up</a>', '', {
+      toastClass: 'ngx-toastr toast-call',
+      disableTimeOut: true
+    })
+    .onTap
+    .pipe(take(1))
+    .subscribe(() => {
+      console.log('hang up!')
     });
   }
 
