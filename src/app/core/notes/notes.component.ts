@@ -12,6 +12,7 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./notes.component.scss']
 })
 export class NotesComponent implements OnInit, OnChanges {
+  @Input() personId: number;
   @Input() noteData: any;
   @Input() isPersonNote: boolean;
   @Input() personName: string;
@@ -29,7 +30,6 @@ export class NotesComponent implements OnInit, OnChanges {
   reverse = true;
   isUpdating = false;
   contactGroups: BasicContactGroup[];
-  personId: number;
   notes: any;
 
   constructor(private sharedService: SharedService, private contactGroupService: ContactGroupsService) { }
@@ -42,10 +42,11 @@ export class NotesComponent implements OnInit, OnChanges {
         this.contactGroups.forEach(x => {
           this.contact = x.contactPeople;
         });
-        this.setPersonNoteAddressees();
-        this.setAddressees();
       }
-      this.addressee = this.contact.map(x => x.addressee);
+      if (this.contactGroups && this.personId) {
+        this.setPersonNoteAddressees();
+      }
+      // this.addressee = this.contact.map(x => x.addressee);
     });
 
     this.init();
@@ -70,16 +71,30 @@ export class NotesComponent implements OnInit, OnChanges {
         if (+x.contactGroupId !== 0) {
           this.contactGroupIds.push(+x.contactGroupId);
         }
-        this.personId = this.personNotes.find(p => p.personId).personId;
+        // this.personId = this.personNotes.find(p => p.personId).personId;
       });
     }
   }
 
   private setPersonNoteAddressees() {
-    console.log('contactgroup ids for notes', this.contactGroupIds);
     let id = new Set(this.contactGroupIds);
     let output;
-    console.log('contactgroups for notes...', this.contactGroups);
+    let person;
+    if(this.personId){
+      this.contactGroups.forEach(c=>{
+        c.contactPeople.forEach(x=>{
+          person = x;
+        });
+      });
+      output = {
+        addressee:'',
+        groupId: 0,
+        personId: this.personId,
+        personAddressee: person.addressee
+      };
+      this.personNoteAddressees.push(output);
+      console.log('person output', output);
+    }
     for (const item of this.contactGroups) {
       if (id.has(item.contactGroupId)) {
         id.forEach(x => {
@@ -90,29 +105,30 @@ export class NotesComponent implements OnInit, OnChanges {
               groupId: item.contactGroupId
             }
             this.personNoteAddressees.push(output);
+            console.log('contact addressess output', output);
           }
         })
       }
     }
 
   }
-  private setAddressees() {
-    let output;
-    let person;
-    this.contactGroups.forEach(c=>{
-      c.contactPeople.forEach(x=>{
-        person = x;
-      });
-    });
-    output = {
-      addressee:'',
-      groupId: 0,
-      personId: this.personId,
-      personAddressee: person.addressee
-    };
-    this.personNoteAddressees.push(output);
-    console.log('person output', output);
-  }
+  // private setAddressees() {
+  //   let output;
+  //   let person;
+  //   this.contactGroups.forEach(c=>{
+  //     c.contactPeople.forEach(x=>{
+  //       person = x;
+  //     });
+  //   });
+  //   output = {
+  //     addressee:'',
+  //     groupId: 0,
+  //     personId: this.personId,
+  //     personAddressee: person.addressee
+  //   };
+  //   this.personNoteAddressees.push(output);
+  //   console.log('person output', output);
+  // }
 
   setFlag(noteId: number, isImportantFlag: boolean) {
     console.log('note id here.....', noteId);
