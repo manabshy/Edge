@@ -15,27 +15,15 @@ import { Title } from '@angular/platform-browser';
 import { AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 
-
+const CACHE_SIZE = 1;
 @Injectable({
   providedIn: 'root'
 })
 export class SharedService {
-  infoDetail: DropdownListInfo;
+  infoDetail$: Observable<DropdownListInfo>;
   lastCallNoteToast: any;
   formErrors: any;
 
-  // private infoDetail: DropdownListInfo;
-  // get dropdownListInfo() {
-  //   this.getDropdownListInfo().subscribe(data =>{
-  //     this.infoDetail = data;
-  //     console.log('data from getter', this.infoDetail)
-  //   });
-  //   return this.infoDetail;
-  // // }
-  // get dropdownListInfo() {
-  //   const listInfo = localStorage.getItem('dropdownListInfo');
-  //   return JSON.parse(listInfo);
-  // }
   constructor(private http: HttpClient,
               private _location: Location,
               private _router: Router,
@@ -307,23 +295,14 @@ export class SharedService {
   }
 
   getDropdownListInfo(): Observable<DropdownListInfo> {
-    if (this.infoDetail) {
-      console.log('info cache', this.infoDetail);
-      return of(this.infoDetail);
+    if (!this.infoDetail$) {
+      this.infoDetail$ = this.requestDropdownListInfo().pipe(shareReplay(CACHE_SIZE));
     }
 
-    return this.http.get<DropdownListInfo>(AppConstants.baseInfoUrl)
-      .pipe(
-        tap(data => {
-          if (data) {
-            this.infoDetail = data;
-          }}),
-          shareReplay(1)
-        // publishReplay(1),
-        // refCount(),
-        // take(1),
-        // tap((data) => console.log('info from db', data))
-      );
+    return this.infoDetail$;
+  }
+  private requestDropdownListInfo(): Observable<DropdownListInfo> {
+    return this.http.get<DropdownListInfo>(AppConstants.baseInfoUrl);
   }
 
   findAddress(searchTerm: string, container: string): Observable<AddressAutoCompleteData> {
