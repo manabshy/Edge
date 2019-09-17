@@ -13,7 +13,7 @@ import { WedgeValidators } from 'src/app/core/shared/wedge-validators';
 import { Address } from 'src/app/core/models/address';
 import { ToastrService } from 'ngx-toastr';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
-import { StaffMember } from 'src/app/core/models/staff-member';
+import { StaffMember, Permission } from 'src/app/core/models/staff-member';
 
 @Component({
   selector: 'app-contactgroups-detail-edit',
@@ -159,8 +159,8 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
   }
 
   enablePersonWarnings() {
-    let setPermission;
-    let clearPermission;
+    let setPermission: Permission;
+    let clearPermission: Permission;
     let isEnabled = false;
     if (this.currentStaffMember) {
       if (this.currentStaffMember.permissions) {
@@ -168,14 +168,15 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
         clearPermission = this.currentStaffMember.permissions.find(x => x.permissionId === 68);
       }
     }
-    if (+this.warningStatusId.value > 1) {
-      isEnabled = !!clearPermission;
+    if (this.personDetails && this.personDetails.warningStatusId > 1) {
+      if (+this.warningStatusId.value > 1) {
+        isEnabled = !!clearPermission;
+      } else {
+        isEnabled = !!setPermission;
+      }
+      this.isWarningsEnabled = isEnabled;
     } else {
-      isEnabled = !!setPermission;
-    }
-    this.isWarningsEnabled = isEnabled;
-    if (this.isWarningsEnabled) {
-      this.warningStatusId.enable();
+      this.isWarningsEnabled = true;
     }
   }
 
