@@ -83,11 +83,6 @@
           <div class="alert alert-danger small mb-2 mr-2 d-inline-block" *ngFor="let importantNote of importantPersonNotes">
             <i class="fas fa-exclamation-circle fa-fw text-danger mr-1"></i> {{importantNote.text}}
           </div>
-          <div class="mb-2 d-inline-block">
-            <a class="small" [routerLink]="['notes']">
-              All Notes
-            </a>
-          </div>
         </ng-container>
       </div>
     <div class="row mx-0 pb-3" *ngIf="searchedPersonDetails">
