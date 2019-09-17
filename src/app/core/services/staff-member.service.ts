@@ -15,7 +15,7 @@ export class StaffMemberService {
   staffMember: StaffMember;
   currentStaffMember$: Observable<StaffMember>;
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient) { }
 
   public getCurrentStaffMember(): Observable<StaffMember> {
     if (!this.currentStaffMember$) {
@@ -28,20 +28,4 @@ export class StaffMemberService {
     return this.http.get<StaffMemberResult>(`${AppConstants.baseUrl}/currentUser`)
       .pipe(map(response => response.result));
   }
-  // public getCurrentStaffMember(): Observable<StaffMember> {
-  //   if (this.staffMember) {
-  //     console.log('current user from cache', this.staffMember);
-  //     return of(this.staffMember);
-  //   }
-  //   return this.http.get<StaffMemberResult>(`${AppConstants.baseUrl}/currentUser`)
-  //     .pipe(
-  //       map(response => response.result),
-  //       tap(data => this.staffMember = data),
-  //       shareReplay(1)
-  //       // publishReplay(1),
-  //       // refCount(),
-  //       // take(1),
-  //       // tap((data)=>console.log('current user from db', data)),
-  //     );
-  // }
 }
