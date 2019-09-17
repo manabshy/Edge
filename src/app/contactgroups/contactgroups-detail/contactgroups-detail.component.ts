@@ -34,13 +34,12 @@ export class ContactgroupsDetailComponent implements OnInit {
 
   ngOnInit() {
     console.log(this.subNav);
-    // this.route.params.subscribe(params => {this.contactGroupId = params['id']; });
     this.route.params.subscribe(params => {
       this.personId = params['personId'] || 0;
       this.searchedPersonDetails = null;
       this.searchedPersonContactGroups = null;
       this.init();
-     
+
     });
   }
 
@@ -54,14 +53,11 @@ export class ContactgroupsDetailComponent implements OnInit {
         this.setDropdownLists();
       });
     }
-    console.log('detail list info', this.listInfo);
     this.getSearchedPersonDetails(this.personId);
     this.getSearchedPersonContactGroups(this.personId);
     this.getSearchedPersonSummaryInfo(this.personId);
-    console.log('contact groups on detail page....', this.searchedPersonContactGroups)
     if(this.searchedPersonContactGroups){
       AppUtils.contactInfoForNotes = this.searchedPersonContactGroups;
-      // this.contactGroupService.contactInfoForNotes$.subscribe(data => console.log('contact groups on detail page....', data));
     }
   }
 
@@ -69,17 +65,10 @@ export class ContactgroupsDetailComponent implements OnInit {
     this.warnings = this.listInfo.result.personWarningStatuses;
   }
 
-  setImportantPersonNotes(){
-    console.log('person notes heree....', this.searchedPersonDetails.personNotes);
-    this.importantPersonNotes = this.searchedPersonDetails.personNotes.filter(x=>x.isImportant && +x.personId === +this.personId);
+  setImportantPersonNotes() {
+    this.importantPersonNotes = this.searchedPersonDetails.personNotes.filter(x => x.isImportant && +x.personId === +this.personId);
   }
-  // setContactGroupDetailsForNotes(){
-  //   let groupInfo;
-  //   if(this.searchedPersonDetails){
-  //     groupInfo = this.searchedPersonContactGroups;
-  //     AppUtils.contactInfoForNotes = groupInfo;
-  //   }
-  // }
+
   getContactGroupById(contactGroupId: number) {
     this.contactGroupService.getContactGroupbyId(contactGroupId).subscribe(data => {
       this.contactGroupDetails = data;
@@ -98,20 +87,18 @@ export class ContactgroupsDetailComponent implements OnInit {
   getSearchedPersonSummaryInfo(personId: number) {
     this.contactGroupService.getPersonInfo(personId).subscribe(data => {
       this.summaryTotals = data;
-      console.log('summary info', data);
     });
   }
 
   getSearchedPersonContactGroups(personId: number) {
     this.contactGroupService.getPersonContactGroups(personId).subscribe(data => {
      if (data) {
-       console.log('........', data)
         this.searchedPersonContactGroups = data;
         this.contactGroupService.contactInfoChanged(data);
      }
     });
   }
- 
+
   createNewContactGroup(){
     this.isNewContactGroup = true;
   }
@@ -122,7 +109,6 @@ export class ContactgroupsDetailComponent implements OnInit {
       person: this.searchedPersonDetails,
       isPersonNote: true
     }
-    console.log('for notes',data);
     this.sharedService.addNote(data);
   }
 

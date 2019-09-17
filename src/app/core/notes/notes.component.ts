@@ -36,19 +36,20 @@ export class NotesComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.contactGroupService.contactInfoForNotes$.subscribe(data =>
-      {
-        this.contactGroups = data; console.log('info here....', data);
-        if(this.contactGroups){
-          this.contactGroups.forEach(x=>{
-            this.contact = x.contactPeople;
-          })
-          this.setPersonNoteAddressees();
-          this.setAddressees();
-        }
-         this.addressee = this.contact.map(x=>x.addressee);
+    {
+      this.contactGroups = data; console.log('info here....', data);
+      if (this.contactGroups) {
+        this.contactGroups.forEach(x => {
+          this.contact = x.contactPeople;
+        });
+        this.setPersonNoteAddressees();
+        this.setAddressees();
+      }
+      this.addressee = this.contact.map(x => x.addressee);
     });
 
     this.init();
+    console.log('result.....', this.personNoteAddressees);
   }
 
   ngOnChanges() {
@@ -57,22 +58,21 @@ export class NotesComponent implements OnInit, OnChanges {
 
   init() {
     this.originalNotes = this.personNotes || this.contactGroupNotes;
-    if(this.originalNotes) {
-      this.notes = this.originalNotes.slice(0,10);
-      console.log('scrolled notes', this.notes);
+    if (this.originalNotes) {
+      this.notes = this.originalNotes.slice(0, 10);
     }
-   if (this.noteData) {
+    if (this.noteData) {
       this.noteData.people !== undefined ? this.contactPeople = this.noteData.people : this.contactPeople = [];
       this.noteData.group ? this.groupAddressee = this.noteData.group.addressee : this.groupAddressee = [];
-   }
-   if(this.personNotes){
-    this.personNotes.forEach(x=>{
-     if(+x.contactGroupId!==0) {
-       this.contactGroupIds.push(+x.contactGroupId);
-     }
-     this.personId = this.personNotes.find(x=>x.personId).personId;
-   })
- }
+    }
+    if (this.personNotes) {
+      this.personNotes.forEach(x => {
+        if (+x.contactGroupId !== 0) {
+          this.contactGroupIds.push(+x.contactGroupId);
+        }
+        this.personId = this.personNotes.find(p => p.personId).personId;
+      });
+    }
   }
 
   private setPersonNoteAddressees() {
@@ -94,7 +94,7 @@ export class NotesComponent implements OnInit, OnChanges {
         })
       }
     }
-    console.log('result.....', this.personNoteAddressees);
+
   }
   private setAddressees() {
     let output;

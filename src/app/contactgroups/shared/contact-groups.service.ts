@@ -10,6 +10,7 @@ import { ContactGroupAutoCompleteResult, ContactGroupAutoCompleteData,
 import { map, tap } from 'rxjs/operators';
 import { Person, BasicPerson } from 'src/app/core/models/person';
 
+const PAGE_SIZE = 100;
 @Injectable({
   providedIn: 'root'
 })
@@ -27,8 +28,9 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
 
   constructor(private http: HttpClient) { }
 
-  getAutocompleteContactGroups(searchTerm: any): Observable<ContactGroupAutoCompleteResult[]> {
-    let url = `${AppConstants.baseContactGroupUrl}/search?SearchTerm=${searchTerm}`;
+  getAutocompleteContactGroups(searchTerm: any, pageSize?: number ): Observable<ContactGroupAutoCompleteResult[]> {
+    pageSize = 10;
+    let url = `${AppConstants.baseContactGroupUrl}/search?SearchTerm=${searchTerm}&Pagesize=${pageSize}`;
     url = url.replace(/\+/gi, '%2B');
     return this.http.get<ContactGroupAutoCompleteData>(url)
       .pipe(
@@ -57,7 +59,6 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
       .pipe(
         map(response => response.result),
         tap(data => this.contactGroupNotes = data.contactNotes),
-        tap(data => console.log('contact notes here...', this.contactGroupNotes )),
         tap(data => console.log('contact group details here...', JSON.stringify(data)))
       );
   }
@@ -73,7 +74,6 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
       .pipe(
         map(response => response.result),
         tap(data => this.personNotes = data.personNotes),
-        tap(data => console.log('person notes here...', this.personNotes )),
         tap(data => console.log('person details here...', JSON.stringify(data)))
       );
   }
@@ -161,17 +161,19 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
     const url = `${AppConstants.basePersonUrl}/${personId}/personNotes`;
     return this.http.get<ContactNoteData>(url).pipe(
       map(response => response.result),
-      tap(data => this.personNotes = data),
-      tap(data => console.log('person notes here...', this.personNotes )),
-      tap(data => console.log('notes here...', JSON.stringify(data))));
+      tap(data => this.personNotes = data)
+      // tap(data => console.log('person notes here...', this.personNotes )),
+      // tap(data => console.log('notes here...', JSON.stringify(data)))
+      );
   }
 
   getContactGroupNotes(contactGroupId: number): Observable<ContactNote[]> {
     const url = `${AppConstants.baseContactGroupUrl}/${contactGroupId}/contactNotes`;
     return this.http.get<ContactNoteData>(url).pipe(
       map(response => response.result),
-      tap(data => this.contactGroupNotes = data),
-      tap(data => console.log('group notes here...', JSON.stringify(data))));
+      tap(data => this.contactGroupNotes = data)
+      // tap(data => console.log('group notes here...', JSON.stringify(data)))
+      );
   }
 
   addPersonNote(personNote: ContactNote): Observable< ContactNote|any> {
@@ -221,11 +223,9 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
   notesChanged(note: ContactNote) {
     switch(true){
       case !!note.personId:
-        console.log('personal notes in switch', this.personNotes);
         this.notesSubject.next(note);
         break;
       case !!note.contactGroupId:
-        console.log('contact notes in switch', this.contactGroupNotes);
           this.notesSubject.next(note);
     }
   }
