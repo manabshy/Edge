@@ -31,6 +31,7 @@ export class NotesComponent implements OnInit, OnChanges {
   reverse = true;
   isUpdating = false;
   notes: any;
+  addressees: any[];
 
   constructor(private sharedService: SharedService, private contactGroupService: ContactGroupsService) { }
 
@@ -43,6 +44,9 @@ export class NotesComponent implements OnInit, OnChanges {
     if (this.contactGroups && this.personId) {
       this.setPersonNoteAddressees();
     }
+
+    // remove duplicate addressees when updated notes returns the new list of notes
+     this.addressees = [...new Map(this.personNoteAddressees.map(item => [item.groupId, item])).values()];
   }
 
   init() {
@@ -98,19 +102,15 @@ export class NotesComponent implements OnInit, OnChanges {
           x.isPinned ? x.isPinned = false : x.isPinned = true;
           this.isUpdating = true;
         }
-        console.log('contact groupid here.....', x.contactGroupId);
-        console.log('personid here.....', x.personId);
         if (x.contactGroupId) {
           console.log('contact note here.....', x);
           this.contactGroupService.updateContactGroupNote(x).subscribe((data) => {
-            // if (data) { location.reload(); }
             this.contactGroupService.notesChanged(x);
             this.isUpdating = false;
           });
         } else {
           console.log('person note here.....', x);
           this.contactGroupService.updatePersonNote(x).subscribe((data) => {
-            // if (data) { location.reload(); }
             this.contactGroupService.notesChanged(x);
             this.isUpdating = false;
           });
