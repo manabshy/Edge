@@ -15,46 +15,34 @@ export class NotesComponent implements OnInit, OnChanges {
   @Input() personId: number;
   @Input() noteData: any;
   @Input() isPersonNote: boolean;
-  @Input() personName: string;
   @Input() personNotes: ContactNote[];
   @Input() contactGroupNotes: ContactNote[];
+  @Input() contactGroups: BasicContactGroup[];
   originalNotes: any;
   tests: any;
   contactPeople: Person[];
   personNoteAddressees = [];
   contact: Person[];
+  person: Person;
   contactGroupIds: number[] = [];
   groupAddressee: any;
   addressee: any;
   order = ['isPinned', 'createDate'];
   reverse = true;
   isUpdating = false;
-  contactGroups: BasicContactGroup[];
   notes: any;
 
   constructor(private sharedService: SharedService, private contactGroupService: ContactGroupsService) { }
 
   ngOnInit() {
-    this.contactGroupService.contactInfoForNotes$.subscribe(data =>
-    {
-      this.contactGroups = data; console.log('info here....', data);
-      if (this.contactGroups) {
-        this.contactGroups.forEach(x => {
-          this.contact = x.contactPeople;
-        });
-      }
-      if (this.contactGroups && this.personId) {
-        this.setPersonNoteAddressees();
-      }
-      // this.addressee = this.contact.map(x => x.addressee);
-    });
-
     this.init();
-    console.log('result.....', this.personNoteAddressees);
   }
 
   ngOnChanges() {
     this.init();
+    if (this.contactGroups && this.personId) {
+      this.setPersonNoteAddressees();
+    }
   }
 
   init() {
@@ -71,64 +59,34 @@ export class NotesComponent implements OnInit, OnChanges {
         if (+x.contactGroupId !== 0) {
           this.contactGroupIds.push(+x.contactGroupId);
         }
-        // this.personId = this.personNotes.find(p => p.personId).personId;
       });
     }
   }
 
   private setPersonNoteAddressees() {
-    let id = new Set(this.contactGroupIds);
+    console.log('contact groups in notes..', this.contactGroups);
+    const contactGroupIds = new Set(this.contactGroupIds);
     let output;
-    let person;
-    if(this.personId){
-      this.contactGroups.forEach(c=>{
-        c.contactPeople.forEach(x=>{
-          person = x;
-        });
-      });
-      output = {
-        addressee:'',
-        groupId: 0,
-        personId: this.personId,
-        personAddressee: person.addressee
-      };
-      this.personNoteAddressees.push(output);
-      console.log('person output', output);
-    }
-    for (const item of this.contactGroups) {
-      if (id.has(item.contactGroupId)) {
-        id.forEach(x => {
-          if (+item.contactGroupId === +x) {
-            console.log('contact people here...', item.contactPeople, 'id:', item.contactGroupId);
-            output = {
-              addressee: item.contactPeople.map(x => x.addressee),
-              groupId: item.contactGroupId
+
+    if (this.contactGroups) {
+      for (const item of this.contactGroups) {
+        if (contactGroupIds.has(item.contactGroupId)) {
+          contactGroupIds.forEach(x => {
+            if (+item.contactGroupId === +x) {
+              output = {
+                addressee: item.contactPeople.map(x => x.addressee),
+                groupId: item.contactGroupId
+              };
+              this.personNoteAddressees.push(output);
             }
-            this.personNoteAddressees.push(output);
-            console.log('contact addressess output', output);
-          }
-        })
+          });
+        }
+        if (item.contactPeople.find(p => p.personId === +this.personId)) {
+          this.person = item.contactPeople.find(p => p.personId === this.personId);
+        }
       }
     }
-
   }
-  // private setAddressees() {
-  //   let output;
-  //   let person;
-  //   this.contactGroups.forEach(c=>{
-  //     c.contactPeople.forEach(x=>{
-  //       person = x;
-  //     });
-  //   });
-  //   output = {
-  //     addressee:'',
-  //     groupId: 0,
-  //     personId: this.personId,
-  //     personAddressee: person.addressee
-  //   };
-  //   this.personNoteAddressees.push(output);
-  //   console.log('person output', output);
-  // }
 
   setFlag(noteId: number, isImportantFlag: boolean) {
     console.log('note id here.....', noteId);
@@ -142,22 +100,23 @@ export class NotesComponent implements OnInit, OnChanges {
         }
         console.log('contact groupid here.....', x.contactGroupId);
         console.log('personid here.....', x.personId);
-       if (x.contactGroupId) {
-        console.log('contact note here.....', x);
+        if (x.contactGroupId) {
+          console.log('contact note here.....', x);
           this.contactGroupService.updateContactGroupNote(x).subscribe((data) => {
             // if (data) { location.reload(); }
             this.contactGroupService.notesChanged(x);
             this.isUpdating = false;
           });
-       } else {
-        console.log('person note here.....', x);
-         this.contactGroupService.updatePersonNote(x).subscribe((data) => {
-          // if (data) { location.reload(); }
-           this.contactGroupService.notesChanged(x);
+        } else {
+          console.log('person note here.....', x);
+          this.contactGroupService.updatePersonNote(x).subscribe((data) => {
+            // if (data) { location.reload(); }
+            this.contactGroupService.notesChanged(x);
             this.isUpdating = false;
           });
-       }
-      }});
+        }
+      }
+    });
   }
 
   onScrollDown() {
@@ -168,9 +127,9 @@ export class NotesComponent implements OnInit, OnChanges {
   onScrollUp() {
     console.log('scrolled up!!');
   }
- addNote() {
-   if (this.noteData) {
+  addNote() {
+    if (this.noteData) {
       this.sharedService.addNote(this.noteData);
-   }
+    }
   }
 }

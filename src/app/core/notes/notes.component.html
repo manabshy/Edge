@@ -69,11 +69,11 @@
                   </ng-template>
                 </ng-container>
                 <ng-template #groupsInfo>
-                  <div *ngIf="personNoteAddressees">
+                  <div *ngIf="personNoteAddressees && person">
                     <div *ngFor="let group of personNoteAddressees">
                       <div *ngIf="group.groupId === note?.contactGroupId">{{group.addressee}}</div>
-                      <div *ngIf="group.personId === note?.personId">{{group.personAddressee}}</div>
                     </div>
+                    <div *ngIf="person.personId === note?.personId">{{person.addressee}}</div>
                   </div>
                 </ng-template>
               </div>
