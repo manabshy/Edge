@@ -716,7 +716,8 @@ setImportantNotes(){
     }
   }
 
-  // Replace this with a directive
+  // TODO: Replace this with a directive
+  /* Only allow spaces and digits */
   phoneNumberOnly(event): boolean {
     const charCode = (event.which) ? event.which : event.keyCode;
     if (charCode > 31 && charCode !== 107 && charCode !== 32 && (charCode < 48 || charCode > 57)) {
