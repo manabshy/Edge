@@ -106,6 +106,7 @@ export class NoteModalComponent implements OnInit {
       note.personId = this.selectedPerson.personId;
       this.contactGroupService.addPersonNote(note).subscribe(data => {
         if (data) {
+          this.contactGroupService.notesChanged(data);
           this.toastr.success('Note successfully added');
         }
       });
