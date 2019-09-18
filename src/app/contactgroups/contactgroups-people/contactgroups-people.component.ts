@@ -716,6 +716,15 @@ setImportantNotes(){
     }
   }
 
+  // Replace this with a directive
+  phoneNumberOnly(event): boolean {
+    const charCode = (event.which) ? event.which : event.keyCode;
+    if (charCode > 31 && charCode !== 107 && charCode !== 32 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
+
+  }
   showHideMarkPrefs(event, i) {
     event.preventDefault();
     event.stopPropagation();
