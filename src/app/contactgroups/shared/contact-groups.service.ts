@@ -18,7 +18,7 @@ export class ContactGroupsService {
 personNotes: ContactNote[];
 contactGroupNotes: ContactNote[];
 private contactInfoAction$ = new Subject<BasicContactGroup[] | null >();
-private personNotesSubject = new Subject<ContactNote | null>();
+private personNotesSubject = new Subject<ContactNote[] | null>();
 private contactGroupNotesSubject = new Subject<ContactNote | null>();
 private notesSubject = new Subject<ContactNote | null>();
 noteChanges$ = this.notesSubject.asObservable();
@@ -209,17 +209,9 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
     this.contactInfoAction$.next(info);
   }
 
-  // personNotesChanged(note: ContactNote) {
-  //   let index;
-  //   this.personNotes ? index = this.personNotes.findIndex(x => x.id === note.id) : index = -1;
-  //   if (index !== -1) {
-  //     this.personNotes[index] = note;
-  //   } else {
-  //    note.personId ? this.personNotes.push(note) : this.contactGroupNotes.push(note);
-  //   }
-  //   this.sortByPinnedAndDate(this.personNotes);
-  //   this.personNotesSubject.next(note);
-  // }
+  personNotesChanged(notes: ContactNote[]) {
+    this.personNotesSubject.next(notes);
+  }
   notesChanged(note: ContactNote) {
     switch(true){
       case !!note.personId:

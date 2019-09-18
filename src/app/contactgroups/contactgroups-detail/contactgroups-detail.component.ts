@@ -78,11 +78,14 @@ export class ContactgroupsDetailComponent implements OnInit {
 
   getSearchedPersonDetails(personId: number) {
     this.contactGroupService.getPerson(personId).subscribe(data => {
-      this.searchedPersonDetails = data;
-      this.setImportantPersonNotes();
-      this.sharedService.setTitle(this.searchedPersonDetails.addressee);
-      this.searchedPersonDetails.warning = this.sharedService.showWarning(this.searchedPersonDetails.warningStatusId, this.warnings, this.searchedPersonDetails.warningStatusComment);
-    });
+      if(data) {
+        this.searchedPersonDetails = data;
+        this.setImportantPersonNotes();
+        this.contactGroupService.personNotesChanged(data.personNotes);
+        this.sharedService.setTitle(this.searchedPersonDetails.addressee);
+        this.searchedPersonDetails.warning = this.sharedService.showWarning(this.searchedPersonDetails.warningStatusId, this.warnings, this.searchedPersonDetails.warningStatusComment);
+  
+      }    });
   }
   getSearchedPersonSummaryInfo(personId: number) {
     this.contactGroupService.getPersonInfo(personId).subscribe(data => {

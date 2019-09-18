@@ -21,6 +21,7 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
   contactGroups: BasicContactGroup[];
   contactGroupIds: number[];
   contactGroupInfo: BasicContactGroup[];
+  personNotesInfo: ContactNote[];
   constructor(private contactGroupService: ContactGroupsService,
               private route: ActivatedRoute,
               private sharedService: SharedService) {super(); }
@@ -45,7 +46,7 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
       this.personId = +params['personId'] || 0;
     });
 
-    
+
     if (this.contactGroupId) {
       console.log('contact group id', this.contactGroupId);
       this.getContactGroupNotes(this.contactGroupId);
@@ -54,7 +55,7 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
       this.getPersonNotes(this.personId);
       this.getContactGroups(this.personId);
     }
-    
+
     this.contactGroupService.noteChanges$.subscribe(data => {
       if (data) {
         this.getPersonNotes(this.personId);
@@ -66,6 +67,10 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
       }
     });
 
+    this.contactGroupService.personNotesChanges$.subscribe(data => {
+      this.personNotesInfo = data;
+      console.log('person notes from service here... on  notes page....', data)
+    });
     this.contactGroupService.contactInfoForNotes$.subscribe(data => {
       this.contactGroupInfo = data;
       console.log('contact groups on detail notes page....', data)
@@ -92,7 +97,6 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
   getContactGroups(personId: number) {
     this.contactGroupService.getPersonContactGroups(personId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
      if(data) {
-       console.log('here notes details......', data)
         this.contactGroups = data;
         this.contactGroupService.contactInfoChanged(data);
      }
