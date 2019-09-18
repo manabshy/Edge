@@ -44,7 +44,7 @@ export class ContactgroupsDetailComponent implements OnInit {
   }
 
   init() {
-    if(AppUtils.listInfo) {
+    if (AppUtils.listInfo) {
       this.listInfo = AppUtils.listInfo;
       this.setDropdownLists();
     } else {
@@ -56,9 +56,15 @@ export class ContactgroupsDetailComponent implements OnInit {
     this.getSearchedPersonDetails(this.personId);
     this.getSearchedPersonContactGroups(this.personId);
     this.getSearchedPersonSummaryInfo(this.personId);
-    if(this.searchedPersonContactGroups){
-      AppUtils.contactInfoForNotes = this.searchedPersonContactGroups;
-    }
+   
+    this.contactGroupService.noteChanges$.subscribe(data => {
+      if (data) {
+        this.contactGroupService.getPerson(this.personId).subscribe(x => {
+          this.searchedPersonDetails.personNotes = x.personNotes;
+          this.setImportantPersonNotes();
+        });
+      }
+    });
   }
 
   setDropdownLists() {
@@ -78,15 +84,16 @@ export class ContactgroupsDetailComponent implements OnInit {
 
   getSearchedPersonDetails(personId: number) {
     this.contactGroupService.getPerson(personId).subscribe(data => {
-      if(data) {
+      if (data) {
         this.searchedPersonDetails = data;
-        this.setImportantPersonNotes();
         this.contactGroupService.personNotesChanged(data.personNotes);
+        this.setImportantPersonNotes();
         this.sharedService.setTitle(this.searchedPersonDetails.addressee);
         this.searchedPersonDetails.warning = this.sharedService.showWarning(this.searchedPersonDetails.warningStatusId, this.warnings, this.searchedPersonDetails.warningStatusComment);
-  
-      }    });
+      }
+    });
   }
+
   getSearchedPersonSummaryInfo(personId: number) {
     this.contactGroupService.getPersonInfo(personId).subscribe(data => {
       this.summaryTotals = data;
