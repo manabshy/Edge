@@ -124,13 +124,11 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.init();
     this.contactGroupService.noteChanges$.subscribe(data => {
       if (data) {
-        this.setImportantNotes();
         this.contactGroupService.getContactGroupbyId(this.contactGroupId).subscribe(x => {
           this.contactGroupDetails.contactNotes = x.contactNotes;
+          this.setImportantNotes();
         });
-        console.log('updated notes here', this.contactGroupDetails.contactNotes);
       }
-      console.log('note changes here....', data);
     });
   }
 
@@ -222,7 +220,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
           comments: ''
         });
         this.newPerson = data;
-        console.log('new person initialised', this.newPerson);
         this.findPotentialDuplicatePerson(data);
       });
 
@@ -256,7 +253,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
       .subscribe(data => {
         this.contactGroupDetails = data;
         this.setImportantNotes();
-        console.log('contact people', this.contactGroupDetails);
         this.initialContactGroupLength = this.contactGroupDetails.contactPeople.length;
         this.populateFormDetails(data);
         this.addSelectedPeople();
@@ -324,13 +320,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.contactGroupService.getPotentialDuplicatePeople(person).subscribe(data => {
       this.potentialDuplicatePeople = data;
       if (data) {
-      // this.newPerson = {} as  BasicPerson;
       this.newPerson.firstName = data.firstName,
       this.newPerson.middleName = data.middleName,
       this.newPerson.lastName = data.lastName;
       }
-      console.log(' for new person', data);
-      console.log('new person', this.newPerson);
       this.checkDuplicatePeople(person);
     });
   }
@@ -387,8 +380,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
 setImportantNotes(){
   this.importantContactNotes = this.contactGroupDetails.contactNotes.filter(x=>x.isImportant && +x.contactGroupId === this.contactGroupId);
   this.importantPeopleNotes = this.contactGroupDetails.contactNotes.filter(x=>x.isImportant);
-  console.log('important contact notes', this.importantContactNotes);
-  console.log('important people notes', this.importantPeopleNotes);
   this.contactGroupDetails.contactPeople.forEach(x => {
     x.personNotes = this.importantPeopleNotes.filter(p => p.personId === x.personId);
   });
@@ -399,8 +390,8 @@ setImportantNotes(){
     this.isEditingSelectedCompany = true;
     this.contactGroupBackUp();
     let companyName;
-    if(newCompany) {
-      companyName = this.companyFinderForm.get("companyName").value;
+    if (newCompany) {
+      companyName = this.companyFinderForm.get('companyName').value;
     }
     this._router.navigate(['/company-centre/detail', id, 'edit'], {queryParams: {isNewCompany: newCompany, isEditingSelectedCompany: true, companyName: companyName }});
   }
@@ -412,7 +403,7 @@ setImportantNotes(){
   }
 
   contactGroupBackUp() {
-    if(this.firstContactGroupPerson) {
+    if (this.firstContactGroupPerson) {
       this.selectedPeople.push(this.firstContactGroupPerson);
     }
     AppUtils.holdingSelectedPeople = this.selectedPeople;
@@ -473,11 +464,11 @@ setImportantNotes(){
     this.isCompanyAdded = true;
     this.searchCompanyTermBK = this.companyFinderForm.get('companyName').value;
     this.companyFinderForm.get('companyName').setValue(company.companyName);
-    setTimeout(()=>{
-      if(this.companyNameInput) {
+    setTimeout(() => {
+      if (this.companyNameInput) {
         this.companyNameInput.nativeElement.scrollIntoView({block: 'center'});
       }
-    })
+    });
    }
 
   getCompanyDetails(companyId: number) {
@@ -491,7 +482,7 @@ setImportantNotes(){
   }
 
   selectPerson(id: number) {
-    if(this.removedPersonIds.indexOf(id) >= 0 ){
+    if (this.removedPersonIds.indexOf(id) >= 0 ){
       this.removedPersonIds.splice(this.removedPersonIds.indexOf(id),1);
     }
     if (id !== 0 && !this.checkDuplicateInContactGroup(id)) {
@@ -608,7 +599,6 @@ setImportantNotes(){
         this.contactGroupDetails.contactPeople = [];
       }
       if (this.selectedCompanyDetails) {
-        console.log(this.selectedCompanyDetails);
         this.isCompanyAdded = true;
         contactGroup.companyId = this.selectedCompanyDetails.companyId;
         contactGroup.companyName = this.selectedCompanyDetails.companyName;

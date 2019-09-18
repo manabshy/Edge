@@ -45,7 +45,7 @@ export class NotesComponent implements OnInit, OnChanges {
       this.setPersonNoteAddressees();
     }
 
-    // remove duplicate addressees when updated notes returns the new list of notes
+    // remove duplicate addressees when an updated note returns the new list of notes
      this.addressees = [...new Map(this.personNoteAddressees.map(item => [item.groupId, item])).values()];
   }
 
