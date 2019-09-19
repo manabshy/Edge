@@ -5,7 +5,6 @@ import { ActivatedRoute } from '@angular/router';
 import { AppUtils } from '../core/shared/utils';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { JsonPipe } from '@angular/common';
 import { SharedService } from '../core/services/shared.service';
 import { AppConstants } from '../core/shared/app-constants';
 
@@ -27,7 +26,10 @@ export class ContactGroupsComponent implements OnInit {
   listInfo: any;
   warnings: any;
   differentSearchSuggestions: string[];
-  constructor(private contactGroupService: ContactGroupsService, private route: ActivatedRoute, private fb: FormBuilder, private sharedService: SharedService) { }
+  constructor(private contactGroupService: ContactGroupsService,
+              private route: ActivatedRoute,
+              private fb: FormBuilder,
+              private sharedService: SharedService) { }
 
   ngOnInit() {
     this.contactFinderForm = this.fb.group({
@@ -39,20 +41,20 @@ export class ContactGroupsComponent implements OnInit {
         // this.contactGroupsAutocomplete(data.searchTerm)
       });
 
-    this.route.queryParams.subscribe(params=>{
-      if(params['searchTerm'] || AppUtils.searchTerm) {
+    this.route.queryParams.subscribe(params => {
+      if (params['searchTerm'] || AppUtils.searchTerm) {
         this.contactFinderForm.get('searchTerm').setValue(params['searchTerm'] || AppUtils.searchTerm);
         this.contactGroupsResults();
         this.isHintVisible = false;
         this.isMessageVisible = false;
       }
-    })
-    
-    if(AppUtils.listInfo) {
+    });
+
+    if (AppUtils.listInfo) {
       this.listInfo = AppUtils.listInfo;
       this.setDropdownLists();
     } else {
-      this.sharedService.getDropdownListInfo().subscribe(data=> {
+      this.sharedService.getDropdownListInfo().subscribe(data => {
         this.listInfo = data;
         this.setDropdownLists();
       });
@@ -97,15 +99,15 @@ export class ContactGroupsComponent implements OnInit {
 
   contactGroupsResults() {
     const searchTerm = this.contactFinderForm.get('searchTerm').value;
-    if(searchTerm) {
+    if (searchTerm) {
       this.isLoading = true;
     }
     this.contactGroupService.getAutocompleteContactGroups(searchTerm).subscribe(result => {
         this.contactGroups = result;
-        if(this.contactGroups && this.contactGroups.length) {
+        if (this.contactGroups && this.contactGroups.length) {
           this.contactGroups.forEach(x => {
             x.warning = this.sharedService.showWarning(x.warningStatusId, this.warnings, x.warningStatusComment);
-          })
+          });
         }
         this.isLoading = false;
         console.log('contact groups', this.contactGroups);
@@ -131,14 +133,14 @@ export class ContactGroupsComponent implements OnInit {
   getDifferentSearchSuggestions(searchTerm: string) {
     const telIndex = searchTerm.search(AppConstants.telephonePattern);
     this.differentSearchSuggestions = [];
-    if(telIndex > 0){
+    if (telIndex > 0){
       this.differentSearchSuggestions.push(searchTerm.substring(0, telIndex).trim());
     }
     this.differentSearchSuggestions.push(searchTerm.substring(telIndex).trim());
   }
 
   onKeyup(event: KeyboardEvent) {
-    if(event.key !== 'Enter') {
+    if (event.key !== 'Enter') {
       this.isMessageVisible = false;
     }
     AppUtils.searchTerm = this.contactFinderForm.value.searchTerm;
