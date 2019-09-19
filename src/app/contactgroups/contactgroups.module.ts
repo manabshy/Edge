@@ -18,6 +18,7 @@ import { ContactgroupsDetailOffersComponent } from './contactgroups-detail-offer
 import { ContactgroupsDetailTenanciesComponent } from './contactgroups-detail-tenancies/contactgroups-detail-tenancies.component';
 import { ContactgroupsDetaillettingsManagementsComponent } from './contactgroups-detail-lettings-managements/contactgroups-detail-lettings-managements.component';
 import { ContactgroupsDetailHomeManagementsComponent } from './contactgroups-detail-home-managements/contactgroups-detail-home-managements.component';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 @NgModule({
   declarations: [ContactgroupsListComponent, ContactgroupsDetailComponent, ContactgroupsPeopleComponent, ContactgroupsDetailEditComponent, ContactgroupsCompanyEditComponent, ContactgroupsDetailLeadsComponent, ContactgroupsDetailNotesComponent, ContactgroupsDetailSearchesComponent, ContactgroupsDetailValuationsComponent, ContactgroupsDetailInstructionsComponent, ContactgroupsDetailOffersComponent, ContactgroupsDetailTenanciesComponent, ContactgroupsDetaillettingsManagementsComponent, ContactgroupsDetailHomeManagementsComponent],
@@ -25,6 +26,7 @@ import { ContactgroupsDetailHomeManagementsComponent } from './contactgroups-det
     CommonModule,
     CoreModule,
     FormsModule,
+    InfiniteScrollModule,
     ContactgroupsRoutingModule
   ],
   exports: [ContactgroupsListComponent]

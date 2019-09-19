@@ -28,16 +28,15 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
 
   constructor(private http: HttpClient) { }
 
-  getAutocompleteContactGroups(searchTerm: any, pageSize?: number ): Observable<ContactGroupAutoCompleteResult[]> {
-    pageSize = 10;
+  getAutocompleteContactGroups(searchTerm: any, pageSize?: number): Observable<ContactGroupAutoCompleteResult[]> {
+    pageSize = PAGE_SIZE;
     const options = new HttpParams()
-    .set('searchTerm', searchTerm  || '')
-    .set('pageSize', pageSize.toString()) ;
-    let url = `${AppConstants.baseContactGroupUrl}/search`;
+      .set('searchTerm', searchTerm || '')
+      .set('pageSize', pageSize.toString());
+    const url = `${AppConstants.baseContactGroupUrl}/search`;
     // let url = `${AppConstants.baseContactGroupUrl}/search?SearchTerm=${searchTerm}&Pagesize=${pageSize}`;
     // url = url.replace(/\+/gi, '%2B');
-    console.log('new encode url', url)
-    return this.http.get<ContactGroupAutoCompleteData>(url, {params: options})
+    return this.http.get<ContactGroupAutoCompleteData>(url, { params: options })
       .pipe(
         map(response => response.result),
         tap(data => console.log(JSON.stringify(data)))
