@@ -33,5 +33,5 @@
   <div class="text-center" *ngIf="isHintVisible">
       <i class="far fa-smile-wink"></i> Type at least <strong>3 characters</strong> to get results
   </div>
-  <app-property-list *ngIf="!isLoading && !isHintVisible" [properties]='properties' [searchTerm]='propertyFinderForm.value.propertyAddress'></app-property-list>
+  <app-property-list *ngIf="!isLoading && !isHintVisible" [originalProperties]='properties' [searchTerm]='propertyFinderForm.value.propertyAddress'></app-property-list>
 </div>

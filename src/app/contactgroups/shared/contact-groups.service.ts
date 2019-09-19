@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { AppConstants } from 'src/app/core/shared/app-constants';
-import { ContactGroupAutoCompleteResult, ContactGroupAutoCompleteData,
-         PersonContactData, ContactGroupData, ContactGroup, BasicContactGroup,
-         BasicContactGroupData, CompanyAutoCompleteResult, CompanyContactGroupAutoCompleteData as CompanyAutoCompleteData,
-         Company, CompanyData, SignerAutoCompleteData, Signer, PersonSummaryFiguresData,
-         PersonSummaryFigures, SignerData, PotentialDuplicateResult, PeopleAutoCompleteData2,  ContactNote, ContactNoteData } from './contact-group';
+import {
+  ContactGroupAutoCompleteResult, ContactGroupAutoCompleteData,
+  PersonContactData, ContactGroupData, ContactGroup, BasicContactGroup,
+  BasicContactGroupData, CompanyAutoCompleteResult, CompanyContactGroupAutoCompleteData as CompanyAutoCompleteData,
+  Company, CompanyData, SignerAutoCompleteData, Signer, PersonSummaryFiguresData,
+  PersonSummaryFigures, SignerData, PotentialDuplicateResult, PeopleAutoCompleteData2, ContactNote, ContactNoteData
+} from './contact-group';
 import { map, tap } from 'rxjs/operators';
 import { Person, BasicPerson } from 'src/app/core/models/person';
 
@@ -15,16 +17,16 @@ const PAGE_SIZE = 100;
   providedIn: 'root'
 })
 export class ContactGroupsService {
-personNotes: ContactNote[];
-contactGroupNotes: ContactNote[];
-private contactInfoAction$ = new Subject<BasicContactGroup[] | null >();
-private personNotesSubject = new Subject<ContactNote[] | null>();
-private contactGroupNotesSubject = new Subject<ContactNote | null>();
-private notesSubject = new Subject<ContactNote | null>();
-noteChanges$ = this.notesSubject.asObservable();
-contactInfoForNotes$ = this.contactInfoAction$.asObservable();
-personNotesChanges$ = this.personNotesSubject.asObservable();
-contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
+  personNotes: ContactNote[];
+  contactGroupNotes: ContactNote[];
+  private contactInfoAction$ = new Subject<BasicContactGroup[] | null>();
+  private personNotesSubject = new Subject<ContactNote[] | null>();
+  private contactGroupNotesSubject = new Subject<ContactNote | null>();
+  private notesSubject = new Subject<ContactNote | null>();
+  noteChanges$ = this.notesSubject.asObservable();
+  contactInfoForNotes$ = this.contactInfoAction$.asObservable();
+  personNotesChanges$ = this.personNotesSubject.asObservable();
+  contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
 
   constructor(private http: HttpClient) { }
 
@@ -34,8 +36,6 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
       .set('searchTerm', searchTerm || '')
       .set('pageSize', pageSize.toString());
     const url = `${AppConstants.baseContactGroupUrl}/search`;
-    // let url = `${AppConstants.baseContactGroupUrl}/search?SearchTerm=${searchTerm}&Pagesize=${pageSize}`;
-    // url = url.replace(/\+/gi, '%2B');
     return this.http.get<ContactGroupAutoCompleteData>(url, { params: options })
       .pipe(
         map(response => response.result),
@@ -46,9 +46,9 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
   getAutocompleteSigners(searchTerm: string): Observable<Signer[]> {
     const url = `${AppConstants.baseContactGroupUrl}/autocomplete?SearchTerm=${searchTerm}`;
     return this.http.get<SignerAutoCompleteData>(url)
-    .pipe(
-         map(response => response.result),
-         tap(data => console.log(JSON.stringify(data)))
+      .pipe(
+        map(response => response.result),
+        tap(data => console.log(JSON.stringify(data)))
       );
   }
 
@@ -82,26 +82,26 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
       );
   }
 
-  getPersonContactGroups( personId: number): Observable<BasicContactGroup[]> {
+  getPersonContactGroups(personId: number): Observable<BasicContactGroup[]> {
     const url = `${AppConstants.basePersonUrl}/${personId}/contactGroups`;
     return this.http.get<BasicContactGroupData>(url).pipe(map(response => response.result));
   }
 
-  getPersonInfo( personId: number): Observable<PersonSummaryFigures> {
+  getPersonInfo(personId: number): Observable<PersonSummaryFigures> {
     const url = `${AppConstants.basePersonUrl}/${personId}/info`;
     return this.http.get<PersonSummaryFiguresData>(url).pipe(map(response => response.result));
   }
 
   getPotentialDuplicatePeople(person: BasicPerson): Observable<PotentialDuplicateResult> {
     const options = new HttpParams()
-                    .set('fullName', person.fullName  || '')
-                    .set('phoneNumber', person.phoneNumber  || '')
-                    .set('emailAddress', person.emailAddress  || '') ;
+      .set('fullName', person.fullName || '')
+      .set('phoneNumber', person.phoneNumber || '')
+      .set('emailAddress', person.emailAddress || '');
     const url = `${AppConstants.basePersonUrl}/duplicates`;
-    return this.http.get<PeopleAutoCompleteData2>(url, {params: options}).pipe(
+    return this.http.get<PeopleAutoCompleteData2>(url, { params: options }).pipe(
       map(response => response.result),
       tap(data => console.log('results for duplicates', data))
-      );
+    );
   }
 
   addPerson(person: Person): Observable<Person | any> {
@@ -133,21 +133,21 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
   }
 
   getAutocompleteCompany(company: any): Observable<CompanyAutoCompleteResult[]> {
-   let options;
-  //   if (company && company.companyName.length >= 3) {
-  //      options = new HttpParams()
-  //                     .set('searchTerm', company.companyName  || '') ;
-  //  }
-   options = new HttpParams()
-                      .set('searchTerm', company.companyName  || '') ;
+    let options;
+    //   if (company && company.companyName.length >= 3) {
+    //      options = new HttpParams()
+    //                     .set('searchTerm', company.companyName  || '') ;
+    //  }
+    options = new HttpParams()
+      .set('searchTerm', company.companyName || '');
     const url = `${AppConstants.baseCompanyUrl}/search`;
-    return this.http.get<CompanyAutoCompleteData>(url, {params: options}).pipe(
+    return this.http.get<CompanyAutoCompleteData>(url, { params: options }).pipe(
       map(response => response.result),
       tap(data => console.log('company list here here...', JSON.stringify(data)))
-      );
+    );
   }
 
-  getCompany( companyId: number): Observable<Company | any> {
+  getCompany(companyId: number): Observable<Company | any> {
     const url = `${AppConstants.baseCompanyUrl}/${companyId}`;
     return this.http.get<CompanyData>(url).pipe(
       map(response => response.result),
@@ -168,7 +168,7 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
       tap(data => this.personNotes = data)
       // tap(data => console.log('person notes here...', this.personNotes )),
       // tap(data => console.log('notes here...', JSON.stringify(data)))
-      );
+    );
   }
 
   getContactGroupNotes(contactGroupId: number): Observable<ContactNote[]> {
@@ -177,10 +177,10 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
       map(response => response.result),
       tap(data => this.contactGroupNotes = data)
       // tap(data => console.log('group notes here...', JSON.stringify(data)))
-      );
+    );
   }
 
-  addPersonNote(personNote: ContactNote): Observable< ContactNote|any> {
+  addPersonNote(personNote: ContactNote): Observable<ContactNote | any> {
     const url = `${AppConstants.basePersonUrl}/${personNote.personId}/personNotes`;
     return this.http.post<ContactNoteData>(url, personNote).pipe(
       map(response => response.result),
@@ -194,7 +194,7 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
       tap(data => console.log('added  contactgroup note here...', JSON.stringify(data))));
   }
 
-  updatePersonNote(personNote: ContactNote): Observable< ContactNote|any> {
+  updatePersonNote(personNote: ContactNote): Observable<ContactNote | any> {
     const url = `${AppConstants.basePersonUrl}/${personNote.personId}/personNotes/${personNote.id}`;
     return this.http.put<ContactNoteData>(url, personNote).pipe(
       map(response => response.result),
@@ -204,12 +204,12 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
   updateContactGroupNote(contactGroupNote: ContactNote): Observable<ContactNote | any> {
     const url = `${AppConstants.baseContactGroupUrl}/${contactGroupNote.contactGroupId}/contactNotes/${contactGroupNote.id}`;
     return this.http.put<ContactNoteData>(url, contactGroupNote)
-    .pipe(
-      map(response => response.result),
-      tap(data => console.log('updated contactgroup note here...', JSON.stringify(data))));
+      .pipe(
+        map(response => response.result),
+        tap(data => console.log('updated contactgroup note here...', JSON.stringify(data))));
   }
 
-  contactInfoChanged(info: BasicContactGroup[]){
+  contactInfoChanged(info: BasicContactGroup[]) {
     this.contactInfoAction$.next(info);
   }
 
@@ -217,12 +217,12 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
     this.personNotesSubject.next(notes);
   }
   notesChanged(note: ContactNote) {
-    switch(true){
+    switch (true) {
       case !!note.personId:
         this.notesSubject.next(note);
         break;
       case !!note.contactGroupId:
-          this.notesSubject.next(note);
+        this.notesSubject.next(note);
     }
   }
 
