@@ -195,7 +195,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.addSelectedPeople();
     }
     this.personFinderForm.valueChanges
-      .pipe(debounceTime(400))
+      .pipe(debounceTime(750))
       .subscribe(data => {
         if (
           data.fullName &&
@@ -717,10 +717,11 @@ setImportantNotes(){
   }
 
   // TODO: Replace this with a directive
-  /* Only allow spaces and digits */
+  /* Only allow spaces, dashes, the plus sign and digits */
   phoneNumberOnly(event): boolean {
     const charCode = (event.which) ? event.which : event.keyCode;
-    if (charCode > 31 && charCode !== 107 && charCode !== 32 && (charCode < 48 || charCode > 57)) {
+    const isCodeNotAllowed = charCode > 31 && charCode !== 45 && charCode !== 43 && charCode !== 32 && (charCode < 48 || charCode > 57);
+    if (isCodeNotAllowed) {
       return false;
     }
     return true;
