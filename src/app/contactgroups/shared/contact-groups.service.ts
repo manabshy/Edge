@@ -30,9 +30,14 @@ contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
 
   getAutocompleteContactGroups(searchTerm: any, pageSize?: number ): Observable<ContactGroupAutoCompleteResult[]> {
     pageSize = 10;
-    let url = `${AppConstants.baseContactGroupUrl}/search?SearchTerm=${searchTerm}&Pagesize=${pageSize}`;
-    url = url.replace(/\+/gi, '%2B');
-    return this.http.get<ContactGroupAutoCompleteData>(url)
+    const options = new HttpParams()
+    .set('searchTerm', searchTerm  || '')
+    .set('pageSize', pageSize.toString()) ;
+    let url = `${AppConstants.baseContactGroupUrl}/search`;
+    // let url = `${AppConstants.baseContactGroupUrl}/search?SearchTerm=${searchTerm}&Pagesize=${pageSize}`;
+    // url = url.replace(/\+/gi, '%2B');
+    console.log('new encode url', url)
+    return this.http.get<ContactGroupAutoCompleteData>(url, {params: options})
       .pipe(
         map(response => response.result),
         tap(data => console.log(JSON.stringify(data)))
