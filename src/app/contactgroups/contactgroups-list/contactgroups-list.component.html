@@ -2,7 +2,7 @@
  <div *ngIf="originalContactGroups" class="search-results" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
   [immediateCheck]="true" (scrolled)="onScrollDown()" (scrolledUp)="onScrollUp()" >
     <a [routerLink]="['detail', contactGroup.personId ]"
-      class="list-group-item list-group-item-action" 
+      class="list-group-item list-group-item-action"
       [ngClass]="{'list-group-item-danger': contactGroup?.warning?.id !== 1}"
       *ngFor="let contactGroup of contactGroups; let i = index;">
       <div class="row mb-1">
@@ -22,12 +22,19 @@
                 <strong [innerHTML]="contactGroup.addressee | highlight : searchTerm"></strong>
               </div>
             </div>
-            <div class="col-12 col-sm-auto">
+            <!-- <div class="col-12 col-sm-auto">
               <p>
                 <app-telephone [person]="contactGroup" [number]="contactGroup?.phoneNumbers[0]" [searchTerm]="searchTerm" [warning]="contactGroup?.warningStatusComment || contactGroup?.warning?.value"></app-telephone>
                 <span class="text-danger" *ngIf="!contactGroup?.phoneNumbers[0]">No Phone</span>
               </p>
-            </div>
+            </div> -->
+           <div class="col-12 col-sm-auto">
+              <ng-container *ngFor="let phoneNumber of contactPhoneNumbers">
+                <p class="mb-2" *ngIf="phoneNumber.personId === contactGroup.personId">
+                  <app-telephone [person]="contactGroup" [number]="phoneNumber.number" [sms]="phoneNumber.sendSMS" [searchTerm]="searchTerm" [warning]="contactGroup?.warningStatusComment || contactGroup?.warning?.value"></app-telephone>
+                </p>
+              </ng-container>
+           </div>
             <div class="col text-sm-right">
               <p class="text-truncate"><a (click)="$event.stopPropagation()"
                   *ngIf="contactGroup?.emailAddresses[0]"
