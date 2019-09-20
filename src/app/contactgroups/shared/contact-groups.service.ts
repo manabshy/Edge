@@ -32,11 +32,12 @@ export class ContactGroupsService {
 
   getAutocompleteContactGroups(searchTerm: any, pageSize?: number): Observable<ContactGroupAutoCompleteResult[]> {
     pageSize = PAGE_SIZE;
+    let url: string;
     const options = new HttpParams()
-      .set('searchTerm', searchTerm || '')
-      .set('pageSize', pageSize.toString());
-    const url = `${AppConstants.baseContactGroupUrl}/search`;
-    return this.http.get<ContactGroupAutoCompleteData>(url, { params: options })
+    .set('searchTerm', searchTerm || '')
+    .set('pageSize', pageSize.toString());
+    url = `${AppConstants.baseContactGroupUrl}/search?${options.toString().replace(/\+/gi, '%2B')}`;
+    return this.http.get<ContactGroupAutoCompleteData>(url)
       .pipe(
         map(response => response.result),
         tap(data => console.log(JSON.stringify(data)))
