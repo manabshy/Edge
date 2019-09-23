@@ -146,8 +146,8 @@
   </div>
   <div class="mb-3">
     <h5>Info</h5>
-    <div class="text-center" *ngIf="!summaryTotals">
-      <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading info ...
+    <div class="text-center text-danger" *ngIf="!summaryTotals">
+      <i class="far fa-sad-tear"></i> No summary info
     </div>
     <ng-container *ngIf="summaryTotals">
       <app-subnav>
