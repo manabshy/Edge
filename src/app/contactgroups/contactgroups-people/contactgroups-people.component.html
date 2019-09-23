@@ -3,7 +3,7 @@
   <div class="row page-title">
     <div class="col">
       <h4 class="mb-0"><ng-container *ngIf="contactGroupDetails?.contactType === 4; else peopleCG">
-        Company</ng-container><ng-template #peopleCG>Personal</ng-template> Contact group  <small class="text-muted">C- {{contactGroupDetails?.contactGroupId}}</small>
+        Company</ng-container><ng-template #peopleCG>Personal</ng-template> Contact group <small *ngIf="contactGroupDetails?.contactGroupId" class="text-muted">C- {{contactGroupDetails?.contactGroupId}}</small>
         <span class="badge badge-pill badge-success" *ngIf="isAMLCompleted">AML Completed</span>
       </h4>
     </div>
@@ -198,11 +198,13 @@
                       </div>
                     </ng-template>
                     <div class="col-12">
-                      <ng-container *ngIf="person?.personNotes?.length">
-                        <div class="alert alert-danger small mb-2 mr-2 d-inline-block" *ngFor="let importantNote of person?.personNotes">
-                          <i class="fas fa-exclamation-circle fa-fw text-danger mr-1"></i> {{importantNote.text}}
-                        </div>
-                      </ng-container>
+                     <div *ngIf="!isNewContactGroup">
+                        <ng-container *ngIf="person?.personNotes?.length">
+                          <div class="alert alert-danger small mb-2 mr-2 d-inline-block" *ngFor="let importantNote of person?.personNotes">
+                            <i class="fas fa-exclamation-circle fa-fw text-danger mr-1"></i> {{importantNote.text}}
+                          </div>
+                        </ng-container>
+                     </div>
                     </div>
                     <div class="col-12 mb-2">
                       <strong>{{person?.firstName | titlecase}} {{person?.lastName | titlecase}}</strong>
