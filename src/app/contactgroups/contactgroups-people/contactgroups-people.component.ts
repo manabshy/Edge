@@ -383,6 +383,7 @@ setImportantNotes(){
   this.contactGroupDetails.contactPeople.forEach(x => {
     x.personNotes = this.importantPeopleNotes.filter(p => p.personId === x.personId);
   });
+  console.log(this.contactGroupDetails.contactPeople);
 }
 
   editSelectedCompany(id: number, newCompany?: boolean) {

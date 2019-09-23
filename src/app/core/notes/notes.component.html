@@ -4,7 +4,7 @@
       <i class="fas fa-sticky-note mr-2"></i> Add Note
     </span>
   </div>
-  <div class="text-center" *ngIf="!originalNotes || (personNotes && !personNoteAddressees.length) || isUpdating; else results">
+  <div class="text-center" *ngIf="(originalNotes && !originalNotes.length) || isUpdating; else results">
     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading notes ...
   </div>
   <ng-template #results>
