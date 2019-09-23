@@ -149,6 +149,9 @@
     <div class="text-center text-danger" *ngIf="!summaryTotals">
       <i class="far fa-sad-tear"></i> No summary info
     </div>
+    <!-- <div class="text-center" *ngIf="(summaryTotals && !summaryTotals.length)">
+      <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading info ...
+    </div> -->
     <ng-container *ngIf="summaryTotals">
       <app-subnav>
         <app-subnav-item *ngFor="let item of subNav" [navLink]="item?.link+'?docTitle='+item?.label+' | '+searchedPersonDetails?.addressee">
