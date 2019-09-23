@@ -8,6 +8,20 @@
     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading details ...
   </div>
   <form *ngIf="personDetails || basicPerson" [formGroup]="personForm" (ngSubmit)="savePerson()" (keydown.enter)="$event.preventDefault()" autocompleteOff>
+    <div class="form-group row" [hidden]="basicPerson">
+      <label for="warningStatus" class="col-sm-2 col-form-label col-form-label-sm">Warning</label>
+      <div class="col-sm-3">
+        <select class="custom-select custom-select-sm" id="warningStatus" name="warningStatus" formControlName="warningStatusId" >
+          <option selected *ngFor="let warning of warnings | keyvalue:keepOriginalOrder" [value]=warning.value.id [attr.disabled]="(!isWarningsEnabled) ? '' : null">{{warning.value.value}}</option>
+        </select>
+        <input type="text" class="form-control form-control-sm mt-2" [ngClass]="{'is-invalid': formErrors.warningStatusComment || personForm.errors?.warningStatusRequired}" formControlName="warningStatusComment" placeholder="Comment ..." *ngIf="isWarningCommentVisible">
+        <div class="invalid-feedback">{{formErrors.warningStatusComment}}</div>
+        <div class="invalid-feedback" *ngIf="personForm.errors?.warningStatusRequired">Please enter a Comment</div>
+      </div>
+      <div class="col col-form-label col-form-label-sm text-left text-danger" *ngIf="!isWarningsEnabled">
+        You don't have the permission to change the warning.
+      </div>
+    </div>
     <div class="form-group row">
       <label for="title" class="col-sm-2 col-form-label col-form-label-sm">Title</label>
       <div class="col-sm-3">
@@ -115,20 +129,6 @@
         </div>
       </div>
    </div>
-   <div class="form-group row">
-    <label for="warningStatus" class="col-sm-2 col-form-label col-form-label-sm">Warning</label>
-    <div class="col-sm-3">
-      <select class="custom-select custom-select-sm" id="warningStatus" name="warningStatus" formControlName="warningStatusId" >
-        <option selected *ngFor="let warning of warnings | keyvalue:keepOriginalOrder" [value]=warning.value.id [attr.disabled]="(!isWarningsEnabled) ? '' : null">{{warning.value.value}}</option>
-      </select>
-      <input type="text" class="form-control form-control-sm mt-2" [ngClass]="{'is-invalid': formErrors.warningStatusComment || personForm.errors?.warningStatusRequired}" formControlName="warningStatusComment" placeholder="Comment ..." *ngIf="isWarningCommentVisible">
-      <div class="invalid-feedback">{{formErrors.warningStatusComment}}</div>
-      <div class="invalid-feedback" *ngIf="personForm.errors?.warningStatusRequired">Please enter a Comment</div>
-    </div>
-    <div class="col col-form-label col-form-label-sm text-left text-danger" *ngIf="!isWarningsEnabled">
-      You don't have the permission to change the warning.
-    </div>
-  </div>
    <div class="form-group row">
     <label class="col-sm-2 col-form-label col-form-label-sm">Contact by</label>
     <div class="col-sm-10">
