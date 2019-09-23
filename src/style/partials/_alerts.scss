@@ -1,0 +1,29 @@
+.alert {
+    &:before {
+        @extend %fa-icon;
+        @extend .fas;
+        margin-right: spacer(1);
+    }
+    &-danger {
+        &:before {
+            content: fa-content($fa-var-exclamation-circle);
+        }
+    }
+    &-success {
+        &:before {
+            content: fa-content($fa-var-check-circle);
+        }
+    }
+
+    &-info {
+        &:before {
+            content: fa-content($fa-var-info-circle);
+        }
+    }
+
+    &-warning {
+        &:before {
+            content: fa-content($fa-var-exclamation-triangle);
+        }
+    }
+}
