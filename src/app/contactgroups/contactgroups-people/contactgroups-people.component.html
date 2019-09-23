@@ -20,7 +20,7 @@
               <i class="fas fa-user-plus fa-fw mr-2"></i> Add Person
             </button>
           </li>
-          <li role="menuitem"><button type="button" class="dropdown-item" (click)="addNote()"><i class="fas fa-sticky-note fa-fw mr-2"></i> Add Note</button></li>
+          <li role="menuitem" *ngIf="contactGroupDetails?.contactGroupId"><button type="button" class="dropdown-item" (click)="addNote()"><i class="fas fa-sticky-note fa-fw mr-2"></i> Add Note</button></li>
         </ul>
       </div>
     </div>
@@ -314,7 +314,8 @@
             </div>
             <div class="row">
               <label class="col-sm-2 col-form-label col-form-label-sm">Notes</label>
-              <div class="col-sm-10">
+              <div class="col-sm-10" [ngClass]="{'notes-disabled': !contactGroupDetails?.contactGroupId}">
+                <small class="alert alert-info" *ngIf="!contactGroupDetails?.contactGroupId"><i class="fas fa-info-circle fa-fw mr-2"></i> Save to enable Notes</small>
                 <app-notes [noteData]="dataNote"  [contactGroupNotes]="dataNote?.notes"></app-notes>
               </div>
             </div>
