@@ -276,6 +276,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
           }
           this.contactGroupDetails.contactPeople = [];
           this.contactGroupDetails.contactPeople.push(this.firstContactGroupPerson);
+          this.showPersonWarning();
           this.setSalutation();
           this.isLoadingNewPersonVisible = false;
         }
