@@ -131,7 +131,8 @@ export class TelephoneComponent implements OnInit {
         isOutGoingCall: true,
         callerNmber: this.currentStaffMember.phone,
         calledNumber: this.number,
-        guid: ''
+        guid: '',
+        isCallHangedUp: false
       };
 
       this.isDialing = true;
@@ -172,7 +173,21 @@ export class TelephoneComponent implements OnInit {
     .onTap
     .pipe(take(1))
     .subscribe(() => {
-      console.log('hang up!')
+      const tapiInfo: TapiRequestInfo = {
+        officeId: this.currentStaffMember.homeOffice.officeId,
+        staffId: this.currentStaffMember.staffMemberId,
+        isOutGoingCall: true,
+        callerNmber: this.currentStaffMember.phone,
+        calledNumber: this.number,
+        guid: '',
+        isCallHangedUp: true
+      };
+
+      this.tapiService.putCallRequest(tapiInfo).subscribe(data => {
+        console.log(data);
+      });
+
+      console.log('hang up!');
     });
   }
 
