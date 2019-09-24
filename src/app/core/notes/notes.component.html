@@ -4,14 +4,15 @@
       <i class="fas fa-sticky-note mr-2"></i> Add Note
     </span>
   </div>
-  <div class="text-center" *ngIf="(originalNotes && !originalNotes.length) || isUpdating; else results">
+  <div class="text-center" *ngIf="(notes && !notes.length) || isUpdating; else results">
     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading notes ...
   </div>
   <ng-template #results>
-    <div *ngIf="originalNotes" class="search-results" infiniteScroll [infiniteScrollDistance]="0"
+    <!-- <div *ngIf="originalNotes" class="search-results" infiniteScroll [infiniteScrollDistance]="0"
       [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="50" [immediateCheck]="true" [alwaysCallback]="true"
       (scrolled)="onScrollDown()" (scrolledUp)="onScrollUp()">
-      <div class="list-group-item text-center text-danger" *ngIf="!originalNotes?.length">
+    </div> -->
+    <div class="list-group-item text-center text-danger" *ngIf="!notes?.length">
         <i class="far fa-sad-tear"></i> No notes
       </div>
       <div class="list-group-item" *ngFor="let note of notes">
@@ -95,6 +96,5 @@
           </div>
         </div>
       </div>
-    </div>
   </ng-template>
 </div>
