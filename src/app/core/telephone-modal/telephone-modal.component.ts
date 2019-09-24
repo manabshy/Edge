@@ -22,4 +22,8 @@ export class TelephoneModalComponent implements OnInit {
     this.subject.complete();
   }
 
+  cancel() {
+    this.bsModalRef.hide();
+  }
+
 }
