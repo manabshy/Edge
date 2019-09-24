@@ -146,16 +146,10 @@
   </div>
   <div class="mb-3">
     <h5>Info</h5>
-    <div class="text-center text-danger" *ngIf="!summaryTotals">
-      <i class="far fa-sad-tear"></i> No summary info
-    </div>
-    <!-- <div class="text-center" *ngIf="(summaryTotals && !summaryTotals.length)">
-      <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading info ...
-    </div> -->
-    <ng-container *ngIf="summaryTotals">
-      <app-subnav>
-        <app-subnav-item *ngFor="let item of subNav" [navLink]="item?.link+'?docTitle='+item?.label+' | '+searchedPersonDetails?.addressee">
-          {{item?.label}}
+    <app-subnav>
+      <app-subnav-item *ngFor="let item of subNav" [navLink]="item?.link+'?docTitle='+item?.label+' | '+searchedPersonDetails?.addressee">
+        {{item?.label}}
+        <ng-container *ngIf="summaryTotals; else loadingInfo">
           <ng-container *ngIf="isObject(summaryTotals[item?.value]); else simpleValue">
             <span class="badge badge-pill badge-success mr-1"> {{summaryTotals[item?.value]?.active}} </span>
             <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value]?.total}}</span>
@@ -163,8 +157,11 @@
           <ng-template #simpleValue>
             <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value] || '0'}}</span>
           </ng-template>
-        </app-subnav-item>
-      </app-subnav>
-    </ng-container>
+        </ng-container>
+        <ng-template #loadingInfo>
+          <span class="badge badge-pill badge-primary"><i class="fas fa-spinner fa-pulse d-inline-block"></i></span>
+        </ng-template>
+      </app-subnav-item>
+    </app-subnav>
   </div>
 </div>
