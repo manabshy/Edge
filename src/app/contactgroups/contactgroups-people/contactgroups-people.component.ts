@@ -563,7 +563,6 @@ setImportantNotes(){
     console.log('contact to clone', this.contactGroupDetails);
     this.isCloned = true;
     if (this.isCloned) {
-      this.contactGroupDetails.contactNotes = [];
       this.contactGroupDetails.contactGroupId = 0;
       this.contactGroupDetails.referenceCount = 0;
     }
