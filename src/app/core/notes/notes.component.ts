@@ -125,6 +125,7 @@ export class NotesComponent implements OnInit, OnChanges {
   }
 
   onScrollUp() {
+    AppUtils.setupInfintiteScroll(this.originalNotes, this.notes);
     console.log('scrolled up!!');
   }
   addNote() {

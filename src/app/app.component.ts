@@ -57,7 +57,8 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
     ).subscribe((event: any[]) => {
       AppUtils.prevRouteBU = AppUtils.prevRoute || '';
       AppUtils.prevRoute = event[0].urlAfterRedirects;
-
+      
+      console.log('prev url',  AppUtils.prevRoute);
       this.isScrollTopVisible = false;
       this.isFading = true;
       setTimeout(()=>{

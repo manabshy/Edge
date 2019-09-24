@@ -8,8 +8,9 @@
     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading notes ...
   </div>
   <ng-template #results>
-    <div *ngIf="originalNotes" style="height: 60rem; overflow: scroll" class="search-results" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
-      [immediateCheck]="true" [scrollWindow]="false" (scrolled)="onScrollDown()" (scrolledUp)="onScrollUp()">
+    <div *ngIf="originalNotes" class="search-results" infiniteScroll [infiniteScrollDistance]="0"
+      [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="50" [immediateCheck]="true" [alwaysCallback]="true"
+      (scrolled)="onScrollDown()" (scrolledUp)="onScrollUp()">
       <div class="list-group-item text-center text-danger" *ngIf="!originalNotes?.length">
         <i class="far fa-sad-tear"></i> No notes
       </div>
