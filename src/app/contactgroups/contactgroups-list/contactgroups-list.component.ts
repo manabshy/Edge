@@ -17,13 +17,17 @@ export class ContactgroupsListComponent implements OnInit, OnChanges {
   constructor(private sharedService: SharedService) { }
 
   ngOnInit() {
-  }
-
-  ngOnChanges() {
-   if (this.originalContactGroups) {
+    if (this.originalContactGroups) {
       this.contactGroups = this.originalContactGroups.slice(0, 10);
       this.setSmsFlag();
    }
+  }
+
+  ngOnChanges() {
+  //  if (this.originalContactGroups) {
+  //     this.contactGroups = this.originalContactGroups.slice(0, 10);
+  //     this.setSmsFlag();
+  //  }
     // remove duplicate phone numbers
     // this.contactPhoneNumbers = [...new Map(this.output.map(item => [item.personId, item])).values()];
   }
