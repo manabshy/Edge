@@ -19,7 +19,7 @@ export class AuthService {
     redirectUri: AppConstants.redirectUri,
     postLogoutRedirectUri: AppConstants.postLogoutRedirectUri,
     cacheLocation: 'localStorage',
-    expireOffsetSeconds: 800,
+    expireOffsetSeconds: 600,
     endpoints: {
       'https://dandg-api-wedge.azurewebsites.net': '67f9a9a1-d8de-45bc-af20-43e1e18ccba5',
       'https://dandg-api-wedge-dev.azurewebsites.net': '67f9a9a1-d8de-45bc-af20-43e1e18ccba5',
