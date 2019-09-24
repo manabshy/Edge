@@ -41,9 +41,9 @@ form {
 
     .alert {
         position: absolute;
-        top: 50%;
+        top: spacer(3);
         left: 50%;
-        transform: translate(-50%, -50%);
+        transform: translateX(-50%);
         z-index: 1;
         white-space: nowrap;
     }

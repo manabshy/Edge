@@ -1,8 +1,13 @@
 .alert {
+    padding-left: 3em;
+
     &:before {
         @extend %fa-icon;
         @extend .fas;
         margin-right: spacer(1);
+        position: absolute;
+        top: spacer(3);
+        left: spacer(3);
     }
     &-danger {
         &:before {
