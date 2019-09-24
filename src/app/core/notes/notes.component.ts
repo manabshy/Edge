@@ -50,10 +50,10 @@ export class NotesComponent implements OnInit, OnChanges {
   }
 
   init() {
-    this.originalNotes = this.personNotes || this.contactGroupNotes;
-    if (this.originalNotes) {
-      this.notes = this.originalNotes.slice(0, 10);
-    }
+    this.notes = this.personNotes || this.contactGroupNotes;
+    // if (this.originalNotes) {
+    //   this.notes = this.originalNotes.slice(0, 10);
+    // }
     if (this.noteData) {
       this.noteData.people !== undefined ? this.contactPeople = this.noteData.people : this.contactPeople = [];
       this.noteData.group ? this.groupAddressee = this.noteData.group.addressee : this.groupAddressee = [];
