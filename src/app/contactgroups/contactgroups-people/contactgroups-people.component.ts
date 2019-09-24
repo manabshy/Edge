@@ -183,7 +183,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
     if(this.contactGroupId) {
       this.getContactGroupById(this.contactGroupId)
-      
+
     } else {
       this.contactGroupDetails = {} as ContactGroup;
       this.contactGroupDetails.contactPeople = [];
@@ -559,13 +559,16 @@ setImportantNotes(){
   }
 
   cloneContactGroup() {
-     this.isCloned = true;
+    console.log('contact to clone', this.contactGroupDetails);
+    this.isCloned = true;
     if (this.isCloned) {
+      this.contactGroupDetails.contactNotes = [];
       this.contactGroupDetails.contactGroupId = 0;
       this.contactGroupDetails.referenceCount = 0;
     }
     this.contactGroupDetailsForm.markAsDirty();
   }
+
   saveContactGroup() {
     let validityCondition = this.contactGroupDetailsForm.valid;
     if(this.contactGroupDetails.contactType === ContactType.CompanyContact) {
