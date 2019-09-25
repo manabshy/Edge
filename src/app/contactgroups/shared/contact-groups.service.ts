@@ -24,20 +24,29 @@ export class ContactGroupsService {
   private personNotesSubject = new Subject<ContactNote[] | null>();
   private contactGroupNotesSubject = new Subject<ContactNote | null>();
   private notesSubject = new Subject<ContactNote | null>();
+  private contactGroupAutocompleteSubject = new Subject<ContactGroupAutoCompleteResult[] | null>();
+  private pageChangeSubject = new Subject<number | null>();
   noteChanges$ = this.notesSubject.asObservable();
   contactInfoForNotes$ = this.contactInfoAction$.asObservable();
   personNotesChanges$ = this.personNotesSubject.asObservable();
   contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
+  contactGroupAutocomplete$ = this.contactGroupAutocompleteSubject.asObservable();
+  pageChanges$ = this.pageChangeSubject.asObservable();
 
   constructor(private http: HttpClient) { }
 
-  getAutocompleteContactGroups(searchTerm: any, pageSize?: number): Observable<ContactGroupAutoCompleteResult[]> {
-    pageSize = PAGE_SIZE;
+  getAutocompleteContactGroups(searchTerm: any, pageSize?: number, page?: number): Observable<ContactGroupAutoCompleteResult[]> {
+    // pageSize = 10;
+    // page = 1;
+    if(!page || +page === 0){
+       page = 1;
+    }
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
       fromObject: {
         searchTerm: searchTerm,
-        pageSize: pageSize.toString()
+        pageSize: pageSize.toString(),
+        page: page.toString()
       }
     });
     const url = `${AppConstants.baseContactGroupUrl}/search`;
@@ -218,6 +227,13 @@ export class ContactGroupsService {
     this.contactInfoAction$.next(info);
   }
 
+  pageNumberChanged(result: number) {
+    this. pageChangeSubject.next(result);
+  }
+
+  contactGroupAutocompleteChanged(result: ContactGroupAutoCompleteResult[]) {
+    this. contactGroupAutocompleteSubject.next(result);
+  }
   personNotesChanged(notes: ContactNote[]) {
     this.personNotesSubject.next(notes);
   }
