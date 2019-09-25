@@ -1,0 +1,26 @@
+@import "../../../style/bootstrap-overrides";
+
+@import "../../../../node_modules/bootstrap/scss/functions";
+@import "../../../../node_modules/bootstrap/scss/variables";
+@import "../../../../node_modules/bootstrap/scss/mixins";
+
+:host {
+    @include media-breakpoint-down(sm) {
+        @include make-row();
+        margin: 0;
+    }
+
+    & > * {
+        @include media-breakpoint-down(sm) {
+            @include make-col-ready();
+            flex-basis: 0;
+            flex-grow: 1;
+            max-width: 100%;
+        } 
+
+        &.sms-btn {
+            flex: 0 0 auto;
+            width: auto;
+        }
+    }
+}

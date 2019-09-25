@@ -41,20 +41,10 @@ export class TelephoneComponent implements OnInit {
     }
   }
 
-  callOrText() {
+  callOrText(call: boolean) {
     event.stopPropagation();
     event.preventDefault();
-    if (this.sms) {
-      if (this.warning && this.warning !== 'None') {
-        this.showWarning().subscribe(res => {
-          if (res) {
-            this.callOrTextChoice();
-          }
-        });
-      } else {
-        this.callOrTextChoice();
-      }
-    } else {
+    if (call) {
       if (this.warning && this.warning !== 'None') {
         this.showWarning().subscribe(res => {
           if (res) {
@@ -63,6 +53,16 @@ export class TelephoneComponent implements OnInit {
         });
       } else {
         this.call();
+      }
+    } else {
+      if (this.warning && this.warning !== 'None') {
+        this.showWarning().subscribe(res => {
+          if (res) {
+            this.sendSMS();
+          }
+        });
+      } else {
+        this.sendSMS();
       }
     }
   }
