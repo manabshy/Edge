@@ -3,7 +3,7 @@ import { ContactGroupAutoCompleteResult } from '../shared/contact-group';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { ContactGroupsService } from '../shared/contact-groups.service';
-
+import * as _ from 'lodash';
 @Component({
   selector: 'app-contactgroups-list',
   templateUrl: './contactgroups-list.component.html',
@@ -21,7 +21,10 @@ export class ContactgroupsListComponent implements OnInit, OnChanges {
   
   ngOnInit() {
     if (this.originalContactGroups) {
-      this.contactGroups = this.originalContactGroups.slice(0, 10);
+      this.contactGroups = _(this.originalContactGroups).slice(this.page * 10).take(10).value();
+      // this.contactGroups = this.originalContactGroups.slice(0, 10);
+      console.log('all groups to show', this.originalContactGroups);
+      console.log('new group to show', this.contactGroups);
       this.setSmsFlag();
    }
   }

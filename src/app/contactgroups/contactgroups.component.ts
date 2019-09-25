@@ -8,6 +8,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { SharedService } from '../core/services/shared.service';
 import { AppConstants } from '../core/shared/app-constants';
 
+const PAGE_SIZE = 20;
 @Component({
   selector: 'app-contactgroups',
   templateUrl: './contactgroups.component.html',
@@ -19,7 +20,7 @@ export class ContactGroupsComponent implements OnInit {
   isHintVisible = false;
   isLoading = false;
   contactFinderForm: FormGroup;
-  contactGroups: ContactGroupAutoCompleteResult[];
+  contactGroups: ContactGroupAutoCompleteResult[]=[];
   contactGroupDetails: ContactGroupAutoCompleteResult[];
   contactPeople: any[];
   contactGroupId: number;
@@ -114,16 +115,20 @@ export class ContactGroupsComponent implements OnInit {
     if (searchTerm) {
       this.isLoading = true;
     }
-    console.log("contactgroupresults " + this.page);
-    this.contactGroupService.getAutocompleteContactGroups(searchTerm, 10, this.page).subscribe(result => {
-        this.contactGroups = result;
+    this.contactGroupService.getAutocompleteContactGroups(searchTerm, PAGE_SIZE, this.page).subscribe(result => {
+       if (+this.page === (0 || 1)) {
+         console.log('initial', this.page)
+          this.contactGroups = result;
+       } else {
+        console.log('other calls', this.page)
+         this.contactGroups = this.contactGroups.concat(result);
+       }
         if (this.contactGroups && this.contactGroups.length) {
           this.contactGroups.forEach(x => {
             x.warning = this.sharedService.showWarning(x.warningStatusId, this.warnings, x.warningStatusComment);
           });
         }
         this.isLoading = false;
-        console.log('contact groups', this.contactGroups);
 
         if (searchTerm && searchTerm.length) {
           if (!this.contactGroups.length) {
