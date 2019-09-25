@@ -1,5 +1,5 @@
 <div class="list-group mb-5">
- <div *ngIf="originalContactGroups" class="search-results" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+ <div *ngIf="originalContactGroups" class="search-results" infiniteScroll [infiniteScrollDistance]="5" [infiniteScrollThrottle]="20"
   [immediateCheck]="true" (scrolled)="onScrollDown()" (scrolledUp)="onScrollUp()" >
     <a [routerLink]="['detail', contactGroup.personId ]"
       class="list-group-item list-group-item-action"
