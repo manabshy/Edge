@@ -1,7 +1,8 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, HostListener } from '@angular/core';
 import { ContactGroupAutoCompleteResult } from '../shared/contact-group';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { SharedService } from 'src/app/core/services/shared.service';
+import { ContactGroupsService } from '../shared/contact-groups.service';
 
 @Component({
   selector: 'app-contactgroups-list',
@@ -11,11 +12,13 @@ import { SharedService } from 'src/app/core/services/shared.service';
 export class ContactgroupsListComponent implements OnInit, OnChanges {
   @Input() originalContactGroups: ContactGroupAutoCompleteResult[];
   @Input() searchTerm: string;
+  @Input() pageNumber: number;
   contactGroups: ContactGroupAutoCompleteResult[];
   contactPhoneNumbers = [];
-
-  constructor(private sharedService: SharedService) { }
-
+  page: number;
+  
+  constructor(private sharedService: SharedService, private contactGroupService: ContactGroupsService) { }
+  
   ngOnInit() {
     if (this.originalContactGroups) {
       this.contactGroups = this.originalContactGroups.slice(0, 10);
@@ -24,12 +27,7 @@ export class ContactgroupsListComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-  //  if (this.originalContactGroups) {
-  //     this.contactGroups = this.originalContactGroups.slice(0, 10);
-  //     this.setSmsFlag();
-  //  }
-    // remove duplicate phone numbers
-    // this.contactPhoneNumbers = [...new Map(this.output.map(item => [item.personId, item])).values()];
+    this.page = this.pageNumber;
   }
 
   setSmsFlag() {
@@ -50,10 +48,20 @@ export class ContactgroupsListComponent implements OnInit, OnChanges {
 
   onScrollDown() {
     AppUtils.setupInfintiteScroll(this.originalContactGroups, this.contactGroups);
+    this.onWindowScroll();
     console.log('scrolled down!!');
   }
 
   onScrollUp() {
     console.log('scrolled up!!');
+  }
+
+  @HostListener('window:scroll', ['$event'])
+  onWindowScroll() {
+    if (window.innerHeight + window.scrollY === document.body.scrollHeight) {
+      this.page ++;
+      this.contactGroupService.pageNumberChanged(this.page);
+      console.log('bottom here...', this.page);
+ }
   }
 }

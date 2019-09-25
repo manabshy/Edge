@@ -26,6 +26,7 @@ export class ContactGroupsComponent implements OnInit {
   listInfo: any;
   warnings: any;
   differentSearchSuggestions: string[];
+  page = 0;
   constructor(private contactGroupService: ContactGroupsService,
               private route: ActivatedRoute,
               private fb: FormBuilder,
@@ -59,6 +60,17 @@ export class ContactGroupsComponent implements OnInit {
         this.setDropdownLists();
       });
     }
+
+    // page changes here
+    this.contactGroupService.pageChanges$.subscribe(data =>{
+      if(data){
+        console.log('new page here', data);
+        this.page = data;
+        this.contactGroupsResults()
+        console.log('new page for service here', this.page);
+        console.log('new groups here', this.contactGroups);
+      }
+    });
   }
 
   setDropdownLists() {
@@ -102,7 +114,8 @@ export class ContactGroupsComponent implements OnInit {
     if (searchTerm) {
       this.isLoading = true;
     }
-    this.contactGroupService.getAutocompleteContactGroups(searchTerm).subscribe(result => {
+    console.log("contactgroupresults " + this.page);
+    this.contactGroupService.getAutocompleteContactGroups(searchTerm, 10, this.page).subscribe(result => {
         this.contactGroups = result;
         if (this.contactGroups && this.contactGroups.length) {
           this.contactGroups.forEach(x => {

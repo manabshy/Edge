@@ -38,8 +38,8 @@ export class ContactGroupsService {
   getAutocompleteContactGroups(searchTerm: any, pageSize?: number, page?: number): Observable<ContactGroupAutoCompleteResult[]> {
     // pageSize = 10;
     // page = 1;
-    if(!page || +page === 0){
-       page = 1;
+    if (!page || +page === 0) {
+      page = 1;
     }
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
@@ -228,7 +228,7 @@ export class ContactGroupsService {
   }
 
   pageNumberChanged(result: number) {
-    this. pageChangeSubject.next(result);
+    this.pageChangeSubject.next(result);
   }
 
   contactGroupAutocompleteChanged(result: ContactGroupAutoCompleteResult[]) {
