@@ -4,7 +4,6 @@ import { ContactGroupAutoCompleteResult } from './shared/contact-group';
 import { ActivatedRoute } from '@angular/router';
 import { AppUtils } from '../core/shared/utils';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { SharedService } from '../core/services/shared.service';
 import { AppConstants } from '../core/shared/app-constants';
 import * as _ from 'lodash';
@@ -30,7 +29,7 @@ export class ContactGroupsComponent implements OnInit, OnDestroy {
   differentSearchSuggestions: string[];
   page = 1;
   searchTerm = '';
-  bottomReached: boolean = false;
+  bottomReached = false;
 
   constructor(private contactGroupService: ContactGroupsService,
               private route: ActivatedRoute,

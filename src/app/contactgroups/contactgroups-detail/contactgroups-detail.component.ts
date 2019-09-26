@@ -26,7 +26,7 @@ export class ContactgroupsDetailComponent implements OnInit {
   isCollapsed: boolean;
   summaryTotals: PersonSummaryFigures;
   subNav = ContactGroupDetailsSubNavItems;
-  importantPersonNotes: ContactNote[];
+  // importantPersonNotes: ContactNote[];
 
   constructor(private contactGroupService: ContactGroupsService,
               private sharedService: SharedService,
@@ -61,7 +61,7 @@ export class ContactgroupsDetailComponent implements OnInit {
       if (data) {
         this.contactGroupService.getPerson(this.personId).subscribe(x => {
           this.searchedPersonDetails.personNotes = x.personNotes;
-          this.setImportantPersonNotes();
+          // this.setImportantPersonNotes();
         });
       }
     });
@@ -71,9 +71,9 @@ export class ContactgroupsDetailComponent implements OnInit {
     this.warnings = this.listInfo.result.personWarningStatuses;
   }
 
-  setImportantPersonNotes() {
-    this.importantPersonNotes = this.searchedPersonDetails.personNotes.filter(x => x.isImportant && +x.personId === +this.personId);
-  }
+  // setImportantPersonNotes() {
+  //   this.importantPersonNotes = this.searchedPersonDetails.personNotes.filter(x => x.isImportant && +x.personId === +this.personId);
+  // }
 
   getContactGroupById(contactGroupId: number) {
     this.contactGroupService.getContactGroupbyId(contactGroupId).subscribe(data => {
@@ -83,11 +83,11 @@ export class ContactgroupsDetailComponent implements OnInit {
   }
 
   getSearchedPersonDetails(personId: number) {
-    this.contactGroupService.getPerson(personId).subscribe(data => {
+    this.contactGroupService.getPerson(personId, true).subscribe(data => {
       if (data) {
         this.searchedPersonDetails = data;
         this.contactGroupService.personNotesChanged(data.personNotes);
-        this.setImportantPersonNotes();
+        // this.setImportantPersonNotes();
         this.sharedService.setTitle(this.searchedPersonDetails.addressee);
         this.searchedPersonDetails.warning = this.sharedService.showWarning(this.searchedPersonDetails.warningStatusId, this.warnings, this.searchedPersonDetails.warningStatusComment);
       }

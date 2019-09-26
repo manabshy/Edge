@@ -25,21 +25,7 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
   constructor(private contactGroupService: ContactGroupsService,
               private route: ActivatedRoute,
               private sharedService: SharedService) {super(); }
-  // ngOnInit() {
-  //   // let personParams = this.route.snapshot.queryParamMap.get('person');
-  //   // if(personParams){
-  //   //   this.person = JSON.parse(personParams);
-  //   // }
-  // }
-
-  // addNote() {
-  //   event.stopPropagation();
-  //   const data = {
-  //     person: this.person,
-  //     isPersonNote: true
-  //   }
-  //   this.sharedService.addNote(data);
-  // }
+ 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.contactGroupId = +params['contactGroupId'] || 0;
@@ -84,7 +70,7 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
   }
 
   getPersonNotes(personId: number) {
-    this.contactGroupService.getPersonNotes(personId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
+    this.contactGroupService.getPersonNotes(personId, true, 20).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
       this.personNotes = data;
     });
   }

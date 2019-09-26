@@ -17,9 +17,9 @@ export class ContactgroupsListComponent implements OnInit, OnChanges {
   contactGroups: ContactGroupAutoCompleteResult[] = [];
   contactPhoneNumbers = [];
   page: number;
-  
+
   constructor(private contactGroupService: ContactGroupsService) { }
-  
+
   ngOnInit() {
   }
 
