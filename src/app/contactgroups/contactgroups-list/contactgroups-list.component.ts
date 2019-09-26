@@ -13,41 +13,25 @@ export class ContactgroupsListComponent implements OnInit, OnChanges {
   @Input() originalContactGroups: ContactGroupAutoCompleteResult[];
   @Input() searchTerm: string;
   @Input() pageNumber: number;
-  contactGroups: ContactGroupAutoCompleteResult[];
+  @Input() bottomReached: boolean;
+  contactGroups: ContactGroupAutoCompleteResult[] = [];
   contactPhoneNumbers = [];
   page: number;
   
   constructor(private sharedService: SharedService, private contactGroupService: ContactGroupsService) { }
   
   ngOnInit() {
-    if (this.originalContactGroups) {
-      this.contactGroups = _(this.originalContactGroups).slice(this.page * 10).take(10).value();
-      this.setSmsFlag();
-   }
   }
 
   ngOnChanges() {
     this.page = this.pageNumber;
-  }
-
-  setSmsFlag() {
-    let sendSMS: boolean;
-    let result;
     if (this.originalContactGroups) {
-      this.originalContactGroups.forEach(c => {
-        this.sharedService.isUKMobile(c.phoneNumbers[0]) ? sendSMS = true : sendSMS = false;
-        result = {
-          personId: c.personId,
-          sendSMS: sendSMS,
-          number: c.phoneNumbers[0]
-        };
-        this.contactPhoneNumbers.push(result);
-      });
+      this.contactGroups = this.originalContactGroups
     }
   }
 
   onScrollDown() {
-    AppUtils.setupInfintiteScroll(this.originalContactGroups, this.contactGroups);
+    //AppUtils.setupInfintiteScroll(this.originalContactGroups, this.contactGroups);
     this.onWindowScroll();
     console.log('scrolled down!!');
   }
@@ -58,7 +42,7 @@ export class ContactgroupsListComponent implements OnInit, OnChanges {
 
   @HostListener('window:scroll', ['$event'])
   onWindowScroll() {
-    if (window.innerHeight + window.scrollY === document.body.scrollHeight) {
+    if (window.innerHeight + window.scrollY === document.body.scrollHeight && !this.bottomReached) {
       this.page ++;
       this.contactGroupService.pageNumberChanged(this.page);
       console.log('bottom here...', this.page);
