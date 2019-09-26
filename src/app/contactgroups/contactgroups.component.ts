@@ -41,7 +41,7 @@ export class ContactGroupsComponent implements OnInit, OnDestroy {
       searchTerm: [''],
     });
     this.contactFinderForm.valueChanges
-      .pipe(debounceTime(500), distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)))
+      .pipe(distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)))
       .subscribe(data => {
         console.log('searchterm in valuechanges', this.searchTerm);
        if (data.searchTerm === '') {
