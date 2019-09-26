@@ -20,7 +20,7 @@ export class NotesComponent implements OnInit, OnChanges {
   @Input() personNotes: ContactNote[];
   @Input() contactGroupNotes: ContactNote[];
   @Input() contactGroups: BasicContactGroup[];
-  originalNotes: any;
+  notes: any;
   tests: any;
   contactPeople: Person[];
   personNoteAddressees = [];
@@ -96,7 +96,7 @@ export class NotesComponent implements OnInit, OnChanges {
 
   setFlag(noteId: number, isImportantFlag: boolean) {
     console.log('note id here.....', noteId);
-    this.originalNotes.forEach((x: ContactNote) => {
+    this.notes.forEach((x: ContactNote) => {
       if (x.id === noteId) {
         if (isImportantFlag) {
           x.isImportant ? x.isImportant = false : x.isImportant = true;

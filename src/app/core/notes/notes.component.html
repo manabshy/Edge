@@ -9,7 +9,7 @@
   </div>
   <ng-template #results>
     <div *ngIf="notes" class="search-results" infiniteScroll [infiniteScrollDistance]="5"
-      [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="50" [immediateCheck]="true" [alwaysCallback]="true"
+      [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"
       (scrolled)="onScrollDown()" (scrolledUp)="onScrollUp()">
     </div>
     <div class="list-group-item text-center text-danger" *ngIf="!notes?.length">

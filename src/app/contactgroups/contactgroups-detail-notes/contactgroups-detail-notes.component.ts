@@ -63,16 +63,15 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
       this.contactGroupInfo = data;
       console.log('contact groups on detail notes page....', data);
     });
+
     this.contactGroupService.pageChanges$.subscribe(newPageNumber => {
       this.page = newPageNumber;
-       console.log('first call here.....');
       this.getNextPersonNotesPage(this.page);
     });
 
   }
 
   getPersonNotes() {
-    console.log('first call here.....');
     this.getNextPersonNotesPage(this.page);
   }
 
@@ -84,15 +83,14 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
   getContactGroups(personId: number) {
     this.contactGroupService.getPersonContactGroups(personId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
      if (data) {
-        // this.contactGroups = data;
+        this.contactGroups = data;
         this.contactGroupService.contactInfoChanged(data);
      }
     });
   }
   private getNextPersonNotesPage(page) {
-    this.contactGroupService.getPersonNotes(this.personId, true, 10, page).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
+    this.contactGroupService.getPersonNotes(this.personId, 10, page).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
       if (data) {
-        // this.personNotes = data;
         this.personNotes = this.personNotes.concat(data);
       }
       if (!data.length) {
