@@ -56,9 +56,6 @@
       </div>
     </div>
   </form>
-  <div class="text-center" *ngIf="isLoading && !isHintVisible">
-    <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...
-  </div>
   <ng-container *ngIf="isMessageVisible && !isLoading && !isHintVisible">
       <div class="text-center text-danger">
         <i class="far fa-sad-tear"></i> No results for '<strong>{{contactFinderForm.value.searchTerm || ' '}}</strong>'
@@ -76,4 +73,7 @@
   </div>
   <app-contactgroups-list [originalContactGroups]='contactGroups' [pageNumber]="page" [searchTerm]='contactFinderForm.value.searchTerm' *ngIf="!isLoading && !isHintVisible">
   </app-contactgroups-list>
+  <div class="text-center" *ngIf="isLoading && !isHintVisible">
+      <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...
+    </div>
 </div>
