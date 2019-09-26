@@ -32,7 +32,6 @@ export class NotesComponent implements OnInit, OnChanges {
   order = ['isPinned', 'createDate'];
   reverse = true;
   isUpdating = false;
-  notes: any;
   addressees: any[];
   page: number;
 
