@@ -71,9 +71,18 @@ export class ContactGroupsService {
     return this.http.get<SignerData>(url).pipe(map(response => response.result));
   }
 
-  getContactGroupbyId(contactGroupId: number): Observable<ContactGroup> {
+  getContactGroupbyId(contactGroupId: number, includeOnlyImportantNotes?: boolean): Observable<ContactGroup> {
+    if (!includeOnlyImportantNotes) {
+      includeOnlyImportantNotes = false;
+    }
+    const options = new HttpParams({
+      encoder: new CustomQueryEncoderHelper,
+      fromObject: {
+        includeOnlyImportantNotes: includeOnlyImportantNotes.toString()
+      }
+    });
     const url = `${AppConstants.baseContactGroupUrl}/${contactGroupId}`;
-    return this.http.get<ContactGroupData>(url)
+    return this.http.get<ContactGroupData>(url, { params: options })
       .pipe(
         map(response => response.result),
         tap(data => this.contactGroupNotes = data.contactNotes),
@@ -87,7 +96,7 @@ export class ContactGroupsService {
   }
 
   getPerson(personId: number, includeOnlyImportantNotes?: boolean): Observable<Person> {
-    if(!includeOnlyImportantNotes){
+    if (!includeOnlyImportantNotes) {
       includeOnlyImportantNotes = false;
     }
     const options = new HttpParams({
@@ -97,7 +106,7 @@ export class ContactGroupsService {
       }
     });
     const url = `${AppConstants.basePersonUrl}/${personId}`;
-    return this.http.get<PersonContactData>(url, {params: options})
+    return this.http.get<PersonContactData>(url, { params: options })
       .pipe(
         map(response => response.result),
         tap(data => this.personNotes = data.personNotes),
@@ -184,12 +193,9 @@ export class ContactGroupsService {
       tap(data => console.log('updated company contact details here...', JSON.stringify(data))));
   }
 
-  getPersonNotes(personId: number, includeOnlyImportantNotes?:boolean, pageSize?: number, page?: number): Observable<ContactNote[]> {
+  getPersonNotes(personId: number, pageSize?: number, page?: number): Observable<ContactNote[]> {
     if (!page || +page === 0) {
       page = 1;
-    }
-    if(!includeOnlyImportantNotes){
-      includeOnlyImportantNotes = false;
     }
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
@@ -199,7 +205,7 @@ export class ContactGroupsService {
       }
     });
     const url = `${AppConstants.basePersonUrl}/${personId}/personNotes`;
-    return this.http.get<ContactNoteData>(url,{params:options}).pipe(
+    return this.http.get<ContactNoteData>(url, { params: options }).pipe(
       map(response => response.result),
       tap(data => this.personNotes = data)
       // tap(data => console.log('person notes here...', this.personNotes )),
@@ -207,9 +213,19 @@ export class ContactGroupsService {
     );
   }
 
-  getContactGroupNotes(contactGroupId: number): Observable<ContactNote[]> {
+  getContactGroupNotes(contactGroupId: number, pageSize?: number, page?: number): Observable<ContactNote[]> {
+    if (!page || +page === 0) {
+      page = 1;
+    }
+    const options = new HttpParams({
+      encoder: new CustomQueryEncoderHelper,
+      fromObject: {
+        pageSize: pageSize.toString(),
+        page: page.toString()
+      }
+    });
     const url = `${AppConstants.baseContactGroupUrl}/${contactGroupId}/contactNotes`;
-    return this.http.get<ContactNoteData>(url).pipe(
+    return this.http.get<ContactNoteData>(url, { params: options }).pipe(
       map(response => response.result),
       tap(data => this.contactGroupNotes = data)
       // tap(data => console.log('group notes here...', JSON.stringify(data)))
@@ -254,7 +270,7 @@ export class ContactGroupsService {
   }
 
   contactGroupAutocompleteChanged(result: ContactGroupAutoCompleteResult[]) {
-    this. contactGroupAutocompleteSubject.next(result);
+    this.contactGroupAutocompleteSubject.next(result);
   }
   personNotesChanged(notes: ContactNote[]) {
     this.personNotesSubject.next(notes);
