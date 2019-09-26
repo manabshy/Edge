@@ -65,7 +65,7 @@ export class ContactGroupsComponent implements OnInit, OnDestroy {
     this.contactGroupService.pageChanges$.subscribe(newPageNumber => {
       if (newPageNumber) {
         this.page = newPageNumber;
-        this.contactGroupsAddPage(this.page);
+        this.getNextContactGroupsPage(this.page);
       }
     });
   }
@@ -85,11 +85,10 @@ export class ContactGroupsComponent implements OnInit, OnDestroy {
     this.bottomReached = false;
     this.contactGroups = [];
     this.searchTerm = this.contactFinderForm.get('searchTerm').value;
-    this.contactGroupsAddPage(this.page);
-
+    this.getNextContactGroupsPage(this.page);
   }
 
-  contactGroupsAddPage(page: number) {
+  getNextContactGroupsPage(page: number) {
     this.isLoading = true;
     this.contactGroupService.getAutocompleteContactGroups(this.searchTerm, PAGE_SIZE, page).subscribe(result => {
       this.isLoading = false;
@@ -109,9 +108,8 @@ export class ContactGroupsComponent implements OnInit, OnDestroy {
 
       let sendSMS: boolean;
       let newNumber;
-
-      if(result) {
-        result.forEach((c,index) => {
+      if (result) {
+        result.forEach((c, index) => {
           this.sharedService.isUKMobile(c.phoneNumbers[0]) ? sendSMS = true : sendSMS = false;
           newNumber = {
             personId: c.personId,
@@ -126,7 +124,7 @@ export class ContactGroupsComponent implements OnInit, OnDestroy {
              x.warning = this.sharedService.showWarning(x.warningStatusId, this.warnings, x.warningStatusComment);
            });
          }
-      }      
+      }
 
      }, error => {
        this.contactGroups = [];

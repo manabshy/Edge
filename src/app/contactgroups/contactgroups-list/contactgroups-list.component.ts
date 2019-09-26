@@ -18,7 +18,7 @@ export class ContactgroupsListComponent implements OnInit, OnChanges {
   contactPhoneNumbers = [];
   page: number;
   
-  constructor(private sharedService: SharedService, private contactGroupService: ContactGroupsService) { }
+  constructor(private contactGroupService: ContactGroupsService) { }
   
   ngOnInit() {
   }
@@ -26,12 +26,11 @@ export class ContactgroupsListComponent implements OnInit, OnChanges {
   ngOnChanges() {
     this.page = this.pageNumber;
     if (this.originalContactGroups) {
-      this.contactGroups = this.originalContactGroups
+      this.contactGroups = this.originalContactGroups;
     }
   }
 
   onScrollDown() {
-    //AppUtils.setupInfintiteScroll(this.originalContactGroups, this.contactGroups);
     this.onWindowScroll();
     console.log('scrolled down!!');
   }
