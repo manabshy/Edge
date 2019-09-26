@@ -22,9 +22,6 @@ export class ContactgroupsListComponent implements OnInit, OnChanges {
   ngOnInit() {
     if (this.originalContactGroups) {
       this.contactGroups = _(this.originalContactGroups).slice(this.page * 10).take(10).value();
-      // this.contactGroups = this.originalContactGroups.slice(0, 10);
-      console.log('all groups to show', this.originalContactGroups);
-      console.log('new group to show', this.contactGroups);
       this.setSmsFlag();
    }
   }

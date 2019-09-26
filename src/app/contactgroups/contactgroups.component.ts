@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ContactGroupsService } from './shared/contact-groups.service';
 import { ContactGroupAutoCompleteResult } from './shared/contact-group';
 import { ActivatedRoute } from '@angular/router';
@@ -14,13 +14,13 @@ const PAGE_SIZE = 20;
   templateUrl: './contactgroups.component.html',
   styleUrls: ['./contactgroups.component.scss']
 })
-export class ContactGroupsComponent implements OnInit {
+export class ContactGroupsComponent implements OnInit, OnDestroy {
   advSearchCollapsed = false;
   isMessageVisible = false;
   isHintVisible = false;
   isLoading = false;
   contactFinderForm: FormGroup;
-  contactGroups: ContactGroupAutoCompleteResult[]=[];
+  contactGroups: ContactGroupAutoCompleteResult[] = [];
   contactGroupDetails: ContactGroupAutoCompleteResult[];
   contactPeople: any[];
   contactGroupId: number;
@@ -28,6 +28,9 @@ export class ContactGroupsComponent implements OnInit {
   warnings: any;
   differentSearchSuggestions: string[];
   page = 0;
+  get searchTerm() {
+    return this.contactFinderForm.get('searchTerm').value;
+  }
   constructor(private contactGroupService: ContactGroupsService,
               private route: ActivatedRoute,
               private fb: FormBuilder,
@@ -40,7 +43,10 @@ export class ContactGroupsComponent implements OnInit {
     this.contactFinderForm.valueChanges
       .pipe(debounceTime(500), distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)))
       .subscribe(data => {
-        // this.contactGroupsAutocomplete(data.searchTerm)
+        console.log('searchterm in valuechanges', this.searchTerm);
+       if (data.searchTerm === '') {
+         this.contactGroups = [];
+       }
       });
 
     this.route.queryParams.subscribe(params => {
@@ -63,17 +69,17 @@ export class ContactGroupsComponent implements OnInit {
     }
 
     // page changes here
-    this.contactGroupService.pageChanges$.subscribe(data =>{
-      if(data){
-        console.log('new page here', data);
-        this.page = data;
-        this.contactGroupsResults()
-        console.log('new page for service here', this.page);
-        console.log('new groups here', this.contactGroups);
+    this.contactGroupService.pageChanges$.subscribe(newPageNumber => {
+      if (newPageNumber) {
+        this.page = newPageNumber;
+        this.contactGroupsResults();
       }
     });
   }
 
+  ngOnDestroy() {
+    this.contactGroups = [];
+  }
   setDropdownLists() {
     this.warnings = this.listInfo.result.personWarningStatuses;
   }
@@ -111,17 +117,14 @@ export class ContactGroupsComponent implements OnInit {
   // }
 
   contactGroupsResults() {
-    const searchTerm = this.contactFinderForm.get('searchTerm').value;
-    if (searchTerm) {
+    if (this.searchTerm) {
       this.isLoading = true;
     }
-    this.contactGroupService.getAutocompleteContactGroups(searchTerm, PAGE_SIZE, this.page).subscribe(result => {
+    this.contactGroupService.getAutocompleteContactGroups(this.searchTerm, PAGE_SIZE, this.page).subscribe(result => {
        if (+this.page === (0 || 1)) {
-         console.log('initial', this.page)
           this.contactGroups = result;
        } else {
-        console.log('other calls', this.page)
-         this.contactGroups = this.contactGroups.concat(result);
+        this.contactGroups = this.contactGroups.concat(result);
        }
         if (this.contactGroups && this.contactGroups.length) {
           this.contactGroups.forEach(x => {
@@ -130,10 +133,10 @@ export class ContactGroupsComponent implements OnInit {
         }
         this.isLoading = false;
 
-        if (searchTerm && searchTerm.length) {
+        if (this.searchTerm && this.searchTerm.length) {
           if (!this.contactGroups.length) {
             this.isMessageVisible = true;
-            this.getDifferentSearchSuggestions(searchTerm);
+            this.getDifferentSearchSuggestions(this.searchTerm);
           } else {
             this.isMessageVisible = false;
           }
