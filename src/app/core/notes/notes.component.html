@@ -7,7 +7,7 @@
   <div class="text-center" *ngIf="isUpdating">
     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading notes ...
   </div>
-  <div class="list-group-item text-center text-danger" *ngIf="!notes || !notes?.length && !isUpdating; else results">
+  <div class="list-group-item text-center text-danger" *ngIf="!notes || !notes?.length && !isUpdating">
     <i class="far fa-sad-tear"></i> No notes
   </div>
   <ng-container *ngIf="notes?.length && !isUpdating">
