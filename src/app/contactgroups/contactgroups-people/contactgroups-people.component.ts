@@ -135,7 +135,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       }
     });
   
-    this.contactGroupService.notePageChanges$.subscribe(newPageNumber => {
+    this.contactGroupService.contactNotePageChanges$.subscribe(newPageNumber => {
       this.page = newPageNumber;
       this.getNextContactNotesPage(this.page);
     });
@@ -402,14 +402,12 @@ export class ContactgroupsPeopleComponent implements OnInit {
     }
 
   private getNextContactNotesPage(page) {
-    console.log('contact notes here.....')
     this.contactGroupService
       .getContactGroupNotes(this.contactGroupId, 10, page)
       .subscribe(data => {
         if (data) {
           this.contactNotes = this.contactNotes.concat(data);
         }
-        console.log('contact notes here...', this.contactNotes);
         if (!data.length) {
           this.bottomReached = true;
         }

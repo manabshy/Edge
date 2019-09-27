@@ -26,14 +26,16 @@ export class ContactGroupsService {
   private notesSubject = new Subject<ContactNote | null>();
   private contactGroupAutocompleteSubject = new Subject<ContactGroupAutoCompleteResult[] | null>();
   private pageChangeSubject = new Subject<number | null>();
-  private notePageChangeSubject = new Subject<number | null>();
+  private personNotePageChangeSubject = new Subject<number | null>();
+  private contactNotePageChangeSubject = new Subject<number | null>();
   noteChanges$ = this.notesSubject.asObservable();
   contactInfoForNotes$ = this.contactInfoAction$.asObservable();
   personNotesChanges$ = this.personNotesSubject.asObservable();
   contactGroupNotesChanges$ = this.contactGroupNotesSubject.asObservable();
   contactGroupAutocomplete$ = this.contactGroupAutocompleteSubject.asObservable();
   pageChanges$ = this.pageChangeSubject.asObservable();
-  notePageChanges$ = this.notePageChangeSubject.asObservable();
+  personNotePageChanges$ = this.personNotePageChangeSubject.asObservable();
+  contactNotePageChanges$ = this.contactNotePageChangeSubject.asObservable();
 
   constructor(private http: HttpClient) { }
 
@@ -267,8 +269,11 @@ export class ContactGroupsService {
     this.contactInfoAction$.next(info);
   }
 
-  notePageNumberChanged(result: number) {
-    this.notePageChangeSubject.next(result);
+  personNotePageNumberChanged(result: number) {
+    this.personNotePageChangeSubject.next(result);
+  }
+  contactNotePageNumberChanged(result: number) {
+    this.contactNotePageChangeSubject.next(result);
   }
   pageNumberChanged(result: number) {
     this.pageChangeSubject.next(result);

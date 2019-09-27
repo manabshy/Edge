@@ -24,6 +24,16 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
   personNotesInfo: ContactNote[];
   page = 1;
   bottomReached: boolean;
+  addressees: any[] = [];
+
+  // get personNotesData() {
+  //   if (this.person && this.contactGroups) {
+  //     return {
+  //       addressees: this.addressees,
+  //       person: this.person
+  //     };
+  //   }
+  // }
   constructor(private contactGroupService: ContactGroupsService,
               private route: ActivatedRoute,
               private sharedService: SharedService) {super(); }
@@ -64,7 +74,7 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
       console.log('contact groups on detail notes page....', data);
     });
 
-    this.contactGroupService.notePageChanges$.subscribe(newPageNumber => {
+    this.contactGroupService.personNotePageChanges$.subscribe(newPageNumber => {
       this.page = newPageNumber;
       this.getNextPersonNotesPage(this.page);
     });
@@ -80,25 +90,52 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
       this.contactGroupNotes = data;
     });
   }
+
   getContactGroups(personId: number) {
     this.contactGroupService.getPersonContactGroups(personId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
      if (data) {
         this.contactGroups = data;
         this.contactGroupService.contactInfoChanged(data);
+        this.setPersonNoteAddressees(data);
      }
     });
   }
+
   private getNextPersonNotesPage(page) {
     this.contactGroupService.getPersonNotes(this.personId, 10, page).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
       if (data) {
         this.personNotes = this.personNotes.concat(data);
-        this.contactGroupService.sortByPinnedAndDate(this.personNotes);
-        // _.orderBy(this.personNotes, ['isPinned', 'createDate'], ['asc', 'desc']);
       }
       if (!data.length) {
         this.bottomReached = true;
        }
     });
+  }
+
+  private setPersonNoteAddressees(contactGroups: BasicContactGroup[]) {
+    let output;
+    if (contactGroups) {
+      // for (const item of contactGroups) {
+      //   output = {
+      //     addressee: item.contactPeople.map(x => x.addressee),
+      //     groupId: item.contactGroupId
+      //   };
+      //   this.addressees.push(output);
+      //   if (item.contactPeople.find(p => p.personId === +this.personId)) {
+      //     this.person = item.contactPeople.find(p => p.personId === this.personId);
+      //   }
+      // }
+      contactGroups.forEach((item, index) => {
+        output = {
+              addressee: item.contactPeople.map(x => x.addressee),
+              groupId: item.contactGroupId
+            };
+            if (item.contactPeople.find(p => p.personId === +this.personId)) {
+              this.person = item.contactPeople.find(p => p.personId === this.personId);
+            }
+            this.addressees[index] = output;
+      });
+    }
   }
   addNote() {
     event.stopPropagation();
