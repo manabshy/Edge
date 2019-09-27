@@ -38,8 +38,8 @@
       </div>
     </div>
     <div class="col-12">
-        <ng-container *ngIf="importantPersonNotes?.length">
-          <div class="alert alert-danger small mb-2 mr-2 d-inline-block" *ngFor="let importantNote of importantPersonNotes">
+        <ng-container *ngIf="searchedPersonDetails?.personNotes?.length">
+          <div class="alert alert-danger small mb-2 mr-2 d-inline-block" *ngFor="let importantNote of searchedPersonDetails?.personNotes">
             {{importantNote.text}}
           </div>
         </ng-container>

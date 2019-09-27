@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, HostListener } from '@angular/core';
 import { ContactNote, BasicContactGroup } from 'src/app/contactgroups/shared/contact-group';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
@@ -14,11 +14,13 @@ import { map } from 'rxjs/operators';
 export class NotesComponent implements OnInit, OnChanges {
   @Input() personId: number;
   @Input() noteData: any;
+  @Input() pageNumber: number;
   @Input() isPersonNote: boolean;
+  @Input() bottomReached: boolean;
   @Input() personNotes: ContactNote[];
   @Input() contactGroupNotes: ContactNote[];
   @Input() contactGroups: BasicContactGroup[];
-  originalNotes: any;
+  notes: any;
   tests: any;
   contactPeople: Person[];
   personNoteAddressees = [];
@@ -30,8 +32,8 @@ export class NotesComponent implements OnInit, OnChanges {
   order = ['isPinned', 'createDate'];
   reverse = true;
   isUpdating = false;
-  notes: any;
   addressees: any[];
+  page: number;
 
   constructor(private sharedService: SharedService, private contactGroupService: ContactGroupsService) { }
 
@@ -41,19 +43,18 @@ export class NotesComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     this.init();
+    this.page = this.pageNumber;
     if (this.contactGroups && this.personId) {
       this.setPersonNoteAddressees();
     }
 
     // remove duplicate addressees when an updated note returns the new list of notes
-     this.addressees = [...new Map(this.personNoteAddressees.map(item => [item.groupId, item])).values()];
+    this.addressees = [...new Map(this.personNoteAddressees.map(item => [item.groupId, item])).values()];
   }
 
   init() {
     this.notes = this.personNotes || this.contactGroupNotes;
-    // if (this.originalNotes) {
-    //   this.notes = this.originalNotes.slice(0, 10);
-    // }
+
     if (this.noteData) {
       this.noteData.people !== undefined ? this.contactPeople = this.noteData.people : this.contactPeople = [];
       this.noteData.group ? this.groupAddressee = this.noteData.group.addressee : this.groupAddressee = [];
@@ -94,7 +95,7 @@ export class NotesComponent implements OnInit, OnChanges {
 
   setFlag(noteId: number, isImportantFlag: boolean) {
     console.log('note id here.....', noteId);
-    this.originalNotes.forEach((x: ContactNote) => {
+    this.notes.forEach((x: ContactNote) => {
       if (x.id === noteId) {
         if (isImportantFlag) {
           x.isImportant ? x.isImportant = false : x.isImportant = true;
@@ -120,14 +121,22 @@ export class NotesComponent implements OnInit, OnChanges {
   }
 
   onScrollDown() {
-    AppUtils.setupInfintiteScroll(this.originalNotes, this.notes);
+    this.onWindowScroll()
     console.log('scrolled down!!');
   }
 
   onScrollUp() {
-    AppUtils.setupInfintiteScroll(this.originalNotes, this.notes);
     console.log('scrolled up!!');
   }
+
+  @HostListener('window:scroll', ['$event'])
+  onWindowScroll() {
+    if (window.innerHeight + window.scrollY === document.body.scrollHeight && !this.bottomReached) {
+      this.page++;
+      this.contactGroupService.pageNumberChanged(this.page);
+    }
+  }
+
   addNote() {
     if (this.noteData) {
       this.sharedService.addNote(this.noteData);

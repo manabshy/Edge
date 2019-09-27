@@ -71,12 +71,15 @@ export class ContactgroupsPeopleComponent implements OnInit {
   formErrors = FormErrors;
   isCompanyAdded = true;
   importantPeopleNotes: ContactNote[];
+  contactNotes: ContactNote[] = [];
+  page = 1;
+  bottomReached: boolean;
   get dataNote() {
     if(this.contactGroupDetails) {
       return {
         group: this.contactGroupDetails,
         people: this.contactGroupDetails.contactPeople,
-        notes: this.contactGroupDetails.contactNotes
+        notes: this.contactNotes
       }
     }
     return null;
@@ -122,6 +125,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.personId = +params['personId'] || 0;
     });
     this.init();
+    this.getContactNotes();
     this.contactGroupService.noteChanges$.subscribe(data => {
       if (data) {
         this.contactGroupService.getContactGroupbyId(this.contactGroupId).subscribe(x => {
@@ -130,6 +134,12 @@ export class ContactgroupsPeopleComponent implements OnInit {
         });
       }
     });
+  
+    this.contactGroupService.pageChanges$.subscribe(newPageNumber => {
+      this.page = newPageNumber;
+      this.getNextContactNotesPage(this.page);
+    });
+
   }
 
   init() {
@@ -249,7 +259,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   getContactGroupById(contactGroupId: number) {
     this.contactGroupService
-      .getContactGroupbyId(contactGroupId)
+      .getContactGroupbyId(contactGroupId, true)
       .subscribe(data => {
         this.contactGroupDetails = data;
         this.setImportantNotes();
@@ -378,14 +388,34 @@ export class ContactgroupsPeopleComponent implements OnInit {
    });
   }
 
-setImportantNotes(){
-  this.importantContactNotes = this.contactGroupDetails.contactNotes.filter(x=>x.isImportant && +x.contactGroupId === this.contactGroupId);
-  this.importantPeopleNotes = this.contactGroupDetails.contactNotes.filter(x=>x.isImportant);
-  this.contactGroupDetails.contactPeople.forEach(x => {
-    x.personNotes = this.importantPeopleNotes.filter(p => p.personId === x.personId);
-  });
-}
+  setImportantNotes(){
+    this.importantContactNotes = this.contactGroupDetails.contactNotes.filter(x=>x.isImportant && +x.contactGroupId === this.contactGroupId);
+    this.importantPeopleNotes = this.contactGroupDetails.contactNotes.filter(x=>x.isImportant);
+    this.contactGroupDetails.contactPeople.forEach(x => {
+      x.personNotes = this.importantPeopleNotes.filter(p => p.personId === x.personId);
+    });
+  }
 
+   getContactNotes(){
+     this.bottomReached = false;
+    this.getNextContactNotesPage(this.page);
+    }
+
+  private getNextContactNotesPage(page) {
+    console.log('contact notes here.....')
+    this.contactGroupService
+      .getContactGroupNotes(this.contactGroupId, 10, page)
+      .subscribe(data => {
+        if (data) {
+          this.contactNotes = this.contactNotes.concat(data);
+        }
+        console.log('contact notes here...', this.contactNotes);
+        if (!data.length) {
+          this.bottomReached = true;
+        }
+      });
+  }
+  
   editSelectedCompany(id: number, newCompany?: boolean) {
     event.preventDefault();
     this.isEditingSelectedCompany = true;

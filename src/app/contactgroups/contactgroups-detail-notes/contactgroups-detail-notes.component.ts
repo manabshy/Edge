@@ -6,7 +6,7 @@ import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ContactNote, BasicContactGroup } from '../shared/contact-group';
 import { BaseComponent } from 'src/app/core/models/base-component';
 import { takeUntil } from 'rxjs/operators';
-
+import * as _ from 'lodash';
 @Component({
   selector: 'app-contactgroups-detail-notes',
   templateUrl: './contactgroups-detail-notes.component.html',
@@ -15,31 +15,19 @@ import { takeUntil } from 'rxjs/operators';
 export class ContactgroupsDetailNotesComponent extends BaseComponent implements OnInit  {
   person: Person;
   personId: number;
-  personNotes: ContactNote[];
+  personNotes: ContactNote[] = [];
   contactGroupId: number;
   contactGroupNotes: ContactNote[];
   contactGroups: BasicContactGroup[];
   contactGroupIds: number[];
   contactGroupInfo: BasicContactGroup[];
   personNotesInfo: ContactNote[];
+  page = 1;
+  bottomReached: boolean;
   constructor(private contactGroupService: ContactGroupsService,
               private route: ActivatedRoute,
               private sharedService: SharedService) {super(); }
-  // ngOnInit() {
-  //   // let personParams = this.route.snapshot.queryParamMap.get('person');
-  //   // if(personParams){
-  //   //   this.person = JSON.parse(personParams);
-  //   // }
-  // }
 
-  // addNote() {
-  //   event.stopPropagation();
-  //   const data = {
-  //     person: this.person,
-  //     isPersonNote: true
-  //   }
-  //   this.sharedService.addNote(data);
-  // }
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.contactGroupId = +params['contactGroupId'] || 0;
@@ -52,15 +40,15 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
       this.getContactGroupNotes(this.contactGroupId);
     } else if (this.personId) {
       console.log('person id', this.personId);
-      this.getPersonNotes(this.personId);
+      this.getPersonNotes();
       this.getContactGroups(this.personId);
     }
 
     this.contactGroupService.noteChanges$.subscribe(data => {
       if (data) {
-        this.getPersonNotes(this.personId);
+        this.getPersonNotes();
         console.log('updated notes here', this.personNotes);
-       if(this.contactGroupId) {
+       if (this.contactGroupId) {
           this.getContactGroupNotes(this.contactGroupId);
           console.log('updated notes here', this.contactGroupNotes);
        }
@@ -69,24 +57,22 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
 
     this.contactGroupService.personNotesChanges$.subscribe(data => {
       this.personNotesInfo = data;
-      console.log('person notes from service here... on  notes page....', data)
+      console.log('person notes from service here... on  notes page....', data);
     });
     this.contactGroupService.contactInfoForNotes$.subscribe(data => {
       this.contactGroupInfo = data;
-      console.log('contact groups on detail notes page....', data)
+      console.log('contact groups on detail notes page....', data);
     });
-    // if(this.personNotes){
-    //    this.personNotes.forEach(x=>{
-    //     this.contactGroupIds.push(+x.contactGroupId);
-    //   })
-    //   console.log('contactgroup ids for notes', this.contactGroupIds);
-    // }
+
+    this.contactGroupService.pageChanges$.subscribe(newPageNumber => {
+      this.page = newPageNumber;
+      this.getNextPersonNotesPage(this.page);
+    });
+
   }
 
-  getPersonNotes(personId: number) {
-    this.contactGroupService.getPersonNotes(personId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
-      this.personNotes = data;
-    });
+  getPersonNotes() {
+    this.getNextPersonNotesPage(this.page);
   }
 
   getContactGroupNotes(personId: number) {
@@ -96,10 +82,22 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
   }
   getContactGroups(personId: number) {
     this.contactGroupService.getPersonContactGroups(personId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
-     if(data) {
+     if (data) {
         this.contactGroups = data;
         this.contactGroupService.contactInfoChanged(data);
      }
+    });
+  }
+  private getNextPersonNotesPage(page) {
+    this.contactGroupService.getPersonNotes(this.personId, 10, page).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
+      if (data) {
+        this.personNotes = this.personNotes.concat(data);
+        this.contactGroupService.sortByPinnedAndDate(this.personNotes);
+        // _.orderBy(this.personNotes, ['isPinned', 'createDate'], ['asc', 'desc']);
+      }
+      if (!data.length) {
+        this.bottomReached = true;
+       }
     });
   }
   addNote() {

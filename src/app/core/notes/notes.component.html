@@ -8,10 +8,10 @@
     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading notes ...
   </div>
   <ng-template #results>
-    <!-- <div *ngIf="originalNotes" class="search-results" infiniteScroll [infiniteScrollDistance]="0"
-      [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="50" [immediateCheck]="true" [alwaysCallback]="true"
+    <div *ngIf="notes" class="search-results" infiniteScroll [infiniteScrollDistance]="5"
+      [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"
       (scrolled)="onScrollDown()" (scrolledUp)="onScrollUp()">
-    </div> -->
+    </div>
     <div class="list-group-item text-center text-danger" *ngIf="!notes?.length">
         <i class="far fa-sad-tear"></i> No notes
       </div>
@@ -86,12 +86,6 @@
                 {{note?.createdBy}}<br>
                 {{note?.createDate | date: 'HH:mm d/MM/yyyy'}}
               </div>
-              <!-- <div class="col-sm text-truncate">
-                        <dl class="row text-truncate">
-                          <dt class="col-4 d-sm-none">Owner</dt>
-                          <dd class="col text-truncate">{{note?.createdBy}}</dd>
-                        </dl>
-                      </div> -->
             </div>
           </div>
         </div>
