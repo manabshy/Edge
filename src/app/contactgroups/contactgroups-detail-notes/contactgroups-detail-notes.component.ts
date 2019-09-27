@@ -6,7 +6,7 @@ import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ContactNote, BasicContactGroup } from '../shared/contact-group';
 import { BaseComponent } from 'src/app/core/models/base-component';
 import { takeUntil } from 'rxjs/operators';
-
+import * as _ from 'lodash';
 @Component({
   selector: 'app-contactgroups-detail-notes',
   templateUrl: './contactgroups-detail-notes.component.html',
@@ -92,6 +92,8 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
     this.contactGroupService.getPersonNotes(this.personId, 10, page).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
       if (data) {
         this.personNotes = this.personNotes.concat(data);
+        this.contactGroupService.sortByPinnedAndDate(this.personNotes);
+        // _.orderBy(this.personNotes, ['isPinned', 'createDate'], ['asc', 'desc']);
       }
       if (!data.length) {
         this.bottomReached = true;

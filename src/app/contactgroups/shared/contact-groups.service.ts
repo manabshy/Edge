@@ -299,7 +299,6 @@ export class ContactGroupsService {
 
   sortByPinnedAndDate(notes) {
     if (notes) {
-      console.log('note for pinning', notes);
       notes.sort((a, b) => {
         const dateA = new Date(a.createDate);
         const dateB = new Date(b.createDate);
