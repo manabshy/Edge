@@ -17,6 +17,7 @@ export class ContactgroupsListComponent implements OnInit, OnChanges {
   contactGroups: ContactGroupAutoCompleteResult[] = [];
   contactPhoneNumbers = [];
   page: number;
+  groupsLength: number;
 
   constructor(private contactGroupService: ContactGroupsService) { }
 
@@ -28,38 +29,33 @@ export class ContactgroupsListComponent implements OnInit, OnChanges {
     if (this.originalContactGroups) {
       this.contactGroups = this.originalContactGroups;
     }
-    setTimeout(()=>{
-      //this.itemIntoView();
+    if(this.groupsLength !== this.contactGroups.length - 1) {
+      setTimeout(()=>{
+        this.groupsLength = this.contactGroups.length - 1;
+        this.itemIntoView(this.groupsLength);
+      });
+    }
+  }
+
+  itemIntoView(index: number) {
+    const items = document.querySelectorAll('.list-group-item');
+
+    let observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.intersectionRatio > 0) {
+          setTimeout(()=>{
+            this.onWindowScroll();
+            observer.unobserve(entry.target);
+          })
+        }
+      });
     });
+
+    if(index > 0) {
+      observer.observe(items[index]);
+    }
   }
-
-  onScrollDown() {
-    this.onWindowScroll();
-    console.log('scrolled down!!');
-  }
-
-  onScrollUp() {
-    console.log('scrolled up!!');
-  }
-
-  // itemIntoView() {
-  //   const items = document.querySelectorAll('.list-group-item-last');
-
-  //   let observer = new IntersectionObserver((entries) => {
-  //     entries.forEach(entry => {
-  //       if (entry.intersectionRatio > 0) {
-  //         observer.unobserve(entry.target);
-  //         this.onWindowScroll();
-  //       }
-  //     });
-  //   });
-
-  //   items.forEach(item => {
-  //     observer.observe(item);
-  //   });
-  // }
-
-  // @HostListener('window:scroll', ['$event'])
+  
   onWindowScroll() {
     if (!this.bottomReached) {
       this.page ++;

@@ -34,6 +34,7 @@ export class NotesComponent implements OnInit, OnChanges {
   isUpdating = false;
   addressees: any[];
   page: number;
+  notesLength: number;
 
   constructor(private sharedService: SharedService, private contactGroupService: ContactGroupsService) { }
 
@@ -46,6 +47,13 @@ export class NotesComponent implements OnInit, OnChanges {
     this.page = this.pageNumber;
     if (this.contactGroups && this.personId) {
       this.setPersonNoteAddressees();
+    }
+
+    if(this.notesLength !== this.notes.length - 1) {
+      setTimeout(()=>{
+        this.notesLength = this.notes.length - 1;
+        this.itemIntoView(this.notesLength);
+      });
     }
 
     // remove duplicate addressees when an updated note returns the new list of notes
@@ -121,7 +129,7 @@ export class NotesComponent implements OnInit, OnChanges {
   }
 
   onScrollDown() {
-    this.onWindowScroll()
+    //this.onWindowScroll()
     console.log('scrolled down!!');
   }
 
@@ -129,9 +137,27 @@ export class NotesComponent implements OnInit, OnChanges {
     console.log('scrolled up!!');
   }
 
-  @HostListener('window:scroll', ['$event'])
+  itemIntoView(index: number) {
+    const items = document.querySelectorAll('.list-group-item');
+
+    let observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.intersectionRatio > 0) {
+          setTimeout(()=>{
+            this.onWindowScroll();
+            observer.unobserve(entry.target);
+          })
+        }
+      });
+    });
+
+    if(index > 0) {
+      observer.observe(items[index]);
+    }
+  }
+
   onWindowScroll() {
-    if (window.innerHeight + window.scrollY === document.body.scrollHeight && !this.bottomReached) {
+    if (!this.bottomReached) {
       this.page++;
       this.contactGroupService.pageNumberChanged(this.page);
     }
