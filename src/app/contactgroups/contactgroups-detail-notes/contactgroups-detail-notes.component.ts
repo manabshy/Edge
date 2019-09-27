@@ -64,7 +64,7 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
       console.log('contact groups on detail notes page....', data);
     });
 
-    this.contactGroupService.pageChanges$.subscribe(newPageNumber => {
+    this.contactGroupService.notePageChanges$.subscribe(newPageNumber => {
       this.page = newPageNumber;
       this.getNextPersonNotesPage(this.page);
     });

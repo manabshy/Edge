@@ -135,7 +135,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       }
     });
   
-    this.contactGroupService.pageChanges$.subscribe(newPageNumber => {
+    this.contactGroupService.notePageChanges$.subscribe(newPageNumber => {
       this.page = newPageNumber;
       this.getNextContactNotesPage(this.page);
     });

@@ -159,7 +159,7 @@ export class NotesComponent implements OnInit, OnChanges {
   onWindowScroll() {
     if (!this.bottomReached) {
       this.page++;
-      this.contactGroupService.pageNumberChanged(this.page);
+      this.contactGroupService.notePageNumberChanged(this.page);
     }
   }
 
