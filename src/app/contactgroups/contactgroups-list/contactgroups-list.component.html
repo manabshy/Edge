@@ -1,10 +1,9 @@
 <div class="list-group mb-3">
- <div *ngIf="originalContactGroups" class="search-results" infiniteScroll [infiniteScrollDistance]="5" [infiniteScrollThrottle]="5"
-  [immediateCheck]="true" (scrolled)="onScrollDown()" (scrolledUp)="onScrollUp()" >
+ <div *ngIf="originalContactGroups" class="search-results" infiniteScroll [infiniteScrollDistance]="0" (scrolled)="onScrollDown()" (scrolledUp)="onScrollUp()" >
     <a [routerLink]="['detail', contactGroup.personId ]"
       class="list-group-item list-group-item-action"
-      [ngClass]="{'list-group-item-danger': contactGroup?.warning?.id !== 1}"
-      *ngFor="let contactGroup of contactGroups; let i = index;">
+      [ngClass]="{'list-group-item-danger': contactGroup?.warning?.id !== 1, 'list-group-item-last': isLast}"
+      *ngFor="let contactGroup of contactGroups; let i = index; last as isLast">
       <div class="row mb-1">
         <div class="col">
           <small class="text-muted mr-2">ID: {{contactGroup?.personId}}</small><br class="d-sm-none" />

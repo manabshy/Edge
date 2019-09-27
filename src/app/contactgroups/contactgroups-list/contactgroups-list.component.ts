@@ -28,6 +28,9 @@ export class ContactgroupsListComponent implements OnInit, OnChanges {
     if (this.originalContactGroups) {
       this.contactGroups = this.originalContactGroups
     }
+    setTimeout(()=>{
+      //this.itemIntoView();
+    });
   }
 
   onScrollDown() {
@@ -40,12 +43,29 @@ export class ContactgroupsListComponent implements OnInit, OnChanges {
     console.log('scrolled up!!');
   }
 
-  @HostListener('window:scroll', ['$event'])
+  // itemIntoView() {
+  //   const items = document.querySelectorAll('.list-group-item-last');
+
+  //   let observer = new IntersectionObserver((entries) => {
+  //     entries.forEach(entry => {
+  //       if (entry.intersectionRatio > 0) {
+  //         observer.unobserve(entry.target);
+  //         this.onWindowScroll();
+  //       }
+  //     });
+  //   });
+
+  //   items.forEach(item => {
+  //     observer.observe(item);
+  //   });
+  // }
+
+  // @HostListener('window:scroll', ['$event'])
   onWindowScroll() {
-    if (window.innerHeight + window.scrollY === document.body.scrollHeight && !this.bottomReached) {
+    if (!this.bottomReached) {
       this.page ++;
       this.contactGroupService.pageNumberChanged(this.page);
       console.log('bottom here...', this.page);
- }
+    }
   }
 }
