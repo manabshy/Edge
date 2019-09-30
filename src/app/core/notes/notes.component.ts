@@ -20,7 +20,6 @@ export class NotesComponent implements OnInit, OnChanges {
   @Input() person: Person;
   @Input() personNotes: ContactNote[];
   @Input() contactGroupNotes: ContactNote[];
-  @Input() contactGroups: BasicContactGroup[];
 
   notes: any;
   tests: any;
@@ -92,13 +91,14 @@ export class NotesComponent implements OnInit, OnChanges {
   onWindowScroll() {
     if (window.innerHeight + window.scrollY === document.body.scrollHeight && !this.bottomReached) {
       this.page++;
-    if (this.contactPeople) {
-      console.log('here for contact notes');
+      if (this.contactPeople) {
+        console.log('here for contact notes');
         this.contactGroupService.contactNotePageNumberChanged(this.page);
-    } else {
-      console.log('here for person notes');
-      this.contactGroupService.personNotePageNumberChanged(this.page);
-    }
+      } else {
+        console.log('here for person notes');
+        this.contactGroupService.personNotePageNumberChanged(this.page);
+      }
+      console.log('page number here...', this.page);
     }
   }
 

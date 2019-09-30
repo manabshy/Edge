@@ -23,17 +23,10 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
   contactGroupInfo: BasicContactGroup[];
   personNotesInfo: ContactNote[];
   page = 1;
-  bottomReached: boolean;
+  pageSize = 10;
+  bottomReached = false;
   addressees: any[] = [];
 
-  // get personNotesData() {
-  //   if (this.person && this.contactGroups) {
-  //     return {
-  //       addressees: this.addressees,
-  //       person: this.person
-  //     };
-  //   }
-  // }
   constructor(private contactGroupService: ContactGroupsService,
               private route: ActivatedRoute,
               private sharedService: SharedService) {super(); }
@@ -56,12 +49,10 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
 
     this.contactGroupService.noteChanges$.subscribe(data => {
       if (data) {
+        this.personNotes = [];
+        this.page = 1;
+        this.bottomReached = false;
         this.getPersonNotes();
-        console.log('updated notes here', this.personNotes);
-       if (this.contactGroupId) {
-          this.getContactGroupNotes(this.contactGroupId);
-          console.log('updated notes here', this.contactGroupNotes);
-       }
       }
     });
 
@@ -95,16 +86,16 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
     this.contactGroupService.getPersonContactGroups(personId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
      if (data) {
         this.contactGroups = data;
-        this.contactGroupService.contactInfoChanged(data);
+        // this.contactGroupService.contactInfoChanged(data);
         this.setPersonNoteAddressees(data);
      }
     });
   }
 
   private getNextPersonNotesPage(page) {
-    this.contactGroupService.getPersonNotes(this.personId, 10, page).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
+    this.contactGroupService.getPersonNotes(this.personId, this.pageSize, page).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
       if (data) {
-        this.personNotes = this.personNotes.concat(data);
+        this.personNotes = _.concat(this.personNotes, data);
       }
       if (!data.length) {
         this.bottomReached = true;

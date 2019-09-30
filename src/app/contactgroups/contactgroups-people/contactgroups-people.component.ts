@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Renderer2, ViewChild, ElementRef, ɵConsole } from '@angular/core';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Person, BasicPerson } from 'src/app/core/models/person';
@@ -14,7 +14,7 @@ import { WedgeError, SharedService } from 'src/app/core/services/shared.service'
 import { FormErrors, ValidationMessages } from 'src/app/core/shared/app-constants';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { ToastrService } from 'ngx-toastr';
-
+import * as _ from 'lodash';
 @Component({
   selector: 'app-contactgroups-people',
   templateUrl: './contactgroups-people.component.html',
@@ -74,6 +74,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   contactNotes: ContactNote[] = [];
   page = 1;
   bottomReached: boolean;
+  pageSize = 10;
   get dataNote() {
     if(this.contactGroupDetails) {
       return {
@@ -118,7 +119,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.contactGroupTypes =  ContactGroupsTypes;
+    this.contactGroupTypes = ContactGroupsTypes;
     this.route.params.subscribe(params => {
       this.contactGroupId = +params['contactGroupId'] || 0;
       this.groupPersonId = +params['groupPersonId'] || 0;
@@ -128,13 +129,16 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.getContactNotes();
     this.contactGroupService.noteChanges$.subscribe(data => {
       if (data) {
+        this.contactNotes = [];
+        this.page = 1;
+        this.getContactNotes();
         this.contactGroupService.getContactGroupbyId(this.contactGroupId).subscribe(x => {
           this.contactGroupDetails.contactNotes = x.contactNotes;
           this.setImportantNotes();
         });
       }
     });
-  
+
     this.contactGroupService.contactNotePageChanges$.subscribe(newPageNumber => {
       this.page = newPageNumber;
       this.getNextContactNotesPage(this.page);
@@ -143,7 +147,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   init() {
-    if(AppUtils.listInfo) {
+    if (AppUtils.listInfo) {
       this.listInfo = AppUtils.listInfo;
       this.setDropdownLists();
     } else {
@@ -403,10 +407,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   private getNextContactNotesPage(page) {
     this.contactGroupService
-      .getContactGroupNotes(this.contactGroupId, 10, page)
+      .getContactGroupNotes(this.contactGroupId, this.pageSize, page)
       .subscribe(data => {
         if (data) {
-          this.contactNotes = this.contactNotes.concat(data);
+          this.contactNotes = _.concat(this.contactNotes, data);
         }
         if (!data.length) {
           this.bottomReached = true;

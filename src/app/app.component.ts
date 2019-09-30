@@ -57,7 +57,11 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
     ).subscribe((event: any[]) => {
       AppUtils.prevRouteBU = AppUtils.prevRoute || '';
       AppUtils.prevRoute = event[0].urlAfterRedirects;
-      
+      // console.log('before prev url',  AppUtils.prevRoute);
+      // if (AppUtils.prevRoute.includes('/auth-callback#')) {
+      //   AppUtils.prevRoute = event[1].urlAfterRedirects;
+      //   console.log('prev url after login',  AppUtils.prevRoute);
+      // }
       console.log('prev url',  AppUtils.prevRoute);
       this.isScrollTopVisible = false;
       this.isFading = true;
