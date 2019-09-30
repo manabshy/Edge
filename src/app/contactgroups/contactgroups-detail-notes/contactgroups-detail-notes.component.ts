@@ -12,7 +12,7 @@ import * as _ from 'lodash';
   templateUrl: './contactgroups-detail-notes.component.html',
   styleUrls: ['./contactgroups-detail-notes.component.scss']
 })
-export class ContactgroupsDetailNotesComponent extends BaseComponent implements OnInit  {
+export class ContactgroupsDetailNotesComponent extends BaseComponent implements OnInit {
   person: Person;
   personId: number;
   personNotes: ContactNote[] = [];
@@ -28,15 +28,14 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
   addressees: any[] = [];
 
   constructor(private contactGroupService: ContactGroupsService,
-              private route: ActivatedRoute,
-              private sharedService: SharedService) {super(); }
+    private route: ActivatedRoute,
+    private sharedService: SharedService) { super(); }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.contactGroupId = +params['contactGroupId'] || 0;
       this.personId = +params['personId'] || 0;
     });
-
 
     if (this.contactGroupId) {
       console.log('contact group id', this.contactGroupId);
@@ -47,7 +46,7 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
       this.getContactGroups(this.personId);
     }
 
-    this.contactGroupService.noteChanges$.subscribe(data => {
+    this.contactGroupService.noteChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
       if (data) {
         this.personNotes = [];
         this.page = 1;
@@ -56,16 +55,17 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
       }
     });
 
-    this.contactGroupService.personNotesChanges$.subscribe(data => {
+    this.contactGroupService.personNotesChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
       this.personNotesInfo = data;
       console.log('person notes from service here... on  notes page....', data);
     });
-    this.contactGroupService.contactInfoForNotes$.subscribe(data => {
+
+    this.contactGroupService.contactInfoForNotes$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
       this.contactGroupInfo = data;
       console.log('contact groups info on detail notes page....', data);
     });
 
-    this.contactGroupService.personNotePageChanges$.subscribe(newPageNumber => {
+    this.contactGroupService.personNotePageChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(newPageNumber => {
       this.page = newPageNumber;
       this.getNextPersonNotesPage(this.page);
     });
@@ -82,13 +82,13 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
     });
   }
 
+  // TODO: Retrieve contact groups from contactInfoForNotes$ observable
   getContactGroups(personId: number) {
     this.contactGroupService.getPersonContactGroups(personId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
-     if (data) {
+      if (data) {
         this.contactGroups = data;
-        // this.contactGroupService.contactInfoChanged(data);
         this.setPersonNoteAddressees(data);
-     }
+      }
     });
   }
 
@@ -99,35 +99,26 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
       }
       if (!data.length) {
         this.bottomReached = true;
-       }
+      }
     });
   }
 
   private setPersonNoteAddressees(contactGroups: BasicContactGroup[]) {
     let output;
     if (contactGroups) {
-      // for (const item of contactGroups) {
-      //   output = {
-      //     addressee: item.contactPeople.map(x => x.addressee),
-      //     groupId: item.contactGroupId
-      //   };
-      //   this.addressees.push(output);
-      //   if (item.contactPeople.find(p => p.personId === +this.personId)) {
-      //     this.person = item.contactPeople.find(p => p.personId === this.personId);
-      //   }
-      // }
       contactGroups.forEach((item, index) => {
         output = {
-              addressee: item.contactPeople.map(x => x.addressee),
-              groupId: item.contactGroupId
-            };
-            if (item.contactPeople.find(p => p.personId === +this.personId)) {
-              this.person = item.contactPeople.find(p => p.personId === this.personId);
-            }
-            this.addressees[index] = output;
+          addressee: item.contactPeople.map(x => x.addressee),
+          groupId: item.contactGroupId
+        };
+        if (item.contactPeople.find(p => p.personId === +this.personId)) {
+          this.person = item.contactPeople.find(p => p.personId === this.personId);
+        }
+        this.addressees[index] = output;
       });
     }
   }
+
   addNote() {
     event.stopPropagation();
     const data = {
