@@ -59,9 +59,8 @@ export class ContactgroupsDetailComponent implements OnInit {
    
     this.contactGroupService.noteChanges$.subscribe(data => {
       if (data) {
-        this.contactGroupService.getPerson(this.personId).subscribe(x => {
+        this.contactGroupService.getPerson(this.personId, true).subscribe(x => {
           this.searchedPersonDetails.personNotes = x.personNotes;
-          // this.setImportantPersonNotes();
         });
       }
     });
@@ -104,6 +103,7 @@ export class ContactgroupsDetailComponent implements OnInit {
     this.contactGroupService.getPersonContactGroups(personId).subscribe(data => {
      if (data) {
         this.searchedPersonContactGroups = data;
+        console.log('contact groups for person here', data)
         this.contactGroupService.contactInfoChanged(data);
      }
     });
