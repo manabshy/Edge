@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ContactGroup, BasicContactGroup, PersonSummaryFigures, ContactGroupDetailsSubNav, ContactGroupDetailsSubNavItems, ContactNote } from '../shared/contact-group';
+import { ContactGroup, BasicContactGroup, PersonSummaryFigures, ContactGroupDetailsSubNavItems } from '../shared/contact-group';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ActivatedRoute } from '@angular/router';
 import { Person } from 'src/app/core/models/person';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { AppUtils } from 'src/app/core/shared/utils';
-import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-contactgroups-detail',
@@ -48,7 +47,7 @@ export class ContactgroupsDetailComponent implements OnInit {
       this.listInfo = AppUtils.listInfo;
       this.setDropdownLists();
     } else {
-      this.sharedService.getDropdownListInfo().subscribe(data=> {
+      this.sharedService.getDropdownListInfo().subscribe(data => {
         this.listInfo = data;
         this.setDropdownLists();
       });
@@ -56,7 +55,7 @@ export class ContactgroupsDetailComponent implements OnInit {
     this.getSearchedPersonDetails(this.personId);
     this.getSearchedPersonContactGroups(this.personId);
     this.getSearchedPersonSummaryInfo(this.personId);
-   
+
     this.contactGroupService.noteChanges$.subscribe(data => {
       if (data) {
         this.contactGroupService.getPerson(this.personId, true).subscribe(x => {
@@ -70,10 +69,6 @@ export class ContactgroupsDetailComponent implements OnInit {
     this.warnings = this.listInfo.result.personWarningStatuses;
   }
 
-  // setImportantPersonNotes() {
-  //   this.importantPersonNotes = this.searchedPersonDetails.personNotes.filter(x => x.isImportant && +x.personId === +this.personId);
-  // }
-
   getContactGroupById(contactGroupId: number) {
     this.contactGroupService.getContactGroupbyId(contactGroupId).subscribe(data => {
       this.contactGroupDetails = data;
@@ -86,9 +81,9 @@ export class ContactgroupsDetailComponent implements OnInit {
       if (data) {
         this.searchedPersonDetails = data;
         this.contactGroupService.personNotesChanged(data.personNotes);
-        // this.setImportantPersonNotes();
         this.sharedService.setTitle(this.searchedPersonDetails.addressee);
-        this.searchedPersonDetails.warning = this.sharedService.showWarning(this.searchedPersonDetails.warningStatusId, this.warnings, this.searchedPersonDetails.warningStatusComment);
+        this.searchedPersonDetails.warning = this.sharedService
+          .showWarning(this.searchedPersonDetails.warningStatusId, this.warnings, this.searchedPersonDetails.warningStatusComment);
       }
     });
   }
@@ -101,15 +96,15 @@ export class ContactgroupsDetailComponent implements OnInit {
 
   getSearchedPersonContactGroups(personId: number) {
     this.contactGroupService.getPersonContactGroups(personId).subscribe(data => {
-     if (data) {
+      if (data) {
         this.searchedPersonContactGroups = data;
-        console.log('contact groups for person here', data)
+        console.log('contact groups for person here', data);
         this.contactGroupService.contactInfoChanged(data);
-     }
+      }
     });
   }
 
-  createNewContactGroup(){
+  createNewContactGroup() {
     this.isNewContactGroup = true;
   }
 
@@ -118,7 +113,7 @@ export class ContactgroupsDetailComponent implements OnInit {
     const data = {
       person: this.searchedPersonDetails,
       isPersonNote: true
-    }
+    };
     this.sharedService.addNote(data);
   }
 
@@ -126,7 +121,4 @@ export class ContactgroupsDetailComponent implements OnInit {
     return val instanceof Object;
   }
 
-  ngOnDestroy(){
-
-  }
 }
