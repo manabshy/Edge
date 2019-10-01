@@ -112,6 +112,7 @@ export const ValidationMessages = {
     pattern: 'Postcode is not valid'
   },
   'senderPhoneNumber': {
+    international: 'Not UK number, please enter the international prefix',
     required: 'Sender phone number is required',
     invalidPhoneNumber: 'Please enter a valid phone number'
   },
