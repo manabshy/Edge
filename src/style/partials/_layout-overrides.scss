@@ -201,3 +201,7 @@ fieldset {
 .btn-light {
     border: 1px solid $border-color;
 }
+
+.form-control:disabled {
+    opacity: .5;
+}
