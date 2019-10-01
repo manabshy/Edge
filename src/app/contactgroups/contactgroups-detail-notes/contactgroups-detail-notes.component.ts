@@ -6,82 +6,74 @@ import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ContactNote, BasicContactGroup } from '../shared/contact-group';
 import { BaseComponent } from 'src/app/core/models/base-component';
 import { takeUntil } from 'rxjs/operators';
-
+import * as _ from 'lodash';
 @Component({
   selector: 'app-contactgroups-detail-notes',
   templateUrl: './contactgroups-detail-notes.component.html',
   styleUrls: ['./contactgroups-detail-notes.component.scss']
 })
-export class ContactgroupsDetailNotesComponent extends BaseComponent implements OnInit  {
+export class ContactgroupsDetailNotesComponent extends BaseComponent implements OnInit {
   person: Person;
   personId: number;
-  personNotes: ContactNote[];
+  personNotes: ContactNote[] = [];
   contactGroupId: number;
   contactGroupNotes: ContactNote[];
   contactGroups: BasicContactGroup[];
   contactGroupIds: number[];
   contactGroupInfo: BasicContactGroup[];
-  constructor(private contactGroupService: ContactGroupsService,
-              private route: ActivatedRoute,
-              private sharedService: SharedService) {super(); }
-  // ngOnInit() {
-  //   // let personParams = this.route.snapshot.queryParamMap.get('person');
-  //   // if(personParams){
-  //   //   this.person = JSON.parse(personParams);
-  //   // }
-  // }
+  personNotesInfo: ContactNote[];
+  page = 1;
+  pageSize = 10;
+  bottomReached = false;
+  addressees: any[] = [];
 
-  // addNote() {
-  //   event.stopPropagation();
-  //   const data = {
-  //     person: this.person,
-  //     isPersonNote: true
-  //   }
-  //   this.sharedService.addNote(data);
-  // }
+  constructor(private contactGroupService: ContactGroupsService,
+    private route: ActivatedRoute,
+    private sharedService: SharedService) { super(); }
+
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.contactGroupId = +params['contactGroupId'] || 0;
       this.personId = +params['personId'] || 0;
     });
 
-    
     if (this.contactGroupId) {
       console.log('contact group id', this.contactGroupId);
       this.getContactGroupNotes(this.contactGroupId);
     } else if (this.personId) {
       console.log('person id', this.personId);
-      this.getPersonNotes(this.personId);
+      this.getPersonNotes();
       this.getContactGroups(this.personId);
     }
-    
-    this.contactGroupService.noteChanges$.subscribe(data => {
+
+    this.contactGroupService.noteChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
       if (data) {
-        this.getPersonNotes(this.personId);
-        console.log('updated notes here', this.personNotes);
-       if(this.contactGroupId) {
-          this.getContactGroupNotes(this.contactGroupId);
-          console.log('updated notes here', this.contactGroupNotes);
-       }
+        this.personNotes = [];
+        this.page = 1;
+        this.bottomReached = false;
+        this.getPersonNotes();
       }
     });
 
-    this.contactGroupService.contactInfoForNotes$.subscribe(data => {
-      this.contactGroupInfo = data;
-      console.log('contact groups on detail notes page....', data)
+    this.contactGroupService.personNotesChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
+      this.personNotesInfo = data;
+      console.log('person notes from service here... on  notes page....', data);
     });
-    // if(this.personNotes){
-    //    this.personNotes.forEach(x=>{
-    //     this.contactGroupIds.push(+x.contactGroupId);
-    //   })
-    //   console.log('contactgroup ids for notes', this.contactGroupIds);
-    // }
+
+    this.contactGroupService.contactInfoForNotes$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
+      this.contactGroupInfo = data;
+      console.log('contact groups info on detail notes page....', data);
+    });
+
+    this.contactGroupService.personNotePageChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(newPageNumber => {
+      this.page = newPageNumber;
+      this.getNextPersonNotesPage(this.page);
+    });
+
   }
 
-  getPersonNotes(personId: number) {
-    this.contactGroupService.getPersonNotes(personId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
-      this.personNotes = data;
-    });
+  getPersonNotes() {
+    this.getNextPersonNotesPage(this.page);
   }
 
   getContactGroupNotes(personId: number) {
@@ -89,15 +81,44 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
       this.contactGroupNotes = data;
     });
   }
+
+  // TODO: Retrieve contact groups from contactInfoForNotes$ observable
   getContactGroups(personId: number) {
     this.contactGroupService.getPersonContactGroups(personId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
-     if(data) {
-       console.log('here notes details......', data)
+      if (data) {
         this.contactGroups = data;
-        this.contactGroupService.contactInfoChanged(data);
-     }
+        this.setPersonNoteAddressees(data);
+      }
     });
   }
+
+  private getNextPersonNotesPage(page) {
+    this.contactGroupService.getPersonNotes(this.personId, this.pageSize, page).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
+      if (data) {
+        this.personNotes = _.concat(this.personNotes, data);
+      }
+      if (!data.length) {
+        this.bottomReached = true;
+      }
+    });
+  }
+
+  private setPersonNoteAddressees(contactGroups: BasicContactGroup[]) {
+    let output;
+    if (contactGroups) {
+      contactGroups.forEach((item, index) => {
+        output = {
+          addressee: item.contactPeople.map(x => x.addressee),
+          groupId: item.contactGroupId
+        };
+        if (item.contactPeople.find(p => p.personId === +this.personId)) {
+          this.person = item.contactPeople.find(p => p.personId === this.personId);
+        }
+        this.addressees[index] = output;
+      });
+    }
+  }
+
   addNote() {
     event.stopPropagation();
     const data = {

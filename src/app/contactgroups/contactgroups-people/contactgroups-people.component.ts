@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Renderer2, ViewChild, ElementRef, ɵConsole } from '@angular/core';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Person, BasicPerson } from 'src/app/core/models/person';
@@ -14,7 +14,7 @@ import { WedgeError, SharedService } from 'src/app/core/services/shared.service'
 import { FormErrors, ValidationMessages } from 'src/app/core/shared/app-constants';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { ToastrService } from 'ngx-toastr';
-
+import * as _ from 'lodash';
 @Component({
   selector: 'app-contactgroups-people',
   templateUrl: './contactgroups-people.component.html',
@@ -71,12 +71,16 @@ export class ContactgroupsPeopleComponent implements OnInit {
   formErrors = FormErrors;
   isCompanyAdded = true;
   importantPeopleNotes: ContactNote[];
+  contactNotes: ContactNote[] = [];
+  page = 1;
+  bottomReached: boolean;
+  pageSize = 10;
   get dataNote() {
     if(this.contactGroupDetails) {
       return {
         group: this.contactGroupDetails,
         people: this.contactGroupDetails.contactPeople,
-        notes: this.contactGroupDetails.contactNotes
+        notes: this.contactNotes
       }
     }
     return null;
@@ -115,27 +119,35 @@ export class ContactgroupsPeopleComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.contactGroupTypes =  ContactGroupsTypes;
+    this.contactGroupTypes = ContactGroupsTypes;
     this.route.params.subscribe(params => {
       this.contactGroupId = +params['contactGroupId'] || 0;
       this.groupPersonId = +params['groupPersonId'] || 0;
       this.personId = +params['personId'] || 0;
     });
     this.init();
+    this.getContactNotes();
     this.contactGroupService.noteChanges$.subscribe(data => {
       if (data) {
-        this.setImportantNotes();
+        this.contactNotes = [];
+        this.page = 1;
+        this.getContactNotes();
         this.contactGroupService.getContactGroupbyId(this.contactGroupId).subscribe(x => {
           this.contactGroupDetails.contactNotes = x.contactNotes;
+          this.setImportantNotes();
         });
-        console.log('updated notes here', this.contactGroupDetails.contactNotes);
       }
-      console.log('note changes here....', data);
     });
+
+    this.contactGroupService.contactNotePageChanges$.subscribe(newPageNumber => {
+      this.page = newPageNumber;
+      this.getNextContactNotesPage(this.page);
+    });
+
   }
 
   init() {
-    if(AppUtils.listInfo) {
+    if (AppUtils.listInfo) {
       this.listInfo = AppUtils.listInfo;
       this.setDropdownLists();
     } else {
@@ -197,7 +209,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.addSelectedPeople();
     }
     this.personFinderForm.valueChanges
-      .pipe(debounceTime(400))
+      .pipe(debounceTime(750))
       .subscribe(data => {
         if (
           data.fullName &&
@@ -222,7 +234,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
           comments: ''
         });
         this.newPerson = data;
-        console.log('new person initialised', this.newPerson);
         this.findPotentialDuplicatePerson(data);
       });
 
@@ -252,11 +263,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   getContactGroupById(contactGroupId: number) {
     this.contactGroupService
-      .getContactGroupbyId(contactGroupId)
+      .getContactGroupbyId(contactGroupId, true)
       .subscribe(data => {
         this.contactGroupDetails = data;
         this.setImportantNotes();
-        console.log('contact people', this.contactGroupDetails);
         this.initialContactGroupLength = this.contactGroupDetails.contactPeople.length;
         this.populateFormDetails(data);
         this.addSelectedPeople();
@@ -280,6 +290,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
           }
           this.contactGroupDetails.contactPeople = [];
           this.contactGroupDetails.contactPeople.push(this.firstContactGroupPerson);
+          this.showPersonWarning();
           this.setSalutation();
           this.isLoadingNewPersonVisible = false;
         }
@@ -324,13 +335,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.contactGroupService.getPotentialDuplicatePeople(person).subscribe(data => {
       this.potentialDuplicatePeople = data;
       if (data) {
-      // this.newPerson = {} as  BasicPerson;
       this.newPerson.firstName = data.firstName,
       this.newPerson.middleName = data.middleName,
       this.newPerson.lastName = data.lastName;
       }
-      console.log(' for new person', data);
-      console.log('new person', this.newPerson);
       this.checkDuplicatePeople(person);
     });
   }
@@ -384,23 +392,39 @@ export class ContactgroupsPeopleComponent implements OnInit {
    });
   }
 
-setImportantNotes(){
-  this.importantContactNotes = this.contactGroupDetails.contactNotes.filter(x=>x.isImportant && +x.contactGroupId === this.contactGroupId);
-  this.importantPeopleNotes = this.contactGroupDetails.contactNotes.filter(x=>x.isImportant);
-  console.log('important contact notes', this.importantContactNotes);
-  console.log('important people notes', this.importantPeopleNotes);
-  this.contactGroupDetails.contactPeople.forEach(x => {
-    x.personNotes = this.importantPeopleNotes.filter(p => p.personId === x.personId);
-  });
-}
+  setImportantNotes(){
+    this.importantContactNotes = this.contactGroupDetails.contactNotes.filter(x=>x.isImportant && +x.contactGroupId === this.contactGroupId);
+    this.importantPeopleNotes = this.contactGroupDetails.contactNotes.filter(x=>x.isImportant);
+    this.contactGroupDetails.contactPeople.forEach(x => {
+      x.personNotes = this.importantPeopleNotes.filter(p => p.personId === x.personId);
+    });
+  }
 
+   getContactNotes(){
+     this.bottomReached = false;
+    this.getNextContactNotesPage(this.page);
+    }
+
+  private getNextContactNotesPage(page) {
+    this.contactGroupService
+      .getContactGroupNotes(this.contactGroupId, this.pageSize, page)
+      .subscribe(data => {
+        if (data) {
+          this.contactNotes = _.concat(this.contactNotes, data);
+        }
+        if (!data.length) {
+          this.bottomReached = true;
+        }
+      });
+  }
+  
   editSelectedCompany(id: number, newCompany?: boolean) {
     event.preventDefault();
     this.isEditingSelectedCompany = true;
     this.contactGroupBackUp();
     let companyName;
-    if(newCompany) {
-      companyName = this.companyFinderForm.get("companyName").value;
+    if (newCompany) {
+      companyName = this.companyFinderForm.get('companyName').value;
     }
     this._router.navigate(['/company-centre/detail', id, 'edit'], {queryParams: {isNewCompany: newCompany, isEditingSelectedCompany: true, companyName: companyName }});
   }
@@ -412,7 +436,7 @@ setImportantNotes(){
   }
 
   contactGroupBackUp() {
-    if(this.firstContactGroupPerson) {
+    if (this.firstContactGroupPerson) {
       this.selectedPeople.push(this.firstContactGroupPerson);
     }
     AppUtils.holdingSelectedPeople = this.selectedPeople;
@@ -473,11 +497,11 @@ setImportantNotes(){
     this.isCompanyAdded = true;
     this.searchCompanyTermBK = this.companyFinderForm.get('companyName').value;
     this.companyFinderForm.get('companyName').setValue(company.companyName);
-    setTimeout(()=>{
-      if(this.companyNameInput) {
+    setTimeout(() => {
+      if (this.companyNameInput) {
         this.companyNameInput.nativeElement.scrollIntoView({block: 'center'});
       }
-    })
+    });
    }
 
   getCompanyDetails(companyId: number) {
@@ -491,7 +515,7 @@ setImportantNotes(){
   }
 
   selectPerson(id: number) {
-    if(this.removedPersonIds.indexOf(id) >= 0 ){
+    if (this.removedPersonIds.indexOf(id) >= 0 ){
       this.removedPersonIds.splice(this.removedPersonIds.indexOf(id),1);
     }
     if (id !== 0 && !this.checkDuplicateInContactGroup(id)) {
@@ -568,13 +592,15 @@ setImportantNotes(){
   }
 
   cloneContactGroup() {
-     this.isCloned = true;
+    console.log('contact to clone', this.contactGroupDetails);
+    this.isCloned = true;
     if (this.isCloned) {
       this.contactGroupDetails.contactGroupId = 0;
       this.contactGroupDetails.referenceCount = 0;
     }
     this.contactGroupDetailsForm.markAsDirty();
   }
+
   saveContactGroup() {
     let validityCondition = this.contactGroupDetailsForm.valid;
     if(this.contactGroupDetails.contactType === ContactType.CompanyContact) {
@@ -608,7 +634,6 @@ setImportantNotes(){
         this.contactGroupDetails.contactPeople = [];
       }
       if (this.selectedCompanyDetails) {
-        console.log(this.selectedCompanyDetails);
         this.isCompanyAdded = true;
         contactGroup.companyId = this.selectedCompanyDetails.companyId;
         contactGroup.companyName = this.selectedCompanyDetails.companyName;
@@ -726,6 +751,17 @@ setImportantNotes(){
     }
   }
 
+  // TODO: Replace this with a directive
+  /* Only allow spaces, dashes, the plus sign and digits */
+  phoneNumberOnly(event): boolean {
+    const charCode = (event.which) ? event.which : event.keyCode;
+    const isCodeNotAllowed = charCode > 31 && charCode !== 45 && charCode !== 43 && charCode !== 32 && (charCode < 48 || charCode > 57);
+    if (isCodeNotAllowed) {
+      return false;
+    }
+    return true;
+
+  }
   showHideMarkPrefs(event, i) {
     event.preventDefault();
     event.stopPropagation();

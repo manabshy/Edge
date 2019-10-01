@@ -18,9 +18,11 @@ currentPropertyChanged(propertyId: number) {
 
   constructor(private http: HttpClient) { }
 
-  autocompleteProperties(property: any): Observable<PropertyAutoComplete[]> {
+  autocompleteProperties(property: any, pageSize?: number): Observable<PropertyAutoComplete[]> {
+    pageSize = 100;
     const options = new HttpParams()
-      .set('searchTerm', property.propertyAddress || '');
+      .set('searchTerm', property.propertyAddress || '')
+      .set('pageSize', pageSize.toString());
     const url = `${AppConstants.basePropertyUrl}/autocomplete`;
     return this.http.get<PropertyAutoCompleteData>(url, { params: options })
       .pipe(

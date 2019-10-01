@@ -13,13 +13,15 @@ import { PropertyDetailDocumentsComponent } from './property-detail-documents/pr
 import { PropertyDetailPhotosComponent } from './property-detail-photos/property-detail-photos.component';
 import { PropertyDetailMapComponent } from './property-detail-map/property-detail-map.component';
 import { PropertyDetailEditComponent } from './property-detail-edit/property-detail-edit.component';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 @NgModule({
   declarations: [PropertyListComponent, PropertyComponent, PropertyDetailComponent, PropertyDetailInstructionsComponent, PropertyDetailOffersComponent, PropertyDetailNotesComponent, PropertyDetailDocumentsComponent, PropertyDetailPhotosComponent, PropertyDetailMapComponent, PropertyDetailEditComponent],
   imports: [
     CommonModule,
     PropertyRoutingModule,
-    CoreModule
+    CoreModule,
+    InfiniteScrollModule
   ],
   exports: [PropertyListComponent]
 })

@@ -1,5 +1,3 @@
-
-
 html {
     @media (max-width: 320px) {
         font-size: 0.85rem;
@@ -198,4 +196,12 @@ fieldset {
 
 .mark, mark {
     padding: 0;
+}
+
+.btn-light {
+    border: 1px solid $border-color;
+}
+
+.form-control:disabled {
+    opacity: .5;
 }

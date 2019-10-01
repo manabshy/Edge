@@ -5,7 +5,7 @@
       <h4 class="m-0">Property centre</h4>
     </div>
     <div class="col-auto">
-      <a class="btn btn-primary" [routerLink]="['detail', 0 , 'edit' ]"  [queryParams]="{isNewProperty: true}" >New Property</a>
+      <a class="btn btn-primary" [routerLink]="['detail', 0 , 'edit' ]"  [queryParams]="{isNewProperty: true}" ><i class="fas fa-plus mr-2"></i> Property</a>
     </div>
   </div>
   <form class="mb-3" [formGroup]="propertyFinderForm" (ngSubmit)="propertiesResults()">
@@ -33,5 +33,5 @@
   <div class="text-center" *ngIf="isHintVisible">
       <i class="far fa-smile-wink"></i> Type at least <strong>3 characters</strong> to get results
   </div>
-  <app-property-list *ngIf="!isLoading && !isHintVisible" [properties]='properties' [searchTerm]='propertyFinderForm.value.propertyAddress'></app-property-list>
+  <app-property-list *ngIf="!isLoading && !isHintVisible" [originalProperties]='properties' [searchTerm]='propertyFinderForm.value.propertyAddress'></app-property-list>
 </div>

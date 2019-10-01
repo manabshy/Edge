@@ -8,7 +8,7 @@
     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading details ...
   </div>
   <form *ngIf="personDetails || basicPerson" [formGroup]="personForm" (ngSubmit)="savePerson()" (keydown.enter)="$event.preventDefault()" autocompleteOff>
-    <div class="form-group row">
+    <div class="form-group row" [hidden]="basicPerson">
       <label for="warningStatus" class="col-sm-2 col-form-label col-form-label-sm">Warning</label>
       <div class="col-sm-3">
         <select class="custom-select custom-select-sm" id="warningStatus" name="warningStatus" formControlName="warningStatusId" >
@@ -198,7 +198,6 @@
         </div>
       </div>
     </div>
-
     <div class="form-actions" [ngClass]="{'px-0': basicPerson}">
       <div class="container px-lg-4">
         <div class="row justify-content-end w-100 no-gutters">

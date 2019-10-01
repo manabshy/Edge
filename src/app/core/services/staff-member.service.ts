@@ -7,41 +7,25 @@ import { map, tap, shareReplay, publishReplay, refCount, take } from 'rxjs/opera
 import { StaffMember, StaffMemberResult } from '../models/staff-member';
 import { Staff } from 'src/app/diary/shared/diary';
 
+const CACHE_SIZE = 1;
 @Injectable({
   providedIn: 'root'
 })
 export class StaffMemberService {
   staffMember: StaffMember;
-  private staffMemberSubject = new Subject<StaffMember>();
-  staffMemberChanged$ = this.staffMemberSubject.asObservable();
+  currentStaffMember$: Observable<StaffMember>;
 
-  currentStaffMember$ = this.http.get<StaffMemberResult>(`${AppConstants.baseUrl}/currentUser`)
-    .pipe(
-      map(response => response.result),
-      tap(data => console.log('currentUser from observable', JSON.stringify(data)),
-        shareReplay(1))
-    );
-
-  get currentStaffMember() {
-    const member = localStorage.getItem('currentUser');
-    return JSON.parse(member);
-  }
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient) { }
 
   public getCurrentStaffMember(): Observable<StaffMember> {
-    if (this.staffMember) {
-      console.log('current user from cache', this.staffMember);
-      return of(this.staffMember);
+    if (!this.currentStaffMember$) {
+      this.currentStaffMember$ = this.requestCurrentStaffMember().pipe(shareReplay(CACHE_SIZE));
     }
+    return this.currentStaffMember$;
+  }
+
+  private requestCurrentStaffMember(): Observable<StaffMember> {
     return this.http.get<StaffMemberResult>(`${AppConstants.baseUrl}/currentUser`)
-      .pipe(
-        map(response => response.result),
-        tap(data => this.staffMember = data),
-        shareReplay(1)
-        // publishReplay(1),
-        // refCount(),
-        // take(1),
-        // tap((data)=>console.log('current user from db', data)),
-      );
+      .pipe(map(response => response.result));
   }
 }

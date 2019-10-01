@@ -3,9 +3,8 @@
   <div class="row page-title">
     <div class="col">
       <h4 class="mb-0"><ng-container *ngIf="contactGroupDetails?.contactType === 4; else peopleCG">
-        Company</ng-container><ng-template #peopleCG>Personal</ng-template> Contact group
-        <span class="badge badge-pill badge-success"
-                        *ngIf="isAMLCompleted">AML Completed</span>
+        Company</ng-container><ng-template #peopleCG>Personal</ng-template> Contact group  <small class="text-muted" *ngIf="contactGroupDetails?.contactGroupId">C-{{contactGroupDetails?.contactGroupId}}</small>
+        <span class="badge badge-pill badge-success" *ngIf="isAMLCompleted">AML Completed</span>
       </h4>
     </div>
     <div class="col-auto" *ngIf="isTypePicked">
@@ -21,7 +20,7 @@
               <i class="fas fa-user-plus fa-fw mr-2"></i> Add Person
             </button>
           </li>
-          <li role="menuitem"><button type="button" class="dropdown-item" (click)="addNote()"><i class="fas fa-sticky-note fa-fw mr-2"></i> Add Note</button></li>
+          <li role="menuitem" *ngIf="contactGroupDetails?.contactGroupId"><button type="button" class="dropdown-item" (click)="addNote()"><i class="fas fa-sticky-note fa-fw mr-2"></i> Add Note</button></li>
         </ul>
       </div>
     </div>
@@ -30,7 +29,7 @@
     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading details ...
   </div>
   <ng-container *ngIf="!isLoadingDetails">
-    <div class="alert alert-info"
+    <div class="alert alert-warning"
       *ngIf="contactGroupDetails?.contactPeople && (contactGroupDetails?.contactPeople.length !== initialContactGroupLength) && isTypePicked">
       There are pending changes on the people list. Save to make them effective.
     </div>
@@ -132,7 +131,7 @@
         <div class="row mb-3">
           <div class="col-12">
             <div class="alert alert-danger small mb-2 mr-2 d-inline-block" *ngFor="let importantNote of importantContactNotes">
-                <i class="fas fa-exclamation-circle fa-fw text-danger mr-1"></i> {{importantNote.text}}
+              {{importantNote.text}}
             </div>
           </div>
         </div>
@@ -199,16 +198,13 @@
                       </div>
                     </ng-template>
                     <div class="col-12">
-                      <ng-container *ngIf="person?.personNotes?.length">
-                        <div class="alert alert-danger small mb-2 mr-2 d-inline-block" *ngFor="let importantNote of person?.personNotes">
-                          <i class="fas fa-exclamation-circle fa-fw text-danger mr-1"></i> {{importantNote.text}}
-                        </div>
-                        <div class="mb-2 d-inline-block">
-                          <a class="small" [routerLink]="['../../../../detail/', person?.personId, 'notes' ]">
-                            All Notes
-                          </a>
-                        </div>
-                      </ng-container>
+                     <div *ngIf="!isNewContactGroup">
+                        <ng-container *ngIf="person?.personNotes?.length">
+                          <div class="alert alert-danger small mb-2 mr-2 d-inline-block" *ngFor="let importantNote of person?.personNotes">
+                            {{importantNote.text}}
+                          </div>
+                        </ng-container>
+                     </div>
                     </div>
                     <div class="col-12 mb-2">
                       <strong>{{person?.firstName | titlecase}} {{person?.lastName | titlecase}}</strong>
@@ -320,8 +316,9 @@
             </div>
             <div class="row">
               <label class="col-sm-2 col-form-label col-form-label-sm">Notes</label>
-              <div class="col-sm-10">
-                <app-notes [noteData]="dataNote" [personName]="" [contactGroupNotes]="dataNote?.notes"></app-notes>
+              <div class="col-sm-10" [ngClass]="{'notes-disabled': !contactGroupDetails?.contactGroupId}">
+                <small class="alert alert-info" *ngIf="!contactGroupDetails?.contactGroupId">Save to enable Notes</small>
+                <app-notes [noteData]="dataNote"  [contactGroupNotes]="dataNote?.notes" [bottomReached]="bottomReached" [pageNumber]="page"></app-notes>
               </div>
             </div>
           </form>
@@ -384,7 +381,7 @@
         <div class="form-group row">
           <label for="phone" class="col-sm-2 col-form-label col-form-label-sm">Phone</label>
           <div class="col-sm-10">
-            <input type="text" id="phone" class="form-control form-control-sm" formControlName="phoneNumber">
+            <input type="text" id="phone" (keypress)="phoneNumberOnly($event)" class="form-control form-control-sm" formControlName="phoneNumber">
           </div>
         </div>
         <div class="form-group row">

@@ -1,144 +1,148 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ContactGroupsService } from './shared/contact-groups.service';
 import { ContactGroupAutoCompleteResult } from './shared/contact-group';
 import { ActivatedRoute } from '@angular/router';
 import { AppUtils } from '../core/shared/utils';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { JsonPipe } from '@angular/common';
 import { SharedService } from '../core/services/shared.service';
 import { AppConstants } from '../core/shared/app-constants';
+import * as _ from 'lodash';
 
+const PAGE_SIZE = 20;
 @Component({
   selector: 'app-contactgroups',
   templateUrl: './contactgroups.component.html',
   styleUrls: ['./contactgroups.component.scss']
 })
-export class ContactGroupsComponent implements OnInit {
+export class ContactGroupsComponent implements OnInit, OnDestroy {
   advSearchCollapsed = false;
   isMessageVisible = false;
   isHintVisible = false;
   isLoading = false;
   contactFinderForm: FormGroup;
-  contactGroups: ContactGroupAutoCompleteResult[];
+  contactGroups: ContactGroupAutoCompleteResult[] = [];
   contactGroupDetails: ContactGroupAutoCompleteResult[];
   contactPeople: any[];
   contactGroupId: number;
   listInfo: any;
   warnings: any;
   differentSearchSuggestions: string[];
-  constructor(private contactGroupService: ContactGroupsService, private route: ActivatedRoute, private fb: FormBuilder, private sharedService: SharedService) { }
+  page = 1;
+  searchTerm = '';
+  bottomReached = false;
+
+  constructor(private contactGroupService: ContactGroupsService,
+              private route: ActivatedRoute,
+              private fb: FormBuilder,
+              private sharedService: SharedService) { }
 
   ngOnInit() {
     this.contactFinderForm = this.fb.group({
       searchTerm: [''],
     });
-    this.contactFinderForm.valueChanges
-      .pipe(debounceTime(500), distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)))
-      .subscribe(data => {
-        // this.contactGroupsAutocomplete(data.searchTerm)
-      });
 
-    this.route.queryParams.subscribe(params=>{
-      if(params['searchTerm'] || AppUtils.searchTerm) {
+    this.route.queryParams.subscribe(params => {
+      if (params['searchTerm'] || AppUtils.searchTerm) {
         this.contactFinderForm.get('searchTerm').setValue(params['searchTerm'] || AppUtils.searchTerm);
         this.contactGroupsResults();
         this.isHintVisible = false;
         this.isMessageVisible = false;
       }
-    })
-    
-    if(AppUtils.listInfo) {
+    });
+
+    if (AppUtils.listInfo) {
       this.listInfo = AppUtils.listInfo;
       this.setDropdownLists();
     } else {
-      this.sharedService.getDropdownListInfo().subscribe(data=> {
+      this.sharedService.getDropdownListInfo().subscribe(data => {
         this.listInfo = data;
         this.setDropdownLists();
       });
     }
+
+    // page changes here
+    this.contactGroupService.pageChanges$.subscribe(newPageNumber => {
+      if (newPageNumber) {
+        this.page = newPageNumber;
+        this.getNextContactGroupsPage(this.page);
+      }
+    });
   }
 
+  ngOnDestroy() {
+    this.contactGroups = [];
+  }
   setDropdownLists() {
     this.warnings = this.listInfo.result.personWarningStatuses;
   }
 
-  // contactGroupsAutocomplete(searchTerm: string) {
-  //   if(searchTerm) {
-  //     this.isLoading = true;
-  //   }
-  //   this.contactGroupService.getAutocompleteContactGroups(searchTerm).subscribe(result => {
-  //       this.contactGroups = result;
-  //       if(this.contactGroups && this.contactGroups.length) {
-  //         this.contactGroups.forEach(x => {
-  //           x.warning = this.sharedService.showWarning(x.warningStatusId, this.warnings, x.warningStatusComment);
-  //         })
-  //       }
-  //       this.isLoading = false;
-  //       console.log('contact groups', this.contactGroups);
-
-  //       if (searchTerm && searchTerm.length) {
-  //         if (!this.contactGroups.length) {
-  //           this.isMessageVisible = true;
-  //           this.getDifferentSearchSuggestions(searchTerm);
-  //         } else {
-  //           this.isMessageVisible = false;
-  //         }
-  //       } else {
-  //         this.isMessageVisible = false;
-  //       }
-
-  //     }, error => {
-  //       this.contactGroups = [];
-  //       this.isLoading = false;
-  //       this.isHintVisible = true;
-  //     });
-  // }
-
   contactGroupsResults() {
-    const searchTerm = this.contactFinderForm.get('searchTerm').value;
-    if(searchTerm) {
+    if (this.searchTerm) {
       this.isLoading = true;
     }
-    this.contactGroupService.getAutocompleteContactGroups(searchTerm).subscribe(result => {
-        this.contactGroups = result;
-        if(this.contactGroups && this.contactGroups.length) {
-          this.contactGroups.forEach(x => {
-            x.warning = this.sharedService.showWarning(x.warningStatusId, this.warnings, x.warningStatusComment);
-          })
-        }
-        this.isLoading = false;
-        console.log('contact groups', this.contactGroups);
+    this.page = 1;
+    this.bottomReached = false;
+    this.contactGroups = [];
+    this.searchTerm = this.contactFinderForm.get('searchTerm').value;
+    this.getNextContactGroupsPage(this.page);
+  }
 
-        if (searchTerm && searchTerm.length) {
-          if (!this.contactGroups.length) {
-            this.isMessageVisible = true;
-            this.getDifferentSearchSuggestions(searchTerm);
-          } else {
-            this.isMessageVisible = false;
-          }
+  getNextContactGroupsPage(page: number) {
+    this.isLoading = true;
+    this.contactGroupService.getAutocompleteContactGroups(this.searchTerm, PAGE_SIZE, page).subscribe(result => {
+      this.isLoading = false;
+
+      if (this.searchTerm && this.searchTerm.length) {
+        if (!result.length) {
+          this.isMessageVisible = true;
+          this.bottomReached = true;
+          this.getDifferentSearchSuggestions(this.searchTerm);
+          return;
         } else {
           this.isMessageVisible = false;
         }
+      } else {
+        this.isMessageVisible = false;
+      }
 
-      }, error => {
-        this.contactGroups = [];
-        this.isLoading = false;
-        this.isHintVisible = true;
-      });
+      let sendSMS: boolean;
+      let newNumber;
+      if (result) {
+        result.forEach((c, index) => {
+          this.sharedService.isUKMobile(c.phoneNumbers[0]) ? sendSMS = true : sendSMS = false;
+          newNumber = {
+            personId: c.personId,
+            sendSMS: sendSMS,
+            number: c.phoneNumbers[0]
+          };
+          result[index].phoneNumbers = newNumber;
+        });
+        this.contactGroups = _.concat(this.contactGroups, result);
+         if (this.contactGroups && this.contactGroups.length) {
+           this.contactGroups.forEach(x => {
+             x.warning = this.sharedService.showWarning(x.warningStatusId, this.warnings, x.warningStatusComment);
+           });
+         }
+      }
+
+     }, error => {
+       this.contactGroups = [];
+       this.isLoading = false;
+       this.isHintVisible = true;
+     });
   }
 
   getDifferentSearchSuggestions(searchTerm: string) {
     const telIndex = searchTerm.search(AppConstants.telephonePattern);
     this.differentSearchSuggestions = [];
-    if(telIndex > 0){
+    if (telIndex > 0){
       this.differentSearchSuggestions.push(searchTerm.substring(0, telIndex).trim());
     }
     this.differentSearchSuggestions.push(searchTerm.substring(telIndex).trim());
   }
 
   onKeyup(event: KeyboardEvent) {
-    if(event.key !== 'Enter') {
+    if (event.key !== 'Enter') {
       this.isMessageVisible = false;
     }
     AppUtils.searchTerm = this.contactFinderForm.value.searchTerm;

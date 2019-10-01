@@ -61,16 +61,16 @@ export class SmsModalComponent implements OnInit {
       header: this.header,
       personId: this.person.personId
     });
-    this.smsForm.get('personId').disable();
-    this.smsForm.get('phoneNumber').disable();
-    this.smsForm.get('header').disable();
-    this.logValidationErrorsSimple(this.smsForm, false);
-    this.smsForm.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
-      this.logValidationErrorsSimple(this.smsForm, true);
-      this.smsForm.get('personId').enable();
-      this.smsForm.get('phoneNumber').enable();
-      this.smsForm.get('header').enable();
-    });
+    // this.smsForm.get('personId').disable();
+    // this.smsForm.get('phoneNumber').disable();
+    // this.smsForm.get('header').disable();
+    //this.logValidationErrorsSimple(this.smsForm, false);
+    // this.smsForm.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
+    //   this.logValidationErrorsSimple(this.smsForm, false);
+    //   this.smsForm.get('personId').enable();
+    //   this.smsForm.get('phoneNumber').enable();
+    //   this.smsForm.get('header').enable();
+    // });
   }
 
   logValidationErrorsSimple(group: FormGroup = this.smsForm, fakeTouched: boolean) {
@@ -84,14 +84,14 @@ export class SmsModalComponent implements OnInit {
         this.formErrors[key] = '';
         for (const errorKey in control.errors) {
           if (errorKey) {
-            console.log(messages);
+            console.log(errorKey, messages[errorKey]);
             this.formErrors[key] += messages[errorKey] + '\n';
           }
         }
       }
-      if (control instanceof FormGroup) {
-        this.logValidationErrorsSimple(control, fakeTouched);
-      }
+      // if (control instanceof FormGroup) {
+      //   this.logValidationErrorsSimple(control, fakeTouched);
+      // }
     });
     this.sharedService.scrollToFirstInvalidField();
   }

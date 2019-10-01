@@ -5,7 +5,7 @@
       <h4 class="m-0">Contact centre</h4>
     </div>
     <div class="col-auto">
-      <a class="btn btn-primary" [routerLink]="['detail/0/people', 0]"  [queryParams]="{isNewContactGroup: true}" >New Contact Group</a>
+      <a class="btn btn-primary" [routerLink]="['detail/0/people', 0]"  [queryParams]="{isNewContactGroup: true}" ><i class="fas fa-plus mr-2"></i> Contact Group</a>
     </div>
   </div>
   <form class="mb-3" [formGroup]="contactFinderForm" (ngSubmit)="contactGroupsResults()">
@@ -56,10 +56,15 @@
       </div>
     </div>
   </form>
+  <div class="text-center" *ngIf="isHintVisible">
+      <i class="far fa-smile-wink"></i> Type at least <strong>3 characters</strong> to get results
+  </div>
+  <app-contactgroups-list [originalContactGroups]='contactGroups' [pageNumber]="page" [searchTerm]='contactFinderForm.value.searchTerm' [bottomReached]="bottomReached" *ngIf="!isHintVisible">
+  </app-contactgroups-list>
   <div class="text-center" *ngIf="isLoading && !isHintVisible">
     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...
   </div>
-  <ng-container *ngIf="isMessageVisible && !isLoading && !isHintVisible">
+  <ng-container *ngIf="isMessageVisible && !isLoading && !isHintVisible && page === 1">
       <div class="text-center text-danger">
         <i class="far fa-sad-tear"></i> No results for '<strong>{{contactFinderForm.value.searchTerm || ' '}}</strong>'
       </div>  
@@ -71,9 +76,4 @@
         </div>
       </div>
     </ng-container>
-  <div class="text-center" *ngIf="isHintVisible">
-      <i class="far fa-smile-wink"></i> Type at least <strong>3 characters</strong> to get results
-  </div>
-  <app-contactgroups-list [contactGroups]='contactGroups' [searchTerm]='contactFinderForm.value.searchTerm' *ngIf="!isLoading && !isHintVisible">
-  </app-contactgroups-list>
 </div>

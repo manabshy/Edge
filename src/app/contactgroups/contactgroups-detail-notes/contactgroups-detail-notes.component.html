@@ -5,8 +5,8 @@
       <h4 class="mb-0">Notes</h4>
     </div>
     <div class="col-auto">
-      <button type="button" class="btn btn-primary" (click)="addNote()"><i class="fas fa-plus mr-2"></i> Add</button>
+      <button type="button" class="btn btn-primary" (click)="addNote()"><i class="fas fa-plus mr-2"></i> Note</button>
     </div>
   </div>
-  <app-notes [personNotes]="personNotes"></app-notes>
+  <app-notes [personId]="personId" [addressees]="addressees" [person]="person" [pageNumber]="page" [bottomReached]="bottomReached" [personNotes]="personNotes"></app-notes>
 </div>

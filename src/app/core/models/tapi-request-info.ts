@@ -5,4 +5,5 @@ export interface TapiRequestInfo {
     callerNmber: string;
     guid: string;
     isOutGoingCall: boolean;
+    isCallHangedUp: boolean;
   }

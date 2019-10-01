@@ -1,50 +1,57 @@
-<div class="list-group mb-5">
-  <a [routerLink]="['detail', contactGroup.personId ]"
-    class="list-group-item list-group-item-action" 
-    [ngClass]="{'list-group-item-danger': contactGroup?.warning?.id !== 1}"
-    *ngFor="let contactGroup of contactGroups; let i = index;">
-    <div class="row mb-1">
-      <div class="col">
-        <small class="text-muted mr-2">ID: {{contactGroup?.personId}}</small><br class="d-sm-none" />
-        <span class="badge badge-pill badge-danger mb-2" *ngIf="contactGroup?.warning?.id !== 1">{{contactGroup?.warningStatusComment || contactGroup?.warning?.value}}</span>
+<div class="list-group mb-3">
+ <div *ngIf="originalContactGroups" class="search-results">
+    <a [routerLink]="['detail', contactGroup.personId ]"
+      class="list-group-item list-group-item-action"
+      [ngClass]="{'list-group-item-danger': contactGroup?.warning?.id !== 1}"
+      *ngFor="let contactGroup of contactGroups; let i = index; last as isLast">
+      <div class="row mb-1">
+        <div class="col">
+          <small class="text-muted mr-2">ID: {{contactGroup?.personId}}</small><br class="d-sm-none" />
+          <span class="badge badge-pill badge-danger mb-2" *ngIf="contactGroup?.warning?.id !== 1">{{contactGroup?.warningStatusComment || contactGroup?.warning?.value}}</span>
+        </div>
+        <div class="col-auto text-right">
+          <a [routerLink]="['detail', contactGroup.personId, 'edit' ]"><i class="fas fa-edit"></i> Edit</a>
+        </div>
       </div>
-      <div class="col-auto text-right">
-        <a [routerLink]="['detail', contactGroup.personId, 'edit' ]"><i class="fas fa-edit"></i> Edit</a>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col text-truncate">
-        <div class="row align-items-center">
-          <div class="col-sm-5">
-            <div class="mb-1 text-truncate">
-              <strong [innerHTML]="contactGroup.addressee | highlight : searchTerm"></strong>
-            </div>
-          </div>
-          <div class="col-12 col-sm-auto">
-            <p>
-              <app-telephone [person]="contactGroup" [number]="contactGroup?.phoneNumbers[0]" [searchTerm]="searchTerm" [warning]="contactGroup?.warningStatusComment || contactGroup?.warning?.value"></app-telephone>
-              <span class="text-danger" *ngIf="!contactGroup?.phoneNumbers[0]">No Phone</span>
-            </p>
-          </div>
-          <div class="col text-sm-right">
-            <p class="text-truncate"><a (click)="$event.stopPropagation()"
-                *ngIf="contactGroup?.emailAddresses[0]"
-                class="mobile-btn" href="mailto:{{contactGroup?.emailAddresses[0]}}" [innerHTML]="contactGroup?.emailAddresses[0] | highlight : searchTerm"></a><span class="text-danger" *ngIf="!contactGroup?.emailAddresses[0]">No Email</span></p>
-          </div>
-          <div class="col-12">
-              <div *ngFor="let cG of contactGroup?.contactGroups" class="text-truncate">
-                <ng-container *ngIf="cG?.isCompany">
-                  <i class="fas fa-briefcase mr-1 fa-fw"></i> <span [innerHTML]="cG?.companyName | highlight : searchTerm"></span>
-                </ng-container>
-                <i class="fas fa-users mr-1 fa-fw" *ngIf="cG?.contactPeople.length"></i>
-                <ng-container
-                  *ngFor="let people of cG.contactPeople; last as isLast">
-                  <span [innerHTML]="people.addressee | highlight : searchTerm"></span><ng-container *ngIf="!isLast">, </ng-container>
-                </ng-container>
+      <div class="row">
+        <div class="col text-truncate">
+          <div class="row align-items-center">
+            <div class="col-sm-5">
+              <div class="mb-1 text-truncate">
+                <strong [innerHTML]="contactGroup.addressee | highlight : searchTerm"></strong>
               </div>
+            </div>
+            <div class="col-12 col-sm-auto">
+              <p>
+                <app-telephone [person]="contactGroup" [number]="contactGroup?.phoneNumbers?.number" [sms]="contactGroup?.phoneNumbers?.sendSMS" [searchTerm]="searchTerm" [warning]="contactGroup?.warningStatusComment || contactGroup?.warning?.value"></app-telephone>
+                <span class="text-danger" *ngIf="!contactGroup?.phoneNumbers">No Phone</span>
+              </p>
+            </div>
+           <!-- <div class="col-12 col-sm-auto">
+              <p class="mb-2" *ngIf="contactGroup?.phoneNumbers?.personId === contactGroup?.personId">
+                <app-telephone [person]="contactGroup" [number]="contactGroup?.phoneNumbers.number" [sms]="contactGroup.phoneNumbers.sendSMS" [searchTerm]="searchTerm" [warning]="contactGroup?.warningStatusComment || contactGroup?.warning?.value"></app-telephone>
+              </p>
+           </div> -->
+            <div class="col text-sm-right">
+              <p class="text-truncate"><a (click)="$event.stopPropagation()"
+                  *ngIf="contactGroup?.emailAddresses[0]"
+                  class="mobile-btn" href="mailto:{{contactGroup?.emailAddresses[0]}}" [innerHTML]="contactGroup?.emailAddresses[0] | highlight : searchTerm"></a><span class="text-danger" *ngIf="!contactGroup?.emailAddresses[0]">No Email</span></p>
+            </div>
+            <div class="col-12">
+                <div *ngFor="let cG of contactGroup?.contactGroups" class="text-truncate">
+                  <ng-container *ngIf="cG?.isCompany">
+                    <i class="fas fa-briefcase mr-1 fa-fw"></i> <span [innerHTML]="cG?.companyName | highlight : searchTerm"></span>
+                  </ng-container>
+                  <i class="fas fa-users mr-1 fa-fw" *ngIf="cG?.contactPeople.length"></i>
+                  <ng-container
+                    *ngFor="let people of cG.contactPeople; last as isLast">
+                    <span [innerHTML]="people.addressee | highlight : searchTerm"></span><ng-container *ngIf="!isLast">, </ng-container>
+                  </ng-container>
+                </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </a>
+    </a>
+ </div>
 </div>

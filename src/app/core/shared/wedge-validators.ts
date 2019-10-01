@@ -100,7 +100,6 @@ export class WedgeValidators {
         
         if(number) {
           switch(+type){
-            case TelephoneTypeId.Home:
             case TelephoneTypeId.Fax:
               if(_this.sharedService.isUKMobile(number)) {
                 return { 'mismatch': true };

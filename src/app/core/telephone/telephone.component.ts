@@ -41,20 +41,10 @@ export class TelephoneComponent implements OnInit {
     }
   }
 
-  callOrText() {
+  callOrText(call: boolean) {
     event.stopPropagation();
     event.preventDefault();
-    if (this.sms) {
-      if (this.warning && this.warning !== 'None') {
-        this.showWarning().subscribe(res => {
-          if (res) {
-            this.callOrTextChoice();
-          }
-        });
-      } else {
-        this.callOrTextChoice();
-      }
-    } else {
+    if (call) {
       if (this.warning && this.warning !== 'None') {
         this.showWarning().subscribe(res => {
           if (res) {
@@ -63,6 +53,16 @@ export class TelephoneComponent implements OnInit {
         });
       } else {
         this.call();
+      }
+    } else {
+      if (this.warning && this.warning !== 'None') {
+        this.showWarning().subscribe(res => {
+          if (res) {
+            this.sendSMS();
+          }
+        });
+      } else {
+        this.sendSMS();
       }
     }
   }
@@ -131,7 +131,8 @@ export class TelephoneComponent implements OnInit {
         isOutGoingCall: true,
         callerNmber: this.currentStaffMember.phone,
         calledNumber: this.number,
-        guid: ''
+        guid: '',
+        isCallHangedUp: false
       };
 
       this.isDialing = true;
@@ -149,13 +150,39 @@ export class TelephoneComponent implements OnInit {
 
   calling() {
     this.isDialing = false;
-    this.toastr.success('Dialing ...', '', {
-      toastClass: 'ngx-toastr toast-call'
-    })
-    .onHidden
+    this.endCallBanner()
+    this.leaveANoteBanner();
+  }
+
+  endCallBanner() {
+    if (this.sharedService.lastCallEndCallToast) {
+      this.toastr.clear(this.sharedService.lastCallEndCallToast.toastId);
+    }
+    this.sharedService.lastCallEndCallToast = this.toastr.success('Calling ' + this.person.salutation + ' ... <a class="btn btn-danger text-white ml-2">Hang up</a>', '', {
+      toastClass: 'ngx-toastr toast-call',
+      disableTimeOut: true
+    });
+    
+    this.sharedService.lastCallEndCallToast
+    .onTap
     .pipe(take(1))
     .subscribe(() => {
-      this.leaveANoteBanner();
+      const tapiInfo: TapiRequestInfo = {
+        officeId: this.currentStaffMember.homeOffice.officeId,
+        staffId: this.currentStaffMember.staffMemberId,
+        isOutGoingCall: true,
+        callerNmber: this.currentStaffMember.phone,
+        calledNumber: this.number,
+        guid: '',
+        isCallHangedUp: true
+      };
+
+      this.tapiService.putCallRequest(tapiInfo).subscribe(data => {
+        console.log(data);
+        this.toastr.clear(this.sharedService.lastCallEndCallToast.toastId);
+      });
+
+      console.log('hang up!');
     });
   }
 
@@ -167,7 +194,8 @@ export class TelephoneComponent implements OnInit {
       toastClass: 'ngx-toastr toast-notes',
       disableTimeOut: true,
       closeButton: true
-    })
+    });
+    this.sharedService.lastCallNoteToast
     .onTap
     .pipe(take(1))
     .subscribe(() => {
@@ -176,6 +204,7 @@ export class TelephoneComponent implements OnInit {
         isPersonNote: true
       };
       this.sharedService.addNote(data);
+      this.toastr.clear(this.sharedService.lastCallNoteToast.toastId);
     });
   }
 }

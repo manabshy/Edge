@@ -16,6 +16,8 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 
 //partials
 @import "style/partials/layout-overrides";
+@import "style/partials/alerts";
+@import "style/partials/badges";
 @import "style/partials/page-title";
 @import "style/partials/animation";
 @import "style/partials/nav";

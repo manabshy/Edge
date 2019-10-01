@@ -86,12 +86,6 @@
         padding-bottom: spacer(3);
     }
 
-    .nav-item {
-        & + .nav-item {
-            border-top: 1px solid $gray-700;
-        }
-    }
-
     .dropdown-menu {
         position: static;
     }
