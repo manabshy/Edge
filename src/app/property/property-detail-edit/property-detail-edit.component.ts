@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PropertyService } from '../shared/property.service';
 import { Property, PropertyStyle, PropertyType } from '../shared/property';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -42,6 +42,7 @@ export class PropertyDetailEditComponent implements OnInit {
   isAddressFormValid: boolean;
 
   constructor(private route: ActivatedRoute,
+              private _router: Router,
               private propertyService: PropertyService,
               private sharedService: SharedService,
               private contactGroupService: ContactGroupsService,
@@ -69,7 +70,7 @@ export class PropertyDetailEditComponent implements OnInit {
     if (this.propertyId) {
       this.getPropertyDetails(this.propertyId);
     }
-    if(AppUtils.newSignerId) {
+    if (AppUtils.newSignerId) {
       this.getSignerDetails(AppUtils.newSignerId);
     }
 
@@ -199,9 +200,9 @@ export class PropertyDetailEditComponent implements OnInit {
     const isOwnerChanged = this.lastKnownOwner || this.lastKnownOwner == null;
     this.logValidationErrors(this.propertyForm, true);
     this.propertyAddress ? this.isAddressFormValid = true : this.isAddressFormValid = false;
-    console.log('is address form valid...... ', this.isAddressFormValid)
+    console.log('is address form valid...... ', this.isAddressFormValid);
     if (this.propertyForm.valid && this.isAddressFormValid) {
-      console.log('valid property form...... ', this.propertyForm)
+      console.log('valid property form...... ', this.propertyForm);
       if (this.propertyForm.dirty || isOwnerChanged) {
         this.AddOrUpdateProperty();
       } else {
@@ -209,7 +210,7 @@ export class PropertyDetailEditComponent implements OnInit {
       }
     } else {
       this.errorMessage = {} as WedgeError;
-      console.log('invalid form ', this.propertyForm)
+      console.log('invalid form ', this.propertyForm);
       this.errorMessage.displayMessage = 'Please correct validation errors';
     }
   }
@@ -227,7 +228,9 @@ export class PropertyDetailEditComponent implements OnInit {
     }
     this.isSubmitting = true;
     if (this.isNewProperty) {
-      this.propertyService.addProperty(property).subscribe(res => this.onSaveComplete(res.result), (error: WedgeError) => {
+      this.propertyService.addProperty(property).subscribe(res => {
+       if (res) { this.onSaveComplete(res); }
+      }, (error: WedgeError) => {
         this.errorMessage = error;
         this.sharedService.showError(this.errorMessage);
         this.isSubmitting = false;
@@ -241,13 +244,26 @@ export class PropertyDetailEditComponent implements OnInit {
     }
   }
 
-  onSaveComplete(property?: Property) {
+  onSaveComplete(property?: any) {
     this.propertyForm.markAsPristine();
     this.isSubmitting = false;
     this.toastr.success('Property successfully saved');
-    this._location.back();
-    console.log('complete');
+    let url = this._router.url;
+    let id = this.propertyId;
+
+    if (url.indexOf('detail/' + id) === -1) {
+      id = 0;
+    }
+    if (url.indexOf('?') >= 0) {
+      url = url.substring(0, url.indexOf('?'));
+      url = url.replace('detail/' + id, 'detail/' + property.propertyId);
+      this._location.replaceState(url);
+    }
+
+    this.propertyId = property.propertyId;
+    this._router.navigate(['/property-centre/detail', this.propertyId]);
   }
+
   canDeactivate(): boolean {
     if (this.propertyForm.dirty  && !this.isSubmitting) {
       return false;
