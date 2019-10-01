@@ -15,10 +15,7 @@
 }
 
 .person-details {
-    padding-top: 0;
-    padding-bottom: 0;
-    
-    &:before {
-        content: none;
-    }
+    border-top:0; 
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
 }
