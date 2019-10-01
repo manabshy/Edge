@@ -61,10 +61,10 @@ export class SmsModalComponent implements OnInit {
       header: this.header,
       personId: this.person.personId
     });
-    this.smsForm.get('personId').disable();
-    this.smsForm.get('phoneNumber').disable();
-    this.smsForm.get('header').disable();
-    this.logValidationErrorsSimple(this.smsForm, false);
+    // this.smsForm.get('personId').disable();
+    // this.smsForm.get('phoneNumber').disable();
+    // this.smsForm.get('header').disable();
+    //this.logValidationErrorsSimple(this.smsForm, false);
     // this.smsForm.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
     //   this.logValidationErrorsSimple(this.smsForm, false);
     //   this.smsForm.get('personId').enable();
