@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Renderer2, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { AddressAutoCompleteData, SharedService } from '../services/shared.service';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AppConstants } from '../shared/app-constants';
@@ -13,11 +13,12 @@ import { AppUtils } from '../shared/utils';
   templateUrl: './address.component.html',
   styleUrls: ['./address.component.scss']
 })
-export class AddressComponent implements OnInit {
+export class AddressComponent implements OnInit, OnChanges {
   @Input() personDetails: Person;
   @Input() propertyDetails: Property;
   @Input() isNewProperty: boolean;
   @Input() companyDetails: Company;
+  @Input() fullAddressError: any;
   @Output() addressDetails = new EventEmitter<any>();
   foundAddress: AddressAutoCompleteData;
   defaultCountryCode = 232;
@@ -31,7 +32,7 @@ export class AddressComponent implements OnInit {
   searchTermBK = '';
 
   get showPostCode(): boolean {
-    return this.addressForm.get('countryId').value == this.defaultCountryCode;
+    return +this.addressForm.get('countryId').value === this.defaultCountryCode;
   }
   get fullAddress(): FormControl {
     return <FormControl>this.addressForm.get('fullAddress');
@@ -45,9 +46,7 @@ export class AddressComponent implements OnInit {
   get countryId(): FormControl {
     return <FormControl>this.addressForm.get('countryId');
   }
-  // get address(): FormGroup {
-  //   return <FormGroup>this.addressForm.get('address');
-  // }
+
   constructor(private sharedService: SharedService,
               private fb: FormBuilder,
               private renderer: Renderer2,
@@ -72,7 +71,7 @@ export class AddressComponent implements OnInit {
       });
     }
     this.addressForm = this.fb.group({
-      fullAddress: [''],
+      fullAddress: ['', Validators.required],
       addressLines: ['', {validators: Validators.maxLength(500)}],
       countryId: 0,
       addressLine2: [''],
@@ -92,8 +91,6 @@ export class AddressComponent implements OnInit {
       if (data.postCode) {
         this.postCode.setValue(this.sharedService.formatPostCode(data.postCode), { emitEvent: false });
       }
-      // this.logValidationErrors(this.personForm, false);
-      // this.logValidationErrorsFormArray(this.personForm);
       this.emitAddress();
     });
   }

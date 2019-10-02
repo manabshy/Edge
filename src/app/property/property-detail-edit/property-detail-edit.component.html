@@ -30,9 +30,11 @@
         <span class="invalid-feedback">{{formErrors?.propertyStyleId}}</span>
       </div>
     </div>
-    <app-address [propertyDetails]="propertyDetails" [isNewProperty]="isNewProperty" (addressDetails)="getAddress($event)"></app-address>
-    <div [ngClass]="{'is-invalid':!isAddressFormValid}">
-      <span class="invalid-feedback d-block ml-5 mb-3"> <span *ngIf="!isAddressFormValid && propertyForm.touched">Property address is required</span></span>
+    <app-address [propertyDetails]="propertyDetails" [fullAddressError]="formErrors.fullAddress" [isNewProperty]="isNewProperty" (addressDetails)="getAddress($event)"></app-address>
+    <div class="row justify-content-end">
+      <div class="col-sm-10">
+        <input type="hidden" id="fullAddress" class="form-control" formControlName="fullAddress">
+      </div>
     </div>
     <div class="form-group row">
       <label for="region" class="col-sm-2 col-form-label col-form-label-sm">Region</label>
