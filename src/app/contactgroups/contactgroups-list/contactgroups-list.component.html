@@ -23,13 +23,13 @@
             </div>
             <div class="col-12 col-sm-auto">
               <p>
-                <app-telephone [person]="contactGroup" [number]="contactGroup?.phoneNumbers?.number" [sms]="contactGroup?.phoneNumbers?.sendSMS" [searchTerm]="searchTerm" [warning]="contactGroup?.warningStatusComment || contactGroup?.warning?.value"></app-telephone>
-                <span class="text-danger" *ngIf="!contactGroup?.phoneNumbers">No Phone</span>
+                <app-telephone [person]="contactGroup" [number]="contactGroup?.phoneNumbers[0]" [searchTerm]="searchTerm" [warning]="contactGroup?.warningStatusComment || contactGroup?.warning?.value"></app-telephone>
+                <span class="text-danger" *ngIf="!contactGroup?.phoneNumbers[0]">No Phone</span>
               </p>
             </div>
            <!-- <div class="col-12 col-sm-auto">
               <p class="mb-2" *ngIf="contactGroup?.phoneNumbers?.personId === contactGroup?.personId">
-                <app-telephone [person]="contactGroup" [number]="contactGroup?.phoneNumbers.number" [sms]="contactGroup.phoneNumbers.sendSMS" [searchTerm]="searchTerm" [warning]="contactGroup?.warningStatusComment || contactGroup?.warning?.value"></app-telephone>
+                <app-telephone [person]="contactGroup" [number]="contactGroup?.phoneNumbers.number" [searchTerm]="searchTerm" [warning]="contactGroup?.warningStatusComment || contactGroup?.warning?.value"></app-telephone>
               </p>
            </div> -->
             <div class="col text-sm-right">

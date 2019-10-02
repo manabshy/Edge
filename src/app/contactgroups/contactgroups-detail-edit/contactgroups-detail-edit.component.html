@@ -107,7 +107,7 @@
               </select>
               <div class="input-group-append order-sm-2">
                 <label class="btn btn-light" btnCheckbox formControlName="sendSMS" tabindex="0"
-                  role="button" [ngClass]="{'font-weight-bold': personForm.value.phoneNumbers[i].sendSMS}" [style.visibility]="!sharedService.isUKMobile(personForm.value.phoneNumbers[i].number) ? 'hidden' : 'visible'">SMS</label>
+                  role="button" [hidden]="true" [ngClass]="{'font-weight-bold': personForm.value.phoneNumbers[i].sendSMS}" [style.visibility]="!sharedService.isUKMobile(personForm.value.phoneNumbers[i].number) ? 'hidden' : 'visible'">SMS</label>
                 <label class="btn btn-light" btnCheckbox formControlName="isPreferred" tabindex="0" (click)="togglePreferences(i, phoneNumbers)"
                   role="button" [class.active]="personForm.value.phoneNumbers[i].isPreferred"><i class="fa-star" [ngClass]="personForm.value.phoneNumbers[i].isPreferred ? 'fas' : 'far'"></i></label>
               </div>

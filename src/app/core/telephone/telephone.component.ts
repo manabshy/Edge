@@ -24,9 +24,9 @@ export class TelephoneComponent implements OnInit {
   @Input() number: string;
   @Input() staffMember: StaffMember;
   @Input() searchTerm: string;
-  @Input() sms: boolean;
   @Input() warning: any;
   isDialing: boolean;
+  sms: boolean = true;
   currentStaffMember: StaffMember;
 
   constructor(private modalService: BsModalService,

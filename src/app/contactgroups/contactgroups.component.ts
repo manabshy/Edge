@@ -108,15 +108,6 @@ export class ContactGroupsComponent implements OnInit, OnDestroy {
       let sendSMS: boolean;
       let newNumber;
       if (result) {
-        result.forEach((c, index) => {
-          this.sharedService.isUKMobile(c.phoneNumbers[0]) ? sendSMS = true : sendSMS = false;
-          newNumber = {
-            personId: c.personId,
-            sendSMS: sendSMS,
-            number: c.phoneNumbers[0]
-          };
-          result[index].phoneNumbers = newNumber;
-        });
         this.contactGroups = _.concat(this.contactGroups, result);
          if (this.contactGroups && this.contactGroups.length) {
            this.contactGroups.forEach(x => {

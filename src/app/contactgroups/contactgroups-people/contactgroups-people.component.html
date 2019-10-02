@@ -222,7 +222,7 @@
                         *ngIf="!person?.phoneNumbers.length || !person?.phoneNumbers[0].number">No phone</p>
                         <ng-container *ngFor="let phoneNumber of person?.phoneNumbers">
                           <p class="mb-2" *ngIf="phoneNumber?.number">
-                            <app-telephone [person]="person"  [number]="phoneNumber.number" [sms]="phoneNumber.sendSMS" [warning]="person?.warningStatusComment || person?.warning?.value"></app-telephone>
+                            <app-telephone [person]="person"  [number]="phoneNumber.number" [warning]="person?.warningStatusComment || person?.warning?.value"></app-telephone>
                           </p>
                         </ng-container>
                     </div>
