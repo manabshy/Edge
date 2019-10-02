@@ -48,6 +48,7 @@ export const FormErrors = {
   'emailAddresses': {
     'email': '',
   },
+  'fullAddress': '',
   'address': '',
   'number': '',
   'postCode': '',
@@ -102,6 +103,9 @@ export const ValidationMessages = {
     },
   },
   'address': {
+    required: 'Address is required'
+  },
+  'fullAddress': {
     required: 'Address is required'
   },
   'number': {

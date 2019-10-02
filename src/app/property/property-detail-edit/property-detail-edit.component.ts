@@ -147,14 +147,10 @@ export class PropertyDetailEditComponent implements OnInit {
       regionId: ['', Validators.required],
       areaId: ['', Validators.required],
       subAreaId: ['', Validators.required],
-      // fullAddress: [''],
-      // address: this.fb.group({
-      //   addressLines: ['', {validators: [Validators.maxLength(500)]}],
-      //   countryId: [0],
-      //   postCode: ['', {validators: [Validators.minLength(5), Validators.maxLength(8), Validators.pattern(AppConstants.postCodePattern)]}],
-      // })
+      fullAddress: ['', Validators.required]
     });
   }
+
 
   getAddress(address: Address) {
     if (this.propertyAddress && JSON.stringify(this.propertyAddress) !== JSON.stringify(address)) {
@@ -163,7 +159,10 @@ export class PropertyDetailEditComponent implements OnInit {
       this.propertyForm.markAsPristine();
     }
     this.propertyAddress = address;
-    console.log('selected property address here...', this.propertyAddress);
+
+   if (this.propertyAddress) {
+      this.propertyForm.patchValue({fullAddress: this.propertyAddress});
+   }
   }
 
   getSelectedOwner(owner: Signer) {
