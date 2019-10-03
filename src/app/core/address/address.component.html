@@ -78,29 +78,31 @@
               score</span></small>
         </div>
         <ng-container *ngIf="propertyDetails">
-          <div class="form-group">
-            <label class="small" for="postcode">Flat Number</label>
-            <input type="text" class="form-control form-control-sm" formControlName="flatNumber" id="flatNumber" />
-          </div>
-          <div class="form-group">
-            <label class="small" for="postcode">House Number</label>
-            <input type="text" class="form-control form-control-sm" formControlName="houseNumber" id="houseNumber" />
-          </div>
-          <div class="form-group">
-            <label class="small" for="postcode">Building Name</label>
-            <input type="text" class="form-control form-control-sm" formControlName="houseBuildingName" id="houseBuildingName" />
-          </div>
-          <div class="form-group">
-            <label class="small" for="postcode">Street</label>
-            <input type="text" class="form-control form-control-sm" formControlName="streetName" id="streetName" />
-          </div>
-          <div class="form-group">
-            <label class="small" for="postcode">Address Line 2</label>
-            <input type="text" class="form-control form-control-sm" formControlName="addressLine2" id="addressLine2" />
-          </div>
-          <div class="form-group">
-            <label class="small" for="postcode">Town</label>
-            <input type="text" class="form-control form-control-sm" formControlName="town" id="town" />
+          <div class="row">
+            <div class="form-group col-6 col-sm-2">
+              <label class="small" for="postcode">Flat Number</label>
+              <input type="text" class="form-control form-control-sm" formControlName="flatNumber" id="flatNumber" />
+            </div>
+            <div class="form-group col-6 col-sm-2">
+              <label class="small" for="postcode">House Number</label>
+              <input type="text" class="form-control form-control-sm" formControlName="houseNumber" id="houseNumber" />
+            </div>
+            <div class="form-group col-sm-8">
+              <label class="small" for="postcode">Building Name</label>
+              <input type="text" class="form-control form-control-sm" formControlName="houseBuildingName" id="houseBuildingName" />
+            </div>
+            <div class="form-group col-sm-6">
+              <label class="small" for="postcode">Street</label>
+              <input type="text" class="form-control form-control-sm" formControlName="streetName" id="streetName" />
+            </div>
+            <div class="form-group col-sm-6">
+              <label class="small" for="postcode">Address Line 2</label>
+              <input type="text" class="form-control form-control-sm" formControlName="addressLine2" id="addressLine2" />
+            </div>
+            <div class="form-group col-sm-12">
+              <label class="small" for="postcode">Town</label>
+              <input type="text" class="form-control form-control-sm" formControlName="town" id="town" />
+            </div>
           </div>
         </ng-container>
         <div class="form-group" *ngIf="showPostCode || propertyDetails">
