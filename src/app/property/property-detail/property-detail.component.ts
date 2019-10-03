@@ -15,7 +15,7 @@ import { FormatAddressPipe } from 'src/app/core/shared/format-address.pipe';
 })
 export class PropertyDetailComponent implements OnInit {
   propertyId: number;
-  searchedPropertyDetails: Property;
+  propertyDetails: Property;
   summaryTotals: PropertySummaryFigures;
   propertyTypes = PropertyTypes;
   propertyStyles = PropertyStyles;
@@ -23,77 +23,120 @@ export class PropertyDetailComponent implements OnInit {
   regions: any;
   allAreas: any;
   allSubAreas: any;
+  region: any;
+  area: any;
+  subArea: any;
   subNav = PropertyDetailsSubNavItems;
   propertyDetails$ = new Observable<any>();
 
-  get region() {
-    if (this.searchedPropertyDetails && this.regions) {
-      const getRegion = this.regions.get(this.searchedPropertyDetails.regionId.toString()).get('value');
-      return getRegion;
-    }
-  }
+  // get region() {
+  //   if (this.propertyDetails && this.regions) {
+  //     const getRegion = this.regions.get(this.propertyDetails.regionId.toString()).get('value');
+  //     return getRegion;
+  //   }
+  // }
 
-  get area() {
-    if (this.searchedPropertyDetails && this.allAreas) {
-      const getArea = this.allAreas.get(this.searchedPropertyDetails.areaId.toString()).get('value');
-      return getArea;
-    }
-  }
+  // get area() {
+  //   if (this.propertyDetails && this.allAreas) {
+  //     const getArea = this.allAreas.get(this.propertyDetails.areaId.toString()).get('value');
+  //     return getArea;
+  //   }
+  // }
 
-  get subArea() {
-    if (this.searchedPropertyDetails && this.allSubAreas) {
-      const getSubArea = this.allSubAreas.get(this.searchedPropertyDetails.subAreaId.toString()).get('value');
-      return getSubArea;
-    }
-  }
+  // get subArea() {
+  //   if (this.propertyDetails && this.allSubAreas) {
+  //     const getSubArea = this.allSubAreas.get(this.propertyDetails.subAreaId.toString()).get('value');
+  //     return getSubArea;
+  //   }
+  // }
 
 
   constructor(private propertyService: PropertyService,
-              private formatAddressPipe: FormatAddressPipe,
-              private route: ActivatedRoute,
-              private sharedService: SharedService) { }
+    private formatAddressPipe: FormatAddressPipe,
+    private route: ActivatedRoute,
+    private sharedService: SharedService) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.propertyId = +params['id'] || 0;
-    });
-    this.propertyDetails$ = this.propertyService.propertyDetails$
-      .pipe
-      ( tap(data => {
-        this.searchedPropertyDetails = data;
-        this.sharedService.setTitle(this.formatAddressPipe.transform(this.searchedPropertyDetails.address));
-      }),
-        tap(data => this.summaryTotals = data.info),
-        tap(data => console.log('details', data))
-      );
 
-    if (this.propertyId) {
-      this.propertyService.currentPropertyChanged(this.propertyId);
-    }
-    if(AppUtils.listInfo) {
+    });
+    // this.propertyDetails$ = this.propertyService.propertyDetails$
+    //   .pipe
+    //   ( tap(data => {
+    //     this.propertyDetails = data;
+    //     this.sharedService.setTitle(this.formatAddressPipe.transform(this.propertyDetails.address));
+    //   }),
+    //     tap(data => this.summaryTotals = data.info),
+    //     tap(data => console.log('SEARCHED PROPERTY SUMMARY TOTALS',  this.propertyDetails.info))
+    //   );
+
+    // if (this.propertyId) {
+    //   this.propertyService.currentPropertyChanged(this.propertyId);
+    // }
+    if (AppUtils.listInfo) {
       this.listInfo = AppUtils.listInfo;
       this.setDropdownLists();
     } else {
-      this.sharedService.getDropdownListInfo().subscribe(data=> {
+      this.sharedService.getDropdownListInfo().subscribe(data => {
         this.listInfo = data;
         this.setDropdownLists();
       });
     }
+    if (this.propertyId) {
+      this.getPropertyDetails(this.propertyId);
+    }
+
   }
 
   setDropdownLists() {
-    this.regions = this.sharedService.objectToMap(this.listInfo.result.regions);
-    this.allAreas = this.sharedService.objectToMap(this.listInfo.result.areas);
-    this.allSubAreas = this.sharedService.objectToMap(this.listInfo.result.subAreas);
+    this.regions = new Map(Object.entries(this.listInfo.result.regions));
+    this.allAreas = new Map(Object.entries(this.listInfo.result.areas));
+    this.allSubAreas = new Map(Object.entries(this.listInfo.result.subAreas));
+    // console.log('new map', map);
   }
-    isObject(val) {
-      return val instanceof Object;
-    }
-  // getPropertyDetails(propertyId: number) {
-  //   this.propertyService.getProperty(propertyId).subscribe(data => {
-  //     // this.searchedPropertyDetails = data;
-  //     console.log(this.searchedPropertyDetails);
-  //   });
-  // }
+  isObject(val) {
+    return val instanceof Object;
+  }
+  getPropertyDetails(propertyId: number) {
+    this.propertyService.getProperty(propertyId, true, true).subscribe(data => {
+      if (data) {
+        this.propertyDetails = data;
+        this.sharedService.setTitle(this.formatAddressPipe.transform(this.propertyDetails.address));
+        this.summaryTotals = data.info;
+        this.setupRegionalValues();
+      }
+      console.log('property details here', this.propertyDetails);
+    });
+  }
 
+  // TODO: Refactor
+  setupRegionalValues() {
+    if (this.propertyDetails) {
+      const regionValues = this.regions.values();
+      const areaValues = this.allAreas.values();
+      const subAreaValues = this.allSubAreas.values();
+      switch (true) {
+        case !!this.regions:
+          for (const item of regionValues) {
+            if (item.id === this.propertyDetails.regionId) {
+              this.region = item.value;
+            }
+          }
+        case !!this.allAreas:
+          for (const item of areaValues) {
+            if (item.id === this.propertyDetails.areaId) {
+              this.area = item.value;
+            }
+          }
+        case !!this.allSubAreas:
+          for (const item of subAreaValues) {
+            if (item.id === this.propertyDetails.subAreaId) {
+              this.subArea = item.value;
+            }
+          }
+      }
+    }
+  }
 }
+

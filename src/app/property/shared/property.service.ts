@@ -4,6 +4,7 @@ import { Observable, BehaviorSubject, combineLatest, Subject } from 'rxjs';
 import { PropertyAutoComplete, PropertyAutoCompleteData, Property, PropertyData, PropertyPhotoData, Photo } from './property';
 import { map, tap, switchMap, filter } from 'rxjs/operators';
 import { AppConstants } from 'src/app/core/shared/app-constants';
+import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encoder-helper';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,7 @@ import { AppConstants } from 'src/app/core/shared/app-constants';
 export class PropertyService {
 
 currentPropertyIdSubject = new BehaviorSubject<number | null>(0);
+// currentPropertyIdSubject = new Subject<number | null>();
 currentPropertyId$ = this.currentPropertyIdSubject.asObservable();
 currentPropertyChanged(propertyId: number) {
   this.currentPropertyIdSubject.next(propertyId);
@@ -43,9 +45,22 @@ currentPropertyChanged(propertyId: number) {
       map(response => response),
       tap(data => console.log('updated property details here...', JSON.stringify(data))));
   }
-  getProperty(propertyId: number): Observable<Property> {
+  getProperty(propertyId: number, includeInfo?: boolean, includePhoto?: boolean): Observable<Property> {
+    if (!includeInfo) {
+      includeInfo = false;
+    }
+    if (!includePhoto) {
+      includePhoto = false;
+    }
+    const options = new HttpParams({
+      encoder: new CustomQueryEncoderHelper,
+      fromObject: {
+        includeInfo: includeInfo.toString(),
+        includePhoto: includePhoto.toString(),
+      }
+    });
     const url = `${AppConstants.basePropertyUrl}/${propertyId}`;
-    return this.http.get<PropertyData>(url).pipe(map(response => response.result));
+    return this.http.get<PropertyData>(url, {params: options}).pipe(map(response => response.result));
   }
 
   getPropertyPhoto(propertyId: number): Observable<Photo[]> {
@@ -64,6 +79,7 @@ currentPropertyChanged(propertyId: number) {
       switchMap(propertyId => this.http.get<PropertyData>(`${AppConstants.basePropertyUrl}/${propertyId}?includeInfo=true&includePhoto=true`)
         .pipe(
           map(response => response.result),
+          tap(data => console.log('property id of details returned', propertyId)),
           tap(data => console.log('details returned', JSON.stringify(data)))
         )
       ));
