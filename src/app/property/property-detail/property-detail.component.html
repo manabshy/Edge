@@ -5,17 +5,18 @@
       <h4 class="mb-0">Property Detail</h4>
     </div>
   </div>
-  <div class="text-center py-3" *ngIf="!searchedPropertyDetails">
+  <div class="text-center py-3" *ngIf="!propertyDetails">
     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading info ...
   </div>
-  <ng-container *ngIf="propertyDetails$ | async as propertyDetails">
-    <div class="list-group">
-      
+  <!-- <ng-container *ngIf="propertyDetails$ | async as propertyDetails">
+  </ng-container> -->
+  <div class="list-group">
     <div class="list-group-item mb-4 property-details">
       <div class="text-right" *ngIf="propertyDetails">
         <div class="row mb-2">
           <div class="col-auto">
-            <span class="badge badge-pill badge-primary mr-1">{{propertyTypes.get(propertyDetails?.propertyTypeId)}}</span>
+            <span
+              class="badge badge-pill badge-primary mr-1">{{propertyTypes.get(propertyDetails?.propertyTypeId)}}</span>
             <span class="badge badge-pill badge-primary">{{propertyStyles.get(propertyDetails?.propertyStyleId)}}</span>
           </div>
           <div class="col text-right">
@@ -59,12 +60,12 @@
         </div>
       </div>
     </div>
-    </div>
-  </ng-container>
+  </div>
   <div *ngIf="summaryTotals">
     <h5>Info</h5>
     <app-subnav>
-      <app-subnav-item *ngFor="let item of subNav" [navLink]="item?.link+'?docTitle='+item?.label+' | '+(searchedPropertyDetails?.address | formatAddress)">
+      <app-subnav-item *ngFor="let item of subNav"
+        [navLink]="item?.link+'?docTitle='+item?.label+' | '+(propertyDetails?.address | formatAddress)">
         {{item?.label}}
         <ng-container *ngIf="isObject(summaryTotals[item?.value]); else simpleValue">
           <span class="badge badge-pill badge-success mr-1"> {{summaryTotals[item?.value]?.active}} </span>
@@ -74,7 +75,7 @@
           <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value] || '0'}}</span>
         </ng-template>
       </app-subnav-item>
-      <app-subnav-item [navLink]="'map?docTitle=Map | '+(searchedPropertyDetails?.address | formatAddress)">
+      <app-subnav-item [navLink]="'map?docTitle=Map | '+(propertyDetails?.address | formatAddress)">
         Map
       </app-subnav-item>
     </app-subnav>
