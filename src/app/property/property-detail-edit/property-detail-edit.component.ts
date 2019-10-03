@@ -107,12 +107,12 @@ export class PropertyDetailEditComponent implements OnInit {
   getPropertyDetails(propertyId: number) {
     this.propertyService.getProperty(propertyId).subscribe(data => {
       this.propertyDetails = data;
-      console.log('property here.....', this.propertyDetails.lastKnownOwner);
+      console.log('property details here.....', this.propertyDetails);
       this.onSelectType(data.propertyTypeId);
       this.onSelectRegion(data.regionId);
       this.onSelectArea(data.areaId);
       this.displayPropertyDetails(data);
-      console.log(this.propertyDetails);
+      console.log('property details after here.....',this.propertyDetails);
     });
   }
   private displayPropertyDetails(data: Property) {
@@ -131,14 +131,14 @@ export class PropertyDetailEditComponent implements OnInit {
   }
 
   onSelectType(propertyTypeId: number) {
-    this.propertyStyles = this.allPropertyStyles.filter((x: InfoDetail) => x.parentId === propertyTypeId);
-    console.log('selected styles', this.propertyStyles );
+    this.propertyStyles = this.allPropertyStyles.filter((x: InfoDetail) => +x.parentId === propertyTypeId);
   }
   onSelectRegion(regionId: number) {
-    this.areas = this.allAreas.filter((x: InfoDetail) => x.parentId === regionId);
+    this.areas = this.allAreas.filter((x: InfoDetail) => +x.parentId === regionId);
   }
   onSelectArea(areaId: number) {
-    this.subAreas = this.allSubAreas.filter((x: InfoDetail) => x.parentId === areaId);
+    this.subAreas = this.allSubAreas.filter((x: InfoDetail) => +x.parentId === areaId);
+    console.log('all subreas',this.subAreas)
   }
   setupEditForm() {
     this.propertyForm = this.fb.group({
@@ -161,7 +161,8 @@ export class PropertyDetailEditComponent implements OnInit {
     this.propertyAddress = address;
 
    if (this.propertyAddress) {
-      this.propertyForm.patchValue({fullAddress: this.propertyAddress});
+     this.propertyForm.patchValue({fullAddress: this.propertyAddress});
+
    }
   }
 
@@ -197,10 +198,13 @@ export class PropertyDetailEditComponent implements OnInit {
   }
   saveProperty() {
     const isOwnerChanged = this.lastKnownOwner || this.lastKnownOwner == null;
+    const control = this.propertyForm.get('fullAddress');
     this.logValidationErrors(this.propertyForm, true);
+    control.clearValidators();
+    control.updateValueAndValidity();
     this.propertyAddress ? this.isAddressFormValid = true : this.isAddressFormValid = false;
     console.log('is address form valid...... ', this.isAddressFormValid);
-    if (this.propertyForm.valid && this.isAddressFormValid) {
+    if (this.propertyForm.valid) {
       console.log('valid property form...... ', this.propertyForm);
       if (this.propertyForm.dirty || isOwnerChanged) {
         this.AddOrUpdateProperty();
@@ -209,7 +213,6 @@ export class PropertyDetailEditComponent implements OnInit {
       }
     } else {
       this.errorMessage = {} as WedgeError;
-      console.log('invalid form ', this.propertyForm);
       this.errorMessage.displayMessage = 'Please correct validation errors';
     }
   }
@@ -260,6 +263,7 @@ export class PropertyDetailEditComponent implements OnInit {
     }
 
     this.propertyId = property.propertyId;
+    this.propertyService.currentPropertyChanged(+this.propertyId);
     this._router.navigate(['/property-centre/detail', this.propertyId]);
   }
 
