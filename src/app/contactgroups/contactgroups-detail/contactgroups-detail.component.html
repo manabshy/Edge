@@ -1,8 +1,8 @@
 <app-breadcrumb></app-breadcrumb>
 <div class="container">
-  <div class="row page-title mb-0">
+  <div class="row page-title">
     <div class="col">
-      <h4 class="mb-0">Person Detail</h4>
+      <h4 class="mb-0">Person</h4>
     </div>
     <div class="col-auto">
       <div class="btn-group" dropdown placement="bottom right">
@@ -23,147 +23,163 @@
       </div>
     </div>
   </div>
-  <div class="text-center py-3" *ngIf="!searchedPersonDetails">
-    <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading info ...
-  </div>
-  <div class="list-group">
-    <div class="list-group-item mb-4 person-details" [ngClass]="{'list-group-item-danger': searchedPersonDetails?.warning?.id !== 1}" *ngIf="searchedPersonDetails">
-      <div class="text-right">
-        <div class="row">
-          <div class="col-auto">
-            <app-score-badge [person]="searchedPersonDetails"></app-score-badge> <span class="badge badge-pill badge-danger" *ngIf="searchedPersonDetails?.warning?.id !== 1">{{searchedPersonDetails?.warningStatusComment || searchedPersonDetails?.warning?.value}}</span>
-          </div>
-          <div class="col text-right">
-            <a routerLink="edit"><i class="fas fa-edit"></i> Edit</a>
-          </div>
-        </div>
+  <div class="row align-items-start">
+    <div class="col-lg-8">
+      <h5>Detail</h5>
+      <div class="text-center py-3" *ngIf="!searchedPersonDetails">
+        <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading info ...
       </div>
-      <div class="row mb-1" *ngIf="searchedPersonDetails?.personNotes?.length">
-          <div class="col-12">
-            <div class="alert alert-danger small mb-2 mr-2 d-inline-block" *ngFor="let importantNote of searchedPersonDetails?.personNotes">
-              {{importantNote.text}}
+      <div class="list-group">
+        <div class="list-group-item mb-4" [ngClass]="{'list-group-item-danger': searchedPersonDetails?.warning?.id !== 1}"
+          *ngIf="searchedPersonDetails">
+          <div class="text-right">
+            <div class="row">
+              <div class="col-auto">
+                <app-score-badge [person]="searchedPersonDetails"></app-score-badge> <span
+                  class="badge badge-pill badge-danger"
+                  *ngIf="searchedPersonDetails?.warning?.id !== 1">{{searchedPersonDetails?.warningStatusComment || searchedPersonDetails?.warning?.value}}</span>
+              </div>
+              <div class="col text-right">
+                <a routerLink="edit"><i class="fas fa-edit"></i> Edit</a>
+              </div>
             </div>
           </div>
-      </div>
-      <div class="row" *ngIf="searchedPersonDetails">
-        <div class="col-12">
-          <p class="mb-2">
-            <strong>{{searchedPersonDetails.addressee}}</strong>
-          </p>
-        </div>
-        <div class="col-sm-4">
-          <div class="mb-2">
-            <pre>{{searchedPersonDetails.address | formatAddress}}</pre><span class="text-danger"
-              *ngIf="!(searchedPersonDetails.address | formatAddress)">No address</span></div>
-        </div>
-        <div class="col-12 col-sm-3 col-xl-4">
-          <p class="mb-2 text-danger"
-          *ngIf="!searchedPersonDetails.phoneNumbers.length || !searchedPersonDetails.phoneNumbers[0].number">No
-          phone</p>
-          <ng-container *ngFor="let phoneNumber of searchedPersonDetails.phoneNumbers">
-            <p class="mb-2" *ngIf="phoneNumber.number">
-              <app-telephone [person]="searchedPersonDetails" [number]="phoneNumber.number" [warning]="searchedPersonDetails?.warningStatusComment || searchedPersonDetails?.warning?.value"></app-telephone>
-            </p>
-          </ng-container>
-        </div>
-        <div class="col-sm-5 col-xl-4">
-          <p class="mb-2 text-danger"
-            *ngIf="!searchedPersonDetails.emailAddresses.length || !searchedPersonDetails.emailAddresses[0].email">No
-            email</p>
-          <ng-container *ngFor="let emailAddresses of searchedPersonDetails.emailAddresses">
-            <p class="mb-2 text-truncate" *ngIf="emailAddresses.email"><a
-                class="mobile-btn" href="mailto:{{emailAddresses.email}}">{{emailAddresses.email}}</a></p>
-          </ng-container>
-        </div>
-        <div class="col-12">
-          <hr class="my-1">
-        </div>
-        <div class="col-12">
-          <div class="row align-items-center">
-            <div class="col">
-              <button type="button" class="btn btn-link px-0" (click)="isCollapsed = !isCollapsed"
-                [attr.aria-expanded]="!isCollapsed" aria-controls="collapseBasic">Marketing Prefs <span
-                  class="badge badge-pill badge-primary">
-                  {{searchedPersonDetails.marketingPreferences?.count || 0}} </span>
-              </button>
-            </div>
-            <div class="col-auto">
-              <small class="text-muted">ID: {{searchedPersonDetails?.personId}}</small>
+          <div class="row mb-1" *ngIf="searchedPersonDetails?.personNotes?.length">
+            <div class="col-12">
+              <div class="alert alert-danger small mb-2 mr-2 d-inline-block"
+                *ngFor="let importantNote of searchedPersonDetails?.personNotes">
+                {{importantNote.text}}
+              </div>
             </div>
           </div>
-          <div id="collapseBasic" [collapse]="!isCollapsed">
-            <ul>
-              <li *ngIf="searchedPersonDetails.marketingPreferences?.marketBulletin">Quarterly bulletin</li>
-              <li *ngIf="searchedPersonDetails.marketingPreferences?.general">Special offers</li>
-              <li *ngIf="searchedPersonDetails.marketingPreferences?.events">Landlord/investor events</li>
-              <li *ngIf="searchedPersonDetails.marketingPreferences?.newHomes">New homes/investments</li>
-              <li *ngIf="searchedPersonDetails.marketingPreferences?.general">Other occasional marketing</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="row mb-3">
-    <div class="col-12">
-      <h5>Contact groups</h5>
-      <app-subnav>
-        <div class="list-group-item" *ngIf="!searchedPersonContactGroups">
-          <div class="text-center">
-            <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading contact groups ...
-          </div>
-        </div>
-        <app-subnav-item *ngFor="let searchedPersonContactGroup of searchedPersonContactGroups" [navLink]="'people/'+searchedPersonContactGroup.contactGroupId+'?docTitle=Contact Group | '+searchedPersonDetails?.addressee">
-          <i class="fas fa-briefcase mr-2 fa-fw"
-          *ngIf="searchedPersonContactGroup?.isCompany; else peopleIcon"></i>
-          <ng-template #peopleIcon>
-            <i class="fas fa-users mr-2 fa-fw"></i>
-          </ng-template>
-          <span class="d-inline-block mr-2 align-top">
-            <ng-container *ngFor="let contactPerson of searchedPersonContactGroup.contactPeople; last as isLast; first as isFirst">
-              <br class="d-sm-none" *ngIf="!isFirst" />
-              <ng-container *ngIf="contactPerson?.personId === searchedPersonDetails?.personId; else link">
-                {{contactPerson.addressee}}
+          <div class="row" *ngIf="searchedPersonDetails">
+            <div class="col-12">
+              <p class="mb-2">
+                <strong>{{searchedPersonDetails.addressee}}</strong>
+              </p>
+            </div>
+            <div class="col-sm-4">
+              <div class="mb-2">
+                <pre>{{searchedPersonDetails.address | formatAddress}}</pre><span class="text-danger"
+                  *ngIf="!(searchedPersonDetails.address | formatAddress)">No address</span></div>
+            </div>
+            <div class="col-12 col-sm-3 col-xl-4">
+              <p class="mb-2 text-danger"
+                *ngIf="!searchedPersonDetails.phoneNumbers.length || !searchedPersonDetails.phoneNumbers[0].number">No
+                phone</p>
+              <ng-container *ngFor="let phoneNumber of searchedPersonDetails.phoneNumbers">
+                <p class="mb-2" *ngIf="phoneNumber.number">
+                  <app-telephone [person]="searchedPersonDetails" [number]="phoneNumber.number"
+                    [warning]="searchedPersonDetails?.warningStatusComment || searchedPersonDetails?.warning?.value">
+                  </app-telephone>
+                </p>
               </ng-container>
-              <ng-template #link>
-                <a [routerLink]="['../../../detail', contactPerson.personId ]"
-                  (click)="$event.stopPropagation();">{{contactPerson.addressee}}</a>
+            </div>
+            <div class="col-sm-5 col-xl-4">
+              <p class="mb-2 text-danger"
+                *ngIf="!searchedPersonDetails.emailAddresses.length || !searchedPersonDetails.emailAddresses[0].email">No
+                email</p>
+              <ng-container *ngFor="let emailAddresses of searchedPersonDetails.emailAddresses">
+                <p class="mb-2 text-truncate" *ngIf="emailAddresses.email"><a class="mobile-btn"
+                    href="mailto:{{emailAddresses.email}}">{{emailAddresses.email}}</a></p>
+              </ng-container>
+            </div>
+            <div class="col-12">
+              <hr class="my-1">
+            </div>
+            <div class="col-12">
+              <div class="row align-items-center">
+                <div class="col">
+                  <button type="button" class="btn btn-link px-0" (click)="isCollapsed = !isCollapsed"
+                    [attr.aria-expanded]="!isCollapsed" aria-controls="collapseBasic">Marketing Prefs <span
+                      class="badge badge-pill badge-primary">
+                      {{searchedPersonDetails.marketingPreferences?.count || 0}} </span>
+                  </button>
+                </div>
+                <div class="col-auto">
+                  <small class="text-muted">ID: {{searchedPersonDetails?.personId}}</small>
+                </div>
+              </div>
+              <div id="collapseBasic" [collapse]="!isCollapsed">
+                <ul>
+                  <li *ngIf="searchedPersonDetails.marketingPreferences?.marketBulletin">Quarterly bulletin</li>
+                  <li *ngIf="searchedPersonDetails.marketingPreferences?.general">Special offers</li>
+                  <li *ngIf="searchedPersonDetails.marketingPreferences?.events">Landlord/investor events</li>
+                  <li *ngIf="searchedPersonDetails.marketingPreferences?.newHomes">New homes/investments</li>
+                  <li *ngIf="searchedPersonDetails.marketingPreferences?.general">Other occasional marketing</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-12">
+          <h5>Contact groups</h5>
+          <app-subnav>
+            <div class="list-group-item" *ngIf="!searchedPersonContactGroups">
+              <div class="text-center">
+                <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading contact groups ...
+              </div>
+            </div>
+            <app-subnav-item *ngFor="let searchedPersonContactGroup of searchedPersonContactGroups"
+              [navLink]="'people/'+searchedPersonContactGroup.contactGroupId+'?docTitle=Contact Group | '+searchedPersonDetails?.addressee">
+              <i class="fas fa-briefcase mr-2 fa-fw" *ngIf="searchedPersonContactGroup?.isCompany; else peopleIcon"></i>
+              <ng-template #peopleIcon>
+                <i class="fas fa-users mr-2 fa-fw"></i>
               </ng-template>
-              <ng-container *ngIf="!isLast">, </ng-container>
-            </ng-container>
-            <ng-container *ngIf="searchedPersonContactGroup?.isCompany">
-              <br class="d-sm-none" /><span class="badge badge-pill badge-info">{{searchedPersonContactGroup?.companyName}}</span>
-            </ng-container>
-          </span>
-        </app-subnav-item>
-        <a class="list-group-item list-group-item-action text-center py-4"
-          (click)="createNewContactGroup(); $event.stopPropagation()" *ngIf="searchedPersonDetails"
-          [routerLink]="['people', 0]" [queryParams]="{isNewContactGroup: true}">
-          <span class="btn-link">
-            <i class="fas fa-users"></i><i class="fas fa-plus fa-xs align-text-top"></i> New Contact Group
-          </span>
-        </a>
-      </app-subnav>
+              <span class="d-inline-block mr-2 align-top">
+                <ng-container
+                  *ngFor="let contactPerson of searchedPersonContactGroup.contactPeople; last as isLast; first as isFirst">
+                  <br class="d-sm-none" *ngIf="!isFirst" />
+                  <ng-container *ngIf="contactPerson?.personId === searchedPersonDetails?.personId; else link">
+                    {{contactPerson.addressee}}
+                  </ng-container>
+                  <ng-template #link>
+                    <a [routerLink]="['../../../detail', contactPerson.personId ]"
+                      (click)="$event.stopPropagation();">{{contactPerson.addressee}}</a>
+                  </ng-template>
+                  <ng-container *ngIf="!isLast">, </ng-container>
+                </ng-container>
+                <ng-container *ngIf="searchedPersonContactGroup?.isCompany">
+                  <br class="d-sm-none" /><span
+                    class="badge badge-pill badge-info">{{searchedPersonContactGroup?.companyName}}</span>
+                </ng-container>
+              </span>
+            </app-subnav-item>
+            <a class="list-group-item list-group-item-action text-center py-4"
+              (click)="createNewContactGroup(); $event.stopPropagation()" *ngIf="searchedPersonDetails"
+              [routerLink]="['people', 0]" [queryParams]="{isNewContactGroup: true}">
+              <span class="btn-link">
+                <i class="fas fa-users"></i><i class="fas fa-plus fa-xs align-text-top"></i> New Contact Group
+              </span>
+            </a>
+          </app-subnav>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="mb-3">
-    <h5>Info</h5>
-    <app-subnav>
-      <app-subnav-item *ngFor="let item of subNav" [navLink]="item?.link+'?docTitle='+item?.label+' | '+searchedPersonDetails?.addressee">
-        {{item?.label}}
-        <ng-container *ngIf="summaryTotals; else loadingInfo">
-          <ng-container *ngIf="isObject(summaryTotals[item?.value]); else simpleValue">
-            <span class="badge badge-pill badge-success mr-1"> {{summaryTotals[item?.value]?.active}} </span>
-            <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value]?.total}}</span>
-          </ng-container>
-          <ng-template #simpleValue>
-            <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value] || '0'}}</span>
-          </ng-template>
-        </ng-container>
-        <ng-template #loadingInfo>
-          <span class="badge badge-pill badge-primary"><i class="fas fa-spinner fa-pulse d-inline-block"></i></span>
-        </ng-template>
-      </app-subnav-item>
-    </app-subnav>
+    <div class="col-lg-4 aside sticky-top">
+      <div class="mb-3">
+        <h5>Info</h5>
+        <app-subnav>
+          <app-subnav-item *ngFor="let item of subNav"
+            [navLink]="item?.link+'?docTitle='+item?.label+' | '+searchedPersonDetails?.addressee">
+            {{item?.label}}
+            <ng-container *ngIf="summaryTotals; else loadingInfo">
+              <ng-container *ngIf="isObject(summaryTotals[item?.value]); else simpleValue">
+                <span class="badge badge-pill badge-success mr-1"> {{summaryTotals[item?.value]?.active}} </span>
+                <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value]?.total}}</span>
+              </ng-container>
+              <ng-template #simpleValue>
+                <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value] || '0'}}</span>
+              </ng-template>
+            </ng-container>
+            <ng-template #loadingInfo>
+              <span class="badge badge-pill badge-primary"><i class="fas fa-spinner fa-pulse d-inline-block"></i></span>
+            </ng-template>
+          </app-subnav-item>
+        </app-subnav>
+      </div>
+    </div>
   </div>
 </div>

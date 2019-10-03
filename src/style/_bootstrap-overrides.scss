@@ -17,7 +17,7 @@ $custom-control-indicator-border-color: $gray-300;
 $input-bg: lighten( #dee2e6, 8% );
 
 //container
-$container-max-widths: ("md": 959px);
+$container-max-widths: ("sm": 576px, "md": 959px, "lg": 1140px);
 
 //spacers
 $spacers: (5: (1rem * 3.5));
