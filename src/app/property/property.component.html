@@ -12,7 +12,7 @@
     <div class="row">
       <div class="col">
         <div class="input-group">
-          <input type="search" class="form-control" formControlName="propertyAddress" placeholder="Property Address"
+          <input type="search" class="form-control" formControlName="searchTerm" placeholder="Property Address or Id"
           aria-label="Property Address" (keyup)="onKeyup($event)">
           <div class="input-group-append">
             <button class="btn btn-secondary">Search</button>
@@ -24,14 +24,15 @@
     </div>
 
   </form>
-  <div class="text-center" *ngIf="isLoading && !isHintVisible">
-    <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...
-  </div>
-  <div class="text-center text-danger" *ngIf="isMessageVisible && !isLoading && !isHintVisible">
-      <i class="far fa-sad-tear"></i> No results for '<strong>{{propertyFinderForm.value.propertyAddress || ' '}}</strong>'
-  </div>
   <div class="text-center" *ngIf="isHintVisible">
       <i class="far fa-smile-wink"></i> Type at least <strong>3 characters</strong> to get results
   </div>
-  <app-property-list *ngIf="!isLoading && !isHintVisible" [originalProperties]='properties' [searchTerm]='propertyFinderForm.value.propertyAddress'></app-property-list>
+  <app-property-list *ngIf="!isHintVisible" [pageNumber]="page" [properties]='properties' [searchTerm]='propertyFinderForm.value.searchTerm'></app-property-list>
+
+  <div class="text-center" *ngIf="isLoading && !isHintVisible">
+    <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...
+  </div>
+  <div class="text-center text-danger" *ngIf="isMessageVisible && !isLoading && !isHintVisible && page === 1">
+      <i class="far fa-sad-tear"></i> No results for '<strong>{{propertyFinderForm.value.searchTerm || ' '}}</strong>'
+  </div>
 </div>

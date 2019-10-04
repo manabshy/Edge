@@ -1,6 +1,6 @@
- import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, BehaviorSubject, combineLatest, Subject } from 'rxjs';
+import { Observable, BehaviorSubject, Subject, combineLatest } from 'rxjs';
 import { PropertyAutoComplete, PropertyAutoCompleteData, Property, PropertyData, PropertyPhotoData, Photo } from './property';
 import { map, tap, switchMap, filter } from 'rxjs/operators';
 import { AppConstants } from 'src/app/core/shared/app-constants';
@@ -12,20 +12,31 @@ import { Address } from 'src/app/core/models/address';
 })
 export class PropertyService {
 
-currentPropertyIdSubject = new BehaviorSubject<number | null>(0);
-// currentPropertyIdSubject = new Subject<number | null>();
-currentPropertyId$ = this.currentPropertyIdSubject.asObservable();
-currentPropertyChanged(propertyId: number) {
-  this.currentPropertyIdSubject.next(propertyId);
-}
+  currentPropertyIdSubject = new BehaviorSubject<number | null>(0);
+  private  propertyPageNumberSubject = new Subject<number>();
+  private searchTermSubject = new BehaviorSubject('');
+  private pageSubject = new BehaviorSubject(0);
+  private pageSizeSubject = new BehaviorSubject(0);
+  searchTerm$ = this.searchTermSubject.asObservable();
+  page$ = this.pageSubject.asObservable();
+  pageSize$ = this.pageSizeSubject.asObservable();
+  propertyPageNumberChanges$ = this.propertyPageNumberSubject.asObservable();
+  currentPropertyId$ = this.currentPropertyIdSubject.asObservable();
 
   constructor(private http: HttpClient) { }
 
-  autocompleteProperties(property: any, pageSize?: number): Observable<PropertyAutoComplete[]> {
-    pageSize = 100;
-    const options = new HttpParams()
-      .set('searchTerm', property.propertyAddress || '')
-      .set('pageSize', pageSize.toString());
+  autocompleteProperties(searchTerm: any, pageSize?: number, page?: number): Observable<PropertyAutoComplete[]> {
+    if (!page || +page === 0) {
+      page = 1;
+    }
+    const options = new HttpParams({
+      encoder: new CustomQueryEncoderHelper,
+      fromObject: {
+        searchTerm: searchTerm,
+        pageSize: pageSize.toString(),
+        page: page.toString()
+      }
+    });
     const url = `${AppConstants.basePropertyUrl}/autocomplete`;
     return this.http.get<PropertyAutoCompleteData>(url, { params: options })
       .pipe(
@@ -46,6 +57,7 @@ currentPropertyChanged(propertyId: number) {
       map(response => response),
       tap(data => console.log('updated property details here...', JSON.stringify(data))));
   }
+
   getProperty(propertyId: number, includeInfo?: boolean, includePhoto?: boolean): Observable<Property> {
     if (!includeInfo) {
       includeInfo = false;
@@ -61,13 +73,14 @@ currentPropertyChanged(propertyId: number) {
       }
     });
     const url = `${AppConstants.basePropertyUrl}/${propertyId}`;
-    return this.http.get<PropertyData>(url, {params: options}).pipe(map(response => response.result));
+    return this.http.get<PropertyData>(url, { params: options }).pipe(map(response => response.result));
   }
 
   getPropertyPhoto(propertyId: number): Observable<Photo[]> {
     const url = `${AppConstants.basePropertyUrl}/${propertyId}/photos`;
     return this.http.get<PropertyPhotoData>(url).pipe(map(response => response.result));
   }
+
   // TODO: temp
   getPropertyMap(propertyId: number): Observable<Photo> {
     const url = `${AppConstants.basePropertyUrl}/${propertyId}/map`;
@@ -83,7 +96,7 @@ currentPropertyChanged(propertyId: number) {
       }
     });
     const url = `${AppConstants.basePropertyUrl}/duplicates`;
-    return this.http.get<PropertyAutoCompleteData>(url, {params: options}).pipe(map(response => response.result));
+    return this.http.get<PropertyAutoCompleteData>(url, { params: options }).pipe(map(response => response.result));
   }
 
   propertyDetails$ = this.currentPropertyId$
@@ -97,20 +110,30 @@ currentPropertyChanged(propertyId: number) {
         )
       ));
 
-  // propertyPhotos$ = this.currentPropertyId$
-  // .pipe(
-  //   filter(propertyId => Boolean(propertyId)),
-  //   switchMap(propertyId => this.http.get<PropertyPhotoData>(`${AppConstants.basePropertyUrl}/${propertyId}/photos`)
-  //     .pipe(
-  //       map(response => response.result),
-  //       tap(data => console.log('photos returned', JSON.stringify(data)))
-  //     )
-  //   ));
+  currentPropertyChanged(propertyId: number) {
+    this.currentPropertyIdSubject.next(propertyId);
+  }
 
-  //   propertyDetailsWithPhotos$ = combineLatest(this.propertyDetails$, this.propertyPhotos$)
-  //   .pipe(map(([detail, photos]) => ({
-  //     propertyDetails: detail,
-  //     photos: photos
-  //   })));
+  propertyPageNumberChanged(newPageNumber: number) {
+    this.propertyPageNumberSubject.next(newPageNumber);
+  }
+
+  // combinedParameters = combineLatest([this.searchTerm$, this.pageSize$, this.page$]);
+  // autocompleteProperties$ = this.combinedParameters.pipe(
+  //   switchMap(([searchTerm, pageSize, page]) => {
+  //     const options = new HttpParams({
+  //       encoder: new CustomQueryEncoderHelper,
+  //       fromObject: {
+  //         searchTerm: searchTerm.toString(),
+  //         pageSize: pageSize.toString(),
+  //         page: page.toString()
+  //       }
+  //     });
+  //     const url = `${AppConstants.basePropertyUrl}/autocomplete`;
+  //     return this.http.get<PropertyAutoCompleteData>(url, { params: options });
+  //   }),
+  //   map(response => response.result),
+  //   tap(data => console.log(JSON.stringify(data)))
+  // );
 }
 
