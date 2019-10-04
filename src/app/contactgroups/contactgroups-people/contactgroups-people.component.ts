@@ -61,8 +61,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isTypePicked = false;
   isNewCompanyContact = false;
   foundCompanies: CompanyAutoCompleteResult[];
-  @ViewChild('companyNameInput', { static: false }) companyNameInput : ElementRef;
-  searchCompanyTermBK: string = '';
+  @ViewChild('companyNameInput', { static: false }) companyNameInput: ElementRef;
+  searchCompanyTermBK = '';
   selectedCompanyDetails: Company;
   selectedCompanyId: number;
   companyFinderForm: FormGroup;
@@ -76,18 +76,18 @@ export class ContactgroupsPeopleComponent implements OnInit {
   bottomReached: boolean;
   pageSize = 10;
   get dataNote() {
-    if(this.contactGroupDetails) {
+    if (this.contactGroupDetails) {
       return {
         group: this.contactGroupDetails,
         people: this.contactGroupDetails.contactPeople,
         notes: this.contactNotes
-      }
+      };
     }
     return null;
   }
 
   get isMaxPeople() {
-    if(this.contactGroupDetails){
+    if (this.contactGroupDetails) {
       return this.contactGroupDetails.contactPeople.length && this.contactGroupDetails.contactType === ContactType.CompanyContact;
     }
     return false;
@@ -97,11 +97,11 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   get isAMLCompleted() {
-    return this.contactGroupDetails && (!!this.contactGroupDetails.companyAmlCompletedDate || this.contactGroupDetails.isAmlCompleted)
+    return this.contactGroupDetails && (!!this.contactGroupDetails.companyAmlCompletedDate || this.contactGroupDetails.isAmlCompleted);
   }
 
   get isLoadingDetails() {
-    return this.contactGroupId && !this.contactGroupDetails
+    return this.contactGroupId && !this.contactGroupDetails;
   }
 
   public keepOriginalOrder = (a) => a.key;
@@ -151,14 +151,14 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.listInfo = AppUtils.listInfo;
       this.setDropdownLists();
     } else {
-      this.sharedService.getDropdownListInfo().subscribe(data=> {
+      this.sharedService.getDropdownListInfo().subscribe(data => {
         this.listInfo = data;
         this.setDropdownLists();
       });
     }
     this.removedPersonIds = [];
     this.selectedPeople = [];
-    if(!this.contactGroupId) {
+    if (!this.contactGroupId) {
       this.route.queryParams.subscribe(params => {
         this.isNewContactGroup = (!AppUtils.holdingSelectedPeople && params['isNewContactGroup']) || false;
         this.isSigner = params['isSigner'] || false;
@@ -182,7 +182,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       emailAddress: [''],
       phoneNumber: ['']
     });
-    if(AppUtils.holdingSelectedPeople || AppUtils.holdingSelectedCompany) {
+    if (AppUtils.holdingSelectedPeople || AppUtils.holdingSelectedCompany) {
       AppUtils.holdingSelectedPeople ? this.selectedPeople = AppUtils.holdingSelectedPeople : null;
       AppUtils.holdingSelectedCompany ? this.selectedCompanyDetails = AppUtils.holdingSelectedCompany : null;
       AppUtils.holdingSelectedCompany ? this.selectCompany(this.selectedCompanyDetails) : null;
@@ -195,14 +195,14 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.isTypePicked = true;
     }
 
-    if(this.contactGroupId) {
-      this.getContactGroupById(this.contactGroupId)
+    if (this.contactGroupId) {
+      this.getContactGroupById(this.contactGroupId);
 
     } else {
       this.contactGroupDetails = {} as ContactGroup;
       this.contactGroupDetails.contactPeople = [];
       this.contactGroupDetails.contactType = AppUtils.holdingContactType || ContactType.Individual;
-      if(AppUtils.holdingContactType === ContactType.CompanyContact) {
+      if (AppUtils.holdingContactType === ContactType.CompanyContact) {
         this.isNewCompanyContact = true;
       }
       AppUtils.holdingContactType = null;
@@ -242,7 +242,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       .subscribe(data => this.findCompany(data));
   }
 
-  setDropdownLists(){
+  setDropdownLists() {
     this.warnings = this.listInfo.result.personWarningStatuses;
   }
 
@@ -310,7 +310,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     if (this.contactGroupDetailsForm) {
       this.contactGroupDetailsForm.reset();
     }
-    if(contactGroup.companyName) {
+    if (contactGroup.companyName) {
       this.companyFinderForm.get('companyName').setValue(contactGroup.companyName);
       this.getCompanyDetails(contactGroup.companyId);
     }
@@ -392,15 +392,16 @@ export class ContactgroupsPeopleComponent implements OnInit {
    });
   }
 
-  setImportantNotes(){
-    this.importantContactNotes = this.contactGroupDetails.contactNotes.filter(x=>x.isImportant && +x.contactGroupId === this.contactGroupId);
-    this.importantPeopleNotes = this.contactGroupDetails.contactNotes.filter(x=>x.isImportant);
+  setImportantNotes() {
+    this.importantContactNotes = this.contactGroupDetails.contactNotes
+                                .filter(x => x.isImportant && +x.contactGroupId === this.contactGroupId);
+    this.importantPeopleNotes = this.contactGroupDetails.contactNotes.filter(x => x.isImportant);
     this.contactGroupDetails.contactPeople.forEach(x => {
       x.personNotes = this.importantPeopleNotes.filter(p => p.personId === x.personId);
     });
   }
 
-   getContactNotes(){
+   getContactNotes() {
      this.bottomReached = false;
     this.getNextContactNotesPage(this.page);
     }
@@ -417,7 +418,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         }
       });
   }
-  
+
   editSelectedCompany(id: number, newCompany?: boolean) {
     event.preventDefault();
     this.isEditingSelectedCompany = true;
@@ -426,7 +427,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
     if (newCompany) {
       companyName = this.companyFinderForm.get('companyName').value;
     }
-    this._router.navigate(['/company-centre/detail', id, 'edit'], {queryParams: {isNewCompany: newCompany, isEditingSelectedCompany: true, companyName: companyName }});
+    this._router.navigate(['/company-centre/detail', id, 'edit'],
+    {queryParams: {isNewCompany: newCompany, isEditingSelectedCompany: true, companyName: companyName }});
   }
 
   editSelectedPerson(id: number) {
@@ -481,12 +483,12 @@ export class ContactgroupsPeopleComponent implements OnInit {
    }
 
    initCompanySearch() {
-    if(this.contactGroupDetails && this.contactGroupDetails.referenceCount){
+    if (this.contactGroupDetails && this.contactGroupDetails.referenceCount) {
       return;
     }
     this.selectedCompanyDetails = null;
     this.isCompanyAdded = false;
-    if(this.companyFinderForm.get('companyName').value){
+    if (this.companyFinderForm.get('companyName').value) {
       this.companyFinderForm.get('companyName').setValue(this.searchCompanyTermBK);
     }
    }
@@ -515,8 +517,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   selectPerson(id: number) {
-    if (this.removedPersonIds.indexOf(id) >= 0 ){
-      this.removedPersonIds.splice(this.removedPersonIds.indexOf(id),1);
+    if (this.removedPersonIds.indexOf(id) >= 0 ) {
+      this.removedPersonIds.splice(this.removedPersonIds.indexOf(id), 1);
     }
     if (id !== 0 && !this.checkDuplicateInContactGroup(id)) {
       this.selectedPersonId = id;
@@ -554,8 +556,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   showPersonWarning() {
-    this.contactGroupDetails.contactPeople.forEach(x=>{
-      x.warning = this.sharedService.showWarning(x.warningStatusId, this.warnings, x.warningStatusComment)
+    this.contactGroupDetails.contactPeople.forEach(x => {
+      x.warning = this.sharedService.showWarning(x.warningStatusId, this.warnings, x.warningStatusComment);
     });
   }
 
@@ -603,14 +605,14 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   saveContactGroup() {
     let validityCondition = this.contactGroupDetailsForm.valid;
-    if(this.contactGroupDetails.contactType === ContactType.CompanyContact) {
+    if (this.contactGroupDetails.contactType === ContactType.CompanyContact) {
       validityCondition = this.contactGroupDetailsForm.valid && this.companyFinderForm.valid;
     }
    if (validityCondition) {
      if (this.contactGroupDetailsForm.dirty || this.companyFinderForm.dirty) {
         const contactPeople = this.contactGroupDetails.contactPeople.length;
         if (this.selectedPeople.length || contactPeople) {
-          let contactGroup = {...this.contactGroupDetails, ...this.contactGroupDetailsForm.value};
+          const contactGroup = {...this.contactGroupDetails, ...this.contactGroupDetailsForm.value};
           this.isSubmitting = true;
           this.errorMessage = null;
           if (contactGroup.contactGroupId) {
@@ -629,7 +631,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
   private addNewContactGroup(contactGroup: ContactGroup) {
     if (this.isNewCompanyContact) {
-      if(!this.contactGroupDetails){
+      if (!this.contactGroupDetails) {
         this.contactGroupDetails = {} as ContactGroup;
         this.contactGroupDetails.contactPeople = [];
       }
@@ -638,7 +640,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         contactGroup.companyId = this.selectedCompanyDetails.companyId;
         contactGroup.companyName = this.selectedCompanyDetails.companyName;
         contactGroup.contactType = ContactType.CompanyContact;
-        if(!this.contactGroupDetails.contactPeople.length) {
+        if (!this.contactGroupDetails.contactPeople.length) {
           this.contactGroupDetails.contactPeople.push(this.selectedPerson);
         }
         this.contactGroupService
@@ -671,7 +673,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   private updateContactGroup(contactGroup: ContactGroup) {
-    if(contactGroup.companyName) {
+    if (contactGroup.companyName) {
       contactGroup.companyId = this.selectedCompanyDetails.companyId;
       contactGroup.companyName = this.selectedCompanyDetails.companyName;
     }
@@ -688,25 +690,25 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   onSaveComplete(contactGroupId): void {
     this.toastr.success('Contact Group successfully saved');
-    if(!contactGroupId) {
+    if (!contactGroupId) {
       this.sharedService.back();
     } else {
-      if(this.isSigner) {
+      if (this.isSigner) {
         AppUtils.newSignerId = contactGroupId;
         this.sharedService.back();
       }
       let url = this._router.url;
       let replacedId = this.contactGroupId;
 
-      if(url.indexOf("people/"+replacedId) === -1) {
+      if (url.indexOf('people/' + replacedId) === -1) {
         replacedId = 0;
       }
 
-      if(url.indexOf("?") >= 0) {
-        url = url.substring(0,url.indexOf("?"));
+      if (url.indexOf('?') >= 0) {
+        url = url.substring(0, url.indexOf('?'));
       }
 
-      url = url.replace('people/'+replacedId, 'people/'+contactGroupId);
+      url = url.replace('people/' + replacedId, 'people/' + contactGroupId);
 
       this._location.replaceState(url);
       this.contactGroupId = contactGroupId;
@@ -728,7 +730,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       counter++;
     });
     if (this.contactGroupDetails.contactType === ContactType.CompanyContact) {
-      type = ContactType.CompanyContact
+      type = ContactType.CompanyContact;
     }
     this.contactGroupDetailsForm.patchValue({
       salutation: salutation,
@@ -788,7 +790,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   canDeactivate(): boolean {
-    if ((this.contactGroupDetailsForm.dirty || this.companyFinderForm.dirty) && !this.isSubmitting && !this.isEditingSelectedPerson && !this.isEditingSelectedCompany) {
+    if ((this.contactGroupDetailsForm.dirty || this.companyFinderForm.dirty) &&
+         !this.isSubmitting && !this.isEditingSelectedPerson && !this.isEditingSelectedCompany) {
       return false;
     }
     return true;
