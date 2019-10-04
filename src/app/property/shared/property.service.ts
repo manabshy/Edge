@@ -5,6 +5,7 @@ import { PropertyAutoComplete, PropertyAutoCompleteData, Property, PropertyData,
 import { map, tap, switchMap, filter } from 'rxjs/operators';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encoder-helper';
+import { Address } from 'src/app/core/models/address';
 
 @Injectable({
   providedIn: 'root'
@@ -71,6 +72,18 @@ currentPropertyChanged(propertyId: number) {
   getPropertyMap(propertyId: number): Observable<Photo> {
     const url = `${AppConstants.basePropertyUrl}/${propertyId}/map`;
     return this.http.get<any>(url).pipe(map(response => response.result));
+  }
+
+  getPotentialDuplicateProperties(address: Address): Observable<PropertyAutoComplete[]> {
+    const options = new HttpParams({
+      encoder: new CustomQueryEncoderHelper,
+      fromObject: {
+        streetName: address.streetName,
+        postCode: address.postCode
+      }
+    });
+    const url = `${AppConstants.basePropertyUrl}/duplicates`;
+    return this.http.get<PropertyAutoCompleteData>(url, {params: options}).pipe(map(response => response.result));
   }
 
   propertyDetails$ = this.currentPropertyId$

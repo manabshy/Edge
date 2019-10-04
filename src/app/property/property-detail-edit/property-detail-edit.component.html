@@ -16,6 +16,7 @@
         <input type="hidden" id="fullAddress" class="form-control" formControlName="fullAddress">
       </div>
     </div>
+    <app-property-duplicate-checker [propertyAddress]="propertyAddress" (selectedProperty)="getSelectedProperty($event)"></app-property-duplicate-checker>
     <div class="form-group row">
       <label for="propertyTypeId" class="col-sm-2 col-form-label col-form-label-sm">Property Type</label>
       <div class="col-sm-3">

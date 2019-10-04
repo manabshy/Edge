@@ -175,6 +175,10 @@ export class PropertyDetailEditComponent implements OnInit {
     this.lastKnownOwner = owner;
   }
 
+  getSelectedProperty(property: any){
+    console.log('selected property', property);
+  }
+
   logValidationErrors(group: FormGroup = this.propertyForm, fakeTouched: boolean) {
     Object.keys(group.controls).forEach((key: string) => {
       const control = group.get(key);
@@ -196,6 +200,7 @@ export class PropertyDetailEditComponent implements OnInit {
     });
     this.sharedService.scrollToFirstInvalidField();
   }
+
   saveProperty() {
     const isOwnerChanged = this.lastKnownOwner || this.lastKnownOwner == null;
     const control = this.propertyForm.get('fullAddress');

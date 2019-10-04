@@ -14,15 +14,19 @@ import { PropertyDetailPhotosComponent } from './property-detail-photos/property
 import { PropertyDetailMapComponent } from './property-detail-map/property-detail-map.component';
 import { PropertyDetailEditComponent } from './property-detail-edit/property-detail-edit.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { PropertyDuplicateCheckerComponent } from './shared/property-duplicate-checker/property-duplicate-checker.component';
 
 @NgModule({
-  declarations: [PropertyListComponent, PropertyComponent, PropertyDetailComponent, PropertyDetailInstructionsComponent, PropertyDetailOffersComponent, PropertyDetailNotesComponent, PropertyDetailDocumentsComponent, PropertyDetailPhotosComponent, PropertyDetailMapComponent, PropertyDetailEditComponent],
+  declarations: [PropertyListComponent, PropertyComponent, PropertyDetailComponent,
+    PropertyDetailInstructionsComponent, PropertyDetailOffersComponent, PropertyDetailNotesComponent,
+    PropertyDetailDocumentsComponent, PropertyDetailPhotosComponent, PropertyDetailMapComponent,
+    PropertyDetailEditComponent, PropertyDuplicateCheckerComponent],
   imports: [
     CommonModule,
     PropertyRoutingModule,
     CoreModule,
     InfiniteScrollModule
   ],
-  exports: [PropertyListComponent]
+  exports: [PropertyListComponent, PropertyDuplicateCheckerComponent]
 })
 export class PropertyModule { }

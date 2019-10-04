@@ -1,0 +1,52 @@
+<ng-container *ngIf="isDuplicateFound">
+    <div class="form-group row justify-content-end">
+      <div class="col-sm-10">
+        <div class="row">
+          <div class="col">
+            <h5>Similar or duplicate properties</h5>
+          </div>
+        </div>
+        <div class="list-group small">
+          <div class="list-group-item list-header d-none d-sm-block">
+            <div class="row">
+              <div class="col-sm"><strong>Ref</strong></div>
+              <div class="col-sm"><strong>Address</strong></div>
+              <div class="col-sm col-lg-2"></div>
+            </div>
+          </div>
+         <div *ngIf="potentialDuplicates$ | async as potentialDuplicates">
+            <div class="list-group-item list-group-item-action" *ngFor="let foundProperty of potentialDuplicates">
+              <div class="row align-items-end align-items-sm-center"
+              (click)="selectProperty(foundProperty?.personId)">
+                <div class="col-12 mb-2 mb-sm-0" *ngIf="foundProperty?.ranking > 150">
+                  <span class="badge badge-pill badge-success" *ngIf="foundProperty?.ranking > 500">Full Match</span>
+                  <span class="badge badge-pill badge-warning" *ngIf="foundProperty?.ranking > 300 && foundProperty?.ranking < 500">Good Match</span>
+                </div>
+                <div class="col-sm">
+                  <dl class="row">
+                    <dt class="col-4 d-sm-none">Property Ref</dt>
+                    <dd class="col">
+                      {{foundProperty?.propertyId}}
+                      <span class="mr-1" [innerHTML]="foundProperty?.propertyId | highlight"></span>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="col-sm">
+                  <dl class="row">
+                    <dt class="col-4 d-sm-none">Property Address</dt>
+                    <dd class="col">
+                      {{foundProperty?.address}}
+                      <span class="mr-1" [innerHTML]="foundProperty?.address | highlight"></span>
+                    </dd>
+                  </dl>
+                </div>
+                <div class="col-sm col-lg-2 text-center">
+                  <button class="btn btn-block btn-sm btn-link">Select</button>
+                </div>
+              </div>
+            </div>
+         </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
