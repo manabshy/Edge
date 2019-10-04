@@ -373,9 +373,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     event.preventDefault();
     event.stopPropagation();
     this.isCreateNewPerson = true;
-    if (this.isCreateNewPerson) {
-      this.newPerson;
-    }
+
     setTimeout(() => {
       this.offCanvasContent.nativeElement.scrollTo(0, 0);
     });
