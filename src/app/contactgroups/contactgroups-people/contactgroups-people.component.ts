@@ -301,7 +301,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.contactGroupService.getPerson(personId).subscribe(data => {
       data.isNewPerson = true;
       this.selectedPerson = data;
-      this.addedPerson = data;
       this.collectSelectedPeople(data);
     });
   }
@@ -585,12 +584,28 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.setSalutation();
   }
 
-  showAddedPersonDetails(id) {
-    if (id !== 0) {
-      this.selectedPersonId = id;
-      this.getPersonDetails(id);
+  showAddedPersonId(id) {
+    // if (id !== 0) {
+    //   this.selectedPersonId = id;
+    //   this.getPersonDetails(id);
+    // }
+    // this.selectedPersonId = 0;
+  }
+
+  getAddedPersonDetails(person: Person) {
+    if (person) {
+      person.isNewPerson = true;
+      this.addedPerson = person;
+      if (this.contactGroupDetails && this.contactGroupDetails.contactPeople.length) {
+        this.collectSelectedPeople(person);
+      } else {
+        this.contactGroupDetails = {} as ContactGroup;
+        const people = this.contactGroupDetails.contactPeople = [];
+        people.push(person);
+        this.setSalutation();
+        this.saveContactGroup();
+      }
     }
-    this.selectedPersonId = 0;
   }
 
   cloneContactGroup() {
@@ -604,11 +619,11 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   saveContactGroup() {
-    let validityCondition = this.contactGroupDetailsForm.valid;
+    let validForm = this.contactGroupDetailsForm.valid;
     if (this.contactGroupDetails.contactType === ContactType.CompanyContact) {
-      validityCondition = this.contactGroupDetailsForm.valid && this.companyFinderForm.valid;
+      validForm = this.contactGroupDetailsForm.valid && this.companyFinderForm.valid;
     }
-   if (validityCondition) {
+   if (validForm) {
      if (this.contactGroupDetailsForm.dirty || this.companyFinderForm.dirty) {
         const contactPeople = this.contactGroupDetails.contactPeople.length;
         if (this.selectedPeople.length || contactPeople) {

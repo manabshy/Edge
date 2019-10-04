@@ -170,10 +170,6 @@ export class ContactGroupsService {
 
   getAutocompleteCompany(company: any): Observable<CompanyAutoCompleteResult[]> {
     let options;
-    //   if (company && company.companyName.length >= 3) {
-    //      options = new HttpParams()
-    //                     .set('searchTerm', company.companyName  || '') ;
-    //  }
     options = new HttpParams()
       .set('searchTerm', company.companyName || '');
     const url = `${AppConstants.baseCompanyUrl}/search`;
@@ -282,9 +278,11 @@ export class ContactGroupsService {
   contactGroupAutocompleteChanged(result: ContactGroupAutoCompleteResult[]) {
     this.contactGroupAutocompleteSubject.next(result);
   }
+
   personNotesChanged(notes: ContactNote[]) {
     this.personNotesSubject.next(notes);
   }
+
   notesChanged(note: ContactNote) {
     switch (true) {
       case !!note.personId:
@@ -295,32 +293,5 @@ export class ContactGroupsService {
     }
   }
 
-  contactGroupNotesChanged(note: ContactNote) {
-    let index;
-    this.contactGroupNotes ? index = this.contactGroupNotes.findIndex(x => x.id === note.id) : index = -1;
-    if (index !== -1) {
-      this.contactGroupNotes[index] = note;
-    } else {
-      note.contactGroupId ? this.contactGroupNotes.push(note) : this.personNotes.push(note);
-    }
-    this.sortByPinnedAndDate(this.contactGroupNotes);
-    this.contactGroupNotesSubject.next(note);
-  }
-
-  sortByPinnedAndDate(notes) {
-    if (notes) {
-      notes.sort((a, b) => {
-        const dateA = new Date(a.createDate);
-        const dateB = new Date(b.createDate);
-        if (a.isPinned !== b.isPinned) {
-          return b.isPinned - a.isPinned;
-        } else {
-          if (dateA < dateB) { return 1; }
-          if (dateA > dateB) { return -1; }
-        }
-        return 0;
-      });
-    }
-  }
 }
 

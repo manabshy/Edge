@@ -21,6 +21,7 @@ import { StaffMember, Permission } from 'src/app/core/models/staff-member';
   styleUrls: ['./contactgroups-detail-edit.component.scss']
 })
 export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChecked {
+  @Output() addedPersonDetails = new EventEmitter<Person>();
   @Output() addedPersonId = new EventEmitter<number>();
   @Output() hideCanvas = new EventEmitter<boolean>();
   @Output() backToFinder = new EventEmitter<boolean>();
@@ -209,7 +210,6 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
 
   logValidationErrorsFormArray(control: AbstractControl) {
     this.formArraryErrors = '';
-    //console.log(control['controls']);
     control['controls'].forEach((x: AbstractControl, i) => {
       const fields = ['number', 'email'];
       fields.forEach(label => {
@@ -609,7 +609,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
         } else {
           this.contactGroupService.addPerson(person).subscribe((data) => {
              this.newPersonId = data.personId;
-             this.onSaveComplete(); },
+             this.onSaveComplete(data); },
             (error: WedgeError) => {
               this.errorMessage = error;
               this.sharedService.showError(this.errorMessage);
@@ -640,6 +640,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
     }
     if (this.newPersonId) {
       this.addNewPerson(this.newPersonId);
+      this.addedPersonDetails.emit(person);
       this.backToFinder.emit(true);
       this.makeCanvasInvisible(this.isOffCanvasVisible);
     } else {

@@ -474,7 +474,7 @@
       </div>
     </ng-container>
     <ng-template #createNewPerson>
-      <app-contactgroups-detail-edit (addedPersonId)="showAddedPersonDetails($event)"
+      <app-contactgroups-detail-edit (addedPersonDetails)="getAddedPersonDetails($event)" (addedPersonId)="showAddedPersonId($event)"
         (hideCanvas)="hideCanvas($event)" (backToFinder)="backToFinder($event)" *ngIf="isCreateNewPerson"
         [basicPerson]="newPerson">
       </app-contactgroups-detail-edit>
