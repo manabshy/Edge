@@ -259,7 +259,7 @@ export class AddressComponent implements OnInit, OnChanges {
         houseBuildingName: property.address.houseBuildingName,
         streetName: property.address.streetName,
         town: property.address.town,
-        postCode: property.address.inCode + ' ' + property.address.outCode,
+        postCode: property.address.postCode.trim(),
         countryId: this.defaultCountryCode
     });
     }
