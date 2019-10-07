@@ -44,7 +44,7 @@ fdescribe('ContactGroupsService should', () => {
   }));
 
   it('return person notes', fakeAsync(() => {
-    const url = `${basePersonUrl}/297426/personNotes`;
+    const url = `${basePersonUrl}/297426/personNotes?pageSize=10&page=1`;
     const notes = PersonNotesMock as any[];
     let response: any[];
     service.getPersonNotes(297426).subscribe(res => response = res);

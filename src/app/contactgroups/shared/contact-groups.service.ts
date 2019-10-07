@@ -45,6 +45,9 @@ export class ContactGroupsService {
     if (!page || +page === 0) {
       page = 1;
     }
+    if (pageSize == null) {
+      pageSize = 10;
+    }
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
       fromObject: {
@@ -197,6 +200,9 @@ export class ContactGroupsService {
     if (!page || +page === 0) {
       page = 1;
     }
+    if (pageSize == null) {
+      pageSize = 10;
+    }
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
       fromObject: {
@@ -216,6 +222,9 @@ export class ContactGroupsService {
   getContactGroupNotes(contactGroupId: number, pageSize?: number, page?: number): Observable<ContactNote[]> {
     if (!page || +page === 0) {
       page = 1;
+    }
+    if (pageSize == null) {
+      pageSize = 10;
     }
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,

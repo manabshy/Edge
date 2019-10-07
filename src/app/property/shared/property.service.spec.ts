@@ -2,8 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { PropertyService } from './property.service';
 import { HttpClientTestingModule, HttpTestingController, TestRequest  } from '@angular/common/http/testing';
-import { Property, PropertyType, PropertyStyle } from './property';
-import { Address } from 'src/app/core/models/address';
+import { Property } from './property';
 import { MockProperty } from './test-helper';
 
 fdescribe('PropertyService', () => {
@@ -14,8 +13,10 @@ fdescribe('PropertyService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule]
+      imports: [HttpClientTestingModule],
+      providers: [PropertyService]
     });
+
     service = TestBed.get(PropertyService);
     httpTestingController = TestBed.get(HttpTestingController);
   });
@@ -30,10 +31,10 @@ fdescribe('PropertyService', () => {
 
   it('should make one api call and return a matching property', () => {
     // let response: any;
-    // service.getProperty(property.propertyId).subscribe(res => response = res);
+    // service.getProperty(property.propertyId).subscribe(res => {response = res; console.log('result', res)});
     service.getProperty(property.propertyId).subscribe();
 
-    const req: TestRequest = httpTestingController.expectOne(`${baseUrl}/${property.propertyId}`);
+    const req: TestRequest = httpTestingController.expectOne(`${baseUrl}/${property.propertyId}?includeInfo=false&includePhoto=false`);
 
     req.flush(property);
     expect(req.request.method).toEqual('GET');

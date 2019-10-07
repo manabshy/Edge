@@ -29,6 +29,9 @@ export class PropertyService {
     if (!page || +page === 0) {
       page = 1;
     }
+    if (pageSize == null) {
+      pageSize = 10;
+    }
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
       fromObject: {
