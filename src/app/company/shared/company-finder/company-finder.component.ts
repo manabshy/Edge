@@ -10,25 +10,22 @@ import { debounceTime } from 'rxjs/operators';
   templateUrl: './company-finder.component.html',
   styleUrls: ['./company-finder.component.scss']
 })
-export class CompanyFinderComponent implements OnInit {
+export class CompanyFinderComponent implements OnInit, OnChanges {
   companyFinderForm: FormGroup;
   foundCompanies: CompanyAutoCompleteResult[];
   searchCompanyTermBK: any;
-  //selectedCompanyDetails: Company;
   selectedCompanyId: number;
   isCompanyAdded: boolean;
   isLoadingCompaniesVisible: boolean;
   @Output() companyName = new EventEmitter<any>();
   @Output() selectedCompanyDetails = new EventEmitter<Company>();
-  @Input() companyNameError: boolean = false;
+  @Input() companyNameError = false;
   @Input() existingCompany: Company;
   @ViewChild('companyNameInput', { static: true }) companyNameInput: ElementRef;
 
   constructor(
     private contactGroupService: ContactGroupsService,
     private fb: FormBuilder,
-    // private modalService: BsModalService,
-    // private _location: Location,
     private sharedService: SharedService,
     private renderer: Renderer2
   ) { }
@@ -43,7 +40,7 @@ export class CompanyFinderComponent implements OnInit {
 
   init() {
     let companyName = '';
-    switch(true) {
+    switch (true) {
       case this.searchCompanyTermBK:
         companyName = this.searchCompanyTermBK.companyName;
         break;
