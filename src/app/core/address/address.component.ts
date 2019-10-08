@@ -7,6 +7,7 @@ import { Company } from 'src/app/contactgroups/shared/contact-group';
 import { Property } from 'src/app/property/shared/property';
 import { Address } from '../models/address';
 import { AppUtils } from '../shared/utils';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-address',
@@ -85,9 +86,8 @@ export class AddressComponent implements OnInit, OnChanges {
     if (this.companyDetails || this.personDetails || this.propertyDetails) {
       this.populateAddressForm(this.personDetails, this.companyDetails, this.propertyDetails);
     }
-    this.addressForm.valueChanges
+    this.addressForm.valueChanges.pipe(debounceTime(500))
     .subscribe((data) => {
-      console.log('data from form', data);
       if (data.postCode) {
         this.postCode.setValue(this.sharedService.formatPostCode(data.postCode), { emitEvent: false });
       }

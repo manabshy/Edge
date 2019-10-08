@@ -3,6 +3,7 @@ import { PropertyService } from '../property.service';
 import { Observable } from 'rxjs';
 import { Address } from 'src/app/core/models/address';
 import { tap } from 'rxjs/operators';
+import { PropertyAutoComplete } from '../property';
 
 @Component({
   selector: 'app-property-duplicate-checker',
@@ -12,8 +13,7 @@ import { tap } from 'rxjs/operators';
 export class PropertyDuplicateCheckerComponent implements OnInit, OnChanges {
   @Input() propertyAddress: Address;
   @Output() selectedProperty = new EventEmitter<any>();
-  selectedPropertyDetails: any;
-  potentialDuplicates$ = new Observable<any>();
+  potentialDuplicates: PropertyAutoComplete[] = [];
   isDuplicateFound = false;
 
   constructor(private propertyService: PropertyService) { }
@@ -22,24 +22,28 @@ export class PropertyDuplicateCheckerComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    if (this.propertyAddress) {
-      console.log('property address here', this.propertyAddress);
-      this.potentialDuplicates$ = this.propertyService.getPotentialDuplicateProperties(this.propertyAddress)
-        .pipe(
-          tap(data => { if (data) { this.isDuplicateFound = true; } }),
-          tap(data => console.log('duplicates', data))
-        );
+    if (this.propertyAddress && this.propertyAddress.postCode) {
+      this.getDuplicates();
     }
   }
 
   selectProperty(propertyId: number) {
     if (propertyId) {
-      this.propertyService.getProperty(propertyId).subscribe(data => {
+      this.propertyService.getProperty(propertyId, true, true).subscribe(data => {
         if (data) {
           this.selectedProperty.emit(data);
         }
       });
     }
+  }
+
+  private getDuplicates() {
+    this.propertyService.getPotentialDuplicateProperties(this.propertyAddress).subscribe(data => {
+      if (data && data.length) {
+        this.potentialDuplicates = data;
+        this.isDuplicateFound = true;
+      }
+    });
   }
 }
 

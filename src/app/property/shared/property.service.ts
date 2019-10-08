@@ -94,12 +94,23 @@ export class PropertyService {
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
       fromObject: {
+        addressLine2: address.addressLine2,
+        flatNumber: address.flatNumber,
+        houseBuildingName: address.houseBuildingName,
+        houseNumber: address.houseNumber,
+        inCode: address.inCode || '',
+        outCode: address.outCode  || '',
+        postCode: address.postCode,
         streetName: address.streetName,
-        postCode: address.postCode
+        town: address.town
       }
     });
     const url = `${AppConstants.basePropertyUrl}/duplicates`;
-    return this.http.get<PropertyAutoCompleteData>(url, { params: options }).pipe(map(response => response.result));
+    return this.http.get<PropertyAutoCompleteData>(url, { params: options })
+    .pipe(
+      map(response => response.result),
+      tap(data => console.log('duplicates', data))
+      );
   }
 
   propertyDetails$ = this.currentPropertyId$

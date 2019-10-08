@@ -63,6 +63,7 @@ export interface PropertyWithPhotos {
 export interface PropertyAutoComplete {
   propertyId: number;
   propertyAddress: string;
+  ranking?: number;
 }
 export interface PropertyAutoCompleteData {
  result: PropertyAutoComplete[];

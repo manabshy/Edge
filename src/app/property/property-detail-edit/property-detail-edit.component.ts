@@ -82,7 +82,6 @@ export class PropertyDetailEditComponent implements OnInit {
       this.onSelectArea(+data.areaId);
       this.selectedSubAreas = this.subAreas;
       // this.logValidationErrors(this.propertyForm, false);
-      console.log('sub area after selection...', this.subAreas);
     });
   }
 
@@ -107,12 +106,10 @@ export class PropertyDetailEditComponent implements OnInit {
   getPropertyDetails(propertyId: number) {
     this.propertyService.getProperty(propertyId).subscribe(data => {
       this.propertyDetails = data;
-      console.log('property details here.....', this.propertyDetails);
       this.onSelectType(data.propertyTypeId);
       this.onSelectRegion(data.regionId);
       this.onSelectArea(data.areaId);
       this.displayPropertyDetails(data);
-      console.log('property details after here.....',this.propertyDetails);
     });
   }
   private displayPropertyDetails(data: Property) {
@@ -138,7 +135,6 @@ export class PropertyDetailEditComponent implements OnInit {
   }
   onSelectArea(areaId: number) {
     this.subAreas = this.allSubAreas.filter((x: InfoDetail) => +x.parentId === areaId);
-    console.log('all subreas',this.subAreas)
   }
   setupEditForm() {
     this.propertyForm = this.fb.group({
@@ -162,7 +158,6 @@ export class PropertyDetailEditComponent implements OnInit {
 
    if (this.propertyAddress) {
      this.propertyForm.patchValue({fullAddress: this.propertyAddress});
-
    }
   }
 
@@ -175,8 +170,13 @@ export class PropertyDetailEditComponent implements OnInit {
     this.lastKnownOwner = owner;
   }
 
-  getSelectedProperty(property: any){
+  getSelectedProperty(property: Property) {
     console.log('selected property', property);
+    if (property) {
+      this.propertyForm.markAsPristine();
+      this.propertyForm.clearValidators();
+    }
+    this._router.navigate(['/property-centre/detail', property.propertyId]);
   }
 
   logValidationErrors(group: FormGroup = this.propertyForm, fakeTouched: boolean) {
@@ -208,9 +208,7 @@ export class PropertyDetailEditComponent implements OnInit {
     control.clearValidators();
     control.updateValueAndValidity();
     this.propertyAddress ? this.isAddressFormValid = true : this.isAddressFormValid = false;
-    console.log('is address form valid...... ', this.isAddressFormValid);
     if (this.propertyForm.valid) {
-      console.log('valid property form...... ', this.propertyForm);
       if (this.propertyForm.dirty || isOwnerChanged) {
         this.AddOrUpdateProperty();
       } else {
