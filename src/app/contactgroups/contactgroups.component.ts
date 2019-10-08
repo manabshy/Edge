@@ -37,6 +37,7 @@ export class ContactGroupsComponent implements OnInit, OnDestroy {
               private sharedService: SharedService) { }
 
   ngOnInit() {
+    this.sharedService.setTitle("Contact Centre");
     this.contactFinderForm = this.fb.group({
       searchTerm: [''],
     });

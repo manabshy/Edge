@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CompanyAutoCompleteResult } from '../contactgroups/shared/contact-group';
 import { AppUtils } from '../core/shared/utils';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { SharedService } from '../core/services/shared.service';
 
 @Component({
   selector: 'app-company',
@@ -18,9 +19,10 @@ export class CompanyComponent implements OnInit {
   companies: CompanyAutoCompleteResult[];
   isMessageVisible: boolean;
   advSearchCollapsed = false;
-  constructor(private contactGroupService: ContactGroupsService, private route: ActivatedRoute, private fb: FormBuilder) { }
+  constructor(private contactGroupService: ContactGroupsService, private route: ActivatedRoute, private fb: FormBuilder, private sharedService: SharedService) { }
 
   ngOnInit() {
+    this.sharedService.setTitle("Company Centre");
     this.companyFinderForm = this.fb.group({
       companyName: [''],
     });
