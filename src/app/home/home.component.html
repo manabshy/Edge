@@ -11,13 +11,13 @@
         <app-dashboard *ngIf='currentStaffMember' [currentStaffMember]='currentStaffMember'></app-dashboard>
       </div>
     </tab>
-    <tab (select)="onSelect($event)">
+    <tab (select)="onSelect($event)" *ngIf="false">
       <ng-template tabHeading>
         <i class="far fa-calendar-alt"></i><span class="nav-label">Diary</span>
       </ng-template>
       <app-diary></app-diary>
     </tab>
-    <tab (select)="onSelect($event)">
+    <tab (select)="onSelect($event)" *ngIf="false">
       <ng-template tabHeading>
         <i class="fas fa-chalkboard-teacher"></i><span class="nav-label">Leaderboard</span>
       </ng-template>
@@ -28,7 +28,7 @@
         <app-leaderboard  *ngIf='currentStaffMember' [currentStaffMember]='currentStaffMember'></app-leaderboard>
       </div>
     </tab>
-    <tab (select)="onSelect($event)">
+    <tab (select)="onSelect($event)" *ngIf="false">
       <ng-template tabHeading>
         <div class="position-relative">
           <i class="fas fa-tasks"></i>
