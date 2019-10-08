@@ -49,6 +49,27 @@ export interface PropertySummaryFigures {
   propertyNotes: number;
   propertyPhotos: number;
 }
+export interface InstructionInfo {
+  propertyEventId: number;
+  type: string;
+  statusId: number;
+  offerReceivedDate: Date;
+  amount: number;
+  applicantId: number;
+  applicantAddressee: string;
+  staffMember: string;
+}
+export interface OfferInfo {
+  propertyEventId: number;
+  type: string;
+  statusId: number;
+  instuctionDate: Date;
+  amount: number;
+  shortLetAmount: number;
+  ownerId: number;
+  ownerAddressee: string;
+  staffMember: string;
+}
 export interface PropertyData {
  result: Property;
 }

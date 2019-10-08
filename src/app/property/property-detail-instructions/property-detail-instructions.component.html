@@ -8,53 +8,55 @@
   <div class="list-group">
       <div class="list-group-item list-header d-none d-sm-block">
         <div class="row">
-          <div class="col-sm"><strong>Vendor</strong></div>
-          <div class="col-sm"><strong>Status</strong></div>
-          <div class="col-sm"><strong>Date</strong></div>
-          <div class="col-sm"><strong>Price/Rent</strong></div>
-          <div class="col-sm"><strong>Agency</strong></div>
+          <div class="col-sm"><strong>Instruction Date</strong></div>
           <div class="col-sm"><strong>Type</strong></div>
+          <div class="col-sm"><strong>Status</strong></div>
+          <div class="col-sm"><strong>Amount</strong></div>
+          <div class="col-sm"><strong>Owner</strong></div>
+          <div class="col-sm"><strong>Lister</strong></div>
         </div>
       </div>
-      <a href="#" class="list-group-item list-group-item-action">
-        <div class="row">
-          <div class="col-sm">
-            <dl class="row">
-              <dt class="col-4 d-sm-none">Vendor</dt>
-              <dd class="col"><a href="#">John Smith</a></dd>
-            </dl>
-          </div>
-          <div class="col-sm">
-            <dl class="row">
-              <dt class="col-4 d-sm-none">Status</dt>
-              <dd class="col">U/O</dd>
-            </dl>
-          </div>
-          <div class="col-sm">
-            <dl class="row">
-              <dt class="col-4 d-sm-none">Date</dt>
-              <dd class="col">14/05/18</dd>
-            </dl>
-          </div>
-          <div class="col-sm">
-            <dl class="row">
-              <dt class="col-4 d-sm-none">Price/Rent</dt>
-              <dd class="col">£820,000</dd>
-            </dl>
-          </div>
-          <div class="col-sm">
-            <dl class="row">
-              <dt class="col-4 d-sm-none">Agency</dt>
-              <dd class="col">Sole</dd>
-            </dl>
-          </div>
-          <div class="col-sm">
-            <dl class="row">
-              <dt class="col-4 d-sm-none">Type</dt>
-              <dd class="col">Sales</dd>
-            </dl>
+    <div *ngIf="instructions$|async as instructions">
+        <div class="list-group-item list-group-item-action" *ngFor="let instruction of instructions" >
+          <div class="row">
+            <div class="col-sm">
+              <dl class="row">
+                <dt class="col-4 d-sm-none">Instruction Date</dt>
+                <dd class="col"><a href="#">{{instruction.instuctionDate| date: 'd/MM/yyyy'}}</a></dd>
+              </dl>
+            </div>
+            <div class="col-sm">
+              <dl class="row">
+                <dt class="col-4 d-sm-none">Type</dt>
+                <dd class="col">{{instruction.type}}</dd>
+              </dl>
+            </div>
+            <div class="col-sm">
+              <dl class="row">
+                <dt class="col-4 d-sm-none">Status</dt>
+                <dd class="col">{{instruction.statusId}}</dd>
+              </dl>
+            </div>
+            <div class="col-sm">
+              <dl class="row">
+                <dt class="col-4 d-sm-none">Amount</dt>
+                <dd class="col">{{instruction.amount | currency: "GBP"}}</dd>
+              </dl>
+            </div>
+            <div class="col-sm">
+              <dl class="row">
+                <dt class="col-4 d-sm-none">Owner</dt>
+                <dd class="col">{{instruction.ownerAddressee}}</dd>
+              </dl>
+            </div>
+            <div class="col-sm">
+              <dl class="row">
+                <dt class="col-4 d-sm-none">Lister</dt>
+                <dd class="col">{{instruction.staffMember}}</dd>
+              </dl>
+            </div>
           </div>
         </div>
-      </a>
+    </div>
     </div>
 </div>
