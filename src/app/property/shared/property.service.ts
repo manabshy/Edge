@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, BehaviorSubject, Subject, combineLatest } from 'rxjs';
-import { PropertyAutoComplete, PropertyAutoCompleteData, Property, PropertyData, PropertyPhotoData, Photo } from './property';
+import { Observable, BehaviorSubject, Subject } from 'rxjs';
+import { PropertyAutoComplete, PropertyAutoCompleteData, Property, PropertyData,
+         PropertyPhotoData, Photo, InstructionInfo, OfferInfo } from './property';
 import { map, tap, switchMap, filter } from 'rxjs/operators';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encoder-helper';
@@ -87,6 +88,16 @@ export class PropertyService {
   // TODO: temp
   getPropertyMap(propertyId: number): Observable<Photo> {
     const url = `${AppConstants.basePropertyUrl}/${propertyId}/map`;
+    return this.http.get<any>(url).pipe(map(response => response.result));
+  }
+
+  getPropertyInstructions(propertyId: number): Observable<InstructionInfo[]> {
+    const url = `${AppConstants.basePropertyUrl}/${propertyId}/instructions`;
+    return this.http.get<any>(url).pipe(map(response => response.result));
+  }
+
+  getPropertyOffers(propertyId: number): Observable<OfferInfo[]> {
+    const url = `${AppConstants.basePropertyUrl}/${propertyId}/offers`;
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
 
