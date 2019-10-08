@@ -8,6 +8,7 @@ import { AppUtils } from '../core/shared/utils';
 import { Observable } from 'rxjs';
 import { BaseComponent } from '../core/models/base-component';
 import * as _ from 'lodash';
+import { SharedService } from '../core/services/shared.service';
 
 @Component({
   selector: 'app-property',
@@ -26,9 +27,10 @@ export class PropertyComponent extends BaseComponent implements OnInit {
   page: number;
   bottomReached: boolean;
 
-  constructor(private propertyService: PropertyService, private route: ActivatedRoute, private fb: FormBuilder) { super(); }
+  constructor(private propertyService: PropertyService, private route: ActivatedRoute, private fb: FormBuilder, private sharedService: SharedService) { super(); }
 
   ngOnInit() {
+    this.sharedService.setTitle("Property Centre");
     this.propertyFinderForm = this.fb.group({
       searchTerm: [''],
     });
