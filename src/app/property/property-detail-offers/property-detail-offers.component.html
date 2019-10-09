@@ -17,6 +17,9 @@
         </div>
       </div>
     <div *ngIf="offers$|async as offers">
+        <div class="list-group-item text-center text-danger" *ngIf="!offers || !offers?.length">
+            <i class="far fa-sad-tear"></i> No offers
+          </div>
         <div class="list-group-item list-group-item-action" *ngFor="let offer of offers" >
           <div class="row">
             <div class="col-sm">

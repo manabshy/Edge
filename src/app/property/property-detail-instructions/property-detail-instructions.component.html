@@ -17,6 +17,9 @@
         </div>
       </div>
     <div *ngIf="instructions$|async as instructions">
+        <div class="list-group-item text-center text-danger" *ngIf="!instructions || !instructions?.length">
+            <i class="far fa-sad-tear"></i> No instructions
+          </div>
         <div class="list-group-item list-group-item-action" *ngFor="let instruction of instructions" >
           <div class="row">
             <div class="col-sm">
