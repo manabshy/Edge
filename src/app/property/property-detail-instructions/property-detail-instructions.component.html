@@ -6,57 +6,74 @@
     </div>
   </div>
   <div class="list-group">
-      <div class="list-group-item list-header d-none d-sm-block">
-        <div class="row">
-          <div class="col-sm"><strong>Instruction Date</strong></div>
-          <div class="col-sm"><strong>Type</strong></div>
-          <div class="col-sm"><strong>Status</strong></div>
-          <div class="col-sm"><strong>Amount</strong></div>
-          <div class="col-sm"><strong>Owner</strong></div>
-          <div class="col-sm"><strong>Lister</strong></div>
-        </div>
+    <div class="list-group-item list-header d-none d-sm-block">
+      <div class="row">
+        <div class="col-sm"><strong>Instructed</strong></div>
+        <div class="col-sm"><strong>Type</strong></div>
+        <div class="col-sm"><strong>Status</strong></div>
+        <div class="col-sm"><strong>Long Let Rent</strong></div>
+        <div class="col-sm" *ngIf="isShortLet"><strong>Short Let Rent</strong></div>
+        <div class="col-sm"><strong>Landlord</strong></div>
+        <div class="col-sm"><strong>Lister</strong></div>
       </div>
+    </div>
     <div *ngIf="instructions$|async as instructions">
-        <div class="list-group-item list-group-item-action" *ngFor="let instruction of instructions" >
-          <div class="row">
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Instruction Date</dt>
-                <dd class="col"><a href="#">{{instruction.instuctionDate| date: 'd/MM/yyyy'}}</a></dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Type</dt>
-                <dd class="col">{{instruction.type}}</dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Status</dt>
-                <dd class="col">{{instruction.statusId}}</dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Amount</dt>
-                <dd class="col">{{instruction.amount | currency: "GBP"}}</dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Owner</dt>
-                <dd class="col">{{instruction.ownerAddressee}}</dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Lister</dt>
-                <dd class="col">{{instruction.staffMember}}</dd>
-              </dl>
-            </div>
+      <div class="list-group-item text-center text-danger" *ngIf="!instructions || !instructions?.length">
+        <i class="far fa-sad-tear"></i> No instructions
+      </div>
+      <div class="list-group-item list-group-item-action" *ngFor="let instruction of instructions">
+        <div class="row">
+          <div class="col-sm">
+            <dl class="row">
+              <dt class="col-4 d-sm-none">Instructed</dt>
+              <dd class="col">{{instruction?.instuctionDate| date: 'd/MM/yyyy'}}</dd>
+            </dl>
+          </div>
+          <div class="col-sm">
+            <dl class="row">
+              <dt class="col-4 d-sm-none">Type</dt>
+              <dd class="col">{{instruction?.type}}</dd>
+            </dl>
+          </div>
+          <div class="col-sm">
+            <dl class="row">
+              <dt class="col-4 d-sm-none">Status</dt>
+              <dd class="col">{{instruction?.status}}</dd>
+            </dl>
+          </div>
+          <div class="col-sm">
+            <dl class="row">
+              <dt class="col-4 d-sm-none">Long Let Rent</dt>
+              <dd class="col">{{instruction?.amount | currency: "GBP"}}</dd>
+            </dl>
+          </div>
+          <div class="col-sm" *ngIf="isShortLet">
+            <dl class="row">
+              <dt class="col-4 d-sm-none">Short Let Rent</dt>
+              <ng-container *ngIf="instruction.shortLetAmount > 0; else noAmount">
+                <dd class="col">{{instruction?.shortLetAmount | currency: "GBP"}}</dd>
+              </ng-container>
+              <ng-template #noAmount>
+                <dd class="col"></dd>
+              </ng-template>
+            </dl>
+          </div>
+          <div class="col-sm">
+            <dl class="row">
+              <dt class="col-4 d-sm-none">Landlord</dt>
+              <dd class="col"><a
+                  [routerLink]="['/contact-centre/detail', instruction.ownerId]">{{instruction?.ownerAddressee}}</a>
+              </dd>
+            </dl>
+          </div>
+          <div class="col-sm">
+            <dl class="row">
+              <dt class="col-4 d-sm-none">Lister</dt>
+              <dd class="col">{{instruction?.staffMember}}</dd>
+            </dl>
           </div>
         </div>
+      </div>
     </div>
-    </div>
+  </div>
 </div>

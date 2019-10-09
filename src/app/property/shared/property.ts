@@ -49,20 +49,22 @@ export interface PropertySummaryFigures {
   propertyNotes: number;
   propertyPhotos: number;
 }
-export interface InstructionInfo {
+export interface OfferInfo {
   propertyEventId: number;
   type: string;
   statusId: number;
+  status: string;
   offerReceivedDate: Date;
   amount: number;
   applicantId: number;
   applicantAddressee: string;
   staffMember: string;
 }
-export interface OfferInfo {
+export interface InstructionInfo {
   propertyEventId: number;
   type: string;
   statusId: number;
+  status: string;
   instuctionDate: Date;
   amount: number;
   shortLetAmount: number;
