@@ -2,7 +2,7 @@
 <div class="container">
   <div class="row page-title">
     <div class="col">
-      <h4 class="mb-0">Person</h4>
+      <h4 class="mb-0">Person <small class="text-muted">{{searchedPersonDetails?.personId}}</small></h4>
     </div>
     <div class="col-auto">
       <div class="btn-group" dropdown placement="bottom right">
@@ -95,9 +95,6 @@
                       class="badge badge-pill badge-primary">
                       {{searchedPersonDetails.marketingPreferences?.count || 0}} </span>
                   </button>
-                </div>
-                <div class="col-auto">
-                  <small class="text-muted">ID: {{searchedPersonDetails?.personId}}</small>
                 </div>
               </div>
               <div id="collapseBasic" [collapse]="!isCollapsed">

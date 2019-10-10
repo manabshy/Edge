@@ -6,7 +6,7 @@
       *ngFor="let contactGroup of contactGroups; let i = index; last as isLast">
       <div class="row mb-1">
         <div class="col">
-          <small class="text-muted mr-2">ID: {{contactGroup?.personId}}</small><small class="text-muted mr-2" *ngIf="contactGroup?.postCode"><i class="fas fa-map-marker-alt fa-fw"></i><span [innerHTML]="contactGroup?.postCode | highlight : searchTerm"></span></small><br class="d-sm-none" />
+          <small class="text-muted mr-2">{{contactGroup?.personId}}</small><small class="text-muted mr-2" *ngIf="contactGroup?.postCode"><i class="fas fa-map-marker-alt fa-fw"></i><span [innerHTML]="contactGroup?.postCode | highlight : searchTerm"></span></small><br class="d-sm-none" />
           <span class="badge badge-pill badge-danger mb-2" *ngIf="contactGroup?.warning?.id !== 1">{{contactGroup?.warningStatusComment || contactGroup?.warning?.value}}</span>
         </div>
         <div class="col-auto text-right">
