@@ -10,27 +10,26 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { mockDropdownListInfo } from 'src/app/contactgroups/shared/test-helper/dropdown-list-data.json';
-import { MockProperty, MockInstructions } from '../shared/test-helper';
-import { Property, InstructionInfo } from '../shared/property';
+import { MockInstructions } from '../shared/test-helper';
+import { InstructionInfo } from '../shared/property';
 import { PropertyService } from '../shared/property.service';
-import { delay } from 'rxjs/operators';
 
 fdescribe('PropertyDetailInstructionsComponent should', () => {
   let component: PropertyDetailInstructionsComponent;
   let fixture: ComponentFixture<PropertyDetailInstructionsComponent>;
   let propertyService: PropertyService;
-  const property = MockProperty as unknown as Property;
   const instructions = MockInstructions as unknown as InstructionInfo[];
   const mockSharedService = {
     getDropdownListInfo: () => of(mockDropdownListInfo),
-      scrollToFirstInvalidField: () => null,
-      ISOToDate: () => Date(),
-      isUKMobile: () => false,
-      formatPostCode: () => ''
+    scrollToFirstInvalidField: () => null,
+    ISOToDate: () => Date(),
+    isUKMobile: () => false,
+    formatPostCode: () => ''
   };
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PropertyDetailInstructionsComponent ],
+      declarations: [PropertyDetailInstructionsComponent],
       imports: [
         HttpClientTestingModule,
         BrowserModule,
@@ -39,17 +38,20 @@ fdescribe('PropertyDetailInstructionsComponent should', () => {
         RouterTestingModule.withRoutes([])
       ],
       providers: [
-        {provide: SharedService, useValue: mockSharedService},
-        {provide: ActivatedRoute, useValue: {
-          snapshot: {
-            paramMap: convertToParamMap({
-            id: '1'
-            })
-          }}}
-       ],
-       schemas: [NO_ERRORS_SCHEMA]
+        { provide: SharedService, useValue: mockSharedService },
+        {
+          provide: ActivatedRoute, useValue: {
+            snapshot: {
+              paramMap: convertToParamMap({
+                id: '1'
+              })
+            }
+          }
+        }
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -68,14 +70,13 @@ fdescribe('PropertyDetailInstructionsComponent should', () => {
     let response: any;
     component.ngOnInit();
     component.instructions$
-    .subscribe(res => {
-      response = res;
-      console.log('res', response);
-      expect(response).toEqual(instructions);
-    });
+      .subscribe(res => {
+        response = res;
+        console.log('res', response);
+        expect(response).toEqual(instructions);
+      });
 
     expect(spy).toHaveBeenCalledWith(1);
-
   }));
 
   it('display the instructions correctly', async(() => {
@@ -87,6 +88,7 @@ fdescribe('PropertyDetailInstructionsComponent should', () => {
       fixture.detectChanges();
       const instructionDivs = fixture.debugElement.queryAll(By.css('.list-group-item-action *'));
       console.log('first row', instructionDivs[0].nativeElement.textContent);
+
       expect(instructionDivs[0].nativeElement.textContent).toContain(instructions[0].type);
     });
   }));
