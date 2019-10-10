@@ -36,6 +36,7 @@ export class PropertyDetailInstructionsComponent implements OnInit {
         this.setStatusesInfo();
       });
     }
+
     this.propertyId = +this.route.snapshot.paramMap.get('id') || 0;
     if (this.propertyId) {
       this.instructions$ = this.propertyService.getPropertyInstructions(this.propertyId)

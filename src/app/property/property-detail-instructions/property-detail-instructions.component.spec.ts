@@ -15,7 +15,7 @@ import { Property, InstructionInfo } from '../shared/property';
 import { PropertyService } from '../shared/property.service';
 import { delay } from 'rxjs/operators';
 
-fdescribe('PropertyDetailInstructionsComponent', () => {
+fdescribe('PropertyDetailInstructionsComponent should', () => {
   let component: PropertyDetailInstructionsComponent;
   let fixture: ComponentFixture<PropertyDetailInstructionsComponent>;
   let propertyService: PropertyService;
@@ -59,22 +59,35 @@ fdescribe('PropertyDetailInstructionsComponent', () => {
     // fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('create', () => {
     expect(component).toBeTruthy();
   });
 
   it('set instructions correctly from service', async(() => {
     const spy = spyOn(propertyService, 'getPropertyInstructions').and.returnValue(of(instructions));
-    let response;
+    let response: any;
     component.ngOnInit();
     component.instructions$
-    .pipe(delay(0))
     .subscribe(res => {
       response = res;
       console.log('res', response);
       expect(response).toEqual(instructions);
     });
-   
+
     expect(spy).toHaveBeenCalledWith(1);
+
+  }));
+
+  it('display the instructions correctly', async(() => {
+    spyOn(propertyService, 'getPropertyInstructions').and.returnValue(of(instructions));
+    component.ngOnInit();
+    component.instructions$.subscribe();
+
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      const instructionDivs = fixture.debugElement.queryAll(By.css('.list-group-item-action *'));
+      console.log('first row', instructionDivs[0].nativeElement.textContent);
+      expect(instructionDivs[0].nativeElement.textContent).toContain(instructions[0].type);
+    });
   }));
 });
