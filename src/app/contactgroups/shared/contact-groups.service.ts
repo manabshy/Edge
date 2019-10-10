@@ -210,7 +210,7 @@ export class ContactGroupsService {
         page: page.toString()
       }
     });
-    const url = `${AppConstants.basePersonUrl}/${personId}/personNotes`;
+    const url = `${AppConstants.basePersonUrl}/${personId}/notes`;
     return this.http.get<ContactNoteData>(url, { params: options }).pipe(
       map(response => response.result),
       tap(data => this.personNotes = data)
@@ -233,7 +233,7 @@ export class ContactGroupsService {
         page: page.toString()
       }
     });
-    const url = `${AppConstants.baseContactGroupUrl}/${contactGroupId}/contactNotes`;
+    const url = `${AppConstants.baseContactGroupUrl}/${contactGroupId}/notes`;
     return this.http.get<ContactNoteData>(url, { params: options }).pipe(
       map(response => response.result),
       tap(data => this.contactGroupNotes = data)
@@ -242,28 +242,28 @@ export class ContactGroupsService {
   }
 
   addPersonNote(personNote: ContactNote): Observable<ContactNote | any> {
-    const url = `${AppConstants.basePersonUrl}/${personNote.personId}/personNotes`;
+    const url = `${AppConstants.basePersonUrl}/${personNote.personId}/notes`;
     return this.http.post<ContactNoteData>(url, personNote).pipe(
       map(response => response.result),
       tap(data => console.log('added  person note here...', JSON.stringify(data))));
   }
 
   addContactGroupNote(contactGroupNote: ContactNote): Observable<ContactNote | any> {
-    const url = `${AppConstants.baseContactGroupUrl}/${contactGroupNote.contactGroupId}/contactNotes`;
+    const url = `${AppConstants.baseContactGroupUrl}/${contactGroupNote.contactGroupId}/notes`;
     return this.http.post<ContactNoteData>(url, contactGroupNote).pipe(
       map(response => response.result),
       tap(data => console.log('added  contactgroup note here...', JSON.stringify(data))));
   }
 
   updatePersonNote(personNote: ContactNote): Observable<ContactNote | any> {
-    const url = `${AppConstants.basePersonUrl}/${personNote.personId}/personNotes/${personNote.id}`;
+    const url = `${AppConstants.basePersonUrl}/${personNote.personId}/notes/${personNote.id}`;
     return this.http.put<ContactNoteData>(url, personNote).pipe(
       map(response => response.result),
       tap(data => console.log('updated note  person note here...', JSON.stringify(data))));
   }
 
   updateContactGroupNote(contactGroupNote: ContactNote): Observable<ContactNote | any> {
-    const url = `${AppConstants.baseContactGroupUrl}/${contactGroupNote.contactGroupId}/contactNotes/${contactGroupNote.id}`;
+    const url = `${AppConstants.baseContactGroupUrl}/${contactGroupNote.contactGroupId}/notes/${contactGroupNote.id}`;
     return this.http.put<ContactNoteData>(url, contactGroupNote)
       .pipe(
         map(response => response.result),
