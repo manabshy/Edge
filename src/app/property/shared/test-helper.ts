@@ -114,6 +114,65 @@ export const mockProperty200 = {
   lastKnownOwner: {} as Signer
 };
 
+export const MockInstructions = [
+  {
+      propertyEventId: 108003,
+      type: 'Lettings',
+      statusId: 16,
+      instuctionDate: '2019-05-07T00:00:00',
+      amount: 323.07,
+      shortLetAmount: 0,
+      ownerId: 295674,
+      ownerAddressee: 'Mrs Ferdous Rahman',
+      staffMember: 'Surely MgrLets'
+  },
+  {
+      propertyEventId: 58755,
+      type: 'Lettings',
+      statusId: 32,
+      instuctionDate: '2018-12-10T00:00:00',
+      amount: 323.07,
+      shortLetAmount: 519.23,
+      ownerId: 295674,
+      ownerAddressee: 'Mrs Ferdous Rahman',
+      staffMember: 'Surely MgrLets'
+  }
+];
+
+export const MockOffers = [
+  {
+      'propertyEventId': 154717,
+      'type': 'Lettings',
+      'statusId': 2,
+      'offerReceivedDate': '2019-08-23T00:00:00',
+      'amount': 611.53,
+      'applicantId': 323308,
+      'applicantAddressee': 'Mrs Sophie Edwards, Mr Blake Edwards',
+      'staffMember': 'Alexandra Carberry'
+  },
+  {
+      'propertyEventId': 154709,
+      'type': 'Lettings',
+      'statusId': 2,
+      'offerReceivedDate': '2019-08-22T00:00:00',
+      'amount': 646.15,
+      'applicantId': 323278,
+      'applicantAddressee': 'Ms Luisa Jimenez, Mis laura Rojas',
+      'staffMember': 'Camilla Craven'
+  },
+  {
+      'propertyEventId': 154663,
+      'type': 'Lettings',
+      'statusId': 4,
+      'offerReceivedDate': '2019-08-21T00:00:00',
+      'amount': 646.15,
+      'applicantId': 321068,
+      'applicantAddressee': 'Ms Alayne Kane & Mr Robert Pohlhausen ',
+      'staffMember': 'Camilla Craven'
+  }
+];
+
+
 export const MockProperties = [mockProperty100, mockProperty200];
 
 
