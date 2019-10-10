@@ -16,7 +16,6 @@ export class NotesComponent implements OnInit, OnChanges {
   @Input() noteData: any;
   @Input() personNotesData: any;
   @Input() pageNumber: number;
-  @Input() isPersonNote: boolean;
   @Input() bottomReached: boolean;
   @Input() addressees: any;
   @Input() person: Person;
@@ -36,6 +35,8 @@ export class NotesComponent implements OnInit, OnChanges {
   isUpdating = false;
   page: number;
   notesLength: number;
+  isPropertyNote: boolean;
+  isPersonNote: boolean;
 
   constructor(private sharedService: SharedService,
     private contactGroupService: ContactGroupsService,
@@ -46,15 +47,20 @@ export class NotesComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     this.init();
-    console.log('property notes', this.propertyNotes);
   }
 
   init() {
-    this.notes = this.personNotes || this.contactGroupNotes;
+    this.notes = this.personNotes || this.contactGroupNotes || this.propertyNotes;
     this.page = this.pageNumber;
     if (this.noteData) {
       this.noteData.people !== undefined ? this.contactPeople = this.noteData.people : this.contactPeople = [];
       this.noteData.group ? this.groupAddressee = this.noteData.group.addressee : this.groupAddressee = [];
+    }
+    if (this.propertyNotes) {
+      this.propertyNotes.filter(x => x.text) ? this.isPropertyNote = true : this.isPropertyNote = false;
+    }
+    if (this.personNotes) {
+      this.personNotes.filter(x => x.text) ? this.isPersonNote = true : this.isPersonNote = false;
     }
   }
 
@@ -121,9 +127,14 @@ export class NotesComponent implements OnInit, OnChanges {
       if (this.contactPeople) {
         console.log('here for contact notes');
         this.contactGroupService.contactNotePageNumberChanged(this.page);
-      } else {
-        console.log('here for person notes');
+      }
+      if (this.isPersonNote) {
+        console.log('here for person notes', this.isPersonNote);
         this.contactGroupService.personNotePageNumberChanged(this.page);
+      }
+      if (this.isPropertyNote) {
+        console.log('here for property notes', this.isPropertyNote);
+        this.propertyService.propertyPageNumberChanged(this.page);
       }
       console.log('page number here...', this.page);
     }

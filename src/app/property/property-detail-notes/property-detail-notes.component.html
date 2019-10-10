@@ -4,9 +4,9 @@
     <div class="col">
       <h4 class="mb-0">Notes</h4>
     </div>
-    <div class="col-auto">
+    <!-- <div class="col-auto">
       <button type="button" class="btn btn-primary" (click)="addNote()"><i class="fas fa-plus mr-2"></i> Note</button>
-    </div>
+    </div> -->
   </div>
-  <app-notes [propertyNotes] = "propertyNotes"></app-notes>
+  <app-notes [propertyNotes]="propertyNotes" [pageNumber]="page" [bottomReached]="bottomReached"></app-notes>
 </div>

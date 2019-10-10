@@ -82,7 +82,8 @@ export class PropertyDetailNotesComponent extends BaseComponent implements OnIni
         if (this.noteTypes) {
           keys.forEach(key => {
             if (+key === +note.type) {
-              note.typeDescription = this.noteTypes[+key];
+              note.typeDescription = _.startCase(this.noteTypes[+key]);
+              // note.typeDescription = this.noteTypes[+key];
             }
           });
         }
