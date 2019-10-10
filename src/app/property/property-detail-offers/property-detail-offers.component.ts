@@ -27,7 +27,7 @@ export class PropertyDetailOffersComponent implements OnInit {
 
   ngOnInit() {
     if (AppUtils.listInfo) {
-      this.listInfo = AppUtils.listInfo.result;
+      this.listInfo = AppUtils.listInfo;
       this.setStatusesInfo();
     } else {
       this.sharedService.getDropdownListInfo().subscribe(data => {
@@ -50,10 +50,10 @@ export class PropertyDetailOffersComponent implements OnInit {
   }
 
   setStatusesInfo() {
-    this.propertySaleStatuses = this.listInfo.propertySaleStatuses;
-    this.propertyLettingStatuses = this.listInfo.propertyLettingStatuses;
-    this.offerSaleStatuses = this.listInfo.offerSaleStatuses;
-    this.offerLettingStatuses = this.listInfo.offerLettingStatuses;
+    this.propertySaleStatuses = this.listInfo.result.propertySaleStatuses;
+    this.propertyLettingStatuses = this.listInfo.result.propertyLettingStatuses;
+    this.offerSaleStatuses = this.listInfo.result.offerSaleStatuses;
+    this.offerLettingStatuses = this.listInfo.result.offerLettingStatuses;
   }
 
   setPropertyStatus() {

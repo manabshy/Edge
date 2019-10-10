@@ -28,11 +28,12 @@ export class PropertyDetailInstructionsComponent implements OnInit {
 
   ngOnInit() {
     if (AppUtils.listInfo) {
-      this.listInfo = AppUtils.listInfo.result;
+      this.listInfo = AppUtils.listInfo;
       this.setStatusesInfo();
     } else {
       this.sharedService.getDropdownListInfo().subscribe(data => {
         this.listInfo = data;
+        console.log('info in new subscription', data)
         this.setStatusesInfo();
       });
     }
@@ -43,7 +44,7 @@ export class PropertyDetailInstructionsComponent implements OnInit {
         .pipe(
           tap(data => this.instructionsData = data),
           tap(data => {
-            if (data) {
+            if (data && data.length) {
               this.setPropertyStatus();
               data.find(x => +x.shortLetAmount > 0) ? this.isShortLet = true : this.isShortLet = false;
             }
@@ -52,10 +53,10 @@ export class PropertyDetailInstructionsComponent implements OnInit {
   }
 
   setStatusesInfo() {
-    this.propertySaleStatuses = this.listInfo.propertySaleStatuses;
-    this.propertyLettingStatuses = this.listInfo.propertyLettingStatuses;
-    this.offerSaleStatuses = this.listInfo.offerSaleStatuses;
-    this.offerLettingStatuses = this.listInfo.offerLettingStatuses;
+    this.propertySaleStatuses = this.listInfo.result.propertySaleStatuses;
+    this.propertyLettingStatuses = this.listInfo.result.propertyLettingStatuses;
+    this.offerSaleStatuses = this.listInfo.result.offerSaleStatuses;
+    this.offerLettingStatuses = this.listInfo.result.offerLettingStatuses;
   }
 
   setPropertyStatus() {
