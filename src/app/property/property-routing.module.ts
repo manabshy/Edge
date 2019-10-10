@@ -26,7 +26,7 @@ const routes: Routes = [
         {path: 'edit', component: PropertyDetailEditComponent, canDeactivate: [CanDeactivateGuard] },
         {path: 'instructions', component: PropertyDetailInstructionsComponent},
         {path: 'offers', component: PropertyDetailOffersComponent},
-        {path: 'notes', component: PropertyDetailNotesComponent},
+        {path: 'property-notes', component: PropertyDetailNotesComponent},
         {path: 'documents', component: PropertyDetailDocumentsComponent},
         {path: 'property-photos', component: PropertyDetailPhotosComponent},
         {path: 'map', component: PropertyDetailMapComponent},
