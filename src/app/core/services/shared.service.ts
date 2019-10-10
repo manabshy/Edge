@@ -355,6 +355,7 @@ export interface DropdownListInfo {
  PropertyStyles: InfoDetail[];
  PropertyTypes: InfoDetail[];
  PersonWarningStatuses: InfoDetail[];
+ propertyNoteTypes: InfoDetail[];
 }
 
 export interface InfoDetail {

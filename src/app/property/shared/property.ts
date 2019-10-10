@@ -72,6 +72,17 @@ export interface InstructionInfo {
   ownerAddressee: string;
   staffMember: string;
 }
+export interface PropertyNote {
+  propertyId: number;
+  id: number;
+  text: string;
+  isImportant: boolean;
+  isPinned: boolean;
+  createDate: Date;
+  createdBy: number;
+  type: number;
+  typeDescription: string;
+}
 export interface PropertyData {
  result: Property;
 }

@@ -3,6 +3,8 @@ import { ContactNote, BasicContactGroup } from 'src/app/contactgroups/shared/con
 import { SharedService } from 'src/app/core/services/shared.service';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { Person } from '../models/person';
+import { PropertyNote } from 'src/app/property/shared/property';
+import { PropertyService } from 'src/app/property/shared/property.service';
 
 @Component({
   selector: 'app-notes',
@@ -20,6 +22,7 @@ export class NotesComponent implements OnInit, OnChanges {
   @Input() person: Person;
   @Input() personNotes: ContactNote[];
   @Input() contactGroupNotes: ContactNote[];
+  @Input() propertyNotes: PropertyNote[];
 
   notes: any;
   tests: any;
@@ -34,13 +37,16 @@ export class NotesComponent implements OnInit, OnChanges {
   page: number;
   notesLength: number;
 
-  constructor(private sharedService: SharedService, private contactGroupService: ContactGroupsService) { }
+  constructor(private sharedService: SharedService,
+    private contactGroupService: ContactGroupsService,
+    private propertyService: PropertyService) { }
 
   ngOnInit() {
   }
 
   ngOnChanges() {
     this.init();
+    console.log('property notes', this.propertyNotes);
   }
 
   init() {
@@ -53,7 +59,7 @@ export class NotesComponent implements OnInit, OnChanges {
   }
 
   setFlag(noteId: number, isImportantFlag: boolean) {
-    this.notes.forEach((x: ContactNote) => {
+    this.notes.forEach((x) => {
       if (x.id === noteId) {
         if (isImportantFlag) {
           x.isImportant ? x.isImportant = false : x.isImportant = true;
@@ -61,21 +67,42 @@ export class NotesComponent implements OnInit, OnChanges {
           x.isPinned ? x.isPinned = false : x.isPinned = true;
           this.isUpdating = true;
         }
-        if (x.contactGroupId) {
-          console.log('contact note here.....', x);
-          this.contactGroupService.updateContactGroupNote(x).subscribe((data) => {
-            this.contactGroupService.notesChanged(x);
-            this.isUpdating = false;
-          });
-        } else {
-          console.log('person note here.....', x);
-          this.contactGroupService.updatePersonNote(x).subscribe((data) => {
-            this.contactGroupService.notesChanged(x);
-            this.isUpdating = false;
-          });
+        switch (true) {
+          case !!x.contactGroupId:
+            this.contactGroupService.updateContactGroupNote(x).subscribe((data) => {
+              this.contactGroupService.notesChanged(x);
+              this.isUpdating = false;
+            });
+            break;
+          case !!x.personId:
+            this.contactGroupService.updatePersonNote(x).subscribe((data) => {
+              this.contactGroupService.notesChanged(x);
+              this.isUpdating = false;
+            });
+            break;
+          case !!x.propertyId:
+            this.propertyService.updatePropertyNote(x).subscribe((data) => {
+              this.propertyService.propertyNoteChanged(x);
+              this.isUpdating = false;
+            });
+            break;
         }
+        // if (x.contactGroupId) {
+        //   console.log('contact note here.....', x);
+        //   this.contactGroupService.updateContactGroupNote(x).subscribe((data) => {
+        //     this.contactGroupService.notesChanged(x);
+        //     this.isUpdating = false;
+        //   });
+        // } else {
+        //   console.log('person note here.....', x);
+        //   this.contactGroupService.updatePersonNote(x).subscribe((data) => {
+        //     this.contactGroupService.notesChanged(x);
+        //     this.isUpdating = false;
+        //   });
+        // }
       }
     });
+
   }
 
   onScrollDown() {

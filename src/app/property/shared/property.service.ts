@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
-import { PropertyAutoComplete, PropertyAutoCompleteData, Property, PropertyData,
-         PropertyPhotoData, Photo, InstructionInfo, OfferInfo } from './property';
+import {
+  PropertyAutoComplete, PropertyAutoCompleteData, Property, PropertyData,
+  PropertyPhotoData, Photo, InstructionInfo, OfferInfo, PropertyNote
+} from './property';
 import { map, tap, switchMap, filter } from 'rxjs/operators';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encoder-helper';
@@ -12,15 +14,10 @@ import { Address } from 'src/app/core/models/address';
   providedIn: 'root'
 })
 export class PropertyService {
-
   currentPropertyIdSubject = new BehaviorSubject<number | null>(0);
-  private  propertyPageNumberSubject = new Subject<number>();
-  private searchTermSubject = new BehaviorSubject('');
-  private pageSubject = new BehaviorSubject(0);
-  private pageSizeSubject = new BehaviorSubject(0);
-  searchTerm$ = this.searchTermSubject.asObservable();
-  page$ = this.pageSubject.asObservable();
-  pageSize$ = this.pageSizeSubject.asObservable();
+  private propertyPageNumberSubject = new Subject<number>();
+  private propertyNoteChangeSubject = new Subject<PropertyNote>();
+  propertNoteChanges$ = this.propertyNoteChangeSubject.asObservable();
   propertyPageNumberChanges$ = this.propertyPageNumberSubject.asObservable();
   currentPropertyId$ = this.currentPropertyIdSubject.asObservable();
 
@@ -110,7 +107,7 @@ export class PropertyService {
         houseBuildingName: address.houseBuildingName,
         houseNumber: address.houseNumber,
         inCode: address.inCode || '',
-        outCode: address.outCode  || '',
+        outCode: address.outCode || '',
         postCode: address.postCode,
         streetName: address.streetName,
         town: address.town
@@ -118,10 +115,45 @@ export class PropertyService {
     });
     const url = `${AppConstants.basePropertyUrl}/duplicates`;
     return this.http.get<PropertyAutoCompleteData>(url, { params: options })
-    .pipe(
-      map(response => response.result),
-      tap(data => console.log('duplicates', data))
+      .pipe(
+        map(response => response.result),
+        tap(data => console.log('duplicates', data))
       );
+  }
+
+  getPropertyNotes(propertyId: number, pageSize?: number, page?: number): Observable<PropertyNote[]> {
+    if (!page || +page === 0) {
+      page = 1;
+    }
+    if (pageSize == null) {
+      pageSize = 10;
+    }
+    const options = new HttpParams({
+      encoder: new CustomQueryEncoderHelper,
+      fromObject: {
+        pageSize: pageSize.toString(),
+        page: page.toString()
+      }
+    });
+    const url = `${AppConstants.basePropertyUrl}/${propertyId}/notes`;
+    return this.http.get<any>(url, { params: options }).pipe(
+      map(response => response.result),
+      tap(data => console.log('property notes here...', JSON.stringify(data)))
+    );
+  }
+
+  addPropertyNote(propertyNote: PropertyNote): Observable<PropertyNote | any> {
+    const url = `${AppConstants.basePropertyUrl}/${propertyNote.propertyId}/notes`;
+    return this.http.post<any>(url, propertyNote).pipe(
+      map(response => response.result),
+      tap(data => console.log('added property note here...', JSON.stringify(data))));
+  }
+
+  updatePropertyNote(propertyNote: PropertyNote): Observable<PropertyNote | any> {
+    const url = `${AppConstants.basePropertyUrl}/${propertyNote.propertyId}/notes/${propertyNote.id}`;
+    return this.http.put<any>(url, propertyNote).pipe(
+      map(response => response.result),
+      tap(data => console.log('updated property note here...', JSON.stringify(data))));
   }
 
   propertyDetails$ = this.currentPropertyId$
@@ -143,22 +175,9 @@ export class PropertyService {
     this.propertyPageNumberSubject.next(newPageNumber);
   }
 
-  // combinedParameters = combineLatest([this.searchTerm$, this.pageSize$, this.page$]);
-  // autocompleteProperties$ = this.combinedParameters.pipe(
-  //   switchMap(([searchTerm, pageSize, page]) => {
-  //     const options = new HttpParams({
-  //       encoder: new CustomQueryEncoderHelper,
-  //       fromObject: {
-  //         searchTerm: searchTerm.toString(),
-  //         pageSize: pageSize.toString(),
-  //         page: page.toString()
-  //       }
-  //     });
-  //     const url = `${AppConstants.basePropertyUrl}/autocomplete`;
-  //     return this.http.get<PropertyAutoCompleteData>(url, { params: options });
-  //   }),
-  //   map(response => response.result),
-  //   tap(data => console.log(JSON.stringify(data)))
-  // );
+  propertyNoteChanged(newNote: PropertyNote) {
+    this.propertyNoteChangeSubject.next(newNote);
+  }
+
 }
 
