@@ -4,6 +4,22 @@
     <div class="col">
       <h4 class="mb-0">Property <small class="text-muted">{{propertyDetails?.propertyId}}</small></h4>
     </div>
+    <div class="col-auto">
+      <div class="btn-group" dropdown placement="bottom right">
+        <button id="actionsToggle" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
+          aria-controls="actionsList">
+          Actions <span class="caret"></span>
+        </button>
+        <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="actionsToggle">
+          <li role="menuitem" *ngIf="propertyDetails">
+            <a class="dropdown-item"
+              [routerLink]="['edit']">
+              <i class="fas fa-edit fa-fw mr-2"></i> Edit Property
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
   <div class="row">
     <div class="col-xl-8">

@@ -13,6 +13,12 @@
         <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="actionsToggle">
           <li role="menuitem" *ngIf="searchedPersonDetails">
             <a class="dropdown-item"
+              [routerLink]="['edit']">
+              <i class="fas fa-edit fa-fw mr-2"></i> Edit Person
+            </a>
+          </li>
+          <li role="menuitem" *ngIf="searchedPersonDetails">
+            <a class="dropdown-item"
               (click)="createNewContactGroup(); $event.stopPropagation()"
               [routerLink]="['people', 0]" [queryParams]="{isNewContactGroup: true}">
               <i class="fas fa-users"></i><i class="fas fa-plus fa-xs align-text-top"></i> New Contact Group
