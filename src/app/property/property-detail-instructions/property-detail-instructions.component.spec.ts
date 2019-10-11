@@ -9,7 +9,7 @@ import { BrowserModule, By } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SharedService } from 'src/app/core/services/shared.service';
-import { mockDropdownListInfo } from 'src/app/contactgroups/shared/test-helper/dropdown-list-data.json';
+import { MockDropdownListInfo } from 'src/app/contactgroups/shared/test-helper/dropdown-list-data.json';
 import { MockInstructions } from '../shared/test-helper';
 import { InstructionInfo } from '../shared/property';
 import { PropertyService } from '../shared/property.service';
@@ -20,7 +20,7 @@ fdescribe('PropertyDetailInstructionsComponent should', () => {
   let propertyService: PropertyService;
   const instructions = MockInstructions as unknown as InstructionInfo[];
   const mockSharedService = {
-    getDropdownListInfo: () => of(mockDropdownListInfo),
+    getDropdownListInfo: () => of(MockDropdownListInfo),
     scrollToFirstInvalidField: () => null,
     ISOToDate: () => Date(),
     isUKMobile: () => false,

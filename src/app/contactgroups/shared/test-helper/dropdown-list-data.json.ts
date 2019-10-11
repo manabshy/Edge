@@ -10,7 +10,7 @@ export const MockCountries = [
   {id: 8, value: 'Anguilla', parentId: null},
   {id: 9, value: 'Antartica', parentId: null}
 ];
-export const mockDropdownListInfo = {
+export const MockDropdownListInfo = {
   result: {
     countries: [
       { id: 232, value: 'United Kingdom', parentId: null },
