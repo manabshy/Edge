@@ -209,3 +209,19 @@ fieldset {
 .aside {
     top: 1rem;
 }
+
+.v-o-h {
+    visibility: hidden;
+
+    &-xl {
+        @include media-breakpoint-down(lg) {
+            visibility: visible;
+        }
+    }
+
+    .v-o-h-container:hover &, .v-o-h:focus & {
+        @include media-breakpoint-up(xl) {
+            visibility: visible
+        }
+    }
+}
