@@ -82,6 +82,7 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
           this.currentStaffMember = data;
           this.isCurrentUserAvailable = true;
           AppUtils.currentStaffMemberGlobal = data;
+          this.staffMemberService.currentStaffMemberChange(data);
           console.log('app component current user', data);
         }
       }, (error: WedgeError) => {
@@ -90,6 +91,7 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
 
       this.infoService.getDropdownListInfo().pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
         AppUtils.listInfo = data;
+        this.infoService.infoChanged(data);
         console.log('app component list info', data);
       });
     }

@@ -12,20 +12,25 @@ const CACHE_SIZE = 1;
   providedIn: 'root'
 })
 export class StaffMemberService {
-  staffMember: StaffMember;
-  currentStaffMember$: Observable<StaffMember>;
+  private currentStaffMemberSubject = new BehaviorSubject<StaffMember | null>(null);
+  private staffMember$: Observable<StaffMember>;
+  currentStaffMember$ = this.currentStaffMemberSubject.asObservable();
 
   constructor(private http: HttpClient) { }
 
   public getCurrentStaffMember(): Observable<StaffMember> {
-    if (!this.currentStaffMember$) {
-      this.currentStaffMember$ = this.requestCurrentStaffMember().pipe(shareReplay(CACHE_SIZE));
+    if (!this.staffMember$) {
+      this.staffMember$ = this.requestCurrentStaffMember().pipe(shareReplay(CACHE_SIZE));
     }
-    return this.currentStaffMember$;
+    return this.staffMember$;
   }
 
   private requestCurrentStaffMember(): Observable<StaffMember> {
     return this.http.get<StaffMemberResult>(`${AppConstants.baseUrl}/currentUser`)
       .pipe(map(response => response.result));
+  }
+
+  currentStaffMemberChange(staffMember: StaffMember) {
+    this.currentStaffMemberSubject.next(staffMember);
   }
 }

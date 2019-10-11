@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { shareReplay } from 'rxjs/operators';
 import { AppConstants } from '../shared/app-constants';
 import { HttpClient } from '@angular/common/http';
@@ -8,7 +8,9 @@ const CACHE_SIZE = 1;
   providedIn: 'root'
 })
 export class InfoService {
-  infoDetail$: Observable<DropdownListInfo>;
+  private infoDetail$: Observable<DropdownListInfo>;
+  private infoSubject = new BehaviorSubject<DropdownListInfo | null>(null);
+  info$ = this.infoSubject.asObservable();
 
   constructor(private http: HttpClient) { }
 
@@ -18,6 +20,10 @@ export class InfoService {
     }
 
     return this.infoDetail$;
+  }
+
+  infoChanged(info: DropdownListInfo) {
+    this.infoSubject.next(info);
   }
 
   private requestDropdownListInfo(): Observable<DropdownListInfo> {
