@@ -15,12 +15,11 @@ import { Title } from '@angular/platform-browser';
 import { AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 
-const CACHE_SIZE = 1;
 @Injectable({
   providedIn: 'root'
 })
 export class SharedService {
-  infoDetail$: Observable<DropdownListInfo>;
+
   lastCallNoteToast: any;
   lastCallEndCallToast: any;
   formErrors: any;
@@ -295,35 +294,9 @@ export class SharedService {
     }
   }
 
-  getDropdownListInfo(): Observable<DropdownListInfo> {
-    if (!this.infoDetail$) {
-      this.infoDetail$ = this.requestDropdownListInfo().pipe(shareReplay(CACHE_SIZE));
-    }
-
-    return this.infoDetail$;
-  }
-  private requestDropdownListInfo(): Observable<DropdownListInfo> {
-    return this.http.get<DropdownListInfo>(AppConstants.baseInfoUrl);
-  }
-
 }
 
-export interface DropdownListInfo {
- Countries: InfoDetail[];
- CompanyTypes: InfoDetail[];
- Titles: Record<number, string>;
- TelephoneTypes: Record<number, string>;
- PropertyStyles: InfoDetail[];
- PropertyTypes: InfoDetail[];
- PersonWarningStatuses: InfoDetail[];
- propertyNoteTypes: InfoDetail[];
-}
 
-export interface InfoDetail {
-  id: number;
-  value: string;
-  parentId: number;
-}
 
 export class WedgeError {
   errorCode: number;

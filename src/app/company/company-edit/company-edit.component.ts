@@ -12,6 +12,7 @@ import { WedgeValidators } from 'src/app/core/shared/wedge-validators';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { Address } from 'src/app/core/models/address';
 import { ToastrService } from 'ngx-toastr';
+import { InfoService } from 'src/app/core/services/info.service';
 
 
 @Component({
@@ -42,6 +43,7 @@ export class CompanyEditComponent implements OnInit {
               private companyService: CompanyService,
               private fb: FormBuilder,
               private sharedService: SharedService,
+              private infoService: InfoService,
               private toastr: ToastrService,
               private _location: Location,
               private route: ActivatedRoute,
@@ -58,7 +60,7 @@ export class CompanyEditComponent implements OnInit {
       this.listInfo = AppUtils.listInfo;
       this.setDropdownLists();
     } else {
-      this.sharedService.getDropdownListInfo().subscribe(data=> {
+      this.infoService.getDropdownListInfo().subscribe(data=> {
         this.listInfo = data;
         console.log('list info in company edit component from new sub', data);
         this.setDropdownLists();

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, Renderer2, AfterViewInit, AfterContentInit, AfterContentChecked } from '@angular/core';
-import { SharedService, WedgeError, InfoDetail } from 'src/app/core/services/shared.service';
+import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractControl, ValidatorFn } from '@angular/forms';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { Person, Email, PhoneNumber, BasicPerson, TelephoneTypeId } from 'src/app/core/models/person';
@@ -15,6 +15,7 @@ import { ToastrService } from 'ngx-toastr';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
 import { StaffMember, Permission } from 'src/app/core/models/staff-member';
 import { AddressService, AddressAutoCompleteData } from 'src/app/core/services/address.service';
+import { InfoService, InfoDetail } from 'src/app/core/services/info.service';
 
 @Component({
   selector: 'app-contactgroups-detail-edit',
@@ -104,6 +105,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
   constructor(public sharedService: SharedService,
     private toastr: ToastrService,
     private addressService: AddressService,
+    private infoService: InfoService,
     private contactGroupService: ContactGroupsService,
     private staffMemberService: StaffMemberService,
     private fb: FormBuilder,
@@ -117,7 +119,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
       this.listInfo = AppUtils.listInfo;
       this.setDropdownLists();
     } else {
-      this.sharedService.getDropdownListInfo().subscribe(data => {
+      this.infoService.getDropdownListInfo().subscribe(data => {
         this.listInfo = data;
         this.setDropdownLists();
       });

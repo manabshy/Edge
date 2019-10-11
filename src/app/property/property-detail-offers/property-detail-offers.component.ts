@@ -6,6 +6,7 @@ import { PropertyService } from '../shared/property.service';
 import { tap } from 'rxjs/operators';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { AppUtils } from 'src/app/core/shared/utils';
+import { InfoService } from 'src/app/core/services/info.service';
 
 @Component({
   selector: 'app-property-detail-offers',
@@ -23,14 +24,17 @@ export class PropertyDetailOffersComponent implements OnInit {
   offerLettingStatuses: any;
   status: any;
 
-  constructor(private route: ActivatedRoute, private propertyService: PropertyService, private sharedService: SharedService) { }
+  constructor(private route: ActivatedRoute,
+    private propertyService: PropertyService,
+    private infoService: InfoService,
+    private sharedService: SharedService) { }
 
   ngOnInit() {
     if (AppUtils.listInfo) {
       this.listInfo = AppUtils.listInfo;
       this.setStatusesInfo();
     } else {
-      this.sharedService.getDropdownListInfo().subscribe(data => {
+      this.infoService.getDropdownListInfo().subscribe(data => {
         this.listInfo = data;
         this.setStatusesInfo();
       });

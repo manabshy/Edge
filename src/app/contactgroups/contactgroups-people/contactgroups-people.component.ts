@@ -15,6 +15,7 @@ import { FormErrors, ValidationMessages } from 'src/app/core/shared/app-constant
 import { AppUtils } from 'src/app/core/shared/utils';
 import { ToastrService } from 'ngx-toastr';
 import * as _ from 'lodash';
+import { InfoService } from 'src/app/core/services/info.service';
 @Component({
   selector: 'app-contactgroups-people',
   templateUrl: './contactgroups-people.component.html',
@@ -114,6 +115,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     private modalService: BsModalService,
     private _location: Location,
     private sharedService: SharedService,
+    private infoService: InfoService,
     private toastr: ToastrService,
     private renderer: Renderer2
   ) {}
@@ -151,7 +153,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.listInfo = AppUtils.listInfo;
       this.setDropdownLists();
     } else {
-      this.sharedService.getDropdownListInfo().subscribe(data => {
+      this.infoService.getDropdownListInfo().subscribe(data => {
         this.listInfo = data;
         this.setDropdownLists();
       });

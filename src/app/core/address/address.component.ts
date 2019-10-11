@@ -9,6 +9,7 @@ import { Address } from '../models/address';
 import { AppUtils } from '../shared/utils';
 import { debounceTime } from 'rxjs/operators';
 import { AddressService, AddressAutoCompleteData } from '../services/address.service';
+import { InfoService } from '../services/info.service';
 
 @Component({
   selector: 'app-address',
@@ -51,6 +52,7 @@ export class AddressComponent implements OnInit, OnChanges {
 
   constructor(private sharedService: SharedService,
               private addressService: AddressService,
+              private infoService: InfoService,
               private fb: FormBuilder,
               private renderer: Renderer2,
              ) { }
@@ -68,7 +70,7 @@ export class AddressComponent implements OnInit, OnChanges {
       this.listInfo = AppUtils.listInfo;
       this.setDropdownLists();
     } else {
-      this.sharedService.getDropdownListInfo().subscribe(data => {
+      this.infoService.getDropdownListInfo().subscribe(data => {
         this.listInfo = data;
         this.setDropdownLists();
       });

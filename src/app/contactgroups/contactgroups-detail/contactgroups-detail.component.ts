@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Person } from 'src/app/core/models/person';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { AppUtils } from 'src/app/core/shared/utils';
+import { InfoService } from 'src/app/core/services/info.service';
 
 @Component({
   selector: 'app-contactgroups-detail',
@@ -29,6 +30,7 @@ export class ContactgroupsDetailComponent implements OnInit {
 
   constructor(private contactGroupService: ContactGroupsService,
               private sharedService: SharedService,
+              private infoService: InfoService,
               private route: ActivatedRoute) { }
 
   ngOnInit() {
@@ -47,7 +49,7 @@ export class ContactgroupsDetailComponent implements OnInit {
       this.listInfo = AppUtils.listInfo;
       this.setDropdownLists();
     } else {
-      this.sharedService.getDropdownListInfo().subscribe(data => {
+      this.infoService.getDropdownListInfo().subscribe(data => {
         this.listInfo = data;
         this.setDropdownLists();
       });

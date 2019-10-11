@@ -1,5 +1,4 @@
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { InfoDetail } from '../services/shared.service';
 
 export interface Address {
   flatNumber: string;

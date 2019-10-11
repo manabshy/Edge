@@ -6,6 +6,7 @@ import { InstructionInfo } from '../shared/property';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { tap } from 'rxjs/operators';
+import { InfoService } from 'src/app/core/services/info.service';
 
 @Component({
   selector: 'app-property-detail-instructions',
@@ -24,14 +25,17 @@ export class PropertyDetailInstructionsComponent implements OnInit {
   status: any;
   isShortLet = false;
 
-  constructor(private route: ActivatedRoute, private propertyService: PropertyService, private sharedService: SharedService) { }
+  constructor(private route: ActivatedRoute,
+    private propertyService: PropertyService,
+    private infoService: InfoService,
+    private sharedService: SharedService) { }
 
   ngOnInit() {
     if (AppUtils.listInfo) {
       this.listInfo = AppUtils.listInfo;
       this.setStatusesInfo();
     } else {
-      this.sharedService.getDropdownListInfo().subscribe(data => {
+      this.infoService.getDropdownListInfo().subscribe(data => {
         this.listInfo = data;
         console.log('info in new subscription', data)
         this.setStatusesInfo();

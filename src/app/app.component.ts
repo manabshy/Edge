@@ -10,6 +10,7 @@ import { BehaviorSubject } from 'rxjs';
 import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
 import { EdgeServiceWorkerService } from './core/services/edge-service-worker.service';
 import { BaseComponent } from './core/models/base-component';
+import { InfoService } from './core/services/info.service';
 
 @Component({
   selector: 'app-root',
@@ -43,6 +44,7 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
     private route: ActivatedRoute,
     public authService: AuthService,
     protected sharedService: SharedService,
+    private infoService: InfoService,
     protected staffMemberService: StaffMemberService,
     private edgeServiceWorker: EdgeServiceWorkerService,
     private renderer: Renderer2,
@@ -86,7 +88,7 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
         this.sharedService.showError(error);
       });
 
-      this.sharedService.getDropdownListInfo().pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
+      this.infoService.getDropdownListInfo().pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
         AppUtils.listInfo = data;
         console.log('app component list info', data);
       });

@@ -6,7 +6,7 @@ import { StaffMemberService } from '../core/services/staff-member.service';
 import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
 import { AppUtils } from '../core/shared/utils';
 import { StaffMember } from '../core/models/staff-member';
-import { SharedService, DropdownListInfo, WedgeError } from '../core/services/shared.service';
+import { SharedService, WedgeError } from '../core/services/shared.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { CompanyDetailComponent } from '../company/company-detail/company-detail.component';
@@ -17,7 +17,6 @@ import { CompanyDetailComponent } from '../company/company-detail/company-detail
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  info: DropdownListInfo;
   // get currentStaffMember(): StaffMember {
   //   return this.staffMemberService.currentStaffMember;
   // }
