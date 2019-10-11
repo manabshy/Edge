@@ -40,32 +40,27 @@ export class CompanyEditComponent implements OnInit {
   info: any;
 
   constructor(private contactGroupService: ContactGroupsService,
-              private companyService: CompanyService,
-              private fb: FormBuilder,
-              private sharedService: SharedService,
-              private infoService: InfoService,
-              private toastr: ToastrService,
-              private _location: Location,
-              private route: ActivatedRoute,
-              private _router: Router
-            ) { }
+    private companyService: CompanyService,
+    private fb: FormBuilder,
+    private sharedService: SharedService,
+    private infoService: InfoService,
+    private toastr: ToastrService,
+    private _location: Location,
+    private route: ActivatedRoute,
+    private _router: Router
+  ) { }
 
   ngOnInit() {
     this.init();
   }
 
   init() {
-    console.log('list info Global in company edit component', AppUtils.listInfo);
-    if(AppUtils.listInfo) {
-      this.listInfo = AppUtils.listInfo;
-      this.setDropdownLists();
-    } else {
-      this.infoService.getDropdownListInfo().subscribe(data=> {
+    this.infoService.info$.subscribe(data => {
+      if (data) {
         this.listInfo = data;
-        console.log('list info in company edit component from new sub', data);
-        this.setDropdownLists();
-      });
-    }
+        this.companyTypes = this.listInfo.result.companyTypes;
+      }
+    });
 
     this.route.params.subscribe(params => this.companyId = this.companyId || +params['id'] || 0);
     this.route.queryParams.subscribe(params => {
@@ -78,15 +73,12 @@ export class CompanyEditComponent implements OnInit {
     if (id) {
       this.getCompanyDetails(id);
     }
-    if(AppUtils.newSignerId) {
+    if (AppUtils.newSignerId) {
       this.getSignerDetails(AppUtils.newSignerId);
     }
     this.companyForm.valueChanges.pipe(debounceTime(400)).subscribe(() => this.logValidationErrors(this.companyForm, false));
   }
 
-  setDropdownLists() {
-    this.companyTypes = this.listInfo.result.companyTypes;
-  }
 
   getCompanyDetails(id: number) {
     this.contactGroupService.getCompany(id).subscribe(data => {
@@ -123,13 +115,13 @@ export class CompanyEditComponent implements OnInit {
         countryId: company.companyAddress.countryId,
         country: company.companyAddress.country,
       },
-        telephone: company.telephone,
-        fax: company.fax,
-        website: company.website,
-        email: company.email,
-        amlCompletedDate: this.sharedService.ISOToDate(company.amlCompletedDate)
+      telephone: company.telephone,
+      fax: company.fax,
+      website: company.website,
+      email: company.email,
+      amlCompletedDate: this.sharedService.ISOToDate(company.amlCompletedDate)
     });
-     this.existingSigner = company.signer;
+    this.existingSigner = company.signer;
   }
   populateNewCompanyDetails() {
     if (this.companyForm) {
@@ -143,11 +135,11 @@ export class CompanyEditComponent implements OnInit {
         countryId: this.defaultCountryCode,
         country: this.companyDetails.companyAddress.country,
       },
-        telephone: this.companyDetails.telephone,
-        fax: this.companyDetails.fax,
-        website: this.companyDetails.website,
-        email: this.companyDetails.email,
-        amlCompletedDate: this.companyDetails.amlCompletedDate
+      telephone: this.companyDetails.telephone,
+      fax: this.companyDetails.fax,
+      website: this.companyDetails.website,
+      email: this.companyDetails.email,
+      amlCompletedDate: this.companyDetails.amlCompletedDate
     });
   }
 
@@ -158,18 +150,18 @@ export class CompanyEditComponent implements OnInit {
       signer: [''],
       fullAddress: [''],
       address: this.fb.group({
-        addressLines: ['', { validators: Validators.maxLength(500)}],
+        addressLines: ['', { validators: Validators.maxLength(500) }],
         countryId: 0,
-        postCode: ['', { validators: [Validators.minLength(5), Validators.maxLength(8)]}],
+        postCode: ['', { validators: [Validators.minLength(5), Validators.maxLength(8)] }],
       }),
-        telephone: ['', { validators: WedgeValidators.phoneNumberValidator()}],
-        fax: ['', { validators: WedgeValidators.phoneNumberValidator()}],
-        email: ['', { validators: Validators.pattern(AppConstants.emailPattern)}],
-        website: [''],
-        amlCompletedDate: ['']
+      telephone: ['', { validators: WedgeValidators.phoneNumberValidator() }],
+      fax: ['', { validators: WedgeValidators.phoneNumberValidator() }],
+      email: ['', { validators: Validators.pattern(AppConstants.emailPattern) }],
+      website: [''],
+      amlCompletedDate: ['']
     });
 
-    if(companyName) {
+    if (companyName) {
       this.companyDetails = {} as Company;
       this.companyDetails.companyName = companyName;
     }
@@ -180,7 +172,7 @@ export class CompanyEditComponent implements OnInit {
       const control = group.get(key);
       const messages = ValidationMessages[key];
       if (control.valid) {
-       FormErrors[key] = '';
+        FormErrors[key] = '';
       }
       if (control && !control.valid && (fakeTouched || control.dirty)) {
         FormErrors[key] = '';
@@ -198,7 +190,7 @@ export class CompanyEditComponent implements OnInit {
   }
 
   getSelectedSigner(signer: Signer) {
-    if(this.signer && this.signer !== signer) {
+    if (this.signer && this.signer !== signer) {
       this.companyForm.markAsDirty();
     } else {
       this.companyForm.markAsPristine();
@@ -207,7 +199,7 @@ export class CompanyEditComponent implements OnInit {
   }
 
   getAddress(address: Address) {
-    if(this.address && JSON.stringify(this.address) != JSON.stringify(address)) {
+    if (this.address && JSON.stringify(this.address) !== JSON.stringify(address)) {
       this.companyForm.markAsDirty();
     } else {
       this.companyForm.markAsPristine();
@@ -215,7 +207,7 @@ export class CompanyEditComponent implements OnInit {
     this.address = address;
   }
 
-  getCompanyName(name: any){
+  getCompanyName(name: any) {
     this.companyForm.get('companyName').setValue(name.companyName);
   }
 
@@ -223,12 +215,12 @@ export class CompanyEditComponent implements OnInit {
     this.companyDetails = null;
     let url = this._router.url;
 
-    if(url.indexOf("?") >= 0) {
-      url = url.substring(0,url.indexOf("?"));
+    if (url.indexOf('?') >= 0) {
+      url = url.substring(0, url.indexOf('?'));
     }
 
-    url = url.replace('detail/0', 'detail/'+this.companyId);
-    url = url.replace('detail/'+this.companyId, 'detail/'+company.companyId);
+    url = url.replace('detail/0', 'detail/' + this.companyId);
+    url = url.replace('detail/' + this.companyId, 'detail/' + company.companyId);
     this._location.replaceState(url);
     this.companyId = company.companyId;
     this.init();
@@ -238,7 +230,7 @@ export class CompanyEditComponent implements OnInit {
     const isSignerChanged = this.signer || this.signer == null;
     this.logValidationErrors(this.companyForm, true);
     if (this.companyForm.valid) {
-      if (this.companyForm.dirty || isSignerChanged ) {
+      if (this.companyForm.dirty || isSignerChanged) {
         this.AddOrUpdateCompany();
       } else {
         this.onSaveComplete();
@@ -276,7 +268,7 @@ export class CompanyEditComponent implements OnInit {
     }
   }
   onSaveComplete(company?: Company) {
-    if(this.isEditingSelectedCompany && company){
+    if (this.isEditingSelectedCompany && company) {
       AppUtils.holdingSelectedCompany = company;
       console.log(AppUtils.holdingSelectedCompany);
     }
@@ -284,10 +276,10 @@ export class CompanyEditComponent implements OnInit {
     this.isSubmitting = false;
     this.toastr.success('Company successfully saved');
     this.sharedService.back();
-   console.log('complete');
+    console.log('complete');
   }
   canDeactivate(): boolean {
-    if (this.companyForm.dirty  && !this.isSubmitting) {
+    if (this.companyForm.dirty && !this.isSubmitting) {
       return false;
     }
     return true;
@@ -296,7 +288,7 @@ export class CompanyEditComponent implements OnInit {
     this.sharedService.back();
   }
 
-  clearControlValue(control:AbstractControl){
+  clearControlValue(control: AbstractControl) {
     this.sharedService.clearControlValue(control);
   }
 }

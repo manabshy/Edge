@@ -3,8 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { PropertyService } from '../shared/property.service';
 import { Observable } from 'rxjs';
 import { InstructionInfo } from '../shared/property';
-import { AppUtils } from 'src/app/core/shared/utils';
-import { SharedService } from 'src/app/core/services/shared.service';
 import { tap } from 'rxjs/operators';
 import { InfoService } from 'src/app/core/services/info.service';
 
@@ -27,20 +25,16 @@ export class PropertyDetailInstructionsComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
     private propertyService: PropertyService,
-    private infoService: InfoService,
-    private sharedService: SharedService) { }
+    private infoService: InfoService) { }
 
   ngOnInit() {
-    if (AppUtils.listInfo) {
-      this.listInfo = AppUtils.listInfo;
-      this.setStatusesInfo();
-    } else {
-      this.infoService.getDropdownListInfo().subscribe(data => {
+    this.infoService.info$.subscribe(data => {
+      if (data) {
         this.listInfo = data;
-        console.log('info in new subscription', data)
         this.setStatusesInfo();
-      });
-    }
+      }
+      console.log('info changes property instructions here', data);
+    });
 
     this.propertyId = +this.route.snapshot.paramMap.get('id') || 0;
     if (this.propertyId) {
@@ -57,10 +51,12 @@ export class PropertyDetailInstructionsComponent implements OnInit {
   }
 
   setStatusesInfo() {
-    this.propertySaleStatuses = this.listInfo.result.propertySaleStatuses;
-    this.propertyLettingStatuses = this.listInfo.result.propertyLettingStatuses;
-    this.offerSaleStatuses = this.listInfo.result.offerSaleStatuses;
-    this.offerLettingStatuses = this.listInfo.result.offerLettingStatuses;
+    if (this.listInfo) {
+      this.propertySaleStatuses = this.listInfo.result.propertySaleStatuses;
+      this.propertyLettingStatuses = this.listInfo.result.propertyLettingStatuses;
+      this.offerSaleStatuses = this.listInfo.result.offerSaleStatuses;
+      this.offerLettingStatuses = this.listInfo.result.offerLettingStatuses;
+    }
   }
 
   setPropertyStatus() {

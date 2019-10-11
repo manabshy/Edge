@@ -66,15 +66,13 @@ export class AddressComponent implements OnInit, OnChanges {
   }
 
   init() {
-    if (AppUtils.listInfo) {
-      this.listInfo = AppUtils.listInfo;
-      this.setDropdownLists();
-    } else {
-      this.infoService.getDropdownListInfo().subscribe(data => {
+    this.infoService.info$.subscribe(data => {
+      if (data) {
         this.listInfo = data;
-        this.setDropdownLists();
-      });
-    }
+        this.countries = this.listInfo.result.countries;
+      }
+    });
+  
     this.addressForm = this.fb.group({
       fullAddress: ['', Validators.required],
       addressLines: ['', {validators: Validators.maxLength(500)}],
@@ -97,10 +95,6 @@ export class AddressComponent implements OnInit, OnChanges {
       }
       this.emitAddress();
     });
-  }
-
-  setDropdownLists() {
-    this.countries = this.listInfo.result.countries;
   }
 
   searchAddress() {

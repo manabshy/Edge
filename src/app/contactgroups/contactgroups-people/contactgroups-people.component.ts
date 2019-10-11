@@ -2,8 +2,10 @@ import { Component, OnInit, Renderer2, ViewChild, ElementRef, ɵConsole } from '
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Person, BasicPerson } from 'src/app/core/models/person';
-import { ContactGroup, PeopleAutoCompleteResult, ContactGroupsTypes,
-         ContactType, CompanyAutoCompleteResult, Company, PotentialDuplicateResult, ContactNote } from '../shared/contact-group';
+import {
+  ContactGroup, PeopleAutoCompleteResult, ContactGroupsTypes,
+  ContactType, CompanyAutoCompleteResult, Company, PotentialDuplicateResult, ContactNote
+} from '../shared/contact-group';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -118,7 +120,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     private infoService: InfoService,
     private toastr: ToastrService,
     private renderer: Renderer2
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.contactGroupTypes = ContactGroupsTypes;
@@ -149,15 +151,13 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   init() {
-    if (AppUtils.listInfo) {
-      this.listInfo = AppUtils.listInfo;
-      this.setDropdownLists();
-    } else {
-      this.infoService.getDropdownListInfo().subscribe(data => {
+    this.infoService.info$.subscribe(data => {
+      if (data) {
         this.listInfo = data;
-        this.setDropdownLists();
-      });
-    }
+        this.warnings = this.listInfo.result.personWarningStatuses;
+      }
+    });
+
     this.removedPersonIds = [];
     this.selectedPeople = [];
     if (!this.contactGroupId) {
@@ -244,10 +244,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
       .subscribe(data => this.findCompany(data));
   }
 
-  setDropdownLists() {
-    this.warnings = this.listInfo.result.personWarningStatuses;
-  }
-
   isCompanyContactGroup(isSelectedTypeCompany: boolean) {
     this.contactGroupDetails = {} as ContactGroup;
     this.contactGroupDetails.contactPeople = [];
@@ -315,14 +311,14 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.companyFinderForm.get('companyName').setValue(contactGroup.companyName);
       this.getCompanyDetails(contactGroup.companyId);
     }
-      this.contactGroupDetails = contactGroup;
-      this.contactGroupDetailsForm.patchValue({
-        salutation: contactGroup.salutation,
-        addressee: contactGroup.addressee,
-        comments: contactGroup.comments,
-        isRelocationAgent: contactGroup.isRelocationAgent,
-        contactType: contactGroup.contactType
-      });
+    this.contactGroupDetails = contactGroup;
+    this.contactGroupDetailsForm.patchValue({
+      salutation: contactGroup.salutation,
+      addressee: contactGroup.addressee,
+      comments: contactGroup.comments,
+      isRelocationAgent: contactGroup.isRelocationAgent,
+      contactType: contactGroup.contactType
+    });
   }
   findCompany(searchTerm: string) {
     this.isLoadingCompaniesVisible = true;
@@ -336,21 +332,21 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.contactGroupService.getPotentialDuplicatePeople(person).subscribe(data => {
       this.potentialDuplicatePeople = data;
       if (data) {
-      this.newPerson.firstName = data.firstName,
-      this.newPerson.middleName = data.middleName,
-      this.newPerson.lastName = data.lastName;
+        this.newPerson.firstName = data.firstName,
+          this.newPerson.middleName = data.middleName,
+          this.newPerson.lastName = data.lastName;
       }
       this.checkDuplicatePeople(person);
     });
   }
   checkDuplicatePeople(person: BasicPerson) {
-   const matchedPeople = [];
-   if (this.potentialDuplicatePeople) {
+    const matchedPeople = [];
+    if (this.potentialDuplicatePeople) {
       this.potentialDuplicatePeople.matches.forEach((x) => {
         const firstName = x.firstName ? x.firstName.toLowerCase() : '';
         const middleName = x.middleNames ? x.middleNames.toLowerCase() : '';
         const lastName = x.lastName ? x.lastName.toLowerCase() : '';
-        const fullName =  middleName ? `${firstName} ${middleName} ${lastName} ` :  `${firstName} ${lastName} `;
+        const fullName = middleName ? `${firstName} ${middleName} ${lastName} ` : `${firstName} ${lastName} `;
         const sameName = fullName.toLowerCase().trim() === person.fullName.toLowerCase().trim();
         const email = x.emailAddresses.filter(x => x === person.emailAddress);
         const phone = x.phoneNumbers.filter(x => x === person.phoneNumber ? person.phoneNumber.replace(/\s+/g, '') : '');
@@ -361,7 +357,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
             x.matchScore = 10;
             break;
           case (sameName) && (sameEmail || samePhone):
-              x.matchScore = 7;
+            x.matchScore = 7;
             break;
           default:
             x.matchScore = 0;
@@ -369,7 +365,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         matchedPeople.push(x);
       });
       this.potentialDuplicatePeople.matches = matchedPeople;
-   }
+    }
   }
   createNewContactGroupPerson(event) {
     event.preventDefault();
@@ -382,28 +378,28 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   setMainPerson(id: number) {
-   this.contactGroupDetails.contactPeople.forEach((x: Person) => {
-    if (x.personId === id) {
-      x.isMainPerson = true;
-    } else {
-      x.isMainPerson = false;
-    }
-   });
+    this.contactGroupDetails.contactPeople.forEach((x: Person) => {
+      if (x.personId === id) {
+        x.isMainPerson = true;
+      } else {
+        x.isMainPerson = false;
+      }
+    });
   }
 
   setImportantNotes() {
     this.importantContactNotes = this.contactGroupDetails.contactNotes
-                                .filter(x => x.isImportant && +x.contactGroupId === this.contactGroupId);
+      .filter(x => x.isImportant && +x.contactGroupId === this.contactGroupId);
     this.importantPeopleNotes = this.contactGroupDetails.contactNotes.filter(x => x.isImportant);
     this.contactGroupDetails.contactPeople.forEach(x => {
       x.personNotes = this.importantPeopleNotes.filter(p => p.personId === x.personId);
     });
   }
 
-   getContactNotes() {
-     this.bottomReached = false;
+  getContactNotes() {
+    this.bottomReached = false;
     this.getNextContactNotesPage(this.page);
-    }
+  }
 
   private getNextContactNotesPage(page) {
     this.contactGroupService
@@ -427,13 +423,13 @@ export class ContactgroupsPeopleComponent implements OnInit {
       companyName = this.companyFinderForm.get('companyName').value;
     }
     this._router.navigate(['/company-centre/detail', id, 'edit'],
-    {queryParams: {isNewCompany: newCompany, isEditingSelectedCompany: true, companyName: companyName }});
+      { queryParams: { isNewCompany: newCompany, isEditingSelectedCompany: true, companyName: companyName } });
   }
 
   editSelectedPerson(id: number) {
     this.isEditingSelectedPerson = true;
     this.contactGroupBackUp();
-    this._router.navigate(['../../edit'], {queryParams: {groupPersonId: id, isEditingSelectedPerson: true}, relativeTo: this.route});
+    this._router.navigate(['../../edit'], { queryParams: { groupPersonId: id, isEditingSelectedPerson: true }, relativeTo: this.route });
   }
 
   contactGroupBackUp() {
@@ -476,12 +472,12 @@ export class ContactgroupsPeopleComponent implements OnInit {
       title: 'Are you sure you want to remove ' + fullName + '?',
       actions: ['No', 'Remove']
     };
-    const modal = this.modalService.show(ConfirmModalComponent, {ignoreBackdropClick: true, initialState});
+    const modal = this.modalService.show(ConfirmModalComponent, { ignoreBackdropClick: true, initialState });
     modal.content.subject = subject;
     return subject.asObservable();
-   }
+  }
 
-   initCompanySearch() {
+  initCompanySearch() {
     if (this.contactGroupDetails && this.contactGroupDetails.referenceCount) {
       return;
     }
@@ -490,9 +486,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
     if (this.companyFinderForm.get('companyName').value) {
       this.companyFinderForm.get('companyName').setValue(this.searchCompanyTermBK);
     }
-   }
+  }
 
-   selectCompany(company: Company) {
+  selectCompany(company: Company) {
     this.foundCompanies = null;
     this.selectedCompanyDetails = company;
     this.isCompanyAdded = true;
@@ -500,10 +496,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.companyFinderForm.get('companyName').setValue(company.companyName);
     setTimeout(() => {
       if (this.companyNameInput) {
-        this.companyNameInput.nativeElement.scrollIntoView({block: 'center'});
+        this.companyNameInput.nativeElement.scrollIntoView({ block: 'center' });
       }
     });
-   }
+  }
 
   getCompanyDetails(companyId: number) {
     this.contactGroupService.getCompany(companyId).subscribe(data => {
@@ -516,7 +512,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   selectPerson(id: number) {
-    if (this.removedPersonIds.indexOf(id) >= 0 ) {
+    if (this.removedPersonIds.indexOf(id) >= 0) {
       this.removedPersonIds.splice(this.removedPersonIds.indexOf(id), 1);
     }
     if (id !== 0 && !this.checkDuplicateInContactGroup(id)) {
@@ -623,11 +619,11 @@ export class ContactgroupsPeopleComponent implements OnInit {
     if (this.contactGroupDetails.contactType === ContactType.CompanyContact) {
       validForm = this.contactGroupDetailsForm.valid && this.companyFinderForm.valid;
     }
-   if (validForm) {
-     if (this.contactGroupDetailsForm.dirty || this.companyFinderForm.dirty) {
+    if (validForm) {
+      if (this.contactGroupDetailsForm.dirty || this.companyFinderForm.dirty) {
         const contactPeople = this.contactGroupDetails.contactPeople.length;
         if (this.selectedPeople.length || contactPeople) {
-          const contactGroup = {...this.contactGroupDetails, ...this.contactGroupDetailsForm.value};
+          const contactGroup = { ...this.contactGroupDetails, ...this.contactGroupDetailsForm.value };
           this.isSubmitting = true;
           this.errorMessage = null;
           if (contactGroup.contactGroupId) {
@@ -636,13 +632,13 @@ export class ContactgroupsPeopleComponent implements OnInit {
             this.addNewContactGroup(contactGroup);
           }
         }
-     } else {
-      this.onSaveComplete(this.contactGroupId);
-     }
-   } else {
-     this.errorMessage = {} as WedgeError;
-    this.errorMessage.displayMessage = 'Please correct validation errors';
-   }
+      } else {
+        this.onSaveComplete(this.contactGroupId);
+      }
+    } else {
+      this.errorMessage = {} as WedgeError;
+      this.errorMessage.displayMessage = 'Please correct validation errors';
+    }
   }
   private addNewContactGroup(contactGroup: ContactGroup) {
     if (this.isNewCompanyContact) {
@@ -659,14 +655,14 @@ export class ContactgroupsPeopleComponent implements OnInit {
           this.contactGroupDetails.contactPeople.push(this.selectedPerson);
         }
         this.contactGroupService
-        .addContactGroup(contactGroup)
-        .subscribe(res => {
-          this.onSaveComplete(res.result.contactGroupId);
-        }, (error: WedgeError) => {
-          this.errorMessage = error;
-          this.sharedService.showError(this.errorMessage);
-          this.isSubmitting = false;
-        });
+          .addContactGroup(contactGroup)
+          .subscribe(res => {
+            this.onSaveComplete(res.result.contactGroupId);
+          }, (error: WedgeError) => {
+            this.errorMessage = error;
+            this.sharedService.showError(this.errorMessage);
+            this.isSubmitting = false;
+          });
       } else {
         this.contactGroupDetails.contactPeople.push(this.selectedPerson);
         this.isCompanyAdded = false;
@@ -675,15 +671,15 @@ export class ContactgroupsPeopleComponent implements OnInit {
       }
 
     } else {
-    this.contactGroupService
-      .addContactGroup(contactGroup)
-      .subscribe(res => {
-        this.onSaveComplete(res.result.contactGroupId);
-      }, (error: WedgeError) => {
-        this.errorMessage = error;
-        this.sharedService.showError(this.errorMessage);
-        this.isSubmitting = false;
-      });
+      this.contactGroupService
+        .addContactGroup(contactGroup)
+        .subscribe(res => {
+          this.onSaveComplete(res.result.contactGroupId);
+        }, (error: WedgeError) => {
+          this.errorMessage = error;
+          this.sharedService.showError(this.errorMessage);
+          this.isSubmitting = false;
+        });
     }
   }
 
@@ -752,7 +748,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       addressee: addressee,
       contactType: type,
       comments: this.contactGroupDetails.comments
-    }, {onlySelf: false});
+    }, { onlySelf: false });
     this.contactGroupDetailsForm.markAsDirty();
   }
 
@@ -806,7 +802,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   canDeactivate(): boolean {
     if ((this.contactGroupDetailsForm.dirty || this.companyFinderForm.dirty) &&
-         !this.isSubmitting && !this.isEditingSelectedPerson && !this.isEditingSelectedCompany) {
+      !this.isSubmitting && !this.isEditingSelectedPerson && !this.isEditingSelectedCompany) {
       return false;
     }
     return true;

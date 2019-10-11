@@ -29,14 +29,11 @@ export class PropertyDetailNotesComponent extends BaseComponent implements OnIni
     private infoService: InfoService) { super(); }
 
   ngOnInit() {
-    if (AppUtils.listInfo) {
-      this.listInfo = AppUtils.listInfo;
-    } else {
-      this.infoService.getDropdownListInfo().subscribe(data => {
+    this.infoService.info$.subscribe(data => {
+      if (data) {
         this.listInfo = data;
-        console.log('info in new subscription', this.noteTypes);
-      });
-    }
+      }
+    });
 
     this.propertyId = +this.route.snapshot.paramMap.get('id') || 0;
     if (this.propertyId) {

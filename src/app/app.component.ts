@@ -59,11 +59,7 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
     ).subscribe((event: any[]) => {
       AppUtils.prevRouteBU = AppUtils.prevRoute || '';
       AppUtils.prevRoute = event[0].urlAfterRedirects;
-      // console.log('before prev url',  AppUtils.prevRoute);
-      // if (AppUtils.prevRoute.includes('/auth-callback#')) {
-      //   AppUtils.prevRoute = event[1].urlAfterRedirects;
-      //   console.log('prev url after login',  AppUtils.prevRoute);
-      // }
+     
       console.log('prev url',  AppUtils.prevRoute);
       this.isScrollTopVisible = false;
       this.isFading = true;
@@ -81,7 +77,6 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
         if (data) {
           this.currentStaffMember = data;
           this.isCurrentUserAvailable = true;
-          AppUtils.currentStaffMemberGlobal = data;
           this.staffMemberService.currentStaffMemberChange(data);
           console.log('app component current user', data);
         }
@@ -90,7 +85,6 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
       });
 
       this.infoService.getDropdownListInfo().pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
-        AppUtils.listInfo = data;
         this.infoService.infoChanged(data);
         console.log('app component list info', data);
       });

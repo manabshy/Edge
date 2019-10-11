@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
-import { AuthService } from './auth.service';
-import { Observable, Subject, BehaviorSubject, of } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { AppConstants } from '../shared/app-constants';
-import { map, tap, shareReplay, publishReplay, refCount, take } from 'rxjs/operators';
+import { map, shareReplay } from 'rxjs/operators';
 import { StaffMember, StaffMemberResult } from '../models/staff-member';
-import { Staff } from 'src/app/diary/shared/diary';
 
 const CACHE_SIZE = 1;
 @Injectable({

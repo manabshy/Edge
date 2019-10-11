@@ -26,14 +26,14 @@ export class TelephoneComponent implements OnInit {
   @Input() searchTerm: string;
   @Input() warning: any;
   isDialing: boolean;
-  sms: boolean = true;
+  sms = true;
   currentStaffMember: StaffMember;
 
   constructor(private modalService: BsModalService,
-              private tapiService: TapiService,
-              private sharedService: SharedService,
-              private toastr: ToastrService,
-              private staffMemberService: StaffMemberService) { }
+    private tapiService: TapiService,
+    private sharedService: SharedService,
+    private toastr: ToastrService,
+    private staffMemberService: StaffMemberService) { }
 
   ngOnInit() {
     if (!this.sharedService.isUKMobile(this.number)) {
@@ -103,7 +103,7 @@ export class TelephoneComponent implements OnInit {
       salutation: this.person.salutation,
       actions: ['Cancel', 'Send SMS']
     };
-    const modal = this.modalService.show(SmsModalComponent, {initialState });
+    const modal = this.modalService.show(SmsModalComponent, { initialState });
     modal.content.subject = subject;
     return subject.asObservable();
   }
@@ -114,16 +114,11 @@ export class TelephoneComponent implements OnInit {
       this.leaveANoteBanner();
     } else {
 
-      if (AppUtils.currentStaffMemberGlobal) {
-        this.currentStaffMember = AppUtils.currentStaffMemberGlobal;
-        console.log('global staff member in home in ngOnInit', this.currentStaffMember);
-      } else {
-        this.staffMemberService.getCurrentStaffMember().subscribe(data => {
-        this.currentStaffMember = data;
-        }, (error: WedgeError) => {
-          this.sharedService.showError(error);
-        });
-      }
+      this.staffMemberService.currentStaffMember$.subscribe(data => {
+        if (data) {
+          this.currentStaffMember = data;
+        }
+      });
 
       const tapiInfo: TapiRequestInfo = {
         officeId: this.currentStaffMember.homeOffice.officeId,
@@ -140,17 +135,17 @@ export class TelephoneComponent implements OnInit {
         this.calling();
         console.log(data);
       },
-      (error: WedgeError) => {
-        this.isDialing = false;
-        this.sharedService.showError(error);
-      });
+        (error: WedgeError) => {
+          this.isDialing = false;
+          this.sharedService.showError(error);
+        });
 
     }
   }
 
   calling() {
     this.isDialing = false;
-    this.endCallBanner()
+    this.endCallBanner();
     this.leaveANoteBanner();
   }
 
@@ -162,28 +157,28 @@ export class TelephoneComponent implements OnInit {
       toastClass: 'ngx-toastr toast-call',
       disableTimeOut: true
     });
-    
+
     this.sharedService.lastCallEndCallToast
-    .onTap
-    .pipe(take(1))
-    .subscribe(() => {
-      const tapiInfo: TapiRequestInfo = {
-        officeId: this.currentStaffMember.homeOffice.officeId,
-        staffId: this.currentStaffMember.staffMemberId,
-        isOutGoingCall: true,
-        callerNmber: this.currentStaffMember.phone,
-        calledNumber: this.number,
-        guid: '',
-        isCallHangedUp: true
-      };
+      .onTap
+      .pipe(take(1))
+      .subscribe(() => {
+        const tapiInfo: TapiRequestInfo = {
+          officeId: this.currentStaffMember.homeOffice.officeId,
+          staffId: this.currentStaffMember.staffMemberId,
+          isOutGoingCall: true,
+          callerNmber: this.currentStaffMember.phone,
+          calledNumber: this.number,
+          guid: '',
+          isCallHangedUp: true
+        };
 
-      this.tapiService.putCallRequest(tapiInfo).subscribe(data => {
-        console.log(data);
-        this.toastr.clear(this.sharedService.lastCallEndCallToast.toastId);
+        this.tapiService.putCallRequest(tapiInfo).subscribe(data => {
+          console.log(data);
+          this.toastr.clear(this.sharedService.lastCallEndCallToast.toastId);
+        });
+
+        console.log('hang up!');
       });
-
-      console.log('hang up!');
-    });
   }
 
   leaveANoteBanner() {
@@ -196,15 +191,15 @@ export class TelephoneComponent implements OnInit {
       closeButton: true
     });
     this.sharedService.lastCallNoteToast
-    .onTap
-    .pipe(take(1))
-    .subscribe(() => {
-      const data = {
-        person: this.person,
-        isPersonNote: true
-      };
-      this.sharedService.addNote(data);
-      this.toastr.clear(this.sharedService.lastCallNoteToast.toastId);
-    });
+      .onTap
+      .pipe(take(1))
+      .subscribe(() => {
+        const data = {
+          person: this.person,
+          isPersonNote: true
+        };
+        this.sharedService.addNote(data);
+        this.toastr.clear(this.sharedService.lastCallNoteToast.toastId);
+      });
   }
 }

@@ -30,16 +30,14 @@ export class PropertyDetailOffersComponent implements OnInit {
     private sharedService: SharedService) { }
 
   ngOnInit() {
-    if (AppUtils.listInfo) {
-      this.listInfo = AppUtils.listInfo;
-      this.setStatusesInfo();
-    } else {
-      this.infoService.getDropdownListInfo().subscribe(data => {
-        this.listInfo = data;
-        this.setStatusesInfo();
-      });
-    }
-
+    this.infoService.info$.subscribe(data => {
+      if (data) {
+         this.listInfo = data;
+         this.setStatusesInfo();
+      }
+       console.log('info changes property detail here', data);
+     });
+     
     this.propertyId = +this.route.snapshot.paramMap.get('id') || 0;
     if (this.propertyId) {
       this.offers$ = this.propertyService.getPropertyOffers(this.propertyId)
@@ -54,10 +52,12 @@ export class PropertyDetailOffersComponent implements OnInit {
   }
 
   setStatusesInfo() {
-    this.propertySaleStatuses = this.listInfo.result.propertySaleStatuses;
-    this.propertyLettingStatuses = this.listInfo.result.propertyLettingStatuses;
-    this.offerSaleStatuses = this.listInfo.result.offerSaleStatuses;
-    this.offerLettingStatuses = this.listInfo.result.offerLettingStatuses;
+   if (this.listInfo) {
+      this.propertySaleStatuses = this.listInfo.result.propertySaleStatuses;
+      this.propertyLettingStatuses = this.listInfo.result.propertyLettingStatuses;
+      this.offerSaleStatuses = this.listInfo.result.offerSaleStatuses;
+      this.offerLettingStatuses = this.listInfo.result.offerLettingStatuses;
+   }
   }
 
   setPropertyStatus() {

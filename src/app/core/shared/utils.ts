@@ -16,13 +16,13 @@ export interface ICachedRoute {
 }
 
 export class AppUtils {
-  public static prevRoute: string = '';
-  public static prevRouteBU: string = '';
-  public static deactivateRoute: string = '';
+  public static prevRoute = '';
+  public static prevRouteBU = '';
+  public static deactivateRoute = '';
   public static homeSelectedTab: number;
   public static dashboardSelectedTab: number;
-  public static isDiarySearchVisible: boolean = false;
-  public static parentRoute: string = '';
+  public static isDiarySearchVisible = false;
+  public static parentRoute = '';
   public static searchTerm: string;
   public static companySearchTerm: any;
   public static newSignerId: number;
@@ -34,8 +34,6 @@ export class AppUtils {
   public static holdingCloned: boolean;
   static firstContactPerson: Person;
   static propertySearchTerm: string;
-  static currentStaffMemberGlobal: StaffMember;
-  static listInfo: any;
   static openedWindows: any[] = [];
   static contactInfoForNotes: any;
   static routeCache = new Map<string, ICachedRoute>();
@@ -55,7 +53,7 @@ export class AppUtils {
     const moDate = isDate(date) ? date : (date);
     return format(moDate, 'HH:mm');
   }
-  public static capitaliseFirstLetter<T>(value: string): string{
+  public static capitaliseFirstLetter<T>(value: string): string {
     if (value) {
       const result = value.charAt(0).toLocaleUpperCase();
       return result.concat(value.substr(1));

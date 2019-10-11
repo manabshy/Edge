@@ -26,12 +26,11 @@ export class ContactgroupsDetailComponent implements OnInit {
   isCollapsed: boolean;
   summaryTotals: PersonSummaryFigures;
   subNav = ContactGroupDetailsSubNavItems;
-  // importantPersonNotes: ContactNote[];
 
   constructor(private contactGroupService: ContactGroupsService,
-              private sharedService: SharedService,
-              private infoService: InfoService,
-              private route: ActivatedRoute) { }
+    private sharedService: SharedService,
+    private infoService: InfoService,
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
     console.log(this.subNav);
@@ -45,15 +44,12 @@ export class ContactgroupsDetailComponent implements OnInit {
   }
 
   init() {
-    if (AppUtils.listInfo) {
-      this.listInfo = AppUtils.listInfo;
-      this.setDropdownLists();
-    } else {
-      this.infoService.getDropdownListInfo().subscribe(data => {
+    this.infoService.info$.subscribe(data => {
+      if (data) {
         this.listInfo = data;
-        this.setDropdownLists();
-      });
-    }
+        this.warnings = this.listInfo.result.personWarningStatuses;
+      }
+    });
     this.getSearchedPersonDetails(this.personId);
     this.getSearchedPersonContactGroups(this.personId);
     this.getSearchedPersonSummaryInfo(this.personId);
@@ -65,10 +61,6 @@ export class ContactgroupsDetailComponent implements OnInit {
         });
       }
     });
-  }
-
-  setDropdownLists() {
-    this.warnings = this.listInfo.result.personWarningStatuses;
   }
 
   getContactGroupById(contactGroupId: number) {

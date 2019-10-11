@@ -6,10 +6,8 @@ import { StaffMemberService } from '../core/services/staff-member.service';
 import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
 import { AppUtils } from '../core/shared/utils';
 import { StaffMember } from '../core/models/staff-member';
-import { SharedService, WedgeError } from '../core/services/shared.service';
+import { SharedService } from '../core/services/shared.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { environment } from 'src/environments/environment';
-import { CompanyDetailComponent } from '../company/company-detail/company-detail.component';
 
 @Component({
   selector: 'app-home',
@@ -17,9 +15,7 @@ import { CompanyDetailComponent } from '../company/company-detail/company-detail
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  // get currentStaffMember(): StaffMember {
-  //   return this.staffMemberService.currentStaffMember;
-  // }
+
   currentStaffMember: StaffMember;
   get isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
@@ -29,28 +25,19 @@ export class HomeComponent implements OnInit {
   @ViewChild('homeTabs', { static: true }) homeTabs: TabsetComponent;
 
   constructor(private authService: AuthService,
-              private staffMemberService: StaffMemberService,
-              private sharedService: SharedService,
-              private router: Router,
-              private route: ActivatedRoute) { }
+    private staffMemberService: StaffMemberService,
+    private sharedService: SharedService,
+    private router: Router,
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
-    if (AppUtils.currentStaffMemberGlobal) {
-      this.currentStaffMember = AppUtils.currentStaffMemberGlobal;
-      console.log('global staff member in home in ngOnInit', this.currentStaffMember);
-    } else {
-      this.staffMemberService.getCurrentStaffMember().subscribe(data => {
-      this.currentStaffMember = data;
-        console.log('global staff member in home from new sub', this.currentStaffMember);
-      }, (error: WedgeError) => {
-        this.sharedService.showError(error);
-      });
-    }
+    this.staffMemberService.currentStaffMember$.subscribe(data => {
+      if (data) {
+        this.currentStaffMember = data;
+      }
+    });
 
-    //this.sharedService.getDropdownListInfo().subscribe(data => this.info = data);
-    // this.sharedService.getDropdownListInfo().subscribe();
-    // console.log('info detail in home component', this.info );
-    this.route.queryParams.subscribe(params =>  {
+    this.route.queryParams.subscribe(params => {
       if (params['selectedTab']) {
         AppUtils.homeSelectedTab = params['selectedTab'];
       }

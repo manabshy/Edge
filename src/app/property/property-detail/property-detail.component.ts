@@ -4,8 +4,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Property, PropertyTypes, PropertyStyles, PropertyDetailsSubNavItems, PropertySummaryFigures } from '../shared/property';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { AppUtils } from 'src/app/core/shared/utils';
 import { FormatAddressPipe } from 'src/app/core/shared/format-address.pipe';
 import { InfoService } from 'src/app/core/services/info.service';
 
@@ -61,7 +59,6 @@ export class PropertyDetailComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.propertyId = +params['id'] || 0;
-
     });
     // this.propertyDetails$ = this.propertyService.propertyDetails$
     //   .pipe
@@ -76,30 +73,29 @@ export class PropertyDetailComponent implements OnInit {
     // if (this.propertyId) {
     //   this.propertyService.currentPropertyChanged(this.propertyId);
     // }
-    if (AppUtils.listInfo) {
-      this.listInfo = AppUtils.listInfo;
-      this.setDropdownLists();
-    } else {
-      this.infoService.getDropdownListInfo().subscribe(data => {
+
+    this.infoService.info$.subscribe(data => {
+      if (data) {
         this.listInfo = data;
         this.setDropdownLists();
-      });
-    }
+        console.log('changes in property detail...', data);
+      }
+    });
     if (this.propertyId) {
       this.getPropertyDetails(this.propertyId);
     }
-
   }
 
   setDropdownLists() {
     this.regions = new Map(Object.entries(this.listInfo.result.regions));
     this.allAreas = new Map(Object.entries(this.listInfo.result.areas));
     this.allSubAreas = new Map(Object.entries(this.listInfo.result.subAreas));
-    // console.log('new map', map);
   }
+
   isObject(val) {
     return val instanceof Object;
   }
+
   getPropertyDetails(propertyId: number) {
     this.propertyService.getProperty(propertyId, true, true).subscribe(data => {
       if (data) {
