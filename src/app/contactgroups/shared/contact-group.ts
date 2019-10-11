@@ -28,9 +28,10 @@ export interface ContactGroup {
   companyAmlCompletedDate?: string;
   isAmlCompleted: boolean;
 }
-export const ContactGroupDetailsSubNav = ['notes','leads','searches','valuations', 'instructions', 'offers', 'tenancies', 'lettings-managements', 'home-managements'];
+export const ContactGroupDetailsSubNav = ['notes', 'instructions', 'offers', 'searches', 'lettings-managements', 'home-managements'];
+// export const ContactGroupDetailsSubNav = ['notes','leads','searches','valuations', 'instructions', 'offers', 'tenancies', 'lettings-managements', 'home-managements'];
 
-export const ContactGroupDetailsSubNavItems: SubNavItem[] = ContactGroupDetailsSubNav.map(x=>({
+export const ContactGroupDetailsSubNavItems: SubNavItem[] = ContactGroupDetailsSubNav.map(x => ({
   link: x,
   label: SubNav.subNavLabel(x),
   value:  SubNav.subNavValue(x),
@@ -128,7 +129,7 @@ export interface CompanyAutoCompleteResult extends Company {
   companyName: string;
 }
 
-export interface ContactGroupAutoCompleteResult extends PersonWarning{
+export interface ContactGroupAutoCompleteResult extends PersonWarning {
   personId: number;
   title: string;
   firstName: string;
