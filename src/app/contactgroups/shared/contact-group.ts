@@ -34,7 +34,7 @@ export const ContactGroupDetailsSubNav = ['notes', 'instructions', 'offers', 'se
 export const ContactGroupDetailsSubNavItems: SubNavItem[] = ContactGroupDetailsSubNav.map(x => ({
   link: x,
   label: SubNav.subNavLabel(x),
-  value:  SubNav.subNavValue(x),
+  value: SubNav.subNavValue(x),
 }));
 
 
@@ -161,6 +161,21 @@ export interface PeopleAutoCompleteResult {
   matchScore: number;
   ranking: number;
 }
+export interface ContactOffer {
+  propertyAddress: Address;
+}
+export interface ContactInstruction {
+  propertyAddress: Address;
+}
+export interface ContactSearch {
+  propertyAddress: Address;
+}
+export interface ContactLettingsManagement {
+  propertyAddress: Address;
+}
+export interface ContactHomeManagement {
+  propertyAddress: Address;
+}
 export interface BasicContactGroup {
   contactGroupId: number;
   isCompany: boolean;
@@ -174,10 +189,10 @@ export enum ContactType {
   CompanyContact = 4,
   ReloContact = 8
 }
-export const ContactGroupsTypes = new Map( [
-  [ContactType.Individual,  'Individual/Joint'],
-  [ContactType.Sharers,  'Multi/Sharer'],
-  [ContactType.CompanyContact,  'Company Contact']
+export const ContactGroupsTypes = new Map([
+  [ContactType.Individual, 'Individual/Joint'],
+  [ContactType.Sharers, 'Multi/Sharer'],
+  [ContactType.CompanyContact, 'Company Contact']
 ]);
 export interface ContactGroupsType {
   id: string;

@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, Subject, BehaviorSubject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import {
   ContactGroupAutoCompleteResult, ContactGroupAutoCompleteData,
   PersonContactData, ContactGroupData, ContactGroup, BasicContactGroup,
   BasicContactGroupData, CompanyAutoCompleteResult, CompanyContactGroupAutoCompleteData as CompanyAutoCompleteData,
   Company, CompanyData, SignerAutoCompleteData, Signer, PersonSummaryFiguresData,
-  PersonSummaryFigures, SignerData, PotentialDuplicateResult, PeopleAutoCompleteData2, ContactNote, ContactNoteData
+  PersonSummaryFigures, SignerData, PotentialDuplicateResult, PeopleAutoCompleteData2,
+  ContactNote, ContactNoteData, ContactInstruction, ContactSearch, ContactOffer, ContactLettingsManagement, ContactHomeManagement
 } from './contact-group';
 import { map, tap } from 'rxjs/operators';
 import { Person, BasicPerson } from 'src/app/core/models/person';
@@ -40,8 +41,6 @@ export class ContactGroupsService {
   constructor(private http: HttpClient) { }
 
   getAutocompleteContactGroups(searchTerm: any, pageSize?: number, page?: number): Observable<ContactGroupAutoCompleteResult[]> {
-    // pageSize = 10;
-    // page = 1;
     if (!page || +page === 0) {
       page = 1;
     }
@@ -79,9 +78,7 @@ export class ContactGroupsService {
   }
 
   getContactGroupbyId(contactGroupId: number, includeOnlyImportantNotes?: boolean): Observable<ContactGroup> {
-    if (!includeOnlyImportantNotes) {
-      includeOnlyImportantNotes = false;
-    }
+    if (!includeOnlyImportantNotes) { includeOnlyImportantNotes = false; }
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
       fromObject: {
@@ -197,12 +194,8 @@ export class ContactGroupsService {
   }
 
   getPersonNotes(personId: number, pageSize?: number, page?: number): Observable<ContactNote[]> {
-    if (!page || +page === 0) {
-      page = 1;
-    }
-    if (pageSize == null) {
-      pageSize = 10;
-    }
+    if (!page || +page === 0) { page = 1; }
+    if (pageSize == null) { pageSize = 10; }
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
       fromObject: {
@@ -220,12 +213,8 @@ export class ContactGroupsService {
   }
 
   getContactGroupNotes(contactGroupId: number, pageSize?: number, page?: number): Observable<ContactNote[]> {
-    if (!page || +page === 0) {
-      page = 1;
-    }
-    if (pageSize == null) {
-      pageSize = 10;
-    }
+    if (!page || +page === 0) { page = 1; }
+    if (pageSize == null) { pageSize = 10; }
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
       fromObject: {
@@ -268,6 +257,31 @@ export class ContactGroupsService {
       .pipe(
         map(response => response.result),
         tap(data => console.log('updated contactgroup note here...', JSON.stringify(data))));
+  }
+
+  getInstructions(personId: number): Observable<ContactInstruction> {
+    const url = `${AppConstants.basePersonUrl}/${personId}/instructions`;
+    return this.http.get<any>(url).pipe(map(response => response.result));
+  }
+
+  getSearches(personId: number): Observable<ContactSearch> {
+    const url = `${AppConstants.basePersonUrl}/${personId}/searches`;
+    return this.http.get<any>(url).pipe(map(response => response.result));
+  }
+
+  getOffers(personId: number): Observable<ContactOffer> {
+    const url = `${AppConstants.basePersonUrl}/${personId}/offers`;
+    return this.http.get<any>(url).pipe(map(response => response.result));
+  }
+
+  getLettingsManagements(personId: number): Observable<ContactLettingsManagement> {
+    const url = `${AppConstants.basePersonUrl}/${personId}/lettingsManagements`;
+    return this.http.get<any>(url).pipe(map(response => response.result));
+  }
+
+  getHomeManagements(personId: number): Observable<ContactHomeManagement> {
+    const url = `${AppConstants.basePersonUrl}/${personId}/homeManagements`;
+    return this.http.get<any>(url).pipe(map(response => response.result));
   }
 
   contactInfoChanged(info: BasicContactGroup[]) {
