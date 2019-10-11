@@ -110,29 +110,22 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
     private staffMemberService: StaffMemberService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private _location: Location,
     private renderer: Renderer2) { }
 
   ngOnInit() {
-    console.log('list info Global in contact group edit component', AppUtils.listInfo);
-    if (AppUtils.listInfo) {
-      this.listInfo = AppUtils.listInfo;
-      this.setDropdownLists();
-    } else {
-      this.infoService.getDropdownListInfo().subscribe(data => {
+    this.infoService.info$.subscribe(data => {
+     if (data) {
         this.listInfo = data;
         this.setDropdownLists();
-      });
-    }
-    if (AppUtils.currentStaffMemberGlobal) {
-      this.currentStaffMember = AppUtils.currentStaffMemberGlobal;
-    } else {
-      this.staffMemberService.getCurrentStaffMember().subscribe(data => {
-      this.currentStaffMember = data;
-      }, (error: WedgeError) => {
-        this.sharedService.showError(error);
-      });
-    }
+     }
+      console.log('info changes here', data);
+    });
+    this.staffMemberService.currentStaffMember$.subscribe(data => {
+     if (data) {
+        this.currentStaffMember = data;
+     }
+      console.log('staff member changes here...', data);
+    });
     this.route.params.subscribe(params => this.personId = +params['personId'] || 0);
     this.route.queryParams.subscribe(params => {
       this.groupPersonId = +params['groupPersonId'] || 0;
@@ -157,10 +150,12 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
     this.enablePersonWarnings();
   }
   setDropdownLists() {
-    this.countries = this.listInfo.result.countries;
-    this.titles = this.listInfo.result.titles;
-    this.warnings = this.listInfo.result.personWarningStatuses;
-    this.telephoneTypes = this.listInfo.result.telephoneTypes;
+   if (this.listInfo) {
+      this.countries = this.listInfo.result.countries;
+      this.titles = this.listInfo.result.titles;
+      this.warnings = this.listInfo.result.personWarningStatuses;
+      this.telephoneTypes = this.listInfo.result.telephoneTypes;
+   }
   }
 
   enablePersonWarnings() {
@@ -235,7 +230,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
             }
           });
         }
-      })
+      });
     });
   }
 
@@ -252,7 +247,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
     }
   }
 
-  clearControlValue(control:AbstractControl){
+  clearControlValue(control: AbstractControl) {
     this.sharedService.clearControlValue(control);
   }
 
@@ -640,7 +635,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
           person.isNewPerson = true;
           holdingPeople[index] = person;
         }
-      })
+      });
     }
     if (this.newPersonId) {
       this.addNewPerson(this.newPersonId);
