@@ -42,6 +42,8 @@
 
     @include media-breakpoint-up(sm) {
         margin: spacer(4) $grid-gutter-width 70px auto;
+        position: sticky;
+        bottom: spacer(2);
     }
 
 }

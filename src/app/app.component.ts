@@ -123,7 +123,7 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
   }
 
   toggleScrollTop() {
-    if (window.innerHeight < this.appContainer.nativeElement.scrollHeight) {
+    if (window.innerHeight < this.appContainer.nativeElement.scrollHeight && window.scrollY) {
       this.isScrollTopVisible = true;
     } else {
       this.isScrollTopVisible = false;
