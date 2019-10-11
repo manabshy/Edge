@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, Renderer2, AfterViewInit, AfterContentInit, AfterContentChecked } from '@angular/core';
-import { SharedService, WedgeError, AddressAutoCompleteData, InfoDetail } from 'src/app/core/services/shared.service';
+import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractControl, ValidatorFn } from '@angular/forms';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { Person, Email, PhoneNumber, BasicPerson, TelephoneTypeId } from 'src/app/core/models/person';
@@ -14,6 +14,8 @@ import { Address } from 'src/app/core/models/address';
 import { ToastrService } from 'ngx-toastr';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
 import { StaffMember, Permission } from 'src/app/core/models/staff-member';
+import { AddressService, AddressAutoCompleteData } from 'src/app/core/services/address.service';
+import { InfoService, InfoDetail } from 'src/app/core/services/info.service';
 
 @Component({
   selector: 'app-contactgroups-detail-edit',
@@ -102,6 +104,8 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
   public keepOriginalOrder = (a) => a.key;
   constructor(public sharedService: SharedService,
     private toastr: ToastrService,
+    private addressService: AddressService,
+    private infoService: InfoService,
     private contactGroupService: ContactGroupsService,
     private staffMemberService: StaffMemberService,
     private fb: FormBuilder,
@@ -115,7 +119,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
       this.listInfo = AppUtils.listInfo;
       this.setDropdownLists();
     } else {
-      this.sharedService.getDropdownListInfo().subscribe(data => {
+      this.infoService.getDropdownListInfo().subscribe(data => {
         this.listInfo = data;
         this.setDropdownLists();
       });
@@ -287,7 +291,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
     } else {
       this.backToAddressesList = false;
     }
-    this.sharedService.findAddress(searchTerm, container).subscribe(data => {
+    this.addressService.findAddress(searchTerm, container).subscribe(data => {
       data.Items.forEach(x => {
         if (x.Id) {
           if (x.Type !== 'Address') {
@@ -303,7 +307,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
 
   private retrieveAddress(id: string) {
     if (this.foundAddress) {
-      this.sharedService.getAddress(id).subscribe(data => {
+      this.addressService.getAddress(id).subscribe(data => {
         this.retrievedAddresses = data;
         const retrievedAddress = this.retrievedAddresses.Items[0];
         const keys = Object.keys(retrievedAddress);

@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { FormatAddressPipe } from 'src/app/core/shared/format-address.pipe';
+import { InfoService } from 'src/app/core/services/info.service';
 
 @Component({
   selector: 'app-property-detail',
@@ -54,6 +55,7 @@ export class PropertyDetailComponent implements OnInit {
   constructor(private propertyService: PropertyService,
     private formatAddressPipe: FormatAddressPipe,
     private route: ActivatedRoute,
+    private infoService: InfoService,
     private sharedService: SharedService) { }
 
   ngOnInit() {
@@ -78,7 +80,7 @@ export class PropertyDetailComponent implements OnInit {
       this.listInfo = AppUtils.listInfo;
       this.setDropdownLists();
     } else {
-      this.sharedService.getDropdownListInfo().subscribe(data => {
+      this.infoService.getDropdownListInfo().subscribe(data => {
         this.listInfo = data;
         this.setDropdownLists();
       });

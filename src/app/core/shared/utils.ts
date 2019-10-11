@@ -3,7 +3,6 @@ import { isArray, isPlainObject, mapValues, isNull, isUndefined, random  } from 
 import { ContactGroup, Company } from 'src/app/contactgroups/shared/contact-group';
 import { Person } from '../models/person';
 import { StaffMember } from '../models/staff-member';
-import { DropdownListInfo } from '../services/shared.service';
 import { DetachedRouteHandle } from '@angular/router';
 
 

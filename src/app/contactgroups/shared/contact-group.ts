@@ -28,12 +28,13 @@ export interface ContactGroup {
   companyAmlCompletedDate?: string;
   isAmlCompleted: boolean;
 }
-export const ContactGroupDetailsSubNav = ['notes','leads','searches','valuations', 'instructions', 'offers', 'tenancies', 'lettings-managements', 'home-managements'];
+export const ContactGroupDetailsSubNav = ['notes', 'instructions', 'offers', 'searches', 'lettings-managements', 'home-managements'];
+// export const ContactGroupDetailsSubNav = ['notes','leads','searches','valuations', 'instructions', 'offers', 'tenancies', 'lettings-managements', 'home-managements'];
 
-export const ContactGroupDetailsSubNavItems: SubNavItem[] = ContactGroupDetailsSubNav.map(x=>({
+export const ContactGroupDetailsSubNavItems: SubNavItem[] = ContactGroupDetailsSubNav.map(x => ({
   link: x,
   label: SubNav.subNavLabel(x),
-  value:  SubNav.subNavValue(x),
+  value: SubNav.subNavValue(x),
 }));
 
 
@@ -128,7 +129,7 @@ export interface CompanyAutoCompleteResult extends Company {
   companyName: string;
 }
 
-export interface ContactGroupAutoCompleteResult extends PersonWarning{
+export interface ContactGroupAutoCompleteResult extends PersonWarning {
   personId: number;
   title: string;
   firstName: string;
@@ -160,6 +161,21 @@ export interface PeopleAutoCompleteResult {
   matchScore: number;
   ranking: number;
 }
+export interface ContactOffer {
+  propertyAddress: Address;
+}
+export interface ContactInstruction {
+  propertyAddress: Address;
+}
+export interface ContactSearch {
+  propertyAddress: Address;
+}
+export interface ContactLettingsManagement {
+  propertyAddress: Address;
+}
+export interface ContactHomeManagement {
+  propertyAddress: Address;
+}
 export interface BasicContactGroup {
   contactGroupId: number;
   isCompany: boolean;
@@ -173,10 +189,10 @@ export enum ContactType {
   CompanyContact = 4,
   ReloContact = 8
 }
-export const ContactGroupsTypes = new Map( [
-  [ContactType.Individual,  'Individual/Joint'],
-  [ContactType.Sharers,  'Multi/Sharer'],
-  [ContactType.CompanyContact,  'Company Contact']
+export const ContactGroupsTypes = new Map([
+  [ContactType.Individual, 'Individual/Joint'],
+  [ContactType.Sharers, 'Multi/Sharer'],
+  [ContactType.CompanyContact, 'Company Contact']
 ]);
 export interface ContactGroupsType {
   id: string;

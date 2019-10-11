@@ -18,7 +18,7 @@ import { ContactgroupsRoutingModule } from '../contactgroups-routing.module';
 import { ContactGroupsComponent } from '../contactgroups.component';
 import { timer, of, EMPTY, Observable, from } from 'rxjs';
 import { mapTo, first } from 'rxjs/operators';
-import { MockCountries, mockDropdownListInfo } from '../shared/test-helper/dropdown-list-data.json';
+import { MockCountries, MockDropdownListInfo } from '../shared/test-helper/dropdown-list-data.json';
 import { Mock } from 'protractor/built/driverProviders';
 import { ValidationMessages } from 'src/app/core/shared/app-constants';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -38,7 +38,7 @@ describe('ContactgroupsDetailEditComponent', () => {
   const person = <Person> <unknown>MockPerson;
   let contactGroupService: ContactGroupsService,
     mockSharedService = {
-      getDropdownListInfo: () => of(mockDropdownListInfo),
+      getDropdownListInfo: () => of(MockDropdownListInfo),
       scrollToFirstInvalidField: () => null,
       ISOToDate: () => Date(),
       isUKMobile: () => false,

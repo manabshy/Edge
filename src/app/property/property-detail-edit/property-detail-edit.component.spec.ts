@@ -14,7 +14,7 @@ import { ToastrService } from 'ngx-toastr';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MockProperty } from '../shared/test-helper';
 import { of, Observable, from } from 'rxjs';
-import { mockDropdownListInfo } from 'src/app/contactgroups/shared/test-helper/dropdown-list-data.json';
+import { MockDropdownListInfo } from 'src/app/contactgroups/shared/test-helper/dropdown-list-data.json';
 import { Property } from '../shared/property';
 import { ActivatedRouteStub } from 'src/testing/activated-route-stub';
 
@@ -25,7 +25,7 @@ fdescribe('PropertyDetailEditComponent', () => {
   let activedRouteStub: ActivatedRouteStub;
   let propertyServiceSpy;
   let mockSharedService = {
-    getDropdownListInfo: () => of(mockDropdownListInfo),
+    getDropdownListInfo: () => of(MockDropdownListInfo),
       scrollToFirstInvalidField: () => null,
       ISOToDate: () => Date(),
       isUKMobile: () => false,

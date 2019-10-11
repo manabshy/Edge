@@ -6,11 +6,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AppConstants, ValidationMessages, FormErrors } from 'src/app/core/shared/app-constants';
 import { Location } from '@angular/common';
 import { Address } from '../../core/models/address';
-import { SharedService, InfoDetail, WedgeError } from '../../core/services/shared.service';
+import { SharedService, WedgeError } from '../../core/services/shared.service';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { Signer } from 'src/app/contactgroups/shared/contact-group';
 import { ToastrService } from 'ngx-toastr';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
+import { InfoService, InfoDetail } from 'src/app/core/services/info.service';
 
 @Component({
   selector: 'app-property-detail-edit',
@@ -45,6 +46,7 @@ export class PropertyDetailEditComponent implements OnInit {
               private _router: Router,
               private propertyService: PropertyService,
               private sharedService: SharedService,
+              private infoService: InfoService,
               private contactGroupService: ContactGroupsService,
               private toastr: ToastrService,
               private fb: FormBuilder,
@@ -55,7 +57,7 @@ export class PropertyDetailEditComponent implements OnInit {
       this.listInfo = AppUtils.listInfo;
       this.setDropdownLists();
     } else {
-      this.sharedService.getDropdownListInfo().subscribe(data => {
+      this.infoService.getDropdownListInfo().subscribe(data => {
         this.listInfo = data;
         this.setDropdownLists();
       });

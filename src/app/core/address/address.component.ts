@@ -1,5 +1,5 @@
 import { Component, OnInit, Renderer2, Input, Output, EventEmitter, OnChanges } from '@angular/core';
-import { AddressAutoCompleteData, SharedService } from '../services/shared.service';
+import { SharedService } from '../services/shared.service';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AppConstants } from '../shared/app-constants';
 import { Person } from '../models/person';
@@ -8,6 +8,8 @@ import { Property } from 'src/app/property/shared/property';
 import { Address } from '../models/address';
 import { AppUtils } from '../shared/utils';
 import { debounceTime } from 'rxjs/operators';
+import { AddressService, AddressAutoCompleteData } from '../services/address.service';
+import { InfoService } from '../services/info.service';
 
 @Component({
   selector: 'app-address',
@@ -49,6 +51,8 @@ export class AddressComponent implements OnInit, OnChanges {
   }
 
   constructor(private sharedService: SharedService,
+              private addressService: AddressService,
+              private infoService: InfoService,
               private fb: FormBuilder,
               private renderer: Renderer2,
              ) { }
@@ -66,7 +70,7 @@ export class AddressComponent implements OnInit, OnChanges {
       this.listInfo = AppUtils.listInfo;
       this.setDropdownLists();
     } else {
-      this.sharedService.getDropdownListInfo().subscribe(data => {
+      this.infoService.getDropdownListInfo().subscribe(data => {
         this.listInfo = data;
         this.setDropdownLists();
       });
@@ -125,7 +129,7 @@ export class AddressComponent implements OnInit, OnChanges {
     } else {
       this.backToAddressesList = false;
     }
-    this.sharedService.findAddress(searchTerm, container).subscribe(data => {
+    this.addressService.findAddress(searchTerm, container).subscribe(data => {
       data.Items.forEach(x => {
         if (x.Id) {
           if (x.Type !== 'Address') {
@@ -141,7 +145,7 @@ export class AddressComponent implements OnInit, OnChanges {
 
   retrieveAddress(id: string) {
     if (this.foundAddress) {
-      this.sharedService.getAddress(id).subscribe(data => {
+      this.addressService.getAddress(id).subscribe(data => {
         this.retrievedAddresses = data;
         const retrievedAddress = this.retrievedAddresses.Items[0];
         const keys = Object.keys(retrievedAddress);

@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { PropertyService } from '../shared/property.service';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
 import { PropertyNote } from '../shared/property';
-import { SharedService, InfoDetail } from 'src/app/core/services/shared.service';
+import { SharedService } from 'src/app/core/services/shared.service';
 import * as _ from 'lodash';
 import { BaseComponent } from 'src/app/core/models/base-component';
 import { takeUntil } from 'rxjs/operators';
 import { AppUtils } from 'src/app/core/shared/utils';
+import { InfoService } from 'src/app/core/services/info.service';
 
 @Component({
   selector: 'app-property-detail-notes',
@@ -23,13 +23,16 @@ export class PropertyDetailNotesComponent extends BaseComponent implements OnIni
   noteTypes: any;
   listInfo: any;
 
-  constructor(private route: ActivatedRoute, private propertyService: PropertyService, private sharedService: SharedService) { super(); }
+  constructor(private route: ActivatedRoute,
+    private propertyService: PropertyService,
+    private sharedService: SharedService,
+    private infoService: InfoService) { super(); }
 
   ngOnInit() {
     if (AppUtils.listInfo) {
       this.listInfo = AppUtils.listInfo;
     } else {
-      this.sharedService.getDropdownListInfo().subscribe(data => {
+      this.infoService.getDropdownListInfo().subscribe(data => {
         this.listInfo = data;
         console.log('info in new subscription', this.noteTypes);
       });
