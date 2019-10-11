@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AppUtils } from '../shared/utils';
 import * as dayjs from 'dayjs';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable, Subject, of } from 'rxjs';
-import { AppConstants} from '../shared/app-constants';
+import { Subject } from 'rxjs';
 import { map, fill } from 'lodash';
-import { tap, publishReplay, refCount, take, shareReplay} from 'rxjs/operators';
 import { BsModalService } from 'ngx-bootstrap/modal/';
 import { ErrorModalComponent } from '../error-modal/error-modal.component';
 import { NoteModalComponent } from '../note-modal/note-modal.component';
@@ -24,17 +21,16 @@ export class SharedService {
   lastCallEndCallToast: any;
   formErrors: any;
 
-  constructor(private http: HttpClient,
-              private _location: Location,
-              private _router: Router,
-              private titleService: Title,
-              private modalService: BsModalService) {
+  constructor(private _location: Location,
+    private _router: Router,
+    private titleService: Title,
+    private modalService: BsModalService) {
 
   }
 
   back() {
     if (!(window.opener && window.opener !== window)) {
-      if(AppUtils.deactivateRoute) {
+      if (AppUtils.deactivateRoute) {
         this._router.navigate([AppUtils.deactivateRoute]);
         AppUtils.deactivateRoute = '';
       } else {
@@ -49,8 +45,8 @@ export class SharedService {
     this.titleService.setTitle(title);
   }
 
-  clearControlValue(control: AbstractControl){
-    if(control.value){
+  clearControlValue(control: AbstractControl) {
+    if (control.value) {
       control.setValue('');
       control.updateValueAndValidity();
       control.parent.markAsDirty();
@@ -60,53 +56,53 @@ export class SharedService {
   openLinkWindow(link: string) {
     const width = Math.floor(Math.random() * 100) + 860;
     const height = Math.floor(Math.random() * 100) + 500;
-    const left = window.top.outerWidth / 2 + window.top.screenX - ( 960 / 2);
-    const top = window.top.outerHeight / 2 + window.top.screenY - ( 600 / 2);
+    const left = window.top.outerWidth / 2 + window.top.screenX - (960 / 2);
+    const top = window.top.outerHeight / 2 + window.top.screenY - (600 / 2);
     const w = window.open(link, '_self');
     AppUtils.openedWindows.push(w);
-    setTimeout(()=>{
-      AppUtils.openedWindows.forEach(x=>{
+    setTimeout(() => {
+      AppUtils.openedWindows.forEach(x => {
         x.focus();
-      })
-    })
+      });
+    });
   }
 
-  showWarning(id:number, warnings: any, comment?: string):any {
+  showWarning(id: number, warnings: any, comment?: string): any {
     let warns = [];
-    if(warnings) {
-      warns = warnings.filter(x => x.id === id)
+    if (warnings) {
+      warns = warnings.filter(x => x.id === id);
     }
     return warns[0];
   }
 
   showError(error: WedgeError) {
     const subject = new Subject<boolean>();
-        const initialState = {
-          title: error.requestId,
-          desc: error.displayMessage,
-          techDet: error.technicalDetails
-        };
-        const modal = this.modalService.show(ErrorModalComponent, {ignoreBackdropClick: true, initialState});
-        modal.content.subject = subject;
-        return subject.asObservable();
+    const initialState = {
+      title: error.requestId,
+      desc: error.displayMessage,
+      techDet: error.technicalDetails
+    };
+    const modal = this.modalService.show(ErrorModalComponent, { ignoreBackdropClick: true, initialState });
+    modal.content.subject = subject;
+    return subject.asObservable();
   }
 
   addNote(data: any) {
     const subject = new Subject<boolean>();
-        const initialState = {
-          data: data
-        };
-        const modalClass = 'modal-lg';
-        const modal = this.modalService.show(NoteModalComponent, {class: modalClass, initialState});
-        modal.content.subject = subject;
-        return subject.asObservable();
+    const initialState = {
+      data: data
+    };
+    const modalClass = 'modal-lg';
+    const modal = this.modalService.show(NoteModalComponent, { class: modalClass, initialState });
+    modal.content.subject = subject;
+    return subject.asObservable();
   }
 
   scrollTodayIntoView() {
     setTimeout(() => {
       if (window.innerWidth < 576) {
         if (document.getElementById('today')) {
-          document.getElementById('today').scrollIntoView({block: 'center'});
+          document.getElementById('today').scrollIntoView({ block: 'center' });
         } else {
           window.scrollTo(0, 0);
         }
@@ -120,23 +116,22 @@ export class SharedService {
       const currentHourDivs = document.getElementsByClassName('hour-' + currentHour);
       if (currentHourDivs) {
         for (let i = 0; i < currentHourDivs.length; i++) {
-          currentHourDivs[i].scrollIntoView({block: 'center'});
+          currentHourDivs[i].scrollIntoView({ block: 'center' });
         }
       }
     });
   }
 
   objectToMap(o) {
-    let m = new Map()
-    for(let k of Object.keys(o)) {
-        if(o[k] instanceof Object) {
-            m.set(k, this.objectToMap(o[k]))
-        }
-        else {
-            m.set(k, o[k])
-        }
+    const m = new Map();
+    for (const k of Object.keys(o)) {
+      if (o[k] instanceof Object) {
+        m.set(k, this.objectToMap(o[k]));
+      } else {
+        m.set(k, o[k]);
+      }
     }
-      return m
+    return m;
   }
 
   ISOToDate(date: Date): Date {
@@ -227,10 +222,10 @@ export class SharedService {
     let outCode: string;
     let inCode: string;
     if (postcode) {
-     outCode = postcode.split(' ')[0];
-     inCode = postcode.split(' ')[1];
-     postCodeParts.push(outCode);
-     postCodeParts.push(inCode);
+      outCode = postcode.split(' ')[0];
+      inCode = postcode.split(' ')[1];
+      postCodeParts.push(outCode);
+      postCodeParts.push(inCode);
     }
     return postCodeParts;
   }
@@ -258,7 +253,9 @@ export class SharedService {
     let pv = 0;
     return map(fill((new Array(30)), 0), (vv, i) => {
       vv = pv;
-      if (vv < 1000000) { vv += 50000; } else if (vv >= 1000000 && vv < 2000000) { vv += 250000; } else if (vv >= 2000000 && vv < 5000000) { vv += 500000; }
+      if (vv < 1000000) { vv += 50000; }
+      if (vv >= 1000000 && vv < 2000000) { vv += 250000; }
+      if (vv >= 2000000 && vv < 5000000) { vv += 500000; }
       pv = vv;
       return pv;
     });
@@ -267,36 +264,34 @@ export class SharedService {
   isUKMobile(number: string) {
     if (number) {
       const formattedNumber = number.replace(' ', '');
-      return  (formattedNumber.startsWith('07') || formattedNumber.startsWith('00') || formattedNumber.startsWith('+'))  &&
-      !formattedNumber.startsWith('070') && !formattedNumber.startsWith('076');
+      return (formattedNumber.startsWith('07') || formattedNumber.startsWith('00') || formattedNumber.startsWith('+')) &&
+        !formattedNumber.startsWith('070') && !formattedNumber.startsWith('076');
     } else {
       return false;
     }
   }
   isInternationalNumber(number: string) {
-    const formattedNumber = number.replace(' ', '').replace('+44','');
-    return  formattedNumber.startsWith('00') || formattedNumber.startsWith('+');
+    const formattedNumber = number.replace(' ', '').replace('+44', '');
+    return formattedNumber.startsWith('00') || formattedNumber.startsWith('+');
   }
   getRegionCode(number: string) {
     const phoneUtil: PhoneNumberUtil = PhoneNumberUtil.getInstance();
-        const rawNumber = phoneUtil.parseAndKeepRawInput(number, 'GB');
-        return this.isInternationalNumber(number) ? phoneUtil.getRegionCodeForNumber(rawNumber) : 'GB';
+    const rawNumber = phoneUtil.parseAndKeepRawInput(number, 'GB');
+    return this.isInternationalNumber(number) ? phoneUtil.getRegionCodeForNumber(rawNumber) : 'GB';
   }
 
   scrollToFirstInvalidField() {
     const invalidFields = document.getElementsByClassName('is-invalid');
-    if(invalidFields.length){
-      setTimeout(()=>{
-        if(invalidFields[0]){
-          invalidFields[0].scrollIntoView({block: 'center'});
+    if (invalidFields.length) {
+      setTimeout(() => {
+        if (invalidFields[0]) {
+          invalidFields[0].scrollIntoView({ block: 'center' });
         }
-      })
+      });
     }
   }
 
 }
-
-
 
 export class WedgeError {
   errorCode: number;
