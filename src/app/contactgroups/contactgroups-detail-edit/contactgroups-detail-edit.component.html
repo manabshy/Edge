@@ -1,5 +1,6 @@
 <app-breadcrumb *ngIf="!basicPerson"></app-breadcrumb>
 <div class="container" [ngClass]="{'p-0': basicPerson}">
+  <small class="text-muted">{{personDetails?.personId}}</small>
   <div class="page-title sticky-top" [ngClass]="{'pt-3': basicPerson}">
     <h4 *ngIf="!basicPerson">Edit Person</h4>
     <app-score-badge [bar]="true" [person]="personForm?.value"></app-score-badge>

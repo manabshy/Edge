@@ -3,7 +3,10 @@
       class="list-group-item list-group-item-action pb-2" *ngFor="let company of companies; let i = index;">
       <div class="row">
         <div class="col text-truncate">
-          <div class="row align-items-center">
+          <div class="row">
+            <div class="col-12">
+              <small class="text-muted">{{company.companyId}}</small>
+            </div>
             <div class="col-sm-5">
               <div class="mb-1 text-truncate">
                <strong>{{company.companyName}}</strong>
