@@ -17,10 +17,19 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { PropertyDuplicateCheckerComponent } from './shared/property-duplicate-checker/property-duplicate-checker.component';
 
 @NgModule({
-  declarations: [PropertyListComponent, PropertyComponent, PropertyDetailComponent,
-    PropertyDetailInstructionsComponent, PropertyDetailOffersComponent, PropertyDetailNotesComponent,
-    PropertyDetailDocumentsComponent, PropertyDetailPhotosComponent, PropertyDetailMapComponent,
-    PropertyDetailEditComponent, PropertyDuplicateCheckerComponent],
+  declarations: [
+    PropertyListComponent,
+    PropertyComponent,
+    PropertyDetailComponent,
+    PropertyDetailInstructionsComponent,
+    PropertyDetailOffersComponent,
+    PropertyDetailNotesComponent,
+    PropertyDetailDocumentsComponent,
+    PropertyDetailPhotosComponent,
+    PropertyDetailMapComponent,
+    PropertyDetailEditComponent,
+    PropertyDuplicateCheckerComponent
+  ],
   imports: [
     CommonModule,
     PropertyRoutingModule,

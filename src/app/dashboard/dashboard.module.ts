@@ -1,6 +1,6 @@
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {ReactiveFormsModule} from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
@@ -13,8 +13,12 @@ import { InstructionsAndBusinessDevelopmentComponent } from './dashboard-list/in
 import { ExchangesAndPipelineComponent } from './dashboard-list/exchanges-and-pipeline/exchanges-and-pipeline.component';
 
 @NgModule({
-  declarations: [MyDashboardComponent, TeamDashboardComponent, DashboardListComponent,
-    ValuationsAndInstructionsComponent, InstructionsAndBusinessDevelopmentComponent, ExchangesAndPipelineComponent],
+  declarations: [MyDashboardComponent,
+    TeamDashboardComponent,
+    DashboardListComponent,
+    ValuationsAndInstructionsComponent,
+    InstructionsAndBusinessDevelopmentComponent,
+    ExchangesAndPipelineComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -22,7 +26,12 @@ import { ExchangesAndPipelineComponent } from './dashboard-list/exchanges-and-pi
     DashboardRoutingModule,
     CoreModule
   ],
-  exports: [MyDashboardComponent, TeamDashboardComponent, DashboardListComponent,
-    ValuationsAndInstructionsComponent, ExchangesAndPipelineComponent, InstructionsAndBusinessDevelopmentComponent],
+  exports: [
+    MyDashboardComponent,
+    TeamDashboardComponent,
+    DashboardListComponent,
+    ValuationsAndInstructionsComponent,
+    ExchangesAndPipelineComponent,
+    InstructionsAndBusinessDevelopmentComponent],
 })
 export class DashboardModule { }
