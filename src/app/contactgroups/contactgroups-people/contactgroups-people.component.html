@@ -37,12 +37,6 @@
       *ngIf="contactGroupDetails?.contactPeople && (contactGroupDetails?.contactPeople.length !== initialContactGroupLength) && isTypePicked">
       There are pending changes on the people list. Save to make them effective.
     </div>
-    <div class="alert alert-warning" *ngIf="contactGroupDetails?.referenceCount && !isCloned"
-      (click)="cloneContactGroup()">
-      Transaction history present. You can't add or remove people from this Contact Group.<br>If you want to add or
-      remove
-      a person, <a [routerLink]="['../', contactGroupId]">create a new Contact Group</a>
-    </div>
     <div class="alert alert-danger"
       *ngIf="contactGroupDetails?.contactPeople && !contactGroupDetails?.contactPeople.length && !isNewContactGroup && !isLoadingNewPersonVisible">
       You must add at least <b>1</b> person in the contact group.
@@ -287,6 +281,12 @@
                   <i class="fas fa-user-plus mr-2"></i>Add Person
                 </span>
               </a>
+              <div class="list-group-item list-group-item-warning text-center" *ngIf="contactGroupDetails?.referenceCount && !isCloned"
+                (click)="cloneContactGroup()">
+                Transaction history present. You can't add or remove people from this Contact Group.<br>If you want to add or
+                remove
+                a person, <a [routerLink]="['../', contactGroupId]">create a new Contact Group</a>
+              </div>
               <div class="list-group-item list-group-item-warning text-center"
                 *ngIf="!(contactGroupDetails?.contactPeople.length < 8)">
                 You can add max 8 People per contact group.
