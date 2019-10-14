@@ -1,6 +1,10 @@
 <app-breadcrumb></app-breadcrumb>
 <div class="container">
-  <h4 class="page-title"><ng-container *ngIf="isNewCompany; else editLabel">New</ng-container><ng-template #editLabel>Edit</ng-template> Company</h4>
+  <small class="text-muted">{{companyDetails?.companyId}}</small>
+  <h4 class="page-title">
+    <ng-container *ngIf="isNewCompany; else editLabel">New</ng-container>
+    <ng-template #editLabel>Edit</ng-template> Company
+  </h4>
   <div class="text-center" *ngIf="!companyDetails && !isNewCompany">
     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading details ...
   </div>
@@ -8,7 +12,9 @@
     <form [formGroup]="companyForm" (ngSubmit)="saveCompany()" autocompleteOff>
       <fieldset>
         <legend>Company</legend>
-        <app-company-finder [existingCompany]="companyDetails" [companyNameError]="formErrors.companyName" (companyName)="getCompanyName($event)" (selectedCompanyDetails)="navigateToCompany($event)"></app-company-finder>
+        <app-company-finder [existingCompany]="companyDetails" [companyNameError]="formErrors.companyName"
+          (companyName)="getCompanyName($event)" (selectedCompanyDetails)="navigateToCompany($event)">
+        </app-company-finder>
         <div class="row justify-content-end">
           <div class="col-sm-10">
             <input type="hidden" id="companyName" class="form-control" formControlName="companyName">
@@ -27,12 +33,15 @@
           <label for="amlDate" class="col-sm-2 col-form-label col-form-label-sm">AML Completed</label>
           <div class="col-sm-3">
             <div class="input-group input-group-sm">
-              <input type="text" id="amlDate" placeholder="dd/mm/yyyy" class="form-control fake-readonly" formControlName="amlCompletedDate"
-              [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', maxDate:todaysDate}" bsDatepicker readonly>
+              <input type="text" id="amlDate" placeholder="dd/mm/yyyy" class="form-control fake-readonly"
+                formControlName="amlCompletedDate"
+                [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', maxDate:todaysDate}" bsDatepicker
+                readonly>
               <div class="input-group-append" *ngIf="companyForm.value.amlCompletedDate">
-                <button type="button" class="btn btn-primary" aria-label="clear AML" (click)="clearControlValue(companyForm.get('amlCompletedDate'))">
-                    <span aria-hidden="true">&times;</span>
-                </button>  
+                <button type="button" class="btn btn-primary" aria-label="clear AML"
+                  (click)="clearControlValue(companyForm.get('amlCompletedDate'))">
+                  <span aria-hidden="true">&times;</span>
+                </button>
               </div>
             </div>
           </div>
@@ -47,27 +56,31 @@
         <div class="form-group row">
           <label for="companyTelephone" class="col-sm-2 col-form-label col-form-label-sm">Telephone</label>
           <div class="col-sm-10">
-            <input type="text" id="companyTelephone" placeholder="" class="form-control form-control-sm" formControlName="telephone" [ngClass]="{'is-invalid':formErrors.telephone}">
+            <input type="text" id="companyTelephone" placeholder="" class="form-control form-control-sm"
+              formControlName="telephone" [ngClass]="{'is-invalid':formErrors.telephone}">
             <span class="invalid-feedback">{{formErrors?.telephone}}</span>
           </div>
         </div>
         <div class="form-group row">
           <label for="companyFax" class="col-sm-2 col-form-label col-form-label-sm">Fax</label>
           <div class="col-sm-10">
-            <input type="text" id="companyFax" placeholder="" class="form-control form-control-sm" formControlName="fax" [ngClass]="{'is-invalid':formErrors.fax}">
+            <input type="text" id="companyFax" placeholder="" class="form-control form-control-sm" formControlName="fax"
+              [ngClass]="{'is-invalid':formErrors.fax}">
             <span class="invalid-feedback">{{formErrors?.fax}}</span>
           </div>
         </div>
         <div class="form-group row">
           <label for="companyWebsite" class="col-sm-2 col-form-label col-form-label-sm">Website</label>
           <div class="col-sm-10">
-            <input type="text" id="companyWebsite" placeholder="" class="form-control form-control-sm" formControlName="website">
+            <input type="text" id="companyWebsite" placeholder="" class="form-control form-control-sm"
+              formControlName="website">
           </div>
         </div>
         <div class="form-group row">
           <label for="companyEmail" class="col-sm-2 col-form-label col-form-label-sm">Email</label>
           <div class="col-sm-10">
-            <input type="text" id="companyEmail" placeholder="" class="form-control form-control-sm" formControlName="email" [ngClass]="{'is-invalid':formErrors.email}">
+            <input type="text" id="companyEmail" placeholder="" class="form-control form-control-sm"
+              formControlName="email" [ngClass]="{'is-invalid':formErrors.email}">
             <span class="invalid-feedback">{{formErrors?.email}}</span>
           </div>
         </div>
@@ -77,7 +90,8 @@
           <div class="row justify-content-end w-100 no-gutters">
             <div class="col-sm-10 d-flex">
               <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
-              <button type="submit" class="btn btn-secondary" [attr.disabled]="isSubmitting ? '' : null"><i class="fas fa-spinner fa-pulse d-inline-block mr-2" *ngIf="isSubmitting"></i>Save</button>
+              <button type="submit" class="btn btn-secondary" [attr.disabled]="isSubmitting ? '' : null"><i
+                  class="fas fa-spinner fa-pulse d-inline-block mr-2" *ngIf="isSubmitting"></i>Save</button>
             </div>
           </div>
         </div>

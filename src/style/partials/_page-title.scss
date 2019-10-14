@@ -1,17 +1,13 @@
 
 
 .page-title {
-    padding: spacer(3) 0;
+    padding: spacer(2) 0;
     margin-bottom: spacer(3);
     border-bottom: 1px solid $border-color;
 
     &.sticky-top {
         background: color('white');
         z-index: 99;
-    }
-
-    @include media-breakpoint-up(lg) {
-        padding-top: 0;
     }
 
     @include media-breakpoint-down(sm) {

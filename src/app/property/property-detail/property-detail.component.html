@@ -1,64 +1,65 @@
 <app-breadcrumb></app-breadcrumb>
 <div class="container">
+  <small class="text-muted">{{propertyDetails?.propertyId}}</small>
   <div class="row page-title">
     <div class="col">
-      <h4 class="mb-0">Property <small class="text-muted">{{propertyDetails?.propertyId}}</small></h4>
+      <h4 class="mb-0">Property</h4>
     </div>
   </div>
   <div class="row">
     <div class="col-xl-8">
       <h5>Detail</h5>
       <div class="list-group">
-    
-          <div class="list-group-item mb-4">
-            <div class="text-center py-3" *ngIf="!propertyDetails">
-              <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading info ...
-            </div>
-            <div class="row" *ngIf="propertyDetails">
-              <div class="col-sm-4 mb-2 mb-sm-0">
-                <a [routerLink]="['property-photos']">
-                  <div class="card bg-dark text-white">
-                    <img class="card-img" [src]="propertyDetails?.photo?.azureResourceURL" alt=""
-                      *ngIf="propertyDetails?.photo?.azureResourceURL; else noPhoto">
-                    <ng-template #noPhoto>
-                      <img class="card-img" src="https://dummyimage.com/400x300/e9ecef/212529&text=no+photos" alt="">
-                    </ng-template>
-                    <div class="card-img-overlay clearfix" *ngIf="propertyDetails?.photo?.azureResourceURL">
-                      <span class="float left pull-left">{{propertyDetails?.info?.propertyPhotos}} Photos</span>
-                      <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
-                    </div>
-                  </div>
-                </a>
-              </div>
-              <div class="col">
-                <pre><strong>{{propertyDetails?.address | formatAddress}}</strong></pre>
-              </div>
-              <div class="col-auto">
-                <a routerLink="edit"><i class="fas fa-edit"></i> Edit</a>
-              </div>
-              <div class="col-12">
-                <hr class="mb-2">
-              </div>
-              <div class="col-12">
-                <div class="row mb-2">
-                  <div class="col-auto">
-                    <span
-                      class="badge badge-pill badge-info mr-1">{{propertyTypes.get(propertyDetails?.propertyTypeId)}}</span>
-                    <span
-                      class="badge badge-pill badge-info">{{propertyStyles.get(propertyDetails?.propertyStyleId)}}</span>
+
+        <div class="list-group-item mb-4">
+          <div class="text-center py-3" *ngIf="!propertyDetails">
+            <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading info ...
+          </div>
+          <div class="row" *ngIf="propertyDetails">
+            <div class="col-sm-4 mb-2 mb-sm-0">
+              <a [routerLink]="['property-photos']">
+                <div class="card bg-dark text-white">
+                  <img class="card-img" [src]="propertyDetails?.photo?.azureResourceURL" alt=""
+                    *ngIf="propertyDetails?.photo?.azureResourceURL; else noPhoto">
+                  <ng-template #noPhoto>
+                    <img class="card-img" src="https://dummyimage.com/400x300/e9ecef/212529&text=no+photos" alt="">
+                  </ng-template>
+                  <div class="card-img-overlay clearfix" *ngIf="propertyDetails?.photo?.azureResourceURL">
+                    <span class="float left pull-left">{{propertyDetails?.info?.propertyPhotos}} Photos</span>
+                    <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
                   </div>
                 </div>
-                <div class="row align-items-center">
-                  <div class="col">
-                    <span class="badge badge-pill badge-info mr-1">{{region}}</span>
-                    <span class="badge badge-pill badge-info mr-1">{{area}}</span>
-                    <span class="badge badge-pill badge-info">{{subArea}}</span>
-                  </div>
+              </a>
+            </div>
+            <div class="col">
+              <pre><strong>{{propertyDetails?.address | formatAddress}}</strong></pre>
+            </div>
+            <div class="col-auto">
+              <a routerLink="edit"><i class="fas fa-edit"></i> Edit</a>
+            </div>
+            <div class="col-12">
+              <hr class="mb-2">
+            </div>
+            <div class="col-12">
+              <div class="row mb-2">
+                <div class="col-auto">
+                  <span
+                    class="badge badge-pill badge-info mr-1">{{propertyTypes.get(propertyDetails?.propertyTypeId)}}</span>
+                  <span
+                    class="badge badge-pill badge-info">{{propertyStyles.get(propertyDetails?.propertyStyleId)}}</span>
+                </div>
+              </div>
+              <div class="row align-items-center">
+                <div class="col">
+                  <span class="badge badge-pill badge-info mr-1">{{region}}</span>
+                  <span class="badge badge-pill badge-info mr-1">{{area}}</span>
+                  <span class="badge badge-pill badge-info">{{subArea}}</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
     </div>
     <div class="col-xl-4 aside sticky-top">
       <div *ngIf="summaryTotals">
