@@ -31,27 +31,16 @@ export class InfoService {
 
   private requestDropdownListInfo(): Observable<DropdownListInfo> {
     return this.http.get<DropdownListInfo>(AppConstants.baseInfoUrl)
-    .pipe(
-      tap(data => {
-        if (data) {
-          this.infoData = data;
-          this.storage.set('info', data).subscribe();
-        }
-      })
-    );
+      .pipe(
+        tap(data => {
+          if (data) {
+            this.infoData = data;
+            this.storage.set('info', data).subscribe();
+          }
+        })
+      );
   }
 
-  //  getInfo(): Observable<DropdownListInfo> {
-  //   return this.http.get<DropdownListInfo>(AppConstants.baseInfoUrl)
-  //     .pipe(
-  //       tap(data => {
-  //         if (data) {
-  //           this.infoData = data;
-  //           this.storage.set('info', data).subscribe();
-  //         }
-  //       })
-  //     );
-  // }
 }
 
 export interface DropdownListInfo {
