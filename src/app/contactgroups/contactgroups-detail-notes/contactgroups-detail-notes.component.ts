@@ -7,6 +7,7 @@ import { ContactNote, BasicContactGroup } from '../shared/contact-group';
 import { BaseComponent } from 'src/app/core/models/base-component';
 import { takeUntil } from 'rxjs/operators';
 import * as _ from 'lodash';
+import { AppUtils } from 'src/app/core/shared/utils';
 @Component({
   selector: 'app-contactgroups-detail-notes',
   templateUrl: './contactgroups-detail-notes.component.html',
@@ -26,12 +27,14 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
   pageSize = 10;
   bottomReached = false;
   addressees: any[] = [];
+  navPlaceholder: string;
 
   constructor(private contactGroupService: ContactGroupsService,
     private route: ActivatedRoute,
     private sharedService: SharedService) { super(); }
 
   ngOnInit() {
+    this.navPlaceholder = AppUtils.navPlaceholder;
     this.route.params.subscribe(params => {
       this.contactGroupId = +params['contactGroupId'] || 0;
       this.personId = +params['personId'] || 0;

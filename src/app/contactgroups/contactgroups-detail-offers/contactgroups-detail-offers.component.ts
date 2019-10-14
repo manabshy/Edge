@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AppUtils } from 'src/app/core/shared/utils';
 
 @Component({
   selector: 'app-contactgroups-detail-offers',
@@ -6,10 +7,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./contactgroups-detail-offers.component.scss']
 })
 export class ContactgroupsDetailOffersComponent implements OnInit {
+  navPlaceholder: string;
 
   constructor() { }
 
   ngOnInit() {
+    this.navPlaceholder = AppUtils.navPlaceholder;
   }
 
 }
