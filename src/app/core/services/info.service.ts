@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { shareReplay } from 'rxjs/operators';
+import { shareReplay, tap } from 'rxjs/operators';
 import { AppConstants } from '../shared/app-constants';
 import { HttpClient } from '@angular/common/http';
+import { StorageMap } from '@ngx-pwa/local-storage';
+
 const CACHE_SIZE = 1;
 @Injectable({
   providedIn: 'root'
@@ -11,8 +13,9 @@ export class InfoService {
   private infoDetail$: Observable<DropdownListInfo>;
   private infoSubject = new BehaviorSubject<DropdownListInfo | null>(null);
   info$ = this.infoSubject.asObservable();
-
-  constructor(private http: HttpClient) { }
+  infoData: any;
+  info: DropdownListInfo;
+  constructor(private http: HttpClient, private storage: StorageMap) { }
 
   getDropdownListInfo(): Observable<DropdownListInfo> {
     if (!this.infoDetail$) {
@@ -27,8 +30,28 @@ export class InfoService {
   }
 
   private requestDropdownListInfo(): Observable<DropdownListInfo> {
-    return this.http.get<DropdownListInfo>(AppConstants.baseInfoUrl);
+    return this.http.get<DropdownListInfo>(AppConstants.baseInfoUrl)
+    .pipe(
+      tap(data => {
+        if (data) {
+          this.infoData = data;
+          this.storage.set('info', data).subscribe();
+        }
+      })
+    );
   }
+
+  //  getInfo(): Observable<DropdownListInfo> {
+  //   return this.http.get<DropdownListInfo>(AppConstants.baseInfoUrl)
+  //     .pipe(
+  //       tap(data => {
+  //         if (data) {
+  //           this.infoData = data;
+  //           this.storage.set('info', data).subscribe();
+  //         }
+  //       })
+  //     );
+  // }
 }
 
 export interface DropdownListInfo {
