@@ -66,10 +66,12 @@ export class PropertyDetailEditComponent implements OnInit {
     // }
     // info local storage here...
     this.storage.get('info').subscribe(data => {
-      this.listInfo = data; this.setDropdownLists();
-      console.log('app info here....', data);
-      console.log('list info here....',  this.listInfo);
+      if (data) {
+        this.listInfo = data; this.setDropdownLists();
+        console.log('list info here....',  this.listInfo);
+      }
     });
+
     this.setupEditForm();
     this.route.params.subscribe(params => {
       this.propertyId = +params['id'] || 0;

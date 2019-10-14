@@ -8,6 +8,7 @@ import { tap } from 'rxjs/operators';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { FormatAddressPipe } from 'src/app/core/shared/format-address.pipe';
 import { InfoService } from 'src/app/core/services/info.service';
+import { StorageMap } from '@ngx-pwa/local-storage';
 
 @Component({
   selector: 'app-property-detail',
@@ -56,6 +57,7 @@ export class PropertyDetailComponent implements OnInit {
     private formatAddressPipe: FormatAddressPipe,
     private route: ActivatedRoute,
     private infoService: InfoService,
+    private storage: StorageMap,
     private sharedService: SharedService) { }
 
   ngOnInit() {
@@ -76,15 +78,13 @@ export class PropertyDetailComponent implements OnInit {
     // if (this.propertyId) {
     //   this.propertyService.currentPropertyChanged(this.propertyId);
     // }
-    if (AppUtils.listInfo) {
-      this.listInfo = AppUtils.listInfo;
-      this.setDropdownLists();
-    } else {
-      this.infoService.getDropdownListInfo().subscribe(data => {
-        this.listInfo = data;
-        this.setDropdownLists();
-      });
-    }
+    this.storage.get('info').subscribe(data => {
+      if (data) {
+        this.listInfo = data; this.setDropdownLists();
+        console.log('list info property detail....', this.listInfo);
+      }
+    });
+
     if (this.propertyId) {
       this.getPropertyDetails(this.propertyId);
     }
@@ -95,11 +95,12 @@ export class PropertyDetailComponent implements OnInit {
     this.regions = new Map(Object.entries(this.listInfo.result.regions));
     this.allAreas = new Map(Object.entries(this.listInfo.result.areas));
     this.allSubAreas = new Map(Object.entries(this.listInfo.result.subAreas));
-    // console.log('new map', map);
   }
+
   isObject(val) {
     return val instanceof Object;
   }
+
   getPropertyDetails(propertyId: number) {
     this.propertyService.getProperty(propertyId, true, true).subscribe(data => {
       if (data) {
