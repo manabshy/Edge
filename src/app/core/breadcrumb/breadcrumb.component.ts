@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { SharedService } from '../services/shared.service';
 
 @Component({
@@ -7,6 +7,9 @@ import { SharedService } from '../services/shared.service';
   styleUrls: ['./breadcrumb.component.scss']
 })
 export class BreadcrumbComponent implements OnInit {
+
+  @Input() title: string;
+
   constructor(private sharedService: SharedService) { }
 
   ngOnInit() {

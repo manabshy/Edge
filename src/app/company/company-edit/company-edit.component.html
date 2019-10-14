@@ -1,6 +1,5 @@
-<app-breadcrumb></app-breadcrumb>
+<app-breadcrumb [title]="companyDetails?.companyId"></app-breadcrumb>
 <div class="container">
-  <small class="text-muted">{{companyDetails?.companyId}}</small>
   <h4 class="page-title">
     <ng-container *ngIf="isNewCompany; else editLabel">New</ng-container>
     <ng-template #editLabel>Edit</ng-template> Company

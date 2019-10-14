@@ -1,6 +1,5 @@
-<app-breadcrumb></app-breadcrumb>
+<app-breadcrumb [title]="propertyDetails?.propertyId"></app-breadcrumb>
 <div class="container">
-  <small class="text-muted">{{propertyDetails?.propertyId}}</small>
   <div class="page-title sticky-top">
     <h4>
       <ng-container *ngIf="propertyDetails else newProperty ">Edit</ng-container> Property
