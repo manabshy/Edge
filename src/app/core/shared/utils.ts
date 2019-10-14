@@ -38,6 +38,7 @@ export class AppUtils {
   static contactInfoForNotes: any;
   static routeCache = new Map<string, ICachedRoute>();
   static currentStaffMemberGlobal: StaffMember;
+  static navPlaceholder: string;
 
   /**
    * Format a date/time into a string

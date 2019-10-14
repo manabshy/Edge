@@ -23,6 +23,7 @@ export class PropertyDetailOffersComponent implements OnInit {
   offerSaleStatuses: any;
   offerLettingStatuses: any;
   status: any;
+  navPlaceholder: string;
 
   constructor(private route: ActivatedRoute,
     private propertyService: PropertyService,
@@ -30,6 +31,7 @@ export class PropertyDetailOffersComponent implements OnInit {
     private sharedService: SharedService) { }
 
   ngOnInit() {
+    this.navPlaceholder = AppUtils.navPlaceholder;
     this.infoService.info$.subscribe(data => {
       if (data) {
          this.listInfo = data;

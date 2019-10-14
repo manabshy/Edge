@@ -131,7 +131,7 @@
               </div>
             </div>
             <app-subnav-item *ngFor="let searchedPersonContactGroup of searchedPersonContactGroups"
-              [navLink]="'people/'+searchedPersonContactGroup.contactGroupId+'?docTitle=Contact Group | '+searchedPersonDetails?.addressee">
+              [navLink]="'people/'+searchedPersonContactGroup.contactGroupId" [params]="{docTitle: 'Contact Group | '+searchedPersonDetails?.addressee}">
               <i class="fas fa-briefcase mr-2 fa-fw" *ngIf="searchedPersonContactGroup?.isCompany; else peopleIcon"></i>
               <ng-template #peopleIcon>
                 <i class="fas fa-users mr-2 fa-fw"></i>
@@ -171,7 +171,7 @@
         <h5>Info</h5>
         <app-subnav>
           <app-subnav-item *ngFor="let item of subNav"
-            [navLink]="item?.link+'?docTitle='+item?.label+' | '+searchedPersonDetails?.addressee">
+            [navLink]="item?.link" [params]="{docTitle: item?.label+' | '+searchedPersonDetails?.addressee}">
             {{item?.label}}
             <ng-container *ngIf="summaryTotals; else loadingInfo">
               <ng-container *ngIf="isObject(summaryTotals[item?.value]); else simpleValue">

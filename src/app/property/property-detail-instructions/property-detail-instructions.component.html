@@ -1,4 +1,4 @@
-<app-breadcrumb></app-breadcrumb>
+<app-breadcrumb [title]="navPlaceholder"></app-breadcrumb>
 <div class="container">
   <div class="row page-title">
     <div class="col">
@@ -62,7 +62,7 @@
             <dl class="row">
               <dt class="col-4 d-sm-none">Landlord</dt>
               <dd class="col"><a
-                  [routerLink]="['/contact-centre/detail', instruction.ownerId]">{{instruction?.ownerAddressee}}</a>
+                  [routerLink]="['/contact-centre/detail/0/people/', instruction.ownerId]">{{instruction?.ownerAddressee}}</a>
               </dd>
             </dl>
           </div>

@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { InstructionInfo } from '../shared/property';
 import { tap } from 'rxjs/operators';
 import { InfoService } from 'src/app/core/services/info.service';
+import { AppUtils } from 'src/app/core/shared/utils';
 
 @Component({
   selector: 'app-property-detail-instructions',
@@ -22,12 +23,14 @@ export class PropertyDetailInstructionsComponent implements OnInit {
   offerLettingStatuses: any;
   status: any;
   isShortLet = false;
+  navPlaceholder: string;
 
   constructor(private route: ActivatedRoute,
     private propertyService: PropertyService,
     private infoService: InfoService) { }
 
   ngOnInit() {
+    this.navPlaceholder = AppUtils.navPlaceholder;
     this.infoService.info$.subscribe(data => {
       if (data) {
         this.listInfo = data;

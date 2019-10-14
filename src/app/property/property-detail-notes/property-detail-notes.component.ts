@@ -22,6 +22,7 @@ export class PropertyDetailNotesComponent extends BaseComponent implements OnIni
   bottomReached = false;
   noteTypes: any;
   listInfo: any;
+  navPlaceholder: string;
 
   constructor(private route: ActivatedRoute,
     private propertyService: PropertyService,
@@ -29,6 +30,7 @@ export class PropertyDetailNotesComponent extends BaseComponent implements OnIni
     private infoService: InfoService) { super(); }
 
   ngOnInit() {
+    this.navPlaceholder = AppUtils.navPlaceholder;
     this.infoService.info$.subscribe(data => {
       if (data) {
         this.listInfo = data;

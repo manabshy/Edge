@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { Photo } from '../shared/property';
 import { Observable } from 'rxjs';
+import { AppUtils } from 'src/app/core/shared/utils';
 
 @Component({
   selector: 'app-property-detail-photos',
@@ -18,11 +19,13 @@ export class PropertyDetailPhotosComponent implements OnInit {
   propertyId: number;
   propertyPhotos: Photo[];
   photos$: Observable<Photo[]>;
+  navPlaceholder: string;
 
   constructor(private propertyService: PropertyService,
               private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.navPlaceholder = AppUtils.navPlaceholder;
     this.route.params.subscribe(params => {
       this.propertyId = +params['id'] || 0;
     });

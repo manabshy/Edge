@@ -26,7 +26,6 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
   @ViewChild('appContainer', { static: true }) appContainer : ElementRef;
   @ViewChild(ToastContainerDirective, { static: true }) toastContainer: ToastContainerDirective;
   appHeightObservable;
-  navPlaceholder: string;
   //  get currentStaffMemberGetter(): StaffMember {
   //     return this.currentStaffMember;
   //   }
@@ -99,8 +98,8 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
     this.route.queryParams.subscribe(params => {
       if(params['docTitle']) {
         this.sharedService.setTitle(params['docTitle']);
-        this.navPlaceholder = params['docTitle'];
-        this.navPlaceholder = this.navPlaceholder.substring(this.navPlaceholder.indexOf('|') + 1).trim();
+        AppUtils.navPlaceholder = params['docTitle'];
+        AppUtils.navPlaceholder = AppUtils.navPlaceholder.substring(AppUtils.navPlaceholder.indexOf('|') + 1).trim();
       }
     })
   }

@@ -9,20 +9,21 @@ import { SharedService } from '../services/shared.service';
 })
 export class SubnavItemComponent implements OnInit {
   @Input() navLink;
+  @Input() params;
   @HostBinding('class.list-group-item')
   @HostBinding('class.list-group-item-action')
   @HostBinding('class.clearfix') true;
+  link: string;
   constructor(private _router: Router, private sharedService: SharedService) { }
 
   ngOnInit() {
+    const baseLink = this._router.url.substring(0, this._router.url.indexOf('?')) || this._router.url;
+    this.link = '/'+baseLink + '/'+ this.navLink;
   }
 
-  @HostListener('click')
-  onClick() {
-    const baseLink = this._router.url.substring(0, this._router.url.indexOf('?')) || this._router.url;
-    const link = baseLink + '/'+ this.navLink;
-    this._router.navigateByUrl(link);
-    //this.sharedService.openLinkWindow(link);
-  }
+  // @HostListener('click')
+  // onClick() {
+  //   this._router.navigateByUrl(this.link);
+  // }
 
 }
