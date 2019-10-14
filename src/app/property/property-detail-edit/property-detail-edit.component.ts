@@ -12,6 +12,7 @@ import { Signer } from 'src/app/contactgroups/shared/contact-group';
 import { ToastrService } from 'ngx-toastr';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { InfoService, InfoDetail } from 'src/app/core/services/info.service';
+import { StorageMap } from '@ngx-pwa/local-storage';
 
 @Component({
   selector: 'app-property-detail-edit',
@@ -43,25 +44,32 @@ export class PropertyDetailEditComponent implements OnInit {
   isAddressFormValid: boolean;
 
   constructor(private route: ActivatedRoute,
-              private _router: Router,
-              private propertyService: PropertyService,
-              private sharedService: SharedService,
-              private infoService: InfoService,
-              private contactGroupService: ContactGroupsService,
-              private toastr: ToastrService,
-              private fb: FormBuilder,
-              private _location: Location) {}
+    private _router: Router,
+    private propertyService: PropertyService,
+    private sharedService: SharedService,
+    private infoService: InfoService,
+    private storage: StorageMap,
+    private contactGroupService: ContactGroupsService,
+    private toastr: ToastrService,
+    private fb: FormBuilder,
+    private _location: Location) { }
 
   ngOnInit() {
-    if (AppUtils.listInfo) {
-      this.listInfo = AppUtils.listInfo;
-      this.setDropdownLists();
-    } else {
-      this.infoService.getDropdownListInfo().subscribe(data => {
-        this.listInfo = data;
-        this.setDropdownLists();
-      });
-    }
+    // if (AppUtils.listInfo) {
+    //   this.listInfo = AppUtils.listInfo;
+    //   this.setDropdownLists();
+    // } else {
+    //   this.infoService.getDropdownListInfo().subscribe(data => {
+    //     this.listInfo = data;
+    //     this.setDropdownLists();
+    //   });
+    // }
+    // info local storage here...
+    this.storage.get('info').subscribe(data => {
+      this.listInfo = data; this.setDropdownLists();
+      console.log('app info here....', data);
+      console.log('list info here....',  this.listInfo);
+    });
     this.setupEditForm();
     this.route.params.subscribe(params => {
       this.propertyId = +params['id'] || 0;
@@ -95,7 +103,7 @@ export class PropertyDetailEditComponent implements OnInit {
     this.allSubAreas = this.listInfo.result.subAreas;
   }
 
- getSignerDetails(id: number) {
+  getSignerDetails(id: number) {
     this.contactGroupService.getSignerbyId(id).subscribe(data => {
       this.lastKnownOwner = data;
       this.propertyForm.markAsDirty();
@@ -158,9 +166,9 @@ export class PropertyDetailEditComponent implements OnInit {
     }
     this.propertyAddress = address;
 
-   if (this.propertyAddress) {
-     this.propertyForm.patchValue({fullAddress: this.propertyAddress});
-   }
+    if (this.propertyAddress) {
+      this.propertyForm.patchValue({ fullAddress: this.propertyAddress });
+    }
   }
 
   getSelectedOwner(owner: Signer) {
@@ -186,7 +194,7 @@ export class PropertyDetailEditComponent implements OnInit {
       const control = group.get(key);
       const messages = ValidationMessages[key];
       if (control.valid) {
-       FormErrors[key] = '';
+        FormErrors[key] = '';
       }
       if (control && !control.valid && (fakeTouched || control.dirty)) {
         FormErrors[key] = '';
@@ -227,16 +235,16 @@ export class PropertyDetailEditComponent implements OnInit {
     const property = { ...this.propertyDetails, ...this.propertyForm.value };
     if (this.propertyDetails) {
       propertyAddress = { ...this.propertyDetails.address, ...this.propertyAddress };
-      this.lastKnownOwner ? property.lastKnownOwner = this.lastKnownOwner :  property.lastKnownOwner = this.propertyDetails.lastKnownOwner;
+      this.lastKnownOwner ? property.lastKnownOwner = this.lastKnownOwner : property.lastKnownOwner = this.propertyDetails.lastKnownOwner;
       property.address = propertyAddress;
     } else {
       property.lastKnownOwner = this.lastKnownOwner;
-     property.address = this.propertyAddress;
+      property.address = this.propertyAddress;
     }
     this.isSubmitting = true;
     if (this.isNewProperty) {
       this.propertyService.addProperty(property).subscribe(res => {
-       if (res) { this.onSaveComplete(res); }
+        if (res) { this.onSaveComplete(res); }
       }, (error: WedgeError) => {
         this.errorMessage = error;
         this.sharedService.showError(this.errorMessage);
@@ -273,7 +281,7 @@ export class PropertyDetailEditComponent implements OnInit {
   }
 
   canDeactivate(): boolean {
-    if (this.propertyForm.dirty  && !this.isSubmitting) {
+    if (this.propertyForm.dirty && !this.isSubmitting) {
       return false;
     }
     return true;
