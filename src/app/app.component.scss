@@ -42,6 +42,8 @@
 
     @include media-breakpoint-up(sm) {
         margin: spacer(4) $grid-gutter-width 70px auto;
+        position: sticky;
+        bottom: spacer(2);
     }
 
 }
@@ -83,7 +85,7 @@
             color: color("white");
             animation: loading-text 6s linear infinite;
         }
-        
+
         @include media-breakpoint-up(lg){
             font-size: 3.5rem;
         }

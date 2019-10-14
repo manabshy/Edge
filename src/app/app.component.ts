@@ -82,7 +82,7 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
           this.currentStaffMember = data;
           this.isCurrentUserAvailable = true;
           AppUtils.currentStaffMemberGlobal = data;
-          this.staffMemberService.currentStaffMemberChange(data);
+          // this.staffMemberService.currentStaffMemberChange(data);
           console.log('app component current user', data);
         }
       }, (error: WedgeError) => {
@@ -129,7 +129,7 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
   }
 
   toggleScrollTop() {
-    if (window.innerHeight < this.appContainer.nativeElement.scrollHeight) {
+    if (window.innerHeight < this.appContainer.nativeElement.scrollHeight && window.scrollY) {
       this.isScrollTopVisible = true;
     } else {
       this.isScrollTopVisible = false;
