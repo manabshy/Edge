@@ -37,6 +37,7 @@ export class AppUtils {
   static openedWindows: any[] = [];
   static contactInfoForNotes: any;
   static routeCache = new Map<string, ICachedRoute>();
+  static currentStaffMemberGlobal: StaffMember;
 
   /**
    * Format a date/time into a string

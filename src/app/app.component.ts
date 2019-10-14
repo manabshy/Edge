@@ -77,7 +77,8 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
         if (data) {
           this.currentStaffMember = data;
           this.isCurrentUserAvailable = true;
-          this.staffMemberService.currentStaffMemberChange(data);
+          AppUtils.currentStaffMemberGlobal = data;
+          // this.staffMemberService.currentStaffMemberChange(data);
           console.log('app component current user', data);
         }
       }, (error: WedgeError) => {

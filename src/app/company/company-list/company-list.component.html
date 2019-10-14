@@ -1,25 +1,25 @@
 <div class="list-group mb-5">
-    <a [routerLink]="['detail', company.companyId, 'edit' ]"
-      class="list-group-item list-group-item-action pb-2" *ngFor="let company of companies; let i = index;">
-      <div class="row">
-        <div class="col text-truncate">
-          <div class="row">
-            <div class="col-12">
-              <small class="text-muted">{{company.companyId}}</small>
+  <a [routerLink]="['detail', company.companyId, 'edit' ]" class="list-group-item list-group-item-action pb-2"
+    *ngFor="let company of companies; let i = index;">
+    <div class="row">
+      <div class="col text-truncate">
+        <div class="row">
+          <div class="col-12">
+            <small class="text-muted">{{company.companyId}}</small>
+          </div>
+          <div class="col-sm-5">
+            <div class="mb-1 text-truncate">
+              <strong>{{company.companyName}}</strong>
             </div>
-            <div class="col-sm-5">
-              <div class="mb-1 text-truncate">
-               <strong>{{company.companyName}}</strong>
-              </div>
-            </div>
-            <div class="col-sm-5">
-              <div class="mb-1 text-truncate">
-                <pre>{{company.companyAddress | formatAddress}}</pre><span class="text-danger"
+          </div>
+          <div class="col-sm-5">
+            <div class="mb-1 text-truncate">
+              <pre>{{company.companyAddress | formatAddress}}</pre><span class="text-danger"
                 *ngIf="!(company.companyAddress | formatAddress)">No address</span>
-              </div>
             </div>
           </div>
         </div>
       </div>
-    </a>
-  </div>
+    </div>
+  </a>
+</div>

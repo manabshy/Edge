@@ -11,7 +11,8 @@
           aria-controls="actionsList">
           Actions <span class="caret"></span>
         </button>
-        <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="actionsToggle">
+        <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+          aria-labelledby="actionsToggle">
           <li role="menuitem" *ngIf="searchedPersonDetails">
             <a class="dropdown-item"
               [routerLink]="['edit']">
@@ -25,7 +26,8 @@
               <i class="fas fa-users"></i><i class="fas fa-plus fa-xs align-text-top"></i> New Contact Group
             </a>
           </li>
-          <li role="menuitem"><button type="button" class="dropdown-item" (click)="addNote()"><i class="fas fa-sticky-note fa-fw mr-2"></i> Add Note</button></li>
+          <li role="menuitem"><button type="button" class="dropdown-item" (click)="addNote()"><i
+                class="fas fa-sticky-note fa-fw mr-2"></i> Add Note</button></li>
         </ul>
       </div>
     </div>
@@ -37,7 +39,8 @@
         <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading info ...
       </div>
       <div class="list-group">
-        <div class="list-group-item mb-4" [ngClass]="{'list-group-item-danger': searchedPersonDetails?.warning?.id !== 1}"
+        <div class="list-group-item mb-4"
+          [ngClass]="{'list-group-item-danger': searchedPersonDetails?.warning?.id !== 1}"
           *ngIf="searchedPersonDetails">
           <div class="text-right">
             <div class="row">
@@ -84,7 +87,8 @@
             </div>
             <div class="col-sm-5 col-xl-4">
               <p class="mb-2 text-danger"
-                *ngIf="!searchedPersonDetails.emailAddresses.length || !searchedPersonDetails.emailAddresses[0].email">No
+                *ngIf="!searchedPersonDetails.emailAddresses.length || !searchedPersonDetails.emailAddresses[0].email">
+                No
                 email</p>
               <ng-container *ngFor="let emailAddresses of searchedPersonDetails.emailAddresses">
                 <p class="mb-2 text-truncate" *ngIf="emailAddresses.email"><a class="mobile-btn"

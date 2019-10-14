@@ -85,7 +85,7 @@
             color: color("white");
             animation: loading-text 6s linear infinite;
         }
-        
+
         @include media-breakpoint-up(lg){
             font-size: 3.5rem;
         }
