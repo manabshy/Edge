@@ -23,6 +23,7 @@
     "@angular/pwa": "^0.12.4",
     "@angular/router": "^8.2.7",
     "@angular/service-worker": "^8.2.7",
+    "@ngx-pwa/local-storage": "^8.2.3",
     "@types/google-libphonenumber": "^7.4.17",
     "adal-angular4": "^4.0.9",
     "bootstrap": "^4.3.1",
