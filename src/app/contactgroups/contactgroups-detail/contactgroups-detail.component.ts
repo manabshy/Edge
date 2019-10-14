@@ -6,6 +6,7 @@ import { Person } from 'src/app/core/models/person';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { InfoService } from 'src/app/core/services/info.service';
+import { StorageMap } from '@ngx-pwa/local-storage';
 
 @Component({
   selector: 'app-contactgroups-detail',
@@ -30,6 +31,7 @@ export class ContactgroupsDetailComponent implements OnInit {
 
   constructor(private contactGroupService: ContactGroupsService,
               private sharedService: SharedService,
+              private storage: StorageMap,
               private infoService: InfoService,
               private route: ActivatedRoute) { }
 
@@ -45,15 +47,13 @@ export class ContactgroupsDetailComponent implements OnInit {
   }
 
   init() {
-    if (AppUtils.listInfo) {
-      this.listInfo = AppUtils.listInfo;
-      this.setDropdownLists();
-    } else {
-      this.infoService.getDropdownListInfo().subscribe(data => {
+    this.storage.get('info').subscribe(data => {
+      if (data) {
         this.listInfo = data;
         this.setDropdownLists();
-      });
-    }
+        console.log('app info in contact detail ....', this.listInfo);
+      }
+    });
     this.getSearchedPersonDetails(this.personId);
     this.getSearchedPersonContactGroups(this.personId);
     this.getSearchedPersonSummaryInfo(this.personId);
@@ -68,7 +68,9 @@ export class ContactgroupsDetailComponent implements OnInit {
   }
 
   setDropdownLists() {
-    this.warnings = this.listInfo.result.personWarningStatuses;
+    if (this.listInfo) {
+      this.warnings = this.listInfo.result.personWarningStatuses;
+    }
   }
 
   getContactGroupById(contactGroupId: number) {
