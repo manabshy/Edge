@@ -124,9 +124,10 @@ export class PropertyDetailEditComponent implements OnInit {
       regionId: data.regionId,
       areaId: data.areaId,
       subAreaId: data.subAreaId,
+      fullAddress: data.address
     });
     this.lastKnownOwner = data.lastKnownOwner;
-    this.propertyAddress = data.address;
+    //this.propertyAddress = data.address;
   }
 
   onSelectType(propertyTypeId: number) {
