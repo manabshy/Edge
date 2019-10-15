@@ -14,7 +14,7 @@
               <div class="col-sm col-lg-2"></div>
             </div>
           </div>
-         <div *ngIf="potentialDuplicates">
+         <ng-container *ngIf="potentialDuplicates">
             <div class="list-group-item list-group-item-action" *ngFor="let foundProperty of potentialDuplicates">
               <div class="row align-items-end align-items-sm-center"
               (click)="selectProperty(foundProperty?.propertyId)">
@@ -45,7 +45,7 @@
                 </div>
               </div>
             </div>
-         </div>
+          </ng-container>
         </div>
       </div>
     </div>
