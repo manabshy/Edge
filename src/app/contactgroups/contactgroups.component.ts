@@ -8,6 +8,7 @@ import { SharedService } from '../core/services/shared.service';
 import { AppConstants } from '../core/shared/app-constants';
 import * as _ from 'lodash';
 import { InfoService } from '../core/services/info.service';
+import { StorageMap } from '@ngx-pwa/local-storage';
 
 const PAGE_SIZE = 20;
 @Component({
@@ -33,13 +34,14 @@ export class ContactGroupsComponent implements OnInit, OnDestroy {
   bottomReached = false;
 
   constructor(private contactGroupService: ContactGroupsService,
-              private route: ActivatedRoute,
-              private fb: FormBuilder,
-              private infoService: InfoService,
-              private sharedService: SharedService) { }
+    private route: ActivatedRoute,
+    private fb: FormBuilder,
+    private infoService: InfoService,
+    private storage: StorageMap,
+    private sharedService: SharedService) { }
 
   ngOnInit() {
-    this.sharedService.setTitle("Contact Centre");
+    this.sharedService.setTitle('Contact Centre');
     this.contactFinderForm = this.fb.group({
       searchTerm: [''],
     });
@@ -53,15 +55,13 @@ export class ContactGroupsComponent implements OnInit, OnDestroy {
       }
     });
 
-    if (AppUtils.listInfo) {
-      this.listInfo = AppUtils.listInfo;
-      this.setDropdownLists();
-    } else {
-      this.infoService.getDropdownListInfo().subscribe(data => {
+    this.storage.get('info').subscribe(data => {
+      if (data) {
         this.listInfo = data;
         this.setDropdownLists();
-      });
-    }
+        console.log('list info in contact groups....', this.listInfo);
+      }
+    });
 
     // page changes here
     this.contactGroupService.pageChanges$.subscribe(newPageNumber => {
@@ -76,7 +76,9 @@ export class ContactGroupsComponent implements OnInit, OnDestroy {
     this.contactGroups = [];
   }
   setDropdownLists() {
-    this.warnings = this.listInfo.result.personWarningStatuses;
+    if (this.listInfo) {
+      this.warnings = this.listInfo.result.personWarningStatuses;
+    }
   }
 
   contactGroupsResults() {
@@ -112,24 +114,24 @@ export class ContactGroupsComponent implements OnInit, OnDestroy {
       let newNumber;
       if (result) {
         this.contactGroups = _.concat(this.contactGroups, result);
-         if (this.contactGroups && this.contactGroups.length) {
-           this.contactGroups.forEach(x => {
-             x.warning = this.sharedService.showWarning(x.warningStatusId, this.warnings, x.warningStatusComment);
-           });
-         }
+        if (this.contactGroups && this.contactGroups.length) {
+          this.contactGroups.forEach(x => {
+            x.warning = this.sharedService.showWarning(x.warningStatusId, this.warnings, x.warningStatusComment);
+          });
+        }
       }
 
-     }, error => {
-       this.contactGroups = [];
-       this.isLoading = false;
-       this.isHintVisible = true;
-     });
+    }, error => {
+      this.contactGroups = [];
+      this.isLoading = false;
+      this.isHintVisible = true;
+    });
   }
 
   getDifferentSearchSuggestions(searchTerm: string) {
     const telIndex = searchTerm.search(AppConstants.telephonePattern);
     this.differentSearchSuggestions = [];
-    if (telIndex > 0){
+    if (telIndex > 0) {
       this.differentSearchSuggestions.push(searchTerm.substring(0, telIndex).trim());
     }
     this.differentSearchSuggestions.push(searchTerm.substring(telIndex).trim());
