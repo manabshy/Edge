@@ -70,6 +70,7 @@ export interface InstructionInfo {
   shortLetAmount: number;
   ownerId: number;
   ownerAddressee: string;
+  agencyType: string;
   staffMember: string;
 }
 export interface PropertyNote {
