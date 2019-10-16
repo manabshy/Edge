@@ -45,14 +45,21 @@ export class InfoService {
 }
 
 export interface DropdownListInfo {
-  countries: InfoDetail[];
-  companyTypes: InfoDetail[];
   titles: Record<number, string>;
   telephoneTypes: Record<number, string>;
+  propertyNoteTypes: Record<number, string>;
+  countries: InfoDetail[];
+  companyTypes: InfoDetail[];
+  personWarningStatuses: InfoDetail[];
   propertyStyles: InfoDetail[];
   propertyTypes: InfoDetail[];
-  personWarningStatuses: InfoDetail[];
-  propertyNoteTypes: InfoDetail[];
+  offerLettingStatuses: InfoDetail[];
+  offerSaleStatuses: InfoDetail[];
+  propertyLettingStatuses: InfoDetail[];
+  propertySaleStatuses: InfoDetail[];
+  regions: InfoDetail[];
+  areas: InfoDetail[];
+  subAreas: InfoDetail[];
 }
 
 export interface InfoDetail {
