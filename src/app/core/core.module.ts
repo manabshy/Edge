@@ -13,7 +13,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // ngx bootstrap imports
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
-import {NgPipesModule} from 'ngx-pipes';
+import { NgPipesModule } from 'ngx-pipes';
 //bootstrap
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown/';
 import { CollapseModule } from 'ngx-bootstrap/collapse/';
@@ -57,17 +57,69 @@ import { CustomReuseStrategy } from './share/custom-reuse-strategy';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 @NgModule({
-  declarations: [RoundingPipe, TruncatingPipe, ShortenNamePipe, BreadcrumbComponent, BasicSearchComponent,
-    ConfirmModalComponent, PropertyFinderComponent, FormatAddressPipe, ScoreBadgeComponent,
-    ErrorModalComponent, AddressComponent, SignerComponent, AutocompleteOffDirective, HighlightPipe,
-    NoteModalComponent, NotesComponent, TelephoneComponent, TelephoneModalComponent, SubnavItemComponent, SubnavComponent, SmsModalComponent],
+  declarations: [
+    RoundingPipe,
+    TruncatingPipe,
+    ShortenNamePipe,
+    BreadcrumbComponent,
+    BasicSearchComponent,
+    ConfirmModalComponent,
+    PropertyFinderComponent,
+    FormatAddressPipe,
+    ScoreBadgeComponent,
+    ErrorModalComponent,
+    AddressComponent,
+    SignerComponent,
+    AutocompleteOffDirective,
+    HighlightPipe,
+    NoteModalComponent,
+    NotesComponent, TelephoneComponent,
+    TelephoneModalComponent,
+    SubnavItemComponent,
+    SubnavComponent,
+    SmsModalComponent],
   exports: [
-    RoundingPipe, TruncatingPipe, ShortenNamePipe, FormatAddressPipe, HighlightPipe, AutocompleteOffDirective,
-    BreadcrumbComponent, BasicSearchComponent, NoteModalComponent, NotesComponent, SmsModalComponent,
-    ConfirmModalComponent, ErrorModalComponent, PropertyFinderComponent, ScoreBadgeComponent, AddressComponent, SignerComponent, TelephoneComponent, TelephoneModalComponent, SubnavComponent, SubnavItemComponent,
-    RouterModule, BrowserAnimationsModule, CollapseModule, TabsModule, TypeaheadModule, BsDropdownModule,
-    BsDatepickerModule, ModalModule, PopoverModule,  NgPipesModule,
-    TooltipModule, AccordionModule, ButtonsModule, ReactiveFormsModule, FormsModule, OrderModule, ToastrModule, ToastContainerModule, AgmCoreModule, CarouselModule
+    RoundingPipe,
+    TruncatingPipe,
+    ShortenNamePipe,
+    FormatAddressPipe,
+    HighlightPipe,
+    AutocompleteOffDirective,
+    BreadcrumbComponent,
+    BasicSearchComponent,
+    NoteModalComponent,
+    NotesComponent,
+    SmsModalComponent,
+    ConfirmModalComponent,
+    ErrorModalComponent,
+    PropertyFinderComponent,
+    ScoreBadgeComponent,
+    AddressComponent,
+    SignerComponent,
+    TelephoneComponent,
+    TelephoneModalComponent,
+    SubnavComponent,
+    SubnavItemComponent,
+    RouterModule,
+    BrowserAnimationsModule,
+    CollapseModule,
+    TabsModule,
+    TypeaheadModule,
+    BsDropdownModule,
+    BsDatepickerModule,
+    ModalModule,
+    PopoverModule,
+    NgPipesModule,
+    TooltipModule,
+    AccordionModule,
+    ButtonsModule,
+    ReactiveFormsModule,
+    FormsModule,
+    OrderModule,
+    ToastrModule,
+    ToastContainerModule,
+    AgmCoreModule,
+    CarouselModule
   ],
   imports: [
     CommonModule,

@@ -18,6 +18,7 @@ import { AppUtils } from 'src/app/core/shared/utils';
 import { ToastrService } from 'ngx-toastr';
 import * as _ from 'lodash';
 import { InfoService } from 'src/app/core/services/info.service';
+import { StorageMap } from '@ngx-pwa/local-storage';
 @Component({
   selector: 'app-contactgroups-people',
   templateUrl: './contactgroups-people.component.html',
@@ -118,6 +119,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     private _location: Location,
     private sharedService: SharedService,
     private infoService: InfoService,
+    private storage: StorageMap,
     private toastr: ToastrService,
     private renderer: Renderer2
   ) { }
@@ -151,13 +153,13 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   init() {
-    this.infoService.info$.subscribe(data => {
+    this.storage.get('info').subscribe(data => {
       if (data) {
         this.listInfo = data;
-        this.warnings = this.listInfo.result.personWarningStatuses;
+        this.setDropdownLists();
+        console.log('list info in contact people....', this.listInfo);
       }
     });
-
     this.removedPersonIds = [];
     this.selectedPeople = [];
     if (!this.contactGroupId) {
@@ -242,6 +244,12 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.companyFinderForm.valueChanges
       .pipe(debounceTime(1000), distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)))
       .subscribe(data => this.findCompany(data));
+  }
+
+  setDropdownLists() {
+    if (this.listInfo) {
+      this.warnings = this.listInfo.personWarningStatuses;
+    }
   }
 
   isCompanyContactGroup(isSelectedTypeCompany: boolean) {

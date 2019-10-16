@@ -7,6 +7,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { SharedService } from '../core/services/shared.service';
 import { AppConstants } from '../core/shared/app-constants';
 import { InfoService } from '../core/services/info.service';
+import { StorageMap } from '@ngx-pwa/local-storage';
 import * as _ from 'lodash';
 
 const PAGE_SIZE = 20;
@@ -36,6 +37,7 @@ export class ContactGroupsComponent implements OnInit {
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private infoService: InfoService,
+    private storage: StorageMap,
     private sharedService: SharedService) { }
 
   ngOnInit() {
@@ -53,12 +55,14 @@ export class ContactGroupsComponent implements OnInit {
       }
     });
 
-    this.infoService.info$.subscribe(data => {
+    this.storage.get('info').subscribe(data => {
       if (data) {
         this.listInfo = data;
-        this.warnings = this.listInfo.result.personWarningStatuses;
+        this.setDropdownLists();
+        console.log('list info in contact groups....', this.listInfo);
       }
     });
+
     // page changes here
     this.contactGroupService.pageChanges$.subscribe(newPageNumber => {
       if (newPageNumber) {
@@ -66,6 +70,15 @@ export class ContactGroupsComponent implements OnInit {
         this.getNextContactGroupsPage(this.page);
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.contactGroups = [];
+  }
+  setDropdownLists() {
+    if (this.listInfo) {
+      this.warnings = this.listInfo.personWarningStatuses;
+    }
   }
 
   contactGroupsResults() {

@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { shareReplay } from 'rxjs/operators';
+import { shareReplay, tap, map } from 'rxjs/operators';
 import { AppConstants } from '../shared/app-constants';
 import { HttpClient } from '@angular/common/http';
+import { StorageMap } from '@ngx-pwa/local-storage';
+
 const CACHE_SIZE = 1;
 @Injectable({
   providedIn: 'root'
@@ -11,8 +13,9 @@ export class InfoService {
   private infoDetail$: Observable<DropdownListInfo>;
   private infoSubject = new BehaviorSubject<DropdownListInfo | null>(null);
   info$ = this.infoSubject.asObservable();
-
-  constructor(private http: HttpClient) { }
+  infoData: any;
+  info: DropdownListInfo;
+  constructor(private http: HttpClient, private storage: StorageMap) { }
 
   getDropdownListInfo(): Observable<DropdownListInfo> {
     if (!this.infoDetail$) {
@@ -27,19 +30,36 @@ export class InfoService {
   }
 
   private requestDropdownListInfo(): Observable<DropdownListInfo> {
-    return this.http.get<DropdownListInfo>(AppConstants.baseInfoUrl);
+    return this.http.get<any>(AppConstants.baseInfoUrl)
+      .pipe(
+        map(response => response.result),
+        tap(data => {
+          if (data) {
+            this.infoData = data;
+            this.storage.set('info', data).subscribe();
+          }
+        })
+      );
   }
+
 }
 
 export interface DropdownListInfo {
-  Countries: InfoDetail[];
-  CompanyTypes: InfoDetail[];
-  Titles: Record<number, string>;
-  TelephoneTypes: Record<number, string>;
-  PropertyStyles: InfoDetail[];
-  PropertyTypes: InfoDetail[];
-  PersonWarningStatuses: InfoDetail[];
-  propertyNoteTypes: InfoDetail[];
+  titles: Record<number, string>;
+  telephoneTypes: Record<number, string>;
+  propertyNoteTypes: Record<number, string>;
+  countries: InfoDetail[];
+  companyTypes: InfoDetail[];
+  personWarningStatuses: InfoDetail[];
+  propertyStyles: InfoDetail[];
+  propertyTypes: InfoDetail[];
+  offerLettingStatuses: InfoDetail[];
+  offerSaleStatuses: InfoDetail[];
+  propertyLettingStatuses: InfoDetail[];
+  propertySaleStatuses: InfoDetail[];
+  regions: InfoDetail[];
+  areas: InfoDetail[];
+  subAreas: InfoDetail[];
 }
 
 export interface InfoDetail {

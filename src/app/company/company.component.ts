@@ -19,10 +19,13 @@ export class CompanyComponent implements OnInit {
   companies: CompanyAutoCompleteResult[];
   isMessageVisible: boolean;
   advSearchCollapsed = false;
-  constructor(private contactGroupService: ContactGroupsService, private route: ActivatedRoute, private fb: FormBuilder, private sharedService: SharedService) { }
+  constructor(private contactGroupService: ContactGroupsService,
+    private route: ActivatedRoute,
+    private fb: FormBuilder,
+    private sharedService: SharedService) { }
 
   ngOnInit() {
-    this.sharedService.setTitle("Company Centre");
+    this.sharedService.setTitle('Company Centre');
     this.companyFinderForm = this.fb.group({
       companyName: [''],
     });
@@ -34,8 +37,8 @@ export class CompanyComponent implements OnInit {
         // this.companiesAutocomplete(data)
       });
 
-    if (this.route.snapshot.queryParamMap.get('companyName') || AppUtils.companySearchTerm ) {
-      this.companiesResults(this.route.snapshot.queryParamMap.get('companyName') || AppUtils.companySearchTerm );
+    if (this.route.snapshot.queryParamMap.get('companyName') || AppUtils.companySearchTerm) {
+      this.companiesResults(this.route.snapshot.queryParamMap.get('companyName') || AppUtils.companySearchTerm);
     }
   }
 
@@ -62,31 +65,31 @@ export class CompanyComponent implements OnInit {
   // }
 
   companiesResults(searchTerm?: any) {
-    if(!searchTerm) {
+    if (!searchTerm) {
       searchTerm = this.companyFinderForm.value;
     }
     this.isLoading = true;
     this.contactGroupService.getAutocompleteCompany(searchTerm).subscribe(result => {
-        this.companies = result;
-        this.isLoading = false;
+      this.companies = result;
+      this.isLoading = false;
 
-        if (this.companyFinderForm.value.companyName && this.companyFinderForm.value.companyName.length) {
-          if (!this.companies.length) {
-            this.isMessageVisible = true;
-          } else {
-            this.isMessageVisible = false;
-          }
+      if (this.companyFinderForm.value.companyName && this.companyFinderForm.value.companyName.length) {
+        if (!this.companies.length) {
+          this.isMessageVisible = true;
+        } else {
+          this.isMessageVisible = false;
         }
+      }
 
-      }, error => {
-        this.companies = [];
-        this.isLoading = false;
-        this.isHintVisible = true;
-      });
+    }, error => {
+      this.companies = [];
+      this.isLoading = false;
+      this.isHintVisible = true;
+    });
   }
 
   onKeyup(event: KeyboardEvent) {
-    if(event.key !== 'Enter') {
+    if (event.key !== 'Enter') {
       this.isMessageVisible = false;
     }
     AppUtils.companySearchTerm = this.companyFinderForm.value;

@@ -12,6 +12,7 @@ import { Signer } from 'src/app/contactgroups/shared/contact-group';
 import { ToastrService } from 'ngx-toastr';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { InfoService, InfoDetail } from 'src/app/core/services/info.service';
+import { StorageMap } from '@ngx-pwa/local-storage';
 
 @Component({
   selector: 'app-property-detail-edit',
@@ -47,19 +48,30 @@ export class PropertyDetailEditComponent implements OnInit {
     private propertyService: PropertyService,
     private sharedService: SharedService,
     private infoService: InfoService,
+    private storage: StorageMap,
     private contactGroupService: ContactGroupsService,
     private toastr: ToastrService,
     private fb: FormBuilder,
     private _location: Location) { }
 
   ngOnInit() {
-    this.infoService.info$.subscribe(data => {
+    // if (AppUtils.listInfo) {
+    //   this.listInfo = AppUtils.listInfo;
+    //   this.setDropdownLists();
+    // } else {
+    //   this.infoService.getDropdownListInfo().subscribe(data => {
+    //     this.listInfo = data;
+    //     this.setDropdownLists();
+    //   });
+    // }
+    // info local storage here...
+    this.storage.get('info').subscribe(data => {
       if (data) {
-        this.listInfo = data;
-        this.setDropdownLists();
+        this.listInfo = data; this.setDropdownLists();
+        console.log('list info here....',  this.listInfo);
       }
-      console.log('info changes in property detail edit here', data);
     });
+
     this.setupEditForm();
     this.route.params.subscribe(params => {
       this.propertyId = +params['id'] || 0;
@@ -86,13 +98,11 @@ export class PropertyDetailEditComponent implements OnInit {
   }
 
   setDropdownLists() {
-    if (this.listInfo) {
-      this.propertyTypes = this.listInfo.result.propertyTypes;
-      this.allPropertyStyles = this.listInfo.result.propertyStyles;
-      this.regions = this.listInfo.result.regions;
-      this.allAreas = this.listInfo.result.areas;
-      this.allSubAreas = this.listInfo.result.subAreas;
-    }
+    this.propertyTypes = this.listInfo.propertyTypes;
+    this.allPropertyStyles = this.listInfo.propertyStyles;
+    this.regions = this.listInfo.regions;
+    this.allAreas = this.listInfo.areas;
+    this.allSubAreas = this.listInfo.subAreas;
   }
 
   getSignerDetails(id: number) {

@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { AppConstants } from '../shared/app-constants';
-import { map, shareReplay } from 'rxjs/operators';
+import { map, shareReplay, tap } from 'rxjs/operators';
 import { StaffMember, StaffMemberResult } from '../models/staff-member';
+import { Staff } from 'src/app/diary/shared/diary';
+import { StorageMap } from '@ngx-pwa/local-storage';
 
 const CACHE_SIZE = 1;
 @Injectable({
@@ -14,7 +16,7 @@ export class StaffMemberService {
   private staffMember$: Observable<StaffMember>;
   currentStaffMember$ = this.currentStaffMemberSubject.asObservable();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private storage: StorageMap) { }
 
   public getCurrentStaffMember(): Observable<StaffMember> {
     if (!this.staffMember$) {
@@ -25,7 +27,14 @@ export class StaffMemberService {
 
   private requestCurrentStaffMember(): Observable<StaffMember> {
     return this.http.get<StaffMemberResult>(`${AppConstants.baseUrl}/currentUser`)
-      .pipe(map(response => response.result));
+      .pipe(
+        map(response => response.result),
+        tap(data => {
+          if (data) {
+            this.storage.set('currentUser', data).subscribe();
+          }
+        })
+      );
   }
 
   currentStaffMemberChange(staffMember: StaffMember) {

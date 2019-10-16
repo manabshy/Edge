@@ -7,6 +7,7 @@ import { tap } from 'rxjs/operators';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { InfoService } from 'src/app/core/services/info.service';
+import { StorageMap } from '@ngx-pwa/local-storage';
 
 @Component({
   selector: 'app-property-detail-offers',
@@ -27,19 +28,20 @@ export class PropertyDetailOffersComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
     private propertyService: PropertyService,
+    private storage: StorageMap,
     private infoService: InfoService,
     private sharedService: SharedService) { }
 
   ngOnInit() {
     this.navPlaceholder = AppUtils.navPlaceholder;
-    this.infoService.info$.subscribe(data => {
+    this.storage.get('info').subscribe(data => {
       if (data) {
-         this.listInfo = data;
-         this.setStatusesInfo();
+        this.listInfo = data;
+        this.setStatusesInfo();
+        console.log('list info property offers....', this.listInfo);
       }
-       console.log('info changes property detail here', data);
-     });
-     
+    });
+
     this.propertyId = +this.route.snapshot.paramMap.get('id') || 0;
     if (this.propertyId) {
       this.offers$ = this.propertyService.getPropertyOffers(this.propertyId)
@@ -54,33 +56,35 @@ export class PropertyDetailOffersComponent implements OnInit {
   }
 
   setStatusesInfo() {
-   if (this.listInfo) {
-      this.propertySaleStatuses = this.listInfo.result.propertySaleStatuses;
-      this.propertyLettingStatuses = this.listInfo.result.propertyLettingStatuses;
-      this.offerSaleStatuses = this.listInfo.result.offerSaleStatuses;
-      this.offerLettingStatuses = this.listInfo.result.offerLettingStatuses;
-   }
+    if (this.listInfo) {
+      this.propertySaleStatuses = this.listInfo.propertySaleStatuses;
+      this.propertyLettingStatuses = this.listInfo.propertyLettingStatuses;
+      this.offerSaleStatuses = this.listInfo.offerSaleStatuses;
+      this.offerLettingStatuses = this.listInfo.offerLettingStatuses;
+    }
   }
 
   setPropertyStatus() {
-    this.offersData.forEach((item) => {
-      switch (true) {
-        case !!this.propertySaleStatuses:
-          this.propertySaleStatuses.forEach(x => {
-            if (x.id === item.statusId) {
-              item.status = x.value;
-            }
-          });
-          break;
-        case !!this.propertyLettingStatuses:
-          this.propertyLettingStatuses.forEach(x => {
-            if (x.id === item.statusId) {
-              item.status = x.value;
-            }
-          });
-          break;
-      }
-    });
+    if (this.listInfo && this.offersData) {
+      this.offersData.forEach((item) => {
+        switch (true) {
+          case !!this.propertySaleStatuses:
+            this.propertySaleStatuses.forEach(x => {
+              if (x.id === item.statusId) {
+                item.status = x.value;
+              }
+            });
+            break;
+          case !!this.propertyLettingStatuses:
+            this.propertyLettingStatuses.forEach(x => {
+              if (x.id === item.statusId) {
+                item.status = x.value;
+              }
+            });
+            break;
+        }
+      });
+    }
   }
 
 }

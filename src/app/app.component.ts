@@ -1,6 +1,6 @@
 import { Component, Renderer2, ChangeDetectorRef, HostListener, OnInit, AfterViewChecked, ViewChild, ElementRef } from '@angular/core';
 import { Router, RoutesRecognized, ActivatedRoute } from '@angular/router';
-import { filter, pairwise, takeUntil } from 'rxjs/operators';
+import { filter, pairwise, takeUntil, tap } from 'rxjs/operators';
 import { AppUtils } from './core/shared/utils';
 import { AuthService } from './core/services/auth.service';
 import { SharedService, WedgeError } from './core/services/shared.service';
@@ -51,10 +51,12 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
     private cdRef: ChangeDetectorRef) {
       super();
     /*  Track previous route for Breadcrumb component  */
+
     this.router.events.pipe(
       filter(e => e instanceof RoutesRecognized)
     ).pipe(
-      pairwise()
+      pairwise(),
+      tap(data => console.log('events here...', data))
     ).subscribe((event: any[]) => {
       AppUtils.prevRouteBU = AppUtils.prevRoute || '';
       AppUtils.prevRoute = event[0].urlAfterRedirects;
@@ -67,17 +69,18 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
       }, 1200)
       //window.scrollTo(0,0);
     });
+    console.log('instance created')
   }
 
   ngOnInit() {
     this.toastr.overlayContainer = this.toastContainer;
+    console.log('instance initiliased')
     if (this.isLoggedIn) {
       this.staffMemberService.getCurrentStaffMember().pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
         if (data) {
           this.currentStaffMember = data;
           this.isCurrentUserAvailable = true;
           AppUtils.currentStaffMemberGlobal = data;
-          // this.staffMemberService.currentStaffMemberChange(data);
           console.log('app component current user', data);
         }
       }, (error: WedgeError) => {

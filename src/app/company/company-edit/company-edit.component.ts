@@ -13,6 +13,7 @@ import { AppUtils } from 'src/app/core/shared/utils';
 import { Address } from 'src/app/core/models/address';
 import { ToastrService } from 'ngx-toastr';
 import { InfoService } from 'src/app/core/services/info.service';
+import { StorageMap } from '@ngx-pwa/local-storage';
 
 
 @Component({
@@ -44,6 +45,7 @@ export class CompanyEditComponent implements OnInit {
     private fb: FormBuilder,
     private sharedService: SharedService,
     private infoService: InfoService,
+    private storage: StorageMap,
     private toastr: ToastrService,
     private _location: Location,
     private route: ActivatedRoute,
@@ -55,10 +57,11 @@ export class CompanyEditComponent implements OnInit {
   }
 
   init() {
-    this.infoService.info$.subscribe(data => {
+    this.storage.get('info').subscribe(data => {
       if (data) {
         this.listInfo = data;
-        this.companyTypes = this.listInfo.result.companyTypes;
+        this.setDropdownLists();
+        console.log('list info company edit....', this.listInfo);
       }
     });
 
@@ -79,6 +82,11 @@ export class CompanyEditComponent implements OnInit {
     this.companyForm.valueChanges.pipe(debounceTime(400)).subscribe(() => this.logValidationErrors(this.companyForm, false));
   }
 
+  setDropdownLists() {
+    if (this.listInfo) {
+      this.companyTypes = this.listInfo.companyTypes;
+    }
+  }
 
   getCompanyDetails(id: number) {
     this.contactGroupService.getCompany(id).subscribe(data => {

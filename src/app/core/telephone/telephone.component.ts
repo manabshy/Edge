@@ -114,7 +114,7 @@ export class TelephoneComponent implements OnInit {
       this.leaveANoteBanner();
     } else {
 
-      this.staffMemberService.currentStaffMember$.subscribe(data => {
+      this.staffMemberService.getCurrentStaffMember().subscribe(data => {
         if (data) {
           this.currentStaffMember = data;
         }

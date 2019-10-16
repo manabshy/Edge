@@ -8,6 +8,7 @@ import { BaseComponent } from 'src/app/core/models/base-component';
 import { takeUntil } from 'rxjs/operators';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { InfoService } from 'src/app/core/services/info.service';
+import { StorageMap } from '@ngx-pwa/local-storage';
 
 @Component({
   selector: 'app-property-detail-notes',
@@ -27,13 +28,15 @@ export class PropertyDetailNotesComponent extends BaseComponent implements OnIni
   constructor(private route: ActivatedRoute,
     private propertyService: PropertyService,
     private sharedService: SharedService,
+    private storage: StorageMap,
     private infoService: InfoService) { super(); }
 
   ngOnInit() {
     this.navPlaceholder = AppUtils.navPlaceholder;
-    this.infoService.info$.subscribe(data => {
+    this.storage.get('info').subscribe(data => {
       if (data) {
         this.listInfo = data;
+        console.log('list info property notes....', this.listInfo);
       }
     });
 
@@ -76,7 +79,9 @@ export class PropertyDetailNotesComponent extends BaseComponent implements OnIni
   }
 
   setupNoteType() {
-    this.noteTypes = this.listInfo.result.propertyNoteTypes;
+    if(this.listInfo) {
+      this.noteTypes = this.listInfo.propertyNoteTypes;
+    }
     const keys = Object.keys(this.noteTypes);
     console.log(this.noteTypes);
     if (this.propertyNotes) {

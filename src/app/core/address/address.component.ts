@@ -10,6 +10,7 @@ import { AppUtils } from '../shared/utils';
 import { debounceTime } from 'rxjs/operators';
 import { AddressService, AddressAutoCompleteData } from '../services/address.service';
 import { InfoService } from '../services/info.service';
+import { StorageMap } from '@ngx-pwa/local-storage';
 
 @Component({
   selector: 'app-address',
@@ -53,6 +54,7 @@ export class AddressComponent implements OnInit, OnChanges {
   constructor(private sharedService: SharedService,
               private addressService: AddressService,
               private infoService: InfoService,
+              private storage: StorageMap,
               private fb: FormBuilder,
               private renderer: Renderer2,
              ) { }
@@ -66,13 +68,14 @@ export class AddressComponent implements OnInit, OnChanges {
   }
 
   init() {
-    this.infoService.info$.subscribe(data => {
+    this.storage.get('info').subscribe(data => {
       if (data) {
         this.listInfo = data;
-        this.countries = this.listInfo.result.countries;
+        this.setDropdownLists();
+        console.log('list info in contact people....', this.listInfo);
       }
     });
-  
+
     this.addressForm = this.fb.group({
       fullAddress: ['', Validators.required],
       addressLines: ['', {validators: Validators.maxLength(500)}],
@@ -95,6 +98,12 @@ export class AddressComponent implements OnInit, OnChanges {
       }
       this.emitAddress();
     });
+  }
+
+  setDropdownLists() {
+    if (this.listInfo) {
+      this.countries = this.listInfo.countries;
+    }
   }
 
   searchAddress() {

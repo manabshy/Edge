@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { InstructionInfo } from '../shared/property';
 import { tap } from 'rxjs/operators';
 import { InfoService } from 'src/app/core/services/info.service';
+import { StorageMap } from '@ngx-pwa/local-storage';
+import { SharedService } from 'src/app/core/services/shared.service';
 import { AppUtils } from 'src/app/core/shared/utils';
 
 @Component({
@@ -27,16 +29,18 @@ export class PropertyDetailInstructionsComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
     private propertyService: PropertyService,
-    private infoService: InfoService) { }
+    private infoService: InfoService,
+    private storage: StorageMap,
+    private sharedService: SharedService) { }
 
   ngOnInit() {
     this.navPlaceholder = AppUtils.navPlaceholder;
-    this.infoService.info$.subscribe(data => {
+    this.storage.get('info').subscribe(data => {
       if (data) {
         this.listInfo = data;
         this.setStatusesInfo();
+        console.log('list info property instructions....', this.listInfo);
       }
-      console.log('info changes property instructions here', data);
     });
 
     this.propertyId = +this.route.snapshot.paramMap.get('id') || 0;
@@ -54,33 +58,35 @@ export class PropertyDetailInstructionsComponent implements OnInit {
   }
 
   setStatusesInfo() {
-    if (this.listInfo) {
-      this.propertySaleStatuses = this.listInfo.result.propertySaleStatuses;
-      this.propertyLettingStatuses = this.listInfo.result.propertyLettingStatuses;
-      this.offerSaleStatuses = this.listInfo.result.offerSaleStatuses;
-      this.offerLettingStatuses = this.listInfo.result.offerLettingStatuses;
-    }
+   if(this.listInfo) {
+      this.propertySaleStatuses = this.listInfo.propertySaleStatuses;
+      this.propertyLettingStatuses = this.listInfo.propertyLettingStatuses;
+      this.offerSaleStatuses = this.listInfo.offerSaleStatuses;
+      this.offerLettingStatuses = this.listInfo.offerLettingStatuses;
+   }
   }
 
   setPropertyStatus() {
-    this.instructionsData.forEach((item) => {
-      switch (true) {
-        case !!this.propertySaleStatuses:
-          this.propertySaleStatuses.forEach(x => {
-            if (x.id === item.statusId) {
-              item.status = x.value;
-            }
-          });
-          break;
-        case !!this.propertyLettingStatuses:
-          this.propertyLettingStatuses.forEach(x => {
-            if (x.id === item.statusId) {
-              item.status = x.value;
-            }
-          });
-          break;
-      }
-    });
+  if(this.listInfo && this.instructionsData) {
+      this.instructionsData.forEach((item) => {
+        switch (true) {
+          case !!this.propertySaleStatuses:
+            this.propertySaleStatuses.forEach(x => {
+              if (x.id === item.statusId) {
+                item.status = x.value;
+              }
+            });
+            break;
+          case !!this.propertyLettingStatuses:
+            this.propertyLettingStatuses.forEach(x => {
+              if (x.id === item.statusId) {
+                item.status = x.value;
+              }
+            });
+            break;
+        }
+      });
+  }
   }
 
 }

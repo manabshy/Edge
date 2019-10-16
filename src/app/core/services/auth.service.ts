@@ -5,6 +5,8 @@ import { Subject } from 'rxjs';
 import { BsModalService } from 'ngx-bootstrap/modal/';
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
 import { Router } from '@angular/router';
+import { StorageMap } from '@ngx-pwa/local-storage';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -30,17 +32,21 @@ export class AuthService {
   };
 
   constructor(private adalService: AdalService,
-              private modalService: BsModalService,
-              private _router: Router) { this.adalService.init(this.adalConfig); }
+    private modalService: BsModalService,
+    private storage: StorageMap,
+    private _router: Router) { this.adalService.init(this.adalConfig); }
 
   public isLoggedIn(): boolean {
     return this.adalService.userInfo.authenticated;
   }
 
+  // TODO: Refactor to add proper env check
   public signout(): void {
     this.confirmSignOut().subscribe(res => {
       if (res) {
-        localStorage.removeItem('currentUser');
+        if (environment.production) {
+          this.storage.delete('currentUser').subscribe();
+        }
         localStorage.setItem('prev', this._router.url);
         this.adalService.logOut();
       }
