@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AppConstants } from '../shared/app-constants';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { PersonInstruction, PersonSearch, PersonOffer, PersonLettingsManagement, PersonHomeManagement } from '../models/person';
 
 @Injectable({
@@ -17,9 +17,9 @@ export class PeopleService {
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
 
-  getSearches(personId: number): Observable<PersonSearch> {
+  getSearches(personId: number): Observable<PersonSearch[]> {
     const url = `${AppConstants.basePersonUrl}/${personId}/searches`;
-    return this.http.get<any>(url).pipe(map(response => response.result));
+    return this.http.get<any>(url).pipe(map(response => response.result), tap(data=>console.log('searches', data)));
   }
 
   getOffers(personId: number): Observable<PersonOffer> {

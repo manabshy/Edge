@@ -11,54 +11,51 @@
   <div class="list-group">
     <div class="list-group-item list-header d-none d-sm-block">
       <div class="row">
-        <div class="col-sm"><strong>Request</strong></div>
+        <div class="col-sm"><strong>Created</strong></div>
+        <div class="col-sm"><strong>Type</strong></div>
+        <div class="col-sm"><strong>Price</strong></div>
+        <div class="col-sm"><strong>Beds</strong></div>
         <div class="col-sm"><strong>Areas</strong></div>
-        <div class="col-sm"><strong>Neg.</strong></div>
       </div>
     </div>
-    <a routerLink="/applicant-view-sale" class="list-group-item list-group-item-action">
-      <div class="row">
-        <div class="col-sm">
-          <dl class="row">
-            <dt class="col-4 d-sm-none">Request</dt>
-            <dd class="col">Sales £750,000 2 Beds</dd>
-          </dl>
+   <div *ngIf="searches$ | async as searches">
+      <div class="list-group-item text-center text-danger" *ngIf="!searches || !searches?.length">
+          <i class="far fa-sad-tear"></i> No searches
         </div>
-        <div class="col-sm">
-          <dl class="row">
-            <dt class="col-4 d-sm-none">Areas</dt>
-            <dd class="col">Chelsea, Kensington</dd>
-          </dl>
-        </div>
-        <div class="col-sm">
-          <dl class="row">
-            <dt class="col-4 d-sm-none">Neg.</dt>
-            <dd class="col">Chiara Tassia, Dave Newport</dd>
-          </dl>
-        </div>
-      </div>
-    </a>
-    <a routerLink="/applicant-view-letting" class="list-group-item list-group-item-action">
-      <div class="row">
-        <div class="col-sm">
-          <dl class="row">
-            <dt class="col-4 d-sm-none">Request</dt>
-            <dd class="col">Long Let £1000 2 Beds</dd>
-          </dl>
-        </div>
-        <div class="col-sm">
-          <dl class="row">
-            <dt class="col-4 d-sm-none">Areas</dt>
-            <dd class="col">Chelsea, Kensington</dd>
-          </dl>
-        </div>
-        <div class="col-sm">
-          <dl class="row">
-            <dt class="col-4 d-sm-none">Neg.</dt>
-            <dd class="col">Jemma Graham</dd>
-          </dl>
+      <div class="list-group-item list-group-item-action" *ngFor="let search of searches">
+        <div class="row">
+          <div class="col-sm">
+            <dl class="row">
+              <dt class="col-4 d-sm-none">Created</dt>
+              <dd class="col">{{search?.createDate| date: 'd/MM/yyyy'}}</dd>
+            </dl>
+          </div>
+          <div class="col-sm">
+            <dl class="row">
+              <dt class="col-4 d-sm-none">Type</dt>
+              <dd class="col">{{search?.type}}</dd>
+            </dl>
+          </div>
+          <div class="col-sm">
+            <dl class="row">
+              <dt class="col-4 d-sm-none">Price</dt>
+              <dd class="col">{{search?.maxAmount | currency: "GBP"}}</dd>
+            </dl>
+          </div>
+          <div class="col-sm">
+            <dl class="row">
+              <dt class="col-4 d-sm-none">Minimum Beds</dt>
+              <dd class="col"> {{search?.minBeds}}</dd>
+            </dl>
+          </div>
+          <div class="col-sm">
+            <dl class="row">
+              <dt class="col-4 d-sm-none">Areas</dt>
+              <dd class="col">{{search?.areas}}</dd>
+            </dl>
+          </div>
         </div>
       </div>
-    </a>
+   </div>
   </div>
 </div>

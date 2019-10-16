@@ -11,7 +11,7 @@
         <div class="col-sm"><strong>Instructed</strong></div>
         <div class="col-sm"><strong>Type</strong></div>
         <div class="col-sm"><strong>Status</strong></div>
-        <div class="col-sm"><strong>Long Let Rent</strong></div>
+        <div class="col-sm"><strong>Price</strong></div>
         <div class="col-sm" *ngIf="isShortLet"><strong>Short Let Rent</strong></div>
         <div class="col-sm"><strong>Landlord</strong></div>
         <div class="col-sm"><strong>Lister</strong></div>
@@ -43,7 +43,7 @@
           </div>
           <div class="col-sm">
             <dl class="row">
-              <dt class="col-4 d-sm-none">Long Let Rent</dt>
+              <dt class="col-4 d-sm-none">Price</dt>
               <dd class="col">{{instruction?.amount | currency: "GBP"}}</dd>
             </dl>
           </div>
