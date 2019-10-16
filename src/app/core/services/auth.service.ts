@@ -40,6 +40,7 @@ export class AuthService {
     return this.adalService.userInfo.authenticated;
   }
 
+  // TODO: Refactor to add proper env check
   public signout(): void {
     this.confirmSignOut().subscribe(res => {
       if (res) {
