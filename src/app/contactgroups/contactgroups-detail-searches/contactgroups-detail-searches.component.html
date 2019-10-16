@@ -11,11 +11,11 @@
   <div class="list-group">
     <div class="list-group-item list-header d-none d-sm-block">
       <div class="row">
-        <div class="col-sm"><strong>Created</strong></div>
         <div class="col-sm"><strong>Type</strong></div>
-        <div class="col-sm"><strong>Price</strong></div>
-        <div class="col-sm"><strong>Beds</strong></div>
         <div class="col-sm"><strong>Areas</strong></div>
+        <div class="col-sm"><strong>Price</strong></div>
+        <div class="col-sm"><strong>Min Beds</strong></div>
+        <div class="col-sm"><strong>Created</strong></div>
       </div>
     </div>
    <div *ngIf="searches$ | async as searches">
@@ -26,14 +26,14 @@
         <div class="row">
           <div class="col-sm">
             <dl class="row">
-              <dt class="col-4 d-sm-none">Created</dt>
-              <dd class="col">{{search?.createDate| date: 'd/MM/yyyy'}}</dd>
+              <dt class="col-4 d-sm-none">Type</dt>
+              <dd class="col">{{search?.type}}</dd>
             </dl>
           </div>
           <div class="col-sm">
             <dl class="row">
-              <dt class="col-4 d-sm-none">Type</dt>
-              <dd class="col">{{search?.type}}</dd>
+              <dt class="col-4 d-sm-none">Areas</dt>
+              <dd class="col">{{search?.areas}}</dd>
             </dl>
           </div>
           <div class="col-sm">
@@ -44,14 +44,14 @@
           </div>
           <div class="col-sm">
             <dl class="row">
-              <dt class="col-4 d-sm-none">Minimum Beds</dt>
+              <dt class="col-4 d-sm-none">Min Beds</dt>
               <dd class="col"> {{search?.minBeds}}</dd>
             </dl>
           </div>
           <div class="col-sm">
             <dl class="row">
-              <dt class="col-4 d-sm-none">Areas</dt>
-              <dd class="col">{{search?.areas}}</dd>
+              <dt class="col-4 d-sm-none">Created</dt>
+              <dd class="col">{{search?.createDate| date: 'd/MM/yyyy'}}</dd>
             </dl>
           </div>
         </div>
