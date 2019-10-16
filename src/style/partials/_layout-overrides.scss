@@ -219,7 +219,7 @@ fieldset {
         }
     }
 
-    .v-o-h-container:hover &, .v-o-h:focus & {
+    .v-o-h-container:hover & {
         @include media-breakpoint-up(xl) {
             visibility: visible
         }
