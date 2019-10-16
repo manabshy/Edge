@@ -25,7 +25,7 @@ export class PropertyComponent extends BaseComponent implements OnInit {
   searchTerm = '';
   PAGE_SIZE = 20;
   page: number;
-  bottomReached: boolean;
+  bottomReached = false;
 
   constructor(private propertyService: PropertyService, private route: ActivatedRoute, private fb: FormBuilder, private sharedService: SharedService) { super(); }
 

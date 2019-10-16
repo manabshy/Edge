@@ -134,7 +134,7 @@ export class NotesComponent implements OnInit, OnChanges {
       }
       if (this.isPropertyNote) {
         console.log('here for property notes', this.isPropertyNote);
-        this.propertyService.propertyPageNumberChanged(this.page);
+        this.propertyService.propertyNotePageNumberChanged(this.page);
       }
       console.log('page number here...', this.page);
     }

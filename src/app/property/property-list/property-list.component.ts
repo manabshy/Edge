@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, HostListener } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, HostListener, OnDestroy } from '@angular/core';
 
 import { PropertyAutoComplete } from '../shared/property';
 import { PropertyService } from '../shared/property.service';
@@ -8,10 +8,10 @@ import { PropertyService } from '../shared/property.service';
   templateUrl: './property-list.component.html',
   styleUrls: ['./property-list.component.scss']
 })
-export class PropertyListComponent implements OnInit, OnChanges {
+export class PropertyListComponent implements OnInit, OnChanges{
   @Input() properties: PropertyAutoComplete[];
   @Input() searchTerm: string;
-  @Input() bottomReached: boolean;
+  @Input() bottomReached = false;
   @Input() pageNumber: number;
   page: number;
 
@@ -31,6 +31,7 @@ export class PropertyListComponent implements OnInit, OnChanges {
 
   onPropertySelected(propertyId: string) {
     this.propertyService.currentPropertyChanged(+propertyId);
+    // this.bottomReached = true;
   }
 
   @HostListener('window:scroll', ['$event'])

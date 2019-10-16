@@ -42,12 +42,12 @@ export class PropertyDetailNotesComponent extends BaseComponent implements OnIni
       this.getPropertyNotes();
     }
 
-    this.propertyService.propertyPageNumberChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(newPage => {
+    this.propertyService.propertyNotePageNumberChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(newPage => {
       this.page = newPage;
       this.getNexPropertyNotesPage(this.page);
     });
 
-    this.propertyService.propertNoteChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
+    this.propertyService.propertyNoteChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
       if (data) {
         this.propertyNotes = [];
         this.page = 1;

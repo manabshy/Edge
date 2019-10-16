@@ -17,14 +17,16 @@ export class PropertyService {
   currentPropertyIdSubject = new BehaviorSubject<number | null>(0);
   private propertyPageNumberSubject = new Subject<number>();
   private propertyNoteChangeSubject = new Subject<PropertyNote>();
-  propertNoteChanges$ = this.propertyNoteChangeSubject.asObservable();
+  private propertyNotePageNumberChangeSubject = new Subject<number>();
+  propertyNoteChanges$ = this.propertyNoteChangeSubject.asObservable();
+  propertyNotePageNumberChanges$ = this.propertyNotePageNumberChangeSubject.asObservable();
   propertyPageNumberChanges$ = this.propertyPageNumberSubject.asObservable();
   currentPropertyId$ = this.currentPropertyIdSubject.asObservable();
 
   constructor(private http: HttpClient) { }
 
   autocompleteProperties(searchTerm: any, pageSize?: number, page?: number): Observable<PropertyAutoComplete[]> {
-    if (!page || +page === 0) {
+    if (!page) {
       page = 1;
     }
     if (pageSize == null) {
@@ -122,7 +124,7 @@ export class PropertyService {
   }
 
   getPropertyNotes(propertyId: number, pageSize?: number, page?: number): Observable<PropertyNote[]> {
-    if (!page || +page === 0) {
+    if (!page) {
       page = 1;
     }
     if (pageSize == null) {
@@ -156,19 +158,13 @@ export class PropertyService {
       tap(data => console.log('updated property note here...', JSON.stringify(data))));
   }
 
-  propertyDetails$ = this.currentPropertyId$
-    .pipe(
-      filter(propertyId => Boolean(propertyId)),
-      switchMap(propertyId => this.http.get<PropertyData>(`${AppConstants.basePropertyUrl}/${propertyId}?includeInfo=true&includePhoto=true`)
-        .pipe(
-          map(response => response.result),
-          tap(data => console.log('property id of details returned', propertyId)),
-          tap(data => console.log('details returned', JSON.stringify(data)))
-        )
-      ));
-
   currentPropertyChanged(propertyId: number) {
+    console.log('next value is ', this.currentPropertyIdSubject.getValue())
     this.currentPropertyIdSubject.next(propertyId);
+  }
+
+  propertyNotePageNumberChanged(newPageNumber: number) {
+    this.propertyNotePageNumberChangeSubject.next(newPageNumber);
   }
 
   propertyPageNumberChanged(newPageNumber: number) {
@@ -178,6 +174,17 @@ export class PropertyService {
   propertyNoteChanged(newNote: PropertyNote) {
     this.propertyNoteChangeSubject.next(newNote);
   }
+
+  // propertyDetails$ = this.currentPropertyId$
+  //   .pipe(
+  //     filter(propertyId => Boolean(propertyId)),
+  //     switchMap(propertyId => this.http.get<PropertyData>(`${AppConstants.basePropertyUrl}/${propertyId}?includeInfo=true&includePhoto=true`)
+  //       .pipe(
+  //         map(response => response.result),
+  //         tap(data => console.log('property id of details returned', propertyId)),
+  //         tap(data => console.log('details returned', JSON.stringify(data)))
+  //       )
+  //     ));
 
 }
 
