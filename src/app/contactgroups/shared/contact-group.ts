@@ -161,21 +161,7 @@ export interface PeopleAutoCompleteResult {
   matchScore: number;
   ranking: number;
 }
-export interface ContactOffer {
-  propertyAddress: Address;
-}
-export interface ContactInstruction {
-  propertyAddress: Address;
-}
-export interface ContactSearch {
-  propertyAddress: Address;
-}
-export interface ContactLettingsManagement {
-  propertyAddress: Address;
-}
-export interface ContactHomeManagement {
-  propertyAddress: Address;
-}
+
 export interface BasicContactGroup {
   contactGroupId: number;
   isCompany: boolean;

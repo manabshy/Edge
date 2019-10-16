@@ -8,13 +8,11 @@ import {
   BasicContactGroupData, CompanyAutoCompleteResult, CompanyContactGroupAutoCompleteData as CompanyAutoCompleteData,
   Company, CompanyData, SignerAutoCompleteData, Signer, PersonSummaryFiguresData,
   PersonSummaryFigures, SignerData, PotentialDuplicateResult, PeopleAutoCompleteData2,
-  ContactNote, ContactNoteData, ContactInstruction, ContactSearch, ContactOffer, ContactLettingsManagement, ContactHomeManagement
-} from './contact-group';
+  ContactNote, ContactNoteData} from './contact-group';
 import { map, tap } from 'rxjs/operators';
 import { Person, BasicPerson } from 'src/app/core/models/person';
 import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encoder-helper';
 
-const PAGE_SIZE = 100;
 @Injectable({
   providedIn: 'root'
 })
@@ -257,31 +255,6 @@ export class ContactGroupsService {
       .pipe(
         map(response => response.result),
         tap(data => console.log('updated contactgroup note here...', JSON.stringify(data))));
-  }
-
-  getInstructions(personId: number): Observable<ContactInstruction> {
-    const url = `${AppConstants.basePersonUrl}/${personId}/instructions`;
-    return this.http.get<any>(url).pipe(map(response => response.result));
-  }
-
-  getSearches(personId: number): Observable<ContactSearch> {
-    const url = `${AppConstants.basePersonUrl}/${personId}/searches`;
-    return this.http.get<any>(url).pipe(map(response => response.result));
-  }
-
-  getOffers(personId: number): Observable<ContactOffer> {
-    const url = `${AppConstants.basePersonUrl}/${personId}/offers`;
-    return this.http.get<any>(url).pipe(map(response => response.result));
-  }
-
-  getLettingsManagements(personId: number): Observable<ContactLettingsManagement> {
-    const url = `${AppConstants.basePersonUrl}/${personId}/lettingsManagements`;
-    return this.http.get<any>(url).pipe(map(response => response.result));
-  }
-
-  getHomeManagements(personId: number): Observable<ContactHomeManagement> {
-    const url = `${AppConstants.basePersonUrl}/${personId}/homeManagements`;
-    return this.http.get<any>(url).pipe(map(response => response.result));
   }
 
   contactInfoChanged(info: BasicContactGroup[]) {

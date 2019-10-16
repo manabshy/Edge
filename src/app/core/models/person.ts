@@ -96,6 +96,30 @@ export interface SmsInfo {
   senderName: string;
   senderPhoneNumber: string;
 }
+export interface PersonOffer {
+  propertyAddress: Address;
+}
+export interface PersonInstruction {
+  propertyAddress: Address;
+}
+export interface PersonSearch {
+  propertyAddress: Address;
+}
+export interface PersonLettingsManagement {
+  propertyAddress: Address;
+}
+export interface PersonHomeManagement {
+  propertyAddress: Address;
+}
+export interface PersonSearch {
+  lettingsRequirementId: number;
+  salesRequirementId?: any;
+  maxAmount: number;
+  minBeds: number;
+  createDate: Date;
+  staffMember: string;
+  areas: string;
+}
 export const PeopleTitles  = <PersonTitle[]>[
   {id: 'Mr', name: 'Mr'},
   {id: 'Mrs', name: 'Mrs'},
