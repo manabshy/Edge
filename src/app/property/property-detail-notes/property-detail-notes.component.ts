@@ -78,7 +78,7 @@ export class PropertyDetailNotesComponent extends BaseComponent implements OnIni
 
   setupNoteType() {
     if(this.listInfo) {
-      this.noteTypes = this.listInfo.result.propertyNoteTypes;
+      this.noteTypes = this.listInfo.propertyNoteTypes;
     }
     const keys = Object.keys(this.noteTypes);
     console.log(this.noteTypes);

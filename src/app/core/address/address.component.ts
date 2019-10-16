@@ -75,7 +75,7 @@ export class AddressComponent implements OnInit, OnChanges {
         console.log('list info in contact people....', this.listInfo);
       }
     });
-  
+
     this.addressForm = this.fb.group({
       fullAddress: ['', Validators.required],
       addressLines: ['', {validators: Validators.maxLength(500)}],
@@ -102,7 +102,7 @@ export class AddressComponent implements OnInit, OnChanges {
 
   setDropdownLists() {
     if (this.listInfo) {
-      this.countries = this.listInfo.result.countries;
+      this.countries = this.listInfo.countries;
     }
   }
 

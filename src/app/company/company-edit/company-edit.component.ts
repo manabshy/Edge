@@ -84,7 +84,7 @@ export class CompanyEditComponent implements OnInit {
 
   setDropdownLists() {
     if (this.listInfo) {
-      this.companyTypes = this.listInfo.result.companyTypes;
+      this.companyTypes = this.listInfo.companyTypes;
     }
   }
 

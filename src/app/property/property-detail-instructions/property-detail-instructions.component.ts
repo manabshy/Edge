@@ -35,7 +35,7 @@ export class PropertyDetailInstructionsComponent implements OnInit {
   ngOnInit() {
     this.storage.get('info').subscribe(data => {
       if (data) {
-        this.listInfo = data; 
+        this.listInfo = data;
         this.setStatusesInfo();
         console.log('list info property instructions....', this.listInfo);
       }
@@ -57,10 +57,10 @@ export class PropertyDetailInstructionsComponent implements OnInit {
 
   setStatusesInfo() {
    if(this.listInfo) {
-      this.propertySaleStatuses = this.listInfo.result.propertySaleStatuses;
-      this.propertyLettingStatuses = this.listInfo.result.propertyLettingStatuses;
-      this.offerSaleStatuses = this.listInfo.result.offerSaleStatuses;
-      this.offerLettingStatuses = this.listInfo.result.offerLettingStatuses;
+      this.propertySaleStatuses = this.listInfo.propertySaleStatuses;
+      this.propertyLettingStatuses = this.listInfo.propertyLettingStatuses;
+      this.offerSaleStatuses = this.listInfo.offerSaleStatuses;
+      this.offerLettingStatuses = this.listInfo.offerLettingStatuses;
    }
   }
 

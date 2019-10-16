@@ -76,25 +76,24 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
   ngOnInit() {
     this.toastr.overlayContainer = this.toastContainer;
     console.log('instance initiliased')
-    // if (this.isLoggedIn) {
-    //   this.staffMemberService.getCurrentStaffMember().pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
-    //     if (data) {
-    //       this.currentStaffMember = data;
-    //       this.isCurrentUserAvailable = true;
-    //       AppUtils.currentStaffMemberGlobal = data;
-    //       // this.staffMemberService.currentStaffMemberChange(data);
-    //       console.log('app component current user', data);
-    //     }
-    //   }, (error: WedgeError) => {
-    //     this.sharedService.showError(error);
-    //   });
+    if (this.isLoggedIn) {
+      this.staffMemberService.getCurrentStaffMember().pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
+        if (data) {
+          this.currentStaffMember = data;
+          this.isCurrentUserAvailable = true;
+          AppUtils.currentStaffMemberGlobal = data;
+          console.log('app component current user', data);
+        }
+      }, (error: WedgeError) => {
+        this.sharedService.showError(error);
+      });
 
-    //   this.infoService.getDropdownListInfo().pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
-    //     AppUtils.listInfo = data;
-    //     this.infoService.infoChanged(data);
-    //     console.log('app component list info', data);
-    //   });
-    // }
+      this.infoService.getDropdownListInfo().pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
+        AppUtils.listInfo = data;
+        this.infoService.infoChanged(data);
+        console.log('app component list info', data);
+      });
+    }
     this.appHeightObservable = new MutationObserver(() => {
       this.toggleScrollTop();
     });

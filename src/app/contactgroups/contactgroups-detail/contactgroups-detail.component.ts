@@ -69,7 +69,7 @@ export class ContactgroupsDetailComponent implements OnInit {
 
   setDropdownLists() {
     if (this.listInfo) {
-      this.warnings = this.listInfo.result.personWarningStatuses;
+      this.warnings = this.listInfo.personWarningStatuses;
     }
   }
 

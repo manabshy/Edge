@@ -155,10 +155,10 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
     this.enablePersonWarnings();
   }
   setDropdownLists() {
-    this.countries = this.listInfo.result.countries;
-    this.titles = this.listInfo.result.titles;
-    this.warnings = this.listInfo.result.personWarningStatuses;
-    this.telephoneTypes = this.listInfo.result.telephoneTypes;
+    this.countries = this.listInfo.countries;
+    this.titles = this.listInfo.titles;
+    this.warnings = this.listInfo.personWarningStatuses;
+    this.telephoneTypes = this.listInfo.telephoneTypes;
   }
 
   enablePersonWarnings() {

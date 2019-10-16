@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { shareReplay, tap } from 'rxjs/operators';
+import { shareReplay, tap, map } from 'rxjs/operators';
 import { AppConstants } from '../shared/app-constants';
 import { HttpClient } from '@angular/common/http';
 import { StorageMap } from '@ngx-pwa/local-storage';
@@ -30,8 +30,9 @@ export class InfoService {
   }
 
   private requestDropdownListInfo(): Observable<DropdownListInfo> {
-    return this.http.get<DropdownListInfo>(AppConstants.baseInfoUrl)
+    return this.http.get<any>(AppConstants.baseInfoUrl)
       .pipe(
+        map(response => response.result),
         tap(data => {
           if (data) {
             this.infoData = data;
@@ -44,13 +45,13 @@ export class InfoService {
 }
 
 export interface DropdownListInfo {
-  Countries: InfoDetail[];
-  CompanyTypes: InfoDetail[];
-  Titles: Record<number, string>;
-  TelephoneTypes: Record<number, string>;
-  PropertyStyles: InfoDetail[];
-  PropertyTypes: InfoDetail[];
-  PersonWarningStatuses: InfoDetail[];
+  countries: InfoDetail[];
+  companyTypes: InfoDetail[];
+  titles: Record<number, string>;
+  telephoneTypes: Record<number, string>;
+  propertyStyles: InfoDetail[];
+  propertyTypes: InfoDetail[];
+  personWarningStatuses: InfoDetail[];
   propertyNoteTypes: InfoDetail[];
 }
 

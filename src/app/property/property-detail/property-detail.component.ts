@@ -92,9 +92,9 @@ export class PropertyDetailComponent implements OnInit {
   }
 
   setDropdownLists() {
-    this.regions = new Map(Object.entries(this.listInfo.result.regions));
-    this.allAreas = new Map(Object.entries(this.listInfo.result.areas));
-    this.allSubAreas = new Map(Object.entries(this.listInfo.result.subAreas));
+    this.regions = new Map(Object.entries(this.listInfo.regions));
+    this.allAreas = new Map(Object.entries(this.listInfo.areas));
+    this.allSubAreas = new Map(Object.entries(this.listInfo.subAreas));
   }
 
   isObject(val) {

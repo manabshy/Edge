@@ -98,11 +98,11 @@ export class PropertyDetailEditComponent implements OnInit {
   }
 
   setDropdownLists() {
-    this.propertyTypes = this.listInfo.result.propertyTypes;
-    this.allPropertyStyles = this.listInfo.result.propertyStyles;
-    this.regions = this.listInfo.result.regions;
-    this.allAreas = this.listInfo.result.areas;
-    this.allSubAreas = this.listInfo.result.subAreas;
+    this.propertyTypes = this.listInfo.propertyTypes;
+    this.allPropertyStyles = this.listInfo.propertyStyles;
+    this.regions = this.listInfo.regions;
+    this.allAreas = this.listInfo.areas;
+    this.allSubAreas = this.listInfo.subAreas;
   }
 
   getSignerDetails(id: number) {
