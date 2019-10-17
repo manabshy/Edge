@@ -19,20 +19,20 @@ export class PeopleService {
 
   getSearches(personId: number): Observable<PersonSearch[]> {
     const url = `${AppConstants.basePersonUrl}/${personId}/searches`;
-    return this.http.get<any>(url).pipe(map(response => response.result), tap(data=>console.log('searches', data)));
+    return this.http.get<any>(url).pipe(map(response => response.result));
   }
 
-  getOffers(personId: number): Observable<PersonOffer> {
+  getOffers(personId: number): Observable<PersonOffer[]> {
     const url = `${AppConstants.basePersonUrl}/${personId}/offers`;
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
 
-  getLettingsManagements(personId: number): Observable<PersonLettingsManagement> {
+  getLettingsManagements(personId: number): Observable<PersonLettingsManagement[]> {
     const url = `${AppConstants.basePersonUrl}/${personId}/lettingsManagements`;
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
 
-  getHomeManagements(personId: number): Observable<PersonHomeManagement> {
+  getHomeManagements(personId: number): Observable<PersonHomeManagement[]> {
     const url = `${AppConstants.basePersonUrl}/${personId}/homeManagements`;
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
