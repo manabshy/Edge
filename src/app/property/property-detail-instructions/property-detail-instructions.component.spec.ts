@@ -32,7 +32,7 @@ fdescribe('PropertyDetailInstructionsComponent should', () => {
       declarations: [PropertyDetailInstructionsComponent],
       imports: [
         HttpClientTestingModule,
-        BrowserModule,
+        // BrowserModule,
         FormsModule,
         ReactiveFormsModule,
         RouterTestingModule.withRoutes([])

@@ -51,7 +51,7 @@ describe('ContactgroupsDetailEditComponent', () => {
       declarations: [ ContactgroupsDetailEditComponent ],
       imports: [
         HttpClientTestingModule,
-        BrowserModule,
+        // BrowserModule,
         FormsModule,
         ReactiveFormsModule,
         RouterTestingModule.withRoutes([])

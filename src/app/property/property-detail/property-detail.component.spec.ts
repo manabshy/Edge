@@ -23,7 +23,7 @@ fdescribe('PropertyDetailComponent should', () => {
       declarations: [ PropertyDetailComponent, FormatAddressPipe ],
       imports: [
         HttpClientTestingModule,
-        BrowserModule,
+        // BrowserModule,
         FormsModule,
         ReactiveFormsModule,
         RouterModule.forRoot([])

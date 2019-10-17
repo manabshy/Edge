@@ -41,6 +41,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { CompanyModule } from './company/company.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -78,11 +80,13 @@ import { environment } from '../environments/environment';
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
     AccountModule,
     CoreModule,
     DashboardModule,
     LeaderboardModule,
-    PropertyModule,
+    // PropertyModule,
     ContactgroupsModule,
     DiaryModule,
     CompanyModule,

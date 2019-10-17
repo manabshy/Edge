@@ -45,7 +45,7 @@ fdescribe('PropertyDetailEditComponent', () => {
       declarations: [ PropertyDetailEditComponent ],
       imports: [
         HttpClientTestingModule,
-        BrowserModule,
+        // BrowserModule,
         FormsModule,
         ReactiveFormsModule,
         RouterTestingModule.withRoutes([])

@@ -21,8 +21,6 @@ import { ExchangesAndPipelineComponent } from './dashboard-list/exchanges-and-pi
     ExchangesAndPipelineComponent],
   imports: [
     CommonModule,
-    ReactiveFormsModule,
-    HttpClientModule,
     DashboardRoutingModule,
     CoreModule
   ],

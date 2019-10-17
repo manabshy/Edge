@@ -12,7 +12,6 @@ import { AccountRoutingModule } from './account-routing.module';
   exports: [LoginComponent],
   imports: [
     CommonModule,
-    HttpClientModule,
     AccountRoutingModule
   ],
   providers: [ AdalService,
