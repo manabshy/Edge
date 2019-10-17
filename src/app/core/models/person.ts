@@ -100,7 +100,15 @@ export interface PersonOffer {
   propertyAddress: Address;
 }
 export interface PersonInstruction {
-  propertyAddress: Address;
+  propertyEventId: number;
+  type: string;
+  status: string;
+  instuctionDate: Date;
+  amount: number;
+  shortLetAmount?: any;
+  agencyType: string;
+  propertyAddress: string;
+  staffMember: string;
 }
 export interface PersonSearch {
   propertyAddress: Address;

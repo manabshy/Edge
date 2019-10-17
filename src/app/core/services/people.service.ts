@@ -12,7 +12,7 @@ export class PeopleService {
 
   constructor(private http: HttpClient) { }
 
-  getInstructions(personId: number): Observable<PersonInstruction> {
+  getInstructions(personId: number): Observable<PersonInstruction[]> {
     const url = `${AppConstants.basePersonUrl}/${personId}/instructions`;
     return this.http.get<any>(url).pipe(map(response => response.result));
   }

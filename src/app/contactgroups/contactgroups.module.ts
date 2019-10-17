@@ -21,7 +21,21 @@ import { ContactgroupsDetailHomeManagementsComponent } from './contactgroups-det
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 @NgModule({
-  declarations: [ContactgroupsListComponent, ContactgroupsDetailComponent, ContactgroupsPeopleComponent, ContactgroupsDetailEditComponent, ContactgroupsCompanyEditComponent, ContactgroupsDetailLeadsComponent, ContactgroupsDetailNotesComponent, ContactgroupsDetailSearchesComponent, ContactgroupsDetailValuationsComponent, ContactgroupsDetailInstructionsComponent, ContactgroupsDetailOffersComponent, ContactgroupsDetailTenanciesComponent, ContactgroupsDetaillettingsManagementsComponent, ContactgroupsDetailHomeManagementsComponent],
+  declarations: [
+    ContactgroupsListComponent,
+    ContactgroupsDetailComponent,
+    ContactgroupsPeopleComponent,
+    ContactgroupsDetailEditComponent,
+    ContactgroupsCompanyEditComponent,
+    ContactgroupsDetailLeadsComponent,
+    ContactgroupsDetailNotesComponent,
+    ContactgroupsDetailSearchesComponent,
+    ContactgroupsDetailValuationsComponent,
+    ContactgroupsDetailInstructionsComponent,
+    ContactgroupsDetailOffersComponent,
+    ContactgroupsDetailTenanciesComponent,
+    ContactgroupsDetaillettingsManagementsComponent,
+    ContactgroupsDetailHomeManagementsComponent],
   imports: [
     CommonModule,
     CoreModule,

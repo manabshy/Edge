@@ -9,95 +9,72 @@
     </div>
   </div>
   <div class="list-group">
-      <div class="list-group-item list-header d-none d-sm-block">
+    <div class="list-group-item list-header d-none d-sm-block">
+      <div class="row">
+        <div class="col-sm-3"><strong>Address</strong></div>
+        <div class="col-sm"><strong>Status</strong></div>
+        <div class="col-sm"><strong>Price</strong></div>
+        <div class="col-sm" *ngIf="isShortLet"><strong>Short Let Rent</strong></div>
+        <div class="col-sm"><strong>Type</strong></div>
+        <div class="col-sm"><strong>Lister</strong></div>
+        <div class="col-sm"><strong>Instructed</strong></div>
+      </div>
+    </div>
+    <div *ngIf="instructions$ | async as instructions">
+      <div class="list-group-item text-center text-danger" *ngIf="!instructions || !instructions?.length">
+        <i class="far fa-sad-tear"></i> No searches
+      </div>
+      <div class="list-group-item list-group-item-action" *ngFor="let instruction of instructions">
         <div class="row">
-          <div class="col-sm-3"><strong>Address</strong></div>
-          <div class="col-sm"><strong>Status</strong></div>
-          <div class="col-sm"><strong>Lister</strong></div>
-          <div class="col-sm"><strong>Instructed</strong></div>
-          <div class="col-sm"><strong>Price</strong></div>
-          <div class="col-sm"><strong>Type</strong></div>
+          <div class="col-sm-3">
+            <dl class="row">
+              <dt class="col-4 d-sm-none">Address</dt>
+              <dd class="col">{{instruction?.propertyAddress}}</dd>
+            </dl>
+          </div>
+          <div class="col-sm">
+            <dl class="row">
+              <dt class="col-4 d-sm-none">Status</dt>
+              <dd class="col">{{instruction?.status}}</dd>
+            </dl>
+          </div>
+          <div class="col-sm">
+            <dl class="row">
+              <dt class="col-4 d-sm-none">Price</dt>
+              <dd class="col">{{instruction?.amount  | currency: "GBP"}}</dd>
+            </dl>
+          </div>
+          <div class="col-sm" *ngIf="isShortLet">
+            <dl class="row">
+              <dt class="col-4 d-sm-none">Short Let Rent</dt>
+              <ng-container *ngIf="instruction.shortLetAmount > 0; else noAmount">
+                <dd class="col">{{instruction?.shortLetAmount | currency: "GBP"}}</dd>
+              </ng-container>
+              <ng-template #noAmount>
+                <dd class="col"></dd>
+              </ng-template>
+            </dl>
+          </div>
+          <div class="col-sm">
+            <dl class="row">
+              <dt class="col-4 d-sm-none">Type</dt>
+              <dd class="col">{{instruction?.type}}</dd>
+            </dl>
+          </div>
+          <div class="col-sm">
+            <dl class="row">
+              <dt class="col-4 d-sm-none">Lister</dt>
+              <dd class="col">{{instruction?.staffMember}}</dd>
+            </dl>
+          </div>
+          <div class="col-sm">
+            <dl class="row">
+              <dt class="col-4 d-sm-none">Instructed</dt>
+              <dd class="col">{{instruction?.instructionDate | date: 'd/MM/yyyy'}}</dd>
+            </dl>
+          </div>
         </div>
       </div>
-      <a routerLink="/property-details-sale" class="list-group-item list-group-item-action">
-        <div class="row">
-          <div class="col-sm-3">
-            <dl class="row">
-              <dt class="col-4 d-sm-none">Address</dt>
-              <dd class="col">23 Prince of Wales Crescent, SW6</dd>
-            </dl>
-          </div>
-          <div class="col-sm">
-            <dl class="row">
-              <dt class="col-4 d-sm-none">Status</dt>
-              <dd class="col">U/O</dd>
-            </dl>
-          </div>
-          <div class="col-sm">
-            <dl class="row">
-              <dt class="col-4 d-sm-none">Lister</dt>
-              <dd class="col">Chiara Tassia</dd>
-            </dl>
-          </div>
-          <div class="col-sm">
-            <dl class="row">
-              <dt class="col-4 d-sm-none">Instructed</dt>
-              <dd class="col">14/05/18</dd>
-            </dl>
-          </div>
-          <div class="col-sm">
-            <dl class="row">
-              <dt class="col-4 d-sm-none">Price</dt>
-              <dd class="col">£820,000</dd>
-            </dl>
-          </div>
-          <div class="col-sm">
-            <dl class="row">
-              <dt class="col-4 d-sm-none">Type</dt>
-              <dd class="col">Sale Sole</dd>
-            </dl>
-          </div>
-        </div>
-      </a>
-      <a routerLink="/property-details-letting" class="list-group-item list-group-item-action">
-        <div class="row">
-          <div class="col-sm-3">
-            <dl class="row">
-              <dt class="col-4 d-sm-none">Address</dt>
-              <dd class="col">23 Prince of Wales Crescent, SW6</dd>
-            </dl>
-          </div>
-          <div class="col-sm">
-            <dl class="row">
-              <dt class="col-4 d-sm-none">Status</dt>
-              <dd class="col">INST</dd>
-            </dl>
-          </div>
-          <div class="col-sm">
-            <dl class="row">
-              <dt class="col-4 d-sm-none">Lister</dt>
-              <dd class="col">Henny Irwin</dd>
-            </dl>
-          </div>
-          <div class="col-sm">
-            <dl class="row">
-              <dt class="col-4 d-sm-none">Instructed</dt>
-              <dd class="col">14/05/18</dd>
-            </dl>
-          </div>
-          <div class="col-sm">
-            <dl class="row">
-              <dt class="col-4 d-sm-none">Price</dt>
-              <dd class="col">£650</dd>
-            </dl>
-          </div>
-          <div class="col-sm">
-            <dl class="row">
-              <dt class="col-4 d-sm-none">Type</dt>
-              <dd class="col">Long Let Multi</dd>
-            </dl>
-          </div>
-        </div>
-      </a>
     </div>
+  </div>
 </div>
