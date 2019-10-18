@@ -20,6 +20,7 @@ import { ContactgroupsDetaillettingsManagementsComponent } from './contactgroups
 import { ContactgroupsDetailHomeManagementsComponent } from './contactgroups-detail-home-managements/contactgroups-detail-home-managements.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { ContactGroupsComponent } from './contactgroups.component';
+import { ContactgroupsDetailHomeHelperComponent } from './contactgroups-detail-home-helper/contactgroups-detail-home-helper.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { ContactGroupsComponent } from './contactgroups.component';
     ContactgroupsDetailOffersComponent,
     ContactgroupsDetailTenanciesComponent,
     ContactgroupsDetaillettingsManagementsComponent,
-    ContactgroupsDetailHomeManagementsComponent],
+    ContactgroupsDetailHomeManagementsComponent,
+    ContactgroupsDetailHomeHelperComponent],
   imports: [
     CommonModule,
     CoreModule,

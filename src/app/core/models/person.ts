@@ -114,10 +114,20 @@ export interface PersonSearch {
   propertyAddress: Address;
 }
 export interface PersonLettingsManagement {
-  propertyAddress: Address;
+  propertyAddress: string;
+  type: string;
+  status: string;
+  managedStartDate?: Date;
+  managedEndDate?: Date;
+  propertyManager: string;
 }
-export interface PersonHomeManagement {
-  propertyAddress: Address;
+export interface PersonHomeHelper {
+  propertyAddress: string;
+  type: string;
+  status: string;
+  managedStartDate?: Date;
+  managedEndDate?: Date;
+  propertyManager: string;
 }
 export interface PersonSearch {
   lettingsRequirementId: number;

@@ -2,10 +2,10 @@
 <div class="container">
   <div class="row page-title">
     <div class="col">
-      <h4 class="mb-0">Lettings Managements</h4>
+      <h4 class="mb-0">Home Helper</h4>
     </div>
     <div class="col-auto">
-      <button type="button" class="btn btn-primary"><i class="fas fa-plus mr-2"></i> Let M.</button>
+      <button type="button" class="btn btn-primary"><i class="fas fa-plus mr-2"></i> Home H.</button>
     </div>
   </div>
   <div class="list-group">
@@ -18,11 +18,11 @@
         <div class="col-sm"><strong>Prop. Man.</strong></div>
       </div>
     </div>
-    <div *ngIf="managements$ | async as managements">
-      <div class="list-group-item text-center text-danger" *ngIf="!managements || !managements?.length">
-        <i class="far fa-sad-tear"></i> No lettings managements
+    <div *ngIf="homeHelpers$ | async as homeHelpers">
+      <div class="list-group-item text-center text-danger" *ngIf="!homeHelpers || !homeHelpers?.length">
+        <i class="far fa-sad-tear"></i> No home helpers
       </div>
-      <div class="list-group-item list-group-item-action" *ngFor="let item of managements">
+      <div class="list-group-item list-group-item-action" *ngFor="let item of homeHelpers">
         <div class="row">
           <div class="col-sm-3">
             <dl class="row">

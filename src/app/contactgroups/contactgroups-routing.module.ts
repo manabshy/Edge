@@ -14,6 +14,7 @@ import { ContactgroupsDetailOffersComponent } from './contactgroups-detail-offer
 import { ContactgroupsDetailTenanciesComponent } from './contactgroups-detail-tenancies/contactgroups-detail-tenancies.component';
 import { ContactgroupsDetaillettingsManagementsComponent } from './contactgroups-detail-lettings-managements/contactgroups-detail-lettings-managements.component';
 import { ContactgroupsDetailHomeManagementsComponent } from './contactgroups-detail-home-managements/contactgroups-detail-home-managements.component';
+import { ContactgroupsDetailHomeHelperComponent } from './contactgroups-detail-home-helper/contactgroups-detail-home-helper.component';
 
 const routes: Routes = [
   { path: '', component: ContactGroupsComponent, data: { shouldDetach: true } },
@@ -32,6 +33,7 @@ const routes: Routes = [
       { path: 'tenancies', component: ContactgroupsDetailTenanciesComponent },
       { path: 'lettings-managements', component: ContactgroupsDetaillettingsManagementsComponent },
       { path: 'home-managements', component: ContactgroupsDetailHomeManagementsComponent },
+      { path: 'home-helper', component: ContactgroupsDetailHomeHelperComponent },
     ]
   },
 ];
