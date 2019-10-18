@@ -1,11 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthGuardService } from '../core/services/auth-guard.service';
 import { ContactgroupsDetailComponent } from './contactgroups-detail/contactgroups-detail.component';
 import { ContactGroupsComponent } from './contactgroups.component';
 import { ContactgroupsPeopleComponent } from './contactgroups-people/contactgroups-people.component';
 import { ContactgroupsDetailEditComponent } from './contactgroups-detail-edit/contactgroups-detail-edit.component';
-import { ContactgroupsCompanyEditComponent } from './contactgroups-company-edit/contactgroups-company-edit.component';
 import { CanDeactivateGuard } from '../core/shared/can-deactivate.guard';
 import { ContactgroupsDetailLeadsComponent } from './contactgroups-detail-leads/contactgroups-detail-leads.component';
 import { ContactgroupsDetailNotesComponent } from './contactgroups-detail-notes/contactgroups-detail-notes.component';
@@ -18,26 +16,24 @@ import { ContactgroupsDetaillettingsManagementsComponent } from './contactgroups
 import { ContactgroupsDetailHomeManagementsComponent } from './contactgroups-detail-home-managements/contactgroups-detail-home-managements.component';
 
 const routes: Routes = [
-  { path: 'contact-centre', canActivate: [AuthGuardService],
+  { path: '', component: ContactGroupsComponent, data: { shouldDetach: true } },
+  {
+    path: 'detail/:personId',
     children: [
-    { path: '', component: ContactGroupsComponent, data: { shouldDetach: true } },
-    { path: 'detail/:personId',
-      children: [
-        { path: '', component: ContactgroupsDetailComponent, data: { shouldDetach: true } },
-        { path: 'people/:contactGroupId', component: ContactgroupsPeopleComponent, canDeactivate: [CanDeactivateGuard] },
-        {path: 'edit', component: ContactgroupsDetailEditComponent, canDeactivate: [CanDeactivateGuard]},
-        {path: 'leads', component: ContactgroupsDetailLeadsComponent},
-        {path: 'notes', component: ContactgroupsDetailNotesComponent},
-        {path: 'searches', component: ContactgroupsDetailSearchesComponent},
-        {path: 'valuations', component: ContactgroupsDetailValuationsComponent},
-        {path: 'instructions', component: ContactgroupsDetailInstructionsComponent},
-        {path: 'offers', component: ContactgroupsDetailOffersComponent},
-        {path: 'tenancies', component: ContactgroupsDetailTenanciesComponent},
-        {path: 'lettings-managements', component: ContactgroupsDetaillettingsManagementsComponent},
-        {path: 'home-managements', component: ContactgroupsDetailHomeManagementsComponent},
-        // {path: 'edit:/id', component: ContactgroupsDetailEditComponent}
-      ]},
-  ]},
+      { path: '', component: ContactgroupsDetailComponent, data: { shouldDetach: true } },
+      { path: 'people/:contactGroupId', component: ContactgroupsPeopleComponent, canDeactivate: [CanDeactivateGuard] },
+      { path: 'edit', component: ContactgroupsDetailEditComponent, canDeactivate: [CanDeactivateGuard] },
+      { path: 'leads', component: ContactgroupsDetailLeadsComponent },
+      { path: 'notes', component: ContactgroupsDetailNotesComponent },
+      { path: 'searches', component: ContactgroupsDetailSearchesComponent },
+      { path: 'valuations', component: ContactgroupsDetailValuationsComponent },
+      { path: 'instructions', component: ContactgroupsDetailInstructionsComponent },
+      { path: 'offers', component: ContactgroupsDetailOffersComponent },
+      { path: 'tenancies', component: ContactgroupsDetailTenanciesComponent },
+      { path: 'lettings-managements', component: ContactgroupsDetaillettingsManagementsComponent },
+      { path: 'home-managements', component: ContactgroupsDetailHomeManagementsComponent },
+    ]
+  },
 ];
 
 @NgModule({

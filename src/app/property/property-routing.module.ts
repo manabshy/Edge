@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthGuardService } from '../core/services/auth-guard.service';
 import { PropertyComponent } from './property.component';
 import { CanDeactivateGuard } from '../core/shared/can-deactivate.guard';
 import { PropertyDetailComponent } from './property-detail/property-detail.component';
@@ -14,7 +13,6 @@ import { PropertyDetailEditComponent } from './property-detail-edit/property-det
 
 
 const routes: Routes = [
-
   { path: '', component: PropertyComponent, data: { shouldDetach: true } },
   {
     path: 'detail/:id',
@@ -29,30 +27,7 @@ const routes: Routes = [
       { path: 'map', component: PropertyDetailMapComponent },
     ]
   }
-]
-// const routes: Routes = [
-//   { path: 'property-centre', canActivate: [AuthGuardService],
-//     children: [
-//       { path: '', component: PropertyComponent, data: { shouldDetach: true } },
-//       // { path: 'company', children: [
-//       //   { path: '', component: ContactgroupsCompanyEditComponent }
-//       // ] },
-//       { path: 'detail/:id',
-//       children: [
-//         { path: '', component: PropertyDetailComponent, data: { shouldDetach: true }},
-//         {path: 'edit', component: PropertyDetailEditComponent, canDeactivate: [CanDeactivateGuard] },
-//         {path: 'instructions', component: PropertyDetailInstructionsComponent},
-//         {path: 'offers', component: PropertyDetailOffersComponent},
-//         {path: 'property-notes', component: PropertyDetailNotesComponent},
-//         {path: 'documents', component: PropertyDetailDocumentsComponent},
-//         {path: 'property-photos', component: PropertyDetailPhotosComponent},
-//         {path: 'map', component: PropertyDetailMapComponent},
-//         // {path: 'map/:lat/:lng', component: PropertyDetailMapComponent},
-//       ] }
-//     ]
-//   }
-// ]
-
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

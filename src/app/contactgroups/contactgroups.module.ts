@@ -19,9 +19,11 @@ import { ContactgroupsDetailTenanciesComponent } from './contactgroups-detail-te
 import { ContactgroupsDetaillettingsManagementsComponent } from './contactgroups-detail-lettings-managements/contactgroups-detail-lettings-managements.component';
 import { ContactgroupsDetailHomeManagementsComponent } from './contactgroups-detail-home-managements/contactgroups-detail-home-managements.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { ContactGroupsComponent } from './contactgroups.component';
 
 @NgModule({
   declarations: [
+    ContactGroupsComponent,
     ContactgroupsListComponent,
     ContactgroupsDetailComponent,
     ContactgroupsPeopleComponent,
