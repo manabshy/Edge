@@ -14,6 +14,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // ngx bootstrap imports
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { NgPipesModule } from 'ngx-pipes';
+
+//ng bootstrap imports
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+
 //bootstrap
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown/';
 import { CollapseModule } from 'ngx-bootstrap/collapse/';
@@ -122,7 +126,8 @@ import { BracketsNewLinePipe } from './shared/brackets-new-line.pipe';
     ToastrModule,
     ToastContainerModule,
     AgmCoreModule,
-    CarouselModule
+    CarouselModule,
+    NgbModule
   ],
   imports: [
     CommonModule,
@@ -132,6 +137,7 @@ import { BracketsNewLinePipe } from './shared/brackets-new-line.pipe';
     RouterModule,
     // BrowserAnimationsModule,
     InfiniteScrollModule,
+    NgbModule,
     BsDropdownModule.forRoot(),
     CollapseModule.forRoot(),
     TabsModule.forRoot(),

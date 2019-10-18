@@ -13,7 +13,7 @@
       <div class="col">
         <div class="input-group">
           <input type="search" class="form-control" formControlName="searchTerm" placeholder="Name, email, phone or postcode"
-          aria-label="Search criteria" (keyup)="onKeyup($event)">
+          aria-label="Search criteria" (keyup)="onKeyup($event)" [ngbTypeahead]="search" (selectItem)="selectedItem($event)">
           <div class="input-group-append">
             <button class="btn btn-secondary">Search</button>
           </div>
@@ -56,6 +56,52 @@
       </div>
     </div>
   </form>
+  <!-- <form class="mb-3" [formGroup]="contactFinderForm" (ngSubmit)="contactGroupsResults()">
+    <div class="row">
+      <div class="col">
+        <div class="input-group">
+          <input type="search" class="form-control" formControlName="searchTerm" placeholder="Name, email, phone or postcode"
+          aria-label="Search criteria" (keyup)="onKeyup($event)">
+          <div class="input-group-append">
+            <button class="btn btn-secondary">Search</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div id="advSearch" [collapse]="!advSearchCollapsed">
+          <div class="row">
+            <div class="col-md-auto pr-0">
+              Must be one of:
+            </div>
+            <div class="col">
+              <div class="form-group form-check">
+                <div class="row">
+                  <div class="custom-control custom-checkbox col-6 col-md-auto">
+                    <input type="checkbox" class="custom-control-input" id="advLandlord">
+                    <label class="custom-control-label" for="advLandlord">Landlord</label>
+                  </div>
+                  <div class="custom-control custom-checkbox col-6 col-md-auto">
+                    <input type="checkbox" class="custom-control-input" id="advTenant">
+                    <label class="custom-control-label" for="advTenant">Tenant</label>
+                  </div>
+                  <div class="custom-control custom-checkbox col-6 col-md-auto">
+                    <input type="checkbox" class="custom-control-input" id="advVendor">
+                    <label class="custom-control-label" for="advVendor">Vendor</label>
+                  </div>
+                  <div class="custom-control custom-checkbox col-6 col-md-auto">
+                    <input type="checkbox" class="custom-control-input" id="advBuyer">
+                    <label class="custom-control-label" for="advBuyer">Buyer</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form> -->
   <div class="text-center" *ngIf="isHintVisible">
       <i class="far fa-smile-wink"></i> Type at least <strong>3 characters</strong> to get results
   </div>

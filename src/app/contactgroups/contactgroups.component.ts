@@ -9,6 +9,8 @@ import { AppConstants } from '../core/shared/app-constants';
 import { InfoService } from '../core/services/info.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import * as _ from 'lodash';
+import { Observable, of } from 'rxjs';
+import { debounceTime, distinctUntilChanged, tap, switchMap, catchError } from 'rxjs/operators';
 
 const PAGE_SIZE = 20;
 @Component({
@@ -32,6 +34,9 @@ export class ContactGroupsComponent implements OnInit {
   page = 1;
   searchTerm = '';
   bottomReached = false;
+  search: (text$: Observable<string>) => Observable<any>;
+  searching: boolean;
+  searchFailed: boolean;
 
   constructor(private contactGroupService: ContactGroupsService,
     private route: ActivatedRoute,
@@ -70,6 +75,24 @@ export class ContactGroupsComponent implements OnInit {
         this.getNextContactGroupsPage(this.page);
       }
     });
+    
+    // suggestions
+    this.search = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      tap(() => this.searching = true),
+      switchMap(term =>
+        // this.contactGroupService.getPeopleSuggestions(term).pipe(
+        //   tap(() => this.searchFailed = false),
+        //   catchError(() => {
+        //     this.searchFailed = true;
+        //     return of([]);
+        //   }))
+      {return of(states)}
+      ),
+      tap(() => this.searching = false)
+    )
   }
 
   ngOnDestroy() {
@@ -150,4 +173,22 @@ export class ContactGroupsComponent implements OnInit {
     }
   }
 
+  selectedItem(item: any){
+    if(item.item !=null) {
+      this.searchTerm = item.item;
+      this.isMessageVisible = false;
+      console.log('search term', this.searchTerm)
+      console.log('item selected', item)
+     }
+      this.contactGroupsResults();
+  }
 }
+
+export const states = ['Alabama', 'Alaska', 'American Samoa', 'Arizona', 'Arkansas', 'California', 'Colorado',
+  'Connecticut', 'Delaware', 'District Of Columbia', 'Federated States Of Micronesia', 'Florida', 'Georgia',
+  'Guam', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine',
+  'Marshall Islands', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana',
+  'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
+  'Northern Mariana Islands', 'Ohio', 'Oklahoma', 'Oregon', 'Palau', 'Pennsylvania', 'Puerto Rico', 'Rhode Island',
+  'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virgin Islands', 'Virginia',
+  'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
