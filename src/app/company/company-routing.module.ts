@@ -7,17 +7,11 @@ import { CompanyEditComponent } from './company-edit/company-edit.component';
 import { CanDeactivateGuard } from '../core/shared/can-deactivate.guard';
 
 const routes: Routes = [
-  { path: 'company-centre', canActivate: [AuthGuardService],
+  { path: '', component: CompanyComponent, data: { shouldDetach: true } },
+  {
+    path: 'detail/:id',
     children: [
-      { path: '', component: CompanyComponent, data: { shouldDetach: true } },
-      // { path: 'company', children: [
-      //   { path: '', component: ContactgroupsCompanyEditComponent }
-      // ] },
-      { path: 'detail/:id',
-      children: [
-        // { path: '', component: CompanyDetailComponent },
-        {path: 'edit', component: CompanyEditComponent, canDeactivate: [CanDeactivateGuard]},
-      ] }
+      { path: 'edit', component: CompanyEditComponent, canDeactivate: [CanDeactivateGuard] },
     ]
   }
 ]

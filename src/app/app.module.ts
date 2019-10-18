@@ -89,7 +89,7 @@ import { HttpClientModule } from '@angular/common/http';
     // PropertyModule,
     ContactgroupsModule,
     DiaryModule,
-    CompanyModule,
+    // CompanyModule,
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],

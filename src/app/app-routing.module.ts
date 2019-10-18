@@ -26,19 +26,19 @@ const routes: Routes = [
   {
     path: 'property-centre',
     data: { preload: true },
-    loadChildren: () => import('./property/property.module').then(m => m.PropertyModule), 
+    loadChildren: () => import('./property/property.module').then(m => m.PropertyModule),
     canActivate: [AuthGuardService],
   },
-  // {
-  //   path: 'property-centre',
-  //   loadChildren: () => import('./property/property.module').then(m => m.PropertyModule), canActivate: [AuthGuardService]
-  // },
+  {
+    path: 'company-centre',
+    loadChildren: () => import('./company/company.module').then(m => m.CompanyModule), canActivate: [AuthGuardService]
+  },
   { path: '', component: HomeComponent, canActivate: [AuthGuardService] },
   { path: '**', component: NotFoundComponent }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled'})],
+  imports: [RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' })],
   exports: [RouterModule]
 })
 
