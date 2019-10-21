@@ -27,7 +27,7 @@
   <div class="text-center" *ngIf="isHintVisible">
       <i class="far fa-smile-wink"></i> Type at least <strong>3 characters</strong> to get results
   </div>
-  <app-property-list *ngIf="!isHintVisible" [pageNumber]="page" [properties]='properties' [searchTerm]='propertyFinderForm.value.searchTerm'></app-property-list>
+  <app-property-list *ngIf="!isHintVisible" [pageNumber]="page" [properties]='properties' [bottomReached]="bottomReached" [searchTerm]='searchTerm'></app-property-list>
 
   <div class="text-center" *ngIf="isLoading && !isHintVisible">
     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...

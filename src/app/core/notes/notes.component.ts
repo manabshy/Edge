@@ -127,16 +127,20 @@ export class NotesComponent implements OnInit, OnChanges {
       if (this.contactPeople) {
         console.log('here for contact notes');
         this.contactGroupService.contactNotePageNumberChanged(this.page);
+        console.log('page number here for contact notes...', this.page);
+
       }
       if (this.isPersonNote) {
         console.log('here for person notes', this.isPersonNote);
         this.contactGroupService.personNotePageNumberChanged(this.page);
+        console.log('page number here for peron notes...', this.page);
+
       }
       if (this.isPropertyNote) {
         console.log('here for property notes', this.isPropertyNote);
         this.propertyService.propertyNotePageNumberChanged(this.page);
+        console.log('page number here for property notes...', this.page);
       }
-      console.log('page number here...', this.page);
     }
   }
 
