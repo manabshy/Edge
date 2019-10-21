@@ -122,4 +122,13 @@ export class PropertyComponent extends BaseComponent implements OnInit {
     }
   }
 
+  selectedSuggestion(event: any){
+    if (event.item != null) {
+      this.searchTerm = event.item;
+      this.isMessageVisible = false;
+      console.log('search term', this.searchTerm)
+      console.log('item selected', event)
+     }
+      this.propertiesResults();
+  }
 }
