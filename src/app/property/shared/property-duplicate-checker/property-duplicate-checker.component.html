@@ -18,9 +18,9 @@
             <div class="list-group-item list-group-item-action" *ngFor="let foundProperty of potentialDuplicates">
               <div class="row align-items-end align-items-sm-center"
               (click)="selectProperty(foundProperty?.propertyId)">
-                <div class="col-12 mb-2 mb-sm-0" *ngIf="foundProperty?.ranking > 60">
-                  <span class="badge badge-pill badge-success" *ngIf="foundProperty?.ranking > 100">Full Match</span>
-                  <span class="badge badge-pill badge-warning" *ngIf="foundProperty?.ranking > 50 && foundProperty?.ranking < 100">Good Match</span>
+                <div class="col-12 mb-2 mb-sm-0" *ngIf="foundProperty?.ranking">
+                  <span class="badge badge-pill badge-success" *ngIf="foundProperty?.ranking > 1000">Full Match</span>
+                  <span class="badge badge-pill badge-warning" *ngIf="foundProperty?.ranking < 1000">Good Match</span>
                 </div>
                 <div class="col-sm">
                   <dl class="row">
