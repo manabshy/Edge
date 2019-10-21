@@ -13,7 +13,7 @@
       <div class="col">
         <div class="input-group">
           <input type="search" class="form-control" formControlName="searchTerm" placeholder="Property Address or Id"
-          aria-label="Property Address" (keyup)="onKeyup($event)">
+          aria-label="Property Address" (keyup)="onKeyup($event)"[ngbTypeahead]="search" (selectItem)="selectedSuggestion($event)">
           <div class="input-group-append">
             <button class="btn btn-secondary">Search</button>
           </div>

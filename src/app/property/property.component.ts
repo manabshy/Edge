@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { PropertyService } from './shared/property.service';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, takeUntil, tap, switchMap } from 'rxjs/operators';
 import { PropertyAutoComplete } from './shared/property';
 import { AppUtils } from '../core/shared/utils';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { BaseComponent } from '../core/models/base-component';
 import * as _ from 'lodash';
 import { SharedService } from '../core/services/shared.service';
+import { states } from '../contactgroups/contactgroups.component';
 
 @Component({
   selector: 'app-property',
@@ -26,6 +27,8 @@ export class PropertyComponent extends BaseComponent implements OnInit {
   PAGE_SIZE = 20;
   page: number;
   bottomReached = false;
+  search: (text$: Observable<string>) => Observable<unknown>;
+  searching: boolean;
 
   constructor(private propertyService: PropertyService, private route: ActivatedRoute, private fb: FormBuilder, private sharedService: SharedService) { super(); }
 
@@ -51,6 +54,24 @@ export class PropertyComponent extends BaseComponent implements OnInit {
       this.page = newPageNumber;
       this.getNextPropertyPage(this.page);
     });
+  // suggestions
+  this.search = (text$: Observable<string>) =>
+  text$.pipe(
+    debounceTime(300),
+    distinctUntilChanged(),
+    tap(() => this.searching = true),
+    switchMap(term =>
+      // this.contactGroupService.getPeopleSuggestions(term).pipe(
+      //   tap(() => this.searchFailed = false),
+      //   catchError(() => {
+      //     this.searchFailed = true;
+      //     return of([]);
+      //   }))
+    {return of(states)}
+    ),
+    tap(() => this.searching = false)
+  )
+  
   }
 
   propertiesResults() {

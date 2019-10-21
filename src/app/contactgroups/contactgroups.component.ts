@@ -173,12 +173,12 @@ export class ContactGroupsComponent implements OnInit {
     }
   }
 
-  selectedItem(item: any){
-    if(item.item !=null) {
-      this.searchTerm = item.item;
+  selectedSuggestion(event: any){
+    if (event.item != null) {
+      this.searchTerm = event.item;
       this.isMessageVisible = false;
       console.log('search term', this.searchTerm)
-      console.log('item selected', item)
+      console.log('item selected', event)
      }
       this.contactGroupsResults();
   }
