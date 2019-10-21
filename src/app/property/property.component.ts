@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PropertyService } from './shared/property.service';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, takeUntil, tap, switchMap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, takeUntil, tap, switchMap, catchError } from 'rxjs/operators';
 import { PropertyAutoComplete } from './shared/property';
 import { AppUtils } from '../core/shared/utils';
 import { Observable, of } from 'rxjs';
@@ -29,11 +29,15 @@ export class PropertyComponent extends BaseComponent implements OnInit {
   bottomReached = false;
   search: (text$: Observable<string>) => Observable<unknown>;
   searching: boolean;
+  searchFailed: boolean;
 
-  constructor(private propertyService: PropertyService, private route: ActivatedRoute, private fb: FormBuilder, private sharedService: SharedService) { super(); }
+  constructor(private propertyService: PropertyService,
+    private route: ActivatedRoute,
+    private fb: FormBuilder,
+    private sharedService: SharedService) { super(); }
 
   ngOnInit() {
-    this.sharedService.setTitle("Property Centre");
+    this.sharedService.setTitle('Property Centre');
     this.propertyFinderForm = this.fb.group({
       searchTerm: [''],
     });
@@ -54,24 +58,23 @@ export class PropertyComponent extends BaseComponent implements OnInit {
       this.page = newPageNumber;
       this.getNextPropertyPage(this.page);
     });
-  // suggestions
-  this.search = (text$: Observable<string>) =>
-  text$.pipe(
-    debounceTime(300),
-    distinctUntilChanged(),
-    tap(() => this.searching = true),
-    switchMap(term =>
-      // this.contactGroupService.getPeopleSuggestions(term).pipe(
-      //   tap(() => this.searchFailed = false),
-      //   catchError(() => {
-      //     this.searchFailed = true;
-      //     return of([]);
-      //   }))
-    {return of(states)}
-    ),
-    tap(() => this.searching = false)
-  )
-  
+    // suggestions
+    this.search = (text$: Observable<string>) =>
+      text$.pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        tap(() => this.searching = true),
+        switchMap(term =>
+          this.propertyService.getPropertySuggestions(term).pipe(
+            tap(() => this.searchFailed = false),
+            catchError(() => {
+              this.searchFailed = true;
+              return of([]);
+            }))
+        ),
+        tap(() => this.searching = false)
+      );
+
   }
 
   propertiesResults() {
@@ -122,13 +125,13 @@ export class PropertyComponent extends BaseComponent implements OnInit {
     }
   }
 
-  selectedSuggestion(event: any){
+  selectedSuggestion(event: any) {
     if (event.item != null) {
       this.searchTerm = event.item;
       this.isMessageVisible = false;
-      console.log('search term', this.searchTerm)
-      console.log('item selected', event)
-     }
-      this.propertiesResults();
+      console.log('search term', this.searchTerm);
+      console.log('item selected', event);
+    }
+    this.propertiesResults();
   }
 }

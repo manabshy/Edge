@@ -61,14 +61,7 @@ export class ContactGroupsService {
       );
   }
 
-  getPeopleSuggestions(searchTerm: string): Observable<any> {
-    const url = `${AppConstants.baseContactGroupUrl}/suggestions?SearchTerm=${searchTerm}`;
-    return this.http.get<any>(url)
-      .pipe(
-        map(response => response.result),
-        tap(data => console.log(JSON.stringify(data)))
-      );
-  }
+ 
   getAutocompleteSigners(searchTerm: string): Observable<Signer[]> {
     const url = `${AppConstants.baseContactGroupUrl}/autocomplete?SearchTerm=${searchTerm}`;
     return this.http.get<SignerAutoCompleteData>(url)

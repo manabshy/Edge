@@ -12,6 +12,14 @@ export class PeopleService {
 
   constructor(private http: HttpClient) { }
 
+  getPeopleSuggestions(searchTerm: string): Observable<any[]> {
+    const url = `${AppConstants.basePersonUrl}/suggestions?SearchTerm=${searchTerm}`;
+    return this.http.get<any>(url)
+      .pipe(
+        map(response => response.result),
+        tap(data => console.log(JSON.stringify(data)))
+      );
+  }
   getInstructions(personId: number): Observable<PersonInstruction[]> {
     const url = `${AppConstants.basePersonUrl}/${personId}/instructions`;
     return this.http.get<any>(url).pipe(map(response => response.result));

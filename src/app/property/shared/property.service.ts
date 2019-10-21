@@ -47,6 +47,15 @@ export class PropertyService {
         tap(data => console.log(JSON.stringify(data)))
       );
   }
+  getPropertySuggestions(searchTerm: string): Observable<any[]> {
+    const url = `${AppConstants.basePropertyUrl}/suggestions?SearchTerm=${searchTerm}`;
+    return this.http.get<any>(url)
+      .pipe(
+        map(response => response.result),
+        tap(data => console.log(JSON.stringify(data)))
+      );
+  }
+
   addProperty(property: Property): Observable<Property | any> {
     const url = `${AppConstants.basePropertyUrl}`;
     return this.http.post<PropertyData>(url, property).pipe(

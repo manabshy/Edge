@@ -11,6 +11,7 @@ import { StorageMap } from '@ngx-pwa/local-storage';
 import * as _ from 'lodash';
 import { Observable, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap, switchMap, catchError } from 'rxjs/operators';
+import { PeopleService } from '../core/services/people.service';
 
 const PAGE_SIZE = 20;
 @Component({
@@ -42,6 +43,7 @@ export class ContactGroupsComponent implements OnInit {
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private infoService: InfoService,
+    private peopleService: PeopleService,
     private storage: StorageMap,
     private sharedService: SharedService) { }
 
@@ -83,13 +85,12 @@ export class ContactGroupsComponent implements OnInit {
       distinctUntilChanged(),
       tap(() => this.searching = true),
       switchMap(term =>
-        // this.contactGroupService.getPeopleSuggestions(term).pipe(
-        //   tap(() => this.searchFailed = false),
-        //   catchError(() => {
-        //     this.searchFailed = true;
-        //     return of([]);
-        //   }))
-      {return of(states)}
+        this.peopleService.getPeopleSuggestions(term).pipe(
+          tap(() => this.searchFailed = false),
+          catchError(() => {
+            this.searchFailed = true;
+            return of([]);
+          }))
       ),
       tap(() => this.searching = false)
     )
