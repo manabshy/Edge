@@ -142,7 +142,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
     } else {
       this.getPersonDetails(id);
     }
-    this.logValidationErrors(this.personForm, false);
+    this.logValidationErrors(this.personForm, true);
     this.personForm.valueChanges
       .pipe(debounceTime(400)).subscribe((data) => {
         this.postCode.setValue(this.sharedService.formatPostCode(data.address.postCode), { emitEvent: false });
@@ -425,7 +425,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
     this.personForm = this.fb.group({
       warningStatusId: [''],
       warningStatusComment: ['', { validators: [Validators.maxLength(20)] }],
-      titleId: ['', { validators: [Validators.required] }],
+      titleId: [null, { validators: [Validators.required] }],
       firstName: ['', { validators: [Validators.required, Validators.maxLength(40)] }],
       middleName: ['', { validators: Validators.maxLength(50) }],
       lastName: ['', { validators: [Validators.required, Validators.maxLength(80)] }],

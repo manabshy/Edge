@@ -25,8 +25,8 @@
     <div class="form-group row">
       <label for="title" class="col-sm-2 col-form-label col-form-label-sm">Title</label>
       <div class="col-sm-3">
-        <select class="custom-select custom-select-sm" id="title" name="title" formControlName="titleId" [ngClass]="{'is-invalid':formErrors.titleId}" >
-          <option selected *ngFor="let title of titles | keyvalue:keepOriginalOrder" [value]=title.key>{{title.value}}</option>
+        <select class="custom-select custom-select-sm" id="title" name="title" formControlName="titleId" [ngClass]="{'is-invalid':formErrors.titleId}">
+          <option *ngFor="let title of titles | keyvalue:keepOriginalOrder" [value]=title.key>{{title.value}}</option>
         </select>
         <span class="invalid-feedback">{{formErrors.titleId}}</span>
       </div>
