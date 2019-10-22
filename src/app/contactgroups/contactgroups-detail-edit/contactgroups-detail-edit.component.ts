@@ -425,7 +425,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
     this.personForm = this.fb.group({
       warningStatusId: [''],
       warningStatusComment: ['', { validators: [Validators.maxLength(20)] }],
-      titleId: [null, { validators: [Validators.required] }],
+      titleId: ['', { validators: [Validators.required] }],
       firstName: ['', { validators: [Validators.required, Validators.maxLength(40)] }],
       middleName: ['', { validators: Validators.maxLength(50) }],
       lastName: ['', { validators: [Validators.required, Validators.maxLength(80)] }],
