@@ -61,6 +61,7 @@ export class AddressComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.init();
+   
   }
 
   ngOnChanges() {
@@ -79,7 +80,7 @@ export class AddressComponent implements OnInit, OnChanges {
     this.addressForm = this.fb.group({
       fullAddress: ['', Validators.required],
       addressLines: ['', {validators: Validators.maxLength(500)}],
-      countryId: 0,
+      countryId: this.defaultCountryCode,
       addressLine2: [''],
       flatNumber: [''],
       houseNumber: [''],
@@ -162,7 +163,8 @@ export class AddressComponent implements OnInit, OnChanges {
           this.addressForm.patchValue({
             fullAddress: '',
             addressLines: (retrievedAddress.Company ? retrievedAddress.Company + '\n' : '') + retAddressLines + retrievedAddress.City,
-            postCode: retrievedAddress.PostalCode
+            postCode: retrievedAddress.PostalCode,
+            countryId: this.defaultCountryCode
           });
         } else {
           this.addressForm.patchValue({
@@ -187,6 +189,7 @@ export class AddressComponent implements OnInit, OnChanges {
         });
       });
     }
+    console.log('form', this.addressForm)
   }
 
   private emitAddress() {

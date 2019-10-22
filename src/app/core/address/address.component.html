@@ -3,7 +3,7 @@
     <label for="country" class="col-sm-2 col-form-label col-form-label-sm">Country</label>
     <div class="col-sm-3">
       <select class="custom-select custom-select-sm" id="country" formControlName="countryId">
-        <option selected *ngFor="let country of countries " [value]=country.id>{{country.value}}</option>
+        <option selected *ngFor="let country of countries " [ngValue]=country.id>{{country.value}}</option>
       </select>
     </div>
   </div>

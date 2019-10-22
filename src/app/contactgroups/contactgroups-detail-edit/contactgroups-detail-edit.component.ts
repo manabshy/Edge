@@ -36,7 +36,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
   telephoneTypes: any;
   listInfo: any;
   titleSelected = 1;
-  defaultCountryCode = 232;
+  // defaultCountryCode = 232;
   telephoneTypeSelected = 1;
   todaysDate = new Date();
   retrievedAddresses: AddressAutoCompleteData;
@@ -71,9 +71,9 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
   isWarningsEnabled: boolean;
   warningStatus: number;
 
-  get showPostCode(): boolean {
-    return this.address.get('countryId').value === this.defaultCountryCode;
-  }
+  // get showPostCode(): boolean {
+  //   return this.address.get('countryId').value === this.defaultCountryCode;
+  // }
   get addressLines(): FormControl {
     return <FormControl>this.address.get('addressLines');
   }
@@ -266,77 +266,12 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
     });
   }
 
-  searchAddress() {
-    const addressSearchTerm = this.personForm.get('fullAddress').value;
-    this.findAddress(addressSearchTerm, '');
-  }
-
-  enterAddress(event) {
-    event.preventDefault();
-    this.enterAddressManually = true;
-    setTimeout(() => {
-      this.renderer.selectRootElement('#addressLines').focus();
-    });
-  }
-
-  findAddress(searchTerm: string, container: string) {
-    this.retrievedAddresses = null;
-    this.isLoadingAddressVisible = true;
-
-    if (container) {
-      this.backToAddressesList = true;
-    } else {
-      this.backToAddressesList = false;
-    }
-    this.addressService.findAddress(searchTerm, container).subscribe(data => {
-      data.Items.forEach(x => {
-        if (x.Id) {
-          if (x.Type !== 'Address') {
-            x.Action = 'View all';
-            this.searchTermBK = searchTerm;
-          }
-        }
-      });
-      this.foundAddress = data;
-      this.isLoadingAddressVisible = false;
-    });
-  }
-
-  private retrieveAddress(id: string) {
-    if (this.foundAddress) {
-      this.addressService.getAddress(id).subscribe(data => {
-        this.retrievedAddresses = data;
-        const retrievedAddress = this.retrievedAddresses.Items[0];
-        const keys = Object.keys(retrievedAddress);
-        let retAddressLines = '';
-        keys.forEach(x => {
-          if (x.includes('Line') && retrievedAddress[x]) {
-            retAddressLines += retrievedAddress[x] + '\n';
-          }
-        });
-        this.personForm.patchValue({
-          fullAddress: '',
-          address: {
-            addressLines: (retrievedAddress.Company ? retrievedAddress.Company + '\n' : '') + retAddressLines + retrievedAddress.City,
-            postCode: retrievedAddress.PostalCode
-          }
-        });
-        setTimeout(() => {
-          document.getElementById('addressLines').scrollIntoView({ block: 'center' });
-        });
-      });
-    }
-  }
-
   populateNewPersonDetails() {
     this.personForm.patchValue({
       warningStatusId: 1,
       firstName: this.basicPerson.firstName,
       middleName: this.basicPerson.middleName,
       lastName: this.basicPerson.lastName,
-      address: {
-        countryId: this.defaultCountryCode
-      },
       contactByEmail: true,
       contactByPhone: true,
       marketingPreferences: {
