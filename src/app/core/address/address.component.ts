@@ -115,7 +115,7 @@ export class AddressComponent implements OnInit, OnChanges {
     event.preventDefault();
     this.enterAddressManually = true;
     setTimeout(() => {
-     if (!this.propertyDetails) {
+     if (!(this.propertyDetails || this.isNewProperty)) {
         this.renderer.selectRootElement('#addressLines').focus();
      } else {
       this.renderer.selectRootElement('#flatNumber').focus();

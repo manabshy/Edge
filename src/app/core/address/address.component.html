@@ -68,7 +68,7 @@
   <ng-container *ngIf="propertyDetails || addressLines.value || enterAddressManually">
     <div class="form-group row justify-content-end">
       <div class="col-sm-10">
-        <div class="form-group" *ngIf="!propertyDetails">
+        <div class="form-group" *ngIf="!(propertyDetails || isNewProperty)">
           <label class="small" for="postcode">Address Lines</label>
           <textarea type="textarea" class="form-control form-control-sm" formControlName="addressLines" id="addressLines"
             (keydown.enter)="$event.stopPropagation()" rows="5" cols="10" maxlength="500"
@@ -77,7 +77,7 @@
               class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your
               score</span></small>
         </div>
-        <ng-container *ngIf="propertyDetails">
+        <ng-container *ngIf="propertyDetails || isNewProperty">
           <div class="row">
             <div class="form-group col-6 col-sm-2">
               <label class="small" for="postcode">Flat Number</label>
