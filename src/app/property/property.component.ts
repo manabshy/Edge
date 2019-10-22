@@ -1,15 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { PropertyService } from './shared/property.service';
-import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, takeUntil, tap, switchMap, catchError } from 'rxjs/operators';
 import { PropertyAutoComplete } from './shared/property';
 import { AppUtils } from '../core/shared/utils';
-import { Observable, of } from 'rxjs';
+import { Observable, EMPTY } from 'rxjs';
 import { BaseComponent } from '../core/models/base-component';
 import * as _ from 'lodash';
 import { SharedService } from '../core/services/shared.service';
-import { states } from '../contactgroups/contactgroups.component';
 
 @Component({
   selector: 'app-property',
@@ -27,12 +25,10 @@ export class PropertyComponent extends BaseComponent implements OnInit {
   PAGE_SIZE = 20;
   page: number;
   bottomReached = false;
-  search: (text$: Observable<string>) => Observable<unknown>;
-  searching: boolean;
-  searchFailed: boolean;
+  suggestions: (text$: Observable<string>) => Observable<unknown>;
+  suggestedTerm: '';
 
   constructor(private propertyService: PropertyService,
-    private route: ActivatedRoute,
     private fb: FormBuilder,
     private sharedService: SharedService) { super(); }
 
@@ -42,37 +38,29 @@ export class PropertyComponent extends BaseComponent implements OnInit {
       searchTerm: [''],
     });
 
-    // this.route.queryParams.subscribe(params => {
-    //   if (params['searchTerm'] || AppUtils.searchTerm) {
-    //     this.propertyFinderForm.get('searchTerm').setValue(params['searchTerm'] || AppUtils.propertySearchTerm);
-    //     this.propertiesResults();
-    //     this.isHintVisible = false;
-    //     this.isMessageVisible = false;
-    //   }
-    // });
-    // if (this.route.snapshot.queryParamMap.get('searchTerm') || AppUtils.propertySearchTerm ) {
-    //   this.propertiesResults();
-    // }
-
     this.propertyService.propertyPageNumberChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(newPageNumber => {
       this.page = newPageNumber;
       this.getNextPropertyPage(this.page);
     });
-    // suggestions
-    this.search = (text$: Observable<string>) =>
+
+    this.suggestions = (text$: Observable<string>) =>
       text$.pipe(
         debounceTime(300),
         distinctUntilChanged(),
-        tap(() => this.searching = true),
         switchMap(term =>
           this.propertyService.getPropertySuggestions(term).pipe(
-            tap(() => this.searchFailed = false),
             catchError(() => {
-              this.searchFailed = true;
-              return of([]);
+              return EMPTY;
             }))
         ),
-        tap(() => this.searching = false)
+        tap((data: any[]) => {
+          if (data && !data.length) {
+            this.isMessageVisible = true;
+            this.isLoading = false;
+            this.isHintVisible = false;
+            this.page = 1;
+          }
+        })
       );
 
   }
@@ -84,7 +72,7 @@ export class PropertyComponent extends BaseComponent implements OnInit {
     this.page = 1;
     this.bottomReached = false;
     this.properties = [];
-    this.searchTerm = this.propertyFinderForm.value.searchTerm;
+    this.suggestedTerm ? this.searchTerm = this.suggestedTerm : this.searchTerm = this.propertyFinderForm.value.searchTerm;
     this.getNextPropertyPage(this.page);
   }
 
@@ -106,6 +94,7 @@ export class PropertyComponent extends BaseComponent implements OnInit {
 
     }, error => {
       this.properties = [];
+      this.searchTerm = '';
       this.isLoading = false;
       this.isHintVisible = true;
     });
@@ -127,10 +116,7 @@ export class PropertyComponent extends BaseComponent implements OnInit {
 
   selectedSuggestion(event: any) {
     if (event.item != null) {
-      this.searchTerm = event.item;
-      this.isMessageVisible = false;
-      console.log('search term', this.searchTerm);
-      console.log('item selected', event);
+      this.suggestedTerm = event.item;
     }
     this.propertiesResults();
   }

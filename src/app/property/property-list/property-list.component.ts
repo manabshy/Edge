@@ -8,7 +8,7 @@ import { PropertyService } from '../shared/property.service';
   templateUrl: './property-list.component.html',
   styleUrls: ['./property-list.component.scss']
 })
-export class PropertyListComponent implements OnInit, OnChanges, OnDestroy {
+export class PropertyListComponent implements OnInit, OnChanges {
   @Input() properties: PropertyAutoComplete[];
   @Input() searchTerm: string;
   @Input() bottomReached: boolean;
@@ -24,17 +24,7 @@ export class PropertyListComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges() {
     this.page = this.pageNumber;
   }
-  
-  ngOnDestroy() {
-    this.searchTerm = '';
-    this.bottomReached = true;
-    this.page = 1;
-    this.properties = []
-    console.log('search term destroyed', this.searchTerm)
-    console.log('search term destroyed and page no', this.page)
-    console.log('is bottom reached', this.bottomReached)
-    
-  }
+ 
   onScrollDown() {
     this.onWindowScroll();
     console.log('scrolled')
