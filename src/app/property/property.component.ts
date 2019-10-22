@@ -119,5 +119,6 @@ export class PropertyComponent extends BaseComponent implements OnInit {
       this.suggestedTerm = event.item;
     }
     this.propertiesResults();
+    this.suggestedTerm = '';
   }
 }

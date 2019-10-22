@@ -9,7 +9,7 @@ import { AppConstants } from '../core/shared/app-constants';
 import { InfoService } from '../core/services/info.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import * as _ from 'lodash';
-import { Observable, of } from 'rxjs';
+import { Observable, of, EMPTY } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap, switchMap, catchError } from 'rxjs/operators';
 import { PeopleService } from '../core/services/people.service';
 
@@ -35,9 +35,10 @@ export class ContactGroupsComponent implements OnInit {
   page = 1;
   searchTerm = '';
   bottomReached = false;
-  search: (text$: Observable<string>) => Observable<any>;
+  suggestions: (text$: Observable<string>) => Observable<any>;
   searching: boolean;
   searchFailed: boolean;
+  suggestedTerm: any;
 
   constructor(private contactGroupService: ContactGroupsService,
     private route: ActivatedRoute,
@@ -77,28 +78,28 @@ export class ContactGroupsComponent implements OnInit {
         this.getNextContactGroupsPage(this.page);
       }
     });
-    
-    // suggestions
-    this.search = (text$: Observable<string>) =>
-    text$.pipe(
-      debounceTime(300),
-      distinctUntilChanged(),
-      tap(() => this.searching = true),
-      switchMap(term =>
-        this.peopleService.getPeopleSuggestions(term).pipe(
-          tap(() => this.searchFailed = false),
-          catchError(() => {
-            this.searchFailed = true;
-            return of([]);
-          }))
-      ),
-      tap(() => this.searching = false)
-    )
+
+    this.suggestions = (text$: Observable<string>) =>
+      text$.pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap(term =>
+          this.peopleService.getPeopleSuggestions(term).pipe(
+            catchError(() => {
+              return EMPTY;
+            }))
+        ),
+        tap((data: any[]) => {
+          if (data && !data.length) {
+            this.isMessageVisible = true;
+            this.isLoading = false;
+            this.isHintVisible = false;
+            this.page = 1;
+          }
+        })
+      );
   }
 
-  ngOnDestroy() {
-    this.contactGroups = [];
-  }
   setDropdownLists() {
     if (this.listInfo) {
       this.warnings = this.listInfo.personWarningStatuses;
@@ -112,7 +113,7 @@ export class ContactGroupsComponent implements OnInit {
     this.page = 1;
     this.bottomReached = false;
     this.contactGroups = [];
-    this.searchTerm = this.contactFinderForm.get('searchTerm').value;
+    this.suggestedTerm ? this.searchTerm = this.suggestedTerm : this.searchTerm = this.contactFinderForm.get('searchTerm').value;
     this.getNextContactGroupsPage(this.page);
   }
 
@@ -174,22 +175,11 @@ export class ContactGroupsComponent implements OnInit {
     }
   }
 
-  selectedSuggestion(event: any){
+  selectedSuggestion(event: any) {
     if (event.item != null) {
-      this.searchTerm = event.item;
-      this.isMessageVisible = false;
-      console.log('search term', this.searchTerm)
-      console.log('item selected', event)
-     }
-      this.contactGroupsResults();
+      this.suggestedTerm = event.item;
+    }
+    this.contactGroupsResults();
+    this.suggestedTerm = '';
   }
 }
-
-export const states = ['Alabama', 'Alaska', 'American Samoa', 'Arizona', 'Arkansas', 'California', 'Colorado',
-  'Connecticut', 'Delaware', 'District Of Columbia', 'Federated States Of Micronesia', 'Florida', 'Georgia',
-  'Guam', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine',
-  'Marshall Islands', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana',
-  'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
-  'Northern Mariana Islands', 'Ohio', 'Oklahoma', 'Oregon', 'Palau', 'Pennsylvania', 'Puerto Rico', 'Rhode Island',
-  'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virgin Islands', 'Virginia',
-  'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
