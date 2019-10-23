@@ -147,6 +147,19 @@ export class WedgeValidators {
     };
   }
 
+  static titleValidator(): ValidatorFn {
+    
+    return (control: AbstractControl): { [key: string]:boolean } | null => {
+      const id = control.get('titleId').value;
+      const comment = control.get('titleOther').value;
+      
+      if(+id === 100 && !(!!comment)) {
+        return { 'titleOther': true };
+      }
+      return null;
+    };
+  }
+
 
 
 

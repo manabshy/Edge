@@ -101,6 +101,9 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
   get isWarningCommentVisible() {
     return +this.personForm.get('warningStatusId').value === 100;
   }
+  get isTitleOtherVisible() {
+    return +this.personForm.get('titleId').value === 100;
+  }
 
   public keepOriginalOrder = (a) => a.key;
   constructor(public sharedService: SharedService,
@@ -301,6 +304,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
       warningStatusId: person.warningStatusId !== null ? person.warningStatusId : 1,
       warningStatusComment: person.warningStatusComment,
       titleId: person.titleId !== null ? person.titleId : 1,
+      titleOther: person.titleOther,
       firstName: person.firstName,
       middleName: person.middleName,
       lastName: person.lastName,
@@ -361,6 +365,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
       warningStatusId: [''],
       warningStatusComment: ['', { validators: [Validators.maxLength(20)] }],
       titleId: ['', { validators: [Validators.required] }],
+      titleOther: ['', { validators: [Validators.maxLength(20)] }],
       firstName: ['', { validators: [Validators.required, Validators.maxLength(40)] }],
       middleName: ['', { validators: Validators.maxLength(50) }],
       lastName: ['', { validators: [Validators.required, Validators.maxLength(80)] }],
@@ -383,7 +388,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
       amlCompletedDate: [''],
       emailAddresses: this.fb.array([this.createEmailItem()]),
       phoneNumbers: this.fb.array([this.createPhoneNumberItem()])
-    }, { validators: [WedgeValidators.emailPhoneValidator(), WedgeValidators.warningStatusValidator()] });
+    }, { validators: [WedgeValidators.emailPhoneValidator(), WedgeValidators.warningStatusValidator(), WedgeValidators.titleValidator()] });
     // this.warningStatusId.disable();
   }
 
@@ -516,16 +521,20 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
     });
   }
 
-  removeWarningComment() {
+  removeOthers() {
     if (+this.personForm.get('warningStatusId').value !== 100) {
       this.personForm.get('warningStatusComment').setValue('');
+    }
+
+    if (+this.personForm.get('titleId').value !== 100) {
+      this.personForm.get('titleOther').setValue('');
     }
   }
 
   savePerson() {
     this.errorMessage = null;
     this.removeSMSLandlines();
-    this.removeWarningComment();
+    this.removeOthers();
     this.logValidationErrors(this.personForm, true);
     if (this.personForm.valid) {
       this.isSubmitting = true;

@@ -29,6 +29,8 @@
           <option value=""></option>
           <option *ngFor="let title of titles | keyvalue:keepOriginalOrder" [value]=title.key>{{title.value}}</option>
         </select>
+        <input type="text" class="form-control form-control-sm mt-2" [ngClass]="{'is-invalid': formErrors.titleOther || personForm.errors?.titleOther}" formControlName="titleOther" placeholder="Title ..." *ngIf="isTitleOtherVisible">
+        <div class="invalid-feedback" *ngIf="personForm.errors?.titleOther">Please enter a Title</div>
         <span class="invalid-feedback">{{formErrors.titleId}}</span>
       </div>
     </div>
