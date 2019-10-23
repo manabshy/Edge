@@ -27,7 +27,7 @@
       <div class="col-sm-3">
         <select class="custom-select custom-select-sm" id="title" name="title" formControlName="titleId" [ngClass]="{'is-invalid':formErrors.titleId}">
           <option value=""></option>
-          <option *ngFor="let title of titles | keyvalue:keepOriginalOrder" [ngValue]=title.key>{{title.value}}</option>
+          <option *ngFor="let title of titles | keyvalue:keepOriginalOrder" [value]=title.key>{{title.value}}</option>
         </select>
         <span class="invalid-feedback">{{formErrors.titleId}}</span>
       </div>
