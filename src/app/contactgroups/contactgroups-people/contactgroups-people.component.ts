@@ -66,7 +66,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isNewCompanyContact = false;
   foundCompanies: CompanyAutoCompleteResult[];
   @ViewChild('companyNameInput', { static: false }) companyNameInput: ElementRef;
-  searchCompanyTermBK = '';
+  selectedCompany = '';
   selectedCompanyDetails: Company;
   selectedCompanyId: number;
   companyFinderForm: FormGroup;
@@ -170,7 +170,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
     }
     this.isSubmitting = false;
     this.companyFinderForm = this.fb.group({
-      companyName: ['', Validators.required],
+      companyName: [''],
+      selectedCompany: ['', Validators.required],
     });
     this.contactGroupDetailsForm = this.fb.group({
       salutation: [''],
@@ -240,10 +241,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.newPerson = data;
         this.findPotentialDuplicatePerson(data);
       });
-
-    this.companyFinderForm.valueChanges
-      .pipe(debounceTime(1000), distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)))
-      .subscribe(data => this.findCompany(data));
   }
 
   setDropdownLists() {
@@ -316,7 +313,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.contactGroupDetailsForm.reset();
     }
     if (contactGroup.companyName) {
-      this.companyFinderForm.get('companyName').setValue(contactGroup.companyName);
+      this.companyFinderForm.get('selectedCompany').setValue(contactGroup.companyName);
       this.getCompanyDetails(contactGroup.companyId);
     }
     this.contactGroupDetails = contactGroup;
@@ -328,7 +325,15 @@ export class ContactgroupsPeopleComponent implements OnInit {
       contactType: contactGroup.contactType
     });
   }
-  findCompany(searchTerm: string) {
+
+  searchCompany() {
+    event.preventDefault();
+    event.stopPropagation();
+    const searchTerm = this.companyFinderForm.value;
+    this.findCompany(searchTerm);
+  }
+
+  findCompany(searchTerm: any) {
     this.isLoadingCompaniesVisible = true;
     this.contactGroupService.getAutocompleteCompany(searchTerm).subscribe(data => {
       this.foundCompanies = data;
@@ -428,7 +433,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.contactGroupBackUp();
     let companyName;
     if (newCompany) {
-      companyName = this.companyFinderForm.get('companyName').value;
+      companyName = this.companyFinderForm.get('selectedCompany').value;
     }
     this._router.navigate(['/company-centre/detail', id, 'edit'],
       { queryParams: { isNewCompany: newCompany, isEditingSelectedCompany: true, companyName: companyName } });
@@ -485,23 +490,12 @@ export class ContactgroupsPeopleComponent implements OnInit {
     return subject.asObservable();
   }
 
-  initCompanySearch() {
-    if (this.contactGroupDetails && this.contactGroupDetails.referenceCount) {
-      return;
-    }
-    this.selectedCompanyDetails = null;
-    this.isCompanyAdded = false;
-    if (this.companyFinderForm.get('companyName').value) {
-      this.companyFinderForm.get('companyName').setValue(this.searchCompanyTermBK);
-    }
-  }
-
   selectCompany(company: Company) {
     this.foundCompanies = null;
     this.selectedCompanyDetails = company;
     this.isCompanyAdded = true;
-    this.searchCompanyTermBK = this.companyFinderForm.get('companyName').value;
-    this.companyFinderForm.get('companyName').setValue(company.companyName);
+    this.companyFinderForm.get('selectedCompany').setValue(company.companyName);
+    this.selectedCompany = this.companyFinderForm.get('selectedCompany').value;
     setTimeout(() => {
       if (this.companyNameInput) {
         this.companyNameInput.nativeElement.scrollIntoView({ block: 'center' });

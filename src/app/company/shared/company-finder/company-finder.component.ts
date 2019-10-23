@@ -13,10 +13,11 @@ import { debounceTime } from 'rxjs/operators';
 export class CompanyFinderComponent implements OnInit, OnChanges {
   companyFinderForm: FormGroup;
   foundCompanies: CompanyAutoCompleteResult[];
-  searchCompanyTermBK: any;
+  selectedCompany: any;
   selectedCompanyId: number;
   isCompanyAdded: boolean;
   isLoadingCompaniesVisible: boolean;
+  enterManually: boolean = false;
   @Output() companyName = new EventEmitter<any>();
   @Output() selectedCompanyDetails = new EventEmitter<Company>();
   @Input() companyNameError = false;
@@ -41,8 +42,8 @@ export class CompanyFinderComponent implements OnInit, OnChanges {
   init() {
     let companyName = '';
     switch (true) {
-      case this.searchCompanyTermBK:
-        companyName = this.searchCompanyTermBK.companyName;
+      case this.selectedCompany:
+        companyName = this.selectedCompany.selectedCompany;
         break;
       case !!this.existingCompany:
         companyName = this.existingCompany.companyName;
@@ -51,16 +52,21 @@ export class CompanyFinderComponent implements OnInit, OnChanges {
         companyName = '';
     }
     this.companyFinderForm = this.fb.group({
-      companyName: [companyName, Validators.required],
+      companyName: [''],
+      selectedCompany: [companyName, Validators.required],
     });
-    this.companyFinderForm.valueChanges.pipe(debounceTime(400)).subscribe(data => this.findCompany(data));
+    this.companyFinderForm.valueChanges.subscribe(data => {
+      this.selectedCompany = data;
+      this.companyName.emit(this.selectedCompany);
+    });
   }
 
-  initCompanySearch() {
-    this.isCompanyAdded = false;
-    if (this.companyFinderForm.get('companyName').value && this.searchCompanyTermBK) {
-      this.companyFinderForm.get('companyName').setValue(this.searchCompanyTermBK.companyName);
-    }
+  enterCompany() {
+    event.preventDefault();
+    event.stopPropagation();
+    const searchTerm = this.companyFinderForm.get('companyName').value;
+    this.companyFinderForm.get('selectedCompany').setValue(searchTerm);
+    this.enterManually = !this.enterManually;
   }
 
   selectCompany(company: Company) {
@@ -68,12 +74,18 @@ export class CompanyFinderComponent implements OnInit, OnChanges {
     this.selectedCompanyDetails.emit(company);
   }
 
+  searchCompany() {
+    event.preventDefault();
+    event.stopPropagation();
+    this.enterManually = false;
+    const searchTerm = this.companyFinderForm.value;
+    this.findCompany(searchTerm);
+  }
+
   findCompany(searchTerm: any) {
     this.isLoadingCompaniesVisible = true;
-    this.companyName.emit(searchTerm);
     this.contactGroupService.getAutocompleteCompany(searchTerm).subscribe(data => {
       this.foundCompanies = data;
-      this.searchCompanyTermBK = searchTerm;
       this.isLoadingCompaniesVisible = false;
       this.checkDuplicateCompanies(searchTerm);
     });

@@ -216,7 +216,7 @@ export class CompanyEditComponent implements OnInit {
   }
 
   getCompanyName(name: any) {
-    this.companyForm.get('companyName').setValue(name.companyName);
+    this.companyForm.get('companyName').setValue(name.selectedCompany);
   }
 
   navigateToCompany(company: Company) {

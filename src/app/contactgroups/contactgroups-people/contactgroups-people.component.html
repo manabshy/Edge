@@ -66,19 +66,18 @@
         <h5>Company</h5>
         <form class="pb-3" [formGroup]="companyFinderForm" autocompleteOff>
           <div class="row">
-            <label for="company" class="col-sm-2 col-form-label col-form-label-sm">Name</label>
+            <label for="company" class="col-sm-2 col-form-label col-form-label-sm">Find Company</label>
             <div class="col-sm-10">
               <div class="form-group">
-                <div (click)="initCompanySearch()">
-                  <input #companyNameInput type="search" id="company" class="form-control form-control-sm fake-readonly"
-                    formControlName="companyName" (keydown.enter)="$event.preventDefault();"
-                    [attr.readonly]="selectedCompanyDetails ? '' : null">
-                </div>
-                <div class="form-text small" *ngIf="selectedCompanyDetails">
-                  <a href (click)="editSelectedCompany(selectedCompanyDetails?.companyId)">View/Edit Company Info</a>
+                <div class="input-group input-group-sm">
+                  <input #companyNameInput type="search" id="company" class="form-control"
+                    formControlName="companyName" (keydown.enter)="searchCompany()">
+                    <div class="input-group-append">
+                      <button type="button" class="btn btn-secondary">Search</button>
+                    </div>
                 </div>
               </div>
-              <ng-container *ngIf="foundCompanies && !selectedCompanyDetails">
+              <ng-container *ngIf="foundCompanies">
                 <h5>Quick Finder</h5>
                 <div class="list-group small mb-3">
                   <ng-container *ngIf="!isLoadingCompaniesVisible">
@@ -108,7 +107,18 @@
               </ng-container>
             </div>
           </div>
-          <app-address *ngIf="isCompanyAdded && companyFinderForm.value.companyName"
+          <ng-container *ngIf="selectedCompanyDetails">
+            <div class="row">
+              <label for="selectedCompany" class="col-sm-2 col-form-label col-form-label-sm">Company Name</label>
+              <div class="col-sm-10">
+                  <div class="form-group">
+                    <input type="text" readonly class="form-control-sm form-control-plaintext font-weight-bold" id="selectedCompany" formControlName="selectedCompany">
+                    <a class="small" href (click)="editSelectedCompany(selectedCompanyDetails?.companyId)">View/Edit Company Info</a>
+                  </div>
+              </div>
+            </div>
+          </ng-container>
+          <app-address *ngIf="isCompanyAdded && companyFinderForm.value.selectedCompany"
             [companyDetails]="selectedCompanyDetails" (addressDetails)="getAddress($event)"></app-address>
           <div class="row justify-content-end">
             <label class="col-sm-2 col-form-label col-form-label-sm">Type</label>
