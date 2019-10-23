@@ -38,6 +38,13 @@ export class PropertyComponent extends BaseComponent implements OnInit {
       searchTerm: [''],
     });
 
+    if (AppUtils.propertySearchTerm) {
+      this.propertyFinderForm.get('searchTerm').setValue(AppUtils.propertySearchTerm);
+      this.propertiesResults();
+      this.isHintVisible = false;
+      this.isMessageVisible = false;
+    }
+
     this.propertyService.propertyPageNumberChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(newPageNumber => {
       this.page = newPageNumber;
       this.getNextPropertyPage(this.page);
@@ -73,6 +80,7 @@ export class PropertyComponent extends BaseComponent implements OnInit {
     this.bottomReached = false;
     this.properties = [];
     this.suggestedTerm ? this.searchTerm = this.suggestedTerm : this.searchTerm = this.propertyFinderForm.value.searchTerm;
+    AppUtils.propertySearchTerm = this.searchTerm;
     this.getNextPropertyPage(this.page);
   }
 
@@ -104,7 +112,7 @@ export class PropertyComponent extends BaseComponent implements OnInit {
     if (event.key !== 'Enter') {
       this.isMessageVisible = false;
     }
-    AppUtils.propertySearchTerm = this.propertyFinderForm.value;
+    AppUtils.propertySearchTerm = this.propertyFinderForm.value.searchTerm;
     if (this.propertyFinderForm.value.searchTerm && this.propertyFinderForm.value.searchTerm.length > 2) {
       this.isHintVisible = false;
     } else {
@@ -119,6 +127,7 @@ export class PropertyComponent extends BaseComponent implements OnInit {
       this.suggestedTerm = event.item;
     }
     this.propertiesResults();
+    AppUtils.propertySearchTerm = this.searchTerm;
     this.suggestedTerm = '';
   }
 }
