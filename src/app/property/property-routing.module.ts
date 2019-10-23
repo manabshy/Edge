@@ -13,18 +13,18 @@ import { PropertyDetailEditComponent } from './property-detail-edit/property-det
 
 
 const routes: Routes = [
-  { path: '', component: PropertyComponent, data: { shouldDetach: true } },
+  { path: '', component: PropertyComponent, data: { shouldDetach: false } },
   {
     path: 'detail/:id',
     children: [
       { path: '', component: PropertyDetailComponent, data: { shouldDetach: true } },
-      { path: 'edit', component: PropertyDetailEditComponent, canDeactivate: [CanDeactivateGuard] },
-      { path: 'instructions', component: PropertyDetailInstructionsComponent },
-      { path: 'offers', component: PropertyDetailOffersComponent },
-      { path: 'property-notes', component: PropertyDetailNotesComponent },
-      { path: 'documents', component: PropertyDetailDocumentsComponent },
-      { path: 'property-photos', component: PropertyDetailPhotosComponent },
-      { path: 'map', component: PropertyDetailMapComponent },
+      { path: 'edit', component: PropertyDetailEditComponent , data: { shouldDetach: true }, canDeactivate: [CanDeactivateGuard] },
+      { path: 'instructions', component: PropertyDetailInstructionsComponent, data: { shouldDetach: true } },
+      { path: 'offers', component: PropertyDetailOffersComponent , data: { shouldDetach: true }},
+      { path: 'property-notes', component: PropertyDetailNotesComponent, data: { shouldDetach: false } },
+      { path: 'documents', component: PropertyDetailDocumentsComponent, data: { shouldDetach: true } },
+      { path: 'property-photos', component: PropertyDetailPhotosComponent, data: { shouldDetach: true } },
+      { path: 'map', component: PropertyDetailMapComponent, data: { shouldDetach: true } },
     ]
   }
 ];
