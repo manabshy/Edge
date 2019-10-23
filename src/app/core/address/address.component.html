@@ -14,12 +14,12 @@
     <div class="col-sm-10">
       <div class="input-group input-group-sm">
         <input type="search" id="fullAddress" class="form-control" placeholder=""
-          [ngClass]="{'border border-warning': personDetails && !addressLines.value && !enterAddressManually, 'is-invalid':fullAddressError}"
+          [ngClass]="{'border border-warning': personDetails && !addressLines.value && !enterAddressManually, 'is-invalid':addressError}"
           formControlName="fullAddress" (keyup.enter)="$event.stopPropagation(); searchAddress()">
           <div class="input-group-append">
             <button type="button" class="btn btn-secondary" (click)="searchAddress()">Search</button>
           </div>
-          <span class="invalid-feedback w-100">{{fullAddressError}}</span>
+          <span class="invalid-feedback w-100">{{addressError}}</span>
         <small class="form-text w-100" *ngIf="personDetails && !addressLines.value && !enterAddressManually"><i
             class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your
             score</span></small>

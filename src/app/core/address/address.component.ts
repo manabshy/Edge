@@ -22,7 +22,7 @@ export class AddressComponent implements OnInit, OnChanges {
   @Input() propertyDetails: Property;
   @Input() isNewProperty: boolean;
   @Input() companyDetails: Company;
-  @Input() fullAddressError: any;
+  @Input() addressError: any;
   @Output() addressDetails = new EventEmitter<any>();
   foundAddress: AddressAutoCompleteData;
   defaultCountryCode = 232;

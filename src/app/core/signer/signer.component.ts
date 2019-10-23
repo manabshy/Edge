@@ -13,6 +13,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 })
 export class SignerComponent implements OnInit, OnChanges {
   @Output() selectedSigner = new EventEmitter<Signer>();
+  @Output() newSigner = new EventEmitter<boolean>();
   @Input() existingSigner: Signer;
   @Input() label: string;
   @ViewChild('searchTermInput', { static: true }) searchTermInput: ElementRef;
@@ -105,6 +106,10 @@ export class SignerComponent implements OnInit, OnChanges {
         this.isHintVisible = true;
       }
     }
+  }
+
+  createNewSigner() {
+    this.newSigner.emit(true);
   }
 
 }

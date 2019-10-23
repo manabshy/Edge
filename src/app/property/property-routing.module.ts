@@ -18,7 +18,7 @@ const routes: Routes = [
     path: 'detail/:id',
     children: [
       { path: '', component: PropertyDetailComponent, data: { shouldDetach: true } },
-      { path: 'edit', component: PropertyDetailEditComponent , data: { shouldDetach: true }, canDeactivate: [CanDeactivateGuard] },
+      { path: 'edit', component: PropertyDetailEditComponent , data: { shouldDetach: false }, canDeactivate: [CanDeactivateGuard] },
       { path: 'instructions', component: PropertyDetailInstructionsComponent, data: { shouldDetach: true } },
       { path: 'offers', component: PropertyDetailOffersComponent , data: { shouldDetach: true }},
       { path: 'property-notes', component: PropertyDetailNotesComponent, data: { shouldDetach: false } },

@@ -27,7 +27,7 @@
             </select>
           </div>
         </div>
-        <app-signer (selectedSigner)="getSelectedSigner($event)" [existingSigner]="existingSigner"></app-signer>
+        <app-signer (selectedSigner)="getSelectedSigner($event)" (newSigner)="createNewSigner($event)" [existingSigner]="existingSigner"></app-signer>
         <div class="form-group row">
           <label for="amlDate" class="col-sm-2 col-form-label col-form-label-sm">AML Completed</label>
           <div class="col-sm-3">

@@ -11,11 +11,11 @@
   </div>
   <form *ngIf="propertyDetails || isNewProperty" [formGroup]="propertyForm" (ngSubmit)="saveProperty()"
     (keydown.enter)="$event.preventDefault()" autocompleteOff>
-    <app-address [propertyDetails]="propertyDetails" [fullAddressError]="formErrors.fullAddress"
+    <app-address [propertyDetails]="propertyDetails" [addressError]="formErrors.address"
       [isNewProperty]="isNewProperty" (addressDetails)="getAddress($event)"></app-address>
     <div class="row justify-content-end">
       <div class="col-sm-10">
-        <input type="hidden" id="fullAddress" class="form-control" formControlName="fullAddress">
+        <input type="hidden" id="address" class="form-control" formControlName="address">
       </div>
     </div>
     <app-property-duplicate-checker [propertyAddress]="propertyAddress"
@@ -73,7 +73,7 @@
         <span class="invalid-feedback">{{formErrors?.subAreaId}}</span>
       </div>
     </div>
-    <app-signer label="Last known owner" [existingSigner]="lastKnownOwner" (selectedSigner)="getSelectedOwner($event)">
+    <app-signer label="Last known owner" [existingSigner]="lastKnownOwner" (selectedSigner)="getSelectedOwner($event)" (newSigner)="createNewSigner($event)">
     </app-signer>
     <div class="form-actions">
       <div class="container px-lg-4">

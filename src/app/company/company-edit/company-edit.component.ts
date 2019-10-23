@@ -39,6 +39,7 @@ export class CompanyEditComponent implements OnInit {
   todaysDate = new Date();
   formErrors = FormErrors;
   info: any;
+  isCreatingNewSigner: boolean;
 
   constructor(private contactGroupService: ContactGroupsService,
     private companyService: CompanyService,
@@ -97,6 +98,12 @@ export class CompanyEditComponent implements OnInit {
       this.errorMessage = <any>error;
       this.sharedService.showError(this.errorMessage);
     });
+  }
+
+  createNewSigner(event) {
+    if(event) {
+      this.isCreatingNewSigner = true;
+    }
   }
 
   getSignerDetails(id: number) {
@@ -287,7 +294,7 @@ export class CompanyEditComponent implements OnInit {
     console.log('complete');
   }
   canDeactivate(): boolean {
-    if (this.companyForm.dirty && !this.isSubmitting) {
+    if (this.companyForm.dirty && !this.isSubmitting && !this.isCreatingNewSigner) {
       return false;
     }
     return true;

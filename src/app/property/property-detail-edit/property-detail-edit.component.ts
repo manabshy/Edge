@@ -42,6 +42,7 @@ export class PropertyDetailEditComponent implements OnInit {
   errorMessage: any;
   formErrors = FormErrors;
   isAddressFormValid: boolean;
+  isCreatingNewSigner: boolean;
 
   constructor(private route: ActivatedRoute,
     private _router: Router,
@@ -69,6 +70,15 @@ export class PropertyDetailEditComponent implements OnInit {
       if (data) {
         this.listInfo = data; this.setDropdownLists();
         console.log('list info here....',  this.listInfo);
+      }
+    });
+
+    this.storage.get('propertyBK').subscribe((data: string) => {
+      if (data) {
+        this.propertyDetails = <Property>JSON.parse(data);
+        console.log(this.propertyDetails);
+        this.displayPropertyDetails(this.propertyDetails);
+        this.storage.delete('propertyBK').subscribe();
       }
     });
 
@@ -105,8 +115,16 @@ export class PropertyDetailEditComponent implements OnInit {
     this.allSubAreas = this.listInfo.subAreas;
   }
 
+  createNewSigner(event) {
+    if(event) {
+      this.storage.set('propertyBK', JSON.stringify(this.propertyForm.value)).subscribe();
+      this.isCreatingNewSigner = true;
+    }
+  }
+
   getSignerDetails(id: number) {
     this.contactGroupService.getSignerbyId(id).subscribe(data => {
+      AppUtils.newSignerId = null;
       this.lastKnownOwner = data;
       this.propertyForm.markAsDirty();
     }, error => {
@@ -134,7 +152,7 @@ export class PropertyDetailEditComponent implements OnInit {
       regionId: data.regionId,
       areaId: data.areaId,
       subAreaId: data.subAreaId,
-      fullAddress: data.address
+      address: data.address
     });
     this.lastKnownOwner = data.lastKnownOwner;
     //this.propertyAddress = data.address;
@@ -156,7 +174,7 @@ export class PropertyDetailEditComponent implements OnInit {
       regionId: ['', Validators.required],
       areaId: ['', Validators.required],
       subAreaId: ['', Validators.required],
-      fullAddress: ['', Validators.required]
+      address: ['', Validators.required]
     });
   }
 
@@ -170,7 +188,7 @@ export class PropertyDetailEditComponent implements OnInit {
     this.propertyAddress = address;
 
     if (this.propertyAddress) {
-      this.propertyForm.patchValue({ fullAddress: this.propertyAddress });
+      this.propertyForm.patchValue({ address: this.propertyAddress });
     }
   }
 
@@ -216,7 +234,7 @@ export class PropertyDetailEditComponent implements OnInit {
 
   saveProperty() {
     const isOwnerChanged = this.lastKnownOwner || this.lastKnownOwner == null;
-    const control = this.propertyForm.get('fullAddress');
+    const control = this.propertyForm.get('address');
     this.logValidationErrors(this.propertyForm, true);
     control.clearValidators();
     control.updateValueAndValidity();
@@ -284,7 +302,7 @@ export class PropertyDetailEditComponent implements OnInit {
   }
 
   canDeactivate(): boolean {
-    if (this.propertyForm.dirty && !this.isSubmitting) {
+    if (this.propertyForm.dirty && !this.isSubmitting && !this.isCreatingNewSigner) {
       return false;
     }
     return true;
