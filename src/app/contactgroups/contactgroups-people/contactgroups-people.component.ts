@@ -60,11 +60,13 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isSubmitting = false;
   errorMessage: WedgeError;
   isLoadingCompaniesVisible = false;
+  isSearchCompanyVisible: boolean = true;
   orderFoundPeople = 'matchScore';
   reverse = true;
   isTypePicked = false;
   isNewCompanyContact = false;
   foundCompanies: CompanyAutoCompleteResult[];
+  @ViewChild('selectedCompanyInput', { static: false }) selectedCompanyInput: ElementRef;
   @ViewChild('companyNameInput', { static: false }) companyNameInput: ElementRef;
   selectedCompany = '';
   selectedCompanyDetails: Company;
@@ -490,15 +492,24 @@ export class ContactgroupsPeopleComponent implements OnInit {
     return subject.asObservable();
   }
 
+  toggleSearchCompany() {
+    event.preventDefault();
+    this.isSearchCompanyVisible = !this.isSearchCompanyVisible;
+    setTimeout(()=>{
+      this.companyNameInput.nativeElement.focus();
+    })
+  }
+
   selectCompany(company: Company) {
     this.foundCompanies = null;
     this.selectedCompanyDetails = company;
     this.isCompanyAdded = true;
     this.companyFinderForm.get('selectedCompany').setValue(company.companyName);
     this.selectedCompany = this.companyFinderForm.get('selectedCompany').value;
+    this.isSearchCompanyVisible = false;
     setTimeout(() => {
-      if (this.companyNameInput) {
-        this.companyNameInput.nativeElement.scrollIntoView({ block: 'center' });
+      if (this.selectedCompanyInput) {
+        this.selectedCompanyInput.nativeElement.scrollIntoView({ block: 'center' });
       }
     });
   }
@@ -506,6 +517,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   getCompanyDetails(companyId: number) {
     this.contactGroupService.getCompany(companyId).subscribe(data => {
       this.selectedCompanyDetails = data;
+      this.isSearchCompanyVisible = false;
     });
   }
 
