@@ -16,13 +16,14 @@ export class SignerComponent implements OnInit, OnChanges {
   @Output() newSigner = new EventEmitter<boolean>();
   @Input() existingSigner: Signer;
   @Input() label: string;
-  @ViewChild('searchTermInput', { static: true }) searchTermInput: ElementRef;
+  @ViewChild('selectedSignerInput', { static: true }) selectedSignerInput: ElementRef;
   signerFinderForm: FormGroup;
   selectedSignerDetails: Signer;
   signers: Signer[];
   isLoading: boolean;
   isMessageVisible: boolean;
   isHintVisible: boolean;
+  isSearchVisible: boolean = true;
   get signerNames(): FormControl {
     if (this.signerFinderForm) {
       return <FormControl> this.signerFinderForm.get('selectedSigner');
@@ -51,6 +52,7 @@ export class SignerComponent implements OnInit, OnChanges {
       this.existingSigner.companyName ? displayName = namesWithCompany : displayName = names;
       this.signerNames.setValue(displayName);
       this.selectedSignerDetails = this.existingSigner;
+      this.isSearchVisible = false;
       this.selectedSigner.emit(this.selectedSignerDetails);
     }
   }
@@ -77,6 +79,7 @@ export class SignerComponent implements OnInit, OnChanges {
 
   selectSigner(id: number) {
     this.selectedSignerDetails = this.signers.find(x => x.contactGroupId === id);
+    this.isSearchVisible = false;
     if (this.selectedSignerDetails) {
       this.signers = null;
       let displayName: string;
@@ -85,7 +88,9 @@ export class SignerComponent implements OnInit, OnChanges {
       this.selectedSignerDetails.companyName ? displayName = namesWithCompany : displayName = names;
       this.signerFinderForm.get('selectedSigner').setValue(displayName);
       this.selectedSigner.emit(this.selectedSignerDetails);
-      this.searchTermInput.nativeElement.scrollIntoView({block: 'center'});
+      setTimeout(()=>{
+        this.selectedSignerInput.nativeElement.scrollIntoView({block: 'center'});
+      })
     }
     console.log('selected signer ', this.selectedSignerDetails.contactNames);
     console.log('selected  signer company name', this.selectedSignerDetails.companyName);
@@ -94,6 +99,11 @@ export class SignerComponent implements OnInit, OnChanges {
 
   resetSearch() {
     this.signerFinderForm.reset();
+  }
+
+  toggleSearch() {
+    event.preventDefault();
+    this.isSearchVisible = !this.isSearchVisible;
   }
 
   onKeyup() {
