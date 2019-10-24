@@ -43,6 +43,7 @@ export class PropertyDetailEditComponent implements OnInit {
   formErrors = FormErrors;
   isAddressFormValid: boolean;
   isCreatingNewSigner: boolean;
+  createdSigner: Signer;
 
   constructor(private route: ActivatedRoute,
     private _router: Router,
@@ -69,7 +70,7 @@ export class PropertyDetailEditComponent implements OnInit {
     this.storage.get('info').subscribe(data => {
       if (data) {
         this.listInfo = data; this.setDropdownLists();
-        console.log('list info here....',  this.listInfo);
+        console.log('list info here....', this.listInfo);
       }
     });
 
@@ -92,9 +93,16 @@ export class PropertyDetailEditComponent implements OnInit {
     if (this.propertyId) {
       this.getPropertyDetails(this.propertyId);
     }
-    if (AppUtils.newSignerId) {
-      this.getSignerDetails(AppUtils.newSignerId);
-    }
+
+    this.contactGroupService.signer$.subscribe(data => {
+      if (data) {
+        this.lastKnownOwner = data;
+        this.createdSigner = data;
+        this.isCreatingNewSigner = false;
+        this.propertyForm.markAsDirty();
+        console.log('signer details here from observable...', data)
+      }
+    });
 
     this.propertyForm.valueChanges.subscribe(data => {
       this.onSelectType(+data.propertyTypeId);
@@ -116,22 +124,24 @@ export class PropertyDetailEditComponent implements OnInit {
   }
 
   createNewSigner(event) {
-    if(event) {
+    if (event) {
       this.storage.set('propertyBK', JSON.stringify(this.propertyForm.value)).subscribe();
       this.isCreatingNewSigner = true;
     }
   }
 
-  getSignerDetails(id: number) {
-    this.contactGroupService.getSignerbyId(id).subscribe(data => {
-      AppUtils.newSignerId = null;
-      this.lastKnownOwner = data;
-      this.propertyForm.markAsDirty();
-    }, error => {
-      this.errorMessage = <any>error;
-      this.sharedService.showError(this.errorMessage);
-    });
-  }
+  // getSignerDetails(id: number) {
+  //   this.contactGroupService.getSignerbyId(id).subscribe(data => {
+  //     AppUtils.newSignerId = null;
+  //     this.lastKnownOwner = data;
+  //     console.log('signer details IN SIGNER METHOD...', data)
+  //     this.isCreatingNewSigner = false;
+  //     this.propertyForm.markAsDirty();
+  //   }, error => {
+  //     this.errorMessage = <any>error;
+  //     this.sharedService.showError(this.errorMessage);
+  //   });
+  // }
 
   getPropertyDetails(propertyId: number) {
     this.propertyService.getProperty(propertyId).subscribe(data => {

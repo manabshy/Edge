@@ -15,6 +15,7 @@ export class SignerComponent implements OnInit, OnChanges {
   @Output() selectedSigner = new EventEmitter<Signer>();
   @Output() newSigner = new EventEmitter<boolean>();
   @Input() existingSigner: Signer;
+  @Input() createdSigner: Signer;
   @Input() label: string;
   @ViewChild('searchTermInput', { static: true }) searchTermInput: ElementRef;
   signerFinderForm: FormGroup;
@@ -25,7 +26,7 @@ export class SignerComponent implements OnInit, OnChanges {
   isHintVisible: boolean;
   get signerNames(): FormControl {
     if (this.signerFinderForm) {
-      return <FormControl> this.signerFinderForm.get('selectedSigner');
+      return <FormControl>this.signerFinderForm.get('selectedSigner');
     }
   }
   constructor(private contactGroupService: ContactGroupsService, private route: ActivatedRoute, private fb: FormBuilder) { }
@@ -43,36 +44,39 @@ export class SignerComponent implements OnInit, OnChanges {
   }
 
   private displayExistingSigners() {
-    if (this.existingSigner && this.signerFinderForm) {
-      console.log('existing.....', this.existingSigner);
+    let signer: Signer;
+    this.createdSigner ? signer = this.createdSigner : signer = this.existingSigner;
+    console.log('new or existing signer.....', signer);
+    if (signer && this.signerFinderForm) {
       let displayName: string;
-      const names = this.existingSigner.contactNames;
-      const namesWithCompany = this.existingSigner.contactNames + ' (' + this.existingSigner.companyName + ')';
-      this.existingSigner.companyName ? displayName = namesWithCompany : displayName = names;
+      const names = signer.contactNames;
+      const namesWithCompany = signer.contactNames + ' (' + signer.companyName + ')';
+      signer.companyName ? displayName = namesWithCompany : displayName = names;
       this.signerNames.setValue(displayName);
-      this.selectedSignerDetails = this.existingSigner;
+      this.selectedSignerDetails = signer;
       this.selectedSigner.emit(this.selectedSignerDetails);
     }
   }
 
+
   searchSigner() {
     event.preventDefault();
     event.stopPropagation();
-    const searchTerm = this.signerFinderForm.get("searchTerm").value;
+    const searchTerm = this.signerFinderForm.get('searchTerm').value;
     this.signersAutocomplete(searchTerm);
   }
 
   signersAutocomplete(searchTerm: string) {
     this.isLoading = true;
     this.contactGroupService.getAutocompleteSigners(searchTerm).subscribe(result => {
-        this.signers = result;
-        this.isLoading = false;
-        console.log('signers here', this.signers);
-      }, error => {
-        this.signers = [];
-        this.isLoading = false;
-        this.isHintVisible = true;
-      });
+      this.signers = result;
+      this.isLoading = false;
+      console.log('signers here', this.signers);
+    }, error => {
+      this.signers = [];
+      this.isLoading = false;
+      this.isHintVisible = true;
+    });
   }
 
   selectSigner(id: number) {
@@ -85,7 +89,7 @@ export class SignerComponent implements OnInit, OnChanges {
       this.selectedSignerDetails.companyName ? displayName = namesWithCompany : displayName = names;
       this.signerFinderForm.get('selectedSigner').setValue(displayName);
       this.selectedSigner.emit(this.selectedSignerDetails);
-      this.searchTermInput.nativeElement.scrollIntoView({block: 'center'});
+      this.searchTermInput.nativeElement.scrollIntoView({ block: 'center' });
     }
     console.log('selected signer ', this.selectedSignerDetails.contactNames);
     console.log('selected  signer company name', this.selectedSignerDetails.companyName);

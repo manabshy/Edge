@@ -8,7 +8,8 @@ import {
   BasicContactGroupData, CompanyAutoCompleteResult, CompanyContactGroupAutoCompleteData as CompanyAutoCompleteData,
   Company, CompanyData, SignerAutoCompleteData, Signer, PersonSummaryFiguresData,
   PersonSummaryFigures, SignerData, PotentialDuplicateResult, PeopleAutoCompleteData2,
-  ContactNote, ContactNoteData} from './contact-group';
+  ContactNote, ContactNoteData
+} from './contact-group';
 import { map, tap } from 'rxjs/operators';
 import { Person, BasicPerson } from 'src/app/core/models/person';
 import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encoder-helper';
@@ -24,6 +25,7 @@ export class ContactGroupsService {
   private contactGroupNotesSubject = new Subject<ContactNote | null>();
   private notesSubject = new Subject<ContactNote | null>();
   private contactGroupAutocompleteSubject = new Subject<ContactGroupAutoCompleteResult[] | null>();
+  private signerSubject = new Subject<Signer | null>();
   private pageChangeSubject = new Subject<number | null>();
   private personNotePageChangeSubject = new Subject<number | null>();
   private contactNotePageChangeSubject = new Subject<number | null>();
@@ -35,6 +37,7 @@ export class ContactGroupsService {
   pageChanges$ = this.pageChangeSubject.asObservable();
   personNotePageChanges$ = this.personNotePageChangeSubject.asObservable();
   contactNotePageChanges$ = this.contactNotePageChangeSubject.asObservable();
+  signer$ = this.signerSubject.asObservable();
 
   constructor(private http: HttpClient) { }
 
@@ -61,7 +64,7 @@ export class ContactGroupsService {
       );
   }
 
- 
+
   getAutocompleteSigners(searchTerm: string): Observable<Signer[]> {
     const url = `${AppConstants.baseContactGroupUrl}/autocomplete?SearchTerm=${searchTerm}`;
     return this.http.get<SignerAutoCompleteData>(url)
@@ -272,6 +275,9 @@ export class ContactGroupsService {
     this.pageChangeSubject.next(result);
   }
 
+  signerChanged(signer: Signer) {
+    this.signerSubject.next(signer);
+  }
   contactGroupAutocompleteChanged(result: ContactGroupAutoCompleteResult[]) {
     this.contactGroupAutocompleteSubject.next(result);
   }

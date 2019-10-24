@@ -73,7 +73,7 @@
         <span class="invalid-feedback">{{formErrors?.subAreaId}}</span>
       </div>
     </div>
-    <app-signer label="Last known owner" [existingSigner]="lastKnownOwner" (selectedSigner)="getSelectedOwner($event)" (newSigner)="createNewSigner($event)">
+    <app-signer label="Last known owner" [createdSigner]="createdSigner" [existingSigner]="lastKnownOwner" (selectedSigner)="getSelectedOwner($event)" (newSigner)="createNewSigner($event)">
     </app-signer>
     <div class="form-actions">
       <div class="container px-lg-4">

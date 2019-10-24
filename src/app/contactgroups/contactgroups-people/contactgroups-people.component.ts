@@ -509,6 +509,16 @@ export class ContactgroupsPeopleComponent implements OnInit {
     });
   }
 
+  getSignerDetails(id: number) {
+    this.contactGroupService.getSignerbyId(id).subscribe(data => {
+      if (data) {
+        this.contactGroupService.signerChanged(data);
+      }
+    }, error => {
+      this.errorMessage = <any>error;
+      this.sharedService.showError(this.errorMessage);
+    });
+  }
   getAddress(address: any) {
     this.contactGroupDetails.companyAddress = address;
   }
@@ -594,6 +604,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
     if (person) {
       person.isNewPerson = true;
       this.addedPerson = person;
+      console.log('is signer here', this.isSigner);
+      if (this.isSigner) {
+        this.contactGroupService.signerChanged(null);
+      }
       if (this.contactGroupDetails && this.contactGroupDetails.contactPeople.length) {
         this.collectSelectedPeople(person);
       } else {
@@ -708,6 +722,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     } else {
       if (this.isSigner) {
         AppUtils.newSignerId = contactGroupId;
+        this.getSignerDetails(contactGroupId);
         this.sharedService.back();
       }
       let url = this._router.url;
