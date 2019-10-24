@@ -18,7 +18,7 @@
       </div>
     </div>
 
-    <div class="row" *ngIf="isSearchVisible">
+    <div class="row" [hidden]="!isSearchVisible">
       <ng-container *ngIf="!label; else givenLabel "><label for="searchTerm"
           class="col-sm-2 col-form-label col-form-label-sm">Find Signers</label></ng-container>
       <ng-template #givenLabel><label for="searchTerm" class="col-sm-2 col-form-label col-form-label-sm"> Find
@@ -26,8 +26,8 @@
       <div class="col-sm-10">
         <div class="form-group">
           <div class="input-group input-group-sm">
-            <input type="search" id="searchTerm" class="form-control" formControlName="searchTerm"
-              (keydown.enter)="searchSigner()" autofocus>
+            <input #searchSignerInput type="search" id="searchTerm" class="form-control" formControlName="searchTerm"
+              (keydown.enter)="searchSigner()">
             <div class="input-group-append">
               <button type="button" class="btn btn-secondary" (click)="searchSigner()">Search</button>
             </div>

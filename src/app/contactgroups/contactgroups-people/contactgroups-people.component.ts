@@ -67,6 +67,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isNewCompanyContact = false;
   foundCompanies: CompanyAutoCompleteResult[];
   @ViewChild('selectedCompanyInput', { static: false }) selectedCompanyInput: ElementRef;
+  @ViewChild('companyNameInput', { static: false }) companyNameInput: ElementRef;
   selectedCompany = '';
   selectedCompanyDetails: Company;
   selectedCompanyId: number;
@@ -494,6 +495,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
   toggleSearchCompany() {
     event.preventDefault();
     this.isSearchCompanyVisible = !this.isSearchCompanyVisible;
+    setTimeout(()=>{
+      this.companyNameInput.nativeElement.focus();
+    })
   }
 
   selectCompany(company: Company) {

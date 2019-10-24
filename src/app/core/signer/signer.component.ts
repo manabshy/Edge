@@ -17,6 +17,7 @@ export class SignerComponent implements OnInit, OnChanges {
   @Input() existingSigner: Signer;
   @Input() label: string;
   @ViewChild('selectedSignerInput', { static: true }) selectedSignerInput: ElementRef;
+  @ViewChild('searchSignerInput', { static: true }) searchSignerInput: ElementRef;
   signerFinderForm: FormGroup;
   selectedSignerDetails: Signer;
   signers: Signer[];
@@ -104,6 +105,9 @@ export class SignerComponent implements OnInit, OnChanges {
   toggleSearch() {
     event.preventDefault();
     this.isSearchVisible = !this.isSearchVisible;
+    setTimeout(()=>{
+      this.searchSignerInput.nativeElement.focus();
+    })
   }
 
   onKeyup() {
