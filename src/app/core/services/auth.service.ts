@@ -22,7 +22,7 @@ export class AuthService {
     postLogoutRedirectUri: AppConstants.postLogoutRedirectUri,
     cacheLocation: 'localStorage',
     // loadFrameTimeout: 600000,
-    loadFrameTimeout: 3600000,
+    loadFrameTimeout: 36000000,
     endpoints: {
       'https://dandg-api-wedge.azurewebsites.net': '67f9a9a1-d8de-45bc-af20-43e1e18ccba5',
       'https://dandg-api-wedge-dev.azurewebsites.net': '67f9a9a1-d8de-45bc-af20-43e1e18ccba5',
