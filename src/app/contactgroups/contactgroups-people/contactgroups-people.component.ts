@@ -616,10 +616,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
     if (person) {
       person.isNewPerson = true;
       this.addedPerson = person;
-      console.log('is signer here', this.isSigner);
-      if (this.isSigner) {
-        this.contactGroupService.signerChanged(null);
-      }
       if (this.contactGroupDetails && this.contactGroupDetails.contactPeople.length) {
         this.collectSelectedPeople(person);
       } else {
