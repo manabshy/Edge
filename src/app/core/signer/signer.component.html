@@ -32,7 +32,7 @@
         <div class="form-group">
           <div class="input-group input-group-sm">
             <input #searchSignerInput type="search" id="searchTerm" class="form-control" formControlName="searchTerm"
-              (keydown.enter)="searchSigner()">
+              (keydown.enter)="searchSigner()" [ngbTypeahead]="suggestions" [focusFirst]="false" (selectItem)="selectedSuggestion($event)">
             <div class="input-group-append">
               <button type="button" class="btn btn-secondary" (click)="searchSigner()">Search</button>
             </div>

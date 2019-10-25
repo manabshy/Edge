@@ -4,7 +4,9 @@ import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { AppUtils } from '../shared/utils';
 import { ContactGroupAutoCompleteResult, BasicContactGroup, ContactGroup, Signer } from 'src/app/contactgroups/shared/contact-group';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, catchError, tap } from 'rxjs/operators';
+import { PeopleService } from '../services/people.service';
+import { Observable, EMPTY } from 'rxjs';
 
 @Component({
   selector: 'app-signer',
@@ -25,19 +27,43 @@ export class SignerComponent implements OnInit, OnChanges {
   isLoading: boolean;
   isMessageVisible: boolean;
   isHintVisible: boolean;
-  isSearchVisible: boolean = true;
+  isSearchVisible = true;
+  suggestions: (text$: Observable<string>) => Observable<any[]>;
+  suggestedTerm: any;
+  searchTerm = '';
   get signerNames(): FormControl {
     if (this.signerFinderForm) {
       return <FormControl>this.signerFinderForm.get('selectedSigner');
     }
   }
-  constructor(private contactGroupService: ContactGroupsService, private route: ActivatedRoute, private fb: FormBuilder) { }
+  constructor(private contactGroupService: ContactGroupsService,
+    private peopleService: PeopleService,
+    private route: ActivatedRoute,
+    private fb: FormBuilder) { }
 
   ngOnInit() {
     this.signerFinderForm = this.fb.group({
       searchTerm: [''],
       selectedSigner: [''],
     });
+    this.suggestions = (text$: Observable<string>) =>
+      text$.pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap(term =>
+          this.peopleService.getPeopleSuggestions(term).pipe(
+            catchError(() => {
+              return EMPTY;
+            }))
+        ),
+        tap((data: any[]) => {
+          if (data && !data.length) {
+            this.isMessageVisible = true;
+            this.isLoading = false;
+            this.isHintVisible = false;
+          }
+        })
+      );
     this.displayExistingSigners();
   }
 
@@ -65,8 +91,8 @@ export class SignerComponent implements OnInit, OnChanges {
   searchSigner() {
     event.preventDefault();
     event.stopPropagation();
-    const searchTerm = this.signerFinderForm.get('searchTerm').value;
-    this.signersAutocomplete(searchTerm);
+   this.suggestedTerm ?  this.searchTerm = this.suggestedTerm : this.searchTerm = this.signerFinderForm.get('searchTerm').value;
+    this.signersAutocomplete(this.searchTerm);
   }
 
   signersAutocomplete(searchTerm: string) {
@@ -93,9 +119,9 @@ export class SignerComponent implements OnInit, OnChanges {
       this.selectedSignerDetails.companyName ? displayName = namesWithCompany : displayName = names;
       this.signerFinderForm.get('selectedSigner').setValue(displayName);
       this.selectedSigner.emit(this.selectedSignerDetails);
-      setTimeout(()=>{
-        this.selectedSignerInput.nativeElement.scrollIntoView({block: 'center'});
-      })
+      setTimeout(() => {
+        this.selectedSignerInput.nativeElement.scrollIntoView({ block: 'center' });
+      });
     }
     console.log('selected signer ', this.selectedSignerDetails.contactNames);
     console.log('selected  signer company name', this.selectedSignerDetails.companyName);
@@ -109,9 +135,9 @@ export class SignerComponent implements OnInit, OnChanges {
   toggleSearch() {
     event.preventDefault();
     this.isSearchVisible = !this.isSearchVisible;
-    setTimeout(()=>{
+    setTimeout(() => {
       this.searchSignerInput.nativeElement.focus();
-    })
+    });
   }
 
   onKeyup() {
@@ -130,4 +156,11 @@ export class SignerComponent implements OnInit, OnChanges {
     this.newSigner.emit(true);
   }
 
+  selectedSuggestion(event: any) {
+    if (event.item != null) {
+      this.suggestedTerm = event.item;
+    }
+    this.searchSigner();
+    this.suggestedTerm = '';
+  }
 }
