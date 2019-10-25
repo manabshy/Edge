@@ -92,12 +92,17 @@ export class AddressComponent implements OnInit, OnChanges {
     if (this.companyDetails || this.personDetails || this.propertyDetails) {
       this.populateAddressForm(this.personDetails, this.companyDetails, this.propertyDetails);
     }
-    this.addressForm.valueChanges.pipe(debounceTime(500))
-    .subscribe((data) => {
-      if (data.postCode) {
-        this.postCode.setValue(this.sharedService.formatPostCode(data.postCode), { emitEvent: false });
-      }
-      this.emitAddress();
+
+    Object.keys(this.addressForm.controls).forEach(key => {
+      this.addressForm.get(key).valueChanges.pipe(debounceTime(500))
+      .subscribe((data) => {
+        if (key === "postCode") {
+          this.postCode.setValue(this.sharedService.formatPostCode(data), { emitEvent: false });
+        }
+        if (key !== "fullAddress") {
+          this.emitAddress();
+        }
+      });
     });
   }
 
@@ -150,6 +155,7 @@ export class AddressComponent implements OnInit, OnChanges {
   retrieveAddress(id: string) {
     if (this.foundAddress) {
       this.addressService.getAddress(id).subscribe(data => {
+        this.foundAddress = null;
         this.retrievedAddresses = data;
         const retrievedAddress = this.retrievedAddresses.Items[0];
         const keys = Object.keys(retrievedAddress);

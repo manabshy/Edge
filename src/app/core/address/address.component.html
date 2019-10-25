@@ -24,45 +24,52 @@
             class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your
             score</span></small>
       </div>
-      <ng-container *ngIf="foundAddress && !retrievedAddresses">
-        <h5 class="mt-3">Select Address</h5>
-        <div class="list-group small">
-          <div class="list-group-item" *ngIf="backToAddressesList" (click)="findAddress(searchTermBK, '')">
-            <button type="button" class="btn btn-sm btn-link p-0"><i class="fas fa-chevron-left mr-2"></i> Back</button>
-          </div>
-          <ng-container *ngIf="foundAddress?.Items?.length; else noAddress">
-            <ng-container *ngIf="!isLoadingAddressVisible">
-              <ng-container *ngFor="let address of foundAddress?.Items; last as isLast">
-                <div class="list-group-item list-group-item-action"
-                  (click)="address?.Action ? findAddress(searchTermBK, address?.Id) : retrieveAddress(address?.Id)"
-                  *ngIf="!address?.Error">
-                  <div class="row align-items-center">
-                    <div class="col">
-                      {{address?.Text}}, {{address?.Description}}
-                    </div>
-                    <div class="col-auto">
-                      <button type="button" class="btn btn-sm btn-link">{{address?.Action || 'Select'}}</button>
+      <div class="off-canvas" [hidden]="!foundAddress" (click)="foundAddress = null">
+        <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
+          <h4 class="page-title text-left pt-3">
+            Select address
+            <button type="button" class="close mr-2" aria-label="Close" (click)="foundAddress = null">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </h4>
+          <div class="list-group small">
+            <div class="list-group-item" *ngIf="backToAddressesList" (click)="findAddress(searchTermBK, '')">
+              <button type="button" class="btn btn-sm btn-link p-0"><i class="fas fa-chevron-left mr-2"></i> Back</button>
+            </div>
+            <ng-container *ngIf="foundAddress?.Items?.length; else noAddress">
+              <ng-container *ngIf="!isLoadingAddressVisible">
+                <ng-container *ngFor="let address of foundAddress?.Items; last as isLast">
+                  <div class="list-group-item list-group-item-action"
+                    (click)="address?.Action ? findAddress(searchTermBK, address?.Id) : retrieveAddress(address?.Id)"
+                    *ngIf="!address?.Error">
+                    <div class="row align-items-center">
+                      <div class="col">
+                        {{address?.Text}}, {{address?.Description}}
+                      </div>
+                      <div class="col-auto">
+                        <button type="button" class="btn btn-sm btn-link">{{address?.Action || 'Select'}}</button>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="list-group-item text-center" *ngIf="address?.Error || isLast">
-                  No Address Found? Try again or <a href (click)="enterAddress($event)">enter it manually</a>.
-                </div>
+                  <div class="list-group-item text-center" *ngIf="address?.Error || isLast">
+                    No Address Found? Try again or <a href (click)="enterAddress($event)">enter it manually</a>.
+                  </div>
+                </ng-container>
               </ng-container>
             </ng-container>
-          </ng-container>
-          <ng-template #noAddress>
-            <div class="list-group-item text-center">
-              No Address Found. Try again or <a href (click)="enterAddress($event)">enter it manually</a>.
-            </div>
-          </ng-template>
-          <ng-container *ngIf="isLoadingAddressVisible">
-            <div class="list-group-item text-center">
-              <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading addresses ...
-            </div>
-          </ng-container>
+            <ng-template #noAddress>
+              <div class="list-group-item text-center">
+                No Address Found. Try again or <a href (click)="enterAddress($event)">enter it manually</a>.
+              </div>
+            </ng-template>
+            <ng-container *ngIf="isLoadingAddressVisible">
+              <div class="list-group-item text-center">
+                <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading addresses ...
+              </div>
+            </ng-container>
+          </div>
         </div>
-      </ng-container>
+      </div>
     </div>
   </div>
   <ng-container *ngIf="propertyDetails || addressLines.value || enterAddressManually">

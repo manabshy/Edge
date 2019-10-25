@@ -87,34 +87,39 @@
                     </div>
                 </div>
               </div>
-              <ng-container *ngIf="foundCompanies">
-                <h5>Quick Finder</h5>
-                <div class="list-group small mb-3">
-                  <ng-container *ngIf="!isLoadingCompaniesVisible">
-                    <div class="list-group-item list-group-item-action" *ngFor="let company of foundCompanies"
-                      (click)="selectCompany(company)">
-                      <div class="row align-items-center">
-                        <div class="col"
-                          [innerHTML]="company.companyName | highlight : companyFinderForm.value.companyName"></div>
-                        <div class="col-auto">
-                          <button class="btn btn-block btn-sm btn-link">Select</button>
+              <div class="off-canvas" [hidden]="!foundCompanies" (click)="foundCompanies = null">
+                <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
+                  <h4 class="page-title text-left pt-3">
+                    Quick finder
+                    <button type="button" class="close mr-2" aria-label="Close" (click)="foundCompanies = null">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </h4>
+                  <div class="list-group small mb-3">
+                    <ng-container *ngIf="!isLoadingCompaniesVisible">
+                      <div class="list-group-item list-group-item-action" *ngFor="let company of foundCompanies"
+                        (click)="selectCompany(company)">
+                        <div class="row align-items-center">
+                          <div class="col" [innerHTML]="company.companyName | highlight : companyFinderForm.value.companyName"></div>
+                          <div class="col-auto">
+                            <button class="btn btn-block btn-sm btn-link">Select</button>
+                          </div>
                         </div>
                       </div>
+                    </ng-container>
+                    <div class="list-group-item text-center" *ngIf="isLoadingCompaniesVisible">
+                      <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading companies ...
                     </div>
-                  </ng-container>
-                  <div class="list-group-item text-center" *ngIf="isLoadingCompaniesVisible">
-                    <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading companies ...
-                  </div>
-                  <div class="list-group-item list-group-item-action text-center"
-                    *ngIf="!foundCompanies?.length && companyFinderForm.value.companyName && !isLoadingCompaniesVisible">
-                    No company found. Try again or create a new one.
-                  </div>
-                  <div class="list-group-item list-group-item-action text-center py-4"
-                    (click)="editSelectedCompany(0, true)">
-                    <span class="btn-link"><i class="fas fa-plus mr-2"></i>New Company</span>
+                    <div class="list-group-item list-group-item-action text-center"
+                      *ngIf="!foundCompanies?.length && companyFinderForm.value.companyName && !isLoadingCompaniesVisible">
+                      No company found. Try again or create a new one.
+                    </div>
+                    <div class="list-group-item list-group-item-action text-center py-4" (click)="editSelectedCompany(0, true)">
+                      <span class="btn-link"><i class="fas fa-plus mr-2"></i>New Company</span>
+                    </div>
                   </div>
                 </div>
-              </ng-container>
+              </div>
             </div>
           </div>
           <app-address *ngIf="isCompanyAdded && companyFinderForm.value.selectedCompany"
