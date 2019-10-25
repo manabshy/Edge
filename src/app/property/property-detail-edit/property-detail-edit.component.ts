@@ -111,7 +111,7 @@ export class PropertyDetailEditComponent implements OnInit {
       this.selectedAreas = this.areas;
       this.onSelectArea(+data.areaId);
       this.selectedSubAreas = this.subAreas;
-      // this.logValidationErrors(this.propertyForm, false);
+      this.logValidationErrors(this.propertyForm, false);
     });
   }
 
