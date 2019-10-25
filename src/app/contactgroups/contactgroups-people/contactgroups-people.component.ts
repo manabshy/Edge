@@ -331,7 +331,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   searchCompany() {
     event.preventDefault();
     event.stopPropagation();
-    const searchTerm = this.companyFinderForm.value;
+    const searchTerm = this.companyFinderForm.value.companyName;
     this.findCompany(searchTerm);
   }
 

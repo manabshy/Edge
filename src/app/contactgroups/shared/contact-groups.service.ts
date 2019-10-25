@@ -63,7 +63,14 @@ export class ContactGroupsService {
         tap(data => console.log(JSON.stringify(data)))
       );
   }
-
+  getCompanySuggestions(searchTerm: string): Observable<any[]> {
+    const url = `${AppConstants.baseCompanyUrl}/suggestions?SearchTerm=${searchTerm}`;
+    return this.http.get<any>(url)
+      .pipe(
+        map(response => response.result),
+        tap(data => console.log(JSON.stringify(data)))
+      );
+  }
 
   getAutocompleteSigners(searchTerm: string): Observable<Signer[]> {
     const url = `${AppConstants.baseContactGroupUrl}/autocomplete?SearchTerm=${searchTerm}`;
@@ -170,10 +177,13 @@ export class ContactGroupsService {
       tap(data => console.log('updated contact details here...', JSON.stringify(data))));
   }
 
-  getAutocompleteCompany(company: any): Observable<CompanyAutoCompleteResult[]> {
-    let options;
-    options = new HttpParams()
-      .set('searchTerm', company.companyName || '');
+  getAutocompleteCompany(companyName: any): Observable<CompanyAutoCompleteResult[]> {
+    const options = new HttpParams({
+      encoder: new CustomQueryEncoderHelper,
+      fromObject: {
+        searchTerm: companyName,
+      }
+    });
     const url = `${AppConstants.baseCompanyUrl}/search`;
     return this.http.get<CompanyAutoCompleteData>(url, { params: options }).pipe(
       map(response => response.result),

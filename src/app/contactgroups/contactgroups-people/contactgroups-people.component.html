@@ -83,7 +83,7 @@
                   <input #companyNameInput type="search" id="company" class="form-control"
                     formControlName="companyName" (keydown.enter)="searchCompany()">
                     <div class="input-group-append">
-                      <button type="button" class="btn btn-secondary">Search</button>
+                      <button type="button" class="btn btn-secondary" (click)="searchCompany()">Search</button>
                     </div>
                 </div>
               </div>

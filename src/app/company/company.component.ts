@@ -4,8 +4,9 @@ import { ContactGroupsService } from '../contactgroups/shared/contact-groups.ser
 import { ActivatedRoute } from '@angular/router';
 import { CompanyAutoCompleteResult } from '../contactgroups/shared/contact-group';
 import { AppUtils } from '../core/shared/utils';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, catchError, tap } from 'rxjs/operators';
 import { SharedService } from '../core/services/shared.service';
+import { Observable, EMPTY } from 'rxjs';
 
 @Component({
   selector: 'app-company',
@@ -19,6 +20,10 @@ export class CompanyComponent implements OnInit {
   companies: CompanyAutoCompleteResult[];
   isMessageVisible: boolean;
   advSearchCollapsed = false;
+  suggestions: (text$: Observable<string>) => Observable<any[]>;
+  suggestedTerm = '';
+  searchTerm = '';
+
   constructor(private contactGroupService: ContactGroupsService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
@@ -38,38 +43,36 @@ export class CompanyComponent implements OnInit {
       });
 
     if (this.route.snapshot.queryParamMap.get('companyName') || AppUtils.companySearchTerm) {
-      this.companiesResults(this.route.snapshot.queryParamMap.get('companyName') || AppUtils.companySearchTerm);
+      const term = this.route.snapshot.queryParamMap.get('companyName') || AppUtils.companySearchTerm;
+      this.companyFinderForm.get('companyName').setValue(term);
+      this.companiesResults();
     }
+    this.suggestions = (text$: Observable<string>) =>
+      text$.pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap(term =>
+          this.contactGroupService.getCompanySuggestions(term).pipe(
+            catchError(() => {
+              return EMPTY;
+            }))
+        ),
+        tap((data: any[]) => {
+          if (data && !data.length) {
+            this.isMessageVisible = true;
+            this.isLoading = false;
+            this.isHintVisible = false;
+          }
+        })
+      );
   }
 
-  // companiesAutocomplete(searchTerm: string) {
-  //   console.log(searchTerm);
-  //   this.isLoading = true;
-  //   this.contactGroupService.getAutocompleteCompany(searchTerm).subscribe(result => {
-  //       this.companies = result;
-  //       this.isLoading = false;
-
-  //       if (this.companyFinderForm.value.companyName && this.companyFinderForm.value.companyName.length) {
-  //         if (!this.companies.length) {
-  //           this.isMessageVisible = true;
-  //         } else {
-  //           this.isMessageVisible = false;
-  //         }
-  //       }
-
-  //     }, error => {
-  //       this.companies = [];
-  //       this.isLoading = false;
-  //       this.isHintVisible = true;
-  //     });
-  // }
-
-  companiesResults(searchTerm?: any) {
-    if (!searchTerm) {
-      searchTerm = this.companyFinderForm.value;
+  companiesResults() {
+    if (this.searchTerm) {
+      this.isLoading = true;
     }
-    this.isLoading = true;
-    this.contactGroupService.getAutocompleteCompany(searchTerm).subscribe(result => {
+    this.suggestedTerm ? this.searchTerm = this.suggestedTerm : this.searchTerm = this.companyFinderForm.value.companyName;
+    this.contactGroupService.getAutocompleteCompany(this.searchTerm).subscribe(result => {
       this.companies = result;
       this.isLoading = false;
 
@@ -101,5 +104,13 @@ export class CompanyComponent implements OnInit {
         this.isHintVisible = true;
       }
     }
+  }
+
+  selectedSuggestion(event: any) {
+    if (event.item != null) {
+      this.suggestedTerm = event.item;
+    }
+    this.companiesResults();
+    this.suggestedTerm = '';
   }
 }

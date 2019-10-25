@@ -80,7 +80,8 @@ export class CompanyFinderComponent implements OnInit, OnChanges {
     event.preventDefault();
     event.stopPropagation();
     this.enterManually = false;
-    const searchTerm = this.companyFinderForm.value;
+    const searchTerm = this.companyFinderForm.value.companyName;
+    console.log('company name', searchTerm);
     this.findCompany(searchTerm);
   }
 
