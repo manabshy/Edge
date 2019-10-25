@@ -64,6 +64,7 @@ export class CompanyFinderComponent implements OnInit, OnChanges {
   enterCompany() {
     event.preventDefault();
     event.stopPropagation();
+    this.foundCompanies = null;
     const searchTerm = this.companyFinderForm.get('companyName').value;
     this.companyFinderForm.get('selectedCompany').setValue(searchTerm);
     this.enterManually = !this.enterManually;
@@ -71,6 +72,7 @@ export class CompanyFinderComponent implements OnInit, OnChanges {
 
   selectCompany(company: Company) {
     this.isCompanyAdded = true;
+    this.foundCompanies = null;
     this.selectedCompanyDetails.emit(company);
   }
 

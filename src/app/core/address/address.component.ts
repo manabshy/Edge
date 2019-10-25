@@ -120,6 +120,7 @@ export class AddressComponent implements OnInit, OnChanges {
   enterAddress(event) {
     event.preventDefault();
     this.enterAddressManually = true;
+    this.foundAddress = null;
     setTimeout(() => {
      if (!(this.propertyDetails || this.isNewProperty)) {
         this.renderer.selectRootElement('#addressLines').focus();

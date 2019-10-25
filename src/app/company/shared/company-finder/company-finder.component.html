@@ -13,30 +13,37 @@
             <div class="invalid-feedback w-100">Search for a Company</div>
         </div>
       </div>
-      <ng-container *ngIf="foundCompanies && !enterManually">
-        <h5>Quick Finder</h5>
-        <div class="list-group small mb-3">
-          <ng-container *ngIf="!isLoadingCompaniesVisible">
-            <div class="list-group-item list-group-item-action" *ngFor="let company of foundCompanies"
-              (click)="selectCompany(company)">
-              <div class="row align-items-center">
-                <div class="col"
-                  [innerHTML]="company.companyName | highlight : companyFinderForm.value.companyName"></div>
-                <div class="col-auto">
-                  <button class="btn btn-block btn-sm btn-link">Select</button>
+      <div class="off-canvas" [hidden]="!foundCompanies" (click)="foundCompanies = null">
+        <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
+          <h4 class="page-title text-left pt-3">
+            Quick Finder
+            <button type="button" class="close mr-2" aria-label="Close" (click)="foundCompanies = null">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </h4>
+          <div class="list-group small mb-3">
+            <ng-container *ngIf="!isLoadingCompaniesVisible">
+              <div class="list-group-item list-group-item-action" *ngFor="let company of foundCompanies"
+                (click)="selectCompany(company)">
+                <div class="row align-items-center">
+                  <div class="col"
+                    [innerHTML]="company.companyName | highlight : companyFinderForm.value.companyName"></div>
+                  <div class="col-auto">
+                    <button class="btn btn-block btn-sm btn-link">Select</button>
+                  </div>
                 </div>
               </div>
+            </ng-container>
+            <div class="list-group-item text-center" *ngIf="isLoadingCompaniesVisible">
+              <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading companies ...
             </div>
-          </ng-container>
-          <div class="list-group-item text-center" *ngIf="isLoadingCompaniesVisible">
-            <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading companies ...
-          </div>
-          <div class="list-group-item text-center"
-            *ngIf="!isLoadingCompaniesVisible">
-            No Company Found? Try again or <a href (click)="enterCompany()">enter it manually</a>.
+            <div class="list-group-item text-center"
+              *ngIf="!isLoadingCompaniesVisible">
+              No Company Found? Try again or <a href (click)="enterCompany()">enter it manually</a>.
+            </div>
           </div>
         </div>
-      </ng-container>
+      </div>
     </div>
   </div>
   <ng-container *ngIf="(!foundCompanies && isCompanyAdded) || enterManually || existingCompany">
