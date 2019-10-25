@@ -101,7 +101,7 @@ export class PropertyDetailEditComponent implements OnInit {
         this.createdSigner = data;
         this.isCreatingNewSigner = false;
         this.propertyForm.markAsDirty();
-        console.log('signer details here from observable...', data)
+        console.log('signer details here from observable...', data);
       }
     });
 
@@ -166,7 +166,7 @@ export class PropertyDetailEditComponent implements OnInit {
       address: data.address
     });
     this.lastKnownOwner = data.lastKnownOwner;
-    //this.propertyAddress = data.address;
+    // this.propertyAddress = data.address;
   }
 
   onSelectType(propertyTypeId: number) {
@@ -219,7 +219,6 @@ export class PropertyDetailEditComponent implements OnInit {
       this.propertyForm.clearValidators();
       this.propertyForm.updateValueAndValidity();
     }
-    this.isSubmitting = false;
     this._router.navigate(['/property-centre/detail', property.propertyId]);
   }
 
@@ -294,11 +293,13 @@ export class PropertyDetailEditComponent implements OnInit {
         this.isSubmitting = false;
       });
     } else {
-      this.propertyService.updateProperty(property).subscribe(res => this.onSaveComplete(res.result), (error: WedgeError) => {
-        this.errorMessage = error;
-        this.sharedService.showError(this.errorMessage);
-        this.isSubmitting = false;
-      });
+      if (!this.isMatchFound) {
+        this.propertyService.updateProperty(property).subscribe(res => this.onSaveComplete(res.result), (error: WedgeError) => {
+          this.errorMessage = error;
+          this.sharedService.showError(this.errorMessage);
+          this.isSubmitting = false;
+        });
+      }
     }
   }
 
