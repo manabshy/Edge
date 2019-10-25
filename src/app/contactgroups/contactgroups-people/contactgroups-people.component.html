@@ -81,7 +81,7 @@
               <div class="form-group">
                 <div class="input-group input-group-sm">
                   <input #companyNameInput type="search" id="company" class="form-control"
-                    formControlName="companyName" (keydown.enter)="searchCompany()">
+                    formControlName="companyName" (keydown.enter)="searchCompany()" [ngbTypeahead]="suggestions" [focusFirst]="false" (selectItem)="selectedSuggestion($event)">
                     <div class="input-group-append">
                       <button type="button" class="btn btn-secondary" (click)="searchCompany()">Search</button>
                     </div>

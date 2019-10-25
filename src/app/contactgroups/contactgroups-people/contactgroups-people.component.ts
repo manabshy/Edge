@@ -7,8 +7,8 @@ import {
   ContactType, CompanyAutoCompleteResult, Company, PotentialDuplicateResult, ContactNote
 } from '../shared/contact-group';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap, catchError, tap } from 'rxjs/operators';
+import { Subject, Observable, EMPTY } from 'rxjs';
 import { BsModalService } from 'ngx-bootstrap/modal/';
 import { ConfirmModalComponent } from 'src/app/core/confirm-modal/confirm-modal.component';
 import { Location } from '@angular/common';
@@ -81,6 +81,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
   page = 1;
   bottomReached: boolean;
   pageSize = 10;
+  suggestions: (text$: Observable<string>) => Observable<any[]>;
+  suggestedTerm: any;
+  searchTerm: any;
   get dataNote() {
     if (this.contactGroupDetails) {
       return {
@@ -151,9 +154,26 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.page = newPageNumber;
       this.getNextContactNotesPage(this.page);
     });
-
+    this.suggestions = (text$: Observable<string>) =>
+      text$.pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap(term =>
+          this.contactGroupService.getCompanySuggestions(term).pipe(
+            catchError(() => {
+              return EMPTY;
+            }))
+        )
+      );
   }
 
+  selectedSuggestion(event: any) {
+    if (event.item != null) {
+      this.suggestedTerm = event.item;
+    }
+    this.searchCompany();
+    this.suggestedTerm = '';
+  }
   init() {
     this.storage.get('info').subscribe(data => {
       if (data) {
@@ -331,8 +351,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
   searchCompany() {
     event.preventDefault();
     event.stopPropagation();
-    const searchTerm = this.companyFinderForm.value.companyName;
-    this.findCompany(searchTerm);
+    this.suggestedTerm ? this.searchTerm = this.suggestedTerm : this.searchTerm = this.companyFinderForm.value.companyName;
+    this.findCompany(this.searchTerm);
   }
 
   findCompany(searchTerm: any) {
@@ -495,7 +515,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   toggleSearchCompany() {
     event.preventDefault();
     this.isSearchCompanyVisible = !this.isSearchCompanyVisible;
-    setTimeout(()=>{
+    setTimeout(() => {
       this.companyNameInput.nativeElement.focus();
     })
   }

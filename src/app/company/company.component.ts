@@ -47,24 +47,24 @@ export class CompanyComponent implements OnInit {
       this.companyFinderForm.get('companyName').setValue(term);
       this.companiesResults();
     }
+    this.getSuggestions();
+  }
+
+  private getSuggestions() {
     this.suggestions = (text$: Observable<string>) =>
-      text$.pipe(
-        debounceTime(300),
-        distinctUntilChanged(),
-        switchMap(term =>
-          this.contactGroupService.getCompanySuggestions(term).pipe(
-            catchError(() => {
-              return EMPTY;
-            }))
-        ),
-        tap((data: any[]) => {
-          if (data && !data.length) {
-            this.isMessageVisible = true;
-            this.isLoading = false;
-            this.isHintVisible = false;
-          }
-        })
-      );
+      text$
+        .pipe(
+          debounceTime(300),
+          distinctUntilChanged(),
+          switchMap(term => this.contactGroupService.getCompanySuggestions(term).pipe(catchError(() => {
+            return EMPTY;
+          }))), tap((data: any[]) => {
+            if (data && !data.length) {
+              this.isMessageVisible = true;
+              this.isLoading = false;
+              this.isHintVisible = false;
+            }
+          }));
   }
 
   companiesResults() {
