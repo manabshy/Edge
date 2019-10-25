@@ -44,6 +44,7 @@ export class PropertyDetailEditComponent implements OnInit {
   isAddressFormValid: boolean;
   isCreatingNewSigner: boolean;
   createdSigner: Signer;
+  isMatchFound = false;
 
   constructor(private route: ActivatedRoute,
     private _router: Router,
@@ -93,7 +94,7 @@ export class PropertyDetailEditComponent implements OnInit {
     if (this.propertyId) {
       this.getPropertyDetails(this.propertyId);
     }
-
+    this.logValidationErrors(this.propertyForm, false);
     this.contactGroupService.signer$.subscribe(data => {
       if (data) {
         this.lastKnownOwner = data;
@@ -216,8 +217,19 @@ export class PropertyDetailEditComponent implements OnInit {
     if (property) {
       this.propertyForm.markAsPristine();
       this.propertyForm.clearValidators();
+      this.propertyForm.updateValueAndValidity();
     }
+    this.isSubmitting = false;
     this._router.navigate(['/property-centre/detail', property.propertyId]);
+  }
+
+  checkPropertyMatches(isFullMatch: boolean) {
+    if (isFullMatch) {
+      this.isMatchFound = isFullMatch;
+    } else {
+      this.isMatchFound = false;
+    }
+    console.log('match condition', this.isMatchFound);
   }
 
   logValidationErrors(group: FormGroup = this.propertyForm, fakeTouched: boolean) {

@@ -1,8 +1,6 @@
 import { Component, OnInit, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { PropertyService } from '../property.service';
-import { Observable } from 'rxjs';
 import { Address } from 'src/app/core/models/address';
-import { tap } from 'rxjs/operators';
 import { PropertyAutoComplete } from '../property';
 
 @Component({
@@ -13,8 +11,10 @@ import { PropertyAutoComplete } from '../property';
 export class PropertyDuplicateCheckerComponent implements OnInit, OnChanges {
   @Input() propertyAddress: Address;
   @Output() selectedProperty = new EventEmitter<any>();
+  @Output() fullMatchFound = new EventEmitter<boolean>();
   potentialDuplicates: PropertyAutoComplete[] = [];
   isDuplicateFound = false;
+  isFullMatch: boolean;
 
   constructor(private propertyService: PropertyService) { }
 
@@ -42,8 +42,19 @@ export class PropertyDuplicateCheckerComponent implements OnInit, OnChanges {
       if (data && data.length) {
         this.potentialDuplicates = data;
         this.isDuplicateFound = true;
+        this.getFullMatches(data);
       }
     });
+  }
+
+  private getFullMatches(matches: PropertyAutoComplete[]) {
+    const properties = matches.filter(x => x.ranking > 1000);
+    if (properties && properties.length) {
+      this.isFullMatch = true;
+    } else {
+      this.isFullMatch = false;
+    }
+    this.fullMatchFound.emit(this.isFullMatch);
   }
 }
 
