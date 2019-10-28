@@ -177,11 +177,19 @@ export class ContactGroupsService {
       tap(data => console.log('updated contact details here...', JSON.stringify(data))));
   }
 
-  getAutocompleteCompany(companyName: any): Observable<CompanyAutoCompleteResult[]> {
+  getAutocompleteCompany(companyName: any, pageSize?: number, page?: number): Observable<CompanyAutoCompleteResult[]> {
+    if (!page || +page === 0) {
+      page = 1;
+    }
+    if (pageSize == null) {
+      pageSize = 10;
+    }
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
       fromObject: {
         searchTerm: companyName,
+        pageSize: pageSize.toString(),
+        page: page.toString()
       }
     });
     const url = `${AppConstants.baseCompanyUrl}/search`;

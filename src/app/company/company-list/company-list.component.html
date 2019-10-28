@@ -1,4 +1,8 @@
 <div class="list-group mb-5">
+  <div *ngIf="companies" class="search-results" infiniteScroll [infiniteScrollDistance]="5"
+    [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"
+    (scrolled)="onScrollDown()">
+  </div>
   <a [routerLink]="['detail', company.companyId, 'edit' ]" class="list-group-item list-group-item-action pb-2"
     *ngFor="let company of companies; let i = index;">
     <div class="row">

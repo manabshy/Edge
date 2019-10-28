@@ -5,7 +5,8 @@
       <h4 class="m-0">Company centre</h4>
     </div>
     <div class="col-auto">
-      <a class="btn btn-primary" [routerLink]="['detail', 0 , 'edit' ]"  [queryParams]="{isNewCompany: true}" ><i class="fas fa-plus mr-2"></i> Company</a>
+      <a class="btn btn-primary" [routerLink]="['detail', 0 , 'edit' ]" [queryParams]="{isNewCompany: true}"><i
+          class="fas fa-plus mr-2"></i> Company</a>
     </div>
   </div>
   <form class="mb-3" [formGroup]="companyFinderForm" (ngSubmit)="companiesResults()">
@@ -13,7 +14,8 @@
       <div class="col">
         <div class="input-group">
           <input type="search" class="form-control" formControlName="companyName" placeholder="Company Name"
-          aria-label="Company Name" (keyup)="onKeyup($event)" [ngbTypeahead]="suggestions" [focusFirst]="false" (selectItem)="selectedSuggestion($event)">
+            aria-label="Company Name" (keyup)="onKeyup($event)" [ngbTypeahead]="suggestions" [focusFirst]="false"
+            (selectItem)="selectedSuggestion($event)">
           <div class="input-group-append">
             <button class="btn btn-secondary">Search</button>
           </div>
@@ -61,14 +63,15 @@
       </div>
     </div>
   </form>
+  <div class="text-center" *ngIf="isHintVisible">
+    <i class="far fa-smile-wink"></i> Type at least <strong>3 characters</strong> to get results
+  </div>
+  <app-company-list *ngIf="!isHintVisible" [companies]='companies' [pageNumber]="page"
+    [searchTerm]='searchTerm' [bottomReached]="bottomReached"></app-company-list>
   <div class="text-center" *ngIf="isLoading && !isHintVisible">
     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...
   </div>
-  <div class="text-center text-danger" *ngIf="isMessageVisible && !isLoading && !isHintVisible">
-      <i class="far fa-sad-tear"></i> No results for '<strong>{{companyFinderForm.value.companyName || ' '}}</strong>'
+  <div class="text-center text-danger" *ngIf="isMessageVisible && !isLoading && !isHintVisible && page === 1">
+    <i class="far fa-sad-tear"></i> No results for '<strong>{{companyFinderForm.value.companyName || ' '}}</strong>'
   </div>
-  <div class="text-center" *ngIf="isHintVisible">
-      <i class="far fa-smile-wink"></i> Type at least <strong>3 characters</strong> to get results
-  </div>
-  <app-company-list *ngIf="!isLoading && !isHintVisible" [companies]='companies'></app-company-list>
 </div>

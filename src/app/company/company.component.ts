@@ -7,7 +7,10 @@ import { AppUtils } from '../core/shared/utils';
 import { debounceTime, distinctUntilChanged, switchMap, catchError, tap } from 'rxjs/operators';
 import { SharedService } from '../core/services/shared.service';
 import { Observable, EMPTY } from 'rxjs';
+import * as _ from 'lodash';
+import { CompanyService } from './shared/company.service';
 
+const PAGE_SIZE = 10;
 @Component({
   selector: 'app-company',
   templateUrl: './company.component.html',
@@ -23,8 +26,11 @@ export class CompanyComponent implements OnInit {
   suggestions: (text$: Observable<string>) => Observable<any[]>;
   suggestedTerm = '';
   searchTerm = '';
+  page: number;
+  bottomReached: boolean;
 
   constructor(private contactGroupService: ContactGroupsService,
+    private companyService: CompanyService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private sharedService: SharedService) { }
@@ -35,57 +41,64 @@ export class CompanyComponent implements OnInit {
       companyName: [''],
     });
 
-    this.companyFinderForm.valueChanges
-      .pipe(debounceTime(1000), distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)))
-      .subscribe(data => {
-        console.log(data);
-        // this.companiesAutocomplete(data)
-      });
-
     if (this.route.snapshot.queryParamMap.get('companyName') || AppUtils.companySearchTerm) {
       const term = this.route.snapshot.queryParamMap.get('companyName') || AppUtils.companySearchTerm;
       this.companyFinderForm.get('companyName').setValue(term);
       this.companiesResults();
+      this.isHintVisible = false;
+      this.isMessageVisible = false;
     }
-    this.getSuggestions();
-  }
+    this.companyService.companyPageChanges$.subscribe(newPageNumber => {
+      if (newPageNumber) {
+        this.page = newPageNumber;
+        this.getNextCompanyListPage(this.page);
+      }
+    });
 
-  private getSuggestions() {
     this.suggestions = (text$: Observable<string>) =>
       text$
         .pipe(
-          debounceTime(300),
           distinctUntilChanged(),
           switchMap(term => this.contactGroupService.getCompanySuggestions(term).pipe(catchError(() => {
             return EMPTY;
-          }))), tap((data: any[]) => {
-            if (data && !data.length) {
-              this.isMessageVisible = true;
-              this.isLoading = false;
-              this.isHintVisible = false;
-            }
-          }));
+          }))));
   }
 
   companiesResults() {
     if (this.searchTerm) {
       this.isLoading = true;
+      this.suggestions = null;
     }
+    this.page = 1;
+    this.bottomReached = false;
+    this.companies = [];
     this.suggestedTerm ? this.searchTerm = this.suggestedTerm : this.searchTerm = this.companyFinderForm.value.companyName;
-    this.contactGroupService.getAutocompleteCompany(this.searchTerm).subscribe(result => {
-      this.companies = result;
-      this.isLoading = false;
+    this.getNextCompanyListPage(this.page);
+  }
 
-      if (this.companyFinderForm.value.companyName && this.companyFinderForm.value.companyName.length) {
-        if (!this.companies.length) {
+  private getNextCompanyListPage(page: number) {
+    this.isLoading = true;
+    this.contactGroupService.getAutocompleteCompany(this.searchTerm, PAGE_SIZE, page).subscribe(result => {
+      this.isLoading = false;
+      if (this.searchTerm && this.searchTerm.length) {
+        if (!result.length) {
           this.isMessageVisible = true;
+          this.bottomReached = true;
+          return;
         } else {
           this.isMessageVisible = false;
         }
+      } else {
+        this.isMessageVisible = false;
+      }
+
+      if (result) {
+        this.companies = _.concat(this.companies, result);
       }
 
     }, error => {
       this.companies = [];
+      this.searchTerm = '';
       this.isLoading = false;
       this.isHintVisible = true;
     });
@@ -111,6 +124,7 @@ export class CompanyComponent implements OnInit {
       this.suggestedTerm = event.item;
     }
     this.companiesResults();
+    AppUtils.companySearchTerm = this.searchTerm;
     this.suggestedTerm = '';
   }
 }
