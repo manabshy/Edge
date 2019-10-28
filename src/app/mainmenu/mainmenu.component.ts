@@ -3,7 +3,8 @@ import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { AuthService } from '../core/services/auth.service';
 import { StaffMemberService } from '../core/services/staff-member.service';
-import { StaffMember } from '../core/models/staff-member';
+import { StaffMember, Impersonation } from '../core/models/staff-member';
+import { StorageMap } from '@ngx-pwa/local-storage';
 
 @Component({
   selector: 'app-mainmenu',
@@ -14,14 +15,17 @@ export class MainmenuComponent implements OnInit {
   navbarCollapsed = false;
   isLoggedIn: boolean;
   currentStaffMember: StaffMember;
+  impersonationList: Impersonation[];
+
   // get currentStaffMember(): StaffMember {
   //   return this.staffMemberService.currentStaffMember;
   // }
 
   constructor(public router: Router,
-              public _location: Location,
-              public authService: AuthService,
-              public staffMemberService: StaffMemberService) { }
+    public _location: Location,
+    public authService: AuthService,
+    private storage: StorageMap,
+    public staffMemberService: StaffMemberService) { }
 
   ngOnInit() {
     this.staffMemberService.getCurrentStaffMember().subscribe(data => {
@@ -29,6 +33,20 @@ export class MainmenuComponent implements OnInit {
         this.currentStaffMember = data;
       }
     });
+
+    this.staffMemberService.getImpersonationList().subscribe(data => {
+      if (data) {
+        this.impersonationList = data;
+      }
+      console.log('impersonation list', this.impersonationList);
+    });
+  }
+
+  onStaffMemberSelected(staffMemberId: number) {
+
+    if (staffMemberId) {
+      this.storage.set('impersonatedStaffMemberId', staffMemberId).subscribe();
+    }
   }
 
   backClicked() {
