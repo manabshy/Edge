@@ -1,29 +1,42 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark flex-lg-column">
   <div class="navbar-back">
-      <app-breadcrumb *ngIf="router.url !== '/'" (click)="backClicked()"></app-breadcrumb>
+    <app-breadcrumb *ngIf="router.url !== '/'" (click)="backClicked()"></app-breadcrumb>
   </div>
-  <a class="navbar-brand" routerLink="/" aria-label="Home"><img src="assets/dng_logo.png" width="30" height="30" alt=""></a>
+  <a class="navbar-brand" routerLink="/" aria-label="Home"><img src="assets/dng_logo.png" width="30" height="30"
+      alt=""></a>
   <button class="navbar-toggler" type="button" (click)="navbarCollapsed = !navbarCollapsed"
-  [attr.aria-expanded]="!navbarCollapsed" aria-controls="navbarNavDropdown">
+    [attr.aria-expanded]="!navbarCollapsed" aria-controls="navbarNavDropdown">
     <i class="fas fa-bars fa-fw" *ngIf="!navbarCollapsed"></i>
     <i class="fas fa-times fa-fw" *ngIf="navbarCollapsed"></i>
   </button>
   <div class="collapse navbar-collapse" id="navbarNavDropdown" [collapse]="!navbarCollapsed">
     <ul class="navbar-nav flex-column">
       <li class="nav-item active" (click)="navbarCollapsed = !navbarCollapsed">
-        <a class="nav-link" routerLink="/" [queryParams]="{selectedTab: 0}"><div><i class="fas fa-th-large fa-fw mr-3"></i>Dashboard</div></a>
+        <a class="nav-link" routerLink="/" [queryParams]="{selectedTab: 0}">
+          <div><i class="fas fa-th-large fa-fw mr-3"></i>Dashboard</div>
+        </a>
       </li>
       <li class="nav-item active" (click)="navbarCollapsed = !navbarCollapsed" *ngIf="false">
-        <a class="nav-link" routerLink="/" [queryParams]="{selectedTab: 1}"><div><i class="fas fa-calendar-alt fa-fw mr-3"></i>Diary</div></a>
+        <a class="nav-link" routerLink="/" [queryParams]="{selectedTab: 1}">
+          <div><i class="fas fa-calendar-alt fa-fw mr-3"></i>Diary</div>
+        </a>
       </li>
       <li class="nav-item active" (click)="navbarCollapsed = !navbarCollapsed" *ngIf="false">
-        <a class="nav-link" routerLink="/" [queryParams]="{selectedTab: 2}"><div><i class="fas fa-chalkboard-teacher fa-fw mr-3"></i>Leaderboard</div></a>
+        <a class="nav-link" routerLink="/" [queryParams]="{selectedTab: 2}">
+          <div><i class="fas fa-chalkboard-teacher fa-fw mr-3"></i>Leaderboard</div>
+        </a>
       </li>
       <li class="nav-item active" (click)="navbarCollapsed = !navbarCollapsed" *ngIf="false">
-        <a class="nav-link" routerLink="/" [queryParams]="{selectedTab: 3}"><div><i class="fas fa-tasks fa-fw mr-3"></i>Tasks<span class="badge badge-pill badge-secondary ml-3">15</span></div></a>
+        <a class="nav-link" routerLink="/" [queryParams]="{selectedTab: 3}">
+          <div><i class="fas fa-tasks fa-fw mr-3"></i>Tasks<span class="badge badge-pill badge-secondary ml-3">15</span>
+          </div>
+        </a>
       </li>
       <li class="nav-item" dropdown [insideClick]="true">
-        <button type="button" class="btn btn-link nav-link dropdown-toggle" dropdownToggle aria-haspopup="true" aria-expanded="false"><div><i class="fas fa-address-book fa-fw mr-3"></i>Contacts</div></button>
+        <button type="button" class="btn btn-link nav-link dropdown-toggle" dropdownToggle aria-haspopup="true"
+          aria-expanded="false">
+          <div><i class="fas fa-address-book fa-fw mr-3"></i>Contacts</div>
+        </button>
         <div class="dropdown-menu" *dropdownMenu (click)="navbarCollapsed = !navbarCollapsed">
           <a class="dropdown-item" routerLink="/contact-centre">Contact centre</a>
           <a class="dropdown-item" routerLink="/applicant-register" *ngIf="false">Applicants</a>
@@ -32,10 +45,13 @@
         </div>
       </li>
       <li class="nav-item" dropdown [insideClick]="true">
-        <button type="button" class="btn btn-link nav-link dropdown-toggle" dropdownToggle aria-haspopup="true" aria-expanded="false"><div><i class="fas fa-city fa-fw mr-3"></i>Properties</div></button>
+        <button type="button" class="btn btn-link nav-link dropdown-toggle" dropdownToggle aria-haspopup="true"
+          aria-expanded="false">
+          <div><i class="fas fa-city fa-fw mr-3"></i>Properties</div>
+        </button>
         <div class="dropdown-menu" *dropdownMenu (click)="navbarCollapsed = !navbarCollapsed">
-            <a class="dropdown-item" routerLink="/property-centre">Property centre</a>
-            <a class="dropdown-item" routerLink="/" *ngIf="false">Valuations</a>
+          <a class="dropdown-item" routerLink="/property-centre">Property centre</a>
+          <a class="dropdown-item" routerLink="/" *ngIf="false">Valuations</a>
           <a class="dropdown-item" routerLink="/" *ngIf="false">Instructions</a>
           <a class="dropdown-item" routerLink="/" *ngIf="false">Offers</a>
           <a class="dropdown-item" routerLink="/" *ngIf="false">Tenancies</a>
@@ -44,7 +60,10 @@
         </div>
       </li>
       <li class="nav-item" dropdown [insideClick]="true" *ngIf="false">
-          <button type="button" class="btn btn-link nav-link dropdown-toggle" dropdownToggle aria-haspopup="true" aria-expanded="false"><div><i class="fas fa-file-invoice fa-fw mr-3"></i>Accounts</div></button>
+        <button type="button" class="btn btn-link nav-link dropdown-toggle" dropdownToggle aria-haspopup="true"
+          aria-expanded="false">
+          <div><i class="fas fa-file-invoice fa-fw mr-3"></i>Accounts</div>
+        </button>
         <div class="dropdown-menu" *dropdownMenu (click)="navbarCollapsed = !navbarCollapsed">
           <a class="dropdown-item" routerLink="/">Invoices</a>
           <a class="dropdown-item" routerLink="/">Works Orders</a>
@@ -52,14 +71,18 @@
         </div>
       </li>
       <li class="nav-item" dropdown [insideClick]="true" *ngIf="false">
-          <button type="button" class="btn btn-link nav-link dropdown-toggle" dropdownToggle aria-haspopup="true" aria-expanded="false"><div><i class="fas fa-user-cog fa-fw mr-3"></i>Admin</div></button>
+        <button type="button" class="btn btn-link nav-link dropdown-toggle" dropdownToggle aria-haspopup="true"
+          aria-expanded="false">
+          <div><i class="fas fa-user-cog fa-fw mr-3"></i>Admin</div>
+        </button>
         <div class="dropdown-menu" *dropdownMenu (click)="navbarCollapsed = !navbarCollapsed">
           <a class="dropdown-item" routerLink="/">Staff</a>
           <a class="dropdown-item" routerLink="/">Offices</a>
         </div>
       </li>
       <li class="nav-item user-menu">
-        <img [src]="currentStaffMember?.thumbnailUrl" alt="" class="rounded-circle" *ngIf="currentStaffMember?.thumbnailUrl; else noPhoto">
+        <img [src]="currentStaffMember?.thumbnailUrl" alt="" class="rounded-circle"
+          *ngIf="currentStaffMember?.thumbnailUrl; else noPhoto">
         <ng-template #noPhoto>
           <img class="rounded-circle" src="https://dummyimage.com/75x75/e9ecef/212529&text=no+photo" alt="">
         </ng-template>
@@ -70,15 +93,19 @@
               {{role}}<ng-container *ngIf="!isLast"> ,</ng-container>
             </ng-container>
           </small>
-          <a class="text-light" routerLink="/impersonate-member" (click)="navbarCollapsed = !navbarCollapsed"><i class="fas fa-user-friends mr-3"></i>Impersonate</a>
+          <a class="text-light" routerLink="/impersonate-member" (click)="navbarCollapsed = !navbarCollapsed"><i
+              class="fas fa-user-friends mr-3"></i>Impersonate</a>
           <!--IF IMPERSONATING-->
-          <!-- <a class="text-light" routerLink="/impersonate-member" (click)="navbarCollapsed = !navbarCollapsed"><i class="fas fa-user-friends mr-3"></i>Alex Agyapong</a>
-          <div>
+          <div><a class="text-light" routerLink="/impersonate-member" (click)="navbarCollapsed = !navbarCollapsed"><i
+                class="fas fa-user-friends mr-3"></i>{{impersonatedStaffMember?.fullName}}</a></div>
+          <!-- <div>
             <a class="text-light mr-3">Change</a><a class="text-light">Stop</a>
           </div> -->
           <!--IF IMPERSONATING-->
         </div>
-        <a class="nav-link justify-content-center" (click)="logOut()"><div><i class="fas fa-sign-out-alt mr-3"></i>Log out</div></a>
+        <a class="nav-link justify-content-center" (click)="logOut()">
+          <div><i class="fas fa-sign-out-alt mr-3"></i>Log out</div>
+        </a>
       </li>
     </ul>
   </div>

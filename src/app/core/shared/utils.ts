@@ -14,6 +14,13 @@ export interface ICachedRoute {
   handle: DetachedRouteHandle;
   data: IRouteConfigData;
 }
+export interface RequestOption {
+  impersonatedStaffMemberId?: number;
+  isNameSearch: boolean;
+  searchTerm: string;
+  pageSize?: number;
+  page?: number;
+}
 
 export class AppUtils {
   public static prevRoute = '';

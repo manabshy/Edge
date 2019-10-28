@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { AppConstants } from '../shared/app-constants';
 import { map, shareReplay, tap } from 'rxjs/operators';
@@ -15,9 +15,15 @@ export class StaffMemberService {
   private currentStaffMemberSubject = new BehaviorSubject<StaffMember | null>(null);
   private staffMember$: Observable<StaffMember>;
   private impersonationList$: Observable<Impersonation[]>;
+  private impersonationSubject = new BehaviorSubject<Impersonation | null>(null);
+  impersonatedStaffMember$ = this.impersonationSubject.asObservable();
   currentStaffMember$ = this.currentStaffMemberSubject.asObservable();
 
   constructor(private http: HttpClient, private storage: StorageMap) { }
+
+  impersonatedStaffMemberChanged(person: Impersonation) {
+    this.impersonationSubject.next(person);
+  }
 
   public getCurrentStaffMember(): Observable<StaffMember> {
     if (!this.staffMember$) {
@@ -54,4 +60,5 @@ export class StaffMemberService {
   currentStaffMemberChange(staffMember: StaffMember) {
     this.currentStaffMemberSubject.next(staffMember);
   }
+
 }

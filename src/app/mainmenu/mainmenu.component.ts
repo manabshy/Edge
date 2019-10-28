@@ -15,7 +15,7 @@ export class MainmenuComponent implements OnInit {
   navbarCollapsed = false;
   isLoggedIn: boolean;
   currentStaffMember: StaffMember;
-  impersonationList: Impersonation[];
+  impersonatedStaffMember: Impersonation;
 
   // get currentStaffMember(): StaffMember {
   //   return this.staffMemberService.currentStaffMember;
@@ -33,13 +33,14 @@ export class MainmenuComponent implements OnInit {
         this.currentStaffMember = data;
       }
     });
-  }
 
-  onStaffMemberSelected(staffMemberId: number) {
-
-    if (staffMemberId) {
-      this.storage.set('impersonatedStaffMemberId', staffMemberId).subscribe();
-    }
+    this.staffMemberService.impersonatedStaffMember$.subscribe(data => {
+      if (data) {
+        this.impersonatedStaffMember = data;
+        console.log('person', data);
+        this.storage.get('impersonatedStaffMemberId').subscribe(id => console.log('selected id:', id));
+      }
+    });
   }
 
   backClicked() {

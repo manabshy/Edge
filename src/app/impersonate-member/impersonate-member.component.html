@@ -10,8 +10,8 @@
       <p>Select member to impersonate</p>
       <p>
         <ng-container *ngFor="let member of impersonationList">
-            <button class="btn btn-link p-0 mr-3" href>{{member?.fullName}}</button>
-        </ng-container> 
+            <button class="btn btn-link p-0 mr-3" (click)="selectStaffMember(member)">{{member?.fullName}}</button>
+        </ng-container>
       </p>
     </div>
   </div>

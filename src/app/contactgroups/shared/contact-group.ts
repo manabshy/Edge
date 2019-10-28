@@ -103,12 +103,6 @@ export interface ContactNote extends BaseNote {
 export interface PersonNote extends BaseNote {
   personId: number;
 }
-export interface RequestOption {
-  isNameSearch: boolean;
-  searchTerm: string;
-  pageSize: number;
-  page: number;
-}
 
 export interface AutoCompleteResult {
   contactGroupId: number;
