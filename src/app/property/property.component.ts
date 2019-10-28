@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PropertyService } from './shared/property.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, takeUntil, tap, switchMap, catchError } from 'rxjs/operators';
+import { distinctUntilChanged, takeUntil, tap, switchMap, catchError } from 'rxjs/operators';
 import { PropertyAutoComplete } from './shared/property';
 import { AppUtils } from '../core/shared/utils';
 import { Observable, EMPTY } from 'rxjs';
@@ -52,22 +52,13 @@ export class PropertyComponent extends BaseComponent implements OnInit {
 
     this.suggestions = (text$: Observable<string>) =>
       text$.pipe(
-        debounceTime(300),
         distinctUntilChanged(),
         switchMap(term =>
           this.propertyService.getPropertySuggestions(term).pipe(
             catchError(() => {
               return EMPTY;
             }))
-        ),
-        tap((data: any[]) => {
-          if (data && !data.length) {
-            this.isMessageVisible = true;
-            this.isLoading = false;
-            this.isHintVisible = false;
-            this.page = 1;
-          }
-        })
+        )
       );
 
   }
@@ -75,6 +66,7 @@ export class PropertyComponent extends BaseComponent implements OnInit {
   propertiesResults() {
     if (this.searchTerm) {
       this.isLoading = true;
+      this.suggestions = null;
     }
     this.page = 1;
     this.bottomReached = false;

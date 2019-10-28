@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { AppUtils } from '../shared/utils';
 import { ContactGroupAutoCompleteResult, BasicContactGroup, ContactGroup, Signer } from 'src/app/contactgroups/shared/contact-group';
-import { debounceTime, distinctUntilChanged, switchMap, catchError, tap } from 'rxjs/operators';
+import { distinctUntilChanged, switchMap, catchError, tap } from 'rxjs/operators';
 import { PeopleService } from '../services/people.service';
 import { Observable, EMPTY } from 'rxjs';
 
@@ -48,21 +48,13 @@ export class SignerComponent implements OnInit, OnChanges {
     });
     this.suggestions = (text$: Observable<string>) =>
       text$.pipe(
-        debounceTime(300),
         distinctUntilChanged(),
         switchMap(term =>
           this.peopleService.getPeopleSuggestions(term).pipe(
             catchError(() => {
               return EMPTY;
             }))
-        ),
-        tap((data: any[]) => {
-          if (data && !data.length) {
-            this.isMessageVisible = true;
-            this.isLoading = false;
-            this.isHintVisible = false;
-          }
-        })
+        )
       );
     this.displayExistingSigners();
   }

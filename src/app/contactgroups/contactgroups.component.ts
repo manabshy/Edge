@@ -10,7 +10,7 @@ import { InfoService } from '../core/services/info.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import * as _ from 'lodash';
 import { Observable, of, EMPTY } from 'rxjs';
-import { debounceTime, distinctUntilChanged, tap, switchMap, catchError } from 'rxjs/operators';
+import { distinctUntilChanged, tap, switchMap, catchError } from 'rxjs/operators';
 import { PeopleService } from '../core/services/people.service';
 
 const PAGE_SIZE = 20;
@@ -81,22 +81,13 @@ export class ContactGroupsComponent implements OnInit {
 
     this.suggestions = (text$: Observable<string>) =>
       text$.pipe(
-        debounceTime(300),
         distinctUntilChanged(),
         switchMap(term =>
           this.peopleService.getPeopleSuggestions(term).pipe(
             catchError(() => {
               return EMPTY;
             }))
-        ),
-        tap((data: any[]) => {
-          if (data && !data.length) {
-            this.isMessageVisible = true;
-            this.isLoading = false;
-            this.isHintVisible = false;
-            this.page = 1;
-          }
-        })
+        )
       );
   }
 
@@ -109,6 +100,7 @@ export class ContactGroupsComponent implements OnInit {
   contactGroupsResults() {
     if (this.searchTerm) {
       this.isLoading = true;
+      this.suggestions = null;
     }
     this.page = 1;
     this.bottomReached = false;

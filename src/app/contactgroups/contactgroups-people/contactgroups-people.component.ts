@@ -156,7 +156,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
     });
     this.suggestions = (text$: Observable<string>) =>
       text$.pipe(
-        debounceTime(300),
         distinctUntilChanged(),
         switchMap(term =>
           this.contactGroupService.getCompanySuggestions(term).pipe(
