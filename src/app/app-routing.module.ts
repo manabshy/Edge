@@ -13,6 +13,7 @@ import { SendEdetailsComponent } from './send-edetails/send-edetails.component';
 import { AuthGuardService } from './core/services/auth-guard.service';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { SelectiveStrategyService } from './core/services/selective-strategy.service';
+import { ImpersonateMemberComponent } from './impersonate-member/impersonate-member.component';
 
 const routes: Routes = [
   { path: 'property-details-letting', component: PropertyDetailsLettingComponent, canActivate: [AuthGuardService] },
@@ -23,6 +24,7 @@ const routes: Routes = [
   { path: 'applicant-view-letting', component: ApplicantViewLettingComponent, canActivate: [AuthGuardService] },
   { path: 'applicant-view-sale', component: ApplicantViewSaleComponent, canActivate: [AuthGuardService] },
   { path: 'send-edetails', component: SendEdetailsComponent, canActivate: [AuthGuardService] },
+  { path: 'impersonate-member', component: ImpersonateMemberComponent, canActivate: [AuthGuardService] },
   {
     path: 'property-centre',
     data: { preload: true },

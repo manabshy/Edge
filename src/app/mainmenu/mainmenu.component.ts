@@ -33,13 +33,6 @@ export class MainmenuComponent implements OnInit {
         this.currentStaffMember = data;
       }
     });
-
-    this.staffMemberService.getImpersonationList().subscribe(data => {
-      if (data) {
-        this.impersonationList = data;
-      }
-      console.log('impersonation list', this.impersonationList);
-    });
   }
 
   onStaffMemberSelected(staffMemberId: number) {

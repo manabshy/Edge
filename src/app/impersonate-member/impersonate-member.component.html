@@ -1,0 +1,18 @@
+<app-breadcrumb></app-breadcrumb>
+<div class="container">
+  <div class="row page-title">
+    <div class="col">
+      <h4 class="m-0">Impersonate member</h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <p>Select member to impersonate</p>
+      <p>
+        <ng-container *ngFor="let member of impersonationList">
+            <button class="btn btn-link p-0 mr-3" href>{{member?.fullName}}</button>
+        </ng-container> 
+      </p>
+    </div>
+  </div>
+</div>

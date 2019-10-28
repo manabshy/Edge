@@ -43,6 +43,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
+import { ImpersonateMemberComponent } from './impersonate-member/impersonate-member.component';
 
 
 @NgModule({
@@ -73,7 +74,8 @@ import { HttpClientModule } from '@angular/common/http';
     SendEdetailsComponent,
     PropertyChecklistLettingComponent,
     PropertyChecklistItemComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    ImpersonateMemberComponent
   ],
   imports: [
     BrowserModule,
