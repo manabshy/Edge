@@ -15,6 +15,10 @@ export interface StaffMember {
   photoUrl: string;
 }
 
+export interface Impersonation {
+  staffMemberId: number;
+  fullName: string;
+}
 export interface Permission {
   permissionId: number;
   description: PermissionDescription;
