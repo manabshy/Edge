@@ -24,7 +24,7 @@ export class ImpersonateMemberComponent implements OnInit {
 
   selectStaffMember(person: Impersonation) {
     if (person) {
-      this.storage.set('impersonatedStaffMemberId', person.staffMemberId).subscribe();
+      this.storage.set('impersonatedStaffMember', person).subscribe();
       this.staffMemberService.impersonatedStaffMemberChanged(person);
     }
   }

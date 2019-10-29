@@ -34,11 +34,17 @@ export class MainmenuComponent implements OnInit {
       }
     });
 
+    this.storage.get('impersonatedStaffMember').subscribe((staffMember: string) => {
+      if (staffMember) {
+        this.impersonatedStaffMember = staffMember as unknown as Impersonation;
+        console.log('selected id:', staffMember);
+      }
+    });
     this.staffMemberService.impersonatedStaffMember$.subscribe(data => {
       if (data) {
         this.impersonatedStaffMember = data;
         console.log('person', data);
-        this.storage.get('impersonatedStaffMemberId').subscribe(id => console.log('selected id:', id));
+
       }
     });
   }
