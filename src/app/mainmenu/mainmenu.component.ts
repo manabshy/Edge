@@ -34,9 +34,9 @@ export class MainmenuComponent implements OnInit {
       }
     });
 
-    this.storage.get('impersonatedStaffMember').subscribe((staffMember: string) => {
+    this.storage.get('impersonatedStaffMember').subscribe((staffMember: Impersonation) => {
       if (staffMember) {
-        this.impersonatedStaffMember = staffMember as unknown as Impersonation;
+        this.impersonatedStaffMember = staffMember;
         console.log('selected id:', staffMember);
       }
     });
