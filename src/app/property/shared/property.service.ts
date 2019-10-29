@@ -9,6 +9,8 @@ import { map, tap } from 'rxjs/operators';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encoder-helper';
 import { Address } from 'src/app/core/models/address';
+import { SharedService } from 'src/app/core/services/shared.service';
+import { RequestOption } from 'src/app/core/shared/utils';
 
 @Injectable({
   providedIn: 'root'
@@ -25,9 +27,9 @@ export class PropertyService {
   propertyPageNumberChanges$ = this.propertyPageNumberSubject.asObservable();
   currentPropertyId$ = this.currentPropertyIdSubject.asObservable();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private sharedService: SharedService) { }
 
-  autocompleteProperties(searchTerm: any, pageSize?: number, page?: number): Observable<PropertyAutoComplete[]> {
+  autocompleteProperties2(searchTerm: any, pageSize?: number, page?: number): Observable<PropertyAutoComplete[]> {
     if (!page) {
       page = 1;
     }
@@ -42,6 +44,16 @@ export class PropertyService {
         page: page.toString()
       }
     });
+    const url = `${AppConstants.basePropertyUrl}/autocomplete`;
+    return this.http.get<PropertyAutoCompleteData>(url, { params: options })
+      .pipe(
+        map(response => response.result),
+        tap(data => console.log(JSON.stringify(data)))
+      );
+  }
+  autocompleteProperties(opts: RequestOption): Observable<PropertyAutoComplete[]> {
+    let options: HttpParams;
+    options = this.sharedService.setQueryParams(opts);
     const url = `${AppConstants.basePropertyUrl}/autocomplete`;
     return this.http.get<PropertyAutoCompleteData>(url, { params: options })
       .pipe(

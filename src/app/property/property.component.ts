@@ -3,11 +3,13 @@ import { PropertyService } from './shared/property.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { distinctUntilChanged, takeUntil, tap, switchMap, catchError } from 'rxjs/operators';
 import { PropertyAutoComplete } from './shared/property';
-import { AppUtils } from '../core/shared/utils';
+import { AppUtils, RequestOption } from '../core/shared/utils';
 import { Observable, EMPTY } from 'rxjs';
 import { BaseComponent } from '../core/models/base-component';
 import * as _ from 'lodash';
 import { SharedService } from '../core/services/shared.service';
+import { StorageMap } from '@ngx-pwa/local-storage';
+import { Impersonation } from '../core/models/staff-member';
 
 @Component({
   selector: 'app-property',
@@ -27,9 +29,11 @@ export class PropertyComponent extends BaseComponent implements OnInit {
   bottomReached = false;
   suggestions: (text$: Observable<string>) => Observable<unknown>;
   suggestedTerm: '';
+  impersonatedStaffMemberId: number;
 
   constructor(private propertyService: PropertyService,
     private fb: FormBuilder,
+    private storage: StorageMap,
     private sharedService: SharedService) { super(); }
 
   ngOnInit() {
@@ -38,6 +42,12 @@ export class PropertyComponent extends BaseComponent implements OnInit {
       searchTerm: [''],
     });
 
+    this.storage.get('impersonatedStaffMember').subscribe((person: Impersonation) => {
+      if (person) {
+       this.impersonatedStaffMemberId = person.staffMemberId;
+        console.log('id here....:',  this.impersonatedStaffMemberId);
+      }
+    });
     if (AppUtils.propertySearchTerm) {
       this.propertyFinderForm.get('searchTerm').setValue(AppUtils.propertySearchTerm);
       this.propertiesResults();
@@ -60,7 +70,6 @@ export class PropertyComponent extends BaseComponent implements OnInit {
             }))
         )
       );
-
   }
 
   propertiesResults() {
@@ -78,7 +87,13 @@ export class PropertyComponent extends BaseComponent implements OnInit {
 
   getNextPropertyPage(page) {
     this.isLoading = true;
-    this.propertyService.autocompleteProperties(this.searchTerm, this.PAGE_SIZE, page).subscribe(result => {
+    const requestOptions = {
+      impersonatedStaffMemberId: this.impersonatedStaffMemberId ? this.impersonatedStaffMemberId : 0,
+      page: page,
+      pageSize: this.PAGE_SIZE,
+      searchTerm: this.searchTerm
+    } as RequestOption;
+    this.propertyService.autocompleteProperties(requestOptions).subscribe(result => {
       this.isLoading = false;
       if (this.searchTerm && this.searchTerm.length) {
         if (!result.length) {

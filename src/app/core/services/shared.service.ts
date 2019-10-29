@@ -286,26 +286,26 @@ export class SharedService {
   }
 
 
-  public resolveParams(requestOption: RequestOption) {
-    if (!requestOption.page || +requestOption.page === 0) {
+  public setQueryParams(requestOption: RequestOption) {
+    if (!requestOption.page) {
       requestOption.page = 1;
     }
     if (requestOption.pageSize == null) {
       requestOption.pageSize = 10;
     }
-    this.storage.get('impersonatedStaffMemberId').subscribe((id: number) => {
-      if (id) {
-        requestOption.impersonatedStaffMemberId = id;
-      } else {
-        requestOption.impersonatedStaffMemberId = 0;
-      }
-      console.log('id for options:', id);
-    });
+    // this.storage.get('impersonatedStaffMemberId').subscribe((id: number) => {
+    //   if (id) {
+    //     requestOption.impersonatedStaffMemberId = id;
+    //     console.log('id here....:',  requestOption.impersonatedStaffMemberId);
+    //   } else {
+    //     requestOption.impersonatedStaffMemberId = 0;
+    //   }
+    // });
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
       fromObject: {
         searchTerm: requestOption.searchTerm,
-        id: requestOption.impersonatedStaffMemberId.toString(),
+        id: requestOption.impersonatedStaffMemberId ? requestOption.impersonatedStaffMemberId.toString() : '',
         pageSize: requestOption.pageSize.toString(),
         page: requestOption.page.toString()
       }
