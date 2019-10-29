@@ -5,7 +5,7 @@ import {
   PropertyAutoComplete, PropertyAutoCompleteData, Property, PropertyData,
   PropertyPhotoData, Photo, InstructionInfo, OfferInfo, PropertyNote
 } from './property';
-import { map, tap, switchMap, filter } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encoder-helper';
 import { Address } from 'src/app/core/models/address';
@@ -18,6 +18,8 @@ export class PropertyService {
   private propertyPageNumberSubject = new Subject<number>();
   private propertyNoteChangeSubject = new Subject<PropertyNote>();
   private propertyNotePageNumberChangeSubject = new Subject<number>();
+  private showPropertyDuplicatesSubject = new Subject<boolean>();
+  showPropertyDuplicatesChanges$ = this.showPropertyDuplicatesSubject.asObservable();
   propertyNoteChanges$ = this.propertyNoteChangeSubject.asObservable();
   propertyNotePageNumberChanges$ = this.propertyNotePageNumberChangeSubject.asObservable();
   propertyPageNumberChanges$ = this.propertyPageNumberSubject.asObservable();
@@ -47,6 +49,7 @@ export class PropertyService {
         tap(data => console.log(JSON.stringify(data)))
       );
   }
+
   getPropertySuggestions(searchTerm: string): Observable<any[]> {
     const url = `${AppConstants.basePropertyUrl}/suggestions?SearchTerm=${searchTerm}`;
     return this.http.get<any>(url)
@@ -93,7 +96,6 @@ export class PropertyService {
     return this.http.get<PropertyPhotoData>(url).pipe(map(response => response.result));
   }
 
-  // TODO: temp
   getPropertyMap(propertyId: number): Observable<Photo> {
     const url = `${AppConstants.basePropertyUrl}/${propertyId}/map`;
     return this.http.get<any>(url).pipe(map(response => response.result));
@@ -182,6 +184,10 @@ export class PropertyService {
 
   propertyNoteChanged(newNote: PropertyNote) {
     this.propertyNoteChangeSubject.next(newNote);
+  }
+
+  displayDuplicates(show: boolean) {
+    this.showPropertyDuplicatesSubject.next(show);
   }
 
   // propertyDetails$ = this.currentPropertyId$

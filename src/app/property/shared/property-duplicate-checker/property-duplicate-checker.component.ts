@@ -13,6 +13,7 @@ export class PropertyDuplicateCheckerComponent implements OnInit, OnChanges {
   @Output() selectedProperty = new EventEmitter<any>();
   @Output() fullMatchFound = new EventEmitter<boolean>();
   potentialDuplicates: PropertyAutoComplete[] = [];
+  showMatches: boolean;
   isDuplicateFound = false;
   isFullMatch: boolean;
 
@@ -22,7 +23,11 @@ export class PropertyDuplicateCheckerComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    if (this.propertyAddress && this.propertyAddress.postCode) {
+    this.propertyService.showPropertyDuplicatesChanges$.subscribe(data => {
+      this.showMatches = data;
+    });
+
+    if (this.propertyAddress && this.propertyAddress.postCode || this.showMatches) {
       this.getDuplicates();
     }
   }

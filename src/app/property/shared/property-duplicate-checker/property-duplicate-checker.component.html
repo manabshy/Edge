@@ -1,11 +1,12 @@
-<div class="off-canvas" [hidden]="!isDuplicateFound" (click)="isDuplicateFound = null">
+<div class="off-canvas" [hidden]="!isDuplicateFound && !showMatches" (click)="isDuplicateFound = false; showMatches = false;">
   <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
     <h4 class="page-title text-left pt-3">
       Property duplicates
-      <button type="button" class="close mr-2" aria-label="Close" (click)="isDuplicateFound = null">
+      <button type="button" class="close mr-2" aria-label="Close" (click)="isDuplicateFound = false; showMatches = false;">
         <span aria-hidden="true">&times;</span>
       </button>
     </h4>
+    <div class="alert alert-danger">There is already a property with this address. <a href (click)="$event.preventDefault(); isDuplicateFound = false; showMatches = false;">Search again </a>or select it from the list.</div>
     <div class="list-group small">
       <div class="list-group-item list-header d-none d-sm-block">
         <div class="row">

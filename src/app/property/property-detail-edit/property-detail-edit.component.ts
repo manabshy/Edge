@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PropertyService } from '../shared/property.service';
-import { Property, PropertyStyle, PropertyType } from '../shared/property';
+import { Property } from '../shared/property';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AppConstants, ValidationMessages, FormErrors } from 'src/app/core/shared/app-constants';
+import { ValidationMessages, FormErrors } from 'src/app/core/shared/app-constants';
 import { Location } from '@angular/common';
 import { Address } from '../../core/models/address';
 import { SharedService, WedgeError } from '../../core/services/shared.service';
-import { AppUtils } from 'src/app/core/shared/utils';
 import { Signer } from 'src/app/contactgroups/shared/contact-group';
 import { ToastrService } from 'ngx-toastr';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
-import { InfoService, InfoDetail } from 'src/app/core/services/info.service';
+import { InfoDetail } from 'src/app/core/services/info.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
 
 @Component({
@@ -45,12 +44,12 @@ export class PropertyDetailEditComponent implements OnInit {
   isCreatingNewSigner: boolean;
   createdSigner: Signer;
   isMatchFound = false;
+  showMatches = false;
 
   constructor(private route: ActivatedRoute,
     private _router: Router,
     private propertyService: PropertyService,
     private sharedService: SharedService,
-    private infoService: InfoService,
     private storage: StorageMap,
     private contactGroupService: ContactGroupsService,
     private toastr: ToastrService,
@@ -58,16 +57,6 @@ export class PropertyDetailEditComponent implements OnInit {
     private _location: Location) { }
 
   ngOnInit() {
-    // if (AppUtils.listInfo) {
-    //   this.listInfo = AppUtils.listInfo;
-    //   this.setDropdownLists();
-    // } else {
-    //   this.infoService.getDropdownListInfo().subscribe(data => {
-    //     this.listInfo = data;
-    //     this.setDropdownLists();
-    //   });
-    // }
-    // info local storage here...
     this.storage.get('info').subscribe(data => {
       if (data) {
         this.listInfo = data; this.setDropdownLists();
@@ -197,6 +186,7 @@ export class PropertyDetailEditComponent implements OnInit {
       this.propertyForm.markAsPristine();
     }
     this.propertyAddress = address;
+    this.isMatchFound = false;
 
     if (this.propertyAddress) {
       this.propertyForm.patchValue({ address: this.propertyAddress });
@@ -228,7 +218,6 @@ export class PropertyDetailEditComponent implements OnInit {
     } else {
       this.isMatchFound = false;
     }
-    console.log('match condition', this.isMatchFound);
   }
 
   logValidationErrors(group: FormGroup = this.propertyForm, fakeTouched: boolean) {
@@ -283,17 +272,25 @@ export class PropertyDetailEditComponent implements OnInit {
       property.lastKnownOwner = this.lastKnownOwner;
       property.address = this.propertyAddress;
     }
-    this.isSubmitting = true;
+
     if (this.isNewProperty) {
-      this.propertyService.addProperty(property).subscribe(res => {
-        if (res) { this.onSaveComplete(res); }
-      }, (error: WedgeError) => {
-        this.errorMessage = error;
-        this.sharedService.showError(this.errorMessage);
-        this.isSubmitting = false;
-      });
+      if (this.isMatchFound) {
+        console.log('here....', this.isMatchFound)
+        this.showMatches = true;
+        this.propertyService.displayDuplicates(this.showMatches);
+      } else {
+        this.isSubmitting = true;
+        this.propertyService.addProperty(property).subscribe(res => {
+          if (res) { this.onSaveComplete(res); }
+        }, (error: WedgeError) => {
+          this.errorMessage = error;
+          this.sharedService.showError(this.errorMessage);
+          this.isSubmitting = false;
+        });
+      }
     } else {
       if (!this.isMatchFound) {
+        this.isSubmitting = true;
         this.propertyService.updateProperty(property).subscribe(res => this.onSaveComplete(res.result), (error: WedgeError) => {
           this.errorMessage = error;
           this.sharedService.showError(this.errorMessage);
