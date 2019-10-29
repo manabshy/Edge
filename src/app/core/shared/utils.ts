@@ -1,6 +1,5 @@
-import {format, compareAsc, isDate} from 'date-fns';
-import { isArray, isPlainObject, mapValues, isNull, isUndefined, random  } from 'lodash';
-import { ContactGroup, Company } from 'src/app/contactgroups/shared/contact-group';
+import { format, isDate } from 'date-fns';
+import { Company } from 'src/app/contactgroups/shared/contact-group';
 import { Person } from '../models/person';
 import { StaffMember } from '../models/staff-member';
 import { DetachedRouteHandle } from '@angular/router';
@@ -47,6 +46,7 @@ export class AppUtils {
   static currentStaffMemberGlobal: StaffMember;
   static navPlaceholder: string;
 
+
   /**
    * Format a date/time into a string
    */
@@ -62,7 +62,7 @@ export class AppUtils {
     const moDate = isDate(date) ? date : (date);
     return format(moDate, 'HH:mm');
   }
-  public static capitaliseFirstLetter<T>(value: string): string {
+  public static capitaliseFirstLetter(value: string): string {
     if (value) {
       const result = value.charAt(0).toLocaleUpperCase();
       return result.concat(value.substr(1));
@@ -78,6 +78,5 @@ export class AppUtils {
       }
     }
   }
-
 
 }

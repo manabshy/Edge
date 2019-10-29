@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AppUtils } from '../shared/utils';
+import { AppUtils, RequestOption } from '../shared/utils';
 import * as dayjs from 'dayjs';
 import { Subject } from 'rxjs';
 import { map, fill } from 'lodash';
@@ -11,6 +11,9 @@ import { Location } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
+import { HttpParams } from '@angular/common/http';
+import { CustomQueryEncoderHelper } from '../shared/custom-query-encoder-helper';
+import { StorageMap } from '@ngx-pwa/local-storage';
 
 @Injectable({
   providedIn: 'root'
@@ -24,8 +27,8 @@ export class SharedService {
   constructor(private _location: Location,
     private _router: Router,
     private titleService: Title,
+    private storage: StorageMap,
     private modalService: BsModalService) {
-
   }
 
   back() {
@@ -270,14 +273,44 @@ export class SharedService {
       return false;
     }
   }
+
   isInternationalNumber(number: string) {
     const formattedNumber = number.replace(' ', '').replace('+44', '');
     return formattedNumber.startsWith('00') || formattedNumber.startsWith('+');
   }
+
   getRegionCode(number: string) {
     const phoneUtil: PhoneNumberUtil = PhoneNumberUtil.getInstance();
     const rawNumber = phoneUtil.parseAndKeepRawInput(number, 'GB');
     return this.isInternationalNumber(number) ? phoneUtil.getRegionCodeForNumber(rawNumber) : 'GB';
+  }
+
+
+  public resolveParams(requestOption: RequestOption) {
+    if (!requestOption.page || +requestOption.page === 0) {
+      requestOption.page = 1;
+    }
+    if (requestOption.pageSize == null) {
+      requestOption.pageSize = 10;
+    }
+    this.storage.get('impersonatedStaffMemberId').subscribe((id: number) => {
+      if (id) {
+        requestOption.impersonatedStaffMemberId = id;
+      } else {
+        requestOption.impersonatedStaffMemberId = 0;
+      }
+      console.log('id for options:', id);
+    });
+    const options = new HttpParams({
+      encoder: new CustomQueryEncoderHelper,
+      fromObject: {
+        searchTerm: requestOption.searchTerm,
+        id: requestOption.impersonatedStaffMemberId.toString(),
+        pageSize: requestOption.pageSize.toString(),
+        page: requestOption.page.toString()
+      }
+    });
+    return options;
   }
 
   scrollToFirstInvalidField() {
