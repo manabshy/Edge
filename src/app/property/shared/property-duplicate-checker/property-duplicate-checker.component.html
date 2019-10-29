@@ -1,8 +1,8 @@
-<div class="off-canvas" [hidden]="!isDuplicateFound" (click)="isDuplicateFound = null">
+<div class="off-canvas" [hidden]="!isDuplicateFound && !showMatches" (click)="isDuplicateFound = false; showMatches = false;">
   <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
     <h4 class="page-title text-left pt-3">
       Property duplicates
-      <button type="button" class="close mr-2" aria-label="Close" (click)="isDuplicateFound = null">
+      <button type="button" class="close mr-2" aria-label="Close" (click)="isDuplicateFound = false; showMatches = false;">
         <span aria-hidden="true">&times;</span>
       </button>
     </h4>
