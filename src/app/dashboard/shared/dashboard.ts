@@ -15,7 +15,7 @@ export interface Dashboard {
   exchanges: DashboardNumbers;
   pipeline: DashboardNumbers;
   liveTenancies: DashboardNumbers;
-  staffMember: StaffMember;
+  staffMember: BasicStaffMember;
 }
 export interface DashboardNumbers {
   periodCount?: number;
@@ -28,7 +28,7 @@ export interface DashboardNumbers {
   totalFees?: number;
   totalPropertyCount?: number;
 }
-export interface StaffMember {
+export interface BasicStaffMember {
   staffMemberId: number;
   staffMemberFullName: string;
 }

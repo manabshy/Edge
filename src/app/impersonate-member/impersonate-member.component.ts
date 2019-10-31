@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { StaffMemberService } from '../core/services/staff-member.service';
-import { Impersonation } from '../core/models/staff-member';
+import { Impersonation, StaffMember } from '../core/models/staff-member';
 import { StorageMap } from '@ngx-pwa/local-storage';
 
 @Component({
@@ -14,12 +14,13 @@ export class ImpersonateMemberComponent implements OnInit {
   constructor(private staffMemberService: StaffMemberService, private storage: StorageMap) { }
 
   ngOnInit() {
-    this.staffMemberService.getImpersonationList().subscribe(data => {
+    this.storage.get('currentUser').subscribe((data: StaffMember) => {
       if (data) {
-        this.impersonationList = data;
+        this.impersonationList = data.impersonations;
       }
       console.log('impersonation list', this.impersonationList);
     });
+
   }
 
   selectStaffMember(person: Impersonation) {

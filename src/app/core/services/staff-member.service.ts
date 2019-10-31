@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject, Subject } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { AppConstants } from '../shared/app-constants';
 import { map, shareReplay, tap } from 'rxjs/operators';
 import { StaffMember, StaffMemberResult, Impersonation } from '../models/staff-member';
-import { Staff } from 'src/app/diary/shared/diary';
 import { StorageMap } from '@ngx-pwa/local-storage';
 
 const CACHE_SIZE = 1;
@@ -14,7 +13,6 @@ const CACHE_SIZE = 1;
 export class StaffMemberService {
   private currentStaffMemberSubject = new BehaviorSubject<StaffMember | null>(null);
   private staffMember$: Observable<StaffMember>;
-  private impersonationList$: Observable<Impersonation[]>;
   private impersonationSubject = new BehaviorSubject<Impersonation | null>(null);
   impersonatedStaffMember$ = this.impersonationSubject.asObservable();
   currentStaffMember$ = this.currentStaffMemberSubject.asObservable();
@@ -31,12 +29,6 @@ export class StaffMemberService {
     }
     return this.staffMember$;
   }
-  public getImpersonationList(): Observable<Impersonation[]> {
-    if (!this.impersonationList$) {
-      this.impersonationList$ = this.requestImpersonationList().pipe(shareReplay(CACHE_SIZE));
-    }
-    return this.impersonationList$;
-  }
 
   private requestCurrentStaffMember(): Observable<StaffMember> {
     return this.http.get<StaffMemberResult>(`${AppConstants.baseUrl}/currentUser`)
@@ -47,13 +39,6 @@ export class StaffMemberService {
             this.storage.set('currentUser', data).subscribe();
           }
         })
-      );
-  }
-
-  private requestImpersonationList(): Observable<Impersonation[]> {
-    return this.http.get<any>(`${AppConstants.baseUrl}/impersonation`)
-      .pipe(
-        map(response => response.result)
       );
   }
 

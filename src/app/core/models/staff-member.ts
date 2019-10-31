@@ -6,6 +6,7 @@ export interface StaffMember {
   mobile: string;
   roles: Role[];
   permissions: Permission[];
+  impersonations: Impersonation[];
   homeOffice: Office;
   staffMemberId: number;
   firstName: string;
