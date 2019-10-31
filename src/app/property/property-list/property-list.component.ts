@@ -24,7 +24,7 @@ export class PropertyListComponent implements OnInit, OnChanges {
   ngOnChanges() {
     this.page = this.pageNumber;
   }
- 
+
   onScrollDown() {
     this.onWindowScroll();
     console.log('scrolled')
@@ -37,7 +37,11 @@ export class PropertyListComponent implements OnInit, OnChanges {
 
   @HostListener('window:scroll', ['$event'])
   onWindowScroll() {
-    if (window.innerHeight + window.scrollY === document.body.scrollHeight && !this.bottomReached) {
+    let scrollHeight: number, totalHeight: number;
+    scrollHeight = document.body.scrollHeight;
+    totalHeight = window.scrollY + window.innerHeight;
+
+    if (totalHeight >= scrollHeight && !this.bottomReached) {
       this.page++;
       this.propertyService.propertyPageNumberChanged(this.page);
       console.log('properties page number', this.page)
