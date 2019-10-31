@@ -3,6 +3,8 @@ import { Company } from 'src/app/contactgroups/shared/contact-group';
 import { Person } from '../models/person';
 import { StaffMember } from '../models/staff-member';
 import { DetachedRouteHandle } from '@angular/router';
+import { HttpParams } from '@angular/common/http';
+import { CustomQueryEncoderHelper } from './custom-query-encoder-helper';
 
 
 export interface IRouteConfigData {
@@ -14,7 +16,6 @@ export interface ICachedRoute {
   data: IRouteConfigData;
 }
 export interface RequestOption {
-  impersonatedStaffMemberId?: number;
   isNameSearch: boolean;
   searchTerm: string;
   pageSize?: number;
@@ -46,6 +47,24 @@ export class AppUtils {
   static currentStaffMemberGlobal: StaffMember;
   static navPlaceholder: string;
 
+
+  public static setQueryParams(requestOption: RequestOption) {
+    if (!requestOption.page) {
+      requestOption.page = 1;
+    }
+    if (requestOption.pageSize == null) {
+      requestOption.pageSize = 10;
+    }
+    const options = new HttpParams({
+      encoder: new CustomQueryEncoderHelper,
+      fromObject: {
+        searchTerm: requestOption.searchTerm,
+        pageSize: requestOption.pageSize.toString(),
+        page: requestOption.page.toString()
+      }
+    });
+    return options;
+  }
 
   /**
    * Format a date/time into a string

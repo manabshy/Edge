@@ -285,34 +285,6 @@ export class SharedService {
     return this.isInternationalNumber(number) ? phoneUtil.getRegionCodeForNumber(rawNumber) : 'GB';
   }
 
-
-  public setQueryParams(requestOption: RequestOption) {
-    if (!requestOption.page) {
-      requestOption.page = 1;
-    }
-    if (requestOption.pageSize == null) {
-      requestOption.pageSize = 10;
-    }
-    // this.storage.get('impersonatedStaffMemberId').subscribe((id: number) => {
-    //   if (id) {
-    //     requestOption.impersonatedStaffMemberId = id;
-    //     console.log('id here....:',  requestOption.impersonatedStaffMemberId);
-    //   } else {
-    //     requestOption.impersonatedStaffMemberId = 0;
-    //   }
-    // });
-    const options = new HttpParams({
-      encoder: new CustomQueryEncoderHelper,
-      fromObject: {
-        searchTerm: requestOption.searchTerm,
-        id: requestOption.impersonatedStaffMemberId ? requestOption.impersonatedStaffMemberId.toString() : '',
-        pageSize: requestOption.pageSize.toString(),
-        page: requestOption.page.toString()
-      }
-    });
-    return options;
-  }
-
   scrollToFirstInvalidField() {
     const invalidFields = document.getElementsByClassName('is-invalid');
     if (invalidFields.length) {

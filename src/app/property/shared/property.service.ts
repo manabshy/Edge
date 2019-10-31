@@ -10,7 +10,7 @@ import { AppConstants } from 'src/app/core/shared/app-constants';
 import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encoder-helper';
 import { Address } from 'src/app/core/models/address';
 import { SharedService } from 'src/app/core/services/shared.service';
-import { RequestOption } from 'src/app/core/shared/utils';
+import { RequestOption, AppUtils } from 'src/app/core/shared/utils';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +27,7 @@ export class PropertyService {
   propertyPageNumberChanges$ = this.propertyPageNumberSubject.asObservable();
   currentPropertyId$ = this.currentPropertyIdSubject.asObservable();
 
-  constructor(private http: HttpClient, private sharedService: SharedService) { }
+  constructor(private http: HttpClient) { }
 
   autocompleteProperties2(searchTerm: any, pageSize?: number, page?: number): Observable<PropertyAutoComplete[]> {
     if (!page) {
@@ -53,7 +53,7 @@ export class PropertyService {
   }
   autocompleteProperties(opts: RequestOption): Observable<PropertyAutoComplete[]> {
     let options: HttpParams;
-    options = this.sharedService.setQueryParams(opts);
+    options = AppUtils.setQueryParams(opts);
     const url = `${AppConstants.basePropertyUrl}/autocomplete`;
     return this.http.get<PropertyAutoCompleteData>(url, { params: options })
       .pipe(

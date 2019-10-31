@@ -29,7 +29,6 @@ export class PropertyComponent extends BaseComponent implements OnInit {
   bottomReached = false;
   suggestions: (text$: Observable<string>) => Observable<unknown>;
   suggestedTerm: '';
-  impersonatedStaffMemberId: number;
 
   constructor(private propertyService: PropertyService,
     private fb: FormBuilder,
@@ -42,12 +41,6 @@ export class PropertyComponent extends BaseComponent implements OnInit {
       searchTerm: [''],
     });
 
-    this.storage.get('impersonatedStaffMember').subscribe((person: Impersonation) => {
-      if (person) {
-       this.impersonatedStaffMemberId = person.staffMemberId;
-        console.log('id here....:',  this.impersonatedStaffMemberId);
-      }
-    });
     if (AppUtils.propertySearchTerm) {
       this.propertyFinderForm.get('searchTerm').setValue(AppUtils.propertySearchTerm);
       this.propertiesResults();
@@ -88,7 +81,6 @@ export class PropertyComponent extends BaseComponent implements OnInit {
   getNextPropertyPage(page) {
     this.isLoading = true;
     const requestOptions = {
-      impersonatedStaffMemberId: this.impersonatedStaffMemberId ? this.impersonatedStaffMemberId : 0,
       page: page,
       pageSize: this.PAGE_SIZE,
       searchTerm: this.searchTerm
