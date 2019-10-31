@@ -4,20 +4,35 @@ import { Observable, throwError } from 'rxjs';
 import { WedgeError } from './services/shared.service';
 import { catchError } from 'rxjs/operators';
 import { AppUtils, ICachedRoute } from './shared/utils';
+import { StorageMap } from '@ngx-pwa/local-storage';
+import { Impersonation } from './models/staff-member';
 
 @Injectable()
 export class AppInterceptor implements HttpInterceptor {
+  impersonatedStaffMemberId: number;
+
+  constructor(private storage: StorageMap) {
+  }
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const jsonReq: HttpRequest<any> = req.clone({
-      setHeaders : {'Content-Type': 'application/json'}
+    this.storage.get('impersonatedStaffMember').subscribe((person: Impersonation) => {
+      if (person) {
+        this.impersonatedStaffMemberId = person.staffMemberId;
+        console.log('id  in service here....:', this.impersonatedStaffMemberId);
+      }
     });
-    if(req.method !== "GET") {
+    const jsonReq: HttpRequest<any> = req.clone({
+      setHeaders: {
+        'Content-Type': 'application/json',
+        'impersonation': this.impersonatedStaffMemberId ? this.impersonatedStaffMemberId.toString() : ''
+      }
+    });
+    if (req.method !== 'GET') {
       AppUtils.routeCache = new Map<string, ICachedRoute>();
     }
     return next.handle(jsonReq).pipe(catchError(err => this.handleError(err)));
   }
 
-  private handleError(err: HttpErrorResponse): Observable<WedgeError> |  Observable<any> {
+  private handleError(err: HttpErrorResponse): Observable<WedgeError> | Observable<any> {
     const wedgeError = new WedgeError();
     if (err.error instanceof ErrorEvent) {
       wedgeError.displayMessage = `An error occurred: ${err.error.message}`;
