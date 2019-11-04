@@ -18,13 +18,17 @@ import { ImpersonateMemberComponent } from './impersonate-member/impersonate-mem
 const routes: Routes = [
   { path: 'property-details-letting', component: PropertyDetailsLettingComponent, canActivate: [AuthGuardService] },
   { path: 'property-details-sale', component: PropertyDetailsSaleComponent, canActivate: [AuthGuardService] },
-  { path: 'lead-edit', component: LeadEditComponent, canActivate: [AuthGuardService] },
-  { path: 'lead-register', component: LeadRegisterComponent, canActivate: [AuthGuardService] },
   { path: 'applicant-register', component: ApplicantRegisterComponent, canActivate: [AuthGuardService] },
   { path: 'applicant-view-letting', component: ApplicantViewLettingComponent, canActivate: [AuthGuardService] },
   { path: 'applicant-view-sale', component: ApplicantViewSaleComponent, canActivate: [AuthGuardService] },
   { path: 'send-edetails', component: SendEdetailsComponent, canActivate: [AuthGuardService] },
   { path: 'impersonate-member', component: ImpersonateMemberComponent, canActivate: [AuthGuardService] },
+  {
+    path: 'leads-register',
+    data: { preload: true },
+    loadChildren: () => import('./leads/leads.module').then(m => m.LeadsModule),
+    canActivate: [AuthGuardService],
+  },
   {
     path: 'property-centre',
     data: { preload: true },

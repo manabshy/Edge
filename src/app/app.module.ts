@@ -5,7 +5,6 @@ import { AppComponent } from './app.component';
 import { MainmenuComponent } from './mainmenu/mainmenu.component';
 import { HomeComponent } from './home/home.component';
 import { AppRoutingModule } from './/app-routing.module';
-import { ContactGroupsComponent } from './contactgroups/contactgroups.component';
 import { PropertyDetailsLettingComponent } from './property-details-letting/property-details-letting.component';
 import { PropertyDetailsSaleComponent } from './property-details-sale/property-details-sale.component';
 import { PropertyFeaturesComponent } from './property-features/property-features.component';
@@ -17,8 +16,6 @@ import { PropertyNotesComponent } from './property-notes/property-notes.componen
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DiaryComponent } from './diary/diary.component';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
-import { LeadEditComponent } from './leads/lead-edit/lead-edit.component';
-import { LeadRegisterComponent } from './leads/lead-register/lead-register.component';
 import { ApplicantRegisterComponent } from './applicant-register/applicant-register.component';
 import { ApplicantViewLettingComponent } from './applicant-view-letting/applicant-view-letting.component';
 import { ViewingsComponent } from './viewings/viewings.component';
@@ -34,11 +31,8 @@ import { CoreModule } from './core/core.module';
 import { AccountModule } from './account/account.module';
 import { LeaderboardModule } from './leaderboard/leaderboard.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { PropertyModule } from './property/property.module';
-import { ContactgroupsModule } from './contactgroups/contactgroups.module';
 import { DiaryModule } from './diary/diary.module';
 import { NotFoundComponent } from './not-found/not-found.component';
-import { CompanyModule } from './company/company.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -62,8 +56,6 @@ import { ImpersonateMemberComponent } from './impersonate-member/impersonate-mem
     DashboardComponent,
     DiaryComponent,
     LeaderboardComponent,
-    LeadEditComponent,
-    LeadRegisterComponent,
     ApplicantRegisterComponent,
     ApplicantViewLettingComponent,
     ViewingsComponent,
@@ -87,10 +79,7 @@ import { ImpersonateMemberComponent } from './impersonate-member/impersonate-mem
     CoreModule,
     DashboardModule,
     LeaderboardModule,
-    // PropertyModule,
-    // ContactgroupsModule,
     DiaryModule,
-    // CompanyModule,
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
