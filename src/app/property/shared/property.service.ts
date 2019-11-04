@@ -123,7 +123,7 @@ export class PropertyService {
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
 
-  getPotentialDuplicateProperties(address: Address): Observable<PropertyAutoComplete[]> {
+  getPotentialDuplicateProperties(address: Address, propertyId?: number): Observable<PropertyAutoComplete[]> {
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
       fromObject: {
@@ -135,7 +135,8 @@ export class PropertyService {
         outCode: address.outCode || '',
         postCode: address.postCode,
         streetName: address.streetName,
-        town: address.town
+        town: address.town,
+        propertyId: propertyId ? propertyId.toString() : ''
       }
     });
     const url = `${AppConstants.basePropertyUrl}/duplicates`;

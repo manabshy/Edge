@@ -18,7 +18,7 @@
         <input type="hidden" id="address" class="form-control" formControlName="address">
       </div>
     </div>
-    <app-property-duplicate-checker [propertyAddress]="propertyAddress" (selectedProperty)="getSelectedProperty($event)"
+    <app-property-duplicate-checker [propertyAddress]="propertyAddress" [propertyId]="propertyDetails?.propertyId" (selectedProperty)="getSelectedProperty($event)"
       (fullMatchFound)="checkPropertyMatches($event)"></app-property-duplicate-checker>
     <div class="form-group row">
       <label for="propertyTypeId" class="col-sm-2 col-form-label col-form-label-sm">Property Type</label>

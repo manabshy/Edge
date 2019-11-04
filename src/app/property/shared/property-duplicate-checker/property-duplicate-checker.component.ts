@@ -10,6 +10,7 @@ import { PropertyAutoComplete } from '../property';
 })
 export class PropertyDuplicateCheckerComponent implements OnInit, OnChanges {
   @Input() propertyAddress: Address;
+  @Input() propertyId: number;
   @Output() selectedProperty = new EventEmitter<any>();
   @Output() fullMatchFound = new EventEmitter<boolean>();
   potentialDuplicates: PropertyAutoComplete[] = [];
@@ -43,7 +44,7 @@ export class PropertyDuplicateCheckerComponent implements OnInit, OnChanges {
   }
 
   private getDuplicates() {
-    this.propertyService.getPotentialDuplicateProperties(this.propertyAddress).subscribe(data => {
+    this.propertyService.getPotentialDuplicateProperties(this.propertyAddress, this.propertyId).subscribe(data => {
       if (data && data.length) {
         this.potentialDuplicates = data;
         this.isDuplicateFound = true;
