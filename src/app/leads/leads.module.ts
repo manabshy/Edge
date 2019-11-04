@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { LeadsRoutingModule } from './leads-routing.module';
 import { LeadRegisterComponent } from './lead-register/lead-register.component';
+import { CoreModule } from '../core/core.module';
 
 @NgModule({
   declarations: [
@@ -10,6 +11,7 @@ import { LeadRegisterComponent } from './lead-register/lead-register.component';
   ],
   imports: [
     CommonModule,
+    CoreModule,
     LeadsRoutingModule
   ]
 })
