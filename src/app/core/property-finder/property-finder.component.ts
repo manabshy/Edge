@@ -15,7 +15,7 @@ export class PropertyFinderComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.property = '96 Welbeck Gardens, London, SW12 3JF';
+    this.property = '';
   }
 
 }

@@ -1,46 +1,12 @@
 <div class="form-group row">
-  <label for="property" class="col-sm-2 col-form-label col-form-label-sm">Address</label>
+  <label for="property" class="col-sm-2 col-form-label col-form-label-sm">Find Property</label>
   <div class="col-sm-10">
-    <input type="text" class="form-control form-control-sm" id="property" placeholder="Property"
-      [(ngModel)]="property">
-    <button class="btn btn-sm btn-link px-0" type="button" id="manAddressBtn"
-      (click)="isManAddressCollapsed = !isManAddressCollapsed" [attr.aria-expanded]="!isManAddressCollapsed"
-      aria-controls="collapseBasic">Enter address manually</button>
-    <div class="collapse" [collapse]="!isManAddressCollapsed" id="manAddress">
-      <div class="form-group mt-2">
-        <label class="small" for="flat">Flat number</label>
-        <input type="text" class="form-control form-control-sm" id="flat" placeholder="Flat number">
-      </div>
-      <div class="form-group">
-        <label class="small" for="house">House number</label>
-        <input type="text" class="form-control form-control-sm" id="house" placeholder="House number">
-      </div>
-      <div class="form-group">
-        <label class="small" for="building">Building name</label>
-        <input type="text" class="form-control form-control-sm" id="building" placeholder="Building name">
-      </div>
-      <div class="form-group">
-        <label class="small" for="street">Street</label>
-        <input type="text" class="form-control form-control-sm" id="street" placeholder="Street">
-      </div>
-      <div class="form-group">
-        <label class="small" for="adressline2">Address line 2</label>
-        <input type="text" class="form-control form-control-sm" id="addressline2"
-          placeholder="Address line 2">
-      </div>
-      <div class="form-group">
-        <label class="small" for="town">Town</label>
-        <input type="text" class="form-control form-control-sm" id="town" placeholder="Town">
-      </div>
-      <div class="form-group">
-        <label class="small" for="outcode">Postcode</label>
-        <div class="input-group">
-          <input type="text" class="form-control form-control-sm" maxlength="4" id="outcode"
-            placeholder="Outcode">
-          <input type="text" class="form-control form-control-sm" maxlength="3" id="incode"
-            placeholder="Incode">
+    <div class="input-group input-group-sm">
+      <input type="text" class="form-control form-control-sm" id="property"
+        [(ngModel)]="property">
+        <div class="input-group-append">
+          <button type="button" class="btn btn-secondary">Search</button>
         </div>
-      </div>
     </div>
   </div>
 </div>
