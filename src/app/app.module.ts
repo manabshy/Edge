@@ -17,8 +17,8 @@ import { PropertyNotesComponent } from './property-notes/property-notes.componen
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DiaryComponent } from './diary/diary.component';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
-import { LeadEditComponent } from './lead-edit/lead-edit.component';
-import { LeadRegisterComponent } from './lead-register/lead-register.component';
+import { LeadEditComponent } from './leads/lead-edit/lead-edit.component';
+import { LeadRegisterComponent } from './leads/lead-register/lead-register.component';
 import { ApplicantRegisterComponent } from './applicant-register/applicant-register.component';
 import { ApplicantViewLettingComponent } from './applicant-view-letting/applicant-view-letting.component';
 import { ViewingsComponent } from './viewings/viewings.component';

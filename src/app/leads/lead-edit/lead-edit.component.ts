@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { AppUtils } from '../core/shared/utils';
+import { AppUtils } from '../../core/shared/utils';
 
 @Component({
   selector: 'app-lead-edit',
-  templateUrl: './lead-edit.component.html',
-  styleUrls: ['./lead-edit.component.scss']
+  templateUrl: '../lead-edit/lead-edit.component.html',
+  styleUrls: ['../lead-edit/lead-edit.component.scss']
 })
 export class LeadEditComponent implements OnInit {
 
