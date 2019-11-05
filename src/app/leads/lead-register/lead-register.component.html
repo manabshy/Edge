@@ -4,8 +4,24 @@
     <div class="col">
       <h4 class="m-0">Leads register</h4>
     </div>
+    <div class="col-auto">
+      <div class="btn-group" dropdown placement="bottom right">
+        <button id="actionsToggle" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
+          aria-controls="actionsList">
+          Actions <span class="caret"></span>
+        </button>
+        <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+          aria-labelledby="actionsToggle">
+          <li role="menuitem">
+            <a class="dropdown-item" href (click)="assignLeads()">
+              <i class="fas fa-arrow-right fa-fw"></i><i class="fas fa-user fa-fw"></i> Assign
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
-  <form action="" class="mb-3">
+  <form action="" class="mb-3 p-0">
 
     <div class="row">
       <div class="col">
@@ -48,22 +64,45 @@
       </div>
     </div>
   </form>
-  <div class="list-group mb-3">
-    <a routerLink="edit" class="list-group-item list-group-item-action">
-      <div class="row">
-        <div class="col">
-          <span class="badge badge-pill badge-info">Type</span>
+  <form action="">
+    <div class="list-group mb-3">
+      <a [routerLink]="areLeadsAssignable ? null : ['edit']" (click)="selectLead()"
+        class="list-group-item list-group-item-action">
+        <div class="row">
+          <div class="col-auto" *ngIf="areLeadsAssignable">
+            <div class="custom-control custom-checkbox" (click)="$event.stopPropagation()">
+              <input type="checkbox" class="custom-control-input" id="assign">
+              <label class="custom-control-label" for="assign"><span class="sr-only">Assign</span></label>
+            </div>
+          </div>
+          <div class="col">
+            <div class="row">
+              <div class="col">
+                <span class="badge badge-pill badge-info">Type</span>
+              </div>
+              <div class="col">
+                Lead Name Surname
+              </div>
+              <div class="col">
+                mm:hh, dd/mm/yyyy
+              </div>
+              <div class="col text-muted">
+                Owner Name Surname
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="col">
-          Lead Name Surname
-        </div>
-        <div class="col">
-          mm:hh, dd/mm/yyyy
-        </div>
-        <div class="col text-muted">
-          Owner Name Surname
+      </a>
+    </div>
+    <div class="form-actions" *ngIf="areLeadsAssignable">
+      <div class="container px-lg-4">
+        <div class="row justify-content-end w-100 no-gutters">
+          <div class="col-sm-10 d-flex">
+            <button (click)="areLeadsAssignable = false" type="button" class="btn btn-light mr-2">Cancel</button>
+            <button type="submit" class="btn btn-secondary">Assign</button>
+          </div>
         </div>
       </div>
-    </a>
-  </div>
+    </div>
+  </form>
 </div>

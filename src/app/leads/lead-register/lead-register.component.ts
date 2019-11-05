@@ -7,9 +7,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LeadRegisterComponent implements OnInit {
 
+  areLeadsAssignable: boolean = false;
+
   constructor() { }
 
   ngOnInit() {
+  }
+
+  assignLeads() {
+    event.preventDefault();
+    this.areLeadsAssignable = true;
+  }
+
+  assignSelected() {
+    console.log("show popup to assign leads");
+  }
+
+  selectLead() {
+    if(this.areLeadsAssignable) {
+      event.preventDefault();
+    }
   }
 
 }
