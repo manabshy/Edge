@@ -65,6 +65,7 @@
     </div>
   </form>
   <form action="">
+    <h5 *ngIf="areLeadsAssignable">Select to assign</h5>
     <div class="list-group mb-3">
       <a [routerLink]="areLeadsAssignable ? null : ['edit']" (click)="selectLead()"
         class="list-group-item list-group-item-action">
