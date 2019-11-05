@@ -11,6 +11,7 @@ import { debounceTime } from 'rxjs/operators';
 import { AddressService, AddressAutoCompleteData } from '../services/address.service';
 import { InfoService } from '../services/info.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-address',
@@ -174,6 +175,13 @@ export class AddressComponent implements OnInit, OnChanges {
             countryId: this.defaultCountryCode
           });
         } else {
+          let buildingInfo = retrievedAddress.BuildingName.split(' ');
+          let numberRegex = /\d/;
+          if(numberRegex.test(buildingInfo[0])){
+            retrievedAddress.BuildingNumber = buildingInfo[0];
+            retrievedAddress.BuildingName = buildingInfo.slice(1, buildingInfo.length).join(' ');
+          }
+
           this.addressForm.patchValue({
             flatNumber: retrievedAddress.SubBuilding.replace(/flat/gi, '').trim(),
             houseNumber: retrievedAddress.BuildingNumber,
