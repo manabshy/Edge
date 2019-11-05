@@ -15,17 +15,25 @@ export class LeadsService {
   
   addLead(lead: Lead): Observable<any> {
       const url = `${AppConstants.baseLeadsUrl}`;
-    return this.http.post<Lead>(url, lead).pipe(tap(data => console.log('result', data)));
+    
+      return this.http.post<Lead>(url, lead).pipe(tap(data => console.log('result', data)));
   }
 
   updateLead(lead: Lead): Observable<any> {
-    const url = `${AppConstants.baseLeadsUrl}`;
+    const url = `${AppConstants.baseLeadsUrl}/${leadId}`;
 
-    return this.http.post<Lead>(url, lead).pipe(tap(data => console.log('result', data)));
+    return this.http.put<Lead>(url, lead).pipe(tap(data => console.log('result', data)));
   }
 
   getLead(leadId: number): Observable<any>  {
-    const url = `${AppConstants.baseLeadsUrl}`;
+    const url = `${AppConstants.baseLeadsUrl}/${leadId}`;
+    
+    return this.http.get<Lead>(url).pipe(tap(data => console.log('result', data)));
+  }
+
+  getLeads(staffMemberId: number): Observable<any>  {
+    const url = `${AppConstants.baseLeadsUrl}/owner/${staffMemberId}`;
+    
     return this.http.get<Lead>(url).pipe(tap(data => console.log('result', data)));
   }
 }
