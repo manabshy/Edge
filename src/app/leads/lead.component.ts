@@ -22,4 +22,4 @@ export class LeadComponent implements OnInit {
   
   }
 
-}
+
