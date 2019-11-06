@@ -93,14 +93,13 @@
               {{role}}<ng-container *ngIf="!isLast"> ,</ng-container>
             </ng-container>
           </small>
-          <a class="text-light" routerLink="/impersonate-member" (click)="navbarCollapsed = !navbarCollapsed"><i
+          <a *ngIf="!impersonatedStaffMember" class="text-light" routerLink="/impersonate-member" (click)="navbarCollapsed = !navbarCollapsed"><i
               class="fas fa-user-friends mr-3"></i>Impersonate</a>
           <!--IF IMPERSONATING-->
           <div *ngIf="impersonatedStaffMember"><a class="text-light" routerLink="/impersonate-member" (click)="navbarCollapsed = !navbarCollapsed"><i
                 class="fas fa-user-friends mr-3"></i>{{impersonatedStaffMember?.fullName}}</a></div>
-          <!-- <div>
-            <a class="text-light mr-3">Change</a><a class="text-light">Stop</a>
-          </div> -->
+          <div>
+          </div>
           <!--IF IMPERSONATING-->
         </div>
         <a class="nav-link justify-content-center" (click)="logOut()">

@@ -153,7 +153,7 @@ export class TelephoneComponent implements OnInit {
     if (this.sharedService.lastCallEndCallToast) {
       this.toastr.clear(this.sharedService.lastCallEndCallToast.toastId);
     }
-    this.sharedService.lastCallEndCallToast = this.toastr.success('Calling ' + this.person.salutation + ' ... <a class="btn btn-danger text-white ml-2">Hang up</a>', '', {
+    this.sharedService.lastCallEndCallToast = this.toastr.success('<div class="row align-items-center"><div class="col">Calling <b>' + this.person.salutation + '</b></div><div class="col-auto"><a class="btn btn-danger text-white ml-2">Hang up</a></div>', '', {
       toastClass: 'ngx-toastr toast-call',
       disableTimeOut: true
     });
