@@ -40,14 +40,14 @@
       </div>
       <div class="list-group">
         <div class="list-group-item mb-4"
-          [ngClass]="{'list-group-item-danger': searchedPersonDetails?.warning?.id !== 1}"
+          [ngClass]="{'list-group-item-danger': searchedPersonDetails?.warning && searchedPersonDetails?.warning?.id !== 1}"
           *ngIf="searchedPersonDetails">
           <div class="text-right">
             <div class="row">
               <div class="col-auto">
                 <app-score-badge [person]="searchedPersonDetails"></app-score-badge> <span
                   class="badge badge-pill badge-danger"
-                  *ngIf="searchedPersonDetails?.warning?.id !== 1">{{searchedPersonDetails?.warningStatusComment || searchedPersonDetails?.warning?.value}}</span>
+                  *ngIf="searchedPersonDetails?.warning && searchedPersonDetails?.warning?.id !== 1">{{searchedPersonDetails?.warningStatusComment || searchedPersonDetails?.warning?.value}}</span>
               </div>
               <div class="col text-right">
                 <a routerLink="edit"><i class="fas fa-edit"></i> Edit</a>

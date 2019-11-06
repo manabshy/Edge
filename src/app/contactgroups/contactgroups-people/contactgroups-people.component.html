@@ -163,13 +163,13 @@
                   </div>
                 </div>
                 <div class="list-group-item" *ngFor="let person of contactGroupDetails?.contactPeople ; index as i"
-                  [ngClass]="{'new-person': person?.isNewPerson, 'list-group-item-danger': person?.warning?.id !== 1}">
+                  [ngClass]="{'new-person': person?.isNewPerson, 'list-group-item-danger': person?.warning && person?.warning?.id !== 1}">
                   <div class="row">
                     <div class="col">
                       <small class="text-muted mr-2">{{person?.personId}}</small>
                       <app-score-badge [person]="person"></app-score-badge>
                       <span class="badge badge-pill badge-danger mb-2 mr-2"
-                        *ngIf="person?.warning?.id !== 1">{{person?.warningStatusComment || person?.warning?.value}}</span>
+                        *ngIf="person?.warning && person?.warning?.id !== 1">{{person?.warningStatusComment || person?.warning?.value}}</span>
                       <span class="badge badge-pill badge-info mb-2"
                         *ngIf="person?.isMainPerson && contactGroupDetails.contactType !== 4">Main Person</span>
                     </div>
