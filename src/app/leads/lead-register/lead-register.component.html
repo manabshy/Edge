@@ -68,7 +68,7 @@
     <h5 *ngIf="areLeadsAssignable">Select to assign</h5>
     <div class="list-group mb-3">
       <a [routerLink]="areLeadsAssignable ? null : ['edit']" (click)="selectLead()"
-        class="list-group-item list-group-item-action">
+        class="list-group-item list-group-item-action" *ngFor="let lead of leads; let i = index;">
         <div class="row">
           <div class="col-auto" *ngIf="areLeadsAssignable">
             <div class="custom-control custom-checkbox" (click)="$event.stopPropagation()">
@@ -82,13 +82,13 @@
                 <span class="badge badge-pill badge-info">Type</span>
               </div>
               <div class="col">
-                Lead Name Surname
+                <small>{{lead?.LeadTypeId}}</small>
               </div>
               <div class="col">
-                mm:hh, dd/mm/yyyy
+                <small>{{Lead?.CreaetedDate}}</small>
               </div>
               <div class="col text-muted">
-                Owner Name Surname
+                <small>{{lead?.OwnerId}}</small>
               </div>
             </div>
           </div>

@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { LeadsService } from '../shared/leads.service';
+import { StaffMemberService } from 'src/app/core/services/staff-member.service';
+import { Lead } from '../shared/lead';
+import { StaffMember } from 'src/app/core/models/staff-member';
 
 @Component({
   selector: 'app-lead-register',
@@ -8,10 +12,27 @@ import { Component, OnInit } from '@angular/core';
 export class LeadRegisterComponent implements OnInit {
 
   areLeadsAssignable: boolean = false;
+  currentStaffMember: StaffMember;
+  leads: Lead[];
 
-  constructor() { }
+  constructor(private leadService: LeadsService, private staffMemberService: StaffMemberService) { }
 
   ngOnInit() {
+    this.staffMemberService.getCurrentStaffMember().subscribe(data => {
+      if (data) {
+        this.currentStaffMember = data;
+      }
+    });
+
+    this.getLeads();
+  }
+
+  getLeads() {
+    this.leadService.getLeads(this.currentStaffMember.staffMemberId).subscribe(result => {
+        this.leads = result;
+    }, error => {
+      this.leads = [];
+    });
   }
 
   assignLeads() {
