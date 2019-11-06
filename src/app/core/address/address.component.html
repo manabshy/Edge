@@ -34,7 +34,7 @@
           </h4>
           <div class="list-group small">
             <div class="list-group-item" *ngIf="backToAddressesList" (click)="findAddress(searchTermBK, '')">
-              <button type="button" class="btn btn-sm btn-link p-0"><i class="fas fa-chevron-left mr-2"></i> Back</button>
+              <button type="button" class="btn btn-sm btn-link p-0"><i class="fas fa-arrow-left mr-2"></i> Back</button>
             </div>
             <ng-container *ngIf="foundAddress?.Items?.length; else noAddress">
               <ng-container *ngIf="!isLoadingAddressVisible">
