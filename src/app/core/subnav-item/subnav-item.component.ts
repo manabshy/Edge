@@ -17,8 +17,10 @@ export class SubnavItemComponent implements OnInit {
   constructor(private _router: Router, private sharedService: SharedService) { }
 
   ngOnInit() {
-    const baseLink = this._router.url.substring(0, this._router.url.indexOf('?')) || this._router.url;
-    this.link = '/'+baseLink + '/'+ this.navLink;
+    if(this.navLink) {
+      const baseLink = this._router.url.substring(0, this._router.url.indexOf('?')) || this._router.url;
+      this.link = '/'+baseLink + '/'+ this.navLink;
+    }
   }
 
   // @HostListener('click')

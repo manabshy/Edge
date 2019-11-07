@@ -32,29 +32,20 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </h4>
-          <div class="list-group small">
+          <app-subnav>
             <div class="list-group-item" *ngIf="backToAddressesList" (click)="findAddress(searchTermBK, '')">
-              <button type="button" class="btn btn-sm btn-link p-0"><i class="fas fa-chevron-left mr-2"></i> Back</button>
+              <button type="button" class="btn btn-link p-0"><i class="fas fa-chevron-left mr-2"></i> Back</button>
             </div>
             <ng-container *ngIf="foundAddress?.Items?.length; else noAddress">
               <ng-container *ngIf="!isLoadingAddressVisible">
-                <ng-container *ngFor="let address of foundAddress?.Items; last as isLast">
-                  <div class="list-group-item list-group-item-action"
-                    (click)="address?.Action ? findAddress(searchTermBK, address?.Id) : retrieveAddress(address?.Id)"
-                    *ngIf="!address?.Error">
-                    <div class="row align-items-center">
-                      <div class="col">
-                        {{address?.Text}}, {{address?.Description}}
-                      </div>
-                      <div class="col-auto">
-                        <button type="button" class="btn btn-sm btn-link">{{address?.Action || 'Select'}}</button>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="list-group-item list-group-item-action text-center py-4" *ngIf="address?.Error || isLast" (click)="enterAddress($event)">
-                    <a href (click)="$event.preventDefault()"><i class="fas fa-plus mr-2"></i> New Address</a>
-                  </div>
-                </ng-container>
+                <app-subnav-item *ngFor="let address of foundAddress?.Items"
+                  (click)="address?.Action ? findAddress(searchTermBK, address?.Id) : retrieveAddress(address?.Id)">
+                  <div *ngIf="!address?.Error">{{address?.Text}}, {{address?.Description}}</div>
+                </app-subnav-item>
+                <div class="list-group-item list-group-item-action text-center py-4"
+                  (click)="enterAddress($event)">
+                  <a href (click)="$event.preventDefault()"><i class="fas fa-plus mr-2"></i> New Address</a>
+                </div>
               </ng-container>
             </ng-container>
             <ng-template #noAddress>
@@ -70,7 +61,7 @@
                 <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading addresses ...
               </div>
             </ng-container>
-          </div>
+          </app-subnav>
         </div>
       </div>
     </div>

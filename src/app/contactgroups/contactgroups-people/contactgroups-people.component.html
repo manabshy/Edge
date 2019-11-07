@@ -98,17 +98,11 @@
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </h4>
-                  <div class="list-group small mb-3">
+                  <app-subnav>
                     <ng-container *ngIf="!isLoadingCompaniesVisible">
-                      <div class="list-group-item list-group-item-action" *ngFor="let company of foundCompanies"
-                        (click)="selectCompany(company)">
-                        <div class="row align-items-center">
-                          <div class="col" [innerHTML]="company.companyName | highlight : companyFinderForm.value.companyName"></div>
-                          <div class="col-auto">
-                            <button class="btn btn-block btn-sm btn-link">Select</button>
-                          </div>
-                        </div>
-                      </div>
+                      <app-subnav-item *ngFor="let company of foundCompanies" (click)="selectCompany(company)">
+                        <div [innerHTML]="company.companyName | highlight : companyFinderForm.value.companyName"></div>
+                      </app-subnav-item>
                     </ng-container>
                     <div class="list-group-item text-center" *ngIf="isLoadingCompaniesVisible">
                       <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading companies ...
@@ -120,7 +114,7 @@
                     <div class="list-group-item list-group-item-action text-center py-4" (click)="editSelectedCompany(0, true)">
                       <span class="btn-link"><i class="fas fa-plus mr-2"></i>New Company</span>
                     </div>
-                  </div>
+                  </app-subnav>
                 </div>
               </div>
             </div>
@@ -440,66 +434,43 @@
               <h5>Quick Finder</h5>
             </div>
           </div>
-          <div class="list-group small">
-            <div class="list-group-item list-header d-none d-sm-block">
+
+          <app-subnav>
+            <app-subnav-item *ngFor="let foundPerson of potentialDuplicatePeople?.matches" 
+              [ngClass]="{'disabled': checkDuplicateInContactGroup(foundPerson?.personId)}"
+              (click)="selectPerson(foundPerson?.personId)">
               <div class="row">
-                <div class="col-sm"><strong>Full Name</strong></div>
-                <div class="col-sm"><strong>Telephone</strong></div>
-                <div class="col-sm-4"><strong>Email</strong></div>
-                <div class="col-sm col-lg-2"></div>
-              </div>
-            </div>
-            <div class="list-group-item list-group-item-action"
-              *ngFor="let foundPerson of potentialDuplicatePeople?.matches"
-              [ngClass]="{'disabled': checkDuplicateInContactGroup(foundPerson?.personId)}">
-              <div class="row align-items-end align-items-sm-center" (click)="selectPerson(foundPerson?.personId)">
-                <div class="col-12 mb-2 mb-sm-0" *ngIf="foundPerson?.ranking > 150">
-                  <span class="badge badge-pill badge-success" *ngIf="foundPerson?.ranking > 500">Full Match</span>
-                  <span class="badge badge-pill badge-warning"
-                    *ngIf="foundPerson?.ranking > 300 && foundPerson?.ranking < 500">Good Match</span>
-                </div>
-                <div class="col-sm">
-                  <dl class="row">
-                    <dt class="col-4 d-sm-none">Full Name</dt>
-                    <dd class="col">
-                      {{foundPerson?.title}}
-                      <span class="mr-1"
-                        [innerHTML]="foundPerson?.firstName | highlight : personFinderForm.value.firstName"></span>
-                      <span [innerHTML]="foundPerson?.lastName | highlight : personFinderForm.value.lastName"></span>
-                    </dd>
-                  </dl>
-                </div>
-                <div class="col-sm">
-                  <dl class="row">
-                    <dt class="col-4 d-sm-none">Telephone</dt>
-                    <dd class="col">
-                      <ng-container *ngFor="let phoneNumber of foundPerson?.phoneNumbers">
-                        <div [innerHTML]="phoneNumber | highlight : personFinderForm.value.phoneNumber:true"></div>
-                      </ng-container>
-                    </dd>
-                  </dl>
+                <ng-container *ngIf="checkDuplicateInContactGroup(foundPerson?.personId); else badge">
+                  <div class="col-12 mb-2">
+                    <i class="fas fa-exclamation-triangle mr-1"></i> Already in this group                    
+                  </div>
+                </ng-container>
+                <ng-template #badge>
+                  <div class="col-12 mb-2" *ngIf="foundPerson?.ranking > 150">
+                    <span class="badge badge-pill badge-success" *ngIf="foundPerson?.ranking > 500">Full Match</span>
+                    <span class="badge badge-pill badge-warning"
+                      *ngIf="foundPerson?.ranking > 300 && foundPerson?.ranking < 500">Good Match</span>
+                  </div>
+                </ng-template> 
+                <div class="col-sm-4">
+                  <b>
+                    {{foundPerson?.title}}
+                    <span class="mr-1" [innerHTML]="foundPerson?.firstName | highlight : personFinderForm.value.firstName"></span>
+                    <span [innerHTML]="foundPerson?.lastName | highlight : personFinderForm.value.lastName"></span>
+                  </b>
                 </div>
                 <div class="col-sm-4">
-                  <dl class="row">
-                    <dt class="col-4 d-sm-none">Email</dt>
-                    <dd class="col text-truncate">
-                      <ng-container *ngFor="let email of foundPerson?.emailAddresses">
-                        <div class="text-truncate"
-                          [innerHTML]="email | highlight : personFinderForm.value.emailAddress"></div>
-                      </ng-container>
-                    </dd>
-                  </dl>
-                </div>
-                <div class="col-sm col-lg-2 text-center">
-                  <ng-container *ngIf="checkDuplicateInContactGroup(foundPerson?.personId); else selectBtn">
-                    <i class="fas fa-exclamation-triangle mr-1"></i> Already in this group
+                  <ng-container *ngFor="let phoneNumber of foundPerson?.phoneNumbers">
+                    <div [innerHTML]="phoneNumber | highlight : personFinderForm.value.phoneNumber:true"></div>
                   </ng-container>
-                  <ng-template #selectBtn>
-                    <button class="btn btn-block btn-sm btn-link">Select</button>
-                  </ng-template>
+                </div>
+                <div class="col-sm-4">
+                  <ng-container *ngFor="let email of foundPerson?.emailAddresses">
+                    <div class="text-truncate" [innerHTML]="email | highlight : personFinderForm.value.emailAddress"></div>
+                  </ng-container>
                 </div>
               </div>
-            </div>
+            </app-subnav-item>
             <div class="list-group-item text-center"
               *ngIf="potentialDuplicatePeople && !potentialDuplicatePeople?.matches?.length">
               No Person found. <ng-container *ngIf="isCreateNewPersonVisible; else fillDetails">Create a new one with
@@ -512,7 +483,7 @@
                 <i class="fas fa-user-plus"></i> Create New Person
               </span>
             </a>
-          </div>
+          </app-subnav>
         </div>
       </div>
     </ng-container>
