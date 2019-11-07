@@ -161,7 +161,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         switchMap(term =>
           this.contactGroupService.getCompanySuggestions(term).pipe(
             tap(data => {
-              if(data && !data.length){
+              if (data && !data.length) {
                 this.noSuggestions = true;
               }
             }),
