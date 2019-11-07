@@ -186,6 +186,10 @@ export class AddressComponent implements OnInit, OnChanges {
             retrievedAddress.BuildingNumber = buildingInfo[0];
             retrievedAddress.BuildingName = buildingInfo.slice(1, buildingInfo.length).join(' ');
           }
+          if(!retrievedAddress.BuildingName && !this.hasNumber(retrievedAddress.SubBuilding)) {
+            retrievedAddress.BuildingName = retrievedAddress.SubBuilding;
+            retrievedAddress.SubBuilding = '';
+          }
           this.addressForm.patchValue({
             flatNumber: retrievedAddress.SubBuilding.replace(/flat/gi, '').trim(),
             houseNumber: retrievedAddress.BuildingNumber || buildingNumber,
