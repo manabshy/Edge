@@ -54,9 +54,11 @@ export class MainmenuComponent implements OnInit {
     });
   }
 
-  showImpersonateBanner(member: Impersonation, existing?:boolean) {
-    if(!existing){
-      this.toastr.clear(this.impersonateToastr.toastId);
+  showImpersonateBanner(member: Impersonation, existing?: boolean) {
+    if (!existing) {
+     if(this.impersonateToastr) {
+        this.toastr.clear(this.impersonateToastr.toastId);
+     }
     }
     this.impersonateToastr = this.toastr.warning('<div class="row align-items-center"><div class="col">You\'re acting on behalf of <b>' + member.fullName + '</b></div><div class="col-auto"><a class="btn btn-danger text-white ml-2">Stop</a></div>', '', {
       disableTimeOut: true
@@ -65,8 +67,17 @@ export class MainmenuComponent implements OnInit {
       .onTap
       .pipe(take(1))
       .subscribe(() => {
+        this.stopImpersonation();
         console.log('unimpersonate');
       });
+  }
+
+  stopImpersonation() {
+    this.impersonatedStaffMember = null;
+    if (!this.impersonatedStaffMember) {
+      this.storage.delete('impersonatedStaffMember').subscribe();
+    }
+    console.log('stop now', this.impersonatedStaffMember)
   }
 
   backClicked() {
