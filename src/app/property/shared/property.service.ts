@@ -117,8 +117,8 @@ export class PropertyService {
       fromObject: {
         addressLine2: address.addressLine2,
         flatNumber: address.flatNumber,
-        houseBuildingName: address.houseBuildingName,
-        houseNumber: address.houseNumber,
+        houseBuildingName: address.houseBuildingName || '',
+        houseNumber: address.houseNumber || '',
         inCode: address.inCode || '',
         outCode: address.outCode || '',
         postCode: address.postCode,
