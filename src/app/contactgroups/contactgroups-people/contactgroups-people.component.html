@@ -87,6 +87,9 @@
                     </div>
                 </div>
               </div>
+              <div class="btn-link btn-sm p-0 mb-3" *ngIf="noSuggestions" (click)="editSelectedCompany(0, true)">
+                <i class="fas fa-plus mr-2"></i>New Company
+              </div>
               <div class="off-canvas" [hidden]="!foundCompanies" (click)="foundCompanies = null">
                 <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
                   <h4 class="page-title text-left pt-3">

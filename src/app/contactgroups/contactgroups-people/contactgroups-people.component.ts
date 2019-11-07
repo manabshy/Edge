@@ -84,6 +84,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   suggestions: (text$: Observable<string>) => Observable<any[]>;
   suggestedTerm: any;
   searchTerm: any;
+  noSuggestions: boolean = false;
   get dataNote() {
     if (this.contactGroupDetails) {
       return {
@@ -159,6 +160,11 @@ export class ContactgroupsPeopleComponent implements OnInit {
         distinctUntilChanged(),
         switchMap(term =>
           this.contactGroupService.getCompanySuggestions(term).pipe(
+            tap(data => {
+              if(data && !data.length){
+                this.noSuggestions = true;
+              }
+            }),
             catchError(() => {
               return EMPTY;
             }))

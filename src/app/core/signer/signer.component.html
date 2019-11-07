@@ -38,6 +38,10 @@
             </div>
           </div>
         </div>
+        <a class="small mb-3" [routerLink]="['/contact-centre/detail/0/people', 0]" *ngIf="noSuggestions"
+          [queryParams]="{isNewContactGroup: true, isSigner: true}" (click)="createNewSigner()">
+            <i class="fas fa-plus mr-2"></i> New Contact Group
+        </a>
         <div class="off-canvas" [hidden]="!signers" (click)="signers = null">
           <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
             <h4 class="page-title text-left pt-3">
