@@ -1,3 +1,8 @@
+<div class="row justify-content-end" *ngIf="isLoading">
+  <div class="col-sm-10 text-center">
+    <i class="fas fa-spinner fa-pulse d-inline-block"></i> Looking for duplicates ...
+  </div>
+</div>
 <div class="off-canvas" [hidden]="!isDuplicateFound && !showMatches" (click)="isDuplicateFound = false; showMatches = false;">
   <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
     <h4 class="page-title text-left pt-3">
@@ -40,8 +45,8 @@
                 </dd>
               </dl>
             </div>
-            <div class="col-sm col-lg-2 text-center">
-              <button class="btn btn-block btn-sm btn-link">Select</button>
+            <div class="col-sm col-lg-auto text-center">
+              <button class="btn btn-block btn-sm btn-link">Go to property</button>
             </div>
           </div>
         </div>
