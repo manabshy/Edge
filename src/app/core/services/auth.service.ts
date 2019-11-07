@@ -47,7 +47,6 @@ export class AuthService {
         if (environment.production) {
           this.storage.delete('currentUser').subscribe();
         }
-        localStorage.setItem('prev', this._router.url);
         this.adalService.logOut();
       }
     });
