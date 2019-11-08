@@ -60,6 +60,7 @@ export interface DropdownListInfo {
   regions: InfoDetail[];
   areas: InfoDetail[];
   subAreas: InfoDetail[];
+  leadTypes: InfoDetail[];
 }
 
 export interface InfoDetail {
