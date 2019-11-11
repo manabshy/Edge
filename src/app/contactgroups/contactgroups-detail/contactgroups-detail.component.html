@@ -34,92 +34,7 @@
   <div class="row align-items-start">
     <div class="col-xl-8">
       <h5>Detail</h5>
-      <div class="text-center py-3" *ngIf="!searchedPersonDetails">
-        <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading info ...
-      </div>
-      <div class="list-group">
-        <div class="list-group-item mb-4"
-          [ngClass]="{'list-group-item-danger': searchedPersonDetails?.warning && searchedPersonDetails?.warning?.id !== 1}"
-          *ngIf="searchedPersonDetails">
-          <div class="text-right">
-            <div class="row">
-              <div class="col-auto">
-                <app-score-badge [person]="searchedPersonDetails"></app-score-badge> <span
-                  class="badge badge-pill badge-danger"
-                  *ngIf="searchedPersonDetails?.warning && searchedPersonDetails?.warning?.id !== 1">{{searchedPersonDetails?.warningStatusComment || searchedPersonDetails?.warning?.value}}</span>
-              </div>
-              <div class="col text-right">
-                <a routerLink="edit"><i class="fas fa-edit"></i> Edit</a>
-              </div>
-            </div>
-          </div>
-          <div class="row mb-1" *ngIf="searchedPersonDetails?.personNotes?.length">
-            <div class="col-12">
-              <div class="alert alert-danger small mb-2 mr-2 d-inline-block"
-                *ngFor="let importantNote of searchedPersonDetails?.personNotes">
-                {{importantNote.text}}
-              </div>
-            </div>
-          </div>
-          <div class="row" *ngIf="searchedPersonDetails">
-            <div class="col-12">
-              <p class="mb-2">
-                <strong>{{searchedPersonDetails.addressee}}</strong>
-              </p>
-            </div>
-            <div class="col-sm-4">
-              <div class="mb-2">
-                <pre>{{searchedPersonDetails.address | formatAddress}}</pre><span class="text-danger"
-                  *ngIf="!(searchedPersonDetails.address | formatAddress)">No address</span></div>
-            </div>
-            <div class="col-12 col-sm-3 col-xl-4">
-              <p class="mb-2 text-danger"
-                *ngIf="!searchedPersonDetails.phoneNumbers.length || !searchedPersonDetails.phoneNumbers[0].number">No
-                phone</p>
-              <ng-container *ngFor="let phoneNumber of searchedPersonDetails.phoneNumbers">
-                <p class="mb-2" *ngIf="phoneNumber.number">
-                  <app-telephone [person]="searchedPersonDetails" [number]="phoneNumber.number"
-                    [warning]="searchedPersonDetails?.warningStatusComment || searchedPersonDetails?.warning?.value">
-                  </app-telephone>
-                </p>
-              </ng-container>
-            </div>
-            <div class="col-sm-5 col-xl-4">
-              <p class="mb-2 text-danger"
-                *ngIf="!searchedPersonDetails.emailAddresses.length || !searchedPersonDetails.emailAddresses[0].email">
-                No
-                email</p>
-              <ng-container *ngFor="let emailAddresses of searchedPersonDetails.emailAddresses">
-                <p class="mb-2 text-truncate" *ngIf="emailAddresses.email"><a class="mobile-btn"
-                    href="mailto:{{emailAddresses.email}}">{{emailAddresses.email}}</a></p>
-              </ng-container>
-            </div>
-            <div class="col-12">
-              <hr class="my-1">
-            </div>
-            <div class="col-12">
-              <div class="row align-items-center">
-                <div class="col">
-                  <button type="button" class="btn btn-link px-0" (click)="isCollapsed = !isCollapsed"
-                    [attr.aria-expanded]="!isCollapsed" aria-controls="collapseBasic">Marketing Prefs <span
-                      class="badge badge-pill badge-primary">
-                      {{searchedPersonDetails.marketingPreferences?.count || 0}} </span>
-                  </button>
-                </div>
-              </div>
-              <div id="collapseBasic" [collapse]="!isCollapsed">
-                <ul>
-                  <li *ngIf="searchedPersonDetails.marketingPreferences?.marketBulletin">Quarterly bulletin</li>
-                  <li *ngIf="searchedPersonDetails.marketingPreferences?.general">Special offers</li>
-                  <li *ngIf="searchedPersonDetails.marketingPreferences?.events">Landlord/investor events</li>
-                  <li *ngIf="searchedPersonDetails.marketingPreferences?.newHomes">New homes/investments</li>
-                  <li *ngIf="searchedPersonDetails.marketingPreferences?.general">Other occasional marketing</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <app-person-details [personDetails]="searchedPersonDetails"></app-person-details>
       <div class="row mb-3">
         <div class="col-12">
           <h5>Contact groups</h5>
@@ -162,6 +77,7 @@
               </span>
             </a>
           </app-subnav>
+
         </div>
       </div>
     </div>
