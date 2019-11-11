@@ -9,6 +9,7 @@ import { SharedService } from '../services/shared.service';
 })
 export class SubnavItemComponent implements OnInit {
   @Input() navLink;
+  @Input() noBaseLink = false;
   @Input() params;
   @HostBinding('class.list-group-item')
   @HostBinding('class.list-group-item-action')
@@ -17,8 +18,14 @@ export class SubnavItemComponent implements OnInit {
   constructor(private _router: Router, private sharedService: SharedService) { }
 
   ngOnInit() {
-    const baseLink = this._router.url.substring(0, this._router.url.indexOf('?')) || this._router.url;
-    this.link = '/'+baseLink + '/'+ this.navLink;
+    if(this.navLink) {
+      if(this.noBaseLink){
+        this.link = this.navLink;
+      } else {
+        const baseLink = this._router.url.substring(0, this._router.url.indexOf('?')) || this._router.url;
+        this.link = '/'+baseLink + '/'+ this.navLink;
+      }
+    }
   }
 
   // @HostListener('click')

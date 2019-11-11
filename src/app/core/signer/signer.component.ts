@@ -31,6 +31,7 @@ export class SignerComponent implements OnInit, OnChanges {
   suggestions: (text$: Observable<string>) => Observable<any[]>;
   suggestedTerm: any;
   searchTerm = '';
+  noSuggestions: boolean = false;
   get signerNames(): FormControl {
     if (this.signerFinderForm) {
       return <FormControl>this.signerFinderForm.get('selectedSigner');
@@ -51,6 +52,11 @@ export class SignerComponent implements OnInit, OnChanges {
         distinctUntilChanged(),
         switchMap(term =>
           this.peopleService.getPeopleSuggestions(term).pipe(
+            tap(data => {
+              if(data && !data.length){
+                this.noSuggestions = true;
+              }
+            }),
             catchError(() => {
               return EMPTY;
             }))

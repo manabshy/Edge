@@ -3,7 +3,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { Company, CompanyAutoCompleteResult } from 'src/app/contactgroups/shared/contact-group';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, tap, catchError } from 'rxjs/operators';
+import { Observable, EMPTY } from 'rxjs';
 
 @Component({
   selector: 'app-company-finder',
@@ -17,12 +18,16 @@ export class CompanyFinderComponent implements OnInit, OnChanges {
   selectedCompanyId: number;
   isCompanyAdded: boolean;
   isLoadingCompaniesVisible: boolean;
-  enterManually: boolean = false;
+  enterManually = false;
   @Output() companyName = new EventEmitter<any>();
   @Output() selectedCompanyDetails = new EventEmitter<Company>();
   @Input() companyNameError = false;
   @Input() existingCompany: Company;
   @ViewChild('companyNameInput', { static: true }) companyNameInput: ElementRef;
+  suggestions: (text$: Observable<string>) => Observable<any[]>;
+  noSuggestions = false;
+  suggestedTerm: '';
+  searchTerm = '';
 
   constructor(
     private contactGroupService: ContactGroupsService,
@@ -33,10 +38,35 @@ export class CompanyFinderComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.init();
+    this.suggestions = (text$: Observable<string>) =>
+      text$.pipe(
+        distinctUntilChanged(),
+        switchMap(term =>
+          this.contactGroupService.getCompanySuggestions(term).pipe(
+            tap(data => {
+              if (data && !data.length) {
+                this.noSuggestions = true;
+              } else {
+                this.noSuggestions = false;
+              }
+            }),
+            catchError(() => {
+              return EMPTY;
+            }))
+        )
+      );
   }
 
   ngOnChanges() {
     this.init();
+  }
+
+  selectedSuggestion(event: any) {
+    if (event.item != null) {
+      this.suggestedTerm = event.item;
+    }
+    this.searchCompany();
+    this.suggestedTerm = '';
   }
 
   init() {
@@ -67,7 +97,8 @@ export class CompanyFinderComponent implements OnInit, OnChanges {
     this.foundCompanies = null;
     const searchTerm = this.companyFinderForm.get('companyName').value;
     this.companyFinderForm.get('selectedCompany').setValue(searchTerm);
-    this.enterManually = !this.enterManually;
+    this.enterManually = true;
+    // this.enterManually = !this.enterManually;
   }
 
   selectCompany(company: Company) {
@@ -80,9 +111,9 @@ export class CompanyFinderComponent implements OnInit, OnChanges {
     event.preventDefault();
     event.stopPropagation();
     this.enterManually = false;
-    const searchTerm = this.companyFinderForm.value.companyName;
-    console.log('company name', searchTerm);
-    this.findCompany(searchTerm);
+    this.suggestedTerm ? this.searchTerm = this.suggestedTerm : this.searchTerm = this.companyFinderForm.value.companyName;
+    console.log('company name', this.searchTerm);
+    this.findCompany(this.searchTerm);
   }
 
   findCompany(searchTerm: any) {

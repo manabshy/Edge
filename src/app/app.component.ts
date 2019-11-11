@@ -60,6 +60,10 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
     ).subscribe((event: any[]) => {
       AppUtils.prevRouteBU = AppUtils.prevRoute || '';
       AppUtils.prevRoute = event[0].urlAfterRedirects;
+      let current = event[1].urlAfterRedirects
+      if(current.indexOf('login') < 0 && current.indexOf('auth-callback') < 0 && current !== "/") {
+        localStorage.setItem('prev', event[1].urlAfterRedirects);
+      }
      
       console.log('prev url',  AppUtils.prevRoute);
       this.isScrollTopVisible = false;
