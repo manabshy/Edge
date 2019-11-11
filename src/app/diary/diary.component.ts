@@ -1,22 +1,23 @@
-import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
-import { FormGroup, FormArray, Validators, FormBuilder } from '@angular/forms';
-import { DiaryEvent, newEventForm, DiaryEventTypesEnum, newPropertyForm } from './shared/diary';
+import { Component, OnInit, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import { DiaryEvent, ViewMode } from './shared/diary';
 import { AppUtils } from '../core/shared/utils';
-import { addHours , format} from 'date-fns';
 import * as dayjs from 'dayjs';
 import { SharedService } from '../core/services/shared.service';
 import { PopoverDirective } from 'ngx-bootstrap/popover';
 import { TooltipDirective } from 'ngx-bootstrap/tooltip';
+import { DiaryEventService } from './shared/diary-event.service';
 
 @Component({
   selector: 'app-diary',
   templateUrl: './diary.component.html',
   styleUrls: ['./diary.component.scss']
 })
-export class DiaryComponent implements OnInit {
+export class DiaryComponent implements OnInit, AfterViewInit {
   isDropup = false;
   public diaryEventForm: FormGroup;
   diaryEvent: DiaryEvent;
+  diaryEvents: DiaryEvent[];
   days: any[];
   today = dayjs();
   todayMonth = this.today.month();
@@ -27,33 +28,121 @@ export class DiaryComponent implements OnInit {
   viewMode = 'workingWeek';
   setTodayLabel = 'This ' + this.viewMode;
   monthLabel = dayjs().month(this.viewedMonth).format('MMM');
-  hours: any[] = ['00','01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23'];
+  hours: any[] = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
   @ViewChildren(PopoverDirective) popovers: QueryList<PopoverDirective>;
   @ViewChildren(TooltipDirective) tooltips: QueryList<TooltipDirective>;
 
   appUtils = AppUtils;
+  diaryHeaderForm: FormGroup;
 
-  constructor(protected fb: FormBuilder, protected sharedService: SharedService) { }
+  constructor(protected fb: FormBuilder,
+    private diaryEventService: DiaryEventService,
+    protected sharedService: SharedService) { }
 
   ngOnInit() {
+    this.diaryHeaderForm = this.fb.group({
+      viewMode: ['workingWeek']
+    });
+    this.setupForm();
     this.setDropup();
-    this.diaryEventForm = newEventForm();
-    this.patchDateTime();
     this.setToday();
+    this.getDiaryEvents();
+    console.log('working week', ViewMode.workingWeek)
   }
 
   ngAfterViewInit() {
     this.popoverSubscribe();
   }
 
+  // getEvents(diaryEvents:DiaryEvent[]) {
+
+  //   const events = [];
+  //   if(diaryEvents && diaryEvents.length) {
+  //     diaryEvents.forEach((event)=>{
+  //       event['type'] = event.eventType;
+  //       event['time'] = '00:00';
+  //       event['duration'] = Math.random() * Math.floor(6) * 2.085 + 2.085 + '%';
+  //       event['position'] = Math.random() * Math.floor(36) * 2.085 + '%';
+  //       event['title'] = event.eventType;
+  //       event['notes'] = event.notes;
+  //       event['color'] = event.eventColour;
+  //       events.push(event);
+  //       console.log('event',event )
+  //     })
+  //   }
+  //   console.log('events',events )
+  //   return events;
+  // }
+  getEvents() {
+    const events = [];
+    const counter = Math.floor(Math.random() * Math.floor(3) + 1);
+
+    for (let i = 1; i < counter; i++) {
+      const event = new Object;
+      const counter1 = Math.floor(Math.random() * Math.floor(2));
+      event['type'] = counter1;
+      event['time'] = '00:00';
+      event['duration'] = Math.random() * Math.floor(6) * 2.085 + 2.085 + '%';
+      event['position'] = Math.random() * Math.floor(36) * 2.085 + '%';
+      event['title'] = 'This is the event title';
+      event['notes'] = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
+      event['color'] = this.getRandomColor();
+
+      events.push(event);
+
+    }
+
+    return events;
+  }
+
+  getDiaryEvents() {
+    this.diaryEventService.getDiaryEvents('2018-10-01', '2019-11-08').subscribe(data => {
+      this.diaryEvents = data;
+      // this.getEvents(data);
+      console.log('my diary here', data)
+    });
+  }
+  setupForm() {
+    this.diaryEventForm = this.fb.group({
+      startDateTime: AppUtils.getMomentDate(new Date()),
+      endDateTime: Date,
+      eventType: [''],
+      eventColour: [''],
+      notes: [''],
+      allDay: [false],
+      isCancelled: [false],
+      isConfirmed: [false],
+      isHighImportance: [false],
+      isOtherAgentViewing: [false],
+    });
+  }
+
+  displayEvents(diaryEvent: DiaryEvent) {
+    this.diaryEvent = diaryEvent;
+    if (diaryEvent) {
+      this.diaryEventForm.patchValue({
+        startDateTime: diaryEvent.startDateTime,
+        endDateTime: diaryEvent.endDateTime,
+        eventType: diaryEvent.eventType,
+        eventColour: diaryEvent.eventColour,
+        notes: diaryEvent.notes,
+        allDay: diaryEvent.allDay,
+        isCancelled: diaryEvent.isCancelled,
+        isConfirmed: diaryEvent.isConfirmed,
+        isHighImportance: diaryEvent.isHighImportance,
+        isOtherAgentViewing: diaryEvent.isOtherAgentViewing
+      });
+    }
+  }
+
   popoverSubscribe() {
     this.popovers.forEach((popover: PopoverDirective) => {
       popover.onShown.subscribe(() => {
         this.popovers
-        .filter(p => p !== popover)
-        .forEach(p => p.hide());
+          .filter(p => p !== popover)
+          .forEach(p => p.hide());
         this.tooltips
-        .forEach(t => t.hide());
+          .forEach(t => t.hide());
       });
     });
   }
@@ -69,7 +158,7 @@ export class DiaryComponent implements OnInit {
   makeDayObj(date) {
     const dayObj = new Object();
     const day = date;
-    
+
     dayObj['date'] = day;
 
     if (day.year() == this.todayYear) {
@@ -80,7 +169,7 @@ export class DiaryComponent implements OnInit {
     dayObj['isWeekend'] = day.day() === 0;
     dayObj['isToday'] = day.isSame(this.today, 'day');
     dayObj['spanClass'] = 'span-' + day.day();
-    dayObj['events'] = this.getEvents();
+    dayObj['events'] = this.getEvents(this.diaryEvents);
     dayObj['isClickable'] = day.isSame(this.today, 'day') || day.isAfter(this.today, 'day');
 
     return dayObj;
@@ -145,7 +234,7 @@ export class DiaryComponent implements OnInit {
   }
 
   prevMonth() {
-    switch(this.viewMode) {
+    switch (this.viewMode) {
       case 'month':
         if (this.viewedMonth === 0) {
           this.days = this.getDaysInMonth(11, this.viewedYear - 1);
@@ -154,19 +243,19 @@ export class DiaryComponent implements OnInit {
         }
         break;
       case 'day':
-        this.days = this.getDay(this.viewedDate.subtract(1,'day'));  
+        this.days = this.getDay(this.viewedDate.subtract(1, 'day'));
         break;
       default:
-        this.days = this.getDaysInWeek(this.viewedDate.subtract(7,'day')); 
+        this.days = this.getDaysInWeek(this.viewedDate.subtract(7, 'day'));
     }
     //window.scrollTo(0, 0);
-    setTimeout(()=>{
+    setTimeout(() => {
       this.popoverSubscribe();
     })
   }
 
   nextMonth() {
-    switch(this.viewMode) {
+    switch (this.viewMode) {
       case 'month':
         if (this.viewedMonth === 11) {
           this.days = this.getDaysInMonth(0, this.viewedYear + 1);
@@ -175,13 +264,13 @@ export class DiaryComponent implements OnInit {
         }
         break;
       case 'day':
-        this.days = this.getDay(this.viewedDate.add(1,'day'));  
+        this.days = this.getDay(this.viewedDate.add(1, 'day'));
         break;
       default:
-        this.days = this.getDaysInWeek(this.viewedDate.add(7,'day'));
+        this.days = this.getDaysInWeek(this.viewedDate.add(7, 'day'));
     }
     //window.scrollTo(0, 0);
-    setTimeout(()=>{
+    setTimeout(() => {
       this.popoverSubscribe();
     })
   }
@@ -198,19 +287,20 @@ export class DiaryComponent implements OnInit {
     this.viewedDate = date || this.viewedDate;
     this.viewMode = mode;
     this.changeView();
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
   }
 
-  changeView() {
+  changeView(mode?: any) {
+    this.viewMode = mode;
     if (window.innerWidth < 576) {
-      if(this.viewMode !== 'day'){
+      if (this.viewMode !== 'day') {
         this.viewMode = 'month';
-        
+
         this.sharedService.scrollTodayIntoView();
       }
     }
 
-    switch(this.viewMode) {
+    switch (this.viewMode) {
       case 'month':
         this.days = this.getDaysInMonth(this.viewedMonth, this.viewedYear);
         this.setTodayLabel = 'This ' + this.viewMode;
@@ -223,7 +313,7 @@ export class DiaryComponent implements OnInit {
         this.days = this.getDaysInWeek(this.viewedDate);
         this.setTodayLabel = 'This week';
     }
-    setTimeout(()=>{
+    setTimeout(() => {
       this.popoverSubscribe();
     })
   }
@@ -241,122 +331,9 @@ export class DiaryComponent implements OnInit {
     return color;
   }
 
-  getEvents() {
-    const events = [];
-    const counter = Math.floor(Math.random() * Math.floor(3) + 1);
-
-    for (let i = 1; i < counter; i++) {
-      const event = new Object;
-      const counter1 = Math.floor(Math.random() * Math.floor(2));
-      event['type'] = counter1;
-      event['time'] = '00:00';
-      event['duration'] = Math.random() * Math.floor(6) * 2.085 + 2.085 + '%';
-      event['position'] = Math.random() * Math.floor(36) * 2.085 + '%';
-      event['title'] = 'This is the event title';
-      event['notes'] = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
-      event['color'] = this.getRandomColor();
-
-      events.push(event);
-
-    }
-
-    return events;
-  }
 
 
-  get contactGroups(): FormArray {
-    return this.diaryEventForm.get('contactGroups') as FormArray;
-  }
 
-  get eventType(): string {
-    return this.diaryEventForm.get('eventType').value as string;
-  }
 
-  get staffMembers(): FormArray {
-    return this.diaryEventForm.get('staffMembers') as FormArray;
-  }
 
-  get properties(): FormArray {
-    return this.diaryEventForm.get('properties') as FormArray;
-  }
-  // Patch the date/time to the next available hour
-  protected patchDateTime() {
-    this.diaryEventForm.patchValue({
-      startDateTime: format(addHours(Date.now(), 1), 'HH:00'),
-      endDateTime: format(addHours(Date.now(), 2), 'HH:00')
-    });
-  }
-  get canSeeProperty(): boolean {
-    const allowed = [
-      DiaryEventTypesEnum.ViewingSales,
-      DiaryEventTypesEnum.ViewingLettings,
-      DiaryEventTypesEnum.ValuationSales,
-      DiaryEventTypesEnum.ValuationLettings,
-      DiaryEventTypesEnum.PropertyManagement,
-    ];
-    return (allowed as any[]).indexOf(this.eventType) !== -1;
-  }
-
-  /**
-   * Set the first control in the array with the supplied value.
-   * @param data The contact group Id to set.
-   */
-  set propertyCtrl(data: any) {
-    this.properties.setControl(data.index, this.fb.group({
-      propertyId: data.propertyId,
-      propertySaleId: data.propertySaleId,
-      propertyLettingId: data.propertyLettingId,
-      address: data.address
-    }));
-
-  }
-  // Add a new, empty property
-  public addProperty(): void {
-    this.properties.push(newPropertyForm());
-  }
-
-  /**
-   * Delete a property at a given index
-   * @param {number} index The index to delete at.
-   */
-  public deleteProperty(index: number): void {
-    this.properties.removeAt(index);
-  }
-
-  // Delete all empty properties
-  deleteEmptyProperties() {
-
-    for (let i = this.properties.length; i--;) {
-      const ctrl = this.properties.at(i);
-      const id = ctrl && ctrl.get('propertyId').value;
-      if (id === 0) {
-        this.properties.removeAt(i);
-      }
-    }
-  }
-
-  public setValidatorByEventType(): void {
-    switch (this.diaryEvent.eventType) {
-      case DiaryEventTypesEnum.ViewingSales:
-      case DiaryEventTypesEnum.ViewingLettings:
-      case DiaryEventTypesEnum.ValuationSales:
-      case DiaryEventTypesEnum.ValuationLettings:
-      case DiaryEventTypesEnum.PropertyManagement:
-
-        // A property and contactGroup is required
-        this.diaryEventForm.controls['properties'].setValidators([Validators.required]);
-        this.diaryEventForm.controls['properties'].updateValueAndValidity();
-        this.diaryEventForm.controls['contactGroups'].setValidators([Validators.required]);
-        this.diaryEventForm.controls['contactGroups'].updateValueAndValidity();
-        break;
-      default:
-        // -->Set: properties validators
-        this.diaryEventForm.controls['properties'].setValidators([]);
-        this.diaryEventForm.controls['properties'].updateValueAndValidity();
-        // -->Set: contact groups validators
-        this.diaryEventForm.controls['contactGroups'].setValidators([]);
-        this.diaryEventForm.controls['contactGroups'].updateValueAndValidity();
-        break;
-    }
-  }
 }
