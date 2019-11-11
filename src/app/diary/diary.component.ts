@@ -36,7 +36,7 @@ export class DiaryComponent implements OnInit, AfterViewInit {
   diaryHeaderForm: FormGroup;
 
   constructor(protected fb: FormBuilder,
-    private diaryEventService: DiaryEventService,
+    protected diaryEventService: DiaryEventService,
     protected sharedService: SharedService) { }
 
   ngOnInit() {
@@ -169,7 +169,7 @@ export class DiaryComponent implements OnInit, AfterViewInit {
     dayObj['isWeekend'] = day.day() === 0;
     dayObj['isToday'] = day.isSame(this.today, 'day');
     dayObj['spanClass'] = 'span-' + day.day();
-    dayObj['events'] = this.getEvents(this.diaryEvents);
+    dayObj['events'] = this.getEvents();
     dayObj['isClickable'] = day.isSame(this.today, 'day') || day.isAfter(this.today, 'day');
 
     return dayObj;
