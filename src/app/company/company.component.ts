@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ɵConsole } from '@angular/core';
 import { FormGroup, FormBuilder, AbstractControl } from '@angular/forms';
 import { ContactGroupsService } from '../contactgroups/shared/contact-groups.service';
 import { ActivatedRoute } from '@angular/router';
@@ -43,7 +43,7 @@ export class CompanyComponent implements OnInit {
 
     if (this.route.snapshot.queryParamMap.get('companyName') || AppUtils.companySearchTerm) {
       const term = this.route.snapshot.queryParamMap.get('companyName') || AppUtils.companySearchTerm;
-      this.companyFinderForm.get('companyName').setValue(term);
+      this.companyFinderForm.get('companyName').setValue(term.companyName);
       this.companiesResults();
       this.isHintVisible = false;
       this.isMessageVisible = false;
