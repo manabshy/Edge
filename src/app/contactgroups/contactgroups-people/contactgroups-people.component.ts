@@ -60,7 +60,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isSubmitting = false;
   errorMessage: WedgeError;
   isLoadingCompaniesVisible = false;
-  isSearchCompanyVisible: boolean = true;
+  isSearchCompanyVisible = true;
   orderFoundPeople = 'matchScore';
   reverse = true;
   isTypePicked = false;
@@ -84,7 +84,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   suggestions: (text$: Observable<string>) => Observable<any[]>;
   suggestedTerm: any;
   searchTerm: any;
-  noSuggestions: boolean = false;
+  noSuggestions = false;
   get dataNote() {
     if (this.contactGroupDetails) {
       return {
@@ -418,9 +418,16 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   setMainPerson(id: number) {
+    const contactPeople = this.contactGroupDetails.contactPeople;
+    let index: number;
     this.contactGroupDetails.contactPeople.forEach((x: Person) => {
-      if (x.personId === id) {
+
+      if (+x.personId === id) {
         x.isMainPerson = true;
+        index = contactPeople.indexOf(x);
+        contactPeople.unshift(contactPeople.splice(index, 1)[0]);
+        console.log('new contact people', contactPeople);
+        this.contactGroupDetailsForm.markAsDirty();
       } else {
         x.isMainPerson = false;
       }
@@ -522,7 +529,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.isSearchCompanyVisible = !this.isSearchCompanyVisible;
     setTimeout(() => {
       this.companyNameInput.nativeElement.focus();
-    })
+    });
   }
 
   selectCompany(company: Company) {
@@ -737,6 +744,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       contactGroup.companyId = this.selectedCompanyDetails.companyId;
       contactGroup.companyName = this.selectedCompanyDetails.companyName;
     }
+    console.log('contact to update', contactGroup);
     this.contactGroupService
       .updateContactGroup(contactGroup)
       .subscribe(res => {

@@ -60,6 +60,7 @@ import { SmsModalComponent } from './sms-modal/sms-modal.component';
 import { CustomReuseStrategy } from './share/custom-reuse-strategy';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { BracketsNewLinePipe } from './shared/brackets-new-line.pipe';
+import { PersonDetailsComponent } from './shared/person-details/person-details.component';
 
 @NgModule({
   declarations: [
@@ -83,7 +84,8 @@ import { BracketsNewLinePipe } from './shared/brackets-new-line.pipe';
     SubnavItemComponent,
     SubnavComponent,
     SmsModalComponent,
-    BracketsNewLinePipe],
+    BracketsNewLinePipe,
+    PersonDetailsComponent],
   exports: [
     RoundingPipe,
     TruncatingPipe,
@@ -107,6 +109,7 @@ import { BracketsNewLinePipe } from './shared/brackets-new-line.pipe';
     TelephoneModalComponent,
     SubnavComponent,
     SubnavItemComponent,
+    PersonDetailsComponent,
     RouterModule,
     // BrowserAnimationsModule,
     CollapseModule,
