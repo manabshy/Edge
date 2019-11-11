@@ -171,9 +171,9 @@ export class PropertyDetailEditComponent implements OnInit {
     this.propertyForm = this.fb.group({
       propertyTypeId: ['', Validators.required],
       propertyStyleId: ['', Validators.required],
-      regionId: ['', Validators.required],
-      areaId: ['', Validators.required],
-      subAreaId: ['', Validators.required],
+      regionId: 1,
+      areaId: [''],
+      subAreaId: [''],
       address: ['', Validators.required]
     });
   }
