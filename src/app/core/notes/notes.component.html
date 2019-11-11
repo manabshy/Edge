@@ -23,7 +23,7 @@
         <div class="col-auto" *ngIf="note?.isImportant">
           <i class="fas fa-exclamation-circle text-danger fa-fw" tooltip="Important"></i>
         </div>
-        <div class="col text-right">
+        <div class="col text-right" *ngIf="!note?.propertyId">
           <div class="btn-group" dropdown placement="bottom right">
             <button id="actionsToggle" dropdownToggle type="button" class="btn btn-link p-0 dropdown-toggle"
               aria-controls="actionsList">
