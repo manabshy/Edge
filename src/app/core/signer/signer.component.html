@@ -7,17 +7,17 @@
           class="col-sm-2 col-form-label col-form-label-sm">{{label}}</label></ng-template>
       <div class="col-sm-10">
         <div class="form-group">
-          <input type="text" #selectedSignerInput readonly class="form-control-sm form-control-plaintext font-weight-bold"
+          <input type="hidden" #selectedSignerInput
             id="selectedSigner" formControlName="selectedSigner">
+          <app-subnav class="small" *ngIf="selectedSignerDetails">
+            <app-subnav-item [navLink]="'/contact-centre/detail/0/people/'+selectedSignerDetails?.contactGroupId" [noBaseLink]="true">
+              {{selectedSignerDetails?.contactNames}}
+            </app-subnav-item>
+          </app-subnav>
           <a class="small mr-3" href (click)="toggleSearch()">
             Change
             <ng-container *ngIf="!label; else givenLabel1 ">Signers</ng-container>
             <ng-template #givenLabel1>{{label}}</ng-template>
-          </a>
-          <a *ngIf="selectedSignerDetails" class="small" [routerLink]="['/contact-centre/detail/0/people/', selectedSignerDetails?.contactGroupId]" (click)="$event.stopPropagation()">
-            View
-            <ng-container *ngIf="!label; else givenLabel2 ">Signers</ng-container>
-            <ng-template #givenLabel2>{{label}}</ng-template>
           </a>
         </div>
       </div>
