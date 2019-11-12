@@ -1,4 +1,4 @@
-<app-breadcrumb [title]="'CO-'+companyDetails?.companyId"></app-breadcrumb>
+<app-breadcrumb [title]="'CO-'+(companyDetails?.companyId || '')"></app-breadcrumb>
 <div class="container">
   <h4 class="page-title">
     <ng-container *ngIf="isNewCompany; else editLabel">New</ng-container>
