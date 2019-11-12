@@ -18,8 +18,8 @@
           <div class="row">
             <div class="col-12 mb-2" *ngIf="foundProperty?.ranking">
               <small class="text-muted mr-2">PR-{{foundProperty?.propertyId}}</small>
-              <span class="badge badge-pill badge-success" *ngIf="foundProperty?.ranking > 1000">Full Match</span>
-              <span class="badge badge-pill badge-warning" *ngIf="foundProperty?.ranking < 1000">Good Match</span>
+              <span class="badge badge-pill badge-success" *ngIf="foundProperty?.matchType == 'FullMatch'">Full Match</span>
+              <span class="badge badge-pill badge-warning" *ngIf="foundProperty?.matchType == 'PartMatch'">Part Match</span>
             </div>
             <div class="col-sm">
               {{foundProperty?.propertyAddress}}

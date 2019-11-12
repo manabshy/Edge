@@ -170,7 +170,7 @@ export class PropertyDetailEditComponent implements OnInit {
   setupEditForm() {
     this.propertyForm = this.fb.group({
       propertyTypeId: ['', Validators.required],
-      propertyStyleId: ['', Validators.required],
+      propertyStyleId: [''],
       regionId: 1,
       areaId: [''],
       subAreaId: [''],

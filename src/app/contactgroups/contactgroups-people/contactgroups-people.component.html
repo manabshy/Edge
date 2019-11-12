@@ -440,22 +440,21 @@
           </div>
 
           <app-subnav>
-            <app-subnav-item *ngFor="let foundPerson of potentialDuplicatePeople?.matches" 
+            <app-subnav-item *ngFor="let foundPerson of potentialDuplicatePeople?.matches"
               [ngClass]="{'disabled': checkDuplicateInContactGroup(foundPerson?.personId)}"
               (click)="selectPerson(foundPerson?.personId)">
               <div class="row">
                 <ng-container *ngIf="checkDuplicateInContactGroup(foundPerson?.personId); else badge">
                   <div class="col-12 mb-2">
-                    <i class="fas fa-exclamation-triangle mr-1"></i> Already in this group                    
+                    <i class="fas fa-exclamation-triangle mr-1"></i> Already in this group
                   </div>
                 </ng-container>
                 <ng-template #badge>
-                  <div class="col-12 mb-2" *ngIf="foundPerson?.ranking > 150">
-                    <span class="badge badge-pill badge-success" *ngIf="foundPerson?.ranking > 500">Full Match</span>
-                    <span class="badge badge-pill badge-warning"
-                      *ngIf="foundPerson?.ranking > 300 && foundPerson?.ranking < 500">Good Match</span>
+                  <div class="col-12 mb-2" *ngIf="foundPerson?.matchType">
+                    <span class="badge badge-pill badge-success" *ngIf="foundPerson?.matchType == 'FullMatch'">Full Match</span>
+                    <span class="badge badge-pill badge-warning" *ngIf="foundPerson?.matchType == 'GoodMatch'">Good Match</span>
                   </div>
-                </ng-template> 
+                </ng-template>
                 <div class="col-sm-4">
                   <b>
                     {{foundPerson?.title}}
