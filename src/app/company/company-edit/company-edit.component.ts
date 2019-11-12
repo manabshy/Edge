@@ -283,14 +283,14 @@ export class CompanyEditComponent implements OnInit {
     }
   }
   onSaveComplete(company?: Company) {
-    this.companyForm.markAsPristine();
-    this.isSubmitting = false;
-    this.toastr.success('Company successfully saved');
     if (this.isEditingSelectedCompany && company) {
       AppUtils.holdingSelectedCompany = company;
       console.log(AppUtils.holdingSelectedCompany);
-      this.sharedService.back();
     }
+    this.companyForm.markAsPristine();
+    this.isSubmitting = false;
+    this.toastr.success('Company successfully saved');
+    this.sharedService.back();
     console.log('complete');
   }
   canDeactivate(): boolean {
