@@ -85,10 +85,10 @@ export interface PropertyNote {
   typeDescription: string;
 }
 export interface PropertyData {
- result: Property;
+  result: Property;
 }
 export interface PropertyPhotoData {
- result: Photo[];
+  result: Photo[];
 }
 export interface PropertyWithPhotos {
   details: Property;
@@ -99,9 +99,10 @@ export interface PropertyAutoComplete {
   propertyId: number;
   propertyAddress: string;
   ranking?: number;
+  matchType?: string;
 }
 export interface PropertyAutoCompleteData {
- result: PropertyAutoComplete[];
+  result: PropertyAutoComplete[];
 }
 
 export interface MinBedroom {
@@ -109,14 +110,14 @@ export interface MinBedroom {
   name: string;
 }
 
-export const MinBedrooms = <MinBedroom[]> [
+export const MinBedrooms = <MinBedroom[]>[
   // {id: 0, name: 'Any'},
-  {id: 1, name: '1'},
-  {id: 2, name: '2'},
-  {id: 3, name: '3'},
-  {id: 4, name: '4'},
-  {id: 5, name: '5'},
-  {id: 6, name: '6+'}
+  { id: 1, name: '1' },
+  { id: 2, name: '2' },
+  { id: 3, name: '3' },
+  { id: 4, name: '4' },
+  { id: 5, name: '5' },
+  { id: 6, name: '6+' }
 ];
 export enum PropertyType {
   House = 1,
