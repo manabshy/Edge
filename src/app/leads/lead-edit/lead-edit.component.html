@@ -17,22 +17,22 @@
           </div>
           <div class="col-sm-6 form-group">
             <label for="chaser">Owner</label>
-            <select class="form-control form-control-sm" id="chaser">
-              <option></option>
-              <option>Alex Turnbull</option>
+            <select class="form-control form-control-sm" id="owner" formControlName="ownerId">
+                <option value=""></option>
+                <option selected *ngFor="let staffMember of staffMembers" [value]=staffMember.staffMemberId>{{staffMember?.fullName}}</option>          
             </select>
           </div>
         </div>
       </div>
       <div class="col-sm-auto form-group text-right">
-        <button type="button" class="btn btn-danger">Close lead</button>
+        <button type="button" class="btn btn-danger" (click)="CloseLeadClicked()">Close lead</button>
       </div>
     </div>
     <hr class="mt-0">
     <div class="form-group row">
       <label for="type" class="col-sm-2 col-form-label col-form-label-sm">Type</label>
       <div class="col-sm-3">
-        <select class="custom-select custom-select-sm" id="leadType">
+        <select class="custom-select custom-select-sm" id="leadType" formControlName="leadTypeId">
             <option value=""></option>
             <option selected *ngFor="let leadType of leadTypes" [value]=leadType.id>{{leadType?.value}}</option>          
         </select>
@@ -41,24 +41,18 @@
     <div class="row">
       <label class="col-sm-2 col-form-label col-form-label-sm">Person</label>
       <div class="col-sm-10">
-        <div class="list-group mb-3">
-          <div class="list-group-item">
-            {{lead?.person}}
-          </div>
+        <div class="list-group mb-3">          
+            <app-person-details [personDetails]="person"></app-person-details>          
         </div>
       </div>
     </div>
-    <app-property-finder></app-property-finder>
+    <!-- <app-contactgroups-detail  [leadOwnerId]="lead?.ownerId"></app-contactgroups-detail> -->
     <div class="row">
-      <label class="col-sm-2 col-form-label col-form-label-sm">Notes</label>
-      <div class="col-sm-10">
-        <div class="list-group mb-3">
-          <div class="list-group-item">
-            {{lead?.owner}}
-          </div>
+        <label class="col-sm-2 col-form-label col-form-label-sm">Notes</label>
+        <div class="col-sm-10" [ngClass]="{'notes-disabled': !contactGroupDetails?.contactGroupId}">          
+          <app-notes [personNotes]="personNotes" [bottomReached]="bottomReached"></app-notes>
         </div>
       </div>
-    </div>
 
     <div class="form-actions">
       <div class="container px-lg-4">

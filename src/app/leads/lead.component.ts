@@ -14,6 +14,7 @@ export class LeadComponent implements OnInit {
 
   currentStaffMember: StaffMember;
   leads: Lead[];
+  staffMembers: StaffMember[];
 
   constructor(private leadService: LeadsService, private staffMemberService: StaffMemberService) { }
 
@@ -26,18 +27,29 @@ export class LeadComponent implements OnInit {
     });
 
     this.getLeads();
+    this.getAllStaffmembers();
   }
 
   getLeads() {
     console.log("getting leads");
     this.leadService.getLeads(this.currentStaffMember.staffMemberId).subscribe(result => {
-        this.leads = result;
+      this.leads = result;
     }, error => {
       this.leads = [];
     });
   }
 
-
+  getAllStaffmembers() {
+    this.staffMemberService.getAllStaffMembers().subscribe(result => {
+      this.staffMembers = result;
+      //console.log("staffMembers Object:");
+      //console.log(this.staffMembers);
+    }, error => {
+      this.staffMembers = [];
+    });
   }
+
+
+}
 
 

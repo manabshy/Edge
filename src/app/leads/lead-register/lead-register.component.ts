@@ -11,29 +11,14 @@ import { StaffMember } from 'src/app/core/models/staff-member';
 })
 export class LeadRegisterComponent implements OnInit {
   @Input() leads: Lead[];
-  areLeadsAssignable: boolean = false;
-  currentStaffMember: StaffMember;  
+  areLeadsAssignable = false;
+  currentStaffMember: StaffMember;
 
   constructor(private leadService: LeadsService, private staffMemberService: StaffMemberService) { }
 
   ngOnInit() {
-    // this.staffMemberService.getCurrentStaffMember().subscribe(data => {
-    //   if (data) {
-    //     this.currentStaffMember = data;
-    //   }
-    // });
-
-    // this.getLeads();
   }
 
-  // getLeads() {
-  //   console.log("getting leads");
-  //   this.leadService.getLeads(this.currentStaffMember.staffMemberId).subscribe(result => {
-  //       this.leads = result;
-  //   }, error => {
-  //     this.leads = [];
-  //   });
-  // }
 
   assignLeads() {
     event.preventDefault();
@@ -44,10 +29,13 @@ export class LeadRegisterComponent implements OnInit {
     console.log("show popup to assign leads");
   }
 
-  selectLead() {
+  selectLead(lead?: Lead) {
+    console.log('clicked', lead)
+    this.leadService.leadsChanged(lead);
     if(this.areLeadsAssignable) {
-      event.preventDefault();
+      // event.preventDefault();
     }
   }
 
+ 
 }

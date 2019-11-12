@@ -96,3 +96,7 @@ export enum ApiRole {
 export interface StaffMemberResult {
   result: StaffMember;
 }
+
+export interface StaffMemberListResult {
+  result: StaffMember[];
+}
