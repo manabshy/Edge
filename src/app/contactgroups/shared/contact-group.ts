@@ -159,6 +159,7 @@ export interface PeopleAutoCompleteResult {
   emailAddresses: string[];
   phoneNumbers: string[];
   matchScore: number;
+  matchType: string;
   ranking: number;
 }
 
