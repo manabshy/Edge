@@ -147,14 +147,14 @@ export class LeadEditComponent implements OnInit {
     });
   }
 
-  private CloseLeadClicked() {
+  closeLeadClicked() {
 
     this.lead.closedById = this.currentStaffMember.staffMemberId;
     this.lead.dateClosed = new Date();
     this.updateLead();
   }
 
-  private updateLead() {
+  updateLead() {
     console.log(this.lead);
     const lead = { ...this.lead, ...this.leadEditForm.value };
     console.log('updated lead:', lead);
