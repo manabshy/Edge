@@ -6,13 +6,14 @@ import { Lead } from '../shared/lead';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { InfoDetail } from 'src/app/core/services/info.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { SharedService } from 'src/app/core/services/shared.service';
+import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
 import { StaffMember } from 'src/app/core/models/staff-member';
 import { ContactNote } from 'src/app/contactgroups/shared/contact-group';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { getDate } from 'date-fns';
 import { Person } from 'src/app/core/models/person';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-lead-edit',
@@ -37,7 +38,8 @@ export class LeadEditComponent implements OnInit {
     private fb: FormBuilder,
     private sharedService: SharedService,
     private contactGroupService: ContactGroupsService,
-    private staffMemberService: StaffMemberService) { }
+    private staffMemberService: StaffMemberService,
+    private toastr: ToastrService) { }
 
   ngOnInit() {
     AppUtils.parentRoute = AppUtils.prevRoute;
@@ -116,6 +118,7 @@ export class LeadEditComponent implements OnInit {
     this.leadEditForm.patchValue({
       ownerId: lead.ownerId,
       person: lead.person,
+      personId: lead.personId,
       leadTypeId: lead.leadTypeId,
       nextChaseDate: this.sharedService.ISOToDate(lead.createdDate)
     });
@@ -148,7 +151,22 @@ export class LeadEditComponent implements OnInit {
 
     this.lead.closedById = this.currentStaffMember.staffMemberId;
     this.lead.dateClosed = new Date();
-    this.leadsService.updateLead(this.lead);
+    this.updateLead();
+  }
+
+  private updateLead() {
+    console.log(this.lead);
+    const lead = { ...this.lead, ...this.leadEditForm.value };
+    console.log('updated lead:', lead);
+    this.leadsService.updateLead(lead).subscribe((result) => {
+      this.onUpdateCompleted();
+    }, (error: WedgeError) => {
+      this.sharedService.showError(error);
+    });
+  }
+
+  private onUpdateCompleted() {
+    this.toastr.success('Lead successfully updated');
   }
 
 

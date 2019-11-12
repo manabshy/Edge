@@ -29,7 +29,7 @@ export class LeadsService {
   updateLead(lead: Lead): Observable<any> {
     const url = `${AppConstants.baseLeadsUrl}/${lead.leadId}`;
     console.log('Update lead', lead);
-    return this.http.post(url, lead).pipe(
+    return this.http.put<Lead>(url, lead).pipe(
       map(response => response),
       tap(data => console.log('Updated Lead details here...', JSON.stringify(data))));
   }

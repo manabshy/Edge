@@ -17,3 +17,10 @@ export interface Lead {
     updatedDate: Date;
     updatedBy: number;
 }
+
+export interface LeadSearchInfo {
+    leadTypeId: number;
+    ownerId: number;
+    officeId: number;
+    createdDate: Date;
+}

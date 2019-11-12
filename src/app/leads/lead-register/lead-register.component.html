@@ -21,28 +21,30 @@
       </div>
     </div>
   </div>
-  <form action="" class="mb-3 p-0">
+  <form [formGroup]="leadRegisterForm" class="mb-3 p-0">
 
     <div class="row">
       <div class="col">
         <div class="form-group">
-          <label for="type">Type</label>
-          <select class="form-control form-control-sm" id="type">
-            <option></option>
-            <option>Valuation</option>
-            <option>Professional valuation</option>
-            <option>Refurbishment</option>
-            <option>Insurance</option>
-            <option>Remortage</option>
-            <option>Wealth check</option>
+          <label for="leadType">Type</label>
+          <select class="form-control form-control-sm" id="leadType" formControlName="leadTypeId">
+            <option value=""></option>
+            <option selected *ngFor="let leadType of leadTypes" [value]=leadType.id>{{leadType?.value}}</option>                      
           </select>
         </div>
       </div>
       <div class="col">
-        <label for="chaser">Owner</label>
-        <select class="form-control form-control-sm" id="chaser">
-          <option></option>
-          <option>Alex Turnbull</option>
+        <label for="owner">Owner</label>
+        <select class="form-control form-control-sm" id="owner" formControlName="ownerId">
+          <option value=""></option>
+          <option selected *ngFor="let staffMember of staffMembers" [value]=staffMember.staffMemberId>{{staffMember?.fullName}}</option>          
+        </select>
+      </div>
+      <div class="col">
+        <label for="office">Office</label>
+        <select class="form-control form-control-sm" id="office" formControlName="officeId">
+          <option value=""></option>
+          <option selected *ngFor="let office of offices" [value]=office.officeId>{{office?.name}}</option>          
         </select>
       </div>
       <div class="col">

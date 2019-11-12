@@ -100,3 +100,7 @@ export interface StaffMemberResult {
 export interface StaffMemberListResult {
   result: StaffMember[];
 }
+
+export interface OfficeListResult {
+  result: Office[];
+}
