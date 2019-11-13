@@ -21,7 +21,7 @@
       </div>
     </div>
   </div>
-  <form [formGroup]="leadRegisterForm" class="mb-3 p-0">
+  <form class="mb-3 p-0" [formGroup]="leadRegisterForm">
 
     <div class="row">
       <div class="col">
@@ -35,10 +35,11 @@
       </div>
       <div class="col">
         <label for="owner">Owner</label>
-        <select class="form-control form-control-sm" id="owner" formControlName="ownerId">
+        <app-staffmember-finder></app-staffmember-finder>
+        <!-- <select class="form-control form-control-sm" id="owner" formControlName="ownerId">
           <option value=""></option>
           <option selected *ngFor="let staffMember of staffMembers" [value]=staffMember.staffMemberId>{{staffMember?.fullName}}</option>          
-        </select>
+        </select> -->
       </div>
       <div class="col">
         <label for="office">Office</label>
@@ -50,17 +51,17 @@
       <div class="col">
         <label for="dateFrom">Date From</label>
         <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
-          [bsConfig]="{showWeekNumbers:false}" bsDatepicker>
+          [bsConfig]="{showWeekNumbers:false}" bsDatepicker formControlName="dateFrom">
       </div>
       <div class="col">
         <label for="dateTo">Date To</label>
         <input type="text" id="dateTo" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
-          [bsConfig]="{showWeekNumbers:false}" bsDatepicker>
+          [bsConfig]="{showWeekNumbers:false}" bsDatepicker formControlName="dateTo">
       </div>
       <div class="w-100"></div>
       <div class="col">
         <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" id="colsedInclusive">
+          <input type="checkbox" class="custom-control-input" id="closedInclusive" formControlName="includeClosedLeads">
           <label class="custom-control-label" for="colsedInclusive">Include closed leads</label>
         </div>
       </div>

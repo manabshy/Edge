@@ -15,7 +15,7 @@ export class LeadComponent implements OnInit {
 
   currentStaffMember: StaffMember;
   leads: Lead[];
-  staffMembers: StaffMember[];  
+  staffMembers: StaffMember[];
 
   constructor(private leadService: LeadsService, private staffMemberService: StaffMemberService) { }
 
@@ -32,7 +32,7 @@ export class LeadComponent implements OnInit {
     this.getAllStaffmembers();
   }
 
-  getLeads() {    
+  getLeads() {
     this.leadService.getLeads(this.currentStaffMember.staffMemberId).subscribe(result => {
       this.leads = result;
     }, error => {

@@ -5,7 +5,7 @@ import { Lead } from '../shared/lead';
 import { StaffMember, Office } from 'src/app/core/models/staff-member';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { InfoDetail } from 'src/app/core/services/info.service';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { OfficeService } from 'src/app/core/services/office.service';
 
@@ -28,9 +28,12 @@ export class LeadRegisterComponent implements OnInit {
     private staffMemberService: StaffMemberService,
     private sharedService: SharedService,
     private storage: StorageMap,
-    private officeService: OfficeService) { }
+    private officeService: OfficeService,
+    private fb: FormBuilder) { }
 
   ngOnInit() {
+
+    this.setupLeadRegisterForm();
 
     // Lead Types
     this.storage.get('info').subscribe(data => {
@@ -40,12 +43,14 @@ export class LeadRegisterComponent implements OnInit {
       }
     });
 
+    // All Active Staffmembers
     this.storage.get('allstaffmembers').subscribe(data => {
       if (data) {
         this.staffMembers = data as StaffMember[];
       }
     });
 
+    // Offices
     this.officeService.getOffices().subscribe(
       data => {
       this.offices = data;
@@ -79,6 +84,17 @@ export class LeadRegisterComponent implements OnInit {
       officeId: lead.officeId,
       leadTypeId: lead.leadTypeId,
       nextChaseDate: this.sharedService.ISOToDate(lead.createdDate)
+    });
+  }
+
+  private setupLeadRegisterForm() {
+    this.leadRegisterForm = this.fb.group({
+      ownerId: '',
+      officeId: '',
+      leadTypeId: '',
+      includeClosedLeads: false,
+      dateFrom: [''],
+      dateTo: ['']
     });
   }
 

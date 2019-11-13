@@ -64,4 +64,26 @@ export class StaffMemberService {
       }));
   }
 
+  getStaffMemberSuggestions(searchTerm): Observable<any>  {
+    console.log('search Term:', searchTerm);
+    return this.http.get<StaffMemberResult>(`${AppConstants.baseUrl}/suggestions?SearchTerm=${searchTerm}`).pipe(
+      map(response => response.result),
+      tap(data => {
+        if (data) {
+          console.log('suggestions:', data);
+        }
+      }));
+  }
+
+  // getStaffMemberSuggestions(searchTerm)  {
+  //   console.log('search Term:', searchTerm);
+  //   return this.http.get<StaffMemberResult>(`${AppConstants.baseUrl}/suggestionvalues?SearchTerm=${searchTerm}`).pipe(
+  //     map(response => response.result),
+  //     tap(data => {
+  //       if (data) {
+  //         console.log('suggestions:', data);
+  //       }
+  //     }));
+  // }
+
 }
