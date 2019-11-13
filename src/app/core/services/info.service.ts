@@ -11,8 +11,6 @@ const CACHE_SIZE = 1;
 })
 export class InfoService {
   private infoDetail$: Observable<DropdownListInfo>;
-  private infoSubject = new BehaviorSubject<DropdownListInfo | null>(null);
-  info$ = this.infoSubject.asObservable();
   infoData: any;
   info: DropdownListInfo;
   constructor(private http: HttpClient, private storage: StorageMap) { }
@@ -25,9 +23,6 @@ export class InfoService {
     return this.infoDetail$;
   }
 
-  infoChanged(info: DropdownListInfo) {
-    this.infoSubject.next(info);
-  }
 
   private requestDropdownListInfo(): Observable<DropdownListInfo> {
     return this.http.get<any>(AppConstants.baseInfoUrl)
