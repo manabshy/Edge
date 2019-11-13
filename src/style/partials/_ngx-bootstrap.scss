@@ -1,0 +1,59 @@
+timepicker {
+    .form-control {
+        @extend .form-control-sm;
+    }
+}
+
+bs-datepicker-container {
+
+    .bs-datepicker-body table td span.selected, .bs-datepicker-body table td span[class*=select-]:after, .bs-datepicker-body table td.selected span, .bs-datepicker-body table td[class*=select-] span:after, .bs-datepicker-head {
+        background-color: theme-color("dark")!important;
+    }
+
+    .is-other-month {
+        opacity: 0;
+    }
+
+    .bs-datepicker-container {
+        padding: 0;
+    }
+
+    .bs-datepicker-head {
+        height: 55px;
+        .current {
+            @extend .custom-select;
+            width: auto;
+        }
+    }
+}
+
+
+popover-container {
+    &.alert-warning {
+        .arrow{
+            &::after {
+                border-top-color: theme-color-level('warning', $alert-bg-level);
+            }
+        }
+    }
+}
+
+carousel {
+    .carousel-item {
+        position: relative;
+        display: none;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        width: 100%;
+        transition: -webkit-transform .6s ease;
+        transition: transform .6s ease;
+        transition: transform .6s ease,-webkit-transform .6s ease;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        -webkit-perspective: 1000px;
+        perspective: 1000px;
+        float: none;
+        margin: 0;
+    }
+}

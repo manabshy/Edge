@@ -1,0 +1,17 @@
+@mixin navbar-mobile-btn($right: false) {
+    @include media-breakpoint-down(md) {
+        color: color("white");
+        font-size: 2rem;
+        line-height: 1;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        border: 0px;
+        padding: 0px;
+
+        @if ($right) {
+            left: auto;
+            right: 10px;
+        }
+    }
+}

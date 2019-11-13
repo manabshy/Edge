@@ -1,3 +1,39 @@
-<p>
-  leaderboard works!
-</p>
+<div class="tab-content-container">
+  <form [formGroup]="leaderboardForm">
+    <div class="form-group" [ngStyle]="{'visibility': filterVisibility}">
+      <select class="custom-select" formControlName="period">
+        <option *ngFor='let item of periods | keyvalue:keepOriginalOrder' [value]='item.key'>{{item.value}}</option>
+      </select>
+    </div>
+  </form>
+  <app-leaderboard-tabs [tabs]="columns" [active]="active" [managedOrFees]="managedOrFees" [data]="data" (tabChange)=" getSelectedTab($event)" ></app-leaderboard-tabs>
+  <!-- <tabset>
+    <tab heading="Instructions" (select)="showFilter('visible')">
+      <div class="no-gutters">
+        <app-instructions [instructions]=instructions [selectedPeriodLabel]=selectedPeriodLabel
+         [originalInstructions]='originalInstructions'>
+        </app-instructions>
+      </div>
+    </tab>
+    <tab heading="Pipeline" (select)="showFilter('hidden')">
+      <div class="no-gutters">
+        <app-pipeline [pipelineList]=pipelineList></app-pipeline>
+      </div>
+    </tab>
+    <tab heading="Exchanges" (select)="showFilter('visible')">
+      <div class="no-gutters">
+        <app-exchanges [exchanges]=exchanges [selectedPeriodLabel]=selectedPeriodLabel ></app-exchanges>
+      </div>
+    </tab>
+  </tabset> -->
+</div>
+<!--
+  <div class="card-body">
+   <div class="wizard">
+     <a [routerLink]="['instructions']" [queryParams] = "{period: selectedPeriod}" >Instruction</a>
+     <a [routerLink]="['pipeline']" [queryParams] = "{period: selectedPeriod}" >Pipeline</a>
+     <a [routerLink]="['exchanges']" [queryParams] = "{period: selectedPeriod}" >Exchanges</a>
+   </div>
+   <router-outlet></router-outlet>
+  </div>
+  <a [routerLink]="['/diary']">Diary</a> -->

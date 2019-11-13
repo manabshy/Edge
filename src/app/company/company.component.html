@@ -1,0 +1,77 @@
+<app-breadcrumb></app-breadcrumb>
+<div class="container">
+  <div class="row page-title">
+    <div class="col">
+      <h4 class="m-0">Company centre</h4>
+    </div>
+    <div class="col-auto">
+      <a class="btn btn-primary" [routerLink]="['detail', 0 , 'edit' ]" [queryParams]="{isNewCompany: true}"><i
+          class="fas fa-plus mr-2"></i> Company</a>
+    </div>
+  </div>
+  <form class="mb-3" [formGroup]="companyFinderForm" (ngSubmit)="companiesResults()">
+    <div class="row">
+      <div class="col">
+        <div class="input-group">
+          <input type="search" class="form-control" formControlName="companyName" placeholder="Company Name"
+            aria-label="Company Name" (keyup)="onKeyup($event)" [ngbTypeahead]="suggestions" [focusFirst]="false"
+            (selectItem)="selectedSuggestion($event)">
+          <div class="input-group-append">
+            <button class="btn btn-secondary">Search</button>
+          </div>
+        </div>
+        <!-- <button class="btn btn-link px-0" type="button" id="button-advanced" (click)="advSearchCollapsed = !advSearchCollapsed"
+        [attr.aria-expanded]="!advSearchCollapsed" aria-controls="advSearch">Advanced search</button> -->
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div id="advSearch" [collapse]="!advSearchCollapsed">
+          <div class="row">
+            <div class="col-md-auto pr-0">
+              Must be one of:
+            </div>
+            <!-- TODO: Change to populate from list -->
+            <div class="col">
+              <div class="form-group form-check">
+                <div class="row">
+                  <div class="custom-control custom-checkbox col-6 col-md-auto">
+                    <input type="checkbox" class="custom-control-input" id="advLandlord">
+                    <label class="custom-control-label" for="advLandlord">Company</label>
+                  </div>
+                  <div class="custom-control custom-checkbox col-6 col-md-auto">
+                    <input type="checkbox" class="custom-control-input" id="advTenant">
+                    <label class="custom-control-label" for="advTenant">Other Agent</label>
+                  </div>
+                  <div class="custom-control custom-checkbox col-6 col-md-auto">
+                    <input type="checkbox" class="custom-control-input" id="advVendor">
+                    <label class="custom-control-label" for="advVendor">Relocation Agent</label>
+                  </div>
+                  <div class="custom-control custom-checkbox col-6 col-md-auto">
+                    <input type="checkbox" class="custom-control-input" id="advBuyer">
+                    <label class="custom-control-label" for="advBuyer">Property Developer</label>
+                  </div>
+                  <div class="custom-control custom-checkbox col-6 col-md-auto">
+                    <input type="checkbox" class="custom-control-input" id="advBuyer">
+                    <label class="custom-control-label" for="advBuyer">Tradesman</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="text-center" *ngIf="isHintVisible">
+    <i class="far fa-smile-wink"></i> Type at least <strong>3 characters</strong> to get results
+  </div>
+  <app-company-list *ngIf="!isHintVisible" [companies]='companies' [pageNumber]="page"
+    [searchTerm]='searchTerm' [bottomReached]="bottomReached"></app-company-list>
+  <div class="text-center" *ngIf="isLoading && !isHintVisible">
+    <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...
+  </div>
+  <div class="text-center text-danger" *ngIf="isMessageVisible && !isLoading && !isHintVisible && page === 1">
+    <i class="far fa-sad-tear"></i> No results for '<strong>{{companyFinderForm.value.companyName || ' '}}</strong>'
+  </div>
+</div>

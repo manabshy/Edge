@@ -1,0 +1,80 @@
+<app-breadcrumb [title]="navPlaceholder"></app-breadcrumb>
+<div class="container">
+  <div class="row page-title">
+    <div class="col">
+      <h4 class="mb-0">Instructions</h4>
+    </div>
+    <div class="col-auto" *ngIf="false">
+      <button type="button" class="btn btn-primary"><i class="fas fa-plus mr-2"></i> Inst.</button>
+    </div>
+  </div>
+  <div class="list-group">
+    <div class="list-group-item list-header d-none d-sm-block">
+      <div class="row">
+        <div class="col-sm-3"><strong>Address</strong></div>
+        <div class="col-sm"><strong>Status</strong></div>
+        <div class="col-sm"><strong>Price</strong></div>
+        <div class="col-sm" *ngIf="isShortLet"><strong>Short Let Rent</strong></div>
+        <div class="col-sm"><strong>Type</strong></div>
+        <div class="col-sm"><strong>Lister</strong></div>
+        <div class="col-sm"><strong>Instructed</strong></div>
+      </div>
+    </div>
+    <div *ngIf="instructions$ | async as instructions">
+      <div class="list-group-item text-center text-danger" *ngIf="!instructions || !instructions?.length">
+        <i class="far fa-sad-tear"></i> No searches
+      </div>
+      <div class="list-group-item list-group-item-action" *ngFor="let instruction of instructions">
+        <div class="row">
+          <div class="col-sm-3">
+            <dl class="row">
+              <dt class="col-4 d-sm-none">Address</dt>
+              <dd class="col">{{instruction?.propertyAddress}}</dd>
+            </dl>
+          </div>
+          <div class="col-sm">
+            <dl class="row">
+              <dt class="col-4 d-sm-none">Status</dt>
+              <dd class="col">{{instruction?.status}}</dd>
+            </dl>
+          </div>
+          <div class="col-sm">
+            <dl class="row">
+              <dt class="col-4 d-sm-none">Price</dt>
+              <dd class="col">{{instruction?.amount  | currency: "GBP"}}</dd>
+            </dl>
+          </div>
+          <div class="col-sm" *ngIf="isShortLet">
+            <dl class="row">
+              <dt class="col-4 d-sm-none">Short Let Rent</dt>
+              <ng-container *ngIf="instruction.shortLetAmount > 0; else noAmount">
+                <dd class="col">{{instruction?.shortLetAmount | currency: "GBP"}}</dd>
+              </ng-container>
+              <ng-template #noAmount>
+                <dd class="col"></dd>
+              </ng-template>
+            </dl>
+          </div>
+          <div class="col-sm">
+            <dl class="row">
+              <dt class="col-4 d-sm-none">Type</dt>
+              <dd class="col">{{instruction?.type}}</dd>
+            </dl>
+          </div>
+          <div class="col-sm">
+            <dl class="row">
+              <dt class="col-4 d-sm-none">Lister</dt>
+              <dd class="col">{{instruction?.staffMember}}</dd>
+            </dl>
+          </div>
+          <div class="col-sm">
+            <dl class="row">
+              <dt class="col-4 d-sm-none">Instructed</dt>
+              <dd class="col">{{instruction?.instructionDate | date: 'd/MM/yyyy'}}</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

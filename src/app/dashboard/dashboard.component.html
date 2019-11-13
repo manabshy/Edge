@@ -1,172 +1,40 @@
-<ul class="nav nav-tabs" id="myTab" role="tablist">
-  <li class="nav-item">
-    <a class="nav-link active" id="me-tab" data-toggle="tab" href="#me" role="tab" aria-controls="me" aria-selected="true">Me</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" id="team-tab" data-toggle="tab" href="#team" role="tab" aria-controls="team" aria-selected="false">Team</a>
-  </li>
-  <li>
-    <div class="form-group">
-      <select class="form-control" id="sel1">
-        <option>This week</option>
-        <option selected>This month</option>
-        <option>This quarter</option>
-        <option>This year</option>
-      </select>
-    </div>
-  </li>
-</ul>
-<div class="tab-content" id="myTabContent">
-  <div class="tab-pane fade show active" id="me" role="tabpanel" aria-labelledby="me-tab">
-    <div class="no-gutters">
-      <div class="row justify-content-center">
-        <div class="col col-5 text-center bg-primary p-4 m-1">
-          <p>Valuations</p>
-          <h6>7</h6>
-          <p>This month</p>
-        </div>
-        <div class="col col-5 text-center bg-primary p-4 m-1">
-          <p>Instructions</p>
-          <h6>4</h6>
-          <p>This month</p>
-        </div>
-      </div>
-      <div class="row justify-content-center">
-        <div class="col col-5 text-center bg-primary p-3 m-1">
-          <p>Business Development</p>
-          <h6>200</h6>
-          <p>Tickets</p>
-        </div>
-        <div class="col col-5 text-center bg-primary p-4 m-1">
-          <p>All Instructions</p>
-          <h6>25</h6>
-          <p></p>
-        </div>
-      </div>
-      <div class="row justify-content-center">
-        <div class="col col-5 text-center bg-primary p-4 m-1">
-          <p>Exchanges</p>
-          <h6>£103 k</h6>
-          <p>This month</p>
-        </div>
-        <div class="col col-5 text-center bg-primary p-4 m-1">
-          <p>Pipeline</p>
-          <h6>£140 k</h6>
-          <p></p>
-        </div>
-      </div>
-    </div>
+<h4 class="mb-lg-3">{{currentStaffMember.jobTitle}}</h4>
+
+<div class="tab-content-container">
+  <div class="form-group float">
+    <select [(ngModel)]="selectedPeriod" class="custom-select" id="sel1">
+      <option *ngFor='let periodOption of periodList' [value]='periodOption.key'>{{periodOption.value}}</option>
+    </select>
   </div>
-  <div class="tab-pane fade" id="team" role="tabpanel" aria-labelledby="team-tab">
-    <div class="no-gutters">
-      <div class="row">
-        <div class="col col-12 text-left bg-primary mb-2 p-1">
-          <h6>Viewings</h6>
-          <table class="table table-sm table-borderless">
-            <thead>
-              <tr>
-                <th>Total</th>
-                <th>Nina L</th>
-                <th>Lisa K</th>
-                <th>Stephen H</th>
-                <th>Robert M</th>
-                <th>Joe M</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>46</td>
-                <td>18</td>
-                <td>12</td>
-                <td>9</td>
-                <td>5</td>
-                <td>2</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col col-12 text-left bg-primary mb-2 p-1">
-          <h6>Offers agreed</h6>
-          <table class="table table-sm table-borderless">
-            <thead>
-              <tr>
-                <th>Total</th>
-                <th>Nina L</th>
-                <th>Lisa K</th>
-                <th>Stephen H</th>
-                <th>Robert M</th>
-                <th>Joe M</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>46</td>
-                <td>18</td>
-                <td>12</td>
-                <td>9</td>
-                <td>5</td>
-                <td>2</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col col-12 text-left bg-primary mb-2 p-1">
-          <h6>Exchanges</h6>
-          <table class="table table-sm table-borderless">
-            <thead>
-              <tr>
-                <th>Total</th>
-                <th>Nina L</th>
-                <th>Lisa K</th>
-                <th>Stephen H</th>
-                <th>Robert M</th>
-                <th>Joe M</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>£46 k</td>
-                <td>£18 k</td>
-                <td>£12 k</td>
-                <td>£9 k</td>
-                <td>£5 k</td>
-                <td>£2 k</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col col-12 text-left bg-primary mb-2 p-1">
-          <h6>Pipeline</h6>
-          <table class="table table-sm table-borderless">
-            <thead>
-              <tr>
-                <th>Total</th>
-                <th>Nina L</th>
-                <th>Lisa K</th>
-                <th>Stephen H</th>
-                <th>Robert M</th>
-                <th>Joe M</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>£46 k</td>
-                <td>£18 k</td>
-                <td>£12 k</td>
-                <td>£9 k</td>
-                <td>£5 k</td>
-                <td>£2 k</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
+  <tabset #dashboardTabs>
+    <!-- <tab heading="Me" (select)="onSelect($event)">
+      <app-my-dashboard [myDashboard]='myDashboard'
+       [isValuation]='isValuation'
+       [valuationTile]='valuationTile'
+       [instructionsTile]='instructionsTile'
+       [isInstructions]='isInstructions'
+       [allInstructionsTile]='allInstructionsTile'
+       [isAllInstructions]='isAllInstructions'
+       [bddTile]='bddTile'
+       [isBdd]='isBdd'
+       [exchangesTile]='exchangesTile'
+       [isExchanges]='isExchanges'
+       [pipelineTile]= 'pipelineTile'
+       [isPipeline]='isPipeline'
+       [period]='period'
+       [periodKey]='periodKey'></app-my-dashboard>
+    </tab> -->
+    <tab heading="Me" (select)="onSelect($event)">
+      <app-my-dashboard [myDashboard]='myDashboard'
+       [period]='period'
+       [periodKey]='periodKey'></app-my-dashboard>
+    </tab>
+    <tab heading="Team" (select)="onSelect($event)">
+      <app-team-dashboard [teamDashboard]='teamDashboard' [dashboardTotals]='dashboardTotals'
+        [totalApplicants]='totalApplicants' [totalViewings]='totalViewings' [totalOffersAgreed]='totalOffersAgreed'
+        [totalOffersReceived]='totalOffersReceived' [totalExchanges]='totalExchanges' [totalPipeline]='totalPipeline'
+        [period]='period'>
+      </app-team-dashboard>
+    </tab>
+  </tabset>
 </div>

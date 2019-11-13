@@ -1,0 +1,61 @@
+<app-breadcrumb [title]="navPlaceholder"></app-breadcrumb>
+<div class="container">
+  <div class="row page-title">
+    <div class="col">
+      <h4 class="mb-0">Home Helper</h4>
+    </div>
+    <div class="col-auto" *ngIf="false">
+      <button type="button" class="btn btn-primary"><i class="fas fa-plus mr-2"></i> Home H.</button>
+    </div>
+  </div>
+  <div class="list-group">
+    <div class="list-group-item list-header d-none d-sm-block">
+      <div class="row">
+        <div class="col-sm-3"><strong>Address</strong></div>
+        <div class="col-sm"><strong>Start date</strong></div>
+        <div class="col-sm"><strong>End date</strong></div>
+        <div class="col-sm"><strong>Status</strong></div>
+        <div class="col-sm"><strong>Prop. Man.</strong></div>
+      </div>
+    </div>
+    <div *ngIf="homeHelpers$ | async as homeHelpers">
+      <div class="list-group-item text-center text-danger" *ngIf="!homeHelpers || !homeHelpers?.length">
+        <i class="far fa-sad-tear"></i> No home helpers
+      </div>
+      <div class="list-group-item list-group-item-action" *ngFor="let item of homeHelpers">
+        <div class="row">
+          <div class="col-sm-3">
+            <dl class="row">
+              <dt class="col-4 d-sm-none">Address</dt>
+              <dd class="col">{{item?.propertyAddress}}</dd>
+            </dl>
+          </div>
+          <div class="col-sm">
+            <dl class="row">
+              <dt class="col-4 d-sm-none">Start date</dt>
+              <dd class="col">{{(item?.managedStartDate | date: 'd/MM/yyyy') || "-"}}</dd>
+            </dl>
+          </div>
+          <div class="col-sm">
+            <dl class="row">
+              <dt class="col-4 d-sm-none">End date</dt>
+              <dd class="col">{{(item?.managedEndDate | date: 'd/MM/yyyy') || "-"}}</dd>
+            </dl>
+          </div>
+          <div class="col-sm">
+            <dl class="row">
+              <dt class="col-4 d-sm-none">Status</dt>
+              <dd class="col" [innerHTML]="item?.status | bracketsNewLine"></dd>
+            </dl>
+          </div>
+          <div class="col-sm">
+            <dl class="row">
+              <dt class="col-4 d-sm-none">Prop. Man.</dt>
+              <dd class="col">{{item?.propertyManager}}</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

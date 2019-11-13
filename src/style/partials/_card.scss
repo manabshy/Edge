@@ -1,0 +1,46 @@
+.card-grid {
+    @include make-row();
+    margin-left: - $grid-gutter-width/5;
+    margin-right: - $grid-gutter-width/5;
+
+    .card{
+        margin-bottom: $grid-gutter-width/3;
+        width: calc(50% - #{$grid-gutter-width/2.5});
+        margin-left: $grid-gutter-width/5;
+        margin-right: $grid-gutter-width/5;
+        
+        @include media-breakpoint-up(sm) {
+            width: calc(33.33% - #{$grid-gutter-width/2.5});
+        }
+
+        a {
+
+            .text-decoration-none {
+                color: $body-color;
+            }
+
+            &, &.card-body {
+                text-decoration: none;
+
+                &:hover {
+                    .card-title, .text-decoration {
+                        text-decoration: underline;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.card-body {
+    @include media-breakpoint-down(sm){
+        padding: spacer(3);
+    }
+}
+
+.card-img-overlay {
+    top: auto;
+    background-color: rgba(theme-color("dark"), .6);
+    padding-bottom: spacer(2);
+    padding-top: spacer(2);
+}

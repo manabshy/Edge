@@ -1,0 +1,28 @@
+//overrides
+@import "style/bootstrap-overrides";
+
+//bootstrap
+@import "~bootstrap/scss/bootstrap";
+
+
+//fontAwesome
+$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+@import "~@fortawesome/fontawesome-free/scss/regular";
+
+//toastr
+@import '~ngx-toastr/toastr-bs4-alert';
+
+//partials
+@import "style/partials/layout-overrides";
+@import "style/partials/alerts";
+@import "style/partials/badges";
+@import "style/partials/page-title";
+@import "style/partials/animation";
+@import "style/partials/nav";
+@import "style/partials/card";
+@import "style/partials/table";
+@import "style/partials/off-canvas";
+@import "style/partials/ngx-bootstrap";
+@import "style/partials/toastr";

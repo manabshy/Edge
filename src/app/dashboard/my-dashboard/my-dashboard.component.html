@@ -1,61 +1,61 @@
-<ul class="nav nav-tabs" id="myTab" role="tablist">
-  <li class="nav-item">
-    <a class="nav-link active" id="me-tab" data-toggle="tab" href="#me" role="tab" aria-controls="me" aria-selected="true">Me</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" id="team-tab" data-toggle="tab" href="#team" role="tab" aria-controls="team" aria-selected="false">Team</a>
-  </li>
-  <li>
-    <div class="form-group">
-      <select class="form-control" id="sel1">
-        <option>This week</option>
-        <option selected>This month</option>
-        <option>This quarter</option>
-        <option>This year</option>
-      </select>
+<div class="text-center" *ngIf="!myDashboard; else results">
+  <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...
+</div>
+<ng-template #results>
+  <div class="card-grid">
+    <div class="card">
+      <a class="card-body text-center" [routerLink]="['/list', 2337]" [queryParams]="{periodFilter: periodKey, isValuation:isValuation}">
+        <h6 class="card-title"> {{valuationTile}}</h6>
+        <h4 class="text-secondary">{{ myDashboard.valuations?.periodCount || 0 }}</h4>
+        <p class="card-text"><small class="text-muted">{{ period }}</small></p>
+      </a>
     </div>
-  </li>
-</ul>
-<div class="tab-content" id="myTabContent">
-  <div class="tab-pane fade show active" id="me" role="tabpanel" aria-labelledby="me-tab">
-    <div class="no-gutters">
-      <div class="row justify-content-center">
-        <div class="col col-5 text-center bg-primary p-4 m-1">
-          <p>Valuations</p>
-          <h6>7</h6>
-          <p>This month</p>
-        </div>
-        <div class="col col-5 text-center bg-primary p-4 m-1">
-          <p>Instructions</p>
-          <h6>4</h6>
-          <p>This month</p>
-        </div>
-      </div>
-      <div class="row justify-content-center">
-        <div class="col col-5 text-center bg-primary p-3 m-1">
-          <p>Business Development</p>
-          <h6>200</h6>
-          <p>Tickets</p>
-        </div>
-        <div class="col col-5 text-center bg-primary p-4 m-1">
-          <p>All Instructions</p>
-          <h6>25</h6>
-          <p></p>
-        </div>
-      </div>
-      <div class="row justify-content-center">
-        <div class="col col-5 text-center bg-primary p-4 m-1">
-          <p>Exchanges</p>
-          <h6>£103 k</h6>
-          <p>This month</p>
-        </div>
-        <div class="col col-5 text-center bg-primary p-4 m-1">
-          <p>Pipeline</p>
-          <h6>£140 k</h6>
-          <p></p>
-        </div>
-      </div>
+    <div class="card">
+      <a class="card-body text-center" [routerLink]="['/list', 2337]" [queryParams]="{periodFilter: periodKey, isInstructions:isInstructions}">
+        <h6 class="card-title">{{instructionsTile}}</h6>
+        <h4 class="text-secondary">{{ myDashboard.instructions.periodCount }}</h4>
+        <p class="card-text"><small class="text-muted">{{ period }}</small></p>
+      </a>
+    </div>
+    <div class="card">
+      <a class="card-body text-center"  [routerLink]="['/list', 2337]" [queryParams]="{ isBdd:isBdd}">
+        <h6 class="card-title">Business Development</h6>
+        <h4 class="text-secondary">{{ myDashboard.businessDevelopment.totalCount }}</h4>
+        <p class="card-text"><small class="text-muted">Tickets</small></p>
+      </a>
+    </div>
+    <div class="card">
+      <a class="card-body text-center" [routerLink]="['/list', 2337]" [queryParams]="{ isAllInstructions:isAllInstructions}" >
+        <h6 class="card-title">{{allInstructionsTile}}</h6>
+        <h4 class="text-secondary m-0">{{ myDashboard.instructions.totalCount }}</h4>
+      </a>
+    </div>
+    <div class="card">
+      <a class="card-body text-center"  [routerLink]="['/list', 2337]" [queryParams]="{ isExchanges:isExchanges}">
+        <h6 class="card-title">{{exchangesTile}}</h6>
+        <h4 class="text-secondary">
+          {{
+                myDashboard.exchanges.periodFees
+                  | rounding
+                  | currency: "GBP"
+                  | truncating
+              }}
+        </h4>
+        <p class="card-text"><small class="text-muted">{{ period }}</small></p>
+      </a>
+    </div>
+    <div class="card"  >
+      <a class="card-body text-center" [routerLink]="['/list', 2337]"  [queryParams]="{isPipeline:isPipeline}" >
+        <h6 class="card-title">{{pipelineTile}}</h6>
+        <h4 class="text-secondary m-0">
+          {{
+                    myDashboard.pipeline.totalFees
+                      | rounding
+                      | currency: "GBP"
+                      | truncating
+                  }}
+        </h4>
+      </a>
     </div>
   </div>
-
-</div>
+</ng-template>

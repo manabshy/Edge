@@ -1,63 +1,67 @@
-import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { Dashboard } from "../shared/dashboard";
-import { DashboardService } from "../shared/dashboard.service";
-import { Router, ActivatedRoute } from "@angular/router";
+import { Component, OnInit, Input } from '@angular/core';
+import { Dashboard, Tiles } from '../shared/dashboard';
 @Component({
   selector: 'app-my-dashboard',
   templateUrl: './my-dashboard.component.html',
   styleUrls: ['./my-dashboard.component.css']
 })
 export class MyDashboardComponent implements OnInit {
- dashboard: Dashboard;
-  myDashboardForm: FormGroup;
-  constructor(private fb: FormBuilder,
-     private dashboardService: DashboardService, private route: Router) {}
+@Input() myDashboard: Dashboard;
+@Input() period: string;
+@Input() periodKey: string;
+// @Input() valuationTile: Tiles;
+// @Input() allInstructionsTile: Tiles;
+// @Input() instructionsTile: Tiles;
+// @Input() exchangesTile: Tiles;
+// @Input() bddTile: Tiles;
+// @Input() pipelineTile: Tiles;
+// @Input() isValuation: boolean;
+// @Input() isAllInstructions: boolean;
+// @Input() isInstructions: boolean;
+// @Input() isBdd: boolean;
+// @Input() isExchanges: boolean;
+// @Input() isPipeline: boolean;
+
+valuationTile: Tiles = Tiles.Valuations;
+bddTile: Tiles = Tiles.BusinessDevelopment;
+allInstructionsTile: Tiles = Tiles.AllInstructions;
+exchangesTile = Tiles.Exchanges;
+pipelineTile = Tiles.Pipeline;
+instructionsTile = Tiles.Instructions;
+typeType: Tiles;
+get valuations(): string {
+ return this.valuationTile = Tiles.Valuations;
+}
+get allInstructions(): string {
+ return this.allInstructionsTile = Tiles.AllInstructions;
+}
+get bdd(): string {
+ return this.bddTile = Tiles.BusinessDevelopment;
+}
+get isValuation(): boolean {
+ return this.valuationTile === Tiles.Valuations;
+}
+get isInstructions(): boolean {
+ return this.instructionsTile === Tiles.Instructions;
+}
+get isAllInstructions(): boolean {
+ return this.allInstructions === Tiles.AllInstructions;
+}
+get isBdd(): boolean {
+ return this.bddTile === Tiles.BusinessDevelopment;
+}
+get isPipeline(): boolean {
+ return this.pipelineTile === Tiles.Pipeline;
+}
+get isExchanges(): boolean {
+ return this.exchangesTile === Tiles.Exchanges;
+}
+
+
+  constructor() { }
 
   ngOnInit() {
-    this.myDashboardForm = this.fb.group({
-      period: [''],
-      periodStartDate: new Date(),
-      periodEndDate: 0,
-      valuations: 0,
-      instructions: 0,
-      applicants: 0,
-      viewings: 0,
-      offersAgreed: 0,
-      offersReceived: 0,
-      businessDevelopment: 0,
-      exchanges: 0,
-      pipeline: 0,
-      liveTenancies: 0
-    });
-    // this.route.paramMap.subscribe(params => { this.id = +params.get('id'); });
   }
-  getStaffMemberDashboard(id: number): void {
-    this.dashboardService.getStaffMemberDashboard(id)
-      .subscribe(data => {
-        this.displayDashboardFigures(data);
-      });
-  }
-  displayDashboardFigures(dashboard: Dashboard): void {
-    if (this.myDashboardForm) {
-      this.myDashboardForm.reset();
-    }
-    this.dashboard = dashboard;
-    console.log(dashboard);
-    this.myDashboardForm.patchValue({
-      period: this.dashboard.period,
-      periodStartDate: this.dashboard.periodStartDate,
-      periodEndDate: this.dashboard.periodEndDate,
-      valuations: this.dashboard.valuations,
-      instructions: this.dashboard.instructions,
-      applicants: this.dashboard.applicants,
-      viewings: this.dashboard.viewings,
-      offersAgreed: this.dashboard.offersAgreed,
-      offersReceived: this.dashboard.offersReceived,
-      businessDevelopment: this.dashboard.businessDevelopment,
-      exchanges: this.dashboard.exchanges,
-      pipeline: this.dashboard.pipeline,
-      liveTenancies: this.dashboard.liveTenancies
-    });
-  }
+
+ 
 }

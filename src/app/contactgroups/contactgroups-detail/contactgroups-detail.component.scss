@@ -1,0 +1,21 @@
+:host ::ng-deep accordion {
+    .card-body {
+        padding: 0;
+    }
+
+    .list-group-item {
+        & > .row {
+            margin: 0;
+
+            & > .col, & > [class*="col-"] {
+                padding: 0;
+            }
+        }
+    }
+}
+
+// .person-details {
+//     border-top:0; 
+//     border-top-left-radius: 0;
+//     border-top-right-radius: 0;
+// }

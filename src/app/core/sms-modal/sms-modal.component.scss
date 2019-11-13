@@ -1,0 +1,63 @@
+@import "../../../style/bootstrap-overrides";
+
+@import "../../../../node_modules/bootstrap/scss/functions";
+@import "../../../../node_modules/bootstrap/scss/variables";
+@import "../../../../node_modules/bootstrap/scss/mixins";
+
+.fixed-text {
+    position: relative;
+    width: 100%;
+
+    &-header, &-footer {
+        background: color("white");
+        border: 1px solid $input-border-color;
+    }
+
+    &-header {
+        padding: $input-padding-y $input-padding-x;
+        width: 100%;
+        border-bottom: none;
+        margin: 0;
+        @include border-top-radius($input-border-radius);
+    }
+
+    &-footer {
+        padding-left: $input-padding-x;
+        border-top: none;
+        @include border-bottom-radius($input-border-radius);
+
+        label {
+            width: 4rem;
+        }
+
+        .form-control {
+            border-right: none;
+            @include border-right-radius(0);
+            @include border-bottom-radius(0);
+        }
+
+        .form-row:not(:first-child){
+            .form-control {
+                border-top: none;
+                border-bottom: none;
+                @include border-top-radius(0);
+                @include border-bottom-right-radius($input-border-radius);
+            }
+        }
+    }
+
+    textarea {
+        border-top: none;
+        border-bottom: none;
+        @include border-radius(0);
+    }
+
+    &.is-invalid {
+        .is-invalid {
+            border: 1px solid theme-color("danger")!important;
+        }
+        & ~ .invalid-feedback {
+            display: block;
+        }
+    }
+}

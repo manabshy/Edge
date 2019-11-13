@@ -1,31 +1,84 @@
-<div class="container">
-  <ul class="nav nav-pills" role="tablist">
-      <li class="nav-item active"><a class="nav-link active" href="#dash" data-toggle="tab" role="tab">Dashboard</a></li>
-      <li class="nav-item"><a class="nav-link" href="#diary" data-toggle="tab" role="tab">Diary</a></li>
-      <li class="nav-item"><a class="nav-link" href="#leaderboard" data-toggle="tab" role="tab">Leaderboard</a></li>
-      <li class="nav-item"><a class="nav-link" href="#tasks" data-toggle="tab" role="tab">Tasks</a></li>
-  </ul>
-  <div class="alert alert-info p-1 d-flex align-items-center justify-content-center"><p>You are currently 31st. Complete 3 tasks for 30th</p></div>
-  <div class="tab-content">
-    <div id="dash" class="tab-pane fade in show active" role="tabpanel">
-      <app-dashboard></app-dashboard>
-    </div>
-    <div id="diary" class="tab-pane fade" role="tabpanel">
-        <app-diary></app-diary>
-    </div>
-    <div id="leaderboard" class="tab-pane fade" role="tabpanel">
-        <app-leaderboard></app-leaderboard>
-    </div>
-    <div id="tasks" class="tab-pane fade" role="tabpanel">
-      <div class="container-fluid">
-        <div class="row justify-content-center">
-          <div class="col-auto">
-              <button class="btn btn-primary btn-block mb-2">Viewing feedbacks <span class="badge badge-pill badge-light">4</span></button>
-              <button class="btn btn-primary btn-block mb-2">Chase Valuations <span class="badge badge-pill badge-light">6</span></button>
-              <button class="btn btn-primary btn-block mb-2">Complete AML <span class="badge badge-pill badge-light">9</span></button>
-          </div>
+<div class="container-fluid home-container pt-sm-3" [ngClass]="containerClass">
+  <tabset type="pills" #homeTabs>
+    <tab (select)="onSelect($event)">
+      <ng-template tabHeading>
+        <i class="fas fa-th-large"></i><span class="nav-label">Dashboard</span>
+      </ng-template>
+      <div class="container p-0">
+        <div class="text-center" *ngIf="!currentStaffMember">
+          <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading dashboard ...
+        </div>
+        <app-dashboard *ngIf='currentStaffMember' [currentStaffMember]='currentStaffMember'></app-dashboard>
+      </div>
+    </tab>
+    <tab (select)="onSelect($event)" *ngIf="false">
+      <ng-template tabHeading>
+        <i class="far fa-calendar-alt"></i><span class="nav-label">Diary</span>
+      </ng-template>
+      <app-diary></app-diary>
+    </tab>
+    <tab (select)="onSelect($event)" *ngIf="false">
+      <ng-template tabHeading>
+        <i class="fas fa-chalkboard-teacher"></i><span class="nav-label">Leaderboard</span>
+      </ng-template>
+      <div class="container p-0">
+        <div class="text-center" *ngIf="!currentStaffMember">
+          <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading leaderboard ...
+        </div>
+        <app-leaderboard  *ngIf='currentStaffMember' [currentStaffMember]='currentStaffMember'></app-leaderboard>
+      </div>
+    </tab>
+    <tab (select)="onSelect($event)" *ngIf="false">
+      <ng-template tabHeading>
+        <div class="position-relative">
+          <i class="fas fa-tasks"></i>
+          <span class="nav-label">Tasks</span>
+          <span class="badge badge-pill badge-secondary">15</span>
+        </div>
+      </ng-template>
+      <div class="container p-0">
+        <div class="list-group w-50 mx-auto">
+          <a href="#" class="list-group-item list-group-item-action">
+            <div class="row align-items-center">
+              <div class="col-3 col-sm-2">
+                  <span class="badge badge-primary badge-pill">4</span>
+              </div>
+              <div class="col">
+                Feedbacks
+              </div>
+              <div class="col-4 col-sm-3">
+                <span class="btn-link">View</span>
+              </div>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action">
+            <div class="row align-items-center">
+              <div class="col-3 col-sm-2">
+                  <span class="badge badge-primary badge-pill">6</span>
+              </div>
+              <div class="col">
+                Valuations
+              </div>
+              <div class="col-4 col-sm-3">
+                <span class="btn-link">Chase</span>
+              </div>
+            </div>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action">
+            <div class="row align-items-center">
+              <div class="col-3 col-sm-2">
+                  <span class="badge badge-primary badge-pill">9</span>
+              </div>
+              <div class="col">
+                AML
+              </div>
+              <div class="col-4 col-sm-3">
+                <span class="btn-link">Complete</span>
+              </div>
+            </div>
+          </a>
         </div>
       </div>
-    </div>
-  </div>        
+    </tab>
+  </tabset>
 </div>

@@ -1,0 +1,20 @@
+<app-breadcrumb></app-breadcrumb>
+<div class="container pb-3">
+  <div class="row page-title">
+    <div class="col">
+      <h4 class="m-0"><span class="text-secondary">#</span> Title </h4>
+    </div>
+    <div class="col-auto" *ngIf="!isAllInstructions">
+      <select [(ngModel)]="selectedPeriod" class="custom-select" id="sel1">
+        <option *ngFor='let periodOption of periodList' [value]='periodOption.key'>{{periodOption.value}}</option>
+      </select>
+    </div>
+  </div>
+  <app-valuations-and-instructions *ngIf="isInstructions || isValuation "
+  [selectedPeriod]='selectedPeriod'
+   [periodList]='periodList' [period]='period' [instructions]='instructions'
+   [valuations]='valuations' [isValuations]='isValuation'></app-valuations-and-instructions>
+  <app-instructions-and-business-development *ngIf="isAllInstructions"
+  [period]='period' [allInstructions]='allInstructions || isBdd'></app-instructions-and-business-development>
+  <app-exchanges-and-pipeline *ngIf="isExchanges || isPipeline"></app-exchanges-and-pipeline>
+</div>

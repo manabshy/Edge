@@ -1,0 +1,10 @@
+<a *ngIf="navLink" [routerLink]="link" [queryParams]="params">
+    <div class="float-left pull-left text-left"><ng-container *ngTemplateOutlet="content"></ng-container></div>
+    <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
+</a>
+<a *ngIf="!navLink" href (click)="$event.preventDefault()">
+    <div class="float-left pull-left text-left"><ng-container *ngTemplateOutlet="content"></ng-container></div>
+    <span class="float-right pull-right"><i class="fas fa-chevron-right"></i></span>
+</a>
+
+<ng-template #content><ng-content></ng-content></ng-template>

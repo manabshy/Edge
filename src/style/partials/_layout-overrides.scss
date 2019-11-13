@@ -1,0 +1,235 @@
+html {
+    @media (max-width: 320px) {
+        font-size: 0.85rem;
+    }
+}
+
+body {
+    padding-top: $top-bar-height;
+    background: $white url('./assets/dg_bg.svg') right bottom no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    min-height: 100vh;
+
+    @include media-breakpoint-down(sm) {
+        padding-bottom: 30px;
+        @media (orientation: landscape) {
+            padding-top: 0;
+        }
+    }
+
+    @include media-breakpoint-up(lg) {
+        padding-top: 0;
+        background-size: 50%;
+    }
+
+}
+
+a:not(:disabled) {
+    cursor: pointer;
+}
+
+.list-group-item-action {
+    cursor: pointer;
+}
+
+tr:first-child{
+    th, td {
+        border-top: none;
+    }
+}
+
+.col-form-label{
+    text-align: right;
+
+    @include media-breakpoint-down(sm){
+        text-align: left;
+    }
+}
+
+.list-group-item {
+
+    .card-body &.list-header + .list-group-item {
+        @include media-breakpoint-down(sm){
+            border-top: 0;
+        }
+    }
+}
+
+dl {
+    margin-bottom: spacer(2);
+
+    @include media-breakpoint-up(sm) {
+        margin-bottom: 0;
+    }
+
+    dd, dt {
+        margin: 0;
+    }
+}
+
+.telephone {
+    @include media-breakpoint-up(md){
+        @include make-col(12);
+    }
+    @include media-breakpoint-up(xl){
+        @include make-col(6);
+    }
+}
+
+.input-group {
+    select {
+        flex: 0 0 auto!important;
+        width: auto!important;
+    }
+
+    .input-group-append {
+        .btn:last-child {
+            border-top-right-radius: $border-radius !important;
+            border-bottom-right-radius: $border-radius !important;
+        }
+
+        & + input, & + select, & + textarea {
+            margin-left: -1px!important;
+
+            @include media-breakpoint-down(sm) {
+                border-top-left-radius: $border-radius !important;
+                border-bottom-left-radius: $border-radius !important;
+                flex: 0 0 100%!important;
+                width: 100%!important;
+            }
+        }
+    }
+}
+
+.bg-warning {
+    color: $body-color;
+}
+
+.invalid-feedback {
+    white-space: pre;
+}
+
+.is-invalid {
+    background-image: none!important;
+}
+
+select.is-invalid {
+    background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") $input-bg no-repeat right 0.75rem center/8px 10px !important;
+}
+
+pre {
+    margin-bottom: 0;
+    font-family: inherit;
+    font-size: $font-size-base;
+}
+
+.no-scroll {
+    overflow: hidden;
+}
+
+fieldset {
+    legend {
+        font-size: $h5-font-size;
+        font-weight: $headings-font-weight;
+        line-height: $headings-line-height;
+    }
+}
+
+.fake-readonly[readonly]{
+    background-color: $input-bg;
+}
+
+.nav-pills {
+    .nav-link {
+        border: 1px solid $border-color;
+    }
+
+    .nav-item {
+        margin-left: spacer(2);
+        margin-bottom: spacer(1);
+    }
+
+    &.nav-responsive {
+        padding: 0 spacer(1);
+
+        @include media-breakpoint-down(lg){
+            padding: 0;
+            position: relative;
+            white-space: nowrap;
+            flex-wrap: nowrap;
+            overflow-y: hidden;
+            padding-right: spacer(5);
+        }
+
+        .nav-item {
+            &:first-child {
+                @include media-breakpoint-down(lg) {
+                    margin-left: 0;
+                }
+            }
+        }
+    }
+}
+
+.embed-responsive {
+    &:before {
+        @include media-breakpoint-down(sm){
+            @media (orientation: portrait) {
+                padding-top: 100%;
+            }
+        }
+    }
+}
+
+.badge-info {
+    color: $body-color;
+}
+
+.mobile-btn {
+    @include media-breakpoint-down(sm) {
+        display: block;
+        padding: $btn-padding-y $btn-padding-x!important;
+        border-radius: $btn-border-radius;
+        text-align: center;
+        background-color: color("white");
+        width: 100%;
+        border: 1px solid $border-color;
+    }
+}
+
+.mark, mark {
+    padding: 0;
+}
+
+.btn-light {
+    border: 1px solid $border-color;
+}
+
+.form-control:disabled {
+    opacity: .5;
+}
+
+.aside {
+    top: 1rem;
+}
+
+.v-o-h {
+    visibility: hidden;
+
+    &-xl {
+        @include media-breakpoint-down(lg) {
+            visibility: visible;
+        }
+    }
+
+    .v-o-h-container:hover & {
+        @include media-breakpoint-up(xl) {
+            visibility: visible
+        }
+    }
+}
+
+.dropdown-menu {
+    z-index: 1050;
+}

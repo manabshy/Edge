@@ -1,0 +1,98 @@
+<div class="list-group">
+  <div class="list-group-item list-group-item-action text-center py-4" *ngIf="noteData" (click)="addNote()">
+    <span class="btn-link">
+      <i class="fas fa-sticky-note mr-2"></i> Add Note
+    </span>
+  </div>
+  <div class="text-center" *ngIf="isUpdating">
+    <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading notes ...
+  </div>
+  <div class="list-group-item text-center text-danger" *ngIf="!notes || !notes?.length && !isUpdating">
+    <i class="far fa-sad-tear"></i> No notes
+  </div>
+  <ng-container *ngIf="notes?.length && !isUpdating">
+    <div *ngIf="notes" class="search-results" infiniteScroll [infiniteScrollDistance]="5"
+      [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"
+      (scrolled)="onScrollDown()" (scrolledUp)="onScrollUp()">
+    </div>
+    <div class="list-group-item" *ngFor="let note of notes">
+      <div class="row">
+        <div class="col-auto pr-0" *ngIf="note?.isPinned">
+          <i class="fas fa-thumbtack fa-fw" tooltip="Pinned to top"></i>
+        </div>
+        <div class="col-auto" *ngIf="note?.isImportant">
+          <i class="fas fa-exclamation-circle text-danger fa-fw" tooltip="Important"></i>
+        </div>
+        <div class="col text-right" *ngIf="!note?.propertyId">
+          <div class="btn-group" dropdown placement="bottom right">
+            <button id="actionsToggle" dropdownToggle type="button" class="btn btn-link p-0 dropdown-toggle"
+              aria-controls="actionsList">
+              Set as <span class="caret"></span>
+            </button>
+            <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+              aria-labelledby="actionsToggle">
+              <li role="menuitem">
+                <button type="button" class="dropdown-item" (click)="setFlag(note?.id, true)">
+                  <i class="fas fa-exclamation-circle fa-fw text-danger" [style.opacity]="note?.isImportant ? '0.5' : 1"></i>
+                  <i class="fas fa-times fa-xs align-text-top" *ngIf="note?.isImportant"></i>
+                  <span class="ml-2">
+                    <ng-container *ngIf="note?.isImportant; else important ">Unimportant</ng-container>
+                    <ng-template #important>Important</ng-template>
+                  </span>
+                </button>
+              </li>
+              <li role="menuitem">
+                <button type="button" class="dropdown-item" (click)="setFlag(note?.id, false)">
+                  <i class="fas fa-thumbtack fa-fw" [style.opacity]="note?.isPinned ? '0.5' : 1"></i>
+                  <i class="fas fa-times fa-xs align-text-top" *ngIf="note?.isPinned"></i>
+                  <span class="ml-2">
+                    <ng-container *ngIf="note?.isPinned; else pin ">Unpinned</ng-container>
+                    <ng-template #pin>Pinned to top</ng-template>
+                  </span>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="row">
+            <div class="col-11 col-sm-3" *ngIf="note?.contactGroupId || note?.personId">
+              <ng-container *ngIf="groupAddressee; else groupsInfo">
+                <a class="mb-2" [routerLink]="['/contact-centre/detail', note?.personId || 0, 'people', note?.contactGroupId]" *ngIf="note?.contactGroupId; else personNote">{{groupAddressee || note?.contactGroupId}}
+                </a>
+                <ng-template #personNote>
+                  <ng-container *ngIf="contactPeople">
+                    <ng-container *ngFor="let person of contactPeople">
+                      <a class="mb-2" [routerLink]="['/contact-centre/detail', note?.personId]" *ngIf="person.personId === note?.personId">{{person.addressee}}</a>
+                    </ng-container>
+                  </ng-container>
+                </ng-template>
+              </ng-container>
+              <ng-template #groupsInfo>
+                <ng-container *ngIf="addressees && person">
+                  <ng-container *ngFor="let group of addressees">
+                    <a class="mb-2" [routerLink]="['/contact-centre/detail', note?.personId || 0, 'people', note?.contactGroupId]" *ngIf="group.groupId === note?.contactGroupId">{{group.addressee}}</a>
+                  </ng-container>
+                  <a class="mb-2" [routerLink]="['/contact-centre/detail', note?.personId]" *ngIf="person.personId === note?.personId">{{person.addressee}}</a>
+                </ng-container>
+              </ng-template>
+            </div>
+            <div class="col-sm-2 mb-2" *ngIf="note?.propertyId">
+              <span class="badge badge-pill badge-success" *ngIf="note.type < 3">{{note.typeDescription}}</span>
+              <span class="badge badge-pill badge-warning" *ngIf="note.type > 2">{{note.typeDescription}}</span>
+            </div>
+            <div class="col-sm mb-2">
+              {{note?.text}}
+            </div>
+            <div class="col-sm-3 text-muted">
+              {{note?.createdBy}}<br>
+              {{note?.createDate | date: 'HH:mm d/MM/yyyy'}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

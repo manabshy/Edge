@@ -1,0 +1,66 @@
+<form class="p-0" [formGroup]="companyFinderForm" autocompleteOff>
+  <div class="row" *ngIf="!existingCompany">
+    <label for="company" class="col-sm-2 col-form-label col-form-label-sm">Find Company</label>
+    <div class="col-sm-10">
+      <div class="form-group">
+        <div class="input-group input-group-sm">
+          <input #companyNameInput type="search" id="company" class="form-control form-control-sm fake-readonly" formControlName="companyName"
+            [ngClass]="{'is-invalid': companyNameError && !enterManually && !companyFinderForm.value.companyName}"
+            (keydown.enter)="searchCompany()"[ngbTypeahead]="suggestions" [focusFirst]="false" (selectItem)="selectedSuggestion($event)">
+            <div class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="searchCompany()">Search</button>
+            </div>
+            <div class="invalid-feedback w-100">Search for a Company</div>
+        </div>
+        <div class="small text-center pt-3"
+        *ngIf="noSuggestions">
+        No Company Found? Try again or <a href (click)="enterCompany()">enter it manually</a>.
+      </div>
+      </div>
+      <div class="off-canvas" [hidden]="!foundCompanies" (click)="foundCompanies = null">
+        <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
+          <h4 class="page-title text-left pt-3">
+            Quick Finder
+            <button type="button" class="close mr-2" aria-label="Close" (click)="foundCompanies = null">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </h4>
+          <div class="list-group small mb-3">
+            <ng-container *ngIf="!isLoadingCompaniesVisible">
+              <div class="list-group-item list-group-item-action" *ngFor="let company of foundCompanies"
+                (click)="selectCompany(company)">
+                <div class="row align-items-center">
+                  <div class="col"
+                    [innerHTML]="company.companyName | highlight : companyFinderForm.value.companyName"></div>
+                  <div class="col-auto">
+                    <button class="btn btn-block btn-sm btn-link">Select</button>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <div class="list-group-item text-center" *ngIf="isLoadingCompaniesVisible">
+              <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading companies ...
+            </div>
+            <div class="list-group-item text-center"
+              *ngIf="!isLoadingCompaniesVisible">
+              No Company Found? Try again or <a href (click)="enterCompany()">enter it manually</a>.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="(!foundCompanies && isCompanyAdded) || enterManually || existingCompany">
+    <div class="row">
+      <label for="company" class="col-sm-2 col-form-label col-form-label-sm">Company name</label>
+      <div class="col-sm-10">
+          <div class="form-group">
+            <input type="text" class="form-control form-control-sm"
+              [ngClass]="{'is-invalid': companyNameError && enterManually}"
+              id="selectedCompany" formControlName="selectedCompany">
+            <div class="invalid-feedback w-100">{{companyNameError}}</div>
+          </div>
+      </div>
+    </div>
+  </ng-container>
+</form>

@@ -1,160 +1,182 @@
-<form>
-  <div class="form-group">
-    <label for="type">Type</label>
-    <select class="form-control form-control-sm" id="type">
-      <option selected>Valuation</option>
-      <option>Professional valuation</option>
-      <option>Refurbishment</option>
-      <option>Insurance</option>
-      <option>Remortage</option>
-      <option>Wealth check</option>
-    </select>
-  </div>
-  <app-property-finder></app-property-finder>
-  <div class="form-group">
-    <label for="chaser">Chase by</label>
-    <select class="form-control form-control-sm" id="chaser">
-      <option selected>Alex Turnbull</option>
-      <option>Kate Brogan</option>
-      <option>Peter Doyle</option>
-      <option>Jose Bailao</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label for="nextChase">Chase Date</label>
-    <input type="text" data-provide="datepicker" class="form-control form-control-sm" id="nextChase" aria-describedby="emailHelp" placeholder="Chase date">
-  </div>
-  <div class="form-check form-check-inline">
-    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
-    <label class="form-check-label" for="exampleRadios1">
-      Active
-    </label>
-  </div>
-  <div class="form-check form-check-inline">
-    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
-    <label class="form-check-label" for="exampleRadios2">
-      Pending
-    </label>
-  </div>
-  <div class="form-check form-check-inline">
-    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3" disabled>
-    <label class="form-check-label" for="exampleRadios3">
-      Closed
-    </label>
-  </div>
-
-
-  <div class="container-fluid messageList mt-2">
-    <div class="row border-bottom">
-      <div class="col-4">
-        <p>Matt Easley
-          <br>28/11/18</p>
+<app-breadcrumb></app-breadcrumb>
+<div class="container">
+  <h4 class="page-title">Edit Lead</h4>
+  <form>
+    <div class="form-group row">
+      <label for="type" class="col-sm-2 col-form-label col-form-label-sm">Type</label>
+      <div class="col-sm-3">
+        <select class="custom-select custom-select-sm" id="type">
+          <option selected>Valuation</option>
+          <option>Professional valuation</option>
+          <option>Refurbishment</option>
+          <option>Insurance</option>
+          <option>Remortage</option>
+          <option>Wealth check</option>
+        </select>
       </div>
-      <div class="col">
-        <div class="form-group">
-          <textarea class="form-control form-control-sm" id="newMessage" rows="3"></textarea>
+    </div>
+    <app-property-finder></app-property-finder>
+    <div class="form-group row">
+      <label for="chaser" class="col-sm-2 col-form-label col-form-label-sm">Chase by</label>
+      <div class="col-sm-3">
+        <select class="custom-select custom-select-sm" id="chaser">
+          <option selected>Alex Turnbull</option>
+          <option>Kate Brogan</option>
+          <option>Peter Doyle</option>
+          <option>Jose Bailao</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="nextChase" class="col-sm-2 col-form-label col-form-label-sm">Chase Date</label>
+      <div class="col-sm-3">
+        <input type="text" id="date" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
+          [bsConfig]="{showWeekNumbers:false}" id="nextChase" bsDatepicker>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-2 col-form-label col-form-label-sm">Status</label>
+      <div class="col-sm-10">
+        <div class="custom-control custom-radio">
+          <input class="custom-control-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1"
+            checked>
+          <label class="custom-control-label" for="exampleRadios1">
+            Active
+          </label>
+        </div>
+        <div class="custom-control custom-radio">
+          <input class="custom-control-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+          <label class="custom-control-label" for="exampleRadios2">
+            Pending
+          </label>
+        </div>
+        <div class="custom-control custom-radio">
+          <input class="custom-control-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3"
+            disabled>
+          <label class="custom-control-label" for="exampleRadios3">
+            Closed
+          </label>
         </div>
       </div>
     </div>
-    <div class="row border-bottom">
-      <div class="col-4">
-        <p>Matt Easley
-          <br>27/11/18</p>
-      </div>
-      <div class="col">
-        <p>Called no answer</p>
+    <div class="row justify-content-end">
+      <div class="col-sm-10">
+        <div class="list-group mb-3">
+          <div class="list-group-item">
+            <div class="row">
+              <div class="col-sm-3">
+                <div class="row mb-2">
+                  <div class="col font-weight-bold">
+                    Matt Easley
+                  </div>
+                  <div class="col-auto col-sm-12 text-muted">
+                    28/11/18
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <textarea class="form-control" id="newMessage" rows="3" placeholder="Comment ..."></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="list-group-item">
+            <div class="row">
+              <div class="col-sm-3">
+                <div class="row mb-2">
+                  <div class="col font-weight-bold">
+                    Matt Easley
+                  </div>
+                  <div class="col-auto col-sm-12 text-muted">
+                    28/11/18
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                Called no answer
+              </div>
+            </div>
+          </div>
+          <div class="list-group-item">
+            <div class="row">
+              <div class="col-sm-3">
+                <div class="row mb-2">
+                  <div class="col font-weight-bold">
+                    Matt Easley
+                  </div>
+                  <div class="col-auto col-sm-12 text-muted">
+                    28/11/18
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                Called no answer
+              </div>
+            </div>
+          </div>
+          <div class="list-group-item">
+            <div class="row">
+              <div class="col-sm-3">
+                <div class="row mb-2">
+                  <div class="col font-weight-bold">
+                    Matt Easley
+                  </div>
+                  <div class="col-auto col-sm-12 text-muted">
+                    28/11/18
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                Called no answer
+              </div>
+            </div>
+          </div>
+          <div class="list-group-item">
+            <div class="row">
+              <div class="col-sm-3">
+                <div class="row mb-2">
+                  <div class="col font-weight-bold">
+                    Matt Easley
+                  </div>
+                  <div class="col-auto col-sm-12 text-muted">
+                    28/11/18
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                Called no answer
+              </div>
+            </div>
+          </div>
+          <div class="list-group-item">
+            <div class="row">
+              <div class="col-sm-3">
+                <div class="row mb-2">
+                  <div class="col font-weight-bold">
+                    Matt Easley
+                  </div>
+                  <div class="col-auto col-sm-12 text-muted">
+                    28/11/18
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                Called no answer
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="row border-bottom">
-      <div class="col-4">
-        <p>Matt Easley
-          <br>27/08/18</p>
-      </div>
-      <div class="col">
-        <p>ABout to go out, may be in the autumn</p>
-      </div>
-    </div>
-    <div class="row border-bottom">
-      <div class="col-4">
-        <p>Matt Easley
-          <br>27/08/17</p>
-      </div>
-      <div class="col">
-        <p>Could be interested but not until next year</p>
+
+    <div class="form-actions">
+      <div class="container px-lg-4">
+        <div class="row justify-content-end w-100 no-gutters">
+          <div class="col-sm-10 d-flex">
+            <button routerLink="/contact-centre" type="button" class="btn btn-light mr-2">Cancel</button>
+            <button routerLink="/contact-centre" type="submit" class="btn btn-secondary">Edit lead</button>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="row border-bottom">
-      <div class="col-4">
-        <p>Matt Easley
-          <br>27/08/17</p>
-      </div>
-      <div class="col">
-        <p>Could be interested but not until next year</p>
-      </div>
-    </div>
-    <div class="row border-bottom">
-      <div class="col-4">
-        <p>Matt Easley
-          <br>27/08/17</p>
-      </div>
-      <div class="col">
-        <p>Could be interested but not until next year</p>
-      </div>
-    </div>
-    <div class="row border-bottom">
-      <div class="col-4">
-        <p>Matt Easley
-          <br>27/08/17</p>
-      </div>
-      <div class="col">
-        <p>Could be interested but not until next year</p>
-      </div>
-    </div>
-    <div class="row border-bottom">
-      <div class="col-4">
-        <p>Matt Easley
-          <br>27/08/17</p>
-      </div>
-      <div class="col border-bottom">
-        <p>Could be interested but not until next year</p>
-      </div>
-    </div>
-    <div class="row border-bottom">
-      <div class="col-4">
-        <p>Matt Easley
-          <br>27/08/17</p>
-      </div>
-      <div class="col">
-        <p>Could be interested but not until next year</p>
-      </div>
-    </div>
-    <div class="row border-bottom">
-      <div class="col-4">
-        <p>Matt Easley
-          <br>27/08/17</p>
-      </div>
-      <div class="col">
-        <p>Could be interested but not until next year</p>
-      </div>
-    </div>
-    <div class="row border-bottom">
-      <div class="col-4">
-        <p>Matt Easley
-          <br>27/08/17</p>
-      </div>
-      <div class="col">
-        <p>Could be interested but not until next year</p>
-      </div>
-    </div>
-    <div class="row border-bottom">
-      <div class="col-4">
-        <p>Matt Easley
-          <br>27/08/17</p>
-      </div>
-      <div class="col">
-        <p>Could be interested but not until next year</p>
-      </div>
-    </div>
-  </div>
-  <button routerLink="/contact-centre" type="submit" class="btn btn-primary">Save</button>
-</form>
+  </form>
+</div>

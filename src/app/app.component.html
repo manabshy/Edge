@@ -1,6 +1,22 @@
-<div class="no-gutters">
-  <div class="row">
-    <div class="col-sm-2"><app-mainmenu></app-mainmenu></div>
-    <div class="col"><router-outlet></router-outlet></div>
+<div class="row no-gutters app-container" #appContainer>
+  <div class="col-lg-3 col-xl-2 bg-dark side-nav" *ngIf="isLoggedIn"><app-mainmenu></app-mainmenu></div>
+  <div class="col" [ngClass]="{'fade-in': isFading}">
+    <div toastContainer></div>
+    <!-- <div class="col text-muted nav-placeholder" *ngIf="navPlaceholder">
+      <small>{{navPlaceholder}}</small>
+    </div> -->
+    <router-outlet></router-outlet>
+    <button type="button" class="btn btn-link scroll-top text-center" (click)="scrollTop()" *ngIf="isScrollTopVisible"><i class="fas fa-chevron-up"></i><br>Scroll top</button>
   </div>
 </div>
+<!-- TODO fix getcurrentuser -->
+<!-- <div class="loader" *ngIf="!isCurrentUserAvailable && isLoggedIn">
+<div class="loader" *ngIf="!currentStaffMember && isLoggedIn">
+  <video autoplay loop>
+    <source src="assets/Boy-21827.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+  </video>
+  <div class="loader-message" data-text="Logging in ...">
+    Logging in ...
+  </div>
+</div> -->

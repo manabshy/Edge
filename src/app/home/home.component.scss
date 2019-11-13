@@ -1,0 +1,102 @@
+@import "../../style/bootstrap-overrides";
+
+@import "../../../node_modules/bootstrap/scss/functions";
+@import "../../../node_modules/bootstrap/scss/variables";
+@import "../../../node_modules/bootstrap/scss/mixins";
+
+:host ::ng-deep .nav-pills {
+    @include fixed-bottom('sm');
+    @include media-breakpoint-down(sm){
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    .nav-item {
+        &:first-child {
+            margin-left: 0;
+        }
+        @include media-breakpoint-down(sm) {
+            margin: 0;
+        }  
+    }
+
+    .nav-link {
+        @include media-breakpoint-down(sm) {
+            text-align: center;
+            border-radius: 0;
+            border: none;
+        }  
+    }
+}
+
+
+:host ::ng-deep .nav {
+    .badge {
+        position: absolute;
+        top: 0;
+        right: 0;
+        transform: translate(100%, -100%);
+    }
+
+    .nav-label {
+        @include media-breakpoint-down(sm) {
+            display: block;
+            font-size: .8rem;
+        }
+        @include media-breakpoint-up(sm) {
+            margin-left: spacer(2);
+        }
+    }
+
+}
+
+.home-container {
+
+    @include media-breakpoint-down(md) {
+        min-height: calc(100vh - (#{$top-bar-height} + 70px));
+    }
+
+    
+    &:after {
+        content:none;
+        position: fixed;
+        top: 50%;
+        transform: translateY(-50%);
+        display: block;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: theme-color("dark");
+        opacity: 0.5;
+        color: color("white");
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        font-size: 30px;
+        padding: 3px 18px;
+        z-index: 1000;
+    }
+
+    &.nav-right {
+        &:after {
+            content:'\f054';
+            right: 10px;
+        }
+    }
+
+    &.nav-left {
+        &:after {
+            content:'\f053';
+            left: 10px;
+            padding: 3px 14px;
+        }
+    }
+}
+
+.w-50 {
+    @include media-breakpoint-down(lg){
+        width: 75%!important;
+    }
+    @include media-breakpoint-down(sm){
+        width: 100%!important;
+    }
+}
