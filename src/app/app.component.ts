@@ -11,6 +11,7 @@ import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
 import { EdgeServiceWorkerService } from './core/services/edge-service-worker.service';
 import { BaseComponent } from './core/models/base-component';
 import { InfoService } from './core/services/info.service';
+import { StorageMap } from '@ngx-pwa/local-storage';
 
 @Component({
   selector: 'app-root',
@@ -23,20 +24,21 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
   isFading = false;
   isCurrentUserAvailable = false;
   currentStaffMember: StaffMember;
-  @ViewChild('appContainer', { static: true }) appContainer : ElementRef;
+  listInfo: any;
+  @ViewChild('appContainer', { static: true }) appContainer: ElementRef;
   @ViewChild(ToastContainerDirective, { static: true }) toastContainer: ToastContainerDirective;
   appHeightObservable;
   //  get currentStaffMemberGetter(): StaffMember {
   //     return this.currentStaffMember;
   //   }
 
-    get isLoggedIn(): boolean {
-      return this.authService.isLoggedIn();
-    }
+  get isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
+  }
 
-    // get isLoadVisible(): boolean {
-    //   return !(!!this.currentStaffMember);
-    // }
+  // get isLoadVisible(): boolean {
+  //   return !(!!this.currentStaffMember);
+  // }
 
 
   constructor(private router: Router,
@@ -44,12 +46,13 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
     public authService: AuthService,
     protected sharedService: SharedService,
     private infoService: InfoService,
+    private storage: StorageMap,
     protected staffMemberService: StaffMemberService,
     private edgeServiceWorker: EdgeServiceWorkerService,
     private renderer: Renderer2,
     private toastr: ToastrService,
     private cdRef: ChangeDetectorRef) {
-      super();
+    super();
     /*  Track previous route for Breadcrumb component  */
 
     this.router.events.pipe(
@@ -60,41 +63,28 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
     ).subscribe((event: any[]) => {
       AppUtils.prevRouteBU = AppUtils.prevRoute || '';
       AppUtils.prevRoute = event[0].urlAfterRedirects;
-      let current = event[1].urlAfterRedirects
-      if(current.indexOf('login') < 0 && current.indexOf('auth-callback') < 0 && current !== "/") {
+      const current = event[1].urlAfterRedirects;
+      if (current.indexOf('login') < 0 && current.indexOf('auth-callback') < 0 && current !== '/') {
         localStorage.setItem('prev', event[1].urlAfterRedirects);
       }
-     
-      console.log('prev url',  AppUtils.prevRoute);
+
       this.isScrollTopVisible = false;
       this.isFading = true;
-      setTimeout(()=>{
+      setTimeout(() => {
         this.isFading = false;
-      }, 1200)
-      //window.scrollTo(0,0);
+      }, 1200);
+      // window.scrollTo(0,0);
     });
-    console.log('instance created')
+    console.log('instance created');
   }
 
   ngOnInit() {
     this.toastr.overlayContainer = this.toastContainer;
-    console.log('instance initiliased')
+    console.log('instance initiliased');
     if (this.isLoggedIn) {
-      this.staffMemberService.getCurrentStaffMember().pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
-        if (data) {
-          this.currentStaffMember = data;
-          this.isCurrentUserAvailable = true;
-          AppUtils.currentStaffMemberGlobal = data;
-          console.log('app component current user', data);
-        }
-      }, (error: WedgeError) => {
-        this.sharedService.showError(error);
-      });
+      this.getCurrentStaffMember();
 
-      this.infoService.getDropdownListInfo().pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
-        this.infoService.infoChanged(data);
-        console.log('app component list info', data);
-      });
+      this.getInfo();
     }
     this.appHeightObservable = new MutationObserver(() => {
       this.toggleScrollTop();
@@ -103,14 +93,13 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
 
 
     this.route.queryParams.subscribe(params => {
-      if(params['docTitle']) {
+      if (params['docTitle']) {
         this.sharedService.setTitle(params['docTitle']);
         AppUtils.navPlaceholder = params['docTitle'];
         AppUtils.navPlaceholder = AppUtils.navPlaceholder.substring(AppUtils.navPlaceholder.indexOf('|') + 1).trim();
       }
-    })
+    });
   }
-
 
   ngAfterViewChecked() {
 
@@ -138,7 +127,44 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
   }
 
   scrollTop() {
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
+  }
+
+  private getCurrentStaffMember() {
+    this.storage.get('currentUser').subscribe((staffMember: StaffMember) => {
+      if (staffMember) {
+        this.currentStaffMember = staffMember;
+        console.log('current user from storage here....', staffMember);
+      } else {
+        this.staffMemberService.getCurrentStaffMember().pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
+          if (data) {
+            this.currentStaffMember = data;
+            this.isCurrentUserAvailable = true;
+            AppUtils.currentStaffMemberGlobal = data;
+            console.log('app component current user from db', data);
+          }
+        }, (error: WedgeError) => {
+          this.sharedService.showError(error);
+        });
+      }
+    });
+  }
+
+  private getInfo() {
+    this.storage.get('info').subscribe(info => {
+      if (info) {
+        this.listInfo = info;
+        console.log('app info in from storage....', info);
+      } else {
+        this.infoService.getDropdownListInfo().pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
+          if (data) {
+            this.listInfo = data;
+            console.log('new sub i napp component list info', data);
+          }
+        });
+      }
+    });
+
   }
 
 }
