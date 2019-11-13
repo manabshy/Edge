@@ -388,8 +388,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
         const lastName = x.lastName ? x.lastName.toLowerCase() : '';
         const fullName = middleName ? `${firstName} ${middleName} ${lastName} ` : `${firstName} ${lastName} `;
         const sameName = fullName.toLowerCase().trim() === person.fullName.toLowerCase().trim();
-        const email = x.emailAddresses.filter(x => x === person.emailAddress);
-        const phone = x.phoneNumbers.filter(x => x === person.phoneNumber ? person.phoneNumber.replace(/\s+/g, '') : '');
+        const email = x.emailAddresses ? x.emailAddresses.filter(x => x === person.emailAddress) : [];
+        const phone = x.phoneNumbers ?
+                      x.phoneNumbers.filter(x => x === person.phoneNumber ? person.phoneNumber.replace(/\s+/g, '') : '') : [];
         const samePhone = phone[0] ? phone[0].toString() === person.phoneNumber.replace(/\s+/g, '') : false;
         const sameEmail = email[0] ? email[0].toLowerCase() === person.emailAddress : false;
         switch (true) {

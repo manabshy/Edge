@@ -57,7 +57,7 @@ export class PropertyDuplicateCheckerComponent implements OnInit, OnChanges {
   }
 
   private getFullMatches(matches: PropertyAutoComplete[]) {
-    const properties = matches.filter(x => x.ranking > 1000);
+    const properties = matches.filter(x => x.matchType === 'FullMatch');
     if (properties && properties.length) {
       this.isFullMatch = true;
     } else {

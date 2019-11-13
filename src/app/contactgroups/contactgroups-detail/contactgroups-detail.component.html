@@ -1,4 +1,4 @@
-<app-breadcrumb [title]="'P-'+searchedPersonDetails?.personId"></app-breadcrumb>
+<app-breadcrumb [title]="searchedPersonDetails?.personId ? 'P-'+searchedPersonDetails?.personId : ''"></app-breadcrumb>
 <div class="container">
   <div class="row page-title">
     <div class="col">

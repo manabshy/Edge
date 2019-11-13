@@ -28,7 +28,7 @@ export interface ContactGroup {
   companyAmlCompletedDate?: string;
   isAmlCompleted: boolean;
 }
-export const ContactGroupDetailsSubNav = ['notes', 'leads', 'instructions', 'offers', 'searches', 'lettings-managements', 'home-helper'];
+export const ContactGroupDetailsSubNav = ['notes', 'leads', 'instructions', 'offers', 'searches', 'lettings-managements', 'home-helpers'];
 // export const ContactGroupDetailsSubNav = ['notes','leads','searches','valuations', 'instructions', 'offers', 'tenancies', 'lettings-managements', 'home-managements'];
 
 export const ContactGroupDetailsSubNavItems: SubNavItem[] = ContactGroupDetailsSubNav.map(x => ({
@@ -153,6 +153,7 @@ export interface PeopleAutoCompleteResult {
   emailAddresses: string[];
   phoneNumbers: string[];
   matchScore: number;
+  matchType: string;
   ranking: number;
 }
 

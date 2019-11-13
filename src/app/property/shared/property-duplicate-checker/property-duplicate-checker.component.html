@@ -6,20 +6,20 @@
 <div class="off-canvas" [hidden]="!isDuplicateFound && !showMatches" (click)="isDuplicateFound = false; showMatches = false;">
   <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
     <h4 class="page-title text-left pt-3">
-      Property duplicates
+      Quick finder
       <button type="button" class="close mr-2" aria-label="Close" (click)="isDuplicateFound = false; showMatches = false;">
         <span aria-hidden="true">&times;</span>
       </button>
     </h4>
-    <div class="alert alert-danger">There is already a property with this address. <a href (click)="$event.preventDefault(); isDuplicateFound = false; showMatches = false;">Search again </a>or select it from the list.</div>
+    <div class="alert alert-info" *ngIf="isFullMatch">There is already a property with this address. Select it from the list or <a href (click)="$event.preventDefault(); isDuplicateFound = false; showMatches = false;">search again</a>.</div>
     <app-subnav>
       <ng-container *ngIf="potentialDuplicates">
         <app-subnav-item *ngFor="let foundProperty of potentialDuplicates" (click)="selectProperty(foundProperty?.propertyId)">
           <div class="row">
             <div class="col-12 mb-2" *ngIf="foundProperty?.ranking">
               <small class="text-muted mr-2">PR-{{foundProperty?.propertyId}}</small>
-              <span class="badge badge-pill badge-success" *ngIf="foundProperty?.ranking > 1000">Full Match</span>
-              <span class="badge badge-pill badge-warning" *ngIf="foundProperty?.ranking < 1000">Good Match</span>
+              <span class="badge badge-pill badge-success" *ngIf="foundProperty?.matchType == 'FullMatch'">Full Match</span>
+              <span class="badge badge-pill badge-warning" *ngIf="foundProperty?.matchType == 'PartMatch'">Part Match</span>
             </div>
             <div class="col-sm">
               {{foundProperty?.propertyAddress}}

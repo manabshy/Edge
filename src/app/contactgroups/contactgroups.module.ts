@@ -17,7 +17,6 @@ import { ContactgroupsDetailInstructionsComponent } from './contactgroups-detail
 import { ContactgroupsDetailOffersComponent } from './contactgroups-detail-offers/contactgroups-detail-offers.component';
 import { ContactgroupsDetailTenanciesComponent } from './contactgroups-detail-tenancies/contactgroups-detail-tenancies.component';
 import { ContactgroupsDetaillettingsManagementsComponent } from './contactgroups-detail-lettings-managements/contactgroups-detail-lettings-managements.component';
-import { ContactgroupsDetailHomeManagementsComponent } from './contactgroups-detail-home-managements/contactgroups-detail-home-managements.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { ContactGroupsComponent } from './contactgroups.component';
 import { ContactgroupsDetailHomeHelperComponent } from './contactgroups-detail-home-helper/contactgroups-detail-home-helper.component';
@@ -38,7 +37,6 @@ import { ContactgroupsDetailHomeHelperComponent } from './contactgroups-detail-h
     ContactgroupsDetailOffersComponent,
     ContactgroupsDetailTenanciesComponent,
     ContactgroupsDetaillettingsManagementsComponent,
-    ContactgroupsDetailHomeManagementsComponent,
     ContactgroupsDetailHomeHelperComponent],
   imports: [
     CommonModule,

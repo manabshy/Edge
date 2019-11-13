@@ -51,9 +51,7 @@ export class HomeComponent implements OnInit {
       console.log('current user info here....', data)
     });
 
-    this.storage.get('info').subscribe(data => {
-      console.log('app info in home component here....', data);
-    });
+    
     this.route.queryParams.subscribe(params =>  {
       if (params['selectedTab']) {
         AppUtils.homeSelectedTab = params['selectedTab'];
