@@ -1,8 +1,7 @@
-<!-- <app-breadcrumb></app-breadcrumb> -->
 <div class="container">
   <div class="row page-title">
     <div class="col">
-      <!-- <h5>Leads register</h5> -->
+      <h4 class="m-0">Leads register</h4>
     </div>
     <div class="col-auto">
       <div class="btn-group" dropdown placement="bottom right">
@@ -86,13 +85,16 @@
                 <span class="badge badge-pill badge-info">{{lead?.leadType}}</span>
               </div>
               <div class="col">
-                <small>{{lead.owner}}</small>
+                <small>{{lead.person}}</small>
               </div>
               <div class="col">
                 <small>{{lead.createdDate | date: 'dd/MM/yyyy hh:mm'}}</small>
               </div>
               <div class="col text-muted">
-                <small>{{lead.person}}</small>
+                <small>
+                  <b>Owner</b><br>
+                  {{lead.owner}}
+                </small>
               </div>
             </div>
           </div>
