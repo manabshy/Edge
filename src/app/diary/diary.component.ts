@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { DiaryEvent, ViewMode, BasicEventRequest, Period } from './shared/diary';
+import { DiaryEvent, ViewMode, BasicEventRequest, Period, Day } from './shared/diary';
 import { AppUtils } from '../core/shared/utils';
 import * as dayjs from 'dayjs';
+import { format, isDate } from 'date-fns';
 import { SharedService } from '../core/services/shared.service';
 import { PopoverDirective } from 'ngx-bootstrap/popover';
 import { TooltipDirective } from 'ngx-bootstrap/tooltip';
@@ -49,35 +50,32 @@ export class DiaryComponent implements OnInit, AfterViewInit {
     this.setToday();
     this.period = this.getPeriod();
     this.getDiaryEvents();
-    console.log('period here', this.today);
-    console.log('todays', this.today);
-    console.log('todays Month', this.todayMonth);
   }
 
   ngAfterViewInit() {
     this.popoverSubscribe();
   }
 
-  // getEvents(diaryEvents:DiaryEvent[]) {
+  getEvents(diaryEvents?: DiaryEvent[]) {
 
-  //   const events = [];
-  //   if(diaryEvents && diaryEvents.length) {
-  //     diaryEvents.forEach((event)=>{
-  //       event['type'] = event.eventType;
-  //       event['time'] = '00:00';
-  //       event['duration'] = Math.random() * Math.floor(6) * 2.085 + 2.085 + '%';
-  //       event['position'] = Math.random() * Math.floor(36) * 2.085 + '%';
-  //       event['title'] = event.eventType;
-  //       event['notes'] = event.notes;
-  //       event['color'] = event.eventColour;
-  //       events.push(event);
-  //       console.log('event',event )
-  //     })
-  //   }
-  //   console.log('events',events )
-  //   return events;
-  // }
-  getEvents() {
+    const events: DiaryEvent[] = []
+    if (diaryEvents && diaryEvents.length) {
+      diaryEvents.forEach((event) => {
+        // event['type'] = event.eventType;
+        event.startTime = format(event.startDateTime, 'HH:mm');
+        event.duration = event.totalHours * 2.085 + 2.085 + '%';
+        event.position = event.totalHours * 2.085 + '%';
+        // event['title'] = event.eventType;
+        // event['notes'] = event.notes;
+        // event['color'] = event.eventColour;
+        events.push(event);
+        console.log('event', event)
+      })
+    }
+    console.log('events', events)
+    return events;
+  }
+  getEventsOld() {
     const events = [];
     const counter = Math.floor(Math.random() * Math.floor(3) + 1);
 
@@ -110,8 +108,10 @@ export class DiaryComponent implements OnInit, AfterViewInit {
       } as BasicEventRequest;
     }
     this.diaryEventService.getDiaryEvents(request).subscribe(data => {
-      this.diaryEvents = data;
-      // this.getEvents(data);
+      if (data) {
+        this.diaryEvents = data;
+        this.getEvents(data);
+      }
       console.log('my diary here', data);
     });
   }
@@ -168,24 +168,44 @@ export class DiaryComponent implements OnInit, AfterViewInit {
     }
   }
 
+  // makeDayObjOld(date) {
+  //   const dayObj = new Object();
+  //   const day = date;
+
+  //   dayObj['date'] = day;
+
+  //   if (day.year() === this.todayYear) {
+  //     dayObj['label'] = day.format('ddd D MMM');
+  //   } else {
+  //     dayObj['label'] = day.format('ddd D MMM YYYY');
+  //   }
+  //   dayObj['isWeekend'] = day.day() === 0;
+  //   dayObj['isToday'] = day.isSame(this.today, 'day');
+  //   dayObj['spanClass'] = 'span-' + day.day();
+  //   dayObj['events'] = this.getEvents();
+  //   dayObj['isClickable'] = day.isSame(this.today, 'day') || day.isAfter(this.today, 'day');
+
+  //   return dayObj;
+  // }
+
   makeDayObj(date) {
-    const dayObj = new Object();
+    const eventDay = {} as Day;
     const day = date;
 
-    dayObj['date'] = day;
+    eventDay.date = day;
 
     if (day.year() === this.todayYear) {
-      dayObj['label'] = day.format('ddd D MMM');
+      eventDay.label = day.format('ddd D MMM');
     } else {
-      dayObj['label'] = day.format('ddd D MMM YYYY');
+      eventDay.label = day.format('ddd D MMM YYYY');
     }
-    dayObj['isWeekend'] = day.day() === 0;
-    dayObj['isToday'] = day.isSame(this.today, 'day');
-    dayObj['spanClass'] = 'span-' + day.day();
-    dayObj['events'] = this.getEvents();
-    dayObj['isClickable'] = day.isSame(this.today, 'day') || day.isAfter(this.today, 'day');
+    eventDay.isWeekend = day.day() === 0;
+    eventDay.isToday = day.isSame(this.today, 'day');
+    eventDay.spanClass = 'span-' + day.day();
+    eventDay.events = this.getEvents(this.diaryEvents);
+    eventDay.isClickable = day.isSame(this.today, 'day') || day.isAfter(this.today, 'day');
 
-    return dayObj;
+    return eventDay;
   }
 
   getDaysInMonth(month, year) {
@@ -225,6 +245,7 @@ export class DiaryComponent implements OnInit, AfterViewInit {
       week.push(
         this.makeDayObj(firstDate)
       );
+      console.log('days here', this.makeDayObj(firstDate));
     }
 
     this.sharedService.scrollCurrentHourIntoView();
@@ -240,7 +261,7 @@ export class DiaryComponent implements OnInit, AfterViewInit {
     this.viewedDate = curr;
     this.viewedMonth = curr.month();
     this.viewedYear = curr.year();
-
+    console.log('today here...', this.makeDayObj(curr));
     this.sharedService.scrollCurrentHourIntoView();
 
     return day;
@@ -372,9 +393,15 @@ export class DiaryComponent implements OnInit, AfterViewInit {
     const endDate = this.days[this.days.length - 1].date;
     const period = {
       startDate: startDate.format('YYYY-MM-DD'),
-      endDate: endDate.format('YYYY-MM-DD')
-      // startDateTime: startDate.format('DD-MM-YYYYTHH:mm:ss.sssZ'),
-      // endDateTime: endDate.format('DD-MM-YYYYTHH:mm:ss.sssZ')
+      endDate: endDate.format('YYYY-MM-DD'),
+    } as Period;
+    return period;
+  }
+
+  private getStartAndEndTime(startDate, endDate) {
+    const period = {
+      startTime: startDate.format('HH:mm:ss'),
+      endTime: endDate.format('HH:mm:ss'),
     } as Period;
     return period;
   }

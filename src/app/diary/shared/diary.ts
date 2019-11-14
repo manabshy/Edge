@@ -9,9 +9,13 @@ export interface DiaryEvent {
   diaryEventId: number;
   startDateTime: Date;
   endDateTime: Date;
+  startTime: string;
   eventType: string;
   eventColour: string;
   notes: string;
+  totalHours: number;
+  duration: string;
+  position: string;
   allDay: boolean;
   isCancelled: boolean;
   isConfirmed: boolean;
@@ -21,7 +25,19 @@ export interface DiaryEvent {
 export interface Period {
   startDate: string;
   endDate: string;
+  startTime: string;
+  endTime: string;
 }
+export interface Day {
+  date: any;
+  label: string;
+  spanClass: string;
+  events: DiaryEvent[];
+  isWeekend: boolean;
+  isToday: boolean;
+  isClickable: boolean;
+}
+
 export interface CallbackReminder {
   diaryEventId: number;
   notes: string;
