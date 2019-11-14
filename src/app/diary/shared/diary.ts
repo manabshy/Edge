@@ -18,6 +18,10 @@ export interface DiaryEvent {
   isHighImportance: boolean;
   isOtherAgentViewing: boolean;
 }
+export interface Period {
+  startDate: string;
+  endDate: string;
+}
 export interface CallbackReminder {
   diaryEventId: number;
   notes: string;
@@ -31,6 +35,11 @@ export interface CallbackReminder {
   isCancelled: boolean;
   staffMembers: Staff[];
   smsMessage: string;
+}
+export interface BasicEventRequest {
+  staffMemberId?: number;
+  startDate?: Date | string | number;
+  endDate?: Date | string | number;
 }
 export interface EventQuery {
   staffMembers: number[];

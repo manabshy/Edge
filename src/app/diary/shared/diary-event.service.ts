@@ -4,7 +4,7 @@ import { map, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encoder-helper';
-import { DiaryEvent } from './diary';
+import { DiaryEvent, BasicEventRequest } from './diary';
 
 @Injectable({
   providedIn: 'root'
@@ -13,13 +13,13 @@ export class DiaryEventService {
 
   constructor(private http: HttpClient) { }
 
-  getDiaryEvents(startDate: string, endDate: string, staffMemberId?: number): Observable<DiaryEvent[]> {
+  getDiaryEvents(request: BasicEventRequest): Observable<DiaryEvent[]> {
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
       fromObject: {
-        startDate: startDate.toString(),
-        endDate: endDate.toString(),
-        staffMemberId: staffMemberId ? staffMemberId.toString(): ''
+        startDate: request.startDate.toString(),
+        endDate: request.endDate.toString(),
+        staffMemberId: request.staffMemberId ? request.staffMemberId.toString() : ''
       }
     });
     const url = `${AppConstants.baseDiaryEventUrl}`;

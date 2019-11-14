@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { DiaryEvent, ViewMode } from './shared/diary';
+import { DiaryEvent, ViewMode, BasicEventRequest, Period } from './shared/diary';
 import { AppUtils } from '../core/shared/utils';
 import * as dayjs from 'dayjs';
 import { SharedService } from '../core/services/shared.service';
@@ -18,6 +18,7 @@ export class DiaryComponent implements OnInit, AfterViewInit {
   public diaryEventForm: FormGroup;
   diaryEvent: DiaryEvent;
   diaryEvents: DiaryEvent[];
+  period = {} as Period;
   days: any[];
   today = dayjs();
   todayMonth = this.today.month();
@@ -46,8 +47,11 @@ export class DiaryComponent implements OnInit, AfterViewInit {
     this.setupForm();
     this.setDropup();
     this.setToday();
+    this.period = this.getPeriod();
     this.getDiaryEvents();
-    console.log('working week', ViewMode.workingWeek)
+    console.log('period here', this.today);
+    console.log('todays', this.today);
+    console.log('todays Month', this.todayMonth);
   }
 
   ngAfterViewInit() {
@@ -96,10 +100,19 @@ export class DiaryComponent implements OnInit, AfterViewInit {
   }
 
   getDiaryEvents() {
-    this.diaryEventService.getDiaryEvents('2018-10-01', '2019-11-08').subscribe(data => {
+    console.log('period here..', this.period);
+    let request;
+    if (this.period) {
+      request = {
+        startDate: this.period.startDate || '2018-10-01',
+        endDate: this.period.endDate || '2019-11-13',
+        staffMemberId: 2523
+      } as BasicEventRequest;
+    }
+    this.diaryEventService.getDiaryEvents(request).subscribe(data => {
       this.diaryEvents = data;
       // this.getEvents(data);
-      console.log('my diary here', data)
+      console.log('my diary here', data);
     });
   }
   setupForm() {
@@ -161,7 +174,7 @@ export class DiaryComponent implements OnInit, AfterViewInit {
 
     dayObj['date'] = day;
 
-    if (day.year() == this.todayYear) {
+    if (day.year() === this.todayYear) {
       dayObj['label'] = day.format('ddd D MMM');
     } else {
       dayObj['label'] = day.format('ddd D MMM YYYY');
@@ -220,9 +233,9 @@ export class DiaryComponent implements OnInit, AfterViewInit {
   }
 
   getDay(date) {
-    let curr = date;
-    let day = new Array();
-    this.monthLabel = curr.format('MMM YYYY')
+    const curr = date;
+    const day = new Array();
+    this.monthLabel = curr.format('MMM YYYY');
     day.push(this.makeDayObj(curr));
     this.viewedDate = curr;
     this.viewedMonth = curr.month();
@@ -234,6 +247,7 @@ export class DiaryComponent implements OnInit, AfterViewInit {
   }
 
   prevMonth() {
+    this.period = this.getPeriod();
     switch (this.viewMode) {
       case 'month':
         if (this.viewedMonth === 0) {
@@ -241,20 +255,27 @@ export class DiaryComponent implements OnInit, AfterViewInit {
         } else {
           this.days = this.getDaysInMonth(this.viewedMonth - 1, this.viewedYear);
         }
+        this.getDiaryEvents();
+        console.log('prev months info here...', this.period);
         break;
       case 'day':
         this.days = this.getDay(this.viewedDate.subtract(1, 'day'));
+        this.getDiaryEvents();
+        console.log('prev days info here...', this.period);
         break;
       default:
         this.days = this.getDaysInWeek(this.viewedDate.subtract(7, 'day'));
+        this.getDiaryEvents();
+        console.log('prev weeks info here...', this.period);
     }
-    //window.scrollTo(0, 0);
+    // window.scrollTo(0, 0);
     setTimeout(() => {
       this.popoverSubscribe();
-    })
+    });
   }
 
   nextMonth() {
+    this.period = this.getPeriod();
     switch (this.viewMode) {
       case 'month':
         if (this.viewedMonth === 11) {
@@ -262,17 +283,23 @@ export class DiaryComponent implements OnInit, AfterViewInit {
         } else {
           this.days = this.getDaysInMonth(this.viewedMonth + 1, this.viewedYear);
         }
+        this.getDiaryEvents();
+        console.log('months info here...', this.period);
         break;
       case 'day':
         this.days = this.getDay(this.viewedDate.add(1, 'day'));
+        console.log('days info here...', this.period);
+        this.getDiaryEvents();
         break;
       default:
         this.days = this.getDaysInWeek(this.viewedDate.add(7, 'day'));
+        this.getDiaryEvents();
+        console.log('weeks info here...', this.period);
     }
-    //window.scrollTo(0, 0);
+    // window.scrollTo(0, 0);
     setTimeout(() => {
       this.popoverSubscribe();
-    })
+    });
   }
 
   setToday() {
@@ -292,10 +319,10 @@ export class DiaryComponent implements OnInit, AfterViewInit {
 
   changeView(mode?: any) {
     this.viewMode = mode;
+    console.log('view here', mode);
     if (window.innerWidth < 576) {
       if (this.viewMode !== 'day') {
         this.viewMode = 'month';
-
         this.sharedService.scrollTodayIntoView();
       }
     }
@@ -304,18 +331,27 @@ export class DiaryComponent implements OnInit, AfterViewInit {
       case 'month':
         this.days = this.getDaysInMonth(this.viewedMonth, this.viewedYear);
         this.setTodayLabel = 'This ' + this.viewMode;
+        this.period = this.getPeriod();
+        this.getDiaryEvents();
+        console.log('month', this.period);
         break;
       case 'day':
         this.days = this.getDay(this.viewedDate);
         this.setTodayLabel = 'Today';
+        this.period = this.getPeriod();
+        this.getDiaryEvents();
+        console.log('day', this.period);
         break;
       default:
         this.days = this.getDaysInWeek(this.viewedDate);
         this.setTodayLabel = 'This week';
+        this.period = this.getPeriod();
+        this.getDiaryEvents();
+        console.log('week', this.period);
     }
     setTimeout(() => {
       this.popoverSubscribe();
-    })
+    });
   }
 
   toggleSearch() {
@@ -331,7 +367,17 @@ export class DiaryComponent implements OnInit, AfterViewInit {
     return color;
   }
 
-
+  private getPeriod() {
+    const startDate = this.days[0].date;
+    const endDate = this.days[this.days.length - 1].date;
+    const period = {
+      startDate: startDate.format('YYYY-MM-DD'),
+      endDate: endDate.format('YYYY-MM-DD')
+      // startDateTime: startDate.format('DD-MM-YYYYTHH:mm:ss.sssZ'),
+      // endDateTime: endDate.format('DD-MM-YYYYTHH:mm:ss.sssZ')
+    } as Period;
+    return period;
+  }
 
 
 
