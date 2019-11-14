@@ -198,6 +198,7 @@
     right: spacer(1);
     left: spacer(1);
     overflow: hidden;
+    background: theme-color(dark);
 
     .month & {
         background-color: transparent!important;
@@ -212,6 +213,12 @@
         padding: spacer(1);
         @include border-radius(spacer(1));
         color: color("white");
+
+        &.all-day {
+            position: sticky;
+            top: 2.085%!important;
+            z-index: 50;
+        }
     }
 
     .color {
