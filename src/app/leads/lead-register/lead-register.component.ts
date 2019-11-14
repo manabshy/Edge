@@ -73,7 +73,7 @@ export class LeadRegisterComponent implements OnInit {
     console.log('clicked', lead)
     this.leadService.leadsChanged(lead);
     if (this.areLeadsAssignable) {
-      // event.preventDefault();
+      //event.preventDefault();
     }
   }
 
