@@ -32,10 +32,11 @@ export class MainmenuComponent implements OnInit {
     public staffMemberService: StaffMemberService) { }
 
   ngOnInit() {
-    this.staffMemberService.getCurrentStaffMember().subscribe(data => {
+    this.storage.get('currentUser').subscribe((data: StaffMember) => {
       if (data) {
         this.currentStaffMember = data;
       }
+      console.log('current user from storage in main menu....', data);
     });
 
     this.storage.get('impersonatedStaffMember').subscribe((staffMember: Impersonation) => {
@@ -45,6 +46,7 @@ export class MainmenuComponent implements OnInit {
         this.showImpersonateBanner(this.impersonatedStaffMember, true);
       }
     });
+
     this.staffMemberService.impersonatedStaffMember$.subscribe(data => {
       if (data) {
         this.impersonatedStaffMember = data;
@@ -56,7 +58,7 @@ export class MainmenuComponent implements OnInit {
 
   showImpersonateBanner(member: Impersonation, existing?: boolean) {
     if (!existing) {
-     if(this.impersonateToastr) {
+     if (this.impersonateToastr) {
         this.toastr.clear(this.impersonateToastr.toastId);
      }
     }
@@ -77,7 +79,7 @@ export class MainmenuComponent implements OnInit {
     if (!this.impersonatedStaffMember) {
       this.storage.delete('impersonatedStaffMember').subscribe();
     }
-    console.log('stop now', this.impersonatedStaffMember)
+    console.log('stop now', this.impersonatedStaffMember);
   }
 
   backClicked() {
