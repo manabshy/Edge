@@ -5,15 +5,21 @@ import { DiaryRoutingModule } from './diary-routing.module';
 import { AddDiaryEventComponent } from './add-diary-event/add-diary-event.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CoreModule } from '../core/core.module';
+import { CalendarComponent } from './calendar/calendar.component';
+import { CalendarHeaderComponent } from './shared/calendar-header.component';
+import { CalendarModule } from 'angular-calendar';
+import { calendar } from 'ngx-bootstrap/chronos/moment/calendar';
 
 @NgModule({
-  declarations: [AddDiaryEventComponent],
+  declarations: [AddDiaryEventComponent, CalendarComponent, CalendarHeaderComponent],
   imports: [
     CommonModule,
     CoreModule,
     DiaryRoutingModule,
     ReactiveFormsModule,
-    CoreModule
-  ]
+    CoreModule,
+    CalendarModule
+  ],
+  exports:[CalendarComponent]
 })
 export class DiaryModule { }

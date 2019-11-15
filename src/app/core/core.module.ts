@@ -50,6 +50,9 @@ import { SubnavComponent } from './subnav/subnav.component';
 import { OrderModule } from 'ngx-order-pipe';
 import { ToastrModule, ToastContainerModule } from 'ngx-toastr';
 import { AgmCoreModule } from '@agm/core';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+
 
 //various
 import { AutocompleteOffDirective } from './shared/autocomplete-off.directive';
@@ -154,6 +157,10 @@ import { PersonDetailsComponent } from './shared/person-details/person-details.c
     ToastrModule.forRoot({ positionClass: 'inline', enableHtml: true }),
     ToastContainerModule,
     CarouselModule.forRoot(),
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory
+    }),
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyC1Hv_vNkUxvvRibyjPbfgNhrTNi30jNtQ'
     })

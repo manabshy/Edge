@@ -33,25 +33,13 @@ export class HomeComponent implements OnInit {
               private route: ActivatedRoute) { }
 
   ngOnInit() {
-    // if (AppUtils.currentStaffMemberGlobal) {
-    //   this.currentStaffMember = AppUtils.currentStaffMemberGlobal;
-    //   console.log('global staff member in home in ngOnInit', this.currentStaffMember);
-    // } else {
-    //   this.staffMemberService.getCurrentStaffMember().subscribe(data => {
-    //   this.currentStaffMember = data;
-    //     console.log('global staff member in home from new sub', this.currentStaffMember);
-    //   }, (error: WedgeError) => {
-    //     this.sharedService.showError(error);
-    //   });
-    // }
 
-    // current user here...
     this.storage.get('currentUser').subscribe((data: StaffMember) => {
       this.currentStaffMember = data;
-      console.log('current user info here....', data)
+      console.log('current user info here....', data);
     });
 
-    
+
     this.route.queryParams.subscribe(params =>  {
       if (params['selectedTab']) {
         AppUtils.homeSelectedTab = params['selectedTab'];

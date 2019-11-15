@@ -27,6 +27,7 @@
     "@ngx-pwa/local-storage": "^8.2.3",
     "@types/google-libphonenumber": "^7.4.17",
     "adal-angular4": "^4.0.9",
+    "angular-calendar": "^0.28.0",
     "bootstrap": "^4.3.1",
     "core-js": "^2.5.4",
     "date-fns": "^1.30.1",

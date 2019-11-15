@@ -14,6 +14,9 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 //toastr
 @import '~ngx-toastr/toastr-bs4-alert';
 
+/* new calender lib css - angular-cli file: src/styles.css */
+ @import "../node_modules/angular-calendar/css/angular-calendar.css";
+
 //partials
 @import "style/partials/layout-overrides";
 @import "style/partials/alerts";
