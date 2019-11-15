@@ -69,12 +69,11 @@ export class CalendarComponent implements OnInit {
         tap(data => { this.diaryEvents = data, console.log('calender events', data); }),
         map(result => {
           return result.map(diary => {
-            const title = diary.notes;
-            const start = new Date(
-              diary.startDateTime
-            );
+            const title = `${diary.eventType} - ${diary.notes}`;
+            const start = new Date(diary.startDateTime);
             const allDay = diary.allDay;
-            return { title, start, allDay } as CalendarEvent;
+            const meta = diary;
+            return { title, start, allDay, meta } as CalendarEvent;
           });
         }),
       );
