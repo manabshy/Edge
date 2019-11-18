@@ -1,3 +1,101 @@
-<p>
-  company-detail works!
-</p>
+<app-breadcrumb [title]="companyDetails?.companyId ? 'P-'+companyDetails?.companyId : ''"></app-breadcrumb>
+<div class="container">
+  <div class="row page-title">
+    <div class="col">
+      <h4 class="mb-0">Company</h4>
+    </div>
+    <div class="col-auto">
+      <div class="btn-group" dropdown placement="bottom right">
+        <button id="actionsToggle" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
+          aria-controls="actionsList">
+          Actions <span class="caret"></span>
+        </button>
+        <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+          aria-labelledby="actionsToggle">
+          <li role="menuitem" *ngIf="companyDetails">
+            <a class="dropdown-item"
+              [routerLink]="['edit']" >
+              <i class="fas fa-edit fa-fw mr-2"></i> Edit Company
+            </a>
+          </li>
+          <li role="menuitem" *ngIf="companyDetails">
+            <a class="dropdown-item"
+              (click)="createNewCompanyOrContact(); $event.stopPropagation()">
+              <i class="fas fa-users"></i><i class="fas fa-plus fa-xs align-text-top"></i> New Company
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="row align-items-start">
+    <div class="col-xl-8">
+      <h5>Detail</h5>
+      <app-company-info [companyDetails]="companyDetails"></app-company-info>
+      <div class="row mb-3">
+        <div class="col-12">
+          <h5>Company contacts</h5>
+          <app-subnav>
+            <div class="list-group-item" *ngIf="!companyContacts">
+              <div class="text-center">
+                <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading company contacts...
+              </div>
+            </div>
+            <app-subnav-item *ngFor="let companyContact of companyContacts"
+              [navLink]="'people/'+companyContact.contactGroupId" [params]="{docTitle: 'Contact Group | '+companyDetails?.addressee}">
+              <i class="fas fa-briefcase mr-2 fa-fw" *ngIf="companyContact?.isCompany; else peopleIcon"></i>
+              <ng-template #peopleIcon>
+                <i class="fas fa-users mr-2 fa-fw"></i>
+              </ng-template>
+              <span class="d-inline-block mr-2 align-top">
+                <ng-container
+                  *ngFor="let contactPerson of companyContact.contactPeople; last as isLast; first as isFirst">
+                  <br class="d-sm-none" *ngIf="!isFirst" />
+                  <ng-container *ngIf="contactPerson">
+                    <a [routerLink]="['../../../detail', contactPerson.personId ]"
+                      (click)="$event.stopPropagation();">{{contactPerson.addressee}}</a>
+                  </ng-container>
+                  <ng-container *ngIf="!isLast">, </ng-container>
+                </ng-container>
+                <ng-container *ngIf="companyContact?.isCompany">
+                  <br class="d-sm-none" /><span
+                    class="badge badge-pill badge-info">{{companyContact?.companyName}}</span>
+                </ng-container>
+              </span>
+            </app-subnav-item>
+            <a class="list-group-item list-group-item-action text-center py-4"
+              (click)="createNewCompanyOrContact('newContact'); $event.stopPropagation()" *ngIf="companyDetails">
+              <span class="btn-link">
+                <i class="fas fa-users"></i><i class="fas fa-plus fa-xs align-text-top"></i> New Company Contact
+              </span>
+            </a>
+          </app-subnav>
+
+        </div>
+      </div>
+    </div>
+    <!-- <div class="col-xl-4 aside sticky-top">
+      <div class="mb-3">
+        <h5>Info</h5>
+        <app-subnav>
+          <app-subnav-item *ngFor="let item of subNav"
+            [navLink]="item?.link" [params]="{docTitle: item?.label+' | '+companyDetails?.addressee}">
+            {{item?.label}}
+            <ng-container *ngIf="summaryTotals; else loadingInfo">
+              <ng-container *ngIf="isObject(summaryTotals[item?.value]); else simpleValue">
+                <span class="badge badge-pill badge-success mr-1"> {{summaryTotals[item?.value]?.active}} </span>
+                <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value]?.total}}</span>
+              </ng-container>
+              <ng-template #simpleValue>
+                <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value] || '0'}}</span>
+              </ng-template>
+            </ng-container>
+            <ng-template #loadingInfo>
+              <span class="badge badge-pill badge-primary"><i class="fas fa-spinner fa-pulse d-inline-block"></i></span>
+            </ng-template>
+          </app-subnav-item>
+        </app-subnav>
+      </div>
+    </div> -->
+  </div>
+</div>

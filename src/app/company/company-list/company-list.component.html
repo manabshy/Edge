@@ -3,8 +3,14 @@
     [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"
     (scrolled)="onScrollDown()">
   </div>
-  <a [routerLink]="['detail', company.companyId, 'edit' ]" class="list-group-item list-group-item-action pb-2"
+  <a [routerLink]="['detail', company.companyId ]" class="list-group-item list-group-item-action v-o-h-container"
     *ngFor="let company of companies; let i = index;">
+    <div class="row mb-1">
+      <div class="col-auto text-right">
+        <a class="v-o-h" [routerLink]="['detail',  company.companyId, 'edit' ]"><i class="fas fa-edit"></i> Edit</a>
+        <a class="d-xl-none" [routerLink]="['detail',  company.companyId ]">View <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
     <div class="row">
       <div class="col text-truncate">
         <div class="row">

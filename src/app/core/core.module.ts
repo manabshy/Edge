@@ -64,6 +64,7 @@ import { CustomReuseStrategy } from './share/custom-reuse-strategy';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { BracketsNewLinePipe } from './shared/brackets-new-line.pipe';
 import { PersonDetailsComponent } from './shared/person-details/person-details.component';
+import { CompanyInfoComponent } from './shared/company-info/company-info.component';
 
 @NgModule({
   declarations: [
@@ -88,7 +89,8 @@ import { PersonDetailsComponent } from './shared/person-details/person-details.c
     SubnavComponent,
     SmsModalComponent,
     BracketsNewLinePipe,
-    PersonDetailsComponent],
+    PersonDetailsComponent,
+    CompanyInfoComponent],
   exports: [
     RoundingPipe,
     TruncatingPipe,
@@ -113,6 +115,7 @@ import { PersonDetailsComponent } from './shared/person-details/person-details.c
     SubnavComponent,
     SubnavItemComponent,
     PersonDetailsComponent,
+    CompanyInfoComponent,
     RouterModule,
     // BrowserAnimationsModule,
     CollapseModule,
