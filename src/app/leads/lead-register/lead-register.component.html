@@ -32,7 +32,7 @@
       </div>
       <div class="col-sm form-group">
         <label for="owner">Owner</label>
-        <app-staffmember-finder></app-staffmember-finder>
+        <app-staffmember-finder (ownerChanged) = "onOwnerChanged($event)"></app-staffmember-finder>
       </div>
       <div class="col-sm form-group">
         <label for="office">Office</label>
@@ -65,7 +65,7 @@
     <div class="list-group mb-3">
       <!-- <a [routerLink]="areLeadsAssignable ? null : ['edit', lead?.leadId]" (click)="selectLead()" -->
       <a [routerLink]="areLeadsAssignable ? null : ['edit', lead?.leadId]" (click)="selectLead(lead)"
-        class="list-group-item list-group-item-action" *ngFor="let lead of leads; let i = index;">
+        class="list-group-item list-group-item-action" *ngFor="let lead of filteredLeads; let i = index;">
         <div class="row align-items-center">
           <div class="col-auto" *ngIf="areLeadsAssignable">
             <div class="custom-control custom-checkbox" (click)="$event.stopPropagation()">

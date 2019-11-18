@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
 import { tap, catchError, distinctUntilChanged, debounceTime, switchMap, map } from 'rxjs/operators';
 import { Observable, EMPTY } from 'rxjs';
 import { StaffMember } from 'src/app/core/models/staff-member';
 import { AppUtils } from 'src/app/core/shared/utils';
+import { FormGroup, FormBuilder } from '@angular/forms';
+
+
 
 @Component({
   selector: 'app-staffmember-finder',
@@ -12,6 +15,7 @@ import { AppUtils } from 'src/app/core/shared/utils';
 })
 export class StaffmemberFinderComponent implements OnInit {
 
+  @Output() ownerChanged = new EventEmitter();
   suggestions: (text$: Observable<any>) => Observable<any>;
   suggestedTerm: any;
   searchTerm = '';
@@ -19,8 +23,11 @@ export class StaffmemberFinderComponent implements OnInit {
   storage: any;
   staffMembers: StaffMember[];
   formatter = (x: { fullName: string }) => x.fullName;
+  selectedOwner: StaffMember;
+  ownerForm: FormGroup;
 
-  constructor(private staffMemberService: StaffMemberService) { }
+
+  constructor(private staffMemberService: StaffMemberService, private fb: FormBuilder) { }
 
 
   ngOnInit() {
@@ -31,10 +38,30 @@ export class StaffmemberFinderComponent implements OnInit {
         distinctUntilChanged(),
         switchMap((term) =>
           this.staffMemberService.getStaffMemberSuggestions(term).pipe(
-            tap(data => console.log('names 1', data)),
             catchError(() => {
               return EMPTY;
             }))));
+
+    this.ownerForm = this.fb.group({
+      ownerId: ''
+    });
+
+    this.ownerForm.patchValue({
+      ownerId: this.selectedOwner
+    });
+
+
+    this.onChanges();
+
+  }
+
+  onChanges(): void {
+    this.ownerForm.valueChanges.subscribe(val => {
+      console.log('changed owner form group:', val);
+    });
+
+    console.log('Selected Owner:', this.selectedOwner);
+
   }
 
   inputFormatBandListValue(value: any) {
@@ -55,11 +82,22 @@ export class StaffmemberFinderComponent implements OnInit {
     AppUtils.searchTerm = this.searchTerm;
     console.log('search term:', this.searchTerm);
 
+    if (this.selectedOwner == null) {
+      console.log('selected owner is cleared');
+    }
+    else{
+      console.log(this.selectedOwner);
+    }
+
   }
 
-  selectedSuggestion(event) {
-    console.log(event.item);
-
+  selectedSuggestion(event: any) {
+    this.ownerForm.patchValue({
+      ownerId: this.selectedOwner
+    });
+    console.log('event raised', event);
+    this.ownerChanged.emit(event);
   }
+
 
 }

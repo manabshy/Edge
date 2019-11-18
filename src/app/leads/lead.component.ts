@@ -5,7 +5,9 @@ import { StaffMember } from '../core/models/staff-member';
 import { getLocaleDayNames } from '@angular/common';
 import { Lead } from './shared/lead';
 import { InfoDetail } from '../core/services/info.service';
+import * as _ from 'lodash';
 
+const PAGE_SIZE = 20;
 @Component({
   selector: 'app-lead',
   templateUrl: './lead.component.html',
@@ -15,7 +17,10 @@ export class LeadComponent implements OnInit {
 
   currentStaffMember: StaffMember;
   leads: Lead[];
+  filteredLeads: Lead[];
   staffMembers: StaffMember[];
+  page = 1;
+  bottomReached = false;
 
   constructor(private leadService: LeadsService, private staffMemberService: StaffMemberService) { }
 
@@ -25,16 +30,39 @@ export class LeadComponent implements OnInit {
     this.staffMemberService.getCurrentStaffMember().subscribe(data => {
       if (data) {
         this.currentStaffMember = data;
-        this.getLeads();
+        this.bottomReached = false;
+
+        this.getLeads(this.page);
+      }
+    });
+
+    // page changes here
+    this.leadService.pageChanges$.subscribe(newPageNumber => {
+      if (newPageNumber) {
+        this.page = newPageNumber;
+        this.getLeads(this.page);
+        console.log('end of page', this.page);
       }
     });
 
     this.getAllStaffmembers();
   }
 
-  getLeads() {
-    this.leadService.getLeads(this.currentStaffMember.staffMemberId).subscribe(result => {
-      this.leads = result;
+  getLeads(page: number) {
+    this.leadService.getLeads(this.currentStaffMember.staffMemberId, PAGE_SIZE, page).subscribe(result => {
+      //this.leads = this.leads.concat(result);
+      //this.filteredLeads = this.filteredLeads.concat(result);
+      // if (this.leads != null) {
+      //   this.leads.push(result);
+      //   this.filteredLeads.push(result);
+      // }
+      // else{
+         this.leads = result;
+         //this.filteredLeads = result;
+      // }
+     //.this.leads = _.concat(this.leads, result);
+      //console.log(result);
+      //this.filteredLeads = _.concat(this.filteredLeads, result);
     }, error => {
       this.leads = [];
     });

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Lead } from './lead';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 import { AppConstants } from 'src/app/core/shared/app-constants';
+import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encoder-helper';
 
 @Injectable({
   providedIn: 'root'
@@ -11,12 +12,19 @@ import { AppConstants } from 'src/app/core/shared/app-constants';
 export class LeadsService {
 
   private leadsChangeSubject = new BehaviorSubject<Lead | null>(null);
+  private pageChangeSubject = new Subject<number | null>();
+
   leadsChanges$ = this.leadsChangeSubject.asObservable();
+  pageChanges$ = this.pageChangeSubject.asObservable();
 
   constructor(private http: HttpClient) { }
 
   leadsChanged(lead: Lead) {
     this.leadsChangeSubject.next(lead);
+  }
+
+  pageNumberChanged(result: number) {
+    this.pageChangeSubject.next(result);
   }
 
   addLead(lead: Lead): Observable<any> {
@@ -42,10 +50,26 @@ export class LeadsService {
     //tap(data => console.log('result', JSON.stringify(data))));
   }
 
-  getLeads(staffMemberId: number): Observable<any> {
-    const url = `${AppConstants.baseLeadsUrl}/owner/${staffMemberId}`;
+  getLeads(staffMemberId: number, pageSize?: number, page?: number): Observable<any> {
+    if (!page || +page === 0) {
+      page = 1;
+    }
+    if (pageSize == null) {
+      pageSize = 10;
+    }
 
-    return this.http.get<any>(url).pipe(
+    const options = new HttpParams({
+      encoder: new CustomQueryEncoderHelper,
+      fromObject: {
+        staffMemberId: staffMemberId.toString(),
+        pageSize: pageSize.toString(),
+        page: page.toString()
+      }
+    });
+
+    const url = `${AppConstants.baseLeadsUrl}/owner`;
+
+    return this.http.get<any>(url, { params: options }).pipe(
       map(response => response.result),
       tap(data => console.log('result', JSON.stringify(data))));
   }

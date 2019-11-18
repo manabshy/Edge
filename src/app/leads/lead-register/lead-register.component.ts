@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { LeadsService } from '../shared/leads.service';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
 import { Lead } from '../shared/lead';
@@ -8,14 +8,20 @@ import { InfoDetail } from 'src/app/core/services/info.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { OfficeService } from 'src/app/core/services/office.service';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { ControlPosition } from '@agm/core/services/google-maps-types';
 
 @Component({
   selector: 'app-lead-register',
   templateUrl: '../lead-register/lead-register.component.html',
   styleUrls: ['../lead-register/lead-register.component.scss']
 })
-export class LeadRegisterComponent implements OnInit {
+export class LeadRegisterComponent implements OnInit, OnChanges {
   @Input() leads: Lead[];
+  // @Input() filteredLeads: Lead[];
+  @Input() searchTerm: string;
+  @Input() pageNumber: number;
+  @Input() bottomReached: boolean;
   areLeadsAssignable = false;
   currentStaffMember: StaffMember;
   listInfo: any;
@@ -23,6 +29,10 @@ export class LeadRegisterComponent implements OnInit {
   leadRegisterForm: FormGroup;
   staffMembers: StaffMember[];
   offices: Office[];
+  page: number;
+  groupsLength: number;
+  filteredLeads: Lead[];
+
 
   constructor(private leadService: LeadsService,
     private staffMemberService: StaffMemberService,
@@ -53,10 +63,11 @@ export class LeadRegisterComponent implements OnInit {
     // Offices
     this.officeService.getOffices().subscribe(
       data => {
-      this.offices = data;
-        console.log('offices', this.offices);
+        this.offices = data;
       }
     );
+
+    this.onChanges();
   }
 
 
@@ -96,6 +107,77 @@ export class LeadRegisterComponent implements OnInit {
       dateFrom: [''],
       dateTo: ['']
     });
+  }
+
+  onChanges(): void {
+    this.leadRegisterForm.valueChanges.subscribe(val => {
+      if (this.leadRegisterForm.controls['ownerId'].value !== '') {
+        this.filteredLeads = this.leads.filter(l => l.ownerId === this.leadRegisterForm.controls['ownerId'].value);
+      } else {
+        this.filteredLeads = this.leads;
+      }
+    });
+  }
+
+  onOwnerChanged(event: any) {
+    console.log(event);
+
+    if (event.item != null) {
+      this.leadRegisterForm.patchValue({
+        ownerId: event.item.staffMemberId
+      });
+
+      // this.filteredLeads = this.leads.filter(l => l.ownerId === event.item.staffMemberId);
+
+    } else {
+      console.log('reseting filter');
+      this.leadRegisterForm.patchValue({
+        ownerId: ''
+      });
+
+    }
+  }
+
+  ngOnChanges() {
+    console.log('leads', this.leads);
+    console.log('filtered leads', this.filteredLeads);
+    this.page = this.pageNumber;
+    if (this.leads) {
+      this.filteredLeads = this.leads;
+    }
+    if (this.groupsLength !== this.filteredLeads.length - 1) {
+      setTimeout(() => {
+        this.groupsLength = this.filteredLeads.length - 1;
+        this.itemIntoView(this.groupsLength);
+      });
+    }
+  }
+
+  itemIntoView(index: number) {
+    const items = document.querySelectorAll('.list-group-item');
+
+    let observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.intersectionRatio > 0) {
+          setTimeout(() => {
+            this.onWindowScroll();
+            observer.unobserve(entry.target);
+          });
+        }
+      });
+    });
+
+    if (index > 0) {
+      observer.observe(items[index]);
+    }
+  }
+
+  onWindowScroll() {
+    if (!this.bottomReached) {
+      this.page++;
+      this.leadService.pageNumberChanged(this.page);
+      console.log('bottom here...', this.page);
+    }
   }
 
 
