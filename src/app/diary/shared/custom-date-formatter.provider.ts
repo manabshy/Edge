@@ -18,6 +18,10 @@ export class CustomDateFormatter extends CalendarDateFormatter {
     return new DatePipe(locale).transform(date, 'EEE', locale);
   }
 
+  public weekViewColumnSubHeader({ date, locale }: DateFormatterParams): string {
+    return new DatePipe(locale).transform(date, 'd', locale);
+  }
+
   public dayViewHour({ date, locale }: DateFormatterParams): string {
     return new DatePipe(locale).transform(date, 'HH:mm', locale);
   }

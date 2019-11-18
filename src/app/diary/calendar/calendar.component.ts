@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CalendarEvent, CalendarDateFormatter, CalendarView } from 'angular-calendar';
+import { CalendarEvent, CalendarDateFormatter, CalendarView, CalendarWeekViewBeforeRenderEvent, CalendarDayViewBeforeRenderEvent } from 'angular-calendar';
 import {
   isSameMonth,
   isSameDay,
@@ -28,7 +28,7 @@ import { tap, map } from 'rxjs/operators';
   ]
 })
 export class CalendarComponent implements OnInit {
-  view: CalendarView = CalendarView.Month;
+  view: CalendarView = CalendarView.Week;
 
   viewDate: Date = new Date();
 
@@ -42,6 +42,24 @@ export class CalendarComponent implements OnInit {
 
   ngOnInit() {
     this.getDiaryEvents();
+  }
+
+  beforeWeekViewRender(renderEvent: CalendarWeekViewBeforeRenderEvent) {
+    this.currentTimeIntoView();
+  }
+
+  beforeDayViewRender(renderEvent: CalendarDayViewBeforeRenderEvent) {
+    this.currentTimeIntoView();
+  }
+
+  currentTimeIntoView() {
+    const marker = document.getElementsByClassName('cal-current-time-marker');
+
+    setTimeout(()=>{
+      if(marker && marker.length) {
+        marker[0].scrollIntoView({ block: 'center' });
+      }
+    });
   }
 
 
@@ -97,6 +115,11 @@ export class CalendarComponent implements OnInit {
         this.viewDate = date;
       }
     }
+  }
+
+  changeDay(date: Date) {
+    this.viewDate = date;
+    this.view = CalendarView.Day;
   }
 
   // eventClicked(event: CalendarEvent<{ diaryEvent: DiaryEvent }>): void {

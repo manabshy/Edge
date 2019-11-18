@@ -5,8 +5,7 @@
 </app-calendar-header>
 <ng-template #loading>
   <div class="text-center">
-    <i class="fa fa-spin fa-spinner fa-5x"></i> <br />
-    Loading events...
+    <i class="fa fa-spin fa-spinner"></i> Loading events...
   </div>
 </ng-template>
 <!-- {{events$|async|json}} -->
@@ -17,19 +16,22 @@
       [viewDate]="viewDate"
       [events]="events"
       [activeDayIsOpen]="activeDayIsOpen"
-      (dayClicked)="dayClicked($event.day)"
+      (dayClicked)="changeDay($event.day.date)"
     >
     </mwl-calendar-month-view>
     <mwl-calendar-week-view
       *ngSwitchCase="'week'"
       [viewDate]="viewDate"
       [events]="events"
+      (dayHeaderClicked)="changeDay($event.day.date)"
+      (beforeViewRender)="beforeWeekViewRender($event)"
     >
     </mwl-calendar-week-view>
     <mwl-calendar-day-view
       *ngSwitchCase="'day'"
       [viewDate]="viewDate"
       [events]="events"
+      (beforeViewRender)="beforeDayViewRender($event)"
     >
     </mwl-calendar-day-view>
   </div>

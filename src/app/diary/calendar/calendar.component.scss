@@ -1,0 +1,88 @@
+@import "../../../style/bootstrap-overrides";
+@import "../../../../node_modules/bootstrap/scss/functions";
+@import "../../../../node_modules/bootstrap/scss/variables";
+@import "../../../../node_modules/bootstrap/scss/mixins";
+
+$time-column-mobile-width: 40px;
+
+:host ::ng-deep {
+
+    mwl-calendar-week-view {
+        @include media-breakpoint-up(md) {
+            display: block;
+            max-height: 700px;
+            overflow: auto;
+        }
+    
+        &-header {
+            display: block;
+            position: sticky;
+            top: 0;
+            z-index: 49;
+            background: color("white");
+
+            @include media-breakpoint-down(sm) {
+                top: $top-bar-height + 85;
+            }
+
+            @media (max-width: 320px) {
+                top: $top-bar-height + 70;
+            }
+        }
+    }
+
+    .cal-week-view {
+        border: none;;
+    }
+
+    .cal-day-headers, .cal-time-events {
+        border-left: 0;
+
+        @include media-breakpoint-down(sm) {
+            font-size: 75%;
+        }
+
+        @media (max-width: 320px) {
+            font-size: 80%;
+        }
+    }
+
+    .cal-day-headers {
+        @include media-breakpoint-down(sm){
+            padding-left: $time-column-mobile-width;
+        }
+    }
+
+    .cal-time-label-column, .cal-time {
+        @include media-breakpoint-down(sm){
+            width: $time-column-mobile-width;
+        }  
+    }
+
+    .cal-day-headers {
+        span {
+            display: inline-block;
+            padding: $badge-padding-y $badge-padding-x;
+            @include font-size($font-size-sm);
+            font-weight: $badge-font-weight;
+            line-height: 1;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: baseline;
+            @include border-radius($badge-border-radius);
+            opacity: 1;
+            @include alert-variant(theme-color-level("primary", $alert-bg-level), theme-color-level("primary", $alert-border-level), theme-color-level("primary", $alert-color-level));
+        }
+
+        .cal-weekend {
+            span {
+                @include alert-variant(theme-color-level("light", $alert-bg-level), theme-color-level("light", $alert-border-level), theme-color-level("light", $alert-color-level));
+            }
+        }
+
+        .cal-past {
+            opacity: .5;
+        }
+    }
+
+}
