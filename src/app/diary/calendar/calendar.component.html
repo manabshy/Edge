@@ -1,4 +1,5 @@
 <app-calendar-header [(view)]="view" [(viewDate)]="viewDate"
+[weekStartsOn]="weekStartsOn"
 (viewDateChange)="getDiaryEvents()"
 (viewChange)="getDiaryEvents()"
 >
@@ -25,6 +26,7 @@
       [events]="events"
       (dayHeaderClicked)="changeDay($event.day.date)"
       (beforeViewRender)="beforeWeekViewRender($event)"
+      [weekStartsOn]="weekStartsOn"
     >
     </mwl-calendar-week-view>
     <mwl-calendar-day-view

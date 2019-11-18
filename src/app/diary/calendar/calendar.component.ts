@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CalendarEvent, CalendarDateFormatter, CalendarView, CalendarWeekViewBeforeRenderEvent, CalendarDayViewBeforeRenderEvent } from 'angular-calendar';
+import { CalendarEvent, CalendarDateFormatter, CalendarView, CalendarWeekViewBeforeRenderEvent, CalendarDayViewBeforeRenderEvent, DAYS_OF_WEEK } from 'angular-calendar';
 import {
   isSameMonth,
   isSameDay,
@@ -31,6 +31,8 @@ export class CalendarComponent implements OnInit {
   view: CalendarView = CalendarView.Week;
 
   viewDate: Date = new Date();
+
+  weekStartsOn = DAYS_OF_WEEK.MONDAY;
 
   events: CalendarEvent[] = [];
   events$: Observable<Array<CalendarEvent<{ diaryEvent: DiaryEvent }>>>;

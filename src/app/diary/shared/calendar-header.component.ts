@@ -13,6 +13,7 @@ export class CalendarHeaderComponent implements OnChanges {
   @Input() view: CalendarView | 'month' | 'week' | 'day';
   @Input() viewDate: Date;
   @Input() locale = 'en';
+  @Input() weekStartsOn;
   @Output() viewChange: EventEmitter<string> = new EventEmitter();
   @Output() viewDateChange: EventEmitter<Date> = new EventEmitter();
   label: string;
