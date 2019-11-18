@@ -9,6 +9,43 @@
     <i class="fa fa-spin fa-spinner"></i> Loading events...
   </div>
 </ng-template>
+<ng-template
+  #monthCell
+  let-day="day"
+  let-openDay="openDay"
+  let-locale="locale"
+  let-tooltipPlacement="tooltipPlacement"
+  let-highlightDay="highlightDay"
+  let-unhighlightDay="unhighlightDay"
+  let-eventClicked="eventClicked"
+  let-tooltipTemplate="tooltipTemplate"
+  let-tooltipAppendToBody="tooltipAppendToBody">
+  <div class="cal-cell-top">
+    <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
+    <div
+      class="cal-event"
+      *ngFor="let event of day.events; trackBy:trackByEventId"
+      [style.backgroundColor]="event.color?.secondary"
+      [style.borderColor]="event.color?.primary"
+      [mwlCalendarTooltip]="!tooltipDisabled ? (event.title | calendarEventTitle:'weekTooltip':event) : ''"
+      [tooltipPlacement]="tooltipPlacement"
+      [tooltipEvent]="event"
+      [tooltipTemplate]="tooltipTemplate"
+      [tooltipAppendToBody]="tooltipAppendToBody"
+      (mwlClick)="eventClicked.emit()">
+      <mwl-calendar-event-actions
+        [event]="event"
+        [customTemplate]="eventActionsTemplate">
+      </mwl-calendar-event-actions>
+      &ngsp;
+      <mwl-calendar-event-title
+        [event]="event"
+        [customTemplate]="eventTitleTemplate"
+        view="week">
+      </mwl-calendar-event-title>
+    </div>
+  </div>
+</ng-template>
 <!-- {{events$|async|json}} -->
 <div *ngIf="events$ | async; else loading; let events" >
   <div [ngSwitch]="view">
@@ -18,6 +55,8 @@
       [events]="events"
       [activeDayIsOpen]="activeDayIsOpen"
       (dayClicked)="changeDay($event.day.date)"
+      [cellTemplate]="monthCell"
+      [weekStartsOn]="weekStartsOn"
     >
     </mwl-calendar-month-view>
     <mwl-calendar-week-view

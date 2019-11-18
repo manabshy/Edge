@@ -7,7 +7,7 @@ $time-column-mobile-width: 40px;
 
 :host ::ng-deep {
 
-    mwl-calendar-week-view {
+    mwl-calendar-month-view, mwl-calendar-week-view {
         @include media-breakpoint-up(md) {
             display: block;
             max-height: 700px;
@@ -82,6 +82,31 @@ $time-column-mobile-width: 40px;
 
         .cal-past {
             opacity: .5;
+        }
+    }
+
+    
+
+    .cal-month-view {
+        .cal-cell {
+            width: 14%;
+        }
+
+
+        .cal-event {
+            border-radius: 5px;
+            width: calc(100% - 2px);
+            height: auto;
+            margin: 1px;
+            padding: 0 5px;
+            line-height: 25px;
+            font-size: 12px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            background-color: #d1e8ff;
+            border-color: #1e90ff;
+            color: #1e90ff;
         }
     }
 
