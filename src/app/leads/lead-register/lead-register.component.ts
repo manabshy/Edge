@@ -140,12 +140,11 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     console.log('leads', this.leads);
-    console.log('filtered leads', this.filteredLeads);
     this.page = this.pageNumber;
     if (this.leads) {
       this.filteredLeads = this.leads;
     }
-    if (this.groupsLength !== this.filteredLeads.length - 1) {
+    if (this.filteredLeads && this.groupsLength !== this.filteredLeads.length - 1) {
       setTimeout(() => {
         this.groupsLength = this.filteredLeads.length - 1;
         this.itemIntoView(this.groupsLength);

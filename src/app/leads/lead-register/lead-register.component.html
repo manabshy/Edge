@@ -79,14 +79,14 @@
                 <span class="badge badge-pill badge-info">{{lead?.leadType}}</span>
               </div>
               <div class="col-sm">
-                <b>{{lead.person}}</b>
+                <b>{{lead?.person}}</b>
               </div>
               <div class="col-sm">
-                {{lead.nextChaseDate | date: 'dd/MM/yyyy hh:mm'}}
+                {{lead?.nextChaseDate | date: 'dd/MM/yyyy hh:mm'}}
               </div>
               <div class="col-sm text-muted">
                 <small>
-                  {{lead.owner}}
+                  {{lead?.owner}}
                 </small>
               </div>
             </div>

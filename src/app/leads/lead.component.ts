@@ -50,19 +50,21 @@ export class LeadComponent implements OnInit {
 
   getLeads(page: number) {
     this.leadService.getLeads(this.currentStaffMember.staffMemberId, PAGE_SIZE, page).subscribe(result => {
-      //this.leads = this.leads.concat(result);
-      //this.filteredLeads = this.filteredLeads.concat(result);
-      // if (this.leads != null) {
-      //   this.leads.push(result);
-      //   this.filteredLeads.push(result);
-      // }
-      // else{
-         this.leads = result;
-         //this.filteredLeads = result;
-      // }
-     //.this.leads = _.concat(this.leads, result);
-      //console.log(result);
-      //this.filteredLeads = _.concat(this.filteredLeads, result);
+
+
+      if (this.leads != null) {
+        this.leads = this.leads.concat(result);
+      } else {
+        this.leads = result;
+      }
+
+      this.filteredLeads = this.leads;
+
+      //this.leads = _.concat(this.leads, result);      
+      //this.filteredLeads = this.leads;
+
+      console.log('result:', result);
+      console.log('leads:', this.leads);
     }, error => {
       this.leads = [];
     });
