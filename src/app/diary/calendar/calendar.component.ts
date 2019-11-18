@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CalendarEvent, CalendarDateFormatter, CalendarView, CalendarWeekViewBeforeRenderEvent, CalendarDayViewBeforeRenderEvent, DAYS_OF_WEEK } from 'angular-calendar';
+import { CalendarEvent, CalendarDateFormatter, CalendarView, CalendarWeekViewBeforeRenderEvent, CalendarDayViewBeforeRenderEvent, DAYS_OF_WEEK, CalendarEventTitleFormatter } from 'angular-calendar';
 import {
   isSameMonth,
   isSameDay,
@@ -16,6 +16,7 @@ import { Observable } from 'rxjs';
 import { DiaryEvent, BasicEventRequest } from '../shared/diary';
 import { DiaryEventService } from '../shared/diary-event.service';
 import { tap, map } from 'rxjs/operators';
+import { CustomEventTitleFormatter } from '../shared/custom-event-title-formatter.provider';
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
@@ -24,6 +25,10 @@ import { tap, map } from 'rxjs/operators';
     {
       provide: CalendarDateFormatter,
       useClass: CustomDateFormatter
+    },
+    {
+      provide: CalendarEventTitleFormatter,
+      useClass: CustomEventTitleFormatter
     }
   ]
 })
