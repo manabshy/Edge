@@ -32,7 +32,7 @@
       </div>
       <div class="col-sm form-group">
         <label for="owner">Owner</label>
-        <app-staffmember-finder (ownerChanged) = "onOwnerChanged($event)"></app-staffmember-finder>
+        <app-staffmember-finder (ownerChanged) = "onOwnerChanged($event)" ></app-staffmember-finder>
       </div>
       <div class="col-sm form-group">
         <label for="office">Office</label>
@@ -55,7 +55,7 @@
       <div class="col">
         <div class="custom-control custom-checkbox">
           <input type="checkbox" class="custom-control-input" id="closedInclusive" formControlName="includeClosedLeads">
-          <label class="custom-control-label" for="colsedInclusive">Include closed leads</label>
+          <label class="custom-control-label" for="closedInclusive">Include closed leads</label>
         </div>
       </div>
     </div>

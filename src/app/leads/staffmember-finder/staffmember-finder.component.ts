@@ -57,11 +57,10 @@ export class StaffmemberFinderComponent implements OnInit {
 
   onChanges(): void {
     this.ownerForm.valueChanges.subscribe(val => {
-      console.log('changed owner form group:', val);
+      if (val.ownerId === '') {
+        this.ownerChanged.emit(null);
+      }
     });
-
-    console.log('Selected Owner:', this.selectedOwner);
-
   }
 
   inputFormatBandListValue(value: any) {
@@ -80,22 +79,12 @@ export class StaffmemberFinderComponent implements OnInit {
 
     }
     AppUtils.searchTerm = this.searchTerm;
-    console.log('search term:', this.searchTerm);
-
-    if (this.selectedOwner == null) {
-      console.log('selected owner is cleared');
-    }
-    else{
-      console.log(this.selectedOwner);
-    }
-
   }
 
   selectedSuggestion(event: any) {
     this.ownerForm.patchValue({
       ownerId: this.selectedOwner
     });
-    console.log('event raised', event);
     this.ownerChanged.emit(event);
   }
 

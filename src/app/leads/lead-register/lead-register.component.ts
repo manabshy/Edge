@@ -18,7 +18,6 @@ import { ControlPosition } from '@agm/core/services/google-maps-types';
 })
 export class LeadRegisterComponent implements OnInit, OnChanges {
   @Input() leads: Lead[];
-  // @Input() filteredLeads: Lead[];
   @Input() searchTerm: string;
   @Input() pageNumber: number;
   @Input() bottomReached: boolean;
@@ -45,6 +44,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
 
     this.setupLeadRegisterForm();
 
+
     // Lead Types
     this.storage.get('info').subscribe(data => {
       if (data) {
@@ -66,8 +66,6 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
         this.offices = data;
       }
     );
-
-    this.onChanges();
   }
 
 
@@ -84,7 +82,6 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     console.log('clicked', lead)
     this.leadService.leadsChanged(lead);
     if (this.areLeadsAssignable) {
-      //event.preventDefault();
     }
   }
 
@@ -109,33 +106,34 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     });
   }
 
-  onChanges(): void {
-    this.leadRegisterForm.valueChanges.subscribe(val => {
-      if (this.leadRegisterForm.controls['ownerId'].value !== '') {
-        this.filteredLeads = this.leads.filter(l => l.ownerId === this.leadRegisterForm.controls['ownerId'].value);
-      } else {
-        this.filteredLeads = this.leads;
-      }
-    });
-  }
-
   onOwnerChanged(event: any) {
     console.log(event);
 
-    if (event.item != null) {
+    if (event && event.item != null) {
       this.leadRegisterForm.patchValue({
         ownerId: event.item.staffMemberId
       });
 
-      // this.filteredLeads = this.leads.filter(l => l.ownerId === event.item.staffMemberId);
+      // if (this.leadRegisterForm.get('leadTypeId').value !== '') {
+      //   this.filteredLeads = this.leads.filter(l => l.leadTypeId === this.leadRegisterForm.get('leadTypeId').value);
+      // }
+
+      this.filteredLeads = this.leads.filter(l => l.ownerId === event.item.staffMemberId);
 
     } else {
       console.log('reseting filter');
       this.leadRegisterForm.patchValue({
         ownerId: ''
       });
-
+      this.filteredLeads = this.leads;
     }
+
+    //this.leadService.getLeads(this.leadRegisterForm.get('ownerId'));
+
+    //console.log(this.leadRegisterForm.get('ownerId'));
+    //console.log(this.leadRegisterForm.get('ownerId'));
+
+    console.log(this.leadRegisterForm.value);
   }
 
   ngOnChanges() {

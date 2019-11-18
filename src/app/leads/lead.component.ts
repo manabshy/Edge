@@ -60,9 +60,6 @@ export class LeadComponent implements OnInit {
 
       this.filteredLeads = this.leads;
 
-      //this.leads = _.concat(this.leads, result);      
-      //this.filteredLeads = this.leads;
-
       console.log('result:', result);
       console.log('leads:', this.leads);
     }, error => {
