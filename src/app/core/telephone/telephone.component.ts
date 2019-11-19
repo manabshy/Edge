@@ -24,13 +24,14 @@ export class TelephoneComponent implements OnInit {
   @Input() person: Person;
   @Input() company: Company;
   @Input() number: string;
-  @Input() isFax: boolean = false;
+  @Input() isFax = false;
   @Input() staffMember: StaffMember;
   @Input() searchTerm: string;
   @Input() warning: any;
   isDialing: boolean;
   sms = true;
   currentStaffMember: StaffMember;
+  tapiInfo: TapiRequestInfo;
 
   constructor(private modalService: BsModalService,
     private tapiService: TapiService,
@@ -115,7 +116,7 @@ export class TelephoneComponent implements OnInit {
   call() {
     if (window.innerWidth < 576) {
       document.location.href = 'tel:' + this.number;
-      if(this.person){
+      if (this.person) {
         this.leaveANoteBanner();
       }
     } else {
@@ -123,11 +124,14 @@ export class TelephoneComponent implements OnInit {
       this.staffMemberService.getCurrentStaffMember().subscribe(data => {
         if (data) {
           this.currentStaffMember = data;
+         this.tapiInfo = this.setupTapiInfo(data);
         }
       });
 
+      // TODO: use extracted method
       const tapiInfo: TapiRequestInfo = {
-        officeId: this.currentStaffMember.homeOffice.officeId,
+        // officeId: this.currentStaffMember.homeOffice.officeId ? this.currentStaffMember.homeOffice.officeId : 0,
+        officeId: 0,
         staffId: this.currentStaffMember.staffMemberId,
         isOutGoingCall: true,
         callerNmber: this.currentStaffMember.phone,
@@ -152,7 +156,7 @@ export class TelephoneComponent implements OnInit {
   calling() {
     this.isDialing = false;
     this.endCallBanner();
-    if(this.person){
+    if (this.person) {
       this.leaveANoteBanner();
     }
   }
@@ -161,7 +165,7 @@ export class TelephoneComponent implements OnInit {
     if (this.sharedService.lastCallEndCallToast) {
       this.toastr.clear(this.sharedService.lastCallEndCallToast.toastId);
     }
-    const receiver = this.person ? this.person.salutation : this.company.companyName
+    const receiver = this.person ? this.person.salutation : this.company.companyName;
     this.sharedService.lastCallEndCallToast = this.toastr.success('<div class="row align-items-center"><div class="col">Calling <b>' + receiver + '</b></div><div class="col-auto"><a class="btn btn-danger text-white ml-2">Hang up</a></div>', '', {
       toastClass: 'ngx-toastr toast-call',
       disableTimeOut: true
@@ -172,7 +176,8 @@ export class TelephoneComponent implements OnInit {
       .pipe(take(1))
       .subscribe(() => {
         const tapiInfo: TapiRequestInfo = {
-          officeId: this.currentStaffMember.homeOffice.officeId,
+          // officeId: this.currentStaffMember.homeOffice.officeId,
+          officeId: 0,
           staffId: this.currentStaffMember.staffMemberId,
           isOutGoingCall: true,
           callerNmber: this.currentStaffMember.phone,
@@ -210,5 +215,21 @@ export class TelephoneComponent implements OnInit {
         this.sharedService.addNote(data);
         this.toastr.clear(this.sharedService.lastCallNoteToast.toastId);
       });
+  }
+  setupTapiInfo(staffMember: StaffMember) {
+    console.log('tapi staffMember', staffMember);
+    let tapiInfo: TapiRequestInfo;
+    tapiInfo = {
+      // officeId: staffMember.homeOffice.officeId,
+      officeId: 0,
+      staffId: staffMember.staffMemberId,
+      isOutGoingCall: true,
+      callerNmber: staffMember.phone,
+      calledNumber: this.number,
+      guid: '',
+      isCallHangedUp: false
+    };
+    console.log('tapi request info', tapiInfo);
+    return tapiInfo;
   }
 }
