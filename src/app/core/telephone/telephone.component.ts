@@ -11,9 +11,9 @@ import { SmsModalComponent } from '../sms-modal/sms-modal.component';
 import { take } from 'rxjs/operators';
 import { Person } from '../models/person';
 import { StaffMember } from '../models/staff-member';
-import { AppUtils } from '../shared/utils';
 import { StaffMemberService } from '../services/staff-member.service';
 import { Company } from 'src/app/contactgroups/shared/contact-group';
+import { StorageMap } from '@ngx-pwa/local-storage';
 
 @Component({
   selector: 'app-telephone',
@@ -37,12 +37,26 @@ export class TelephoneComponent implements OnInit {
     private tapiService: TapiService,
     private sharedService: SharedService,
     private toastr: ToastrService,
+    private storage: StorageMap,
     private staffMemberService: StaffMemberService) { }
 
   ngOnInit() {
     if (!this.sharedService.isUKMobile(this.number)) {
       this.sms = false;
     }
+    this.storage.get('currentUser').subscribe((data: StaffMember) => {
+      if (data) {
+        this.currentStaffMember = data;
+        this.tapiInfo = this.setupTapiInfo(data);
+        console.log('current user info in telephone....', data);
+      }
+    });
+    // this.staffMemberService.getCurrentStaffMember().subscribe(data => {
+    //   if (data) {
+    //     this.currentStaffMember = data;
+    //     this.tapiInfo = this.setupTapiInfo(data);
+    //   }
+    // });
   }
 
   callOrText(call: boolean) {
@@ -120,28 +134,8 @@ export class TelephoneComponent implements OnInit {
         this.leaveANoteBanner();
       }
     } else {
-
-      this.staffMemberService.getCurrentStaffMember().subscribe(data => {
-        if (data) {
-          this.currentStaffMember = data;
-         this.tapiInfo = this.setupTapiInfo(data);
-        }
-      });
-
-      // TODO: use extracted method
-      const tapiInfo: TapiRequestInfo = {
-        // officeId: this.currentStaffMember.homeOffice.officeId ? this.currentStaffMember.homeOffice.officeId : 0,
-        officeId: 0,
-        staffId: this.currentStaffMember.staffMemberId,
-        isOutGoingCall: true,
-        callerNmber: this.currentStaffMember.phone,
-        calledNumber: this.number,
-        guid: '',
-        isCallHangedUp: false
-      };
-
       this.isDialing = true;
-      this.tapiService.putCallRequest(tapiInfo).subscribe(data => {
+      this.tapiService.putCallRequest(this.tapiInfo).subscribe(data => {
         this.calling();
         console.log(data);
       },
@@ -175,18 +169,7 @@ export class TelephoneComponent implements OnInit {
       .onTap
       .pipe(take(1))
       .subscribe(() => {
-        const tapiInfo: TapiRequestInfo = {
-          // officeId: this.currentStaffMember.homeOffice.officeId,
-          officeId: 0,
-          staffId: this.currentStaffMember.staffMemberId,
-          isOutGoingCall: true,
-          callerNmber: this.currentStaffMember.phone,
-          calledNumber: this.number,
-          guid: '',
-          isCallHangedUp: true
-        };
-
-        this.tapiService.putCallRequest(tapiInfo).subscribe(data => {
+        this.tapiService.putCallRequest(this.tapiInfo).subscribe(data => {
           console.log(data);
           this.toastr.clear(this.sharedService.lastCallEndCallToast.toastId);
         });
