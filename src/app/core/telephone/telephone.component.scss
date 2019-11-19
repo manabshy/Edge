@@ -22,8 +22,11 @@
             flex: 0 0 auto;
             width: auto;
             font-weight: bold;
-            min-width: 4rem;
-            text-align: center;
+
+            @include media-breakpoint-down(md) {
+                min-width: 4rem;
+                text-align: center;
+            }
         }
     }
 }
