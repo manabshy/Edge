@@ -1,21 +1,25 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, HostListener } from '@angular/core';
 import { LeadsService } from '../shared/leads.service';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
-import { Lead } from '../shared/lead';
+import { Lead, LeadSearchInfo } from '../shared/lead';
 import { StaffMember, Office } from 'src/app/core/models/staff-member';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { InfoDetail } from 'src/app/core/services/info.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { OfficeService } from 'src/app/core/services/office.service';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { ControlPosition } from '@agm/core/services/google-maps-types';
 
 @Component({
   selector: 'app-lead-register',
   templateUrl: '../lead-register/lead-register.component.html',
   styleUrls: ['../lead-register/lead-register.component.scss']
 })
-export class LeadRegisterComponent implements OnInit {
+export class LeadRegisterComponent implements OnInit, OnChanges {
   @Input() leads: Lead[];
+  @Input() pageNumber: number;
+  @Input() bottomReached: boolean;
   areLeadsAssignable = false;
   currentStaffMember: StaffMember;
   listInfo: any;
@@ -23,6 +27,11 @@ export class LeadRegisterComponent implements OnInit {
   leadRegisterForm: FormGroup;
   staffMembers: StaffMember[];
   offices: Office[];
+  page: number;
+  groupsLength: number;
+  filteredLeads: Lead[];
+  leadSearchInfo: LeadSearchInfo;
+
 
   constructor(private leadService: LeadsService,
     private staffMemberService: StaffMemberService,
@@ -34,6 +43,7 @@ export class LeadRegisterComponent implements OnInit {
   ngOnInit() {
 
     this.setupLeadRegisterForm();
+
 
     // Lead Types
     this.storage.get('info').subscribe(data => {
@@ -53,10 +63,11 @@ export class LeadRegisterComponent implements OnInit {
     // Offices
     this.officeService.getOffices().subscribe(
       data => {
-      this.offices = data;
-        console.log('offices', this.offices);
+        this.offices = data;
       }
     );
+
+    this.leadSearchInfo = this.getSearchInfo(true);
   }
 
 
@@ -73,18 +84,7 @@ export class LeadRegisterComponent implements OnInit {
     console.log('clicked', lead)
     this.leadService.leadsChanged(lead);
     if (this.areLeadsAssignable) {
-      //event.preventDefault();
     }
-  }
-
-  private patchLeadsSearchValues(lead: Lead) {
-    this.leadRegisterForm.patchValue({
-      ownerId: lead.ownerId,
-      personId: lead.personId,
-      officeId: lead.officeId,
-      leadTypeId: lead.leadTypeId,
-      nextChaseDate: this.sharedService.ISOToDate(lead.createdDate)
-    });
   }
 
   private setupLeadRegisterForm() {
@@ -96,6 +96,66 @@ export class LeadRegisterComponent implements OnInit {
       dateFrom: [''],
       dateTo: ['']
     });
+  }
+
+  onOwnerChanged(event: any) {
+    console.log(event);
+
+    if (event && event.item != null) {
+      this.leadRegisterForm.patchValue({
+        ownerId: event.item.staffMemberId
+      });
+
+      this.leadSearchInfo = this.getSearchInfo(true);
+      this.leadService.pageNumberChanged(this.leadSearchInfo);
+
+    } else {
+      this.leadRegisterForm.patchValue({
+        ownerId: ''
+      });
+      this.filteredLeads = this.leads;
+    }
+  }
+
+  ngOnChanges() {
+    this.page = this.pageNumber;
+
+    if (this.leads) {
+      this.filteredLeads = this.leads;
+    }
+  }
+
+  private getSearchInfo(newSearch: boolean) {
+    return {
+      page: !newSearch ? this.pageNumber : 1,
+      ownerId: this.leadRegisterForm != null ?
+        (this.leadRegisterForm.get('ownerId').value !== '' ? this.leadRegisterForm.get('ownerId').value : 2537) : '',
+      leadTypeId: this.leadRegisterForm != null ? (this.leadRegisterForm.get('leadTypeId').value) : '',
+      officeId: this.leadRegisterForm != null ? (this.leadRegisterForm.get('officeId').value) : '',
+      dateFrom: this.leadRegisterForm != null ? (this.leadRegisterForm.get('dateFrom').value) : '',
+      dateTo: this.leadRegisterForm != null ? (this.leadRegisterForm.get('dateTo').value) : ''
+    };
+  }
+
+  onScrollDown() {
+    this.onWindowScroll();
+    console.log('scrolled');
+  }
+
+  @HostListener('window:scroll', ['$event'])
+  onWindowScroll() {
+    let scrollHeight: number, totalHeight: number;
+    scrollHeight = document.body.scrollHeight;
+    totalHeight = window.scrollY + window.innerHeight;
+
+    this.leadSearchInfo = this.getSearchInfo(false);
+
+    if (totalHeight >= scrollHeight && !this.bottomReached) {
+      this.page++;
+      this.leadSearchInfo.page = this.page;
+      this.leadService.pageNumberChanged(this.leadSearchInfo);
+      console.log('leads page number', this.page);
+    }
   }
 
 
