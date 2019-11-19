@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { LeadsService } from '../shared/leads.service';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
-import { Lead } from '../shared/lead';
+import { Lead, LeadSearchInfo } from '../shared/lead';
 import { StaffMember, Office } from 'src/app/core/models/staff-member';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { InfoDetail } from 'src/app/core/services/info.service';
@@ -18,7 +18,6 @@ import { ControlPosition } from '@agm/core/services/google-maps-types';
 })
 export class LeadRegisterComponent implements OnInit, OnChanges {
   @Input() leads: Lead[];
-  @Input() searchTerm: string;
   @Input() pageNumber: number;
   @Input() bottomReached: boolean;
   areLeadsAssignable = false;
@@ -31,6 +30,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   page: number;
   groupsLength: number;
   filteredLeads: Lead[];
+  leadSearchInfo: LeadSearchInfo;
 
 
   constructor(private leadService: LeadsService,
@@ -66,6 +66,15 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
         this.offices = data;
       }
     );
+
+    this.leadSearchInfo = {
+      page: this.page,
+      ownerId: this.leadRegisterForm.get('ownerId').value !== '' ? this.leadRegisterForm.get('ownerId').value : 2537,
+      leadTypeId: this.leadRegisterForm.get('leadTypeId').value,
+      officeId: this.leadRegisterForm.get('officeId').value,
+      dateFrom: this.leadRegisterForm.get('dateFrom').value,
+      dateTo: this.leadRegisterForm.get('dateTo').value
+    };
   }
 
 
@@ -118,7 +127,19 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       //   this.filteredLeads = this.leads.filter(l => l.leadTypeId === this.leadRegisterForm.get('leadTypeId').value);
       // }
 
-      this.filteredLeads = this.leads.filter(l => l.ownerId === event.item.staffMemberId);
+      this.leadSearchInfo = {
+        page: 1,
+        ownerId: this.leadRegisterForm.get('ownerId').value !== '' ? this.leadRegisterForm.get('ownerId').value : 2537,
+        leadTypeId: this.leadRegisterForm.get('leadTypeId').value,
+        officeId: this.leadRegisterForm.get('officeId').value,
+        dateFrom: this.leadRegisterForm.get('dateFrom').value,
+        dateTo: this.leadRegisterForm.get('dateTo').value
+      };
+
+      //console.log('owner changed', this.leadSearchInfo);
+      this.leadService.pageNumberChanged(this.leadSearchInfo);
+
+      //this.filteredLeads = this.leads.filter(l => l.ownerId === event.item.staffMemberId);
 
     } else {
       console.log('reseting filter');
@@ -128,7 +149,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       this.filteredLeads = this.leads;
     }
 
-    //this.leadService.getLeads(this.leadRegisterForm.get('ownerId'));
+
 
     //console.log(this.leadRegisterForm.get('ownerId'));
     //console.log(this.leadRegisterForm.get('ownerId'));
@@ -137,8 +158,19 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    console.log('leads', this.leads);
+    
     this.page = this.pageNumber;
+    //this.leadSearchInfo.page = this.pageNumber;
+
+    this.leadSearchInfo = {
+      page: this.pageNumber,
+      ownerId: this.leadRegisterForm.get('ownerId').value !== '' ? this.leadRegisterForm.get('ownerId').value : 2537,
+      leadTypeId: this.leadRegisterForm.get('leadTypeId').value,
+      officeId: this.leadRegisterForm.get('officeId').value,
+      dateFrom: this.leadRegisterForm.get('dateFrom').value,
+      dateTo: this.leadRegisterForm.get('dateTo').value
+    };
+
     if (this.leads) {
       this.filteredLeads = this.leads;
     }
@@ -172,7 +204,18 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   onWindowScroll() {
     if (!this.bottomReached) {
       this.page++;
-      this.leadService.pageNumberChanged(this.page);
+      //this.leadSearchInfo.page = this.page;
+
+      this.leadSearchInfo = {
+        page: this.page,
+        ownerId: this.leadRegisterForm.get('ownerId').value !== '' ? this.leadRegisterForm.get('ownerId').value : 2537,
+        leadTypeId: this.leadRegisterForm.get('leadTypeId').value,
+        officeId: this.leadRegisterForm.get('officeId').value,
+        dateFrom: this.leadRegisterForm.get('dateFrom').value,
+        dateTo: this.leadRegisterForm.get('dateTo').value
+      };
+
+      this.leadService.pageNumberChanged(this.leadSearchInfo);
       console.log('bottom here...', this.page);
     }
   }

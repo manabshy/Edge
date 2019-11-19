@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Lead } from './lead';
+import { Lead, LeadSearchInfo } from './lead';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 import { AppConstants } from 'src/app/core/shared/app-constants';
@@ -12,7 +12,7 @@ import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encod
 export class LeadsService {
 
   private leadsChangeSubject = new BehaviorSubject<Lead | null>(null);
-  private pageChangeSubject = new Subject<number | null>();
+  private pageChangeSubject = new Subject<LeadSearchInfo | null>();
 
   leadsChanges$ = this.leadsChangeSubject.asObservable();
   pageChanges$ = this.pageChangeSubject.asObservable();
@@ -23,7 +23,7 @@ export class LeadsService {
     this.leadsChangeSubject.next(lead);
   }
 
-  pageNumberChanged(result: number) {
+  pageNumberChanged(result: LeadSearchInfo) {
     this.pageChangeSubject.next(result);
   }
 

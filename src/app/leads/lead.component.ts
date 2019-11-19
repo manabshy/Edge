@@ -3,7 +3,7 @@ import { LeadsService } from './shared/leads.service';
 import { StaffMemberService } from '../core/services/staff-member.service';
 import { StaffMember } from '../core/models/staff-member';
 import { getLocaleDayNames } from '@angular/common';
-import { Lead } from './shared/lead';
+import { Lead, LeadSearchInfo } from './shared/lead';
 import { InfoDetail } from '../core/services/info.service';
 import * as _ from 'lodash';
 
@@ -21,6 +21,7 @@ export class LeadComponent implements OnInit {
   staffMembers: StaffMember[];
   page = 1;
   bottomReached = false;
+  leadSearchInfo: LeadSearchInfo;
 
   constructor(private leadService: LeadsService, private staffMemberService: StaffMemberService) { }
 
@@ -32,31 +33,50 @@ export class LeadComponent implements OnInit {
         this.currentStaffMember = data;
         this.bottomReached = false;
 
-        this.getLeads(this.page);
+        this.leadSearchInfo = {
+          page: this.page,
+          ownerId: this.currentStaffMember.staffMemberId,
+          leadTypeId: null,
+          officeId: null,
+          dateFrom: null,
+          dateTo: null
+        };
+
+        // this.leadSearchInfo.page = this.page;
+        // this.leadSearchInfo.ownerId = this.currentStaffMember.staffMemberId;
+
+        this.getLeads(this.leadSearchInfo);
       }
     });
 
     // page changes here
     this.leadService.pageChanges$.subscribe(newPageNumber => {
       if (newPageNumber) {
-        this.page = newPageNumber;
-        this.getLeads(this.page);
-        console.log('end of page', this.page);
+        this.page = newPageNumber.page;
+        this.getLeads(newPageNumber);
+        console.log('end of page', newPageNumber.page);
       }
     });
 
     this.getAllStaffmembers();
   }
 
-  getLeads(page: number) {
-    this.leadService.getLeads(this.currentStaffMember.staffMemberId, PAGE_SIZE, page).subscribe(result => {
+  getLeads(leadSearchInfo: LeadSearchInfo) {
+    this.leadService.getLeads(leadSearchInfo.ownerId, PAGE_SIZE, leadSearchInfo.page).subscribe(result => {
 
-
-      if (this.leads != null) {
-        this.leads = this.leads.concat(result);
-      } else {
+      console.log('owner changed: ', leadSearchInfo);
+      if (leadSearchInfo.page === 1) {
+        console.log('filter applied');
         this.leads = result;
+      } else {
+        this.leads = this.leads.concat(result);
       }
+
+      // if (this.leads != null) {
+      //   this.leads = this.leads.concat(result);
+      // } else {
+      //   this.leads = result;
+      // }
 
       this.filteredLeads = this.leads;
 

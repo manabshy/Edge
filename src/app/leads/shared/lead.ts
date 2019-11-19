@@ -22,5 +22,7 @@ export interface LeadSearchInfo {
     leadTypeId: number;
     ownerId: number;
     officeId: number;
-    createdDate: Date;
+    dateFrom: Date;
+    dateTo: Date;
+    page: number;
 }
