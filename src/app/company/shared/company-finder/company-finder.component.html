@@ -12,9 +12,9 @@
             </div>
             <div class="invalid-feedback w-100">Search for a Company</div>
         </div>
-        <div class="small text-center pt-3"
+        <div class="small pt-3"
         *ngIf="noSuggestions">
-        No Company Found? Try again or <a href (click)="enterCompany()">enter it manually</a>.
+        No Company Found. <a href (click)="enterCompany()">Enter it manually</a>.
       </div>
       </div>
       <div class="off-canvas" [hidden]="!foundCompanies" (click)="foundCompanies = null">

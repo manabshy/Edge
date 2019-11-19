@@ -63,7 +63,7 @@ export class CompanyDetailComponent implements OnInit {
   createNewCompanyOrContact(event?: string) {
     if (event === 'newContact') {
       this.isNewContactGroup = true;
-      this.router.navigate(['/contact-centre/detail/0/people/0'], { queryParams: { isNewContactGroup: true } });
+      this.router.navigate(['/contact-centre/detail/0/people/0'], { queryParams: { isNewContactGroup: true, isNewCompanyContact: true } });
     } else {
       this.isNewCompany = true;
       this.router.navigate(['/company-centre/detail/0/edit'], { queryParams: { isNewCompany: true } });

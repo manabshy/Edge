@@ -17,6 +17,7 @@ export class SignerComponent implements OnInit, OnChanges {
   @Output() selectedSigner = new EventEmitter<Signer>();
   @Output() newSigner = new EventEmitter<boolean>();
   @Input() existingSigner: Signer;
+  @Input() readOnly: boolean = false;
   @Input() createdSigner: Signer;
   @Input() label: string;
   @ViewChild('selectedSignerInput', { static: true }) selectedSignerInput: ElementRef;

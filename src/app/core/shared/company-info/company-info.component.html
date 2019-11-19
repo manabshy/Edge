@@ -1,3 +1,77 @@
-<p>
-  company-info works!
-</p>
+<div class="list-group">
+  <div class="list-group-item text-center" *ngIf="!companyDetails">
+    <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading info ...
+  </div>
+  <div class="list-group-item mb-4"
+    *ngIf="companyDetails">
+    <div class="text-right">
+      <div class="row">
+        <div class="col text-right">
+          <a routerLink="edit"><i class="fas fa-edit"></i> Edit</a>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="companyDetails">
+      <div class="col-12">
+        <p class="mb-2">
+          <strong>{{companyDetails?.companyName}}</strong>
+        </p>
+      </div>
+      <div class="col-sm-4">
+        <div class="mb-2">
+          <pre>{{companyDetails?.companyAddress | formatAddress}}</pre><span class="text-danger"
+            *ngIf="!(companyDetails?.companyAddress | formatAddress)">No address</span></div>
+      </div>
+      <div class="col-12 col-sm-3 col-xl-4">
+        <p class="mb-2 text-danger" *ngIf="!companyDetails?.telephone; else phoneNumber">
+          No
+          phone</p>
+        <ng-template #phoneNumber>
+          <p class="mb-2">
+            <app-telephone [company]="companyDetails" [number]="companyDetails?.telephone">
+            </app-telephone>
+          </p>
+        </ng-template>
+        <p class="mb-2 text-danger" *ngIf="!companyDetails?.fax; else faxNumber">
+            No
+            fax</p>
+        <ng-template #faxNumber>
+          <p class="mb-2">
+            <app-telephone [company]="companyDetails" [isFax]="true" [number]="companyDetails?.fax">
+            </app-telephone>
+          </p>
+        </ng-template>
+      </div>
+      <div class="col-sm-5 col-xl-4">
+        <p class="mb-2 text-danger"
+          *ngIf="!companyDetails?.email; else emailAddress">
+          No
+          email</p>
+        <ng-template #emailAddress>
+          <p class="mb-2 text-truncate" *ngIf="companyDetails?.email"><a class="mobile-btn"
+              href="mailto:{{companyDetails?.email}}">{{companyDetails?.email}}</a></p>
+        </ng-template>
+        <p class="mb-2 text-danger"
+          *ngIf="!companyDetails?.website; else websiteAddress">
+          No
+          website</p>
+        <ng-template #websiteAddress>
+          <p class="mb-2 text-truncate" *ngIf="companyDetails?.website"><a class="mobile-btn"
+              href="companyDetails?.website" target="_blank">website</a></p>
+        </ng-template>
+      </div>
+      <div class="col-12">
+        <hr class="my-1">
+      </div>
+      <div class="col-12">
+        <p class="mb-2 text-danger"
+          *ngIf="!companyDetails?.signer; else signerDetails">
+          No
+          signer</p>
+        <ng-template #signerDetails>
+          <app-signer [readOnly]="true" [existingSigner]="companyDetails?.signer"></app-signer>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>
