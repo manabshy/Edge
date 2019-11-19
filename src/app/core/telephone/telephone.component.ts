@@ -13,6 +13,7 @@ import { Person } from '../models/person';
 import { StaffMember } from '../models/staff-member';
 import { AppUtils } from '../shared/utils';
 import { StaffMemberService } from '../services/staff-member.service';
+import { Company } from 'src/app/contactgroups/shared/contact-group';
 
 @Component({
   selector: 'app-telephone',
@@ -21,7 +22,9 @@ import { StaffMemberService } from '../services/staff-member.service';
 })
 export class TelephoneComponent implements OnInit {
   @Input() person: Person;
+  @Input() company: Company;
   @Input() number: string;
+  @Input() isFax: boolean = false;
   @Input() staffMember: StaffMember;
   @Input() searchTerm: string;
   @Input() warning: any;
@@ -99,8 +102,9 @@ export class TelephoneComponent implements OnInit {
     const subject = new Subject<boolean>();
     const initialState = {
       person: this.person,
+      company: this.company,
       number: this.number,
-      salutation: this.person.salutation,
+      salutation: this.person ? this.person.salutation : this.company.companyName,
       actions: ['Cancel', 'Send SMS']
     };
     const modal = this.modalService.show(SmsModalComponent, { initialState });
@@ -111,7 +115,9 @@ export class TelephoneComponent implements OnInit {
   call() {
     if (window.innerWidth < 576) {
       document.location.href = 'tel:' + this.number;
-      this.leaveANoteBanner();
+      if(this.person){
+        this.leaveANoteBanner();
+      }
     } else {
 
       this.staffMemberService.getCurrentStaffMember().subscribe(data => {
@@ -146,14 +152,17 @@ export class TelephoneComponent implements OnInit {
   calling() {
     this.isDialing = false;
     this.endCallBanner();
-    this.leaveANoteBanner();
+    if(this.person){
+      this.leaveANoteBanner();
+    }
   }
 
   endCallBanner() {
     if (this.sharedService.lastCallEndCallToast) {
       this.toastr.clear(this.sharedService.lastCallEndCallToast.toastId);
     }
-    this.sharedService.lastCallEndCallToast = this.toastr.success('<div class="row align-items-center"><div class="col">Calling <b>' + this.person.salutation + '</b></div><div class="col-auto"><a class="btn btn-danger text-white ml-2">Hang up</a></div>', '', {
+    const receiver = this.person ? this.person.salutation : this.company.companyName
+    this.sharedService.lastCallEndCallToast = this.toastr.success('<div class="row align-items-center"><div class="col">Calling <b>' + receiver + '</b></div><div class="col-auto"><a class="btn btn-danger text-white ml-2">Hang up</a></div>', '', {
       toastClass: 'ngx-toastr toast-call',
       disableTimeOut: true
     });

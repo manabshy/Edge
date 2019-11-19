@@ -6,6 +6,9 @@
   <a [routerLink]="['detail', company.companyId ]" class="list-group-item list-group-item-action v-o-h-container"
     *ngFor="let company of companies; let i = index;">
     <div class="row mb-1">
+      <div class="col">
+        <small class="text-muted">CO-{{company.companyId}}</small>
+      </div>
       <div class="col-auto text-right">
         <a class="v-o-h" [routerLink]="['detail',  company.companyId, 'edit' ]"><i class="fas fa-edit"></i> Edit</a>
         <a class="d-xl-none" [routerLink]="['detail',  company.companyId ]">View <i class="fas fa-arrow-right"></i></a>
@@ -14,9 +17,6 @@
     <div class="row">
       <div class="col text-truncate">
         <div class="row">
-          <div class="col-12">
-            <small class="text-muted">CO-{{company.companyId}}</small>
-          </div>
           <div class="col-sm-5">
             <div class="mb-1 text-truncate">
               <strong>{{company.companyName}}</strong>

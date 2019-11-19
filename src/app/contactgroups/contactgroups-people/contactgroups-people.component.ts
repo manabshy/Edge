@@ -192,6 +192,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     if (!this.contactGroupId) {
       this.route.queryParams.subscribe(params => {
         this.isNewContactGroup = (!AppUtils.holdingSelectedPeople && params['isNewContactGroup']) || false;
+        this.isNewCompanyContact = params['isNewCompanyContact'] || false;
         this.isSigner = params['isSigner'] || false;
       });
     }
@@ -234,6 +235,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.contactGroupDetails = {} as ContactGroup;
       this.contactGroupDetails.contactPeople = [];
       this.contactGroupDetails.contactType = AppUtils.holdingContactType || ContactType.Individual;
+      if(this.isNewCompanyContact) {
+        this.isTypePicked = true;
+        this.contactGroupDetails.contactType = ContactType.CompanyContact;
+      }
       if (AppUtils.holdingContactType === ContactType.CompanyContact) {
         this.isNewCompanyContact = true;
       }
