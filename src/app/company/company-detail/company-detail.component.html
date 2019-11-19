@@ -20,8 +20,8 @@
           </li>
           <li role="menuitem" *ngIf="companyDetails">
             <a class="dropdown-item"
-              (click)="createNewCompanyOrContact(); $event.stopPropagation()">
-              <i class="fas fa-users"></i><i class="fas fa-plus fa-xs align-text-top"></i> New Company
+              (click)="createNewCompanyOrContact('newContact'); $event.stopPropagation()">
+              <i class="fas fa-briefcase"></i><i class="fas fa-plus fa-xs align-text-top"></i> New Company Contact
             </a>
           </li>
         </ul>
@@ -66,7 +66,7 @@
             <a class="list-group-item list-group-item-action text-center py-4"
               (click)="createNewCompanyOrContact('newContact'); $event.stopPropagation()" *ngIf="companyDetails">
               <span class="btn-link">
-                <i class="fas fa-users"></i><i class="fas fa-plus fa-xs align-text-top"></i> New Company Contact
+                <i class="fas fa-briefcase"></i><i class="fas fa-plus fa-xs align-text-top"></i> New Company Contact
               </span>
             </a>
           </app-subnav>
