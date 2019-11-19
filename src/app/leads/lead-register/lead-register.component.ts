@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, HostListener } from '@angular/core';
 import { LeadsService } from '../shared/leads.service';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
 import { Lead, LeadSearchInfo } from '../shared/lead';
@@ -67,14 +67,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       }
     );
 
-    this.leadSearchInfo = {
-      page: this.page,
-      ownerId: this.leadRegisterForm.get('ownerId').value !== '' ? this.leadRegisterForm.get('ownerId').value : 2537,
-      leadTypeId: this.leadRegisterForm.get('leadTypeId').value,
-      officeId: this.leadRegisterForm.get('officeId').value,
-      dateFrom: this.leadRegisterForm.get('dateFrom').value,
-      dateTo: this.leadRegisterForm.get('dateTo').value
-    };
+    this.leadSearchInfo = this.getSearchInfo(true);
   }
 
 
@@ -92,16 +85,6 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     this.leadService.leadsChanged(lead);
     if (this.areLeadsAssignable) {
     }
-  }
-
-  private patchLeadsSearchValues(lead: Lead) {
-    this.leadRegisterForm.patchValue({
-      ownerId: lead.ownerId,
-      personId: lead.personId,
-      officeId: lead.officeId,
-      leadTypeId: lead.leadTypeId,
-      nextChaseDate: this.sharedService.ISOToDate(lead.createdDate)
-    });
   }
 
   private setupLeadRegisterForm() {
@@ -123,100 +106,55 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
         ownerId: event.item.staffMemberId
       });
 
-      // if (this.leadRegisterForm.get('leadTypeId').value !== '') {
-      //   this.filteredLeads = this.leads.filter(l => l.leadTypeId === this.leadRegisterForm.get('leadTypeId').value);
-      // }
-
-      this.leadSearchInfo = {
-        page: 1,
-        ownerId: this.leadRegisterForm.get('ownerId').value !== '' ? this.leadRegisterForm.get('ownerId').value : 2537,
-        leadTypeId: this.leadRegisterForm.get('leadTypeId').value,
-        officeId: this.leadRegisterForm.get('officeId').value,
-        dateFrom: this.leadRegisterForm.get('dateFrom').value,
-        dateTo: this.leadRegisterForm.get('dateTo').value
-      };
-
-      //console.log('owner changed', this.leadSearchInfo);
+      this.leadSearchInfo = this.getSearchInfo(true);
       this.leadService.pageNumberChanged(this.leadSearchInfo);
 
-      //this.filteredLeads = this.leads.filter(l => l.ownerId === event.item.staffMemberId);
-
     } else {
-      console.log('reseting filter');
       this.leadRegisterForm.patchValue({
         ownerId: ''
       });
       this.filteredLeads = this.leads;
     }
-
-
-
-    //console.log(this.leadRegisterForm.get('ownerId'));
-    //console.log(this.leadRegisterForm.get('ownerId'));
-
-    console.log(this.leadRegisterForm.value);
   }
 
   ngOnChanges() {
-    
     this.page = this.pageNumber;
-    //this.leadSearchInfo.page = this.pageNumber;
-
-    this.leadSearchInfo = {
-      page: this.pageNumber,
-      ownerId: this.leadRegisterForm.get('ownerId').value !== '' ? this.leadRegisterForm.get('ownerId').value : 2537,
-      leadTypeId: this.leadRegisterForm.get('leadTypeId').value,
-      officeId: this.leadRegisterForm.get('officeId').value,
-      dateFrom: this.leadRegisterForm.get('dateFrom').value,
-      dateTo: this.leadRegisterForm.get('dateTo').value
-    };
 
     if (this.leads) {
       this.filteredLeads = this.leads;
     }
-    if (this.filteredLeads && this.groupsLength !== this.filteredLeads.length - 1) {
-      setTimeout(() => {
-        this.groupsLength = this.filteredLeads.length - 1;
-        this.itemIntoView(this.groupsLength);
-      });
-    }
   }
 
-  itemIntoView(index: number) {
-    const items = document.querySelectorAll('.list-group-item');
-
-    let observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.intersectionRatio > 0) {
-          setTimeout(() => {
-            this.onWindowScroll();
-            observer.unobserve(entry.target);
-          });
-        }
-      });
-    });
-
-    if (index > 0) {
-      observer.observe(items[index]);
-    }
+  private getSearchInfo(newSearch: boolean) {
+    return {
+      page: !newSearch ? this.pageNumber : 1,
+      ownerId: this.leadRegisterForm != null ?
+        (this.leadRegisterForm.get('ownerId').value !== '' ? this.leadRegisterForm.get('ownerId').value : 2537) : '',
+      leadTypeId: this.leadRegisterForm != null ? (this.leadRegisterForm.get('leadTypeId').value) : '',
+      officeId: this.leadRegisterForm != null ? (this.leadRegisterForm.get('officeId').value) : '',
+      dateFrom: this.leadRegisterForm != null ? (this.leadRegisterForm.get('dateFrom').value) : '',
+      dateTo: this.leadRegisterForm != null ? (this.leadRegisterForm.get('dateTo').value) : ''
+    };
   }
 
+  onScrollDown() {
+    this.onWindowScroll();
+    console.log('scrolled');
+  }
+
+  @HostListener('window:scroll', ['$event'])
   onWindowScroll() {
-    if (!this.bottomReached) {
+    let scrollHeight: number, totalHeight: number;
+    scrollHeight = document.body.scrollHeight;
+    totalHeight = window.scrollY + window.innerHeight;
+
+    this.leadSearchInfo = this.getSearchInfo(false);
+
+    if (totalHeight >= scrollHeight && !this.bottomReached) {
       this.page++;
-      //this.leadSearchInfo.page = this.page;
-
-      this.leadSearchInfo = {
-        page: this.page,
-        ownerId: this.leadRegisterForm.get('ownerId').value !== '' ? this.leadRegisterForm.get('ownerId').value : 2537,
-        leadTypeId: this.leadRegisterForm.get('leadTypeId').value,
-        officeId: this.leadRegisterForm.get('officeId').value,
-        dateFrom: this.leadRegisterForm.get('dateFrom').value,
-        dateTo: this.leadRegisterForm.get('dateTo').value
-      };
-
+      this.leadSearchInfo.page = this.page;
       this.leadService.pageNumberChanged(this.leadSearchInfo);
-      console.log('bottom here...', this.page);
+      console.log('leads page number', this.page);
     }
   }
 

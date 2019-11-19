@@ -70,8 +70,7 @@ export class LeadsService {
     const url = `${AppConstants.baseLeadsUrl}/owner`;
 
     return this.http.get<any>(url, { params: options }).pipe(
-      map(response => response.result),
-      tap(data => console.log('result', JSON.stringify(data))));
+      map(response => response.result));
   }
 
 
