@@ -86,7 +86,6 @@ export class CalendarComponent implements OnInit {
     const request = {
       startDate: format(getStart(this.viewDate), 'YYYY-MM-DD'),
       endDate: format(getEnd(this.viewDate), 'YYYY-MM-DD'),
-      staffMemberId: 2523
     } as BasicEventRequest;
     console.log('request here.....', request);
     this.events$ = this.diaryEventService.getDiaryEvents(request)
