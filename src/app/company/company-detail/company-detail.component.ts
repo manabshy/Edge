@@ -14,9 +14,10 @@ export class CompanyDetailComponent implements OnInit {
   companyContacts: BasicContactGroup[];
   errorMessage: any;
   isNewCompany: boolean;
-  companyId: any;
-  isEditingSelectedCompany: any;
+  companyId: number;
+  isEditingSelectedCompany: boolean;
   isNewContactGroup: boolean;
+  isExistingCompany: boolean;
 
   constructor(private contactGroupService: ContactGroupsService,
     private sharedService: SharedService,
@@ -29,6 +30,7 @@ export class CompanyDetailComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.isNewCompany = this.companyId ? false : params['isNewCompany'];
       this.isEditingSelectedCompany = params['isEditingSelectedCompany'] || false;
+      this.isExistingCompany = params['isExistingCompany'] || false;
     });
 
     if (this.companyId) {
@@ -42,7 +44,7 @@ export class CompanyDetailComponent implements OnInit {
   }
 
   getCompanyDetails(id: number) {
-    this.contactGroupService.getCompany(id).subscribe(data => {
+    this.contactGroupService.getCompany(id, true).subscribe(data => {
       this.companyDetails = data;
       this.sharedService.setTitle(this.companyDetails.companyName);
     }, error => {
@@ -62,10 +64,16 @@ export class CompanyDetailComponent implements OnInit {
   }
   createNewCompanyOrContact(event?: string) {
     if (event === 'newContact') {
-      this.isNewContactGroup = true;
-      this.router.navigate(['/contact-centre/detail/0/people/0'], { queryParams: { isNewContactGroup: true, isNewCompanyContact: true } });
+      this.router.navigate(['/contact-centre/detail/0/people/0'],
+        {
+          queryParams:
+          {
+            isNewCompanyContact: true,
+            isExistingCompany: true,
+            existingCompanyId: this.companyId
+          }
+        });
     } else {
-      this.isNewCompany = true;
       this.router.navigate(['/company-centre/detail/0/edit'], { queryParams: { isNewCompany: true } });
     }
   }
