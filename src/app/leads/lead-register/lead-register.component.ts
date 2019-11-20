@@ -138,7 +138,8 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       leadTypeId: this.leadRegisterForm != null ? this.leadRegisterForm.get('leadTypeId').value : null,
       officeId: this.leadRegisterForm != null ? this.leadRegisterForm.get('officeId').value : null,
       dateFrom: this.leadRegisterForm != null ? this.leadRegisterForm.get('dateFrom').value : null,
-      dateTo: this.leadRegisterForm != null ? this.leadRegisterForm.get('dateTo').value : null
+      dateTo: this.leadRegisterForm != null ? this.leadRegisterForm.get('dateTo').value : null,
+      includeClosedLeads: this.leadRegisterForm != null ? this.leadRegisterForm.get('includeClosedLeads').value : null
     };
   }
 

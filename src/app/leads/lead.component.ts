@@ -39,7 +39,8 @@ export class LeadComponent implements OnInit {
           leadTypeId: null,
           officeId: null,
           dateFrom: null,
-          dateTo: null
+          dateTo: null,
+          includeClosedLeads: false
         };
 
         // this.leadSearchInfo.page = this.page;
