@@ -26,7 +26,7 @@
       </div>
       <dl>
         <dt>Notes</dt>
-        <dd>{{ event.meta.notes }}</dd>
+        <dd>{{ event.meta.notes || '-'}}</dd>
       </dl>
       <dl *ngIf="event.meta.properties && event.meta.properties.length">
         <dt>Properties</dt>
