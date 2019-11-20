@@ -35,7 +35,7 @@ export class LeadComponent implements OnInit {
 
         this.leadSearchInfo = {
           page: this.page,
-          ownerId: this.currentStaffMember.staffMemberId,
+          ownerId: null,
           leadTypeId: null,
           officeId: null,
           dateFrom: null,
@@ -62,26 +62,16 @@ export class LeadComponent implements OnInit {
   }
 
   getLeads(leadSearchInfo: LeadSearchInfo) {
-    this.leadService.getLeads(leadSearchInfo.ownerId, PAGE_SIZE, leadSearchInfo.page).subscribe(result => {
+    this.leadService.getLeads(leadSearchInfo, PAGE_SIZE).subscribe(result => {
 
-      console.log('owner changed: ', leadSearchInfo);
       if (leadSearchInfo.page === 1) {
-        console.log('filter applied');
         this.leads = result;
       } else {
         this.leads = this.leads.concat(result);
       }
 
-      // if (this.leads != null) {
-      //   this.leads = this.leads.concat(result);
-      // } else {
-      //   this.leads = result;
-      // }
-
       this.filteredLeads = this.leads;
 
-      console.log('result:', result);
-      console.log('leads:', this.leads);
     }, error => {
       this.leads = [];
     });
