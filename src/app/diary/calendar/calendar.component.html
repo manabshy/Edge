@@ -1,4 +1,4 @@
-<app-calendar-header [(view)]="view" [(viewDate)]="viewDate"
+<app-calendar-header [(view)]="view" [(daysInWeek)]="daysInWeek" [(viewDate)]="viewDate"
 [weekStartsOn]="weekStartsOn"
 (viewDateChange)="getDiaryEvents()"
 (viewChange)="getDiaryEvents()"
@@ -55,17 +55,19 @@
       [events]="events"
       [activeDayIsOpen]="activeDayIsOpen"
       (dayClicked)="changeDay($event.day.date)"
+      (beforeViewRender)="beforeMonthViewRender($event)"
       [cellTemplate]="monthCell"
       [weekStartsOn]="weekStartsOn"
     >
     </mwl-calendar-month-view>
     <mwl-calendar-week-view
-      *ngSwitchCase="'week'"
+      *ngSwitchDefault
       [viewDate]="viewDate"
       [events]="events"
       (dayHeaderClicked)="changeDay($event.day.date)"
       (beforeViewRender)="beforeWeekViewRender($event)"
       [weekStartsOn]="weekStartsOn"
+      [daysInWeek]="daysInWeek"
     >
     </mwl-calendar-week-view>
     <mwl-calendar-day-view

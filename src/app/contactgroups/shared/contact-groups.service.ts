@@ -153,7 +153,7 @@ export class ContactGroupsService {
     const url = `${AppConstants.basePersonUrl}`;
     return this.http.post<PersonContactData>(url, person).pipe(
       map(response => response.result),
-      tap(data => console.log('updated person details here...', JSON.stringify(data))));
+      tap(data => console.log('added person details here...', JSON.stringify(data))));
   }
 
   updatePerson(person: Person): Observable<any> {
@@ -217,7 +217,7 @@ export class ContactGroupsService {
     const url = `${AppConstants.baseCompanyUrl}`;
     return this.http.post(url, contactGroup).pipe(
       map(response => response),
-      tap(data => console.log('updated company contact details here...', JSON.stringify(data))));
+      tap(data => console.log('added company contact details here...', JSON.stringify(data))));
   }
 
   getPersonNotes(personId: number, pageSize?: number, page?: number): Observable<ContactNote[]> {
