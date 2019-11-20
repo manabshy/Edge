@@ -108,7 +108,7 @@ export class CalendarComponent implements OnInit {
         tap(data => { this.diaryEvents = data, console.log('calender events', data); }),
         map(result => {
           return result.map(diary => {
-            const title = `${diary.eventType} - ${diary.notes}`;
+            const title = `${diary.eventType}`;
             const start = new Date(diary.startDateTime);
             const allDay = diary.allDay;
             const meta = diary;

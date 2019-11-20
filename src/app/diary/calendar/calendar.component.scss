@@ -32,7 +32,11 @@ $time-column-mobile-width: 40px;
     }
 
     .cal-week-view {
-        border: none;;
+        border: none;
+
+        .cal-event {
+            border: none;
+        }
     }
 
     .cal-day-headers, .cal-time-events {
@@ -98,15 +102,18 @@ $time-column-mobile-width: 40px;
             width: calc(100% - 2px);
             height: auto;
             margin: 1px;
-            padding: 0 5px;
-            line-height: 25px;
+            padding: 5px;
+            line-height: 1;
             font-size: 12px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
             background-color: #d1e8ff;
             border-color: #1e90ff;
             color: #1e90ff;
+
+            @include media-breakpoint-down(md) {    
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
         }
     }
 

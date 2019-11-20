@@ -9,6 +9,45 @@
     <i class="fa fa-spin fa-spinner"></i> Loading events...
   </div>
 </ng-template>
+<ng-template #customTooltip let-event="event">
+  <div role="tooltip" class="popover">
+    <div class="popover-arrow arrow"></div>
+    <h3 class="popover-title popover-header">{{event.title}}</h3>
+    <div class="popover-content popover-body">
+      <div class="row">
+        <dl class="col">
+          <dt>Start</dt>
+          <dd>{{ event.meta.startDateTime | calendarDate:'dayViewHour':locale }}</dd>
+        </dl>
+        <dl class="col">
+          <dt>End</dt>
+          <dd>{{ event.meta.endDateTime | calendarDate:'dayViewHour':locale }}</dd>
+        </dl>
+      </div>
+      <dl>
+        <dt>Notes</dt>
+        <dd>{{ event.meta.notes }}</dd>
+      </dl>
+      <dl *ngIf="event.meta.properties && event.meta.properties.length">
+        <dt>Properties</dt>
+        <dd>
+          <p class="mb-1" *ngFor="let property of event.meta.properties">
+              {{property.address | formatAddress}}
+          </p>
+        </dd>
+      </dl>
+      <dl *ngIf="event.meta.staffMembers && event.meta.staffMembers.length">
+        <dt>Staff Members</dt>
+        <dd>
+          <p class="mb-1" *ngFor="let staffMember of event.meta.staffMembers">
+            {{staffMember.fullName}}
+          </p>
+        </dd>
+      </dl>
+
+    </div>
+  </div>
+</ng-template>
 <ng-template
   #monthCell
   let-day="day"
@@ -53,10 +92,10 @@
       *ngSwitchCase="'month'"
       [viewDate]="viewDate"
       [events]="events"
-      [activeDayIsOpen]="activeDayIsOpen"
       (dayClicked)="changeDay($event.day.date)"
       (beforeViewRender)="beforeMonthViewRender($event)"
       [cellTemplate]="monthCell"
+      [tooltipTemplate]="customTooltip"
       [weekStartsOn]="weekStartsOn"
     >
     </mwl-calendar-month-view>
@@ -66,6 +105,7 @@
       [events]="events"
       (dayHeaderClicked)="changeDay($event.day.date)"
       (beforeViewRender)="beforeWeekViewRender($event)"
+      [tooltipTemplate]="customTooltip"
       [weekStartsOn]="weekStartsOn"
       [daysInWeek]="daysInWeek"
     >
@@ -75,6 +115,7 @@
       [viewDate]="viewDate"
       [events]="events"
       (beforeViewRender)="beforeDayViewRender($event)"
+      [tooltipTemplate]="customTooltip"
     >
     </mwl-calendar-day-view>
   </div>
