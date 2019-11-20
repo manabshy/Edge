@@ -4,7 +4,7 @@
       <ng-container *ngIf="!label; else givenLabel "><label for="searchTerm"
           class="col-form-label col-form-label-sm" [ngClass]="readOnly ? 'col-12 text-left' : 'col-sm-2'">Signers</label></ng-container>
       <ng-template #givenLabel><label for="searchTerm"
-          class="col-form-label-sm" [ngClass]="readOnly ? 'col-12 text-left' : 'col-sm-2'">{{label}}</label></ng-template>
+          class="col-form-label col-form-label-sm" [ngClass]="readOnly ? 'col-12 text-left' : 'col-sm-2'">{{label}}</label></ng-template>
       <div class="col">
         <div class="form-group">
           <input type="hidden" #selectedSignerInput
@@ -72,7 +72,8 @@
                 </app-subnav-item>
               </ng-container>
               <div class="list-group-item text-center" *ngIf="!signers?.length && !isLoading">
-                No signers found
+                No <ng-container *ngIf="!label; else givenLabel2 ">Signers</ng-container>
+                <ng-template #givenLabel2>{{label}}</ng-template> found
               </div>
               <div class="list-group-item text-center" *ngIf="isLoading">
                 <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...
