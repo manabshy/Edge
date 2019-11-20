@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CalendarEvent, CalendarDateFormatter, CalendarView, CalendarWeekViewBeforeRenderEvent, CalendarDayViewBeforeRenderEvent, DAYS_OF_WEEK, CalendarEventTitleFormatter } from 'angular-calendar';
+import { CalendarEvent, CalendarDateFormatter, CalendarView, CalendarWeekViewBeforeRenderEvent, CalendarDayViewBeforeRenderEvent, DAYS_OF_WEEK, CalendarEventTitleFormatter, CalendarMonthViewBeforeRenderEvent } from 'angular-calendar';
 import {
   isSameMonth,
   isSameDay,
@@ -33,7 +33,8 @@ import { CustomEventTitleFormatter } from '../shared/custom-event-title-formatte
   ]
 })
 export class CalendarComponent implements OnInit {
-  view: CalendarView = CalendarView.Week;
+  view: CalendarView | 'month' | 'week' | 'threeDays' | 'day' = CalendarView.Week ;
+  daysInWeek;
 
   viewDate: Date = new Date();
 
@@ -51,8 +52,20 @@ export class CalendarComponent implements OnInit {
     this.getDiaryEvents();
   }
 
+  beforeMonthViewRender(renderEvent: CalendarMonthViewBeforeRenderEvent) {
+    this.weekStartsOn = DAYS_OF_WEEK.MONDAY;
+    this.daysInWeek = null;
+  }
+  
   beforeWeekViewRender(renderEvent: CalendarWeekViewBeforeRenderEvent) {
     this.currentTimeIntoView();
+    if(this.view === 'threeDays') {
+      this.daysInWeek = 3;
+      this.weekStartsOn = null;
+    } else {
+      this.daysInWeek = null;
+      this.weekStartsOn = DAYS_OF_WEEK.MONDAY;
+    }
   }
 
   beforeDayViewRender(renderEvent: CalendarDayViewBeforeRenderEvent) {
@@ -74,12 +87,14 @@ export class CalendarComponent implements OnInit {
     const getStart: any = {
       month: startOfMonth,
       week: startOfWeek,
+      threeDays: startOfWeek,
       day: startOfDay
     }[this.view];
 
     const getEnd: any = {
       month: endOfMonth,
       week: endOfWeek,
+      threeDays: endOfWeek,
       day: endOfDay
     }[this.view];
 
