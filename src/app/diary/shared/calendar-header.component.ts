@@ -1,6 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { CalendarView } from 'angular-calendar';
-import { OnChange } from 'ngx-bootstrap/utils/decorators';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
@@ -10,22 +9,26 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 })
 export class CalendarHeaderComponent implements OnChanges {
 
-  @Input() view: CalendarView | 'month' | 'week' | 'day';
+  @Input() view: CalendarView | 'month' | 'week' | 'threeDays' | 'day';
   @Input() viewDate: Date;
   @Input() locale = 'en';
   @Input() weekStartsOn;
+  @Input() daysInWeek;
   @Output() viewChange: EventEmitter<string> = new EventEmitter();
   @Output() viewDateChange: EventEmitter<Date> = new EventEmitter();
   label: string;
+  excludeDays = [];
   diaryHeaderForm: FormGroup;
 
   constructor(private fb: FormBuilder) { }
 
-  ngOnChanges() {
+  ngOnInit() {
     this.diaryHeaderForm = this.fb.group({
       viewMode: this.view
     });
+  }
 
+  ngOnChanges() {
     if (this.view) {
       this.getLabel();
     }
@@ -40,6 +43,7 @@ export class CalendarHeaderComponent implements OnChanges {
         this.label = 'This Month';
         break;
       default:
+        this.view = 'week';
         this.label = 'This Week';
     }
   }
