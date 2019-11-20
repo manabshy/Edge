@@ -19,10 +19,10 @@ export interface Lead {
 }
 
 export interface LeadSearchInfo {
-    leadTypeId: number;
-    ownerId: number;
-    officeId: number;
-    dateFrom: Date;
-    dateTo: Date;
+    leadTypeId?: number;
+    ownerId?: number;
+    officeId?: number;
+    dateFrom?: Date;
+    dateTo?: Date;
     page: number;
 }

@@ -68,6 +68,12 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     );
 
     this.leadSearchInfo = this.getSearchInfo(true);
+
+    this.leadRegisterForm.valueChanges.subscribe(changes => {
+      this.leadSearchInfo = this.getSearchInfo(true);
+      console.log('form group changes', this.leadSearchInfo);
+      this.leadService.pageNumberChanged(this.leadSearchInfo);
+    });
   }
 
 
@@ -89,12 +95,12 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
 
   private setupLeadRegisterForm() {
     this.leadRegisterForm = this.fb.group({
-      ownerId: '',
-      officeId: '',
-      leadTypeId: '',
+      ownerId: null,
+      officeId: null,
+      leadTypeId: null,
       includeClosedLeads: false,
-      dateFrom: [''],
-      dateTo: ['']
+      dateFrom: null,
+      dateTo: null
     });
   }
 
@@ -128,12 +134,11 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   private getSearchInfo(newSearch: boolean) {
     return {
       page: !newSearch ? this.pageNumber : 1,
-      ownerId: this.leadRegisterForm != null ?
-        (this.leadRegisterForm.get('ownerId').value !== '' ? this.leadRegisterForm.get('ownerId').value : 2537) : '',
-      leadTypeId: this.leadRegisterForm != null ? (this.leadRegisterForm.get('leadTypeId').value) : '',
-      officeId: this.leadRegisterForm != null ? (this.leadRegisterForm.get('officeId').value) : '',
-      dateFrom: this.leadRegisterForm != null ? (this.leadRegisterForm.get('dateFrom').value) : '',
-      dateTo: this.leadRegisterForm != null ? (this.leadRegisterForm.get('dateTo').value) : ''
+      ownerId: this.leadRegisterForm != null ? this.leadRegisterForm.get('ownerId').value : null,
+      leadTypeId: this.leadRegisterForm != null ? this.leadRegisterForm.get('leadTypeId').value : null,
+      officeId: this.leadRegisterForm != null ? this.leadRegisterForm.get('officeId').value : null,
+      dateFrom: this.leadRegisterForm != null ? this.leadRegisterForm.get('dateFrom').value : null,
+      dateTo: this.leadRegisterForm != null ? this.leadRegisterForm.get('dateTo').value : null
     };
   }
 

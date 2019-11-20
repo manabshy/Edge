@@ -50,20 +50,26 @@ export class LeadsService {
     //tap(data => console.log('result', JSON.stringify(data))));
   }
 
-  getLeads(staffMemberId: number, pageSize?: number, page?: number): Observable<any> {
-    if (!page || +page === 0) {
-      page = 1;
+  getLeads(leadSearchInfo: LeadSearchInfo, pageSize?: number): Observable<any> {
+    if (!leadSearchInfo.page || +leadSearchInfo.page === 0) {
+      leadSearchInfo.page = 1;
     }
     if (pageSize == null) {
       pageSize = 10;
     }
 
+    console.log('date params', leadSearchInfo);
+
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
       fromObject: {
-        staffMemberId: staffMemberId.toString(),
-        pageSize: pageSize.toString(),
-        page: page.toString()
+        ownerId: leadSearchInfo.ownerId != null ? leadSearchInfo.ownerId.toString() : '',
+        leadTypeId: leadSearchInfo.leadTypeId != null ? leadSearchInfo.leadTypeId.toString() : '',
+        officeId: leadSearchInfo.officeId != null ? leadSearchInfo.officeId.toString() : '',
+        dateFrom: leadSearchInfo.dateFrom != null ? new Date(leadSearchInfo.dateFrom.toString()).toLocaleDateString() : '',
+        dateTo: leadSearchInfo.dateTo != null ? new Date(leadSearchInfo.dateTo.toString()).toLocaleDateString() : '',
+        page: leadSearchInfo.page.toString(),
+        pageSize: pageSize.toString()
       }
     });
 
