@@ -199,9 +199,16 @@ export class ContactGroupsService {
     );
   }
 
-  getCompany(companyId: number): Observable<Company | any> {
+  getCompany(companyId: number, includeCompanyContacts?: boolean): Observable<Company | any> {
+    if (!includeCompanyContacts) { includeCompanyContacts = false; }
+    const options = new HttpParams({
+      encoder: new CustomQueryEncoderHelper,
+      fromObject: {
+        includeCompanyContacts: includeCompanyContacts.toString()
+      }
+    });
     const url = `${AppConstants.baseCompanyUrl}/${companyId}`;
-    return this.http.get<CompanyData>(url).pipe(
+    return this.http.get<CompanyData>(url, { params: options }).pipe(
       map(response => response.result),
       tap(data => console.log('company details here...', JSON.stringify(data))));
   }

@@ -21,10 +21,11 @@ export class TapiService {
   constructor(private http: HttpClient, private staffMemberService: StaffMemberService) { }
 
   putCallRequest(tapiRequestInfo: TapiRequestInfo): Observable<any> {
+    console.log('tapi request', tapiRequestInfo);
     const url = `${AppConstants.baseTapiUrl}`;
 
     // User Name
-    this.staffMemberService.getCurrentStaffMember().subscribe(data => this.currentStaffMember = data);    
+    this.staffMemberService.getCurrentStaffMember().subscribe(data => this.currentStaffMember = data);
 
     // getting callRequestsSubscriptionAddress if already exists
     let callRequestsSubscriptionAddress = sessionStorage.getItem('callRequestsSubscriptionAddress');

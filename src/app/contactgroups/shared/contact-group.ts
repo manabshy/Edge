@@ -75,6 +75,7 @@ export interface Company {
   companyName: string;
   companyTypeId: CompanyTypeId;
   signer: Signer;
+  companyContacts: BasicContactGroup[];
   companyAddress: Address;
   telephone: string;
   fax: string;
