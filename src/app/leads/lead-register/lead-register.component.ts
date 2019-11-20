@@ -20,6 +20,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   @Input() leads: Lead[];
   @Input() pageNumber: number;
   @Input() bottomReached: boolean;
+  @Input() showFilterOptions: boolean = true;
   areLeadsAssignable = false;
   currentStaffMember: StaffMember;
   listInfo: any;
@@ -31,6 +32,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   groupsLength: number;
   filteredLeads: Lead[];
   leadSearchInfo: LeadSearchInfo;
+  enableOwnerFilter: boolean = true;
 
 
   constructor(private leadService: LeadsService,
@@ -66,6 +68,10 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
         this.offices = data;
       }
     );
+
+    // if (this.currentStaffMember.permissions.filter(p => p.permissionId === 69).length > 0) {
+    //   this.enableOwnerFilter = false;
+    // }
 
     this.leadSearchInfo = this.getSearchInfo(true);
 
