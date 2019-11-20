@@ -24,5 +24,6 @@ export interface LeadSearchInfo {
     officeId?: number;
     dateFrom?: Date;
     dateTo?: Date;
+    includeClosedLeads?: boolean;
     page: number;
 }

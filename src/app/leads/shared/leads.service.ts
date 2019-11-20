@@ -68,6 +68,7 @@ export class LeadsService {
         officeId: leadSearchInfo.officeId != null ? leadSearchInfo.officeId.toString() : '',
         dateFrom: leadSearchInfo.dateFrom != null ? new Date(leadSearchInfo.dateFrom.toString()).toLocaleDateString() : '',
         dateTo: leadSearchInfo.dateTo != null ? new Date(leadSearchInfo.dateTo.toString()).toLocaleDateString() : '',
+        includeClosedLeads: leadSearchInfo.includeClosedLeads != null ? (String)(leadSearchInfo.includeClosedLeads) : '',
         page: leadSearchInfo.page.toString(),
         pageSize: pageSize.toString()
       }
