@@ -43,7 +43,8 @@ export class CompanyComponent implements OnInit {
 
     if (this.route.snapshot.queryParamMap.get('companyName') || AppUtils.companySearchTerm) {
       const term = this.route.snapshot.queryParamMap.get('companyName') || AppUtils.companySearchTerm;
-      this.companyFinderForm.get('companyName').setValue(term.companyName);
+      console.log('search term in company', term)
+      this.companyFinderForm.get('companyName').setValue(term);
       this.companiesResults();
       this.isHintVisible = false;
       this.isMessageVisible = false;
