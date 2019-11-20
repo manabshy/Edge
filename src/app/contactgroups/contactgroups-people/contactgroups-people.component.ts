@@ -19,6 +19,7 @@ import { ToastrService } from 'ngx-toastr';
 import * as _ from 'lodash';
 import { InfoService } from 'src/app/core/services/info.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
+import { CompanyService } from 'src/app/company/shared/company.service';
 @Component({
   selector: 'app-contactgroups-people',
   templateUrl: './contactgroups-people.component.html',
@@ -82,9 +83,12 @@ export class ContactgroupsPeopleComponent implements OnInit {
   bottomReached: boolean;
   pageSize = 10;
   suggestions: (text$: Observable<string>) => Observable<any[]>;
-  suggestedTerm: any;
-  searchTerm: any;
+  suggestedTerm = '';
+  searchTerm = '';
   noSuggestions = false;
+  isExistingCompany = false;
+  existingCompanyId: number;
+  existingCompanyDetails: Company;
   get dataNote() {
     if (this.contactGroupDetails) {
       return {
@@ -118,6 +122,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   constructor(
     private contactGroupService: ContactGroupsService,
+    private companyService: CompanyService,
     private fb: FormBuilder,
     private _router: Router,
     private route: ActivatedRoute,
@@ -150,6 +155,13 @@ export class ContactgroupsPeopleComponent implements OnInit {
         });
       }
     });
+
+    // this.companyService.companyChanges$.subscribe(company => {
+    //   if(company) {
+    //     this.existingCompanyDetails = company;
+    //     console.log('existing company here', this.existingCompanyDetails)
+    //   }
+    // })
 
     this.contactGroupService.contactNotePageChanges$.subscribe(newPageNumber => {
       this.page = newPageNumber;
@@ -194,6 +206,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.isNewContactGroup = (!AppUtils.holdingSelectedPeople && params['isNewContactGroup']) || false;
         this.isNewCompanyContact = params['isNewCompanyContact'] || false;
         this.isSigner = params['isSigner'] || false;
+        this.isExistingCompany = params['isExistingCompany'] || false;
+        this.existingCompanyId = params['existingCompanyId'] || 0;
       });
     }
     this.isSubmitting = false;
@@ -235,7 +249,14 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.contactGroupDetails = {} as ContactGroup;
       this.contactGroupDetails.contactPeople = [];
       this.contactGroupDetails.contactType = AppUtils.holdingContactType || ContactType.Individual;
-      if(this.isNewCompanyContact) {
+      if (this.isNewCompanyContact && this.isExistingCompany) {
+        this.isTypePicked = true;
+        this.contactGroupDetails.contactType = ContactType.CompanyContact;
+        this.getCompanyDetails(this.existingCompanyId);
+        console.log('here in init', this.contactGroupDetailsForm);
+        console.log('selected details in init', this.selectedCompanyDetails);
+      }
+      if (this.isNewCompanyContact) {
         this.isTypePicked = true;
         this.contactGroupDetails.contactType = ContactType.CompanyContact;
       }
@@ -395,7 +416,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         const sameName = fullName.toLowerCase().trim() === person.fullName.toLowerCase().trim();
         const email = x.emailAddresses ? x.emailAddresses.filter(x => x === person.emailAddress) : [];
         const phone = x.phoneNumbers ?
-                      x.phoneNumbers.filter(x => x === person.phoneNumber ? person.phoneNumber.replace(/\s+/g, '') : '') : [];
+          x.phoneNumbers.filter(x => x === person.phoneNumber ? person.phoneNumber.replace(/\s+/g, '') : '') : [];
         const samePhone = phone[0] ? phone[0].toString() === person.phoneNumber.replace(/\s+/g, '') : false;
         const sameEmail = email[0] ? email[0].toLowerCase() === person.emailAddress : false;
         switch (true) {
@@ -604,11 +625,13 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   checkDuplicateInContactGroup(id) {
     let isDuplicate = false;
-    this.contactGroupDetails.contactPeople.forEach(x => {
-      if (x.personId === id) {
-        isDuplicate = true;
-      }
-    });
+    if (this.contactGroupDetails && this.contactGroupDetails.contactPeople) {
+      this.contactGroupDetails.contactPeople.forEach(x => {
+        if (x && x.personId === id) {
+          isDuplicate = true;
+        }
+      });
+    }
     return isDuplicate;
   }
 
@@ -677,12 +700,12 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   saveContactGroup() {
-    let validForm = this.contactGroupDetailsForm.valid;
-    if (this.contactGroupDetails.contactType === ContactType.CompanyContact) {
-      validForm = this.contactGroupDetailsForm.valid && this.companyFinderForm.valid;
-    }
+    const validForm = this.contactGroupDetailsForm.valid;
+    // if (this.contactGroupDetails.contactType === ContactType.CompanyContact && !this.isExistingCompany) {
+    //   validForm = this.contactGroupDetailsForm.valid && this.companyFinderForm.valid;
+    // }
     if (validForm) {
-      if (this.contactGroupDetailsForm.dirty || this.companyFinderForm.dirty) {
+      if (this.contactGroupDetailsForm.dirty || this.companyFinderForm.dirty || this.isExistingCompany) {
         const contactPeople = this.contactGroupDetails.contactPeople.length;
         if (this.selectedPeople.length || contactPeople) {
           const contactGroup = { ...this.contactGroupDetails, ...this.contactGroupDetailsForm.value };
@@ -764,6 +787,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   onSaveComplete(contactGroupId): void {
     this.toastr.success('Contact Group successfully saved');
+
+    if (this.isExistingCompany && this.isExistingCompany) {
+      this._router.navigate(['/company-centre/detail', this.existingCompanyId]);
+    }
     if (!contactGroupId) {
       this.sharedService.back();
     } else {

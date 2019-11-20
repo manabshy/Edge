@@ -48,7 +48,6 @@ export class TelephoneComponent implements OnInit {
       if (data) {
         this.currentStaffMember = data;
         this.tapiInfo = this.setupTapiInfo(data);
-        console.log('current user info in telephone....', data);
       }
     });
     // this.staffMemberService.getCurrentStaffMember().subscribe(data => {
@@ -200,7 +199,6 @@ export class TelephoneComponent implements OnInit {
       });
   }
   setupTapiInfo(staffMember: StaffMember) {
-    console.log('tapi staffMember', staffMember);
     let tapiInfo: TapiRequestInfo;
     tapiInfo = {
       // officeId: staffMember.homeOffice.officeId,
@@ -212,7 +210,6 @@ export class TelephoneComponent implements OnInit {
       guid: '',
       isCallHangedUp: false
     };
-    console.log('tapi request info', tapiInfo);
     return tapiInfo;
   }
 }

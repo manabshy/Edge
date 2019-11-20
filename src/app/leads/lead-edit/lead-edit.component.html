@@ -25,7 +25,7 @@
         </div>
       </div>
       <div class="col-sm-auto form-group text-right">
-        <button type="button" class="btn btn-danger" (click)="closeLeadClicked()">Close lead</button>
+        <button type="button" class="btn btn-danger" (click)="closeLeadClicked()" [attr.disabled] = "lead.closedById ? 'disabled' : null">{{lead.closedById ? 'Closed' : 'Close Lead'}}</button>
       </div>
     </div>
     <hr class="mt-0">

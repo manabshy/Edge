@@ -43,10 +43,10 @@ export class LeadEditComponent implements OnInit {
 
   ngOnInit() {
     AppUtils.parentRoute = AppUtils.prevRoute;
+
     this.route.params.subscribe(params => {
       this.leadId = +params['leadId'] || 0;
     });
-
 
     this.setupLeadEditForm();
 
@@ -92,26 +92,8 @@ export class LeadEditComponent implements OnInit {
       });
 
       console.log('new lead', this.lead);
-      console.log('lead edit form', this.leadEditForm);
 
     });
-
-    // this.leadsService.getLead(this.leadId).subscribe(result => {
-    //   this.lead = result;
-
-    //   this.leadEditForm.patchValue({
-    //     ownerId: result.ownerId,
-    //     person: result.person,
-    //     leadTypeId: result.leadTypeId,
-    //     nextChaseDate: this.sharedService.ISOToDate(result.createdDate)
-    //   });
-
-    //   console.log('selected lead:', this.lead);
-    //   console.log('lead edit form', this.leadEditForm);
-
-    // }, error => {
-    //   this.lead = null;
-    // });
   }
 
   private patchLeadValues(lead: Lead) {
@@ -120,7 +102,7 @@ export class LeadEditComponent implements OnInit {
       person: lead.person,
       personId: lead.personId,
       leadTypeId: lead.leadTypeId,
-      nextChaseDate: this.sharedService.ISOToDate(lead.createdDate)
+      nextChaseDate: this.sharedService.ISOToDate(lead.nextChaseDate)
     });
   }
 
@@ -128,13 +110,11 @@ export class LeadEditComponent implements OnInit {
     this.contactGroupService.getPersonNotes(this.lead.personId).subscribe(
       data => {
         this.personNotes = data;
-        console.log('notes:', this.personNotes);
       });
 
     this.contactGroupService.getPerson(this.lead.personId).subscribe(
       data => {
         this.person = data;
-        console.log('notes:', this.person);
       });
   }
 
@@ -155,9 +135,7 @@ export class LeadEditComponent implements OnInit {
   }
 
   updateLead() {
-    console.log(this.lead);
     const lead = { ...this.lead, ...this.leadEditForm.value };
-    console.log('updated lead:', lead);
     this.leadsService.updateLead(lead).subscribe((result) => {
       this.onUpdateCompleted();
     }, (error: WedgeError) => {

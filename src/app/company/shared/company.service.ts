@@ -10,7 +10,9 @@ import { HttpClient } from '@angular/common/http';
 })
 export class CompanyService {
   private companyPageChangeSubject = new Subject<number | null>();
+  private companySubject = new Subject<Company | null>();
   companyPageChanges$ = this.companyPageChangeSubject.asObservable();
+  companyChanges$ = this.companySubject.asObservable();
 
   constructor(private http: HttpClient) { }
 
@@ -18,6 +20,10 @@ export class CompanyService {
     this.companyPageChangeSubject.next(newPage);
   }
 
+  companyChanged(company: Company) {
+    this.companySubject.next(company);
+  }
+  
   addCompany(company: Company): Observable<any> {
     const url = `${AppConstants.baseCompanyUrl}`;
     return this.http.post(url, company).pipe(
