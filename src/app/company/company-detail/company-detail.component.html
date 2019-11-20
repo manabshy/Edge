@@ -41,8 +41,8 @@
                 <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading company contacts...
               </div>
             </div>
-            <app-subnav-item *ngFor="let companyContact of companyDetails?.companyContacts"
-              [navLink]="'people/'+companyContact.contactGroupId" [params]="{docTitle: 'Contact Group | '+companyDetails?.addressee}">
+            <app-subnav-item *ngFor="let companyContact of companyDetails?.companyContacts" [noBaseLink]="true"
+              [navLink]="'/contact-centre/detail/'+0+'/people/'+companyContact.contactGroupId" [params]="{docTitle: 'Contact Group | '+companyDetails?.addressee}">
               <i class="fas fa-briefcase mr-2 fa-fw" *ngIf="companyContact?.isCompany; else peopleIcon"></i>
               <ng-template #peopleIcon>
                 <i class="fas fa-users mr-2 fa-fw"></i>
@@ -52,8 +52,8 @@
                   *ngFor="let contactPerson of companyContact?.contactPeople; last as isLast; first as isFirst">
                   <br class="d-sm-none" *ngIf="!isFirst" />
                   <ng-container *ngIf="contactPerson">
-                    <a [routerLink]="['../../../detail', contactPerson.personId ]"
-                      (click)="$event.stopPropagation();">{{contactPerson?.addressee}}</a>
+                    <a [routerLink]="['/', contactPerson.personId ]"
+                      (click)="$event.stopPropagation()">{{contactPerson?.addressee}}</a>
                   </ng-container>
                   <ng-container *ngIf="!isLast">, </ng-container>
                 </ng-container>

@@ -3,6 +3,7 @@ import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-group
 import { SharedService } from 'src/app/core/services/shared.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Company, BasicContactGroup } from 'src/app/contactgroups/shared/contact-group';
+import { CompanyService } from '../shared/company.service';
 
 @Component({
   selector: 'app-company-detail',
@@ -20,6 +21,7 @@ export class CompanyDetailComponent implements OnInit {
   isExistingCompany: boolean;
 
   constructor(private contactGroupService: ContactGroupsService,
+    private companyService: CompanyService,
     private sharedService: SharedService,
     private router: Router,
     private route: ActivatedRoute) { }
@@ -45,8 +47,11 @@ export class CompanyDetailComponent implements OnInit {
 
   getCompanyDetails(id: number) {
     this.contactGroupService.getCompany(id, true).subscribe(data => {
-      this.companyDetails = data;
-      this.sharedService.setTitle(this.companyDetails.companyName);
+      if (data) {
+        this.companyDetails = data;
+
+        this.sharedService.setTitle(this.companyDetails.companyName);
+      }
     }, error => {
       this.errorMessage = <any>error;
       this.sharedService.showError(this.errorMessage);
@@ -76,5 +81,7 @@ export class CompanyDetailComponent implements OnInit {
     } else {
       this.router.navigate(['/company-centre/detail/0/edit'], { queryParams: { isNewCompany: true } });
     }
+    this.companyDetails ? this.companyService.companyChanged(this.companyDetails) : this.companyService.companyChanged(null);
   }
+
 }
