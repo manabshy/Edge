@@ -53,7 +53,7 @@
           <h5>Quick links</h5>
           <app-subnav>
             <app-subnav-item *ngFor="let item of subNav"  [noBaseLink]="true"
-            [navLink]="'/contact-centre/detail/'+person.personId+'/'+item?.value" [params]="{docTitle: item?.label+' | '+person?.addressee}">
+            [navLink]="'/contact-centre/detail/'+item?.params[0]+'/'+item?.value" [params]="{docTitle: item?.label+' | '+person?.addressee}">
               <!-- [params]="{docTitle: item?.label+' | '+searchedPersonDetails?.addressee}"> -->
               {{item?.label}}
               <ng-container *ngIf="summaryTotals; else loadingInfo">          

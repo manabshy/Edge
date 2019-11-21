@@ -33,6 +33,9 @@ export class LeadEditComponent implements OnInit {
   person: Person;
   subNav = LeadEditSubNavItems;
   summaryTotals: PersonSummaryFigures;
+  page = 1;
+  pageSize = 10;
+  bottomReached = false;
 
   constructor(private leadsService: LeadsService,
     private route: ActivatedRoute,
@@ -50,6 +53,7 @@ export class LeadEditComponent implements OnInit {
       this.leadId = +params['leadId'] || 0;
     });
 
+    console.log('person:', this.person);
     this.setupLeadEditForm();
 
     this.storage.get('allstaffmembers').subscribe(data => {
@@ -65,6 +69,8 @@ export class LeadEditComponent implements OnInit {
       }
     });
 
+    this.getLeadInformation();
+
     // receive new lead
     this.leadsService.leadsChanges$.subscribe(lead => {
       this.lead = lead;
@@ -75,16 +81,7 @@ export class LeadEditComponent implements OnInit {
         this.getPersonInformation();
 
       } else {
-        this.leadsService.getLead(this.leadId).subscribe(result => {
-          this.lead = result;
-
-          this.patchLeadValues(result);
-
-          this.getPersonInformation();
-
-        }, error => {
-          this.lead = null;
-        });
+        this.getLeadInformation();
       }
 
       this.staffMemberService.getCurrentStaffMember().subscribe(data => {
@@ -95,6 +92,17 @@ export class LeadEditComponent implements OnInit {
 
       console.log('new lead', this.lead);
 
+    });
+  }
+
+  private getLeadInformation() {
+    this.leadsService.getLead(this.leadId).subscribe(result => {
+      this.lead = result;
+      console.log('lead fro DB:', result);
+      this.patchLeadValues(result);
+      this.getPersonInformation();
+    }, error => {
+      this.lead = null;
     });
   }
 
@@ -118,6 +126,11 @@ export class LeadEditComponent implements OnInit {
       data => {
         this.person = data;
         this.getSearchedPersonSummaryInfo(this.person.personId);
+
+        this.subNav.forEach(element => {
+          element.params.push(this.person.personId);
+
+        });
       });
   }
 
