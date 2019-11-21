@@ -81,9 +81,9 @@
         </div>
       </div>
     </div>
-    <div class="col-xl-4 aside sticky-top">
+    <div class="col-xl-4 aside sticky-top-lg">
       <div class="mb-3">
-        <h5>Info</h5>
+        <h5>Quick links</h5>
         <app-subnav>
           <app-subnav-item *ngFor="let item of subNav"
             [navLink]="item?.link" [params]="{docTitle: item?.label+' | '+searchedPersonDetails?.addressee}">

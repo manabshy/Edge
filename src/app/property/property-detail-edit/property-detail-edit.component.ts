@@ -12,6 +12,9 @@ import { ToastrService } from 'ngx-toastr';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { InfoDetail } from 'src/app/core/services/info.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { Subject } from 'rxjs';
+import { ConfirmModalComponent } from 'src/app/core/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-property-detail-edit',
@@ -48,6 +51,7 @@ export class PropertyDetailEditComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
     private _router: Router,
+    private modalService: BsModalService,
     private propertyService: PropertyService,
     private sharedService: SharedService,
     private storage: StorageMap,
@@ -60,14 +64,12 @@ export class PropertyDetailEditComponent implements OnInit {
     this.storage.get('info').subscribe(data => {
       if (data) {
         this.listInfo = data; this.setDropdownLists();
-        console.log('list info here....', this.listInfo);
       }
     });
 
     this.storage.get('propertyBK').subscribe((data: string) => {
       if (data) {
         this.propertyDetails = <Property>JSON.parse(data);
-        console.log(this.propertyDetails);
         this.displayPropertyDetails(this.propertyDetails);
         this.storage.delete('propertyBK').subscribe();
       }
@@ -90,7 +92,6 @@ export class PropertyDetailEditComponent implements OnInit {
         this.createdSigner = data;
         this.isCreatingNewSigner = false;
         this.propertyForm.markAsDirty();
-        console.log('signer details here from observable...', data);
       }
     });
 
@@ -120,19 +121,6 @@ export class PropertyDetailEditComponent implements OnInit {
     }
   }
 
-  // getSignerDetails(id: number) {
-  //   this.contactGroupService.getSignerbyId(id).subscribe(data => {
-  //     AppUtils.newSignerId = null;
-  //     this.lastKnownOwner = data;
-  //     console.log('signer details IN SIGNER METHOD...', data)
-  //     this.isCreatingNewSigner = false;
-  //     this.propertyForm.markAsDirty();
-  //   }, error => {
-  //     this.errorMessage = <any>error;
-  //     this.sharedService.showError(this.errorMessage);
-  //   });
-  // }
-
   getPropertyDetails(propertyId: number) {
     this.propertyService.getProperty(propertyId).subscribe(data => {
       this.propertyDetails = data;
@@ -142,6 +130,7 @@ export class PropertyDetailEditComponent implements OnInit {
       this.displayPropertyDetails(data);
     });
   }
+
   private displayPropertyDetails(data: Property) {
     if (this.propertyForm) {
       this.propertyForm.reset();
@@ -155,7 +144,6 @@ export class PropertyDetailEditComponent implements OnInit {
       address: data.address
     });
     this.lastKnownOwner = data.lastKnownOwner;
-    // this.propertyAddress = data.address;
   }
 
   onSelectType(propertyTypeId: number) {
@@ -203,7 +191,6 @@ export class PropertyDetailEditComponent implements OnInit {
   }
 
   getSelectedProperty(property: Property) {
-    console.log('selected property', property);
     if (property) {
       this.propertyForm.markAsPristine();
       this.propertyForm.clearValidators();
@@ -251,7 +238,15 @@ export class PropertyDetailEditComponent implements OnInit {
     this.propertyAddress ? this.isAddressFormValid = true : this.isAddressFormValid = false;
     if (this.propertyForm.valid) {
       if (this.propertyForm.dirty || isOwnerChanged) {
-        this.AddOrUpdateProperty();
+        if (!this.lastKnownOwner) {
+          this.showWarning().subscribe(res => {
+            if (res) {
+              this.AddOrUpdateProperty();
+            }
+          });
+        } else {
+          this.AddOrUpdateProperty();
+        }
       } else {
         this.onSaveComplete();
       }
@@ -275,7 +270,6 @@ export class PropertyDetailEditComponent implements OnInit {
 
     if (this.isNewProperty) {
       if (this.isMatchFound) {
-        console.log('here....', this.isMatchFound)
         this.showMatches = true;
         this.propertyService.displayDuplicates(this.showMatches);
       } else {
@@ -332,4 +326,14 @@ export class PropertyDetailEditComponent implements OnInit {
     this.sharedService.back();
   }
 
+  showWarning() {
+    const subject = new Subject<boolean>();
+    const initialState = {
+      title: 'Do you want to set the owner?',
+      actions: ['Yes', 'No']
+    };
+    const modal = this.modalService.show(ConfirmModalComponent, { ignoreBackdropClick: true, initialState });
+    modal.content.subject = subject;
+    return subject.asObservable();
+  }
 }

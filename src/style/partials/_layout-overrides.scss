@@ -214,6 +214,13 @@ fieldset {
     top: 1rem;
 }
 
+.sticky-top-lg {
+    @extend .sticky-top;
+    @include media-breakpoint-down(md){
+        position: static;
+    }
+}
+
 .v-o-h {
     visibility: hidden;
 
