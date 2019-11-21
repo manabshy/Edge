@@ -16,7 +16,7 @@
     <div class="popover-content popover-body">
       <div class="row">
         <div class="col-12 mb-1">
-          <span class="badge badge-pill badge-danger" *ngIf="event.meta.isCancelled">Cancelled</span>
+          <span class="badge badge-pill badge-danger mr-1" *ngIf="event.meta.isCancelled">Cancelled</span>
           <span class="badge badge-pill badge-success" *ngIf="event.meta.isConfirmed">Confirmed</span>
         </div>
         <dl class="col">
@@ -65,27 +65,20 @@
   let-tooltipAppendToBody="tooltipAppendToBody">
   <div class="cal-cell-top">
     <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
-    <div
-      class="cal-event"
-      *ngFor="let event of day.events; trackBy:trackByEventId"
-      [style.backgroundColor]="event.color?.secondary"
-      [style.borderColor]="event.color?.primary"
-      [mwlCalendarTooltip]="!tooltipDisabled ? (event.title | calendarEventTitle:'weekTooltip':event) : ''"
-      [tooltipPlacement]="tooltipPlacement"
-      [tooltipEvent]="event"
-      [tooltipTemplate]="tooltipTemplate"
-      [tooltipAppendToBody]="tooltipAppendToBody"
-      (mwlClick)="eventClicked.emit()">
-      <mwl-calendar-event-actions
-        [event]="event"
-        [customTemplate]="eventActionsTemplate">
-      </mwl-calendar-event-actions>
-      &ngsp;
-      <mwl-calendar-event-title
-        [event]="event"
-        [customTemplate]="eventTitleTemplate"
-        view="week">
-      </mwl-calendar-event-title>
+    <div class="cal-event-container" [ngClass]="event?.cssClass" *ngFor="let event of day.events; trackBy:trackByEventId">
+      <div class="cal-event" [style.backgroundColor]="event.color?.primary" (mouseenter)="highlightDay.emit({event: event})"
+        (mouseleave)="unhighlightDay.emit({event: event})"
+        [mwlCalendarTooltip]="event.title | calendarEventTitle:'monthTooltip':event" [tooltipPlacement]="tooltipPlacement"
+        [tooltipEvent]="event" [tooltipTemplate]="tooltipTemplate" [tooltipAppendToBody]="tooltipAppendToBody" mwlDraggable
+        [class.cal-draggable]="event.draggable" dragActiveClass="cal-drag-active"
+        [dropData]="{event: event, draggedFrom: day}" [dragAxis]="{x: event.draggable, y: event.draggable}"
+        (mwlClick)="eventClicked.emit({ event: event })">
+        <mwl-calendar-event-actions [event]="event" [customTemplate]="eventActionsTemplate">
+        </mwl-calendar-event-actions>
+        &ngsp;
+        <mwl-calendar-event-title [event]="event" [customTemplate]="eventTitleTemplate" view="week">
+        </mwl-calendar-event-title>
+      </div>
     </div>
   </div>
 </ng-template>
