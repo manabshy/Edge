@@ -22,6 +22,7 @@ export class LeadComponent implements OnInit {
   page = 1;
   bottomReached = false;
   leadSearchInfo: LeadSearchInfo;
+  isLoading = false;
 
   constructor(private leadService: LeadsService, private staffMemberService: StaffMemberService) { }
 
@@ -64,8 +65,10 @@ export class LeadComponent implements OnInit {
   }
 
   getLeads(leadSearchInfo: LeadSearchInfo) {
+    this.isLoading = true;
     this.leadService.getLeads(leadSearchInfo, PAGE_SIZE).subscribe(result => {
-
+      this.isLoading = false;
+      
       if (leadSearchInfo.page === 1) {
         this.leads = result;
       } else {
