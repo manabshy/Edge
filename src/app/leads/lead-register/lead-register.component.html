@@ -24,41 +24,40 @@
 
     <div class="row">
       <div class="col-sm form-group">
-        <label for="leadType">Type</label>
+        <label class="small" for="leadType">Type</label>
         <select class="form-control form-control-sm" id="leadType" formControlName="leadTypeId">
           <option value=""></option>
           <option selected *ngFor="let leadType of leadTypes" [value]=leadType.id>{{leadType?.value}}</option>
         </select>
       </div>
       <div class="col-sm form-group">
-        <label for="owner">Owner</label>
+        <label class="small" for="owner">Owner</label>
         <app-staffmember-finder (ownerChanged)="onOwnerChanged($event)"></app-staffmember-finder>
       </div>
       <div class="col-sm form-group">
-        <label for="office">Office</label>
+        <label class="small" for="office">Office</label>
         <select class="form-control form-control-sm" id="office" formControlName="officeId">
           <option value=""></option>
           <option selected *ngFor="let office of offices" [value]=office.officeId>{{office?.name}}</option>
         </select>
       </div>
       <div class="col-sm form-group">
-        <label for="dateFrom">Date From</label>
+        <label class="small" for="dateFrom">Date From</label>
         <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
           [bsConfig]="{showWeekNumbers:false}" bsDatepicker formControlName="dateFrom">
       </div>
       <div class="col-sm form-group">
-        <label for="dateTo">Date To</label>
+        <label class="small" for="dateTo">Date To</label>
         <input type="text" id="dateTo" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
           [bsConfig]="{showWeekNumbers:false}" bsDatepicker formControlName="dateTo">
       </div>
       <div class="w-100"></div>
-      <div class="col">
+      <div class="col-sm-auto">
         <div class="custom-control custom-checkbox">
           <input type="checkbox" class="custom-control-input" id="closedInclusive" formControlName="includeClosedLeads">
           <label class="custom-control-label" for="closedInclusive">Include closed leads</label>
         </div>
       </div>
-      <div class="w-100"></div>
       <div class="col">
           <div class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input" id="unassignedLeadsOnly" formControlName="includeUnassignedLeadsOnly">
@@ -91,18 +90,17 @@
           <div class="col">
             <div class="row align-items-center">
               <div class="col-sm mb-2 mb-sm-0">
+                <span class="badge badge-pill badge-danger mr-1" *ngIf="lead?.closedById">Closed</span>
                 <span class="badge badge-pill badge-info">{{lead?.leadType}}</span>
               </div>
               <div class="col-sm">
-                <b>{{lead?.person}}</b>
+                {{lead?.person}}
               </div>
               <div class="col-sm">
                 {{lead?.nextChaseDate | date: 'dd/MM/yyyy hh:mm'}}
               </div>
               <div class="col-sm text-muted">
-                <small>
-                  {{lead?.owner}}
-                </small>
+                {{lead?.owner}}
               </div>
             </div>
           </div>
