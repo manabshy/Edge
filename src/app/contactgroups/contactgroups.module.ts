@@ -20,6 +20,7 @@ import { ContactgroupsDetaillettingsManagementsComponent } from './contactgroups
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { ContactGroupsComponent } from './contactgroups.component';
 import { ContactgroupsDetailHomeHelperComponent } from './contactgroups-detail-home-helper/contactgroups-detail-home-helper.component';
+import { PersonDuplicateCheckerComponent } from './shared/person-duplicate-checker/person-duplicate-checker.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { ContactgroupsDetailHomeHelperComponent } from './contactgroups-detail-h
     ContactgroupsDetailOffersComponent,
     ContactgroupsDetailTenanciesComponent,
     ContactgroupsDetaillettingsManagementsComponent,
-    ContactgroupsDetailHomeHelperComponent],
+    ContactgroupsDetailHomeHelperComponent,
+    PersonDuplicateCheckerComponent],
   imports: [
     CommonModule,
     CoreModule,
