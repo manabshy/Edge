@@ -156,13 +156,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
       }
     });
 
-    // this.companyService.companyChanges$.subscribe(company => {
-    //   if(company) {
-    //     this.existingCompanyDetails = company;
-    //     console.log('existing company here', this.existingCompanyDetails)
-    //   }
-    // })
-
     this.contactGroupService.contactNotePageChanges$.subscribe(newPageNumber => {
       this.page = newPageNumber;
       this.getNextContactNotesPage(this.page);
