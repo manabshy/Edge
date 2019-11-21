@@ -52,13 +52,12 @@
           [bsConfig]="{showWeekNumbers:false}" bsDatepicker formControlName="dateTo">
       </div>
       <div class="w-100"></div>
-      <div class="col">
+      <div class="col-sm-auto">
         <div class="custom-control custom-checkbox">
           <input type="checkbox" class="custom-control-input" id="closedInclusive" formControlName="includeClosedLeads">
           <label class="custom-control-label" for="closedInclusive">Include closed leads</label>
         </div>
       </div>
-      <div class="w-100"></div>
       <div class="col">
           <div class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input" id="unassignedLeadsOnly" formControlName="includeUnassignedLeadsOnly">
@@ -94,15 +93,13 @@
                 <span class="badge badge-pill badge-info">{{lead?.leadType}}</span>
               </div>
               <div class="col-sm">
-                <b>{{lead?.person}}</b>
+                {{lead?.person}}
               </div>
               <div class="col-sm">
                 {{lead?.nextChaseDate | date: 'dd/MM/yyyy hh:mm'}}
               </div>
               <div class="col-sm text-muted">
-                <small>
-                  {{lead?.owner}}
-                </small>
+                {{lead?.owner}}
               </div>
             </div>
           </div>

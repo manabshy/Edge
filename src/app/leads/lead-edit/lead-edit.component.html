@@ -4,31 +4,28 @@
     <div class="col">
       <h4 class="m-0">Lead</h4>
     </div>
+    <div class="col-auto">
+        <button type="button" class="btn btn-danger" (click)="closeLeadClicked()" [attr.disabled] = "lead.closedById ? 'disabled' : null">{{lead.closedById ? 'Closed' : 'Close Lead'}}</button>
+    </div>
   </div>
   <form [formGroup]="leadEditForm" (ngSubmit)="updateLead()">
-    <div class="row justify-content-between align-items-end">
-      <div class="col-sm-6">
-        <div class="row">
-          <div class="col-sm-6 form-group">
-            <label for="chaseDate">Next chase date</label>
-            <input type="text" id="chaseDate" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
-              formControlName="nextChaseDate"
-              [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY'}" bsDatepicker >
-          </div>
-          <div class="col-sm-6 form-group">
-            <label for="chaser">Owner</label>
-            <select class="form-control form-control-sm" id="owner" formControlName="ownerId">
-                <option value=""></option>
-                <option selected *ngFor="let staffMember of staffMembers" [value]=staffMember.staffMemberId>{{staffMember?.fullName}}</option>          
-            </select>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-auto form-group text-right">
-        <button type="button" class="btn btn-danger" (click)="closeLeadClicked()" [attr.disabled] = "lead.closedById ? 'disabled' : null">{{lead.closedById ? 'Closed' : 'Close Lead'}}</button>
+    <div class="form-group row">
+      <label for="chaseDate" class="col-sm-2 col-form-label col-form-label-sm">Next chase date</label>
+      <div class="col-sm-3">
+        <input type="text" id="chaseDate" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
+        formControlName="nextChaseDate"
+        [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY'}" bsDatepicker >
       </div>
     </div>
-    <hr class="mt-0">
+    <div class="form-group row">
+      <label for="chaser" class="col-sm-2 col-form-label col-form-label-sm">Owner</label>
+      <div class="col-sm-3">
+        <select class="form-control form-control-sm" id="owner" formControlName="ownerId">
+            <option value=""></option>
+            <option selected *ngFor="let staffMember of staffMembers" [value]=staffMember.staffMemberId>{{staffMember?.fullName}}</option>          
+        </select>
+      </div>
+    </div>
     <div class="form-group row">
       <label for="type" class="col-sm-2 col-form-label col-form-label-sm">Type</label>
       <div class="col-sm-3">
