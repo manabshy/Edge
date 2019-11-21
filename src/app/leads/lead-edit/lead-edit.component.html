@@ -12,20 +12,22 @@
           <div class="col-sm-6 form-group">
             <label for="chaseDate">Next chase date</label>
             <input type="text" id="chaseDate" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
-              formControlName="nextChaseDate"
-              [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY'}" bsDatepicker >
+              formControlName="nextChaseDate" [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY'}"
+              bsDatepicker>
           </div>
           <div class="col-sm-6 form-group">
             <label for="chaser">Owner</label>
             <select class="form-control form-control-sm" id="owner" formControlName="ownerId">
-                <option value=""></option>
-                <option selected *ngFor="let staffMember of staffMembers" [value]=staffMember.staffMemberId>{{staffMember?.fullName}}</option>          
+              <option value=""></option>
+              <option selected *ngFor="let staffMember of staffMembers" [value]=staffMember.staffMemberId>
+                {{staffMember?.fullName}}</option>
             </select>
           </div>
         </div>
       </div>
       <div class="col-sm-auto form-group text-right">
-        <button type="button" class="btn btn-danger" (click)="closeLeadClicked()" [attr.disabled] = "lead.closedById ? 'disabled' : null">{{lead.closedById ? 'Closed' : 'Close Lead'}}</button>
+        <button type="button" class="btn btn-danger" (click)="closeLeadClicked()"
+          [attr.disabled]="lead.closedById ? 'disabled' : null">{{lead.closedById ? 'Closed' : 'Close Lead'}}</button>
       </div>
     </div>
     <hr class="mt-0">
@@ -33,26 +35,50 @@
       <label for="type" class="col-sm-2 col-form-label col-form-label-sm">Type</label>
       <div class="col-sm-3">
         <select class="custom-select custom-select-sm" id="leadType" formControlName="leadTypeId">
-            <option value=""></option>
-            <option selected *ngFor="let leadType of leadTypes" [value]=leadType.id>{{leadType?.value}}</option>          
+          <option value=""></option>
+          <option selected *ngFor="let leadType of leadTypes" [value]=leadType.id>{{leadType?.value}}</option>
         </select>
       </div>
     </div>
     <div class="row">
       <label class="col-sm-2 col-form-label col-form-label-sm">Person</label>
       <div class="col-sm-10">
-        <div class="list-group mb-3">          
-            <app-person-details [personDetails]="person"></app-person-details>          
+        <div class="list-group mb-3">
+          <app-person-details [personDetails]="person"></app-person-details>
         </div>
       </div>
+      <div class="col-xl-4 aside sticky-top">
+          <div class="mb-3">
+            <h5>Info</h5>
+            <app-subnav>
+              <app-subnav-item *ngFor="let item of subNav" [navLink]="item?.link"
+                [params]="{docTitle: item?.label+' | '+searchedPersonDetails?.addressee}">
+                {{item?.label}}
+                <ng-container *ngIf="summaryTotals; else loadingInfo">
+                  <ng-container *ngIf="isObject(summaryTotals[item?.value]); else simpleValue">
+                    <span class="badge badge-pill badge-success mr-1"> {{summaryTotals[item?.value]?.active}} </span>
+                    <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value]?.total}}</span>
+                  </ng-container>
+                  <ng-template #simpleValue>
+                    <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value] || '0'}}</span>
+                  </ng-template>
+                </ng-container>
+                <ng-template #loadingInfo>
+                  <span class="badge badge-pill badge-primary"><i class="fas fa-spinner fa-pulse d-inline-block"></i></span>
+                </ng-template>
+              </app-subnav-item>
+            </app-subnav>
+          </div>
+        </div>
     </div>
+   
     <!-- <app-contactgroups-detail  [leadOwnerId]="lead?.ownerId"></app-contactgroups-detail> -->
     <div class="row">
-        <label class="col-sm-2 col-form-label col-form-label-sm">Notes</label>
-        <div class="col-sm-10">          
-          <app-notes [personNotes]="personNotes"></app-notes>
-        </div>
+      <label class="col-sm-2 col-form-label col-form-label-sm">Notes</label>
+      <div class="col-sm-10">
+        <app-notes [personNotes]="personNotes"></app-notes>
       </div>
+    </div>
 
     <div class="form-actions">
       <div class="container px-lg-4">

@@ -1,3 +1,13 @@
+import { SubNavItem, SubNav } from "src/app/core/shared/subnav";
+
+export const LeadEditSubNav = ['instructions', 'offers', 'searches', 'lettings-managements', 'home-helpers'];
+
+export const LeadEditSubNavItems: SubNavItem[] = LeadEditSubNav.map(x => ({
+  link: x,
+  label: SubNav.subNavLabel(x),
+  value: SubNav.subNavValue(x),
+}));
+
 export interface Lead {
     leadId: number;
     personId: number;

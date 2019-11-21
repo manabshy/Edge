@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AppUtils } from '../../core/shared/utils';
 import { ActivatedRoute } from '@angular/router';
 import { LeadsService } from '../shared/leads.service';
-import { Lead } from '../shared/lead';
+import { Lead, LeadEditSubNavItems } from '../shared/lead';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { InfoDetail } from 'src/app/core/services/info.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
@@ -31,6 +31,8 @@ export class LeadEditComponent implements OnInit {
   staffMembers: StaffMember[];
   currentStaffMember: StaffMember;
   person: Person;
+  subNav = LeadEditSubNavItems;
+
 
   constructor(private leadsService: LeadsService,
     private route: ActivatedRoute,
