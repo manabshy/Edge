@@ -57,7 +57,7 @@
           website</p>
         <ng-template #websiteAddress>
           <p class="mb-2 text-truncate" *ngIf="companyDetails?.website"><a class="mobile-btn"
-              href="companyDetails?.website" target="_blank">website</a></p>
+              href="{{companyDetails?.website}}" target="_blank">{{companyDetails?.website}}</a></p>
         </ng-template>
       </div>
       <div class="col-12">
