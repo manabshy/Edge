@@ -106,7 +106,8 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       leadTypeId: null,
       includeClosedLeads: false,
       dateFrom: null,
-      dateTo: null
+      dateTo: null,
+      includeUnassignedLeadsOnly: false,
     });
   }
 
@@ -145,7 +146,8 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       officeId: this.leadRegisterForm != null ? this.leadRegisterForm.get('officeId').value : null,
       dateFrom: this.leadRegisterForm != null ? this.leadRegisterForm.get('dateFrom').value : null,
       dateTo: this.leadRegisterForm != null ? this.leadRegisterForm.get('dateTo').value : null,
-      includeClosedLeads: this.leadRegisterForm != null ? this.leadRegisterForm.get('includeClosedLeads').value : null
+      includeClosedLeads: this.leadRegisterForm != null ? this.leadRegisterForm.get('includeClosedLeads').value : null,
+      includeUnassignedLeadsOnly: this.leadRegisterForm != null ? this.leadRegisterForm.get('includeUnassignedLeadsOnly').value : null
     };
   }
 

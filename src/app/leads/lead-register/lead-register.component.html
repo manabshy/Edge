@@ -15,7 +15,7 @@
             <a class="dropdown-item" href (click)="assignLeads()">
               <i class="fas fa-arrow-right fa-fw"></i><i class="fas fa-user fa-fw"></i> Assign
             </a>
-          </li>          
+          </li>
         </ul>
       </div>
     </div>
@@ -27,18 +27,18 @@
         <label for="leadType">Type</label>
         <select class="form-control form-control-sm" id="leadType" formControlName="leadTypeId">
           <option value=""></option>
-          <option selected *ngFor="let leadType of leadTypes" [value]=leadType.id>{{leadType?.value}}</option>                      
+          <option selected *ngFor="let leadType of leadTypes" [value]=leadType.id>{{leadType?.value}}</option>
         </select>
       </div>
-      <div class="col-sm form-group" >
+      <div class="col-sm form-group">
         <label for="owner">Owner</label>
-        <app-staffmember-finder (ownerChanged) = "onOwnerChanged($event)" ></app-staffmember-finder>
+        <app-staffmember-finder (ownerChanged)="onOwnerChanged($event)"></app-staffmember-finder>
       </div>
       <div class="col-sm form-group">
         <label for="office">Office</label>
         <select class="form-control form-control-sm" id="office" formControlName="officeId">
           <option value=""></option>
-          <option selected *ngFor="let office of offices" [value]=office.officeId>{{office?.name}}</option>          
+          <option selected *ngFor="let office of offices" [value]=office.officeId>{{office?.name}}</option>
         </select>
       </div>
       <div class="col-sm form-group">
@@ -58,12 +58,27 @@
           <label class="custom-control-label" for="closedInclusive">Include closed leads</label>
         </div>
       </div>
+      <div class="w-100"></div>
+      <div class="col">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="unassignedLeadsOnly" formControlName="includeUnassignedLeadsOnly">
+            <label class="custom-control-label" for="unassignedLeadsOnly">Include unassigned leads only</label>
+          </div>
+        </div>
     </div>
   </form>
   <form action="">
     <h5 *ngIf="areLeadsAssignable">Select to assign</h5>
     <div class="list-group mb-3">
       <!-- <a [routerLink]="areLeadsAssignable ? null : ['edit', lead?.leadId]" (click)="selectLead()" -->
+      <div class="list-group-item list-header d-none d-sm-block">
+        <div class="row">
+          <div class="col-sm"><strong>Lead Type</strong></div>
+          <div class="col-sm"><strong>Person</strong></div>
+          <div class="col-sm"><strong>Next Chase Date</strong></div>
+          <div class="col-sm"><strong>Owner</strong></div>
+        </div>
+      </div>
       <a [routerLink]="areLeadsAssignable ? null : ['edit', lead?.leadId]" (click)="selectLead(lead)"
         class="list-group-item list-group-item-action" *ngFor="let lead of filteredLeads; let i = index;">
         <div class="row align-items-center">

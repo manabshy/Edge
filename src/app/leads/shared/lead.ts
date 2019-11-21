@@ -26,4 +26,5 @@ export interface LeadSearchInfo {
     dateTo?: Date;
     includeClosedLeads?: boolean;
     page: number;
+    includeUnassignedLeadsOnly?: boolean;
 }
