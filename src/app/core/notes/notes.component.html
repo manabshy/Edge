@@ -17,13 +17,27 @@
     </div>
     <div class="list-group-item" *ngFor="let note of notes">
       <div class="row">
-        <div class="col-auto pr-0" *ngIf="note?.isPinned">
-          <i class="fas fa-thumbtack fa-fw" tooltip="Pinned to top"></i>
+        <div class="col-auto pr-0">
+          <i class="fas fa-thumbtack fa-fw" 
+            role="button" data-toggle="button" 
+            (click)="setFlag(note?.id, false)"
+            [attr.aria-pressed]="!note?.isPinned ? false : true" 
+            [ngClass]="{'unset': !note?.isPinned, 'd-none': !note?.isPinned && note?.propertyId}"
+            tooltip="Pin to top"
+            container="body">
+          </i>
         </div>
-        <div class="col-auto" *ngIf="note?.isImportant">
-          <i class="fas fa-exclamation-circle text-danger fa-fw" tooltip="Important"></i>
+        <div class="col-auto">
+          <i class="fas fa-exclamation-circle text-danger fa-fw" 
+            role="button" data-toggle="button" 
+            (click)="setFlag(note?.id, true)"
+            [attr.aria-pressed]="!note?.isImportant ? false : true" 
+            [ngClass]="{'unset': !note?.isImportant, 'd-none': !note?.isImportant && note?.propertyId}" 
+            tooltip="Important"
+            container="body">
+          </i>
         </div>
-        <div class="col text-right" *ngIf="!note?.propertyId">
+        <!-- <div class="col text-right" *ngIf="!note?.propertyId">
           <div class="btn-group" dropdown placement="bottom right">
             <button id="actionsToggle" dropdownToggle type="button" class="btn btn-link p-0 dropdown-toggle"
               aria-controls="actionsList">
@@ -53,7 +67,7 @@
               </li>
             </ul>
           </div>
-        </div>
+        </div> -->
       </div>
       <div class="row">
         <div class="col-12">

@@ -65,6 +65,9 @@ export class NotesComponent implements OnInit, OnChanges {
   }
 
   setFlag(noteId: number, isImportantFlag: boolean) {
+    if(this.notes.propertyId){
+      return;
+    }
     this.notes.forEach((x) => {
       if (x.id === noteId) {
         if (isImportantFlag) {
