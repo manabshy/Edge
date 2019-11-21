@@ -52,14 +52,15 @@
         <div class="mb-3">
           <h5>Info</h5>
           <app-subnav>
-            <app-subnav-item *ngFor="let item of subNav" [navLink]="item?.link"
-              [params]="{docTitle: item?.label+' | '+searchedPersonDetails?.addressee}">
+            <app-subnav-item *ngFor="let item of subNav"  [noBaseLink]="true"
+            [navLink]="'/contact-centre/detail/'+person.personId+'/'+item?.value" [params]="{docTitle: item?.label+' | '+person?.addressee}">
+              <!-- [params]="{docTitle: item?.label+' | '+searchedPersonDetails?.addressee}"> -->
               {{item?.label}}
-              <ng-container *ngIf="summaryTotals; else loadingInfo">
+              <ng-container *ngIf="summaryTotals; else loadingInfo">          
                 <ng-container *ngIf="isObject(summaryTotals[item?.value]); else simpleValue">
                   <span class="badge badge-pill badge-success mr-1"> {{summaryTotals[item?.value]?.active}} </span>
                   <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value]?.total}}</span>
-                </ng-container>
+                </ng-container> 
                 <ng-template #simpleValue>
                   <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value] || '0'}}</span>
                 </ng-template>
