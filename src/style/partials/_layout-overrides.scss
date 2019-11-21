@@ -214,9 +214,9 @@ fieldset {
     top: 1rem;
 }
 
-.sticky-top-lg {
+.sticky-top-xl {
     @extend .sticky-top;
-    @include media-breakpoint-down(md){
+    @include media-breakpoint-down(lg){
         position: static;
     }
 }
