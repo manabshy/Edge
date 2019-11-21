@@ -118,21 +118,24 @@ $time-column-mobile-width: 40px;
     }
 
     .cal-event-container {
-        &:not(.is-confirmed) {
+        &.is-confirmed {
             .cal-event {
-                background: repeating-linear-gradient(
-                45deg,
-                color("white"),
-                color("white") 10px,
-                #d1e8ff 10px,
-                #d1e8ff 20px
-                );
-                border: 1px solid #d1e8ff;
+                border-left: 5px solid theme-color("success");
             }
         }
         &.is-important {
             .cal-event {
-                border-left: 5px solid theme-color("danger");
+                position: relative;
+                padding-left: 10px;
+                &:before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    left: 0;
+                    border-left: 5px solid theme-color("danger");
+                    display: block;
+                }
             }
         }
         &.is-cancelled {
