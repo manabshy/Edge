@@ -117,4 +117,29 @@ $time-column-mobile-width: 40px;
         }
     }
 
+    .cal-event-container {
+        &:not(.is-confirmed) {
+            .cal-event {
+                background: repeating-linear-gradient(
+                45deg,
+                color("white"),
+                color("white") 10px,
+                #d1e8ff 10px,
+                #d1e8ff 20px
+                );
+                border: 1px solid #d1e8ff;
+            }
+        }
+        &.is-important {
+            .cal-event {
+                border-left: 5px solid theme-color("danger");
+            }
+        }
+        &.is-cancelled {
+            .cal-event {
+                text-decoration: line-through;
+            }
+        }
+    }
+
 }

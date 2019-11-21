@@ -112,7 +112,11 @@ export class CalendarComponent implements OnInit {
             const start = new Date(diary.startDateTime);
             const allDay = diary.allDay;
             const meta = diary;
-            return { title, start, allDay, meta } as CalendarEvent;
+            let cssClass = '';
+            cssClass += meta.isCancelled ? 'is-cancelled' : '';
+            cssClass += meta.isHighImportance ? ' is-important' : '';
+            cssClass += meta.isConfirmed ? ' is-confirmed' : '';
+            return { title, start, allDay, meta, cssClass } as CalendarEvent;
           });
         }),
       );
