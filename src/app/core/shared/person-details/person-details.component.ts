@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Person } from '../../models/person';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-person-details',
@@ -7,10 +8,13 @@ import { Person } from '../../models/person';
   styleUrls: ['./person-details.component.scss']
 })
 export class PersonDetailsComponent implements OnInit {
-@Input()  personDetails: Person;
-  constructor() { }
+  @Input() personDetails: Person;
+  constructor(private router: Router) { }
 
   ngOnInit() {
   }
 
+  navigate() {
+    this.router.navigate(['/contact-centre/detail/', this.personDetails.personId, 'edit']);
+  }
 }

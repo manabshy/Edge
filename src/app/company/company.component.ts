@@ -109,7 +109,7 @@ export class CompanyComponent implements OnInit {
     if (event.key !== 'Enter') {
       this.isMessageVisible = false;
     }
-    AppUtils.companySearchTerm = this.companyFinderForm.value;
+    AppUtils.companySearchTerm = this.companyFinderForm.value.companyName;
 
     if (this.companyFinderForm.value.companyName && this.companyFinderForm.value.companyName.length > 2) {
       this.isHintVisible = false;
