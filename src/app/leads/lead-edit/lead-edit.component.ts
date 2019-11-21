@@ -9,7 +9,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
 import { StaffMember } from 'src/app/core/models/staff-member';
-import { ContactNote } from 'src/app/contactgroups/shared/contact-group';
+import { ContactNote, PersonSummaryFigures } from 'src/app/contactgroups/shared/contact-group';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { getDate } from 'date-fns';
 import { Person } from 'src/app/core/models/person';
@@ -32,7 +32,7 @@ export class LeadEditComponent implements OnInit {
   currentStaffMember: StaffMember;
   person: Person;
   subNav = LeadEditSubNavItems;
-
+  summaryTotals: PersonSummaryFigures;
 
   constructor(private leadsService: LeadsService,
     private route: ActivatedRoute,
@@ -117,7 +117,18 @@ export class LeadEditComponent implements OnInit {
     this.contactGroupService.getPerson(this.lead.personId).subscribe(
       data => {
         this.person = data;
+        this.getSearchedPersonSummaryInfo(this.person.personId);
       });
+  }
+
+  getSearchedPersonSummaryInfo(personId: number) {
+    this.contactGroupService.getPersonInfo(personId).subscribe(data => {
+      this.summaryTotals = data;
+    });
+  }
+
+  isObject(val) {
+    return val instanceof Object;
   }
 
   private setupLeadEditForm() {
