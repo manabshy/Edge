@@ -329,8 +329,8 @@ export class PropertyDetailEditComponent implements OnInit {
   showWarning() {
     const subject = new Subject<boolean>();
     const initialState = {
-      title: 'Do you want to set the owner?',
-      actions: ['Yes', 'No']
+      title: 'It looks like you don\'t have set a owner. Do you want to save anyway?',
+      actions: ['No', 'Yes, save']
     };
     const modal = this.modalService.show(ConfirmModalComponent, { ignoreBackdropClick: true, initialState });
     modal.content.subject = subject;
