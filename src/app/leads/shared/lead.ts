@@ -6,6 +6,7 @@ export const LeadEditSubNavItems: SubNavItem[] = LeadEditSubNav.map(x => ({
   link: x,
   label: SubNav.subNavLabel(x),
   value: SubNav.subNavValue(x),
+  params: []
 }));
 
 export interface Lead {

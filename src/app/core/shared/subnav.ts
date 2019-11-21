@@ -21,4 +21,5 @@ export interface SubNavItem {
     link: string;
     label: string;
     value: string;
+    params?: any[];
 }
