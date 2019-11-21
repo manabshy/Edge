@@ -12,9 +12,13 @@
 <ng-template #customTooltip let-event="event">
   <div role="tooltip" class="popover">
     <div class="popover-arrow arrow"></div>
-    <h3 class="popover-title popover-header">{{event.title}}</h3>
+    <h3 class="popover-title popover-header">{{event.title}} <span class="badge badge-pill badge-danger ml-1" *ngIf="event.meta.isHighImportance">Important</span></h3>
     <div class="popover-content popover-body">
       <div class="row">
+        <div class="col-12 mb-1">
+          <span class="badge badge-pill badge-danger" *ngIf="event.meta.isCancelled">Cancelled</span>
+          <span class="badge badge-pill badge-success" *ngIf="event.meta.isConfirmed">Confirmed</span>
+        </div>
         <dl class="col">
           <dt>Start</dt>
           <dd>{{ event.meta.startDateTime | calendarDate:'dayViewHour':locale }}</dd>
