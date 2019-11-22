@@ -49,6 +49,8 @@ export class LeadEditComponent implements OnInit {
   ngOnInit() {
     AppUtils.parentRoute = AppUtils.prevRoute;
 
+    console.log('subnav',this.subNav);
+
     this.route.params.subscribe(params => {
       this.leadId = +params['leadId'] || 0;
     });
