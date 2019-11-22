@@ -11,6 +11,7 @@ import { BasicPerson } from 'src/app/core/models/person';
 export class PersonDuplicateCheckerComponent implements OnInit {
   personFinderForm: FormGroup;
   potentialDuplicatePeople: PotentialDuplicateResult;
+  selectedPersonId: number;
   isOffCanvasVisible = false;
   isCreateNewPersonVisible = false;
   isCreateNewPerson = false;

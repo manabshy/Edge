@@ -89,6 +89,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isExistingCompany = false;
   existingCompanyId: number;
   existingCompanyDetails: Company;
+  isNewAddress: boolean;
   get dataNote() {
     if (this.contactGroupDetails) {
       return {
@@ -584,7 +585,12 @@ export class ContactgroupsPeopleComponent implements OnInit {
     });
   }
   getAddress(address: any) {
-    this.contactGroupDetails.companyAddress = address;
+    if (address) {
+      this.contactGroupDetails.companyAddress = address;
+      this.isNewAddress = true;
+    }
+    console.log('from child', address);
+    console.log('new company address here', this.contactGroupDetails.companyAddress);
   }
 
   selectPerson(id: number) {
@@ -698,7 +704,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     //   validForm = this.contactGroupDetailsForm.valid && this.companyFinderForm.valid;
     // }
     if (validForm) {
-      if (this.contactGroupDetailsForm.dirty || this.companyFinderForm.dirty || this.isExistingCompany) {
+      if (this.contactGroupDetailsForm.dirty || this.companyFinderForm.dirty || this.isExistingCompany || this.isNewAddress) {
         const contactPeople = this.contactGroupDetails.contactPeople.length;
         if (this.selectedPeople.length || contactPeople) {
           const contactGroup = { ...this.contactGroupDetails, ...this.contactGroupDetailsForm.value };

@@ -3,7 +3,7 @@ import { SharedService } from '../services/shared.service';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AppConstants } from '../shared/app-constants';
 import { Person } from '../models/person';
-import { Company } from 'src/app/contactgroups/shared/contact-group';
+import { Company, BasicContactGroup } from 'src/app/contactgroups/shared/contact-group';
 import { Property } from 'src/app/property/shared/property';
 import { Address } from '../models/address';
 import { AppUtils } from '../shared/utils';
@@ -23,6 +23,7 @@ export class AddressComponent implements OnInit, OnChanges {
   @Input() propertyDetails: Property;
   @Input() isNewProperty: boolean;
   @Input() companyDetails: Company;
+  @Input() companyAddress: Address;
   @Input() addressError: any;
   @Output() addressDetails = new EventEmitter<any>();
   foundAddress: AddressAutoCompleteData;
@@ -90,8 +91,8 @@ export class AddressComponent implements OnInit, OnChanges {
       town: [''],
       postCode: ['', { validators: [Validators.minLength(5), Validators.maxLength(8), Validators.pattern(AppConstants.postCodePattern)] }],
     });
-    if (this.companyDetails || this.personDetails || this.propertyDetails) {
-      this.populateAddressForm(this.personDetails, this.companyDetails, this.propertyDetails);
+    if (this.companyDetails || this.personDetails || this.propertyDetails || this.companyAddress) {
+      this.populateAddressForm(this.personDetails, this.companyDetails, this.propertyDetails, this.companyAddress);
     }
 
     Object.keys(this.addressForm.controls).forEach(key => {
@@ -186,7 +187,7 @@ export class AddressComponent implements OnInit, OnChanges {
             retrievedAddress.BuildingNumber = buildingInfo[0];
             retrievedAddress.BuildingName = buildingInfo.slice(1, buildingInfo.length).join(' ');
           }
-          if(!retrievedAddress.BuildingName && !this.hasNumber(retrievedAddress.SubBuilding)) {
+          if (!retrievedAddress.BuildingName && !this.hasNumber(retrievedAddress.SubBuilding)) {
             retrievedAddress.BuildingName = retrievedAddress.SubBuilding;
             retrievedAddress.SubBuilding = '';
           }
@@ -252,7 +253,7 @@ export class AddressComponent implements OnInit, OnChanges {
     this.addressDetails.emit(address);
   }
 
-  populateAddressForm(person?: Person, company?: Company, property?: Property) {
+  populateAddressForm(person?: Person, company?: Company, property?: Property, companyAddress?: Address) {
     if (this.addressForm) {
       this.addressForm.reset();
     }
@@ -283,6 +284,20 @@ export class AddressComponent implements OnInit, OnChanges {
             postCode: company.companyAddress.postCode,
             countryId: company.companyAddress.countryId,
             country: company.companyAddress.country,
+          });
+        }
+        break;
+      case !!this.companyAddress:
+        this.companyAddress = companyAddress;
+        if (companyAddress) {
+          if (companyAddress.postCode) {
+            companyAddress.postCode = companyAddress.postCode.trim();
+          }
+          this.addressForm.patchValue({
+            addressLines: companyAddress.addressLines,
+            postCode: companyAddress.postCode,
+            countryId: companyAddress.countryId,
+            country: companyAddress.country,
           });
         }
         break;

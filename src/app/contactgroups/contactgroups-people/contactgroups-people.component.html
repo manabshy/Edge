@@ -1,4 +1,5 @@
-<app-breadcrumb [title]="contactGroupDetails?.contactGroupId ? 'CG-'+contactGroupDetails?.contactGroupId : ''"></app-breadcrumb>
+<app-breadcrumb [title]="contactGroupDetails?.contactGroupId ? 'CG-'+contactGroupDetails?.contactGroupId : ''">
+</app-breadcrumb>
 <div class="container">
   <div class="row page-title">
     <div class="col">
@@ -41,7 +42,8 @@
       *ngIf="contactGroupDetails?.contactPeople && !contactGroupDetails?.contactPeople.length && !isNewContactGroup && !isLoadingNewPersonVisible && !isExistingCompany">
       You must add at least <b>1</b> person in the contact group.
     </div>
-    <div class="alert alert-danger" *ngIf="contactGroupDetails?.contactPeople && companyAlert && !isNewContactGroup && !isExistingCompany">
+    <div class="alert alert-danger"
+      *ngIf="contactGroupDetails?.contactPeople && companyAlert && !isNewContactGroup && !isExistingCompany">
       You must add <b>1</b> company for a company contact.
     </div>
     <form action="">
@@ -68,15 +70,15 @@
           <div class="row" [hidden]="!selectedCompanyDetails || isExistingCompany">
             <label for="selectedCompany" class="col-sm-2 col-form-label col-form-label-sm">Company Name</label>
             <div class="col-sm-10">
-                <div class="form-group">
-                  <input type="hidden" #selectedCompanyInput id="selectedCompany" formControlName="selectedCompany">
-                  <app-subnav class="small">
-                    <app-subnav-item (click)="editSelectedCompany(selectedCompanyDetails?.companyId)">
-                      {{selectedCompanyDetails?.companyName}}
-                    </app-subnav-item>
-                  </app-subnav>
-                  <a *ngIf="!isExistingCompany" class="small mr-3" href (click)="toggleSearchCompany()">Change Company</a>
-                </div>
+              <div class="form-group">
+                <input type="hidden" #selectedCompanyInput id="selectedCompany" formControlName="selectedCompany">
+                <app-subnav class="small">
+                  <app-subnav-item (click)="editSelectedCompany(selectedCompanyDetails?.companyId)">
+                    {{selectedCompanyDetails?.companyName}}
+                  </app-subnav-item>
+                </app-subnav>
+                <a *ngIf="!isExistingCompany" class="small mr-3" href (click)="toggleSearchCompany()">Change Company</a>
+              </div>
             </div>
           </div>
           <div class="row" [hidden]="!isSearchCompanyVisible || isExistingCompany">
@@ -84,18 +86,20 @@
             <div class="col-sm-10">
               <div class="form-group">
                 <div class="input-group input-group-sm">
-                  <input #companyNameInput type="search" id="company" class="form-control"
-                    formControlName="companyName" (keydown.enter)="searchCompany()" [ngbTypeahead]="suggestions" [focusFirst]="false" (selectItem)="selectedSuggestion($event)">
-                    <div class="input-group-append">
-                      <button type="button" class="btn btn-secondary" (click)="searchCompany()">Search</button>
-                    </div>
+                  <input #companyNameInput type="search" id="company" class="form-control" formControlName="companyName"
+                    (keydown.enter)="searchCompany()" [ngbTypeahead]="suggestions" [focusFirst]="false"
+                    (selectItem)="selectedSuggestion($event)">
+                  <div class="input-group-append">
+                    <button type="button" class="btn btn-secondary" (click)="searchCompany()">Search</button>
+                  </div>
                 </div>
               </div>
               <div class="btn-link btn-sm p-0 mb-3" *ngIf="noSuggestions" (click)="editSelectedCompany(0, true)">
                 <i class="fas fa-plus mr-2"></i>New Company
               </div>
               <div class="off-canvas" [hidden]="!foundCompanies" (click)="foundCompanies = null">
-                <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
+                <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()"
+                  #offCanvasContent>
                   <h4 class="page-title text-left pt-3">
                     Quick finder
                     <button type="button" class="close mr-2" aria-label="Close" (click)="foundCompanies = null">
@@ -115,7 +119,8 @@
                       *ngIf="!foundCompanies?.length && companyFinderForm.value.companyName && !isLoadingCompaniesVisible">
                       No company found. Try again or create a new one.
                     </div>
-                    <div class="list-group-item list-group-item-action text-center py-4" (click)="editSelectedCompany(0, true)">
+                    <div class="list-group-item list-group-item-action text-center py-4"
+                      (click)="editSelectedCompany(0, true)">
                       <span class="btn-link"><i class="fas fa-plus mr-2"></i>New Company</span>
                     </div>
                   </app-subnav>
@@ -123,8 +128,14 @@
               </div>
             </div>
           </div>
-          <app-address *ngIf="isCompanyAdded && companyFinderForm.value.selectedCompany"
-            [companyDetails]="selectedCompanyDetails" (addressDetails)="getAddress($event)"></app-address>
+          <ng-container *ngIf="contactGroupDetails?.companyAddress?.postCode; else showCompanyAddress">
+            <app-address *ngIf="contactGroupDetails" [companyAddress]="contactGroupDetails.companyAddress"
+              (addressDetails)="getAddress($event)"></app-address>
+          </ng-container>
+          <ng-template #showCompanyAddress>
+            <app-address *ngIf="isCompanyAdded && companyFinderForm.value.selectedCompany"
+              [companyDetails]="selectedCompanyDetails" (addressDetails)="getAddress($event)"></app-address>
+          </ng-template>
           <div class="row justify-content-end" [hidden]="isExistingCompany">
             <label class="col-sm-2 col-form-label col-form-label-sm">Type</label>
             <div class="col-sm-10">
@@ -296,9 +307,10 @@
                   <i class="fas fa-user-plus mr-2"></i>Add Person
                 </span>
               </a>
-              <div class="list-group-item list-group-item-warning text-center" *ngIf="contactGroupDetails?.referenceCount && !isCloned"
-                (click)="cloneContactGroup()">
-                Transaction history present. You can't add or remove people from this Contact Group.<br>If you want to add or
+              <div class="list-group-item list-group-item-warning text-center"
+                *ngIf="contactGroupDetails?.referenceCount && !isCloned" (click)="cloneContactGroup()">
+                Transaction history present. You can't add or remove people from this Contact Group.<br>If you want to
+                add or
                 remove
                 a person, <a [routerLink]="['../', contactGroupId]">create a new Contact Group</a>
               </div>
@@ -451,14 +463,17 @@
                 </ng-container>
                 <ng-template #badge>
                   <div class="col-12 mb-2" *ngIf="foundPerson?.matchType">
-                    <span class="badge badge-pill badge-success" *ngIf="foundPerson?.matchType == 'FullMatch'">Full Match</span>
-                    <span class="badge badge-pill badge-warning" *ngIf="foundPerson?.matchType == 'GoodMatch'">Good Match</span>
+                    <span class="badge badge-pill badge-success" *ngIf="foundPerson?.matchType == 'FullMatch'">Full
+                      Match</span>
+                    <span class="badge badge-pill badge-warning" *ngIf="foundPerson?.matchType == 'GoodMatch'">Good
+                      Match</span>
                   </div>
                 </ng-template>
                 <div class="col-sm-4">
                   <b>
                     {{foundPerson?.title}}
-                    <span class="mr-1" [innerHTML]="foundPerson?.firstName | highlight : personFinderForm.value.firstName"></span>
+                    <span class="mr-1"
+                      [innerHTML]="foundPerson?.firstName | highlight : personFinderForm.value.firstName"></span>
                     <span [innerHTML]="foundPerson?.lastName | highlight : personFinderForm.value.lastName"></span>
                   </b>
                 </div>
@@ -469,7 +484,8 @@
                 </div>
                 <div class="col-sm-4">
                   <ng-container *ngFor="let email of foundPerson?.emailAddresses">
-                    <div class="text-truncate" [innerHTML]="email | highlight : personFinderForm.value.emailAddress"></div>
+                    <div class="text-truncate" [innerHTML]="email | highlight : personFinderForm.value.emailAddress">
+                    </div>
                   </ng-container>
                 </div>
               </div>
