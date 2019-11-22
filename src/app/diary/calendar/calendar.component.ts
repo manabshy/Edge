@@ -86,7 +86,7 @@ export class CalendarComponent implements OnInit {
   }
 
 
-  getDiaryEvents() {
+  getDiaryEvents(isCancelledVisible?) {
     const getStart: any = {
       month: startOfMonth,
       week: startOfWeek,
@@ -119,7 +119,11 @@ export class CalendarComponent implements OnInit {
             cssClass += meta.isCancelled ? 'is-cancelled' : '';
             cssClass += meta.isHighImportance ? ' is-important' : '';
             cssClass += meta.isConfirmed ? ' is-confirmed' : '';
-            return { title, start, allDay, meta, cssClass } as CalendarEvent;
+            if( !meta.isCancelled || isCancelledVisible) {
+              return { title, start, allDay, meta, cssClass } as CalendarEvent;
+            } else {
+              return {} as CalendarEvent;
+            }
           });
         }),
       );

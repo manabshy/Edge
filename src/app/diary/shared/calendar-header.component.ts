@@ -16,6 +16,7 @@ export class CalendarHeaderComponent implements OnChanges {
   @Input() daysInWeek;
   @Output() viewChange: EventEmitter<string> = new EventEmitter();
   @Output() viewDateChange: EventEmitter<Date> = new EventEmitter();
+  @Output() filterChange: EventEmitter<boolean> = new EventEmitter();
   label: string;
   excludeDays = [];
   diaryHeaderForm: FormGroup;
@@ -24,7 +25,8 @@ export class CalendarHeaderComponent implements OnChanges {
 
   ngOnInit() {
     this.diaryHeaderForm = this.fb.group({
-      viewMode: this.view
+      viewMode: this.view,
+      showCancelled: false
     });
   }
 
