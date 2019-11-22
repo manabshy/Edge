@@ -2,6 +2,7 @@
 [weekStartsOn]="weekStartsOn"
 (viewDateChange)="getDiaryEvents()"
 (viewChange)="getDiaryEvents()"
+(filterChange)="getDiaryEvents($event)"
 >
 </app-calendar-header>
 <ng-template #loading>
