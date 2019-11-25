@@ -114,7 +114,7 @@ export class LeadEditComponent implements OnInit {
       this.getPersonInformation();
     }
 
-    
+
   }
 
   private getLeadInformation() {
@@ -195,6 +195,7 @@ export class LeadEditComponent implements OnInit {
 
       this.leadsService.addLead(lead).subscribe((result) => {
         this.onUpdateCompleted();
+        this.lead = lead;
       }, (error: WedgeError) => {
         this.sharedService.showError(error);
       });
