@@ -33,6 +33,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   filteredLeads: Lead[];
   leadSearchInfo: LeadSearchInfo;
   enableOwnerFilter: boolean = true;
+  selectedLeadsForAssignment: Lead[] = [];
 
 
   constructor(private leadService: LeadsService,
@@ -93,10 +94,29 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   }
 
   selectLead(lead?: Lead) {
-    console.log('clicked', lead)
+
+    console.log('clicked', lead);
     this.leadService.leadsChanged(lead);
+  }
+
+  selectLeadForAssignment($event, lead?: Lead) {
+    let leadIndex = -1;
+
+    console.log('clicked', lead);
+
     if (this.areLeadsAssignable) {
+      leadIndex = this.selectedLeadsForAssignment != null ? this.selectedLeadsForAssignment.indexOf(lead) : -1;
+      if (leadIndex < 0) {
+        this.selectedLeadsForAssignment.push(lead);
+      } else {
+        this.selectedLeadsForAssignment.splice(leadIndex, 1);
+      }
+
+      // $event.stopPropagation();
     }
+
+    console.log('selected leads:', this.selectedLeadsForAssignment);
+
   }
 
   private setupLeadRegisterForm() {
@@ -149,6 +169,14 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       includeClosedLeads: this.leadRegisterForm != null ? this.leadRegisterForm.get('includeClosedLeads').value : null,
       includeUnassignedLeadsOnly: this.leadRegisterForm != null ? this.leadRegisterForm.get('includeUnassignedLeadsOnly').value : null
     };
+  }
+
+  cancel() {
+    this.areLeadsAssignable = false;
+  }
+
+  processLeadsAssignment() {
+
   }
 
   onScrollDown() {
