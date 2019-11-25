@@ -174,7 +174,7 @@
                     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading contacts ...
                   </div>
                 </div>
-                <div class="list-group-item" *ngFor="let person of contactGroupDetails?.contactPeople ; index as i"
+                <a [routerLink]="person?.isNewPerson ? null : ['../../../../detail', person?.personId ]"  class="list-group-item list-group-item-action" *ngFor="let person of contactGroupDetails?.contactPeople ; index as i"
                   [ngClass]="{'new-person': person?.isNewPerson, 'list-group-item-danger': person?.warning && person?.warning?.id !== 1}">
                   <div class="row">
                     <div class="col">
@@ -192,7 +192,7 @@
                             class="caret"></span></a>
                         <ul [id]="'dropdown' + i" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
                           [attr.aria-labelledby]="'button' + i">
-                          <li role="menuitem"><a class="dropdown-item" (click)="$event.stopPropagation();"
+                          <li role="menuitem"><a class="dropdown-item"
                               (click)="editSelectedPerson(person?.personId)"><i class="fas fa-edit fa-fw"></i> Edit</a>
                           </li>
                           <li role="menuitem"><a class="dropdown-item" (click)="$event.stopPropagation();"
@@ -295,7 +295,7 @@
                       </div>
                     </div>
                   </div>
-                </div>
+                </a>
                 <div class="list-group-item text-center" *ngIf="isLoadingNewPersonVisible">
                   <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading person details ...
                 </div>

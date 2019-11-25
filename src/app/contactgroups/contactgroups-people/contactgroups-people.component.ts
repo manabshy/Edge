@@ -439,6 +439,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   setMainPerson(id: number) {
+    event.stopPropagation();
+    event.preventDefault();
     const contactPeople = this.contactGroupDetails.contactPeople;
     let index: number;
     this.contactGroupDetails.contactPeople.forEach((x: Person) => {
@@ -495,6 +497,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   editSelectedPerson(id: number) {
+    event.stopPropagation();
+    event.preventDefault();
     this.isEditingSelectedPerson = true;
     this.contactGroupBackUp();
     this._router.navigate(['../../edit'], { queryParams: { groupPersonId: id, isEditingSelectedPerson: true }, relativeTo: this.route });
