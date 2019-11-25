@@ -205,6 +205,13 @@
                             <a class="dropdown-item" (click)="setMainPerson(person?.personId)"
                               *ngIf="!person?.isMainPerson"><i class="fas fa-user-shield fa-fw"></i> Set Main Person</a>
                           </li>
+                          <li role="menuitem">
+                            <a class="dropdown-item"
+                              (click)="$event.stopPropagation();"
+                              [routerLink]="['/leads-register/edit/', 0]" [queryParams]="{isNewLead: true, personId: person?.personId}">
+                              <i class="fas fa-user"></i><i class="fas fa-share-alt fa-xs align-text-top mr-1"></i> Create Lead
+                            </a>
+                          </li>
                           <li role="menuitem"><a class="dropdown-item" href
                               (click)="removePerson(person?.personId, true)"
                               *ngIf="!contactGroupDetails?.referenceCount"><i class="fas fa-user-times fa-fw"></i>
