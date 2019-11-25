@@ -5,9 +5,9 @@ import { LeadEditComponent } from './lead-edit/lead-edit.component';
 import { LeadComponent } from './lead.component';
 
 const routes: Routes = [
-  { path: '', component: LeadComponent, data: { shouldDetach: false } },
+  { path: '', component: LeadComponent, data: { shouldDetach: true } },
   { path: 'edit/:leadId', component: LeadEditComponent, data: { shouldDetach: false } }
-  
+
 ];
 
 @NgModule({

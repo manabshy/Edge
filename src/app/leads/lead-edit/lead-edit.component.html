@@ -5,7 +5,7 @@
       <h4 class="m-0">Lead <span class="badge badge-pill badge-danger" *ngIf="lead?.closedById">Closed</span></h4>
     </div>
     <div class="col-auto">
-      <button type="button" class="btn btn-danger" (click)="closeLeadClicked()" *ngIf="!lead?.closedById">Close
+      <button type="button" class="btn btn-danger" (click)="closeLeadClicked()" *ngIf="lead && !lead?.closedById">Close
         Lead</button>
     </div>
   </div>
@@ -83,7 +83,8 @@
       <div class="container px-lg-4">
         <div class="row justify-content-end w-100 no-gutters">
           <div class="col-sm-10 d-flex">
-            <button routerLink="/leads-register" type="button" class="btn btn-light mr-2">Cancel</button>
+          
+            <button (click)="cancel()"  type="button" class="btn btn-light mr-2">Cancel</button>
             <button type="submit" class="btn btn-secondary">Save</button>
           </div>
         </div>

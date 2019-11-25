@@ -27,7 +27,7 @@
                 class="fas fa-sticky-note fa-fw mr-2"></i> Add Note</button></li>
           <li role="menuitem">
             <a class="dropdown-item"
-              [routerLink]="['/leads-register/edit/', 0]">
+              [routerLink]="['/leads-register/edit/', 0]" [queryParams]="{isNewLead: true, personId: personId}">
               <i class="fas fa-sticky-note fa-fw mr-2"></i> Add Lead
             </a>
           </li>

@@ -29,8 +29,9 @@ export class LeadsService {
 
   addLead(lead: Lead): Observable<any> {
     const url = `${AppConstants.baseLeadsUrl}`;
-
+    console.log('Add lead', lead);
     return this.http.post<Lead>(url, lead).pipe(
+      map(response => response),
       tap(data => console.log('result', JSON.stringify(data))));
   }
 

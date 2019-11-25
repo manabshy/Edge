@@ -24,6 +24,8 @@ export class LeadEditComponent implements OnInit {
 
   listInfo: any;
   leadId: number;
+  personId: number;
+  isNewLead: boolean;
   lead: Lead;
   leadTypes: InfoDetail[];
   leadEditForm: FormGroup;
@@ -49,21 +51,29 @@ export class LeadEditComponent implements OnInit {
   ngOnInit() {
     AppUtils.parentRoute = AppUtils.prevRoute;
 
-    console.log('subnav',this.subNav);
-
     this.route.params.subscribe(params => {
       this.leadId = +params['leadId'] || 0;
     });
 
-    console.log('person:', this.person);
+    this.route.queryParamMap.subscribe(params => {
+      this.personId = +params.get('personId') || 0;
+      this.isNewLead = params.get('isNewLead') as unknown as boolean || false;
+    });
+
+    this.init();
+  }
+
+  init() {
     this.setupLeadEditForm();
 
+    // All Staffmembers
     this.storage.get('allstaffmembers').subscribe(data => {
       if (data) {
         this.staffMembers = data as StaffMember[];
       }
     });
 
+    // Lead Types
     this.storage.get('info').subscribe(data => {
       if (data) {
         this.listInfo = data;
@@ -71,36 +81,46 @@ export class LeadEditComponent implements OnInit {
       }
     });
 
-    this.getLeadInformation();
-
-    // receive new lead
-    this.leadsService.leadsChanges$.subscribe(lead => {
-      this.lead = lead;
-
-      if (lead) {
-        this.patchLeadValues(lead);
-
-        this.getPersonInformation();
-
-      } else {
-        this.getLeadInformation();
+    // Current Logged in staffmember
+    this.storage.get('currentUser').subscribe((data: StaffMember) => {
+      if (data) {
+        this.currentStaffMember = data;
       }
+    });
 
-      this.staffMemberService.getCurrentStaffMember().subscribe(data => {
-        if (data) {
-          this.currentStaffMember = data;
+    console.log('New Lead:', this.isNewLead);
+    console.log('Person Id:', this.personId);
+
+    if (!this.isNewLead) {
+      // receive new lead
+      this.leadsService.leadsChanges$.subscribe(lead => {
+        this.lead = lead;
+
+        if (lead) {
+          this.personId = lead.personId;
+          console.log('have lead object...');
+          this.patchLeadValues(lead);
+
+          this.getPersonInformation();
+
+        } else {
+          console.log('dont have lead object...');
+          this.getLeadInformation();
         }
       });
+    } else {
+      console.log('new lead...');
+      console.log("NEW LEAD: ", this.lead);
+      this.getPersonInformation();
+    }
 
-      console.log('new lead', this.lead);
-
-    });
+    
   }
 
   private getLeadInformation() {
     this.leadsService.getLead(this.leadId).subscribe(result => {
       this.lead = result;
-      console.log('lead fro DB:', result);
+      this.personId = result.personId;
       this.patchLeadValues(result);
       this.getPersonInformation();
     }, error => {
@@ -119,12 +139,12 @@ export class LeadEditComponent implements OnInit {
   }
 
   private getPersonInformation() {
-    this.contactGroupService.getPersonNotes(this.lead.personId).subscribe(
+    this.contactGroupService.getPersonNotes(this.personId).subscribe(
       data => {
         this.personNotes = data;
       });
 
-    this.contactGroupService.getPerson(this.lead.personId).subscribe(
+    this.contactGroupService.getPerson(this.personId).subscribe(
       data => {
         this.person = data;
         this.getSearchedPersonSummaryInfo(this.person.personId);
@@ -164,18 +184,42 @@ export class LeadEditComponent implements OnInit {
 
   updateLead() {
     const lead = { ...this.lead, ...this.leadEditForm.value };
-    this.leadsService.updateLead(lead).subscribe((result) => {
-      this.onUpdateCompleted();
-    }, (error: WedgeError) => {
-      this.sharedService.showError(error);
-    });
+
+    if (this.isNewLead) {
+
+      lead.personId = this.personId;
+      lead.createdBy = this.currentStaffMember.staffMemberId;
+      lead.createdDate = new Date;
+      lead.updatedBy = this.currentStaffMember.staffMemberId;
+      lead.updatedDate = new Date;
+
+      this.leadsService.addLead(lead).subscribe((result) => {
+        this.onUpdateCompleted();
+      }, (error: WedgeError) => {
+        this.sharedService.showError(error);
+      });
+    } else {
+      this.leadsService.updateLead(lead).subscribe((result) => {
+        this.onUpdateCompleted();
+      }, (error: WedgeError) => {
+        this.sharedService.showError(error);
+      });
+    }
   }
 
   private onUpdateCompleted() {
-    this.toastr.success('Lead successfully updated');
+    if (this.isNewLead) { this.toastr.success('Lead successfully saved'); } else {
+      this.toastr.success('Lead successfully updated');
+    }
   }
 
-
+  cancel() {
+    if (false) {
+      //this.backToFinder.emit(true);
+    } else {
+      this.sharedService.back();
+    }
+  }
 
 
 }
