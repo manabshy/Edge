@@ -21,11 +21,19 @@
           <li role="menuitem" *ngIf="contactGroupDetails?.contactPeople.length < 8 && !contactGroupDetails?.referenceCount
           && !isMaxPeople">
             <button type="button" class="dropdown-item" (click)="showHideOffCanvas($event)">
-              <i class="fas fa-user-plus fa-fw mr-2"></i> Add Person
+              <span class="dropdown-icon">
+                <i class="fas fa-user-plus fa-fw"></i>
+              </span>
+              Add Person
             </button>
           </li>
           <li role="menuitem" *ngIf="contactGroupDetails?.contactGroupId"><button type="button" class="dropdown-item"
-              (click)="addNote()"><i class="fas fa-sticky-note fa-fw mr-2"></i> Add Note</button></li>
+              (click)="addNote()">
+              <span class="dropdown-icon">
+                <i class="fas fa-sticky-note fa-fw"></i>
+              </span>
+              Add Note
+            </button></li>
         </ul>
       </div>
     </div>
@@ -193,28 +201,48 @@
                         <ul [id]="'dropdown' + i" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
                           [attr.aria-labelledby]="'button' + i">
                           <li role="menuitem"><a class="dropdown-item"
-                              (click)="editSelectedPerson(person?.personId)"><i class="fas fa-edit fa-fw"></i> Edit</a>
+                              (click)="editSelectedPerson(person?.personId)">
+                              <span class="dropdown-icon">
+                                <i class="fas fa-edit fa-fw"></i>
+                              </span>
+                              Edit</a>
                           </li>
                           <li role="menuitem"><a class="dropdown-item" (click)="$event.stopPropagation();"
                               [routerLink]="person?.isNewPerson ? null : ['../../../../detail', person?.personId ]">
-                              <i class="fas fa-address-card fa-fw"></i> View</a></li>
+                              <span class="dropdown-icon">
+                                <i class="fas fa-address-card fa-fw"></i> 
+                              </span>
+                              View</a></li>
                           <li role="menuitem"><a class="dropdown-item" (click)="$event.stopPropagation();"
-                              [routerLink]="person?.isNewPerson ? null : ['../../../../detail/', person?.personId, 'notes' ]">
-                              <i class="fas fa-sticky-note fa-fw"></i> View All Notes</a></li>
+                              [routerLink]="person?.isNewPerson ? null : ['../../../../detail/', person?.personId, 'notes' ]"> 
+                              <span class="dropdown-icon">
+                                <i class="fas fa-sticky-note fa-fw"></i> 
+                              </span>
+                              View All Notes</a></li>
                           <li role="menuitem">
                             <a class="dropdown-item" (click)="setMainPerson(person?.personId)"
-                              *ngIf="!person?.isMainPerson"><i class="fas fa-user-shield fa-fw"></i> Set Main Person</a>
+                              *ngIf="!person?.isMainPerson"> 
+                              <span class="dropdown-icon">
+                                <i class="fas fa-user-shield fa-fw"></i> 
+                              </span>
+                              Set Main Person</a>
                           </li>
                           <li role="menuitem">
                             <a class="dropdown-item"
                               (click)="$event.stopPropagation();"
                               [routerLink]="['/leads-register/edit/', 0]" [queryParams]="{isNewLead: true, personId: person?.personId}">
-                              <i class="fas fa-user"></i><i class="fas fa-share-alt fa-xs align-text-top mr-1"></i> Create Lead
+                              <span class="dropdown-icon">
+                                <i class="fas fa-user"></i><i class="fas fa-share-alt fa-xs align-text-top"></i> 
+                              </span>
+                              Create Lead
                             </a>
                           </li>
                           <li role="menuitem"><a class="dropdown-item" href
                               (click)="removePerson(person?.personId, true)"
-                              *ngIf="!contactGroupDetails?.referenceCount"><i class="fas fa-user-times fa-fw"></i>
+                              *ngIf="!contactGroupDetails?.referenceCount">
+                              <span class="dropdown-icon">
+                                <i class="fas fa-user-times fa-fw"></i>
+                              </span>
                               Remove</a>
                           </li>
                         </ul>
@@ -229,10 +257,17 @@
                           <ul [id]="'dropdown' + i" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
                             [attr.aria-labelledby]="'button' + i">
                             <li role="menuitem"><a class="dropdown-item"
-                                (click)="editSelectedPerson(person?.personId)"><i class="fas fa-edit"></i> Edit</a></li>
+                                (click)="editSelectedPerson(person?.personId)">
+                                <span class="dropdown-icon">
+                                  <i class="fas fa-edit fa-fw"></i> 
+                                </span>
+                                Edit</a></li>
                             <li role="menuitem"><a class="dropdown-item" href
-                                (click)="removePerson(person?.personId, false)">
-                                <i class="fas fa-user-times"></i> Remove</a>
+                                (click)="removePerson(person?.personId, false)"> 
+                                <span class="dropdown-icon">
+                                  <i class="fas fa-user-times fa-fw"></i>
+                                </span>
+                                Remove</a>
                             </li>
                           </ul>
                         </div>

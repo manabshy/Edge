@@ -14,21 +14,36 @@
           aria-labelledby="actionsToggle">
           <li role="menuitem" *ngIf="searchedPersonDetails">
             <a class="dropdown-item" [routerLink]="['edit']">
-              <i class="fas fa-edit fa-fw mr-2"></i> Edit Person
+              <span class="dropdown-icon">
+                <i class="fas fa-edit fa-fw"></i>
+              </span>
+              Edit Person
             </a>
           </li>
           <li role="menuitem" *ngIf="searchedPersonDetails">
             <a class="dropdown-item" (click)="createNewContactGroup(); $event.stopPropagation()"
               [routerLink]="['people', 0]" [queryParams]="{isNewContactGroup: true}">
-              <i class="fas fa-users"></i><i class="fas fa-plus fa-xs align-text-top"></i> New Contact Group
+              <span class="dropdown-icon">
+                <i class="fas fa-users"></i><i class="fas fa-plus fa-xs align-text-top"></i>
+              </span>
+              New Contact Group
             </a>
           </li>
-          <li role="menuitem"><button type="button" class="dropdown-item" (click)="addNote()"><i
-                class="fas fa-sticky-note fa-fw mr-2"></i> Add Note</button></li>
+          <li role="menuitem">
+            <button type="button" class="dropdown-item" (click)="addNote()">
+              <span class="dropdown-icon">
+                <i class="fas fa-sticky-note fa-fw"></i>
+              </span>
+              Add Note
+            </button>
+          </li>
           <li role="menuitem">
             <a class="dropdown-item"
               [routerLink]="['/leads-register/edit/', 0]" [queryParams]="{isNewLead: true, personId: personId}">
-              <i class="fas fa-user"></i><i class="fas fa-share-alt fa-xs align-text-top mr-1"></i> Create Lead
+              <span class="dropdown-icon">
+                  <i class="fas fa-user"></i><i class="fas fa-share-alt fa-xs align-text-top"></i>
+              </span>
+              Create Lead
             </a>
           </li>
         </ul>
