@@ -168,9 +168,9 @@ export class LeadEditComponent implements OnInit {
 
   private setupLeadEditForm() {
     this.leadEditForm = this.fb.group({
-      ownerId: '',
+      ownerId: null,
       person: '',
-      leadTypeId: '',
+      leadTypeId: 0,
       nextChaseDate: ['']
     });
   }
