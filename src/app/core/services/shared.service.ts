@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { CustomQueryEncoderHelper } from '../shared/custom-query-encoder-helper';
 import { StorageMap } from '@ngx-pwa/local-storage';
+import { ContactGroup } from 'src/app/contactgroups/shared/contact-group';
 
 @Injectable({
   providedIn: 'root'
@@ -143,6 +144,18 @@ export class SharedService {
       formattedDate = dayjs(date).toDate();
     }
     return formattedDate;
+  }
+
+  checkDuplicateInContactGroup(contactGroupDetails: ContactGroup, personId: number) {
+    let isDuplicate = false;
+    if (contactGroupDetails && contactGroupDetails.contactPeople) {
+      contactGroupDetails.contactPeople.forEach(x => {
+        if (x && x.personId === personId) {
+          isDuplicate = true;
+        }
+      });
+    }
+    return isDuplicate;
   }
 
   formatPostCode(postCodeToCheck: string) {
