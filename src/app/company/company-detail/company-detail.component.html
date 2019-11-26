@@ -36,11 +36,6 @@
         <div class="col-12">
           <h5>Company contacts</h5>
           <app-subnav>
-            <div class="list-group-item" *ngIf="!companyDetails?.companyContacts">
-              <div class="text-center">
-                <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading company contacts...
-              </div>
-            </div>
             <app-subnav-item *ngFor="let companyContact of companyDetails?.companyContacts" [noBaseLink]="true"
               [navLink]="'/contact-centre/detail/'+0+'/people/'+companyContact.contactGroupId" [params]="{docTitle: 'Contact Group | '+companyDetails?.addressee}">
               <i class="fas fa-briefcase mr-2 fa-fw" *ngIf="companyContact?.isCompany; else peopleIcon"></i>

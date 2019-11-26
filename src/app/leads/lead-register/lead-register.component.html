@@ -29,7 +29,7 @@
       <div class="col-sm form-group">
         <label class="small" for="leadType">Type</label>
         <select class="form-control form-control-sm" id="leadType" formControlName="leadTypeId">
-          <option value=""></option>
+          <option value="">All</option>
           <option selected *ngFor="let leadType of leadTypes" [value]=leadType.id>{{leadType?.value}}</option>
         </select>
       </div>
@@ -40,7 +40,7 @@
       <div class="col-sm form-group">
         <label class="small" for="office">Office</label>
         <select class="form-control form-control-sm" id="office" formControlName="officeId">
-          <option value=""></option>
+          <option value="">All</option>
           <option selected *ngFor="let office of offices" [value]=office.officeId>{{office?.name}}</option>
         </select>
       </div>

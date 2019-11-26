@@ -68,10 +68,7 @@
   </div>
   <app-company-list *ngIf="!isHintVisible" [companies]='companies' [pageNumber]="page"
     [searchTerm]='searchTerm' [bottomReached]="bottomReached"></app-company-list>
-  <div class="text-center" *ngIf="isLoading && !isHintVisible">
-    <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...
-  </div>
-  <div class="text-center text-danger" *ngIf="isMessageVisible && !isLoading && !isHintVisible && page === 1">
+  <div class="text-center text-danger" *ngIf="isMessageVisible && !isHintVisible && page === 1">
     <i class="far fa-sad-tear"></i> No results for '<strong>{{companyFinderForm.value.companyName || ' '}}</strong>'
   </div>
 </div>

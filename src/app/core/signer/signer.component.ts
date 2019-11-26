@@ -25,7 +25,6 @@ export class SignerComponent implements OnInit, OnChanges {
   signerFinderForm: FormGroup;
   selectedSignerDetails: Signer;
   signers: Signer[];
-  isLoading: boolean;
   isMessageVisible: boolean;
   isHintVisible: boolean;
   isSearchVisible = true;
@@ -95,14 +94,11 @@ export class SignerComponent implements OnInit, OnChanges {
   }
 
   signersAutocomplete(searchTerm: string) {
-    this.isLoading = true;
     this.contactGroupService.getAutocompleteSigners(searchTerm).subscribe(result => {
       this.signers = result;
-      this.isLoading = false;
       console.log('signers here', this.signers);
     }, error => {
       this.signers = [];
-      this.isLoading = false;
       this.isHintVisible = true;
     });
   }

@@ -17,7 +17,6 @@ export class CompanyFinderComponent implements OnInit, OnChanges {
   selectedCompany: any;
   selectedCompanyId: number;
   isCompanyAdded: boolean;
-  isLoadingCompaniesVisible: boolean;
   enterManually = false;
   @Output() companyName = new EventEmitter<any>();
   @Output() selectedCompanyDetails = new EventEmitter<Company>();
@@ -117,10 +116,8 @@ export class CompanyFinderComponent implements OnInit, OnChanges {
   }
 
   findCompany(searchTerm: any) {
-    this.isLoadingCompaniesVisible = true;
     this.contactGroupService.getAutocompleteCompany(searchTerm).subscribe(data => {
       this.foundCompanies = data;
-      this.isLoadingCompaniesVisible = false;
       this.checkDuplicateCompanies(searchTerm);
     });
   }

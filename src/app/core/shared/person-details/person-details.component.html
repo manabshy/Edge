@@ -1,7 +1,4 @@
 <div class="list-group">
-    <div class="list-group-item text-center" *ngIf="!personDetails">
-      <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading info ...
-    </div>
     <div class="list-group-item mb-4"
       [ngClass]="{'list-group-item-danger': personDetails?.warning && personDetails?.warning?.id !== 1}"
       *ngIf="personDetails">

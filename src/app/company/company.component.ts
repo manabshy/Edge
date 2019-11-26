@@ -18,7 +18,6 @@ const PAGE_SIZE = 10;
 })
 export class CompanyComponent implements OnInit {
   companyFinderForm: FormGroup;
-  isLoading: boolean;
   isHintVisible: boolean;
   companies: CompanyAutoCompleteResult[];
   isMessageVisible: boolean;
@@ -67,7 +66,6 @@ export class CompanyComponent implements OnInit {
 
   companiesResults() {
     if (this.searchTerm) {
-      this.isLoading = true;
       this.suggestions = null;
     }
     this.page = 1;
@@ -78,9 +76,7 @@ export class CompanyComponent implements OnInit {
   }
 
   private getNextCompanyListPage(page: number) {
-    this.isLoading = true;
     this.contactGroupService.getAutocompleteCompany(this.searchTerm, PAGE_SIZE, page).subscribe(result => {
-      this.isLoading = false;
       if (this.searchTerm && this.searchTerm.length) {
         if (!result.length) {
           this.isMessageVisible = true;
@@ -100,7 +96,6 @@ export class CompanyComponent implements OnInit {
     }, error => {
       this.companies = [];
       this.searchTerm = '';
-      this.isLoading = false;
       this.isHintVisible = true;
     });
   }

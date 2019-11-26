@@ -52,6 +52,7 @@ import { ToastrModule, ToastContainerModule } from 'ngx-toastr';
 import { AgmCoreModule } from '@agm/core';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 
 
 //various
@@ -136,7 +137,8 @@ import { CompanyInfoComponent } from './shared/company-info/company-info.compone
     ToastContainerModule,
     AgmCoreModule,
     CarouselModule,
-    NgbModule
+    NgbModule,
+    LoadingBarHttpClientModule
   ],
   imports: [
     CommonModule,
@@ -147,6 +149,7 @@ import { CompanyInfoComponent } from './shared/company-info/company-info.compone
     // BrowserAnimationsModule,
     InfiniteScrollModule,
     NgbModule,
+    LoadingBarHttpClientModule,
     BsDropdownModule.forRoot(),
     CollapseModule.forRoot(),
     TabsModule.forRoot(),

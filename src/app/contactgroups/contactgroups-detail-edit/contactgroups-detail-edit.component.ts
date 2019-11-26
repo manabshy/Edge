@@ -52,7 +52,6 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
   errorMessage: WedgeError;
   formArraryErrors: string;
   isSubmitting = false;
-  isLoadingAddressVisible = false;
   backToAddressesList = false;
   enterAddressManually = false;
   isEditingSelectedPerson = false;

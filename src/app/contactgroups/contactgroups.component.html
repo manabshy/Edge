@@ -107,10 +107,7 @@
   </div>
   <app-contactgroups-list [originalContactGroups]='contactGroups' [pageNumber]="page" [searchTerm]='contactFinderForm.value.searchTerm' [bottomReached]="bottomReached" *ngIf="!isHintVisible">
   </app-contactgroups-list>
-  <div class="text-center" *ngIf="isLoading && !isHintVisible">
-    <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...
-  </div>
-  <ng-container *ngIf="isMessageVisible && !isLoading && !isHintVisible && page === 1">
+  <ng-container *ngIf="isMessageVisible && !isHintVisible && page === 1">
       <div class="text-center text-danger">
         <i class="far fa-sad-tear"></i> No results for '<strong>{{contactFinderForm.value.searchTerm || ' '}}</strong>'
       </div>  
