@@ -24,7 +24,7 @@
           <div class="col-lg">
             <div class="form-group">
               <label for="chaser">Owner</label>
-              <select class="form-control form-control-sm" id="owner" formControlName="ownerId">
+              <select class="custom-select custom-select-sm" id="owner" formControlName="ownerId">
                 <option value=""></option>
                 <option selected *ngFor="let staffMember of staffMembers" [value]=staffMember.staffMemberId>
                   {{staffMember?.fullName}}</option>
