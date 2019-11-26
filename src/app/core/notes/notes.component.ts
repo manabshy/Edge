@@ -36,6 +36,7 @@ export class NotesComponent implements OnInit, OnChanges {
   notesLength: number;
   isPropertyNote: boolean;
   isPersonNote: boolean;
+  isUpdating: boolean;
 
   constructor(private sharedService: SharedService,
     private contactGroupService: ContactGroupsService,
