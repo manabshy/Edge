@@ -3,7 +3,7 @@
     <a class="card-body text-center" [routerLink]="['/list', 2337]"
       [queryParams]="{periodFilter: periodKey, isValuation:isValuation}">
       <h6 class="card-title"> {{valuationTile}}</h6>
-      <h4 class="text-secondary">{{ myDashboard.valuations?.periodCount || 0 }}</h4>
+      <h4 class="text-secondary">{{ myDashboard?.valuations?.periodCount || 0 }}</h4>
       <p class="card-text"><small class="text-muted">{{ period }}</small></p>
     </a>
   </div>
@@ -11,14 +11,14 @@
     <a class="card-body text-center" [routerLink]="['/list', 2337]"
       [queryParams]="{periodFilter: periodKey, isInstructions:isInstructions}">
       <h6 class="card-title">{{instructionsTile}}</h6>
-      <h4 class="text-secondary">{{ myDashboard.instructions.periodCount }}</h4>
+      <h4 class="text-secondary">{{ myDashboard?.instructions.periodCount }}</h4>
       <p class="card-text"><small class="text-muted">{{ period }}</small></p>
     </a>
   </div>
   <div class="card">
     <a class="card-body text-center" [routerLink]="['/list', 2337]" [queryParams]="{ isBdd:isBdd}">
       <h6 class="card-title">Business Development</h6>
-      <h4 class="text-secondary">{{ myDashboard.businessDevelopment.totalCount }}</h4>
+      <h4 class="text-secondary">{{ myDashboard?.businessDevelopment.totalCount }}</h4>
       <p class="card-text"><small class="text-muted">Tickets</small></p>
     </a>
   </div>
@@ -26,7 +26,7 @@
     <a class="card-body text-center" [routerLink]="['/list', 2337]"
       [queryParams]="{ isAllInstructions:isAllInstructions}">
       <h6 class="card-title">{{allInstructionsTile}}</h6>
-      <h4 class="text-secondary m-0">{{ myDashboard.instructions.totalCount }}</h4>
+      <h4 class="text-secondary m-0">{{ myDashboard?.instructions.totalCount }}</h4>
     </a>
   </div>
   <div class="card">
@@ -34,7 +34,7 @@
       <h6 class="card-title">{{exchangesTile}}</h6>
       <h4 class="text-secondary">
         {{
-                myDashboard.exchanges.periodFees
+                myDashboard?.exchanges.periodFees
                   | rounding
                   | currency: "GBP"
                   | truncating
@@ -48,7 +48,7 @@
       <h6 class="card-title">{{pipelineTile}}</h6>
       <h4 class="text-secondary m-0">
         {{
-                    myDashboard.pipeline.totalFees
+                    myDashboard?.pipeline.totalFees
                       | rounding
                       | currency: "GBP"
                       | truncating
