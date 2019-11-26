@@ -210,13 +210,13 @@ export class ContactgroupsPeopleComponent implements OnInit {
       isRelocationAgent: false,
       contactType: ContactType.Individual
     });
-    this.personFinderForm = this.fb.group({
-      firstName: [''],
-      lastName: [''],
-      fullName: [''],
-      emailAddress: [''],
-      phoneNumber: ['']
-    });
+    // this.personFinderForm = this.fb.group({
+    //   firstName: [''],
+    //   lastName: [''],
+    //   fullName: [''],
+    //   emailAddress: [''],
+    //   phoneNumber: ['']
+    // });
     if (AppUtils.holdingSelectedPeople || AppUtils.holdingSelectedCompany) {
       AppUtils.holdingSelectedPeople ? this.selectedPeople = AppUtils.holdingSelectedPeople : null;
       AppUtils.holdingSelectedCompany ? this.selectedCompanyDetails = AppUtils.holdingSelectedCompany : null;
@@ -254,34 +254,34 @@ export class ContactgroupsPeopleComponent implements OnInit {
       AppUtils.holdingContactType = null;
       this.addSelectedPeople();
     }
-    this.personFinderForm.valueChanges
-      .pipe(debounceTime(750))
-      .subscribe(data => {
-        if (
-          data.fullName &&
-          (data.phoneNumber || data.emailAddress)
-        ) {
-          this.isCreateNewPersonVisible = true;
-        } else {
-          this.isCreateNewPersonVisible = false;
-        }
-        data.emailAddresses = [];
-        data.emailAddresses.push({
-          id: 0,
-          email: data.emailAddress,
-          isPreferred: true,
-          isPrimaryWebEmail: true
-        });
-        data.phoneNumbers = [];
-        data.phoneNumbers.push({
-          number: data.phoneNumber,
-          typeId: 3,
-          isPreferred: true,
-          comments: ''
-        });
-        this.newPerson = data;
-        this.findPotentialDuplicatePerson(data);
-      });
+    // this.personFinderForm.valueChanges
+    //   .pipe(debounceTime(750))
+    //   .subscribe(data => {
+    //     if (
+    //       data.fullName &&
+    //       (data.phoneNumber || data.emailAddress)
+    //     ) {
+    //       this.isCreateNewPersonVisible = true;
+    //     } else {
+    //       this.isCreateNewPersonVisible = false;
+    //     }
+    //     data.emailAddresses = [];
+    //     data.emailAddresses.push({
+    //       id: 0,
+    //       email: data.emailAddress,
+    //       isPreferred: true,
+    //       isPrimaryWebEmail: true
+    //     });
+    //     data.phoneNumbers = [];
+    //     data.phoneNumbers.push({
+    //       number: data.phoneNumber,
+    //       typeId: 3,
+    //       isPreferred: true,
+    //       comments: ''
+    //     });
+    //     this.newPerson = data;
+    //     this.findPotentialDuplicatePerson(data);
+    //   });
   }
 
   setDropdownLists() {
@@ -378,46 +378,47 @@ export class ContactgroupsPeopleComponent implements OnInit {
     });
   }
 
-  findPotentialDuplicatePerson(person: BasicPerson) {
-    this.contactGroupService.getPotentialDuplicatePeople(person).subscribe(data => {
-      this.potentialDuplicatePeople = data;
-      if (data) {
-        this.newPerson.firstName = data.firstName,
-          this.newPerson.middleName = data.middleName,
-          this.newPerson.lastName = data.lastName;
-      }
-      this.checkDuplicatePeople(person);
-    });
-  }
-  checkDuplicatePeople(person: BasicPerson) {
-    const matchedPeople = [];
-    if (this.potentialDuplicatePeople) {
-      this.potentialDuplicatePeople.matches.forEach((x) => {
-        const firstName = x.firstName ? x.firstName.toLowerCase() : '';
-        const middleName = x.middleNames ? x.middleNames.toLowerCase() : '';
-        const lastName = x.lastName ? x.lastName.toLowerCase() : '';
-        const fullName = middleName ? `${firstName} ${middleName} ${lastName} ` : `${firstName} ${lastName} `;
-        const sameName = fullName.toLowerCase().trim() === person.fullName.toLowerCase().trim();
-        const email = x.emailAddresses ? x.emailAddresses.filter(x => x === person.emailAddress) : [];
-        const phone = x.phoneNumbers ?
-          x.phoneNumbers.filter(x => x === person.phoneNumber ? person.phoneNumber.replace(/\s+/g, '') : '') : [];
-        const samePhone = phone[0] ? phone[0].toString() === person.phoneNumber.replace(/\s+/g, '') : false;
-        const sameEmail = email[0] ? email[0].toLowerCase() === person.emailAddress : false;
-        switch (true) {
-          case sameName && sameEmail && samePhone:
-            x.matchScore = 10;
-            break;
-          case (sameName) && (sameEmail || samePhone):
-            x.matchScore = 7;
-            break;
-          default:
-            x.matchScore = 0;
-        }
-        matchedPeople.push(x);
-      });
-      this.potentialDuplicatePeople.matches = matchedPeople;
-    }
-  }
+  // findPotentialDuplicatePerson(person: BasicPerson) {
+  //   this.contactGroupService.getPotentialDuplicatePeople(person).subscribe(data => {
+  //     this.potentialDuplicatePeople = data;
+  //     if (data) {
+  //       this.newPerson.firstName = data.firstName,
+  //         this.newPerson.middleName = data.middleName,
+  //         this.newPerson.lastName = data.lastName;
+  //     }
+  //     this.checkDuplicatePeople(person);
+  //   });
+  // }
+  // checkDuplicatePeople(person: BasicPerson) {
+  //   const matchedPeople = [];
+  //   if (this.potentialDuplicatePeople) {
+  //     this.potentialDuplicatePeople.matches.forEach((x) => {
+  //       const firstName = x.firstName ? x.firstName.toLowerCase() : '';
+  //       const middleName = x.middleNames ? x.middleNames.toLowerCase() : '';
+  //       const lastName = x.lastName ? x.lastName.toLowerCase() : '';
+  //       const fullName = middleName ? `${firstName} ${middleName} ${lastName} ` : `${firstName} ${lastName} `;
+  //       const sameName = fullName.toLowerCase().trim() === person.fullName.toLowerCase().trim();
+  //       const email = x.emailAddresses ? x.emailAddresses.filter(x => x === person.emailAddress) : [];
+  //       const phone = x.phoneNumbers ?
+  //         x.phoneNumbers.filter(x => x === person.phoneNumber ? person.phoneNumber.replace(/\s+/g, '') : '') : [];
+  //       const samePhone = phone[0] ? phone[0].toString() === person.phoneNumber.replace(/\s+/g, '') : false;
+  //       const sameEmail = email[0] ? email[0].toLowerCase() === person.emailAddress : false;
+  //       switch (true) {
+  //         case sameName && sameEmail && samePhone:
+  //           x.matchScore = 10;
+  //           break;
+  //         case (sameName) && (sameEmail || samePhone):
+  //           x.matchScore = 7;
+  //           break;
+  //         default:
+  //           x.matchScore = 0;
+  //       }
+  //       matchedPeople.push(x);
+  //     });
+  //     this.potentialDuplicatePeople.matches = matchedPeople;
+  //   }
+  // }
+
   createNewContactGroupPerson(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -587,17 +588,19 @@ export class ContactgroupsPeopleComponent implements OnInit {
     console.log('new company address here', this.contactGroupDetails.companyAddress);
   }
 
-  selectPerson(id: number) {
-    if (this.removedPersonIds.indexOf(id) >= 0) {
-      this.removedPersonIds.splice(this.removedPersonIds.indexOf(id), 1);
+  getSelectedPerson(person: Person) {
+    if (this.removedPersonIds.indexOf(person.personId) >= 0) {
+      this.removedPersonIds.splice(this.removedPersonIds.indexOf(person.personId), 1);
     }
-    if (id !== 0 && !this.checkDuplicateInContactGroup(id)) {
-      this.selectedPersonId = id;
-      this.getPersonDetails(id);
-      if (this.contactGroupId) {
-        this.getContactGroupById(this.contactGroupId);
-      }
-      this.personFinderForm.reset();
+    if (person && person.personId !== 0 && !this.sharedService.checkDuplicateInContactGroup(this.contactGroupDetails, person.personId)) {
+      this.selectedPersonId = person.personId;
+      this.collectSelectedPeople(person);
+      // this.getPersonDetails(person.personId);
+      console.log('person selected', person)
+      // if (this.contactGroupId) {
+      //   this.getContactGroupById(this.contactGroupId);
+      // }
+      // this.personFinderForm.reset();
     } else {
       return false;
     }
@@ -608,6 +611,28 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.selectedPersonId = 0;
   }
 
+  // selectPerson(id: number) {
+  //   if (this.removedPersonIds.indexOf(id) >= 0) {
+  //     this.removedPersonIds.splice(this.removedPersonIds.indexOf(id), 1);
+  //   }
+  //   if (id !== 0 && !this.checkDuplicateInContactGroup(id)) {
+  //     this.selectedPersonId = id;
+  //     this.isLoadingNewPersonVisible = true;
+  //     this.getPersonDetails(id);
+  //     if (this.contactGroupId) {
+  //       this.getContactGroupById(this.contactGroupId);
+  //     }
+  //     this.personFinderForm.reset();
+  //   } else {
+  //     return false;
+  //   }
+
+  //   this.isOffCanvasVisible = false;
+  //   this.renderer.removeClass(document.body, 'no-scroll');
+  //   window.scrollTo(0, 0);
+  //   this.selectedPersonId = 0;
+  // }
+
   collectSelectedPeople(person: Person) {
     if (this.selectedPeople) {
       this.selectedPeople.push(person);
@@ -615,17 +640,17 @@ export class ContactgroupsPeopleComponent implements OnInit {
     }
   }
 
-  checkDuplicateInContactGroup(id) {
-    let isDuplicate = false;
-    if (this.contactGroupDetails && this.contactGroupDetails.contactPeople) {
-      this.contactGroupDetails.contactPeople.forEach(x => {
-        if (x && x.personId === id) {
-          isDuplicate = true;
-        }
-      });
-    }
-    return isDuplicate;
-  }
+  // checkDuplicateInContactGroup(id) {
+  //   let isDuplicate = false;
+  //   if (this.contactGroupDetails && this.contactGroupDetails.contactPeople) {
+  //     this.contactGroupDetails.contactPeople.forEach(x => {
+  //       if (x && x.personId === id) {
+  //         isDuplicate = true;
+  //       }
+  //     });
+  //   }
+  //   return isDuplicate;
+  // }
 
   showPersonWarning() {
     this.contactGroupDetails.contactPeople.forEach(x => {
@@ -636,7 +661,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   addSelectedPeople() {
     if (this.selectedPeople.length) {
       this.selectedPeople.forEach(x => {
-        if (!this.checkDuplicateInContactGroup(x.personId)) {
+        if (!this.sharedService.checkDuplicateInContactGroup(this.contactGroupDetails, x.personId)) {
           this.contactGroupDetails.contactPeople.push(x);
           this.setSalutation();
         }
@@ -656,13 +681,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.setSalutation();
   }
 
-  showAddedPersonId(id) {
-    // if (id !== 0) {
-    //   this.selectedPersonId = id;
-    //   this.getPersonDetails(id);
-    // }
-    // this.selectedPersonId = 0;
-  }
 
   getAddedPersonDetails(person: Person) {
     if (person) {
@@ -701,6 +719,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         if (this.selectedPeople.length || contactPeople) {
           const contactGroup = { ...this.contactGroupDetails, ...this.contactGroupDetailsForm.value };
           this.isSubmitting = true;
+          this.isOffCanvasVisible = false;
           this.errorMessage = null;
           if (contactGroup.contactGroupId) {
             this.updateContactGroup(contactGroup);
@@ -876,6 +895,11 @@ export class ContactgroupsPeopleComponent implements OnInit {
     } else {
       this.renderer.removeClass(document.body, 'no-scroll');
     }
+  }
+
+  resetCanvasFlag(event){
+    console.log('reset flag here', event)
+    this.isOffCanvasVisible = event;
   }
 
   addNote() {
