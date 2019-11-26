@@ -28,11 +28,7 @@
       <i class="far fa-smile-wink"></i> Type at least <strong>3 characters</strong> to get results
   </div>
   <app-property-list *ngIf="!isHintVisible" [pageNumber]="page" [properties]='properties' [bottomReached]="bottomReached" [searchTerm]='searchTerm'></app-property-list>
-
-  <div class="text-center" *ngIf="isLoading && !isHintVisible">
-    <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...
-  </div>
-  <div class="text-center text-danger" *ngIf="isMessageVisible && !isLoading && !isHintVisible && page === 1">
+  <div class="text-center text-danger" *ngIf="isMessageVisible && !isHintVisible && page === 1">
       <i class="far fa-sad-tear"></i> No results for '<strong>{{propertyFinderForm.value.searchTerm || ' '}}</strong>'
   </div>
 </div>

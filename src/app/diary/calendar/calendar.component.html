@@ -5,11 +5,6 @@
 (filterChange)="getDiaryEvents($event)"
 >
 </app-calendar-header>
-<ng-template #loading>
-  <div class="text-center">
-    <i class="fa fa-spin fa-spinner"></i> Loading events...
-  </div>
-</ng-template>
 <ng-template #customTooltip let-event="event">
   <div role="tooltip" class="popover">
     <div class="popover-arrow arrow"></div>
@@ -84,7 +79,7 @@
   </div>
 </ng-template>
 <!-- {{events$|async|json}} -->
-<div *ngIf="events$ | async; else loading; let events" >
+<div *ngIf="events$ | async; let events" >
   <div [ngSwitch]="view">
     <mwl-calendar-month-view
       *ngSwitchCase="'month'"

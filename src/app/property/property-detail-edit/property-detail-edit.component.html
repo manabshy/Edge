@@ -6,9 +6,6 @@
       <ng-template #newProperty>Add</ng-template>
     </h4>
   </div>
-  <div class="text-center" *ngIf="!propertyDetails && !isNewProperty">
-    <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading details ...
-  </div>
   <form *ngIf="propertyDetails || isNewProperty" [formGroup]="propertyForm" (ngSubmit)="saveProperty()"
     (keydown.enter)="$event.preventDefault()" autocompleteOff>
     <app-address [propertyDetails]="propertyDetails" [addressError]="formErrors.address" [isNewProperty]="isNewProperty"

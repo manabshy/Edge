@@ -18,7 +18,6 @@ import { Impersonation } from '../core/models/staff-member';
 })
 export class PropertyComponent extends BaseComponent implements OnInit {
   propertyFinderForm: FormGroup;
-  isLoading: boolean;
   properties: PropertyAutoComplete[] = [];
   isMessageVisible: boolean;
   isHintVisible: boolean;
@@ -67,7 +66,6 @@ export class PropertyComponent extends BaseComponent implements OnInit {
 
   propertiesResults() {
     if (this.searchTerm) {
-      this.isLoading = true;
       this.suggestions = null;
     }
     this.page = 1;
@@ -79,14 +77,12 @@ export class PropertyComponent extends BaseComponent implements OnInit {
   }
 
   getNextPropertyPage(page) {
-    this.isLoading = true;
     const requestOptions = {
       page: page,
       pageSize: this.PAGE_SIZE,
       searchTerm: this.searchTerm
     } as RequestOption;
     this.propertyService.autocompleteProperties(requestOptions).subscribe(result => {
-      this.isLoading = false;
       if (this.searchTerm && this.searchTerm.length) {
         if (!result.length) {
           this.isMessageVisible = true;
@@ -102,7 +98,6 @@ export class PropertyComponent extends BaseComponent implements OnInit {
     }, error => {
       this.properties = [];
       this.searchTerm = '';
-      this.isLoading = false;
       this.isHintVisible = true;
     });
   }

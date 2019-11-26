@@ -30,9 +30,6 @@
       <div class="list-group">
 
         <div class="list-group-item mb-4">
-          <div class="text-center py-3" *ngIf="!propertyDetails">
-            <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading info ...
-          </div>
           <div class="row" *ngIf="propertyDetails">
             <div class="col-sm-4 mb-2 mb-sm-0">
               <a [routerLink]="['property-photos']">
