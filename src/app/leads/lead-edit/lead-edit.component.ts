@@ -214,13 +214,25 @@ export class LeadEditComponent implements OnInit {
     }
   }
 
-  cancel() {
-    if (false) {
-      //this.backToFinder.emit(true);
-    } else {
-      this.sharedService.back();
-    }
+  get dataNote() {
+    // if (this.contactGroupDetails) {
+      //console.log('PERSON:',this.person);
+    return {
+      group: null,
+      people: [this.person],
+    notes: this.personNotes
+  };
+  // }
+  // return null;
+}
+
+cancel() {
+  if (false) {
+    //this.backToFinder.emit(true);
+  } else {
+    this.sharedService.back();
   }
+}
 
 
 }

@@ -34,7 +34,7 @@
         </select>
       </div>
       <div class="col-sm form-group">
-        <label class="small" for="owner">Owner</label>
+        <label class="small" for="owner">Lead Owner</label>
         <app-staffmember-finder (ownerChanged)="onOwnerChanged($event)"></app-staffmember-finder>
       </div>
       <div class="col-sm form-group">
@@ -78,7 +78,7 @@
           <div class="col-sm"><strong>Lead Type</strong></div>
           <div class="col-sm"><strong>Person</strong></div>
           <div class="col-sm"><strong>Next Chase Date</strong></div>
-          <div class="col-sm"><strong>Owner</strong></div>
+          <div class="col-sm"><strong>Lead Owner</strong></div>
         </div>
       </div>
       <a [routerLink]="areLeadsAssignable ? null : ['edit', lead?.leadId]" (click)="selectLead(lead)"
@@ -114,7 +114,7 @@
       <div class="container px-lg-4">
         <div class="row justify-content-end w-100 no-gutters">
           <div class="col-sm-10 d-flex">
-            <button (click)="Cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
+            <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
             <button type="submit" class="btn btn-secondary">Assign</button>
           </div>
         </div>
