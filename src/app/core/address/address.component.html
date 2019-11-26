@@ -37,16 +37,14 @@
               <button type="button" class="btn btn-link p-0"><i class="fas fa-arrow-left mr-2"></i> Back</button>
             </div>
             <ng-container *ngIf="foundAddress?.Items?.length; else noAddress">
-              <ng-container *ngIf="!isLoadingAddressVisible">
-                <app-subnav-item *ngFor="let address of foundAddress?.Items"
-                  (click)="address?.Action ? findAddress(searchTermBK, address?.Id) : retrieveAddress(address?.Id)">
-                  <div *ngIf="!address?.Error">{{address?.Text}}, {{address?.Description}}</div>
-                </app-subnav-item>
-                <div class="list-group-item list-group-item-action text-center py-4"
-                  (click)="enterAddress($event)">
-                  <a href (click)="$event.preventDefault()"><i class="fas fa-plus mr-2"></i> Enter Manually</a>
-                </div>
-              </ng-container>
+              <app-subnav-item *ngFor="let address of foundAddress?.Items"
+                (click)="address?.Action ? findAddress(searchTermBK, address?.Id) : retrieveAddress(address?.Id)">
+                <div *ngIf="!address?.Error">{{address?.Text}}, {{address?.Description}}</div>
+              </app-subnav-item>
+              <div class="list-group-item list-group-item-action text-center py-4"
+                (click)="enterAddress($event)">
+                <a href (click)="$event.preventDefault()"><i class="fas fa-plus mr-2"></i> Enter Manually</a>
+              </div>
             </ng-container>
             <ng-template #noAddress>
               <div class="list-group-item text-center">
@@ -56,11 +54,6 @@
                 <a href (click)="$event.preventDefault()"><i class="fas fa-plus mr-2"></i> New Address</a>
               </div>
             </ng-template>
-            <ng-container *ngIf="isLoadingAddressVisible">
-              <div class="list-group-item text-center">
-                <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading addresses ...
-              </div>
-            </ng-container>
           </app-subnav>
         </div>
       </div>

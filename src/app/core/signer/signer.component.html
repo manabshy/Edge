@@ -51,32 +51,27 @@
               </button>
             </h4>
             <app-subnav>
-              <ng-container *ngIf="!isLoading">
-                <app-subnav-item *ngFor="let signer of signers"
-                  (click)="selectSigner(signer.contactGroupId)">
-                  <div class="row">
-                    <div class="col-sm-4">
-                      <b [innerHTML]="signer.contactNames | highlight : signerFinderForm.value.searchTerm"
-                        [ngClass]="{'mr-2': signer?.companyName}"></b>
-                      <ng-container *ngIf="signer?.companyName">
-                        <span class="badge badge-pill badge-info">{{signer?.companyName}}</span>
-                      </ng-container>
-                    </div>
-                    <div class="col-sm-4">
-                      {{signer?.phoneNumber}}
-                    </div>
-                    <div class="col-sm-4">
-                      {{signer?.emailAddress}}
-                    </div>
+              <app-subnav-item *ngFor="let signer of signers"
+                (click)="selectSigner(signer.contactGroupId)">
+                <div class="row">
+                  <div class="col-sm-4">
+                    <b [innerHTML]="signer.contactNames | highlight : signerFinderForm.value.searchTerm"
+                      [ngClass]="{'mr-2': signer?.companyName}"></b>
+                    <ng-container *ngIf="signer?.companyName">
+                      <span class="badge badge-pill badge-info">{{signer?.companyName}}</span>
+                    </ng-container>
                   </div>
-                </app-subnav-item>
-              </ng-container>
-              <div class="list-group-item text-center" *ngIf="!signers?.length && !isLoading">
+                  <div class="col-sm-4">
+                    {{signer?.phoneNumber}}
+                  </div>
+                  <div class="col-sm-4">
+                    {{signer?.emailAddress}}
+                  </div>
+                </div>
+              </app-subnav-item>
+              <div class="list-group-item text-center" *ngIf="!signers?.length">
                 No <ng-container *ngIf="!label; else givenLabel2 ">Signers</ng-container>
                 <ng-template #givenLabel2>{{label}}</ng-template> found
-              </div>
-              <div class="list-group-item text-center" *ngIf="isLoading">
-                <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...
               </div>
               <a [routerLink]="['/contact-centre/detail/0/people', 0]"
                 [queryParams]="{isNewContactGroup: true, isSigner: true}" (click)="createNewSigner()"

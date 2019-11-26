@@ -64,7 +64,9 @@ export class PropertyService {
 
   getPropertySuggestions(searchTerm: string): Observable<any[]> {
     const url = `${AppConstants.basePropertyUrl}/suggestions?SearchTerm=${searchTerm}`;
-    return this.http.get<any>(url)
+    return this.http.get<any>(url, {
+      headers: { ignoreLoadingBar: '' }
+    })
       .pipe(
         map(response => response.result),
         tap(data => console.log(JSON.stringify(data)))

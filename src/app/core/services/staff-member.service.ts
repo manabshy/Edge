@@ -66,7 +66,9 @@ export class StaffMemberService {
 
   getStaffMemberSuggestions(searchTerm): Observable<any>  {
     console.log('search Term:', searchTerm);
-    return this.http.get<StaffMemberResult>(`${AppConstants.baseUrl}/suggestions?SearchTerm=${searchTerm}`).pipe(
+    return this.http.get<StaffMemberResult>(`${AppConstants.baseUrl}/suggestions?SearchTerm=${searchTerm}`, {
+      headers: { ignoreLoadingBar: '' }
+    }).pipe(
       map(response => response.result),
       tap(data => {
         if (data) {

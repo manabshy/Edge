@@ -50,7 +50,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
   removedPersonIds: any[] = [];
   newPerson: BasicPerson;
   isCreateNewPersonVisible = false;
-  isLoadingNewPersonVisible = false;
   isEditingSelectedPerson = false;
   isEditingSelectedCompany = false;
   isCreateNewPerson = false;
@@ -60,7 +59,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
   initialContactGroupLength = 0;
   isSubmitting = false;
   errorMessage: WedgeError;
-  isLoadingCompaniesVisible = false;
   isSearchCompanyVisible = true;
   orderFoundPeople = 'matchScore';
   reverse = true;
@@ -113,10 +111,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   get isAMLCompleted() {
     return this.contactGroupDetails && (!!this.contactGroupDetails.companyAmlCompletedDate || this.contactGroupDetails.isAmlCompleted);
-  }
-
-  get isLoadingDetails() {
-    return this.contactGroupId && !this.contactGroupDetails;
   }
 
   public keepOriginalOrder = (a) => a.key;
@@ -329,7 +323,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   getContactGroupFirstPerson(personId: number, isSelectedTypeCompany: boolean) {
-    this.isLoadingNewPersonVisible = true;
     this.contactGroupService.getPerson(personId).subscribe(data => {
       data.isMainPerson = true;
       this.firstContactGroupPerson = data;
@@ -342,7 +335,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
           this.contactGroupDetails.contactPeople.push(this.firstContactGroupPerson);
           this.showPersonWarning();
           this.setSalutation();
-          this.isLoadingNewPersonVisible = false;
         }
       }
     });
@@ -381,10 +373,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   findCompany(searchTerm: any) {
-    this.isLoadingCompaniesVisible = true;
     this.contactGroupService.getAutocompleteCompany(searchTerm).subscribe(data => {
       this.foundCompanies = data;
-      this.isLoadingCompaniesVisible = false;
     });
   }
 
@@ -604,7 +594,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
     }
     if (person && person.personId !== 0 && !this.sharedService.checkDuplicateInContactGroup(this.contactGroupDetails, person.personId)) {
       this.selectedPersonId = person.personId;
-      this.isLoadingNewPersonVisible = true;
       this.collectSelectedPeople(person);
       // this.getPersonDetails(person.personId);
       console.log('person selected', person)
@@ -675,7 +664,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
         if (!this.sharedService.checkDuplicateInContactGroup(this.contactGroupDetails, x.personId)) {
           this.contactGroupDetails.contactPeople.push(x);
           this.setSalutation();
-          this.isLoadingNewPersonVisible = false;
         }
       });
       if (this.removedPersonIds.length) {

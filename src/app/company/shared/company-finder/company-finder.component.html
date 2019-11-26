@@ -26,23 +26,17 @@
             </button>
           </h4>
           <div class="list-group small mb-3">
-            <ng-container *ngIf="!isLoadingCompaniesVisible">
-              <div class="list-group-item list-group-item-action" *ngFor="let company of foundCompanies"
-                (click)="selectCompany(company)">
-                <div class="row align-items-center">
-                  <div class="col"
-                    [innerHTML]="company.companyName | highlight : companyFinderForm.value.companyName"></div>
-                  <div class="col-auto">
-                    <button class="btn btn-block btn-sm btn-link">Select</button>
-                  </div>
+            <div class="list-group-item list-group-item-action" *ngFor="let company of foundCompanies"
+              (click)="selectCompany(company)">
+              <div class="row align-items-center">
+                <div class="col"
+                  [innerHTML]="company.companyName | highlight : companyFinderForm.value.companyName"></div>
+                <div class="col-auto">
+                  <button class="btn btn-block btn-sm btn-link">Select</button>
                 </div>
               </div>
-            </ng-container>
-            <div class="list-group-item text-center" *ngIf="isLoadingCompaniesVisible">
-              <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading companies ...
             </div>
-            <div class="list-group-item text-center"
-              *ngIf="!isLoadingCompaniesVisible">
+            <div class="list-group-item text-center">
               No Company Found? Try again or <a href (click)="enterCompany()">enter it manually</a>.
             </div>
           </div>

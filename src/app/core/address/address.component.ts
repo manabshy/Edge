@@ -32,7 +32,6 @@ export class AddressComponent implements OnInit, OnChanges {
   listInfo: any;
   countries: any;
   enterAddressManually = false;
-  isLoadingAddressVisible: boolean;
   retrievedAddresses: AddressAutoCompleteData;
   backToAddressesList: boolean;
   searchTermBK = '';
@@ -134,7 +133,6 @@ export class AddressComponent implements OnInit, OnChanges {
 
   findAddress(searchTerm: string, container: string) {
     this.retrievedAddresses = null;
-    this.isLoadingAddressVisible = true;
 
     if (container) {
       this.backToAddressesList = true;
@@ -151,7 +149,6 @@ export class AddressComponent implements OnInit, OnChanges {
         }
       });
       this.foundAddress = data;
-      this.isLoadingAddressVisible = false;
     });
   }
 

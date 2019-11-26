@@ -23,7 +23,6 @@ export class ContactGroupsComponent implements OnInit {
   advSearchCollapsed = false;
   isMessageVisible = false;
   isHintVisible = false;
-  isLoading = false;
   contactFinderForm: FormGroup;
   contactGroups: ContactGroupAutoCompleteResult[] = [];
   contactGroupDetails: ContactGroupAutoCompleteResult[];
@@ -99,7 +98,6 @@ export class ContactGroupsComponent implements OnInit {
 
   contactGroupsResults() {
     if (this.searchTerm) {
-      this.isLoading = true;
       this.suggestions = null;
     }
     this.page = 1;
@@ -110,9 +108,7 @@ export class ContactGroupsComponent implements OnInit {
   }
 
   getNextContactGroupsPage(page: number) {
-    this.isLoading = true;
     this.contactGroupService.getAutocompleteContactGroups(this.searchTerm, PAGE_SIZE, page).subscribe(result => {
-      this.isLoading = false;
 
       if (this.searchTerm && this.searchTerm.length) {
         if (!result.length) {
@@ -138,7 +134,6 @@ export class ContactGroupsComponent implements OnInit {
 
     }, error => {
       this.contactGroups = [];
-      this.isLoading = false;
       this.isHintVisible = true;
     });
   }
