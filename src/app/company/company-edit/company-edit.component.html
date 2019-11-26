@@ -31,7 +31,7 @@
             <div class="input-group input-group-sm">
               <input type="text" id="amlDate" placeholder="dd/mm/yyyy" class="form-control fake-readonly"
                 formControlName="amlCompletedDate"
-                [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', maxDate:todaysDate}" bsDatepicker
+                [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', maxDate:todaysDate, customTodayClass: 'font-weight-bold'}" bsDatepicker
                 readonly>
               <div class="input-group-append" *ngIf="companyForm.value.amlCompletedDate">
                 <button type="button" class="btn btn-primary" aria-label="clear AML"
