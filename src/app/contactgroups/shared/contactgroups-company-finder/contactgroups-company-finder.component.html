@@ -1,0 +1,82 @@
+<h5>Company</h5>
+<form class="pb-3" [formGroup]="companyFinderForm" autocompleteOff>
+  <div class="row" [hidden]="!selectedCompanyDetails || isExistingCompany">
+    <label for="selectedCompany" class="col-sm-2 col-form-label col-form-label-sm">Company Name</label>
+    <div class="col-sm-10">
+      <div class="form-group">
+        <input type="hidden" #selectedCompanyInput id="selectedCompany" formControlName="selectedCompany">
+        <app-subnav class="small">
+          <app-subnav-item (click)="editSelectedCompany(selectedCompanyDetails?.companyId)">
+            {{selectedCompanyDetails?.companyName}}
+          </app-subnav-item>
+        </app-subnav>
+        <a *ngIf="!isExistingCompany" class="small mr-3" href (click)="toggleSearchCompany()">Change Company</a>
+      </div>
+    </div>
+  </div>
+  <div class="row" [hidden]="!isSearchCompanyVisible || isExistingCompany">
+    <label for="company" class="col-sm-2 col-form-label col-form-label-sm">Find Company</label>
+    <div class="col-sm-10">
+      <div class="form-group">
+        <div class="input-group input-group-sm">
+          <input #companyNameInput type="search" id="company" class="form-control" formControlName="companyName"
+            (keydown.enter)="searchCompany()" [ngbTypeahead]="suggestions" [focusFirst]="false"
+            (selectItem)="selectedSuggestion($event)">
+          <div class="input-group-append">
+            <button type="button" class="btn btn-secondary" (click)="searchCompany()">Search</button>
+          </div>
+        </div>
+      </div>
+      <div class="btn-link btn-sm p-0 mb-3" *ngIf="noSuggestions" (click)="editSelectedCompany(0, true)">
+        <i class="fas fa-plus mr-2"></i>New Company
+      </div>
+      <div class="off-canvas" [hidden]="!foundCompanies" (click)="foundCompanies = null">
+        <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
+          <h4 class="page-title text-left pt-3">
+            Quick finder
+            <button type="button" class="close mr-2" aria-label="Close" (click)="foundCompanies = null">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </h4>
+          <app-subnav>
+            <app-subnav-item *ngFor="let company of foundCompanies" (click)="selectCompany(company)">
+              <div [innerHTML]="company.companyName | highlight : companyFinderForm.value.companyName"></div>
+            </app-subnav-item>
+            <div class="list-group-item list-group-item-action text-center"
+              *ngIf="!foundCompanies?.length && companyFinderForm.value.companyName">
+              No company found. Try again or create a new one.
+            </div>
+            <div class="list-group-item list-group-item-action text-center py-4" (click)="editSelectedCompany(0, true)">
+              <span class="btn-link"><i class="fas fa-plus mr-2"></i>New Company</span>
+            </div>
+          </app-subnav>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="contactGroupDetails?.companyAddress?.postCode; else showCompanyAddress">
+    <app-address *ngIf="contactGroupDetails" [companyAddress]="contactGroupDetails.companyAddress"
+      (addressDetails)="getAddress($event)"></app-address>
+  </ng-container>
+  <ng-template #showCompanyAddress>
+    <app-address *ngIf="isCompanyAdded && companyFinderForm.value.selectedCompany"
+      [companyDetails]="selectedCompanyDetails" (addressDetails)="getAddress($event)"></app-address>
+  </ng-template>
+  <div class="row justify-content-end" [hidden]="isExistingCompany">
+    <label class="col-sm-2 col-form-label col-form-label-sm">Type</label>
+    <div class="col-sm-10">
+      <div class="row">
+        <div class="form-group col-sm-auto">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="solicitor">
+            <label class="custom-control-label" for="solicitor">Solicitor</label>
+          </div>
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="invClerk">
+            <label class="custom-control-label" for="invClerk">Inventory Clerk</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

@@ -17,14 +17,14 @@
             <div class="form-group">
               <label for="chaseDate">Next chase date</label>
               <input type="text" id="chaseDate" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
-                formControlName="nextChaseDate" [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY'}"
+                formControlName="nextChaseDate" [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
                 bsDatepicker>
             </div>
           </div>
           <div class="col-lg">
             <div class="form-group">
-              <label for="chaser">Owner</label>
-              <select class="form-control form-control-sm" id="owner" formControlName="ownerId">
+              <label for="chaser">Lead Owner</label>
+              <select class="custom-select custom-select-sm" id="owner" formControlName="ownerId">
                 <option value=""></option>
                 <option selected *ngFor="let staffMember of staffMembers" [value]=staffMember.staffMemberId>
                   {{staffMember?.fullName}}</option>

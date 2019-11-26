@@ -4,9 +4,6 @@
     <h4 *ngIf="!basicPerson">Edit Person</h4>
     <app-score-badge [bar]="true" [person]="personForm?.value"></app-score-badge>
   </div>
-  <div class="text-center" *ngIf="!personDetails && !basicPerson">
-    <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading details ...
-  </div>
   <form *ngIf="personDetails || basicPerson" [formGroup]="personForm" (ngSubmit)="savePerson()" (keydown.enter)="$event.preventDefault()" autocompleteOff>
     <div class="form-group row" [hidden]="basicPerson">
       <label for="warningStatus" class="col-sm-2 col-form-label col-form-label-sm">Warning</label>
@@ -192,7 +189,7 @@
       <div class="col-sm-3">
         <div class="input-group input-group-sm">
             <input type="text" id="amlDate" placeholder="dd/mm/yyyy" class="form-control fake-readonly" formControlName="amlCompletedDate"
-            [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', maxDate:todaysDate}" bsDatepicker readonly>
+            [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', maxDate:todaysDate, customTodayClass: 'font-weight-bold'}" bsDatepicker readonly>
             <div class="input-group-append" *ngIf="personForm.value.amlCompletedDate">
               <button type="button" class="btn btn-primary" aria-label="clear AML" (click)="clearControlValue(personForm.get('amlCompletedDate'))">
                   <span aria-hidden="true">&times;</span>

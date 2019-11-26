@@ -4,9 +4,6 @@
     <ng-container *ngIf="isNewCompany; else editLabel">New</ng-container>
     <ng-template #editLabel>Edit</ng-template> Company
   </h4>
-  <div class="text-center" *ngIf="!companyDetails && !isNewCompany">
-    <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading details ...
-  </div>
   <ng-container *ngIf="companyDetails || isNewCompany">
     <form [formGroup]="companyForm" (ngSubmit)="saveCompany()" autocompleteOff>
       <fieldset>
@@ -34,7 +31,7 @@
             <div class="input-group input-group-sm">
               <input type="text" id="amlDate" placeholder="dd/mm/yyyy" class="form-control fake-readonly"
                 formControlName="amlCompletedDate"
-                [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', maxDate:todaysDate}" bsDatepicker
+                [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', maxDate:todaysDate, customTodayClass: 'font-weight-bold'}" bsDatepicker
                 readonly>
               <div class="input-group-append" *ngIf="companyForm.value.amlCompletedDate">
                 <button type="button" class="btn btn-primary" aria-label="clear AML"

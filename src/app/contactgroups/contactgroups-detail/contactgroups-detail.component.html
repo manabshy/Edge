@@ -58,11 +58,6 @@
         <div class="col-12">
           <h5>Contact groups</h5>
           <app-subnav>
-            <div class="list-group-item" *ngIf="!searchedPersonContactGroups">
-              <div class="text-center">
-                <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading contact groups ...
-              </div>
-            </div>
             <app-subnav-item *ngFor="let searchedPersonContactGroup of searchedPersonContactGroups"
               [navLink]="'people/'+searchedPersonContactGroup.contactGroupId"
               [params]="{docTitle: 'Contact Group | '+searchedPersonDetails?.addressee}">

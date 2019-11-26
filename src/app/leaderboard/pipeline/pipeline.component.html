@@ -1,28 +1,25 @@
-<div class="text-center" *ngIf="pipelineList && !pipelineList.length; else results">
-  <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...
-</div>
-<ng-template #results>
-  <div class="table-responsive">
-    <table class="table table-sortable">
-      <thead>
-        <th></th>
-        <th class="d-none d-sm-table-cell"></th>
-        <th class="text-right" [class.active]="order === 'totalFees'" (click)="setOrder('totalFees')"><span
-            class="mr-3" [hidden]="order === 'totalFees' && !reverse">▼</span><span class="mr-3" [hidden]="order !== 'totalFees' || reverse">▲</span></th>
-        <th class="text-right" [class.active]="order === 'totalCount'" (click)="setOrder('totalCount')"><span
-            [hidden]="order === 'totalCount' && !reverse">▼</span><span [hidden]="order !== 'totalCount' || reverse">▲</span></th>
-      </thead>
-      <tbody>
-        <tr *ngFor="let pipeline of pipelineList | orderBy: order:reverse; let i = index;">
-          <th scope="row" class="font-weight-normal">{{i + 1}}<span class="d-sm-none">. {{pipeline.fullName}}</span>
-          </th>
-          <td class="d-none d-sm-table-cell">{{pipeline.fullName}}</td>
-          <td class="text-right" [ngClass]="{'font-weight-bold': order === 'totalFees'}">{{pipeline.totalFees | rounding
+<div class="table-responsive">
+  <table class="table table-sortable">
+    <thead>
+      <th></th>
+      <th class="d-none d-sm-table-cell"></th>
+      <th class="text-right" [class.active]="order === 'totalFees'" (click)="setOrder('totalFees')"><span class="mr-3"
+          [hidden]="order === 'totalFees' && !reverse">▼</span><span class="mr-3"
+          [hidden]="order !== 'totalFees' || reverse">▲</span></th>
+      <th class="text-right" [class.active]="order === 'totalCount'" (click)="setOrder('totalCount')"><span
+          [hidden]="order === 'totalCount' && !reverse">▼</span><span
+          [hidden]="order !== 'totalCount' || reverse">▲</span></th>
+    </thead>
+    <tbody>
+      <tr *ngFor="let pipeline of pipelineList | orderBy: order:reverse; let i = index;">
+        <th scope="row" class="font-weight-normal">{{i + 1}}<span class="d-sm-none">. {{pipeline.fullName}}</span>
+        </th>
+        <td class="d-none d-sm-table-cell">{{pipeline.fullName}}</td>
+        <td class="text-right" [ngClass]="{'font-weight-bold': order === 'totalFees'}">{{pipeline.totalFees | rounding
                               | currency: "GBP"
                               | truncating}}</td>
-          <td class="text-right" [ngClass]="{'font-weight-bold': order === 'totalCount'}">{{pipeline.totalCount}}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</ng-template>
+        <td class="text-right" [ngClass]="{'font-weight-bold': order === 'totalCount'}">{{pipeline.totalCount}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

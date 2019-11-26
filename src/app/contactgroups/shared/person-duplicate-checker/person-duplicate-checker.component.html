@@ -1,4 +1,4 @@
-<div class="off-canvas" [hidden]="!isOffCanvasVisible" (click)="showHideOffCanvas($event)">
+<div class="off-canvas" [hidden]="!isPersonCanvasVisible" (click)="showHideOffCanvas($event)">
   <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
     <h4 class="page-title text-left pt-3" [ngClass]="{'m-0': isCreateNewPerson}">
       <ng-container *ngIf="!isCreateNewPerson; else createLabel">Find</ng-container>
@@ -44,13 +44,12 @@
               <h5>Quick Finder</h5>
             </div>
           </div>
-
           <app-subnav>
             <app-subnav-item *ngFor="let foundPerson of potentialDuplicatePeople?.matches"
-              [ngClass]="{'disabled': checkDuplicateInContactGroup(foundPerson?.personId)}"
+              [ngClass]="{'disabled': isAlreadyInContactgroup(foundPerson?.personId)}"
               (click)="selectPerson(foundPerson?.personId)">
               <div class="row">
-                <ng-container *ngIf="checkDuplicateInContactGroup(foundPerson?.personId); else badge">
+                <ng-container *ngIf="isAlreadyInContactgroup(foundPerson?.personId); else badge">
                   <div class="col-12 mb-2">
                     <i class="fas fa-exclamation-triangle mr-1"></i> Already in this group
                   </div>
@@ -102,7 +101,7 @@
     </ng-container>
     <ng-template #createNewPerson>
       <app-contactgroups-detail-edit (addedPersonDetails)="getAddedPersonDetails($event)"
-        (addedPersonId)="showAddedPersonId($event)" (hideCanvas)="hideCanvas($event)"
+        (hideCanvas)="hideCanvas($event)"
         (backToFinder)="backToFinder($event)" *ngIf="isCreateNewPerson && newPerson" [basicPerson]="newPerson">
       </app-contactgroups-detail-edit>
     </ng-template>

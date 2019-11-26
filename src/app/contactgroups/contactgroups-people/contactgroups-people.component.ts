@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2, ViewChild, ElementRef, ɵConsole } from '@angular/core';
+import { Component, OnInit, Renderer2, ViewChild, ElementRef } from '@angular/core';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Person, BasicPerson } from 'src/app/core/models/person';
@@ -7,19 +7,17 @@ import {
   ContactType, CompanyAutoCompleteResult, Company, PotentialDuplicateResult, ContactNote
 } from '../shared/contact-group';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, switchMap, catchError, tap } from 'rxjs/operators';
+import { distinctUntilChanged, switchMap, catchError, tap } from 'rxjs/operators';
 import { Subject, Observable, EMPTY } from 'rxjs';
 import { BsModalService } from 'ngx-bootstrap/modal/';
 import { ConfirmModalComponent } from 'src/app/core/confirm-modal/confirm-modal.component';
 import { Location } from '@angular/common';
 import { WedgeError, SharedService } from 'src/app/core/services/shared.service';
-import { FormErrors, ValidationMessages } from 'src/app/core/shared/app-constants';
+import { FormErrors } from 'src/app/core/shared/app-constants';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { ToastrService } from 'ngx-toastr';
 import * as _ from 'lodash';
-import { InfoService } from 'src/app/core/services/info.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
-import { CompanyService } from 'src/app/company/shared/company.service';
 @Component({
   selector: 'app-contactgroups-people',
   templateUrl: './contactgroups-people.component.html',
@@ -50,7 +48,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
   removedPersonIds: any[] = [];
   newPerson: BasicPerson;
   isCreateNewPersonVisible = false;
-  isLoadingNewPersonVisible = false;
   isEditingSelectedPerson = false;
   isEditingSelectedCompany = false;
   isCreateNewPerson = false;
@@ -60,7 +57,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
   initialContactGroupLength = 0;
   isSubmitting = false;
   errorMessage: WedgeError;
-  isLoadingCompaniesVisible = false;
   isSearchCompanyVisible = true;
   orderFoundPeople = 'matchScore';
   reverse = true;
@@ -115,22 +111,16 @@ export class ContactgroupsPeopleComponent implements OnInit {
     return this.contactGroupDetails && (!!this.contactGroupDetails.companyAmlCompletedDate || this.contactGroupDetails.isAmlCompleted);
   }
 
-  get isLoadingDetails() {
-    return this.contactGroupId && !this.contactGroupDetails;
-  }
-
   public keepOriginalOrder = (a) => a.key;
 
   constructor(
     private contactGroupService: ContactGroupsService,
-    private companyService: CompanyService,
     private fb: FormBuilder,
     private _router: Router,
     private route: ActivatedRoute,
     private modalService: BsModalService,
     private _location: Location,
     private sharedService: SharedService,
-    private infoService: InfoService,
     private storage: StorageMap,
     private toastr: ToastrService,
     private renderer: Renderer2
@@ -216,13 +206,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       isRelocationAgent: false,
       contactType: ContactType.Individual
     });
-    this.personFinderForm = this.fb.group({
-      firstName: [''],
-      lastName: [''],
-      fullName: [''],
-      emailAddress: [''],
-      phoneNumber: ['']
-    });
+
     if (AppUtils.holdingSelectedPeople || AppUtils.holdingSelectedCompany) {
       AppUtils.holdingSelectedPeople ? this.selectedPeople = AppUtils.holdingSelectedPeople : null;
       AppUtils.holdingSelectedCompany ? this.selectedCompanyDetails = AppUtils.holdingSelectedCompany : null;
@@ -247,8 +231,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.isTypePicked = true;
         this.contactGroupDetails.contactType = ContactType.CompanyContact;
         this.getCompanyDetails(this.existingCompanyId);
-        console.log('here in init', this.contactGroupDetailsForm);
-        console.log('selected details in init', this.selectedCompanyDetails);
       }
       if (this.isNewCompanyContact) {
         this.isTypePicked = true;
@@ -260,34 +242,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
       AppUtils.holdingContactType = null;
       this.addSelectedPeople();
     }
-    this.personFinderForm.valueChanges
-      .pipe(debounceTime(750))
-      .subscribe(data => {
-        if (
-          data.fullName &&
-          (data.phoneNumber || data.emailAddress)
-        ) {
-          this.isCreateNewPersonVisible = true;
-        } else {
-          this.isCreateNewPersonVisible = false;
-        }
-        data.emailAddresses = [];
-        data.emailAddresses.push({
-          id: 0,
-          email: data.emailAddress,
-          isPreferred: true,
-          isPrimaryWebEmail: true
-        });
-        data.phoneNumbers = [];
-        data.phoneNumbers.push({
-          number: data.phoneNumber,
-          typeId: 3,
-          isPreferred: true,
-          comments: ''
-        });
-        this.newPerson = data;
-        this.findPotentialDuplicatePerson(data);
-      });
   }
 
   setDropdownLists() {
@@ -329,7 +283,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   getContactGroupFirstPerson(personId: number, isSelectedTypeCompany: boolean) {
-    this.isLoadingNewPersonVisible = true;
     this.contactGroupService.getPerson(personId).subscribe(data => {
       data.isMainPerson = true;
       this.firstContactGroupPerson = data;
@@ -342,7 +295,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
           this.contactGroupDetails.contactPeople.push(this.firstContactGroupPerson);
           this.showPersonWarning();
           this.setSalutation();
-          this.isLoadingNewPersonVisible = false;
         }
       }
     });
@@ -381,53 +333,11 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   findCompany(searchTerm: any) {
-    this.isLoadingCompaniesVisible = true;
     this.contactGroupService.getAutocompleteCompany(searchTerm).subscribe(data => {
       this.foundCompanies = data;
-      this.isLoadingCompaniesVisible = false;
     });
   }
 
-  findPotentialDuplicatePerson(person: BasicPerson) {
-    this.contactGroupService.getPotentialDuplicatePeople(person).subscribe(data => {
-      this.potentialDuplicatePeople = data;
-      if (data) {
-        this.newPerson.firstName = data.firstName,
-          this.newPerson.middleName = data.middleName,
-          this.newPerson.lastName = data.lastName;
-      }
-      this.checkDuplicatePeople(person);
-    });
-  }
-  checkDuplicatePeople(person: BasicPerson) {
-    const matchedPeople = [];
-    if (this.potentialDuplicatePeople) {
-      this.potentialDuplicatePeople.matches.forEach((x) => {
-        const firstName = x.firstName ? x.firstName.toLowerCase() : '';
-        const middleName = x.middleNames ? x.middleNames.toLowerCase() : '';
-        const lastName = x.lastName ? x.lastName.toLowerCase() : '';
-        const fullName = middleName ? `${firstName} ${middleName} ${lastName} ` : `${firstName} ${lastName} `;
-        const sameName = fullName.toLowerCase().trim() === person.fullName.toLowerCase().trim();
-        const email = x.emailAddresses ? x.emailAddresses.filter(x => x === person.emailAddress) : [];
-        const phone = x.phoneNumbers ?
-          x.phoneNumbers.filter(x => x === person.phoneNumber ? person.phoneNumber.replace(/\s+/g, '') : '') : [];
-        const samePhone = phone[0] ? phone[0].toString() === person.phoneNumber.replace(/\s+/g, '') : false;
-        const sameEmail = email[0] ? email[0].toLowerCase() === person.emailAddress : false;
-        switch (true) {
-          case sameName && sameEmail && samePhone:
-            x.matchScore = 10;
-            break;
-          case (sameName) && (sameEmail || samePhone):
-            x.matchScore = 7;
-            break;
-          default:
-            x.matchScore = 0;
-        }
-        matchedPeople.push(x);
-      });
-      this.potentialDuplicatePeople.matches = matchedPeople;
-    }
-  }
   createNewContactGroupPerson(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -449,7 +359,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
         x.isMainPerson = true;
         index = contactPeople.indexOf(x);
         contactPeople.unshift(contactPeople.splice(index, 1)[0]);
-        console.log('new contact people', contactPeople);
         this.contactGroupDetailsForm.markAsDirty();
       } else {
         x.isMainPerson = false;
@@ -588,29 +497,21 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.sharedService.showError(this.errorMessage);
     });
   }
+
   getAddress(address: any) {
     if (address) {
       this.contactGroupDetails.companyAddress = address;
       this.isNewAddress = true;
     }
-    console.log('from child', address);
-    console.log('new company address here', this.contactGroupDetails.companyAddress);
   }
 
-  selectPerson(id: number) {
-    if (this.removedPersonIds.indexOf(id) >= 0) {
-      this.removedPersonIds.splice(this.removedPersonIds.indexOf(id), 1);
+  getSelectedPerson(person: Person) {
+    if (this.removedPersonIds.indexOf(person.personId) >= 0) {
+      this.removedPersonIds.splice(this.removedPersonIds.indexOf(person.personId), 1);
     }
-    if (id !== 0 && !this.checkDuplicateInContactGroup(id)) {
-      this.selectedPersonId = id;
-      this.isLoadingNewPersonVisible = true;
-      this.getPersonDetails(id);
-      if (this.contactGroupId) {
-        this.getContactGroupById(this.contactGroupId);
-      }
-      this.personFinderForm.reset();
-    } else {
-      return false;
+    if (person && person.personId !== 0 && !this.sharedService.checkDuplicateInContactGroup(this.contactGroupDetails, person.personId)) {
+      this.selectedPersonId = person.personId;
+      this.collectSelectedPeople(person);
     }
 
     this.isOffCanvasVisible = false;
@@ -626,18 +527,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
     }
   }
 
-  checkDuplicateInContactGroup(id) {
-    let isDuplicate = false;
-    if (this.contactGroupDetails && this.contactGroupDetails.contactPeople) {
-      this.contactGroupDetails.contactPeople.forEach(x => {
-        if (x && x.personId === id) {
-          isDuplicate = true;
-        }
-      });
-    }
-    return isDuplicate;
-  }
-
   showPersonWarning() {
     this.contactGroupDetails.contactPeople.forEach(x => {
       x.warning = this.sharedService.showWarning(x.warningStatusId, this.warnings, x.warningStatusComment);
@@ -647,10 +536,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
   addSelectedPeople() {
     if (this.selectedPeople.length) {
       this.selectedPeople.forEach(x => {
-        if (!this.checkDuplicateInContactGroup(x.personId)) {
+        if (!this.sharedService.checkDuplicateInContactGroup(this.contactGroupDetails, x.personId)) {
           this.contactGroupDetails.contactPeople.push(x);
           this.setSalutation();
-          this.isLoadingNewPersonVisible = false;
         }
       });
       if (this.removedPersonIds.length) {
@@ -668,13 +556,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.setSalutation();
   }
 
-  showAddedPersonId(id) {
-    // if (id !== 0) {
-    //   this.selectedPersonId = id;
-    //   this.getPersonDetails(id);
-    // }
-    // this.selectedPersonId = 0;
-  }
 
   getAddedPersonDetails(person: Person) {
     if (person) {
@@ -713,6 +594,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         if (this.selectedPeople.length || contactPeople) {
           const contactGroup = { ...this.contactGroupDetails, ...this.contactGroupDetailsForm.value };
           this.isSubmitting = true;
+          this.isOffCanvasVisible = false;
           this.errorMessage = null;
           if (contactGroup.contactGroupId) {
             this.updateContactGroup(contactGroup);
@@ -858,17 +740,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
     }
   }
 
-  // TODO: Replace this with a directive
-  /* Only allow spaces, dashes, the plus sign and digits */
-  phoneNumberOnly(event): boolean {
-    const charCode = (event.which) ? event.which : event.keyCode;
-    const isCodeNotAllowed = charCode > 31 && charCode !== 45 && charCode !== 43 && charCode !== 32 && (charCode < 48 || charCode > 57);
-    if (isCodeNotAllowed) {
-      return false;
-    }
-    return true;
-
-  }
   showHideMarkPrefs(event, i) {
     event.preventDefault();
     event.stopPropagation();
@@ -888,6 +759,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
     } else {
       this.renderer.removeClass(document.body, 'no-scroll');
     }
+  }
+
+  resetCanvasFlag(event) {
+    this.isOffCanvasVisible = event;
   }
 
   addNote() {

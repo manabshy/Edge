@@ -32,11 +32,11 @@ export class NotesComponent implements OnInit, OnChanges {
   addressee: any;
   order = ['isPinned', 'createDate'];
   reverse = true;
-  isUpdating = false;
   page: number;
   notesLength: number;
   isPropertyNote: boolean;
   isPersonNote: boolean;
+  isUpdating: boolean;
 
   constructor(private sharedService: SharedService,
     private contactGroupService: ContactGroupsService,
@@ -74,25 +74,21 @@ export class NotesComponent implements OnInit, OnChanges {
           x.isImportant ? x.isImportant = false : x.isImportant = true;
         } else {
           x.isPinned ? x.isPinned = false : x.isPinned = true;
-          this.isUpdating = true;
         }
         switch (true) {
           case !!x.contactGroupId:
             this.contactGroupService.updateContactGroupNote(x).subscribe((data) => {
               this.contactGroupService.notesChanged(x);
-              this.isUpdating = false;
             });
             break;
           case !!x.personId:
             this.contactGroupService.updatePersonNote(x).subscribe((data) => {
               this.contactGroupService.notesChanged(x);
-              this.isUpdating = false;
             });
             break;
           case !!x.propertyId:
             this.propertyService.updatePropertyNote(x).subscribe((data) => {
               this.propertyService.propertyNoteChanged(x);
-              this.isUpdating = false;
             });
             break;
         }
