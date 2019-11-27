@@ -143,7 +143,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.contactGroupService.getContactGroupbyId(this.contactGroupId).subscribe(x => {
           this.contactGroupDetails.contactNotes = x.contactNotes;
           this.setImportantNotes();
-        });
+        },
+          (error: WedgeError) => {
+            this.sharedService.showError(error);
+          });
       }
     });
 
@@ -283,7 +286,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
           this.contactGroupDetails.contactGroupId = 0;
         }
         this.isTypePicked = true;
-      });
+      },
+        (error: WedgeError) => {
+          this.sharedService.showError(error);
+        });
   }
 
   getContactGroupFirstPerson(personId: number, isSelectedTypeCompany: boolean) {
@@ -301,7 +307,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
           this.setSalutation();
         }
       }
-    });
+    },
+      (error: WedgeError) => {
+        this.sharedService.showError(error);
+      });
   }
   getPersonDetails(personId: number) {
     this.contactGroupService.getPerson(personId).subscribe(data => {
@@ -343,6 +352,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
   findCompany(searchTerm: any) {
     this.contactGroupService.getAutocompleteCompany(searchTerm).subscribe(data => {
       this.foundCompanies = data;
+    }, (error: WedgeError) => {
+      this.sharedService.showError(error);
     });
   }
 
@@ -398,6 +409,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
         if (data && !data.length) {
           this.bottomReached = true;
         }
+      }, (error: WedgeError) => {
+        this.sharedService.showError(error);
       });
   }
 
@@ -492,6 +505,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.contactGroupService.getCompany(companyId).subscribe(data => {
       this.selectedCompanyDetails = data;
       this.isSearchCompanyVisible = false;
+    }, (error: WedgeError) => {
+      this.sharedService.showError(error);
     });
   }
 

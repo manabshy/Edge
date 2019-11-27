@@ -8,6 +8,7 @@ import { TabsetComponent, TabDirective } from 'ngx-bootstrap/tabs/';
 import { AppUtils } from '../core/shared/utils';
 import { StaffMember } from '../core/models/staff-member';
 import { ActivatedRoute } from '@angular/router';
+import { WedgeError, SharedService } from '../core/services/shared.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -54,7 +55,7 @@ export class DashboardComponent implements OnInit {
   get selectedPeriod() {
     return this._selectedPeriod;
   }
-  constructor( private dashboardService: DashboardService, protected route: ActivatedRoute) { }
+  constructor( private dashboardService: DashboardService, private sharedService: SharedService, protected route: ActivatedRoute) { }
 
   ngOnInit() {
       this.route.queryParams.subscribe(params =>  {
@@ -84,8 +85,13 @@ export class DashboardComponent implements OnInit {
       .subscribe(result => {
         this.teamDashboard = result;
         this.getDashboardTotals(result);
-      });
+      }
+      // (error: WedgeError) => {
+      //   this.sharedService.showError(error);
+      // });
+      );
   }
+
   getDashboardPipeline(id: number, role: string, period?: string): void {
     this.dashboardService.getDashboardPipeline(id, role, period)
       .subscribe(result => {
