@@ -240,6 +240,8 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       this.leadService.pageNumberChanged(this.leadSearchInfo);
       console.log('leads page number', this.page);
     }
+
+    console.log('bottom reached', this.bottomReached);
   }
 
 

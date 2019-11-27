@@ -52,11 +52,11 @@ export class LeadComponent implements OnInit {
     });
 
     // page changes here
-    this.leadService.pageChanges$.subscribe(newPageNumber => {
-      if (newPageNumber) {
-        this.page = newPageNumber.page;
-        this.getLeads(newPageNumber);
-        console.log('end of page', newPageNumber.page);
+    this.leadService.pageChanges$.subscribe(leadSearchInfo => {
+      if (leadSearchInfo) {
+        this.page = leadSearchInfo.page;
+        this.getLeads(leadSearchInfo);
+        console.log('end of page', leadSearchInfo.page);
       }
     });
 
@@ -65,7 +65,7 @@ export class LeadComponent implements OnInit {
 
   getLeads(leadSearchInfo: LeadSearchInfo) {
     this.leadService.getLeads(leadSearchInfo, PAGE_SIZE).subscribe(result => {
-      
+
       if (leadSearchInfo.page === 1) {
         this.leads = result;
       } else {
@@ -73,6 +73,12 @@ export class LeadComponent implements OnInit {
       }
 
       this.filteredLeads = this.leads;
+
+      if (result && !result.length) {
+        this.bottomReached = true;
+        console.log('data', result);
+        console.log('bottom reached', this.bottomReached);
+      }
 
     }, error => {
       this.leads = [];

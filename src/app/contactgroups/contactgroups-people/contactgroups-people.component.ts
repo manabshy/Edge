@@ -387,7 +387,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         if (data) {
           this.contactNotes = _.concat(this.contactNotes, data);
         }
-        if (!data.length) {
+        if (data && !data.length) {
           this.bottomReached = true;
         }
       });

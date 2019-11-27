@@ -72,7 +72,7 @@ export class PropertyDetailNotesComponent extends BaseComponent implements OnIni
           this.propertyNotes = _.concat(this.propertyNotes, data);
           this.setupNoteType();
         }
-        if (!data.length) {
+        if (data && !data.length) {
           this.bottomReached = true;
         }
       });

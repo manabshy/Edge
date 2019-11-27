@@ -123,7 +123,7 @@ export class NotesComponent implements OnInit, OnChanges {
   onWindowScroll() {
     if (window.innerHeight + window.scrollY === document.body.scrollHeight && !this.bottomReached) {
       this.page++;
-      if (this.contactPeople) {
+      if (this.contactPeople && this.contactPeople.length) {
         console.log('here for contact notes');
         this.contactGroupService.contactNotePageNumberChanged(this.page);
         console.log('page number here for contact notes...', this.page);
@@ -145,6 +145,8 @@ export class NotesComponent implements OnInit, OnChanges {
 
   addNote() {
     if (this.noteData) {
+      console.log('add note', this.person);
+      console.log('note data' , this.noteData);
       this.sharedService.addNote(this.noteData);
     }
   }

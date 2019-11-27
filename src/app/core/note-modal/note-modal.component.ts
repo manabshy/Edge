@@ -83,6 +83,7 @@ export class NoteModalComponent implements OnInit {
   }
 
   action(value: boolean) {
+    console.log(value);
    if (value) {
       this.saveNote();
    }
@@ -92,6 +93,7 @@ export class NoteModalComponent implements OnInit {
   }
 
   saveNote() {
+    console.log(this.data);
     this.isPersonNote || this.data.isPersonNote || this.data.personId ? this.addPersonNote() : this.addContactNote();
     // if (this.noteForm.valid) {
     //   if (this.noteForm.dirty) {

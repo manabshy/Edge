@@ -78,7 +78,7 @@ export class CompanyComponent implements OnInit {
   private getNextCompanyListPage(page: number) {
     this.contactGroupService.getAutocompleteCompany(this.searchTerm, PAGE_SIZE, page).subscribe(result => {
       if (this.searchTerm && this.searchTerm.length) {
-        if (!result.length) {
+        if (result && !result.length) {
           this.isMessageVisible = true;
           this.bottomReached = true;
           return;

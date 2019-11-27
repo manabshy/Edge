@@ -14,13 +14,16 @@ import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-group
 import { getDate } from 'date-fns';
 import { Person } from 'src/app/core/models/person';
 import { ToastrService } from 'ngx-toastr';
+import { takeUntil } from 'rxjs/operators';
+import * as _ from 'lodash';
+import { BaseComponent } from 'src/app/core/models/base-component';
 
 @Component({
   selector: 'app-lead-edit',
   templateUrl: '../lead-edit/lead-edit.component.html',
   styleUrls: ['../lead-edit/lead-edit.component.scss']
 })
-export class LeadEditComponent implements OnInit {
+export class LeadEditComponent extends BaseComponent implements OnInit {
 
   listInfo: any;
   leadId: number;
@@ -46,7 +49,7 @@ export class LeadEditComponent implements OnInit {
     private sharedService: SharedService,
     private contactGroupService: ContactGroupsService,
     private staffMemberService: StaffMemberService,
-    private toastr: ToastrService) { }
+    private toastr: ToastrService) { super(); }
 
   ngOnInit() {
     AppUtils.parentRoute = AppUtils.prevRoute;
@@ -114,6 +117,10 @@ export class LeadEditComponent implements OnInit {
       this.getPersonInformation();
     }
 
+    this.contactGroupService.personNotePageChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(newPageNumber => {
+      this.page = newPageNumber;
+      this.getNextPersonNotesPage(this.page);
+    });
 
   }
 
@@ -139,14 +146,13 @@ export class LeadEditComponent implements OnInit {
   }
 
   private getPersonInformation() {
-    this.contactGroupService.getPersonNotes(this.personId).subscribe(
-      data => {
-        this.personNotes = data;
-      });
+
+    this.getPersonNotes();
 
     this.contactGroupService.getPerson(this.personId).subscribe(
       data => {
         this.person = data;
+        console.log('get person information', this.person);
         this.getSearchedPersonSummaryInfo(this.person.personId);
 
         this.subNav.forEach(element => {
@@ -216,23 +222,43 @@ export class LeadEditComponent implements OnInit {
 
   get dataNote() {
     // if (this.contactGroupDetails) {
-      //console.log('PERSON:',this.person);
+    //console.log('PERSON:',this.person);
     return {
-      group: null,
-      people: [this.person],
-    notes: this.personNotes
-  };
-  // }
-  // return null;
-}
-
-cancel() {
-  if (false) {
-    //this.backToFinder.emit(true);
-  } else {
-    this.sharedService.back();
+      //   group: null,
+      //   people: [this.person],
+      // notes: this.personNotes
+      personId: this.personId
+    };
+    // }
+    // return null;
   }
-}
+
+  cancel() {
+    if (false) {
+      //this.backToFinder.emit(true);
+    } else {
+      this.sharedService.back();
+    }
+  }
+
+  getPersonNotes() {
+    this.getNextPersonNotesPage(this.page);
+  }
+
+  private getNextPersonNotesPage(page) {
+
+    this.contactGroupService.getPersonNotes(this.personId, this.pageSize, page).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
+      if (data) {
+        this.personNotes = _.concat(this.personNotes, data);
+      }
+      if (data && !data.length) {
+
+        this.bottomReached = true;
+        console.log('data', data);
+        console.log('bottom reached',this.bottomReached);
+      }
+    });
+  }
 
 
 }

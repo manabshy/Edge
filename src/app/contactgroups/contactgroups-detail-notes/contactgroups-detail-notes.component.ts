@@ -100,7 +100,7 @@ export class ContactgroupsDetailNotesComponent extends BaseComponent implements 
       if (data) {
         this.personNotes = _.concat(this.personNotes, data);
       }
-      if (!data.length) {
+      if (data && !data.length) {
         this.bottomReached = true;
       }
     });

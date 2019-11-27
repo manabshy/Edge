@@ -84,7 +84,7 @@ export class PropertyComponent extends BaseComponent implements OnInit {
     } as RequestOption;
     this.propertyService.autocompleteProperties(requestOptions).subscribe(result => {
       if (this.searchTerm && this.searchTerm.length) {
-        if (!result.length) {
+        if (result && !result.length) {
           this.isMessageVisible = true;
           this.bottomReached = true;
         } else {
