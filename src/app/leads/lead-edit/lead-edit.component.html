@@ -75,7 +75,8 @@
       </div>
       <div class="col-xl-8">
         <h5>Notes</h5>
-        <app-notes [personNotes]="personNotes"></app-notes>
+        <!-- <app-notes [personNotes]="personNotes"></app-notes> -->
+        <app-notes [personId]="personId" [person]="person" [personNotes]="personNotes" [noteData] = "dataNote"></app-notes>
       </div>
     </div>
 

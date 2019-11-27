@@ -10,6 +10,9 @@ import { SharedService } from 'src/app/core/services/shared.service';
 import { OfficeService } from 'src/app/core/services/office.service';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { ControlPosition } from '@agm/core/services/google-maps-types';
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { LeadAssignmentModalComponent } from '../lead-assignment-modal/lead-assignment-modal/lead-assignment-modal.component';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-lead-register',
@@ -41,6 +44,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     private sharedService: SharedService,
     private storage: StorageMap,
     private officeService: OfficeService,
+    private modalService: BsModalService,
     private fb: FormBuilder) { }
 
   ngOnInit() {
@@ -176,7 +180,14 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   }
 
   processLeadsAssignment() {
+    this.showLeadsAssignmentModal();
+  }
 
+  showLeadsAssignmentModal() {
+    const subject = new Subject<boolean>();
+    const modal = this.modalService.show(LeadAssignmentModalComponent);
+    modal.content.subject = subject;
+    return subject.asObservable();
   }
 
   onScrollDown() {

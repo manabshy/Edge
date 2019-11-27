@@ -69,7 +69,7 @@
         </div>
     </div>
   </form>
-  <form action="" class="pb-0" (ngSubmit)="processLeadsAssignment()">
+  <form class="pb-0" (ngSubmit)="processLeadsAssignment()">
     <h5 *ngIf="areLeadsAssignable">Select to assign</h5>
     <div class="list-group mb-3">
       <!-- <a [routerLink]="areLeadsAssignable ? null : ['edit', lead?.leadId]" (click)="selectLead()" -->
@@ -114,7 +114,7 @@
       <div class="container px-lg-4">
         <div class="row justify-content-end w-100 no-gutters">
           <div class="col-sm-10 d-flex">
-            <button (click)="Cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
+            <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
             <button type="submit" class="btn btn-secondary">Assign</button>
           </div>
         </div>
