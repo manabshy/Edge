@@ -569,7 +569,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     if (person) {
       person.isNewPerson = true;
       this.addedPerson = person;
-      if (this.contactGroupDetails && this.contactGroupDetails.contactPeople.length) {
+      if (this.contactGroupDetails && this.contactGroupDetails.contactPeople.length || this.isExistingCompany) {
         this.collectSelectedPeople(person);
       } else {
         this.contactGroupDetails = {} as ContactGroup;
@@ -682,9 +682,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
   onSaveComplete(contactGroupId): void {
     this.toastr.success('Contact Group successfully saved');
 
-    if (this.isExistingCompany && this.isExistingCompany) {
-      this._router.navigate(['/company-centre/detail', this.existingCompanyId]);
-    }
     if (!contactGroupId) {
       this.sharedService.back();
     } else {
@@ -709,6 +706,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this._location.replaceState(url);
       this.contactGroupId = contactGroupId;
       this.init();
+
+      if (this.isExistingCompany && this.existingCompanyId) {
+        this._router.navigate(['/company-centre/detail', this.existingCompanyId]);
+      }
     }
   }
 
