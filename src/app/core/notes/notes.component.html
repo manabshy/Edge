@@ -15,21 +15,21 @@
     <div class="list-group-item" *ngFor="let note of notes">
       <div class="row">
         <div class="col-auto pr-0">
-          <i class="fas fa-thumbtack fa-fw" 
-            role="button" data-toggle="button" 
+          <i class="fas fa-thumbtack fa-fw"
+            role="button" data-toggle="button"
             (click)="setFlag(note?.id, false)"
-            [attr.aria-pressed]="!note?.isPinned ? false : true" 
+            [attr.aria-pressed]="!note?.isPinned ? false : true"
             [ngClass]="{'unset': !note?.isPinned, 'd-none': !note?.isPinned && note?.propertyId}"
             tooltip="Pin to top"
             container="body">
           </i>
         </div>
         <div class="col-auto">
-          <i class="fas fa-exclamation-circle text-danger fa-fw" 
-            role="button" data-toggle="button" 
+          <i class="fas fa-exclamation-circle text-danger fa-fw"
+            role="button" data-toggle="button"
             (click)="setFlag(note?.id, true)"
-            [attr.aria-pressed]="!note?.isImportant ? false : true" 
-            [ngClass]="{'unset': !note?.isImportant, 'd-none': !note?.isImportant && note?.propertyId}" 
+            [attr.aria-pressed]="!note?.isImportant ? false : true"
+            [ngClass]="{'unset': !note?.isImportant, 'd-none': !note?.isImportant && note?.propertyId}"
             tooltip="Important"
             container="body">
           </i>
@@ -76,7 +76,7 @@
                 <ng-template #personNote>
                   <ng-container *ngIf="contactPeople">
                     <ng-container *ngFor="let person of contactPeople">
-                      <a class="mb-2" [routerLink]="['/contact-centre/detail', note?.personId]" *ngIf="person.personId === note?.personId">{{person.addressee}}</a>
+                      <a class="mb-2" [routerLink]="['/contact-centre/detail', note?.personId]" *ngIf="person?.personId === note?.personId">{{person?.addressee}}</a>
                     </ng-container>
                   </ng-container>
                 </ng-template>
@@ -84,15 +84,15 @@
               <ng-template #groupsInfo>
                 <ng-container *ngIf="addressees && person">
                   <ng-container *ngFor="let group of addressees">
-                    <a class="mb-2" [routerLink]="['/contact-centre/detail', note?.personId || 0, 'people', note?.contactGroupId]" *ngIf="group.groupId === note?.contactGroupId">{{group.addressee}}</a>
+                    <a class="mb-2" [routerLink]="['/contact-centre/detail', note?.personId || 0, 'people', note?.contactGroupId]" *ngIf="group?.groupId === note?.contactGroupId">{{group?.addressee}}</a>
                   </ng-container>
-                  <a class="mb-2" [routerLink]="['/contact-centre/detail', note?.personId]" *ngIf="person.personId === note?.personId">{{person.addressee}}</a>
+                  <a class="mb-2" [routerLink]="['/contact-centre/detail', note?.personId]" *ngIf="person?.personId === note?.personId">{{person?.addressee}}</a>
                 </ng-container>
               </ng-template>
             </div>
             <div class="col-sm-2 mb-2" *ngIf="note?.propertyId">
-              <span class="badge badge-pill badge-success" *ngIf="note.type < 3">{{note.typeDescription}}</span>
-              <span class="badge badge-pill badge-warning" *ngIf="note.type > 2">{{note.typeDescription}}</span>
+              <span class="badge badge-pill badge-success" *ngIf="note.type < 3">{{note?.typeDescription}}</span>
+              <span class="badge badge-pill badge-warning" *ngIf="note.type > 2">{{note?.typeDescription}}</span>
             </div>
             <div class="col-sm mb-2">
               {{note?.text}}
