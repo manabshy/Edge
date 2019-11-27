@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-lead-assignment-modal',
@@ -7,9 +8,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LeadAssignmentModalComponent implements OnInit {
 
-  constructor() { }
+  constructor(public bsModalRef: BsModalRef) { }
 
   ngOnInit() {
+  }
+
+  onOwnerChanged(event: any) {
+    console.log(event);
+
+    if (event && event.item != null) {
+
+    } else {
+
+    }
+  }
+
+  action(value: boolean) {
+    this.bsModalRef.hide();
   }
 
 }

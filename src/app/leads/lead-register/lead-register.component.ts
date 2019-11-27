@@ -37,6 +37,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   leadSearchInfo: LeadSearchInfo;
   enableOwnerFilter: boolean = true;
   selectedLeadsForAssignment: Lead[] = [];
+  selectedLeadsCount: number = 0;
 
 
   constructor(private leadService: LeadsService,
@@ -112,14 +113,17 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       leadIndex = this.selectedLeadsForAssignment != null ? this.selectedLeadsForAssignment.indexOf(lead) : -1;
       if (leadIndex < 0) {
         this.selectedLeadsForAssignment.push(lead);
+        this.selectedLeadsCount++;
       } else {
         this.selectedLeadsForAssignment.splice(leadIndex, 1);
+        this.selectedLeadsCount--;
       }
 
       // $event.stopPropagation();
     }
 
     console.log('selected leads:', this.selectedLeadsForAssignment);
+    console.log('leads count:', this.selectedLeadsCount);
 
   }
 
@@ -185,8 +189,8 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
 
   showLeadsAssignmentModal() {
     const subject = new Subject<boolean>();
-    const modal = this.modalService.show(LeadAssignmentModalComponent);
-    modal.content.subject = subject;
+    const modal = this.modalService.show(LeadAssignmentModalComponent, { ignoreBackdropClick: true });
+    modal.content.subject = subject; 
     return subject.asObservable();
   }
 
