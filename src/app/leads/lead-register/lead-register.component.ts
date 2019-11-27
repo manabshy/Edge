@@ -37,7 +37,6 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   leadSearchInfo: LeadSearchInfo;
   enableOwnerFilter: boolean = true;
   selectedLeadsForAssignment: Lead[] = [];
-  selectedLeadsCount: number = 0;
   isSelectAllChecked: boolean = false;
 
 
@@ -124,17 +123,14 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       leadIndex = this.selectedLeadIndex(lead);
       if (leadIndex < 0) {
         this.selectedLeadsForAssignment.push(lead);
-        this.selectedLeadsCount++;
       } else {
         this.selectedLeadsForAssignment.splice(leadIndex, 1);
-        this.selectedLeadsCount--;
       }
 
       // $event.stopPropagation();
     }
 
     console.log('selected leads:', this.selectedLeadsForAssignment);
-    console.log('leads count:', this.selectedLeadsCount);
 
   }
 
