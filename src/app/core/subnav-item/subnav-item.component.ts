@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, HostBinding, HostListener } from '@angular/core';
+import { Component, OnInit, Input, HostBinding, HostListener, OnChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { SharedService } from '../services/shared.service';
 
@@ -7,17 +7,18 @@ import { SharedService } from '../services/shared.service';
   templateUrl: './subnav-item.component.html',
   styleUrls: ['./subnav-item.component.scss']
 })
-export class SubnavItemComponent implements OnInit {
+export class SubnavItemComponent implements OnChanges {
   @Input() navLink;
   @Input() noBaseLink = false;
   @Input() params;
+  @Input() target;
   @HostBinding('class.list-group-item')
   @HostBinding('class.list-group-item-action')
   @HostBinding('class.clearfix') true;
   link: string;
   constructor(private _router: Router, private sharedService: SharedService) { }
 
-  ngOnInit() {
+  ngOnChanges() {
     if(this.navLink) {
       if(this.noBaseLink){
         this.link = this.navLink;
