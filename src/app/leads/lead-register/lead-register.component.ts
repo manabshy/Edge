@@ -38,6 +38,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   enableOwnerFilter: boolean = true;
   selectedLeadsForAssignment: Lead[] = [];
   selectedLeadsCount: number = 0;
+  isSelectAllChecked: boolean = false;
 
 
   constructor(private leadService: LeadsService,
@@ -135,6 +136,21 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     console.log('selected leads:', this.selectedLeadsForAssignment);
     console.log('leads count:', this.selectedLeadsCount);
 
+  }
+
+  selectAllLeadsForAssignment(event) {
+    event.preventDefault();
+    if(this.selectedLeadsForAssignment.length) {
+      this.selectedLeadsForAssignment = [];
+      this.isSelectAllChecked = false;
+    } else {
+      if(this.filteredLeads){
+        this.filteredLeads.forEach(lead => {
+          this.selectLeadForAssignment(event, lead);
+        })
+      }
+      this.isSelectAllChecked = true;
+    }
   }
 
   private setupLeadRegisterForm() {
