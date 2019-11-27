@@ -75,18 +75,24 @@
       <!-- <a [routerLink]="areLeadsAssignable ? null : ['edit', lead?.leadId]" (click)="selectLead()" -->
       <div class="list-group-item list-header d-none d-sm-block">
         <div class="row">
+          <div class="col-1" *ngIf="areLeadsAssignable">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="assignAll">
+              <label class="custom-control-label" for="assignAll"><span class="sr-only">Assign all</span></label>
+            </div>
+          </div>
           <div class="col-sm"><strong>Lead Type</strong></div>
           <div class="col-sm"><strong>Person</strong></div>
           <div class="col-sm"><strong>Next Chase Date</strong></div>
           <div class="col-sm"><strong>Lead Owner</strong></div>
         </div>
       </div>
-      <a [routerLink]="areLeadsAssignable ? null : ['edit', lead?.leadId]" (click)="selectLead(lead)"
-        class="list-group-item list-group-item-action" *ngFor="let lead of filteredLeads; let i = index;">
+      <a [routerLink]="areLeadsAssignable ? null : ['edit', lead?.leadId]" (click)="selectLeadForAssignment($event, lead)"
+        class="list-group-item list-group-item-action" *ngFor="let lead of filteredLeads; let i = index;" [ngClass]="{'list-group-item-info': selectedLeadIndex(lead) >= 0}">
         <div class="row align-items-center">
-          <div class="col-auto" *ngIf="areLeadsAssignable">
-            <div class="custom-control custom-checkbox" (click)="$event.stopPropagation()">
-              <input type="checkbox" class="custom-control-input" [attr.id]="'assign'+i" (click)="selectLeadForAssignment($event, lead)">
+          <div class="col-1" *ngIf="areLeadsAssignable">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" [attr.id]="'assign'+i" [attr.checked]="selectedLeadIndex(lead) >= 0 ? 'checked' : null">
               <label class="custom-control-label" [attr.for]="'assign'+i"><span class="sr-only">Assign</span></label>
             </div>
           </div>
