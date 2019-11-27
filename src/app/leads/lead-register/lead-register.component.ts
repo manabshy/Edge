@@ -103,13 +103,23 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     this.leadService.leadsChanged(lead);
   }
 
+  selectedLeadIndex(lead: Lead) {
+    return this.selectedLeadsForAssignment != null ? this.selectedLeadsForAssignment.indexOf(lead) : -1;
+  }
+
   selectLeadForAssignment(event, lead?: Lead) {
     let leadIndex = -1;
+
+    if(this.areLeadsAssignable) {
+      event.stopPropagation();
+    } else {
+      return;
+    }
 
     console.log('clicked', lead);
 
     if (this.areLeadsAssignable) {
-      leadIndex = this.selectedLeadsForAssignment != null ? this.selectedLeadsForAssignment.indexOf(lead) : -1;
+      leadIndex = this.selectedLeadIndex(lead);
       if (leadIndex < 0) {
         this.selectedLeadsForAssignment.push(lead);
       } else {
@@ -177,6 +187,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
 
   cancel() {
     this.areLeadsAssignable = false;
+    this.selectedLeadsForAssignment = [];
   }
 
   processLeadsAssignment() {
