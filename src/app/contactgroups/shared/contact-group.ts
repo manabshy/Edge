@@ -18,6 +18,10 @@ export interface ContactGroup {
   companyName: string;
   companyAddress: Address;
   referenceCount: number;
+  isSolicitor: boolean;
+  isInventoryClerk: boolean;
+  isEstateAgent: boolean;
+  isMortgageAdvisor: boolean;
   relocationContactName?: string;
   isRelocationAgent: boolean;
   assignedContactType?: string;

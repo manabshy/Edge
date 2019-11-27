@@ -204,6 +204,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
       addressee: [''],
       comments: [''],
       isRelocationAgent: false,
+      isSolicitor: false,
+      isInventoryClerk: false,
+      isEstateAgent: false,
+      isMortgageAdvisor: false,
       contactType: ContactType.Individual
     });
 
@@ -321,6 +325,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
       addressee: contactGroup.addressee,
       comments: contactGroup.comments,
       isRelocationAgent: contactGroup.isRelocationAgent,
+      isSolicitor: contactGroup.isSolicitor,
+      isInventoryClerk: contactGroup.isInventoryClerk,
+      isEstateAgent: contactGroup.isEstateAgent,
+      isMortgageAdvisor: contactGroup.isMortgageAdvisor,
       contactType: contactGroup.contactType
     });
   }
@@ -584,6 +592,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   saveContactGroup() {
+    console.log('contact details', this.contactGroupDetailsForm.value)
     const validForm = this.contactGroupDetailsForm.valid;
     // if (this.contactGroupDetails.contactType === ContactType.CompanyContact && !this.isExistingCompany) {
     //   validForm = this.contactGroupDetailsForm.valid && this.companyFinderForm.valid;
