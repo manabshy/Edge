@@ -134,18 +134,28 @@
           <app-address *ngIf="isCompanyAdded && companyFinderForm.value.selectedCompany"
             [companyDetails]="selectedCompanyDetails" (addressDetails)="getAddress($event)"></app-address>
         </ng-template>
+      </form>
+      <form class="pb-3" [formGroup]="contactGroupDetailsForm" autocompleteOff>
         <div class="row justify-content-end" [hidden]="isExistingCompany">
           <label class="col-sm-2 col-form-label col-form-label-sm">Type</label>
           <div class="col-sm-10">
             <div class="row">
               <div class="form-group col-sm-auto">
                 <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="solicitor">
+                  <input type="checkbox" class="custom-control-input" id="solicitor" formControlName="isSolicitor">
                   <label class="custom-control-label" for="solicitor">Solicitor</label>
                 </div>
                 <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="invClerk">
+                  <input type="checkbox" class="custom-control-input" id="invClerk" formControlName="isInventoryClerk">
                   <label class="custom-control-label" for="invClerk">Inventory Clerk</label>
+                </div>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="estateAgent" formControlName="isEstateAgent">
+                  <label class="custom-control-label" for="estateAgent">Estate Agent</label>
+                </div>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="mortgageAdvisor" formControlName="isMortgageAdvisor">
+                  <label class="custom-control-label" for="mortgageAdvisor">Mortgage Advisor</label>
                 </div>
               </div>
             </div>
