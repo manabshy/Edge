@@ -104,8 +104,6 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   }
 
   selectLeadForAssignment(event, lead?: Lead) {
-    event.preventDefault();
-    event.stopPropagation();
     let leadIndex = -1;
 
     console.log('clicked', lead);
