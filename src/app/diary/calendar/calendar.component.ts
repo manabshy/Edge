@@ -13,10 +13,11 @@ import {
 } from 'date-fns';
 import { CustomDateFormatter } from '../shared/custom-date-formatter.provider';
 import { Observable } from 'rxjs';
-import { DiaryEvent, BasicEventRequest } from '../shared/diary';
+import { DiaryEvent, BasicEventRequest, Staff } from '../shared/diary';
 import { DiaryEventService } from '../shared/diary-event.service';
 import { tap, map } from 'rxjs/operators';
 import { CustomEventTitleFormatter } from '../shared/custom-event-title-formatter.provider';
+import * as _ from 'lodash';
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
@@ -113,12 +114,13 @@ export class CalendarComponent implements OnInit {
             const start = new Date(diary.startDateTime);
             const allDay = diary.allDay;
             const meta = diary;
+            const members = this.getStaff(meta.staffMembers);
             let cssClass = '';
             cssClass += meta.isCancelled ? 'is-cancelled' : '';
             cssClass += meta.isHighImportance ? ' is-important' : '';
             cssClass += meta.isConfirmed ? ' is-confirmed' : '';
             if (!meta.isCancelled || isCancelledVisible) {
-              return { title, start, allDay, meta, cssClass } as CalendarEvent;
+              return { title, start, allDay, meta, members, cssClass } as CalendarEvent;
             } else {
               return {} as CalendarEvent;
             }
@@ -152,6 +154,12 @@ export class CalendarComponent implements OnInit {
     this.view = CalendarView.Day;
   }
 
+  getStaff(members: Staff[]) {
+    if (members.length > 5) {
+      return _.take(members, 5);
+    }
+    return members;
+  }
   // eventClicked(event: CalendarEvent<{ diaryEvent: DiaryEvent }>): void {
   //  if(event) {
   //     window.open(
