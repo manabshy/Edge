@@ -95,18 +95,13 @@ export class LeaderboardComponent implements OnInit, OnChanges, AfterViewInit {
     this.active = this.columns[0];
     if (this.periodControl.value) {
       this.downloadLeaderboard(Period[this.periodControl.value]);
-      // this.getExchanges(this.salesManager, Period[this.periodControl.value]);
-      // this.getInstructions(this.salesManager, Period[this.periodControl.value], 100);
-
     }
 
     this.leaderboardForm.valueChanges.subscribe(data => {
       this.selectedPeriodLabel = this.periods.get(+data.period);
       this.downloadLeaderboard(Period[data.period]);
-      // this.getExchanges(this.salesManager, Period[data.period]);
-      // this.getInstructions(this.salesManager, Period[data.period], 100);
     });
-    this.getPipeline();
+    // this.getPipeline();
   }
   ngOnChanges(changes: SimpleChanges) {
 
@@ -155,6 +150,7 @@ export class LeaderboardComponent implements OnInit, OnChanges, AfterViewInit {
   }
   getSelectedTab(value) {
     this.active = value;
+    console.log('period value', this.periodControl.value)
     this.downloadLeaderboard(Period[this.periodControl.value]);
   }
 
