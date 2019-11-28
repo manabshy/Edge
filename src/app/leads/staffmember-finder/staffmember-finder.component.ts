@@ -1,10 +1,11 @@
-import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter, OnChanges } from '@angular/core';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
 import { tap, catchError, distinctUntilChanged, debounceTime, switchMap, map } from 'rxjs/operators';
 import { Observable, EMPTY } from 'rxjs';
 import { StaffMember } from 'src/app/core/models/staff-member';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { StorageMap } from '@ngx-pwa/local-storage';
 
 
 
@@ -13,21 +14,21 @@ import { FormGroup, FormBuilder } from '@angular/forms';
   templateUrl: './staffmember-finder.component.html',
   styleUrls: ['./staffmember-finder.component.scss']
 })
-export class StaffmemberFinderComponent implements OnInit {
+export class StaffmemberFinderComponent implements OnInit, OnChanges {
 
+  @Input() staffMember: StaffMember;
   @Output() ownerChanged = new EventEmitter();
   suggestions: (text$: Observable<any>) => Observable<any>;
   suggestedTerm: any;
   searchTerm = '';
   noSuggestions = false;
-  storage: any;
   staffMembers: StaffMember[];
   formatter = (x: { fullName: string }) => x.fullName;
   selectedOwner: StaffMember;
   ownerForm: FormGroup;
+  currentStaffMember: StaffMember;
 
-
-  constructor(private staffMemberService: StaffMemberService, private fb: FormBuilder) { }
+  constructor(private staffMemberService: StaffMemberService, private fb: FormBuilder, private storage: StorageMap) { }
 
 
   ngOnInit() {
@@ -43,16 +44,18 @@ export class StaffmemberFinderComponent implements OnInit {
             }))));
 
     this.ownerForm = this.fb.group({
-      ownerId: ''
+      owner: ''
     });
 
     this.ownerForm.patchValue({
-      ownerId: this.selectedOwner
+      owner: this.selectedOwner
     });
 
-
     this.onChanges();
+  }
 
+  ngOnChanges() {
+    this.selectedOwner = this.staffMember;
   }
 
   onChanges(): void {
@@ -63,14 +66,14 @@ export class StaffmemberFinderComponent implements OnInit {
     });
   }
 
-  inputFormatBandListValue(value: any) {
+  inputFormatOwnerValue(value: any) {
     if (value.fullName) {
       return value.fullName;
     }
     return value;
   }
 
-  resultFormatBandListValue(value: any) {
+  resultFormatOwnerValue(value: any) {
     return value.fullName;
   }
 
@@ -83,7 +86,7 @@ export class StaffmemberFinderComponent implements OnInit {
 
   selectedSuggestion(event: any) {
     this.ownerForm.patchValue({
-      ownerId: this.selectedOwner
+      owner: this.selectedOwner
     });
     this.ownerChanged.emit(event);
   }
