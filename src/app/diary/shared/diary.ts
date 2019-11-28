@@ -11,6 +11,8 @@ export interface DiaryEvent {
   endDateTime: Date;
   startTime: string;
   eventType: string;
+  subject: string;
+  location: string;
   eventColour: string;
   notes: string;
   totalHours: number;

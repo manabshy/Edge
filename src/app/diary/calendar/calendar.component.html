@@ -28,35 +28,38 @@
         <dt>Notes</dt>
         <dd>{{ event.meta.notes || '-'}}</dd>
       </dl>
-      <dl *ngIf="event.meta.properties && event.meta.properties.length">
+      <dl *ngIf="event.meta?.properties && event.meta?.properties?.length">
         <dt>Properties</dt>
         <dd>
-          <p class="mb-1" *ngFor="let property of event.meta.properties">
+          <p class="mb-1" *ngFor="let property of event.meta?.properties">
               {{property?.address | formatAddress}}
           </p>
         </dd>
       </dl>
-      <dl *ngIf="event.meta.staffMembers && event.meta.staffMembers.length">
+      <dl *ngIf="event.meta?.staffMembers && event.meta?.staffMembers?.length">
         <dt>Staff Members</dt>
         <dd>
-          <p class="mb-1" *ngFor="let staffMember of event.meta.staffMembers">
+          <p class="mb-1" *ngFor="let staffMember of event.meta?.staffMembers">
             {{staffMember?.fullName}}
           </p>
         </dd>
       </dl>
-      <dl *ngIf="event.meta.contacts && event.meta.contacts?.length">
+      <dl *ngIf="event.meta?.contacts && event.meta.contacts?.length">
         <dt>Contact Groups</dt>
         <dd>
-         <ng-container *ngFor="let contact of event.meta.contacts">
+         <ng-container *ngFor="let contact of event.meta?.contacts">
             <p class="mb-1" *ngFor="let person of contact?.contactPeople">
               {{person?.addressee}}
-              {{person?.phoneNumbers[0]}}
-              {{person?.emailAddresses[0]}}
             </p>
          </ng-container>
         </dd>
       </dl>
-
+      <dl *ngIf="event.meta?.location">
+        <dt>Location</dt>
+        <dd>
+            {{event.meta?.location}}
+        </dd>
+      </dl>
     </div>
   </div>
 </ng-template>
@@ -90,7 +93,6 @@
     </div>
   </div>
 </ng-template>
-<!-- {{events$|async|json}} -->
 <div *ngIf="events$ | async; let events" >
   <div [ngSwitch]="view">
     <mwl-calendar-month-view
