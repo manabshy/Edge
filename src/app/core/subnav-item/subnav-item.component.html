@@ -1,4 +1,4 @@
-<a *ngIf="navLink" [routerLink]="link" [queryParams]="params">
+<a *ngIf="navLink" [routerLink]="link" [queryParams]="params" target="{{target}}">
     <div class="float-left pull-left text-left"><ng-container *ngTemplateOutlet="content"></ng-container></div>
     <span class="float-right pull-right"><i class="fas fa-arrow-right"></i></span>
 </a>
