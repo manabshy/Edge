@@ -13,10 +13,11 @@ import {
 } from 'date-fns';
 import { CustomDateFormatter } from '../shared/custom-date-formatter.provider';
 import { Observable } from 'rxjs';
-import { DiaryEvent, BasicEventRequest } from '../shared/diary';
+import { DiaryEvent, BasicEventRequest, Staff } from '../shared/diary';
 import { DiaryEventService } from '../shared/diary-event.service';
 import { tap, map } from 'rxjs/operators';
 import { CustomEventTitleFormatter } from '../shared/custom-event-title-formatter.provider';
+import * as _ from 'lodash';
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
@@ -33,14 +34,13 @@ import { CustomEventTitleFormatter } from '../shared/custom-event-title-formatte
   ]
 })
 export class CalendarComponent implements OnInit {
-  view: CalendarView | 'month' | 'week' | 'threeDays' | 'day' = CalendarView.Week ;
+  view: CalendarView | 'month' | 'week' | 'threeDays' | 'day' = CalendarView.Week;
   daysInWeek;
 
   viewDate: Date = new Date();
 
   weekStartsOn = DAYS_OF_WEEK.MONDAY;
 
-  events: CalendarEvent[] = [];
   events$: Observable<Array<CalendarEvent<{ diaryEvent: DiaryEvent }>>>;
   myEvents$: Observable<Array<CalendarEvent<{ diaryEvent: DiaryEvent }>>>;
   diaryEvents: DiaryEvent[];
@@ -56,10 +56,10 @@ export class CalendarComponent implements OnInit {
     this.weekStartsOn = DAYS_OF_WEEK.MONDAY;
     this.daysInWeek = null;
   }
-  
+
   beforeWeekViewRender(renderEvent: CalendarWeekViewBeforeRenderEvent) {
     this.currentTimeIntoView();
-    if(this.view === 'threeDays') {
+    if (this.view === 'threeDays') {
       this.daysInWeek = 3;
       this.weekStartsOn = null;
     } else {
@@ -76,17 +76,17 @@ export class CalendarComponent implements OnInit {
     const marker = document.getElementsByClassName('cal-current-time-marker');
     const calEvent = document.getElementsByClassName('cal-event');
 
-    setTimeout(()=>{
-      if(marker && marker.length) {
+    setTimeout(() => {
+      if (marker && marker.length) {
         marker[0].scrollIntoView({ block: 'center' });
-      } else if(calEvent && calEvent.length) {
+      } else if (calEvent && calEvent.length) {
         calEvent[0].scrollIntoView({ block: 'center' });
       }
     });
   }
 
 
-  getDiaryEvents(isCancelledVisible?) {
+  getDiaryEvents(isCancelledVisible?: boolean) {
     const getStart: any = {
       month: startOfMonth,
       week: startOfWeek,
@@ -105,22 +105,22 @@ export class CalendarComponent implements OnInit {
       startDate: format(getStart(this.viewDate), 'YYYY-MM-DD'),
       endDate: format(getEnd(this.viewDate), 'YYYY-MM-DD'),
     } as BasicEventRequest;
-    console.log('request here.....', request);
     this.events$ = this.diaryEventService.getDiaryEvents(request)
       .pipe(
-        tap(data => { this.diaryEvents = data, console.log('calender events', data); }),
+        tap(data => this.diaryEvents = data),
         map(result => {
           return result.map(diary => {
-            const title = `${diary.eventType}`;
+            const title = diary.subject || diary.eventType;
             const start = new Date(diary.startDateTime);
             const allDay = diary.allDay;
             const meta = diary;
+            const members = this.getStaff(meta.staffMembers);
             let cssClass = '';
             cssClass += meta.isCancelled ? 'is-cancelled' : '';
             cssClass += meta.isHighImportance ? ' is-important' : '';
             cssClass += meta.isConfirmed ? ' is-confirmed' : '';
-            if( !meta.isCancelled || isCancelledVisible) {
-              return { title, start, allDay, meta, cssClass } as CalendarEvent;
+            if (!meta.isCancelled || isCancelledVisible) {
+              return { title, start, allDay, meta, members, cssClass } as CalendarEvent;
             } else {
               return {} as CalendarEvent;
             }
@@ -154,6 +154,12 @@ export class CalendarComponent implements OnInit {
     this.view = CalendarView.Day;
   }
 
+  getStaff(members: Staff[]) {
+    if (members.length > 5) {
+      return _.take(members, 5);
+    }
+    return members;
+  }
   // eventClicked(event: CalendarEvent<{ diaryEvent: DiaryEvent }>): void {
   //  if(event) {
   //     window.open(

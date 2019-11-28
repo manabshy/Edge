@@ -47,10 +47,10 @@ export class DashboardComponent implements OnInit {
     this.period = this.getSelectedPeriod(this._selectedPeriod);
     this.periodKey = this.getSelectedPeriodKey(this._selectedPeriod);
     // this.getStaffMemberDashboard(this.staffMember.staffMemberId, this.role, this.selectedPeriod);
-    this.getStaffMemberDashboard(2337, this.role, this.selectedPeriod);
-    this.getTeamMembersDashboard(2337, this.role, this.selectedPeriod);
-    this.getDashboardPipeline(2337, this.role, this.selectedPeriod);
-    this.getDashboardInstructions(2337, this.role, this.selectedPeriod);
+    this.getStaffMemberDashboard(2345, this.role, this.selectedPeriod);
+    this.getTeamMembersDashboard(2345, this.role, this.selectedPeriod);
+    this.getDashboardPipeline(2345, this.role, this.selectedPeriod);
+    this.getDashboardInstructions(2345, this.role, this.selectedPeriod);
   }
   get selectedPeriod() {
     return this._selectedPeriod;

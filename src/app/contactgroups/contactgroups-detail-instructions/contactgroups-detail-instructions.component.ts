@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { PersonInstruction } from 'src/app/core/models/person';
 import { Observable } from 'rxjs';
@@ -11,17 +11,16 @@ import { tap } from 'rxjs/operators';
   templateUrl: './contactgroups-detail-instructions.component.html',
   styleUrls: ['./contactgroups-detail-instructions.component.scss']
 })
-export class ContactgroupsDetailInstructionsComponent implements OnInit {
+export class ContactgroupsDetailInstructionsComponent implements OnChanges {
   navPlaceholder: string;
-  personId: number;
   instructions$ = new Observable<PersonInstruction[]>();
   isShortLet: boolean;
+  @Input() personId: number;
 
   constructor(private route: ActivatedRoute, private peopleService: PeopleService) { }
 
-  ngOnInit() {
+  ngOnChanges() {
     this.navPlaceholder = AppUtils.navPlaceholder;
-    this.personId = +this.route.snapshot.paramMap.get('personId');
     if (this.personId) {
       this.instructions$ = this.peopleService.getInstructions(this.personId);
       tap((data: PersonInstruction[]) => {
