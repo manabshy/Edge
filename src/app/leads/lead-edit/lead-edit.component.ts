@@ -42,6 +42,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
   pageSize = 10;
   bottomReached = false;
   leadOwner: StaffMember;
+  leadIds: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  currentLeadIndex: number = 0;
 
   constructor(private leadsService: LeadsService,
     private route: ActivatedRoute,
@@ -172,6 +174,20 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
     this.contactGroupService.getPersonInfo(personId).subscribe(data => {
       this.summaryTotals = data;
     });
+  }
+
+  onOwnerChanged(event: any) {
+    console.log(event);
+
+    if (event && event.item != null) {
+      this.leadEditForm.patchValue({
+        ownerId: event.item.staffMemberId
+      });
+    } else {
+      this.leadEditForm.patchValue({
+        ownerId: ''
+      });
+    }
   }
 
   isObject(val) {
