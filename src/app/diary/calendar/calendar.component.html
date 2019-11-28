@@ -32,7 +32,7 @@
         <dt>Properties</dt>
         <dd>
           <p class="mb-1" *ngFor="let property of event.meta.properties">
-              {{property.address | formatAddress}}
+              {{property?.address | formatAddress}}
           </p>
         </dd>
       </dl>
@@ -40,8 +40,20 @@
         <dt>Staff Members</dt>
         <dd>
           <p class="mb-1" *ngFor="let staffMember of event.meta.staffMembers">
-            {{staffMember.fullName}}
+            {{staffMember?.fullName}}
           </p>
+        </dd>
+      </dl>
+      <dl *ngIf="event.meta.contacts && event.meta.contacts?.length">
+        <dt>Contact Groups</dt>
+        <dd>
+         <ng-container *ngFor="let contact of event.meta.contacts">
+            <p class="mb-1" *ngFor="let person of contact?.contactPeople">
+              {{person?.addressee}}
+              {{person?.phoneNumbers[0]}}
+              {{person?.emailAddresses[0]}}
+            </p>
+         </ng-container>
         </dd>
       </dl>
 

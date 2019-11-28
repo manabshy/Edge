@@ -21,6 +21,8 @@ export interface DiaryEvent {
   isConfirmed: boolean;
   isHighImportance: boolean;
   isOtherAgentViewing: boolean;
+  contacts: ContactGroup[];
+  staffMembers: Staff[];
 }
 export interface Period {
   startDate: string;
