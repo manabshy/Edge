@@ -69,7 +69,12 @@ export class LeadComponent implements OnInit {
       if (leadSearchInfo.page === 1) {
         this.leads = result;
       } else {
-        this.leads = this.leads.concat(result);
+        console.log('leadSearchInfo.page', leadSearchInfo.page);
+        if (this.leads) {
+          this.leads = this.leads.concat(result);
+        } else {
+          this.leads = result;
+        }
       }
 
       this.filteredLeads = this.leads;

@@ -26,18 +26,20 @@
             <div class="form-group">
               <label for="chaseDate">Next chase date</label>
               <input type="text" id="chaseDate" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
-                formControlName="nextChaseDate" [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
+                formControlName="nextChaseDate"
+                [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
                 bsDatepicker>
             </div>
           </div>
           <div class="col-lg">
             <div class="form-group">
               <label for="chaser">Lead Owner</label>
-              <select class="custom-select custom-select-sm" id="owner" formControlName="ownerId">
+              <!-- <select class="custom-select custom-select-sm" id="owner" formControlName="ownerId">
                 <option value=""></option>
                 <option selected *ngFor="let staffMember of staffMembers" [value]=staffMember.staffMemberId>
                   {{staffMember?.fullName}}</option>
-              </select>
+              </select> -->
+              <app-staffmember-finder [staffMember] = "leadOwner" (ownerChanged)="onOwnerChanged($event)"></app-staffmember-finder>
             </div>
           </div>
         </div>
@@ -52,15 +54,16 @@
         <div class="mb-5">
           <h5>Quick links</h5>
           <app-subnav>
-            <app-subnav-item *ngFor="let item of subNav"  [noBaseLink]="true"
-            [navLink]="'/contact-centre/detail/'+person?.personId+'/'+item?.link" [params]="{docTitle: item?.label+' | '+person?.addressee}">
+            <app-subnav-item *ngFor="let item of subNav" [noBaseLink]="true"
+              [navLink]="'/contact-centre/detail/'+item?.params[0]+'/'+item?.link"
+              [params]="{docTitle: item?.label+' | '+person?.addressee}">
               <!-- [params]="{docTitle: item?.label+' | '+searchedPersonDetails?.addressee}"> -->
               {{item?.label}}
-              <ng-container *ngIf="summaryTotals; else loadingInfo">          
+              <ng-container *ngIf="summaryTotals; else loadingInfo">
                 <ng-container *ngIf="isObject(summaryTotals[item?.value]); else simpleValue">
                   <span class="badge badge-pill badge-success mr-1"> {{summaryTotals[item?.value]?.active}} </span>
                   <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value]?.total}}</span>
-                </ng-container> 
+                </ng-container>
                 <ng-template #simpleValue>
                   <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value] || '0'}}</span>
                 </ng-template>
@@ -76,7 +79,8 @@
       <div class="col-xl-8">
         <h5>Notes</h5>
         <!-- <app-notes [personNotes]="personNotes"></app-notes> -->
-        <app-notes [personNotes]="personNotes" [noteData] = "dataNote" [pageNumber] = "page" [bottomReached] = "bottomReached"></app-notes>
+        <app-notes [personNotes]="personNotes" [noteData]="dataNote" [pageNumber]="page"
+          [bottomReached]="bottomReached"></app-notes>
       </div>
     </div>
 
@@ -84,8 +88,8 @@
       <div class="container px-lg-4">
         <div class="row justify-content-end w-100 no-gutters">
           <div class="col-sm-10 d-flex">
-          
-            <button (click)="cancel()"  type="button" class="btn btn-light mr-2">Cancel</button>
+
+            <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
             <button type="submit" class="btn btn-secondary">Save</button>
           </div>
         </div>

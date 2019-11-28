@@ -41,6 +41,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
   page = 1;
   pageSize = 10;
   bottomReached = false;
+  leadOwner: StaffMember;
 
   constructor(private leadsService: LeadsService,
     private route: ActivatedRoute,
@@ -106,6 +107,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
 
           this.getPersonInformation();
 
+          this.leadOwner = this.staffMembers.find(sm => sm.staffMemberId === this.lead.ownerId)[0];
+          console.log('lead Owner', this.leadOwner);
+
         } else {
           console.log('dont have lead object...');
           this.getLeadInformation();
@@ -130,6 +134,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
       this.personId = result.personId;
       this.patchLeadValues(result);
       this.getPersonInformation();
+      this.leadOwner = this.staffMembers.find(sm => sm.staffMemberId === this.lead.ownerId);
+      console.log('lead Owner', this.leadOwner);
     }, error => {
       this.lead = null;
     });
@@ -255,7 +261,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
 
         this.bottomReached = true;
         console.log('data', data);
-        console.log('bottom reached',this.bottomReached);
+        console.log('bottom reached', this.bottomReached);
       }
     });
   }
