@@ -66,6 +66,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { BracketsNewLinePipe } from './shared/brackets-new-line.pipe';
 import { PersonDetailsComponent } from './shared/person-details/person-details.component';
 import { CompanyInfoComponent } from './shared/company-info/company-info.component';
+import { NoteFormComponent } from './note-form/note-form.component';
 
 @NgModule({
   declarations: [
@@ -91,7 +92,8 @@ import { CompanyInfoComponent } from './shared/company-info/company-info.compone
     SmsModalComponent,
     BracketsNewLinePipe,
     PersonDetailsComponent,
-    CompanyInfoComponent],
+    CompanyInfoComponent,
+    NoteFormComponent],
   exports: [
     RoundingPipe,
     TruncatingPipe,
@@ -117,6 +119,7 @@ import { CompanyInfoComponent } from './shared/company-info/company-info.compone
     SubnavItemComponent,
     PersonDetailsComponent,
     CompanyInfoComponent,
+    NoteFormComponent,
     RouterModule,
     // BrowserAnimationsModule,
     CollapseModule,

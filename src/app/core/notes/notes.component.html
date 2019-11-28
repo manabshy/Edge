@@ -1,8 +1,6 @@
 <div class="list-group">
-  <div class="list-group-item list-group-item-action text-center py-4" *ngIf="noteData" (click)="addNote()">
-    <span class="btn-link">
-      <i class="fas fa-sticky-note mr-2"></i> Add Note
-    </span>
+  <div class="list-group-item list-group-item-action text-center py-4" *ngIf="noteData">
+    <app-note-form [data]="noteData"></app-note-form>
   </div>
   <div class="list-group-item text-center text-danger" *ngIf="!notes || !notes?.length && !isUpdating">
     <i class="far fa-sad-tear"></i> No notes
