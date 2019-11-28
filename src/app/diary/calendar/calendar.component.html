@@ -45,7 +45,7 @@
             </ng-container>
             <ng-template #moreMembers>
               <div>{{staffMember?.fullName}}</div>
-              <span *ngIf="isLast">.... </span>
+              <span *ngIf="isLast">+ {{event.meta?.staffMembers?.length - 5 !== 1 ? (event.meta?.staffMembers?.length - 5 + ' people') : (event.meta?.staffMembers?.length - 5 + ' person')}}</span>
             </ng-template>
           </ng-container>
         </dd>
