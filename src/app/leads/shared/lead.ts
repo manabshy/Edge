@@ -38,4 +38,5 @@ export interface LeadSearchInfo {
     includeClosedLeads?: boolean;
     page: number;
     includeUnassignedLeadsOnly?: boolean;
+    startLeadId?: number;
 }

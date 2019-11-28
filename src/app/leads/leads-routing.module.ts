@@ -5,7 +5,7 @@ import { LeadEditComponent } from './lead-edit/lead-edit.component';
 import { LeadComponent } from './lead.component';
 
 const routes: Routes = [
-  { path: '', component: LeadComponent, data: { shouldDetach: true } },
+  { path: '', component: LeadComponent, data: { shouldDetach: false } },
   { path: 'edit/:leadId', component: LeadEditComponent, data: { shouldDetach: false } }
 
 ];

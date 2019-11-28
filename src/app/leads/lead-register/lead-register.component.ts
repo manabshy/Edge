@@ -111,9 +111,12 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   selectLeadForAssignment(event, lead?: Lead) {
     let leadIndex = -1;
 
-    if(this.areLeadsAssignable) {
+    if (this.areLeadsAssignable) {
       event.stopPropagation();
+      console.log('Lead is clicked for assignment...');
+
     } else {
+      this.leadService.leadsSearchChanged(this.leadSearchInfo);
       return;
     }
 
@@ -136,11 +139,11 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
 
   selectAllLeadsForAssignment(event) {
     event.preventDefault();
-    if(this.selectedLeadsForAssignment.length) {
+    if (this.selectedLeadsForAssignment.length) {
       this.selectedLeadsForAssignment = [];
       this.isSelectAllChecked = false;
     } else {
-      if(this.filteredLeads){
+      if (this.filteredLeads) {
         this.filteredLeads.forEach(lead => {
           this.selectLeadForAssignment(event, lead);
         })
@@ -213,7 +216,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   showLeadsAssignmentModal() {
     const subject = new Subject<boolean>();
     const modal = this.modalService.show(LeadAssignmentModalComponent, { ignoreBackdropClick: true });
-    modal.content.subject = subject; 
+    modal.content.subject = subject;
     return subject.asObservable();
   }
 

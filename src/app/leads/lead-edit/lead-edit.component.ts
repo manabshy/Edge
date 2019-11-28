@@ -42,8 +42,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
   pageSize = 10;
   bottomReached = false;
   leadOwner: StaffMember;
-  leadIds: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  leadIds: number[] = [];
   currentLeadIndex: number = 0;
+  leadsListCompleted: boolean = false;
 
   constructor(private leadsService: LeadsService,
     private route: ActivatedRoute,
@@ -131,16 +132,37 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
         this.getPersonNotes();
       }
     });
-    
+
     this.contactGroupService.personNotePageChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(newPageNumber => {
       this.page = newPageNumber;
       this.getNextPersonNotesPage(this.page);
     });
 
+    // leads search changed
+    this.leadsService.leadsSearchChanges$.subscribe(leadSearchInfo => {
+
+      if (leadSearchInfo) {
+        leadSearchInfo.startLeadId = this.leadId;
+        // console.log('lead id:',this.lead.leadId);
+        // console.log('this lead id:',this.leadId);
+        // console.log('lead search info changed',leadSearchInfo);
+
+        this.leadsService.getLeadIds(leadSearchInfo).subscribe(result => {
+          this.leadIds = result;
+          //this.moveToNextLead();
+          console.log('leads Ids here: ', this.leadIds);
+        }, error => {
+          this.lead = null;
+        });
+
+      }
+    });
+
   }
 
   private getLeadInformation() {
-    this.leadsService.getLead(this.leadId).subscribe(result => {
+    console.log('get lead information', this.leadId);
+    this.leadsService.getLead(this.leadId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.lead = result;
       this.personId = result.personId;
       this.patchLeadValues(result);
@@ -298,9 +320,18 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
   }
 
   moveToNextLead() {
-    this.currentLeadIndex++;
-    this.leadId = this.leadIds[this.currentLeadIndex];
-    this.init();
+    if (this.currentLeadIndex < this.leadIds.length - 1) {
+      this.currentLeadIndex++;
+      this.leadId = this.leadIds[this.currentLeadIndex];
+      console.log('move to next lead IDs', this.leadIds);
+      console.log('move to next lead ID', this.leadId);
+      this.getLeadInformation();
+      this.getPersonNotes();
+    } else {
+      this.leadsListCompleted = true;
+      console.log('list completed');
+    }
+
   }
 
 

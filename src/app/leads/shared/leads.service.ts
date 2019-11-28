@@ -13,9 +13,11 @@ export class LeadsService {
 
   private leadsChangeSubject = new BehaviorSubject<Lead | null>(null);
   private pageChangeSubject = new Subject<LeadSearchInfo | null>();
+  private leadsSearchSubject = new BehaviorSubject<LeadSearchInfo | null>(null);
 
   leadsChanges$ = this.leadsChangeSubject.asObservable();
   pageChanges$ = this.pageChangeSubject.asObservable();
+  leadsSearchChanges$ = this.leadsSearchSubject.asObservable();
 
   constructor(private http: HttpClient) { }
 
@@ -23,8 +25,12 @@ export class LeadsService {
     this.leadsChangeSubject.next(lead);
   }
 
-  pageNumberChanged(result: LeadSearchInfo) {
-    this.pageChangeSubject.next(result);
+  leadsSearchChanged(leadSearchInfo: LeadSearchInfo) {
+    this.leadsSearchSubject.next(leadSearchInfo);
+  }
+
+  pageNumberChanged(leadSearchInfo: LeadSearchInfo) {
+    this.pageChangeSubject.next(leadSearchInfo);
   }
 
   addLead(lead: Lead): Observable<any> {
@@ -78,6 +84,32 @@ export class LeadsService {
     });
 
     const url = `${AppConstants.baseLeadsUrl}/owner`;
+
+    return this.http.get<any>(url, { params: options }).pipe(
+      map(response => response.result));
+  }
+
+  // Returning list of Lead Ids
+  getLeadIds(leadSearchInfo: LeadSearchInfo): Observable<any> {
+
+    console.log('date params', leadSearchInfo);
+
+    const options = new HttpParams({
+      encoder: new CustomQueryEncoderHelper,
+      fromObject: {
+        ownerId: leadSearchInfo.ownerId != null ? leadSearchInfo.ownerId.toString() : '',
+        leadTypeId: leadSearchInfo.leadTypeId != null ? leadSearchInfo.leadTypeId.toString() : '',
+        officeId: leadSearchInfo.officeId != null ? leadSearchInfo.officeId.toString() : '',
+        dateFrom: leadSearchInfo.dateFrom != null ? new Date(leadSearchInfo.dateFrom.toString()).toLocaleDateString() : '',
+        dateTo: leadSearchInfo.dateTo != null ? new Date(leadSearchInfo.dateTo.toString()).toLocaleDateString() : '',
+        includeClosedLeads: leadSearchInfo.includeClosedLeads != null ? (String)(leadSearchInfo.includeClosedLeads) : '',
+        includeUnassignedLeadsOnly: leadSearchInfo.includeUnassignedLeadsOnly != null
+          ? (String)(leadSearchInfo.includeUnassignedLeadsOnly) : '',
+        startLeadId: leadSearchInfo.startLeadId != null ? leadSearchInfo.startLeadId.toString() : ''
+      }
+    });
+
+    const url = `${AppConstants.baseLeadsUrl}/ids`;
 
     return this.http.get<any>(url, { params: options }).pipe(
       map(response => response.result));
