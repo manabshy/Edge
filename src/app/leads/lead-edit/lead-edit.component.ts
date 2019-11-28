@@ -45,6 +45,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
   leadIds: number[] = [];
   currentLeadIndex: number = 0;
   leadsListCompleted: boolean = false;
+  isFormDirty: boolean = false;
+  onLoading: boolean = false;
 
   constructor(private leadsService: LeadsService,
     private route: ActivatedRoute,
@@ -66,8 +68,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
       this.personId = +params.get('personId') || 0;
       this.isNewLead = params.get('isNewLead') as unknown as boolean || false;
     });
-
+    this.onLoading = true;
     this.init();
+    
   }
 
   init() {
@@ -158,6 +161,16 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
       }
     });
 
+    this.onChanges();
+
+  }
+
+  onChanges(): void {
+    this.leadEditForm.valueChanges.subscribe(val => {
+      if (!this.onLoading) {
+      this.isFormDirty = true;
+      }
+    });
   }
 
   private getLeadInformation() {
@@ -182,6 +195,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
       leadTypeId: lead.leadTypeId,
       nextChaseDate: this.sharedService.ISOToDate(lead.nextChaseDate)
     });
+    this.onLoading = false;
   }
 
   private getPersonInformation() {
@@ -320,17 +334,26 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
   }
 
   moveToNextLead() {
+    console.log('form dirty', this.isFormDirty);
+    if (this.isFormDirty) {
+      this.updateLead();
+      this.isFormDirty = false;
+    }
+
     if (this.currentLeadIndex < this.leadIds.length - 1) {
       this.currentLeadIndex++;
       this.leadId = this.leadIds[this.currentLeadIndex];
       console.log('move to next lead IDs', this.leadIds);
       console.log('move to next lead ID', this.leadId);
+      this.onLoading = true;
       this.getLeadInformation();
       this.getPersonNotes();
     } else {
       this.leadsListCompleted = true;
       console.log('list completed');
     }
+    console.log('list completed?', this.leadsListCompleted);
+
 
   }
 
