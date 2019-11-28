@@ -123,6 +123,15 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
       this.getPersonInformation();
     }
 
+    this.contactGroupService.noteChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
+      if (data) {
+        this.personNotes = [];
+        this.page = 1;
+        this.bottomReached = false;
+        this.getPersonNotes();
+      }
+    });
+    
     this.contactGroupService.personNotePageChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(newPageNumber => {
       this.page = newPageNumber;
       this.getNextPersonNotesPage(this.page);
@@ -269,9 +278,15 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
 
   private getNextPersonNotesPage(page) {
 
+
     this.contactGroupService.getPersonNotes(this.personId, this.pageSize, page).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
       if (data) {
-        this.personNotes = _.concat(this.personNotes, data);
+        if (page === 1) {
+          this.personNotes = data;
+        } else {
+          this.personNotes = _.concat(this.personNotes, data);
+        }
+        console.log('person Notes', this.personNotes);
       }
       if (data && !data.length) {
 
@@ -280,6 +295,12 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
         console.log('bottom reached', this.bottomReached);
       }
     });
+  }
+
+  moveToNextLead() {
+    this.currentLeadIndex++;
+    this.leadId = this.leadIds[this.currentLeadIndex];
+    this.init();
   }
 
 
