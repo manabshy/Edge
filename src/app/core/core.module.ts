@@ -53,6 +53,7 @@ import { AgmCoreModule } from '@agm/core';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
+import {AngularStickyThingsModule} from '@w11k/angular-sticky-things';
 
 
 //various
@@ -141,7 +142,8 @@ import { NoteFormComponent } from './note-form/note-form.component';
     AgmCoreModule,
     CarouselModule,
     NgbModule,
-    LoadingBarHttpClientModule
+    LoadingBarHttpClientModule,
+    AngularStickyThingsModule
   ],
   imports: [
     CommonModule,
@@ -153,6 +155,7 @@ import { NoteFormComponent } from './note-form/note-form.component';
     InfiniteScrollModule,
     NgbModule,
     LoadingBarHttpClientModule,
+    AngularStickyThingsModule,
     BsDropdownModule.forRoot(),
     CollapseModule.forRoot(),
     TabsModule.forRoot(),

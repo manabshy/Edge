@@ -47,14 +47,9 @@
         <div class="list-group mb-4">
           <app-person-details [personDetails]="person"></app-person-details>
         </div>
-        <h5>Notes</h5>
-        <!-- <app-notes [personNotes]="personNotes"></app-notes> -->
-        <app-notes [personNotes]="personNotes" [noteData]="dataNote" [pageNumber]="page"
-          [bottomReached]="bottomReached"></app-notes>
-      </div>
-      <div class="col-xl-4 aside sticky-top-xl">
-        <div class="mb-5">
-          <h5>Quick links</h5>
+        <div #spacer></div>
+        <div stickyThing [spacer]="spacer" marginTop="16">
+          <h5>More Info</h5>
           <accordion class="sub-info" [closeOthers]="true">
             <accordion-group *ngFor="let item of subNav">
               <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
@@ -70,8 +65,7 @@
                     </ng-template>
                   </ng-container>
                   <ng-template #loadingInfo>
-                    <span class="badge badge-pill badge-primary"><i
-                        class="fas fa-spinner fa-pulse d-inline-block"></i></span>
+                    <span class="badge badge-pill badge-primary"><i class="fas fa-spinner fa-pulse d-inline-block"></i></span>
                   </ng-template>
                 </div>
                 <span class="badge badge-secondary float-right pull-right"></span>
@@ -82,7 +76,17 @@
             </accordion-group>
           </accordion>
         </div>
+        <div class="mb-5"></div>
+        <h5>Notes</h5>
+        <!-- <app-notes [personNotes]="personNotes"></app-notes> -->
+        <app-notes [personNotes]="personNotes" [noteData]="dataNote" [pageNumber]="page"
+          [bottomReached]="bottomReached"></app-notes>
       </div>
+      <!-- <div class="col-xl-4 aside sticky-top-xl">
+        <div class="mb-5">
+      
+        </div>
+      </div> -->
     </div>
 
     <div class="form-actions">
