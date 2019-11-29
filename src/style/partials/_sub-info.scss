@@ -5,6 +5,12 @@
     .card-header, .card-body {
         padding: 0;
     }
+
+    .card-body {
+        max-height: 350px;
+        overflow-y: auto;
+    }
+
     .btn {
        padding: $list-group-item-padding-y $list-group-item-padding-x; 
     }
