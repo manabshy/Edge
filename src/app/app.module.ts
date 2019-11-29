@@ -38,7 +38,6 @@ import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { ImpersonateMemberComponent } from './impersonate-member/impersonate-member.component';
-import { SharedModule } from './shared/shared.module';
 
 
 @NgModule({
@@ -78,7 +77,6 @@ import { SharedModule } from './shared/shared.module';
     HttpClientModule,
     AccountModule,
     CoreModule,
-    SharedModule,
     DashboardModule,
     LeaderboardModule,
     DiaryModule,
