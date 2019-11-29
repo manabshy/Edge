@@ -43,9 +43,10 @@
         <input type="text" id="dateTo" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
           [bsConfig]="{showWeekNumbers:false, customTodayClass: 'font-weight-bold'}" bsDatepicker formControlName="dateTo">
       </div>
-      <div class="col-sm form-group">
-        <label class="small" for="owner">Lead Owner</label>
-        <app-staffmember-finder (ownerChanged)="onOwnerChanged($event)"></app-staffmember-finder>
+      <div class="col-sm col-sm-4 form-group">
+        <label class="small" for="owner">Search</label>
+        <!-- <app-staffmember-finder (ownerChanged)="onOwnerChanged($event)"></app-staffmember-finder> -->
+        <app-lead-finder (leadSuggestionSelected)="onLeadSuggestionSelected($event)"></app-lead-finder>
       </div>
       <div class="col-sm form-group">
         <label class="small" for="office">Office</label>

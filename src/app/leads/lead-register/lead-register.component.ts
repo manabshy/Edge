@@ -161,6 +161,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       dateFrom: null,
       dateTo: null,
       includeUnassignedLeadsOnly: false,
+      leadSearchTerm: null
     });
   }
 
@@ -183,6 +184,21 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     }
   }
 
+  onLeadSuggestionSelected(event: any) {
+    if (event && event.item != null) {
+      this.leadRegisterForm.patchValue({
+        leadSearchTerm: event.item
+      });
+      this.leadSearchInfo = this.getSearchInfo(true);
+      this.leadService.pageNumberChanged(this.leadSearchInfo);
+    } else {
+      this.leadRegisterForm.patchValue({
+        leadSearchTerm: ''
+      });
+    }
+    console.log('lead suggestion selected:', this.leadRegisterForm);
+  }
+
   ngOnChanges() {
     this.page = this.pageNumber;
 
@@ -200,7 +216,8 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       dateFrom: this.leadRegisterForm != null ? this.leadRegisterForm.get('dateFrom').value : null,
       dateTo: this.leadRegisterForm != null ? this.leadRegisterForm.get('dateTo').value : null,
       includeClosedLeads: this.leadRegisterForm != null ? this.leadRegisterForm.get('includeClosedLeads').value : null,
-      includeUnassignedLeadsOnly: this.leadRegisterForm != null ? this.leadRegisterForm.get('includeUnassignedLeadsOnly').value : null
+      includeUnassignedLeadsOnly: this.leadRegisterForm != null ? this.leadRegisterForm.get('includeUnassignedLeadsOnly').value : null,
+      leadSearchTerm: this.leadRegisterForm != null ? this.leadRegisterForm.get('leadSearchTerm').value : null
     };
   }
 

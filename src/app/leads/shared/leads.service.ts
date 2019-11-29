@@ -79,7 +79,8 @@ export class LeadsService {
         includeUnassignedLeadsOnly: leadSearchInfo.includeUnassignedLeadsOnly != null
           ? (String)(leadSearchInfo.includeUnassignedLeadsOnly) : '',
         page: leadSearchInfo.page.toString(),
-        pageSize: pageSize.toString()
+        pageSize: pageSize.toString(),
+        searchTerm: leadSearchInfo.searchTerm
       }
     });
 
@@ -105,7 +106,8 @@ export class LeadsService {
         includeClosedLeads: leadSearchInfo.includeClosedLeads != null ? (String)(leadSearchInfo.includeClosedLeads) : '',
         includeUnassignedLeadsOnly: leadSearchInfo.includeUnassignedLeadsOnly != null
           ? (String)(leadSearchInfo.includeUnassignedLeadsOnly) : '',
-        startLeadId: leadSearchInfo.startLeadId != null ? leadSearchInfo.startLeadId.toString() : ''
+        startLeadId: leadSearchInfo.startLeadId != null ? leadSearchInfo.startLeadId.toString() : '',
+        searchTerm: leadSearchInfo.searchTerm
       }
     });
 
@@ -113,6 +115,19 @@ export class LeadsService {
 
     return this.http.get<any>(url, { params: options }).pipe(
       map(response => response.result));
+  }
+
+  getLeadSuggestions(searchTerm): Observable<any>  {
+    console.log('search Term:', searchTerm);
+    return this.http.get<any>(`${AppConstants.baseLeadsUrl}/suggestions?SearchTerm=${searchTerm}`, {
+      headers: { ignoreLoadingBar: '' }
+    }).pipe(
+      map(response => response.result),
+      tap(data => {
+        if (data) {
+          console.log('lead suggestions:', data);
+        }
+      }));
   }
 
 

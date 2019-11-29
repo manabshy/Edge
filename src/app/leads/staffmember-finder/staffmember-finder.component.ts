@@ -60,7 +60,7 @@ export class StaffmemberFinderComponent implements OnInit, OnChanges {
 
   onChanges(): void {
     this.ownerForm.valueChanges.subscribe(val => {
-      if (val.ownerId === '') {
+      if (val.owner === '') {
         this.ownerChanged.emit(null);
       }
     });

@@ -1,3 +1,5 @@
-<p>
-  lead-finder works!
-</p>
+<form [formGroup]="leadFinderForm">
+    <input type="search" class="form-control form-control-sm" placeholder="Name, email, phone or address"
+        aria-label="Search criteria" (keyup)="onKeyup($event)" [ngbTypeahead]="suggestions" 
+        [focusFirst]="true" (selectItem)="suggestionSelected($event)" 
+        [resultFormatter]="resultFormatOwnerValue" [inputFormatter]="inputFormatOwnerValue" formControlName="leadSuggestion"></form>
