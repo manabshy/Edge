@@ -11,7 +11,7 @@ import { OfficeService } from 'src/app/core/services/office.service';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { ControlPosition } from '@agm/core/services/google-maps-types';
 import { BsModalService } from 'ngx-bootstrap/modal';
-import { LeadAssignmentModalComponent } from '../lead-assignment-modal/lead-assignment-modal/lead-assignment-modal.component';
+import { LeadAssignmentModalComponent } from '../lead-assignment-modal/lead-assignment-modal.component';
 import { Subject } from 'rxjs';
 
 @Component({
