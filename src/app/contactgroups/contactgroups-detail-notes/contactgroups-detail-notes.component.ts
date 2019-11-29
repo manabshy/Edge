@@ -1,10 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Person } from 'src/app/core/models/person';
+import { Person } from 'src/app/shared/models/person';
 import { ActivatedRoute } from '@angular/router';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ContactNote, BasicContactGroup } from '../shared/contact-group';
-import { BaseComponent } from 'src/app/core/models/base-component';
+import { BaseComponent } from 'src/app/shared/models/base-component';
 import { takeUntil } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { AppUtils } from 'src/app/core/shared/utils';

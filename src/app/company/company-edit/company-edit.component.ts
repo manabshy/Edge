@@ -10,7 +10,7 @@ import { CompanyService } from '../shared/company.service';
 import { debounceTime } from 'rxjs/operators';
 import { WedgeValidators } from 'src/app/core/shared/wedge-validators';
 import { AppUtils } from 'src/app/core/shared/utils';
-import { Address } from 'src/app/core/models/address';
+import { Address } from 'src/app/shared/models/address';
 import { ToastrService } from 'ngx-toastr';
 import { InfoService } from 'src/app/core/services/info.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
@@ -286,7 +286,7 @@ export class CompanyEditComponent implements OnInit {
     this.companyForm.markAsPristine();
     this.isSubmitting = false;
     this.toastr.success('Company successfully saved');
-    
+
     if (this.isEditingSelectedCompany && company) {
       AppUtils.holdingSelectedCompany = company;
       console.log(AppUtils.holdingSelectedCompany);

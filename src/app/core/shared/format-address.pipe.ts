@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Address } from '../models/address';
+import { Address } from '../../shared/models/address';
 
 @Pipe({
   name: 'formatAddress'
@@ -36,7 +36,7 @@ export class FormatAddressPipe implements PipeTransform {
   if (!!address.town) {
     fullAddress += address.town + ', \n';
   }
-  
+
   if (!!address.postCode) {
     fullAddress += address.postCode;
   } else if (address.outCode && address.inCode) {

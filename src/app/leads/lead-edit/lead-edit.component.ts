@@ -8,15 +8,15 @@ import { InfoDetail } from 'src/app/core/services/info.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
-import { StaffMember } from 'src/app/core/models/staff-member';
+import { StaffMember } from 'src/app/shared/models/staff-member';
 import { ContactNote, PersonSummaryFigures } from 'src/app/contactgroups/shared/contact-group';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { getDate } from 'date-fns';
-import { Person } from 'src/app/core/models/person';
+import { Person } from 'src/app/shared/models/person';
 import { ToastrService } from 'ngx-toastr';
 import { takeUntil } from 'rxjs/operators';
 import * as _ from 'lodash';
-import { BaseComponent } from 'src/app/core/models/base-component';
+import { BaseComponent } from 'src/app/shared/models/base-component';
 
 @Component({
   selector: 'app-lead-edit',
@@ -70,7 +70,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
     });
     this.onLoading = true;
     this.init();
-    
+
   }
 
   init() {

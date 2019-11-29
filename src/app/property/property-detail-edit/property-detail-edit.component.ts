@@ -5,7 +5,7 @@ import { Property } from '../shared/property';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ValidationMessages, FormErrors } from 'src/app/core/shared/app-constants';
 import { Location } from '@angular/common';
-import { Address } from '../../core/models/address';
+import { Address } from '../../shared/models/address';
 import { SharedService, WedgeError } from '../../core/services/shared.service';
 import { Signer } from 'src/app/contactgroups/shared/contact-group';
 import { ToastrService } from 'ngx-toastr';

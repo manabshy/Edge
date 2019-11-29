@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { PropertyService } from '../property.service';
-import { Address } from 'src/app/core/models/address';
+import { Address } from 'src/app/shared/models/address';
 import { PropertyAutoComplete } from '../property';
 
 @Component({

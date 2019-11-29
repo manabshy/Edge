@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppUtils } from 'src/app/core/shared/utils';
-import { PersonHomeHelper } from 'src/app/core/models/person';
+import { PersonHomeHelper } from 'src/app/shared/models/person';
 import { ActivatedRoute } from '@angular/router';
 import { PeopleService } from 'src/app/core/services/people.service';
 import { tap, catchError } from 'rxjs/operators';

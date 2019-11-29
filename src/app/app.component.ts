@@ -5,11 +5,11 @@ import { AppUtils } from './core/shared/utils';
 import { AuthService } from './core/services/auth.service';
 import { SharedService, WedgeError } from './core/services/shared.service';
 import { StaffMemberService } from './core/services/staff-member.service';
-import { StaffMember } from './core/models/staff-member';
+import { StaffMember } from './shared/models/staff-member';
 import { BehaviorSubject } from 'rxjs';
 import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
 import { EdgeServiceWorkerService } from './core/services/edge-service-worker.service';
-import { BaseComponent } from './core/models/base-component';
+import { BaseComponent } from './shared/models/base-component';
 import { InfoService } from './core/services/info.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
 

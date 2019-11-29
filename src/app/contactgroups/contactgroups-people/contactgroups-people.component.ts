@@ -1,7 +1,7 @@
 import { Component, OnInit, Renderer2, ViewChild, ElementRef } from '@angular/core';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Person, BasicPerson } from 'src/app/core/models/person';
+import { Person, BasicPerson } from 'src/app/shared/models/person';
 import {
   ContactGroup, PeopleAutoCompleteResult, ContactGroupsTypes,
   ContactType, CompanyAutoCompleteResult, Company, PotentialDuplicateResult, ContactNote

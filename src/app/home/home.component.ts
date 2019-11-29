@@ -1,12 +1,12 @@
 import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { AuthService } from '../core/services/auth.service';
-import { UserResult, User } from '../core/models/user';
+import { UserResult, User } from '../shared/models/user';
 import { StaffMemberService } from '../core/services/staff-member.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
 
 import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
 import { AppUtils } from '../core/shared/utils';
-import { StaffMember } from '../core/models/staff-member';
+import { StaffMember } from '../shared/models/staff-member';
 import { SharedService } from '../core/services/shared.service';
 import { Router, ActivatedRoute } from '@angular/router';
 

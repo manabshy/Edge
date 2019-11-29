@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 
 import { LeaderboardService } from './shared/leaderboard.service';
 import { Constants } from '../core/shared/period-list';
-import { StaffMember, ApiRole } from '../core/models/staff-member';
+import { StaffMember, ApiRole } from '../shared/models/staff-member';
 import {
   Leaderboard, LeaderboardResult, PeriodMap, Period, NegotiatorColumns,
   SalesManagerColumns, LettingsManagerColumns, LeaderboardColumns, LeaderboardSort

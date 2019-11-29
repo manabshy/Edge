@@ -8,7 +8,7 @@ import {
 import { map, tap } from 'rxjs/operators';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encoder-helper';
-import { Address } from 'src/app/core/models/address';
+import { Address } from 'src/app/shared/models/address';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { RequestOption, AppUtils } from 'src/app/core/shared/utils';
 

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ContactGroup, BasicContactGroup, PersonSummaryFigures, ContactGroupDetailsSubNavItems } from '../shared/contact-group';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ActivatedRoute } from '@angular/router';
-import { Person } from 'src/app/core/models/person';
+import { Person } from 'src/app/shared/models/person';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { InfoService } from 'src/app/core/services/info.service';

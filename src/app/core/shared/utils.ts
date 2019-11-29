@@ -1,7 +1,7 @@
 import { format, isDate } from 'date-fns';
 import { Company } from 'src/app/contactgroups/shared/contact-group';
-import { Person } from '../models/person';
-import { StaffMember } from '../models/staff-member';
+import { Person } from '../../shared/models/person';
+import { StaffMember } from '../../shared/models/staff-member';
 import { DetachedRouteHandle } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { CustomQueryEncoderHelper } from './custom-query-encoder-helper';

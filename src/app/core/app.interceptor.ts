@@ -5,7 +5,7 @@ import { WedgeError } from './services/shared.service';
 import { catchError } from 'rxjs/operators';
 import { AppUtils, ICachedRoute } from './shared/utils';
 import { StorageMap } from '@ngx-pwa/local-storage';
-import { Impersonation } from './models/staff-member';
+import { Impersonation } from '../shared/models/staff-member';
 
 @Injectable()
 export class AppInterceptor implements HttpInterceptor {

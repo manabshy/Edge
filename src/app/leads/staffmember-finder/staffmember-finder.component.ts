@@ -2,7 +2,7 @@ import { Component, OnInit, Output, Input, EventEmitter, OnChanges } from '@angu
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
 import { tap, catchError, distinctUntilChanged, debounceTime, switchMap, map } from 'rxjs/operators';
 import { Observable, EMPTY } from 'rxjs';
-import { StaffMember } from 'src/app/core/models/staff-member';
+import { StaffMember } from 'src/app/shared/models/staff-member';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { StorageMap } from '@ngx-pwa/local-storage';

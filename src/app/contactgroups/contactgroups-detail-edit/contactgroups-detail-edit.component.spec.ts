@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ContactgroupsDetailEditComponent } from './contactgroups-detail-edit.component';
-import { BasicPerson, Person } from 'src/app/core/models/person';
+import { BasicPerson, Person } from 'src/app/shared/models/person';
 import { NO_ERRORS_SCHEMA, DebugElement, Renderer2 } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Location } from '@angular/common';

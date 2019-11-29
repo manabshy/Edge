@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { AppUtils } from 'src/app/core/shared/utils';
-import { PersonInstruction } from 'src/app/core/models/person';
+import { PersonInstruction } from 'src/app/shared/models/person';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { PeopleService } from 'src/app/core/services/people.service';

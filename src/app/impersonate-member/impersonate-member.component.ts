@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { StaffMemberService } from '../core/services/staff-member.service';
-import { Impersonation, StaffMember } from '../core/models/staff-member';
+import { Impersonation, StaffMember } from '../shared/models/staff-member';
 import { StorageMap } from '@ngx-pwa/local-storage';
 
 @Component({

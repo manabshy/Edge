@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LeadsService } from './shared/leads.service';
 import { StaffMemberService } from '../core/services/staff-member.service';
-import { StaffMember } from '../core/models/staff-member';
+import { StaffMember } from '../shared/models/staff-member';
 import { getLocaleDayNames } from '@angular/common';
 import { Lead, LeadSearchInfo } from './shared/lead';
 import { InfoDetail } from '../core/services/info.service';

@@ -1,4 +1,4 @@
-import { ResultData } from '../shared/result-data';
+import { ResultData } from '../../core/shared/result-data';
 
 export interface User {
   staffMemberId: number;

@@ -5,11 +5,11 @@ import { distinctUntilChanged, takeUntil, tap, switchMap, catchError } from 'rxj
 import { PropertyAutoComplete } from './shared/property';
 import { AppUtils, RequestOption } from '../core/shared/utils';
 import { Observable, EMPTY } from 'rxjs';
-import { BaseComponent } from '../core/models/base-component';
+import { BaseComponent } from '../shared/models/base-component';
 import * as _ from 'lodash';
 import { SharedService } from '../core/services/shared.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
-import { Impersonation } from '../core/models/staff-member';
+import { Impersonation } from '../shared/models/staff-member';
 
 @Component({
   selector: 'app-property',

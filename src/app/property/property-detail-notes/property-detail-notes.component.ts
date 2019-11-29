@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { PropertyNote } from '../shared/property';
 import { SharedService } from 'src/app/core/services/shared.service';
 import * as _ from 'lodash';
-import { BaseComponent } from 'src/app/core/models/base-component';
+import { BaseComponent } from 'src/app/shared/models/base-component';
 import { takeUntil } from 'rxjs/operators';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { InfoService } from 'src/app/core/services/info.service';

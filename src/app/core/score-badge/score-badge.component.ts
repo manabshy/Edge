@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Person } from '../models/person';
+import { Person } from '../../shared/models/person';
 import { FormatAddressPipe } from '../shared/format-address.pipe';
 
 @Component({
@@ -32,7 +32,7 @@ export class ScoreBadgeComponent implements OnInit {
     let message = 'Complete'
 
     if(this.person) {
-      
+
       if(this.person.address.countryId != 232) {
         percentRange = 25;
       } else {

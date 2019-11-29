@@ -1,7 +1,7 @@
 import { Component, OnInit, Renderer2, Input, Output, EventEmitter, OnChanges, ɵConsole } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PotentialDuplicateResult, ContactGroup } from '../contact-group';
-import { BasicPerson, Person } from 'src/app/core/models/person';
+import { BasicPerson, Person } from 'src/app/shared/models/person';
 import { ContactGroupsService } from '../contact-groups.service';
 import { CompanyService } from 'src/app/company/shared/company.service';
 import { Router, ActivatedRoute } from '@angular/router';

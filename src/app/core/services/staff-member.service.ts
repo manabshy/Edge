@@ -3,7 +3,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { AppConstants } from '../shared/app-constants';
 import { map, shareReplay, tap } from 'rxjs/operators';
-import { StaffMember, StaffMemberResult, Impersonation, StaffMemberListResult } from '../models/staff-member';
+import { StaffMember, StaffMemberResult, Impersonation, StaffMemberListResult } from '../../shared/models/staff-member';
 import { StorageMap } from '@ngx-pwa/local-storage';
 
 const CACHE_SIZE = 1;

@@ -1,7 +1,7 @@
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { isArray } from 'util';
-import { newPropertyAddress } from 'src/app/core/models/address';
+import { newPropertyAddress } from 'src/app/shared/models/address';
 import { ContactGroup } from 'src/app/contactgroups/shared/contact-group';
 import { Property } from 'src/app/property/shared/property';
 

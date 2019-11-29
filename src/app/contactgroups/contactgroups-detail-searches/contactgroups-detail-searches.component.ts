@@ -6,7 +6,7 @@ import { StorageMap } from '@ngx-pwa/local-storage';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { PeopleService } from 'src/app/core/services/people.service';
 import { Observable } from 'rxjs';
-import { PersonSearch } from 'src/app/core/models/person';
+import { PersonSearch } from 'src/app/shared/models/person';
 
 @Component({
   selector: 'app-contactgroups-detail-searches',

@@ -2,11 +2,11 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 
 import { DashboardService } from './shared/dashboard.service';
 import { Dashboard, DashboardResult, TeamDashboardResult, DashboardTotals, OffersResult, Pipeline, Instruction, Tiles } from './shared/dashboard';
-import { User } from '../core/models/user';
+import { User } from '../shared/models/user';
 import { Constants } from '../core/shared/period-list';
 import { TabsetComponent, TabDirective } from 'ngx-bootstrap/tabs/';
 import { AppUtils } from '../core/shared/utils';
-import { StaffMember } from '../core/models/staff-member';
+import { StaffMember } from '../shared/models/staff-member';
 import { ActivatedRoute } from '@angular/router';
 import { WedgeError, SharedService } from '../core/services/shared.service';
 

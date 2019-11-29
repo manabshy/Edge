@@ -1,7 +1,7 @@
 import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { PhoneNumberUtil, PhoneNumber, PhoneNumberFormat } from 'google-libphonenumber';
 import { SharedService } from '../services/shared.service';
-import { TelephoneTypeId } from '../models/person';
+import { TelephoneTypeId } from '../../shared/models/person';
 
 export class WedgeValidators {
   // static sharedService: SharedService;
@@ -71,7 +71,7 @@ export class WedgeValidators {
           }
         } catch (e) { }
       }
-      
+
       return validNumber ? null : errors;
     };
   }
@@ -97,7 +97,7 @@ export class WedgeValidators {
 
         const number = phoneNumber.value;
         const type = typeId.value;
-        
+
         if(number) {
           switch(+type){
             case TelephoneTypeId.Fax:
@@ -122,11 +122,11 @@ export class WedgeValidators {
   }
 
   static emailPhoneValidator(): ValidatorFn {
-    
+
     return (control: AbstractControl): { [key: string]:boolean } | null => {
       const email = control.get('emailAddresses').value[0].email;
       const phone = control.get('phoneNumbers').value[0].number;
-      
+
       if(!(!!email) && !(!!phone)) {
         return { 'emailOrPhone': true };
       }
@@ -135,11 +135,11 @@ export class WedgeValidators {
   }
 
   static warningStatusValidator(): ValidatorFn {
-    
+
     return (control: AbstractControl): { [key: string]:boolean } | null => {
       const id = control.get('warningStatusId').value;
       const comment = control.get('warningStatusComment').value;
-      
+
       if(+id === 100 && !(!!comment)) {
         return { 'warningStatusRequired': true };
       }
@@ -148,11 +148,11 @@ export class WedgeValidators {
   }
 
   static titleValidator(): ValidatorFn {
-    
+
     return (control: AbstractControl): { [key: string]:boolean } | null => {
       const id = control.get('titleId').value;
       const comment = control.get('titleOther').value;
-      
+
       if(+id === 100 && !(!!comment)) {
         return { 'titleOther': true };
       }

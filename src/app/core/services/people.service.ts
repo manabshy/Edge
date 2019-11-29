@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AppConstants } from '../shared/app-constants';
 import { map, tap } from 'rxjs/operators';
-import { PersonInstruction, PersonSearch, PersonOffer, PersonLettingsManagement, PersonHomeHelper } from '../models/person';
+import { PersonInstruction, PersonSearch, PersonOffer, PersonLettingsManagement, PersonHomeHelper } from '../../shared/models/person';
 
 @Injectable({
   providedIn: 'root'

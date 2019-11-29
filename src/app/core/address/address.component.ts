@@ -2,10 +2,10 @@ import { Component, OnInit, Renderer2, Input, Output, EventEmitter, OnChanges } 
 import { SharedService } from '../services/shared.service';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AppConstants } from '../shared/app-constants';
-import { Person } from '../models/person';
+import { Person } from '../../shared/models/person';
 import { Company, BasicContactGroup } from 'src/app/contactgroups/shared/contact-group';
 import { Property } from 'src/app/property/shared/property';
-import { Address } from '../models/address';
+import { Address } from '../../shared/models/address';
 import { AppUtils } from '../shared/utils';
 import { debounceTime } from 'rxjs/operators';
 import { AddressService, AddressAutoCompleteData } from '../services/address.service';

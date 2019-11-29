@@ -1,5 +1,5 @@
-import { Address } from 'src/app/core/models/address';
-import { Person, BasicPerson, PersonWarning } from 'src/app/core/models/person';
+import { Address } from 'src/app/shared/models/address';
+import { Person, BasicPerson, PersonWarning } from 'src/app/shared/models/person';
 import { ResultData } from 'src/app/core/shared/result-data';
 import { SubNavItem, SubNav } from 'src/app/core/shared/subnav';
 

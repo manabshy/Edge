@@ -2,7 +2,7 @@ import { Component, OnInit, Input, OnChanges, HostListener } from '@angular/core
 import { LeadsService } from '../shared/leads.service';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
 import { Lead, LeadSearchInfo } from '../shared/lead';
-import { StaffMember, Office } from 'src/app/core/models/staff-member';
+import { StaffMember, Office } from 'src/app/shared/models/staff-member';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { InfoDetail } from 'src/app/core/services/info.service';
 import { FormGroup, FormBuilder } from '@angular/forms';

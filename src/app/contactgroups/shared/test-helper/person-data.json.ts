@@ -1,4 +1,4 @@
-import { BasicPerson } from 'src/app/core/models/person';
+import { BasicPerson } from 'src/app/shared/models/person';
 
 export const MockBasicPerson = {
   firstName: 'John',

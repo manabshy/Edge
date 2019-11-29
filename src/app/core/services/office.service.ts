@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { HttpClient } from '@angular/common/http';
 import { AppConstants } from '../shared/app-constants';
-import { Office, OfficeListResult } from '../models/staff-member';
+import { Office, OfficeListResult } from '../../shared/models/staff-member';
 import { Observable } from 'rxjs';
 import { shareReplay, map, tap } from 'rxjs/operators';
 

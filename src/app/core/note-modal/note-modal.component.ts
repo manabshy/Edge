@@ -1,7 +1,7 @@
 import { Component, OnInit, Input} from '@angular/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { Subject } from 'rxjs';
-import { Person } from '../models/person';
+import { Person } from '../../shared/models/person';
 import { ContactGroup } from 'src/app/contactgroups/shared/contact-group';
 
 @Component({

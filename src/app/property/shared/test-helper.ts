@@ -1,4 +1,4 @@
-import { Address } from 'src/app/core/models/address';
+import { Address } from 'src/app/shared/models/address';
 import { Property, PropertyType, PropertyStyle, MapCentre, Photo, PropertySummaryFigures } from './property';
 import { Signer } from 'src/app/contactgroups/shared/contact-group';
 

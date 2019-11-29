@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { SmsInfo } from '../models/person';
+import { SmsInfo } from '../../shared/models/person';
 import { Observable } from 'rxjs';
 import { AppConstants } from '../shared/app-constants';
 import { map, tap } from 'rxjs/operators';
