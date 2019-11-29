@@ -11,13 +11,3 @@
     color: $input-bg!important;
     text-shadow: $border-color 0 0 1px, $border-color 0 0 1px, $border-color 0 0 1px, $border-color 0 0 1px, $border-color 0 0 1px, $border-color 0 0 1px, $border-color 0 0 1px, $border-color 0 0 1px, $border-color 0 0 1px, $border-color 0 0 1px, $border-color 0 0 1px, $border-color 0 0 1px, $border-color 0 0 1px, $border-color 0 0 1px, $border-color 0 0 1px;
 }
-
-.add-note-container {
-    position: sticky;
-    top: 0;
-    z-index: 9;
-
-    @include media-breakpoint-down(sm) {
-        position: static;
-    }
-}
