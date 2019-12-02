@@ -102,7 +102,8 @@
 
             <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
             <button type="submit" class="btn btn-secondary mr-2">Save</button>
-            <button (click)="moveToNextLead()" type="button" class="btn btn-success btn-default">Next</button>
+
+            <button (click)="moveToNextLead()" type="button" class="btn btn-secondary" [isOpen]="leadsListCompleted" [tooltip]="leadsListCompleted ? 'You have reached the end of the list' : null">Save & Next</button>
           </div>
         </div>
       </div>
