@@ -47,6 +47,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
   leadsListCompleted: boolean = false;
   isFormDirty: boolean = false;
   onLoading: boolean = false;
+  isSubmitting: boolean;
 
   constructor(private leadsService: LeadsService,
     private route: ActivatedRoute,
@@ -257,6 +258,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
 
   updateLead() {
     const lead = { ...this.lead, ...this.leadEditForm.value };
+    this.isSubmitting = true;
 
     if (this.isNewLead) {
 
@@ -271,12 +273,14 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
         this.lead = lead;
       }, (error: WedgeError) => {
         this.sharedService.showError(error);
+        this.isSubmitting = false;
       });
     } else {
       this.leadsService.updateLead(lead).subscribe((result) => {
         this.onUpdateCompleted();
       }, (error: WedgeError) => {
         this.sharedService.showError(error);
+        this.isSubmitting = false;
       });
     }
   }
@@ -355,6 +359,13 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
     console.log('list completed?', this.leadsListCompleted);
 
 
+  }
+
+  canDeactivate(): boolean {
+    if (this.leadEditForm.dirty && !this.isSubmitting) {
+      return false;
+    }
+    return true;
   }
 
 
