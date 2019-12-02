@@ -1,6 +1,6 @@
 import { SubNavItem, SubNav } from "src/app/core/shared/subnav";
 
-export const LeadEditSubNav = ['instructions', 'offers', 'searches', 'lettings-managements', 'home-helpers'];
+export const LeadEditSubNav = ['properties','instructions', 'offers', 'searches', 'lettings-managements', 'home-helpers'];
 
 export const LeadEditSubNavItems: SubNavItem[] = LeadEditSubNav.map(x => ({
   link: x,
