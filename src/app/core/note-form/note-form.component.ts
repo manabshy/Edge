@@ -96,6 +96,7 @@ export class NoteFormComponent implements OnInit {
     if (note) {
       this.contactGroupService.addPersonNote(note).subscribe(data => {
         if (data) {
+          this.formReset();
           this.contactGroupService.notesChanged(data);
           this.toastr.success('Note successfully added');
         }

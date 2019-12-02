@@ -1,21 +1,21 @@
-:host ::ng-deep accordion {
-    .card-body {
-        padding: 0;
-    }
+@import "../../../style/bootstrap-overrides";
 
-    .list-group-item {
-        & > .row {
-            margin: 0;
+@import "../../../../node_modules/bootstrap/scss/functions";
+@import "../../../../node_modules/bootstrap/scss/variables";
+@import "../../../../node_modules/bootstrap/scss/mixins";
 
-            & > .col, & > [class*="col-"] {
-                padding: 0;
+:host ::ng-deep {
+    .is-sticky {
+        &[style*=fixed] {
+            transition: all .3s;
+            @include media-breakpoint-down(lg) {
+                position: static!important;
+            }
+            @include media-breakpoint-up(xl) {
+                right: spacer(3)!important;
+                left: auto!important;
+                width: 25%!important;
             }
         }
     }
 }
-
-// .person-details {
-//     border-top:0; 
-//     border-top-left-radius: 0;
-//     border-top-right-radius: 0;
-// }

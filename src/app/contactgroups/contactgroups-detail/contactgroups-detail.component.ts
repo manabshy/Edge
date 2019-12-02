@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ContactGroup, BasicContactGroup, PersonSummaryFigures, ContactGroupDetailsSubNavItems } from '../shared/contact-group';
+import { ContactGroup, BasicContactGroup, PersonSummaryFigures, ContactGroupDetailsSubNavItems, ContactNote } from '../shared/contact-group';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ActivatedRoute } from '@angular/router';
 import { Person } from 'src/app/shared/models/person';
@@ -7,13 +7,16 @@ import { SharedService } from 'src/app/core/services/shared.service';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { InfoService } from 'src/app/core/services/info.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
+import { BaseComponent } from 'src/app/shared/models/base-component';
+import * as _ from 'lodash';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-contactgroups-detail',
   templateUrl: './contactgroups-detail.component.html',
   styleUrls: ['./contactgroups-detail.component.scss']
 })
-export class ContactgroupsDetailComponent implements OnInit {
+export class ContactgroupsDetailComponent extends BaseComponent implements OnInit {
   listInfo: any;
   warnings: any;
   searchedPersonContactGroups: BasicContactGroup[];
@@ -23,16 +26,26 @@ export class ContactgroupsDetailComponent implements OnInit {
   searchedPersonCompanyName: string;
   contactGroupId: number;
   personId = 0;
+  page = 1;
+  pageSize = 10;
+  personNotes: ContactNote[] = [];
+  bottomReached = false;
   isNewContactGroup = false;
   isCollapsed: boolean;
   summaryTotals: PersonSummaryFigures;
   subNav = ContactGroupDetailsSubNavItems;
 
+  get dataNote() {
+    return {
+      personId: this.personId
+    };
+  }
+
   constructor(private contactGroupService: ContactGroupsService,
               private sharedService: SharedService,
               private storage: StorageMap,
               private infoService: InfoService,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute) {super();}
 
   ngOnInit() {
     console.log(this.subNav);
@@ -57,13 +70,20 @@ export class ContactgroupsDetailComponent implements OnInit {
     this.getSearchedPersonContactGroups(this.personId);
     this.getSearchedPersonSummaryInfo(this.personId);
 
-    this.contactGroupService.noteChanges$.subscribe(data => {
+    this.contactGroupService.noteChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
       if (data) {
-        this.contactGroupService.getPerson(this.personId, true).subscribe(x => {
-          this.searchedPersonDetails.personNotes = x.personNotes;
-        });
+        this.personNotes = [];
+        this.page = 1;
+        this.bottomReached = false;
+        this.getPersonNotes();
       }
     });
+
+    this.contactGroupService.personNotePageChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(newPageNumber => {
+      this.page = newPageNumber;
+      this.getNextPersonNotesPage(this.page);
+    });
+
   }
 
   setDropdownLists() {
@@ -109,6 +129,31 @@ export class ContactgroupsDetailComponent implements OnInit {
 
   createNewContactGroup() {
     this.isNewContactGroup = true;
+  }
+
+  getPersonNotes() {
+    this.getNextPersonNotesPage(this.page);
+  }
+
+  private getNextPersonNotesPage(page) {
+
+
+    this.contactGroupService.getPersonNotes(this.personId, this.pageSize, page).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
+      if (data) {
+        if (page === 1) {
+          this.personNotes = data;
+        } else {
+          this.personNotes = _.concat(this.personNotes, data);
+        }
+        console.log('person Notes', this.personNotes);
+      }
+      if (data && !data.length) {
+
+        this.bottomReached = true;
+        console.log('data', data);
+        console.log('bottom reached', this.bottomReached);
+      }
+    });
   }
 
   addNote() {

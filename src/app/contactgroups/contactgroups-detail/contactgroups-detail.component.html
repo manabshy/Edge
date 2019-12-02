@@ -95,29 +95,44 @@
 
         </div>
       </div>
-    </div>
-    <div class="col-xl-4 aside sticky-top-xl">
-      <div class="mb-3">
-        <h5>Quick links</h5>
-        <app-subnav>
-          <app-subnav-item *ngFor="let item of subNav" [navLink]="item?.link"
-            [params]="{docTitle: item?.label+' | '+searchedPersonDetails?.addressee}">
-            {{item?.label}}
-            <ng-container *ngIf="summaryTotals; else loadingInfo">
-              <ng-container *ngIf="isObject(summaryTotals[item?.value]); else simpleValue">
-                <span class="badge badge-pill badge-success mr-1"> {{summaryTotals[item?.value]?.active}} </span>
-                <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value]?.total}}</span>
-              </ng-container>
-              <ng-template #simpleValue>
-                <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value] || '0'}}</span>
-              </ng-template>
+      <div #spacer></div>
+      <div class="mb-3" stickyThing [spacer]="spacer" marginTop="66">
+        <h5>More Info</h5>
+        <accordion class="sub-info" [closeOthers]="true">
+          <accordion-group *ngFor="let item of subNav">
+            <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
+              <div class="pull-left float-left">
+                {{item?.label}}
+                <ng-container *ngIf="summaryTotals; else loadingInfo">
+                  <ng-container *ngIf="isObject(summaryTotals[item?.value]); else simpleValue">
+                    <span class="badge badge-pill badge-success mr-1"> {{summaryTotals[item?.value]?.active}} </span>
+                    <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value]?.total}}</span>
+                  </ng-container>
+                  <ng-template #simpleValue>
+                    <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value] || '0'}}</span>
+                  </ng-template>
+                </ng-container>
+                <ng-template #loadingInfo>
+                  <span class="badge badge-pill badge-primary"><i class="fas fa-spinner fa-pulse d-inline-block"></i></span>
+                </ng-template>
+              </div>
+              <span class="badge badge-secondary float-right pull-right"></span>
+            </button>
+            <ng-container [ngSwitch]="item?.value">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              <!-- <app-contactgroups-detail-instructions *ngSwitchCase="'instructions'" [personId]="person?.personId"></app-contactgroups-detail-instructions> -->
             </ng-container>
-            <ng-template #loadingInfo>
-              <span class="badge badge-pill badge-primary"><i class="fas fa-spinner fa-pulse d-inline-block"></i></span>
-            </ng-template>
-          </app-subnav-item>
-        </app-subnav>
+          </accordion-group>
+        </accordion>
       </div>
+      <h5>Notes</h5>
+      <app-notes [personNotes]="personNotes" [noteData]="dataNote" [pageNumber]="page"
+        [bottomReached]="bottomReached"></app-notes>
     </div>
   </div>
 </div>
