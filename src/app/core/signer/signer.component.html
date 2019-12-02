@@ -6,19 +6,15 @@
       <ng-template #givenLabel><label for="searchTerm"
           class="col-form-label col-form-label-sm" [ngClass]="readOnly ? 'col-12 text-left' : 'col-sm-2'">{{label}}</label></ng-template>
       <div class="col">
-        <div class="form-group">
+        <div class="form-group d-flex d-sm-block">
           <input type="hidden" #selectedSignerInput
             id="selectedSigner" formControlName="selectedSigner">
-          <app-subnav class="small" *ngIf="selectedSignerDetails">
-            <app-subnav-item [navLink]="'/contact-centre/detail/0/people/'+selectedSignerDetails?.contactGroupId" [noBaseLink]="true">
-              {{selectedSignerDetails?.contactNames}}
-            </app-subnav-item>
-          </app-subnav>
-          <a class="small mr-3" *ngIf="!readOnly" href (click)="toggleSearch()">
-            Change
-            <ng-container *ngIf="!label; else givenLabel1 ">Signers</ng-container>
-            <ng-template #givenLabel1>{{label}}</ng-template>
+          <a class="small mobile-btn" [routerLink]="['/contact-centre/detail/0/people/', selectedSignerDetails?.contactGroupId]">
+            {{selectedSignerDetails?.contactNames}}
           </a>
+          <button class="btn btn-light btn-sm ml-2" *ngIf="!readOnly" type="button" (click)="toggleSearch()">
+            Change
+          </button>
         </div>
       </div>
     </div>

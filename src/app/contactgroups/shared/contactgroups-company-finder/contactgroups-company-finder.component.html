@@ -3,14 +3,12 @@
   <div class="row" [hidden]="!selectedCompanyDetails || isExistingCompany">
     <label for="selectedCompany" class="col-sm-2 col-form-label col-form-label-sm">Company Name</label>
     <div class="col-sm-10">
-      <div class="form-group">
+      <div class="form-group d-flex d-sm-block">
         <input type="hidden" #selectedCompanyInput id="selectedCompany" formControlName="selectedCompany">
-        <app-subnav class="small">
-          <app-subnav-item (click)="editSelectedCompany(selectedCompanyDetails?.companyId)">
-            {{selectedCompanyDetails?.companyName}}
-          </app-subnav-item>
-        </app-subnav>
-        <a *ngIf="!isExistingCompany" class="small mr-3" href (click)="toggleSearchCompany()">Change Company</a>
+        <button type="button" class="btn btn-link btn-sm p-0 mobile-btn" (click)="editSelectedCompany(selectedCompanyDetails?.companyId)">
+          {{selectedCompanyDetails?.companyName}}
+        </button>
+        <button type="button" *ngIf="!isExistingCompany" class="btn btn-light btn-sm ml-2" (click)="toggleSearchCompany()">Change</button>
       </div>
     </div>
   </div>
