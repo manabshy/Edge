@@ -12,7 +12,7 @@
   <form [formGroup]="leadEditForm" (ngSubmit)="updateLead()">
     <div class="row align-items-start">
       <div class="col-xl-8">
-        <div class="row mb-4">
+        <div class="row">
           <div class="col-lg">
             <div class="form-group">
               <label for="type">Type</label>
@@ -44,9 +44,7 @@
           </div>
         </div>
         <h5>Person</h5>
-        <div class="list-group mb-3">
-          <app-person-details [personDetails]="person"></app-person-details>
-        </div>
+        <app-person-details [personDetails]="person"></app-person-details>
         <div #spacer></div>
         <div stickyThing [spacer]="spacer" marginTop="66">
           <h5>More Info</h5>
