@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 })
 export class PersonDetailsComponent implements OnInit {
   @Input() personDetails: Person;
+  @Input() isClickable: boolean = true;
   constructor(private router: Router) { }
 
   ngOnInit() {
