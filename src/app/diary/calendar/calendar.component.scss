@@ -145,4 +145,41 @@ $time-column-mobile-width: 40px;
         }
     }
 
+    .cal-all-day-events {
+        border-left: 0;
+        border-bottom-width: 2px;
+
+        .cal-events-row {
+            @include media-breakpoint-down(sm){
+                margin-left: $time-column-mobile-width;
+            }
+        }
+    }
+
+    .cal-day-column {
+        .cal-hour {
+            background-color: rgba(theme-color(warning), .075);
+
+            &:nth-child(10) ~ .cal-hour {
+                background-color: rgba(theme-color(info), .075);
+            }
+
+            &:nth-child(14) ~ .cal-hour {
+                background-color: initial;
+            }
+
+            &:nth-child(16) ~ .cal-hour {
+                background-color: rgba(theme-color(info), .075);
+            }
+
+            &:nth-child(18) ~ .cal-hour {
+                background-color: initial;
+            }
+
+            &:nth-child(21) ~ .cal-hour {
+                background-color: rgba(theme-color(warning), .075);
+            }
+        }
+    } 
+
 }

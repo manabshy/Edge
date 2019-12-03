@@ -74,13 +74,13 @@ export class CalendarComponent implements OnInit {
 
   currentTimeIntoView() {
     const marker = document.getElementsByClassName('cal-current-time-marker');
-    const calEvent = document.getElementsByClassName('cal-event');
+    const calHours = document.getElementsByClassName('cal-hour');
 
     setTimeout(() => {
       if (marker && marker.length) {
         marker[0].scrollIntoView({ block: 'center' });
-      } else if (calEvent && calEvent.length) {
-        calEvent[0].scrollIntoView({ block: 'center' });
+      } else if (calHours && calHours.length) {
+        calHours[11].scrollIntoView({ block: 'center' });
       }
     });
   }
