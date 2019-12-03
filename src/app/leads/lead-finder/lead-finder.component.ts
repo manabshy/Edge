@@ -38,12 +38,12 @@ export class LeadFinderComponent implements OnInit {
     });
 
     this.leadFinderForm.valueChanges.subscribe(val => {
-      console.log('new lead suggestion', val.leadSuggestion);
       if (val.leadSuggestion === '') {
         this.leadSuggestionSelected.emit(null);
         console.log(true);
-      }
-      else{
+      } else {
+        console.log('lead finder form changed', val);
+        this.searchTerm = val.leadSuggestion;
         console.log(false);
       }
     });
@@ -51,10 +51,8 @@ export class LeadFinderComponent implements OnInit {
   }
 
   onKeyup(event: KeyboardEvent) {
-    if (event.key !== 'Enter') {
-
-    }
     AppUtils.searchTerm = this.searchTerm;
+    console.log('search term entered:', this.searchTerm);
   }
 
   suggestionSelected(event: any) {

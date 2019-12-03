@@ -147,13 +147,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
 
       if (leadSearchInfo) {
         leadSearchInfo.startLeadId = this.leadId;
-        // console.log('lead id:',this.lead.leadId);
-        // console.log('this lead id:',this.leadId);
-        // console.log('lead search info changed',leadSearchInfo);
 
         this.leadsService.getLeadIds(leadSearchInfo).subscribe(result => {
           this.leadIds = result;
-          //this.moveToNextLead();
           console.log('leads Ids here: ', this.leadIds);
         }, error => {
           this.lead = null;
@@ -169,7 +165,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
   onChanges(): void {
     this.leadEditForm.valueChanges.subscribe(val => {
       if (!this.onLoading) {
-      this.isFormDirty = true;
+        this.isFormDirty = true;
       }
     });
   }

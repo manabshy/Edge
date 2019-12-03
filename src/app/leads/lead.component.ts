@@ -54,9 +54,9 @@ export class LeadComponent implements OnInit {
     // page changes here
     this.leadService.pageChanges$.subscribe(leadSearchInfo => {
       if (leadSearchInfo) {
+        console.log('PAGE CHANGED EVENT RAISED', leadSearchInfo);
         this.page = leadSearchInfo.page;
         this.getLeads(leadSearchInfo);
-        console.log('end of page', leadSearchInfo.page);
       }
     });
 
@@ -64,12 +64,12 @@ export class LeadComponent implements OnInit {
   }
 
   getLeads(leadSearchInfo: LeadSearchInfo) {
+    console.log('GET LEADS: ', leadSearchInfo);
     this.leadService.getLeads(leadSearchInfo, PAGE_SIZE).subscribe(result => {
 
       if (leadSearchInfo.page === 1) {
         this.leads = result;
       } else {
-        console.log('leadSearchInfo.page', leadSearchInfo.page);
         if (this.leads) {
           this.leads = this.leads.concat(result);
         } else {

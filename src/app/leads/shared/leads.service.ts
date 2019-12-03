@@ -30,6 +30,7 @@ export class LeadsService {
   }
 
   pageNumberChanged(leadSearchInfo: LeadSearchInfo) {
+    console.log('PAGE CHANGED EVENT RECEIVED', leadSearchInfo);
     this.pageChangeSubject.next(leadSearchInfo);
   }
 
@@ -65,12 +66,12 @@ export class LeadsService {
       pageSize = 10;
     }
 
-    console.log('date params', leadSearchInfo);
+    console.log('get leads date params', leadSearchInfo);
 
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
       fromObject: {
-        ownerId: leadSearchInfo.ownerId != null ? leadSearchInfo.ownerId.toString() : '',
+        // ownerId: leadSearchInfo.ownerId != null ? leadSearchInfo.ownerId.toString() : '',
         leadTypeId: leadSearchInfo.leadTypeId != null ? leadSearchInfo.leadTypeId.toString() : '',
         officeId: leadSearchInfo.officeId != null ? leadSearchInfo.officeId.toString() : '',
         dateFrom: leadSearchInfo.dateFrom != null ? new Date(leadSearchInfo.dateFrom.toString()).toLocaleDateString() : '',
@@ -80,14 +81,20 @@ export class LeadsService {
           ? (String)(leadSearchInfo.includeUnassignedLeadsOnly) : '',
         page: leadSearchInfo.page.toString(),
         pageSize: pageSize.toString(),
-        searchTerm: leadSearchInfo.searchTerm
+        searchTerm: leadSearchInfo.searchTerm != null ? leadSearchInfo.searchTerm : '',
+        allowPaging: 'true'
       }
     });
 
-    const url = `${AppConstants.baseLeadsUrl}/owner`;
+    const url = `${AppConstants.baseLeadsUrl}/search`;
 
     return this.http.get<any>(url, { params: options }).pipe(
-      map(response => response.result));
+      map(response => response.result),
+      tap(data => {
+        if (data) {
+          console.log('lead search redult:', data);
+        }
+      }));
   }
 
   // Returning list of Lead Ids
@@ -98,7 +105,7 @@ export class LeadsService {
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
       fromObject: {
-        ownerId: leadSearchInfo.ownerId != null ? leadSearchInfo.ownerId.toString() : '',
+        // ownerId: leadSearchInfo.ownerId != null ? leadSearchInfo.ownerId.toString() : '',
         leadTypeId: leadSearchInfo.leadTypeId != null ? leadSearchInfo.leadTypeId.toString() : '',
         officeId: leadSearchInfo.officeId != null ? leadSearchInfo.officeId.toString() : '',
         dateFrom: leadSearchInfo.dateFrom != null ? new Date(leadSearchInfo.dateFrom.toString()).toLocaleDateString() : '',
@@ -107,7 +114,8 @@ export class LeadsService {
         includeUnassignedLeadsOnly: leadSearchInfo.includeUnassignedLeadsOnly != null
           ? (String)(leadSearchInfo.includeUnassignedLeadsOnly) : '',
         startLeadId: leadSearchInfo.startLeadId != null ? leadSearchInfo.startLeadId.toString() : '',
-        searchTerm: leadSearchInfo.searchTerm
+        searchTerm: leadSearchInfo.searchTerm != null ? leadSearchInfo.searchTerm : '',
+        allowPaging: 'false'
       }
     });
 
@@ -117,7 +125,7 @@ export class LeadsService {
       map(response => response.result));
   }
 
-  getLeadSuggestions(searchTerm): Observable<any>  {
+  getLeadSuggestions(searchTerm): Observable<any> {
     console.log('search Term:', searchTerm);
     return this.http.get<any>(`${AppConstants.baseLeadsUrl}/suggestions?SearchTerm=${searchTerm}`, {
       headers: { ignoreLoadingBar: '' }

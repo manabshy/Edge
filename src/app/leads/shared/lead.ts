@@ -40,4 +40,5 @@ export interface LeadSearchInfo {
     includeUnassignedLeadsOnly?: boolean;
     startLeadId?: number;
     searchTerm?: any;
+    allowPaging?: boolean;
 }
