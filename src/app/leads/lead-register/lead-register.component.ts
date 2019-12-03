@@ -161,7 +161,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       dateFrom: null,
       dateTo: null,
       includeUnassignedLeadsOnly: false,
-      leadSearchTerm: null
+      searchTerm: null
     });
   }
 
@@ -187,13 +187,13 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   onLeadSuggestionSelected(event: any) {
     if (event && event.item != null) {
       this.leadRegisterForm.patchValue({
-        leadSearchTerm: event.item
+        searchTerm: event.item
       });
       this.leadSearchInfo = this.getSearchInfo(true);
       this.leadService.pageNumberChanged(this.leadSearchInfo);
     } else {
       this.leadRegisterForm.patchValue({
-        leadSearchTerm: ''
+        searchTerm: ''
       });
     }
     console.log('lead suggestion selected:', this.leadRegisterForm);
@@ -217,7 +217,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       dateTo: this.leadRegisterForm != null ? this.leadRegisterForm.get('dateTo').value : null,
       includeClosedLeads: this.leadRegisterForm != null ? this.leadRegisterForm.get('includeClosedLeads').value : null,
       includeUnassignedLeadsOnly: this.leadRegisterForm != null ? this.leadRegisterForm.get('includeUnassignedLeadsOnly').value : null,
-      leadSearchTerm: this.leadRegisterForm != null ? this.leadRegisterForm.get('leadSearchTerm').value : null
+      searchTerm: this.leadRegisterForm != null ? this.leadRegisterForm.get('searchTerm').value : null
     };
   }
 
@@ -255,6 +255,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       this.leadSearchInfo.page = this.page;
       this.leadService.pageNumberChanged(this.leadSearchInfo);
       console.log('leads page number', this.page);
+      console.log('leads page number params', this.leadSearchInfo);
     }
 
     console.log('bottom reached', this.bottomReached);
