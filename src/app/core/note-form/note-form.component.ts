@@ -67,6 +67,12 @@ export class NoteFormComponent implements OnInit {
     this.renderer.selectRootElement('#note').focus();
   }
 
+  ctrlEnterSubmit(e) {
+    if (e.ctrlKey && e.keyCode == 13) {
+      this.action(true);
+    }
+  }
+
 
 
   action(value: boolean) {

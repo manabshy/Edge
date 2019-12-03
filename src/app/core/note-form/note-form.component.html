@@ -32,6 +32,7 @@
       </ng-container>
     </div>
     <textarea class="form-control" name="note" id="note" cols="30" rows="5" placeholder="Comment ..."
+      (keydown)="ctrlEnterSubmit($event)"
       formControlName="text"></textarea>
   </div>
   <div class="mt-4" [ngClass]="{'text-center': isCancelVisible}">

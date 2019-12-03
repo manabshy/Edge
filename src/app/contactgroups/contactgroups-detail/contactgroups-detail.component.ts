@@ -69,6 +69,7 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
     this.getSearchedPersonDetails(this.personId);
     this.getSearchedPersonContactGroups(this.personId);
     this.getSearchedPersonSummaryInfo(this.personId);
+    this.getPersonNotes();
 
     this.contactGroupService.noteChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
       if (data) {
