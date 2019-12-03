@@ -6,7 +6,7 @@ import { StorageMap } from '@ngx-pwa/local-storage';
 
 import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
 import { AppUtils } from '../core/shared/utils';
-import { StaffMember } from '../shared/models/staff-member';
+import { StaffMember, ApiRole } from '../shared/models/staff-member';
 import { SharedService } from '../core/services/shared.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -21,16 +21,22 @@ export class HomeComponent implements OnInit {
   get isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
   }
+  get isLeaderboardVisible() {
+    if (this.currentStaffMember) {
+      return this.currentStaffMember.dashboardMode !== ApiRole.NotApplicable;
+    }
+  }
+
   selectedTab = 0;
   containerClass = '';
   @ViewChild('homeTabs', { static: true }) homeTabs: TabsetComponent;
 
   constructor(private authService: AuthService,
-              private staffMemberService: StaffMemberService,
-              private sharedService: SharedService,
-              private storage: StorageMap,
-              private router: Router,
-              private route: ActivatedRoute) { }
+    private staffMemberService: StaffMemberService,
+    private sharedService: SharedService,
+    private storage: StorageMap,
+    private router: Router,
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
 
@@ -40,7 +46,7 @@ export class HomeComponent implements OnInit {
     });
 
 
-    this.route.queryParams.subscribe(params =>  {
+    this.route.queryParams.subscribe(params => {
       if (params['selectedTab']) {
         AppUtils.homeSelectedTab = params['selectedTab'];
       }

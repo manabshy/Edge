@@ -20,7 +20,7 @@
       </ng-template>
       <app-calendar></app-calendar>
     </tab>
-    <tab (select)="onSelect($event)">
+    <tab (select)="onSelect($event)" *ngIf="isLeaderboardVisible">
       <ng-template tabHeading>
         <i class="fas fa-chalkboard-teacher"></i><span class="nav-label">Leaderboard</span>
       </ng-template>

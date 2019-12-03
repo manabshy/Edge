@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { AuthService } from '../core/services/auth.service';
 import { StaffMemberService } from '../core/services/staff-member.service';
-import { StaffMember, Impersonation } from '../shared/models/staff-member';
+import { StaffMember, Impersonation, ApiRole } from '../shared/models/staff-member';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { take } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
@@ -20,9 +20,11 @@ export class MainmenuComponent implements OnInit {
   impersonatedStaffMember: Impersonation;
   impersonateToastr: any;
 
-  // get currentStaffMember(): StaffMember {
-  //   return this.staffMemberService.currentStaffMember;
-  // }
+  get isLeaderboardVisible() {
+    if (this.currentStaffMember) {
+      return this.currentStaffMember.dashboardMode !== ApiRole.NotApplicable;
+    }
+  }
 
   constructor(public router: Router,
     public _location: Location,
@@ -58,9 +60,9 @@ export class MainmenuComponent implements OnInit {
 
   showImpersonateBanner(member: Impersonation, existing?: boolean) {
     if (!existing) {
-     if (this.impersonateToastr) {
+      if (this.impersonateToastr) {
         this.toastr.clear(this.impersonateToastr.toastId);
-     }
+      }
     }
     this.impersonateToastr = this.toastr.warning('<div class="row align-items-center"><div class="col">You\'re acting on behalf of <b>' + member.fullName + '</b></div><div class="col-auto"><a class="btn btn-danger text-white ml-2">Stop</a></div>', '', {
       disableTimeOut: true

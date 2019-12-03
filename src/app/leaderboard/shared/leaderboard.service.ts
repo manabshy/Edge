@@ -13,31 +13,32 @@ export class LeaderboardService {
 
   constructor(private http: HttpClient) {}
 
-  getStaffMemberPipeline(role: string): Observable<Leaderboard[] | any> {
-    const url = `${AppConstants.leaderboardBaseUrl}/pipeline?role=${role}`;
+  getStaffMemberPipeline(params?: any): Observable<Leaderboard[] | any> {
+    if (params == null) { params = 20; }
+    const url = `${AppConstants.leaderboardBaseUrl}/pipeline?pageSize=${params}`;
     return this.http.get<LeaderboardResult>(url)
     .pipe(map(response => response.result));
   }
 
-  getStaffMemberExchanges(role: string, period: any): Observable<Leaderboard[] | any> {
-    return this.getLeaderboard(role, period, 'exchanges');
+  getStaffMemberExchanges(period: any): Observable<Leaderboard[] | any> {
+    return this.getLeaderboard(period, 'exchanges');
   }
 
-  getStaffMemberInstructions(role: string, period: any, params?: any): Observable<Leaderboard[] | any> {
-    return this.getLeaderboard(role, period, 'instructions', params);
+  getStaffMemberInstructions(period: any, params?: any): Observable<Leaderboard[] | any> {
+    return this.getLeaderboard(period, 'instructions', params);
   }
 
-  getStaffMemberViewingsCompleted(role: string, period: any, params?: any): Observable<Leaderboard[] | any> {
-    return this.getLeaderboard(role, period, 'viewings', params);
+  getStaffMemberViewingsCompleted(period: any, params?: any): Observable<Leaderboard[] | any> {
+    return this.getLeaderboard(period, 'viewings', params);
   }
 
-  getStaffMemberManagedTenancies(role: string, period: any, params?: any): Observable<Leaderboard[] | any> {
-    return this.getLeaderboard(role, period, 'propertyLettings', params);
+  getStaffMemberManagedTenancies(period: any, params?: any): Observable<Leaderboard[] | any> {
+    return this.getLeaderboard(period, 'propertyLettings', params);
   }
 
-  private getLeaderboard(role: string, period: any, endPoint: string, params?: any) {
-    if (params == null) { params = 10; }
-    const url = `${AppConstants.leaderboardBaseUrl}/${endPoint}?role=${role}&period=${period}&pageSize=${params}`;
+  private getLeaderboard(period: any, endPoint: string, params?: any) {
+    if (params == null) { params = 20; }
+    const url = `${AppConstants.leaderboardBaseUrl}/${endPoint}?period=${period}&pageSize=${params}`;
     return this.http.get<LeaderboardResult>(url).pipe(map(response => response.result));
   }
 }
