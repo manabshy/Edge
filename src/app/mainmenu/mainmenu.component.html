@@ -11,7 +11,7 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNavDropdown" [collapse]="!navbarCollapsed">
     <ul class="navbar-nav flex-column">
-      <li class="nav-item active" (click)="navbarCollapsed = !navbarCollapsed">
+      <li class="nav-item active" (click)="navbarCollapsed = !navbarCollapsed"  *ngIf="false">
         <a class="nav-link" routerLink="/" [queryParams]="{selectedTab: 0}">
           <div><i class="fas fa-th-large fa-fw mr-3"></i>Dashboard</div>
         </a>

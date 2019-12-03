@@ -1,6 +1,6 @@
 <div class="container-fluid home-container pt-sm-3" [ngClass]="containerClass">
   <tabset type="pills" #homeTabs>
-    <tab (select)="onSelect($event)">
+    <tab (select)="onSelect($event)"  *ngIf="false">
       <ng-template tabHeading>
         <i class="fas fa-th-large"></i><span class="nav-label">Dashboard</span>
       </ng-template>
