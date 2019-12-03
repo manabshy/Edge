@@ -1,4 +1,5 @@
 export interface StaffMember {
+  dashboardMode: string;
   jobTitle: string;
   email: string;
   username: string;
@@ -87,6 +88,7 @@ export enum OrderRole {
 }
 
 export enum ApiRole {
+  NotApplicable = 'NotApplicable',
   SalesManager = 'SalesManager',
   LettingsManager = 'LettingsManager',
   SalesNegotiator = 'SalesNegotiator',

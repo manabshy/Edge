@@ -12,7 +12,6 @@ import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { SharedService } from '../core/services/shared.service';
 import { ToastrService } from 'ngx-toastr';
-import { AppUtils } from '../core/shared/utils';
 
 @Component({
   selector: 'app-leaderboard',
@@ -20,9 +19,9 @@ import { AppUtils } from '../core/shared/utils';
   styleUrls: ['./leaderboard.component.scss']
 })
 export class LeaderboardComponent implements OnInit, OnChanges, AfterViewInit {
-  private readonly salesManager = 'salesManager';
-  private readonly lettingsManager = 'lettingsManager';
-  private readonly lettingsNegotiator = 'lettingsNegotiator';
+  // private readonly salesManager = ApiRole.SalesManager;
+  // private readonly lettingsManager = 'LettingsManager';
+  // private readonly lettingsNegotiator = 'LettingsNegotiator';
   @Input() currentStaffMember: StaffMember;
   data: Leaderboard[];
   originalInstructions: Leaderboard[] = [];
@@ -44,8 +43,8 @@ export class LeaderboardComponent implements OnInit, OnChanges, AfterViewInit {
    * Return the relevant columns based on role
    */
   get columns(): string[] {
-    switch (this.currentStaffMember.jobTitle) {
-
+    const role = this.currentStaffMember.dashboardMode;
+    switch (role) {
       case ApiRole.LettingsNegotiator:
       case ApiRole.SalesNegotiator:
         return NegotiatorColumns;
@@ -57,10 +56,7 @@ export class LeaderboardComponent implements OnInit, OnChanges, AfterViewInit {
         return LettingsManagerColumns;
 
       default:
-        return LettingsManagerColumns;
-        // return NegotiatorColumns;
-        // return SalesManagerColumns;
-      // return [];
+        return SalesManagerColumns;
     }
   }
 
@@ -101,7 +97,6 @@ export class LeaderboardComponent implements OnInit, OnChanges, AfterViewInit {
       this.selectedPeriodLabel = this.periods.get(+data.period);
       this.downloadLeaderboard(Period[data.period]);
     });
-    // this.getPipeline();
   }
   ngOnChanges(changes: SimpleChanges) {
 
@@ -117,7 +112,7 @@ export class LeaderboardComponent implements OnInit, OnChanges, AfterViewInit {
   }
   getPipeline() {
     this.leaderboardService
-      .getStaffMemberPipeline(this.salesManager)
+      .getStaffMemberPipeline()
       .subscribe(result => {
         this.pipelineList = result;
         console.log('pipeline results', result);
@@ -129,18 +124,18 @@ export class LeaderboardComponent implements OnInit, OnChanges, AfterViewInit {
     this.leaderboardForm.patchValue({ period: Period.ThisYear });
   }
 
-  getExchanges(role: string, period: string) {
+  getExchanges(period: string) {
     this.leaderboardService
-      .getStaffMemberExchanges(role, period)
+      .getStaffMemberExchanges(period)
       .subscribe(result => {
         this.exchanges = result;
         console.log('exchanges results', result);
       });
   }
 
-  getInstructions(role: string, period: string, pageSize: any) {
+  getInstructions(period: string, pageSize: any) {
     this.leaderboardService
-      .getStaffMemberInstructions(role, period, pageSize)
+      .getStaffMemberInstructions(period, pageSize)
       .subscribe(result => {
         this.originalInstructions = result;
         if (result !== null) {
@@ -150,7 +145,7 @@ export class LeaderboardComponent implements OnInit, OnChanges, AfterViewInit {
   }
   getSelectedTab(value) {
     this.active = value;
-    console.log('period value', this.periodControl.value)
+    console.log('period value', this.periodControl.value);
     this.downloadLeaderboard(Period[this.periodControl.value]);
   }
 
@@ -163,7 +158,7 @@ export class LeaderboardComponent implements OnInit, OnChanges, AfterViewInit {
     let leaderboard$: Observable<Leaderboard[]>;
     switch (this.active) {
       case LeaderboardColumns.Exchanges:
-        leaderboard$ = this.leaderboardService.getStaffMemberExchanges(this.salesManager, period)
+        leaderboard$ = this.leaderboardService.getStaffMemberExchanges(period)
           .pipe(
             map(data => {
               return data.map(person => {
@@ -177,7 +172,7 @@ export class LeaderboardComponent implements OnInit, OnChanges, AfterViewInit {
           );
         break;
       case LeaderboardColumns.Pipeline:
-        leaderboard$ = this.leaderboardService.getStaffMemberPipeline(this.salesManager)
+        leaderboard$ = this.leaderboardService.getStaffMemberPipeline()
           .pipe(
             map(data => {
               return data.map(person => {
@@ -191,7 +186,7 @@ export class LeaderboardComponent implements OnInit, OnChanges, AfterViewInit {
           );
         break;
       case LeaderboardColumns.Instructions:
-        leaderboard$ = this.leaderboardService.getStaffMemberInstructions(this.salesManager, period)
+        leaderboard$ = this.leaderboardService.getStaffMemberInstructions(period)
           .pipe(
             map(data => {
               return data.map(person => {
@@ -204,7 +199,7 @@ export class LeaderboardComponent implements OnInit, OnChanges, AfterViewInit {
           );
         break;
       case LeaderboardColumns.ViewingsCompleted:
-        leaderboard$ = this.leaderboardService.getStaffMemberViewingsCompleted(this.lettingsNegotiator, period)
+        leaderboard$ = this.leaderboardService.getStaffMemberViewingsCompleted(period)
           .pipe(
             map(data => {
               return data.map(person => {
@@ -217,7 +212,7 @@ export class LeaderboardComponent implements OnInit, OnChanges, AfterViewInit {
           );
         break;
       case LeaderboardColumns.Managed:
-        leaderboard$ = this.leaderboardService.getStaffMemberManagedTenancies(this.salesManager, period)
+        leaderboard$ = this.leaderboardService.getStaffMemberManagedTenancies(period)
           .pipe(
             map(data => {
               return data.map(person => {
@@ -233,7 +228,7 @@ export class LeaderboardComponent implements OnInit, OnChanges, AfterViewInit {
     if (!leaderboard$) {
       this.toastrService.warning('Unable to download leaderboard');
     }
-    leaderboard$.subscribe(result => { this.data = result; console.log('downloaded leaderboard', result) });
+    leaderboard$.subscribe(result => { this.data = result; console.log('downloaded leaderboard', result); });
     // leaderboard$.pipe(tap(result => this.data = result), tap(res => console.log('downloaded leaderboard', res ))).subscribe();
   }
 

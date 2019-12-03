@@ -11,7 +11,7 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNavDropdown" [collapse]="!navbarCollapsed">
     <ul class="navbar-nav flex-column">
-      <li class="nav-item active" (click)="navbarCollapsed = !navbarCollapsed">
+      <li class="nav-item active" (click)="navbarCollapsed = !navbarCollapsed"  *ngIf="false">
         <a class="nav-link" routerLink="/" [queryParams]="{selectedTab: 0}">
           <div><i class="fas fa-th-large fa-fw mr-3"></i>Dashboard</div>
         </a>
@@ -21,7 +21,7 @@
           <div><i class="fas fa-calendar-alt fa-fw mr-3"></i>Calendar</div>
         </a>
       </li>
-      <li class="nav-item active" (click)="navbarCollapsed = !navbarCollapsed">
+      <li class="nav-item active" *ngIf="isLeaderboardVisible" (click)="navbarCollapsed = !navbarCollapsed">
         <a class="nav-link" routerLink="/" [queryParams]="{selectedTab: 2}">
           <div><i class="fas fa-chalkboard-teacher fa-fw mr-3"></i>Leaderboard</div>
         </a>
