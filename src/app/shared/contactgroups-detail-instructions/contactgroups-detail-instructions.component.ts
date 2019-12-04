@@ -12,7 +12,6 @@ import { tap } from 'rxjs/operators';
   styleUrls: ['./contactgroups-detail-instructions.component.scss']
 })
 export class ContactgroupsDetailInstructionsComponent implements OnChanges {
-  navPlaceholder: string;
   instructions$ = new Observable<PersonInstruction[]>();
   isShortLet: boolean;
   @Input() personId: number;
@@ -20,7 +19,6 @@ export class ContactgroupsDetailInstructionsComponent implements OnChanges {
   constructor(private route: ActivatedRoute, private peopleService: PeopleService) { }
 
   ngOnChanges() {
-    this.navPlaceholder = AppUtils.navPlaceholder;
     if (this.personId) {
       this.instructions$ = this.peopleService.getInstructions(this.personId);
       tap((data: PersonInstruction[]) => {

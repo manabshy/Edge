@@ -119,12 +119,13 @@
               <span class="badge badge-secondary float-right pull-right"></span>
             </button>
             <ng-container [ngSwitch]="item?.value">
+              <app-contactgroups-detail-instructions *ngSwitchCase="'instructions'" [personId]="searchedPersonDetails?.personId"></app-contactgroups-detail-instructions>
+              <app-contactgroups-detail-offers *ngSwitchCase="'offers'" [personId]="searchedPersonDetails?.personId"></app-contactgroups-detail-offers>
               <app-contactgroups-detail-home-helper *ngSwitchCase="'homeHelpers'" [personId]="searchedPersonDetails?.personId"></app-contactgroups-detail-home-helper>
             </ng-container>
           </accordion-group>
         </accordion>
       </div>
-      <app-contactgroups-detail-instructions *ngIf="searchedPersonDetails?.personId" [personId]="searchedPersonDetails?.personId"></app-contactgroups-detail-instructions>
       <h5>Notes</h5>
       <app-notes [personNotes]="personNotes" [noteData]="dataNote" [pageNumber]="page"
         [bottomReached]="bottomReached"></app-notes>
