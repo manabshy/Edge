@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, HostBinding, HostListener, OnChanges } from '@angular/core';
 import { Router } from '@angular/router';
-import { SharedService } from '../services/shared.service';
+import { SharedService } from '../../core/services/shared.service';
 
 @Component({
   selector: 'app-subnav-item',

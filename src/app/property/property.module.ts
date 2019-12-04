@@ -34,7 +34,7 @@ import { SharedModule } from '../shared/shared.module';
   imports: [
     CommonModule,
     SharedModule,
-    CoreModule,
+    // CoreModule,
     PropertyRoutingModule,
     InfiniteScrollModule
   ],

@@ -4,13 +4,13 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { sample, debounceTime } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { StaffMemberService } from '../services/staff-member.service';
-import { StaffMember } from '../../shared/models/staff-member';
-import { SmsInfo } from '../../shared/models/person';
-import { SmsService } from '../services/sms.service';
-import { WedgeError, SharedService } from '../services/shared.service';
-import { FormErrors, ValidationMessages } from '../shared/app-constants';
-import { WedgeValidators } from '../../shared/wedge-validators';
+import { StaffMemberService } from '../../core/services/staff-member.service';
+import { StaffMember } from '../models/staff-member';
+import { SmsInfo } from '../models/person';
+import { SmsService } from '../../core/services/sms.service';
+import { WedgeError, SharedService } from '../../core/services/shared.service';
+import { FormErrors, ValidationMessages } from '../../core/shared/app-constants';
+import { WedgeValidators } from '../wedge-validators';
 
 @Component({
   selector: 'app-sms-modal',

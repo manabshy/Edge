@@ -1,29 +1,18 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ContactgroupsDetailEditComponent } from './contactgroups-detail-edit.component';
-import { BasicPerson, Person } from 'src/app/shared/models/person';
-import { NO_ERRORS_SCHEMA, DebugElement, Renderer2 } from '@angular/core';
+import { Person } from 'src/app/shared/models/person';
+import { NO_ERRORS_SCHEMA, DebugElement } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { Location } from '@angular/common';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { ContactGroupsService } from '../shared/contact-groups.service';
-import { MockBasicPerson, MockPerson } from '../shared/test-helper/person-data.json';
+import { MockPerson } from '../shared/test-helper/person-data.json';
 import { ToastrService } from 'ngx-toastr';
-import { BrowserModule, By } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule, FormGroup, AbstractControl, FormArray } from '@angular/forms';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { AppRoutingModule } from 'src/app/app-routing.module';
-import { CoreModule } from 'src/app/core/core.module';
-import { ContactgroupsRoutingModule } from '../contactgroups-routing.module';
-import { ContactGroupsComponent } from '../contactgroups.component';
-import { timer, of, EMPTY, Observable, from } from 'rxjs';
-import { mapTo, first } from 'rxjs/operators';
-import { MockCountries, MockDropdownListInfo } from '../shared/test-helper/dropdown-list-data.json';
-import { Mock } from 'protractor/built/driverProviders';
-import { ValidationMessages } from 'src/app/core/shared/app-constants';
+import { By } from '@angular/platform-browser';
+import { FormsModule, ReactiveFormsModule, FormGroup, AbstractControl } from '@angular/forms';
+import { of } from 'rxjs';
+import { MockDropdownListInfo } from '../shared/test-helper/dropdown-list-data.json';
 import { RouterTestingModule } from '@angular/router/testing';
-import { Property } from 'src/app/property/shared/property';
-import { MockProperty } from 'src/app/property/shared/test-helper';
 
 describe('ContactgroupsDetailEditComponent', () => {
   let component: ContactgroupsDetailEditComponent;
@@ -31,8 +20,7 @@ describe('ContactgroupsDetailEditComponent', () => {
   let debugEl: DebugElement;
   let element: HTMLElement;
   let personForm: FormGroup,
-      firstNameControl: AbstractControl,
-      saveButton: DebugElement;
+      firstNameControl: AbstractControl;
 
   let personSpy: any;
   const person = <Person> <unknown>MockPerson;
@@ -73,9 +61,6 @@ describe('ContactgroupsDetailEditComponent', () => {
     component = fixture.componentInstance;
     element = fixture.nativeElement;
     debugEl = fixture.debugElement;
-    const clickButton = () => {
-      fixture.debugElement.query(By.css('.btn-secondary')).triggerEventHandler('click', null);
-    };
     // personForm = component.personForm;
     // firstName = fixture.debugElement.query(By.css('#name')).nativeElement;
     fixture.detectChanges();

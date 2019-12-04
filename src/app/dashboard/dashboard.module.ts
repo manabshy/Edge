@@ -22,9 +22,9 @@ import { SharedModule } from '../shared/shared.module';
     ExchangesAndPipelineComponent],
   imports: [
     CommonModule,
-    DashboardRoutingModule,
     SharedModule,
-    CoreModule
+    DashboardRoutingModule,
+    // CoreModule
   ],
   exports: [
     MyDashboardComponent,

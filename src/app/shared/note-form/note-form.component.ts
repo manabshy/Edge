@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, Renderer2, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ContactNote, ContactGroup } from 'src/app/contactgroups/shared/contact-group';
-import { Person } from '../../shared/models/person';
+import { Person } from '../models/person';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { ToastrService } from 'ngx-toastr';
 

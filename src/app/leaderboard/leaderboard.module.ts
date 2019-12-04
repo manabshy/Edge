@@ -8,6 +8,7 @@ import { InstructionsComponent } from './instructions/instructions.component';
 import { ExchangesComponent } from './exchanges/exchanges.component';
 import { CoreModule } from '../core/core.module';
 import { LeaderboardTabsComponent } from './leaderboard-tabs/leaderboard-tabs.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [PipelineComponent, InstructionsComponent, ExchangesComponent, LeaderboardTabsComponent],
@@ -15,7 +16,8 @@ import { LeaderboardTabsComponent } from './leaderboard-tabs/leaderboard-tabs.co
   imports: [
     CommonModule,
     LeaderboardRoutingModule,
-    CoreModule,
+    SharedModule,
+    // CoreModule,
     InfiniteScrollModule
   ]
 })

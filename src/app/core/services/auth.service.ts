@@ -3,7 +3,7 @@ import { AdalService } from 'adal-angular4';
 import { AppConstants } from '../shared/app-constants';
 import { Subject } from 'rxjs';
 import { BsModalService } from 'ngx-bootstrap/modal/';
-import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
+import { ConfirmModalComponent } from '../../shared/confirm-modal/confirm-modal.component';
 import { Router } from '@angular/router';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { environment } from 'src/environments/environment';

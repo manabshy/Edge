@@ -6,7 +6,6 @@ import { ShortenNamePipe } from '../shared/shorten-name.pipe';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppInterceptor } from './app.interceptor';
 import { CacheInterceptor } from './cache.interceptor';
-import { BasicSearchComponent } from './basic-search/basic-search.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule, RouteReuseStrategy } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -31,20 +30,20 @@ import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
 
 //components
-import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
-import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
-import { PropertyFinderComponent } from './property-finder/property-finder.component';
+import { BreadcrumbComponent } from '../shared/breadcrumb/breadcrumb.component';
+import { ConfirmModalComponent } from '../shared/confirm-modal/confirm-modal.component';
+import { PropertyFinderComponent } from '../shared/property-finder/property-finder.component';
 import { FormatAddressPipe } from '../shared/format-address.pipe';
-import { ScoreBadgeComponent } from './score-badge/score-badge.component';
+import { ScoreBadgeComponent } from '../shared/score-badge/score-badge.component';
 import { CanDeactivateGuard } from './shared/can-deactivate.guard';
-import { ErrorModalComponent } from './error-modal/error-modal.component';
-import { NoteModalComponent } from './note-modal/note-modal.component';
-import { AddressComponent } from './address/address.component';
-import { SignerComponent } from './signer/signer.component';
-import { NotesComponent } from './notes/notes.component';
-import { TelephoneComponent } from './telephone/telephone.component';
-import { TelephoneModalComponent } from './telephone-modal/telephone-modal.component';
-import { SubnavComponent } from './subnav/subnav.component';
+import { ErrorModalComponent } from '../shared/error-modal/error-modal.component';
+import { NoteModalComponent } from '../shared/note-modal/note-modal.component';
+import { AddressComponent } from '../shared/address/address.component';
+import { SignerComponent } from '../shared/signer/signer.component';
+import { NotesComponent } from '../shared/notes/notes.component';
+import { TelephoneComponent } from '../shared/telephone/telephone.component';
+import { TelephoneModalComponent } from '../shared/telephone-modal/telephone-modal.component';
+import { SubnavComponent } from '../shared/subnav/subnav.component';
 
 //vendor
 import { OrderModule } from 'ngx-order-pipe';
@@ -60,130 +59,129 @@ import {AngularStickyThingsModule} from '@w11k/angular-sticky-things';
 import { AutocompleteOffDirective } from '../shared/autocomplete-off.directive';
 import { HighlightPipe } from '../shared/highlight.pipe';
 import { AppConstants } from './shared/app-constants';
-import { SubnavItemComponent } from './subnav-item/subnav-item.component';
-import { SmsModalComponent } from './sms-modal/sms-modal.component';
+import { SubnavItemComponent } from '../shared/subnav-item/subnav-item.component';
+import { SmsModalComponent } from '../shared/sms-modal/sms-modal.component';
 import { CustomReuseStrategy } from './share/custom-reuse-strategy';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { BracketsNewLinePipe } from '../shared/brackets-new-line.pipe';
-import { PersonDetailsComponent } from './shared/person-details/person-details.component';
-import { CompanyInfoComponent } from './shared/company-info/company-info.component';
-import { NoteFormComponent } from './note-form/note-form.component';
+import { PersonDetailsComponent } from '../shared/person-details/person-details.component';
+import { CompanyInfoComponent } from '../shared/company-info/company-info.component';
+import { NoteFormComponent } from '../shared/note-form/note-form.component';
 
 @NgModule({
   declarations: [
-    RoundingPipe,
-    TruncatingPipe,
-    ShortenNamePipe,
-    BreadcrumbComponent,
-    BasicSearchComponent,
-    ConfirmModalComponent,
-    PropertyFinderComponent,
-    FormatAddressPipe,
-    ScoreBadgeComponent,
-    ErrorModalComponent,
-    AddressComponent,
-    SignerComponent,
-    AutocompleteOffDirective,
-    HighlightPipe,
-    NoteModalComponent,
-    NotesComponent, TelephoneComponent,
-    TelephoneModalComponent,
-    SubnavItemComponent,
-    SubnavComponent,
-    SmsModalComponent,
-    BracketsNewLinePipe,
-    PersonDetailsComponent,
-    CompanyInfoComponent,
-    NoteFormComponent],
+    // RoundingPipe,
+    // TruncatingPipe,
+    // ShortenNamePipe,
+    // BreadcrumbComponent,
+    // ConfirmModalComponent,
+    // PropertyFinderComponent,
+    // FormatAddressPipe,
+    // ScoreBadgeComponent,
+    // ErrorModalComponent,
+    // AddressComponent,
+    // SignerComponent,
+    // AutocompleteOffDirective,
+    // HighlightPipe,
+    // NoteModalComponent,
+    // NotesComponent, TelephoneComponent,
+    // TelephoneModalComponent,
+    // SubnavItemComponent,
+    // SubnavComponent,
+    // SmsModalComponent,
+    // BracketsNewLinePipe,
+    // PersonDetailsComponent,
+    // CompanyInfoComponent,
+    // NoteFormComponent
+  ],
   exports: [
-    RoundingPipe,
-    TruncatingPipe,
-    ShortenNamePipe,
-    FormatAddressPipe,
-    HighlightPipe,
-    BracketsNewLinePipe,
-    AutocompleteOffDirective,
-    BreadcrumbComponent,
-    BasicSearchComponent,
-    NoteModalComponent,
-    NotesComponent,
-    SmsModalComponent,
-    ConfirmModalComponent,
-    ErrorModalComponent,
-    PropertyFinderComponent,
-    ScoreBadgeComponent,
-    AddressComponent,
-    SignerComponent,
-    TelephoneComponent,
-    TelephoneModalComponent,
-    SubnavComponent,
-    SubnavItemComponent,
-    PersonDetailsComponent,
-    CompanyInfoComponent,
-    NoteFormComponent,
-    RouterModule,
+    // RoundingPipe,
+    // TruncatingPipe,
+    // ShortenNamePipe,
+    // FormatAddressPipe,
+    // HighlightPipe,
+    // BracketsNewLinePipe,
+    // AutocompleteOffDirective,
+    // BreadcrumbComponent,
+    // NoteModalComponent,
+    // NotesComponent,
+    // SmsModalComponent,
+    // ConfirmModalComponent,
+    // ErrorModalComponent,
+    // PropertyFinderComponent,
+    // ScoreBadgeComponent,
+    // AddressComponent,
+    // SignerComponent,
+    // TelephoneComponent,
+    // TelephoneModalComponent,
+    // SubnavComponent,
+    // SubnavItemComponent,
+    // PersonDetailsComponent,
+    // CompanyInfoComponent,
+    // NoteFormComponent,
+    // RouterModule,
     // BrowserAnimationsModule,
-    CollapseModule,
-    TabsModule,
-    TypeaheadModule,
-    BsDropdownModule,
-    BsDatepickerModule,
-    ModalModule,
-    PopoverModule,
-    NgPipesModule,
-    TooltipModule,
-    AccordionModule,
-    ButtonsModule,
-    ReactiveFormsModule,
-    FormsModule,
-    OrderModule,
-    ToastrModule,
-    ToastContainerModule,
-    AgmCoreModule,
-    CarouselModule,
-    NgbModule,
-    LoadingBarHttpClientModule,
-    AngularStickyThingsModule
+    // CollapseModule,
+    // TabsModule,
+    // TypeaheadModule,
+    // BsDropdownModule,
+    // BsDatepickerModule,
+    // ModalModule,
+    // PopoverModule,
+    // NgPipesModule,
+    // TooltipModule,
+    // AccordionModule,
+    // ButtonsModule,
+    // ReactiveFormsModule,
+    // FormsModule,
+    // OrderModule,
+    // ToastrModule,
+    // ToastContainerModule,
+    // AgmCoreModule,
+    // CarouselModule,
+    // NgbModule,
+    // LoadingBarHttpClientModule,
+    // AngularStickyThingsModule
   ],
   imports: [
     CommonModule,
-    ReactiveFormsModule,
-    FormsModule,
-    OrderModule,
-    RouterModule,
+    // ReactiveFormsModule,
+    // FormsModule,
+    // OrderModule,
+    // RouterModule,
     // BrowserAnimationsModule,
-    InfiniteScrollModule,
-    NgbModule,
-    LoadingBarHttpClientModule,
-    AngularStickyThingsModule,
-    BsDropdownModule.forRoot(),
-    CollapseModule.forRoot(),
-    TabsModule.forRoot(),
-    BsDatepickerModule.forRoot(),
-    TypeaheadModule.forRoot(),
-    ModalModule.forRoot(),
-    PopoverModule.forRoot(),
-    TooltipModule.forRoot(),
-    AccordionModule.forRoot(),
-    ButtonsModule.forRoot(),
-    ToastrModule.forRoot({ positionClass: 'inline', enableHtml: true }),
-    ToastContainerModule,
-    CarouselModule.forRoot(),
-    CalendarModule.forRoot({
-      provide: DateAdapter,
-      useFactory: adapterFactory
-    }),
-    AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyC1Hv_vNkUxvvRibyjPbfgNhrTNi30jNtQ'
-    })
+    // InfiniteScrollModule,
+    // NgbModule,
+    // LoadingBarHttpClientModule,
+    // AngularStickyThingsModule,
+    // BsDropdownModule.forRoot(),
+    // CollapseModule.forRoot(),
+    // TabsModule.forRoot(),
+    // BsDatepickerModule.forRoot(),
+    // TypeaheadModule.forRoot(),
+    // ModalModule.forRoot(),
+    // PopoverModule.forRoot(),
+    // TooltipModule.forRoot(),
+    // AccordionModule.forRoot(),
+    // ButtonsModule.forRoot(),
+    // ToastrModule.forRoot({ positionClass: 'inline', enableHtml: true }),
+    // ToastContainerModule,
+    // CarouselModule.forRoot(),
+    // CalendarModule.forRoot({
+    //   provide: DateAdapter,
+    //   useFactory: adapterFactory
+    // }),
+    // AgmCoreModule.forRoot({
+    //   apiKey: 'AIzaSyC1Hv_vNkUxvvRibyjPbfgNhrTNi30jNtQ'
+    // })
   ],
-  entryComponents: [
-    ConfirmModalComponent,
-    ErrorModalComponent,
-    NoteModalComponent,
-    TelephoneModalComponent,
-    SmsModalComponent
-  ],
+  // entryComponents: [
+  //   ConfirmModalComponent,
+  //   ErrorModalComponent,
+  //   NoteModalComponent,
+  //   TelephoneModalComponent,
+  //   SmsModalComponent
+  // ],
   providers: [
     CanDeactivateGuard,
     FormatAddressPipe,

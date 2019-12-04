@@ -21,7 +21,7 @@ import { LeadFinderComponent } from './lead-finder/lead-finder.component';
   ],
   imports: [
     CommonModule,
-    CoreModule,
+    // CoreModule,
     LeadsRoutingModule
   ],
   entryComponents: [

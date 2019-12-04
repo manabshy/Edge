@@ -2,7 +2,7 @@ import { Component, OnInit, Input, OnChanges, HostListener } from '@angular/core
 import { ContactNote, BasicContactGroup } from 'src/app/contactgroups/shared/contact-group';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
-import { Person } from '../../shared/models/person';
+import { Person } from '../models/person';
 import { PropertyNote } from 'src/app/property/shared/property';
 import { PropertyService } from 'src/app/property/shared/property.service';
 

@@ -46,7 +46,7 @@ import { SharedModule } from '../shared/shared.module';
   imports: [
     CommonModule,
     SharedModule,
-    CoreModule,
+    // CoreModule,
     FormsModule,
     InfiniteScrollModule,
     ContactgroupsRoutingModule

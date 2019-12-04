@@ -16,10 +16,9 @@ import { SharedModule } from '../shared/shared.module';
   imports: [
     CommonModule,
     SharedModule,
-    CoreModule,
     DiaryRoutingModule,
     ReactiveFormsModule,
-    CoreModule,
+    // CoreModule,
     CalendarModule
   ],
   exports:[CalendarComponent]

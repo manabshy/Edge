@@ -14,7 +14,7 @@ import { InfoDetail } from 'src/app/core/services/info.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { Subject } from 'rxjs';
-import { ConfirmModalComponent } from 'src/app/core/confirm-modal/confirm-modal.component';
+import { ConfirmModalComponent } from 'src/app/shared/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-property-detail-edit',
