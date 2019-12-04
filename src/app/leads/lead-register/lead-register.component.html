@@ -42,13 +42,13 @@
           <div class="col-sm form-group">
             <label class="small" for="dateFrom">Date From</label>
             <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
-              [bsConfig]="{showWeekNumbers:false, customTodayClass: 'font-weight-bold'}" bsDatepicker
+              [bsConfig]="{showWeekNumbers:false, customTodayClass: 'font-weight-bold'}" [(bsValue)]="dateFrom" value="{{ dateFrom | date:'dd/MM/yyyy'}}" bsDatepicker
               formControlName="dateFrom">
           </div>
           <div class="col-sm form-group">
             <label class="small" for="dateTo">Date To</label>
             <input type="text" id="dateTo" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
-              [bsConfig]="{showWeekNumbers:false, customTodayClass: 'font-weight-bold'}" bsDatepicker formControlName="dateTo">
+              [bsConfig]="{showWeekNumbers:false, customTodayClass: 'font-weight-bold'}" [(bsValue)]="dateFrom" value="{{ dateFrom | date:'dd/MM/yyyy'}}" bsDatepicker formControlName="dateTo">
           </div>
           <div class="col-sm form-group">
             <label class="small" for="office">Office</label>

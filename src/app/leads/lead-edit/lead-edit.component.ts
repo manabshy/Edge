@@ -378,7 +378,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
       this.currentLeadIndex++;
       this.leadId = this.leadIds[this.currentLeadIndex];
       console.log('move to next lead IDs', this.leadIds);
-      console.log('move to next lead ID', this.leadId);
+      //console.log('move to next lead ID', this.leadId);
       this.onLoading = true;
       this.getLeadInformation();
       this.getPersonNotes();
@@ -386,7 +386,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
       this.leadsListCompleted = true;
       console.log('list completed');
     }
-    console.log('list completed?', this.leadsListCompleted);
+    //console.log('list completed?', this.leadsListCompleted);
 
 
   }
