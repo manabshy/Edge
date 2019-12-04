@@ -79,26 +79,51 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="col-xl-4 aside sticky-top-xl">
-      <div *ngIf="summaryTotals">
-        <h5>Quick links</h5>
-        <app-subnav>
-          <app-subnav-item *ngFor="let item of subNav"
-            [navLink]="item?.link" [params]="{docTitle: item?.label+' | '+(propertyDetails?.address | formatAddress)}">
-            {{item?.label}}
-            <ng-container *ngIf="isObject(summaryTotals[item?.value]); else simpleValue">
-              <span class="badge badge-pill badge-success mr-1"> {{summaryTotals[item?.value]?.active}} </span>
-              <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value]?.total}}</span>
+      <div #spacer></div>
+      <div class="mb-3" stickyThing [spacer]="spacer" marginTop="66">
+        <h5>More Info</h5>
+        <accordion class="sub-info mb-2" [closeOthers]="true">
+          <accordion-group *ngFor="let item of subNav">
+            <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
+              <div class="pull-left float-left">
+                {{item?.label}}
+                <ng-container *ngIf="summaryTotals; else loadingInfo">
+                  <ng-container *ngIf="isObject(summaryTotals[item?.value]); else simpleValue">
+                    <span class="badge badge-pill badge-success mr-1"> {{summaryTotals[item?.value]?.active}} </span>
+                    <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value]?.total}}</span>
+                  </ng-container>
+                  <ng-template #simpleValue>
+                    <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value] || '0'}}</span>
+                  </ng-template>
+                </ng-container>
+                <ng-template #loadingInfo>
+                  <span class="badge badge-pill badge-primary"><i class="fas fa-spinner fa-pulse d-inline-block"></i></span>
+                </ng-template>
+              </div>
+              <span class="badge badge-secondary float-right pull-right"></span>
+            </button>
+            <ng-container [ngSwitch]="item?.value">
+              <app-property-detail-instructions *ngSwitchCase="'instructions'" [propertyId]="propertyDetails?.propertyId"></app-property-detail-instructions>
+              <app-property-detail-offers *ngSwitchCase="'offers'" [propertyId]="propertyDetails?.propertyId"></app-property-detail-offers>
             </ng-container>
-            <ng-template #simpleValue>
-              <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value] || '0'}}</span>
-            </ng-template>
+          </accordion-group>
+        </accordion>
+        <app-subnav>
+          <app-subnav-item [navLink]="'property-photos'" [params]="{docTitle:'Property Photos | '+(propertyDetails?.address | formatAddress)}">
+            Property Photos <span class="badge badge-pill badge-primary"> {{summaryTotals?.propertyPhotos || '0'}}</span>
           </app-subnav-item>
           <app-subnav-item [navLink]="'map'" [params]="{docTitle:'Map | '+(propertyDetails?.address | formatAddress)}">
             Map
           </app-subnav-item>
         </app-subnav>
+      </div>
+      <h5>Notes</h5>
+      <app-notes [propertyNotes]="propertyNotes" [pageNumber]="page" [bottomReached]="bottomReached"></app-notes>
+    </div>
+    <div class="col-xl-4 aside sticky-top-xl">
+      <div *ngIf="summaryTotals">
+        <h5>Quick links</h5>
+        
       </div>
     </div>
   </div>

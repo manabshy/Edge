@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PropertyService } from '../shared/property.service';
 import { Observable } from 'rxjs';
@@ -11,18 +11,14 @@ import { AppUtils } from 'src/app/core/shared/utils';
   templateUrl: './property-detail-instructions.component.html',
   styleUrls: ['./property-detail-instructions.component.scss']
 })
-export class PropertyDetailInstructionsComponent implements OnInit {
-  propertyId: number;
+export class PropertyDetailInstructionsComponent implements OnChanges {
+  @Input() propertyId: number;
   instructions$ = new Observable<InstructionInfo[]>();
   isShortLet = false;
-  navPlaceholder: string;
 
   constructor(private route: ActivatedRoute, private propertyService: PropertyService) { }
 
-  ngOnInit() {
-    this.navPlaceholder = AppUtils.navPlaceholder;
-
-    this.propertyId = +this.route.snapshot.paramMap.get('id') || 0;
+  ngOnChanges() {
     if (this.propertyId) {
       this.instructions$ = this.propertyService.getPropertyInstructions(this.propertyId)
         .pipe(

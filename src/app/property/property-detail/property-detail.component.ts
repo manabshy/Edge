@@ -1,19 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { PropertyService } from '../shared/property.service';
 import { ActivatedRoute } from '@angular/router';
-import { Property, PropertyTypes, PropertyStyles, PropertyDetailsSubNavItems, PropertySummaryFigures } from '../shared/property';
+import { Property, PropertyTypes, PropertyStyles, PropertyDetailsSubNavItems, PropertySummaryFigures, PropertyNote } from '../shared/property';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { Observable } from 'rxjs';
 import { FormatAddressPipe } from 'src/app/shared/format-address.pipe';
 import { InfoService } from 'src/app/core/services/info.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
+import { takeUntil } from 'rxjs/operators';
+import * as _ from 'lodash';
+import { BaseComponent } from 'src/app/shared/models/base-component';
 
 @Component({
   selector: 'app-property-detail',
   templateUrl: './property-detail.component.html',
   styleUrls: ['./property-detail.component.scss']
 })
-export class PropertyDetailComponent implements OnInit {
+export class PropertyDetailComponent extends BaseComponent implements OnInit {
   propertyId: number;
   propertyDetails: Property;
   summaryTotals: PropertySummaryFigures;
@@ -28,6 +31,11 @@ export class PropertyDetailComponent implements OnInit {
   subArea: any;
   subNav = PropertyDetailsSubNavItems;
   propertyDetails$ = new Observable<any>();
+  propertyNotes: PropertyNote[] = [];
+  page = 1;
+  pageSize = 10;
+  bottomReached = false;
+  noteTypes: any;
 
   // get region() {
   //   if (this.propertyDetails && this.regions) {
@@ -56,7 +64,7 @@ export class PropertyDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private infoService: InfoService,
     private storage: StorageMap,
-    private sharedService: SharedService) { }
+    private sharedService: SharedService) { super(); }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -84,6 +92,62 @@ export class PropertyDetailComponent implements OnInit {
 
     if (this.propertyId) {
       this.getPropertyDetails(this.propertyId);
+    }
+
+    if (this.propertyId) {
+      this.getPropertyNotes();
+    }
+
+    this.propertyService.propertyNotePageNumberChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(newPage => {
+      this.page = newPage;
+      this.getNexPropertyNotesPage(this.page);
+    });
+
+    this.propertyService.propertyNoteChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
+      if (data) {
+        this.propertyNotes = [];
+        this.page = 1;
+        this.bottomReached = false;
+        this.getPropertyNotes();
+      }
+    });
+  }
+
+  private getPropertyNotes() {
+    this.getNexPropertyNotesPage(this.page);
+  }
+
+  private getNexPropertyNotesPage(page) {
+    this.propertyService.getPropertyNotes(this.propertyId, this.pageSize, page)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(data => {
+        if (data && data.length) {
+          this.propertyNotes = _.concat(this.propertyNotes, data);
+          this.setupNoteType();
+        }
+        if (data && !data.length) {
+          this.bottomReached = true;
+        }
+      });
+  }
+
+  setupNoteType() {
+    if(this.listInfo) {
+      this.noteTypes = this.listInfo.propertyNoteTypes;
+    }
+    const keys = Object.keys(this.noteTypes);
+    console.log(this.noteTypes);
+    if (this.propertyNotes) {
+      this.propertyNotes.forEach((note: PropertyNote) => {
+        if (this.noteTypes) {
+          keys.forEach(key => {
+            if (+key === +note.type) {
+              note.typeDescription = _.startCase(this.noteTypes[+key]);
+              // note.typeDescription = this.noteTypes[+key];
+            }
+          });
+        }
+      });
     }
   }
 
