@@ -19,7 +19,7 @@ import { ContactgroupsDetailTenanciesComponent } from './contactgroups-detail-te
 import { ContactgroupsDetaillettingsManagementsComponent } from './contactgroups-detail-lettings-managements/contactgroups-detail-lettings-managements.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { ContactGroupsComponent } from './contactgroups.component';
-import { ContactgroupsDetailHomeHelperComponent } from './contactgroups-detail-home-helper/contactgroups-detail-home-helper.component';
+import { ContactgroupsDetailHomeHelperComponent } from '../shared/contactgroups-detail-home-helper/contactgroups-detail-home-helper.component';
 import { PersonDuplicateCheckerComponent } from './shared/person-duplicate-checker/person-duplicate-checker.component';
 import { ContactgroupsCompanyFinderComponent } from './shared/contactgroups-company-finder/contactgroups-company-finder.component';
 import { SharedModule } from '../shared/shared.module';
@@ -40,7 +40,7 @@ import { SharedModule } from '../shared/shared.module';
     ContactgroupsDetailOffersComponent,
     ContactgroupsDetailTenanciesComponent,
     ContactgroupsDetaillettingsManagementsComponent,
-    ContactgroupsDetailHomeHelperComponent,
+    // ContactgroupsDetailHomeHelperComponent,
     PersonDuplicateCheckerComponent,
     ContactgroupsCompanyFinderComponent],
   imports: [

@@ -13,7 +13,7 @@ import { ContactgroupsDetailInstructionsComponent } from './contactgroups-detail
 import { ContactgroupsDetailOffersComponent } from './contactgroups-detail-offers/contactgroups-detail-offers.component';
 import { ContactgroupsDetailTenanciesComponent } from './contactgroups-detail-tenancies/contactgroups-detail-tenancies.component';
 import { ContactgroupsDetaillettingsManagementsComponent } from './contactgroups-detail-lettings-managements/contactgroups-detail-lettings-managements.component';
-import { ContactgroupsDetailHomeHelperComponent } from './contactgroups-detail-home-helper/contactgroups-detail-home-helper.component';
+import { ContactgroupsDetailHomeHelperComponent } from '../shared/contactgroups-detail-home-helper/contactgroups-detail-home-helper.component';
 import { AuthGuardService } from '../core/services/auth-guard.service';
 
 const routes: Routes = [
@@ -33,7 +33,7 @@ const routes: Routes = [
       { path: 'tenancies', component: ContactgroupsDetailTenanciesComponent },
       { path: 'lettings-managements', component: ContactgroupsDetaillettingsManagementsComponent },
       { path: 'home-helpers', component: ContactgroupsDetailHomeHelperComponent },
-    
+
     ]
   },
 ];

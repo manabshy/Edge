@@ -26,6 +26,7 @@ import { CompanyInfoComponent } from './company-info/company-info.component';
 import { NoteFormComponent } from './note-form/note-form.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { ContactgroupsDetailHomeHelperComponent } from '../shared/contactgroups-detail-home-helper/contactgroups-detail-home-helper.component';
 
 // ngx bootstrap imports
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
@@ -79,7 +80,9 @@ import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
     BracketsNewLinePipe,
     PersonDetailsComponent,
     CompanyInfoComponent,
-    NoteFormComponent
+    NoteFormComponent,
+    ContactgroupsDetailHomeHelperComponent
+
   ],
   imports: [
     CommonModule,
@@ -136,6 +139,7 @@ import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
     PersonDetailsComponent,
     CompanyInfoComponent,
     NoteFormComponent,
+    ContactgroupsDetailHomeHelperComponent,
 
     // to be removed
     InfiniteScrollModule,
