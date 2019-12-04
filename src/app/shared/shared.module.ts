@@ -29,6 +29,7 @@ import { RouterModule } from '@angular/router';
 import { ContactgroupsDetailHomeHelperComponent } from '../shared/contactgroups-detail-home-helper/contactgroups-detail-home-helper.component';
 import { ContactgroupsDetailInstructionsComponent } from '../shared/contactgroups-detail-instructions/contactgroups-detail-instructions.component';
 import { ContactgroupsDetailOffersComponent } from '../shared/contactgroups-detail-offers/contactgroups-detail-offers.component';
+import { ContactgroupsDetailLeadsComponent } from '../shared/contactgroups-detail-leads/contactgroups-detail-leads.component';
 
 // ngx bootstrap imports
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
@@ -86,7 +87,8 @@ import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
     NoteFormComponent,
     ContactgroupsDetailHomeHelperComponent,
     ContactgroupsDetailInstructionsComponent,
-    ContactgroupsDetailOffersComponent
+    ContactgroupsDetailOffersComponent,
+    ContactgroupsDetailLeadsComponent
 
   ],
   imports: [
@@ -147,6 +149,7 @@ import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
     ContactgroupsDetailHomeHelperComponent,
     ContactgroupsDetailInstructionsComponent,
     ContactgroupsDetailOffersComponent,
+    ContactgroupsDetailLeadsComponent,
 
     // to be removed
     InfiniteScrollModule,

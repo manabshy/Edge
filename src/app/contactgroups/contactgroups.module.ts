@@ -9,7 +9,7 @@ import { CoreModule } from '../core/core.module';
 import { FormsModule } from '@angular/forms';
 import { ContactgroupsDetailEditComponent } from './contactgroups-detail-edit/contactgroups-detail-edit.component';
 import { ContactgroupsCompanyEditComponent } from './contactgroups-company-edit/contactgroups-company-edit.component';
-import { ContactgroupsDetailLeadsComponent } from './contactgroups-detail-leads/contactgroups-detail-leads.component';
+import { ContactgroupsDetailLeadsComponent } from '../shared/contactgroups-detail-leads/contactgroups-detail-leads.component';
 import { ContactgroupsDetailNotesComponent } from './contactgroups-detail-notes/contactgroups-detail-notes.component';
 import { ContactgroupsDetailSearchesComponent } from './contactgroups-detail-searches/contactgroups-detail-searches.component';
 import { ContactgroupsDetailValuationsComponent } from './contactgroups-detail-valuations/contactgroups-detail-valuations.component';
@@ -32,7 +32,7 @@ import { SharedModule } from '../shared/shared.module';
     ContactgroupsPeopleComponent,
     ContactgroupsDetailEditComponent,
     ContactgroupsCompanyEditComponent,
-    ContactgroupsDetailLeadsComponent,
+    // ContactgroupsDetailLeadsComponent,
     ContactgroupsDetailNotesComponent,
     ContactgroupsDetailSearchesComponent,
     ContactgroupsDetailValuationsComponent,
@@ -42,7 +42,8 @@ import { SharedModule } from '../shared/shared.module';
     ContactgroupsDetaillettingsManagementsComponent,
     // ContactgroupsDetailHomeHelperComponent,
     PersonDuplicateCheckerComponent,
-    ContactgroupsCompanyFinderComponent],
+    ContactgroupsCompanyFinderComponent
+  ],
   imports: [
     CommonModule,
     SharedModule,
