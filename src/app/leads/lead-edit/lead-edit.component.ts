@@ -9,7 +9,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
 import { StaffMember } from 'src/app/shared/models/staff-member';
-import { ContactNote, PersonSummaryFigures } from 'src/app/contactgroups/shared/contact-group';
+import { ContactNote, PersonSummaryFigures, BasicContactGroup } from 'src/app/contactgroups/shared/contact-group';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { getDate } from 'date-fns';
 import { Person } from 'src/app/shared/models/person';
@@ -48,6 +48,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
   isFormDirty: boolean = false;
   onLoading: boolean = false;
   isSubmitting: boolean;
+  contactGroups: BasicContactGroup[];
+  addressees: any[] = [];
 
   constructor(private leadsService: LeadsService,
     private route: ActivatedRoute,
@@ -176,6 +178,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
       this.lead = result;
       this.personId = result.personId;
       this.patchLeadValues(result);
+      console.log('in get lead information', this.personId);
       this.getPersonInformation();
       this.leadOwner = this.staffMembers.find(sm => sm.staffMemberId === this.lead.ownerId);
       console.log('lead Owner', this.leadOwner);
@@ -198,7 +201,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
   private getPersonInformation() {
 
     this.getPersonNotes();
-
+    this.getContactGroups(this.personId);
     this.contactGroupService.getPerson(this.personId).subscribe(
       data => {
         this.person = data;
@@ -287,6 +290,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
     }
   }
 
+ 
+
+
   get dataNote() {
     // if (this.contactGroupDetails) {
     //console.log('PERSON:',this.person);
@@ -314,7 +320,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
 
   private getNextPersonNotesPage(page) {
 
-
     this.contactGroupService.getPersonNotes(this.personId, this.pageSize, page).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
       if (data) {
         if (page === 1) {
@@ -331,6 +336,35 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
         console.log('bottom reached', this.bottomReached);
       }
     });
+  }
+
+   // TODO: Retrieve contact groups from contactInfoForNotes$ observable
+   getContactGroups(personId: number) {
+    this.contactGroupService.getPersonContactGroups(personId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
+      if (data) {
+        this.contactGroups = data;
+        this.setPersonNoteAddressees(data);
+        console.log('addressees: ', this.addressees);
+        console.log('contact groups: ', data);
+        console.log('person: ', this.person);
+      }
+    });
+  }
+
+  private setPersonNoteAddressees(contactGroups: BasicContactGroup[]) {
+    let output;
+    if (contactGroups) {
+      contactGroups.forEach((item, index) => {
+        output = {
+          addressee: item.contactPeople.map(x => x.addressee),
+          groupId: item.contactGroupId
+        };
+        if (item.contactPeople.find(p => p.personId === +this.personId)) {
+          this.person = item.contactPeople.find(p => p.personId === this.personId);
+        }
+        this.addressees[index] = output;
+      });
+    }
   }
 
   moveToNextLead() {

@@ -44,7 +44,7 @@ export class LeadFinderComponent implements OnInit {
       } else {
         console.log('lead finder form changed', val);
         this.searchTerm = val.leadSuggestion;
-        console.log(false);
+        this.leadSuggestionSelected.emit(val.leadSuggestion);
       }
     });
 
@@ -52,7 +52,6 @@ export class LeadFinderComponent implements OnInit {
 
   onKeyup(event: KeyboardEvent) {
     AppUtils.searchTerm = this.searchTerm;
-    console.log('search term entered:', this.searchTerm);
   }
 
   suggestionSelected(event: any) {

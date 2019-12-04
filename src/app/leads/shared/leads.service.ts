@@ -30,7 +30,7 @@ export class LeadsService {
   }
 
   pageNumberChanged(leadSearchInfo: LeadSearchInfo) {
-    console.log('PAGE CHANGED EVENT RECEIVED', leadSearchInfo);
+
     this.pageChangeSubject.next(leadSearchInfo);
   }
 
@@ -44,7 +44,7 @@ export class LeadsService {
 
   updateLead(lead: Lead): Observable<any> {
     const url = `${AppConstants.baseLeadsUrl}/${lead.leadId}`;
-    console.log('Update lead', lead);
+
     return this.http.put<Lead>(url, lead).pipe(
       map(response => response),
       tap(data => console.log('Updated Lead details here...', JSON.stringify(data))));
@@ -126,14 +126,14 @@ export class LeadsService {
   }
 
   getLeadSuggestions(searchTerm): Observable<any> {
-    console.log('search Term:', searchTerm);
+
     return this.http.get<any>(`${AppConstants.baseLeadsUrl}/suggestions?SearchTerm=${searchTerm}`, {
       headers: { ignoreLoadingBar: '' }
     }).pipe(
       map(response => response.result),
       tap(data => {
         if (data) {
-          console.log('lead suggestions:', data);
+
         }
       }));
   }

@@ -84,7 +84,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     this.leadRegisterForm.valueChanges.subscribe(changes => {
       this.leadSearchInfo = this.getSearchInfo(true);
       console.log('form group changes', this.leadSearchInfo);
-      this.leadService.pageNumberChanged(this.leadSearchInfo);
+      //this.leadService.pageNumberChanged(this.leadSearchInfo);
     });
   }
 
@@ -185,13 +185,16 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   }
 
   onLeadSuggestionSelected(event: any) {
-    if (event && event.item != null) {
+    console.log('lead suggestion event:', event);
+    if (event) {
       this.leadRegisterForm.patchValue({
-        searchTerm: event.item
+        searchTerm: event
       });
+      console.log('lead suggestion:', event);
       this.leadSearchInfo = this.getSearchInfo(true);
-      this.leadService.pageNumberChanged(this.leadSearchInfo);
+      // this.leadService.pageNumberChanged(this.leadSearchInfo);
     } else {
+      console.log('no change in lead suggestion:');
       this.leadRegisterForm.patchValue({
         searchTerm: ''
       });
@@ -219,6 +222,10 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       includeUnassignedLeadsOnly: this.leadRegisterForm != null ? this.leadRegisterForm.get('includeUnassignedLeadsOnly').value : null,
       searchTerm: this.leadRegisterForm != null ? this.leadRegisterForm.get('searchTerm').value : null
     };
+  }
+
+  PerformSearch() { 
+    this.leadService.pageNumberChanged(this.leadSearchInfo);
   }
 
   cancel() {

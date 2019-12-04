@@ -44,9 +44,6 @@ export class LeadComponent implements OnInit {
           includeUnassignedLeadsOnly: false
         };
 
-        // this.leadSearchInfo.page = this.page;
-        // this.leadSearchInfo.ownerId = this.currentStaffMember.staffMemberId;
-
         this.getLeads(this.leadSearchInfo);
       }
     });
@@ -54,7 +51,6 @@ export class LeadComponent implements OnInit {
     // page changes here
     this.leadService.pageChanges$.subscribe(leadSearchInfo => {
       if (leadSearchInfo) {
-        console.log('PAGE CHANGED EVENT RAISED', leadSearchInfo);
         this.page = leadSearchInfo.page;
         this.getLeads(leadSearchInfo);
       }
@@ -64,7 +60,6 @@ export class LeadComponent implements OnInit {
   }
 
   getLeads(leadSearchInfo: LeadSearchInfo) {
-    console.log('GET LEADS: ', leadSearchInfo);
     this.leadService.getLeads(leadSearchInfo, PAGE_SIZE).subscribe(result => {
 
       if (leadSearchInfo.page === 1) {
@@ -81,7 +76,6 @@ export class LeadComponent implements OnInit {
 
       if (result && !result.length) {
         this.bottomReached = true;
-        console.log('data', result);
         console.log('bottom reached', this.bottomReached);
       }
 
