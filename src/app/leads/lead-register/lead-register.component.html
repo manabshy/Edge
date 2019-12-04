@@ -23,50 +23,61 @@
       </div>
     </div>
   </div>
-  <form class="mb-3 p-0" [formGroup]="leadRegisterForm" *ngIf="showFilterOptions">
+  <form class="p-0" [formGroup]="leadRegisterForm" *ngIf="showFilterOptions">
 
-    <div class="row">
-      <div class="col-12 form-group">
-        <!-- <app-staffmember-finder (ownerChanged)="onOwnerChanged($event)"></app-staffmember-finder> -->
-        <app-lead-finder (leadSuggestionSelected)="onLeadSuggestionSelected($event)"></app-lead-finder>
-      </div>
-      <div class="col-sm form-group">
-        <label class="small" for="leadType">Type</label>
-        <select class="custom-select custom-select-sm" id="leadType" formControlName="leadTypeId">
-          <option value="">All</option>
-          <option selected *ngFor="let leadType of leadTypes" [value]=leadType.id>{{leadType?.value}}</option>
-        </select>
-      </div>
-      <div class="col-sm form-group">
-        <label class="small" for="dateFrom">Date From</label>
-        <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
-          [bsConfig]="{showWeekNumbers:false, customTodayClass: 'font-weight-bold'}" bsDatepicker formControlName="dateFrom">
-      </div>
-      <div class="col-sm form-group">
-        <label class="small" for="dateTo">Date To</label>
-        <input type="text" id="dateTo" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
-          [bsConfig]="{showWeekNumbers:false, customTodayClass: 'font-weight-bold'}" bsDatepicker formControlName="dateTo">
-      </div>
-      <div class="col-sm form-group">
-        <label class="small" for="office">Office</label>
-        <select class="custom-select custom-select-sm" id="office" formControlName="officeId">
-          <option value="">All</option>
-          <option selected *ngFor="let office of offices" [value]=office.officeId>{{office?.name}}</option>
-        </select>
-      </div>
-      <div class="w-100"></div>
-      <div class="col-sm-auto">
-        <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" id="closedInclusive" formControlName="includeClosedLeads">
-          <label class="custom-control-label" for="closedInclusive">Include closed leads</label>
-        </div>
-      </div>
-      <div class="col">
-          <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="unassignedLeadsOnly" formControlName="includeUnassignedLeadsOnly">
-            <label class="custom-control-label" for="unassignedLeadsOnly">Include unassigned leads only</label>
+    <div class="row align-items-center">
+      <div class="col-sm">
+        <div class="row">
+          <div class="col-12 form-group">
+            <!-- <app-staffmember-finder (ownerChanged)="onOwnerChanged($event)"></app-staffmember-finder> -->
+            <app-lead-finder (leadSuggestionSelected)="onLeadSuggestionSelected($event)"></app-lead-finder>
+          </div>
+          <div class="col-sm form-group">
+            <label class="small" for="leadType">Type</label>
+            <select class="custom-select custom-select-sm" id="leadType" formControlName="leadTypeId">
+              <option value="">All</option>
+              <option selected *ngFor="let leadType of leadTypes" [value]=leadType.id>{{leadType?.value}}</option>
+            </select>
+          </div>
+          <div class="col-sm form-group">
+            <label class="small" for="dateFrom">Date From</label>
+            <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
+              [bsConfig]="{showWeekNumbers:false, customTodayClass: 'font-weight-bold'}" bsDatepicker
+              formControlName="dateFrom">
+          </div>
+          <div class="col-sm form-group">
+            <label class="small" for="dateTo">Date To</label>
+            <input type="text" id="dateTo" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
+              [bsConfig]="{showWeekNumbers:false, customTodayClass: 'font-weight-bold'}" bsDatepicker formControlName="dateTo">
+          </div>
+          <div class="col-sm form-group">
+            <label class="small" for="office">Office</label>
+            <select class="custom-select custom-select-sm" id="office" formControlName="officeId">
+              <option value="">All</option>
+              <option selected *ngFor="let office of offices" [value]=office.officeId>{{office?.name}}</option>
+            </select>
+          </div>
+          <div class="w-100"></div>
+          <div class="col-sm-auto">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="closedInclusive" formControlName="includeClosedLeads">
+              <label class="custom-control-label" for="closedInclusive">Include closed leads</label>
+            </div>
+          </div>
+          <div class="col form-group">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="unassignedLeadsOnly"
+                formControlName="includeUnassignedLeadsOnly">
+              <label class="custom-control-label" for="unassignedLeadsOnly">Include unassigned leads only</label>
+            </div>
           </div>
         </div>
+      </div>
+      <div class="col-sm-2">
+        <div class="form-group">
+          <button class="btn btn-block btn-secondary">Search</button>
+        </div>
+      </div>
     </div>
   </form>
   <form class="pb-0" (ngSubmit)="processLeadsAssignment()">
