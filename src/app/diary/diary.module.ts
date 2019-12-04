@@ -9,11 +9,13 @@ import { CalendarComponent } from './calendar/calendar.component';
 import { CalendarHeaderComponent } from './shared/calendar-header.component';
 import { CalendarModule } from 'angular-calendar';
 import { calendar } from 'ngx-bootstrap/chronos/moment/calendar';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [AddDiaryEventComponent, CalendarComponent, CalendarHeaderComponent],
   imports: [
     CommonModule,
+    SharedModule,
     CoreModule,
     DiaryRoutingModule,
     ReactiveFormsModule,

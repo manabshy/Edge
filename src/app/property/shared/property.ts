@@ -1,5 +1,5 @@
 import { Address } from 'src/app/shared/models/address';
-import { SubNavItem, SubNav } from 'src/app/core/shared/subnav';
+import { SubNavItem, SubNav } from 'src/app/shared/subnav';
 import { Signer } from 'src/app/contactgroups/shared/contact-group';
 
 export interface Property {

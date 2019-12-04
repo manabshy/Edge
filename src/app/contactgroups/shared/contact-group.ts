@@ -1,7 +1,7 @@
 import { Address } from 'src/app/shared/models/address';
 import { Person, BasicPerson, PersonWarning } from 'src/app/shared/models/person';
-import { ResultData } from 'src/app/core/shared/result-data';
-import { SubNavItem, SubNav } from 'src/app/core/shared/subnav';
+import { ResultData } from 'src/app/shared/result-data';
+import { SubNavItem, SubNav } from 'src/app/shared/subnav';
 
 export interface ContactGroup {
   contactType: ContactType;

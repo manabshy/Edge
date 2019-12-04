@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RoundingPipe } from './shared/rounding.pipe';
-import { TruncatingPipe } from './shared/truncating.pipe';
-import { ShortenNamePipe } from './shared/shorten-name.pipe';
+import { RoundingPipe } from '../shared/rounding.pipe';
+import { TruncatingPipe } from '../shared/truncating.pipe';
+import { ShortenNamePipe } from '../shared/shorten-name.pipe';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppInterceptor } from './app.interceptor';
 import { CacheInterceptor } from './cache.interceptor';
@@ -34,7 +34,7 @@ import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 import { PropertyFinderComponent } from './property-finder/property-finder.component';
-import { FormatAddressPipe } from './shared/format-address.pipe';
+import { FormatAddressPipe } from '../shared/format-address.pipe';
 import { ScoreBadgeComponent } from './score-badge/score-badge.component';
 import { CanDeactivateGuard } from './shared/can-deactivate.guard';
 import { ErrorModalComponent } from './error-modal/error-modal.component';
@@ -57,14 +57,14 @@ import {AngularStickyThingsModule} from '@w11k/angular-sticky-things';
 
 
 //various
-import { AutocompleteOffDirective } from './shared/autocomplete-off.directive';
-import { HighlightPipe } from './shared/highlight.pipe';
+import { AutocompleteOffDirective } from '../shared/autocomplete-off.directive';
+import { HighlightPipe } from '../shared/highlight.pipe';
 import { AppConstants } from './shared/app-constants';
 import { SubnavItemComponent } from './subnav-item/subnav-item.component';
 import { SmsModalComponent } from './sms-modal/sms-modal.component';
 import { CustomReuseStrategy } from './share/custom-reuse-strategy';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { BracketsNewLinePipe } from './shared/brackets-new-line.pipe';
+import { BracketsNewLinePipe } from '../shared/brackets-new-line.pipe';
 import { PersonDetailsComponent } from './shared/person-details/person-details.component';
 import { CompanyInfoComponent } from './shared/company-info/company-info.component';
 import { NoteFormComponent } from './note-form/note-form.component';

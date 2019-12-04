@@ -10,7 +10,7 @@ import { SmsInfo } from '../../shared/models/person';
 import { SmsService } from '../services/sms.service';
 import { WedgeError, SharedService } from '../services/shared.service';
 import { FormErrors, ValidationMessages } from '../shared/app-constants';
-import { WedgeValidators } from '../shared/wedge-validators';
+import { WedgeValidators } from '../../shared/wedge-validators';
 
 @Component({
   selector: 'app-sms-modal',

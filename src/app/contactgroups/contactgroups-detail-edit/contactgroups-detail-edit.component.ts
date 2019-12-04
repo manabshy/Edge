@@ -9,7 +9,7 @@ import { EventEmitter } from '@angular/core';
 import { debounceTime } from 'rxjs/operators';
 import { AppConstants, FormErrors, ValidationMessages } from 'src/app/core/shared/app-constants';
 import { AppUtils } from 'src/app/core/shared/utils';
-import { WedgeValidators } from 'src/app/core/shared/wedge-validators';
+import { WedgeValidators } from 'src/app/shared/wedge-validators';
 import { Address } from 'src/app/shared/models/address';
 import { ToastrService } from 'ngx-toastr';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';

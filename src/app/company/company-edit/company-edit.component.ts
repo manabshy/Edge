@@ -8,7 +8,7 @@ import { Location } from '@angular/common';
 import { Company, Signer } from 'src/app/contactgroups/shared/contact-group';
 import { CompanyService } from '../shared/company.service';
 import { debounceTime } from 'rxjs/operators';
-import { WedgeValidators } from 'src/app/core/shared/wedge-validators';
+import { WedgeValidators } from 'src/app/shared/wedge-validators';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { Address } from 'src/app/shared/models/address';
 import { ToastrService } from 'ngx-toastr';

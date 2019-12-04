@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PropertyService } from '../shared/property.service';
-import { FormatAddressPipe } from 'src/app/core/shared/format-address.pipe';
+import { FormatAddressPipe } from 'src/app/shared/format-address.pipe';
 import { ActivatedRoute } from '@angular/router';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { Photo } from '../shared/property';

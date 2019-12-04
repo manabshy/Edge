@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Instruction, Applicant, Valuation, Tiles } from '../shared/dashboard';
-import { Constants } from 'src/app/core/shared/period-list';
+import { Constants } from 'src/app/shared/period-list';
 import { DashboardService } from '../shared/dashboard.service';
 import { ActivatedRoute } from '@angular/router';
 

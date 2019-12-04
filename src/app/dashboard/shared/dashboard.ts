@@ -1,4 +1,4 @@
-import { ResultData } from 'src/app/core/shared/result-data';
+import { ResultData } from 'src/app/shared/result-data';
 import { Address } from 'src/app/shared/models/address';
 
 export interface Dashboard {

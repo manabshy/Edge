@@ -7,7 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute, Router, Data, convertToParamMap } from '@angular/router';
 import { Location } from '@angular/common';
 import { RouterTestingModule } from '@angular/router/testing';
-import { FormatAddressPipe } from 'src/app/core/shared/format-address.pipe';
+import { FormatAddressPipe } from 'src/app/shared/format-address.pipe';
 import { PropertyService } from '../shared/property.service';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { ToastrService } from 'ngx-toastr';

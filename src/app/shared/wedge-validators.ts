@@ -1,7 +1,7 @@
 import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { PhoneNumberUtil, PhoneNumber, PhoneNumberFormat } from 'google-libphonenumber';
-import { SharedService } from '../services/shared.service';
-import { TelephoneTypeId } from '../../shared/models/person';
+import { SharedService } from '../core/services/shared.service';
+import { TelephoneTypeId } from './models/person';
 
 export class WedgeValidators {
   // static sharedService: SharedService;
