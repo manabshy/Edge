@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { PersonLettingsManagement } from 'src/app/shared/models/person';
 import { Observable, EMPTY } from 'rxjs';
@@ -12,16 +12,13 @@ import { catchError } from 'rxjs/operators';
   templateUrl: './contactgroups-detail-lettings-managements.component.html',
   styleUrls: ['./contactgroups-detail-lettings-managements.component.scss']
 })
-export class ContactgroupsDetaillettingsManagementsComponent implements OnInit {
-  navPlaceholder: string;
-  personId: number;
+export class ContactgroupsDetaillettingsManagementsComponent implements OnChanges {
+  @Input() personId: number;
   managements$ = new Observable<PersonLettingsManagement[]>();
   errorMessage: WedgeError;
   constructor(private route: ActivatedRoute, private peopleService: PeopleService, private sharedService: SharedService) { }
 
-  ngOnInit() {
-    this.navPlaceholder = AppUtils.navPlaceholder;
-    this.personId = +this.route.snapshot.paramMap.get('personId');
+  ngOnChanges() {
     if (this.personId) {
       this.managements$ = this.peopleService.getLettingsManagements(this.personId)
         .pipe(
