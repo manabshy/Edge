@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { PersonHomeHelper } from 'src/app/shared/models/person';
 import { ActivatedRoute } from '@angular/router';
@@ -12,16 +12,14 @@ import { WedgeError, SharedService } from 'src/app/core/services/shared.service'
   templateUrl: './contactgroups-detail-home-helper.component.html',
   styleUrls: ['./contactgroups-detail-home-helper.component.scss']
 })
-export class ContactgroupsDetailHomeHelperComponent implements OnInit {
+export class ContactgroupsDetailHomeHelperComponent implements OnChanges {
   navPlaceholder: string;
-  personId: number;
+  @Input() personId: number;
   homeHelpers$ = new Observable<PersonHomeHelper[]>();
   errorMessage: WedgeError;
-  constructor(private route: ActivatedRoute, private peopleService: PeopleService, private sharedService: SharedService) { }
+  constructor(private peopleService: PeopleService, private sharedService: SharedService) { }
 
-  ngOnInit() {
-    this.navPlaceholder = AppUtils.navPlaceholder;
-    this.personId = +this.route.snapshot.paramMap.get('personId');
+  ngOnChanges() {
     if (this.personId) {
       this.homeHelpers$ = this.peopleService.getHomeHelpers(this.personId)
         .pipe(
