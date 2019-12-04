@@ -6,6 +6,7 @@ import { getLocaleDayNames } from '@angular/common';
 import { Lead, LeadSearchInfo } from './shared/lead';
 import { InfoDetail } from '../core/services/info.service';
 import * as _ from 'lodash';
+import { AppUtils } from '../core/shared/utils';
 
 const PAGE_SIZE = 20;
 @Component({
@@ -41,10 +42,12 @@ export class LeadComponent implements OnInit {
           dateFrom: null,
           dateTo: null,
           includeClosedLeads: false,
-          includeUnassignedLeadsOnly: false
+          includeUnassignedLeadsOnly: false,
+          leadSearchTerm: AppUtils.leadSearchTerm ? AppUtils.leadSearchTerm : ''
         };
 
         this.getLeads(this.leadSearchInfo);
+        console.log('calling from here 1');
       }
     });
 
@@ -53,6 +56,7 @@ export class LeadComponent implements OnInit {
       if (leadSearchInfo) {
         this.page = leadSearchInfo.page;
         this.getLeads(leadSearchInfo);
+        console.log('calling from here 2');
       }
     });
 

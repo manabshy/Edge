@@ -39,6 +39,7 @@ export class AppUtils {
   public static holdingContactType: number;
   public static holdingCompany: Company;
   public static holdingCloned: boolean;
+  public static leadSearchTerm: string;
   static firstContactPerson: Person;
   static propertySearchTerm: string;
   static openedWindows: any[] = [];
@@ -46,7 +47,7 @@ export class AppUtils {
   static routeCache = new Map<string, ICachedRoute>();
   static currentStaffMemberGlobal: StaffMember;
   static navPlaceholder: string;
-
+  
 
   public static setQueryParams(requestOption: RequestOption) {
     if (!requestOption.page) {

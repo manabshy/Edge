@@ -13,6 +13,7 @@ import { ControlPosition } from '@agm/core/services/google-maps-types';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { LeadAssignmentModalComponent } from '../lead-assignment-modal/lead-assignment-modal.component';
 import { Subject } from 'rxjs';
+import { AppUtils } from 'src/app/core/shared/utils';
 
 @Component({
   selector: 'app-lead-register',
@@ -38,7 +39,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   enableOwnerFilter: boolean = true;
   selectedLeadsForAssignment: Lead[] = [];
   isSelectAllChecked: boolean = false;
-
+  searchTerm = '';
 
   constructor(private leadService: LeadsService,
     private staffMemberService: StaffMemberService,
@@ -81,12 +82,28 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
 
     this.leadSearchInfo = this.getSearchInfo(true);
 
+    if (AppUtils.leadSearchTerm) {
+
+      this.leadRegisterForm.get('leadSearchTerm').setValue(AppUtils.leadSearchTerm);
+      this.searchTerm = AppUtils.leadSearchTerm;
+    }
+
     this.leadRegisterForm.valueChanges.subscribe(changes => {
       this.leadSearchInfo = this.getSearchInfo(true);
       console.log('form group changes', this.leadSearchInfo);
-      //this.leadService.pageNumberChanged(this.leadSearchInfo);
+      // this.leadService.pageNumberChanged(this.leadSearchInfo);
     });
+
+    //this.leadResults();
   }
+
+  // leadResults() {
+  //   this.page = 1;
+  //   this.bottomReached = false;
+  //   this.leadService.pageNumberChanged(this.leadSearchInfo);
+  //   console.log('lead results...', this.leadSearchInfo);
+  // }
+
 
 
   assignLeads() {
@@ -161,42 +178,43 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       dateFrom: null,
       dateTo: null,
       includeUnassignedLeadsOnly: false,
-      searchTerm: null
+      leadSearchTerm: null
     });
   }
 
   onOwnerChanged(event: any) {
     console.log(event);
 
-    if (event && event.item != null) {
-      this.leadRegisterForm.patchValue({
-        ownerId: event.item.staffMemberId
-      });
+    // if (event && event.item != null) {
+    //   this.leadRegisterForm.patchValue({
+    //     ownerId: event.item.staffMemberId
+    //   });
 
-      this.leadSearchInfo = this.getSearchInfo(true);
-      this.leadService.pageNumberChanged(this.leadSearchInfo);
+    //   this.leadSearchInfo = this.getSearchInfo(true);
+    //   this.leadService.pageNumberChanged(this.leadSearchInfo);
 
-    } else {
-      this.leadRegisterForm.patchValue({
-        ownerId: ''
-      });
-      this.filteredLeads = this.leads;
-    }
+    // } else {
+    //   this.leadRegisterForm.patchValue({
+    //     ownerId: ''
+    //   });
+    //   this.filteredLeads = this.leads;
+    // }
   }
 
   onLeadSuggestionSelected(event: any) {
     console.log('lead suggestion event:', event);
     if (event) {
       this.leadRegisterForm.patchValue({
-        searchTerm: event
+        leadSearchTerm: event
       });
       console.log('lead suggestion:', event);
       this.leadSearchInfo = this.getSearchInfo(true);
       // this.leadService.pageNumberChanged(this.leadSearchInfo);
     } else {
       console.log('no change in lead suggestion:');
+      if (AppUtils.leadSearchTerm) { }
       this.leadRegisterForm.patchValue({
-        searchTerm: ''
+        leadSearchTerm: ''
       });
     }
     console.log('lead suggestion selected:', this.leadRegisterForm);
@@ -220,11 +238,11 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       dateTo: this.leadRegisterForm != null ? this.leadRegisterForm.get('dateTo').value : null,
       includeClosedLeads: this.leadRegisterForm != null ? this.leadRegisterForm.get('includeClosedLeads').value : null,
       includeUnassignedLeadsOnly: this.leadRegisterForm != null ? this.leadRegisterForm.get('includeUnassignedLeadsOnly').value : null,
-      searchTerm: this.leadRegisterForm != null ? this.leadRegisterForm.get('searchTerm').value : null
+      leadSearchTerm: this.leadRegisterForm != null ? this.leadRegisterForm.get('leadSearchTerm').value : null
     };
   }
 
-  PerformSearch() { 
+  PerformSearch() {
     this.leadService.pageNumberChanged(this.leadSearchInfo);
   }
 

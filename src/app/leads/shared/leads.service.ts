@@ -81,7 +81,7 @@ export class LeadsService {
           ? (String)(leadSearchInfo.includeUnassignedLeadsOnly) : '',
         page: leadSearchInfo.page.toString(),
         pageSize: pageSize.toString(),
-        searchTerm: leadSearchInfo.searchTerm != null ? leadSearchInfo.searchTerm : '',
+        searchTerm: leadSearchInfo.leadSearchTerm != null ? leadSearchInfo.leadSearchTerm : '',
         allowPaging: 'true'
       }
     });
@@ -114,7 +114,7 @@ export class LeadsService {
         includeUnassignedLeadsOnly: leadSearchInfo.includeUnassignedLeadsOnly != null
           ? (String)(leadSearchInfo.includeUnassignedLeadsOnly) : '',
         startLeadId: leadSearchInfo.startLeadId != null ? leadSearchInfo.startLeadId.toString() : '',
-        searchTerm: leadSearchInfo.searchTerm != null ? leadSearchInfo.searchTerm : '',
+        searchTerm: leadSearchInfo.leadSearchTerm != null ? leadSearchInfo.leadSearchTerm : '',
         allowPaging: 'false'
       }
     });

@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { debounceTime, distinctUntilChanged, switchMap, catchError } from 'rxjs/operators';
 import { LeadsService } from '../shared/leads.service';
@@ -34,8 +34,10 @@ export class LeadFinderComponent implements OnInit {
 
 
     this.leadFinderForm = this.fb.group({
-      leadSuggestion: ''
+      leadSuggestion: AppUtils.leadSearchTerm
     });
+
+    this.leadFinderForm.get('leadSuggestion').setValue(AppUtils.leadSearchTerm);
 
     this.leadFinderForm.valueChanges.subscribe(val => {
       if (val.leadSuggestion === '') {
@@ -50,8 +52,13 @@ export class LeadFinderComponent implements OnInit {
 
   }
 
+  // ngOnChanges() {
+  //   this.leadFinderForm.get('leadSearchTerm').setValue(this.searchTerm);
+  //   console.log('lead search term:', this.searchTerm);
+  // }
+
   onKeyup(event: KeyboardEvent) {
-    AppUtils.searchTerm = this.searchTerm;
+    AppUtils.leadSearchTerm = this.searchTerm;
   }
 
   suggestionSelected(event: any) {
