@@ -282,6 +282,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
         this.isSubmitting = false;
       });
     }
+
+    this.sharedService.back();
+
   }
 
   private onUpdateCompleted() {
