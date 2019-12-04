@@ -76,10 +76,6 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       }
     );
 
-    // if (this.currentStaffMember.permissions.filter(p => p.permissionId === 69).length > 0) {
-    //   this.enableOwnerFilter = false;
-    // }
-
     this.leadSearchInfo = this.getSearchInfo(true);
 
     if (AppUtils.leadSearchTerm) {
@@ -87,6 +83,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       this.leadRegisterForm.get('leadSearchTerm').setValue(AppUtils.leadSearchTerm);
       this.searchTerm = AppUtils.leadSearchTerm;
     }
+    console.log('INIT: ', this.leadSearchInfo);
 
     this.leadRegisterForm.valueChanges.subscribe(changes => {
       this.leadSearchInfo = this.getSearchInfo(true);
@@ -133,6 +130,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       console.log('Lead is clicked for assignment...');
 
     } else {
+      console.log('LEADS CLICKED: ', this.leadSearchInfo);
       this.leadService.leadsSearchChanged(this.leadSearchInfo);
       return;
     }
@@ -238,7 +236,8 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       dateTo: this.leadRegisterForm != null ? this.leadRegisterForm.get('dateTo').value : null,
       includeClosedLeads: this.leadRegisterForm != null ? this.leadRegisterForm.get('includeClosedLeads').value : null,
       includeUnassignedLeadsOnly: this.leadRegisterForm != null ? this.leadRegisterForm.get('includeUnassignedLeadsOnly').value : null,
-      leadSearchTerm: this.leadRegisterForm != null ? this.leadRegisterForm.get('leadSearchTerm').value : null
+      leadSearchTerm: this.leadRegisterForm != null && this.leadRegisterForm.get('leadSearchTerm').value
+        ? this.leadRegisterForm.get('leadSearchTerm').value : (AppUtils.leadSearchTerm ? AppUtils.leadSearchTerm : null)
     };
   }
 
