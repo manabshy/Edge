@@ -16,7 +16,7 @@ import { ContactgroupsDetailValuationsComponent } from './contactgroups-detail-v
 import { ContactgroupsDetailInstructionsComponent } from '../shared/contactgroups-detail-instructions/contactgroups-detail-instructions.component';
 import { ContactgroupsDetailOffersComponent } from '../shared/contactgroups-detail-offers/contactgroups-detail-offers.component';
 import { ContactgroupsDetailTenanciesComponent } from './contactgroups-detail-tenancies/contactgroups-detail-tenancies.component';
-import { ContactgroupsDetaillettingsManagementsComponent } from './contactgroups-detail-lettings-managements/contactgroups-detail-lettings-managements.component';
+import { ContactgroupsDetaillettingsManagementsComponent } from '../shared/contactgroups-detail-lettings-managements/contactgroups-detail-lettings-managements.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { ContactGroupsComponent } from './contactgroups.component';
 import { ContactgroupsDetailHomeHelperComponent } from '../shared/contactgroups-detail-home-helper/contactgroups-detail-home-helper.component';
@@ -39,7 +39,7 @@ import { SharedModule } from '../shared/shared.module';
     // ContactgroupsDetailInstructionsComponent,
     // ContactgroupsDetailOffersComponent,
     ContactgroupsDetailTenanciesComponent,
-    ContactgroupsDetaillettingsManagementsComponent,
+    // ContactgroupsDetaillettingsManagementsComponent,
     // ContactgroupsDetailHomeHelperComponent,
     PersonDuplicateCheckerComponent,
     ContactgroupsCompanyFinderComponent
