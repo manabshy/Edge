@@ -110,9 +110,6 @@ export interface PersonInstruction {
   propertyAddress: string;
   staffMember: string;
 }
-export interface PersonSearch {
-  propertyAddress: Address;
-}
 export interface PersonLettingsManagement {
   propertyAddress: string;
   type: string;
@@ -134,6 +131,8 @@ export interface PersonSearch {
   salesRequirementId?: any;
   maxAmount: number;
   minBeds: number;
+  type: string;
+  isActive: boolean;
   createDate: Date;
   staffMember: string;
   areas: string;
