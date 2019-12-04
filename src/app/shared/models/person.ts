@@ -103,7 +103,7 @@ export interface PersonInstruction {
   propertyEventId: number;
   type: string;
   status: string;
-  instuctionDate: Date;
+  instructionDate: Date;
   amount: number;
   shortLetAmount?: any;
   agencyType: string;

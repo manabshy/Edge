@@ -27,6 +27,7 @@ import { NoteFormComponent } from './note-form/note-form.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ContactgroupsDetailHomeHelperComponent } from '../shared/contactgroups-detail-home-helper/contactgroups-detail-home-helper.component';
+import { ContactgroupsDetailInstructionsComponent } from '../shared/contactgroups-detail-instructions/contactgroups-detail-instructions.component';
 
 // ngx bootstrap imports
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
@@ -56,6 +57,7 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
+
 @NgModule({
   declarations: [
     RoundingPipe,
@@ -81,7 +83,8 @@ import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
     PersonDetailsComponent,
     CompanyInfoComponent,
     NoteFormComponent,
-    ContactgroupsDetailHomeHelperComponent
+    ContactgroupsDetailHomeHelperComponent,
+    ContactgroupsDetailInstructionsComponent
 
   ],
   imports: [
@@ -140,6 +143,7 @@ import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
     CompanyInfoComponent,
     NoteFormComponent,
     ContactgroupsDetailHomeHelperComponent,
+    ContactgroupsDetailInstructionsComponent,
 
     // to be removed
     InfiniteScrollModule,
