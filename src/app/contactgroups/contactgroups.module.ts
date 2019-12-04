@@ -12,10 +12,10 @@ import { ContactgroupsCompanyEditComponent } from './contactgroups-company-edit/
 import { ContactgroupsDetailLeadsComponent } from '../shared/contactgroups-detail-leads/contactgroups-detail-leads.component';
 import { ContactgroupsDetailNotesComponent } from './contactgroups-detail-notes/contactgroups-detail-notes.component';
 import { ContactgroupsDetailSearchesComponent } from './contactgroups-detail-searches/contactgroups-detail-searches.component';
-import { ContactgroupsDetailValuationsComponent } from './contactgroups-detail-valuations/contactgroups-detail-valuations.component';
+import { ContactgroupsDetailValuationsComponent } from '../shared/contactgroups-detail-valuations/contactgroups-detail-valuations.component';
 import { ContactgroupsDetailInstructionsComponent } from '../shared/contactgroups-detail-instructions/contactgroups-detail-instructions.component';
 import { ContactgroupsDetailOffersComponent } from '../shared/contactgroups-detail-offers/contactgroups-detail-offers.component';
-import { ContactgroupsDetailTenanciesComponent } from './contactgroups-detail-tenancies/contactgroups-detail-tenancies.component';
+import { ContactgroupsDetailTenanciesComponent } from '../shared/contactgroups-detail-tenancies/contactgroups-detail-tenancies.component';
 import { ContactgroupsDetaillettingsManagementsComponent } from '../shared/contactgroups-detail-lettings-managements/contactgroups-detail-lettings-managements.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { ContactGroupsComponent } from './contactgroups.component';
@@ -35,10 +35,10 @@ import { SharedModule } from '../shared/shared.module';
     // ContactgroupsDetailLeadsComponent,
     ContactgroupsDetailNotesComponent,
     ContactgroupsDetailSearchesComponent,
-    ContactgroupsDetailValuationsComponent,
+    // ContactgroupsDetailValuationsComponent,
+    // ContactgroupsDetailTenanciesComponent,
     // ContactgroupsDetailInstructionsComponent,
     // ContactgroupsDetailOffersComponent,
-    ContactgroupsDetailTenanciesComponent,
     // ContactgroupsDetaillettingsManagementsComponent,
     // ContactgroupsDetailHomeHelperComponent,
     PersonDuplicateCheckerComponent,

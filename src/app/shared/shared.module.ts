@@ -31,6 +31,8 @@ import { ContactgroupsDetailInstructionsComponent } from '../shared/contactgroup
 import { ContactgroupsDetailOffersComponent } from '../shared/contactgroups-detail-offers/contactgroups-detail-offers.component';
 import { ContactgroupsDetailLeadsComponent } from '../shared/contactgroups-detail-leads/contactgroups-detail-leads.component';
 import { ContactgroupsDetaillettingsManagementsComponent } from '../shared/contactgroups-detail-lettings-managements/contactgroups-detail-lettings-managements.component';
+import { ContactgroupsDetailValuationsComponent } from '../shared/contactgroups-detail-valuations/contactgroups-detail-valuations.component';
+import { ContactgroupsDetailTenanciesComponent } from '../shared/contactgroups-detail-tenancies/contactgroups-detail-tenancies.component';
 
 // ngx bootstrap imports
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
@@ -90,7 +92,9 @@ import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
     ContactgroupsDetailInstructionsComponent,
     ContactgroupsDetailOffersComponent,
     ContactgroupsDetailLeadsComponent,
-    ContactgroupsDetaillettingsManagementsComponent
+    ContactgroupsDetaillettingsManagementsComponent,
+    ContactgroupsDetailValuationsComponent,
+    ContactgroupsDetailTenanciesComponent
 
   ],
   imports: [
@@ -153,6 +157,8 @@ import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
     ContactgroupsDetailOffersComponent,
     ContactgroupsDetailLeadsComponent,
     ContactgroupsDetaillettingsManagementsComponent,
+    ContactgroupsDetailValuationsComponent,
+    ContactgroupsDetailTenanciesComponent,
 
     // to be removed
     InfiniteScrollModule,
