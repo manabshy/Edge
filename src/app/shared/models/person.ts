@@ -1,7 +1,7 @@
 import { Address } from './address';
 import { ContactNote } from 'src/app/contactgroups/shared/contact-group';
 
-export interface Person extends PersonWarning{
+export interface Person extends PersonWarning {
   personId: number;
   firstName: string;
   lastName: string;
@@ -97,7 +97,17 @@ export interface SmsInfo {
   senderPhoneNumber: string;
 }
 export interface PersonOffer {
-  propertyAddress: Address;
+  propertyEventId: number;
+  type: string;
+  status: string;
+  offerReceivedDate: Date;
+  amount: number;
+  propertyAddress: string;
+  staffMember: string;
+}
+export interface PersonProperty {
+  propertyId: number;
+  address: Address;
 }
 export interface PersonInstruction {
   propertyEventId: number;
@@ -137,16 +147,16 @@ export interface PersonSearch {
   staffMember: string;
   areas: string;
 }
-export const PeopleTitles  = <PersonTitle[]>[
-  {id: 'Mr', name: 'Mr'},
-  {id: 'Mrs', name: 'Mrs'},
-  {id: 'Miss', name: 'Miss'},
-  {id: 'Ms', name: 'Ms'},
-  {id: 'Lady', name: 'Lady'},
-  {id: 'Sir', name: 'Sir'},
-  {id: 'Dr', name: 'Dr'},
-  {id: 'Lord', name: 'Lord'},
-  {id: 'Other', name: 'Other'},
+export const PeopleTitles = <PersonTitle[]>[
+  { id: 'Mr', name: 'Mr' },
+  { id: 'Mrs', name: 'Mrs' },
+  { id: 'Miss', name: 'Miss' },
+  { id: 'Ms', name: 'Ms' },
+  { id: 'Lady', name: 'Lady' },
+  { id: 'Sir', name: 'Sir' },
+  { id: 'Dr', name: 'Dr' },
+  { id: 'Lord', name: 'Lord' },
+  { id: 'Other', name: 'Other' },
 ];
 
 
@@ -155,10 +165,10 @@ export interface PersonTitle {
   name: string;
 }
 
-export const MarketTypes = <MarketType[]> [
-  {id: 'contactByEmail', name: 'Email', selected: true},
-  {id: 'contactByPost', name: 'Post', selected: false},
-  {id: 'contactByPhone', name: 'Phone', selected: true}
+export const MarketTypes = <MarketType[]>[
+  { id: 'contactByEmail', name: 'Email', selected: true },
+  { id: 'contactByPost', name: 'Post', selected: false },
+  { id: 'contactByPhone', name: 'Phone', selected: true }
 ];
 
 export interface MarketType {
@@ -186,7 +196,7 @@ export enum TitleId {
   Lord = 8,
   Other = 100
 }
-export const Titles  = new Map<number, string>([
+export const Titles = new Map<number, string>([
   [TitleId.Mr, 'Mr'],
 ]);
 
@@ -197,10 +207,10 @@ export enum TelephoneTypeId {
   Fax = 4,
   Other = 5
 }
-export const PhoneTypes = <PhoneType[]> [
-  { id: 1, name: 'Home', valueStr: 'Home'},
-  { id: 2, name: 'Work', valueStr: 'Work'},
-  { id: 3, name: 'Mobile', valueStr: 'Mobile'},
-  { id: 4, name: 'Fax', valueStr: 'Fax'},
-  { id: 5, name: 'Other', valueStr: 'Other'}
+export const PhoneTypes = <PhoneType[]>[
+  { id: 1, name: 'Home', valueStr: 'Home' },
+  { id: 2, name: 'Work', valueStr: 'Work' },
+  { id: 3, name: 'Mobile', valueStr: 'Mobile' },
+  { id: 4, name: 'Fax', valueStr: 'Fax' },
+  { id: 5, name: 'Other', valueStr: 'Other' }
 ];

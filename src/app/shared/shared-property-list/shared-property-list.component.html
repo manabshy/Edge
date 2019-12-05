@@ -1,0 +1,25 @@
+<div class="list-group mb-3" *ngIf="properties$|async as properties">
+  <div class="list-group-item text-center text-danger" *ngIf="!properties || !properties?.length">
+    <i class="far fa-sad-tear"></i> No properties
+  </div>
+  <a (click)="navigateToDetails(property)" class="list-group-item list-group-item-action pb-2"
+    *ngFor="let property of properties; let i = index;">
+    <div class="row">
+      <div class="col order-sm-1">
+        <div class="row align-items-center">
+          <div class="col-12">
+            <div class="mb-1 text-muted">
+              <small>PR-{{property?.propertyId}}</small>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="mb-1">
+              <strong [innerHTML]="property?.address| formatAddress"></strong><span class="text-danger"
+                *ngIf="!(property.address )">No address</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </a>
+</div>

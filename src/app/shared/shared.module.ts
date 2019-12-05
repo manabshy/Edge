@@ -34,6 +34,7 @@ import { ContactgroupsDetaillettingsManagementsComponent } from '../shared/conta
 import { ContactgroupsDetailValuationsComponent } from '../shared/contactgroups-detail-valuations/contactgroups-detail-valuations.component';
 import { ContactgroupsDetailTenanciesComponent } from '../shared/contactgroups-detail-tenancies/contactgroups-detail-tenancies.component';
 import { ContactgroupsDetailSearchesComponent } from '../shared/contactgroups-detail-searches/contactgroups-detail-searches.component';
+import { SharedPropertyListComponent } from './shared-property-list/shared-property-list.component';
 
 // ngx bootstrap imports
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
@@ -96,7 +97,8 @@ import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
     ContactgroupsDetaillettingsManagementsComponent,
     ContactgroupsDetailValuationsComponent,
     ContactgroupsDetailTenanciesComponent,
-    ContactgroupsDetailSearchesComponent
+    ContactgroupsDetailSearchesComponent,
+    SharedPropertyListComponent
 
   ],
   imports: [
@@ -162,7 +164,7 @@ import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
     ContactgroupsDetailValuationsComponent,
     ContactgroupsDetailTenanciesComponent,
     ContactgroupsDetailSearchesComponent,
-
+    SharedPropertyListComponent,
      // to be refactored
     InfiniteScrollModule,
     CollapseModule,

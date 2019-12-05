@@ -119,6 +119,7 @@
               <span class="badge badge-secondary float-right pull-right"></span>
             </button>
             <ng-container [ngSwitch]="item?.value">
+              <app-shared-property-list *ngSwitchCase="'properties'" [personId]="searchedPersonDetails?.personId"></app-shared-property-list>
               <app-contactgroups-detail-instructions *ngSwitchCase="'instructions'" [personId]="searchedPersonDetails?.personId"></app-contactgroups-detail-instructions>
               <app-contactgroups-detail-offers *ngSwitchCase="'offers'" [personId]="searchedPersonDetails?.personId"></app-contactgroups-detail-offers>
               <app-contactgroups-detail-searches *ngSwitchCase="'searches'" [personId]="searchedPersonDetails?.personId"></app-contactgroups-detail-searches>

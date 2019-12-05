@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AppConstants } from '../shared/app-constants';
 import { map, tap } from 'rxjs/operators';
-import { PersonInstruction, PersonSearch, PersonOffer, PersonLettingsManagement, PersonHomeHelper } from '../../shared/models/person';
+import { PersonInstruction, PersonSearch, PersonOffer, PersonLettingsManagement, PersonHomeHelper, PersonProperty } from '../../shared/models/person';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +22,11 @@ export class PeopleService {
         tap(data => console.log(JSON.stringify(data)))
       );
   }
+  getProperties(personId: number): Observable<PersonProperty[]> {
+    const url = `${AppConstants.basePersonUrl}/${personId}/properties`;
+    return this.http.get<any>(url).pipe(map(response => response.result));
+  }
+
   getInstructions(personId: number): Observable<PersonInstruction[]> {
     const url = `${AppConstants.basePersonUrl}/${personId}/instructions`;
     return this.http.get<any>(url).pipe(map(response => response.result));
