@@ -124,8 +124,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
           this.getLeadInformation();
         }
       });
-    } else {
-      console.log('new lead...');
+    } else {      
       console.log("NEW LEAD: ", this.lead);
       this.getPersonInformation();
     }
@@ -152,6 +151,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
 
         this.leadsService.getLeadIds(leadSearchInfo).subscribe(result => {
           this.leadIds = result;
+          console.log('leads Ids search info: ', leadSearchInfo);
           console.log('leads Ids here: ', this.leadIds);
         }, error => {
           this.lead = null;

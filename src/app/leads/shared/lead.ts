@@ -32,6 +32,7 @@ export interface Lead {
 export interface LeadSearchInfo {
     leadTypeId?: number;
     ownerId?: number;
+    personId?: number;
     officeId?: number;
     dateFrom?: Date;
     dateTo?: Date;

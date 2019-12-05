@@ -18,7 +18,6 @@ export class LeadComponent implements OnInit {
 
   currentStaffMember: StaffMember;
   leads: Lead[];
-  filteredLeads: Lead[];
   staffMembers: StaffMember[];
   page = 1;
   bottomReached = false;
@@ -36,7 +35,8 @@ export class LeadComponent implements OnInit {
 
         this.leadSearchInfo = {
           page: this.page,
-          ownerId: null,
+          ownerId: this.currentStaffMember.staffMemberId,
+          personId: null,
           leadTypeId: null,
           officeId: null,
           dateFrom: null,
@@ -64,6 +64,7 @@ export class LeadComponent implements OnInit {
   }
 
   getLeads(leadSearchInfo: LeadSearchInfo) {
+    console.log('get leads search info: ', leadSearchInfo);
     this.leadService.getLeads(leadSearchInfo, PAGE_SIZE).subscribe(result => {
 
       if (leadSearchInfo.page === 1) {
@@ -75,8 +76,6 @@ export class LeadComponent implements OnInit {
           this.leads = result;
         }
       }
-
-      this.filteredLeads = this.leads;
 
       if (result && !result.length) {
         this.bottomReached = true;

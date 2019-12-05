@@ -71,7 +71,8 @@ export class LeadsService {
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
       fromObject: {
-        // ownerId: leadSearchInfo.ownerId != null ? leadSearchInfo.ownerId.toString() : '',
+        ownerId: leadSearchInfo.ownerId != null ? leadSearchInfo.ownerId.toString() : '',
+        personId: leadSearchInfo.personId != null ? leadSearchInfo.personId.toString() : '',
         leadTypeId: leadSearchInfo.leadTypeId != null ? leadSearchInfo.leadTypeId.toString() : '',
         officeId: leadSearchInfo.officeId != null ? leadSearchInfo.officeId.toString() : '',
         dateFrom: leadSearchInfo.dateFrom != null ? new Date(leadSearchInfo.dateFrom.toString()).toLocaleDateString() : '',
@@ -86,6 +87,7 @@ export class LeadsService {
       }
     });
 
+    console.log('get leads options', options);
     const url = `${AppConstants.baseLeadsUrl}/search`;
 
     return this.http.get<any>(url, { params: options }).pipe(
@@ -105,7 +107,8 @@ export class LeadsService {
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
       fromObject: {
-        // ownerId: leadSearchInfo.ownerId != null ? leadSearchInfo.ownerId.toString() : '',
+        ownerId: leadSearchInfo.ownerId != null ? leadSearchInfo.ownerId.toString() : '',
+        personId: leadSearchInfo.personId != null ? leadSearchInfo.personId.toString() : '',
         leadTypeId: leadSearchInfo.leadTypeId != null ? leadSearchInfo.leadTypeId.toString() : '',
         officeId: leadSearchInfo.officeId != null ? leadSearchInfo.officeId.toString() : '',
         dateFrom: leadSearchInfo.dateFrom != null ? new Date(leadSearchInfo.dateFrom.toString()).toLocaleDateString() : '',

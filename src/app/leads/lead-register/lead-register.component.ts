@@ -76,7 +76,16 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       }
     );
 
-    this.leadSearchInfo = this.getSearchInfo(true);
+    // Current Logged in staffmember
+    this.storage.get('currentUser').subscribe((data: StaffMember) => {
+      if (data) {
+        this.currentStaffMember = data;
+
+        this.leadSearchInfo = this.getSearchInfo(true);
+      }
+    });
+
+
 
     if (AppUtils.leadSearchTerm) {
 
@@ -169,7 +178,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
 
   private setupLeadRegisterForm() {
     this.leadRegisterForm = this.fb.group({
-      ownerId: null,
+      ownerId: this.currentStaffMember ? this.currentStaffMember.staffMemberId : null,
       officeId: null,
       leadTypeId: null,
       includeClosedLeads: false,
@@ -182,21 +191,6 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
 
   onOwnerChanged(event: any) {
     console.log(event);
-
-    // if (event && event.item != null) {
-    //   this.leadRegisterForm.patchValue({
-    //     ownerId: event.item.staffMemberId
-    //   });
-
-    //   this.leadSearchInfo = this.getSearchInfo(true);
-    //   this.leadService.pageNumberChanged(this.leadSearchInfo);
-
-    // } else {
-    //   this.leadRegisterForm.patchValue({
-    //     ownerId: ''
-    //   });
-    //   this.filteredLeads = this.leads;
-    // }
   }
 
   onLeadSuggestionSelected(event: any) {
@@ -207,7 +201,6 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       });
       console.log('lead suggestion:', event);
       this.leadSearchInfo = this.getSearchInfo(true);
-      // this.leadService.pageNumberChanged(this.leadSearchInfo);
     } else {
       console.log('no change in lead suggestion:');
       if (AppUtils.leadSearchTerm) { }
@@ -229,7 +222,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   private getSearchInfo(newSearch: boolean) {
     return {
       page: !newSearch ? this.pageNumber : 1,
-      ownerId: this.leadRegisterForm != null ? this.leadRegisterForm.get('ownerId').value : null,
+      ownerId: this.currentStaffMember ? this.currentStaffMember.staffMemberId : null,
       leadTypeId: this.leadRegisterForm != null ? this.leadRegisterForm.get('leadTypeId').value : null,
       officeId: this.leadRegisterForm != null ? this.leadRegisterForm.get('officeId').value : null,
       dateFrom: this.leadRegisterForm != null ? this.leadRegisterForm.get('dateFrom').value : null,
