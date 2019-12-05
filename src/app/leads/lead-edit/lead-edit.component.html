@@ -69,13 +69,12 @@
                 <span class="badge badge-secondary float-right pull-right"></span>
               </button>
               <ng-container [ngSwitch]="item?.value">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                <!-- <app-contactgroups-detail-instructions *ngSwitchCase="'instructions'" [personId]="person?.personId"></app-contactgroups-detail-instructions> -->
+                  <app-shared-property-list *ngSwitchCase="'properties'" [personId]="person?.personId"></app-shared-property-list>
+                  <app-contactgroups-detail-instructions *ngSwitchCase="'instructions'" [personId]="person?.personId"></app-contactgroups-detail-instructions>
+                  <app-contactgroups-detail-offers *ngSwitchCase="'offers'" [personId]="person?.personId"></app-contactgroups-detail-offers>
+                  <app-contactgroups-detail-searches *ngSwitchCase="'searches'" [personId]="person?.personId"></app-contactgroups-detail-searches>
+                  <app-contactgroups-detail-lettings-managements *ngSwitchCase="'lettingsManagements'" [personId]="person?.personId"></app-contactgroups-detail-lettings-managements>
+                  <app-contactgroups-detail-home-helper *ngSwitchCase="'homeHelpers'" [personId]="person?.personId"></app-contactgroups-detail-home-helper>
               </ng-container>
             </accordion-group>
           </accordion>
@@ -88,7 +87,7 @@
       </div>
       <!-- <div class="col-xl-4 aside sticky-top-xl">
         <div class="mb-5">
-      
+
         </div>
       </div> -->
     </div>
