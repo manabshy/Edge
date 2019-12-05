@@ -105,7 +105,7 @@ import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
     RouterModule,
     FormsModule,
 
-    //to be removed
+    // to be refactored
     InfiniteScrollModule,
     CollapseModule,
     TabsModule,
@@ -163,7 +163,7 @@ import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
     ContactgroupsDetailTenanciesComponent,
     ContactgroupsDetailSearchesComponent,
 
-    // to be removed
+     // to be refactored
     InfiniteScrollModule,
     CollapseModule,
     TabsModule,

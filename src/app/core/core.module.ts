@@ -15,7 +15,7 @@ import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { NgPipesModule } from 'ngx-pipes';
 
 //ng bootstrap imports
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 //bootstrap
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown/';
@@ -52,7 +52,7 @@ import { AgmCoreModule } from '@agm/core';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
-import {AngularStickyThingsModule} from '@w11k/angular-sticky-things';
+import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
 
 
 //various
@@ -69,119 +69,12 @@ import { CompanyInfoComponent } from '../shared/company-info/company-info.compon
 import { NoteFormComponent } from '../shared/note-form/note-form.component';
 
 @NgModule({
-  declarations: [
-    // RoundingPipe,
-    // TruncatingPipe,
-    // ShortenNamePipe,
-    // BreadcrumbComponent,
-    // ConfirmModalComponent,
-    // PropertyFinderComponent,
-    // FormatAddressPipe,
-    // ScoreBadgeComponent,
-    // ErrorModalComponent,
-    // AddressComponent,
-    // SignerComponent,
-    // AutocompleteOffDirective,
-    // HighlightPipe,
-    // NoteModalComponent,
-    // NotesComponent, TelephoneComponent,
-    // TelephoneModalComponent,
-    // SubnavItemComponent,
-    // SubnavComponent,
-    // SmsModalComponent,
-    // BracketsNewLinePipe,
-    // PersonDetailsComponent,
-    // CompanyInfoComponent,
-    // NoteFormComponent
-  ],
-  exports: [
-    // RoundingPipe,
-    // TruncatingPipe,
-    // ShortenNamePipe,
-    // FormatAddressPipe,
-    // HighlightPipe,
-    // BracketsNewLinePipe,
-    // AutocompleteOffDirective,
-    // BreadcrumbComponent,
-    // NoteModalComponent,
-    // NotesComponent,
-    // SmsModalComponent,
-    // ConfirmModalComponent,
-    // ErrorModalComponent,
-    // PropertyFinderComponent,
-    // ScoreBadgeComponent,
-    // AddressComponent,
-    // SignerComponent,
-    // TelephoneComponent,
-    // TelephoneModalComponent,
-    // SubnavComponent,
-    // SubnavItemComponent,
-    // PersonDetailsComponent,
-    // CompanyInfoComponent,
-    // NoteFormComponent,
-    // RouterModule,
-    // BrowserAnimationsModule,
-    // CollapseModule,
-    // TabsModule,
-    // TypeaheadModule,
-    // BsDropdownModule,
-    // BsDatepickerModule,
-    // ModalModule,
-    // PopoverModule,
-    // NgPipesModule,
-    // TooltipModule,
-    // AccordionModule,
-    // ButtonsModule,
-    // ReactiveFormsModule,
-    // FormsModule,
-    // OrderModule,
-    // ToastrModule,
-    // ToastContainerModule,
-    // AgmCoreModule,
-    // CarouselModule,
-    // NgbModule,
-    // LoadingBarHttpClientModule,
-    // AngularStickyThingsModule
-  ],
+  declarations: [],
+  exports: [ ],
   imports: [
-    CommonModule,
-    // ReactiveFormsModule,
-    // FormsModule,
-    // OrderModule,
-    // RouterModule,
-    // BrowserAnimationsModule,
-    // InfiniteScrollModule,
-    // NgbModule,
-    // LoadingBarHttpClientModule,
-    // AngularStickyThingsModule,
-    // BsDropdownModule.forRoot(),
-    // CollapseModule.forRoot(),
-    // TabsModule.forRoot(),
-    // BsDatepickerModule.forRoot(),
-    // TypeaheadModule.forRoot(),
-    // ModalModule.forRoot(),
-    // PopoverModule.forRoot(),
-    // TooltipModule.forRoot(),
-    // AccordionModule.forRoot(),
-    // ButtonsModule.forRoot(),
-    // ToastrModule.forRoot({ positionClass: 'inline', enableHtml: true }),
-    // ToastContainerModule,
-    // CarouselModule.forRoot(),
-    // CalendarModule.forRoot({
-    //   provide: DateAdapter,
-    //   useFactory: adapterFactory
-    // }),
-    // AgmCoreModule.forRoot({
-    //   apiKey: 'AIzaSyC1Hv_vNkUxvvRibyjPbfgNhrTNi30jNtQ'
-    // })
+    CommonModule
   ],
-  // entryComponents: [
-  //   ConfirmModalComponent,
-  //   ErrorModalComponent,
-  //   NoteModalComponent,
-  //   TelephoneModalComponent,
-  //   SmsModalComponent
-  // ],
+
   providers: [
     CanDeactivateGuard,
     FormatAddressPipe,
