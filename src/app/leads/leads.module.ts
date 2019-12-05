@@ -9,6 +9,7 @@ import { LeadComponent } from './lead.component';
 import { StaffmemberFinderComponent } from './staffmember-finder/staffmember-finder.component';
 import { LeadAssignmentModalComponent } from './lead-assignment-modal/lead-assignment-modal.component';
 import { LeadFinderComponent } from './lead-finder/lead-finder.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { LeadFinderComponent } from './lead-finder/lead-finder.component';
   ],
   imports: [
     CommonModule,
-    CoreModule,
+    // CoreModule,
+    SharedModule,
     LeadsRoutingModule
   ],
   entryComponents: [

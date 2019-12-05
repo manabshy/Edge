@@ -2,7 +2,7 @@ import { Component, OnInit, Input, SimpleChanges, OnChanges, AfterViewInit } fro
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 
 import { LeaderboardService } from './shared/leaderboard.service';
-import { Constants } from '../core/shared/period-list';
+import { Constants } from '../shared/period-list';
 import { StaffMember, ApiRole } from '../shared/models/staff-member';
 import {
   Leaderboard, LeaderboardResult, PeriodMap, Period, NegotiatorColumns,

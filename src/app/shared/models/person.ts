@@ -103,15 +103,12 @@ export interface PersonInstruction {
   propertyEventId: number;
   type: string;
   status: string;
-  instuctionDate: Date;
+  instructionDate: Date;
   amount: number;
   shortLetAmount?: any;
   agencyType: string;
   propertyAddress: string;
   staffMember: string;
-}
-export interface PersonSearch {
-  propertyAddress: Address;
 }
 export interface PersonLettingsManagement {
   propertyAddress: string;
@@ -134,6 +131,8 @@ export interface PersonSearch {
   salesRequirementId?: any;
   maxAmount: number;
   minBeds: number;
+  type: string;
+  isActive: boolean;
   createDate: Date;
   staffMember: string;
   areas: string;

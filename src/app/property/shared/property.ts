@@ -1,5 +1,5 @@
 import { Address } from 'src/app/shared/models/address';
-import { SubNavItem, SubNav } from 'src/app/core/shared/subnav';
+import { SubNavItem, SubNav } from 'src/app/shared/subnav';
 import { Signer } from 'src/app/contactgroups/shared/contact-group';
 
 export interface Property {
@@ -158,7 +158,7 @@ export const PropertyStyles = new Map([
   [PropertyStyle.ParkingSpace, 'Parking Space'],
 ]);
 
-export const PropertyDetailsSubNav = ['property-notes', 'instructions', 'offers', 'property-photos'];
+export const PropertyDetailsSubNav = ['instructions', 'offers'];
 
 export const PropertyDetailsSubNavItems: SubNavItem[] = PropertyDetailsSubNav.map(x => ({
   link: x,

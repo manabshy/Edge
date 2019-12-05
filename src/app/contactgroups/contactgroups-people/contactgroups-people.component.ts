@@ -10,7 +10,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { distinctUntilChanged, switchMap, catchError, tap } from 'rxjs/operators';
 import { Subject, Observable, EMPTY } from 'rxjs';
 import { BsModalService } from 'ngx-bootstrap/modal/';
-import { ConfirmModalComponent } from 'src/app/core/confirm-modal/confirm-modal.component';
+import { ConfirmModalComponent } from 'src/app/shared/confirm-modal/confirm-modal.component';
 import { Location } from '@angular/common';
 import { WedgeError, SharedService } from 'src/app/core/services/shared.service';
 import { FormErrors } from 'src/app/core/shared/app-constants';

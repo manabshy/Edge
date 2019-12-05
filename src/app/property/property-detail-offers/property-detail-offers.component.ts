@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OfferInfo } from '../shared/property';
 import { ActivatedRoute } from '@angular/router';
@@ -10,16 +10,13 @@ import { AppUtils } from 'src/app/core/shared/utils';
   templateUrl: './property-detail-offers.component.html',
   styleUrls: ['./property-detail-offers.component.scss']
 })
-export class PropertyDetailOffersComponent implements OnInit {
-  propertyId: number;
+export class PropertyDetailOffersComponent implements OnChanges {
+  @Input() propertyId: number;
   offers$ = new Observable<OfferInfo[]>();
-  navPlaceholder: string;
 
   constructor(private route: ActivatedRoute, private propertyService: PropertyService) { }
 
-  ngOnInit() {
-    this.navPlaceholder = AppUtils.navPlaceholder;
-    this.propertyId = +this.route.snapshot.paramMap.get('id') || 0;
+  ngOnChanges() {
     if (this.propertyId) {
       this.offers$ = this.propertyService.getPropertyOffers(this.propertyId);
     }

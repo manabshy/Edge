@@ -5,15 +5,15 @@ import { ContactGroupsComponent } from './contactgroups.component';
 import { ContactgroupsPeopleComponent } from './contactgroups-people/contactgroups-people.component';
 import { ContactgroupsDetailEditComponent } from './contactgroups-detail-edit/contactgroups-detail-edit.component';
 import { CanDeactivateGuard } from '../core/shared/can-deactivate.guard';
-import { ContactgroupsDetailLeadsComponent } from './contactgroups-detail-leads/contactgroups-detail-leads.component';
+import { ContactgroupsDetailLeadsComponent } from '../shared/contactgroups-detail-leads/contactgroups-detail-leads.component';
 import { ContactgroupsDetailNotesComponent } from './contactgroups-detail-notes/contactgroups-detail-notes.component';
-import { ContactgroupsDetailSearchesComponent } from './contactgroups-detail-searches/contactgroups-detail-searches.component';
-import { ContactgroupsDetailValuationsComponent } from './contactgroups-detail-valuations/contactgroups-detail-valuations.component';
-import { ContactgroupsDetailInstructionsComponent } from './contactgroups-detail-instructions/contactgroups-detail-instructions.component';
-import { ContactgroupsDetailOffersComponent } from './contactgroups-detail-offers/contactgroups-detail-offers.component';
-import { ContactgroupsDetailTenanciesComponent } from './contactgroups-detail-tenancies/contactgroups-detail-tenancies.component';
-import { ContactgroupsDetaillettingsManagementsComponent } from './contactgroups-detail-lettings-managements/contactgroups-detail-lettings-managements.component';
-import { ContactgroupsDetailHomeHelperComponent } from './contactgroups-detail-home-helper/contactgroups-detail-home-helper.component';
+import { ContactgroupsDetailSearchesComponent } from '../shared/contactgroups-detail-searches/contactgroups-detail-searches.component';
+import { ContactgroupsDetailValuationsComponent } from '../shared/contactgroups-detail-valuations/contactgroups-detail-valuations.component';
+import { ContactgroupsDetailInstructionsComponent } from '../shared/contactgroups-detail-instructions/contactgroups-detail-instructions.component';
+import { ContactgroupsDetailOffersComponent } from '../shared/contactgroups-detail-offers/contactgroups-detail-offers.component';
+import { ContactgroupsDetailTenanciesComponent } from '../shared/contactgroups-detail-tenancies/contactgroups-detail-tenancies.component';
+import { ContactgroupsDetaillettingsManagementsComponent } from '../shared/contactgroups-detail-lettings-managements/contactgroups-detail-lettings-managements.component';
+import { ContactgroupsDetailHomeHelperComponent } from '../shared/contactgroups-detail-home-helper/contactgroups-detail-home-helper.component';
 import { AuthGuardService } from '../core/services/auth-guard.service';
 
 const routes: Routes = [
@@ -33,7 +33,7 @@ const routes: Routes = [
       { path: 'tenancies', component: ContactgroupsDetailTenanciesComponent },
       { path: 'lettings-managements', component: ContactgroupsDetaillettingsManagementsComponent },
       { path: 'home-helpers', component: ContactgroupsDetailHomeHelperComponent },
-    
+
     ]
   },
 ];

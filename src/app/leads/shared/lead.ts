@@ -1,4 +1,4 @@
-import { SubNavItem, SubNav } from "src/app/core/shared/subnav";
+import { SubNavItem, SubNav } from "src/app/shared/subnav";
 
 export const LeadEditSubNav = ['properties','instructions', 'offers', 'searches', 'lettings-managements', 'home-helpers'];
 

@@ -15,6 +15,7 @@ import { PropertyDetailMapComponent } from './property-detail-map/property-detai
 import { PropertyDetailEditComponent } from './property-detail-edit/property-detail-edit.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { PropertyDuplicateCheckerComponent } from './shared/property-duplicate-checker/property-duplicate-checker.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -32,8 +33,9 @@ import { PropertyDuplicateCheckerComponent } from './shared/property-duplicate-c
   ],
   imports: [
     CommonModule,
+    SharedModule,
+    // CoreModule,
     PropertyRoutingModule,
-    CoreModule,
     InfiniteScrollModule
   ],
   exports: [PropertyListComponent, PropertyDuplicateCheckerComponent]

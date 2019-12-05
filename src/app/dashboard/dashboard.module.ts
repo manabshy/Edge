@@ -11,6 +11,7 @@ import { DashboardListComponent } from './dashboard-list/dashboard-list.componen
 import { ValuationsAndInstructionsComponent } from './dashboard-list/valuations-and-instructions/valuations-and-instructions.component';
 import { InstructionsAndBusinessDevelopmentComponent } from './dashboard-list/instructions-and-business-development/instructions-and-business-development.component';
 import { ExchangesAndPipelineComponent } from './dashboard-list/exchanges-and-pipeline/exchanges-and-pipeline.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [MyDashboardComponent,
@@ -21,8 +22,9 @@ import { ExchangesAndPipelineComponent } from './dashboard-list/exchanges-and-pi
     ExchangesAndPipelineComponent],
   imports: [
     CommonModule,
+    SharedModule,
     DashboardRoutingModule,
-    CoreModule
+    // CoreModule
   ],
   exports: [
     MyDashboardComponent,

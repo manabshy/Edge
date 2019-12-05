@@ -1,33 +1,41 @@
 import { Component, OnInit } from '@angular/core';
 import { PropertyService } from '../shared/property.service';
 import { ActivatedRoute } from '@angular/router';
-import { Property, PropertyTypes, PropertyStyles, PropertyDetailsSubNavItems, PropertySummaryFigures } from '../shared/property';
+import { Property, PropertyTypes, PropertyStyles, PropertyDetailsSubNavItems, PropertySummaryFigures, PropertyNote } from '../shared/property';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { Observable } from 'rxjs';
-import { FormatAddressPipe } from 'src/app/core/shared/format-address.pipe';
-import { InfoService } from 'src/app/core/services/info.service';
+import { FormatAddressPipe } from 'src/app/shared/format-address.pipe';
+import { InfoService, DropdownListInfo, InfoDetail } from 'src/app/core/services/info.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
+import { takeUntil } from 'rxjs/operators';
+import * as _ from 'lodash';
+import { BaseComponent } from 'src/app/shared/models/base-component';
 
 @Component({
   selector: 'app-property-detail',
   templateUrl: './property-detail.component.html',
   styleUrls: ['./property-detail.component.scss']
 })
-export class PropertyDetailComponent implements OnInit {
+export class PropertyDetailComponent extends BaseComponent implements OnInit {
   propertyId: number;
   propertyDetails: Property;
   summaryTotals: PropertySummaryFigures;
   propertyTypes = PropertyTypes;
   propertyStyles = PropertyStyles;
-  listInfo: any;
-  regions: any;
-  allAreas: any;
-  allSubAreas: any;
-  region: any;
-  area: any;
-  subArea: any;
+  listInfo: DropdownListInfo;
+  regions: InfoDetail[];
+  allAreas: InfoDetail[];
+  allSubAreas: InfoDetail[];
+  region: string;
+  area: string;
+  subArea: string;
   subNav = PropertyDetailsSubNavItems;
   propertyDetails$ = new Observable<any>();
+  propertyNotes: PropertyNote[] = [];
+  page = 1;
+  pageSize = 10;
+  bottomReached = false;
+  noteTypes: Record<number, string>;
 
   // get region() {
   //   if (this.propertyDetails && this.regions) {
@@ -56,28 +64,17 @@ export class PropertyDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private infoService: InfoService,
     private storage: StorageMap,
-    private sharedService: SharedService) { }
+    private sharedService: SharedService) { super(); }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.propertyId = +params['id'] || 0;
     });
-    // this.propertyDetails$ = this.propertyService.propertyDetails$
-    //   .pipe
-    //   ( tap(data => {
-    //     this.propertyDetails = data;
-    //     this.sharedService.setTitle(this.formatAddressPipe.transform(this.propertyDetails.address));
-    //   }),
-    //     tap(data => this.summaryTotals = data.info),
-    //     tap(data => console.log('SEARCHED PROPERTY SUMMARY TOTALS',  this.propertyDetails.info))
-    //   );
 
-    // if (this.propertyId) {
-    //   this.propertyService.currentPropertyChanged(this.propertyId);
-    // }
     this.storage.get('info').subscribe(data => {
       if (data) {
-        this.listInfo = data; this.setDropdownLists();
+        this.listInfo = data as DropdownListInfo;
+        this.setDropdownLists();
         console.log('list info property detail....', this.listInfo);
       }
     });
@@ -85,12 +82,73 @@ export class PropertyDetailComponent implements OnInit {
     if (this.propertyId) {
       this.getPropertyDetails(this.propertyId);
     }
+
+    if (this.propertyId) {
+      this.getPropertyNotes();
+    }
+
+    this.propertyService.propertyNotePageNumberChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(newPage => {
+      this.page = newPage;
+      this.getNexPropertyNotesPage(this.page);
+    });
+
+    this.propertyService.propertyNoteChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
+      if (data) {
+        this.propertyNotes = [];
+        this.page = 1;
+        this.bottomReached = false;
+        this.getPropertyNotes();
+      }
+    });
+  }
+
+  private getPropertyNotes() {
+    this.getNexPropertyNotesPage(this.page);
+  }
+
+  private getNexPropertyNotesPage(page) {
+    this.propertyService.getPropertyNotes(this.propertyId, this.pageSize, page)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(data => {
+        if (data && data.length) {
+          this.propertyNotes = _.concat(this.propertyNotes, data);
+          this.setupNoteType();
+        }
+        if (data && !data.length) {
+          this.bottomReached = true;
+        }
+      });
+  }
+
+  setupNoteType() {
+    if (this.listInfo && this.listInfo.propertyNoteTypes) {
+      this.noteTypes = this.listInfo.propertyNoteTypes;
+      const keys = Object.keys(this.noteTypes);
+      console.log(this.noteTypes);
+      if (this.propertyNotes) {
+        this.propertyNotes.forEach((note: PropertyNote) => {
+          if (this.noteTypes) {
+            keys.forEach(key => {
+              if (+key === +note.type) {
+                note.typeDescription = _.startCase(this.noteTypes[+key]);
+              }
+            });
+          }
+        });
+      }
+    }
   }
 
   setDropdownLists() {
-    this.regions = new Map(Object.entries(this.listInfo.regions));
-    this.allAreas = new Map(Object.entries(this.listInfo.areas));
-    this.allSubAreas = new Map(Object.entries(this.listInfo.subAreas));
+    if (this.listInfo) {
+      this.regions = this.listInfo.regions;
+      this.allAreas = this.listInfo.areas;
+      this.allSubAreas = this.listInfo.subAreas;
+      // this.regions = new Map(Object.entries(this.listInfo.regions));
+      // this.allAreas = new Map(Object.entries(this.listInfo.areas));
+      // this.allSubAreas = new Map(Object.entries(this.listInfo.subAreas));
+    }
+    console.log('regions1', this.regions);
   }
 
   isObject(val) {
@@ -103,34 +161,33 @@ export class PropertyDetailComponent implements OnInit {
         this.propertyDetails = data;
         this.sharedService.setTitle(this.formatAddressPipe.transform(this.propertyDetails.address));
         this.summaryTotals = data.info;
-        this.setupRegionalValues();
+        console.log('property details here', this.propertyDetails);
+        if (this.regions && this.allAreas && this.allSubAreas) {
+          this.setupRegionalValues(data);
+        }
       }
-      console.log('property details here', this.propertyDetails);
     });
   }
 
   // TODO: Refactor
-  setupRegionalValues() {
-    if (this.propertyDetails) {
-      const regionValues = this.regions.values();
-      const areaValues = this.allAreas.values();
-      const subAreaValues = this.allSubAreas.values();
+  setupRegionalValues(propertyDetails: Property) {
+    if (propertyDetails) {
       switch (true) {
         case !!this.regions:
-          for (const item of regionValues) {
-            if (item.id === this.propertyDetails.regionId) {
+          for (const item of this.regions) {
+            if (item.id === propertyDetails.regionId) {
               this.region = item.value;
             }
           }
         case !!this.allAreas:
-          for (const item of areaValues) {
-            if (item.id === this.propertyDetails.areaId) {
+          for (const item of this.allAreas) {
+            if (item.id === propertyDetails.areaId) {
               this.area = item.value;
             }
           }
         case !!this.allSubAreas:
-          for (const item of subAreaValues) {
-            if (item.id === this.propertyDetails.subAreaId) {
+          for (const item of this.allSubAreas) {
+            if (item.id === propertyDetails.subAreaId) {
               this.subArea = item.value;
             }
           }

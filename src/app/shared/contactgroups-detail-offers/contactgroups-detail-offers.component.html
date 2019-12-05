@@ -1,11 +1,11 @@
-<div class="list-group">
+<div class="list-group list-group-flush">
   <div class="list-group-item list-header d-none d-sm-block d-xl-none">
     <div class="row">
-      <div class="col-sm"><strong>Received</strong></div>
+      <div class="col-sm"><strong>Address</strong></div>
       <div class="col-sm"><strong>Type</strong></div>
       <div class="col-sm"><strong>Status</strong></div>
       <div class="col-sm"><strong>Amount</strong></div>
-      <div class="col-sm"><strong>Applicant</strong></div>
+      <div class="col-sm"><strong>Received</strong></div>
       <div class="col-sm"><strong>Neg</strong></div>
     </div>
   </div>
@@ -17,14 +17,14 @@
       <div class="row">
         <div class="col-sm col-xl-12">
           <dl class="row">
-            <dt class="col-4 d-sm-none d-xl-block">Received</dt>
-            <dd class="col">{{offer?.offerReceivedDate| date: 'd/MM/yyyy'}}</dd>
+            <dt class="col-4 d-sm-none d-xl-block">Address</dt>
+            <dd class="col">{{offer?.propertyAddress}}</dd>
           </dl>
         </div>
         <div class="col-sm col-xl-12">
           <dl class="row">
             <dt class="col-4 d-sm-none d-xl-block">Type</dt>
-            <dd class="col">{{offer.type}}</dd>
+            <dd class="col">{{offer?.type}}</dd>
           </dl>
         </div>
         <div class="col-sm col-xl-12">
@@ -41,10 +41,8 @@
         </div>
         <div class="col-sm col-xl-12">
           <dl class="row">
-            <dt class="col-4 d-sm-none d-xl-block">Applicant</dt>
-            <dd class="col"><a
-                [routerLink]="['/contact-centre/detail/0/people/', offer.applicantId]">{{offer.applicantAddressee}}</a>
-            </dd>
+            <dt class="col-4 d-sm-none d-xl-block">Received</dt>
+            <dd class="col">{{offer?.offerReceivedDate| date: 'dd/MM/yyyy'}}</dd>
           </dl>
         </div>
         <div class="col-sm col-xl-12">
