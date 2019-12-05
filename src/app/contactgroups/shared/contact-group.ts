@@ -94,6 +94,7 @@ export interface ContactAddress extends Address {
   countryId: number;
 }
 export interface BaseNote {
+  addressee: string;
   id: number;
   text: string;
   isImportant: boolean;
