@@ -25,7 +25,7 @@ export class LeadsService {
     this.leadsChangeSubject.next(lead);
   }
 
-  leadsSearchChanged(leadSearchInfo: LeadSearchInfo) {
+  leadClickChanged(leadSearchInfo: LeadSearchInfo) {
     this.leadClickSubject.next(leadSearchInfo);
   }
 

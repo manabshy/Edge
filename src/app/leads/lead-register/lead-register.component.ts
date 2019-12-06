@@ -140,7 +140,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
 
     } else {
       console.log('LEADS CLICKED: ', this.leadSearchInfo);
-      this.leadService.leadsSearchChanged(this.leadSearchInfo);
+      this.leadService.leadClickChanged(this.leadSearchInfo);
       return;
     }
 

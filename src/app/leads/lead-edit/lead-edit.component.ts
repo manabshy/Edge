@@ -124,7 +124,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
           this.getLeadInformation();
         }
       });
-    } else {      
+    } else {
       console.log("NEW LEAD: ", this.lead);
       this.getPersonInformation();
     }
@@ -151,8 +151,11 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
 
         this.leadsService.getLeadIds(leadSearchInfo).subscribe(result => {
           this.leadIds = result;
+          this.currentLeadIndex = this.leadIds.indexOf(leadSearchInfo.startLeadId);
           console.log('leads Ids search info: ', leadSearchInfo);
           console.log('leads Ids here: ', this.leadIds);
+          console.log('current Index: ', this.currentLeadIndex);
+          console.log('Lead Id: ', this.leadId);
         }, error => {
           this.lead = null;
         });
@@ -293,7 +296,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
     }
   }
 
- 
+
 
 
   get dataNote() {
@@ -341,8 +344,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
     });
   }
 
-   // TODO: Retrieve contact groups from contactInfoForNotes$ observable
-   getContactGroups(personId: number) {
+  // TODO: Retrieve contact groups from contactInfoForNotes$ observable
+  getContactGroups(personId: number) {
     this.contactGroupService.getPersonContactGroups(personId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
       if (data) {
         this.contactGroups = data;
