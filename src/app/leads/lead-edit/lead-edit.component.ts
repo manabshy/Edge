@@ -144,7 +144,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
     });
 
     // leads search changed
-    this.leadsService.leadsSearchChanges$.subscribe(leadSearchInfo => {
+    this.leadsService.leadClickChanges$.subscribe(leadSearchInfo => {
 
       if (leadSearchInfo) {
         leadSearchInfo.startLeadId = this.leadId;

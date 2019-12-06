@@ -17,7 +17,7 @@ export class LeadsService {
 
   leadsChanges$ = this.leadsChangeSubject.asObservable();
   pageChanges$ = this.pageChangeSubject.asObservable();
-  leadsSearchChanges$ = this.leadsSearchSubject.asObservable();
+  leadClickChanges$ = this.leadsSearchSubject.asObservable();
 
   constructor(private http: HttpClient) { }
 
