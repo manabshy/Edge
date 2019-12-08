@@ -51,4 +51,16 @@ export class PeopleService {
     const url = `${AppConstants.basePersonUrl}/${personId}/homeHelpers`;
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
+
+  getLeads(personId: number): Observable<any> {
+    const url = `${AppConstants.basePersonUrl}/${personId}/leads`;
+    return this.http.get<any>(url).pipe(
+      map(response => response.result),
+      tap(data => {
+        if (data) {
+          console.log('person leads:', data);
+        }
+      }));
+  }
+
 }

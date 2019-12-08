@@ -38,10 +38,10 @@
             </button>
           </li>
           <li role="menuitem">
-            <a class="dropdown-item"
-              [routerLink]="['/leads-register/edit/', 0]" [queryParams]="{isNewLead: true, personId: personId}">
+            <a class="dropdown-item" [routerLink]="['/leads-register/edit/', 0]"
+              [queryParams]="{isNewLead: true, personId: personId}">
               <span class="dropdown-icon">
-                  <i class="fas fa-user"></i><i class="fas fa-share-alt fa-xs align-text-top"></i>
+                <i class="fas fa-user"></i><i class="fas fa-share-alt fa-xs align-text-top"></i>
               </span>
               Create Lead
             </a>
@@ -113,25 +113,34 @@
                   </ng-template>
                 </ng-container>
                 <ng-template #loadingInfo>
-                  <span class="badge badge-pill badge-primary"><i class="fas fa-spinner fa-pulse d-inline-block"></i></span>
+                  <span class="badge badge-pill badge-primary"><i
+                      class="fas fa-spinner fa-pulse d-inline-block"></i></span>
                 </ng-template>
               </div>
               <span class="badge badge-secondary float-right pull-right"></span>
             </button>
             <ng-container [ngSwitch]="item?.value">
-              <app-shared-property-list *ngSwitchCase="'properties'" [personId]="searchedPersonDetails?.personId"></app-shared-property-list>
-              <app-contactgroups-detail-instructions *ngSwitchCase="'instructions'" [personId]="searchedPersonDetails?.personId"></app-contactgroups-detail-instructions>
-              <app-contactgroups-detail-offers *ngSwitchCase="'offers'" [personId]="searchedPersonDetails?.personId"></app-contactgroups-detail-offers>
-              <app-contactgroups-detail-searches *ngSwitchCase="'searches'" [personId]="searchedPersonDetails?.personId"></app-contactgroups-detail-searches>
-              <app-contactgroups-detail-lettings-managements *ngSwitchCase="'lettingsManagements'" [personId]="searchedPersonDetails?.personId"></app-contactgroups-detail-lettings-managements>
-              <app-contactgroups-detail-home-helper *ngSwitchCase="'homeHelpers'" [personId]="searchedPersonDetails?.personId"></app-contactgroups-detail-home-helper>
+              <app-shared-property-list *ngSwitchCase="'properties'" [personId]="searchedPersonDetails?.personId">
+              </app-shared-property-list>
+              <app-contactgroups-detail-instructions *ngSwitchCase="'instructions'"
+                [personId]="searchedPersonDetails?.personId"></app-contactgroups-detail-instructions>
+              <app-contactgroups-detail-offers *ngSwitchCase="'offers'" [personId]="searchedPersonDetails?.personId">
+              </app-contactgroups-detail-offers>
+              <app-contactgroups-detail-searches *ngSwitchCase="'searches'"
+                [personId]="searchedPersonDetails?.personId"></app-contactgroups-detail-searches>
+              <app-contactgroups-detail-lettings-managements *ngSwitchCase="'lettingsManagements'"
+                [personId]="searchedPersonDetails?.personId"></app-contactgroups-detail-lettings-managements>
+              <app-contactgroups-detail-home-helper *ngSwitchCase="'homeHelpers'"
+                [personId]="searchedPersonDetails?.personId"></app-contactgroups-detail-home-helper>
+              <app-shared-lead-register *ngSwitchCase="'leads'" [personId]="searchedPersonDetails?.personId">
+              </app-shared-lead-register>
             </ng-container>
           </accordion-group>
         </accordion>
       </div>
       <h5>Notes</h5>
-      <app-notes [personNotes]="personNotes" [noteData]="dataNote" [pageNumber]="page"
-        [bottomReached]="bottomReached"></app-notes>
+      <app-notes [personNotes]="personNotes" [noteData]="dataNote" [pageNumber]="page" [bottomReached]="bottomReached">
+      </app-notes>
     </div>
   </div>
 </div>

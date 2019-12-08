@@ -64,6 +64,7 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
+import { SharedLeadRegisterComponent } from './shared-lead-register/shared-lead-register.component';
 
 @NgModule({
   declarations: [
@@ -98,7 +99,8 @@ import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
     ContactgroupsDetailValuationsComponent,
     ContactgroupsDetailTenanciesComponent,
     ContactgroupsDetailSearchesComponent,
-    SharedPropertyListComponent
+    SharedPropertyListComponent,
+    SharedLeadRegisterComponent
 
   ],
   imports: [
@@ -187,7 +189,8 @@ import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
     CarouselModule,
     NgbModule,
     LoadingBarHttpClientModule,
-    AngularStickyThingsModule
+    AngularStickyThingsModule,
+    SharedLeadRegisterComponent
   ],
   entryComponents: [
     ConfirmModalComponent,
