@@ -184,7 +184,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
       console.log('in get lead information', this.personId);
       this.getPersonInformation();
       this.leadOwner = this.staffMembers.find(sm => sm.staffMemberId === this.lead.ownerId);
-      console.log('lead Owner', this.leadOwner);
     }, error => {
       this.lead = null;
     });
@@ -204,12 +203,13 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
   private getPersonInformation() {
 
     this.getPersonNotes();
-    this.getContactGroups(this.personId);
     this.contactGroupService.getPerson(this.personId).subscribe(
       data => {
-        this.person = data;
-        console.log('get person information', this.person);
-        this.getSearchedPersonSummaryInfo(this.person.personId);
+        if (data) {
+          this.person = data;
+          console.log('get person information', this.person);
+          this.getSearchedPersonSummaryInfo(this.person.personId);
+        }
 
         this.subNav.forEach(element => {
           element.params.push(this.person.personId);
@@ -344,35 +344,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
         console.log('bottom reached', this.bottomReached);
       }
     });
-  }
-
-  // TODO: Retrieve contact groups from contactInfoForNotes$ observable
-  getContactGroups(personId: number) {
-    this.contactGroupService.getPersonContactGroups(personId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
-      if (data) {
-        this.contactGroups = data;
-        this.setPersonNoteAddressees(data);
-        console.log('addressees: ', this.addressees);
-        console.log('contact groups: ', data);
-        console.log('person: ', this.person);
-      }
-    });
-  }
-
-  private setPersonNoteAddressees(contactGroups: BasicContactGroup[]) {
-    let output;
-    if (contactGroups) {
-      contactGroups.forEach((item, index) => {
-        output = {
-          addressee: item.contactPeople.map(x => x.addressee),
-          groupId: item.contactGroupId
-        };
-        if (item.contactPeople.find(p => p.personId === +this.personId)) {
-          this.person = item.contactPeople.find(p => p.personId === this.personId);
-        }
-        this.addressees[index] = output;
-      });
-    }
   }
 
   moveToNextLead() {
