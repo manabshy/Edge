@@ -203,10 +203,11 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       this.leadSearchInfo = this.getSearchInfo(true);
     } else {
       console.log('no change in lead suggestion:');
-      if (AppUtils.leadSearchTerm) { }
+      AppUtils.leadSearchTerm = '';
       this.leadRegisterForm.patchValue({
         leadSearchTerm: ''
       });
+      
     }
     console.log('lead suggestion selected:', this.leadRegisterForm);
   }
@@ -243,8 +244,8 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     this.selectedLeadsForAssignment = [];
   }
 
-  processLeadsAssignment() {
-    this.showLeadsAssignmentModal();
+  processLeadsAssignment(leadOwner: number, leadsForAssignment: Lead[]) {
+    this.leadService.assignLeads(leadOwner, leadsForAssignment);
   }
 
   showLeadsAssignmentModal() {
@@ -254,6 +255,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
 
     subject.subscribe(leadOwner => {
       if (leadOwner) {
+        this.processLeadsAssignment(leadOwner, this.selectedLeadsForAssignment);
         console.log('lead Owner selected', leadOwner);
         console.log('leads selected for assignment', this.selectedLeadsForAssignment);
       }

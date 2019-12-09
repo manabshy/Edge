@@ -141,6 +141,14 @@ export class LeadsService {
       }));
   }
 
+  assignLeads(leadOwner: number, leads: Lead[]) {
+    const url = `${AppConstants.baseLeadsUrl}/assign`;
+
+    return this.http.put<Lead>(url, leads).pipe(
+      map(response => response),
+      tap(data => console.log('Updated Lead details here...', JSON.stringify(data))));
+  }
+
 
 }
 
