@@ -44,7 +44,7 @@
           </div>
         </div>
         <h5>Person</h5>
-        <app-person-details [personDetails]="person"></app-person-details>
+        <app-person-details *ngIf="person" [personDetails]="person"></app-person-details>
         <div #spacer></div>
         <div stickyThing [spacer]="spacer" marginTop="66">
           <h5>More Info</h5>
