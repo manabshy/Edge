@@ -195,6 +195,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.isSigner = params['isSigner'] || false;
         this.isExistingCompany = params['isExistingCompany'] || false;
         this.existingCompanyId = params['existingCompanyId'] || 0;
+        if (this.isExistingCompany) {
+          this.isOffCanvasVisible = true;
+        }
       });
     }
     this.isSubmitting = false;
