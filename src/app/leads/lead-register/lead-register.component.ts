@@ -248,9 +248,17 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   }
 
   showLeadsAssignmentModal() {
-    const subject = new Subject<boolean>();
+    const subject = new Subject<number>();
     const modal = this.modalService.show(LeadAssignmentModalComponent, { ignoreBackdropClick: true });
     modal.content.subject = subject;
+
+    subject.subscribe(leadOwner => {
+      if (leadOwner) {
+        console.log('lead Owner selected', leadOwner);
+        console.log('leads selected for assignment', this.selectedLeadsForAssignment);
+      }
+    });
+
     return subject.asObservable();
   }
 

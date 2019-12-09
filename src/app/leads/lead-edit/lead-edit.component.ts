@@ -258,7 +258,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
     this.updateLead();
   }
 
-  updateLead() {
+  updateLead(shouldExit: boolean = false) {
     const lead = { ...this.lead, ...this.leadEditForm.value };
     this.isSubmitting = true;
 
@@ -286,7 +286,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
       });
     }
 
-    this.sharedService.back();
+    if (shouldExit) {
+      this.sharedService.back();
+    }
 
   }
 
