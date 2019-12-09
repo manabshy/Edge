@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChildren, QueryList, AfterViewInit } from '@angu
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { DiaryEvent, ViewMode, BasicEventRequest, Period, Day } from './shared/diary';
 import { AppUtils } from '../core/shared/utils';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import { format, isDate } from 'date-fns';
 import { SharedService } from '../core/services/shared.service';
 import { PopoverDirective } from 'ngx-bootstrap/popover';
