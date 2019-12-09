@@ -6,7 +6,7 @@ import { LeadRegisterComponent } from './lead-register/lead-register.component';
 import { CoreModule } from '../core/core.module';
 import { LeadEditComponent } from './lead-edit/lead-edit.component';
 import { LeadComponent } from './lead.component';
-import { StaffmemberFinderComponent } from './staffmember-finder/staffmember-finder.component';
+import { StaffmemberFinderComponent } from '../shared/staffmember-finder/staffmember-finder.component';
 import { LeadFinderComponent } from './lead-finder/lead-finder.component';
 import { SharedModule } from '../shared/shared.module';
 
@@ -15,7 +15,6 @@ import { SharedModule } from '../shared/shared.module';
     LeadRegisterComponent,
     LeadEditComponent,
     LeadComponent,
-    StaffmemberFinderComponent,
     LeadFinderComponent
   ],
   imports: [

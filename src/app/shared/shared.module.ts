@@ -35,6 +35,9 @@ import { ContactgroupsDetailValuationsComponent } from '../shared/contactgroups-
 import { ContactgroupsDetailTenanciesComponent } from '../shared/contactgroups-detail-tenancies/contactgroups-detail-tenancies.component';
 import { ContactgroupsDetailSearchesComponent } from '../shared/contactgroups-detail-searches/contactgroups-detail-searches.component';
 import { SharedPropertyListComponent } from './shared-property-list/shared-property-list.component';
+import { SharedLeadRegisterComponent } from './shared-lead-register/shared-lead-register.component';
+import { LeadAssignmentModalComponent } from './lead-assignment-modal/lead-assignment-modal.component';
+import { StaffmemberFinderComponent } from './staffmember-finder/staffmember-finder.component';
 
 // ngx bootstrap imports
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
@@ -64,7 +67,7 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
-import { SharedLeadRegisterComponent } from './shared-lead-register/shared-lead-register.component';
+
 
 @NgModule({
   declarations: [
@@ -100,7 +103,9 @@ import { SharedLeadRegisterComponent } from './shared-lead-register/shared-lead-
     ContactgroupsDetailTenanciesComponent,
     ContactgroupsDetailSearchesComponent,
     SharedPropertyListComponent,
-    SharedLeadRegisterComponent
+    SharedLeadRegisterComponent,
+    LeadAssignmentModalComponent,
+    StaffmemberFinderComponent
 
   ],
   imports: [
@@ -167,6 +172,7 @@ import { SharedLeadRegisterComponent } from './shared-lead-register/shared-lead-
     ContactgroupsDetailTenanciesComponent,
     ContactgroupsDetailSearchesComponent,
     SharedPropertyListComponent,
+    StaffmemberFinderComponent,
      // to be refactored
     InfiniteScrollModule,
     CollapseModule,
@@ -197,7 +203,8 @@ import { SharedLeadRegisterComponent } from './shared-lead-register/shared-lead-
     ErrorModalComponent,
     NoteModalComponent,
     TelephoneModalComponent,
-    SmsModalComponent
-  ],
+    SmsModalComponent,
+    LeadAssignmentModalComponent // To be moved. Decide ASAP
+  ]
 })
 export class SharedModule { }
