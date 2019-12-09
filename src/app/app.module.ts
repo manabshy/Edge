@@ -69,6 +69,7 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
 import { SharedModule } from './shared/shared.module';
+import { LeadAssignmentModalComponent } from './leads/lead-assignment-modal/lead-assignment-modal.component';
 
 const externalModulesImports = [
   InfiniteScrollModule,
@@ -149,7 +150,8 @@ const externalModulesExports = [
     PropertyChecklistLettingComponent,
     PropertyChecklistItemComponent,
     NotFoundComponent,
-    ImpersonateMemberComponent
+    ImpersonateMemberComponent,
+    LeadAssignmentModalComponent
   ],
   imports: [
     BrowserModule,
@@ -169,6 +171,9 @@ const externalModulesExports = [
   exports: [
     // externalModulesExports,
     MainmenuComponent
+  ],
+  entryComponents: [
+    LeadAssignmentModalComponent // To be moved to shared module. Need to decide ASAP
   ],
   providers: [],
   bootstrap: [AppComponent],

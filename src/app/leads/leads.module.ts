@@ -7,7 +7,6 @@ import { CoreModule } from '../core/core.module';
 import { LeadEditComponent } from './lead-edit/lead-edit.component';
 import { LeadComponent } from './lead.component';
 import { StaffmemberFinderComponent } from './staffmember-finder/staffmember-finder.component';
-import { LeadAssignmentModalComponent } from './lead-assignment-modal/lead-assignment-modal.component';
 import { LeadFinderComponent } from './lead-finder/lead-finder.component';
 import { SharedModule } from '../shared/shared.module';
 
@@ -17,17 +16,12 @@ import { SharedModule } from '../shared/shared.module';
     LeadEditComponent,
     LeadComponent,
     StaffmemberFinderComponent,
-    LeadAssignmentModalComponent,
     LeadFinderComponent
   ],
   imports: [
     CommonModule,
-    // CoreModule,
     SharedModule,
     LeadsRoutingModule
-  ],
-  entryComponents: [
-    LeadAssignmentModalComponent
   ]
 })
 export class LeadsModule { }
