@@ -51,6 +51,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
   isSubmitting: boolean;
   contactGroups: BasicContactGroup[];
   addressees: any[] = [];
+  noteRequiredWarning: string;
 
   constructor(private leadsService: LeadsService,
     private route: ActivatedRoute,
@@ -277,6 +278,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
 
       // Checking if Close Lead is ticked and note is entered
       if (closeLead && note.text === '') {
+        this.noteRequiredWarning = 'Note must be entered...';
         console.log('cannot update');
         return;
       }

@@ -11,6 +11,7 @@ import { Person } from 'src/app/shared/models/person';
 export class LeadNoteComponent implements OnInit, OnChanges {
   @Input() selectedPerson: Person;
   @Input() isDisabled: boolean;
+  @Input() noteRequiredWarning: string;
 
   shortcuts = {
     'Left Message': 'Left message',
@@ -45,6 +46,7 @@ export class LeadNoteComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     console.log('Lead Note Component:', this.isDisabled);
+    console.log('Note required warning:', this.noteRequiredWarning);
   }
 
   consumeShortcut(shortcut: string) {
@@ -91,3 +93,4 @@ export class LeadNoteComponent implements OnInit, OnChanges {
   }
 
 }
+
