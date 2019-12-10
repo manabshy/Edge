@@ -257,6 +257,21 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
     const lead = { ...this.lead, ...this.leadEditForm.value };
     this.isSubmitting = true;
 
+    const closeLead = this.leadEditForm.get('closeLead').value;
+    const note = leadNote.getNote();
+
+    // Checking if Close Lead is ticked and note is entered
+    if ((closeLead || this.isNewLead) && note.text === '') {
+      this.noteRequiredWarning = 'When you close a lead you must enter a Note.';
+      console.log('cannot update');
+      setTimeout(() => {
+        this.sharedService.scrollToFirstInvalidField();
+      })
+      return;
+    } else {
+      this.noteRequiredWarning = '';
+    }
+
     if (this.isNewLead) {
 
       lead.personId = this.personId;
@@ -274,21 +289,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
       });
     } else {
 
-      const closeLead = this.leadEditForm.get('closeLead').value;
-      const note = leadNote.getNote();
 
-      // Checking if Close Lead is ticked and note is entered
-      if (closeLead && note.text === '') {
-        this.noteRequiredWarning = 'When you close a lead you must enter a Note.';
-        console.log('cannot update');
-        setTimeout(() => {
-          this.sharedService.scrollToFirstInvalidField();
-        })
-        return;
-      }
-      else {
-        this.noteRequiredWarning = '';
-      }
 
       if (closeLead) {
         lead.closedById = this.currentStaffMember.staffMemberId;
