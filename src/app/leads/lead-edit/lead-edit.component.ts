@@ -279,8 +279,11 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
 
       // Checking if Close Lead is ticked and note is entered
       if (closeLead && note.text === '') {
-        this.noteRequiredWarning = 'Note must be entered...';
+        this.noteRequiredWarning = 'When you close a lead you must enter a Note.';
         console.log('cannot update');
+        setTimeout(()=>{
+          this.sharedService.scrollToFirstInvalidField();
+        })
         return;
       }
 
