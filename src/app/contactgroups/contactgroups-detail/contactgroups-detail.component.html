@@ -117,7 +117,13 @@
                       class="fas fa-spinner fa-pulse d-inline-block"></i></span>
                 </ng-template>
               </div>
-              <span class="badge badge-secondary float-right pull-right"></span>
+              <span class="float-right pull-right" (click)="$event.stopPropagation()">
+                <ng-container [ngSwitch]="item?.value">
+                  <a [routerLink]="['/property-centre/detail', 0, 'edit']" [queryParams]="{isNewProperty: true, lastKnownPerson: personParams}" *ngSwitchCase="'properties'">Create</a>
+                  <a [routerLink]="['/leads-register/edit/', 0]"
+                  [queryParams]="{isNewLead: true, personId: personId}" *ngSwitchCase="'leads'">Create</a>
+                </ng-container>
+              </span>
             </button>
             <ng-container [ngSwitch]="item?.value">
               <app-shared-property-list *ngSwitchCase="'properties'" [personId]="searchedPersonDetails?.personId">

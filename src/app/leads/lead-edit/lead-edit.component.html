@@ -38,7 +38,7 @@
                 </div>
                 <span class="float-right pull-right" (click)="$event.stopPropagation()">
                   <ng-container [ngSwitch]="item?.value">
-                    <a [routerLink]="['/property-centre/detail', 0, 'edit']" [queryParams]="{isNewProperty: true, lastKnownPerson: personParams}" *ngSwitchCase="'properties'">Add</a>
+                    <a [routerLink]="['/property-centre/detail', 0, 'edit']" [queryParams]="{isNewProperty: true, lastKnownPerson: personParams}" *ngSwitchCase="'properties'">Create</a>
                   </ng-container>
                 </span>
               </button>

@@ -34,6 +34,7 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
   isCollapsed: boolean;
   summaryTotals: PersonSummaryFigures;
   subNav = ContactGroupDetailsSubNavItems;
+  personParams: string;
 
   get dataNote() {
     return {
@@ -104,6 +105,7 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
     this.contactGroupService.getPerson(personId, true).subscribe(data => {
       if (data) {
         this.searchedPersonDetails = data;
+        this.personParams = JSON.stringify(this.searchedPersonDetails);
         this.contactGroupService.personNotesChanged(data.personNotes);
         this.sharedService.setTitle(this.searchedPersonDetails.addressee);
         this.searchedPersonDetails.warning = this.sharedService
