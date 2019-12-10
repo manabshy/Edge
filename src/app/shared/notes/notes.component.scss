@@ -8,6 +8,7 @@
 }
 
 .unset {
+    transition: all .3s;
     color: $input-bg!important;
-    text-shadow: $border-color 0 0 1px, $border-color 0 0 1px, $border-color 0 0 1px, $border-color 0 0 1px, $border-color 0 0 1px, $border-color 0 0 1px, $border-color 0 0 1px, $border-color 0 0 1px, $border-color 0 0 1px, $border-color 0 0 1px, $border-color 0 0 1px, $border-color 0 0 1px, $border-color 0 0 1px, $border-color 0 0 1px, $border-color 0 0 1px;
+    text-shadow: $body-color 0 0 1px, $body-color 0 0 1px, $body-color 0 0 1px, $body-color 0 0 1px, $body-color 0 0 1px, $body-color 0 0 1px, $body-color 0 0 1px, $body-color 0 0 1px, $body-color 0 0 1px, $body-color 0 0 1px, $body-color 0 0 1px, $body-color 0 0 1px, $body-color 0 0 1px;
 }
