@@ -48,6 +48,7 @@ export class PropertyDetailEditComponent implements OnInit {
   createdSigner: Signer;
   isMatchFound = false;
   showMatches = false;
+  lastKnownPerson: any;
 
   constructor(private route: ActivatedRoute,
     private _router: Router,
@@ -77,14 +78,20 @@ export class PropertyDetailEditComponent implements OnInit {
 
     this.setupEditForm();
     this.route.params.subscribe(params => {
-      this.propertyId = +params['id'] || 0;
+      this.propertyId = +params['id'] || 0;  
+      if (this.propertyId) {
+        this.getPropertyDetails(this.propertyId);
+      }
     });
     this.route.queryParams.subscribe(params => {
       this.isNewProperty = this.propertyId ? this.isNewProperty = false : params['isNewProperty'];
+      if(this.isNewProperty){
+        this.propertyForm.reset();
+        this.setupEditForm();
+      }
+      this.lastKnownPerson = JSON.parse(params['lastKnownPerson']);
+
     });
-    if (this.propertyId) {
-      this.getPropertyDetails(this.propertyId);
-    }
     this.logValidationErrors(this.propertyForm, false);
     this.contactGroupService.signer$.subscribe(data => {
       if (data) {
@@ -196,7 +203,11 @@ export class PropertyDetailEditComponent implements OnInit {
       this.propertyForm.clearValidators();
       this.propertyForm.updateValueAndValidity();
     }
-    this._router.navigate(['/property-centre/detail', property.propertyId]);
+    if(this.lastKnownPerson) {
+      this._router.navigate(['/property-centre/detail', property.propertyId, 'edit'], {queryParams: {lastKnownPerson: JSON.stringify(this.lastKnownPerson)}});
+    } else {
+      this._router.navigate(['/property-centre/detail', property.propertyId, 'edit']);
+    }
   }
 
   checkPropertyMatches(isFullMatch: boolean) {
@@ -231,6 +242,7 @@ export class PropertyDetailEditComponent implements OnInit {
 
   saveProperty() {
     const isOwnerChanged = this.lastKnownOwner || this.lastKnownOwner == null;
+    console.log(this.lastKnownOwner);
     const control = this.propertyForm.get('address');
     this.logValidationErrors(this.propertyForm, true);
     control.clearValidators();

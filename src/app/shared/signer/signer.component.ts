@@ -7,6 +7,7 @@ import { ContactGroupAutoCompleteResult, BasicContactGroup, ContactGroup, Signer
 import { distinctUntilChanged, switchMap, catchError, tap } from 'rxjs/operators';
 import { PeopleService } from '../../core/services/people.service';
 import { Observable, EMPTY } from 'rxjs';
+import { Person } from '../models/person';
 
 @Component({
   selector: 'app-signer',
@@ -17,6 +18,7 @@ export class SignerComponent implements OnInit, OnChanges {
   @Output() selectedSigner = new EventEmitter<Signer>();
   @Output() newSigner = new EventEmitter<boolean>();
   @Input() existingSigner: Signer;
+  @Input() existingPerson: Person;
   @Input() readOnly: boolean = false;
   @Input() createdSigner: Signer;
   @Input() label: string;
@@ -67,6 +69,9 @@ export class SignerComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     this.displayExistingSigners();
+    if(this.existingPerson) {
+      this.signersAutocomplete(this.existingPerson.firstName + ' ' + this.existingPerson.middleName + ' ' + this.existingPerson.lastName);
+    }
   }
 
   private displayExistingSigners() {
