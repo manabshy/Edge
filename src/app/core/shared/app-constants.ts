@@ -152,6 +152,12 @@ export const ValidationMessages = {
   },
   'subAreaId': {
     required: 'Sub Area is required'
+  },
+  'leadTypeId': {
+    required: 'Lead Type is required'
+  },
+  'nextChaseDate': {
+    required: 'Next chase date is required'
   }
   // 'invalidPhoneNumber': {
   //   required: 'Phone is required',

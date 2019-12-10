@@ -1,5 +1,5 @@
-<div class="list-group mb-3" *ngIf="leads$|async as leads">
-  <div class="list-group-item list-header d-none d-sm-block">
+<div class="list-group list-group-flush" *ngIf="leads$|async as leads">
+  <div class="list-group-item list-header d-none d-sm-block d-xl-none">
     <div class="row">
       <div class="col-sm"><strong>Lead Type</strong></div>
       <div class="col-sm"><strong>Person</strong></div>
@@ -13,22 +13,18 @@
   <a (click)="leadClicked(lead)" class="list-group-item list-group-item-action"
     *ngFor="let lead of leads; let i = index;">
     <div class="row align-items-center">
-      <div class="col">
-        <div class="row align-items-center">
-          <div class="col-sm mb-2 mb-sm-0">
-            <span class="badge badge-pill badge-danger mr-1" *ngIf="lead?.closedById">Closed</span>
-            <span class="badge badge-pill badge-info">{{lead?.leadType}}</span>
-          </div>
-          <div class="col-sm">
-            {{lead?.person}}
-          </div>
-          <div class="col-sm">
-            {{(lead?.nextChaseDate | date: 'dd/MM/yyyy hh:mm') || '-'}}
-          </div>
-          <div class="col-sm text-muted">
-            {{lead?.owner}}
-          </div>
-        </div>
+      <div class="col-sm mb-2 mb-sm-0 mb-xl-2 col-xl-12">
+        <span class="badge badge-pill badge-danger mr-1" *ngIf="lead?.closedById">Closed</span>
+        <span class="badge badge-pill badge-info">{{lead?.leadType}}</span>
+      </div>
+      <div class="col-sm col-xl-12">
+        {{lead?.person}}
+      </div>
+      <div class="col-sm col-xl-12">
+        {{(lead?.nextChaseDate | date: 'dd/MM/yyyy hh:mm') || '-'}}
+      </div>
+      <div class="col-sm text-muted col-xl-12">
+        {{lead?.owner}}
       </div>
     </div>
   </a>

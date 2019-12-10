@@ -5,7 +5,7 @@ import { LeadsService } from '../shared/leads.service';
 import { Lead, LeadEditSubNavItems } from '../shared/lead';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { InfoDetail } from 'src/app/core/services/info.service';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
 import { StaffMember } from 'src/app/shared/models/staff-member';
@@ -14,10 +14,11 @@ import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-group
 import { getDate } from 'date-fns';
 import { Person } from 'src/app/shared/models/person';
 import { ToastrService } from 'ngx-toastr';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, debounceTime } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { BaseComponent } from 'src/app/shared/models/base-component';
 import { LeadNoteComponent } from '../lead-note/lead-note.component';
+import { ValidationMessages, FormErrors } from 'src/app/core/shared/app-constants';
 
 @Component({
   selector: 'app-lead-edit',
@@ -53,6 +54,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
   addressees: any[] = [];
   noteRequiredWarning: string;
   personParams: string;
+  formErrors = FormErrors;
 
   constructor(private leadsService: LeadsService,
     private route: ActivatedRoute,
@@ -81,6 +83,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
 
   init() {
     this.setupLeadEditForm();
+    this.leadEditForm.valueChanges.pipe(debounceTime(400)).subscribe(() => this.logValidationErrors(this.leadEditForm, false));
 
     // All Staffmembers
     this.storage.get('allstaffmembers').subscribe(data => {
@@ -171,6 +174,28 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
     });
   }
 
+  logValidationErrors(group: FormGroup = this.leadEditForm, fakeTouched: boolean) {
+    Object.keys(group.controls).forEach((key: string) => {
+      const control = group.get(key);
+      const messages = ValidationMessages[key];
+      if (control.valid) {
+        FormErrors[key] = '';
+      }
+      if (control && !control.valid && (fakeTouched || control.dirty)) {
+        FormErrors[key] = '';
+        for (const errorKey in control.errors) {
+          if (errorKey) {
+            FormErrors[key] += messages[errorKey] + '\n';
+          }
+        }
+      }
+      if (control instanceof FormGroup) {
+        this.logValidationErrors(control, fakeTouched);
+      }
+    });
+    this.sharedService.scrollToFirstInvalidField();
+  }
+
   private getLeadInformation() {
     this.leadsService.getLead(this.leadId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.lead = result;
@@ -241,8 +266,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
     this.leadEditForm = this.fb.group({
       ownerId: null,
       person: '',
-      leadTypeId: 0,
-      nextChaseDate: [''],
+      leadTypeId: [0, Validators.required],
+      nextChaseDate: ['', Validators.required],
       closeLead: false
     });
   }
@@ -258,7 +283,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
 
     const lead = { ...this.lead, ...this.leadEditForm.value };
     this.isSubmitting = true;
-
+    this.logValidationErrors(this.leadEditForm, true);
+    
     const closeLead = this.leadEditForm.get('closeLead').value;
     const note = leadNote.getNote();
 
@@ -274,44 +300,47 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
       this.noteRequiredWarning = '';
     }
 
-    if (this.isNewLead) {
+    if (this.leadEditForm.valid) {
 
-      lead.personId = this.personId;
-      lead.createdBy = this.currentStaffMember.staffMemberId;
-      lead.createdDate = new Date;
-      lead.updatedBy = this.currentStaffMember.staffMemberId;
-      lead.updatedDate = new Date;
+      if (this.isNewLead) {
 
-      this.leadsService.addLead(lead).subscribe((result) => {
-        this.onUpdateCompleted();
-        this.lead = lead;
-      }, (error: WedgeError) => {
-        this.sharedService.showError(error);
-        this.isSubmitting = false;
-      });
-    } else {
+        lead.personId = this.personId;
+        lead.createdBy = this.currentStaffMember.staffMemberId;
+        lead.createdDate = new Date;
+        lead.updatedBy = this.currentStaffMember.staffMemberId;
+        lead.updatedDate = new Date;
+
+        this.leadsService.addLead(lead).subscribe((result) => {
+          this.onUpdateCompleted();
+          this.lead = lead;
+        }, (error: WedgeError) => {
+          this.sharedService.showError(error);
+          this.isSubmitting = false;
+        });
+      } else {
 
 
 
-      if (closeLead) {
-        lead.closedById = this.currentStaffMember.staffMemberId;
-        lead.dateClosed = new Date();
-      }
-
-      // adding note
-      this.contactGroupService.addPersonNote(note).subscribe(data => {
-        if (data) {
-          // this.formReset();
+        if (closeLead) {
+          lead.closedById = this.currentStaffMember.staffMemberId;
+          lead.dateClosed = new Date();
         }
-      });
 
-      // updating lead
-      this.leadsService.updateLead(lead).subscribe((result) => {
-        this.onUpdateCompleted();
-      }, (error: WedgeError) => {
-        this.sharedService.showError(error);
-        this.isSubmitting = false;
-      });
+        // adding note
+        this.contactGroupService.addPersonNote(note).subscribe(data => {
+          if (data) {
+            // this.formReset();
+          }
+        });
+
+        // updating lead
+        this.leadsService.updateLead(lead).subscribe((result) => {
+          this.onUpdateCompleted();
+        }, (error: WedgeError) => {
+          this.sharedService.showError(error);
+          this.isSubmitting = false;
+        });
+      }
     }
 
     // if (shouldExit) {
