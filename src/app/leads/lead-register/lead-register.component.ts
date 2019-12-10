@@ -207,7 +207,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       this.leadRegisterForm.patchValue({
         leadSearchTerm: ''
       });
-      
+
     }
     console.log('lead suggestion selected:', this.leadRegisterForm);
   }
@@ -255,13 +255,14 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
 
     subject.subscribe(leadOwner => {
       if (leadOwner) {
-        this.processLeadsAssignment(leadOwner, this.selectedLeadsForAssignment);
         console.log('lead Owner selected', leadOwner);
         console.log('leads selected for assignment', this.selectedLeadsForAssignment);
+        this.processLeadsAssignment(leadOwner, this.selectedLeadsForAssignment);
       }
     });
 
     return subject.asObservable();
+
   }
 
   onScrollDown() {

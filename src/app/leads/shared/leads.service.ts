@@ -55,7 +55,6 @@ export class LeadsService {
 
     return this.http.get<any>(url).pipe(
       map(response => response.result));
-    //tap(data => console.log('result', JSON.stringify(data))));
   }
 
   getLeads(leadSearchInfo: LeadSearchInfo, pageSize?: number): Observable<any> {
@@ -144,7 +143,11 @@ export class LeadsService {
   assignLeads(leadOwner: number, leads: Lead[]) {
     const url = `${AppConstants.baseLeadsUrl}/assign`;
 
-    return this.http.put<Lead>(url, leads).pipe(
+    const leadAssignmentInfo = { leadOwnerId: leadOwner, leads: leads };
+    console.log('lead assignment object:', leadAssignmentInfo);
+
+   
+    return this.http.put<Lead>(url, leadAssignmentInfo).pipe(
       map(response => response),
       tap(data => console.log('Updated Lead details here...', JSON.stringify(data))));
   }

@@ -33,12 +33,7 @@
           </div>
           <div class="col-lg">
             <div class="form-group">
-              <label for="chaser">Lead Owner</label>
-              <!-- <select class="custom-select custom-select-sm" id="owner" formControlName="ownerId">
-                <option value=""></option>
-                <option selected *ngFor="let staffMember of staffMembers" [value]=staffMember.staffMemberId>
-                  {{staffMember?.fullName}}</option>
-              </select> -->
+              <label for="chaser">Lead Owner</label>            
               <app-staffmember-finder [staffMember]="leadOwner" (ownerChanged)="onOwnerChanged($event)">
               </app-staffmember-finder>
             </div>

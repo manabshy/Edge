@@ -99,13 +99,13 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
     this.storage.get('currentUser').subscribe((data: StaffMember) => {
       if (data) {
         this.currentStaffMember = data;
-        console.log("current staffmember loaded", this.currentStaffMember);
+
+        if (this.isNewLead) {
+          this.leadOwner = this.currentStaffMember;
+        }
 
       }
     });
-
-    console.log('New Lead:', this.isNewLead);
-    console.log('Person Id:', this.personId);
 
     if (!this.isNewLead) {
       // receive new lead
@@ -114,22 +114,15 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
 
         if (lead) {
           this.personId = lead.personId;
-          console.log('have lead object...');
           this.patchLeadValues(lead);
-
           this.getPersonInformation();
 
           this.leadOwner = this.staffMembers.find(sm => sm.staffMemberId === this.lead.ownerId)[0];
-          console.log('lead Owner', this.leadOwner);
-
         } else {
-          console.log('dont have lead object...');
           this.getLeadInformation();
         }
       });
     } else {
-      console.log("NEW LEAD: ", this.lead);
-      console.log("current staffmember", this.currentStaffMember);
       this.getPersonInformation();
     }
 
@@ -156,10 +149,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
         this.leadsService.getLeadIds(leadSearchInfo).subscribe(result => {
           this.leadIds = result;
           this.currentLeadIndex = this.leadIds.indexOf(leadSearchInfo.startLeadId);
-          console.log('leads Ids search info: ', leadSearchInfo);
-          console.log('leads Ids here: ', this.leadIds);
-          console.log('current Index: ', this.currentLeadIndex);
-          console.log('Lead Id: ', this.leadId);
         }, error => {
           this.lead = null;
         });
@@ -180,12 +169,10 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
   }
 
   private getLeadInformation() {
-    console.log('get lead information', this.leadId);
     this.leadsService.getLead(this.leadId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.lead = result;
       this.personId = result.personId;
       this.patchLeadValues(result);
-      console.log('in get lead information', this.personId);
       this.getPersonInformation();
       this.leadOwner = this.staffMembers.find(sm => sm.staffMemberId === this.lead.ownerId);
     }, error => {
@@ -212,7 +199,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
       data => {
         if (data) {
           this.person = data;
-          console.log('get person information', this.person);
           this.getSearchedPersonSummaryInfo(this.person.personId);
         }
 
@@ -328,25 +314,14 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
     }
   }
 
-
-
-
   get dataNote() {
-    // if (this.contactGroupDetails) {
-    //console.log('PERSON:',this.person);
     return {
-      //   group: null,
-      //   people: [this.person],
-      // notes: this.personNotes
       personId: this.personId
     };
-    // }
-    // return null;
   }
 
   cancel() {
     if (false) {
-      //this.backToFinder.emit(true);
     } else {
       this.sharedService.back();
     }
@@ -365,12 +340,10 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
         } else {
           this.personNotes = _.concat(this.personNotes, data);
         }
-        console.log('person Notes', this.personNotes);
       }
       if (data && !data.length) {
 
         this.bottomReached = true;
-        console.log('data', data);
         console.log('bottom reached', this.bottomReached);
       }
     });
@@ -395,9 +368,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
       this.leadsListCompleted = true;
       console.log('list completed');
     }
-    //console.log('list completed?', this.leadsListCompleted);
-
-
   }
 
   canDeactivate(): boolean {
