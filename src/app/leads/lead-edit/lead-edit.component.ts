@@ -17,6 +17,7 @@ import { ToastrService } from 'ngx-toastr';
 import { takeUntil } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { BaseComponent } from 'src/app/shared/models/base-component';
+import { LeadNoteComponent } from '../lead-note/lead-note.component';
 
 @Component({
   selector: 'app-lead-edit',
@@ -98,6 +99,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
     this.storage.get('currentUser').subscribe((data: StaffMember) => {
       if (data) {
         this.currentStaffMember = data;
+        console.log("current staffmember loaded", this.currentStaffMember);
+
       }
     });
 
@@ -126,6 +129,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
       });
     } else {
       console.log("NEW LEAD: ", this.lead);
+      console.log("current staffmember", this.currentStaffMember);
       this.getPersonInformation();
     }
 
@@ -247,18 +251,20 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
       ownerId: null,
       person: '',
       leadTypeId: 0,
-      nextChaseDate: ['']
+      nextChaseDate: [''],
+      closeLead: false
     });
   }
 
-  closeLeadClicked() {
+  // closeLeadClicked() {
 
-    this.lead.closedById = this.currentStaffMember.staffMemberId;
-    this.lead.dateClosed = new Date();
-    this.updateLead();
-  }
+  //   this.lead.closedById = this.currentStaffMember.staffMemberId;
+  //   this.lead.dateClosed = new Date();
+  //   this.updateLead();
+  // }
 
-  updateLead(shouldExit: boolean = false) {
+  updateLead(shouldExit: boolean = false, leadNote = null) {
+
     const lead = { ...this.lead, ...this.leadEditForm.value };
     this.isSubmitting = true;
 
@@ -278,6 +284,29 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
         this.isSubmitting = false;
       });
     } else {
+
+      const closeLead = this.leadEditForm.get('closeLead').value;
+      const note = leadNote.getNote();
+
+      // Checking if Close Lead is ticked and note is entered
+      if (closeLead && note.text === '') {
+        console.log('cannot update');
+        return;
+      }
+
+      if (closeLead) {
+        lead.closedById = this.currentStaffMember.staffMemberId;
+        lead.dateClosed = new Date();
+      }
+
+      // adding note
+      this.contactGroupService.addPersonNote(note).subscribe(data => {
+        if (data) {
+          // this.formReset();
+        }
+      });
+
+      // updating lead
       this.leadsService.updateLead(lead).subscribe((result) => {
         this.onUpdateCompleted();
       }, (error: WedgeError) => {
@@ -286,9 +315,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
       });
     }
 
-    if (shouldExit) {
-      this.sharedService.back();
-    }
+    // if (shouldExit) {
+    //   this.sharedService.back();
+    // }
 
   }
 

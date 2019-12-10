@@ -9,13 +9,15 @@ import { LeadComponent } from './lead.component';
 import { StaffmemberFinderComponent } from '../shared/staffmember-finder/staffmember-finder.component';
 import { LeadFinderComponent } from './lead-finder/lead-finder.component';
 import { SharedModule } from '../shared/shared.module';
+import { LeadNoteComponent } from './lead-note/lead-note.component';
 
 @NgModule({
   declarations: [
     LeadRegisterComponent,
     LeadEditComponent,
     LeadComponent,
-    LeadFinderComponent
+    LeadFinderComponent,
+    LeadNoteComponent
   ],
   imports: [
     CommonModule,

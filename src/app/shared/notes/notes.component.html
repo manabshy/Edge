@@ -1,5 +1,5 @@
 <div class="list-group mb-5">
-  <div class="list-group-item add-note-container py-4" *ngIf="noteData">
+  <div class="list-group-item add-note-container py-4" *ngIf="noteData && showNoteInput">
     <app-note-form [data]="noteData"></app-note-form>
   </div>
   <div class="list-group-item text-center text-danger" *ngIf="!notes || !notes?.length && !isUpdating">

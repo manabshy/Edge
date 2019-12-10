@@ -56,6 +56,7 @@ export class StaffmemberFinderComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     this.selectedOwner = this.staffMember;
+    console.log('owner is set: ', this.selectedOwner);
   }
 
   onChanges(): void {

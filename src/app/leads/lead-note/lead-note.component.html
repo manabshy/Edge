@@ -1,0 +1,35 @@
+<form [formGroup]="noteForm" (ngSubmit)="action(true)" class="text-left">
+    <div class="form-group">
+      <div class="custom-control custom-checkbox custom-control-inline">
+        <input type="checkbox" class="custom-control-input" id="important" formControlName="isImportant">
+        <label class="custom-control-label" for="important">Set as important</label>
+      </div>
+      <div class="custom-control custom-checkbox custom-control-inline">
+        <input type="checkbox" class="custom-control-input" id="topPinned" formControlName="isPinned">
+        <label class="custom-control-label" for="topPinned">Pin to top</label>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="row mb-2">
+        <div class="col">
+          <label for="note">Note</label>
+        </div>
+        <div class="col-auto">
+          <ng-template #popTemplate>
+            <ng-container *ngFor="let shortcut of shortcuts | keyvalue:keepOriginalOrder; last as isLast">
+              {{shortcut.key}} - {{shortcut.value}} <br *ngIf="!isLast" />
+            </ng-container>
+          </ng-template>          
+        </div>
+      </div>
+      <div class="form-group mb-1">
+        <ng-container *ngFor="let shortcut of shortcuts | keyvalue:keepOriginalOrder; last as isLast">
+          <button type="button" class="btn btn-sm btn-outline-primary mr-2 mb-2"
+            (click)="consumeShortcut(shortcut.value)">{{shortcut.key}}</button>
+        </ng-container>
+      </div>
+      <textarea class="form-control" name="note" id="note" cols="30" rows="5" placeholder="Comment ..."
+        (keydown)="ctrlEnterSubmit($event)"
+        formControlName="text"></textarea>
+    </div>    
+  </form>
