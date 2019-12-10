@@ -6,13 +6,13 @@ import { AuthService } from './core/services/auth.service';
 import { SharedService, WedgeError } from './core/services/shared.service';
 import { StaffMemberService } from './core/services/staff-member.service';
 import { StaffMember } from './shared/models/staff-member';
-import { BehaviorSubject } from 'rxjs';
 import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
 import { EdgeServiceWorkerService } from './core/services/edge-service-worker.service';
 import { BaseComponent } from './shared/models/base-component';
 import { InfoService } from './core/services/info.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
-
+import { environment } from 'src/environments/environment';
+import manifest from 'src/manifest.json';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -81,6 +81,9 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
   ngOnInit() {
     this.toastr.overlayContainer = this.toastContainer;
     console.log('instance initiliased');
+    this.setManifestName();
+    console.log('manifest here..', manifest)
+
     if (this.isLoggedIn) {
       this.getCurrentStaffMember();
 
@@ -167,4 +170,24 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
 
   }
 
+  private setManifestName() {
+    const baseUrl = environment.baseUrl;
+    const name = 'Edge 4';
+    const isDev = baseUrl.includes('dev');
+    const isTest = baseUrl.includes('test');
+    switch (true) {
+      case isDev:
+        manifest.name = `${name} Dev`;
+        manifest.short_name = `${name} Dev`;
+        break;
+      case isTest:
+        manifest.name = `${name} Test`;
+        manifest.short_name = `${name} Test`;
+        break;
+      default:
+        manifest.name = `${name}`;
+        manifest.short_name = `${name}`;
+        break;
+    }
+  }
 }

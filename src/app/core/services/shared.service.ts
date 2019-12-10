@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AppUtils, RequestOption } from '../shared/utils';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import { Subject } from 'rxjs';
 import { map, fill } from 'lodash';
 import { BsModalService } from 'ngx-bootstrap/modal/';
