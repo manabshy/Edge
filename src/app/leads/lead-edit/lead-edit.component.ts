@@ -52,6 +52,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
   contactGroups: BasicContactGroup[];
   addressees: any[] = [];
   noteRequiredWarning: string;
+  personParams: string;
 
   constructor(private leadsService: LeadsService,
     private route: ActivatedRoute,
@@ -200,6 +201,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
       data => {
         if (data) {
           this.person = data;
+          this.personParams = JSON.stringify(this.person);
           this.getSearchedPersonSummaryInfo(this.person.personId);
         }
 
