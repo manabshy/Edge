@@ -8,8 +8,9 @@ import { Person } from 'src/app/shared/models/person';
   templateUrl: './lead-note.component.html',
   styleUrls: ['./lead-note.component.scss']
 })
-export class LeadNoteComponent implements OnInit {
+export class LeadNoteComponent implements OnInit, OnChanges {
   @Input() selectedPerson: Person;
+  @Input() isDisabled: boolean;
 
   shortcuts = {
     'Left Message': 'Left message',
@@ -38,8 +39,13 @@ export class LeadNoteComponent implements OnInit {
     this.noteForm.valueChanges.subscribe(val => {
       this.note = val.text;
     });
+
+  
   }
 
+  ngOnChanges() {
+    console.log('Lead Note Component:', this.isDisabled);
+  }
 
   consumeShortcut(shortcut: string) {
     const textControl = this.noteForm.get('text');

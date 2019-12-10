@@ -51,7 +51,7 @@
           </div>
 
         </div>
-        <app-lead-note #leadNote [selectedPerson] = "person"></app-lead-note>
+        <app-lead-note #leadNote [selectedPerson] = "person" [isDisabled] = "lead?.closedById ? true : fasle"></app-lead-note>
         <h5>Person</h5>
         <app-person-details *ngIf="person" [personDetails]="person"></app-person-details>
         <div #spacer></div>
