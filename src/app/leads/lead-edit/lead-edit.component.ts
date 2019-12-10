@@ -103,6 +103,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
 
         if (this.isNewLead) {
           this.leadOwner = this.currentStaffMember;
+          this.leadEditForm.get('ownerId').setValue(this.leadOwner.staffMemberId);
         }
 
       }
