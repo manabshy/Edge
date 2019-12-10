@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2, Input } from '@angular/core';
+import { Component, OnInit, Renderer2, Input, OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ContactNote } from 'src/app/contactgroups/shared/contact-group';
 import { Person } from 'src/app/shared/models/person';
