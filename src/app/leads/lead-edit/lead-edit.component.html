@@ -45,13 +45,13 @@
           </div>
           <div class="col-lg">
             <div class="form-group">              
-              <input type="checkbox" class="custom-control-input" id="closeLead" formControlName="closeLead" [(ngModel)] = "lead?.closedById ? true : fasle">
+              <input type="checkbox" class="custom-control-input" id="closeLead" formControlName="closeLead" [(ngModel)] = "lead?.closedById ? true : false">
               <label class="custom-control-label" for="closeLead">Close Lead</label>
             </div>
           </div>
 
         </div>
-        <app-lead-note #leadNote [selectedPerson] = "person" [isDisabled] = "lead?.closedById ? true : fasle"></app-lead-note>
+        <app-lead-note #leadNote [selectedPerson] = "person" [isDisabled] = "lead?.closedById ? true : false"></app-lead-note>
         <h5>Person</h5>
         <app-person-details *ngIf="person" [personDetails]="person"></app-person-details>
         <div #spacer></div>
