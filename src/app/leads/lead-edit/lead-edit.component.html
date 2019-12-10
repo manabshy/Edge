@@ -119,10 +119,10 @@
           <div class="col-sm-10 d-flex">
 
             <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
-            <button type="submit" class="btn btn-secondary mr-2">Save</button>
+            <button type="submit" class="btn btn-secondary mr-2" [attr.disabled] = "lead?.closedById ? true : null">Save</button>
 
             <button (click)="moveToNextLead()" type="button" class="btn btn-secondary" [isOpen]="leadsListCompleted"
-              [tooltip]="leadsListCompleted ? 'You have reached the end of the list' : null">Save & Next</button>
+              [tooltip]="leadsListCompleted ? 'You have reached the end of the list' : null" [attr.disabled] = "lead?.closedById ? true : null">Save & Next</button>
           </div>
         </div>
       </div>
