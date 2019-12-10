@@ -2,4 +2,4 @@
 <input type="search" class="form-control form-control-sm" placeholder="Name"
     aria-label="Search criteria" (keyup)="onKeyup($event)" [ngbTypeahead]="suggestions" 
     [focusFirst]="true" (selectItem)="selectedSuggestion($event)" [(ngModel)] = "selectedOwner" 
-    [resultFormatter]="resultFormatOwnerValue" [inputFormatter]="inputFormatOwnerValue" formControlName="owner"></form>
+    [resultFormatter]="resultFormatOwnerValue" [inputFormatter]="inputFormatOwnerValue" formControlName="owner" [attr.disabled] = "isDisabled ? true : null"></form>

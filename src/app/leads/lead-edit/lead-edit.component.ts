@@ -199,7 +199,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
       person: lead.person,
       personId: lead.personId,
       leadTypeId: lead.leadTypeId,
-      nextChaseDate: this.sharedService.ISOToDate(lead.nextChaseDate)
+      nextChaseDate: this.sharedService.ISOToDate(lead.nextChaseDate),
+      closeLead: lead.closedById
     });
     this.onLoading = false;
   }

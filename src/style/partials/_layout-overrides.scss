@@ -206,10 +206,6 @@ fieldset {
     border: 1px solid $border-color;
 }
 
-.form-control:disabled {
-    opacity: .5;
-}
-
 .aside {
     top: 1rem;
 }
@@ -244,4 +240,8 @@ fieldset {
 .dropdown-icon {
     display: inline-block;
     min-width: 2rem;
+}
+
+.custom-checkbox .custom-control-input:disabled:checked ~ .custom-control-label::before {
+    background-image: none;
 }
