@@ -91,8 +91,53 @@
           </accordion>
         </div>
         <div class="mb-3"></div>
+        <div class="row">
+          <div class="col-12">
+            <div class="form-group">
+              <div class="custom-control custom-checkbox">              
+                <input type="checkbox" class="custom-control-input" id="closeLead" formControlName="closeLead" [attr.disabled] = "lead?.closedById ? true : null">
+                <label class="custom-control-label" for="closeLead">Mark as <span class="badge badge-pill badge-danger">Closed</span></label>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg">
+            <div class="form-group">
+              <label for="type">Type</label>
+              <select class="custom-select custom-select-sm" id="leadType" formControlName="leadTypeId" [attr.disabled] = "lead?.closedById ? true : null">
+                <option value=""></option>
+                <option selected *ngFor="let leadType of leadTypes" [value]=leadType.id>{{leadType?.value}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-lg">
+            <div class="form-group">
+              <label for="chaseDate">Next chase date</label>
+              <input type="text" id="chaseDate" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
+                formControlName="nextChaseDate"
+                [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
+                bsDatepicker [attr.disabled] = "lead?.closedById ? true : null">
+            </div>
+          </div>
+          <div class="col-lg">
+            <div class="form-group">
+              <label for="chaser">Lead Owner</label>
+              <!-- <select class="custom-select custom-select-sm" id="owner" formControlName="ownerId">
+                <option value=""></option>
+                <option selected *ngFor="let staffMember of staffMembers" [value]=staffMember.staffMemberId>
+                  {{staffMember?.fullName}}</option>
+              </select> -->
+              <app-staffmember-finder [staffMember]="leadOwner" (ownerChanged)="onOwnerChanged($event)" [isDisabled] = "lead?.closedById ? true : false">
+              </app-staffmember-finder>
+            </div>
+          </div>
+        </div>
         <h5>Notes</h5>
         <!-- <app-notes [personNotes]="personNotes"></app-notes> -->
+        <div class="list-group">
+          <div class="list-group-item add-note py-4">
+            <app-lead-note #leadNote [selectedPerson] = "person" [isDisabled] = "lead?.closedById ? true : false"></app-lead-note>
+          </div>
+        </div>
         <app-notes [personNotes]="personNotes" [person]="person" [noteData]="dataNote" [addressees]="addressees"
           [pageNumber]="page" [bottomReached]="bottomReached" [showNoteInput]="false"></app-notes>
       </div>

@@ -112,15 +112,16 @@ export class CalendarComponent implements OnInit {
           return result.map(diary => {
             const title = diary.subject || diary.eventType;
             const start = new Date(diary.startDateTime);
+            const end = new Date(diary.endDateTime);
             const allDay = diary.allDay;
-            const meta = diary;
+            let meta = diary;
             const members = this.getStaff(meta.staffMembers);
             let cssClass = '';
             cssClass += meta.isCancelled ? 'is-cancelled' : '';
             cssClass += meta.isHighImportance ? ' is-important' : '';
             cssClass += meta.isConfirmed ? ' is-confirmed' : '';
             if (!meta.isCancelled || isCancelledVisible) {
-              return { title, start, allDay, meta, members, cssClass } as CalendarEvent;
+              return { title, start, end, allDay, meta, members, cssClass } as CalendarEvent;
             } else {
               return {} as CalendarEvent;
             }

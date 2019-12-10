@@ -17,6 +17,7 @@ import { StorageMap } from '@ngx-pwa/local-storage';
 export class StaffmemberFinderComponent implements OnInit, OnChanges {
 
   @Input() staffMember: StaffMember;
+  @Input() isDisabled: boolean = false;
   @Output() ownerChanged = new EventEmitter();
   suggestions: (text$: Observable<any>) => Observable<any>;
   suggestedTerm: any;
