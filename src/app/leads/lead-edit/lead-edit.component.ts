@@ -104,6 +104,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
 
         if (this.isNewLead) {
           this.leadOwner = this.currentStaffMember;
+          this.leadEditForm.get('ownerId').setValue(this.leadOwner.staffMemberId);
         }
 
       }
@@ -282,10 +283,13 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
       if (closeLead && note.text === '') {
         this.noteRequiredWarning = 'When you close a lead you must enter a Note.';
         console.log('cannot update');
-        setTimeout(()=>{
+        setTimeout(() => {
           this.sharedService.scrollToFirstInvalidField();
         })
         return;
+      }
+      else {
+        this.noteRequiredWarning = '';
       }
 
       if (closeLead) {
