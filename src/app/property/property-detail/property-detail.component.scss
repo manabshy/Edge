@@ -17,11 +17,20 @@
             @include media-breakpoint-down(lg) {
                 position: static!important;
             }
+        }
+    }
+
+    [stickything] {
+        &:not([style*=fixed]) {
             @include media-breakpoint-up(xl) {
-                right: spacer(3)!important;
-                left: auto!important;
-                width: 25%!important;
+                top: 160px!important;
             }
+        }
+        @include media-breakpoint-up(xl) {
+            position: fixed;
+            right: spacer(3)!important;
+            left: auto!important;
+            width: 25%!important;
         }
     }
 }

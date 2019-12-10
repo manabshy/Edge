@@ -1,4 +1,4 @@
-<div class="list-group mb-3" *ngIf="properties$|async as properties">
+<div class="list-group list-group-flush" *ngIf="properties$|async as properties">
   <div class="list-group-item text-center text-danger" *ngIf="!properties || !properties?.length">
     <i class="far fa-sad-tear"></i> No properties
   </div>
