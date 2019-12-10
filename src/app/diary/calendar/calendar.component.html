@@ -17,11 +17,21 @@
         </div>
         <dl class="col">
           <dt>Start</dt>
-          <dd>{{ event.meta.startDateTime | calendarDate:'dayViewHour':locale }}</dd>
+          <dd>
+            <ng-container *ngIf="(event.start | calendarDate:'dayViewTitle':locale) !== (event.end | calendarDate:'dayViewTitle':locale)">
+              {{ event.start | calendarDate:'dayViewTitle':locale }} <br>
+            </ng-container>
+            {{ event.start | calendarDate:'dayViewHour':locale }}
+          </dd>
         </dl>
         <dl class="col">
           <dt>End</dt>
-          <dd>{{ event.meta.endDateTime | calendarDate:'dayViewHour':locale }}</dd>
+          <dd>
+            <ng-container *ngIf="(event.start | calendarDate:'dayViewTitle':locale) !== (event.end | calendarDate:'dayViewTitle':locale)">
+              {{ event.end | calendarDate:'dayViewTitle':locale }} <br>
+            </ng-container>
+            {{ event.end | calendarDate:'dayViewHour':locale }}
+          </dd>
         </dl>
       </div>
       <dl>
