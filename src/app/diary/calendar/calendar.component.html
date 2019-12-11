@@ -41,10 +41,12 @@
       <dl *ngIf="event.meta?.properties && event.meta?.properties?.length">
         <dt>Properties</dt>
         <dd>
-          <p class="mb-1" *ngFor="let property of event.meta?.properties">
-              {{property?.address | formatAddress}}
-             <span class="small" *ngIf="property?.viewingArragementId > 0"> {{property?.viewingArragement}}</span>
-          </p>
+          <div class="mb-1" *ngFor="let property of event.meta?.properties">
+            <pre>{{property?.address | formatAddress}}</pre>
+            <ng-container *ngIf="property?.viewingArragementId > 0">
+              <span class="badge badge-pill badge-warning"> {{property?.viewingArragement}}</span>
+            </ng-container>
+          </div>
         </dd>
       </dl>
       <dl *ngIf="event.meta?.staffMembers && event.meta?.staffMembers?.length">
