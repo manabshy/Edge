@@ -64,6 +64,8 @@ export const FormErrors = {
   'regionId': '',
   'areaId': '',
   'subAreaId': '',
+  'leadTypeId': '',
+  'nextChaseDate': ''
 };
 export const ValidationMessages = {
   'searchTerm': {

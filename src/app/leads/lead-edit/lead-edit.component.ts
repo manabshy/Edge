@@ -55,6 +55,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
   noteRequiredWarning: string;
   personParams: string;
   formErrors = FormErrors;
+  public keepOriginalOrder = (a) => a.key;
 
   constructor(private leadsService: LeadsService,
     private route: ActivatedRoute,
@@ -284,7 +285,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
     const lead = { ...this.lead, ...this.leadEditForm.value };
     this.isSubmitting = true;
     this.logValidationErrors(this.leadEditForm, true);
-    
+
     const closeLead = this.leadEditForm.get('closeLead').value;
     const note = leadNote.getNote();
 

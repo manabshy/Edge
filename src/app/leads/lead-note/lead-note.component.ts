@@ -12,6 +12,7 @@ export class LeadNoteComponent implements OnInit, OnChanges {
   @Input() selectedPerson: Person;
   @Input() isDisabled: boolean;
   @Input() noteRequiredWarning: string;
+  public keepOriginalOrder = (a) => a.key;
 
   shortcuts = {
     'Left Message': 'Left message',
@@ -41,7 +42,7 @@ export class LeadNoteComponent implements OnInit, OnChanges {
       this.note = val.text;
     });
 
-  
+
   }
 
   ngOnChanges() {
