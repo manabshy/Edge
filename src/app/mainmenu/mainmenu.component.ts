@@ -84,10 +84,6 @@ export class MainmenuComponent implements OnInit {
     console.log('stop now', this.impersonatedStaffMember);
   }
 
-  backClicked() {
-    this.navbarCollapsed = false;
-  }
-
   logOut() {
     this.authService.signout();
   }
