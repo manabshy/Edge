@@ -140,13 +140,13 @@ export class LeadsService {
       }));
   }
 
-  assignLeads(leadOwner: number, leads: Lead[]) {
+  assignLeads(leadOwner: number, leads: Lead[]): Observable<any> {
     const url = `${AppConstants.baseLeadsUrl}/assign`;
 
     const leadAssignmentInfo = { leadOwnerId: leadOwner, leads: leads };
     console.log('lead assignment object:', leadAssignmentInfo);
 
-   
+
     return this.http.put<Lead>(url, leadAssignmentInfo).pipe(
       map(response => response),
       tap(data => console.log('Updated Lead details here...', JSON.stringify(data))));
