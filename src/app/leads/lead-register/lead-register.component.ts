@@ -8,14 +8,12 @@ import { InfoDetail } from 'src/app/core/services/info.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { OfficeService } from 'src/app/core/services/office.service';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
-import { ControlPosition } from '@agm/core/services/google-maps-types';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { LeadAssignmentModalComponent } from '../../shared/lead-assignment-modal/lead-assignment-modal.component';
 import { Subject } from 'rxjs';
 import { AppUtils } from 'src/app/core/shared/utils';
-import { ResultData } from 'src/app/shared/result-data';
 import { ToastrService } from 'ngx-toastr';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-lead-register',
@@ -26,7 +24,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   @Input() leads: Lead[];
   @Input() pageNumber: number;
   @Input() bottomReached: boolean;
-  @Input() showFilterOptions: boolean = true;
+  @Input() showFilterOptions = true;
   areLeadsAssignable = false;
   currentStaffMember: StaffMember;
   listInfo: any;
@@ -38,14 +36,13 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   groupsLength: number;
   filteredLeads: Lead[];
   leadSearchInfo: LeadSearchInfo;
-  enableOwnerFilter: boolean = true;
+  enableOwnerFilter = true;
   selectedLeadsForAssignment: Lead[] = [];
-  isSelectAllChecked: boolean = false;
+  isSelectAllChecked = false;
   searchTerm = '';
   errorMessage: WedgeError;
 
   constructor(private leadService: LeadsService,
-    private staffMemberService: StaffMemberService,
     private sharedService: SharedService,
     private storage: StorageMap,
     private officeService: OfficeService,
@@ -98,13 +95,13 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     }
     console.log('INIT: ', this.leadSearchInfo);
 
-    this.leadRegisterForm.valueChanges.subscribe(changes => {
+    this.leadRegisterForm.valueChanges.subscribe(() => {
       this.leadSearchInfo = this.getSearchInfo(true);
       console.log('form group changes', this.leadSearchInfo);
       // this.leadService.pageNumberChanged(this.leadSearchInfo);
     });
 
-    //this.leadResults();
+    // this.leadResults();
   }
 
   // leadResults() {
@@ -122,7 +119,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   }
 
   assignSelected() {
-    console.log("show popup to assign leads");
+    console.log('show popup to assign leads');
   }
 
   selectLead(lead?: Lead) {
@@ -174,7 +171,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       if (this.filteredLeads) {
         this.filteredLeads.forEach(lead => {
           this.selectLeadForAssignment(event, lead);
-        })
+        });
       }
       this.isSelectAllChecked = true;
     }
@@ -249,10 +246,12 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   }
 
   processLeadsAssignment(leadOwner: number, leadsForAssignment: Lead[]) {
-    this.leadService.assignLeads(leadOwner, leadsForAssignment).subscribe((result: ResultData) => {
-      if (result.status) {
-        this.toastr.success('Lead successfully assigned!');
-       // get assigned leads here...
+    this.leadService.assignLeads(leadOwner, leadsForAssignment).subscribe(result => {
+      if (result) {
+        this.toastr.success('Lead(s) successfully assigned!');
+        this.areLeadsAssignable = false;
+        this.selectedLeadsForAssignment = [];
+        this.replaceLeadsWithNewOwners(result);
       }
     }, (error: WedgeError) => {
       this.errorMessage = error;
@@ -301,5 +300,19 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     console.log('bottom reached', this.bottomReached);
   }
 
-
+  private replaceLeadsWithNewOwners(newLeads: Lead[]) {
+    if (this.leads && this.leads.length) {
+      let index = -1;
+      for (const lead of this.leads) {
+        newLeads.forEach(x => {
+          if (x.leadId === lead.leadId) {
+            index = this.leads.findIndex(l => l.leadId === lead.leadId);
+            if (this.leads[index]) {
+              this.leads[index] = x;
+            }
+          }
+        });
+      }
+    }
+  }
 }
