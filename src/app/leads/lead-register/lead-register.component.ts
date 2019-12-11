@@ -6,7 +6,7 @@ import { StaffMember, Office } from 'src/app/shared/models/staff-member';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { InfoDetail } from 'src/app/core/services/info.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { SharedService } from 'src/app/core/services/shared.service';
+import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { OfficeService } from 'src/app/core/services/office.service';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { ControlPosition } from '@agm/core/services/google-maps-types';
@@ -14,6 +14,8 @@ import { BsModalService } from 'ngx-bootstrap/modal';
 import { LeadAssignmentModalComponent } from '../../shared/lead-assignment-modal/lead-assignment-modal.component';
 import { Subject } from 'rxjs';
 import { AppUtils } from 'src/app/core/shared/utils';
+import { ResultData } from 'src/app/shared/result-data';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-lead-register',
@@ -40,6 +42,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   selectedLeadsForAssignment: Lead[] = [];
   isSelectAllChecked: boolean = false;
   searchTerm = '';
+  errorMessage: WedgeError;
 
   constructor(private leadService: LeadsService,
     private staffMemberService: StaffMemberService,
@@ -47,6 +50,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     private storage: StorageMap,
     private officeService: OfficeService,
     private modalService: BsModalService,
+    private toastr: ToastrService,
     private fb: FormBuilder) { }
 
   ngOnInit() {
@@ -245,7 +249,15 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   }
 
   processLeadsAssignment(leadOwner: number, leadsForAssignment: Lead[]) {
-    this.leadService.assignLeads(leadOwner, leadsForAssignment);
+    this.leadService.assignLeads(leadOwner, leadsForAssignment).subscribe((result: ResultData) => {
+      if (result.status) {
+        this.toastr.success('Lead successfully assigned!');
+       // get assigned leads here...
+      }
+    }, (error: WedgeError) => {
+      this.errorMessage = error;
+      this.sharedService.showError(this.errorMessage);
+    });
   }
 
   showLeadsAssignmentModal() {
