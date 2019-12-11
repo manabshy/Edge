@@ -1,150 +1,154 @@
-<div class="container">
-  <div class="row page-title">
-    <div class="col">
-      <h4 class="m-0">Leads register</h4>
+<div class="row page-title">
+  <div class="col">
+    <h4 class="m-0">Leads register</h4>
+  </div>
+  <div class="col-auto">
+    <div class="btn-group" dropdown placement="bottom right">
+      <button id="actionsToggle" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
+        aria-controls="actionsList">
+        Actions <span class="caret"></span>
+      </button>
+      <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+        aria-labelledby="actionsToggle">
+        <li role="menuitem">
+          <a class="dropdown-item" href (click)="assignLeads()">
+            <span class="dropdown-icon">
+              <i class="fas fa-arrow-right fa-xs align-text-top"></i><i class="fas fa-user fa-fw"></i>
+            </span>
+            Assign
+          </a>
+        </li>
+      </ul>
     </div>
-    <div class="col-auto">
-      <div class="btn-group" dropdown placement="bottom right">
-        <button id="actionsToggle" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
-          aria-controls="actionsList">
-          Actions <span class="caret"></span>
-        </button>
-        <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
-          aria-labelledby="actionsToggle">
-          <li role="menuitem">
-            <a class="dropdown-item" href (click)="assignLeads()">
-              <span class="dropdown-icon">
-                <i class="fas fa-arrow-right fa-xs align-text-top"></i><i class="fas fa-user fa-fw"></i>
-              </span>
-              Assign
-            </a>
-          </li>
-        </ul>
+  </div>
+</div>
+<form class="p-0" [formGroup]="leadRegisterForm" *ngIf="showFilterOptions">
+
+  <div class="row align-items-center">
+    <div class="col-sm">
+      <div class="row">
+        <div class="col-12 form-group">
+          <!-- <app-staffmember-finder (ownerChanged)="onOwnerChanged($event)"></app-staffmember-finder> -->
+          <app-lead-finder (leadSuggestionSelected)="onLeadSuggestionSelected($event)"></app-lead-finder>
+        </div>
+        <div class="col-sm form-group">
+          <label class="small" for="leadType">Type</label>
+          <select class="custom-select custom-select-sm" id="leadType" formControlName="leadTypeId">
+            <option value="">All</option>
+            <option selected *ngFor="let leadType of leadTypes" [value]=leadType.id>{{leadType?.value}}</option>
+          </select>
+        </div>
+        <div class="col-sm form-group">
+          <label class="small" for="dateFrom">Date From</label>
+          <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
+            [bsConfig]="{showWeekNumbers:false, customTodayClass: 'font-weight-bold'}" [(bsValue)]="dateFrom"
+            value="{{ dateFrom | date:'dd/MM/yyyy'}}" bsDatepicker formControlName="dateFrom">
+        </div>
+        <div class="col-sm form-group">
+          <label class="small" for="dateTo">Date To</label>
+          <input type="text" id="dateTo" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
+            [bsConfig]="{showWeekNumbers:false, customTodayClass: 'font-weight-bold'}" [(bsValue)]="dateTo"
+            value="{{ dateTo | date:'dd/MM/yyyy'}}" bsDatepicker formControlName="dateTo">
+        </div>
+        <div class="col-sm form-group">
+          <label class="small" for="office">Office</label>
+          <select class="custom-select custom-select-sm" id="office" formControlName="officeId">
+            <option value="">All</option>
+            <option selected *ngFor="let office of offices" [value]=office.officeId>{{office?.name}}</option>
+          </select>
+        </div>
+        <div class="w-100"></div>
+        <div class="col-sm-auto">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="closedInclusive"
+              formControlName="includeClosedLeads">
+            <label class="custom-control-label" for="closedInclusive">Include closed leads</label>
+          </div>
+        </div>
+        <div class="col form-group">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="unassignedLeadsOnly"
+              formControlName="includeUnassignedLeadsOnly">
+            <label class="custom-control-label" for="unassignedLeadsOnly">Include unassigned leads only</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-2">
+      <div class="form-group">
+        <button class="btn btn-block btn-secondary" (click)="PerformSearch()">Search</button>
       </div>
     </div>
   </div>
-  <form class="p-0" [formGroup]="leadRegisterForm" *ngIf="showFilterOptions">
-
-    <div class="row align-items-center">
-      <div class="col-sm">
-        <div class="row">
-          <div class="col-12 form-group">
-            <!-- <app-staffmember-finder (ownerChanged)="onOwnerChanged($event)"></app-staffmember-finder> -->
-            <app-lead-finder (leadSuggestionSelected)="onLeadSuggestionSelected($event)"></app-lead-finder>
+</form>
+<form class="pb-0" (ngSubmit)="showLeadsAssignmentModal()">
+  <div class="row" *ngIf="areLeadsAssignable">
+    <div class="col">
+      <h5>Select to assign</h5>
+    </div>
+    <div class="col-auto d-sm-none">
+      <button type="button" class="btn btn-link p-0" (click)="selectAllLeadsForAssignment($event)">
+        {{selectedLeadsForAssignment?.length ? 'Unselect' : 'Select'}} all
+      </button>
+    </div>
+  </div>
+  <div class="list-group mb-3">
+    <!-- <a [routerLink]="areLeadsAssignable ? null : ['edit', lead?.leadId]" (click)="selectLead()" -->
+    <div class="list-group-item list-header d-none d-sm-block">
+      <div class="row">
+        <a href class="col-1" *ngIf="areLeadsAssignable" (click)="selectAllLeadsForAssignment($event)">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="assignAll"
+              [attr.checked]="isSelectAllChecked ? 'checked' : null">
+            <label class="custom-control-label" for="assignAll"><span class="sr-only">Assign all</span></label>
           </div>
-          <div class="col-sm form-group">
-            <label class="small" for="leadType">Type</label>
-            <select class="custom-select custom-select-sm" id="leadType" formControlName="leadTypeId">
-              <option value="">All</option>
-              <option selected *ngFor="let leadType of leadTypes" [value]=leadType.id>{{leadType?.value}}</option>
-            </select>
+        </a>
+        <div class="col-sm"><strong>Lead Type</strong></div>
+        <div class="col-sm"><strong>Person</strong></div>
+        <div class="col-sm"><strong>Next Chase Date</strong></div>
+        <div class="col-sm"><strong>Lead Owner</strong></div>
+      </div>
+    </div>
+    <a [routerLink]="areLeadsAssignable ? null : ['edit', lead?.leadId]" (click)="selectLeadForAssignment($event, lead)"
+      class="list-group-item list-group-item-action" *ngFor="let lead of filteredLeads; let i = index;"
+      [ngClass]="{'list-group-item-info': selectedLeadIndex(lead) >= 0}">
+      <div class="row align-items-center">
+        <div class="col-1" *ngIf="areLeadsAssignable">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" [attr.id]="'assign'+i"
+              [attr.checked]="selectedLeadIndex(lead) >= 0 ? 'checked' : null">
+            <label class="custom-control-label" [attr.for]="'assign'+i"><span class="sr-only">Assign</span></label>
           </div>
-          <div class="col-sm form-group">
-            <label class="small" for="dateFrom">Date From</label>
-            <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
-              [bsConfig]="{showWeekNumbers:false, customTodayClass: 'font-weight-bold'}" [(bsValue)]="dateFrom" value="{{ dateFrom | date:'dd/MM/yyyy'}}" bsDatepicker
-              formControlName="dateFrom">
-          </div>
-          <div class="col-sm form-group">
-            <label class="small" for="dateTo">Date To</label>
-            <input type="text" id="dateTo" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
-              [bsConfig]="{showWeekNumbers:false, customTodayClass: 'font-weight-bold'}" [(bsValue)]="dateTo" value="{{ dateTo | date:'dd/MM/yyyy'}}" bsDatepicker formControlName="dateTo">
-          </div>
-          <div class="col-sm form-group">
-            <label class="small" for="office">Office</label>
-            <select class="custom-select custom-select-sm" id="office" formControlName="officeId">
-              <option value="">All</option>
-              <option selected *ngFor="let office of offices" [value]=office.officeId>{{office?.name}}</option>
-            </select>
-          </div>
-          <div class="w-100"></div>
-          <div class="col-sm-auto">
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input" id="closedInclusive" formControlName="includeClosedLeads">
-              <label class="custom-control-label" for="closedInclusive">Include closed leads</label>
+        </div>
+        <div class="col">
+          <div class="row align-items-center">
+            <div class="col-sm mb-2 mb-sm-0">
+              <span class="badge badge-pill badge-danger mr-1" *ngIf="lead?.closedById">Closed</span>
+              <span class="badge badge-pill badge-info">{{lead?.leadType}}</span>
             </div>
-          </div>
-          <div class="col form-group">
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input" id="unassignedLeadsOnly"
-                formControlName="includeUnassignedLeadsOnly">
-              <label class="custom-control-label" for="unassignedLeadsOnly">Include unassigned leads only</label>
+            <div class="col-sm">
+              {{lead?.person}}
+            </div>
+            <div class="col-sm">
+              {{(lead?.nextChaseDate | date: 'dd/MM/yyyy hh:mm') || '-'}}
+            </div>
+            <div class="col-sm text-muted">
+              {{lead?.owner}}
             </div>
           </div>
         </div>
       </div>
-      <div class="col-sm-2">
-        <div class="form-group">
-          <button class="btn btn-block btn-secondary" (click)="PerformSearch()">Search</button>
+    </a>
+  </div>
+  <div class="form-actions" *ngIf="areLeadsAssignable">
+    <div class="container px-lg-4">
+      <div class="row justify-content-end w-100 no-gutters">
+        <div class="col-sm-10 d-flex">
+          <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
+          <button type="submit" class="btn btn-secondary">Assign <span
+              class="badge badge-pill badge-info">{{selectedLeadsForAssignment?.length}}</span></button>
         </div>
       </div>
     </div>
-  </form>
-  <form class="pb-0" (ngSubmit)="showLeadsAssignmentModal()">
-    <div class="row" *ngIf="areLeadsAssignable">
-      <div class="col">
-        <h5>Select to assign</h5>
-      </div>
-      <div class="col-auto d-sm-none">
-        <button type="button" class="btn btn-link p-0" (click)="selectAllLeadsForAssignment($event)">
-          {{selectedLeadsForAssignment?.length ? 'Unselect' : 'Select'}} all
-        </button>
-      </div>
-    </div>
-    <div class="list-group mb-3">
-      <!-- <a [routerLink]="areLeadsAssignable ? null : ['edit', lead?.leadId]" (click)="selectLead()" -->
-      <div class="list-group-item list-header d-none d-sm-block">
-        <div class="row">
-          <a href class="col-1" *ngIf="areLeadsAssignable" (click)="selectAllLeadsForAssignment($event)" >
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input" id="assignAll" [attr.checked]="isSelectAllChecked ? 'checked' : null">
-              <label class="custom-control-label" for="assignAll"><span class="sr-only">Assign all</span></label>
-            </div>
-          </a>
-          <div class="col-sm"><strong>Lead Type</strong></div>
-          <div class="col-sm"><strong>Person</strong></div>
-          <div class="col-sm"><strong>Next Chase Date</strong></div>
-          <div class="col-sm"><strong>Lead Owner</strong></div>
-        </div>
-      </div>
-      <a [routerLink]="areLeadsAssignable ? null : ['edit', lead?.leadId]" (click)="selectLeadForAssignment($event, lead)"
-        class="list-group-item list-group-item-action" *ngFor="let lead of filteredLeads; let i = index;" [ngClass]="{'list-group-item-info': selectedLeadIndex(lead) >= 0}">
-        <div class="row align-items-center">
-          <div class="col-1" *ngIf="areLeadsAssignable">
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input" [attr.id]="'assign'+i" [attr.checked]="selectedLeadIndex(lead) >= 0 ? 'checked' : null">
-              <label class="custom-control-label" [attr.for]="'assign'+i"><span class="sr-only">Assign</span></label>
-            </div>
-          </div>
-          <div class="col">
-            <div class="row align-items-center">
-              <div class="col-sm mb-2 mb-sm-0">
-                <span class="badge badge-pill badge-danger mr-1" *ngIf="lead?.closedById">Closed</span>
-                <span class="badge badge-pill badge-info">{{lead?.leadType}}</span>
-              </div>
-              <div class="col-sm">
-                {{lead?.person}}
-              </div>
-              <div class="col-sm">
-                {{(lead?.nextChaseDate | date: 'dd/MM/yyyy hh:mm') || '-'}}
-              </div>
-              <div class="col-sm text-muted">
-                {{lead?.owner}}
-              </div>
-            </div>
-          </div>
-        </div>
-      </a>
-    </div>
-    <div class="form-actions" *ngIf="areLeadsAssignable">
-      <div class="container px-lg-4">
-        <div class="row justify-content-end w-100 no-gutters">
-          <div class="col-sm-10 d-flex">
-            <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
-            <button type="submit" class="btn btn-secondary">Assign <span class="badge badge-pill badge-info">{{selectedLeadsForAssignment?.length}}</span></button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </form>
-</div>
+  </div>
+</form>
