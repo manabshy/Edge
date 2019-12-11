@@ -39,17 +39,6 @@ export class LeadFinderComponent implements OnInit {
 
     this.leadFinderForm.get('leadSuggestion').setValue(AppUtils.leadSearchTerm);
 
-    this.leadFinderForm.valueChanges.subscribe(val => {
-      if (val.leadSuggestion === '') {
-        this.leadSuggestionSelected.emit(null);
-        console.log(true);
-      } else {
-        console.log('lead finder form changed', val);
-        this.searchTerm = val.leadSuggestion;
-        this.leadSuggestionSelected.emit(val.leadSuggestion);
-      }
-    });
-
   }
 
   // ngOnChanges() {
@@ -59,6 +48,12 @@ export class LeadFinderComponent implements OnInit {
 
   onKeyup(event: KeyboardEvent) {
     AppUtils.leadSearchTerm = this.searchTerm;
+  }
+
+  
+
+  submit(event) {
+    this.leadSuggestionSelected.emit(this.leadFinderForm.get('leadSuggestion').value);
   }
 
   suggestionSelected(event: any) {

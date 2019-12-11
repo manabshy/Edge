@@ -211,6 +211,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
 
     }
     console.log('lead suggestion selected:', this.leadRegisterForm);
+    this.PerformSearch();
   }
 
   ngOnChanges() {

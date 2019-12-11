@@ -4,6 +4,7 @@
         class="form-control form-control-sm"
         aria-label="Search criteria" 
         (keyup)="onKeyup($event)" 
+        (keydown.enter)="submit($event)"
         [ngbTypeahead]="suggestions" 
         [focusFirst]="false" 
         (selectItem)="suggestionSelected($event)"         
