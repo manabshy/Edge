@@ -14,4 +14,27 @@
     .btn {
        padding: $list-group-item-padding-y $list-group-item-padding-x; 
     }
+
+    &.is-sticky {
+        &[style*=fixed] {
+            transition: all .3s;
+            @include media-breakpoint-down(lg) {
+                position: static!important;
+            }
+        }
+    }
+
+    &[stickything] {
+        &:not([style*=fixed]) {
+            @include media-breakpoint-up(xl) {
+                top: 119px!important;
+            }
+        }
+        @include media-breakpoint-up(xl) {
+            position: fixed;
+            right: calc((100vw - #{$side-nav-width} + #{spacer(3)} - #{container-max-width('lg')})/2)!important;
+            left: auto!important;
+            width: calc((#{container-max-width('lg')}/3) - #{spacer(3)})!important;
+        }
+    }
 }
