@@ -56,6 +56,7 @@ export interface DropdownListInfo {
   areas: InfoDetail[];
   subAreas: InfoDetail[];
   leadTypes: InfoDetail[];
+  viewingArrangements: InfoDetail[];
 }
 
 export interface InfoDetail {

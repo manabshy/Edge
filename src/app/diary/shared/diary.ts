@@ -25,6 +25,7 @@ export interface DiaryEvent {
   isOtherAgentViewing: boolean;
   contacts: ContactGroup[];
   staffMembers: Staff[];
+  properties: DiaryProperty[];
 }
 export interface Period {
   startDate: string;
@@ -87,7 +88,8 @@ export interface HistoricEvent {
 export interface DiaryProperty extends Property {
   propertyLettingId: number;
   propertySaleId: number;
-  contactGroups?: ContactGroup[];
+  viewingArragementId: number;
+  viewingArragement: string;
 }
 
 

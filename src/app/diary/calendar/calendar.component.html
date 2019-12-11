@@ -43,6 +43,7 @@
         <dd>
           <p class="mb-1" *ngFor="let property of event.meta?.properties">
               {{property?.address | formatAddress}}
+             <span class="small" *ngIf="property?.viewingArragementId > 0"> {{property?.viewingArragement}}</span>
           </p>
         </dd>
       </dl>

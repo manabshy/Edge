@@ -13,11 +13,13 @@ import {
 } from 'date-fns';
 import { CustomDateFormatter } from '../shared/custom-date-formatter.provider';
 import { Observable } from 'rxjs';
-import { DiaryEvent, BasicEventRequest, Staff } from '../shared/diary';
+import { DiaryEvent, BasicEventRequest, Staff, DiaryProperty } from '../shared/diary';
 import { DiaryEventService } from '../shared/diary-event.service';
 import { tap, map } from 'rxjs/operators';
 import { CustomEventTitleFormatter } from '../shared/custom-event-title-formatter.provider';
 import * as _ from 'lodash';
+import { StorageMap } from '@ngx-pwa/local-storage';
+import { InfoDetail, DropdownListInfo } from 'src/app/core/services/info.service';
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
@@ -45,10 +47,14 @@ export class CalendarComponent implements OnInit {
   myEvents$: Observable<Array<CalendarEvent<{ diaryEvent: DiaryEvent }>>>;
   diaryEvents: DiaryEvent[];
   activeDayIsOpen: boolean;
+  viewingArrangements: InfoDetail[];
 
-  constructor(private diaryEventService: DiaryEventService) { }
+  constructor(private diaryEventService: DiaryEventService, private storage: StorageMap) { }
 
   ngOnInit() {
+    this.storage.get('info').subscribe((data: DropdownListInfo) => {
+      if (data) { this.viewingArrangements = data.viewingArrangements; }
+    });
     this.getDiaryEvents();
   }
 
@@ -114,7 +120,8 @@ export class CalendarComponent implements OnInit {
             const start = new Date(diary.startDateTime);
             const end = new Date(diary.endDateTime);
             const allDay = diary.allDay;
-            let meta = diary;
+            const meta = diary;
+            this.setViewingArrangement(diary.properties);
             const members = this.getStaff(meta.staffMembers);
             let cssClass = '';
             cssClass += meta.isCancelled ? 'is-cancelled' : '';
@@ -161,6 +168,20 @@ export class CalendarComponent implements OnInit {
     }
     return members;
   }
+
+  setViewingArrangement(properties: DiaryProperty[]) {
+    if (this.viewingArrangements && properties) {
+      const values = Object.values(this.viewingArrangements);
+      for (const property of properties) {
+        values.forEach(x => {
+          if (x.id === property.viewingArragementId) {
+            property.viewingArragement = x.value;
+          }
+        });
+      }
+    }
+  }
+
   // eventClicked(event: CalendarEvent<{ diaryEvent: DiaryEvent }>): void {
   //  if(event) {
   //     window.open(
@@ -170,7 +191,6 @@ export class CalendarComponent implements OnInit {
   //  }
   // }
 }
-
 
 function getTimezoneOffsetString(date: Date): string {
   const timezoneOffset = date.getTimezoneOffset();
