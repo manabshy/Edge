@@ -290,84 +290,77 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   //   this.updateLead();
   // }
 
-  getNewPersonNote(leadNote: any) {
+  getNewPersonNote(leadNote: ContactNote) {
     if (leadNote) {
-      console.log('note here', leadNote)
       this.note = leadNote;
     }
 
   }
   updateLead(shouldExit: boolean = false, leadNote = null) {
 
-    const lead = { ...this.lead, ...this.leadEditForm.value };
-    this.isSubmitting = true;
-    this.logValidationErrors(this.leadEditForm, true);
-
     const closeLead = this.leadEditForm.get('closeLead').value;
     const nextChaseDate = this.leadEditForm.get('nextChaseDate').value;
-    console.log('form in update lead method', this.leadEditForm.valid)
-    console.log('note in update lead method', leadNote)
-    if ((closeLead || this.isNewLead || nextChaseDate) && (this.note && this.note.text) === '') {
-      this.noteRequiredWarning = 'When you close a lead you must enter a Note.';
-      console.log('cannot update');
-      setTimeout(() => {
-        this.sharedService.scrollToFirstInvalidField();
-      })
-      return;
-    } else {
-      this.noteRequiredWarning = '';
-    }
+    this.logValidationErrors(this.leadEditForm, true);
 
     if (this.leadEditForm.valid) {
-
-      if (this.isNewLead) {
-
-        lead.personId = this.personId;
-        lead.createdBy = this.currentStaffMember.staffMemberId;
-        lead.createdDate = new Date;
-        lead.updatedBy = this.currentStaffMember.staffMemberId;
-        lead.updatedDate = new Date;
-
-        this.leadsService.addLead(lead).subscribe((result) => {
-          this.onUpdateCompleted();
-          this.lead = lead;
-        }, (error: WedgeError) => {
-          this.sharedService.showError(error);
-          this.isSubmitting = false;
-        });
-      } else {
-
-
-
-        if (closeLead) {
-          lead.closedById = this.currentStaffMember.staffMemberId;
-          lead.dateClosed = new Date();
+      this.isSubmitting = true;
+      if (this.leadEditForm.dirty) {
+        const lead = { ...this.lead, ...this.leadEditForm.value };
+        if ((closeLead || this.isNewLead || nextChaseDate) && (this.note.text === '' || this.note.text == null)) {
+          console.log('should show message...', this.note)
+          this.noteRequiredWarning = 'Note is required.';
+          setTimeout(() => {
+            this.sharedService.scrollToFirstInvalidField();
+          });
+          return;
+        } else {
+          this.noteRequiredWarning = '';
         }
+        if (this.isNewLead) {
 
-        // adding note
-        console.log('this note', this.note)
-        this.contactGroupService.addPersonNote(this.note).subscribe(data => {
-          if (data) {
-            this.contactGroupService.notesChanged(data);
+          lead.personId = this.personId;
+          lead.createdBy = this.currentStaffMember.staffMemberId;
+          lead.createdDate = new Date;
+          lead.updatedBy = this.currentStaffMember.staffMemberId;
+          lead.updatedDate = new Date;
+
+          this.leadsService.addLead(lead).subscribe((result) => {
+            this.onUpdateCompleted();
+            this.lead = lead;
+          }, (error: WedgeError) => {
+            this.sharedService.showError(error);
+            this.isSubmitting = false;
+          });
+        } else {
+
+          if (closeLead) {
+            lead.closedById = this.currentStaffMember.staffMemberId;
+            lead.dateClosed = new Date();
           }
-        }, (error: WedgeError) => {
-          this.sharedService.showError(error);
-          this.isSubmitting = false;
-        });
 
-        // updating lead
-        this.leadsService.updateLead(lead).subscribe((result) => {
-          this.onUpdateCompleted();
-        }, (error: WedgeError) => {
-          this.sharedService.showError(error);
-          this.isSubmitting = false;
-        });
+          // adding note
+          console.log('this note', this.note);
+          this.contactGroupService.addPersonNote(this.note).subscribe(data => {
+            if (data) {
+              this.contactGroupService.notesChanged(data);
+            }
+          }, (error: WedgeError) => {
+            this.sharedService.showError(error);
+            this.isSubmitting = false;
+          });
+
+          // updating lead
+          this.leadsService.updateLead(lead).subscribe((result) => {
+            this.onUpdateCompleted();
+          }, (error: WedgeError) => {
+            this.sharedService.showError(error);
+            this.isSubmitting = false;
+          });
+        }
+      } else {
+        this.onUpdateCompleted();
       }
     }
-
-    // if (shouldExit) {
-    //   this.sharedService.back();
-    // }
 
   }
 
