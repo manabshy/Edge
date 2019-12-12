@@ -14,12 +14,18 @@ export class LeadsService {
   private leadsChangeSubject = new BehaviorSubject<Lead | null>(null);
   private pageChangeSubject = new Subject<LeadSearchInfo | null>();
   private leadClickSubject = new BehaviorSubject<LeadSearchInfo | null>(null);
+  private isLeadUpdatedSubject = new Subject<boolean | null>();
 
+  isLeadUpdated$ = this.isLeadUpdatedSubject.asObservable();
   leadsChanges$ = this.leadsChangeSubject.asObservable();
   pageChanges$ = this.pageChangeSubject.asObservable();
   leadClickChanges$ = this.leadClickSubject.asObservable();
 
   constructor(private http: HttpClient) { }
+
+  isLeadUpdated(updated: boolean) {
+    this.isLeadUpdatedSubject.next(updated);
+  }
 
   leadsChanged(lead: Lead) {
     this.leadsChangeSubject.next(lead);

@@ -2,6 +2,7 @@ import { Component, OnInit, Renderer2, Input, OnChanges, Output, EventEmitter } 
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ContactNote } from 'src/app/contactgroups/shared/contact-group';
 import { Person } from 'src/app/shared/models/person';
+import { LeadsService } from '../shared/leads.service';
 
 @Component({
   selector: 'app-lead-note',
@@ -26,11 +27,18 @@ export class LeadNoteComponent implements OnInit, OnChanges {
   noteForm: FormGroup;
   note: string;
 
-  constructor(private fb: FormBuilder, private renderer: Renderer2) { }
+  constructor(private fb: FormBuilder, private leadService: LeadsService, private renderer: Renderer2) { }
 
 
   ngOnInit() {
     this.formInit();
+    this.leadService.isLeadUpdated$.subscribe(data => {
+      if (data) {
+        console.log('is updated in note', data)
+        this.noteForm.reset();
+      }
+    });
+
   }
 
   formInit() {

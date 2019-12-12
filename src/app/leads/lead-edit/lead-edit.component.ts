@@ -60,6 +60,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   note: ContactNote;
   todaysDate = new Date();
   isUpdateComplete: boolean;
+  isNoteFormDirty: boolean;
 
   constructor(private leadsService: LeadsService,
     private route: ActivatedRoute,
@@ -293,6 +294,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   getNewPersonNote(leadNote: ContactNote) {
     if (leadNote) {
       this.note = leadNote;
+      this.isNoteFormDirty = true;
     }
 
   }
@@ -304,10 +306,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
     if (this.leadEditForm.valid) {
       this.isSubmitting = true;
-      if (this.leadEditForm.dirty) {
+      if (this.leadEditForm.dirty || this.isNoteFormDirty) {
         const lead = { ...this.lead, ...this.leadEditForm.value };
         if ((closeLead || this.isNewLead || nextChaseDate) && (this.note.text === '' || this.note.text == null)) {
-          console.log('should show message...', this.note)
           this.noteRequiredWarning = 'Note is required.';
           setTimeout(() => {
             this.sharedService.scrollToFirstInvalidField();
@@ -369,6 +370,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       this.toastr.success('Lead successfully updated');
     }
     this.isUpdateComplete = true;
+    this.leadsService.isLeadUpdated(true);
   }
 
   get dataNote() {
