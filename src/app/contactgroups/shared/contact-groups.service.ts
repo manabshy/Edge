@@ -260,6 +260,15 @@ export class ContactGroupsService {
   }
 
   addPersonNote(personNote: ContactNote): Observable<ContactNote | any> {
+    if (personNote) {
+      if (personNote.isImportant == null) {
+        personNote.isImportant = false;
+      }
+      if (personNote.isPinned == null) {
+        personNote.isPinned = false;
+      }
+    }
+    console.log('person note in service', personNote)
     const url = `${AppConstants.basePersonUrl}/${personNote.personId}/notes`;
     return this.http.post<ContactNoteData>(url, personNote).pipe(
       map(response => response.result),
