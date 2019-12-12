@@ -9,7 +9,7 @@
         Lead</button>
     </div> -->
   </div>
-  <form [formGroup]="leadEditForm" (ngSubmit)="updateLead(true, leadNote)">
+  <form [formGroup]="leadEditForm" (ngSubmit)="updateLead(true, leadNote)" autocompleteOff>
     <div class="row align-items-start" >
       <div class="col-xl-8">
         <h5>Person</h5>
@@ -63,7 +63,7 @@
         <div class="row">
           <div class="col-12">
             <div class="form-group">
-              <div class="custom-control custom-checkbox">              
+              <div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" id="closeLead" formControlName="closeLead" [attr.disabled] = "lead?.closedById ? true : null">
                 <label class="custom-control-label" for="closeLead">Mark as <span class="badge badge-pill badge-danger">Closed</span></label>
               </div>
@@ -84,7 +84,7 @@
               <label for="chaseDate">Next chase date</label>
               <input type="text" id="chaseDate" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
                 formControlName="nextChaseDate"
-                [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
+                [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', minDate:todaysDate, customTodayClass: 'font-weight-bold'}"
                 bsDatepicker [attr.disabled] = "lead?.closedById ? true : null" [ngClass]="{'is-invalid': formErrors?.nextChaseDate}">
                 <div class="invalid-feedback">{{formErrors?.nextChaseDate}}</div>
             </div>
@@ -106,7 +106,8 @@
         <!-- <app-notes [personNotes]="personNotes"></app-notes> -->
         <div class="list-group">
           <div class="list-group-item add-note py-4">
-            <app-lead-note #leadNote [selectedPerson] = "person" [isDisabled] = "lead?.closedById ? true : false"  [noteRequiredWarning] = "noteRequiredWarning"></app-lead-note>
+            <app-lead-note #leadNote [selectedPerson] = "person" [isDisabled] = "lead?.closedById ? true : false"
+           (leadNote)="getNewPersonNote($event)" [noteRequiredWarning] = "noteRequiredWarning" [isUpdateComplete]="isUpdateComplete"></app-lead-note>
           </div>
         </div>
         <app-notes [personNotes]="personNotes" [person]="person" [noteData]="dataNote" [addressees]="addressees"

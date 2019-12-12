@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { AppUtils } from '../../core/shared/utils';
 import { ActivatedRoute } from '@angular/router';
 import { LeadsService } from '../shared/leads.service';
@@ -25,7 +25,7 @@ import { ValidationMessages, FormErrors } from 'src/app/core/shared/app-constant
   templateUrl: '../lead-edit/lead-edit.component.html',
   styleUrls: ['../lead-edit/lead-edit.component.scss']
 })
-export class LeadEditComponent extends BaseComponent implements OnInit {
+export class LeadEditComponent extends BaseComponent implements OnInit, AfterViewInit {
 
   listInfo: any;
   leadId: number;
@@ -56,6 +56,10 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
   personParams: string;
   formErrors = FormErrors;
   public keepOriginalOrder = (a) => a.key;
+  @ViewChild('leadNote', { static: true }) leadNote: LeadNoteComponent;
+  note: ContactNote;
+  todaysDate = new Date();
+  isUpdateComplete: boolean;
 
   constructor(private leadsService: LeadsService,
     private route: ActivatedRoute,
@@ -68,7 +72,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
 
   ngOnInit() {
     AppUtils.parentRoute = AppUtils.prevRoute;
-
+    console.log('lead note component', this.note);
     this.route.params.subscribe(params => {
       this.leadId = +params['leadId'] || 0;
     });
@@ -82,6 +86,12 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
 
   }
 
+  ngAfterViewInit() {
+    if (this.leadNote) {
+      this.note = this.leadNote.getNote();
+      console.log('in after view init', this.leadNote.getNote());
+    }
+  }
   init() {
     this.setupLeadEditForm();
     this.leadEditForm.valueChanges.pipe(debounceTime(400)).subscribe(() => this.logValidationErrors(this.leadEditForm, false));
@@ -280,6 +290,13 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
   //   this.updateLead();
   // }
 
+  getNewPersonNote(leadNote: any) {
+    if (leadNote) {
+      console.log('note here', leadNote)
+      this.note = leadNote;
+    }
+
+  }
   updateLead(shouldExit: boolean = false, leadNote = null) {
 
     const lead = { ...this.lead, ...this.leadEditForm.value };
@@ -287,10 +304,10 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
     this.logValidationErrors(this.leadEditForm, true);
 
     const closeLead = this.leadEditForm.get('closeLead').value;
-    const note = leadNote.getNote();
-
-    // Checking if Close Lead is ticked and note is entered
-    if ((closeLead || this.isNewLead) && note.text === '') {
+    const nextChaseDate = this.leadEditForm.get('nextChaseDate').value;
+    console.log('form in update lead method', this.leadEditForm.valid)
+    console.log('note in update lead method', leadNote)
+    if ((closeLead || this.isNewLead || nextChaseDate) && (this.note && this.note.text) === '') {
       this.noteRequiredWarning = 'When you close a lead you must enter a Note.';
       console.log('cannot update');
       setTimeout(() => {
@@ -328,10 +345,14 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
         }
 
         // adding note
-        this.contactGroupService.addPersonNote(note).subscribe(data => {
+        console.log('this note', this.note)
+        this.contactGroupService.addPersonNote(this.note).subscribe(data => {
           if (data) {
-            // this.formReset();
+            this.contactGroupService.notesChanged(data);
           }
+        }, (error: WedgeError) => {
+          this.sharedService.showError(error);
+          this.isSubmitting = false;
         });
 
         // updating lead
@@ -354,6 +375,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit {
     if (this.isNewLead) { this.toastr.success('Lead successfully saved'); } else {
       this.toastr.success('Lead successfully updated');
     }
+    this.isUpdateComplete = true;
   }
 
   get dataNote() {

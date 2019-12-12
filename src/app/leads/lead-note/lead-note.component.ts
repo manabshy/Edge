@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Renderer2, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ContactNote } from 'src/app/contactgroups/shared/contact-group';
 import { Person } from 'src/app/shared/models/person';
@@ -11,7 +11,9 @@ import { Person } from 'src/app/shared/models/person';
 export class LeadNoteComponent implements OnInit, OnChanges {
   @Input() selectedPerson: Person;
   @Input() isDisabled: boolean;
+  @Input() isUpdateComplete: boolean;
   @Input() noteRequiredWarning: string;
+  @Output() leadNote = new EventEmitter<ContactNote>();
   public keepOriginalOrder = (a) => a.key;
 
   shortcuts = {
@@ -40,12 +42,16 @@ export class LeadNoteComponent implements OnInit, OnChanges {
 
     this.noteForm.valueChanges.subscribe(val => {
       this.note = val.text;
+      this.leadNote.emit(this.getNote());
     });
 
 
   }
 
   ngOnChanges() {
+    if (this.isUpdateComplete) {
+      this.noteForm.reset();
+    }
     console.log('Lead Note Component:', this.isDisabled);
     console.log('Note required warning:', this.noteRequiredWarning);
   }
@@ -86,7 +92,7 @@ export class LeadNoteComponent implements OnInit, OnChanges {
   }
 
   getNote() {
-    const note = { ...this.personNote, ...this.noteForm.value };
+    const note = { ...this.personNote, ...this.noteForm.value } as ContactNote;
     if (note && this.selectedPerson) {
       note.personId = this.selectedPerson.personId;
     }
