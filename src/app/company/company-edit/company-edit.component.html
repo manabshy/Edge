@@ -34,9 +34,9 @@
                 [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', maxDate:todaysDate, customTodayClass: 'font-weight-bold'}" bsDatepicker
                 readonly>
               <div class="input-group-append" *ngIf="companyForm.value.amlCompletedDate">
-                <button type="button" class="btn btn-primary" aria-label="clear AML"
+                <button type="button" class="btn btn-light"
                   (click)="clearControlValue(companyForm.get('amlCompletedDate'))">
-                  <span aria-hidden="true">&times;</span>
+                  Clear
                 </button>
               </div>
             </div>

@@ -43,7 +43,7 @@
                 </span>
               </button>
               <ng-container [ngSwitch]="item?.value">
-                <app-shared-property-list *ngSwitchCase="'properties'" [personId]="person?.personId">
+                <app-shared-property-list *ngSwitchCase="'properties'" [isLead]="true" [personId]="person?.personId">
                 </app-shared-property-list>
                 <app-contactgroups-detail-instructions *ngSwitchCase="'instructions'" [personId]="person?.personId">
                 </app-contactgroups-detail-instructions>

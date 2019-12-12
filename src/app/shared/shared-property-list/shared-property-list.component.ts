@@ -12,6 +12,7 @@ import { PeopleService } from 'src/app/core/services/people.service';
 export class SharedPropertyListComponent implements OnChanges {
 
   @Input() personId: number;
+  @Input() isLead: number;
   properties$ = new Observable<PersonProperty[]>();
 
   constructor(private router: Router, private peopleService: PeopleService) { }
