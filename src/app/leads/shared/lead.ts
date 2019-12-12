@@ -1,4 +1,5 @@
 import { SubNavItem, SubNav } from "src/app/shared/subnav";
+import { Address } from "src/app/shared/models/address";
 
 export const LeadEditSubNav = ['properties','instructions', 'offers', 'searches', 'lettings-managements', 'home-helpers'];
 
@@ -22,6 +23,7 @@ export interface Lead {
     leadTypeId: number;
     leadType: string;
     relatedPropertyEventId: number;
+    property: LeadProperty;
     officeId: number;
     createdDate: Date;
     createdBy: number;
@@ -42,4 +44,9 @@ export interface LeadSearchInfo {
     startLeadId?: number;
     leadSearchTerm?: any;
     allowPaging?: boolean;
+}
+
+export interface LeadProperty{
+  propertyId: number;
+  address: Address;
 }
