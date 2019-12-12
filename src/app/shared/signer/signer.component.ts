@@ -111,6 +111,7 @@ export class SignerComponent implements OnInit, OnChanges {
   selectSigner(id: number) {
     this.selectedSignerDetails = this.signers.find(x => x.contactGroupId === id);
     this.isSearchVisible = false;
+    this.existingPerson = null;
     if (this.selectedSignerDetails) {
       this.signers = null;
       let displayName: string;

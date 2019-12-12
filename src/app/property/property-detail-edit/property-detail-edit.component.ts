@@ -49,6 +49,8 @@ export class PropertyDetailEditComponent implements OnInit {
   isMatchFound = false;
   showMatches = false;
   lastKnownPerson: any;
+  leadId: number;
+  personId: number;
 
   constructor(private route: ActivatedRoute,
     private _router: Router,
@@ -85,6 +87,8 @@ export class PropertyDetailEditComponent implements OnInit {
     });
     this.route.queryParams.subscribe(params => {
       this.isNewProperty = this.propertyId ? this.isNewProperty = false : params['isNewProperty'];
+      this.leadId = +params['leadId'] || 0;
+      this.personId = +params['personId'] || 0;
       if(this.isNewProperty){
         this.propertyForm.reset();
         this.setupEditForm();
@@ -204,7 +208,7 @@ export class PropertyDetailEditComponent implements OnInit {
       this.propertyForm.updateValueAndValidity();
     }
     if(this.lastKnownPerson) {
-      this._router.navigate(['/property-centre/detail', property.propertyId, 'edit'], {queryParams: {lastKnownPerson: JSON.stringify(this.lastKnownPerson)}});
+      this._router.navigate(['/property-centre/detail', property.propertyId, 'edit'], {queryParams: {leadId: this.leadId, personId: this.personId, lastKnownPerson: JSON.stringify(this.lastKnownPerson)}});
     } else {
       this._router.navigate(['/property-centre/detail', property.propertyId, 'edit']);
     }
@@ -324,7 +328,20 @@ export class PropertyDetailEditComponent implements OnInit {
 
     this.propertyId = property.propertyId;
     this.propertyService.currentPropertyChanged(+this.propertyId);
-    this._router.navigate(['/property-centre/detail', this.propertyId]);
+    if(this.lastKnownPerson) {
+      if(this.personId) {
+        this._router.navigate(['/contact-centre/detail/', this.personId]);
+      } else {
+        if(this.leadId) {
+          this._router.navigate(['/leads-register/edit/', this.leadId]);
+        } else {
+          this._router.navigate(['/leads-register/edit/', this.leadId], {queryParams: {isNewLead: true, personId: this.lastKnownPerson.personId}});
+        }
+      }
+    } else {
+      this._router.navigate(['/property-centre/detail', this.propertyId]);
+
+    }
   }
 
   canDeactivate(): boolean {

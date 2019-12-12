@@ -119,7 +119,7 @@
               </div>
               <span class="float-right pull-right" (click)="$event.stopPropagation()">
                 <ng-container [ngSwitch]="item?.value">
-                  <a [routerLink]="['/property-centre/detail', 0, 'edit']" [queryParams]="{isNewProperty: true, lastKnownPerson: personParams}" *ngSwitchCase="'properties'">Create</a>
+                  <a [routerLink]="['/property-centre/detail', 0, 'edit']" [queryParams]="{isNewProperty: true, personId: searchedPersonDetails?.personId,  lastKnownPerson: personParams}" *ngSwitchCase="'properties'">Create</a>
                   <a [routerLink]="['/leads-register/edit/', 0]"
                   [queryParams]="{isNewLead: true, personId: personId}" *ngSwitchCase="'leads'">Create</a>
                 </ng-container>

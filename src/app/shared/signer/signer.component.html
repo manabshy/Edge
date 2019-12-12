@@ -19,7 +19,7 @@
       </div>
     </div>
 
-    <div class="row" [hidden]="!isSearchVisible">
+    <div class="row" [hidden]="!isSearchVisible && !existingPerson">
       <ng-container *ngIf="!label; else givenLabel3 "><label for="searchTerm"
           class="col-sm-2 col-form-label col-form-label-sm">Find Signers</label></ng-container>
       <ng-template #givenLabel3><label for="searchTerm" class="col-sm-2 col-form-label col-form-label-sm"> Find
