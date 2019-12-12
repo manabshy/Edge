@@ -198,7 +198,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     console.log('lead suggestion event:', event);
     if (event) {
       this.leadRegisterForm.patchValue({
-        leadSearchTerm: event
+        leadSearchTerm: event.item
       });
       console.log('lead suggestion:', event);
       this.leadSearchInfo = this.getSearchInfo(true);
