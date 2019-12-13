@@ -45,10 +45,10 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   bottomReached = false;
   leadOwner: StaffMember;
   leadIds: number[] = [];
-  currentLeadIndex: number = 0;
-  leadsListCompleted: boolean = false;
-  isFormDirty: boolean = false;
-  onLoading: boolean = false;
+  currentLeadIndex = 0;
+  leadsListCompleted = false;
+  isFormDirty = false;
+  onLoading = false;
   isSubmitting: boolean;
   contactGroups: BasicContactGroup[];
   addressees: any[] = [];
@@ -299,7 +299,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
   }
   updateLead(shouldExit: boolean = false, leadNote = null) {
-
+    console.log('form here in update', this.leadEditForm)
     const closeLead = this.leadEditForm.get('closeLead').value;
     const nextChaseDate = this.leadEditForm.get('nextChaseDate').value;
     this.logValidationErrors(this.leadEditForm, true);
@@ -371,6 +371,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     }
     this.isUpdateComplete = true;
     this.leadsService.isLeadUpdated(true);
+    this.leadEditForm.reset();
   }
 
   get dataNote() {
@@ -410,22 +411,25 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
   moveToNextLead() {
     console.log('form dirty', this.isFormDirty);
-    if (this.isFormDirty) {
-      this.updateLead();
+    if (this.isFormDirty || this.isNoteFormDirty) {
+      this.updateLead(true, this.note);
       this.isFormDirty = false;
+      this.isNoteFormDirty = false;
+      this.noteRequiredWarning = '';
     }
 
     if (this.currentLeadIndex < this.leadIds.length - 1) {
       this.currentLeadIndex++;
       this.leadId = this.leadIds[this.currentLeadIndex];
       console.log('move to next lead IDs', this.leadIds);
-      //console.log('move to next lead ID', this.leadId);
       this.onLoading = true;
       this.getLeadInformation();
       this.getPersonNotes();
     } else {
       this.leadsListCompleted = true;
-      console.log('list completed');
+      console.log('list completed', this.leadIds);
+      this.leadEditForm.reset();
+      console.log('form here', this.leadEditForm)
     }
   }
 
@@ -436,5 +440,10 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     return true;
   }
 
+  private resetForm() {
+    if (this.leadEditForm) {
+      this.leadEditForm.reset();
+    }
+  }
 
 }
