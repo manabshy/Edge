@@ -14,10 +14,10 @@ export class LeaderboardTabsComponent implements OnInit, OnChanges {
   @Input() data: Leaderboard[];
   @Output() tabChange: EventEmitter<any> = new EventEmitter<any>();
   order = 'totalFees';
-  reverse = true;
+  reverse = false;
   leaderboardSort = LeaderboardSort;
   sortedData: Leaderboard[];
- 
+
   constructor(private orderPipe: OrderPipe) {this.sortedData = orderPipe.transform(this.data, 'totalFees'); }
 
   ngOnInit() {
