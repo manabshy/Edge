@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges, OnChanges, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 
 import { LeaderboardService } from './shared/leaderboard.service';
@@ -6,11 +6,11 @@ import { Constants } from '../shared/period-list';
 import { StaffMember, ApiRole } from '../shared/models/staff-member';
 import {
   Leaderboard, LeaderboardResult, PeriodMap, Period, NegotiatorColumns,
-  SalesManagerColumns, LettingsManagerColumns, LeaderboardColumns, LeaderboardSort
+  SalesManagerColumns, LettingsManagerColumns, LeaderboardColumns
 } from './shared/leaderboard';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { SharedService } from '../core/services/shared.service';
+import { SharedService, WedgeError } from '../core/services/shared.service';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -18,10 +18,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './leaderboard.component.html',
   styleUrls: ['./leaderboard.component.scss']
 })
-export class LeaderboardComponent implements OnInit, OnChanges, AfterViewInit {
-  // private readonly salesManager = ApiRole.SalesManager;
-  // private readonly lettingsManager = 'LettingsManager';
-  // private readonly lettingsNegotiator = 'LettingsNegotiator';
+export class LeaderboardComponent implements OnInit {
   @Input() currentStaffMember: StaffMember;
   data: Leaderboard[];
   originalInstructions: Leaderboard[] = [];
@@ -36,9 +33,11 @@ export class LeaderboardComponent implements OnInit, OnChanges, AfterViewInit {
   filterVisibility = 'visible';
   leaderboardForm: FormGroup;
   active: string;
+  isFilterHidden: boolean;
   get periodControl(): FormControl {
     return <FormControl>this.leaderboardForm.get('period');
   }
+
   /**
    * Return the relevant columns based on role
    */
@@ -98,24 +97,12 @@ export class LeaderboardComponent implements OnInit, OnChanges, AfterViewInit {
       this.downloadLeaderboard(Period[data.period]);
     });
   }
-  ngOnChanges(changes: SimpleChanges) {
 
-    // if (changes['role'] && changes['role'].currentValue) {
-    //   this.active = this.columns[0];
-    // }
-  }
-
-  ngAfterViewInit() {
-    // if (this.data) {
-    //   this.downloadLeaderboard(Period[this.periodControl.value]);
-    // }
-  }
   getPipeline() {
     this.leaderboardService
       .getStaffMemberPipeline()
       .subscribe(result => {
         this.pipelineList = result;
-        console.log('pipeline results', result);
       });
   }
 
@@ -129,7 +116,6 @@ export class LeaderboardComponent implements OnInit, OnChanges, AfterViewInit {
       .getStaffMemberExchanges(period)
       .subscribe(result => {
         this.exchanges = result;
-        console.log('exchanges results', result);
       });
   }
 
@@ -143,9 +129,14 @@ export class LeaderboardComponent implements OnInit, OnChanges, AfterViewInit {
         }
       });
   }
+
   getSelectedTab(value) {
     this.active = value;
-    console.log('period value', this.periodControl.value);
+    if (value === LeaderboardColumns.Pipeline) {
+      this.isFilterHidden = true;
+    } else {
+      this.isFilterHidden = false;
+    }
     this.downloadLeaderboard(Period[this.periodControl.value]);
   }
 
@@ -228,11 +219,9 @@ export class LeaderboardComponent implements OnInit, OnChanges, AfterViewInit {
     if (!leaderboard$) {
       this.toastrService.warning('Unable to download leaderboard');
     }
-    leaderboard$.subscribe(result => { this.data = result; console.log('downloaded leaderboard', result); });
-    // leaderboard$.pipe(tap(result => this.data = result), tap(res => console.log('downloaded leaderboard', res ))).subscribe();
+    leaderboard$.subscribe(result => this.data = result, (error: WedgeError) => {
+      this.sharedService.showError(error);
+    });
   }
 
-  showFilter(val: string) {
-    this.filterVisibility = val;
-  }
 }

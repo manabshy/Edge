@@ -1,6 +1,6 @@
 <div class="tab-content-container">
   <form [formGroup]="leaderboardForm">
-    <div class="form-group" [ngStyle]="{'visibility': filterVisibility}">
+    <div class="form-group" *ngIf="!isFilterHidden">
       <select class="custom-select" formControlName="period">
         <option *ngFor='let item of periods | keyvalue:keepOriginalOrder' [value]='item.key'>{{item.value}}</option>
       </select>
