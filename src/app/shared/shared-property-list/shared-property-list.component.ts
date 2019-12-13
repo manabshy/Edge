@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, Input } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, Output, EventEmitter } from '@angular/core';
 import { PersonProperty } from '../models/person';
 import { Observable } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,6 +13,7 @@ export class SharedPropertyListComponent implements OnChanges {
 
   @Input() personId: number;
   @Input() isLead: number;
+  @Output() associatedProperty = new EventEmitter<PersonProperty>();
   properties$ = new Observable<PersonProperty[]>();
 
   constructor(private router: Router, private peopleService: PeopleService) { }
@@ -24,8 +25,15 @@ export class SharedPropertyListComponent implements OnChanges {
   }
   navigateToDetails(property: PersonProperty) {
     if (property) {
-      console.log('property', property)
+      console.log('property', property);
       this.router.navigate(['property-centre/detail', property.propertyId]);
+    }
+  }
+
+  associateToLead(property: PersonProperty) {
+    event.stopPropagation();
+    if (property) {
+      this.associatedProperty.emit(property);
     }
   }
 }

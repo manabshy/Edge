@@ -22,8 +22,7 @@ export interface Lead {
     closedBy?: any;
     leadTypeId: number;
     leadType: string;
-    relatedPropertyEventId: number;
-    property: LeadProperty;
+    relatedProperty: LeadProperty;
     officeId: number;
     createdDate: Date;
     createdBy: number;

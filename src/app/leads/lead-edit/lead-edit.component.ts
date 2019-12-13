@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { AppUtils } from '../../core/shared/utils';
 import { ActivatedRoute } from '@angular/router';
 import { LeadsService } from '../shared/leads.service';
-import { Lead, LeadEditSubNavItems } from '../shared/lead';
+import { Lead, LeadEditSubNavItems, LeadProperty } from '../shared/lead';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { InfoDetail } from 'src/app/core/services/info.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -12,7 +12,7 @@ import { StaffMember } from 'src/app/shared/models/staff-member';
 import { ContactNote, PersonSummaryFigures, BasicContactGroup } from 'src/app/contactgroups/shared/contact-group';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { getDate } from 'date-fns';
-import { Person } from 'src/app/shared/models/person';
+import { Person, PersonProperty } from 'src/app/shared/models/person';
 import { ToastrService } from 'ngx-toastr';
 import { takeUntil, debounceTime } from 'rxjs/operators';
 import * as _ from 'lodash';
@@ -61,6 +61,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   todaysDate = new Date();
   isUpdateComplete: boolean;
   isNoteFormDirty: boolean;
+  isPropertyAssociated: boolean;
+  isMessageVisible: boolean;
 
   constructor(private leadsService: LeadsService,
     private route: ActivatedRoute,
@@ -290,6 +292,21 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   //   this.lead.dateClosed = new Date();
   //   this.updateLead();
   // }
+  removeProperty() {
+    const newLead = { ...this.lead, ...{ relatedProperty: {} } } as Lead;
+    if (this.lead.relatedProperty) {
+      this.isMessageVisible = true;
+      this.lead = newLead;
+    }
+  }
+
+  getAssociatedProperty(property: PersonProperty) {
+    if (property) {
+      this.lead.relatedProperty = property;
+      this.isPropertyAssociated = true;
+      this.isMessageVisible = false;
+    }
+  }
 
   getNewPersonNote(leadNote: ContactNote) {
     if (leadNote) {
@@ -299,14 +316,14 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
   }
   updateLead(shouldExit: boolean = false, leadNote = null) {
-    console.log('form here in update', this.leadEditForm)
+    console.log('form here in update', this.leadEditForm);
     const closeLead = this.leadEditForm.get('closeLead').value;
     const nextChaseDate = this.leadEditForm.get('nextChaseDate').value;
     this.logValidationErrors(this.leadEditForm, true);
 
     if (this.leadEditForm.valid) {
       this.isSubmitting = true;
-      if (this.leadEditForm.dirty || this.isNoteFormDirty) {
+      if (this.leadEditForm.dirty || this.isNoteFormDirty || this.isPropertyAssociated) {
         const lead = { ...this.lead, ...this.leadEditForm.value };
         if ((closeLead || this.isNewLead || nextChaseDate) && (this.note.text === '' || this.note.text == null)) {
           this.noteRequiredWarning = 'Note is required.';
@@ -429,7 +446,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       this.leadsListCompleted = true;
       console.log('list completed', this.leadIds);
       this.leadEditForm.reset();
-      console.log('form here', this.leadEditForm)
+      console.log('form here', this.leadEditForm);
     }
   }
 
