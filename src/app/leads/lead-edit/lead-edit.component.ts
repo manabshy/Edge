@@ -63,6 +63,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   isNoteFormDirty: boolean;
   isPropertyAssociated: boolean;
   isMessageVisible: boolean;
+  isPropertyRemoved: boolean;
 
   constructor(private leadsService: LeadsService,
     private route: ActivatedRoute,
@@ -293,16 +294,23 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   //   this.updateLead();
   // }
   removeProperty() {
-    const newLead = { ...this.lead, ...{ relatedProperty: {} } } as Lead;
+    const newLead = { ...this.lead, ...{ relatedProperty: null } };
     if (this.lead.relatedProperty) {
       this.isMessageVisible = true;
+      this.isPropertyRemoved = true;
       this.lead = newLead;
     }
   }
 
   getAssociatedProperty(property: PersonProperty) {
     if (property) {
-      this.lead.relatedProperty = property;
+      if (this.lead) {
+        this.lead.relatedProperty = property;
+      } else {
+        this.lead = {} as Lead;
+        this.lead.relatedProperty = property;
+        console.log('related property', this.lead.relatedProperty)
+      }
       this.isPropertyAssociated = true;
       this.isMessageVisible = false;
     }
@@ -323,7 +331,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
     if (this.leadEditForm.valid) {
       this.isSubmitting = true;
-      if (this.leadEditForm.dirty || this.isNoteFormDirty || this.isPropertyAssociated) {
+      if (this.leadEditForm.dirty || this.isNoteFormDirty || this.isPropertyAssociated || this.isPropertyRemoved) {
         const lead = { ...this.lead, ...this.leadEditForm.value };
         if ((closeLead || this.isNewLead || nextChaseDate) && (this.note.text === '' || this.note.text == null)) {
           this.noteRequiredWarning = 'Note is required.';
@@ -338,6 +346,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
           lead.personId = this.personId;
           lead.createdBy = this.currentStaffMember.staffMemberId;
+          lead.ownerId = this.currentStaffMember.staffMemberId;
           lead.createdDate = new Date;
           lead.updatedBy = this.currentStaffMember.staffMemberId;
           lead.updatedDate = new Date;
@@ -368,6 +377,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
           });
 
           // updating lead
+
           this.leadsService.updateLead(lead).subscribe((result) => {
             this.onUpdateCompleted();
           }, (error: WedgeError) => {

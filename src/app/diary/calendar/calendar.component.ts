@@ -123,6 +123,7 @@ export class CalendarComponent implements OnInit {
             const meta = diary;
             this.setViewingArrangement(diary.properties);
             const members = this.getStaff(meta.staffMembers);
+            console.log('viewings arrangements 1', meta.properties)
             let cssClass = '';
             cssClass += meta.isCancelled ? 'is-cancelled' : '';
             cssClass += meta.isHighImportance ? ' is-important' : '';
