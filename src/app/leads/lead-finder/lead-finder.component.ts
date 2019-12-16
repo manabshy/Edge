@@ -16,11 +16,27 @@ export class LeadFinderComponent implements OnInit {
   @Output() leadSuggestionSelected = new EventEmitter();
   suggestions: (text$: Observable<any>) => Observable<any>;
   searchTerm = '';
+  suggestedTerm = '';
   leadFinderForm: FormGroup;
 
   constructor(private leadService: LeadsService, private fb: FormBuilder) { }
 
   ngOnInit() {
+
+    this.leadFinderForm = this.fb.group({
+      leadSuggestion: ''
+    });
+    this.leadFinderForm.valueChanges.pipe(debounceTime(800)).subscribe(search => {
+      AppUtils.leadSearchTerm = '';
+      if (search && search.leadSuggestion) {
+        console.log('search data', search);
+        console.log('AppUtils search term data', AppUtils.leadSearchTerm);
+        this.suggestedTerm ? this.searchTerm = this.suggestedTerm : this.searchTerm = search.leadSuggestion;
+        this.leadService.leadsSearchTermChanged(this.searchTerm);
+      }
+    });
+
+    // this.leadFinderForm.get('leadSuggestion').setValue(AppUtils.leadSearchTerm);
 
     this.suggestions = (text$: Observable<string>) =>
       text$.pipe(
@@ -32,13 +48,6 @@ export class LeadFinderComponent implements OnInit {
               return EMPTY;
             }))));
 
-
-    this.leadFinderForm = this.fb.group({
-      leadSuggestion: AppUtils.leadSearchTerm
-    });
-
-    this.leadFinderForm.get('leadSuggestion').setValue(AppUtils.leadSearchTerm);
-
   }
 
   // ngOnChanges() {
@@ -47,17 +56,27 @@ export class LeadFinderComponent implements OnInit {
   // }
 
   onKeyup(event: KeyboardEvent) {
-    AppUtils.leadSearchTerm = this.searchTerm;
+    // AppUtils.leadSearchTerm = this.searchTerm;
+    this.leadService.leadsSearchTermChanged(this.searchTerm);
+    console.log(' AppUtils.leadSearchTerm term here',   AppUtils.leadSearchTerm);
   }
 
-  
+
 
   submit(event) {
-    this.leadSuggestionSelected.emit(this.leadFinderForm.get('leadSuggestion').value);
+    console.log('search term here 2', this.leadFinderForm.value.leadSuggestion);
+    this.leadService.leadsSearchTermChanged(this.searchTerm);
+    // this.leadSuggestionSelected.emit(this.leadFinderForm.get('leadSuggestion').value);
   }
 
   suggestionSelected(event: any) {
-    this.leadSuggestionSelected.emit(event);
+    if (event && event.item) {
+      console.log('event  here', event);
+      this.suggestedTerm = event.item;
+      this.leadService.leadsSearchTermChanged(this.searchTerm);
+      // this.leadSuggestionSelected.emit(event);
+    }
+     this.suggestedTerm = '';
   }
 
 }

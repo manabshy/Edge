@@ -15,7 +15,9 @@ export class LeadsService {
   private pageChangeSubject = new Subject<LeadSearchInfo | null>();
   private leadClickSubject = new BehaviorSubject<LeadSearchInfo | null>(null);
   private isLeadUpdatedSubject = new Subject<boolean | null>();
+  private leadSearchTermSubject = new Subject<string | null>();
 
+  leadSearchTermChanges$ = this.leadSearchTermSubject.asObservable();
   isLeadUpdated$ = this.isLeadUpdatedSubject.asObservable();
   leadsChanges$ = this.leadsChangeSubject.asObservable();
   pageChanges$ = this.pageChangeSubject.asObservable();
@@ -27,6 +29,9 @@ export class LeadsService {
     this.isLeadUpdatedSubject.next(updated);
   }
 
+  leadsSearchTermChanged(term: string) {
+    this.leadSearchTermSubject.next(term);
+  }
   leadsChanged(lead: Lead) {
     this.leadsChangeSubject.next(lead);
   }

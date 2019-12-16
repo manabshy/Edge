@@ -86,13 +86,24 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       }
     });
 
+    // New search term
+    this.leadService.leadSearchTermChanges$.subscribe(newSearchTerm => {
 
+      if (newSearchTerm) {
+        this.leadRegisterForm.get('leadSearchTerm').setValue(newSearchTerm);
+        console.log('lead suggestion:', newSearchTerm);
+        this.leadSearchInfo = this.getSearchInfo(true);
+      } else {
+        console.log('no change in lead suggestion:');
+        AppUtils.leadSearchTerm = '';
+        this.leadRegisterForm.patchValue({
+          leadSearchTerm: ''
+        });
 
-    if (AppUtils.leadSearchTerm) {
-
-      this.leadRegisterForm.get('leadSearchTerm').setValue(AppUtils.leadSearchTerm);
-      this.searchTerm = AppUtils.leadSearchTerm;
-    }
+      }
+      console.log('lead suggestion selected:', this.leadRegisterForm);
+      this.PerformSearch();
+    });
     console.log('INIT: ', this.leadSearchInfo);
 
     this.leadRegisterForm.valueChanges.subscribe(() => {
@@ -196,22 +207,22 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
 
   onLeadSuggestionSelected(event: any) {
     console.log('lead suggestion event:', event);
-    if (event) {
-      this.leadRegisterForm.patchValue({
-        leadSearchTerm: event.item
-      });
-      console.log('lead suggestion:', event);
-      this.leadSearchInfo = this.getSearchInfo(true);
-    } else {
-      console.log('no change in lead suggestion:');
-      AppUtils.leadSearchTerm = '';
-      this.leadRegisterForm.patchValue({
-        leadSearchTerm: ''
-      });
+    // if (event) {
+    //   this.leadRegisterForm.patchValue({
+    //     leadSearchTerm: event.item
+    //   });
+    //   console.log('lead suggestion:', event);
+    //   this.leadSearchInfo = this.getSearchInfo(true);
+    // } else {
+    //   console.log('no change in lead suggestion:');
+    //   AppUtils.leadSearchTerm = '';
+    //   this.leadRegisterForm.patchValue({
+    //     leadSearchTerm: ''
+    //   });
 
-    }
-    console.log('lead suggestion selected:', this.leadRegisterForm);
-    this.PerformSearch();
+    // }
+    // console.log('lead suggestion selected:', this.leadRegisterForm);
+    // this.PerformSearch();
   }
 
   ngOnChanges() {

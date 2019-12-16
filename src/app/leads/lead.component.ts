@@ -22,11 +22,13 @@ export class LeadComponent implements OnInit {
   page = 1;
   bottomReached = false;
   leadSearchInfo: LeadSearchInfo;
+  searchTerm = '';
 
   constructor(private leadService: LeadsService, private staffMemberService: StaffMemberService) { }
 
   ngOnInit() {
 
+    this.leadService.leadSearchTermChanges$.subscribe(newSearchTerm =>this.searchTerm = newSearchTerm)
     // Current Staff Member
     this.staffMemberService.getCurrentStaffMember().subscribe(data => {
       if (data) {
@@ -43,11 +45,11 @@ export class LeadComponent implements OnInit {
           dateTo: null,
           includeClosedLeads: false,
           includeUnassignedLeadsOnly: false,
-          leadSearchTerm: AppUtils.leadSearchTerm ? AppUtils.leadSearchTerm : ''
+          leadSearchTerm: this.searchTerm ? this.searchTerm : ''
         };
 
         this.getLeads(this.leadSearchInfo);
-        console.log('calling from here 1');
+        console.log('calling from here 1', this.leadSearchInfo.leadSearchTerm);
       }
     });
 
@@ -56,7 +58,7 @@ export class LeadComponent implements OnInit {
       if (leadSearchInfo) {
         this.page = leadSearchInfo.page;
         this.getLeads(leadSearchInfo);
-        console.log('calling from here 2');
+        console.log('calling from here 2', this.leadSearchInfo.leadSearchTerm);
       }
     });
 
