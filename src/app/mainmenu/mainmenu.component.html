@@ -16,12 +16,12 @@
         </a>
       </li>
       <li class="nav-item active" (click)="navbarCollapsed = !navbarCollapsed">
-        <a class="nav-link" routerLink="/" [queryParams]="{selectedTab: 1}">
+        <a class="nav-link" routerLink="/" [queryParams]="{selectedTab: 0}">
           <div><i class="fas fa-calendar-alt fa-fw mr-3"></i>Calendar</div>
         </a>
       </li>
       <li class="nav-item active" *ngIf="isLeaderboardVisible" (click)="navbarCollapsed = !navbarCollapsed">
-        <a class="nav-link" routerLink="/" [queryParams]="{selectedTab: 2}">
+        <a class="nav-link" routerLink="/" [queryParams]="{selectedTab: 1}">
           <div><i class="fas fa-chalkboard-teacher fa-fw mr-3"></i>Leaderboard</div>
         </a>
       </li>
