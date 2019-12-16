@@ -2,7 +2,6 @@
   <div class="list-group-item list-header d-none d-sm-block d-xl-none">
     <div class="row">
       <div class="col-sm"><strong>Lead Type</strong></div>
-      <div class="col-sm"><strong>Person</strong></div>
       <div class="col-sm"><strong>Next Chase Date</strong></div>
       <div class="col-sm"><strong>Lead Owner</strong></div>
     </div>
@@ -18,13 +17,16 @@
         <span class="badge badge-pill badge-info">{{lead?.leadType}}</span>
       </div>
       <div class="col-sm col-xl-12">
-        {{lead?.person}}
+        <dl class="row">
+          <dt class="col-4 d-sm-none d-xl-block">N.C. Date</dt>
+          <dd class="col">{{(lead?.nextChaseDate | date: 'dd/MM/yyyy hh:mm') || '-'}}</dd>
+        </dl>
       </div>
       <div class="col-sm col-xl-12">
-        {{(lead?.nextChaseDate | date: 'dd/MM/yyyy hh:mm') || '-'}}
-      </div>
-      <div class="col-sm text-muted col-xl-12">
-        {{lead?.owner}}
+        <dl class="row">
+          <dt class="col-4 d-sm-none d-xl-block">Lead Owner</dt>
+          <dd class="col">{{lead?.owner}}</dd>
+        </dl>
       </div>
     </div>
   </a>

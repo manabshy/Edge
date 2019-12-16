@@ -127,13 +127,22 @@
               <span class="badge badge-pill badge-info">{{lead?.leadType}}</span>
             </div>
             <div class="col-sm">
-              {{lead?.person}}
+              <dl class="row">
+                <dt class="col-4 d-sm-none">Person</dt>
+                <dd class="col">{{lead?.person}}</dd>
+              </dl>
             </div>
             <div class="col-sm">
-              {{(lead?.nextChaseDate | date: 'dd/MM/yyyy hh:mm') || '-'}}
+              <dl class="row">
+                <dt class="col-4 d-sm-none">N.C. Date</dt>
+                <dd class="col">{{(lead?.nextChaseDate | date: 'dd/MM/yyyy hh:mm') || '-'}}</dd>
+              </dl>
             </div>
-            <div class="col-sm text-muted">
-              {{lead?.owner}}
+            <div class="col-sm">
+              <dl class="row">
+                <dt class="col-4 d-sm-none">Lead Owner</dt>
+                <dd class="col">{{lead?.owner}}</dd>
+              </dl>
             </div>
           </div>
         </div>
