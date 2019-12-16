@@ -83,6 +83,7 @@ export class StaffmemberFinderComponent implements OnInit, OnChanges {
     if (event.key !== 'Enter') {
 
     }
+    this.ownerChanged.emit(this.ownerForm.value.owner);
     AppUtils.searchTerm = this.searchTerm;
   }
 

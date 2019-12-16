@@ -9,6 +9,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 export class LeadAssignmentModalComponent implements OnInit {
 
   selectedOwner: number;
+  isAssignable: boolean;
 
   constructor(public bsModalRef: BsModalRef) { }
 
@@ -17,10 +18,11 @@ export class LeadAssignmentModalComponent implements OnInit {
   }
 
   onOwnerChanged(event: any) {
-    console.log(event);
+    console.log('owner from child',event);
 
     if (event && event.item != null) {
       this.selectedOwner = event.item.staffMemberId;
+      this.isAssignable = true;
     }
   }
 

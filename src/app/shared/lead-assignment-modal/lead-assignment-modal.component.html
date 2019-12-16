@@ -7,5 +7,5 @@
   </div>
 
   <button type="button" class="btn btn-light mr-2" (click)="action(false)">Cancel</button>
-  <button type="button" class="btn btn-secondary" (click)="action(true)">Assign</button>
+  <button type="button" class="btn btn-secondary" [attr.disabled]="!isAssignable ? true: null" (click)="action(true)">Assign</button>
 </div>
