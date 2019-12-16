@@ -8,6 +8,7 @@
     top: 0;
     background: color('white');
     z-index: 100;
+    min-height: 3.5rem;
 
     @include media-breakpoint-down(sm) {
         top: $top-bar-height;

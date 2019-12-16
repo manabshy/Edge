@@ -27,7 +27,7 @@
     &[stickything] {
         &:not([style*=fixed]) {
             @include media-breakpoint-up(xl) {
-                top: 119px!important;
+                top: 120px!important;
             }
         }
         @include media-breakpoint-up(xl) {
