@@ -267,9 +267,11 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   onOwnerChanged(event: any) {
     console.log('new owner here...', event);
     this.isOwnerChanged = true;
-    if (event && event.item != null) {
+    if (event && event.item != null || event) {
+      let ownerId = 0;
+      event.item ? ownerId = event.item.staffMemberId : ownerId = event.staffMemberId;
       this.leadEditForm.patchValue({
-        ownerId: event.item.staffMemberId
+        ownerId: ownerId
       });
     } else {
       this.leadEditForm.patchValue({
