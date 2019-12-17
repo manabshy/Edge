@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { AppUtils } from '../../core/shared/utils';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LeadsService } from '../shared/leads.service';
 import { Lead, LeadEditSubNavItems, LeadProperty } from '../shared/lead';
 import { StorageMap } from '@ngx-pwa/local-storage';
@@ -19,6 +19,7 @@ import * as _ from 'lodash';
 import { BaseComponent } from 'src/app/shared/models/base-component';
 import { LeadNoteComponent } from '../lead-note/lead-note.component';
 import { ValidationMessages, FormErrors } from 'src/app/core/shared/app-constants';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-lead-edit',
@@ -69,6 +70,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
   constructor(private leadsService: LeadsService,
     private route: ActivatedRoute,
+    private router: Router,
+    private location: Location,
     private storage: StorageMap,
     private fb: FormBuilder,
     private sharedService: SharedService,
@@ -361,9 +364,22 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
           lead.updatedBy = this.currentStaffMember.staffMemberId;
           lead.updatedDate = new Date;
 
+          // adding note REFACTOR ASAP
+          console.log('this note', this.note);
+          this.contactGroupService.addPersonNote(this.note).subscribe(data => {
+            if (data) {
+              this.contactGroupService.notesChanged(data);
+            }
+          }, (error: WedgeError) => {
+            this.sharedService.showError(error);
+            this.isSubmitting = false;
+          });
+
           this.leadsService.addLead(lead).subscribe((result) => {
-            this.onUpdateCompleted();
-            this.lead = lead;
+            if (result) {
+              this.lead = lead;
+              this.onUpdateCompleted(result);
+            }
           }, (error: WedgeError) => {
             this.sharedService.showError(error);
             this.isSubmitting = false;
@@ -393,7 +409,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
               this.lead = result;
               result.dateClosed ? this.isLeadClosed = true : this.isLeadClosed = false;
             }
-            this.onUpdateCompleted();
+            this.onUpdateCompleted(result);
           }, (error: WedgeError) => {
             this.sharedService.showError(error);
             this.isSubmitting = false;
@@ -406,12 +422,24 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
   }
 
-  private onUpdateCompleted() {
+  private onUpdateCompleted(lead?: Lead) {
     if (this.isNewLead) { this.toastr.success('Lead successfully saved'); } else {
       this.toastr.success('Lead successfully updated');
     }
     this.isUpdateComplete = true;
     this.leadsService.isLeadUpdated(true);
+
+    let url = this.router.url;
+    let id = this.leadId;
+    if (url.indexOf('edit/' + id) === -1) {
+      id = 0;
+    }
+    if (url.indexOf('?') >= 0) {
+      url = url.substring(0, url.indexOf('?'));
+      url = url.replace('edit/' + id, 'edit/' + lead.leadId);
+      this.location.replaceState(url);
+    }
+    this.leadId = lead.leadId;
   }
 
   get dataNote() {
