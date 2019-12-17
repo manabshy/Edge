@@ -226,14 +226,16 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
   private patchLeadValues(lead: Lead) {
     console.log('values to patch here', lead)
-    this.leadEditForm.patchValue({
-      ownerId: lead.ownerId,
-      person: lead.person,
-      personId: lead.personId,
-      leadTypeId: lead.leadTypeId,
-      nextChaseDate: this.sharedService.ISOToDate(lead.nextChaseDate),
-      closeLead: lead.closedById
-    });
+    if (lead) {
+      this.leadEditForm.patchValue({
+        ownerId: lead.ownerId,
+        person: lead.person,
+        personId: lead.personId,
+        leadTypeId: lead.leadTypeId,
+        nextChaseDate: this.sharedService.ISOToDate(lead.nextChaseDate),
+        closeLead: lead.closedById
+      });
+    }
     this.onLoading = false;
     console.log('after patching here', this.leadEditForm.value)
   }
@@ -401,7 +403,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     }
     this.isUpdateComplete = true;
     this.leadsService.isLeadUpdated(true);
-    this.leadEditForm.reset();
   }
 
   get dataNote() {

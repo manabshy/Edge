@@ -29,11 +29,11 @@ export class LeadFinderComponent implements OnInit {
     this.leadFinderForm.valueChanges.pipe(debounceTime(800)).subscribe(search => {
       AppUtils.leadSearchTerm = '';
       if (search && search.leadSuggestion) {
-        console.log('search data', search);
-        console.log('AppUtils search term data', AppUtils.leadSearchTerm);
         this.suggestedTerm ? this.searchTerm = this.suggestedTerm : this.searchTerm = search.leadSuggestion;
-        this.leadService.leadsSearchTermChanged(this.searchTerm);
+      } else {
+        this.searchTerm = '';
       }
+      this.leadService.leadsSearchTermChanged(this.searchTerm);
     });
 
     // this.leadFinderForm.get('leadSuggestion').setValue(AppUtils.leadSearchTerm);
@@ -58,7 +58,7 @@ export class LeadFinderComponent implements OnInit {
   onKeyup(event: KeyboardEvent) {
     // AppUtils.leadSearchTerm = this.searchTerm;
     this.leadService.leadsSearchTermChanged(this.searchTerm);
-    console.log(' AppUtils.leadSearchTerm term here',   AppUtils.leadSearchTerm);
+    console.log(' AppUtils.leadSearchTerm term here', AppUtils.leadSearchTerm);
   }
 
 
@@ -76,7 +76,7 @@ export class LeadFinderComponent implements OnInit {
       this.leadService.leadsSearchTermChanged(this.searchTerm);
       // this.leadSuggestionSelected.emit(event);
     }
-     this.suggestedTerm = '';
+    this.suggestedTerm = '';
   }
 
 }
