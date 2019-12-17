@@ -296,12 +296,14 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     });
   }
 
-  // closeLeadClicked() {
+  closeLeadChanged(lead: Lead) {
+    const nextChaseDateControl = this.leadEditForm.get('nextChaseDate');
+    if (lead.nextChaseDate == null) {
+      nextChaseDateControl.clearValidators();
+      nextChaseDateControl.updateValueAndValidity();
+    }
+  }
 
-  //   this.lead.closedById = this.currentStaffMember.staffMemberId;
-  //   this.lead.dateClosed = new Date();
-  //   this.updateLead();
-  // }
   removeProperty() {
     const newLead = { ...this.lead, ...{ relatedProperty: null } };
     if (this.lead.relatedProperty) {
@@ -330,7 +332,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       this.note = leadNote;
       this.isNoteFormDirty = true;
     }
-
   }
   updateLead(shouldExit: boolean = false, leadNote = null) {
     console.log('form here in update', this.leadEditForm);

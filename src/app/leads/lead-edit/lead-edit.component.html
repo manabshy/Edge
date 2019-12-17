@@ -84,7 +84,7 @@
                 <div class="col-12">
                   <div class="form-group">
                     <div class="custom-control custom-checkbox">
-                      <input type="checkbox" class="custom-control-input" id="closeLead" formControlName="closeLead" [attr.disabled] = "isLeadClosed ? true : null">
+                      <input type="checkbox" class="custom-control-input" id="closeLead" formControlName="closeLead" (change)="closeLeadChanged(lead)" [attr.disabled] = "isLeadClosed ? true : null">
                       <label class="custom-control-label" for="closeLead">Mark as <span class="badge badge-pill badge-danger">Closed</span></label>
                     </div>
                   </div>
