@@ -46,6 +46,7 @@ export class AuthService {
       if (res) {
         if (environment.production) {
           this.storage.delete('currentUser').subscribe();
+          this.storage.delete('info').subscribe();
         }
         this.adalService.logOut();
       }
