@@ -112,14 +112,14 @@
                 <div class="col-lg">
                   <div class="form-group">
                     <label for="chaser">Lead Owner</label>
-                    <input type="text" class="form-control form-control-sm" id="owner" formControlName="owner"/>
+                    <!-- <input type="text" class="form-control form-control-sm" id="owner" formControlName="owner"/> -->
                     <!-- <select class="custom-select custom-select-sm" id="owner" formControlName="ownerId">
                       <option value=""></option>
                       <option selected *ngFor="let staffMember of staffMembers" [value]=staffMember.staffMemberId>
                         {{staffMember?.fullName}}</option>
                     </select> -->
-                    <!-- <app-staffmember-finder [staffMember]="leadOwner" (ownerChanged)="onOwnerChanged($event)" [isDisabled] = "lead?.closedById ? true : false">
-                    </app-staffmember-finder> -->
+                    <app-staffmember-finder [staffMember]="leadOwner" (ownerChanged)="onOwnerChanged($event)" [isDisabled] = "lead?.closedById ? true : false">
+                    </app-staffmember-finder>
                   </div>
                 </div>
               </div>

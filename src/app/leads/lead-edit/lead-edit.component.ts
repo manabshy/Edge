@@ -64,6 +64,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   isPropertyAssociated: boolean;
   isMessageVisible: boolean;
   isPropertyRemoved: boolean;
+  isOwnerChanged: boolean;
 
   constructor(private leadsService: LeadsService,
     private route: ActivatedRoute,
@@ -217,7 +218,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       this.personId = result.personId;
       this.patchLeadValues(result);
       this.getPersonInformation();
-      // this.leadOwner = this.staffMembers.find(sm => sm.staffMemberId === this.lead.ownerId);
+      this.leadOwner = this.staffMembers.find(sm => sm.staffMemberId === this.lead.ownerId);
     }, error => {
       this.lead = null;
     });
@@ -227,7 +228,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     console.log('values to patch here', lead)
     this.leadEditForm.patchValue({
       ownerId: lead.ownerId,
-      owner: lead.owner,
       person: lead.person,
       personId: lead.personId,
       leadTypeId: lead.leadTypeId,
@@ -263,8 +263,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   onOwnerChanged(event: any) {
-    console.log(event);
-
+    console.log('new owner here...', event);
+    this.isOwnerChanged = true;
     if (event && event.item != null) {
       this.leadEditForm.patchValue({
         ownerId: event.item.staffMemberId
@@ -283,7 +283,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   private setupLeadEditForm() {
     this.leadEditForm = this.fb.group({
       ownerId: null,
-      owner: '',
       person: '',
       leadTypeId: [0, Validators.required],
       nextChaseDate: ['', Validators.required],
@@ -335,7 +334,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
     if (this.leadEditForm.valid) {
       this.isSubmitting = true;
-      if (this.leadEditForm.dirty || this.isNoteFormDirty || this.isPropertyAssociated || this.isPropertyRemoved) {
+      if (this.leadEditForm.dirty || this.isNoteFormDirty || this.isPropertyAssociated || this.isPropertyRemoved || this.isOwnerChanged) {
         const lead = { ...this.lead, ...this.leadEditForm.value };
         if ((closeLead || this.isNewLead || nextChaseDate) && (this.note.text === '' || this.note.text == null)) {
           this.noteRequiredWarning = 'Note is required.';
