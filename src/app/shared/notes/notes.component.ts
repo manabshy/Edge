@@ -22,7 +22,7 @@ export class NotesComponent implements OnInit, OnChanges {
   @Input() personNotes: ContactNote[];
   @Input() contactGroupNotes: ContactNote[];
   @Input() propertyNotes: PropertyNote[];
-  @Input() showNoteInput: boolean;
+  @Input() showNoteInput: boolean = true;
   
   notes: any;
   tests: any;
