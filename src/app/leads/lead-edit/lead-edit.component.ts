@@ -217,15 +217,17 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       this.personId = result.personId;
       this.patchLeadValues(result);
       this.getPersonInformation();
-      this.leadOwner = this.staffMembers.find(sm => sm.staffMemberId === this.lead.ownerId);
+      // this.leadOwner = this.staffMembers.find(sm => sm.staffMemberId === this.lead.ownerId);
     }, error => {
       this.lead = null;
     });
   }
 
   private patchLeadValues(lead: Lead) {
+    console.log('values to patch here', lead)
     this.leadEditForm.patchValue({
       ownerId: lead.ownerId,
+      owner: lead.owner,
       person: lead.person,
       personId: lead.personId,
       leadTypeId: lead.leadTypeId,
@@ -233,6 +235,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       closeLead: lead.closedById
     });
     this.onLoading = false;
+    console.log('after patching here', this.leadEditForm.value)
   }
 
   private getPersonInformation() {
@@ -280,6 +283,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   private setupLeadEditForm() {
     this.leadEditForm = this.fb.group({
       ownerId: null,
+      owner: '',
       person: '',
       leadTypeId: [0, Validators.required],
       nextChaseDate: ['', Validators.required],
