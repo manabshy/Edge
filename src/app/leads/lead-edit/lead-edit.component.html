@@ -84,7 +84,7 @@
                 <div class="col-12">
                   <div class="form-group">
                     <div class="custom-control custom-checkbox">
-                      <input type="checkbox" class="custom-control-input" id="closeLead" formControlName="closeLead" [attr.disabled] = "lead?.closedById ? true : null">
+                      <input type="checkbox" class="custom-control-input" id="closeLead" formControlName="closeLead" [attr.disabled] = "isLeadClosed ? true : null">
                       <label class="custom-control-label" for="closeLead">Mark as <span class="badge badge-pill badge-danger">Closed</span></label>
                     </div>
                   </div>
@@ -92,7 +92,7 @@
                 <div class="col-lg">
                   <div class="form-group">
                     <label for="leadType">Lead Type</label>
-                    <select class="custom-select custom-select-sm" id="leadType" formControlName="leadTypeId" [attr.disabled] = "lead?.closedById ? true : null" [ngClass]="{'is-invalid': formErrors?.leadTypeId}">
+                    <select class="custom-select custom-select-sm" id="leadType" formControlName="leadTypeId" [attr.disabled] = "isLeadClosed ? true : null" [ngClass]="{'is-invalid': formErrors?.leadTypeId}">
                       <option value=""></option>
                       <option selected *ngFor="let leadType of leadTypes" [value]=leadType.id>{{leadType?.value}}</option>
                     </select>
@@ -105,7 +105,7 @@
                     <input type="text" id="chaseDate" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
                       formControlName="nextChaseDate"
                       [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', minDate:todaysDate, customTodayClass: 'font-weight-bold'}"
-                      bsDatepicker [attr.disabled] = "lead?.closedById ? true : null" [ngClass]="{'is-invalid': formErrors?.nextChaseDate}">
+                      bsDatepicker [attr.disabled] = "isLeadClosed ? true : null" [ngClass]="{'is-invalid': formErrors?.nextChaseDate}">
                       <div class="invalid-feedback">{{formErrors?.nextChaseDate}}</div>
                   </div>
                 </div>
@@ -118,7 +118,7 @@
                       <option selected *ngFor="let staffMember of staffMembers" [value]=staffMember.staffMemberId>
                         {{staffMember?.fullName}}</option>
                     </select> -->
-                    <app-staffmember-finder [staffMember]="leadOwner" (ownerChanged)="onOwnerChanged($event)" [isDisabled] = "lead?.closedById ? true : false">
+                    <app-staffmember-finder [staffMember]="leadOwner" (ownerChanged)="onOwnerChanged($event)" [isDisabled] = "isLeadClosed ? true : false">
                     </app-staffmember-finder>
                   </div>
                 </div>
@@ -129,7 +129,7 @@
         <!-- <app-notes [personNotes]="personNotes"></app-notes> -->
         <div class="list-group">
           <div class="list-group-item add-note py-4">
-            <app-lead-note #leadNote [selectedPerson] = "person" [isDisabled] = "lead?.closedById ? true : false"
+            <app-lead-note #leadNote [selectedPerson] = "person" [isDisabled] = "isLeadClosed ? true : false"
            (leadNote)="getNewPersonNote($event)" [noteRequiredWarning] = "noteRequiredWarning" [isUpdateComplete]="isUpdateComplete"></app-lead-note>
           </div>
         </div>
@@ -149,10 +149,10 @@
           <div class="col-sm-10 d-flex">
 
             <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
-            <button type="submit" class="btn btn-secondary mr-2" [attr.disabled] = "lead?.closedById ? true : null">Save</button>
+            <button type="submit" class="btn btn-secondary mr-2" [attr.disabled] = "isLeadClosed ? true : null">Save</button>
 
             <button (click)="moveToNextLead()" type="button" class="btn btn-secondary" [isOpen]="leadsListCompleted"
-              [tooltip]="leadsListCompleted ? 'You have reached the end of the list' : null" [attr.disabled] = "lead?.closedById ? true : null">Save & Next</button>
+              [tooltip]="leadsListCompleted ? 'You have reached the end of the list' : null" [attr.disabled] = "isLeadClosed ? true : null">Save & Next</button>
           </div>
         </div>
       </div>

@@ -56,8 +56,8 @@ export class LeadsService {
   updateLead(lead: Lead): Observable<any> {
     const url = `${AppConstants.baseLeadsUrl}/${lead.leadId}`;
 
-    return this.http.put<Lead>(url, lead).pipe(
-      map(response => response),
+    return this.http.put<any>(url, lead).pipe(
+      map(response => response.result),
       tap(data => console.log('Updated Lead details here...', JSON.stringify(data))));
   }
 

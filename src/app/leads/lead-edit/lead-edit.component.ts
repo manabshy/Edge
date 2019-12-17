@@ -65,6 +65,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   isMessageVisible: boolean;
   isPropertyRemoved: boolean;
   isOwnerChanged: boolean;
+  isLeadClosed: boolean;
 
   constructor(private leadsService: LeadsService,
     private route: ActivatedRoute,
@@ -218,6 +219,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       this.personId = result.personId;
       this.patchLeadValues(result);
       this.getPersonInformation();
+      this.lead.dateClosed ? this.isLeadClosed = true : this.isLeadClosed = false;
       this.leadOwner = this.staffMembers.find(sm => sm.staffMemberId === this.lead.ownerId);
     }, error => {
       this.lead = null;
@@ -225,7 +227,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   private patchLeadValues(lead: Lead) {
-    console.log('values to patch here', lead)
+    console.log('values to patch here', lead);
     if (lead) {
       this.leadEditForm.patchValue({
         ownerId: lead.ownerId,
@@ -237,7 +239,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       });
     }
     this.onLoading = false;
-    console.log('after patching here', this.leadEditForm.value)
+    console.log('after patching here', this.leadEditForm.value);
   }
 
   private getPersonInformation() {
@@ -316,7 +318,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       } else {
         this.lead = {} as Lead;
         this.lead.relatedProperty = property;
-        console.log('related property', this.lead.relatedProperty)
+        console.log('related property', this.lead.relatedProperty);
       }
       this.isPropertyAssociated = true;
       this.isMessageVisible = false;
@@ -386,6 +388,10 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
           // updating lead
 
           this.leadsService.updateLead(lead).subscribe((result) => {
+            if (result) {
+              this.lead = result;
+              result.dateClosed ? this.isLeadClosed = true : this.isLeadClosed = false;
+            }
             this.onUpdateCompleted();
           }, (error: WedgeError) => {
             this.sharedService.showError(error);
