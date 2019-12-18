@@ -5,7 +5,7 @@ import { LeadsService } from '../shared/leads.service';
 import { Lead, LeadEditSubNavItems, LeadProperty } from '../shared/lead';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { InfoDetail } from 'src/app/core/services/info.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
 import { StaffMember } from 'src/app/shared/models/staff-member';
@@ -48,7 +48,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   leadIds: number[] = [];
   currentLeadIndex = 0;
   leadsListCompleted = false;
-  isFormDirty = false;
   onLoading = false;
   isSubmitting: boolean;
   contactGroups: BasicContactGroup[];
@@ -67,6 +66,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   isPropertyRemoved: boolean;
   isOwnerChanged: boolean;
   isLeadClosed: boolean;
+  get nextChaseDateControl() {
+    return this.leadEditForm.get('nextChaseDate') as FormControl;
+  }
 
   constructor(private leadsService: LeadsService,
     private route: ActivatedRoute,
@@ -182,17 +184,21 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       }
     });
 
-    this.onChanges();
+    // this.onFormChanges();
 
   }
 
-  onChanges(): void {
-    this.leadEditForm.valueChanges.subscribe(val => {
-      if (!this.onLoading) {
-        this.isFormDirty = true;
-      }
-    });
-  }
+  // onFormChanges(): void {
+  //   this.leadEditForm.valueChanges.subscribe(val => {
+  //     console.log('this is shit', val)
+  //     if (!this.onLoading) {
+  //       this.isFormDirty = true;
+  //     }else{
+  //       this.isFormDirty = false;
+  //     }
+  //     console.log('this is shit 2', this.isFormDirty)
+  //   });
+  // }
 
   logValidationErrors(group: FormGroup = this.leadEditForm, fakeTouched: boolean) {
     Object.keys(group.controls).forEach((key: string) => {
@@ -307,6 +313,12 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     }
   }
 
+  clearNextCaseDateValidators() {
+    this.nextChaseDateControl.clearValidators();
+    this.nextChaseDateControl.updateValueAndValidity();
+    console.log('here for validators', this.nextChaseDateControl)
+  }
+
   removeProperty() {
     const newLead = { ...this.lead, ...{ relatedProperty: null } };
     if (this.lead.relatedProperty) {
@@ -336,7 +348,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       this.isNoteFormDirty = true;
     }
   }
-   // TODO: REFACTOR ASAP
+  // TODO: REFACTOR ASAP
   updateLead(shouldExit: boolean = false, leadNote = null) {
     console.log('form here in update', this.leadEditForm);
     const closeLead = this.leadEditForm.get('closeLead').value;
@@ -477,11 +489,12 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   moveToNextLead() {
-    console.log('form dirty', this.isFormDirty);
-    if (this.isFormDirty || this.isNoteFormDirty) {
+    console.log('lead form dirty', this.leadEditForm.dirty);
+    if (this.leadEditForm.dirty || this.isNoteFormDirty) {
+      this.clearNextCaseDateValidators();
       this.updateLead(true, this.note);
-      this.isFormDirty = false;
       this.isNoteFormDirty = false;
+      this.leadEditForm.markAsPristine();
       this.noteRequiredWarning = '';
     }
 
