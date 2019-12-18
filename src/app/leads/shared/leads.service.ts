@@ -13,7 +13,6 @@ export class LeadsService {
 
   private leadsChangeSubject = new BehaviorSubject<Lead | null>(null);
   private pageChangeSubject = new Subject<LeadSearchInfo | null>();
-  private leadClickSubject = new BehaviorSubject<LeadSearchInfo | null>(null);
   private isLeadUpdatedSubject = new Subject<boolean | null>();
   private leadSearchTermSubject = new Subject<string | null>();
 
@@ -21,7 +20,8 @@ export class LeadsService {
   isLeadUpdated$ = this.isLeadUpdatedSubject.asObservable();
   leadsChanges$ = this.leadsChangeSubject.asObservable();
   pageChanges$ = this.pageChangeSubject.asObservable();
-  leadClickChanges$ = this.leadClickSubject.asObservable();
+
+  private readonly MAX_PAGE_SIZE = '500';
 
   constructor(private http: HttpClient) { }
 
@@ -34,10 +34,6 @@ export class LeadsService {
   }
   leadsChanged(lead: Lead) {
     this.leadsChangeSubject.next(lead);
-  }
-
-  leadClickChanged(leadSearchInfo: LeadSearchInfo) {
-    this.leadClickSubject.next(leadSearchInfo);
   }
 
   pageNumberChanged(leadSearchInfo: LeadSearchInfo) {
@@ -110,7 +106,7 @@ export class LeadsService {
   }
 
   // Returning list of Lead Ids
-  getLeadIds(leadSearchInfo: LeadSearchInfo): Observable<any> {
+  getLeadIds(leadSearchInfo: LeadSearchInfo, pageSize?: number): Observable<any> {
 
     console.log('date params', leadSearchInfo);
 
@@ -128,7 +124,8 @@ export class LeadsService {
           ? (String)(leadSearchInfo.includeUnassignedLeadsOnly) : '',
         startLeadId: leadSearchInfo.startLeadId != null ? leadSearchInfo.startLeadId.toString() : '',
         searchTerm: leadSearchInfo.leadSearchTerm != null ? leadSearchInfo.leadSearchTerm : '',
-        allowPaging: 'false'
+        allowPaging: 'false',
+        pageSize: this.MAX_PAGE_SIZE.toString()
       }
     });
 

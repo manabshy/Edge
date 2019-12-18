@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { AppUtils } from '../../core/shared/utils';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LeadsService } from '../shared/leads.service';
-import { Lead, LeadEditSubNavItems, LeadProperty } from '../shared/lead';
+import { Lead, LeadEditSubNavItems, LeadProperty, LeadSearchInfo } from '../shared/lead';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { InfoDetail } from 'src/app/core/services/info.service';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
@@ -86,6 +86,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     console.log('lead note component', this.note);
     this.route.params.subscribe(params => {
       this.leadId = +params['leadId'] || 0;
+      if (this.leadId) {
+        this.getLeadIds(this.leadId);
+      }
     });
 
     this.route.queryParamMap.subscribe(params => {
@@ -168,37 +171,19 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       this.getNextPersonNotesPage(this.page);
     });
 
-    // leads search changed
-    this.leadsService.leadClickChanges$.subscribe(leadSearchInfo => {
-
-      if (leadSearchInfo) {
-        leadSearchInfo.startLeadId = this.leadId;
-
-        this.leadsService.getLeadIds(leadSearchInfo).subscribe(result => {
-          this.leadIds = result;
-          this.currentLeadIndex = this.leadIds.indexOf(leadSearchInfo.startLeadId);
-        }, error => {
-          this.lead = null;
-        });
-
-      }
-    });
-
-    // this.onFormChanges();
-
   }
 
-  // onFormChanges(): void {
-  //   this.leadEditForm.valueChanges.subscribe(val => {
-  //     console.log('this is shit', val)
-  //     if (!this.onLoading) {
-  //       this.isFormDirty = true;
-  //     }else{
-  //       this.isFormDirty = false;
-  //     }
-  //     console.log('this is shit 2', this.isFormDirty)
-  //   });
-  // }
+  getLeadIds(leadId: number) {
+    console.log('leadId', leadId)
+    const leadSearchInfo = { startLeadId: leadId } as LeadSearchInfo;
+    this.leadsService.getLeadIds(leadSearchInfo).subscribe(result => {
+      this.leadIds = result;
+      this.currentLeadIndex = this.leadIds.indexOf(leadSearchInfo.startLeadId);
+    }, error => {
+      this.lead = null;
+    });
+
+  }
 
   logValidationErrors(group: FormGroup = this.leadEditForm, fakeTouched: boolean) {
     Object.keys(group.controls).forEach((key: string) => {
@@ -316,7 +301,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   clearNextCaseDateValidators() {
     this.nextChaseDateControl.clearValidators();
     this.nextChaseDateControl.updateValueAndValidity();
-    console.log('here for validators', this.nextChaseDateControl)
+    console.log('here for validators', this.nextChaseDateControl);
   }
 
   removeProperty() {

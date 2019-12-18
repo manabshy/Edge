@@ -54,7 +54,6 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
 
     this.setupLeadRegisterForm();
 
-
     // Lead Types
     this.storage.get('info').subscribe(data => {
       if (data) {
@@ -83,6 +82,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
         this.currentStaffMember = data;
 
         this.leadSearchInfo = this.getSearchInfo(true);
+        console.log('here not happy', this.leadSearchInfo)
       }
     });
 
@@ -148,15 +148,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
 
     if (this.areLeadsAssignable) {
       event.stopPropagation();
-      console.log('Lead is clicked for assignment...');
-
-    } else {
-      console.log('LEADS CLICKED: ', this.leadSearchInfo);
-      this.leadService.leadClickChanged(this.leadSearchInfo);
-      return;
     }
-
-    console.log('clicked', lead);
 
     if (this.areLeadsAssignable) {
       leadIndex = this.selectedLeadIndex(lead);
@@ -165,12 +157,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       } else {
         this.selectedLeadsForAssignment.splice(leadIndex, 1);
       }
-
-      // $event.stopPropagation();
     }
-
-    console.log('selected leads:', this.selectedLeadsForAssignment);
-
   }
 
   selectAllLeadsForAssignment(event) {
