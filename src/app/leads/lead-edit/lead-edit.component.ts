@@ -476,7 +476,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   moveToNextLead() {
     console.log('lead form dirty', this.leadEditForm.dirty);
     if (this.leadEditForm.dirty || this.isNoteFormDirty) {
-      this.clearNextCaseDateValidators();
+      // this.clearNextCaseDateValidators();
       this.updateLead(true, this.note);
       this.isNoteFormDirty = false;
       this.leadEditForm.markAsPristine();
