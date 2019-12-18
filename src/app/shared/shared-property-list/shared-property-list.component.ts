@@ -12,10 +12,10 @@ import { PeopleService } from 'src/app/core/services/people.service';
 export class SharedPropertyListComponent implements OnChanges {
 
   @Input() personId: number;
-  @Input() isLead: number;
+  @Input() isLead: boolean;
+  @Input() isLeadClosed: boolean;
   @Output() associatedProperty = new EventEmitter<PersonProperty>();
   properties$ = new Observable<PersonProperty[]>();
-
   constructor(private router: Router, private peopleService: PeopleService) { }
 
   ngOnChanges() {
@@ -23,6 +23,7 @@ export class SharedPropertyListComponent implements OnChanges {
       this.properties$ = this.peopleService.getProperties(this.personId);
     }
   }
+
   navigateToDetails(property: PersonProperty) {
     if (property) {
       console.log('property', property);

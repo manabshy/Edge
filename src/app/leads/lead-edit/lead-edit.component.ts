@@ -336,6 +336,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       this.isNoteFormDirty = true;
     }
   }
+   // TODO: REFACTOR ASAP
   updateLead(shouldExit: boolean = false, leadNote = null) {
     console.log('form here in update', this.leadEditForm);
     const closeLead = this.leadEditForm.get('closeLead').value;
@@ -364,8 +365,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
           lead.updatedBy = this.currentStaffMember.staffMemberId;
           lead.updatedDate = new Date;
 
-          // adding note REFACTOR ASAP
-          console.log('this note', this.note);
           this.contactGroupService.addPersonNote(this.note).subscribe(data => {
             if (data) {
               this.contactGroupService.notesChanged(data);

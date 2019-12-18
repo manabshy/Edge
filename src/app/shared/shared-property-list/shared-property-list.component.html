@@ -20,7 +20,7 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-auto col-xl-12" *ngIf="isLead">
+      <div class="col-sm-auto col-xl-12" *ngIf="isLead && !isLeadClosed">
         <button type="button" class="btn btn-block btn-light" (click)=" associateToLead(property)">Associate to lead</button>
       </div>
     </div>
