@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Person } from '../models/person';
 import { Router } from '@angular/router';
+import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 
 @Component({
   selector: 'app-person-details',
@@ -9,10 +10,15 @@ import { Router } from '@angular/router';
 })
 export class PersonDetailsComponent implements OnInit {
   @Input() personDetails: Person;
-  @Input() isClickable: boolean = true;
-  constructor(private router: Router) { }
+  @Input() isClickable = true;
+  constructor(private router: Router, private contactgroupService: ContactGroupsService) { }
 
   ngOnInit() {
+    this.contactgroupService.noteChanges$.subscribe(note => {
+      if (note && note.isImportant) {
+        this.personDetails.personNotes.push(note);
+      }
+    });
   }
 
   navigate() {
