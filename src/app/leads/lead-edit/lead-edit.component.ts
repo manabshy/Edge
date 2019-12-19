@@ -11,7 +11,6 @@ import { StaffMemberService } from 'src/app/core/services/staff-member.service';
 import { StaffMember } from 'src/app/shared/models/staff-member';
 import { ContactNote, PersonSummaryFigures, BasicContactGroup } from 'src/app/contactgroups/shared/contact-group';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
-import { getDate } from 'date-fns';
 import { Person, PersonProperty } from 'src/app/shared/models/person';
 import { ToastrService } from 'ngx-toastr';
 import { takeUntil, debounceTime } from 'rxjs/operators';
@@ -20,6 +19,7 @@ import { BaseComponent } from 'src/app/shared/models/base-component';
 import { LeadNoteComponent } from '../lead-note/lead-note.component';
 import { ValidationMessages, FormErrors } from 'src/app/core/shared/app-constants';
 import { Location } from '@angular/common';
+import { isEqual, isSameDay, format } from 'date-fns';
 
 @Component({
   selector: 'app-lead-edit',
@@ -66,6 +66,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   isPropertyRemoved: boolean;
   isOwnerChanged: boolean;
   isLeadClosed: boolean;
+  isNextChaseDateChanged: boolean;
+  isLeadMarkedAsClosed: boolean;
   get nextChaseDateControl() {
     return this.leadEditForm.get('nextChaseDate') as FormControl;
   }
@@ -98,6 +100,16 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.onLoading = true;
     this.init();
 
+    this.leadEditForm.valueChanges.subscribe(data => {
+      console.log('all changes', data)
+      if (this.lead) {
+        if (!isEqual(data.nextChaseDate, this.lead.nextChaseDate)) {
+          this.isNextChaseDateChanged = true;
+          console.log('next date change', this.isNextChaseDateChanged, 'changes', data)
+        }
+      }
+      data.closeLead ? this.isLeadMarkedAsClosed = true : this.isLeadMarkedAsClosed = false;
+    })
   }
 
   ngAfterViewInit() {
@@ -335,16 +347,15 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
   // TODO: REFACTOR ASAP
   updateLead(shouldExit: boolean = false, leadNote = null) {
-    console.log('form here in update', this.leadEditForm);
-    const closeLead = this.leadEditForm.get('closeLead').value;
-    const nextChaseDate = this.leadEditForm.get('nextChaseDate').value;
+
     this.logValidationErrors(this.leadEditForm, true);
 
     if (this.leadEditForm.valid) {
       this.isSubmitting = true;
       if (this.leadEditForm.dirty || this.isNoteFormDirty || this.isPropertyAssociated || this.isPropertyRemoved || this.isOwnerChanged) {
         const lead = { ...this.lead, ...this.leadEditForm.value };
-        if ((closeLead || this.isNewLead || nextChaseDate) && (this.note.text === '' || this.note.text == null)) {
+        const isNoteRequired = this.isLeadMarkedAsClosed || this.isNewLead || this.isNextChaseDateChanged;
+        if ((isNoteRequired) && (this.note.text === '' || this.note.text == null)) {
           this.noteRequiredWarning = 'Note is required.';
           setTimeout(() => {
             this.sharedService.scrollToFirstInvalidField();
@@ -362,14 +373,16 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
           lead.updatedBy = this.currentStaffMember.staffMemberId;
           lead.updatedDate = new Date;
 
-          this.contactGroupService.addPersonNote(this.note).subscribe(data => {
-            if (data) {
-              this.contactGroupService.notesChanged(data);
-            }
-          }, (error: WedgeError) => {
-            this.sharedService.showError(error);
-            this.isSubmitting = false;
-          });
+          if (this.note && this.note.text) {
+            this.contactGroupService.addPersonNote(this.note).subscribe(data => {
+              if (data) {
+                this.contactGroupService.notesChanged(data);
+              }
+            }, (error: WedgeError) => {
+              this.sharedService.showError(error);
+              this.isSubmitting = false;
+            });
+          }
 
           this.leadsService.addLead(lead).subscribe((result) => {
             if (result) {
@@ -382,24 +395,24 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
           });
         } else {
 
-          if (closeLead) {
+          if (this.isLeadMarkedAsClosed) {
             lead.closedById = this.currentStaffMember.staffMemberId;
             lead.dateClosed = new Date();
           }
 
           // adding note
-          console.log('this note', this.note);
-          this.contactGroupService.addPersonNote(this.note).subscribe(data => {
-            if (data) {
-              this.contactGroupService.notesChanged(data);
-            }
-          }, (error: WedgeError) => {
-            this.sharedService.showError(error);
-            this.isSubmitting = false;
-          });
+          if (this.note && this.note.text) {
+            this.contactGroupService.addPersonNote(this.note).subscribe(data => {
+              if (data) {
+                this.contactGroupService.notesChanged(data);
+              }
+            }, (error: WedgeError) => {
+              this.sharedService.showError(error);
+              this.isSubmitting = false;
+            });
+          }
 
           // updating lead
-
           this.leadsService.updateLead(lead).subscribe((result) => {
             if (result) {
               this.lead = result;
@@ -434,8 +447,11 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       url = url.substring(0, url.indexOf('?'));
       url = url.replace('edit/' + id, 'edit/' + lead.leadId);
       this.location.replaceState(url);
+      this.isNewLead = false;
     }
     this.leadId = lead.leadId;
+    this.router.navigate(['/leads-register/edit/', this.leadId]);
+    this.init();
   }
 
   get dataNote() {
@@ -476,7 +492,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   moveToNextLead() {
     console.log('lead form dirty', this.leadEditForm.dirty);
     if (this.leadEditForm.dirty || this.isNoteFormDirty) {
-      // this.clearNextCaseDateValidators();
       this.updateLead(true, this.note);
       this.isNoteFormDirty = false;
       this.leadEditForm.markAsPristine();
@@ -504,11 +519,4 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     }
     return true;
   }
-
-  private resetForm() {
-    if (this.leadEditForm) {
-      this.leadEditForm.reset();
-    }
-  }
-
 }
