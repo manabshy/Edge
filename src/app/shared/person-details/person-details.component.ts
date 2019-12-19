@@ -11,10 +11,10 @@ import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-group
 export class PersonDetailsComponent implements OnInit {
   @Input() personDetails: Person;
   @Input() isClickable = true;
-  constructor(private router: Router, private contactgroupService: ContactGroupsService) { }
+  constructor(private router: Router, private contactGroupService: ContactGroupsService) { }
 
   ngOnInit() {
-    this.contactgroupService.noteChanges$.subscribe(note => {
+    this.contactGroupService.noteChanges$.subscribe(note => {
       if (note && note.isImportant) {
         this.personDetails.personNotes.push(note);
       }

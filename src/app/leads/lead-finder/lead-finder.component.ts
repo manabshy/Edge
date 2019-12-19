@@ -13,7 +13,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 })
 export class LeadFinderComponent implements OnInit {
 
-  @Output() leadSuggestionSelected = new EventEmitter();
+  @Output() leadSearchTerm = new EventEmitter();
   suggestions: (text$: Observable<any>) => Observable<any>;
   searchTerm = '';
   suggestedTerm = '';
@@ -26,17 +26,15 @@ export class LeadFinderComponent implements OnInit {
     this.leadFinderForm = this.fb.group({
       leadSuggestion: ''
     });
-    this.leadFinderForm.valueChanges.pipe(debounceTime(800)).subscribe(search => {
-      AppUtils.leadSearchTerm = '';
-      if (search && search.leadSuggestion) {
-        this.suggestedTerm ? this.searchTerm = this.suggestedTerm : this.searchTerm = search.leadSuggestion;
-      } else {
-        this.searchTerm = '';
-      }
-      this.leadService.leadsSearchTermChanged(this.searchTerm);
-    });
 
-    // this.leadFinderForm.get('leadSuggestion').setValue(AppUtils.leadSearchTerm);
+    this.leadFinderForm.valueChanges.subscribe(data => {
+      if (data && data.leadSuggestion) {
+        this.leadSearchTerm.emit(data.leadSuggestion);
+      } else {
+        this.leadService.leadsSearchTermChanged('');
+      }
+
+    });
 
     this.suggestions = (text$: Observable<string>) =>
       text$.pipe(
@@ -50,33 +48,27 @@ export class LeadFinderComponent implements OnInit {
 
   }
 
-  // ngOnChanges() {
-  //   this.leadFinderForm.get('leadSearchTerm').setValue(this.searchTerm);
-  //   console.log('lead search term:', this.searchTerm);
-  // }
-
   onKeyup(event: KeyboardEvent) {
-    // AppUtils.leadSearchTerm = this.searchTerm;
-    this.leadService.leadsSearchTermChanged(this.searchTerm);
-    console.log(' AppUtils.leadSearchTerm term here', AppUtils.leadSearchTerm);
+    if (this.leadFinderForm.value.leadSuggestion) {
+      this.searchTerm = this.leadFinderForm.value.leadSuggestion;
+    } else {
+      this.searchTerm = '';
+      this.leadService.leadsSearchTermChanged(this.searchTerm);
+    }
   }
 
 
 
   submit(event) {
-    console.log('search term here 2', this.leadFinderForm.value.leadSuggestion);
     this.leadService.leadsSearchTermChanged(this.searchTerm);
-    // this.leadSuggestionSelected.emit(this.leadFinderForm.get('leadSuggestion').value);
   }
 
   suggestionSelected(event: any) {
     if (event && event.item) {
       console.log('event  here', event);
       this.suggestedTerm = event.item;
-      this.leadService.leadsSearchTermChanged(this.searchTerm);
-      // this.leadSuggestionSelected.emit(event);
+      this.leadService.leadsSearchTermChanged(event.item);
     }
     this.suggestedTerm = '';
   }
-
 }

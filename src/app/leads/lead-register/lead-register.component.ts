@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, HostListener } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, HostListener, ViewChild, AfterViewInit } from '@angular/core';
 import { LeadsService } from '../shared/leads.service';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
 import { Lead, LeadSearchInfo } from '../shared/lead';
@@ -14,6 +14,7 @@ import { Subject } from 'rxjs';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { ToastrService } from 'ngx-toastr';
 import * as _ from 'lodash';
+import { LeadFinderComponent } from '../lead-finder/lead-finder.component';
 
 @Component({
   selector: 'app-lead-register',
@@ -115,15 +116,6 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     // this.leadResults();
   }
 
-  // leadResults() {
-  //   this.page = 1;
-  //   this.bottomReached = false;
-  //   this.leadService.pageNumberChanged(this.leadSearchInfo);
-  //   console.log('lead results...', this.leadSearchInfo);
-  // }
-
-
-
   assignLeads() {
     event.preventDefault();
     this.areLeadsAssignable = true;
@@ -192,24 +184,17 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     console.log(event);
   }
 
-  onLeadSuggestionSelected(event: any) {
-    console.log('lead suggestion event:', event);
-    // if (event) {
-    //   this.leadRegisterForm.patchValue({
-    //     leadSearchTerm: event.item
-    //   });
-    //   console.log('lead suggestion:', event);
-    //   this.leadSearchInfo = this.getSearchInfo(true);
-    // } else {
-    //   console.log('no change in lead suggestion:');
-    //   AppUtils.leadSearchTerm = '';
-    //   this.leadRegisterForm.patchValue({
-    //     leadSearchTerm: ''
-    //   });
-
-    // }
-    // console.log('lead suggestion selected:', this.leadRegisterForm);
-    // this.PerformSearch();
+  setLeadSearchTerm(term: string) {
+    if (term) {
+      this.leadRegisterForm.patchValue({
+        leadSearchTerm: term
+      });
+      this.leadSearchInfo = this.getSearchInfo(true);
+    } else {
+      this.leadRegisterForm.patchValue({
+        leadSearchTerm: ''
+      });
+    }
   }
 
   ngOnChanges() {
@@ -230,8 +215,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       dateTo: this.leadRegisterForm != null ? this.leadRegisterForm.get('dateTo').value : null,
       includeClosedLeads: this.leadRegisterForm != null ? this.leadRegisterForm.get('includeClosedLeads').value : null,
       includeUnassignedLeadsOnly: this.leadRegisterForm != null ? this.leadRegisterForm.get('includeUnassignedLeadsOnly').value : null,
-      leadSearchTerm: this.leadRegisterForm != null && this.leadRegisterForm.get('leadSearchTerm').value
-        ? this.leadRegisterForm.get('leadSearchTerm').value : (AppUtils.leadSearchTerm ? AppUtils.leadSearchTerm : null)
+      leadSearchTerm: this.leadRegisterForm != null ? this.leadRegisterForm.get('leadSearchTerm').value : null
     };
   }
 
