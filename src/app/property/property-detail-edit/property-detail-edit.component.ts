@@ -51,6 +51,7 @@ export class PropertyDetailEditComponent implements OnInit {
   lastKnownPerson: any;
   leadId: number;
   personId: number;
+  lastKnownPersonParam: any;
 
   constructor(private route: ActivatedRoute,
     private _router: Router,
@@ -80,7 +81,7 @@ export class PropertyDetailEditComponent implements OnInit {
 
     this.setupEditForm();
     this.route.params.subscribe(params => {
-      this.propertyId = +params['id'] || 0;  
+      this.propertyId = +params['id'] || 0;
       if (this.propertyId) {
         this.getPropertyDetails(this.propertyId);
       }
@@ -89,13 +90,16 @@ export class PropertyDetailEditComponent implements OnInit {
       this.isNewProperty = this.propertyId ? this.isNewProperty = false : params['isNewProperty'];
       this.leadId = +params['leadId'] || 0;
       this.personId = +params['personId'] || 0;
-      if(this.isNewProperty){
+      this.lastKnownPersonParam = params['lastKnownPerson'];
+      if (this.isNewProperty) {
         this.propertyForm.reset();
         this.setupEditForm();
       }
-      this.lastKnownPerson = JSON.parse(params['lastKnownPerson']);
-
+      if (this.lastKnownPersonParam) {
+        this.lastKnownPerson = JSON.parse(params['lastKnownPerson']);
+      }
     });
+
     this.logValidationErrors(this.propertyForm, false);
     this.contactGroupService.signer$.subscribe(data => {
       if (data) {
@@ -207,8 +211,8 @@ export class PropertyDetailEditComponent implements OnInit {
       this.propertyForm.clearValidators();
       this.propertyForm.updateValueAndValidity();
     }
-    if(this.lastKnownPerson) {
-      this._router.navigate(['/property-centre/detail', property.propertyId, 'edit'], {queryParams: {leadId: this.leadId, personId: this.personId, lastKnownPerson: JSON.stringify(this.lastKnownPerson)}});
+    if (this.lastKnownPerson) {
+      this._router.navigate(['/property-centre/detail', property.propertyId, 'edit'], { queryParams: { leadId: this.leadId, personId: this.personId, lastKnownPerson: JSON.stringify(this.lastKnownPerson) } });
     } else {
       this._router.navigate(['/property-centre/detail', property.propertyId, 'edit']);
     }
@@ -328,14 +332,14 @@ export class PropertyDetailEditComponent implements OnInit {
 
     this.propertyId = property.propertyId;
     this.propertyService.currentPropertyChanged(+this.propertyId);
-    if(this.lastKnownPerson) {
-      if(this.personId) {
+    if (this.lastKnownPerson) {
+      if (this.personId) {
         this._router.navigate(['/contact-centre/detail/', this.personId]);
       } else {
-        if(this.leadId) {
+        if (this.leadId) {
           this._router.navigate(['/leads-register/edit/', this.leadId]);
         } else {
-          this._router.navigate(['/leads-register/edit/', this.leadId], {queryParams: {isNewLead: true, personId: this.lastKnownPerson.personId}});
+          this._router.navigate(['/leads-register/edit/', this.leadId], { queryParams: { isNewLead: true, personId: this.lastKnownPerson.personId } });
         }
       }
     } else {
