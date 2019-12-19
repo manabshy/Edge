@@ -346,7 +346,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     }
   }
   // TODO: REFACTOR ASAP
-  updateLead(shouldExit: boolean = false, leadNote = null) {
+  SaveLead(shouldExit: boolean = false, leadNote = null) {
 
     this.logValidationErrors(this.leadEditForm, true);
 
@@ -448,10 +448,10 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       url = url.replace('edit/' + id, 'edit/' + lead.leadId);
       this.location.replaceState(url);
       this.isNewLead = false;
+      this.leadId = lead.leadId;
+      this.router.navigate(['/leads-register/edit/', this.leadId]);
+      this.init();
     }
-    this.leadId = lead.leadId;
-    this.router.navigate(['/leads-register/edit/', this.leadId]);
-    this.init();
   }
 
   get dataNote() {
@@ -492,7 +492,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   moveToNextLead() {
     console.log('lead form dirty', this.leadEditForm.dirty);
     if (this.leadEditForm.dirty || this.isNoteFormDirty) {
-      this.updateLead(true, this.note);
+      this.SaveLead(true, this.note);
       this.isNoteFormDirty = false;
       this.leadEditForm.markAsPristine();
       this.noteRequiredWarning = '';
