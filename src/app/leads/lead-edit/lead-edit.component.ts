@@ -101,15 +101,15 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.init();
 
     this.leadEditForm.valueChanges.subscribe(data => {
-      console.log('all changes', data)
+      console.log('all changes', data);
       if (this.lead) {
         if (!isEqual(data.nextChaseDate, this.lead.nextChaseDate)) {
           this.isNextChaseDateChanged = true;
-          console.log('next date change', this.isNextChaseDateChanged, 'changes', data)
+          console.log('next date change', this.isNextChaseDateChanged, 'changes', data);
         }
       }
       data.closeLead ? this.isLeadMarkedAsClosed = true : this.isLeadMarkedAsClosed = false;
-    })
+    });
   }
 
   ngAfterViewInit() {
@@ -186,7 +186,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   getLeadIds(leadId: number) {
-    console.log('leadId', leadId)
+    console.log('leadId', leadId);
     const leadSearchInfo = { startLeadId: leadId } as LeadSearchInfo;
     this.leadsService.getLeadIds(leadSearchInfo).subscribe(result => {
       this.leadIds = result;
@@ -364,71 +364,61 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
         } else {
           this.noteRequiredWarning = '';
         }
-        if (this.isNewLead) {
-
-          lead.personId = this.personId;
-          lead.createdBy = this.currentStaffMember.staffMemberId;
-          lead.ownerId = this.currentStaffMember.staffMemberId;
-          lead.createdDate = new Date;
-          lead.updatedBy = this.currentStaffMember.staffMemberId;
-          lead.updatedDate = new Date;
-
-          if (this.note && this.note.text) {
-            this.contactGroupService.addPersonNote(this.note).subscribe(data => {
-              if (data) {
-                this.contactGroupService.notesChanged(data);
-              }
-            }, (error: WedgeError) => {
-              this.sharedService.showError(error);
-              this.isSubmitting = false;
-            });
-          }
-
-          this.leadsService.addLead(lead).subscribe((result) => {
-            if (result) {
-              this.lead = lead;
-              this.onUpdateCompleted(result);
-            }
-          }, (error: WedgeError) => {
-            this.sharedService.showError(error);
-            this.isSubmitting = false;
-          });
-        } else {
-
-          if (this.isLeadMarkedAsClosed) {
-            lead.closedById = this.currentStaffMember.staffMemberId;
-            lead.dateClosed = new Date();
-          }
-
-          // adding note
-          if (this.note && this.note.text) {
-            this.contactGroupService.addPersonNote(this.note).subscribe(data => {
-              if (data) {
-                this.contactGroupService.notesChanged(data);
-              }
-            }, (error: WedgeError) => {
-              this.sharedService.showError(error);
-              this.isSubmitting = false;
-            });
-          }
-
-          // updating lead
-          this.leadsService.updateLead(lead).subscribe((result) => {
-            if (result) {
-              this.lead = result;
-              result.dateClosed ? this.isLeadClosed = true : this.isLeadClosed = false;
-            }
-            this.onUpdateCompleted(result);
-          }, (error: WedgeError) => {
-            this.sharedService.showError(error);
-            this.isSubmitting = false;
-          });
-        }
+        this.AddOrUpdateLead(lead);
       } else {
         this.onUpdateCompleted();
       }
     }
 
+  }
+
+  private AddOrUpdateLead(lead: any) {
+    if (this.isNewLead) {
+      lead.personId = this.personId;
+      lead.createdBy = this.currentStaffMember.staffMemberId;
+      lead.ownerId = this.currentStaffMember.staffMemberId;
+      lead.createdDate = new Date;
+      lead.updatedBy = this.currentStaffMember.staffMemberId;
+      lead.updatedDate = new Date;
+
+      this.leadsService.addLead(lead).subscribe((result) => {
+        if (result) {
+          this.lead = lead;
+          this.onUpdateCompleted(result);
+        }
+      }, (error: WedgeError) => {
+        this.sharedService.showError(error);
+        this.isSubmitting = false;
+      });
+    } else {
+      if (this.isLeadMarkedAsClosed) {
+        lead.closedById = this.currentStaffMember.staffMemberId;
+        lead.dateClosed = new Date();
+      }
+
+      this.leadsService.updateLead(lead).subscribe((result) => {
+        if (result) {
+          this.lead = result;
+          result.dateClosed ? this.isLeadClosed = true : this.isLeadClosed = false;
+        }
+        this.onUpdateCompleted(result);
+      }, (error: WedgeError) => {
+        this.sharedService.showError(error);
+        this.isSubmitting = false;
+      });
+    }
+
+    // adding note
+    if (this.note && this.note.text) {
+      this.contactGroupService.addPersonNote(this.note).subscribe(data => {
+        if (data) {
+          this.contactGroupService.notesChanged(data);
+        }
+      }, (error: WedgeError) => {
+        this.sharedService.showError(error);
+        this.isSubmitting = false;
+      });
+    }
   }
 
   private onUpdateCompleted(lead?: Lead) {
