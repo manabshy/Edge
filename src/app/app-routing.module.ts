@@ -30,6 +30,12 @@ const routes: Routes = [
     canActivate: [AuthGuardService],
   },
   {
+    path: 'valuations-register',
+    data: { preload: true },
+    loadChildren: () => import('./valuations/valuations.module').then(m => m.ValuationsModule),
+    canActivate: [AuthGuardService],
+  },
+  {
     path: 'property-centre',
     data: { preload: true },
     loadChildren: () => import('./property/property.module').then(m => m.PropertyModule),
