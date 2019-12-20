@@ -58,7 +58,7 @@ export class LeadComponent implements OnInit {
       if (leadSearchInfo) {
         this.page = leadSearchInfo.page;
         this.getLeads(leadSearchInfo);
-        console.log('calling from here 2', this.leadSearchInfo.leadSearchTerm);
+        // console.log('calling from here 2', this.leadSearchInfo.leadSearchTerm);
       }
     });
 

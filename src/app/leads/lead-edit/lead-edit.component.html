@@ -105,7 +105,7 @@
                     <input type="text" id="chaseDate" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
                       formControlName="nextChaseDate"
                       [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', minDate:todaysDate, customTodayClass: 'font-weight-bold'}"
-                      bsDatepicker [attr.disabled] = "isLeadClosed ? true : null" [ngClass]="{'is-invalid': formErrors?.nextChaseDate}">
+                      bsDatepicker [attr.disabled] = "isLeadClosed ? true : null" [ngClass]="{'is-invalid': (formErrors?.nextChaseDate)}">
                       <div class="invalid-feedback">{{formErrors?.nextChaseDate}}</div>
                   </div>
                 </div>

@@ -8,14 +8,14 @@ export class WedgeValidators {
   /**
    * Validator that requires controls to have a value greater than a number.
    */
-   constructor(private sharedService: SharedService) {}
+  constructor(private sharedService: SharedService) { }
   static min(min: number): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (isEmptyInputValue(control.value) || isEmptyInputValue(min)) {
-        return {'min': min, 'actual': control.value};
+        return { 'min': min, 'actual': control.value };
       }
       const value = parseFloat(control.value);
-      return !isNaN(value) && value < min ? {'min': min, 'actual': control.value} : null;
+      return !isNaN(value) && value < min ? { 'min': min, 'actual': control.value } : null;
     };
   }
 
@@ -25,10 +25,10 @@ export class WedgeValidators {
   static max(max: number): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (isEmptyInputValue(control.value) || isEmptyInputValue(max)) {
-        return {'max': max, 'actual': control.value};
+        return { 'max': max, 'actual': control.value };
       }
       const value = parseFloat(control.value);
-      return !isNaN(value) && value > max ? {'max': max, 'actual': control.value} : null;
+      return !isNaN(value) && value > max ? { 'max': max, 'actual': control.value } : null;
     };
   }
 
@@ -57,15 +57,15 @@ export class WedgeValidators {
         return null;
       }
 
-      if(isNumber){
+      if (isNumber) {
         const phoneNumberUtil = PhoneNumberUtil.getInstance();
         try {
           const phoneNumber = phoneNumberUtil.parseAndKeepRawInput(
             control.value, regionCode
           );
           validNumber = phoneNumberUtil.isValidNumber(phoneNumber);
-          if(!validNumber){
-            if(!isInternationalNumber(control.value)) {
+          if (!validNumber) {
+            if (!isInternationalNumber(control.value)) {
               errors['international'] = true;
             }
           }
@@ -89,29 +89,29 @@ export class WedgeValidators {
   // }
 
   static phoneTypeValidator(_this): ValidatorFn {
-    return (control: AbstractControl): { [key: string]:boolean } | null => {
+    return (control: AbstractControl): { [key: string]: boolean } | null => {
       const phoneNumber = control.get('number');
       const typeId = control.get('typeId');
 
-      if(phoneNumber && typeId) {
+      if (phoneNumber && typeId) {
 
         const number = phoneNumber.value;
         const type = typeId.value;
 
-        if(number) {
-          switch(+type){
+        if (number) {
+          switch (+type) {
             case TelephoneTypeId.Fax:
-              if(_this.sharedService.isUKMobile(number)) {
+              if (_this.sharedService.isUKMobile(number)) {
                 return { 'mismatch': true };
               } else {
                 return null;
               }
             case TelephoneTypeId.Mobile:
-            if(_this.sharedService.isUKMobile(number)) {
-              return null;
-            } else {
-              return { 'mismatch': true };
-            }
+              if (_this.sharedService.isUKMobile(number)) {
+                return null;
+              } else {
+                return { 'mismatch': true };
+              }
             default:
               return null;
           }
@@ -123,11 +123,11 @@ export class WedgeValidators {
 
   static emailPhoneValidator(): ValidatorFn {
 
-    return (control: AbstractControl): { [key: string]:boolean } | null => {
+    return (control: AbstractControl): { [key: string]: boolean } | null => {
       const email = control.get('emailAddresses').value[0].email;
       const phone = control.get('phoneNumbers').value[0].number;
 
-      if(!(!!email) && !(!!phone)) {
+      if (!(!!email) && !(!!phone)) {
         return { 'emailOrPhone': true };
       }
       return null;
@@ -136,11 +136,11 @@ export class WedgeValidators {
 
   static warningStatusValidator(): ValidatorFn {
 
-    return (control: AbstractControl): { [key: string]:boolean } | null => {
+    return (control: AbstractControl): { [key: string]: boolean } | null => {
       const id = control.get('warningStatusId').value;
       const comment = control.get('warningStatusComment').value;
 
-      if(+id === 100 && !(!!comment)) {
+      if (+id === 100 && !(!!comment)) {
         return { 'warningStatusRequired': true };
       }
       return null;
@@ -149,12 +149,22 @@ export class WedgeValidators {
 
   static titleValidator(): ValidatorFn {
 
-    return (control: AbstractControl): { [key: string]:boolean } | null => {
+    return (control: AbstractControl): { [key: string]: boolean } | null => {
       const id = control.get('titleId').value;
       const comment = control.get('titleOther').value;
 
-      if(+id === 100 && !(!!comment)) {
+      if (+id === 100 && !(!!comment)) {
         return { 'titleOther': true };
+      }
+      return null;
+    };
+  }
+  static nextChaseDateValidator(): ValidatorFn {
+    const currentDate = new Date();
+
+    return (control: AbstractControl): { [key: string]: boolean } | null => {
+      if (control !== null && control.value < currentDate) {
+        return { 'nextChaseDatePassed': true };
       }
       return null;
     };
@@ -173,8 +183,8 @@ export class WedgeValidators {
 
     // no values have been set
     if (isEmptyInputValue(shortLetVal) &&
-        isEmptyInputValue(longLetVal) &&
-        isEmptyInputValue(saleVal)) {
+      isEmptyInputValue(longLetVal) &&
+      isEmptyInputValue(saleVal)) {
       return { 'empty': true };
     }
 
@@ -189,6 +199,6 @@ function isEmptyInputValue(value: any): boolean {
 }
 
 function isInternationalNumber(number: string) {
-  const formattedNumber = number.replace(' ', '').replace('+44','');
-  return  formattedNumber.startsWith('00') || formattedNumber.startsWith('+');
+  const formattedNumber = number.replace(' ', '').replace('+44', '');
+  return formattedNumber.startsWith('00') || formattedNumber.startsWith('+');
 }

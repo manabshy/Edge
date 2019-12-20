@@ -65,7 +65,7 @@ export const FormErrors = {
   'areaId': '',
   'subAreaId': '',
   'leadTypeId': '',
-  'nextChaseDate': ''
+  'nextChaseDate': '',
 };
 export const ValidationMessages = {
   'searchTerm': {
@@ -159,7 +159,8 @@ export const ValidationMessages = {
     required: 'Lead Type is required'
   },
   'nextChaseDate': {
-    required: 'Next chase date is required'
+    required: 'Next chase date is required',
+    nextChaseDatePassed: 'Next chase date cannot be in the past'
   }
   // 'invalidPhoneNumber': {
   //   required: 'Phone is required',

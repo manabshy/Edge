@@ -20,6 +20,7 @@ import { LeadNoteComponent } from '../lead-note/lead-note.component';
 import { ValidationMessages, FormErrors } from 'src/app/core/shared/app-constants';
 import { Location } from '@angular/common';
 import { isEqual, isSameDay, format } from 'date-fns';
+import { WedgeValidators } from 'src/app/shared/wedge-validators';
 
 @Component({
   selector: 'app-lead-edit',
@@ -205,6 +206,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
         FormErrors[key] = '';
       }
       if (control && !control.valid && (fakeTouched || control.dirty)) {
+        console.log('errors ', control.errors);
         FormErrors[key] = '';
         for (const errorKey in control.errors) {
           if (errorKey) {
@@ -297,7 +299,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       ownerId: null,
       person: '',
       leadTypeId: [0, Validators.required],
-      nextChaseDate: ['', Validators.required],
+      nextChaseDate: ['', [Validators.required]],
       closeLead: false
     });
   }
@@ -310,11 +312,18 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     }
   }
 
-  clearNextCaseDateValidators() {
+  clearNextChaseDateValidators() {
     this.nextChaseDateControl.clearValidators();
     this.nextChaseDateControl.updateValueAndValidity();
-    console.log('here for validators', this.nextChaseDateControl);
   }
+
+  setNextChaseDateValidators() {
+    if (this.nextChaseDateControl.value < new Date()) {
+      this.nextChaseDateControl.setValidators(WedgeValidators.nextChaseDateValidator());
+      this.nextChaseDateControl.updateValueAndValidity();
+    }
+  }
+
 
   removeProperty() {
     const newLead = { ...this.lead, ...{ relatedProperty: null } };
@@ -345,9 +354,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       this.isNoteFormDirty = true;
     }
   }
-  // TODO: REFACTOR ASAP
-  SaveLead(shouldExit: boolean = false, leadNote = null) {
 
+  SaveLead(shouldExit: boolean = false, leadNote = null) {
+    this.setNextChaseDateValidators();
     this.logValidationErrors(this.leadEditForm, true);
 
     if (this.leadEditForm.valid) {
@@ -395,7 +404,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
         lead.closedById = this.currentStaffMember.staffMemberId;
         lead.dateClosed = new Date();
       }
-
       this.leadsService.updateLead(lead).subscribe((result) => {
         if (result) {
           this.lead = result;
