@@ -52,6 +52,7 @@ export interface DropdownListInfo {
   offerSaleStatuses: InfoDetail[];
   propertyLettingStatuses: InfoDetail[];
   propertySaleStatuses: InfoDetail[];
+  valuationStatus: InfoDetail[];
   regions: InfoDetail[];
   areas: InfoDetail[];
   subAreas: InfoDetail[];

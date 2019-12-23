@@ -24,9 +24,9 @@ export interface ValuationRequestOption extends BaseRequestOption {
 }
 
 export enum ValuationStatus {
-  Incomplete,
-  Invited,
-  Valued
+  Incomplete = 1,
+  Invited = 2,
+  Valued = 3
 }
 
 export function getValuationStatuses() {

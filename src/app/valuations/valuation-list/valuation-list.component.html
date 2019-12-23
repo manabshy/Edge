@@ -1,3 +1,60 @@
-<p>
-  valuation-list works!
-</p>
+<div class="list-group mb-3">
+  <div class="list-group-item list-header d-none d-sm-block">
+    <div class="row">
+      <div class="col-sm"><strong>Status</strong></div>
+      <div class="col-sm"><strong>Address</strong></div>
+      <div class="col-sm"><strong>Owner</strong></div>
+      <div class="col-sm"><strong>Date</strong></div>
+      <div class="col-sm"><strong>Valuer</strong></div>
+      <div class="col-sm"><strong>Values</strong></div>
+    </div>
+  </div>
+  <a
+    class="list-group-item list-group-item-action" *ngFor="let val of valuations">
+    <div class="row align-items-center">
+      <div class="col-sm mb-2 mb-sm-0">
+        <span class="badge badge-pill badge-info">{{val?.valuationStatus}}</span>
+      </div>
+      <div class="col-sm">
+        <dl class="row">
+          <dt class="col-4 d-sm-none">Address</dt>
+          <dd class="col">{{val?.property?.address | formatAddress}}</dd>
+        </dl>
+      </div>
+      <div class="col-sm">
+        <dl class="row">
+          <dt class="col-4 d-sm-none">Owner</dt>
+          <dd class="col">{{val?.propertyOwner?.contactNames || '-'}}</dd>
+        </dl>
+      </div>
+      <div class="col-sm">
+        <dl class="row">
+          <dt class="col-4 d-sm-none">Date</dt>
+          <dd class="col">{{(val?.valuationDate | date: 'dd/MM/yyyy hh:mm') || '-'}}</dd>
+        </dl>
+      </div>
+      <div class="col-sm">
+        <dl class="row">
+          <dt class="col-4 d-sm-none">Valuer</dt>
+          <dd class="col">{{val?.valuer?.fullName}}</dd>
+        </dl>
+      </div>
+      <div class="col-sm">
+        <dl class="row">
+          <dt class="col-4 d-sm-none">Values</dt>
+          <dd class="col">
+            <div>
+              <span class="d-inline-block w-25">S:</span> {{val?.suggestedAskingPrice || '-'}}
+            </div>
+            <div>
+              <span class="d-inline-block w-25">LL:</span> {{val?.suggestedAskingRentLongLet ? val?.suggestedAskingRentLongLet + ' pw' : '-'}}
+            </div>
+            <div>
+              <span class="d-inline-block w-25">SL:</span> {{val?.suggestedAskingRentShortLet ? val?.suggestedAskingRentShortLet + ' pw' : '-'}}
+            </div>
+          </dd>
+        </dl>
+      </div>
+    </div>
+  </a>
+</div>
