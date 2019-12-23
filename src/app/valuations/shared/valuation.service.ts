@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Valuation, ValuationRequestion as ValuationRequestOption } from './valuation';
+import { Valuation, ValuationRequestOption } from './valuation';
 import { AppConstants } from 'src/app/core/shared/app-constants';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encoder-helper';
 
 @Injectable({
@@ -12,6 +12,14 @@ import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encod
 export class ValuationService {
 
   constructor(private http: HttpClient) { }
+
+  getValuationSuggestions(searchTerm: string): Observable<any> {
+    const url = `${AppConstants.baseValuationUrl}/suggestions?SearchTerm=${searchTerm}`;
+    return this.http.get<any>(url)
+      .pipe(
+        map(response => response.result)
+      );
+  }
 
   getValuations(request: ValuationRequestOption): Observable<Valuation[] | any> {
     const options = this.setQueryParams(request);
