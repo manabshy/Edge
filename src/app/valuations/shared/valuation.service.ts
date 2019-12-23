@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Valuation } from './valuation';
+import { Valuation, ValuationRequestion as ValuationRequestOption } from './valuation';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { map } from 'rxjs/operators';
+import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encoder-helper';
 
 @Injectable({
   providedIn: 'root'
@@ -12,11 +13,31 @@ export class ValuationService {
 
   constructor(private http: HttpClient) { }
 
-  getValuations(): Observable<Valuation[] | any> {
+  getValuations(request: ValuationRequestOption): Observable<Valuation[] | any> {
+    const options = this.setQueryParams(request);
     const url = `${AppConstants.baseValuationUrl}/search`;
-    return this.http.get<any>(url)
+    return this.http.get<any>(url, { params: options })
       .pipe(
         map(response => response.result)
       );
   }
+
+  private setQueryParams(requestOption: ValuationRequestOption) {
+    if (!requestOption.page) {
+      requestOption.page = 1;
+    }
+    if (requestOption.pageSize == null) {
+      requestOption.pageSize = 10;
+    }
+    const options = new HttpParams({
+      encoder: new CustomQueryEncoderHelper,
+      fromObject: {
+        searchTerm: requestOption.searchTerm,
+        pageSize: requestOption.pageSize.toString(),
+        page: requestOption.page.toString()
+      }
+    });
+    return options;
+  }
+
 }
