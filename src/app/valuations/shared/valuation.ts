@@ -22,3 +22,15 @@ export interface Valuation {
 export interface ValuationRequestOption extends BaseRequestOption {
   valuationStatus?: number;
 }
+
+export enum ValuationStatus {
+  Incomplete,
+  Invited,
+  Valued
+}
+
+export function getValuationStatuses() {
+  return Object.keys(ValuationStatus).filter(
+    (type) => isNaN(<any>type)
+  );
+}
