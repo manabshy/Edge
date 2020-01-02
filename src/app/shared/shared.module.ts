@@ -67,6 +67,7 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -136,7 +137,8 @@ import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
     CarouselModule,
     NgbModule,
     LoadingBarHttpClientModule,
-    AngularStickyThingsModule
+    AngularStickyThingsModule,
+    NgSelectModule
   ],
   exports: [
     RoundingPipe,
@@ -196,6 +198,7 @@ import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
     NgbModule,
     LoadingBarHttpClientModule,
     AngularStickyThingsModule,
+    NgSelectModule,
     SharedLeadRegisterComponent
   ],
   entryComponents: [
