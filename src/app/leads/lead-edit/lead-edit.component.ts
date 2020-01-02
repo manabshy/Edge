@@ -69,6 +69,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   isLeadClosed: boolean;
   isNextChaseDateChanged: boolean;
   isLeadMarkedAsClosed: boolean;
+  isValidatorCleared: boolean;
   get nextChaseDateControl() {
     return this.leadEditForm.get('nextChaseDate') as FormControl;
   }
@@ -306,7 +307,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
   closeLeadChanged(lead: Lead) {
     const nextChaseDateControl = this.leadEditForm.get('nextChaseDate');
-    if (lead.nextChaseDate == null) {
+    if (lead.nextChaseDate == null || nextChaseDateControl.value < new Date()) {
+      this.isValidatorCleared = true;
       nextChaseDateControl.clearValidators();
       nextChaseDateControl.updateValueAndValidity();
     }
@@ -318,7 +320,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   setNextChaseDateValidators() {
-    if (this.nextChaseDateControl.value < new Date()) {
+    if (this.nextChaseDateControl.value < new Date() && !this.isValidatorCleared) {
       this.nextChaseDateControl.setValidators(WedgeValidators.nextChaseDateValidator());
       this.nextChaseDateControl.updateValueAndValidity();
     }
