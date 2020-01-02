@@ -10,6 +10,7 @@
     </div>
   </div>
   <a
+    [routerLink]="['detail', val?.valuationEventId, 'edit']"
     class="list-group-item list-group-item-action" *ngFor="let val of valuations">
     <div class="row align-items-center">
       <div class="col-sm mb-2 mb-sm-0">
