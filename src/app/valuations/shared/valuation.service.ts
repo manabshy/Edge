@@ -42,7 +42,11 @@ export class ValuationService {
       fromObject: {
         searchTerm: requestOption.searchTerm,
         pageSize: requestOption.pageSize.toString(),
-        page: requestOption.page.toString()
+        page: requestOption.page.toString(),
+        date: requestOption.date ? requestOption.date.toString() : '',
+        status: requestOption.status.toString(),
+        listerId: requestOption.listerId.toString(),
+        officeId: requestOption.officeId.toString()
       }
     });
     return options;
