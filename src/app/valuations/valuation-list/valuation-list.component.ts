@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import { Valuation } from '../shared/valuation';
+import { Valuation, ValuationStatus } from '../shared/valuation';
 
 @Component({
   selector: 'app-valuation-list',
@@ -19,9 +19,12 @@ export class ValuationListComponent implements OnInit, OnChanges {
   ngOnInit() {
   }
 
-  ngOnChanges(){
-    if(this.valuations){
+  ngOnChanges() {
+    if (this.valuations) {
       console.log('valuations', this.valuations)
+      this.valuations.forEach(x => {
+        x.valuationStatusLabel = ValuationStatus[x.valuationStatus];
+      });
     }
   }
 }

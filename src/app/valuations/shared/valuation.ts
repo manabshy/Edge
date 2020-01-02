@@ -7,6 +7,7 @@ import { BaseRequestOption } from 'src/app/shared/models/base-request-option';
 export interface Valuation {
   valuationEventId: number;
   valuationStatus: number;
+  valuationStatusLabel: string;
   property: Property;
   valuer: BaseStaffMember;
   valuationDate?: Date;
