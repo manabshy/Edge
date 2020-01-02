@@ -64,6 +64,16 @@ export class StaffMemberService {
       }));
   }
 
+  getListers(): Observable<StaffMember[]> {
+    return this.http.get<any>(`${AppConstants.baseUrl}/listers`).pipe(
+      map(response => response.result),
+      tap(data => {
+        if (data) {
+          this.storage.set('allListers', data).subscribe();
+        }
+      }));
+  }
+
   getStaffMemberSuggestions(searchTerm): Observable<any>  {
     console.log('search Term:', searchTerm);
     return this.http.get<StaffMemberResult>(`${AppConstants.baseUrl}/suggestions?SearchTerm=${searchTerm}`, {

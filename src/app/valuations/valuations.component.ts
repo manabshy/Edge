@@ -2,18 +2,22 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { Observable, EMPTY } from 'rxjs';
 import { ValuationService } from './shared/valuation.service';
-import { debounceTime, distinctUntilChanged, switchMap, catchError } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, catchError, takeUntil } from 'rxjs/operators';
 import { Valuation, ValuationRequestOption, ValuationStatus, getValuationStatuses } from './shared/valuation';
 import { WedgeError, SharedService } from '../core/services/shared.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { StaffMember, Office } from '../shared/models/staff-member';
+import { BaseComponent } from '../shared/models/base-component';
+import { StaffMemberService } from '../core/services/staff-member.service';
+import { OfficeService } from '../core/services/office.service';
+import { TypeaheadOptions } from 'ngx-bootstrap/typeahead/public_api';
 
 @Component({
   selector: 'app-valuations',
   templateUrl: './valuations.component.html',
   styleUrls: ['./valuations.component.scss']
 })
-export class ValuationsComponent implements OnInit {
+export class ValuationsComponent extends BaseComponent implements OnInit {
   valuationFinderForm: FormGroup;
   valuations: Valuation[] = [];
   searchTerm = '';
@@ -33,8 +37,10 @@ export class ValuationsComponent implements OnInit {
 
   constructor(private valuationService: ValuationService,
     private sharedService: SharedService,
+    private staffMemberService: StaffMemberService,
+    private officeService: OfficeService,
     private storage: StorageMap,
-    private fb: FormBuilder) { }
+    private fb: FormBuilder) { super(); }
 
   ngOnInit() {
 
@@ -42,17 +48,19 @@ export class ValuationsComponent implements OnInit {
     this.getValuations();
     this.statuses = getValuationStatuses();
 
-    // All Active listers
-    this.storage.get('allstaffmembers').subscribe(data => {
+    this.storage.get('allListers').subscribe(data => {
       if (data) {
         this.listers = data as StaffMember[];
+      } else {
+        this.staffMemberService.getListers().pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => this.listers = result);
       }
     });
 
-    // Offices
     this.storage.get('offices').subscribe(data => {
       if (data) {
         this.offices = data as Office[];
+      } else {
+        this.officeService.getOffices().pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => this.offices = result);
       }
     });
 
@@ -114,7 +122,7 @@ export class ValuationsComponent implements OnInit {
   suggestionSelected(event) {
     if (event.item != null) {
       this.suggestedTerm = event.item;
-      console.log('suggestion', this.suggestedTerm)
+      console.log('suggestion', this.suggestedTerm);
     }
     this.getValuations();
     this.suggestedTerm = '';
