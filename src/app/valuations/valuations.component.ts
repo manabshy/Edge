@@ -22,6 +22,9 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
   valuations: Valuation[] = [];
   searchTerm = '';
   suggestedTerm = '';
+  listerId = 0;
+  officeId = 0;
+  status = 0;
   isMessageVisible: boolean;
   isHintVisible: boolean;
   page: number;
@@ -96,7 +99,11 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
   getNextValuationsPage(page: number) {
     const request = {
       page: page,
-      searchTerm: this.searchTerm
+      searchTerm: this.searchTerm,
+      date: this.valuationFinderForm.get('date').value,
+      status: this.status,
+      listerId: this.listerId,
+      officeId: this.officeId
     } as ValuationRequestOption;
 
     this.valuationService.getValuations(request).subscribe(result => {
@@ -117,6 +124,19 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
       this.isHintVisible = true;
       this.sharedService.showError(error);
     });
+  }
+
+  onStatusSelected(id: number) {
+    this.status = id;
+    console.log('selected status', id);
+  }
+  onListerSelected(id: number) {
+    this.listerId = id;
+    console.log('selected lister', id);
+  }
+  onOfficeSelected(id: number) {
+    this.officeId = id;
+    console.log('selected office', id);
   }
 
   suggestionSelected(event) {

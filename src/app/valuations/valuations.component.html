@@ -28,7 +28,7 @@
           </div>
           <div class="col-sm form-group">
             <label class="small" for="office">Status</label>
-            <select class="custom-select custom-select-sm" id="office" formControlName="statusId">
+            <select class="custom-select custom-select-sm" id="office" formControlName="statusId" (change)="onStatusSelected($event.target.value)">
               <option selected value="0">Select</option>
               <option *ngFor="let status of statuses | keyvalue:keepOriginalOrder " [value]='status.key'>
                 {{status.value}}</option>
@@ -36,14 +36,14 @@
           </div>
           <div class="col-sm form-group">
             <label class="small" for="office">Lister</label>
-            <select class="custom-select custom-select-sm" id="office" formControlName="listerId">
+            <select class="custom-select custom-select-sm" id="office" formControlName="listerId" (change)="onListerSelected($event.target.value)">
               <option selected value="0">Select</option>
               <option *ngFor="let lister of listers" [value]=lister.staffMemberId>{{lister?.fullName}}</option>
             </select>
           </div>
           <div class="col-sm form-group">
             <label class="small" for="office">Office</label>
-            <select class="custom-select custom-select-sm" id="office" formControlName="officeId">
+            <select class="custom-select custom-select-sm" id="office" formControlName="officeId" (change)="onOfficeSelected($event.target.value)">
               <option selected value="0">Select</option>
               <option *ngFor="let office of offices" [value]=office.officeId>{{office?.name}}</option>
             </select>

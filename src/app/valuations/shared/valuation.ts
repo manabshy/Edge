@@ -21,7 +21,10 @@ export interface Valuation {
 }
 
 export interface ValuationRequestOption extends BaseRequestOption {
-  valuationStatus?: number;
+  status?: number;
+  date?: string;
+  listerId?: number;
+  officeId?: number;
 }
 
 export enum ValuationStatus {
