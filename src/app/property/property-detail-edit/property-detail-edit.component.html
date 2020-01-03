@@ -23,7 +23,8 @@
         <select class="custom-select custom-select-sm" id="propertyTypeId" name="propertyTypeId"
           formControlName="propertyTypeId" (change)="onSelectType($event.target.value) "
           [ngClass]="{'is-invalid':formErrors.propertyTypeId}">
-          <option selected *ngFor="let propertyType of propertyTypes " [value]=propertyType.id>{{propertyType.value}}
+          <option selected value="0"></option>
+          <option *ngFor="let propertyType of propertyTypes" [value]=propertyType.id>{{propertyType.value}}
           </option>
         </select>
         <span class="invalid-feedback">{{formErrors?.propertyTypeId}}</span>
@@ -32,9 +33,10 @@
     <div class="form-group row">
       <label for="propertyTypeId" class="col-sm-2 col-form-label col-form-label-sm">Property Style</label>
       <div class="col-sm-3">
-        <select class="custom-select custom-select-sm" id="propertyStyleId" name="propertyStyleId"
+        <select #propStyle class="custom-select custom-select-sm" id="propertyStyleId" name="propertyStyleId"
           formControlName="propertyStyleId" [ngClass]="{'is-invalid':formErrors.propertyStyleId}">
-          <option selected *ngFor="let propertyStyle of selectedStyles " [value]=propertyStyle.id>
+          <option selected [value]="defaultStyle"></option>
+          <option *ngFor="let propertyStyle of propertyStyles " [value]=propertyStyle.id>
             {{propertyStyle.value}}</option>
         </select>
         <span class="invalid-feedback">{{formErrors?.propertyStyleId}}</span>
@@ -45,7 +47,8 @@
       <div class="col-sm-3">
         <select class="custom-select custom-select-sm" id="region" name="region" formControlName="regionId"
           (change)="onSelectRegion($event.target.value)" [ngClass]="{'is-invalid':formErrors.regionId}">
-          <option selected *ngFor="let region of regions " [value]=region.id>{{region.value}}</option>
+          <!-- <option selected value="0"></option> -->
+          <option *ngFor="let region of regions " [value]=region.id>{{region.value}}</option>
         </select>
         <span class="invalid-feedback">{{formErrors?.regionId}}</span>
       </div>
@@ -55,7 +58,8 @@
       <div class="col-sm-3">
         <select class="custom-select custom-select-sm" id="area" name="area" formControlName="areaId"
           (change)="onSelectArea($event.target.value)" [ngClass]="{'is-invalid':formErrors.areaId}">
-          <option selected *ngFor="let area of selectedAreas " [value]=area.id>{{area.value}}</option>
+          <option selected value="0"></option>
+          <option *ngFor="let area of areas " [value]=area.id>{{area.value}}</option>
         </select>
         <span class="invalid-feedback">{{formErrors?.areaId}}</span>
       </div>
@@ -65,7 +69,8 @@
       <div class="col-sm-3">
         <select class="custom-select custom-select-sm" id="subArea" name="subArea" formControlName="subAreaId"
           [ngClass]="{'is-invalid':formErrors.subAreaId}">
-          <option selected *ngFor="let subArea of selectedSubAreas " [value]=subArea.id>{{subArea.value}}</option>
+          <option selected value="0"></option>
+          <option *ngFor="let subArea of subAreas " [value]=subArea.id>{{subArea.value}}</option>
         </select>
         <span class="invalid-feedback">{{formErrors?.subAreaId}}</span>
       </div>

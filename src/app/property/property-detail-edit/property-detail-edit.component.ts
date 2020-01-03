@@ -29,8 +29,8 @@ export class PropertyDetailEditComponent implements OnInit {
   isSubmitting: boolean;
   isNewProperty: boolean;
   listInfo: any;
-  propertyTypes: any;
-  allPropertyStyles: any;
+  propertyTypes: any[];
+  allPropertyStyles: any[];
   propertyStyles: InfoDetail[];
   regions: InfoDetail[];
   allAreas: InfoDetail[];
@@ -52,6 +52,8 @@ export class PropertyDetailEditComponent implements OnInit {
   leadId: number;
   personId: number;
   lastKnownPersonParam: any;
+  defaultStyle: number;
+  defaultRegionId = 1;
 
   constructor(private route: ActivatedRoute,
     private _router: Router,
@@ -67,7 +69,8 @@ export class PropertyDetailEditComponent implements OnInit {
   ngOnInit() {
     this.storage.get('info').subscribe(data => {
       if (data) {
-        this.listInfo = data; this.setDropdownLists();
+        this.listInfo = data;
+        this.setDropdownLists();
       }
     });
 
@@ -111,12 +114,6 @@ export class PropertyDetailEditComponent implements OnInit {
     });
 
     this.propertyForm.valueChanges.subscribe(data => {
-      this.onSelectType(+data.propertyTypeId);
-      this.selectedStyles = this.propertyStyles;
-      this.onSelectRegion(+data.regionId);
-      this.selectedAreas = this.areas;
-      this.onSelectArea(+data.areaId);
-      this.selectedSubAreas = this.subAreas;
       this.logValidationErrors(this.propertyForm, false);
     });
   }
@@ -127,6 +124,7 @@ export class PropertyDetailEditComponent implements OnInit {
     this.regions = this.listInfo.regions;
     this.allAreas = this.listInfo.areas;
     this.allSubAreas = this.listInfo.subAreas;
+    this.getAreas(this.defaultRegionId);
   }
 
   createNewSigner(event) {
@@ -162,21 +160,34 @@ export class PropertyDetailEditComponent implements OnInit {
   }
 
   onSelectType(propertyTypeId: number) {
-    this.propertyStyles = this.allPropertyStyles.filter((x: InfoDetail) => +x.parentId === propertyTypeId);
+    this.propertyStyles = this.allPropertyStyles.filter((x: InfoDetail) => +x.parentId === +propertyTypeId);
+    this.propertyForm.get('propertyStyleId').setValue(0);
   }
+
   onSelectRegion(regionId: number) {
-    this.areas = this.allAreas.filter((x: InfoDetail) => +x.parentId === regionId);
+    this.getAreas(+regionId);
+    this.propertyForm.get('areaId').setValue(0);
+    this.propertyForm.get('subAreaId').setValue(0);
   }
+
   onSelectArea(areaId: number) {
-    this.subAreas = this.allSubAreas.filter((x: InfoDetail) => +x.parentId === areaId);
+    this.subAreas = this.allSubAreas.filter((x: InfoDetail) => +x.parentId === +areaId);
+    this.propertyForm.get('subAreaId').setValue(0);
   }
+
+  private getAreas(id: number) {
+    if (this.allAreas && this.allAreas.length) {
+      this.areas = this.allAreas.filter((x: InfoDetail) => +x.parentId === id);
+    }
+  }
+
   setupEditForm() {
     this.propertyForm = this.fb.group({
-      propertyTypeId: ['', Validators.required],
-      propertyStyleId: [''],
+      propertyTypeId: [0, Validators.required],
+      propertyStyleId: [0],
       regionId: 1,
-      areaId: [''],
-      subAreaId: [''],
+      areaId: [0],
+      subAreaId: [0],
       address: ['', Validators.required]
     });
   }

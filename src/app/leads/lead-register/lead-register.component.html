@@ -23,7 +23,6 @@
   </div>
 </div>
 <form class="p-0" [formGroup]="leadRegisterForm" *ngIf="showFilterOptions">
-
   <div class="row align-items-center">
     <div class="col-sm">
       <div class="row">
@@ -93,7 +92,6 @@
     </div>
   </div>
   <div class="list-group mb-3">
-    <!-- <a [routerLink]="areLeadsAssignable ? null : ['edit', lead?.leadId]" (click)="selectLead()" -->
     <div class="list-group-item list-header d-none d-sm-block">
       <div class="row">
         <a href class="col-1" *ngIf="areLeadsAssignable" (click)="selectAllLeadsForAssignment($event)">
@@ -105,8 +103,8 @@
         </a>
         <div class="col-sm"><strong>Lead Type</strong></div>
         <div class="col-sm"><strong>Person</strong></div>
-        <div class="col-sm"><strong>Next Chase Date</strong></div>
-        <div class="col-sm"><strong>Lead Owner</strong></div>
+        <div class="col-sm"><strong>Chase Date</strong></div>
+        <div class="col-sm"><strong>Chaser</strong></div>
       </div>
     </div>
     <a [routerLink]="areLeadsAssignable ? null : ['edit', lead?.leadId]" (click)="selectLeadForAssignment($event, lead)"
@@ -134,13 +132,13 @@
             </div>
             <div class="col-sm">
               <dl class="row">
-                <dt class="col-4 d-sm-none">N.C. Date</dt>
+                <dt class="col-4 d-sm-none">Chase Date</dt>
                 <dd class="col">{{(lead?.nextChaseDate | date: 'dd/MM/yyyy hh:mm') || '-'}}</dd>
               </dl>
             </div>
             <div class="col-sm">
               <dl class="row">
-                <dt class="col-4 d-sm-none">Lead Owner</dt>
+                <dt class="col-4 d-sm-none">Chaser</dt>
                 <dd class="col">{{lead?.owner}}</dd>
               </dl>
             </div>
