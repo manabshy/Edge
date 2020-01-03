@@ -27,14 +27,26 @@ export interface ValuationRequestOption extends BaseRequestOption {
   officeId?: number;
 }
 
-export enum ValuationStatus {
+export interface ValuationStatus {
+  id: number;
+  value: string;
+}
+
+export const ValuationStatuses = <ValuationStatus[]>[
+  { id: 1, value: 'Incomplete' },
+  { id: 2, value: 'Invited' },
+  { id: 3, value: 'Valued' }
+];
+
+export enum ValuationStatusEnum {
+  None = 0,
   Incomplete = 1,
   Invited = 2,
   Valued = 3
 }
 
 export function getValuationStatuses() {
-  return Object.keys(ValuationStatus).filter(
+  return Object.keys(ValuationStatusEnum).filter(
     (type) => isNaN(<any>type)
   );
 }

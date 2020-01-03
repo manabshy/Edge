@@ -9,7 +9,7 @@
           class="fas fa-plus mr-2"></i> Valuation </a>
     </div>
   </div>
-  <form class="mb-3" [formGroup]="valuationFinderForm">
+  <form class="mb-3" [formGroup]="valuationFinderForm" autocompleteOff>
     <div class="row align-items-center">
       <div class="col-sm">
         <div class="row">
@@ -24,26 +24,26 @@
             <label class="small" for="dateFrom">Date</label>
             <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
               [bsConfig]="{showWeekNumbers:false, customTodayClass: 'font-weight-bold'}" [(bsValue)]="date"
-              value="{{ date | date:'dd/MM/yyyy'}}" bsDatepicker formControlName="date">
+              value="{{ date | date:'dd/MM/yyyy'}}" bsDatepicker formControlName="date" >
           </div>
           <div class="col-sm form-group">
             <label class="small" for="office">Status</label>
-            <select class="custom-select custom-select-sm" id="office" formControlName="statusId" (change)="onStatusSelected($event.target.value)">
+            <select class="custom-select custom-select-sm" id="office" formControlName="statusId">
               <option selected value="0"></option>
-              <option *ngFor="let status of statuses | keyvalue:keepOriginalOrder " [value]='status.key'>
+              <option *ngFor="let status of statuses" [value]='status.id'>
                 {{status.value}}</option>
             </select>
           </div>
           <div class="col-sm form-group">
             <label class="small" for="office">Lister</label>
-            <select class="custom-select custom-select-sm" id="office" formControlName="listerId" (change)="onListerSelected($event.target.value)">
+            <select class="custom-select custom-select-sm" id="office" formControlName="listerId">
               <option selected value="0"></option>
               <option *ngFor="let lister of listers" [value]=lister.staffMemberId>{{lister?.fullName}}</option>
             </select>
           </div>
           <div class="col-sm form-group">
             <label class="small" for="office">Office</label>
-            <select class="custom-select custom-select-sm" id="office" formControlName="officeId" (change)="onOfficeSelected($event.target.value)">
+            <select class="custom-select custom-select-sm" id="office" formControlName="officeId" >
               <option selected value="0"></option>
               <option *ngFor="let office of offices" [value]=office.officeId>{{office?.name}}</option>
             </select>

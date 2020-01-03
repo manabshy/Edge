@@ -64,7 +64,7 @@ export class StaffMemberService {
       }));
   }
 
-  getListers(): Observable<StaffMember[]> {
+  getValuers(): Observable<StaffMember[]> {
     return this.http.get<any>(`${AppConstants.baseUrl}/listers`).pipe(
       map(response => response.result),
       tap(data => {

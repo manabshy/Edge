@@ -3,14 +3,14 @@ import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { Observable, EMPTY } from 'rxjs';
 import { ValuationService } from './shared/valuation.service';
 import { debounceTime, distinctUntilChanged, switchMap, catchError, takeUntil } from 'rxjs/operators';
-import { Valuation, ValuationRequestOption, ValuationStatus, getValuationStatuses } from './shared/valuation';
+import { Valuation, ValuationRequestOption, ValuationStatusEnum, getValuationStatuses, ValuationStatuses } from './shared/valuation';
 import { WedgeError, SharedService } from '../core/services/shared.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { StaffMember, Office } from '../shared/models/staff-member';
 import { BaseComponent } from '../shared/models/base-component';
 import { StaffMemberService } from '../core/services/staff-member.service';
 import { OfficeService } from '../core/services/office.service';
-import { TypeaheadOptions } from 'ngx-bootstrap/typeahead/public_api';
+import { format } from 'date-fns';
 
 @Component({
   selector: 'app-valuations',
@@ -36,6 +36,19 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
   get searchTermControl() {
     return this.valuationFinderForm.get('searchTerm') as FormControl;
   }
+  get dateControl() {
+    return this.valuationFinderForm.get('date') as FormControl;
+  }
+  get statusControl() {
+    return this.valuationFinderForm.get('statusId') as FormControl;
+  }
+  get listerControl() {
+    return this.valuationFinderForm.get('listerId') as FormControl;
+  }
+  get officeControl() {
+    return this.valuationFinderForm.get('officeId') as FormControl;
+  }
+
   public keepOriginalOrder = (a) => a.key;
 
   constructor(private valuationService: ValuationService,
@@ -49,13 +62,14 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
 
     this.setupForm();
     this.getValuations();
-    this.statuses = getValuationStatuses();
+    this.statuses = ValuationStatuses;
+    // this.statuses = getValuationStatuses();
 
     this.storage.get('allListers').subscribe(data => {
       if (data) {
         this.listers = data as StaffMember[];
       } else {
-        this.staffMemberService.getListers().pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => this.listers = result);
+        this.staffMemberService.getValuers().pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => this.listers = result);
       }
     });
 
@@ -97,13 +111,14 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
   }
 
   getNextValuationsPage(page: number) {
+
     const request = {
       page: page,
       searchTerm: this.searchTerm,
-      date: this.valuationFinderForm.get('date').value,
-      status: this.status,
-      listerId: this.listerId,
-      officeId: this.officeId
+      date: format(this.dateControl.value, 'YYYY-MM-DD'),
+      status: this.statusControl.value,
+      listerId: this.listerControl.value,
+      officeId: this.officeControl.value
     } as ValuationRequestOption;
 
     this.valuationService.getValuations(request).subscribe(result => {
@@ -124,19 +139,6 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
       this.isHintVisible = true;
       this.sharedService.showError(error);
     });
-  }
-
-  onStatusSelected(id: number) {
-    this.status = id;
-    console.log('selected status', id);
-  }
-  onListerSelected(id: number) {
-    this.listerId = id;
-    console.log('selected lister', id);
-  }
-  onOfficeSelected(id: number) {
-    this.officeId = id;
-    console.log('selected office', id);
   }
 
   suggestionSelected(event) {
