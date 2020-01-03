@@ -5,7 +5,7 @@ import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encoder-helper';
-
+import { format } from 'date-fns';
 @Injectable({
   providedIn: 'root'
 })
@@ -65,6 +65,8 @@ export class LeadsService {
   }
 
   getLeads(leadSearchInfo: LeadSearchInfo, pageSize?: number): Observable<any> {
+    const dateTo =  format(leadSearchInfo.dateTo, 'YYYY-MM-DD');
+    const dateFrom =  format(leadSearchInfo.dateFrom, 'YYYY-MM-DD');
     if (!leadSearchInfo.page || +leadSearchInfo.page === 0) {
       leadSearchInfo.page = 1;
     }
@@ -81,8 +83,8 @@ export class LeadsService {
         personId: leadSearchInfo.personId != null ? leadSearchInfo.personId.toString() : '',
         leadTypeId: leadSearchInfo.leadTypeId != null ? leadSearchInfo.leadTypeId.toString() : '',
         officeId: leadSearchInfo.officeId != null ? leadSearchInfo.officeId.toString() : '',
-        dateFrom: leadSearchInfo.dateFrom != null ? new Date(leadSearchInfo.dateFrom.toString()).toLocaleDateString() : '',
-        dateTo: leadSearchInfo.dateTo != null ? new Date(leadSearchInfo.dateTo.toString()).toLocaleDateString() : '',
+        dateFrom: leadSearchInfo.dateFrom != null ? dateFrom.toString() : '',
+        dateTo: leadSearchInfo.dateTo != null ? dateTo.toString() : '',
         includeClosedLeads: leadSearchInfo.includeClosedLeads != null ? (String)(leadSearchInfo.includeClosedLeads) : '',
         includeUnassignedLeadsOnly: leadSearchInfo.includeUnassignedLeadsOnly != null
           ? (String)(leadSearchInfo.includeUnassignedLeadsOnly) : '',
