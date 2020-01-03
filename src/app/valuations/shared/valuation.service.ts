@@ -45,7 +45,7 @@ export class ValuationService {
         page: requestOption.page.toString(),
         date: requestOption.date ? requestOption.date.toString() : '',
         status: requestOption.status.toString(),
-        listerId: requestOption.listerId.toString(),
+        valuerId: requestOption.valuerId.toString(),
         officeId: requestOption.officeId.toString()
       }
     });

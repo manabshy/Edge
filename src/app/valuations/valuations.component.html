@@ -35,10 +35,10 @@
             </select>
           </div>
           <div class="col-sm form-group">
-            <label class="small" for="office">Lister</label>
-            <select class="custom-select custom-select-sm" id="office" formControlName="listerId">
+            <label class="small" for="office">Valuer</label>
+            <select class="custom-select custom-select-sm" id="office" formControlName="valuerId">
               <option selected value="0"></option>
-              <option *ngFor="let lister of listers" [value]=lister.staffMemberId>{{lister?.fullName}}</option>
+              <option *ngFor="let valuer of valuers" [value]=valuer.staffMemberId>{{valuer?.fullName}}</option>
             </select>
           </div>
           <div class="col-sm form-group">

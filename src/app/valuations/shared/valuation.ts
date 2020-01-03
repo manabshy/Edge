@@ -23,7 +23,7 @@ export interface Valuation {
 export interface ValuationRequestOption extends BaseRequestOption {
   status?: number;
   date?: string;
-  listerId?: number;
+  valuerId?: number;
   officeId?: number;
 }
 

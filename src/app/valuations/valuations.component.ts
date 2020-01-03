@@ -30,7 +30,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
   page: number;
   bottomReached = false;
   suggestions: (text$: Observable<any>) => Observable<any>;
-  listers: StaffMember[];
+  valuers: StaffMember[];
   offices: Office[];
   statuses: any;
   get searchTermControl() {
@@ -42,8 +42,8 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
   get statusControl() {
     return this.valuationFinderForm.get('statusId') as FormControl;
   }
-  get listerControl() {
-    return this.valuationFinderForm.get('listerId') as FormControl;
+  get valuerControl() {
+    return this.valuationFinderForm.get('valuerId') as FormControl;
   }
   get officeControl() {
     return this.valuationFinderForm.get('officeId') as FormControl;
@@ -67,9 +67,9 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
 
     this.storage.get('allListers').subscribe(data => {
       if (data) {
-        this.listers = data as StaffMember[];
+        this.valuers = data as StaffMember[];
       } else {
-        this.staffMemberService.getValuers().pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => this.listers = result);
+        this.staffMemberService.getValuers().pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => this.valuers = result);
       }
     });
 
@@ -97,7 +97,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
       searchTerm: '',
       date: null,
       statusId: 0,
-      listerId: 0,
+      valuerId: 0,
       officeId: 0,
     });
   }
@@ -117,7 +117,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
       searchTerm: this.searchTerm,
       date: format(this.dateControl.value, 'YYYY-MM-DD'),
       status: this.statusControl.value,
-      listerId: this.listerControl.value,
+      valuerId: this.valuerControl.value,
       officeId: this.officeControl.value
     } as ValuationRequestOption;
 
