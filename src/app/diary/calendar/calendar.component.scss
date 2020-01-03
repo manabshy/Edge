@@ -22,7 +22,7 @@ $time-column-mobile-width: 40px;
             background: color("white");
 
             @include media-breakpoint-down(sm) {
-                top: $top-bar-height + 85;
+                top: $top-bar-height + 85 + 43;
             }
 
             @media (max-width: 320px) {
