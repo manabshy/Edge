@@ -43,7 +43,7 @@ export class ValuationService {
         searchTerm: requestOption.searchTerm,
         pageSize: requestOption.pageSize.toString(),
         page: requestOption.page.toString(),
-        date: requestOption.date ? requestOption.date.toString() : '',
+        date: requestOption.date ? requestOption.date.toString() : null,
         status: requestOption.status.toString(),
         valuerId: requestOption.valuerId.toString(),
         officeId: requestOption.officeId.toString()

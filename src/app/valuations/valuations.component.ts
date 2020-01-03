@@ -115,7 +115,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
     const request = {
       page: page,
       searchTerm: this.searchTerm,
-      date: format(this.dateControl.value, 'YYYY-MM-DD'),
+      date: this.dateControl.value === null ? null : format(this.dateControl.value, 'YYYY-MM-DD'),
       status: this.statusControl.value,
       valuerId: this.valuerControl.value,
       officeId: this.officeControl.value
