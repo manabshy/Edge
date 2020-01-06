@@ -7,9 +7,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ValuationDetailEditComponent implements OnInit {
 
+  staffMembers = [
+    {
+    id: 1,
+    fullName: 'John Smith'
+    },
+    {
+    id: 1,
+    fullName: 'Bill Doe'
+    }
+
+  ]
+
+  showCalendar: boolean = false;
+
   constructor() { }
 
   ngOnInit() {
+  }
+
+  selectStaffMember(staffMember: any){
+    this.showCalendar = true;
   }
 
 }
