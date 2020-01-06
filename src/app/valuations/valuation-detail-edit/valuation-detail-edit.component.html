@@ -6,7 +6,7 @@
     </div>
   </div>
   <form action="">
-    [property finder]<br><br>
+   <app-property-finder (selectedProperty)="getSelectedProperty($event)"></app-property-finder>
     <!-- <app-signer label="Last known owner" [createdSigner]="createdSigner" [existingSigner]="lastKnownOwner" [existingPerson]="lastKnownPerson"
       (selectedSigner)="getSelectedOwner($event)" (newSigner)="createNewSigner($event)"></app-signer> -->
     <app-signer label="Last known owner"
