@@ -17,6 +17,8 @@ import { of, Observable, from } from 'rxjs';
 import { MockDropdownListInfo } from 'src/app/contactgroups/shared/test-helper/dropdown-list-data.json';
 import { Property } from '../shared/property';
 import { ActivatedRouteStub } from 'src/testing/activated-route-stub';
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { MockBsModalService } from 'src/testing/extended-mock-services';
 
 fdescribe('PropertyDetailEditComponent', () => {
   let component: PropertyDetailEditComponent;
@@ -55,6 +57,7 @@ fdescribe('PropertyDetailEditComponent', () => {
         FormatAddressPipe,
         {provide: SharedService, useValue: mockSharedService},
         {provide: ToastrService, useValue: mockToastrService},
+        { provide: BsModalService, useValue: MockBsModalService }
         // {
         //   provide: ActivatedRoute,
         //   useValue: {

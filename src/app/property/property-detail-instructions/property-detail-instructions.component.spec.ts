@@ -14,7 +14,7 @@ import { MockInstructions } from '../shared/test-helper';
 import { InstructionInfo } from '../shared/property';
 import { PropertyService } from '../shared/property.service';
 
-fdescribe('PropertyDetailInstructionsComponent should', () => {
+describe('PropertyDetailInstructionsComponent should', () => {
   let component: PropertyDetailInstructionsComponent;
   let fixture: ComponentFixture<PropertyDetailInstructionsComponent>;
   let propertyService: PropertyService;
@@ -68,7 +68,6 @@ fdescribe('PropertyDetailInstructionsComponent should', () => {
   it('set instructions correctly from service', async(() => {
     const spy = spyOn(propertyService, 'getPropertyInstructions').and.returnValue(of(instructions));
     let response: any;
-    component.ngOnInit();
     component.instructions$
       .subscribe(res => {
         response = res;
@@ -81,7 +80,6 @@ fdescribe('PropertyDetailInstructionsComponent should', () => {
 
   it('display the instructions correctly', async(() => {
     spyOn(propertyService, 'getPropertyInstructions').and.returnValue(of(instructions));
-    component.ngOnInit();
     component.instructions$.subscribe();
 
     fixture.whenStable().then(() => {

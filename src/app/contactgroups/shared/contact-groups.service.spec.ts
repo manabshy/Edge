@@ -7,7 +7,7 @@ import { ContactGroupsAutocompleteMock } from './test-helper/contactgroups-autoc
 import { NewPersonNoteMock, AddedPersonNoteMock, PersonNotesMock } from './test-helper/person-note.json';
 import { PersonNote } from './contact-group';
 
-fdescribe('ContactGroupsService should', () => {
+describe('ContactGroupsService should', () => {
   let httpTestingController: HttpTestingController;
   let service: ContactGroupsService;
   const baseContactGroupUrl = `https://dandg-api-wedge-dev.azurewebsites.net/v10/contactGroups`;

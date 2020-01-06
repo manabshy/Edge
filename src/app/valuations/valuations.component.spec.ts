@@ -1,16 +1,32 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ValuationsComponent } from './valuations.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MockBsModalService } from 'src/testing/extended-mock-services';
 
-describe('ValuationsComponent', () => {
+fdescribe('ValuationsComponent', () => {
   let component: ValuationsComponent;
   let fixture: ComponentFixture<ValuationsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ValuationsComponent ]
+      imports: [
+        HttpClientTestingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        RouterTestingModule.withRoutes([])
+      ],
+      declarations: [ValuationsComponent],
+      providers: [
+        { provide: BsModalService, useValue: MockBsModalService }
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -23,3 +39,5 @@ describe('ValuationsComponent', () => {
     expect(component).toBeTruthy();
   });
 });
+
+
