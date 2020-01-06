@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Valuation, ValuationRequestOption } from './valuation';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { map, tap } from 'rxjs/operators';
@@ -10,8 +10,14 @@ import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encod
   providedIn: 'root'
 })
 export class ValuationService {
+  private valuationPageNumberSubject = new Subject<number>();
+  valuationPageNumberChanges$ = this.valuationPageNumberSubject.asObservable();
 
   constructor(private http: HttpClient) { }
+
+  valuationPageNumberChanged(page: number) {
+    this.valuationPageNumberSubject.next(page);
+  }
 
   getValuationSuggestions(searchTerm: string): Observable<any> {
     const url = `${AppConstants.baseValuationUrl}/suggestions?SearchTerm=${searchTerm}`;
@@ -26,11 +32,12 @@ export class ValuationService {
     const url = `${AppConstants.baseValuationUrl}/search`;
     return this.http.get<any>(url, { params: options })
       .pipe(
-        map(response => response.result)
+        map(response => response.result),
+        tap(data => console.log('valuations', JSON.stringify(data)))
       );
   }
 
-  private setQueryParams(requestOption: ValuationRequestOption) {
+  setQueryParams(requestOption: ValuationRequestOption) {
     if (!requestOption.page) {
       requestOption.page = 1;
     }

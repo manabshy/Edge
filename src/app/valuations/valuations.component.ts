@@ -81,6 +81,11 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
       }
     });
 
+    this.valuationService.valuationPageNumberChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(newPageNumber => {
+      this.page = newPageNumber;
+      this.getNextValuationsPage(this.page);
+    });
+    
     this.suggestions = (text$: Observable<string>) =>
       text$.pipe(
         debounceTime(200),

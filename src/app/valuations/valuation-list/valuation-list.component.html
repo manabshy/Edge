@@ -9,6 +9,10 @@
       <div class="col-sm"><strong>Values</strong></div>
     </div>
   </div>
+  <div *ngIf="valuations" class="search-results" infiniteScroll [infiniteScrollDistance]="5"
+    [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"
+    (scrolled)="onScrollDown()">
+  </div>
   <a
     [routerLink]="['detail', val?.valuationEventId, 'edit']"
     class="list-group-item list-group-item-action" *ngFor="let val of valuations">
