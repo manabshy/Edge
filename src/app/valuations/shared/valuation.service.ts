@@ -37,6 +37,15 @@ export class ValuationService {
       );
   }
 
+  getValuation(valuationId: number): Observable<Valuation| any> {
+    const url = `${AppConstants.baseValuationUrl}/${valuationId}`;
+    return this.http.get<any>(url)
+      .pipe(
+        map(response => response.result),
+        tap(data => console.log('valuation', JSON.stringify(data)))
+      );
+  }
+
   setQueryParams(requestOption: ValuationRequestOption) {
     if (!requestOption.page) {
       requestOption.page = 1;
