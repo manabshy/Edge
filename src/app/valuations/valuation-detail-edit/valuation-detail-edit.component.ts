@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Property } from 'src/app/property/shared/property';
+import { Property, MinBedrooms, LeaseTypes } from 'src/app/property/shared/property';
 import { Signer } from 'src/app/contactgroups/shared/contact-group';
 import { ValuationService } from '../shared/valuation.service';
 import { ActivatedRoute } from '@angular/router';
@@ -31,6 +31,14 @@ export class ValuationDetailEditComponent implements OnInit {
   lastKnownOwner: Signer;
   valuationForm: FormGroup;
 
+  get rooms() {
+    return MinBedrooms;
+  }
+
+  get leaseTypes() {
+    return LeaseTypes;
+  }
+
   constructor(private valuationService: ValuationService, private route: ActivatedRoute, private fb: FormBuilder) { }
 
   ngOnInit() {
@@ -43,9 +51,19 @@ export class ValuationDetailEditComponent implements OnInit {
 
   setupForm() {
     this.valuationForm = this.fb.group({
+      reason: [''],
+      period: [''],
+      marketChat: [''],
+      propertyNotes: [''],
+      bedrooms: [0],
+      bathrooms: [0],
+      receptions: [0],
+      sizeInSquareFeet: [0],
+      lease: [''],
       outside: [null],
       parking: [null],
-      features: [null]
+      features: [null],
+      attendees: [null]
     });
   }
 
@@ -67,7 +85,13 @@ export class ValuationDetailEditComponent implements OnInit {
       this.valuationForm.reset();
     }
     if (valuation) {
-
+      this.valuationForm.patchValue({
+        // reason: valuation.reason,
+        // period: valuation.period,
+        // marketChat: valuation.marketChat,
+        // propertyNotes: valuation.propertyNotes,
+        valuation
+      })
     }
   }
 
@@ -82,5 +106,9 @@ export class ValuationDetailEditComponent implements OnInit {
       this.lastKnownOwner = owner;
       console.log('selected owner', owner);
     }
+  }
+
+  saveValuation() {
+
   }
 }

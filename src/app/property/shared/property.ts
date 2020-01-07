@@ -2,7 +2,17 @@ import { Address } from 'src/app/shared/models/address';
 import { SubNavItem, SubNav } from 'src/app/shared/subnav';
 import { Signer } from 'src/app/contactgroups/shared/contact-group';
 
-export interface Property {
+export interface PropertyInfo {
+  bedrooms?: number;
+  bathrooms?: number;
+  receptions?: number;
+  sizeInSquareFeet?: number;
+  lease: string;
+  outside: string;
+  parking: string;
+  features: string;
+}
+export interface Property extends PropertyInfo {
   propertyId: number;
   propertyTypeId: PropertyType;
   propertyStyleId: PropertyStyle;
@@ -19,6 +29,7 @@ export interface Property {
   info: PropertySummaryFigures;
   lastKnownOwner: Signer;
 }
+
 export interface MapCentre {
   longitude: string;
   latitude: string;
@@ -109,6 +120,15 @@ export interface MinBedroom {
   id: number;
   name: string;
 }
+export interface LeaseType {
+  id: number;
+  name: string;
+}
+
+export const LeaseTypes = <LeaseType[]>[
+  { id: 1, name: 'FreeHold' },
+  { id: 2, name: 'LeaseHold' }
+];
 
 export const MinBedrooms = <MinBedroom[]>[
   // {id: 0, name: 'Any'},
@@ -119,10 +139,12 @@ export const MinBedrooms = <MinBedroom[]>[
   { id: 5, name: '5' },
   { id: 6, name: '6+' }
 ];
+
 export enum PropertyType {
   House = 1,
   Flat = 2
 }
+
 export enum PropertyStyle {
   SemiDetached = 1,
   Detached = 2,
@@ -138,6 +160,7 @@ export enum PropertyStyle {
   Land = 13,
   ParkingSpace = 11,
 }
+
 export const PropertyTypes = new Map([
   [PropertyType.Flat, 'Flat'],
   [PropertyType.House, 'House']

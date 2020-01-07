@@ -5,7 +5,7 @@
       <h4 class="m-0">Valuation</h4>
     </div>
   </div>
-  <form [formGroup]="valuationForm">
+  <form [formGroup]="valuationForm" (ngSubmit)="saveValuation()">
     <app-property-finder (selectedProperty)="getSelectedProperty($event)"></app-property-finder>
     <!-- <app-signer label="Last known owner" [createdSigner]="createdSigner" [existingSigner]="lastKnownOwner" [existingPerson]="lastKnownPerson"
       (selectedSigner)="getSelectedOwner($event)" (newSigner)="createNewSigner($event)"></app-signer> -->
@@ -14,26 +14,29 @@
     <div class="form-group row">
       <label for="why" class="col-sm-2 col-form-label col-form-label-sm">Why?</label>
       <div class="col-sm-10">
-        <textarea class="form-control form-control-sm" name="why" id="why" cols="30" rows="5"></textarea>
+        <textarea class="form-control form-control-sm" name="why" id="why" cols="30" rows="5"
+          formControlName="reason"></textarea>
       </div>
     </div>
     <div class="form-group row">
       <label for="when" class="col-sm-2 col-form-label col-form-label-sm">When?</label>
       <div class="col-sm-10">
-        <textarea class="form-control form-control-sm" name="when" id="when" cols="30" rows="5"></textarea>
+        <textarea class="form-control form-control-sm" name="when" id="when" cols="30" rows="5"
+          formControlName="period"></textarea>
       </div>
     </div>
     <div class="form-group row">
       <label for="marketChat" class="col-sm-2 col-form-label col-form-label-sm">Market Chat</label>
       <div class="col-sm-10">
-        <textarea class="form-control form-control-sm" name="marketChat" id="marketChat" cols="30" rows="5"></textarea>
+        <textarea class="form-control form-control-sm" name="marketChat" id="marketChat" cols="30" rows="5"
+          formControlName="marketChat"></textarea>
       </div>
     </div>
     <div class="form-group row">
       <label for="propertyNotes" class="col-sm-2 col-form-label col-form-label-sm">Property Notes</label>
       <div class="col-sm-10">
-        <textarea class="form-control form-control-sm" name="propertyNotes" id="propertyNotes" cols="30"
-          rows="5"></textarea>
+        <textarea class="form-control form-control-sm" name="propertyNotes" id="propertyNotes" cols="30" rows="5"
+          formControlName="propertyNotes"></textarea>
       </div>
     </div>
     <div class="form-group row">
@@ -42,15 +45,25 @@
         <div class="row">
           <div class="col-sm form-group">
             <label class="small" for="bedrooms">Bedrooms</label>
-            <input type="text" name="bedrooms" id="bedrooms" class="form-control form-control-sm">
+            <!-- <input type="text" name="bedrooms" id="bedrooms" class="form-control form-control-sm"> -->
+            <select class="form-control form-control-sm" name="bedrooms" id="bedrooms" formControlName="bedrooms">
+              <option value="0"></option>
+              <option *ngFor="let bedroom of rooms" [value]='bedroom.id'> {{bedroom.name}}</option>
+            </select>
           </div>
           <div class="col-sm form-group">
             <label class="small" for="bathrooms">Bathrooms</label>
-            <input type="text" name="bathrooms" id="bathrooms" class="form-control form-control-sm">
+            <select class="form-control form-control-sm" name="bathrooms" id="bathrooms" formControlName="bathrooms">
+              <option value="0"></option>
+              <option *ngFor="let bathroom of rooms" [value]='bathroom.id'> {{bathroom.name}}</option>
+            </select>
           </div>
           <div class="col-sm form-group">
             <label class="small" for="receptions">Receptions</label>
-            <input type="text" name="receptions" id="receptions" class="form-control form-control-sm">
+            <select class="form-control form-control-sm" name="receptions" id="receptions" formControlName="receptions">
+              <option value="0"></option>
+              <option *ngFor="let bathroom of rooms" [value]='bathroom.id'> {{bathroom.name}}</option>
+            </select>
           </div>
           <div class="col-sm form-group">
             <label class="small" for="sqFoot">Sq. Foot</label>
@@ -58,43 +71,46 @@
           </div>
           <div class="col-sm form-group">
             <label class="small" for="lease">Lease</label>
-            <input type="text" name="lease" id="lease" class="form-control form-control-sm">
+            <select class="form-control form-control-sm" name="lease" id="lease" formControlName="lease">
+              <option value="0"></option>
+              <option *ngFor="let type of leaseTypes" [value]='type.id'> {{type.name}}</option>
+            </select>
           </div>
         </div>
         <div class="row">
           <div class="col-sm form-group">
-            <label class="small" for="Outside">Outside</label>
-            <ng-select [items]="people" [multiple]="true" bindLabel="name" groupBy="gender" [selectableGroup]="true"
-              [closeOnSelect]="false" bindValue="id" formControlName="outside">
+            <label class="small" for="outside">Outside</label>
+            <ng-select [items]="staffMembers" [multiple]="true" bindLabel="name" groupBy="gender"
+              [selectableGroup]="true" [closeOnSelect]="false" bindValue="id" formControlName="outside">
               <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
-                <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.gender | uppercase}}
+                <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.gender | uppercase}}
               </ng-template>
               <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-                <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.name}}
+                <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.name}}
               </ng-template>
             </ng-select>
           </div>
           <div class="col-sm form-group">
             <label class="small" for="Parking">Parking</label>
-            <ng-select [items]="people" [multiple]="true" bindLabel="name" groupBy="gender" [selectableGroup]="true"
-              [closeOnSelect]="false" bindValue="id" formControlName="parking">
+            <ng-select [items]="staffMembers" [multiple]="true" bindLabel="name" groupBy="gender"
+              [selectableGroup]="true" [closeOnSelect]="false" bindValue="id" formControlName="parking">
               <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
-                <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.gender | uppercase}}
+                <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.gender | uppercase}}
               </ng-template>
               <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-                <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.name}}
+                <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.name}}
               </ng-template>
             </ng-select>
           </div>
           <div class="col-sm form-group">
             <label class="small" for="features">Features</label>
-            <ng-select [items]="people" [multiple]="true" bindLabel="name" groupBy="gender" [selectableGroup]="true"
-              [closeOnSelect]="false" bindValue="id" formControlName="features">
+            <ng-select [items]="staffMembers" [multiple]="true" bindLabel="name" groupBy="gender"
+              [selectableGroup]="true" [closeOnSelect]="false" bindValue="id" formControlName="features">
               <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
-                <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.gender | uppercase}}
+                <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.gender | uppercase}}
               </ng-template>
               <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-                <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.name}}
+                <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.name}}
               </ng-template>
             </ng-select>
           </div>

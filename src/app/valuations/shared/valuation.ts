@@ -5,7 +5,13 @@ import { Person } from 'src/app/shared/models/person';
 import { BaseRequestOption } from 'src/app/shared/models/base-request-option';
 import { Signer } from 'src/app/contactgroups/shared/contact-group';
 
-export interface Valuation {
+export interface ValuationInfo {
+  reason: string;
+  period: string;
+  marketChat: string;
+  propertyNotes: string;
+}
+export interface Valuation extends ValuationInfo{
   valuationEventId: number;
   valuationStatus: number;
   valuationStatusLabel: string;
@@ -21,12 +27,6 @@ export interface Valuation {
   createdBy: BaseStaffMember;
 }
 
-export interface ValuationInfo {
-  reason: string;
-  period: string;
-  marketChat: string;
-  propertyNotes: string;
-}
 export interface ValuationRequestOption extends BaseRequestOption {
   status?: number;
   date?: string;
