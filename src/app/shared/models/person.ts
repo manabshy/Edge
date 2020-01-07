@@ -104,6 +104,7 @@ export interface PersonOffer {
   amount: number;
   propertyAddress: string;
   staffMember: string;
+  isActive: boolean;
 }
 export interface PersonProperty {
   propertyId: number;
@@ -119,6 +120,7 @@ export interface PersonInstruction {
   agencyType: string;
   propertyAddress: string;
   staffMember: string;
+  isActive: boolean;
 }
 export interface PersonLettingsManagement {
   propertyAddress: string;
@@ -127,6 +129,7 @@ export interface PersonLettingsManagement {
   managedStartDate?: Date;
   managedEndDate?: Date;
   propertyManager: string;
+  isActive: boolean;
 }
 export interface PersonHomeHelper {
   propertyAddress: string;
@@ -135,6 +138,7 @@ export interface PersonHomeHelper {
   managedStartDate?: Date;
   managedEndDate?: Date;
   propertyManager: string;
+  isActive: boolean;
 }
 export interface PersonSearch {
   lettingsRequirementId: number;

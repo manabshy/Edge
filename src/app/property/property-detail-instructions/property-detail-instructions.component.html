@@ -32,7 +32,8 @@
         <div class="col-sm col-xl-12">
           <dl class="row">
             <dt class="col-4 d-sm-none d-xl-block">Status</dt>
-            <dd class="col">{{instruction?.status}}</dd>
+            <dd class="col" *ngIf="instruction.isActive"><span class="badge badge-pill badge-success" >{{instruction?.status}}</span></dd>
+            <dd class="col" *ngIf="!instruction.isActive"><span class="badge badge-pill badge-danger" >{{instruction?.status}}</span></dd>
           </dl>
         </div>
         <div class="col-sm col-xl-12">

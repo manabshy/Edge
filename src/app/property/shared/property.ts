@@ -59,6 +59,7 @@ export interface OfferInfo {
   applicantId: number;
   applicantAddressee: string;
   staffMember: string;
+  isActive: boolean;
 }
 export interface InstructionInfo {
   propertyEventId: number;
@@ -72,6 +73,7 @@ export interface InstructionInfo {
   ownerAddressee: string;
   agencyType: string;
   staffMember: string;
+  isActive: boolean;
 }
 export interface PropertyNote {
   propertyId: number;
