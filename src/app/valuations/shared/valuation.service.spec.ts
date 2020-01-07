@@ -32,7 +32,7 @@ fdescribe('ValuationService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should get valuations', () => {
+  it('should pass correct parameters to get valuations', () => {
     const option = {
       searchTerm: 'test',
       date: format(new Date(), 'YYYY-MM-DD'),
@@ -44,7 +44,6 @@ fdescribe('ValuationService', () => {
 
     service.getValuations(option).subscribe();
 
-    console.log('option', option, 'URL', url);
     const req = httpTestingController.expectOne(url);
     req.flush(response);
     expect(req.request.method).toEqual('GET');
