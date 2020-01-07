@@ -3,6 +3,7 @@ import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
 import { DiaryEvent } from 'src/app/diary/shared/diary';
 import { Person } from 'src/app/shared/models/person';
 import { BaseRequestOption } from 'src/app/shared/models/base-request-option';
+import { Signer } from 'src/app/contactgroups/shared/contact-group';
 
 export interface Valuation {
   valuationEventId: number;
@@ -11,7 +12,7 @@ export interface Valuation {
   property: Property;
   valuer: BaseStaffMember;
   valuationDate?: Date;
-  propertyOwner?: Person;
+  propertyOwner?: Signer;
   diaryEvent: DiaryEvent;
   suggestedAskingPrice?: number;
   suggestedAskingRentLongLet: number;

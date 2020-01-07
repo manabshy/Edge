@@ -9,7 +9,7 @@
     <app-property-finder (selectedProperty)="getSelectedProperty($event)"></app-property-finder>
     <!-- <app-signer label="Last known owner" [createdSigner]="createdSigner" [existingSigner]="lastKnownOwner" [existingPerson]="lastKnownPerson"
       (selectedSigner)="getSelectedOwner($event)" (newSigner)="createNewSigner($event)"></app-signer> -->
-    <app-signer label="Last known owner" [existingPerson]="valuation?.propertyOwner || lastKnownOwner"
+    <app-signer label="Last known owner" [existingSigner]="valuation?.propertyOwner"
       (selectedSigner)="getSelectedOwner($event)" (newSigner)="createNewSigner($event)"></app-signer>
     <div class="form-group row">
       <label for="why" class="col-sm-2 col-form-label col-form-label-sm">Why?</label>
