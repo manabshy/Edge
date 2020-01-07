@@ -20,6 +20,12 @@ export interface Valuation {
   createdBy: BaseStaffMember;
 }
 
+export interface ValuationInfo {
+  reason: string;
+  period: string;
+  marketChat: string;
+  propertyNotes: string;
+}
 export interface ValuationRequestOption extends BaseRequestOption {
   status?: number;
   date?: string;
