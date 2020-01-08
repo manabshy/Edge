@@ -15,8 +15,14 @@ export class PersonDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.contactGroupService.noteChanges$.subscribe(note => {
-      if (note && note.isImportant) {
-        this.personDetails.personNotes.push(note);
+      const notes = this.personDetails.personNotes;
+      const existingNote = notes.find(x => x.id === note.id);
+      if (note && note.isImportant && !existingNote) {
+        notes.push(note);
+      }
+      if (note && !note.isImportant) {
+        const index = notes.findIndex(x => +x.id === +note.id);
+        notes.splice(index, 1);
       }
     });
   }
