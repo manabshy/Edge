@@ -7,7 +7,7 @@ import { Signer } from 'src/app/contactgroups/shared/contact-group';
 
 export interface ValuationInfo {
   reason: string;
-  period: string;
+  timeFrame: string;
   marketChat: string;
   propertyNotes: string;
 }

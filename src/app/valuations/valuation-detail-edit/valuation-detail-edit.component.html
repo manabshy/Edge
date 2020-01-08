@@ -70,47 +70,47 @@
             <input type="text" name="sqFoot" id="sqFoot" class="form-control form-control-sm">
           </div>
           <div class="col-sm form-group">
-            <label class="small" for="lease">Lease</label>
-            <select class="form-control form-control-sm" name="lease" id="lease" formControlName="lease">
+            <label class="small" for="tenure">Tenure</label>
+            <select class="form-control form-control-sm" name="tenure" id="tenure" formControlName="tenure">
               <option value="0"></option>
-              <option *ngFor="let type of leaseTypes" [value]='type.id'> {{type.name}}</option>
+              <option *ngFor="let type of tenures" [value]='type.id'> {{type.value}}</option>
             </select>
           </div>
         </div>
         <div class="row">
           <div class="col-sm form-group">
-            <label class="small" for="outside">Outside</label>
-            <ng-select [items]="staffMembers" [multiple]="true" bindLabel="name" groupBy="gender"
-              [selectableGroup]="true" [closeOnSelect]="false" bindValue="id" formControlName="outside">
+            <label class="small" for="outsideSpace">Outside Space</label>
+            <ng-select [items]="outsideSpaces" [multiple]="true" bindLabel="value" groupBy="gender"
+              [selectableGroup]="true" [closeOnSelect]="false" bindValue="id" formControlName="outsideSpace">
               <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
                 <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.gender | uppercase}}
               </ng-template>
               <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-                <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.name}}
+                <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.value}}
               </ng-template>
             </ng-select>
           </div>
           <div class="col-sm form-group">
             <label class="small" for="Parking">Parking</label>
-            <ng-select [items]="staffMembers" [multiple]="true" bindLabel="name" groupBy="gender"
+            <ng-select [items]="parkings" [multiple]="true" bindLabel="value" groupBy="gender"
               [selectableGroup]="true" [closeOnSelect]="false" bindValue="id" formControlName="parking">
               <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
                 <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.gender | uppercase}}
               </ng-template>
               <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-                <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.name}}
+                <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.value}}
               </ng-template>
             </ng-select>
           </div>
           <div class="col-sm form-group">
             <label class="small" for="features">Features</label>
-            <ng-select [items]="staffMembers" [multiple]="true" bindLabel="name" groupBy="gender"
+            <ng-select [items]="features" [multiple]="true" bindLabel="value" groupBy="gender"
               [selectableGroup]="true" [closeOnSelect]="false" bindValue="id" formControlName="features">
               <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
                 <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.gender | uppercase}}
               </ng-template>
               <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-                <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.name}}
+                <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.value}}
               </ng-template>
             </ng-select>
           </div>

@@ -7,8 +7,8 @@ export interface PropertyInfo {
   bathrooms?: number;
   receptions?: number;
   sizeInSquareFeet?: number;
-  lease: string;
-  outside: string;
+  tenure: string;
+  outsideSpace: string;
   parking: string;
   features: string;
 }

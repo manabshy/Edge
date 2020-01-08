@@ -5,6 +5,8 @@ import { ValuationService } from '../shared/valuation.service';
 import { ActivatedRoute } from '@angular/router';
 import { Valuation } from '../shared/valuation';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { StorageMap } from '@ngx-pwa/local-storage';
+import { InfoDetail, DropdownListInfo } from 'src/app/core/services/info.service';
 
 @Component({
   selector: 'app-valuation-detail-edit',
@@ -13,23 +15,15 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 })
 export class ValuationDetailEditComponent implements OnInit {
 
-  staffMembers = [
-    {
-      id: 1,
-      fullName: 'John Smith'
-    },
-    {
-      id: 1,
-      fullName: 'Bill Doe'
-    }
-
-  ];
-
   showCalendar = false;
   valuationId: number;
   valuation: Valuation;
   lastKnownOwner: Signer;
   valuationForm: FormGroup;
+  tenures: InfoDetail[];
+  outsideSpaces: InfoDetail[];
+  parkings: InfoDetail[];
+  features: InfoDetail[];
 
   get rooms() {
     return MinBedrooms;
@@ -39,7 +33,15 @@ export class ValuationDetailEditComponent implements OnInit {
     return LeaseTypes;
   }
 
-  constructor(private valuationService: ValuationService, private route: ActivatedRoute, private fb: FormBuilder) { }
+  staffMembers = [
+    { id: 1, fullName: 'John Smith' },
+    { id: 1, fullName: 'Bill Doe' }
+  ];
+
+  constructor(private valuationService: ValuationService,
+    private storage: StorageMap,
+    private route: ActivatedRoute,
+    private fb: FormBuilder) { }
 
   ngOnInit() {
     this.setupForm();
@@ -47,6 +49,14 @@ export class ValuationDetailEditComponent implements OnInit {
     if (this.valuationId) {
       this.getValuation(this.valuationId);
     }
+
+    this.storage.get('info').subscribe((info: DropdownListInfo) => {
+      this.tenures = info.tenures;
+      this.outsideSpaces = info.outsideSpaces;
+      this.parkings = info.parkings;
+      this.features = info.propertyFeatures;
+    })
+
   }
 
   setupForm() {
@@ -59,8 +69,8 @@ export class ValuationDetailEditComponent implements OnInit {
       bathrooms: [0],
       receptions: [0],
       sizeInSquareFeet: [0],
-      lease: [''],
-      outside: [null],
+      tenure: [''],
+      outsideSpace: [null],
       parking: [null],
       features: [null],
       attendees: [null]
@@ -108,7 +118,7 @@ export class ValuationDetailEditComponent implements OnInit {
     }
   }
 
-  createNewSigner(event){
+  createNewSigner(event) {
 
   }
 

@@ -58,6 +58,10 @@ export interface DropdownListInfo {
   subAreas: InfoDetail[];
   leadTypes: InfoDetail[];
   viewingArrangements: InfoDetail[];
+  tenures: InfoDetail[];
+  propertyFeatures: InfoDetail[];
+  parkings: InfoDetail[];
+  outsideSpaces: InfoDetail[];
 }
 
 export interface InfoDetail {
