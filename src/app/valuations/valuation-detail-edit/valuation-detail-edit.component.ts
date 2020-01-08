@@ -108,6 +108,10 @@ export class ValuationDetailEditComponent implements OnInit {
     }
   }
 
+  createNewSigner(event){
+
+  }
+
   saveValuation() {
 
   }

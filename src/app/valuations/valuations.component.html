@@ -21,10 +21,9 @@
               (selectItem)="suggestionSelected($event)" formControlName="searchTerm">
           </div>
           <div class="col-sm form-group">
-            <label class="small" for="dateFrom">Date</label>
-            <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
-              [bsConfig]="{showWeekNumbers:false, customTodayClass: 'font-weight-bold'}" [(bsValue)]="date"
-              value="{{ date | date:'dd/MM/yyyy'}}" bsDatepicker formControlName="date" >
+            <label class="small" for="date">Date</label>
+            <input type="text" id="date" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
+              [bsConfig]="{showWeekNumbers:false,  dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}" bsDatepicker formControlName="date" >
           </div>
           <div class="col-sm form-group">
             <label class="small" for="office">Status</label>
