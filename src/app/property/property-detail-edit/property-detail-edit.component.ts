@@ -223,9 +223,10 @@ export class PropertyDetailEditComponent implements OnInit {
       this.propertyForm.updateValueAndValidity();
     }
     if (this.lastKnownPerson) {
-      this._router.navigate(['/property-centre/detail', property.propertyId, 'edit'], { queryParams: { leadId: this.leadId, personId: this.personId, lastKnownPerson: JSON.stringify(this.lastKnownPerson) } });
+      this._router.navigate(['/property-centre/detail', property.propertyId, 'edit'],
+        { queryParams: { leadId: this.leadId, personId: this.personId, lastKnownPerson: JSON.stringify(this.lastKnownPerson) } });
     } else {
-      this._router.navigate(['/property-centre/detail', property.propertyId, 'edit']);
+      this._router.navigate(['/property-centre/detail', property.propertyId]);
     }
   }
 
