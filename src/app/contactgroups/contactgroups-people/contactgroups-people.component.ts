@@ -86,6 +86,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   existingCompanyId: number;
   existingCompanyDetails: Company;
   isNewAddress: boolean;
+  signer: string;
   get dataNote() {
     if (this.contactGroupDetails) {
       return {
@@ -195,6 +196,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.isSigner = params['isSigner'] || false;
         this.isExistingCompany = params['isExistingCompany'] || false;
         this.existingCompanyId = params['existingCompanyId'] || 0;
+        this.signer =  params['signer'] || '';
         if (this.isExistingCompany) {
           this.isOffCanvasVisible = true;
         }

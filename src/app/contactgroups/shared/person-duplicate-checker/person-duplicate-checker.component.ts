@@ -20,6 +20,7 @@ import { debounceTime } from 'rxjs/operators';
 export class PersonDuplicateCheckerComponent implements OnInit, OnChanges {
   @Input() contactGroupDetails: ContactGroup;
   @Input() isOffCanvasVisible: boolean;
+  @Input() searchTerm: string;
   @Output() addedPersonDetails = new EventEmitter<Person>();
   @Output() selectedPerson = new EventEmitter<Person>();
   @Output() isCanvasHidden = new EventEmitter<boolean>();
@@ -45,10 +46,13 @@ export class PersonDuplicateCheckerComponent implements OnInit, OnChanges {
     this.personFinderForm = this.fb.group({
       firstName: [''],
       lastName: [''],
-      fullName: [''],
+      fullName: [this.searchTerm],
       emailAddress: [''],
       phoneNumber: ['']
     });
+    if(this.searchTerm) {
+      this.findPotentialDuplicatePerson(this.personFinderForm.value);
+    }
     this.personFinderForm.valueChanges
       .pipe(debounceTime(750))
       .subscribe(data => {
