@@ -83,7 +83,6 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
         this.currentStaffMember = data;
 
         this.leadSearchInfo = this.getSearchInfo(true);
-        console.log('here not happy', this.leadSearchInfo)
       }
     });
 

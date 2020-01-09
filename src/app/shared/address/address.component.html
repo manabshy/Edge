@@ -24,11 +24,11 @@
             class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your
             score</span></small>
       </div>
-      <div class="off-canvas" [hidden]="!foundAddress" (click)="foundAddress = null">
+      <div class="off-canvas" [hidden]="!foundAddress" (click)="hideOffCanvas()">
         <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
           <h4 class="page-title text-left pt-3">
             Address lookup
-            <button type="button" class="close mr-2" aria-label="Close" (click)="foundAddress = null">
+            <button type="button" class="close mr-2" aria-label="Close" (click)="hideOffCanvas()">
               <span aria-hidden="true">&times;</span>
             </button>
           </h4>
