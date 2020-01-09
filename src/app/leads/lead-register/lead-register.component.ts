@@ -169,8 +169,8 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   private setupLeadRegisterForm() {
     this.leadRegisterForm = this.fb.group({
       ownerId: this.currentStaffMember ? this.currentStaffMember.staffMemberId : null,
-      officeId: null,
-      leadTypeId: null,
+      officeId: 0,
+      leadTypeId: 0,
       includeClosedLeads: false,
       dateFrom: null,
       dateTo: null,

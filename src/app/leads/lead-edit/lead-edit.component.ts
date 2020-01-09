@@ -70,6 +70,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   isNextChaseDateChanged = false;
   isLeadMarkedAsClosed: boolean;
   isValidatorCleared: boolean;
+  selectedLeadTypeId: number;
   get nextChaseDateControl() {
     return this.leadEditForm.get('nextChaseDate') as FormControl;
   }
@@ -87,6 +88,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
   ngOnInit() {
     AppUtils.parentRoute = AppUtils.prevRoute;
+    this.selectedLeadTypeId = +this.route.snapshot.queryParamMap.get('leadTypeId');
     this.route.params.subscribe(params => {
       this.leadId = +params['leadId'] || 0;
       if (this.leadId) {
@@ -181,7 +183,13 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
   getLeadIds(leadId: number) {
     console.log('leadId', leadId);
-    const leadSearchInfo = { startLeadId: leadId } as LeadSearchInfo;
+    const leadSearchInfo = {
+      startLeadId: leadId,
+      leadTypeId: this.selectedLeadTypeId ? this.selectedLeadTypeId : 0,
+      includeClosedLeads: false,
+      includeUnassignedLeadsOnly: false
+    } as LeadSearchInfo;
+
     this.leadsService.getLeadIds(leadSearchInfo).subscribe(result => {
       this.leadIds = result;
       this.currentLeadIndex = this.leadIds.indexOf(leadSearchInfo.startLeadId);
@@ -445,7 +453,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     if (url.indexOf('edit/' + id) === -1) {
       id = 0;
     }
-    if (url.indexOf('?') >= 0) {
+    if (url.indexOf('?') >= 0 && this.isNewLead) {
       url = url.substring(0, url.indexOf('?'));
       url = url.replace('edit/' + id, 'edit/' + lead.leadId);
       this.location.replaceState(url);

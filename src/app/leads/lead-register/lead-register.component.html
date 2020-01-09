@@ -111,7 +111,7 @@
     [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"
     (scrolled)="onScrollDown()">
   </div>
-    <a [routerLink]="areLeadsAssignable ? null : ['edit', lead?.leadId]" (click)="selectLeadForAssignment($event, lead)"
+    <a [routerLink]="areLeadsAssignable ? null : ['edit', lead?.leadId]" [queryParams]="{leadTypeId: lead?.leadTypeId}" (click)="selectLeadForAssignment($event, lead)"
       class="list-group-item list-group-item-action" *ngFor="let lead of filteredLeads; let i = index;"
       [ngClass]="{'list-group-item-info': selectedLeadIndex(lead) >= 0}">
       <div class="row align-items-center">
