@@ -22,7 +22,7 @@
     </div>
   </div>
 </div>
-<form class="p-0" [formGroup]="leadRegisterForm" *ngIf="showFilterOptions">
+<form class="p-0" [formGroup]="leadRegisterForm" *ngIf="showFilterOptions" autocompleteOff>
   <div class="row align-items-center">
     <div class="col-sm">
       <div class="row">
@@ -107,6 +107,10 @@
         <div class="col-sm"><strong>Chaser</strong></div>
       </div>
     </div>
+    <div *ngIf="leads" class="search-results" infiniteScroll [infiniteScrollDistance]="5"
+    [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"
+    (scrolled)="onScrollDown()">
+  </div>
     <a [routerLink]="areLeadsAssignable ? null : ['edit', lead?.leadId]" (click)="selectLeadForAssignment($event, lead)"
       class="list-group-item list-group-item-action" *ngFor="let lead of filteredLeads; let i = index;"
       [ngClass]="{'list-group-item-info': selectedLeadIndex(lead) >= 0}">

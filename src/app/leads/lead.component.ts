@@ -2,11 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { LeadsService } from './shared/leads.service';
 import { StaffMemberService } from '../core/services/staff-member.service';
 import { StaffMember } from '../shared/models/staff-member';
-import { getLocaleDayNames } from '@angular/common';
 import { Lead, LeadSearchInfo } from './shared/lead';
-import { InfoDetail } from '../core/services/info.service';
 import * as _ from 'lodash';
-import { AppUtils } from '../core/shared/utils';
 
 const PAGE_SIZE = 20;
 @Component({
@@ -28,7 +25,7 @@ export class LeadComponent implements OnInit {
 
   ngOnInit() {
 
-    this.leadService.leadSearchTermChanges$.subscribe(newSearchTerm =>this.searchTerm = newSearchTerm)
+    this.leadService.leadSearchTermChanges$.subscribe(newSearchTerm => this.searchTerm = newSearchTerm)
     // Current Staff Member
     this.staffMemberService.getCurrentStaffMember().subscribe(data => {
       if (data) {
@@ -49,7 +46,6 @@ export class LeadComponent implements OnInit {
         };
 
         this.getLeads(this.leadSearchInfo);
-        console.log('calling from here 1', this.leadSearchInfo.leadSearchTerm);
       }
     });
 
@@ -78,11 +74,7 @@ export class LeadComponent implements OnInit {
           this.leads = result;
         }
       }
-
-      if (result && !result.length) {
-        this.bottomReached = true;
-        console.log('bottom reached', this.bottomReached);
-      }
+      result && !result.length ? this.bottomReached = true : this.bottomReached = false;
 
     }, error => {
       this.leads = [];
