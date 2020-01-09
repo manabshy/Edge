@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2, Input, Output, EventEmitter, OnChanges } from '@angular/core';
+import { Component, OnInit, Renderer2, Input, Output, EventEmitter, OnChanges, ElementRef } from '@angular/core';
 import { SharedService } from '../../core/services/shared.service';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AppConstants } from '../../core/shared/app-constants';
@@ -58,6 +58,7 @@ export class AddressComponent implements OnInit, OnChanges {
     private storage: StorageMap,
     private fb: FormBuilder,
     private renderer: Renderer2,
+    private _host: ElementRef
   ) { }
 
   ngOnInit() {
@@ -149,13 +150,18 @@ export class AddressComponent implements OnInit, OnChanges {
         }
       });
       this.foundAddress = data;
+      if(this.foundAddress) {
+        const closestParent = this._host.nativeElement.closest('.off-canvas-content');
+        closestParent.scrollTo(0,0);
+        this.renderer.addClass(closestParent, 'no-scroll');
+      }
     });
   }
 
   retrieveAddress(id: string) {
     if (this.foundAddress) {
       this.addressService.getAddress(id).subscribe(data => {
-        this.foundAddress = null;
+        this.hideOffCanvas();
         this.retrievedAddresses = data;
         const retrievedAddress = this.retrievedAddresses.Items[0];
         const keys = Object.keys(retrievedAddress);
@@ -211,6 +217,12 @@ export class AddressComponent implements OnInit, OnChanges {
       });
     }
     console.log('form', this.addressForm);
+  }
+
+  hideOffCanvas() {
+    this.foundAddress = null;
+    const closestParent = this._host.nativeElement.closest('.off-canvas-content');
+    this.renderer.removeClass(closestParent, 'no-scroll');
   }
 
   private hasNumber(number: string) {
