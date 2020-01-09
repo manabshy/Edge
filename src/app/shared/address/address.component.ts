@@ -152,8 +152,10 @@ export class AddressComponent implements OnInit, OnChanges {
       this.foundAddress = data;
       if(this.foundAddress) {
         const closestParent = this._host.nativeElement.closest('.off-canvas-content');
-        closestParent.scrollTo(0,0);
-        this.renderer.addClass(closestParent, 'no-scroll');
+        if(closestParent) {
+          closestParent.scrollTo(0,0);
+          this.renderer.addClass(closestParent, 'no-scroll');
+        }
       }
     });
   }
@@ -222,7 +224,9 @@ export class AddressComponent implements OnInit, OnChanges {
   hideOffCanvas() {
     this.foundAddress = null;
     const closestParent = this._host.nativeElement.closest('.off-canvas-content');
-    this.renderer.removeClass(closestParent, 'no-scroll');
+    if(closestParent) {
+      this.renderer.removeClass(closestParent, 'no-scroll');
+    }
   }
 
   private hasNumber(number: string) {
