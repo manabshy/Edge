@@ -425,7 +425,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.contactGroupBackUp();
     let companyName;
     if (newCompany) {
-      companyName = this.companyFinderForm.get('selectedCompany').value;
+      companyName = this.companyFinderForm.get('companyName').value;
     }
     this._router.navigate(['/company-centre/detail', id, 'edit'],
       { queryParams: { isNewCompany: newCompany, isEditingSelectedCompany: true, companyName: companyName } });
