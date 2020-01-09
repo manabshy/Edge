@@ -404,6 +404,6 @@
   </form>
 </div>
 <app-person-duplicate-checker *ngIf="isOffCanvasVisible" [isOffCanvasVisible]="isOffCanvasVisible"
-  [contactGroupDetails]="contactGroupDetails" (addedPersonDetails)="getAddedPersonDetails($event)"
+  [contactGroupDetails]="contactGroupDetails" [searchTerm]="signer" (addedPersonDetails)="getAddedPersonDetails($event)"
   (selectedPerson)="getSelectedPerson($event)" (isCanvasHidden)="resetCanvasFlag($event)">
 </app-person-duplicate-checker>
