@@ -583,18 +583,20 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
 
-  getAddedPersonDetails(person: Person) {
-    if (person) {
-      person.isNewPerson = true;
-      this.addedPerson = person;
+  getAddedPersonDetails(personEmitter: any) {
+    if (personEmitter) {
+      personEmitter.person.isNewPerson = true;
+      this.addedPerson = personEmitter.person;
       if (this.contactGroupDetails && this.contactGroupDetails.contactPeople.length || this.isExistingCompany) {
-        this.collectSelectedPeople(person);
+        this.collectSelectedPeople(personEmitter.person);
       } else {
         this.contactGroupDetails = {} as ContactGroup;
         const people = this.contactGroupDetails.contactPeople = [];
-        people.push(person);
+        people.push(personEmitter.person);
         this.setSalutation();
-        this.saveContactGroup();
+        if(!personEmitter.otherPersonToAdd) {
+          this.saveContactGroup();
+        }
       }
     }
   }

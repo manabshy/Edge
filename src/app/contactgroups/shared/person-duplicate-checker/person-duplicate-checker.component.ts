@@ -1,6 +1,6 @@
 import { Component, OnInit, Renderer2, Input, Output, EventEmitter, OnChanges, ɵConsole } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { PotentialDuplicateResult, ContactGroup } from '../contact-group';
+import { PotentialDuplicateResult, ContactGroup, ContactType } from '../contact-group';
 import { BasicPerson, Person } from 'src/app/shared/models/person';
 import { ContactGroupsService } from '../contact-groups.service';
 import { CompanyService } from 'src/app/company/shared/company.service';
@@ -24,6 +24,7 @@ export class PersonDuplicateCheckerComponent implements OnInit, OnChanges {
   @Output() selectedPerson = new EventEmitter<Person>();
   @Output() isCanvasHidden = new EventEmitter<boolean>();
   // selectedPerson: Person;
+  isCompanyContactGroup: boolean = false;
   personFinderForm: FormGroup;
   potentialDuplicatePeople: PotentialDuplicateResult;
   selectedPersonId: number;
@@ -79,6 +80,9 @@ export class PersonDuplicateCheckerComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
+    if(this.contactGroupDetails.contactType === ContactType.CompanyContact){
+      this.isCompanyContactGroup = true;
+    }
     if (this.isOffCanvasVisible) {
       this.isPersonCanvasVisible = this.isOffCanvasVisible;
     }
@@ -204,9 +208,10 @@ export class PersonDuplicateCheckerComponent implements OnInit, OnChanges {
     this.renderer.removeClass(document.body, 'no-scroll');
   }
 
-  backToFinder(event) {
-    if (event) {
-      this.isCreateNewPerson = false;
+  backToFinder(otherPersonToAdd) {
+    this.isCreateNewPerson = false;
+    if (otherPersonToAdd) {
+      this.personFinderForm.reset();
     }
   }
 }

@@ -102,7 +102,7 @@
     <ng-template #createNewPerson>
       <app-contactgroups-detail-edit (addedPersonDetails)="getAddedPersonDetails($event)"
         (hideCanvas)="hideCanvas($event)"
-        (backToFinder)="backToFinder($event)" *ngIf="isCreateNewPerson && newPerson" [basicPerson]="newPerson">
+        (backToFinder)="backToFinder($event)" *ngIf="isCreateNewPerson && newPerson" [basicPerson]="newPerson" [isCompanyContactGroup]="isCompanyContactGroup">
       </app-contactgroups-detail-edit>
     </ng-template>
   </div>
