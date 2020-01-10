@@ -1,4 +1,4 @@
-import { Property } from 'src/app/property/shared/property';
+import { Property, PropertyInfo } from 'src/app/property/shared/property';
 import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
 import { DiaryEvent } from 'src/app/diary/shared/diary';
 import { Person } from 'src/app/shared/models/person';
@@ -9,9 +9,9 @@ export interface ValuationInfo {
   reason: string;
   timeFrame: string;
   marketChat: string;
-  propertyNotes: string;
+  generalNotes: string;
 }
-export interface Valuation extends ValuationInfo{
+export interface Valuation extends ValuationInfo, PropertyInfo{
   valuationEventId: number;
   valuationStatus: number;
   valuationStatusLabel: string;

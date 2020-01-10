@@ -6,11 +6,11 @@ export interface PropertyInfo {
   bedrooms?: number;
   bathrooms?: number;
   receptions?: number;
-  sizeInSquareFeet?: number;
-  tenure: string;
+  sqFt?: number;
+  tenureId: number;
   outsideSpace: string;
   parking: string;
-  features: string;
+  propertyFeature: string;
 }
 export interface Property extends PropertyInfo {
   propertyId: number;

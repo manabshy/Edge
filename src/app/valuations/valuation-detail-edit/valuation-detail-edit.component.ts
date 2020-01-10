@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Property, MinBedrooms, LeaseTypes } from 'src/app/property/shared/property';
+import { Property, MinBedrooms } from 'src/app/property/shared/property';
 import { Signer } from 'src/app/contactgroups/shared/contact-group';
 import { ValuationService } from '../shared/valuation.service';
 import { ActivatedRoute } from '@angular/router';
@@ -27,10 +27,6 @@ export class ValuationDetailEditComponent implements OnInit {
 
   get rooms() {
     return MinBedrooms;
-  }
-
-  get leaseTypes() {
-    return LeaseTypes;
   }
 
   staffMembers = [
@@ -68,8 +64,8 @@ export class ValuationDetailEditComponent implements OnInit {
       bedrooms: [0],
       bathrooms: [0],
       receptions: [0],
-      sizeInSquareFeet: [0],
-      tenure: [''],
+      sqFoot: [0],
+      tenureId: [0],
       outsideSpace: [null],
       parking: [null],
       features: [null],
@@ -91,18 +87,27 @@ export class ValuationDetailEditComponent implements OnInit {
   }
 
   populateForm(valuation: Valuation) {
+    console.log('data to populate', valuation)
     if (this.valuationForm) {
       this.valuationForm.reset();
     }
     if (valuation) {
       this.valuationForm.patchValue({
-        // reason: valuation.reason,
-        // period: valuation.period,
-        // marketChat: valuation.marketChat,
-        // propertyNotes: valuation.propertyNotes,
-        valuation
+        reason: valuation.reason,
+        period: valuation.timeFrame,
+        marketChat: valuation.marketChat,
+        propertyNotes: valuation.generalNotes,
+        bedrooms: valuation.bedrooms,
+        bathrooms: valuation.bathrooms,
+        receptions: valuation.receptions,
+        tenureId: valuation.tenureId,
+        sqFoot: valuation.sqFt,
+        outsideSpace: valuation.outsideSpace,
+        parking: valuation.parking,
+        features: valuation.propertyFeature
       })
     }
+    console.log('form values', this.valuationForm.value)
   }
 
   getSelectedProperty(property: Property) {
