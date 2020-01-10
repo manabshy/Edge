@@ -68,6 +68,7 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
+import { CalendarSharedModule } from './calendar-shared/calendar-shared.module';
 
 const externalModulesImports = [
   InfiniteScrollModule,
@@ -162,6 +163,7 @@ const externalModulesExports = [
     DashboardModule,
     LeaderboardModule,
     DiaryModule,
+    CalendarSharedModule,
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],

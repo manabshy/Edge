@@ -11,12 +11,12 @@ import {
   endOfDay,
   format
 } from 'date-fns';
-import { CustomDateFormatter } from '../shared/custom-date-formatter.provider';
+import { CustomDateFormatter } from '../custom-date-formatter.provider';
 import { Observable } from 'rxjs';
-import { DiaryEvent, BasicEventRequest, Staff, DiaryProperty } from '../shared/diary';
-import { DiaryEventService } from '../shared/diary-event.service';
+import { DiaryEvent, BasicEventRequest, Staff, DiaryProperty } from '../../diary/shared/diary';
+import { DiaryEventService } from '../../diary/shared/diary-event.service';
 import { tap, map } from 'rxjs/operators';
-import { CustomEventTitleFormatter } from '../shared/custom-event-title-formatter.provider';
+import { CustomEventTitleFormatter } from '../custom-event-title-formatter.provider';
 import * as _ from 'lodash';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { InfoDetail, DropdownListInfo } from 'src/app/core/services/info.service';
