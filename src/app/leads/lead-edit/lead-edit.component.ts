@@ -67,9 +67,10 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   isPropertyRemoved: boolean;
   isOwnerChanged: boolean;
   isLeadClosed: boolean;
-  isNextChaseDateChanged: boolean;
+  isNextChaseDateChanged = false;
   isLeadMarkedAsClosed: boolean;
   isValidatorCleared: boolean;
+  selectedLeadTypeId: number;
   get nextChaseDateControl() {
     return this.leadEditForm.get('nextChaseDate') as FormControl;
   }
@@ -87,7 +88,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
   ngOnInit() {
     AppUtils.parentRoute = AppUtils.prevRoute;
-    console.log('lead note component', this.note);
+    this.selectedLeadTypeId = +this.route.snapshot.queryParamMap.get('leadTypeId');
     this.route.params.subscribe(params => {
       this.leadId = +params['leadId'] || 0;
       if (this.leadId) {
@@ -103,13 +104,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.init();
 
     this.leadEditForm.valueChanges.subscribe(data => {
-      console.log('all changes', data);
-      if (this.lead) {
-        if (!isEqual(data.nextChaseDate, this.lead.nextChaseDate)) {
-          this.isNextChaseDateChanged = true;
-          console.log('next date change', this.isNextChaseDateChanged, 'changes', data);
-        }
-      }
       data.closeLead ? this.isLeadMarkedAsClosed = true : this.isLeadMarkedAsClosed = false;
     });
   }
@@ -189,7 +183,13 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
   getLeadIds(leadId: number) {
     console.log('leadId', leadId);
-    const leadSearchInfo = { startLeadId: leadId } as LeadSearchInfo;
+    const leadSearchInfo = {
+      startLeadId: leadId,
+      leadTypeId: this.selectedLeadTypeId ? this.selectedLeadTypeId : 0,
+      includeClosedLeads: false,
+      includeUnassignedLeadsOnly: false
+    } as LeadSearchInfo;
+
     this.leadsService.getLeadIds(leadSearchInfo).subscribe(result => {
       this.leadIds = result;
       this.currentLeadIndex = this.leadIds.indexOf(leadSearchInfo.startLeadId);
@@ -236,7 +236,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   private patchLeadValues(lead: Lead) {
-    console.log('values to patch here', lead);
     if (lead) {
       this.leadEditForm.patchValue({
         ownerId: lead.ownerId,
@@ -276,7 +275,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   onOwnerChanged(event: any) {
-    console.log('new owner here...', event);
     this.isOwnerChanged = true;
     if (event && event.item != null || event) {
       let ownerId = 0;
@@ -303,6 +301,14 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       nextChaseDate: ['', [Validators.required]],
       closeLead: false
     });
+  }
+
+  onChaseDateChange(newChaseDate: Date) {
+    if (this.lead && this.lead.nextChaseDate) {
+      if (!isEqual(newChaseDate, this.lead.nextChaseDate)) {
+        this.isNextChaseDateChanged = true;
+      }
+    }
   }
 
   closeLeadChanged(lead: Lead) {
@@ -366,6 +372,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       if (this.leadEditForm.dirty || this.isNoteFormDirty || this.isPropertyAssociated || this.isPropertyRemoved || this.isOwnerChanged) {
         const lead = { ...this.lead, ...this.leadEditForm.value };
         const isNoteRequired = this.isLeadMarkedAsClosed || this.isNewLead || this.isNextChaseDateChanged;
+
         if ((isNoteRequired) && (this.note.text === '' || this.note.text == null)) {
           this.noteRequiredWarning = 'Note is required.';
           setTimeout(() => {
@@ -437,13 +444,16 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     }
     this.isUpdateComplete = true;
     this.leadsService.isLeadUpdated(true);
+    if (this.isNextChaseDateChanged) {
+      this.isNextChaseDateChanged = false;
+    }
 
     let url = this.router.url;
     let id = this.leadId;
     if (url.indexOf('edit/' + id) === -1) {
       id = 0;
     }
-    if (url.indexOf('?') >= 0) {
+    if (url.indexOf('?') >= 0 && this.isNewLead) {
       url = url.substring(0, url.indexOf('?'));
       url = url.replace('edit/' + id, 'edit/' + lead.leadId);
       this.location.replaceState(url);

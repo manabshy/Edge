@@ -86,6 +86,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   existingCompanyId: number;
   existingCompanyDetails: Company;
   isNewAddress: boolean;
+  signer: string;
   get dataNote() {
     if (this.contactGroupDetails) {
       return {
@@ -195,6 +196,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.isSigner = params['isSigner'] || false;
         this.isExistingCompany = params['isExistingCompany'] || false;
         this.existingCompanyId = params['existingCompanyId'] || 0;
+        this.signer =  params['signer'] || '';
         if (this.isExistingCompany) {
           this.isOffCanvasVisible = true;
         }
@@ -423,7 +425,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.contactGroupBackUp();
     let companyName;
     if (newCompany) {
-      companyName = this.companyFinderForm.get('selectedCompany').value;
+      companyName = this.companyFinderForm.get('companyName').value;
     }
     this._router.navigate(['/company-centre/detail', id, 'edit'],
       { queryParams: { isNewCompany: newCompany, isEditingSelectedCompany: true, companyName: companyName } });
@@ -583,18 +585,20 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
 
-  getAddedPersonDetails(person: Person) {
-    if (person) {
-      person.isNewPerson = true;
-      this.addedPerson = person;
+  getAddedPersonDetails(personEmitter: any) {
+    if (personEmitter) {
+      personEmitter.person.isNewPerson = true;
+      this.addedPerson = personEmitter.person;
       if (this.contactGroupDetails && this.contactGroupDetails.contactPeople.length || this.isExistingCompany) {
-        this.collectSelectedPeople(person);
+        this.collectSelectedPeople(personEmitter.person);
       } else {
         this.contactGroupDetails = {} as ContactGroup;
         const people = this.contactGroupDetails.contactPeople = [];
-        people.push(person);
+        people.push(personEmitter.person);
         this.setSalutation();
-        this.saveContactGroup();
+        if(!personEmitter.otherPersonToAdd) {
+          this.saveContactGroup();
+        }
       }
     }
   }

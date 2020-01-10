@@ -16,7 +16,7 @@ export interface Lead {
     person: string;
     ownerId: number;
     owner: string;
-    nextChaseDate?: any;
+    nextChaseDate?: Date;
     dateClosed?: any;
     closedById?: any;
     closedBy?: any;

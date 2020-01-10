@@ -35,7 +35,7 @@
           </div>
         </div>
         <a class="small mb-3" [routerLink]="['/contact-centre/detail/0/people', 0]" *ngIf="noSuggestions"
-          [queryParams]="{isNewContactGroup: true, isSigner: true}" (click)="createNewSigner()">
+          [queryParams]="{isNewContactGroup: true, isSigner: true, signer: signerFinderForm.get('searchTerm').value}" (click)="createNewSigner()">
             <i class="fas fa-plus mr-2"></i> New Contact Group
         </a>
         <div class="off-canvas" [hidden]="!signers" (click)="signers = null">
@@ -71,7 +71,7 @@
                 <ng-template #givenLabel2>{{label}}</ng-template> found
               </div>
               <a [routerLink]="['/contact-centre/detail/0/people', 0]"
-                [queryParams]="{isNewContactGroup: true, isSigner: true}" (click)="createNewSigner()"
+                [queryParams]="{isNewContactGroup: true, isSigner: true, signer: signerFinderForm.get('searchTerm').value}" (click)="createNewSigner()"
                 class="list-group-item list-group-item-action text-center py-4">
                 <span class="btn-link">
                   <i class="fas fa-plus mr-2"></i> New Contact Group

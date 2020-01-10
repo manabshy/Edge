@@ -24,11 +24,12 @@ import { StorageMap } from '@ngx-pwa/local-storage';
   styleUrls: ['./contactgroups-detail-edit.component.scss']
 })
 export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChecked {
-  @Output() addedPersonDetails = new EventEmitter<Person>();
+  @Output() addedPersonDetails = new EventEmitter<any>();
   @Output() addedPersonId = new EventEmitter<number>();
   @Output() hideCanvas = new EventEmitter<boolean>();
   @Output() backToFinder = new EventEmitter<boolean>();
   @Input() basicPerson: BasicPerson;
+  @Input() isCompanyContactGroup: boolean = false;
   prefToggleStatus = false;
   countries: any;
   titles: any;
@@ -52,6 +53,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
   errorMessage: WedgeError;
   formArraryErrors: string;
   isSubmitting = false;
+  isSubmittingAndAdd = false;
   backToAddressesList = false;
   enterAddressManually = false;
   isEditingSelectedPerson = false;
@@ -245,7 +247,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
 
   cancel() {
     if (this.basicPerson) {
-      this.backToFinder.emit(true);
+      this.backToFinder.emit(false);
     } else {
       this.sharedService.back();
     }
@@ -530,13 +532,17 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
     }
   }
 
-  savePerson() {
+  savePerson(otherPersonToAdd) {
     this.errorMessage = null;
     this.removeSMSLandlines();
     this.removeOthers();
     this.logValidationErrors(this.personForm, true);
     if (this.personForm.valid) {
-      this.isSubmitting = true;
+      if(otherPersonToAdd){
+        this.isSubmittingAndAdd = true;
+      } else {
+        this.isSubmitting = true;
+      }
       if (this.personForm.dirty) {
         const person = { ...this.personDetails, ...this.personForm.value };
         if (!person.titleId) {
@@ -544,34 +550,37 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
         }
         // person.address.addressLines = this.removeDuplicateAdressLines();
         if (!this.basicPerson) {
-          this.contactGroupService.updatePerson(person).subscribe(res => this.onSaveComplete(res.result),
+          this.contactGroupService.updatePerson(person).subscribe(res => this.onSaveComplete(res.result, otherPersonToAdd),
             (error: WedgeError) => {
               this.errorMessage = error;
               this.sharedService.showError(this.errorMessage);
               this.isSubmitting = false;
+              this.isSubmittingAndAdd = false;
             });
         } else {
           this.contactGroupService.addPerson(person).subscribe((data) => {
             this.newPersonId = data.personId;
-            this.onSaveComplete(data);
+            this.onSaveComplete(data, otherPersonToAdd);
           },
             (error: WedgeError) => {
               this.errorMessage = error;
               this.sharedService.showError(this.errorMessage);
               this.isSubmitting = false;
+              this.isSubmittingAndAdd = false;
             });
         }
       } else {
-        this.onSaveComplete(this.personDetails);
+        this.onSaveComplete(this.personDetails, otherPersonToAdd);
       }
     } else {
       this.errorMessage = {} as WedgeError;
       this.errorMessage.displayMessage = 'Please correct validation errors';
     }
   }
-  onSaveComplete(person?: Person) {
+  onSaveComplete(person?: Person, otherPersonToAdd?: boolean) {
     this.personForm.markAsPristine();
     this.isSubmitting = false;
+    this.isSubmittingAndAdd = false;
     this.errorMessage = null;
     this.toastr.success('Person successfully saved');
     if (this.isEditingSelectedPerson && AppUtils.holdingSelectedPeople) {
@@ -585,9 +594,15 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
     }
     if (this.newPersonId) {
       this.addNewPerson(this.newPersonId);
-      this.addedPersonDetails.emit(person);
-      this.backToFinder.emit(true);
-      this.makeCanvasInvisible(this.isOffCanvasVisible);
+      const personEmitter = {
+        person: person,
+        otherPersonToAdd: otherPersonToAdd
+      }
+      this.addedPersonDetails.emit(personEmitter);
+      this.backToFinder.emit(otherPersonToAdd);
+      if(!personEmitter.otherPersonToAdd) {
+        this.makeCanvasInvisible(this.isOffCanvasVisible);
+      }
     } else {
       this.sharedService.back();
     }
@@ -600,7 +615,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
   }
 
   canDeactivate(): boolean {
-    if (this.personForm.dirty && !this.isSubmitting) {
+    if (this.personForm.dirty && !this.isSubmitting && !this.isSubmittingAndAdd) {
       return false;
     }
     return true;
