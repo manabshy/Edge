@@ -64,18 +64,18 @@
                     </div>
                   </div>
                 </app-subnav-item>
+                <div class="list-group-item text-center" *ngIf="!properties?.length">
+                  No <ng-container *ngIf="!label; else givenLabel2 ">Property</ng-container>
+                  <ng-template #givenLabel2>{{label}}</ng-template> found
+                </div>
+                <a [routerLink]="['/property-centre/detail/0', 'edit']" [queryParams]="{isNewProperty: true}"
+                  (click)="CreateNewProperty()" class="list-group-item list-group-item-action text-center py-4">
+                  <span class="btn-link">
+                    <i class="fas fa-plus mr-2"></i> Add Property
+                  </span>
+                </a>
               </ng-container>
             </app-subnav>
-            <div class="list-group-item text-center" *ngIf="!properties?.length">
-              No <ng-container *ngIf="!label; else givenLabel2 ">Property</ng-container>
-              <ng-template #givenLabel2>{{label}}</ng-template> found
-            </div>
-            <a [routerLink]="['/property-centre/detail/0', 'edit']" [queryParams]="{isNewProperty: true}"
-              (click)="CreateNewProperty()" class="list-group-item list-group-item-action text-center py-4">
-              <span class="btn-link">
-                <i class="fas fa-plus mr-2"></i> Add Property
-              </span>
-            </a>
           </div>
         </div>
       </div>
