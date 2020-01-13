@@ -134,6 +134,7 @@
       [tooltipTemplate]="customTooltip"
       [weekStartsOn]="weekStartsOn"
       [daysInWeek]="daysInWeek"
+      (hourSegmentClicked)="getClickedDate($event.date)"
     >
     </mwl-calendar-week-view>
     <mwl-calendar-day-view
@@ -142,6 +143,7 @@
       [events]="events"
       (beforeViewRender)="beforeDayViewRender($event)"
       [tooltipTemplate]="customTooltip"
+      (hourSegmentClicked)="getClickedDate($event.date)"
     >
     </mwl-calendar-day-view>
   </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { CalendarEvent, CalendarDateFormatter, CalendarView, CalendarWeekViewBeforeRenderEvent, CalendarDayViewBeforeRenderEvent, DAYS_OF_WEEK, CalendarEventTitleFormatter, CalendarMonthViewBeforeRenderEvent } from 'angular-calendar';
 import {
   isSameMonth,
@@ -36,12 +36,13 @@ import { InfoDetail, DropdownListInfo } from 'src/app/core/services/info.service
   ]
 })
 export class CalendarComponent implements OnInit {
+  @Output() selectedDate = new EventEmitter<any>();
   view: CalendarView | 'month' | 'week' | 'threeDays' | 'day' = CalendarView.Week;
   daysInWeek;
-
   viewDate: Date = new Date();
-
   weekStartsOn = DAYS_OF_WEEK.MONDAY;
+  clickedDate: Date;
+  clickedColumn: number;
 
   events$: Observable<Array<CalendarEvent<{ diaryEvent: DiaryEvent }>>>;
   myEvents$: Observable<Array<CalendarEvent<{ diaryEvent: DiaryEvent }>>>;
@@ -137,13 +138,7 @@ export class CalendarComponent implements OnInit {
       );
   }
 
-  dayClicked({
-    date,
-    events
-  }: {
-    date: Date;
-    events: Array<CalendarEvent<{ diaryEvent: DiaryEvent }>>;
-  }): void {
+  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
       if (
         (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
@@ -152,8 +147,15 @@ export class CalendarComponent implements OnInit {
         this.activeDayIsOpen = false;
       } else {
         this.activeDayIsOpen = true;
-        this.viewDate = date;
       }
+      this.viewDate = date;
+    }
+  }
+
+  getClickedDate(date: Date) {
+    if (date) {
+      this.selectedDate.emit(date);
+      console.log('clicked date', date);
     }
   }
 

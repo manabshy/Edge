@@ -123,6 +123,12 @@ export class ValuationDetailEditComponent implements OnInit {
     }
   }
 
+  getSelectedDate(date: Date) {
+    if (date) {
+      console.log('selected date in val', date);
+      this.showCalendar = false;
+    }
+  }
   createNewSigner(event) {
 
   }
