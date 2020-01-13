@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input, OnChanges, ViewChild, ElementRef } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { PropertyService } from 'src/app/property/shared/property.service';
 import { Observable, EMPTY } from 'rxjs';
 import { distinctUntilChanged, switchMap, catchError, tap } from 'rxjs/operators';
@@ -16,6 +16,7 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
   @Input() label: string;
   @Input() readOnly = false;
   @Input() existingProperty: Property;
+  @Input() createdProperty: Property;
   @Output() selectedProperty = new EventEmitter<any>();
   @ViewChild('selectedPropertyInput', { static: true }) selectedPropertyInput: ElementRef;
   @ViewChild('searchPropertyInput', { static: true }) searchPropertyInput: ElementRef;
@@ -29,9 +30,11 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
   isHintVisible: boolean;
   isSearchVisible = true;
   noSuggestions = false;
-  createdProperty: Property;
   suggestions: (text$: Observable<string>) => Observable<unknown>;
 
+  get propertyAddress() {
+    return this.propertyFinderForm.get('selectedPropertyAddress') as FormControl;
+  }
 
   constructor(private propertyService: PropertyService, private fb: FormBuilder) { }
 
@@ -40,6 +43,14 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
       searchTerm: [''],
       selectedPropertyAddress: [''],
     });
+
+    // this.propertyService.newPropertyAdded$.subscribe((newProperty: Property) => {
+    //   if (newProperty) {
+    //     this.createdProperty = newProperty;
+    //     this.displayExistingProperty();
+    //     console.log('should be in finder', this.createdProperty);
+    //   }
+    // });
 
     this.suggestions = (text$: Observable<string>) =>
       text$.pipe(
@@ -56,10 +67,11 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
             }))
         )
       );
-    this.displayExistingProperty();
+      this.displayExistingProperty();
   }
 
   ngOnChanges() {
+    console.log('new property', this.createdProperty)
     this.displayExistingProperty();
   }
 
@@ -85,7 +97,7 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
         if (data) {
           console.log('selected prop', data);
           this.selectedPropertyDetails = data;
-          this.propertyFinderForm.get('selectedPropertyAddress').patchValue(data.address);
+          this.propertyAddress.patchValue(data.address);
           this.selectedProperty.emit(data);
           // setTimeout(() => {
           //   this.selectedPropertyInput.nativeElement.scrollIntoView({ block: 'center' });
@@ -95,14 +107,15 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
     }
   }
 
+
+
   displayExistingProperty() {
-    // let property: Property;
-    // property = this.existingProperty;
-    if (this.existingProperty && this.propertyFinderForm) {
-      this.propertyFinderForm.get('selectedPropertyAddress').patchValue(this.existingProperty.address);
-      this.selectedPropertyDetails = this.existingProperty;
+    let property: Property;
+    this.createdProperty ? property = this.createdProperty : property = this.existingProperty;
+    if (property && this.propertyFinderForm) {
+      this.propertyAddress.patchValue(property.address);
+      this.selectedPropertyDetails = property;
       this.isSearchVisible = false;
-      // this.selectedProperty.emit()
     }
   }
 

@@ -360,6 +360,8 @@ export class PropertyDetailEditComponent implements OnInit {
       }
     } else {
       if(this.getBack) {
+        this.propertyService.setAddedProperty(property);
+        console.log('property in edit.........xxxxxxxxx', property);
         this._location.back();
       } else {
         this._router.navigate(['/property-centre/detail', this.propertyId]);
