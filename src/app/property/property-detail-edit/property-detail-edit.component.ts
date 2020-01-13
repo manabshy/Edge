@@ -54,6 +54,7 @@ export class PropertyDetailEditComponent implements OnInit {
   lastKnownPersonParam: any;
   defaultStyle: number;
   defaultRegionId = 1;
+  searchedAddress: string;
 
   constructor(private route: ActivatedRoute,
     private _router: Router,
@@ -91,6 +92,7 @@ export class PropertyDetailEditComponent implements OnInit {
     });
     this.route.queryParams.subscribe(params => {
       this.isNewProperty = this.propertyId ? this.isNewProperty = false : params['isNewProperty'];
+      this.searchedAddress = params['searchedAddress'] || '';
       this.leadId = +params['leadId'] || 0;
       this.personId = +params['personId'] || 0;
       this.lastKnownPersonParam = params['lastKnownPerson'];

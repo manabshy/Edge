@@ -25,6 +25,7 @@ export class AddressComponent implements OnInit, OnChanges {
   @Input() companyDetails: Company;
   @Input() companyAddress: Address;
   @Input() addressError: any;
+  @Input() searchedAddress: string;
   @Output() addressDetails = new EventEmitter<any>();
   foundAddress: AddressAutoCompleteData;
   defaultCountryCode = 232;
@@ -80,7 +81,7 @@ export class AddressComponent implements OnInit, OnChanges {
     });
 
     this.addressForm = this.fb.group({
-      fullAddress: ['', Validators.required],
+      fullAddress: [this.searchedAddress, Validators.required],
       addressLines: ['', { validators: Validators.maxLength(500) }],
       countryId: this.defaultCountryCode,
       addressLine2: [''],
@@ -93,6 +94,10 @@ export class AddressComponent implements OnInit, OnChanges {
     });
     if (this.companyDetails || this.personDetails || this.propertyDetails || this.companyAddress) {
       this.populateAddressForm(this.personDetails, this.companyDetails, this.propertyDetails, this.companyAddress);
+    }
+
+    if(this.searchedAddress) {
+      this.searchAddress();
     }
 
     Object.keys(this.addressForm.controls).forEach(key => {

@@ -9,7 +9,7 @@
   <form *ngIf="propertyDetails || isNewProperty" [formGroup]="propertyForm" (ngSubmit)="saveProperty()"
     (keydown.enter)="$event.preventDefault()" autocompleteOff>
     <app-address [propertyDetails]="propertyDetails" [addressError]="formErrors.address" [isNewProperty]="isNewProperty"
-      (addressDetails)="getAddress($event)"></app-address>
+      (addressDetails)="getAddress($event)" [searchedAddress]="searchedAddress"></app-address>
     <div class="row justify-content-end">
       <div class="col-sm-10">
         <input type="hidden" id="address" class="form-control" formControlName="address">

@@ -39,7 +39,7 @@
           </div>
         </div>
         <a class="small mb-3" [routerLink]="['/property-centre/detail/0', 'edit']" *ngIf="noSuggestions"
-          [queryParams]="{isNewProperty: true}" (click)="CreateNewProperty()">
+          [queryParams]="{isNewProperty: true, searchedAddress: propertyFinderForm.get('searchTerm').value}" (click)="CreateNewProperty()">
           <i class="fas fa-plus mr-2"></i> Add Property
         </a>
         <div class="off-canvas" [hidden]="!properties" (click)="properties = null">
@@ -68,7 +68,7 @@
                   No <ng-container *ngIf="!label; else givenLabel2 ">Property</ng-container>
                   <ng-template #givenLabel2>{{label}}</ng-template> found
                 </div>
-                <a [routerLink]="['/property-centre/detail/0', 'edit']" [queryParams]="{isNewProperty: true}"
+                <a [routerLink]="['/property-centre/detail/0', 'edit']" [queryParams]="{isNewProperty: true, searchedAddress: propertyFinderForm.get('searchTerm').value}"
                   (click)="CreateNewProperty()" class="list-group-item list-group-item-action text-center py-4">
                   <span class="btn-link">
                     <i class="fas fa-plus mr-2"></i> Add Property
