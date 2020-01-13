@@ -22,7 +22,7 @@
         </div>
       </div>
     </div>
-    <div class="row" [hidden]="!isSearchVisible && existingProperty">
+    <div class="row" [hidden]="!isSearchVisible && (existingProperty || selectedPropertyDetails)">
       <ng-container *ngIf="!label; else givenLabel3 "><label for="searchTerm"
           class="col-sm-2 col-form-label col-form-label-sm">Find property</label></ng-container>
       <ng-template #givenLabel3><label for="searchTerm" class="col-sm-2 col-form-label col-form-label-sm"> Find
