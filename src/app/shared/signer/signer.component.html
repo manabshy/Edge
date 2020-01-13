@@ -9,7 +9,10 @@
         <div class="form-group d-flex d-sm-block">
           <input type="hidden" #selectedSignerInput
             id="selectedSigner" formControlName="selectedSigner">
-          <a class="small text-left mobile-btn" [routerLink]="['/contact-centre/detail/0/people/', selectedSignerDetails?.contactGroupId]">
+          <a class="small text-left mobile-btn"  *ngIf="selectedSignerDetails" [routerLink]="['/contact-centre/detail/0/people/', selectedSignerDetails?.contactGroupId]">
+            {{selectedSignerDetails?.contactNames}}
+          </a>
+          <a class="small text-left mobile-btn" *ngIf="!selectedSignerDetails">
             {{selectedSignerDetails?.contactNames}}
           </a>
           <button class="btn btn-light btn-sm ml-2" *ngIf="!readOnly" type="button" (click)="toggleSearch()">

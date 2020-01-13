@@ -9,9 +9,12 @@
         <div class="form-group d-flex d-sm-block">
           <input type="hidden" #selectedPropertyInput id="selectedPropertyAddress"
             formControlName="selectedPropertyAddress">
-          <a class="small text-left mobile-btn"
+          <a class="small text-left mobile-btn"  *ngIf="selectedPropertyDetails"
             [routerLink]="['/property-centre/detail/', selectedPropertyDetails?.propertyId]">
-            {{selectedPropertyDetails.address | formatAddress}}
+            {{selectedPropertyDetails?.address | formatAddress}}
+          </a>
+          <a class="small text-left mobile-btn" *ngIf="!selectedPropertyDetails">
+            {{selectedPropertyDetails?.address | formatAddress}}
           </a>
           <button class="btn btn-light btn-sm ml-2" *ngIf="!readOnly" type="button" (click)="toggleSearch()">
             Change
