@@ -55,6 +55,7 @@ export class PropertyDetailEditComponent implements OnInit {
   defaultStyle: number;
   defaultRegionId = 1;
   searchedAddress: string;
+  getBack: number;
 
   constructor(private route: ActivatedRoute,
     private _router: Router,
@@ -95,6 +96,7 @@ export class PropertyDetailEditComponent implements OnInit {
       this.searchedAddress = params['searchedAddress'] || '';
       this.leadId = +params['leadId'] || 0;
       this.personId = +params['personId'] || 0;
+      this.getBack = +params['getBack'] || 0;
       this.lastKnownPersonParam = params['lastKnownPerson'];
       if (this.isNewProperty) {
         this.propertyForm.reset();
@@ -357,8 +359,11 @@ export class PropertyDetailEditComponent implements OnInit {
         }
       }
     } else {
-      this._router.navigate(['/property-centre/detail', this.propertyId]);
-
+      if(this.getBack) {
+        this._location.back();
+      } else {
+        this._router.navigate(['/property-centre/detail', this.propertyId]);
+      }
     }
   }
 
