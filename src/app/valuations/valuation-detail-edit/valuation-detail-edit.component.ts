@@ -24,6 +24,7 @@ export class ValuationDetailEditComponent implements OnInit {
   outsideSpaces: InfoDetail[];
   parkings: InfoDetail[];
   features: InfoDetail[];
+  selectedDate: Date;
 
   get rooms() {
     return MinBedrooms;
@@ -126,6 +127,7 @@ export class ValuationDetailEditComponent implements OnInit {
   getSelectedDate(date: Date) {
     if (date) {
       console.log('selected date in val', date);
+      this.selectedDate = date;
       this.showCalendar = false;
     }
   }

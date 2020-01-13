@@ -78,7 +78,7 @@ dl {
 }
 
 .input-group {
-    select {
+    select:not(.single-select) {
         flex: 0 0 auto!important;
         width: auto!important;
     }
