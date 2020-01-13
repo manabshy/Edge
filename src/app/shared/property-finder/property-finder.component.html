@@ -1,41 +1,81 @@
-<form class="mb-0" [formGroup]="propertyFinderForm">
-  <div class="form-group row">
-    <label for="property" class="col-sm-2 col-form-label col-form-label-sm">
-      Find property
-    </label>
-    <div class="col-sm-10">
-      <div class="input-group input-group-sm">
-        <input type="search" class="form-control" formControlName="searchTerm" placeholder="Property Address or Id"
-          aria-label="Property Address" (keyup)="onKeyup($event)" [ngbTypeahead]="suggestions" [focusFirst]="false"
-          (selectItem)="selectedSuggestion($event)">
-        <div class="input-group-append">
-          <button type="button" class="btn btn-secondary" (click)="searchProperty()">Search</button>
-        </div>
-      </div>
-      <div class="off-canvas" [hidden]="!properties" (click)="properties = null">
-        <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
-          <h4 class="page-title text-left pt-3">
-            Quick finder
-            <button type="button" class="close mr-2" aria-label="Close" (click)="properties = null">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </h4>
-          <app-subnav>
-            <ng-container *ngIf="properties">
-              <app-subnav-item *ngFor="let property of properties" (click)="selectProperty(property?.propertyId)">
-                <div class="row">
-                  <div class="col-12 mb-2" *ngIf="property?.propertyId">
-                    <small class="text-muted mr-2">PR-{{property?.propertyId}}</small>
-                  </div>
-                  <div class="col-sm">
-                    {{property?.propertyAddress}}
-                  </div>
-                </div>
-              </app-subnav-item>
-            </ng-container>
-          </app-subnav>
+<ng-container>
+  <form class="pb-0" [formGroup]="propertyFinderForm" autocompleteOff>
+    <div class="row" [hidden]="!selectedPropertyDetails">
+      <ng-container *ngIf="!label; else givenLabel "><label for="searchTerm" class="col-form-label col-form-label-sm"
+          [ngClass]="readOnly ? 'col-12 text-left' : 'col-sm-2'">Property</label></ng-container>
+      <ng-template #givenLabel><label for="searchTerm" class="col-form-label col-form-label-sm"
+          [ngClass]="readOnly ? 'col-12 text-left' : 'col-sm-2'">{{label}}</label></ng-template>
+      <div class="col">
+        <div class="form-group d-flex d-sm-block">
+          <input type="hidden" #selectedPropertyInput id="selectedPropertyAddress"
+            formControlName="selectedPropertyAddress">
+          <a class="small text-left mobile-btn"
+            [routerLink]="['/property-centre/detail/', selectedPropertyDetails?.propertyId]">
+            {{selectedPropertyDetails.address | formatAddress}}
+          </a>
+          <button class="btn btn-light btn-sm ml-2" *ngIf="!readOnly" type="button" (click)="toggleSearch()">
+            Change
+          </button>
         </div>
       </div>
     </div>
-  </div>
-</form>
+    <div class="row" [hidden]="!isSearchVisible && existingProperty">
+      <ng-container *ngIf="!label; else givenLabel3 "><label for="searchTerm"
+          class="col-sm-2 col-form-label col-form-label-sm">Find property</label></ng-container>
+      <ng-template #givenLabel3><label for="searchTerm" class="col-sm-2 col-form-label col-form-label-sm"> Find
+          {{label}}</label></ng-template>
+      <div class="col-sm-10">
+        <div class="form-group">
+          <div class="input-group input-group-sm">
+            <input #searchPropertyInput type="search" id="searchTerm" class="form-control" formControlName="searchTerm"
+              (keydown.enter)="searchProperty()" [ngbTypeahead]="suggestions" [focusFirst]="false"
+              (selectItem)="selectedSuggestion($event)">
+            <div class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="searchProperty()">Search</button>
+            </div>
+          </div>
+        </div>
+        <a class="small mb-3" [routerLink]="['/property-centre/detail/0', 'edit']" *ngIf="noSuggestions"
+          [queryParams]="{isNewProperty: true}" (click)="CreateNewProperty()">
+          <i class="fas fa-plus mr-2"></i> Add Property
+        </a>
+        <div class="off-canvas" [hidden]="!properties" (click)="properties = null">
+          <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
+            <h4 class="page-title text-left pt-3">
+              <ng-container *ngIf="!label; else givenLabel4 ">Pick property</ng-container>
+              <ng-template #givenLabel4>Pick {{label}}</ng-template>
+              <button type="button" class="close mr-2" aria-label="Close" (click)="properties = null">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </h4>
+            <app-subnav>
+              <ng-container *ngIf="properties">
+                <app-subnav-item *ngFor="let property of properties"
+                  (click)="selectProperty(property?.propertyId); properties = null">
+                  <div class="row">
+                    <div class="col-12 mb-2" *ngIf="property?.propertyId">
+                      <small class="text-muted mr-2">PR-{{property?.propertyId}}</small>
+                    </div>
+                    <div class="col-sm">
+                      {{property?.propertyAddress}}
+                    </div>
+                  </div>
+                </app-subnav-item>
+              </ng-container>
+            </app-subnav>
+            <div class="list-group-item text-center" *ngIf="!properties?.length">
+              No <ng-container *ngIf="!label; else givenLabel2 ">Property</ng-container>
+              <ng-template #givenLabel2>{{label}}</ng-template> found
+            </div>
+            <a [routerLink]="['/property-centre/detail/0', 'edit']" [queryParams]="{isNewProperty: true}"
+              (click)="CreateNewProperty()" class="list-group-item list-group-item-action text-center py-4">
+              <span class="btn-link">
+                <i class="fas fa-plus mr-2"></i> Add Property
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</ng-container>

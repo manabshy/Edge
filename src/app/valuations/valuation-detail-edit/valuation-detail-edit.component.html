@@ -6,7 +6,7 @@
     </div>
   </div>
   <form [formGroup]="valuationForm" (ngSubmit)="saveValuation()">
-    <app-property-finder (selectedProperty)="getSelectedProperty($event)"></app-property-finder>
+    <app-property-finder label="Property" [existingProperty] = valuation?.property (selectedProperty)="getSelectedProperty($event)"></app-property-finder>
     <!-- <app-signer label="Last known owner" [createdSigner]="createdSigner" [existingSigner]="lastKnownOwner" [existingPerson]="lastKnownPerson"
       (selectedSigner)="getSelectedOwner($event)" (newSigner)="createNewSigner($event)"></app-signer> -->
     <app-signer label="Last known owner" [existingSigner]="valuation?.propertyOwner"
