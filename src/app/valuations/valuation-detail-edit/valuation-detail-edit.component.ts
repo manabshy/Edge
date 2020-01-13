@@ -7,6 +7,8 @@ import { Valuation } from '../shared/valuation';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { InfoDetail, DropdownListInfo } from 'src/app/core/services/info.service';
+import { PropertyService } from 'src/app/property/shared/property.service';
+import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 
 @Component({
   selector: 'app-valuation-detail-edit',
@@ -25,6 +27,9 @@ export class ValuationDetailEditComponent implements OnInit {
   parkings: InfoDetail[];
   features: InfoDetail[];
   selectedDate: Date;
+  createdProperty: Property;
+  createdSigner: any;
+  isCreatingNewSigner: boolean;
 
   get rooms() {
     return MinBedrooms;
@@ -36,6 +41,8 @@ export class ValuationDetailEditComponent implements OnInit {
   ];
 
   constructor(private valuationService: ValuationService,
+    private propertyService: PropertyService,
+    private contactGroupService: ContactGroupsService,
     private storage: StorageMap,
     private route: ActivatedRoute,
     private fb: FormBuilder) { }
@@ -52,7 +59,22 @@ export class ValuationDetailEditComponent implements OnInit {
       this.outsideSpaces = info.outsideSpaces;
       this.parkings = info.parkings;
       this.features = info.propertyFeatures;
-    })
+    });
+
+    this.propertyService.newPropertyAdded$.subscribe(newProperty => {
+      if (newProperty) {
+        this.createdProperty = newProperty;
+        console.log('should send to finder', this.createdProperty);
+      }
+    });
+
+    this.contactGroupService.signer$.subscribe(data => {
+      if (data) {
+        // this.lastKnownOwner = data;
+        this.createdSigner = data;
+        this.isCreatingNewSigner = false;
+      }
+    });
 
   }
 
@@ -88,7 +110,7 @@ export class ValuationDetailEditComponent implements OnInit {
   }
 
   populateForm(valuation: Valuation) {
-    console.log('data to populate', valuation)
+    console.log('data to populate', valuation);
     if (this.valuationForm) {
       this.valuationForm.reset();
     }
@@ -106,9 +128,9 @@ export class ValuationDetailEditComponent implements OnInit {
         outsideSpace: valuation.outsideSpace,
         parking: valuation.parking,
         features: valuation.propertyFeature
-      })
+      });
     }
-    console.log('form values', this.valuationForm.value)
+    console.log('form values', this.valuationForm.value);
   }
 
   getSelectedProperty(property: Property) {

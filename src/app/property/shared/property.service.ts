@@ -21,6 +21,9 @@ export class PropertyService {
   private propertyNoteChangeSubject = new Subject<PropertyNote>();
   private propertyNotePageNumberChangeSubject = new Subject<number>();
   private showPropertyDuplicatesSubject = new Subject<boolean>();
+  private propertyAddedSubject = new Subject<Property>();
+
+  newPropertyAdded$ = this.propertyAddedSubject.asObservable();
   showPropertyDuplicatesChanges$ = this.showPropertyDuplicatesSubject.asObservable();
   propertyNoteChanges$ = this.propertyNoteChangeSubject.asObservable();
   propertyNotePageNumberChanges$ = this.propertyNotePageNumberChangeSubject.asObservable();
@@ -205,16 +208,8 @@ export class PropertyService {
     this.showPropertyDuplicatesSubject.next(show);
   }
 
-  // propertyDetails$ = this.currentPropertyId$
-  //   .pipe(
-  //     filter(propertyId => Boolean(propertyId)),
-  //     switchMap(propertyId => this.http.get<PropertyData>(`${AppConstants.basePropertyUrl}/${propertyId}?includeInfo=true&includePhoto=true`)
-  //       .pipe(
-  //         map(response => response.result),
-  //         tap(data => console.log('property id of details returned', propertyId)),
-  //         tap(data => console.log('details returned', JSON.stringify(data)))
-  //       )
-  //     ));
-
+  setAddedProperty(property: Property) {
+    this.propertyAddedSubject.next(property);
+  }
 }
 

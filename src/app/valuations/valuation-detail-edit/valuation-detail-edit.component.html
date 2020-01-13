@@ -5,11 +5,11 @@
       <h4 class="m-0">Valuation</h4>
     </div>
   </div>
+  {{createdProperty|json}}
   <form [formGroup]="valuationForm" (ngSubmit)="saveValuation()">
-    <app-property-finder label="Property" [existingProperty] = valuation?.property (selectedProperty)="getSelectedProperty($event)"></app-property-finder>
-    <!-- <app-signer label="Last known owner" [createdSigner]="createdSigner" [existingSigner]="lastKnownOwner" [existingPerson]="lastKnownPerson"
-      (selectedSigner)="getSelectedOwner($event)" (newSigner)="createNewSigner($event)"></app-signer> -->
-    <app-signer label="Last known owner" [existingSigner]="valuation?.propertyOwner"
+    <app-property-finder label="Property" [createdProperty]="createdProperty" [existingProperty]=valuation?.property
+      (selectedProperty)="getSelectedProperty($event)"></app-property-finder>
+    <app-signer label="Last known owner" [createdSigner]="createdSigner" [existingSigner]="valuation?.propertyOwner"
       (selectedSigner)="getSelectedOwner($event)" (newSigner)="createNewSigner($event)"></app-signer>
     <div class="form-group row">
       <label for="why" class="col-sm-2 col-form-label col-form-label-sm">Why?</label>
@@ -92,8 +92,8 @@
           </div>
           <div class="col-sm form-group">
             <label class="small" for="Parking">Parking</label>
-            <ng-select [items]="parkings" [multiple]="true" bindLabel="value" groupBy="gender"
-              [selectableGroup]="true" [closeOnSelect]="false" bindValue="id" formControlName="parking">
+            <ng-select [items]="parkings" [multiple]="true" bindLabel="value" groupBy="gender" [selectableGroup]="true"
+              [closeOnSelect]="false" bindValue="id" formControlName="parking">
               <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
                 <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.gender | uppercase}}
               </ng-template>
@@ -104,8 +104,8 @@
           </div>
           <div class="col-sm form-group">
             <label class="small" for="features">Features</label>
-            <ng-select [items]="features" [multiple]="true" bindLabel="value" groupBy="gender"
-              [selectableGroup]="true" [closeOnSelect]="false" bindValue="id" formControlName="features">
+            <ng-select [items]="features" [multiple]="true" bindLabel="value" groupBy="gender" [selectableGroup]="true"
+              [closeOnSelect]="false" bindValue="id" formControlName="features">
               <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
                 <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.gender | uppercase}}
               </ng-template>
