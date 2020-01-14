@@ -5,6 +5,8 @@ import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-group
 import { Person } from '../models/person';
 import { PropertyNote } from 'src/app/property/shared/property';
 import { PropertyService } from 'src/app/property/shared/property.service';
+import { StaffMember } from '../models/staff-member';
+import { StorageMap } from '@ngx-pwa/local-storage';
 
 @Component({
   selector: 'app-notes',
@@ -38,12 +40,19 @@ export class NotesComponent implements OnInit, OnChanges {
   isPropertyNote: boolean;
   isPersonNote: boolean;
   isUpdating: boolean;
+  currentStaffMember: StaffMember;
 
   constructor(private sharedService: SharedService,
     private contactGroupService: ContactGroupsService,
+    private storage: StorageMap,
     private propertyService: PropertyService) { }
 
   ngOnInit() {
+    this.storage.get('currentUser').subscribe((staffMember: StaffMember) => {
+      if (staffMember) {
+        this.currentStaffMember = staffMember;
+      }
+    });
   }
 
   ngOnChanges() {
