@@ -1,4 +1,4 @@
-<app-breadcrumb [title]="searchedPersonDetails?.personId ? 'P-'+searchedPersonDetails?.personId : ''"></app-breadcrumb>
+<app-breadcrumb></app-breadcrumb>
 <div class="container">
   <div class="row page-title">
     <div class="col">
@@ -150,3 +150,4 @@
     </div>
   </div>
 </div>
+<app-additional-info [id]="searchedPersonDetails?.personId ? 'P-'+searchedPersonDetails?.personId : ''"></app-additional-info>

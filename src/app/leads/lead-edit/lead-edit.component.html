@@ -1,4 +1,4 @@
-<app-breadcrumb [title]="lead?.leadId ? 'L-'+lead?.leadId : ''"></app-breadcrumb>
+<app-breadcrumb></app-breadcrumb>
 <div class="container">
   <div class="row page-title">
     <div class="col">
@@ -155,3 +155,5 @@
     </div>
   </form>
 </div>
+<app-additional-info [id]="lead?.leadId ? 'L-'+lead?.leadId : ''"></app-additional-info>
+

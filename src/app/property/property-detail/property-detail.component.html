@@ -1,4 +1,4 @@
-<app-breadcrumb [title]="propertyDetails?.propertyId ? 'PR-'+propertyDetails?.propertyId : ''"></app-breadcrumb>
+<app-breadcrumb></app-breadcrumb>
 <div class="container">
   <div class="row page-title">
     <div class="col">
@@ -122,3 +122,4 @@
     </div>
   </div>
 </div>
+<app-additional-info [id]="propertyDetails?.propertyId ? 'PR-'+propertyDetails?.propertyId : ''"></app-additional-info>

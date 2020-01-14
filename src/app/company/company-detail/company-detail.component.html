@@ -1,4 +1,4 @@
-<app-breadcrumb [title]="companyDetails?.companyId ? 'P-'+companyDetails?.companyId : ''"></app-breadcrumb>
+<app-breadcrumb></app-breadcrumb>
 <div class="container">
   <div class="row page-title">
     <div class="col">
@@ -94,3 +94,4 @@
     </div> -->
   </div>
 </div>
+<app-additional-info [id]="companyDetails?.companyId ? 'CO-'+companyDetails?.companyId : ''"></app-additional-info>

@@ -67,6 +67,7 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
+import { AdditionalInfoComponent } from './additional-info/additional-info.component';
 
 
 @NgModule({
@@ -105,7 +106,8 @@ import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
     SharedPropertyListComponent,
     SharedLeadRegisterComponent,
     LeadAssignmentModalComponent,
-    StaffmemberFinderComponent
+    StaffmemberFinderComponent,
+    AdditionalInfoComponent
 
   ],
   imports: [
@@ -173,6 +175,7 @@ import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
     ContactgroupsDetailSearchesComponent,
     SharedPropertyListComponent,
     StaffmemberFinderComponent,
+    AdditionalInfoComponent,
      // to be refactored
     InfiniteScrollModule,
     CollapseModule,

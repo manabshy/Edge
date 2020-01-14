@@ -6,20 +6,16 @@
   <a [routerLink]="['detail', property?.propertyId]" [queryParams]="{searchTerm: propertyAddress}"
     (click)="onPropertySelected(property.propertyId)" class="list-group-item list-group-item-action pb-2"
     *ngFor="let property of properties; let i = index;">
-    <div class="row">
-      <div class="col order-sm-1">
-        <div class="row align-items-center">
-          <div class="col-12">
-            <div class="mb-1 text-muted">
-              <small>PR-{{property?.propertyId}}</small>
-            </div>
-          </div>
-          <div class="col-12">
-            <div class="mb-1">
-              <strong [innerHTML]="property?.propertyAddress | highlight : searchTerm"></strong><span
-                class="text-danger" *ngIf="!(property.propertyAddress )">No address</span>
-            </div>
-          </div>
+    <div class="row align-items-center">
+      <div class="col-12">
+        <div class="mb-1">
+          <strong [innerHTML]="property?.propertyAddress | highlight : searchTerm"></strong><span
+            class="text-danger" *ngIf="!(property.propertyAddress )">No address</span>
+        </div>
+      </div>
+      <div class="col-12 text-right">
+        <div class="text-muted">
+          <small>PR-{{property?.propertyId}}</small>
         </div>
       </div>
     </div>

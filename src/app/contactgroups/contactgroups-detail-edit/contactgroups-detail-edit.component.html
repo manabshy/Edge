@@ -1,4 +1,4 @@
-<app-breadcrumb [title]="personDetails?.personId ? 'P-'+personDetails?.personId : ''" *ngIf="!basicPerson"></app-breadcrumb>
+<app-breadcrumb *ngIf="!basicPerson"></app-breadcrumb>
 <div class="container" [ngClass]="{'p-0': basicPerson}">
   <div class="page-title sticky-top" [ngClass]="{'pt-3': basicPerson}">
     <h4 *ngIf="!basicPerson">Edit Person</h4>
@@ -211,3 +211,4 @@
     </div>
   </form>
 </div>
+<app-additional-info [id]="personDetails?.personId ? 'P-'+personDetails?.personId : ''" *ngIf="!basicPerson"></app-additional-info>
