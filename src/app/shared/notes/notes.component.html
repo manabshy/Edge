@@ -81,7 +81,12 @@
               {{note?.text}}
             </div>
             <div class="col-sm-3 text-muted">
-              {{note?.createdBy}}<br>
+              <ng-container *ngIf="note?.createdBy !== currentStaffMember?.fullName; else current">
+                {{note?.createdBy}}
+              </ng-container>
+              <ng-template #current>
+                <span class="badge badge-pill badge-info">You</span>
+              </ng-template><br>
               {{note?.createDate | date: 'HH:mm d/MM/yyyy'}}
             </div>
           </div>

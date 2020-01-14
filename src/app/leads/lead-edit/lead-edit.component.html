@@ -84,16 +84,6 @@
         <div class="list-group mb-3">
           <div class="list-group-item pt-4 pb-3">
             <div class="row">
-              <div class="col-12">
-                <div class="form-group">
-                  <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="closeLead" formControlName="closeLead"
-                      (change)="closeLeadChanged(lead)" [attr.disabled]="isLeadClosed ? true : null">
-                    <label class="custom-control-label" for="closeLead">Mark as <span
-                        class="badge badge-pill badge-danger">Closed</span></label>
-                  </div>
-                </div>
-              </div>
               <div class="col-lg">
                 <div class="form-group">
                   <label for="leadType">Lead Type</label>
@@ -122,6 +112,16 @@
                   <app-staffmember-finder [staffMember]="leadOwner" (ownerChanged)="onOwnerChanged($event)"
                     [isDisabled]="isLeadClosed ? true : false">
                   </app-staffmember-finder>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-group">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="closeLead" formControlName="closeLead"
+                      (change)="closeLeadChanged(lead)" [attr.disabled]="isLeadClosed ? true : null">
+                    <label class="custom-control-label" for="closeLead">Mark as <span
+                        class="badge badge-pill badge-danger">Closed</span></label>
+                  </div>
                 </div>
               </div>
             </div>
