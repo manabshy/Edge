@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { CalendarEvent, CalendarDateFormatter, CalendarView, CalendarWeekViewBeforeRenderEvent, CalendarDayViewBeforeRenderEvent, DAYS_OF_WEEK, CalendarEventTitleFormatter, CalendarMonthViewBeforeRenderEvent } from 'angular-calendar';
 import {
   isSameMonth,
@@ -36,6 +36,8 @@ import { InfoDetail, DropdownListInfo } from 'src/app/core/services/info.service
   ]
 })
 export class CalendarComponent implements OnInit {
+  @Input() staffMemberId: number;
+  @Input() myCalendarOnly: boolean;
   @Output() selectedDate = new EventEmitter<any>();
   view: CalendarView | 'month' | 'week' | 'threeDays' | 'day' = CalendarView.Week;
   daysInWeek;
@@ -109,6 +111,7 @@ export class CalendarComponent implements OnInit {
     }[this.view];
 
     const request = {
+      staffMemberId: this.staffMemberId,
       startDate: format(getStart(this.viewDate), 'YYYY-MM-DD'),
       endDate: format(getEnd(this.viewDate), 'YYYY-MM-DD'),
     } as BasicEventRequest;

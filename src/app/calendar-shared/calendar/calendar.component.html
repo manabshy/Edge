@@ -3,6 +3,7 @@
 (viewDateChange)="getDiaryEvents()"
 (viewChange)="getDiaryEvents()"
 (filterChange)="getDiaryEvents($event)"
+[myCalendarOnly] ="myCalendarOnly"
 >
 </app-calendar-header>
 <ng-template #customTooltip let-event="event">

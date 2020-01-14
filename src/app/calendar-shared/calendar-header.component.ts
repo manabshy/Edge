@@ -14,6 +14,7 @@ export class CalendarHeaderComponent implements OnChanges {
   @Input() locale = 'en';
   @Input() weekStartsOn;
   @Input() daysInWeek;
+  @Input() myCalendarOnly: boolean;
   @Output() viewChange: EventEmitter<string> = new EventEmitter();
   @Output() viewDateChange: EventEmitter<Date> = new EventEmitter();
   @Output() filterChange: EventEmitter<boolean> = new EventEmitter();
