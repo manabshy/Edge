@@ -10,6 +10,7 @@ import { InfoDetail, DropdownListInfo } from 'src/app/core/services/info.service
 import { PropertyService } from 'src/app/property/shared/property.service';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { SharedService } from 'src/app/core/services/shared.service';
+import { StaffMember } from 'src/app/shared/models/staff-member';
 
 @Component({
   selector: 'app-valuation-detail-edit',
@@ -31,6 +32,7 @@ export class ValuationDetailEditComponent implements OnInit {
   createdProperty: Property;
   createdSigner: any;
   isCreatingNewSigner: boolean;
+  allStaffMembers: StaffMember[];
 
   get rooms() {
     return MinBedrooms;
@@ -61,6 +63,12 @@ export class ValuationDetailEditComponent implements OnInit {
       this.outsideSpaces = info.outsideSpaces;
       this.parkings = info.parkings;
       this.features = info.propertyFeatures;
+    });
+
+    this.storage.get('allstaffmembers').subscribe(data => {
+      if (data) {
+        this.allStaffMembers = data as StaffMember[];
+      }
     });
 
     this.propertyService.newPropertyAdded$.subscribe(newProperty => {
@@ -154,6 +162,9 @@ export class ValuationDetailEditComponent implements OnInit {
       this.selectedDate = date;
       this.showCalendar = false;
     }
+  }
+  onChange(staffMember) {
+    console.log('selected', staffMember);
   }
   createNewSigner(event) {
 
