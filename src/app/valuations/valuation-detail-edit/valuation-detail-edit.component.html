@@ -120,12 +120,21 @@
     <div class="form-group row">
       <label for="propertyNotes" class="col-sm-2 col-form-label col-form-label-sm">Main Staff Member</label>
       <div class="col-sm-10">
-        <label class="small">Pick a Member</label>
-        <app-subnav class="small">
-          <app-subnav-item *ngFor="let staffMember of staffMembers" (click)="selectStaffMember(staffMember)">
-            {{staffMember?.fullName}}
-          </app-subnav-item>
-        </app-subnav>
+        <ng-container *ngIf="mainStaffMember; else allMain">
+          <app-subnav class="small">
+            <app-subnav-item *ngIf="mainStaffMember" (click)="selectMainStaffMember(mainStaffMember)">
+              {{mainStaffMember?.fullName}}
+            </app-subnav-item>
+          </app-subnav>
+        </ng-container>
+        <ng-template #allMain>
+          <label class="small">Pick a Member</label>
+          <app-subnav class="small">
+            <app-subnav-item *ngFor="let staffMember of staffMembers" (click)="selectMainStaffMember(staffMember)">
+              {{staffMember?.fullName}}
+            </app-subnav-item>
+          </app-subnav>
+        </ng-template>
         <div class="off-canvas" [hidden]="!showCalendar" (click)="showCalendar = false">
           <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
             <h4 class="page-title text-left pt-3">
@@ -134,7 +143,8 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </h4>
-            <app-calendar (selectedDate)="getSelectedDate($event)"></app-calendar>
+            <app-calendar *ngIf="staffMemberId" [staffMemberId]="staffMemberId" [myCalendarOnly] = "true"
+              (selectedDate)="getSelectedDate($event)"></app-calendar>
           </div>
         </div>
       </div>
@@ -146,14 +156,16 @@
           <div class="row align-items-center">
             <div class="col-sm">
               <dl class="row">
-                <dd class="col"> {{attendee.fullName}}</dd>
+                <dd class="col">{{attendee.fullName}}</dd>
               </dl>
             </div>
             <div class="col-sm">
               <dl class="row">
                 <dd class="col">
-                  <button class="btn btn-light btn-sm ml-2 mb-2" type="button">Remove</button>
-                  <button class="btn btn-light btn-sm ml-2 mb-2" type="button">Set as main</button>
+                  <button class="btn btn-light btn-sm ml-2 mb-2" type="button"
+                    (click)="removeAttendee(attendee?.staffMemberId)">Remove</button>
+                  <button class="btn btn-light btn-sm ml-2 mb-2" type="button" (click)="setMain(attendee)">Set as
+                    main</button>
                 </dd>
               </dl>
             </div>
@@ -163,7 +175,7 @@
       <label class="col-sm-2 col-form-label col-form-label-sm">Select attendee</label>
       <div class="col-sm-10">
         <div class="input-group input-group-sm">
-          <div class="col-md-3 order-md-0 mt-1 mt-md-0">
+          <div class="col-md-3 mt-1 mt-md-0">
             <ng-select [items]="allStaffMembers" [clearable]="false" bindLabel="fullName" bindValue="staffMemberId"
               groupBy="activeDepartments" (change)="onStaffMemberChange($event)">
               <ng-template ng-optgroup-tmp let-item="item">
@@ -184,7 +196,7 @@
       <div class="col-sm-10">
         <div class="d-flex d-sm-block">
           <small class="text-left mobile-btn">{{selectedDate | date: 'E d MMM yyyy, hh:mm'}}</small>
-          <button class="btn btn-light btn-sm ml-2" type="button"> Change </button>
+          <button class="btn btn-light btn-sm ml-2" type="button" (click)="changeDate()"> Change </button>
         </div>
       </div>
     </div>
@@ -193,8 +205,8 @@
       <div class="col-sm-3">
         <div class="input-group input-group-sm">
           <select class="form-control single-select" name="valuationDuration" id="valuationDuration">
-            <option value="">0,5</option>
-            <option value="" selected>1</option>
+            <option value="0.5">0.5</option>
+            <option value="1" selected>1</option>
           </select>
           <div class="input-group-append">
             <div class="input-group-text">

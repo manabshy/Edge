@@ -35,6 +35,8 @@ export class ValuationDetailEditComponent implements OnInit {
   allStaffMembers: StaffMember[];
   attendees: StaffMember[] = [];
   attendee: StaffMember;
+  mainStaffMember: StaffMember;
+  staffMemberId: number;
 
 
   get rooms() {
@@ -42,8 +44,11 @@ export class ValuationDetailEditComponent implements OnInit {
   }
 
   staffMembers = [
-    { id: 1, fullName: 'John Smith' },
-    { id: 1, fullName: 'Bill Doe' }
+    { staffMemberId: 2484, fullName: 'Gabor Remenyi', emailAddress: 'gremenyi@dng.co.uk', hasReminder: null },
+    { staffMemberId: 2127, fullName: 'Matt Easley', emailAddress: 'measley@dng.co.uk', hasReminder: null },
+    { staffMemberId: 2606, fullName: 'Elia Fulchignoni', emailAddress: 'efulchignoni@dng.co.uk' },
+    { staffMemberId: 2523, fullName: 'Alexander Agyapong', emailAddress: 'aagyapong@dng.co.uk' },
+    { staffMemberId: 2537, fullName: 'Mansoor Malik', emailAddress: 'mmalik@dng.co.uk', hasReminder: null }
   ];
 
   constructor(private valuationService: ValuationService,
@@ -109,7 +114,9 @@ export class ValuationDetailEditComponent implements OnInit {
     });
   }
 
-  selectStaffMember(staffMember: any) {
+  selectMainStaffMember(staffMember: StaffMember) {
+    this.mainStaffMember = staffMember;
+    this.staffMemberId = staffMember.staffMemberId;
     this.showCalendar = true;
   }
 
@@ -166,6 +173,7 @@ export class ValuationDetailEditComponent implements OnInit {
       this.showCalendar = false;
     }
   }
+
   onStaffMemberChange(staffMember: StaffMember) {
     if (staffMember) {
       this.attendee = staffMember;
@@ -179,8 +187,26 @@ export class ValuationDetailEditComponent implements OnInit {
     if (this.attendee && !existingAttendee) {
       this.attendees.push(this.attendee);
     }
-
   }
+
+  setMain(staffMember: StaffMember) {
+    // const existingMain = this.staffMembers.find(x => x.staffMemberId === this.attendee.staffMemberId);
+    if (staffMember) {
+      this.mainStaffMember = staffMember;
+    }
+  }
+
+  removeAttendee(id: number) {
+    if (this.attendees && this.attendees.length) {
+      const index = this.attendees.findIndex(x => x.staffMemberId === +id);
+      this.attendees.splice(index, 1);
+    }
+  }
+
+  changeDate() {
+    this.showCalendar = true;
+  }
+
   createNewSigner(event) {
 
   }
