@@ -9,6 +9,7 @@ import { StorageMap } from '@ngx-pwa/local-storage';
 import { InfoDetail, DropdownListInfo } from 'src/app/core/services/info.service';
 import { PropertyService } from 'src/app/property/shared/property.service';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
+import { SharedService } from 'src/app/core/services/shared.service';
 
 @Component({
   selector: 'app-valuation-detail-edit',
@@ -43,6 +44,7 @@ export class ValuationDetailEditComponent implements OnInit {
   constructor(private valuationService: ValuationService,
     private propertyService: PropertyService,
     private contactGroupService: ContactGroupsService,
+    private sharedService: SharedService,
     private storage: StorageMap,
     private route: ActivatedRoute,
     private fb: FormBuilder) { }
@@ -159,5 +161,9 @@ export class ValuationDetailEditComponent implements OnInit {
 
   saveValuation() {
 
+  }
+
+  cancel() {
+    this.sharedService.back();
   }
 }
