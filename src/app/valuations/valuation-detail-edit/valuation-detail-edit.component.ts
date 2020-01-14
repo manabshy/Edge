@@ -33,6 +33,9 @@ export class ValuationDetailEditComponent implements OnInit {
   createdSigner: any;
   isCreatingNewSigner: boolean;
   allStaffMembers: StaffMember[];
+  attendees: StaffMember[] = [];
+  attendee: StaffMember;
+
 
   get rooms() {
     return MinBedrooms;
@@ -163,8 +166,20 @@ export class ValuationDetailEditComponent implements OnInit {
       this.showCalendar = false;
     }
   }
-  onChange(staffMember) {
-    console.log('selected', staffMember);
+  onStaffMemberChange(staffMember: StaffMember) {
+    if (staffMember) {
+      this.attendee = staffMember;
+      console.log('selected', staffMember);
+    }
+
+  }
+
+  addAttendee() {
+    const existingAttendee = this.attendees.find(x => x.staffMemberId === this.attendee.staffMemberId);
+    if (this.attendee && !existingAttendee) {
+      this.attendees.push(this.attendee);
+    }
+
   }
   createNewSigner(event) {
 

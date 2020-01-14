@@ -141,23 +141,42 @@
     </div>
     <div class="form-group row" *ngIf="selectedDate">
       <label class="col-sm-2 col-form-label col-form-label-sm">Attendees</label>
-      <div class="col-sm-10">
-        [staff member finder]
+      <div class="col-sm-10 mb-2">
+        <div *ngFor="let attendee of attendees">
+          <div class="row align-items-center">
+            <div class="col-sm">
+              <dl class="row">
+                <dd class="col"> {{attendee.fullName}}</dd>
+              </dl>
+            </div>
+            <div class="col-sm">
+              <dl class="row">
+                <dd class="col">
+                  <button class="btn btn-light btn-sm ml-2 mb-2" type="button">Remove</button>
+                  <button class="btn btn-light btn-sm ml-2 mb-2" type="button">Set as main</button>
+                </dd>
+              </dl>
+            </div>
+          </div>
+        </div>
       </div>
       <label class="col-sm-2 col-form-label col-form-label-sm">Select attendee</label>
       <div class="col-sm-10">
-        <div class="col-md-3 order-md-2 mt-1 mt-md-0">
-          <ng-select [items]="allStaffMembers"
-          [clearable]="false"
-          bindLabel="fullName"
-          bindValue="staffMemberId"
-          groupBy="activeDepartments"
-          (change)="onChange($event)">
+        <div class="input-group input-group-sm">
+          <div class="col-md-3 order-md-0 mt-1 mt-md-0">
+            <ng-select [items]="allStaffMembers" [clearable]="false" bindLabel="fullName" bindValue="staffMemberId"
+              groupBy="activeDepartments" (change)="onStaffMemberChange($event)">
               <ng-template ng-optgroup-tmp let-item="item">
-                  {{item.category || 'Unnamed group'}}
+                {{item.category || 'Unnamed group'}}
               </ng-template>
-          </ng-select>
-      </div>
+            </ng-select>
+          </div>
+          <div class="input-group-append">
+            <button type="button" class="btn btn-secondary" (click)="addAttendee()">
+              Add
+            </button>
+          </div>
+        </div>
       </div>
     </div>
     <div class="form-group row" *ngIf="selectedDate">
@@ -204,7 +223,8 @@
                 <input type="text" name="longLetValue" id="longLetValue" class="form-control form-control-sm">
               </div>
               <label class="small" for="longLetMonthlyValue">Value (per month)</label>
-              <input type="text" name="longLetMonthlyValue" id="longLetMonthlyValue" class="form-control form-control-sm">
+              <input type="text" name="longLetMonthlyValue" id="longLetMonthlyValue"
+                class="form-control form-control-sm">
             </div>
           </div>
           <div class="card">
@@ -215,7 +235,8 @@
                 <input type="text" name="shortLetValue" id="shortLetValue" class="form-control form-control-sm">
               </div>
               <label class="small" for="shortLetMonthlyValue">Value (per month)</label>
-              <input type="text" name="shortLetMonthlyValue" id="shortLetMonthlyValue" class="form-control form-control-sm">
+              <input type="text" name="shortLetMonthlyValue" id="shortLetMonthlyValue"
+                class="form-control form-control-sm">
             </div>
           </div>
         </div>
