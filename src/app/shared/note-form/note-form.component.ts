@@ -14,6 +14,7 @@ export class NoteFormComponent implements OnInit {
   noteForm: FormGroup;
   personNote: ContactNote;
   contactGroupNote: ContactNote;
+  @Input() isModal: number;
   @Input() selectedPerson: Person;
   @Input() selectedContactGroup: ContactGroup;
   @Input() isPersonNote: boolean;
