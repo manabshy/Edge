@@ -118,15 +118,11 @@
       </div>
     </div>
     <div class="form-group row">
-      <label for="propertyNotes" class="col-sm-2 col-form-label col-form-label-sm">Main Staff Member</label>
+      <label class="col-sm-2 col-form-label col-form-label-sm">Attendees</label>
       <div class="col-sm-10">
-        <ng-container *ngIf="mainStaffMember; else allMain">
-          <app-subnav class="small">
-            <app-subnav-item *ngIf="mainStaffMember" (click)="selectMainStaffMember(mainStaffMember)">
-              {{mainStaffMember?.fullName}}
-            </app-subnav-item>
-          </app-subnav>
-        </ng-container>
+        <p *ngIf="mainStaffMember; else allMain" class="d-flex d-sm-block">
+          <small class="text-left mobile-btn">{{mainStaffMember?.fullName}}</small>
+        </p>
         <ng-template #allMain>
           <label class="small">Pick a Member</label>
           <app-subnav class="small">
@@ -147,35 +143,17 @@
               (selectedDate)="getSelectedDate($event)"></app-calendar>
           </div>
         </div>
+        <p *ngFor="let attendee of attendees" class="d-flex d-sm-block">
+          <button class="btn btn-light btn-sm mr-2" type="button"
+            (click)="removeAttendee(attendee?.staffMemberId)" aria-label="remove"><span aria-hidden="true">&times;</span></button>
+          <small class="text-left mobile-btn">{{attendee.fullName}}</small>
+          <button class="btn btn-light btn-sm ml-2" type="button" (click)="setMain(attendee)">Set as
+            main</button>
+        </p>
       </div>
-    </div>
-    <div class="form-group row" *ngIf="selectedDate">
-      <label class="col-sm-2 col-form-label col-form-label-sm">Attendees</label>
-      <div class="col-sm-10 mb-2">
-        <div *ngFor="let attendee of attendees">
-          <div class="row align-items-center">
-            <div class="col-sm">
-              <dl class="row">
-                <dd class="col">{{attendee.fullName}}</dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dd class="col">
-                  <button class="btn btn-light btn-sm ml-2 mb-2" type="button"
-                    (click)="removeAttendee(attendee?.staffMemberId)">Remove</button>
-                  <button class="btn btn-light btn-sm ml-2 mb-2" type="button" (click)="setMain(attendee)">Set as
-                    main</button>
-                </dd>
-              </dl>
-            </div>
-          </div>
-        </div>
-      </div>
-      <label class="col-sm-2 col-form-label col-form-label-sm">Select attendee</label>
-      <div class="col-sm-10">
-        <div class="input-group input-group-sm">
-          <div class="col-md-3 mt-1 mt-md-0">
+      <div class="col-sm-3 offset-sm-2" *ngIf="selectedDate">
+        <div class="row align-items-center no-gutters">
+          <div class="col">
             <ng-select [items]="allStaffMembers" [clearable]="false" bindLabel="fullName" bindValue="staffMemberId"
               groupBy="activeDepartments" (change)="onStaffMemberChange($event)">
               <ng-template ng-optgroup-tmp let-item="item">
@@ -183,8 +161,8 @@
               </ng-template>
             </ng-select>
           </div>
-          <div class="input-group-append">
-            <button type="button" class="btn btn-secondary" (click)="addAttendee()">
+          <div class="col-auto">
+            <button type="button" class="btn btn-sm btn-light ml-2" (click)="addAttendee()">
               Add
             </button>
           </div>
