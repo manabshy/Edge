@@ -24,7 +24,7 @@
     </div>
   </ng-container>
   <ng-container *ngIf="!data?.group || step2">
-    <app-note-form [selectedPerson]="selectedPerson" [selectedContactGroup]="selectedContactGroup" [data]="data" [isPersonNote]="isPersonNote" [isCancelVisible]="true" (actionEmit)="action($event)">
+    <app-note-form [isModal]="1" [selectedPerson]="selectedPerson" [selectedContactGroup]="selectedContactGroup" [data]="data" [isPersonNote]="isPersonNote" [isCancelVisible]="true" (actionEmit)="action($event)">
     </app-note-form>
   </ng-container>
 </div>
