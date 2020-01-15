@@ -37,12 +37,30 @@ export class ValuationService {
       );
   }
 
-  getValuation(valuationId: number): Observable<Valuation| any> {
+  getValuation(valuationId: number): Observable<Valuation | any> {
     const url = `${AppConstants.baseValuationUrl}/${valuationId}`;
     return this.http.get<any>(url)
       .pipe(
         map(response => response.result),
         tap(data => console.log('valuation', JSON.stringify(data)))
+      );
+  }
+
+  addValuation(valuation: Valuation): Observable<Valuation | any> {
+    const url = `${AppConstants.baseValuationUrl}`;
+    return this.http.post<any>(url, valuation)
+      .pipe(
+        map(response => response.result),
+        tap(data => console.log('added valuation', JSON.stringify(data)))
+      );
+  }
+
+  updateValuation(valuation: Valuation): Observable<Valuation | any> {
+    const url = `${AppConstants.baseValuationUrl}/${valuation.valuationEventId}`;
+    return this.http.put<any>(url, valuation)
+      .pipe(
+        map(response => response.result),
+        tap(data => console.log('added valuation', JSON.stringify(data)))
       );
   }
 

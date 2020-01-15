@@ -158,6 +158,21 @@ export class SharedService {
     return isDuplicate;
   }
 
+  resetUrl(oldId: number, newId: number){
+    let url = this._router.url;
+    let id = oldId;
+
+    if (url.indexOf('detail/' + id) === -1) {
+      id = 0;
+    }
+    if (url.indexOf('?') >= 0) {
+      url = url.substring(0, url.indexOf('?'));
+      url = url.replace('detail/' + id, 'detail/' + newId);
+      this._location.replaceState(url);
+      oldId = newId;
+    }
+  }
+
   formatPostCode(postCodeToCheck: string) {
     // Permitted letters depend upon their position in the postcode.
     const alpha1 = '[abcdefghijklmnoprstuwyz]';                       // Character 1

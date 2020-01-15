@@ -2,15 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { Property, MinBedrooms } from 'src/app/property/shared/property';
 import { Signer } from 'src/app/contactgroups/shared/contact-group';
 import { ValuationService } from '../shared/valuation.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Valuation } from '../shared/valuation';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { InfoDetail, DropdownListInfo } from 'src/app/core/services/info.service';
 import { PropertyService } from 'src/app/property/shared/property.service';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
-import { SharedService } from 'src/app/core/services/shared.service';
+import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { StaffMember } from 'src/app/shared/models/staff-member';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-valuation-detail-edit',
@@ -37,6 +38,9 @@ export class ValuationDetailEditComponent implements OnInit {
   attendee: StaffMember;
   mainStaffMember: StaffMember;
   staffMemberId: number;
+  isNewValuation: string;
+  errorMessage: WedgeError;
+  isSubmitting: boolean;
 
 
   get rooms() {
@@ -55,13 +59,16 @@ export class ValuationDetailEditComponent implements OnInit {
     private propertyService: PropertyService,
     private contactGroupService: ContactGroupsService,
     private sharedService: SharedService,
+    private toastr: ToastrService,
     private storage: StorageMap,
     private route: ActivatedRoute,
+    private router: Router,
     private fb: FormBuilder) { }
 
   ngOnInit() {
     this.setupForm();
     this.valuationId = +this.route.snapshot.paramMap.get('id');
+    this.isNewValuation = this.route.snapshot.queryParamMap.get('isNewValuation');
     if (this.valuationId) {
       this.getValuation(this.valuationId);
     }
@@ -216,10 +223,64 @@ export class ValuationDetailEditComponent implements OnInit {
   }
 
   saveValuation() {
+    console.log('save here........................')
+    if (this.valuationForm.valid) {
+      if (this.valuationForm.dirty) {
+        const valuation = { ...this.valuation, ...this.valuationForm.value };
+        this.addOrUpdateValuation(valuation);
+      } else {
+        this.onSaveComplete();
+      }
+    } else {
+      this.errorMessage = {} as WedgeError;
+      this.errorMessage.displayMessage = 'Please correct validation errors';
+    }
+  }
 
+  addOrUpdateValuation(valuation: Valuation) {
+    this.isSubmitting = true;
+    if (this.isNewValuation) {
+      this.valuationService.addValuation(valuation).subscribe(data => {
+        if (data) { this.onSaveComplete(data); }
+      },
+        (error: WedgeError) => {
+          this.errorMessage = error;
+          this.sharedService.showError(this.errorMessage);
+          this.isSubmitting = false;
+        });
+    } else {
+      this.valuationService.updateValuation(valuation).subscribe(data => {
+        if (data) { this.onSaveComplete(data); }
+      },
+        (error: WedgeError) => {
+          this.errorMessage = error;
+          this.sharedService.showError(this.errorMessage);
+          this.isSubmitting = false;
+        });
+    }
+  }
+
+  onSaveComplete(valuation?: Valuation) {
+    this.valuationForm.markAsPristine();
+    this.isSubmitting = false;
+    this.errorMessage = null;
+    if (this.isNewValuation) {
+      this.toastr.success('Valuation successfully saved');
+    } else {
+      this.toastr.success('Valuation successfully updated');
+    }
+
+    this.sharedService.resetUrl(this.valuationId, valuation.valuationEventId);
+    this.router.navigate(['/valuations-register/detail', this.valuationId]);
   }
 
   cancel() {
     this.sharedService.back();
+  }
+  canDeactivate(): boolean {
+    if (this.valuationForm.dirty && !this.isSubmitting) {
+      return false;
+    }
+    return true;
   }
 }
