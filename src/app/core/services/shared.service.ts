@@ -159,7 +159,7 @@ export class SharedService {
     return isDuplicate;
   }
 
-  resetUrl(oldId: number, newId: number){
+  resetUrl(oldId: number, newId: number) {
     let url = this._router.url;
     let id = oldId;
 
@@ -195,6 +195,13 @@ export class SharedService {
       }
     });
     this.scrollToFirstInvalidField();
+  }
+
+  resetForm(form: FormGroup) {
+    form.reset();
+    Object.keys(form.controls).forEach(key => {
+      form.get(key).setErrors(null);
+    });
   }
 
   formatPostCode(postCodeToCheck: string) {

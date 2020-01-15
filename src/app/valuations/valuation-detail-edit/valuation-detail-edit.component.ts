@@ -279,6 +279,7 @@ export class ValuationDetailEditComponent implements OnInit {
   }
 
   cancel() {
+    this.sharedService.resetForm(this.valuationForm);
     this.sharedService.back();
   }
 
