@@ -39,7 +39,7 @@ export class ValuationDetailEditComponent implements OnInit {
   attendee: StaffMember;
   mainStaffMember: StaffMember;
   staffMemberId: number;
-  isNewValuation: string;
+  isNewValuation: boolean;
   errorMessage: WedgeError;
   isSubmitting: boolean;
   formErrors = FormErrors;
@@ -69,7 +69,7 @@ export class ValuationDetailEditComponent implements OnInit {
   ngOnInit() {
     this.setupForm();
     this.valuationId = +this.route.snapshot.paramMap.get('id');
-    this.isNewValuation = this.route.snapshot.queryParamMap.get('isNewValuation');
+    this.isNewValuation = this.route.snapshot.queryParamMap.get('isNewValuation') as unknown as boolean;
     if (this.valuationId) {
       this.getValuation(this.valuationId);
     }
@@ -141,9 +141,9 @@ export class ValuationDetailEditComponent implements OnInit {
 
   populateForm(valuation: Valuation) {
     console.log('data to populate', valuation);
-    if (this.valuationForm) {
-      this.valuationForm.reset();
-    }
+    // if (this.valuationForm) {
+    //   this.valuationForm.reset();
+    // }
     if (valuation) {
       this.valuationForm.patchValue({
         reason: valuation.reason,
@@ -270,12 +270,12 @@ export class ValuationDetailEditComponent implements OnInit {
     this.errorMessage = null;
     if (this.isNewValuation) {
       this.toastr.success('Valuation successfully saved');
+      this.sharedService.resetUrl(this.valuationId, valuation.valuationEventId);
+      this.router.navigate(['/valuations-register/detail', this.valuationId]);
     } else {
       this.toastr.success('Valuation successfully updated');
     }
 
-    this.sharedService.resetUrl(this.valuationId, valuation.valuationEventId);
-    this.router.navigate(['/valuations-register/detail', this.valuationId]);
   }
 
   cancel() {

@@ -159,14 +159,14 @@ export class SharedService {
     return isDuplicate;
   }
 
-  resetUrl(oldId: number, newId: number) {
+  resetUrl(oldId: number, newId: number, isNew = true) {
     let url = this._router.url;
     let id = oldId;
 
     if (url.indexOf('detail/' + id) === -1) {
       id = 0;
     }
-    if (url.indexOf('?') >= 0) {
+    if (url.indexOf('?') >= 0 && isNew) {
       url = url.substring(0, url.indexOf('?'));
       url = url.replace('detail/' + id, 'detail/' + newId);
       this._location.replaceState(url);
