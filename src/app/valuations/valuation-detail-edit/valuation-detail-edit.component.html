@@ -180,7 +180,7 @@
     </div>
     <div class="form-group row" *ngIf="selectedDate">
       <label for="valuationDuration" class="col-sm-2 col-form-label col-form-label-sm">Duration</label>
-      <div class="col-sm-2">
+      <div class="col-sm-2 form-group">
         <div class="input-group input-group-sm">
           <select class="form-control single-select" name="valuationDuration" id="valuationDuration">
             <option value="0.5">0.5</option>
@@ -191,6 +191,12 @@
               hours
             </div>
           </div>
+        </div>
+      </div>
+      <div class="col-sm-10 offset-sm-2">
+        <div class="custom-control custom-checkbox form-control-sm py-0">
+          <input type="checkbox" class="custom-control-input" id="sendInvitation">
+          <label class="custom-control-label" for="sendInvitation">Send invitation to Property Owner and Attendees</label>
         </div>
       </div>
     </div>
@@ -239,8 +245,7 @@
             <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
             <!-- <button type="submit" class="btn btn-secondary" [attr.disabled]="isSubmitting ? '' : null"><i
                 class="fas fa-spinner fa-pulse d-inline-block mr-2" *ngIf="isSubmitting"></i>Save</button> -->
-            <button type="submit" class="btn btn-secondary mr-2">Save</button>
-            <button type="submit" class="btn btn-secondary">Invite</button>
+            <button type="submit" class="btn btn-secondary">Save</button>
           </div>
         </div>
       </div>
