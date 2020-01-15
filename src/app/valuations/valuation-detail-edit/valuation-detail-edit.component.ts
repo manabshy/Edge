@@ -4,7 +4,7 @@ import { Signer } from 'src/app/contactgroups/shared/contact-group';
 import { ValuationService } from '../shared/valuation.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Valuation } from '../shared/valuation';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { InfoDetail, DropdownListInfo } from 'src/app/core/services/info.service';
 import { PropertyService } from 'src/app/property/shared/property.service';
@@ -12,6 +12,8 @@ import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-group
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { StaffMember } from 'src/app/shared/models/staff-member';
 import { ToastrService } from 'ngx-toastr';
+import { FormErrors, ValidationMessages } from 'src/app/core/shared/app-constants';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-valuation-detail-edit',
@@ -19,7 +21,6 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./valuation-detail-edit.component.scss']
 })
 export class ValuationDetailEditComponent implements OnInit {
-
   showCalendar = false;
   valuationId: number;
   valuation: Valuation;
@@ -41,7 +42,7 @@ export class ValuationDetailEditComponent implements OnInit {
   isNewValuation: string;
   errorMessage: WedgeError;
   isSubmitting: boolean;
-
+  formErrors = FormErrors;
 
   get rooms() {
     return MinBedrooms;
@@ -100,15 +101,17 @@ export class ValuationDetailEditComponent implements OnInit {
         this.isCreatingNewSigner = false;
       }
     });
-
+    this.valuationForm.valueChanges
+      .pipe(debounceTime(400))
+      .subscribe(() => this.sharedService.logValidationErrors(this.valuationForm, false));
   }
 
   setupForm() {
     this.valuationForm = this.fb.group({
-      reason: [''],
-      period: [''],
-      marketChat: [''],
-      propertyNotes: [''],
+      reason: ['', Validators.required],
+      timeFrame: ['', Validators.required],
+      marketChat: ['', Validators.required],
+      generalNotes: ['', Validators.required],
       bedrooms: [0],
       bathrooms: [0],
       receptions: [0],
@@ -144,9 +147,9 @@ export class ValuationDetailEditComponent implements OnInit {
     if (valuation) {
       this.valuationForm.patchValue({
         reason: valuation.reason,
-        period: valuation.timeFrame,
+        timeFrame: valuation.timeFrame,
         marketChat: valuation.marketChat,
-        propertyNotes: valuation.generalNotes,
+        generalNotes: valuation.generalNotes,
         bedrooms: valuation.bedrooms,
         bathrooms: valuation.bathrooms,
         receptions: valuation.receptions,
@@ -223,7 +226,8 @@ export class ValuationDetailEditComponent implements OnInit {
   }
 
   saveValuation() {
-    console.log('save here........................')
+    this.sharedService.logValidationErrors(this.valuationForm, true);
+
     if (this.valuationForm.valid) {
       if (this.valuationForm.dirty) {
         const valuation = { ...this.valuation, ...this.valuationForm.value };
@@ -277,6 +281,7 @@ export class ValuationDetailEditComponent implements OnInit {
   cancel() {
     this.sharedService.back();
   }
+
   canDeactivate(): boolean {
     if (this.valuationForm.dirty && !this.isSubmitting) {
       return false;
