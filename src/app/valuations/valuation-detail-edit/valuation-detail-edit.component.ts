@@ -3,8 +3,8 @@ import { Property, MinBedrooms } from 'src/app/property/shared/property';
 import { Signer } from 'src/app/contactgroups/shared/contact-group';
 import { ValuationService } from '../shared/valuation.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Valuation } from '../shared/valuation';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Valuation, ValuationStatusEnum } from '../shared/valuation';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { InfoDetail, DropdownListInfo } from 'src/app/core/services/info.service';
 import { PropertyService } from 'src/app/property/shared/property.service';
@@ -44,8 +44,8 @@ export class ValuationDetailEditComponent implements OnInit {
   isSubmitting: boolean;
   formErrors = FormErrors;
 
-  get rooms() {
-    return MinBedrooms;
+  get isInvitationSent() {
+    return this.valuationForm.get('isInvitationSent') as FormControl;
   }
 
   staffMembers = [
@@ -108,6 +108,8 @@ export class ValuationDetailEditComponent implements OnInit {
 
   setupForm() {
     this.valuationForm = this.fb.group({
+      property: [''],
+      propertyOwner: [''],
       reason: ['', Validators.required],
       timeFrame: ['', Validators.required],
       marketChat: ['', Validators.required],
@@ -120,7 +122,9 @@ export class ValuationDetailEditComponent implements OnInit {
       outsideSpace: [null],
       parking: [null],
       features: [null],
-      attendees: [null]
+      attendees: [null],
+      isInvitationSent: false
+
     });
   }
 
@@ -140,10 +144,6 @@ export class ValuationDetailEditComponent implements OnInit {
   }
 
   populateForm(valuation: Valuation) {
-    console.log('data to populate', valuation);
-    // if (this.valuationForm) {
-    //   this.valuationForm.reset();
-    // }
     if (valuation) {
       this.valuationForm.patchValue({
         reason: valuation.reason,
@@ -165,13 +165,14 @@ export class ValuationDetailEditComponent implements OnInit {
 
   getSelectedProperty(property: Property) {
     if (property) {
+      this.valuation.property = property;
       console.log('selected property', property);
     }
   }
 
   getSelectedOwner(owner: Signer) {
     if (owner) {
-      this.lastKnownOwner = owner;
+      this.valuation.propertyOwner = owner;
       console.log('selected owner', owner);
     }
   }
@@ -244,6 +245,8 @@ export class ValuationDetailEditComponent implements OnInit {
   addOrUpdateValuation(valuation: Valuation) {
     this.isSubmitting = true;
     if (this.isNewValuation) {
+      this.isInvitationSent.value ? valuation.valuationStatus = ValuationStatusEnum.Invited
+                            : valuation.valuationStatus = ValuationStatusEnum.None;
       this.valuationService.addValuation(valuation).subscribe(data => {
         if (data) { this.onSaveComplete(data); }
       },
