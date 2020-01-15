@@ -26,16 +26,16 @@
               [bsConfig]="{showWeekNumbers:false,  dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}" bsDatepicker formControlName="date" >
           </div>
           <div class="col-sm form-group">
-            <label class="small" for="office">Status</label>
-            <select class="custom-select custom-select-sm" id="office" formControlName="statusId">
+            <label class="small" for="statusId">Status</label>
+            <select class="custom-select custom-select-sm" id="statusId" formControlName="statusId">
               <option selected value="0"></option>
               <option *ngFor="let status of statuses" [value]='status.id'>
                 {{status.value}}</option>
             </select>
           </div>
           <div class="col-sm form-group">
-            <label class="small" for="office">Valuer</label>
-            <select class="custom-select custom-select-sm" id="office" formControlName="valuerId">
+            <label class="small" for="valuerId">Valuer</label>
+            <select class="custom-select custom-select-sm" id="valuerId" formControlName="valuerId">
               <option selected value="0"></option>
               <option *ngFor="let valuer of valuers" [value]=valuer.staffMemberId>{{valuer?.fullName}}</option>
             </select>

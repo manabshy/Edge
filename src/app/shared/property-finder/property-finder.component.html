@@ -1,9 +1,9 @@
 <ng-container>
   <form class="pb-0" [formGroup]="propertyFinderForm" autocompleteOff>
     <div class="row" [hidden]="!selectedPropertyDetails">
-      <ng-container *ngIf="!label; else givenLabel "><label for="searchTerm" class="col-form-label col-form-label-sm"
+      <ng-container *ngIf="!label; else givenLabel "><label for="propSearchTerm" class="col-form-label col-form-label-sm"
           [ngClass]="readOnly ? 'col-12 text-left' : 'col-sm-2'">Property</label></ng-container>
-      <ng-template #givenLabel><label for="searchTerm" class="col-form-label col-form-label-sm"
+      <ng-template #givenLabel><label for="propSearchTerm" class="col-form-label col-form-label-sm"
           [ngClass]="readOnly ? 'col-12 text-left' : 'col-sm-2'">{{label}}</label></ng-template>
       <div class="col">
         <div class="form-group d-flex d-sm-block">
@@ -23,14 +23,14 @@
       </div>
     </div>
     <div class="row" [hidden]="!isSearchVisible && (existingProperty || selectedPropertyDetails)">
-      <ng-container *ngIf="!label; else givenLabel3 "><label for="searchTerm"
+      <ng-container *ngIf="!label; else givenLabel3 "><label for="propSearchTerm"
           class="col-sm-2 col-form-label col-form-label-sm">Find property</label></ng-container>
-      <ng-template #givenLabel3><label for="searchTerm" class="col-sm-2 col-form-label col-form-label-sm"> Find
+      <ng-template #givenLabel3><label for="propSearchTerm" class="col-sm-2 col-form-label col-form-label-sm"> Find
           {{label}}</label></ng-template>
       <div class="col-sm-10">
         <div class="form-group">
           <div class="input-group input-group-sm">
-            <input #searchPropertyInput type="search" id="searchTerm" class="form-control" formControlName="searchTerm"
+            <input #searchPropertyInput type="search" id="propSearchTerm" class="form-control" formControlName="searchTerm"
               (keydown.enter)="searchProperty()" [ngbTypeahead]="suggestions" [focusFirst]="false"
               (selectItem)="selectedSuggestion($event)">
             <div class="input-group-append">
