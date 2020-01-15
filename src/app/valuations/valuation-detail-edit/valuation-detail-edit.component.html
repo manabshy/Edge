@@ -139,13 +139,13 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </h4>
-            <app-calendar *ngIf="staffMemberId" [staffMemberId]="staffMemberId" [myCalendarOnly] = "true"
+            <app-calendar *ngIf="staffMemberId" [staffMemberId]="staffMemberId" [myCalendarOnly]="true"
               (selectedDate)="getSelectedDate($event)"></app-calendar>
           </div>
         </div>
         <p *ngFor="let attendee of attendees" class="d-flex d-sm-block">
-          <button class="btn btn-light btn-sm mr-2" type="button"
-            (click)="removeAttendee(attendee?.staffMemberId)" aria-label="remove"><span aria-hidden="true">&times;</span></button>
+          <button class="btn btn-light btn-sm mr-2" type="button" (click)="removeAttendee(attendee?.staffMemberId)"
+            aria-label="remove"><span aria-hidden="true">&times;</span></button>
           <small class="text-left mobile-btn">{{attendee.fullName}}</small>
           <button class="btn btn-light btn-sm ml-2" type="button" (click)="setMain(attendee)">Set as
             main</button>
@@ -154,8 +154,9 @@
       <div class="col-sm-3 offset-sm-2" *ngIf="selectedDate">
         <div class="row align-items-center no-gutters">
           <div class="col">
-            <ng-select [items]="allStaffMembers" [clearable]="false" bindLabel="fullName" bindValue="staffMemberId"
-              groupBy="activeDepartments" (change)="onStaffMemberChange($event)">
+            <ng-select [items]="allStaffMembers" [hideSelected]="true" (clear)="onClear()" [clearable]="true"
+              bindLabel="fullName" bindValue="staffMemberId" groupBy="activeDepartments"
+              (change)="onStaffMemberChange($event)">
               <ng-template ng-optgroup-tmp let-item="item">
                 {{item.category || 'Unnamed group'}}
               </ng-template>
@@ -196,7 +197,8 @@
       <div class="col-sm-10 offset-sm-2">
         <div class="custom-control custom-checkbox form-control-sm py-0">
           <input type="checkbox" class="custom-control-input" id="sendInvitation">
-          <label class="custom-control-label" for="sendInvitation">Send invitation to Property Owner and Attendees</label>
+          <label class="custom-control-label" for="sendInvitation">Send invitation to Property Owner and
+            Attendees</label>
         </div>
       </div>
     </div>

@@ -190,9 +190,9 @@ export class ValuationDetailEditComponent implements OnInit {
   }
 
   setMain(staffMember: StaffMember) {
-    // const existingMain = this.staffMembers.find(x => x.staffMemberId === this.attendee.staffMemberId);
     if (staffMember) {
-      this.mainStaffMember = staffMember;
+      this.selectMainStaffMember(staffMember);
+      this.removeAttendee(staffMember.staffMemberId);
     }
   }
 
@@ -201,6 +201,10 @@ export class ValuationDetailEditComponent implements OnInit {
       const index = this.attendees.findIndex(x => x.staffMemberId === +id);
       this.attendees.splice(index, 1);
     }
+  }
+
+  onClear() {
+    console.log('clear......');
   }
 
   changeDate() {

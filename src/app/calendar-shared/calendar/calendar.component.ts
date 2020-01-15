@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, OnChanges } from '@angular/core';
 import { CalendarEvent, CalendarDateFormatter, CalendarView, CalendarWeekViewBeforeRenderEvent, CalendarDayViewBeforeRenderEvent, DAYS_OF_WEEK, CalendarEventTitleFormatter, CalendarMonthViewBeforeRenderEvent } from 'angular-calendar';
 import {
   isSameMonth,
@@ -35,7 +35,7 @@ import { InfoDetail, DropdownListInfo } from 'src/app/core/services/info.service
     }
   ]
 })
-export class CalendarComponent implements OnInit {
+export class CalendarComponent implements OnInit, OnChanges {
   @Input() staffMemberId: number;
   @Input() myCalendarOnly: boolean;
   @Output() selectedDate = new EventEmitter<any>();
@@ -51,6 +51,7 @@ export class CalendarComponent implements OnInit {
   diaryEvents: DiaryEvent[];
   activeDayIsOpen: boolean;
   viewingArrangements: InfoDetail[];
+  id: number;
 
   constructor(private diaryEventService: DiaryEventService, private storage: StorageMap) { }
 
@@ -61,6 +62,12 @@ export class CalendarComponent implements OnInit {
     this.getDiaryEvents();
   }
 
+  ngOnChanges() {
+    if (this.staffMemberId) {
+      this.id = this.staffMemberId;
+      this.getDiaryEvents();
+    }
+  }
   beforeMonthViewRender(renderEvent: CalendarMonthViewBeforeRenderEvent) {
     this.weekStartsOn = DAYS_OF_WEEK.MONDAY;
     this.daysInWeek = null;
@@ -96,6 +103,7 @@ export class CalendarComponent implements OnInit {
 
 
   getDiaryEvents(isCancelledVisible?: boolean) {
+    console.log('id in calendar', this.staffMemberId)
     const getStart: any = {
       month: startOfMonth,
       week: startOfWeek,
@@ -111,7 +119,7 @@ export class CalendarComponent implements OnInit {
     }[this.view];
 
     const request = {
-      staffMemberId: this.staffMemberId,
+      staffMemberId: this.id,
       startDate: format(getStart(this.viewDate), 'YYYY-MM-DD'),
       endDate: format(getEnd(this.viewDate), 'YYYY-MM-DD'),
     } as BasicEventRequest;
