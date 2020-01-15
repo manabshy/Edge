@@ -9,12 +9,13 @@ import { NoteModalComponent } from '../../shared/note-modal/note-modal.component
 import { PhoneNumberUtil } from 'google-libphonenumber';
 import { Location } from '@angular/common';
 import { Title } from '@angular/platform-browser';
-import { AbstractControl } from '@angular/forms';
+import { AbstractControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { CustomQueryEncoderHelper } from '../shared/custom-query-encoder-helper';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { ContactGroup } from 'src/app/contactgroups/shared/contact-group';
+import { ValidationMessages, FormErrors } from '../shared/app-constants';
 
 @Injectable({
   providedIn: 'root'
@@ -171,6 +172,29 @@ export class SharedService {
       this._location.replaceState(url);
       oldId = newId;
     }
+  }
+
+  logValidationErrors(group: FormGroup, fakeTouched: boolean) {
+    Object.keys(group.controls).forEach((key: string) => {
+      const control = group.get(key);
+      const messages = ValidationMessages[key];
+      if (control.valid) {
+        FormErrors[key] = '';
+      }
+      if (control && !control.valid && (fakeTouched || control.dirty)) {
+        console.log('errors ', control.errors);
+        FormErrors[key] = '';
+        for (const errorKey in control.errors) {
+          if (errorKey) {
+            FormErrors[key] += messages[errorKey] + '\n';
+          }
+        }
+      }
+      if (control instanceof FormGroup) {
+        this.logValidationErrors(control, fakeTouched);
+      }
+    });
+    this.scrollToFirstInvalidField();
   }
 
   formatPostCode(postCodeToCheck: string) {
