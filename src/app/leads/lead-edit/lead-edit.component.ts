@@ -530,8 +530,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     } else {
       this.leadsListCompleted = true;
       console.log('list completed', this.leadIds);
-      this.leadEditForm.reset();
-      console.log('form here', this.leadEditForm);
     }
   }
 
