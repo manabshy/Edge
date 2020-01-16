@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { AppUtils } from '../../core/shared/utils';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LeadsService } from '../shared/leads.service';
-import { Lead, LeadEditSubNavItems, LeadProperty, LeadSearchInfo } from '../shared/lead';
+import { Lead, LeadEditSubNavItems, LeadSearchInfo } from '../shared/lead';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { InfoDetail } from 'src/app/core/services/info.service';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
@@ -19,7 +19,7 @@ import { BaseComponent } from 'src/app/shared/models/base-component';
 import { LeadNoteComponent } from '../lead-note/lead-note.component';
 import { ValidationMessages, FormErrors } from 'src/app/core/shared/app-constants';
 import { Location } from '@angular/common';
-import { isEqual, isSameDay, format } from 'date-fns';
+import { isEqual } from 'date-fns';
 import { WedgeValidators } from 'src/app/shared/wedge-validators';
 
 @Component({
@@ -71,6 +71,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   isLeadMarkedAsClosed: boolean;
   isValidatorCleared: boolean;
   selectedLeadTypeId: number;
+  isChaseDateInvalid: boolean = false;
+  errorMessage: WedgeError;
   get nextChaseDateControl() {
     return this.leadEditForm.get('nextChaseDate') as FormControl;
   }
@@ -83,7 +85,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     private fb: FormBuilder,
     private sharedService: SharedService,
     private contactGroupService: ContactGroupsService,
-    private staffMemberService: StaffMemberService,
     private toastr: ToastrService) { super(); }
 
   ngOnInit() {
@@ -117,6 +118,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   init() {
     this.setupLeadEditForm();
     this.leadEditForm.valueChanges.pipe(debounceTime(400)).subscribe(() => this.logValidationErrors(this.leadEditForm, false));
+    this.setNextChaseDateValidators();
 
     // All Staffmembers
     this.storage.get('allstaffmembers').subscribe(data => {
@@ -193,7 +195,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.leadsService.getLeadIds(leadSearchInfo).subscribe(result => {
       this.leadIds = result;
       this.currentLeadIndex = this.leadIds.indexOf(leadSearchInfo.startLeadId);
-    }, error => {
+    }, () => {
       this.lead = null;
     });
 
@@ -230,7 +232,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       this.getPersonInformation();
       this.lead.dateClosed ? this.isLeadClosed = true : this.isLeadClosed = false;
       this.leadOwner = this.staffMembers.find(sm => sm.staffMemberId === this.lead.ownerId);
-    }, error => {
+    }, () => {
       this.lead = null;
     });
   }
@@ -307,6 +309,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     if (this.lead && this.lead.nextChaseDate) {
       if (!isEqual(newChaseDate, this.lead.nextChaseDate)) {
         this.isNextChaseDateChanged = true;
+        this.noteRequiredWarning = 'Note is required.';
       }
     }
   }
@@ -326,9 +329,11 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   setNextChaseDateValidators() {
+    console.log('condit.....', this.nextChaseDateControl.value < new Date() && !this.isValidatorCleared)
     if (this.nextChaseDateControl.value < new Date() && !this.isValidatorCleared) {
       this.nextChaseDateControl.setValidators(WedgeValidators.nextChaseDateValidator());
       this.nextChaseDateControl.updateValueAndValidity();
+      this.isChaseDateInvalid = true;
     }
   }
 
@@ -364,7 +369,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   SaveLead(shouldExit: boolean = false, leadNote = null) {
-    this.setNextChaseDateValidators();
+    // this.setNextChaseDateValidators();
     this.logValidationErrors(this.leadEditForm, true);
 
     if (this.leadEditForm.valid) {
@@ -386,6 +391,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       } else {
         this.onUpdateCompleted();
       }
+    } else {
+      this.errorMessage = {} as WedgeError;
+      this.errorMessage.displayMessage = 'Please correct validation errors';
     }
 
   }
@@ -417,6 +425,15 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
         if (result) {
           this.lead = result;
           result.dateClosed ? this.isLeadClosed = true : this.isLeadClosed = false;
+          if (this.isChaseDateInvalid) {
+            this.isChaseDateInvalid = false;
+            console.log('should be false here', this.isChaseDateInvalid)
+          }
+          console.log('is chase date invalid', this.isChaseDateInvalid)
+          if (!this.isChaseDateInvalid) {
+            console.log('is chase date invalid 2', this.isChaseDateInvalid)
+            this.moveToNextLead();
+          }
         }
         this.onUpdateCompleted(result);
       }, (error: WedgeError) => {
@@ -447,7 +464,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     if (this.isNextChaseDateChanged) {
       this.isNextChaseDateChanged = false;
     }
-
+    // if (this.isChaseDateInvalid) {
+    //   this.isChaseDateInvalid = false;
+    // }
     let url = this.router.url;
     let id = this.leadId;
     if (url.indexOf('edit/' + id) === -1) {
@@ -500,13 +519,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   moveToNextLead() {
-    console.log('lead form dirty', this.leadEditForm.dirty);
-    if (this.leadEditForm.dirty || this.isNoteFormDirty) {
-      this.SaveLead(true, this.note);
-      this.isNoteFormDirty = false;
-      this.leadEditForm.markAsPristine();
-      this.noteRequiredWarning = '';
-    }
 
     if (this.currentLeadIndex < this.leadIds.length - 1) {
       this.currentLeadIndex++;
@@ -523,6 +535,17 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     }
   }
 
+  traverseLeads() {
+    this.SaveLead(true, this.note)
+    console.log('note',  this.note)
+    // console.log('is chase date invalid', this.isChaseDateInvalid)
+    // if (!this.isChaseDateInvalid) {
+    //   console.log('is chase date invalid 2', this.isChaseDateInvalid)
+    //   setTimeout(() => {
+    //     this.moveToNextLead();
+    //   })
+    // }
+  }
   canDeactivate(): boolean {
     if (this.leadEditForm.dirty && !this.isSubmitting || this.isPropertyAssociated) {
       return false;
