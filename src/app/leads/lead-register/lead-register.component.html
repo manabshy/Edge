@@ -68,7 +68,7 @@
           <div class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input" id="unassignedLeadsOnly"
               formControlName="includeUnassignedLeadsOnly">
-            <label class="custom-control-label" for="unassignedLeadsOnly">Include unassigned leads only</label>
+            <label class="custom-control-label" for="unassignedLeadsOnly">Show unassigned leads only</label>
           </div>
         </div>
       </div>
@@ -107,10 +107,10 @@
         <div class="col-sm"><strong>Chaser</strong></div>
       </div>
     </div>
-    <div *ngIf="leads" class="search-results" infiniteScroll [infiniteScrollDistance]="5"
+    <!-- <div *ngIf="leads" class="search-results" infiniteScroll [infiniteScrollDistance]="5"
     [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"
     (scrolled)="onScrollDown()">
-  </div>
+  </div> -->
     <a [routerLink]="areLeadsAssignable ? null : ['edit', lead?.leadId]" [queryParams]="{leadTypeId: lead?.leadTypeId}" (click)="selectLeadForAssignment($event, lead)"
       class="list-group-item list-group-item-action" *ngFor="let lead of filteredLeads; let i = index;"
       [ngClass]="{'list-group-item-info': selectedLeadIndex(lead) >= 0}">
