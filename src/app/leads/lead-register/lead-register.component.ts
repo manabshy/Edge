@@ -14,7 +14,7 @@ import { Subject } from 'rxjs';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { ToastrService } from 'ngx-toastr';
 import * as _ from 'lodash';
-import { LeadFinderComponent } from '../lead-finder/lead-finder.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-lead-register',
@@ -42,6 +42,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   isSelectAllChecked = false;
   searchTerm = '';
   errorMessage: WedgeError;
+  info: string;
 
   constructor(private leadService: LeadsService,
     private sharedService: SharedService,
@@ -49,6 +50,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     private officeService: OfficeService,
     private modalService: BsModalService,
     private toastr: ToastrService,
+    private router: Router,
     private fb: FormBuilder) { }
 
   ngOnInit() {
@@ -125,7 +127,6 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   }
 
   selectLead(lead?: Lead) {
-
     console.log('clicked', lead);
     this.leadService.leadsChanged(lead);
   }
@@ -258,6 +259,18 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
 
   }
 
+  navigateToEdit(lead: Lead) {
+    if (!this.areLeadsAssignable) {
+      const newInfo = { ...this.leadSearchInfo, ...this.leadRegisterForm.value } as LeadSearchInfo;
+      newInfo.startLeadId = lead.leadId;
+      this.info = JSON.stringify(newInfo);
+      this.router.navigate(['/leads-register/edit', lead.leadId],
+        {
+          queryParams:
+            { leadSearchInfo: this.info }
+        });
+    }
+  }
   onScrollDown() {
     this.onWindowScroll();
     console.log('scrolled');
