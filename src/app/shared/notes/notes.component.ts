@@ -25,7 +25,7 @@ export class NotesComponent implements OnInit, OnChanges {
   @Input() contactGroupNotes: ContactNote[];
   @Input() propertyNotes: PropertyNote[];
   @Input() showNoteInput: boolean = true;
-  
+
   notes: any;
   tests: any;
   contactPeople: Person[];
@@ -75,7 +75,7 @@ export class NotesComponent implements OnInit, OnChanges {
   }
 
   setFlag(noteId: number, isImportantFlag: boolean) {
-    if(this.notes.propertyId){
+    if (this.notes.propertyId) {
       return;
     }
     this.notes.forEach((x) => {
@@ -102,19 +102,6 @@ export class NotesComponent implements OnInit, OnChanges {
             });
             break;
         }
-        // if (x.contactGroupId) {
-        //   console.log('contact note here.....', x);
-        //   this.contactGroupService.updateContactGroupNote(x).subscribe((data) => {
-        //     this.contactGroupService.notesChanged(x);
-        //     this.isUpdating = false;
-        //   });
-        // } else {
-        //   console.log('person note here.....', x);
-        //   this.contactGroupService.updatePersonNote(x).subscribe((data) => {
-        //     this.contactGroupService.notesChanged(x);
-        //     this.isUpdating = false;
-        //   });
-        // }
       }
     });
 
@@ -122,11 +109,9 @@ export class NotesComponent implements OnInit, OnChanges {
 
   onScrollDown() {
     this.onWindowScroll();
-    console.log('scrolled down!!');
   }
 
   onScrollUp() {
-    console.log('scrolled up!!');
   }
 
   @HostListener('window:scroll', ['$event'])
@@ -134,29 +119,21 @@ export class NotesComponent implements OnInit, OnChanges {
     if (window.innerHeight + window.scrollY === document.body.scrollHeight && !this.bottomReached) {
       this.page++;
       if (this.contactPeople && this.contactPeople.length) {
-        console.log('here for contact notes');
         this.contactGroupService.contactNotePageNumberChanged(this.page);
-        console.log('page number here for contact notes...', this.page);
 
       }
       if (this.isPersonNote) {
-        console.log('here for person notes', this.isPersonNote);
         this.contactGroupService.personNotePageNumberChanged(this.page);
-        console.log('page number here for peron notes...', this.page);
 
       }
       if (this.isPropertyNote) {
-        console.log('here for property notes', this.isPropertyNote);
         this.propertyService.propertyNotePageNumberChanged(this.page);
-        console.log('page number here for property notes...', this.page);
       }
     }
   }
 
   addNote() {
     if (this.noteData) {
-      console.log('add note', this.person);
-      console.log('note data' , this.noteData);
       this.sharedService.addNote(this.noteData);
     }
   }
