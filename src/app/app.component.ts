@@ -79,6 +79,9 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
   }
 
   ngOnInit() {
+    console.log('before forcing update for testing');
+    this.edgeServiceWorker.forceUpdate();
+    console.log('after forcing update');
     this.toastr.overlayContainer = this.toastContainer;
     console.log('instance initiliased');
     this.setManifestName();
@@ -113,7 +116,7 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
     }
 
     this.cdRef.detectChanges();
-    this.edgeServiceWorker.forceUpdate();
+    // this.edgeServiceWorker.forceUpdate();
   }
 
   @HostListener('window:scroll', ['$event'])
