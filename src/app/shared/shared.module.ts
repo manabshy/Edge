@@ -68,6 +68,7 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { AdditionalInfoComponent } from './additional-info/additional-info.component';
 
 
 @NgModule({
@@ -106,7 +107,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     SharedPropertyListComponent,
     SharedLeadRegisterComponent,
     LeadAssignmentModalComponent,
-    StaffmemberFinderComponent
+    StaffmemberFinderComponent,
+    AdditionalInfoComponent
 
   ],
   imports: [
@@ -175,6 +177,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     ContactgroupsDetailSearchesComponent,
     SharedPropertyListComponent,
     StaffmemberFinderComponent,
+    AdditionalInfoComponent,
      // to be refactored
     InfiniteScrollModule,
     CollapseModule,

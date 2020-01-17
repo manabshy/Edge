@@ -8,11 +8,6 @@
       <div class="col">
         <div class="row align-items-center">
           <div class="col-12">
-            <div class="mb-1 text-muted">
-              <small>PR-{{property?.propertyId}}</small>
-            </div>
-          </div>
-          <div class="col-12">
             <div class="mb-1">
               <strong [innerHTML]="property?.address| formatAddress"></strong><span class="text-danger"
                 *ngIf="!(property.address )">No address</span>
@@ -21,7 +16,7 @@
         </div>
       </div>
       <div class="col-sm-auto col-xl-12" *ngIf="isLead && !isLeadClosed">
-        <button type="button" class="btn btn-block btn-light" (click)=" associateToLead(property)">Associate to lead</button>
+        <button type="button" class="btn btn-sm btn-block btn-light" (click)=" associateToLead(property)">Associate to lead</button>
       </div>
     </div>
   </a>

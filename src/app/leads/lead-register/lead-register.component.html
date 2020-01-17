@@ -47,7 +47,7 @@
           <label class="small" for="dateTo">Date To</label>
           <input type="text" id="dateTo" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
             [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY',customTodayClass: 'font-weight-bold'}"
-             bsDatepicker formControlName="dateTo">
+            bsDatepicker formControlName="dateTo">
         </div>
         <div class="col-sm form-group">
           <label class="small" for="office">Office</label>
@@ -68,7 +68,7 @@
           <div class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input" id="unassignedLeadsOnly"
               formControlName="includeUnassignedLeadsOnly">
-            <label class="custom-control-label" for="unassignedLeadsOnly">Include unassigned leads only</label>
+            <label class="custom-control-label" for="unassignedLeadsOnly">Show unassigned leads only</label>
           </div>
         </div>
       </div>
@@ -108,10 +108,10 @@
       </div>
     </div>
     <div *ngIf="leads" class="search-results" infiniteScroll [infiniteScrollDistance]="5"
-    [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"
-    (scrolled)="onScrollDown()">
-  </div>
-    <a [routerLink]="areLeadsAssignable ? null : ['edit', lead?.leadId]" [queryParams]="{leadTypeId: lead?.leadTypeId}" (click)="selectLeadForAssignment($event, lead)"
+      [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"
+      (scrolled)="onScrollDown()">
+    </div>
+    <a (click)="selectLeadForAssignment($event, lead); navigateToEdit(lead)"
       class="list-group-item list-group-item-action" *ngFor="let lead of filteredLeads; let i = index;"
       [ngClass]="{'list-group-item-info': selectedLeadIndex(lead) >= 0}">
       <div class="row align-items-center">

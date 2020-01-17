@@ -1,4 +1,4 @@
-<app-breadcrumb [title]="contactGroupDetails?.contactGroupId ? 'CG-'+contactGroupDetails?.contactGroupId : ''">
+<app-breadcrumb>
 </app-breadcrumb>
 <div class="container">
   <div class="row page-title">
@@ -182,7 +182,6 @@
                 [ngClass]="{'new-person': person?.isNewPerson, 'list-group-item-danger': person?.warning && person?.warning?.id !== 1}">
                 <div class="row">
                   <div class="col">
-                    <small class="text-muted mr-2">P-{{person?.personId}}</small>
                     <app-score-badge [person]="person"></app-score-badge>
                     <span class="badge badge-pill badge-danger mb-2 mr-2"
                       *ngIf="person?.warning && person?.warning?.id !== 1">{{person?.warningStatusComment || person?.warning?.value}}</span>
@@ -324,6 +323,9 @@
                       </ul>
                     </div>
                   </div>
+                  <div class="col-12 text-right">
+                    <small class="text-muted">P-{{person?.personId}}</small>
+                  </div>
                 </div>
               </a>
             </ng-container>
@@ -407,3 +409,4 @@
   [contactGroupDetails]="contactGroupDetails" [searchTerm]="signer" (addedPersonDetails)="getAddedPersonDetails($event)"
   (selectedPerson)="getSelectedPerson($event)" (isCanvasHidden)="resetCanvasFlag($event)">
 </app-person-duplicate-checker>
+<app-additional-info [id]="contactGroupDetails?.contactGroupId ? 'CG-'+contactGroupDetails?.contactGroupId : ''"></app-additional-info>

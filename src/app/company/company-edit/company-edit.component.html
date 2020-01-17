@@ -1,4 +1,4 @@
-<app-breadcrumb [title]="companyDetails?.companyId ? 'CO-'+companyDetails?.companyId : ''"></app-breadcrumb>
+<app-breadcrumb></app-breadcrumb>
 <div class="container">
   <h4 class="page-title">
     <ng-container *ngIf="isNewCompany; else editLabel">New</ng-container>
@@ -95,3 +95,4 @@
     </form>
   </ng-container>
 </div>
+<app-additional-info [id]="companyDetails?.companyId ? 'CO-'+companyDetails?.companyId : ''"></app-additional-info>

@@ -1,4 +1,4 @@
-<app-breadcrumb [title]="lead?.leadId ? 'L-'+lead?.leadId : ''"></app-breadcrumb>
+<app-breadcrumb></app-breadcrumb>
 <div class="container">
   <div class="row page-title">
     <div class="col">
@@ -100,9 +100,9 @@
                   <label for="chaseDate">Chase date</label>
                   <input type="text" id="chaseDate" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
                     formControlName="nextChaseDate"
-                    [bsConfig]="{showWeekNumbers:false, useUtc: true, dateInputFormat: 'DD/MM/YYYY', minDate:todaysDate, customTodayClass: 'font-weight-bold'}"
-                    bsDatepicker [attr.disabled]="isLeadClosed ? true : null"  (bsValueChange)="onChaseDateChange($event)"
-                    [ngClass]="{'is-invalid': (formErrors?.nextChaseDate)}">
+                    [bsConfig]="{showWeekNumbers:false, useUtc: false, dateInputFormat: 'DD/MM/YYYY', minDate:todaysDate, customTodayClass: 'font-weight-bold'}"
+                    bsDatepicker [attr.disabled]="isLeadClosed ? true : null"
+                    (bsValueChange)="onChaseDateChange($event)" [ngClass]="{'is-invalid': (formErrors?.nextChaseDate)}">
                   <div class="invalid-feedback">{{formErrors?.nextChaseDate}}</div>
                 </div>
               </div>
@@ -135,7 +135,7 @@
               [isUpdateComplete]="isUpdateComplete"></app-lead-note>
           </div>
         </div>
-        <app-notes [personNotes]="personNotes" [person]="person" [noteData]="dataNote" [addressees]="addressees"
+        <app-notes [personNotes]="personNotes" [person]="person" [addressees]="addressees"
           [pageNumber]="page" [bottomReached]="bottomReached" [showNoteInput]="false"></app-notes>
       </div>
     </div>
@@ -146,12 +146,14 @@
             <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
             <button type="submit" class="btn btn-secondary mr-2"
               [attr.disabled]="isLeadClosed ? true : null">Save</button>
-            <button (click)="moveToNextLead()" type="button" class="btn btn-secondary" [isOpen]="leadsListCompleted"
-              [tooltip]="leadsListCompleted ? 'You have reached the end of the list' : null"
-              [attr.disabled]="isLeadClosed ? true : null">Save & Next</button>
+            <button (click)="traverseLeads()" type="button" class="btn btn-secondary" [isOpen]="leadsListCompleted"
+              [tooltip]="leadsListCompleted ? 'You have reached the end of the list' : null || !leadEditForm.valid? errorMessage?.displayMessage : ''"
+              placement="top" [attr.disabled]="isLeadClosed ? true : null ">Save &
+              Next</button>
           </div>
         </div>
       </div>
     </div>
   </form>
 </div>
+<app-additional-info [id]="lead?.leadId ? 'L-'+lead?.leadId : ''"></app-additional-info>
