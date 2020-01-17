@@ -73,6 +73,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   selectedLeadTypeId: number;
   isChaseDateInvalid: boolean = false;
   errorMessage: WedgeError;
+  leadSearchInfo: LeadSearchInfo;
+  infoParam: string;
   get nextChaseDateControl() {
     return this.leadEditForm.get('nextChaseDate') as FormControl;
   }
@@ -90,6 +92,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   ngOnInit() {
     AppUtils.parentRoute = AppUtils.prevRoute;
     this.selectedLeadTypeId = +this.route.snapshot.queryParamMap.get('leadTypeId');
+    this.infoParam = this.route.snapshot.queryParamMap.get('leadSearchInfo');
     this.route.params.subscribe(params => {
       this.leadId = +params['leadId'] || 0;
       if (this.leadId) {
@@ -184,17 +187,11 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   getLeadIds(leadId: number) {
-    console.log('leadId', leadId);
-    const leadSearchInfo = {
-      startLeadId: leadId,
-      leadTypeId: this.selectedLeadTypeId ? this.selectedLeadTypeId : 0,
-      includeClosedLeads: false,
-      includeUnassignedLeadsOnly: false
-    } as LeadSearchInfo;
+    this.leadSearchInfo = JSON.parse(this.infoParam) as LeadSearchInfo;
 
-    this.leadsService.getLeadIds(leadSearchInfo).subscribe(result => {
+    this.leadsService.getLeadIds(this.leadSearchInfo).subscribe(result => {
       this.leadIds = result;
-      this.currentLeadIndex = this.leadIds.indexOf(leadSearchInfo.startLeadId);
+      this.currentLeadIndex = this.leadIds.indexOf(this.leadSearchInfo.startLeadId);
     }, () => {
       this.lead = null;
     });
@@ -244,12 +241,12 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
         person: lead.person,
         personId: lead.personId,
         leadTypeId: lead.leadTypeId,
-        nextChaseDate: this.sharedService.ISOToDate(lead.nextChaseDate),
+        nextChaseDate: lead.nextChaseDate ? new Date(lead.nextChaseDate) : null,
         closeLead: lead.closedById
       });
     }
     this.onLoading = false;
-    console.log('after patching here', this.leadEditForm.value);
+
   }
 
   private getPersonInformation() {
@@ -310,6 +307,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       if (!isEqual(newChaseDate, this.lead.nextChaseDate)) {
         this.isNextChaseDateChanged = true;
         this.noteRequiredWarning = 'Note is required.';
+      } else {
+        this.noteRequiredWarning = '';
       }
     }
   }
@@ -329,7 +328,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   setNextChaseDateValidators() {
-    console.log('condit.....', this.nextChaseDateControl.value < new Date() && !this.isValidatorCleared)
+    console.log('condit.....', this.nextChaseDateControl.value < new Date() && !this.isValidatorCleared);
     if (this.nextChaseDateControl.value < new Date() && !this.isValidatorCleared) {
       this.nextChaseDateControl.setValidators(WedgeValidators.nextChaseDateValidator());
       this.nextChaseDateControl.updateValueAndValidity();
@@ -427,11 +426,11 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
           result.dateClosed ? this.isLeadClosed = true : this.isLeadClosed = false;
           if (this.isChaseDateInvalid) {
             this.isChaseDateInvalid = false;
-            console.log('should be false here', this.isChaseDateInvalid)
+            console.log('should be false here', this.isChaseDateInvalid);
           }
-          console.log('is chase date invalid', this.isChaseDateInvalid)
+          console.log('is chase date invalid', this.isChaseDateInvalid);
           if (!this.isChaseDateInvalid) {
-            console.log('is chase date invalid 2', this.isChaseDateInvalid)
+            console.log('is chase date invalid 2', this.isChaseDateInvalid);
             this.moveToNextLead();
           }
         }
@@ -534,16 +533,10 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   traverseLeads() {
-    this.SaveLead(true, this.note)
-    console.log('note',  this.note)
-    // console.log('is chase date invalid', this.isChaseDateInvalid)
-    // if (!this.isChaseDateInvalid) {
-    //   console.log('is chase date invalid 2', this.isChaseDateInvalid)
-    //   setTimeout(() => {
-    //     this.moveToNextLead();
-    //   })
-    // }
+    this.SaveLead(true, this.note);
+    console.log('note', this.note);
   }
+
   canDeactivate(): boolean {
     if (this.leadEditForm.dirty && !this.isSubmitting || this.isPropertyAssociated) {
       return false;

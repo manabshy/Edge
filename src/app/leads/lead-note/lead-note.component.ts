@@ -60,8 +60,6 @@ export class LeadNoteComponent implements OnInit, OnChanges {
     if (this.isUpdateComplete) {
       this.noteForm.reset();
     }
-    console.log('Lead Note Component:', this.isDisabled);
-    console.log('Note required warning:', this.noteRequiredWarning);
   }
 
   consumeShortcut(shortcut: string) {
