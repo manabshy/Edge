@@ -65,8 +65,8 @@ export class LeadsService {
   }
 
   getLeads(leadSearchInfo: LeadSearchInfo, pageSize?: number): Observable<any> {
-    const dateTo =  format(leadSearchInfo.dateTo, 'YYYY-MM-DD');
-    const dateFrom =  format(leadSearchInfo.dateFrom, 'YYYY-MM-DD');
+    const dateTo = format(leadSearchInfo.dateTo, 'YYYY-MM-DD');
+    const dateFrom = format(leadSearchInfo.dateFrom, 'YYYY-MM-DD');
     if (!leadSearchInfo.page || +leadSearchInfo.page === 0) {
       leadSearchInfo.page = 1;
     }
@@ -109,7 +109,8 @@ export class LeadsService {
 
   // Returning list of Lead Ids
   getLeadIds(leadSearchInfo: LeadSearchInfo, pageSize?: number): Observable<any> {
-
+    const dateTo = format(leadSearchInfo.dateTo, 'YYYY-MM-DD');
+    const dateFrom = format(leadSearchInfo.dateFrom, 'YYYY-MM-DD');
     console.log('date params', leadSearchInfo);
 
     const options = new HttpParams({
@@ -119,8 +120,8 @@ export class LeadsService {
         personId: leadSearchInfo.personId != null ? leadSearchInfo.personId.toString() : '',
         leadTypeId: leadSearchInfo.leadTypeId != null ? leadSearchInfo.leadTypeId.toString() : '',
         officeId: leadSearchInfo.officeId != null ? leadSearchInfo.officeId.toString() : '',
-        dateFrom: leadSearchInfo.dateFrom != null ? new Date(leadSearchInfo.dateFrom.toString()).toLocaleDateString() : '',
-        dateTo: leadSearchInfo.dateTo != null ? new Date(leadSearchInfo.dateTo.toString()).toLocaleDateString() : '',
+        dateFrom: leadSearchInfo.dateFrom != null ? dateFrom.toString() : '',
+        dateTo: leadSearchInfo.dateTo != null ? dateTo.toString() : '',
         includeClosedLeads: leadSearchInfo.includeClosedLeads != null ? (String)(leadSearchInfo.includeClosedLeads) : '',
         includeUnassignedLeadsOnly: leadSearchInfo.includeUnassignedLeadsOnly != null
           ? (String)(leadSearchInfo.includeUnassignedLeadsOnly) : '',
