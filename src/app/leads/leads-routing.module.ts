@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { LeadRegisterComponent } from './lead-register/lead-register.component';
 import { LeadEditComponent } from './lead-edit/lead-edit.component';
 import { LeadComponent } from './lead.component';
 import { CanDeactivateGuard } from '../core/shared/can-deactivate.guard';
 
 const routes: Routes = [
-  { path: '', component: LeadComponent, data: { shouldDetach: false } },
+  { path: '', component: LeadComponent, data: { shouldDetach: true } },
   { path: 'edit/:leadId', component: LeadEditComponent, canDeactivate: [CanDeactivateGuard], data: { shouldDetach: false } }
 
 ];
