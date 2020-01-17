@@ -288,8 +288,6 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       console.log('leads page number', this.page);
       console.log('leads page number params', this.leadSearchInfo);
     }
-
-    console.log('bottom reached', this.bottomReached);
   }
 
   private replaceLeadsWithNewOwners(newLeads: Lead[]) {

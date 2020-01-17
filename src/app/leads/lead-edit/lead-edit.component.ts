@@ -307,7 +307,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     if (this.lead && this.lead.nextChaseDate) {
       if (!isEqual(newChaseDate, this.lead.nextChaseDate)) {
         this.isNextChaseDateChanged = true;
-        this.noteRequiredWarning = 'Note is required.';
+        console.log('note here', this.note);
+        this.note ? this.noteRequiredWarning = '' : this.noteRequiredWarning = 'Note is required.';
       } else {
         this.noteRequiredWarning = '';
       }
@@ -427,10 +428,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
           result.dateClosed ? this.isLeadClosed = true : this.isLeadClosed = false;
           if (this.isChaseDateInvalid) {
             this.isChaseDateInvalid = false;
-            console.log('should be false here', this.isChaseDateInvalid);
           }
           console.log('is chase date invalid', this.isChaseDateInvalid);
-          if (!this.isChaseDateInvalid) {
+          if (!this.isChaseDateInvalid && this.isSaveAndNext) {
             console.log('is chase date invalid 2', this.isChaseDateInvalid);
             this.moveToNextLead();
           }
@@ -461,7 +461,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       this.isSaveAndNext ? time = 2000 : time = 5000;
       this.toastr.success('Lead successfully updated', '', { timeOut: time });
     }
-  
+
     this.isSaveAndNext = false;
     this.isUpdateComplete = true;
     this.leadsService.isLeadUpdated(true);
@@ -483,12 +483,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       this.router.navigate(['/leads-register/edit/', this.leadId]);
       this.init();
     }
-  }
-
-  get dataNote() {
-    return {
-      personId: this.personId
-    };
   }
 
   cancel() {
