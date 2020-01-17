@@ -75,6 +75,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   errorMessage: WedgeError;
   leadSearchInfo: LeadSearchInfo;
   infoParam: string;
+  isSaveAndNext: boolean;
   get nextChaseDateControl() {
     return this.leadEditForm.get('nextChaseDate') as FormControl;
   }
@@ -455,17 +456,19 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   private onUpdateCompleted(lead?: Lead) {
+    let time: number;
     if (this.isNewLead) { this.toastr.success('Lead successfully saved'); } else {
-      this.toastr.success('Lead successfully updated');
+      this.isSaveAndNext ? time = 2000 : time = 5000;
+      this.toastr.success('Lead successfully updated', '', { timeOut: time });
     }
+  
+    this.isSaveAndNext = false;
     this.isUpdateComplete = true;
     this.leadsService.isLeadUpdated(true);
     if (this.isNextChaseDateChanged) {
       this.isNextChaseDateChanged = false;
     }
-    // if (this.isChaseDateInvalid) {
-    //   this.isChaseDateInvalid = false;
-    // }
+
     let url = this.router.url;
     let id = this.leadId;
     if (url.indexOf('edit/' + id) === -1) {
@@ -533,6 +536,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   traverseLeads() {
+    this.isSaveAndNext = true;
     this.SaveLead(true, this.note);
     console.log('note', this.note);
   }
