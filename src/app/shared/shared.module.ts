@@ -69,6 +69,7 @@ import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { AdditionalInfoComponent } from './additional-info/additional-info.component';
+import { SharedValuationListComponent } from './shared-valuation-list/shared-valuation-list.component';
 
 
 @NgModule({
@@ -108,7 +109,8 @@ import { AdditionalInfoComponent } from './additional-info/additional-info.compo
     SharedLeadRegisterComponent,
     LeadAssignmentModalComponent,
     StaffmemberFinderComponent,
-    AdditionalInfoComponent
+    AdditionalInfoComponent,
+    SharedValuationListComponent
 
   ],
   imports: [
