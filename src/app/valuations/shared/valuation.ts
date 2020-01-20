@@ -36,6 +36,7 @@ export interface Valuation extends ValuationInfo {
   suggestedAskingRentShortLetMonthly?: number;
   createdDate: Date;
   createdBy: BaseStaffMember;
+  isActive?: boolean;
 }
 
 export interface ValuationRequestOption extends BaseRequestOption {

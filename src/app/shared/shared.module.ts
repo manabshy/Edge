@@ -180,6 +180,7 @@ import { SharedValuationListComponent } from './shared-valuation-list/shared-val
     SharedPropertyListComponent,
     StaffmemberFinderComponent,
     AdditionalInfoComponent,
+    SharedValuationListComponent,
      // to be refactored
     InfiniteScrollModule,
     CollapseModule,
