@@ -16,7 +16,7 @@
         </th>
         <td class="d-none d-sm-table-cell">{{pipeline.fullName}}</td>
         <td class="text-right" [ngClass]="{'font-weight-bold': order === 'totalFees'}">{{pipeline.totalFees | rounding
-                              | currency: "GBP"
+                              | number: '1.0-0'
                               | truncating}}</td>
         <td class="text-right" [ngClass]="{'font-weight-bold': order === 'totalCount'}">{{pipeline.totalCount}}</td>
       </tr>

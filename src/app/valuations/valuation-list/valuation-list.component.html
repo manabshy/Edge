@@ -49,14 +49,15 @@
           <dt class="col-4 d-sm-none">Values</dt>
           <dd class="col">
             <div>
-              <span class="d-inline-block w-25">S:</span> {{val?.suggestedAskingPrice || '-'}}
+              <span class="d-inline-block w-25">S:</span> <ng-container *ngIf="val?.suggestedAskingPrice, else noValue">{{val?.suggestedAskingPrice | number:'1.0-0'}}</ng-container>
             </div>
             <div>
-              <span class="d-inline-block w-25">LL:</span> {{val?.suggestedAskingRentLongLet ? val?.suggestedAskingRentLongLet + ' pw' : '-'}}
+              <span class="d-inline-block w-25">LL:</span> <ng-container *ngIf="val?.suggestedAskingRentLongLet, else noValue">{{val?.suggestedAskingRentLongLet | number:'1.0-0'}}</ng-container>
             </div>
             <div>
-              <span class="d-inline-block w-25">SL:</span> {{val?.suggestedAskingRentShortLet ? val?.suggestedAskingRentShortLet + ' pw' : '-'}}
+              <span class="d-inline-block w-25">SL:</span> <ng-container *ngIf="val?.suggestedAskingRentShortLet, else noValue">{{val?.suggestedAskingRentShortLet | number:'1.0-0'}}</ng-container>
             </div>
+            <ng-template #noValue>-</ng-template>
           </dd>
         </dl>
       </div>
