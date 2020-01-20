@@ -77,7 +77,7 @@ export interface InstructionInfo {
   type: string;
   statusId: number;
   status: string;
-  instuctionDate: Date;
+  instructionDate: Date;
   amount: number;
   shortLetAmount: number;
   ownerId: number;
