@@ -79,9 +79,8 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
   }
 
   ngOnInit() {
-    console.log('before forcing update for testing');
-    this.edgeServiceWorker.forceUpdate();
-    console.log('after forcing update');
+    // this.edgeServiceWorker.forceUpdate();
+    console.log('edgeServiceWorker in ngonit', this.edgeServiceWorker);
     this.toastr.overlayContainer = this.toastContainer;
     console.log('instance initiliased');
     this.setManifestName();

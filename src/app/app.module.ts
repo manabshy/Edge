@@ -167,11 +167,6 @@ const externalModulesExports = [
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
-  exports: [
-    // externalModulesExports,
-    MainmenuComponent
-  ],
-
   providers: [],
   bootstrap: [AppComponent],
   schemas: [NO_ERRORS_SCHEMA]
