@@ -3,6 +3,8 @@ import { SwUpdate, UpdateAvailableEvent } from '@angular/service-worker';
 import { interval, concat, Subject } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { ConfirmModalComponent } from 'src/app/shared/confirm-modal/confirm-modal.component';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +14,21 @@ export class EdgeServiceWorkerService {
   private appChangeSubject = new Subject<UpdateAvailableEvent>();
   appChanges$ = this.appChangeSubject.asObservable();
 
-  constructor(private appRef: ApplicationRef, private updates: SwUpdate, private toastr: ToastrService) { }
+  constructor(private appRef: ApplicationRef,
+    private updates: SwUpdate,
+    private modalService: BsModalService,
+    private toastr: ToastrService) {
+    this.updates.available.subscribe(evt => {
+      if (evt) {
+        console.log('event triggered here', evt);
+        this.showWarning().subscribe(res => {
+          if (res) {
+            window.location.reload();
+          }
+        });
+      }
+    })
+  }
 
   appChanged(update: UpdateAvailableEvent) {
     this.appChangeSubject.next(update);
@@ -39,5 +55,16 @@ export class EdgeServiceWorkerService {
         }
       });
     }
+  }
+
+  showWarning() {
+    const subject = new Subject<boolean>();
+    const initialState = {
+      title: 'A new version of the app is available!',
+      actions: ['Cancel', 'Refresh']
+    };
+    const modal = this.modalService.show(ConfirmModalComponent, { ignoreBackdropClick: true, initialState });
+    modal.content.subject = subject;
+    return subject.asObservable();
   }
 }
