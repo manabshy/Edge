@@ -129,7 +129,7 @@ pre {
 }
 
 fieldset {
-    legend {
+    .fieldset-title {
         font-size: $h5-font-size;
         font-weight: $headings-font-weight;
         line-height: $headings-line-height;
