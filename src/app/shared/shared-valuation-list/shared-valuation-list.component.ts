@@ -2,7 +2,7 @@ import { Component, OnInit, OnChanges, Input } from '@angular/core';
 import { Valuation, ValuationStatusEnum } from 'src/app/valuations/shared/valuation';
 import { PeopleService } from 'src/app/core/services/people.service';
 import { Observable } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
 
 @Component({
@@ -15,7 +15,7 @@ export class SharedValuationListComponent implements OnChanges {
   valuations$ = new Observable<Valuation[]>();
   @Input() personId: number;
 
-  constructor(private peopleService: PeopleService) { }
+  constructor(private peopleService: PeopleService, private router: Router) { }
 
   ngOnChanges() {
     if (this.personId) {
@@ -27,6 +27,12 @@ export class SharedValuationListComponent implements OnChanges {
             });
           })
         );
+    }
+  }
+
+  navigateToDetail(valuation: Valuation) {
+    if (valuation) {
+      this.router.navigate(['valuations-register/detail/', valuation.valuationEventId, 'edit'])
     }
   }
 }
