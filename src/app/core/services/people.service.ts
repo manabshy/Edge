@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { AppConstants } from '../shared/app-constants';
 import { map, tap } from 'rxjs/operators';
 import { PersonInstruction, PersonSearch, PersonOffer, PersonLettingsManagement, PersonHomeHelper, PersonProperty } from '../../shared/models/person';
+import { Valuation } from 'src/app/valuations/shared/valuation';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +30,10 @@ export class PeopleService {
 
   getInstructions(personId: number): Observable<PersonInstruction[]> {
     const url = `${AppConstants.basePersonUrl}/${personId}/instructions`;
+    return this.http.get<any>(url).pipe(map(response => response.result));
+  }
+  getValuations(personId: number): Observable<Valuation[]> {
+    const url = `${AppConstants.basePersonUrl}/${personId}/valuations`;
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
 

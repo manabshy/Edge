@@ -134,6 +134,8 @@
               </app-contactgroups-detail-offers>
               <app-contactgroups-detail-searches *ngSwitchCase="'searches'"
                 [personId]="searchedPersonDetails?.personId"></app-contactgroups-detail-searches>
+                <app-shared-valuation-list *ngSwitchCase="'valuations'"
+                [personId]="searchedPersonDetails?.personId"></app-shared-valuation-list>
               <app-contactgroups-detail-lettings-managements *ngSwitchCase="'lettingsManagements'"
                 [personId]="searchedPersonDetails?.personId"></app-contactgroups-detail-lettings-managements>
               <app-contactgroups-detail-home-helper *ngSwitchCase="'homeHelpers'"
