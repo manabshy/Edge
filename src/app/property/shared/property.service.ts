@@ -127,7 +127,10 @@ export class PropertyService {
     const url = `${AppConstants.basePropertyUrl}/${propertyId}/offers`;
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
-
+  getValuations(propertyId: number): Observable<any[]> {
+    const url = `${AppConstants.basePropertyUrl}/${propertyId}/valuations`;
+    return this.http.get<any>(url).pipe(map(response => response.result));
+  }
   getPotentialDuplicateProperties(address: Address, propertyId?: number): Observable<PropertyAutoComplete[]> {
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
