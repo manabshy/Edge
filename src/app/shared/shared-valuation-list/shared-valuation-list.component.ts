@@ -1,9 +1,11 @@
-import { Component, OnInit, OnChanges, Input } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, SimpleChange, SimpleChanges } from '@angular/core';
 import { Valuation, ValuationStatusEnum } from 'src/app/valuations/shared/valuation';
 import { PeopleService } from 'src/app/core/services/people.service';
 import { Observable } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
+import { PropertyService } from 'src/app/property/shared/property.service';
+import { SharedService } from 'src/app/core/services/shared.service';
 
 @Component({
   selector: 'app-shared-valuation-list',
@@ -14,10 +16,15 @@ export class SharedValuationListComponent implements OnChanges {
 
   valuations$ = new Observable<Valuation[]>();
   @Input() personId: number;
+  @Input() propertyId: number;
 
-  constructor(private peopleService: PeopleService, private router: Router) { }
+  constructor(private peopleService: PeopleService,
+    private sharedService: SharedService,
+    private propertyService: PropertyService,
+    private router: Router) { }
 
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges) {
+    console.log('changes', changes)
     if (this.personId) {
       this.valuations$ = this.peopleService.getValuations(this.personId)
         .pipe(
@@ -25,6 +32,15 @@ export class SharedValuationListComponent implements OnChanges {
             vals.forEach(x => {
               x.valuationStatusLabel = ValuationStatusEnum[x.valuationStatus];
             });
+          })
+        );
+    }
+
+    if (this.propertyId) {
+      this.valuations$ = this.propertyService.getValuations(this.personId)
+        .pipe(
+          tap(vals => {
+            this.sharedService.setValuationStatusLabel(vals);
           })
         );
     }

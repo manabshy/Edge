@@ -15,7 +15,7 @@
             <a class="dropdown-item"
               [routerLink]="['edit']">
               <span class="dropdown-icon">
-                <i class="fas fa-edit fa-fw"></i> 
+                <i class="fas fa-edit fa-fw"></i>
               </span>
               Edit Property
             </a>
@@ -104,6 +104,7 @@
             </button>
             <ng-container [ngSwitch]="item?.value">
               <app-property-detail-instructions *ngSwitchCase="'instructions'" [propertyId]="propertyDetails?.propertyId"></app-property-detail-instructions>
+              <app-shared-valuation-list *ngSwitchCase="'valuations'" [propertyId]="propertyDetails?.propertyId"></app-shared-valuation-list>
               <app-property-detail-offers *ngSwitchCase="'offers'" [propertyId]="propertyDetails?.propertyId"></app-property-detail-offers>
             </ng-container>
           </accordion-group>
