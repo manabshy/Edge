@@ -27,7 +27,7 @@
   "dataGroups": [
     {
       "name": "from-api",
-      "urls": ["/diaryEvents/**", "/leaderboard/**"],
+      "urls": ["/leaderboard/**"],
       "cacheConfig": {
         "strategy": "freshness",
         "maxSize": 15,
