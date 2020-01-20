@@ -32,8 +32,16 @@ export interface ContactGroup {
   companyAmlCompletedDate?: string;
   isAmlCompleted: boolean;
 }
-export const ContactGroupDetailsSubNav = ['properties', 'leads', 'instructions', 'valuations','offers', 'searches', 'lettings-managements', 'home-helpers'];
-// export const ContactGroupDetailsSubNav = ['notes','leads','searches','valuations', 'instructions', 'offers', 'tenancies', 'lettings-managements', 'home-managements'];
+export const ContactGroupDetailsSubNav = [
+  'properties',
+  'leads',
+  'instructions',
+  'valuations',
+  'offers',
+  'searches',
+  'lettings-managements',
+  'home-helpers'
+];
 
 export const ContactGroupDetailsSubNavItems: SubNavItem[] = ContactGroupDetailsSubNav.map(x => ({
   link: x,

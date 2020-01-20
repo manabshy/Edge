@@ -1,7 +1,16 @@
-import { SubNavItem, SubNav } from "src/app/shared/subnav";
-import { Address } from "src/app/shared/models/address";
+import { SubNavItem, SubNav } from 'src/app/shared/subnav';
+import { Address } from 'src/app/shared/models/address';
 
-export const LeadEditSubNav = ['properties','instructions', 'offers', 'leads','searches', 'lettings-managements', 'home-helpers'];
+export const LeadEditSubNav = [
+  'properties',
+  'instructions',
+  'offers',
+  'leads',
+  'searches',
+  'valuations',
+  'lettings-managements',
+  'home-helpers'
+];
 
 export const LeadEditSubNavItems: SubNavItem[] = LeadEditSubNav.map(x => ({
   link: x,
@@ -11,41 +20,41 @@ export const LeadEditSubNavItems: SubNavItem[] = LeadEditSubNav.map(x => ({
 }));
 
 export interface Lead {
-    leadId: number;
-    personId: number;
-    person: string;
-    ownerId: number;
-    owner: string;
-    nextChaseDate?: Date;
-    dateClosed?: any;
-    closedById?: any;
-    closedBy?: any;
-    leadTypeId: number;
-    leadType: string;
-    relatedProperty: LeadProperty;
-    officeId: number;
-    createdDate: Date;
-    createdBy: number;
-    updatedDate: Date;
-    updatedBy: number;
+  leadId: number;
+  personId: number;
+  person: string;
+  ownerId: number;
+  owner: string;
+  nextChaseDate?: Date;
+  dateClosed?: any;
+  closedById?: any;
+  closedBy?: any;
+  leadTypeId: number;
+  leadType: string;
+  relatedProperty: LeadProperty;
+  officeId: number;
+  createdDate: Date;
+  createdBy: number;
+  updatedDate: Date;
+  updatedBy: number;
 }
 
 export interface LeadSearchInfo {
-    leadTypeId?: number;
-    ownerId?: number;
-    personId?: number;
-    officeId?: number;
-    dateFrom?: Date;
-    dateTo?: Date;
-    includeClosedLeads?: boolean;
-    page: number;
-    includeUnassignedLeadsOnly?: boolean;
-    startLeadId?: number;
-    leadSearchTerm?: any;
-    allowPaging?: boolean;
+  leadTypeId?: number;
+  ownerId?: number;
+  personId?: number;
+  officeId?: number;
+  dateFrom?: Date;
+  dateTo?: Date;
+  includeClosedLeads?: boolean;
+  page: number;
+  includeUnassignedLeadsOnly?: boolean;
+  startLeadId?: number;
+  leadSearchTerm?: any;
+  allowPaging?: boolean;
 }
 
-export interface LeadProperty{
+export interface LeadProperty {
   propertyId: number;
   address: Address;
 }
