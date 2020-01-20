@@ -264,7 +264,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       const newInfo = { ...this.leadSearchInfo, ...this.leadRegisterForm.value } as LeadSearchInfo;
       newInfo.startLeadId = lead.leadId;
       this.info = JSON.stringify(newInfo);
-      this.router.navigate(['/leads-register/edit', lead.leadId], { queryParams: { leadSearchInfo: this.info } });
+      this.router.navigate(['/leads-register/edit', lead.leadId], { queryParams: { showSaveAndNext: true, leadSearchInfo: this.info } });
     }
   }
 
