@@ -43,9 +43,28 @@ export class ValuationDetailEditComponent implements OnInit {
   errorMessage: WedgeError;
   isSubmitting: boolean;
   formErrors = FormErrors;
+  property: Property;
+  isOwnerChanged: boolean;
+  isPropertyChanged: boolean;
 
   get isInvitationSent() {
     return this.valuationForm.get('isInvitationSent') as FormControl;
+  }
+  get shortLetWeekly() {
+    return this.valuationForm.get('suggestedAskingRentShortLet') as FormControl;
+  }
+  get longLetWeekly() {
+    return this.valuationForm.get('suggestedAskingRentLongLet') as FormControl;
+  }
+  get shortLetMonthly() {
+    return this.valuationForm.get('suggestedAskingRentShortLetMonthly') as FormControl;
+  }
+  get longLetMonthly() {
+    return this.valuationForm.get('suggestedAskingRentLongLetMonthly') as FormControl;
+  }
+
+  get rooms() {
+    return MinBedrooms;
   }
 
   staffMembers = [
@@ -89,7 +108,9 @@ export class ValuationDetailEditComponent implements OnInit {
 
     this.propertyService.newPropertyAdded$.subscribe(newProperty => {
       if (newProperty) {
+        // this.valuation.property = newProperty;
         this.createdProperty = newProperty;
+        this.valuationForm.get('property').setValue(newProperty);
         console.log('should send to finder', this.createdProperty);
       }
     });
@@ -103,7 +124,39 @@ export class ValuationDetailEditComponent implements OnInit {
     });
     this.valuationForm.valueChanges
       .pipe(debounceTime(400))
-      .subscribe(() => this.sharedService.logValidationErrors(this.valuationForm, false));
+      .subscribe((data) => {
+        const weekly = data.suggestedAskingRentLongLet || data.suggestedAskingRentShortLet;
+        const monthly = data.suggestedAskingRentLongLetMonthly || data.suggestedAskingRentShortLetMonthly;
+        this.sharedService.logValidationErrors(this.valuationForm, false);
+        this.setRent(data);
+      });
+  }
+
+  setRent(rent) {
+    let value = 0;
+    switch (true) {
+      case !!rent.suggestedAskingRentShortLet:
+        value = rent.suggestedAskingRentShortLet * 4;
+        this.shortLetMonthly.setValue(value);
+        this.longLetMonthly.setValue(value);
+        break;
+      case !!rent.suggestedAskingRentLongLet:
+        value = rent.suggestedAskingRentLongLet * 4;
+        this.longLetMonthly.setValue(value);
+        this.shortLetMonthly.setValue(value);
+        break;
+      case !!rent.suggestedAskingRentShortLetMonthly:
+        console.log('short let monthly', rent.suggestedAskingRentShortLetMonthly)
+        value = rent.suggestedAskingRentShortLetMonthly / 4;
+        this.shortLetWeekly.setValue(value);
+        this.shortLetMonthly.setValue(rent.suggestedAskingRentShortLetMonthly);
+        break;
+      case !!rent.suggestedAskingRentLongLetMonthly:
+        value = rent.suggestedAskingRentLongLetMonthly / 4;
+        this.longLetWeekly.setValue(value);
+        this.shortLetWeekly.setValue(rent.suggestedAskingRentLongLetMonthly)
+        break;
+    }
   }
 
   setupForm() {
@@ -123,7 +176,13 @@ export class ValuationDetailEditComponent implements OnInit {
       parking: [null],
       features: [null],
       attendees: [null],
-      isInvitationSent: false
+      isInvitationSent: false,
+      duration: [0],
+      suggestedAskingPrice: [0],
+      suggestedAskingRentLongLet: [0],
+      suggestedAskingRentShortLet: [0],
+      suggestedAskingRentLongLetMonthly: [0],
+      suggestedAskingRentShortLetMonthly: [0],
 
     });
   }
@@ -146,6 +205,8 @@ export class ValuationDetailEditComponent implements OnInit {
   populateForm(valuation: Valuation) {
     if (valuation) {
       this.valuationForm.patchValue({
+        property: valuation.property,
+        propertyOwner: valuation.propertyOwner,
         reason: valuation.reason,
         timeFrame: valuation.timeFrame,
         marketChat: valuation.marketChat,
@@ -157,7 +218,12 @@ export class ValuationDetailEditComponent implements OnInit {
         sqFoot: valuation.sqFt,
         outsideSpace: valuation.outsideSpace,
         parking: valuation.parking,
-        features: valuation.propertyFeature
+        features: valuation.propertyFeature,
+        suggestedAskingPrice: valuation.suggestedAskingPrice,
+        suggestedAskingRentLongLet: valuation.suggestedAskingRentLongLet,
+        suggestedAskingRentLongLetMonthly: valuation.suggestedAskingRentLongLetMonthly,
+        suggestedAskingRentShortLet: valuation.suggestedAskingRentShortLet,
+        suggestedAskingRentShortLetMonthly: valuation.suggestedAskingRentShortLetMonthly
       });
     }
     console.log('form values', this.valuationForm.value);
@@ -165,15 +231,21 @@ export class ValuationDetailEditComponent implements OnInit {
 
   getSelectedProperty(property: Property) {
     if (property) {
-      this.valuation.property = property;
-      console.log('selected property', property);
+      // this.valuation.property = property;
+      this.property = property;
+      this.isPropertyChanged = true;
+      this.valuationForm.get('property').setValue(property);
+      console.log('property changed', this.isPropertyChanged);
     }
   }
 
   getSelectedOwner(owner: Signer) {
     if (owner) {
-      this.valuation.propertyOwner = owner;
-      console.log('selected owner', owner);
+      // this.valuation.propertyOwner = owner;
+      this.lastKnownOwner = owner;
+      this.isOwnerChanged = true;
+      this.valuationForm.get('propertyOwner').setValue(owner);
+      console.log('owner changed', this.isOwnerChanged);
     }
   }
 
@@ -228,11 +300,10 @@ export class ValuationDetailEditComponent implements OnInit {
 
   saveValuation() {
     this.sharedService.logValidationErrors(this.valuationForm, true);
-
     if (this.valuationForm.valid) {
-      if (this.valuationForm.dirty) {
-        const valuation = { ...this.valuation, ...this.valuationForm.value };
-        this.addOrUpdateValuation(valuation);
+      if (this.valuationForm.dirty || this.isOwnerChanged || this.isPropertyChanged) {
+
+        this.addOrUpdateValuation();
       } else {
         this.onSaveComplete();
       }
@@ -242,11 +313,13 @@ export class ValuationDetailEditComponent implements OnInit {
     }
   }
 
-  addOrUpdateValuation(valuation: Valuation) {
+  addOrUpdateValuation() {
+    const valuation = { ...this.valuation, ...this.valuationForm.value };
     this.isSubmitting = true;
+
     if (this.isNewValuation) {
       this.isInvitationSent.value ? valuation.valuationStatus = ValuationStatusEnum.Invited
-                            : valuation.valuationStatus = ValuationStatusEnum.None;
+        : valuation.valuationStatus = ValuationStatusEnum.None;
       this.valuationService.addValuation(valuation).subscribe(data => {
         if (data) { this.onSaveComplete(data); }
       },

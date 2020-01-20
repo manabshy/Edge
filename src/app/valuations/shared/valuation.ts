@@ -4,6 +4,7 @@ import { DiaryEvent } from 'src/app/diary/shared/diary';
 import { Person } from 'src/app/shared/models/person';
 import { BaseRequestOption } from 'src/app/shared/models/base-request-option';
 import { Signer } from 'src/app/contactgroups/shared/contact-group';
+import { BaseProperty } from 'src/app/shared/models/base-property';
 
 export interface ValuationInfo {
   reason: string;
@@ -11,18 +12,28 @@ export interface ValuationInfo {
   marketChat: string;
   generalNotes: string;
 }
-export interface Valuation extends ValuationInfo, PropertyInfo{
+export interface Valuation extends ValuationInfo {
   valuationEventId: number;
   valuationStatus: number;
   valuationStatusLabel: string;
-  property: Property;
+  property: BaseProperty;
   valuer: BaseStaffMember;
   valuationDate?: Date;
   propertyOwner?: Signer;
   diaryEvent: DiaryEvent;
+  bedrooms?: number;
+  bathrooms?: number;
+  receptions?: number;
+  sqFt?: number;
+  tenureId: number;
+  outsideSpace: string;
+  parking: string;
+  propertyFeature: string;
   suggestedAskingPrice?: number;
-  suggestedAskingRentLongLet: number;
-  suggestedAskingRentShortLet: number;
+  suggestedAskingRentLongLet?: number;
+  suggestedAskingRentShortLet?: number;
+  suggestedAskingRentLongLetMonthly?: number;
+  suggestedAskingRentShortLetMonthly?: number;
   createdDate: Date;
   createdBy: BaseStaffMember;
 }
