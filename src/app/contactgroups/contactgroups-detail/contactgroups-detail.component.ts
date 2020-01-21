@@ -35,6 +35,7 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
   summaryTotals: PersonSummaryFigures;
   subNav = ContactGroupDetailsSubNavItems;
   personParams: string;
+  showNotes: boolean;
 
   get dataNote() {
     return {
@@ -50,6 +51,7 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
 
   ngOnInit() {
     console.log(this.subNav);
+    this.showNotes = this.route.snapshot.queryParamMap.get('showNotes') === 'true';
     this.route.params.subscribe(params => {
       this.personId = params['personId'] || 0;
       this.searchedPersonDetails = null;

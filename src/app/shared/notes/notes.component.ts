@@ -7,6 +7,7 @@ import { PropertyNote } from 'src/app/property/shared/property';
 import { PropertyService } from 'src/app/property/shared/property.service';
 import { StaffMember } from '../models/staff-member';
 import { StorageMap } from '@ngx-pwa/local-storage';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-notes',
@@ -19,6 +20,7 @@ export class NotesComponent implements OnInit, OnChanges {
   @Input() personNotesData: any;
   @Input() pageNumber: number;
   @Input() bottomReached: boolean;
+  @Input() showNotes: boolean;
   @Input() addressees: any;
   @Input() person: Person;
   @Input() personNotes: ContactNote[];
@@ -45,6 +47,7 @@ export class NotesComponent implements OnInit, OnChanges {
   constructor(private sharedService: SharedService,
     private contactGroupService: ContactGroupsService,
     private storage: StorageMap,
+    private router: Router,
     private propertyService: PropertyService) { }
 
   ngOnInit() {
@@ -119,20 +122,22 @@ export class NotesComponent implements OnInit, OnChanges {
     let scrollHeight: number, totalHeight: number;
     scrollHeight = document.body.scrollHeight;
     totalHeight = window.scrollY + window.innerHeight;
-    // const url = this.router.url;
-    // const isCompanyCentre = url.endsWith('/company-centre');
-    if (totalHeight >= scrollHeight && !this.bottomReached) {
-      this.page++;
-      if (this.contactPeople && this.contactPeople.length) {
-        this.contactGroupService.contactNotePageNumberChanged(this.page);
+    const url = this.router.url;
+    const hasNotes = url.includes('showNotes=true');
+    if (hasNotes) {
+      if (totalHeight >= scrollHeight && !this.bottomReached) {
+        this.page++;
+        if (this.contactPeople && this.contactPeople.length) {
+          this.contactGroupService.contactNotePageNumberChanged(this.page);
 
-      }
-      if (this.isPersonNote) {
-        this.contactGroupService.personNotePageNumberChanged(this.page);
+        }
+        if (this.isPersonNote) {
+          this.contactGroupService.personNotePageNumberChanged(this.page);
 
-      }
-      if (this.isPropertyNote) {
-        this.propertyService.propertyNotePageNumberChanged(this.page);
+        }
+        if (this.isPropertyNote) {
+          this.propertyService.propertyNotePageNumberChanged(this.page);
+        }
       }
     }
   }
