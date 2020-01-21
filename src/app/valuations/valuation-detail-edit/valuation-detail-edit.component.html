@@ -160,10 +160,10 @@
         <div class="row align-items-center no-gutters">
           <div class="col">
             <ng-select [items]="allStaffMembers" [hideSelected]="true" (clear)="onClear()" [clearable]="true"
-              bindLabel="fullName" bindValue="staffMemberId" groupBy="activeDepartments"
+              bindLabel="fullName" bindValue="staffMemberId"
               (change)="onStaffMemberChange($event)">
               <ng-template ng-optgroup-tmp let-item="item">
-                {{item.category || 'Unnamed group'}}
+                {{item.fullName || 'Unnamed group'}}
               </ng-template>
             </ng-select>
           </div>

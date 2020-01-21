@@ -14,6 +14,7 @@ import { StaffMember } from 'src/app/shared/models/staff-member';
 import { ToastrService } from 'ngx-toastr';
 import { FormErrors, ValidationMessages } from 'src/app/core/shared/app-constants';
 import { debounceTime } from 'rxjs/operators';
+import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
 
 @Component({
   selector: 'app-valuation-detail-edit',
@@ -34,10 +35,10 @@ export class ValuationDetailEditComponent implements OnInit {
   createdProperty: Property;
   createdSigner: any;
   isCreatingNewSigner: boolean;
-  allStaffMembers: StaffMember[];
-  attendees: StaffMember[] = [];
-  attendee: StaffMember;
-  mainStaffMember: StaffMember;
+  allStaffMembers: BaseStaffMember[];
+  attendees: BaseStaffMember[] = [];
+  attendee: BaseStaffMember;
+  mainStaffMember: BaseStaffMember;
   staffMemberId: number;
   isNewValuation: boolean;
   showOnlyMainStaffMember: boolean;
@@ -103,7 +104,8 @@ export class ValuationDetailEditComponent implements OnInit {
 
     this.storage.get('allstaffmembers').subscribe(data => {
       if (data) {
-        this.allStaffMembers = data as StaffMember[];
+        this.allStaffMembers = data as BaseStaffMember[];
+        console.log('staffmembers in stored', data)
       }
     });
 
@@ -176,7 +178,8 @@ export class ValuationDetailEditComponent implements OnInit {
       outsideSpace: [null],
       parking: [null],
       propertyFeature: [null],
-      attendees: [null],
+      attendees: [[]],
+      valuer: [''],
       isInvitationSent: false,
       duration: [0],
       suggestedAskingPrice: [0],
@@ -188,11 +191,13 @@ export class ValuationDetailEditComponent implements OnInit {
     });
   }
 
-  selectMainStaffMember(staffMember: StaffMember) {
+  selectMainStaffMember(staffMember: BaseStaffMember) {
     this.mainStaffMember = staffMember;
     this.staffMemberId = staffMember.staffMemberId;
     this.showCalendar = true;
     this.showOnlyMainStaffMember = true;
+    // this.valuationForm.get('valuer').setValue(staffMember);
+    // this.valuation.valuer = staffMember as unknown as BaseStaffMember;
   }
 
   getValuation(id: number) {
@@ -222,7 +227,7 @@ export class ValuationDetailEditComponent implements OnInit {
         outsideSpace: valuation.outsideSpace,
         parking: valuation.parking,
         propertyFeature: valuation.propertyFeature,
-        attendees: valuation.valuer.fullName,
+        valuer: valuation.valuer,
         suggestedAskingPrice: valuation.suggestedAskingPrice,
         suggestedAskingRentLongLet: valuation.suggestedAskingRentLongLet,
         suggestedAskingRentLongLetMonthly: valuation.suggestedAskingRentLongLetMonthly,
@@ -261,10 +266,11 @@ export class ValuationDetailEditComponent implements OnInit {
     }
   }
 
-  onStaffMemberChange(staffMember: StaffMember) {
+  onStaffMemberChange(staffMember: BaseStaffMember) {
     if (staffMember) {
       this.attendee = staffMember;
       console.log('selected', staffMember);
+      console.log('attendess her....0', this.attendee);
     }
 
   }
@@ -273,10 +279,11 @@ export class ValuationDetailEditComponent implements OnInit {
     const existingAttendee = this.attendees.find(x => x.staffMemberId === this.attendee.staffMemberId);
     if (this.attendee && !existingAttendee) {
       this.attendees.push(this.attendee);
+
     }
   }
 
-  setMain(staffMember: StaffMember) {
+  setMain(staffMember: BaseStaffMember) {
     if (staffMember) {
       this.selectMainStaffMember(staffMember);
       this.removeAttendee(staffMember.staffMemberId);
@@ -321,6 +328,11 @@ export class ValuationDetailEditComponent implements OnInit {
 
   addOrUpdateValuation() {
     const valuation = { ...this.valuation, ...this.valuationForm.value };
+    const attendees = {...this.valuation.diaryEvent.staffMembers, ...this.attendees}
+    console.log('valuation before', valuation)
+    valuation.diaryEvent.staffMembers = attendees;
+    console.log('attendees', attendees)
+    console.log('valuation', valuation)
     this.isSubmitting = true;
 
     if (this.isNewValuation) {

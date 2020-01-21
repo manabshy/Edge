@@ -5,6 +5,7 @@ import { Person } from 'src/app/shared/models/person';
 import { BaseRequestOption } from 'src/app/shared/models/base-request-option';
 import { Signer } from 'src/app/contactgroups/shared/contact-group';
 import { BaseProperty } from 'src/app/shared/models/base-property';
+import { StaffMember } from 'src/app/shared/models/staff-member';
 
 export interface ValuationInfo {
   reason: string;
