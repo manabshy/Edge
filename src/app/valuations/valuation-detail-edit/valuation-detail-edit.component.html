@@ -123,8 +123,10 @@
     <div class="form-group row">
       <label class="col-sm-2 col-form-label col-form-label-sm">Attendees</label>
       <div class="col-sm-10">
-        <p *ngIf="mainStaffMember; else allMain" class="d-flex d-sm-block">
-          <small class="text-left mobile-btn">{{mainStaffMember?.fullName}}</small>
+        <p *ngIf="showOnlyMainStaffMember; else allMain" class="d-flex d-sm-block">
+          <small class="text-left mobile-btn">{{mainStaffMember?.fullName || valuation.valuer?.fullName}}</small>
+          <button class="btn btn-light btn-sm ml-2" type="button" (click)="showValuersList()"> Change main attendee
+          </button>
         </p>
         <ng-template #allMain>
           <label class="small">Pick a Member</label>
@@ -154,7 +156,7 @@
             main</button>
         </p>
       </div>
-      <div class="col-sm-3 offset-sm-2" *ngIf="selectedDate">
+      <div class="col-sm-3 offset-sm-2" *ngIf="selectedDate && showOnlyMainStaffMember">
         <div class="row align-items-center no-gutters">
           <div class="col">
             <ng-select [items]="allStaffMembers" [hideSelected]="true" (clear)="onClear()" [clearable]="true"
@@ -173,7 +175,7 @@
         </div>
       </div>
     </div>
-    <div class="form-group row" *ngIf="selectedDate">
+    <div class="form-group row" *ngIf="selectedDate && showOnlyMainStaffMember">
       <label class="col-sm-2 col-form-label col-form-label-sm">Date</label>
       <div class="col-sm-10">
         <div class="d-flex d-sm-block">
@@ -182,7 +184,7 @@
         </div>
       </div>
     </div>
-    <div class="form-group row" *ngIf="selectedDate">
+    <div class="form-group row" *ngIf="selectedDate && showOnlyMainStaffMember">
       <label for="valuationDuration" class="col-sm-2 col-form-label col-form-label-sm">Duration</label>
       <div class="col-sm-2 form-group">
         <div class="input-group input-group-sm">
@@ -213,7 +215,8 @@
             <div class="card-body">
               <h5 class="card-title">Sell</h5>
               <label class="small" for="sellValue">Value</label>
-              <input type="text" name="sellValue" id="sellValue" class="form-control form-control-sm" formControlName="suggestedAskingPrice">
+              <input type="text" name="sellValue" id="sellValue" class="form-control form-control-sm"
+                formControlName="suggestedAskingPrice">
             </div>
           </div>
           <div class="card">
@@ -221,7 +224,8 @@
               <h5 class="card-title">Long Let</h5>
               <div class="form-group">
                 <label class="small" for="longLetValue">Value (per week)</label>
-                <input type="text" name="longLetValue" id="longLetValue" class="form-control form-control-sm" formControlName="suggestedAskingRentLongLet">
+                <input type="text" name="longLetValue" id="longLetValue" class="form-control form-control-sm"
+                  formControlName="suggestedAskingRentLongLet">
               </div>
               <label class="small" for="longLetMonthlyValue">Value (per month)</label>
               <input type="text" name="longLetMonthlyValue" id="longLetMonthlyValue"
@@ -233,7 +237,8 @@
               <h5 class="card-title">Short Let</h5>
               <div class="form-group">
                 <label class="small" for="shortLetValue">Value (per week)</label>
-                <input type="text" name="shortLetValue" id="shortLetValue" class="form-control form-control-sm" formControlName="suggestedAskingRentShortLet">
+                <input type="text" name="shortLetValue" id="shortLetValue" class="form-control form-control-sm"
+                  formControlName="suggestedAskingRentShortLet">
               </div>
               <label class="small" for="shortLetMonthlyValue">Value (per month)</label>
               <input type="text" name="shortLetMonthlyValue" id="shortLetMonthlyValue"
@@ -258,8 +263,8 @@
     </div>
   </form>
 </div>
-<div bsModal #instructionModal="bs-modal" class="modal fade" tabindex="-1"
-     role="dialog" aria-labelledby="dialog-sizes-name1">
+<div bsModal #instructionModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="dialog-sizes-name1">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
@@ -281,7 +286,8 @@
                   </div>
                   <h5 class="card-title">Sell</h5>
                   <label class="small" for="sellValue">Value</label>
-                  <input type="text" name="sellValue" id="sellValue" class="form-control form-control-sm" formControlName="suggestedAskingPrice">
+                  <input type="text" name="sellValue" id="sellValue" class="form-control form-control-sm"
+                    formControlName="suggestedAskingPrice">
                 </div>
               </div>
               <div class="card">
@@ -293,7 +299,8 @@
                   <h5 class="card-title">Long Let</h5>
                   <div class="form-group">
                     <label class="small" for="longLetValue">Value (per week)</label>
-                    <input type="text" name="longLetValue" id="longLetValue" class="form-control form-control-sm" formControlName="suggestedAskingRentLongLet">
+                    <input type="text" name="longLetValue" id="longLetValue" class="form-control form-control-sm"
+                      formControlName="suggestedAskingRentLongLet">
                   </div>
                   <label class="small" for="longLetMonthlyValue">Value (per month)</label>
                   <input type="text" name="longLetMonthlyValue" id="longLetMonthlyValue"
@@ -309,7 +316,8 @@
                   <h5 class="card-title">Short Let</h5>
                   <div class="form-group">
                     <label class="small" for="shortLetValue">Value (per week)</label>
-                    <input type="text" name="shortLetValue" id="shortLetValue" class="form-control form-control-sm" formControlName="suggestedAskingRentShortLet">
+                    <input type="text" name="shortLetValue" id="shortLetValue" class="form-control form-control-sm"
+                      formControlName="suggestedAskingRentShortLet">
                   </div>
                   <label class="small" for="shortLetMonthlyValue">Value (per month)</label>
                   <input type="text" name="shortLetMonthlyValue" id="shortLetMonthlyValue"

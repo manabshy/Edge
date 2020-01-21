@@ -40,6 +40,7 @@ export class ValuationDetailEditComponent implements OnInit {
   mainStaffMember: StaffMember;
   staffMemberId: number;
   isNewValuation: boolean;
+  showOnlyMainStaffMember: boolean;
   errorMessage: WedgeError;
   isSubmitting: boolean;
   formErrors = FormErrors;
@@ -191,12 +192,14 @@ export class ValuationDetailEditComponent implements OnInit {
     this.mainStaffMember = staffMember;
     this.staffMemberId = staffMember.staffMemberId;
     this.showCalendar = true;
+    this.showOnlyMainStaffMember = true;
   }
 
   getValuation(id: number) {
     this.valuationService.getValuation(id).subscribe((data => {
       if (data) {
         this.valuation = data;
+        this.valuation.valuer.fullName ? this.showOnlyMainStaffMember = true : this.showOnlyMainStaffMember = false;
         this.populateForm(data);
       }
     }));
@@ -219,6 +222,7 @@ export class ValuationDetailEditComponent implements OnInit {
         outsideSpace: valuation.outsideSpace,
         parking: valuation.parking,
         propertyFeature: valuation.propertyFeature,
+        attendees: valuation.valuer.fullName,
         suggestedAskingPrice: valuation.suggestedAskingPrice,
         suggestedAskingRentLongLet: valuation.suggestedAskingRentLongLet,
         suggestedAskingRentLongLetMonthly: valuation.suggestedAskingRentLongLetMonthly,
@@ -285,7 +289,9 @@ export class ValuationDetailEditComponent implements OnInit {
       this.attendees.splice(index, 1);
     }
   }
-
+  showValuersList() {
+    this.showOnlyMainStaffMember = !this.showOnlyMainStaffMember;
+  }
   onClear() {
     console.log('clear......');
   }
