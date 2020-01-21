@@ -108,7 +108,7 @@
           <div class="col-sm form-group">
             <label class="small" for="features">Features</label>
             <ng-select [items]="features" [multiple]="true" bindLabel="value" groupBy="gender" [selectableGroup]="true"
-              [closeOnSelect]="false" bindValue="id" formControlName="features">
+              [closeOnSelect]="false" bindValue="id" formControlName="propertyFeature">
               <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
                 <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.gender | uppercase}}
               </ng-template>
