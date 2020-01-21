@@ -77,6 +77,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   infoParam: string;
   isSaveAndNext: boolean;
   showSaveAndNext: boolean;
+  showNotes: boolean;
   get nextChaseDateControl() {
     return this.leadEditForm.get('nextChaseDate') as FormControl;
   }
@@ -96,6 +97,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.selectedLeadTypeId = +this.route.snapshot.queryParamMap.get('leadTypeId');
     this.infoParam = this.route.snapshot.queryParamMap.get('leadSearchInfo');
     this.showSaveAndNext = this.route.snapshot.queryParamMap.get('showSaveAndNext') === 'true';
+    this.showNotes = this.route.snapshot.queryParamMap.get('showNotes') === 'true';
     this.route.params.subscribe(params => {
       this.leadId = +params['leadId'] || 0;
       if (this.leadId && this.showSaveAndNext) {

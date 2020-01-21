@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, OnChanges, HostListener } from '@angular/core';
 import { CompanyAutoCompleteResult } from 'src/app/contactgroups/shared/contact-group';
 import { CompanyService } from '../shared/company.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-company-list',
@@ -15,7 +16,7 @@ export class CompanyListComponent implements OnInit, OnChanges {
 @Input() bottomReached: boolean;
 @Input() pageNumber: number;
 page: number;
-  constructor(  private companyService: CompanyService ) { }
+  constructor(  private companyService: CompanyService, private router: Router ) { }
 
   ngOnInit() {
   }
@@ -31,10 +32,17 @@ page: number;
 
   @HostListener('window:scroll', ['$event'])
   onWindowScroll() {
-    if (window.innerHeight + window.scrollY === document.body.scrollHeight && !this.bottomReached) {
-      this.page++;
-      this.companyService.companyPageChanged(this.page);
-      console.log('companies page number', this.page);
-    }
+    let scrollHeight: number, totalHeight: number;
+    scrollHeight = document.body.scrollHeight;
+    totalHeight = window.scrollY + window.innerHeight;
+    const url = this.router.url;
+    const isCompanyCentre = url.endsWith('/company-centre');
+   if(isCompanyCentre) {
+      if (totalHeight >= scrollHeight && !this.bottomReached) {
+        this.page++;
+        this.companyService.companyPageChanged(this.page);
+        console.log('companies page number', this.page);
+      }
+   }
   }
 }

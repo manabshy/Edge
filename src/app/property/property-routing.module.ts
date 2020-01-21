@@ -13,7 +13,7 @@ import { PropertyDetailEditComponent } from './property-detail-edit/property-det
 
 
 const routes: Routes = [
-  { path: '', component: PropertyComponent, data: { shouldDetach: false } },
+  { path: '', component: PropertyComponent, data: { shouldDetach: true } },
   {
     path: 'detail/:id',
     children: [

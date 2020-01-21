@@ -1,6 +1,6 @@
 <div class="list-group mb-3">
   <div *ngIf="originalContactGroups" class="search-results">
-    <a [routerLink]="['detail', contactGroup.personId ]" class="list-group-item list-group-item-action v-o-h-container"
+    <a [routerLink]="['detail', contactGroup.personId ]" [queryParams]="{showNotes: true}" class="list-group-item list-group-item-action v-o-h-container"
       [ngClass]="{'list-group-item-danger': contactGroup?.warning && contactGroup?.warning?.id !== 1}"
       *ngFor="let contactGroup of contactGroups; let i = index; last as isLast">
       <div class="row mb-1">

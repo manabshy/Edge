@@ -89,14 +89,17 @@ export class CalendarComponent implements OnInit, OnChanges {
   }
 
   currentTimeIntoView() {
-    const marker = document.getElementsByClassName('cal-current-time-marker');
-    const calHours = document.getElementsByClassName('cal-hour');
+    const calHourSegments = document.getElementsByClassName('cal-hour-segment');
 
     setTimeout(() => {
-      if (marker && marker.length) {
-        marker[0].scrollIntoView({ block: 'center' });
-      } else if (calHours && calHours.length) {
-        calHours[11].scrollIntoView({ block: 'center' });
+      if (calHourSegments && calHourSegments.length) {
+        if(window.innerWidth >= 1024) {
+          
+          console.log(calHourSegments[21])
+          calHourSegments[23].scrollIntoView({ block: 'center' });
+        } else {
+          calHourSegments[19].scrollIntoView({ block: 'center' });
+        }
       }
     });
   }

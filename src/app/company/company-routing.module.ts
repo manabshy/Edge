@@ -7,11 +7,11 @@ import { CompanyEditComponent } from './company-edit/company-edit.component';
 import { CanDeactivateGuard } from '../core/shared/can-deactivate.guard';
 
 const routes: Routes = [
-  { path: '', component: CompanyComponent, data: { shouldDetach: false } },
+  { path: '', component: CompanyComponent, data: { shouldDetach: true } },
   {
     path: 'detail/:id',
     children: [
-      { path: '', component: CompanyDetailComponent},
+      { path: '', component: CompanyDetailComponent, data: { shouldDetach: true }},
       { path: 'edit', component: CompanyEditComponent, canDeactivate: [CanDeactivateGuard], data: { shouldDetach: true } },
     ]
   }
