@@ -5,19 +5,27 @@
       <h4 class="mb-0">Property</h4>
     </div>
     <div class="col-auto">
-      <div class="btn-group" dropdown placement="bottom right">
+      <div class="btn-group" dropdown placement="bottom right" *ngIf="propertyDetails">
         <button id="actionsToggle" dropdownToggle type="button" class="btn btn-light dropdown-toggle"
           aria-controls="actionsList">
           Actions <span class="caret"></span>
         </button>
         <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="actionsToggle">
-          <li role="menuitem" *ngIf="propertyDetails">
+          <li role="menuitem">
             <a class="dropdown-item"
               [routerLink]="['edit']">
               <span class="dropdown-icon">
                 <i class="fas fa-edit fa-fw"></i>
               </span>
               Edit Property
+            </a>
+          </li>
+          <li role="menuitem">
+            <a class="dropdown-item">
+              <span class="dropdown-icon">
+                <i class="fas fa-city"></i><i class="fas fa-pound-sign fa-xs align-text-top"></i>
+              </span>
+              Create Valuation
             </a>
           </li>
         </ul>
