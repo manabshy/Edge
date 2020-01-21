@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, OnChanges, HostListener } from '@angular/core';
 import { Valuation, ValuationStatusEnum } from '../shared/valuation';
 import { ValuationService } from '../shared/valuation.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-valuation-list',
@@ -15,7 +16,7 @@ export class ValuationListComponent implements OnInit, OnChanges {
   @Input() pageNumber: number;
   page: number;
 
-  constructor(private valuationService: ValuationService) { }
+  constructor(private valuationService: ValuationService,private router: Router) { }
 
   ngOnInit() {
   }
@@ -40,11 +41,15 @@ export class ValuationListComponent implements OnInit, OnChanges {
     let scrollHeight: number, totalHeight: number;
     scrollHeight = document.body.scrollHeight;
     totalHeight = window.scrollY + window.innerHeight;
+    const url = this.router.url;
+    const isValuationsRegister = url.endsWith('/valuations-register');
 
-    if (totalHeight >= scrollHeight && !this.bottomReached) {
-      this.page++;
-      this.valuationService.valuationPageNumberChanged(this.page);
-      console.log('valuations page number', this.page)
-    }
+   if(isValuationsRegister) {
+      if (totalHeight >= scrollHeight && !this.bottomReached) {
+        this.page++;
+        this.valuationService.valuationPageNumberChanged(this.page);
+        console.log('valuations page number', this.page)
+      }
+   }
   }
 }

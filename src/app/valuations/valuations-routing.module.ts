@@ -5,12 +5,12 @@ import { ValuationDetailEditComponent } from './valuation-detail-edit/valuation-
 import { CanDeactivateGuard } from '../core/shared/can-deactivate.guard';
 
 const routes: Routes = [
-  { path: '', component: ValuationsComponent, data: { shouldDetach: false } },
+  { path: '', component: ValuationsComponent, data: { shouldDetach: true } },
   {
     path: 'detail/:id',
     children: [
       // { path: 'edit', component: ValuationDetailEditComponent , data: { shouldDetach: false }, canDeactivate: [CanDeactivateGuard] }
-      { path: 'edit', component: ValuationDetailEditComponent , data: { shouldDetach: false } }
+      { path: 'edit', component: ValuationDetailEditComponent , data: { shouldDetach: true } }
     ]
   }
 ];
