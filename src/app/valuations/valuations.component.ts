@@ -11,6 +11,7 @@ import { BaseComponent } from '../shared/models/base-component';
 import { StaffMemberService } from '../core/services/staff-member.service';
 import { OfficeService } from '../core/services/office.service';
 import { format } from 'date-fns';
+import { BaseStaffMember } from '../shared/models/base-staff-member';
 
 @Component({
   selector: 'app-valuations',
@@ -65,6 +66,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
     this.statuses = ValuationStatuses;
     // this.statuses = getValuationStatuses();
 
+    
     this.storage.get('allstaffmembers').subscribe(data => {
       if (data) {
         this.valuers = data as StaffMember[];
@@ -72,7 +74,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
         this.staffMemberService.getAllStaffMembers().pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => this.valuers = result);
       }
     });
-  
+
     this.storage.get('allListers').subscribe(data => {
       if (data) {
         this.valuers = data as StaffMember[];

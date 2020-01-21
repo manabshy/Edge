@@ -5,6 +5,7 @@ import { AppConstants } from '../shared/app-constants';
 import { map, shareReplay, tap } from 'rxjs/operators';
 import { StaffMember, StaffMemberResult, Impersonation, StaffMemberListResult } from '../../shared/models/staff-member';
 import { StorageMap } from '@ngx-pwa/local-storage';
+import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
 
 const CACHE_SIZE = 1;
 @Injectable({
@@ -70,6 +71,15 @@ export class StaffMemberService {
       tap(data => {
         if (data) {
           this.storage.set('allListers', data).subscribe();
+        }
+      }));
+  }
+  getValuationAttendees(): Observable<BaseStaffMember[]> {
+    return this.http.get<any>(`${AppConstants.baseUrl}/attendees`).pipe(
+      map(response => response.result),
+      tap(data => {
+        if (data) {
+          this.storage.set('allAttendees', data).subscribe();
         }
       }));
   }

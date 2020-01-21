@@ -13,15 +13,17 @@ import { SharedService, WedgeError } from 'src/app/core/services/shared.service'
 import { StaffMember } from 'src/app/shared/models/staff-member';
 import { ToastrService } from 'ngx-toastr';
 import { FormErrors, ValidationMessages } from 'src/app/core/shared/app-constants';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
+import { StaffMemberService } from 'src/app/core/services/staff-member.service';
+import { BaseComponent } from 'src/app/shared/models/base-component';
 
 @Component({
   selector: 'app-valuation-detail-edit',
   templateUrl: './valuation-detail-edit.component.html',
   styleUrls: ['./valuation-detail-edit.component.scss']
 })
-export class ValuationDetailEditComponent implements OnInit {
+export class ValuationDetailEditComponent extends BaseComponent implements OnInit {
   showCalendar = false;
   valuationId: number;
   valuation: Valuation;
@@ -48,6 +50,7 @@ export class ValuationDetailEditComponent implements OnInit {
   property: Property;
   isOwnerChanged: boolean;
   isPropertyChanged: boolean;
+  allAttendees: BaseStaffMember[];
 
   get isInvitationSent() {
     return this.valuationForm.get('isInvitationSent') as FormControl;
@@ -81,11 +84,12 @@ export class ValuationDetailEditComponent implements OnInit {
     private propertyService: PropertyService,
     private contactGroupService: ContactGroupsService,
     private sharedService: SharedService,
+    private staffMemberService: StaffMemberService,
     private toastr: ToastrService,
     private storage: StorageMap,
     private route: ActivatedRoute,
     private router: Router,
-    private fb: FormBuilder) { }
+    private fb: FormBuilder) { super() }
 
   ngOnInit() {
     this.setupForm();
@@ -102,10 +106,11 @@ export class ValuationDetailEditComponent implements OnInit {
       this.features = info.propertyFeatures;
     });
 
-    this.storage.get('allstaffmembers').subscribe(data => {
+    this.storage.get('allAttendees').subscribe(data => {
       if (data) {
-        this.allStaffMembers = data as BaseStaffMember[];
-        console.log('staffmembers in stored', data)
+        this.allAttendees = data as BaseStaffMember[];
+      } else {
+        this.staffMemberService.getValuationAttendees().pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => this.allAttendees = result);
       }
     });
 
@@ -228,6 +233,7 @@ export class ValuationDetailEditComponent implements OnInit {
         parking: valuation.parking,
         propertyFeature: valuation.propertyFeature,
         valuer: valuation.valuer,
+        duration: valuation.diaryEvent.duration,
         suggestedAskingPrice: valuation.suggestedAskingPrice,
         suggestedAskingRentLongLet: valuation.suggestedAskingRentLongLet,
         suggestedAskingRentLongLetMonthly: valuation.suggestedAskingRentLongLetMonthly,
@@ -303,6 +309,10 @@ export class ValuationDetailEditComponent implements OnInit {
     console.log('clear......');
   }
 
+  onTenureChange(tenureId) {
+    console.log('tenure change', event)
+  }
+
   changeDate() {
     this.showCalendar = true;
   }
@@ -328,7 +338,7 @@ export class ValuationDetailEditComponent implements OnInit {
 
   addOrUpdateValuation() {
     const valuation = { ...this.valuation, ...this.valuationForm.value };
-    const attendees = {...this.valuation.diaryEvent.staffMembers, ...this.attendees}
+    const attendees = { ...this.valuation.diaryEvent.staffMembers, ...this.attendees }
     console.log('valuation before', valuation)
     valuation.diaryEvent.staffMembers = attendees;
     console.log('attendees', attendees)
