@@ -269,12 +269,16 @@
         </button>
       </div>
       <div class="modal-body">
-        <div class="form-group row">
-          <label for="valuationDuration" class="col-12">Values</label>
+        <fieldset class="form-group row">
+          <legend class="col-12 col-form-label text-left">Values</legend>
           <div class="col-12">
             <div class="card-deck">
               <div class="card">
                 <div class="card-body">
+                  <div class="custom-control custom-checkbox form-group">
+                    <input type="checkbox" id="isntructSale" name="isntructSale" class="custom-control-input">
+                    <label class="custom-control-label" for="isntructSale">Instruct</label>
+                  </div>
                   <h5 class="card-title">Sell</h5>
                   <label class="small" for="sellValue">Value</label>
                   <input type="text" name="sellValue" id="sellValue" class="form-control form-control-sm" formControlName="suggestedAskingPrice">
@@ -282,6 +286,10 @@
               </div>
               <div class="card">
                 <div class="card-body">
+                  <div class="custom-control custom-checkbox form-group">
+                    <input type="checkbox" id="isntructLongLet" name="isntructLongLet" class="custom-control-input">
+                    <label class="custom-control-label" for="isntructLongLet">Instruct</label>
+                  </div>
                   <h5 class="card-title">Long Let</h5>
                   <div class="form-group">
                     <label class="small" for="longLetValue">Value (per week)</label>
@@ -294,6 +302,10 @@
               </div>
               <div class="card">
                 <div class="card-body">
+                  <div class="custom-control custom-checkbox form-group">
+                    <input type="checkbox" id="isntructShortLet" name="isntructShortLet" class="custom-control-input">
+                    <label class="custom-control-label" for="isntructShortLet">Instruct</label>
+                  </div>
                   <h5 class="card-title">Short Let</h5>
                   <div class="form-group">
                     <label class="small" for="shortLetValue">Value (per week)</label>
@@ -306,7 +318,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </fieldset>
         <fieldset class="form-group">
           <legend class="col-form-label text-left">Instruction Type</legend>
           <div class="custom-control custom-radio">
