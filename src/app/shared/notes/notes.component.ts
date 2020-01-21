@@ -116,7 +116,12 @@ export class NotesComponent implements OnInit, OnChanges {
 
   @HostListener('window:scroll', ['$event'])
   onWindowScroll() {
-    if (window.innerHeight + window.scrollY === document.body.scrollHeight && !this.bottomReached) {
+    let scrollHeight: number, totalHeight: number;
+    scrollHeight = document.body.scrollHeight;
+    totalHeight = window.scrollY + window.innerHeight;
+    // const url = this.router.url;
+    // const isCompanyCentre = url.endsWith('/company-centre');
+    if (totalHeight >= scrollHeight && !this.bottomReached) {
       this.page++;
       if (this.contactPeople && this.contactPeople.length) {
         this.contactGroupService.contactNotePageNumberChanged(this.page);

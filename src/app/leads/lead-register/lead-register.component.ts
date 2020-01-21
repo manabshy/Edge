@@ -264,7 +264,14 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       const newInfo = { ...this.leadSearchInfo, ...this.leadRegisterForm.value } as LeadSearchInfo;
       newInfo.startLeadId = lead.leadId;
       this.info = JSON.stringify(newInfo);
-      this.router.navigate(['/leads-register/edit', lead.leadId], { queryParams: { showSaveAndNext: true, leadSearchInfo: this.info } });
+      this.router.navigate(['/leads-register/edit', lead.leadId],
+        {
+          queryParams: {
+            showNotes: true,
+            showSaveAndNext: true,
+            leadSearchInfo: this.info
+          }
+        });
     }
   }
 
@@ -280,13 +287,17 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     totalHeight = window.scrollY + window.innerHeight;
 
     this.leadSearchInfo = this.getSearchInfo(false);
+    const url = this.router.url;
+    const isLeadsRegister = url.endsWith('/leads-register');
 
-    if (totalHeight >= scrollHeight && !this.bottomReached) {
-      this.page++;
-      this.leadSearchInfo.page = this.page;
-      this.leadService.pageNumberChanged(this.leadSearchInfo);
-      console.log('leads page number', this.page);
-      console.log('leads page number params', this.leadSearchInfo);
+    if (isLeadsRegister) {
+      if (totalHeight >= scrollHeight && !this.bottomReached) {
+        this.page++;
+        this.leadSearchInfo.page = this.page;
+        this.leadService.pageNumberChanged(this.leadSearchInfo);
+        console.log('leads page number', this.page);
+        console.log('leads page number params', this.leadSearchInfo);
+      }
     }
   }
 
