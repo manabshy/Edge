@@ -54,16 +54,16 @@
     <ng-container *ngIf="isNewContactGroup && !isTypePicked">
       <h5>Type of Contact Group?</h5>
       <div class="list-group list-group-horizontal-sm mb-3">
-        <div class="list-group-item list-group-item-action text-center" (click)="isCompanyContactGroup(true)">
-          <span class="btn btn-link">
-            <i class="fas fa-briefcase fa-lg"></i><br>
-            Company Contact Group
-          </span>
-        </div>
         <div class="list-group-item list-group-item-action text-center" (click)="isCompanyContactGroup(false)">
           <span class="btn btn-link">
             <i class="fas fa-users fa-lg"></i><br>
             Personal Contact Group
+          </span>
+        </div>
+        <div class="list-group-item list-group-item-action text-center" (click)="isCompanyContactGroup(true)">
+          <span class="btn btn-link">
+            <i class="fas fa-briefcase fa-lg"></i><br>
+            Company Contact Group
           </span>
         </div>
       </div>

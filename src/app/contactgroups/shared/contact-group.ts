@@ -61,6 +61,7 @@ export class SignerRequest {
 export interface Summary {
   active: number;
   total: number;
+  inactive: number;
 }
 export interface PersonSummaryFigures {
   personId: number;
