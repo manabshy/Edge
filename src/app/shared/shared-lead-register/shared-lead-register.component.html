@@ -1,7 +1,8 @@
 <div class="list-group list-group-flush" *ngIf="leads$|async as leads">
   <div class="list-group-item list-header d-none d-sm-block d-xl-none">
     <div class="row">
-      <div class="col-sm"><strong>Lead Type</strong></div>
+      <div class="col-sm-auto"><span class="badge badge-pill badge-primary invisible">Closed</span></div>
+      <div class="col-sm"><strong>Type</strong></div>
       <div class="col-sm"><strong>Next Chase Date</strong></div>
       <div class="col-sm"><strong>Lead Owner</strong></div>
     </div>
@@ -12,9 +13,14 @@
   <a (click)="leadClicked(lead)" class="list-group-item list-group-item-action"
     *ngFor="let lead of leads; let i = index;">
     <div class="row align-items-center">
-      <div class="col-sm mb-2 mb-sm-0 mb-xl-2 col-xl-12">
-        <span class="badge badge-pill badge-danger mr-1" *ngIf="lead?.closedById">Closed</span>
-        <span class="badge badge-pill badge-info">{{lead?.leadType}}</span>
+      <div class="col-sm-auto mb-2 mb-sm-0 mb-xl-2 col-xl-12">
+        <span class="badge badge-pill badge-primary mr-1" *ngIf="lead?.closedById">Closed</span>
+      </div>
+      <div class="col-sm col-xl-12">
+        <dl class="row">
+          <dt class="col-4 d-sm-none d-xl-block">Type</dt>
+          <dd class="col">{{lead?.leadType}}</dd>
+        </dl>
       </div>
       <div class="col-sm col-xl-12">
         <dl class="row">

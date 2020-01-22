@@ -2,7 +2,7 @@
 <div class="container">
   <div class="row page-title">
     <div class="col">
-      <h4 class="m-0">Lead <span class="badge badge-pill badge-danger" *ngIf="lead?.closedById">Closed</span></h4>
+      <h4 class="m-0">Lead <span class="badge badge-pill badge-primary" *ngIf="lead?.closedById">Closed</span></h4>
     </div>
   </div>
   <form [formGroup]="leadEditForm" (ngSubmit)="SaveLead(true, leadNote)" autocompleteOff>
@@ -10,25 +10,6 @@
       <div class="col-xl-8">
         <h5>Person</h5>
         <app-person-details *ngIf="person" [personDetails]="person"></app-person-details>
-        <h5>Property</h5>
-        <ng-container *ngIf="lead?.relatedProperty; else noProperty">
-          <p class="d-flex d-sm-block">
-            <a class="text-left mobile-btn"
-              [routerLink]="['/property-centre/detail/', lead?.relatedProperty?.propertyId]">
-              {{lead?.relatedProperty?.address | formatAddress}}
-            </a>
-            <ng-container *ngIf="!isMessageVisible; else noProperty">
-              <button class="btn btn-light btn-sm ml-2" type="button" (click)="removeProperty()"
-                [attr.disabled]="isLeadClosed ? true : null">Remove
-              </button>
-            </ng-container>
-          </p>
-        </ng-container>
-        <ng-template #noProperty>
-          <p>
-            No property associated to this lead
-          </p>
-        </ng-template>
         <div #spacer></div>
         <div class="sub-info" stickyThing [spacer]="spacer" marginTop="66">
           <h5>More Info</h5>
@@ -86,7 +67,7 @@
             <div class="row">
               <div class="col-lg">
                 <div class="form-group">
-                  <label for="leadType">Lead Type</label>
+                  <label for="leadType">Type</label>
                   <select class="custom-select custom-select-sm" id="leadType" formControlName="leadTypeId"
                     [attr.disabled]="isLeadClosed ? true : null" [ngClass]="{'is-invalid': formErrors?.leadTypeId}">
                     <option value=""></option>
@@ -120,13 +101,32 @@
                     <input type="checkbox" class="custom-control-input" id="closeLead" formControlName="closeLead"
                       (change)="closeLeadChanged(lead)" [attr.disabled]="isLeadClosed ? true : null">
                     <label class="custom-control-label" for="closeLead">Mark as <span
-                        class="badge badge-pill badge-danger">Closed</span></label>
+                        class="badge badge-pill badge-primary">Closed</span></label>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <h5>Associated Property</h5>
+        <ng-container *ngIf="lead?.relatedProperty; else noProperty">
+          <p class="d-flex d-sm-block">
+            <a class="text-left mobile-btn"
+              [routerLink]="['/property-centre/detail/', lead?.relatedProperty?.propertyId]">
+              {{lead?.relatedProperty?.address | formatAddress}}
+            </a>
+            <ng-container *ngIf="!isMessageVisible; else noProperty">
+              <button class="btn btn-light btn-sm ml-2" type="button" (click)="removeProperty()"
+                [attr.disabled]="isLeadClosed ? true : null">Remove
+              </button>
+            </ng-container>
+          </p>
+        </ng-container>
+        <ng-template #noProperty>
+          <p>
+            No property associated to this lead
+          </p>
+        </ng-template>
         <h5>Notes</h5>
         <div class="list-group">
           <div class="list-group-item add-note py-4">

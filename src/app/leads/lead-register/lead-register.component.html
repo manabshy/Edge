@@ -101,7 +101,8 @@
             <label class="custom-control-label" for="assignAll"><span class="sr-only">Assign all</span></label>
           </div>
         </a>
-        <div class="col-sm"><strong>Lead Type</strong></div>
+        <div class="col-sm-auto" *ngIf="isClosedIncluded"><span class="badge badge-pill badge-primary invisible">Closed</span></div>
+        <div class="col-sm"><strong>Type</strong></div>
         <div class="col-sm"><strong>Person</strong></div>
         <div class="col-sm"><strong>Chase Date</strong></div>
         <div class="col-sm"><strong>Chaser</strong></div>
@@ -124,9 +125,14 @@
         </div>
         <div class="col">
           <div class="row align-items-center">
-            <div class="col-sm mb-2 mb-sm-0">
-              <span class="badge badge-pill badge-danger mr-1" *ngIf="lead?.closedById">Closed</span>
-              <span class="badge badge-pill badge-info">{{lead?.leadType}}</span>
+            <div class="col-sm-auto mb-2 mb-sm-0" *ngIf="isClosedIncluded">
+              <span class="badge badge-pill badge-primary" *ngIf="lead?.closedById">Closed</span>
+            </div>
+            <div class="col-sm">
+              <dl class="row">
+                <dt class="col-4 d-sm-none">Type</dt>
+                <dd class="col">{{lead?.leadType}}</dd>
+              </dl>
             </div>
             <div class="col-sm">
               <dl class="row">
@@ -157,7 +163,7 @@
         <div class="col-sm-10 d-flex">
           <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
           <button type="submit" class="btn btn-secondary">Assign <span
-              class="badge badge-pill badge-info">{{selectedLeadsForAssignment?.length}}</span></button>
+              class="badge badge-pill badge-primary">{{selectedLeadsForAssignment?.length}}</span></button>
         </div>
       </div>
     </div>

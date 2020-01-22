@@ -43,6 +43,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   searchTerm = '';
   errorMessage: WedgeError;
   info: string;
+  isClosedIncluded: boolean;
 
   constructor(private leadService: LeadsService,
     private sharedService: SharedService,
@@ -220,6 +221,9 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   }
 
   PerformSearch() {
+    if(this.leadSearchInfo) {
+      this.isClosedIncluded = this.leadSearchInfo.includeClosedLeads;
+    }
     this.leadService.pageNumberChanged(this.leadSearchInfo);
   }
 
