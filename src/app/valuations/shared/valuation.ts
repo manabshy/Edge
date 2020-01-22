@@ -27,6 +27,7 @@ export interface Valuation extends ValuationInfo {
   receptions?: number;
   sqFt?: number;
   tenureId: number;
+  approxLeaseExpiryDate: Date;
   outsideSpace: string;
   parking: string;
   propertyFeature: string;

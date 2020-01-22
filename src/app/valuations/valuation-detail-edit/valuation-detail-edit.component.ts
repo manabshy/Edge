@@ -51,6 +51,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   isOwnerChanged: boolean;
   isPropertyChanged: boolean;
   allAttendees: BaseStaffMember[];
+  isEditable: boolean;
+  showLeaseExpiryDate: boolean;
 
   get isInvitationSent() {
     return this.valuationForm.get('isInvitationSent') as FormControl;
@@ -183,6 +185,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       outsideSpace: [null],
       parking: [null],
       propertyFeature: [null],
+      approxLeaseExpiryDate: [null],
       attendees: [[]],
       valuer: [''],
       isInvitationSent: false,
@@ -209,6 +212,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.valuationService.getValuation(id).subscribe((data => {
       if (data) {
         this.valuation = data;
+        this.valuation.valuationStatus === 3 ? this.isEditable = false : this.isEditable = true;
+        this.attendees = this.valuation.diaryEvent.staffMembers;
+        console.log('this.valuation', this.valuation.valuationStatus, 'isedit', this.isEditable)
         this.valuation.valuer.fullName ? this.showOnlyMainStaffMember = true : this.showOnlyMainStaffMember = false;
         this.populateForm(data);
       }
@@ -228,12 +234,13 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         bathrooms: valuation.bathrooms,
         receptions: valuation.receptions,
         tenureId: valuation.tenureId,
+        approxLeaseExpiryDate: valuation.approxLeaseExpiryDate,
         sqFoot: valuation.sqFt,
         outsideSpace: valuation.outsideSpace,
         parking: valuation.parking,
         propertyFeature: valuation.propertyFeature,
         valuer: valuation.valuer,
-        duration: valuation.diaryEvent.duration,
+        duration: valuation.diaryEvent.totalHours,
         suggestedAskingPrice: valuation.suggestedAskingPrice,
         suggestedAskingRentLongLet: valuation.suggestedAskingRentLongLet,
         suggestedAskingRentLongLetMonthly: valuation.suggestedAskingRentLongLetMonthly,
@@ -242,6 +249,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       });
     }
     console.log('form values', this.valuationForm.value);
+    console.log('valuation values', valuation);
   }
 
   getSelectedProperty(property: Property) {
@@ -309,8 +317,13 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     console.log('clear......');
   }
 
-  onTenureChange(tenureId) {
-    console.log('tenure change', event)
+  onTenureChange(tenureId: number) {
+    console.log('clear  idd......', tenureId);
+    if (+tenureId === 3) {
+      this.showLeaseExpiryDate = true;
+    } else {
+      this.showLeaseExpiryDate = false;
+    }
   }
 
   changeDate() {
@@ -338,9 +351,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   addOrUpdateValuation() {
     const valuation = { ...this.valuation, ...this.valuationForm.value };
-    const attendees = { ...this.valuation.diaryEvent.staffMembers, ...this.attendees }
+    const attendees = { ...this.valuation.diaryEvent.staffMembers, ...this.attendees } as BaseStaffMember[];
     console.log('valuation before', valuation)
-    valuation.diaryEvent.staffMembers = attendees;
+    // valuation.diaryEvent.staffMembers = attendees;
     console.log('attendees', attendees)
     console.log('valuation', valuation)
     this.isSubmitting = true;
