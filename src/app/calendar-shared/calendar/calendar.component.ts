@@ -20,6 +20,7 @@ import { CustomEventTitleFormatter } from '../custom-event-title-formatter.provi
 import * as _ from 'lodash';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { InfoDetail, DropdownListInfo } from 'src/app/core/services/info.service';
+import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
@@ -94,7 +95,7 @@ export class CalendarComponent implements OnInit, OnChanges {
     setTimeout(() => {
       if (calHourSegments && calHourSegments.length) {
         if(window.innerWidth >= 1024) {
-          
+
           console.log(calHourSegments[21])
           calHourSegments[23].scrollIntoView({ block: 'center' });
         } else {
@@ -178,7 +179,7 @@ export class CalendarComponent implements OnInit, OnChanges {
     this.view = CalendarView.Day;
   }
 
-  getStaff(members: Staff[]) {
+  getStaff(members: BaseStaffMember[]) {
     if (members.length > 5) {
       return _.take(members, 5);
     }

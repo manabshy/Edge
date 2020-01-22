@@ -4,6 +4,7 @@ import { isArray } from 'util';
 import { newPropertyAddress } from 'src/app/shared/models/address';
 import { ContactGroup } from 'src/app/contactgroups/shared/contact-group';
 import { Property } from 'src/app/property/shared/property';
+import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
 
 export interface DiaryEvent {
   diaryEventId: number;
@@ -24,7 +25,7 @@ export interface DiaryEvent {
   isHighImportance: boolean;
   isOtherAgentViewing: boolean;
   contacts: ContactGroup[];
-  staffMembers: Staff[];
+  staffMembers: BaseStaffMember[];
   properties: DiaryProperty[];
 }
 export interface Period {
