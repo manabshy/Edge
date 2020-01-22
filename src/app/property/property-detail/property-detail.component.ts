@@ -156,7 +156,7 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit {
   }
 
   getPropertyDetails(propertyId: number) {
-    this.propertyService.getProperty(propertyId, true, true).subscribe(data => {
+    this.propertyService.getProperty(propertyId, true, true,false).subscribe(data => {
       if (data) {
         this.propertyDetails = data;
         this.sharedService.setTitle(this.formatAddressPipe.transform(this.propertyDetails.address));

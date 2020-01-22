@@ -90,7 +90,7 @@ export class PropertyService {
       tap(data => console.log('updated property details here...', JSON.stringify(data))));
   }
 
-  getProperty(propertyId: number, includeInfo?: boolean, includePhoto?: boolean): Observable<Property> {
+  getProperty(propertyId: number, includeInfo?: boolean, includePhoto?: boolean, includeValuers?: boolean): Observable<Property> {
     if (!includeInfo) {
       includeInfo = false;
     }
@@ -102,6 +102,7 @@ export class PropertyService {
       fromObject: {
         includeInfo: includeInfo.toString(),
         includePhoto: includePhoto.toString(),
+        includeValuers: includeValuers.toString()
       }
     });
     const url = `${AppConstants.basePropertyUrl}/${propertyId}`;
