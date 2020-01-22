@@ -60,16 +60,16 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   get isInvitationSent() {
     return this.valuationForm.get('isInvitationSent') as FormControl;
   }
-  get shortLetWeekly() {
+  get shortLetWeeklyControl() {
     return this.valuationForm.get('suggestedAskingRentShortLet') as FormControl;
   }
-  get longLetWeekly() {
+  get longLetWeeklyControl() {
     return this.valuationForm.get('suggestedAskingRentLongLet') as FormControl;
   }
-  get shortLetMonthly() {
+  get shortLetMonthlyControl() {
     return this.valuationForm.get('suggestedAskingRentShortLetMonthly') as FormControl;
   }
-  get longLetMonthly() {
+  get longLetMonthlyControl() {
     return this.valuationForm.get('suggestedAskingRentLongLetMonthly') as FormControl;
   }
 
@@ -141,37 +141,56 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.valuationForm.valueChanges
       .pipe(debounceTime(400))
       .subscribe((data) => {
-        const weekly = data.suggestedAskingRentLongLet || data.suggestedAskingRentShortLet;
-        const monthly = data.suggestedAskingRentLongLetMonthly || data.suggestedAskingRentShortLetMonthly;
         this.sharedService.logValidationErrors(this.valuationForm, false);
-        // console.log('data entered', data)
         this.setRent(data);
       });
   }
 
-  setRent(rent) {
+  // TODO: Not working properly, fix asap
+  setRent(rent: any) {
     let value = 0;
+    const shortLetWeeklyValue = +rent.suggestedAskingRentShortLet;
+    const longLetWeeklyValue = +rent.suggestedAskingRentLongLet;
+    const shortLetMonthlyValue = +rent.suggestedAskingRentShortLetMonthly;
+    const longLetMonthlyValue = +rent.suggestedAskingRentLongLetMonthly;
+
     switch (true) {
-      case !!rent.suggestedAskingRentShortLet:
-        console.log('data entered', rent.suggestedAskingRentShortLet);
-        value = +rent.suggestedAskingRentShortLet * 4;
-        this.shortLetMonthly.setValue(value);
-        return;
-      case !!rent.suggestedAskingRentLongLet:
-        value = +rent.suggestedAskingRentLongLet * 4;
-        this.longLetMonthly.setValue(value);
-        return;
-      case !!rent.suggestedAskingRentShortLetMonthly:
-        console.log('short let monthly', rent.suggestedAskingRentShortLetMonthly);
-        value = +rent.suggestedAskingRentShortLetMonthly / 4;
-        this.shortLetWeekly.setValue(value);
-        return;
-      case !!rent.suggestedAskingRentLongLetMonthly:
-        value = +rent.suggestedAskingRentLongLetMonthly / 4;
-        this.longLetWeekly.setValue(value);
-        return;
+      case !!shortLetWeeklyValue:
+        value = shortLetWeeklyValue * 4;
+        this.shortLetMonthlyControl.setValue(value);
+        break;
+      case !!longLetWeeklyValue:
+        value = longLetWeeklyValue * 4;
+        this.longLetMonthlyControl.setValue(value);
+        break;
+      case !!shortLetMonthlyValue:
+        value = shortLetMonthlyValue / 4;
+        this.shortLetWeeklyControl.setValue(value);
+        break;
+      case !!longLetMonthlyValue:
+        value = longLetMonthlyValue / 4;
+        this.longLetWeeklyControl.setValue(value);
+        break;
     }
+    //   if(shortLetWeeklyValue) {
+    //     value = shortLetWeeklyValue * 4;
+    //     this.shortLetMonthlyControl.setValue(value);
+    //   }
+    //   if(longLetWeeklyValue) {
+    //     value = longLetWeeklyValue * 4;
+    //      this.longLetMonthlyControl.setValue(value);
+    //   }
+    //   if(shortLetMonthlyValue) {
+    //     value = shortLetMonthlyValue / 4;
+    //       this.shortLetWeeklyControl.setValue(value);
+    //   }
+    //   if(longLetMonthlyValue) {
+    //     value = longLetMonthlyValue / 4;
+    //       this.longLetWeeklyControl.setValue(value);
+    //   }
+    // }
   }
+
 
   setupForm() {
     this.valuationForm = this.fb.group({
