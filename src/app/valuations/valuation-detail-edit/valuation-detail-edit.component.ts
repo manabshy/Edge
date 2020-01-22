@@ -94,7 +94,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     private storage: StorageMap,
     private route: ActivatedRoute,
     private router: Router,
-    private fb: FormBuilder) { super() }
+    private fb: FormBuilder) { super(); }
 
   ngOnInit() {
     this.setupForm();
@@ -102,7 +102,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.propertyId = +this.route.snapshot.queryParamMap.get('propertyId');
     this.lastKnownOwnerId = +this.route.snapshot.queryParamMap.get('lastKnownOwnerId');
     this.isNewValuation = this.route.snapshot.queryParamMap.get('isNewValuation') as unknown as boolean;
-    console.log('id', this.propertyId, 'ownerId', this.lastKnownOwnerId)
+    console.log('id', this.propertyId, 'ownerId', this.lastKnownOwnerId);
     if (this.valuationId) {
       this.getValuation(this.valuationId);
     }
@@ -133,7 +133,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
     this.contactGroupService.signer$.subscribe(data => {
       if (data) {
-        // this.lastKnownOwner = data;
+        this.lastKnownOwner = data;
         this.createdSigner = data;
         this.isCreatingNewSigner = false;
       }
@@ -153,7 +153,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     let value = 0;
     switch (true) {
       case !!rent.suggestedAskingRentShortLet:
-        console.log('data entered', rent.suggestedAskingRentShortLet)
+        console.log('data entered', rent.suggestedAskingRentShortLet);
         value = +rent.suggestedAskingRentShortLet * 4;
         this.shortLetMonthly.setValue(value);
         return;
@@ -162,7 +162,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.longLetMonthly.setValue(value);
         return;
       case !!rent.suggestedAskingRentShortLetMonthly:
-        console.log('short let monthly', rent.suggestedAskingRentShortLetMonthly)
+        console.log('short let monthly', rent.suggestedAskingRentShortLetMonthly);
         value = +rent.suggestedAskingRentShortLetMonthly / 4;
         this.shortLetWeekly.setValue(value);
         return;
@@ -221,7 +221,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.lastKnownOwner = this.valuation.propertyOwner;
         this.existingProperty = this.valuation.property;
         this.attendees = this.valuation.attendees;
-        console.log('this.valuation', this.valuation.valuationStatus, 'isedit', this.isEditable)
         this.valuation.valuer.fullName ? this.showOnlyMainStaffMember = true : this.showOnlyMainStaffMember = false;
         this.populateForm(data);
       }
@@ -333,6 +332,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   changeDate() {
+    if (this.mainStaffMember) {
+      this.staffMemberId = this.mainStaffMember.staffMemberId;
+    }
     this.showCalendar = true;
   }
 
@@ -358,10 +360,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   addOrUpdateValuation() {
     const valuation = { ...this.valuation, ...this.valuationForm.value };
     const attendees = { ...this.valuation.diaryEvent.staffMembers, ...this.attendees } as BaseStaffMember[];
-    console.log('valuation before', valuation)
+    console.log('valuation before', valuation);
     valuation.diaryEvent.staffMembers = attendees;
-    console.log('attendees', attendees)
-    console.log('valuation', valuation)
+    console.log('attendees', attendees);
+    console.log('valuation', valuation);
     this.isSubmitting = true;
 
     if (this.isNewValuation) {
