@@ -44,6 +44,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   errorMessage: WedgeError;
   info: string;
   isClosedIncluded: boolean;
+  canSeeUnassignable: boolean;
 
   constructor(private leadService: LeadsService,
     private sharedService: SharedService,
@@ -84,7 +85,8 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     this.storage.get('currentUser').subscribe((data: StaffMember) => {
       if (data) {
         this.currentStaffMember = data;
-
+        const seeAllLeadsPermission = this.currentStaffMember.permissions.find(x => x.permissionId === 69);
+        seeAllLeadsPermission ? this.canSeeUnassignable = true : this.canSeeUnassignable = false;
         this.leadSearchInfo = this.getSearchInfo(true);
       }
     });
