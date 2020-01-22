@@ -72,17 +72,16 @@
             <label class="small" for="sqFoot">Sq. Foot</label>
             <input type="text" name="sqFoot" id="sqFoot" class="form-control form-control-sm" formControlName="sqFoot">
           </div>
-          <div class="col-sm form-group">
+          <div class="form-group" [ngClass]="showLeaseExpiryDate ? 'col-sm-auto' : 'col-sm'">
             <label class="small" for="tenureId">Tenure</label>
-            <select class="form-control form-control-sm" name="tenureId" id="tenureId" formControlName="tenureId"
-              (change)="onTenureChange($event.target.value)">
-              <option value="0"></option>
-              <option *ngFor="let tenure of tenures" [value]='tenure.id'> {{tenure.value}}</option>
-            </select>
-            <div *ngIf="showLeaseExpiryDate">
-              <label class="small" for="approxLeaseExpiryDate">Expiry date</label>
-              <input class="form-control form-control-sm" type="text" name="approxLeaseExpiryDate"
-                id="approxLeaseExpiryDate" class="form-control form-control-sm" formControlName="approxLeaseExpiryDate">
+            <div class="input-group input-group-sm">
+              <select class="form-control single-select" name="tenureId" id="tenureId" formControlName="tenureId"
+                (change)="onTenureChange($event.target.value)">
+                <option value="0"></option>
+                <option *ngFor="let tenure of tenures" [value]='tenure.id'> {{tenure.value}}</option>
+              </select>
+              <input class="form-control" type="text" name="approxLeaseExpiryDate" *ngIf="showLeaseExpiryDate" aria-label="length"
+                placeholder="Length ..." id="approxLeaseExpiryDate" formControlName="approxLeaseExpiryDate">
             </div>
           </div>
         </div>
