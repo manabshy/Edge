@@ -17,6 +17,7 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
 import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
 import { BaseComponent } from 'src/app/shared/models/base-component';
+import { BaseProperty } from 'src/app/shared/models/base-property';
 
 @Component({
   selector: 'app-valuation-detail-edit',
@@ -47,7 +48,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   errorMessage: WedgeError;
   isSubmitting: boolean;
   formErrors = FormErrors;
-  property: Property;
+  existingProperty: BaseProperty;
   isOwnerChanged: boolean;
   isPropertyChanged: boolean;
   allAttendees: BaseStaffMember[];
@@ -218,7 +219,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.valuation = data;
         this.valuation.valuationStatus === 3 ? this.isEditable = false : this.isEditable = true;
         this.lastKnownOwner = this.valuation.propertyOwner;
-        this.attendees = this.valuation.diaryEvent.staffMembers;
+        this.existingProperty = this.valuation.property;
+        this.attendees = this.valuation.attendees;
         console.log('this.valuation', this.valuation.valuationStatus, 'isedit', this.isEditable)
         this.valuation.valuer.fullName ? this.showOnlyMainStaffMember = true : this.showOnlyMainStaffMember = false;
         this.populateForm(data);
@@ -260,7 +262,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   getSelectedProperty(property: Property) {
     if (property) {
       // this.valuation.property = property;
-      this.property = property;
+      this.existingProperty = property;
       this.isPropertyChanged = true;
       this.valuationForm.get('property').setValue(property);
       console.log('property changed', this.isPropertyChanged);

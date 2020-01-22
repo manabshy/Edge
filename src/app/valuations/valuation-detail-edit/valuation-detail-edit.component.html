@@ -7,7 +7,7 @@
   </div>
   {{createdProperty|json}}
   <form [formGroup]="valuationForm" (ngSubmit)="saveValuation()">
-    <app-property-finder label="Property" [createdProperty]="createdProperty" [existingProperty]=valuation?.property
+    <app-property-finder label="Property" [createdProperty]="createdProperty" [existingProperty]=existingProperty
       (selectedProperty)="getSelectedProperty($event)"></app-property-finder>
     <app-signer label="Last known owner" [createdSigner]="createdSigner" [existingSigner]="lastKnownOwner"
       (selectedSigner)="getSelectedOwner($event)" (newSigner)="createNewSigner($event)"></app-signer>

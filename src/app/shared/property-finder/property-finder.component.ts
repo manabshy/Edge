@@ -67,7 +67,7 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
             }))
         )
       );
-      this.displayExistingProperty();
+    this.displayExistingProperty();
   }
 
   ngOnChanges() {
@@ -93,7 +93,7 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
     this.isSearchVisible = false;
     this.existingProperty = null;
     if (propertyId) {
-      this.propertyService.getProperty(propertyId, true, true).subscribe(data => {
+      this.propertyService.getProperty(propertyId, false, false, true).subscribe(data => {
         if (data) {
           console.log('selected prop', data);
           this.selectedPropertyDetails = data;
