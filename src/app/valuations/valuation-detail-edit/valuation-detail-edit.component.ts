@@ -351,7 +351,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     const valuation = { ...this.valuation, ...this.valuationForm.value };
     const attendees = { ...this.valuation.diaryEvent.staffMembers, ...this.attendees } as BaseStaffMember[];
     console.log('valuation before', valuation)
-    // valuation.diaryEvent.staffMembers = attendees;
+    valuation.diaryEvent.staffMembers = attendees;
     console.log('attendees', attendees)
     console.log('valuation', valuation)
     this.isSubmitting = true;

@@ -10,7 +10,7 @@ const routes: Routes = [
     path: 'detail/:id',
     children: [
       // { path: 'edit', component: ValuationDetailEditComponent , data: { shouldDetach: false }, canDeactivate: [CanDeactivateGuard] }
-      { path: 'edit', component: ValuationDetailEditComponent , data: { shouldDetach: true } }
+      { path: 'edit', component: ValuationDetailEditComponent , data: { shouldDetach: false } }
     ]
   }
 ];

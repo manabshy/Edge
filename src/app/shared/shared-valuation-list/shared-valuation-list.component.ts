@@ -23,21 +23,18 @@ export class SharedValuationListComponent implements OnChanges {
     private propertyService: PropertyService,
     private router: Router) { }
 
-  ngOnChanges(changes: SimpleChanges) {
-    console.log('changes', changes)
+  ngOnChanges() {
     if (this.personId) {
       this.valuations$ = this.peopleService.getValuations(this.personId)
         .pipe(
           tap(vals => {
-            vals.forEach(x => {
-              x.valuationStatusLabel = ValuationStatusEnum[x.valuationStatus];
-            });
+            this.sharedService.setValuationStatusLabel(vals);
           })
         );
     }
 
     if (this.propertyId) {
-      this.valuations$ = this.propertyService.getValuations(this.personId)
+      this.valuations$ = this.propertyService.getValuations(this.propertyId)
         .pipe(
           tap(vals => {
             this.sharedService.setValuationStatusLabel(vals);
