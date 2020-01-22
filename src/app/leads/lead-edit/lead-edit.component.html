@@ -24,7 +24,7 @@
             </ng-container>
           </p>
           <p class="d-sm-inline-block">
-            <a href="#" class="btn btn-sm btn-block btn-light">Create Valuation</a>
+            <a (click)="navigateToNewValuation(lead?.relatedProperty.propertyId, lead?.personId)" class="btn btn-sm btn-block btn-light">Create Valuation</a>
           </p>
         </ng-container>
         <ng-template #noProperty>

@@ -539,6 +539,18 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     console.log('note', this.note);
   }
 
+  navigateToNewValuation(propertyId: number, lastKnownOwnerId?: number) {
+    this.router.navigate(['valuations-register/detail/', 0, 'edit'], {
+      queryParams: {
+        propertyId: propertyId,
+        lastKnownOwnerId: lastKnownOwnerId,
+        isNewValuation: true
+      }
+    })
+
+    console.log('related prop', propertyId)
+  }
+
   canDeactivate(): boolean {
     if (this.leadEditForm.dirty && !this.isSubmitting || this.isPropertyAssociated) {
       return false;

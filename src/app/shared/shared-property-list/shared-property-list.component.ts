@@ -31,6 +31,17 @@ export class SharedPropertyListComponent implements OnChanges {
     }
   }
 
+  navigateToNewValuation(propertyId: number) {
+    event.stopPropagation();
+    this.router.navigate(['valuations-register/detail/', 0, 'edit'], {
+      queryParams: {
+        propertyId: propertyId,
+        isNewValuation: true,
+        lastKnownOwnerId: this.personId
+      }
+    });
+  }
+
   associateToLead(property: PersonProperty) {
     event.stopPropagation();
     if (property) {

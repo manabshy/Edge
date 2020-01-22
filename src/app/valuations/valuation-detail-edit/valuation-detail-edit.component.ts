@@ -53,6 +53,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   allAttendees: BaseStaffMember[];
   isEditable: boolean;
   showLeaseExpiryDate: boolean;
+  propertyId: number;
+  lastKnownOwnerId: number;
 
   get isInvitationSent() {
     return this.valuationForm.get('isInvitationSent') as FormControl;
@@ -96,7 +98,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   ngOnInit() {
     this.setupForm();
     this.valuationId = +this.route.snapshot.paramMap.get('id');
+    this.propertyId = +this.route.snapshot.queryParamMap.get('propertyId');
+    this.lastKnownOwnerId = +this.route.snapshot.queryParamMap.get('lastKnownOwnerId');
     this.isNewValuation = this.route.snapshot.queryParamMap.get('isNewValuation') as unknown as boolean;
+    console.log('id', this.propertyId, 'ownerId', this.lastKnownOwnerId)
     if (this.valuationId) {
       this.getValuation(this.valuationId);
     }
