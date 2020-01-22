@@ -138,6 +138,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         const weekly = data.suggestedAskingRentLongLet || data.suggestedAskingRentShortLet;
         const monthly = data.suggestedAskingRentLongLetMonthly || data.suggestedAskingRentShortLetMonthly;
         this.sharedService.logValidationErrors(this.valuationForm, false);
+        // console.log('data entered', data)
         this.setRent(data);
       });
   }
@@ -146,26 +147,23 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     let value = 0;
     switch (true) {
       case !!rent.suggestedAskingRentShortLet:
-        value = rent.suggestedAskingRentShortLet * 4;
+        console.log('data entered', rent.suggestedAskingRentShortLet)
+        value = +rent.suggestedAskingRentShortLet * 4;
         this.shortLetMonthly.setValue(value);
-        this.longLetMonthly.setValue(value);
-        break;
+        return;
       case !!rent.suggestedAskingRentLongLet:
-        value = rent.suggestedAskingRentLongLet * 4;
+        value = +rent.suggestedAskingRentLongLet * 4;
         this.longLetMonthly.setValue(value);
-        this.shortLetMonthly.setValue(value);
-        break;
+        return;
       case !!rent.suggestedAskingRentShortLetMonthly:
         console.log('short let monthly', rent.suggestedAskingRentShortLetMonthly)
-        value = rent.suggestedAskingRentShortLetMonthly / 4;
+        value = +rent.suggestedAskingRentShortLetMonthly / 4;
         this.shortLetWeekly.setValue(value);
-        this.shortLetMonthly.setValue(rent.suggestedAskingRentShortLetMonthly);
-        break;
+        return;
       case !!rent.suggestedAskingRentLongLetMonthly:
-        value = rent.suggestedAskingRentLongLetMonthly / 4;
+        value = +rent.suggestedAskingRentLongLetMonthly / 4;
         this.longLetWeekly.setValue(value);
-        this.shortLetWeekly.setValue(rent.suggestedAskingRentLongLetMonthly)
-        break;
+        return;
     }
   }
 
@@ -190,11 +188,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       valuer: [''],
       isInvitationSent: false,
       duration: [0],
-      suggestedAskingPrice: [0],
-      suggestedAskingRentLongLet: [0],
-      suggestedAskingRentShortLet: [0],
-      suggestedAskingRentLongLetMonthly: [0],
-      suggestedAskingRentShortLetMonthly: [0],
+      suggestedAskingPrice: [],
+      suggestedAskingRentLongLet: [],
+      suggestedAskingRentShortLet: [],
+      suggestedAskingRentLongLetMonthly: [],
+      suggestedAskingRentShortLetMonthly: [],
 
     });
   }
@@ -213,6 +211,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       if (data) {
         this.valuation = data;
         this.valuation.valuationStatus === 3 ? this.isEditable = false : this.isEditable = true;
+        this.lastKnownOwner = this.valuation.propertyOwner;
         this.attendees = this.valuation.diaryEvent.staffMembers;
         console.log('this.valuation', this.valuation.valuationStatus, 'isedit', this.isEditable)
         this.valuation.valuer.fullName ? this.showOnlyMainStaffMember = true : this.showOnlyMainStaffMember = false;
@@ -241,11 +240,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         propertyFeature: valuation.propertyFeature,
         valuer: valuation.valuer,
         duration: valuation.diaryEvent.totalHours,
-        suggestedAskingPrice: valuation.suggestedAskingPrice,
-        suggestedAskingRentLongLet: valuation.suggestedAskingRentLongLet,
-        suggestedAskingRentLongLetMonthly: valuation.suggestedAskingRentLongLetMonthly,
-        suggestedAskingRentShortLet: valuation.suggestedAskingRentShortLet,
-        suggestedAskingRentShortLetMonthly: valuation.suggestedAskingRentShortLetMonthly
+        suggestedAskingPrice: valuation.suggestedAskingPrice ? valuation.suggestedAskingPrice : '',
+        suggestedAskingRentLongLet: valuation.suggestedAskingRentLongLet ? valuation.suggestedAskingRentLongLet : '',
+        suggestedAskingRentLongLetMonthly: valuation.suggestedAskingRentLongLetMonthly ? valuation.suggestedAskingRentLongLetMonthly : '',
+        suggestedAskingRentShortLet: valuation.suggestedAskingRentShortLet ? valuation.suggestedAskingRentShortLet : '',
+        suggestedAskingRentShortLetMonthly: valuation.suggestedAskingRentShortLetMonthly ? valuation.suggestedAskingRentShortLetMonthly : ''
       });
     }
     console.log('form values', this.valuationForm.value);
@@ -264,7 +263,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   getSelectedOwner(owner: Signer) {
     if (owner) {
-      // this.valuation.propertyOwner = owner;
       this.lastKnownOwner = owner;
       this.isOwnerChanged = true;
       this.valuationForm.get('propertyOwner').setValue(owner);

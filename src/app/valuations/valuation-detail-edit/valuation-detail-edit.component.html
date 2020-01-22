@@ -9,7 +9,7 @@
   <form [formGroup]="valuationForm" (ngSubmit)="saveValuation()">
     <app-property-finder label="Property" [createdProperty]="createdProperty" [existingProperty]=valuation?.property
       (selectedProperty)="getSelectedProperty($event)"></app-property-finder>
-    <app-signer label="Last known owner" [createdSigner]="createdSigner" [existingSigner]="valuation?.propertyOwner"
+    <app-signer label="Last known owner" [createdSigner]="createdSigner" [existingSigner]="lastKnownOwner"
       (selectedSigner)="getSelectedOwner($event)" (newSigner)="createNewSigner($event)"></app-signer>
     <div class="form-group row">
       <label for="reason" class="col-sm-2 col-form-label col-form-label-sm">Why?</label>
