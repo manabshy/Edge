@@ -13,6 +13,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 })
 export class LeadFinderComponent implements OnInit {
 
+  @Input() leadSuggestion: string;
   @Output() leadSearchTerm = new EventEmitter();
   suggestions: (text$: Observable<any>) => Observable<any>;
   searchTerm = '';
@@ -24,7 +25,7 @@ export class LeadFinderComponent implements OnInit {
   ngOnInit() {
 
     this.leadFinderForm = this.fb.group({
-      leadSuggestion: ''
+      leadSuggestion: this.leadSuggestion || ''
     });
 
     this.leadFinderForm.valueChanges.subscribe(data => {

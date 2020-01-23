@@ -28,7 +28,7 @@
       <div class="row">
         <div class="col-12 form-group">
           <!-- <app-staffmember-finder (ownerChanged)="onOwnerChanged($event)"></app-staffmember-finder> -->
-          <app-lead-finder (leadSearchTerm)="setLeadSearchTerm($event)"></app-lead-finder>
+          <app-lead-finder [leadSuggestion]="leadRegisterForm.get('leadSearchTerm').value" (leadSearchTerm)="setLeadSearchTerm($event)"></app-lead-finder>
         </div>
         <div class="col-sm form-group">
           <label class="small" for="leadType">Type</label>
