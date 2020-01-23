@@ -213,6 +213,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       isInvitationSent: false,
       totalHours: [0],
       attendees: [''],
+      searchAttendeeId: null,
       valuationDate: [''],
       suggestedAskingPrice: [],
       suggestedAskingRentLongLet: [],
@@ -317,7 +318,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     const existingAttendee = this.attendees.find(x => x.staffMemberId === this.attendee.staffMemberId);
     if (this.attendee && !existingAttendee) {
       this.attendees.push(this.attendee);
-
+      this.valuationForm.get('searchAttendeeId').setValue(null);
     }
   }
 
