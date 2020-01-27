@@ -187,6 +187,10 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
     this.contactGroupService.personNotePageChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(newPageNumber => {
       this.page = newPageNumber;
+      console.log("(TRAVERSE) different person ID from here0: ", this.personId);
+      if (this.personId == null) {
+        this.page = 1;
+      }
       this.getNextPersonNotesPage(this.page);
     });
 
@@ -260,7 +264,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
   private getPersonInformation() {
     console.log("(TRAVERSE) different person ID from here2: ", this.personId);
-    
+
     this.contactGroupService.getPerson(this.personId).subscribe(
       data => {
         if (data) {
@@ -441,7 +445,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
           console.log('is chase date invalid', this.isChaseDateInvalid);
           if (!this.isChaseDateInvalid && this.isSaveAndNext) {
             console.log('is chase date invalid 2', this.isChaseDateInvalid);
-            this.moveToNextLead();
           }
         }
         this.onUpdateCompleted(result);
@@ -492,6 +495,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       this.router.navigate(['/leads-register/edit/', this.leadId]);
       this.init();
     }
+    this.moveToNextLead();
+
   }
 
   cancel() {
@@ -506,7 +511,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   private getNextPersonNotesPage(page) {
-
     console.log("(TRAVERSE) current lead id: ", this.leadId);
     console.log("(TRAVERSE) current person id for Notes: ", this.personId, this.page);
     this.contactGroupService.getPersonNotes(this.personId, this.pageSize, page).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
@@ -533,6 +537,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       console.log('move to next lead IDs', this.leadIds);
       this.onLoading = true;
       this.page = 1;
+      this.personId = null;
+      this.person = null;
+      this.personNotes = [];
       this.getLeadInformation();
       // this.getPersonNotes();
     } else {
