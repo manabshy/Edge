@@ -20,10 +20,11 @@ steps:
     npm install
     ng build --prod
   displayName: 'npm install and build'
-- task: AzureRmWebAppDeployment@4
+
+- task: AzureWebApp@1
   inputs:
-    ConnectionType: 'AzureRM'
-    azureSubscription: 'DG Infrastructure (44a352fe-70d3-41c1-ab1b-147114852d31)'
-    appType: 'webApp'
-    WebAppName: 'dandg-edge-dev'
-    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+        azureSubscription: 'DG Infrastructure (44a352fe-70d3-41c1-ab1b-147114852d31)'
+        appType: 'webApp'
+        appName: 'dandg-edge-test'
+        package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+        deploymentMethod: 'auto'
