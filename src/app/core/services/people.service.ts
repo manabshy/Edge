@@ -32,8 +32,8 @@ export class PeopleService {
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
 
-  getSearches(personId: number): Observable<PersonSearch[]> {
-    const url = `${AppConstants.basePersonUrl}/${personId}/searches`;
+  getSearches(personId: number, isClosedIncluded: boolean): Observable<PersonSearch[]> {
+    const url = `${AppConstants.basePersonUrl}/${personId}/searches?activeOnly=${!isClosedIncluded}`;
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
 

@@ -1,17 +1,23 @@
 <div class="list-group list-group-flush">
-  <div class="list-group-item list-header d-none d-sm-block d-xl-none">
-    <div class="row">
-      <div class="col-sm"><strong>Type</strong></div>
-      <div class="col-sm"><strong>Areas</strong></div>
-      <div class="col-sm"><strong>Status</strong></div>
-      <div class="col-sm"><strong>Price</strong></div>
-      <div class="col-sm"><strong>Min Beds</strong></div>
-      <div class="col-sm"><strong>Created</strong></div>
-    </div>
-  </div>
   <ng-container *ngIf="searches$ | async as searches">
     <div class="list-group-item text-center text-danger" *ngIf="!searches || !searches?.length">
       <i class="far fa-sad-tear"></i> No searches
+    </div>
+    <div class="list-group-item list-header d-none d-sm-block d-xl-none">
+      <div class="row">
+        <div class="col-sm"><strong>Type</strong></div>
+        <div class="col-sm"><strong>Areas</strong></div>
+        <div class="col-sm"><strong>Status</strong></div>
+        <div class="col-sm"><strong>Price</strong></div>
+        <div class="col-sm"><strong>Min Beds</strong></div>
+        <div class="col-sm"><strong>Created</strong></div>
+      </div>
+    </div>
+    <div class="list-group-item" *ngIf="searches && searches?.length">
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getSearches()" class="custom-control-input" id="includeClosedSearches">
+        <label class="custom-control-label" for="includeClosedSearches">Include closed searches</label>
+      </div>
     </div>
     <div class="list-group-item list-group-item-action" *ngFor="let search of searches">
       <div class="row">
