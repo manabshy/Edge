@@ -4,7 +4,14 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
 trigger:
-- master
+- r5
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'DG Infrastructure (44a352fe-70d3-41c1-ab1b-147114852d31)'
+    appType: 'webApp'
+    WebAppName: 'dandg-edge-test'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
 
 pool:
   vmImage: 'ubuntu-latest'
