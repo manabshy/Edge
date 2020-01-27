@@ -180,6 +180,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
         this.personNotes = [];
         this.page = 1;
         this.bottomReached = false;
+        console.log("(TRAVERSE) different person ID from here1: ", this.personId);
         this.getPersonNotes();
       }
     });
@@ -230,9 +231,11 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.leadsService.getLead(this.leadId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.lead = result;
       this.personId = result.personId;
+      console.log("(TRAVERSE) current lead id: ", this.leadId);
       console.log("(TRAVERSE) current person id: ", this.personId);
       this.patchLeadValues(result);
       this.getPersonInformation();
+      //this.getPersonNotes();
       this.lead.dateClosed ? this.isLeadClosed = true : this.isLeadClosed = false;
       this.leadOwner = this.staffMembers.find(sm => sm.staffMemberId === this.lead.ownerId);
     }, () => {
@@ -256,14 +259,15 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   private getPersonInformation() {
-
-    this.getPersonNotes();
+    console.log("(TRAVERSE) different person ID from here2: ", this.personId);
+    
     this.contactGroupService.getPerson(this.personId).subscribe(
       data => {
         if (data) {
           this.person = data;
           this.personParams = JSON.stringify(this.person);
           this.getSearchedPersonSummaryInfo(this.person.personId);
+          this.getPersonNotes();
         }
 
         this.subNav.forEach(element => {
@@ -503,7 +507,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
   private getNextPersonNotesPage(page) {
 
-    console.log("(TRAVERSE) current person id for Notes: ", this.personId);
+    console.log("(TRAVERSE) current lead id: ", this.leadId);
+    console.log("(TRAVERSE) current person id for Notes: ", this.personId, this.page);
     this.contactGroupService.getPersonNotes(this.personId, this.pageSize, page).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
       if (data) {
         if (page === 1) {
@@ -527,8 +532,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       this.leadId = this.leadIds[this.currentLeadIndex];
       console.log('move to next lead IDs', this.leadIds);
       this.onLoading = true;
+      this.page = 1;
       this.getLeadInformation();
-      this.getPersonNotes();
+      // this.getPersonNotes();
     } else {
       this.leadsListCompleted = true;
       console.log('list completed', this.leadIds);
