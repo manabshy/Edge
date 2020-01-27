@@ -126,7 +126,7 @@
         <div class="col">
           <div class="row align-items-center">
             <div class="col-sm-auto mb-2 mb-sm-0" *ngIf="isClosedIncluded">
-              <span class="badge badge-pill badge-primary" *ngIf="lead?.closedById">Closed</span>
+              <span class="badge badge-pill badge-primary" [ngClass]="{'invisible': !lead?.closedById}">Closed</span>
             </div>
             <div class="col-sm">
               <dl class="row">

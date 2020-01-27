@@ -52,8 +52,8 @@ export class PeopleService {
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
 
-  getLeads(personId: number): Observable<any> {
-    const url = `${AppConstants.basePersonUrl}/${personId}/leads`;
+  getLeads(personId: number, isClosedIncluded: boolean): Observable<any> {
+    const url = `${AppConstants.basePersonUrl}/${personId}/leads?activeOnly=${!isClosedIncluded}`;
     return this.http.get<any>(url).pipe(
       map(response => response.result),
       tap(data => {
