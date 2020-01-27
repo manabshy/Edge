@@ -103,8 +103,8 @@
               <span class="badge badge-secondary float-right pull-right"></span>
             </button>
             <ng-container [ngSwitch]="item?.value">
-              <app-property-detail-instructions *ngSwitchCase="'instructions'" [propertyId]="propertyDetails?.propertyId"></app-property-detail-instructions>
-              <app-property-detail-offers *ngSwitchCase="'offers'" [propertyId]="propertyDetails?.propertyId"></app-property-detail-offers>
+              <app-property-detail-instructions *ngSwitchCase="'instructions'" [propertyId]="propertyDetails?.propertyId" [closedCounter]="summaryTotals?.instructions?.inactive"></app-property-detail-instructions>
+              <app-property-detail-offers *ngSwitchCase="'offers'" [propertyId]="propertyDetails?.propertyId" [closedCounter]="summaryTotals?.offers?.inactive"></app-property-detail-offers>
             </ng-container>
           </accordion-group>
         </accordion>

@@ -13,6 +13,8 @@ import { AppUtils } from 'src/app/core/shared/utils';
 })
 export class PropertyDetailInstructionsComponent implements OnChanges {
   @Input() propertyId: number;
+  @Input() closedCounter: number;
+  isClosedIncluded: boolean = false;
   instructions$ = new Observable<InstructionInfo[]>();
   isShortLet = false;
 
@@ -20,14 +22,18 @@ export class PropertyDetailInstructionsComponent implements OnChanges {
 
   ngOnChanges() {
     if (this.propertyId) {
-      this.instructions$ = this.propertyService.getPropertyInstructions(this.propertyId)
-        .pipe(
-          tap(data => {
-            if (data && data.length) {
-              data.find(x => +x.shortLetAmount > 0) ? this.isShortLet = true : this.isShortLet = false;
-            }
-          }));
+      this.getInstructions();
     }
+  }
+
+  getInstructions() {
+    this.instructions$ = this.propertyService.getPropertyInstructions(this.propertyId, this.isClosedIncluded)
+    .pipe(
+      tap(data => {
+        if (data && data.length) {
+          data.find(x => +x.shortLetAmount > 0) ? this.isShortLet = true : this.isShortLet = false;
+        }
+      }));
   }
 
 }
