@@ -135,7 +135,7 @@
               <app-contactgroups-detail-searches *ngSwitchCase="'searches'"
                 [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.searches?.inactive"></app-contactgroups-detail-searches>
               <app-contactgroups-detail-lettings-managements *ngSwitchCase="'lettingsManagements'"
-                [personId]="searchedPersonDetails?.personId"></app-contactgroups-detail-lettings-managements>
+                [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.lettingsManagements?.inactive"></app-contactgroups-detail-lettings-managements>
               <app-contactgroups-detail-home-helper *ngSwitchCase="'homeHelpers'"
                 [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.homeHelpers?.inactive"></app-contactgroups-detail-home-helper>
               <app-shared-lead-register *ngSwitchCase="'leads'" [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.leads?.inactive">

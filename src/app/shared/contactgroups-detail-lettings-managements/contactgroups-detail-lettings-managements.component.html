@@ -1,16 +1,22 @@
 <div class="list-group list-group-flush">
-  <div class="list-group-item list-header d-none d-sm-block d-xl-none">
-    <div class="row">
-      <div class="col-sm-3"><strong>Address</strong></div>
-      <div class="col-sm"><strong>Start date</strong></div>
-      <div class="col-sm"><strong>End date</strong></div>
-      <div class="col-sm"><strong>Status</strong></div>
-      <div class="col-sm"><strong>Prop. Man.</strong></div>
-    </div>
-  </div>
   <ng-container *ngIf="managements$ | async as managements">
     <div class="list-group-item text-center text-danger" *ngIf="!managements || !managements?.length">
       <i class="far fa-sad-tear"></i> No lettings managements
+    </div>
+    <div class="list-group-item" *ngIf="closedCounter">
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getLettingManagements()" class="custom-control-input" id="includeClosedLettingManagements">
+        <label class="custom-control-label" for="includeClosedLettingManagements">Include closed letting managements</label>
+      </div>
+    </div>
+    <div class="list-group-item list-header d-none d-sm-block d-xl-none" *ngIf="managements && managements?.length">
+      <div class="row">
+        <div class="col-sm-3"><strong>Address</strong></div>
+        <div class="col-sm"><strong>Start date</strong></div>
+        <div class="col-sm"><strong>End date</strong></div>
+        <div class="col-sm"><strong>Status</strong></div>
+        <div class="col-sm"><strong>Prop. Man.</strong></div>
+      </div>
     </div>
     <div class="list-group-item list-group-item-action" *ngFor="let item of managements">
       <div class="row">
