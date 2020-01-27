@@ -106,7 +106,7 @@
                 <ng-container *ngIf="summaryTotals; else loadingInfo">
                   <ng-container *ngIf="isObject(summaryTotals[item?.value]); else simpleValue">
                     <span class="badge badge-pill badge-success mr-1"> {{summaryTotals[item?.value]?.active}} </span>
-                    <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value]?.total - summaryTotals[item?.value]?.active}}</span>
+                    <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value]?.inactive}}</span>
                   </ng-container>
                   <ng-template #simpleValue>
                     <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value] || '0'}}</span>
@@ -129,16 +129,16 @@
               <app-shared-property-list *ngSwitchCase="'properties'" [personId]="searchedPersonDetails?.personId">
               </app-shared-property-list>
               <app-contactgroups-detail-instructions *ngSwitchCase="'instructions'"
-                [personId]="searchedPersonDetails?.personId"></app-contactgroups-detail-instructions>
-              <app-contactgroups-detail-offers *ngSwitchCase="'offers'" [personId]="searchedPersonDetails?.personId">
+                [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.instructions?.inactive"></app-contactgroups-detail-instructions>
+              <app-contactgroups-detail-offers *ngSwitchCase="'offers'" [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.offers?.inactive">
               </app-contactgroups-detail-offers>
               <app-contactgroups-detail-searches *ngSwitchCase="'searches'"
-                [personId]="searchedPersonDetails?.personId"></app-contactgroups-detail-searches>
+                [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.searches?.inactive"></app-contactgroups-detail-searches>
               <app-contactgroups-detail-lettings-managements *ngSwitchCase="'lettingsManagements'"
                 [personId]="searchedPersonDetails?.personId"></app-contactgroups-detail-lettings-managements>
               <app-contactgroups-detail-home-helper *ngSwitchCase="'homeHelpers'"
-                [personId]="searchedPersonDetails?.personId"></app-contactgroups-detail-home-helper>
-              <app-shared-lead-register *ngSwitchCase="'leads'" [personId]="searchedPersonDetails?.personId">
+                [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.homeHelpers?.inactive"></app-contactgroups-detail-home-helper>
+              <app-shared-lead-register *ngSwitchCase="'leads'" [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.leads?.inactive">
               </app-shared-lead-register>
             </ng-container>
           </accordion-group>

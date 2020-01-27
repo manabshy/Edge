@@ -12,6 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ContactgroupsDetailOffersComponent implements OnChanges {
   @Input() personId: number;
+  @Input() closedCounter: number;
   isClosedIncluded: boolean = false;
   offers$ = new Observable<PersonOffer[]>();
 

@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 export class SharedLeadRegisterComponent implements OnChanges {
 
   @Input() personId: number;
+  @Input() closedCounter: number;
   isClosedIncluded: boolean = false;
   leads$ = new Observable<Lead[]>();
 

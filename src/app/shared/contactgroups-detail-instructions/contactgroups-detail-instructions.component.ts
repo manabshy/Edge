@@ -16,6 +16,7 @@ export class ContactgroupsDetailInstructionsComponent implements OnChanges {
   isShortLet: boolean;
   isClosedIncluded: boolean = false;
   @Input() personId: number;
+  @Input() closedCounter: number;
 
   constructor(private route: ActivatedRoute, private peopleService: PeopleService) { }
 

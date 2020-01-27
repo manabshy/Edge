@@ -11,6 +11,7 @@ import { PersonSearch } from 'src/app/shared/models/person';
 export class ContactgroupsDetailSearchesComponent implements OnInit, OnChanges {
   navPlaceholder: string;
   @Input() personId: number;
+  @Input() closedCounter: number;
   isClosedIncluded: boolean = false;
   searches$ = new Observable<PersonSearch[]>();
 
