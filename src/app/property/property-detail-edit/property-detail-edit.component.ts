@@ -208,6 +208,7 @@ export class PropertyDetailEditComponent implements OnInit {
   }
 
   getSelectedOwner(owner: Signer) {
+    console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',owner);
     if (this.lastKnownOwner !== owner) {
       this.propertyForm.markAsDirty();
     } else {
@@ -293,7 +294,7 @@ export class PropertyDetailEditComponent implements OnInit {
     const property = { ...this.propertyDetails, ...this.propertyForm.value };
     if (this.propertyDetails) {
       propertyAddress = { ...this.propertyDetails.address, ...this.propertyAddress };
-      this.lastKnownOwner ? property.lastKnownOwner = this.lastKnownOwner : property.lastKnownOwner = this.propertyDetails.lastKnownOwner;
+      property.lastKnownOwner = this.lastKnownOwner;
       property.address = propertyAddress;
     } else {
       property.lastKnownOwner = this.lastKnownOwner;
