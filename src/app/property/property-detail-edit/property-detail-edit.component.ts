@@ -208,7 +208,6 @@ export class PropertyDetailEditComponent implements OnInit {
   }
 
   getSelectedOwner(owner: Signer) {
-    console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',owner);
     if (this.lastKnownOwner !== owner) {
       this.propertyForm.markAsDirty();
     } else {
