@@ -21,10 +21,7 @@ steps:
     ng build --prod
   displayName: 'npm install and build'
 
-- task: AzureWebApp@1
+- task: PublishBuildArtifacts@1
   inputs:
-        azureSubscription: 'DG Infrastructure (44a352fe-70d3-41c1-ab1b-147114852d31)'
-        appType: 'webApp'
-        appName: 'dandg-edge-test'
-        package: '$(System.DefaultWorkingDirectory)/**/*.zip'
-        deploymentMethod: 'auto'
+    PathtoPublish: 'dist'
+    ArtifactName: 'dist'
