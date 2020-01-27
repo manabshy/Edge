@@ -14,6 +14,12 @@
     <div class="list-group-item text-center text-danger" *ngIf="!instructions || !instructions?.length">
       <i class="far fa-sad-tear"></i> No searches
     </div>
+    <div class="list-group-item" *ngIf="instructions && instructions?.length">
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getInstructions()" class="custom-control-input" id="includeClosedInstructions">
+        <label class="custom-control-label" for="includeClosedInstructions">Include closed instructions</label>
+      </div>
+    </div> 
     <div class="list-group-item list-group-item-action" *ngFor="let instruction of instructions">
       <div class="row">
         <div class="col-sm-3 col-xl-12">

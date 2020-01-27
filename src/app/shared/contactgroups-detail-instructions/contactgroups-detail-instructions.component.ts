@@ -14,18 +14,23 @@ import { tap } from 'rxjs/operators';
 export class ContactgroupsDetailInstructionsComponent implements OnChanges {
   instructions$ = new Observable<PersonInstruction[]>();
   isShortLet: boolean;
+  isClosedIncluded: boolean = false;
   @Input() personId: number;
 
   constructor(private route: ActivatedRoute, private peopleService: PeopleService) { }
 
   ngOnChanges() {
     if (this.personId) {
-      this.instructions$ = this.peopleService.getInstructions(this.personId);
-      tap((data: PersonInstruction[]) => {
-        if (data && data.length) {
-          data.find(x => +x.shortLetAmount > 0) ? this.isShortLet = true : this.isShortLet = false;
-        }
-      });
+      this.getInstructions();
     }
+  }
+
+  getInstructions() {
+    this.instructions$ = this.peopleService.getInstructions(this.personId, this.isClosedIncluded);
+    tap((data: PersonInstruction[]) => {
+      if (data && data.length) {
+        data.find(x => +x.shortLetAmount > 0) ? this.isShortLet = true : this.isShortLet = false;
+      }
+    });
   }
 }
