@@ -31,6 +31,7 @@
     "@types/google-libphonenumber": "^7.4.17",
     "@w11k/angular-sticky-things": "^1.2.4",
     "adal-angular4": "^4.0.9",
+    "ajv": "^6.11.0",
     "angular-calendar": "^0.28.2",
     "bootstrap": "^4.4.1",
     "core-js": "^2.5.4",
@@ -50,7 +51,7 @@
     "zone.js": "^0.9.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.803.21",
+    "@angular-devkit/build-angular": "^0.803.23",
     "@angular/cli": "^8.3.21",
     "@angular/compiler-cli": "^8.2.14",
     "@angular/language-service": "^8.2.14",
