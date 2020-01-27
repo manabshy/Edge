@@ -1,16 +1,22 @@
 <div class="list-group list-group-flush">
-  <div class="list-group-item list-header d-none d-sm-block d-xl-none">
-    <div class="row">
-      <div class="col-sm-3"><strong>Address</strong></div>
-      <div class="col-sm"><strong>Start date</strong></div>
-      <div class="col-sm"><strong>End date</strong></div>
-      <div class="col-sm"><strong>Status</strong></div>
-      <div class="col-sm"><strong>Prop. Man.</strong></div>
-    </div>
-  </div>
   <ng-container *ngIf="homeHelpers$ | async as homeHelpers">
     <div class="list-group-item text-center text-danger" *ngIf="!homeHelpers || !homeHelpers?.length">
       <i class="far fa-sad-tear"></i> No home helpers
+    </div>
+    <div class="list-group-item" *ngIf="closedCounter">
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getHomeHelpers()" class="custom-control-input" id="includeClosedHomeHelpers">
+        <label class="custom-control-label" for="includeClosedHomeHelpers">Include closed home helpers</label>
+      </div>
+    </div>
+    <div class="list-group-item list-header d-none d-sm-block d-xl-none" *ngIf="homeHelpers && homeHelpers?.length">
+      <div class="row">
+        <div class="col-sm-3"><strong>Address</strong></div>
+        <div class="col-sm"><strong>Start date</strong></div>
+        <div class="col-sm"><strong>End date</strong></div>
+        <div class="col-sm"><strong>Status</strong></div>
+        <div class="col-sm"><strong>Prop. Man.</strong></div>
+      </div>
     </div>
     <div class="list-group-item list-group-item-action" *ngFor="let item of homeHelpers">
       <div class="row">

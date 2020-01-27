@@ -12,19 +12,25 @@ import { Router } from '@angular/router';
 export class SharedLeadRegisterComponent implements OnChanges {
 
   @Input() personId: number;
+  @Input() closedCounter: number;
+  isClosedIncluded: boolean = false;
   leads$ = new Observable<Lead[]>();
 
   constructor(private peopleService: PeopleService, private router: Router) { }
 
   ngOnChanges() {
     if (this.personId) {
-      this.leads$ = this.peopleService.getLeads(this.personId);
+      this.getLeads();
     }
   }
 
   leadClicked(lead: Lead) {
     this.router.navigateByUrl('/', { skipLocationChange: true })
       .then(() => this.router.navigate(['leads-register/edit', lead.leadId]));
+  }
+
+  getLeads() {
+    this.leads$ = this.peopleService.getLeads(this.personId, this.isClosedIncluded);
   }
 
 }

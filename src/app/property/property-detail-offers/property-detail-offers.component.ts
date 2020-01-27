@@ -12,14 +12,20 @@ import { AppUtils } from 'src/app/core/shared/utils';
 })
 export class PropertyDetailOffersComponent implements OnChanges {
   @Input() propertyId: number;
+  @Input() closedCounter: number;
+  isClosedIncluded: boolean = false;
   offers$ = new Observable<OfferInfo[]>();
 
   constructor(private route: ActivatedRoute, private propertyService: PropertyService) { }
 
   ngOnChanges() {
     if (this.propertyId) {
-      this.offers$ = this.propertyService.getPropertyOffers(this.propertyId);
+      this.getOffers();
     }
+  }
+
+  getOffers() {
+    this.offers$ = this.propertyService.getPropertyOffers(this.propertyId, this.isClosedIncluded);
   }
 
 }

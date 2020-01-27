@@ -12,14 +12,20 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ContactgroupsDetailOffersComponent implements OnChanges {
   @Input() personId: number;
+  @Input() closedCounter: number;
+  isClosedIncluded: boolean = false;
   offers$ = new Observable<PersonOffer[]>();
 
   constructor(private route: ActivatedRoute, private peopleService: PeopleService) { }
 
   ngOnChanges() {
     if (this.personId) {
-      this.offers$ = this.peopleService.getOffers(this.personId);
+      this.getOffers();
     }
+  }
+
+  getOffers() {
+    this.offers$ = this.peopleService.getOffers(this.personId, this.isClosedIncluded);
   }
 
 }

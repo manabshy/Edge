@@ -90,7 +90,7 @@
                 <ng-container *ngIf="summaryTotals; else loadingInfo">
                   <ng-container *ngIf="isObject(summaryTotals[item?.value]); else simpleValue">
                     <span class="badge badge-pill badge-success mr-1"> {{summaryTotals[item?.value]?.active}} </span>
-                    <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value]?.total - summaryTotals[item?.value]?.active}}</span>
+                    <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value]?.inactive}}</span>
                   </ng-container>
                   <ng-template #simpleValue>
                     <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value] || '0'}}</span>
@@ -103,8 +103,8 @@
               <span class="badge badge-secondary float-right pull-right"></span>
             </button>
             <ng-container [ngSwitch]="item?.value">
-              <app-property-detail-instructions *ngSwitchCase="'instructions'" [propertyId]="propertyDetails?.propertyId"></app-property-detail-instructions>
-              <app-property-detail-offers *ngSwitchCase="'offers'" [propertyId]="propertyDetails?.propertyId"></app-property-detail-offers>
+              <app-property-detail-instructions *ngSwitchCase="'instructions'" [propertyId]="propertyDetails?.propertyId" [closedCounter]="summaryTotals?.instructions?.inactive"></app-property-detail-instructions>
+              <app-property-detail-offers *ngSwitchCase="'offers'" [propertyId]="propertyDetails?.propertyId" [closedCounter]="summaryTotals?.offers?.inactive"></app-property-detail-offers>
             </ng-container>
           </accordion-group>
         </accordion>
