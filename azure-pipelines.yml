@@ -5,13 +5,6 @@
 
 trigger:
 - r5
-- task: AzureRmWebAppDeployment@4
-  inputs:
-    ConnectionType: 'AzureRM'
-    azureSubscription: 'DG Infrastructure (44a352fe-70d3-41c1-ab1b-147114852d31)'
-    appType: 'webApp'
-    WebAppName: 'dandg-edge-test'
-    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -27,3 +20,10 @@ steps:
     npm install
     ng build --prod
   displayName: 'npm install and build'
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'DG Infrastructure (44a352fe-70d3-41c1-ab1b-147114852d31)'
+    appType: 'webApp'
+    WebAppName: 'dandg-edge-dev'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
