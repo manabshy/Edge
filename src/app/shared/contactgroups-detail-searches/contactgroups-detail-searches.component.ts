@@ -10,7 +10,8 @@ import { PersonSearch } from 'src/app/shared/models/person';
 })
 export class ContactgroupsDetailSearchesComponent implements OnInit, OnChanges {
   navPlaceholder: string;
- @Input() personId: number;
+  @Input() personId: number;
+  isClosedIncluded: boolean = false;
   searches$ = new Observable<PersonSearch[]>();
 
   constructor(private peopleService: PeopleService) { }
@@ -20,8 +21,12 @@ export class ContactgroupsDetailSearchesComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     if (this.personId) {
-      this.searches$ = this.peopleService.getSearches(this.personId);
+      this.getSearches();
     }
+  }
+
+  getSearches() {
+    this.searches$ = this.peopleService.getSearches(this.personId, this.isClosedIncluded);
   }
 
 }

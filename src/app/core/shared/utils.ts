@@ -5,6 +5,7 @@ import { StaffMember } from '../../shared/models/staff-member';
 import { DetachedRouteHandle } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { CustomQueryEncoderHelper } from './custom-query-encoder-helper';
+import { LeadSearchInfo } from 'src/app/leads/shared/lead';
 
 
 export interface IRouteConfigData {
@@ -47,7 +48,8 @@ export class AppUtils {
   static routeCache = new Map<string, ICachedRoute>();
   static currentStaffMemberGlobal: StaffMember;
   static navPlaceholder: string;
-  
+  static leadSearchInfo: LeadSearchInfo;
+
 
   public static setQueryParams(requestOption: RequestOption) {
     if (!requestOption.page) {

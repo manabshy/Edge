@@ -28,8 +28,8 @@ export class PeopleService {
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
 
-  getInstructions(personId: number): Observable<PersonInstruction[]> {
-    const url = `${AppConstants.basePersonUrl}/${personId}/instructions`;
+  getInstructions(personId: number, isClosedIncluded: boolean): Observable<PersonInstruction[]> {
+    const url = `${AppConstants.basePersonUrl}/${personId}/instructions?activeOnly=${!isClosedIncluded}`;
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
   getValuations(personId: number): Observable<Valuation[]> {
@@ -37,13 +37,13 @@ export class PeopleService {
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
 
-  getSearches(personId: number): Observable<PersonSearch[]> {
-    const url = `${AppConstants.basePersonUrl}/${personId}/searches`;
+  getSearches(personId: number, isClosedIncluded: boolean): Observable<PersonSearch[]> {
+    const url = `${AppConstants.basePersonUrl}/${personId}/searches?activeOnly=${!isClosedIncluded}`;
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
 
-  getOffers(personId: number): Observable<PersonOffer[]> {
-    const url = `${AppConstants.basePersonUrl}/${personId}/offers`;
+  getOffers(personId: number, isClosedIncluded: boolean): Observable<PersonOffer[]> {
+    const url = `${AppConstants.basePersonUrl}/${personId}/offers?activeOnly=${!isClosedIncluded}`;
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
 
@@ -57,8 +57,8 @@ export class PeopleService {
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
 
-  getLeads(personId: number): Observable<any> {
-    const url = `${AppConstants.basePersonUrl}/${personId}/leads`;
+  getLeads(personId: number, isClosedIncluded: boolean): Observable<any> {
+    const url = `${AppConstants.basePersonUrl}/${personId}/leads?activeOnly=${!isClosedIncluded}`;
     return this.http.get<any>(url).pipe(
       map(response => response.result),
       tap(data => {

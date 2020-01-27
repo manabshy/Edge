@@ -96,10 +96,9 @@
           <a *ngIf="!impersonatedStaffMember" class="text-light" routerLink="/impersonate-member" (click)="navbarCollapsed = !navbarCollapsed"><i
               class="fas fa-user-friends mr-3"></i>Work As</a>
           <!--IF IMPERSONATING-->
-          <div *ngIf="impersonatedStaffMember"><a class="text-light" routerLink="/impersonate-member" (click)="navbarCollapsed = !navbarCollapsed"><i
-                class="fas fa-user-friends mr-3"></i>{{impersonatedStaffMember?.fullName}}</a></div>
-          <div>
-          </div>
+          <!-- <div *ngIf="impersonatedStaffMember"><a class="text-light" routerLink="/impersonate-member"
+              (click)="navbarCollapsed = !navbarCollapsed"><i
+                class="fas fa-user-friends mr-3"></i>{{impersonatedStaffMember?.fullName}}</a></div> -->
           <!--IF IMPERSONATING-->
         </div>
         <a class="nav-link justify-content-center" (click)="logOut()">

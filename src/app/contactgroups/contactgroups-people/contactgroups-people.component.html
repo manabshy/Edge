@@ -54,16 +54,16 @@
     <ng-container *ngIf="isNewContactGroup && !isTypePicked">
       <h5>Type of Contact Group?</h5>
       <div class="list-group list-group-horizontal-sm mb-3">
-        <div class="list-group-item list-group-item-action text-center" (click)="isCompanyContactGroup(true)">
-          <span class="btn btn-link">
-            <i class="fas fa-briefcase fa-lg"></i><br>
-            Company Contact Group
-          </span>
-        </div>
         <div class="list-group-item list-group-item-action text-center" (click)="isCompanyContactGroup(false)">
           <span class="btn btn-link">
             <i class="fas fa-users fa-lg"></i><br>
             Personal Contact Group
+          </span>
+        </div>
+        <div class="list-group-item list-group-item-action text-center" (click)="isCompanyContactGroup(true)">
+          <span class="btn btn-link">
+            <i class="fas fa-briefcase fa-lg"></i><br>
+            Company Contact Group
           </span>
         </div>
       </div>
@@ -185,7 +185,7 @@
                     <app-score-badge [person]="person"></app-score-badge>
                     <span class="badge badge-pill badge-danger mb-2 mr-2"
                       *ngIf="person?.warning && person?.warning?.id !== 1">{{person?.warningStatusComment || person?.warning?.value}}</span>
-                    <span class="badge badge-pill badge-info mb-2"
+                    <span class="badge badge-pill badge-primary mb-2"
                       *ngIf="person?.isMainPerson && contactGroupDetails.contactType !== 4">Main Person</span>
                   </div>
                   <div class="col-auto" *ngIf="!person?.isNewPerson; else removeSelectedPerson">

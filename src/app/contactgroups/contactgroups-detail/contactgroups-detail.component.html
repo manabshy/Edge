@@ -80,7 +80,7 @@
                 </ng-container>
                 <ng-container *ngIf="searchedPersonContactGroup?.isCompany">
                   <br class="d-sm-none" /><span
-                    class="badge badge-pill badge-info">{{searchedPersonContactGroup?.companyName}}</span>
+                    class="badge badge-pill badge-primary">{{searchedPersonContactGroup?.companyName}}</span>
                 </ng-container>
               </span>
             </app-subnav-item>
@@ -106,7 +106,7 @@
                 <ng-container *ngIf="summaryTotals; else loadingInfo">
                   <ng-container *ngIf="isObject(summaryTotals[item?.value]); else simpleValue">
                     <span class="badge badge-pill badge-success mr-1"> {{summaryTotals[item?.value]?.active}} </span>
-                    <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value]?.total}}</span>
+                    <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value]?.total - summaryTotals[item?.value]?.active}}</span>
                   </ng-container>
                   <ng-template #simpleValue>
                     <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value] || '0'}}</span>

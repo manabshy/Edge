@@ -4,6 +4,7 @@ import { StaffMemberService } from '../core/services/staff-member.service';
 import { StaffMember } from '../shared/models/staff-member';
 import { Lead, LeadSearchInfo } from './shared/lead';
 import * as _ from 'lodash';
+import { AppUtils } from '../core/shared/utils';
 
 const PAGE_SIZE = 20;
 @Component({
@@ -25,7 +26,8 @@ export class LeadComponent implements OnInit {
 
   ngOnInit() {
 
-    this.leadService.leadSearchTermChanges$.subscribe(newSearchTerm => this.searchTerm = newSearchTerm)
+    // this.leadService.leadSearchTermChanges$.subscribe(newSearchTerm => this.searchTerm = newSearchTerm)
+
     // Current Staff Member
     this.staffMemberService.getCurrentStaffMember().subscribe(data => {
       if (data) {
@@ -44,7 +46,11 @@ export class LeadComponent implements OnInit {
           includeUnassignedLeadsOnly: false,
           leadSearchTerm: this.searchTerm ? this.searchTerm : ''
         };
-
+        if(AppUtils.leadSearchInfo){
+          console.log('from app utils', AppUtils.leadSearchInfo)
+          this.leadSearchInfo = AppUtils.leadSearchInfo;
+          // this.searchTerm = AppUtils.leadSearchInfo.leadSearchTerm;
+        }
         this.getLeads(this.leadSearchInfo);
       }
     });
