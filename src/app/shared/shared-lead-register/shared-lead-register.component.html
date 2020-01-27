@@ -1,4 +1,10 @@
 <div class="list-group list-group-flush" *ngIf="leads$|async as leads">
+  <div class="list-group-item" *ngIf="leads && leads?.length">
+    <div class="custom-control custom-checkbox">
+      <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getLeads()" class="custom-control-input" id="includeClosedLeads">
+      <label class="custom-control-label" for="includeClosedLeads">Include closed leads</label>
+    </div>
+  </div> 
   <div class="list-group-item list-header d-none d-sm-block d-xl-none">
     <div class="row">
       <div class="col-sm-auto" *ngIf="isClosedIncluded"><span class="badge badge-pill badge-primary invisible">Closed</span></div>
@@ -9,13 +15,7 @@
   </div>
   <div class="list-group-item text-center text-danger" *ngIf="!leads || !leads?.length">
     <i class="far fa-sad-tear"></i> No Leads
-  </div>
-  <div class="list-group-item" *ngIf="leads && leads?.length">
-    <div class="custom-control custom-checkbox">
-      <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getLeads()" class="custom-control-input" id="includeClosedLeads">
-      <label class="custom-control-label" for="includeClosedLeads">Include closed leads</label>
-    </div>
-  </div>  
+  </div> 
   <a (click)="leadClicked(lead)" class="list-group-item list-group-item-action"
     *ngFor="let lead of leads; let i = index;">
     <div class="row align-items-center">
