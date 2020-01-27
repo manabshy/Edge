@@ -230,6 +230,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.leadsService.getLead(this.leadId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.lead = result;
       this.personId = result.personId;
+      console.log("(TRAVERSE) current person id: ", this.personId);
       this.patchLeadValues(result);
       this.getPersonInformation();
       this.lead.dateClosed ? this.isLeadClosed = true : this.isLeadClosed = false;
@@ -502,6 +503,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
   private getNextPersonNotesPage(page) {
 
+    console.log("(TRAVERSE) current person id for Notes: ", this.personId);
     this.contactGroupService.getPersonNotes(this.personId, this.pageSize, page).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
       if (data) {
         if (page === 1) {
