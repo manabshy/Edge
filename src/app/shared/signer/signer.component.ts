@@ -136,6 +136,7 @@ export class SignerComponent implements OnInit, OnChanges {
   remove() {
     this.selectedSignerDetails = null;
     this.isSearchVisible = true;
+    this.signerFinderForm.get('searchTerm').setValue('');
     this.selectedSigner.emit(this.selectedSignerDetails);
   }
 
