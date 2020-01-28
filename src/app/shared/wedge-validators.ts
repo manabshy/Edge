@@ -160,11 +160,19 @@ export class WedgeValidators {
     };
   }
   static nextChaseDateValidator(): ValidatorFn {
-    const currentDate = new Date();
+    const currentFullDate = new Date();
 
     return (control: AbstractControl): { [key: string]: boolean } | null => {
-      if (control !== null && control.value < currentDate) {
-        return { 'nextChaseDatePassed': true };
+      if (control !== null) {
+
+        const controlFullDate = new Date(control.value);
+
+        const controlDate = new Date(controlFullDate.getFullYear(), controlFullDate.getMonth(), controlFullDate.getDate());
+        const currentDate = new Date(currentFullDate.getFullYear(), currentFullDate.getMonth(), currentFullDate.getDate());
+
+        if (controlDate < currentDate) {
+          return { 'nextChaseDatePassed': true };
+        }
       }
       return null;
     };
@@ -202,3 +210,4 @@ function isInternationalNumber(number: string) {
   const formattedNumber = number.replace(' ', '').replace('+44', '');
   return formattedNumber.startsWith('00') || formattedNumber.startsWith('+');
 }
+
