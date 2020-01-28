@@ -179,13 +179,13 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       if (data) {
         this.personNotes = [];
         this.page = 1;
-        this.bottomReached = false;        
+        this.bottomReached = false;
         this.getPersonNotes();
       }
     });
 
     this.contactGroupService.personNotePageChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(newPageNumber => {
-      this.page = newPageNumber;      
+      this.page = newPageNumber;
       if (this.personId == null) {
         this.page = 1;
       }
@@ -201,6 +201,10 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       this.leadIds = result;
       this.currentLeadIndex = this.leadIds.indexOf(this.leadSearchInfo.startLeadId);
       console.log('(TRAVERSE) Lead IDs to traverse: ', this.leadIds);
+
+      if (this.leadIds.length <= 1) {
+        this.leadsListCompleted = true;
+      }
     }, () => {
       this.lead = null;
     });
@@ -233,7 +237,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   private getLeadInformation() {
     this.leadsService.getLead(this.leadId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.lead = result;
-      this.personId = result.personId;      
+      this.personId = result.personId;
       this.patchLeadValues(result);
       this.getPersonInformation();
       //this.getPersonNotes();
@@ -259,7 +263,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
   }
 
-  private getPersonInformation() {   
+  private getPersonInformation() {
 
     this.contactGroupService.getPerson(this.personId).subscribe(
       data => {
@@ -507,7 +511,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   private getNextPersonNotesPage(page) {
-    
+
     this.contactGroupService.getPersonNotes(this.personId, this.pageSize, page).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
       if (data) {
         if (page === 1) {
