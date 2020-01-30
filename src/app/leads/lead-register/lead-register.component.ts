@@ -272,6 +272,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       this.info = JSON.stringify(newInfo);
       AppUtils.leadSearchInfo = newInfo;
       console.log('set in app utils', AppUtils.leadSearchInfo)
+      console.log('Lead Register App utils', lead.leadId)
       this.router.navigate(['/leads-register/edit', lead.leadId],
         {
           queryParams: {

@@ -93,6 +93,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     private toastr: ToastrService) { super(); }
 
   ngOnInit() {
+    console.log('I am in the beginning of Lead Edit ngOnInit: ', this.showSaveAndNext, this.leadsListCompleted);
     AppUtils.parentRoute = AppUtils.prevRoute;
     this.selectedLeadTypeId = +this.route.snapshot.queryParamMap.get('leadTypeId');
     this.infoParam = this.route.snapshot.queryParamMap.get('leadSearchInfo');
@@ -100,6 +101,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.showNotes = this.route.snapshot.queryParamMap.get('showNotes') === 'true';
     this.route.params.subscribe(params => {
       this.leadId = +params['leadId'] || 0;
+      console.log('I am in Lead Edit ngOnInit: ', this.leadId, this.showSaveAndNext);
       if (this.leadId && this.showSaveAndNext) {
         this.getLeadIds(this.leadId);
       }
@@ -115,6 +117,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.leadEditForm.valueChanges.subscribe(data => {
       data.closeLead ? this.isLeadMarkedAsClosed = true : this.isLeadMarkedAsClosed = false;
     });
+    console.log('I am at the end of Lead Edit ngOnInit: ', this.leadId, this.showSaveAndNext, this.leadsListCompleted);
+
   }
 
   ngAfterViewInit() {
@@ -159,6 +163,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     if (!this.isNewLead) {
       // receive new lead
       this.leadsService.leadsChanges$.subscribe(lead => {
+        console.log('i am here in Lead Change subscription...');
         this.lead = lead;
 
         if (lead) {
@@ -191,6 +196,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       }
       this.getNextPersonNotesPage(this.page);
     });
+
+    console.log('I am at the end of Init(): ', this.leadId, this.showSaveAndNext, this.leadsListCompleted);
+
 
   }
 
@@ -235,6 +243,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   private getLeadInformation() {
+    console.log('I am at the beginning of getLeadInformation(): ', this.leadId, this.showSaveAndNext, this.leadsListCompleted);
+
     this.leadsService.getLead(this.leadId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.lead = result;
       this.personId = result.personId;
@@ -246,6 +256,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     }, () => {
       this.lead = null;
     });
+    console.log('I am at the end of getLeadInformation(): ', this.leadId, this.showSaveAndNext, this.leadsListCompleted);
+
   }
 
   private patchLeadValues(lead: Lead) {
@@ -343,10 +355,21 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   setNextChaseDateValidators() {
-    console.log('condit.....', this.nextChaseDateControl.value < new Date() && !this.isValidatorCleared);
+    console.log('condit.....', this.nextChaseDateControl.value != '' && this.nextChaseDateControl.value < new Date() && !this.isValidatorCleared);
+
+    console.log("this.nextChaseDateControl.value == ''", this.nextChaseDateControl.value === '');
+    console.log("this.nextChaseDateControl.value == undefined", this.nextChaseDateControl.value === undefined);
+    console.log("this.nextChaseDateControl.value == null", this.nextChaseDateControl.value === null);
+    console.log("this.isValidatorCleared", !this.isValidatorCleared);
+    console.log("this.nextChaseDateControl.value < new Date()", this.nextChaseDateControl.value < new Date());
+
     if (this.nextChaseDateControl.value < new Date() && !this.isValidatorCleared) {
       this.nextChaseDateControl.setValidators(WedgeValidators.nextChaseDateValidator());
       this.nextChaseDateControl.updateValueAndValidity();
+      // this.isChaseDateInvalid = true;
+    }
+
+    if (this.nextChaseDateControl.value != '' && this.nextChaseDateControl.value < new Date() && !this.isValidatorCleared) {
       this.isChaseDateInvalid = true;
     }
   }
@@ -385,9 +408,17 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   SaveLead(shouldExit: boolean = false, leadNote = null) {
     // this.setNextChaseDateValidators();
     this.logValidationErrors(this.leadEditForm, true);
+    console.log('i am here in SAVE');
 
     if (this.leadEditForm.valid) {
       this.isSubmitting = true;
+
+      console.log('Form dirty:', this.leadEditForm.dirty);
+      console.log('note form dirty:', this.isNoteFormDirty);
+      console.log('property associated:', this.isPropertyAssociated);
+      console.log('property removed:', this.isPropertyRemoved);
+      console.log('owner changed:', this.isOwnerChanged);
+
       if (this.leadEditForm.dirty || this.isNoteFormDirty || this.isPropertyAssociated || this.isPropertyRemoved || this.isOwnerChanged) {
         const lead = { ...this.lead, ...this.leadEditForm.value };
         const isNoteRequired = this.isLeadMarkedAsClosed || this.isNewLead || this.isNextChaseDateChanged;
@@ -403,6 +434,15 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
         }
         this.AddOrUpdateLead(lead);
       } else {
+
+        console.log('isChaseDateInvalid:', this.isChaseDateInvalid);
+        console.log('isSaveAndNext:', this.isSaveAndNext);
+
+        if (!this.isChaseDateInvalid && this.isSaveAndNext) {
+          console.log('is chase date invalid 2', this.isChaseDateInvalid);
+          this.moveToNextLead();
+        }
+
         this.onUpdateCompleted();
       }
     } else {
@@ -420,6 +460,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       lead.createdDate = new Date;
       lead.updatedBy = this.currentStaffMember.staffMemberId;
       lead.updatedDate = new Date;
+      console.log('i am here in add or update');
 
       this.leadsService.addLead(lead).subscribe((result) => {
         if (result) {
@@ -447,6 +488,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
             console.log('is chase date invalid 2', this.isChaseDateInvalid);
             this.moveToNextLead();
           }
+          else {
+            console.log('dont want to move to next lead');
+          }
         }
         this.onUpdateCompleted(result);
       }, (error: WedgeError) => {
@@ -469,6 +513,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   private onUpdateCompleted(lead?: Lead) {
+    console.log('i am here in OnUpdateCompleted');
+
     let time: number;
     if (this.isNewLead) { this.toastr.success('Lead successfully saved'); } else {
       this.isSaveAndNext ? time = 2000 : time = 5000;
@@ -530,8 +576,13 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
   moveToNextLead() {
 
-    if (this.currentLeadIndex < this.leadIds.length - 1) {
-      this.currentLeadIndex++;
+    console.log('this.currentLeadIndex:', this.currentLeadIndex);
+    console.log('this.leadIds.length - 1:', this.leadIds.length - 1);
+    console.log('this.currentLeadIndex < this.leadIds.length - 1:', this.currentLeadIndex < this.leadIds.length - 1);
+
+    if (this.currentLeadIndex++ <= this.leadIds.length - 1) {
+      //this.currentLeadIndex++;
+      console.log('this.currentLeadIndex++:', this.currentLeadIndex);
       this.leadId = this.leadIds[this.currentLeadIndex];
       console.log('move to next lead IDs', this.leadIds);
       this.onLoading = true;
@@ -541,6 +592,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       this.personNotes = [];
       this.getLeadInformation();
       // this.getPersonNotes();
+      if (this.currentLeadIndex == this.leadIds.length - 1) {
+        this.leadsListCompleted = true;
+      }
     } else {
       this.leadsListCompleted = true;
       console.log('list completed', this.leadIds);
