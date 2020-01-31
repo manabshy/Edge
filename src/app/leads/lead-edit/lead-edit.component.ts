@@ -90,7 +90,10 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     private fb: FormBuilder,
     private sharedService: SharedService,
     private contactGroupService: ContactGroupsService,
-    private toastr: ToastrService) { super(); }
+    private toastr: ToastrService) {
+      super();
+    console.log('I am in the constructor');
+  }
 
   ngOnInit() {
     console.log('I am in the beginning of Lead Edit ngOnInit: ', this.showSaveAndNext, this.leadsListCompleted);
@@ -261,6 +264,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   private patchLeadValues(lead: Lead) {
+    console.log('I am in patchLeadValues(): ', this.lead);
+
     if (lead) {
       this.leadEditForm.patchValue({
         ownerId: lead.ownerId,
