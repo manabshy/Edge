@@ -134,6 +134,7 @@ export class TelephoneComponent implements OnInit {
       }
     } else {
       this.isDialing = true;
+      this.tapiInfo = this.setupTapiInfo(this.currentStaffMember);
       this.tapiService.putCallRequest(this.tapiInfo).subscribe(data => {
         this.calling();
         console.log(data);
