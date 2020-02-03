@@ -584,7 +584,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     console.log('this.currentLeadIndex:', this.currentLeadIndex);
     console.log('this.leadIds.length - 1:', this.leadIds.length - 1);
     console.log('this.currentLeadIndex < this.leadIds.length - 1:', this.currentLeadIndex < this.leadIds.length - 1);
-
+    window.scrollTo(0,0);
     if (this.currentLeadIndex++ <= this.leadIds.length - 1) {
       //this.currentLeadIndex++;
       console.log('this.currentLeadIndex++:', this.currentLeadIndex);
