@@ -13,13 +13,14 @@ export class SharedLeadRegisterComponent implements OnChanges {
 
   @Input() personId: number;
   @Input() closedCounter: number;
+  @Input() moreInfo: string;
   isClosedIncluded: boolean = false;
   leads$ = new Observable<Lead[]>();
 
   constructor(private peopleService: PeopleService, private router: Router) { }
 
   ngOnChanges() {
-    if (this.personId) {
+    if (this.personId && this.moreInfo.includes('leads')) {
       this.getLeads();
     }
   }

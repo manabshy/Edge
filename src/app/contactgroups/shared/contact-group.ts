@@ -65,15 +65,15 @@ export interface Summary {
 }
 export interface PersonSummaryFigures {
   personId: number;
-  leads: number;
+  leads: Summary;
   notes: number;
-  searches: number;
+  searches: Summary;
   valuations: Summary;
   instructions: Summary;
   offers: Summary;
   tenancies: Summary;
-  lettingsManagements: number;
-  homeManagements: number;
+  lettingsManagements: Summary;
+  homeHelpers: Summary;
 }
 export interface Company {
   companyId: number;
