@@ -10,6 +10,7 @@ import { StorageMap } from '@ngx-pwa/local-storage';
 import { BaseComponent } from 'src/app/shared/models/base-component';
 import * as _ from 'lodash';
 import { takeUntil } from 'rxjs/operators';
+import { SubNavItem } from 'src/app/shared/subnav';
 
 @Component({
   selector: 'app-contactgroups-detail',
@@ -36,6 +37,7 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
   subNav = ContactGroupDetailsSubNavItems;
   personParams: string;
   showNotes: boolean;
+  moreInfo: any;
 
   get dataNote() {
     return {
@@ -170,6 +172,9 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
     this.sharedService.addNote(data);
   }
 
+  getMoreInfo(item: SubNavItem) {
+    this.moreInfo = item.value;
+  }
   isObject(val) {
     return val instanceof Object;
   }
