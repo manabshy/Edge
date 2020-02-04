@@ -16,16 +16,16 @@ import { StorageMap } from '@ngx-pwa/local-storage';
 })
 export class StaffmemberFinderComponent implements OnInit, OnChanges {
 
-  @Input() staffMember: StaffMember;
+  @Input() staffMemberId: number;
   @Input() isDisabled: boolean = false;
   @Output() ownerChanged = new EventEmitter();
   suggestions: (text$: Observable<any>) => Observable<any>;
+  staffMember: StaffMember;
   suggestedTerm: any;
   searchTerm = '';
   noSuggestions = false;
   staffMembers: StaffMember[];
   formatter = (x: { fullName: string }) => x.fullName;
-  selectedOwner: StaffMember;
   ownerForm: FormGroup;
   currentStaffMember: StaffMember;
 
@@ -33,7 +33,16 @@ export class StaffmemberFinderComponent implements OnInit, OnChanges {
 
 
   ngOnInit() {
+    this.ownerForm = this.fb.group({
+      owner: ''
+    });
 
+    // All Staffmembers
+    this.storage.get('allstaffmembers').subscribe(data => {
+      if (data) {
+        this.staffMembers = data as StaffMember[];
+      }
+    });
     this.suggestions = (text$: Observable<string>) =>
       text$.pipe(
         debounceTime(200),
@@ -44,20 +53,22 @@ export class StaffmemberFinderComponent implements OnInit, OnChanges {
               return EMPTY;
             }))));
 
-    this.ownerForm = this.fb.group({
-      owner: ''
-    });
-
-    this.ownerForm.patchValue({
-      owner: this.selectedOwner
-    });
-
     this.onChanges();
   }
 
   ngOnChanges() {
-    this.selectedOwner = this.staffMember;
-    console.log('owner is set: ', this.selectedOwner);
+    if (this.staffMembers && this.staffMembers.length && this.staffMemberId !== null) {
+      this.staffMember = this.staffMembers.find(sm => sm.staffMemberId === this.staffMemberId);
+      this.ownerForm.patchValue({
+        owner: this.staffMember
+      });
+    } else {
+      if (this.ownerForm) {
+        this.ownerForm.patchValue({
+          owner: ''
+        });
+      }
+    }
   }
 
   onChanges(): void {
@@ -88,11 +99,7 @@ export class StaffmemberFinderComponent implements OnInit, OnChanges {
   }
 
   selectedSuggestion(event: any) {
-    this.ownerForm.patchValue({
-      owner: this.selectedOwner
-    });
-    this.ownerChanged.emit(event);
+    this.ownerChanged.emit(event.item);
   }
-
 
 }
