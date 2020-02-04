@@ -13,13 +13,14 @@ import { AppUtils } from 'src/app/core/shared/utils';
 export class PropertyDetailOffersComponent implements OnChanges {
   @Input() propertyId: number;
   @Input() closedCounter: number;
+  @Input() moreInfo: string;
   isClosedIncluded: boolean = false;
   offers$ = new Observable<OfferInfo[]>();
 
   constructor(private route: ActivatedRoute, private propertyService: PropertyService) { }
 
   ngOnChanges() {
-    if (this.propertyId) {
+    if (this.propertyId && this.moreInfo.includes('offers')) {
       this.getOffers();
     }
   }

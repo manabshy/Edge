@@ -100,7 +100,7 @@
         <h5>More Info</h5>
         <accordion [closeOthers]="true">
           <accordion-group *ngFor="let item of subNav">
-            <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
+            <button class="btn btn-link btn-block clearfix" accordion-heading type="button"  (click)="getMoreInfo(item)">
               <div class="pull-left float-left">
                 {{item?.label}}
                 <ng-container *ngIf="summaryTotals; else loadingInfo">
@@ -126,19 +126,19 @@
               </span>
             </button>
             <ng-container [ngSwitch]="item?.value">
-              <app-shared-property-list *ngSwitchCase="'properties'" [personId]="searchedPersonDetails?.personId">
+              <app-shared-property-list *ngSwitchCase="'properties'" [moreInfo]="moreInfo" [personId]="searchedPersonDetails?.personId">
               </app-shared-property-list>
-              <app-contactgroups-detail-instructions *ngSwitchCase="'instructions'"
+              <app-contactgroups-detail-instructions *ngSwitchCase="'instructions'" [moreInfo]="moreInfo"
                 [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.instructions?.inactive"></app-contactgroups-detail-instructions>
-              <app-contactgroups-detail-offers *ngSwitchCase="'offers'" [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.offers?.inactive">
+              <app-contactgroups-detail-offers *ngSwitchCase="'offers'" [moreInfo]="moreInfo" [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.offers?.inactive">
               </app-contactgroups-detail-offers>
-              <app-contactgroups-detail-searches *ngSwitchCase="'searches'"
+              <app-contactgroups-detail-searches *ngSwitchCase="'searches'" [moreInfo]="moreInfo"
                 [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.searches?.inactive"></app-contactgroups-detail-searches>
-              <app-contactgroups-detail-lettings-managements *ngSwitchCase="'lettingsManagements'"
-                [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.lettingsManagements?.inactive"></app-contactgroups-detail-lettings-managements>
-              <app-contactgroups-detail-home-helper *ngSwitchCase="'homeHelpers'"
+              <app-contactgroups-detail-lettings-managements *ngSwitchCase="'lettingsManagements'" [moreInfo]="moreInfo"
+                [personId]="searchedPersonDetails?.personId" [moreInfo]="moreInfo" [closedCounter]="summaryTotals?.lettingsManagements?.inactive"></app-contactgroups-detail-lettings-managements>
+              <app-contactgroups-detail-home-helper *ngSwitchCase="'homeHelpers'" [moreInfo]="moreInfo"
                 [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.homeHelpers?.inactive"></app-contactgroups-detail-home-helper>
-              <app-shared-lead-register *ngSwitchCase="'leads'" [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.leads?.inactive">
+              <app-shared-lead-register *ngSwitchCase="'leads'" [moreInfo]="moreInfo" [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.leads?.inactive">
               </app-shared-lead-register>
             </ng-container>
           </accordion-group>
