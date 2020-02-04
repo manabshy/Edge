@@ -15,13 +15,14 @@ export class ContactgroupsDetailInstructionsComponent implements OnChanges {
   instructions$ = new Observable<PersonInstruction[]>();
   isShortLet: boolean;
   isClosedIncluded: boolean = false;
+  @Input() moreInfo: string;
   @Input() personId: number;
   @Input() closedCounter: number;
 
   constructor(private route: ActivatedRoute, private peopleService: PeopleService) { }
 
   ngOnChanges() {
-    if (this.personId) {
+    if (this.personId && this.moreInfo.includes('instructions')) {
       this.getInstructions();
     }
   }

@@ -21,6 +21,7 @@ import { ValidationMessages, FormErrors } from 'src/app/core/shared/app-constant
 import { Location } from '@angular/common';
 import { isEqual } from 'date-fns';
 import { WedgeValidators } from 'src/app/shared/wedge-validators';
+import { SubNavItem } from 'src/app/shared/subnav';
 
 @Component({
   selector: 'app-lead-edit',
@@ -78,6 +79,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   isSaveAndNext: boolean;
   showSaveAndNext: boolean;
   showNotes: boolean;
+  moreInfo: string = '';
   get nextChaseDateControl() {
     return this.leadEditForm.get('nextChaseDate') as FormControl;
   }
@@ -580,6 +582,10 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.isSaveAndNext = true;
     this.SaveLead(true, this.note);
     console.log('note', this.note);
+  }
+
+  getMoreInfo(item: SubNavItem) {
+    this.moreInfo = item.value;
   }
 
   canDeactivate(): boolean {
