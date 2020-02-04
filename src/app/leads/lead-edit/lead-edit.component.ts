@@ -613,7 +613,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   canDeactivate(): boolean {
-    if (this.leadEditForm.dirty && !this.isSubmitting || this.isPropertyAssociated) {
+    if (this.leadEditForm.dirty && !this.isSubmitting || this.isPropertyAssociated || this.isPropertyRemoved) {
       return false;
     }
     return true;
