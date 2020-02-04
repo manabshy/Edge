@@ -91,7 +91,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     private sharedService: SharedService,
     private contactGroupService: ContactGroupsService,
     private toastr: ToastrService) {
-      super();
+    super();
     console.log('I am in the constructor');
   }
 
@@ -135,13 +135,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.leadEditForm.valueChanges.pipe(debounceTime(400)).subscribe(() => this.logValidationErrors(this.leadEditForm, false));
     this.setNextChaseDateValidators();
 
-    // All Staffmembers
-    this.storage.get('allstaffmembers').subscribe(data => {
-      if (data) {
-        this.staffMembers = data as StaffMember[];
-      }
-    });
-
     // Lead Types
     this.storage.get('info').subscribe(data => {
       if (data) {
@@ -174,7 +167,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
           this.patchLeadValues(lead);
           this.getPersonInformation();
 
-          this.leadOwner = this.staffMembers.find(sm => sm.staffMemberId === this.lead.ownerId)[0];
         } else {
           this.getLeadInformation();
         }
@@ -255,7 +247,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       this.getPersonInformation();
       //this.getPersonNotes();
       this.lead.dateClosed ? this.isLeadClosed = true : this.isLeadClosed = false;
-      this.leadOwner = this.staffMembers.find(sm => sm.staffMemberId === this.lead.ownerId);
     }, () => {
       this.lead = null;
     });
@@ -306,6 +297,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
   onOwnerChanged(event: any) {
     this.isOwnerChanged = true;
+    console.log('from child', event)
     if (event && event.item != null || event) {
       let ownerId = 0;
       event.item ? ownerId = event.item.staffMemberId : ownerId = event.staffMemberId;
@@ -411,18 +403,10 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   SaveLead(shouldExit: boolean = false, leadNote = null) {
-    // this.setNextChaseDateValidators();
     this.logValidationErrors(this.leadEditForm, true);
-    console.log('i am here in SAVE');
 
     if (this.leadEditForm.valid) {
       this.isSubmitting = true;
-
-      console.log('Form dirty:', this.leadEditForm.dirty);
-      console.log('note form dirty:', this.isNoteFormDirty);
-      console.log('property associated:', this.isPropertyAssociated);
-      console.log('property removed:', this.isPropertyRemoved);
-      console.log('owner changed:', this.isOwnerChanged);
 
       if (this.leadEditForm.dirty || this.isNoteFormDirty || this.isPropertyAssociated || this.isPropertyRemoved || this.isOwnerChanged) {
         const lead = { ...this.lead, ...this.leadEditForm.value };
@@ -439,12 +423,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
         }
         this.AddOrUpdateLead(lead);
       } else {
-
-        console.log('isChaseDateInvalid:', this.isChaseDateInvalid);
-        console.log('isSaveAndNext:', this.isSaveAndNext);
-
         if (!this.isChaseDateInvalid && this.isSaveAndNext) {
-          console.log('is chase date invalid 2', this.isChaseDateInvalid);
           this.moveToNextLead();
         }
 
@@ -465,7 +444,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       lead.createdDate = new Date;
       lead.updatedBy = this.currentStaffMember.staffMemberId;
       lead.updatedDate = new Date;
-      console.log('i am here in add or update');
 
       this.leadsService.addLead(lead).subscribe((result) => {
         if (result) {
@@ -580,16 +558,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   moveToNextLead() {
-
-    console.log('this.currentLeadIndex:', this.currentLeadIndex);
-    console.log('this.leadIds.length - 1:', this.leadIds.length - 1);
-    console.log('this.currentLeadIndex < this.leadIds.length - 1:', this.currentLeadIndex < this.leadIds.length - 1);
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
     if (this.currentLeadIndex++ <= this.leadIds.length - 1) {
-      //this.currentLeadIndex++;
-      console.log('this.currentLeadIndex++:', this.currentLeadIndex);
       this.leadId = this.leadIds[this.currentLeadIndex];
-      console.log('move to next lead IDs', this.leadIds);
       this.onLoading = true;
       this.page = 1;
       this.personId = null;
@@ -602,7 +573,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       }
     } else {
       this.leadsListCompleted = true;
-      console.log('list completed', this.leadIds);
     }
   }
 
@@ -613,7 +583,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   canDeactivate(): boolean {
-    if (this.leadEditForm.dirty && !this.isSubmitting || this.isPropertyAssociated) {
+    if (this.leadEditForm.dirty && !this.isSubmitting || this.isPropertyAssociated || this.isPropertyRemoved) {
       return false;
     }
     return true;

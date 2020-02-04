@@ -90,7 +90,7 @@
               <div class="col-lg">
                 <div class="form-group">
                   <label for="chaser">Chaser</label>
-                  <app-staffmember-finder [staffMember]="leadOwner" (ownerChanged)="onOwnerChanged($event)"
+                  <app-staffmember-finder [staffMemberId]="lead?.ownerId" (ownerChanged)="onOwnerChanged($event)"
                     [isDisabled]="isLeadClosed ? true : false">
                   </app-staffmember-finder>
                 </div>
