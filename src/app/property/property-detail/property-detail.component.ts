@@ -10,6 +10,7 @@ import { StorageMap } from '@ngx-pwa/local-storage';
 import { takeUntil } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { BaseComponent } from 'src/app/shared/models/base-component';
+import { SubNavItem } from 'src/app/shared/subnav';
 
 @Component({
   selector: 'app-property-detail',
@@ -36,6 +37,7 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit {
   pageSize = 10;
   bottomReached = false;
   noteTypes: Record<number, string>;
+  moreInfo: string;
 
   // get region() {
   //   if (this.propertyDetails && this.regions) {
@@ -193,6 +195,10 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit {
           }
       }
     }
+  }
+
+  getMoreInfo(item: SubNavItem) {
+    this.moreInfo = item.value;
   }
 }
 
