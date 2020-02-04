@@ -90,6 +90,27 @@
     .dropdown-menu {
         position: static;
     }
+
+    .dropdown-item {
+        &.active {
+            background: inherit;
+            color: inherit;
+            position: relative;
+            
+            &::before {
+                content: '';
+                display: block;
+                background: theme-color(secondary);
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                position: absolute;
+                top: 50%;
+                left: 0;
+                transform: translate(80%, -50%);
+            }
+        }
+    }
 }
 
 .navbar-toggler {
