@@ -14,20 +14,27 @@ import { catchError } from 'rxjs/operators';
 })
 export class ContactgroupsDetaillettingsManagementsComponent implements OnChanges {
   @Input() personId: number;
+  @Input() closedCounter: number;
+  @Input() moreInfo: string;
+  isClosedIncluded: boolean = false;
   managements$ = new Observable<PersonLettingsManagement[]>();
   errorMessage: WedgeError;
   constructor(private route: ActivatedRoute, private peopleService: PeopleService, private sharedService: SharedService) { }
 
   ngOnChanges() {
-    if (this.personId) {
-      this.managements$ = this.peopleService.getLettingsManagements(this.personId)
-        .pipe(
-          catchError((error: WedgeError) => {
-            this.errorMessage = error;
-            this.sharedService.showError(this.errorMessage);
-            return EMPTY;
-          }));
+    if (this.personId && this.moreInfo.includes('lettingsManagements')) {
+      this.getLettingsManagements();
     }
+  }
+
+  getLettingsManagements() {
+    this.managements$ = this.peopleService.getLettingsManagements(this.personId, this.isClosedIncluded)
+    .pipe(
+      catchError((error: WedgeError) => {
+        this.errorMessage = error;
+        this.sharedService.showError(this.errorMessage);
+        return EMPTY;
+      }));
   }
 
 }

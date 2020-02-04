@@ -13,21 +13,28 @@ import { AppUtils } from 'src/app/core/shared/utils';
 })
 export class PropertyDetailInstructionsComponent implements OnChanges {
   @Input() propertyId: number;
+  @Input() closedCounter: number;
+  @Input() moreInfo: string;
+  isClosedIncluded: boolean = false;
   instructions$ = new Observable<InstructionInfo[]>();
   isShortLet = false;
 
   constructor(private route: ActivatedRoute, private propertyService: PropertyService) { }
 
   ngOnChanges() {
-    if (this.propertyId) {
-      this.instructions$ = this.propertyService.getPropertyInstructions(this.propertyId)
-        .pipe(
-          tap(data => {
-            if (data && data.length) {
-              data.find(x => +x.shortLetAmount > 0) ? this.isShortLet = true : this.isShortLet = false;
-            }
-          }));
+    if (this.propertyId && this.moreInfo.includes('instructions')) {
+      this.getInstructions();
     }
+  }
+
+  getInstructions() {
+    this.instructions$ = this.propertyService.getPropertyInstructions(this.propertyId, this.isClosedIncluded)
+      .pipe(
+        tap(data => {
+          if (data && data.length) {
+            data.find(x => +x.shortLetAmount > 0) ? this.isShortLet = true : this.isShortLet = false;
+          }
+        }));
   }
 
 }

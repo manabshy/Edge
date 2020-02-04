@@ -180,7 +180,7 @@ export class CalendarComponent implements OnInit, OnChanges {
   }
 
   getStaff(members: BaseStaffMember[]) {
-    if (members.length > 5) {
+    if (members && members.length > 5) {
       return _.take(members, 5);
     }
     return members;

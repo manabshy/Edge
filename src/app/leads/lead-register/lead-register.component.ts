@@ -269,9 +269,12 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     if (!this.areLeadsAssignable) {
       const newInfo = { ...this.leadSearchInfo, ...this.leadRegisterForm.value } as LeadSearchInfo;
       newInfo.startLeadId = lead.leadId;
+      newInfo.ownerId = lead.ownerId;
       this.info = JSON.stringify(newInfo);
       AppUtils.leadSearchInfo = newInfo;
       console.log('set in app utils', AppUtils.leadSearchInfo)
+      console.log('Lead Register App utils', lead.leadId)
+      console.log('Lead Register App utils INFO: ', this.info)
       this.router.navigate(['/leads-register/edit', lead.leadId],
         {
           queryParams: {

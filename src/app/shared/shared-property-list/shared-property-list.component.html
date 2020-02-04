@@ -9,7 +9,7 @@
         <div class="row align-items-center">
           <div class="col-12">
             <div class="mb-1">
-              <strong [innerHTML]="property?.address| formatAddress"></strong><span class="text-danger"
+              <span [innerHTML]="property?.address| formatAddress"></span><span class="text-danger"
                 *ngIf="!(property.address )">No address</span>
             </div>
           </div>

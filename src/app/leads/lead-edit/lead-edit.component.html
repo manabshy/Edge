@@ -15,13 +15,14 @@
           <h5>More Info</h5>
           <accordion [closeOthers]="true">
             <accordion-group *ngFor="let item of subNav">
-              <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
+              <button class="btn btn-link btn-block clearfix" accordion-heading type="button"
+                (click)="getMoreInfo(item)">
                 <div class="pull-left float-left">
                   {{item?.label}}
                   <ng-container *ngIf="summaryTotals; else loadingInfo">
                     <ng-container *ngIf="isObject(summaryTotals[item?.value]); else simpleValue">
                       <span class="badge badge-pill badge-success mr-1"> {{summaryTotals[item?.value]?.active}} </span>
-                      <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value]?.total - summaryTotals[item?.value]?.active}}</span>
+                      <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value]?.inactive}}</span>
                     </ng-container>
                     <ng-template #simpleValue>
                       <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value] || '0'}}</span>
@@ -41,22 +42,30 @@
                 </span>
               </button>
               <ng-container [ngSwitch]="item?.value">
-                <app-shared-property-list *ngSwitchCase="'properties'" [isLeadClosed]="isLeadClosed" [isLead]="true"
-                  [personId]="person?.personId" (associatedProperty)="getAssociatedProperty($event)">
+                <app-shared-property-list *ngSwitchCase="'properties'" [moreInfo]="moreInfo"
+                  [isLeadClosed]="isLeadClosed" [isLead]="true" [personId]="person?.personId"
+                  (associatedProperty)="getAssociatedProperty($event)">
                 </app-shared-property-list>
-                <app-contactgroups-detail-instructions *ngSwitchCase="'instructions'" [personId]="person?.personId">
+                <app-contactgroups-detail-instructions *ngSwitchCase="'instructions'" [moreInfo]="moreInfo"
+                  [personId]="person?.personId" [closedCounter]="summaryTotals?.instructions?.inactive">
                 </app-contactgroups-detail-instructions>
-                <app-contactgroups-detail-offers *ngSwitchCase="'offers'" [personId]="person?.personId">
+                <app-contactgroups-detail-offers *ngSwitchCase="'offers'" [moreInfo]="moreInfo"
+                  [personId]="person?.personId" [closedCounter]="summaryTotals?.offers?.inactive">
                 </app-contactgroups-detail-offers>
-                <app-contactgroups-detail-searches *ngSwitchCase="'searches'" [personId]="person?.personId">
+                <app-contactgroups-detail-searches *ngSwitchCase="'searches'" [moreInfo]="moreInfo"
+                  [personId]="person?.personId" [closedCounter]="summaryTotals?.searches?.inactive">
                 </app-contactgroups-detail-searches>
                 <app-shared-valuation-list *ngSwitchCase="'valuations'"
                 [personId]="person?.personId"></app-shared-valuation-list>
                 <app-contactgroups-detail-lettings-managements *ngSwitchCase="'lettingsManagements'"
-                  [personId]="person?.personId"></app-contactgroups-detail-lettings-managements>
-                <app-contactgroups-detail-home-helper *ngSwitchCase="'homeHelpers'" [personId]="person?.personId">
+                  [moreInfo]="moreInfo" [personId]="person?.personId"
+                  [closedCounter]="summaryTotals?.lettingsManagements?.inactive">
+                </app-contactgroups-detail-lettings-managements>
+                <app-contactgroups-detail-home-helper *ngSwitchCase="'homeHelpers'" [moreInfo]="moreInfo"
+                  [personId]="person?.personId" [closedCounter]="summaryTotals?.homeHelpers?.inactive">
                 </app-contactgroups-detail-home-helper>
-                <app-shared-lead-register *ngSwitchCase="'leads'" [personId]="person?.personId">
+                <app-shared-lead-register *ngSwitchCase="'leads'" [moreInfo]="moreInfo" [personId]="person?.personId"
+                  [closedCounter]="summaryTotals?.leads?.inactive">
                 </app-shared-lead-register>
               </ng-container>
             </accordion-group>
@@ -92,7 +101,7 @@
               <div class="col-lg">
                 <div class="form-group">
                   <label for="chaser">Chaser</label>
-                  <app-staffmember-finder [staffMember]="leadOwner" (ownerChanged)="onOwnerChanged($event)"
+                  <app-staffmember-finder [staffMemberId]="lead?.ownerId" (ownerChanged)="onOwnerChanged($event)"
                     [isDisabled]="isLeadClosed ? true : false">
                   </app-staffmember-finder>
                 </div>
@@ -137,8 +146,8 @@
               [isUpdateComplete]="isUpdateComplete"></app-lead-note>
           </div>
         </div>
-        <app-notes [personNotes]="personNotes" [person]="person" [showNotes]="showNotes"
-          [pageNumber]="page" [bottomReached]="bottomReached" [showNoteInput]="false"></app-notes>
+        <app-notes [personNotes]="personNotes" [person]="person" [showNotes]="showNotes" [pageNumber]="page"
+          [bottomReached]="bottomReached" [showNoteInput]="false"></app-notes>
       </div>
     </div>
     <div class="form-actions">
@@ -148,7 +157,8 @@
             <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
             <button type="submit" class="btn btn-secondary mr-2"
               [attr.disabled]="isLeadClosed ? true : null">Save</button>
-            <button *ngIf="showSaveAndNext && !leadsListCompleted" (click)="traverseLeads()" type="button" class="btn btn-secondary" [isOpen]="leadsListCompleted"
+            <button *ngIf="showSaveAndNext && !leadsListCompleted" (click)="traverseLeads()" type="button"
+              class="btn btn-secondary" [isOpen]="leadsListCompleted"
               [tooltip]="leadsListCompleted ? 'You have reached the end of the list' : null || !leadEditForm.valid? errorMessage?.displayMessage : ''"
               placement="top" [attr.disabled]="isLeadClosed ? true : null ">Save &
               Next</button>

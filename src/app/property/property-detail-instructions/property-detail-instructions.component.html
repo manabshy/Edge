@@ -1,19 +1,25 @@
 <div class="list-group list-group-flush">
-  <div class="list-group-item list-header d-none d-sm-block d-xl-none">
-    <div class="row">
-      <div class="col-sm"><strong>Instructed</strong></div>
-      <div class="col-sm"><strong>Type</strong></div>
-      <div class="col-sm"><strong>Status</strong></div>
-      <div class="col-sm"><strong>Price</strong></div>
-      <div class="col-sm" *ngIf="isShortLet"><strong>Short Let Rent</strong></div>
-      <div class="col-sm"><strong>Owner</strong></div>
-      <div class="col-sm"><strong>Agency</strong></div>
-      <div class="col-sm"><strong>Lister</strong></div>
-    </div>
-  </div>
   <ng-container *ngIf="instructions$|async as instructions">
     <div class="list-group-item text-center text-danger" *ngIf="!instructions || !instructions?.length">
       <i class="far fa-sad-tear"></i> No instructions
+    </div>
+    <div class="list-group-item" *ngIf="closedCounter">
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getInstructions()" class="custom-control-input" id="includeClosedInstructions">
+        <label class="custom-control-label" for="includeClosedInstructions">Include closed instructions</label>
+      </div>
+    </div>
+    <div class="list-group-item list-header d-none d-sm-block d-xl-none" *ngIf="instructions && instructions?.length">
+      <div class="row">
+        <div class="col-sm"><strong>Instructed</strong></div>
+        <div class="col-sm"><strong>Type</strong></div>
+        <div class="col-sm"><strong>Status</strong></div>
+        <div class="col-sm"><strong>Price</strong></div>
+        <div class="col-sm" *ngIf="isShortLet"><strong>Short Let Rent</strong></div>
+        <div class="col-sm"><strong>Owner</strong></div>
+        <div class="col-sm"><strong>Agency</strong></div>
+        <div class="col-sm"><strong>Lister</strong></div>
+      </div>
     </div>
     <div class="list-group-item list-group-item-action" *ngFor="let instruction of instructions">
       <div class="row">

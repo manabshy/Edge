@@ -9,8 +9,10 @@ import { PersonSearch } from 'src/app/shared/models/person';
   styleUrls: ['./contactgroups-detail-searches.component.scss']
 })
 export class ContactgroupsDetailSearchesComponent implements OnInit, OnChanges {
-  navPlaceholder: string;
   @Input() personId: number;
+  @Input() closedCounter: number;
+  @Input() moreInfo: string;
+  navPlaceholder: string;
   isClosedIncluded: boolean = false;
   searches$ = new Observable<PersonSearch[]>();
 
@@ -20,7 +22,7 @@ export class ContactgroupsDetailSearchesComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    if (this.personId) {
+    if (this.personId && this.moreInfo.includes('searches')) {
       this.getSearches();
     }
   }

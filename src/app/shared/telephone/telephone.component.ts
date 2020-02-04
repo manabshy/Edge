@@ -134,6 +134,7 @@ export class TelephoneComponent implements OnInit {
       }
     } else {
       this.isDialing = true;
+      this.tapiInfo = this.setupTapiInfo(this.currentStaffMember);
       this.tapiService.putCallRequest(this.tapiInfo).subscribe(data => {
         this.calling();
         console.log(data);
@@ -168,6 +169,7 @@ export class TelephoneComponent implements OnInit {
       .onTap
       .pipe(take(1))
       .subscribe(() => {
+        this.tapiInfo = this.setupTapiInfo(this.currentStaffMember, true);
         this.tapiService.putCallRequest(this.tapiInfo).subscribe(data => {
           console.log(data);
           this.toastr.clear(this.sharedService.lastCallEndCallToast.toastId);
@@ -198,7 +200,7 @@ export class TelephoneComponent implements OnInit {
         this.toastr.clear(this.sharedService.lastCallNoteToast.toastId);
       });
   }
-  setupTapiInfo(staffMember: StaffMember) {
+  setupTapiInfo(staffMember: StaffMember, isCallHangedUp: boolean = false) {
     let tapiInfo: TapiRequestInfo;
     tapiInfo = {
       // officeId: staffMember.homeOffice.officeId,
@@ -208,7 +210,7 @@ export class TelephoneComponent implements OnInit {
       callerNmber: staffMember.phone,
       calledNumber: this.number,
       guid: '',
-      isCallHangedUp: false
+      isCallHangedUp: isCallHangedUp
     };
     return tapiInfo;
   }

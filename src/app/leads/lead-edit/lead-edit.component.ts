@@ -21,6 +21,7 @@ import { ValidationMessages, FormErrors } from 'src/app/core/shared/app-constant
 import { Location } from '@angular/common';
 import { isEqual } from 'date-fns';
 import { WedgeValidators } from 'src/app/shared/wedge-validators';
+import { SubNavItem } from 'src/app/shared/subnav';
 
 @Component({
   selector: 'app-lead-edit',
@@ -78,6 +79,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   isSaveAndNext: boolean;
   showSaveAndNext: boolean;
   showNotes: boolean;
+  moreInfo: string = '';
   get nextChaseDateControl() {
     return this.leadEditForm.get('nextChaseDate') as FormControl;
   }
@@ -90,9 +92,13 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     private fb: FormBuilder,
     private sharedService: SharedService,
     private contactGroupService: ContactGroupsService,
-    private toastr: ToastrService) { super(); }
+    private toastr: ToastrService) {
+    super();
+    console.log('I am in the constructor');
+  }
 
   ngOnInit() {
+    console.log('I am in the beginning of Lead Edit ngOnInit: ', this.showSaveAndNext, this.leadsListCompleted);
     AppUtils.parentRoute = AppUtils.prevRoute;
     this.selectedLeadTypeId = +this.route.snapshot.queryParamMap.get('leadTypeId');
     this.infoParam = this.route.snapshot.queryParamMap.get('leadSearchInfo');
@@ -100,6 +106,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.showNotes = this.route.snapshot.queryParamMap.get('showNotes') === 'true';
     this.route.params.subscribe(params => {
       this.leadId = +params['leadId'] || 0;
+      console.log('I am in Lead Edit ngOnInit: ', this.leadId, this.showSaveAndNext);
       if (this.leadId && this.showSaveAndNext) {
         this.getLeadIds(this.leadId);
       }
@@ -115,6 +122,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.leadEditForm.valueChanges.subscribe(data => {
       data.closeLead ? this.isLeadMarkedAsClosed = true : this.isLeadMarkedAsClosed = false;
     });
+    console.log('I am at the end of Lead Edit ngOnInit: ', this.leadId, this.showSaveAndNext, this.leadsListCompleted);
+
   }
 
   ngAfterViewInit() {
@@ -127,13 +136,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.setupLeadEditForm();
     this.leadEditForm.valueChanges.pipe(debounceTime(400)).subscribe(() => this.logValidationErrors(this.leadEditForm, false));
     this.setNextChaseDateValidators();
-
-    // All Staffmembers
-    this.storage.get('allstaffmembers').subscribe(data => {
-      if (data) {
-        this.staffMembers = data as StaffMember[];
-      }
-    });
 
     // Lead Types
     this.storage.get('info').subscribe(data => {
@@ -159,6 +161,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     if (!this.isNewLead) {
       // receive new lead
       this.leadsService.leadsChanges$.subscribe(lead => {
+        console.log('i am here in Lead Change subscription...');
         this.lead = lead;
 
         if (lead) {
@@ -166,7 +169,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
           this.patchLeadValues(lead);
           this.getPersonInformation();
 
-          this.leadOwner = this.staffMembers.find(sm => sm.staffMemberId === this.lead.ownerId)[0];
         } else {
           this.getLeadInformation();
         }
@@ -180,15 +182,20 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
         this.personNotes = [];
         this.page = 1;
         this.bottomReached = false;
-        console.log("(TRAVERSE) different person ID from here1: ", this.personId);
         this.getPersonNotes();
       }
     });
 
     this.contactGroupService.personNotePageChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(newPageNumber => {
       this.page = newPageNumber;
+      if (this.personId == null) {
+        this.page = 1;
+      }
       this.getNextPersonNotesPage(this.page);
     });
+
+    console.log('I am at the end of Init(): ', this.leadId, this.showSaveAndNext, this.leadsListCompleted);
+
 
   }
 
@@ -198,6 +205,11 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.leadsService.getLeadIds(this.leadSearchInfo).subscribe(result => {
       this.leadIds = result;
       this.currentLeadIndex = this.leadIds.indexOf(this.leadSearchInfo.startLeadId);
+      console.log('(TRAVERSE) Lead IDs to traverse: ', this.leadIds);
+
+      if (this.leadIds.length <= 1) {
+        this.leadsListCompleted = true;
+      }
     }, () => {
       this.lead = null;
     });
@@ -228,22 +240,25 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   private getLeadInformation() {
+    console.log('I am at the beginning of getLeadInformation(): ', this.leadId, this.showSaveAndNext, this.leadsListCompleted);
+
     this.leadsService.getLead(this.leadId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.lead = result;
       this.personId = result.personId;
-      console.log("(TRAVERSE) current lead id: ", this.leadId);
-      console.log("(TRAVERSE) current person id: ", this.personId);
       this.patchLeadValues(result);
       this.getPersonInformation();
       //this.getPersonNotes();
       this.lead.dateClosed ? this.isLeadClosed = true : this.isLeadClosed = false;
-      this.leadOwner = this.staffMembers.find(sm => sm.staffMemberId === this.lead.ownerId);
     }, () => {
       this.lead = null;
     });
+    console.log('I am at the end of getLeadInformation(): ', this.leadId, this.showSaveAndNext, this.leadsListCompleted);
+
   }
 
   private patchLeadValues(lead: Lead) {
+    console.log('I am in patchLeadValues(): ', this.lead);
+
     if (lead) {
       this.leadEditForm.patchValue({
         ownerId: lead.ownerId,
@@ -259,8 +274,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   private getPersonInformation() {
-    console.log("(TRAVERSE) different person ID from here2: ", this.personId);
-    
+
     this.contactGroupService.getPerson(this.personId).subscribe(
       data => {
         if (data) {
@@ -285,6 +299,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
   onOwnerChanged(event: any) {
     this.isOwnerChanged = true;
+    console.log('from child', event)
     if (event && event.item != null || event) {
       let ownerId = 0;
       event.item ? ownerId = event.item.staffMemberId : ownerId = event.staffMemberId;
@@ -339,10 +354,21 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   setNextChaseDateValidators() {
-    console.log('condit.....', this.nextChaseDateControl.value < new Date() && !this.isValidatorCleared);
+    console.log('condit.....', this.nextChaseDateControl.value != '' && this.nextChaseDateControl.value < new Date() && !this.isValidatorCleared);
+
+    console.log("this.nextChaseDateControl.value == ''", this.nextChaseDateControl.value === '');
+    console.log("this.nextChaseDateControl.value == undefined", this.nextChaseDateControl.value === undefined);
+    console.log("this.nextChaseDateControl.value == null", this.nextChaseDateControl.value === null);
+    console.log("this.isValidatorCleared", !this.isValidatorCleared);
+    console.log("this.nextChaseDateControl.value < new Date()", this.nextChaseDateControl.value < new Date());
+
     if (this.nextChaseDateControl.value < new Date() && !this.isValidatorCleared) {
       this.nextChaseDateControl.setValidators(WedgeValidators.nextChaseDateValidator());
       this.nextChaseDateControl.updateValueAndValidity();
+      // this.isChaseDateInvalid = true;
+    }
+
+    if (this.nextChaseDateControl.value != '' && this.nextChaseDateControl.value < new Date() && !this.isValidatorCleared) {
       this.isChaseDateInvalid = true;
     }
   }
@@ -379,11 +405,11 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   SaveLead(shouldExit: boolean = false, leadNote = null) {
-    // this.setNextChaseDateValidators();
     this.logValidationErrors(this.leadEditForm, true);
 
     if (this.leadEditForm.valid) {
       this.isSubmitting = true;
+
       if (this.leadEditForm.dirty || this.isNoteFormDirty || this.isPropertyAssociated || this.isPropertyRemoved || this.isOwnerChanged) {
         const lead = { ...this.lead, ...this.leadEditForm.value };
         const isNoteRequired = this.isLeadMarkedAsClosed || this.isNewLead || this.isNextChaseDateChanged;
@@ -399,6 +425,10 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
         }
         this.AddOrUpdateLead(lead);
       } else {
+        if (!this.isChaseDateInvalid && this.isSaveAndNext) {
+          this.moveToNextLead();
+        }
+
         this.onUpdateCompleted();
       }
     } else {
@@ -443,6 +473,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
             console.log('is chase date invalid 2', this.isChaseDateInvalid);
             this.moveToNextLead();
           }
+          else {
+            console.log('dont want to move to next lead');
+          }
         }
         this.onUpdateCompleted(result);
       }, (error: WedgeError) => {
@@ -465,6 +498,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   private onUpdateCompleted(lead?: Lead) {
+    console.log('i am here in OnUpdateCompleted');
+
     let time: number;
     if (this.isNewLead) { this.toastr.success('Lead successfully saved'); } else {
       this.isSaveAndNext ? time = 2000 : time = 5000;
@@ -492,6 +527,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       this.router.navigate(['/leads-register/edit/', this.leadId]);
       this.init();
     }
+
   }
 
   cancel() {
@@ -507,8 +543,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
   private getNextPersonNotesPage(page) {
 
-    console.log("(TRAVERSE) current lead id: ", this.leadId);
-    console.log("(TRAVERSE) current person id for Notes: ", this.personId, this.page);
     this.contactGroupService.getPersonNotes(this.personId, this.pageSize, page).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
       if (data) {
         if (page === 1) {
@@ -526,18 +560,21 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   moveToNextLead() {
-
-    if (this.currentLeadIndex < this.leadIds.length - 1) {
-      this.currentLeadIndex++;
+    window.scrollTo(0, 0);
+    if (this.currentLeadIndex++ <= this.leadIds.length - 1) {
       this.leadId = this.leadIds[this.currentLeadIndex];
-      console.log('move to next lead IDs', this.leadIds);
       this.onLoading = true;
       this.page = 1;
+      this.personId = null;
+      this.person = null;
+      this.personNotes = [];
       this.getLeadInformation();
       // this.getPersonNotes();
+      if (this.currentLeadIndex == this.leadIds.length - 1) {
+        this.leadsListCompleted = true;
+      }
     } else {
       this.leadsListCompleted = true;
-      console.log('list completed', this.leadIds);
     }
   }
 
@@ -559,8 +596,12 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     console.log('related prop', propertyId)
   }
 
+  getMoreInfo(item: SubNavItem) {
+    this.moreInfo = item.value;
+  }
+  
   canDeactivate(): boolean {
-    if (this.leadEditForm.dirty && !this.isSubmitting || this.isPropertyAssociated) {
+    if (this.leadEditForm.dirty && !this.isSubmitting || this.isPropertyAssociated || this.isPropertyRemoved) {
       return false;
     }
     return true;

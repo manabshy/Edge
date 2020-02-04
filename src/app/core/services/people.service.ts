@@ -47,13 +47,13 @@ export class PeopleService {
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
 
-  getLettingsManagements(personId: number): Observable<PersonLettingsManagement[]> {
-    const url = `${AppConstants.basePersonUrl}/${personId}/lettingsManagements`;
+  getLettingsManagements(personId: number, isClosedIncluded: boolean): Observable<PersonLettingsManagement[]> {
+    const url = `${AppConstants.basePersonUrl}/${personId}/lettingsManagements?activeOnly=${!isClosedIncluded}`;
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
 
-  getHomeHelpers(personId: number): Observable<PersonHomeHelper[]> {
-    const url = `${AppConstants.basePersonUrl}/${personId}/homeHelpers`;
+  getHomeHelpers(personId: number, isClosedIncluded: boolean): Observable<PersonHomeHelper[]> {
+    const url = `${AppConstants.basePersonUrl}/${personId}/homeHelpers?activeOnly=${!isClosedIncluded}`;
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
 

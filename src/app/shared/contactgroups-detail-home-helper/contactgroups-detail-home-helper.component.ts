@@ -13,22 +13,29 @@ import { WedgeError, SharedService } from 'src/app/core/services/shared.service'
   styleUrls: ['./contactgroups-detail-home-helper.component.scss']
 })
 export class ContactgroupsDetailHomeHelperComponent implements OnChanges {
-  navPlaceholder: string;
   @Input() personId: number;
+  @Input() closedCounter: number;
+  @Input() moreInfo: string;
+  navPlaceholder: string;
+  isClosedIncluded: boolean = false;
   homeHelpers$ = new Observable<PersonHomeHelper[]>();
   errorMessage: WedgeError;
   constructor(private peopleService: PeopleService, private sharedService: SharedService) { }
 
   ngOnChanges() {
-    if (this.personId) {
-      this.homeHelpers$ = this.peopleService.getHomeHelpers(this.personId)
-        .pipe(
-          catchError((error: WedgeError) => {
-            this.errorMessage = error;
-            this.sharedService.showError(this.errorMessage);
-            return EMPTY;
-          }));
+    if (this.personId && this.moreInfo.includes('homeHelpers')) {
+      this.getHomeHelpers();
     }
+  }
+
+  getHomeHelpers() {
+    this.homeHelpers$ = this.peopleService.getHomeHelpers(this.personId, this.isClosedIncluded)
+    .pipe(
+      catchError((error: WedgeError) => {
+        this.errorMessage = error;
+        this.sharedService.showError(this.errorMessage);
+        return EMPTY;
+      }));
   }
 
 }

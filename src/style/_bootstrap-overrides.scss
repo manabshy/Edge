@@ -11,6 +11,9 @@ $link-hover-color: darken($link-color, 15%);
 //container
 $container-max-widths: ("sm": 576px, "md": 959px, "lg": 1140px);
 
+//fonts
+$font-family-base: "Gotham A", "Gotham B", Sans-Serif;
+
 //spacers
 $spacers: (5: (1rem * 3.5));
 

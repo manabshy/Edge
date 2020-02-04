@@ -58,7 +58,8 @@
               <pre class="mb-2"><strong>{{propertyDetails?.address | formatAddress}}</strong></pre>
               <p *ngIf="propertyDetails?.lastKnownOwner?.contactGroupId">
                 <span class="d-block">Last known owner</span>
-                <a [routerLink]="['/contact-centre/detail/0/people', propertyDetails?.lastKnownOwner?.contactGroupId]">{{propertyDetails?.lastKnownOwner?.contactNames}}</a>
+                <a
+                  [routerLink]="['/contact-centre/detail/0/people', propertyDetails?.lastKnownOwner?.contactGroupId]">{{propertyDetails?.lastKnownOwner?.contactNames}}</a>
               </p>
             </div>
             <div class="col-auto">
@@ -92,34 +93,40 @@
         <h5>More Info</h5>
         <accordion class="mb-2" [closeOthers]="true">
           <accordion-group *ngFor="let item of subNav">
-            <button class="btn btn-link btn-block clearfix" accordion-heading type="button">
+            <button class="btn btn-link btn-block clearfix" accordion-heading type="button" (click)="getMoreInfo(item)">
               <div class="pull-left float-left">
                 {{item?.label}}
                 <ng-container *ngIf="summaryTotals; else loadingInfo">
                   <ng-container *ngIf="isObject(summaryTotals[item?.value]); else simpleValue">
                     <span class="badge badge-pill badge-success mr-1"> {{summaryTotals[item?.value]?.active}} </span>
-                    <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value]?.total - summaryTotals[item?.value]?.active}}</span>
+                    <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value]?.inactive}}</span>
                   </ng-container>
                   <ng-template #simpleValue>
                     <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value] || '0'}}</span>
                   </ng-template>
                 </ng-container>
                 <ng-template #loadingInfo>
-                  <span class="badge badge-pill badge-primary"><i class="fas fa-spinner fa-pulse d-inline-block"></i></span>
+                  <span class="badge badge-pill badge-primary"><i
+                      class="fas fa-spinner fa-pulse d-inline-block"></i></span>
                 </ng-template>
               </div>
               <span class="badge badge-secondary float-right pull-right"></span>
             </button>
             <ng-container [ngSwitch]="item?.value">
-              <app-property-detail-instructions *ngSwitchCase="'instructions'" [propertyId]="propertyDetails?.propertyId"></app-property-detail-instructions>
+              <app-property-detail-instructions *ngSwitchCase="'instructions'" [moreInfo]="moreInfo"
+                [propertyId]="propertyDetails?.propertyId" [closedCounter]="summaryTotals?.instructions?.inactive">
+              </app-property-detail-instructions>
               <app-shared-valuation-list *ngSwitchCase="'valuations'" [propertyId]="propertyDetails?.propertyId"></app-shared-valuation-list>
-              <app-property-detail-offers *ngSwitchCase="'offers'" [propertyId]="propertyDetails?.propertyId"></app-property-detail-offers>
+              <app-property-detail-offers *ngSwitchCase="'offers'" [moreInfo]="moreInfo" [propertyId]="propertyDetails?.propertyId"
+                [closedCounter]="summaryTotals?.offers?.inactive"></app-property-detail-offers>
             </ng-container>
           </accordion-group>
         </accordion>
         <app-subnav>
-          <app-subnav-item [navLink]="'property-photos'" [params]="{docTitle:'Property Photos | '+(propertyDetails?.address | formatAddress)}">
-            Property Photos <span class="badge badge-pill badge-primary"> {{summaryTotals?.propertyPhotos || '0'}}</span>
+          <app-subnav-item [navLink]="'property-photos'"
+            [params]="{docTitle:'Property Photos | '+(propertyDetails?.address | formatAddress)}">
+            Property Photos <span class="badge badge-pill badge-primary">
+              {{summaryTotals?.propertyPhotos || '0'}}</span>
           </app-subnav-item>
           <app-subnav-item [navLink]="'map'" [params]="{docTitle:'Map | '+(propertyDetails?.address | formatAddress)}">
             Map

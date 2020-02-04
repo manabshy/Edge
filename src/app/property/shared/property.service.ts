@@ -119,13 +119,13 @@ export class PropertyService {
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
 
-  getPropertyInstructions(propertyId: number): Observable<InstructionInfo[]> {
-    const url = `${AppConstants.basePropertyUrl}/${propertyId}/instructions`;
+  getPropertyInstructions(propertyId: number, isClosedIncluded: boolean): Observable<InstructionInfo[]> {
+    const url = `${AppConstants.basePropertyUrl}/${propertyId}/instructions?activeOnly=${!isClosedIncluded}`;
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
 
-  getPropertyOffers(propertyId: number): Observable<OfferInfo[]> {
-    const url = `${AppConstants.basePropertyUrl}/${propertyId}/offers`;
+  getPropertyOffers(propertyId: number, isClosedIncluded: boolean): Observable<OfferInfo[]> {
+    const url = `${AppConstants.basePropertyUrl}/${propertyId}/offers?activeOnly=${!isClosedIncluded}`;
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
   getValuations(propertyId: number): Observable<any[]> {

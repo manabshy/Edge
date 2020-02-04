@@ -205,7 +205,7 @@ export class CompanyEditComponent implements OnInit {
   }
 
   getSelectedSigner(signer: Signer) {
-    if (this.signer && this.signer !== signer) {
+    if (this.signer !== signer) {
       this.companyForm.markAsDirty();
     } else {
       this.companyForm.markAsPristine();
@@ -260,7 +260,7 @@ export class CompanyEditComponent implements OnInit {
     const company = { ...this.companyDetails, ...this.companyForm.value };
     if (this.companyDetails) {
       companyAddress = { ...this.companyDetails.companyAddress, ...this.address };
-      this.signer ? company.signer = this.signer : company.signer = this.companyDetails.signer;
+      company.signer = this.signer;
       company.companyAddress = companyAddress;
     } else {
       company.signer = this.signer;

@@ -14,12 +14,14 @@ export class SharedPropertyListComponent implements OnChanges {
   @Input() personId: number;
   @Input() isLead: boolean;
   @Input() isLeadClosed: boolean;
+  @Input() moreInfo: string;
   @Output() associatedProperty = new EventEmitter<PersonProperty>();
   properties$ = new Observable<PersonProperty[]>();
   constructor(private router: Router, private peopleService: PeopleService) { }
 
   ngOnChanges() {
-    if (this.personId) {
+    console.log('more info for properts', this.moreInfo)
+    if (this.personId && this.moreInfo.includes('properties')) {
       this.properties$ = this.peopleService.getProperties(this.personId);
     }
   }
