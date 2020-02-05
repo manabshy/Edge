@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PropertyService } from '../shared/property.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Property, PropertyTypes, PropertyStyles, PropertyDetailsSubNavItems, PropertySummaryFigures, PropertyNote } from '../shared/property';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { Observable } from 'rxjs';
@@ -64,6 +64,7 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit {
   constructor(private propertyService: PropertyService,
     private formatAddressPipe: FormatAddressPipe,
     private route: ActivatedRoute,
+    private router: Router,
     private infoService: InfoService,
     private storage: StorageMap,
     private sharedService: SharedService) { super(); }
@@ -153,7 +154,7 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit {
   }
 
   getPropertyDetails(propertyId: number) {
-    this.propertyService.getProperty(propertyId, true, true,false).subscribe(data => {
+    this.propertyService.getProperty(propertyId, true, true, false).subscribe(data => {
       if (data) {
         this.propertyDetails = data;
         this.sharedService.setTitle(this.formatAddressPipe.transform(this.propertyDetails.address));
@@ -194,6 +195,16 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit {
 
   getMoreInfo(item: SubNavItem) {
     this.moreInfo = item.value;
+  }
+
+  navigateToNewValuation(propertyId: number) {
+    event.stopPropagation();
+    this.router.navigate(['valuations-register/detail/', 0, 'edit'], {
+      queryParams: {
+        propertyId: propertyId,
+        isNewValuation: true,
+      }
+    });
   }
 }
 
