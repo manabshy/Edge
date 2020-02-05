@@ -107,6 +107,15 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.getValuation(this.valuationId);
     }
 
+    if (this.propertyId) {
+      this.propertyService.getProperty(this.propertyId, false, false, false).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+        if (result) {
+          this.lastKnownOwner = result.lastKnownOwner;
+          this.existingProperty = result;
+        }
+      });
+    }
+
     this.storage.get('info').subscribe((info: DropdownListInfo) => {
       this.tenures = info.tenures;
       this.outsideSpaces = info.outsideSpaces;
@@ -234,7 +243,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   getValuation(id: number) {
-    this.valuationService.getValuation(id).subscribe((data => {
+    this.valuationService.getValuation(id).pipe(takeUntil(this.ngUnsubscribe)).subscribe((data => {
       if (data) {
         this.valuation = data;
         this.valuation.valuationStatus === 3 ? this.isEditable = false : this.isEditable = true;
