@@ -39,6 +39,7 @@ export interface PropertySummaryFigures {
   lettingInstructions: Summary;
   saleInstructions: Summary;
   instructions: Summary;
+  valuations: Summary;
   lettingOffers: Summary;
   saleOffers: Summary;
   offers: Summary;
@@ -161,7 +162,7 @@ export const PropertyStyles = new Map([
   [PropertyStyle.ParkingSpace, 'Parking Space'],
 ]);
 
-export const PropertyDetailsSubNav = ['instructions', 'offers'];
+export const PropertyDetailsSubNav = ['instructions', 'valuations', 'offers'];
 
 export const PropertyDetailsSubNavItems: SubNavItem[] = PropertyDetailsSubNav.map(x => ({
   link: x,

@@ -108,6 +108,9 @@
               <app-property-detail-instructions *ngSwitchCase="'instructions'" [moreInfo]="moreInfo"
                 [propertyId]="propertyDetails?.propertyId" [closedCounter]="summaryTotals?.instructions?.inactive">
               </app-property-detail-instructions>
+              <app-shared-valuation-list *ngSwitchCase="'valuations'" [moreInfo]="moreInfo"
+              [closedCounter]="summaryTotals?.valuations?.inactive" [propertyId]="propertyDetails?.propertyId">
+            </app-shared-valuation-list>
               <app-property-detail-offers *ngSwitchCase="'offers'" [moreInfo]="moreInfo" [propertyId]="propertyDetails?.propertyId"
                 [closedCounter]="summaryTotals?.offers?.inactive"></app-property-detail-offers>
             </ng-container>
