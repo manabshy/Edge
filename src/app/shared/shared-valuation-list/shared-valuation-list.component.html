@@ -36,7 +36,7 @@
             <dd class="col" *ngIf="valuation?.isActive"><span
                 class="badge badge-pill badge-success">{{valuation?.valuationStatusLabel}}</span></dd>
             <dd class="col" *ngIf="!valuation.isActive"><span
-                class="badge badge-pill badge-danger">{{valuation?.valuationStatusLabel}}</span></dd>
+                class="badge badge-pill badge-primary">{{valuation?.valuationStatusLabel}}</span></dd>
           </dl>
         </div>
         <div class="col-sm col-xl-12" *ngIf="valuation?.suggestedAskingPrice">
@@ -78,7 +78,7 @@
         <div class="col-sm col-xl-12">
           <dl class="row">
             <dt class="col-4 d-sm-none d-xl-block">Valued</dt>
-            <dd class="col">{{valuation?.valuationDate | date: 'd/MM/yyyy'}}</dd>
+            <dd class="col">{{(valuation?.valuationDate | date: 'd/MM/yyyy') || '-'}}</dd>
           </dl>
         </div>
       </div>

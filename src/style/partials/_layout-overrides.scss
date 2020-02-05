@@ -66,6 +66,10 @@ dl {
     dd, dt {
         margin: 0;
     }
+
+    dt {
+        word-wrap: normal;
+    }
 }
 
 .telephone {
