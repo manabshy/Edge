@@ -8,7 +8,6 @@ import { CoreModule } from '../core/core.module';
 import { PropertyDetailComponent } from './property-detail/property-detail.component';
 import { PropertyDetailInstructionsComponent } from './property-detail-instructions/property-detail-instructions.component';
 import { PropertyDetailOffersComponent } from './property-detail-offers/property-detail-offers.component';
-import { PropertyDetailNotesComponent } from './property-detail-notes/property-detail-notes.component';
 import { PropertyDetailDocumentsComponent } from './property-detail-documents/property-detail-documents.component';
 import { PropertyDetailPhotosComponent } from './property-detail-photos/property-detail-photos.component';
 import { PropertyDetailMapComponent } from './property-detail-map/property-detail-map.component';
@@ -24,7 +23,6 @@ import { SharedModule } from '../shared/shared.module';
     PropertyDetailComponent,
     PropertyDetailInstructionsComponent,
     PropertyDetailOffersComponent,
-    PropertyDetailNotesComponent,
     PropertyDetailDocumentsComponent,
     PropertyDetailPhotosComponent,
     PropertyDetailMapComponent,
