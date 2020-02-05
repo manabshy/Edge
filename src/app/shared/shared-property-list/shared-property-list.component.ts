@@ -21,7 +21,7 @@ export class SharedPropertyListComponent implements OnChanges {
 
   ngOnChanges() {
     console.log('more info for properts', this.moreInfo)
-    if (this.personId && this.moreInfo.includes('properties')) {
+    if (this.personId && this.moreInfo && this.moreInfo.includes('properties')) {
       this.properties$ = this.peopleService.getProperties(this.personId);
     }
   }

@@ -20,7 +20,7 @@ export class SharedLeadRegisterComponent implements OnChanges {
   constructor(private peopleService: PeopleService, private router: Router) { }
 
   ngOnChanges() {
-    if (this.personId && this.moreInfo.includes('leads')) {
+    if (this.personId && this.moreInfo && this.moreInfo.includes('leads')) {
       this.getLeads();
     }
   }

@@ -23,19 +23,19 @@ export class ContactgroupsDetailHomeHelperComponent implements OnChanges {
   constructor(private peopleService: PeopleService, private sharedService: SharedService) { }
 
   ngOnChanges() {
-    if (this.personId && this.moreInfo.includes('homeHelpers')) {
+    if (this.personId && this.moreInfo && this.moreInfo.includes('homeHelpers')) {
       this.getHomeHelpers();
     }
   }
 
   getHomeHelpers() {
     this.homeHelpers$ = this.peopleService.getHomeHelpers(this.personId, this.isClosedIncluded)
-    .pipe(
-      catchError((error: WedgeError) => {
-        this.errorMessage = error;
-        this.sharedService.showError(this.errorMessage);
-        return EMPTY;
-      }));
+      .pipe(
+        catchError((error: WedgeError) => {
+          this.errorMessage = error;
+          this.sharedService.showError(this.errorMessage);
+          return EMPTY;
+        }));
   }
 
 }

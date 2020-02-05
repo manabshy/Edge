@@ -22,7 +22,7 @@ export class ContactgroupsDetailSearchesComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    if (this.personId && this.moreInfo.includes('searches')) {
+    if (this.personId && this.moreInfo && this.moreInfo.includes('searches')) {
       this.getSearches();
     }
   }
