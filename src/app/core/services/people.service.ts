@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { AppConstants } from '../shared/app-constants';
 import { map, tap } from 'rxjs/operators';
 import { PersonInstruction, PersonSearch, PersonOffer, PersonLettingsManagement, PersonHomeHelper, PersonProperty } from '../../shared/models/person';
+import { Valuation } from 'src/app/shared/models/valuation';
 
 @Injectable({
   providedIn: 'root'
@@ -42,6 +43,10 @@ export class PeopleService {
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
 
+  getValuations(personId: number, isClosedIncluded?: boolean): Observable<Valuation[]> {
+    const url = `${AppConstants.basePersonUrl}/${personId}/valuations?activeOnly=${!isClosedIncluded}`;
+    return this.http.get<any>(url).pipe(map(response => response.result));
+  }
   getLettingsManagements(personId: number, isClosedIncluded: boolean): Observable<PersonLettingsManagement[]> {
     const url = `${AppConstants.basePersonUrl}/${personId}/lettingsManagements?activeOnly=${!isClosedIncluded}`;
     return this.http.get<any>(url).pipe(map(response => response.result));

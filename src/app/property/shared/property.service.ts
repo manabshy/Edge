@@ -125,6 +125,10 @@ export class PropertyService {
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
 
+  getValuations(propertyId: number, isClosedIncluded?: boolean): Observable<any[]> {
+    const url = `${AppConstants.basePropertyUrl}/${propertyId}/valuations?activeOnly=${!isClosedIncluded}`;
+    return this.http.get<any>(url).pipe(map(response => response.result));
+  }
   getPotentialDuplicateProperties(address: Address, propertyId?: number): Observable<PropertyAutoComplete[]> {
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,

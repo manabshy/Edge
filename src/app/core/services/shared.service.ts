@@ -15,6 +15,7 @@ import { HttpParams } from '@angular/common/http';
 import { CustomQueryEncoderHelper } from '../shared/custom-query-encoder-helper';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { ContactGroup } from 'src/app/contactgroups/shared/contact-group';
+import { Valuation, ValuationStatusEnum } from 'src/app/shared/models/valuation';
 
 @Injectable({
   providedIn: 'root'
@@ -158,6 +159,12 @@ export class SharedService {
     return isDuplicate;
   }
 
+  setValuationStatusLabel(vals: Valuation[]) {
+    vals.forEach(x => {
+      x.valuationStatusLabel = ValuationStatusEnum[x.valuationStatus];
+    });
+
+  }
   formatPostCode(postCodeToCheck: string) {
     // Permitted letters depend upon their position in the postcode.
     const alpha1 = '[abcdefghijklmnoprstuwyz]';                       // Character 1
