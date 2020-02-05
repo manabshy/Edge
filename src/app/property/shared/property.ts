@@ -50,6 +50,7 @@ export interface PropertySummaryFigures {
   lettingInstructions: Summary;
   saleInstructions: Summary;
   instructions: Summary;
+  valuations: Summary;
   lettingOffers: Summary;
   saleOffers: Summary;
   offers: Summary;

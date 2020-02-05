@@ -210,7 +210,7 @@ export class SharedService {
       x.valuationStatusLabel = ValuationStatusEnum[x.valuationStatus];
     });
   }
-  
+
   formatPostCode(postCodeToCheck: string) {
     // Permitted letters depend upon their position in the postcode.
     const alpha1 = '[abcdefghijklmnoprstuwyz]';                       // Character 1

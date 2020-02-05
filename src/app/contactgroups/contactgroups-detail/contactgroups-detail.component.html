@@ -117,7 +117,7 @@
                       class="fas fa-spinner fa-pulse d-inline-block"></i></span>
                 </ng-template>
               </div>
-              <span class="float-right pull-right" (click)="$event.stopPropagation()">
+              <span class="float-right pull-right" (click)="$event.stopPropgation()">
                 <ng-container [ngSwitch]="item?.value">
                   <a [routerLink]="['/property-centre/detail', 0, 'edit']"
                     [queryParams]="{isNewProperty: true, personId: searchedPersonDetails?.personId,  lastKnownPerson: personParams}"
@@ -132,13 +132,11 @@
                 [personId]="searchedPersonDetails?.personId">
               </app-shared-property-list>
               <app-contactgroups-detail-instructions *ngSwitchCase="'instructions'" [moreInfo]="moreInfo"
-                [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.instructions?.inactive">
-              </app-contactgroups-detail-instructions>
-              <app-shared-valuation-list *ngSwitchCase="'valuations'" [moreInfo]="moreInfo"
+                [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.instructions?.inactive"></app-contactgroups-detail-instructions>
+                <app-shared-valuation-list *ngSwitchCase="'valuations'" [moreInfo]="moreInfo"
                 [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.instructions?.inactive">
               </app-shared-valuation-list>
-              <app-contactgroups-detail-offers *ngSwitchCase="'offers'" [moreInfo]="moreInfo"
-                [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.offers?.inactive">
+              <app-contactgroups-detail-offers *ngSwitchCase="'offers'" [moreInfo]="moreInfo" [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.offers?.inactive">
               </app-contactgroups-detail-offers>
               <app-contactgroups-detail-searches *ngSwitchCase="'searches'" [moreInfo]="moreInfo"
                 [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.searches?.inactive">
