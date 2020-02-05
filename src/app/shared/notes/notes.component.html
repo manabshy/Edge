@@ -73,7 +73,7 @@
                   *ngIf="note?.personId">{{note?.addressee}}</a>
               </ng-template>
             </div>
-            <div class="col-sm-2 mb-2" *ngIf="note?.propertyId">
+            <div class="col-sm-3 mb-2" *ngIf="note?.propertyId">
               <span class="badge badge-pill badge-success" *ngIf="note.type < 3">{{note?.typeDescription}}</span>
               <span class="badge badge-pill badge-warning" *ngIf="note.type > 2">{{note?.typeDescription}}</span>
             </div>

@@ -1,7 +1,7 @@
 <ngx-loading-bar [color]="'#dc006a'" [height]="'5px'"></ngx-loading-bar>
 <div class="row no-gutters app-container" #appContainer>
   <div class="col-lg-3 col-xl-2 bg-dark side-nav" *ngIf="isLoggedIn"><app-mainmenu></app-mainmenu></div>
-  <div class="col" [ngClass]="{'fade-in': isFading}">
+  <div class="col" [ngClass]="{'fade-in': isFading}" (click)="$event.stopPropagation()">
     <div toastContainer></div>
     <!-- <div class="col text-muted nav-placeholder" *ngIf="navPlaceholder">
       <small>{{navPlaceholder}}</small>
