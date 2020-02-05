@@ -117,7 +117,7 @@
                       class="fas fa-spinner fa-pulse d-inline-block"></i></span>
                 </ng-template>
               </div>
-              <span class="float-right pull-right" (click)="$event.stopPropagation()">
+              <span class="float-right pull-right" (click)="$event.stopPropgation()">
                 <ng-container [ngSwitch]="item?.value">
                   <a [routerLink]="['/property-centre/detail', 0, 'edit']" [queryParams]="{isNewProperty: true, personId: searchedPersonDetails?.personId,  lastKnownPerson: personParams}" *ngSwitchCase="'properties'">Create</a>
                   <a [routerLink]="['/leads-register/edit/', 0]"
