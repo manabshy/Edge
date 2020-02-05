@@ -10,9 +10,8 @@ import { InfoDetail, DropdownListInfo } from 'src/app/core/services/info.service
 import { PropertyService } from 'src/app/property/shared/property.service';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
-import { StaffMember } from 'src/app/shared/models/staff-member';
 import { ToastrService } from 'ngx-toastr';
-import { FormErrors, ValidationMessages } from 'src/app/core/shared/app-constants';
+import { FormErrors } from 'src/app/core/shared/app-constants';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';

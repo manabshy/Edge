@@ -184,7 +184,7 @@
       <div class="col-sm-10">
         <div class="d-flex d-sm-block">
           <small
-            class="text-left mobile-btn">{{(selectedDate || valuation.valuationDate) | date: 'E d MMM yyyy, hh:mm'}}</small>
+            class="text-left mobile-btn">{{(selectedDate || valuation?.valuationDate) | date: 'E d MMM yyyy, hh:mm'}}</small>
           <button class="btn btn-light btn-sm ml-2" type="button" (click)="changeDate()"> Change </button>
         </div>
       </div>
@@ -259,7 +259,7 @@
         <div class="row justify-content-end w-100 no-gutters">
           <div class="col-sm-10 d-flex">
             <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
-            <button *ngIf="isEditable" type="submit" class="btn btn-secondary mr-2">Save</button>
+            <button *ngIf="isEditable || isNewValuation" type="submit" class="btn btn-secondary mr-2">Save</button>
             <button type="button" class="btn btn-secondary" (click)="instructionModal.show()">Instruct</button>
           </div>
         </div>
