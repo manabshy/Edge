@@ -17,29 +17,32 @@ export class SharedValuationListComponent implements OnChanges {
   valuations$ = new Observable<Valuation[]>();
   @Input() personId: number;
   @Input() propertyId: number;
-
+  @Input() moreInfo: string;
+  @Input() closedCounter: number;
+  isClosedIncluded: boolean = false;
   constructor(private peopleService: PeopleService,
     private sharedService: SharedService,
     private propertyService: PropertyService,
     private router: Router) { }
 
   ngOnChanges() {
-    if (this.personId) {
-      this.valuations$ = this.peopleService.getValuations(this.personId)
-        .pipe(
-          tap(vals => {
-            this.sharedService.setValuationStatusLabel(vals);
-          })
-        );
+    if (this.moreInfo && this.moreInfo.includes('valuations')) {
+      this.getValuations();
     }
+  }
 
+  private getValuations() {
+    if (this.personId) {
+      this.valuations$ = this.peopleService.getValuations(this.personId, this.isClosedIncluded)
+        .pipe(tap(vals => {
+          this.sharedService.setValuationStatusLabel(vals);
+        }));
+    }
     if (this.propertyId) {
-      this.valuations$ = this.propertyService.getValuations(this.propertyId)
-        .pipe(
-          tap(vals => {
-            this.sharedService.setValuationStatusLabel(vals);
-          })
-        );
+      this.valuations$ = this.propertyService.getValuations(this.propertyId, this.isClosedIncluded)
+        .pipe(tap(vals => {
+          this.sharedService.setValuationStatusLabel(vals);
+        }));
     }
   }
 

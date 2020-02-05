@@ -128,8 +128,8 @@ export class PropertyService {
     const url = `${AppConstants.basePropertyUrl}/${propertyId}/offers?activeOnly=${!isClosedIncluded}`;
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
-  getValuations(propertyId: number): Observable<any[]> {
-    const url = `${AppConstants.basePropertyUrl}/${propertyId}/valuations`;
+  getValuations(propertyId: number, isClosedIncluded?: boolean): Observable<any[]> {
+    const url = `${AppConstants.basePropertyUrl}/${propertyId}/valuations?activeOnly=${!isClosedIncluded}`;
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
   getPotentialDuplicateProperties(address: Address, propertyId?: number): Observable<PropertyAutoComplete[]> {

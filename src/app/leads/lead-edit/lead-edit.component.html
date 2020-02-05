@@ -55,8 +55,8 @@
                 <app-contactgroups-detail-searches *ngSwitchCase="'searches'" [moreInfo]="moreInfo"
                   [personId]="person?.personId" [closedCounter]="summaryTotals?.searches?.inactive">
                 </app-contactgroups-detail-searches>
-                <app-shared-valuation-list *ngSwitchCase="'valuations'"
-                [personId]="person?.personId"></app-shared-valuation-list>
+                <app-shared-valuation-list *ngSwitchCase="'valuations'" [moreInfo]="moreInfo"
+                [personId]="person?.personId" [closedCounter]="summaryTotals?.valuations?.inactive"></app-shared-valuation-list>
                 <app-contactgroups-detail-lettings-managements *ngSwitchCase="'lettingsManagements'"
                   [moreInfo]="moreInfo" [personId]="person?.personId"
                   [closedCounter]="summaryTotals?.lettingsManagements?.inactive">

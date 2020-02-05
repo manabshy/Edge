@@ -32,8 +32,8 @@ export class PeopleService {
     const url = `${AppConstants.basePersonUrl}/${personId}/instructions?activeOnly=${!isClosedIncluded}`;
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
-  getValuations(personId: number): Observable<Valuation[]> {
-    const url = `${AppConstants.basePersonUrl}/${personId}/valuations`;
+  getValuations(personId: number, isClosedIncluded?: boolean): Observable<Valuation[]> {
+    const url = `${AppConstants.basePersonUrl}/${personId}/valuations?activeOnly=${!isClosedIncluded}`;
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
 

@@ -15,6 +15,12 @@
     <div class="list-group-item text-center text-danger" *ngIf="!valuations || !valuations?.length">
       <i class="far fa-sad-tear"></i> No valuations
     </div>
+    <div class="list-group-item" *ngIf="closedCounter">
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getValuations()" class="custom-control-input" id="includeClosedValuations">
+        <label class="custom-control-label" for="includeClosedValuations">Include closed valuations</label>
+      </div>
+    </div>
     <a class="list-group-item list-group-item-action" (click)="navigateToDetail(valuation)"
       *ngFor="let valuation of valuations">
       <div class="row">
