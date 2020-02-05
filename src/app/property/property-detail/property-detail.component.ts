@@ -91,7 +91,6 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit {
 
     this.propertyService.propertyNotePageNumberChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(newPage => {
       this.page = newPage;
-      console.log('here..................xxxxxxx 222222')
       this.getNexPropertyNotesPage(this.page);
     });
 
@@ -100,7 +99,6 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit {
         this.propertyNotes = [];
         this.page = 1;
         this.bottomReached = false;
-        console.log('here..................xxxxxxx')
         this.getPropertyNotes();
       }
     });
@@ -129,7 +127,6 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit {
       this.noteTypes = this.listInfo.propertyNoteTypes;
       const keys = Object.keys(this.noteTypes);
       if (this.propertyNotes && this.propertyNotes.length) {
-        console.log('xxxx....prop notes here.....',this.propertyNotes);
         this.propertyNotes.forEach((note: PropertyNote) => {
           if (this.noteTypes) {
             keys.forEach(key => {
@@ -148,11 +145,7 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit {
       this.regions = this.listInfo.regions;
       this.allAreas = this.listInfo.areas;
       this.allSubAreas = this.listInfo.subAreas;
-      // this.regions = new Map(Object.entries(this.listInfo.regions));
-      // this.allAreas = new Map(Object.entries(this.listInfo.areas));
-      // this.allSubAreas = new Map(Object.entries(this.listInfo.subAreas));
     }
-    console.log('regions1', this.regions);
   }
 
   isObject(val) {
