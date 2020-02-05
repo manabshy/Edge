@@ -36,7 +36,7 @@
         [attr.aria-expanded]="!con.isActive && !collapsible.contacts" aria-controls="collapseContacts">
           <div><i class="fas fa-address-book fa-fw mr-3"></i>Contacts</div>
         </button>
-        <div class="dropdown-menu" id="collapseContacts" [collapse]="!con.isActive && collapsible.contacts">
+        <div class="dropdown-menu" id="collapseContacts" (click)="navbarCollapsed = !navbarCollapsed" [collapse]="!con.isActive && collapsible.contacts">
           <a class="dropdown-item" routerLink="/contact-centre" routerLinkActive="active font-weight-bold">Contact centre</a>
           <a class="dropdown-item" routerLink="/applicant-register" routerLinkActive="active font-weight-bold" *ngIf="false">Applicants</a>
           <a class="dropdown-item" routerLink="/leads-register" routerLinkActive="active font-weight-bold">Leads</a>
@@ -48,7 +48,7 @@
         [attr.aria-expanded]="!pro.isActive && !collapsible.properties" aria-controls="collapseProperties">
           <div><i class="fas fa-city fa-fw mr-3"></i>Properties</div>
         </button>
-        <div class="dropdown-menu" id="collapseProperties" [collapse]="!pro.isActive && collapsible.properties">
+        <div class="dropdown-menu" id="collapseProperties" (click)="navbarCollapsed = !navbarCollapsed" [collapse]="!pro.isActive && collapsible.properties">
           <a class="dropdown-item" routerLink="/property-centre" routerLinkActive="active font-weight-bold">Property centre</a>
           <a class="dropdown-item" routerLink="/" *ngIf="false">Valuations</a>
           <a class="dropdown-item" routerLink="/" *ngIf="false">Instructions</a>
