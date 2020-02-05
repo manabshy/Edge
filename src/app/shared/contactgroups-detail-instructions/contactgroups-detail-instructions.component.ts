@@ -22,7 +22,7 @@ export class ContactgroupsDetailInstructionsComponent implements OnChanges {
   constructor(private route: ActivatedRoute, private peopleService: PeopleService) { }
 
   ngOnChanges() {
-    if (this.personId && this.moreInfo.includes('instructions')) {
+    if (this.personId && this.moreInfo && this.moreInfo.includes('instructions')) {
       this.getInstructions();
     }
   }

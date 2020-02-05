@@ -91,6 +91,7 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit {
 
     this.propertyService.propertyNotePageNumberChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(newPage => {
       this.page = newPage;
+      console.log('here..................xxxxxxx 222222')
       this.getNexPropertyNotesPage(this.page);
     });
 
@@ -99,6 +100,7 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit {
         this.propertyNotes = [];
         this.page = 1;
         this.bottomReached = false;
+        console.log('here..................xxxxxxx')
         this.getPropertyNotes();
       }
     });
@@ -126,8 +128,8 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit {
     if (this.listInfo && this.listInfo.propertyNoteTypes) {
       this.noteTypes = this.listInfo.propertyNoteTypes;
       const keys = Object.keys(this.noteTypes);
-      console.log(this.noteTypes);
-      if (this.propertyNotes) {
+      if (this.propertyNotes && this.propertyNotes.length) {
+        console.log('xxxx....prop notes here.....',this.propertyNotes);
         this.propertyNotes.forEach((note: PropertyNote) => {
           if (this.noteTypes) {
             keys.forEach(key => {

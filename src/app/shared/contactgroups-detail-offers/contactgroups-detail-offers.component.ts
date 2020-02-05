@@ -20,7 +20,7 @@ export class ContactgroupsDetailOffersComponent implements OnChanges {
   constructor(private route: ActivatedRoute, private peopleService: PeopleService) { }
 
   ngOnChanges() {
-    if (this.personId && this.moreInfo.includes('offers')) {
+    if (this.personId && this.moreInfo && this.moreInfo.includes('offers')) {
       this.getOffers();
     }
   }

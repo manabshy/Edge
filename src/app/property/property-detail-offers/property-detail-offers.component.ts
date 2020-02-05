@@ -1,9 +1,8 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OfferInfo } from '../shared/property';
 import { ActivatedRoute } from '@angular/router';
 import { PropertyService } from '../shared/property.service';
-import { AppUtils } from 'src/app/core/shared/utils';
 
 @Component({
   selector: 'app-property-detail-offers',
@@ -17,10 +16,10 @@ export class PropertyDetailOffersComponent implements OnChanges {
   isClosedIncluded: boolean = false;
   offers$ = new Observable<OfferInfo[]>();
 
-  constructor(private route: ActivatedRoute, private propertyService: PropertyService) { }
+  constructor(private propertyService: PropertyService) { }
 
   ngOnChanges() {
-    if (this.propertyId && this.moreInfo.includes('offers')) {
+    if (this.propertyId && this.moreInfo && this.moreInfo.includes('offers')) {
       this.getOffers();
     }
   }

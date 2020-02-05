@@ -19,6 +19,13 @@ export class MainmenuComponent implements OnInit {
   currentStaffMember: StaffMember;
   impersonatedStaffMember: Impersonation;
   impersonateToastr: any;
+  isContactsCollapsed = true;
+  isPropertiesCollapsed = true;
+
+  collapsible: any = {
+    contacts: true,
+    properties: true
+  }
 
   get isLeaderboardVisible() {
     if (this.currentStaffMember) {
@@ -56,6 +63,18 @@ export class MainmenuComponent implements OnInit {
         this.showImpersonateBanner(this.impersonatedStaffMember);
       }
     });
+  }
+
+  toggleCollapse(label: string) {
+    Object.entries(this.collapsible).forEach(x=>{
+      if(x[0] === label) {
+        this.collapsible[x[0]] = false
+      } else {
+        this.collapsible[x[0]] = true
+      }
+    })
+
+    console.log(this.collapsible);
   }
 
   showImpersonateBanner(member: Impersonation, existing?: boolean) {

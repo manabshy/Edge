@@ -22,19 +22,19 @@ export class ContactgroupsDetaillettingsManagementsComponent implements OnChange
   constructor(private route: ActivatedRoute, private peopleService: PeopleService, private sharedService: SharedService) { }
 
   ngOnChanges() {
-    if (this.personId && this.moreInfo.includes('lettingsManagements')) {
+    if (this.personId && this.moreInfo && this.moreInfo.includes('lettingsManagements')) {
       this.getLettingsManagements();
     }
   }
 
   getLettingsManagements() {
     this.managements$ = this.peopleService.getLettingsManagements(this.personId, this.isClosedIncluded)
-    .pipe(
-      catchError((error: WedgeError) => {
-        this.errorMessage = error;
-        this.sharedService.showError(this.errorMessage);
-        return EMPTY;
-      }));
+      .pipe(
+        catchError((error: WedgeError) => {
+          this.errorMessage = error;
+          this.sharedService.showError(this.errorMessage);
+          return EMPTY;
+        }));
   }
 
 }
