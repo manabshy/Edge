@@ -31,6 +31,7 @@ export interface Photo {
 }
 export interface Summary {
   active: number;
+  inactive: number;
   total: number;
 }
 export interface PropertySummaryFigures {
