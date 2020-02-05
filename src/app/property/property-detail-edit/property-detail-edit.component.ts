@@ -139,7 +139,7 @@ export class PropertyDetailEditComponent implements OnInit {
   }
 
   getPropertyDetails(propertyId: number) {
-    this.propertyService.getProperty(propertyId).subscribe(data => {
+    this.propertyService.getProperty(propertyId, false, false, false).subscribe(data => {
       this.propertyDetails = data;
       this.onSelectType(data.propertyTypeId);
       this.onSelectRegion(data.regionId);
