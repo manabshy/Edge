@@ -61,7 +61,8 @@ export class EdgeServiceWorkerService {
     const subject = new Subject<boolean>();
     const initialState = {
       title: 'A new version of the app is available!',
-      actions: ['Refresh']
+      actions: ['Refresh'],
+      isSingleAction: true
     };
     const modal = this.modalService.show(ConfirmModalComponent, { ignoreBackdropClick: true, initialState });
     modal.content.subject = subject;
