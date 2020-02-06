@@ -10,6 +10,7 @@ export class ConfirmModalComponent implements OnInit {
   @Input() title;
   @Input() danger;
   @Input() actions = [];
+  @Input() isSingleAction = false;
   subject: Subject<boolean>;
 
   constructor(public bsModalRef: BsModalRef) { }

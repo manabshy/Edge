@@ -3,14 +3,13 @@ import { Address } from 'src/app/shared/models/address';
 
 export const LeadEditSubNav = [
   'properties',
-  'instructions',
-  'offers',
   'leads',
-  'searches',
   'valuations',
+  'instructions',
+  'searches',
+  'offers',
   'lettings-managements',
-  'home-helpers'
-];
+  'home-helpers'];
 
 export const LeadEditSubNavItems: SubNavItem[] = LeadEditSubNav.map(x => ({
   link: x,

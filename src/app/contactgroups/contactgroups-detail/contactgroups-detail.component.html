@@ -60,7 +60,7 @@
           <app-subnav>
             <app-subnav-item *ngFor="let searchedPersonContactGroup of searchedPersonContactGroups"
               [navLink]="'people/'+searchedPersonContactGroup.contactGroupId"
-              [params]="{docTitle: 'Contact Group | '+searchedPersonDetails?.addressee}">
+              [params]="{docTitle: 'Contact Group | '+searchedPersonDetails?.addressee,  showNotes: true}">
               <i class="fas fa-briefcase mr-2 fa-fw" *ngIf="searchedPersonContactGroup?.isCompany; else peopleIcon"></i>
               <ng-template #peopleIcon>
                 <i class="fas fa-users mr-2 fa-fw"></i>
@@ -73,7 +73,7 @@
                     {{contactPerson.addressee}}
                   </ng-container>
                   <ng-template #link>
-                    <a [routerLink]="['../../../detail', contactPerson.personId ]"
+                    <a [routerLink]="['../../../detail', contactPerson.personId ]" [queryParams]="{showNotes: true}"
                       (click)="$event.stopPropagation();">{{contactPerson.addressee}}</a>
                   </ng-template>
                   <ng-container *ngIf="!isLast">, </ng-container>

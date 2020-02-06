@@ -28,7 +28,7 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
   contactGroupId: number;
   personId = 0;
   page = 1;
-  pageSize = 10;
+  pageSize = 20;
   personNotes: ContactNote[] = [];
   bottomReached = false;
   isNewContactGroup = false;
@@ -52,7 +52,6 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
               private route: ActivatedRoute) {super();}
 
   ngOnInit() {
-    console.log(this.subNav);
     this.showNotes = this.route.snapshot.queryParamMap.get('showNotes') === 'true';
     this.route.params.subscribe(params => {
       this.personId = params['personId'] || 0;
@@ -146,20 +145,27 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
 
 
     this.contactGroupService.getPersonNotes(this.personId, this.pageSize, page).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
-      if (data) {
-        if (page === 1) {
-          this.personNotes = data;
-        } else {
-          this.personNotes = _.concat(this.personNotes, data);
-        }
-        console.log('person Notes', this.personNotes);
-      }
-      if (data && !data.length) {
-
+      if (data && data.length) {
+        this.personNotes = _.concat(this.personNotes, data);
+      } else if (!data.length || data.length < this.pageSize) {
         this.bottomReached = true;
         console.log('data', data);
-        console.log('bottom reached', this.bottomReached);
+        console.log('bottom reached for id',this.personId, 'condition',this.bottomReached);
       }
+      // if (data) {
+      //   if (page === 1) {
+      //     this.personNotes = data;
+      //   } else {
+      //     this.personNotes = _.concat(this.personNotes, data);
+      //   }
+      //   console.log('person Notes', this.personNotes);
+      // }
+      // if (data && (!data.length || data.length < this.pageSize)) {
+
+      //   this.bottomReached = true;
+      //   console.log('data', data);
+      //   console.log('bottom reached', this.bottomReached);
+      // }
     });
   }
 

@@ -5,7 +5,7 @@
     <ng-container *ngTemplateOutlet="content"></ng-container>
   </div>
   <a class="list-group-item list-group-item-action mb-3"
-    [routerLink]="['/contact-centre/detail/', personDetails?.personId]"
+    [routerLink]="['/contact-centre/detail/', personDetails?.personId]"  [queryParams]="{showNotes: true}"
     [ngClass]="{'list-group-item-danger': personDetails?.warning && personDetails?.warning?.id !== 1}"
     *ngIf="personDetails && isClickable">
     <ng-container *ngTemplateOutlet="content"></ng-container>
