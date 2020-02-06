@@ -441,8 +441,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   private AddOrUpdateLead(lead: any) {
     if (this.isNewLead) {
       lead.personId = this.personId;
-      lead.createdBy = this.currentStaffMember.staffMemberId;
-      lead.ownerId = this.currentStaffMember.staffMemberId;
+      lead.createdBy = this.currentStaffMember.staffMemberId;      
       lead.createdDate = new Date;
       lead.updatedBy = this.currentStaffMember.staffMemberId;
       lead.updatedDate = new Date;
