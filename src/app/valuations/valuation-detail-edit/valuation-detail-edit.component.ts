@@ -17,7 +17,8 @@ import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
 import { BaseComponent } from 'src/app/shared/models/base-component';
 import { BaseProperty } from 'src/app/shared/models/base-property';
-
+import addYears from 'date-fns/add_years';
+import differenceInCalendarYears from 'date-fns/difference_in_calendar_years';
 @Component({
   selector: 'app-valuation-detail-edit',
   templateUrl: './valuation-detail-edit.component.html',
@@ -55,9 +56,14 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   showLeaseExpiryDate: boolean;
   propertyId: number;
   lastKnownOwnerId: number;
+  approxLeaseExpiryDateValue: Date;
 
   get isInvitationSent() {
     return this.valuationForm.get('isInvitationSent') as FormControl;
+  }
+
+  get approxLeaseExpiryDateControl() {
+    return this.valuationForm.get('approxLeaseExpiryDate') as FormControl;
   }
   get shortLetWeeklyControl() {
     return this.valuationForm.get('suggestedAskingRentShortLet') as FormControl;
@@ -111,6 +117,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         if (result) {
           this.lastKnownOwner = result.lastKnownOwner;
           this.existingProperty = result;
+          const baseProperty = { propertyId: this.existingProperty.propertyId, address: this.existingProperty.address } as BaseProperty;
+          this.valuationForm.get('property').setValue(baseProperty);
+          console.log('base property', this.valuationForm.get('property').value)
         }
       });
     }
@@ -237,7 +246,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.staffMemberId = staffMember.staffMemberId;
     this.showCalendar = true;
     this.showOnlyMainStaffMember = true;
-    // this.valuationForm.get('valuer').setValue(staffMember);
+    this.valuationForm.get('valuer').setValue(staffMember);
     // this.valuation.valuer = staffMember as unknown as BaseStaffMember;
   }
 
@@ -246,6 +255,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       if (data) {
         this.valuation = data;
         this.valuation.valuationStatus === 3 ? this.isEditable = false : this.isEditable = true;
+        this.valuation.approxLeaseExpiryDate ? this.showLeaseExpiryDate = true : this.showLeaseExpiryDate = false;
+        this.setLeaseExpiryDate();
         this.lastKnownOwner = this.valuation.propertyOwner;
         this.existingProperty = this.valuation.property;
         this.attendees = this.valuation.attendees;
@@ -268,12 +279,14 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         bathrooms: valuation.bathrooms,
         receptions: valuation.receptions,
         tenureId: valuation.tenureId,
-        approxLeaseExpiryDate: valuation.approxLeaseExpiryDate,
+        // approxLeaseExpiryDate: valuation.approxLeaseExpiryDate,
         sqFoot: valuation.sqFt,
         outsideSpace: valuation.outsideSpace,
         parking: valuation.parking,
         propertyFeature: valuation.propertyFeature,
         valuer: valuation.valuer,
+        attendees: valuation.attendees,
+        valuationDate: valuation.valuationDate,
         totalHours: valuation.totalHours,
         suggestedAskingPrice: valuation.suggestedAskingPrice ? valuation.suggestedAskingPrice : '',
         suggestedAskingRentLongLet: valuation.suggestedAskingRentLongLet ? valuation.suggestedAskingRentLongLet : '',
@@ -309,6 +322,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     if (date) {
       console.log('selected date in val', date);
       this.selectedDate = date;
+      this.valuationForm.get('valuationDate').setValue(date);
       this.showCalendar = false;
     }
   }
@@ -326,6 +340,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     const existingAttendee = this.attendees.find(x => x.staffMemberId === this.attendee.staffMemberId);
     if (this.attendee && !existingAttendee) {
       this.attendees.push(this.attendee);
+      this.valuationForm.get('attendees').setValue(this.attendees);
       this.valuationForm.get('searchAttendeeId').setValue(null);
     }
   }
@@ -351,7 +366,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   onTenureChange(tenureId: number) {
-    console.log('clear  idd......', tenureId);
     if (+tenureId === 3) {
       this.showLeaseExpiryDate = true;
     } else {
@@ -386,12 +400,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   addOrUpdateValuation() {
+    this.setLeaseExpiryDate();
     const valuation = { ...this.valuation, ...this.valuationForm.value };
-    const attendees = { ...this.valuation.diaryEvent.staffMembers, ...this.attendees } as BaseStaffMember[];
-    console.log('valuation before', valuation);
-    valuation.diaryEvent.staffMembers = attendees;
-    console.log('attendees', attendees);
-    console.log('valuation', valuation);
     this.isSubmitting = true;
 
     if (this.isNewValuation) {
@@ -417,6 +427,24 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   }
 
+  private setLeaseExpiryDate() {
+
+    if (this.valuationForm.get('approxLeaseExpiryDate').value) {
+      const leaseExpiryDateInYears = +this.valuationForm.get('approxLeaseExpiryDate').value;
+      this.approxLeaseExpiryDateValue = addYears(new Date(), leaseExpiryDateInYears);
+      // this.valuation.approxLeaseExpiryDate = this.approxLeaseExpiryDateValue;
+      console.log('lease year', this.approxLeaseExpiryDateValue);
+      this.valuationForm.get('approxLeaseExpiryDate').setValue(this.approxLeaseExpiryDateValue);
+      console.log('lease year control', this.valuationForm.get('approxLeaseExpiryDate').value);
+      return;
+    }
+    if (this.valuation.approxLeaseExpiryDate) {
+      const leaseExpiryDateValue = differenceInCalendarYears(this.valuation.approxLeaseExpiryDate, new Date());
+      console.log('lease in numbers', this.approxLeaseExpiryDateValue);
+      this.valuationForm.get('approxLeaseExpiryDate').setValue(leaseExpiryDateValue);
+      return;
+    }
+  }
   onSaveComplete(valuation?: Valuation) {
     this.valuationForm.markAsPristine();
     this.isSubmitting = false;
@@ -424,11 +452,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     if (this.isNewValuation) {
       this.toastr.success('Valuation successfully saved');
       this.sharedService.resetUrl(this.valuationId, valuation.valuationEventId);
-      this.router.navigate(['/valuations-register/detail', this.valuationId]);
+      this.router.navigate(['/valuations-register/detail', valuation.valuationEventId, 'edit']);
     } else {
       this.toastr.success('Valuation successfully updated');
     }
-
   }
 
   cancel() {
