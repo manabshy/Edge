@@ -129,11 +129,9 @@ export class NotesComponent implements OnInit, OnChanges {
         this.page++;
         if (this.contactPeople && this.contactPeople.length) {
           this.contactGroupService.contactNotePageNumberChanged(this.page);
-
         }
         if (this.isPersonNote) {
           this.contactGroupService.personNotePageNumberChanged(this.page);
-
         }
         if (this.isPropertyNote) {
           this.propertyService.propertyNotePageNumberChanged(this.page);

@@ -47,7 +47,7 @@
                   *ngFor="let contactPerson of companyContact?.contactPeople; last as isLast; first as isFirst">
                   <br class="d-sm-none" *ngIf="!isFirst" />
                   <ng-container *ngIf="contactPerson">
-                    <a [routerLink]="['/', contactPerson.personId ]"
+                    <a [routerLink]="['/', contactPerson.personId ]" [queryParams]="{showNotes: true}"
                       (click)="$event.stopPropagation()">{{contactPerson?.addressee}}</a>
                   </ng-container>
                   <ng-container *ngIf="!isLast">, </ng-container>

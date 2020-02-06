@@ -22,7 +22,7 @@ const routes: Routes = [
     path: 'detail/:personId',
     children: [
       { path: '', component: ContactgroupsDetailComponent, data: { shouldDetach: true } },
-      { path: 'people/:contactGroupId', component: ContactgroupsPeopleComponent, canDeactivate: [CanDeactivateGuard] },
+      { path: 'people/:contactGroupId', component: ContactgroupsPeopleComponent, canDeactivate: [CanDeactivateGuard]},
       { path: 'edit', component: ContactgroupsDetailEditComponent, canDeactivate: [CanDeactivateGuard] },
       { path: 'leads', component: ContactgroupsDetailLeadsComponent },
       { path: 'notes', component: ContactgroupsDetailNotesComponent },

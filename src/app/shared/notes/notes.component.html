@@ -64,12 +64,12 @@
             <div class="col-11 col-sm-3" *ngIf="note?.contactGroupId || note?.personId">
               <ng-container *ngIf="note?.contactGroupId; else personInfo">
                 <a class="mb-2"
-                  [routerLink]="['/contact-centre/detail', note?.personId || 0, 'people', note?.contactGroupId]"
+                  [routerLink]="['/contact-centre/detail', note?.personId || 0, 'people', note?.contactGroupId]"  [queryParams]="{showNotes: true}"
                   *ngIf="note?.contactGroupId">{{note?.addressee}}
                 </a>
               </ng-container>
               <ng-template #personInfo>
-                <a class="mb-2" [routerLink]="['/contact-centre/detail', note?.personId]"
+                <a class="mb-2" [routerLink]="['/contact-centre/detail', note?.personId]"  [queryParams]="{showNotes: true}"
                   *ngIf="note?.personId">{{note?.addressee}}</a>
               </ng-template>
             </div>

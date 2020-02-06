@@ -28,7 +28,7 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
   contactGroupId: number;
   personId = 0;
   page = 1;
-  pageSize = 10;
+  pageSize = 20;
   personNotes: ContactNote[] = [];
   bottomReached = false;
   isNewContactGroup = false;

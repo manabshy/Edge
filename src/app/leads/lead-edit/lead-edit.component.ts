@@ -44,7 +44,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   subNav = LeadEditSubNavItems;
   summaryTotals: PersonSummaryFigures;
   page = 1;
-  pageSize = 10;
+  pageSize = 20;
   bottomReached = false;
   leadOwner: StaffMember;
   leadIds: number[] = [];
