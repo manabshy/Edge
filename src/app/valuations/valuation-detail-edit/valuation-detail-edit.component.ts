@@ -56,7 +56,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   showLeaseExpiryDate: boolean;
   propertyId: number;
   lastKnownOwnerId: number;
-  approxLeaseExpiryDateValue: Date;
+  approxLeaseExpiryDate: Date;
 
   get isInvitationSent() {
     return this.valuationForm.get('isInvitationSent') as FormControl;
@@ -257,7 +257,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.valuation.approxLeaseExpiryDate ? this.showLeaseExpiryDate = true : this.showLeaseExpiryDate = false;
         this.lastKnownOwner = this.valuation.propertyOwner;
         this.existingProperty = this.valuation.property;
-        this.attendees = this.valuation.attendees;
+        this.attendees = this.valuation.attendees ? this.valuation.attendees : [];
         this.valuation.valuer.fullName ? this.showOnlyMainStaffMember = true : this.showOnlyMainStaffMember = false;
         this.populateForm(data);
       }
@@ -401,8 +401,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.setLeaseExpiryDate();
     this.isSubmitting = true;
     const valuation = { ...this.valuation, ...this.valuationForm.value };
-    this.approxLeaseExpiryDateValue ? valuation.approxLeaseExpiryDate = this.approxLeaseExpiryDateValue
-                                    : this.valuation.approxLeaseExpiryDate = null;
+    this.approxLeaseExpiryDate ? valuation.approxLeaseExpiryDate = this.approxLeaseExpiryDate : this.valuation.approxLeaseExpiryDate = null;
 
     if (this.isNewValuation) {
       this.isInvitationSent.value ? valuation.valuationStatus = ValuationStatusEnum.Booked
@@ -430,7 +429,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   private setLeaseExpiryDate() {
     if (this.valuationForm.get('approxLeaseExpiryDate').value) {
       const leaseExpiryDateInYears = +this.valuationForm.get('approxLeaseExpiryDate').value;
-      this.approxLeaseExpiryDateValue = addYears(new Date(), leaseExpiryDateInYears);
+      this.approxLeaseExpiryDate = addYears(new Date(), leaseExpiryDateInYears);
     }
 
   }

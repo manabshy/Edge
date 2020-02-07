@@ -5,7 +5,6 @@
       <h4 class="m-0">Valuation</h4>
     </div>
   </div>
-  {{createdProperty|json}}
   <form [formGroup]="valuationForm" (ngSubmit)="saveValuation()">
     <app-property-finder label="Property" [createdProperty]="createdProperty" [existingProperty]=existingProperty
       (selectedProperty)="getSelectedProperty($event)"></app-property-finder>
@@ -161,7 +160,7 @@
             main</button>
         </p>
       </div>
-      <div class="col-sm-3 offset-sm-2" *ngIf="selectedDate && showOnlyMainStaffMember">
+      <div class="col-sm-3 offset-sm-2" *ngIf="isEditable || isNewValuation">
         <div class="row align-items-center no-gutters">
           <div class="col">
             <ng-select placeholder="Select Staff Member" [items]="allAttendees" [hideSelected]="true" (clear)="onClear()" [clearable]="true"
