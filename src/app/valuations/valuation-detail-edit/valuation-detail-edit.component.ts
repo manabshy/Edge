@@ -245,7 +245,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
   setupInstructionForm() {
     this.instructionForm = this.fb.group({
-      instruct: [false],
+      instructSale: [false],
+      instructShortLet: [false],
+      instructLongLet: [false],
       instructionType: [''],
       suggestedAskingPrice: [],
       suggestedAskingRentLongLet: [],
