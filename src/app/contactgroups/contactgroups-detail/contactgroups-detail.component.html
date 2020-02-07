@@ -131,7 +131,7 @@
               <app-contactgroups-detail-instructions *ngSwitchCase="'instructions'" [moreInfo]="moreInfo"
                 [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.instructions?.inactive"></app-contactgroups-detail-instructions>
                 <app-shared-valuation-list *ngSwitchCase="'valuations'" [moreInfo]="moreInfo"
-                [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.instructions?.inactive">
+                [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.valuations?.inactive">
               </app-shared-valuation-list>
               <app-contactgroups-detail-offers *ngSwitchCase="'offers'" [moreInfo]="moreInfo" [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.offers?.inactive">
               </app-contactgroups-detail-offers>
@@ -148,7 +148,7 @@
         </accordion>
       </div>
       <h5>Notes</h5>
-      <app-notes [personNotes]="personNotes" [noteData]="dataNote" [showNotes]="showNotes" [pageNumber]="page" [bottomReached]="bottomReached">
+      <app-notes [personNotes]="personNotes" [noteData]="dataNote" [pageNumber]="page" [bottomReached]="bottomReached">
       </app-notes>
     </div>
   </div>
