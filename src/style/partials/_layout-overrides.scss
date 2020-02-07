@@ -47,6 +47,17 @@ tr:first-child{
     }
 }
 
+.form-control-plaintext {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background-color: transparent!important;
+    font-weight: bold;
+
+    &::-ms-expand {
+        display: none;
+    }
+}
+
 .list-group-item {
 
     .card-body &.list-header + .list-group-item {

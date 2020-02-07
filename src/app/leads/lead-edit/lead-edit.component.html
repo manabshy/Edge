@@ -80,7 +80,10 @@
                 <div class="form-group">
                   <label for="leadType">Type</label>
                   <select class="custom-select custom-select-sm" id="leadType" formControlName="leadTypeId"
-                    [attr.disabled]="isLeadClosed ? true : null" [ngClass]="{'is-invalid': formErrors?.leadTypeId}">
+                    [attr.disabled]="isLeadClosed ? true : null" 
+                    [ngClass]="{'is-invalid': formErrors?.leadTypeId, 
+                    'custom-select custom-select-sm': !isLeadClosed, 
+                    'form-control form-control-sm form-control-plaintext': isLeadClosed}">
                     <option value=""></option>
                     <option selected *ngFor="let leadType of leadTypes" [value]=leadType.id>{{leadType?.value}}</option>
                   </select>
@@ -94,7 +97,7 @@
                     formControlName="nextChaseDate"
                     [bsConfig]="{showWeekNumbers:false, useUtc: false, dateInputFormat: 'DD/MM/YYYY', minDate:todaysDate, customTodayClass: 'font-weight-bold'}"
                     bsDatepicker [attr.disabled]="isLeadClosed ? true : null"
-                    (bsValueChange)="onChaseDateChange($event)" [ngClass]="{'is-invalid': (formErrors?.nextChaseDate)}">
+                    (bsValueChange)="onChaseDateChange($event)" [ngClass]="{'is-invalid': (formErrors?.nextChaseDate), 'form-control-plaintext': isLeadClosed}">
                   <div class="invalid-feedback">{{formErrors?.nextChaseDate}}</div>
                 </div>
               </div>
@@ -106,11 +109,11 @@
                   </app-staffmember-finder>
                 </div>
               </div>
-              <div class="col-12">
+              <div class="col-12" *ngIf="!isLeadClosed">
                 <div class="form-group">
                   <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" id="closeLead" formControlName="closeLead"
-                      (change)="closeLeadChanged(lead)" [attr.disabled]="isLeadClosed ? true : null">
+                      (change)="closeLeadChanged(lead)">
                     <label class="custom-control-label" for="closeLead">Mark as <span
                         class="badge badge-pill badge-primary">Closed</span></label>
                   </div>
@@ -126,9 +129,8 @@
               [routerLink]="['/property-centre/detail/', lead?.relatedProperty?.propertyId]">
               {{lead?.relatedProperty?.address | formatAddress}}
             </a>
-            <ng-container *ngIf="!isMessageVisible; else noProperty">
-              <button class="btn btn-light btn-sm ml-2" type="button" (click)="removeProperty()"
-                [attr.disabled]="isLeadClosed ? true : null">Remove
+            <ng-container *ngIf="!isMessageVisible && !isLeadClosed">
+              <button class="btn btn-light btn-sm ml-2" type="button" (click)="removeProperty()">Remove
               </button>
             </ng-container>
           </p>
@@ -139,9 +141,9 @@
           </p>
         </ng-template>
         <h5>Notes</h5>
-        <div class="list-group">
+        <div class="list-group" *ngIf="!isLeadClosed">
           <div class="list-group-item add-note py-4">
-            <app-lead-note #leadNote [selectedPerson]="person" [isDisabled]="isLeadClosed ? true : false"
+            <app-lead-note #leadNote [selectedPerson]="person"
               (leadNote)="getNewPersonNote($event)" [noteRequiredWarning]="noteRequiredWarning"
               [isUpdateComplete]="isUpdateComplete"></app-lead-note>
           </div>
@@ -154,9 +156,9 @@
       <div class="container px-lg-4">
         <div class="row justify-content-end w-100 no-gutters">
           <div class="col-sm-10 d-flex">
-            <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
-            <button type="submit" class="btn btn-secondary mr-2"
-              [attr.disabled]="isLeadClosed ? true : null">Save</button>
+            <button (click)="cancel()" type="button" class="btn btn-light mr-2" *ngIf="!isLeadClosed">Cancel</button>
+            <button (click)="cancel()" type="button" class="btn btn-secondary mr-2" *ngIf="isLeadClosed">Close</button>
+            <button type="submit" class="btn btn-secondary mr-2" *ngIf="!isLeadClosed">Save</button>
             <button *ngIf="showSaveAndNext && !leadsListCompleted" (click)="traverseLeads()" type="button"
               class="btn btn-secondary" [isOpen]="leadsListCompleted"
               [tooltip]="leadsListCompleted ? 'You have reached the end of the list' : null || !leadEditForm.valid? errorMessage?.displayMessage : ''"
