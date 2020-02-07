@@ -20,7 +20,6 @@ export class NotesComponent implements OnInit, OnChanges {
   @Input() personNotesData: any;
   @Input() pageNumber: number;
   @Input() bottomReached: boolean;
-  @Input() showNotes: boolean;
   @Input() addressees: any;
   @Input() person: Person;
   @Input() personNotes: ContactNote[];
@@ -117,6 +116,7 @@ export class NotesComponent implements OnInit, OnChanges {
   onScrollUp() {
   }
 
+  // REFACTOR ASAP
   @HostListener('window:scroll', ['$event'])
   onWindowScroll() {
     let scrollHeight: number, totalHeight: number;
@@ -126,17 +126,19 @@ export class NotesComponent implements OnInit, OnChanges {
     const hasNotes = url.includes('showNotes=true');
     if (hasNotes) {
       if (totalHeight >= scrollHeight && !this.bottomReached) {
+        console.log('xxxxxxxxxxxxxxxxxxxx..........', this.notes)
         this.page++;
         if (this.contactPeople && this.contactPeople.length) {
           this.contactGroupService.contactNotePageNumberChanged(this.page);
-
+          console.log('in contact notes..........', this.contactGroupNotes)
         }
         if (this.isPersonNote) {
           this.contactGroupService.personNotePageNumberChanged(this.page);
-
+          console.log('in person notes..........', this.personNotes)
         }
         if (this.isPropertyNote) {
           this.propertyService.propertyNotePageNumberChanged(this.page);
+          console.log('in property notes..........', this.propertyNotes)
         }
       }
     }

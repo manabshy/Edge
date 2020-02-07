@@ -176,7 +176,7 @@
         <div class="col-sm-10">
           <div class="list-group mb-3">
             <ng-container>
-              <a [routerLink]="person?.isNewPerson ? null : ['../../../../detail', person?.personId ]"
+              <a [routerLink]="person?.isNewPerson ? null : ['../../../../detail', person?.personId ]" [queryParams]="{showNotes: true}"
                 class="list-group-item list-group-item-action"
                 *ngFor="let person of contactGroupDetails?.contactPeople ; index as i"
                 [ngClass]="{'new-person': person?.isNewPerson, 'list-group-item-danger': person?.warning && person?.warning?.id !== 1}">
