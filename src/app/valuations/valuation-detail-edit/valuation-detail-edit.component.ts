@@ -444,10 +444,12 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     if (this.isNewValuation) {
       this.toastr.success('Valuation successfully saved');
       this.sharedService.resetUrl(this.valuationId, valuation.valuationEventId);
-      this.router.navigate(['/valuations-register/detail', valuation.valuationEventId, 'edit']);
     } else {
       this.toastr.success('Valuation successfully updated');
     }
+
+    this.router.navigateByUrl('/', { skipLocationChange: true })
+      .then(() => this.router.navigate(['/valuations-register/detail', valuation.valuationEventId, 'edit']));
   }
 
   cancel() {
