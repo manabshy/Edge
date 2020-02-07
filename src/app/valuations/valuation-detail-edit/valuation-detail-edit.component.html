@@ -213,7 +213,7 @@
       </div>
     </div>
     <div class="form-group row">
-      <label for="valuationDuration" class="col-sm-2 col-form-label col-form-label-sm">Values</label>
+      <label for="sellValue" class="col-sm-2 col-form-label col-form-label-sm">Values</label>
       <div class="col-sm-10">
         <div class="card-deck">
           <div class="card">
@@ -259,7 +259,7 @@
           <div class="col-sm-10 d-flex">
             <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
             <button *ngIf="isEditable || isNewValuation" type="submit" class="btn btn-secondary mr-2">Save</button>
-            <button type="button" class="btn btn-secondary" (click)="instructionModal.show()">Instruct</button>
+            <button type="button" class="btn btn-secondary" (click)="instructionModal.show(); startInstruction(valuation)">Instruct</button>
           </div>
         </div>
       </div>
@@ -277,71 +277,73 @@
         </button>
       </div>
       <div class="modal-body">
-        <fieldset class="form-group row">
-          <legend class="col-12 col-form-label text-left">Values</legend>
-          <div class="col-12">
-            <div class="card-deck">
-              <div class="card">
-                <div class="card-body">
-                  <div class="custom-control custom-checkbox form-group">
-                    <input type="checkbox" id="isntructSale" name="isntructSale" class="custom-control-input">
-                    <label class="custom-control-label" for="isntructSale">Instruct</label>
+       <form [formGroup]="instructionForm" (ngSubmit)="saveInstruction()">
+          <fieldset class="form-group row">
+            <legend class="col-12 col-form-label text-left">Values</legend>
+            <div class="col-12">
+              <div class="card-deck">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="custom-control custom-checkbox form-group">
+                      <input type="checkbox" id="isntructSale" name="isntructSale" class="custom-control-input" formControlName="instruct">
+                      <label class="custom-control-label" for="isntructSale">Instruct</label>
+                    </div>
+                    <h5 class="card-title">Sell</h5>
+                    <label class="small" for="sellValue">Value</label>
+                    <input type="text" name="sellValue" id="sellValue" class="form-control form-control-sm" formControlName="suggestedAskingPrice">
                   </div>
-                  <h5 class="card-title">Sell</h5>
-                  <label class="small" for="sellValue">Value</label>
-                  <input type="text" name="sellValue" id="sellValue" class="form-control form-control-sm">
                 </div>
-              </div>
-              <div class="card">
-                <div class="card-body">
-                  <div class="custom-control custom-checkbox form-group">
-                    <input type="checkbox" id="isntructLongLet" name="isntructLongLet" class="custom-control-input">
-                    <label class="custom-control-label" for="isntructLongLet">Instruct</label>
+                <div class="card">
+                  <div class="card-body">
+                    <div class="custom-control custom-checkbox form-group">
+                      <input type="checkbox" id="isntructLongLet" name="isntructLongLet" class="custom-control-input" formControlName="instruct">
+                      <label class="custom-control-label" for="isntructLongLet">Instruct</label>
+                    </div>
+                    <h5 class="card-title">Long Let</h5>
+                    <div class="form-group">
+                      <label class="small" for="longLetValue">Value (per week)</label>
+                      <input type="text" name="longLetValue" id="longLetValue" class="form-control form-control-sm" formControlName="suggestedAskingRentLongLet">
+                    </div>
+                    <label class="small" for="longLetMonthlyValue">Value (per month)</label>
+                    <input type="text" name="longLetMonthlyValue" id="longLetMonthlyValue"
+                      class="form-control form-control-sm" formControlName="suggestedAskingRentLongLetMonthly">
                   </div>
-                  <h5 class="card-title">Long Let</h5>
-                  <div class="form-group">
-                    <label class="small" for="longLetValue">Value (per week)</label>
-                    <input type="text" name="longLetValue" id="longLetValue" class="form-control form-control-sm">
-                  </div>
-                  <label class="small" for="longLetMonthlyValue">Value (per month)</label>
-                  <input type="text" name="longLetMonthlyValue" id="longLetMonthlyValue"
-                    class="form-control form-control-sm">
                 </div>
-              </div>
-              <div class="card">
-                <div class="card-body">
-                  <div class="custom-control custom-checkbox form-group">
-                    <input type="checkbox" id="isntructShortLet" name="isntructShortLet" class="custom-control-input">
-                    <label class="custom-control-label" for="isntructShortLet">Instruct</label>
+                <div class="card">
+                  <div class="card-body">
+                    <div class="custom-control custom-checkbox form-group">
+                      <input type="checkbox" id="isntructShortLet" name="isntructShortLet" class="custom-control-input" formControlName="instruct">
+                      <label class="custom-control-label" for="isntructShortLet">Instruct</label>
+                    </div>
+                    <h5 class="card-title">Short Let</h5>
+                    <div class="form-group">
+                      <label class="small" for="shortLetValue">Value (per week)</label>
+                      <input type="text" name="shortLetValue" id="shortLetValue" class="form-control form-control-sm" formControlName="suggestedAskingRentShortLet">
+                    </div>
+                    <label class="small" for="shortLetMonthlyValue">Value (per month)</label>
+                    <input type="text" name="shortLetMonthlyValue" id="shortLetMonthlyValue"
+                      class="form-control form-control-sm" formControlName="suggestedAskingRentShortLetMonthly">
                   </div>
-                  <h5 class="card-title">Short Let</h5>
-                  <div class="form-group">
-                    <label class="small" for="shortLetValue">Value (per week)</label>
-                    <input type="text" name="shortLetValue" id="shortLetValue" class="form-control form-control-sm">
-                  </div>
-                  <label class="small" for="shortLetMonthlyValue">Value (per month)</label>
-                  <input type="text" name="shortLetMonthlyValue" id="shortLetMonthlyValue"
-                    class="form-control form-control-sm">
                 </div>
               </div>
             </div>
+          </fieldset>
+          <fieldset class="form-group">
+            <legend class="col-form-label text-left">Instruction Type</legend>
+            <div class="custom-control custom-radio">
+              <input type="radio" id="soleAgency" value="Sole Agency" name="instructionType" class="custom-control-input" formControlName="instructionType">
+              <label class="custom-control-label" for="soleAgency">Sole Agency</label>
+            </div>
+            <div class="custom-control custom-radio">
+              <input type="radio" id="multiAgency" value="Multi Agency" name="instructionType" class="custom-control-input" formControlName="instructionType">
+              <label class="custom-control-label" for="multiAgency">Multi Agency</label>
+            </div>
+          </fieldset>
+          <div class="mt-4 text-center">
+            <button type="button" class="btn btn-light mr-2" (click)="instructionModal.hide()">Cancel</button>
+            <button type="submit" class="btn btn-secondary">Instruct</button>
           </div>
-        </fieldset>
-        <fieldset class="form-group">
-          <legend class="col-form-label text-left">Instruction Type</legend>
-          <div class="custom-control custom-radio">
-            <input type="radio" id="soleAgency" name="instructionType" class="custom-control-input">
-            <label class="custom-control-label" for="soleAgency">Sole Agency</label>
-          </div>
-          <div class="custom-control custom-radio">
-            <input type="radio" id="multiAgency" name="instructionType" class="custom-control-input">
-            <label class="custom-control-label" for="multiAgency">Multi Agency</label>
-          </div>
-        </fieldset>
-        <div class="mt-4 text-center">
-          <button type="button" class="btn btn-light mr-2" (click)="instructionModal.hide()">Cancel</button>
-          <button type="button" class="btn btn-secondary">Instruct</button>
-        </div>
+       </form>
       </div>
     </div>
   </div>

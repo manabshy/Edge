@@ -1,11 +1,8 @@
-import { Property, PropertyInfo } from 'src/app/property/shared/property';
-import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
-import { DiaryEvent } from 'src/app/diary/shared/diary';
-import { Person } from 'src/app/shared/models/person';
-import { BaseRequestOption } from 'src/app/shared/models/base-request-option';
 import { Signer } from 'src/app/contactgroups/shared/contact-group';
+import { DiaryEvent } from 'src/app/diary/shared/diary';
 import { BaseProperty } from 'src/app/shared/models/base-property';
-import { StaffMember } from 'src/app/shared/models/staff-member';
+import { BaseRequestOption } from 'src/app/shared/models/base-request-option';
+import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
 
 export interface ValuationInfo {
   reason: string;

@@ -19,6 +19,7 @@ import { BaseProperty } from 'src/app/shared/models/base-property';
 import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
 import { Valuation, ValuationStatusEnum } from '../shared/valuation';
 import { ValuationService } from '../shared/valuation.service';
+import { Instruction } from 'src/app/shared/models/instruction';
 @Component({
   selector: 'app-valuation-detail-edit',
   templateUrl: './valuation-detail-edit.component.html',
@@ -57,6 +58,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   propertyId: number;
   lastKnownOwnerId: number;
   approxLeaseExpiryDate: Date;
+  instructionForm: FormGroup;
+  instruction: Instruction;
 
   get isInvitationSent() {
     return this.valuationForm.get('isInvitationSent') as FormControl;
@@ -103,6 +106,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   ngOnInit() {
     this.setupForm();
+    this.setupInstructionForm();
     this.valuationId = +this.route.snapshot.paramMap.get('id');
     this.propertyId = +this.route.snapshot.queryParamMap.get('propertyId');
     this.lastKnownOwnerId = +this.route.snapshot.queryParamMap.get('lastKnownOwnerId');
@@ -119,7 +123,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.existingProperty = result;
           const baseProperty = { propertyId: this.existingProperty.propertyId, address: this.existingProperty.address } as BaseProperty;
           this.valuationForm.get('property').setValue(baseProperty);
-          console.log('base property', this.valuationForm.get('property').value)
+          console.log('base property', this.valuationForm.get('property').value);
         }
       });
     }
@@ -236,8 +240,18 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       suggestedAskingRentLongLet: [],
       suggestedAskingRentShortLet: [],
       suggestedAskingRentLongLetMonthly: [],
-      suggestedAskingRentShortLetMonthly: [],
-
+      suggestedAskingRentShortLetMonthly: []
+    });
+  }
+  setupInstructionForm() {
+    this.instructionForm = this.fb.group({
+      instruct: [false],
+      instructionType: [''],
+      suggestedAskingPrice: [],
+      suggestedAskingRentLongLet: [],
+      suggestedAskingRentShortLet: [],
+      suggestedAskingRentLongLetMonthly: [],
+      suggestedAskingRentShortLetMonthly: []
     });
   }
 
@@ -295,6 +309,19 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
     console.log('form values', this.valuationForm.value);
     console.log('valuation values', valuation);
+  }
+
+  populateInstructionForm(instruction: Instruction) {
+    if (instruction) {
+      this.instructionForm.patchValue({
+        instructionType: instruction.instructionType,
+        suggestedAskingPrice: instruction.suggestedAskingPrice ? instruction.suggestedAskingPrice : '',
+        suggestedAskingRentLongLet: instruction.suggestedAskingRentLongLet ? instruction.suggestedAskingRentLongLet : '',
+        suggestedAskingRentLongLetMonthly: instruction.suggestedAskingRentLongLetMonthly ? instruction.suggestedAskingRentLongLetMonthly : '',
+        suggestedAskingRentShortLet: instruction.suggestedAskingRentShortLet ? instruction.suggestedAskingRentShortLet : '',
+        suggestedAskingRentShortLetMonthly: instruction.suggestedAskingRentShortLetMonthly ? instruction.suggestedAskingRentShortLetMonthly : ''
+      });
+    }
   }
 
   getSelectedProperty(property: Property) {
@@ -382,6 +409,38 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   }
 
+  startInstruction() {
+    let val: Valuation;
+    val = { ...this.valuation, ...this.valuationForm.value };
+    const instruction = {
+      instructionType: '',
+      suggestedAskingPrice: val.suggestedAskingPrice,
+      suggestedAskingRentShortLet: val.suggestedAskingRentShortLet,
+      suggestedAskingRentLongLet: val.suggestedAskingRentLongLet,
+      suggestedAskingRentShortLetMonthly: val.suggestedAskingRentShortLetMonthly,
+      suggestedAskingRentLongLetMonthly: val.suggestedAskingRentLongLetMonthly
+    } as Instruction;
+    this.instruction = instruction;
+    this.populateInstructionForm(instruction);
+    console.log('instruction form here....', this.instructionForm.value);
+  }
+
+  saveInstruction() {
+    console.log('save instruction here');
+    this.sharedService.logValidationErrors(this.instructionForm, true);
+    if (this.instructionForm.valid) {
+      if (this.instructionForm.dirty) {
+        // save instruction here....
+      } else {
+        // don't save
+      }
+    } else {
+      this.errorMessage = {} as WedgeError;
+      this.errorMessage.displayMessage = 'Please correct validation errors';
+      this.sharedService.showError( this.errorMessage);
+    }
+  }
+
   saveValuation() {
     this.sharedService.logValidationErrors(this.valuationForm, true);
     if (this.valuationForm.valid) {
@@ -394,6 +453,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     } else {
       this.errorMessage = {} as WedgeError;
       this.errorMessage.displayMessage = 'Please correct validation errors';
+      this.sharedService.showError( this.errorMessage);
     }
   }
 
