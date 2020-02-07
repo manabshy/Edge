@@ -46,20 +46,19 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
   }
 
   constructor(private contactGroupService: ContactGroupsService,
-              private sharedService: SharedService,
-              private storage: StorageMap,
-              private infoService: InfoService,
-              private route: ActivatedRoute) {super();}
+    private sharedService: SharedService,
+    private storage: StorageMap,
+    private infoService: InfoService,
+    private route: ActivatedRoute) { super(); }
 
   ngOnInit() {
     this.showNotes = this.route.snapshot.queryParamMap.get('showNotes') === 'true';
-    this.route.params.subscribe(params => {
-      this.personId = params['personId'] || 0;
+    this.personId = +this.route.snapshot.paramMap.get('personId');
+    if (this.personId) {
       this.searchedPersonDetails = null;
       this.searchedPersonContactGroups = null;
       this.init();
-
-    });
+    }
   }
 
   init() {
@@ -150,7 +149,7 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
       } else if (!data.length || data.length < this.pageSize) {
         this.bottomReached = true;
         console.log('data', data);
-        console.log('bottom reached for id',this.personId, 'condition',this.bottomReached);
+        console.log('bottom reached for id', this.personId, 'condition', this.bottomReached);
       }
       // if (data) {
       //   if (page === 1) {
