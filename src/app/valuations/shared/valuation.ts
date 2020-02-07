@@ -61,14 +61,14 @@ export interface ValuationStatus {
 
 export const ValuationStatuses = <ValuationStatus[]>[
   { id: 1, value: 'Incomplete' },
-  { id: 2, value: 'Invited' },
+  { id: 2, value: 'Booked' },
   { id: 3, value: 'Valued' }
 ];
 
 export enum ValuationStatusEnum {
   None = 0,
   Incomplete = 1,
-  Invited = 2,
+  Booked = 2,
   Valued = 3
 }
 
