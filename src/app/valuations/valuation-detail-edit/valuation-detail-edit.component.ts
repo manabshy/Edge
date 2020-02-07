@@ -1,24 +1,24 @@
 import { Component, OnInit } from '@angular/core';
-import { Property, MinBedrooms } from 'src/app/property/shared/property';
-import { Signer } from 'src/app/contactgroups/shared/contact-group';
-import { ValuationService } from '../shared/valuation.service';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Valuation, ValuationStatusEnum } from '../shared/valuation';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { StorageMap } from '@ngx-pwa/local-storage';
-import { InfoDetail, DropdownListInfo } from 'src/app/core/services/info.service';
-import { PropertyService } from 'src/app/property/shared/property.service';
-import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
-import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
-import { ToastrService } from 'ngx-toastr';
-import { FormErrors } from 'src/app/core/shared/app-constants';
-import { debounceTime, takeUntil } from 'rxjs/operators';
-import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
-import { StaffMemberService } from 'src/app/core/services/staff-member.service';
-import { BaseComponent } from 'src/app/shared/models/base-component';
-import { BaseProperty } from 'src/app/shared/models/base-property';
 import addYears from 'date-fns/add_years';
 import differenceInCalendarYears from 'date-fns/difference_in_calendar_years';
+import { ToastrService } from 'ngx-toastr';
+import { debounceTime, takeUntil } from 'rxjs/operators';
+import { Signer } from 'src/app/contactgroups/shared/contact-group';
+import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
+import { DropdownListInfo, InfoDetail } from 'src/app/core/services/info.service';
+import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
+import { StaffMemberService } from 'src/app/core/services/staff-member.service';
+import { FormErrors } from 'src/app/core/shared/app-constants';
+import { MinBedrooms, Property } from 'src/app/property/shared/property';
+import { PropertyService } from 'src/app/property/shared/property.service';
+import { BaseComponent } from 'src/app/shared/models/base-component';
+import { BaseProperty } from 'src/app/shared/models/base-property';
+import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
+import { Valuation, ValuationStatusEnum } from '../shared/valuation';
+import { ValuationService } from '../shared/valuation.service';
 @Component({
   selector: 'app-valuation-detail-edit',
   templateUrl: './valuation-detail-edit.component.html',
@@ -220,15 +220,15 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       bedrooms: [0],
       bathrooms: [0],
       receptions: [0],
-      sqFoot: [0],
+      sqFt: [0],
       tenureId: [0],
       outsideSpace: [null],
       parking: [null],
       propertyFeature: [null],
       approxLeaseExpiryDate: [null],
       valuer: [''],
-      isInvitationSent: false,
-      totalHours: [0],
+      isInvitationSent: true,
+      totalHours: [1],
       attendees: [''],
       searchAttendeeId: null,
       valuationDate: [''],
@@ -247,7 +247,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.showCalendar = true;
     this.showOnlyMainStaffMember = true;
     this.valuationForm.get('valuer').setValue(staffMember);
-    // this.valuation.valuer = staffMember as unknown as BaseStaffMember;
   }
 
   getValuation(id: number) {
@@ -256,7 +255,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.valuation = data;
         this.valuation.valuationStatus === 3 ? this.isEditable = false : this.isEditable = true;
         this.valuation.approxLeaseExpiryDate ? this.showLeaseExpiryDate = true : this.showLeaseExpiryDate = false;
-        this.setLeaseExpiryDate();
         this.lastKnownOwner = this.valuation.propertyOwner;
         this.existingProperty = this.valuation.property;
         this.attendees = this.valuation.attendees;
@@ -279,8 +277,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         bathrooms: valuation.bathrooms,
         receptions: valuation.receptions,
         tenureId: valuation.tenureId,
-        // approxLeaseExpiryDate: valuation.approxLeaseExpiryDate,
-        sqFoot: valuation.sqFt,
+        approxLeaseExpiryDate: this.changeLeaseExpiryDateToYears(valuation.approxLeaseExpiryDate),
+        sqFt: valuation.sqFt,
         outsideSpace: valuation.outsideSpace,
         parking: valuation.parking,
         propertyFeature: valuation.propertyFeature,
@@ -401,8 +399,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   addOrUpdateValuation() {
     this.setLeaseExpiryDate();
-    const valuation = { ...this.valuation, ...this.valuationForm.value };
     this.isSubmitting = true;
+    const valuation = { ...this.valuation, ...this.valuationForm.value };
+    this.approxLeaseExpiryDateValue ? valuation.approxLeaseExpiryDate = this.approxLeaseExpiryDateValue
+                                    : this.valuation.approxLeaseExpiryDate = null;
 
     if (this.isNewValuation) {
       this.isInvitationSent.value ? valuation.valuationStatus = ValuationStatusEnum.Booked
@@ -428,23 +428,16 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   private setLeaseExpiryDate() {
-
     if (this.valuationForm.get('approxLeaseExpiryDate').value) {
       const leaseExpiryDateInYears = +this.valuationForm.get('approxLeaseExpiryDate').value;
       this.approxLeaseExpiryDateValue = addYears(new Date(), leaseExpiryDateInYears);
-      // this.valuation.approxLeaseExpiryDate = this.approxLeaseExpiryDateValue;
-      console.log('lease year', this.approxLeaseExpiryDateValue);
-      this.valuationForm.get('approxLeaseExpiryDate').setValue(this.approxLeaseExpiryDateValue);
-      console.log('lease year control', this.valuationForm.get('approxLeaseExpiryDate').value);
-      return;
     }
-    if (this.valuation.approxLeaseExpiryDate) {
-      const leaseExpiryDateValue = differenceInCalendarYears(this.valuation.approxLeaseExpiryDate, new Date());
-      console.log('lease in numbers', this.approxLeaseExpiryDateValue);
-      this.valuationForm.get('approxLeaseExpiryDate').setValue(leaseExpiryDateValue);
-      return;
-    }
+
   }
+  private changeLeaseExpiryDateToYears(approxLeaseExpiryDate: string | number | Date) {
+    return differenceInCalendarYears(approxLeaseExpiryDate, new Date());
+  }
+
   onSaveComplete(valuation?: Valuation) {
     this.valuationForm.markAsPristine();
     this.isSubmitting = false;
