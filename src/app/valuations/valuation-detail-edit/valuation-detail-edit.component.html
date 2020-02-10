@@ -7,38 +7,38 @@
   </div>
   <form [formGroup]="valuationForm" (ngSubmit)="saveValuation()">
     <app-property-finder label="Property" [createdProperty]="createdProperty" [existingProperty]=existingProperty
-      (selectedProperty)="getSelectedProperty($event)"></app-property-finder>
+      (selectedProperty)="getSelectedProperty($event)" [readOnly]="!isEditable"></app-property-finder>
     <app-signer label="Last known owner" [createdSigner]="createdSigner" [existingSigner]="lastKnownOwner"
-      (selectedSigner)="getSelectedOwner($event)" (newSigner)="createNewSigner($event)"></app-signer>
-    <div class="form-group row">
+      (selectedSigner)="getSelectedOwner($event)" (newSigner)="createNewSigner($event)" [readOnly]="!isEditable"></app-signer>
+    <div class="form-group row" *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value)">
       <label for="reason" class="col-sm-2 col-form-label col-form-label-sm">Why?</label>
       <div class="col-sm-10">
         <textarea class="form-control form-control-sm" name="reason" id="reason" cols="30" rows="3"
-          formControlName="reason" [ngClass]="{'is-invalid': (formErrors?.reason)}"></textarea>
+          formControlName="reason" [attr.disabled]="!isEditable ? true : null" [ngClass]="{'is-invalid': (formErrors?.reason), 'form-control-plaintext': !isEditable}"></textarea>
         <div class="invalid-feedback">{{formErrors?.reason}}</div>
       </div>
     </div>
-    <div class="form-group row">
+    <div class="form-group row" *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('timeFrame').value)">
       <label for="timeFrame" class="col-sm-2 col-form-label col-form-label-sm">When?</label>
       <div class="col-sm-10">
         <textarea class="form-control form-control-sm" name="timeFrame" id="timeFrame" cols="30" rows="3"
-          formControlName="timeFrame" [ngClass]="{'is-invalid': (formErrors?.timeFrame)}"></textarea>
+          formControlName="timeFrame" [attr.disabled]="!isEditable ? true : null" [ngClass]="{'is-invalid': (formErrors?.timeFrame), 'form-control-plaintext': !isEditable}"></textarea>
         <div class="invalid-feedback">{{formErrors?.timeFrame}}</div>
       </div>
     </div>
-    <div class="form-group row">
+    <div class="form-group row" *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('marketChat').value)">
       <label for="marketChat" class="col-sm-2 col-form-label col-form-label-sm">Market Chat</label>
       <div class="col-sm-10">
         <textarea class="form-control form-control-sm" name="marketChat" id="marketChat" cols="30" rows="3"
-          formControlName="marketChat" [ngClass]="{'is-invalid': (formErrors?.marketChat)}"></textarea>
+          formControlName="marketChat" [attr.disabled]="!isEditable ? true : null" [ngClass]="{'is-invalid': (formErrors?.marketChat), 'form-control-plaintext': !isEditable}"></textarea>
         <div class="invalid-feedback">{{formErrors?.marketChat}}</div>
       </div>
     </div>
-    <div class="form-group row">
+    <div class="form-group row" *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('generalNotes').value)">
       <label for="generalNotes" class="col-sm-2 col-form-label col-form-label-sm">Property Notes</label>
       <div class="col-sm-10">
         <textarea class="form-control form-control-sm" name="generalNotes" id="generalNotes" cols="30" rows="3"
-          formControlName="generalNotes" [ngClass]="{'is-invalid': (formErrors?.generalNotes)}"></textarea>
+          formControlName="generalNotes" [attr.disabled]="!isEditable ? true : null" [ngClass]="{'is-invalid': (formErrors?.generalNotes), 'form-control-plaintext': !isEditable}"></textarea>
         <div class="invalid-feedback">{{formErrors?.generalNotes}}</div>
       </div>
     </div>
@@ -48,39 +48,45 @@
         <div class="row">
           <div class="col-sm form-group">
             <label class="small" for="bedrooms">Bedrooms</label>
-            <select class="form-control form-control-sm" name="bedrooms" id="bedrooms" formControlName="bedrooms">
-              <option value="0"></option>
+            <select class="form-control form-control-sm" name="bedrooms" id="bedrooms" formControlName="bedrooms"
+              [attr.disabled]="!isEditable ? true : null" [ngClass]="{'form-control-plaintext': !isEditable}">
+              <option value="0">Not Known</option>
               <option *ngFor="let bedroom of rooms" [value]='bedroom.id'> {{bedroom.name}}</option>
             </select>
           </div>
           <div class="col-sm form-group">
             <label class="small" for="bathrooms">Bathrooms</label>
-            <select class="form-control form-control-sm" name="bathrooms" id="bathrooms" formControlName="bathrooms">
-              <option value="0"></option>
+            <select class="form-control form-control-sm" name="bathrooms" id="bathrooms" formControlName="bathrooms"
+              [attr.disabled]="!isEditable ? true : null" [ngClass]="{'form-control-plaintext': !isEditable}">
+              <option value="0">Not Known</option>
               <option *ngFor="let bathroom of rooms" [value]='bathroom.id'> {{bathroom.name}}</option>
             </select>
           </div>
           <div class="col-sm form-group">
             <label class="small" for="receptions">Receptions</label>
-            <select class="form-control form-control-sm" name="receptions" id="receptions" formControlName="receptions">
-              <option value="0"></option>
+            <select class="form-control form-control-sm" name="receptions" id="receptions" formControlName="receptions"
+              [attr.disabled]="!isEditable ? true : null" [ngClass]="{'form-control-plaintext': !isEditable}">
+              <option value="0">Not Known</option>
               <option *ngFor="let bathroom of rooms" [value]='bathroom.id'> {{bathroom.name}}</option>
             </select>
           </div>
           <div class="col-sm form-group">
             <label class="small" for="sqFt">Sq. Foot</label>
-            <input type="text" name="sqFt" id="sqFt" class="form-control form-control-sm" formControlName="sqFt">
+            <input type="text" name="sqFt" id="sqFt" class="form-control form-control-sm" formControlName="sqFt"
+              [attr.disabled]="!isEditable ? true : null" [ngClass]="{'form-control-plaintext': !isEditable}">
           </div>
           <div class="form-group" [ngClass]="showLeaseExpiryDate ? 'col-sm-auto' : 'col-sm'">
             <label class="small" for="tenureId">Tenure</label>
             <div class="input-group input-group-sm">
               <select class="form-control single-select" name="tenureId" id="tenureId" formControlName="tenureId"
-                (change)="onTenureChange($event.target.value)">
-                <option value="0"></option>
+                (change)="onTenureChange($event.target.value)"
+                [attr.disabled]="!isEditable ? true : null" [ngClass]="{'form-control-plaintext': !isEditable}">
+                <option value="0">Not Known</option>
                 <option *ngFor="let tenure of tenures" [value]='tenure.id'> {{tenure.value}}</option>
               </select>
               <input class="form-control" type="text" name="approxLeaseExpiryDate" *ngIf="showLeaseExpiryDate" aria-label="length"
-                placeholder="Length ..." id="approxLeaseExpiryDate" formControlName="approxLeaseExpiryDate">
+                placeholder="Length ..." id="approxLeaseExpiryDate" formControlName="approxLeaseExpiryDate"
+                [attr.disabled]="!isEditable ? true : null" [ngClass]="{'form-control-plaintext': !isEditable}">
             </div>
           </div>
         </div>
@@ -88,7 +94,7 @@
           <div class="col-sm form-group">
             <label class="small" for="outsideSpace">Outside Space</label>
             <ng-select [items]="outsideSpaces" [multiple]="true" bindLabel="value" groupBy="gender"
-              [selectableGroup]="true" [closeOnSelect]="false" bindValue="id" formControlName="outsideSpace">
+              [selectableGroup]="true" [closeOnSelect]="false" [readonly]="!isEditable" bindValue="id" formControlName="outsideSpace">
               <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
                 <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.gender | uppercase}}
               </ng-template>
@@ -100,7 +106,7 @@
           <div class="col-sm form-group">
             <label class="small" for="Parking">Parking</label>
             <ng-select [items]="parkings" [multiple]="true" bindLabel="value" groupBy="gender" [selectableGroup]="true"
-              [closeOnSelect]="false" bindValue="id" formControlName="parking">
+              [closeOnSelect]="false" [readonly]="!isEditable" bindValue="id" formControlName="parking">
               <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
                 <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.gender | uppercase}}
               </ng-template>
@@ -112,7 +118,7 @@
           <div class="col-sm form-group">
             <label class="small" for="features">Features</label>
             <ng-select [items]="features" [multiple]="true" bindLabel="value" groupBy="gender" [selectableGroup]="true"
-              [closeOnSelect]="false" bindValue="id" formControlName="propertyFeature">
+              [closeOnSelect]="false" [readonly]="!isEditable" bindValue="id" formControlName="propertyFeature">
               <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
                 <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.gender | uppercase}}
               </ng-template>
@@ -129,7 +135,7 @@
       <div class="col-sm-10">
         <p *ngIf="showOnlyMainStaffMember; else allMain" class="d-flex d-sm-block">
           <small class="text-left mobile-btn">{{mainStaffMember?.fullName || valuation.valuer?.fullName}}</small>
-          <button class="btn btn-light btn-sm ml-2" type="button" (click)="showValuersList()"> Change
+          <button class="btn btn-light btn-sm ml-2" type="button" (click)="showValuersList()" *ngIf="isEditable || isNewValuation"> Change
           </button>
         </p>
         <ng-template #allMain>
@@ -154,9 +160,9 @@
         </div>
         <p *ngFor="let attendee of attendees" class="d-flex d-sm-block">
           <button class="btn btn-light btn-sm mr-2" type="button" (click)="removeAttendee(attendee?.staffMemberId)"
-            aria-label="remove"><span aria-hidden="true">&times;</span></button>
+            aria-label="remove" *ngIf="isEditable || isNewValuation"><span aria-hidden="true">&times;</span></button>
           <small class="text-left mobile-btn">{{attendee.fullName}}</small>
-          <button class="btn btn-light btn-sm ml-2" type="button" (click)="setMain(attendee)">Set as
+          <button class="btn btn-light btn-sm ml-2" type="button" (click)="setMain(attendee)" *ngIf="isEditable || isNewValuation">Set as
             main</button>
         </p>
       </div>
