@@ -258,11 +258,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       instructShortLet: [false],
       instructLongLet: [false],
       instructionType: [''],
-      suggestedAskingPrice: [],
-      suggestedAskingRentLongLet: [],
-      suggestedAskingRentShortLet: [],
-      suggestedAskingRentLongLetMonthly: [],
-      suggestedAskingRentShortLetMonthly: []
+      askingPrice: [],
+      askingRentLongLet: [],
+      askingRentShortLet: [],
+      askingRentLongLetMonthly: [],
+      askingRentShortLetMonthly: []
     });
   }
 
@@ -324,11 +324,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     if (instruction) {
       this.instructionForm.patchValue({
         instructionType: instruction.instructionType,
-        suggestedAskingPrice: instruction.suggestedAskingPrice ? instruction.suggestedAskingPrice : '',
-        suggestedAskingRentLongLet: instruction.suggestedAskingRentLongLet ? instruction.suggestedAskingRentLongLet : '',
-        suggestedAskingRentLongLetMonthly: instruction.suggestedAskingRentLongLetMonthly ? instruction.suggestedAskingRentLongLetMonthly : '',
-        suggestedAskingRentShortLet: instruction.suggestedAskingRentShortLet ? instruction.suggestedAskingRentShortLet : '',
-        suggestedAskingRentShortLetMonthly: instruction.suggestedAskingRentShortLetMonthly ? instruction.suggestedAskingRentShortLetMonthly : ''
+        askingPrice: instruction.askingPrice ? instruction.askingPrice : '',
+        askingRentLongLet: instruction.askingRentLongLet ? instruction.askingRentLongLet : '',
+        askingRentLongLetMonthly: instruction.askingRentLongLetMonthly ? instruction.askingRentLongLetMonthly : '',
+        askingRentShortLet: instruction.askingRentShortLet ? instruction.askingRentShortLet : '',
+        askingRentShortLetMonthly: instruction.askingRentShortLetMonthly ? instruction.askingRentShortLetMonthly : ''
       });
     }
   }
@@ -422,12 +422,13 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     let val: Valuation;
     val = { ...this.valuation, ...this.valuationForm.value };
     const instruction = {
+      valuationEventId: val.valuationEventId,
       instructionType: '',
-      suggestedAskingPrice: val.suggestedAskingPrice,
-      suggestedAskingRentShortLet: val.suggestedAskingRentShortLet,
-      suggestedAskingRentLongLet: val.suggestedAskingRentLongLet,
-      suggestedAskingRentShortLetMonthly: val.suggestedAskingRentShortLetMonthly,
-      suggestedAskingRentLongLetMonthly: val.suggestedAskingRentLongLetMonthly
+      askingPrice: val.suggestedAskingPrice,
+      askingRentShortLet: val.suggestedAskingRentShortLet,
+      askingRentLongLet: val.suggestedAskingRentLongLet,
+      askingRentShortLetMonthly: val.suggestedAskingRentShortLetMonthly,
+      askingRentLongLetMonthly: val.suggestedAskingRentLongLetMonthly
     } as Instruction;
     this.instruction = instruction;
     this.populateInstructionForm(instruction);
