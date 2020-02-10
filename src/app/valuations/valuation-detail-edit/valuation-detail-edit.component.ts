@@ -5,7 +5,7 @@ import { StorageMap } from '@ngx-pwa/local-storage';
 import addYears from 'date-fns/add_years';
 import differenceInCalendarYears from 'date-fns/difference_in_calendar_years';
 import { ToastrService } from 'ngx-toastr';
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import { debounceTime, takeUntil, distinctUntilChanged } from 'rxjs/operators';
 import { Signer } from 'src/app/contactgroups/shared/contact-group';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { DropdownListInfo, InfoDetail } from 'src/app/core/services/info.service';
@@ -79,6 +79,21 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
   get longLetMonthlyControl() {
     return this.valuationForm.get('suggestedAskingRentLongLetMonthly') as FormControl;
+  }
+  get instAskingPriceControl() {
+    return this.instructionForm.get('askingPrice') as FormControl;
+  }
+  get instShortLetWeeklyControl() {
+    return this.instructionForm.get('askingRentShortLet') as FormControl;
+  }
+  get instLongLetWeeklyControl() {
+    return this.instructionForm.get('askingRentLongLet') as FormControl;
+  }
+  get instShortLetMonthlyControl() {
+    return this.instructionForm.get('askingRentShortLetMonthly') as FormControl;
+  }
+  get instLongLetMonthlyControl() {
+    return this.instructionForm.get('askingRentLongLetMonthly') as FormControl;
   }
 
   get rooms() {
@@ -166,39 +181,64 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.setRentFigures();
       });
 
+    this.instructionForm.valueChanges.pipe(debounceTime(400), distinctUntilChanged())
+      .subscribe((data) => {
+        this.sharedService.logValidationErrors(this.instructionForm, false);
+        this.setInstructionFormValidators();
+        this.setInstructionRentFigures();
+      });
+
+  }
+  setInstructionRentFigures() {
+   if (this.instShortLetWeeklyControl.value) {
+     this.setMonthlyRent(this.instShortLetWeeklyControl, this.instShortLetMonthlyControl);
+   }
+   if (this.instLongLetWeeklyControl.value) {
+     this.setMonthlyRent(this.instLongLetWeeklyControl, this.instLongLetMonthlyControl);
+   }
+   if (this.instShortLetMonthlyControl.value) {
+     this.setWeeklyRent(this.instShortLetWeeklyControl, this.instShortLetMonthlyControl);
+   }
+   if (this.instLongLetMonthlyControl.value) {
+     this.setWeeklyRent(this.instLongLetWeeklyControl, this.instLongLetMonthlyControl);
+   }
+  }
+
+  setupInitialRentFigures(val: Valuation) {
+    if (val.suggestedAskingRentShortLet) {
+      this.shortLetMonthlyControl.setValue(+val.suggestedAskingRentShortLet * 4);
+    }
+    if (val.suggestedAskingRentLongLet) {
+      this.longLetMonthlyControl.setValue(+val.suggestedAskingRentLongLet * 4);
+    }
+    if (val.suggestedAskingRentShortLetMonthly) {
+      this.shortLetWeeklyControl.setValue(+val.suggestedAskingRentShortLetMonthly / 4);
+    }
+    if (val.suggestedAskingRentLongLetMonthly) {
+      this.longLetWeeklyControl.setValue(+val.suggestedAskingRentLongLetMonthly / 4);
+    }
+
   }
 
   setRentFigures() {
-
     if (this.shortLetWeeklyControl.value) {
+      console.log('in short let weekly...............', this.shortLetWeeklyControl.value);
       this.setShortMonthlyRent();
     }
     if (this.shortLetMonthlyControl.value) {
-      this.setShortLetWeeklyRent()
+      console.log('in short let monthly...............', this.shortLetMonthlyControl.value);
+      this.setShortLetWeeklyRent();
     }
     if (this.longLetWeeklyControl.value) {
+      console.log('in long let weekly...............', this.longLetWeeklyControl.value);
       this.setLongLetMonthlyRent();
     }
     if (this.longLetMonthlyControl.value) {
       this.setLongLetWeeklyRent();
-      console.log('long let weekly', this.longLetWeeklyControl.value)
+      console.log('in long let weekly', this.longLetMonthlyControl.value);
     }
-    // switch (true) {
-    //   case !!this.shortLetWeeklyControl.value:
-    //     this.setShortMonthlyRent();
-    //     console.log('short let monthly', this.shortLetMonthlyControl.value)
-    //     break;
-    //   case !!this.shortLetMonthlyControl.value:
-    //     this.setShortLetWeeklyRent();
-    //     break;
-    //   case !!this.longLetWeeklyControl.value:
-    //     this.setLongLetMonthlyRent();
-    //     break;
-    //   case !!this.longLetMonthlyControl.value:
-    //     this.setLongLetWeeklyRent();
-    //     console.log('long let weekly', this.longLetWeeklyControl.value)
-    // }
   }
+
   private setShortLetWeeklyRent() {
     this.shortLetMonthlyControl.valueChanges
       .subscribe(shortLetMonthly => {
@@ -214,12 +254,23 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   private setLongLetMonthlyRent() {
     this.longLetWeeklyControl.valueChanges
-      .subscribe(longLet => this.longLetMonthlyControl.setValue(+longLet * 4, { emitEvent: false }));
+      .subscribe(longLet => {
+        this.longLetMonthlyControl.setValue(+longLet * 4, { emitEvent: false });
+      });
   }
 
   private setShortMonthlyRent() {
     this.shortLetWeeklyControl.valueChanges
       .subscribe(shortLet => this.shortLetMonthlyControl.setValue(+shortLet * 4, { emitEvent: false }));
+  }
+
+  private setMonthlyRent(weeklyControl: FormControl, monthlyControl: FormControl) {
+    weeklyControl.valueChanges
+      .subscribe(rent => monthlyControl.setValue(+rent * 4, { emitEvent: false }));
+  }
+  private setWeeklyRent(weeklyControl: FormControl, monthlyControl: FormControl) {
+    monthlyControl.valueChanges
+      .subscribe(rent => weeklyControl.setValue(+rent / 4, { emitEvent: false }));
   }
 
   setupForm() {
@@ -285,6 +336,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.attendees = this.valuation.attendees ? this.valuation.attendees : [];
         this.valuation.valuer.fullName ? this.showOnlyMainStaffMember = true : this.showOnlyMainStaffMember = false;
         this.populateForm(data);
+        this.setupInitialRentFigures(data);
       }
     }));
   }
@@ -435,19 +487,60 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     console.log('instruction form here....', this.instructionForm.value);
   }
 
+  setInstructionFormValidators() {
+    this.setAskingPriceValidator();
+    this.setShortLetRentValidator();
+    this.setLongLetRentValidator();
+  }
+
+  private setLongLetRentValidator() {
+    if (this.instructionForm.get('instructLongLet').value && this.instLongLetWeeklyControl.value === '') {
+      this.instLongLetWeeklyControl.setValidators(Validators.required);
+      this.instLongLetWeeklyControl.updateValueAndValidity();
+    } else {
+      this.instLongLetWeeklyControl.clearValidators();
+      this.instLongLetWeeklyControl.updateValueAndValidity();
+    }
+  }
+
+  private setShortLetRentValidator() {
+    if (this.instructionForm.get('instructShortLet').value && this.instShortLetWeeklyControl.value === '') {
+      this.instShortLetWeeklyControl.setValidators(Validators.required);
+      this.instShortLetWeeklyControl.updateValueAndValidity();
+    } else {
+      this.instShortLetWeeklyControl.clearValidators();
+      this.instShortLetWeeklyControl.updateValueAndValidity();
+    }
+  }
+
+  private setAskingPriceValidator() {
+    if (this.instructionForm.get('instructSale').value && this.instAskingPriceControl.value === '') {
+      this.instAskingPriceControl.setValidators(Validators.required);
+      this.instAskingPriceControl.updateValueAndValidity();
+    } else {
+      this.instAskingPriceControl.clearValidators();
+      this.instAskingPriceControl.updateValueAndValidity();
+    }
+  }
+
   saveInstruction() {
-    console.log('save instruction here');
+    this.setInstructionFormValidators();
     this.sharedService.logValidationErrors(this.instructionForm, true);
     if (this.instructionForm.valid) {
       if (this.instructionForm.dirty) {
-        // save instruction here....
+        this.isSubmitting = true;
+        const instruction = { ...this.instruction, ...this.instructionForm.value };
+        this.valuationService.addInstruction(instruction).subscribe(result => {
+          this.onInstructionSaveComplete(result);
+        });
+        console.log('instruction form to save', this.instructionForm.value);
       } else {
-        // don't save
+        this.onInstructionSaveComplete();
       }
     } else {
       this.errorMessage = {} as WedgeError;
       this.errorMessage.displayMessage = 'Please correct validation errors';
-      this.sharedService.showError(this.errorMessage);
+      // this.sharedService.showError(this.errorMessage);
     }
   }
 
@@ -522,9 +615,24 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       .then(() => this.router.navigate(['/valuations-register/detail', valuation.valuationEventId, 'edit']));
   }
 
+  onInstructionSaveComplete(propertyId?: number) {
+    this.instructionForm.markAsPristine();
+    this.isSubmitting = false;
+    this.errorMessage = null;
+    this.toastr.success('Instruction successfully saved');
+    if (propertyId) {
+      this.router.navigate(['/property-centre/detail', propertyId]);
+    }
+  }
+
   cancel() {
     this.sharedService.resetForm(this.valuationForm);
     this.sharedService.back();
+  }
+
+  cancelInstruction() {
+    console.log('cancel inst', this.instructionForm.value);
+    this.sharedService.resetForm(this.instructionForm);
   }
 
   canDeactivate(): boolean {

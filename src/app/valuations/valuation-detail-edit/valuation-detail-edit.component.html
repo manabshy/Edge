@@ -277,7 +277,7 @@
         </button>
       </div>
       <div class="modal-body">
-       <form [formGroup]="instructionForm" (ngSubmit)="saveInstruction()">
+       <form [formGroup]="instructionForm" (ngSubmit)="saveInstruction()" autocompleteOff>
           <fieldset class="form-group row">
             <legend class="col-12 col-form-label text-left">Values</legend>
             <div class="col-12">
@@ -290,7 +290,8 @@
                     </div>
                     <h5 class="card-title">Sell</h5>
                     <label class="small" for="sellValue">Value</label>
-                    <input type="text" name="sellValue" id="sellValue" class="form-control form-control-sm" formControlName="askingPrice">
+                    <input type="text" name="sellValue" id="sellValue" class="form-control form-control-sm" formControlName="askingPrice" [ngClass]="{'is-invalid':formErrors.askingPrice}">
+                    <span class="invalid-feedback">{{formErrors?.askingPrice}}</span>
                   </div>
                 </div>
                 <div class="card">
@@ -302,7 +303,8 @@
                     <h5 class="card-title">Long Let</h5>
                     <div class="form-group">
                       <label class="small" for="longLetValue">Value (per week)</label>
-                      <input type="text" name="longLetValue" id="longLetValue" class="form-control form-control-sm" formControlName="askingRentLongLet">
+                      <input type="text" name="longLetValue" id="longLetValue" class="form-control form-control-sm" formControlName="askingRentLongLet" [ngClass]="{'is-invalid':formErrors.askingRentLongLet}">
+                      <span class="invalid-feedback">{{formErrors?.askingRentLongLet}}</span>
                     </div>
                     <label class="small" for="longLetMonthlyValue">Value (per month)</label>
                     <input type="text" name="longLetMonthlyValue" id="longLetMonthlyValue"
@@ -318,7 +320,8 @@
                     <h5 class="card-title">Short Let</h5>
                     <div class="form-group">
                       <label class="small" for="shortLetValue">Value (per week)</label>
-                      <input type="text" name="shortLetValue" id="shortLetValue" class="form-control form-control-sm" formControlName="askingRentShortLet">
+                      <input type="text" name="shortLetValue" id="shortLetValue" class="form-control form-control-sm" formControlName="askingRentShortLet" [ngClass]="{'is-invalid':formErrors.askingRentShortLet}">
+                      <span class="invalid-feedback">{{formErrors?.askingRentShortLet}}</span>
                     </div>
                     <label class="small" for="shortLetMonthlyValue">Value (per month)</label>
                     <input type="text" name="shortLetMonthlyValue" id="shortLetMonthlyValue"
@@ -331,16 +334,16 @@
           <fieldset class="form-group">
             <legend class="col-form-label text-left">Instruction Type</legend>
             <div class="custom-control custom-radio">
-              <input type="radio" id="soleAgency" value="Sole Agency" name="instructionType" class="custom-control-input" formControlName="instructionType">
+              <input type="radio" id="soleAgency" value="1" name="instructionType" class="custom-control-input" formControlName="instructionType">
               <label class="custom-control-label" for="soleAgency">Sole Agency</label>
             </div>
             <div class="custom-control custom-radio">
-              <input type="radio" id="multiAgency" value="Multi Agency" name="instructionType" class="custom-control-input" formControlName="instructionType">
+              <input type="radio" id="multiAgency" value="2" name="instructionType" class="custom-control-input" formControlName="instructionType">
               <label class="custom-control-label" for="multiAgency">Multi Agency</label>
             </div>
           </fieldset>
           <div class="mt-4 text-center">
-            <button type="button" class="btn btn-light mr-2" (click)="instructionModal.hide()">Cancel</button>
+            <button type="button" class="btn btn-light mr-2" (click)="instructionModal.hide(); cancelInstruction()">Cancel</button>
             <button type="submit" class="btn btn-secondary">Instruct</button>
           </div>
        </form>

@@ -73,6 +73,9 @@ export const FormErrors = {
   'timeFrame': '',
   'marketChat': '',
   'generalNotes': '',
+  'askingPrice': '',
+  'askingRentShortLet': '',
+  'askingRentLongLet': '',
 };
 export const ValidationMessages = {
   'searchTerm': {
@@ -180,6 +183,15 @@ export const ValidationMessages = {
   },
   'generalNotes': {
     required: 'Property note is required'
+  },
+  'askingPrice': {
+    required: 'Asking sale price is required'
+  },
+  'askingRentShortLet': {
+    required: 'Short let rent is required'
+  },
+  'askingRentLongLet': {
+    required: 'Long let rent is required'
   }
   // 'invalidPhoneNumber': {
   //   required: 'Phone is required',
