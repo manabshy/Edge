@@ -185,9 +185,23 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       .subscribe((data) => {
         this.sharedService.logValidationErrors(this.instructionForm, false);
         this.setInstructionFormValidators();
-        // this.setRentFigures();
+        this.setInstructionRentFigures();
       });
 
+  }
+  setInstructionRentFigures() {
+   if (this.instShortLetWeeklyControl.value) {
+     this.setMonthlyRent(this.instShortLetWeeklyControl, this.instShortLetMonthlyControl);
+   }
+   if (this.instLongLetWeeklyControl.value) {
+     this.setMonthlyRent(this.instLongLetWeeklyControl, this.instLongLetMonthlyControl);
+   }
+   if (this.instShortLetMonthlyControl.value) {
+     this.setWeeklyRent(this.instShortLetWeeklyControl, this.instShortLetMonthlyControl);
+   }
+   if (this.instLongLetMonthlyControl.value) {
+     this.setWeeklyRent(this.instLongLetWeeklyControl, this.instLongLetMonthlyControl);
+   }
   }
 
   setupInitialRentFigures(val: Valuation) {
@@ -248,6 +262,15 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   private setShortMonthlyRent() {
     this.shortLetWeeklyControl.valueChanges
       .subscribe(shortLet => this.shortLetMonthlyControl.setValue(+shortLet * 4, { emitEvent: false }));
+  }
+
+  private setMonthlyRent(weeklyControl: FormControl, monthlyControl: FormControl) {
+    weeklyControl.valueChanges
+      .subscribe(rent => monthlyControl.setValue(+rent * 4, { emitEvent: false }));
+  }
+  private setWeeklyRent(weeklyControl: FormControl, monthlyControl: FormControl) {
+    monthlyControl.valueChanges
+      .subscribe(rent => weeklyControl.setValue(+rent / 4, { emitEvent: false }));
   }
 
   setupForm() {
