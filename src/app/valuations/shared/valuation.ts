@@ -59,14 +59,18 @@ export interface ValuationStatus {
 export const ValuationStatuses = <ValuationStatus[]>[
   { id: 1, value: 'Incomplete' },
   { id: 2, value: 'Booked' },
-  { id: 3, value: 'Valued' }
+  { id: 3, value: 'Valued' },
+  { id: 4, value: 'Instructed' },
+  { id: 5, value: 'Cancelled' }
 ];
 
 export enum ValuationStatusEnum {
   None = 0,
   Incomplete = 1,
   Booked = 2,
-  Valued = 3
+  Valued = 3,
+  Instructed = 4,
+  Cancelled = 5
 }
 
 export function getValuationStatuses() {
