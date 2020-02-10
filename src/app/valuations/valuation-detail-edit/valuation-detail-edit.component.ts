@@ -190,18 +190,18 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   }
   setInstructionRentFigures() {
-   if (this.instShortLetWeeklyControl.value) {
-     this.setMonthlyRent(this.instShortLetWeeklyControl, this.instShortLetMonthlyControl);
-   }
-   if (this.instLongLetWeeklyControl.value) {
-     this.setMonthlyRent(this.instLongLetWeeklyControl, this.instLongLetMonthlyControl);
-   }
-   if (this.instShortLetMonthlyControl.value) {
-     this.setWeeklyRent(this.instShortLetWeeklyControl, this.instShortLetMonthlyControl);
-   }
-   if (this.instLongLetMonthlyControl.value) {
-     this.setWeeklyRent(this.instLongLetWeeklyControl, this.instLongLetMonthlyControl);
-   }
+    if (this.instShortLetWeeklyControl.value) {
+      this.setMonthlyRent(this.instShortLetWeeklyControl, this.instShortLetMonthlyControl);
+    }
+    if (this.instLongLetWeeklyControl.value) {
+      this.setMonthlyRent(this.instLongLetWeeklyControl, this.instLongLetMonthlyControl);
+    }
+    if (this.instShortLetMonthlyControl.value) {
+      this.setWeeklyRent(this.instShortLetWeeklyControl, this.instShortLetMonthlyControl);
+    }
+    if (this.instLongLetMonthlyControl.value) {
+      this.setWeeklyRent(this.instLongLetWeeklyControl, this.instLongLetMonthlyControl);
+    }
   }
 
   setupInitialRentFigures(val: Valuation) {
@@ -526,8 +526,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   saveInstruction() {
     this.setInstructionFormValidators();
     this.sharedService.logValidationErrors(this.instructionForm, true);
+    const instructionSelected = this.instructionForm.get('instructSale').value || this.instructionForm.get('instructShortLet').value
+      || this.instructionForm.get('instructLongLet').value;
     if (this.instructionForm.valid) {
-      if (this.instructionForm.dirty) {
+      if (this.instructionForm.dirty && instructionSelected) {
         this.isSubmitting = true;
         const instruction = { ...this.instruction, ...this.instructionForm.value };
         this.valuationService.addInstruction(instruction).subscribe(result => {
@@ -619,8 +621,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.instructionForm.markAsPristine();
     this.isSubmitting = false;
     this.errorMessage = null;
-    this.toastr.success('Instruction successfully saved');
     if (propertyId) {
+      this.toastr.success('Instruction successfully saved');
       this.router.navigate(['/property-centre/detail', propertyId]);
     }
   }
