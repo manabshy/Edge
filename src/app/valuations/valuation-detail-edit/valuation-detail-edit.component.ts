@@ -168,37 +168,41 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   }
 
-  setRentFigures() {
+  setupInitialRentFigures(val: Valuation) {
+    if (val.suggestedAskingRentShortLet) {
+      this.shortLetMonthlyControl.setValue(+val.suggestedAskingRentShortLet * 4);
+    }
+    if (val.suggestedAskingRentLongLet) {
+      this.longLetMonthlyControl.setValue(+val.suggestedAskingRentLongLet * 4);
+    }
+    if (val.suggestedAskingRentShortLetMonthly) {
+      this.shortLetWeeklyControl.setValue(+val.suggestedAskingRentShortLetMonthly / 4);
+    }
+    if (val.suggestedAskingRentLongLetMonthly) {
+      this.longLetWeeklyControl.setValue(+val.suggestedAskingRentLongLetMonthly / 4);
+    }
 
+  }
+
+  setRentFigures() {
     if (this.shortLetWeeklyControl.value) {
+      console.log('in short let weekly...............', this.shortLetWeeklyControl.value)
       this.setShortMonthlyRent();
     }
     if (this.shortLetMonthlyControl.value) {
+      console.log('in short let monthly...............', this.shortLetMonthlyControl.value)
       this.setShortLetWeeklyRent()
     }
     if (this.longLetWeeklyControl.value) {
+      console.log('in long let weekly...............', this.longLetWeeklyControl.value)
       this.setLongLetMonthlyRent();
     }
     if (this.longLetMonthlyControl.value) {
       this.setLongLetWeeklyRent();
-      console.log('long let weekly', this.longLetWeeklyControl.value)
+      console.log('in long let weekly', this.longLetMonthlyControl.value)
     }
-    // switch (true) {
-    //   case !!this.shortLetWeeklyControl.value:
-    //     this.setShortMonthlyRent();
-    //     console.log('short let monthly', this.shortLetMonthlyControl.value)
-    //     break;
-    //   case !!this.shortLetMonthlyControl.value:
-    //     this.setShortLetWeeklyRent();
-    //     break;
-    //   case !!this.longLetWeeklyControl.value:
-    //     this.setLongLetMonthlyRent();
-    //     break;
-    //   case !!this.longLetMonthlyControl.value:
-    //     this.setLongLetWeeklyRent();
-    //     console.log('long let weekly', this.longLetWeeklyControl.value)
-    // }
   }
+
   private setShortLetWeeklyRent() {
     this.shortLetMonthlyControl.valueChanges
       .subscribe(shortLetMonthly => {
@@ -214,7 +218,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   private setLongLetMonthlyRent() {
     this.longLetWeeklyControl.valueChanges
-      .subscribe(longLet => this.longLetMonthlyControl.setValue(+longLet * 4, { emitEvent: false }));
+      .subscribe(longLet => {
+        this.longLetMonthlyControl.setValue(+longLet * 4, { emitEvent: false });
+      });
   }
 
   private setShortMonthlyRent() {
@@ -285,6 +291,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.attendees = this.valuation.attendees ? this.valuation.attendees : [];
         this.valuation.valuer.fullName ? this.showOnlyMainStaffMember = true : this.showOnlyMainStaffMember = false;
         this.populateForm(data);
+        this.setupInitialRentFigures(data);
       }
     }));
   }
@@ -440,9 +447,14 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.sharedService.logValidationErrors(this.instructionForm, true);
     if (this.instructionForm.valid) {
       if (this.instructionForm.dirty) {
-        // save instruction here....
+        this.isSubmitting = true;
+        const instruction = { ...this.instruction, ...this.instructionForm.value };
+        this.valuationService.addInstruction(instruction).subscribe(result => {
+          this.onInstructionSaveComplete(result);
+        });
+        console.log('instruct to save', instruction)
       } else {
-        // don't save
+        this.onInstructionSaveComplete();
       }
     } else {
       this.errorMessage = {} as WedgeError;
@@ -520,6 +532,16 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
     this.router.navigateByUrl('/', { skipLocationChange: true })
       .then(() => this.router.navigate(['/valuations-register/detail', valuation.valuationEventId, 'edit']));
+  }
+
+  onInstructionSaveComplete(propertyId?: number) {
+    this.instructionForm.markAsPristine();
+    this.isSubmitting = false;
+    this.errorMessage = null;
+    this.toastr.success('Instruction successfully saved');
+    if (propertyId) {
+      this.router.navigate(['/property-centre/detail', propertyId])
+    }
   }
 
   cancel() {
