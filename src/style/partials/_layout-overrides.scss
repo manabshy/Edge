@@ -200,6 +200,17 @@ fieldset {
         width: 100%;
         border: 1px solid $border-color;
     }
+
+    &:not(a) {
+        @include media-breakpoint-down(sm) {
+            padding-left: 0!important;
+            padding-right: 0!important;
+            text-align: left;
+            font-weight: bold;
+            background-color: transparent;
+            border: none;
+        }  
+    }
 }
 
 .mark, mark {

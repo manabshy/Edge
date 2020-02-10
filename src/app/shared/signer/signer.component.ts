@@ -20,6 +20,7 @@ export class SignerComponent implements OnInit, OnChanges {
   @Input() existingSigner: Signer;
   @Input() existingPerson: Person;
   @Input() readOnly: boolean = false;
+  @Input() fullWidth: boolean = false;
   @Input() createdSigner: Signer;
   @Input() label: string;
   @ViewChild('selectedSignerInput', { static: true }) selectedSignerInput: ElementRef;

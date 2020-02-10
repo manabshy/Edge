@@ -1,10 +1,8 @@
 <ng-container>
   <form class="pb-0" [formGroup]="propertyFinderForm" autocompleteOff>
     <div class="row" [hidden]="!selectedPropertyDetails">
-      <ng-container *ngIf="!label; else givenLabel "><label for="propSearchTerm" class="col-form-label col-form-label-sm"
-          [ngClass]="readOnly ? 'col-12 text-left' : 'col-sm-2'">Property</label></ng-container>
-      <ng-template #givenLabel><label for="propSearchTerm" class="col-form-label col-form-label-sm"
-          [ngClass]="readOnly ? 'col-12 text-left' : 'col-sm-2'">{{label}}</label></ng-template>
+      <ng-container *ngIf="!label; else givenLabel "><label for="propSearchTerm" class="col-form-label col-form-label-sm col-sm-2">Property</label></ng-container>
+      <ng-template #givenLabel><label for="propSearchTerm" class="col-form-label col-form-label-sm col-sm-2">{{label}}</label></ng-template>
       <div class="col">
         <div class="form-group d-flex d-sm-block">
           <input type="hidden" #selectedPropertyInput id="selectedPropertyAddress"
