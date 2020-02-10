@@ -176,13 +176,13 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     });
     this.valuationForm.valueChanges
       .pipe(debounceTime(400))
-      .subscribe((data) => {
+      .subscribe(() => {
         this.sharedService.logValidationErrors(this.valuationForm, false);
         this.setRentFigures();
       });
 
     this.instructionForm.valueChanges.pipe(debounceTime(400), distinctUntilChanged())
-      .subscribe((data) => {
+      .subscribe(() => {
         this.sharedService.logValidationErrors(this.instructionForm, false);
         this.setInstructionFormValidators();
         this.setInstructionRentFigures();
@@ -222,46 +222,17 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   setRentFigures() {
     if (this.shortLetWeeklyControl.value) {
-      console.log('in short let weekly...............', this.shortLetWeeklyControl.value);
-      this.setShortMonthlyRent();
+      this.setMonthlyRent(this.shortLetWeeklyControl, this.shortLetMonthlyControl);
     }
     if (this.shortLetMonthlyControl.value) {
-      console.log('in short let monthly...............', this.shortLetMonthlyControl.value);
-      this.setShortLetWeeklyRent();
+      this.setWeeklyRent(this.shortLetWeeklyControl, this.shortLetMonthlyControl);
     }
     if (this.longLetWeeklyControl.value) {
-      console.log('in long let weekly...............', this.longLetWeeklyControl.value);
-      this.setLongLetMonthlyRent();
+      this.setMonthlyRent(this.longLetWeeklyControl, this.longLetMonthlyControl);
     }
     if (this.longLetMonthlyControl.value) {
-      this.setLongLetWeeklyRent();
-      console.log('in long let weekly', this.longLetMonthlyControl.value);
+      this.setWeeklyRent(this.longLetWeeklyControl, this.longLetMonthlyControl);
     }
-  }
-
-  private setShortLetWeeklyRent() {
-    this.shortLetMonthlyControl.valueChanges
-      .subscribe(shortLetMonthly => {
-        this.shortLetWeeklyControl.setValue(+shortLetMonthly / 4, { emitEvent: false });
-      });
-  }
-  private setLongLetWeeklyRent() {
-    this.longLetMonthlyControl.valueChanges
-      .subscribe(longLetMonthly => {
-        this.longLetWeeklyControl.setValue(+longLetMonthly / 4, { emitEvent: false });
-      });
-  }
-
-  private setLongLetMonthlyRent() {
-    this.longLetWeeklyControl.valueChanges
-      .subscribe(longLet => {
-        this.longLetMonthlyControl.setValue(+longLet * 4, { emitEvent: false });
-      });
-  }
-
-  private setShortMonthlyRent() {
-    this.shortLetWeeklyControl.valueChanges
-      .subscribe(shortLet => this.shortLetMonthlyControl.setValue(+shortLet * 4, { emitEvent: false }));
   }
 
   private setMonthlyRent(weeklyControl: FormControl, monthlyControl: FormControl) {
@@ -466,7 +437,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.showCalendar = true;
   }
 
-  createNewSigner(event) {
+  createNewSigner() {
 
   }
 
