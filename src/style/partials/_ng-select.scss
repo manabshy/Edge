@@ -1,0 +1,20 @@
+.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value {
+    @include alert-variant(theme-color-level("primary", $alert-bg-level), theme-color-level("primary", $alert-border-level), theme-color-level("primary", $alert-color-level));
+}
+
+.ng-select.ng-select-disabled>.ng-select-container{
+    background-color: transparent;
+    border: none;
+
+    &:hover{
+        box-shadow: none;
+    }
+
+    .ng-value-container {
+        padding: 0;
+    }
+
+    .ng-arrow-wrapper {
+        display: none;
+    }
+}
