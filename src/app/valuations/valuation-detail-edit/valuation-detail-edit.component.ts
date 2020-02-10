@@ -163,55 +163,64 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       .pipe(debounceTime(400))
       .subscribe((data) => {
         this.sharedService.logValidationErrors(this.valuationForm, false);
-        this.setRent(data);
+        this.setRentFigures();
+      });
+
+  }
+
+  setRentFigures() {
+
+    if (this.shortLetWeeklyControl.value) {
+      this.setShortMonthlyRent();
+    }
+    if (this.shortLetMonthlyControl.value) {
+      this.setShortLetWeeklyRent()
+    }
+    if (this.longLetWeeklyControl.value) {
+      this.setLongLetMonthlyRent();
+    }
+    if (this.longLetMonthlyControl.value) {
+      this.setLongLetWeeklyRent();
+      console.log('long let weekly', this.longLetWeeklyControl.value)
+    }
+    // switch (true) {
+    //   case !!this.shortLetWeeklyControl.value:
+    //     this.setShortMonthlyRent();
+    //     console.log('short let monthly', this.shortLetMonthlyControl.value)
+    //     break;
+    //   case !!this.shortLetMonthlyControl.value:
+    //     this.setShortLetWeeklyRent();
+    //     break;
+    //   case !!this.longLetWeeklyControl.value:
+    //     this.setLongLetMonthlyRent();
+    //     break;
+    //   case !!this.longLetMonthlyControl.value:
+    //     this.setLongLetWeeklyRent();
+    //     console.log('long let weekly', this.longLetWeeklyControl.value)
+    // }
+  }
+  private setShortLetWeeklyRent() {
+    this.shortLetMonthlyControl.valueChanges
+      .subscribe(shortLetMonthly => {
+        this.shortLetWeeklyControl.setValue(+shortLetMonthly / 4, { emitEvent: false });
+      });
+  }
+  private setLongLetWeeklyRent() {
+    this.longLetMonthlyControl.valueChanges
+      .subscribe(longLetMonthly => {
+        this.longLetWeeklyControl.setValue(+longLetMonthly / 4, { emitEvent: false });
       });
   }
 
-  // TODO: Not working properly, fix asap
-  setRent(rent: any) {
-    let value = 0;
-    const shortLetWeeklyValue = +rent.suggestedAskingRentShortLet;
-    const longLetWeeklyValue = +rent.suggestedAskingRentLongLet;
-    const shortLetMonthlyValue = +rent.suggestedAskingRentShortLetMonthly;
-    const longLetMonthlyValue = +rent.suggestedAskingRentLongLetMonthly;
-
-    switch (true) {
-      case !!shortLetWeeklyValue:
-        value = shortLetWeeklyValue * 4;
-        this.shortLetMonthlyControl.setValue(value);
-        break;
-      case !!longLetWeeklyValue:
-        value = longLetWeeklyValue * 4;
-        this.longLetMonthlyControl.setValue(value);
-        break;
-      case !!shortLetMonthlyValue:
-        value = shortLetMonthlyValue / 4;
-        this.shortLetWeeklyControl.setValue(value);
-        break;
-      case !!longLetMonthlyValue:
-        value = longLetMonthlyValue / 4;
-        this.longLetWeeklyControl.setValue(value);
-        break;
-    }
-    //   if(shortLetWeeklyValue) {
-    //     value = shortLetWeeklyValue * 4;
-    //     this.shortLetMonthlyControl.setValue(value);
-    //   }
-    //   if(longLetWeeklyValue) {
-    //     value = longLetWeeklyValue * 4;
-    //      this.longLetMonthlyControl.setValue(value);
-    //   }
-    //   if(shortLetMonthlyValue) {
-    //     value = shortLetMonthlyValue / 4;
-    //       this.shortLetWeeklyControl.setValue(value);
-    //   }
-    //   if(longLetMonthlyValue) {
-    //     value = longLetMonthlyValue / 4;
-    //       this.longLetWeeklyControl.setValue(value);
-    //   }
-    // }
+  private setLongLetMonthlyRent() {
+    this.longLetWeeklyControl.valueChanges
+      .subscribe(longLet => this.longLetMonthlyControl.setValue(+longLet * 4, { emitEvent: false }));
   }
 
+  private setShortMonthlyRent() {
+    this.shortLetWeeklyControl.valueChanges
+      .subscribe(shortLet => this.shortLetMonthlyControl.setValue(+shortLet * 4, { emitEvent: false }));
+  }
 
   setupForm() {
     this.valuationForm = this.fb.group({
@@ -309,8 +318,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         suggestedAskingRentShortLetMonthly: valuation.suggestedAskingRentShortLetMonthly ? valuation.suggestedAskingRentShortLetMonthly : ''
       });
     }
-    console.log('form values', this.valuationForm.value);
-    console.log('valuation values', valuation);
   }
 
   populateInstructionForm(instruction: Instruction) {
@@ -439,7 +446,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     } else {
       this.errorMessage = {} as WedgeError;
       this.errorMessage.displayMessage = 'Please correct validation errors';
-      this.sharedService.showError( this.errorMessage);
+      this.sharedService.showError(this.errorMessage);
     }
   }
 
@@ -455,7 +462,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     } else {
       this.errorMessage = {} as WedgeError;
       this.errorMessage.displayMessage = 'Please correct validation errors';
-      this.sharedService.showError( this.errorMessage);
+      this.sharedService.showError(this.errorMessage);
     }
   }
 
