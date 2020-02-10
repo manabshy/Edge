@@ -5,6 +5,7 @@ import { Valuation, ValuationRequestOption } from './valuation';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { map, tap } from 'rxjs/operators';
 import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encoder-helper';
+import { Instruction } from 'src/app/shared/models/instruction';
 
 @Injectable({
   providedIn: 'root'
@@ -61,6 +62,16 @@ export class ValuationService {
       .pipe(
         map(response => response.result),
         tap(data => console.log('added valuation', JSON.stringify(data)))
+      );
+  }
+
+  // Extract to instruction service
+  addInstruction(instruction: Instruction): Observable<Instruction | any> {
+    const url = `${AppConstants.baseValuationUrl}`;
+    return this.http.post<any>(url, instruction)
+      .pipe(
+        map(response => response.result),
+        tap(data => console.log('added instruction', JSON.stringify(data)))
       );
   }
 
