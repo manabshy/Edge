@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StorageMap } from '@ngx-pwa/local-storage';
@@ -120,6 +120,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     private router: Router,
     private fb: FormBuilder) { super(); }
 
+
+
   ngOnInit() {
     this.setupForm();
     this.setupInstructionForm();
@@ -159,14 +161,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       }
     });
 
-    this.propertyService.newPropertyAdded$.subscribe(newProperty => {
-      if (newProperty) {
-        // this.valuation.property = newProperty;
-        this.createdProperty = newProperty;
-        this.valuationForm.get('property').setValue(newProperty);
-        console.log('should send to finder', this.createdProperty);
-      }
-    });
+    this.getAddedProperty();
 
     this.contactGroupService.signer$.subscribe(data => {
       if (data) {
@@ -190,6 +185,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       });
 
   }
+
   setInstructionRentFigures() {
     if (this.instShortLetWeeklyControl.value) {
       this.setMonthlyRent(this.instShortLetWeeklyControl, this.instShortLetMonthlyControl);
@@ -363,11 +359,26 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       // this.valuation.property = property;
       this.existingProperty = property;
       this.isPropertyChanged = true;
+      this.lastKnownOwner = property.lastKnownOwner;
       this.valuationForm.get('property').setValue(property);
+      this.valuationForm.get('propertyOwner').setValue(this.lastKnownOwner);
+      console.log('selected prop owner......', this.valuationForm.get('propertyOwner').value)
+
       console.log('property changed', this.isPropertyChanged);
     }
   }
 
+  private getAddedProperty() {
+    this.propertyService.newPropertyAdded$.subscribe(newProperty => {
+      if (newProperty) {
+        this.existingProperty = newProperty;
+        this.createdProperty = newProperty;
+        this.valuationForm.get('property').setValue(this.createdProperty);
+        console.log('property to send to finder', this.createdProperty);
+        console.log('property in form', this.valuationForm.get('property').value);
+      }
+    });
+  }
   getSelectedOwner(owner: Signer) {
     if (owner) {
       this.lastKnownOwner = owner;
