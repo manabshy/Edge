@@ -9,7 +9,7 @@
     <app-property-finder label="Property" [createdProperty]="createdProperty" [existingProperty]=existingProperty
       (selectedProperty)="getSelectedProperty($event)" [readOnly]="!isEditable && !isNewValuation"></app-property-finder>
     <app-signer label="Last known owner" [createdSigner]="createdSigner" [existingSigner]="lastKnownOwner"
-      (selectedSigner)="getSelectedOwner($event)" (newSigner)="createNewSigner($event)" [readOnly]="!isEditable && !isNewValuation"></app-signer>
+      (selectedSigner)="getSelectedOwner($event)" (newSigner)="createNewSigner()" [readOnly]="!isEditable && !isNewValuation"></app-signer>
     <div class="form-group row" *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value)">
       <label for="reason" class="col-sm-2 col-form-label col-form-label-sm">Why?</label>
       <div class="col-sm-10">
@@ -264,7 +264,7 @@
           <div class="col-sm-10 d-flex">
             <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
             <button *ngIf="isEditable || isNewValuation" type="submit" class="btn btn-secondary mr-2">Save</button>
-            <button *ngIf="canInstruct" type="button" class="btn btn-secondary" (click)="instructionModal.show(); startInstruction(valuation)">Instruct</button>
+            <button *ngIf="canInstruct" type="button" class="btn btn-secondary" (click)="instructionModal.show(); startInstruction()">Instruct</button>
           </div>
         </div>
       </div>
