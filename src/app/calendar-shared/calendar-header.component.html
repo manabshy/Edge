@@ -1,76 +1,73 @@
 <form [formGroup]="diaryHeaderForm">
-    <div class="row align-items-center">
-        <div class="col col-md-auto pr-0 mr-md-2 order-md-1">
-            <div class="row align-items-center">
-                <div class="col-auto pr-0">
-                    <button type="button" class="btn btn-light mr-2" mwlCalendarToday [(viewDate)]="viewDate"
-                        (viewDateChange)="viewDateChange.next(viewDate)">
-                        {{label}}
-                    </button>
-                </div>
-                <div class="col-auto px-0">
-                    <button type="button" class="btn btn-light mr-1" mwlCalendarPreviousView [daysInWeek]="daysInWeek"
-                        [view]="view" [(viewDate)]="viewDate" (viewDateChange)="viewDateChange.next(viewDate)">
-                        <i class="fas fa-chevron-left fa-fw"></i>
-                        <span class="sr-only">Previous</span>
-                    </button>
-                    <button type="button" class="btn btn-light" mwlCalendarNextView [daysInWeek]="daysInWeek"
-                        [view]="view" [(viewDate)]="viewDate" (viewDateChange)="viewDateChange.next(viewDate)">
-                        <i class="fas fa-chevron-right fa-fw"></i>
-                        <span class="sr-only">Next</span>
-                    </button>
-                </div>
-            </div>
+  <div class="row align-items-center">
+    <div class="col col-md-auto pr-0 mr-md-2 order-md-1">
+      <div class="row align-items-center">
+        <div class="col-auto pr-0">
+          <button type="button" class="btn btn-light mr-2" mwlCalendarToday [(viewDate)]="viewDate"
+            (viewDateChange)="viewDateChange.next(viewDate)">
+            {{label}}
+          </button>
         </div>
-        <div class="col-auto order-md-3">
-            <select name="viewMode" id="vew-mode" formControlName="viewMode"
-                (change)="viewChange.emit($event.target.value)" class="custom-select">
-                <option value="day">Day</option>
-                <option value="threeDays">3 Days</option>
-                <option value="week">Week</option>
-                <option value="month">Month</option>
-            </select>
+        <div class="col-auto px-0">
+          <button type="button" class="btn btn-light mr-1" mwlCalendarPreviousView [daysInWeek]="daysInWeek"
+            [view]="view" [(viewDate)]="viewDate" (viewDateChange)="viewDateChange.next(viewDate)">
+            <i class="fas fa-chevron-left fa-fw"></i>
+            <span class="sr-only">Previous</span>
+          </button>
+          <button type="button" class="btn btn-light" mwlCalendarNextView [daysInWeek]="daysInWeek" [view]="view"
+            [(viewDate)]="viewDate" (viewDateChange)="viewDateChange.next(viewDate)">
+            <i class="fas fa-chevron-right fa-fw"></i>
+            <span class="sr-only">Next</span>
+          </button>
         </div>
-        <div class="col-md order-md-2 mt-1 mt-md-0">
-            <div class="row align-items-center">
-                <div class="col order-md-1">
-                    <h5 class="mb-0">
-                        {{ viewDate | calendarDate: (view + 'ViewTitle'):locale:weekStartsOn:excludeDays:daysInWeek }}
-                    </h5>
-                </div>
-                <div class="col-auto p-md-0 order-md-3">
-                    <div class="btn-group" dropdown placement="bottom right" [insideClick]="true">
-                        <button id="filter" dropdownToggle type="button" class="btn btn-light dropdown-toggle"
-                            aria-controls="dropdown-custom-html">
-                            Filter <span class="caret"></span>
-                        </button>
-                        <ul id="dropdown-custom-html" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
-                            aria-labelledby="filter">
-                            <li role="menuitem">
-                                <div class="dropdown-item">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="showCancelled" formControlName="showCancelled"
-                                            (change)="filterChange.emit($event.target.checked)">
-                                        <label class="custom-control-label" for="showCancelled">Show Cancelled</label>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-3 order-md-2 mt-1 mt-md-0" *ngIf="!myCalendarOnly">
-                    <ng-select [items]="accounts"
-                    [clearable]="false"
-                    bindLabel="name"
-                    bindValue="name"
-                    groupBy="category"
-                    formControlName="staffMember">
-                        <ng-template ng-optgroup-tmp let-item="item">
-                            {{item.category || 'Unnamed group'}}
-                        </ng-template>
-                    </ng-select>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
+    <div class="col-auto order-md-3">
+      <select name="viewMode" id="vew-mode" formControlName="viewMode" (change)="viewChange.emit($event.target.value)"
+        class="custom-select">
+        <option value="day">Day</option>
+        <option value="threeDays">3 Days</option>
+        <option value="week">Week</option>
+        <option value="month">Month</option>
+      </select>
+    </div>
+    <div class="col-md order-md-2 mt-1 mt-md-0">
+      <div class="row align-items-center">
+        <div class="col order-md-1">
+          <h5 class="mb-0">
+            {{ viewDate | calendarDate: (view + 'ViewTitle'):locale:weekStartsOn:excludeDays:daysInWeek }}
+          </h5>
+        </div>
+        <div class="col-auto p-md-0 order-md-3">
+          <div class="btn-group" dropdown placement="bottom right" [insideClick]="true">
+            <button id="filter" dropdownToggle type="button" class="btn btn-light dropdown-toggle"
+              aria-controls="dropdown-custom-html">
+              Filter <span class="caret"></span>
+            </button>
+            <ul id="dropdown-custom-html" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+              aria-labelledby="filter">
+              <li role="menuitem">
+                <div class="dropdown-item">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="showCancelled"
+                      formControlName="showCancelled" (change)="filterChange.emit($event.target.checked)">
+                    <label class="custom-control-label" for="showCancelled">Show Cancelled</label>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-3 order-md-2 mt-1 mt-md-0" *ngIf="!myCalendarOnly">
+          <ng-select placeholder="Select Staff Member" [items]="staffMembers" [clearable]="true" bindLabel="fullName"
+            bindValue="staffMemberId" groupBy="category" (change)="onStaffMemberChange($event)"
+            formControlName="staffMember">
+            <ng-template ng-optgroup-tmp let-item="item">
+              <!-- {{item.category || 'Unnamed group'}} -->
+            </ng-template>
+          </ng-select>
+        </div>
+      </div>
+    </div>
+  </div>
 </form>

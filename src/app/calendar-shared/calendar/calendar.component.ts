@@ -105,6 +105,10 @@ export class CalendarComponent implements OnInit, OnChanges {
     });
   }
 
+  getSelectedStaffMemberDiaryEvents(staffMemberId: number){
+    this.id = staffMemberId;
+    this.getDiaryEvents();
+  }
 
   getDiaryEvents(isCancelledVisible?: boolean) {
     console.log('id in calendar', this.staffMemberId)
