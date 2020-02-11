@@ -96,7 +96,7 @@
   let-tooltipAppendToBody="tooltipAppendToBody">
   <div class="cal-cell-top">
     <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
-    <div class="cal-event-container" [ngClass]="event?.cssClass" *ngFor="let event of day.events; trackBy:trackByEventId">
+    <div class="cal-event-container" [ngClass]="event?.cssClass" *ngFor="let event of day.events; trackBy:trackByFn">
       <div class="cal-event" [style.backgroundColor]="event.color?.primary" (mouseenter)="highlightDay.emit({event: event})"
         (mouseleave)="unhighlightDay.emit({event: event})"
         [mwlCalendarTooltip]="event.title | calendarEventTitle:'monthTooltip':event" [tooltipPlacement]="tooltipPlacement"

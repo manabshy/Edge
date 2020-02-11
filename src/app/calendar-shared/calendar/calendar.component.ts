@@ -94,7 +94,7 @@ export class CalendarComponent implements OnInit, OnChanges {
 
     setTimeout(() => {
       if (calHourSegments && calHourSegments.length) {
-        if(window.innerWidth >= 1024) {
+        if (window.innerWidth >= 1024) {
 
           console.log(calHourSegments[21])
           calHourSegments[23].scrollIntoView({ block: 'center' });
@@ -208,6 +208,11 @@ export class CalendarComponent implements OnInit, OnChanges {
   //     );
   //  }
   // }
+
+  trackByFn(index, item: DiaryEvent) {
+    if (!item) { return null; }
+    return item.diaryEventId;
+  }
 }
 
 function getTimezoneOffsetString(date: Date): string {
