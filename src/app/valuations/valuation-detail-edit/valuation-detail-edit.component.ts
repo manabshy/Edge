@@ -55,6 +55,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   allAttendees: BaseStaffMember[];
   isEditable: boolean;
   showLeaseExpiryDate: boolean;
+  canInstruct: boolean;
   propertyId: number;
   lastKnownOwnerId: number;
   approxLeaseExpiryDate: Date;
@@ -301,6 +302,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       if (data) {
         this.valuation = data;
         this.valuation.valuationStatus === 3 ? this.isEditable = false : this.isEditable = true;
+        this.valuation.valuationStatus === 3 ? this.canInstruct = true : this.canInstruct = false;
         this.valuation.approxLeaseExpiryDate ? this.showLeaseExpiryDate = true : this.showLeaseExpiryDate = false;
         this.lastKnownOwner = this.valuation.propertyOwner;
         this.existingProperty = this.valuation.property;
