@@ -134,7 +134,7 @@
               [routerLink]="['/property-centre/detail/', lead?.relatedProperty?.propertyId]">
               {{lead?.relatedProperty?.address | formatAddress}}
             </a>
-            <ng-container *ngIf="!isMessageVisible && !isLeadClosed">
+            <ng-container *ngIf="!isMessageVisible">
               <button class="btn btn-light btn-sm ml-2" type="button" (click)="navigateToNewValuation(lead?.relatedProperty?.propertyId)">Create Val.
               </button>
             </ng-container>
