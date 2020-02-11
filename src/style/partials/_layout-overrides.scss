@@ -216,7 +216,7 @@ fieldset {
         border: 1px solid $border-color;
     }
 
-    &:not(a) {
+    &:not(a):not(button) {
         font-weight: bold;
         @include media-breakpoint-down(sm) {
             padding-left: 0!important;
