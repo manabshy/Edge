@@ -78,6 +78,12 @@ dl {
         margin-bottom: 0;
     }
 
+    .col-xl-12 > & {
+        @include media-breakpoint-up(xl) {
+            margin-bottom: spacer(2);
+        } 
+    }
+
     dd, dt {
         margin: 0;
     }
