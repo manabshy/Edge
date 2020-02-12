@@ -371,10 +371,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   private getAddedProperty() {
     this.propertyService.newPropertyAdded$.subscribe(newProperty => {
       if (newProperty) {
-        this.existingProperty = newProperty;
         this.createdProperty = newProperty;
         this.valuationForm.get('property').setValue(this.createdProperty);
-        console.log('property to send to finder', this.createdProperty);
+        this.getSelectedOwner(newProperty.lastKnownOwner);
         console.log('property in form', this.valuationForm.get('property').value);
       }
     });
@@ -384,7 +383,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.lastKnownOwner = owner;
       this.isOwnerChanged = true;
       this.valuationForm.get('propertyOwner').setValue(owner);
-      console.log('owner changed', this.isOwnerChanged);
+      console.log('owner changed',  this.valuationForm.get('propertyOwner'));
     }
   }
 
