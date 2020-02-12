@@ -25,3 +25,11 @@ form {
         }
     }
 }
+
+.card-deck {
+    .card:first-child:last-child {
+        @include media-breakpoint-up(sm) {
+            max-width: 45%;
+        }
+    }
+}
