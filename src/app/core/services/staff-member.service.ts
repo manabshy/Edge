@@ -84,7 +84,7 @@ export class StaffMemberService {
       }));
   }
 
-  getStaffMemberSuggestions(searchTerm): Observable<any>  {
+  getStaffMemberSuggestions(searchTerm): Observable<any> {
     console.log('search Term:', searchTerm);
     return this.http.get<StaffMemberResult>(`${AppConstants.baseUrl}/suggestions?SearchTerm=${searchTerm}`, {
       headers: { ignoreLoadingBar: '' }
@@ -97,15 +97,9 @@ export class StaffMemberService {
       }));
   }
 
-  // getStaffMemberSuggestions(searchTerm)  {
-  //   console.log('search Term:', searchTerm);
-  //   return this.http.get<StaffMemberResult>(`${AppConstants.baseUrl}/suggestionvalues?SearchTerm=${searchTerm}`).pipe(
-  //     map(response => response.result),
-  //     tap(data => {
-  //       if (data) {
-  //         console.log('suggestions:', data);
-  //       }
-  //     }));
-  // }
-
+  getStaffMembersForCalendar(): Observable<BaseStaffMember[]> {
+    return this.http.get<any>(`${AppConstants.baseUrl}/calendars`).pipe(
+      map(response => response.result),
+      tap(data => console.log('staff members for calendar:', data)));
+  }
 }

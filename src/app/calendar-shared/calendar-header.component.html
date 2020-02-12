@@ -59,8 +59,8 @@
           </div>
         </div>
         <div class="col-md-3 order-md-2 mt-1 mt-md-0" *ngIf="!myCalendarOnly">
-          <ng-select placeholder="Select Staff Member" [items]="staffMembers" [clearable]="false" bindLabel="fullName"
-            bindValue="staffMemberId" groupBy="category" (change)="onStaffMemberChange($event)"
+          <ng-select placeholder="Select Staff Member" [items]="staffMembers$|async" [clearable]="false"
+            bindLabel="fullName" bindValue="staffMemberId" groupBy="category" (change)="onStaffMemberChange($event)"
             formControlName="staffMember">
             <ng-template ng-optgroup-tmp let-item="item">
               <!-- {{item.category || 'Unnamed group'}} -->
