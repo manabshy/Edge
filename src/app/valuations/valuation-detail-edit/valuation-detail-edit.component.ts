@@ -600,13 +600,14 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       .then(() => this.router.navigate(['/valuations-register/detail', valuation.valuationEventId, 'edit']));
   }
 
-  onInstructionSaveComplete(propertyId?: number) {
+  onInstructionSaveComplete(instruction?: Instruction) {
+    const instructionEventId = instruction.salesInstructionEventId || instruction.lettingsInstructionEventId;
     this.instructionForm.markAsPristine();
     this.isSubmitting = false;
     this.errorMessage = null;
-    if (propertyId) {
+    if (instructionEventId) {
       this.toastr.success('Instruction successfully saved');
-      this.router.navigate(['/property-centre/detail', propertyId]);
+      this.router.navigate(['/property-centre/detail', instructionEventId]);
     }
   }
 
