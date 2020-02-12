@@ -67,7 +67,7 @@ export class ValuationService {
 
   // Extract to instruction service
   addInstruction(instruction: Instruction): Observable<Instruction | any> {
-    const url = `${AppConstants.baseValuationUrl}`;
+    const url = `${AppConstants.baseValuationUrl}/${instruction.valuationEventId}/instruct`;
     return this.http.post<any>(url, instruction)
       .pipe(
         map(response => response.result),

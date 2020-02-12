@@ -1,6 +1,6 @@
 export interface Instruction {
   valuationEventId: number;
-  instructionType: string;
+  agencyType: string;
   askingPrice?: number;
   askingRentLongLet?: number;
   askingRentShortLet?: number;

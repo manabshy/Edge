@@ -276,7 +276,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       instructSale: [false],
       instructShortLet: [false],
       instructLongLet: [false],
-      instructionType: [''],
+      agencyType: [''],
       askingPrice: [],
       askingRentLongLet: [],
       askingRentShortLet: [],
@@ -344,7 +344,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   populateInstructionForm(instruction: Instruction) {
     if (instruction) {
       this.instructionForm.patchValue({
-        instructionType: instruction.instructionType,
+        agencyType: instruction.agencyType,
         askingPrice: instruction.askingPrice ? instruction.askingPrice : '',
         askingRentLongLet: instruction.askingRentLongLet ? instruction.askingRentLongLet : '',
         askingRentLongLetMonthly: instruction.askingRentLongLetMonthly ? instruction.askingRentLongLetMonthly : '',
@@ -458,7 +458,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     val = { ...this.valuation, ...this.valuationForm.value };
     const instruction = {
       valuationEventId: val.valuationEventId,
-      instructionType: '',
+      agencyType: '',
       askingPrice: val.suggestedAskingPrice,
       askingRentShortLet: val.suggestedAskingRentShortLet,
       askingRentLongLet: val.suggestedAskingRentLongLet,
