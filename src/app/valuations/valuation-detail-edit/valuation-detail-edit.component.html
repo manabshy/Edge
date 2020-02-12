@@ -351,7 +351,7 @@
               <input type="radio" id="multiAgency" value="2" name="agencyType" class="custom-control-input" formControlName="agencyType">
               <label class="custom-control-label" for="multiAgency">Multi Agency</label>
             </div>
-            <small *ngIf="instructionForm.get('agencyType').errors?.required" class="text-danger" >{{formErrors?.agencyType}}</small>
+            <small *ngIf="instructionForm.get('agencyType')?.errors?.required" class="text-danger" >{{formErrors?.agencyType}}</small>
           </fieldset>
           <div class="mt-4 text-center">
             <button type="button" class="btn btn-light mr-2" (click)="instructionModal.hide(); cancelInstruction()">Cancel</button>
