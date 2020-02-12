@@ -56,12 +56,9 @@
       </div>
     </div>
   </form>
-  <div class="text-center" *ngIf="isHintVisible">
-    <i class="far fa-smile-wink"></i> Type at least <strong>3 characters</strong> to get results
-  </div>
   <app-valuation-list *ngIf="!isHintVisible" [pageNumber]="page" [valuations]='valuations'
     [bottomReached]="bottomReached" [searchTerm]='searchTerm'></app-valuation-list>
-  <div class="text-center text-danger" *ngIf="isMessageVisible && !isHintVisible && page === 1">
-    <i class="far fa-sad-tear"></i> No results for '<strong>{{valuationFinderForm.value.searchTerm || ' '}}</strong>'
+  <div class="text-center text-danger" *ngIf="isMessageVisible && page === 1">
+    <i class="far fa-sad-tear"></i> No results for your current search
   </div>
 </div>
