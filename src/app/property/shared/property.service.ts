@@ -21,7 +21,7 @@ export class PropertyService {
   private propertyNoteChangeSubject = new Subject<PropertyNote>();
   private propertyNotePageNumberChangeSubject = new Subject<number>();
   private showPropertyDuplicatesSubject = new Subject<boolean>();
-  private propertyAddedSubject = new Subject<Property>();
+  private propertyAddedSubject = new BehaviorSubject<Property | null>(null);
 
   newPropertyAdded$ = this.propertyAddedSubject.asObservable();
   showPropertyDuplicatesChanges$ = this.showPropertyDuplicatesSubject.asObservable();

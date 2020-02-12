@@ -36,7 +36,7 @@ export class PropertyDuplicateCheckerComponent implements OnInit, OnChanges {
 
   selectProperty(propertyId: number) {
     if (propertyId) {
-      this.propertyService.getProperty(propertyId, true, true).subscribe(data => {
+      this.propertyService.getProperty(propertyId, true, true, false).subscribe(data => {
         if (data) {
           this.selectedProperty.emit(data);
         }
