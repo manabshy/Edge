@@ -276,7 +276,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       instructSale: [false],
       instructShortLet: [false],
       instructLongLet: [false],
-      agencyType: [''],
+      agencyType: ['', Validators.required],
       askingPrice: [],
       askingRentLongLet: [],
       askingRentShortLet: [],

@@ -292,7 +292,7 @@
             <legend class="col-12 col-form-label text-left">Values</legend>
             <div class="col-12">
               <div class="card-deck">
-                <div class="card" *ngIf="instructionForm.get('askingPrice').value">
+                <div class="card" *ngIf="instruction?.askingPrice">
                   <div class="card-body">
                     <div class="custom-control custom-checkbox form-group">
                       <input type="checkbox" id="isntructSale" name="isntructSale" class="custom-control-input" formControlName="instructSale">
@@ -304,7 +304,7 @@
                     <span class="invalid-feedback">{{formErrors?.askingPrice}}</span>
                   </div>
                 </div>
-                <div class="card" *ngIf="instructionForm.get('askingRentLongLet').value">
+                <div class="card" *ngIf="instruction?.askingRentLongLet">
                   <div class="card-body">
                     <div class="custom-control custom-checkbox form-group">
                       <input type="checkbox" id="isntructLongLet" name="isntructLongLet" class="custom-control-input" formControlName="instructLongLet">
@@ -321,7 +321,7 @@
                       class="form-control form-control-sm" formControlName="askingRentLongLetMonthly">
                   </div>
                 </div>
-                <div class="card" *ngIf="instructionForm.get('askingRentShortLet').value">
+                <div class="card" *ngIf="instruction?.askingRentShortLet">
                   <div class="card-body">
                     <div class="custom-control custom-checkbox form-group">
                       <input type="checkbox" id="isntructShortLet" name="isntructShortLet" class="custom-control-input" formControlName="instructShortLet">
@@ -342,7 +342,7 @@
             </div>
           </fieldset>
           <fieldset class="form-group">
-            <legend class="col-form-label text-left">Instruction Type</legend>
+            <legend class="col-form-label text-left">Agency Type</legend>
             <div class="custom-control custom-radio">
               <input type="radio" id="soleAgency" value="1" name="agencyType" class="custom-control-input" formControlName="agencyType">
               <label class="custom-control-label" for="soleAgency">Sole Agency</label>
@@ -351,6 +351,7 @@
               <input type="radio" id="multiAgency" value="2" name="agencyType" class="custom-control-input" formControlName="agencyType">
               <label class="custom-control-label" for="multiAgency">Multi Agency</label>
             </div>
+            <small *ngIf="instructionForm.get('agencyType').errors?.required" class="text-danger" >{{formErrors?.agencyType}}</small>
           </fieldset>
           <div class="mt-4 text-center">
             <button type="button" class="btn btn-light mr-2" (click)="instructionModal.hide(); cancelInstruction()">Cancel</button>

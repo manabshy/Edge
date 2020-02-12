@@ -1,9 +1,11 @@
 export interface Instruction {
   valuationEventId: number;
-  agencyType: string;
+  salesInstructionEventId?: number;
+  lettingsInstructionEventId?: number;
   askingPrice?: number;
   askingRentLongLet?: number;
   askingRentShortLet?: number;
   askingRentLongLetMonthly?: number;
   askingRentShortLetMonthly?: number;
+  agencyType: string;
 }

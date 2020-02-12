@@ -76,7 +76,9 @@ export const FormErrors = {
   'askingPrice': '',
   'askingRentShortLet': '',
   'askingRentLongLet': '',
+  'agencyType': ''
 };
+
 export const ValidationMessages = {
   'searchTerm': {
     required: ' This field is required',
@@ -192,6 +194,9 @@ export const ValidationMessages = {
   },
   'askingRentLongLet': {
     required: 'Long let rent is required'
+  },
+  'agencyType': {
+    required: 'Agency type is required'
   }
   // 'invalidPhoneNumber': {
   //   required: 'Phone is required',
