@@ -20,6 +20,7 @@ export class CacheService {
     let cache: CacheStatus;
     if (response) {
       cache = response.cacheStatus;
+      this.setCacheStatus(cache);
       console.log('cache status from response', cache);
 
       this.storage.get('cacheStatus').subscribe((result: CacheStatus) => {
@@ -51,4 +52,11 @@ export class CacheService {
     }
   }
 
+  setCacheStatus(cacheStatus: CacheStatus) {
+    this.storage.has('cacheStatus').subscribe(hasKey => {
+      if (!hasKey) {
+        this.storage.set('cacheStatus', cacheStatus).subscribe();
+      }
+    });
+  }
 }
