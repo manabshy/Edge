@@ -1,11 +1,20 @@
+export interface CacheStatus {
+  info: Date;
+  offices: Date;
+  staffMembers: Date;
+}
+
 export interface ResultData {
-  resultCount: number;
-  returnCode: number;
   status: true;
-  page: number;
-  totalPages: number;
-  totalResultCount: number;
+  returnCode: number;
   requestId: string;
   message: string;
   technicalDetails: string;
+  result: any;
+  cacheStatus: CacheStatus;
+  resultCount: number;
+  page: number;
+  totalPages: number;
+  totalResultCount: number;
 }
+
