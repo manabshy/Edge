@@ -110,7 +110,7 @@
     </div>
     <div *ngIf="leads" class="search-results" infiniteScroll [infiniteScrollDistance]="5"
       [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"
-      (scrolled)="onScrollDown()">
+      >
     </div>
     <a (click)="selectLeadForAssignment($event, lead); navigateToEdit(lead)"
       class="list-group-item list-group-item-action" *ngFor="let lead of filteredLeads; let i = index;"
