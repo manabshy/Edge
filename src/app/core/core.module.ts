@@ -79,8 +79,8 @@ import { NoteFormComponent } from '../shared/note-form/note-form.component';
     CanDeactivateGuard,
     FormatAddressPipe,
     { provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true },
     { provide: RouteReuseStrategy, useClass: CustomReuseStrategy }
-    // { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true }
   ]
 })
 export class CoreModule { }
