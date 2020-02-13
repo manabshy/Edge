@@ -56,11 +56,12 @@ export class StaffMemberService {
   }
 
   requestAllStaffMembers() {
-    return this.http.get<StaffMemberListResult>(`${AppConstants.baseUrl}/all`).pipe(
-      map(response => response.result),
+    return this.http.get<StaffMemberListResult | any>(`${AppConstants.baseUrl}/all`).pipe(
+      map(response => response),
       tap(data => {
         if (data) {
-          this.storage.set('allstaffmembers', data).subscribe();
+          this.storage.set('allstaffmembers', data.result).subscribe();
+          this.storage.set('cacheStatus', data.cacheStatus).subscribe();
         }
       }));
   }

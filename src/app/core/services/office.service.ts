@@ -25,12 +25,13 @@ export class OfficeService {
   }
 
   private requestOffices() {
-    return this.http.get<OfficeListResult>(`${AppConstants.baseOfficeUrl}`)
+    return this.http.get<OfficeListResult | any>(`${AppConstants.baseOfficeUrl}`)
       .pipe(
-        map(response => response.result),
+        map(response => response),
         tap(data => {
           if (data) {
-            this.storage.set('offices', data).subscribe();
+            this.storage.set('offices', data.result).subscribe();
+            this.storage.set('cacheStatus', data.cacheStatus).subscribe();
           }
         })
       );

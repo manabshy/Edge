@@ -27,11 +27,12 @@ export class InfoService {
   private requestDropdownListInfo(): Observable<DropdownListInfo> {
     return this.http.get<any>(AppConstants.baseInfoUrl)
       .pipe(
-        map(response => response.result),
+        map(response => response),
         tap(data => {
           if (data) {
-            this.infoData = data;
-            this.storage.set('info', data).subscribe();
+            this.infoData = data.result;
+            this.storage.set('info', this.infoData).subscribe();
+            this.storage.set('cacheStatus', data.cacheStatus).subscribe();
           }
         })
       );
