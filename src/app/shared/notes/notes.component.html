@@ -7,8 +7,7 @@
   </div>
   <ng-container *ngIf="notes?.length && !isUpdating">
     <div *ngIf="notes" class="search-results" infiniteScroll [infiniteScrollDistance]="5"
-      [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"
-      (scrolled)="onScrollDown()" (scrolledUp)="onScrollUp()">
+      [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true">
     </div>
     <div class="list-group-item" *ngFor="let note of notes">
       <div class="row">
@@ -64,13 +63,13 @@
             <div class="col-11 col-sm-3" *ngIf="note?.contactGroupId || note?.personId">
               <ng-container *ngIf="note?.contactGroupId; else personInfo">
                 <a class="mb-2"
-                  [routerLink]="['/contact-centre/detail', note?.personId || 0, 'people', note?.contactGroupId]"  [queryParams]="{showNotes: true}"
-                  *ngIf="note?.contactGroupId">{{note?.addressee}}
+                  [routerLink]="['/contact-centre/detail', note?.personId || 0, 'people', note?.contactGroupId]"
+                  [queryParams]="{showNotes: true}" *ngIf="note?.contactGroupId">{{note?.addressee}}
                 </a>
               </ng-container>
               <ng-template #personInfo>
-                <a class="mb-2" [routerLink]="['/contact-centre/detail', note?.personId]"  [queryParams]="{showNotes: true}"
-                  *ngIf="note?.personId">{{note?.addressee}}</a>
+                <a class="mb-2" [routerLink]="['/contact-centre/detail', note?.personId]"
+                  [queryParams]="{showNotes: true}" *ngIf="note?.personId">{{note?.addressee}}</a>
               </ng-template>
             </div>
             <div class="col-sm-3 mb-2" *ngIf="note?.propertyId">

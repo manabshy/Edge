@@ -1,7 +1,6 @@
 <div class="list-group mb-3">
   <div *ngIf="properties" class="search-results" infiniteScroll [infiniteScrollDistance]="5"
-    [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"
-    (scrolled)="onScrollDown()">
+    [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true">
   </div>
   <a [routerLink]="['detail', property?.propertyId]" [queryParams]="{searchTerm: propertyAddress, showNotes:true}"
     (click)="onPropertySelected(property.propertyId)" class="list-group-item list-group-item-action pb-2"
