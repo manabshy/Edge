@@ -63,6 +63,8 @@ export interface DropdownListInfo {
   propertyFeatures: InfoDetail[];
   parkings: InfoDetail[];
   outsideSpaces: InfoDetail[];
+  originTypes: InfoDetail[];
+  origins: InfoDetail[];
 }
 
 export interface InfoDetail {

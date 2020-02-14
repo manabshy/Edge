@@ -20,6 +20,7 @@ import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
 import { Valuation, ValuationStatusEnum } from '../shared/valuation';
 import { ValuationService } from '../shared/valuation.service';
 import { Instruction } from 'src/app/shared/models/instruction';
+
 @Component({
   selector: 'app-valuation-detail-edit',
   templateUrl: './valuation-detail-edit.component.html',
@@ -61,6 +62,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   approxLeaseExpiryDate: Date;
   instructionForm: FormGroup;
   instruction: Instruction;
+  originTypes: InfoDetail[];
+  allOrigins: InfoDetail[];
+  origins: InfoDetail[];
+  origin: string;
 
   get isInvitationSent() {
     return this.valuationForm.get('isInvitationSent') as FormControl;
@@ -151,6 +156,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.outsideSpaces = info.outsideSpaces;
       this.parkings = info.parkings;
       this.features = info.propertyFeatures;
+      this.allOrigins = info.origins;
+      this.originTypes = info.originTypes;
+      console.log('all origins', this.allOrigins);
     });
 
     this.storage.get('allAttendees').subscribe(data => {
@@ -245,6 +253,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.valuationForm = this.fb.group({
       property: [''],
       propertyOwner: [''],
+      originId: [0],
       reason: ['', Validators.required],
       timeFrame: ['', Validators.required],
       marketChat: ['', Validators.required],
@@ -306,6 +315,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.valuation.valuer.fullName ? this.showOnlyMainStaffMember = true : this.showOnlyMainStaffMember = false;
         this.populateForm(data);
         this.setupInitialRentFigures(data);
+        if (this.valuation && this.allOrigins) {
+          this.getOriginIdValue(this.valuation.originId);
+        }
       }
     }));
   }
@@ -315,6 +327,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.valuationForm.patchValue({
         property: valuation.property,
         propertyOwner: valuation.propertyOwner,
+        originId: valuation.originId,
         reason: valuation.reason,
         timeFrame: valuation.timeFrame,
         marketChat: valuation.marketChat,
@@ -339,6 +352,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         suggestedAskingRentShortLetMonthly: valuation.suggestedAskingRentShortLetMonthly ? valuation.suggestedAskingRentShortLetMonthly : ''
       });
     }
+    console.log('valuation form', this.valuationForm.value);
   }
 
   populateInstructionForm(instruction: Instruction) {
@@ -354,6 +368,21 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   }
 
+  onSelectType(originTypeId: number) {
+    this.origins = this.allOrigins.filter((x: InfoDetail) => +x.parentId === +originTypeId);
+    this.valuationForm.get('originId').setValue(0);
+  }
+
+  getOriginIdValue(id: number) {
+    this.origin = 'Not Known';
+    if (id) {
+      this.allOrigins.forEach(x => {
+        if (+x.id === id) {
+          this.origin = x.value;
+        }
+      });
+    }
+  }
   getSelectedProperty(property: Property) {
     if (property) {
       // this.valuation.property = property;
@@ -362,7 +391,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.lastKnownOwner = property.lastKnownOwner;
       this.valuationForm.get('property').setValue(property);
       this.valuationForm.get('propertyOwner').setValue(this.lastKnownOwner);
-      console.log('selected prop owner......', this.valuationForm.get('propertyOwner').value)
+      console.log('selected prop owner......', this.valuationForm.get('propertyOwner').value);
 
       console.log('property changed', this.isPropertyChanged);
     }
@@ -383,7 +412,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.lastKnownOwner = owner;
       this.isOwnerChanged = true;
       this.valuationForm.get('propertyOwner').setValue(owner);
-      console.log('owner changed',  this.valuationForm.get('propertyOwner'));
+      console.log('owner changed', this.valuationForm.get('propertyOwner'));
     }
   }
 
