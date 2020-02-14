@@ -17,13 +17,6 @@ form {
     .btn {
         @include border-left-radius(0);
     }
-
-    ::ng-deep {
-        .ng-select.ng-select-single .ng-select-container {
-            height: 38px;
-            @include border-right-radius(0);
-        }
-    }
 }
 
 .card-deck {
