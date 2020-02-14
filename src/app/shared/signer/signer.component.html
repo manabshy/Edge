@@ -9,16 +9,15 @@
         <div class="form-group d-flex d-sm-block">
           <input type="hidden" #selectedSignerInput
             id="selectedSigner" formControlName="selectedSigner">
-            
-          <button class="btn btn-light btn-sm mr-2" *ngIf="!readOnly" type="button" aria-label="remove" (click)="remove()">
-            <span aria-hidden="true">×</span>
-          </button>
           <a class="small text-left mobile-btn" *ngIf="selectedSignerDetails" [routerLink]="['/contact-centre/detail/0/people/', selectedSignerDetails?.contactGroupId]">
             {{selectedSignerDetails?.contactNames}}
           </a>
           <a class="small text-left mobile-btn" *ngIf="!selectedSignerDetails">
             {{selectedSignerDetails?.contactNames}}
           </a>
+          <button class="btn btn-light btn-sm ml-2" *ngIf="!readOnly" type="button" aria-label="remove" (click)="remove()">
+            <span aria-hidden="true">×</span>
+          </button>
           <button class="btn btn-light btn-sm ml-2" *ngIf="!readOnly" type="button" (click)="toggleSearch()">
             Change
           </button>

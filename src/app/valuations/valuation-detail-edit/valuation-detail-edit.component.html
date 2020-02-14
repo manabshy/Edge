@@ -17,8 +17,7 @@
       <div class="col-sm-10">
         <div class="row">
           <div class="col-sm form-group" *ngIf="isEditable || isNewValuation">
-            <label class="small" for="originTypes">Origin Types</label>
-            <select class="custom-select custom-select-sm" name="originTypes" id="originTypes"
+            <select class="custom-select custom-select-sm" name="originTypes" id="originTypes" arial-label="Origin Types"
               (change)="onSelectType($event.target.value)"
               [attr.disabled]="!isEditable && !isNewValuation ? true : null"
               [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}">
@@ -26,10 +25,9 @@
               <option *ngFor="let type of originTypes" [value]='type.id'> {{type.value}}</option>
             </select>
           </div>
-          <ng-container *ngIf="!valuation?.originId || (isEditable || isNewValuation) else originValue">
+          <ng-container *ngIf="(!valuation?.originId || (isEditable || isNewValuation)) && origins?.length else originValue">
             <div class="col-sm form-group">
-              <label class="small" for="originId">Origins</label>
-              <select class="custom-select custom-select-sm" name="originId" id="originId" formControlName="originId"
+              <select class="custom-select custom-select-sm" name="originId" id="originId" formControlName="originId" aria-label="Origins"
                 [attr.disabled]="!isEditable && !isNewValuation ? true : null"
                 [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}">
                 <option value="0">Not Known</option>
@@ -215,9 +213,9 @@
           </div>
         </div>
         <p *ngFor="let attendee of attendees" class="d-flex d-sm-block">
-          <button class="btn btn-light btn-sm mr-2" type="button" (click)="removeAttendee(attendee?.staffMemberId)"
-            aria-label="remove" *ngIf="isEditable || isNewValuation"><span aria-hidden="true">&times;</span></button>
           <small class="text-left mobile-btn">{{attendee.fullName}}</small>
+          <button class="btn btn-light btn-sm ml-2" type="button" (click)="removeAttendee(attendee?.staffMemberId)"
+            aria-label="remove" *ngIf="isEditable || isNewValuation"><span aria-hidden="true">&times;</span></button>
           <button class="btn btn-light btn-sm ml-2" type="button" (click)="setMain(attendee)"
             *ngIf="isEditable || isNewValuation">Set as
             main</button>

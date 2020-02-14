@@ -125,15 +125,15 @@
         <h5>Associated Property</h5>
         <ng-container *ngIf="lead?.relatedProperty; else noProperty">
           <p class="d-flex d-sm-block">
-            <ng-container *ngIf="!isMessageVisible && !isLeadClosed">
-              <button class="btn btn-light btn-sm mr-2" type="button" aria-label="remove" (click)="removeProperty()">
-                <span aria-hidden="true">×</span>
-              </button>
-            </ng-container>
             <a class="text-left mobile-btn"
               [routerLink]="['/property-centre/detail/', lead?.relatedProperty?.propertyId]">
               {{lead?.relatedProperty?.address | formatAddress}}
             </a>
+            <ng-container *ngIf="!isMessageVisible && !isLeadClosed">
+              <button class="btn btn-light btn-sm ml-2" type="button" aria-label="remove" (click)="removeProperty()">
+                <span aria-hidden="true">×</span>
+              </button>
+            </ng-container>
             <ng-container *ngIf="!isMessageVisible">
               <button class="btn btn-light btn-sm ml-2" type="button" (click)="navigateToNewValuation(lead?.relatedProperty?.propertyId)">Create Val.
               </button>
