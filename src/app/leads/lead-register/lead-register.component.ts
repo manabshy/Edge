@@ -228,6 +228,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     if (this.leadSearchInfo) {
       this.isClosedIncluded = this.leadSearchInfo.includeClosedLeads;
     }
+    this.sharedService.scrollElIntoView('list-group');
     this.leadService.pageNumberChanged(this.leadSearchInfo);
   }
 

@@ -64,7 +64,7 @@ export class PropertyComponent extends BaseComponent implements OnInit {
       );
   }
 
-  propertiesResults() {
+  propertiesResults(submit?: boolean) {
     if (this.searchTerm) {
       this.suggestions = null;
     }
@@ -74,6 +74,9 @@ export class PropertyComponent extends BaseComponent implements OnInit {
     this.suggestedTerm ? this.searchTerm = this.suggestedTerm : this.searchTerm = this.propertyFinderForm.value.searchTerm;
     AppUtils.propertySearchTerm = this.searchTerm;
     this.getNextPropertyPage(this.page);
+    if(submit) {
+      this.sharedService.scrollElIntoView('list-group');
+    }
   }
 
   getNextPropertyPage(page) {
@@ -120,7 +123,7 @@ export class PropertyComponent extends BaseComponent implements OnInit {
     if (event.item != null) {
       this.suggestedTerm = event.item;
     }
-    this.propertiesResults();
+    this.propertiesResults(true);
     AppUtils.propertySearchTerm = this.searchTerm;
     this.suggestedTerm = '';
   }

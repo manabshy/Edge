@@ -8,7 +8,7 @@
       <a class="btn btn-light" [routerLink]="['detail', 0 , 'edit' ]"  [queryParams]="{isNewProperty: true}" ><i class="fas fa-plus mr-2"></i> Property</a>
     </div>
   </div>
-  <form class="mb-3" [formGroup]="propertyFinderForm" (ngSubmit)="propertiesResults()">
+  <form class="mb-3" [formGroup]="propertyFinderForm" (ngSubmit)="propertiesResults(true)">
     <div class="row">
       <div class="col">
         <div class="input-group">

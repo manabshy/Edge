@@ -117,12 +117,15 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
     });
   }
 
-  getValuations() {
+  getValuations(submit?: boolean) {
     this.page = 1;
     this.bottomReached = false;
     this.valuations = [];
     this.suggestedTerm ? this.searchTerm = this.suggestedTerm : this.searchTerm = this.searchTermControl.value;
     this.getNextValuationsPage(this.page);
+    if(submit) {
+      this.sharedService.scrollElIntoView('list-group');
+    }
   }
 
   getNextValuationsPage(page: number) {
@@ -161,7 +164,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
       this.suggestedTerm = event.item;
       console.log('suggestion', this.suggestedTerm);
     }
-    this.getValuations();
+    this.getValuations(true);
     this.suggestedTerm = '';
   }
 

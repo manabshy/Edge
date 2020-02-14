@@ -64,7 +64,7 @@ export class CompanyComponent implements OnInit {
           }))));
   }
 
-  companiesResults() {
+  companiesResults(submit?: boolean) {
     if (this.searchTerm) {
       this.suggestions = null;
     }
@@ -73,6 +73,9 @@ export class CompanyComponent implements OnInit {
     this.companies = [];
     this.suggestedTerm ? this.searchTerm = this.suggestedTerm : this.searchTerm = this.companyFinderForm.value.companyName;
     this.getNextCompanyListPage(this.page);
+    if(submit) {
+      this.sharedService.scrollElIntoView('list-group');
+    }
   }
 
   private getNextCompanyListPage(page: number) {
@@ -119,7 +122,7 @@ export class CompanyComponent implements OnInit {
     if (event.item != null) {
       this.suggestedTerm = event.item;
     }
-    this.companiesResults();
+    this.companiesResults(true);
     AppUtils.companySearchTerm = this.searchTerm;
     this.suggestedTerm = '';
   }

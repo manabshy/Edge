@@ -104,6 +104,22 @@ export class SharedService {
     return subject.asObservable();
   }
 
+  scrollElIntoView(className: string) {
+    const els = document.getElementsByClassName(className);
+    const headerOffset = 130;
+    if(els.length) {
+      const elementPosition = els[0].getBoundingClientRect().top;
+      const offsetPosition = elementPosition - headerOffset;
+
+      if(elementPosition !== offsetPosition) {
+        window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth"
+        });
+      }
+    }
+  }
+
   scrollTodayIntoView() {
     setTimeout(() => {
       if (window.innerWidth < 576) {

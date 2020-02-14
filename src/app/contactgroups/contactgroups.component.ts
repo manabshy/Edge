@@ -96,7 +96,7 @@ export class ContactGroupsComponent implements OnInit {
     }
   }
 
-  contactGroupsResults() {
+  contactGroupsResults(submit?: boolean) {
     if (this.searchTerm) {
       this.suggestions = null;
     }
@@ -105,6 +105,9 @@ export class ContactGroupsComponent implements OnInit {
     this.contactGroups = [];
     this.suggestedTerm ? this.searchTerm = this.suggestedTerm : this.searchTerm = this.contactFinderForm.get('searchTerm').value;
     this.getNextContactGroupsPage(this.page);
+    if(submit) {
+      this.sharedService.scrollElIntoView('list-group');
+    }
   }
 
   getNextContactGroupsPage(page: number) {
@@ -166,7 +169,7 @@ export class ContactGroupsComponent implements OnInit {
     if (event.item != null) {
       this.suggestedTerm = event.item;
     }
-    this.contactGroupsResults();
+    this.contactGroupsResults(true);
     this.suggestedTerm = '';
   }
 }
