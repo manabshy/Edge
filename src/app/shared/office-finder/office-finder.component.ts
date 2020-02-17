@@ -3,7 +3,8 @@ import { Office } from '../models/staff-member';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { OfficeService } from 'src/app/core/services/office.service';
 import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
+import { ResultData } from '../result-data';
 
 @Component({
   selector: 'app-office-finder',
@@ -18,17 +19,29 @@ export class OfficeFinderComponent implements OnInit {
   constructor(private officeService: OfficeService, private storage: StorageMap) { }
 
   ngOnInit(): void {
+    this.getOffices();
+  }
+
+  private getOffices() {
     this.storage.get('offices').subscribe(data => {
       if (data) {
         this.offices$ = of(data as Office[]);
       } else {
-        this.offices$ = this.officeService.getOffices().pipe((map(res => res)));
+        this.officeService.getOffices()
+          .pipe((map(response => response as ResultData),
+            tap(res => {
+              if (res) { this.offices$ = of(res.result); }
+            }))).subscribe();
       }
     });
   }
 
   onOfficeChange(office: Office) {
-    console.log('selected office', office);
-    this.selectedOfficeId.emit(office.officeId);
+    if (office) {
+      console.log('selected office', office);
+      this.selectedOfficeId.emit(office.officeId);
+    } else {
+      this.selectedOfficeId.emit(0);
+    }
   }
 }

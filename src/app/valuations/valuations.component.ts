@@ -83,13 +83,13 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
       }
     });
 
-    this.storage.get('offices').subscribe(data => {
-      if (data) {
-        this.offices = data as Office[];
-      } else {
-        this.officeService.getOffices().pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => this.offices = result);
-      }
-    });
+    // this.storage.get('offices').subscribe(data => {
+    //   if (data) {
+    //     this.offices = data as Office[];
+    //   } else {
+    //     this.officeService.getOffices().pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => this.offices = result);
+    //   }
+    // });
 
     this.valuationService.valuationPageNumberChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(newPageNumber => {
       this.page = newPageNumber;

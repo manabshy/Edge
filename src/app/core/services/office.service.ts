@@ -12,7 +12,7 @@ const CACHE_SIZE = 1;
 })
 export class OfficeService {
 
-  private offices$: Observable<Office[]>;
+  private offices$: Observable<Office[] | any>;
 
   constructor(private http: HttpClient, private storage: StorageMap) { }
 
