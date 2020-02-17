@@ -70,6 +70,7 @@ import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { AdditionalInfoComponent } from './additional-info/additional-info.component';
 import { SharedValuationListComponent } from './shared-valuation-list/shared-valuation-list.component';
+import { OfficeFinderComponent } from './office-finder/office-finder.component';
 
 
 @NgModule({
@@ -110,7 +111,8 @@ import { SharedValuationListComponent } from './shared-valuation-list/shared-val
     LeadAssignmentModalComponent,
     StaffmemberFinderComponent,
     AdditionalInfoComponent,
-    SharedValuationListComponent
+    SharedValuationListComponent,
+    OfficeFinderComponent
 
   ],
   imports: [
@@ -181,6 +183,7 @@ import { SharedValuationListComponent } from './shared-valuation-list/shared-val
     StaffmemberFinderComponent,
     AdditionalInfoComponent,
     SharedValuationListComponent,
+    OfficeFinderComponent,
      // to be refactored
     InfiniteScrollModule,
     CollapseModule,

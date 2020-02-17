@@ -42,10 +42,7 @@
           </div>
           <div class="col-sm form-group">
             <label class="small" for="office">Office</label>
-            <select class="custom-select custom-select-sm" id="office" formControlName="officeId" >
-              <option selected value="0"></option>
-              <option *ngFor="let office of offices" [value]=office.officeId>{{office?.name}}</option>
-            </select>
+            <app-office-finder [officeId] = "officeId" (selectedOfficeId)= "getSelectedOfficeId($event)"></app-office-finder>
           </div>
         </div>
       </div>

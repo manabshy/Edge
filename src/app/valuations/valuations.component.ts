@@ -66,7 +66,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
     this.statuses = ValuationStatuses;
     // this.statuses = getValuationStatuses();
 
-    
+
     this.storage.get('allstaffmembers').subscribe(data => {
       if (data) {
         this.valuers = data as StaffMember[];
@@ -123,7 +123,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
     this.valuations = [];
     this.suggestedTerm ? this.searchTerm = this.suggestedTerm : this.searchTerm = this.searchTermControl.value;
     this.getNextValuationsPage(this.page);
-    if(submit) {
+    if (submit) {
       this.sharedService.scrollElIntoView('list-group');
     }
   }
@@ -166,6 +166,10 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
     }
     this.getValuations(true);
     this.suggestedTerm = '';
+  }
+
+  getSelectedOfficeId(id: number) {
+    this.officeControl.setValue(id);
   }
 
   enter(event) {

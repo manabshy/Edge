@@ -1,0 +1,6 @@
+<!-- <div class="col-sm form-group">
+  <label class="small" for="office">Office</label>
+</div> -->
+<ng-select placeholder="Select Office" [items]="offices$ |async" [clearable]="false" bindLabel="name"
+  bindValue="officeId" [virtualScroll] = "true" groupBy="category" (change)="onOfficeChange($event)">
+</ng-select>
