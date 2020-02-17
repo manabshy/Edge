@@ -289,6 +289,10 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     }
   }
 
+  getSelectedOfficeId(officeId: number) {
+    this.leadRegisterForm.get('officeId').setValue(officeId);
+  }
+
   onScrollDown() {
     this.onWindowScroll();
     console.log('scrolled');
