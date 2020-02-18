@@ -110,6 +110,7 @@
                   </app-staffmember-finder> -->
                   <app-staff-member-finder [staffMemberId]="lead?.ownerId" [listType]="'allStaffMembers'"
                     (selectedStaffMemberId)="getSelectedStaffMemberId($event)"
+                    [isRequired]="!leadEditForm.get('ownerId').value"
                     [isDisabled]="isLeadClosed ? true : false"></app-staff-member-finder>
                 </div>
               </div>

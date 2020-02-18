@@ -15,6 +15,7 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
   @Input() staffMemberId: number;
   @Input() listType: string;
   @Input() isDisabled: boolean;
+  @Input() isRequired: boolean;
   @Output() selectedStaffMemberId = new EventEmitter<number>();
   staffMembers$ = new Observable<any>();
   staffMemberFinderForm: FormGroup;

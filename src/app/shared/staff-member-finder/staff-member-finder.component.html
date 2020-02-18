@@ -2,6 +2,9 @@
   <ng-select placeholder="Select Staff Member" [items]="staffMembers$|async" [hideSelected]="true" [clearable]="true"
     bindLabel="fullName" bindValue="staffMemberId" (change)="onStaffMemberChange($event)"
     formControlName="staffMemberId" [readonly]="isDisabled ? true : null"
-    [ngClass]="{'form-control-plaintext': isDisabled}">
+    [ngClass]="{'is-invalid': isRequired, 'form-control-plaintext': isDisabled}" [attr.required]="isRequired ? true : null">
   </ng-select>
+  <div class="invalid-feedback">
+    Chaser is required
+  </div>
 </form>
