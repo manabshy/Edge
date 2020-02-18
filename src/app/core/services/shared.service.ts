@@ -107,14 +107,14 @@ export class SharedService {
   scrollElIntoView(className: string) {
     const els = document.getElementsByClassName(className);
     const headerOffset = 130;
-    if(els.length) {
+    if (els.length) {
       const elementPosition = els[0].getBoundingClientRect().top;
       const offsetPosition = elementPosition - headerOffset;
 
-      if(elementPosition !== offsetPosition) {
+      if (elementPosition !== offsetPosition) {
         window.scrollTo({
-            top: offsetPosition,
-            behavior: "smooth"
+          top: offsetPosition,
+          behavior: "smooth"
         });
       }
     }
@@ -225,6 +225,15 @@ export class SharedService {
     vals.forEach(x => {
       x.valuationStatusLabel = ValuationStatusEnum[x.valuationStatus];
     });
+  }
+
+  // not working so duplicate in individual components for now. FIX ASAP
+  setBottomReachedFlag(result: any, bottomReached?: boolean, pageSize?: number) {
+    if (result && (!result.length || result.length < +pageSize)) {
+      bottomReached = true;
+    } else {
+      bottomReached = false;
+    }
   }
 
   formatPostCode(postCodeToCheck: string) {

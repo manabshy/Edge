@@ -282,7 +282,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
   onOwnerChanged(event: any) {
     this.isOwnerChanged = true;
-    console.log('from child', event)
+    console.log('from child', event);
     if (event && event.item != null || event) {
       let ownerId = 0;
       event.item ? ownerId = event.item.staffMemberId : ownerId = event.staffMemberId;
@@ -297,7 +297,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   getSelectedStaffMemberId(id: number) {
-    console.log('valuer id here', id)
+    console.log('valuer id here', id);
     this.isOwnerChanged = true;
     if (id) {
       this.leadEditForm.patchValue({ ownerId: id });
@@ -535,12 +535,16 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
           this.personNotes = _.concat(this.personNotes, data);
         }
       }
-      if (data && !data.length) {
-
-        this.bottomReached = true;
-        console.log('bottom reached', this.bottomReached);
-      }
+      this.setBottomReachedFlag(data);
     });
+  }
+
+  private setBottomReachedFlag(result: any) {
+    if (result && (!result.length || result.length < +this.pageSize)) {
+      this.bottomReached = true;
+    } else {
+      this.bottomReached = false;
+    }
   }
 
   moveToNextLead() {
@@ -575,9 +579,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
         lastKnownOwnerId: lastKnownOwnerId,
         isNewValuation: true
       }
-    })
+    });
 
-    console.log('related prop', propertyId)
+    console.log('related prop', propertyId);
   }
 
   getMoreInfo(item: SubNavItem) {
