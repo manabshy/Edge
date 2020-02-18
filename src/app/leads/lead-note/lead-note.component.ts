@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2, Input, OnChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Renderer2, Input, OnChanges, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ContactNote } from 'src/app/contactgroups/shared/contact-group';
 import { Person } from 'src/app/shared/models/person';
@@ -15,6 +15,7 @@ export class LeadNoteComponent implements OnInit, OnChanges {
   @Input() isUpdateComplete: boolean;
   @Input() noteRequiredWarning: string;
   @Output() leadNote = new EventEmitter<ContactNote>();
+  @ViewChild('note', {static: true}) noteComponent: ElementRef;
   public keepOriginalOrder = (a) => a.key;
 
   shortcuts = {
@@ -27,7 +28,7 @@ export class LeadNoteComponent implements OnInit, OnChanges {
   noteForm: FormGroup;
   note: string;
 
-  constructor(private fb: FormBuilder, private leadService: LeadsService, private renderer: Renderer2) { }
+  constructor(private fb: FormBuilder, private leadService: LeadsService) { }
 
 
   ngOnInit() {
@@ -75,8 +76,8 @@ export class LeadNoteComponent implements OnInit, OnChanges {
       textValue = textValue.slice(0, 0) + shortcut + ', ' + textValue.slice(0);
     }
     textValue = textValue.replace(/,\s*$/, '');
-    textControl.setValue(textValue.trimEnd() + ' ');
-    this.renderer.selectRootElement('#note').focus();
+    textControl.setValue(textValue.replace(/\s+$/g, '') + ' ');
+    this.noteComponent.nativeElement.focus();
   }
 
   ctrlEnterSubmit(e) {

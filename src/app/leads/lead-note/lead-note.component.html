@@ -28,7 +28,7 @@
           [attr.disabled] = "isDisabled ? true : null" (click)="consumeShortcut(shortcut.value)">{{shortcut.key}}</button>
         </ng-container>
       </div>
-      <textarea class="form-control" name="note" id="note" cols="30" rows="5" placeholder="Comment ..."
+      <textarea #note class="form-control" name="note" id="note" cols="30" rows="5" placeholder="Comment ..."
         (keydown)="ctrlEnterSubmit($event)"
         formControlName="text" [attr.disabled] = "isDisabled ? true : null" [ngClass]="{'is-invalid': noteRequiredWarning}"></textarea>
       <div class="invalid-feedback w-100">{{noteRequiredWarning}}</div>

@@ -28,7 +28,7 @@
           (click)="consumeShortcut(shortcut.value)">{{shortcut.key}}</button>
       </ng-container>
     </div>
-    <textarea class="form-control" name="note" id="note{{isModal}}" cols="30" rows="5" placeholder="Comment ..."
+    <textarea #note class="form-control" name="note" id="note{{isModal}}" cols="30" rows="5" placeholder="Comment ..."
       (keydown)="ctrlEnterSubmit($event)"
       formControlName="text"></textarea>
   </div>

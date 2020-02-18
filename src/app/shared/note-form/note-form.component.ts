@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, Renderer2, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ContactNote, ContactGroup } from 'src/app/contactgroups/shared/contact-group';
 import { Person } from '../models/person';
@@ -21,6 +21,7 @@ export class NoteFormComponent implements OnInit {
   @Input() data;
   @Input() isCancelVisible: boolean = false;
   @Output() actionEmit = new EventEmitter<boolean>();
+  @ViewChild('note', {static: true}) noteComponent: ElementRef;
   shortcuts = {
     'Left Message': 'Left message',
     'SMS': 'Sent an SMS',
@@ -30,8 +31,7 @@ export class NoteFormComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
     private contactGroupService: ContactGroupsService,
-    private toastr: ToastrService,
-    private renderer: Renderer2) { }
+    private toastr: ToastrService) { }
 
   ngOnInit() {
     this.formInit();
@@ -60,8 +60,8 @@ export class NoteFormComponent implements OnInit {
       textValue = textValue.slice(0, 0) + shortcut + ', ' + textValue.slice(0);
     }
     textValue = textValue.replace(/,\s*$/, '');
-    textControl.setValue(textValue.trimEnd() + ' ');
-    this.renderer.selectRootElement('#note').focus();
+    textControl.setValue(textValue.replace(/,\s*$/, '') + ' ');
+    this.noteComponent.nativeElement.focus();
   }
 
   ctrlEnterSubmit(e) {
