@@ -71,6 +71,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { AdditionalInfoComponent } from './additional-info/additional-info.component';
 import { SharedValuationListComponent } from './shared-valuation-list/shared-valuation-list.component';
 import { OfficeFinderComponent } from './office-finder/office-finder.component';
+import { StaffMemberFinderComponent } from './staff-member-finder/staff-member-finder.component';
 
 
 @NgModule({
@@ -112,7 +113,8 @@ import { OfficeFinderComponent } from './office-finder/office-finder.component';
     StaffmemberFinderComponent,
     AdditionalInfoComponent,
     SharedValuationListComponent,
-    OfficeFinderComponent
+    OfficeFinderComponent,
+    StaffMemberFinderComponent
 
   ],
   imports: [
@@ -184,6 +186,7 @@ import { OfficeFinderComponent } from './office-finder/office-finder.component';
     AdditionalInfoComponent,
     SharedValuationListComponent,
     OfficeFinderComponent,
+    StaffMemberFinderComponent,
      // to be refactored
     InfiniteScrollModule,
     CollapseModule,

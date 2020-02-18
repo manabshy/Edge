@@ -75,13 +75,13 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
       }
     });
 
-    this.storage.get('allListers').subscribe(data => {
-      if (data) {
-        this.valuers = data as StaffMember[];
-      } else {
-        this.staffMemberService.getValuers().pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => this.valuers = result);
-      }
-    });
+    // this.storage.get('allListers').subscribe(data => {
+    //   if (data) {
+    //     this.valuers = data as StaffMember[];
+    //   } else {
+    //     this.staffMemberService.getValuers().pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => this.valuers = result);
+    //   }
+    // });
 
     // this.storage.get('offices').subscribe(data => {
     //   if (data) {
@@ -170,6 +170,11 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
 
   getSelectedOfficeId(id: number) {
     this.officeControl.setValue(id);
+  }
+
+  getSelectedStaffMemberId(id: number) {
+    console.log('valuer id here', id)
+    this.valuerControl.setValue(id);
   }
 
   enter(event) {

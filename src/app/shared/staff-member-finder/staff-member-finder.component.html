@@ -1,0 +1,3 @@
+<ng-select placeholder="Select Staff Member" [items]="staffMembers$|async" [hideSelected]="true" [clearable]="true"
+  bindLabel="fullName" bindValue="staffMemberId" (change)="onStaffMemberChange($event)">
+</ng-select>
