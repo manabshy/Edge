@@ -56,7 +56,8 @@
                   [personId]="person?.personId" [closedCounter]="summaryTotals?.searches?.inactive">
                 </app-contactgroups-detail-searches>
                 <app-shared-valuation-list *ngSwitchCase="'valuations'" [moreInfo]="moreInfo"
-                [personId]="person?.personId" [closedCounter]="summaryTotals?.valuations?.inactive"></app-shared-valuation-list>
+                  [personId]="person?.personId" [closedCounter]="summaryTotals?.valuations?.inactive">
+                </app-shared-valuation-list>
                 <app-contactgroups-detail-lettings-managements *ngSwitchCase="'lettingsManagements'"
                   [moreInfo]="moreInfo" [personId]="person?.personId"
                   [closedCounter]="summaryTotals?.lettingsManagements?.inactive">
@@ -80,9 +81,8 @@
                 <div class="form-group">
                   <label for="leadType">Type</label>
                   <select class="custom-select custom-select-sm" id="leadType" formControlName="leadTypeId"
-                    [attr.disabled]="isLeadClosed ? true : null" 
-                    [ngClass]="{'is-invalid': formErrors?.leadTypeId, 
-                    'custom-select custom-select-sm': !isLeadClosed, 
+                    [attr.disabled]="isLeadClosed ? true : null" [ngClass]="{'is-invalid': formErrors?.leadTypeId,
+                    'custom-select custom-select-sm': !isLeadClosed,
                     'form-control form-control-sm form-control-plaintext': isLeadClosed}">
                     <option value=""></option>
                     <option selected *ngFor="let leadType of leadTypes" [value]=leadType.id>{{leadType?.value}}</option>
@@ -97,16 +97,20 @@
                     formControlName="nextChaseDate"
                     [bsConfig]="{showWeekNumbers:false, useUtc: false, dateInputFormat: 'DD/MM/YYYY', minDate:todaysDate, customTodayClass: 'font-weight-bold'}"
                     bsDatepicker [attr.disabled]="isLeadClosed ? true : null"
-                    (bsValueChange)="onChaseDateChange($event)" [ngClass]="{'is-invalid': (formErrors?.nextChaseDate), 'form-control-plaintext': isLeadClosed}">
+                    (bsValueChange)="onChaseDateChange($event)"
+                    [ngClass]="{'is-invalid': (formErrors?.nextChaseDate), 'form-control-plaintext': isLeadClosed}">
                   <div class="invalid-feedback">{{formErrors?.nextChaseDate}}</div>
                 </div>
               </div>
               <div class="col-lg">
                 <div class="form-group">
                   <label for="chaser">Chaser</label>
-                  <app-staffmember-finder [staffMemberId]="lead?.ownerId" (ownerChanged)="onOwnerChanged($event)"
+                  <!-- <app-staffmember-finder [staffMemberId]="lead?.ownerId" (ownerChanged)="onOwnerChanged($event)"
                     [isDisabled]="isLeadClosed ? true : false">
-                  </app-staffmember-finder>
+                  </app-staffmember-finder> -->
+                  <app-staff-member-finder [staffMemberId]="lead?.ownerId" [listType]="'allStaffMembers'"
+                    (selectedStaffMemberId)="getSelectedStaffMemberId($event)"
+                    [isDisabled]="isLeadClosed ? true : false"></app-staff-member-finder>
                 </div>
               </div>
               <div class="col-12" *ngIf="!isLeadClosed">
@@ -135,7 +139,8 @@
               </button>
             </ng-container>
             <ng-container *ngIf="!isMessageVisible">
-              <button class="btn btn-light btn-sm ml-2" type="button" (click)="navigateToNewValuation(lead?.relatedProperty?.propertyId)">Create Val.
+              <button class="btn btn-light btn-sm ml-2" type="button"
+                (click)="navigateToNewValuation(lead?.relatedProperty?.propertyId)">Create Val.
               </button>
             </ng-container>
           </p>
@@ -148,13 +153,12 @@
         <h5>Notes</h5>
         <div class="list-group" *ngIf="!isLeadClosed">
           <div class="list-group-item add-note py-4">
-            <app-lead-note #leadNote [selectedPerson]="person"
-              (leadNote)="getNewPersonNote($event)" [noteRequiredWarning]="noteRequiredWarning"
-              [isUpdateComplete]="isUpdateComplete"></app-lead-note>
+            <app-lead-note #leadNote [selectedPerson]="person" (leadNote)="getNewPersonNote($event)"
+              [noteRequiredWarning]="noteRequiredWarning" [isUpdateComplete]="isUpdateComplete"></app-lead-note>
           </div>
         </div>
-        <app-notes [personNotes]="personNotes" [person]="person"  [pageNumber]="page"
-          [bottomReached]="bottomReached" [showNoteInput]="false"></app-notes>
+        <app-notes [personNotes]="personNotes" [person]="person" [pageNumber]="page" [bottomReached]="bottomReached"
+          [showNoteInput]="false"></app-notes>
       </div>
     </div>
     <div class="form-actions">
@@ -164,8 +168,8 @@
             <button (click)="cancel()" type="button" class="btn btn-light mr-2" *ngIf="!isLeadClosed">Cancel</button>
             <button (click)="cancel()" type="button" class="btn btn-secondary mr-2" *ngIf="isLeadClosed">Back</button>
             <button type="submit" class="btn btn-secondary mr-2" *ngIf="!isLeadClosed">Save</button>
-            <button *ngIf="showSaveAndNext && !leadsListCompleted && !isLeadClosed" (click)="traverseLeads()" type="button"
-              class="btn btn-secondary" [isOpen]="leadsListCompleted"
+            <button *ngIf="showSaveAndNext && !leadsListCompleted && !isLeadClosed" (click)="traverseLeads()"
+              type="button" class="btn btn-secondary" [isOpen]="leadsListCompleted"
               [tooltip]="leadsListCompleted ? 'You have reached the end of the list' : null || !leadEditForm.valid? errorMessage?.displayMessage : ''"
               placement="top">Save &
               Next</button>

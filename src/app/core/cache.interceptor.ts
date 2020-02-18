@@ -14,7 +14,7 @@ export class CacheInterceptor implements HttpInterceptor {
     // Invalidate cache here if cache status changes
     return next.handle(req).pipe(
       tap((data) => {
-        console.log('all response body', data.body);
+        // console.log('all response body', data.body);
         this.cacheService.invalidateCache(data.body);
       })
     );

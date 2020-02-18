@@ -94,11 +94,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     private contactGroupService: ContactGroupsService,
     private toastr: ToastrService) {
     super();
-    console.log('I am in the constructor');
   }
 
   ngOnInit() {
-    console.log('I am in the beginning of Lead Edit ngOnInit: ', this.showSaveAndNext, this.leadsListCompleted);
     AppUtils.parentRoute = AppUtils.prevRoute;
     this.selectedLeadTypeId = +this.route.snapshot.queryParamMap.get('leadTypeId');
     this.infoParam = this.route.snapshot.queryParamMap.get('leadSearchInfo');
@@ -106,7 +104,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.showNotes = this.route.snapshot.queryParamMap.get('showNotes') === 'true';
     this.route.params.subscribe(params => {
       this.leadId = +params['leadId'] || 0;
-      console.log('I am in Lead Edit ngOnInit: ', this.leadId, this.showSaveAndNext);
       if (this.leadId && this.showSaveAndNext) {
         this.getLeadIds(this.leadId);
       }
@@ -122,14 +119,12 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.leadEditForm.valueChanges.subscribe(data => {
       data.closeLead ? this.isLeadMarkedAsClosed = true : this.isLeadMarkedAsClosed = false;
     });
-    console.log('I am at the end of Lead Edit ngOnInit: ', this.leadId, this.showSaveAndNext, this.leadsListCompleted);
 
   }
 
   ngAfterViewInit() {
     if (this.leadNote) {
       this.note = this.leadNote.getNote();
-      console.log('in after view init', this.leadNote.getNote());
     }
   }
   init() {
@@ -161,7 +156,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     if (!this.isNewLead) {
       // receive new lead
       this.leadsService.leadsChanges$.subscribe(lead => {
-        console.log('i am here in Lead Change subscription...');
         this.lead = lead;
 
         if (lead) {
@@ -194,18 +188,13 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       this.getNextPersonNotesPage(this.page);
     });
 
-    console.log('I am at the end of Init(): ', this.leadId, this.showSaveAndNext, this.leadsListCompleted);
-
-
   }
 
   getLeadIds(leadId: number) {
     this.leadSearchInfo = JSON.parse(this.infoParam) as LeadSearchInfo;
-
     this.leadsService.getLeadIds(this.leadSearchInfo).subscribe(result => {
       this.leadIds = result;
       this.currentLeadIndex = this.leadIds.indexOf(this.leadSearchInfo.startLeadId);
-      console.log('(TRAVERSE) Lead IDs to traverse: ', this.leadIds);
 
       if (this.leadIds.length <= 1) {
         this.leadsListCompleted = true;
@@ -240,8 +229,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   private getLeadInformation() {
-    console.log('I am at the beginning of getLeadInformation(): ', this.leadId, this.showSaveAndNext, this.leadsListCompleted);
-
     this.leadsService.getLead(this.leadId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.lead = result;
       this.personId = result.personId;
@@ -252,13 +239,10 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     }, () => {
       this.lead = null;
     });
-    console.log('I am at the end of getLeadInformation(): ', this.leadId, this.showSaveAndNext, this.leadsListCompleted);
 
   }
 
   private patchLeadValues(lead: Lead) {
-    console.log('I am in patchLeadValues(): ', this.lead);
-
     if (lead) {
       this.leadEditForm.patchValue({
         ownerId: lead.ownerId,
@@ -274,7 +258,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   private getPersonInformation() {
-
     this.contactGroupService.getPerson(this.personId).subscribe(
       data => {
         if (data) {
@@ -310,6 +293,16 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       this.leadEditForm.patchValue({
         ownerId: ''
       });
+    }
+  }
+
+  getSelectedStaffMemberId(id: number) {
+    console.log('valuer id here', id)
+    if (id) {
+      this.isOwnerChanged = true;
+      this.leadEditForm.patchValue({ ownerId: id });
+    } else {
+      this.leadEditForm.patchValue({ ownerId: 0 });
     }
   }
 
@@ -354,13 +347,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   setNextChaseDateValidators() {
-    console.log('condit.....', this.nextChaseDateControl.value != '' && this.nextChaseDateControl.value < new Date() && !this.isValidatorCleared);
-
-    console.log("this.nextChaseDateControl.value == ''", this.nextChaseDateControl.value === '');
-    console.log("this.nextChaseDateControl.value == undefined", this.nextChaseDateControl.value === undefined);
-    console.log("this.nextChaseDateControl.value == null", this.nextChaseDateControl.value === null);
-    console.log("this.isValidatorCleared", !this.isValidatorCleared);
-    console.log("this.nextChaseDateControl.value < new Date()", this.nextChaseDateControl.value < new Date());
 
     if (this.nextChaseDateControl.value < new Date() && !this.isValidatorCleared) {
       this.nextChaseDateControl.setValidators(WedgeValidators.nextChaseDateValidator());
@@ -390,7 +376,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       } else {
         this.lead = {} as Lead;
         this.lead.relatedProperty = property;
-        console.log('related property', this.lead.relatedProperty);
       }
       this.isPropertyAssociated = true;
       this.isMessageVisible = false;
@@ -441,7 +426,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   private AddOrUpdateLead(lead: any) {
     if (this.isNewLead) {
       lead.personId = this.personId;
-      lead.createdBy = this.currentStaffMember.staffMemberId;      
+      lead.createdBy = this.currentStaffMember.staffMemberId;
       lead.createdDate = new Date;
       lead.updatedBy = this.currentStaffMember.staffMemberId;
       lead.updatedDate = new Date;
@@ -598,7 +583,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   getMoreInfo(item: SubNavItem) {
     this.moreInfo = item.value;
   }
-  
+
   canDeactivate(): boolean {
     if (this.leadEditForm.dirty && !this.isSubmitting || this.isPropertyAssociated || this.isPropertyRemoved) {
       return false;
