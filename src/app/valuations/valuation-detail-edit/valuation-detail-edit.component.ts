@@ -264,10 +264,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       receptions: [0],
       sqFt: [0],
       tenureId: [0],
-      outsideSpace: [null],
-      parking: [null],
-      propertyFeature: [null],
-      approxLeaseExpiryDate: [null],
+      outsideSpace: [''],
+      parking: [''],
+      propertyFeature: [''],
+      approxLeaseExpiryDate: [''],
       valuer: [''],
       isInvitationSent: true,
       totalHours: [1],
@@ -588,7 +588,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.setLeaseExpiryDate();
     this.isSubmitting = true;
     const valuation = { ...this.valuation, ...this.valuationForm.value };
-    this.approxLeaseExpiryDate ? valuation.approxLeaseExpiryDate = this.approxLeaseExpiryDate : this.valuation.approxLeaseExpiryDate = null;
+    if (this.approxLeaseExpiryDate) {
+      valuation.approxLeaseExpiryDate = this.approxLeaseExpiryDate;
+    }
 
     if (this.isNewValuation) {
       this.isInvitationSent.value ? valuation.valuationStatus = ValuationStatusEnum.Booked
