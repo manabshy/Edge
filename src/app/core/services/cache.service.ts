@@ -21,10 +21,10 @@ export class CacheService {
     if (response) {
       cache = response.cacheStatus;
       this.setCacheStatus(cache);
-      console.log('cache status from response', cache);
+      // console.log('cache status from response', cache);
 
       this.storage.get('cacheStatus').subscribe((result: CacheStatus) => {
-        console.log('existing cache status here..', result);
+        // console.log('existing cache status here..', result);
         if (result.info !== cache.info) {
           this.storage.delete('info').subscribe();
           this.infoService.getDropdownListInfo().subscribe();

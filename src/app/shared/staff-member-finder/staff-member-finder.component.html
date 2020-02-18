@@ -1,3 +1,7 @@
-<ng-select placeholder="Select Staff Member" [items]="staffMembers$|async" [hideSelected]="true" [clearable]="true"
-  bindLabel="fullName" bindValue="staffMemberId" (change)="onStaffMemberChange($event)">
-</ng-select>
+<form [formGroup]="staffMemberFinderForm">
+  <ng-select placeholder="Select Staff Member" [items]="staffMembers$|async" [hideSelected]="true" [clearable]="true"
+    bindLabel="fullName" bindValue="staffMemberId" (change)="onStaffMemberChange($event)"
+    formControlName="staffMemberId" [readonly]="isDisabled ? true : null"
+    [ngClass]="{'form-control-plaintext': isDisabled}">
+  </ng-select>
+</form>
