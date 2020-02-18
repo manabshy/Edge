@@ -46,8 +46,8 @@ export class LeadComponent implements OnInit {
           includeUnassignedLeadsOnly: false,
           leadSearchTerm: this.searchTerm ? this.searchTerm : ''
         };
-        if(AppUtils.leadSearchInfo){
-          console.log('from app utils', AppUtils.leadSearchInfo)
+        if (AppUtils.leadSearchInfo) {
+          console.log('from app utils', AppUtils.leadSearchInfo);
           this.leadSearchInfo = AppUtils.leadSearchInfo;
           // this.searchTerm = AppUtils.leadSearchInfo.leadSearchTerm;
         }
@@ -80,11 +80,18 @@ export class LeadComponent implements OnInit {
           this.leads = result;
         }
       }
-      result && !result.length ? this.bottomReached = true : this.bottomReached = false;
-
+      this.setBottomReachedFlag(result);
     }, error => {
       this.leads = [];
     });
+  }
+
+  private setBottomReachedFlag(result: any) {
+    if (result && (!result.length || result.length < +PAGE_SIZE)) {
+      this.bottomReached = true;
+    } else {
+      this.bottomReached = false;
+    }
   }
 
   getAllStaffmembers() {
