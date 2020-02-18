@@ -109,13 +109,13 @@
       </div>
       <div class="row align-items-center">
         <div class="col-4 text-center">
-          <h5 class="m-0 text-secondary">{{totalExchanges | rounding | number: '1.0-0' | truncating }}</h5>
+          <h5 class="m-0 text-secondary">{{totalExchanges | rounding | currency:'GBP':'symbol':'1.0-0' | truncating }}</h5>
           <p>Total</p>
         </div>
         <div class="col-8">
           <div class="row">
             <div class="col-6 px-2 text-center" *ngFor="let member of teamDashboard">
-              <h5 class="m-0">{{ member.exchanges.periodFees | rounding | number: '1.0-0' | truncating }}</h5>
+              <h5 class="m-0">{{ member.exchanges.periodFees | rounding | currency:'GBP':'symbol':'1.0-0' | truncating }}</h5>
               <p>{{ member.staffMember.staffMemberFullName | shortenName}}</p>
             </div>
           </div>
@@ -128,13 +128,13 @@
       <h6 class="card-title">Pipeline</h6>
       <div class="row align-items-center">
         <div class="col-4 text-center">
-          <h5 class="m-0 text-secondary">{{totalPipeline | rounding | number: '1.0-0' | truncating }}</h5>
+          <h5 class="m-0 text-secondary">{{totalPipeline | rounding | currency:'GBP':'symbol':'1.0-0' | truncating }}</h5>
           <p>Total</p>
         </div>
         <div class="col-8">
           <div class="row">
             <div class="col-6 px-2 text-center" *ngFor="let member of teamDashboard">
-              <h5 class="m-0">{{ member.pipeline.totalFees | rounding | number: '1.0-0' | truncating }}</h5>
+              <h5 class="m-0">{{ member.pipeline.totalFees | rounding | currency:'GBP':'symbol':'1.0-0' | truncating }}</h5>
               <p>{{ member.staffMember.staffMemberFullName | shortenName}}</p>
             </div>
           </div>

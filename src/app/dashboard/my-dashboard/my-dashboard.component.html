@@ -36,7 +36,7 @@
         {{
                 myDashboard?.exchanges.periodFees
                   | rounding
-                  | number: '1.0-0'
+                  | currency:'GBP':'symbol':'1.0-0'
                   | truncating
               }}
       </h4>
@@ -50,7 +50,7 @@
         {{
                     myDashboard?.pipeline.totalFees
                       | rounding
-                      | number: '1.0-0'
+                      | currency:'GBP':'symbol':'1.0-0'
                       | truncating
                   }}
       </h4>
