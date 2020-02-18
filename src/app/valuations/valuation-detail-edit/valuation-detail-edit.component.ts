@@ -66,6 +66,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   allOrigins: InfoDetail[];
   origins: InfoDetail[];
   origin: string;
+  valuers: BaseStaffMember[] = [];
 
   get isInvitationSent() {
     return this.valuationForm.get('isInvitationSent') as FormControl;
@@ -140,10 +141,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
 
     if (this.propertyId) {
-      this.propertyService.getProperty(this.propertyId, false, false, false).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.propertyService.getProperty(this.propertyId, false, false, true).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
         if (result) {
           this.lastKnownOwner = result.lastKnownOwner;
           this.existingProperty = result;
+          this.valuers = result.valuers;
           const baseProperty = { propertyId: this.existingProperty.propertyId, address: this.existingProperty.address } as BaseProperty;
           this.valuationForm.get('property').setValue(baseProperty);
           console.log('base property', this.valuationForm.get('property').value);
@@ -158,7 +160,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.features = info.propertyFeatures;
       this.allOrigins = info.origins;
       this.originTypes = info.originTypes;
-      console.log('all origins', this.allOrigins);
     });
 
     this.storage.get('allAttendees').subscribe(data => {
@@ -318,6 +319,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         if (this.valuation && this.allOrigins) {
           this.getOriginIdValue(this.valuation.originId);
         }
+
       }
     }));
   }
@@ -385,14 +387,14 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
   getSelectedProperty(property: Property) {
     if (property) {
-      // this.valuation.property = property;
+      this.valuers = [];
       this.existingProperty = property;
       this.isPropertyChanged = true;
       this.lastKnownOwner = property.lastKnownOwner;
       this.valuationForm.get('property').setValue(property);
       this.valuationForm.get('propertyOwner').setValue(this.lastKnownOwner);
+      this.getValuers(property.propertyId);
       console.log('selected prop owner......', this.valuationForm.get('propertyOwner').value);
-
       console.log('property changed', this.isPropertyChanged);
     }
   }
@@ -458,9 +460,17 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
   showValuersList() {
     this.showOnlyMainStaffMember = !this.showOnlyMainStaffMember;
+    if (this.existingProperty || this.createdProperty) {
+      const propId = this.existingProperty.propertyId || this.createdProperty.propertyId;
+      this.getValuers(propId);
+    }
   }
-  onClear() {
-    console.log('clear......');
+
+  private getValuers(propId: number) {
+    if (this.valuers && !this.valuers.length) {
+      this.propertyService.getProperty(propId, false, false, true).pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe(data => this.valuers = data.valuers);
+    }
   }
 
   onTenureChange(tenureId: number) {

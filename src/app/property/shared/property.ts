@@ -1,6 +1,7 @@
 import { Address } from 'src/app/shared/models/address';
 import { SubNavItem, SubNav } from 'src/app/shared/subnav';
 import { Signer } from 'src/app/contactgroups/shared/contact-group';
+import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
 
 export interface PropertyInfo {
   bedrooms?: number;
@@ -28,6 +29,7 @@ export interface Property extends PropertyInfo {
   photo: Photo;
   info: PropertySummaryFigures;
   lastKnownOwner: Signer;
+  valuers?: BaseStaffMember[];
 }
 
 export interface MapCentre {
