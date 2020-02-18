@@ -5,6 +5,7 @@ import { StaffMember } from '../shared/models/staff-member';
 import { Lead, LeadSearchInfo } from './shared/lead';
 import * as _ from 'lodash';
 import { AppUtils } from '../core/shared/utils';
+import { SharedService } from '../core/services/shared.service';
 
 const PAGE_SIZE = 20;
 @Component({
@@ -22,7 +23,7 @@ export class LeadComponent implements OnInit {
   leadSearchInfo: LeadSearchInfo;
   searchTerm = '';
 
-  constructor(private leadService: LeadsService, private staffMemberService: StaffMemberService) { }
+  constructor(private leadService: LeadsService, private sharedService: SharedService, private staffMemberService: StaffMemberService) { }
 
   ngOnInit() {
 
@@ -81,7 +82,8 @@ export class LeadComponent implements OnInit {
         }
       }
       this.setBottomReachedFlag(result);
-    }, error => {
+
+    }, () => {
       this.leads = [];
     });
   }
@@ -97,7 +99,7 @@ export class LeadComponent implements OnInit {
   getAllStaffmembers() {
     this.staffMemberService.getAllStaffMembers().subscribe(result => {
       this.staffMembers = result;
-    }, error => {
+    }, () => {
       this.staffMembers = [];
     });
   }
