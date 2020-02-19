@@ -70,7 +70,7 @@ export class ValuationService {
     const url = `${AppConstants.baseValuationUrl}/${instruction.valuationEventId}/instruct`;
     return this.http.post<any>(url, instruction)
       .pipe(
-        map(response => response.result),
+        map(response => response),
         tap(data => console.log('added instruction', JSON.stringify(data)))
       );
   }

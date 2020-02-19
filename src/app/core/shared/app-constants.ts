@@ -76,7 +76,9 @@ export const FormErrors = {
   'askingPrice': '',
   'askingRentShortLet': '',
   'askingRentLongLet': '',
-  'agencyType': ''
+  'agencyType': '',
+  'originId': '',
+  'originType': ''
 };
 
 export const ValidationMessages = {
@@ -197,6 +199,12 @@ export const ValidationMessages = {
   },
   'agencyType': {
     required: 'Agency type is required'
+  },
+  'originId': {
+    required: 'Vendor origin is required'
+  },
+  'originType': {
+    required: 'Vendor origin type is required'
   }
   // 'invalidPhoneNumber': {
   //   required: 'Phone is required',
