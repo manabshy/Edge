@@ -25,17 +25,19 @@ export class CacheService {
 
       this.storage.get('cacheStatus').subscribe((result: CacheStatus) => {
         // console.log('existing cache status here..', result);
-        if (result.info !== cache.info) {
-          this.storage.delete('info').subscribe();
-          this.infoService.getDropdownListInfo().subscribe();
-        }
-        if (result.offices !== cache.offices) {
-          this.storage.delete('offices').subscribe();
-          this.officeService.getOffices().subscribe();
-        }
-        if (result.staffMembers !== cache.staffMembers) {
-          this.storage.delete('allstaffmembers').subscribe();
-          this.staffMemberService.getAllStaffMembers().subscribe();
+        if (result && cache) {
+          if (result.info !== cache.info) {
+            this.storage.delete('info').subscribe();
+            this.infoService.getDropdownListInfo().subscribe();
+          }
+          if (result.offices !== cache.offices) {
+            this.storage.delete('offices').subscribe();
+            this.officeService.getOffices().subscribe();
+          }
+          if (result.staffMembers !== cache.staffMembers) {
+            this.storage.delete('allstaffmembers').subscribe();
+            this.staffMemberService.getAllStaffMembers().subscribe();
+          }
         }
       });
       // switch (true) {
