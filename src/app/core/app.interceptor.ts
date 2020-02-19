@@ -23,7 +23,7 @@ export class AppInterceptor implements HttpInterceptor {
     const jsonReq: HttpRequest<any> = req.clone({
       setHeaders: {
         'Content-Type': 'application/json',
-        'impersonation': this.impersonatedStaffMemberId ? this.impersonatedStaffMemberId.toString() : ''
+        'work-as': this.impersonatedStaffMemberId ? this.impersonatedStaffMemberId.toString() : ''
       }
     });
     if (req.method !== 'GET') {
