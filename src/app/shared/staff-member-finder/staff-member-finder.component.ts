@@ -30,8 +30,8 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
+    console.log('staffMember Id', this.staffMemberId);
     if (this.staffMemberId) {
-      console.log('staffMember Id', this.staffMemberId);
       this.staffMemberFinderForm.patchValue({
         staffMemberId: this.staffMemberId
       });

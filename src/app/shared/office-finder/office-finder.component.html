@@ -1,3 +1,5 @@
-<ng-select placeholder="Select Office" [items]="offices$ |async" [clearable]="true" bindLabel="name"
-  bindValue="officeId" [virtualScroll] = "true" groupBy="category" (change)="onOfficeChange($event)">
-</ng-select>
+<form [formGroup]="officeFinderForm">
+  <ng-select placeholder="Select Office" [items]="offices$ |async" [clearable]="true" bindLabel="name"
+    bindValue="officeId" [virtualScroll] = "true" groupBy="category" (change)="onOfficeChange($event)" formControlName="officeId">
+  </ng-select>
+</form>

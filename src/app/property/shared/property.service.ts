@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import {
   PropertyAutoComplete, PropertyAutoCompleteData, Property, PropertyData,
-  PropertyPhotoData, Photo, InstructionInfo, OfferInfo, PropertyNote
+  PropertyPhotoData, Photo, InstructionInfo, OfferInfo, PropertyNote, PropertyLocation
 } from './property';
 import { map, tap } from 'rxjs/operators';
 import { AppConstants } from 'src/app/core/shared/app-constants';
@@ -11,6 +11,7 @@ import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encod
 import { Address } from 'src/app/shared/models/address';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { RequestOption, AppUtils } from 'src/app/core/shared/utils';
+import { Office } from 'src/app/shared/models/staff-member';
 
 @Injectable({
   providedIn: 'root'
@@ -190,6 +191,11 @@ export class PropertyService {
     return this.http.put<any>(url, propertyNote).pipe(
       map(response => response.result),
       tap(data => console.log('updated property note here...', JSON.stringify(data))));
+  }
+
+  getPropertyOfficeId(address?: Address): Observable<PropertyLocation |any> {
+    const url = `${AppConstants.basePropertyUrl}/location`;
+    return this.http.post<any>(url, address).pipe(map(response => response.result));
   }
 
   currentPropertyChanged(propertyId: number) {

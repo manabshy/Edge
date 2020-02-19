@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PropertyService } from '../shared/property.service';
-import { Property } from '../shared/property';
+import { Property, PropertyLocation } from '../shared/property';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ValidationMessages, FormErrors } from 'src/app/core/shared/app-constants';
 import { Location } from '@angular/common';
@@ -15,13 +15,15 @@ import { StorageMap } from '@ngx-pwa/local-storage';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { Subject } from 'rxjs';
 import { ConfirmModalComponent } from 'src/app/shared/confirm-modal/confirm-modal.component';
+import { BaseComponent } from 'src/app/shared/models/base-component';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-property-detail-edit',
   templateUrl: './property-detail-edit.component.html',
   styleUrls: ['./property-detail-edit.component.scss']
 })
-export class PropertyDetailEditComponent implements OnInit {
+export class PropertyDetailEditComponent extends BaseComponent implements OnInit {
   propertyId: number;
   propertyDetails: Property;
   propertyForm: FormGroup;
@@ -56,6 +58,8 @@ export class PropertyDetailEditComponent implements OnInit {
   defaultRegionId = 1;
   searchedAddress: string;
   getBack: number;
+  officeId: number;
+  propertyLocation: PropertyLocation;
 
   constructor(private route: ActivatedRoute,
     private _router: Router,
@@ -66,7 +70,7 @@ export class PropertyDetailEditComponent implements OnInit {
     private contactGroupService: ContactGroupsService,
     private toastr: ToastrService,
     private fb: FormBuilder,
-    private _location: Location) { }
+    private _location: Location) { super(); }
 
   ngOnInit() {
     this.storage.get('info').subscribe(data => {
@@ -141,6 +145,7 @@ export class PropertyDetailEditComponent implements OnInit {
   getPropertyDetails(propertyId: number) {
     this.propertyService.getProperty(propertyId, false, false, false).subscribe(data => {
       this.propertyDetails = data;
+      this.officeId = data.officeId;
       this.onSelectType(data.propertyTypeId);
       this.onSelectRegion(data.regionId);
       this.onSelectArea(data.areaId);
@@ -148,19 +153,20 @@ export class PropertyDetailEditComponent implements OnInit {
     });
   }
 
-  private displayPropertyDetails(data: Property) {
+  private displayPropertyDetails(property: Property) {
     if (this.propertyForm) {
       this.propertyForm.reset();
     }
     this.propertyForm.patchValue({
-      propertyTypeId: data.propertyTypeId,
-      propertyStyleId: data.propertyStyleId,
-      regionId: data.regionId,
-      areaId: data.areaId,
-      subAreaId: data.subAreaId,
-      address: data.address
+      officeId: property.officeId,
+      propertyTypeId: property.propertyTypeId,
+      propertyStyleId: property.propertyStyleId,
+      regionId: property.regionId,
+      areaId: property.areaId,
+      subAreaId: property.subAreaId,
+      address: property.address
     });
-    this.lastKnownOwner = data.lastKnownOwner;
+    this.lastKnownOwner = property.lastKnownOwner;
   }
 
   onSelectType(propertyTypeId: number) {
@@ -189,6 +195,7 @@ export class PropertyDetailEditComponent implements OnInit {
     this.propertyForm = this.fb.group({
       propertyTypeId: [0, Validators.required],
       propertyStyleId: [0],
+      officeId: [0],
       regionId: 1,
       areaId: [0],
       subAreaId: [0],
@@ -196,6 +203,9 @@ export class PropertyDetailEditComponent implements OnInit {
     });
   }
 
+  getSelectedOfficeId(id: number) {
+    this.propertyForm.get('officeId').setValue(id);
+  }
 
   getAddress(address: Address) {
     if (this.propertyAddress && JSON.stringify(this.propertyAddress) !== JSON.stringify(address)) {
@@ -205,7 +215,12 @@ export class PropertyDetailEditComponent implements OnInit {
     }
     this.propertyAddress = address;
     this.isMatchFound = false;
-
+    this.propertyService.getPropertyOfficeId(address).pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(result => {
+        this.officeId = result.officeId;
+        this.propertyLocation = result;
+        console.log('officeId from db', this.officeId);
+      });
     if (this.propertyAddress) {
       this.propertyForm.patchValue({ address: this.propertyAddress });
     }
@@ -355,11 +370,12 @@ export class PropertyDetailEditComponent implements OnInit {
         if (this.leadId) {
           this._router.navigate(['/leads-register/edit/', this.leadId]);
         } else {
-          this._router.navigate(['/leads-register/edit/', this.leadId], { queryParams: { isNewLead: true, personId: this.lastKnownPerson.personId } });
+          this._router.navigate(['/leads-register/edit/', this.leadId],
+            { queryParams: { isNewLead: true, personId: this.lastKnownPerson.personId } });
         }
       }
     } else {
-      if(this.getBack) {
+      if (this.getBack) {
         this.propertyService.setAddedProperty(property);
         console.log('property in edit.........xxxxxxxxx', property);
         this._location.back();

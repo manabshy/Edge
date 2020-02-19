@@ -14,6 +14,7 @@ export interface PropertyInfo {
   propertyFeature: string;
 }
 export interface Property extends PropertyInfo {
+  officeId: number;
   propertyId: number;
   propertyTypeId: PropertyType;
   propertyStyleId: PropertyStyle;
@@ -100,6 +101,12 @@ export interface PropertyNote {
   createdBy: number;
   type: number;
   typeDescription: string;
+}
+
+export interface PropertyLocation {
+  latitude: number;
+  longitude: number;
+  officeId: number;
 }
 export interface PropertyData {
   result: Property;
