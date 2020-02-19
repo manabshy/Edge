@@ -205,7 +205,7 @@
         <div class="off-canvas" [hidden]="!showCalendar" (click)="showCalendar = false">
           <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
             <h4 class="page-title text-left pt-3">
-              Calendar
+              {{mainStaffMember?.fullName}} Calendar 
               <button type="button" class="close mr-2" aria-label="Close" (click)="showCalendar = false">
                 <span aria-hidden="true">&times;</span>
               </button>

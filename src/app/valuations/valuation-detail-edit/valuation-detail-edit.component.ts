@@ -445,6 +445,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.attendees.push(this.attendee);
       this.valuationForm.get('attendees').setValue(this.attendees);
       this.valuationForm.get('searchAttendeeId').setValue(null);
+      if(!this.showOnlyMainStaffMember) {
+        this.setMain(this.attendee);
+      }
     }
   }
 

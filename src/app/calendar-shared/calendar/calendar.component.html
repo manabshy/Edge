@@ -1,4 +1,4 @@
-<a class="btn btn-secondary add-event mb-sm-3" href="">
+<a class="btn btn-secondary add-event mb-sm-3" href="" *ngIf="!myCalendarOnly">
   <i class="fas fa-plus mr-2"></i> Event
 </a>
 <app-calendar-header [(view)]="view" [(daysInWeek)]="daysInWeek" [(viewDate)]="viewDate"
