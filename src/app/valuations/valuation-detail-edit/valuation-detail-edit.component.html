@@ -194,12 +194,13 @@
           </button>
         </p>
         <ng-template #allMain>
-          <label class="small">Pick a Member</label>
-          <app-subnav class="small mb-3">
+          <label class="small">Pick a Member to select the availability</label>
+          <app-subnav class="small mb-2">
             <app-subnav-item *ngFor="let valuer of valuers" (click)="selectMainStaffMember(valuer)">
               {{valuer?.fullName}}
             </app-subnav-item>
           </app-subnav>
+          <p class="small mb-2">or</p>
         </ng-template>
         <div class="off-canvas" [hidden]="!showCalendar" (click)="showCalendar = false">
           <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
