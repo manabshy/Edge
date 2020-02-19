@@ -74,15 +74,6 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       }
     });
 
-    // Offices
-    this.storage.get('offices').subscribe(data => {
-      if (data) {
-        this.offices = data as Office[];
-      } else {
-        this.officeService.getOffices().subscribe(result => this.offices = result);
-      }
-    });
-
     // Current Logged in staffmember
     this.storage.get('currentUser').subscribe((data: StaffMember) => {
       if (data) {
