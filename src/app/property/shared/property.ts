@@ -34,8 +34,8 @@ export interface Property extends PropertyInfo {
 }
 
 export interface MapCentre {
-  longitude: string;
-  latitude: string;
+  longitude: string | number;
+  latitude: string | number;
 }
 export interface Photo {
   propertyId: number;

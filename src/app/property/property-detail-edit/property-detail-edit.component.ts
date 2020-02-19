@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PropertyService } from '../shared/property.service';
-import { Property, PropertyLocation } from '../shared/property';
+import { Property, PropertyLocation, MapCentre } from '../shared/property';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ValidationMessages, FormErrors } from 'src/app/core/shared/app-constants';
 import { Location } from '@angular/common';
@@ -309,7 +309,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
 
   AddOrUpdateProperty() {
     let propertyAddress;
-    const property = { ...this.propertyDetails, ...this.propertyForm.value };
+    const property = { ...this.propertyDetails, ...this.propertyForm.value } as Property;
     if (this.propertyDetails) {
       propertyAddress = { ...this.propertyDetails.address, ...this.propertyAddress };
       property.lastKnownOwner = this.lastKnownOwner;
@@ -318,7 +318,16 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
       property.lastKnownOwner = this.lastKnownOwner;
       property.address = this.propertyAddress;
     }
+  
+    if (this.propertyLocation) {
+      if (property.mapCentre === undefined) {
+        property.mapCentre = {} as MapCentre;
+      }
+      property.mapCentre.latitude = this.propertyLocation.latitude;
+      property.mapCentre.longitude = this.propertyLocation.longitude;
+    }
 
+    console.log('property to be added', property)
     if (this.isNewProperty) {
       if (this.isMatchFound) {
         this.showMatches = true;

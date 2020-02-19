@@ -569,7 +569,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     const instructionSelected = this.instructionForm.get('instructSale').value || this.instructionForm.get('instructShortLet').value
       || this.instructionForm.get('instructLongLet').value;
     if (this.instructionForm.valid) {
-      if (this.instructionForm.dirty && instructionSelected) {
+      if (this.instructionForm.dirty) {
         this.isSubmitting = true;
         const instruction = { ...this.instruction, ...this.instructionForm.value };
         this.valuationService.addInstruction(instruction).subscribe((result: ResultData) => {
