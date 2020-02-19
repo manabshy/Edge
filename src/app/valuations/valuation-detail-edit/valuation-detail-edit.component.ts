@@ -182,8 +182,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     });
 
     this.valuationForm.valueChanges
-      .pipe(debounceTime(400))
-      .subscribe(() => {
+      // .pipe(debounceTime(400))
+      .subscribe((data) => {
         this.sharedService.logValidationErrors(this.valuationForm, false);
         this.setRentFigures();
       });
