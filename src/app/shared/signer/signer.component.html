@@ -1,11 +1,11 @@
 <ng-container>
   <form class="pb-0" [formGroup]="signerFinderForm" autocompleteOff>
-    <div class="row" [hidden]="!selectedSignerDetails">
+    <div [ngClass]="{'row': !fullWidth}" [hidden]="!selectedSignerDetails">
       <ng-container *ngIf="!label; else givenLabel "><label for="searchTerm"
-          class="col-form-label col-form-label-sm" [ngClass]="fullWidth ? 'col-12 text-left' : 'col-sm-2'">Signers</label></ng-container>
+          [ngClass]="{'col-form-label col-form-label-sm col-sm-2': !fullWidth, 'small': fullWidth, 'mb-1': readOnly}">Signers</label></ng-container>
       <ng-template #givenLabel><label for="searchTerm"
-          class="col-form-label col-form-label-sm" [ngClass]="fullWidth ? 'col-12 text-left' : 'col-sm-2'">{{label}}</label></ng-template>
-      <div class="col">
+          [ngClass]="{'col-form-label col-form-label-sm col-sm-2': !fullWidth, 'small': fullWidth, 'mb-1': readOnly}">{{label}}</label></ng-template>
+      <div [ngClass]="{'col': !fullWidth}">
         <div class="form-group d-flex d-sm-block">
           <input type="hidden" #selectedSignerInput
             id="selectedSigner" formControlName="selectedSigner">

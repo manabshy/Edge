@@ -14,6 +14,8 @@ import { FormGroup, FormControl } from '@angular/forms';
 })
 export class OfficeFinderComponent implements OnInit, OnChanges {
   @Input() officeId: number;
+  @Input() fullWidth: boolean;
+  @Input() readOnly: boolean;
   @Output() selectedOfficeId = new EventEmitter<number>();
   offices$ = new Observable<Office[]>();
   officeFinderForm: FormGroup;

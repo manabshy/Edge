@@ -1,5 +1,12 @@
 <form [formGroup]="officeFinderForm">
-  <ng-select placeholder="Select Office" [items]="offices$ |async" [clearable]="true" bindLabel="name"
-    bindValue="officeId" [virtualScroll] = "true" groupBy="category" (change)="onOfficeChange($event)" formControlName="officeId">
-  </ng-select>
+  <div [ngClass]="{'row': !fullWidth}">
+    <label for="office"
+      [ngClass]="{'col-form-label col-form-label-sm col-sm-2': !fullWidth, 'small': fullWidth, 'mb-0': readOnly}">Office</label>
+    <div [ngClass]="{'col': !fullWidth}">
+      <ng-select id="office" placeholder="Select Office" [items]="offices$ |async" [clearable]="true" bindLabel="name" [readonly]="readOnly"
+        bindValue="officeId" [virtualScroll]="true" groupBy="category" (change)="onOfficeChange($event)"
+        formControlName="officeId">
+      </ng-select>
+    </div>
+  </div>
 </form>

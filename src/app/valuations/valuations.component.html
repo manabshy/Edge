@@ -42,8 +42,7 @@
             <app-staff-member-finder (selectedStaffMemberId)="getSelectedStaffMemberId($event)" [listType]="'allValuers'"></app-staff-member-finder>
           </div>
           <div class="col-sm form-group">
-            <label class="small" for="office">Office</label>
-            <app-office-finder [officeId] = "officeId" (selectedOfficeId)= "getSelectedOfficeId($event)"></app-office-finder>
+            <app-office-finder [officeId] = "officeId" (selectedOfficeId)= "getSelectedOfficeId($event)" [fullWidth]="true"></app-office-finder>
           </div>
         </div>
       </div>

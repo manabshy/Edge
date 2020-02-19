@@ -45,20 +45,28 @@
     @include alert-variant(theme-color-level("primary", $alert-bg-level), theme-color-level("primary", $alert-border-level), theme-color-level("primary", $alert-color-level));
 }
 
-.ng-select.ng-select-disabled>.ng-select-container{
-    background-color: transparent;
-    border: none;
-
-    &:hover{
-        box-shadow: none;
+.ng-select.ng-select-disabled {
+    &>.ng-select-container{
+        background-color: transparent;
+        border: none;
+    
+        &:hover{
+            box-shadow: none;
+        }
+    
+        .ng-value-container {
+            padding: 0;
+        }
+    
+        .ng-arrow-wrapper {
+            display: none;
+        }
     }
 
-    .ng-value-container {
-        padding: 0;
-    }
-
-    .ng-arrow-wrapper {
-        display: none;
+    &.ng-select-single {
+        &>.ng-select-container{ 
+            font-weight: bold;
+        }
     }
 }
 

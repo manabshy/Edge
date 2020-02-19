@@ -39,6 +39,10 @@ tr:first-child{
     }
 }
 
+small {
+    font-size: $font-size-sm;
+}
+
 .col-form-label{
     text-align: right;
 

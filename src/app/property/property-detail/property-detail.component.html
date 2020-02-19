@@ -56,11 +56,15 @@
             </div>
             <div class="col">
               <pre class="mb-2"><strong>{{propertyDetails?.address | formatAddress}}</strong></pre>
-              <p *ngIf="propertyDetails?.lastKnownOwner?.contactGroupId">
-                <span class="d-block">Last known owner</span>
-                <a
-                  [routerLink]="['/contact-centre/detail/0/people', propertyDetails?.lastKnownOwner?.contactGroupId]">{{propertyDetails?.lastKnownOwner?.contactNames}}</a>
-              </p>
+              <div class="row">
+                <div class="col-sm mb-2">
+                  <app-office-finder [officeId]="propertyDetails?.officeId" [fullWidth]="true" [readOnly]="true"></app-office-finder>
+                </div>
+                <div class="col-sm" *ngIf="propertyDetails?.lastKnownOwner?.contactGroupId">
+                  <app-signer label="Last known owner" [existingSigner]="propertyDetails?.lastKnownOwner"
+                    [readOnly]="true" [fullWidth]="true"></app-signer>
+                </div>
+              </div>
             </div>
             <div class="col-auto">
               <a routerLink="edit"><i class="fas fa-edit"></i> Edit</a>
