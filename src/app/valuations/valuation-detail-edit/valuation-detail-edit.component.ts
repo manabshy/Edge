@@ -20,6 +20,7 @@ import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
 import { Valuation, ValuationStatusEnum } from '../shared/valuation';
 import { ValuationService } from '../shared/valuation.service';
 import { Instruction } from 'src/app/shared/models/instruction';
+import { ResultData } from 'src/app/shared/result-data';
 
 @Component({
   selector: 'app-valuation-detail-edit',
@@ -179,6 +180,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.isCreatingNewSigner = false;
       }
     });
+
     this.valuationForm.valueChanges
       .pipe(debounceTime(400))
       .subscribe(() => {
@@ -254,7 +256,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.valuationForm = this.fb.group({
       property: [''],
       propertyOwner: [''],
-      originId: [0],
+      originType: [0, Validators.required],
+      originId: [0, Validators.required],
       reason: ['', Validators.required],
       timeFrame: ['', Validators.required],
       marketChat: ['', Validators.required],
@@ -545,6 +548,18 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   }
 
+  hasOriginTypeError() {
+    const originTypeControl = this.valuationForm.get('originType');
+    originTypeControl.markAsDirty();
+
+    const hasError = originTypeControl.value === 0 && originTypeControl.dirty && originTypeControl.errors && originTypeControl.errors.required;
+    if (hasError) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   saveInstruction() {
     this.setInstructionFormValidators();
     this.sharedService.logValidationErrors(this.instructionForm, true);
@@ -554,8 +569,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       if (this.instructionForm.dirty && instructionSelected) {
         this.isSubmitting = true;
         const instruction = { ...this.instruction, ...this.instructionForm.value };
-        this.valuationService.addInstruction(instruction).subscribe(result => {
-          this.onInstructionSaveComplete(result);
+        this.valuationService.addInstruction(instruction).subscribe((result: ResultData) => {
+          this.onInstructionSaveComplete(result.status);
         });
         console.log('instruction form to save', this.instructionForm.value);
       } else {
@@ -590,6 +605,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     const valuation = { ...this.valuation, ...this.valuationForm.value };
     if (this.approxLeaseExpiryDate) {
       valuation.approxLeaseExpiryDate = this.approxLeaseExpiryDate;
+    }
+    if (this.valuationForm.get('sqFt').value === 'Not Known') {
+      valuation.sqFt = 0;
     }
 
     if (this.isNewValuation) {
@@ -641,14 +659,14 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       .then(() => this.router.navigate(['/valuations-register/detail', valuation.valuationEventId, 'edit']));
   }
 
-  onInstructionSaveComplete(instruction?: Instruction) {
-    const instructionEventId = instruction.salesInstructionEventId || instruction.lettingsInstructionEventId;
+  onInstructionSaveComplete(status?: boolean) {
+    // const instructionEventId = instruction.salesInstructionEventId || instruction.lettingsInstructionEventId;
     this.instructionForm.markAsPristine();
     this.isSubmitting = false;
     this.errorMessage = null;
-    if (instructionEventId) {
+    if (status) {
       this.toastr.success('Instruction successfully saved');
-      this.router.navigate(['/property-centre/detail', instructionEventId]);
+      this.router.navigate(['/property-centre/detail', this.existingProperty.propertyId]);
     }
   }
 
