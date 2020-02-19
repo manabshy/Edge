@@ -5,6 +5,16 @@
 
 $time-column-mobile-width: 40px;
 
+.add-event {
+    @include media-breakpoint-down(sm) {
+        position: fixed;
+        z-index: 10;
+        bottom: 70px;
+        right: spacer(2);
+    }
+}
+
+
 :host ::ng-deep {
 
     mwl-calendar-month-view, mwl-calendar-week-view {
@@ -22,11 +32,11 @@ $time-column-mobile-width: 40px;
             background: color("white");
 
             @include media-breakpoint-down(sm) {
-                top: $top-bar-height + 85 + 43;
+                top: $top-bar-height + 85 + 24;
             }
 
             @media (max-width: 320px) {
-                top: $top-bar-height + 70;
+                top: $top-bar-height + 96;
             }
         }
     }
