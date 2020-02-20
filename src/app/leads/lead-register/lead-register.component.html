@@ -87,7 +87,75 @@
       </button>
     </div>
   </div>
-  <div class="list-group mb-3">
+  
+  <div *ngIf="leads" class="search-results" infiniteScroll [infiniteScrollDistance]="5"
+  [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true">
+  </div>
+  <table class="table table-hover border bg-white responsive">
+    <thead>
+      <tr>
+        <th *ngIf="areLeadsAssignable">
+          <a href *ngIf="areLeadsAssignable" (click)="selectAllLeadsForAssignment($event)">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="assignAll"
+                [attr.checked]="isSelectAllChecked ? 'checked' : null">
+              <label class="custom-control-label" for="assignAll"><span class="sr-only">Assign all</span></label>
+            </div>
+          </a>
+        </th>
+        <th *ngIf="isClosedIncluded"><span class="badge badge-pill badge-primary invisible">Closed</span></th>
+        <th>Type</th>
+        <th>Person</th>
+        <th>Chase Date</th>
+        <th>Chaser</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let lead of filteredLeads; let i = index;" 
+        (click)="selectLeadForAssignment($event, lead); navigateToEdit(lead)"
+        [ngClass]="{'table-info': selectedLeadIndex(lead) >= 0}">
+        <td *ngIf="areLeadsAssignable">
+          <div class="custom-control custom-checkbox d-inline-block" (click)="$event.stopPropagation()">
+            <input type="checkbox" class="custom-control-input" [attr.id]="'assign'+i"
+              [attr.checked]="selectedLeadsForAssignment?.indexOf(lead) >= 0 ? 'checked' : null" (click)="selectLeadForAssignment($event, lead)">
+            <label class="custom-control-label" [attr.for]="'assign'+i"><span class="sr-only">Assign</span></label>
+          </div>
+        </td>
+        <td *ngIf="isClosedIncluded">
+          <span class="badge badge-pill badge-primary" [ngClass]="{'invisible': !lead?.closedById}">Closed</span>
+        </td>
+        <td>
+          <dl class="row">
+            <dt class="col-4 d-sm-none">Type</dt>
+            <dd class="col">{{lead?.leadType}}</dd>
+          </dl>
+        </td>
+        <td (click)="$event.stopPropagation();">
+          <dl class="row">
+            <dt class="col-4 d-sm-none">Person</dt>
+            <dd class="col">
+              <a href (click)="navigateToEdit(lead)">
+                {{lead?.person}}
+              </a>
+            </dd>
+          </dl>
+        </td>
+        <td>
+          <dl class="row">
+            <dt class="col-4 d-sm-none">Chase Date</dt>
+            <dd class="col">{{(lead?.nextChaseDate | date: 'dd/MM/yyyy') || '-'}}</dd>
+          </dl>
+        </td>
+        <td>
+          <dl class="row">
+            <dt class="col-4 d-sm-none">Chaser</dt>
+            <dd class="col">{{lead?.owner}}</dd>
+          </dl>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- <div class="list-group mb-3">
     <div class="list-group-item list-header d-none d-sm-block">
       <div class="row">
         <a href class="col-1" *ngIf="areLeadsAssignable" (click)="selectAllLeadsForAssignment($event)">
@@ -103,10 +171,6 @@
         <div class="col-sm"><strong>Chase Date</strong></div>
         <div class="col-sm"><strong>Chaser</strong></div>
       </div>
-    </div>
-    <div *ngIf="leads" class="search-results" infiniteScroll [infiniteScrollDistance]="5"
-      [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"
-      >
     </div>
     <a (click)="selectLeadForAssignment($event, lead); navigateToEdit(lead)"
       class="list-group-item list-group-item-action" *ngFor="let lead of filteredLeads; let i = index;"
@@ -152,7 +216,7 @@
         </div>
       </div>
     </a>
-  </div>
+  </div> -->
   <div class="form-actions" *ngIf="areLeadsAssignable">
     <div class="container px-lg-4">
       <div class="row justify-content-end w-100 no-gutters">

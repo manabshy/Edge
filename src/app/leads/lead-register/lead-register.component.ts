@@ -219,7 +219,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     if (this.leadSearchInfo) {
       this.isClosedIncluded = this.leadSearchInfo.includeClosedLeads;
     }
-    this.sharedService.scrollElIntoView('list-group');
+    this.sharedService.scrollElIntoView('table');
     this.leadService.pageNumberChanged(this.leadSearchInfo);
   }
 
@@ -260,6 +260,8 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   }
 
   navigateToEdit(lead: Lead) {
+    event.preventDefault();
+    event.stopPropagation();
     if (!this.areLeadsAssignable) {
       const newInfo = { ...this.leadSearchInfo, ...this.leadRegisterForm.value } as LeadSearchInfo;
       newInfo.startLeadId = lead.leadId;

@@ -124,7 +124,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
     this.suggestedTerm ? this.searchTerm = this.suggestedTerm : this.searchTerm = this.searchTermControl.value;
     this.getNextValuationsPage(this.page);
     if (submit) {
-      this.sharedService.scrollElIntoView('list-group');
+      this.sharedService.scrollElIntoView('table');
     }
   }
 
