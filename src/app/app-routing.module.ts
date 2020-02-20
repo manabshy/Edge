@@ -49,6 +49,10 @@ const routes: Routes = [
     path: 'company-centre',
     loadChildren: () => import('./company/company.module').then(m => m.CompanyModule), canActivate: [AuthGuardService]
   },
+  {
+    path: 'diary',
+    loadChildren: () => import('./diary/diary.module').then(m => m.DiaryModule), canActivate: [AuthGuardService]
+  },
   { path: '', component: HomeComponent, canActivate: [AuthGuardService] },
   { path: '**', component: NotFoundComponent }
 ];

@@ -136,7 +136,6 @@ const externalModulesExports = [
     PropertyMediaComponent,
     PropertyNotesComponent,
     DashboardComponent,
-    DiaryComponent,
     LeaderboardComponent,
     ApplicantRegisterComponent,
     ApplicantViewLettingComponent,
@@ -162,7 +161,6 @@ const externalModulesExports = [
     CoreModule,
     DashboardModule,
     LeaderboardModule,
-    DiaryModule,
     CalendarSharedModule,
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
