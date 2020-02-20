@@ -39,7 +39,7 @@
               <option selected value="0"></option>
               <option *ngFor="let valuer of valuers" [value]=valuer.staffMemberId>{{valuer?.fullName}}</option>
             </select> -->
-            <app-staff-member-finder (selectedStaffMemberId)="getSelectedStaffMemberId($event)" [listType]="'allValuers'"></app-staff-member-finder>
+            <app-staff-member-finder [isMultiple]="false" (selectedStaffMemberId)="getSelectedStaffMemberId($event)" [listType]="'allValuers'"></app-staff-member-finder>
           </div>
           <div class="col-sm form-group">
             <app-office-finder [officeId] = "officeId" (selectedOfficeId)= "getSelectedOfficeId($event)" [fullWidth]="true"></app-office-finder>
