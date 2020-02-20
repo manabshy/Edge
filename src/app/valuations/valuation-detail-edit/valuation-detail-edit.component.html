@@ -194,12 +194,15 @@
           </button>
         </p>
         <ng-template #allMain>
-          <label class="small">Pick a Member to select the availability</label>
-          <app-subnav class="small mb-2">
-            <app-subnav-item *ngFor="let valuer of valuers" (click)="selectMainStaffMember(valuer)">
-              {{valuer?.fullName}}
-            </app-subnav-item>
-          </app-subnav>
+          <label class="small">Pick a Member</label>
+          <ng-container *ngFor="let valuer of valuers; last as isLast">
+            <p class="d-flex d-sm-block" [ngClass]="{'mb-1': isLast}">
+              <label [attr.for]="'book'+valuer?.staffMemberId" class="text-left mobile-btn small">{{valuer?.fullName}}</label>
+              <button [attr.id]="'book'+valuer?.staffMemberId" class="btn btn-light btn-sm ml-2" type="button" (click)="selectMainStaffMember(valuer)"
+                *ngIf="isEditable || isNewValuation">Book availability</button>
+            </p>
+            <hr *ngIf="!isLast" class="d-sm-none">
+          </ng-container>
           <p class="small mb-2">or</p>
         </ng-template>
         <div class="off-canvas" [hidden]="!showCalendar" (click)="showCalendar = false">
@@ -246,9 +249,9 @@
       <label class="col-sm-2 col-form-label col-form-label-sm">Date</label>
       <div class="col-sm-10">
         <div class="d-flex d-sm-block">
-          <small
-            class="text-left mobile-btn">{{(selectedDate || valuation?.valuationDate) | date: 'E d MMM yyyy, hh:mm'}}</small>
-          <button class="btn btn-light btn-sm ml-2" type="button" (click)="changeDate()"
+          <label for="changeDate"
+            class="text-left mobile-btn small">{{(selectedDate || valuation?.valuationDate) | date: 'E d MMM yyyy, hh:mm'}}</label>
+          <button id="changeDate" class="btn btn-light btn-sm ml-2" type="button" (click)="changeDate()"
             *ngIf="isEditable || isNewValuation">Change </button>
         </div>
       </div>

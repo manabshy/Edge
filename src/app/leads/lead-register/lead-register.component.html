@@ -50,8 +50,7 @@
             bsDatepicker formControlName="dateTo">
         </div>
         <div class="col-sm form-group">
-          <label class="small" for="office">Office</label>
-          <app-office-finder (selectedOfficeId) ="getSelectedOfficeId($event)"></app-office-finder>
+          <app-office-finder (selectedOfficeId) ="getSelectedOfficeId($event)" [fullWidth]="true"></app-office-finder>
         </div>
         <div class="w-100"></div>
         <div class="col-sm-auto">
