@@ -1,16 +1,15 @@
-<div class="list-group mb-3">
+<!-- <div class="list-group mb-3">
   <div class="list-group-item list-header d-none d-sm-block">
     <div class="row">
       <div class="col-sm"><strong>Status</strong></div>
-      <div class="col-sm"><strong>Address</strong></div>
-      <div class="col-sm"><strong>Owner</strong></div>
+      <div class="col-sm-3"><strong>Address</strong></div>
+      <div class="col-sm-3"><strong>Owner</strong></div>
       <div class="col-sm"><strong>Date</strong></div>
       <div class="col-sm"><strong>Valuer</strong></div>
-      <div class="col-sm"><strong>Values <small>(per week)</small></strong></div>
+      <div class="col-sm"><strong>Sale</strong></div>
+      <div class="col-sm"><strong>Long Let</strong></div>
+      <div class="col-sm"><strong>Short Let</strong></div>
     </div>
-  </div>
-  <div *ngIf="valuations" class="search-results" infiniteScroll [infiniteScrollDistance]="5"
-    [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true">
   </div>
   <a [routerLink]="['detail', val?.valuationEventId, 'edit']" class="list-group-item list-group-item-action"
     *ngFor="let val of valuations">
@@ -18,13 +17,13 @@
       <div class="col-sm mb-2 mb-sm-0">
         <span class="badge badge-pill badge-primary">{{val?.valuationStatusLabel}}</span>
       </div>
-      <div class="col-sm">
+      <div class="col-sm-3">
         <dl class="row">
           <dt class="col-4 d-sm-none">Address</dt>
           <dd class="col">{{val?.property?.address | formatAddress}}</dd>
         </dl>
       </div>
-      <div class="col-sm">
+      <div class="col-sm-3">
         <dl class="row">
           <dt class="col-4 d-sm-none">Owner</dt>
           <dd class="col">{{val?.propertyOwner?.contactNames || '-'}}</dd>
@@ -44,27 +43,112 @@
       </div>
       <div class="col-sm">
         <dl class="row">
-          <dt class="col-4 d-sm-none">Values<br><small>(per week)</small></dt>
+          <dt class="col-4 d-sm-none">Values</dt>
           <dd class="col">
-            <div>
-              <span class="d-inline-block w-25">S:</span>
-              <ng-container *ngIf="val?.suggestedAskingPrice, else noValue">
+            <ng-container *ngIf="val?.suggestedAskingPrice, else noValue">
                 {{val?.suggestedAskingPrice | currency:'GBP':'symbol':'1.0-0'}}</ng-container>
-            </div>
-            <div>
-              <span class="d-inline-block w-25">LL:</span>
+          </dd>
+        </dl>
+      </div>
+      <div class="col-sm">
+          <dl class="row">
+            <dt class="col-4 d-sm-none">Values</dt>
+            <dd class="col">
               <ng-container *ngIf="val?.suggestedAskingRentLongLet, else noValue">
-                {{val?.suggestedAskingRentLongLet | currency:'GBP':'symbol':'1.0-0'}}</ng-container>
-            </div>
-            <div>
-              <span class="d-inline-block w-25">SL:</span>
-              <ng-container *ngIf="val?.suggestedAskingRentShortLet, else noValue">
-                {{val?.suggestedAskingRentShortLet | currency:'GBP':'symbol':'1.0-0'}}</ng-container>
-            </div>
-            <ng-template #noValue>-</ng-template>
+                  {{val?.suggestedAskingRentLongLet | currency:'GBP':'symbol':'1.0-0'}} pw</ng-container>
+            </dd>
+          </dl>
+      </div>
+      <div class="col-sm">
+        <dl class="row">
+          <dt class="col-4 d-sm-none">Values</dt>
+          <dd class="col">
+            <ng-container *ngIf="val?.suggestedAskingRentShortLet, else noValue">
+              {{val?.suggestedAskingRentShortLet | currency:'GBP':'symbol':'1.0-0'}} pw</ng-container>
           </dd>
         </dl>
       </div>
     </div>
   </a>
+</div> -->
+<div *ngIf="valuations" class="search-results" infiniteScroll [infiniteScrollDistance]="5"
+  [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true">
 </div>
+<table class="table border bg-white responsive">
+  <thead>
+    <tr>
+      <th>Status</th>
+      <th>Address</th>
+      <th>Owner</th>
+      <th>Date</th>
+      <th>Valuer</th>
+      <th class="values">Sale</th>
+      <th class="values">Long Let</th>
+      <th class="values">Short Let</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let val of valuations" (click)="navigateTo(['detail', val?.valuationEventId, 'edit'])">
+      <td>
+        <span class="badge badge-pill badge-primary">{{val?.valuationStatusLabel}}</span>
+      </td>
+      <td (click)="$event.stopPropagation()">
+        <dl class="row">
+          <dt class="col-4 d-sm-none">Address</dt>
+          <dd class="col">
+            <a [routerLink]="['detail', val?.valuationEventId, 'edit']">
+              {{val?.property?.address | formatAddress}}
+            </a>
+          </dd>
+        </dl>
+      </td>
+      <td>
+        <dl class="row">
+          <dt class="col-4 d-sm-none">Owner</dt>
+          <dd class="col">{{val?.propertyOwner?.contactNames || '-'}}</dd>
+        </dl>
+      </td>
+      <td>
+        <dl class="row">
+          <dt class="col-4 d-sm-none">Date</dt>
+          <dd class="col">{{(val?.valuationDate | date: 'dd/MM/yyyy hh:mm') || '-'}}</dd>
+        </dl>
+      </td>
+      <td>
+        <dl class="row">
+          <dt class="col-4 d-sm-none">Valuer</dt>
+          <dd class="col">{{val?.valuer?.fullName}}</dd>
+        </dl>
+      </td>
+      <td class="values">
+        <dl class="row">
+          <dt class="col-4 d-sm-none">Sales</dt>
+          <dd class="col">
+            <ng-container *ngIf="val?.suggestedAskingPrice, else noValue">
+              {{val?.suggestedAskingPrice | currency:'GBP':'symbol':'1.0-0'}}</ng-container>
+          </dd>
+        </dl>
+      </td>
+      <td class="values">
+        <dl class="row">
+          <dt class="col-4 d-sm-none">Long Let</dt>
+          <dd class="col">
+            <ng-container *ngIf="val?.suggestedAskingRentLongLet, else noValue">
+              {{val?.suggestedAskingRentLongLet | currency:'GBP':'symbol':'1.0-0'}} pw</ng-container>
+          </dd>
+        </dl>
+      </td>
+      <td class="values">
+        <dl class="row">
+          <dt class="col-4 d-sm-none">Short Let</dt>
+          <dd class="col">
+            <ng-container *ngIf="val?.suggestedAskingRentShortLet, else noValue">
+              {{val?.suggestedAskingRentShortLet | currency:'GBP':'symbol':'1.0-0'}} pw</ng-container>
+          </dd>
+        </dl>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<ng-template #noValue>-</ng-template>

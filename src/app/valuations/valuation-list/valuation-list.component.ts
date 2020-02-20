@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, OnChanges, HostListener } from '@angular/core';
 import { Valuation, ValuationStatusEnum } from '../shared/valuation';
 import { ValuationService } from '../shared/valuation.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-valuation-list',
@@ -16,7 +16,7 @@ export class ValuationListComponent implements OnInit, OnChanges {
   @Input() pageNumber: number;
   page: number;
 
-  constructor(private valuationService: ValuationService,private router: Router) { }
+  constructor(private valuationService: ValuationService,private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
   }
@@ -29,6 +29,10 @@ export class ValuationListComponent implements OnInit, OnChanges {
       });
     }
     this.page = this.pageNumber;
+  }
+
+  navigateTo(path) {
+    this.router.navigate(path, {relativeTo: this.activatedRoute});
   }
 
   onScrollDown() {
