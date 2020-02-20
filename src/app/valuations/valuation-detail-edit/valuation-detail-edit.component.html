@@ -205,11 +205,11 @@
           </ng-container>
           <p class="small mb-2">or</p>
         </ng-template>
-        <div class="off-canvas" [hidden]="!showCalendar" (click)="showCalendar = false">
+        <div class="off-canvas" [hidden]="!showCalendar" (click)="closeCalendar()">
           <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
             <h4 class="page-title text-left pt-3">
               {{mainStaffMember?.fullName}} Calendar 
-              <button type="button" class="close mr-2" aria-label="Close" (click)="showCalendar = false">
+              <button type="button" class="close mr-2" aria-label="Close" (click)="closeCalendar()">
                 <span aria-hidden="true">&times;</span>
               </button>
             </h4>
@@ -217,14 +217,17 @@
               (selectedDate)="getSelectedDate($event)"></app-calendar>
           </div>
         </div>
-        <p *ngFor="let attendee of attendees" class="d-flex d-sm-block">
-          <small class="text-left mobile-btn">{{attendee.fullName}}</small>
-          <button class="btn btn-light btn-sm ml-2" type="button" (click)="removeAttendee(attendee?.staffMemberId)"
-            aria-label="remove" *ngIf="isEditable || isNewValuation"><span aria-hidden="true">&times;</span></button>
-          <button class="btn btn-light btn-sm ml-2" type="button" (click)="setMain(attendee)"
-            *ngIf="isEditable || isNewValuation">Set as
-            main</button>
-        </p>
+        <ng-container *ngFor="let attendee of attendees">
+          <hr class="d-sm-none">
+          <p class="d-flex d-sm-block">
+            <small class="text-left mobile-btn">{{attendee.fullName}}</small>
+            <button class="btn btn-light btn-sm ml-2" type="button" (click)="removeAttendee(attendee?.staffMemberId)"
+              aria-label="remove" *ngIf="isEditable || isNewValuation"><span aria-hidden="true">&times;</span></button>
+            <button class="btn btn-light btn-sm ml-2" type="button" (click)="setMain(attendee)"
+              *ngIf="isEditable || isNewValuation">Set as
+              main</button>
+          </p>
+        </ng-container>
       </div>
       <div class="col-sm-3 offset-sm-2" *ngIf="isEditable || isNewValuation">
         <div class="row align-items-center no-gutters">

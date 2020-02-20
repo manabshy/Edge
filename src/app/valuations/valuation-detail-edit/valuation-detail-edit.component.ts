@@ -306,6 +306,15 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.valuationForm.get('valuer').setValue(staffMember);
   }
 
+  closeCalendar() {
+    this.showCalendar = false;
+    if(!this.selectedDate) {
+      this.mainStaffMember = null;
+      this.staffMemberId = null;
+      this.showOnlyMainStaffMember = false;
+    }
+  }
+
   getValuation(id: number) {
     this.valuationService.getValuation(id).pipe(takeUntil(this.ngUnsubscribe)).subscribe((data => {
       if (data) {
