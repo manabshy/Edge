@@ -214,16 +214,16 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   setupInitialRentFigures(val: Valuation) {
     if (val.suggestedAskingRentShortLet) {
-      this.shortLetMonthlyControl.setValue(+val.suggestedAskingRentShortLet * 4);
+      this.shortLetMonthlyControl.setValue((+val.suggestedAskingRentShortLet * (52 / 12)).toFixed(2));
     }
     if (val.suggestedAskingRentLongLet) {
-      this.longLetMonthlyControl.setValue(+val.suggestedAskingRentLongLet * 4);
+      this.longLetMonthlyControl.setValue((+val.suggestedAskingRentLongLet * (52 / 12)).toFixed(2));
     }
     if (val.suggestedAskingRentShortLetMonthly) {
-      this.shortLetWeeklyControl.setValue(+val.suggestedAskingRentShortLetMonthly / 4);
+      this.shortLetWeeklyControl.setValue((+val.suggestedAskingRentShortLetMonthly / 4).toFixed(2));
     }
     if (val.suggestedAskingRentLongLetMonthly) {
-      this.longLetWeeklyControl.setValue(+val.suggestedAskingRentLongLetMonthly / 4);
+      this.longLetWeeklyControl.setValue((+val.suggestedAskingRentLongLetMonthly / 4).toFixed(2));
     }
 
   }
@@ -245,11 +245,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   private setMonthlyRent(weeklyControl: FormControl, monthlyControl: FormControl) {
     weeklyControl.valueChanges
-      .subscribe(rent => monthlyControl.setValue(+rent * 4, { emitEvent: false }));
+      .subscribe(rent => monthlyControl.setValue((+rent * (52 / 12)).toFixed(2), { emitEvent: false }));
   }
   private setWeeklyRent(weeklyControl: FormControl, monthlyControl: FormControl) {
     monthlyControl.valueChanges
-      .subscribe(rent => weeklyControl.setValue(+rent / 4, { emitEvent: false }));
+      .subscribe(rent => weeklyControl.setValue((+rent / 4).toFixed(2), { emitEvent: false }));
   }
 
   setupForm() {
@@ -308,7 +308,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   closeCalendar() {
     this.showCalendar = false;
-    if(!this.selectedDate) {
+    if (!this.selectedDate) {
       this.mainStaffMember = null;
       this.staffMemberId = null;
       this.showOnlyMainStaffMember = false;
@@ -454,7 +454,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.attendees.push(this.attendee);
       this.valuationForm.get('attendees').setValue(this.attendees);
       this.valuationForm.get('searchAttendeeId').setValue(null);
-      if(!this.showOnlyMainStaffMember) {
+      if (!this.showOnlyMainStaffMember) {
         this.setMain(this.attendee);
       }
     }

@@ -1,10 +1,15 @@
 <form [formGroup]="staffMemberFinderForm">
-  <ng-select placeholder="Select Staff Member" [items]="staffMembers$|async" [hideSelected]="true" [clearable]="true"
-    bindLabel="fullName" bindValue="staffMemberId" (change)="onStaffMemberChange($event)"
-    formControlName="staffMemberId" [readonly]="isDisabled ? true : null"
-    [ngClass]="{'is-invalid': isRequired, 'form-control-plaintext': isDisabled}" [attr.required]="isRequired ? true : null">
+  <ng-select placeholder="Select Staff Member" [items]="staffMembers$|async" [multiple]="false"
+    [closeOnSelect]="false" [hideSelected]="true" [clearable]="true" bindLabel="fullName" bindValue="staffMemberId"
+    (change)="onStaffMemberChange($event)" formControlName="staffMemberId" [readonly]="isDisabled ? true : null"
+    [ngClass]="{'is-invalid': isRequired, 'form-control-plaintext': isDisabled}"
+    [attr.required]="isRequired ? true : null">
+    <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+      <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.fullName}}
+    </ng-template>
   </ng-select>
   <div class="invalid-feedback">
     Chaser is required
   </div>
+  <!-- {{isMultiple|json}}------ -->
 </form>

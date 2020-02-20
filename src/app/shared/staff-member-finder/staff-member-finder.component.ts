@@ -16,6 +16,7 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
   @Input() listType: string;
   @Input() isDisabled: boolean;
   @Input() isRequired: boolean;
+  @Input() isMultiple: boolean;
   @Output() selectedStaffMemberId = new EventEmitter<number>();
   staffMembers$ = new Observable<any>();
   staffMemberFinderForm: FormGroup;
@@ -30,7 +31,8 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    console.log('staffMember Id', this.staffMemberId);
+    console.log('is multiple', this.isMultiple);
+
     if (this.staffMemberId) {
       this.staffMemberFinderForm.patchValue({
         staffMemberId: this.staffMemberId

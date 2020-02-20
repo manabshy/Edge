@@ -5,6 +5,7 @@ import { CalendarHeaderComponent } from './calendar-header.component';
 import { CalendarModule } from 'angular-calendar';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { SharedModule } from '../shared/shared.module';
     CommonModule,
     SharedModule,
     ReactiveFormsModule,
+    RouterModule,
     CalendarModule
   ],
   exports: [CalendarComponent]
