@@ -22,25 +22,29 @@ export class AddDiaryEventComponent implements OnInit {
   }
 
   ngOnInit() {
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
     this.setupForm();
   }
 
   setupForm() {
     this.diaryEventForm = this.fb.group({
-      startDateTime: AppUtils.getMomentDate(new Date()),
-      endDateTime: Date,
+      startDate: [''],
+      endDate: [''],
+      startDateTime: [''],
+      endDateTime: [''],
       eventType: [''],
-      eventColour: [''],
+      staffMembers: [''],
+      properties: [''],
+      applicants: [''],
       notes: [''],
-      allDay: [false],
-      isCancelled: [false],
-      isConfirmed: [false],
-      isHighImportance: [false],
-      isOtherAgentViewing: [false],
     });
   }
-
+  onStartDateChange(startDate) {
+    console.log('start', startDate)
+  }
+  onEndDateChange(endDate) {
+    console.log('end', endDate)
+  }
   canDeactivate(): boolean {
     if (this.diaryEventForm.dirty) {
       return false;
