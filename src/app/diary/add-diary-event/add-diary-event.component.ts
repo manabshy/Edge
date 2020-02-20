@@ -51,10 +51,4 @@ export class AddDiaryEventComponent implements OnInit {
   cancel() {
     this.sharedService.back();
   }
-  public onDuplicate() {
-    this.childItems.push(this.childItems.length);
-  }
-  public onRemove() {
-    this.childItems.pop();
-  }
 }
