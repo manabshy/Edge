@@ -8,6 +8,7 @@ import { AppUtils } from 'src/app/core/shared/utils';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { DropdownListInfo, InfoDetail } from 'src/app/core/services/info.service';
 import { getHours, getMinutes, addHours } from 'date-fns';
+import { Property } from 'src/app/property/shared/property';
 @Component({
   selector: 'app-add-diary-event',
   templateUrl: './add-diary-event.component.html',
@@ -17,12 +18,22 @@ export class AddDiaryEventComponent implements OnInit {
   eventTypes: InfoDetail[];
   diaryEventForm: FormGroup;
   isSubmitting: any;
-  minutes = ['00', '15', '30', '45']
+  minutes = ['00', '15', '30', '45'];
+  durationTypes = ['minute(s)', 'hour(s)', 'day(s)', 'week(s)'];
+
   get hours() {
     const result = [];
     for (let hr = 0; hr < 24; hr++) {
       const hrStr = hr.toString().padStart(2, '0');
       result.push(hrStr);
+    }
+    return result;
+  }
+
+  get durationValues() {
+    const result = [];
+    for (let duration = 0; duration <= 60; duration++) {
+      result.push(duration);
     }
     return result;
   }
@@ -52,6 +63,9 @@ export class AddDiaryEventComponent implements OnInit {
       endMin: this.getMinutes(),
       eventType: [0],
       allDay: false,
+      hasReminder: false,
+      duration: [0],
+      durationType: [0],
       staffMembers: [''],
       properties: [''],
       applicants: [''],
@@ -90,6 +104,10 @@ export class AddDiaryEventComponent implements OnInit {
   }
   onEndDateChange(endDate) {
     console.log('end', endDate);
+  }
+
+  getSelectedProperties(properties: Property[]){
+    console.log('properties here', properties)
   }
   canDeactivate(): boolean {
     if (this.diaryEventForm.dirty) {
