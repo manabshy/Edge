@@ -18,7 +18,7 @@
         <div class="row">
           <div class="col-sm form-group" *ngIf="isEditable || isNewValuation">
             <select class="custom-select custom-select-sm" name="originTypes" id="originTypes"
-              arial-label="Origin Types" (change)="onSelectType($event.target.value)"
+              formControlName="originType" arial-label="Origin Types" (change)="onSelectType($event.target.value)"
               [attr.disabled]="!isEditable && !isNewValuation ? true : null"
               [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}">
               <option value="0">Not Known</option>
@@ -197,9 +197,10 @@
           <label class="small">Pick a Member</label>
           <ng-container *ngFor="let valuer of valuers; last as isLast">
             <p class="d-flex d-sm-block" [ngClass]="{'mb-1': isLast}">
-              <label [attr.for]="'book'+valuer?.staffMemberId" class="text-left mobile-btn small">{{valuer?.fullName}}</label>
-              <button [attr.id]="'book'+valuer?.staffMemberId" class="btn btn-light btn-sm ml-2" type="button" (click)="selectMainStaffMember(valuer)"
-                *ngIf="isEditable || isNewValuation">Book availability</button>
+              <label [attr.for]="'book'+valuer?.staffMemberId"
+                class="text-left mobile-btn small">{{valuer?.fullName}}</label>
+              <button [attr.id]="'book'+valuer?.staffMemberId" class="btn btn-light btn-sm ml-2" type="button"
+                (click)="selectMainStaffMember(valuer)" *ngIf="isEditable || isNewValuation">Book availability</button>
             </p>
             <hr *ngIf="!isLast" class="d-sm-none">
           </ng-container>
@@ -208,7 +209,7 @@
         <div class="off-canvas" [hidden]="!showCalendar" (click)="closeCalendar()">
           <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
             <h4 class="page-title text-left pt-3">
-              {{mainStaffMember?.fullName}} Calendar 
+              {{mainStaffMember?.fullName}} Calendar
               <button type="button" class="close mr-2" aria-label="Close" (click)="closeCalendar()">
                 <span aria-hidden="true">&times;</span>
               </button>
