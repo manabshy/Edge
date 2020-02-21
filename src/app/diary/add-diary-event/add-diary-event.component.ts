@@ -7,7 +7,7 @@ import { DiaryEventService } from '../shared/diary-event.service';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { DropdownListInfo, InfoDetail } from 'src/app/core/services/info.service';
-
+import { getHours, getMinutes, addHours } from 'date-fns';
 @Component({
   selector: 'app-add-diary-event',
   templateUrl: './add-diary-event.component.html',
@@ -44,10 +44,12 @@ export class AddDiaryEventComponent implements OnInit {
 
   setupForm() {
     this.diaryEventForm = this.fb.group({
-      startDate: [''],
-      endDate: [''],
-      startTime: [''],
-      endTime: [''],
+      startDate: new Date(),
+      endDate: new Date(),
+      startTime: this.getHours(),
+      endTime: this.getHours(true),
+      startMin: this.getMinutes(),
+      endMin: this.getMinutes(),
       eventType: [0],
       allDay: false,
       staffMembers: [''],
@@ -56,6 +58,33 @@ export class AddDiaryEventComponent implements OnInit {
       notes: [''],
     });
   }
+  private getMinutes(): any {
+    let minutes = getMinutes(new Date());
+    switch (true) {
+      case minutes < 15:
+        minutes = 15;
+        break;
+      case minutes > 15 && minutes < 30:
+        minutes = 30;
+        break;
+      case minutes > 30 && minutes < 45:
+        minutes = 45;
+        break;
+      default:
+        minutes = 0;
+        break;
+    }
+    return minutes.toString().padStart(2, '0');
+  }
+
+  private getHours(addAnHour?: boolean): any {
+    let hours = getHours(new Date());
+    if (addAnHour) {
+      hours += 1;
+    }
+    return hours.toString().padStart(2, '0');
+  }
+
   onStartDateChange(startDate) {
     console.log('start', startDate);
   }
