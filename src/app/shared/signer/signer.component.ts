@@ -15,6 +15,7 @@ import { Person } from '../models/person';
   styleUrls: ['./signer.component.scss']
 })
 export class SignerComponent implements OnInit, OnChanges {
+  @Output() selectedSignersList = new EventEmitter<Signer[]>();
   @Output() selectedSigner = new EventEmitter<Signer>();
   @Output() newSigner = new EventEmitter<boolean>();
   @Input() existingSigner: Signer;
@@ -29,9 +30,11 @@ export class SignerComponent implements OnInit, OnChanges {
   signerFinderForm: FormGroup;
   selectedSignerDetails: Signer;
   signers: Signer[];
+  selectedSigners: Signer[] = [];
   isMessageVisible: boolean;
   isHintVisible: boolean;
   isSearchVisible = true;
+  hideLabel: boolean = false;
   suggestions: (text$: Observable<string>) => Observable<any[]>;
   suggestedTerm: any;
   searchTerm = '';
@@ -57,7 +60,7 @@ export class SignerComponent implements OnInit, OnChanges {
         switchMap(term =>
           this.peopleService.getPeopleSuggestions(term).pipe(
             tap(data => {
-              if(data && !data.length){
+              if (data && !data.length) {
                 this.noSuggestions = true;
               }
             }),
@@ -71,7 +74,7 @@ export class SignerComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     this.displayExistingSigners();
-    if(this.existingPerson) {
+    if (this.existingPerson) {
       this.signersAutocomplete(this.existingPerson.firstName + ' ' + this.existingPerson.middleName + ' ' + this.existingPerson.lastName);
     }
   }
@@ -87,7 +90,7 @@ export class SignerComponent implements OnInit, OnChanges {
       signer.companyName ? displayName = namesWithCompany : displayName = names;
       this.signerNames.setValue(displayName);
       this.selectedSignerDetails = signer;
-      this.isSearchVisible = false;
+      this.isMultiple ? this.isSearchVisible = true : this.isSearchVisible = false;
       this.selectedSigner.emit(this.selectedSignerDetails);
     }
   }
@@ -96,7 +99,7 @@ export class SignerComponent implements OnInit, OnChanges {
   searchSigner() {
     event.preventDefault();
     event.stopPropagation();
-   this.suggestedTerm ?  this.searchTerm = this.suggestedTerm : this.searchTerm = this.signerFinderForm.get('searchTerm').value;
+    this.suggestedTerm ? this.searchTerm = this.suggestedTerm : this.searchTerm = this.signerFinderForm.get('searchTerm').value;
     this.signersAutocomplete(this.searchTerm);
   }
 
@@ -112,34 +115,57 @@ export class SignerComponent implements OnInit, OnChanges {
 
   selectSigner(id: number) {
     this.selectedSignerDetails = this.signers.find(x => x.contactGroupId === id);
-    this.isSearchVisible = false;
+    this.isMultiple ? this.isSearchVisible = true : this.isSearchVisible = false;
     this.existingPerson = null;
     if (this.selectedSignerDetails) {
-      this.signers = null;
-      let displayName: string;
-      const names = this.selectedSignerDetails.contactNames;
-      const namesWithCompany = this.selectedSignerDetails.contactNames + ' (' + this.selectedSignerDetails.companyName + ')';
-      this.selectedSignerDetails.companyName ? displayName = namesWithCompany : displayName = names;
-      this.signerFinderForm.get('selectedSigner').setValue(displayName);
-      this.selectedSigner.emit(this.selectedSignerDetails);
-      setTimeout(() => {
-        this.selectedSignerInput.nativeElement.scrollIntoView({ block: 'center' });
-      });
+      if (this.isMultiple) {
+        this.getSelectedSigners(this.selectedSignerDetails);
+      } else {
+        this.signers = null;
+        let displayName: string;
+        const names = this.selectedSignerDetails.contactNames;
+        const namesWithCompany = this.selectedSignerDetails.contactNames + ' (' + this.selectedSignerDetails.companyName + ')';
+        this.selectedSignerDetails.companyName ? displayName = namesWithCompany : displayName = names;
+        this.signerFinderForm.get('selectedSigner').setValue(displayName);
+        this.selectedSigner.emit(this.selectedSignerDetails);
+        setTimeout(() => {
+          this.selectedSignerInput.nativeElement.scrollIntoView({ block: 'center' });
+        });
+      }
     }
     console.log('selected signer ', this.selectedSignerDetails.contactNames);
     console.log('selected  signer company name', this.selectedSignerDetails.companyName);
     console.log('selected signer id', id);
   }
 
+  getSelectedSigners(signer: Signer) {
+    const isExisting = this.selectedSigners.filter(x => x.contactGroupId === signer.contactGroupId);
+    if (this.selectedSigners) {
+      this.selectedSigners.push(signer);
+      this.hideLabel = false;
+      console.log('selected signers list here ZZZZZx', this.selectedSigners)
+      this.selectedSignersList.emit(this.selectedSigners);
+      this.signerFinderForm.get('searchTerm').setValue('');
+    }
+  }
   resetSearch() {
     this.signerFinderForm.reset();
   }
 
-  remove() {
-    this.selectedSignerDetails = null;
-    this.isSearchVisible = true;
-    this.signerFinderForm.get('searchTerm').setValue('');
-    this.selectedSigner.emit(this.selectedSignerDetails);
+  remove(id?: number, isMultiple?: boolean) {
+    if (isMultiple) {
+      if (this.selectedSigners && this.selectedSigners.length) {
+        const index = this.selectedSigners.findIndex(x => x.contactGroupId === id)
+        this.selectedSigners.splice(index, 1);
+        this.selectedSignersList.emit(this.selectedSigners);
+        this.selectedSigners.length === 0 ? this.hideLabel = true : this.hideLabel = false;
+      }
+    } else {
+      this.selectedSignerDetails = null;
+      this.isSearchVisible = true;
+      this.signerFinderForm.get('searchTerm').setValue('');
+      this.selectedSigner.emit(this.selectedSignerDetails);
+    }
   }
 
   toggleSearch() {

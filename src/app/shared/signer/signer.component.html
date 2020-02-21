@@ -1,31 +1,47 @@
 <ng-container>
   <form class="pb-0" [formGroup]="signerFinderForm" autocompleteOff>
-    <div [ngClass]="{'row': !fullWidth}" [hidden]="!selectedSignerDetails">
+    <div [ngClass]="{'row': !fullWidth}" [hidden]="!(selectedSignerDetails||selectedSigners && selectedSigners.length)">
       <ng-container *ngIf="!label; else givenLabel "><label for="searchTerm"
-          [ngClass]="{'col-form-label col-form-label-sm col-sm-2': !fullWidth, 'small': fullWidth, 'mb-1': readOnly}">Signers</label></ng-container>
-      <ng-template #givenLabel><label for="searchTerm"
-          [ngClass]="{'col-form-label col-form-label-sm col-sm-2': !fullWidth, 'small': fullWidth, 'mb-1': readOnly}">{{label}}</label></ng-template>
+          [ngClass]="{'col-form-label col-form-label-sm col-sm-2': !fullWidth, 'small': fullWidth, 'mb-1': readOnly}">Signers</label>
+      </ng-container>
+      <ng-template #givenLabel><label for="searchTerm" *ngIf="!hideLabel"
+          [ngClass]="{'col-form-label col-form-label-sm col-sm-2': !fullWidth, 'small': fullWidth, 'mb-1': readOnly}">{{label}}</label>
+      </ng-template>
       <div [ngClass]="{'col': !fullWidth}">
-        <div class="form-group d-flex d-sm-block">
-          <input type="hidden" #selectedSignerInput
-            id="selectedSigner" formControlName="selectedSigner">
-          <a class="small text-left mobile-btn" *ngIf="selectedSignerDetails" [routerLink]="['/contact-centre/detail/0/people/', selectedSignerDetails?.contactGroupId]">
+        <div class="form-group d-flex d-sm-block" *ngIf="selectedSignerDetails && !isMultiple">
+          <input type="hidden" #selectedSignerInput id="selectedSigner" formControlName="selectedSigner">
+          <a class="small text-left mobile-btn" *ngIf="selectedSignerDetails"
+            [routerLink]="['/contact-centre/detail/0/people/', selectedSignerDetails?.contactGroupId]">
             {{selectedSignerDetails?.contactNames}}
           </a>
           <a class="small text-left mobile-btn" *ngIf="!selectedSignerDetails">
             {{selectedSignerDetails?.contactNames}}
           </a>
-          <button class="btn btn-light btn-sm ml-2" *ngIf="!readOnly" type="button" aria-label="remove" (click)="remove()">
+          <button class="btn btn-light btn-sm ml-2" *ngIf="!readOnly" type="button" aria-label="remove"
+            (click)="remove()">
             <span aria-hidden="true">×</span>
           </button>
           <button class="btn btn-light btn-sm ml-2" *ngIf="!readOnly" type="button" (click)="toggleSearch()">
             Change
           </button>
         </div>
+        <ng-container *ngIf="isMultiple && selectedSigners">
+          <div class="form-group d-flex d-sm-block" *ngFor="let signer of selectedSigners">
+            <input type="hidden" #selectedSignerInput
+            id="selectedSigner" formControlName="selectedSigner">
+            <a class="small text-left mobile-btn"
+              [routerLink]="['/contact-centre/detail/0/people/', signer?.contactGroupId]">
+              {{signer?.contactNames}}
+            </a>
+            <button class="btn btn-light btn-sm ml-2" *ngIf="isMultiple" type="button" aria-label="remove"
+              (click)="remove(signer?.contactGroupId,true)">
+              Remove
+            </button>
+          </div>
+        </ng-container>
       </div>
     </div>
-
-    <div class="row" [hidden]="!isSearchVisible && !existingPerson">
+    <div class="row" [hidden]="!isSearchVisible">
       <ng-container *ngIf="!label; else givenLabel3 "><label for="searchTerm"
           class="col-sm-2 col-form-label col-form-label-sm">Find Signers</label></ng-container>
       <ng-template #givenLabel3><label for="searchTerm" class="col-sm-2 col-form-label col-form-label-sm"> Find
@@ -34,15 +50,17 @@
         <div class="form-group">
           <div class="input-group input-group-sm">
             <input #searchSignerInput type="search" id="searchTerm" class="form-control" formControlName="searchTerm"
-              (keydown.enter)="searchSigner()" [ngbTypeahead]="suggestions" [focusFirst]="false" (selectItem)="selectedSuggestion($event)">
+              (keydown.enter)="searchSigner()" [ngbTypeahead]="suggestions" [focusFirst]="false"
+              (selectItem)="selectedSuggestion($event)">
             <div class="input-group-append">
               <button type="button" class="btn btn-secondary" (click)="searchSigner()">Search</button>
             </div>
           </div>
         </div>
         <a class="small d-block mb-3" [routerLink]="['/contact-centre/detail/0/people', 0]" *ngIf="noSuggestions"
-          [queryParams]="{isNewContactGroup: true, isSigner: true, signer: signerFinderForm.get('searchTerm').value}" (click)="createNewSigner()">
-            <i class="fas fa-plus mr-2"></i> New Contact Group
+          [queryParams]="{isNewContactGroup: true, isSigner: true, signer: signerFinderForm.get('searchTerm').value}"
+          (click)="createNewSigner()">
+          <i class="fas fa-plus mr-2"></i> New Contact Group
         </a>
         <div class="off-canvas" [hidden]="!signers" (click)="signers = null">
           <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
@@ -54,8 +72,7 @@
               </button>
             </h4>
             <app-subnav>
-              <app-subnav-item *ngFor="let signer of signers"
-                (click)="selectSigner(signer.contactGroupId)">
+              <app-subnav-item *ngFor="let signer of signers" (click)="selectSigner(signer.contactGroupId); signers=null">
                 <div class="row">
                   <div class="col-sm-4">
                     <b [innerHTML]="signer.contactNames | highlight : signerFinderForm.value.searchTerm"
@@ -77,8 +94,8 @@
                 <ng-template #givenLabel2>{{label}}</ng-template> found
               </div>
               <a [routerLink]="['/contact-centre/detail/0/people', 0]"
-                [queryParams]="{isNewContactGroup: true, isSigner: true, signer: signerFinderForm.get('searchTerm').value}" (click)="createNewSigner()"
-                class="list-group-item list-group-item-action text-center py-4">
+                [queryParams]="{isNewContactGroup: true, isSigner: true, signer: signerFinderForm.get('searchTerm').value}"
+                (click)="createNewSigner()" class="list-group-item list-group-item-action text-center py-4">
                 <span class="btn-link">
                   <i class="fas fa-plus mr-2"></i> New Contact Group
                 </span>
