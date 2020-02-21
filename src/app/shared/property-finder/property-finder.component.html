@@ -1,13 +1,15 @@
 <ng-container>
   <form class="pb-0" [formGroup]="propertyFinderForm" autocompleteOff>
-    <div class="row" [hidden]="!selectedPropertyDetails">
-      <ng-container *ngIf="!label; else givenLabel "><label for="propSearchTerm" class="col-form-label col-form-label-sm col-sm-2">Property</label></ng-container>
-      <ng-template #givenLabel><label for="propSearchTerm" class="col-form-label col-form-label-sm col-sm-2">{{label}}</label></ng-template>
-      <div class="col">
+    <div class="row" [hidden]="!(selectedPropertyDetails||selectedProperties && selectedProperties.length)">
+      <ng-container *ngIf="!label; else givenLabel "><label for="propSearchTerm"
+          class="col-form-label col-form-label-sm col-sm-2">Property</label></ng-container>
+      <ng-template #givenLabel><label for="propSearchTerm"
+          class="col-form-label col-form-label-sm col-sm-2">{{label}}</label></ng-template>
+      <div class="col" *ngIf="selectedPropertyDetails">
         <div class="form-group d-flex d-sm-block">
           <input type="hidden" #selectedPropertyInput id="selectedPropertyAddress"
             formControlName="selectedPropertyAddress">
-          <a class="small text-left mobile-btn"  *ngIf="selectedPropertyDetails"
+          <a class="small text-left mobile-btn" *ngIf="selectedPropertyDetails"
             [routerLink]="['/property-centre/detail/', selectedPropertyDetails?.propertyId]">
             {{selectedPropertyDetails?.address | formatAddress}}
           </a>
@@ -19,8 +21,18 @@
           </button>
         </div>
       </div>
+      <div class="col" *ngIf="isMultiple && selectedProperties">
+        <div class="form-group d-flex d-sm-block" *ngFor="let property of selectedProperties">
+          <a class="small text-left mobile-btn" [routerLink]="['/property-centre/detail/', property?.propertyId]">
+            {{property?.address | formatAddress}}
+          </a>
+          <button class="btn btn-light btn-sm ml-2" type="button" (click)="removeProperty(property?.propertyId)">
+            Remove
+          </button>
+        </div>
+      </div>
     </div>
-    <div class="row" [hidden]="!isSearchVisible && (existingProperty || selectedPropertyDetails)">
+    <div class="row" [hidden]="!isSearchVisible">
       <ng-container *ngIf="!label; else givenLabel3 "><label for="propSearchTerm"
           class="col-sm-2 col-form-label col-form-label-sm">Find property</label></ng-container>
       <ng-template #givenLabel3><label for="propSearchTerm" class="col-sm-2 col-form-label col-form-label-sm"> Find
@@ -28,16 +40,17 @@
       <div class="col-sm-10">
         <div class="form-group">
           <div class="input-group input-group-sm">
-            <input #searchPropertyInput type="search" id="propSearchTerm" class="form-control" formControlName="searchTerm"
-              (keydown.enter)="searchProperty()" [ngbTypeahead]="suggestions" [focusFirst]="false"
-              (selectItem)="selectedSuggestion($event)">
+            <input #searchPropertyInput type="search" id="propSearchTerm" class="form-control"
+              formControlName="searchTerm" (keydown.enter)="searchProperty()" [ngbTypeahead]="suggestions"
+              [focusFirst]="false" (selectItem)="selectedSuggestion($event)">
             <div class="input-group-append">
               <button type="button" class="btn btn-secondary" (click)="searchProperty()">Search</button>
             </div>
           </div>
         </div>
         <a class="small d-block mb-3" [routerLink]="['/property-centre/detail/0', 'edit']" *ngIf="noSuggestions"
-          [queryParams]="{isNewProperty: true, searchedAddress: propertyFinderForm.get('searchTerm').value, getBack: 1}" (click)="CreateNewProperty()">
+          [queryParams]="{isNewProperty: true, searchedAddress: propertyFinderForm.get('searchTerm').value, getBack: 1}"
+          (click)="CreateNewProperty()">
           <i class="fas fa-plus mr-2"></i> Add Property
         </a>
         <div class="off-canvas" [hidden]="!properties" (click)="properties = null">
@@ -66,7 +79,8 @@
                   No <ng-container *ngIf="!label; else givenLabel2 ">Property</ng-container>
                   <ng-template #givenLabel2>{{label}}</ng-template> found
                 </div>
-                <a [routerLink]="['/property-centre/detail/0', 'edit']" [queryParams]="{isNewProperty: true, searchedAddress: propertyFinderForm.get('searchTerm').value, getBack: 1}"
+                <a [routerLink]="['/property-centre/detail/0', 'edit']"
+                  [queryParams]="{isNewProperty: true, searchedAddress: propertyFinderForm.get('searchTerm').value, getBack: 1}"
                   (click)="CreateNewProperty()" class="list-group-item list-group-item-action text-center py-4">
                   <span class="btn-link">
                     <i class="fas fa-plus mr-2"></i> Add Property
