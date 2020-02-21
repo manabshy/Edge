@@ -33,4 +33,15 @@ export class CustomEventTitleFormatter extends CalendarEventTitleFormatter {
       this.locale
     )}</span class="d-none d-lg-inline"> ${event.title}`;
   }
+  weekTooltip(event: CalendarEvent, title: string) {
+    if (!event.meta.tmpEvent) {
+      return super.weekTooltip(event, title);
+    }
+  }
+
+  dayTooltip(event: CalendarEvent, title: string) {
+    if (!event.meta.tmpEvent) {
+      return super.dayTooltip(event, title);
+    }
+  }
 }

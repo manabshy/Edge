@@ -1,5 +1,8 @@
-import { Component, OnInit, Output, EventEmitter, Input, OnChanges } from '@angular/core';
-import { CalendarEvent, CalendarDateFormatter, CalendarView, CalendarWeekViewBeforeRenderEvent, CalendarDayViewBeforeRenderEvent, DAYS_OF_WEEK, CalendarEventTitleFormatter, CalendarMonthViewBeforeRenderEvent } from 'angular-calendar';
+import { Component, OnInit, Output, EventEmitter, Input, OnChanges, ChangeDetectorRef } from '@angular/core';
+import {
+  CalendarEvent, CalendarDateFormatter, CalendarView, CalendarWeekViewBeforeRenderEvent,
+  CalendarDayViewBeforeRenderEvent, DAYS_OF_WEEK, CalendarEventTitleFormatter, CalendarMonthViewBeforeRenderEvent
+} from 'angular-calendar';
 import {
   isSameMonth,
   isSameDay,
@@ -9,18 +12,30 @@ import {
   endOfWeek,
   startOfDay,
   endOfDay,
-  format
+  format,
+  addDays,
+  addMinutes
 } from 'date-fns';
 import { CustomDateFormatter } from '../custom-date-formatter.provider';
-import { Observable } from 'rxjs';
+import { Observable, fromEvent } from 'rxjs';
 import { DiaryEvent, BasicEventRequest, Staff, DiaryProperty } from '../../diary/shared/diary';
 import { DiaryEventService } from '../../diary/shared/diary-event.service';
-import { tap, map } from 'rxjs/operators';
+import { tap, map, takeUntil, finalize } from 'rxjs/operators';
 import { CustomEventTitleFormatter } from '../custom-event-title-formatter.provider';
+import { WeekViewHourSegment } from 'calendar-utils';
 import * as _ from 'lodash';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { InfoDetail, DropdownListInfo } from 'src/app/core/services/info.service';
 import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
+
+
+function floorToNearest(amount: number, precision: number) {
+  return Math.floor(amount / precision) * precision;
+}
+
+function ceilToNearest(amount: number, precision: number) {
+  return Math.ceil(amount / precision) * precision;
+}
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
@@ -53,8 +68,10 @@ export class CalendarComponent implements OnInit, OnChanges {
   activeDayIsOpen: boolean;
   viewingArrangements: InfoDetail[];
   id: number;
+  events: CalendarEvent[] = [];
+  dragToCreateActive = false;
 
-  constructor(private diaryEventService: DiaryEventService, private storage: StorageMap) { }
+  constructor(private diaryEventService: DiaryEventService, private storage: StorageMap, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.storage.get('info').subscribe((data: DropdownListInfo) => {
@@ -105,7 +122,7 @@ export class CalendarComponent implements OnInit, OnChanges {
     });
   }
 
-  getSelectedStaffMemberDiaryEvents(staffMemberId: number){
+  getSelectedStaffMemberDiaryEvents(staffMemberId: number) {
     this.id = staffMemberId;
     this.getDiaryEvents();
   }
@@ -153,22 +170,8 @@ export class CalendarComponent implements OnInit, OnChanges {
               return {} as CalendarEvent;
             }
           });
-        }),
+        })
       );
-  }
-
-  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
-    if (isSameMonth(date, this.viewDate)) {
-      if (
-        (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
-        events.length === 0
-      ) {
-        this.activeDayIsOpen = false;
-      } else {
-        this.activeDayIsOpen = true;
-      }
-      this.viewDate = date;
-    }
   }
 
   getClickedDate(date: Date) {
@@ -204,28 +207,68 @@ export class CalendarComponent implements OnInit, OnChanges {
     }
   }
 
-  // eventClicked(event: CalendarEvent<{ diaryEvent: DiaryEvent }>): void {
-  //  if(event) {
-  //     window.open(
-  //       `https://www.themoviedb.org/movie/${event.meta.film.id}`,
-  //       '_blank'
-  //     );
-  //  }
-  // }
-
   trackByFn(index, item: DiaryEvent) {
     if (!item) { return null; }
     return item.diaryEventId;
   }
+
+  // New draggable here....
+  startDragToCreate(
+    segment: WeekViewHourSegment,
+    mouseDownEvent: MouseEvent,
+    segmentElement: HTMLElement
+  ) {
+    console.log('.........xxxxxxxxxxxxxxxxxxx')
+    const dragToSelectEvent: CalendarEvent = {
+      id: this.events.length,
+      title: 'New event',
+      start: segment.date,
+      meta: {
+        tmpEvent: true
+      }
+    };
+    this.events = [...this.events, dragToSelectEvent];
+    const segmentPosition = segmentElement.getBoundingClientRect();
+    this.dragToCreateActive = true;
+    const endOfView = endOfWeek(this.viewDate, {
+      weekStartsOn: this.weekStartsOn
+    });
+
+    fromEvent(document, 'mousemove')
+      .pipe(
+        finalize(() => {
+          delete dragToSelectEvent.meta.tmpEvent;
+          this.dragToCreateActive = false;
+          this.refresh();
+        }),
+        takeUntil(fromEvent(document, 'mouseup'))
+      )
+      .subscribe((mouseMoveEvent: MouseEvent) => {
+        const minutesDiff = ceilToNearest(
+          mouseMoveEvent.clientY - segmentPosition.top,
+          30
+        );
+
+        const daysDiff =
+          floorToNearest(
+            mouseMoveEvent.clientX - segmentPosition.left,
+            segmentPosition.width
+          ) / segmentPosition.width;
+
+        const newEnd = addDays(addMinutes(segment.date, minutesDiff), daysDiff);
+        if (newEnd > segment.date && newEnd < endOfView) {
+          dragToSelectEvent.end = newEnd;
+        }
+        console.log('dragggg', dragToSelectEvent)
+        this.refresh();
+      });
+  }
+
+  private refresh() {
+    this.events = [...this.events];
+    this.cdr.detectChanges();
+  }
 }
 
-function getTimezoneOffsetString(date: Date): string {
-  const timezoneOffset = date.getTimezoneOffset();
-  const hoursOffset = String(
-    Math.floor(Math.abs(timezoneOffset / 60))
-  ).padStart(2, '0');
-  const minutesOffset = String(Math.abs(timezoneOffset % 60)).padEnd(2, '0');
-  const direction = timezoneOffset > 0 ? '-' : '+';
 
-  return `T00:00:00${direction}${hoursOffset}:${minutesOffset}`;
-}
+
