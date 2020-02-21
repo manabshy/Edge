@@ -5,6 +5,8 @@ import { baseDiaryEventTypes, valuationDiaryEventTypes, feedbackDiaryEventTypes 
 import { SharedService } from 'src/app/core/services/shared.service';
 import { DiaryEventService } from '../shared/diary-event.service';
 import { AppUtils } from 'src/app/core/shared/utils';
+import { StorageMap } from '@ngx-pwa/local-storage';
+import { DropdownListInfo, InfoDetail } from 'src/app/core/services/info.service';
 
 @Component({
   selector: 'app-add-diary-event',
@@ -12,27 +14,42 @@ import { AppUtils } from 'src/app/core/shared/utils';
   styleUrls: ['./add-diary-event.component.scss']
 })
 export class AddDiaryEventComponent implements OnInit {
-  eventTypes = feedbackDiaryEventTypes;
+  eventTypes: InfoDetail[];
   diaryEventForm: FormGroup;
   isSubmitting: any;
+  minutes = ['00', '15', '30', '45']
+  get hours() {
+    const result = [];
+    for (let hr = 0; hr < 24; hr++) {
+      const hrStr = hr.toString().padStart(2, '0');
+      result.push(hrStr);
+    }
+    return result;
+  }
+
 
   constructor(private fb: FormBuilder,
     private diaryEventService: DiaryEventService,
+    private storage: StorageMap,
     private sharedService: SharedService) {
   }
 
   ngOnInit() {
     window.scrollTo(0, 0);
     this.setupForm();
+    this.storage.get('info').subscribe((info: DropdownListInfo) => {
+      this.eventTypes = info.diaryEventTypes;
+    });
   }
 
   setupForm() {
     this.diaryEventForm = this.fb.group({
       startDate: [''],
       endDate: [''],
-      startDateTime: [''],
-      endDateTime: [''],
-      eventType: [''],
+      startTime: [''],
+      endTime: [''],
+      eventType: [0],
+      allDay: false,
       staffMembers: [''],
       properties: [''],
       applicants: [''],
@@ -40,10 +57,10 @@ export class AddDiaryEventComponent implements OnInit {
     });
   }
   onStartDateChange(startDate) {
-    console.log('start', startDate)
+    console.log('start', startDate);
   }
   onEndDateChange(endDate) {
-    console.log('end', endDate)
+    console.log('end', endDate);
   }
   canDeactivate(): boolean {
     if (this.diaryEventForm.dirty) {

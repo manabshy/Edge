@@ -65,6 +65,7 @@ export interface DropdownListInfo {
   outsideSpaces: InfoDetail[];
   originTypes: InfoDetail[];
   origins: InfoDetail[];
+  diaryEventTypes: InfoDetail[];
 }
 
 export interface InfoDetail {
