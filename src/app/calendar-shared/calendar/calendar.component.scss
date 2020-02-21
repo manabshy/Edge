@@ -193,3 +193,9 @@ $time-column-mobile-width: 40px;
     } 
 
 }
+
+:host-context(.off-canvas) ::ng-deep {
+    .cal-week-view .cal-event-container {
+        max-width: 75%;
+    }
+}
