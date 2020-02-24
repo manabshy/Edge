@@ -5,7 +5,7 @@
       <h4 class="m-0">Diary Event</h4>
     </div>
   </div>
-  <form [formGroup]="diaryEventForm" autocompleteOff>
+  <form [formGroup]="diaryEventForm" (ngSubmit)="saveDiaryEvent()" autocompleteOff>
     <div class="form-group row">
       <label for="appointmentType" class="col-sm-2 col-form-label col-form-label-sm">Type</label>
       <div class="col-sm-3">
@@ -34,7 +34,7 @@
       </div>
     </div> -->
     <app-property-finder (selectedPropertyList)="getSelectedProperties($event)" [isMultiple]="true"></app-property-finder>
-    <app-signer [label]="'Applicant'"  [isMultiple]="true"></app-signer>
+    <app-signer [label]="'Applicant'"  [isMultiple]="true" (selectedSignersList)="getSelectedContactGroups($event)"></app-signer>
     <div class="form-group row">
       <label for="date" class="col-sm-2 col-form-label col-form-label-sm">Start Date</label>
       <div class="col-sm-3">
