@@ -132,7 +132,7 @@
                 <option *ngFor="let tenure of tenures" [value]='tenure.id'> {{tenure.value}}</option>
               </select>
               <input class="form-control" type="text" name="approxLeaseExpiryDate" *ngIf="showLeaseExpiryDate"
-                aria-label="length" placeholder="Length ..." id="approxLeaseExpiryDate"
+                aria-label="length" placeholder="Approx Length ..." id="approxLeaseExpiryDate"
                 formControlName="approxLeaseExpiryDate" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
                 [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}">
             </div>

@@ -41,29 +41,29 @@
         <div class="input-group mb-2">
           <input type="text" id="date" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
             formControlName="startDate"
-            [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
+            [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', minDate:todaysDate, customTodayClass: 'font-weight-bold'}"
             (bsValueChange)="onStartDateChange($event)" bsDatepicker>
-          <select class="custom-select custom-select-sm" name="startTime" id="startTime" formControlName="startTime">
+          <select *ngIf="!isAllDay" class="custom-select custom-select-sm" name="startTime" id="startTime" formControlName="startTime">
             <option *ngFor="let hour of hours" [value]='hour'> {{hour}}</option>
           </select>
-          <select class="custom-select custom-select-sm" name="startMin" id="startMin" formControlName="startMin">
+          <select *ngIf="!isAllDay" class="custom-select custom-select-sm" name="startMin" id="startMin" formControlName="startMin">
             <option *ngFor="let min of minutes" [value]='min'> {{min}}</option>
           </select>
         </div>
         <div class="custom-control custom-checkbox">
           <input type="checkbox" class="custom-control-input" id="allDay"
-            formControlName="allDay">
+            formControlName="allDay" (change)="onAllDayCheck($event)">
           <label class="custom-control-label" for="allDay">All Day </label>
         </div>
       </div>
     </div>
-    <div class="form-group row">
+    <div class="form-group row" *ngIf="!isAllDay">
       <label for="date" class="col-sm-2 col-form-label col-form-label-sm">End Date</label>
       <div class="col-sm-3">
         <div class="input-group">
           <input type="text" id="date" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
             formControlName="endDate"
-            [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
+            [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', minDate:todaysDate, customTodayClass: 'font-weight-bold'}"
             (bsValueChange)="onEndDateChange($event)" bsDatepicker>
           <select class="custom-select custom-select-sm" name="endTime" id="endTime" formControlName="endTime">
             <option *ngFor="let hour of hours" [value]='hour'> {{hour}}</option>
@@ -86,10 +86,10 @@
       <div class="col-sm-6 offset-sm-2">
         <div class="custom-control custom-checkbox mb-2">
           <input type="checkbox" id="hasReminder" name="hasReminder" class="custom-control-input form-control-sm"
-            formControlName="hasReminder">
+            formControlName="hasReminder" (change)="onReminderCheck($event)">
           <label class="custom-control-label" for="hasReminder">Reminder</label>
         </div>
-        <div class="input-group mb-2">
+        <div class="input-group mb-2" *ngIf="isReminder">
           <select class="custom-select custom-select-sm single-select" name="duration" id="duration"
             formControlName="duration">
             <option value="0">Not Known</option>
@@ -101,7 +101,7 @@
             <option *ngFor="let type of durationTypes" [value]='type'> {{type}}</option>
           </select>
         </div>
-        <p>Before start</p>
+        <p *ngIf="isReminder">Before start</p>
       </div>
     </div>
     <div class="form-actions">

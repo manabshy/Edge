@@ -30,6 +30,7 @@ export interface Property extends PropertyInfo {
   photo: Photo;
   info: PropertySummaryFigures;
   lastKnownOwner: Signer;
+  valuer?: BaseStaffMember;
   valuers?: BaseStaffMember[];
 }
 

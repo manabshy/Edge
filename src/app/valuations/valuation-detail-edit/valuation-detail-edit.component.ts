@@ -214,16 +214,16 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   setupInitialRentFigures(val: Valuation) {
     if (val.suggestedAskingRentShortLet) {
-      this.shortLetMonthlyControl.setValue((+val.suggestedAskingRentShortLet * (52 / 12)).toFixed(2));
+      this.shortLetMonthlyControl.setValue(this.calculateMonthlyRent(+val.suggestedAskingRentShortLet));
     }
     if (val.suggestedAskingRentLongLet) {
-      this.longLetMonthlyControl.setValue((+val.suggestedAskingRentLongLet * (52 / 12)).toFixed(2));
+      this.longLetMonthlyControl.setValue(this.calculateMonthlyRent(+val.suggestedAskingRentLongLet));
     }
     if (val.suggestedAskingRentShortLetMonthly) {
-      this.shortLetWeeklyControl.setValue((+val.suggestedAskingRentShortLetMonthly / 4).toFixed(2));
+      this.shortLetWeeklyControl.setValue(this.calculateWeeklyRent(+val.suggestedAskingRentShortLetMonthly));
     }
     if (val.suggestedAskingRentLongLetMonthly) {
-      this.longLetWeeklyControl.setValue((+val.suggestedAskingRentLongLetMonthly / 4).toFixed(2));
+      this.longLetWeeklyControl.setValue(this.calculateMonthlyRent(+val.suggestedAskingRentLongLetMonthly));
     }
 
   }
@@ -245,11 +245,18 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   private setMonthlyRent(weeklyControl: FormControl, monthlyControl: FormControl) {
     weeklyControl.valueChanges
-      .subscribe(rent => monthlyControl.setValue((+rent * (52 / 12)).toFixed(2), { emitEvent: false }));
+      .subscribe(rent => monthlyControl.setValue(this.calculateMonthlyRent(rent), { emitEvent: false }));
   }
   private setWeeklyRent(weeklyControl: FormControl, monthlyControl: FormControl) {
     monthlyControl.valueChanges
-      .subscribe(rent => weeklyControl.setValue((+rent / 4).toFixed(2), { emitEvent: false }));
+      .subscribe(rent => weeklyControl.setValue(this.calculateWeeklyRent(rent), { emitEvent: false }));
+  }
+
+  private calculateMonthlyRent(rent: any): any {
+    return (+rent * (52 / 12)).toFixed(2);
+  }
+  private calculateWeeklyRent(rent: any): any {
+    return (+rent * (12 / 52)).toFixed(2);
   }
 
   setupForm() {
@@ -623,8 +630,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
 
     if (this.isNewValuation) {
-      this.isInvitationSent.value ? valuation.valuationStatus = ValuationStatusEnum.Booked
-        : valuation.valuationStatus = ValuationStatusEnum.None;
       this.valuationService.addValuation(valuation).subscribe(data => {
         if (data) { this.onSaveComplete(data); }
       },
@@ -653,7 +658,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   }
   private changeLeaseExpiryDateToYears(approxLeaseExpiryDate: string | number | Date) {
-    return differenceInCalendarYears(approxLeaseExpiryDate, new Date());
+    if (approxLeaseExpiryDate) {
+      return differenceInCalendarYears(approxLeaseExpiryDate, new Date());
+    }
   }
 
   onSaveComplete(valuation?: Valuation) {
