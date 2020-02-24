@@ -3,7 +3,8 @@ import { CalendarView } from 'angular-calendar';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { BaseStaffMember } from '../shared/models/base-staff-member';
 import { StaffMemberService } from '../core/services/staff-member.service';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { StorageMap } from '@ngx-pwa/local-storage';
 
 @Component({
   selector: 'app-calendar-header',
@@ -27,7 +28,7 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
   diaryHeaderForm: FormGroup;
   staffMembers$ = new Observable<BaseStaffMember[]>();
 
-  constructor(private fb: FormBuilder, private staffMemberService: StaffMemberService) { }
+  constructor(private fb: FormBuilder, private storage: StorageMap, private staffMemberService: StaffMemberService) { }
 
   ngOnInit() {
     this.diaryHeaderForm = this.fb.group({
@@ -46,7 +47,13 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
   }
 
   getStaffMembersForCalendar() {
-    this.staffMembers$ = this.staffMemberService.getStaffMembersForCalendar();
+    this.storage.get('calendarStaffMembers').subscribe(staffMembers => {
+      if (staffMembers) {
+        this.staffMembers$ = of(staffMembers as BaseStaffMember[]);
+      } else {
+        this.staffMembers$ = this.staffMemberService.getStaffMembersForCalendar();
+      }
+    });
   }
 
   onStaffMemberChange(staffMember: BaseStaffMember) {

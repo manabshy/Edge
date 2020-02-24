@@ -101,6 +101,6 @@ export class StaffMemberService {
   getStaffMembersForCalendar(): Observable<BaseStaffMember[]> {
     return this.http.get<any>(`${AppConstants.baseUrl}/calendars`).pipe(
       map(response => response.result),
-      tap(data => console.log('staff members for calendar:', data)));
+      tap(data => this.storage.set('calendarStaffMembers', data).subscribe()));
   }
 }
