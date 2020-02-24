@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { DiaryComponent } from '../diary.component';
 import { DiaryEvent } from '../shared/diary';
 import { SharedService } from 'src/app/core/services/shared.service';
@@ -7,11 +7,12 @@ import { DiaryEventService } from '../shared/diary-event.service';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { DropdownListInfo, InfoDetail } from 'src/app/core/services/info.service';
-import { getHours, getMinutes, addHours, format, setHours } from 'date-fns';
+import { getHours, getMinutes, addHours, format, setHours, setMinutes } from 'date-fns';
 import { Property } from 'src/app/property/shared/property';
 import { Signer } from 'src/app/contactgroups/shared/contact-group';
 import { ToastrService } from 'ngx-toastr';
 import { Router, ActivatedRoute } from '@angular/router';
+import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
 @Component({
   selector: 'app-add-diary-event',
   templateUrl: './add-diary-event.component.html',
@@ -47,6 +48,18 @@ export class AddDiaryEventComponent implements OnInit {
     return result;
   }
 
+  get startHourControl() {
+    return this.diaryEventForm.get('startHour') as FormControl;
+  }
+  get endHourControl() {
+    return this.diaryEventForm.get('endHour') as FormControl;
+  }
+  get startMinControl() {
+    return this.diaryEventForm.get('startMin') as FormControl;
+  }
+  get endMinControl() {
+    return this.diaryEventForm.get('endMin') as FormControl;
+  }
 
   constructor(private fb: FormBuilder,
     private diaryEventService: DiaryEventService,
@@ -60,7 +73,7 @@ export class AddDiaryEventComponent implements OnInit {
     window.scrollTo(0, 0);
     this.diaryEventId = +this.route.snapshot.paramMap.get('id');
     this.isNewEvent = this.route.snapshot.queryParamMap.get('isNewEvent') as unknown as boolean;
-    console.log('is new event', this.isNewEvent)
+    console.log('is new event', this.isNewEvent);
     this.setupForm();
     this.storage.get('info').subscribe((info: DropdownListInfo) => {
       this.eventTypes = info.diaryEventTypes;
@@ -69,10 +82,10 @@ export class AddDiaryEventComponent implements OnInit {
 
   setupForm() {
     this.diaryEventForm = this.fb.group({
-      startDate: new Date(),
-      endDate: new Date(),
-      startTime: this.getHours(),
-      endTime: this.getHours(true),
+      startDateTime: new Date(),
+      endDateTime: new Date(),
+      startHour: this.getHours(),
+      endHour: this.getHours(true),
       startMin: this.getMinutes(),
       endMin: this.getMinutes(),
       eventType: [0],
@@ -129,13 +142,18 @@ export class AddDiaryEventComponent implements OnInit {
   }
 
   getSelectedProperties(properties: Property[]) {
-    console.log('properties here', properties)
-    this.diaryEventForm.get('properties').setValue(properties)
+    console.log('properties here', properties);
+    this.diaryEventForm.get('properties').setValue(properties);
   }
 
   getSelectedContactGroups(contactGroup: Signer) {
-    console.log('contact groups  here', contactGroup)
+    console.log('contact groups  here', contactGroup);
     this.diaryEventForm.get('contactgroups').setValue(contactGroup);
+  }
+
+  getSelectedStaffMembers(staffMembers: BaseStaffMember[]) {
+    console.log('staffMembers here', staffMembers);
+    this.diaryEventForm.get('staffMembers').setValue(staffMembers);
   }
 
   setTime(hour: number, min: number) {
@@ -157,11 +175,13 @@ export class AddDiaryEventComponent implements OnInit {
 
   addOrUpdateEvent() {
     const event = { ...this.diaryEvent, ...this.diaryEventForm.value } as DiaryEvent;
-    // format(event.startDateTime, 'YYYY-MM-DD');
-    // format(event.endDateTime, 'YYYY-MM-DD');
-    const date = setHours(event.startDate, 5)
-    console.log('date hre', date);
-    console.log('devent.......', event);
+    // setHours(event.startDateTime, +this.startHourControl.value);
+    // setHours(event.endDateTime, +this.endHourControl.value);
+    // setMinutes(event.startDateTime, +this.startMinControl.value);
+    // setMinutes(event.endDateTime, +this.endMinControl.value);
+
+    const newDate = setHours(event.startDateTime, +this.startHourControl.value);
+    const newMin = setMinutes(this.setUtcDate(newDate), +this.startMinControl.value);
 
     if (this.isNewEvent) {
       this.diaryEventService.addDiaryEvent(event).subscribe(res => {
@@ -177,13 +197,18 @@ export class AddDiaryEventComponent implements OnInit {
       });
 
     }
-    console.log('add or update here')
+    console.log('add or update here');
   }
 
   onSaveComplete(diaryEvent?: DiaryEvent) {
     if (this.isNewEvent) { this.toastr.success('Diary event successfully saved'); } else {
       this.toastr.success('Diary event successfully updated');
     }
+  }
+
+  private setUtcDate(date) {
+    return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(),
+      date.getSeconds(), date.getMilliseconds()));
   }
 
   canDeactivate(): boolean {

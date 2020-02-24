@@ -18,8 +18,10 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
   @Input() isRequired: boolean;
   @Input() isMultiple: boolean;
   @Output() selectedStaffMemberId = new EventEmitter<number>();
+  @Output() selectedStaffMemberList = new EventEmitter<BaseStaffMember[] | any>();
   staffMembers$ = new Observable<any>();
   staffMemberFinderForm: FormGroup;
+  selectedStaffMembers: BaseStaffMember[] = [];
   constructor(private staffMemberService: StaffMemberService, private storage: StorageMap) { }
 
   ngOnInit(): void {
@@ -32,7 +34,6 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     console.log('is multiple', this.isMultiple);
-
     if (this.staffMemberId) {
       this.staffMemberFinderForm.patchValue({
         staffMemberId: this.staffMemberId
@@ -44,11 +45,11 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
   onStaffMemberChange(staffMember: BaseStaffMember) {
     if (staffMember) {
       this.selectedStaffMemberId.emit(staffMember.staffMemberId);
+      this.selectedStaffMemberList.emit(staffMember);
       console.log('selected', staffMember);
     } else {
       this.selectedStaffMemberId.emit(0);
     }
-    console.log('value of selected id control', this.staffMemberFinderForm.get('staffMemberId').value);
   }
 
   private getStaffMembers(listType?: string) {

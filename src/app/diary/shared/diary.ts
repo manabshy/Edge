@@ -10,8 +10,6 @@ export interface DiaryEvent {
   diaryEventId: number;
   startDateTime: Date;
   endDateTime: Date;
-  startDate: Date;
-  endDate: Date;
   startTime: string;
   eventType: string;
   subject: string;
