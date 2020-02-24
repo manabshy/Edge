@@ -45,6 +45,10 @@
             width: 100%;
             overflow-x: auto;
         }
+
+        @include media-breakpoint-up(xl) {
+            overflow-x: unset;
+        }
     }
 
     .table-link {
