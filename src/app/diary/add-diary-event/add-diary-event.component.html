@@ -10,7 +10,7 @@
       <label for="appointmentType" class="col-sm-2 col-form-label col-form-label-sm">Type</label>
       <div class="col-sm-3">
         <select class="custom-select custom-select-sm" formControlName="eventType">
-          <option value="0">Not Known</option>
+          <option value="0"></option>
           <option *ngFor="let type of eventTypes" [value]="type.id">{{type.value}}</option>
         </select>
       </div>
