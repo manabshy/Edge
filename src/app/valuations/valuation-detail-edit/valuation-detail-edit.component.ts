@@ -630,8 +630,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
 
     if (this.isNewValuation) {
-      this.isInvitationSent.value ? valuation.valuationStatus = ValuationStatusEnum.Booked
-        : valuation.valuationStatus = ValuationStatusEnum.None;
       this.valuationService.addValuation(valuation).subscribe(data => {
         if (data) { this.onSaveComplete(data); }
       },
