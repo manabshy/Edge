@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DiaryComponent } from '../diary.component';
-import { baseDiaryEventTypes, valuationDiaryEventTypes, feedbackDiaryEventTypes, DiaryEvent } from '../shared/diary';
+import { DiaryEvent } from '../shared/diary';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { DiaryEventService } from '../shared/diary-event.service';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { DropdownListInfo, InfoDetail } from 'src/app/core/services/info.service';
-import { getHours, getMinutes, addHours } from 'date-fns';
+import { getHours, getMinutes, addHours, format, setHours } from 'date-fns';
 import { Property } from 'src/app/property/shared/property';
 import { Signer } from 'src/app/contactgroups/shared/contact-group';
 import { ToastrService } from 'ngx-toastr';
+import { Router, ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-add-diary-event',
   templateUrl: './add-diary-event.component.html',
@@ -23,6 +24,11 @@ export class AddDiaryEventComponent implements OnInit {
   minutes = ['00', '15', '30', '45'];
   durationTypes = ['minute(s)', 'hour(s)', 'day(s)', 'week(s)'];
   isNewEvent: any;
+  diaryEvent: DiaryEvent;
+  diaryEventId: number;
+  isAllDay = false;
+  isReminder = false;
+  todaysDate = new Date();
 
   get hours() {
     const result = [];
@@ -46,11 +52,15 @@ export class AddDiaryEventComponent implements OnInit {
     private diaryEventService: DiaryEventService,
     private storage: StorageMap,
     private toastr: ToastrService,
+    private route: ActivatedRoute,
     private sharedService: SharedService) {
   }
 
   ngOnInit() {
     window.scrollTo(0, 0);
+    this.diaryEventId = +this.route.snapshot.paramMap.get('id');
+    this.isNewEvent = this.route.snapshot.queryParamMap.get('isNewEvent') as unknown as boolean;
+    console.log('is new event', this.isNewEvent)
     this.setupForm();
     this.storage.get('info').subscribe((info: DropdownListInfo) => {
       this.eventTypes = info.diaryEventTypes;
@@ -68,8 +78,8 @@ export class AddDiaryEventComponent implements OnInit {
       eventType: [0],
       allDay: false,
       hasReminder: false,
-      duration: [0],
-      durationType: [0],
+      duration: [30],
+      durationType: ['minute(s)'],
       staffMembers: [''],
       properties: [''],
       contactgroups: [''],
@@ -110,6 +120,14 @@ export class AddDiaryEventComponent implements OnInit {
     console.log('end', endDate);
   }
 
+  onAllDayCheck(event: any) {
+    this.isAllDay = event.target.checked;
+  }
+
+  onReminderCheck(event) {
+    this.isReminder = event.target.checked;
+  }
+
   getSelectedProperties(properties: Property[]) {
     console.log('properties here', properties)
     this.diaryEventForm.get('properties').setValue(properties)
@@ -138,6 +156,27 @@ export class AddDiaryEventComponent implements OnInit {
   }
 
   addOrUpdateEvent() {
+    const event = { ...this.diaryEvent, ...this.diaryEventForm.value } as DiaryEvent;
+    // format(event.startDateTime, 'YYYY-MM-DD');
+    // format(event.endDateTime, 'YYYY-MM-DD');
+    const date = setHours(event.startDate, 5)
+    console.log('date hre', date);
+    console.log('devent.......', event);
+
+    if (this.isNewEvent) {
+      this.diaryEventService.addDiaryEvent(event).subscribe(res => {
+        if (res) {
+          this.onSaveComplete(res);
+        }
+      });
+    } else {
+      this.diaryEventService.updateDiaryEvent(this.diaryEventId).subscribe(res => {
+        if (res) {
+          this.onSaveComplete(res);
+        }
+      });
+
+    }
     console.log('add or update here')
   }
 
