@@ -33,40 +33,40 @@
     </div>
     <div class="form-group row">
       <label for="name" class="col-sm-2 col-form-label col-form-label-sm">First Name</label>
-      <div class="col-sm-6">
+      <div class="col-sm-8 col-xl-6">
         <input type="text" id="name" class="form-control form-control-sm" formControlName="firstName" [ngClass]="{'is-invalid':formErrors.firstName}" >
         <span class="invalid-feedback">{{formErrors.firstName}}</span>
       </div>
     </div>
     <div class="form-group row">
       <label for="middleName" class="col-sm-2 col-form-label col-form-label-sm">Middle Name</label>
-      <div class="col-sm-6">
+      <div class="col-sm-8 col-xl-6">
         <input type="text" id="middleName" class="form-control form-control-sm" formControlName="middleName" [ngClass]="{'is-invalid':formErrors.middleName}" >
         <span class="invalid-feedback">{{formErrors.middleName}}</span>
       </div>
     </div>
     <div class="form-group row">
       <label for="lastName" class="col-sm-2 col-form-label col-form-label-sm">Last Name</label>
-      <div class="col-sm-6">
+      <div class="col-sm-8 col-xl-6">
         <input type="text" id="lastName" class="form-control form-control-sm" formControlName="lastName" [ngClass]="{'is-invalid':formErrors?.lastName}" autocomplete="false">
         <span class="invalid-feedback">{{formErrors?.lastName}}</span>
       </div>
     </div>
    <app-address [personDetails]="personDetails || basicPerson" (addressDetails)="getAddress($event)"></app-address>
    <div class="row justify-content-end" *ngIf="personForm.errors?.emailOrPhone" id="contact-error">
-     <div class="col-sm-6">
+     <div class="col-sm-8 col-xl-6">
         <div class="alert alert-danger">Please enter an email OR a phone number</div>
      </div>
    </div>
    <div class="row">
-     <div class="col-sm-6 text-right offset-sm-2 mr-2 d-none d-sm-block mb-1"><small>Pref</small></div>
+     <div class="col-sm-8 col-xl-6 text-right offset-sm-2 mr-2 d-none d-sm-block mb-1"><small>Pref</small></div>
    </div>
    <div formArrayName="emailAddresses" *ngFor="let emailAddress of emailAddresses.controls; let i = index; first as isFirst">
       <div [formGroupName]="i">
         <div class="form-group row">
           <label [for]="'email' + i" class="col col-sm-2 col-form-label col-form-label-sm" [ngClass]="{'sr-only': !isFirst}">Email</label>
           <div class="col-auto d-sm-none mr-2" *ngIf="isFirst"><small>Pref</small></div>
-          <div class="col-sm-6" [ngClass]="{'offset-sm-2':!isFirst}">
+          <div class="col-sm-8 col-xl-6" [ngClass]="{'offset-sm-2':!isFirst}">
               <div class="input-group input-group-sm">
                 <input type="text" [id]="'email' + i" [placeholder]="!isFirst ? 'Additional Email' : ''" class="form-control" formControlName="email"
                 (keyup)="addRemoveEmailItem(i, false)" (blur)="addRemoveEmailItem(i, true)"
@@ -89,14 +89,14 @@
       </div>
     </div>
    <div class="row">
-      <div class="col-sm-6 text-right offset-sm-2 mr-2 d-none d-sm-block mb-1"><small>Pref</small></div>
+      <div class="col-sm-8 col-xl-6 text-right offset-sm-2 mr-2 d-none d-sm-block mb-1"><small>Pref</small></div>
     </div>
    <div formArrayName="phoneNumbers" *ngFor="let phoneNumber of phoneNumbers.controls; let i = index; first as isFirst;">
       <div [formGroupName]="i">
         <div class="form-group row">
           <label [for]="'phone' + i" class="col col-sm-2 col-form-label col-form-label-sm" [ngClass]="{'sr-only': !isFirst}">Phone</label>
           <div class="col-auto d-sm-none mr-2" *ngIf="isFirst"><small>Pref</small></div>
-          <div class="col-sm-6" [ngClass]="{'offset-sm-2':!isFirst}">
+          <div class="col-sm-8 col-xl-6" [ngClass]="{'offset-sm-2':!isFirst}">
             <div class="input-group input-group-sm">
               <input type="text" [id]="'phone' + i" class="form-control" [placeholder]="!isFirst ? 'Additional phone' : ''" formControlName="number" (keyup)="addRemovePhoneNumberItem(i, false)" (blur)="addRemovePhoneNumberItem(i, true)"
               [ngClass]="{'border border-warning': !personForm.controls.phoneNumbers.controls[0].controls.number.value && isFirst && !personForm.errors?.emailOrPhone,
@@ -131,7 +131,7 @@
    </div>
    <div class="form-group row">
     <label class="col-sm-2 col-form-label col-form-label-sm">Contact by</label>
-    <div class="col-sm-6">
+    <div class="col-sm-8 col-xl-6">
       <div class="custom-control custom-checkbox">
         <input class="custom-control-input" type="checkbox" id="contactByEmail" formControlName="contactByEmail">
         <label class="custom-control-label" for="examplecheckboxs1">
@@ -149,7 +149,7 @@
   <div formGroupName="marketingPreferences">
       <div class="form-group row">
         <label class="col-sm-2 col-form-label col-form-label-sm">Marketing</label>
-        <div class="col-sm-6">
+        <div class="col-sm-8 col-xl-6">
           <div class="custom-control custom-checkbox">
             <input class="custom-control-input" type="checkbox" name="marketBulletin" id="quarterly"   formControlName="marketBulletin">
             <label class="custom-control-label" for="quarterly">

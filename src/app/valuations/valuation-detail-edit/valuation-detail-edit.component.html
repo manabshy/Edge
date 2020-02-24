@@ -14,7 +14,7 @@
       [readOnly]="!isEditable && !isNewValuation"></app-signer>
     <div class="row">
       <label for="originId" class="col-sm-2 col-form-label col-form-label-sm">Vendor Origin</label>
-      <div class="col-sm-6">
+      <div class="col-sm-8 col-xl-6">
         <div class="row">
           <div class="col-sm form-group" *ngIf="isEditable || isNewValuation">
             <select class="custom-select custom-select-sm" name="originTypes" id="originTypes"
@@ -47,7 +47,7 @@
     <div class="form-group row"
       *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value)">
       <label for="reason" class="col-sm-2 col-form-label col-form-label-sm">Why?</label>
-      <div class="col-sm-6">
+      <div class="col-sm-8 col-xl-6">
         <textarea class="form-control form-control-sm" name="reason" id="reason" cols="30" rows="3"
           formControlName="reason" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
           [ngClass]="{'is-invalid': (formErrors?.reason), 'form-control-plaintext': !isEditable && !isNewValuation}"></textarea>
@@ -57,7 +57,7 @@
     <div class="form-group row"
       *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('timeFrame').value)">
       <label for="timeFrame" class="col-sm-2 col-form-label col-form-label-sm">When?</label>
-      <div class="col-sm-6">
+      <div class="col-sm-8 col-xl-6">
         <textarea class="form-control form-control-sm" name="timeFrame" id="timeFrame" cols="30" rows="3"
           formControlName="timeFrame" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
           [ngClass]="{'is-invalid': (formErrors?.timeFrame), 'form-control-plaintext': !isEditable && !isNewValuation}"></textarea>
@@ -67,7 +67,7 @@
     <div class="form-group row"
       *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('marketChat').value)">
       <label for="marketChat" class="col-sm-2 col-form-label col-form-label-sm">Market Chat</label>
-      <div class="col-sm-6">
+      <div class="col-sm-8 col-xl-6">
         <textarea class="form-control form-control-sm" name="marketChat" id="marketChat" cols="30" rows="3"
           formControlName="marketChat" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
           [ngClass]="{'is-invalid': (formErrors?.marketChat), 'form-control-plaintext': !isEditable && !isNewValuation}"></textarea>
@@ -77,7 +77,7 @@
     <div class="form-group row"
       *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('generalNotes').value)">
       <label for="generalNotes" class="col-sm-2 col-form-label col-form-label-sm">Property Notes</label>
-      <div class="col-sm-6">
+      <div class="col-sm-8 col-xl-6">
         <textarea class="form-control form-control-sm" name="generalNotes" id="generalNotes" cols="30" rows="3"
           formControlName="generalNotes" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
           [ngClass]="{'is-invalid': (formErrors?.generalNotes), 'form-control-plaintext': !isEditable && !isNewValuation}"></textarea>
@@ -86,9 +86,9 @@
     </div>
     <div class="row">
       <label for="bedrooms" class="col-sm-2 col-form-label col-form-label-sm">Property Info</label>
-      <div class="col-sm-10">
+      <div class="col-sm-8 col-xl-6">
         <div class="row">
-          <div class="col-sm form-group">
+          <div class="col-sm-4 form-group">
             <label class="small" for="bedrooms">Bedrooms</label>
             <select class="custom-select custom-select-sm" name="bedrooms" id="bedrooms" formControlName="bedrooms"
               [attr.disabled]="!isEditable && !isNewValuation ? true : null"
@@ -97,7 +97,7 @@
               <option *ngFor="let bedroom of rooms" [value]='bedroom.id'> {{bedroom.name}}</option>
             </select>
           </div>
-          <div class="col-sm form-group">
+          <div class="col-sm-4 form-group">
             <label class="small" for="bathrooms">Bathrooms</label>
             <select class="custom-select custom-select-sm" name="bathrooms" id="bathrooms" formControlName="bathrooms"
               [attr.disabled]="!isEditable && !isNewValuation ? true : null"
@@ -106,7 +106,7 @@
               <option *ngFor="let bathroom of rooms" [value]='bathroom.id'> {{bathroom.name}}</option>
             </select>
           </div>
-          <div class="col-sm form-group">
+          <div class="col-sm-4 form-group">
             <label class="small" for="receptions">Receptions</label>
             <select class="custom-select custom-select-sm" name="receptions" id="receptions"
               formControlName="receptions" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
@@ -115,13 +115,13 @@
               <option *ngFor="let bathroom of rooms" [value]='bathroom.id'> {{bathroom.name}}</option>
             </select>
           </div>
-          <div class="col-sm form-group">
+          <div class="col-sm-4 form-group">
             <label class="small" for="sqFt">Sq. Foot</label>
             <input type="text" name="sqFt" id="sqFt" class="form-control form-control-sm" formControlName="sqFt"
               [attr.disabled]="!isEditable && !isNewValuation ? true : null"
               [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}">
           </div>
-          <div class="form-group" [ngClass]="showLeaseExpiryDate ? 'col-sm-auto' : 'col-sm'">
+          <div class="form-group" [ngClass]="showLeaseExpiryDate ? 'col-sm-8' : 'col-sm-4'">
             <label class="small" for="tenureId">Tenure</label>
             <div class="input-group input-group-sm">
               <select class="custom-select single-select" name="tenureId" id="tenureId" formControlName="tenureId"
@@ -139,7 +139,7 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-sm form-group"
+          <div class="col-sm-12 form-group"
             *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('outsideSpace').value)">
             <label class="small" for="outsideSpace">Outside Space</label>
             <ng-select [items]="outsideSpaces" [multiple]="true" bindLabel="value" groupBy="gender"
@@ -153,7 +153,7 @@
               </ng-template>
             </ng-select>
           </div>
-          <div class="col-sm form-group"
+          <div class="col-sm-12 form-group"
             *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('parking').value)">
             <label class="small" for="Parking">Parking</label>
             <ng-select [items]="parkings" [multiple]="true" bindLabel="value" groupBy="gender" [selectableGroup]="true"
@@ -167,7 +167,7 @@
               </ng-template>
             </ng-select>
           </div>
-          <div class="col-sm form-group"
+          <div class="col-sm-12 form-group"
             *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('propertyFeature').value)">
             <label class="small" for="features">Features</label>
             <ng-select [items]="features" [multiple]="true" bindLabel="value" groupBy="gender" [selectableGroup]="true"
