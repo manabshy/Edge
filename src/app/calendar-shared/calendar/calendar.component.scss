@@ -20,8 +20,11 @@ $time-column-mobile-width: 40px;
     mwl-calendar-month-view, mwl-calendar-week-view {
         @include media-breakpoint-up(md) {
             display: block;
-            max-height: 600px;
+            max-height: 500px;
             overflow: auto;
+        }
+        @include media-breakpoint-up(xl) {
+            max-height: 600px;
         }
     
         &-header {
