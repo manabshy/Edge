@@ -20,7 +20,7 @@ form {
         bottom: - $card-spacer-x;
     }
 
-    .col-sm-6 {
+    .col-sm-8 {
         @include media-breakpoint-up(sm) {
             @include make-col(10);
         }

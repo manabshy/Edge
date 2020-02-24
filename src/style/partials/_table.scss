@@ -39,6 +39,12 @@
                 margin-bottom: 0;
             }
         }
+
+        @include media-breakpoint-up(md) {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+        }
     }
 
     .table-link {

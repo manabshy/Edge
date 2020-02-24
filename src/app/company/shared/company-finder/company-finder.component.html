@@ -1,7 +1,7 @@
 <form class="p-0" [formGroup]="companyFinderForm" autocompleteOff>
   <div class="row" *ngIf="!existingCompany">
     <label for="company" class="col-sm-2 col-form-label col-form-label-sm">Find Company</label>
-    <div class="col-sm-6">
+    <div class="col-sm-8 col-xl-6">
       <div class="form-group">
         <div class="input-group input-group-sm">
           <input #companyNameInput type="search" id="company" class="form-control form-control-sm fake-readonly" formControlName="companyName"

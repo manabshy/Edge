@@ -85,7 +85,7 @@
         </div>
         <div class="row" [hidden]="!isSearchCompanyVisible || isExistingCompany">
           <label for="company" class="col-sm-2 col-form-label col-form-label-sm">Find Company</label>
-          <div class="col-sm-6">
+          <div class="col-sm-8 col-xl-6">
             <div class="form-group">
               <div class="input-group input-group-sm">
                 <input #companyNameInput type="search" id="company" class="form-control" formControlName="companyName"
@@ -355,13 +355,13 @@
         <form [formGroup]="contactGroupDetailsForm" class="pb-3">
           <div class="form-group row">
             <label for="salutation" class="col-sm-2 col-form-label col-form-label-sm">Salutation</label>
-            <div class="col-sm-6">
+            <div class="col-sm-8 col-xl-6">
               <input type="text" id="salutation" class="form-control form-control-sm" formControlName="salutation">
             </div>
           </div>
           <div class="form-group row">
             <label for="addressee" class="col-sm-2 col-form-label col-form-label-sm">Addressee</label>
-            <div class="col-sm-6">
+            <div class="col-sm-8 col-xl-6">
               <input type="text" id="addressee" class="form-control form-control-sm" formControlName="addressee">
             </div>
           </div>
