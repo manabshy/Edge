@@ -660,7 +660,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   }
   private changeLeaseExpiryDateToYears(approxLeaseExpiryDate: string | number | Date) {
-    return differenceInCalendarYears(approxLeaseExpiryDate, new Date());
+    if (approxLeaseExpiryDate) {
+      return differenceInCalendarYears(approxLeaseExpiryDate, new Date());
+    }
   }
 
   onSaveComplete(valuation?: Valuation) {
