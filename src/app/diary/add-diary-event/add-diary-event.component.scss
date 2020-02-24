@@ -8,7 +8,7 @@ form {
     padding-bottom: spacer(5);
 
     .form-actions {
-        @include fixed-bottom('sm');
+        @include fixed-bottom('xl');
     }
 
 }

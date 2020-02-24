@@ -14,7 +14,7 @@
       [readOnly]="!isEditable && !isNewValuation"></app-signer>
     <div class="row">
       <label for="originId" class="col-sm-2 col-form-label col-form-label-sm">Vendor Origin</label>
-      <div class="col-sm-10">
+      <div class="col-sm-6">
         <div class="row">
           <div class="col-sm form-group" *ngIf="isEditable || isNewValuation">
             <select class="custom-select custom-select-sm" name="originTypes" id="originTypes"
@@ -47,7 +47,7 @@
     <div class="form-group row"
       *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value)">
       <label for="reason" class="col-sm-2 col-form-label col-form-label-sm">Why?</label>
-      <div class="col-sm-10">
+      <div class="col-sm-6">
         <textarea class="form-control form-control-sm" name="reason" id="reason" cols="30" rows="3"
           formControlName="reason" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
           [ngClass]="{'is-invalid': (formErrors?.reason), 'form-control-plaintext': !isEditable && !isNewValuation}"></textarea>
@@ -57,7 +57,7 @@
     <div class="form-group row"
       *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('timeFrame').value)">
       <label for="timeFrame" class="col-sm-2 col-form-label col-form-label-sm">When?</label>
-      <div class="col-sm-10">
+      <div class="col-sm-6">
         <textarea class="form-control form-control-sm" name="timeFrame" id="timeFrame" cols="30" rows="3"
           formControlName="timeFrame" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
           [ngClass]="{'is-invalid': (formErrors?.timeFrame), 'form-control-plaintext': !isEditable && !isNewValuation}"></textarea>
@@ -67,7 +67,7 @@
     <div class="form-group row"
       *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('marketChat').value)">
       <label for="marketChat" class="col-sm-2 col-form-label col-form-label-sm">Market Chat</label>
-      <div class="col-sm-10">
+      <div class="col-sm-6">
         <textarea class="form-control form-control-sm" name="marketChat" id="marketChat" cols="30" rows="3"
           formControlName="marketChat" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
           [ngClass]="{'is-invalid': (formErrors?.marketChat), 'form-control-plaintext': !isEditable && !isNewValuation}"></textarea>
@@ -77,7 +77,7 @@
     <div class="form-group row"
       *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('generalNotes').value)">
       <label for="generalNotes" class="col-sm-2 col-form-label col-form-label-sm">Property Notes</label>
-      <div class="col-sm-10">
+      <div class="col-sm-6">
         <textarea class="form-control form-control-sm" name="generalNotes" id="generalNotes" cols="30" rows="3"
           formControlName="generalNotes" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
           [ngClass]="{'is-invalid': (formErrors?.generalNotes), 'form-control-plaintext': !isEditable && !isNewValuation}"></textarea>

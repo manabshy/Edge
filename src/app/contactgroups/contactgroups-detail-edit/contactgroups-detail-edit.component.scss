@@ -19,4 +19,10 @@ form {
         width: 100%;
         bottom: - $card-spacer-x;
     }
+
+    .col-sm-6 {
+        @include media-breakpoint-up(sm) {
+            @include make-col(10);
+        }
+    }
 }
