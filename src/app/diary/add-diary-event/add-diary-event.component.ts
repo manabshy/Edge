@@ -95,7 +95,7 @@ export class AddDiaryEventComponent implements OnInit {
       durationType: ['minute(s)'],
       staffMembers: [''],
       properties: [''],
-      contactgroups: [''],
+      contacts: [''],
       notes: [''],
     });
   }
@@ -146,9 +146,9 @@ export class AddDiaryEventComponent implements OnInit {
     this.diaryEventForm.get('properties').setValue(properties);
   }
 
-  getSelectedContactGroups(contactGroup: Signer) {
-    console.log('contact groups  here', contactGroup);
-    this.diaryEventForm.get('contactgroups').setValue(contactGroup);
+  getSelectedContactGroups(contacts: Signer[]) {
+    console.log('contact groups  here', contacts);
+    this.diaryEventForm.get('contacts').setValue(contacts);
   }
 
   getSelectedStaffMembers(staffMembers: BaseStaffMember[]) {
@@ -175,14 +175,8 @@ export class AddDiaryEventComponent implements OnInit {
 
   addOrUpdateEvent() {
     const event = { ...this.diaryEvent, ...this.diaryEventForm.value } as DiaryEvent;
-    // setHours(event.startDateTime, +this.startHourControl.value);
-    // setHours(event.endDateTime, +this.endHourControl.value);
-    // setMinutes(event.startDateTime, +this.startMinControl.value);
-    // setMinutes(event.endDateTime, +this.endMinControl.value);
-
-    const newDate = setHours(event.startDateTime, +this.startHourControl.value);
-    const newMin = setMinutes(this.setUtcDate(newDate), +this.startMinControl.value);
-
+    this.setDateTime(event);
+    console.log('start date and time', event.startDateTime);
     if (this.isNewEvent) {
       this.diaryEventService.addDiaryEvent(event).subscribe(res => {
         if (res) {
@@ -198,6 +192,16 @@ export class AddDiaryEventComponent implements OnInit {
 
     }
     console.log('add or update here');
+  }
+
+  // REFACTOR
+  private setDateTime(event: DiaryEvent) {
+    const startDateWithHour = setHours(event.startDateTime, +this.startHourControl.value);
+    const startDateWithMinutes = setMinutes(startDateWithHour, +this.startMinControl.value);
+    const endDateWithHour = setHours(event.endDateTime, +this.endHourControl.value);
+    const endDateWithMinutes = setMinutes(endDateWithHour, +this.endMinControl.value);
+    event.startDateTime = startDateWithMinutes;
+    event.endDateTime = endDateWithMinutes;
   }
 
   onSaveComplete(diaryEvent?: DiaryEvent) {
