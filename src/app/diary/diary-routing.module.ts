@@ -7,7 +7,7 @@ import { DiaryComponent } from './diary.component';
 
 const routes: Routes = [
   { path: '', component: DiaryComponent, data: { shouldDetach: false } },
-  { path: 'add-event', component: AddDiaryEventComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateGuard] },
+  { path: 'edit/:id', component: AddDiaryEventComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateGuard] },
 ];
 
 @NgModule({
