@@ -120,6 +120,7 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
       this.selectedProperties.push(property);
       console.log('selected props list here ZZZZZx', this.selectedProperties)
       this.selectedPropertyList.emit(this.selectedProperties);
+      this.propertyFinderForm.get('searchTerm').setValue('');
     }
   }
 
