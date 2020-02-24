@@ -108,6 +108,12 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     return MinBedrooms;
   }
 
+  get areValuesVisible () {
+    if(this.valuation) {
+      return this.valuation.valuationStatus !== ValuationStatusEnum.Incomplete && this.valuation.valuationStatus !== ValuationStatusEnum.None
+    }
+  }
+
   staffMembers = [
     { staffMemberId: 2484, fullName: 'Gabor Remenyi', emailAddress: 'gremenyi@dng.co.uk', hasReminder: null },
     { staffMemberId: 2127, fullName: 'Matt Easley', emailAddress: 'measley@dng.co.uk', hasReminder: null },
