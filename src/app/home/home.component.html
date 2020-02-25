@@ -8,12 +8,6 @@
         <app-dashboard *ngIf='currentStaffMember' [currentStaffMember]='currentStaffMember'></app-dashboard>
       </div>
     </tab>
-    <tab (select)="onSelect($event)" *ngIf="false">
-      <ng-template tabHeading>
-        <i class="far fa-calendar-alt"></i><span class="nav-label">Diary</span>
-      </ng-template>
-      <app-diary></app-diary>
-    </tab>
     <tab (select)="onSelect($event)">
       <ng-template tabHeading>
         <i class="far fa-calendar-alt"></i><span class="nav-label">Calendar</span>
