@@ -22,8 +22,10 @@
           (selectedStaffMemberList)="getSelectedStaffMembers($event)"></app-staff-member-finder>
       </div>
     </div>
+    <hr>
     <app-property-finder *ngIf="showProperties" (selectedPropertyList)="getSelectedProperties($event)" [isMultiple]="true" [label]="propertyLabel">
     </app-property-finder>
+    <hr class="mt-0">
     <app-signer *ngIf="showContacts" [label]="contactLabel" [isMultiple]="true" (selectedSignersList)="getSelectedContactGroups($event)">
     </app-signer>
     <hr class="mt-0">
