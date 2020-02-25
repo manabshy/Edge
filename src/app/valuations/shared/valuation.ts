@@ -3,6 +3,7 @@ import { DiaryEvent } from 'src/app/diary/shared/diary';
 import { BaseProperty } from 'src/app/shared/models/base-property';
 import { BaseRequestOption } from 'src/app/shared/models/base-request-option';
 import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
+import { Property } from 'src/app/property/shared/property';
 
 export interface ValuationInfo {
   reason: string;

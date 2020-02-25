@@ -15,6 +15,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
 import { WedgeValidators } from 'src/app/shared/wedge-validators';
 import { FormErrors } from 'src/app/core/shared/app-constants';
+import { PropertyService } from 'src/app/property/shared/property.service';
 @Component({
   selector: 'app-add-diary-event',
   templateUrl: './add-diary-event.component.html',
@@ -40,6 +41,7 @@ export class AddDiaryEventComponent implements OnInit {
   propertyLabel = 'Properties';
   contactLabel = 'Contacts';
   eventTypesMap: Map<number, string>;
+  property: Property;
 
   get hours() {
     const result = [];
@@ -79,6 +81,7 @@ export class AddDiaryEventComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
     private diaryEventService: DiaryEventService,
+    private propertyService: PropertyService,
     private storage: StorageMap,
     private toastr: ToastrService,
     private route: ActivatedRoute,
@@ -99,6 +102,7 @@ export class AddDiaryEventComponent implements OnInit {
       }
     });
 
+    this.getAddedProperty();
     this.diaryEventForm.valueChanges.subscribe(data => {
       this.sharedService.logValidationErrors(this.diaryEventForm, false);
     });
@@ -190,6 +194,14 @@ export class AddDiaryEventComponent implements OnInit {
     this.diaryEventForm.get('staffMembers').setValue(staffMembers);
   }
 
+  private getAddedProperty() {
+    this.propertyService.newPropertyAdded$.subscribe(newProperty => {
+      if (newProperty) {
+        this.property = newProperty;
+        console.log('newly created property', newProperty)
+      }
+    });
+  }
   setTime(hour: number, min: number) {
     return (`${hour}:${min}`);
   }

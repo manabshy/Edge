@@ -38,7 +38,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   parkings: InfoDetail[];
   features: InfoDetail[];
   selectedDate: Date;
-  createdProperty: Property;
   createdSigner: any;
   isCreatingNewSigner: boolean;
   allStaffMembers: BaseStaffMember[];
@@ -51,7 +50,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   errorMessage: WedgeError;
   isSubmitting: boolean;
   formErrors = FormErrors;
-  existingProperty: BaseProperty;
+  property: BaseProperty;
   isOwnerChanged: boolean;
   isPropertyChanged: boolean;
   allAttendees: BaseStaffMember[];
@@ -198,9 +197,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.propertyService.getProperty(this.propertyId, false, false, true).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       if (result) {
         this.lastKnownOwner = result.lastKnownOwner;
-        this.existingProperty = result;
+        this.property = result;
         this.valuers = result.valuers;
-        const baseProperty = { propertyId: this.existingProperty.propertyId, address: this.existingProperty.address } as BaseProperty;
+        const baseProperty = { propertyId: this.property.propertyId, address: this.property.address } as BaseProperty;
         this.valuationForm.get('property').setValue(baseProperty);
         console.log('base property', this.valuationForm.get('property').value);
       }
@@ -340,7 +339,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.valuation.valuationStatus === 3 ? this.canInstruct = true : this.canInstruct = false;
         this.valuation.approxLeaseExpiryDate ? this.showLeaseExpiryDate = true : this.showLeaseExpiryDate = false;
         this.lastKnownOwner = this.valuation.propertyOwner;
-        this.existingProperty = this.valuation.property;
+        this.property = this.valuation.property;
         this.attendees = this.valuation.attendees ? this.valuation.attendees : [];
         this.valuation.valuer.fullName ? this.showOnlyMainStaffMember = true : this.showOnlyMainStaffMember = false;
         this.populateForm(data);
@@ -433,7 +432,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   getSelectedProperty(property: Property) {
     if (property) {
       this.valuers = [];
-      this.existingProperty = property;
+      this.property = property;
       this.isPropertyChanged = true;
       this.lastKnownOwner = property.lastKnownOwner;
       this.valuationForm.get('property').setValue(property);
@@ -446,11 +445,12 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   private getAddedProperty() {
-    this.propertyService.newPropertyAdded$.subscribe(newProperty => {
+    this.propertyService.newPropertyAdded$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(newProperty => {
       if (newProperty) {
-        this.createdProperty = newProperty;
-        this.valuationForm.get('property').setValue(this.createdProperty);
+        this.property = newProperty;
+        this.valuationForm.get('property').setValue(this.property);
         this.getSelectedOwner(newProperty.lastKnownOwner);
+        console.log('newly created property', newProperty)
         console.log('property in form', this.valuationForm.get('property').value);
       }
     });
@@ -509,8 +509,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
   showValuersList() {
     this.showOnlyMainStaffMember = !this.showOnlyMainStaffMember;
-    if (this.existingProperty || this.createdProperty) {
-      const propId = this.existingProperty.propertyId || this.createdProperty.propertyId;
+    if (this.property) {
+      const propId = this.property.propertyId;
       this.getValuers(propId);
     }
   }
@@ -712,7 +712,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.errorMessage = null;
     if (status) {
       this.toastr.success('Instruction successfully saved');
-      this.router.navigate(['/property-centre/detail', this.existingProperty.propertyId]);
+      this.router.navigate(['/property-centre/detail', this.property.propertyId]);
     }
   }
 
