@@ -34,10 +34,13 @@
         <input type="text" class="form-control form-control-sm" id="contact-group" placeholder="Contact Group">
       </div>
     </div> -->
+    <hr>
     <app-property-finder (selectedPropertyList)="getSelectedProperties($event)" [isMultiple]="true">
     </app-property-finder>
+    <hr class="mt-0">
     <app-signer [label]="'Applicant'" [isMultiple]="true" (selectedSignersList)="getSelectedContactGroups($event)">
     </app-signer>
+    <hr class="mt-0">
     <div class="form-group row">
       <label for="startDateTime" class="col-sm-2 col-form-label col-form-label-sm">Start Date</label>
       <div class="col-sm-3">
