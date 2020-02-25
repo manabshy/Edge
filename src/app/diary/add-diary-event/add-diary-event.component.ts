@@ -39,6 +39,7 @@ export class AddDiaryEventComponent implements OnInit {
   formErrors = FormErrors;
   propertyLabel = 'Properties';
   contactLabel = 'Contacts';
+  eventTypesMap: Map<number, string>;
 
   get hours() {
     const result = [];
@@ -92,6 +93,10 @@ export class AddDiaryEventComponent implements OnInit {
     this.setupForm();
     this.storage.get('info').subscribe((info: DropdownListInfo) => {
       this.eventTypes = info.diaryEventTypes;
+      if (this.eventTypes && this.eventTypes.length) {
+        const mappedData = this.eventTypes.map(x => [x.id, x.value] as [number, string]);
+        this.eventTypesMap = new Map<number, string>(mappedData);
+      }
     });
 
     this.diaryEventForm.valueChanges.subscribe(data => {
@@ -169,6 +174,7 @@ export class AddDiaryEventComponent implements OnInit {
   onEventTypeChange(eventTypeId: number) {
     console.log('eventId', eventTypeId);
   }
+
   getSelectedProperties(properties: Property[]) {
     console.log('properties here', properties);
     this.diaryEventForm.get('properties').setValue(properties);
@@ -188,8 +194,8 @@ export class AddDiaryEventComponent implements OnInit {
     return (`${hour}:${min}`);
   }
 
-  private setLabels(id: number){
-    
+  private setLabels(id: number) {
+
   }
   saveDiaryEvent() {
     this.sharedService.logValidationErrors(this.diaryEventForm, true);
