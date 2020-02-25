@@ -16,8 +16,7 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
   @Input() label: string;
   @Input() readOnly = false;
   @Input() isMultiple: boolean = false;
-  @Input() existingProperty: Property;
-  @Input() createdProperty: Property;
+  @Input() property: Property;
   @Output() selectedProperty = new EventEmitter<any>();
   @Output() selectedPropertyList = new EventEmitter<any>();
   @ViewChild('selectedPropertyInput', { static: true }) selectedPropertyInput: ElementRef;
@@ -74,8 +73,7 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    console.log('new property', this.createdProperty)
-    console.log('isMultiple in on changes not firing why', this.isMultiple)
+    console.log('property here,,,,', this.property);
     this.displayExistingProperty();
   }
 
@@ -97,7 +95,7 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
     console.log('multiple should be true here', this.isMultiple)
     this.isMultiple ? this.isSearchVisible = true : this.isSearchVisible = false;
     console.log('search visible should be true here', this.isSearchVisible)
-    this.existingProperty = null;
+    this.property = null;
     if (propertyId) {
       this.propertyService.getProperty(propertyId, false, false, true).subscribe(data => {
         if (data) {
@@ -126,12 +124,14 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
 
 
   displayExistingProperty() {
-    let property: Property;
-    this.createdProperty ? property = this.createdProperty : property = this.existingProperty;
-    if (property && this.propertyFinderForm) {
-      this.propertyAddress.patchValue(property.address);
-      this.selectedPropertyDetails = property;
+    if (this.property && this.propertyFinderForm) {
       this.isMultiple ? this.isSearchVisible = true : this.isSearchVisible = false;
+      if (this.isMultiple) {
+        this.getSelectedProperties(this.property);
+      } else {
+        this.propertyAddress.patchValue(this.property.address);
+        this.selectedPropertyDetails = this.property;
+      }
     }
   }
 

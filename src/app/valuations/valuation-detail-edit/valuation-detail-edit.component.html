@@ -6,7 +6,7 @@
     </div>
   </div>
   <form [formGroup]="valuationForm" (ngSubmit)="saveValuation()" autocompleteOff>
-    <app-property-finder label="Property" [createdProperty]="createdProperty" [existingProperty]=existingProperty
+    <app-property-finder label="Property" [property]="property"
       (selectedProperty)="getSelectedProperty($event)" [readOnly]="!isEditable && !isNewValuation">
     </app-property-finder>
     <app-signer label="Last known owner" [createdSigner]="createdSigner" [existingSigner]="lastKnownOwner"
