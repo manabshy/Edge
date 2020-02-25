@@ -15,7 +15,7 @@ export interface Valuation extends ValuationInfo {
   valuationEventId: number;
   valuationStatus: number;
   valuationStatusLabel: string;
-  property: BaseProperty;
+  property: Property;
   valuer: BaseStaffMember;
   valuationDate?: Date;
   propertyOwner?: Signer;
