@@ -17,7 +17,7 @@ import { PropertyService } from 'src/app/property/shared/property.service';
 import { BaseComponent } from 'src/app/shared/models/base-component';
 import { BaseProperty } from 'src/app/shared/models/base-property';
 import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
-import { Valuation, ValuationStatusEnum } from '../shared/valuation';
+import { Valuation, ValuationStatusEnum, ValuationPropertyInfo } from '../shared/valuation';
 import { ValuationService } from '../shared/valuation.service';
 import { Instruction } from 'src/app/shared/models/instruction';
 import { ResultData } from 'src/app/shared/result-data';
@@ -108,9 +108,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     return MinBedrooms;
   }
 
-  get areValuesVisible () {
-    if(this.valuation) {
-      return this.valuation.valuationStatus !== ValuationStatusEnum.Incomplete && this.valuation.valuationStatus !== ValuationStatusEnum.None
+  get areValuesVisible() {
+    if (this.valuation) {
+      return this.valuation.valuationStatus !== ValuationStatusEnum.Incomplete && this.valuation.valuationStatus !== ValuationStatusEnum.None;
     }
   }
 
@@ -148,16 +148,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
 
     if (this.propertyId) {
-      this.propertyService.getProperty(this.propertyId, false, false, true).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-        if (result) {
-          this.lastKnownOwner = result.lastKnownOwner;
-          this.existingProperty = result;
-          this.valuers = result.valuers;
-          const baseProperty = { propertyId: this.existingProperty.propertyId, address: this.existingProperty.address } as BaseProperty;
-          this.valuationForm.get('property').setValue(baseProperty);
-          console.log('base property', this.valuationForm.get('property').value);
-        }
-      });
+      this.getPropertyDetails();
     }
 
     this.storage.get('info').subscribe((info: DropdownListInfo) => {
@@ -201,6 +192,19 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.setInstructionRentFigures();
       });
 
+  }
+
+  private getPropertyDetails() {
+    this.propertyService.getProperty(this.propertyId, false, false, true).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      if (result) {
+        this.lastKnownOwner = result.lastKnownOwner;
+        this.existingProperty = result;
+        this.valuers = result.valuers;
+        const baseProperty = { propertyId: this.existingProperty.propertyId, address: this.existingProperty.address } as BaseProperty;
+        this.valuationForm.get('property').setValue(baseProperty);
+        console.log('base property', this.valuationForm.get('property').value);
+      }
+    });
   }
 
   setInstructionRentFigures() {
@@ -382,6 +386,22 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     console.log('valuation form', this.valuationForm.value);
   }
 
+  displayValuationPropInfo(info: ValuationPropertyInfo) {
+    if (info) {
+      this.valuationForm.patchValue({
+        bedrooms: info.bedrooms || 0,
+        bathrooms: info.bathrooms || 0,
+        receptions: info.receptions || 0,
+        tenureId: info.tenureId || 0,
+        approxLeaseExpiryDate: this.changeLeaseExpiryDateToYears(info.approxLeaseExpiryDate),
+        sqFt: info.sqFt || 'Not Known',
+        outsideSpace: info.outsideSpace,
+        parking: info.parking,
+        propertyFeature: info.propertyFeature,
+      });
+    }
+  }
+
   populateInstructionForm(instruction: Instruction) {
     if (instruction) {
       this.instructionForm.patchValue({
@@ -419,6 +439,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.valuationForm.get('property').setValue(property);
       this.valuationForm.get('propertyOwner').setValue(this.lastKnownOwner);
       this.getValuers(property.propertyId);
+      this.valuationService.getValuationPropertyInfo(property.propertyId).subscribe(res => { if (res) { this.displayValuationPropInfo(res); } });
       console.log('selected prop owner......', this.valuationForm.get('propertyOwner').value);
       console.log('property changed', this.isPropertyChanged);
     }

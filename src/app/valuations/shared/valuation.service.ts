@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
-import { Valuation, ValuationRequestOption } from './valuation';
+import { Valuation, ValuationRequestOption, ValuationPropertyInfo } from './valuation';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { map, tap } from 'rxjs/operators';
 import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encoder-helper';
@@ -62,6 +62,15 @@ export class ValuationService {
       .pipe(
         map(response => response.result),
         tap(data => console.log('added valuation', JSON.stringify(data)))
+      );
+  }
+
+  getValuationPropertyInfo(propertyId: number): Observable<ValuationPropertyInfo | any> {
+    const url = `${AppConstants.baseValuationUrl}/propertyInfo/${propertyId}`;
+    return this.http.get<any>(url)
+      .pipe(
+        map(response => response.result),
+        tap(data => console.log('val prop info', JSON.stringify(data)))
       );
   }
 

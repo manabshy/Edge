@@ -45,6 +45,19 @@ export interface Valuation extends ValuationInfo {
   isActive?: boolean;
 }
 
+export interface ValuationPropertyInfo {
+  propertyId: number;
+  bedrooms: number;
+  bathrooms: number;
+  receptions: number;
+  sqFt: number;
+  tenureId: number;
+  approxLeaseExpiryDate?: any;
+  parking?: any;
+  outsideSpace?: any;
+  propertyFeature?: any;
+  valuers: BaseStaffMember[];
+}
 export interface ValuationRequestOption extends BaseRequestOption {
   status?: number;
   date?: string;
