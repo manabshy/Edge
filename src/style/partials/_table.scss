@@ -1,4 +1,5 @@
 .table {
+    table-layout: fixed;
 
     &.table-sortable thead th {
         &:hover {
@@ -18,8 +19,15 @@
         }
     }
 
+    .long-content {
+        @include media-breakpoint-up(md) {
+            width: 10rem;
+        }
+    }
     .values {
-        min-width: 7.2rem;
+        @include media-breakpoint-up(md) {
+            width: 7.2rem;
+        }
     }
 
     .table-link {

@@ -79,8 +79,8 @@
     <thead>
       <tr>
         <th>Status</th>
-        <th>Address</th>
-        <th>Owner</th>
+        <th class="long-content">Address</th>
+        <th class="long-content">Owner</th>
         <th>Date</th>
         <th>Valuer</th>
         <th class="values">Sale</th>
@@ -93,7 +93,7 @@
         <td>
           <span class="badge badge-pill badge-primary">{{val?.valuationStatusLabel}}</span>
         </td>
-        <td>
+        <td class="long-content">
           <dl class="row">
             <dt class="col-4 d-sm-none">Address</dt>
             <dd class="col">
@@ -103,7 +103,7 @@
             </dd>
           </dl>
         </td>
-        <td>
+        <td class="long-content">
           <dl class="row">
             <dt class="col-4 d-sm-none">Owner</dt>
             <dd class="col">{{val?.propertyOwner?.contactNames || '-'}}</dd>
