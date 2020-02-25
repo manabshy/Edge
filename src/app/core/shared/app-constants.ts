@@ -78,7 +78,8 @@ export const FormErrors = {
   'askingRentLongLet': '',
   'agencyType': '',
   'originId': '',
-  'originType': ''
+  'originType': '',
+  'endDateTime': ''
 };
 
 export const ValidationMessages = {
@@ -205,6 +206,9 @@ export const ValidationMessages = {
   },
   'originType': {
     required: 'Vendor origin type is required'
+  },
+  'endDateTime': {
+    endDateIsBeforeStartDate: 'End date cannot be before start date',
   }
   // 'invalidPhoneNumber': {
   //   required: 'Phone is required',

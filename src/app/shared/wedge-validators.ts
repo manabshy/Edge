@@ -159,6 +159,7 @@ export class WedgeValidators {
       return null;
     };
   }
+
   static nextChaseDateValidator(): ValidatorFn {
     const currentFullDate = new Date();
 
@@ -172,6 +173,25 @@ export class WedgeValidators {
 
         if (controlDate < currentDate) {
           return { 'nextChaseDatePassed': true };
+        }
+      }
+      return null;
+    };
+  }
+
+  static diaryEventEndDateValidator(): ValidatorFn {
+
+    return (control: AbstractControl): { [key: string]: boolean } | null => {
+      if (control !== null) {
+
+        const fullEndDate = new Date(control.get('endDateTime').value);
+        const fullStartDate = new Date(control.get('startDateTime').value);
+
+        const endDate = new Date(fullEndDate.getFullYear(), fullEndDate.getMonth(), fullEndDate.getDate());
+        const startDate = new Date(fullStartDate.getFullYear(), fullStartDate.getMonth(), fullStartDate.getDate());
+
+        if (endDate < startDate) {
+          return { 'endDateIsBeforeStartDate': true };
         }
       }
       return null;

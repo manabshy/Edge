@@ -18,7 +18,8 @@
     <div class="form-group row">
       <label for="property" class="col-sm-2 col-form-label col-form-label-sm">Staff Members</label>
       <div class="col-sm-3">
-        <app-staff-member-finder [listType]="'allStaffMembers'" [isMultiple]="true" (selectedStaffMemberList)="getSelectedStaffMembers($event)"></app-staff-member-finder>
+        <app-staff-member-finder [listType]="'allStaffMembers'" [isMultiple]="true"
+          (selectedStaffMemberList)="getSelectedStaffMembers($event)"></app-staff-member-finder>
       </div>
     </div>
     <!-- <div class="form-group row">
@@ -33,26 +34,30 @@
         <input type="text" class="form-control form-control-sm" id="contact-group" placeholder="Contact Group">
       </div>
     </div> -->
-    <app-property-finder (selectedPropertyList)="getSelectedProperties($event)" [isMultiple]="true"></app-property-finder>
-    <app-signer [label]="'Applicant'"  [isMultiple]="true" (selectedSignersList)="getSelectedContactGroups($event)"></app-signer>
+    <app-property-finder (selectedPropertyList)="getSelectedProperties($event)" [isMultiple]="true">
+    </app-property-finder>
+    <app-signer [label]="'Applicant'" [isMultiple]="true" (selectedSignersList)="getSelectedContactGroups($event)">
+    </app-signer>
     <div class="form-group row">
       <label for="startDateTime" class="col-sm-2 col-form-label col-form-label-sm">Start Date</label>
       <div class="col-sm-3">
         <div class="input-group mb-2">
           <input type="text" id="startDateTime" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
             formControlName="startDateTime"
-            [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', minDate:todaysDate, customTodayClass: 'font-weight-bold'}"
+            [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', minDate:minDate, customTodayClass: 'font-weight-bold'}"
             (bsValueChange)="onStartDateChange($event)" bsDatepicker>
-          <select *ngIf="!isAllDay" class="custom-select custom-select-sm" name="startHour" id="startHour" formControlName="startHour">
+          <select *ngIf="!isAllDay" class="custom-select custom-select-sm" name="startHour" id="startHour"
+            formControlName="startHour">
             <option *ngFor="let hour of hours" [value]='hour'> {{hour}}</option>
           </select>
-          <select *ngIf="!isAllDay" class="custom-select custom-select-sm" name="startMin" id="startMin" formControlName="startMin">
+          <select *ngIf="!isAllDay" class="custom-select custom-select-sm" name="startMin" id="startMin"
+            formControlName="startMin">
             <option *ngFor="let min of minutes" [value]='min'> {{min}}</option>
           </select>
         </div>
         <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" id="allDay"
-            formControlName="allDay" (change)="onAllDayCheck($event)">
+          <input type="checkbox" class="custom-control-input" id="allDay" formControlName="allDay"
+            (change)="onAllDayCheck($event)">
           <label class="custom-control-label" for="allDay">All Day </label>
         </div>
       </div>
@@ -63,8 +68,8 @@
         <div class="input-group">
           <input type="text" id="endDateTime" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
             formControlName="endDateTime"
-            [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', minDate:todaysDate, customTodayClass: 'font-weight-bold'}"
-            (bsValueChange)="onEndDateChange($event)" bsDatepicker>
+            [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', minDate:minDate, customTodayClass: 'font-weight-bold'}"
+            (bsValueChange)="onEndDateChange($event)" bsDatepicker  [ngClass]="{'is-invalid': diaryEventForm.errors?.endDateIsBeforeStartDate}">
           <select class="custom-select custom-select-sm" name="endHour" id="endHour" formControlName="endHour">
             <option *ngFor="let hour of hours" [value]='hour'> {{hour}}</option>
           </select>
@@ -72,6 +77,7 @@
             <option *ngFor="let min of minutes" [value]='min'> {{min}}</option>
           </select>
         </div>
+        <small class="text-danger" *ngIf="diaryEventForm?.errors?.endDateIsBeforeStartDate">End date should be after start date</small>
       </div>
     </div>
     <div class="form-group row">

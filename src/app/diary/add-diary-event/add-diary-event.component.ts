@@ -1,18 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { DiaryComponent } from '../diary.component';
 import { DiaryEvent } from '../shared/diary';
-import { SharedService } from 'src/app/core/services/shared.service';
+import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { DiaryEventService } from '../shared/diary-event.service';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { DropdownListInfo, InfoDetail } from 'src/app/core/services/info.service';
-import { getHours, getMinutes, addHours, format, setHours, setMinutes } from 'date-fns';
+import { getHours, getMinutes, addHours, format, setHours, setMinutes, isAfter } from 'date-fns';
 import { Property } from 'src/app/property/shared/property';
 import { Signer } from 'src/app/contactgroups/shared/contact-group';
 import { ToastrService } from 'ngx-toastr';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
+import { WedgeValidators } from 'src/app/shared/wedge-validators';
+import { FormErrors } from 'src/app/core/shared/app-constants';
 @Component({
   selector: 'app-add-diary-event',
   templateUrl: './add-diary-event.component.html',
@@ -29,7 +31,9 @@ export class AddDiaryEventComponent implements OnInit {
   diaryEventId: number;
   isAllDay = false;
   isReminder = false;
-  todaysDate = new Date();
+  maxDate = null;
+  minDate = new Date();
+  formErrors = FormErrors;
 
   get hours() {
     const result = [];
@@ -60,6 +64,12 @@ export class AddDiaryEventComponent implements OnInit {
   get endMinControl() {
     return this.diaryEventForm.get('endMin') as FormControl;
   }
+  get startDateTimeControl() {
+    return this.diaryEventForm.get('startDateTime') as FormControl;
+  }
+  get endDateTimeControl() {
+    return this.diaryEventForm.get('endDateTime') as FormControl;
+  }
 
   constructor(private fb: FormBuilder,
     private diaryEventService: DiaryEventService,
@@ -77,6 +87,10 @@ export class AddDiaryEventComponent implements OnInit {
     this.setupForm();
     this.storage.get('info').subscribe((info: DropdownListInfo) => {
       this.eventTypes = info.diaryEventTypes;
+    });
+
+    this.diaryEventForm.valueChanges.subscribe(data=>{
+      this.sharedService.logValidationErrors(this.diaryEventForm, false);
     });
   }
 
@@ -97,7 +111,7 @@ export class AddDiaryEventComponent implements OnInit {
       properties: [''],
       contacts: [''],
       notes: [''],
-    });
+    }, { validators: WedgeValidators.diaryEventEndDateValidator() });
   }
   private getMinutes(): any {
     let minutes = getMinutes(new Date());
@@ -128,7 +142,13 @@ export class AddDiaryEventComponent implements OnInit {
 
   onStartDateChange(startDate) {
     console.log('start', startDate);
+    // const con = isAfter(startDate, this.endDateTimeControl.value)
+    // if (con) {
+    //   this.minDate = startDate;
+    // }
+    // console.log('condition', con);
   }
+
   onEndDateChange(endDate) {
     console.log('end', endDate);
   }
@@ -169,7 +189,7 @@ export class AddDiaryEventComponent implements OnInit {
         this.onSaveComplete();
       }
     } else {
-
+      console.log('form here', this.diaryEventForm)
     }
   }
 
