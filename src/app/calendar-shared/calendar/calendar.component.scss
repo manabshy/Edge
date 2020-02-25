@@ -35,11 +35,11 @@ $time-column-mobile-width: 40px;
             background: color("white");
 
             @include media-breakpoint-down(sm) {
-                top: $top-bar-height + 85 + 24;
+                top: $top-bar-height + 73;
             }
 
             @media (max-width: 320px) {
-                top: $top-bar-height + 96;
+                top: $top-bar-height + 62;
             }
         }
     }
