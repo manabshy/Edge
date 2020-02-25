@@ -50,7 +50,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   errorMessage: WedgeError;
   isSubmitting: boolean;
   formErrors = FormErrors;
-  property: BaseProperty;
+  property: Property;
   isOwnerChanged: boolean;
   isPropertyChanged: boolean;
   allAttendees: BaseStaffMember[];
@@ -338,10 +338,15 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.valuation.valuationStatus === 3 ? this.isEditable = false : this.isEditable = true;
         this.valuation.valuationStatus === 3 ? this.canInstruct = true : this.canInstruct = false;
         this.valuation.approxLeaseExpiryDate ? this.showLeaseExpiryDate = true : this.showLeaseExpiryDate = false;
-        this.lastKnownOwner = this.valuation.propertyOwner;
-        this.property = this.valuation.property;
         this.attendees = this.valuation.attendees ? this.valuation.attendees : [];
         this.valuation.valuer.fullName ? this.showOnlyMainStaffMember = true : this.showOnlyMainStaffMember = false;
+        if (this.property) {
+          this.lastKnownOwner = this.property.lastKnownOwner;
+          this.property = this.property;
+        } else {
+          this.lastKnownOwner = this.valuation.propertyOwner;
+          this.property = this.valuation.property;
+        }
         this.populateForm(data);
         this.setupInitialRentFigures(data);
         if (this.valuation && this.allOrigins) {
@@ -460,7 +465,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.lastKnownOwner = owner;
       this.isOwnerChanged = true;
       this.valuationForm.get('propertyOwner').setValue(owner);
-      console.log('owner changed', this.valuationForm.get('propertyOwner'));
+      console.log('owner changed', this.valuationForm.get('propertyOwner').value);
     }
   }
 
