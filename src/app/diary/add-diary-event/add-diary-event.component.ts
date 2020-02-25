@@ -96,10 +96,10 @@ export class AddDiaryEventComponent implements OnInit {
     this.setupForm();
     this.storage.get('info').subscribe((info: DropdownListInfo) => {
       this.eventTypes = info.diaryEventTypes;
-      if (this.eventTypes && this.eventTypes.length) {
-        const mappedData = this.eventTypes.map(x => [x.id, x.value] as [number, string]);
-        this.eventTypesMap = new Map<number, string>(mappedData);
-      }
+      // if (this.eventTypes && this.eventTypes.length) {
+      //   const mappedData = this.eventTypes.map(x => [x.id, x.value] as [number, string]);
+      //   this.eventTypesMap = new Map<number, string>(mappedData);
+      // }
     });
 
     this.getAddedProperty();
