@@ -23,17 +23,22 @@ import { FormErrors } from 'src/app/core/shared/app-constants';
 export class AddDiaryEventComponent implements OnInit {
   eventTypes: InfoDetail[];
   diaryEventForm: FormGroup;
-  isSubmitting: any;
+  isSubmitting: boolean;
   minutes = ['00', '15', '30', '45'];
   durationTypes = ['minute(s)', 'hour(s)', 'day(s)', 'week(s)'];
-  isNewEvent: any;
+  isNewEvent: boolean;
   diaryEvent: DiaryEvent;
   diaryEventId: number;
   isAllDay = false;
   isReminder = false;
+  showProperties = true;
+  showContacts = true;
+  showStaffMembers = true;
   maxDate = null;
   minDate = new Date();
   formErrors = FormErrors;
+  propertyLabel = 'Properties';
+  contactLabel = 'Contacts';
 
   get hours() {
     const result = [];
@@ -89,7 +94,7 @@ export class AddDiaryEventComponent implements OnInit {
       this.eventTypes = info.diaryEventTypes;
     });
 
-    this.diaryEventForm.valueChanges.subscribe(data=>{
+    this.diaryEventForm.valueChanges.subscribe(data => {
       this.sharedService.logValidationErrors(this.diaryEventForm, false);
     });
   }
@@ -161,6 +166,9 @@ export class AddDiaryEventComponent implements OnInit {
     this.isReminder = event.target.checked;
   }
 
+  onEventTypeChange(eventTypeId: number) {
+    console.log('eventId', eventTypeId);
+  }
   getSelectedProperties(properties: Property[]) {
     console.log('properties here', properties);
     this.diaryEventForm.get('properties').setValue(properties);
@@ -180,6 +188,9 @@ export class AddDiaryEventComponent implements OnInit {
     return (`${hour}:${min}`);
   }
 
+  private setLabels(id: number){
+    
+  }
   saveDiaryEvent() {
     this.sharedService.logValidationErrors(this.diaryEventForm, true);
     if (this.diaryEventForm.valid) {
@@ -189,7 +200,7 @@ export class AddDiaryEventComponent implements OnInit {
         this.onSaveComplete();
       }
     } else {
-      console.log('form here', this.diaryEventForm)
+      console.log('form here', this.diaryEventForm);
     }
   }
 
