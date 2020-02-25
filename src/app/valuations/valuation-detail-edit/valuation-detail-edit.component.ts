@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StorageMap } from '@ngx-pwa/local-storage';
@@ -27,7 +27,7 @@ import { ResultData } from 'src/app/shared/result-data';
   templateUrl: './valuation-detail-edit.component.html',
   styleUrls: ['./valuation-detail-edit.component.scss']
 })
-export class ValuationDetailEditComponent extends BaseComponent implements OnInit {
+export class ValuationDetailEditComponent extends BaseComponent implements OnInit, OnDestroy {
   showCalendar = false;
   valuationId: number;
   valuation: Valuation;
@@ -736,5 +736,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       return false;
     }
     return true;
+  }
+  ngOnDestroy() {
+    this.property = {} as Property;
+    this.propertyService.setAddedProperty(null);
   }
 }
