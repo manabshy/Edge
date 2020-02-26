@@ -45,7 +45,6 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
       searchTerm: [''],
       selectedPropertyAddress: [''],
     });
-    console.log('isMultiple in on changes not firing why', this.isMultiple)
     // this.propertyService.newPropertyAdded$.subscribe((newProperty: Property) => {
     //   if (newProperty) {
     //     this.createdProperty = newProperty;
@@ -62,7 +61,7 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
             tap(data => {
               if (data && !data.length) {
                 this.noSuggestions = true;
-              }
+              } else { this.noSuggestions = false; }
             }),
             catchError(() => {
               return EMPTY;

@@ -62,7 +62,7 @@ export class SignerComponent implements OnInit, OnChanges {
             tap(data => {
               if (data && !data.length) {
                 this.noSuggestions = true;
-              }
+              } else { this.noSuggestions = false; }
             }),
             catchError(() => {
               return EMPTY;
