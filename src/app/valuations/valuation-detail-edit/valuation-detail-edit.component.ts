@@ -341,6 +341,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.attendees = this.valuation.attendees ? this.valuation.attendees : [];
         this.valuation.valuer.fullName ? this.showOnlyMainStaffMember = true : this.showOnlyMainStaffMember = false;
         this.valuation.valuer ? this.mainStaffMember = this.valuation.valuer : this.mainStaffMember = this.mainStaffMember;
+
         if (this.property) {
           this.lastKnownOwner = this.property.lastKnownOwner;
           this.property = this.property;
@@ -348,12 +349,13 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.lastKnownOwner = this.valuation.propertyOwner;
           this.property = this.valuation.property;
         }
+
+        this.getValuers(this.property.propertyId);
         this.populateForm(data);
         this.setupInitialRentFigures(data);
         if (this.valuation && this.allOrigins) {
           this.getOriginIdValue(this.valuation.originId);
         }
-
       }
     }));
   }
