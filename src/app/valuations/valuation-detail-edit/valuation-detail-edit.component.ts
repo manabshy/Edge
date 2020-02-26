@@ -150,6 +150,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
     if (this.propertyId) {
       this.getPropertyDetails();
+      this.getValuationPropertyInfo(this.propertyId);
     }
 
     this.storage.get('info').subscribe((info: DropdownListInfo) => {
@@ -462,10 +463,18 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.valuationForm.get('property').setValue(property);
       this.valuationForm.get('propertyOwner').setValue(this.lastKnownOwner);
       this.getValuers(property.propertyId);
-      this.valuationService.getValuationPropertyInfo(property.propertyId).subscribe(res => { if (res) { this.displayValuationPropInfo(res); } });
+      this.getValuationPropertyInfo(property.propertyId);
       console.log('selected prop owner......', this.valuationForm.get('propertyOwner').value);
       console.log('property changed', this.isPropertyChanged);
     }
+  }
+
+  private getValuationPropertyInfo(propertyId: number) {
+    this.valuationService.getValuationPropertyInfo(propertyId).subscribe(res => {
+      if (res) {
+        this.displayValuationPropInfo(res);
+      }
+    });
   }
 
   private getAddedProperty() {
