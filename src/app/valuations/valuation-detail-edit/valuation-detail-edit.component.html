@@ -89,7 +89,7 @@
       <label for="bedrooms" class="col-sm-2 col-form-label col-form-label-sm">Property Info</label>
       <div class="col-sm-8 col-xl-6">
         <div class="row">
-          <div class="col-sm-4 form-group">
+          <div class="col-4 form-group">
             <label class="small" for="bedrooms">Bedrooms</label>
             <select class="custom-select custom-select-sm" name="bedrooms" id="bedrooms" formControlName="bedrooms"
               [attr.disabled]="!isEditable && !isNewValuation ? true : null"
@@ -98,7 +98,7 @@
               <option *ngFor="let bedroom of rooms" [value]='bedroom.id'> {{bedroom.name}}</option>
             </select>
           </div>
-          <div class="col-sm-4 form-group">
+          <div class="col-4 form-group">
             <label class="small" for="bathrooms">Bathrooms</label>
             <select class="custom-select custom-select-sm" name="bathrooms" id="bathrooms" formControlName="bathrooms"
               [attr.disabled]="!isEditable && !isNewValuation ? true : null"
@@ -107,7 +107,7 @@
               <option *ngFor="let bathroom of rooms" [value]='bathroom.id'> {{bathroom.name}}</option>
             </select>
           </div>
-          <div class="col-sm-4 form-group">
+          <div class="col-4 form-group">
             <label class="small" for="receptions">Receptions</label>
             <select class="custom-select custom-select-sm" name="receptions" id="receptions"
               formControlName="receptions" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
@@ -116,13 +116,13 @@
               <option *ngFor="let bathroom of rooms" [value]='bathroom.id'> {{bathroom.name}}</option>
             </select>
           </div>
-          <div class="col-sm-4 form-group">
+          <div class="col-4 form-group">
             <label class="small" for="sqFt">Sq. Foot</label>
             <input type="text" name="sqFt" id="sqFt" class="form-control form-control-sm" formControlName="sqFt"
               [attr.disabled]="!isEditable && !isNewValuation ? true : null"
               [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}">
           </div>
-          <div class="form-group" [ngClass]="showLeaseExpiryDate ? 'col-sm-8' : 'col-sm-4'">
+          <div class="form-group" [ngClass]="showLeaseExpiryDate ? 'col-8' : 'col-4'">
             <label class="small" for="tenureId">Tenure</label>
             <div class="input-group input-group-sm">
               <select class="custom-select single-select" name="tenureId" id="tenureId" formControlName="tenureId"
