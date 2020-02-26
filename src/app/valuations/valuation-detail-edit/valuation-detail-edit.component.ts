@@ -67,6 +67,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   origins: InfoDetail[];
   origin: string;
   valuers: BaseStaffMember[] = [];
+  showDateAndDuration: boolean;
 
   get isInvitationSent() {
     return this.valuationForm.get('isInvitationSent') as FormControl;
@@ -324,11 +325,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   closeCalendar() {
     this.showCalendar = false;
-    // if (!this.selectedDate) {
-    //   this.mainStaffMember = null;
-    //   this.staffMemberId = null;
-    //   this.showOnlyMainStaffMember = false;
-    // }
+    if (!this.selectedDate) {
+      // this.mainStaffMember = null;
+      this.staffMemberId = null;
+      this.showOnlyMainStaffMember = false;
+    }
   }
 
   getValuation(id: number) {
@@ -339,8 +340,18 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.valuation.valuationStatus === 3 ? this.canInstruct = true : this.canInstruct = false;
         this.valuation.approxLeaseExpiryDate ? this.showLeaseExpiryDate = true : this.showLeaseExpiryDate = false;
         this.attendees = this.valuation.attendees ? this.valuation.attendees : [];
-        this.valuation.valuer.fullName ? this.showOnlyMainStaffMember = true : this.showOnlyMainStaffMember = false;
-        this.valuation.valuer ? this.mainStaffMember = this.valuation.valuer : this.mainStaffMember = this.mainStaffMember;
+        // this.valuation.valuer.fullName ? this.showOnlyMainStaffMember = true : this.showOnlyMainStaffMember = false;
+        // this.valuation.valuer ? this.mainStaffMember = this.valuation.valuer : this.mainStaffMember = this.mainStaffMember;
+        if (this.valuation.valuer) {
+          this.mainStaffMember = this.valuation.valuer;
+          if (this.valuation.valuationDate) {
+            this.showOnlyMainStaffMember = true;
+            this.showDateAndDuration = true;
+          } else {
+            this.showOnlyMainStaffMember = false;
+            this.showDateAndDuration = false;
+          }
+        }
 
         if (this.property) {
           this.lastKnownOwner = this.property.lastKnownOwner;
@@ -382,7 +393,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         valuer: valuation.valuer,
         attendees: valuation.attendees,
         valuationDate: valuation.valuationDate,
-        totalHours: valuation.totalHours,
+        totalHours: valuation.totalHours || 1,
         suggestedAskingPrice: valuation.suggestedAskingPrice ? valuation.suggestedAskingPrice : '',
         suggestedAskingRentLongLet: valuation.suggestedAskingRentLongLet ? valuation.suggestedAskingRentLongLet : '',
         suggestedAskingRentLongLetMonthly: valuation.suggestedAskingRentLongLetMonthly ? valuation.suggestedAskingRentLongLetMonthly : '',
@@ -476,6 +487,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     if (date) {
       console.log('selected date in val', date);
       this.selectedDate = date;
+      if (this.valuation && !this.valuation.valuationDate) {
+        this.valuation.valuationDate = date;
+      }
       this.valuationForm.get('valuationDate').setValue(date);
       this.showCalendar = false;
     }
