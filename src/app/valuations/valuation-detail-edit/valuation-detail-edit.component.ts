@@ -324,11 +324,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   closeCalendar() {
     this.showCalendar = false;
-    if (!this.selectedDate) {
-      this.mainStaffMember = null;
-      this.staffMemberId = null;
-      this.showOnlyMainStaffMember = false;
-    }
+    // if (!this.selectedDate) {
+    //   this.mainStaffMember = null;
+    //   this.staffMemberId = null;
+    //   this.showOnlyMainStaffMember = false;
+    // }
   }
 
   getValuation(id: number) {
@@ -340,6 +340,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.valuation.approxLeaseExpiryDate ? this.showLeaseExpiryDate = true : this.showLeaseExpiryDate = false;
         this.attendees = this.valuation.attendees ? this.valuation.attendees : [];
         this.valuation.valuer.fullName ? this.showOnlyMainStaffMember = true : this.showOnlyMainStaffMember = false;
+        this.valuation.valuer ? this.mainStaffMember = this.valuation.valuer : this.mainStaffMember = this.mainStaffMember;
         if (this.property) {
           this.lastKnownOwner = this.property.lastKnownOwner;
           this.property = this.property;
@@ -538,6 +539,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   changeDate() {
     if (this.mainStaffMember) {
       this.staffMemberId = this.mainStaffMember.staffMemberId;
+      console.log('staff member id', this.staffMemberId);
     }
     this.showCalendar = true;
   }
@@ -737,6 +739,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
     return true;
   }
+
   ngOnDestroy() {
     this.property = {} as Property;
     this.propertyService.setAddedProperty(null);
