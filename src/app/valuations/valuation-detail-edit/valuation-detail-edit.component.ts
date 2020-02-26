@@ -342,7 +342,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.valuationService.getValuation(id).pipe(takeUntil(this.ngUnsubscribe)).subscribe((data => {
       if (data) {
         this.valuation = data;
-        this.valuation.valuationStatus === 3 || 4 ? this.isEditable = false : this.isEditable = true;
+        this.valuation.valuationStatus === (3 || 4) ? this.isEditable = false : this.isEditable = true;
         this.valuation.valuationStatus === 3 ? this.canInstruct = true : this.canInstruct = false;
         this.valuation.approxLeaseExpiryDate ? this.showLeaseExpiryDate = true : this.showLeaseExpiryDate = false;
         this.attendees = this.valuation.attendees ? this.valuation.attendees : [];
