@@ -6,8 +6,8 @@
     </div>
   </div>
   <form [formGroup]="valuationForm" (ngSubmit)="saveValuation()" autocompleteOff>
-    <app-property-finder label="Property" [property]="property"
-      (selectedProperty)="getSelectedProperty($event)" [readOnly]="!isEditable && !isNewValuation">
+    <app-property-finder label="Property" [property]="property" (selectedProperty)="getSelectedProperty($event)"
+      [readOnly]="!isEditable && !isNewValuation">
     </app-property-finder>
     <app-signer label="Last known owner" [createdSigner]="createdSigner" [existingSigner]="lastKnownOwner"
       (selectedSigner)="getSelectedOwner($event)" (newSigner)="createNewSigner()"
@@ -189,7 +189,7 @@
     <div class="row">
       <label class="col-sm-2 col-form-label col-form-label-sm">Attendees</label>
       <div class="col-sm-10">
-        <p *ngIf="showOnlyMainStaffMember && valuation.valuationDate; else allMain" class="d-flex d-sm-block">
+        <p *ngIf="showOnlyMainStaffMember && ((valuation && valuation.valuationDate) || isNewValuation); else allMain" class="d-flex d-sm-block">
           <small class="text-left mobile-btn">{{mainStaffMember?.fullName}}</small>
           <button class="btn btn-light btn-sm ml-2" type="button" (click)="showValuersList()"
             *ngIf="isEditable || isNewValuation"> Change
@@ -314,8 +314,8 @@
                     [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}">
                 </div>
                 <label class="small" for="longLetMonthlyValue">Value (per month)</label>
-                <input type="text" name="longLetMonthlyValue" id="longLetMonthlyValue" class="form-control form-control-sm"
-                  formControlName="suggestedAskingRentLongLetMonthly"
+                <input type="text" name="longLetMonthlyValue" id="longLetMonthlyValue"
+                  class="form-control form-control-sm" formControlName="suggestedAskingRentLongLetMonthly"
                   [attr.disabled]="!isEditable && !isNewValuation ? true : null"
                   [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}">
               </div>

@@ -492,10 +492,12 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   addAttendee() {
     const existingAttendee = this.attendees.find(x => x.staffMemberId === this.attendee.staffMemberId);
+    console.log('existing attendee', existingAttendee);
     if (this.attendee && !existingAttendee) {
       this.attendees.push(this.attendee);
       this.valuationForm.get('attendees').setValue(this.attendees);
       this.valuationForm.get('searchAttendeeId').setValue(null);
+      // console.log('valuer exists', this.valuation.valuer);
       if (!this.showOnlyMainStaffMember) {
         this.setMain(this.attendee);
       }
