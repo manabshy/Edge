@@ -324,11 +324,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   closeCalendar() {
     this.showCalendar = false;
-    if (!this.selectedDate) {
-      this.mainStaffMember = null;
-      this.staffMemberId = null;
-      this.showOnlyMainStaffMember = false;
-    }
+    // if (!this.selectedDate) {
+    //   this.mainStaffMember = null;
+    //   this.staffMemberId = null;
+    //   this.showOnlyMainStaffMember = false;
+    // }
   }
 
   getValuation(id: number) {
@@ -340,6 +340,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.valuation.approxLeaseExpiryDate ? this.showLeaseExpiryDate = true : this.showLeaseExpiryDate = false;
         this.attendees = this.valuation.attendees ? this.valuation.attendees : [];
         this.valuation.valuer.fullName ? this.showOnlyMainStaffMember = true : this.showOnlyMainStaffMember = false;
+        this.valuation.valuer ? this.mainStaffMember = this.valuation.valuer : this.mainStaffMember = this.mainStaffMember;
+
         if (this.property) {
           this.lastKnownOwner = this.property.lastKnownOwner;
           this.property = this.property;
@@ -347,12 +349,13 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.lastKnownOwner = this.valuation.propertyOwner;
           this.property = this.valuation.property;
         }
+
+        this.getValuers(this.property.propertyId);
         this.populateForm(data);
         this.setupInitialRentFigures(data);
         if (this.valuation && this.allOrigins) {
           this.getOriginIdValue(this.valuation.originId);
         }
-
       }
     }));
   }
@@ -489,10 +492,12 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   addAttendee() {
     const existingAttendee = this.attendees.find(x => x.staffMemberId === this.attendee.staffMemberId);
+    console.log('existing attendee', existingAttendee);
     if (this.attendee && !existingAttendee) {
       this.attendees.push(this.attendee);
       this.valuationForm.get('attendees').setValue(this.attendees);
       this.valuationForm.get('searchAttendeeId').setValue(null);
+      // console.log('valuer exists', this.valuation.valuer);
       if (!this.showOnlyMainStaffMember) {
         this.setMain(this.attendee);
       }
@@ -538,6 +543,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   changeDate() {
     if (this.mainStaffMember) {
       this.staffMemberId = this.mainStaffMember.staffMemberId;
+      console.log('staff member id', this.staffMemberId);
     }
     this.showCalendar = true;
   }
@@ -737,6 +743,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
     return true;
   }
+
   ngOnDestroy() {
     this.property = {} as Property;
     this.propertyService.setAddedProperty(null);
