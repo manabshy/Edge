@@ -68,6 +68,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   origin: string;
   valuers: BaseStaffMember[] = [];
   showDateAndDuration: boolean;
+  hasDateWithValuer = false;
 
   get isInvitationSent() {
     return this.valuationForm.get('isInvitationSent') as FormControl;
@@ -326,9 +327,13 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   closeCalendar() {
     this.showCalendar = false;
     if (!this.selectedDate) {
-      // this.mainStaffMember = null;
-      this.staffMemberId = null;
-      this.showOnlyMainStaffMember = false;
+      if (this.hasDateWithValuer) {
+        this.valuation.attendees ? this.attendees = this.valuation.attendees : this.attendees = [];
+      } else {
+        this.mainStaffMember = null;
+        this.staffMemberId = null;
+        this.showOnlyMainStaffMember = false;
+      }
     }
   }
 
@@ -340,13 +345,13 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.valuation.valuationStatus === 3 ? this.canInstruct = true : this.canInstruct = false;
         this.valuation.approxLeaseExpiryDate ? this.showLeaseExpiryDate = true : this.showLeaseExpiryDate = false;
         this.attendees = this.valuation.attendees ? this.valuation.attendees : [];
-        // this.valuation.valuer.fullName ? this.showOnlyMainStaffMember = true : this.showOnlyMainStaffMember = false;
-        // this.valuation.valuer ? this.mainStaffMember = this.valuation.valuer : this.mainStaffMember = this.mainStaffMember;
+
         if (this.valuation.valuer) {
           this.mainStaffMember = this.valuation.valuer;
           if (this.valuation.valuationDate) {
             this.showOnlyMainStaffMember = true;
             this.showDateAndDuration = true;
+            this.hasDateWithValuer = true;
           } else {
             this.showOnlyMainStaffMember = false;
             this.showDateAndDuration = false;
