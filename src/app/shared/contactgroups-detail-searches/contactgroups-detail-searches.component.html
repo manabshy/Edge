@@ -6,7 +6,7 @@
     <div class="list-group-item" *ngIf="closedCounter">
       <div class="custom-control custom-checkbox">
         <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getSearches()" class="custom-control-input" id="includeClosedSearches">
-        <label class="custom-control-label" for="includeClosedSearches">Include closed searches</label>
+        <label class="custom-control-label small" for="includeClosedSearches">Include closed searches</label>
       </div>
     </div>
     <div class="list-group-item list-header d-none d-sm-block d-xl-none" *ngIf="searches && searches?.length">

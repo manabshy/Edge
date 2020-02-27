@@ -57,14 +57,14 @@
           <div class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input" id="closedInclusive"
               formControlName="includeClosedLeads">
-            <label class="custom-control-label" for="closedInclusive">Include closed leads</label>
+            <label class="custom-control-label small" for="closedInclusive">Include closed leads</label>
           </div>
         </div>
         <div class="col form-group" *ngIf="canSeeUnassignable">
           <div class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input" id="unassignedLeadsOnly"
               formControlName="includeUnassignedLeadsOnly">
-            <label class="custom-control-label" for="unassignedLeadsOnly">Show unassigned leads only</label>
+            <label class="custom-control-label small" for="unassignedLeadsOnly">Show unassigned leads only</label>
           </div>
         </div>
       </div>
@@ -100,7 +100,7 @@
               <div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" id="assignAll"
                   [attr.checked]="isSelectAllChecked ? 'checked' : null">
-                <label class="custom-control-label" for="assignAll"><span class="sr-only">Assign all</span></label>
+                <label class="custom-control-label small" for="assignAll"><span class="sr-only">Assign all</span></label>
               </div>
             </a>
           </th>
@@ -120,7 +120,7 @@
               <input type="checkbox" class="custom-control-input" [attr.id]="'assign'+i"
                 [attr.checked]="selectedLeadsForAssignment?.indexOf(lead) >= 0 ? 'checked' : null"
                 (click)="selectLeadForAssignment($event, lead)">
-              <label class="custom-control-label" [attr.for]="'assign'+i"><span class="sr-only">Assign</span></label>
+              <label class="custom-control-label small" [attr.for]="'assign'+i"><span class="sr-only">Assign</span></label>
             </div>
           </td>
           <td *ngIf="isClosedIncluded">
@@ -165,7 +165,7 @@
           <div class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input" id="assignAll"
               [attr.checked]="isSelectAllChecked ? 'checked' : null">
-            <label class="custom-control-label" for="assignAll"><span class="sr-only">Assign all</span></label>
+            <label class="custom-control-label small" for="assignAll"><span class="sr-only">Assign all</span></label>
           </div>
         </a>
         <div class="col-sm-auto" *ngIf="isClosedIncluded"><span class="badge badge-pill badge-primary invisible">Closed</span></div>
@@ -183,7 +183,7 @@
           <div class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input" [attr.id]="'assign'+i"
               [attr.checked]="selectedLeadIndex(lead) >= 0 ? 'checked' : null">
-            <label class="custom-control-label" [attr.for]="'assign'+i"><span class="sr-only">Assign</span></label>
+            <label class="custom-control-label small" [attr.for]="'assign'+i"><span class="sr-only">Assign</span></label>
           </div>
         </div>
         <div class="col">

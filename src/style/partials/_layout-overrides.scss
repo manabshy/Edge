@@ -286,3 +286,9 @@ fieldset {
 .custom-checkbox .custom-control-input:disabled:checked ~ .custom-control-label::before {
     background-image: none;
 }
+
+.custom-control-label {
+    &.small {
+        line-height: 2;
+    }
+}

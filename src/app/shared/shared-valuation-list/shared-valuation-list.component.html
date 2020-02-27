@@ -18,7 +18,7 @@
     <div class="list-group-item" *ngIf="closedCounter">
       <div class="custom-control custom-checkbox">
         <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getValuations()" class="custom-control-input" id="includeClosedValuations">
-        <label class="custom-control-label" for="includeClosedValuations">Include previous valuations</label>
+        <label class="custom-control-label small" for="includeClosedValuations">Include previous valuations</label>
       </div>
     </div>
     <a class="list-group-item list-group-item-action" (click)="navigateToDetail(valuation)"

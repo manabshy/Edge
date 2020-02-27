@@ -6,7 +6,7 @@
     <div class="list-group-item" *ngIf="closedCounter">
       <div class="custom-control custom-checkbox">
         <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getLettingManagements()" class="custom-control-input" id="includeClosedLettingManagements">
-        <label class="custom-control-label" for="includeClosedLettingManagements">Include closed letting managements</label>
+        <label class="custom-control-label small" for="includeClosedLettingManagements">Include closed letting managements</label>
       </div>
     </div>
     <div class="list-group-item list-header d-none d-sm-block d-xl-none" *ngIf="managements && managements?.length">

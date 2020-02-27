@@ -251,41 +251,43 @@
         </div>
       </div>
     </div>
-    <hr class="mt-0">
-    <div class="form-group row" *ngIf="selectedDate || showDateAndDuration">
-      <label class="col-sm-2 col-form-label col-form-label-sm">Date</label>
-      <div class="col-sm-10">
-        <div class="d-flex d-sm-block">
-          <label for="changeDate"
-            class="text-left mobile-btn small">{{(selectedDate || valuation?.valuationDate) | date: 'E d MMM yyyy, hh:mm'}}</label>
-          <button id="changeDate" class="btn btn-light btn-sm ml-2" type="button" (click)="changeDate()"
-            *ngIf="isEditable || isNewValuation">Change </button>
+    <ng-container *ngIf="selectedDate || showDateAndDuration">
+      <hr class="mt-0">
+      <div class="form-group row">
+        <label class="col-sm-2 col-form-label col-form-label-sm">Date</label>
+        <div class="col-sm-10">
+          <div class="d-flex d-sm-block">
+            <label for="changeDate"
+              class="text-left mobile-btn small">{{(selectedDate || valuation?.valuationDate) | date: 'E d MMM yyyy, hh:mm'}}</label>
+            <button id="changeDate" class="btn btn-light btn-sm ml-2" type="button" (click)="changeDate()"
+              *ngIf="isEditable || isNewValuation">Change </button>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="row" *ngIf="selectedDate || showDateAndDuration">
-      <label for="valuationDuration" class="col-sm-2 col-form-label col-form-label-sm">Duration</label>
-      <div class="col-sm-2 form-group">
-        <select class="custom-select custom-select-sm single-select" name="valuationDuration" id="valuationDuration"
-          formControlName="totalHours" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
-          [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}">
-          <option value="0.5">30 mins</option>
-          <option value="0.75">45 mins</option>
-          <option value="1" selected>1 hour</option>
-          <option value="1.25" selected>1 hour 15 mins</option>
-          <option value="1.50" selected>1 hour 30 mins</option>
-          <option value="1.75" selected>1 hour 45 mins</option>
-          <option value="2" selected>2 hours</option>
-        </select>
-      </div>
-      <div class="col-sm-10 offset-sm-2" *ngIf="isEditable || isNewValuation">
-        <div class="custom-control custom-checkbox form-control-sm py-0">
-          <input type="checkbox" class="custom-control-input" id="sendInvitation" formControlName="isInvitationSent">
-          <label class="custom-control-label" for="sendInvitation">Send invitation to Property Owner and
-            Attendees</label>
+      <div class="row">
+        <label for="valuationDuration" class="col-sm-2 col-form-label col-form-label-sm">Duration</label>
+        <div class="col-sm-2 form-group">
+          <select class="custom-select custom-select-sm single-select" name="valuationDuration" id="valuationDuration"
+            formControlName="totalHours" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+            [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}">
+            <option value="0.5">30 mins</option>
+            <option value="0.75">45 mins</option>
+            <option value="1" selected>1 hour</option>
+            <option value="1.25" selected>1 hour 15 mins</option>
+            <option value="1.50" selected>1 hour 30 mins</option>
+            <option value="1.75" selected>1 hour 45 mins</option>
+            <option value="2" selected>2 hours</option>
+          </select>
+        </div>
+        <div class="col-sm-10 offset-sm-2" *ngIf="isEditable || isNewValuation">
+          <div class="custom-control custom-checkbox form-control-sm py-0">
+            <input type="checkbox" class="custom-control-input" id="sendInvitation" formControlName="isInvitationSent">
+            <label class="custom-control-label small" for="sendInvitation">Send invitation to Property Owner and
+              Attendees</label>
+          </div>
         </div>
       </div>
-    </div>
+    </ng-container>
     <ng-container *ngIf="areValuesVisible">
       <hr class="mt-0">
       <div class="form-group row">
@@ -377,7 +379,7 @@
                     <div class="custom-control custom-checkbox form-group">
                       <input type="checkbox" id="isntructSale" name="isntructSale" class="custom-control-input"
                         formControlName="instructSale">
-                      <label class="custom-control-label" for="isntructSale">Instruct</label>
+                      <label class="custom-control-label small" for="isntructSale">Instruct</label>
                     </div>
                     <h5 class="card-title">Sell</h5>
                     <label class="small" for="sellValue">Value</label>
@@ -391,7 +393,7 @@
                     <div class="custom-control custom-checkbox form-group">
                       <input type="checkbox" id="isntructLongLet" name="isntructLongLet" class="custom-control-input"
                         formControlName="instructLongLet">
-                      <label class="custom-control-label" for="isntructLongLet">Instruct</label>
+                      <label class="custom-control-label small" for="isntructLongLet">Instruct</label>
                     </div>
                     <h5 class="card-title">Long Let</h5>
                     <div class="form-group">
@@ -410,7 +412,7 @@
                     <div class="custom-control custom-checkbox form-group">
                       <input type="checkbox" id="isntructShortLet" name="isntructShortLet" class="custom-control-input"
                         formControlName="instructShortLet">
-                      <label class="custom-control-label" for="isntructShortLet">Instruct</label>
+                      <label class="custom-control-label small" for="isntructShortLet">Instruct</label>
                     </div>
                     <h5 class="card-title">Short Let</h5>
                     <div class="form-group">
@@ -432,12 +434,12 @@
             <div class="custom-control custom-radio">
               <input type="radio" id="soleAgency" value="1" name="agencyType" class="custom-control-input"
                 formControlName="agencyType">
-              <label class="custom-control-label" for="soleAgency">Sole Agency</label>
+              <label class="custom-control-label small" for="soleAgency">Sole Agency</label>
             </div>
             <div class="custom-control custom-radio">
               <input type="radio" id="multiAgency" value="2" name="agencyType" class="custom-control-input"
                 formControlName="agencyType">
-              <label class="custom-control-label" for="multiAgency">Multi Agency</label>
+              <label class="custom-control-label small" for="multiAgency">Multi Agency</label>
             </div>
             <small *ngIf="instructionForm.get('agencyType')?.errors?.required"
               class="text-danger">{{formErrors?.agencyType}}</small>
