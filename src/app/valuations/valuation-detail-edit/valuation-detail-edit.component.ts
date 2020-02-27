@@ -69,6 +69,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   valuers: BaseStaffMember[] = [];
   showDateAndDuration: boolean;
   hasDateWithValuer = false;
+  activeOriginId: InfoDetail;
+  showOriginId: boolean;
 
   get isInvitationSent() {
     return this.valuationForm.get('isInvitationSent') as FormControl;
@@ -347,7 +349,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.attendees = this.valuation.attendees ? this.valuation.attendees : [];
 
         if (this.valuation.valuationStatus === 3 || this.valuation.valuationStatus === 4) {
-          console.log('status', this.valuation.valuationStatus)
           this.isEditable = false;
         } else { this.isEditable = true; }
 
@@ -375,7 +376,12 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.populateForm(data);
         this.setupInitialRentFigures(data);
         if (this.valuation && this.allOrigins) {
-          this.getOriginIdValue(this.valuation.originId);
+          this.activeOriginId = this.allOrigins.find(x => x.id === +this.valuation.originId);
+          (this.activeOriginId && !this.isEditable) ? this.showOriginId = true : this.showOriginId = false;
+          this.setOriginIdValue(this.valuation.originId);
+        }
+        if (this.valuation && this.allOrigins && this.originTypes) {
+          this.setOriginTypeId(this.valuation.originId);
         }
       }
     }));
@@ -386,7 +392,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.valuationForm.patchValue({
         property: valuation.property,
         propertyOwner: valuation.propertyOwner,
-        originId: valuation.originId,
+        originId: !!this.activeOriginId ? valuation.originId : 0,
         reason: valuation.reason,
         timeFrame: valuation.timeFrame,
         marketChat: valuation.marketChat,
@@ -444,11 +450,12 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   onSelectType(originTypeId: number) {
+    this.showOriginId = true;
     this.origins = this.allOrigins.filter((x: InfoDetail) => +x.parentId === +originTypeId);
     this.valuationForm.get('originId').setValue(0);
   }
 
-  getOriginIdValue(id: number) {
+  setOriginIdValue(id: number) {
     this.origin = 'Not Known';
     if (id) {
       this.allOrigins.forEach(x => {
@@ -458,6 +465,19 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       });
     }
   }
+
+  setOriginTypeId(originId: number) {
+    if (originId) {
+      this.allOrigins.forEach(x => {
+        if (+x.id === originId) {
+          this.valuationForm.get('originType').setValue(x.parentId);
+          this.onSelectType(x.parentId);
+          this.valuationForm.get('originId').setValue(originId);
+        }
+      });
+    }
+  }
+
   getSelectedProperty(property: Property) {
     if (property) {
       this.valuers = [];
@@ -468,8 +488,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.valuationForm.get('propertyOwner').setValue(this.lastKnownOwner);
       this.getValuers(property.propertyId);
       this.getValuationPropertyInfo(property.propertyId);
-      console.log('selected prop owner......', this.valuationForm.get('propertyOwner').value);
-      console.log('property changed', this.isPropertyChanged);
     }
   }
 
@@ -487,23 +505,20 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.property = newProperty;
         this.valuationForm.get('property').setValue(this.property);
         this.getSelectedOwner(newProperty.lastKnownOwner);
-        console.log('newly created property', newProperty)
-        console.log('property in form', this.valuationForm.get('property').value);
       }
     });
   }
+
   getSelectedOwner(owner: Signer) {
     if (owner) {
       this.lastKnownOwner = owner;
       this.isOwnerChanged = true;
       this.valuationForm.get('propertyOwner').setValue(owner);
-      console.log('owner changed', this.valuationForm.get('propertyOwner').value);
     }
   }
 
   getSelectedDate(date: Date) {
     if (date) {
-      console.log('selected date in val', date);
       this.selectedDate = date;
       if (this.valuation && !this.valuation.valuationDate) {
         this.valuation.valuationDate = date;
@@ -516,20 +531,16 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   onStaffMemberChange(staffMember: BaseStaffMember) {
     if (staffMember) {
       this.attendee = staffMember;
-      console.log('selected', staffMember);
-      console.log('attendess her....0', this.attendee);
     }
 
   }
 
   addAttendee() {
     const existingAttendee = this.attendees.find(x => x.staffMemberId === this.attendee.staffMemberId);
-    console.log('existing attendee', existingAttendee);
     if (this.attendee && !existingAttendee) {
       this.attendees.push(this.attendee);
       this.valuationForm.get('attendees').setValue(this.attendees);
       this.valuationForm.get('searchAttendeeId').setValue(null);
-      // console.log('valuer exists', this.valuation.valuer);
       if (!this.showOnlyMainStaffMember) {
         this.setMain(this.attendee);
       }
@@ -573,10 +584,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   changeDate() {
-    if (this.mainStaffMember) {
-      this.staffMemberId = this.mainStaffMember.staffMemberId;
-      console.log('staff member id', this.staffMemberId);
-    }
+    if (this.mainStaffMember) { this.staffMemberId = this.mainStaffMember.staffMemberId; }
     this.showCalendar = true;
   }
 
