@@ -13,6 +13,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 export class StaffMemberFinderComponent implements OnInit, OnChanges {
   @Input() staffMember: BaseStaffMember;
   @Input() staffMemberId: number;
+  @Input() staffMemberIdList: number[];
   @Input() listType: string;
   @Input() isDisabled: boolean;
   @Input() isRequired: boolean;
@@ -22,6 +23,7 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
   staffMembers$ = new Observable<any>();
   staffMemberFinderForm: FormGroup;
   selectedStaffMembers: BaseStaffMember[] = [];
+  isClearable = true;
   constructor(private staffMemberService: StaffMemberService, private storage: StorageMap) { }
 
   ngOnInit(): void {
@@ -37,6 +39,13 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
     if (this.staffMemberId) {
       this.staffMemberFinderForm.patchValue({
         staffMemberId: this.staffMemberId
+      });
+    }
+    if (this.staffMemberIdList) {
+      console.log('staff ids', this.staffMemberIdList)
+      this.isClearable = false;
+      this.staffMemberFinderForm.patchValue({
+        staffMemberId: this.staffMemberIdList
       });
     }
     this.getStaffMembers(this.listType);

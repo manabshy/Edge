@@ -17,6 +17,7 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
   @Input() readOnly = false;
   @Input() isMultiple: boolean = false;
   @Input() property: Property;
+  @Input() propertyList: Property[];
   @Output() selectedProperty = new EventEmitter<any>();
   @Output() selectedPropertyList = new EventEmitter<any>();
   @ViewChild('selectedPropertyInput', { static: true }) selectedPropertyInput: ElementRef;

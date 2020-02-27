@@ -27,6 +27,7 @@ import * as _ from 'lodash';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { InfoDetail, DropdownListInfo } from 'src/app/core/services/info.service';
 import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
+import { Router } from '@angular/router';
 
 
 function floorToNearest(amount: number, precision: number) {
@@ -68,10 +69,15 @@ export class CalendarComponent implements OnInit, OnChanges {
   activeDayIsOpen: boolean;
   viewingArrangements: InfoDetail[];
   id: number;
+
+  //draggable
   events: CalendarEvent[] = [];
   dragToCreateActive = false;
 
-  constructor(private diaryEventService: DiaryEventService, private storage: StorageMap, private cdr: ChangeDetectorRef) { }
+  constructor(private diaryEventService: DiaryEventService,
+    private storage: StorageMap,
+    private router: Router,
+    private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.storage.get('info').subscribe((data: DropdownListInfo) => {
@@ -113,7 +119,7 @@ export class CalendarComponent implements OnInit, OnChanges {
       if (calHourSegments && calHourSegments.length) {
         if (window.innerWidth >= 1024) {
 
-          console.log(calHourSegments[21])
+          console.log(calHourSegments[21]);
           calHourSegments[23].scrollIntoView({ block: 'center' });
         } else {
           calHourSegments[19].scrollIntoView({ block: 'center' });
@@ -128,7 +134,7 @@ export class CalendarComponent implements OnInit, OnChanges {
   }
 
   getDiaryEvents(isCancelledVisible?: boolean) {
-    console.log('id in calendar', this.staffMemberId)
+    console.log('id in calendar', this.staffMemberId);
     const getStart: any = {
       month: startOfMonth,
       week: startOfWeek,
@@ -174,6 +180,13 @@ export class CalendarComponent implements OnInit, OnChanges {
       );
   }
 
+  eventClicked({ event }: { event: CalendarEvent }) {
+    const clickedEvent = { ...event.meta } as DiaryEvent;
+    console.log('event', event.meta);
+    console.log('event id', clickedEvent.diaryEventId);
+    this.router.navigate(['/diary/edit', clickedEvent.diaryEventId]);
+  }
+
   getClickedDate(date: Date) {
     if (date) {
       this.selectedDate.emit(date);
@@ -203,7 +216,7 @@ export class CalendarComponent implements OnInit, OnChanges {
           }
         });
       }
-      console.log('viewings arrangements', properties)
+      console.log('viewings arrangements', properties);
     }
   }
 
@@ -218,7 +231,7 @@ export class CalendarComponent implements OnInit, OnChanges {
     mouseDownEvent: MouseEvent,
     segmentElement: HTMLElement
   ) {
-    console.log('.........xxxxxxxxxxxxxxxxxxx')
+    console.log('.........xxxxxxxxxxxxxxxxxxx');
     const dragToSelectEvent: CalendarEvent = {
       id: this.events.length,
       title: 'New event',
@@ -259,7 +272,7 @@ export class CalendarComponent implements OnInit, OnChanges {
         if (newEnd > segment.date && newEnd < endOfView) {
           dragToSelectEvent.end = newEnd;
         }
-        console.log('dragggg', dragToSelectEvent)
+        console.log('dragggg', dragToSelectEvent);
         this.refresh();
       });
   }

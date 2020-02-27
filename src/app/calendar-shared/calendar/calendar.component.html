@@ -1,4 +1,5 @@
-<a class="btn btn-secondary add-event mb-sm-3" [routerLink]="['/diary/edit', 0]" [queryParams]="{isNewEvent: true}" *ngIf="!myCalendarOnly">
+<a class="btn btn-secondary add-event mb-sm-3" [routerLink]="['/diary/edit', 0]" [queryParams]="{isNewEvent: true}"
+  *ngIf="!myCalendarOnly">
   <i class="fas fa-plus mr-2"></i> Event
 </a>
 <app-calendar-header [(view)]="view" [(daysInWeek)]="daysInWeek" [(viewDate)]="viewDate" [weekStartsOn]="weekStartsOn"
@@ -123,16 +124,17 @@
   <div [ngSwitch]="view">
     <mwl-calendar-month-view *ngSwitchCase="'month'" [viewDate]="viewDate" [events]="events"
       (dayClicked)="changeDay($event.day.date)" (beforeViewRender)="beforeMonthViewRender($event)"
-      [cellTemplate]="monthCell" [tooltipTemplate]="customTooltip" [weekStartsOn]="weekStartsOn">
+      [cellTemplate]="monthCell" [tooltipTemplate]="customTooltip" [weekStartsOn]="weekStartsOn"
+      (eventClicked)="eventClicked($event)">
     </mwl-calendar-month-view>
     <mwl-calendar-week-view *ngSwitchDefault [viewDate]="viewDate" [events]="events"
       (dayHeaderClicked)="changeDay($event.day.date)" (beforeViewRender)="beforeWeekViewRender($event)"
       [tooltipTemplate]="customTooltip" [weekStartsOn]="weekStartsOn" [daysInWeek]="daysInWeek"
-      (hourSegmentClicked)="getClickedDate($event.date)">
+      (hourSegmentClicked)="getClickedDate($event.date)" (eventClicked)="eventClicked($event)">
     </mwl-calendar-week-view>
     <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events"
       (beforeViewRender)="beforeDayViewRender($event)" [tooltipTemplate]="customTooltip"
-      (hourSegmentClicked)="getClickedDate($event.date)">
+      (hourSegmentClicked)="getClickedDate($event.date)" (eventClicked)="eventClicked($event)">
     </mwl-calendar-day-view>
   </div>
 </div>

@@ -19,13 +19,13 @@
     <div *ngIf="showStaffMembers" class="form-group row">
       <label for="property" class="col-sm-2 col-form-label col-form-label-sm">Staff Members</label>
       <div class="col-sm-3">
-        <app-staff-member-finder [listType]="'allStaffMembers'" [isMultiple]="true"
+        <app-staff-member-finder [listType]="'allStaffMembers'" [isMultiple]="true" [staffMemberIdList]="staffMemberIdList"
           (selectedStaffMemberList)="getSelectedStaffMembers($event)"></app-staff-member-finder>
       </div>
     </div>
     <hr>
     <app-property-finder *ngIf="showProperties" (selectedPropertyList)="getSelectedProperties($event)"
-      [isMultiple]="true" [label]="propertyLabel" [property]="property">
+      [isMultiple]="true" [label]="propertyLabel" [property]="property" [propertyList]="diaryEvent?.properties">
     </app-property-finder>
     <hr class="mt-0">
     <app-signer *ngIf="showContacts" [label]="contactLabel" [isMultiple]="true"

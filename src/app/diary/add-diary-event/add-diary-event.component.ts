@@ -42,6 +42,7 @@ export class AddDiaryEventComponent implements OnInit {
   contactLabel = 'Contacts';
   eventTypesMap: Map<number, string>;
   property: Property;
+  staffMemberIdList: number[];
 
   get hours() {
     const result = [];
@@ -102,11 +103,30 @@ export class AddDiaryEventComponent implements OnInit {
       // }
     });
 
+    if (this.diaryEventId) {
+      this.diaryEventService.getDiaryEventById(this.diaryEventId)
+        .subscribe(event => {
+          this.diaryEvent = event;
+          this.setStaffMemberIdList(event.staffMembers);
+          this.populateForm(event);
+          console.log('event details', event);
+        });
+    }
     this.getAddedProperty();
     this.diaryEventForm.valueChanges.subscribe(data => {
       this.sharedService.logValidationErrors(this.diaryEventForm, false);
     });
   }
+  setStaffMemberIdList(staffMembers: BaseStaffMember[]) {
+    const result = [];
+    staffMembers.forEach(x => {
+      if (x.staffMemberId) {
+        result.push(x.staffMemberId);
+      }
+    });
+    this.staffMemberIdList = result;
+  }
+
 
   setupForm() {
     this.diaryEventForm = this.fb.group({
@@ -126,6 +146,27 @@ export class AddDiaryEventComponent implements OnInit {
       contacts: [''],
       notes: [''],
     }, { validators: WedgeValidators.diaryEventEndDateValidator() });
+  }
+  populateForm(diaryEvent: DiaryEvent) {
+    if (diaryEvent) {
+      this.diaryEventForm.patchValue({
+        startDateTime: new Date(diaryEvent.startDateTime),
+        endDateTime: new Date(diaryEvent.endDateTime),
+        startHour: this.getHours(),
+        endHour: this.getHours(true),
+        startMin: this.getMinutes(),
+        endMin: this.getMinutes(),
+        eventType: diaryEvent.eventTypeId,
+        allDay: diaryEvent.allDay,
+        hasReminder: diaryEvent.hasReminder,
+        duration: diaryEvent.totalHours,
+        durationType: 'hour(s)',
+        staffMembers: diaryEvent.staffMembers,
+        properties: diaryEvent.properties,
+        contacts: diaryEvent.contacts,
+        notes: diaryEvent.notes,
+      });
+    }
   }
   private getMinutes(): any {
     let minutes = getMinutes(new Date());
@@ -198,7 +239,7 @@ export class AddDiaryEventComponent implements OnInit {
     this.propertyService.newPropertyAdded$.subscribe(newProperty => {
       if (newProperty) {
         this.property = newProperty;
-        console.log('newly created property', newProperty)
+        console.log('newly created property', newProperty);
       }
     });
   }

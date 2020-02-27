@@ -12,6 +12,7 @@ export interface DiaryEvent {
   endDateTime: Date;
   startTime: string;
   eventType: string;
+  eventTypeId: string;
   subject: string;
   location: string;
   eventColour: string;
@@ -19,6 +20,7 @@ export interface DiaryEvent {
   totalHours: number;
   duration: string;
   position: string;
+  hasReminder: boolean;
   allDay: boolean;
   isCancelled: boolean;
   isConfirmed: boolean;

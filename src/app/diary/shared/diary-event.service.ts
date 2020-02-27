@@ -11,6 +11,7 @@ import { DiaryEvent, BasicEventRequest } from './diary';
 })
 export class DiaryEventService {
 
+
   constructor(private http: HttpClient) { }
 
   getDiaryEvents(request: BasicEventRequest): Observable<DiaryEvent[]> {
@@ -30,6 +31,16 @@ export class DiaryEventService {
       );
   }
 
+  getDiaryEventById(diaryEventId: number): Observable<DiaryEvent> {
+    const url = `${AppConstants.baseDiaryEventUrl}/${diaryEventId}`;
+    return this.http.get<any>(url)
+      .pipe(
+        map(response => response.result),
+        tap(data => console.log(JSON.stringify(data)))
+      );
+  }
+
+
   addDiaryEvent(diaryEvent: DiaryEvent): Observable<DiaryEvent | any> {
     const url = `${AppConstants.baseDiaryEventUrl}`;
     return this.http.post<any>(url, diaryEvent).pipe(
@@ -37,7 +48,7 @@ export class DiaryEventService {
       tap(data => console.log('added event', JSON.stringify(data)))
     );
   }
-  
+
   updateDiaryEvent(diaryEventId: number): Observable<DiaryEvent | any> {
     const url = `${AppConstants.baseDiaryEventUrl}/${diaryEventId}`;
     return this.http.get<any>(url).pipe(
