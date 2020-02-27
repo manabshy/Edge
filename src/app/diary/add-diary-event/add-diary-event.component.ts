@@ -117,6 +117,7 @@ export class AddDiaryEventComponent implements OnInit {
       this.sharedService.logValidationErrors(this.diaryEventForm, false);
     });
   }
+
   setStaffMemberIdList(staffMembers: BaseStaffMember[]) {
     const result = [];
     staffMembers.forEach(x => {
@@ -152,10 +153,10 @@ export class AddDiaryEventComponent implements OnInit {
       this.diaryEventForm.patchValue({
         startDateTime: new Date(diaryEvent.startDateTime),
         endDateTime: new Date(diaryEvent.endDateTime),
-        startHour: this.getHours(),
-        endHour: this.getHours(true),
-        startMin: this.getMinutes(),
-        endMin: this.getMinutes(),
+        startHour: this.getHours(false, diaryEvent.startDateTime),
+        endHour: this.getHours(false, diaryEvent.endDateTime),
+        startMin: this.getMinutes(diaryEvent.startDateTime),
+        endMin: this.getMinutes(diaryEvent.endDateTime),
         eventType: diaryEvent.eventTypeId,
         allDay: diaryEvent.allDay,
         hasReminder: diaryEvent.hasReminder,
@@ -168,29 +169,39 @@ export class AddDiaryEventComponent implements OnInit {
       });
     }
   }
-  private getMinutes(): any {
-    let minutes = getMinutes(new Date());
-    switch (true) {
-      case minutes < 15:
-        minutes = 15;
-        break;
-      case minutes > 15 && minutes < 30:
-        minutes = 30;
-        break;
-      case minutes > 30 && minutes < 45:
-        minutes = 45;
-        break;
-      default:
-        minutes = 0;
-        break;
+  private getMinutes(date?: Date): any {
+    let minutes: number;
+    if (date) {
+      minutes = getMinutes(date);
+    } else {
+      minutes = getMinutes(new Date());
+      switch (true) {
+        case minutes < 15:
+          minutes = 15;
+          break;
+        case minutes > 15 && minutes < 30:
+          minutes = 30;
+          break;
+        case minutes > 30 && minutes < 45:
+          minutes = 45;
+          break;
+        default:
+          minutes = 0;
+          break;
+      }
     }
     return minutes.toString().padStart(2, '0');
   }
 
-  private getHours(addAnHour?: boolean): any {
-    let hours = getHours(new Date());
-    if (addAnHour) {
-      hours += 1;
+  private getHours(addAnHour?: boolean, date?: Date): any {
+    let hours: number;
+    if (date) {
+      hours = getHours(date);
+    } else {
+      hours = getHours(new Date());
+      if (addAnHour) {
+        hours += 1;
+      }
     }
     return hours.toString().padStart(2, '0');
   }
