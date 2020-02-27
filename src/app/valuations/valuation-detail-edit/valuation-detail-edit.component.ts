@@ -354,13 +354,18 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
         if (this.valuation.valuer) {
           this.mainStaffMember = this.valuation.valuer;
-          if (this.valuation.valuationDate) {
-            this.showOnlyMainStaffMember = true;
-            this.showDateAndDuration = true;
-            this.hasDateWithValuer = true;
+          if (this.isEditable) {
+            if (this.valuation.valuationDate) {
+              this.showDateAndDuration = true;
+              this.hasDateWithValuer = true;
+              this.showOnlyMainStaffMember = true;
+            } else {
+              this.showOnlyMainStaffMember = false;
+              this.showDateAndDuration = false;
+              this.hasDateWithValuer = false;
+            }
           } else {
-            this.showOnlyMainStaffMember = false;
-            this.showDateAndDuration = false;
+            this.showOnlyMainStaffMember = true;
           }
         }
 
