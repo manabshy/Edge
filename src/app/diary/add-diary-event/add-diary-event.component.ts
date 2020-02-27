@@ -26,12 +26,12 @@ export class AddDiaryEventComponent implements OnInit {
   diaryEventForm: FormGroup;
   isSubmitting: boolean;
   minutes = ['00', '15', '30', '45'];
-  durationTypes = ['minute(s)', 'hour(s)', 'day(s)', 'week(s)'];
+  durationTypes = ['minute(s)', 'hour(s)', 'day(s)'];
   isNewEvent: boolean;
   diaryEvent: DiaryEvent;
   diaryEventId: number;
   isAllDay = false;
-  isReminder = false;
+  isReminder = true;
   showProperties = true;
   showContacts = true;
   showStaffMembers = true;
@@ -118,7 +118,7 @@ export class AddDiaryEventComponent implements OnInit {
       endMin: this.getMinutes(),
       eventType: [0],
       allDay: false,
-      hasReminder: false,
+      hasReminder: true,
       duration: [30],
       durationType: ['minute(s)'],
       staffMembers: [''],
