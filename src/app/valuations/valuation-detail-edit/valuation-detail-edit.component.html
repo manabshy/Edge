@@ -26,7 +26,7 @@
             </select>
           </div>
           <ng-container
-            *ngIf="isNewValuation || showOriginId else originValue">
+            *ngIf="showOriginId else originValue">
             <div class="col-sm">
               <select class="custom-select custom-select-sm" name="originId" id="originId" formControlName="originId"
                 aria-label="Origins" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
