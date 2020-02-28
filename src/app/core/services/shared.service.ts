@@ -215,10 +215,12 @@ export class SharedService {
   }
 
   resetForm(form: FormGroup) {
+    console.log('reset is called', form)
     form.reset();
     Object.keys(form.controls).forEach(key => {
       form.get(key).setErrors(null);
     });
+    console.log('reset is called after', form)
   }
 
   setValuationStatusLabel(vals: Valuation[]) {

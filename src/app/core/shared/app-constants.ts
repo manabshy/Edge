@@ -202,10 +202,12 @@ export const ValidationMessages = {
     required: 'Agency type is required'
   },
   'originId': {
-    required: 'Vendor origin is required'
+    min: 'Vendor origin is required',
+    originIdIsEmpty: 'Vendor is required'
   },
   'originType': {
-    required: 'Vendor origin type is required'
+    min: 'Vendor type is required',
+    originTypeIsEmpty: 'Vendor is required'
   },
   'endDateTime': {
     endDateIsBeforeStartDate: 'End date cannot be before start date',

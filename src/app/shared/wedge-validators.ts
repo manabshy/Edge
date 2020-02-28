@@ -198,7 +198,29 @@ export class WedgeValidators {
     };
   }
 
+  static originTypeValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: boolean } | null => {
+      if (control != null) {
+        const originType = control.get('originType').value;
+        if (+originType === 0) {
+          return { 'originTypeIsEmpty': true };
+        }
+        return null;
+      };
+    }
+  }
 
+  static originIdValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: boolean } | null => {
+      if (control != null) {
+        const originId = control.get('originId').value;
+        if (+originId === 0) {
+          return { 'originIdIsEmpty': true };
+        }
+        return null;
+      };
+    }
+  }
 
 
   /**
