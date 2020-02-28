@@ -35,11 +35,11 @@ $time-column-mobile-width: 40px;
             background: color("white");
 
             @include media-breakpoint-down(sm) {
-                top: $top-bar-height + 73;
+                top: $top-bar-height + 73 + 36;
             }
 
             @media (max-width: 320px) {
-                top: $top-bar-height + 62;
+                top: $top-bar-height + 62 + 34;
             }
         }
     }
@@ -207,6 +207,19 @@ $time-column-mobile-width: 40px;
 }
 
 :host-context(.off-canvas) ::ng-deep {
+    mwl-calendar-month-view, mwl-calendar-week-view {
+    
+        &-header {
+
+            @include media-breakpoint-down(sm) {
+                top: $top-bar-height + 70;
+            }
+
+            @media (max-width: 320px) {
+                top: $top-bar-height + 59;
+            }
+        }
+    }
     .cal-week-view .cal-event-container {
         max-width: 75%;
     }

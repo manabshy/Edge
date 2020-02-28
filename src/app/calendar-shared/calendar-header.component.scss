@@ -11,3 +11,7 @@
     padding: spacer(1) 0;
     z-index: 50;
 }
+
+:host-context(.off-canvas) {
+    top: $top-bar-height - 3;
+}
