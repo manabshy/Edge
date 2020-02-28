@@ -395,6 +395,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   populateForm(valuation: Valuation) {
+    if (this.valuationForm) {
+      this.valuationForm.reset();
+    }
     if (valuation) {
       this.valuationForm.patchValue({
         property: valuation.property,
@@ -764,6 +767,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   cancel() {
     this.sharedService.resetForm(this.valuationForm);
+    console.log('form state on cancel', this.valuationForm.valid)
     this.sharedService.back();
   }
 
