@@ -75,7 +75,7 @@ $time-column-mobile-width: 40px;
             width: $time-column-mobile-width;
         }  
     }
-
+    
     .cal-day-headers {
         span {
             display: inline-block;
@@ -118,9 +118,6 @@ $time-column-mobile-width: 40px;
             padding: 5px;
             line-height: 1;
             font-size: 12px;
-            background-color: #d1e8ff;
-            border-color: #1e90ff;
-            color: #1e90ff;
 
             @include media-breakpoint-down(md) {    
                 overflow: hidden;
@@ -171,10 +168,10 @@ $time-column-mobile-width: 40px;
 
     .cal-day-column {
         .cal-hour {
-            background-color: rgba(theme-color(warning), .075);
+            background-color: rgba(theme-color-level('warning', $alert-bg-level), .25);
 
             &:nth-child(10) ~ .cal-hour {
-                background-color: rgba(theme-color(info), .075);
+                background-color: rgba(theme-color-level('info', $alert-bg-level), .25);
             }
 
             &:nth-child(14) ~ .cal-hour {
@@ -182,7 +179,7 @@ $time-column-mobile-width: 40px;
             }
 
             &:nth-child(16) ~ .cal-hour {
-                background-color: rgba(theme-color(info), .075);
+                background-color: rgba(theme-color-level('info', $alert-bg-level), .25);
             }
 
             &:nth-child(18) ~ .cal-hour {
@@ -190,10 +187,22 @@ $time-column-mobile-width: 40px;
             }
 
             &:nth-child(21) ~ .cal-hour {
-                background-color: rgba(theme-color(warning), .075);
+                background-color: rgba(theme-color-level('warning', $alert-bg-level), .25);
             }
         }
-    } 
+    }
+    
+    .cal-event {
+        @include alert-variant(theme-color-level('primary', $alert-bg-level), theme-color-level('primary', $alert-border-level), theme-color-level('primary', $alert-color-level));
+    }
+
+    .cal-hour-segment:hover {
+        background-color: theme-color('light')!important;
+    }
+
+    .cal-header.cal-today {
+        background-color: rgba(theme-color-level('secondary', $alert-bg-level), .5);
+    }
 
 }
 
