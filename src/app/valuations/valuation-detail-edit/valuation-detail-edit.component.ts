@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StorageMap } from '@ngx-pwa/local-storage';
@@ -21,7 +21,6 @@ import { Valuation, ValuationStatusEnum, ValuationPropertyInfo } from '../shared
 import { ValuationService } from '../shared/valuation.service';
 import { Instruction } from 'src/app/shared/models/instruction';
 import { ResultData } from 'src/app/shared/result-data';
-import { WedgeValidators } from 'src/app/shared/wedge-validators';
 
 @Component({
   selector: 'app-valuation-detail-edit',
@@ -137,8 +136,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     private router: Router,
     private fb: FormBuilder) { super(); }
 
-
-
   ngOnInit() {
     this.setupForm();
     this.setupInstructionForm();
@@ -146,7 +143,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.propertyId = +this.route.snapshot.queryParamMap.get('propertyId');
     this.lastKnownOwnerId = +this.route.snapshot.queryParamMap.get('lastKnownOwnerId');
     this.isNewValuation = this.route.snapshot.queryParamMap.get('isNewValuation') as unknown as boolean;
-    console.log('id', this.propertyId, 'ownerId', this.lastKnownOwnerId);
     if (this.valuationId) {
       this.getValuation(this.valuationId);
     }
@@ -395,9 +391,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   populateForm(valuation: Valuation) {
-    if (this.valuationForm) {
-      this.valuationForm.reset();
-    }
     if (valuation) {
       this.valuationForm.patchValue({
         property: valuation.property,
@@ -690,7 +683,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     } else {
       this.errorMessage = {} as WedgeError;
       this.errorMessage.displayMessage = 'Please correct validation errors';
-      this.sharedService.showError(this.errorMessage);
+      // this.sharedService.showError(this.errorMessage);
     }
   }
 
