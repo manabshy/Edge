@@ -184,7 +184,7 @@ export class CalendarComponent implements OnInit, OnChanges {
     const clickedEvent = { ...event.meta } as DiaryEvent;
     console.log('event', event.meta);
     console.log('event id', clickedEvent.diaryEventId);
-    this.router.navigate(['/diary/edit', clickedEvent.diaryEventId]);
+    this.router.navigate(['/diary/edit', clickedEvent.diaryEventId], { queryParams: { graphEventId: clickedEvent.exchangeGUID } });
   }
 
   getClickedDate(date: Date) {

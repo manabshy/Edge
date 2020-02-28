@@ -41,6 +41,7 @@ export class AddDiaryEventComponent implements OnInit {
   eventTypesMap: Map<number, string>;
   property: Property;
   staffMemberIdList: number[];
+  graphEventId: string;
 
   get hours() {
     const result = [];
@@ -90,6 +91,7 @@ export class AddDiaryEventComponent implements OnInit {
   ngOnInit() {
     window.scrollTo(0, 0);
     this.diaryEventId = +this.route.snapshot.paramMap.get('id');
+    this.graphEventId = this.route.snapshot.queryParamMap.get('graphEventId');
     this.isNewEvent = this.route.snapshot.queryParamMap.get('isNewEvent') as unknown as boolean;
     console.log('is new event', this.isNewEvent);
     this.setupForm();
@@ -101,8 +103,8 @@ export class AddDiaryEventComponent implements OnInit {
       // }
     });
 
-    if (this.diaryEventId) {
-      this.diaryEventService.getDiaryEventById(this.diaryEventId)
+    if (this.diaryEventId || this.graphEventId) {
+      this.diaryEventService.getDiaryEventById(this.diaryEventId, this.graphEventId)
         .subscribe(event => {
           this.diaryEvent = event;
           this.setStaffMemberIdList(event.staffMembers);
