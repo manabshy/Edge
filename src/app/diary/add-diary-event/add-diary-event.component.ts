@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { DiaryComponent } from '../diary.component';
 import { DiaryEvent } from '../shared/diary';
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { DiaryEventService } from '../shared/diary-event.service';
-import { AppUtils } from 'src/app/core/shared/utils';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { DropdownListInfo, InfoDetail } from 'src/app/core/services/info.service';
-import { getHours, getMinutes, addHours, format, setHours, setMinutes, isAfter } from 'date-fns';
+import { getHours, getMinutes, format, setHours, setMinutes, isAfter } from 'date-fns';
 import { Property } from 'src/app/property/shared/property';
 import { Signer } from 'src/app/contactgroups/shared/contact-group';
 import { ToastrService } from 'ngx-toastr';

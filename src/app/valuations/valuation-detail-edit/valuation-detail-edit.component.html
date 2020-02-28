@@ -20,20 +20,21 @@
             <select class="custom-select custom-select-sm" name="originTypes" id="originTypes"
               formControlName="originType" arial-label="Origin Types" (change)="onSelectType($event.target.value)"
               [attr.disabled]="!isEditable && !isNewValuation ? true : null"
-              [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}">
-              <option value="0">Not Known</option>
+              [ngClass]="{'is-invalid': (formErrors.originType),'form-control-plaintext': !isEditable && !isNewValuation}">
+              <option selected value="0">Not Known</option>
               <option *ngFor="let type of originTypes" [value]='type.id'> {{type.value}}</option>
             </select>
+            <div class="invalid-feedback">{{formErrors?.originType}}</div>
           </div>
-          <ng-container
-            *ngIf="showOriginId else originValue">
+          <ng-container *ngIf="showOriginId else originValue">
             <div class="col-sm">
               <select class="custom-select custom-select-sm" name="originId" id="originId" formControlName="originId"
                 aria-label="Origins" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
-                [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}">
+                [ngClass]="{'is-invalid': (formErrors.originId),'form-control-plaintext': !isEditable && !isNewValuation}">
                 <option value="0">Not Known</option>
                 <option *ngFor="let origin of origins" [value]='origin.id'> {{origin.value}}</option>
               </select>
+              <div class="invalid-feedback">{{formErrors?.originId}}</div>
             </div>
           </ng-container>
           <ng-template #originValue>
@@ -42,6 +43,7 @@
             </div>
           </ng-template>
         </div>
+
       </div>
     </div>
     <hr>

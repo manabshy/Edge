@@ -21,6 +21,7 @@ import { Valuation, ValuationStatusEnum, ValuationPropertyInfo } from '../shared
 import { ValuationService } from '../shared/valuation.service';
 import { Instruction } from 'src/app/shared/models/instruction';
 import { ResultData } from 'src/app/shared/result-data';
+import { WedgeValidators } from 'src/app/shared/wedge-validators';
 
 @Component({
   selector: 'app-valuation-detail-edit',
@@ -277,8 +278,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.valuationForm = this.fb.group({
       property: [''],
       propertyOwner: [''],
-      originType: [0, Validators.required],
-      originId: [0, Validators.required],
+      originType: [0, [Validators.required, Validators.min(1)]],
+      originId: [0, [Validators.required, Validators.min(1)]],
       reason: ['', Validators.required],
       timeFrame: ['', Validators.required],
       marketChat: ['', Validators.required],
@@ -305,6 +306,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       suggestedAskingRentShortLetMonthly: []
     });
   }
+
   setupInstructionForm() {
     this.instructionForm = this.fb.group({
       instructSale: [false],
@@ -393,6 +395,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   populateForm(valuation: Valuation) {
+    if (this.valuationForm) {
+      this.valuationForm.reset();
+    }
     if (valuation) {
       this.valuationForm.patchValue({
         property: valuation.property,
@@ -650,18 +655,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   }
 
-  hasOriginTypeError() {
-    const originTypeControl = this.valuationForm.get('originType');
-    originTypeControl.markAsDirty();
-
-    const hasError = originTypeControl.value === 0 && originTypeControl.dirty && originTypeControl.errors && originTypeControl.errors.required;
-    if (hasError) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   saveInstruction() {
     this.setInstructionFormValidators();
     this.sharedService.logValidationErrors(this.instructionForm, true);
@@ -774,6 +767,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   cancel() {
     this.sharedService.resetForm(this.valuationForm);
+    console.log('form state on cancel', this.valuationForm.valid)
     this.sharedService.back();
   }
 
