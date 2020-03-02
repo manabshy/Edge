@@ -1,5 +1,5 @@
 <div class="modal-header bg-danger text-light">
-  Error {{title}}
+  Error
 </div>
 <div class="modal-body text-center">
   <p [innerHtml]="desc"></p>
@@ -7,5 +7,10 @@
   <div class="mb-3">
     <a [href]="'mailto:helpdesk@dng.co.uk?subject=Error '+title+'&body='+desc+'%0D%0D'+(techDet||'')+'%0D%0D'+url">Contact Helpdesk</a>
   </div>
-  <button type="button" class="btn btn-secondary" (click)="action(false)">Close</button>
+  <div class="mb-4">
+    <button type="button" class="btn btn-light" (click)="action(false)">Close</button>
+  </div>
+  <div class="text-left text-muted">
+    <small>IT REF: {{title}}</small>
+  </div>
 </div>
