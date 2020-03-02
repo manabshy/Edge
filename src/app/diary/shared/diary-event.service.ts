@@ -31,8 +31,8 @@ export class DiaryEventService {
       );
   }
 
-  getDiaryEventById(diaryEventId: number): Observable<DiaryEvent> {
-    const url = `${AppConstants.baseDiaryEventUrl}/${diaryEventId}`;
+  getDiaryEventById(diaryEventId: number, graphEventId?: string): Observable<DiaryEvent> {
+    const url = `${AppConstants.baseDiaryEventUrl}/${diaryEventId}?graphEventId=${graphEventId}`;
     return this.http.get<any>(url)
       .pipe(
         map(response => response.result),

@@ -20,6 +20,7 @@ export interface DiaryEvent {
   totalHours: number;
   duration: string;
   position: string;
+  exchangeGUID: string;
   hasReminder: boolean;
   allDay: boolean;
   isCancelled: boolean;
