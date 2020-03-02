@@ -1,5 +1,5 @@
-import { CalendarDateFormatter, DateFormatterParams } from 'angular-calendar';
-import { DatePipe } from '@angular/common';
+import { CalendarDateFormatter, DateFormatterParams, getWeekViewPeriod } from 'angular-calendar';
+import { DatePipe, formatDate } from '@angular/common';
 import { Injectable } from '@angular/core';
 
 @Injectable()
@@ -30,8 +30,26 @@ export class CustomDateFormatter extends CalendarDateFormatter {
     return this.dayViewHour({ date, locale });
   }
 
-  public threeDaysViewTitle({ date, locale }: DateFormatterParams): string {
-    return new DatePipe(locale).transform(date, 'MMM y', locale);
+  public threeDaysViewTitle({
+    date,
+    locale,
+    weekStartsOn,
+    excludeDays,
+    daysInWeek
+  }: DateFormatterParams): string {
+    const { viewStart, viewEnd } = getWeekViewPeriod(
+      this.dateAdapter,
+      date,
+      weekStartsOn,
+      excludeDays,
+      daysInWeek
+    );
+    const format = (dateToFormat: Date, showYear: boolean) =>
+      formatDate(dateToFormat, 'MMM d' + (showYear ? ', yyyy' : ''), locale);
+    return `${format(
+      viewStart,
+      viewStart.getUTCFullYear() !== viewEnd.getUTCFullYear()
+    )} - ${format(viewEnd, true)}`;
   }
 
   public dayViewTitle({ date, locale }: DateFormatterParams): string {
