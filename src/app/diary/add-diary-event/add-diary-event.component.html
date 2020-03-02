@@ -7,9 +7,9 @@
   </div>
   <form [formGroup]="diaryEventForm" (ngSubmit)="saveDiaryEvent()" autocompleteOff>
     <div class="form-group row">
-      <label for="eventType" class="col-sm-2 col-form-label col-form-label-sm">Type</label>
+      <label for="eventTypeId" class="col-sm-2 col-form-label col-form-label-sm">Type</label>
       <div class="col-sm-3">
-        <select class="custom-select custom-select-sm" id="eventType" formControlName="eventType"
+        <select class="custom-select custom-select-sm" id="eventTypeId" formControlName="eventTypeId"
           (change)="onEventTypeChange($event.target.value)">
           <option value="0"></option>
           <option *ngFor="let type of eventTypes" [value]="type.id">{{type.value}}</option>
