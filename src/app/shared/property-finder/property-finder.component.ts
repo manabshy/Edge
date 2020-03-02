@@ -46,13 +46,6 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
       searchTerm: [''],
       selectedPropertyAddress: [''],
     });
-    // this.propertyService.newPropertyAdded$.subscribe((newProperty: Property) => {
-    //   if (newProperty) {
-    //     this.createdProperty = newProperty;
-    //     this.displayExistingProperty();
-    //     console.log('should be in finder', this.createdProperty);
-    //   }
-    // });
 
     this.suggestions = (text$: Observable<string>) =>
       text$.pipe(
@@ -73,7 +66,9 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    console.log('property here,,,,', this.property);
+    if (this.propertyList && this.propertyList.length) {
+      this.selectedProperties = this.propertyList;
+    }
     this.displayExistingProperty();
   }
 
@@ -125,8 +120,11 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
 
   displayExistingProperty() {
     if (this.property && this.propertyFinderForm) {
+      console.log('here xxxxxxxxxxxxxxxxxxxxxxxx', this.propertyList)
       this.isMultiple ? this.isSearchVisible = true : this.isSearchVisible = false;
+      console.log('propertyie,xxxxxxxxxxxxxx', this.isSearchVisible)
       if (this.isMultiple) {
+
         this.getSelectedProperties(this.property);
       } else {
         this.propertyAddress.patchValue(this.property.address);

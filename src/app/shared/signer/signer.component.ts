@@ -18,6 +18,7 @@ export class SignerComponent implements OnInit, OnChanges {
   @Output() selectedSignersList = new EventEmitter<Signer[]>();
   @Output() selectedSigner = new EventEmitter<Signer>();
   @Output() newSigner = new EventEmitter<boolean>();
+  @Input() contactList: BasicContactGroup[];
   @Input() existingSigner: Signer;
   @Input() existingPerson: Person;
   @Input() readOnly: boolean = false;
@@ -73,9 +74,26 @@ export class SignerComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
+    this.displayContactList();
     this.displayExistingSigners();
     if (this.existingPerson) {
       this.signersAutocomplete(this.existingPerson.firstName + ' ' + this.existingPerson.middleName + ' ' + this.existingPerson.lastName);
+    }
+  }
+
+  private displayContactList() {
+    if (this.contactList && this.contactList.length) {
+      console.log('contact list', this.contactList);
+      const result: Signer[] = [];
+      let output;
+      this.contactList.forEach(x => {
+        output = {
+          contactGroupId: x.contactGroupId,
+          contactNames: x.contactPeople.map(p => p.addressee)
+        };
+        result.push(output);
+      });
+      this.selectedSigners = result;
     }
   }
 
@@ -143,7 +161,7 @@ export class SignerComponent implements OnInit, OnChanges {
     if (this.selectedSigners) {
       this.selectedSigners.push(signer);
       this.hideLabel = false;
-      console.log('selected signers list here ZZZZZx', this.selectedSigners)
+      console.log('selected signers list here ZZZZZx', this.selectedSigners);
       this.selectedSignersList.emit(this.selectedSigners);
       this.signerFinderForm.get('searchTerm').setValue('');
     }
@@ -155,7 +173,7 @@ export class SignerComponent implements OnInit, OnChanges {
   remove(id?: number, isMultiple?: boolean) {
     if (isMultiple) {
       if (this.selectedSigners && this.selectedSigners.length) {
-        const index = this.selectedSigners.findIndex(x => x.contactGroupId === id)
+        const index = this.selectedSigners.findIndex(x => x.contactGroupId === id);
         this.selectedSigners.splice(index, 1);
         this.selectedSignersList.emit(this.selectedSigners);
         this.selectedSigners.length === 0 ? this.hideLabel = true : this.hideLabel = false;

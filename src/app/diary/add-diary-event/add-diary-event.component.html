@@ -29,7 +29,7 @@
     </app-property-finder>
     <hr class="mt-0">
     <app-signer *ngIf="showContacts" [label]="contactLabel" [isMultiple]="true"
-      (selectedSignersList)="getSelectedContactGroups($event)">
+      (selectedSignersList)="getSelectedContactGroups($event)" [contactList]="diaryEvent?.contacts">
     </app-signer>
     <hr class="mt-0">
     <div class="form-group row">
