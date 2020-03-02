@@ -84,6 +84,7 @@ export class AddDiaryEventComponent implements OnInit {
     private propertyService: PropertyService,
     private storage: StorageMap,
     private toastr: ToastrService,
+    private router: Router,
     private route: ActivatedRoute,
     private sharedService: SharedService) {
   }
@@ -137,7 +138,7 @@ export class AddDiaryEventComponent implements OnInit {
       endHour: this.getHours(true),
       startMin: this.getMinutes(),
       endMin: this.getMinutes(),
-      eventType: [0],
+      eventTypeId: [0],
       allDay: false,
       hasReminder: true,
       duration: [30],
@@ -157,7 +158,7 @@ export class AddDiaryEventComponent implements OnInit {
         endHour: this.getHours(false, diaryEvent.endDateTime),
         startMin: this.getMinutes(diaryEvent.startDateTime),
         endMin: this.getMinutes(diaryEvent.endDateTime),
-        eventType: diaryEvent.eventTypeId,
+        eventTypeId: diaryEvent.eventTypeId,
         allDay: diaryEvent.allDay,
         hasReminder: diaryEvent.hasReminder,
         duration: diaryEvent.totalHours,
@@ -265,6 +266,7 @@ export class AddDiaryEventComponent implements OnInit {
     this.sharedService.logValidationErrors(this.diaryEventForm, true);
     if (this.diaryEventForm.valid) {
       if (this.diaryEventForm.dirty) {
+        this.isSubmitting = true;
         this.addOrUpdateEvent();
       } else {
         this.onSaveComplete();
@@ -306,9 +308,14 @@ export class AddDiaryEventComponent implements OnInit {
   }
 
   onSaveComplete(diaryEvent?: DiaryEvent) {
-    if (this.isNewEvent) { this.toastr.success('Diary event successfully saved'); } else {
+    if (this.isNewEvent) {
+      this.toastr.success('Diary event successfully saved');
+      this.sharedService.resetUrl(this.diaryEventId, diaryEvent.diaryEventId);
+    } else {
       this.toastr.success('Diary event successfully updated');
     }
+    this.router.navigateByUrl('/', { skipLocationChange: true })
+      .then(() => this.router.navigate(['/diary/edit', diaryEvent.diaryEventId]));
   }
 
   private setUtcDate(date) {
@@ -317,7 +324,7 @@ export class AddDiaryEventComponent implements OnInit {
   }
 
   canDeactivate(): boolean {
-    if (this.diaryEventForm.dirty) {
+    if (this.diaryEventForm.dirty && !this.isSubmitting) {
       return false;
     }
     return true;
