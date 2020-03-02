@@ -44,8 +44,10 @@ export class MainmenuComponent implements OnInit {
     this.storage.get('currentUser').subscribe((data: StaffMember) => {
       if (data) {
         this.currentStaffMember = data;
+      } else {
+        this.staffMemberService.getCurrentStaffMember().subscribe(res => this.currentStaffMember = res);
       }
-      console.log('current user from storage in main menu....', data);
+      console.log('current user from storage in main menu....', this.currentStaffMember);
     });
 
     this.storage.get('impersonatedStaffMember').subscribe((staffMember: Impersonation) => {
@@ -66,8 +68,8 @@ export class MainmenuComponent implements OnInit {
   }
 
   toggleCollapse(label: string) {
-    Object.entries(this.collapsible).forEach(x=>{
-      if(x[0] === label) {
+    Object.entries(this.collapsible).forEach(x => {
+      if (x[0] === label) {
         this.collapsible[x[0]] = false
       } else {
         this.collapsible[x[0]] = true
