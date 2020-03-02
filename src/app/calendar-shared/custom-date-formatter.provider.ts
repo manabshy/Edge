@@ -30,6 +30,10 @@ export class CustomDateFormatter extends CalendarDateFormatter {
     return this.dayViewHour({ date, locale });
   }
 
+  public threeDaysViewTitle({ date, locale }: DateFormatterParams): string {
+    return new DatePipe(locale).transform(date, 'MMM y', locale);
+  }
+
   public dayViewTitle({ date, locale }: DateFormatterParams): string {
     return new DatePipe(locale).transform(date, 'EEE d MMM, y', locale);
   }

@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input, OnChanges, ChangeDetectorRef } from '@angular/core';
 import {
-  CalendarEvent, CalendarDateFormatter, CalendarView, CalendarWeekViewBeforeRenderEvent,
+  CalendarEvent, CalendarDateFormatter, CalendarWeekViewBeforeRenderEvent,
   CalendarDayViewBeforeRenderEvent, DAYS_OF_WEEK, CalendarEventTitleFormatter, CalendarMonthViewBeforeRenderEvent
 } from 'angular-calendar';
 import {
@@ -28,6 +28,7 @@ import { StorageMap } from '@ngx-pwa/local-storage';
 import { InfoDetail, DropdownListInfo } from 'src/app/core/services/info.service';
 import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
 import { Router } from '@angular/router';
+import { CalendarView } from '../shared/calendar-shared';
 
 
 function floorToNearest(amount: number, precision: number) {
@@ -83,6 +84,9 @@ export class CalendarComponent implements OnInit, OnChanges {
     this.storage.get('info').subscribe((data: DropdownListInfo) => {
       if (data) { this.viewingArrangements = data.viewingArrangements; }
     });
+    if(window.innerWidth < 1024) {
+      this.view = CalendarView.ThreeDays
+    }
     this.getDiaryEvents();
   }
 
@@ -99,7 +103,7 @@ export class CalendarComponent implements OnInit, OnChanges {
 
   beforeWeekViewRender(renderEvent: CalendarWeekViewBeforeRenderEvent) {
     this.currentTimeIntoView();
-    if (this.view === 'threeDays') {
+    if (this.view === CalendarView.ThreeDays) {
       this.daysInWeek = 3;
       this.weekStartsOn = null;
     } else {
@@ -118,11 +122,9 @@ export class CalendarComponent implements OnInit, OnChanges {
     setTimeout(() => {
       if (calHourSegments && calHourSegments.length) {
         if (window.innerWidth >= 1024) {
-
-          console.log(calHourSegments[21]);
           calHourSegments[23].scrollIntoView({ block: 'center' });
         } else {
-          calHourSegments[19].scrollIntoView({ block: 'center' });
+          calHourSegments[18].scrollIntoView({ block: 'center' });
         }
       }
     });

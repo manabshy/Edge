@@ -1,10 +1,10 @@
 import { Component, Input, Output, EventEmitter, OnChanges, OnInit } from '@angular/core';
-import { CalendarView } from 'angular-calendar';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { BaseStaffMember } from '../shared/models/base-staff-member';
 import { StaffMemberService } from '../core/services/staff-member.service';
 import { Observable, of } from 'rxjs';
 import { StorageMap } from '@ngx-pwa/local-storage';
+import { CalendarView } from './shared/calendar-shared';
 
 @Component({
   selector: 'app-calendar-header',
@@ -27,6 +27,7 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
   excludeDays = [];
   diaryHeaderForm: FormGroup;
   staffMembers$ = new Observable<BaseStaffMember[]>();
+  fakeView: string;
 
   constructor(private fb: FormBuilder, private storage: StorageMap, private staffMemberService: StaffMemberService) { }
 
@@ -41,7 +42,10 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    if (this.view) {
+    if (this.view && this.diaryHeaderForm) {
+      this.diaryHeaderForm.patchValue({
+        viewMode: this.view
+      })
       this.getLabel();
     }
   }
@@ -69,7 +73,7 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
         this.label = 'This Month';
         break;
       default:
-        this.view = 'week';
+        this.fakeView = 'week';
         this.label = 'This Week';
     }
   }
