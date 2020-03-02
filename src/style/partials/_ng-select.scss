@@ -13,6 +13,11 @@
     &.ng-select-single{
         .ng-select-container{
             height: 31px;
+
+            @include media-breakpoint-down(sm) {
+                height: 26px;
+            }
+
         }
 
         .ng-input {
