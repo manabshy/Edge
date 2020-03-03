@@ -5,8 +5,11 @@
     <div [ngClass]="{'col-sm-3': !fullWidth}">
       <ng-select id="office" placeholder="Select Office" [items]="offices$ |async" [clearable]="true" bindLabel="name" [readonly]="readOnly"
         bindValue="officeId" [virtualScroll]="true" groupBy="category" (change)="onOfficeChange($event)"
-        formControlName="officeId">
+        formControlName="officeId"  [ngClass]="{'is-invalid': isRequired}">
       </ng-select>
+      <div class="invalid-feedback">
+        Office is required
+      </div>
     </div>
   </div>
 </form>

@@ -18,7 +18,8 @@
     <app-property-duplicate-checker [propertyAddress]="propertyAddress" [propertyId]="propertyDetails?.propertyId"
       (selectedProperty)="getSelectedProperty($event)" (fullMatchFound)="checkPropertyMatches($event)">
     </app-property-duplicate-checker>
-    <app-office-finder class="d-block form-group" [officeId]="officeId" (selectedOfficeId)="getSelectedOfficeId($event)"></app-office-finder>
+    <app-office-finder class="d-block form-group" [officeId]="officeId"
+      (selectedOfficeId)="getSelectedOfficeId($event)"></app-office-finder>
     <div class="form-group row">
       <label for="propertyTypeId" class="col-sm-2 col-form-label col-form-label-sm">Property Type</label>
       <div class="col-sm-3">

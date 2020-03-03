@@ -16,6 +16,7 @@ export class OfficeFinderComponent implements OnInit, OnChanges {
   @Input() officeId: number;
   @Input() fullWidth: boolean;
   @Input() readOnly: boolean;
+  @Input() isRequired: boolean;
   @Output() selectedOfficeId = new EventEmitter<number>();
   offices$ = new Observable<Office[]>();
   officeFinderForm: FormGroup;
@@ -38,7 +39,7 @@ export class OfficeFinderComponent implements OnInit, OnChanges {
   private populateForm() {
     if (this.officeFinderForm) {
       if (this.officeId) {
-        console.log('office id', this.officeId);
+        console.log('office id in finder', this.officeId);
         this.officeFinderForm.patchValue({ officeId: this.officeId });
       } else {
         this.officeFinderForm.get('officeId').setValue(null);

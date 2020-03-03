@@ -60,6 +60,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
   getBack: number;
   officeId: number;
   propertyLocation: PropertyLocation;
+  isOfficeIdRequired: boolean;
 
   constructor(private route: ActivatedRoute,
     private _router: Router,
@@ -204,7 +205,11 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
   }
 
   getSelectedOfficeId(id: number) {
+    console.log('office Id', id)
     this.propertyForm.get('officeId').setValue(id);
+    console.log('office Id control', this.propertyForm.get('officeId').value)
+    // id > 0 ? this.isOfficeIdRequired = false : this.isOfficeIdRequired = true;
+    console.log('office Id required', this.isOfficeIdRequired)
   }
 
   getAddress(address: Address) {
@@ -266,6 +271,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
       }
       if (control && !control.valid && (fakeTouched || control.dirty)) {
         FormErrors[key] = '';
+        console.log('errors in prop edit', control.errors)
         for (const errorKey in control.errors) {
           if (errorKey) {
             FormErrors[key] += messages[errorKey] + '\n';
@@ -318,7 +324,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
       property.lastKnownOwner = this.lastKnownOwner;
       property.address = this.propertyAddress;
     }
-  
+
     if (this.propertyLocation) {
       if (property.mapCentre === undefined) {
         property.mapCentre = {} as MapCentre;
