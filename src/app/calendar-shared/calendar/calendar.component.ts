@@ -218,7 +218,6 @@ export class CalendarComponent implements OnInit, OnChanges {
           }
         });
       }
-      console.log('viewings arrangements', properties);
     }
   }
 

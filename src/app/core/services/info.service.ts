@@ -71,5 +71,6 @@ export interface DropdownListInfo {
 export interface InfoDetail {
   id: number;
   value: string;
-  parentId: number;
+  parentId?: number;
+  isActive?: boolean;
 }

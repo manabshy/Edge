@@ -117,6 +117,7 @@ export class PropertyComponent extends BaseComponent implements OnInit {
         this.isHintVisible = true;
       }
     }
+    
   }
 
   selectedSuggestion(event: any) {

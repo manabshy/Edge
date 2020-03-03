@@ -50,10 +50,8 @@ export class LeadFinderComponent implements OnInit {
   }
 
   onKeyup(event: KeyboardEvent) {
-    if (this.leadFinderForm.value.leadSuggestion) {
+    if (event.key === 'Enter') {
       this.searchTerm = this.leadFinderForm.value.leadSuggestion;
-    } else {
-      this.searchTerm = '';
       this.leadService.leadsSearchTermChanged(this.searchTerm);
     }
   }

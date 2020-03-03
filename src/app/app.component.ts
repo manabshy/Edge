@@ -60,13 +60,16 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
     ).pipe(
       pairwise(),
       tap(data => console.log('events here...', data))
-    ).subscribe((event: any[]) => {
+    ).subscribe((event: any[] | RoutesRecognized[]) => {
       AppUtils.prevRouteBU = AppUtils.prevRoute || '';
       AppUtils.prevRoute = event[0].urlAfterRedirects;
       const current = event[1].urlAfterRedirects;
-      if (current.indexOf('login') < 0 && current.indexOf('auth-callback') < 0 && current !== '/') {
-        localStorage.setItem('prev', event[1].urlAfterRedirects);
-      }
+      // console.log('events before checking current...', event)
+      // if (current.indexOf('login') > -1 && current.indexOf('auth-callback') > -1 && current !== '/') {
+      //   console.log('before removal', event)
+      //   event.pop();
+      //   console.log('after removal', event.forEach((x:RoutesRecognized)=>x.url))
+      // }
 
       this.isScrollTopVisible = false;
       this.isFading = true;
