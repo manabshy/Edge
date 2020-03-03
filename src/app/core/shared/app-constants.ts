@@ -73,6 +73,9 @@ export const FormErrors = {
   'timeFrame': '',
   'marketChat': '',
   'generalNotes': '',
+  'bedrooms': '',
+  'bathrooms': '',
+  'receptions': '',
   'askingPrice': '',
   'askingRentShortLet': '',
   'askingRentLongLet': '',
@@ -188,6 +191,15 @@ export const ValidationMessages = {
   },
   'generalNotes': {
     required: 'Property note is required'
+  },
+  'bedrooms': {
+    max: 'Bedrooms cannot be more than 99'
+  },
+  'bathrooms': {
+    max: 'Bathrooms cannot be more than 99'
+  },
+  'receptions': {
+    max: 'Receptions cannot be more than 99'
   },
   'askingPrice': {
     required: 'Asking sale price is required'

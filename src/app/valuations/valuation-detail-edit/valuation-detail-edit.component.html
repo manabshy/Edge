@@ -94,21 +94,24 @@
             <label class="small" for="bedrooms">Bedrooms</label>
             <input type="number" class="form-control form-control-sm" name="bedrooms" id="bedrooms"
               formControlName="bedrooms" min="0" max="99" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
-              [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}" />
+              [ngClass]="{'is-invalid': (formErrors?.bedrooms),'form-control-plaintext': !isEditable && !isNewValuation}" />
+              <div class="invalid-feedback">{{formErrors?.bedrooms}}</div>
           </div>
           <div class="col-4 form-group">
             <label class="small" for="bathrooms">Bathrooms</label>
             <input type="number" class="form-control form-control-sm" name="bathrooms" id="bathrooms"
               formControlName="bathrooms" min="0" max="99"
               [attr.disabled]="!isEditable && !isNewValuation ? true : null"
-              [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}" />
+              [ngClass]="{'is-invalid': (formErrors?.bathrooms),'form-control-plaintext': !isEditable && !isNewValuation}" />
+              <div class="invalid-feedback">{{formErrors?.bathrooms}}</div>
           </div>
           <div class="col-4 form-group">
             <label class="small" for="receptions">Receptions</label>
-            <input type="number" class="form-control form-control-sm" name="bathrooms" id="bathrooms"
-              formControlName="bathrooms" min="0" max="99"
+            <input type="number" class="form-control form-control-sm" name="receptions" id="receptions"
+              formControlName="receptions" min="0" max="99"
               [attr.disabled]="!isEditable && !isNewValuation ? true : null"
-              [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}" />
+              [ngClass]="{'is-invalid': (formErrors?.receptions),'form-control-plaintext': !isEditable && !isNewValuation}" />
+              <div class="invalid-feedback">{{formErrors?.receptions}}</div>
           </div>
           <div class="col-4 form-group">
             <label class="small" for="sqFt">Sq. Foot</label>
