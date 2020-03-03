@@ -161,68 +161,6 @@
   <div class="text-center text-danger" *ngIf="!filteredLeads?.length">
     <i class="far fa-sad-tear"></i> No results for your current search
   </div>
-  <!-- <div class="list-group mb-3">
-    <div class="list-group-item list-header d-none d-sm-block">
-      <div class="row">
-        <a href class="col-1" *ngIf="areLeadsAssignable" (click)="selectAllLeadsForAssignment($event)">
-          <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="assignAll"
-              [attr.checked]="isSelectAllChecked ? 'checked' : null">
-            <label class="custom-control-label small" for="assignAll"><span class="sr-only">Assign all</span></label>
-          </div>
-        </a>
-        <div class="col-sm-auto" *ngIf="isClosedIncluded"><span class="badge badge-pill badge-primary invisible">Closed</span></div>
-        <div class="col-sm"><strong>Type</strong></div>
-        <div class="col-sm"><strong>Person</strong></div>
-        <div class="col-sm"><strong>Chase Date</strong></div>
-        <div class="col-sm"><strong>Chaser</strong></div>
-      </div>
-    </div>
-    <a (click)="selectLeadForAssignment($event, lead); navigateToEdit(lead)"
-      class="list-group-item list-group-item-action" *ngFor="let lead of filteredLeads; let i = index;"
-      [ngClass]="{'list-group-item-info': selectedLeadIndex(lead) >= 0}">
-      <div class="row align-items-center">
-        <div class="col-1" *ngIf="areLeadsAssignable">
-          <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" [attr.id]="'assign'+i"
-              [attr.checked]="selectedLeadIndex(lead) >= 0 ? 'checked' : null">
-            <label class="custom-control-label small" [attr.for]="'assign'+i"><span class="sr-only">Assign</span></label>
-          </div>
-        </div>
-        <div class="col">
-          <div class="row align-items-center">
-            <div class="col-sm-auto mb-2 mb-sm-0" *ngIf="isClosedIncluded">
-              <span class="badge badge-pill badge-primary" [ngClass]="{'invisible': !lead?.closedById}">Closed</span>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Type</dt>
-                <dd class="col">{{lead?.leadType}}</dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Person</dt>
-                <dd class="col">{{lead?.person}}</dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Chase Date</dt>
-                <dd class="col">{{(lead?.nextChaseDate | date: 'dd/MM/yyyy') || '-'}}</dd>
-              </dl>
-            </div>
-            <div class="col-sm">
-              <dl class="row">
-                <dt class="col-4 d-sm-none">Chaser</dt>
-                <dd class="col">{{lead?.owner}}</dd>
-              </dl>
-            </div>
-          </div>
-        </div>
-      </div>
-    </a>
-  </div> -->
   <div class="form-actions" *ngIf="areLeadsAssignable">
     <div class="container px-lg-4">
       <div class="row justify-content-end w-100 no-gutters">
