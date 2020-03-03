@@ -120,11 +120,8 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
 
   displayExistingProperty() {
     if (this.property && this.propertyFinderForm) {
-      console.log('here xxxxxxxxxxxxxxxxxxxxxxxx', this.propertyList)
       this.isMultiple ? this.isSearchVisible = true : this.isSearchVisible = false;
-      console.log('propertyie,xxxxxxxxxxxxxx', this.isSearchVisible)
       if (this.isMultiple) {
-
         this.getSelectedProperties(this.property);
       } else {
         this.propertyAddress.patchValue(this.property.address);
