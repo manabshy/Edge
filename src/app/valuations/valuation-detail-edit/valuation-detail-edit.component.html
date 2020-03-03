@@ -43,7 +43,6 @@
             </div>
           </ng-template>
         </div>
-
       </div>
     </div>
     <hr>
@@ -93,30 +92,23 @@
         <div class="row">
           <div class="col-4 form-group">
             <label class="small" for="bedrooms">Bedrooms</label>
-            <select class="custom-select custom-select-sm" name="bedrooms" id="bedrooms" formControlName="bedrooms"
-              [attr.disabled]="!isEditable && !isNewValuation ? true : null"
-              [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}">
-              <option value="0">Not Known</option>
-              <option *ngFor="let bedroom of rooms" [value]='bedroom.id'> {{bedroom.name}}</option>
-            </select>
+            <input type="number" class="form-control form-control-sm" name="bedrooms" id="bedrooms"
+              formControlName="bedrooms" min="0" max="99" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+              [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}" />
           </div>
           <div class="col-4 form-group">
             <label class="small" for="bathrooms">Bathrooms</label>
-            <select class="custom-select custom-select-sm" name="bathrooms" id="bathrooms" formControlName="bathrooms"
+            <input type="number" class="form-control form-control-sm" name="bathrooms" id="bathrooms"
+              formControlName="bathrooms" min="0" max="99"
               [attr.disabled]="!isEditable && !isNewValuation ? true : null"
-              [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}">
-              <option value="0">Not Known</option>
-              <option *ngFor="let bathroom of rooms" [value]='bathroom.id'> {{bathroom.name}}</option>
-            </select>
+              [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}" />
           </div>
           <div class="col-4 form-group">
             <label class="small" for="receptions">Receptions</label>
-            <select class="custom-select custom-select-sm" name="receptions" id="receptions"
-              formControlName="receptions" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
-              [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}">
-              <option value="0">Not Known</option>
-              <option *ngFor="let bathroom of rooms" [value]='bathroom.id'> {{bathroom.name}}</option>
-            </select>
+            <input type="number" class="form-control form-control-sm" name="bathrooms" id="bathrooms"
+              formControlName="bathrooms" min="0" max="99"
+              [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+              [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}" />
           </div>
           <div class="col-4 form-group">
             <label class="small" for="sqFt">Sq. Foot</label>
