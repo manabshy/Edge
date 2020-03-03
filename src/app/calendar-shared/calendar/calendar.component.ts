@@ -84,7 +84,7 @@ export class CalendarComponent implements OnInit, OnChanges {
     this.storage.get('info').subscribe((data: DropdownListInfo) => {
       if (data) { this.viewingArrangements = data.viewingArrangements; }
     });
-    if(window.innerWidth < 1024) {
+    if (window.innerWidth < 1024) {
       this.view = CalendarView.ThreeDays
     }
     this.getDiaryEvents();
@@ -186,7 +186,10 @@ export class CalendarComponent implements OnInit, OnChanges {
     const clickedEvent = { ...event.meta } as DiaryEvent;
     console.log('event', event.meta);
     console.log('event id', clickedEvent.diaryEventId);
-    this.router.navigate(['/diary/edit', clickedEvent.diaryEventId], { queryParams: { graphEventId: clickedEvent.exchangeGUID } });
+    this.router.navigate(['/diary/edit', clickedEvent.diaryEventId],
+      {
+        queryParams: { staffMemberId: this.id, graphEventId: clickedEvent.exchangeGUID }
+      });
   }
 
   getClickedDate(date: Date) {
