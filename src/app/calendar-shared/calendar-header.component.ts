@@ -5,6 +5,7 @@ import { StaffMemberService } from '../core/services/staff-member.service';
 import { Observable, of } from 'rxjs';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { CalendarView } from './shared/calendar-shared';
+import { StaffMember } from '../shared/models/staff-member';
 
 @Component({
   selector: 'app-calendar-header',
@@ -28,14 +29,31 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
   diaryHeaderForm: FormGroup;
   staffMembers$ = new Observable<BaseStaffMember[]>();
   fakeView: string;
+  currentStaffMember: any;
+
+  get isShowMeVisible() {
+    if(this.diaryHeaderForm && this.currentStaffMember){
+      return +this.diaryHeaderForm.get('staffMember').value !== this.currentStaffMember.staffMemberId;
+    }
+  }  
 
   constructor(private fb: FormBuilder, private storage: StorageMap, private staffMemberService: StaffMemberService) { }
 
   ngOnInit() {
+    
     this.diaryHeaderForm = this.fb.group({
       viewMode: this.view,
       showCancelled: false,
       staffMember: null
+    });
+
+    this.storage.get('currentUser').subscribe((data: StaffMember) => {
+      if (data) {
+        this.currentStaffMember = data;
+        this.diaryHeaderForm.patchValue({
+          staffMember: this.currentStaffMember.staffMemberId
+        })
+      }
     });
 
     this.getStaffMembersForCalendar();
@@ -58,6 +76,13 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
         this.staffMembers$ = this.staffMemberService.getStaffMembersForCalendar();
       }
     });
+  }
+
+  getCurrentStaffMemberCalendar() {
+    this.staffMemberChange.emit(this.currentStaffMember.staffMemberId);
+    this.diaryHeaderForm.patchValue({
+      staffMember: this.currentStaffMember.staffMemberId
+    })
   }
 
   onStaffMemberChange(staffMember: BaseStaffMember) {

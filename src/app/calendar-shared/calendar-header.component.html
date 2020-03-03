@@ -58,14 +58,21 @@
             </ul>
           </div>
         </div>
-        <div class="col-md-3 order-md-2 mt-1 mt-md-0" *ngIf="!myCalendarOnly">
-          <ng-select placeholder="Select Staff Member" [items]="staffMembers$|async" [clearable]="false"
-            bindLabel="fullName" bindValue="staffMemberId" groupBy="category" (change)="onStaffMemberChange($event)"
-            formControlName="staffMember">
-            <ng-template ng-optgroup-tmp let-item="item">
-              <!-- {{item.category || 'Unnamed group'}} -->
-            </ng-template>
-          </ng-select>
+        <div class="col-md-6 col-xl-3 order-md-2 mt-1 mt-md-0" *ngIf="!myCalendarOnly">
+          <div class="row justify-content-end">
+            <div class="col-auto pr-0" *ngIf="isShowMeVisible">
+              <button type="button" class="btn btn-sm btn-light" (click)="getCurrentStaffMemberCalendar()">Show me</button>
+            </div>
+            <div class="col col-md-7 col-xl">
+              <ng-select placeholder="Select Staff Member" [items]="staffMembers$|async" [clearable]="false"
+                bindLabel="fullName" bindValue="staffMemberId" groupBy="category" (change)="onStaffMemberChange($event)"
+                formControlName="staffMember">
+                <ng-template ng-optgroup-tmp let-item="item">
+                  <!-- {{item.category || 'Unnamed group'}} -->
+                </ng-template>
+              </ng-select>
+            </div>
+          </div>
         </div>
       </div>
     </div>
