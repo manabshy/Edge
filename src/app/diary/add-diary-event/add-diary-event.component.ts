@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { DiaryEvent } from '../shared/diary';
+import { DiaryEvent, DiaryEventTypesEnum } from '../shared/diary';
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { DiaryEventService } from '../shared/diary-event.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
@@ -105,7 +105,8 @@ export class AddDiaryEventComponent implements OnInit {
     // });
     this.storage.get('info').subscribe((info: DropdownListInfo) => {
       const allEventTypes = info.diaryEventTypes;
-      this.eventTypes = allEventTypes.filter(x => ![8, 2048, 4096].includes(x.id));
+      this.eventTypes = allEventTypes
+        .filter(x => ![DiaryEventTypesEnum.ValuationSales, DiaryEventTypesEnum.ValuationLettings, DiaryEventTypesEnum.Alert].includes(x.id));
       console.log('event types....', this.eventTypes);
       if (this.eventTypes && this.eventTypes.length) {
         const mappedData = this.eventTypes.map(x => [x.id, x.value] as [number, string]);
@@ -117,10 +118,7 @@ export class AddDiaryEventComponent implements OnInit {
       this.diaryEventService.getDiaryEventById(this.diaryEventId, this.graphEventId, this.staffMemberId)
         .subscribe(event => {
           this.diaryEvent = event;
-          this.showStaffMembers = true;
-          this.showProperties = true;
-          this.showContacts = true;
-          this.showOthers = true;
+          this.toggleFlags(+event.eventTypeId);
           this.setStaffMemberIdList(event.staffMembers);
           this.populateForm(event);
           console.log('event details', event);
@@ -242,33 +240,44 @@ export class AddDiaryEventComponent implements OnInit {
   }
 
   onEventTypeChange(eventTypeId: number) {
-    const showAllEventTypes = this.eventTypes.filter(x => [1, 4, 128, 1024, 32768].includes(x.id));
-    const showOnlyPropertyEventTypes = this.eventTypes.filter(x => [8192, 16384].includes(x.id));
-    const showOnlyContactEventTypes = this.eventTypes.filter(x => [2, 64, 512].includes(x.id));
-    const showAll = showAllEventTypes.filter(x => +x.id === +eventTypeId);
-    const showOnlyProperties = showOnlyPropertyEventTypes.filter(x => +x.id === +eventTypeId);
-    const showOnlyContacts = showOnlyContactEventTypes.filter(x => +x.id === +eventTypeId);
+    this.toggleFlags(eventTypeId);
+  }
+
+  private toggleFlags(eventTypeId: number) {
+    // Group event into array of parts of the form visbile
+    const showAllEventTypes = this.eventTypes.filter(x => [DiaryEventTypesEnum.ViewingSales, DiaryEventTypesEnum.ViewingLettings,
+    DiaryEventTypesEnum.PropertyManagement, DiaryEventTypesEnum.Reminder, DiaryEventTypesEnum.Other].includes(x.id));
+    const showOnlyPropertyEventTypes = this.eventTypes
+      .filter(x => [DiaryEventTypesEnum.PreviewSales, DiaryEventTypesEnum.PreviewLettings].includes(x.id));
+    const showOnlyContactEventTypes = this.eventTypes
+      .filter(x => [DiaryEventTypesEnum.Meeting, DiaryEventTypesEnum.Interview, DiaryEventTypesEnum.Training].includes(x.id));
+
+    // set flags based on the event type selected
+    const showAllType = showAllEventTypes.filter(x => +x.id === +eventTypeId);
+    const showOnlyPropertiesType = showOnlyPropertyEventTypes.filter(x => +x.id === +eventTypeId);
+    const showOnlyContactsType = showOnlyContactEventTypes.filter(x => +x.id === +eventTypeId);
+
     switch (true) {
-      case !!showAll.length:
-        console.log('show showAll type xxxx', showAll, 'id:', eventTypeId)
+      case !!showAllType.length:
+        console.log('show showAll type xxxx', showAllType, 'id:', eventTypeId);
         this.showProperties = true;
         this.showContacts = true;
         this.showOthers = true;
         break;
-      case !!showOnlyProperties.length:
-        console.log('showOnlyProperties type xxxx', showOnlyProperties, 'id:', eventTypeId)
+      case !!showOnlyPropertiesType.length:
+        console.log('showOnlyProperties type xxxx', showOnlyPropertiesType, 'id:', eventTypeId);
         this.showProperties = true;
         this.showContacts = false;
         this.showOthers = true;
         break;
-      case !!showOnlyContacts.length:
-        console.log('showOnlyContacts type xxxx', showOnlyContacts, 'id:', eventTypeId)
+      case !!showOnlyContactsType.length:
+        console.log('showOnlyContacts type xxxx', showOnlyContactsType, 'id:', eventTypeId);
         this.showProperties = false;
         this.showContacts = true;
         this.showOthers = true;
         break;
       default:
-        console.log('show others', eventTypeId)
+        console.log('show others', eventTypeId);
         this.showProperties = false;
         this.showContacts = false;
         this.showOthers = true;
