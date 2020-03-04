@@ -116,6 +116,24 @@ export enum ViewMode {
   month = 'Month'
 }
 export enum DiaryEventTypesEnum {
+  ViewingSales = 1,
+  ViewingLettings = 1024,
+  PreviewSales = 8192,
+  PreviewLettings = 16384,
+  ValuationSales = 8,
+  ValuationLettings = 2048,
+  Alert = 4096,
+  PropertyManagement = 32768,
+  Meeting = 2,
+  NoAppointments = 16,
+  Training = 512,
+  Interview = 64,
+  Personal = 256,
+  Review = 32,
+  Other = 128,
+  Reminder = 4
+}
+export enum DiaryEventTypesStringEnum {
   ViewingSales = 'Viewing - Sales',
   ViewingLettings = 'Viewing - Lettings',
   ValuationSales = 'Valuation - Sales',
