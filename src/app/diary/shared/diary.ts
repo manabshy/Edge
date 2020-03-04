@@ -90,8 +90,9 @@ export interface HistoricEvent {
 }
 
 export interface DiaryProperty extends Property {
-  propertyLettingId: number;
-  propertySaleId: number;
+  propertyEventId?: number;
+  propertyLettingId?: number;
+  propertySaleId?: number;
   viewingArragementId: number;
   viewingArragement: string;
 }

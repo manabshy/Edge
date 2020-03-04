@@ -184,12 +184,14 @@ export class CalendarComponent implements OnInit, OnChanges {
 
   eventClicked({ event }: { event: CalendarEvent }) {
     const clickedEvent = { ...event.meta } as DiaryEvent;
-    console.log('event', event.meta);
-    console.log('event id', clickedEvent.diaryEventId);
-    this.router.navigate(['/diary/edit', clickedEvent.diaryEventId],
-      {
-        queryParams: { staffMemberId: this.id, graphEventId: clickedEvent.exchangeGUID }
-      });
+    if (+clickedEvent.eventTypeId === 8 || +clickedEvent.eventTypeId === 2048) {
+      this.router.navigate(['/valuations-register/detail', clickedEvent.properties[0].propertyEventId, 'edit']);
+    } else {
+      this.router.navigate(['/diary/edit', clickedEvent.diaryEventId],
+        {
+          queryParams: { staffMemberId: this.id, graphEventId: clickedEvent.exchangeGUID }
+        });
+    }
   }
 
   getClickedDate(date: Date) {
