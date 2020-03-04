@@ -46,6 +46,7 @@ export class AddDiaryEventComponent implements OnInit {
   graphEventId: string;
   staffMemberId: number;
   currentStaffMemberId: number;
+  showTypes = true;
 
   get hours() {
     const result = [];
@@ -118,6 +119,7 @@ export class AddDiaryEventComponent implements OnInit {
       this.diaryEventService.getDiaryEventById(this.diaryEventId, this.graphEventId, this.staffMemberId)
         .subscribe(event => {
           this.diaryEvent = event;
+          event.onOutlook && !event.onEdge ? this.showTypes = false : this.showTypes = true;
           this.toggleFlags(+event.eventTypeId);
           this.setStaffMemberIdList(event.staffMembers);
           this.populateForm(event);

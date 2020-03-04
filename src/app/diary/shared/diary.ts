@@ -27,6 +27,10 @@ export interface DiaryEvent {
   isConfirmed: boolean;
   isHighImportance: boolean;
   isOtherAgentViewing: boolean;
+  isPrivate: boolean;
+  isOrganizer: boolean;
+  onEdge: boolean;
+  onOutlook: boolean;
   contacts: ContactGroup[];
   staffMembers: BaseStaffMember[];
   properties: DiaryProperty[];

@@ -6,7 +6,7 @@
     </div>
   </div>
   <form [formGroup]="diaryEventForm" (ngSubmit)="saveDiaryEvent()" autocompleteOff>
-    <div class="form-group row">
+    <div class="form-group row" *ngIf="showTypes">
       <label for="eventTypeId" class="col-sm-2 col-form-label col-form-label-sm">Type</label>
       <div class="col-sm-3">
         <select class="custom-select custom-select-sm" id="eventTypeId" formControlName="eventTypeId"
