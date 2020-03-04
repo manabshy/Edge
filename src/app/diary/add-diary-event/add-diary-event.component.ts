@@ -42,11 +42,11 @@ export class AddDiaryEventComponent implements OnInit {
   contactLabel = 'Contacts';
   eventTypesMap: Map<number, string>;
   property: Property;
-  staffMemberIdList: number[];
+  staffMemberIdList: number[] = [];
   graphEventId: string;
   staffMemberId: number;
-  currentStaffMemberId: number;
   showTypes = true;
+  currentStaffMember: BaseStaffMember[];
 
   get hours() {
     const result = [];
@@ -101,9 +101,21 @@ export class AddDiaryEventComponent implements OnInit {
     this.staffMemberId = +this.route.snapshot.queryParamMap.get('staffMemberId');
     this.isNewEvent = this.route.snapshot.queryParamMap.get('isNewEvent') as unknown as boolean;
     this.setupForm();
-    // this.storage.get('currentUser').subscribe((data: StaffMember) => {
-    //   if (data) { this.staffMemberIdList.push(data.staffMemberId); }
-    // });
+
+    // Set current staff as the first member of staff members array.
+    this.storage.get('currentUser').subscribe((data: StaffMember) => {
+      if (data) {
+        this.currentStaffMember = [{
+          staffMemberId: data.staffMemberId,
+          emailAddress: data.email,
+          fullName: data.fullName
+        }] as BaseStaffMember[];
+        const currentStaffMemberId = [];
+        currentStaffMemberId.push(data.staffMemberId);
+        this.staffMemberIdList = currentStaffMemberId;
+      }
+    });
+
     this.storage.get('info').subscribe((info: DropdownListInfo) => {
       const allEventTypes = info.diaryEventTypes;
       this.eventTypes = allEventTypes
@@ -126,6 +138,7 @@ export class AddDiaryEventComponent implements OnInit {
           console.log('event details', event);
         });
     }
+
     this.getAddedProperty();
     this.diaryEventForm.valueChanges.subscribe(data => {
       this.sharedService.logValidationErrors(this.diaryEventForm, false);
@@ -333,7 +346,11 @@ export class AddDiaryEventComponent implements OnInit {
   addOrUpdateEvent() {
     const event = { ...this.diaryEvent, ...this.diaryEventForm.value } as DiaryEvent;
     this.setDateTime(event);
-    console.log('start date and time', event.startDateTime);
+    if (!event.staffMembers) {
+      event.staffMembers = [];
+      event.staffMembers = this.currentStaffMember;
+    }
+
     if (this.isNewEvent) {
       this.diaryEventService.addDiaryEvent(event).subscribe(res => {
         if (res) {
@@ -341,14 +358,12 @@ export class AddDiaryEventComponent implements OnInit {
         }
       });
     } else {
-      this.diaryEventService.updateDiaryEvent(this.diaryEventId).subscribe(res => {
+      this.diaryEventService.updateDiaryEvent(event).subscribe(res => {
         if (res) {
           this.onSaveComplete(res);
         }
       });
-
     }
-    console.log('add or update here');
   }
 
   // REFACTOR

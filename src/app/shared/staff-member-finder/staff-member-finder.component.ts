@@ -35,13 +35,12 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    console.log('is multiple', this.isMultiple);
     if (this.staffMemberId) {
       this.staffMemberFinderForm.patchValue({
         staffMemberId: this.staffMemberId
       });
     }
-    if (this.staffMemberIdList) {
+    if (this.staffMemberIdList && this.staffMemberIdList.length) {
       console.log('staff ids', this.staffMemberIdList)
       this.isClearable = false;
       this.staffMemberFinderForm.patchValue({

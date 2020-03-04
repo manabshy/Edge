@@ -49,9 +49,9 @@ export class DiaryEventService {
     );
   }
 
-  updateDiaryEvent(diaryEventId: number): Observable<DiaryEvent | any> {
-    const url = `${AppConstants.baseDiaryEventUrl}/${diaryEventId}`;
-    return this.http.get<any>(url).pipe(
+  updateDiaryEvent(diaryEvent: DiaryEvent): Observable<DiaryEvent | any> {
+    const url = `${AppConstants.baseDiaryEventUrl}/${diaryEvent.diaryEventId}`;
+    return this.http.put<any>(url, diaryEvent).pipe(
       map(response => response.result),
       tap(data => console.log('updated event', JSON.stringify(data)))
     );
