@@ -489,6 +489,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.lastKnownOwner = property.lastKnownOwner;
       this.valuationForm.get('property').setValue(property);
       this.valuationForm.get('propertyOwner').setValue(this.lastKnownOwner);
+      this.valuationForm.markAsDirty();
       this.getValuers(property.propertyId);
       this.getValuationPropertyInfo(property.propertyId);
     }
@@ -517,6 +518,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.lastKnownOwner = owner;
       this.isOwnerChanged = true;
       this.valuationForm.get('propertyOwner').setValue(owner);
+      if (this.isEditable || this.isNewValuation) {
+        this.valuationForm.markAsDirty();
+      }
     }
   }
 
@@ -779,5 +783,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   ngOnDestroy() {
     this.property = {} as Property;
     this.propertyService.setAddedProperty(null);
+    this.storage.delete('valuationFormData').subscribe();
   }
 }

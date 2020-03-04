@@ -232,12 +232,8 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
   }
 
   getSelectedOwner(owner: Signer) {
-    if (this.lastKnownOwner !== owner) {
-      this.propertyForm.markAsDirty();
-    } else {
-      this.propertyForm.markAsPristine();
-    }
     this.lastKnownOwner = owner;
+    this.propertyForm.markAsDirty();
   }
 
   getSelectedProperty(property: Property) {

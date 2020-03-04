@@ -67,9 +67,9 @@
                 <app-subnav-item *ngFor="let property of properties"
                   (click)="selectProperty(property?.propertyId); properties = null">
                   <div class="row">
-                    <div class="col-12 mb-2" *ngIf="property?.propertyId">
+                    <!-- <div class="col-12 mb-2" *ngIf="property?.propertyId">
                       <small class="text-muted mr-2">PR-{{property?.propertyId}}</small>
-                    </div>
+                    </div> -->
                     <div class="col-sm">
                       {{property?.propertyAddress}}
                     </div>

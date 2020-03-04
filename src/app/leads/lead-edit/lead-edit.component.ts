@@ -299,6 +299,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   getSelectedStaffMemberId(id: number) {
     console.log('valuer id here', id);
     this.isOwnerChanged = true;
+    this.leadEditForm.markAsDirty();
     if (id) {
       this.leadEditForm.patchValue({ ownerId: id });
     } else {
