@@ -14,6 +14,7 @@ import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
 import { WedgeValidators } from 'src/app/shared/wedge-validators';
 import { FormErrors } from 'src/app/core/shared/app-constants';
 import { PropertyService } from 'src/app/property/shared/property.service';
+import { StaffMember } from 'src/app/shared/models/staff-member';
 @Component({
   selector: 'app-add-diary-event',
   templateUrl: './add-diary-event.component.html',
@@ -30,9 +31,10 @@ export class AddDiaryEventComponent implements OnInit {
   diaryEventId: number;
   isAllDay = false;
   isReminder = true;
-  showProperties = true;
-  showContacts = true;
+  showProperties = false;
+  showContacts = false;
   showStaffMembers = true;
+  showOthers = false;
   maxDate = null;
   minDate = new Date();
   formErrors = FormErrors;
@@ -42,6 +44,8 @@ export class AddDiaryEventComponent implements OnInit {
   property: Property;
   staffMemberIdList: number[];
   graphEventId: string;
+  staffMemberId: number;
+  currentStaffMemberId: number;
 
   get hours() {
     const result = [];
@@ -93,21 +97,30 @@ export class AddDiaryEventComponent implements OnInit {
     window.scrollTo(0, 0);
     this.diaryEventId = +this.route.snapshot.paramMap.get('id');
     this.graphEventId = this.route.snapshot.queryParamMap.get('graphEventId');
+    this.staffMemberId = +this.route.snapshot.queryParamMap.get('staffMemberId');
     this.isNewEvent = this.route.snapshot.queryParamMap.get('isNewEvent') as unknown as boolean;
-    console.log('is new event', this.isNewEvent);
     this.setupForm();
+    // this.storage.get('currentUser').subscribe((data: StaffMember) => {
+    //   if (data) { this.staffMemberIdList.push(data.staffMemberId); }
+    // });
     this.storage.get('info').subscribe((info: DropdownListInfo) => {
-      this.eventTypes = info.diaryEventTypes;
-      // if (this.eventTypes && this.eventTypes.length) {
-      //   const mappedData = this.eventTypes.map(x => [x.id, x.value] as [number, string]);
-      //   this.eventTypesMap = new Map<number, string>(mappedData);
-      // }
+      const allEventTypes = info.diaryEventTypes;
+      this.eventTypes = allEventTypes.filter(x => ![8, 2048, 4096].includes(x.id));
+      console.log('event types....', this.eventTypes);
+      if (this.eventTypes && this.eventTypes.length) {
+        const mappedData = this.eventTypes.map(x => [x.id, x.value] as [number, string]);
+        this.eventTypesMap = new Map<number, string>(mappedData);
+      }
     });
 
     if (this.diaryEventId || this.graphEventId) {
-      this.diaryEventService.getDiaryEventById(this.diaryEventId, this.graphEventId)
+      this.diaryEventService.getDiaryEventById(this.diaryEventId, this.graphEventId, this.staffMemberId)
         .subscribe(event => {
           this.diaryEvent = event;
+          this.showStaffMembers = true;
+          this.showProperties = true;
+          this.showContacts = true;
+          this.showOthers = true;
           this.setStaffMemberIdList(event.staffMembers);
           this.populateForm(event);
           console.log('event details', event);
@@ -229,7 +242,37 @@ export class AddDiaryEventComponent implements OnInit {
   }
 
   onEventTypeChange(eventTypeId: number) {
-    console.log('eventId', eventTypeId);
+    const showAllEventTypes = this.eventTypes.filter(x => [1, 4, 128, 1024, 32768].includes(x.id));
+    const showOnlyPropertyEventTypes = this.eventTypes.filter(x => [8192, 16384].includes(x.id));
+    const showOnlyContactEventTypes = this.eventTypes.filter(x => [2, 64, 512].includes(x.id));
+    const showAll = showAllEventTypes.filter(x => +x.id === +eventTypeId);
+    const showOnlyProperties = showOnlyPropertyEventTypes.filter(x => +x.id === +eventTypeId);
+    const showOnlyContacts = showOnlyContactEventTypes.filter(x => +x.id === +eventTypeId);
+    switch (true) {
+      case !!showAll.length:
+        console.log('show showAll type xxxx', showAll, 'id:', eventTypeId)
+        this.showProperties = true;
+        this.showContacts = true;
+        this.showOthers = true;
+        break;
+      case !!showOnlyProperties.length:
+        console.log('showOnlyProperties type xxxx', showOnlyProperties, 'id:', eventTypeId)
+        this.showProperties = true;
+        this.showContacts = false;
+        this.showOthers = true;
+        break;
+      case !!showOnlyContacts.length:
+        console.log('showOnlyContacts type xxxx', showOnlyContacts, 'id:', eventTypeId)
+        this.showProperties = false;
+        this.showContacts = true;
+        this.showOthers = true;
+        break;
+      default:
+        console.log('show others', eventTypeId)
+        this.showProperties = false;
+        this.showContacts = false;
+        this.showOthers = true;
+    }
   }
 
   getSelectedProperties(properties: Property[]) {

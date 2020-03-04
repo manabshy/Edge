@@ -19,92 +19,99 @@
     <div *ngIf="showStaffMembers" class="form-group row">
       <label for="property" class="col-sm-2 col-form-label col-form-label-sm">Staff Members</label>
       <div class="col-sm-3">
-        <app-staff-member-finder [listType]="'allStaffMembers'" [isMultiple]="true" [staffMemberIdList]="staffMemberIdList"
-          (selectedStaffMemberList)="getSelectedStaffMembers($event)"></app-staff-member-finder>
+        <app-staff-member-finder [listType]="'allStaffMembers'" [isMultiple]="true"
+          [staffMemberIdList]="staffMemberIdList" (selectedStaffMemberList)="getSelectedStaffMembers($event)">
+        </app-staff-member-finder>
       </div>
     </div>
     <hr>
-    <app-property-finder *ngIf="showProperties" (selectedPropertyList)="getSelectedProperties($event)"
-      [isMultiple]="true" [label]="propertyLabel" [property]="property" [propertyList]="diaryEvent?.properties">
-    </app-property-finder>
-    <hr class="mt-0">
-    <app-signer *ngIf="showContacts" [label]="contactLabel" [isMultiple]="true"
-      (selectedSignersList)="getSelectedContactGroups($event)" [contactList]="diaryEvent?.contacts">
-    </app-signer>
-    <hr class="mt-0">
-    <div class="form-group row">
-      <label for="startDateTime" class="col-sm-2 col-form-label col-form-label-sm">Start Date</label>
-      <div class="col-sm-6 col-xl-3">
-        <div class="input-group mb-2">
-          <input type="text" id="startDateTime" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
-            formControlName="startDateTime"
-            [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', minDate:minDate, customTodayClass: 'font-weight-bold'}"
-            (bsValueChange)="onStartDateChange($event)" bsDatepicker>
-          <select *ngIf="!isAllDay" class="custom-select custom-select-sm" name="startHour" id="startHour"
-            formControlName="startHour">
-            <option *ngFor="let hour of hours" [value]='hour'> {{hour}}</option>
-          </select>
-          <select *ngIf="!isAllDay" class="custom-select custom-select-sm" name="startMin" id="startMin"
-            formControlName="startMin">
-            <option *ngFor="let min of minutes" [value]='min'> {{min}}</option>
-          </select>
-        </div>
-        <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" id="allDay" formControlName="allDay"
-            (change)="onAllDayCheck($event)">
-          <label class="custom-control-label small" for="allDay">All Day </label>
+    <ng-container *ngIf="showProperties">
+      <app-property-finder (selectedPropertyList)="getSelectedProperties($event)" [isMultiple]="true"
+        [label]="propertyLabel" [property]="property" [propertyList]="diaryEvent?.properties">
+      </app-property-finder>
+      <hr class="mt-0">
+    </ng-container>
+    <ng-container *ngIf="showContacts">
+      <app-signer [label]="contactLabel" [isMultiple]="true" (selectedSignersList)="getSelectedContactGroups($event)"
+        [contactList]="diaryEvent?.contacts">
+      </app-signer>
+      <hr class="mt-0">
+    </ng-container>
+    <ng-container *ngIf="showOthers">
+      <div class="form-group row">
+        <label for="startDateTime" class="col-sm-2 col-form-label col-form-label-sm">Start Date</label>
+        <div class="col-sm-6 col-xl-3">
+          <div class="input-group mb-2">
+            <input type="text" id="startDateTime" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
+              formControlName="startDateTime"
+              [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', minDate:minDate, customTodayClass: 'font-weight-bold'}"
+              (bsValueChange)="onStartDateChange($event)" bsDatepicker>
+            <select *ngIf="!isAllDay" class="custom-select custom-select-sm" name="startHour" id="startHour"
+              formControlName="startHour">
+              <option *ngFor="let hour of hours" [value]='hour'> {{hour}}</option>
+            </select>
+            <select *ngIf="!isAllDay" class="custom-select custom-select-sm" name="startMin" id="startMin"
+              formControlName="startMin">
+              <option *ngFor="let min of minutes" [value]='min'> {{min}}</option>
+            </select>
+          </div>
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="allDay" formControlName="allDay"
+              (change)="onAllDayCheck($event)">
+            <label class="custom-control-label small" for="allDay">All Day </label>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="form-group row" *ngIf="!isAllDay">
-      <label for="endDateTime" class="col-sm-2 col-form-label col-form-label-sm">End Date</label>
-      <div class="col-sm-6 col-xl-3">
-        <div class="input-group">
-          <input type="text" id="endDateTime" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
-            formControlName="endDateTime"
-            [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', minDate:minDate, customTodayClass: 'font-weight-bold'}"
-            (bsValueChange)="onEndDateChange($event)" bsDatepicker
-            [ngClass]="{'is-invalid': diaryEventForm.errors?.endDateIsBeforeStartDate}">
-          <select class="custom-select custom-select-sm" name="endHour" id="endHour" formControlName="endHour">
-            <option *ngFor="let hour of hours" [value]='hour'> {{hour}}</option>
-          </select>
-          <select class="custom-select custom-select-sm" name="endMin" id="endMin" formControlName="endMin">
-            <option *ngFor="let min of minutes" [value]='min'> {{min}}</option>
-          </select>
+      <div class="form-group row" *ngIf="!isAllDay">
+        <label for="endDateTime" class="col-sm-2 col-form-label col-form-label-sm">End Date</label>
+        <div class="col-sm-6 col-xl-3">
+          <div class="input-group">
+            <input type="text" id="endDateTime" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
+              formControlName="endDateTime"
+              [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', minDate:minDate, customTodayClass: 'font-weight-bold'}"
+              (bsValueChange)="onEndDateChange($event)" bsDatepicker
+              [ngClass]="{'is-invalid': diaryEventForm.errors?.endDateIsBeforeStartDate}">
+            <select class="custom-select custom-select-sm" name="endHour" id="endHour" formControlName="endHour">
+              <option *ngFor="let hour of hours" [value]='hour'> {{hour}}</option>
+            </select>
+            <select class="custom-select custom-select-sm" name="endMin" id="endMin" formControlName="endMin">
+              <option *ngFor="let min of minutes" [value]='min'> {{min}}</option>
+            </select>
+          </div>
+          <small class="text-danger" *ngIf="diaryEventForm?.errors?.endDateIsBeforeStartDate">End date should be after
+            start date</small>
         </div>
-        <small class="text-danger" *ngIf="diaryEventForm?.errors?.endDateIsBeforeStartDate">End date should be after
-          start date</small>
       </div>
-    </div>
-    <div class="form-group row">
-      <label for="notes" class="col-sm-2 col-form-label col-form-label-sm">Note<br /><span
-          class="form-text text-muted">(200 chars max)</span></label>
-      <div class="col-sm-8 col-xl-6">
-        <textarea type="textarea" class="form-control form-control-sm" formControlName="notes" id="notes" name="note"
-          placeholder="Note" maxlength="200"></textarea>
-      </div>
-    </div>
-    <div class="form-group row">
-      <div class="col-sm-6 col-xl-3 offset-sm-2">
-        <div class="custom-control custom-checkbox mb-2">
-          <input type="checkbox" id="hasReminder" name="hasReminder" class="custom-control-input"
-            formControlName="hasReminder" (change)="onReminderCheck($event)">
-          <label class="custom-control-label small" for="hasReminder">Reminder</label>
+      <div class="form-group row">
+        <label for="notes" class="col-sm-2 col-form-label col-form-label-sm">Note<br /><span
+            class="form-text text-muted">(200 chars max)</span></label>
+        <div class="col-sm-8 col-xl-6">
+          <textarea type="textarea" class="form-control form-control-sm" formControlName="notes" id="notes" name="note"
+            placeholder="Note" maxlength="200"></textarea>
         </div>
-        <div class="input-group mb-2" *ngIf="isReminder">
-          <select class="custom-select custom-select-sm single-select" name="duration" id="duration"
-            formControlName="duration">
-            <option value="0">Not Known</option>
-            <option *ngFor="let duration of durationValues" [value]='duration'> {{duration}}</option>
-          </select>
-          <select class="custom-select custom-select-sm single-select" name="durationType" id="durationType"
-            formControlName="durationType">
-            <option *ngFor="let type of durationTypes" [value]='type'> {{type}}</option>
-          </select>
-        </div>
-        <p class="small" *ngIf="isReminder">Before start</p>
       </div>
-    </div>
+      <div class="form-group row">
+        <div class="col-sm-6 col-xl-3 offset-sm-2">
+          <div class="custom-control custom-checkbox mb-2">
+            <input type="checkbox" id="hasReminder" name="hasReminder" class="custom-control-input"
+              formControlName="hasReminder" (change)="onReminderCheck($event)">
+            <label class="custom-control-label small" for="hasReminder">Reminder</label>
+          </div>
+          <div class="input-group mb-2" *ngIf="isReminder">
+            <select class="custom-select custom-select-sm single-select" name="duration" id="duration"
+              formControlName="duration">
+              <option value="0">Not Known</option>
+              <option *ngFor="let duration of durationValues" [value]='duration'> {{duration}}</option>
+            </select>
+            <select class="custom-select custom-select-sm single-select" name="durationType" id="durationType"
+              formControlName="durationType">
+              <option *ngFor="let type of durationTypes" [value]='type'> {{type}}</option>
+            </select>
+          </div>
+          <p class="small" *ngIf="isReminder">Before start</p>
+        </div>
+      </div>
+    </ng-container>
     <div class="form-actions">
       <div class="container px-lg-1">
         <div class="row justify-content-end w-100 no-gutters">
