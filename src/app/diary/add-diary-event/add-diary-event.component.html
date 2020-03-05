@@ -4,6 +4,23 @@
     <div class="col">
       <h4 class="m-0">Diary Event</h4>
     </div>
+    <div class="col-auto">
+      <div class="btn-group" dropdown placement="bottom right" *ngIf="diaryEvent">
+        <button id="actionsToggle" dropdownToggle type="button" class="btn btn-light dropdown-toggle"
+          aria-controls="actionsList">
+          Actions <span class="caret"></span>
+        </button>
+        <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+          aria-labelledby="actionsToggle">
+          <li role="menuitem">
+            <a class="dropdown-item" (click)="deleteEvent(diaryEvent?.diaryEventId)">
+              <i class="far fa-trash-alt fa-fw ml-2"></i>
+              Delete
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
   <form [formGroup]="diaryEventForm" (ngSubmit)="saveDiaryEvent()" autocompleteOff>
     <div class="form-group row" *ngIf="showTypes">
@@ -80,6 +97,14 @@
           </div>
           <small class="text-danger" *ngIf="diaryEventForm?.errors?.endDateIsBeforeStartDate">End date should be after
             start date</small>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-6 col-xl-3 offset-sm-2">
+          <div class="custom-control custom-checkbox mb-2">
+            <input type="checkbox" id="isConfirmed" name="isConfirmed" class="custom-control-input" formControlName="isConfirmed">
+            <label class="custom-control-label small" for="isConfirmed">Confirm</label>
+          </div>
         </div>
       </div>
       <div class="form-group row">

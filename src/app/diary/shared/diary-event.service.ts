@@ -56,4 +56,11 @@ export class DiaryEventService {
       tap(data => console.log('updated event', JSON.stringify(data)))
     );
   }
+  deleteDiaryEvent(diaryEventId: number): Observable<DiaryEvent | any> {
+    const url = `${AppConstants.baseDiaryEventUrl}/${diaryEventId}`;
+    return this.http.delete<any>(url).pipe(
+      // map(response => response.result),
+      tap(data => console.log('deleted event', JSON.stringify(data)))
+    );
+  }
 }

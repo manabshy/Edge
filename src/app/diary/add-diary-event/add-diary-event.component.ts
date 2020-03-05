@@ -15,6 +15,10 @@ import { WedgeValidators } from 'src/app/shared/wedge-validators';
 import { FormErrors } from 'src/app/core/shared/app-constants';
 import { PropertyService } from 'src/app/property/shared/property.service';
 import { StaffMember } from 'src/app/shared/models/staff-member';
+import { Subject } from 'rxjs';
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { ConfirmModalComponent } from 'src/app/shared/confirm-modal/confirm-modal.component';
+import { ResultData } from 'src/app/shared/result-data';
 @Component({
   selector: 'app-add-diary-event',
   templateUrl: './add-diary-event.component.html',
@@ -88,6 +92,7 @@ export class AddDiaryEventComponent implements OnInit {
     private diaryEventService: DiaryEventService,
     private propertyService: PropertyService,
     private storage: StorageMap,
+    private modalService: BsModalService,
     private toastr: ToastrService,
     private router: Router,
     private route: ActivatedRoute,
@@ -166,6 +171,7 @@ export class AddDiaryEventComponent implements OnInit {
       endMin: this.getMinutes(),
       eventTypeId: [0],
       allDay: false,
+      isConfirmed: false,
       hasReminder: true,
       duration: [30],
       durationType: ['minute(s)'],
@@ -186,6 +192,7 @@ export class AddDiaryEventComponent implements OnInit {
         endMin: this.getMinutes(diaryEvent.endDateTime),
         eventTypeId: diaryEvent.eventTypeId,
         allDay: diaryEvent.allDay,
+        isConfirmed: diaryEvent.isConfirmed,
         hasReminder: diaryEvent.hasReminder,
         duration: diaryEvent.totalHours,
         durationType: 'hour(s)',
@@ -326,9 +333,6 @@ export class AddDiaryEventComponent implements OnInit {
     return (`${hour}:${min}`);
   }
 
-  private setLabels(id: number) {
-
-  }
   saveDiaryEvent() {
     this.sharedService.logValidationErrors(this.diaryEventForm, true);
     if (this.diaryEventForm.valid) {
@@ -366,6 +370,19 @@ export class AddDiaryEventComponent implements OnInit {
     }
   }
 
+  deleteEvent(eventId: number) {
+    this.showWarning().subscribe(res => {
+      if (res) {
+        this.diaryEventService.deleteDiaryEvent(eventId).subscribe((result: ResultData) => {
+          if (result.status) {
+            this.toastr.success('Diary event successfully deleted');
+            this.router.navigate(['/']);
+          }
+        });
+      }
+    });
+  }
+
   // REFACTOR
   private setDateTime(event: DiaryEvent) {
     const startDateWithHour = setHours(event.startDateTime, +this.startHourControl.value);
@@ -401,5 +418,16 @@ export class AddDiaryEventComponent implements OnInit {
 
   cancel() {
     this.sharedService.back();
+  }
+
+  showWarning() {
+    const subject = new Subject<boolean>();
+    const initialState = {
+      title: 'Are you sure you want to delete the event?',
+      actions: ['No', 'Yes']
+    };
+    const modal = this.modalService.show(ConfirmModalComponent, { ignoreBackdropClick: true, initialState });
+    modal.content.subject = subject;
+    return subject.asObservable();
   }
 }
