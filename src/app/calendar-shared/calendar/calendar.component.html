@@ -120,21 +120,23 @@
     </div>
   </div>
 </ng-template>
-<div *ngIf="events$ | async; let events">
-  <div [ngSwitch]="view">
-    <mwl-calendar-month-view *ngSwitchCase="'month'" [viewDate]="viewDate" [events]="events"
-      (dayClicked)="changeDay($event.day.date)" (beforeViewRender)="beforeMonthViewRender($event)"
-      [cellTemplate]="monthCell" [tooltipTemplate]="customTooltip" [weekStartsOn]="weekStartsOn"
-      (eventClicked)="eventClicked($event)">
-    </mwl-calendar-month-view>
-    <mwl-calendar-week-view *ngSwitchDefault [viewDate]="viewDate" [events]="events"
-      (dayHeaderClicked)="changeDay($event.day.date)" (beforeViewRender)="beforeWeekViewRender($event)"
-      [tooltipTemplate]="customTooltip" [weekStartsOn]="weekStartsOn" [daysInWeek]="daysInWeek"
-      (hourSegmentClicked)="getClickedDate($event.date)" (eventClicked)="eventClicked($event)">
-    </mwl-calendar-week-view>
-    <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events"
-      (beforeViewRender)="beforeDayViewRender($event)" [tooltipTemplate]="customTooltip"
-      (hourSegmentClicked)="getClickedDate($event.date)" (eventClicked)="eventClicked($event)">
-    </mwl-calendar-day-view>
-  </div>
+<div class="calendar-container" #calendarContainer>
+  <ng-container *ngIf="events$ | async; let events">
+    <ng-container [ngSwitch]="view">
+      <mwl-calendar-month-view *ngSwitchCase="'month'" [viewDate]="viewDate" [events]="events"
+        (dayClicked)="changeDay($event.day.date)" (beforeViewRender)="beforeMonthViewRender($event)"
+        [cellTemplate]="monthCell" [tooltipTemplate]="customTooltip" [weekStartsOn]="weekStartsOn"
+        (eventClicked)="eventClicked($event)">
+      </mwl-calendar-month-view>
+      <mwl-calendar-week-view *ngSwitchDefault [viewDate]="viewDate" [events]="events"
+        (dayHeaderClicked)="changeDay($event.day.date)" (beforeViewRender)="beforeWeekViewRender($event)"
+        [tooltipTemplate]="customTooltip" [weekStartsOn]="weekStartsOn" [daysInWeek]="daysInWeek"
+        (hourSegmentClicked)="getClickedDate($event.date)" (eventClicked)="eventClicked($event)">
+      </mwl-calendar-week-view>
+      <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events"
+        (beforeViewRender)="beforeDayViewRender($event)" [tooltipTemplate]="customTooltip"
+        (hourSegmentClicked)="getClickedDate($event.date)" (eventClicked)="eventClicked($event)">
+      </mwl-calendar-day-view>
+    </ng-container>
+  </ng-container>
 </div>

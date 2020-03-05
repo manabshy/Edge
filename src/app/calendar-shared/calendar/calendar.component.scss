@@ -14,18 +14,14 @@ $time-column-mobile-width: 40px;
     }
 }
 
+.calendar-container {
+    overflow: auto;
+}
+
 
 :host ::ng-deep {
 
     mwl-calendar-month-view, mwl-calendar-week-view {
-        @include media-breakpoint-up(md) {
-            display: block;
-            max-height: 500px;
-            overflow: auto;
-        }
-        @include media-breakpoint-up(xl) {
-            max-height: 600px;
-        }
     
         &-header {
             display: block;
@@ -33,14 +29,6 @@ $time-column-mobile-width: 40px;
             top: 0;
             z-index: 49;
             background: color("white");
-
-            @include media-breakpoint-down(sm) {
-                top: $top-bar-height + 73 + 36;
-            }
-
-            @media (max-width: 320px) {
-                top: $top-bar-height + 62 + 34;
-            }
         }
     }
 
@@ -207,19 +195,6 @@ $time-column-mobile-width: 40px;
 }
 
 :host-context(.off-canvas) ::ng-deep {
-    mwl-calendar-month-view, mwl-calendar-week-view {
-    
-        &-header {
-
-            @include media-breakpoint-down(sm) {
-                top: $top-bar-height + 70;
-            }
-
-            @media (max-width: 320px) {
-                top: $top-bar-height + 59;
-            }
-        }
-    }
     .cal-week-view .cal-event-container {
         max-width: 75%;
     }

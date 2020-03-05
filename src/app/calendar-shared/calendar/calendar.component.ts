@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input, OnChanges, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, OnChanges, ChangeDetectorRef, ViewChild, ElementRef, Renderer2, AfterViewChecked } from '@angular/core';
 import {
   CalendarEvent, CalendarDateFormatter, CalendarWeekViewBeforeRenderEvent,
   CalendarDayViewBeforeRenderEvent, DAYS_OF_WEEK, CalendarEventTitleFormatter, CalendarMonthViewBeforeRenderEvent
@@ -57,6 +57,7 @@ export class CalendarComponent implements OnInit, OnChanges {
   @Input() staffMemberId: number;
   @Input() myCalendarOnly: boolean;
   @Output() selectedDate = new EventEmitter<any>();
+  @ViewChild('calendarContainer', { static: true }) calendarContainer: ElementRef;
   view: CalendarView | 'month' | 'week' | 'threeDays' | 'day' = CalendarView.Week;
   daysInWeek;
   viewDate: Date = new Date();
@@ -76,6 +77,7 @@ export class CalendarComponent implements OnInit, OnChanges {
   dragToCreateActive = false;
 
   constructor(private diaryEventService: DiaryEventService,
+    private renderer: Renderer2,
     private storage: StorageMap,
     private router: Router,
     private cdr: ChangeDetectorRef) { }
@@ -87,7 +89,17 @@ export class CalendarComponent implements OnInit, OnChanges {
     if (window.innerWidth < 1024) {
       this.view = CalendarView.ThreeDays
     }
-    this.getDiaryEvents();
+    this.getDiaryEvents(); 
+  }
+
+  ngAfterViewInit() {
+    const calContainer = this.calendarContainer.nativeElement;
+    let gap = 20;
+    if (window.innerWidth < 576) {
+      gap += 50;
+    }
+    const maxHeight = `${window.innerHeight - calContainer.getBoundingClientRect().top - gap}px`;
+    this.renderer.setStyle(calContainer, 'max-height', maxHeight); 
   }
 
   ngOnChanges() {

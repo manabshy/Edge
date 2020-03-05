@@ -1,4 +1,4 @@
-import { Component, Renderer2, ChangeDetectorRef, HostListener, OnInit, AfterViewChecked, ViewChild, ElementRef } from '@angular/core';
+import { Component, Renderer2, ChangeDetectorRef, OnInit, AfterViewChecked, ViewChild, ElementRef } from '@angular/core';
 import { Router, RoutesRecognized, ActivatedRoute } from '@angular/router';
 import { filter, pairwise, takeUntil, tap } from 'rxjs/operators';
 import { AppUtils } from './core/shared/utils';
@@ -20,14 +20,12 @@ import manifest from 'src/manifest.json';
 })
 export class AppComponent extends BaseComponent implements OnInit, AfterViewChecked {
   title = 'Wedge';
-  isScrollTopVisible = false;
   isFading = false;
   isCurrentUserAvailable = false;
   currentStaffMember: StaffMember;
   listInfo: any;
   @ViewChild('appContainer', { static: true }) appContainer: ElementRef;
   @ViewChild(ToastContainerDirective, { static: true }) toastContainer: ToastContainerDirective;
-  appHeightObservable;
   //  get currentStaffMemberGetter(): StaffMember {
   //     return this.currentStaffMember;
   //   }
@@ -70,8 +68,6 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
       //   event.pop();
       //   console.log('after removal', event.forEach((x:RoutesRecognized)=>x.url))
       // }
-
-      this.isScrollTopVisible = false;
       this.isFading = true;
       setTimeout(() => {
         this.isFading = false;
@@ -94,10 +90,6 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
 
       this.getInfo();
     }
-    this.appHeightObservable = new MutationObserver(() => {
-      this.toggleScrollTop();
-    });
-    this.appHeightObservable.observe(this.appContainer.nativeElement, { childList: true, subtree: true });
 
 
     this.route.queryParams.subscribe(params => {
@@ -119,23 +111,6 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
 
     this.cdRef.detectChanges();
     // this.edgeServiceWorker.forceUpdate();
-  }
-
-  @HostListener('window:scroll', ['$event'])
-  onScroll(event) {
-    this.toggleScrollTop();
-  }
-
-  toggleScrollTop() {
-    if (window.innerHeight < this.appContainer.nativeElement.scrollHeight && window.scrollY) {
-      this.isScrollTopVisible = true;
-    } else {
-      this.isScrollTopVisible = false;
-    }
-  }
-
-  scrollTop() {
-    window.scrollTo(0, 0);
   }
 
   private getCurrentStaffMember() {

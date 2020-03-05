@@ -34,20 +34,6 @@
     }
 }
 
-.scroll-top {
-    display: block;
-    z-index: 1000;
-    line-height: spacer(3);
-    margin: spacer(4) auto 70px;
-
-    @include media-breakpoint-up(sm) {
-        margin: spacer(4) $grid-gutter-width spacer(2) auto;
-        position: sticky;
-        bottom: spacer(2);
-    }
-
-}
-
 .loader {
     position: fixed;
     top: 0;
