@@ -5,10 +5,10 @@
 }
 
 .tab-pane {
-    padding-top: spacer(3);
+    padding-top: spacer(2);
 
     @include media-breakpoint-up(sm) {
-        padding-top: spacer(4);
+        padding-top: spacer(3);
     }
 }
 
