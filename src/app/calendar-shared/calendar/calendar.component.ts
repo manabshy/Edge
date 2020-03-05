@@ -53,7 +53,7 @@ function ceilToNearest(amount: number, precision: number) {
     }
   ]
 })
-export class CalendarComponent implements OnInit, OnChanges {
+export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked {
   @Input() staffMemberId: number;
   @Input() myCalendarOnly: boolean;
   @Output() selectedDate = new EventEmitter<any>();
@@ -92,14 +92,17 @@ export class CalendarComponent implements OnInit, OnChanges {
     this.getDiaryEvents(); 
   }
 
-  ngAfterViewInit() {
+  ngAfterViewChecked() {
+
     const calContainer = this.calendarContainer.nativeElement;
     let gap = 20;
     if (window.innerWidth < 576) {
       gap += 50;
     }
     const maxHeight = `${window.innerHeight - calContainer.getBoundingClientRect().top - gap}px`;
-    this.renderer.setStyle(calContainer, 'max-height', maxHeight); 
+    this.renderer.setStyle(calContainer, 'max-height', maxHeight);
+
+    this.cdr.detectChanges();
   }
 
   ngOnChanges() {
