@@ -66,9 +66,11 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
       case 'allValuers':
         this.getAllValuers();
         break;
-      case 'allStaffMembers':
-        this.getAllStaffMembers();
+      case 'calendarStaffMembers':
+        this.getAllCalendarStaffMembers();
         break;
+      default:
+        this.getAllStaffMembers();
     }
   }
 
@@ -78,6 +80,15 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
         this.staffMembers$ = of(data as BaseStaffMember[]);
       } else {
         this.staffMemberService.getAllStaffMembers().subscribe(res => this.staffMembers$ = of(res));
+      }
+    });
+  }
+  getAllCalendarStaffMembers() {
+    this.storage.get('calendarStaffMembers').subscribe(data => {
+      if (data) {
+        this.staffMembers$ = of(data as BaseStaffMember[]);
+      } else {
+        this.staffMemberService.getStaffMembersForCalendar().subscribe(res => this.staffMembers$ = of(res));
       }
     });
   }

@@ -36,7 +36,7 @@
     <div *ngIf="showStaffMembers" class="form-group row">
       <label for="property" class="col-sm-2 col-form-label col-form-label-sm">Staff Members</label>
       <div class="col-sm-3">
-        <app-staff-member-finder [listType]="'allStaffMembers'" [isMultiple]="true" [isReadOnly]="diaryEvent?.onOutlook"
+        <app-staff-member-finder [listType]="'calendarStaffMembers'" [isMultiple]="true" [isReadOnly]="diaryEvent?.onOutlook"
           [staffMemberIdList]="staffMemberIdList" (selectedStaffMemberList)="getSelectedStaffMembers($event)">
         </app-staff-member-finder>
       </div>
