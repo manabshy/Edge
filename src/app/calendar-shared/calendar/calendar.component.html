@@ -1,6 +1,6 @@
 <a class="btn btn-secondary add-event mb-sm-3" [routerLink]="['/diary/edit', 0]" [queryParams]="{isNewEvent: true}"
-  *ngIf="!myCalendarOnly">
-  <i class="fas fa-plus mr-2"></i> Event
+  *ngIf="!myCalendarOnly" aria-label="Add event">
+  <span aria-hidden="true"><i class="fas fa-plus mr-sm-2"></i><span class="d-none d-sm-inline">Event</span></span>
 </a>
 <app-calendar-header [(view)]="view" [(daysInWeek)]="daysInWeek" [(viewDate)]="viewDate" [weekStartsOn]="weekStartsOn"
   (viewDateChange)="getDiaryEvents()" (viewChange)="getDiaryEvents()" (filterChange)="getDiaryEvents($event)"
