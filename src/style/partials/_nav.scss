@@ -2,6 +2,10 @@
     @include media-breakpoint-down(sm){
         justify-content: space-between;
     }
+
+    .active {
+        border-color: theme-color("primary");
+    }
 }
 
 .tab-pane {
