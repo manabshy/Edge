@@ -26,17 +26,15 @@ export class DiaryEventService {
     const url = `${AppConstants.baseDiaryEventUrl}`;
     return this.http.get<any>(url, { params: options })
       .pipe(
-        map(response => response.result),
-        tap(data => console.log(JSON.stringify(data)))
-      );
+        map(response => response.result));
   }
 
   getDiaryEventById(diaryEventId: number, graphEventId?: string, staffMemberId?: number): Observable<DiaryEvent> {
     const url = `${AppConstants.baseDiaryEventUrl}/${diaryEventId}?staffMemberId=${staffMemberId}&graphEventId=${graphEventId}`;
     return this.http.get<any>(url)
       .pipe(
-        map(response => response.result),
-        tap(data => console.log(JSON.stringify(data)))
+        map(response => response.result)
+        // tap(data => console.log(JSON.stringify(data)))
       );
   }
 
@@ -44,8 +42,7 @@ export class DiaryEventService {
   addDiaryEvent(diaryEvent: DiaryEvent): Observable<DiaryEvent | any> {
     const url = `${AppConstants.baseDiaryEventUrl}`;
     return this.http.post<any>(url, diaryEvent).pipe(
-      map(response => response.result),
-      tap(data => console.log('added event', JSON.stringify(data)))
+      map(response => response.result)
     );
   }
 
@@ -59,8 +56,6 @@ export class DiaryEventService {
   deleteDiaryEvent(diaryEventId: number): Observable<DiaryEvent | any> {
     const url = `${AppConstants.baseDiaryEventUrl}/${diaryEventId}`;
     return this.http.delete<any>(url).pipe(
-      // map(response => response.result),
-      tap(data => console.log('deleted event', JSON.stringify(data)))
     );
   }
 }

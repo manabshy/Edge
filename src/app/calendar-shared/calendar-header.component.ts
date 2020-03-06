@@ -53,25 +53,32 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
       staffMember: null
     });
 
-    this.route.queryParams.subscribe(params => {
-      this.staffMemberId = +params['staffMemberId'] || 0;
-      if (this.staffMemberId) {
-        this.diaryHeaderForm.patchValue({
-          staffMember: this.staffMemberId || this.currentStaffMember.staffMemberId
-        });
-      }
-    });
-
     this.storage.get('currentUser').subscribe((data: StaffMember) => {
       if (data) {
         this.currentStaffMember = data;
-        this.diaryHeaderForm.patchValue({
-          staffMember: this.staffMemberId || this.currentStaffMember.staffMemberId
-        });
+        this.patchForm(this.currentStaffMember.staffMemberId);
       }
     });
 
+    this.route.queryParams.subscribe(params => {
+      this.staffMemberId = +params['staffMemberId'] || 0;
+      if (this.staffMemberId) {
+        this.patchForm(this.staffMemberId);
+      } else {
+        const currentStaffMemberId = this.currentStaffMember ? this.currentStaffMember.staffMemberId : 0;
+        this.patchForm(currentStaffMemberId);
+      }
+    });
+
+
+
     this.getStaffMembersForCalendar();
+  }
+
+  private patchForm(id: number) {
+    this.diaryHeaderForm.patchValue({
+      staffMember: id
+    });
   }
 
   ngOnChanges() {

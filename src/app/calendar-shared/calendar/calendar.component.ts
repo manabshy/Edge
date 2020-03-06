@@ -88,6 +88,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked {
 
     this.route.queryParams.subscribe(params => {
       this.selectedStaffMemberId = +params['staffMemberId'] || 0;
+      console.log('id in calendar', this.selectedStaffMemberId)
       this.getDiaryEvents();
     });
 
