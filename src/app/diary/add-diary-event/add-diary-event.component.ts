@@ -265,6 +265,7 @@ export class AddDiaryEventComponent implements OnInit {
 
   onStartDateChange(startDate) {
     console.log('start', startDate);
+    this.diaryEventForm.get('endDateTime').setValue(startDate);
     // const con = isAfter(startDate, this.endDateTimeControl.value)
     // if (con) {
     //   this.minDate = startDate;
