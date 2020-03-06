@@ -105,6 +105,11 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
     this.diaryHeaderForm.patchValue({
       staffMember: this.currentStaffMember.staffMemberId
     })
+    this.router.navigate(['/'],
+      {
+        queryParams: { isCalendarSelected: true, staffMemberId: this.currentStaffMember.staffMemberId },
+        queryParamsHandling: 'merge'
+      })
   }
 
   onStaffMemberChange(staffMember: BaseStaffMember) {
@@ -116,6 +121,7 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
       })
     console.log('staff member Id', staffMember.staffMemberId);
   }
+  
   getLabel() {
     switch (this.view) {
       case 'day':

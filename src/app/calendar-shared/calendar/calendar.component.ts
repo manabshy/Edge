@@ -156,12 +156,12 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked {
   }
 
   getSelectedStaffMemberDiaryEvents(staffMemberId: number) {
-    this.id = staffMemberId;
-    this.getDiaryEvents();
+    // this.id = staffMemberId;
+    // this.getDiaryEvents();
+    console.log('get selected id from output event', staffMemberId)
   }
 
   getDiaryEvents(isCancelledVisible?: boolean) {
-    console.log('id in calendar', this.staffMemberId);
     const getStart: any = {
       month: startOfMonth,
       week: startOfWeek,
@@ -181,6 +181,9 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked {
       startDate: format(getStart(this.viewDate), 'YYYY-MM-DD'),
       endDate: format(getEnd(this.viewDate), 'YYYY-MM-DD'),
     } as BasicEventRequest;
+    console.log('id before request', this.id)
+    console.log('selected id before request', this.selectedStaffMemberId)
+    console.log('id in request', request.staffMemberId)
     this.events$ = this.diaryEventService.getDiaryEvents(request)
       .pipe(
         tap(data => this.diaryEvents = data),
