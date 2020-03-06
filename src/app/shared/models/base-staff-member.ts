@@ -4,6 +4,8 @@ export interface BaseStaffMember {
   lastName: string;
   fullName: string;
   emailAddress: null;
-  hasReminder: false;
+  hasReminder: boolean;
+  reminderUnits?: number;
+  reminderUnitType?: number;
   exchangeGUID: string;
 }

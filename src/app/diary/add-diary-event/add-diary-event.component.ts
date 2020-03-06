@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { DiaryEvent, DiaryEventTypesEnum } from '../shared/diary';
+import { DiaryEvent, DiaryEventTypesEnum, reminderUnitTypes } from '../shared/diary';
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { DiaryEventService } from '../shared/diary-event.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
@@ -29,12 +29,12 @@ export class AddDiaryEventComponent implements OnInit {
   diaryEventForm: FormGroup;
   isSubmitting: boolean;
   minutes = ['00', '15', '30', '45'];
-  durationTypes = ['minute(s)', 'hour(s)', 'day(s)'];
+  durationTypes = reminderUnitTypes;
   isNewEvent: boolean;
   diaryEvent: DiaryEvent;
   diaryEventId: number;
   isAllDay = false;
-  isReminder = true;
+  isReminder = false;
   showProperties = false;
   showContacts = false;
   showStaffMembers = true;
@@ -52,6 +52,7 @@ export class AddDiaryEventComponent implements OnInit {
   showTypes = true;
   isEditable = false;
   currentStaffMember: BaseStaffMember[];
+  id: number;
 
   get hours() {
     const result = [];
@@ -117,8 +118,8 @@ export class AddDiaryEventComponent implements OnInit {
           fullName: data.fullName
         }] as BaseStaffMember[];
         const currentStaffMemberId = [];
-        const id = this.staffMemberId || data.staffMemberId;
-        currentStaffMemberId.push(id);
+        this.id = this.staffMemberId || data.staffMemberId;
+        currentStaffMemberId.push(this.id);
         this.staffMemberIdList = currentStaffMemberId;
       }
     });
@@ -139,9 +140,13 @@ export class AddDiaryEventComponent implements OnInit {
         .subscribe(event => {
           if (event) {
             this.diaryEvent = event;
-            event.onOutlook && !event.onEdge ? this.showTypes = false : this.showTypes = true;
-            event.onOutlook ? this.isEditable = false : this.isEditable = true;
-            event.hasReminder ? this.isReminder = true : this.isReminder = false;
+            if (event.onOutlook) {
+              this.isEditable = false;
+              !event.onEdge ? this.showTypes = false : this.showTypes = true;
+            } else {
+              this.isEditable = true;
+              this.setReminder(this.id, event.staffMembers, true);
+            }
             this.toggleFlags(+event.eventTypeId);
             this.setStaffMemberIdList(event.staffMembers);
             this.populateForm(event);
@@ -182,7 +187,7 @@ export class AddDiaryEventComponent implements OnInit {
       isConfirmed: false,
       hasReminder: true,
       duration: [30],
-      durationType: ['minute(s)'],
+      durationType: [0],
       staffMembers: [''],
       properties: [''],
       contacts: [''],
@@ -202,9 +207,6 @@ export class AddDiaryEventComponent implements OnInit {
         eventTypeId: diaryEvent.eventTypeId,
         allDay: diaryEvent.allDay,
         isConfirmed: diaryEvent.isConfirmed,
-        hasReminder: diaryEvent.hasReminder,
-        duration: diaryEvent.totalHours,
-        durationType: 'hour(s)',
         staffMembers: diaryEvent.staffMembers,
         properties: diaryEvent.properties,
         contacts: diaryEvent.contacts,
@@ -276,8 +278,9 @@ export class AddDiaryEventComponent implements OnInit {
   }
 
   private toggleFlags(eventTypeId: number) {
+    console.log('%c Should be hree', 'color: red');
     // Group event into array of parts of the form visbile
-    const showAllEventTypes = this.eventTypes ?? this.eventTypes.filter(x => [DiaryEventTypesEnum.ViewingSales, DiaryEventTypesEnum.ViewingLettings,
+    const showAllEventTypes = this.eventTypes.filter(x => [DiaryEventTypesEnum.ViewingSales, DiaryEventTypesEnum.ViewingLettings,
     DiaryEventTypesEnum.PropertyManagement, DiaryEventTypesEnum.Reminder, DiaryEventTypesEnum.Other].includes(x.id));
     const showOnlyPropertyEventTypes = this.eventTypes
       .filter(x => [DiaryEventTypesEnum.PreviewSales, DiaryEventTypesEnum.PreviewLettings].includes(x.id));
@@ -365,6 +368,8 @@ export class AddDiaryEventComponent implements OnInit {
       event.staffMembers = [];
       event.staffMembers = this.currentStaffMember;
     }
+    console.log('event members', 'color:green', event.staffMembers);
+    this.setReminder(this.id, event.staffMembers);
 
     if (this.isNewEvent) {
       this.diaryEventService.addDiaryEvent(event).subscribe(res => {
@@ -394,6 +399,20 @@ export class AddDiaryEventComponent implements OnInit {
     });
   }
 
+  setReminder(id: number, staffMembers: BaseStaffMember[], isPatch = false) {
+    if (staffMembers && staffMembers.length) {
+      const member = staffMembers.find(x => x.staffMemberId === id);
+      if (isPatch) {
+        this.diaryEventForm.patchValue({ duration: member.reminderUnits, durationType: member.reminderUnitType, hasReminder: member.hasReminder });
+        member.hasReminder ? this.isReminder = true : this.isReminder = false;
+      } else {
+        member.hasReminder = true;
+        member.reminderUnits = +this.diaryEventForm.get('duration').value || 0;
+        member.reminderUnitType = +this.diaryEventForm.get('durationType').value || 0;
+
+      }
+    }
+  }
   // REFACTOR
   private setDateTime(event: DiaryEvent) {
     const startDateWithHour = setHours(event.startDateTime, +this.startHourControl.value);

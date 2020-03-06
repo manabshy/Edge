@@ -153,6 +153,12 @@ export enum DiaryEventTypesStringEnum {
   Reminder = 'Reminder'
 }
 
+export const  reminderUnitTypes = new Map([
+  [0, 'min(s)'],
+  [1, 'hour(s)'],
+  [2, 'day(s)']
+]);
+
 /**
  * Event types shared between all users
  */
