@@ -2,10 +2,11 @@ import { Component, Input, Output, EventEmitter, OnChanges, OnInit } from '@angu
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { BaseStaffMember } from '../shared/models/base-staff-member';
 import { StaffMemberService } from '../core/services/staff-member.service';
-import { Observable, of } from 'rxjs';
+import { Observable, of, merge } from 'rxjs';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { CalendarView } from './shared/calendar-shared';
 import { StaffMember } from '../shared/models/staff-member';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-calendar-header',
@@ -30,29 +31,43 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
   staffMembers$ = new Observable<BaseStaffMember[]>();
   fakeView: string;
   currentStaffMember: any;
+  staffMemberId: number;
 
   get isShowMeVisible() {
-    if(this.diaryHeaderForm && this.currentStaffMember){
+    if (this.diaryHeaderForm && this.currentStaffMember) {
       return +this.diaryHeaderForm.get('staffMember').value !== this.currentStaffMember.staffMemberId;
     }
-  }  
+  }
 
-  constructor(private fb: FormBuilder, private storage: StorageMap, private staffMemberService: StaffMemberService) { }
+  constructor(private fb: FormBuilder,
+    private storage: StorageMap,
+    private router: Router,
+    private route: ActivatedRoute,
+    private staffMemberService: StaffMemberService) { }
 
   ngOnInit() {
-    
+
     this.diaryHeaderForm = this.fb.group({
       viewMode: this.view,
       showCancelled: false,
       staffMember: null
     });
 
+    this.route.queryParams.subscribe(params => {
+      this.staffMemberId = +params['staffMemberId'] || 0;
+      if (this.staffMemberId) {
+        this.diaryHeaderForm.patchValue({
+          staffMember: this.staffMemberId || this.currentStaffMember.staffMemberId
+        });
+      }
+    });
+
     this.storage.get('currentUser').subscribe((data: StaffMember) => {
       if (data) {
         this.currentStaffMember = data;
         this.diaryHeaderForm.patchValue({
-          staffMember: this.currentStaffMember.staffMemberId
-        })
+          staffMember: this.staffMemberId || this.currentStaffMember.staffMemberId
+        });
       }
     });
 
@@ -87,6 +102,11 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
 
   onStaffMemberChange(staffMember: BaseStaffMember) {
     this.staffMemberChange.emit(staffMember.staffMemberId);
+    this.router.navigate(['/'],
+      {
+        queryParams: { isCalendarSelected: true, staffMemberId: staffMember.staffMemberId },
+        queryParamsHandling: 'merge'
+      })
     console.log('staff member Id', staffMember.staffMemberId);
   }
   getLabel() {

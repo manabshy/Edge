@@ -27,7 +27,7 @@ import * as _ from 'lodash';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { InfoDetail, DropdownListInfo } from 'src/app/core/services/info.service';
 import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CalendarView } from '../shared/calendar-shared';
 
 
@@ -71,6 +71,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked {
   activeDayIsOpen: boolean;
   viewingArrangements: InfoDetail[];
   id: number;
+  selectedStaffMemberId: number;
 
   //draggable
   events: CalendarEvent[] = [];
@@ -80,16 +81,24 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked {
     private renderer: Renderer2,
     private storage: StorageMap,
     private router: Router,
+    private route: ActivatedRoute,
     private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
+
+    this.route.queryParams.subscribe(params => {
+      this.selectedStaffMemberId = +params['staffMemberId'] || 0;
+      this.getDiaryEvents();
+    });
+
     this.storage.get('info').subscribe((data: DropdownListInfo) => {
       if (data) { this.viewingArrangements = data.viewingArrangements; }
     });
+
     if (window.innerWidth < 1024) {
       this.view = CalendarView.ThreeDays
     }
-    this.getDiaryEvents(); 
+    // this.getDiaryEvents();
   }
 
   ngAfterViewChecked() {
@@ -167,7 +176,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked {
     }[this.view];
 
     const request = {
-      staffMemberId: this.id,
+      staffMemberId: this.selectedStaffMemberId || this.id,
       startDate: format(getStart(this.viewDate), 'YYYY-MM-DD'),
       endDate: format(getEnd(this.viewDate), 'YYYY-MM-DD'),
     } as BasicEventRequest;
@@ -199,13 +208,15 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked {
 
   eventClicked({ event }: { event: CalendarEvent }) {
     const clickedEvent = { ...event.meta } as DiaryEvent;
-    if (+clickedEvent.eventTypeId === 8 || +clickedEvent.eventTypeId === 2048) {
-      this.router.navigate(['/valuations-register/detail', clickedEvent.properties[0].propertyEventId, 'edit']);
-    } else {
-      this.router.navigate(['/diary/edit', clickedEvent.diaryEventId],
-        {
-          queryParams: { staffMemberId: this.id, graphEventId: clickedEvent.exchangeGUID }
-        });
+    if (!clickedEvent.isBusy) {
+      if (+clickedEvent.eventTypeId === 8 || +clickedEvent.eventTypeId === 2048) {
+        this.router.navigate(['/valuations-register/detail', clickedEvent.properties[0].propertyEventId, 'edit']);
+      } else {
+        this.router.navigate(['/diary/edit', clickedEvent.diaryEventId],
+          {
+            queryParams: { staffMemberId: this.id, graphEventId: clickedEvent.exchangeGUID }
+          });
+      }
     }
   }
 
