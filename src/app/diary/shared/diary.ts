@@ -31,6 +31,7 @@ export interface DiaryEvent {
   isOrganizer: boolean;
   onEdge: boolean;
   onOutlook: boolean;
+  isBusy: boolean;
   contacts: ContactGroup[];
   staffMembers: BaseStaffMember[];
   properties: DiaryProperty[];

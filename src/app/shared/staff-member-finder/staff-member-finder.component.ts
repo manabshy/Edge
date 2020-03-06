@@ -18,6 +18,7 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
   @Input() isDisabled: boolean;
   @Input() isRequired: boolean;
   @Input() isMultiple: boolean;
+  @Input() isReadOnly: boolean;
   @Output() selectedStaffMemberId = new EventEmitter<number>();
   @Output() selectedStaffMemberList = new EventEmitter<BaseStaffMember[] | any>();
   staffMembers$ = new Observable<any>();

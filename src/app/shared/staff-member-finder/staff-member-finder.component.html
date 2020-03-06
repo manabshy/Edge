@@ -1,5 +1,5 @@
 <form [formGroup]="staffMemberFinderForm">
-  <ng-select placeholder="Select Staff Member" [items]="staffMembers$|async" [multiple]="isMultiple"
+  <ng-select placeholder="Select Staff Member" [items]="staffMembers$|async" [multiple]="isMultiple" [readonly] ="isReadOnly"
     [closeOnSelect]="!isMultiple" [hideSelected]="true" [clearable]="isClearable" bindLabel="fullName" bindValue="staffMemberId"
     (change)="onStaffMemberChange($event)" formControlName="staffMemberId" [readonly]="isDisabled ? true : null"
     [ngClass]="{'is-invalid': isRequired, 'form-control-plaintext': isDisabled}"
