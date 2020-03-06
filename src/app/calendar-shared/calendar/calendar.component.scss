@@ -11,6 +11,8 @@ $time-column-mobile-width: 40px;
         z-index: 10;
         bottom: 70px;
         right: spacer(2);
+        display: block;
+        padding: spacer(3) spacer(4);
     }
 }
 
