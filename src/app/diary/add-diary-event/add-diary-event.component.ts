@@ -195,7 +195,7 @@ export class AddDiaryEventComponent implements OnInit {
       eventTypeId: [0],
       allDay: false,
       isConfirmed: false,
-      hasReminder: true,
+      hasReminder: false,
       duration: [30],
       durationType: [0],
       staffMembers: [''],
