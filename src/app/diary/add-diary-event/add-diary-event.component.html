@@ -82,7 +82,7 @@
           <small *ngIf="!isEditable && !isNewEvent">
             <strong>{{diaryEventForm.get('startHour').value}}:{{diaryEventForm.get('startMin').value}}</strong>
           </small>
-          <div class="custom-control custom-checkbox" *ngIf="diaryEvent?.allDay || isNewEvent">
+          <div class="custom-control custom-checkbox" *ngIf="diaryEvent?.allDay || isEditable || isNewEvent">
             <input type="checkbox" class="custom-control-input" id="allDay" formControlName="allDay"
               (change)="onAllDayCheck($event)">
             <label class="custom-control-label small" for="allDay">All Day </label>
@@ -119,7 +119,7 @@
             start date</small>
         </div>
       </div>
-      <div class="form-group row" *ngIf="diaryEvent?.isConfirmed || isNewEvent">
+      <div class="form-group row" *ngIf="diaryEvent?.isConfirmed || isEditable || isNewEvent">
         <div class="col-sm-6 col-xl-3 offset-sm-2">
           <div class="custom-control custom-checkbox mb-2">
             <input type="checkbox" id="isConfirmed" name="isConfirmed" class="custom-control-input"
@@ -137,7 +137,7 @@
             [ngClass]="{'form-control-plaintext': !isEditable && !isNewEvent}" />
         </div>
       </div>
-      <div class="form-group row">
+      <div class="form-group row" *ngIf="diaryEvent?.notes.trim() || isEditable || isNewEvent">
         <label for="notes" class="col-sm-2 col-form-label col-form-label-sm">Note<br /><span
             *ngIf="isEditable || isNewEvent" class="form-text text-muted">(200 chars max)</span></label>
         <div class="col-sm-8 col-xl-6">

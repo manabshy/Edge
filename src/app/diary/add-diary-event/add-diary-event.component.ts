@@ -53,6 +53,9 @@ export class AddDiaryEventComponent implements OnInit {
   isEditable = false;
   currentStaffMember: BaseStaffMember[];
   id: number;
+  showAllEventTypes: InfoDetail[];
+  showOnlyPropertyEventTypes: InfoDetail[];
+  showOnlyContactEventTypes: InfoDetail[];
 
   get hours() {
     const result = [];
@@ -125,13 +128,20 @@ export class AddDiaryEventComponent implements OnInit {
     });
 
     this.storage.get('info').subscribe((info: DropdownListInfo) => {
-      const allEventTypes = info.diaryEventTypes;
-      this.eventTypes = allEventTypes
-        .filter(x => ![DiaryEventTypesEnum.ValuationSales, DiaryEventTypesEnum.ValuationLettings, DiaryEventTypesEnum.Alert].includes(x.id));
-      console.log('event types....', this.eventTypes);
-      if (this.eventTypes && this.eventTypes.length) {
-        const mappedData = this.eventTypes.map(x => [x.id, x.value] as [number, string]);
-        this.eventTypesMap = new Map<number, string>(mappedData);
+      if (info) {
+        const allEventTypes = info.diaryEventTypes;
+        this.eventTypes = allEventTypes
+          .filter(x => ![DiaryEventTypesEnum.ValuationSales, DiaryEventTypesEnum.ValuationLettings, DiaryEventTypesEnum.Alert].includes(x.id));
+
+        // Group event into array of parts of the form visbile
+        if (this.eventTypes && this.eventTypes.length) {
+          this.showAllEventTypes = this.eventTypes.filter(x => [DiaryEventTypesEnum.ViewingSales, DiaryEventTypesEnum.ViewingLettings,
+          DiaryEventTypesEnum.PropertyManagement, DiaryEventTypesEnum.Reminder, DiaryEventTypesEnum.Other].includes(x.id));
+          this.showOnlyPropertyEventTypes = this.eventTypes
+            .filter(x => [DiaryEventTypesEnum.PreviewSales, DiaryEventTypesEnum.PreviewLettings].includes(x.id));
+          this.showOnlyContactEventTypes = this.eventTypes
+            .filter(x => [DiaryEventTypesEnum.Meeting, DiaryEventTypesEnum.Interview, DiaryEventTypesEnum.Training].includes(x.id));
+        }
       }
     });
 
@@ -185,7 +195,7 @@ export class AddDiaryEventComponent implements OnInit {
       eventTypeId: [0],
       allDay: false,
       isConfirmed: false,
-      hasReminder: true,
+      hasReminder: false,
       duration: [30],
       durationType: [0],
       staffMembers: [''],
@@ -195,6 +205,7 @@ export class AddDiaryEventComponent implements OnInit {
       notes: [''],
     }, { validators: WedgeValidators.diaryEventEndDateValidator() });
   }
+
   populateForm(diaryEvent: DiaryEvent) {
     if (diaryEvent) {
       this.diaryEventForm.patchValue({
@@ -254,6 +265,7 @@ export class AddDiaryEventComponent implements OnInit {
 
   onStartDateChange(startDate) {
     console.log('start', startDate);
+    this.diaryEventForm.get('endDateTime').setValue(startDate);
     // const con = isAfter(startDate, this.endDateTimeControl.value)
     // if (con) {
     //   this.minDate = startDate;
@@ -279,18 +291,11 @@ export class AddDiaryEventComponent implements OnInit {
 
   private toggleFlags(eventTypeId: number) {
     console.log('%c Should be hree', 'color: red');
-    // Group event into array of parts of the form visbile
-    const showAllEventTypes = this.eventTypes.filter(x => [DiaryEventTypesEnum.ViewingSales, DiaryEventTypesEnum.ViewingLettings,
-    DiaryEventTypesEnum.PropertyManagement, DiaryEventTypesEnum.Reminder, DiaryEventTypesEnum.Other].includes(x.id));
-    const showOnlyPropertyEventTypes = this.eventTypes
-      .filter(x => [DiaryEventTypesEnum.PreviewSales, DiaryEventTypesEnum.PreviewLettings].includes(x.id));
-    const showOnlyContactEventTypes = this.eventTypes
-      .filter(x => [DiaryEventTypesEnum.Meeting, DiaryEventTypesEnum.Interview, DiaryEventTypesEnum.Training].includes(x.id));
 
     // set flags based on the event type selected
-    const showAllType = showAllEventTypes.filter(x => +x.id === +eventTypeId);
-    const showOnlyPropertiesType = showOnlyPropertyEventTypes.filter(x => +x.id === +eventTypeId);
-    const showOnlyContactsType = showOnlyContactEventTypes.filter(x => +x.id === +eventTypeId);
+    const showAllType = this.showAllEventTypes.filter(x => +x.id === +eventTypeId);
+    const showOnlyPropertiesType = this.showOnlyPropertyEventTypes.filter(x => +x.id === +eventTypeId);
+    const showOnlyContactsType = this.showOnlyContactEventTypes.filter(x => +x.id === +eventTypeId);
 
     switch (true) {
       case !!showAllType.length:
@@ -413,6 +418,7 @@ export class AddDiaryEventComponent implements OnInit {
       }
     }
   }
+
   // REFACTOR
   private setDateTime(event: DiaryEvent) {
     const startDateWithHour = setHours(event.startDateTime, +this.startHourControl.value);
