@@ -59,24 +59,29 @@
       <div class="form-group row">
         <label for="startDateTime" class="col-sm-2 col-form-label col-form-label-sm">Start Date</label>
         <div class="col-sm-6 col-xl-3">
-          <div class="input-group mb-2">
+          <div class="input-group" [ngClass]="{'mb-2':!(!isEditable && !isNewEvent)}">
             <input type="text" id="startDateTime" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
               formControlName="startDateTime"
               [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', minDate:minDate, customTodayClass: 'font-weight-bold'}"
               (bsValueChange)="onStartDateChange($event)" bsDatepicker
               [attr.disabled]="!isEditable && !isNewEvent ? true : null"
               [ngClass]="{'form-control-plaintext': !isEditable && !isNewEvent}">
-            <select *ngIf="!isAllDay" class="custom-select custom-select-sm" name="startHour" id="startHour"
-              formControlName="startHour" [attr.disabled]="!isEditable && !isNewEvent ? true : null"
-              [ngClass]="{'form-control-plaintext': !isEditable && !isNewEvent}">
-              <option *ngFor="let hour of hours" [value]='hour'> {{hour}}</option>
-            </select>
-            <select *ngIf="!isAllDay" class="custom-select custom-select-sm" name="startMin" id="startMin"
-              formControlName="startMin" [attr.disabled]="!isEditable && !isNewEvent ? true : null"
-              [ngClass]="{'form-control-plaintext': !isEditable && !isNewEvent}">
-              <option *ngFor="let min of minutes" [value]='min'> {{min}}</option>
-            </select>
+            <ng-container *ngIf="!(!isEditable && !isNewEvent)">
+              <select *ngIf="!isAllDay" class="custom-select custom-select-sm" name="startHour" id="startHour"
+                formControlName="startHour" [attr.disabled]="!isEditable && !isNewEvent ? true : null"
+                [ngClass]="{'form-control-plaintext': !isEditable && !isNewEvent}">
+                <option *ngFor="let hour of hours" [value]='hour'> {{hour}}</option>
+              </select>
+              <select *ngIf="!isAllDay" class="custom-select custom-select-sm" name="startMin" id="startMin"
+                formControlName="startMin" [attr.disabled]="!isEditable && !isNewEvent ? true : null"
+                [ngClass]="{'form-control-plaintext': !isEditable && !isNewEvent}">
+                <option *ngFor="let min of minutes" [value]='min'> {{min}}</option>
+              </select>
+            </ng-container>
           </div>
+          <small *ngIf="!isEditable && !isNewEvent">
+            <strong>{{diaryEventForm.get('startHour').value}}:{{diaryEventForm.get('startMin').value}}</strong>
+          </small>
           <div class="custom-control custom-checkbox" *ngIf="diaryEvent?.allDay || isNewEvent">
             <input type="checkbox" class="custom-control-input" id="allDay" formControlName="allDay"
               (change)="onAllDayCheck($event)">
@@ -94,17 +99,22 @@
               (bsValueChange)="onEndDateChange($event)" bsDatepicker
               [attr.disabled]="!isEditable && !isNewEvent ? true : null"
               [ngClass]="{'is-invalid': diaryEventForm.errors?.endDateIsBeforeStartDate, 'form-control-plaintext': !isEditable && !isNewEvent}">
-            <select class="custom-select custom-select-sm" name="endHour" id="endHour" formControlName="endHour"
-              [attr.disabled]="!isEditable && !isNewEvent ? true : null"
-              [ngClass]="{'form-control-plaintext': !isEditable && !isNewEvent}">
-              <option *ngFor="let hour of hours" [value]='hour'> {{hour}}</option>
-            </select>
-            <select class="custom-select custom-select-sm" name="endMin" id="endMin" formControlName="endMin"
-              [attr.disabled]="!isEditable && !isNewEvent ? true : null"
-              [ngClass]="{'form-control-plaintext': !isEditable && !isNewEvent}">
-              <option *ngFor="let min of minutes" [value]='min'> {{min}}</option>
-            </select>
+            <ng-container *ngIf="!(!isEditable && !isNewEvent)">
+              <select class="custom-select custom-select-sm" name="endHour" id="endHour" formControlName="endHour"
+                [attr.disabled]="!isEditable && !isNewEvent ? true : null"
+                [ngClass]="{'form-control-plaintext': !isEditable && !isNewEvent}">
+                <option *ngFor="let hour of hours" [value]='hour'> {{hour}}</option>
+              </select>
+              <select class="custom-select custom-select-sm" name="endMin" id="endMin" formControlName="endMin"
+                [attr.disabled]="!isEditable && !isNewEvent ? true : null"
+                [ngClass]="{'form-control-plaintext': !isEditable && !isNewEvent}">
+                <option *ngFor="let min of minutes" [value]='min'> {{min}}</option>
+              </select>
+            </ng-container>
           </div>
+          <small *ngIf="!isEditable && !isNewEvent">
+            <strong>{{diaryEventForm.get('endHour').value}}:{{diaryEventForm.get('endMin').value}}</strong>
+          </small>
           <small class="text-danger" *ngIf="diaryEventForm?.errors?.endDateIsBeforeStartDate">End date should be after
             start date</small>
         </div>
@@ -133,6 +143,7 @@
         <div class="col-sm-8 col-xl-6">
           <textarea type="textarea" class="form-control form-control-sm" formControlName="notes" id="notes" name="note"
             placeholder="Note" maxlength="200" [attr.disabled]="!isEditable && !isNewEvent ? true : null"
+            [ngStyle]="{'min-height.px': diaryEventForm.get('notes').value.length}"
             [ngClass]="{'form-control-plaintext': !isEditable && !isNewEvent}"></textarea>
         </div>
       </div>
