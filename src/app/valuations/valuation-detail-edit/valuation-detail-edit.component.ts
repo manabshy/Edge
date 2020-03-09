@@ -660,7 +660,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     if (this.instructionForm.valid) {
       if (this.instructionForm.dirty) {
         this.isSubmitting = true;
-        const instruction = { ...this.instruction, ...this.instructionForm.value };
+        const instruction = { ...this.instruction, ...this.instructionForm.value } as Instruction;
+        this.setInstructionValue(instruction);
         this.valuationService.addInstruction(instruction).subscribe((result: ResultData) => {
           this.onInstructionSaveComplete(result.status);
         });
@@ -672,6 +673,28 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.errorMessage = {} as WedgeError;
       this.errorMessage.displayMessage = 'Please correct validation errors';
       // this.sharedService.showError(this.errorMessage);
+    }
+  }
+  setInstructionValue(instruction: Instruction) {
+    const isSale = this.instructionForm.get('instructSale').value;
+    const isShortLet = this.instructionForm.get('instructShortLet').value;
+    const isLongLet = this.instructionForm.get('instructLongLet').value;
+    instruction.askingPrice = 0;
+    instruction.askingRentShortLet = 0;
+    instruction.askingRentLongLet = 0;
+    instruction.askingRentShortLetMonthly = 0;
+    instruction.askingRentLongLetMonthly = 0;
+
+    if (isSale) {
+      instruction.askingPrice = +this.instAskingPriceControl.value;
+    }
+    if (isShortLet) {
+      instruction.askingRentShortLet = +this.instShortLetWeeklyControl.value;
+      instruction.askingRentShortLetMonthly = +this.instShortLetMonthlyControl.value;
+    }
+    if (isLongLet) {
+      instruction.askingRentLongLet = +this.instLongLetWeeklyControl.value;
+      instruction.askingRentLongLetMonthly = +this.instLongLetMonthlyControl.value;
     }
   }
 
@@ -764,7 +787,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   cancel() {
     this.sharedService.resetForm(this.valuationForm);
-    console.log('form state on cancel', this.valuationForm.valid)
+    console.log('form state on cancel', this.valuationForm.valid);
     this.sharedService.back();
   }
 
