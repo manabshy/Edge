@@ -19,6 +19,7 @@ import { Subject } from 'rxjs';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { ConfirmModalComponent } from 'src/app/shared/confirm-modal/confirm-modal.component';
 import { ResultData } from 'src/app/shared/result-data';
+import * as _ from 'lodash';
 @Component({
   selector: 'app-add-diary-event',
   templateUrl: './add-diary-event.component.html',
@@ -56,6 +57,9 @@ export class AddDiaryEventComponent implements OnInit {
   showAllEventTypes: InfoDetail[];
   showOnlyPropertyEventTypes: InfoDetail[];
   showOnlyContactEventTypes: InfoDetail[];
+  NumberOfPeopleLabel: string;
+  eventStaffMembers: BaseStaffMember[];
+  showMorePeople = true;
 
   get hours() {
     const result = [];
@@ -162,6 +166,11 @@ export class AddDiaryEventComponent implements OnInit {
             if (event.onOutlook) {
               this.isEditable = false;
               !event.onEdge ? this.showTypes = false : this.showTypes = true;
+              if (event.staffMembers && event.staffMembers.length) {
+                this.eventStaffMembers = event.staffMembers;
+                this.diaryEvent.staffMembers = this.getStaff(event.staffMembers);
+                this.setPeopleLabel(this.eventStaffMembers);
+              }
             } else {
               this.isEditable = true;
               this.setReminder(this.id, event.staffMembers, true);
@@ -173,6 +182,24 @@ export class AddDiaryEventComponent implements OnInit {
           }
         });
     }
+  }
+
+  setPeopleLabel(staffMembers?: BaseStaffMember[]) {
+    const difference = staffMembers?.length - 5;
+    if (difference > 0) {
+      if (difference === 1) {
+        this.NumberOfPeopleLabel = difference + ' person';
+      } else {
+        this.NumberOfPeopleLabel = difference + ' people';
+      }
+    }
+  }
+
+  getStaff(members: BaseStaffMember[]) {
+    if (members && members.length > 5) {
+      return _.take(members, 5);
+    }
+    return members;
   }
 
   setStaffMemberIdList(staffMembers: BaseStaffMember[]) {
@@ -447,6 +474,22 @@ export class AddDiaryEventComponent implements OnInit {
   private setUtcDate(date) {
     return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(),
       date.getSeconds(), date.getMilliseconds()));
+  }
+
+  trackByFn(index, item: BaseStaffMember) {
+    if (!item) { return null; }
+    return item.staffMemberId;
+  }
+
+  showAllMembers() {
+    this.showMorePeople = !this.showMorePeople;
+    this.diaryEvent.staffMembers = this.eventStaffMembers;
+    console.log('%c this.diaryEvent.staffMembers', 'color: red', this.diaryEvent.staffMembers)
+  }
+  showFewMembers() {
+    this.showMorePeople = !this.showMorePeople;
+    this.diaryEvent.staffMembers = this.getStaff(this.eventStaffMembers);
+    console.log('%c this.diaryEvent.staffMembers', 'color: green', this.diaryEvent.staffMembers)
   }
 
   canDeactivate(): boolean {

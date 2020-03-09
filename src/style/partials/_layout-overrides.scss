@@ -86,7 +86,7 @@ dl {
     .col-xl-12 > & {
         @include media-breakpoint-up(xl) {
             margin-bottom: spacer(2);
-        } 
+        }
     }
 
     dd, dt {
@@ -235,7 +235,7 @@ fieldset {
             text-align: left;
             background-color: transparent;
             border: none;
-        }  
+        }
     }
 }
 
@@ -291,4 +291,8 @@ fieldset {
     &.small {
         line-height: 2;
     }
+}
+.custom-label {
+  font-weight: bold;
+  font-size: small;
 }

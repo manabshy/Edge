@@ -36,10 +36,28 @@
     <div *ngIf="showStaffMembers" class="form-group row">
       <label for="property" class="col-sm-2 col-form-label col-form-label-sm">Staff Members</label>
       <div class="col-sm-3">
-        <app-staff-member-finder [listType]="'calendarStaffMembers'" [isMultiple]="true"
-          [isReadOnly]="diaryEvent?.onOutlook" [staffMemberIdList]="staffMemberIdList"
-          (selectedStaffMemberList)="getSelectedStaffMembers($event)">
-        </app-staff-member-finder>
+        <ng-container *ngIf="!diaryEvent?.onOutlook;else staffList">
+          <app-staff-member-finder [listType]="'calendarStaffMembers'" [isMultiple]="true"
+            [isReadOnly]="diaryEvent?.onOutlook" [staffMemberIdList]="staffMemberIdList"
+            (selectedStaffMemberList)="getSelectedStaffMembers($event)">
+          </app-staff-member-finder>
+        </ng-container>
+        <ng-template #staffList>
+          <div class="custom-label" *ngFor="let member of diaryEvent?.staffMembers; last as isLast; first as isFirst trackBy:trackByFn">
+            <ng-container *ngIf="eventStaffMembers?.length < 6; else moreMembers">
+              <div>{{member?.fullName}}</div>
+            </ng-container>
+            <ng-template #moreMembers>
+              <div>{{member?.fullName}}</div>
+              <button type="button" class="btn btn-link px-0" (click)="showAllMembers()" *ngIf="isLast && showMorePeople">+
+                {{NumberOfPeopleLabel}}
+              </button>
+              <button type="button" class="btn btn-link px-0" (click)="showFewMembers()" *ngIf="isLast &&!showMorePeople">
+                show less
+            </button>
+            </ng-template>
+          </div>
+        </ng-template>
       </div>
     </div>
     <hr>
