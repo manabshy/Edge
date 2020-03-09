@@ -141,10 +141,19 @@ export class AddDiaryEventComponent implements OnInit {
             .filter(x => [DiaryEventTypesEnum.PreviewSales, DiaryEventTypesEnum.PreviewLettings].includes(x.id));
           this.showOnlyContactEventTypes = this.eventTypes
             .filter(x => [DiaryEventTypesEnum.Meeting, DiaryEventTypesEnum.Interview, DiaryEventTypesEnum.Training].includes(x.id));
+          // this.getDiaryEvent();
         }
       }
     });
 
+    this.getDiaryEvent();
+    this.getAddedProperty();
+    this.diaryEventForm.valueChanges.subscribe(data => {
+      this.sharedService.logValidationErrors(this.diaryEventForm, false);
+    });
+  }
+
+  private getDiaryEvent() {
     if (this.diaryEventId || this.graphEventId || this.staffMemberId) {
       this.diaryEventService.getDiaryEventById(this.diaryEventId, this.graphEventId, this.staffMemberId)
         .subscribe(event => {
@@ -164,11 +173,6 @@ export class AddDiaryEventComponent implements OnInit {
           }
         });
     }
-
-    this.getAddedProperty();
-    this.diaryEventForm.valueChanges.subscribe(data => {
-      this.sharedService.logValidationErrors(this.diaryEventForm, false);
-    });
   }
 
   setStaffMemberIdList(staffMembers: BaseStaffMember[]) {

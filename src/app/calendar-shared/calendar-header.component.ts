@@ -56,7 +56,9 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
     this.storage.get('currentUser').subscribe((data: StaffMember) => {
       if (data) {
         this.currentStaffMember = data;
-        this.patchForm(this.currentStaffMember.staffMemberId);
+        if (this.diaryHeaderForm.get('staffMember').value === 0) {
+          this.patchForm(this.currentStaffMember.staffMemberId);
+        }
       }
     });
 
@@ -121,7 +123,7 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
       })
     console.log('staff member Id', staffMember.staffMemberId);
   }
-  
+
   getLabel() {
     switch (this.view) {
       case 'day':

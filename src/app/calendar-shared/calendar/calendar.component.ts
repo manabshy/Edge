@@ -218,7 +218,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked {
       } else {
         this.router.navigate(['/diary/edit', clickedEvent.diaryEventId],
           {
-            queryParams: { staffMemberId: this.id, graphEventId: clickedEvent.exchangeGUID }
+            queryParams: { staffMemberId: this.id || this.selectedStaffMemberId, graphEventId: clickedEvent.exchangeGUID }
           });
       }
     }
