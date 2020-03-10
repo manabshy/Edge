@@ -71,6 +71,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   hasDateWithValuer = false;
   activeOriginId: InfoDetail;
   showOriginId: boolean;
+  allOriginTypes: InfoDetail[];
 
   get isInvitationSent() {
     return this.valuationForm.get('isInvitationSent') as FormControl;
@@ -153,12 +154,15 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
 
     this.storage.get('info').subscribe((info: DropdownListInfo) => {
+      let allOriginTypes;
       this.tenures = info.tenures;
       this.outsideSpaces = info.outsideSpaces;
       this.parkings = info.parkings;
       this.features = info.propertyFeatures;
       this.allOrigins = info.origins;
-      this.originTypes = info.originTypes;
+      allOriginTypes = info.originTypes;
+      this.setOriginTypes(allOriginTypes);
+
     });
 
     this.storage.get('allAttendees').subscribe(data => {
@@ -194,6 +198,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       });
 
   }
+
 
   private getPropertyDetails() {
     this.propertyService.getProperty(this.propertyId, false, false, true).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
@@ -452,9 +457,18 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   }
 
+  setOriginTypes(allOriginTypes: InfoDetail[]) {
+    const activeOriginTypes = allOriginTypes.filter((x: InfoDetail) => x.isActive);
+    this.isNewValuation ? this.originTypes = activeOriginTypes : this.originTypes = allOriginTypes;
+    console.log('%c originTypes', 'color: green',this.originTypes)
+  }
+
   onSelectType(originTypeId: number) {
     this.showOriginId = true;
-    this.origins = this.allOrigins.filter((x: InfoDetail) => +x.parentId === +originTypeId);
+    const allOrigins = this.allOrigins.filter((x: InfoDetail) => +x.parentId === +originTypeId);
+    const activeOrigins = this.allOrigins.filter((x: InfoDetail) => +x.parentId === +originTypeId && x.isActive);
+    this.isNewValuation ? this.origins = activeOrigins : this.origins = allOrigins;
+    console.log('%c origins', 'color: purple', this.origins)
     this.valuationForm.get('originId').setValue(0);
   }
 
