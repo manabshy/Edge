@@ -368,6 +368,7 @@ export class AddDiaryEventComponent implements OnInit {
     if (properties && properties.length) {
       console.log('properties here', properties);
       this.diaryEventForm.get('properties').setValue(properties);
+      this.diaryEventForm.markAsDirty();
     }
   }
 
@@ -381,13 +382,19 @@ export class AddDiaryEventComponent implements OnInit {
     }
   }
   getSelectedContactGroups(contacts: Signer[]) {
-    console.log('contact groups  here', contacts);
-    this.diaryEventForm.get('contacts').setValue(contacts);
+    if (contacts && contacts.length) {
+      console.log('contact groups  here', contacts);
+      this.diaryEventForm.get('contacts').setValue(contacts);
+      this.diaryEventForm.markAsDirty();
+    }
   }
 
   getSelectedStaffMembers(staffMembers: BaseStaffMember[]) {
-    console.log('staffMembers here', staffMembers);
-    this.diaryEventForm.get('staffMembers').setValue(staffMembers);
+    if (staffMembers && staffMembers.length) {
+      console.log('staffMembers here', staffMembers);
+      this.diaryEventForm.get('staffMembers').setValue(staffMembers);
+      this.diaryEventForm.markAsDirty();
+    }
   }
 
   private getAddedProperty() {
@@ -439,6 +446,7 @@ export class AddDiaryEventComponent implements OnInit {
         }
       });
     }
+    console.log('event added here', event);
   }
 
   deleteEvent(eventId: number) {
