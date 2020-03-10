@@ -2,7 +2,7 @@
 <div class="container">
   <div class="row page-title">
     <div class="col">
-      <h4 class="m-0">Diary Event</h4>
+      <h4 class="m-0">Event <span class="badge badge-pill badge-success" *ngIf="diaryEvent?.isConfirmed">Confirmed</span></h4>
     </div>
     <div class="col-auto">
       <div class="btn-group" dropdown placement="bottom right" *ngIf="diaryEvent">
