@@ -62,6 +62,7 @@ export const FormErrors = {
   'senderName': '',
   'message': '',
   'phoneNumber': '',
+  'officeId': '',
   'propertyTypeId': '',
   'propertyStyleId': '',
   'regionId': '',
@@ -157,6 +158,9 @@ export const ValidationMessages = {
   },
   'warningStatusComment': {
     maxlength: 'Comment cannot be more than 20 characters',
+  },
+  'officeId': {
+    required: 'Office is required'
   },
   'propertyTypeId': {
     required: 'Property Type is required'

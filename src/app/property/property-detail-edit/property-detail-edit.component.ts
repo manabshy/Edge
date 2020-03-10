@@ -219,9 +219,12 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
     this.isMatchFound = false;
     this.propertyService.getPropertyOfficeId(address).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
-        this.officeId = result.officeId;
-        this.propertyLocation = result;
-        console.log('officeId from db', this.officeId);
+        if (result) {
+          this.officeId = result.officeId;
+          this.propertyLocation = result;
+          this.propertyForm.get('officeId').setValue(result.officeId);
+          console.log('officeId from db', this.officeId);
+        }
       });
     if (this.propertyAddress) {
       this.propertyForm.patchValue({ address: this.propertyAddress });
