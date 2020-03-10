@@ -7,7 +7,6 @@
   <ng-container *ngIf="companyDetails || isNewCompany">
     <form [formGroup]="companyForm" (ngSubmit)="saveCompany()" autocompleteOff>
       <fieldset>
-        <legend class="fieldset-title">Company</legend>
         <app-company-finder [existingCompany]="companyDetails" [companyNameError]="formErrors.companyName"
           (companyName)="getCompanyName($event)" (selectedCompanyDetails)="navigateToCompany($event)">
         </app-company-finder>

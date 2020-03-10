@@ -23,57 +23,59 @@
     </div>
   </div>
   <form [formGroup]="diaryEventForm" (ngSubmit)="saveDiaryEvent()" autocompleteOff>
-    <div class="form-group row" *ngIf="showTypes">
-      <label for="eventTypeId" class="col-sm-2 col-form-label col-form-label-sm">Type</label>
-      <div class="col-sm-3">
-        <select class="custom-select custom-select-sm" id="eventTypeId" formControlName="eventTypeId"
-          (change)="onEventTypeChange($event.target.value)">
-          <option value="0"></option>
-          <option *ngFor="let type of eventTypes" [value]="type.id">{{type.value}}</option>
-        </select>
+    <fieldset *ngIf="showTypes || showStaffMembers">
+      <div class="form-group row" *ngIf="showTypes">
+        <label for="eventTypeId" class="col-sm-2 col-form-label col-form-label-sm">Type</label>
+        <div class="col-sm-3">
+          <select class="custom-select custom-select-sm" id="eventTypeId" formControlName="eventTypeId"
+            (change)="onEventTypeChange($event.target.value)">
+            <option value="0"></option>
+            <option *ngFor="let type of eventTypes" [value]="type.id">{{type.value}}</option>
+          </select>
+        </div>
       </div>
-    </div>
-    <div *ngIf="showStaffMembers" class="form-group row">
-      <label for="property" class="col-sm-2 col-form-label col-form-label-sm">Staff Members</label>
-      <div class="col-sm-3">
-        <ng-container *ngIf="!diaryEvent?.onOutlook;else staffList">
-          <app-staff-member-finder [listType]="'calendarStaffMembers'" [isMultiple]="true"
-            [isReadOnly]="diaryEvent?.onOutlook" [staffMemberIdList]="staffMemberIdList"
-            (selectedStaffMemberList)="getSelectedStaffMembers($event)">
-          </app-staff-member-finder>
-        </ng-container>
-        <ng-template #staffList>
-          <div class="custom-label" *ngFor="let member of diaryEvent?.staffMembers; last as isLast; first as isFirst trackBy:trackByFn">
-            <ng-container *ngIf="eventStaffMembers?.length < 6; else moreMembers">
-              <div>{{member?.fullName}}</div>
-            </ng-container>
-            <ng-template #moreMembers>
-              <div>{{member?.fullName}}</div>
-              <button type="button" class="btn btn-link px-0" (click)="showAllMembers()" *ngIf="isLast && showMorePeople">+
-                {{NumberOfPeopleLabel}}
+      <div *ngIf="showStaffMembers" class="form-group row">
+        <label for="property" class="col-sm-2 col-form-label col-form-label-sm">Staff Members</label>
+        <div class="col-sm-3">
+          <ng-container *ngIf="!diaryEvent?.onOutlook;else staffList">
+            <app-staff-member-finder [listType]="'calendarStaffMembers'" [isMultiple]="true"
+              [isReadOnly]="diaryEvent?.onOutlook" [staffMemberIdList]="staffMemberIdList"
+              (selectedStaffMemberList)="getSelectedStaffMembers($event)">
+            </app-staff-member-finder>
+          </ng-container>
+          <ng-template #staffList>
+            <div class="custom-label" *ngFor="let member of diaryEvent?.staffMembers; last as isLast; first as isFirst trackBy:trackByFn">
+              <ng-container *ngIf="eventStaffMembers?.length < 6; else moreMembers">
+                <div>{{member?.fullName}}</div>
+              </ng-container>
+              <ng-template #moreMembers>
+                <div>{{member?.fullName}}</div>
+                <button type="button" class="btn btn-link px-0" (click)="showAllMembers()" *ngIf="isLast && showMorePeople">+
+                  {{NumberOfPeopleLabel}}
+                </button>
+                <button type="button" class="btn btn-link px-0" (click)="showFewMembers()" *ngIf="isLast &&!showMorePeople">
+                  show less
               </button>
-              <button type="button" class="btn btn-link px-0" (click)="showFewMembers()" *ngIf="isLast &&!showMorePeople">
-                show less
-            </button>
-            </ng-template>
-          </div>
-        </ng-template>
+              </ng-template>
+            </div>
+          </ng-template>
+        </div>
       </div>
-    </div>
-    <hr>
-    <ng-container *ngIf="showProperties">
+    </fieldset>
+    <fieldset *ngIf="showProperties">
+      <legend class="fieldset-title">Properties</legend>
       <app-property-finder (selectedPropertyList)="getSelectedProperties($event)" [isMultiple]="true"
         [label]="propertyLabel" [property]="property" [propertyList]="diaryEvent?.properties">
       </app-property-finder>
-      <hr class="mt-0">
-    </ng-container>
-    <ng-container *ngIf="showContacts">
+    </fieldset>
+    <fieldset *ngIf="showContacts">
+      <legend class="fieldset-title">Contacts</legend>
       <app-signer [label]="contactLabel" [isMultiple]="true" (selectedSignersList)="getSelectedContactGroups($event)"
         [contactList]="diaryEvent?.contacts">
       </app-signer>
-      <hr class="mt-0">
-    </ng-container>
-    <ng-container *ngIf="showOthers">
+    </fieldset>
+    <fieldset *ngIf="showOthers">
+      <legend class="fieldset-title">Detail</legend>
       <div class="form-group row">
         <label for="startDateTime" class="col-sm-2 col-form-label col-form-label-sm">Start Date</label>
         <div class="col-sm-6 col-xl-3">
@@ -188,7 +190,7 @@
           <p class="small" *ngIf="isReminder">Before start</p>
         </div>
       </div>
-    </ng-container>
+    </fieldset>
     <div class="form-actions">
       <div class="container px-lg-1">
         <div class="row justify-content-end w-100 no-gutters">

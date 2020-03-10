@@ -163,6 +163,14 @@ fieldset {
         font-size: $h5-font-size;
         font-weight: $headings-font-weight;
         line-height: $headings-line-height;
+        @include media-breakpoint-up(sm){
+            padding: spacer(2);
+            background-color: theme-color("light");
+        }
+    }
+
+    & + fieldset {
+        margin-top: spacer(3);
     }
 }
 
@@ -295,4 +303,8 @@ fieldset {
 .custom-label {
   font-weight: bold;
   font-size: small;
+}
+
+.section-title {
+    margin-top: spacer(3);
 }

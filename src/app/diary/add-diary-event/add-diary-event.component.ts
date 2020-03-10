@@ -43,8 +43,8 @@ export class AddDiaryEventComponent implements OnInit {
   maxDate = null;
   minDate = new Date();
   formErrors = FormErrors;
-  propertyLabel = 'Properties';
-  contactLabel = 'Contacts';
+  propertyLabel = ' ';
+  contactLabel = ' ';
   eventTypesMap: Map<number, string>;
   property: Property;
   staffMemberIdList: number[] = [];

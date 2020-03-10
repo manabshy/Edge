@@ -1,10 +1,10 @@
 <div class="list-group">
-  <div class="list-group-item mb-3"
+  <div class="list-group-item mb-4"
     [ngClass]="{'list-group-item-danger': personDetails?.warning && personDetails?.warning?.id !== 1}"
     *ngIf="personDetails && !isClickable">
     <ng-container *ngTemplateOutlet="content"></ng-container>
   </div>
-  <a class="list-group-item list-group-item-action mb-3"
+  <a class="list-group-item list-group-item-action mb-4"
     [routerLink]="['/contact-centre/detail/', personDetails?.personId]"  [queryParams]="{showNotes: true}"
     [ngClass]="{'list-group-item-danger': personDetails?.warning && personDetails?.warning?.id !== 1}"
     *ngIf="personDetails && isClickable">

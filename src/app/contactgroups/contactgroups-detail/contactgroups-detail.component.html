@@ -54,7 +54,7 @@
     <div class="col-xl-8">
       <h5>Detail</h5>
       <app-person-details [personDetails]="searchedPersonDetails" [isClickable]="false"></app-person-details>
-      <div class="row mb-3">
+      <div class="row mb-4">
         <div class="col-12">
           <h5>Contact groups</h5>
           <app-subnav>
@@ -96,7 +96,7 @@
         </div>
       </div>
       <div #spacer></div>
-      <div class="sub-info mb-3" stickyThing [spacer]="spacer" marginTop="66">
+      <div class="sub-info mb-4" stickyThing [spacer]="spacer" marginTop="66">
         <h5>More Info</h5>
         <accordion [closeOthers]="true">
           <accordion-group *ngFor="let item of subNav">
