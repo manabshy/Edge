@@ -29,13 +29,13 @@
         <div class="col-sm col-xl-12">
           <dl class="row">
             <dt class="col-4 d-sm-none d-xl-block">Start date</dt>
-            <dd class="col">{{(item?.managedStartDate | date: 'd/MM/yyyy') || "-"}}</dd>
+            <dd class="col monospace">{{(item?.managedStartDate | date: 'dd/MM/yyyy') || "-"}}</dd>
           </dl>
         </div>
         <div class="col-sm col-xl-12">
           <dl class="row">
             <dt class="col-4 d-sm-none d-xl-block">End date</dt>
-            <dd class="col">{{(item?.managedEndDate | date: 'd/MM/yyyy') || "-"}}</dd>
+            <dd class="col monospace">{{(item?.managedEndDate | date: 'dd/MM/yyyy') || "-"}}</dd>
           </dl>
         </div>
         <div class="col-sm col-xl-12">

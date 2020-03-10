@@ -42,7 +42,7 @@
         <div class="col-sm col-xl-12" *ngIf="valuation?.suggestedAskingPrice">
           <dl class="row">
             <dt class="col-4 d-sm-none d-xl-block">Sale</dt>
-            <dd class="col">
+            <dd class="col monospace">
               {{valuation?.suggestedAskingPrice | currency:'GBP':'symbol':'1.0-0' || '-'}}
             </dd>
           </dl>
@@ -50,7 +50,7 @@
         <div class="col-sm col-xl-12" *ngIf="valuation?.suggestedAskingRentLongLet">
           <dl class="row">
             <dt class="col-4 d-sm-none d-xl-block">Long Let</dt>
-            <dd class="col">
+            <dd class="col monospace">
               {{valuation?.suggestedAskingRentLongLet ? (valuation?.suggestedAskingRentLongLet | currency:'GBP':'symbol':'1.0-0') + ' pw' : '-'}}
             </dd>
           </dl>
@@ -58,7 +58,7 @@
         <div class="col-sm col-xl-12" *ngIf="valuation?.suggestedAskingRentShortLet">
           <dl class="row">
             <dt class="col-4 d-sm-none d-xl-block">Short Let</dt>
-            <dd class="col">
+            <dd class="col monospace">
               {{valuation?.suggestedAskingRentShortLet ?( valuation?.suggestedAskingRentShortLet | currency:'GBP':'symbol':'1.0-0') + ' pw' : '-'}}
             </dd>
           </dl>
@@ -72,7 +72,7 @@
         <div class="col-sm col-xl-12">
           <dl class="row">
             <dt class="col-4 d-sm-none d-xl-block">Valued</dt>
-            <dd class="col">{{(valuation?.valuationDate | date: 'd/MM/yyyy') || '-'}}</dd>
+            <dd class="col monospace">{{(valuation?.valuationDate | date: 'dd/MM/yyyy') || '-'}}</dd>
           </dl>
         </div>
       </div>

@@ -24,7 +24,7 @@
         <div class="col-sm col-xl-12">
           <dl class="row">
             <dt class="col-4 d-sm-none d-xl-block">Received</dt>
-            <dd class="col">{{offer?.offerReceivedDate| date: 'd/MM/yyyy'}}</dd>
+            <dd class="col monospace">{{offer?.offerReceivedDate| date: 'dd/MM/yyyy'}}</dd>
           </dl>
         </div>
         <div class="col-sm col-xl-12">
@@ -43,7 +43,7 @@
         <div class="col-sm col-xl-12">
           <dl class="row">
             <dt class="col-4 d-sm-none d-xl-block">Amount</dt>
-            <dd class="col">{{offer?.amount | currency:'GBP':'symbol':'1.0-0'}}</dd>
+            <dd class="col monospace">{{offer?.amount | currency:'GBP':'symbol':'1.0-0'}}</dd>
           </dl>
         </div>
         <div class="col-sm col-xl-12">

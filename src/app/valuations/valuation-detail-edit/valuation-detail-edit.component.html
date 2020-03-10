@@ -310,8 +310,12 @@
                 <h5 class="card-title">Sell</h5>
                 <label class="small" for="sellValue">Value</label>
                 <input type="text" name="sellValue" id="sellValue" class="form-control form-control-sm"
-                  formControlName="suggestedAskingPrice" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                  formControlName="suggestedAskingPrice" 
+                  *ngIf="!(!isEditable && !isNewValuation)"
                   [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}">
+                <div class="small" *ngIf="!isEditable && !isNewValuation">
+                  <strong>{{valuationForm.get('suggestedAskingPrice').value | currency:'GBP':'symbol':'1.0-0'}}</strong>
+                </div>
               </div>
             </div>
             <div class="card"
@@ -322,14 +326,20 @@
                   <label class="small" for="longLetValue">Value (per week)</label>
                   <input type="text" name="longLetValue" id="longLetValue" class="form-control form-control-sm"
                     formControlName="suggestedAskingRentLongLet"
-                    [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                    *ngIf="!(!isEditable && !isNewValuation)"
                     [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}">
+                  <div class="small" *ngIf="!isEditable && !isNewValuation">
+                    <strong>{{valuationForm.get('suggestedAskingRentLongLet').value | currency:'GBP':'symbol':'1.0-0'}}</strong>
+                  </div>
                 </div>
                 <label class="small" for="longLetMonthlyValue">Value (per month)</label>
                 <input type="text" name="longLetMonthlyValue" id="longLetMonthlyValue"
                   class="form-control form-control-sm" formControlName="suggestedAskingRentLongLetMonthly"
-                  [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                  *ngIf="!(!isEditable && !isNewValuation)"
                   [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}">
+                <div class="small" *ngIf="!isEditable && !isNewValuation">
+                  <strong>{{valuationForm.get('suggestedAskingRentLongLetMonthly').value | currency:'GBP':'symbol':'1.0-0'}}</strong>
+                </div>
               </div>
             </div>
             <div class="card"
@@ -340,14 +350,20 @@
                   <label class="small" for="shortLetValue">Value (per week)</label>
                   <input type="text" name="shortLetValue" id="shortLetValue" class="form-control form-control-sm"
                     formControlName="suggestedAskingRentShortLet"
-                    [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                    *ngIf="!(!isEditable && !isNewValuation)"
                     [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}">
+                  <div class="small" *ngIf="!isEditable && !isNewValuation">
+                    <strong>{{valuationForm.get('suggestedAskingRentShortLet').value | currency:'GBP':'symbol':'1.0-0'}}</strong>
+                  </div>
                 </div>
                 <label class="small" for="shortLetMonthlyValue">Value (per month)</label>
                 <input type="text" name="shortLetMonthlyValue" id="shortLetMonthlyValue"
                   class="form-control form-control-sm" formControlName="suggestedAskingRentShortLetMonthly"
-                  [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                  *ngIf="!(!isEditable && !isNewValuation)"
                   [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}">
+                <div class="small" *ngIf="!isEditable && !isNewValuation">
+                  <strong>{{valuationForm.get('suggestedAskingRentShortLetMonthly').value | currency:'GBP':'symbol':'1.0-0'}}</strong>
+                </div>
               </div>
             </div>
           </div>

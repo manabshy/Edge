@@ -26,7 +26,7 @@
         <div class="col-sm col-xl-12">
           <dl class="row">
             <dt class="col-4 d-sm-none d-xl-block">Instructed</dt>
-            <dd class="col">{{instruction?.instructionDate| date: 'd/MM/yyyy'}}</dd>
+            <dd class="col monospace">{{instruction?.instructionDate| date: 'dd/MM/yyyy'}}</dd>
           </dl>
         </div>
         <div class="col-sm col-xl-12">
@@ -45,14 +45,14 @@
         <div class="col-sm col-xl-12">
           <dl class="row">
             <dt class="col-4 d-sm-none d-xl-block">Price</dt>
-            <dd class="col">{{instruction?.amount | currency:'GBP':'symbol':'1.0-0'}}</dd>
+            <dd class="col monospace">{{instruction?.amount | currency:'GBP':'symbol':'1.0-0'}}</dd>
           </dl>
         </div>
         <div class="col-sm col-xl-12" *ngIf="isShortLet">
           <dl class="row">
             <dt class="col-4 d-sm-none d-xl-block">Short Let Rent</dt>
             <ng-container *ngIf="instruction.shortLetAmount > 0; else noAmount">
-              <dd class="col">{{instruction?.shortLetAmount | currency:'GBP':'symbol':'1.0-0'}}</dd>
+              <dd class="col monospace">{{instruction?.shortLetAmount | currency:'GBP':'symbol':'1.0-0'}}</dd>
             </ng-container>
             <ng-template #noAmount>
               <dd class="col"></dd>
