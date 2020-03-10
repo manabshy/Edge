@@ -16,10 +16,12 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
   @Input() label: string;
   @Input() readOnly = false;
   @Input() isMultiple: boolean = false;
+  @Input() canRebook: boolean;
   @Input() property: Property;
   @Input() propertyList: Property[];
   @Output() selectedProperty = new EventEmitter<any>();
   @Output() selectedPropertyList = new EventEmitter<any>();
+  @Output() rebookedProperty = new EventEmitter<number>();
   @ViewChild('selectedPropertyInput', { static: true }) selectedPropertyInput: ElementRef;
   @ViewChild('searchPropertyInput', { static: true }) searchPropertyInput: ElementRef;
   properties: PropertyAutoComplete[];
@@ -158,6 +160,16 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
       const index = this.selectedProperties.findIndex(x => x.propertyId === propertyId)
       this.selectedProperties.splice(index, 1);
       this.selectedPropertyList.emit(this.selectedProperties);
+    }
+  }
+
+  rebookProperty(propertyId: number) {
+    if (this.selectedProperties && this.selectedProperties.length) {
+      const property = this.selectedProperties.filter(x => x.propertyId === propertyId)
+      this.selectedProperties = property;
+      this.selectedPropertyList.emit(this.selectedProperties);
+      this.rebookedProperty.emit(propertyId);
+      this.canRebook = false;
     }
   }
 

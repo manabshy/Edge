@@ -60,6 +60,8 @@ export class AddDiaryEventComponent implements OnInit {
   NumberOfPeopleLabel: string;
   eventStaffMembers: BaseStaffMember[];
   showMorePeople = true;
+  canRebook = false;
+  isRebook: boolean;
 
   get hours() {
     const result = [];
@@ -175,12 +177,19 @@ export class AddDiaryEventComponent implements OnInit {
               this.isEditable = true;
               this.setReminder(this.id, event.staffMembers, true);
             }
+            this.rebookViewings(event);
             this.toggleFlags(+event.eventTypeId);
             this.setStaffMemberIdList(event.staffMembers);
             this.populateForm(event);
             console.log('event details', event);
           }
         });
+    }
+  }
+
+  private rebookViewings(event: DiaryEvent) {
+    if (+event.eventTypeId === DiaryEventTypesEnum.ViewingSales || +event.eventTypeId === DiaryEventTypesEnum.ViewingLettings) {
+      event.properties && event.properties.length ? this.canRebook = true : this.canRebook = false;
     }
   }
 
@@ -356,10 +365,21 @@ export class AddDiaryEventComponent implements OnInit {
   }
 
   getSelectedProperties(properties: Property[]) {
-    console.log('properties here', properties);
-    this.diaryEventForm.get('properties').setValue(properties);
+    if (properties && properties.length) {
+      console.log('properties here', properties);
+      this.diaryEventForm.get('properties').setValue(properties);
+    }
   }
 
+  getRebookedPropertyId(propertyId: number) {
+    console.log('rebooked property id here', propertyId);
+    if (propertyId) {
+      this.isRebook = true;
+      this.diaryEventForm.markAsDirty();
+    } else {
+      this.isRebook = false;
+    }
+  }
   getSelectedContactGroups(contacts: Signer[]) {
     console.log('contact groups  here', contacts);
     this.diaryEventForm.get('contacts').setValue(contacts);
@@ -404,10 +424,9 @@ export class AddDiaryEventComponent implements OnInit {
       event.staffMembers = [];
       event.staffMembers = this.currentStaffMember;
     }
-    console.log('event members', 'color:green', event.staffMembers);
     this.setReminder(this.id, event.staffMembers);
 
-    if (this.isNewEvent) {
+    if (this.isNewEvent || this.isRebook) {
       this.diaryEventService.addDiaryEvent(event).subscribe(res => {
         if (res) {
           this.onSaveComplete(res);
@@ -438,14 +457,16 @@ export class AddDiaryEventComponent implements OnInit {
   setReminder(id: number, staffMembers: BaseStaffMember[], isPatch = false) {
     if (staffMembers && staffMembers.length) {
       const member = staffMembers.find(x => x.staffMemberId === id);
-      if (isPatch) {
-        this.diaryEventForm.patchValue({ duration: member.reminderUnits, durationType: member.reminderUnitType, hasReminder: member.hasReminder });
-        member.hasReminder ? this.isReminder = true : this.isReminder = false;
-      } else {
-        member.hasReminder = true;
-        member.reminderUnits = +this.diaryEventForm.get('duration').value || 0;
-        member.reminderUnitType = +this.diaryEventForm.get('durationType').value || 0;
+      if (member) {
+        if (isPatch) {
+          this.diaryEventForm.patchValue({ duration: member.reminderUnits, durationType: member.reminderUnitType, hasReminder: member.hasReminder });
+          member.hasReminder ? this.isReminder = true : this.isReminder = false;
+        } else {
+          member.hasReminder = true;
+          member.reminderUnits = +this.diaryEventForm.get('duration').value || 0;
+          member.reminderUnitType = +this.diaryEventForm.get('durationType').value || 0;
 
+        }
       }
     }
   }
