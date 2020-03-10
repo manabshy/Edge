@@ -29,6 +29,9 @@
           <button class="btn btn-light btn-sm ml-2" type="button" (click)="removeProperty(property?.propertyId)">
             Remove
           </button>
+          <button *ngIf="canRebook" class="btn btn-light btn-sm ml-2" type="button" (click)="rebookProperty(property?.propertyId)">
+            Rebook
+          </button>
         </div>
       </div>
     </div>

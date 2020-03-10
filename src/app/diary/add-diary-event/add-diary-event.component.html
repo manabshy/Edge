@@ -43,18 +43,21 @@
           </app-staff-member-finder>
         </ng-container>
         <ng-template #staffList>
-          <div class="custom-label" *ngFor="let member of diaryEvent?.staffMembers; last as isLast; first as isFirst trackBy:trackByFn">
+          <div class="custom-label"
+            *ngFor="let member of diaryEvent?.staffMembers; last as isLast; first as isFirst trackBy:trackByFn">
             <ng-container *ngIf="eventStaffMembers?.length < 6; else moreMembers">
               <div>{{member?.fullName}}</div>
             </ng-container>
             <ng-template #moreMembers>
               <div>{{member?.fullName}}</div>
-              <button type="button" class="btn btn-link px-0" (click)="showAllMembers()" *ngIf="isLast && showMorePeople">+
+              <button type="button" class="btn btn-link px-0" (click)="showAllMembers()"
+                *ngIf="isLast && showMorePeople">+
                 {{NumberOfPeopleLabel}}
               </button>
-              <button type="button" class="btn btn-link px-0" (click)="showFewMembers()" *ngIf="isLast &&!showMorePeople">
+              <button type="button" class="btn btn-link px-0" (click)="showFewMembers()"
+                *ngIf="isLast &&!showMorePeople">
                 show less
-            </button>
+              </button>
             </ng-template>
           </div>
         </ng-template>
@@ -62,8 +65,9 @@
     </div>
     <hr>
     <ng-container *ngIf="showProperties">
-      <app-property-finder (selectedPropertyList)="getSelectedProperties($event)" [isMultiple]="true"
-        [label]="propertyLabel" [property]="property" [propertyList]="diaryEvent?.properties">
+      <app-property-finder (selectedPropertyList)="getSelectedProperties($event)"
+        (rebookedProperty)="getRebookedPropertyId($event)" [isMultiple]="true" [label]="propertyLabel"
+        [property]="property" [canRebook]="canRebook" [propertyList]="diaryEvent?.properties">
       </app-property-finder>
       <hr class="mt-0">
     </ng-container>
