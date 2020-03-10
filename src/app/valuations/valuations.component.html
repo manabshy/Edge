@@ -23,7 +23,8 @@
           <div class="col-sm form-group">
             <label class="small" for="date">Date</label>
             <input type="text" id="date" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
-              [bsConfig]="{showWeekNumbers:false,  dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}" bsDatepicker formControlName="date" >
+              [bsConfig]="{showWeekNumbers:false,  dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
+              bsDatepicker formControlName="date">
           </div>
           <div class="col-sm form-group">
             <label class="small" for="statusId">Status</label>
@@ -35,14 +36,12 @@
           </div>
           <div class="col-sm form-group">
             <label class="small" for="valuerId">Valuer</label>
-            <!-- <select class="custom-select custom-select-sm" id="valuerId" formControlName="valuerId">
-              <option selected value="0"></option>
-              <option *ngFor="let valuer of valuers" [value]=valuer.staffMemberId>{{valuer?.fullName}}</option>
-            </select> -->
-            <app-staff-member-finder [isMultiple]="false" (selectedStaffMemberId)="getSelectedStaffMemberId($event)" [listType]="'allValuers'"></app-staff-member-finder>
+            <app-staff-member-finder [isMultiple]="false" (selectedStaffMemberId)="getSelectedStaffMemberId($event)"
+              [listType]="'allValuers'"></app-staff-member-finder>
           </div>
           <div class="col-sm form-group">
-            <app-office-finder [officeId] = "officeId" (selectedOfficeId)= "getSelectedOfficeId($event)" [fullWidth]="true"></app-office-finder>
+            <app-office-finder [officeId]="officeId" (selectedOfficeId)="getSelectedOfficeId($event)"
+              [fullWidth]="true"></app-office-finder>
           </div>
         </div>
       </div>

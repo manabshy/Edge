@@ -21,6 +21,7 @@ export class OfficeFinderComponent implements OnInit, OnChanges {
   offices$ = new Observable<Office[]>();
   officeFinderForm: FormGroup;
   isInvisible: boolean;
+  isClearable = true;
 
   constructor(private officeService: OfficeService, private storage: StorageMap) { }
 
@@ -63,10 +64,12 @@ export class OfficeFinderComponent implements OnInit, OnChanges {
 
   onOfficeChange(office: Office) {
     if (office) {
-      console.log('selected office', office);
+      this.officeId = office.officeId;
       this.selectedOfficeId.emit(office.officeId);
     } else {
+      this.officeId = 0;
       this.selectedOfficeId.emit(0);
     }
+    // this.officeFinderForm.patchValue({ officeId: this.officeId });
   }
 }

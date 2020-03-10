@@ -3,7 +3,7 @@
     <label for="office"
       [ngClass]="{'col-form-label col-form-label-sm col-sm-2': !fullWidth, 'small': fullWidth, 'mb-0': readOnly}">Office</label>
     <div [ngClass]="{'col-sm-3': !fullWidth}">
-      <ng-select id="office" placeholder="Select Office" [items]="offices$ |async" [clearable]="true" bindLabel="name" [readonly]="readOnly"
+      <ng-select id="office" placeholder="Select Office" [items]="offices$ |async" [clearable]="isClearable" bindLabel="name" [readonly]="readOnly"
         bindValue="officeId" [virtualScroll]="true" groupBy="category" (change)="onOfficeChange($event)"
         formControlName="officeId"  [ngClass]="{'is-invalid': isRequired}">
       </ng-select>

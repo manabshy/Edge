@@ -205,11 +205,8 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
   }
 
   getSelectedOfficeId(id: number) {
-    console.log('office Id', id)
     this.propertyForm.get('officeId').setValue(id);
-    console.log('office Id control', this.propertyForm.get('officeId').value)
-    // id > 0 ? this.isOfficeIdRequired = false : this.isOfficeIdRequired = true;
-    console.log('office Id required', this.isOfficeIdRequired)
+    id ? this.isOfficeIdRequired = false : this.isOfficeIdRequired = true;
   }
 
   getAddress(address: Address) {
@@ -285,6 +282,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
     const isOwnerChanged = this.lastKnownOwner || this.lastKnownOwner == null;
     console.log(this.lastKnownOwner);
     const control = this.propertyForm.get('address');
+    this.setOfficeIdValidator();
     this.logValidationErrors(this.propertyForm, true);
     control.clearValidators();
     control.updateValueAndValidity();
@@ -353,6 +351,15 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
           this.isSubmitting = false;
         });
       }
+    }
+  }
+
+  setOfficeIdValidator() {
+    const officeIdControl = this.propertyForm.get('officeId');
+    if (!officeIdControl.value) {
+      this.isOfficeIdRequired = true;
+      officeIdControl.setValidators([Validators.min(1), Validators.required]);
+      officeIdControl.updateValueAndValidity();
     }
   }
 
