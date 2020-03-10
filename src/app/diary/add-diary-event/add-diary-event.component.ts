@@ -424,11 +424,9 @@ export class AddDiaryEventComponent implements OnInit {
       event.staffMembers = [];
       event.staffMembers = this.currentStaffMember;
     }
-    console.log('event members', 'color:green', event.staffMembers);
     this.setReminder(this.id, event.staffMembers);
 
     if (this.isNewEvent || this.isRebook) {
-      console.log('%chereee', 'color:green',this.isRebook);
       this.diaryEventService.addDiaryEvent(event).subscribe(res => {
         if (res) {
           this.onSaveComplete(res);
