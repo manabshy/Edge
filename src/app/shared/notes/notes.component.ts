@@ -27,7 +27,7 @@ export class NotesComponent implements OnInit, OnChanges {
   @Input() propertyNotes: PropertyNote[];
   @Input() showNoteInput: boolean = true;
 
-  notes: any;
+  notes = [];
   tests: any;
   contactPeople: Person[];
   contact: Person[];
@@ -77,7 +77,7 @@ export class NotesComponent implements OnInit, OnChanges {
   }
 
   setFlag(noteId: number, isImportantFlag: boolean) {
-    if (this.notes.propertyId) {
+    if (this.notes.filter(x => x.propertyId)) {
       return;
     }
     this.notes.forEach((x) => {
@@ -126,21 +126,35 @@ export class NotesComponent implements OnInit, OnChanges {
     const hasNotes = url.includes('showNotes=true');
     if (hasNotes) {
       if (totalHeight >= scrollHeight && !this.bottomReached) {
-        console.log('xxxxxxxxxxxxxxxxxxxx..........', this.notes)
-        this.page++;
-        if (this.contactPeople && this.contactPeople.length) {
-          this.contactGroupService.contactNotePageNumberChanged(this.page);
-          console.log('in contact notes..........', this.contactGroupNotes)
-        }
-        if (this.isPersonNote) {
-          this.contactGroupService.personNotePageNumberChanged(this.page);
-          console.log('in person notes..........', this.personNotes)
-        }
-        if (this.isPropertyNote) {
-          this.propertyService.propertyNotePageNumberChanged(this.page);
-          console.log('in property notes..........', this.propertyNotes)
+        console.log('%c before initial call..........', 'color:green', this.bottomReached)
+        if (this.notes && this.notes.length) {
+          this.page++;
+          this.setNewContactNotePageNumber();
+          this.setNewPersonNotePageNumber();
+          this.setNewPropertyNotePageNumber();
         }
       }
+    }
+  }
+
+  private setNewPropertyNotePageNumber() {
+    if (this.isPropertyNote) {
+      this.propertyService.propertyNotePageNumberChanged(this.page);
+      console.log('in property notes..........', this.propertyNotes);
+    }
+  }
+
+  private setNewPersonNotePageNumber() {
+    if (this.isPersonNote) {
+      this.contactGroupService.personNotePageNumberChanged(this.page);
+      console.log('in person notes..........', this.personNotes);
+    }
+  }
+
+  private setNewContactNotePageNumber() {
+    if (this.contactPeople && this.contactPeople.length) {
+      this.contactGroupService.contactNotePageNumberChanged(this.page);
+      console.log('in contact notes..........', this.contactGroupNotes);
     }
   }
 
