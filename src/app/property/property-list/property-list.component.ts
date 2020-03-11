@@ -16,7 +16,6 @@ export class PropertyListComponent implements OnInit, OnChanges {
   @Input() pageNumber: number;
   page: number;
 
-
   constructor(private propertyService: PropertyService, private router: Router) { }
 
   ngOnInit() {
@@ -46,9 +45,11 @@ export class PropertyListComponent implements OnInit, OnChanges {
 
     if (isPropertyCentre) {
       if (totalHeight >= scrollHeight && !this.bottomReached) {
-        this.page++;
-        this.propertyService.propertyPageNumberChanged(this.page);
-        console.log('properties page number', this.page)
+        if (this.properties && this.properties.length) {
+          this.page++;
+          this.propertyService.propertyPageNumberChanged(this.page);
+          console.log('properties page number', this.page)
+        }
       }
     }
   }
