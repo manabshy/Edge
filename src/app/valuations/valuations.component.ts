@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { Observable, EMPTY } from 'rxjs';
 import { ValuationService } from './shared/valuation.service';
-import { debounceTime, distinctUntilChanged, switchMap, catchError, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, catchError, takeUntil, tap } from 'rxjs/operators';
 import { Valuation, ValuationRequestOption, ValuationStatusEnum, getValuationStatuses, ValuationStatuses } from './shared/valuation';
 import { WedgeError, SharedService } from '../core/services/shared.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
@@ -64,8 +64,6 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
     this.setupForm();
     this.getValuations();
     this.statuses = ValuationStatuses;
-    // this.statuses = getValuationStatuses();
-
 
     this.storage.get('allstaffmembers').subscribe(data => {
       if (data) {
@@ -75,25 +73,11 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
       }
     });
 
-    // this.storage.get('allListers').subscribe(data => {
-    //   if (data) {
-    //     this.valuers = data as StaffMember[];
-    //   } else {
-    //     this.staffMemberService.getValuers().pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => this.valuers = result);
-    //   }
-    // });
-
-    // this.storage.get('offices').subscribe(data => {
-    //   if (data) {
-    //     this.offices = data as Office[];
-    //   } else {
-    //     this.officeService.getOffices().pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => this.offices = result);
-    //   }
-    // });
 
     this.valuationService.valuationPageNumberChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(newPageNumber => {
       this.page = newPageNumber;
       this.getNextValuationsPage(this.page);
+      console.log('%c HEYYYY', 'color: blue', this.page)
     });
 
     this.suggestions = (text$: Observable<string>) =>
@@ -139,7 +123,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
       officeId: this.officeControl.value
     } as ValuationRequestOption;
 
-    this.valuationService.getValuations(request).subscribe(result => {
+    this.valuationService.getValuations(request).pipe(tap(res => console.log('res', res)), distinctUntilChanged()).subscribe(result => {
       if (this.searchTerm && this.searchTerm.length) {
         if (result && !result.length) {
           this.isMessageVisible = true;
@@ -149,7 +133,11 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
         }
       }
       if (result && result.length) {
-        this.valuations = this.valuations.concat(result);
+        if (request.page === 1) {
+          this.valuations = result;
+        } else {
+          this.valuations = this.valuations.concat(result);
+        }
       }
     }, (error: WedgeError) => {
       this.valuations = [];

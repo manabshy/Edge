@@ -105,7 +105,7 @@ export class ContactGroupsComponent implements OnInit {
     this.contactGroups = [];
     this.suggestedTerm ? this.searchTerm = this.suggestedTerm : this.searchTerm = this.contactFinderForm.get('searchTerm').value;
     this.getNextContactGroupsPage(this.page);
-    if(submit) {
+    if (submit) {
       this.sharedService.scrollElIntoView('list-group');
     }
   }
@@ -127,7 +127,11 @@ export class ContactGroupsComponent implements OnInit {
       }
 
       if (result) {
-        this.contactGroups = _.concat(this.contactGroups, result);
+        if (page === 1) {
+          this.contactGroups = result;
+        } else {
+          this.contactGroups = _.concat(this.contactGroups, result);
+        }
         if (this.contactGroups && this.contactGroups.length) {
           this.contactGroups.forEach(x => {
             x.warning = this.sharedService.showWarning(x.warningStatusId, this.warnings, x.warningStatusComment);

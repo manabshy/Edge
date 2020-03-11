@@ -74,7 +74,7 @@ export class PropertyComponent extends BaseComponent implements OnInit {
     this.suggestedTerm ? this.searchTerm = this.suggestedTerm : this.searchTerm = this.propertyFinderForm.value.searchTerm;
     AppUtils.propertySearchTerm = this.searchTerm;
     this.getNextPropertyPage(this.page);
-    if(submit) {
+    if (submit) {
       this.sharedService.scrollElIntoView('list-group');
     }
   }
@@ -94,8 +94,12 @@ export class PropertyComponent extends BaseComponent implements OnInit {
           this.isMessageVisible = false;
         }
       }
-      if (result) {
-        this.properties = _.concat(this.properties, result);
+      if (result && result.length) {
+        if (requestOptions.page === 1) {
+          this.properties = result;
+        } else {
+          this.properties = _.concat(this.properties, result);
+        }
       }
 
     }, error => {
@@ -117,7 +121,7 @@ export class PropertyComponent extends BaseComponent implements OnInit {
         this.isHintVisible = true;
       }
     }
-    
+
   }
 
   selectedSuggestion(event: any) {

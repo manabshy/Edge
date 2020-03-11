@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, HostListener } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, HostListener, OnDestroy } from '@angular/core';
 import { Valuation, ValuationStatusEnum } from '../shared/valuation';
 import { ValuationService } from '../shared/valuation.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -8,7 +8,7 @@ import { Router, ActivatedRoute } from '@angular/router';
   templateUrl: './valuation-list.component.html',
   styleUrls: ['./valuation-list.component.scss']
 })
-export class ValuationListComponent implements OnInit, OnChanges {
+export class ValuationListComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() valuations: Valuation[];
   @Input() searchTerm: string;
@@ -16,7 +16,7 @@ export class ValuationListComponent implements OnInit, OnChanges {
   @Input() pageNumber: number;
   page: number;
 
-  constructor(private valuationService: ValuationService,private router: Router, private activatedRoute: ActivatedRoute) { }
+  constructor(private valuationService: ValuationService, private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
   }
@@ -32,7 +32,7 @@ export class ValuationListComponent implements OnInit, OnChanges {
   }
 
   navigateTo(path) {
-    this.router.navigate(path, {relativeTo: this.activatedRoute});
+    this.router.navigate(path, { relativeTo: this.activatedRoute });
   }
 
   onScrollDown() {
@@ -48,12 +48,21 @@ export class ValuationListComponent implements OnInit, OnChanges {
     const url = this.router.url;
     const isValuationsRegister = url.endsWith('/valuations-register');
 
-   if(isValuationsRegister) {
+    if (isValuationsRegister) {
       if (totalHeight >= scrollHeight && !this.bottomReached) {
-        this.page++;
-        this.valuationService.valuationPageNumberChanged(this.page);
-        console.log('valuations page number', this.page)
+        console.log('%c first request NOOOOO', 'color:green', this.page)
+       if(this.valuations && this.valuations.length) {
+         this.page++;
+         console.log('%c Not first request', 'color:purple', this.page)
+         this.valuationService.valuationPageNumberChanged(this.page);
+          console.log('valuations page number', this.page)
+       }
       }
-   }
+    }
+  }
+
+  ngOnDestroy() {
+    this.valuationService.valuationPageNumberChanged(0);
+    console.log('%c on destroy ', 'color:blue', this.page)
   }
 }

@@ -21,5 +21,8 @@
     ],
     "resolveJsonModule": true,
     "esModuleInterop": true
+  },
+  "angularCompilerOptions": {
+    "strictTemplates": false
   }
 }
