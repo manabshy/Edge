@@ -539,8 +539,6 @@ export class AddDiaryEventComponent implements OnInit {
           this.isTelRequired = true;
           contactsControl.setErrors({ 'telephoneRequired': true });
           console.log('%c contacts control in tele val', 'color:purple', contactsControl);
-        } else {
-          this.isTelRequired = false;
         }
       });
     }
