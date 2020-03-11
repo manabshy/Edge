@@ -37,6 +37,7 @@
               (click)="remove(signer?.contactGroupId,true)">
               Remove
             </button>
+            <small *ngIf="!signer.phoneNumber" class="text-danger ml-2">Telephone number for contact is required</small>
           </div>
         </ng-container>
       </div>

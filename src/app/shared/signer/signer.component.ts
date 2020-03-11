@@ -27,6 +27,7 @@ export class SignerComponent implements OnInit, OnChanges {
   @Input() createdSigner: Signer;
   @Input() label: string;
   @Input() contactRequiredWarning: string;
+  @Input() isTelRequired = false;
   @ViewChild('selectedSignerInput', { static: false }) selectedSignerInput: ElementRef;
   @ViewChild('searchSignerInput', { static: true }) searchSignerInput: ElementRef;
   signerFinderForm: FormGroup;
@@ -41,6 +42,8 @@ export class SignerComponent implements OnInit, OnChanges {
   suggestedTerm: any;
   searchTerm = '';
   noSuggestions: boolean = false;
+
+
   get signerNames(): FormControl {
     if (this.signerFinderForm) {
       return <FormControl>this.signerFinderForm.get('selectedSigner');
@@ -162,7 +165,6 @@ export class SignerComponent implements OnInit, OnChanges {
     if (this.selectedSigners) {
       this.selectedSigners.push(signer);
       this.hideLabel = false;
-      console.log('selected signers list here ZZZZZx', this.selectedSigners);
       this.selectedSignersList.emit(this.selectedSigners);
       this.signerFinderForm.get('searchTerm').setValue('');
     }

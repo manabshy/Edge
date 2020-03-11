@@ -77,7 +77,7 @@
     <fieldset *ngIf="showContacts">
       <legend class="fieldset-title">Contacts</legend>
       <app-signer [label]="contactLabel" [isMultiple]="true" (selectedSignersList)="getSelectedContactGroups($event)"
-        [contactList]="diaryEvent?.contacts" [contactRequiredWarning]="contactRequiredWarning">
+        [contactList]="diaryEvent?.contacts" [contactRequiredWarning]="contactRequiredWarning" [isTelRequired]="isTelRequired">
       </app-signer>
     </fieldset>
     <fieldset *ngIf="showOthers">

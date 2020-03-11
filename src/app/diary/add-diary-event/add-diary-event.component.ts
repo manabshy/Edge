@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { DiaryEvent, DiaryEventTypesEnum, reminderUnitTypes } from '../shared/diary';
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { DiaryEventService } from '../shared/diary-event.service';
@@ -28,7 +28,8 @@ import * as _ from 'lodash';
 export class AddDiaryEventComponent implements OnInit {
   eventTypes: InfoDetail[];
   diaryEventForm: FormGroup;
-  isSubmitting: boolean;
+  isSubmitting: boolean = false; isTelRequired: boolean;
+  ;
   minutes = ['00', '15', '30', '45'];
   durationTypes = reminderUnitTypes;
   isNewEvent: boolean;
@@ -521,10 +522,28 @@ export class AddDiaryEventComponent implements OnInit {
       } else {
         this.contactRequiredWarning = '';
       }
+
+      this.setTelephoneValidator(contactsControl);
     }
     console.log('%cpropertyRequiredWarning', 'color:green', this.propertyRequiredWarning);
     console.log('%c properties control', 'color:green', propertiesControl);
     console.log('%c contacts control', 'color:red', contactsControl);
+  }
+
+  setTelephoneValidator(contactsControl: AbstractControl) {
+    const contacts = contactsControl.value;
+    if (contacts) {
+      contacts.forEach((x: Signer) => {
+        if (!x.phoneNumber) {
+          console.log('%ctelephone number is required', 'color:green', x);
+          this.isTelRequired = true;
+          contactsControl.setErrors({ 'telephoneRequired': true });
+          console.log('%c contacts control in tele val', 'color:purple', contactsControl);
+        } else {
+          this.isTelRequired = false;
+        }
+      });
+    }
   }
 
   trackByFn(index, item: BaseStaffMember) {
