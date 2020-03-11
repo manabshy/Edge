@@ -62,6 +62,8 @@ export class AddDiaryEventComponent implements OnInit {
   showMorePeople = true;
   canRebook = false;
   isRebook: boolean;
+  propertyRequiredWarning = '';
+  contactRequiredWarning: string;
 
   get hours() {
     const result = [];
@@ -365,15 +367,14 @@ export class AddDiaryEventComponent implements OnInit {
   }
 
   getSelectedProperties(properties: Property[]) {
+    this.diaryEventForm.markAsDirty();
     if (properties && properties.length) {
-      console.log('properties here', properties);
       this.diaryEventForm.get('properties').setValue(properties);
-      this.diaryEventForm.markAsDirty();
     }
+    this.setValidators();
   }
 
   getRebookedPropertyId(propertyId: number) {
-    console.log('rebooked property id here', propertyId);
     if (propertyId) {
       this.isRebook = true;
       this.diaryEventForm.markAsDirty();
@@ -381,19 +382,19 @@ export class AddDiaryEventComponent implements OnInit {
       this.isRebook = false;
     }
   }
+
   getSelectedContactGroups(contacts: Signer[]) {
+    this.diaryEventForm.markAsDirty();
     if (contacts && contacts.length) {
-      console.log('contact groups  here', contacts);
       this.diaryEventForm.get('contacts').setValue(contacts);
-      this.diaryEventForm.markAsDirty();
     }
+    this.setValidators();
   }
 
   getSelectedStaffMembers(staffMembers: BaseStaffMember[]) {
+    this.diaryEventForm.markAsDirty();
     if (staffMembers && staffMembers.length) {
-      console.log('staffMembers here', staffMembers);
       this.diaryEventForm.get('staffMembers').setValue(staffMembers);
-      this.diaryEventForm.markAsDirty();
     }
   }
 
@@ -411,6 +412,7 @@ export class AddDiaryEventComponent implements OnInit {
   }
 
   saveDiaryEvent() {
+    this.setValidators();
     this.sharedService.logValidationErrors(this.diaryEventForm, true);
     if (this.diaryEventForm.valid) {
       if (this.diaryEventForm.dirty) {
@@ -500,9 +502,29 @@ export class AddDiaryEventComponent implements OnInit {
       .then(() => this.router.navigate(['/diary/edit', diaryEvent.diaryEventId]));
   }
 
-  private setUtcDate(date) {
-    return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(),
-      date.getSeconds(), date.getMilliseconds()));
+  setValidators() {
+    const propertiesControl = this.diaryEventForm.get('properties');
+    const contactsControl = this.diaryEventForm.get('contacts');
+    const eventTypeIdControl = this.diaryEventForm.get('eventTypeId');
+    if (+eventTypeIdControl.value === DiaryEventTypesEnum.ViewingLettings || +eventTypeIdControl.value === DiaryEventTypesEnum.ViewingSales) {
+      if (!propertiesControl.value || (propertiesControl.value && !propertiesControl.value.length)) {
+        propertiesControl.setValidators(Validators.required);
+        propertiesControl.updateValueAndValidity();
+        this.propertyRequiredWarning = 'Property is required';
+      } else {
+        this.propertyRequiredWarning = '';
+      }
+      if (!contactsControl.value || (contactsControl.value && !contactsControl.value.length)) {
+        contactsControl.setValidators(Validators.required);
+        contactsControl.updateValueAndValidity();
+        this.contactRequiredWarning = 'Contact is required';
+      } else {
+        this.contactRequiredWarning = '';
+      }
+    }
+    console.log('%cpropertyRequiredWarning', 'color:green', this.propertyRequiredWarning);
+    console.log('%c properties control', 'color:green', propertiesControl);
+    console.log('%c contacts control', 'color:red', contactsControl);
   }
 
   trackByFn(index, item: BaseStaffMember) {
@@ -513,12 +535,12 @@ export class AddDiaryEventComponent implements OnInit {
   showAllMembers() {
     this.showMorePeople = !this.showMorePeople;
     this.diaryEvent.staffMembers = this.eventStaffMembers;
-    console.log('%c this.diaryEvent.staffMembers', 'color: red', this.diaryEvent.staffMembers)
+    console.log('%c this.diaryEvent.staffMembers', 'color: red', this.diaryEvent.staffMembers);
   }
   showFewMembers() {
     this.showMorePeople = !this.showMorePeople;
     this.diaryEvent.staffMembers = this.getStaff(this.eventStaffMembers);
-    console.log('%c this.diaryEvent.staffMembers', 'color: green', this.diaryEvent.staffMembers)
+    console.log('%c this.diaryEvent.staffMembers', 'color: green', this.diaryEvent.staffMembers);
   }
 
   canDeactivate(): boolean {

@@ -83,7 +83,9 @@ export const FormErrors = {
   'agencyType': '',
   'originId': '',
   'originType': '',
-  'endDateTime': ''
+  'endDateTime': '',
+  'properties': '',
+  'contacts': ''
 };
 
 export const ValidationMessages = {
@@ -227,6 +229,12 @@ export const ValidationMessages = {
   },
   'endDateTime': {
     endDateIsBeforeStartDate: 'End date cannot be before start date',
+  },
+  'properties': {
+    required: 'Property is required'
+  },
+  'contacts': {
+    required: 'Contact is required'
   }
   // 'invalidPhoneNumber': {
   //   required: 'Phone is required',

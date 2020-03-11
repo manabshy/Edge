@@ -2,7 +2,8 @@
 <div class="container">
   <div class="row page-title">
     <div class="col">
-      <h4 class="m-0">Event <span class="badge badge-pill badge-success" *ngIf="diaryEvent?.isConfirmed">Confirmed</span></h4>
+      <h4 class="m-0">Event <span class="badge badge-pill badge-success"
+          *ngIf="diaryEvent?.isConfirmed">Confirmed</span></h4>
     </div>
     <div class="col-auto">
       <div class="btn-group" dropdown placement="bottom right" *ngIf="diaryEvent">
@@ -69,13 +70,14 @@
       <legend class="fieldset-title">Properties</legend>
       <app-property-finder (selectedPropertyList)="getSelectedProperties($event)"
         (rebookedProperty)="getRebookedPropertyId($event)" [isMultiple]="true" [label]="propertyLabel"
-        [property]="property" [canRebook]="canRebook" [propertyList]="diaryEvent?.properties">
+        [property]="property" [canRebook]="canRebook" [propertyList]="diaryEvent?.properties"
+        [propertyRequiredWarning]="propertyRequiredWarning">
       </app-property-finder>
     </fieldset>
     <fieldset *ngIf="showContacts">
       <legend class="fieldset-title">Contacts</legend>
       <app-signer [label]="contactLabel" [isMultiple]="true" (selectedSignersList)="getSelectedContactGroups($event)"
-        [contactList]="diaryEvent?.contacts">
+        [contactList]="diaryEvent?.contacts" [contactRequiredWarning]="contactRequiredWarning">
       </app-signer>
     </fieldset>
     <fieldset *ngIf="showOthers">

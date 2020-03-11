@@ -26,6 +26,7 @@ export class SignerComponent implements OnInit, OnChanges {
   @Input() isMultiple: boolean = false;
   @Input() createdSigner: Signer;
   @Input() label: string;
+  @Input() contactRequiredWarning: string;
   @ViewChild('selectedSignerInput', { static: false }) selectedSignerInput: ElementRef;
   @ViewChild('searchSignerInput', { static: true }) searchSignerInput: ElementRef;
   signerFinderForm: FormGroup;

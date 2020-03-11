@@ -15,10 +15,11 @@ import { BaseProperty } from '../models/base-property';
 export class PropertyFinderComponent implements OnInit, OnChanges {
   @Input() label: string;
   @Input() readOnly = false;
-  @Input() isMultiple: boolean = false;
+  @Input() isMultiple = false;
   @Input() canRebook: boolean;
   @Input() property: Property;
   @Input() propertyList: Property[];
+  @Input() propertyRequiredWarning: string;
   @Output() selectedProperty = new EventEmitter<any>();
   @Output() selectedPropertyList = new EventEmitter<any>();
   @Output() rebookedProperty = new EventEmitter<number>();
@@ -68,6 +69,7 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
+    console.log('%c property warning in finder', 'color: purple', this.propertyRequiredWarning);
     if (this.propertyList && this.propertyList.length) {
       this.selectedProperties = this.propertyList;
     }
@@ -89,15 +91,15 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
   }
 
   selectProperty(propertyId: number) {
-    console.log('multiple should be true here', this.isMultiple)
+    console.log('multiple should be true here', this.isMultiple);
     this.isMultiple ? this.isSearchVisible = true : this.isSearchVisible = false;
-    console.log('search visible should be true here', this.isSearchVisible)
+    console.log('search visible should be true here', this.isSearchVisible);
     this.property = null;
     if (propertyId) {
       this.propertyService.getProperty(propertyId, false, false, true).subscribe(data => {
         if (data) {
           if (this.isMultiple) {
-            console.log('selected prop here', data)
+            console.log('selected prop here', data);
             this.getSelectedProperties(data);
           } else {
             this.selectedPropertyDetails = data;
@@ -113,7 +115,7 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
     const isExisting = this.selectedProperties.filter(x => x.propertyId === property.propertyId);
     if (this.selectedProperties) {
       this.selectedProperties.push(property);
-      console.log('selected props list here ZZZZZx', this.selectedProperties)
+      console.log('selected props list here ZZZZZx', this.selectedProperties);
       this.selectedPropertyList.emit(this.selectedProperties);
       this.propertyFinderForm.get('searchTerm').setValue('');
     }
@@ -157,7 +159,7 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
 
   removeProperty(propertyId: number) {
     if (this.selectedProperties && this.selectedProperties.length) {
-      const index = this.selectedProperties.findIndex(x => x.propertyId === propertyId)
+      const index = this.selectedProperties.findIndex(x => x.propertyId === propertyId);
       this.selectedProperties.splice(index, 1);
       this.selectedPropertyList.emit(this.selectedProperties);
     }
@@ -165,7 +167,7 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
 
   rebookProperty(propertyId: number) {
     if (this.selectedProperties && this.selectedProperties.length) {
-      const property = this.selectedProperties.filter(x => x.propertyId === propertyId)
+      const property = this.selectedProperties.filter(x => x.propertyId === propertyId);
       this.selectedProperties = property;
       this.selectedPropertyList.emit(this.selectedProperties);
       this.rebookedProperty.emit(propertyId);

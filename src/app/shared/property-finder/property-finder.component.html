@@ -29,7 +29,8 @@
           <button class="btn btn-light btn-sm ml-2" type="button" (click)="removeProperty(property?.propertyId)">
             Remove
           </button>
-          <button *ngIf="canRebook" class="btn btn-light btn-sm ml-2" type="button" (click)="rebookProperty(property?.propertyId)">
+          <button *ngIf="canRebook" class="btn btn-light btn-sm ml-2" type="button"
+            (click)="rebookProperty(property?.propertyId)">
             Rebook
           </button>
         </div>
@@ -45,13 +46,16 @@
           <div class="input-group input-group-sm">
             <input #searchPropertyInput type="search" id="propSearchTerm" class="form-control"
               formControlName="searchTerm" (keydown.enter)="searchProperty()" [ngbTypeahead]="suggestions"
-              [focusFirst]="false" (selectItem)="selectedSuggestion($event)">
+              [focusFirst]="false" (selectItem)="selectedSuggestion($event)"
+              [ngClass]="{'is-invalid': propertyRequiredWarning}">
             <div class="input-group-append">
               <button type="button" class="btn btn-secondary" (click)="searchProperty()">Search</button>
             </div>
+            <div class="invalid-feedback w-100">{{propertyRequiredWarning}}</div>
           </div>
         </div>
-        <a class="small d-block mb-3" [routerLink]="['/property-centre/detail/0', 'edit']" *ngIf="noSuggestions && !isMultiple"
+        <a class="small d-block mb-3" [routerLink]="['/property-centre/detail/0', 'edit']"
+          *ngIf="noSuggestions && !isMultiple"
           [queryParams]="{isNewProperty: true, searchedAddress: propertyFinderForm.get('searchTerm').value, getBack: 1}"
           (click)="CreateNewProperty()">
           <i class="fas fa-plus mr-2"></i> Add Property
