@@ -43,30 +43,6 @@ small {
     font-size: $font-size-sm;
 }
 
-.col-form-label{
-    text-align: right;
-
-    @include media-breakpoint-down(sm){
-        text-align: left;
-    }
-}
-
-.form-control-plaintext {
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    background-color: transparent !important;
-    background: none;
-    font-weight: bold;
-    border: none;
-    padding-left: 0!important;
-    padding-right: 0!important;
-    color: $body-color!important;
-
-    &::-ms-expand {
-        display: none;
-    }
-}
-
 .list-group-item {
 
     .card-body &.list-header + .list-group-item {
@@ -107,45 +83,8 @@ dl {
     }
 }
 
-.input-group {
-    select:not(.single-select) {
-        flex: 0 0 auto!important;
-        width: auto!important;
-    }
-
-    .input-group-append {
-        .btn:last-child {
-            border-top-right-radius: $border-radius !important;
-            border-bottom-right-radius: $border-radius !important;
-        }
-
-        & + input, & + select, & + textarea {
-            margin-left: -1px!important;
-
-            @include media-breakpoint-down(sm) {
-                border-top-left-radius: $border-radius !important;
-                border-bottom-left-radius: $border-radius !important;
-                flex: 0 0 100%!important;
-                width: 100%!important;
-            }
-        }
-    }
-}
-
 .bg-warning {
     color: $body-color;
-}
-
-.invalid-feedback {
-    white-space: pre;
-}
-
-.is-invalid {
-    background-image: none!important;
-}
-
-select.is-invalid {
-    background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") $input-bg no-repeat right 0.75rem center/8px 10px !important;
 }
 
 pre {
@@ -156,26 +95,6 @@ pre {
 
 .no-scroll {
     overflow: hidden!important;
-}
-
-fieldset {
-    .fieldset-title {
-        font-size: $h5-font-size;
-        font-weight: $headings-font-weight;
-        line-height: $headings-line-height;
-        @include media-breakpoint-up(sm){
-            padding: spacer(2);
-            background-color: theme-color("light");
-        }
-    }
-
-    & + fieldset {
-        margin-top: spacer(3);
-    }
-}
-
-.fake-readonly[readonly]{
-    background-color: $input-bg;
 }
 
 .nav-pills {
@@ -291,15 +210,6 @@ fieldset {
     min-width: 2rem;
 }
 
-.custom-checkbox .custom-control-input:disabled:checked ~ .custom-control-label::before {
-    background-image: none;
-}
-
-.custom-control-label {
-    &.small {
-        line-height: 2;
-    }
-}
 .custom-label {
   font-weight: bold;
   font-size: small;

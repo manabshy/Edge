@@ -1,17 +1,17 @@
 <form [formGroup]="addressForm" (keydown.enter)="$event.preventDefault()" autocompleteOff>
   <div class="form-group row" *ngIf="!(propertyDetails || isNewProperty)">
-    <label for="country" class="col-sm-2 col-form-label col-form-label-sm">Country</label>
-    <div class="col-sm-3">
+    <div class="col-sm-3 offset-sm-2">
+      <label for="country" class="small">Country</label>
       <select class="custom-select custom-select-sm" id="country" formControlName="countryId">
         <option selected *ngFor="let country of countries " [ngValue]=country.id>{{country.value}}</option>
       </select>
     </div>
   </div>
   <div class="form-group row">
-    <label for="property" class="col-sm-2 col-form-label col-form-label-sm">
-      Find Address
-    </label>
-    <div class="col-sm-8 col-xl-6">
+    <div class="col-sm-8 col-xl-6 offset-sm-2">
+      <label for="property" class="small">
+        Find Address
+      </label>
       <div class="input-group input-group-sm">
         <input type="search" id="fullAddress" class="form-control" placeholder=""
           [ngClass]="{'border border-warning': personDetails && !addressLines.value && !enterAddressManually, 'is-invalid':addressError}"

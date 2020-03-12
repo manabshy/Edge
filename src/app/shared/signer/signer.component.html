@@ -1,13 +1,13 @@
 <ng-container>
   <form class="pb-0" [formGroup]="signerFinderForm" autocompleteOff>
     <div [ngClass]="{'row': !fullWidth}" [hidden]="!(selectedSignerDetails||selectedSigners && selectedSigners.length)">
-      <ng-container *ngIf="!label; else givenLabel "><label for="searchTerm"
-          [ngClass]="{'col-form-label col-form-label-sm col-sm-2': !fullWidth, 'small': fullWidth, 'mb-1': readOnly}">Signers</label>
-      </ng-container>
-      <ng-template #givenLabel><label for="searchTerm" *ngIf="!hideLabel"
-          [ngClass]="{'col-form-label col-form-label-sm col-sm-2': !fullWidth, 'small': fullWidth, 'mb-1': readOnly}">{{label}}</label>
-      </ng-template>
-      <div [ngClass]="{'col': !fullWidth}">
+      <div [ngClass]="{'col-sm-8 col-xl-6 offset-sm-2': !fullWidth}">
+        <ng-container *ngIf="!label; else givenLabel "><label for="searchTerm"
+            class="small">Signers</label>
+        </ng-container>
+        <ng-template #givenLabel><label for="searchTerm" *ngIf="!hideLabel"
+            class="small">{{label}}</label>
+        </ng-template>
         <div class="form-group d-flex d-sm-block" *ngIf="selectedSignerDetails && !isMultiple">
           <input type="hidden" #selectedSignerInput id="selectedSigner" formControlName="selectedSigner">
           <a class="small text-left mobile-btn" *ngIf="selectedSignerDetails"
@@ -43,12 +43,12 @@
       </div>
     </div>
     <div class="row" [hidden]="!isSearchVisible">
-      <ng-container *ngIf="!label; else givenLabel3 "><label for="searchTerm"
-          class="col-sm-2 col-form-label col-form-label-sm">Find Signers</label></ng-container>
-      <ng-template #givenLabel3><label for="searchTerm" class="col-sm-2 col-form-label col-form-label-sm"> Find
-          {{label}}</label></ng-template>
-      <div class="col-sm-8 col-xl-6">
+      <div class="col-sm-8 col-xl-6 offset-sm-2">
         <div class="form-group">
+          <ng-container *ngIf="!label; else givenLabel3 "><label for="searchTerm"
+              class="small">Find Signers</label></ng-container>
+          <ng-template #givenLabel3><label for="searchTerm" class="small"> Find
+              {{label}}</label></ng-template>
           <div class="input-group input-group-sm">
             <input #searchSignerInput type="search" id="searchTerm" class="form-control" formControlName="searchTerm"
               (keydown.enter)="searchSigner()" [ngbTypeahead]="suggestions" [focusFirst]="false"

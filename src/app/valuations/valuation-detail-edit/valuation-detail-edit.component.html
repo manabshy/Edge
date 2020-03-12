@@ -14,10 +14,10 @@
         (selectedSigner)="getSelectedOwner($event)" (newSigner)="createNewSigner()"
         [readOnly]="!isEditable && !isNewValuation"></app-signer>
       <div class="row">
-        <label for="originId" class="col-sm-2 col-form-label col-form-label-sm">Vendor Origin</label>
-        <div class="col-sm-8 col-xl-6">
+        <div class="col-sm-8 col-xl-6 offset-sm-2">
           <div class="row form-group">
             <div class="col-sm" *ngIf="isEditable || isNewValuation">
+              <label for="originId" class="small">Vendor Origin</label>
               <select class="custom-select custom-select-sm" name="originTypes" id="originTypes"
                 formControlName="originType" arial-label="Origin Types" (change)="onSelectType($event.target.value)"
                 [attr.disabled]="!isEditable && !isNewValuation ? true : null"
@@ -54,45 +54,33 @@
     || (!isEditable && valuationForm.get('timeFrame').value)
     || (!isEditable && valuationForm.get('marketChat').value)
     || (!isEditable && valuationForm.get('generalNotes').value)">
-      <legend class="fieldset-title">Chat</legend>
-      <div class="form-group row"
-        *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value)">
-        <label for="reason" class="col-sm-2 col-form-label col-form-label-sm">Why?</label>
-        <div class="col-sm-8 col-xl-6">
-          <textarea class="form-control form-control-sm" name="reason" id="reason" cols="30" rows="3"
-            formControlName="reason" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
-            [ngClass]="{'is-invalid': (formErrors?.reason), 'form-control-plaintext': !isEditable && !isNewValuation}"></textarea>
-          <div class="invalid-feedback">{{formErrors?.reason}}</div>
-        </div>
-      </div>
-      <div class="form-group row"
-        *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('timeFrame').value)">
-        <label for="timeFrame" class="col-sm-2 col-form-label col-form-label-sm">When?</label>
-        <div class="col-sm-8 col-xl-6">
-          <textarea class="form-control form-control-sm" name="timeFrame" id="timeFrame" cols="30" rows="3"
-            formControlName="timeFrame" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
-            [ngClass]="{'is-invalid': (formErrors?.timeFrame), 'form-control-plaintext': !isEditable && !isNewValuation}"></textarea>
-          <div class="invalid-feedback">{{formErrors?.timeFrame}}</div>
-        </div>
-      </div>
-      <div class="form-group row"
-        *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('marketChat').value)">
-        <label for="marketChat" class="col-sm-2 col-form-label col-form-label-sm">Market Chat</label>
-        <div class="col-sm-8 col-xl-6">
-          <textarea class="form-control form-control-sm" name="marketChat" id="marketChat" cols="30" rows="3"
-            formControlName="marketChat" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
-            [ngClass]="{'is-invalid': (formErrors?.marketChat), 'form-control-plaintext': !isEditable && !isNewValuation}"></textarea>
-          <div class="invalid-feedback">{{formErrors?.marketChat}}</div>
-        </div>
-      </div>
-      <div class="form-group row"
-        *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('generalNotes').value)">
-        <label for="generalNotes" class="col-sm-2 col-form-label col-form-label-sm">Property Notes</label>
-        <div class="col-sm-8 col-xl-6">
-          <textarea class="form-control form-control-sm" name="generalNotes" id="generalNotes" cols="30" rows="3"
-            formControlName="generalNotes" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
-            [ngClass]="{'is-invalid': (formErrors?.generalNotes), 'form-control-plaintext': !isEditable && !isNewValuation}"></textarea>
-          <div class="invalid-feedback">{{formErrors?.generalNotes}}</div>
+      <legend class="fieldset-title">Valuation Notes</legend>
+      <div class="row">
+        <div class="col-sm-8 col-xl-6 offset-sm-2">
+          <div class="form-group"
+            *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value)">
+            <label for="reason" class="small">What’s the current situation?</label>
+            <textarea class="form-control form-control-sm" name="reason" id="reason" cols="30" rows="3"
+              formControlName="reason" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+              [ngClass]="{'is-invalid': (formErrors?.reason), 'form-control-plaintext': !isEditable && !isNewValuation}"></textarea>
+            <div class="invalid-feedback">{{formErrors?.reason}}</div>
+          </div>
+          <div class="form-group"
+            *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('timeFrame').value)">
+            <label for="timeFrame" class="small">When are you looking to market?</label>
+            <textarea class="form-control form-control-sm" name="timeFrame" id="timeFrame" cols="30" rows="3"
+              formControlName="timeFrame" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+              [ngClass]="{'is-invalid': (formErrors?.timeFrame), 'form-control-plaintext': !isEditable && !isNewValuation}"></textarea>
+            <div class="invalid-feedback">{{formErrors?.timeFrame}}</div>
+          </div>
+          <div class="form-group"
+            *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('generalNotes').value)">
+            <label for="generalNotes" class="small">Notes (points discussed, other property details)</label>
+            <textarea class="form-control form-control-sm" name="generalNotes" id="generalNotes" cols="30" rows="3"
+              formControlName="generalNotes" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+              [ngClass]="{'is-invalid': (formErrors?.generalNotes), 'form-control-plaintext': !isEditable && !isNewValuation}"></textarea>
+            <div class="invalid-feedback">{{formErrors?.generalNotes}}</div>
+          </div>
         </div>
       </div>
     </fieldset>
@@ -126,7 +114,7 @@
               <div class="invalid-feedback">{{formErrors?.receptions}}</div>
             </div>
             <div class="col-4 form-group">
-              <label class="small" for="sqFt">Sq. Foot</label>
+              <label class="small" for="sqFt">Approx Sq. Foot</label>
               <input type="text" name="sqFt" id="sqFt" class="form-control form-control-sm" formControlName="sqFt"
                 [attr.disabled]="!isEditable && !isNewValuation ? true : null"
                 [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}">
@@ -169,20 +157,6 @@
               <ng-select [items]="parkings" [multiple]="true" bindLabel="value" groupBy="gender"
                 [selectableGroup]="true" [closeOnSelect]="false" [readonly]="!isEditable && !isNewValuation"
                 bindValue="id" formControlName="parking">
-                <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
-                  <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.gender | uppercase}}
-                </ng-template>
-                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-                  <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.value}}
-                </ng-template>
-              </ng-select>
-            </div>
-            <div class="col-sm-12 form-group"
-              *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('propertyFeature').value)">
-              <label class="small" for="features">Features</label>
-              <ng-select [items]="features" [multiple]="true" bindLabel="value" groupBy="gender"
-                [selectableGroup]="true" [closeOnSelect]="false" [readonly]="!isEditable && !isNewValuation"
-                bindValue="id" formControlName="propertyFeature">
                 <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
                   <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.gender | uppercase}}
                 </ng-template>
@@ -270,7 +244,7 @@
     <fieldset *ngIf="selectedDate || showDateAndDuration">
       <h5 class="fieldset-title">Appointment</h5>
       <div class="form-group row">
-        <label class="col-sm-2 col-form-label col-form-label-sm">Date</label>
+        <label class="small">Date</label>
         <div class="col-sm-10">
           <div class="d-flex d-sm-block">
             <label for="changeDate"
@@ -281,7 +255,7 @@
         </div>
       </div>
       <div class="row">
-        <label for="valuationDuration" class="col-sm-2 col-form-label col-form-label-sm">Duration</label>
+        <label for="valuationDuration" class="small">Duration</label>
         <div class="col-sm-2 form-group">
           <select class="custom-select custom-select-sm single-select" name="valuationDuration" id="valuationDuration"
             formControlName="totalHours" [attr.disabled]="!isEditable && !isNewValuation ? true : null"

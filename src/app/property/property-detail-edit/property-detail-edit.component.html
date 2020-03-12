@@ -21,8 +21,9 @@
     <app-office-finder class="d-block form-group" [officeId]="officeId" [isRequired]="isOfficeIdRequired"
       (selectedOfficeId)="getSelectedOfficeId($event)"></app-office-finder>
     <div class="form-group row">
-      <label for="propertyTypeId" class="col-sm-2 col-form-label col-form-label-sm">Property Type</label>
-      <div class="col-sm-3">
+      <div class="col-sm-3 offset-2">
+        <label for="propertyTypeId" class="small">Property Type</label>
+
         <select class="custom-select custom-select-sm" id="propertyTypeId" name="propertyTypeId"
           formControlName="propertyTypeId" (change)="onSelectType($event.target.value) "
           [ngClass]="{'is-invalid':formErrors.propertyTypeId}">
@@ -34,8 +35,9 @@
       </div>
     </div>
     <div class="form-group row">
-      <label for="propertyTypeId" class="col-sm-2 col-form-label col-form-label-sm">Property Style</label>
-      <div class="col-sm-3">
+      <div class="col-sm-3 offset-2">
+        <label for="propertyTypeId" class="small">Property Style</label>
+
         <select #propStyle class="custom-select custom-select-sm" id="propertyStyleId" name="propertyStyleId"
           formControlName="propertyStyleId" [ngClass]="{'is-invalid':formErrors.propertyStyleId}">
           <option selected [value]="defaultStyle"></option>
@@ -46,8 +48,8 @@
       </div>
     </div>
     <div class="form-group row">
-      <label for="region" class="col-sm-2 col-form-label col-form-label-sm">Region</label>
-      <div class="col-sm-3">
+      <div class="col-sm-3 offset-2">
+        <label for="region" class="small">Region</label>
         <select class="custom-select custom-select-sm" id="region" name="region" formControlName="regionId"
           (change)="onSelectRegion($event.target.value)" [ngClass]="{'is-invalid':formErrors.regionId}">
           <!-- <option selected value="0"></option> -->
@@ -57,8 +59,8 @@
       </div>
     </div>
     <div class="form-group row">
-      <label for="area" class="col-sm-2 col-form-label col-form-label-sm">Area</label>
-      <div class="col-sm-3">
+      <div class="col-sm-3 offset-2">
+        <label for="area" class="small">Area</label>
         <select class="custom-select custom-select-sm" id="area" name="area" formControlName="areaId"
           (change)="onSelectArea($event.target.value)" [ngClass]="{'is-invalid':formErrors.areaId}">
           <option selected value="0"></option>
@@ -68,8 +70,8 @@
       </div>
     </div>
     <div class="form-group row">
-      <label for="subArea" class="col-sm-2 col-form-label col-form-label-sm">Sub-Area</label>
-      <div class="col-sm-3">
+      <div class="col-sm-3 offset-2">
+        <label for="subArea" class="small">Sub-Area</label>
         <select class="custom-select custom-select-sm" id="subArea" name="subArea" formControlName="subAreaId"
           [ngClass]="{'is-invalid':formErrors.subAreaId}">
           <option selected value="0"></option>

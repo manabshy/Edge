@@ -1,11 +1,11 @@
 <ng-container>
   <form class="pb-0" [formGroup]="propertyFinderForm" autocompleteOff>
     <div class="row" [hidden]="!(selectedPropertyDetails||selectedProperties && selectedProperties.length)">
-      <ng-container *ngIf="!label; else givenLabel "><label for="propSearchTerm"
-          class="col-form-label col-form-label-sm col-sm-2">Property</label></ng-container>
-      <ng-template #givenLabel><label for="propSearchTerm"
-          class="col-form-label col-form-label-sm col-sm-2">{{label}}</label></ng-template>
-      <div class="col" *ngIf="selectedPropertyDetails">
+      <div class="col-sm-8 col-xl-6 offset-sm-2" *ngIf="selectedPropertyDetails">
+        <ng-container *ngIf="!label; else givenLabel "><label for="propSearchTerm"
+            class="small">Property</label></ng-container>
+        <ng-template #givenLabel><label for="propSearchTerm"
+            class="small">{{label}}</label></ng-template>
         <div class="form-group d-flex d-sm-block">
           <input type="hidden" #selectedPropertyInput id="selectedPropertyAddress"
             formControlName="selectedPropertyAddress">
@@ -21,7 +21,7 @@
           </button>
         </div>
       </div>
-      <div class="col" *ngIf="isMultiple && selectedProperties">
+      <div class="col-sm-8 col-xl-6 offset-sm-2" *ngIf="isMultiple && selectedProperties">
         <div class="form-group d-flex d-sm-block" *ngFor="let property of selectedProperties">
           <a class="small text-left mobile-btn" [routerLink]="['/property-centre/detail/', property?.propertyId]">
             {{property?.address | formatAddress}}
@@ -37,11 +37,11 @@
       </div>
     </div>
     <div class="row" [hidden]="!isSearchVisible">
-      <ng-container *ngIf="!label; else givenLabel3 "><label for="propSearchTerm"
-          class="col-sm-2 col-form-label col-form-label-sm">Find property</label></ng-container>
-      <ng-template #givenLabel3><label for="propSearchTerm" class="col-sm-2 col-form-label col-form-label-sm"> Find
-          {{label}}</label></ng-template>
-      <div class="col-sm-8 col-xl-6">
+      <div class="col-sm-8 col-xl-6 offset-sm-2">
+        <ng-container *ngIf="!label; else givenLabel3 "><label for="propSearchTerm"
+            class="small">Find property</label></ng-container>
+        <ng-template #givenLabel3><label for="propSearchTerm" class="small"> Find
+            {{label}}</label></ng-template>
         <div class="form-group">
           <div class="input-group input-group-sm">
             <input #searchPropertyInput type="search" id="propSearchTerm" class="form-control"

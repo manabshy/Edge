@@ -1,8 +1,8 @@
 <form class="p-0" [formGroup]="companyFinderForm" autocompleteOff>
   <div class="row" *ngIf="!existingCompany">
-    <label for="company" class="col-sm-2 col-form-label col-form-label-sm">Find Company</label>
-    <div class="col-sm-8 col-xl-6">
+    <div class="col-sm-8 col-xl-6 offset-sm-2">
       <div class="form-group">
+        <label for="company" class="small">Find Company</label>
         <div class="input-group input-group-sm">
           <input #companyNameInput type="search" id="company" class="form-control form-control-sm fake-readonly" formControlName="companyName"
             [ngClass]="{'is-invalid': companyNameError && !enterManually && !companyFinderForm.value.companyName}"
@@ -46,9 +46,9 @@
   </div>
   <ng-container *ngIf="(!foundCompanies && isCompanyAdded) || enterManually || existingCompany">
     <div class="row">
-      <label for="company" class="col-sm-2 col-form-label col-form-label-sm">Company name</label>
-      <div class="col-sm-10">
+      <div class="col-sm-8 col-xl-6 offset-sm-2">
           <div class="form-group">
+            <label for="company" class="small">Company name</label>
             <input type="text" class="form-control form-control-sm"
               [ngClass]="{'is-invalid': companyNameError && enterManually}"
               id="selectedCompany" formControlName="selectedCompany">

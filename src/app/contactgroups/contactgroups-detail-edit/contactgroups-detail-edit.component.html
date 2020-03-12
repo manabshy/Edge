@@ -4,114 +4,147 @@
     <h4 *ngIf="!basicPerson">Edit Person</h4>
     <app-score-badge [bar]="true" [person]="personForm?.value"></app-score-badge>
   </div>
-  <form *ngIf="personDetails || basicPerson" [formGroup]="personForm" (ngSubmit)="savePerson(false)" (keydown.enter)="$event.preventDefault()" autocompleteOff>
-    <div class="form-group row" [hidden]="basicPerson">
-      <label for="warningStatus" class="col-sm-2 col-form-label col-form-label-sm">Warning</label>
-      <div class="col-sm-3">
-        <select class="custom-select custom-select-sm" id="warningStatus" name="warningStatus" formControlName="warningStatusId" >
-          <option selected *ngFor="let warning of warnings | keyvalue:keepOriginalOrder" [value]=warning.value.id [attr.disabled]="(!isWarningsEnabled) ? '' : null">{{warning.value.value}}</option>
-        </select>
-        <input type="text" class="form-control form-control-sm mt-2" [ngClass]="{'is-invalid': formErrors.warningStatusComment || personForm.errors?.warningStatusRequired}" formControlName="warningStatusComment" placeholder="Comment ..." *ngIf="isWarningCommentVisible">
-        <div class="invalid-feedback">{{formErrors.warningStatusComment}}</div>
-        <div class="invalid-feedback" *ngIf="personForm.errors?.warningStatusRequired">Please enter a Comment</div>
+  <form *ngIf="personDetails || basicPerson" [formGroup]="personForm" (ngSubmit)="savePerson(false)"
+    (keydown.enter)="$event.preventDefault()" autocompleteOff>
+    <fieldset>
+      <div class="form-group row" [hidden]="basicPerson">
+        <div class="col-sm-3 offset-sm-2">
+          <label for="warningStatus" class="small">Warning <br>
+            <span class="text-danger" *ngIf="!isWarningsEnabled">
+              You don't have the permission to change the warning.
+            </span>
+          </label>
+          <select class="custom-select custom-select-sm" id="warningStatus" name="warningStatus"
+            formControlName="warningStatusId">
+            <option selected *ngFor="let warning of warnings | keyvalue:keepOriginalOrder" [value]=warning.value.id
+              [attr.disabled]="(!isWarningsEnabled) ? '' : null">{{warning.value.value}}</option>
+          </select>
+          <input type="text" class="form-control form-control-sm mt-2"
+            [ngClass]="{'is-invalid': formErrors.warningStatusComment || personForm.errors?.warningStatusRequired}"
+            formControlName="warningStatusComment" placeholder="Comment ..." *ngIf="isWarningCommentVisible">
+          <div class="invalid-feedback">{{formErrors.warningStatusComment}}</div>
+          <div class="invalid-feedback" *ngIf="personForm.errors?.warningStatusRequired">Please enter a Comment</div>
+        </div>
       </div>
-      <div class="col col-form-label col-form-label-sm text-left text-danger" *ngIf="!isWarningsEnabled">
-        You don't have the permission to change the warning.
+      <div class="form-group row">
+        <div class="col-sm-3 offset-sm-2">
+          <label for="title" class="small">Title</label>
+          <select class="custom-select custom-select-sm" id="title" name="title" formControlName="titleId"
+            [ngClass]="{'is-invalid':formErrors.titleId}">
+            <option value=""></option>
+            <option *ngFor="let title of titles | keyvalue:keepOriginalOrder" [value]=title.key>{{title.value}}</option>
+          </select>
+          <input type="text" class="form-control form-control-sm mt-2"
+            [ngClass]="{'is-invalid': formErrors.titleOther || personForm.errors?.titleOther}"
+            formControlName="titleOther" placeholder="Title ..." *ngIf="isTitleOtherVisible">
+          <div class="invalid-feedback" *ngIf="personForm.errors?.titleOther">Please enter a Title</div>
+          <span class="invalid-feedback">{{formErrors.titleId}}</span>
+        </div>
       </div>
-    </div>
-    <div class="form-group row">
-      <label for="title" class="col-sm-2 col-form-label col-form-label-sm">Title</label>
-      <div class="col-sm-3">
-        <select class="custom-select custom-select-sm" id="title" name="title" formControlName="titleId" [ngClass]="{'is-invalid':formErrors.titleId}">
-          <option value=""></option>
-          <option *ngFor="let title of titles | keyvalue:keepOriginalOrder" [value]=title.key>{{title.value}}</option>
-        </select>
-        <input type="text" class="form-control form-control-sm mt-2" [ngClass]="{'is-invalid': formErrors.titleOther || personForm.errors?.titleOther}" formControlName="titleOther" placeholder="Title ..." *ngIf="isTitleOtherVisible">
-        <div class="invalid-feedback" *ngIf="personForm.errors?.titleOther">Please enter a Title</div>
-        <span class="invalid-feedback">{{formErrors.titleId}}</span>
+      <div class="form-group row">
+        <div class="col-sm-8 col-xl-6 offset-sm-2">
+          <label for="name" class="small">First Name</label>
+          <input type="text" id="name" class="form-control form-control-sm" formControlName="firstName"
+            [ngClass]="{'is-invalid':formErrors.firstName}">
+          <span class="invalid-feedback">{{formErrors.firstName}}</span>
+        </div>
       </div>
-    </div>
-    <div class="form-group row">
-      <label for="name" class="col-sm-2 col-form-label col-form-label-sm">First Name</label>
-      <div class="col-sm-8 col-xl-6">
-        <input type="text" id="name" class="form-control form-control-sm" formControlName="firstName" [ngClass]="{'is-invalid':formErrors.firstName}" >
-        <span class="invalid-feedback">{{formErrors.firstName}}</span>
+      <div class="form-group row">
+        <div class="col-sm-8 col-xl-6 offset-sm-2">
+          <label for="middleName" class="small">Middle Name</label>
+          <input type="text" id="middleName" class="form-control form-control-sm" formControlName="middleName"
+            [ngClass]="{'is-invalid':formErrors.middleName}">
+          <span class="invalid-feedback">{{formErrors.middleName}}</span>
+        </div>
       </div>
-    </div>
-    <div class="form-group row">
-      <label for="middleName" class="col-sm-2 col-form-label col-form-label-sm">Middle Name</label>
-      <div class="col-sm-8 col-xl-6">
-        <input type="text" id="middleName" class="form-control form-control-sm" formControlName="middleName" [ngClass]="{'is-invalid':formErrors.middleName}" >
-        <span class="invalid-feedback">{{formErrors.middleName}}</span>
+      <div class="form-group row">
+        <div class="col-sm-8 col-xl-6 offset-sm-2">
+          <label for="lastName" class="small">Last Name</label>
+          <input type="text" id="lastName" class="form-control form-control-sm" formControlName="lastName"
+            [ngClass]="{'is-invalid':formErrors?.lastName}" autocomplete="false">
+          <span class="invalid-feedback">{{formErrors?.lastName}}</span>
+        </div>
       </div>
-    </div>
-    <div class="form-group row">
-      <label for="lastName" class="col-sm-2 col-form-label col-form-label-sm">Last Name</label>
-      <div class="col-sm-8 col-xl-6">
-        <input type="text" id="lastName" class="form-control form-control-sm" formControlName="lastName" [ngClass]="{'is-invalid':formErrors?.lastName}" autocomplete="false">
-        <span class="invalid-feedback">{{formErrors?.lastName}}</span>
+    </fieldset>
+    <fieldset>
+      <legend class="fieldset-title">Address</legend>
+      <app-address [personDetails]="personDetails || basicPerson" (addressDetails)="getAddress($event)"></app-address>
+    </fieldset>
+    <fieldset>
+      <legend class="fieldset-title">Contact details</legend>
+
+      <div class="row justify-content-end" *ngIf="personForm.errors?.emailOrPhone" id="contact-error">
+        <div class="col-sm-8 col-xl-6 offset-sm-2">
+          <div class="alert alert-danger">Please enter an email OR a phone number</div>
+        </div>
       </div>
-    </div>
-   <app-address [personDetails]="personDetails || basicPerson" (addressDetails)="getAddress($event)"></app-address>
-   <div class="row justify-content-end" *ngIf="personForm.errors?.emailOrPhone" id="contact-error">
-     <div class="col-sm-8 col-xl-6">
-        <div class="alert alert-danger">Please enter an email OR a phone number</div>
-     </div>
-   </div>
-   <div class="row">
-     <div class="col-sm-8 col-xl-6 text-right offset-sm-2 mr-2 d-none d-sm-block mb-1"><small>Pref</small></div>
-   </div>
-   <div formArrayName="emailAddresses" *ngFor="let emailAddress of emailAddresses.controls; let i = index; first as isFirst">
-      <div [formGroupName]="i">
-        <div class="form-group row">
-          <label [for]="'email' + i" class="col col-sm-2 col-form-label col-form-label-sm" [ngClass]="{'sr-only': !isFirst}">Email</label>
-          <div class="col-auto d-sm-none mr-2" *ngIf="isFirst"><small>Pref</small></div>
-          <div class="col-sm-8 col-xl-6" [ngClass]="{'offset-sm-2':!isFirst}">
+      <div formArrayName="emailAddresses"
+        *ngFor="let emailAddress of emailAddresses.controls; let i = index; first as isFirst">
+        <div [formGroupName]="i">
+          <div class="form-group row">
+            <div class="col-sm-8 col-xl-6 offset-sm-2">
+              <div class="row">
+                <label [for]="'email' + i" class="col small" [ngClass]="{'sr-only': !isFirst}">Email</label>
+                <div class="col-auto mr-2 mr-sm-1" *ngIf="isFirst"><small>Pref</small></div>
+              </div>
               <div class="input-group input-group-sm">
-                <input type="text" [id]="'email' + i" [placeholder]="!isFirst ? 'Additional Email' : ''" class="form-control" formControlName="email"
-                (keyup)="addRemoveEmailItem(i, false)" (blur)="addRemoveEmailItem(i, true)"
-                [ngClass]="{'border border-warning': !personForm.controls.emailAddresses.controls[0].controls.email.value && isFirst && !personForm.errors?.emailOrPhone,
+                <input type="text" [id]="'email' + i" [placeholder]="!isFirst ? 'Additional Email' : ''"
+                  class="form-control" formControlName="email" (keyup)="addRemoveEmailItem(i, false)"
+                  (blur)="addRemoveEmailItem(i, true)" [ngClass]="{'border border-warning': !personForm.controls.emailAddresses.controls[0].controls.email.value && isFirst && !personForm.errors?.emailOrPhone,
                             'is-invalid': isValid('email', i)
                             || personForm.errors?.emailOrPhone}">
                 <div class="input-group-append">
-                  <label class="btn btn-light" btnCheckbox formControlName="isPreferred" tabindex="0" (click)="togglePreferences(i, emailAddresses)"
-                    role="button"  [class.active]="personForm.value.emailAddresses[i].isPreferred"><i class="fa-star" [ngClass]="!!personForm.value.emailAddresses[i].isPreferred ? 'fas' : 'far'"></i></label>
+                  <label class="btn btn-light" btnCheckbox formControlName="isPreferred" tabindex="0"
+                    (click)="togglePreferences(i, emailAddresses)" role="button"
+                    [class.active]="personForm.value.emailAddresses[i].isPreferred"><i class="fa-star"
+                      [ngClass]="!!personForm.value.emailAddresses[i].isPreferred ? 'fas' : 'far'"></i></label>
                 </div>
                 <span class="invalid-feedback">
-                  <span *ngIf="personForm.controls.emailAddresses.controls[i].controls.email.value && !!personForm.controls.emailAddresses.controls[i].controls.email.errors">
+                  <span
+                    *ngIf="personForm.controls.emailAddresses.controls[i].controls.email.value && !!personForm.controls.emailAddresses.controls[i].controls.email.errors">
                     Please enter a valid email address.
                   </span>
                 </span>
-                <small class="form-text w-100" *ngIf="!personForm.controls.emailAddresses.controls[0].controls.email.value && isFirst"><i class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your score</span></small>
+                <small class="form-text w-100"
+                  *ngIf="!personForm.controls.emailAddresses.controls[0].controls.email.value && isFirst"><i
+                    class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your
+                    score</span></small>
               </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-   <div class="row">
-      <div class="col-sm-8 col-xl-6 text-right offset-sm-2 mr-2 d-none d-sm-block mb-1"><small>Pref</small></div>
-    </div>
-   <div formArrayName="phoneNumbers" *ngFor="let phoneNumber of phoneNumbers.controls; let i = index; first as isFirst;">
-      <div [formGroupName]="i">
-        <div class="form-group row">
-          <label [for]="'phone' + i" class="col col-sm-2 col-form-label col-form-label-sm" [ngClass]="{'sr-only': !isFirst}">Phone</label>
-          <div class="col-auto d-sm-none mr-2" *ngIf="isFirst"><small>Pref</small></div>
-          <div class="col-sm-8 col-xl-6" [ngClass]="{'offset-sm-2':!isFirst}">
-            <div class="input-group input-group-sm">
-              <input type="text" [id]="'phone' + i" class="form-control" [placeholder]="!isFirst ? 'Additional phone' : ''" formControlName="number" (keyup)="addRemovePhoneNumberItem(i, false)" (blur)="addRemovePhoneNumberItem(i, true)"
-              [ngClass]="{'border border-warning': !personForm.controls.phoneNumbers.controls[0].controls.number.value && isFirst && !personForm.errors?.emailOrPhone,
+      <div formArrayName="phoneNumbers"
+        *ngFor="let phoneNumber of phoneNumbers.controls; let i = index; first as isFirst;">
+        <div [formGroupName]="i">
+          <div class="form-group row">
+            <div class="col-sm-8 col-xl-6 offset-sm-2">
+              <div class="row">
+                <label [for]="'phone' + i" class="col small" [ngClass]="{'sr-only': !isFirst}">Phone</label>
+                <div class="col-auto mr-2 mr-sm-1" *ngIf="isFirst"><small>Pref</small></div>
+              </div>
+              <div class="input-group input-group-sm">
+                <input type="text" [id]="'phone' + i" class="form-control"
+                  [placeholder]="!isFirst ? 'Additional phone' : ''" formControlName="number"
+                  (keyup)="addRemovePhoneNumberItem(i, false)" (blur)="addRemovePhoneNumberItem(i, true)"
+                  [ngClass]="{'border border-warning': !personForm.controls.phoneNumbers.controls[0].controls.number.value && isFirst && !personForm.errors?.emailOrPhone,
                         'is-invalid': isValid('number', i)
                         || personForm.errors?.emailOrPhone || personForm.controls.phoneNumbers.controls[i].errors?.mismatch}">
-              <select class="custom-select" formControlName="typeId" [ngClass]="{'is-invalid': personForm.controls.phoneNumbers.controls[i].errors?.mismatch}">
-                <option *ngFor="let telephoneType of telephoneTypes | keyvalue:keepOriginalOrder" [value] = telephoneType.key >{{telephoneType.value}} </option>
-              </select>
-              <div class="input-group-append order-sm-2">
-                <label class="btn btn-light" btnCheckbox formControlName="sendSMS" tabindex="0"
-                  role="button" [hidden]="true" [ngClass]="{'font-weight-bold': personForm.value.phoneNumbers[i].sendSMS}" [style.visibility]="!sharedService.isUKMobile(personForm.value.phoneNumbers[i].number) ? 'hidden' : 'visible'">SMS</label>
-                <label class="btn btn-light" btnCheckbox formControlName="isPreferred" tabindex="0" (click)="togglePreferences(i, phoneNumbers)"
-                  role="button" [class.active]="personForm.value.phoneNumbers[i].isPreferred"><i class="fa-star" [ngClass]="personForm.value.phoneNumbers[i].isPreferred ? 'fas' : 'far'"></i></label>
-              </div>
-              <input type="text" class="form-control order-sm-1" placeholder="Comments" formControlName="comments">
+                <select class="custom-select" formControlName="typeId"
+                  [ngClass]="{'is-invalid': personForm.controls.phoneNumbers.controls[i].errors?.mismatch}">
+                  <option *ngFor="let telephoneType of telephoneTypes | keyvalue:keepOriginalOrder"
+                    [value]=telephoneType.key>{{telephoneType.value}} </option>
+                </select>
+                <div class="input-group-append order-sm-2">
+                  <label class="btn btn-light" btnCheckbox formControlName="sendSMS" tabindex="0" role="button"
+                    [hidden]="true" [ngClass]="{'font-weight-bold': personForm.value.phoneNumbers[i].sendSMS}"
+                    [style.visibility]="!sharedService.isUKMobile(personForm.value.phoneNumbers[i].number) ? 'hidden' : 'visible'">SMS</label>
+                  <label class="btn btn-light" btnCheckbox formControlName="isPreferred" tabindex="0"
+                    (click)="togglePreferences(i, phoneNumbers)" role="button"
+                    [class.active]="personForm.value.phoneNumbers[i].isPreferred"><i class="fa-star"
+                      [ngClass]="personForm.value.phoneNumbers[i].isPreferred ? 'fas' : 'far'"></i></label>
+                </div>
+                <input type="text" class="form-control order-sm-1" placeholder="Comments" formControlName="comments">
                 <div class="invalid-feedback order-sm-3">
                   <div *ngIf="personForm.controls.phoneNumbers.controls[i].controls.number.errors?.invalidPhoneNumber">
                     {{validationMessages.telephone.invalidPhoneNumber}}
@@ -123,92 +156,115 @@
                     Telephone number doesn't match the type
                   </div>
                 </div>
-              <small class="form-text w-100 order-sm-4" *ngIf="!personForm.controls.phoneNumbers.controls[0].controls.number.value && isFirst"><i class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your score</span></small>
+                <small class="form-text w-100 order-sm-4"
+                  *ngIf="!personForm.controls.phoneNumbers.controls[0].controls.number.value && isFirst"><i
+                    class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your
+                    score</span></small>
+              </div>
             </div>
           </div>
         </div>
       </div>
-   </div>
-   <div class="form-group row">
-    <label class="col-sm-2 col-form-label col-form-label-sm">Contact by</label>
-    <div class="col-sm-8 col-xl-6">
-      <div class="custom-control custom-checkbox">
-        <input class="custom-control-input" type="checkbox" id="contactByEmail" formControlName="contactByEmail">
-        <label class="custom-control-label small" for="examplecheckboxs1">
-          Email
-        </label>
-      </div>
-      <div class="custom-control custom-checkbox">
-        <input class="custom-control-input" type="checkbox" id="contactByPhone" formControlName="contactByPhone">
-        <label class="custom-control-label small" for="examplecheckboxs3">
-          Phone
-        </label>
-      </div>
-    </div>
-  </div>
-  <div formGroupName="marketingPreferences">
       <div class="form-group row">
-        <label class="col-sm-2 col-form-label col-form-label-sm">Marketing</label>
-        <div class="col-sm-8 col-xl-6">
+        <div class="col-sm-8 col-xl-6 offset-sm-2">
+          <label class="small">Contact by</label>
+
           <div class="custom-control custom-checkbox">
-            <input class="custom-control-input" type="checkbox" name="marketBulletin" id="quarterly"   formControlName="marketBulletin">
-            <label class="custom-control-label small" for="quarterly">
-              Quarterly Market Bulletin
+            <input class="custom-control-input" type="checkbox" id="contactByEmail" formControlName="contactByEmail">
+            <label class="custom-control-label small" for="examplecheckboxs1">
+              Email
             </label>
           </div>
           <div class="custom-control custom-checkbox">
-            <input class="custom-control-input" type="checkbox" name="events" id="events"   formControlName="events">
-            <label class="custom-control-label small" for="events">
-              Landlord & Investor Events
-            </label>
-          </div>
-          <div class="custom-control custom-checkbox">
-            <input class="custom-control-input" type="checkbox" name="newHomes" id="newHomes"  formControlName="newHomes">
-            <label class="custom-control-label small" for="newHomes">
-              New Home and Investments
-            </label>
-          </div>
-          <div class="custom-control custom-checkbox">
-            <input class="custom-control-input" type="checkbox" name="offersSurveys" id="offersSurveys"
-                formControlName="offersSurveys">
-            <label class="custom-control-label small" for="offersSurveys">
-              Special Offers and Surveys
-            </label>
-          </div>
-          <div class="custom-control custom-checkbox">
-            <input class="custom-control-input" type="checkbox" name="general" id="occasional" formControlName="general">
-            <label class="custom-control-label small" for="occasional">
-              Other Occasional Marketing
+            <input class="custom-control-input" type="checkbox" id="contactByPhone" formControlName="contactByPhone">
+            <label class="custom-control-label small" for="examplecheckboxs3">
+              Phone
             </label>
           </div>
         </div>
       </div>
-  </div>
-    <div class="form-group row">
-      <label for="amlDate" class="col-sm-2 col-form-label col-form-label-sm">AML Completed</label>
-      <div class="col-sm-3">
-        <div class="input-group input-group-sm">
-            <input type="text" id="amlDate" placeholder="dd/mm/yyyy" class="form-control fake-readonly" formControlName="amlCompletedDate"
-            [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', maxDate:todaysDate, customTodayClass: 'font-weight-bold'}" bsDatepicker readonly>
+      <div formGroupName="marketingPreferences">
+        <div class="form-group row">
+          <div class="col-sm-8 col-xl-6 offset-sm-2">
+            <label class="small">Marketing</label>
+
+            <div class="custom-control custom-checkbox">
+              <input class="custom-control-input" type="checkbox" name="marketBulletin" id="quarterly"
+                formControlName="marketBulletin">
+              <label class="custom-control-label small" for="quarterly">
+                Quarterly Market Bulletin
+              </label>
+            </div>
+            <div class="custom-control custom-checkbox">
+              <input class="custom-control-input" type="checkbox" name="events" id="events" formControlName="events">
+              <label class="custom-control-label small" for="events">
+                Landlord & Investor Events
+              </label>
+            </div>
+            <div class="custom-control custom-checkbox">
+              <input class="custom-control-input" type="checkbox" name="newHomes" id="newHomes"
+                formControlName="newHomes">
+              <label class="custom-control-label small" for="newHomes">
+                New Home and Investments
+              </label>
+            </div>
+            <div class="custom-control custom-checkbox">
+              <input class="custom-control-input" type="checkbox" name="offersSurveys" id="offersSurveys"
+                formControlName="offersSurveys">
+              <label class="custom-control-label small" for="offersSurveys">
+                Special Offers and Surveys
+              </label>
+            </div>
+            <div class="custom-control custom-checkbox">
+              <input class="custom-control-input" type="checkbox" name="general" id="occasional"
+                formControlName="general">
+              <label class="custom-control-label small" for="occasional">
+                Other Occasional Marketing
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-3 offset-sm-2">
+          <label for="amlDate" class="small">AML Completed</label>
+
+          <div class="input-group input-group-sm">
+            <input type="text" id="amlDate" placeholder="dd/mm/yyyy" class="form-control fake-readonly"
+              formControlName="amlCompletedDate"
+              [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', maxDate:todaysDate, customTodayClass: 'font-weight-bold'}"
+              bsDatepicker readonly>
             <div class="input-group-append" *ngIf="personForm.value.amlCompletedDate">
-              <button type="button" class="btn btn-light" (click)="clearControlValue(personForm.get('amlCompletedDate'))">
+              <button type="button" class="btn btn-light"
+                (click)="clearControlValue(personForm.get('amlCompletedDate'))">
                 Clear
               </button>
             </div>
+          </div>
         </div>
       </div>
-    </div>
+    </fieldset>
     <div class="form-actions" [ngClass]="{'px-0': basicPerson}">
       <div class="container px-lg-4">
         <div class="row justify-content-end w-100 no-gutters">
           <div class="col-sm-10 d-flex">
             <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
-            <button type="submit" class="btn btn-secondary mr-2" [tooltip]="!personForm.valid ? errorMessage?.displayMessage : ''" placement="top" [attr.disabled]="isSubmitting ? '' : null"><i class="fas fa-spinner fa-pulse d-inline-block mr-2" *ngIf="isSubmitting"></i><ng-container *ngIf="!basicPerson; else addPersonLabel">Save</ng-container><ng-template #addPersonLabel>Add</ng-template></button>
-            <button type="button" (click)="savePerson(true)" class="btn btn-secondary" [tooltip]="!personForm.valid ? errorMessage?.displayMessage : ''" placement="top" [attr.disabled]="isSubmittingAndAdd ? '' : null" *ngIf="basicPerson && !isCompanyContactGroup"><i class="fas fa-spinner fa-pulse d-inline-block mr-2" *ngIf="isSubmitting"></i>Add Another</button>
+            <button type="submit" class="btn btn-secondary mr-2"
+              [tooltip]="!personForm.valid ? errorMessage?.displayMessage : ''" placement="top"
+              [attr.disabled]="isSubmitting ? '' : null"><i class="fas fa-spinner fa-pulse d-inline-block mr-2"
+                *ngIf="isSubmitting"></i>
+              <ng-container *ngIf="!basicPerson; else addPersonLabel">Save</ng-container>
+              <ng-template #addPersonLabel>Add</ng-template>
+            </button>
+            <button type="button" (click)="savePerson(true)" class="btn btn-secondary"
+              [tooltip]="!personForm.valid ? errorMessage?.displayMessage : ''" placement="top"
+              [attr.disabled]="isSubmittingAndAdd ? '' : null" *ngIf="basicPerson && !isCompanyContactGroup"><i
+                class="fas fa-spinner fa-pulse d-inline-block mr-2" *ngIf="isSubmitting"></i>Add Another</button>
           </div>
         </div>
       </div>
     </div>
   </form>
 </div>
-<app-additional-info [id]="personDetails?.personId ? 'P-'+personDetails?.personId : ''" *ngIf="!basicPerson"></app-additional-info>
+<app-additional-info [id]="personDetails?.personId ? 'P-'+personDetails?.personId : ''" *ngIf="!basicPerson">
+</app-additional-info>

@@ -72,21 +72,23 @@
       <h5>Company</h5>
       <form class="pb-3" [formGroup]="companyFinderForm" autocompleteOff>
         <div class="row" [hidden]="!selectedCompanyDetails">
-          <label for="selectedCompany" class="col-sm-2 col-form-label col-form-label-sm">Company Name</label>
-          <div class="col-sm-10">
+          <div class="col-sm-10 offset-sm-2">
+            <label for="selectedCompany" class="small">Company Name</label>
             <div class="form-group d-flex d-sm-block">
               <input type="hidden" #selectedCompanyInput id="selectedCompany" formControlName="selectedCompany">
-              <button type="button" class="btn btn-link btn-sm p-0 mobile-btn" (click)="editSelectedCompany(selectedCompanyDetails?.companyId)">
+              <button type="button" class="btn btn-link btn-sm p-0 mobile-btn"
+                (click)="editSelectedCompany(selectedCompanyDetails?.companyId)">
                 {{selectedCompanyDetails?.companyName}}
               </button>
-              <button type="button" *ngIf="!isExistingCompany" class="btn btn-light btn-sm ml-2" (click)="toggleSearchCompany()">Change</button>
+              <button type="button" *ngIf="!isExistingCompany" class="btn btn-light btn-sm ml-2"
+                (click)="toggleSearchCompany()">Change</button>
             </div>
           </div>
         </div>
         <div class="row" [hidden]="!isSearchCompanyVisible || isExistingCompany">
-          <label for="company" class="col-sm-2 col-form-label col-form-label-sm">Find Company</label>
-          <div class="col-sm-8 col-xl-6">
+          <div class="col-sm-8 col-xl-6 offset-sm-2">
             <div class="form-group">
+              <label for="company" class="small">Find Company</label>
               <div class="input-group input-group-sm">
                 <input #companyNameInput type="search" id="company" class="form-control" formControlName="companyName"
                   (keydown.enter)="searchCompany()" [ngbTypeahead]="suggestions" [focusFirst]="false"
@@ -135,10 +137,11 @@
       </form>
       <form class="pb-3" [formGroup]="contactGroupDetailsForm" autocompleteOff>
         <div class="row justify-content-end">
-          <label class="col-sm-2 col-form-label col-form-label-sm">Type</label>
-          <div class="col-sm-10">
+          <div class="col-sm-10 offset-sm-2">
             <div class="row">
               <div class="form-group col-sm-auto">
+                <label class="small">Type</label>
+
                 <div class="custom-control custom-checkbox">
                   <input type="checkbox" class="custom-control-input" id="solicitor" formControlName="isSolicitor">
                   <label class="custom-control-label small" for="solicitor">Solicitor</label>
@@ -176,8 +179,8 @@
         <div class="col-sm-10">
           <div class="list-group mb-3">
             <ng-container>
-              <a [routerLink]="person?.isNewPerson ? null : ['../../../../detail', person?.personId ]" [queryParams]="{showNotes: true}"
-                class="list-group-item list-group-item-action"
+              <a [routerLink]="person?.isNewPerson ? null : ['../../../../detail', person?.personId ]"
+                [queryParams]="{showNotes: true}" class="list-group-item list-group-item-action"
                 *ngFor="let person of contactGroupDetails?.contactPeople ; index as i"
                 [ngClass]="{'new-person': person?.isNewPerson, 'list-group-item-danger': person?.warning && person?.warning?.id !== 1}">
                 <div class="row">
@@ -354,14 +357,14 @@
         <h5>Details</h5>
         <form [formGroup]="contactGroupDetailsForm" class="pb-3">
           <div class="form-group row">
-            <label for="salutation" class="col-sm-2 col-form-label col-form-label-sm">Salutation</label>
-            <div class="col-sm-8 col-xl-6">
+            <div class="col-sm-8 col-xl-6 offset-sm-2">
+              <label for="salutation" class="small">Salutation</label>
               <input type="text" id="salutation" class="form-control form-control-sm" formControlName="salutation">
             </div>
           </div>
           <div class="form-group row">
-            <label for="addressee" class="col-sm-2 col-form-label col-form-label-sm">Addressee</label>
-            <div class="col-sm-8 col-xl-6">
+            <div class="col-sm-8 col-xl-6 offset-sm-2">
+              <label for="addressee" class="small">Addressee</label>
               <input type="text" id="addressee" class="form-control form-control-sm" formControlName="addressee">
             </div>
           </div>
@@ -379,8 +382,8 @@
             </div>
           </div>
           <div class="row">
-            <label class="col-sm-2 col-form-label col-form-label-sm">Notes</label>
-            <div class="col-sm-10" [ngClass]="{'notes-disabled': !contactGroupDetails?.contactGroupId}">
+            <div class="col-sm-10 offset-sm-2" [ngClass]="{'notes-disabled': !contactGroupDetails?.contactGroupId}">
+              <label class="small">Notes</label>
               <small class="alert alert-info" *ngIf="!contactGroupDetails?.contactGroupId">Save to enable
                 Notes</small>
               <app-notes [noteData]="dataNote" [contactGroupNotes]="dataNote?.notes" [bottomReached]="bottomReached"
@@ -409,4 +412,5 @@
   [contactGroupDetails]="contactGroupDetails" [searchTerm]="signer" (addedPersonDetails)="getAddedPersonDetails($event)"
   (selectedPerson)="getSelectedPerson($event)" (isCanvasHidden)="resetCanvasFlag($event)">
 </app-person-duplicate-checker>
-<app-additional-info [id]="contactGroupDetails?.contactGroupId ? 'CG-'+contactGroupDetails?.contactGroupId : ''"></app-additional-info>
+<app-additional-info [id]="contactGroupDetails?.contactGroupId ? 'CG-'+contactGroupDetails?.contactGroupId : ''">
+</app-additional-info>

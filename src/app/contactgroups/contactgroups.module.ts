@@ -8,7 +8,6 @@ import { ContactgroupsPeopleComponent } from './contactgroups-people/contactgrou
 import { CoreModule } from '../core/core.module';
 import { FormsModule } from '@angular/forms';
 import { ContactgroupsDetailEditComponent } from './contactgroups-detail-edit/contactgroups-detail-edit.component';
-import { ContactgroupsCompanyEditComponent } from './contactgroups-company-edit/contactgroups-company-edit.component';
 import { ContactgroupsDetailLeadsComponent } from '../shared/contactgroups-detail-leads/contactgroups-detail-leads.component';
 import { ContactgroupsDetailNotesComponent } from './contactgroups-detail-notes/contactgroups-detail-notes.component';
 import { ContactgroupsDetailSearchesComponent } from '../shared/contactgroups-detail-searches/contactgroups-detail-searches.component';
@@ -21,7 +20,6 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { ContactGroupsComponent } from './contactgroups.component';
 import { ContactgroupsDetailHomeHelperComponent } from '../shared/contactgroups-detail-home-helper/contactgroups-detail-home-helper.component';
 import { PersonDuplicateCheckerComponent } from './shared/person-duplicate-checker/person-duplicate-checker.component';
-import { ContactgroupsCompanyFinderComponent } from './shared/contactgroups-company-finder/contactgroups-company-finder.component';
 import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
@@ -31,7 +29,6 @@ import { SharedModule } from '../shared/shared.module';
     ContactgroupsDetailComponent,
     ContactgroupsPeopleComponent,
     ContactgroupsDetailEditComponent,
-    ContactgroupsCompanyEditComponent,
     // ContactgroupsDetailLeadsComponent,
     ContactgroupsDetailNotesComponent,
     // ContactgroupsDetailSearchesComponent,
@@ -41,8 +38,7 @@ import { SharedModule } from '../shared/shared.module';
     // ContactgroupsDetailOffersComponent,
     // ContactgroupsDetaillettingsManagementsComponent,
     // ContactgroupsDetailHomeHelperComponent,
-    PersonDuplicateCheckerComponent,
-    ContactgroupsCompanyFinderComponent
+    PersonDuplicateCheckerComponent
   ],
   imports: [
     CommonModule,

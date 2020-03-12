@@ -26,8 +26,8 @@
   <form [formGroup]="diaryEventForm" (ngSubmit)="saveDiaryEvent()" autocompleteOff>
     <fieldset *ngIf="showTypes || showStaffMembers">
       <div class="form-group row" *ngIf="showTypes">
-        <label for="eventTypeId" class="col-sm-2 col-form-label col-form-label-sm">Type</label>
-        <div class="col-sm-3">
+        <div class="col-sm-3 offset-sm-2">
+          <label for="eventTypeId" class="small">Type</label>
           <select class="custom-select custom-select-sm" id="eventTypeId" formControlName="eventTypeId"
             (change)="onEventTypeChange($event.target.value)">
             <option value="0"></option>
@@ -36,8 +36,8 @@
         </div>
       </div>
       <div *ngIf="showStaffMembers" class="form-group row">
-        <label for="property" class="col-sm-2 col-form-label col-form-label-sm">Staff Members</label>
-        <div class="col-sm-3">
+        <div class="col-sm-3 offset-sm-2">
+          <label for="property" class="small">Staff Members</label>
           <ng-container *ngIf="!diaryEvent?.onOutlook;else staffList">
             <app-staff-member-finder [listType]="'calendarStaffMembers'" [isMultiple]="true"
               [isReadOnly]="diaryEvent?.onOutlook" [staffMemberIdList]="staffMemberIdList"
@@ -84,8 +84,8 @@
     <fieldset *ngIf="showOthers">
       <legend class="fieldset-title">Detail</legend>
       <div class="form-group row">
-        <label for="startDateTime" class="col-sm-2 col-form-label col-form-label-sm">Start Date</label>
-        <div class="col-sm-6 col-xl-3">
+        <div class="col-sm-6 col-xl-3 offset-sm-2">
+          <label for="startDateTime" class="small">Start Date</label>
           <div class="input-group" [ngClass]="{'mb-2':!(!isEditable && !isNewEvent)}">
             <input type="text" id="startDateTime" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
               formControlName="startDateTime"
@@ -117,8 +117,8 @@
         </div>
       </div>
       <div class="form-group row" *ngIf="!isAllDay">
-        <label for="endDateTime" class="col-sm-2 col-form-label col-form-label-sm">End Date</label>
-        <div class="col-sm-6 col-xl-3">
+        <div class="col-sm-6 col-xl-3 offset-sm-2">
+          <label for="endDateTime" class="small">End Date</label>
           <div class="input-group">
             <input type="text" id="endDateTime" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
               formControlName="endDateTime"
@@ -157,18 +157,18 @@
         </div>
       </div>
       <div class="form-group row" *ngIf="diaryEvent?.subject && diaryEvent?.onOutlook">
-        <label for="subject" class="col-sm-2 col-form-label col-form-label-sm">Subject</label>
-        <div class="col-sm-8 col-xl-6">
+        <div class="col-sm-8 col-xl-6 offset-sm-2">
+          <label for="subject" class="small">Subject</label>
           <input type="text" class="form-control form-control-sm" formControlName="subject" id="subject" name="subject"
             [attr.disabled]="!isEditable && !isNewEvent ? true : null"
             [ngClass]="{'form-control-plaintext': !isEditable && !isNewEvent}" />
         </div>
       </div>
       <div class="form-group row" *ngIf="diaryEvent?.notes.trim() || isEditable || isNewEvent">
-        <label for="notes" class="col-sm-2 col-form-label col-form-label-sm">Note<br /><span
-            *ngIf="isEditable || isNewEvent" class="form-text text-muted">(200 chars max)</span></label>
         <ng-container *ngIf="!isBase64Image; else showImage">
-          <div class="col-sm-8 col-xl-6">
+          <div class="col-sm-8 col-xl-6 offset-sm-2">
+            <label for="notes" class="small">Note<br /><span
+              *ngIf="isEditable || isNewEvent" class="form-text text-muted">(200 chars max)</span></label>
             <textarea type="textarea" class="form-control form-control-sm" formControlName="notes" id="notes"
               name="note" placeholder="Note" maxlength="200" [attr.disabled]="!isEditable && !isNewEvent ? true : null"
               [ngStyle]="{'min-height.px': diaryEventForm.get('notes').value.length}"
