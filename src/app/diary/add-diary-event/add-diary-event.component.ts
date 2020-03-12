@@ -19,6 +19,7 @@ import { Subject } from 'rxjs';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { ConfirmModalComponent } from 'src/app/shared/confirm-modal/confirm-modal.component';
 import { ResultData } from 'src/app/shared/result-data';
+import { DomSanitizer } from '@angular/platform-browser';
 import * as _ from 'lodash';
 @Component({
   selector: 'app-add-diary-event',
@@ -28,8 +29,8 @@ import * as _ from 'lodash';
 export class AddDiaryEventComponent implements OnInit {
   eventTypes: InfoDetail[];
   diaryEventForm: FormGroup;
-  isSubmitting: boolean = false; isTelRequired: boolean;
-  ;
+  isSubmitting = false;
+  isTelRequired: boolean;
   minutes = ['00', '15', '30', '45'];
   durationTypes = reminderUnitTypes;
   isNewEvent: boolean;
@@ -65,6 +66,8 @@ export class AddDiaryEventComponent implements OnInit {
   isRebook: boolean;
   propertyRequiredWarning = '';
   contactRequiredWarning: string;
+  imagePath: any;
+  isBase64Image: boolean;
 
   get hours() {
     const result = [];
@@ -110,6 +113,7 @@ export class AddDiaryEventComponent implements OnInit {
     private toastr: ToastrService,
     private router: Router,
     private route: ActivatedRoute,
+    private sanitizer: DomSanitizer,
     private sharedService: SharedService) {
   }
 
@@ -175,6 +179,7 @@ export class AddDiaryEventComponent implements OnInit {
                 this.eventStaffMembers = event.staffMembers;
                 this.diaryEvent.staffMembers = this.getStaff(event.staffMembers);
                 this.setPeopleLabel(this.eventStaffMembers);
+                this.getEmbeddedImage(event);
               }
             } else {
               this.isEditable = true;
@@ -560,6 +565,16 @@ export class AddDiaryEventComponent implements OnInit {
     console.log('%c this.diaryEvent.staffMembers', 'color: green', this.diaryEvent.staffMembers);
   }
 
+  getEmbeddedImage(diaryEvent: DiaryEvent) {
+    if (diaryEvent.notes && diaryEvent.notes.startsWith('[data:image')) {
+      const length = diaryEvent.notes.trimEnd().length;
+      const base64Image = diaryEvent.notes.trimEnd().substring(1, length - 3);
+      this.isBase64Image = true;
+      this.imagePath = this.sanitizer.bypassSecurityTrustResourceUrl(base64Image);
+
+      // console.log('last text message', diaryEvent.notes.trimEnd().substring(1, 240543))
+    }
+  }
   canDeactivate(): boolean {
     if (this.diaryEventForm.dirty && !this.isSubmitting) {
       return false;

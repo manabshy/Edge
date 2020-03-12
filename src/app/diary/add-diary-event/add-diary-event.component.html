@@ -77,7 +77,8 @@
     <fieldset *ngIf="showContacts">
       <legend class="fieldset-title">Contacts</legend>
       <app-signer [label]="contactLabel" [isMultiple]="true" (selectedSignersList)="getSelectedContactGroups($event)"
-        [contactList]="diaryEvent?.contacts" [contactRequiredWarning]="contactRequiredWarning" [isTelRequired]="isTelRequired">
+        [contactList]="diaryEvent?.contacts" [contactRequiredWarning]="contactRequiredWarning"
+        [isTelRequired]="isTelRequired">
       </app-signer>
     </fieldset>
     <fieldset *ngIf="showOthers">
@@ -156,7 +157,7 @@
         </div>
       </div>
       <div class="form-group row" *ngIf="diaryEvent?.subject && diaryEvent?.onOutlook">
-        <label for="notes" class="col-sm-2 col-form-label col-form-label-sm">Subject</label>
+        <label for="subject" class="col-sm-2 col-form-label col-form-label-sm">Subject</label>
         <div class="col-sm-8 col-xl-6">
           <input type="text" class="form-control form-control-sm" formControlName="subject" id="subject" name="subject"
             [attr.disabled]="!isEditable && !isNewEvent ? true : null"
@@ -166,12 +167,15 @@
       <div class="form-group row" *ngIf="diaryEvent?.notes.trim() || isEditable || isNewEvent">
         <label for="notes" class="col-sm-2 col-form-label col-form-label-sm">Note<br /><span
             *ngIf="isEditable || isNewEvent" class="form-text text-muted">(200 chars max)</span></label>
-        <div class="col-sm-8 col-xl-6">
-          <textarea type="textarea" class="form-control form-control-sm" formControlName="notes" id="notes" name="note"
-            placeholder="Note" maxlength="200" [attr.disabled]="!isEditable && !isNewEvent ? true : null"
-            [ngStyle]="{'min-height.px': diaryEventForm.get('notes').value.length}"
-            [ngClass]="{'form-control-plaintext': !isEditable && !isNewEvent}"></textarea>
-        </div>
+        <ng-container *ngIf="!isBase64Image; else showImage">
+          <div class="col-sm-8 col-xl-6">
+            <textarea type="textarea" class="form-control form-control-sm" formControlName="notes" id="notes"
+              name="note" placeholder="Note" maxlength="200" [attr.disabled]="!isEditable && !isNewEvent ? true : null"
+              [ngStyle]="{'min-height.px': diaryEventForm.get('notes').value.length}"
+              [ngClass]="{'form-control-plaintext': !isEditable && !isNewEvent}"></textarea>
+          </div>
+        </ng-container>
+        <ng-template #showImage> <img [src]="imagePath" alt="embedded image" /></ng-template>
       </div>
       <div class="form-group row" *ngIf="isReminder || isEditable || isNewEvent">
         <div class="col-sm-6 col-xl-3 offset-sm-2">
