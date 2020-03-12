@@ -135,7 +135,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     private storage: StorageMap,
     private route: ActivatedRoute,
     private infoService: InfoService,
-
     private router: Router,
     private fb: FormBuilder) { super(); }
 

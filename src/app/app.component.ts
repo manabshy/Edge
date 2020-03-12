@@ -24,19 +24,13 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
   isCurrentUserAvailable = false;
   currentStaffMember: StaffMember;
   listInfo: any;
+
   @ViewChild('appContainer', { static: true }) appContainer: ElementRef;
   @ViewChild(ToastContainerDirective, { static: true }) toastContainer: ToastContainerDirective;
-  //  get currentStaffMemberGetter(): StaffMember {
-  //     return this.currentStaffMember;
-  //   }
 
   get isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
   }
-
-  // get isLoadVisible(): boolean {
-  //   return !(!!this.currentStaffMember);
-  // }
 
 
   constructor(private router: Router,
@@ -74,16 +68,11 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
       }, 1200);
       // window.scrollTo(0,0);
     });
-    console.log('instance created');
   }
 
   ngOnInit() {
-    // this.edgeServiceWorker.forceUpdate();
-    console.log('edgeServiceWorker in ngonit', this.edgeServiceWorker);
     this.toastr.overlayContainer = this.toastContainer;
-    console.log('instance initiliased');
     this.setManifestName();
-    console.log('manifest here..', manifest)
 
     if (this.isLoggedIn) {
       this.getCurrentStaffMember();
@@ -110,7 +99,6 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
     }
 
     this.cdRef.detectChanges();
-    // this.edgeServiceWorker.forceUpdate();
   }
 
   private getCurrentStaffMember() {
