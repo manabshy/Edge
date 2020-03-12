@@ -8,7 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { debounceTime, takeUntil, distinctUntilChanged } from 'rxjs/operators';
 import { Signer } from 'src/app/contactgroups/shared/contact-group';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
-import { DropdownListInfo, InfoDetail } from 'src/app/core/services/info.service';
+import { DropdownListInfo, InfoDetail, InfoService } from 'src/app/core/services/info.service';
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
 import { FormErrors } from 'src/app/core/shared/app-constants';
@@ -40,7 +40,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   selectedDate: Date;
   createdSigner: any;
   isCreatingNewSigner: boolean;
-  allStaffMembers: BaseStaffMember[];
+  allStaffMembers: BaseStaffMember[] = [];
   attendees: BaseStaffMember[] = [];
   attendee: BaseStaffMember;
   mainStaffMember: BaseStaffMember;
@@ -53,7 +53,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   property: Property;
   isOwnerChanged: boolean;
   isPropertyChanged: boolean;
-  allAttendees: BaseStaffMember[];
+  allAttendees: BaseStaffMember[] = [];
   isEditable: boolean;
   showLeaseExpiryDate: boolean;
   canInstruct: boolean;
@@ -62,16 +62,16 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   approxLeaseExpiryDate: Date;
   instructionForm: FormGroup;
   instruction: Instruction;
-  originTypes: InfoDetail[];
-  allOrigins: InfoDetail[];
-  origins: InfoDetail[];
+  originTypes: InfoDetail[] = [];
+  allOrigins: InfoDetail[] = [];
+  origins: InfoDetail[] = [];
   origin: string;
   valuers: BaseStaffMember[] = [];
   showDateAndDuration: boolean;
   hasDateWithValuer = false;
   activeOriginId: InfoDetail;
   showOriginId: boolean;
-  allOriginTypes: InfoDetail[];
+  allOriginTypes: InfoDetail[] = [];
 
   get isInvitationSent() {
     return this.valuationForm.get('isInvitationSent') as FormControl;
@@ -134,6 +134,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     private toastr: ToastrService,
     private storage: StorageMap,
     private route: ActivatedRoute,
+    private infoService: InfoService,
+
     private router: Router,
     private fb: FormBuilder) { super(); }
 
@@ -154,15 +156,16 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
 
     this.storage.get('info').subscribe((info: DropdownListInfo) => {
-      let allOriginTypes;
-      this.tenures = info.tenures;
-      this.outsideSpaces = info.outsideSpaces;
-      this.parkings = info.parkings;
-      this.features = info.propertyFeatures;
-      this.allOrigins = info.origins;
-      allOriginTypes = info.originTypes;
-      this.setOriginTypes(allOriginTypes);
-
+      if (info) {
+        this.setupListInfo(info);
+      } else {
+        this.infoService.getDropdownListInfo().pipe(takeUntil(this.ngUnsubscribe)).subscribe((data: ResultData | any) => {
+          if (data) {
+            this.setupListInfo(data.result);
+            console.log(' list info in val edit from db', data.result);
+          }
+        });
+      }
     });
 
     this.storage.get('allAttendees').subscribe(data => {
@@ -172,6 +175,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.staffMemberService.getValuationAttendees().pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => this.allAttendees = result);
       }
     });
+
 
     this.getAddedProperty();
 
@@ -199,6 +203,15 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   }
 
+
+  private setupListInfo(info: DropdownListInfo) {
+    this.tenures = info.tenures;
+    this.outsideSpaces = info.outsideSpaces;
+    this.parkings = info.parkings;
+    this.features = info.propertyFeatures;
+    this.allOrigins = info.origins;
+    this.setOriginTypes(info.originTypes); // TODO: Issue on refresh
+  }
 
   private getPropertyDetails() {
     this.propertyService.getProperty(this.propertyId, false, false, true).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
@@ -460,7 +473,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   setOriginTypes(allOriginTypes: InfoDetail[]) {
     const activeOriginTypes = allOriginTypes.filter((x: InfoDetail) => x.isActive);
     this.isNewValuation ? this.originTypes = activeOriginTypes : this.originTypes = allOriginTypes;
-    console.log('%c originTypes', 'color: green',this.originTypes)
   }
 
   onSelectType(originTypeId: number) {
@@ -468,7 +480,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     const allOrigins = this.allOrigins.filter((x: InfoDetail) => +x.parentId === +originTypeId);
     const activeOrigins = this.allOrigins.filter((x: InfoDetail) => +x.parentId === +originTypeId && x.isActive);
     this.isNewValuation ? this.origins = activeOrigins : this.origins = allOrigins;
-    console.log('%c origins', 'color: purple', this.origins)
     this.valuationForm.get('originId').setValue(0);
   }
 
