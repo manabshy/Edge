@@ -4,7 +4,7 @@ import { DiaryEvent, DiaryEventTypesEnum, reminderUnitTypes } from '../shared/di
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { DiaryEventService } from '../shared/diary-event.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
-import { DropdownListInfo, InfoDetail } from 'src/app/core/services/info.service';
+import { DropdownListInfo, InfoDetail, InfoService } from 'src/app/core/services/info.service';
 import { getHours, getMinutes, format, setHours, setMinutes, isAfter } from 'date-fns';
 import { Property } from 'src/app/property/shared/property';
 import { Signer } from 'src/app/contactgroups/shared/contact-group';
@@ -56,11 +56,11 @@ export class AddDiaryEventComponent implements OnInit {
   isEditable = false;
   currentStaffMember: BaseStaffMember[];
   id: number;
-  showAllEventTypes: InfoDetail[];
-  showOnlyPropertyEventTypes: InfoDetail[];
-  showOnlyContactEventTypes: InfoDetail[];
+  showAllEventTypes: InfoDetail[] = [];
+  showOnlyPropertyEventTypes: InfoDetail[] = [];
+  showOnlyContactEventTypes: InfoDetail[] = [];
   NumberOfPeopleLabel: string;
-  eventStaffMembers: BaseStaffMember[];
+  eventStaffMembers: BaseStaffMember[] = [];
   showMorePeople = true;
   canRebook = false;
   isRebook: boolean;
@@ -114,6 +114,7 @@ export class AddDiaryEventComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
+    private infoService: InfoService,
     private sharedService: SharedService) {
   }
 
@@ -142,20 +143,14 @@ export class AddDiaryEventComponent implements OnInit {
 
     this.storage.get('info').subscribe((info: DropdownListInfo) => {
       if (info) {
-        const allEventTypes = info.diaryEventTypes;
-        this.eventTypes = allEventTypes
-          .filter(x => ![DiaryEventTypesEnum.ValuationSales, DiaryEventTypesEnum.ValuationLettings, DiaryEventTypesEnum.Alert].includes(x.id));
-
-        // Group event into array of parts of the form visbile
-        if (this.eventTypes && this.eventTypes.length) {
-          this.showAllEventTypes = this.eventTypes.filter(x => [DiaryEventTypesEnum.ViewingSales, DiaryEventTypesEnum.ViewingLettings,
-          DiaryEventTypesEnum.PropertyManagement, DiaryEventTypesEnum.Reminder, DiaryEventTypesEnum.Other].includes(x.id));
-          this.showOnlyPropertyEventTypes = this.eventTypes
-            .filter(x => [DiaryEventTypesEnum.PreviewSales, DiaryEventTypesEnum.PreviewLettings].includes(x.id));
-          this.showOnlyContactEventTypes = this.eventTypes
-            .filter(x => [DiaryEventTypesEnum.Meeting, DiaryEventTypesEnum.Interview, DiaryEventTypesEnum.Training].includes(x.id));
-          // this.getDiaryEvent();
-        }
+        this.setupEventTypes(info);
+      } else {
+        this.infoService.getDropdownListInfo().subscribe((data: ResultData | any) => {
+          if (data) {
+            this.setupEventTypes(data.result);
+            console.log(' list info in add event or edit from db', data.result);
+          }
+        });
       }
     });
 
@@ -164,6 +159,21 @@ export class AddDiaryEventComponent implements OnInit {
     this.diaryEventForm.valueChanges.subscribe(data => {
       this.sharedService.logValidationErrors(this.diaryEventForm, false);
     });
+  }
+
+  private setupEventTypes(info: DropdownListInfo) {
+    const allEventTypes = info.diaryEventTypes;
+    this.eventTypes = allEventTypes
+      .filter(x => ![DiaryEventTypesEnum.ValuationSales, DiaryEventTypesEnum.ValuationLettings, DiaryEventTypesEnum.Alert].includes(x.id));
+    // Group event into array of parts of the form visbile
+    if (this.eventTypes && this.eventTypes.length) {
+      this.showAllEventTypes = this.eventTypes.filter(x => [DiaryEventTypesEnum.ViewingSales, DiaryEventTypesEnum.ViewingLettings,
+      DiaryEventTypesEnum.PropertyManagement, DiaryEventTypesEnum.Reminder, DiaryEventTypesEnum.Other].includes(x.id));
+      this.showOnlyPropertyEventTypes = this.eventTypes
+        .filter(x => [DiaryEventTypesEnum.PreviewSales, DiaryEventTypesEnum.PreviewLettings].includes(x.id));
+      this.showOnlyContactEventTypes = this.eventTypes
+        .filter(x => [DiaryEventTypesEnum.Meeting, DiaryEventTypesEnum.Interview, DiaryEventTypesEnum.Training].includes(x.id));
+    }
   }
 
   private getDiaryEvent() {
