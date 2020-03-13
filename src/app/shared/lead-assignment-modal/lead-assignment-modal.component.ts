@@ -18,10 +18,10 @@ export class LeadAssignmentModalComponent implements OnInit {
   }
 
   onOwnerChanged(event: any) {
-    console.log('owner from child',event);
+    console.log('ownerid from child',event.staffMemberId);
 
-    if (event && event.item != null) {
-      this.selectedOwner = event.item.staffMemberId;
+    if (event) {
+      this.selectedOwner = event.staffMemberId;
       this.isAssignable = true;
     }
   }
