@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ElementRef } from '@angular/core';
 import { AppUtils, RequestOption } from '../shared/utils';
 import dayjs from 'dayjs';
 import { Subject } from 'rxjs';
@@ -118,6 +118,14 @@ export class SharedService {
         });
       }
     }
+  }
+
+  scrollIntoView(element: ElementRef){
+    setTimeout(()=>{
+      if(element) {
+        element.nativeElement.scrollIntoView();
+      }
+    })
   }
 
   scrollTodayIntoView() {

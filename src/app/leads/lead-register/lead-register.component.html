@@ -3,6 +3,7 @@
     <h4 class="m-0">Leads register</h4>
   </div>
   <div class="col-auto">
+    <button type="button" class="btn btn-light mr-2 d-none" [ngClass]="{'d-sm-inline': isChangeSearchVisible}" (click)="scrollElIntoView('search-form')">Change Search</button>
     <div class="btn-group" dropdown placement="bottom right">
       <button id="actionsToggle" dropdownToggle type="button" class="btn btn-light dropdown-toggle"
         aria-controls="actionsList">
@@ -22,7 +23,7 @@
     </div>
   </div>
 </div>
-<form class="p-0" [formGroup]="leadRegisterForm" *ngIf="showFilterOptions" autocompleteOff>
+<form class="mb-3 search-form" [formGroup]="leadRegisterForm" *ngIf="showFilterOptions" autocompleteOff>
   <div class="row align-items-center">
     <div class="col-sm">
       <div class="row">

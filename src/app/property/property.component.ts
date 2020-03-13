@@ -28,6 +28,7 @@ export class PropertyComponent extends BaseComponent implements OnInit {
   bottomReached = false;
   suggestions: (text$: Observable<string>) => Observable<unknown>;
   suggestedTerm: '';
+  isChangeSearchVisible: boolean = false;
 
   constructor(private propertyService: PropertyService,
     private fb: FormBuilder,
@@ -80,6 +81,9 @@ export class PropertyComponent extends BaseComponent implements OnInit {
   }
 
   getNextPropertyPage(page) {
+    if(page > 1) {
+      this.isChangeSearchVisible = true;
+    }
     const requestOptions = {
       page: page,
       pageSize: this.PAGE_SIZE,
@@ -131,5 +135,12 @@ export class PropertyComponent extends BaseComponent implements OnInit {
     this.propertiesResults(true);
     AppUtils.propertySearchTerm = this.searchTerm;
     this.suggestedTerm = '';
+  }
+
+
+
+  scrollElIntoView(className: string) {
+    this.sharedService.scrollElIntoView(className);
+    this.isChangeSearchVisible = false;
   }
 }
