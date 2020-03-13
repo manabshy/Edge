@@ -23,7 +23,9 @@ export class LeadComponent implements OnInit {
   leadSearchInfo: LeadSearchInfo;
   searchTerm = '';
 
-  constructor(private leadService: LeadsService, private sharedService: SharedService, private staffMemberService: StaffMemberService) { }
+  constructor(private leadService: LeadsService,
+    private sharedService: SharedService,
+    private staffMemberService: StaffMemberService) { }
 
   ngOnInit() {
 
