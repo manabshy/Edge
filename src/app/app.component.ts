@@ -18,7 +18,7 @@ import manifest from 'src/manifest.json';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent extends BaseComponent implements OnInit, AfterViewChecked {
+export class AppComponent extends BaseComponent implements OnInit {
   title = 'Wedge';
   isFading = false;
   isCurrentUserAvailable = false;
@@ -88,17 +88,6 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
         AppUtils.navPlaceholder = AppUtils.navPlaceholder.substring(AppUtils.navPlaceholder.indexOf('|') + 1).trim();
       }
     });
-  }
-
-  ngAfterViewChecked() {
-
-    if (!this.isLoggedIn) {
-      this.renderer.addClass(document.body, 'bg-dark');
-    } else {
-      this.renderer.removeClass(document.body, 'bg-dark');
-    }
-
-    this.cdRef.detectChanges();
   }
 
   private getCurrentStaffMember() {

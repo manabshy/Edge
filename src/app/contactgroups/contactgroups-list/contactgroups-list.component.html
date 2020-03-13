@@ -1,4 +1,4 @@
-<div class="list-group mb-3">
+<div class="list-group">
   <div *ngIf="originalContactGroups" class="search-results">
     <a [routerLink]="['detail', contactGroup.personId ]" [queryParams]="{showNotes: true}" class="list-group-item list-group-item-action v-o-h-container"
       [ngClass]="{'list-group-item-danger': contactGroup?.warning && contactGroup?.warning?.id !== 1}"

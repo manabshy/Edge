@@ -1,5 +1,5 @@
 <app-breadcrumb *ngIf="!basicPerson"></app-breadcrumb>
-<div class="container" [ngClass]="{'p-0': basicPerson}">
+<div class="container main" [ngClass]="{'p-0': basicPerson}">
   <div class="page-title sticky-top" [ngClass]="{'pt-3': basicPerson}">
     <h4 *ngIf="!basicPerson">Edit Person</h4>
     <app-score-badge [bar]="true" [person]="personForm?.value"></app-score-badge>
@@ -245,7 +245,7 @@
       </div>
     </fieldset>
     <div class="form-actions" [ngClass]="{'px-0': basicPerson}">
-      <div class="container px-lg-4">
+      <div class="container">
         <div class="row justify-content-end w-100 no-gutters">
           <div class="col-sm-10 d-flex">
             <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>

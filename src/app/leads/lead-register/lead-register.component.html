@@ -23,7 +23,7 @@
     </div>
   </div>
 </div>
-<form class="mb-3 search-form" [formGroup]="leadRegisterForm" *ngIf="showFilterOptions" autocompleteOff>
+<form class="pb-0 search-form" [formGroup]="leadRegisterForm" *ngIf="showFilterOptions" autocompleteOff>
   <div class="row align-items-center">
     <div class="col-sm">
       <div class="row">
@@ -163,7 +163,7 @@
     <i class="far fa-sad-tear"></i> No results for your current search
   </div>
   <div class="form-actions" *ngIf="areLeadsAssignable">
-    <div class="container px-lg-4">
+    <div class="container">
       <div class="row justify-content-end w-100 no-gutters">
         <div class="col-sm-10 d-flex">
           <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>

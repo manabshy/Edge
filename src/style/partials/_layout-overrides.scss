@@ -25,6 +25,12 @@ body {
 
 }
 
+.main {
+    background-color: color("white");
+    padding-bottom: spacer(3);
+    @include border-radius($card-border-radius)
+}
+
 a:not(:disabled) {
     cursor: pointer;
 }

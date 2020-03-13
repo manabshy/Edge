@@ -61,6 +61,11 @@ $top-bar-height: 50px;
             left: auto;
             right: 0;
         }
+        @include media-breakpoint-up(xl){
+            width: container-max-width('lg');
+            left: auto;
+            right: calc((100% - #{container-max-width('lg')} - #{$side-nav-width})/2);
+        }
     }
 
     .container {
