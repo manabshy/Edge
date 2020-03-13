@@ -36,6 +36,7 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
+    this.getStaffMembers(this.listType);
     if (this.staffMemberId) {
       this.staffMemberFinderForm.patchValue({
         staffMemberId: this.staffMemberId
@@ -48,7 +49,6 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
         staffMemberId: this.staffMemberIdList
       });
     }
-    this.getStaffMembers(this.listType);
   }
 
   onStaffMemberChange(staffMember: BaseStaffMember) {

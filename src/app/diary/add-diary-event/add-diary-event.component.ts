@@ -7,7 +7,7 @@ import { StorageMap } from '@ngx-pwa/local-storage';
 import { DropdownListInfo, InfoDetail, InfoService } from 'src/app/core/services/info.service';
 import { getHours, getMinutes, format, setHours, setMinutes, isAfter } from 'date-fns';
 import { Property } from 'src/app/property/shared/property';
-import { Signer } from 'src/app/contactgroups/shared/contact-group';
+import { Signer, ContactGroup } from 'src/app/contactgroups/shared/contact-group';
 import { ToastrService } from 'ngx-toastr';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
@@ -199,7 +199,6 @@ export class AddDiaryEventComponent implements OnInit {
             this.toggleFlags(+event.eventTypeId);
             this.setStaffMemberIdList(event.staffMembers);
             this.populateForm(event);
-            console.log('event details', event);
           }
         });
     }
@@ -324,11 +323,6 @@ export class AddDiaryEventComponent implements OnInit {
   onStartDateChange(startDate) {
     console.log('start', startDate);
     this.diaryEventForm.get('endDateTime').setValue(startDate);
-    // const con = isAfter(startDate, this.endDateTimeControl.value)
-    // if (con) {
-    //   this.minDate = startDate;
-    // }
-    // console.log('condition', con);
   }
 
   onEndDateChange(endDate) {
@@ -348,12 +342,14 @@ export class AddDiaryEventComponent implements OnInit {
   }
 
   private toggleFlags(eventTypeId: number) {
-    console.log('%c Should be hree', 'color: red');
+    console.log('%c Should be hree', 'color: red', eventTypeId);
 
     // set flags based on the event type selected
     const showAllType = this.showAllEventTypes.filter(x => +x.id === +eventTypeId);
     const showOnlyPropertiesType = this.showOnlyPropertyEventTypes.filter(x => +x.id === +eventTypeId);
     const showOnlyContactsType = this.showOnlyContactEventTypes.filter(x => +x.id === +eventTypeId);
+    console.log('%cshow event types xxxx', 'color: green', showAllType,
+      'showOnlyProperties:', showOnlyPropertiesType, 'showOnlyContacts type xxxx', showOnlyContactsType);
 
     switch (true) {
       case !!showAllType.length:
@@ -540,22 +536,29 @@ export class AddDiaryEventComponent implements OnInit {
 
       this.setTelephoneValidator(contactsControl);
     }
-    console.log('%cpropertyRequiredWarning', 'color:green', this.propertyRequiredWarning);
-    console.log('%c properties control', 'color:green', propertiesControl);
-    console.log('%c contacts control', 'color:red', contactsControl);
   }
 
   setTelephoneValidator(contactsControl: AbstractControl) {
     const contacts = contactsControl.value;
     if (contacts) {
-      contacts.forEach((x: Signer) => {
-        if (!x.phoneNumber) {
-          console.log('%ctelephone number is required', 'color:green', x);
-          this.isTelRequired = true;
-          contactsControl.setErrors({ 'telephoneRequired': true });
-          console.log('%c contacts control in tele val', 'color:purple', contactsControl);
-        }
-      });
+      if (contacts[0].contactNames) {
+        contacts.forEach((x: Signer) => {
+          if (!x.phoneNumber) {
+            console.log('%ctelephone number for signers is required', 'color:green', x);
+            this.isTelRequired = true;
+            contactsControl.setErrors({ 'telephoneRequired': true });
+          }
+        });
+      } else {
+        contacts.forEach((x: ContactGroup) => {
+          for (const person of x.contactPeople) {
+            if (!person.phoneNumbers[0]) {
+              this.isTelRequired = true;
+              contactsControl.setErrors({ 'telephoneRequired': true });
+            }
+          }
+        });
+      }
     }
   }
 
