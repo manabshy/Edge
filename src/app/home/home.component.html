@@ -1,10 +1,10 @@
-<div class="container-fluid home-container pt-sm-3" [ngClass]="containerClass">
+<div class="container p-0 home-container pt-sm-3" [ngClass]="containerClass">
   <tabset type="pills" #homeTabs>
     <tab (select)="onSelect($event)"  *ngIf="false">
       <ng-template tabHeading>
         <i class="fas fa-th-large"></i><span class="nav-label">Dashboard</span>
       </ng-template>
-      <div class="container p-0">
+      <div class="container main">
         <app-dashboard *ngIf='currentStaffMember' [currentStaffMember]='currentStaffMember'></app-dashboard>
       </div>
     </tab>
@@ -12,13 +12,15 @@
       <ng-template tabHeading>
         <i class="far fa-calendar-alt"></i><span class="nav-label">Calendar</span>
       </ng-template>
-      <app-calendar></app-calendar>
+      <div class="container main pt-2">
+        <app-calendar></app-calendar>
+      </div>
     </tab>
     <tab (select)="onSelect($event)" *ngIf="isLeaderboardVisible">
       <ng-template tabHeading>
         <i class="fas fa-chalkboard-teacher"></i><span class="nav-label">Leaderboard</span>
       </ng-template>
-      <div class="container p-0">
+      <div class="container main">
         <app-leaderboard  *ngIf='currentStaffMember' [currentStaffMember]='currentStaffMember'></app-leaderboard>
       </div>
     </tab>
@@ -30,7 +32,7 @@
           <span class="badge badge-pill badge-secondary">15</span>
         </div>
       </ng-template>
-      <div class="container p-0">
+      <div class="container main">
         <div class="list-group w-50 mx-auto">
           <a href="#" class="list-group-item list-group-item-action">
             <div class="row align-items-center">
