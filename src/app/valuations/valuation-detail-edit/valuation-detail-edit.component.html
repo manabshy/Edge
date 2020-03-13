@@ -15,9 +15,9 @@
         [readOnly]="!isEditable && !isNewValuation"></app-signer>
       <div class="row">
         <div class="col-sm-8 col-xl-6 offset-sm-2">
+          <label for="originId" class="small">Vendor Origin</label>
           <div class="row form-group">
             <div class="col-sm" *ngIf="isEditable || isNewValuation">
-              <label for="originId" class="small">Vendor Origin</label>
               <select class="custom-select custom-select-sm" name="originTypes" id="originTypes"
                 formControlName="originType" arial-label="Origin Types" (change)="onSelectType($event.target.value)"
                 [attr.disabled]="!isEditable && !isNewValuation ? true : null"
@@ -244,8 +244,8 @@
     <fieldset *ngIf="selectedDate || showDateAndDuration">
       <h5 class="fieldset-title">Appointment</h5>
       <div class="form-group row">
-        <label class="small">Date</label>
-        <div class="col-sm-10">
+        <div class="col-sm-10 offset-sm-2">
+          <label class="small">Date</label>
           <div class="d-flex d-sm-block">
             <label for="changeDate"
               class="text-left mobile-btn small">{{(selectedDate || valuation?.valuationDate) | date: 'E d MMM yyyy, hh:mm'}}</label>
@@ -255,8 +255,8 @@
         </div>
       </div>
       <div class="row">
-        <label for="valuationDuration" class="small">Duration</label>
-        <div class="col-sm-2 form-group">
+        <div class="col-sm-2 offset-sm-2 form-group">
+          <label for="valuationDuration" class="small">Duration</label>
           <select class="custom-select custom-select-sm single-select" name="valuationDuration" id="valuationDuration"
             formControlName="totalHours" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
             [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}">
