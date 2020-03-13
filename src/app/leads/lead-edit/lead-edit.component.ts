@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LeadsService } from '../shared/leads.service';
 import { Lead, LeadEditSubNavItems, LeadSearchInfo } from '../shared/lead';
 import { StorageMap } from '@ngx-pwa/local-storage';
-import { InfoDetail } from 'src/app/core/services/info.service';
+import { InfoDetail, InfoService } from 'src/app/core/services/info.service';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
@@ -22,6 +22,7 @@ import { Location } from '@angular/common';
 import { isEqual } from 'date-fns';
 import { WedgeValidators } from 'src/app/shared/wedge-validators';
 import { SubNavItem } from 'src/app/shared/subnav';
+import { ResultData } from 'src/app/shared/result-data';
 
 @Component({
   selector: 'app-lead-edit',
@@ -90,6 +91,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     private location: Location,
     private storage: StorageMap,
     private fb: FormBuilder,
+    private infoService: InfoService,
     private sharedService: SharedService,
     private contactGroupService: ContactGroupsService,
     private toastr: ToastrService) {
@@ -137,6 +139,15 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       if (data) {
         this.listInfo = data;
         this.leadTypes = this.listInfo.leadTypes;
+        console.log(' list info in lead edit from db', data);
+      } else {
+        this.infoService.getDropdownListInfo().subscribe((info: ResultData | any) => {
+          if (info) {
+            this.listInfo = info.result;
+            this.leadTypes = this.listInfo.leadTypes;
+            console.log(' list info in lead edit from db', info.result);
+          }
+        });
       }
     });
 
