@@ -267,7 +267,6 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked {
     mouseDownEvent: MouseEvent,
     segmentElement: HTMLElement
   ) {
-    console.log('.........xxxxxxxxxxxxxxxxxxx');
     const dragToSelectEvent: CalendarEvent = {
       id: this.events.length,
       title: 'New event',
@@ -308,10 +307,11 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked {
         if (newEnd > segment.date && newEnd < endOfView) {
           dragToSelectEvent.end = newEnd;
         }
-        console.log('dragggg', dragToSelectEvent);
         this.refresh();
+        console.log('event', dragToSelectEvent);
       });
   }
+
 
   private refresh() {
     this.events = [...this.events];
