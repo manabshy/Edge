@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { map, tap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encoder-helper';
 import { DiaryEvent, BasicEventRequest } from './diary';
@@ -10,7 +10,8 @@ import { DiaryEvent, BasicEventRequest } from './diary';
   providedIn: 'root'
 })
 export class DiaryEventService {
-
+  private eventDatesSubject= new BehaviorSubject<any|null>('')
+  eventDateChanges$ = this.eventDatesSubject.asObservable()
 
   constructor(private http: HttpClient) { }
 
@@ -57,5 +58,9 @@ export class DiaryEventService {
     const url = `${AppConstants.baseDiaryEventUrl}/${diaryEventId}`;
     return this.http.delete<any>(url).pipe(
     );
+  }
+
+  newEventDates(newDates){
+    this.eventDatesSubject.next(newDates)
   }
 }

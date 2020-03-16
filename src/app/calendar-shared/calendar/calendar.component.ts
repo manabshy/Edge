@@ -74,7 +74,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked {
   selectedStaffMemberId: number;
 
   //draggable
-  events: CalendarEvent[] = [];
+  newEvents: CalendarEvent[] = [];
   dragToCreateActive = false;
 
   constructor(private diaryEventService: DiaryEventService,
@@ -268,14 +268,14 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked {
     segmentElement: HTMLElement
   ) {
     const dragToSelectEvent: CalendarEvent = {
-      id: this.events.length,
+      id: this.newEvents.length,
       title: 'New event',
       start: segment.date,
       meta: {
         tmpEvent: true
       }
     };
-    this.events = [...this.events, dragToSelectEvent];
+    this.newEvents = [...this.newEvents, dragToSelectEvent];
     const segmentPosition = segmentElement.getBoundingClientRect();
     this.dragToCreateActive = true;
     const endOfView = endOfWeek(this.viewDate, {
@@ -308,14 +308,26 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked {
           dragToSelectEvent.end = newEnd;
         }
         this.refresh();
-        console.log('event', dragToSelectEvent);
+        // console.log(dragToSelectEvent)
       });
   }
 
 
   private refresh() {
-    this.events = [...this.events];
+    this.newEvents = [...this.newEvents];
     this.cdr.detectChanges();
+  }
+
+  createNewEvent(){
+    const dates = this.newEvents[this.newEvents.length - 1];
+      // console.log("released button")
+      console.log(dates)
+      
+      this.diaryEventService.newEventDates({startDate:dates.start, endDate:dates.end||dates.start})
+      this.router.navigate(['/diary/edit', 0],
+      {
+        queryParams: { staffMemberId: this.id || this.selectedStaffMemberId, isNewEvent:true, isFromCalendar:true}
+      })
   }
 }
 

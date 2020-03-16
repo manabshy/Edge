@@ -114,30 +114,54 @@
 <!-- Draggable events here..... -->
 <ng-template #weekViewHourSegmentTemplate let-segment="segment" let-locale="locale" let-segmentHeight="segmentHeight"
   let-isTimeLabel="isTimeLabel">
-  <div #segmentElement class="cal-hour-segment" [style.height.px]="segmentHeight"
-    [class.cal-hour-start]="segment.isStart" [class.cal-after-hour-start]="!segment.isStart"
-    [ngClass]="segment.cssClass" (mousedown)="startDragToCreate(segment, $event, segmentElement)">
-    <!-- <div class="cal-time" *ngIf="isTimeLabel">
+  <div #segmentElement 
+    class="cal-hour-segment" 
+    [style.height.px]="segmentHeight"
+    [class.cal-hour-start]="segment.isStart" 
+    [class.cal-after-hour-start]="!segment.isStart"
+    [ngClass]="segment.cssClass" 
+    (mousedown)="startDragToCreate(segment, $event, segmentElement)">
+    <div class="cal-time" *ngIf="isTimeLabel">
       {{ segment.date | calendarDate:'weekViewHour':locale }}
-    </div> -->
+    </div>
   </div>
 </ng-template>
 <div class="calendar-container" #calendarContainer>
   <ng-container *ngIf="events$ | async; let events">
     <ng-container [ngSwitch]="view">
-      <mwl-calendar-month-view *ngSwitchCase="'month'" [viewDate]="viewDate" [events]="events"
-        (dayClicked)="changeDay($event.day.date)" (beforeViewRender)="beforeMonthViewRender($event)"
-        [cellTemplate]="monthCell" [tooltipTemplate]="customTooltip" [weekStartsOn]="weekStartsOn"
-        (eventClicked)="eventClicked($event)">
+      <mwl-calendar-month-view *ngSwitchCase="'month'" 
+        [viewDate]="viewDate" 
+        [events]="newEvents"
+        (dayClicked)="changeDay($event.day.date)" 
+        (beforeViewRender)="beforeMonthViewRender($event)"
+        [cellTemplate]="monthCell" 
+        [tooltipTemplate]="customTooltip" 
+        [weekStartsOn]="weekStartsOn"
+        [hourSegmentTemplate]="weekViewHourSegmentTemplate"
+        (eventClicked)="eventClicked($event)"
+        (mouseup)="createNewEvent()">
       </mwl-calendar-month-view>
-      <mwl-calendar-week-view *ngSwitchDefault [viewDate]="viewDate" [events]="events"
-        (dayHeaderClicked)="changeDay($event.day.date)" (beforeViewRender)="beforeWeekViewRender($event)"
-        [tooltipTemplate]="customTooltip" [weekStartsOn]="weekStartsOn" [daysInWeek]="daysInWeek"  [hourSegmentTemplate]="weekViewHourSegmentTemplate"
-        (hourSegmentClicked)="getClickedDate($event.date)" (eventClicked)="eventClicked($event)">
+      <mwl-calendar-week-view *ngSwitchDefault 
+        [viewDate]="viewDate" [events]="newEvents"
+        (dayHeaderClicked)="changeDay($event.day.date)" 
+        (beforeViewRender)="beforeWeekViewRender($event)"
+        [tooltipTemplate]="customTooltip" 
+        [weekStartsOn]="weekStartsOn" 
+        [daysInWeek]="daysInWeek"  
+        [hourSegmentTemplate]="weekViewHourSegmentTemplate"
+        (hourSegmentClicked)="getClickedDate($event.date)" 
+        (eventClicked)="eventClicked($event)"
+        (mouseup)="createNewEvent()">
       </mwl-calendar-week-view>
-      <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events"
-        (beforeViewRender)="beforeDayViewRender($event)" [tooltipTemplate]="customTooltip"
-        (hourSegmentClicked)="getClickedDate($event.date)" (eventClicked)="eventClicked($event)">
+      <mwl-calendar-day-view *ngSwitchCase="'day'" 
+        [viewDate]="viewDate" 
+        [events]="newEvents"
+        (beforeViewRender)="beforeDayViewRender($event)" 
+        [tooltipTemplate]="customTooltip"
+        (hourSegmentClicked)="getClickedDate($event.date)" 
+        [hourSegmentTemplate]="weekViewHourSegmentTemplate"
+        (eventClicked)="eventClicked($event)"
+        (mouseup)="createNewEvent()">
       </mwl-calendar-day-view>
     </ng-container>
   </ng-container>
