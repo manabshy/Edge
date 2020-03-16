@@ -1,7 +1,7 @@
 <ng-container>
   <form class="pb-0" [formGroup]="propertyFinderForm" autocompleteOff>
     <div class="row" [hidden]="!(selectedPropertyDetails||selectedProperties && selectedProperties.length)">
-      <div class="col-sm-8 col-xl-6 offset-sm-2" *ngIf="selectedPropertyDetails">
+      <div class="col-sm-10 offset-sm-2" *ngIf="selectedPropertyDetails">
         <ng-container *ngIf="!label; else givenLabel "><label for="propSearchTerm"
             class="small">Property</label></ng-container>
         <ng-template #givenLabel><label for="propSearchTerm"
@@ -21,7 +21,7 @@
           </button>
         </div>
       </div>
-      <div class="col-sm-8 col-xl-6 offset-sm-2" *ngIf="isMultiple && selectedProperties">
+      <div class="col-sm-10 offset-sm-2" *ngIf="isMultiple && selectedProperties">
         <div class="form-group d-flex d-sm-block" *ngFor="let property of selectedProperties">
           <a class="small text-left mobile-btn" [routerLink]="['/property-centre/detail/', property?.propertyId]">
             {{property?.address | formatAddress}}

@@ -3,29 +3,29 @@
   </div>
   <a class="navbar-brand" routerLink="/" aria-label="Home" (click)="toggleCollapse('')"><img class="mb-lg-4" src="assets/dng_logo.png" width="30" height="30"
       alt=""></a>
-  <button class="navbar-toggler" type="button" (click)="navbarCollapsed = !navbarCollapsed"
+  <button class="navbar-toggler" type="button" (click)="toggleNavCollapse()"
     [attr.aria-expanded]="!navbarCollapsed" aria-controls="navbarNavDropdown">
     <i class="fas fa-bars fa-fw" *ngIf="!navbarCollapsed"></i>
     <i class="fas fa-times fa-fw" *ngIf="navbarCollapsed"></i>
   </button>
   <div class="collapse navbar-collapse" id="navbarNavDropdown" [collapse]="!navbarCollapsed">
     <ul class="navbar-nav flex-column">
-      <li class="nav-item active" (click)="navbarCollapsed = !navbarCollapsed; toggleCollapse('')"  *ngIf="false">
+      <li class="nav-item active" (click)="toggleNavCollapse(); toggleCollapse('')"  *ngIf="false">
         <a class="nav-link" routerLink="/" [queryParams]="{selectedTab: 0}">
           <div><i class="fas fa-th-large fa-fw mr-3"></i>Dashboard</div>
         </a>
       </li>
-      <li class="nav-item active" (click)="navbarCollapsed = !navbarCollapsed; toggleCollapse('')">
+      <li class="nav-item active" (click)="toggleNavCollapse(); toggleCollapse('')">
         <a class="nav-link" routerLink="/" [queryParams]="{selectedTab: 0}">
           <div><i class="far fa-calendar-alt fa-fw mr-3"></i>Calendar</div>
         </a>
       </li>
-      <li class="nav-item active" *ngIf="isLeaderboardVisible" (click)="navbarCollapsed = !navbarCollapsed; toggleCollapse('')">
+      <li class="nav-item active" *ngIf="isLeaderboardVisible" (click)="toggleNavCollapse(); toggleCollapse('')">
         <a class="nav-link" routerLink="/" [queryParams]="{selectedTab: 1}">
           <div><i class="fas fa-chalkboard-teacher fa-fw mr-3"></i>Leaderboard</div>
         </a>
       </li>
-      <li class="nav-item active" (click)="navbarCollapsed = !navbarCollapsed; toggleCollapse('')" *ngIf="false">
+      <li class="nav-item active" (click)="toggleNavCollapse(); toggleCollapse('')" *ngIf="false">
         <a class="nav-link" routerLink="/" [queryParams]="{selectedTab: 3}">
           <div><i class="fas fa-tasks fa-fw mr-3"></i>Tasks<span class="badge badge-pill badge-secondary ml-3">15</span>
           </div>
@@ -36,7 +36,7 @@
         [attr.aria-expanded]="!con.isActive && !collapsible.contacts" aria-controls="collapseContacts">
           <div><i class="fas fa-address-book fa-fw mr-3"></i>Contacts</div>
         </button>
-        <div class="dropdown-menu" id="collapseContacts" (click)="navbarCollapsed = !navbarCollapsed" [collapse]="!con.isActive && collapsible.contacts">
+        <div class="dropdown-menu" id="collapseContacts" (click)="toggleNavCollapse()" [collapse]="!con.isActive && collapsible.contacts">
           <a class="dropdown-item" routerLink="/contact-centre" routerLinkActive="active font-weight-bold">Contact centre</a>
           <a class="dropdown-item" routerLink="/applicant-register" routerLinkActive="active font-weight-bold" *ngIf="false">Applicants</a>
           <a class="dropdown-item" routerLink="/leads-register" routerLinkActive="active font-weight-bold">Leads</a>
@@ -48,7 +48,7 @@
         [attr.aria-expanded]="!pro.isActive && !collapsible.properties" aria-controls="collapseProperties">
           <div><i class="fas fa-city fa-fw mr-3"></i>Properties</div>
         </button>
-        <div class="dropdown-menu" id="collapseProperties" (click)="navbarCollapsed = !navbarCollapsed" [collapse]="!pro.isActive && collapsible.properties">
+        <div class="dropdown-menu" id="collapseProperties" (click)="toggleNavCollapse()" [collapse]="!pro.isActive && collapsible.properties">
           <a class="dropdown-item" routerLink="/property-centre" routerLinkActive="active font-weight-bold">Property centre</a>
           <a class="dropdown-item" routerLink="/valuations-register" routerLinkActive="active font-weight-bold">Valuations</a>
           <a class="dropdown-item" routerLink="/" *ngIf="false">Instructions</a>
@@ -63,7 +63,7 @@
           aria-expanded="false">
           <div><i class="fas fa-file-invoice fa-fw mr-3"></i>Accounts</div>
         </button>
-        <div class="dropdown-menu" *dropdownMenu (click)="navbarCollapsed = !navbarCollapsed">
+        <div class="dropdown-menu" *dropdownMenu (click)="toggleNavCollapse()">
           <a class="dropdown-item" routerLink="/">Invoices</a>
           <a class="dropdown-item" routerLink="/">Works Orders</a>
           <a class="dropdown-item" routerLink="/">Quick Bills</a>
@@ -74,7 +74,7 @@
           aria-expanded="false">
           <div><i class="fas fa-user-cog fa-fw mr-3"></i>Admin</div>
         </button>
-        <div class="dropdown-menu" *dropdownMenu (click)="navbarCollapsed = !navbarCollapsed">
+        <div class="dropdown-menu" *dropdownMenu (click)="toggleNavCollapse()">
           <a class="dropdown-item" routerLink="/">Staff</a>
           <a class="dropdown-item" routerLink="/">Offices</a>
         </div>
@@ -92,11 +92,11 @@
               {{role}}<ng-container *ngIf="!isLast"> ,</ng-container>
             </ng-container>
           </small>
-          <a *ngIf="!impersonatedStaffMember" class="text-light" routerLink="/impersonate-member" (click)="navbarCollapsed = !navbarCollapsed"><i
+          <a *ngIf="!impersonatedStaffMember" class="text-light" routerLink="/impersonate-member" (click)="toggleNavCollapse()"><i
               class="fas fa-user-friends mr-3"></i>Work As</a>
           <!--IF IMPERSONATING-->
           <!-- <div *ngIf="impersonatedStaffMember"><a class="text-light" routerLink="/impersonate-member"
-              (click)="navbarCollapsed = !navbarCollapsed"><i
+              (click)="toggleNavCollapse()"><i
                 class="fas fa-user-friends mr-3"></i>{{impersonatedStaffMember?.fullName}}</a></div> -->
           <!--IF IMPERSONATING-->
         </div>
@@ -107,4 +107,4 @@
     </ul>
   </div>
 </nav>
-<div class="navbar-backdrop" *ngIf="navbarCollapsed" (click)="navbarCollapsed = !navbarCollapsed"></div>
+<div class="navbar-backdrop" *ngIf="navbarCollapsed" (click)="toggleNavCollapse()"></div>

@@ -398,6 +398,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     if (leadNote) {
       this.note = leadNote;
       this.isNoteFormDirty = true;
+      this.noteRequiredWarning = '';
     }
   }
 
