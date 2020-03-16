@@ -28,7 +28,12 @@ body {
 .main {
     background-color: color("white");
     padding-bottom: spacer(3);
-    @include border-radius($card-border-radius)
+    @include border-radius($card-border-radius);
+    min-height: calc(100vh - 70px);
+
+    @include media-breakpoint-down(sm) {
+        min-height: calc(100vh - 70px - #{$top-bar-height});
+    }
 }
 
 a:not(:disabled) {
