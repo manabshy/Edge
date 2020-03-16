@@ -69,196 +69,176 @@
       </div>
     </ng-container>
     <ng-container *ngIf="contactGroupDetails?.contactType === 4">
-      <h5>Company</h5>
-      <form class="pb-3" [formGroup]="companyFinderForm" autocompleteOff>
-        <div class="row" [hidden]="!selectedCompanyDetails">
-          <div class="col-sm-10 offset-sm-2">
-            <label for="selectedCompany" class="small">Company Name</label>
-            <div class="form-group d-flex d-sm-block">
-              <input type="hidden" #selectedCompanyInput id="selectedCompany" formControlName="selectedCompany">
-              <button type="button" class="btn btn-link btn-sm p-0 mobile-btn"
-                (click)="editSelectedCompany(selectedCompanyDetails?.companyId)">
-                {{selectedCompanyDetails?.companyName}}
-              </button>
-              <button type="button" *ngIf="!isExistingCompany" class="btn btn-light btn-sm ml-2"
-                (click)="toggleSearchCompany()">Change</button>
-            </div>
-          </div>
-        </div>
-        <div class="row" [hidden]="!isSearchCompanyVisible || isExistingCompany">
-          <div class="col-sm-8 col-xl-6 offset-sm-2">
-            <div class="form-group">
-              <label for="company" class="small">Find Company</label>
-              <div class="input-group input-group-sm">
-                <input #companyNameInput type="search" id="company" class="form-control" formControlName="companyName"
-                  (keydown.enter)="searchCompany()" [ngbTypeahead]="suggestions" [focusFirst]="false"
-                  (selectItem)="selectedSuggestion($event)">
-                <div class="input-group-append">
-                  <button type="button" class="btn btn-secondary" (click)="searchCompany()">Search</button>
-                </div>
+      <fieldset>
+        <legend class="fieldset-title">Company</legend>
+        <form class="pb-3" [formGroup]="companyFinderForm" autocompleteOff>
+          <div class="row" [hidden]="!selectedCompanyDetails">
+            <div class="col-sm-10 offset-sm-2">
+              <label for="selectedCompany" class="small">Company Name</label>
+              <div class="form-group d-flex d-sm-block">
+                <input type="hidden" #selectedCompanyInput id="selectedCompany" formControlName="selectedCompany">
+                <button type="button" class="btn btn-link btn-sm p-0 mobile-btn"
+                  (click)="editSelectedCompany(selectedCompanyDetails?.companyId)">
+                  {{selectedCompanyDetails?.companyName}}
+                </button>
+                <button type="button" *ngIf="!isExistingCompany" class="btn btn-light btn-sm ml-2"
+                  (click)="toggleSearchCompany()">Change</button>
               </div>
             </div>
-            <div class="btn-link btn-sm p-0 mb-3" *ngIf="noSuggestions" (click)="editSelectedCompany(0, true)">
-              <i class="fas fa-plus mr-2"></i>New Company
-            </div>
-            <div class="off-canvas" [hidden]="!foundCompanies" (click)="foundCompanies = null">
-              <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
-                <h4 class="page-title text-left pt-3">
-                  Pick Company
-                  <button type="button" class="close mr-2" aria-label="Close" (click)="foundCompanies = null">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </h4>
-                <app-subnav>
-                  <app-subnav-item *ngFor="let company of foundCompanies" (click)="selectCompany(company)">
-                    <div [innerHTML]="company.companyName | highlight : companyFinderForm.value.companyName"></div>
-                  </app-subnav-item>
-                  <div class="list-group-item list-group-item-action text-center"
-                    *ngIf="!foundCompanies?.length && companyFinderForm.value.companyName">
-                    No company found. Try again or create a new one.
+          </div>
+          <div class="row" [hidden]="!isSearchCompanyVisible || isExistingCompany">
+            <div class="col-sm-8 col-xl-6 offset-sm-2">
+              <div class="form-group">
+                <label for="company" class="small">Find Company</label>
+                <div class="input-group input-group-sm">
+                  <input #companyNameInput type="search" id="company" class="form-control" formControlName="companyName"
+                    (keydown.enter)="searchCompany()" [ngbTypeahead]="suggestions" [focusFirst]="false"
+                    (selectItem)="selectedSuggestion($event)">
+                  <div class="input-group-append">
+                    <button type="button" class="btn btn-secondary" (click)="searchCompany()">Search</button>
                   </div>
-                  <div class="list-group-item list-group-item-action text-center py-4"
-                    (click)="editSelectedCompany(0, true)">
-                    <span class="btn-link"><i class="fas fa-plus mr-2"></i>New Company</span>
+                </div>
+              </div>
+              <div class="btn-link btn-sm p-0 mb-3" *ngIf="noSuggestions" (click)="editSelectedCompany(0, true)">
+                <i class="fas fa-plus mr-2"></i>New Company
+              </div>
+              <div class="off-canvas" [hidden]="!foundCompanies" (click)="foundCompanies = null">
+                <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
+                  <h4 class="page-title text-left pt-3">
+                    Pick Company
+                    <button type="button" class="close mr-2" aria-label="Close" (click)="foundCompanies = null">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </h4>
+                  <app-subnav>
+                    <app-subnav-item *ngFor="let company of foundCompanies" (click)="selectCompany(company)">
+                      <div [innerHTML]="company.companyName | highlight : companyFinderForm.value.companyName"></div>
+                    </app-subnav-item>
+                    <div class="list-group-item list-group-item-action text-center"
+                      *ngIf="!foundCompanies?.length && companyFinderForm.value.companyName">
+                      No company found. Try again or create a new one.
+                    </div>
+                    <div class="list-group-item list-group-item-action text-center py-4"
+                      (click)="editSelectedCompany(0, true)">
+                      <span class="btn-link"><i class="fas fa-plus mr-2"></i>New Company</span>
+                    </div>
+                  </app-subnav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ng-container *ngIf="contactGroupDetails?.companyAddress?.postCode; else showCompanyAddress">
+            <app-address *ngIf="contactGroupDetails" [companyAddress]="contactGroupDetails.companyAddress"
+              (addressDetails)="getAddress($event)"></app-address>
+          </ng-container>
+          <ng-template #showCompanyAddress>
+            <app-address *ngIf="(isCompanyAdded && companyFinderForm.value.selectedCompany) || isExistingCompany"
+              [companyDetails]="selectedCompanyDetails" (addressDetails)="getAddress($event)"></app-address>
+          </ng-template>
+        </form>
+        <form class="pb-3" [formGroup]="contactGroupDetailsForm" autocompleteOff>
+          <div class="row justify-content-end">
+            <div class="col-sm-10 offset-sm-2">
+              <div class="row">
+                <div class="form-group col-sm-auto">
+                  <label class="small">Type</label>
+  
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="solicitor" formControlName="isSolicitor">
+                    <label class="custom-control-label small" for="solicitor">Solicitor</label>
                   </div>
-                </app-subnav>
-              </div>
-            </div>
-          </div>
-        </div>
-        <ng-container *ngIf="contactGroupDetails?.companyAddress?.postCode; else showCompanyAddress">
-          <app-address *ngIf="contactGroupDetails" [companyAddress]="contactGroupDetails.companyAddress"
-            (addressDetails)="getAddress($event)"></app-address>
-        </ng-container>
-        <ng-template #showCompanyAddress>
-          <app-address *ngIf="(isCompanyAdded && companyFinderForm.value.selectedCompany) || isExistingCompany"
-            [companyDetails]="selectedCompanyDetails" (addressDetails)="getAddress($event)"></app-address>
-        </ng-template>
-      </form>
-      <form class="pb-3" [formGroup]="contactGroupDetailsForm" autocompleteOff>
-        <div class="row justify-content-end">
-          <div class="col-sm-10 offset-sm-2">
-            <div class="row">
-              <div class="form-group col-sm-auto">
-                <label class="small">Type</label>
-
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="solicitor" formControlName="isSolicitor">
-                  <label class="custom-control-label small" for="solicitor">Solicitor</label>
-                </div>
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="invClerk" formControlName="isInventoryClerk">
-                  <label class="custom-control-label small" for="invClerk">Inventory Clerk</label>
-                </div>
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="estateAgent" formControlName="isEstateAgent">
-                  <label class="custom-control-label small" for="estateAgent">Estate Agent</label>
-                </div>
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="mortgageAdvisor"
-                    formControlName="isMortgageAdvisor">
-                  <label class="custom-control-label small" for="mortgageAdvisor">Mortgage Advisor</label>
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="invClerk" formControlName="isInventoryClerk">
+                    <label class="custom-control-label small" for="invClerk">Inventory Clerk</label>
+                  </div>
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="estateAgent" formControlName="isEstateAgent">
+                    <label class="custom-control-label small" for="estateAgent">Estate Agent</label>
+                  </div>
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="mortgageAdvisor"
+                      formControlName="isMortgageAdvisor">
+                    <label class="custom-control-label small" for="mortgageAdvisor">Mortgage Advisor</label>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </form>
+        </form>
+      </fieldset>
     </ng-container>
     <ng-container *ngIf="!isNewContactGroup  || isTypePicked">
-      <div class="row mb-3">
-        <div class="col-12">
-          <div class="alert alert-danger small mb-2 mr-2 d-inline-block"
-            *ngFor="let importantNote of importantContactNotes">
-            {{importantNote.text}}
+      <fieldset>
+        <legend class="fieldset-title">People</legend>
+      
+        <div class="row justify-content-end mb-3" *ngIf="importantContactNotes?.length">
+          <div class="col-sm-10">
+            <div class="alert alert-danger small mb-2 mr-2 d-inline-block"
+              *ngFor="let importantNote of importantContactNotes">
+              {{importantNote.text}}
+            </div>
           </div>
         </div>
-      </div>
-      <h5>People</h5>
-      <div class="row justify-content-end">
-        <div class="col-sm-10">
-          <div class="list-group mb-3">
-            <ng-container>
-              <a [routerLink]="person?.isNewPerson ? null : ['../../../../detail', person?.personId ]"
-                [queryParams]="{showNotes: true}" class="list-group-item list-group-item-action"
-                *ngFor="let person of contactGroupDetails?.contactPeople ; index as i"
-                [ngClass]="{'new-person': person?.isNewPerson, 'list-group-item-danger': person?.warning && person?.warning?.id !== 1}">
-                <div class="row">
-                  <div class="col">
-                    <app-score-badge [person]="person"></app-score-badge>
-                    <span class="badge badge-pill badge-danger mb-2 mr-2"
-                      *ngIf="person?.warning && person?.warning?.id !== 1">{{person?.warningStatusComment || person?.warning?.value}}</span>
-                    <span class="badge badge-pill badge-primary mb-2"
-                      *ngIf="person?.isMainPerson && contactGroupDetails.contactType !== 4">Main Person</span>
-                  </div>
-                  <div class="col-auto" *ngIf="!person?.isNewPerson; else removeSelectedPerson">
-                    <div dropdown placement="bottom right">
-                      <a class="dropdown-toggle" href [id]="'button' + i" dropdownToggle
-                        (click)="$event.stopPropagation(); false" [attr.aria-controls]="'dropdown' + i">Actions <span
-                          class="caret"></span></a>
-                      <ul [id]="'dropdown' + i" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
-                        [attr.aria-labelledby]="'button' + i">
-                        <li role="menuitem"><a class="dropdown-item" (click)="editSelectedPerson(person?.personId)">
-                            <span class="dropdown-icon">
-                              <i class="fas fa-edit fa-fw"></i>
-                            </span>
-                            Edit</a>
-                        </li>
-                        <li role="menuitem"><a class="dropdown-item" (click)="$event.stopPropagation();"
-                            [routerLink]="person?.isNewPerson ? null : ['../../../../detail', person?.personId ]">
-                            <span class="dropdown-icon">
-                              <i class="fas fa-address-card fa-fw"></i>
-                            </span>
-                            View</a></li>
-                        <li role="menuitem"><a class="dropdown-item" (click)="$event.stopPropagation();"
-                            [routerLink]="person?.isNewPerson ? null : ['../../../../detail/', person?.personId, 'notes' ]">
-                            <span class="dropdown-icon">
-                              <i class="fas fa-sticky-note fa-fw"></i>
-                            </span>
-                            View All Notes</a></li>
-                        <li role="menuitem">
-                          <a class="dropdown-item" (click)="setMainPerson(person?.personId)"
-                            *ngIf="!person?.isMainPerson">
-                            <span class="dropdown-icon">
-                              <i class="fas fa-user-shield fa-fw"></i>
-                            </span>
-                            Set Main Person</a>
-                        </li>
-                        <li role="menuitem">
-                          <a class="dropdown-item" (click)="$event.stopPropagation();"
-                            [routerLink]="['/leads-register/edit/', 0]"
-                            [queryParams]="{isNewLead: true, personId: person?.personId}">
-                            <span class="dropdown-icon">
-                              <i class="fas fa-user"></i><i class="fas fa-share-alt fa-xs align-text-top"></i>
-                            </span>
-                            Create Lead
-                          </a>
-                        </li>
-                        <li role="menuitem"><a class="dropdown-item" href (click)="removePerson(person?.personId, true)"
-                            *ngIf="!contactGroupDetails?.referenceCount">
-                            <span class="dropdown-icon">
-                              <i class="fas fa-user-times fa-fw"></i>
-                            </span>
-                            Remove</a>
-                        </li>
-                      </ul>
+        <div class="row justify-content-end">
+          <div class="col-sm-10">
+            <div class="list-group mb-3">
+              <ng-container>
+                <a [routerLink]="person?.isNewPerson ? null : ['../../../../detail', person?.personId ]"
+                  [queryParams]="{showNotes: true}" class="list-group-item list-group-item-action"
+                  *ngFor="let person of contactGroupDetails?.contactPeople ; index as i"
+                  [ngClass]="{'new-person': person?.isNewPerson, 'list-group-item-danger': person?.warning && person?.warning?.id !== 1}">
+                  <div class="row">
+                    <div class="col">
+                      <app-score-badge [person]="person"></app-score-badge>
+                      <span class="badge badge-pill badge-danger mb-2 mr-2"
+                        *ngIf="person?.warning && person?.warning?.id !== 1">{{person?.warningStatusComment || person?.warning?.value}}</span>
+                      <span class="badge badge-pill badge-primary mb-2"
+                        *ngIf="person?.isMainPerson && contactGroupDetails.contactType !== 4">Main Person</span>
                     </div>
-                  </div>
-                  <ng-template #removeSelectedPerson>
-                    <div class="col text-right">
+                    <div class="col-auto" *ngIf="!person?.isNewPerson; else removeSelectedPerson">
                       <div dropdown placement="bottom right">
                         <a class="dropdown-toggle" href [id]="'button' + i" dropdownToggle
-                          (click)="$event.stopPropagation(); false" [attr.aria-controls]="'dropdown' + i">Actions
-                          <span class="caret"></span></a>
+                          (click)="$event.stopPropagation(); false" [attr.aria-controls]="'dropdown' + i">Actions <span
+                            class="caret"></span></a>
                         <ul [id]="'dropdown' + i" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
                           [attr.aria-labelledby]="'button' + i">
                           <li role="menuitem"><a class="dropdown-item" (click)="editSelectedPerson(person?.personId)">
                               <span class="dropdown-icon">
                                 <i class="fas fa-edit fa-fw"></i>
                               </span>
-                              Edit</a></li>
-                          <li role="menuitem"><a class="dropdown-item" href
-                              (click)="removePerson(person?.personId, false)">
+                              Edit</a>
+                          </li>
+                          <li role="menuitem"><a class="dropdown-item" (click)="$event.stopPropagation();"
+                              [routerLink]="person?.isNewPerson ? null : ['../../../../detail', person?.personId ]">
+                              <span class="dropdown-icon">
+                                <i class="fas fa-address-card fa-fw"></i>
+                              </span>
+                              View</a></li>
+                          <li role="menuitem"><a class="dropdown-item" (click)="$event.stopPropagation();"
+                              [routerLink]="person?.isNewPerson ? null : ['../../../../detail/', person?.personId, 'notes' ]">
+                              <span class="dropdown-icon">
+                                <i class="fas fa-sticky-note fa-fw"></i>
+                              </span>
+                              View All Notes</a></li>
+                          <li role="menuitem">
+                            <a class="dropdown-item" (click)="setMainPerson(person?.personId)" *ngIf="!person?.isMainPerson">
+                              <span class="dropdown-icon">
+                                <i class="fas fa-user-shield fa-fw"></i>
+                              </span>
+                              Set Main Person</a>
+                          </li>
+                          <li role="menuitem">
+                            <a class="dropdown-item" (click)="$event.stopPropagation();"
+                              [routerLink]="['/leads-register/edit/', 0]"
+                              [queryParams]="{isNewLead: true, personId: person?.personId}">
+                              <span class="dropdown-icon">
+                                <i class="fas fa-user"></i><i class="fas fa-share-alt fa-xs align-text-top"></i>
+                              </span>
+                              Create Lead
+                            </a>
+                          </li>
+                          <li role="menuitem"><a class="dropdown-item" href (click)="removePerson(person?.personId, true)"
+                              *ngIf="!contactGroupDetails?.referenceCount">
                               <span class="dropdown-icon">
                                 <i class="fas fa-user-times fa-fw"></i>
                               </span>
@@ -267,130 +247,154 @@
                         </ul>
                       </div>
                     </div>
-                  </ng-template>
-                  <div class="col-12">
-                    <div *ngIf="!isNewContactGroup">
-                      <ng-container *ngIf="person?.personNotes?.length">
-                        <div class="alert alert-danger small mb-2 mr-2 d-inline-block"
-                          *ngFor="let importantNote of person?.personNotes">
-                          {{importantNote.text}}
+                    <ng-template #removeSelectedPerson>
+                      <div class="col text-right">
+                        <div dropdown placement="bottom right">
+                          <a class="dropdown-toggle" href [id]="'button' + i" dropdownToggle
+                            (click)="$event.stopPropagation(); false" [attr.aria-controls]="'dropdown' + i">Actions
+                            <span class="caret"></span></a>
+                          <ul [id]="'dropdown' + i" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+                            [attr.aria-labelledby]="'button' + i">
+                            <li role="menuitem"><a class="dropdown-item" (click)="editSelectedPerson(person?.personId)">
+                                <span class="dropdown-icon">
+                                  <i class="fas fa-edit fa-fw"></i>
+                                </span>
+                                Edit</a></li>
+                            <li role="menuitem"><a class="dropdown-item" href (click)="removePerson(person?.personId, false)">
+                                <span class="dropdown-icon">
+                                  <i class="fas fa-user-times fa-fw"></i>
+                                </span>
+                                Remove</a>
+                            </li>
+                          </ul>
                         </div>
-                      </ng-container>
-                    </div>
-                  </div>
-                  <div class="col-12 mb-2">
-                    <strong>{{person?.firstName | titlecase}} {{person?.lastName | titlecase}}</strong>
-                  </div>
-                  <div class="col-sm-4 mb-2" *ngIf="contactGroupDetails?.contactType !== 4">
-                    <pre>{{person?.address | formatAddress}}</pre><span class="text-danger"
-                      *ngIf="!(person?.address | formatAddress)">No address</span></div>
-                  <div class="col-sm-3 col-xl-4">
-                    <p class="mb-2 text-danger" *ngIf="!person?.phoneNumbers.length || !person?.phoneNumbers[0].number">
-                      No phone</p>
-                    <ng-container *ngFor="let phoneNumber of person?.phoneNumbers">
-                      <p class="mb-2" *ngIf="phoneNumber?.number">
-                        <app-telephone [person]="person" [number]="phoneNumber.number"
-                          [warning]="person?.warningStatusComment || person?.warning?.value"></app-telephone>
-                      </p>
-                    </ng-container>
-                  </div>
-                  <div class="col-sm-5 col-xl-4">
-                    <p class="mb-2 text-danger"
-                      *ngIf="!person?.emailAddresses.length || !person?.emailAddresses[0].email">No email</p>
-                    <ng-container *ngFor="let emailAddress of person?.emailAddresses">
-                      <p class="mb-2 text-truncate" *ngIf="emailAddress?.email"><a (click)="$event.stopPropagation()"
-                          class="mobile-btn" href="mailto:{{emailAddress.email}}">{{emailAddress?.email}}</a></p>
-                    </ng-container>
-                  </div>
-                  <div class="col-12">
-                    <hr class="my-1">
-                  </div>
-                  <div class="col-12">
-                    <div class="row align-items-center">
-                      <div class="col">
-                        <a href class="btn btn-link px-0" (click)="showHideMarkPrefs($event, i)"
-                          [attr.aria-expanded]="!isCollapsed[i]" [attr.aria-controls]="'collapseMark' + i">Marketing
-                          Prefs
-                          <span
-                            class="badge badge-pill badge-primary">{{person?.marketingPreferences?.count || 0}}</span>
-                        </a>
+                      </div>
+                    </ng-template>
+                    <div class="col-12">
+                      <div *ngIf="!isNewContactGroup">
+                        <ng-container *ngIf="person?.personNotes?.length">
+                          <div class="alert alert-danger small mb-2 mr-2 d-inline-block"
+                            *ngFor="let importantNote of person?.personNotes">
+                            {{importantNote.text}}
+                          </div>
+                        </ng-container>
                       </div>
                     </div>
-                    <div [id]="'collapseMark' + i" [collapse]="!isCollapsed[i]">
-                      <ul>
-                        <li *ngIf="person?.marketingPreferences?.marketBulletin">Quarterly bulletin</li>
-                        <li *ngIf="person?.marketingPreferences?.general">Special offers</li>
-                        <li *ngIf="person?.marketingPreferences?.events">Landlord/investor events</li>
-                        <li *ngIf="person?.marketingPreferences?.newHomes">New homes/investments</li>
-                        <li *ngIf="person?.marketingPreferences?.general">Other occasional marketing</li>
-                      </ul>
+                    <div class="col-12 mb-2">
+                      <strong>{{person?.firstName | titlecase}} {{person?.lastName | titlecase}}</strong>
+                    </div>
+                    <div class="col-sm-4 mb-2" *ngIf="contactGroupDetails?.contactType !== 4">
+                      <pre>{{person?.address | formatAddress}}</pre><span class="text-danger"
+                        *ngIf="!(person?.address | formatAddress)">No address</span></div>
+                    <div class="col-sm-3 col-xl-4">
+                      <p class="mb-2 text-danger" *ngIf="!person?.phoneNumbers.length || !person?.phoneNumbers[0].number">
+                        No phone</p>
+                      <ng-container *ngFor="let phoneNumber of person?.phoneNumbers">
+                        <p class="mb-2" *ngIf="phoneNumber?.number">
+                          <app-telephone [person]="person" [number]="phoneNumber.number"
+                            [warning]="person?.warningStatusComment || person?.warning?.value"></app-telephone>
+                        </p>
+                      </ng-container>
+                    </div>
+                    <div class="col-sm-5 col-xl-4">
+                      <p class="mb-2 text-danger" *ngIf="!person?.emailAddresses.length || !person?.emailAddresses[0].email">
+                        No email</p>
+                      <ng-container *ngFor="let emailAddress of person?.emailAddresses">
+                        <p class="mb-2 text-truncate" *ngIf="emailAddress?.email"><a (click)="$event.stopPropagation()"
+                            class="mobile-btn" href="mailto:{{emailAddress.email}}">{{emailAddress?.email}}</a></p>
+                      </ng-container>
+                    </div>
+                    <div class="col-12">
+                      <hr class="my-1">
+                    </div>
+                    <div class="col-12">
+                      <div class="row align-items-center">
+                        <div class="col">
+                          <a href class="btn btn-link px-0" (click)="showHideMarkPrefs($event, i)"
+                            [attr.aria-expanded]="!isCollapsed[i]" [attr.aria-controls]="'collapseMark' + i">Marketing
+                            Prefs
+                            <span class="badge badge-pill badge-primary">{{person?.marketingPreferences?.count || 0}}</span>
+                          </a>
+                        </div>
+                      </div>
+                      <div [id]="'collapseMark' + i" [collapse]="!isCollapsed[i]">
+                        <ul>
+                          <li *ngIf="person?.marketingPreferences?.marketBulletin">Quarterly bulletin</li>
+                          <li *ngIf="person?.marketingPreferences?.general">Special offers</li>
+                          <li *ngIf="person?.marketingPreferences?.events">Landlord/investor events</li>
+                          <li *ngIf="person?.marketingPreferences?.newHomes">New homes/investments</li>
+                          <li *ngIf="person?.marketingPreferences?.general">Other occasional marketing</li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="col-12 text-right">
+                      <small class="text-muted">P-{{person?.personId}}</small>
                     </div>
                   </div>
-                  <div class="col-12 text-right">
-                    <small class="text-muted">P-{{person?.personId}}</small>
-                  </div>
-                </div>
+                </a>
+              </ng-container>
+              <a href (click)="showHideOffCanvas($event)" class="list-group-item list-group-item-action text-center py-4"
+                *ngIf="contactGroupDetails?.contactPeople.length < 8 && !contactGroupDetails?.referenceCount
+                            && !isMaxPeople">
+                <span class="btn-link">
+                  <i class="fas fa-user-plus mr-2"></i>Add Person
+                </span>
               </a>
-            </ng-container>
-            <a href (click)="showHideOffCanvas($event)" class="list-group-item list-group-item-action text-center py-4"
-              *ngIf="contactGroupDetails?.contactPeople.length < 8 && !contactGroupDetails?.referenceCount
-                      && !isMaxPeople">
-              <span class="btn-link">
-                <i class="fas fa-user-plus mr-2"></i>Add Person
-              </span>
-            </a>
-            <div class="list-group-item list-group-item-warning text-center"
-              *ngIf="contactGroupDetails?.referenceCount && !isCloned" (click)="cloneContactGroup()">
-              Transaction history present. You can't add or remove people from this Contact Group.<br>If you want to
-              add or
-              remove
-              a person, <a [routerLink]="['../', contactGroupId]">create a new Contact Group</a>
-            </div>
-            <div class="list-group-item list-group-item-warning text-center"
-              *ngIf="!(contactGroupDetails?.contactPeople.length < 8)">
-              You can add max 8 People per contact group.
+              <div class="list-group-item list-group-item-warning text-center"
+                *ngIf="contactGroupDetails?.referenceCount && !isCloned" (click)="cloneContactGroup()">
+                Transaction history present. You can't add or remove people from this Contact Group.<br>If you want to
+                add or
+                remove
+                a person, <a [routerLink]="['../', contactGroupId]">create a new Contact Group</a>
+              </div>
+              <div class="list-group-item list-group-item-warning text-center"
+                *ngIf="!(contactGroupDetails?.contactPeople.length < 8)">
+                You can add max 8 People per contact group.
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </fieldset>
       <ng-container *ngIf="contactGroupDetails?.contactPeople.length">
-        <h5>Details</h5>
-        <form [formGroup]="contactGroupDetailsForm" class="pb-3">
-          <div class="form-group row">
-            <div class="col-sm-8 col-xl-6 offset-sm-2">
-              <label for="salutation" class="small">Salutation</label>
-              <input type="text" id="salutation" class="form-control form-control-sm" formControlName="salutation">
+        <fieldset>
+          <legend class="fieldset-title">Details</legend>
+          <form [formGroup]="contactGroupDetailsForm" class="pb-3">
+            <div class="form-group row">
+              <div class="col-sm-8 col-xl-6 offset-sm-2">
+                <label for="salutation" class="small">Salutation</label>
+                <input type="text" id="salutation" class="form-control form-control-sm" formControlName="salutation">
+              </div>
             </div>
-          </div>
-          <div class="form-group row">
-            <div class="col-sm-8 col-xl-6 offset-sm-2">
-              <label for="addressee" class="small">Addressee</label>
-              <input type="text" id="addressee" class="form-control form-control-sm" formControlName="addressee">
+            <div class="form-group row">
+              <div class="col-sm-8 col-xl-6 offset-sm-2">
+                <label for="addressee" class="small">Addressee</label>
+                <input type="text" id="addressee" class="form-control form-control-sm" formControlName="addressee">
+              </div>
             </div>
-          </div>
-          <div class="row mt-3 justify-content-end">
-            <div class="col-sm-10">
-              <div class="row">
-                <div class="form-group col-sm-auto">
-                  <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="isRelocationAgent"
-                      formControlName="isRelocationAgent">
-                    <label class="custom-control-label small" for="isRelocationAgent">Is Relocation Agent</label>
+            <div class="row mt-3 justify-content-end">
+              <div class="col-sm-10">
+                <div class="row">
+                  <div class="form-group col-sm-auto">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="isRelocationAgent"
+                        formControlName="isRelocationAgent">
+                      <label class="custom-control-label small" for="isRelocationAgent">Is Relocation Agent</label>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-10 offset-sm-2" [ngClass]="{'notes-disabled': !contactGroupDetails?.contactGroupId}">
-              <label class="small">Notes</label>
-              <small class="alert alert-info" *ngIf="!contactGroupDetails?.contactGroupId">Save to enable
-                Notes</small>
-              <app-notes [noteData]="dataNote" [contactGroupNotes]="dataNote?.notes" [bottomReached]="bottomReached"
-                [pageNumber]="page"></app-notes>
+            <div class="row">
+              <div class="col-sm-10 offset-sm-2" [ngClass]="{'notes-disabled': !contactGroupDetails?.contactGroupId}">
+                <label class="small">Notes</label>
+                <small class="alert alert-info" *ngIf="!contactGroupDetails?.contactGroupId">Save to enable
+                  Notes</small>
+                <app-notes [noteData]="dataNote" [contactGroupNotes]="dataNote?.notes" [bottomReached]="bottomReached"
+                  [pageNumber]="page"></app-notes>
+              </div>
             </div>
-          </div>
-        </form>
+          </form>
+          </fieldset>
       </ng-container>
     </ng-container>
     <div class="form-actions">
