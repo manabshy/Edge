@@ -143,7 +143,6 @@ export class AddDiaryEventComponent implements OnInit {
 
     this.storage.get('info').subscribe((info: DropdownListInfo) => {
       if (info) {
-        console.log(' list info xxxxxxxxxxxxxxxxxxxxxxxxxx', info);
         this.setupEventTypes(info);
       } else {
         this.infoService.getDropdownListInfo().subscribe((data: ResultData | any) => {
@@ -160,6 +159,19 @@ export class AddDiaryEventComponent implements OnInit {
     this.diaryEventForm.valueChanges.subscribe(data => {
       this.sharedService.logValidationErrors(this.diaryEventForm, false);
     });
+
+    this.diaryEventService.eventDateChanges$.subscribe(dates=>{
+      console.log(dates)
+      this.diaryEventForm.patchValue({
+        startDateTime: new Date(dates.startDate),
+        endDateTime: new Date(dates.endDate),
+        startHour: this.getHours(false, dates.startDate),
+        endHour: this.getHours(false, dates.endDate),
+        startMin: this.getMinutes(dates.startDate),
+        endMin: this.getMinutes(dates.endDate),
+      })
+      // this.showOthers=true
+    })
   }
 
   private setupEventTypes(info: DropdownListInfo) {
@@ -603,4 +615,6 @@ export class AddDiaryEventComponent implements OnInit {
     modal.content.subject = subject;
     return subject.asObservable();
   }
+
+
 }
