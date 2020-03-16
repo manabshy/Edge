@@ -82,7 +82,7 @@
     <div class="col">
       <h5>Select to assign</h5>
     </div>
-    <div class="col-auto d-sm-none">
+    <div class="col-auto d-lg-none">
       <button type="button" class="btn btn-link p-0" (click)="selectAllLeadsForAssignment($event)">
         {{selectedLeadsForAssignment?.length ? 'Unselect' : 'Select'}} all
       </button>
@@ -129,13 +129,13 @@
           </td>
           <td>
             <dl class="row">
-              <dt class="col-4 d-sm-none">Type</dt>
+              <dt class="col-4 d-lg-none">Type</dt>
               <dd class="col">{{lead?.leadType}}</dd>
             </dl>
           </td>
           <td>
             <dl class="row">
-              <dt class="col-4 d-sm-none">Person</dt>
+              <dt class="col-4 d-lg-none">Person</dt>
               <dd class="col">
                 <a class="table-link" href (click)="navigateToEdit(lead)">
                   {{lead?.person}}
@@ -145,13 +145,13 @@
           </td>
           <td>
             <dl class="row">
-              <dt class="col-4 d-sm-none">Chase Date</dt>
+              <dt class="col-4 d-lg-none">Chase Date</dt>
               <dd class="col monospace">{{(lead?.nextChaseDate | date: 'dd/MM/yyyy') || '-'}}</dd>
             </dl>
           </td>
           <td>
             <dl class="row">
-              <dt class="col-4 d-sm-none">Chaser</dt>
+              <dt class="col-4 d-lg-none">Chaser</dt>
               <dd class="col">{{lead?.owner}}</dd>
             </dl>
           </td>

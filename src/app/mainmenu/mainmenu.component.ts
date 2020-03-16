@@ -67,6 +67,12 @@ export class MainmenuComponent implements OnInit {
     });
   }
 
+  toggleNavCollapse() {
+    if(window.innerWidth < 1024){
+      this.navbarCollapsed = !this.navbarCollapsed;
+    }
+  }
+
   toggleCollapse(label: string) {
     Object.entries(this.collapsible).forEach(x => {
       if (x[0] === label) {
