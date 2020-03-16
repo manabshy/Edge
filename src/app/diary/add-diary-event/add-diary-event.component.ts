@@ -516,8 +516,9 @@ export class AddDiaryEventComponent implements OnInit {
     } else {
       this.toastr.success('Diary event successfully updated');
     }
-    this.router.navigateByUrl('/', { skipLocationChange: true })
-      .then(() => this.router.navigate(['/diary/edit', diaryEvent.diaryEventId]));
+    this.router.navigate(['/']);
+    // this.router.navigateByUrl('/', { skipLocationChange: true })
+    //   .then(() => this.router.navigate(['/diary/edit', diaryEvent.diaryEventId]));
   }
 
   setValidators() {

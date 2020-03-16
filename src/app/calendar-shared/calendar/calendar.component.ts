@@ -17,7 +17,7 @@ import {
   addMinutes
 } from 'date-fns';
 import { CustomDateFormatter } from '../custom-date-formatter.provider';
-import { Observable, fromEvent } from 'rxjs';
+import { Observable, fromEvent, of, combineLatest, merge } from 'rxjs';
 import { DiaryEvent, BasicEventRequest, Staff, DiaryProperty } from '../../diary/shared/diary';
 import { DiaryEventService } from '../../diary/shared/diary-event.service';
 import { tap, map, takeUntil, finalize } from 'rxjs/operators';
@@ -76,6 +76,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked {
   //draggable
   newEvents: CalendarEvent[] = [];
   dragToCreateActive = false;
+  diaryEvents$: Observable<Array<CalendarEvent<{ diaryEvent: DiaryEvent }>>>;
 
   constructor(private diaryEventService: DiaryEventService,
     private renderer: Renderer2,
@@ -184,7 +185,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked {
     console.log('id before request', this.id)
     console.log('selected id before request', this.selectedStaffMemberId)
     console.log('id in request', request.staffMemberId)
-    this.events$ = this.diaryEventService.getDiaryEvents(request)
+    this.diaryEvents$ = this.diaryEventService.getDiaryEvents(request)
       .pipe(
         tap(data => this.diaryEvents = data),
         map(result => {
@@ -315,18 +316,20 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked {
 
   private refresh() {
     this.newEvents = [...this.newEvents];
+    const newEvents$ = of(this.newEvents);
+    this.diaryEvents$ = merge(this.diaryEvents$, newEvents$);
     this.cdr.detectChanges();
   }
 
-  createNewEvent(){
+  createNewEvent() {
     const dates = this.newEvents[this.newEvents.length - 1];
-      // console.log("released button")
-      console.log(dates)
-      
-      this.diaryEventService.newEventDates({startDate:dates.start, endDate:dates.end||dates.start})
-      this.router.navigate(['/diary/edit', 0],
+    // console.log("released button")
+    console.log(dates)
+
+    this.diaryEventService.newEventDates({ startDate: dates.start, endDate: dates.end || dates.start })
+    this.router.navigate(['/diary/edit', 0],
       {
-        queryParams: { staffMemberId: this.id || this.selectedStaffMemberId, isNewEvent:true, isFromCalendar:true}
+        queryParams: { staffMemberId: this.id || this.selectedStaffMemberId, isNewEvent: true, isFromCalendar: true }
       })
   }
 }
