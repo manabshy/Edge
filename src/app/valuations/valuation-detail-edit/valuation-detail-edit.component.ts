@@ -295,7 +295,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       originId: [0, [Validators.required, Validators.min(1)]],
       reason: ['', Validators.required],
       timeFrame: ['', Validators.required],
-      marketChat: ['', Validators.required],
       generalNotes: ['', Validators.required],
       bedrooms: [0, Validators.max(99)],
       bathrooms: [0, Validators.max(99)],
@@ -415,7 +414,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         originId: !!this.activeOriginId ? valuation.originId : 0,
         reason: valuation.reason,
         timeFrame: valuation.timeFrame,
-        marketChat: valuation.marketChat,
         generalNotes: valuation.generalNotes,
         bedrooms: valuation.bedrooms || 0,
         bathrooms: valuation.bathrooms || 0,
@@ -728,6 +726,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       if (this.valuationForm.dirty || this.isOwnerChanged || this.isPropertyChanged) {
 
         this.addOrUpdateValuation();
+        console.log('%c val form',  this.valuationForm.value);
       } else {
         this.onSaveComplete();
       }
@@ -750,6 +749,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
 
     if (this.isNewValuation) {
+      console.log('%c val',  valuation);
       this.valuationService.addValuation(valuation).subscribe(data => {
         if (data) { this.onSaveComplete(data); }
       },

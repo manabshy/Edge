@@ -52,7 +52,6 @@
     <fieldset *ngIf="isEditable || isNewValuation
     || (!isEditable && valuationForm.get('reason').value)
     || (!isEditable && valuationForm.get('timeFrame').value)
-    || (!isEditable && valuationForm.get('marketChat').value)
     || (!isEditable && valuationForm.get('generalNotes').value)">
       <legend class="fieldset-title">Valuation Notes</legend>
       <div class="row">
@@ -289,7 +288,7 @@
                 <h5 class="card-title">Sell</h5>
                 <label class="small" for="sellValue">Value</label>
                 <input type="text" name="sellValue" id="sellValue" class="form-control form-control-sm"
-                  formControlName="suggestedAskingPrice" 
+                  formControlName="suggestedAskingPrice"
                   *ngIf="!(!isEditable && !isNewValuation)"
                   [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}">
                 <div class="small" *ngIf="!isEditable && !isNewValuation">

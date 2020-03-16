@@ -8,7 +8,6 @@ import { Property } from 'src/app/property/shared/property';
 export interface ValuationInfo {
   reason: string;
   timeFrame: string;
-  marketChat: string;
   generalNotes: string;
 }
 export interface Valuation extends ValuationInfo {
