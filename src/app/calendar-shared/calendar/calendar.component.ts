@@ -17,7 +17,7 @@ import {
   addMinutes,
   isSameMinute,
   addHours,
-  isSameHour
+  getDaysInMonth
 } from 'date-fns';
 import { CustomDateFormatter } from '../custom-date-formatter.provider';
 import { Observable, fromEvent, of, combineLatest, merge, Subscription } from 'rxjs';
@@ -130,7 +130,8 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
   }
   beforeMonthViewRender(renderEvent: CalendarMonthViewBeforeRenderEvent) {
     this.weekStartsOn = DAYS_OF_WEEK.MONDAY;
-    this.daysInWeek = null;
+    let date= getDaysInMonth(this.viewDate)
+    this.daysInWeek = date;
   }
 
   beforeWeekViewRender(renderEvent: CalendarWeekViewBeforeRenderEvent) {
@@ -146,6 +147,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
 
   beforeDayViewRender(renderEvent: CalendarDayViewBeforeRenderEvent) {
     this.currentTimeIntoView();
+    this.daysInWeek = 1;
   }
 
   currentTimeIntoView() {
