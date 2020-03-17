@@ -127,7 +127,7 @@
   </div>
 </ng-template>
 <div class="calendar-container" #calendarContainer>
-  <ng-container *ngIf="diaryEvents$ | async; let events">
+  <ng-container *ngIf="diaryEvents as events">
     <ng-container [ngSwitch]="view">
       <mwl-calendar-month-view *ngSwitchCase="'month'"
         [viewDate]="viewDate"

@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input, OnChanges, ChangeDetectorRef, ViewChild, ElementRef, Renderer2, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, OnChanges, ChangeDetectorRef, ViewChild, ElementRef, Renderer2, AfterViewChecked, OnDestroy } from '@angular/core';
 import {
   CalendarEvent, CalendarDateFormatter, CalendarWeekViewBeforeRenderEvent,
   CalendarDayViewBeforeRenderEvent, DAYS_OF_WEEK, CalendarEventTitleFormatter, CalendarMonthViewBeforeRenderEvent
@@ -14,10 +14,13 @@ import {
   endOfDay,
   format,
   addDays,
-  addMinutes
+  addMinutes,
+  isSameMinute,
+  addHours,
+  isSameHour
 } from 'date-fns';
 import { CustomDateFormatter } from '../custom-date-formatter.provider';
-import { Observable, fromEvent, of, combineLatest, merge } from 'rxjs';
+import { Observable, fromEvent, of, combineLatest, merge, Subscription } from 'rxjs';
 import { DiaryEvent, BasicEventRequest, Staff, DiaryProperty } from '../../diary/shared/diary';
 import { DiaryEventService } from '../../diary/shared/diary-event.service';
 import { tap, map, takeUntil, finalize } from 'rxjs/operators';
@@ -29,6 +32,7 @@ import { InfoDetail, DropdownListInfo } from 'src/app/core/services/info.service
 import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CalendarView } from '../shared/calendar-shared';
+import { isSame } from 'ngx-bootstrap/chronos/public_api';
 
 
 function floorToNearest(amount: number, precision: number) {
@@ -53,7 +57,7 @@ function ceilToNearest(amount: number, precision: number) {
     }
   ]
 })
-export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked {
+export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, OnDestroy {
   @Input() staffMemberId: number;
   @Input() myCalendarOnly: boolean;
   @Output() selectedDate = new EventEmitter<any>();
@@ -67,7 +71,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked {
 
   events$: Observable<Array<CalendarEvent<{ diaryEvent: DiaryEvent }>>>;
   myEvents$: Observable<Array<CalendarEvent<{ diaryEvent: DiaryEvent }>>>;
-  diaryEvents: DiaryEvent[];
+  diaryEvents: CalendarEvent[];
   activeDayIsOpen: boolean;
   viewingArrangements: InfoDetail[];
   id: number;
@@ -77,6 +81,8 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked {
   newEvents: CalendarEvent[] = [];
   dragToCreateActive = false;
   diaryEvents$: Observable<Array<CalendarEvent<{ diaryEvent: DiaryEvent }>>>;
+
+  dairyEventSubscription:Subscription;
 
   constructor(private diaryEventService: DiaryEventService,
     private renderer: Renderer2,
@@ -185,30 +191,26 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked {
     console.log('id before request', this.id)
     console.log('selected id before request', this.selectedStaffMemberId)
     console.log('id in request', request.staffMemberId)
-    this.diaryEvents$ = this.diaryEventService.getDiaryEvents(request)
-      .pipe(
-        tap(data => this.diaryEvents = data),
-        map(result => {
-          return result.map(diary => {
-            const title = diary.subject || diary.eventType;
-            const start = new Date(diary.startDateTime);
-            const end = new Date(diary.endDateTime);
-            const allDay = diary.allDay;
-            const meta = diary;
-            this.setViewingArrangement(diary.properties);
-            const members = this.getStaff(meta.staffMembers);
-            let cssClass = '';
-            cssClass += meta.isCancelled ? 'is-cancelled' : '';
-            cssClass += meta.isHighImportance ? ' is-important' : '';
-            cssClass += meta.isConfirmed ? ' is-confirmed' : '';
-            if (!meta.isCancelled || isCancelledVisible) {
-              return { title, start, end, allDay, meta, members, cssClass } as CalendarEvent;
-            } else {
-              return {} as CalendarEvent;
-            }
-          });
-        })
-      );
+    this.dairyEventSubscription=this.diaryEventService.getDiaryEvents(request).subscribe(result => {
+      this.diaryEvents=[]
+        return result.map(diary => {
+          const title = diary.subject || diary.eventType;
+          const start = new Date(diary.startDateTime);
+          const end = new Date(diary.endDateTime);
+          const allDay = diary.allDay;
+          const meta = diary;
+          this.setViewingArrangement(diary.properties);
+          const members = this.getStaff(meta.staffMembers);
+          let cssClass = '';
+          cssClass += meta.isCancelled ? 'is-cancelled' : '';
+          cssClass += meta.isHighImportance ? ' is-important' : '';
+          cssClass += meta.isConfirmed ? ' is-confirmed' : '';
+          if (!meta.isCancelled || isCancelledVisible) {
+            this.diaryEvents.push({ title, start, end, allDay, meta, members, cssClass } as CalendarEvent
+              )
+          }
+        });
+      })
   }
 
   eventClicked({ event }: { event: CalendarEvent }) {
@@ -269,14 +271,14 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked {
     segmentElement: HTMLElement
   ) {
     const dragToSelectEvent: CalendarEvent = {
-      id: this.newEvents.length,
+      id: this.diaryEvents.length,
       title: 'New event',
       start: segment.date,
       meta: {
         tmpEvent: true
       }
     };
-    this.newEvents = [...this.newEvents, dragToSelectEvent];
+    this.diaryEvents = [...this.diaryEvents, dragToSelectEvent];
     const segmentPosition = segmentElement.getBoundingClientRect();
     this.dragToCreateActive = true;
     const endOfView = endOfWeek(this.viewDate, {
@@ -315,22 +317,31 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked {
 
 
   private refresh() {
-    this.newEvents = [...this.newEvents];
-    const newEvents$ = of(this.newEvents);
-    this.diaryEvents$ = merge(this.diaryEvents$, newEvents$);
+    this.diaryEvents = [...this.diaryEvents];
+    // const newEvents$ = of(this.newEvents);
+    // this.diaryEvents$ = merge(this.diaryEvents$, newEvents$);
     this.cdr.detectChanges();
   }
 
   createNewEvent() {
-    const dates = this.newEvents[this.newEvents.length - 1];
+    const dates = this.diaryEvents[this.diaryEvents.length - 1];
     // console.log("released button")
     console.log(dates)
-
+    if(dates.end==undefined){
+      dates.end= addHours(dates.start, 1)
+    }
+    // console.log()
     this.diaryEventService.newEventDates({ startDate: dates.start, endDate: dates.end || dates.start })
     this.router.navigate(['/diary/edit', 0],
       {
         queryParams: { staffMemberId: this.id || this.selectedStaffMemberId, isNewEvent: true, isFromCalendar: true }
       })
+  }
+
+  ngOnDestroy(){
+    if(this.dairyEventSubscription){
+      this.dairyEventSubscription.unsubscribe()
+    }
   }
 }
 
