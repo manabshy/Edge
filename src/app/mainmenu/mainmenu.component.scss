@@ -89,12 +89,16 @@
 
     .dropdown-menu {
         position: static;
+        background-color: darken( theme-color('dark'), 5% );
     }
 
     .dropdown-item {
+        color: color("white");
+        &:hover {
+            background: darken( theme-color('dark'), 15% );
+        }
         &.active {
             background: inherit;
-            color: inherit;
             position: relative;
             
             &::before {
