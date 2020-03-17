@@ -168,7 +168,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
     console.log('get selected id from output event', staffMemberId)
   }
 
-  getDiaryEvents(isCancelledVisible?: boolean) {
+  getDiaryEvents(isCancelledVisible?: boolean, date?:Date) {
     const getStart: any = {
       month: startOfMonth,
       week: startOfWeek,
@@ -182,15 +182,15 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
       threeDays: endOfWeek,
       day: endOfDay
     }[this.view];
-
-    const request = {
+    let request = {
       staffMemberId: this.selectedStaffMemberId || this.id,
       startDate: format(getStart(this.viewDate), 'YYYY-MM-DD'),
       endDate: format(getEnd(this.viewDate), 'YYYY-MM-DD'),
     } as BasicEventRequest;
-    console.log('id before request', this.id)
-    console.log('selected id before request', this.selectedStaffMemberId)
-    console.log('id in request', request.staffMemberId)
+    if(date){
+      request.startDate=  format(getStart(date), 'YYYY-MM-DD')
+      request.endDate=  format(getStart(date), 'YYYY-MM-DD')
+    }
     this.dairyEventSubscription=this.diaryEventService.getDiaryEvents(request).subscribe(result => {
       this.diaryEvents=[]
         return result.map(diary => {
@@ -232,6 +232,11 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
       this.selectedDate.emit(date);
       console.log('clicked date', date);
     }
+  }
+
+  getDateChange(date){
+   this.getDiaryEvents(false, date)
+   this.viewDate = date;
   }
 
   changeDay(date: Date) {
@@ -324,18 +329,17 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
   }
 
   createNewEvent() {
-    const dates = this.diaryEvents[this.diaryEvents.length - 1];
-    // console.log("released button")
-    console.log(dates)
-    if(dates.end==undefined){
-      dates.end= addHours(dates.start, 1)
-    }
-    // console.log()
-    this.diaryEventService.newEventDates({ startDate: dates.start, endDate: dates.end || dates.start })
-    this.router.navigate(['/diary/edit', 0],
-      {
-        queryParams: { staffMemberId: this.id || this.selectedStaffMemberId, isNewEvent: true, isFromCalendar: true }
-      })
+      const newEvent = this.diaryEvents[this.diaryEvents.length - 1];
+      if(newEvent.id){
+        if(newEvent.end==undefined){
+          newEvent.end= addHours(newEvent.start, 1)
+        }
+        this.diaryEventService.newEventDates({ startDate: newEvent.start, endDate: newEvent.end })
+        this.router.navigate(['/diary/edit', 0],
+          {
+            queryParams: { staffMemberId: this.id || this.selectedStaffMemberId, isNewEvent: true, isFromCalendar: true }
+          })
+      }
   }
 
   ngOnDestroy(){

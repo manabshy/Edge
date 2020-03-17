@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, OnChanges, OnInit } from '@angu
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { BaseStaffMember } from '../shared/models/base-staff-member';
 import { StaffMemberService } from '../core/services/staff-member.service';
-import { Observable, of, merge } from 'rxjs';
+import { Observable, of, merge, empty } from 'rxjs';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { CalendarView } from './shared/calendar-shared';
 import { StaffMember } from '../shared/models/staff-member';
@@ -24,6 +24,7 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
   @Output() viewChange: EventEmitter<string> = new EventEmitter();
   @Output() viewDateChange: EventEmitter<Date> = new EventEmitter();
   @Output() filterChange: EventEmitter<boolean> = new EventEmitter();
+  @Output() dateChange: EventEmitter<Date> = new EventEmitter();
   @Output() staffMemberChange: EventEmitter<number> = new EventEmitter();
   label: string;
   excludeDays = [];
@@ -32,6 +33,7 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
   fakeView: string;
   currentStaffMember: any;
   staffMemberId: number;
+  clicked=false;
 
   get isShowMeVisible() {
     if (this.diaryHeaderForm && this.currentStaffMember) {
@@ -50,7 +52,8 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
     this.diaryHeaderForm = this.fb.group({
       viewMode: this.view,
       showCancelled: false,
-      staffMember: null
+      staffMember: null,
+      dateFilter: new Date()
     });
 
     this.storage.get('currentUser').subscribe((data: StaffMember) => {
@@ -136,5 +139,9 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
         this.fakeView = 'week';
         this.label = 'This Week';
     }
+  }
+
+  onDateChange(date){
+    this.dateChange.emit(date)
   }
 }

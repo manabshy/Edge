@@ -4,7 +4,8 @@
 </a>
 <app-calendar-header [(view)]="view" [(daysInWeek)]="daysInWeek" [(viewDate)]="viewDate" [weekStartsOn]="weekStartsOn"
   (viewDateChange)="getDiaryEvents()" (viewChange)="getDiaryEvents()" (filterChange)="getDiaryEvents($event)"
-  [myCalendarOnly]="myCalendarOnly" (staffMemberChange)="getSelectedStaffMemberDiaryEvents($event)">
+  [myCalendarOnly]="myCalendarOnly" (staffMemberChange)="getSelectedStaffMemberDiaryEvents($event)"
+  (dateChange)="getDateChange($event)">
 </app-calendar-header>
 <ng-template #customTooltip let-event="event">
   <div role="tooltip" class="popover">

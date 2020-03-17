@@ -38,13 +38,13 @@
             {{ viewDate | calendarDate: (view + 'ViewTitle'):locale:weekStartsOn:excludeDays:daysInWeek }}
           </p>
         </div>
-        <div class="col-auto p-md-0 order-md-3">
-          <div class="btn-group" dropdown placement="bottom right" [insideClick]="true">
-            <button id="filter" dropdownToggle type="button" class="btn btn-sm btn-light dropdown-toggle"
-              aria-controls="dropdown-custom-html">
-              Filter <span class="caret"></span>
+        <div class="col-md-3 col-xl-2 mt-1 mt-md-0 order-md-3">
+          <div class="btn-group"   >
+            <button id="filter"  type="button" class="btn btn-sm btn-light dropdown-toggle"
+              aria-controls="dropdown-custom-html" (click)="clicked=!clicked">
+              Change Date <span class="caret"></span>
             </button>
-            <ul id="dropdown-custom-html" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+            <!-- <ul id="dropdown-custom-html" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
               aria-labelledby="filter">
               <li role="menuitem">
                 <div class="dropdown-item">
@@ -55,9 +55,23 @@
                   </div>
                 </div>
               </li>
-            </ul>
-          </div>
+            </ul> -->
+          </div> 
         </div>
+            <div class="col-sm form-group order-md-4" >
+              <div *ngIf="clicked">
+                <input type="text" id="dateFrom" 
+                placeholder="dd/mm/yyyy" 
+                class="form-control form-control-sm"
+                  [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
+                  bsDatepicker 
+                  (bsValueChange)="onDateChange($event)"
+                  formControlName="dateFilter">
+  
+              </div>
+              <!-- <label class="small" for="dateFrom">Date From</label> -->
+              
+            </div>
         <div class="col-md-6 col-xl-4 order-md-2 mt-1 mt-md-0" *ngIf="!myCalendarOnly">
           <div class="row justify-content-end">
             <div class="col-auto pr-0" *ngIf="isShowMeVisible">
