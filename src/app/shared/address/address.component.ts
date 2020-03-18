@@ -96,7 +96,7 @@ export class AddressComponent implements OnInit, OnChanges {
       this.populateAddressForm(this.personDetails, this.companyDetails, this.propertyDetails, this.companyAddress);
     }
 
-    if(this.searchedAddress) {
+    if (this.searchedAddress) {
       this.searchAddress();
     }
 
@@ -107,7 +107,9 @@ export class AddressComponent implements OnInit, OnChanges {
             this.postCode.setValue(this.sharedService.formatPostCode(data), { emitEvent: false });
           }
           if (key !== 'fullAddress') {
-            this.emitAddress();
+            if (key === 'postCode') {
+              this.emitAddress();
+            }
           }
         });
     });
@@ -155,10 +157,10 @@ export class AddressComponent implements OnInit, OnChanges {
         }
       });
       this.foundAddress = data;
-      if(this.foundAddress) {
+      if (this.foundAddress) {
         const closestParent = this._host.nativeElement.closest('.off-canvas-content');
-        if(closestParent) {
-          closestParent.scrollTo(0,0);
+        if (closestParent) {
+          closestParent.scrollTo(0, 0);
           this.renderer.addClass(closestParent, 'no-scroll');
         }
       }
@@ -229,7 +231,7 @@ export class AddressComponent implements OnInit, OnChanges {
   hideOffCanvas() {
     this.foundAddress = null;
     const closestParent = this._host.nativeElement.closest('.off-canvas-content');
-    if(closestParent) {
+    if (closestParent) {
       this.renderer.removeClass(closestParent, 'no-scroll');
     }
   }
@@ -271,6 +273,10 @@ export class AddressComponent implements OnInit, OnChanges {
     this.addressDetails.emit(address);
   }
 
+  sendAddress() {
+    console.log('send address xxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
+    this.emitAddress();
+  }
   populateAddressForm(person?: Person, company?: Company, property?: Property, companyAddress?: Address) {
     if (this.addressForm) {
       this.addressForm.reset();
