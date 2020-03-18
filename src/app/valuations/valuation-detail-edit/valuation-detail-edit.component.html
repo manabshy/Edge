@@ -204,7 +204,7 @@
                 </button>
               </p>
               <app-calendar *ngIf="staffMemberId" [staffMemberId]="staffMemberId" [myCalendarOnly]="true"
-                (selectedDate)="getSelectedDate($event)"></app-calendar>
+               [isSelectingDate]="isSelectingDate" (selectedDate)="getSelectedDate($event)"></app-calendar>
             </div>
           </div>
           <ng-container *ngFor="let attendee of attendees">

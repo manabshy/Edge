@@ -72,6 +72,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   activeOriginId: InfoDetail;
   showOriginId: boolean;
   allOriginTypes: InfoDetail[] = [];
+  isSelectingDate = false;
 
   get isInvitationSent() {
     return this.valuationForm.get('isInvitationSent') as FormControl;
@@ -553,6 +554,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.valuation.valuationDate = date;
       }
       this.valuationForm.get('valuationDate').setValue(date);
+      console.log('selected date in val edit', date)
       this.showCalendar = false;
     }
   }
@@ -580,6 +582,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     if (staffMember) {
       this.selectMainStaffMember(staffMember);
       this.removeAttendee(staffMember.staffMemberId);
+      this.isSelectingDate = true;
     }
   }
 
@@ -615,6 +618,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   changeDate() {
     if (this.mainStaffMember) { this.staffMemberId = this.mainStaffMember.staffMemberId; }
     this.showCalendar = true;
+    this.isSelectingDate = true;
   }
 
   createNewSigner() {
@@ -635,7 +639,14 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     } as Instruction;
     this.instruction = instruction;
     this.populateInstructionForm(instruction);
+    this.setSaleOnlyInstructionFlag(instruction);
     console.log('instruction form here....', this.instructionForm.value);
+  }
+
+  setSaleOnlyInstructionFlag(instruction: Instruction) {
+    if (instruction.askingPrice && !(instruction.askingRentShortLet && instruction.askingRentLongLet)) {
+      this.instructionForm.get('instructSale').setValue(true);
+    }
   }
 
   setInstructionFormValidators() {
@@ -680,7 +691,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     const instructionSelected = this.instructionForm.get('instructSale').value || this.instructionForm.get('instructShortLet').value
       || this.instructionForm.get('instructLongLet').value;
     if (this.instructionForm.valid) {
-      if (this.instructionForm.dirty) {
+      if (this.instructionForm.dirty && instructionSelected) {
         this.isSubmitting = true;
         const instruction = { ...this.instruction, ...this.instructionForm.value } as Instruction;
         this.setInstructionValue(instruction);
@@ -724,9 +735,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.sharedService.logValidationErrors(this.valuationForm, true);
     if (this.valuationForm.valid) {
       if (this.valuationForm.dirty || this.isOwnerChanged || this.isPropertyChanged) {
-
         this.addOrUpdateValuation();
-        console.log('%c val form',  this.valuationForm.value);
       } else {
         this.onSaveComplete();
       }
@@ -749,7 +758,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
 
     if (this.isNewValuation) {
-      console.log('%c val',  valuation);
+      console.log('%c val', valuation);
       this.valuationService.addValuation(valuation).subscribe(data => {
         if (data) { this.onSaveComplete(data); }
       },

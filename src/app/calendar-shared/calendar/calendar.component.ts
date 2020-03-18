@@ -60,6 +60,7 @@ function ceilToNearest(amount: number, precision: number) {
 export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, OnDestroy {
   @Input() staffMemberId: number;
   @Input() myCalendarOnly: boolean;
+  @Input() isSelectingDate: boolean;
   @Output() selectedDate = new EventEmitter<any>();
   @ViewChild('calendarContainer', { static: true }) calendarContainer: ElementRef;
   view: CalendarView | 'month' | 'week' | 'threeDays' | 'day' = CalendarView.Week;
@@ -77,12 +78,12 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
   id: number;
   selectedStaffMemberId: number;
 
-  //draggable
+  // draggable
   newEvents: CalendarEvent[] = [];
   dragToCreateActive = false;
   diaryEvents$: Observable<Array<CalendarEvent<{ diaryEvent: DiaryEvent }>>>;
 
-  dairyEventSubscription:Subscription;
+  dairyEventSubscription: Subscription;
 
   constructor(private diaryEventService: DiaryEventService,
     private renderer: Renderer2,
@@ -95,7 +96,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
 
     this.route.queryParams.subscribe(params => {
       this.selectedStaffMemberId = +params['staffMemberId'] || 0;
-      console.log('id in calendar', this.selectedStaffMemberId)
+      console.log('id in calendar', this.selectedStaffMemberId);
       this.getDiaryEvents();
     });
 
@@ -104,7 +105,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
     });
 
     if (window.innerWidth < 1024) {
-      this.view = CalendarView.ThreeDays
+      this.view = CalendarView.ThreeDays;
     }
     // this.getDiaryEvents();
   }
@@ -130,7 +131,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
   }
   beforeMonthViewRender(renderEvent: CalendarMonthViewBeforeRenderEvent) {
     this.weekStartsOn = DAYS_OF_WEEK.MONDAY;
-    let date= getDaysInMonth(this.viewDate)
+    const date = getDaysInMonth(this.viewDate);
     this.daysInWeek = date;
   }
 
@@ -167,10 +168,10 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
   getSelectedStaffMemberDiaryEvents(staffMemberId: number) {
     // this.id = staffMemberId;
     // this.getDiaryEvents();
-    console.log('get selected id from output event', staffMemberId)
+    console.log('get selected id from output event', staffMemberId);
   }
 
-  getDiaryEvents(isCancelledVisible?: boolean, date?:Date) {
+  getDiaryEvents(isCancelledVisible?: boolean, date?: Date) {
     const getStart: any = {
       month: startOfMonth,
       week: startOfWeek,
@@ -184,35 +185,35 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
       threeDays: endOfWeek,
       day: endOfDay
     }[this.view];
-    let request = {
+    const request = {
       staffMemberId: this.selectedStaffMemberId || this.id,
       startDate: format(getStart(this.viewDate), 'YYYY-MM-DD'),
       endDate: format(getEnd(this.viewDate), 'YYYY-MM-DD'),
     } as BasicEventRequest;
-    if(date){
-      request.startDate=  format(getStart(date), 'YYYY-MM-DD')
-      request.endDate=  format(getStart(date), 'YYYY-MM-DD')
+    if (date) {
+      request.startDate = format(getStart(date), 'YYYY-MM-DD');
+      request.endDate = format(getStart(date), 'YYYY-MM-DD');
     }
-    this.dairyEventSubscription=this.diaryEventService.getDiaryEvents(request).subscribe(result => {
-      this.diaryEvents=[]
-        return result.map(diary => {
-          const title = diary.subject || diary.eventType;
-          const start = new Date(diary.startDateTime);
-          const end = new Date(diary.endDateTime);
-          const allDay = diary.allDay;
-          const meta = diary;
-          this.setViewingArrangement(diary.properties);
-          const members = this.getStaff(meta.staffMembers);
-          let cssClass = '';
-          cssClass += meta.isCancelled ? 'is-cancelled' : '';
-          cssClass += meta.isHighImportance ? ' is-important' : '';
-          cssClass += meta.isConfirmed ? ' is-confirmed' : '';
-          if (!meta.isCancelled || isCancelledVisible) {
-            this.diaryEvents.push({ title, start, end, allDay, meta, members, cssClass } as CalendarEvent
-              )
-          }
-        });
-      })
+    this.dairyEventSubscription = this.diaryEventService.getDiaryEvents(request).subscribe(result => {
+      this.diaryEvents = [];
+      return result.map(diary => {
+        const title = diary.subject || diary.eventType;
+        const start = new Date(diary.startDateTime);
+        const end = new Date(diary.endDateTime);
+        const allDay = diary.allDay;
+        const meta = diary;
+        this.setViewingArrangement(diary.properties);
+        const members = this.getStaff(meta.staffMembers);
+        let cssClass = '';
+        cssClass += meta.isCancelled ? 'is-cancelled' : '';
+        cssClass += meta.isHighImportance ? ' is-important' : '';
+        cssClass += meta.isConfirmed ? ' is-confirmed' : '';
+        if (!meta.isCancelled || isCancelledVisible) {
+          this.diaryEvents.push({ title, start, end, allDay, meta, members, cssClass } as CalendarEvent
+          );
+        }
+      });
+    });
   }
 
   eventClicked({ event }: { event: CalendarEvent }) {
@@ -236,9 +237,9 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
     }
   }
 
-  getDateChange(date){
-   this.getDiaryEvents(false, date)
-   this.viewDate = date;
+  getDateChange(date) {
+    this.getDiaryEvents(false, date);
+    this.viewDate = date;
   }
 
   changeDay(date: Date) {
@@ -272,81 +273,76 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
   }
 
   // New draggable here....
-  startDragToCreate(
-    segment: WeekViewHourSegment,
-    mouseDownEvent: MouseEvent,
-    segmentElement: HTMLElement
-  ) {
-    const dragToSelectEvent: CalendarEvent = {
-      id: this.diaryEvents.length,
-      title: 'New event',
-      start: segment.date,
-      meta: {
-        tmpEvent: true
-      }
-    };
-    this.diaryEvents = [...this.diaryEvents, dragToSelectEvent];
-    const segmentPosition = segmentElement.getBoundingClientRect();
-    this.dragToCreateActive = true;
-    const endOfView = endOfWeek(this.viewDate, {
-      weekStartsOn: this.weekStartsOn
-    });
-
-    fromEvent(document, 'mousemove')
-      .pipe(
-        finalize(() => {
-          delete dragToSelectEvent.meta.tmpEvent;
-          this.dragToCreateActive = false;
-          this.refresh();
-        }),
-        takeUntil(fromEvent(document, 'mouseup'))
-      )
-      .subscribe((mouseMoveEvent: MouseEvent) => {
-        const minutesDiff = ceilToNearest(
-          mouseMoveEvent.clientY - segmentPosition.top,
-          30
-        );
-
-        const daysDiff =
-          floorToNearest(
-            mouseMoveEvent.clientX - segmentPosition.left,
-            segmentPosition.width
-          ) / segmentPosition.width;
-
-        const newEnd = addDays(addMinutes(segment.date, minutesDiff), daysDiff);
-        if (newEnd > segment.date && newEnd < endOfView) {
-          dragToSelectEvent.end = newEnd;
+  startDragToCreate(segment: WeekViewHourSegment, mouseDownEvent: MouseEvent, segmentElement: HTMLElement) {
+    if (!this.isSelectingDate) {
+      const dragToSelectEvent: CalendarEvent = {
+        id: this.diaryEvents.length,
+        title: 'New event',
+        start: segment.date,
+        meta: {
+          tmpEvent: true
         }
-        this.refresh();
-        // console.log(dragToSelectEvent)
+      };
+      this.diaryEvents = [...this.diaryEvents, dragToSelectEvent];
+      const segmentPosition = segmentElement.getBoundingClientRect();
+      this.dragToCreateActive = true;
+      const endOfView = endOfWeek(this.viewDate, {
+        weekStartsOn: this.weekStartsOn
       });
+
+      fromEvent(document, 'mousemove')
+        .pipe(
+          finalize(() => {
+            delete dragToSelectEvent.meta.tmpEvent;
+            this.dragToCreateActive = false;
+            this.refresh();
+          }),
+          takeUntil(fromEvent(document, 'mouseup'))
+        )
+        .subscribe((mouseMoveEvent: MouseEvent) => {
+          const minutesDiff = ceilToNearest(
+            mouseMoveEvent.clientY - segmentPosition.top,
+            30
+          );
+
+          const daysDiff =
+            floorToNearest(
+              mouseMoveEvent.clientX - segmentPosition.left,
+              segmentPosition.width
+            ) / segmentPosition.width;
+
+          const newEnd = addDays(addMinutes(segment.date, minutesDiff), daysDiff);
+          if (newEnd > segment.date && newEnd < endOfView) {
+            dragToSelectEvent.end = newEnd;
+          }
+          this.refresh();
+        });
+    }
   }
 
 
   private refresh() {
     this.diaryEvents = [...this.diaryEvents];
-    // const newEvents$ = of(this.newEvents);
-    // this.diaryEvents$ = merge(this.diaryEvents$, newEvents$);
     this.cdr.detectChanges();
   }
 
   createNewEvent() {
-      const newEvent = this.diaryEvents[this.diaryEvents.length - 1];
-      if(newEvent.id){
-        if(newEvent.end==undefined){
-          newEvent.end= addHours(newEvent.start, 1)
-        }
-        this.diaryEventService.newEventDates({ startDate: newEvent.start, endDate: newEvent.end })
-        this.router.navigate(['/diary/edit', 0],
-          {
-            queryParams: { staffMemberId: this.id || this.selectedStaffMemberId, isNewEvent: true, isFromCalendar: true }
-          })
+    const newEvent = this.diaryEvents[this.diaryEvents.length - 1];
+    if (newEvent.id) {
+      if (newEvent.end === undefined) {
+        newEvent.end = addHours(newEvent.start, 1);
       }
+      this.diaryEventService.newEventDates({ startDate: newEvent.start, endDate: newEvent.end });
+      this.router.navigate(['/diary/edit', 0],
+        {
+          queryParams: { staffMemberId: this.id || this.selectedStaffMemberId, isNewEvent: true, isFromCalendar: true }
+        });
+    }
   }
 
-  ngOnDestroy(){
-    if(this.dairyEventSubscription){
-      this.dairyEventSubscription.unsubscribe()
+  ngOnDestroy() {
+    if (this.dairyEventSubscription) {
+      this.dairyEventSubscription.unsubscribe();
     }
   }
 }

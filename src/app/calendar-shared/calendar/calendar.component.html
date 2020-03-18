@@ -151,7 +151,8 @@
         [hourSegmentTemplate]="weekViewHourSegmentTemplate"
         (hourSegmentClicked)="getClickedDate($event.date)"
         (eventClicked)="eventClicked($event)"
-        (mouseup)="createNewEvent()">
+        (mouseup)="createNewEvent()"
+        >
       </mwl-calendar-week-view>
       <mwl-calendar-day-view *ngSwitchCase="'day'"
         [viewDate]="viewDate"
@@ -161,7 +162,8 @@
         (hourSegmentClicked)="getClickedDate($event.date)"
         [hourSegmentTemplate]="weekViewHourSegmentTemplate"
         (eventClicked)="eventClicked($event)"
-        (mouseup)="createNewEvent()">
+        (mouseup)="createNewEvent()"
+        >
       </mwl-calendar-day-view>
     </ng-container>
   </ng-container>
