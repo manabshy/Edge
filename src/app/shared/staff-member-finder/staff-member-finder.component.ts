@@ -4,6 +4,7 @@ import { BaseStaffMember } from '../models/base-staff-member';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
 import { FormGroup, FormControl } from '@angular/forms';
+import { ResultData } from '../result-data';
 
 @Component({
   selector: 'app-staff-member-finder',
@@ -43,7 +44,7 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
       });
     }
     if (this.staffMemberIdList && this.staffMemberIdList.length) {
-      console.log('staff ids', this.staffMemberIdList)
+      console.log('staff ids', this.staffMemberIdList);
       this.isClearable = false;
       this.staffMemberFinderForm.patchValue({
         staffMemberId: this.staffMemberIdList
@@ -53,7 +54,8 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
 
   onStaffMemberChange(staffMember: BaseStaffMember) {
     if (staffMember) {
-      this.selectedStaffMemberId.emit(staffMember.staffMemberId);
+      this.staffMemberId = staffMember.staffMemberId;
+      this.selectedStaffMemberId.emit(this.staffMemberId);
       this.selectedStaffMemberList.emit(staffMember);
       console.log('selected', staffMember);
     } else {
@@ -79,7 +81,12 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
       if (data) {
         this.staffMembers$ = of(data as BaseStaffMember[]);
       } else {
-        this.staffMemberService.getAllStaffMembers().subscribe(res => this.staffMembers$ = of(res));
+        this.staffMemberService.getAllStaffMembers().subscribe(
+          (res: ResultData) => {
+            this.staffMembers$ = of(res.result);
+            console.log('%cmembers from shared replay', 'color:green', res.result);
+          }
+        );
       }
     });
   }
