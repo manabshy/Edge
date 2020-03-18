@@ -92,6 +92,9 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
         viewMode: this.view
       })
       this.getLabel();
+      this.diaryHeaderForm.patchValue({ 
+        dateFilter: this.viewDate
+      }, {emitEvent: false, onlySelf: true}) 
     }
   }
 
@@ -142,6 +145,8 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
   }
 
   onDateChange(date){
-    this.dateChange.emit(date)
+    if(date!=this.viewDate){  
+      this.dateChange.emit(date)
+    }
   }
 }

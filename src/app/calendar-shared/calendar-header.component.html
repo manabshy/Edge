@@ -42,7 +42,7 @@
           <div class="btn-group"   >
             <button id="filter"  type="button" class="btn btn-sm btn-light dropdown-toggle"
               aria-controls="dropdown-custom-html" (click)="clicked=!clicked">
-              Change Date <span class="caret"></span>
+              Change Date 
             </button>
             <!-- <ul id="dropdown-custom-html" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
               aria-labelledby="filter">
@@ -58,7 +58,7 @@
             </ul> -->
           </div> 
         </div>
-            <div class="col-sm form-group order-md-4" >
+            <div class="col-sm order-md-4" >
               <div *ngIf="clicked">
                 <input type="text" id="dateFrom" 
                 placeholder="dd/mm/yyyy" 
@@ -69,7 +69,6 @@
                   formControlName="dateFilter">
   
               </div>
-              <!-- <label class="small" for="dateFrom">Date From</label> -->
               
             </div>
         <div class="col-md-6 col-xl-4 order-md-2 mt-1 mt-md-0" *ngIf="!myCalendarOnly">
