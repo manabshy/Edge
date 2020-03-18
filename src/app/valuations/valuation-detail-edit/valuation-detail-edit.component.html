@@ -247,7 +247,7 @@
           <label class="small">Date</label>
           <div class="d-flex d-sm-block">
             <label for="changeDate"
-              class="text-left mobile-btn small">{{(selectedDate || valuation?.valuationDate) | date: 'E d MMM yyyy, hh:mm'}}</label>
+              class="text-left mobile-btn small">{{(selectedDate || valuation?.valuationDate) | date: 'E d MMM yyyy, HH:mm'}}</label>
             <button id="changeDate" class="btn btn-light btn-sm ml-2" type="button" (click)="changeDate()"
               *ngIf="isEditable || isNewValuation">Change </button>
           </div>
