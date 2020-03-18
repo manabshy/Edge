@@ -14,7 +14,7 @@ const CACHE_SIZE = 1;
 export class StaffMemberService {
   private currentStaffMemberSubject = new BehaviorSubject<StaffMember | null>(null);
   private staffMember$: Observable<StaffMember>;
-  private staffMembers$: Observable<StaffMember[]>;
+  private staffMembers$: Observable<StaffMember[] | any>;
   private impersonationSubject = new BehaviorSubject<Impersonation | null>(null);
   impersonatedStaffMember$ = this.impersonationSubject.asObservable();
   currentStaffMember$ = this.currentStaffMemberSubject.asObservable();
@@ -60,6 +60,7 @@ export class StaffMemberService {
       map(response => response),
       tap(data => {
         if (data) {
+          console.log('all staff members in servuce:', data);
           this.storage.set('allstaffmembers', data.result).subscribe();
           this.storage.set('cacheStatus', data.cacheStatus).subscribe();
         }

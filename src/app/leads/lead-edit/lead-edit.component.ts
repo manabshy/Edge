@@ -316,6 +316,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     } else {
       this.leadEditForm.patchValue({ ownerId: 0 });
     }
+
+    console.log('valuer id here',   this.leadEditForm.get('ownerId').value);
   }
 
   isObject(val) {
