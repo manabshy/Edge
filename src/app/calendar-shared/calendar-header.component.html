@@ -34,19 +34,27 @@
     <div class="col-md order-md-2 mt-1 mt-md-0">
       <div class="row align-items-center">
         <div class="col order-md-1">
-          <p class="mb-0">
+          <div class="mb-0 btn-group" dropdown [autoClose]="false" #datepickerDropdown="bs-dropdown">
+            <button id="filter" dropdownToggle type="button" class="btn btn-sm btn-light dropdown-toggle"
+            aria-controls="dropdown-custom-html">
             {{ viewDate | calendarDate: (view + 'ViewTitle'):locale:weekStartsOn:excludeDays:daysInWeek }}
-          </p>
-        </div>
-        <div class="col-md-3 col-xl-2 mt-1 mt-md-0 order-md-3">
-          <div class="btn-group"   >
-            <button id="filter"  type="button" class="btn btn-sm btn-light dropdown-toggle"
-              aria-controls="dropdown-custom-html" (click)="clicked=!clicked">
-              Change Date 
             </button>
-            <!-- <ul id="dropdown-custom-html" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+            <ul id="dropdown-custom-html" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
               aria-labelledby="filter">
               <li role="menuitem">
+                <div class="dropdown-item">
+                  <div>
+                    <input type="text" id="dateFrom" 
+                      placeholder="dd/mm/yyyy" 
+                      class="form-control form-control-sm"
+                        [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
+                        bsDatepicker 
+                        (bsValueChange)="onDateChange($event)"
+                        formControlName="dateFilter">
+                  </div>
+                </div>
+              </li>
+              <!-- <li role="menuitem">
                 <div class="dropdown-item">
                   <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" id="showCancelled"
@@ -54,23 +62,10 @@
                     <label class="custom-control-label small" for="showCancelled">Show Cancelled</label>
                   </div>
                 </div>
-              </li>
-            </ul> -->
-          </div> 
+              </li> -->
+            </ul>
+          </div>
         </div>
-            <div class="col-sm order-md-4" >
-              <div *ngIf="clicked">
-                <input type="text" id="dateFrom" 
-                placeholder="dd/mm/yyyy" 
-                class="form-control form-control-sm"
-                  [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
-                  bsDatepicker 
-                  (bsValueChange)="onDateChange($event)"
-                  formControlName="dateFilter">
-  
-              </div>
-              
-            </div>
         <div class="col-md-6 col-xl-4 order-md-2 mt-1 mt-md-0" *ngIf="!myCalendarOnly">
           <div class="row justify-content-end">
             <div class="col-auto pr-0" *ngIf="isShowMeVisible">
