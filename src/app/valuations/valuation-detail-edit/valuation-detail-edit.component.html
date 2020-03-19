@@ -383,7 +383,7 @@
                       formControlName="instructSale">
                     <label class="custom-control-label small" for="isntructSale">Instruct for Sales</label>
                   </div>
-                  <div class="card" *ngIf="instruction?.askingPrice">
+                  <div class="card" *ngIf="instruction?.askingPrice" [ngClass]="{'disabled': !instructionForm.get('instructSale').value}">
                     <div class="card-body">
                       <h5 class="card-title">Sell</h5>
                       <label class="small" for="sellValue">Value</label>
@@ -392,7 +392,7 @@
                       <span class="invalid-feedback">{{formErrors?.askingPrice}}</span>
                     </div>
                   </div>
-                  <fieldset class="form-group mt-3">
+                  <fieldset class="form-group mt-3" *ngIf="instructionForm.get('instructSale').value">
                     <legend class="col-form-label text-left">Sales Agency</legend>
                     <div class="custom-control custom-radio">
                       <input type="radio" id="soleAgency" value="1" name="agencyType" class="custom-control-input"
@@ -418,7 +418,7 @@
                       </div>
                     </div>
                     <div class="col-sm-6">
-                      <div class="card" *ngIf="instruction?.askingRentLongLet">
+                      <div class="card" *ngIf="instruction?.askingRentLongLet" [ngClass]="{'disabled': !instructionForm.get('instructLongLet').value}">
                         <div class="card-body">
                           <h5 class="card-title">Long Let</h5>
                           <div class="form-group">
@@ -434,7 +434,7 @@
                       </div>
                     </div>
                     <div class="col-sm-6">
-                      <div class="card" *ngIf="instruction?.askingRentShortLet">
+                      <div class="card" *ngIf="instruction?.askingRentShortLet" [ngClass]="{'disabled': !instructionForm.get('instructLongLet').value}">
                         <div class="card-body">
                           <h5 class="card-title">Short Let</h5>
                           <div class="form-group">
@@ -450,7 +450,7 @@
                       </div>
                     </div>
                     <div class="col-12">
-                      <fieldset class="form-group mt-3">
+                      <fieldset class="form-group mt-3" *ngIf="instructionForm.get('instructLongLet').value">
                         <legend class="col-form-label text-left">Lettings Agency</legend>
                         <div class="custom-control custom-radio">
                           <input type="radio" id="soleAgency" value="1" name="agencyType" class="custom-control-input"
