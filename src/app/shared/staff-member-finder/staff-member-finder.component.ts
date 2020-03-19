@@ -72,16 +72,16 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
         this.getAllCalendarStaffMembers();
         break;
       default:
-        this.getAllStaffMembers();
+        this.getActiveStaffMembers();
     }
   }
 
-  getAllStaffMembers() {
-    this.storage.get('allstaffmembers').subscribe(data => {
+  getActiveStaffMembers() {
+    this.storage.get('activeStaffmembers').subscribe(data => {
       if (data) {
         this.staffMembers$ = of(data as BaseStaffMember[]);
       } else {
-        this.staffMemberService.getAllStaffMembers().subscribe(
+        this.staffMemberService.getActiveStaffMembers().subscribe(
           (res: ResultData) => {
             this.staffMembers$ = of(res.result);
             console.log('%cmembers from shared replay', 'color:green', res.result);

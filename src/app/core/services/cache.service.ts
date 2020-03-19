@@ -35,6 +35,12 @@ export class CacheService {
             this.officeService.getOffices().subscribe();
           }
           if (result.staffMembers !== cache.staffMembers) {
+             console.log('cache status from response', cache);
+            this.storage.delete('activeStaffmembers').subscribe();
+            this.staffMemberService.getActiveStaffMembers().subscribe();
+          }
+          if (result.staffMembers !== cache.staffMembers) {
+             console.log('cache status from response', cache);
             this.storage.delete('allstaffmembers').subscribe();
             this.staffMemberService.getAllStaffMembers().subscribe();
           }

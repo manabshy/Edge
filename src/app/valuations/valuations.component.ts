@@ -66,11 +66,11 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
     this.getValuations();
     this.statuses = ValuationStatuses;
 
-    this.storage.get('allstaffmembers').subscribe(data => {
+    this.storage.get('activeStaffmembers').subscribe(data => {
       if (data) {
         this.valuers = data as StaffMember[];
       } else {
-        this.staffMemberService.getAllStaffMembers().pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => this.valuers = result);
+        this.staffMemberService.getActiveStaffMembers().pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => this.valuers = result);
       }
     });
 
