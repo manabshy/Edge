@@ -49,12 +49,11 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
     private staffMemberService: StaffMemberService) { }
 
   ngOnInit() {
-
     this.diaryHeaderForm = this.fb.group({
       viewMode: this.view,
       showCancelled: false,
       staffMember: null,
-      dateFilter: new Date()
+      dateFilter: this.viewDate
     });
 
     this.storage.get('currentUser').subscribe((data: StaffMember) => {
@@ -149,6 +148,8 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
     if(date!=this.viewDate){  
       this.dateChange.emit(date)
     }
-    this.datepickerDropdown.hide();
+    if(!this.datepickerDropdown.isOpen){
+      this.datepickerDropdown.hide();
+    }
   }
 }
