@@ -2,54 +2,43 @@
   <div class="row align-items-center">
     <div class="col col-md-auto pr-0 mr-md-2 order-md-1">
       <div class="row align-items-center">
-        <div class="col-auto pr-0">
-          <button type="button" class="btn btn-sm btn-light mr-2" mwlCalendarToday [(viewDate)]="viewDate"
-            (viewDateChange)="viewDateChange.next(viewDate)">
-            {{label}}
-          </button>
+        <div class="col-auto pr-2 d-none d-sm-block">
+          <ng-container *ngTemplateOutlet="goToButton"></ng-container>
         </div>
-        <div class="col-auto px-0">
+        <div class="col-auto px-sm-0">
           <button type="button" class="btn btn-sm btn-light mr-1" mwlCalendarPreviousView [daysInWeek]="daysInWeek"
             [view]="fakeView" [(viewDate)]="viewDate" (viewDateChange)="viewDateChange.next(viewDate)">
             <i class="fas fa-chevron-left fa-fw"></i>
             <span class="sr-only">Previous</span>
           </button>
-          <button type="button" class="btn btn-sm btn-light" mwlCalendarNextView [daysInWeek]="daysInWeek" [view]="fakeView"
-            [(viewDate)]="viewDate" (viewDateChange)="viewDateChange.next(viewDate)">
+          <button type="button" class="btn btn-sm btn-light" mwlCalendarNextView [daysInWeek]="daysInWeek"
+            [view]="fakeView" [(viewDate)]="viewDate" (viewDateChange)="viewDateChange.next(viewDate)">
             <i class="fas fa-chevron-right fa-fw"></i>
             <span class="sr-only">Next</span>
           </button>
         </div>
-      </div>
-    </div>
-    <div class="col-auto order-md-3">
-      <select name="viewMode" id="vew-mode" formControlName="viewMode" (change)="viewChange.emit($event.target.value)"
-        class="custom-select custom-select-sm">
-        <option value="day">Day</option>
-        <option value="threeDays">3 Days</option>
-        <option value="week">Week</option>
-        <option value="month">Month</option>
-      </select>
-    </div>
-    <div class="col-md order-md-2 mt-1 mt-md-0">
-      <div class="row align-items-center">
-        <div class="col order-md-1">
-          <div class="mb-0 btn-group" dropdown [insideClick]="true" #datepickerDropdown="bs-dropdown">
+        <div class="col">
+          <div class="mb-0 btn-group w-100" dropdown [insideClick]="true" #datepickerDropdown="bs-dropdown">
             <button id="filter" dropdownToggle type="button" class="btn btn-sm btn-light dropdown-toggle"
-            aria-controls="dropdown-custom-html">
-            {{ viewDate | calendarDate: (view + 'ViewTitle'):locale:weekStartsOn:excludeDays:daysInWeek }}
+              aria-controls="dropdown-custom-html">
+              {{ viewDate | calendarDate: (view + 'ViewTitle'):locale:weekStartsOn:excludeDays:daysInWeek }}
             </button>
             <ul id="dropdown-custom-html" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
               aria-labelledby="filter">
-              <div class="form-group p-3">
-                <label class="small" for="dateFrom">Go to Date</label>
-                <input type="text" id="dateFrom" 
-                  placeholder="dd/mm/yyyy" 
-                  class="form-control form-control-sm"
+              <div class="p-3">
+                <div class="form-group d-sm-none">
+                  <ng-container *ngTemplateOutlet="goToButton"></ng-container>
+                </div>
+                <div class="form-group d-sm-none">
+                  <label class="small" for="viewMode">Calendar View</label>
+                  <ng-container *ngTemplateOutlet="calendarChangeView"></ng-container>
+                </div>
+                <div class="form-group">
+                  <label class="small" for="dateFrom">Go to Date</label>
+                  <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
                     [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
-                    bsDatepicker 
-                    (bsValueChange)="onDateChange($event)"
-                    formControlName="dateFilter">
+                    bsDatepicker (bsValueChange)="onDateChange($event)" formControlName="dateFilter">
+                </div>
               </div>
               <!-- <li role="menuitem">
                 <div class="dropdown-item">
@@ -63,23 +52,42 @@
             </ul>
           </div>
         </div>
-        <div class="col-md-6 col-xl-4 order-md-2 mt-1 mt-md-0" *ngIf="!myCalendarOnly">
-          <div class="row justify-content-end">
-            <div class="col-auto pr-0" *ngIf="isShowMeVisible">
-              <button type="button" class="btn btn-sm btn-light" (click)="getCurrentStaffMemberCalendar()">Show me</button>
-            </div>
-            <div class="col col-md-7">
-              <ng-select placeholder="Select Staff Member" [items]="staffMembers$|async" [clearable]="false"
-                bindLabel="fullName" bindValue="staffMemberId" groupBy="category" (change)="onStaffMemberChange($event)"
-                formControlName="staffMember">
-                <ng-template ng-optgroup-tmp let-item="item">
-                  <!-- {{item.category || 'Unnamed group'}} -->
-                </ng-template>
-              </ng-select>
-            </div>
-          </div>
+      </div>
+    </div>
+    <div class="col-auto d-none d-sm-block order-md-3">
+      <ng-container *ngTemplateOutlet="calendarChangeView"></ng-container>
+    </div>
+    <div class="col-md order-md-2 mt-1 mt-md-0">
+      <div class="row justify-content-end">
+        <div class="col-auto pr-0" *ngIf="isShowMeVisible">
+          <button type="button" class="btn btn-sm btn-light" (click)="getCurrentStaffMemberCalendar()">Show
+            me</button>
+        </div>
+        <div class="col col-md-7">
+          <ng-select placeholder="Select Staff Member" [items]="staffMembers$|async" [clearable]="false"
+            bindLabel="fullName" bindValue="staffMemberId" groupBy="category" (change)="onStaffMemberChange($event)"
+            formControlName="staffMember">
+            <ng-template ng-optgroup-tmp let-item="item">
+              <!-- {{item.category || 'Unnamed group'}} -->
+            </ng-template>
+          </ng-select>
         </div>
       </div>
     </div>
   </div>
 </form>
+<ng-template #goToButton>
+  <button type="button" class="btn btn-sm btn-light btn-block" mwlCalendarToday [(viewDate)]="viewDate"
+    (viewDateChange)="viewDateChange.next(viewDate)">
+    {{label}}
+  </button>
+</ng-template>
+<ng-template #calendarChangeView>
+  <select name="viewMode" id="viewMode" formControlName="viewMode" (change)="viewChange.emit($event.target.value)"
+    class="custom-select custom-select-sm">
+    <option value="day">Day</option>
+    <option value="threeDays">3 Days</option>
+    <option value="week">Week</option>
+    <option value="month">Month</option>
+  </select>
+</ng-template>
