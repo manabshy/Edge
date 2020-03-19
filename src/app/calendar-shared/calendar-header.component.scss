@@ -15,3 +15,9 @@
 :host-context(.off-canvas) {
     top: $top-bar-height - 3;
 }
+
+.dropdown-menu {
+    @include media-breakpoint-down(sm) {
+        margin-left: - 2rem;
+    }
+}

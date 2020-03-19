@@ -18,38 +18,29 @@
           </button>
         </div>
         <div class="col">
-          <div class="mb-0 btn-group w-100" dropdown [insideClick]="true" #datepickerDropdown="bs-dropdown">
+          <div class="mb-0 btn-group w-100" dropdown #datepickerDropdown="bs-dropdown">
             <button id="filter" dropdownToggle type="button" class="btn btn-sm btn-light dropdown-toggle"
               aria-controls="dropdown-custom-html">
               {{ viewDate | calendarDate: (view + 'ViewTitle'):locale:weekStartsOn:excludeDays:daysInWeek }}
             </button>
-            <ul id="dropdown-custom-html" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+            <div id="dropdown-custom-html" *dropdownMenu class="dropdown-menu" role="menu"
               aria-labelledby="filter">
               <div class="p-3">
                 <div class="form-group d-sm-none">
                   <ng-container *ngTemplateOutlet="goToButton"></ng-container>
                 </div>
-                <div class="form-group d-sm-none">
+                <div class="form-group d-sm-none" (click)="$event.stopPropagation()">
                   <label class="small" for="viewMode">Calendar View</label>
                   <ng-container *ngTemplateOutlet="calendarChangeView"></ng-container>
                 </div>
-                <div class="form-group">
+                <div class="form-group" (click)="$event.stopPropagation()">
                   <label class="small" for="dateFrom">Go to Date</label>
                   <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
                     [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
                     bsDatepicker (bsValueChange)="onDateChange($event)" formControlName="dateFilter">
                 </div>
               </div>
-              <!-- <li role="menuitem">
-                <div class="dropdown-item">
-                  <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="showCancelled"
-                      formControlName="showCancelled" (change)="filterChange.emit($event.target.checked)">
-                    <label class="custom-control-label small" for="showCancelled">Show Cancelled</label>
-                  </div>
-                </div>
-              </li> -->
-            </ul>
+            </div>
           </div>
         </div>
       </div>
