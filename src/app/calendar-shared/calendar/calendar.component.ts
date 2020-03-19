@@ -84,6 +84,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
   diaryEvents$: Observable<Array<CalendarEvent<{ diaryEvent: DiaryEvent }>>>;
 
   dairyEventSubscription: Subscription;
+  movedToView=false
 
   constructor(private diaryEventService: DiaryEventService,
     private renderer: Renderer2,
@@ -149,7 +150,10 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
   }
 
   beforeWeekViewRender(renderEvent: CalendarWeekViewBeforeRenderEvent) {
-    this.currentTimeIntoView();
+    if(!this.movedToView){
+      this.movedToView=true
+      this.currentTimeIntoView();
+    }
     if (this.view === CalendarView.ThreeDays) {
       this.daysInWeek = 3;
       this.weekStartsOn = null;
@@ -161,7 +165,10 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
   }
 
   beforeDayViewRender(renderEvent: CalendarDayViewBeforeRenderEvent) {
-    this.currentTimeIntoView();
+    if(!this.movedToView){
+      this.movedToView=true
+      this.currentTimeIntoView();
+    }
     this.daysInWeek = 1;
     this.passDateToRouter();
   }
