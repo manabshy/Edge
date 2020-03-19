@@ -378,10 +378,10 @@
             <div class="col-12">
               <div class="row">
                 <div class="col-sm-4 mb-4">
-                  <div class="custom-control custom-checkbox form-group">
-                    <input type="checkbox" id="isntructSale" name="isntructSale" class="custom-control-input"
-                      formControlName="instructSale">
-                    <label class="custom-control-label small" for="isntructSale">Instruct for Sales</label>
+                  <div class="custom-control custom-checkbox form-group" *ngIf="showInstruct">
+                    <input type="checkbox" id="instructSale" name="instructSale" class="custom-control-input"
+                      formControlName="instructSale" (change)="onInstructSalesChange($event.target)">
+                    <label class="custom-control-label small" for="instructSale">Instruct for Sales</label>
                   </div>
                   <div class="card" *ngIf="instruction?.askingPrice" [ngClass]="{'disabled': !instructionForm.get('instructSale').value}">
                     <div class="card-body">
@@ -395,30 +395,30 @@
                   <fieldset class="form-group mt-3" *ngIf="instructionForm.get('instructSale').value">
                     <legend class="col-form-label text-left">Sales Agency</legend>
                     <div class="custom-control custom-radio">
-                      <input type="radio" id="soleAgency" value="1" name="agencyType" class="custom-control-input"
-                        formControlName="agencyType">
-                      <label class="custom-control-label small" for="soleAgency">Sole Agency</label>
+                      <input type="radio" id="soleAgencySales" value="1" name="salesAgencyType" class="custom-control-input"
+                        formControlName="salesAgencyType">
+                      <label class="custom-control-label small" for="soleAgencySales">Sole Agency</label>
                     </div>
                     <div class="custom-control custom-radio">
-                      <input type="radio" id="multiAgency" value="2" name="agencyType" class="custom-control-input"
-                        formControlName="agencyType">
-                      <label class="custom-control-label small" for="multiAgency">Multi Agency</label>
+                      <input type="radio" id="multiAgencySales" value="4" name="salesAgencyType" class="custom-control-input"
+                        formControlName="salesAgencyType">
+                      <label class="custom-control-label small" for="multiAgencySales">Multi Agency</label>
                     </div>
-                    <small *ngIf="instructionForm.get('agencyType')?.errors?.required"
-                      class="text-danger">{{formErrors?.agencyType}}</small>
+                    <small *ngIf="instructionForm.get('salesAgencyType')?.errors?.required"
+                      class="text-danger">{{formErrors?.salesAgencyType}}</small>
                   </fieldset>
                 </div>
                 <div class="col-sm-8 mb-4">
                   <div class="row">
                     <div class="col-12">
-                      <div class="custom-control custom-checkbox form-group">
-                        <input type="checkbox" id="isntructLongLet" name="isntructLongLet" class="custom-control-input"
-                          formControlName="instructLongLet">
-                        <label class="custom-control-label small" for="isntructLongLet">Instruct for Lettings</label>
+                      <div class="custom-control custom-checkbox form-group" *ngIf="showInstruct">
+                        <input type="checkbox" id="instructLet" name="instructLet" class="custom-control-input"
+                          formControlName="instructLet" (change)="onInstructLettingsChange($event.target)">
+                        <label class="custom-control-label small" for="instructLet">Instruct for Lettings</label>
                       </div>
                     </div>
                     <div class="col-sm-6">
-                      <div class="card" *ngIf="instruction?.askingRentLongLet" [ngClass]="{'disabled': !instructionForm.get('instructLongLet').value}">
+                      <div class="card" *ngIf="instruction?.askingRentLongLet" [ngClass]="{'disabled': !instructionForm.get('instructLet').value}">
                         <div class="card-body">
                           <h5 class="card-title">Long Let</h5>
                           <div class="form-group">
@@ -434,7 +434,7 @@
                       </div>
                     </div>
                     <div class="col-sm-6">
-                      <div class="card" *ngIf="instruction?.askingRentShortLet" [ngClass]="{'disabled': !instructionForm.get('instructLongLet').value}">
+                      <div class="card" *ngIf="instruction?.askingRentShortLet || instruction?.askingRentLongLet" [ngClass]="{'disabled': !instructionForm.get('instructLet').value}">
                         <div class="card-body">
                           <h5 class="card-title">Short Let</h5>
                           <div class="form-group">
@@ -450,20 +450,20 @@
                       </div>
                     </div>
                     <div class="col-12">
-                      <fieldset class="form-group mt-3" *ngIf="instructionForm.get('instructLongLet').value">
+                      <fieldset class="form-group mt-3" *ngIf="instructionForm.get('instructLet').value">
                         <legend class="col-form-label text-left">Lettings Agency</legend>
                         <div class="custom-control custom-radio">
-                          <input type="radio" id="soleAgency" value="1" name="agencyType" class="custom-control-input"
-                            formControlName="agencyType">
-                          <label class="custom-control-label small" for="soleAgency">Sole Agency</label>
+                          <input type="radio" id="soleAgencyLettings" value="1" name="lettingsAgencyType" class="custom-control-input"
+                            formControlName="lettingsAgencyType">
+                          <label class="custom-control-label small" for="soleAgencyLettings">Sole Agency</label>
                         </div>
                         <div class="custom-control custom-radio">
-                          <input type="radio" id="multiAgency" value="2" name="agencyType" class="custom-control-input"
-                            formControlName="agencyType">
-                          <label class="custom-control-label small" for="multiAgency">Multi Agency</label>
+                          <input type="radio" id="multiAgencyLettings" value="2" name="lettingsAgencyType" class="custom-control-input"
+                            formControlName="lettingsAgencyType">
+                          <label class="custom-control-label small" for="multiAgencyLettings">Multi Agency</label>
                         </div>
-                        <small *ngIf="instructionForm.get('agencyType')?.errors?.required"
-                          class="text-danger">{{formErrors?.agencyType}}</small>
+                        <small *ngIf="instructionForm.get('lettingsAgencyType')?.errors?.required"
+                          class="text-danger">{{formErrors?.lettingsAgencyType}}</small>
                       </fieldset>
                     </div>
                   </div>

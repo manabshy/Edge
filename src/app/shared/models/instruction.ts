@@ -7,5 +7,6 @@ export interface Instruction {
   askingRentShortLet?: number;
   askingRentLongLetMonthly?: number;
   askingRentShortLetMonthly?: number;
-  agencyType: string;
+  salesAgencyType: string;
+  lettingsAgencyType: string;
 }

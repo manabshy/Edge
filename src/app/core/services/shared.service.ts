@@ -120,9 +120,9 @@ export class SharedService {
     }
   }
 
-  scrollIntoView(element: ElementRef){
-    setTimeout(()=>{
-      if(element) {
+  scrollIntoView(element: ElementRef) {
+    setTimeout(() => {
+      if (element) {
         element.nativeElement.scrollIntoView();
       }
     })
@@ -207,7 +207,7 @@ export class SharedService {
         FormErrors[key] = '';
       }
       if (control && !control.valid && (fakeTouched || control.dirty)) {
-        console.log('errors ', control.errors);
+        console.log('control', key, 'errors ', control.errors);
         FormErrors[key] = '';
         for (const errorKey in control.errors) {
           if (errorKey) {
