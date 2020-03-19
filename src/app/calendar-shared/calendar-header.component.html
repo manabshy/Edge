@@ -34,26 +34,23 @@
     <div class="col-md order-md-2 mt-1 mt-md-0">
       <div class="row align-items-center">
         <div class="col order-md-1">
-          <div class="mb-0 btn-group" dropdown [autoClose]="false" #datepickerDropdown="bs-dropdown">
+          <div class="mb-0 btn-group" dropdown [insideClick]="true" #datepickerDropdown="bs-dropdown">
             <button id="filter" dropdownToggle type="button" class="btn btn-sm btn-light dropdown-toggle"
             aria-controls="dropdown-custom-html">
             {{ viewDate | calendarDate: (view + 'ViewTitle'):locale:weekStartsOn:excludeDays:daysInWeek }}
             </button>
             <ul id="dropdown-custom-html" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
               aria-labelledby="filter">
-              <li role="menuitem">
-                <div class="dropdown-item">
-                  <div>
-                    <input type="text" id="dateFrom" 
-                      placeholder="dd/mm/yyyy" 
-                      class="form-control form-control-sm"
-                        [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
-                        bsDatepicker 
-                        (bsValueChange)="onDateChange($event)"
-                        formControlName="dateFilter">
-                  </div>
-                </div>
-              </li>
+              <div class="form-group p-3">
+                <label class="small" for="dateFrom">Go to Date</label>
+                <input type="text" id="dateFrom" 
+                  placeholder="dd/mm/yyyy" 
+                  class="form-control form-control-sm"
+                    [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
+                    bsDatepicker 
+                    (bsValueChange)="onDateChange($event)"
+                    formControlName="dateFilter">
+              </div>
               <!-- <li role="menuitem">
                 <div class="dropdown-item">
                   <div class="custom-control custom-checkbox">
