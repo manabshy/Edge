@@ -69,7 +69,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     });
 
     // All Active Staffmembers
-    this.storage.get('allstaffmembers').subscribe(data => {
+    this.storage.get('activeStaffmembers').subscribe(data => {
       if (data) {
         this.staffMembers = data as StaffMember[];
       }

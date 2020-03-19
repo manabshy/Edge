@@ -67,7 +67,7 @@ export class LeadComponent implements OnInit {
       }
     });
 
-    this.getAllStaffmembers();
+    this.getActiveStaffmembers();
   }
 
   getLeads(leadSearchInfo: LeadSearchInfo) {
@@ -98,8 +98,8 @@ export class LeadComponent implements OnInit {
     }
   }
 
-  getAllStaffmembers() {
-    this.staffMemberService.getAllStaffMembers().subscribe(result => {
+  getActiveStaffmembers() {
+    this.staffMemberService.getActiveStaffMembers().subscribe(result => {
       this.staffMembers = result;
     }, () => {
       this.staffMembers = [];

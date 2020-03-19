@@ -15,6 +15,7 @@ export class StaffMemberService {
   private currentStaffMemberSubject = new BehaviorSubject<StaffMember | null>(null);
   private staffMember$: Observable<StaffMember>;
   private staffMembers$: Observable<StaffMember[] | any>;
+  private activeStaffMembers$: Observable<StaffMember[] | any>;
   private impersonationSubject = new BehaviorSubject<Impersonation | null>(null);
   impersonatedStaffMember$ = this.impersonationSubject.asObservable();
   currentStaffMember$ = this.currentStaffMemberSubject.asObservable();
@@ -46,6 +47,25 @@ export class StaffMemberService {
 
   currentStaffMemberChange(staffMember: StaffMember) {
     this.currentStaffMemberSubject.next(staffMember);
+  }
+
+  getActiveStaffMembers() {
+    if (!this.activeStaffMembers$) {
+      this.activeStaffMembers$ = this.requestActiveStaffMembers().pipe(shareReplay(CACHE_SIZE));
+    }
+    return this.activeStaffMembers$;
+  }
+
+  requestActiveStaffMembers() {
+    return this.http.get<StaffMemberListResult | any>(`${AppConstants.baseUrl}/active`).pipe(
+      map(response => response),
+      tap(data => {
+        if (data) {
+          console.log('active staff members in service:', data);
+          this.storage.set('activeStaffmembers', data.result).subscribe();
+          this.storage.set('cacheStatus', data.cacheStatus).subscribe();
+        }
+      }));
   }
 
   getAllStaffMembers() {
