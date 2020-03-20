@@ -10,33 +10,6 @@
         <span class="badge badge-pill badge-success" *ngIf="isAMLCompleted">AML Completed</span>
       </h4>
     </div>
-    <div class="col-auto" *ngIf="isTypePicked">
-      <div class="btn-group" dropdown placement="bottom right">
-        <button id="actionsToggle" dropdownToggle type="button" class="btn btn-light dropdown-toggle"
-          aria-controls="actionsList">
-          Actions <span class="caret"></span>
-        </button>
-        <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
-          aria-labelledby="actionsToggle">
-          <li role="menuitem" *ngIf="contactGroupDetails?.contactPeople.length < 8 && !contactGroupDetails?.referenceCount
-          && !isMaxPeople">
-            <button type="button" class="dropdown-item" (click)="showHideOffCanvas($event)">
-              <span class="dropdown-icon">
-                <i class="fas fa-user-plus fa-fw"></i>
-              </span>
-              Add Person
-            </button>
-          </li>
-          <li role="menuitem" *ngIf="contactGroupDetails?.contactGroupId"><button type="button" class="dropdown-item"
-              (click)="addNote()">
-              <span class="dropdown-icon">
-                <i class="fas fa-sticky-note fa-fw"></i>
-              </span>
-              Add Note
-            </button></li>
-        </ul>
-      </div>
-    </div>
   </div>
   <div class="alert alert-warning"
     *ngIf="contactGroupDetails?.contactPeople && (contactGroupDetails?.contactPeople.length !== initialContactGroupLength) && isTypePicked">
@@ -214,12 +187,6 @@
                                 <i class="fas fa-address-card fa-fw"></i>
                               </span>
                               View</a></li>
-                          <li role="menuitem"><a class="dropdown-item" (click)="$event.stopPropagation();"
-                              [routerLink]="person?.isNewPerson ? null : ['../../../../detail/', person?.personId, 'notes' ]">
-                              <span class="dropdown-icon">
-                                <i class="fas fa-sticky-note fa-fw"></i>
-                              </span>
-                              View All Notes</a></li>
                           <li role="menuitem">
                             <a class="dropdown-item" (click)="setMainPerson(person?.personId)" *ngIf="!person?.isMainPerson">
                               <span class="dropdown-icon">
