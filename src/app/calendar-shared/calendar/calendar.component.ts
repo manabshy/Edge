@@ -191,10 +191,13 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
   }
 
   getDiaryEvents(isCancelledVisible?: boolean, date?: Date) {
+    function startOfThreeDays(date:Date){
+      return new Date(date)
+    }
     const getStart: any = {
       month: startOfMonth,
       week: startOfWeek,
-      threeDays: startOfWeek,
+      threeDays: startOfThreeDays,
       day: startOfDay
     }[this.view];
 
@@ -212,6 +215,9 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
     if (date) {
       request.startDate = format(getStart(date), 'YYYY-MM-DD');
       request.endDate = format(getStart(date), 'YYYY-MM-DD');
+    }
+    if(this.view === CalendarView.ThreeDays){
+      request.endDate=format((addDays(this.viewDate,3)), 'YYYY-MM-DD')
     }
     this.dairyEventSubscription = this.diaryEventService.getDiaryEvents(request).subscribe(result => {
       this.diaryEvents = [];
