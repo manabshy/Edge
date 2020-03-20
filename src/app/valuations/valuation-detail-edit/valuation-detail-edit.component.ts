@@ -204,7 +204,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.instructionForm.valueChanges.pipe(debounceTime(400), distinctUntilChanged())
       .subscribe(() => {
         this.sharedService.logValidationErrors(this.instructionForm, false);
-        this.setInstructionFormValidators();
+        // this.setInstructionFormValidators();
         this.setInstructionRentFigures();
       });
 
@@ -288,11 +288,19 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       .subscribe(rent => weeklyControl.setValue(this.calculateWeeklyRent(rent), { emitEvent: false }));
   }
 
-  private calculateMonthlyRent(rent: any): any {
-    return (+rent * (52 / 12)).toFixed(2);
+  private calculateMonthlyRent(rent: number): string {
+    let monthlyRent: string;
+    if (rent > 0) {
+      monthlyRent = (rent * (52 / 12)).toFixed(2);
+    }
+    return monthlyRent;
   }
-  private calculateWeeklyRent(rent: any): any {
-    return (+rent * (12 / 52)).toFixed(2);
+  private calculateWeeklyRent(rent: number): string {
+    let weeklyRent: string;
+    if (rent > 0) {
+      weeklyRent = (rent * (12 / 52)).toFixed(2);
+    }
+    return weeklyRent;
   }
 
   setupForm() {
@@ -675,13 +683,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   setInstructionFlags(instruction: Instruction) {
     if (instruction.askingPrice && !instruction.askingRentLongLet) {
       this.instructionForm.get('instructSale').setValue(true);
-      console.log('here sales only ticked', this.instructionForm.get('instructLet').value);
       this.showInstruct = false;
     } else if (!instruction.askingPrice && instruction.askingRentLongLet) {
       this.instructionForm.get('instructLet').setValue(true);
       this.showInstruct = false;
-      console.log('here lettings only ticked');
-    } else { this.showInstruct = true; console.log('here both not ticked'); }
+    } else { this.showInstruct = true; }
   }
 
   onInstructSalesChange(event) {
@@ -694,8 +700,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   setInstructionFormValidators() {
     this.setAskingPriceValidator();
-    this.setShortLetRentValidator();
     this.setLongLetRentValidator();
+    // this.setShortLetRentValidator();
   }
 
   setAgencyTypeValidator() {
@@ -714,9 +720,20 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
     console.log('%chere for instruct form', 'color:purple', this.instructionForm);
   }
+
+  private setAskingPriceValidator() {
+    if (this.instructionForm.get('instructSale').value && !this.instAskingPriceControl.value) {
+      this.instAskingPriceControl.setValidators([Validators.required, Validators.min(1)]);
+      this.instAskingPriceControl.updateValueAndValidity();
+    } else {
+      this.instAskingPriceControl.clearValidators();
+      this.instAskingPriceControl.updateValueAndValidity();
+    }
+  }
+
   private setLongLetRentValidator() {
-    if (this.instructionForm.get('instructLet').value && this.instLongLetWeeklyControl.value === '') {
-      this.instLongLetWeeklyControl.setValidators(Validators.required);
+    if (this.instructionForm.get('instructLet').value && !this.instLongLetWeeklyControl.value) {
+      this.instLongLetWeeklyControl.setValidators([Validators.required, Validators.min(1)]);
       this.instLongLetWeeklyControl.updateValueAndValidity();
     } else {
       this.instLongLetWeeklyControl.clearValidators();
@@ -725,7 +742,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   private setShortLetRentValidator() {
-    if (this.instructionForm.get('instructLet').value && this.instShortLetWeeklyControl.value === '' && !this.instLongLetWeeklyControl.value) {
+    if (this.instructionForm.get('instructLet').value && !this.instShortLetWeeklyControl.value && this.instLongLetWeeklyControl.value) {
       this.instShortLetWeeklyControl.setValidators(Validators.required);
       this.instShortLetWeeklyControl.updateValueAndValidity();
     } else {
@@ -734,16 +751,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   }
 
-  private setAskingPriceValidator() {
-    if (this.instructionForm.get('instructSale').value && this.instAskingPriceControl.value === '') {
-      this.instAskingPriceControl.setValidators(Validators.required);
-      this.instAskingPriceControl.updateValueAndValidity();
 
-    } else {
-      this.instAskingPriceControl.clearValidators();
-      this.instAskingPriceControl.updateValueAndValidity();
-    }
-  }
 
   private setSalesAgencyTypeValidator() {
     const salesAgencyControl = this.instructionForm.get('salesAgencyType');

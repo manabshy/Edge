@@ -213,13 +213,15 @@ export const ValidationMessages = {
     max: 'Receptions cannot be more than 99'
   },
   'askingPrice': {
-    required: 'Asking sale price is required'
+    required: 'Asking sale price is required',
+    min: 'Price must be greater than zero'
   },
   'askingRentShortLet': {
     required: 'Short let rent is required'
   },
   'askingRentLongLet': {
-    required: 'Long let rent is required'
+    required: 'Long let rent is required',
+    min: 'Rent must be greater than zero'
   },
   'salesAgencyType': {
     required: 'Sales agency type is required'
