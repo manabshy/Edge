@@ -171,7 +171,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
         if (window.innerWidth >= 1024) {
           calHourSegments[23].scrollIntoView({ block: 'center' });
         } else {
-          calHourSegments[18].scrollIntoView({ block: 'center' });
+          calHourSegments[22].scrollIntoView({ block: 'center' });
         }
       }
     });
