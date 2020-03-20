@@ -103,6 +103,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
         this.view = params['calendarView'];
       }
       this.getDiaryEvents();
+      
     });
 
     this.storage.get('info').subscribe((data: DropdownListInfo) => {
@@ -149,10 +150,6 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
   }
 
   beforeWeekViewRender(renderEvent: CalendarWeekViewBeforeRenderEvent) {
-    if(!this.movedToView){
-      this.movedToView=true
-      this.currentTimeIntoView();
-    }
     if (this.view === CalendarView.ThreeDays) {
       this.daysInWeek = 3;
       this.weekStartsOn = null;
@@ -163,10 +160,6 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
   }
 
   beforeDayViewRender(renderEvent: CalendarDayViewBeforeRenderEvent) {
-    if(!this.movedToView){
-      this.movedToView=true
-      this.currentTimeIntoView();
-    }
     this.daysInWeek = 1;
   }
 
@@ -221,6 +214,8 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
     }
     this.dairyEventSubscription = this.diaryEventService.getDiaryEvents(request).subscribe(result => {
       this.diaryEvents = [];
+      //when the events arrive the view needs to scroll to 8AM
+      this.currentTimeIntoView()
       return result.map(diary => {
         const title = diary.subject || diary.eventType;
         const start = new Date(diary.startDateTime);
@@ -353,7 +348,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
 
   createNewEvent() {
     const newEvent = this.diaryEvents[this.diaryEvents.length - 1];
-    if (newEvent.id) {
+    if (newEvent.id>=0) {
       if (newEvent.end === undefined) {
         newEvent.end = addHours(newEvent.start, 1);
       }
