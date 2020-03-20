@@ -92,23 +92,18 @@
               [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', minDate:minDate, customTodayClass: 'font-weight-bold'}"
               (bsValueChange)="onStartDateChange($event)" bsDatepicker
               [attr.disabled]="!isEditable && !isNewEvent ? true : null"
-              [ngClass]="{'form-control-plaintext': !isEditable && !isNewEvent}">
-            <ng-container *ngIf="!(!isEditable && !isNewEvent)">
+              >
               <select *ngIf="!isAllDay" class="custom-select custom-select-sm" name="startHour" id="startHour"
                 formControlName="startHour" [attr.disabled]="!isEditable && !isNewEvent ? true : null"
-                [ngClass]="{'form-control-plaintext': !isEditable && !isNewEvent}">
+                >
                 <option *ngFor="let hour of hours" [value]='hour'> {{hour}}</option>
               </select>
               <select *ngIf="!isAllDay" class="custom-select custom-select-sm" name="startMin" id="startMin"
                 formControlName="startMin" [attr.disabled]="!isEditable && !isNewEvent ? true : null"
-                [ngClass]="{'form-control-plaintext': !isEditable && !isNewEvent}">
+                >
                 <option *ngFor="let min of minutes" [value]='min'> {{min}}</option>
               </select>
-            </ng-container>
           </div>
-          <small *ngIf="!isEditable && !isNewEvent">
-            <strong>{{diaryEventForm.get('startHour').value}}:{{diaryEventForm.get('startMin').value}}</strong>
-          </small>
           <div class="custom-control custom-checkbox" *ngIf="diaryEvent?.allDay || isEditable || isNewEvent">
             <input type="checkbox" class="custom-control-input" id="allDay" formControlName="allDay"
               (change)="onAllDayCheck($event)">
@@ -125,23 +120,18 @@
               [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', minDate:minDate, customTodayClass: 'font-weight-bold'}"
               (bsValueChange)="onEndDateChange($event)" bsDatepicker
               [attr.disabled]="!isEditable && !isNewEvent ? true : null"
-              [ngClass]="{'is-invalid': diaryEventForm.errors?.endDateIsBeforeStartDate, 'form-control-plaintext': !isEditable && !isNewEvent}">
-            <ng-container *ngIf="!(!isEditable && !isNewEvent)">
+              [ngClass]="{'is-invalid': diaryEventForm.errors?.endDateIsBeforeStartDate}">
               <select class="custom-select custom-select-sm" name="endHour" id="endHour" formControlName="endHour"
-                [attr.disabled]="!isEditable && !isNewEvent ? true : null"
-                [ngClass]="{'form-control-plaintext': !isEditable && !isNewEvent}">
+              [attr.disabled]="!isEditable && !isNewEvent ? true : null"
+              >
                 <option *ngFor="let hour of hours" [value]='hour'> {{hour}}</option>
               </select>
               <select class="custom-select custom-select-sm" name="endMin" id="endMin" formControlName="endMin"
                 [attr.disabled]="!isEditable && !isNewEvent ? true : null"
-                [ngClass]="{'form-control-plaintext': !isEditable && !isNewEvent}">
+                >
                 <option *ngFor="let min of minutes" [value]='min'> {{min}}</option>
               </select>
-            </ng-container>
           </div>
-          <small *ngIf="!isEditable && !isNewEvent">
-            <strong>{{diaryEventForm.get('endHour').value}}:{{diaryEventForm.get('endMin').value}}</strong>
-          </small>
           <small class="text-danger" *ngIf="diaryEventForm?.errors?.endDateIsBeforeStartDate">End date should be after
             start date</small>
         </div>
@@ -151,7 +141,7 @@
           <div class="custom-control custom-checkbox mb-2">
             <input type="checkbox" id="isConfirmed" name="isConfirmed" class="custom-control-input"
               formControlName="isConfirmed" [attr.disabled]="!isEditable && !isNewEvent ? true : null"
-              [ngClass]="{'form-control-plaintext': !isEditable && !isNewEvent}">
+              >
             <label class="custom-control-label small" for="isConfirmed">Confirm</label>
           </div>
         </div>
@@ -161,7 +151,7 @@
           <label for="subject" class="small">Subject</label>
           <input type="text" class="form-control form-control-sm" formControlName="subject" id="subject" name="subject"
             [attr.disabled]="!isEditable && !isNewEvent ? true : null"
-            [ngClass]="{'form-control-plaintext': !isEditable && !isNewEvent}" />
+             />
         </div>
       </div>
       <div class="form-group row" *ngIf="diaryEvent?.notes.trim() || isEditable || isNewEvent">
@@ -172,7 +162,7 @@
             <textarea type="textarea" class="form-control form-control-sm" formControlName="notes" id="notes"
               name="note" placeholder="Note" maxlength="200" [attr.disabled]="!isEditable && !isNewEvent ? true : null"
               [ngStyle]="{'min-height.px': diaryEventForm.get('notes').value.length}"
-              [ngClass]="{'form-control-plaintext': !isEditable && !isNewEvent}"></textarea>
+              ></textarea>
           </div>
         </ng-container>
         <ng-template #showImage> <img [src]="imagePath" alt="embedded image" /></ng-template>
@@ -187,13 +177,13 @@
           <div class="input-group mb-2" *ngIf="isReminder">
             <select class="custom-select custom-select-sm single-select" name="duration" id="duration"
               formControlName="duration" [attr.disabled]="!isEditable && !isNewEvent ? true : null"
-              [ngClass]="{'form-control-plaintext': !isEditable && !isNewEvent}">
+              >
               <option value="0">Not Known</option>
               <option *ngFor="let duration of durationValues" [value]='duration'> {{duration}}</option>
             </select>
             <select class="custom-select custom-select-sm single-select" name="durationType" id="durationType"
               formControlName="durationType" [attr.disabled]="!isEditable && !isNewEvent ? true : null"
-              [ngClass]="{'form-control-plaintext': !isEditable && !isNewEvent}">
+              >
               <option *ngFor="let type of durationTypes |keyvalue" [value]='type.key'> {{type.value}}</option>
             </select>
           </div>

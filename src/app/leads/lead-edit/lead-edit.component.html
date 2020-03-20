@@ -18,9 +18,7 @@
                 <div class="form-group">
                   <label for="leadType">Type</label>
                   <select class="custom-select custom-select-sm" id="leadType" formControlName="leadTypeId"
-                    [attr.disabled]="isLeadClosed ? true : null" [ngClass]="{'is-invalid': formErrors?.leadTypeId,
-                    'custom-select custom-select-sm': !isLeadClosed,
-                    'form-control form-control-sm form-control-plaintext': isLeadClosed}">
+                    [attr.disabled]="isLeadClosed ? true : null" [ngClass]="{'is-invalid': formErrors?.leadTypeId}">
                     <option value=""></option>
                     <option selected *ngFor="let leadType of leadTypes" [value]=leadType.id>{{leadType?.value}}</option>
                   </select>
@@ -35,7 +33,7 @@
                     [bsConfig]="{showWeekNumbers:false, useUtc: false, dateInputFormat: 'DD/MM/YYYY', minDate:todaysDate, customTodayClass: 'font-weight-bold'}"
                     bsDatepicker [attr.disabled]="isLeadClosed ? true : null"
                     (bsValueChange)="onChaseDateChange($event)"
-                    [ngClass]="{'is-invalid': (formErrors?.nextChaseDate), 'form-control-plaintext': isLeadClosed}">
+                    [ngClass]="{'is-invalid': (formErrors?.nextChaseDate)}">
                   <div class="invalid-feedback">{{formErrors?.nextChaseDate}}</div>
                 </div>
               </div>
