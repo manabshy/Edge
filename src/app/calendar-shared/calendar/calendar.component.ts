@@ -98,11 +98,11 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
     this.route.queryParams.subscribe(params => {
       this.selectedStaffMemberId = +params['staffMemberId'] || 0;
       console.log('id in calendar', this.selectedStaffMemberId);
-      this.getDiaryEvents();
       if(params['selectedDate']){
         this.viewDate =  new Date(+params['selectedDate']);
         this.view = params['calendarView'];
       }
+      this.getDiaryEvents();
     });
 
     this.storage.get('info').subscribe((data: DropdownListInfo) => {
@@ -135,7 +135,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
     }
   }
 
-  private passDateToRouter() {
+  passDateToRouter() {
     this.router.navigate(['/'], {
       queryParams: { selectedDate: this.viewDate.getTime(), calendarView: this.view },
       queryParamsHandling: 'merge'
@@ -146,7 +146,6 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
     this.weekStartsOn = DAYS_OF_WEEK.MONDAY;
     const date = getDaysInMonth(this.viewDate);
     this.daysInWeek = date;
-    this.passDateToRouter();
   }
 
   beforeWeekViewRender(renderEvent: CalendarWeekViewBeforeRenderEvent) {
@@ -161,7 +160,6 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
       this.daysInWeek = null;
       this.weekStartsOn = DAYS_OF_WEEK.MONDAY;
     }
-    this.passDateToRouter();
   }
 
   beforeDayViewRender(renderEvent: CalendarDayViewBeforeRenderEvent) {
@@ -170,7 +168,6 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
       this.currentTimeIntoView();
     }
     this.daysInWeek = 1;
-    this.passDateToRouter();
   }
 
   currentTimeIntoView() {
@@ -260,8 +257,8 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
   }
 
   getDateChange(date) {
-    this.getDiaryEvents(false, date);
     this.viewDate = date;
+    this.passDateToRouter()
   }
 
   changeDay(date: Date) {
