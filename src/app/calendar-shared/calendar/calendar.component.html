@@ -3,7 +3,7 @@
   <span aria-hidden="true"><i class="fas fa-plus mr-sm-2"></i><span class="d-none d-sm-inline">Event</span></span>
 </a>
 <app-calendar-header [(view)]="view" [(daysInWeek)]="daysInWeek" [(viewDate)]="viewDate" [weekStartsOn]="weekStartsOn"
-  (viewDateChange)="getDiaryEvents()" (viewChange)="getDiaryEvents()" (filterChange)="getDiaryEvents($event)"
+(viewDateChange)="passDateToRouter()" (viewChange)="passDateToRouter()" (filterChange)="passDateToRouter()"
   [myCalendarOnly]="myCalendarOnly" (staffMemberChange)="getSelectedStaffMemberDiaryEvents($event)"
   (dateChange)="getDateChange($event)">
 </app-calendar-header>
