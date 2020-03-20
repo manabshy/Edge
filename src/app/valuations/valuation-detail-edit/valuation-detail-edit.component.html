@@ -377,13 +377,13 @@
           <fieldset class="form-group row">
             <div class="col-12">
               <div class="row">
-                <div class="col-sm-4 mb-4">
+                <div class="col-sm-4 mb-4" *ngIf="instruction?.askingPrice">
                   <div class="custom-control custom-checkbox form-group" *ngIf="showInstruct">
                     <input type="checkbox" id="instructSale" name="instructSale" class="custom-control-input"
                       formControlName="instructSale" (change)="onInstructSalesChange($event.target)">
                     <label class="custom-control-label small" for="instructSale">Instruct for Sales</label>
                   </div>
-                  <div class="card" *ngIf="instruction?.askingPrice" [ngClass]="{'disabled': !instructionForm.get('instructSale').value}">
+                  <div class="card" [ngClass]="{'disabled': !instructionForm.get('instructSale').value}">
                     <div class="card-body">
                       <h5 class="card-title">Sell</h5>
                       <label class="small" for="sellValue">Value</label>
@@ -408,7 +408,7 @@
                       class="text-danger">{{formErrors?.salesAgencyType}}</small>
                   </fieldset>
                 </div>
-                <div class="col-sm-8 mb-4">
+                <div class="col-sm-8 mb-4" *ngIf="instruction?.askingRentShortLet || instruction?.askingRentLongLet">
                   <div class="row">
                     <div class="col-12">
                       <div class="custom-control custom-checkbox form-group" *ngIf="showInstruct">
@@ -434,7 +434,7 @@
                       </div>
                     </div>
                     <div class="col-sm-6">
-                      <div class="card" *ngIf="instruction?.askingRentShortLet || instruction?.askingRentLongLet" [ngClass]="{'disabled': !instructionForm.get('instructLet').value}">
+                      <div class="card" [ngClass]="{'disabled': !instructionForm.get('instructLet').value}">
                         <div class="card-body">
                           <h5 class="card-title">Short Let</h5>
                           <div class="form-group">
