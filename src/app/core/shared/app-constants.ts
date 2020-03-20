@@ -80,7 +80,8 @@ export const FormErrors = {
   'askingPrice': '',
   'askingRentShortLet': '',
   'askingRentLongLet': '',
-  'agencyType': '',
+  'salesAgencyType': '',
+  'lettingsAgencyType': '',
   'originId': '',
   'originType': '',
   'endDateTime': '',
@@ -216,8 +217,11 @@ export const ValidationMessages = {
   'askingRentLongLet': {
     required: 'Long let rent is required'
   },
-  'agencyType': {
-    required: 'Agency type is required'
+  'salesAgencyType': {
+    required: 'Sales agency type is required'
+  },
+  'lettingsAgencyType': {
+    required: 'Lettings agency type is required'
   },
   'originId': {
     min: 'Vendor origin is required',

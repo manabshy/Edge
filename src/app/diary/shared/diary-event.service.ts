@@ -25,7 +25,7 @@ export class DiaryEventService {
       }
     });
     const url = `${AppConstants.baseDiaryEventUrl}`;
-    return this.http.get<any>(url, { params: options })
+    return this.http.get<any>(url, { params: options, headers: { ignoreLoadingBar: '' }})
       .pipe(
         map(response => response.result));
   }
