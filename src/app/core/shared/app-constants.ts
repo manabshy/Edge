@@ -74,6 +74,7 @@ export const FormErrors = {
   'timeFrame': '',
   'marketChat': '',
   'generalNotes': '',
+  'approxLeaseExpiryDate': '',
   'bedrooms': '',
   'bathrooms': '',
   'receptions': '',
@@ -198,6 +199,9 @@ export const ValidationMessages = {
   },
   'generalNotes': {
     required: 'Property note is required'
+  },
+  'approxLeaseExpiryDate': {
+    required: 'Approximate lease length is required'
   },
   'bedrooms': {
     max: 'Bedrooms cannot be more than 99'

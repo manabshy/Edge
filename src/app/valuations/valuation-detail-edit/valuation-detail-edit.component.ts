@@ -369,7 +369,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.valuation.valuationStatus === 3 ? this.canInstruct = true : this.canInstruct = false;
         this.valuation.approxLeaseExpiryDate ? this.showLeaseExpiryDate = true : this.showLeaseExpiryDate = false;
         this.attendees = this.valuation.attendees ? this.valuation.attendees : [];
-
         if (this.valuation.valuationStatus === 3 || this.valuation.valuationStatus === 4) {
           this.isEditable = false;
         } else { this.isEditable = true; }
@@ -529,6 +528,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   private getValuationPropertyInfo(propertyId: number) {
     this.valuationService.getValuationPropertyInfo(propertyId).subscribe(res => {
       if (res) {
+        if (+res.tenureId === 3 || res.approxLeaseExpiryDate) {
+          this.showLeaseExpiryDate = true;
+          this.setApproxLeaseLengthValidator();
+        } else { this.showLeaseExpiryDate = false; }
         this.displayValuationPropInfo(res);
       }
     });
@@ -618,9 +621,26 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   onTenureChange(tenureId: number) {
     if (+tenureId === 3) {
       this.showLeaseExpiryDate = true;
+      this.setApproxLeaseLengthValidator();
     } else {
       this.showLeaseExpiryDate = false;
+      if (this.approxLeaseExpiryDateControl.errors) {
+        this.approxLeaseExpiryDateControl.clearValidators();
+        this.approxLeaseExpiryDateControl.updateValueAndValidity();
+      }
+      console.log('%c approx lease cleared', 'color:cyan', this.approxLeaseExpiryDateControl)
     }
+  }
+
+  setApproxLeaseLengthValidator() {
+    if (!this.approxLeaseExpiryDateControl.value) {
+      this.approxLeaseExpiryDateControl.setValidators(Validators.required);
+      this.approxLeaseExpiryDateControl.updateValueAndValidity();
+    } else {
+      this.approxLeaseExpiryDateControl.clearValidators();
+      this.approxLeaseExpiryDateControl.updateValueAndValidity();
+    }
+    console.log('%c approx lease validator', 'color:green', this.approxLeaseExpiryDateControl)
   }
 
   changeDate() {
