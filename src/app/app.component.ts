@@ -62,7 +62,9 @@ export class AppComponent extends BaseComponent implements OnInit {
       //   event.pop();
       //   console.log('after removal', event.forEach((x:RoutesRecognized)=>x.url))
       // }
-      this.isFading = true;
+      if(current.indexOf('calendarView') === -1) {
+        this.isFading = true;
+      }
       setTimeout(() => {
         this.isFading = false;
       }, 1200);
