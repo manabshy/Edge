@@ -21,7 +21,7 @@
               <select class="custom-select custom-select-sm" name="originTypes" id="originTypes"
                 formControlName="originType" arial-label="Origin Types" (change)="onSelectType($event.target.value)"
                 [attr.disabled]="!isEditable && !isNewValuation ? true : null"
-                [ngClass]="{'is-invalid': (formErrors.originType),'form-control-plaintext': !isEditable && !isNewValuation}">
+                [ngClass]="{'is-invalid': (formErrors.originType)}">
                 <option selected value="0">Not Known</option>
                 <option *ngFor="let type of activeOriginTypes" [value]='type.id'> {{type.value}}</option>
               </select>
@@ -31,7 +31,7 @@
               <div class="col-sm">
                 <select class="custom-select custom-select-sm" name="originId" id="originId" formControlName="originId"
                   aria-label="Origins" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
-                  [ngClass]="{'is-invalid': (formErrors.originId),'form-control-plaintext': !isEditable && !isNewValuation}">
+                  [ngClass]="{'is-invalid': (formErrors.originId)}">
                   <option value="0">Not Known</option>
                   <option *ngFor="let origin of origins" [value]='origin.id'> {{origin.value}}</option>
                 </select>
@@ -59,7 +59,7 @@
             <label for="reason" class="small">What’s the current situation?</label>
             <textarea class="form-control form-control-sm" name="reason" id="reason" cols="30" rows="3"
               formControlName="reason" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
-              [ngClass]="{'is-invalid': (formErrors?.reason), 'form-control-plaintext': !isEditable && !isNewValuation}"></textarea>
+              [ngClass]="{'is-invalid': (formErrors?.reason)}"></textarea>
             <div class="invalid-feedback">{{formErrors?.reason}}</div>
           </div>
           <div class="form-group"
@@ -67,7 +67,7 @@
             <label for="timeFrame" class="small">When are you looking to market?</label>
             <textarea class="form-control form-control-sm" name="timeFrame" id="timeFrame" cols="30" rows="3"
               formControlName="timeFrame" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
-              [ngClass]="{'is-invalid': (formErrors?.timeFrame), 'form-control-plaintext': !isEditable && !isNewValuation}"></textarea>
+              [ngClass]="{'is-invalid': (formErrors?.timeFrame)}"></textarea>
             <div class="invalid-feedback">{{formErrors?.timeFrame}}</div>
           </div>
           <div class="form-group"
@@ -75,7 +75,7 @@
             <label for="generalNotes" class="small">Notes (points discussed, other property details)</label>
             <textarea class="form-control form-control-sm" name="generalNotes" id="generalNotes" cols="30" rows="3"
               formControlName="generalNotes" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
-              [ngClass]="{'is-invalid': (formErrors?.generalNotes), 'form-control-plaintext': !isEditable && !isNewValuation}"></textarea>
+              [ngClass]="{'is-invalid': (formErrors?.generalNotes)}"></textarea>
             <div class="invalid-feedback">{{formErrors?.generalNotes}}</div>
           </div>
         </div>
@@ -91,7 +91,7 @@
               <input type="number" class="form-control form-control-sm" name="bedrooms" id="bedrooms"
                 formControlName="bedrooms" min="0" max="99"
                 [attr.disabled]="!isEditable && !isNewValuation ? true : null"
-                [ngClass]="{'is-invalid': (formErrors?.bedrooms),'form-control-plaintext': !isEditable && !isNewValuation}" />
+                [ngClass]="{'is-invalid': (formErrors?.bedrooms)}" />
               <div class="invalid-feedback">{{formErrors?.bedrooms}}</div>
             </div>
             <div class="col-4 form-group">
@@ -99,7 +99,7 @@
               <input type="number" class="form-control form-control-sm" name="bathrooms" id="bathrooms"
                 formControlName="bathrooms" min="0" max="99"
                 [attr.disabled]="!isEditable && !isNewValuation ? true : null"
-                [ngClass]="{'is-invalid': (formErrors?.bathrooms),'form-control-plaintext': !isEditable && !isNewValuation}" />
+                [ngClass]="{'is-invalid': (formErrors?.bathrooms)}" />
               <div class="invalid-feedback">{{formErrors?.bathrooms}}</div>
             </div>
             <div class="col-4 form-group">
@@ -107,14 +107,14 @@
               <input type="number" class="form-control form-control-sm" name="receptions" id="receptions"
                 formControlName="receptions" min="0" max="99"
                 [attr.disabled]="!isEditable && !isNewValuation ? true : null"
-                [ngClass]="{'is-invalid': (formErrors?.receptions),'form-control-plaintext': !isEditable && !isNewValuation}" />
+                [ngClass]="{'is-invalid': (formErrors?.receptions)}" />
               <div class="invalid-feedback">{{formErrors?.receptions}}</div>
             </div>
             <div class="col-4 form-group">
               <label class="small" for="sqFt">Approx Sq. Foot</label>
               <input type="text" name="sqFt" id="sqFt" class="form-control form-control-sm" formControlName="sqFt"
                 [attr.disabled]="!isEditable && !isNewValuation ? true : null"
-                [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}">
+                >
             </div>
             <div class="form-group" [ngClass]="showLeaseExpiryDate ? 'col-8' : 'col-4'">
               <label class="small" for="tenureId">Tenure</label>
@@ -122,14 +122,14 @@
                 <select class="custom-select single-select" name="tenureId" id="tenureId" formControlName="tenureId"
                   (change)="onTenureChange($event.target.value)"
                   [attr.disabled]="!isEditable && !isNewValuation ? true : null"
-                  [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}">
+                  >
                   <option value="0">Not Known</option>
                   <option *ngFor="let tenure of tenures" [value]='tenure.id'> {{tenure.value}}</option>
                 </select>
                 <input class="form-control" type="text" name="approxLeaseExpiryDate" *ngIf="showLeaseExpiryDate"
                   aria-label="length" placeholder="Approx Length ..." id="approxLeaseExpiryDate"
                   formControlName="approxLeaseExpiryDate" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
-                  [ngClass]="{'is-invalid': (formErrors?.approxLeaseExpiryDate),'form-control-plaintext': !isEditable && !isNewValuation}">
+                  [ngClass]="{'is-invalid': (formErrors?.approxLeaseExpiryDate)}">
                 <div class="invalid-feedback">{{formErrors?.approxLeaseExpiryDate}}</div>
               </div>
             </div>
@@ -257,7 +257,7 @@
           <label for="valuationDuration" class="small">Duration</label>
           <select class="custom-select custom-select-sm single-select" name="valuationDuration" id="valuationDuration"
             formControlName="totalHours" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
-            [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}">
+            >
             <option value="0.5">30 mins</option>
             <option value="0.75">45 mins</option>
             <option value="1" selected>1 hour</option>
@@ -288,7 +288,7 @@
                 <label class="small" for="sellValue">Value</label>
                 <input type="text" name="sellValue" id="sellValue" class="form-control form-control-sm"
                   formControlName="suggestedAskingPrice" *ngIf="!(!isEditable && !isNewValuation)"
-                  [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}">
+                  >
                 <div class="small" *ngIf="!isEditable && !isNewValuation">
                   <strong>{{valuationForm.get('suggestedAskingPrice').value | currency:'GBP':'symbol':'1.0-0'}}</strong>
                 </div>
@@ -302,7 +302,7 @@
                   <label class="small" for="longLetValue">Value (per week)</label>
                   <input type="text" name="longLetValue" id="longLetValue" class="form-control form-control-sm"
                     formControlName="suggestedAskingRentLongLet" *ngIf="!(!isEditable && !isNewValuation)"
-                    [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}">
+                    >
                   <div class="small" *ngIf="!isEditable && !isNewValuation">
                     <strong>{{valuationForm.get('suggestedAskingRentLongLet').value | currency:'GBP':'symbol':'1.0-0'}}</strong>
                   </div>
@@ -311,7 +311,7 @@
                 <input type="text" name="longLetMonthlyValue" id="longLetMonthlyValue"
                   class="form-control form-control-sm" formControlName="suggestedAskingRentLongLetMonthly"
                   *ngIf="!(!isEditable && !isNewValuation)"
-                  [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}">
+                  >
                 <div class="small" *ngIf="!isEditable && !isNewValuation">
                   <strong>{{valuationForm.get('suggestedAskingRentLongLetMonthly').value | currency:'GBP':'symbol':'1.0-0'}}</strong>
                 </div>
@@ -325,7 +325,7 @@
                   <label class="small" for="shortLetValue">Value (per week)</label>
                   <input type="text" name="shortLetValue" id="shortLetValue" class="form-control form-control-sm"
                     formControlName="suggestedAskingRentShortLet" *ngIf="!(!isEditable && !isNewValuation)"
-                    [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}">
+                    >
                   <div class="small" *ngIf="!isEditable && !isNewValuation">
                     <strong>{{valuationForm.get('suggestedAskingRentShortLet').value | currency:'GBP':'symbol':'1.0-0'}}</strong>
                   </div>
@@ -334,7 +334,7 @@
                 <input type="text" name="shortLetMonthlyValue" id="shortLetMonthlyValue"
                   class="form-control form-control-sm" formControlName="suggestedAskingRentShortLetMonthly"
                   *ngIf="!(!isEditable && !isNewValuation)"
-                  [ngClass]="{'form-control-plaintext': !isEditable && !isNewValuation}">
+                  >
                 <div class="small" *ngIf="!isEditable && !isNewValuation">
                   <strong>{{valuationForm.get('suggestedAskingRentShortLetMonthly').value | currency:'GBP':'symbol':'1.0-0'}}</strong>
                 </div>
