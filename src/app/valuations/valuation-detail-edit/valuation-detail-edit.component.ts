@@ -80,6 +80,12 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   activeOriginTypes: InfoDetail[] = [];
   isOriginUnknown = false;
 
+  get originTypeControl() {
+    return this.valuationForm.get('originType') as FormControl;
+  }
+  get originIdControl() {
+    return this.valuationForm.get('originId') as FormControl;
+  }
   get isInvitationSent() {
     return this.valuationForm.get('isInvitationSent') as FormControl;
   }
@@ -152,18 +158,20 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     private fb: FormBuilder) { super(); }
 
   ngOnInit() {
+    this.setupForm();
     this.storage.get('currentUser').subscribe((currentStaffMember: StaffMember) => {
       if (currentStaffMember) {
-        if (currentStaffMember.departmentId === 54) {
+        // for testing purposes
+        if (currentStaffMember.departmentId !== 90) {
           this.isClientService = true;
+          this.setOriginTypeValidator();
+          this.setOriginIdValidator();
         } else {
           this.isClientService = false;
           this.isOriginUnknown = true;
         }
-        // currentStaffMember.departmentId === 90 ? this.isClientService = true : this.isClientService = false;
       }
     });
-    this.setupForm();
     this.setupInstructionForm();
     this.valuationId = +this.route.snapshot.paramMap.get('id');
     this.propertyId = +this.route.snapshot.queryParamMap.get('propertyId');
@@ -325,8 +333,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.valuationForm = this.fb.group({
       property: [''],
       propertyOwner: [''],
-      originType: [0, [Validators.required, Validators.min(1)]],
-      originId: [0, [Validators.required, Validators.min(1)]],
+      originType: [0],
+      originId: [0],
       reason: ['', Validators.required],
       timeFrame: ['', Validators.required],
       generalNotes: ['', Validators.required],
@@ -511,7 +519,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.showOriginId = true;
     const allOrigins = this.allOrigins.filter((x: InfoDetail) => +x.parentId === +originTypeId);
     const activeOrigins = this.allOrigins.filter((x: InfoDetail) => +x.parentId === +originTypeId && x.isActive);
-    this.isNewValuation ? this.origins = activeOrigins : this.origins = allOrigins;
+    // this.isNewValuation ? this.origins = activeOrigins : this.origins = allOrigins;
+    this.origins = activeOrigins;
     this.valuationForm.get('originId').setValue(0);
   }
 
@@ -528,9 +537,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   setOriginTypeId(originId: number) {
-    console.log('origin id', originId)
-    console.log('all origin types', this.allOriginTypes)
-    console.log('all origins', this.allOrigins)
+    console.log('origin id', originId);
+    console.log('all origin types', this.allOriginTypes);
+    console.log('all origins', this.allOrigins);
     if (originId) {
       this.allOrigins.forEach(x => {
         if (+x.id === originId) {
@@ -547,14 +556,17 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   private addInactiveOriginType(origin: InfoDetail) {
-    console.log('inactive xxxxxxxxxxxxxxxxxxxxx')
+    console.log('inactive xxxxxxxxxxxxxxxxxxxxx');
     const originType = this.allOriginTypes.find(t => +t.id === origin.parentId);
+    const originId = this.allOrigins.find(o => +o.id === origin.id);
     if (originType) {
       this.activeOriginTypes.push(originType);
       this.valuationForm.get('originType').setValue(originType.id);
       this.onSelectType(origin.parentId);
       this.valuationForm.get('originId').setValue(origin.id);
+      this.origins.push(originId);
       console.log('origin type 1111', originType);
+      console.log('origin ids', this.origins);
       console.log('origin types', this.activeOriginTypes);
     }
   }
@@ -676,7 +688,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.approxLeaseExpiryDateControl.clearValidators();
         this.approxLeaseExpiryDateControl.updateValueAndValidity();
       }
-      console.log('%c approx lease cleared', 'color:cyan', this.approxLeaseExpiryDateControl)
+      console.log('%c approx lease cleared', 'color:cyan', this.approxLeaseExpiryDateControl);
     }
   }
 
@@ -688,7 +700,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.approxLeaseExpiryDateControl.clearValidators();
       this.approxLeaseExpiryDateControl.updateValueAndValidity();
     }
-    console.log('%c approx lease validator', 'color:green', this.approxLeaseExpiryDateControl)
+    console.log('%c approx lease validator', 'color:green', this.approxLeaseExpiryDateControl);
   }
 
   changeDate() {
@@ -819,6 +831,27 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     console.log('%chere for lettings type', 'color:blue', lettingsAgencyControl.value);
   }
 
+  private setOriginTypeValidator() {
+    if (this.originTypeControl) {
+      this.originTypeControl.setValidators([Validators.required, Validators.min(1)]);
+      this.originTypeControl.updateValueAndValidity();
+    } else {
+      this.originTypeControl.clearValidators();
+      this.originTypeControl.updateValueAndValidity();
+    }
+    console.log('%chere for originTypeControl', 'color:blue', this.originTypeControl.value);
+  }
+
+  private setOriginIdValidator() {
+    if (this.originIdControl) {
+      this.originIdControl.setValidators([Validators.required, Validators.min(1)]);
+      this.originIdControl.updateValueAndValidity();
+    } else {
+      this.originIdControl.clearValidators();
+      this.originIdControl.updateValueAndValidity();
+    }
+    console.log('%chere for originIdControl', 'color:purple', this.originIdControl.value);
+  }
   saveInstruction() {
     this.setAgencyTypeValidator();
     this.setInstructionFormValidators();
