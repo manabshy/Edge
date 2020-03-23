@@ -66,7 +66,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   originTypes: InfoDetail[] = [];
   allOrigins: InfoDetail[] = [];
   origins: InfoDetail[] = [];
-  origin = 'Not Known';
+  origin: string;
   valuers: BaseStaffMember[] = [];
   showDateAndDuration: boolean;
   hasDateWithValuer = false;
@@ -169,6 +169,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         } else {
           this.isClientService = false;
           this.isOriginUnknown = true;
+          this.origin = 'Not Known';
         }
       }
     });
@@ -512,6 +513,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   setOriginTypes(allOriginTypes: InfoDetail[]) {
     this.activeOriginTypes = allOriginTypes.filter((x: InfoDetail) => x.isActive);
+    console.log('%c active origin types', 'color:blue', this.activeOriginTypes);
     // this.isNewValuation ? this.originTypes = this.activeOriginTypes : this.originTypes = allOriginTypes;
   }
 
@@ -525,12 +527,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   setOriginIdValue(id: number) {
-    this.isOriginUnknown = true;
     if (id) {
       this.allOrigins.forEach(x => {
-        if (+x.id === id) {
+        if (+x.id === id && this.isClientService && !this.isEditable) {
           this.origin = x.value;
-          this.isOriginUnknown = false;
         }
       });
     }
