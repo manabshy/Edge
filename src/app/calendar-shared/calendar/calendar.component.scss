@@ -60,6 +60,17 @@ $time-column-mobile-width: 40px;
         }
     }
 
+    .cal-all-day-events {
+        position: sticky;
+        background-color: color('white');
+        z-index: 4;
+        top: 3.1rem;
+
+        @include media-breakpoint-up(sm){
+            top: 3.7rem;
+        }
+    }
+
     .cal-time-label-column, .cal-time {
         @include media-breakpoint-down(sm){
             width: $time-column-mobile-width;
