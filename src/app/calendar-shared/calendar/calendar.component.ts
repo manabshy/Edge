@@ -219,7 +219,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
       return result.map(diary => {
         const title = diary.subject || diary.eventType;
         const start = new Date(diary.startDateTime);
-        const end = new Date(diary.endDateTime);
+        const end = diary.allDay ? null : new Date(diary.endDateTime);
         const allDay = diary.allDay;
         const meta = diary;
         this.setViewingArrangement(diary.properties);
