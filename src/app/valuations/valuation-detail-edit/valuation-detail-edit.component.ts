@@ -21,6 +21,7 @@ import { Valuation, ValuationStatusEnum, ValuationPropertyInfo } from '../shared
 import { ValuationService } from '../shared/valuation.service';
 import { Instruction } from 'src/app/shared/models/instruction';
 import { ResultData } from 'src/app/shared/result-data';
+import { StaffMember } from 'src/app/shared/models/staff-member';
 
 @Component({
   selector: 'app-valuation-detail-edit',
@@ -74,7 +75,17 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   allOriginTypes: InfoDetail[] = [];
   isSelectingDate = false;
   showInstruct: boolean;
+  currentStaffMember: StaffMember;
+  isClientService: boolean;
+  activeOriginTypes: InfoDetail[] = [];
+  isOriginUnknown = false;
 
+  get originTypeControl() {
+    return this.valuationForm.get('originType') as FormControl;
+  }
+  get originIdControl() {
+    return this.valuationForm.get('originId') as FormControl;
+  }
   get isInvitationSent() {
     return this.valuationForm.get('isInvitationSent') as FormControl;
   }
@@ -148,6 +159,20 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   ngOnInit() {
     this.setupForm();
+    this.storage.get('currentUser').subscribe((currentStaffMember: StaffMember) => {
+      if (currentStaffMember) {
+        // for testing purposes
+        if (currentStaffMember.departmentId !== 90) {
+          this.isClientService = true;
+          this.setOriginTypeValidator();
+          this.setOriginIdValidator();
+        } else {
+          this.isClientService = false;
+          this.isOriginUnknown = true;
+          this.origin = 'Not Known';
+        }
+      }
+    });
     this.setupInstructionForm();
     this.valuationId = +this.route.snapshot.paramMap.get('id');
     this.propertyId = +this.route.snapshot.queryParamMap.get('propertyId');
@@ -184,6 +209,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     });
 
 
+
     this.getAddedProperty();
 
     this.contactGroupService.signer$.subscribe(data => {
@@ -217,6 +243,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.parkings = info.parkings;
     this.features = info.propertyFeatures;
     this.allOrigins = info.origins;
+    this.allOriginTypes = info.originTypes;
     this.setOriginTypes(info.originTypes); // TODO: Issue on refresh
   }
 
@@ -307,8 +334,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.valuationForm = this.fb.group({
       property: [''],
       propertyOwner: [''],
-      originType: [0, [Validators.required, Validators.min(1)]],
-      originId: [0, [Validators.required, Validators.min(1)]],
+      originType: [0],
+      originId: [0],
       reason: ['', Validators.required],
       timeFrame: ['', Validators.required],
       generalNotes: ['', Validators.required],
@@ -354,6 +381,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.staffMemberId = staffMember.staffMemberId;
     this.showCalendar = true;
     this.showOnlyMainStaffMember = true;
+    this.isSelectingDate = true;
     this.valuationForm.get('valuer').setValue(staffMember);
   }
 
@@ -484,23 +512,24 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   setOriginTypes(allOriginTypes: InfoDetail[]) {
-    const activeOriginTypes = allOriginTypes.filter((x: InfoDetail) => x.isActive);
-    this.isNewValuation ? this.originTypes = activeOriginTypes : this.originTypes = allOriginTypes;
+    this.activeOriginTypes = allOriginTypes.filter((x: InfoDetail) => x.isActive);
+    console.log('%c active origin types', 'color:blue', this.activeOriginTypes);
+    // this.isNewValuation ? this.originTypes = this.activeOriginTypes : this.originTypes = allOriginTypes;
   }
 
   onSelectType(originTypeId: number) {
     this.showOriginId = true;
     const allOrigins = this.allOrigins.filter((x: InfoDetail) => +x.parentId === +originTypeId);
     const activeOrigins = this.allOrigins.filter((x: InfoDetail) => +x.parentId === +originTypeId && x.isActive);
-    this.isNewValuation ? this.origins = activeOrigins : this.origins = allOrigins;
+    // this.isNewValuation ? this.origins = activeOrigins : this.origins = allOrigins;
+    this.origins = activeOrigins;
     this.valuationForm.get('originId').setValue(0);
   }
 
   setOriginIdValue(id: number) {
-    this.origin = 'Not Known';
     if (id) {
       this.allOrigins.forEach(x => {
-        if (+x.id === id) {
+        if (+x.id === id && this.isClientService && !this.isEditable) {
           this.origin = x.value;
         }
       });
@@ -508,14 +537,37 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   setOriginTypeId(originId: number) {
+    console.log('origin id', originId);
+    console.log('all origin types', this.allOriginTypes);
+    console.log('all origins', this.allOrigins);
     if (originId) {
       this.allOrigins.forEach(x => {
         if (+x.id === originId) {
-          this.valuationForm.get('originType').setValue(x.parentId);
-          this.onSelectType(x.parentId);
-          this.valuationForm.get('originId').setValue(originId);
+          if (this.activeOriginTypes.find(t => +t.id === x.parentId)) {
+            this.valuationForm.get('originType').setValue(x.parentId);
+            this.onSelectType(x.parentId);
+            this.valuationForm.get('originId').setValue(originId);
+          } else {
+            this.addInactiveOriginType(x);
+          }
         }
       });
+    }
+  }
+
+  private addInactiveOriginType(origin: InfoDetail) {
+    console.log('inactive xxxxxxxxxxxxxxxxxxxxx');
+    const originType = this.allOriginTypes.find(t => +t.id === origin.parentId);
+    const originId = this.allOrigins.find(o => +o.id === origin.id);
+    if (originType) {
+      this.activeOriginTypes.push(originType);
+      this.valuationForm.get('originType').setValue(originType.id);
+      this.onSelectType(origin.parentId);
+      this.valuationForm.get('originId').setValue(origin.id);
+      this.origins.push(originId);
+      console.log('origin type 1111', originType);
+      console.log('origin ids', this.origins);
+      console.log('origin types', this.activeOriginTypes);
     }
   }
 
@@ -636,7 +688,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.approxLeaseExpiryDateControl.clearValidators();
         this.approxLeaseExpiryDateControl.updateValueAndValidity();
       }
-      console.log('%c approx lease cleared', 'color:cyan', this.approxLeaseExpiryDateControl)
+      console.log('%c approx lease cleared', 'color:cyan', this.approxLeaseExpiryDateControl);
     }
   }
 
@@ -648,7 +700,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.approxLeaseExpiryDateControl.clearValidators();
       this.approxLeaseExpiryDateControl.updateValueAndValidity();
     }
-    console.log('%c approx lease validator', 'color:green', this.approxLeaseExpiryDateControl)
+    console.log('%c approx lease validator', 'color:green', this.approxLeaseExpiryDateControl);
   }
 
   changeDate() {
@@ -779,6 +831,27 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     console.log('%chere for lettings type', 'color:blue', lettingsAgencyControl.value);
   }
 
+  private setOriginTypeValidator() {
+    if (this.originTypeControl) {
+      this.originTypeControl.setValidators([Validators.required, Validators.min(1)]);
+      this.originTypeControl.updateValueAndValidity();
+    } else {
+      this.originTypeControl.clearValidators();
+      this.originTypeControl.updateValueAndValidity();
+    }
+    console.log('%chere for originTypeControl', 'color:blue', this.originTypeControl.value);
+  }
+
+  private setOriginIdValidator() {
+    if (this.originIdControl) {
+      this.originIdControl.setValidators([Validators.required, Validators.min(1)]);
+      this.originIdControl.updateValueAndValidity();
+    } else {
+      this.originIdControl.clearValidators();
+      this.originIdControl.updateValueAndValidity();
+    }
+    console.log('%chere for originIdControl', 'color:purple', this.originIdControl.value);
+  }
   saveInstruction() {
     this.setAgencyTypeValidator();
     this.setInstructionFormValidators();
@@ -813,15 +886,12 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
     if (isSale) {
       instruction.askingPrice = +this.instAskingPriceControl.value;
-      // this.setSalesAgencyTypeValidator();
     }
     if (isLet) {
       instruction.askingRentLongLet = +this.instLongLetWeeklyControl.value;
       instruction.askingRentLongLetMonthly = +this.instLongLetMonthlyControl.value;
       instruction.askingRentShortLet = +this.instShortLetWeeklyControl.value;
       instruction.askingRentShortLetMonthly = +this.instShortLetMonthlyControl.value;
-      // this.setLettingsAgencyTypeValidator();
-      console.log('here for let', this.instructionForm.get('salesAgencyType'));
     }
   }
 
