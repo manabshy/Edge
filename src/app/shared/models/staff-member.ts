@@ -1,5 +1,8 @@
 export interface StaffMember {
-  dashboardMode: string;
+  staffMemberId: number;
+  firstName: string;
+  surname: string;
+  fullName: string;
   jobTitle: string;
   email: string;
   username: string;
@@ -7,14 +10,15 @@ export interface StaffMember {
   mobile: string;
   roles: Role[];
   permissions: Permission[];
+  dashboardMode: string;
   impersonations: Impersonation[];
   homeOffice: Office;
-  staffMemberId: number;
-  firstName: string;
-  surname: string;
-  fullName: string;
+  activeDepartments: Department[];
+  officeId: number;
+  departmentId: number;
   thumbnailUrl: string;
   photoUrl: string;
+  canImpersonate: boolean;
 }
 
 export interface Impersonation {
@@ -59,7 +63,9 @@ export interface StaffPermission {
 
 export interface Department {
   departmentId: number;
-  departmentName: RoleDepartment;
+  staffMemberId: number;
+  officeId: number;
+  roleId: number;
 }
 
 export enum DefaultViews {

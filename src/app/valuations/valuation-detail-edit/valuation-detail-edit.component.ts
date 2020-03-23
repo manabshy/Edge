@@ -21,6 +21,7 @@ import { Valuation, ValuationStatusEnum, ValuationPropertyInfo } from '../shared
 import { ValuationService } from '../shared/valuation.service';
 import { Instruction } from 'src/app/shared/models/instruction';
 import { ResultData } from 'src/app/shared/result-data';
+import { StaffMember } from 'src/app/shared/models/staff-member';
 
 @Component({
   selector: 'app-valuation-detail-edit',
@@ -65,7 +66,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   originTypes: InfoDetail[] = [];
   allOrigins: InfoDetail[] = [];
   origins: InfoDetail[] = [];
-  origin: string;
+  origin = 'Not Known';
   valuers: BaseStaffMember[] = [];
   showDateAndDuration: boolean;
   hasDateWithValuer = false;
@@ -74,6 +75,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   allOriginTypes: InfoDetail[] = [];
   isSelectingDate = false;
   showInstruct: boolean;
+  currentStaffMember: StaffMember;
+  isClientService: boolean;
+  activeOriginTypes: InfoDetail[] = [];
+  isOriginUnknown = false;
 
   get isInvitationSent() {
     return this.valuationForm.get('isInvitationSent') as FormControl;
@@ -147,6 +152,17 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     private fb: FormBuilder) { super(); }
 
   ngOnInit() {
+    this.storage.get('currentUser').subscribe((currentStaffMember: StaffMember) => {
+      if (currentStaffMember) {
+        if (currentStaffMember.departmentId === 54) {
+          this.isClientService = true;
+        } else {
+          this.isClientService = false;
+          this.isOriginUnknown = true;
+        }
+        // currentStaffMember.departmentId === 90 ? this.isClientService = true : this.isClientService = false;
+      }
+    });
     this.setupForm();
     this.setupInstructionForm();
     this.valuationId = +this.route.snapshot.paramMap.get('id');
@@ -184,6 +200,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     });
 
 
+
     this.getAddedProperty();
 
     this.contactGroupService.signer$.subscribe(data => {
@@ -217,6 +234,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.parkings = info.parkings;
     this.features = info.propertyFeatures;
     this.allOrigins = info.origins;
+    this.allOriginTypes = info.originTypes;
     this.setOriginTypes(info.originTypes); // TODO: Issue on refresh
   }
 
@@ -354,6 +372,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.staffMemberId = staffMember.staffMemberId;
     this.showCalendar = true;
     this.showOnlyMainStaffMember = true;
+    this.isSelectingDate = true;
     this.valuationForm.get('valuer').setValue(staffMember);
   }
 
@@ -484,8 +503,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   setOriginTypes(allOriginTypes: InfoDetail[]) {
-    const activeOriginTypes = allOriginTypes.filter((x: InfoDetail) => x.isActive);
-    this.isNewValuation ? this.originTypes = activeOriginTypes : this.originTypes = allOriginTypes;
+    this.activeOriginTypes = allOriginTypes.filter((x: InfoDetail) => x.isActive);
+    // this.isNewValuation ? this.originTypes = this.activeOriginTypes : this.originTypes = allOriginTypes;
   }
 
   onSelectType(originTypeId: number) {
@@ -497,25 +516,46 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   setOriginIdValue(id: number) {
-    this.origin = 'Not Known';
+    this.isOriginUnknown = true;
     if (id) {
       this.allOrigins.forEach(x => {
         if (+x.id === id) {
           this.origin = x.value;
+          this.isOriginUnknown = false;
         }
       });
     }
   }
 
   setOriginTypeId(originId: number) {
+    console.log('origin id', originId)
+    console.log('all origin types', this.allOriginTypes)
+    console.log('all origins', this.allOrigins)
     if (originId) {
       this.allOrigins.forEach(x => {
         if (+x.id === originId) {
-          this.valuationForm.get('originType').setValue(x.parentId);
-          this.onSelectType(x.parentId);
-          this.valuationForm.get('originId').setValue(originId);
+          if (this.activeOriginTypes.find(t => +t.id === x.parentId)) {
+            this.valuationForm.get('originType').setValue(x.parentId);
+            this.onSelectType(x.parentId);
+            this.valuationForm.get('originId').setValue(originId);
+          } else {
+            this.addInactiveOriginType(x);
+          }
         }
       });
+    }
+  }
+
+  private addInactiveOriginType(origin: InfoDetail) {
+    console.log('inactive xxxxxxxxxxxxxxxxxxxxx')
+    const originType = this.allOriginTypes.find(t => +t.id === origin.parentId);
+    if (originType) {
+      this.activeOriginTypes.push(originType);
+      this.valuationForm.get('originType').setValue(originType.id);
+      this.onSelectType(origin.parentId);
+      this.valuationForm.get('originId').setValue(origin.id);
+      console.log('origin type 1111', originType);
+      console.log('origin types', this.activeOriginTypes);
     }
   }
 
@@ -813,15 +853,12 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
     if (isSale) {
       instruction.askingPrice = +this.instAskingPriceControl.value;
-      // this.setSalesAgencyTypeValidator();
     }
     if (isLet) {
       instruction.askingRentLongLet = +this.instLongLetWeeklyControl.value;
       instruction.askingRentLongLetMonthly = +this.instLongLetMonthlyControl.value;
       instruction.askingRentShortLet = +this.instShortLetWeeklyControl.value;
       instruction.askingRentShortLetMonthly = +this.instShortLetMonthlyControl.value;
-      // this.setLettingsAgencyTypeValidator();
-      console.log('here for let', this.instructionForm.get('salesAgencyType'));
     }
   }
 
