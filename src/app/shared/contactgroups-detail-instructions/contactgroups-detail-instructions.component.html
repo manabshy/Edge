@@ -13,9 +13,9 @@
       <div class="row">
         <div class="col-sm-3"><strong>Address</strong></div>
         <div class="col-sm"><strong>Status</strong></div>
-        <div class="col-sm"><strong>Price</strong></div>
-        <div class="col-sm" *ngIf="isShortLet"><strong>Short Let Rent</strong></div>
-        <div class="col-sm"><strong>Type</strong></div>
+        <div class="col-sm"><strong>Sales</strong></div>
+        <div class="col-sm"><strong>Long Let</strong></div>
+        <div class="col-sm"><strong>Short Let</strong></div>
         <div class="col-sm"><strong>Lister</strong></div>
         <div class="col-sm"><strong>Instructed</strong></div>
       </div>
@@ -37,25 +37,29 @@
         </div>
         <div class="col-sm col-xl-12">
           <dl class="row">
-            <dt class="col-4 d-sm-none d-xl-block">Price</dt>
-            <dd class="col monospace">{{instruction?.amount  | currency:'GBP':'symbol':'1.0-0'}}</dd>
-          </dl>
-        </div>
-        <div class="col-sm col-xl-12" *ngIf="isShortLet">
-          <dl class="row">
-            <dt class="col-4 d-sm-none d-xl-block">Short Let Rent</dt>
-            <ng-container *ngIf="instruction.shortLetAmount > 0; else noAmount">
-              <dd class="col monospace">{{instruction?.shortLetAmount | currency:'GBP':'symbol':'1.0-0'}}</dd>
-            </ng-container>
-            <ng-template #noAmount>
-              <dd class="col"></dd>
-            </ng-template>
+            <dt class="col-4 d-sm-none d-xl-block">Sales</dt>
+            <dd class="col monospace">
+              <ng-container *ngIf="instruction?.askingPrice, else noValue">
+                {{instruction?.askingPrice | currency:'GBP':'symbol':'1.0-0'}}</ng-container>
+            </dd>
           </dl>
         </div>
         <div class="col-sm col-xl-12">
           <dl class="row">
-            <dt class="col-4 d-sm-none d-xl-block">Type</dt>
-            <dd class="col">{{instruction?.type}}</dd>
+            <dt class="col-4 d-sm-none d-xl-block">Long Let</dt>
+            <dd class="col monospace">
+              <ng-container *ngIf="instruction?.askingRent, else noValue">
+                {{instruction?.askingRent | currency:'GBP':'symbol':'1.0-0'}} pw</ng-container>
+            </dd>
+          </dl>
+        </div>
+        <div class="col-sm col-xl-12">
+          <dl class="row">
+            <dt class="col-4 d-sm-none d-xl-block">Short Let</dt>
+            <dd class="col monospace">
+              <ng-container *ngIf="instruction?.askingRentShortLet, else noValue">
+                {{instruction?.askingRentShortLet | currency:'GBP':'symbol':'1.0-0'}} pw</ng-container>
+            </dd>
           </dl>
         </div>
         <div class="col-sm col-xl-12">
@@ -74,3 +78,5 @@
     </div>
   </ng-container>
 </div>
+
+<ng-template #noValue>-</ng-template>
