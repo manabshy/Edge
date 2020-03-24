@@ -325,6 +325,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
           finalize(() => {
             delete dragToSelectEvent.meta.tmpEvent;
             this.dragToCreateActive = false;
+            this.createNewEvent()
             this.refresh();
           }),
           takeUntil(fromEvent(document, 'mouseup'))

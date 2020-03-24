@@ -152,7 +152,7 @@
         [tooltipTemplate]="customTooltip"
         [weekStartsOn]="weekStartsOn"
         (eventClicked)="eventClicked($event)"
-        (click)="createNewEvent()">
+        >
       </mwl-calendar-month-view>
       <mwl-calendar-week-view *ngSwitchDefault
         [viewDate]="viewDate" [events]="events"
@@ -164,7 +164,6 @@
         [hourSegmentTemplate]="weekViewHourSegmentTemplate"
         (hourSegmentClicked)="getClickedDate($event.date)"
         (eventClicked)="eventClicked($event)"
-        (click)="createNewEvent()"
         [eventTitleTemplate]='customLabelTemplate'
         >
         <!-- [allDayEventsLabelTemplate]='customLabelTemplate' -->
@@ -177,7 +176,6 @@
         (hourSegmentClicked)="getClickedDate($event.date)"
         [hourSegmentTemplate]="weekViewHourSegmentTemplate"
         (eventClicked)="eventClicked($event)"
-        (click)="createNewEvent()"
         [eventTitleTemplate]='customLabelTemplate'
         >
       </mwl-calendar-day-view>
