@@ -29,7 +29,7 @@
         <div class="col-sm-3 offset-sm-2">
           <label for="eventTypeId" class="small">Type</label>
           <select class="custom-select custom-select-sm" id="eventTypeId" formControlName="eventTypeId"
-            (change)="onEventTypeChange($event.target.value)">
+            (change)="onEventTypeChange($event.target.value)" [attr.disabled]="lockEventTypes ? true : null">
             <option value="0"></option>
             <option *ngFor="let type of eventTypes" [value]="type.id">{{type.value}}</option>
           </select>
@@ -83,7 +83,6 @@
     </fieldset>
     <fieldset *ngIf="showOthers">
       <legend class="fieldset-title">Detail</legend>
-      {{diaryEventForm.get('startDateTime').value |json}}......date
       <div class="form-group row">
         <div class="col-sm-6 col-xl-3 offset-sm-2">
           <label for="startDateTime" class="small">Start Date</label>

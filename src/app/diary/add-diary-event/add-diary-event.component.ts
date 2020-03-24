@@ -71,6 +71,7 @@ export class AddDiaryEventComponent implements OnInit {
   searchParams: {};
   searchType: PropertySearchEnum;
   isApplicant = true;
+  lockEventTypes: boolean;
 
   get hours() {
     const result = [];
@@ -409,7 +410,8 @@ export class AddDiaryEventComponent implements OnInit {
     this.diaryEventForm.markAsDirty();
     if (properties && properties.length) {
       this.diaryEventForm.get('properties').setValue(properties);
-    }
+      this.lockEventTypes = true;
+    } else { this.lockEventTypes = false; }
     this.setValidators();
   }
 
