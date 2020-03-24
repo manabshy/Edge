@@ -22,7 +22,9 @@ export class ValuationService {
 
   getValuationSuggestions(searchTerm: string): Observable<any> {
     const url = `${AppConstants.baseValuationUrl}/suggestions?SearchTerm=${searchTerm}`;
-    return this.http.get<any>(url)
+    return this.http.get<any>(url, {
+      headers: { ignoreLoadingBar: '' }
+    })
       .pipe(
         map(response => response.result)
       );

@@ -25,10 +25,12 @@
               *ngIf="(event.start | calendarDate:'dayViewTitle':locale) !== (event.end | calendarDate:'dayViewTitle':locale)">
               {{ event.start | calendarDate:'dayViewTitle':locale }} <br>
             </ng-container>
-            {{ event.start | calendarDate:'dayViewHour':locale }}
+            <ng-container *ngIf=!event.allDay>
+              {{ event.start | calendarDate:'dayViewHour':locale }}
+            </ng-container>
           </dd>
         </dl>
-        <dl class="col">
+        <dl class="col" *ngIf="event.end">
           <dt>End</dt>
           <dd>
             <ng-container
