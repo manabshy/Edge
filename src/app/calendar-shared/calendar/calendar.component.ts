@@ -85,6 +85,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
 
   dairyEventSubscription: Subscription;
   movedToView=false
+  requestedTimeframe:{start:number, end:number}
 
   constructor(private diaryEventService: DiaryEventService,
     private renderer: Renderer2,
@@ -102,8 +103,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
         this.viewDate =  new Date(+params['selectedDate']);
         this.view = params['calendarView'];
       }
-      this.getDiaryEvents();
-      
+      this.getCurrentDiaryEvents()
     });
 
     this.storage.get('info').subscribe((data: DropdownListInfo) => {
@@ -113,7 +113,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
     if (window.innerWidth < 1024) {
       this.view = CalendarView.ThreeDays;
     }
-    // this.getDiaryEvents();
+    this.diaryEvents = [];
   }
 
   ngAfterViewChecked() {
@@ -132,7 +132,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
   ngOnChanges() {
     if (this.staffMemberId) {
       this.id = this.staffMemberId;
-      this.getDiaryEvents();
+      this.getCurrentDiaryEvents()
     }
   }
 
@@ -179,11 +179,12 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
 
   getSelectedStaffMemberDiaryEvents(staffMemberId: number) {
     // this.id = staffMemberId;
-    // this.getDiaryEvents();
     console.log('get selected id from output event', staffMemberId);
   }
 
-  getDiaryEvents(isCancelledVisible?: boolean, date?: Date) {
+
+  getCurrentDiaryEvents(){
+
     function startOfThreeDays(date:Date){
       return new Date(date)
     }
@@ -193,25 +194,34 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
       threeDays: startOfThreeDays,
       day: startOfDay
     }[this.view];
-
     const getEnd: any = {
       month: endOfMonth,
       week: endOfWeek,
       threeDays: endOfWeek,
       day: endOfDay
     }[this.view];
-    const request = {
-      staffMemberId: this.selectedStaffMemberId || this.id,
-      startDate: format(getStart(this.viewDate), 'YYYY-MM-DD'),
-      endDate: format(getEnd(this.viewDate), 'YYYY-MM-DD'),
-    } as BasicEventRequest;
-    if (date) {
-      request.startDate = format(getStart(date), 'YYYY-MM-DD');
-      request.endDate = format(getStart(date), 'YYYY-MM-DD');
+    
+    const monthStart = startOfMonth(getStart(this.viewDate)).getTime()
+    let monthEnd   = endOfMonth(getEnd(this.viewDate)).getTime()
+
+    if(this.view === CalendarView.Week|| this.view === CalendarView.ThreeDays){
+      monthEnd=endOfMonth(addDays(getEnd(this.viewDate),1)).getTime()
     }
-    if(this.view === CalendarView.ThreeDays){
-      request.endDate=format((addDays(this.viewDate,3)), 'YYYY-MM-DD')
+    if(this.requestedTimeframe==undefined||(this.requestedTimeframe?.start>monthStart||this.requestedTimeframe?.end<monthEnd)){
+      this.requestedTimeframe={
+        start:  monthStart,
+        end:    monthEnd
+      }
+      const request= {
+        staffMemberId: this.selectedStaffMemberId || this.id || 0,
+        startDate: format(monthStart, 'YYYY-MM-DD'),
+        endDate: format(monthEnd, 'YYYY-MM-DD'),
+      }
+      this.getDiaryEvents(request)
     }
+  }
+
+  getDiaryEvents(request,isCancelledVisible?: boolean, date?: Date) {
     this.dairyEventSubscription = this.diaryEventService.getDiaryEvents(request).subscribe(result => {
       this.diaryEvents = [];
       //when the events arrive the view needs to scroll to 8AM
