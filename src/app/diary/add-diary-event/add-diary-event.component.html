@@ -71,18 +71,19 @@
       <app-property-finder (selectedPropertyList)="getSelectedProperties($event)"
         (rebookedProperty)="getRebookedPropertyId($event)" [isMultiple]="true" [label]="propertyLabel"
         [property]="property" [canRebook]="canRebook" [propertyList]="diaryEvent?.properties"
-        [propertyRequiredWarning]="propertyRequiredWarning">
+        [propertyRequiredWarning]="propertyRequiredWarning" [searchType]="searchType">
       </app-property-finder>
     </fieldset>
     <fieldset *ngIf="showContacts">
       <legend class="fieldset-title">Contacts</legend>
       <app-signer [label]="contactLabel" [isMultiple]="true" (selectedSignersList)="getSelectedContactGroups($event)"
         [contactList]="diaryEvent?.contacts" [contactRequiredWarning]="contactRequiredWarning"
-        [isTelRequired]="isTelRequired">
+        [isTelRequired]="isTelRequired" [isApplicant]="isApplicant">
       </app-signer>
     </fieldset>
     <fieldset *ngIf="showOthers">
       <legend class="fieldset-title">Detail</legend>
+      {{diaryEventForm.get('startDateTime').value |json}}......date
       <div class="form-group row">
         <div class="col-sm-6 col-xl-3 offset-sm-2">
           <label for="startDateTime" class="small">Start Date</label>

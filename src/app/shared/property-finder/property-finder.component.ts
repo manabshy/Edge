@@ -20,6 +20,7 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
   @Input() property: Property;
   @Input() propertyList: Property[];
   @Input() propertyRequiredWarning: string;
+  @Input() searchType: number;
   @Output() selectedProperty = new EventEmitter<any>();
   @Output() selectedPropertyList = new EventEmitter<any>();
   @Output() rebookedProperty = new EventEmitter<number>();
@@ -69,7 +70,7 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    console.log('%c property warning in finder', 'color: purple', this.propertyRequiredWarning);
+    console.log('%c searchType in finder', 'color: purple', this.searchType);
     if (this.propertyList && this.propertyList.length) {
       this.selectedProperties = this.propertyList;
     }
@@ -80,10 +81,12 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
     this.suggestedTerm ? this.searchTerm = this.suggestedTerm : this.searchTerm = this.propertyFinderForm.value.searchTerm;
     const requestOptions = {
       pageSize: this.PAGE_SIZE,
-      searchTerm: this.searchTerm
+      searchTerm: this.searchTerm,
+      searchType: this.searchType
     } as RequestOption;
     this.propertyService.autocompleteProperties(requestOptions).subscribe(result => {
       this.properties = result;
+
     }, error => {
       this.properties = [];
       this.searchTerm = '';

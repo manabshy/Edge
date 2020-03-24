@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
-import { DiaryEvent, DiaryEventTypesEnum, reminderUnitTypes } from '../shared/diary';
+import { DiaryEvent, DiaryEventTypesEnum, reminderUnitTypes, PropertySearchEnum } from '../shared/diary';
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { DiaryEventService } from '../shared/diary-event.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
@@ -68,6 +68,9 @@ export class AddDiaryEventComponent implements OnInit {
   contactRequiredWarning: string;
   imagePath: any;
   isBase64Image: boolean;
+  searchParams: {};
+  searchType: PropertySearchEnum;
+  isApplicant = true;
 
   get hours() {
     const result = [];
@@ -160,8 +163,8 @@ export class AddDiaryEventComponent implements OnInit {
       this.sharedService.logValidationErrors(this.diaryEventForm, false);
     });
 
-    this.diaryEventService.eventDateChanges$.subscribe(dates=>{
-      console.log(dates)
+    this.diaryEventService.eventDateChanges$.subscribe(dates => {
+      console.log(dates);
       this.diaryEventForm.patchValue({
         startDateTime: new Date(dates.startDate),
         endDateTime: new Date(dates.endDate),
@@ -169,9 +172,9 @@ export class AddDiaryEventComponent implements OnInit {
         endHour: this.getHours(false, dates.endDate),
         startMin: this.getMinutes(dates.startDate),
         endMin: this.getMinutes(dates.endDate),
-      })
+      });
       // this.showOthers=true
-    })
+    });
   }
 
   private setupEventTypes(info: DropdownListInfo) {
@@ -210,6 +213,7 @@ export class AddDiaryEventComponent implements OnInit {
             }
             this.rebookViewings(event);
             this.toggleFlags(+event.eventTypeId);
+            this.setSearchParams(+event.eventTypeId);
             this.setStaffMemberIdList(event.staffMembers);
             this.populateForm(event);
           }
@@ -352,6 +356,23 @@ export class AddDiaryEventComponent implements OnInit {
 
   onEventTypeChange(eventTypeId: number) {
     this.toggleFlags(eventTypeId);
+    this.setSearchParams(eventTypeId);
+  }
+
+  private setSearchParams(eventTypeId: number) {
+    switch (true) {
+      case +eventTypeId === DiaryEventTypesEnum.ViewingSales:
+        this.searchType = PropertySearchEnum.SalesViewing;
+        break;
+      case +eventTypeId === DiaryEventTypesEnum.ViewingLettings:
+        this.searchType = PropertySearchEnum.LettingsViewing;
+        break;
+
+      default:
+        this.searchType = PropertySearchEnum.DiaryEventProperty;
+        this.isApplicant = false;
+        break;
+    }
   }
 
   private toggleFlags(eventTypeId: number) {
