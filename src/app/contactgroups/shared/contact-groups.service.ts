@@ -83,6 +83,15 @@ export class ContactGroupsService {
       );
   }
 
+  getApplicants(searchTerm: string): Observable<Signer[]> {
+    const url = `${AppConstants.baseApplicantUrl}/search?SearchTerm=${searchTerm}`;
+    return this.http.get<any>(url)
+      .pipe(
+        map(response => response.result),
+        tap(data => console.log(JSON.stringify(data)))
+      );
+  }
+
   getSignerbyId(contactGroupId: number): Observable<Signer> {
     const url = `${AppConstants.baseContactGroupUrl}/${contactGroupId}/contactNames`;
     return this.http.get<SignerData>(url).pipe(map(response => response.result));

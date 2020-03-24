@@ -9,6 +9,7 @@ export class AppConstants {
   public static get basePropertyUrl(): string { return `${environment.baseUrl}/properties`; }
   public static get baseDiaryEventUrl(): string { return `${environment.baseUrl}/diaryEvents`; }
   public static get baseContactGroupUrl(): string { return `${environment.baseUrl}/contactGroups`; }
+  public static get baseApplicantUrl(): string { return `${environment.baseUrl}/applicants`; }
   public static get baseCompanyUrl(): string { return `${environment.baseUrl}/companies`; }
   public static get basePersonUrl(): string { return `${environment.baseUrl}/people`; }
   public static get baseInfoUrl(): string { return `${environment.baseUrl}/info`; }

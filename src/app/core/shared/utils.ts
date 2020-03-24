@@ -19,6 +19,7 @@ export interface ICachedRoute {
 export interface RequestOption {
   isNameSearch: boolean;
   searchTerm: string;
+  searchType: number;
   pageSize?: number;
   page?: number;
 }
@@ -58,10 +59,12 @@ export class AppUtils {
     if (requestOption.pageSize == null) {
       requestOption.pageSize = 10;
     }
+
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
       fromObject: {
         searchTerm: requestOption.searchTerm,
+        searchType: requestOption.searchType ? requestOption.searchType.toString() : '',
         pageSize: requestOption.pageSize.toString(),
         page: requestOption.page.toString()
       }
