@@ -130,10 +130,10 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
   }
 
   ngOnChanges() {
-    if (this.staffMemberId) {
-      this.id = this.staffMemberId;
-      this.getCurrentDiaryEvents()
-    }
+    // if (this.staffMemberId) {
+    //   this.id = this.staffMemberId;
+    //   this.getCurrentDiaryEvents()
+    // }
   }
 
   passDateToRouter() {
@@ -179,6 +179,8 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
 
   getSelectedStaffMemberDiaryEvents(staffMemberId: number) {
     // this.id = staffMemberId;
+    this.selectedStaffMemberId=staffMemberId;
+    this.getCurrentDiaryEvents()
     console.log('get selected id from output event', staffMemberId);
   }
 
@@ -207,11 +209,14 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
     if(this.view === CalendarView.Week|| this.view === CalendarView.ThreeDays){
       monthEnd=endOfMonth(addDays(getEnd(this.viewDate),1)).getTime()
     }
-    if(this.requestedTimeframe==undefined||(this.requestedTimeframe?.start>monthStart||this.requestedTimeframe?.end<monthEnd)){
+    if(this.requestedTimeframe==undefined||
+      (this.requestedTimeframe?.start>monthStart||this.requestedTimeframe?.end<monthEnd)||
+      this.selectedStaffMemberId!==this.id){
       this.requestedTimeframe={
         start:  monthStart,
         end:    monthEnd
       }
+      this.id=this.selectedStaffMemberId
       const request= {
         staffMemberId: this.selectedStaffMemberId || this.id || 0,
         startDate: format(monthStart, 'YYYY-MM-DD'),
