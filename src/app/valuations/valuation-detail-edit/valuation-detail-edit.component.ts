@@ -208,8 +208,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       }
     });
 
-
-
     this.getAddedProperty();
 
     this.contactGroupService.signer$.subscribe(data => {
@@ -221,21 +219,18 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     });
 
     this.valuationForm.valueChanges
-      // .pipe(debounceTime(400))
-      .subscribe((data) => {
+      .subscribe(() => {
         this.sharedService.logValidationErrors(this.valuationForm, false);
         this.setRentFigures();
       });
 
-    this.instructionForm.valueChanges.pipe(debounceTime(400), distinctUntilChanged())
+    this.instructionForm.valueChanges.pipe(debounceTime(100), distinctUntilChanged())
       .subscribe(() => {
         this.sharedService.logValidationErrors(this.instructionForm, false);
-        // this.setInstructionFormValidators();
         this.setInstructionRentFigures();
       });
 
   }
-
 
   private setupListInfo(info: DropdownListInfo) {
     this.tenures = info.tenures;
@@ -752,9 +747,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   setInstructionFormValidators() {
     this.setAskingPriceValidator();
-    this.setLongLetRentValidator();
-    // this.setShortLetRentValidator();
+    this.setRentValidators();
   }
+
 
   setAgencyTypeValidator() {
     switch (true) {
@@ -784,7 +779,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   private setLongLetRentValidator() {
-    if (this.instructionForm.get('instructLet').value && !this.instLongLetWeeklyControl.value) {
+    if (!this.instLongLetWeeklyControl.value && !this.instShortLetWeeklyControl.value) {
       this.instLongLetWeeklyControl.setValidators([Validators.required, Validators.min(1)]);
       this.instLongLetWeeklyControl.updateValueAndValidity();
     } else {
@@ -794,7 +789,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   private setShortLetRentValidator() {
-    if (this.instructionForm.get('instructLet').value && !this.instShortLetWeeklyControl.value && this.instLongLetWeeklyControl.value) {
+    if (!this.instShortLetWeeklyControl.value && !this.longLetWeeklyControl.value) {
       this.instShortLetWeeklyControl.setValidators(Validators.required);
       this.instShortLetWeeklyControl.updateValueAndValidity();
     } else {
@@ -803,7 +798,18 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   }
 
-
+  setRentValidators() {
+    if (this.instructionForm.get('instructLet').value) {
+      switch (true) {
+        case !this.instLongLetWeeklyControl.value:
+          this.setLongLetRentValidator();
+          break;
+        case !this.shortLetWeeklyControl.value:
+          this.setShortLetRentValidator();
+          break;
+      }
+    }
+  }
 
   private setSalesAgencyTypeValidator() {
     const salesAgencyControl = this.instructionForm.get('salesAgencyType');
@@ -864,7 +870,12 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.setInstructionValue(instruction);
         this.valuationService.addInstruction(instruction).subscribe((result: ResultData) => {
           this.onInstructionSaveComplete(result.status);
-        });
+        },
+          (error: WedgeError) => {
+            this.errorMessage = error;
+            this.sharedService.showError(this.errorMessage);
+            this.isSubmitting = false;
+          });
         console.log('instruction form to save', this.instructionForm.value);
       } else {
         this.onInstructionSaveComplete();
