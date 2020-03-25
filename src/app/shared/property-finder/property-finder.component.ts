@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { PropertyService } from 'src/app/property/shared/property.service';
 import { Observable, EMPTY } from 'rxjs';
 import { distinctUntilChanged, switchMap, catchError, tap } from 'rxjs/operators';
-import { Property, PropertyAutoComplete } from 'src/app/property/shared/property';
+import { Property, PropertyAutoComplete, PropertySearchEnum } from 'src/app/property/shared/property';
 import { RequestOption } from 'src/app/core/shared/utils';
 import { BaseProperty } from '../models/base-property';
 
@@ -37,6 +37,7 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
   isSearchVisible = true;
   noSuggestions = false;
   selectedProperties: Property[] = [];
+  searchEnumKey: string;
   suggestions: (text$: Observable<string>) => Observable<unknown>;
 
   get propertyAddress() {
@@ -75,6 +76,10 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
       this.selectedProperties = this.propertyList;
     }
     this.displayExistingProperty();
+    if(this.searchType) {
+      this.searchEnumKey = PropertySearchEnum[this.searchType];
+      this.searchEnumKey = this.searchEnumKey.split(/(?=[A-Z])/).join(' ');
+    }
   }
 
   searchProperty() {

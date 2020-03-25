@@ -120,15 +120,6 @@ export enum ViewMode {
   workingWeek = 'Working Week',
   month = 'Month'
 }
-export enum PropertySearchEnum {
-  SalesInstruction = 1,
-  LettingsInstruction = 2,
-  PropertyManagement = 3,
-  DiaryEventProperty = 4,
-  SalesViewing = 5,
-  LettingsViewing = 6
-}
-
 
 export enum DiaryEventTypesEnum {
   ViewingSales = 1,

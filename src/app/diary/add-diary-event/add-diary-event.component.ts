@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
-import { DiaryEvent, DiaryEventTypesEnum, reminderUnitTypes, PropertySearchEnum } from '../shared/diary';
+import { DiaryEvent, DiaryEventTypesEnum, reminderUnitTypes } from '../shared/diary';
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { DiaryEventService } from '../shared/diary-event.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { DropdownListInfo, InfoDetail, InfoService } from 'src/app/core/services/info.service';
 import { getHours, getMinutes, format, setHours, setMinutes, isAfter } from 'date-fns';
-import { Property } from 'src/app/property/shared/property';
+import { Property, PropertySearchEnum } from 'src/app/property/shared/property';
 import { Signer, ContactGroup } from 'src/app/contactgroups/shared/contact-group';
 import { ToastrService } from 'ngx-toastr';
 import { Router, ActivatedRoute } from '@angular/router';

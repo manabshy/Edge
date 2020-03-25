@@ -75,8 +75,10 @@
         <div class="off-canvas" [hidden]="!signers" (click)="signers = null">
           <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
             <h4 class="page-title text-left pt-3">
-              <ng-container *ngIf="!label; else givenLabel4 ">Pick Signers</ng-container>
-              <ng-template #givenLabel4>Pick {{label}}</ng-template>
+              Pick 
+              <ng-container *ngIf="!label; else givenLabel4 ">Signer</ng-container>
+              <ng-template #givenLabel4>{{label}}</ng-template>
+              <ng-container *ngIf="isApplicant">Applicant</ng-container>
               <button type="button" class="close mr-2" aria-label="Close" (click)="signers = null">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -99,9 +101,11 @@
                   </div>
                 </div>
               </app-subnav-item>
-              <div class="list-group-item text-center" *ngIf="!signers?.length">
+              <div class="list-group-item text-center text-danger" *ngIf="!signers?.length">
                 No <ng-container *ngIf="!label; else givenLabel2 ">Signers</ng-container>
-                <ng-template #givenLabel2>{{label}}</ng-template> found
+                <ng-template #givenLabel2>{{label}}</ng-template>
+                <ng-container *ngIf="isApplicant">Applicant</ng-container> 
+                found
               </div>
               <a [routerLink]="['/contact-centre/detail/0/people', 0]"  *ngIf="!isMultiple"
                 [queryParams]="{isNewContactGroup: true, isSigner: true, signer: signerFinderForm.get('searchTerm').value}"
