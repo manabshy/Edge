@@ -76,9 +76,10 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
       this.selectedProperties = this.propertyList;
     }
     this.displayExistingProperty();
-    if(this.searchType) {
+    if (this.searchType) {
       this.searchEnumKey = PropertySearchEnum[this.searchType];
-      this.searchEnumKey = this.searchEnumKey.split(/(?=[A-Z])/).join(' ');
+      const key = this.searchEnumKey.split(/(?=[A-Z])/).join(' ');
+      this.searchType === PropertySearchEnum.DiaryEventProperty ? this.searchEnumKey = key : this.searchEnumKey = `${key} Property`;
     }
   }
 
