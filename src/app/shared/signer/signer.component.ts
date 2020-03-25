@@ -28,6 +28,7 @@ export class SignerComponent implements OnInit, OnChanges {
   @Input() label: string;
   @Input() contactRequiredWarning: string;
   @Input() isTelRequired = false;
+  @Input() isApplicant: boolean;
   @ViewChild('selectedSignerInput', { static: false }) selectedSignerInput: ElementRef;
   @ViewChild('searchSignerInput', { static: true }) searchSignerInput: ElementRef;
   signerFinderForm: FormGroup;
@@ -42,6 +43,7 @@ export class SignerComponent implements OnInit, OnChanges {
   suggestedTerm: any;
   searchTerm = '';
   noSuggestions: boolean = false;
+  applicantsLabel: string;
 
 
   get signerNames(): FormControl {
@@ -78,11 +80,13 @@ export class SignerComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
+    console.log(' %cis applicant in finder', 'color:green', this.isApplicant)
     this.displayContactList();
     this.displayExistingSigners();
     if (this.existingPerson) {
       this.signersAutocomplete(this.existingPerson.firstName + ' ' + this.existingPerson.middleName + ' ' + this.existingPerson.lastName);
     }
+    // if (this.isApplicant) { this.label = 'applicants'; }
   }
 
   private displayContactList() {
@@ -122,13 +126,23 @@ export class SignerComponent implements OnInit, OnChanges {
     event.preventDefault();
     event.stopPropagation();
     this.suggestedTerm ? this.searchTerm = this.suggestedTerm : this.searchTerm = this.signerFinderForm.get('searchTerm').value;
-    this.signersAutocomplete(this.searchTerm);
+    this.isApplicant ? this.getApplicants(this.searchTerm) : this.signersAutocomplete(this.searchTerm);
   }
 
   signersAutocomplete(searchTerm: string) {
     this.contactGroupService.getAutocompleteSigners(searchTerm).subscribe(result => {
       this.signers = result;
       console.log('signers here', this.signers);
+    }, error => {
+      this.signers = [];
+      this.isHintVisible = true;
+    });
+  }
+
+  getApplicants(searchTerm: string) {
+    this.contactGroupService.getApplicants(searchTerm).subscribe(result => {
+      this.signers = result;
+      console.log('applicants here', this.signers);
     }, error => {
       this.signers = [];
       this.isHintVisible = true;

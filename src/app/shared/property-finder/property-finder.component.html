@@ -63,8 +63,10 @@
         <div class="off-canvas" [hidden]="!properties" (click)="properties = null">
           <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
             <h4 class="page-title text-left pt-3">
-              <ng-container *ngIf="!label; else givenLabel4 ">Pick property</ng-container>
-              <ng-template #givenLabel4>Pick {{label}}</ng-template>
+              Pick
+              <ng-container *ngIf="!label; else givenLabel4 ">property</ng-container>
+              <ng-template #givenLabel4>{{label}}</ng-template>
+              <ng-container *ngIf="searchEnumKey">{{searchEnumKey}}</ng-container>
               <button type="button" class="close mr-2" aria-label="Close" (click)="properties = null">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -82,9 +84,11 @@
                     </div>
                   </div>
                 </app-subnav-item>
-                <div class="list-group-item text-center" *ngIf="!properties?.length">
+                <div class="list-group-item text-center text-danger" *ngIf="!properties?.length">
                   No <ng-container *ngIf="!label; else givenLabel2 ">Property</ng-container>
-                  <ng-template #givenLabel2>{{label}}</ng-template> found
+                  <ng-template #givenLabel2>{{label}}</ng-template>
+                  <ng-container *ngIf="searchEnumKey">{{searchEnumKey}}</ng-container>
+                  found
                 </div>
                 <a [routerLink]="['/property-centre/detail/0', 'edit']" *ngIf="!isMultiple"
                   [queryParams]="{isNewProperty: true, searchedAddress: propertyFinderForm.get('searchTerm').value, getBack: 1}"

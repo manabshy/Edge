@@ -203,3 +203,12 @@ export const PropertyDetailsSubNavItems: SubNavItem[] = PropertyDetailsSubNav.ma
   value: SubNav.subNavValue(x)
 }));
 
+export enum PropertySearchEnum {      
+  SalesInstruction = 1,
+  LettingsInstruction = 2,
+  PropertyManagement = 3,
+  DiaryEventProperty = 4,
+  SalesViewing = 5,
+  LettingsViewing = 6
+}
+

@@ -6,7 +6,7 @@ import { DiaryEventService } from '../shared/diary-event.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { DropdownListInfo, InfoDetail, InfoService } from 'src/app/core/services/info.service';
 import { getHours, getMinutes, format, setHours, setMinutes, isAfter } from 'date-fns';
-import { Property } from 'src/app/property/shared/property';
+import { Property, PropertySearchEnum } from 'src/app/property/shared/property';
 import { Signer, ContactGroup } from 'src/app/contactgroups/shared/contact-group';
 import { ToastrService } from 'ngx-toastr';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -68,6 +68,10 @@ export class AddDiaryEventComponent implements OnInit {
   contactRequiredWarning: string;
   imagePath: any;
   isBase64Image: boolean;
+  searchParams: {};
+  searchType: PropertySearchEnum;
+  isApplicant = true;
+  lockEventTypes: boolean;
 
   get hours() {
     const result = [];
@@ -160,18 +164,19 @@ export class AddDiaryEventComponent implements OnInit {
       this.sharedService.logValidationErrors(this.diaryEventForm, false);
     });
 
-    this.diaryEventService.eventDateChanges$.subscribe(dates=>{
-      console.log(dates)
-      this.diaryEventForm.patchValue({
-        startDateTime: new Date(dates.startDate),
-        endDateTime: new Date(dates.endDate),
-        startHour: this.getHours(false, dates.startDate),
-        endHour: this.getHours(false, dates.endDate),
-        startMin: this.getMinutes(dates.startDate),
-        endMin: this.getMinutes(dates.endDate),
-      })
-      // this.showOthers=true
-    })
+    this.diaryEventService.eventDateChanges$.subscribe(dates => {
+      if (dates) {
+        console.log(dates);
+        this.diaryEventForm.patchValue({
+          startDateTime: new Date(dates.startDate),
+          endDateTime: new Date(dates.endDate),
+          startHour: this.getHours(false, dates.startDate),
+          endHour: this.getHours(false, dates.endDate),
+          startMin: this.getMinutes(dates.startDate),
+          endMin: this.getMinutes(dates.endDate),
+        });
+      }
+    });
   }
 
   private setupEventTypes(info: DropdownListInfo) {
@@ -210,6 +215,7 @@ export class AddDiaryEventComponent implements OnInit {
             }
             this.rebookViewings(event);
             this.toggleFlags(+event.eventTypeId);
+            this.setSearchParams(+event.eventTypeId);
             this.setStaffMemberIdList(event.staffMembers);
             this.populateForm(event);
           }
@@ -352,6 +358,23 @@ export class AddDiaryEventComponent implements OnInit {
 
   onEventTypeChange(eventTypeId: number) {
     this.toggleFlags(eventTypeId);
+    this.setSearchParams(eventTypeId);
+  }
+
+  private setSearchParams(eventTypeId: number) {
+    switch (true) {
+      case +eventTypeId === DiaryEventTypesEnum.ViewingSales:
+        this.searchType = PropertySearchEnum.SalesViewing;
+        break;
+      case +eventTypeId === DiaryEventTypesEnum.ViewingLettings:
+        this.searchType = PropertySearchEnum.LettingsViewing;
+        break;
+
+      default:
+        this.searchType = PropertySearchEnum.DiaryEventProperty;
+        this.isApplicant = false;
+        break;
+    }
   }
 
   private toggleFlags(eventTypeId: number) {
@@ -388,7 +411,8 @@ export class AddDiaryEventComponent implements OnInit {
     this.diaryEventForm.markAsDirty();
     if (properties && properties.length) {
       this.diaryEventForm.get('properties').setValue(properties);
-    }
+      this.lockEventTypes = true;
+    } else { this.lockEventTypes = false; }
     this.setValidators();
   }
 

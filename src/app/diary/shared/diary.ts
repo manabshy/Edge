@@ -120,6 +120,7 @@ export enum ViewMode {
   workingWeek = 'Working Week',
   month = 'Month'
 }
+
 export enum DiaryEventTypesEnum {
   ViewingSales = 1,
   ViewingLettings = 1024,
@@ -153,7 +154,7 @@ export enum DiaryEventTypesStringEnum {
   Reminder = 'Reminder'
 }
 
-export const  reminderUnitTypes = new Map([
+export const reminderUnitTypes = new Map([
   [0, 'min(s)'],
   [1, 'hour(s)'],
   [2, 'day(s)']

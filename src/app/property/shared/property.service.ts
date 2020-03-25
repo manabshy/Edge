@@ -34,28 +34,6 @@ export class PropertyService {
 
   constructor(private http: HttpClient) { }
 
-  autocompleteProperties2(searchTerm: any, pageSize?: number, page?: number): Observable<PropertyAutoComplete[]> {
-    if (!page) {
-      page = 1;
-    }
-    if (pageSize == null) {
-      pageSize = 10;
-    }
-    const options = new HttpParams({
-      encoder: new CustomQueryEncoderHelper,
-      fromObject: {
-        searchTerm: searchTerm,
-        pageSize: pageSize.toString(),
-        page: page.toString()
-      }
-    });
-    const url = `${AppConstants.basePropertyUrl}/autocomplete`;
-    return this.http.get<PropertyAutoCompleteData>(url, { params: options })
-      .pipe(
-        map(response => response.result),
-        tap(data => console.log(JSON.stringify(data)))
-      );
-  }
   autocompleteProperties(opts: RequestOption): Observable<PropertyAutoComplete[]> {
     let options: HttpParams;
     options = AppUtils.setQueryParams(opts);

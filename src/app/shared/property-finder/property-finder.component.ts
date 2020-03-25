@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { PropertyService } from 'src/app/property/shared/property.service';
 import { Observable, EMPTY } from 'rxjs';
 import { distinctUntilChanged, switchMap, catchError, tap } from 'rxjs/operators';
-import { Property, PropertyAutoComplete } from 'src/app/property/shared/property';
+import { Property, PropertyAutoComplete, PropertySearchEnum } from 'src/app/property/shared/property';
 import { RequestOption } from 'src/app/core/shared/utils';
 import { BaseProperty } from '../models/base-property';
 
@@ -20,6 +20,7 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
   @Input() property: Property;
   @Input() propertyList: Property[];
   @Input() propertyRequiredWarning: string;
+  @Input() searchType: number;
   @Output() selectedProperty = new EventEmitter<any>();
   @Output() selectedPropertyList = new EventEmitter<any>();
   @Output() rebookedProperty = new EventEmitter<number>();
@@ -36,6 +37,7 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
   isSearchVisible = true;
   noSuggestions = false;
   selectedProperties: Property[] = [];
+  searchEnumKey: string;
   suggestions: (text$: Observable<string>) => Observable<unknown>;
 
   get propertyAddress() {
@@ -69,21 +71,28 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    console.log('%c property warning in finder', 'color: purple', this.propertyRequiredWarning);
+    console.log('%c searchType in finder', 'color: purple', this.searchType);
     if (this.propertyList && this.propertyList.length) {
       this.selectedProperties = this.propertyList;
     }
     this.displayExistingProperty();
+    if (this.searchType) {
+      this.searchEnumKey = PropertySearchEnum[this.searchType];
+      const key = this.searchEnumKey.split(/(?=[A-Z])/).join(' ');
+      this.searchType === PropertySearchEnum.DiaryEventProperty ? this.searchEnumKey = key : this.searchEnumKey = `${key} Property`;
+    }
   }
 
   searchProperty() {
     this.suggestedTerm ? this.searchTerm = this.suggestedTerm : this.searchTerm = this.propertyFinderForm.value.searchTerm;
     const requestOptions = {
       pageSize: this.PAGE_SIZE,
-      searchTerm: this.searchTerm
+      searchTerm: this.searchTerm,
+      searchType: this.searchType
     } as RequestOption;
     this.propertyService.autocompleteProperties(requestOptions).subscribe(result => {
       this.properties = result;
+
     }, error => {
       this.properties = [];
       this.searchTerm = '';
