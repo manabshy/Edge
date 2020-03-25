@@ -1,5 +1,5 @@
 @mixin navbar-mobile-btn($right: false) {
-    @include media-breakpoint-down(md) {
+    @include media-breakpoint-down(lg) {
         color: color("white");
         font-size: 2rem;
         line-height: 1;

@@ -18,7 +18,7 @@ body {
         }
     }
 
-    @include media-breakpoint-up(lg) {
+    @include media-breakpoint-up(xl) {
         padding-top: 0;
         background-size: 50%;
     }

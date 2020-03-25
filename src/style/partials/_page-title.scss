@@ -10,9 +10,11 @@
     z-index: 100;
     min-height: 3.5rem;
 
-    @include media-breakpoint-down(sm) {
+    @include media-breakpoint-down(lg) {
         top: $top-bar-height;
+    }
 
+    @include media-breakpoint-down(sm) {
         @media (orientation: landscape) {
             position: static;
         }

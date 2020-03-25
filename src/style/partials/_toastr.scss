@@ -3,7 +3,7 @@
     z-index: 150;
     top: $top-bar-height;
 
-    @include media-breakpoint-up(lg){
+    @include media-breakpoint-up(xl){
         top: 0;
     }
 }

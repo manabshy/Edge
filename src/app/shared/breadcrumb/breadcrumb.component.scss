@@ -9,7 +9,7 @@
 .breadcrumb {
     border-radius: 0;
 
-    @include media-breakpoint-down(md) {
+    @include media-breakpoint-down(lg) {
         position: fixed;
         top: 0;
         left: 0;

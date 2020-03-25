@@ -68,7 +68,7 @@ export class MainmenuComponent implements OnInit {
   }
 
   toggleNavCollapse() {
-    if(window.innerWidth < 1024){
+    if(window.innerWidth <= 1024){
       this.navbarCollapsed = !this.navbarCollapsed;
     }
   }
