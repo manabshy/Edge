@@ -62,7 +62,7 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
   ngOnChanges() {
     if (this.valuers) {
       this.isValuersPicker = true;
-      console.log('labels in finder', this.label);
+      console.log('staffMemberId in finder', this.staffMemberId);
       console.log('should be here valuers in finder', this.valuers);
     } else {
       console.log('not in here xxxx valuers in', this.valuers);

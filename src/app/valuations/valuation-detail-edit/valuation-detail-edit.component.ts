@@ -94,6 +94,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   selectedValuerId: number;
   availabilityForm: FormGroup;
   availableDates: Date[];
+  canBookAppointment: boolean;
 
 
   get originTypeControl() {
@@ -444,6 +445,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.salesValuerLabel = 'Sales Valuer';
     this.salesValuers = this.allValuers.sales;
     this.lettingsValuers = this.allValuers.lettings;
+    this.isSalesAndLettings = true; //
   }
 
   getValuation(id: number) {
@@ -689,17 +691,19 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   getSelectedValuerId(id: number) {
     if (id) {
-      console.log('id in val', id);
-      switch (true) {
-        case this.isSalesAndLettings:
-          this.selectedValuerIdList.push(id);
-          console.log('array here', this.selectedValuerIdList);
-          break;
+    }
+    console.log('id in val', id);
+    switch (true) {
+      case this.isSalesAndLettings:
+        this.selectedValuerIdList.push(id);
+        this.selectedValuerIdList.length === 2 ? this.canBookAppointment = true : this.canBookAppointment = false;
+        console.log('array here', this.selectedValuerIdList);
+        break;
 
-        default:
-          this.selectedValuerId = id;
-          break;
-      }
+      default:
+        this.selectedValuerId = id;
+        this.selectedValuerId ? this.canBookAppointment = true : this.canBookAppointment = false;
+        break;
     }
   }
 
@@ -739,6 +743,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   selectAvailableDate(date: Date) {
     if (date) {
       this.selectedDate = date;
+      this.canBookAppointment = false;
       if (this.valuation && !this.valuation.valuationDate) {
         this.valuation.valuationDate = date;
       }
@@ -805,11 +810,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.valuationService.getValuers(propId).pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(data => {
           this.allValuers = data;
-          if (this.isNewValuation) {
-            console.log('for new vals valuers', this.allValuers);
-            this.setValuersForSalesAndLettings();
-            this.isSalesAndLettings = true;
-          }
+          console.log('for new vals valuers', this.allValuers);
+          this.setValuersForSalesAndLettings();
           console.log('valuers', this.allValuers);
         });
     }
