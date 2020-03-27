@@ -45,8 +45,9 @@ export class AddDiaryEventComponent implements OnInit {
   maxDate = null;
   minDate = new Date();
   formErrors = FormErrors;
-  propertyLabel = ' ';
-  contactLabel = ' ';
+  propertyLabel = 'Property';
+  contactLabel = 'Contact';
+  isLabelHidden = true;
   eventTypesMap: Map<number, string>;
   property: Property;
   staffMemberIdList: number[] = [];
@@ -365,9 +366,13 @@ export class AddDiaryEventComponent implements OnInit {
     switch (true) {
       case +eventTypeId === DiaryEventTypesEnum.ViewingSales:
         this.searchType = PropertySearchEnum.SalesViewing;
+        this.contactLabel = 'Sales Applicant';
+        this.propertyLabel = 'For Sale';
         break;
       case +eventTypeId === DiaryEventTypesEnum.ViewingLettings:
         this.searchType = PropertySearchEnum.LettingsViewing;
+        this.contactLabel = 'Lettings Applicant';
+        this.propertyLabel = 'To Let';
         break;
 
       default:

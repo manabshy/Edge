@@ -87,6 +87,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   existingCompanyDetails: Company;
   isNewAddress: boolean;
   signer: string;
+  companiesSearched: boolean;
   get dataNote() {
     if (this.contactGroupDetails) {
       return {
@@ -347,6 +348,14 @@ export class ContactgroupsPeopleComponent implements OnInit {
     });
   }
 
+  setCompanies() {
+    this.foundCompanies = [];
+    this.companiesSearched = false;
+    setTimeout(() => {
+      this.companyNameInput.nativeElement.focus();
+    });
+  }
+
   searchCompany() {
     event.preventDefault();
     event.stopPropagation();
@@ -356,6 +365,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   findCompany(searchTerm: any) {
     this.contactGroupService.getAutocompleteCompany(searchTerm).subscribe(data => {
+      this.companiesSearched = true;
       this.foundCompanies = data;
     }, (error: WedgeError) => {
       this.sharedService.showError(error);

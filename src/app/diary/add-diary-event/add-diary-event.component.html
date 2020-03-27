@@ -67,16 +67,17 @@
       </div>
     </fieldset>
     <fieldset *ngIf="showProperties">
-      <legend class="fieldset-title">Properties</legend>
+      <legend class="fieldset-title">Properties {{propertyLabel}}</legend>
       <app-property-finder (selectedPropertyList)="getSelectedProperties($event)"
         (rebookedProperty)="getRebookedPropertyId($event)" [isMultiple]="true" [label]="propertyLabel"
+        [isLabelHidden]="isLabelHidden"
         [property]="property" [canRebook]="canRebook" [propertyList]="diaryEvent?.properties"
         [propertyRequiredWarning]="propertyRequiredWarning" [searchType]="searchType">
       </app-property-finder>
     </fieldset>
     <fieldset *ngIf="showContacts">
-      <legend class="fieldset-title">Contacts</legend>
-      <app-signer [label]="contactLabel" [isMultiple]="true" (selectedSignersList)="getSelectedContactGroups($event)"
+      <legend class="fieldset-title">{{contactLabel}}s</legend>
+      <app-signer [label]="contactLabel" [isLabelHidden]="isLabelHidden" [isMultiple]="true" (selectedSignersList)="getSelectedContactGroups($event)"
         [contactList]="diaryEvent?.contacts" [contactRequiredWarning]="contactRequiredWarning"
         [isTelRequired]="isTelRequired" [isApplicant]="isApplicant">
       </app-signer>

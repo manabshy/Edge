@@ -26,6 +26,7 @@ export class SignerComponent implements OnInit, OnChanges {
   @Input() isMultiple: boolean = false;
   @Input() createdSigner: Signer;
   @Input() label: string;
+  @Input() isLabelHidden: boolean;
   @Input() contactRequiredWarning: string;
   @Input() isTelRequired = false;
   @Input() isApplicant: boolean;
@@ -44,6 +45,7 @@ export class SignerComponent implements OnInit, OnChanges {
   searchTerm = '';
   noSuggestions: boolean = false;
   applicantsLabel: string;
+  hasBeenSearched: boolean;
 
 
   get signerNames(): FormControl {
@@ -121,6 +123,14 @@ export class SignerComponent implements OnInit, OnChanges {
     }
   }
 
+  setSigners() {
+    this.signers = [];
+    this.hasBeenSearched = false;
+    setTimeout(() => {
+      this.searchSignerInput.nativeElement.focus();
+    });
+  }
+
 
   searchSigner() {
     event.preventDefault();
@@ -131,6 +141,7 @@ export class SignerComponent implements OnInit, OnChanges {
 
   signersAutocomplete(searchTerm: string) {
     this.contactGroupService.getAutocompleteSigners(searchTerm).subscribe(result => {
+      this.hasBeenSearched = true;
       this.signers = result;
       console.log('signers here', this.signers);
     }, error => {
@@ -141,6 +152,7 @@ export class SignerComponent implements OnInit, OnChanges {
 
   getApplicants(searchTerm: string) {
     this.contactGroupService.getApplicants(searchTerm).subscribe(result => {
+      this.hasBeenSearched = true;
       this.signers = result;
       console.log('applicants here', this.signers);
     }, error => {
@@ -206,9 +218,6 @@ export class SignerComponent implements OnInit, OnChanges {
   toggleSearch() {
     event.preventDefault();
     this.isSearchVisible = !this.isSearchVisible;
-    setTimeout(() => {
-      this.searchSignerInput.nativeElement.focus();
-    });
   }
 
   onKeyup() {

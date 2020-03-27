@@ -2,12 +2,13 @@
   <form class="pb-0" [formGroup]="signerFinderForm" autocompleteOff>
     <div [ngClass]="{'row': !fullWidth}" [hidden]="!(selectedSignerDetails||selectedSigners && selectedSigners.length)">
       <div [ngClass]="{'col-sm-8 col-xl-6 offset-sm-2': !fullWidth}">
-        <ng-container *ngIf="!label; else givenLabel "><label for="searchTerm"
-            class="small">Signers</label>
+        <ng-container *ngIf="!isLabelHidden">
+          <ng-container *ngIf="!label; else givenLabel "><label class="small">Signers</label>
         </ng-container>
-        <ng-template #givenLabel><label for="searchTerm" *ngIf="!hideLabel"
+        <ng-template #givenLabel><label *ngIf="!hideLabel"
             class="small">{{label}}</label>
         </ng-template>
+        </ng-container>
         <div class="form-group d-flex d-sm-block" *ngIf="selectedSignerDetails && !isMultiple">
           <input type="hidden" #selectedSignerInput id="selectedSigner" formControlName="selectedSigner">
           <a class="small text-left mobile-btn" *ngIf="selectedSignerDetails"
@@ -29,7 +30,7 @@
             (click)="remove()">
             <span aria-hidden="true">×</span>
           </button>
-          <button class="btn btn-light btn-sm ml-2" *ngIf="!readOnly" type="button" (click)="toggleSearch()">
+          <button class="btn btn-light btn-sm ml-2" *ngIf="!readOnly" type="button" (click)="setSigners()">
             Change
           </button>
         </div>
@@ -50,40 +51,46 @@
         </ng-container>
       </div>
     </div>
-    <div class="row" [hidden]="!isSearchVisible">
-      <div class="col-sm-8 col-xl-6 offset-sm-2">
+    <div class="row">
+      <div class="col-sm-3 offset-sm-2" [hidden]="!isSearchVisible">
         <div class="form-group">
-          <ng-container *ngIf="!label; else givenLabel3 "><label for="searchTerm"
-              class="small">Find Signers</label></ng-container>
-          <ng-template #givenLabel3><label for="searchTerm" class="small"> Find
-              {{label}}</label></ng-template>
-          <div class="input-group input-group-sm">
-            <input #searchSignerInput type="search" id="searchTerm" class="form-control" formControlName="searchTerm"
-              (keydown.enter)="searchSigner()" [ngbTypeahead]="suggestions" [focusFirst]="false"
-              (selectItem)="selectedSuggestion($event)"  [ngClass]="{'is-invalid': contactRequiredWarning}">
-            <div class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="searchSigner()">Search</button>
-            </div>
-            <div class="invalid-feedback w-100">{{contactRequiredWarning}}</div>
-          </div>
+          <button type="button" class="btn btn-light btn-sm btn-block" [ngClass]="{'is-invalid': contactRequiredWarning}" (click)="setSigners()">
+            <i class="fas fa-plus mr-2"></i>
+            <ng-container *ngIf="!label; else givenLabel3">Signer</ng-container>
+              <ng-template #givenLabel3>{{label}}</ng-template>
+          </button>
+          <div class="invalid-feedback w-100">{{contactRequiredWarning}}</div>
         </div>
-        <a class="small d-block mb-3" [routerLink]="['/contact-centre/detail/0/people', 0]" *ngIf="noSuggestions"
-          [queryParams]="{isNewContactGroup: true, isSigner: true, signer: signerFinderForm.get('searchTerm').value}"
-          (click)="createNewSigner()">
-          <i class="fas fa-plus mr-2"></i> New Contact Group
-        </a>
+      </div>
+      <div class="col-12"></div>
+      <div class="col-sm-8 col-xl-6 offset-sm-2">
         <div class="off-canvas" [hidden]="!signers" (click)="signers = null">
           <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
             <h4 class="page-title text-left pt-3">
-              Pick 
               <ng-container *ngIf="!label; else givenLabel4 ">Signer</ng-container>
               <ng-template #givenLabel4>{{label}}</ng-template>
-              <ng-container *ngIf="isApplicant">Applicant</ng-container>
               <button type="button" class="close mr-2" aria-label="Close" (click)="signers = null">
                 <span aria-hidden="true">&times;</span>
               </button>
             </h4>
-            <app-subnav>
+            <div class="form-group">
+              <label for="searchTerm"
+                  class="small">Find</label>
+              <div class="input-group input-group-sm">
+                <input #searchSignerInput type="search" id="searchTerm" class="form-control" formControlName="searchTerm"
+                  (keydown.enter)="searchSigner()" [ngbTypeahead]="suggestions" [focusFirst]="false"
+                  (selectItem)="selectedSuggestion($event)">
+                <div class="input-group-append">
+                  <button type="button" class="btn btn-secondary" (click)="searchSigner()">Search</button>
+                </div>
+              </div>
+            </div>
+            <a class="small d-block mb-3" [routerLink]="['/contact-centre/detail/0/people', 0]" *ngIf="noSuggestions"
+              [queryParams]="{isNewContactGroup: true, isSigner: true, signer: signerFinderForm.get('searchTerm').value}"
+              (click)="createNewSigner()">
+              <i class="fas fa-plus mr-2"></i> New Contact Group
+            </a>
+            <app-subnav *ngIf='hasBeenSearched'>
               <app-subnav-item *ngFor="let signer of signers" (click)="selectSigner(signer.contactGroupId); signers=null">
                 <div class="row">
                   <div class="col-sm-4">
@@ -103,8 +110,7 @@
               </app-subnav-item>
               <div class="list-group-item text-center text-danger" *ngIf="!signers?.length">
                 No <ng-container *ngIf="!label; else givenLabel2 ">Signers</ng-container>
-                <ng-template #givenLabel2>{{label}}</ng-template>
-                <ng-container *ngIf="isApplicant">Applicant</ng-container> 
+                <ng-template #givenLabel2>{{label}}</ng-template> 
                 found
               </div>
               <a [routerLink]="['/contact-centre/detail/0/people', 0]"  *ngIf="!isMultiple"

@@ -37,8 +37,8 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
   isSearchVisible = true;
   noSuggestions = false;
   selectedProperties: Property[] = [];
-  searchEnumKey: string;
   suggestions: (text$: Observable<string>) => Observable<unknown>;
+  hasBeenSearched: boolean;
 
   get propertyAddress() {
     return this.propertyFinderForm.get('selectedPropertyAddress') as FormControl;
@@ -76,11 +76,14 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
       this.selectedProperties = this.propertyList;
     }
     this.displayExistingProperty();
-    if (this.searchType) {
-      this.searchEnumKey = PropertySearchEnum[this.searchType];
-      const key = this.searchEnumKey.split(/(?=[A-Z])/).join(' ');
-      this.searchType === PropertySearchEnum.DiaryEventProperty ? this.searchEnumKey = key : this.searchEnumKey = `${key} Property`;
-    }
+  }
+
+  setProperties() {
+    this.properties = [];
+    this.hasBeenSearched = false;
+    setTimeout(() => {
+      this.searchPropertyInput.nativeElement.focus();
+    });
   }
 
   searchProperty() {
@@ -91,6 +94,7 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
       searchType: this.searchType
     } as RequestOption;
     this.propertyService.autocompleteProperties(requestOptions).subscribe(result => {
+      this.hasBeenSearched = true;
       this.properties = result;
 
     }, error => {

@@ -55,35 +55,43 @@
                   {{selectedCompanyDetails?.companyName}}
                 </button>
                 <button type="button" *ngIf="!isExistingCompany" class="btn btn-light btn-sm ml-2"
-                  (click)="toggleSearchCompany()">Change</button>
+                  (click)="setCompanies()">Change</button>
               </div>
             </div>
           </div>
-          <div class="row" [hidden]="!isSearchCompanyVisible || isExistingCompany">
-            <div class="col-sm-8 col-xl-6 offset-sm-2">
+          <div class="row">
+            <div class="col-sm-3 offset-sm-2" [hidden]="!isSearchCompanyVisible || isExistingCompany">
               <div class="form-group">
-                <label for="company" class="small">Find Company</label>
-                <div class="input-group input-group-sm">
-                  <input #companyNameInput type="search" id="company" class="form-control" formControlName="companyName"
-                    (keydown.enter)="searchCompany()" [ngbTypeahead]="suggestions" [focusFirst]="false"
-                    (selectItem)="selectedSuggestion($event)">
-                  <div class="input-group-append">
-                    <button type="button" class="btn btn-secondary" (click)="searchCompany()">Search</button>
-                  </div>
-                </div>
+                <button type="button" class="btn btn-light btn-sm btn-block" (click)="setCompanies()">
+                  <i class="fas fa-plus mr-2"></i>
+                  Company
+                </button>
               </div>
-              <div class="btn-link btn-sm p-0 mb-3" *ngIf="noSuggestions" (click)="editSelectedCompany(0, true)">
-                <i class="fas fa-plus mr-2"></i>New Company
-              </div>
+            </div>
+            <div class="col-sm-8 col-xl-6 offset-sm-2">
               <div class="off-canvas" [hidden]="!foundCompanies" (click)="foundCompanies = null">
                 <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
                   <h4 class="page-title text-left pt-3">
-                    Pick Company
+                    Company
                     <button type="button" class="close mr-2" aria-label="Close" (click)="foundCompanies = null">
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </h4>
-                  <app-subnav>
+                  <div class="form-group">
+                    <label for="company" class="small">Find</label>
+                    <div class="input-group input-group-sm">
+                      <input #companyNameInput type="search" id="company" class="form-control" formControlName="companyName"
+                        (keydown.enter)="searchCompany()" [ngbTypeahead]="suggestions" [focusFirst]="false"
+                        (selectItem)="selectedSuggestion($event)">
+                      <div class="input-group-append">
+                        <button type="button" class="btn btn-secondary" (click)="searchCompany()">Search</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="btn-link btn-sm p-0 mb-3" *ngIf="noSuggestions" (click)="editSelectedCompany(0, true)">
+                    <i class="fas fa-plus mr-2"></i>New Company
+                  </div>
+                  <app-subnav *ngIf="companiesSearched">
                     <app-subnav-item *ngFor="let company of foundCompanies" (click)="selectCompany(company)">
                       <div [innerHTML]="company.companyName | highlight : companyFinderForm.value.companyName"></div>
                     </app-subnav-item>
