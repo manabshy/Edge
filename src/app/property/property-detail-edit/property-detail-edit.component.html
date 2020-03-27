@@ -21,7 +21,7 @@
     <app-office-finder class="d-block form-group" [officeId]="officeId" [isRequired]="isOfficeIdRequired"
       (selectedOfficeId)="getSelectedOfficeId($event)"></app-office-finder>
     <div class="form-group row">
-      <div class="col-sm-3 offset-2">
+      <div class="col-sm-3 offset-sm-2">
         <label for="propertyTypeId" class="small">Property Type</label>
 
         <select class="custom-select custom-select-sm" id="propertyTypeId" name="propertyTypeId"
@@ -35,7 +35,7 @@
       </div>
     </div>
     <div class="form-group row">
-      <div class="col-sm-3 offset-2">
+      <div class="col-sm-3 offset-sm-2">
         <label for="propertyTypeId" class="small">Property Style</label>
 
         <select #propStyle class="custom-select custom-select-sm" id="propertyStyleId" name="propertyStyleId"
@@ -48,7 +48,7 @@
       </div>
     </div>
     <div class="form-group row">
-      <div class="col-sm-3 offset-2">
+      <div class="col-sm-3 offset-sm-2">
         <label for="region" class="small">Region</label>
         <select class="custom-select custom-select-sm" id="region" name="region" formControlName="regionId"
           (change)="onSelectRegion($event.target.value)" [ngClass]="{'is-invalid':formErrors.regionId}">
@@ -59,7 +59,7 @@
       </div>
     </div>
     <div class="form-group row">
-      <div class="col-sm-3 offset-2">
+      <div class="col-sm-3 offset-sm-2">
         <label for="area" class="small">Area</label>
         <select class="custom-select custom-select-sm" id="area" name="area" formControlName="areaId"
           (change)="onSelectArea($event.target.value)" [ngClass]="{'is-invalid':formErrors.areaId}">
@@ -70,7 +70,7 @@
       </div>
     </div>
     <div class="form-group row">
-      <div class="col-sm-3 offset-2">
+      <div class="col-sm-3 offset-sm-2">
         <label for="subArea" class="small">Sub-Area</label>
         <select class="custom-select custom-select-sm" id="subArea" name="subArea" formControlName="subAreaId"
           [ngClass]="{'is-invalid':formErrors.subAreaId}">
