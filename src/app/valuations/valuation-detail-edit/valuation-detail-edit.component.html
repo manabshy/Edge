@@ -168,76 +168,69 @@
     <fieldset *ngIf="allValuers">
       <h5 class="fieldset-title">Appointment</h5>
       <div class="form-group row">
-        <div class="col-sm-10 offset-sm-2">
+        <div class="col-sm-8 col-xl-4 offset-sm-2">
           <tabset>
             <tab heading="Both" id="both" [active]="isSalesAndLettings" (selectTab)="onSelect($event)">
-              <div class="row">
-                <div class="col-sm-6">
-                  <div class="mb-3">
-                    <app-staff-member-finder [label]="salesValuerLabel" [valuers]="salesValuers"
-                      (selectedStaffMemberId)="getSelectedValuerId($event)">
-                    </app-staff-member-finder>
-                  </div>
-                  <div>
-                    <app-staff-member-finder [label]="lettingsValuerLabel" [valuers]="lettingsValuers"
-                      (selectedStaffMemberId)="getSelectedValuerId($event)">
-                    </app-staff-member-finder>
-                  </div>
-                </div>
+              <div class="form-group">
+                <app-staff-member-finder [label]="salesValuerLabel" [valuers]="salesValuers"
+                  (selectedStaffMemberId)="getSelectedValuerId($event)">
+                </app-staff-member-finder>
+              </div>
+              <div class="form-group">
+                <app-staff-member-finder [label]="lettingsValuerLabel" [valuers]="lettingsValuers"
+                  (selectedStaffMemberId)="getSelectedValuerId($event)">
+                </app-staff-member-finder>
               </div>
             </tab>
             <tab heading="Sales" id="sales" [active]="isSalesOnly" (selectTab)="onSelect($event)">
-              <div class="row">
-                <div class="col-sm-6">
-                  <app-staff-member-finder [label]="salesValuerLabel" [valuers]="salesValuers"
-                    (selectedStaffMemberId)="getSelectedValuerId($event)">
-                  </app-staff-member-finder>
-                </div>
+              <div class="form-group">
+                <app-staff-member-finder [label]="salesValuerLabel" [valuers]="salesValuers"
+                  (selectedStaffMemberId)="getSelectedValuerId($event)">
+                </app-staff-member-finder>
               </div>
             </tab>
             <tab heading="Lettings" id="lettings" [active]="isLettingsOnly" (selectTab)="onSelect($event)">
-              <div class="row">
-                <div class="col-sm-6">
-                  <app-staff-member-finder [label]="lettingsValuerLabel" [valuers]="lettingsValuers"
-                    (selectedStaffMemberId)="getSelectedValuerId($event)">
-                  </app-staff-member-finder>
-                </div>
+              <div class="form-group">
+                <app-staff-member-finder [label]="lettingsValuerLabel" [valuers]="lettingsValuers"
+                  (selectedStaffMemberId)="getSelectedValuerId($event)">
+                </app-staff-member-finder>
               </div>
             </tab>
-            <div class="mt-3 col-sm-5 text-center " *ngIf="canBookAppointment"><button class="btn btn-light btn-sm ml-2"
-                type="button" (click)="getAvailability()">Book
-                Availability</button>
-            </div>
-            <fieldset *ngIf="selectedDate || showDateAndDuration">
-              <div class="form-group row">
-                <div class="col-sm-10" [ngClass]="{'mt-2':'!canBookAppointment'}">
-                  <label class="small">Date & Time</label>
-                  <div class="d-flex d-sm-block">
-                    <label for="changeDate"
-                      class="text-left mobile-btn small">{{(selectedDate || valuation?.valuationDate) | date: 'E d MMM yyyy, HH:mm'}}</label>
-                    <button id="changeDate" class="btn btn-light btn-sm ml-2" type="button" (click)="changeDate()"
-                      *ngIf="isEditable || isNewValuation">Change </button>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-sm-2 form-group">
-                  <label for="valuationDuration" class="small">Duration</label>
-                  <select class="custom-select custom-select-sm single-select" name="valuationDuration"
-                    id="valuationDuration" formControlName="totalHours"
-                    [attr.disabled]="!isEditable && !isNewValuation ? true : null">
-                    <option value="0.5">30 mins</option>
-                    <option value="0.75">45 mins</option>
-                    <option value="1" selected>1 hour</option>
-                    <option value="1.25" selected>1 hour 15 mins</option>
-                    <option value="1.50" selected>1 hour 30 mins</option>
-                    <option value="1.75" selected>1 hour 45 mins</option>
-                    <option value="2" selected>2 hours</option>
-                  </select>
-                </div>
-              </div>
-            </fieldset>
           </tabset>
+          <div class="form-group" *ngIf="canBookAppointment">
+            <button class="btn btn-sm btn-light btn-block"
+              type="button" (click)="getAvailability()">Book
+              Availability</button>
+          </div>
+          <fieldset *ngIf="selectedDate || showDateAndDuration">
+            <div class="form-group row">
+              <div class="col-sm-10" [ngClass]="{'mt-2':'!canBookAppointment'}">
+                <label class="small">Date & Time</label>
+                <div class="d-flex d-sm-block">
+                  <label for="changeDate"
+                    class="text-left mobile-btn small">{{(selectedDate || valuation?.valuationDate) | date: 'E d MMM yyyy, HH:mm'}}</label>
+                  <button id="changeDate" class="btn btn-light btn-sm ml-2" type="button" (click)="changeDate()"
+                    *ngIf="isEditable || isNewValuation">Change </button>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-2 form-group">
+                <label for="valuationDuration" class="small">Duration</label>
+                <select class="custom-select custom-select-sm single-select" name="valuationDuration"
+                  id="valuationDuration" formControlName="totalHours"
+                  [attr.disabled]="!isEditable && !isNewValuation ? true : null">
+                  <option value="0.5">30 mins</option>
+                  <option value="0.75">45 mins</option>
+                  <option value="1" selected>1 hour</option>
+                  <option value="1.25" selected>1 hour 15 mins</option>
+                  <option value="1.50" selected>1 hour 30 mins</option>
+                  <option value="1.75" selected>1 hour 45 mins</option>
+                  <option value="2" selected>2 hours</option>
+                </select>
+              </div>
+            </div>
+          </fieldset>
           <div class="off-canvas" [hidden]="!showCalendar" (click)="closeCalendar()">
             <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
               <p class="page-title text-left pt-3">
