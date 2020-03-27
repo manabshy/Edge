@@ -72,6 +72,7 @@ import { AdditionalInfoComponent } from './additional-info/additional-info.compo
 import { SharedValuationListComponent } from './shared-valuation-list/shared-valuation-list.component';
 import { OfficeFinderComponent } from './office-finder/office-finder.component';
 import { StaffMemberFinderComponent } from './staff-member-finder/staff-member-finder.component';
+import { NoDoubleTapDirective } from './no-double-tap.directive';
 
 
 @NgModule({
@@ -114,7 +115,8 @@ import { StaffMemberFinderComponent } from './staff-member-finder/staff-member-f
     AdditionalInfoComponent,
     SharedValuationListComponent,
     OfficeFinderComponent,
-    StaffMemberFinderComponent
+    StaffMemberFinderComponent,
+    NoDoubleTapDirective
 
   ],
   imports: [
@@ -211,7 +213,8 @@ import { StaffMemberFinderComponent } from './staff-member-finder/staff-member-f
     LoadingBarHttpClientModule,
     AngularStickyThingsModule,
     NgSelectModule,
-    SharedLeadRegisterComponent
+    SharedLeadRegisterComponent,
+    NoDoubleTapDirective
   ],
   entryComponents: [
     ConfirmModalComponent,
