@@ -37,7 +37,7 @@
                   <label class="small" for="dateFrom">Go to Date</label>
                   <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
                     [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
-                    bsDatepicker (bsValueChange)="onDateChange($event)" formControlName="dateFilter">
+                    bsDatepicker (bsValueChange)="onDateChange($event)" (onShown)="onShowPicker($event)" formControlName="dateFilter">
                 </div>
               </div>
             </div>
