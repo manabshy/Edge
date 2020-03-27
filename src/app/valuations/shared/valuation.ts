@@ -4,6 +4,7 @@ import { BaseProperty } from 'src/app/shared/models/base-property';
 import { BaseRequestOption } from 'src/app/shared/models/base-request-option';
 import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
 import { Property } from 'src/app/property/shared/property';
+import { Office } from 'src/app/shared/models/staff-member';
 
 export interface ValuationInfo {
   reason: string;
@@ -57,6 +58,20 @@ export interface ValuationPropertyInfo {
   outsideSpace?: any;
   propertyFeature?: any;
   valuers: BaseStaffMember[];
+}
+export interface OfficeMember {
+  office: Office;
+  staffMembers: BaseStaffMember[];
+}
+
+export interface Valuer {
+  sales: OfficeMember[];
+  lettings: OfficeMember[];
+}
+export interface ValuersAvailabilityOption extends BaseRequestOption {
+  fromDate?: string;
+  staffMemberId1?: number;
+  staffMemberId2?: number;
 }
 export interface ValuationRequestOption extends BaseRequestOption {
   status?: number;

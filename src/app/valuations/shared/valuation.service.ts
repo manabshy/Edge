@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
-import { Valuation, ValuationRequestOption, ValuationPropertyInfo } from './valuation';
+import { Valuation, ValuationRequestOption, ValuationPropertyInfo, Valuer, ValuersAvailabilityOption } from './valuation';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { map, tap } from 'rxjs/operators';
 import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encoder-helper';
@@ -76,6 +76,25 @@ export class ValuationService {
       );
   }
 
+  getValuers(propertyId: number): Observable<Valuer[] | any> {
+    const url = `${AppConstants.baseValuationUrl}/valuers?propertyId=${propertyId}`;
+    return this.http.get<any>(url)
+      .pipe(
+        map(response => response.result),
+        tap(data => console.log('valuers', JSON.stringify(data)))
+      );
+  }
+
+  getValuersAvailability(availability: ValuersAvailabilityOption): Observable<Date[] | any> {
+    const options = this.setAvailabilityQueryParams(availability);
+    const url = `${AppConstants.baseValuationUrl}/valuers/availability`;
+    return this.http.get<any>(url, { params: options })
+      .pipe(
+        map(response => response.result),
+        tap(data => console.log('availability', JSON.stringify(data)))
+      );
+  }
+
   // Extract to instruction service
   addInstruction(instruction: Instruction): Observable<Instruction | any> {
     const url = `${AppConstants.baseValuationUrl}/${instruction.valuationEventId}/instruct`;
@@ -86,6 +105,25 @@ export class ValuationService {
       );
   }
 
+  setAvailabilityQueryParams(requestOption: ValuersAvailabilityOption) {
+    if (!requestOption.page) {
+      requestOption.page = 1;
+    }
+    if (requestOption.pageSize == null) {
+      requestOption.pageSize = 10;
+    }
+    const options = new HttpParams({
+      encoder: new CustomQueryEncoderHelper,
+      fromObject: {
+        pageSize: requestOption.pageSize.toString(),
+        page: requestOption.page.toString(),
+        fromDate: requestOption.fromDate ? requestOption.fromDate.toString() : '',
+        staffMemberId1: requestOption.staffMemberId1.toString(),
+        staffMemberId2: requestOption.staffMemberId2.toString(),
+      }
+    });
+    return options;
+  }
   setQueryParams(requestOption: ValuationRequestOption) {
     if (!requestOption.page) {
       requestOption.page = 1;

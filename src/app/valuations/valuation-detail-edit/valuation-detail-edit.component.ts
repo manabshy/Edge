@@ -17,11 +17,13 @@ import { PropertyService } from 'src/app/property/shared/property.service';
 import { BaseComponent } from 'src/app/shared/models/base-component';
 import { BaseProperty } from 'src/app/shared/models/base-property';
 import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
-import { Valuation, ValuationStatusEnum, ValuationPropertyInfo } from '../shared/valuation';
+import { Valuation, ValuationStatusEnum, ValuationPropertyInfo, Valuer, OfficeMember, ValuersAvailabilityOption } from '../shared/valuation';
 import { ValuationService } from '../shared/valuation.service';
 import { Instruction } from 'src/app/shared/models/instruction';
 import { ResultData } from 'src/app/shared/result-data';
 import { StaffMember } from 'src/app/shared/models/staff-member';
+import { TabDirective } from 'ngx-bootstrap/tabs/ngx-bootstrap-tabs';
+import format from 'date-fns/format';
 
 @Component({
   selector: 'app-valuation-detail-edit',
@@ -67,7 +69,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   allOrigins: InfoDetail[] = [];
   origins: InfoDetail[] = [];
   origin: string;
-  valuers: BaseStaffMember[] = [];
+  valuers: Valuer[] = [];
+  lettingsValuers: OfficeMember[] = [];
+  salesValuers: OfficeMember[] = [];
+  allValuers: Valuer;
+  // valuers: BaseStaffMember[] = [];
   showDateAndDuration: boolean;
   hasDateWithValuer = false;
   activeOriginId: InfoDetail;
@@ -79,6 +85,16 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   isClientService: boolean;
   activeOriginTypes: InfoDetail[] = [];
   isOriginUnknown = false;
+  salesValuerLabel: string;
+  lettingsValuerLabel: string;
+  isSalesOnly: boolean;
+  isSalesAndLettings: boolean;
+  isLettingsOnly: boolean;
+  selectedValuerIdList = [];
+  selectedValuerId: number;
+  availabilityForm: FormGroup;
+  availableDates: Date[];
+
 
   get originTypeControl() {
     return this.valuationForm.get('originType') as FormControl;
@@ -230,6 +246,12 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.setInstructionRentFigures();
       });
 
+    // availability form
+    this.availabilityForm = this.fb.group({
+      fromDate: new Date(),
+      staffMemberId1: 0,
+      staffMemberId2: 0,
+    });
   }
 
   private setupListInfo(info: DropdownListInfo) {
@@ -247,7 +269,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       if (result) {
         this.lastKnownOwner = result.lastKnownOwner;
         this.property = result;
-        this.valuers = result.valuers;
+        // this.valuers = result.valuers;
         const baseProperty = { propertyId: this.property.propertyId, address: this.property.address } as BaseProperty;
         this.valuationForm.get('property').setValue(baseProperty);
         console.log('base property', this.valuationForm.get('property').value);
@@ -393,6 +415,37 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   }
 
+  onSelect(data: TabDirective): void {
+    console.log('tab here...', data);
+    if (this.allValuers) {
+      switch (data.id) {
+        case 'both':
+          this.setValuersForSalesAndLettings();
+          this.isSalesAndLettings = true;
+          break;
+        case 'sales':
+          this.salesValuerLabel = 'Sales Valuer';
+          this.salesValuers = this.allValuers.sales;
+          this.isSalesOnly = true;
+          this.isSalesAndLettings = false;
+          break;
+        case 'lettings':
+          this.lettingsValuerLabel = 'Lettings Valuer';
+          this.lettingsValuers = this.allValuers.lettings;
+          this.isLettingsOnly = true;
+          this.isSalesAndLettings = false;
+          break;
+      }
+    }
+  }
+
+  private setValuersForSalesAndLettings() {
+    this.lettingsValuerLabel = 'Lettings Valuer';
+    this.salesValuerLabel = 'Sales Valuer';
+    this.salesValuers = this.allValuers.sales;
+    this.lettingsValuers = this.allValuers.lettings;
+  }
+
   getValuation(id: number) {
     this.valuationService.getValuation(id).pipe(takeUntil(this.ngUnsubscribe)).subscribe((data => {
       if (data) {
@@ -430,6 +483,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         }
 
         this.getValuers(this.property.propertyId);
+        this.setValuationType(data);
         this.populateForm(data);
         this.setupInitialRentFigures(data);
         if (this.valuation && this.allOrigins) {
@@ -443,6 +497,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       }
     }));
   }
+
 
   populateForm(valuation: Valuation) {
     if (valuation) {
@@ -503,6 +558,25 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         askingRentShortLet: instruction.askingRentShortLet ? instruction.askingRentShortLet : '',
         askingRentShortLetMonthly: instruction.askingRentShortLetMonthly ? instruction.askingRentShortLetMonthly : ''
       });
+    }
+  }
+
+  setValuationType(val: Valuation) {
+    switch (true) {
+      case val.suggestedAskingPrice && !(val.suggestedAskingRentShortLet || val.suggestedAskingRentLongLet):
+        this.isSalesOnly = true;
+        console.log('%csales', 'color:red', this.isSalesOnly);
+        break;
+      case val.suggestedAskingRentShortLet || val.suggestedAskingRentLongLet && !val.suggestedAskingPrice:
+        this.isLettingsOnly = true;
+        console.log('%c lettings', 'color:green', this.isLettingsOnly);
+        break;
+      case !!(val.suggestedAskingRentShortLet || val.suggestedAskingRentLongLet && val.suggestedAskingPrice):
+        this.isSalesAndLettings = true;
+        console.log('%csales and lettings', 'color:blue', this.isSalesAndLettings);
+        break;
+      default:
+        this.isSalesAndLettings = true;
     }
   }
 
@@ -613,6 +687,66 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   }
 
+  getSelectedValuerId(id: number) {
+    if (id) {
+      console.log('id in val', id);
+      switch (true) {
+        case this.isSalesAndLettings:
+          this.selectedValuerIdList.push(id);
+          console.log('array here', this.selectedValuerIdList);
+          break;
+
+        default:
+          this.selectedValuerId = id;
+          break;
+      }
+    }
+  }
+
+  getAvailability() {
+    console.log('here...,open canvas', this.selectedValuerId);
+    this.showCalendar = true;
+    if (this.isSalesAndLettings) {
+      this.availabilityForm.patchValue({
+        staffMemberId1: this.selectedValuerIdList[0],
+        staffMemberId2: this.selectedValuerIdList[1],
+      });
+      console.log('all dis', this.selectedValuerIdList);
+    } else {
+      console.log('selected dis', this.selectedValuerId);
+      this.availabilityForm.patchValue({
+        staffMemberId1: this.selectedValuerId
+      });
+    }
+    console.log('availform', this.availabilityForm.value);
+  }
+
+  searchAvailabilty() {
+    const availability = { ...this.availabilityForm.value };
+    console.log('here...,searvch', availability);
+    const request = {
+      fromDate: format(availability.fromDate, 'YYYY-MM-DD'),
+      staffMemberId1: availability.staffMemberId1,
+      staffMemberId2: availability.staffMemberId2,
+    } as ValuersAvailabilityOption;
+
+    this.valuationService.getValuersAvailability(request).subscribe(res => {
+      this.availableDates = res;
+      console.log('res', res)
+      console.log('res', this.availableDates)
+    })
+  }
+  selectAvailableDate(date: Date) {
+    if (date) {
+      this.selectedDate = date;
+      if (this.valuation && !this.valuation.valuationDate) {
+        this.valuation.valuationDate = date;
+      }
+      this.valuationForm.get('valuationDate').setValue(date);
+      console.log('selected available date in val edit', date);
+      this.showCalendar = false;
+    }
+  }
   getSelectedDate(date: Date) {
     if (date) {
       this.selectedDate = date;
@@ -668,8 +802,22 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   private getValuers(propId: number) {
     if (this.valuers && !this.valuers.length) {
+      this.valuationService.getValuers(propId).pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe(data => {
+          this.allValuers = data;
+          if (this.isNewValuation) {
+            console.log('for new vals valuers', this.allValuers);
+            this.setValuersForSalesAndLettings();
+            this.isSalesAndLettings = true;
+          }
+          console.log('valuers', this.allValuers);
+        });
+    }
+  }
+  private getValuersOld(propId: number) {
+    if (this.valuers && !this.valuers.length) {
       this.propertyService.getProperty(propId, false, false, true).pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe(data => this.valuers = data.valuers);
+        .subscribe();
     }
   }
 
