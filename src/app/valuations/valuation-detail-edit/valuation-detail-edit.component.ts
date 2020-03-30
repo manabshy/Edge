@@ -96,7 +96,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   selectedValuerId: number;
   availabilityForm: FormGroup;
   availableDates: Date[];
-  canBookAppointment: boolean = false;
+  canBookAppointment = false;
 
 
   get originTypeControl() {
@@ -269,19 +269,23 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     });
   }
   setCanBookAppointmentFlag() {
+    console.log('first cond', !!(this.isSalesOnly && this.salesValuerControl.value))
     switch (true) {
-      case this.isSalesOnly && this.salesValuerControl.value:
+      case !!(this.isSalesAndLettings && this.salesValuerControl.value && this.lettingsValuerControl.value):
         this.canBookAppointment = true;
-        break;
-      case this.isLettingsOnly && this.lettingsValuerControl.value:
-        this.canBookAppointment = true;
-        break;
-      case this.isSalesAndLettings && this.salesValuerControl.value && this.lettingsValuerControl.value:
-        this.canBookAppointment = true;
+        console.log('canb ook all', this.canBookAppointment)
         break;
 
-      // default:
-      //   break;
+      case !!(this.isSalesOnly && this.salesValuerControl.value):
+        this.canBookAppointment = true;
+        console.log('canb ook sale only', this.canBookAppointment)
+
+        break;
+      case !!(this.isLettingsOnly && this.lettingsValuerControl.value):
+        this.canBookAppointment = true;
+        console.log('canb ook let ony', this.canBookAppointment)
+
+        break;
     }
   }
 
@@ -744,6 +748,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   onLettingsValuerChange(valuer: BaseStaffMember) {
     console.log('lettings valuer in val', valuer);
+
   }
   onSalesValuerChange(valuer: BaseStaffMember) {
     console.log('sales valuer in val', valuer);
