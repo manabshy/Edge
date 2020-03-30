@@ -94,7 +94,10 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
       this.getLabel();
       this.diaryHeaderForm.patchValue({ 
         dateFilter: this.viewDate
-      }, {emitEvent: false, onlySelf: true}) 
+      },
+      //  {emitEvent: false, onlySelf: true}
+       ) 
+       this.datepickerDropdown.hide();
     }
   }
 
@@ -147,9 +150,6 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
   onDateChange(date){
     if(date!=this.viewDate){  
       this.dateChange.emit(date)
-    }
-    if(!this.datepickerDropdown.isOpen){
-      this.datepickerDropdown.hide();
     }
   }
 
