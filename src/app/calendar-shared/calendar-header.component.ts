@@ -94,7 +94,10 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
       this.getLabel();
       this.diaryHeaderForm.patchValue({ 
         dateFilter: this.viewDate
-      }, {emitEvent: false, onlySelf: true}) 
+      },
+      //  {emitEvent: false, onlySelf: true}
+       ) 
+       this.datepickerDropdown.hide();
     }
   }
 
@@ -148,8 +151,23 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
     if(date!=this.viewDate){  
       this.dateChange.emit(date)
     }
-    if(!this.datepickerDropdown.isOpen){
-      this.datepickerDropdown.hide();
-    }
   }
+
+  onShowPicker(event) {
+    const dayHoverHandler = event.dayHoverHandler;
+    const hoverWrapper = (hoverEvent) => {
+        const { cell, isHovered } = hoverEvent;
+
+        if ((isHovered &&
+          !!navigator.platform &&
+          /iPad|iPhone|iPod/.test(navigator.platform)) &&
+          'ontouchstart' in window
+        ) {
+            (this.datepickerDropdown as any)._datepickerRef.instance.daySelectHandler(cell);
+        }
+
+        return dayHoverHandler(hoverEvent);
+    };
+    event.dayHoverHandler = hoverWrapper;
+}
 }

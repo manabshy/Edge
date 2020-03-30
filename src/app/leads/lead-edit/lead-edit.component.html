@@ -32,6 +32,8 @@
                     formControlName="nextChaseDate"
                     [bsConfig]="{showWeekNumbers:false, useUtc: false, dateInputFormat: 'DD/MM/YYYY', minDate:todaysDate, customTodayClass: 'font-weight-bold'}"
                     bsDatepicker [attr.disabled]="isLeadClosed ? true : null"
+                    #datepicker="bsDatepicker"
+                    [appNoDoubleTap]='datepicker' 
                     (bsValueChange)="onChaseDateChange($event)"
                     [ngClass]="{'is-invalid': (formErrors?.nextChaseDate)}">
                   <div class="invalid-feedback">{{formErrors?.nextChaseDate}}</div>

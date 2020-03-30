@@ -42,7 +42,9 @@
           <label class="small" for="dateFrom">Date From</label>
           <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
             [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
-            bsDatepicker formControlName="dateFrom">
+            bsDatepicker 
+            #datepicker="bsDatepicker"
+            [appNoDoubleTap]='datepicker' formControlName="dateFrom">
         </div>
         <div class="col-sm form-group">
           <label class="small" for="dateTo">Date To</label>
