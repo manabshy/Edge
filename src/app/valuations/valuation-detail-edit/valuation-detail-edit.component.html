@@ -169,37 +169,48 @@
       <h5 class="fieldset-title">Appointment</h5>
       <div class="form-group row">
         <div class="col-sm-8 col-xl-4 offset-sm-2">
-          <tabset>
-            <tab heading="Both" id="both" [active]="isSalesAndLettings" (selectTab)="onSelect($event)">
-              <div class="form-group">
-                <app-staff-member-finder [label]="salesValuerLabel" [valuers]="salesValuers"
-                  (selectedStaffMemberId)="getSelectedValuerId($event)">
-                </app-staff-member-finder>
-              </div>
-              <div class="form-group">
-                <app-staff-member-finder [label]="lettingsValuerLabel" [valuers]="lettingsValuers"
-                  (selectedStaffMemberId)="getSelectedValuerId($event)">
-                </app-staff-member-finder>
-              </div>
-            </tab>
-            <tab heading="Sales" id="sales" [active]="isSalesOnly" (selectTab)="onSelect($event)">
-              <div class="form-group">
-                <app-staff-member-finder [label]="salesValuerLabel" [valuers]="salesValuers"
-                  (selectedStaffMemberId)="getSelectedValuerId($event)">
-                </app-staff-member-finder>
-              </div>
-            </tab>
-            <tab heading="Lettings" id="lettings" [active]="isLettingsOnly" (selectTab)="onSelect($event)">
-              <div class="form-group">
-                <app-staff-member-finder [label]="lettingsValuerLabel" [valuers]="lettingsValuers"
-                  (selectedStaffMemberId)="getSelectedValuerId($event)">
-                </app-staff-member-finder>
-              </div>
-            </tab>
-          </tabset>
-          <div class="form-group" *ngIf="canBookAppointment">
-            <button class="btn btn-sm btn-light btn-block"
-              type="button" (click)="getAvailability()">Book
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="type" id="both" value="both" formControlName="type">
+            <label class="form-check-label" for="both">Both</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="type" id="sales" value="sales" formControlName="type">
+            <label class="form-check-label" for="sales">Sales</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="type" id="lettings" value="lettings"
+              formControlName="type">
+            <label class="form-check-label" for="lettings">Lettings</label>
+          </div>
+          <div class="form-group" [hidden]="!isSalesOnly">
+            <label for="salesValuer" class="small">Sales Valuer</label>
+            <ng-select placeholder="Select Valuer" [items]="salesValuers" bindLabel="fullName" bindValue="staffMemberId"
+              groupBy="staffMembers" [multiple]="false" formControlName="salesValuer"
+              (change)="onSalesValuerChange($event)">
+              <ng-template ng-optgroup-tmp let-item="item">
+                {{item.office?.name}}
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item">
+                {{item.fullName}}
+              </ng-template>
+            </ng-select>
+          </div>
+          <div class="form-group" [hidden]="!isLettingsOnly">
+            <label for="lettingsValuer" class="small">Lettings Valuer</label>
+            <ng-select placeholder="Select Valuer" [items]="lettingsValuers" bindLabel="fullName"
+              bindValue="staffMemberId" groupBy="staffMembers" [multiple]="false" formControlName="lettingsValuer"
+              (change)="onLettingsValuerChange($event)">
+
+              <ng-template ng-optgroup-tmp let-item="item">
+                {{item.office?.name}}
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item">
+                {{item.fullName}}
+              </ng-template>
+            </ng-select>
+          </div>
+          <div class="form-group mt-3">
+            <button class="btn btn-sm btn-light btn-block" type="button" (click)="getAvailability()">Book
               Availability</button>
           </div>
           <fieldset *ngIf="selectedDate || showDateAndDuration">

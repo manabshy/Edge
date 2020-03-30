@@ -87,22 +87,34 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   isOriginUnknown = false;
   salesValuerLabel: string;
   lettingsValuerLabel: string;
-  isSalesOnly: boolean;
   isSalesAndLettings: boolean;
+  isSalesOnly: boolean;
   isLettingsOnly: boolean;
+  isSales: boolean;
+  isLettings: boolean;
   selectedValuerIdList = [];
   selectedValuerId: number;
   availabilityForm: FormGroup;
   availableDates: Date[];
-  canBookAppointment: boolean;
+  canBookAppointment: boolean = false;
 
 
   get originTypeControl() {
     return this.valuationForm.get('originType') as FormControl;
   }
+  get valuationTypeControl() {
+    return this.valuationForm.get('type') as FormControl;
+  }
   get originIdControl() {
     return this.valuationForm.get('originId') as FormControl;
   }
+  get salesValuerControl() {
+    return this.valuationForm.get('salesValuer') as FormControl;
+  }
+  get lettingsValuerControl() {
+    return this.valuationForm.get('lettingsValuer') as FormControl;
+  }
+
   get isInvitationSent() {
     return this.valuationForm.get('isInvitationSent') as FormControl;
   }
@@ -236,9 +248,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     });
 
     this.valuationForm.valueChanges
-      .subscribe(() => {
+      .subscribe((data) => {
         this.sharedService.logValidationErrors(this.valuationForm, false);
         this.setRentFigures();
+        this.toggleValuerType();
+        this.setCanBookAppointmentFlag();
       });
 
     this.instructionForm.valueChanges.pipe(debounceTime(100), distinctUntilChanged())
@@ -253,6 +267,42 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       staffMemberId1: 0,
       staffMemberId2: 0,
     });
+  }
+  setCanBookAppointmentFlag() {
+    switch (true) {
+      case this.isSalesOnly && this.salesValuerControl.value:
+        this.canBookAppointment = true;
+        break;
+      case this.isLettingsOnly && this.lettingsValuerControl.value:
+        this.canBookAppointment = true;
+        break;
+      case this.isSalesAndLettings && this.salesValuerControl.value && this.lettingsValuerControl.value:
+        this.canBookAppointment = true;
+        break;
+
+      // default:
+      //   break;
+    }
+  }
+
+  toggleValuerType() {
+    switch (this.valuationTypeControl.value) {
+      case 'sales':
+        this.isSalesOnly = true;
+        this.isLettingsOnly = false;
+        break;
+      case 'lettings':
+        this.isLettingsOnly = true;
+        this.isSalesOnly = false;
+        break;
+
+      default:
+        this.isSalesOnly = true;
+        this.isLettingsOnly = true;
+        this.isSalesAndLettings = true;
+
+        break;
+    }
   }
 
   private setupListInfo(info: DropdownListInfo) {
@@ -366,7 +416,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       parking: [''],
       propertyFeature: [''],
       approxLeaseExpiryDate: [''],
-      valuer: [''],
+      salesValuer: [''],
+      lettingsValuer: [''],
       isInvitationSent: true,
       totalHours: [1],
       attendees: [''],
@@ -376,7 +427,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       suggestedAskingRentLongLet: [],
       suggestedAskingRentShortLet: [],
       suggestedAskingRentLongLetMonthly: [],
-      suggestedAskingRentShortLetMonthly: []
+      suggestedAskingRentShortLetMonthly: [],
+      type: ['']
     });
   }
 
@@ -394,14 +446,14 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     });
   }
 
-  selectMainStaffMember(staffMember: BaseStaffMember) {
-    this.mainStaffMember = staffMember;
-    this.staffMemberId = staffMember.staffMemberId;
-    this.showCalendar = true;
-    this.showOnlyMainStaffMember = true;
-    this.isSelectingDate = true;
-    this.valuationForm.get('valuer').setValue(staffMember);
-  }
+  // selectMainStaffMember(staffMember: BaseStaffMember) {
+  //   this.mainStaffMember = staffMember;
+  //   this.staffMemberId = staffMember.staffMemberId;
+  //   this.showCalendar = true;
+  //   this.showOnlyMainStaffMember = true;
+  //   this.isSelectingDate = true;
+  //   this.valuationForm.get('valuer').setValue(staffMember);
+  // }
 
   closeCalendar() {
     this.showCalendar = false;
@@ -459,8 +511,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.isEditable = false;
         } else { this.isEditable = true; }
 
-        if (this.valuation.valuer) {
-          this.mainStaffMember = this.valuation.valuer;
+        if (this.valuation.salesValuer || this.valuation.lettingsValuer) {
+          this.mainStaffMember = this.valuation.salesValuer;
           if (this.isEditable) {
             if (this.valuation.valuationDate) {
               this.showDateAndDuration = true;
@@ -519,7 +571,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         outsideSpace: valuation.outsideSpace,
         parking: valuation.parking,
         propertyFeature: valuation.propertyFeature,
-        valuer: valuation.valuer,
+        salesValuer: valuation.salesValuer.staffMemberId,
+        lettingsValuer: valuation.lettingsValuer.staffMemberId,
         attendees: valuation.attendees,
         valuationDate: valuation.valuationDate,
         totalHours: valuation.totalHours || 1,
@@ -689,40 +742,28 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   }
 
-  getSelectedValuerId(id: number) {
-    if (id) {
-    }
-    console.log('id in val', id);
-    switch (true) {
-      case this.isSalesAndLettings:
-        this.selectedValuerIdList.push(id);
-        this.selectedValuerIdList.length === 2 ? this.canBookAppointment = true : this.canBookAppointment = false;
-        console.log('array here', this.selectedValuerIdList);
-        break;
-
-      default:
-        this.selectedValuerId = id;
-        this.selectedValuerId ? this.canBookAppointment = true : this.canBookAppointment = false;
-        break;
-    }
+  onLettingsValuerChange(valuer: BaseStaffMember) {
+    console.log('lettings valuer in val', valuer);
+  }
+  onSalesValuerChange(valuer: BaseStaffMember) {
+    console.log('sales valuer in val', valuer);
   }
 
+
   getAvailability() {
-    console.log('here...,open canvas', this.selectedValuerId);
     this.showCalendar = true;
-    if (this.isSalesAndLettings) {
+    if (this.isSalesAndLettings && this.salesValuerControl.value && this.lettingsValuerControl.value) {
       this.availabilityForm.patchValue({
-        staffMemberId1: this.selectedValuerIdList[0],
-        staffMemberId2: this.selectedValuerIdList[1],
+        staffMemberId1: this.salesValuerControl.value,
+        staffMemberId2: this.lettingsValuerControl.value,
       });
-      console.log('all dis', this.selectedValuerIdList);
+      console.log('all', this.availabilityForm.value);
     } else {
-      console.log('selected dis', this.selectedValuerId);
       this.availabilityForm.patchValue({
-        staffMemberId1: this.selectedValuerId
+        staffMemberId1: this.salesValuerControl.value || this.lettingsValuerControl.value
       });
+      console.log('single', this.availabilityForm.value);
     }
-    console.log('availform', this.availabilityForm.value);
   }
 
   searchAvailabilty() {
@@ -736,9 +777,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
     this.valuationService.getValuersAvailability(request).subscribe(res => {
       this.availableDates = res;
-      console.log('res', res)
-      console.log('res', this.availableDates)
-    })
+      console.log('res', res);
+      console.log('res', this.availableDates);
+    });
   }
   selectAvailableDate(date: Date) {
     if (date) {
@@ -785,7 +826,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   setMain(staffMember: BaseStaffMember) {
     if (staffMember) {
-      this.selectMainStaffMember(staffMember);
+      // this.selectMainStaffMember(staffMember);
       this.removeAttendee(staffMember.staffMemberId);
       this.isSelectingDate = true;
     }
