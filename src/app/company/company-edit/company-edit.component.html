@@ -32,7 +32,10 @@
               <input type="text" id="amlDate" placeholder="dd/mm/yyyy" class="form-control fake-readonly"
                 formControlName="amlCompletedDate"
                 [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', maxDate:todaysDate, customTodayClass: 'font-weight-bold'}"
-                bsDatepicker readonly>
+                bsDatepicker
+                #datepicker="bsDatepicker"
+                [appNoDoubleTap]='datepicker'  
+                readonly>
               <div class="input-group-append" *ngIf="companyForm.value.amlCompletedDate">
                 <button type="button" class="btn btn-light"
                   (click)="clearControlValue(companyForm.get('amlCompletedDate'))">

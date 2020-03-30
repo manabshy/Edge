@@ -91,6 +91,8 @@
               formControlName="startDateTime"
               [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', minDate:minDate, customTodayClass: 'font-weight-bold'}"
               (bsValueChange)="onStartDateChange($event)" bsDatepicker
+              #datepicker="bsDatepicker"
+              [appNoDoubleTap]='datepicker' 
               [attr.disabled]="!isEditable && !isNewEvent ? true : null">
             <select *ngIf="!isAllDay" class="custom-select custom-select-sm" name="startHour" id="startHour"
               formControlName="startHour" [attr.disabled]="!isEditable && !isNewEvent ? true : null">
