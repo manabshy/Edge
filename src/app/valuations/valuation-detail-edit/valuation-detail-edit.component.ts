@@ -428,7 +428,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       suggestedAskingRentShortLet: [],
       suggestedAskingRentLongLetMonthly: [],
       suggestedAskingRentShortLetMonthly: [],
-      type: ['']
+      type: ['both']
     });
   }
 
