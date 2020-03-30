@@ -37,7 +37,7 @@ export class SharedService {
   back() {
     if (!(window.opener && window.opener !== window)) {
       if (AppUtils.deactivateRoute) {
-        this._router.navigate([AppUtils.deactivateRoute]);
+        this._router. navigateByUrl(AppUtils.deactivateRoute);
         AppUtils.deactivateRoute = '';
       } else {
         this._location.back();
