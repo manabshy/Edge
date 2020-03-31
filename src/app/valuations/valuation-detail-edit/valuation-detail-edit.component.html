@@ -13,11 +13,11 @@
       <app-signer label="Last known owner" [createdSigner]="createdSigner" [existingSigner]="lastKnownOwner"
         (selectedSigner)="getSelectedOwner($event)" (newSigner)="createNewSigner()"
         [readOnly]="!isEditable && !isNewValuation"></app-signer>
-      <div class="row">
+      <div class="row" *ngIf="isClientService">
         <div class="col-sm-8 col-xl-6 offset-sm-2">
           <label for="originId" class="small">Vendor Origin</label>
           <div class="row form-group">
-            <div class="col-sm" *ngIf="(isEditable || isNewValuation) && isClientService">
+            <div class="col-sm" *ngIf="(isEditable || isNewValuation)">
               <select class="custom-select custom-select-sm" name="originTypes" id="originTypes"
                 formControlName="originType" arial-label="Origin Types" (change)="onSelectType($event.target.value)"
                 [attr.disabled]="!isEditable && !isNewValuation ? true : null"
@@ -27,7 +27,7 @@
               </select>
               <div class="invalid-feedback">{{formErrors?.originType}}</div>
             </div>
-            <ng-container *ngIf="(showOriginId && isClientService) else originValue">
+            <ng-container *ngIf="(showOriginId) else originValue">
               <div class="col-sm">
                 <select class="custom-select custom-select-sm" name="originId" id="originId" formControlName="originId"
                   aria-label="Origins" [attr.disabled]="!isEditable && !isNewValuation ? true : null"

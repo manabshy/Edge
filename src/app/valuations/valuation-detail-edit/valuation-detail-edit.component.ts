@@ -189,13 +189,14 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.storage.get('currentUser').subscribe((currentStaffMember: StaffMember) => {
       if (currentStaffMember) {
         // for testing purposes
-        if (currentStaffMember.activeDepartments[0].departmentId !== 90) {
+        if (currentStaffMember.activeDepartments[0].departmentId === 90) {
           this.isClientService = true;
           this.setOriginTypeValidator();
           this.setOriginIdValidator();
         } else {
           this.isClientService = false;
           this.isOriginUnknown = true;
+          this.originIdControl.setValue(1);
           this.origin = 'Not Known';
         }
       }
