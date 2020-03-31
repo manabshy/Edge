@@ -223,7 +223,7 @@
                 <div class="d-flex d-sm-block">
                   <label for="changeDate"
                     class="text-left mobile-btn small">{{(selectedDate || valuation?.valuationDate) | date: 'E d MMM yyyy, HH:mm'}}</label>
-                  <button id="changeDate" class="btn btn-light btn-sm ml-2" type="button" (click)="changeDate()"
+                  <button id="changeDate" class="btn btn-light btn-sm ml-2" type="button" (click)="getAvailability()"
                     *ngIf="isEditable || isNewValuation">Change </button>
                 </div>
               </div>
@@ -271,7 +271,7 @@
                 <app-subnav>
                   <ng-container *ngIf="availableDates">
                    <div class="form-group" *ngIf="availableDates?.thisWeek">
-                     <span>This Week</span>
+                     <strong>This Week</strong>
                       <app-subnav-item *ngFor="let slot of availableDates?.thisWeek"
                         (click)="selectAvailableDate(slot); properties = null">
                         <div class="row">
@@ -282,7 +282,7 @@
                       </app-subnav-item>
                    </div>
                    <div class="form-group" *ngIf="availableDates?.nextWeek">
-                     <span>Next Week</span>
+                     <strong>Next Week</strong>
                       <app-subnav-item *ngFor="let slot of availableDates?.nextWeek"
                         (click)="selectAvailableDate(slot); properties = null">
                         <div class="row">
@@ -293,7 +293,7 @@
                       </app-subnav-item>
                    </div>
                    <div class="form-group" *ngIf="availableDates?.next2Weeks">
-                     <span>Next Two Weeks</span>
+                     <strong>Next Two Weeks</strong>
                       <app-subnav-item *ngFor="let slot of availableDates?.next2Weeks"
                         (click)="selectAvailableDate(slot); properties = null">
                         <div class="row">
