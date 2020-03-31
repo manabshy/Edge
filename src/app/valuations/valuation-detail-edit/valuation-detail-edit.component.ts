@@ -597,7 +597,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       type = 'sales';
     }
     if (this.valuation.lettingsValuer && !this.valuation.salesValuer) {
-      type = 'sales';
+      type = 'lettings';
     }
     return type;
   }
