@@ -13,4 +13,9 @@
   <div class="text-left text-muted">
     <small>IT REF: {{title}}</small>
   </div>
+
+  <div *ngIf="!desc">
+    <p *ngIf="error">error:{{error | json}} </p>
+    <p *ngIf="triggeredBy">triggeredby:{{triggeredBy | json}} </p>
+  </div>
 </div>

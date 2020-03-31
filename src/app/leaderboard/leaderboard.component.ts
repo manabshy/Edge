@@ -220,7 +220,7 @@ export class LeaderboardComponent implements OnInit {
       this.toastrService.warning('Unable to download leaderboard');
     }
     leaderboard$.subscribe(result => this.data = result, (error: WedgeError) => {
-      this.sharedService.showError(error);
+      this.sharedService.showError(error, 'leaderboard->leaderboard$');
     });
   }
 

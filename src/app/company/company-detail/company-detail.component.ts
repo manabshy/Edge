@@ -54,7 +54,7 @@ export class CompanyDetailComponent implements OnInit {
       }
     }, error => {
       this.errorMessage = <any>error;
-      this.sharedService.showError(this.errorMessage);
+      this.sharedService.showError(this.errorMessage, 'company-detail->getCompanyDetails');
     });
   }
 

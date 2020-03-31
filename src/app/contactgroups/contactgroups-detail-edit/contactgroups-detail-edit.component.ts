@@ -266,7 +266,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
       this.displayPersonDetails(data);
     }, error => {
       this.errorMessage = <any>error;
-      this.sharedService.showError(this.errorMessage);
+      this.sharedService.showError(this.errorMessage, 'contactgroup-details-edit-> getPersonDetails');
     });
   }
 
@@ -553,7 +553,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
           this.contactGroupService.updatePerson(person).subscribe(res => this.onSaveComplete(res.result, otherPersonToAdd),
             (error: WedgeError) => {
               this.errorMessage = error;
-              this.sharedService.showError(this.errorMessage);
+              this.sharedService.showError(this.errorMessage, 'contactgroup-details-edit-> contactGroupService.updatePerson');
               this.isSubmitting = false;
               this.isSubmittingAndAdd = false;
             });
@@ -564,7 +564,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
           },
             (error: WedgeError) => {
               this.errorMessage = error;
-              this.sharedService.showError(this.errorMessage);
+              this.sharedService.showError(this.errorMessage,'contactgroup-details-edit-> contactGroupService.addPerson');
               this.isSubmitting = false;
               this.isSubmittingAndAdd = false;
             });

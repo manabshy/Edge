@@ -101,7 +101,7 @@ export class SmsModalComponent implements OnInit {
           this.onSaveComplete(status),
           (error: WedgeError) => {
             this.errorMessage = error;
-            this.sharedService.showError(this.errorMessage);
+            this.sharedService.showError(this.errorMessage, 'sms-modal->sendSMS');
             this.isSubmitting = false;
           });
       } else {

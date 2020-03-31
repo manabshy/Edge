@@ -33,6 +33,7 @@ import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CalendarView } from '../shared/calendar-shared';
 import { isSame } from 'ngx-bootstrap/chronos/public_api';
+import { SharedService } from 'src/app/core/services/shared.service';
 
 
 function floorToNearest(amount: number, precision: number) {
@@ -92,7 +93,8 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
     private storage: StorageMap,
     private router: Router,
     private route: ActivatedRoute,
-    private cdr: ChangeDetectorRef) { }
+    private cdr: ChangeDetectorRef,
+    private sharedService:SharedService) { }
 
   ngOnInit() {
 
@@ -218,7 +220,8 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
       }
       this.id=this.selectedStaffMemberId
       const request= {
-        staffMemberId: this.selectedStaffMemberId || this.id || 0,
+        // staffMemberId: this.selectedStaffMemberId || this.id || 0,
+        staffMemberId: -1,
         startDate: format(monthStart, 'YYYY-MM-DD'),
         endDate: format(monthEnd, 'YYYY-MM-DD'),
       }
@@ -248,6 +251,8 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
           );
         }
       });
+    }, error=>{
+      this.sharedService.showError(error, 'calendar->getDiaryEvents');
     });
   }
 

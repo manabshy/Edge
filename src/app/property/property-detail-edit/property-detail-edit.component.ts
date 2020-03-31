@@ -341,7 +341,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
           if (res) { this.onSaveComplete(res); }
         }, (error: WedgeError) => {
           this.errorMessage = error;
-          this.sharedService.showError(this.errorMessage);
+          this.sharedService.showError(this.errorMessage, 'property-detail-edit->addProperty');
           this.isSubmitting = false;
         });
       }
@@ -350,7 +350,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
         this.isSubmitting = true;
         this.propertyService.updateProperty(property).subscribe(res => this.onSaveComplete(res.result), (error: WedgeError) => {
           this.errorMessage = error;
-          this.sharedService.showError(this.errorMessage);
+          this.sharedService.showError(this.errorMessage, 'property-detail-edit->updateProperty');
           this.isSubmitting = false;
         });
       }

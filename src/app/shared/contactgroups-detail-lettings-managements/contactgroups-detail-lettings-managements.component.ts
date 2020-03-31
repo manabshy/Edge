@@ -32,7 +32,7 @@ export class ContactgroupsDetaillettingsManagementsComponent implements OnChange
       .pipe(
         catchError((error: WedgeError) => {
           this.errorMessage = error;
-          this.sharedService.showError(this.errorMessage);
+          this.sharedService.showError(this.errorMessage, 'contactgroup-detail-lettings-managements->getLettingsManagements');
           return EMPTY;
         }));
   }

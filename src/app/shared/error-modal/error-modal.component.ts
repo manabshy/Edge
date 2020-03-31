@@ -12,6 +12,8 @@ export class ErrorModalComponent implements OnInit {
   @Input() title;
   @Input() desc;
   @Input() techDet;
+  @Input() error;
+  @Input() triggeredBy;
   subject: Subject<boolean>;
   url: string;
 

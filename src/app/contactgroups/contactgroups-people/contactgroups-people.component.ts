@@ -147,7 +147,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
           this.setImportantNotes();
         },
           (error: WedgeError) => {
-            this.sharedService.showError(error);
+            this.sharedService.showError(error, 'contactgroups-people->contactGroupService.noteChanges$');
           });
       }
     });
@@ -294,7 +294,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.isTypePicked = true;
       },
         (error: WedgeError) => {
-          this.sharedService.showError(error);
+          this.sharedService.showError(error, 'contactgroups-people->getContactGroupById');
         });
   }
 
@@ -315,7 +315,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       }
     },
       (error: WedgeError) => {
-        this.sharedService.showError(error);
+        this.sharedService.showError(error, 'contactgroups-people->getContactGroupFirstPerson');
       });
   }
   getPersonDetails(personId: number) {
@@ -368,7 +368,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.companiesSearched = true;
       this.foundCompanies = data;
     }, (error: WedgeError) => {
-      this.sharedService.showError(error);
+      this.sharedService.showError(error, 'contactgroups-people->findCompany');
     });
   }
 
@@ -425,7 +425,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
           this.bottomReached = true;
         }
       }, (error: WedgeError) => {
-        this.sharedService.showError(error);
+        this.sharedService.showError(error, 'contactgroups-people->getNextContactNotesPage');
       });
   }
 
@@ -521,7 +521,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.selectedCompanyDetails = data;
       this.isSearchCompanyVisible = false;
     }, (error: WedgeError) => {
-      this.sharedService.showError(error);
+      this.sharedService.showError(error, 'contactgroups-people->getCompanyDetails');
     });
   }
 
@@ -532,7 +532,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       }
     }, error => {
       this.errorMessage = <any>error;
-      this.sharedService.showError(this.errorMessage);
+      this.sharedService.showError(this.errorMessage, 'contactgroups-people->getSignerDetails');
     });
   }
 
@@ -671,7 +671,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
             this.onSaveComplete(res.result.contactGroupId);
           }, (error: WedgeError) => {
             this.errorMessage = error;
-            this.sharedService.showError(this.errorMessage);
+            this.sharedService.showError(this.errorMessage,'contactgroups-people->addContactGroup1');
             this.isSubmitting = false;
           });
       } else {
@@ -688,7 +688,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
           this.onSaveComplete(res.result.contactGroupId);
         }, (error: WedgeError) => {
           this.errorMessage = error;
-          this.sharedService.showError(this.errorMessage);
+          this.sharedService.showError(this.errorMessage,'contactgroups-people->addContactGroup2');
           this.isSubmitting = false;
         });
     }
@@ -706,7 +706,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.onSaveComplete(res.result.contactGroupId);
       }, (error: WedgeError) => {
         this.errorMessage = error;
-        this.sharedService.showError(this.errorMessage);
+        this.sharedService.showError(this.errorMessage,'contactgroups-people->updateContactGroup');
         this.isSubmitting = false;
       });
   }

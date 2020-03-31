@@ -106,7 +106,7 @@ export class AppComponent extends BaseComponent implements OnInit {
             console.log('app component current user from db', data);
           }
         }, (error: WedgeError) => {
-          this.sharedService.showError(error);
+          this.sharedService.showError(error, 'app->getCurrentStaffMember');
         });
       }
     });

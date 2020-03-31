@@ -81,12 +81,14 @@ export class SharedService {
     return warns[0];
   }
 
-  showError(error: WedgeError) {
+  showError(error: WedgeError, triggeredBy) {
     const subject = new Subject<boolean>();
     const initialState = {
       title: error.requestId,
       desc: error.displayMessage,
-      techDet: error.technicalDetails
+      techDet: error.technicalDetails,
+      triggeredBy,
+      error
     };
     const modal = this.modalService.show(ErrorModalComponent, { ignoreBackdropClick: true, initialState });
     modal.content.subject = subject;

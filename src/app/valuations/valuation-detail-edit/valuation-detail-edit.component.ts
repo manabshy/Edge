@@ -873,7 +873,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         },
           (error: WedgeError) => {
             this.errorMessage = error;
-            this.sharedService.showError(this.errorMessage);
+            this.sharedService.showError(this.errorMessage, 'valuation-detail-edit-> saveInstruction');
             this.isSubmitting = false;
           });
         console.log('instruction form to save', this.instructionForm.value);
@@ -939,7 +939,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       },
         (error: WedgeError) => {
           this.errorMessage = error;
-          this.sharedService.showError(this.errorMessage);
+          this.sharedService.showError(this.errorMessage, 'valuation-detail-edit-> addValuation');
           this.isSubmitting = false;
         });
     } else {
@@ -948,7 +948,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       },
         (error: WedgeError) => {
           this.errorMessage = error;
-          this.sharedService.showError(this.errorMessage);
+          this.sharedService.showError(this.errorMessage, 'valuation-detail-edit-> updateValuation');
           this.isSubmitting = false;
         });
     }

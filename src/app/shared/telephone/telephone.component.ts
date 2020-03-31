@@ -141,7 +141,7 @@ export class TelephoneComponent implements OnInit {
       },
         (error: WedgeError) => {
           this.isDialing = false;
-          this.sharedService.showError(error);
+          this.sharedService.showError(error, 'telephone->call');
         });
 
     }
