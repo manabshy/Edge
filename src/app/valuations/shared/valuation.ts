@@ -36,7 +36,6 @@ export interface Valuation extends ValuationInfo {
   endDateTime: Date;
   startTime: string;
   totalHours: number;
-  attendees: BaseStaffMember[];
   suggestedAskingPrice?: number;
   suggestedAskingRentLongLet?: number;
   suggestedAskingRentShortLet?: number;

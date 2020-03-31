@@ -169,19 +169,16 @@
       <h5 class="fieldset-title">Appointment</h5>
       <div class="form-group row">
         <div class="col-sm-8 col-xl-4 offset-sm-2">
-          <div class="form-group">
+          <div class="form-group" *ngIf="isEditable || isNewValuation">
             <div class="nav nav-tabs" btnRadioGroup formControlName="type">
               <div class="nav-item">
-                <label btnRadio="both" class="nav-link"
-                tabindex="0" role="button">Both</label>
+                <label btnRadio="both" class="nav-link" tabindex="0" role="button">Both</label>
               </div>
               <div class="nav-item">
-                <label btnRadio="sales" class="nav-link"
-                tabindex="0" role="button">Sales</label>
+                <label btnRadio="sales" class="nav-link" tabindex="0" role="button">Sales</label>
               </div>
               <div class="nav-item">
-                <label btnRadio="lettings" class="nav-link"
-                tabindex="0" role="button">Lettings</label>
+                <label btnRadio="lettings" class="nav-link" tabindex="0" role="button">Lettings</label>
               </div>
             </div>
           </div>
@@ -189,7 +186,7 @@
             <label for="salesValuer" class="small">Sales Valuer</label>
             <ng-select placeholder="Select Valuer" [items]="salesValuers" bindLabel="fullName" bindValue="staffMemberId"
               groupBy="staffMembers" [multiple]="false" formControlName="salesValuerId"
-              (change)="onSalesValuerChange($event)">
+              (change)="onSalesValuerChange($event)" [readonly]="!isEditable && !isNewValuation">
               <ng-template ng-optgroup-tmp let-item="item">
                 {{item.office?.name}}
               </ng-template>
@@ -202,7 +199,7 @@
             <label for="lettingsValuer" class="small">Lettings Valuer</label>
             <ng-select placeholder="Select Valuer" [items]="lettingsValuers" bindLabel="fullName"
               bindValue="staffMemberId" groupBy="staffMembers" [multiple]="false" formControlName="lettingsValuerId"
-              (change)="onLettingsValuerChange($event)">
+              (change)="onLettingsValuerChange($event)" [readonly]="!isEditable && !isNewValuation">
 
               <ng-template ng-optgroup-tmp let-item="item">
                 {{item.office?.name}}
@@ -212,7 +209,7 @@
               </ng-template>
             </ng-select>
           </div>
-          <div class="form-group mt-3">
+          <div class="form-group mt-3" *ngIf="isEditable || isNewValuation">
             <button class="btn btn-sm btn-light btn-block" type="button" (click)="getAvailability()">Book
               Availability</button>
           </div>
@@ -270,8 +267,8 @@
                 <!-- Refactor ASAP -->
                 <app-subnav>
                   <ng-container *ngIf="availableDates">
-                   <div class="form-group" *ngIf="availableDates?.thisWeek">
-                     <strong>This Week</strong>
+                    <div class="form-group" *ngIf="availableDates?.thisWeek">
+                      <strong>This Week</strong>
                       <app-subnav-item *ngFor="let slot of availableDates?.thisWeek"
                         (click)="selectAvailableDate(slot); properties = null">
                         <div class="row">
@@ -280,9 +277,9 @@
                           </div>
                         </div>
                       </app-subnav-item>
-                   </div>
-                   <div class="form-group" *ngIf="availableDates?.nextWeek">
-                     <strong>Next Week</strong>
+                    </div>
+                    <div class="form-group" *ngIf="availableDates?.nextWeek">
+                      <strong>Next Week</strong>
                       <app-subnav-item *ngFor="let slot of availableDates?.nextWeek"
                         (click)="selectAvailableDate(slot); properties = null">
                         <div class="row">
@@ -291,9 +288,9 @@
                           </div>
                         </div>
                       </app-subnav-item>
-                   </div>
-                   <div class="form-group" *ngIf="availableDates?.next2Weeks">
-                     <strong>Next Two Weeks</strong>
+                    </div>
+                    <div class="form-group" *ngIf="availableDates?.next2Weeks">
+                      <strong>Next Two Weeks</strong>
                       <app-subnav-item *ngFor="let slot of availableDates?.next2Weeks"
                         (click)="selectAvailableDate(slot); properties = null">
                         <div class="row">
@@ -302,7 +299,7 @@
                           </div>
                         </div>
                       </app-subnav-item>
-                   </div>
+                    </div>
                     <div class="list-group-item text-center text-danger" *ngIf="!availableDates">
                       No available dates found
                     </div>
