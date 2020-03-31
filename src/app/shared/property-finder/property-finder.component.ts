@@ -56,7 +56,7 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
       text$.pipe(
         distinctUntilChanged(),
         switchMap(term =>
-          this.propertyService.getPropertySuggestions(term).pipe(
+          this.propertyService.getPropertySuggestions(term, this.searchType).pipe(
             tap(data => {
               if (data && !data.length) {
                 this.noSuggestions = true;
