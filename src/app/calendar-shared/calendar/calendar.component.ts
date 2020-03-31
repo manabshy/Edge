@@ -220,8 +220,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
       }
       this.id=this.selectedStaffMemberId
       const request= {
-        // staffMemberId: this.selectedStaffMemberId || this.id || 0,
-        staffMemberId: -1,
+        staffMemberId: this.selectedStaffMemberId || this.id || 0,
         startDate: format(monthStart, 'YYYY-MM-DD'),
         endDate: format(monthEnd, 'YYYY-MM-DD'),
       }
