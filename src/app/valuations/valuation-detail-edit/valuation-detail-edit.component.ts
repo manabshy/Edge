@@ -242,7 +242,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.sharedService.logValidationErrors(this.valuationForm, false);
         this.setRentFigures();
         this.toggleValuerType();
-        console.log('datea entered',data)
         // this.setCanBookAppointmentFlag();
       });
 
@@ -263,17 +262,14 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     switch (true) {
       case !!(this.isSalesAndLettings && this.salesValuerControl.value && this.lettingsValuerControl.value):
         this.canBookAppointment = true;
-        console.log('canb ook all', this.canBookAppointment);
         break;
 
       case !!(this.isSalesOnly && this.salesValuerControl.value):
         this.canBookAppointment = true;
-        console.log('canb ook sale only', this.canBookAppointment);
 
         break;
       case !!(this.isLettingsOnly && this.lettingsValuerControl.value):
         this.canBookAppointment = true;
-        console.log('canb ook let ony', this.canBookAppointment);
 
         break;
     }
@@ -637,7 +633,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   private addInactiveOriginType(origin: InfoDetail) {
-    console.log('inactive xxxxxxxxxxxxxxxxxxxxx');
     const originType = this.allOriginTypes.find(t => +t.id === origin.parentId);
     const originId = this.allOrigins.find(o => +o.id === origin.id);
     if (originType) {
@@ -646,9 +641,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.onSelectType(origin.parentId);
       this.valuationForm.get('originId').setValue(origin.id);
       this.origins.push(originId);
-      console.log('origin type 1111', originType);
-      console.log('origin ids', this.origins);
-      console.log('origin types', this.activeOriginTypes);
     }
   }
 
