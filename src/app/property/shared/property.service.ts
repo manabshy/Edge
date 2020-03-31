@@ -46,10 +46,15 @@ export class PropertyService {
   }
 
   getPropertySuggestions(searchTerm: string, searchType?: number): Observable<any[]> {
-    const url = `${AppConstants.basePropertyUrl}/suggestions?SearchTerm=${searchTerm}&searchType=${searchType}`;
-    return this.http.get<any>(url, {
-      headers: { ignoreLoadingBar: '' }
-    })
+    const url = `${AppConstants.basePropertyUrl}/suggestions`;
+    const options = new HttpParams({
+      encoder: new CustomQueryEncoderHelper,
+      fromObject: {
+        searchTerm: searchTerm.toString(),
+        searchType: searchType ? searchType.toString() : '',
+      }
+    });
+    return this.http.get<any>(url, { params: options })
       .pipe(
         map(response => response.result),
         tap(data => console.log(JSON.stringify(data)))
