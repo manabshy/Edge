@@ -78,11 +78,7 @@ export class ValuationService {
 
   getValuers(propertyId: number): Observable<Valuer[] | any> {
     const url = `${AppConstants.baseValuationUrl}/valuers?propertyId=${propertyId}`;
-    return this.http.get<any>(url)
-      .pipe(
-        map(response => response.result),
-        tap(data => console.log('valuers', JSON.stringify(data)))
-      );
+    return this.http.get<any>(url).pipe(map(response => response.result));
   }
 
   getValuersAvailability(availability: ValuersAvailabilityOption): Observable<CalendarAvailibility | any> {

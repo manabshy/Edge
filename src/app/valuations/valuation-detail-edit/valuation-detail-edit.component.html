@@ -209,7 +209,7 @@
               </ng-template>
             </ng-select>
           </div>
-          <div class="form-group mt-3" *ngIf="isEditable || isNewValuation">
+          <div class="form-group mt-3" *ngIf="(isEditable || isNewValuation) && canBookAppointment">
             <button class="btn btn-sm btn-light btn-block" type="button" (click)="getAvailability()">Book
               Availability</button>
           </div>
@@ -221,7 +221,7 @@
                   <label for="changeDate"
                     class="text-left mobile-btn small">{{(selectedDate || valuation?.valuationDate) | date: 'E d MMM yyyy, HH:mm'}}</label>
                   <button id="changeDate" class="btn btn-light btn-sm ml-2" type="button" (click)="getAvailability()"
-                    *ngIf="isEditable || isNewValuation">Change </button>
+                    *ngIf="(isEditable || isNewValuation) && canChangeDate">Change </button>
                 </div>
               </div>
             </div>
