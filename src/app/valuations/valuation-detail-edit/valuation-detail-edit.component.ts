@@ -17,11 +17,13 @@ import { PropertyService } from 'src/app/property/shared/property.service';
 import { BaseComponent } from 'src/app/shared/models/base-component';
 import { BaseProperty } from 'src/app/shared/models/base-property';
 import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
-import { Valuation, ValuationStatusEnum, ValuationPropertyInfo } from '../shared/valuation';
+import { Valuation, ValuationStatusEnum, ValuationPropertyInfo, Valuer, OfficeMember, ValuersAvailabilityOption, CalendarAvailibility, ValuationStaffMembersCalanderEvents } from '../shared/valuation';
 import { ValuationService } from '../shared/valuation.service';
 import { Instruction } from 'src/app/shared/models/instruction';
 import { ResultData } from 'src/app/shared/result-data';
 import { StaffMember } from 'src/app/shared/models/staff-member';
+import { TabDirective } from 'ngx-bootstrap/tabs/ngx-bootstrap-tabs';
+import format from 'date-fns/format';
 
 @Component({
   selector: 'app-valuation-detail-edit',
@@ -42,8 +44,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   createdSigner: any;
   isCreatingNewSigner: boolean;
   allStaffMembers: BaseStaffMember[] = [];
-  attendees: BaseStaffMember[] = [];
-  attendee: BaseStaffMember;
   mainStaffMember: BaseStaffMember;
   staffMemberId: number;
   isNewValuation: boolean;
@@ -54,7 +54,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   property: Property;
   isOwnerChanged: boolean;
   isPropertyChanged: boolean;
-  allAttendees: BaseStaffMember[] = [];
   isEditable: boolean;
   showLeaseExpiryDate: boolean;
   canInstruct: boolean;
@@ -67,7 +66,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   allOrigins: InfoDetail[] = [];
   origins: InfoDetail[] = [];
   origin: string;
-  valuers: BaseStaffMember[] = [];
+  valuers: Valuer[] = [];
+  lettingsValuers: OfficeMember[] = [];
+  salesValuers: OfficeMember[] = [];
+  allValuers: Valuer;
+  // valuers: BaseStaffMember[] = [];
   showDateAndDuration: boolean;
   hasDateWithValuer = false;
   activeOriginId: InfoDetail;
@@ -79,13 +82,37 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   isClientService: boolean;
   activeOriginTypes: InfoDetail[] = [];
   isOriginUnknown = false;
+  salesValuerLabel: string;
+  lettingsValuerLabel: string;
+  isSalesAndLettings: boolean;
+  isSalesOnly: boolean;
+  isLettingsOnly: boolean;
+  isSales: boolean;
+  isLettings: boolean;
+  selectedValuerIdList = [];
+  selectedValuerId: number;
+  availabilityForm: FormGroup;
+  availableDates: ValuationStaffMembersCalanderEvents;
+  canBookAppointment = true;
+  canChangeDate: boolean;
+
 
   get originTypeControl() {
     return this.valuationForm.get('originType') as FormControl;
   }
+  get valuationTypeControl() {
+    return this.valuationForm.get('type') as FormControl;
+  }
   get originIdControl() {
     return this.valuationForm.get('originId') as FormControl;
   }
+  get salesValuerControl() {
+    return this.valuationForm.get('salesValuer') as FormControl;
+  }
+  get lettingsValuerControl() {
+    return this.valuationForm.get('lettingsValuer') as FormControl;
+  }
+
   get isInvitationSent() {
     return this.valuationForm.get('isInvitationSent') as FormControl;
   }
@@ -200,14 +227,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       }
     });
 
-    this.storage.get('allAttendees').subscribe(data => {
-      if (data) {
-        this.allAttendees = data as BaseStaffMember[];
-      } else {
-        this.staffMemberService.getValuationAttendees().pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => this.allAttendees = result);
-      }
-    });
-
     this.getAddedProperty();
 
     this.contactGroupService.signer$.subscribe(data => {
@@ -219,9 +238,12 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     });
 
     this.valuationForm.valueChanges
-      .subscribe(() => {
+      .subscribe((data) => {
         this.sharedService.logValidationErrors(this.valuationForm, false);
         this.setRentFigures();
+        this.toggleValuerType();
+        console.log('datea entered',data)
+        // this.setCanBookAppointmentFlag();
       });
 
     this.instructionForm.valueChanges.pipe(debounceTime(100), distinctUntilChanged())
@@ -230,6 +252,51 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.setInstructionRentFigures();
       });
 
+    // availability form
+    this.availabilityForm = this.fb.group({
+      fromDate: new Date(),
+      staffMemberId1: 0,
+      staffMemberId2: 0,
+    });
+  }
+  setCanBookAppointmentFlag() {
+    switch (true) {
+      case !!(this.isSalesAndLettings && this.salesValuerControl.value && this.lettingsValuerControl.value):
+        this.canBookAppointment = true;
+        console.log('canb ook all', this.canBookAppointment);
+        break;
+
+      case !!(this.isSalesOnly && this.salesValuerControl.value):
+        this.canBookAppointment = true;
+        console.log('canb ook sale only', this.canBookAppointment);
+
+        break;
+      case !!(this.isLettingsOnly && this.lettingsValuerControl.value):
+        this.canBookAppointment = true;
+        console.log('canb ook let ony', this.canBookAppointment);
+
+        break;
+    }
+  }
+
+  toggleValuerType() {
+    switch (this.valuationTypeControl.value) {
+      case 'sales':
+        this.isSalesOnly = true;
+        this.isLettingsOnly = false;
+        break;
+      case 'lettings':
+        this.isLettingsOnly = true;
+        this.isSalesOnly = false;
+        break;
+
+      default:
+        this.isSalesOnly = true;
+        this.isLettingsOnly = true;
+        this.isSalesAndLettings = true;
+
+        break;
+    }
   }
 
   private setupListInfo(info: DropdownListInfo) {
@@ -247,7 +314,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       if (result) {
         this.lastKnownOwner = result.lastKnownOwner;
         this.property = result;
-        this.valuers = result.valuers;
+        // this.valuers = result.valuers;
         const baseProperty = { propertyId: this.property.propertyId, address: this.property.address } as BaseProperty;
         this.valuationForm.get('property').setValue(baseProperty);
         console.log('base property', this.valuationForm.get('property').value);
@@ -343,17 +410,19 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       parking: [''],
       propertyFeature: [''],
       approxLeaseExpiryDate: [''],
-      valuer: [''],
+      salesValuerId: [null],
+      lettingsValuerId: [null],
+      salesValuer: [''],
+      lettingsValuer: [''],
       isInvitationSent: true,
       totalHours: [1],
-      attendees: [''],
-      searchAttendeeId: null,
       valuationDate: [''],
       suggestedAskingPrice: [],
       suggestedAskingRentLongLet: [],
       suggestedAskingRentShortLet: [],
       suggestedAskingRentLongLetMonthly: [],
-      suggestedAskingRentShortLetMonthly: []
+      suggestedAskingRentShortLetMonthly: [],
+      type: ['both']
     });
   }
 
@@ -371,26 +440,16 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     });
   }
 
-  selectMainStaffMember(staffMember: BaseStaffMember) {
-    this.mainStaffMember = staffMember;
-    this.staffMemberId = staffMember.staffMemberId;
-    this.showCalendar = true;
-    this.showOnlyMainStaffMember = true;
-    this.isSelectingDate = true;
-    this.valuationForm.get('valuer').setValue(staffMember);
-  }
-
   closeCalendar() {
     this.showCalendar = false;
-    if (!this.selectedDate) {
-      if (this.hasDateWithValuer) {
-        this.valuation.attendees ? this.attendees = this.valuation.attendees : this.attendees = [];
-      } else {
-        this.mainStaffMember = null;
-        this.staffMemberId = null;
-        this.showOnlyMainStaffMember = false;
-      }
-    }
+  }
+
+  private setValuersForSalesAndLettings() {
+    this.lettingsValuerLabel = 'Lettings Valuer';
+    this.salesValuerLabel = 'Sales Valuer';
+    this.salesValuers = this.allValuers.sales;
+    this.lettingsValuers = this.allValuers.lettings;
+    this.isSalesAndLettings = true; //
   }
 
   getValuation(id: number) {
@@ -399,25 +458,18 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.valuation = data;
         this.valuation.valuationStatus === 3 ? this.canInstruct = true : this.canInstruct = false;
         this.valuation.approxLeaseExpiryDate ? this.showLeaseExpiryDate = true : this.showLeaseExpiryDate = false;
-        this.attendees = this.valuation.attendees ? this.valuation.attendees : [];
         if (this.valuation.valuationStatus === 3 || this.valuation.valuationStatus === 4) {
           this.isEditable = false;
         } else { this.isEditable = true; }
 
-        if (this.valuation.valuer) {
-          this.mainStaffMember = this.valuation.valuer;
+        if (this.valuation.salesValuer || this.valuation.lettingsValuer) {
           if (this.isEditable) {
             if (this.valuation.valuationDate) {
               this.showDateAndDuration = true;
-              this.hasDateWithValuer = true;
-              this.showOnlyMainStaffMember = true;
+              this.canChangeDate = true;
             } else {
-              this.showOnlyMainStaffMember = false;
               this.showDateAndDuration = false;
-              this.hasDateWithValuer = false;
             }
-          } else {
-            this.showOnlyMainStaffMember = true;
           }
         }
 
@@ -430,6 +482,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         }
 
         this.getValuers(this.property.propertyId);
+        this.setValuationType(data);
         this.populateForm(data);
         this.setupInitialRentFigures(data);
         if (this.valuation && this.allOrigins) {
@@ -443,6 +496,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       }
     }));
   }
+
+
 
   populateForm(valuation: Valuation) {
     if (valuation) {
@@ -462,8 +517,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         outsideSpace: valuation.outsideSpace,
         parking: valuation.parking,
         propertyFeature: valuation.propertyFeature,
-        valuer: valuation.valuer,
-        attendees: valuation.attendees,
+        salesValuer: valuation.salesValuer,
+        lettingsValuer: valuation.lettingsValuer,
+        salesValuerId: valuation.salesValuer ? valuation.salesValuer.staffMemberId : 0,
+        lettingsValuerId: valuation.lettingsValuer ? valuation.lettingsValuer.staffMemberId : 0,
+        type: this.setInitialType(),
         valuationDate: valuation.valuationDate,
         totalHours: valuation.totalHours || 1,
         suggestedAskingPrice: valuation.suggestedAskingPrice ? valuation.suggestedAskingPrice : '',
@@ -473,7 +531,18 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         suggestedAskingRentShortLetMonthly: valuation.suggestedAskingRentShortLetMonthly ? valuation.suggestedAskingRentShortLetMonthly : ''
       });
     }
-    console.log('valuation form', this.valuationForm.value);
+    console.log('valuation form xxxxxxxxx', this.valuationForm.value);
+  }
+
+  setInitialType(): string {
+    let type = 'both';
+    if (this.valuation.salesValuer && !this.valuation.lettingsValuer) {
+      type = 'sales';
+    }
+    if (this.valuation.lettingsValuer && !this.valuation.salesValuer) {
+      type = 'lettings';
+    }
+    return type;
   }
 
   displayValuationPropInfo(info: ValuationPropertyInfo) {
@@ -503,6 +572,23 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         askingRentShortLet: instruction.askingRentShortLet ? instruction.askingRentShortLet : '',
         askingRentShortLetMonthly: instruction.askingRentShortLetMonthly ? instruction.askingRentShortLetMonthly : ''
       });
+    }
+  }
+
+  setValuationType(val: Valuation) {
+    switch (true) {
+      case val.salesValuer && !val.lettingsValuer:
+        this.isSalesOnly = true;
+        console.log('%csales type xxx', 'color:cyan', this.isSalesOnly);
+        break;
+      case val.lettingsValuer && !val.salesValuer:
+        this.isLettingsOnly = true;
+        console.log('%c lettings type xxx', 'color:purple', this.isLettingsOnly);
+        break;
+
+      default:
+        this.isSalesAndLettings = true;
+        console.log('%csales and lettings type xxx', 'color:magenta', this.isSalesAndLettings);
     }
   }
 
@@ -613,51 +699,65 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   }
 
-  getSelectedDate(date: Date) {
+  onLettingsValuerChange(valuer: BaseStaffMember) {
+    this.lettingsValuerControl.setValue(valuer);
+    console.log('lettings valuer in val', this.lettingsValuerControl.value);
+
+  }
+  onSalesValuerChange(valuer: BaseStaffMember) {
+    this.salesValuerControl.setValue(valuer);
+    console.log('sales valuer in val', this.salesValuerControl.value);
+  }
+
+
+  getAvailability() {
+    this.availableDates = {} as any;
+    this.showCalendar = true;
+    if (this.isSalesAndLettings && this.salesValuerControl.value && this.lettingsValuerControl.value) {
+      this.availabilityForm.patchValue({
+        staffMemberId1: this.salesValuerControl.value.staffMemberId,
+        staffMemberId2: this.lettingsValuerControl.value.staffMemberId,
+      });
+      console.log('all', this.availabilityForm.value);
+    } else {
+      this.availabilityForm.patchValue({
+        staffMemberId1: this.salesValuerControl.value.staffMemberId || this.lettingsValuerControl.value.staffMemberId
+      });
+      console.log('single', this.availabilityForm.value);
+    }
+  }
+
+  searchAvailabilty() {
+    const availability = { ...this.availabilityForm.value };
+    console.log('here...,searvch', availability);
+    const request = {
+      fromDate: format(availability.fromDate, 'YYYY-MM-DD'),
+      staffMemberId1: availability.staffMemberId1,
+      staffMemberId2: availability.staffMemberId2,
+    } as ValuersAvailabilityOption;
+
+    this.valuationService.getValuersAvailability(request).subscribe(res => {
+      this.availableDates = res.valuationStaffMembersCalanderEvents;
+      console.log('res', res);
+      console.log('res', this.availableDates);
+    });
+  }
+
+  selectAvailableDate(date: Date) {
     if (date) {
       this.selectedDate = date;
+      // this.canBookAppointment = false;
+      this.canChangeDate = true;
       if (this.valuation && !this.valuation.valuationDate) {
         this.valuation.valuationDate = date;
       }
       this.valuationForm.get('valuationDate').setValue(date);
-      console.log('selected date in val edit', date);
+      console.log('selected available date in val edit', date);
       this.showCalendar = false;
     }
   }
 
-  onStaffMemberChange(staffMember: BaseStaffMember) {
-    if (staffMember) {
-      this.attendee = staffMember;
-    }
 
-  }
-
-  addAttendee() {
-    const existingAttendee = this.attendees.find(x => x.staffMemberId === this.attendee.staffMemberId);
-    if (this.attendee && !existingAttendee) {
-      this.attendees.push(this.attendee);
-      this.valuationForm.get('attendees').setValue(this.attendees);
-      this.valuationForm.get('searchAttendeeId').setValue(null);
-      if (!this.showOnlyMainStaffMember) {
-        this.setMain(this.attendee);
-      }
-    }
-  }
-
-  setMain(staffMember: BaseStaffMember) {
-    if (staffMember) {
-      this.selectMainStaffMember(staffMember);
-      this.removeAttendee(staffMember.staffMemberId);
-      this.isSelectingDate = true;
-    }
-  }
-
-  removeAttendee(id: number) {
-    if (this.attendees && this.attendees.length) {
-      const index = this.attendees.findIndex(x => x.staffMemberId === +id);
-      this.attendees.splice(index, 1);
-    }
-  }
   showValuersList() {
     this.showOnlyMainStaffMember = !this.showOnlyMainStaffMember;
     if (this.property) {
@@ -668,8 +768,54 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   private getValuers(propId: number) {
     if (this.valuers && !this.valuers.length) {
+      this.valuationService.getValuers(propId).pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe(data => {
+          this.allValuers = data;
+          console.log('for new vals valuers', this.allValuers);
+          this.setValuersForSalesAndLettings();
+          this.addInactiveValuers();
+          console.log('valuers', this.allValuers);
+        });
+    }
+  }
+
+  // add inactive users for display purposes only.
+  addInactiveValuers() {
+    const val = this.valuation;
+    if (this.allValuers && val) {
+      if (val.salesValuer && this.allValuers.sales && this.allValuers.sales.length) {
+        const index = this.allValuers.sales
+          .flatMap(x => x.staffMembers).findIndex(s => s.staffMemberId === val.salesValuer?.staffMemberId);
+        if (index < 0) {
+          this.allValuers.sales[0].staffMembers.push(val.salesValuer);
+          this.valuationForm.get('salesValuerId').setValue(val.salesValuer.staffMemberId);
+          this.canBookAppointment = false;
+          this.canChangeDate = false;
+        }
+        console.log('is inactive sales VALUER', index, 'can book appoint', this.canBookAppointment);
+      }
+
+      if (val.lettingsValuer && this.allValuers.lettings && this.allValuers.lettings.length) {
+        const allLettingsValuers = this.allValuers.lettings
+          .flatMap(x => x.staffMembers);
+        const index = allLettingsValuers
+          .findIndex(s => s.staffMemberId === val.lettingsValuer?.staffMemberId);
+        if (index < 0) {
+          this.allValuers.lettings[0].staffMembers.push(val.lettingsValuer);
+          this.valuationForm.get('lettingsValuerId').setValue(val.lettingsValuer.staffMemberId);
+          this.canBookAppointment = false;
+          this.canChangeDate = false;
+        }
+        console.log('is inactive lettings VALUER', index, 'can book appoint', this.canBookAppointment);
+
+      }
+    }
+  }
+
+  private getValuersOld(propId: number) {
+    if (this.valuers && !this.valuers.length) {
       this.propertyService.getProperty(propId, false, false, true).pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe(data => this.valuers = data.valuers);
+        .subscribe();
     }
   }
 
@@ -699,9 +845,14 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   changeDate() {
-    if (this.mainStaffMember) { this.staffMemberId = this.mainStaffMember.staffMemberId; }
+    if (this.valuation.salesValuer || this.valuation.lettingsValuer) {
+      this.availabilityForm.patchValue({
+        staffMemberId1: this.valuationForm.get('salesValuerId').value,
+        staffMemberId2: this.valuationForm.get('lettingsValuerId').value,
+      });
+      console.log(' avail form here sssssssssss', this.availabilityForm.value);
+    }
     this.showCalendar = true;
-    this.isSelectingDate = true;
   }
 
   createNewSigner() {

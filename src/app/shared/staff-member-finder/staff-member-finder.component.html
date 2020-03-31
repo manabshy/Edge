@@ -1,14 +1,29 @@
 <form [formGroup]="staffMemberFinderForm">
-  <ng-select placeholder="Select Staff Member" [items]="staffMembers$|async" [multiple]="isMultiple" [readonly] ="isReadOnly"
-    [closeOnSelect]="!isMultiple" [hideSelected]="true" [clearable]="isClearable" bindLabel="fullName" bindValue="staffMemberId"
-    (change)="onStaffMemberChange($event)" formControlName="staffMemberId" [readonly]="isDisabled ? true : null"
-    [ngClass]="{'is-invalid': isRequired}"
-    [attr.required]="isRequired ? true : null">
-    <ng-template *ngIf="isMultiple" ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-      <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.fullName}}
-    </ng-template>
-  </ng-select>
+  <label *ngIf="label" for="staffMemberId" class="small">{{label}}</label>
+  <ng-container *ngIf="!isValuersPicker else valuersPicker">
+    <ng-select placeholder="Select Staff Member" [items]="staffMembers$|async" [multiple]="isMultiple"
+      [readonly]="isReadOnly" [closeOnSelect]="!isMultiple" [hideSelected]="true" [clearable]="isClearable"
+      bindLabel="fullName" bindValue="staffMemberId" (change)="onStaffMemberChange($event)"
+      formControlName="staffMemberId" [readonly]="isDisabled ? true : null" [ngClass]="{'is-invalid': isRequired}"
+      [attr.required]="isRequired ? true : null">
+      <ng-template *ngIf="isMultiple" ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+        <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.fullName}}
+      </ng-template>
+    </ng-select>
+  </ng-container>
   <div class="invalid-feedback">
     Chaser is required
   </div>
+  <ng-template #valuersPicker>
+    <ng-select placeholder="Select Valuer" [items]="valuers" bindLabel="fullName" bindValue="staffMemberId"
+      groupBy="staffMembers" [multiple]="false" formControlName="staffMemberId" (change)="onStaffMemberChange($event)">
+
+      <ng-template ng-optgroup-tmp let-item="item">
+        {{item.office?.name}}
+      </ng-template>
+      <ng-template ng-option-tmp let-item="item">
+        {{item.fullName}}
+      </ng-template>
+    </ng-select>
+  </ng-template>
 </form>

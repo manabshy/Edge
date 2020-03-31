@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, EMPTY } from 'rxjs';
 import { BaseStaffMember } from '../models/base-staff-member';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ResultData } from '../result-data';
+import { Valuer, OfficeMember } from 'src/app/valuations/shared/valuation';
 
 @Component({
   selector: 'app-staff-member-finder',
@@ -20,12 +21,34 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
   @Input() isRequired: boolean;
   @Input() isMultiple: boolean;
   @Input() isReadOnly: boolean;
+  @Input() label: string;
+  @Input() valuers: OfficeMember[];
+  @Input() isSalesAndLettings: boolean;
   @Output() selectedStaffMemberId = new EventEmitter<number>();
   @Output() selectedStaffMemberList = new EventEmitter<BaseStaffMember[] | any>();
   staffMembers$ = new Observable<any>();
   staffMemberFinderForm: FormGroup;
   selectedStaffMembers: BaseStaffMember[] = [];
   isClearable = true;
+  isValuersPicker = false;
+  test = [{
+    office: {
+      officeId: 52,
+      name: 'Battersea Park'
+    },
+    staffMembers: [{
+      staffMemberId: 2449,
+      firstName: 'Kesha',
+      lastName: 'Foss-Smith',
+      fullName: 'Kesha Foss-Smith'
+    }, {
+      staffMemberId: 2127,
+      firstName: 'Mathew',
+      lastName: 'Easley',
+      fullName: 'Mathew Easley'
+    }]
+  }] as OfficeMember[];
+  valuersIds: number[] = [];
   constructor(private staffMemberService: StaffMemberService, private storage: StorageMap) { }
 
   ngOnInit(): void {
@@ -37,7 +60,15 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    this.getStaffMembers(this.listType);
+    if (this.valuers) {
+      this.isValuersPicker = true;
+      console.log('staffMemberId in finder', this.staffMemberId);
+      console.log('should be here valuers in finder', this.valuers);
+    } else {
+      console.log('not in here xxxx valuers in', this.valuers);
+      this.getStaffMembers(this.listType);
+      this.isValuersPicker = false;
+    }
     if (this.staffMemberId) {
       this.staffMemberFinderForm.patchValue({
         staffMemberId: this.staffMemberId
@@ -90,6 +121,7 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
       }
     });
   }
+
   getAllCalendarStaffMembers() {
     this.storage.get('calendarStaffMembers').subscribe(data => {
       if (data) {

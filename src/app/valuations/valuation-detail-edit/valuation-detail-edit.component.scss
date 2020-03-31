@@ -19,6 +19,15 @@ form {
     }
 }
 
+.nav-link {
+    margin-bottom: -1px;
+    color: $link-color;
+
+    &.active {
+        outline: none;
+    }
+}
+
 .card-deck {
     .card:first-child:last-child {
         @include media-breakpoint-up(sm) {
