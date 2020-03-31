@@ -188,7 +188,7 @@
           <div class="form-group" [hidden]="!isSalesOnly">
             <label for="salesValuer" class="small">Sales Valuer</label>
             <ng-select placeholder="Select Valuer" [items]="salesValuers" bindLabel="fullName" bindValue="staffMemberId"
-              groupBy="staffMembers" [multiple]="false" formControlName="salesValuer"
+              groupBy="staffMembers" [multiple]="false" formControlName="salesValuerId"
               (change)="onSalesValuerChange($event)">
               <ng-template ng-optgroup-tmp let-item="item">
                 {{item.office?.name}}
@@ -201,7 +201,7 @@
           <div class="form-group" [hidden]="!isLettingsOnly">
             <label for="lettingsValuer" class="small">Lettings Valuer</label>
             <ng-select placeholder="Select Valuer" [items]="lettingsValuers" bindLabel="fullName"
-              bindValue="staffMemberId" groupBy="staffMembers" [multiple]="false" formControlName="lettingsValuer"
+              bindValue="staffMemberId" groupBy="staffMembers" [multiple]="false" formControlName="lettingsValuerId"
               (change)="onLettingsValuerChange($event)">
 
               <ng-template ng-optgroup-tmp let-item="item">
@@ -267,17 +267,43 @@
                     </div>
                   </div>
                 </div>
+                <!-- Refactor ASAP -->
                 <app-subnav>
                   <ng-container *ngIf="availableDates">
-                    <app-subnav-item *ngFor="let slot of availableDates"
-                      (click)="selectAvailableDate(slot); properties = null">
-                      <div class="row">
-                        <div class="col-sm">
-                          {{slot| date: 'E d MMM yyyy, HH:mm'}}
+                   <div class="form-group" *ngIf="availableDates?.thisWeek">
+                     <span>This Week</span>
+                      <app-subnav-item *ngFor="let slot of availableDates?.thisWeek"
+                        (click)="selectAvailableDate(slot); properties = null">
+                        <div class="row">
+                          <div class="col-sm">
+                            {{slot| date: 'E d MMM yyyy, HH:mm'}}
+                          </div>
                         </div>
-                      </div>
-                    </app-subnav-item>
-                    <div class="list-group-item text-center text-danger" *ngIf="!availableDates?.length">
+                      </app-subnav-item>
+                   </div>
+                   <div class="form-group" *ngIf="availableDates?.nextWeek">
+                     <span>Next Week</span>
+                      <app-subnav-item *ngFor="let slot of availableDates?.nextWeek"
+                        (click)="selectAvailableDate(slot); properties = null">
+                        <div class="row">
+                          <div class="col-sm">
+                            {{slot| date: 'E d MMM yyyy, HH:mm'}}
+                          </div>
+                        </div>
+                      </app-subnav-item>
+                   </div>
+                   <div class="form-group" *ngIf="availableDates?.next2Weeks">
+                     <span>Next Two Weeks</span>
+                      <app-subnav-item *ngFor="let slot of availableDates?.next2Weeks"
+                        (click)="selectAvailableDate(slot); properties = null">
+                        <div class="row">
+                          <div class="col-sm">
+                            {{slot| date: 'E d MMM yyyy, HH:mm'}}
+                          </div>
+                        </div>
+                      </app-subnav-item>
+                   </div>
+                    <div class="list-group-item text-center text-danger" *ngIf="!availableDates">
                       No available dates found
                     </div>
                   </ng-container>

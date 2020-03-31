@@ -16,8 +16,8 @@ export interface Valuation extends ValuationInfo {
   valuationStatus: number;
   valuationStatusLabel: string;
   property: Property;
-  salesValuer: BaseStaffMember;
-  lettingsValuer: BaseStaffMember;
+  salesValuer?: BaseStaffMember;
+  lettingsValuer?: BaseStaffMember;
   valuationDate?: Date;
   propertyOwner?: Signer;
   diaryEvent: DiaryEvent;
@@ -68,6 +68,14 @@ export interface OfficeMember {
 export interface Valuer {
   sales: OfficeMember[];
   lettings: OfficeMember[];
+}
+export interface ValuationStaffMembersCalanderEvents {
+  thisWeek: Date[];
+  nextWeek: Date[];
+  next2Weeks: Date[];
+}
+export interface CalendarAvailibility {
+  availableDates: ValuationStaffMembersCalanderEvents[];
 }
 export interface ValuersAvailabilityOption extends BaseRequestOption {
   fromDate?: string;

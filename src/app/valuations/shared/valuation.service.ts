@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
-import { Valuation, ValuationRequestOption, ValuationPropertyInfo, Valuer, ValuersAvailabilityOption } from './valuation';
+import { Valuation, ValuationRequestOption, ValuationPropertyInfo, Valuer, ValuersAvailabilityOption, CalendarAvailibility } from './valuation';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { map, tap } from 'rxjs/operators';
 import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encoder-helper';
@@ -85,7 +85,7 @@ export class ValuationService {
       );
   }
 
-  getValuersAvailability(availability: ValuersAvailabilityOption): Observable<Date[] | any> {
+  getValuersAvailability(availability: ValuersAvailabilityOption): Observable<CalendarAvailibility | any> {
     const options = this.setAvailabilityQueryParams(availability);
     const url = `${AppConstants.baseValuationUrl}/valuers/availability`;
     return this.http.get<any>(url, { params: options })
