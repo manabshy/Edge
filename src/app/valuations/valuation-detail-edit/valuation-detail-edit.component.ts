@@ -106,6 +106,12 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   get originIdControl() {
     return this.valuationForm.get('originId') as FormControl;
   }
+  get salesValuerIdControl() {
+    return this.valuationForm.get('salesValuerId') as FormControl;
+  }
+  get lettingsValuerIdControl() {
+    return this.valuationForm.get('lettingsValuerId') as FormControl;
+  }
   get salesValuerControl() {
     return this.valuationForm.get('salesValuer') as FormControl;
   }
@@ -213,6 +219,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     if (this.propertyId) {
       this.getPropertyDetails();
       this.getValuationPropertyInfo(this.propertyId);
+      this.getValuers(this.propertyId);
     }
 
     this.storage.get('info').subscribe((info: DropdownListInfo) => {
@@ -281,16 +288,22 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       case 'sales':
         this.isSalesOnly = true;
         this.isLettingsOnly = false;
+        this.isSalesAndLettings = false;
+        console.log('%csales type xxx', 'color:red', this.isSalesOnly);
         break;
       case 'lettings':
         this.isLettingsOnly = true;
         this.isSalesOnly = false;
+        this.isSalesAndLettings = false;
+        console.log('%clettings only xxx', 'color:blue', this.isLettingsOnly);
+
         break;
 
       default:
-        this.isSalesOnly = true;
-        this.isLettingsOnly = true;
         this.isSalesAndLettings = true;
+        this.isLettingsOnly = false;
+        this.isSalesOnly = false;
+        console.log('%cboth types xxx', 'color:magenta', this.isSalesAndLettings);
 
         break;
     }
@@ -539,6 +552,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     if (this.valuation.lettingsValuer && !this.valuation.salesValuer) {
       type = 'lettings';
     }
+    this.toggleValuerType();
     return type;
   }
 
@@ -576,15 +590,22 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     switch (true) {
       case val.salesValuer && !val.lettingsValuer:
         this.isSalesOnly = true;
+        this.isSalesAndLettings = false;
+        this.isLettingsOnly = false;
         console.log('%csales type xxx', 'color:cyan', this.isSalesOnly);
         break;
+      
       case val.lettingsValuer && !val.salesValuer:
         this.isLettingsOnly = true;
+        this.isSalesOnly = false;
+        this.isSalesAndLettings = false;
         console.log('%c lettings type xxx', 'color:purple', this.isLettingsOnly);
         break;
 
       default:
         this.isSalesAndLettings = true;
+        this.isLettingsOnly = false;
+        this.isSalesOnly = false;
         console.log('%csales and lettings type xxx', 'color:magenta', this.isSalesAndLettings);
     }
   }
@@ -912,6 +933,31 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     console.log('%chere for instruct form', 'color:purple', this.instructionForm);
   }
 
+  setValuersValidators() {
+    this.setSalesValuerValidator();
+    this.setLettingsValuerValidator();
+  }
+
+  setLettingsValuerValidator() {
+    if ((this.isLettingsOnly || this.isSalesAndLettings) && !this.lettingsValuerIdControl.value) {
+      this.lettingsValuerIdControl.setValidators(Validators.required);
+      this.lettingsValuerIdControl.updateValueAndValidity();
+    } else {
+      this.lettingsValuerIdControl.clearValidators();
+      this.lettingsValuerIdControl.updateValueAndValidity();
+    }
+  }
+
+  private setSalesValuerValidator() {
+    if ((this.isSalesOnly || this.isSalesAndLettings) && !this.salesValuerIdControl.value) {
+      this.salesValuerIdControl.setValidators(Validators.required);
+      this.salesValuerIdControl.updateValueAndValidity();
+    } else {
+      this.salesValuerIdControl.clearValidators();
+      this.salesValuerIdControl.updateValueAndValidity();
+    }
+  }
+
   private setAskingPriceValidator() {
     if (this.instructionForm.get('instructSale').value && !this.instAskingPriceControl.value) {
       this.instAskingPriceControl.setValidators([Validators.required, Validators.min(1)]);
@@ -1051,6 +1097,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   saveValuation() {
+    this.setValuersValidators();
     this.sharedService.logValidationErrors(this.valuationForm, true);
     if (this.valuationForm.valid) {
       if (this.valuationForm.dirty || this.isOwnerChanged || this.isPropertyChanged) {

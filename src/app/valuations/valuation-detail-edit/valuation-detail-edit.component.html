@@ -182,11 +182,12 @@
               </div>
             </div>
           </div>
-          <div class="form-group" [hidden]="!isSalesOnly">
+          <div class="form-group" [hidden]="!(isSalesOnly || isSalesAndLettings)">
             <label for="salesValuer" class="small">Sales Valuer</label>
             <ng-select placeholder="Select Valuer" [items]="salesValuers" bindLabel="fullName" bindValue="staffMemberId"
               groupBy="staffMembers" [multiple]="false" formControlName="salesValuerId"
-              (change)="onSalesValuerChange($event)" [readonly]="!isEditable && !isNewValuation">
+              (change)="onSalesValuerChange($event)" [readonly]="!isEditable && !isNewValuation"
+              [ngClass]="{'is-invalid': formErrors.salesValuerId}">
               <ng-template ng-optgroup-tmp let-item="item">
                 {{item.office?.name}}
               </ng-template>
@@ -194,13 +195,14 @@
                 {{item.fullName}}
               </ng-template>
             </ng-select>
+            <div class="invalid-feedback">{{formErrors.salesValuerId}}</div>
           </div>
-          <div class="form-group" [hidden]="!isLettingsOnly">
+          <div class="form-group" [hidden]="!(isLettingsOnly || isSalesAndLettings)">
             <label for="lettingsValuer" class="small">Lettings Valuer</label>
             <ng-select placeholder="Select Valuer" [items]="lettingsValuers" bindLabel="fullName"
               bindValue="staffMemberId" groupBy="staffMembers" [multiple]="false" formControlName="lettingsValuerId"
-              (change)="onLettingsValuerChange($event)" [readonly]="!isEditable && !isNewValuation">
-
+              (change)="onLettingsValuerChange($event)" [readonly]="!isEditable && !isNewValuation"
+              [ngClass]="{'is-invalid': formErrors.lettingsValuerId}">
               <ng-template ng-optgroup-tmp let-item="item">
                 {{item.office?.name}}
               </ng-template>
@@ -208,6 +210,7 @@
                 {{item.fullName}}
               </ng-template>
             </ng-select>
+            <div class="invalid-feedback">{{formErrors.lettingsValuerId}}</div>
           </div>
           <div class="form-group mt-3" *ngIf="(isEditable || isNewValuation) && canBookAppointment">
             <button class="btn btn-sm btn-light btn-block" type="button" (click)="getAvailability()">Book

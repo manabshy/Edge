@@ -35,11 +35,6 @@ export class AppConstants {
     return /^((\(?0\d{4}\)?\s?\d{3}\s?\d{3})|(\(?0\d{3}\)?\s?\d{3}\s?\d{4})|(\(?0\d{2}\)?\s?\d{4}\s?\d{4}))(\s?\#(\d{4}|\d{3}))?$/;
     // return /^\+?[ \d]+$/g;
   }
-  // public static get redirectUri(): string { return 'http://localhost:4200/auth-callback'; }
-  // public static get postLogoutRedirectUri(): string { return  'http://localhost:4200'; }
-  // public static get leaderboardBaseUrl(): string { return 'http://localhost:57211/v10/staffmembers/leaderboard'; }
-  // public static get baseUrl(): string { return'http://localhost:57211/v10/staffMembers'; }
-  // public static get baseContactGroupUrl(): string { return'http://localhost:57211/v10/contactGroups'; }
 }
 
 export const FormErrors = {
@@ -84,6 +79,8 @@ export const FormErrors = {
   'askingRentLongLet': '',
   'salesAgencyType': '',
   'lettingsAgencyType': '',
+  'salesValuerId': '',
+  'lettingsValuerId': '',
   'originId': '',
   'originType': '',
   'endDateTime': '',
@@ -229,6 +226,12 @@ export const ValidationMessages = {
   },
   'lettingsAgencyType': {
     required: 'Lettings agency type is required'
+  },
+  'salesValuerId': {
+    required: 'Sales valuer is required'
+  },
+  'lettingsValuerId': {
+    required: 'Lettings valuer is required'
   },
   'originId': {
     min: 'Vendor origin is required',
