@@ -83,7 +83,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "wedge:build"
+            "browserTarget": "wedge:build",
+            "port": 8080
           },
           "configurations": {
             "production": {
