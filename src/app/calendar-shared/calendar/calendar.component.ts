@@ -85,8 +85,8 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
   diaryEvents$: Observable<Array<CalendarEvent<{ diaryEvent: DiaryEvent }>>>;
 
   dairyEventSubscription: Subscription;
-  movedToView=false
-  requestedTimeframe:{start:number, end:number}
+  movedToView = false
+  requestedTimeframe: { start: number, end: number }
 
   constructor(private diaryEventService: DiaryEventService,
     private renderer: Renderer2,
@@ -94,15 +94,15 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
     private router: Router,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
-    private sharedService:SharedService) { }
+    private sharedService: SharedService) { }
 
   ngOnInit() {
 
     this.route.queryParams.subscribe(params => {
       this.selectedStaffMemberId = +params['staffMemberId'] || 0;
       console.log('id in calendar', this.selectedStaffMemberId);
-      if(params['selectedDate']){
-        this.viewDate =  new Date(+params['selectedDate']);
+      if (params['selectedDate']) {
+        this.viewDate = new Date(+params['selectedDate']);
         this.view = params['calendarView'];
       }
       this.getCurrentDiaryEvents()
@@ -181,15 +181,15 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
 
   getSelectedStaffMemberDiaryEvents(staffMemberId: number) {
     // this.id = staffMemberId;
-    this.selectedStaffMemberId=staffMemberId;
-    this.getCurrentDiaryEvents()
+    this.selectedStaffMemberId = staffMemberId;
+    this.getCurrentDiaryEvents(true)
     console.log('get selected id from output event', staffMemberId);
   }
 
 
-  getCurrentDiaryEvents(){
+  getCurrentDiaryEvents(isLoaderVisible?:boolean) {
 
-    function startOfThreeDays(date:Date){
+    function startOfThreeDays(date: Date) {
       return new Date(date)
     }
     const getStart: any = {
@@ -204,32 +204,32 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
       threeDays: endOfWeek,
       day: endOfDay
     }[this.view];
-    
-    const monthStart = startOfMonth(getStart(this.viewDate)).getTime()
-    let monthEnd   = endOfMonth(getEnd(this.viewDate)).getTime()
 
-    if(this.view === CalendarView.Week|| this.view === CalendarView.ThreeDays){
-      monthEnd=endOfMonth(addDays(getEnd(this.viewDate),1)).getTime()
+    const monthStart = startOfMonth(getStart(this.viewDate)).getTime()
+    let monthEnd = endOfMonth(getEnd(this.viewDate)).getTime()
+
+    if (this.view === CalendarView.Week || this.view === CalendarView.ThreeDays) {
+      monthEnd = endOfMonth(addDays(getEnd(this.viewDate), 1)).getTime()
     }
-    if(this.requestedTimeframe==undefined||
-      (this.requestedTimeframe?.start>monthStart||this.requestedTimeframe?.end<monthEnd)||
-      this.selectedStaffMemberId!==this.id){
-      this.requestedTimeframe={
-        start:  monthStart,
-        end:    monthEnd
+    if (this.requestedTimeframe == undefined ||
+      (this.requestedTimeframe?.start > monthStart || this.requestedTimeframe?.end < monthEnd) ||
+      this.selectedStaffMemberId !== this.id) {
+      this.requestedTimeframe = {
+        start: monthStart,
+        end: monthEnd
       }
-      this.id=this.selectedStaffMemberId
-      const request= {
+      this.id = this.selectedStaffMemberId
+      const request = {
         staffMemberId: this.selectedStaffMemberId || this.id || 0,
         startDate: format(monthStart, 'YYYY-MM-DD'),
         endDate: format(monthEnd, 'YYYY-MM-DD'),
       }
-      this.getDiaryEvents(request)
+      this.getDiaryEvents(request, isLoaderVisible)
     }
   }
 
-  getDiaryEvents(request,isCancelledVisible?: boolean, date?: Date) {
-    this.dairyEventSubscription = this.diaryEventService.getDiaryEvents(request).subscribe(result => {
+  getDiaryEvents(request, isLoaderVisible?:boolean) {
+    this.dairyEventSubscription = this.diaryEventService.getDiaryEvents(request, isLoaderVisible).subscribe(result => {
       this.diaryEvents = [];
       //when the events arrive the view needs to scroll to 8AM
       this.currentTimeIntoView()
@@ -245,12 +245,12 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
         cssClass += meta.isCancelled ? 'is-cancelled' : '';
         cssClass += meta.isHighImportance ? ' is-important' : '';
         cssClass += meta.isConfirmed ? ' is-confirmed' : '';
-        if (!meta.isCancelled || isCancelledVisible) {
+        if (!meta.isCancelled) {
           this.diaryEvents.push({ title, start, end, allDay, meta, members, cssClass } as CalendarEvent
           );
         }
       });
-    }, error=>{
+    }, error => {
       this.sharedService.showError(error, 'calendar->getDiaryEvents');
     });
   }
@@ -368,7 +368,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
 
   createNewEvent() {
     const newEvent = this.diaryEvents[this.diaryEvents.length - 1];
-    if (newEvent.id>=0) {
+    if (newEvent.id >= 0) {
       if (newEvent.end === undefined) {
         newEvent.end = addHours(newEvent.start, 1);
       }
