@@ -4,6 +4,7 @@ import { BaseProperty } from 'src/app/shared/models/base-property';
 import { BaseRequestOption } from 'src/app/shared/models/base-request-option';
 import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
 import { Property } from 'src/app/property/shared/property';
+import { Office } from 'src/app/shared/models/staff-member';
 
 export interface ValuationInfo {
   reason: string;
@@ -15,7 +16,8 @@ export interface Valuation extends ValuationInfo {
   valuationStatus: number;
   valuationStatusLabel: string;
   property: Property;
-  valuer: BaseStaffMember;
+  salesValuer?: BaseStaffMember;
+  lettingsValuer?: BaseStaffMember;
   valuationDate?: Date;
   propertyOwner?: Signer;
   diaryEvent: DiaryEvent;
@@ -34,7 +36,6 @@ export interface Valuation extends ValuationInfo {
   endDateTime: Date;
   startTime: string;
   totalHours: number;
-  attendees: BaseStaffMember[];
   suggestedAskingPrice?: number;
   suggestedAskingRentLongLet?: number;
   suggestedAskingRentShortLet?: number;
@@ -58,6 +59,28 @@ export interface ValuationPropertyInfo {
   propertyFeature?: any;
   valuers: BaseStaffMember[];
 }
+export interface OfficeMember {
+  office: Office;
+  staffMembers: BaseStaffMember[];
+}
+
+export interface Valuer {
+  sales: OfficeMember[];
+  lettings: OfficeMember[];
+}
+export interface ValuationStaffMembersCalanderEvents {
+  thisWeek: Date[];
+  nextWeek: Date[];
+  next2Weeks: Date[];
+}
+export interface CalendarAvailibility {
+  availableDates: ValuationStaffMembersCalanderEvents[];
+}
+export interface ValuersAvailabilityOption extends BaseRequestOption {
+  fromDate?: string;
+  staffMemberId1?: number;
+  staffMemberId2?: number;
+}
 export interface ValuationRequestOption extends BaseRequestOption {
   status?: number;
   date?: string;
@@ -71,7 +94,6 @@ export interface ValuationStatus {
 }
 
 export const ValuationStatuses = <ValuationStatus[]>[
-  { id: 1, value: 'Incomplete' },
   { id: 2, value: 'Booked' },
   { id: 3, value: 'Valued' },
   { id: 4, value: 'Instructed' },
@@ -80,7 +102,6 @@ export const ValuationStatuses = <ValuationStatus[]>[
 
 export enum ValuationStatusEnum {
   None = 0,
-  Incomplete = 1,
   Booked = 2,
   Valued = 3,
   Instructed = 4,

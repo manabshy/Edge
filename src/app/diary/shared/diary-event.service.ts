@@ -15,7 +15,7 @@ export class DiaryEventService {
 
   constructor(private http: HttpClient) { }
 
-  getDiaryEvents(request: BasicEventRequest): Observable<DiaryEvent[]> {
+  getDiaryEvents(request: BasicEventRequest, isLoaderVisible?:boolean): Observable<DiaryEvent[]> {
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
       fromObject: {
@@ -25,7 +25,11 @@ export class DiaryEventService {
       }
     });
     const url = `${AppConstants.baseDiaryEventUrl}`;
-    return this.http.get<any>(url, { params: options, headers: { ignoreLoadingBar: '' }})
+    let info = { params: options }
+    if (!isLoaderVisible) {
+      info['headers'] = { ignoreLoadingBar: '' };
+    }
+    return this.http.get<any>(url, info)
       .pipe(
         map(response => response.result));
   }

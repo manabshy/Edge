@@ -2,7 +2,8 @@
   <ng-container *ngIf="valuations$ | async as valuations">
     <div class="list-group-item" *ngIf="closedCounter">
       <div class="custom-control custom-checkbox">
-        <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getValuations()" class="custom-control-input" id="includeClosedValuations">
+        <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getValuations()" class="custom-control-input"
+          id="includeClosedValuations">
         <label class="custom-control-label small" for="includeClosedValuations">Include previous valuations</label>
       </div>
     </div>
@@ -65,7 +66,8 @@
         <div class="col-sm col-xl-12">
           <dl class="row">
             <dt class="col-4 d-sm-none d-xl-block">Valuer</dt>
-            <dd class="col">{{valuation?.valuer?.fullName}}</dd>
+            <dd class="col" *ngIf="valuation.salesValuer">{{valuation?.salesValuer?.fullName}}<small *ngIf="valuation.salesValuer && valuation.lettingsValuer">,</small></dd>
+            <dd class="col" *ngIf="valuation.lettingsValuer">{{valuation?.lettingsValuer?.fullName}}</dd>
           </dl>
         </div>
         <div class="col-sm col-xl-12">

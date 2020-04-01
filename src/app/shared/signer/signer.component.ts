@@ -119,7 +119,7 @@ export class SignerComponent implements OnInit, OnChanges {
       this.signerNames.setValue(displayName);
       this.selectedSignerDetails = signer;
       this.isMultiple ? this.isSearchVisible = true : this.isSearchVisible = false;
-      this.selectedSigner.emit(this.selectedSignerDetails);
+      // this.selectedSigner.emit(this.selectedSignerDetails); owner emitted to Valuation edit
     }
   }
 

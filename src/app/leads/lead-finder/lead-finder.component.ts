@@ -59,6 +59,7 @@ export class LeadFinderComponent implements OnInit {
 
 
   submit(event) {
+    this.searchTerm = this.leadFinderForm.value.leadSuggestion;
     this.leadService.leadsSearchTermChanged(this.searchTerm);
   }
 

@@ -24,7 +24,8 @@
           <dl class="row">
             <dt class="col-4 d-sm-none">Address</dt>
             <dd class="col">
-              <a class="table-link" [routerLink]="['detail', val?.valuationEventId, 'edit']" (click)="$event.stopPropagation()">
+              <a class="table-link" [routerLink]="['detail', val?.valuationEventId, 'edit']"
+                (click)="$event.stopPropagation()">
                 {{val?.property?.address | formatAddress}}
               </a>
             </dd>
@@ -45,7 +46,8 @@
         <td>
           <dl class="row">
             <dt class="col-4 d-sm-none">Valuer</dt>
-            <dd class="col">{{val?.valuer?.fullName}}</dd>
+            <dd class="col" *ngIf="val?.salesValuer">{{val?.salesValuer?.fullName}}<small *ngIf="val.salesValuer && val.lettingsValuer">,</small></dd>
+            <dd class="col" *ngIf="val?.lettingsValuer">{{val.lettingsValuer?.fullName}}</dd>
           </dl>
         </td>
         <td class="values">

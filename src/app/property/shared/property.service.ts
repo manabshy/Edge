@@ -45,11 +45,17 @@ export class PropertyService {
       );
   }
 
-  getPropertySuggestions(searchTerm: string): Observable<any[]> {
-    const url = `${AppConstants.basePropertyUrl}/suggestions?SearchTerm=${searchTerm}`;
-    return this.http.get<any>(url, {
-      headers: { ignoreLoadingBar: '' }
-    })
+  getPropertySuggestions(searchTerm: string, searchType?: number): Observable<any[]> {
+    const url = `${AppConstants.basePropertyUrl}/suggestions`;
+    const options = new HttpParams({
+      encoder: new CustomQueryEncoderHelper,
+      fromObject: {
+        searchTerm: searchTerm.toString(),
+        searchType: searchType ? searchType.toString() : '',
+      }
+    });
+
+    return this.http.get<any>(url, { params: options })
       .pipe(
         map(response => response.result),
         tap(data => console.log(JSON.stringify(data)))
@@ -171,7 +177,7 @@ export class PropertyService {
       tap(data => console.log('updated property note here...', JSON.stringify(data))));
   }
 
-  getPropertyOfficeId(address?: Address): Observable<PropertyLocation |any> {
+  getPropertyOfficeId(address?: Address): Observable<PropertyLocation | any> {
     const url = `${AppConstants.basePropertyUrl}/location`;
     return this.http.post<any>(url, address).pipe(map(response => response.result));
   }
