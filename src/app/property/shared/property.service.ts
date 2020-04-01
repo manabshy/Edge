@@ -54,6 +54,7 @@ export class PropertyService {
         searchType: searchType ? searchType.toString() : '',
       }
     });
+
     return this.http.get<any>(url, { params: options })
       .pipe(
         map(response => response.result),

@@ -160,7 +160,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   get areValuesVisible() {
     if (this.valuation) {
-      return this.valuation.valuationStatus !== ValuationStatusEnum.Incomplete && this.valuation.valuationStatus !== ValuationStatusEnum.None;
+      return this.valuation.valuationStatus !== ValuationStatusEnum.None;
     }
   }
 
