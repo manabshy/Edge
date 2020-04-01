@@ -296,7 +296,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.isSalesOnly = false;
         this.isSalesAndLettings = false;
         console.log('%clettings only xxx', 'color:blue', this.isLettingsOnly);
-
         break;
 
       default:
@@ -304,7 +303,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.isLettingsOnly = false;
         this.isSalesOnly = false;
         console.log('%cboth types xxx', 'color:magenta', this.isSalesAndLettings);
-
         break;
     }
   }
@@ -459,7 +457,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.salesValuerLabel = 'Sales Valuer';
     this.salesValuers = this.allValuers.sales;
     this.lettingsValuers = this.allValuers.lettings;
-    this.isSalesAndLettings = true; //
   }
 
   getValuation(id: number) {
@@ -552,7 +549,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     if (this.valuation.lettingsValuer && !this.valuation.salesValuer) {
       type = 'lettings';
     }
-    this.toggleValuerType();
     return type;
   }
 
@@ -594,7 +590,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.isLettingsOnly = false;
         console.log('%csales type xxx', 'color:cyan', this.isSalesOnly);
         break;
-      
+
       case val.lettingsValuer && !val.salesValuer:
         this.isLettingsOnly = true;
         this.isSalesOnly = false;
