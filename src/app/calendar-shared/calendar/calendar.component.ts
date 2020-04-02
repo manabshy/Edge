@@ -17,7 +17,8 @@ import {
   addMinutes,
   isSameMinute,
   addHours,
-  getDaysInMonth
+  getDaysInMonth,
+  subDays
 } from 'date-fns';
 import { CustomDateFormatter } from '../custom-date-formatter.provider';
 import { Observable, fromEvent, of, combineLatest, merge, Subscription } from 'rxjs';
@@ -205,27 +206,46 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
       day: endOfDay
     }[this.view];
 
-    const monthStart = startOfMonth(getStart(this.viewDate)).getTime()
-    let monthEnd = endOfMonth(getEnd(this.viewDate)).getTime()
+    const request = {
+      staffMemberId: this.selectedStaffMemberId || this.id || 0,
+      startDate: format(getStart(this.viewDate), 'YYYY-MM-DD'),
+      endDate: format(getEnd(this.viewDate), 'YYYY-MM-DD'),
+    } as BasicEventRequest;
+           
+    if(this.view === CalendarView.ThreeDays){
+      request.startDate=format((this.viewDate), 'YYYY-MM-DD')
+      request.endDate=format((addDays(this.viewDate,3)), 'YYYY-MM-DD')
+    }else if(this.view === CalendarView.Week){
+      request.startDate=format(addDays(getStart(this.viewDate),1), 'YYYY-MM-DD')
+      request.endDate=format(addDays(getEnd(this.viewDate),1), 'YYYY-MM-DD')
+    }
+    this.getDiaryEvents(request, isLoaderVisible)
 
-    if (this.view === CalendarView.Week || this.view === CalendarView.ThreeDays) {
-      monthEnd = endOfMonth(addDays(getEnd(this.viewDate), 1)).getTime()
-    }
-    if (this.requestedTimeframe == undefined ||
-      (this.requestedTimeframe?.start > monthStart || this.requestedTimeframe?.end < monthEnd) ||
-      this.selectedStaffMemberId !== this.id) {
-      this.requestedTimeframe = {
-        start: monthStart,
-        end: monthEnd
-      }
-      this.id = this.selectedStaffMemberId
-      const request = {
-        staffMemberId: this.selectedStaffMemberId || this.id || 0,
-        startDate: format(monthStart, 'YYYY-MM-DD'),
-        endDate: format(monthEnd, 'YYYY-MM-DD'),
-      }
-      this.getDiaryEvents(request, isLoaderVisible)
-    }
+    /**
+     * This code is for only calling the api if the user navigates away from the already loaded timeframe
+     * it prevents excessive api calls
+     */
+    // const monthStart = startOfMonth(getStart(this.viewDate)).getTime()
+    // let monthEnd = endOfMonth(getEnd(this.viewDate)).getTime()
+
+    // if (this.view === CalendarView.Week || this.view === CalendarView.ThreeDays) {
+    //   monthEnd = endOfMonth(addDays(getEnd(this.viewDate), 1)).getTime()
+    // }
+    // if (this.requestedTimeframe == undefined ||
+    //   (this.requestedTimeframe?.start > monthStart || this.requestedTimeframe?.end < monthEnd) ||
+    //   this.selectedStaffMemberId !== this.id) {
+    //   this.requestedTimeframe = {
+    //     start: monthStart,
+    //     end: monthEnd
+    //   }
+    //   this.id = this.selectedStaffMemberId
+    //   const request = {
+    //     staffMemberId: this.selectedStaffMemberId || this.id || 0,
+    //     startDate: format(monthStart, 'YYYY-MM-DD'),
+    //     endDate: format(monthEnd, 'YYYY-MM-DD'),
+    //   }
+    //   this.getDiaryEvents(request, isLoaderVisible)
+    // }
   }
 
   getDiaryEvents(request, isLoaderVisible?:boolean) {
