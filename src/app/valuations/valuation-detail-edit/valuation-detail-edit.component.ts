@@ -94,6 +94,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   availabilityForm: FormGroup;
   availableDates: ValuationStaffMembersCalanderEvents;
   canBookAppointment = true;
+  isAvailabilityRequired = false;
   canChangeDate: boolean;
 
 
@@ -250,6 +251,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.sharedService.logValidationErrors(this.valuationForm, false);
         this.setRentFigures();
         this.toggleValuerType();
+        this.checkAvailabilityBooking();
         // this.setCanBookAppointmentFlag();
       });
 
@@ -289,20 +291,17 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.isSalesOnly = true;
         this.isLettingsOnly = false;
         this.isSalesAndLettings = false;
-        console.log('%csales type xxx', 'color:red', this.isSalesOnly);
         break;
       case 'lettings':
         this.isLettingsOnly = true;
         this.isSalesOnly = false;
         this.isSalesAndLettings = false;
-        console.log('%clettings only xxx', 'color:blue', this.isLettingsOnly);
         break;
 
       default:
         this.isSalesAndLettings = true;
         this.isLettingsOnly = false;
         this.isSalesOnly = false;
-        console.log('%cboth types xxx', 'color:magenta', this.isSalesAndLettings);
         break;
     }
   }
@@ -453,8 +452,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   private setValuersForSalesAndLettings() {
-    this.lettingsValuerLabel = 'Lettings Valuer';
-    this.salesValuerLabel = 'Sales Valuer';
     this.salesValuers = this.allValuers.sales;
     this.lettingsValuers = this.allValuers.lettings;
   }
@@ -756,6 +753,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   selectAvailableDate(date: Date) {
     if (date) {
       this.selectedDate = date;
+      this.isAvailabilityRequired = false;
       // this.canBookAppointment = false;
       this.canChangeDate = true;
       if (this.valuation && !this.valuation.valuationDate) {
@@ -1090,10 +1088,38 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   }
 
+  checkAvailabilityBooking() {
+    if ((this.isNewValuation || this.isEditable) && !this.valuationForm.get('valuationDate').value) {
+      // if (this.salesValuerIdControl.value || this.lettingsValuerIdControl.value) {
+      //   this.isAvailabilityRequired = true;
+      //   console.log('isAvailabilityRequired', this.isAvailabilityRequired)
+      // }
+      if (this.isSalesAndLettings && (this.salesValuerIdControl.valid && this.lettingsValuerIdControl.value)) {
+        this.isAvailabilityRequired = true;
+        this.isSalesOnly = false;
+        this.isLettingsOnly = false;
+        console.log('for both', this.isAvailabilityRequired)
+      }
+      if (this.isSalesOnly && this.salesValuerIdControl.value) {
+        this.isAvailabilityRequired = true;
+        this.isSalesAndLettings = false;
+        console.log('for lettings only', this.isAvailabilityRequired)
+      }
+      if (this.isLettingsOnly && this.lettingsValuerIdControl.value) {
+        this.isAvailabilityRequired = true;
+        this.isSalesOnly = false;
+        this.isSalesAndLettings = false;
+        console.log('for sales only', this.isAvailabilityRequired)
+
+      }
+    }
+  }
+
   saveValuation() {
+    this.checkAvailabilityBooking();
     this.setValuersValidators();
     this.sharedService.logValidationErrors(this.valuationForm, true);
-    if (this.valuationForm.valid) {
+    if (this.valuationForm.valid && !this.isAvailabilityRequired) {
       if (this.valuationForm.dirty || this.isOwnerChanged || this.isPropertyChanged) {
         this.addOrUpdateValuation();
       } else {

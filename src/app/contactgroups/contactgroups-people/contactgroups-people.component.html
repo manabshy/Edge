@@ -178,7 +178,7 @@
                     </div>
                     <div class="col-auto" *ngIf="!person?.isNewPerson; else removeSelectedPerson">
                       <div dropdown placement="bottom right">
-                        <a class="dropdown-toggle" href [id]="'button' + i" dropdownToggle
+                        <a class="btn btn-light dropdown-toggle" href [id]="'button' + i" dropdownToggle
                           (click)="$event.stopPropagation(); false" [attr.aria-controls]="'dropdown' + i">Actions <span
                             class="caret"></span></a>
                         <ul [id]="'dropdown' + i" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
@@ -225,7 +225,7 @@
                     <ng-template #removeSelectedPerson>
                       <div class="col text-right">
                         <div dropdown placement="bottom right">
-                          <a class="dropdown-toggle" href [id]="'button' + i" dropdownToggle
+                          <a class="btn btn-light dropdown-toggle" href [id]="'button' + i" dropdownToggle
                             (click)="$event.stopPropagation(); false" [attr.aria-controls]="'dropdown' + i">Actions
                             <span class="caret"></span></a>
                           <ul [id]="'dropdown' + i" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
