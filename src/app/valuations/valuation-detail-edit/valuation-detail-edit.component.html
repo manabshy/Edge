@@ -216,6 +216,9 @@
             <button class="btn btn-sm btn-light btn-block" type="button" (click)="getAvailability()">Book
               Availability</button>
           </div>
+          <div class="form-group alert alert-warning" role="alert" *ngIf="isAvailabilityRequired">
+            Please book availability before saving
+          </div>
           <fieldset *ngIf="selectedDate || showDateAndDuration">
             <div class="form-group row">
               <div class="col-sm-10" [ngClass]="{'mt-2':'!canBookAppointment'}">
