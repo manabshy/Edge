@@ -17,7 +17,7 @@
               <span class="dropdown-icon">
                 <i class="fas fa-file-contract"></i>
               </span>
-              Request Sales Terms Of Business
+              Sales Terms Of Business
             </a>
           </li>
           <li role="menuitem" *ngIf="valuationForm.get('suggestedAskingRentLongLet').value || valuationForm.get('suggestedAskingRentShortLet').value">
@@ -25,7 +25,7 @@
               <span class="dropdown-icon">
                 <i class="fas fa-file-contract"></i>
               </span>
-              Request Lettings Terms Of Business
+              Lettings Terms Of Business
             </a>
           </li>
           <li role="menuitem" *ngIf="valuationForm.get('suggestedAskingRentLongLet').value || valuationForm.get('suggestedAskingRentShortLet').value">
@@ -33,7 +33,7 @@
               <span class="dropdown-icon">
                 <i class="fas fa-file-contract"></i>
               </span>
-              Request Landlord Questionnaire
+              Landlord Questionnaire
             </a>
           </li>
         </ul>
@@ -146,12 +146,12 @@
                   [ngClass]="{'is-invalid': (formErrors?.receptions)}" />
                 <div class="invalid-feedback">{{formErrors?.receptions}}</div>
               </div>
-              <div class="col-4 form-group">
+              <div class="col-sm-4 form-group">
                 <label class="small" for="sqFt">Approx Sq. Foot</label>
                 <input type="text" name="sqFt" id="sqFt" class="form-control form-control-sm" formControlName="sqFt"
                   [attr.disabled]="!isEditable && !isNewValuation ? true : null">
               </div>
-              <div class="form-group" [ngClass]="showLeaseExpiryDate ? 'col-8' : 'col-4'">
+              <div class="form-group col-sm-8">
                 <label class="small" for="tenureId">Tenure</label>
                 <div class="input-group input-group-sm">
                   <select class="custom-select single-select" name="tenureId" id="tenureId" formControlName="tenureId"
