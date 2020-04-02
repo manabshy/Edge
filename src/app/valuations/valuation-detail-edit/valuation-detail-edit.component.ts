@@ -690,6 +690,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       if (newProperty) {
         this.property = newProperty;
         this.valuationForm.get('property').setValue(this.property);
+        this.getValuers(this.property.propertyId)
         this.getSelectedOwner(newProperty.lastKnownOwner);
       }
     });
