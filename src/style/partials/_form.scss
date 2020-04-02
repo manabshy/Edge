@@ -11,6 +11,7 @@
     -webkit-appearance: none;
     background: none;
     color: $body-color!important;
+    padding-right: $input-padding-x!important;
 
     &::-ms-expand {
         display: none;
