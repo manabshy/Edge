@@ -14,8 +14,13 @@
     <small>IT REF: {{title}}</small>
   </div>
 
-  <div *ngIf="!desc">
-    <p *ngIf="error">error:{{error | json}} </p>
+  <div *ngIf="desc=='undefined'" class="overflow">
+    <p *ngIf="url">url: {{requestUrl}}</p>
+    <div *ngIf="error">
+      <p *ngFor="let e of error | keyvalue">
+        {{e.key}} : {{e.value}}
+      </p>
+    </div> 
     <p *ngIf="triggeredBy">triggeredby:{{triggeredBy | json}} </p>
   </div>
 </div>

@@ -52,9 +52,6 @@ export class CompanyDetailComponent implements OnInit {
 
         this.sharedService.setTitle(this.companyDetails.companyName);
       }
-    }, error => {
-      this.errorMessage = <any>error;
-      this.sharedService.showError(this.errorMessage, 'company-detail->getCompanyDetails');
     });
   }
 

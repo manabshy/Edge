@@ -452,7 +452,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
           this.onUpdateCompleted(result);
         }
       }, (error: WedgeError) => {
-        this.sharedService.showError(error, 'lead-edit->addLead');
         this.isSubmitting = false;
       });
     } else {
@@ -478,7 +477,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
         }
         this.onUpdateCompleted(result);
       }, (error: WedgeError) => {
-        this.sharedService.showError(error, 'lead-edit->updateLead');
         this.isSubmitting = false;
       });
     }
@@ -490,7 +488,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
           this.contactGroupService.notesChanged(data);
         }
       }, (error: WedgeError) => {
-        this.sharedService.showError(error, 'lead-edit->addPersonNote');
         this.isSubmitting = false;
       });
     }

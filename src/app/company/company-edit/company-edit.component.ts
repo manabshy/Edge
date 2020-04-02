@@ -94,9 +94,6 @@ export class CompanyEditComponent implements OnInit {
       this.companyDetails = data;
       this.sharedService.setTitle(this.companyDetails.companyName);
       this.displayCompanyDetails(data);
-    }, error => {
-      this.errorMessage = <any>error;
-      this.sharedService.showError(this.errorMessage, 'company-edit->getCompanyDetails');
     });
   }
 
@@ -110,9 +107,6 @@ export class CompanyEditComponent implements OnInit {
     this.contactGroupService.getSignerbyId(id).subscribe(data => {
       this.existingSigner = data;
       this.companyForm.markAsDirty();
-    }, error => {
-      this.errorMessage = <any>error;
-      this.sharedService.showError(this.errorMessage, 'company-edit->getSignerDetails');
     });
   }
 
@@ -270,14 +264,10 @@ export class CompanyEditComponent implements OnInit {
     if (this.isNewCompany) {
       console.log('add company', company);
       this.companyService.addCompany(company).subscribe(res => this.onSaveComplete(res.result), (error: WedgeError) => {
-        this.errorMessage = error;
-        this.sharedService.showError(this.errorMessage, 'company-edit->companyService.addCompany');
         this.isSubmitting = false;
       });
     } else {
       this.companyService.updateCompany(company).subscribe(res => this.onSaveComplete(res.result), (error: WedgeError) => {
-        this.errorMessage = error;
-        this.sharedService.showError(this.errorMessage, 'company-edit->companyService.updateCompany');
         this.isSubmitting = false;
       });
     }

@@ -31,8 +31,6 @@ export class ContactgroupsDetaillettingsManagementsComponent implements OnChange
     this.managements$ = this.peopleService.getLettingsManagements(this.personId, this.isClosedIncluded)
       .pipe(
         catchError((error: WedgeError) => {
-          this.errorMessage = error;
-          this.sharedService.showError(this.errorMessage, 'contactgroup-detail-lettings-managements->getLettingsManagements');
           return EMPTY;
         }));
   }

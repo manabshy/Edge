@@ -237,9 +237,6 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
         this.selectedLeadsForAssignment = [];
         this.replaceLeadsWithNewOwners(result);
       }
-    }, (error: WedgeError) => {
-      this.errorMessage = error;
-      this.sharedService.showError(this.errorMessage, 'lead-register->processLeadsAssignment');
     });
   }
 

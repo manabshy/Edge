@@ -145,10 +145,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.contactGroupService.getContactGroupbyId(this.contactGroupId).subscribe(x => {
           this.contactGroupDetails.contactNotes = x.contactNotes;
           this.setImportantNotes();
-        },
-          (error: WedgeError) => {
-            this.sharedService.showError(error, 'contactgroups-people->contactGroupService.noteChanges$');
-          });
+        });
       }
     });
 
@@ -292,10 +289,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
           this.contactGroupDetails.contactGroupId = 0;
         }
         this.isTypePicked = true;
-      },
-        (error: WedgeError) => {
-          this.sharedService.showError(error, 'contactgroups-people->getContactGroupById');
-        });
+      });
   }
 
   getContactGroupFirstPerson(personId: number, isSelectedTypeCompany: boolean) {
@@ -313,10 +307,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
           this.setSalutation();
         }
       }
-    },
-      (error: WedgeError) => {
-        this.sharedService.showError(error, 'contactgroups-people->getContactGroupFirstPerson');
-      });
+    });
   }
   getPersonDetails(personId: number) {
     this.contactGroupService.getPerson(personId).subscribe(data => {
@@ -367,8 +358,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.contactGroupService.getAutocompleteCompany(searchTerm).subscribe(data => {
       this.companiesSearched = true;
       this.foundCompanies = data;
-    }, (error: WedgeError) => {
-      this.sharedService.showError(error, 'contactgroups-people->findCompany');
     });
   }
 
@@ -424,8 +413,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
         if (data && !data.length) {
           this.bottomReached = true;
         }
-      }, (error: WedgeError) => {
-        this.sharedService.showError(error, 'contactgroups-people->getNextContactNotesPage');
       });
   }
 
@@ -520,8 +507,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.contactGroupService.getCompany(companyId).subscribe(data => {
       this.selectedCompanyDetails = data;
       this.isSearchCompanyVisible = false;
-    }, (error: WedgeError) => {
-      this.sharedService.showError(error, 'contactgroups-people->getCompanyDetails');
     });
   }
 
@@ -530,9 +515,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
       if (data) {
         this.contactGroupService.signerChanged(data);
       }
-    }, error => {
-      this.errorMessage = <any>error;
-      this.sharedService.showError(this.errorMessage, 'contactgroups-people->getSignerDetails');
     });
   }
 
@@ -670,8 +652,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
           .subscribe(res => {
             this.onSaveComplete(res.result.contactGroupId);
           }, (error: WedgeError) => {
-            this.errorMessage = error;
-            this.sharedService.showError(this.errorMessage,'contactgroups-people->addContactGroup1');
             this.isSubmitting = false;
           });
       } else {
@@ -687,8 +667,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
         .subscribe(res => {
           this.onSaveComplete(res.result.contactGroupId);
         }, (error: WedgeError) => {
-          this.errorMessage = error;
-          this.sharedService.showError(this.errorMessage,'contactgroups-people->addContactGroup2');
           this.isSubmitting = false;
         });
     }
@@ -705,8 +683,6 @@ export class ContactgroupsPeopleComponent implements OnInit {
       .subscribe(res => {
         this.onSaveComplete(res.result.contactGroupId);
       }, (error: WedgeError) => {
-        this.errorMessage = error;
-        this.sharedService.showError(this.errorMessage,'contactgroups-people->updateContactGroup');
         this.isSubmitting = false;
       });
   }

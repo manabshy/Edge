@@ -146,7 +146,6 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
       this.valuations = [];
       this.searchTerm = '';
       this.isHintVisible = true;
-      this.sharedService.showError(error, 'valuations-> getNextValuationsPage');
     });
   }
 

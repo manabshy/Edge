@@ -13,8 +13,9 @@ export class ErrorModalComponent implements OnInit {
   @Input() desc;
   @Input() techDet;
   @Input() error;
-  @Input() triggeredBy;
+  @Input() triggeredBy: string;
   subject: Subject<boolean>;
+  @Input() requestUrl: string;
   url: string;
 
   constructor(public bsModalRef: BsModalRef, private _router: Router) { }

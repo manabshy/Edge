@@ -32,8 +32,6 @@ export class ContactgroupsDetailHomeHelperComponent implements OnChanges {
     this.homeHelpers$ = this.peopleService.getHomeHelpers(0, this.isClosedIncluded)
       .pipe(
         catchError((error: WedgeError) => {
-          this.errorMessage = error;
-          this.sharedService.showError(this.errorMessage, 'contactgroup-detail-home-helper->getHomeHelpers');
           return EMPTY;
         }));
   }

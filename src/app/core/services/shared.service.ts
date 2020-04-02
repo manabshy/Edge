@@ -407,5 +407,6 @@ export class WedgeError {
   technicalDetails: string;
   message: string;
   displayMessage: string;
+  requestUrl?:string;
 }
 

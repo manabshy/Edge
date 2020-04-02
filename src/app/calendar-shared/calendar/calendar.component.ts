@@ -270,8 +270,6 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
           );
         }
       });
-    }, error => {
-      this.sharedService.showError(error, 'calendar->getDiaryEvents');
     });
   }
 

@@ -86,9 +86,6 @@ export class DashboardComponent implements OnInit {
         this.teamDashboard = result;
         this.getDashboardTotals(result);
       }
-      // (error: WedgeError) => {
-      //   this.sharedService.showError(error);
-      // });
       );
   }
 

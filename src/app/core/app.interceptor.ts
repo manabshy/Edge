@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { WedgeError } from './services/shared.service';
+import { WedgeError, SharedService } from './services/shared.service';
 import { catchError } from 'rxjs/operators';
 import { AppUtils, ICachedRoute } from './shared/utils';
 import { StorageMap } from '@ngx-pwa/local-storage';
@@ -11,7 +11,8 @@ import { Impersonation } from '../shared/models/staff-member';
 export class AppInterceptor implements HttpInterceptor {
   impersonatedStaffMemberId: number;
 
-  constructor(private storage: StorageMap) {
+  constructor(private storage: StorageMap,
+              private sharedService:SharedService) {
   }
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     this.storage.get('impersonatedStaffMember').subscribe((person: Impersonation) => {
@@ -29,10 +30,10 @@ export class AppInterceptor implements HttpInterceptor {
     if (req.method !== 'GET') {
       AppUtils.routeCache = new Map<string, ICachedRoute>();
     }
-    return next.handle(jsonReq).pipe(catchError(err => this.handleError(err)));
+    return next.handle(jsonReq).pipe(catchError(err => this.handleError(err, req.url)));
   }
 
-  private handleError(err: HttpErrorResponse): Observable<WedgeError> | Observable<any> {
+  private handleError(err: HttpErrorResponse, url:string): Observable<WedgeError> | Observable<any> {
     const wedgeError = new WedgeError();
     if (err.error instanceof ErrorEvent) {
       wedgeError.displayMessage = `An error occurred: ${err.error.message}`;
@@ -47,8 +48,10 @@ export class AppInterceptor implements HttpInterceptor {
         wedgeError.displayMessage = `${wedgeError.message}`;
       }
     }
+    wedgeError.requestUrl=url
     console.error('errors from api', err);
     console.error(wedgeError);
+    this.sharedService.showError(wedgeError, 'app.inteceptor');
     return throwError(wedgeError);
   }
 }

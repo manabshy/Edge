@@ -1058,8 +1058,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.onInstructionSaveComplete(result.status);
         },
           (error: WedgeError) => {
-            this.errorMessage = error;
-            this.sharedService.showError(this.errorMessage, 'valuation-detail-edit-> saveInstruction');
             this.isSubmitting = false;
           });
         console.log('instruction form to save', this.instructionForm.value);
@@ -1069,7 +1067,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     } else {
       this.errorMessage = {} as WedgeError;
       this.errorMessage.displayMessage = 'Please correct validation errors';
-      // this.sharedService.showError(this.errorMessage);
+
     }
   }
   setInstructionValue(instruction: Instruction) {
@@ -1104,7 +1102,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     } else {
       this.errorMessage = {} as WedgeError;
       this.errorMessage.displayMessage = 'Please correct validation errors';
-      // this.sharedService.showError(this.errorMessage);
     }
   }
 
@@ -1126,7 +1123,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       },
         (error: WedgeError) => {
           this.errorMessage = error;
-          this.sharedService.showError(this.errorMessage, 'valuation-detail-edit-> addValuation');
           this.isSubmitting = false;
         });
     } else {
@@ -1135,7 +1131,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       },
         (error: WedgeError) => {
           this.errorMessage = error;
-          this.sharedService.showError(this.errorMessage, 'valuation-detail-edit-> updateValuation');
           this.isSubmitting = false;
         });
     }
