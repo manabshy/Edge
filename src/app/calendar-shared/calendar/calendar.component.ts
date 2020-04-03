@@ -88,6 +88,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
   dairyEventSubscription: Subscription;
   movedToView = false
   requestedTimeframe: { start: number, end: number }
+  scrollPosition:number=0
 
   constructor(private diaryEventService: DiaryEventService,
     private renderer: Renderer2,
@@ -105,6 +106,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
       if (params['selectedDate']) {
         this.viewDate = new Date(+params['selectedDate']);
         this.view = params['calendarView'];
+        this.scrollPosition= params['scrollPos']
       }
       this.getCurrentDiaryEvents()
     });
@@ -140,8 +142,9 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
   }
 
   passDateToRouter() {
+    this.scrollPosition=this.calendarContainer.nativeElement.scrollTop
     this.router.navigate(['/'], {
-      queryParams: { selectedDate: this.viewDate.getTime(), calendarView: this.view },
+      queryParams: { selectedDate: this.viewDate.getTime(), calendarView: this.view, scrollPos: this.scrollPosition },
       queryParamsHandling: 'merge'
     });
   }
@@ -168,14 +171,17 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
 
   currentTimeIntoView() {
     const calHourSegments = document.getElementsByClassName('cal-hour-segment');
-
     setTimeout(() => {
-      if (calHourSegments && calHourSegments.length) {
-        if (window.innerWidth >= 1024) {
-          calHourSegments[23].scrollIntoView({ block: 'center' });
-        } else {
-          calHourSegments[22].scrollIntoView({ block: 'center' });
+      if(!this.scrollPosition){
+        if (calHourSegments && calHourSegments.length) {
+          if (window.innerWidth >= 1024) {
+            calHourSegments[23].scrollIntoView({ block: 'center' });
+          } else {
+            calHourSegments[22].scrollIntoView({ block: 'center' });
+          }
         }
+      }else{
+        this.calendarContainer.nativeElement.scrollTop=this.scrollPosition
       }
     });
   }
@@ -275,13 +281,22 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
 
   eventClicked({ event }: { event: CalendarEvent }) {
     const clickedEvent = { ...event.meta } as DiaryEvent;
+    this.scrollPosition=this.calendarContainer.nativeElement.scrollTop
     if (!clickedEvent.isBusy) {
       if (+clickedEvent.eventTypeId === 8 || +clickedEvent.eventTypeId === 2048) {
-        this.router.navigate(['/valuations-register/detail', clickedEvent.properties[0].propertyEventId, 'edit']);
+        this.router.navigate(['/valuations-register/detail', clickedEvent.properties[0].propertyEventId, 'edit'],
+          {
+            queryParams: {scrollPos:this.scrollPosition, selectedDate: this.viewDate.getTime(), calendarView: this.view,}
+          });
       } else {
         this.router.navigate(['/diary/edit', clickedEvent.diaryEventId],
           {
-            queryParams: { staffMemberId: this.id || this.selectedStaffMemberId, graphEventId: clickedEvent.exchangeGUID }
+            queryParams: { staffMemberId: this.id || this.selectedStaffMemberId, 
+              graphEventId: clickedEvent.exchangeGUID, 
+              scrollPos:this.scrollPosition, 
+              selectedDate: this.viewDate.getTime(), 
+              calendarView: this.view, 
+            }
           });
       }
     }
@@ -385,6 +400,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
   }
 
   createNewEvent() {
+    this.scrollPosition=this.calendarContainer.nativeElement.scrollTop
     const newEvent = this.diaryEvents[this.diaryEvents.length - 1];
     if (newEvent.id >= 0) {
       if (newEvent.end === undefined) {
@@ -393,7 +409,13 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
       this.diaryEventService.newEventDates({ startDate: newEvent.start, endDate: newEvent.end });
       this.router.navigate(['/diary/edit', 0],
         {
-          queryParams: { staffMemberId: this.id || this.selectedStaffMemberId, isNewEvent: true, isFromCalendar: true }
+          queryParams: { staffMemberId: this.id || this.selectedStaffMemberId, 
+            isNewEvent: true,
+            isFromCalendar: true,
+            scrollPos:this.scrollPosition,
+            selectedDate: this.viewDate.getTime(),
+            calendarView: this.view, 
+          }
         });
     }
   }

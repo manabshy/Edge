@@ -167,7 +167,6 @@ export class AddDiaryEventComponent implements OnInit {
 
     this.diaryEventService.eventDateChanges$.subscribe(dates => {
       if (dates) {
-        console.log(dates);
         this.diaryEventForm.patchValue({
           startDateTime: new Date(dates.startDate),
           endDateTime: new Date(dates.endDate),
@@ -546,7 +545,7 @@ export class AddDiaryEventComponent implements OnInit {
     } else {
       this.toastr.success('Diary event successfully updated');
     }
-    this.router.navigate(['/']);
+    this.router.navigate(['/'], { queryParamsHandling: "merge" });
     // this.router.navigateByUrl('/', { skipLocationChange: true })
     //   .then(() => this.router.navigate(['/diary/edit', diaryEvent.diaryEventId]));
   }
