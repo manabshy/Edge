@@ -167,7 +167,6 @@ export class AddDiaryEventComponent implements OnInit {
 
     this.diaryEventService.eventDateChanges$.subscribe(dates => {
       if (dates) {
-        console.log(dates);
         this.diaryEventForm.patchValue({
           startDateTime: new Date(dates.startDate),
           endDateTime: new Date(dates.endDate),
@@ -481,8 +480,8 @@ export class AddDiaryEventComponent implements OnInit {
       event.staffMembers = this.currentStaffMember;
     }
     this.setReminder(this.id, event.staffMembers);
-    event.startDateTime=this.toUTC(event.startDateTime)
-    event.endDateTime=this.toUTC(event.endDateTime)
+    event.startDateTime = this.toUTC(event.startDateTime)
+    event.endDateTime = this.toUTC(event.endDateTime)
     if (this.isNewEvent || this.isRebook) {
       this.diaryEventService.addDiaryEvent(event).subscribe(res => {
         if (res) {
@@ -546,7 +545,7 @@ export class AddDiaryEventComponent implements OnInit {
     } else {
       this.toastr.success('Diary event successfully updated');
     }
-    this.router.navigate(['/']);
+    this.router.navigate(['/'], { queryParamsHandling: "merge" });
     // this.router.navigateByUrl('/', { skipLocationChange: true })
     //   .then(() => this.router.navigate(['/diary/edit', diaryEvent.diaryEventId]));
   }
@@ -572,6 +571,11 @@ export class AddDiaryEventComponent implements OnInit {
       }
 
       this.setTelephoneValidator(contactsControl);
+    } else {
+      propertiesControl.clearValidators();
+      propertiesControl.updateValueAndValidity();
+      contactsControl.clearValidators();
+      contactsControl.updateValueAndValidity();
     }
   }
 
@@ -648,8 +652,8 @@ export class AddDiaryEventComponent implements OnInit {
   }
 
 
-  toUTC(date){
-    const d=new Date(date)
+  toUTC(date) {
+    const d = new Date(date)
     return new Date(d.getTime() - d.getTimezoneOffset() * 60 * 1000)
   }
 }
