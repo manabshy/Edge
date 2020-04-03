@@ -96,6 +96,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   canBookAppointment = true;
   isAvailabilityRequired = false;
   canChangeDate: boolean;
+  canSearchAvailability = false;
 
 
   get originTypeControl() {
@@ -252,7 +253,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.setRentFigures();
         this.toggleValuerType();
         this.checkAvailabilityBooking();
-        // this.setCanBookAppointmentFlag();
       });
 
     this.instructionForm.valueChanges.pipe(debounceTime(100), distinctUntilChanged())
@@ -720,19 +720,24 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   getAvailability() {
     this.availableDates = {} as any;
+    this.canSearchAvailability = false;
     this.showCalendar = true;
+    const isSalesOrLettings = (this.isLettingsOnly && this.lettingsValuerControl.value) || (this.isSalesOnly && this.salesValuerControl.value);
     if (this.isSalesAndLettings && this.salesValuerControl.value && this.lettingsValuerControl.value) {
       this.availabilityForm.patchValue({
         staffMemberId1: this.salesValuerControl.value.staffMemberId,
         staffMemberId2: this.lettingsValuerControl.value.staffMemberId,
       });
-      console.log('all', this.availabilityForm.value);
-    } else {
+      this.canSearchAvailability = true;
+      console.log('all', this.availabilityForm.value, 'condit', this.canSearchAvailability);
+    } else if (isSalesOrLettings) {
       this.availabilityForm.patchValue({
         staffMemberId1: this.salesValuerControl.value.staffMemberId || this.lettingsValuerControl.value.staffMemberId
       });
-      console.log('single', this.availabilityForm.value);
+      this.canSearchAvailability = true;
+      console.log('single', this.availabilityForm.value, 'condit', this.canSearchAvailability);
     }
+    console.log('intial', this.availabilityForm.value, 'should be false', this.canSearchAvailability);
   }
 
   searchAvailabilty() {
