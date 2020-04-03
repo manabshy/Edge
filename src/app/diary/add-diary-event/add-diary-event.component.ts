@@ -481,7 +481,8 @@ export class AddDiaryEventComponent implements OnInit {
       event.staffMembers = this.currentStaffMember;
     }
     this.setReminder(this.id, event.staffMembers);
-
+    event.startDateTime=this.toUTC(event.startDateTime)
+    event.endDateTime=this.toUTC(event.endDateTime)
     if (this.isNewEvent || this.isRebook) {
       this.diaryEventService.addDiaryEvent(event).subscribe(res => {
         if (res) {
@@ -647,4 +648,8 @@ export class AddDiaryEventComponent implements OnInit {
   }
 
 
+  toUTC(date){
+    const d=new Date(date)
+    return new Date(d.getTime() - d.getTimezoneOffset() * 60 * 1000)
+  }
 }
