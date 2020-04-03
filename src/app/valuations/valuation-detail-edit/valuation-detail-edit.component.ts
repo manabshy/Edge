@@ -1181,6 +1181,20 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   }
 
+  duplicateValuation() {
+    const propertyId = this.property.propertyId;
+    const lastKnownOwnerId = this.lastKnownOwner.contactGroupId;
+    this.router.navigateByUrl('/', { skipLocationChange: true })
+      .then(() => this.router.navigate(['valuations-register/detail/', 0, 'edit'], {
+        queryParams: {
+          propertyId: propertyId,
+          lastKnownOwnerId: lastKnownOwnerId,
+          isNewValuation: true
+        }
+      })
+      );
+  }
+
   onSaveComplete(valuation?: Valuation) {
     this.valuationForm.markAsPristine();
     this.isSubmitting = false;

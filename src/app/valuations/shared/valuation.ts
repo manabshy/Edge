@@ -44,6 +44,7 @@ export interface Valuation extends ValuationInfo {
   createdDate: Date;
   createdBy: BaseStaffMember;
   isActive?: boolean;
+  isExpired?: boolean;
 }
 
 export interface ValuationPropertyInfo {
