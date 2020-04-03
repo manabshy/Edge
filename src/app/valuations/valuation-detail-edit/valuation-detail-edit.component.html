@@ -295,6 +295,9 @@
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </p>
+                <div class="alert alert-info" role="alert" *ngIf="!canSearchAvailability">
+                  Please select valuer(s)
+                </div>
                 <form [formGroup]="availabilityForm" (ngSubmit)="searchAvailabilty()">
                   <div class="form-group row">
                     <div class="col-sm-4">
@@ -304,7 +307,7 @@
                           [bsConfig]="{showWeekNumbers:false,  dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
                           bsDatepicker formControlName="fromDate">
                         <div class="input-group-append">
-                          <button class="btn btn-secondary">Search</button>
+                          <button class="btn btn-secondary" [attr.disabled]="!canSearchAvailability? true:null">Search</button>
                         </div>
                       </div>
                     </div>
