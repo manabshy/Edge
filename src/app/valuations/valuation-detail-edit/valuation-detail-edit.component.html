@@ -20,7 +20,8 @@
               Sales Terms Of Business
             </a>
           </li>
-          <li role="menuitem" *ngIf="valuationForm.get('suggestedAskingRentLongLet').value || valuationForm.get('suggestedAskingRentShortLet').value">
+          <li role="menuitem"
+            *ngIf="valuationForm.get('suggestedAskingRentLongLet').value || valuationForm.get('suggestedAskingRentShortLet').value">
             <a class="dropdown-item">
               <span class="dropdown-icon">
                 <i class="fas fa-file-contract"></i>
@@ -28,7 +29,8 @@
               Lettings Terms Of Business
             </a>
           </li>
-          <li role="menuitem" *ngIf="valuationForm.get('suggestedAskingRentLongLet').value || valuationForm.get('suggestedAskingRentShortLet').value">
+          <li role="menuitem"
+            *ngIf="valuationForm.get('suggestedAskingRentLongLet').value || valuationForm.get('suggestedAskingRentShortLet').value">
             <a class="dropdown-item">
               <span class="dropdown-icon">
                 <i class="fas fa-file-contract"></i>
@@ -162,7 +164,8 @@
                   </select>
                   <input class="form-control" type="text" name="approxLeaseExpiryDate" *ngIf="showLeaseExpiryDate"
                     aria-label="length" placeholder="Approx Length ..." id="approxLeaseExpiryDate"
-                    formControlName="approxLeaseExpiryDate" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                    formControlName="approxLeaseExpiryDate"
+                    [attr.disabled]="!isEditable && !isNewValuation ? true : null"
                     [ngClass]="{'is-invalid': (formErrors?.approxLeaseExpiryDate)}">
                   <div class="invalid-feedback">{{formErrors?.approxLeaseExpiryDate}}</div>
                 </div>
@@ -220,8 +223,8 @@
             </div>
             <div class="form-group" [hidden]="!(isSalesOnly || isSalesAndLettings)">
               <label for="salesValuer" class="small">Sales Valuer</label>
-              <ng-select placeholder="Select Valuer" [items]="salesValuers" bindLabel="fullName" bindValue="staffMemberId"
-                groupBy="staffMembers" [multiple]="false" formControlName="salesValuerId"
+              <ng-select placeholder="Select Valuer" [items]="salesValuers" bindLabel="fullName"
+                bindValue="staffMemberId" groupBy="staffMembers" [multiple]="false" formControlName="salesValuerId"
                 (change)="onSalesValuerChange($event)" [readonly]="!isEditable && !isNewValuation"
                 [ngClass]="{'is-invalid': formErrors.salesValuerId}">
                 <ng-template ng-optgroup-tmp let-item="item">
@@ -261,7 +264,7 @@
                   <label class="small">Date & Time</label>
                   <div class="d-flex d-sm-block">
                     <label for="changeDate"
-                      class="text-left mobile-btn small">{{(selectedDate || valuation?.valuationDate) | date: 'E d MMM yyyy, HH:mm'}}</label>
+                      class="text-left mobile-btn small">{{(selectedDate || valuation?.valuationDate) | date: 'E d MMM yyyy, HH:mm':'+0000'}}</label>
                     <button id="changeDate" class="btn btn-light btn-sm ml-2" type="button" (click)="getAvailability()"
                       *ngIf="(isEditable || isNewValuation) && canChangeDate">Change </button>
                   </div>
