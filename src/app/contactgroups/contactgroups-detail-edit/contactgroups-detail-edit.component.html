@@ -171,13 +171,13 @@
 
           <div class="custom-control custom-checkbox">
             <input class="custom-control-input" type="checkbox" id="contactByEmail" formControlName="contactByEmail">
-            <label class="custom-control-label small" for="examplecheckboxs1">
+            <label class="custom-control-label small" for="contactByEmail">
               Email
             </label>
           </div>
           <div class="custom-control custom-checkbox">
             <input class="custom-control-input" type="checkbox" id="contactByPhone" formControlName="contactByPhone">
-            <label class="custom-control-label small" for="examplecheckboxs3">
+            <label class="custom-control-label small" for="contactByPhone">
               Phone
             </label>
           </div>
@@ -235,7 +235,7 @@
               [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', maxDate:todaysDate, customTodayClass: 'font-weight-bold'}"
               bsDatepicker
               #datepicker="bsDatepicker"
-              [appNoDoubleTap]='datepicker' 
+              [appNoDoubleTap]='datepicker'
               readonly>
             <div class="input-group-append" *ngIf="personForm.value.amlCompletedDate">
               <button type="button" class="btn btn-light"
