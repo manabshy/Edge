@@ -258,7 +258,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
     }
   }
 
-  logValidationErrors(group: FormGroup = this.propertyForm, fakeTouched: boolean) {
+  logValidationErrors(group: FormGroup = this.propertyForm, fakeTouched: boolean, scrollToError = false) {
     Object.keys(group.controls).forEach((key: string) => {
       const control = group.get(key);
       const messages = ValidationMessages[key];
@@ -278,7 +278,9 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
         this.logValidationErrors(control, fakeTouched);
       }
     });
-    this.sharedService.scrollToFirstInvalidField();
+    if (scrollToError) {
+      this.sharedService.scrollToFirstInvalidField();
+    }
   }
 
   saveProperty() {
@@ -286,7 +288,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
     console.log(this.lastKnownOwner);
     const control = this.propertyForm.get('address');
     this.setOfficeIdValidator();
-    this.logValidationErrors(this.propertyForm, true);
+    this.logValidationErrors(this.propertyForm, true, true);
     control.clearValidators();
     control.updateValueAndValidity();
     this.propertyAddress ? this.isAddressFormValid = true : this.isAddressFormValid = false;

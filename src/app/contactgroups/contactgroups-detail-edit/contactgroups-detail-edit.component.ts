@@ -186,7 +186,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
     }
   }
 
-  logValidationErrors(group: FormGroup = this.personForm, fakeTouched: boolean) {
+  logValidationErrors(group: FormGroup = this.personForm, fakeTouched: boolean, scrollToError = false) {
     Object.keys(group.controls).forEach((key: string) => {
       const control = group.get(key);
       const messages = ValidationMessages[key];
@@ -210,7 +210,9 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
         this.logValidationErrorsFormArray(control);
       }
     });
-    this.sharedService.scrollToFirstInvalidField();
+    if (scrollToError) {
+      this.sharedService.scrollToFirstInvalidField();
+    }
   }
 
   logValidationErrorsFormArray(control: AbstractControl) {
@@ -533,9 +535,9 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
     this.errorMessage = null;
     this.removeSMSLandlines();
     this.removeOthers();
-    this.logValidationErrors(this.personForm, true);
+    this.logValidationErrors(this.personForm, true, true);
     if (this.personForm.valid) {
-      if(otherPersonToAdd){
+      if (otherPersonToAdd) {
         this.isSubmittingAndAdd = true;
       } else {
         this.isSubmitting = true;
@@ -593,7 +595,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
       }
       this.addedPersonDetails.emit(personEmitter);
       this.backToFinder.emit(otherPersonToAdd);
-      if(!personEmitter.otherPersonToAdd) {
+      if (!personEmitter.otherPersonToAdd) {
         this.makeCanvasInvisible(this.isOffCanvasVisible);
       }
     } else {

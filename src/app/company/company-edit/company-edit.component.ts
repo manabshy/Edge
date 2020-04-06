@@ -98,7 +98,7 @@ export class CompanyEditComponent implements OnInit {
   }
 
   createNewSigner(event) {
-    if(event) {
+    if (event) {
       this.isCreatingNewSigner = true;
     }
   }
@@ -176,7 +176,7 @@ export class CompanyEditComponent implements OnInit {
     }
   }
 
-  logValidationErrors(group: FormGroup = this.companyForm, fakeTouched: boolean) {
+  logValidationErrors(group: FormGroup = this.companyForm, fakeTouched: boolean, scrollToError = false) {
     Object.keys(group.controls).forEach((key: string) => {
       const control = group.get(key);
       const messages = ValidationMessages[key];
@@ -195,7 +195,9 @@ export class CompanyEditComponent implements OnInit {
         this.logValidationErrors(control, fakeTouched);
       }
     });
-    this.sharedService.scrollToFirstInvalidField();
+    if (scrollToError) {
+      this.sharedService.scrollToFirstInvalidField();
+    }
   }
 
   getSelectedSigner(signer: Signer) {
@@ -237,7 +239,7 @@ export class CompanyEditComponent implements OnInit {
 
   saveCompany() {
     const isSignerChanged = this.signer || this.signer == null;
-    this.logValidationErrors(this.companyForm, true);
+    this.logValidationErrors(this.companyForm, true, true);
     if (this.companyForm.valid) {
       if (this.companyForm.dirty || isSignerChanged) {
         this.AddOrUpdateCompany();

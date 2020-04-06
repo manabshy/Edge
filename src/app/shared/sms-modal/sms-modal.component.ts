@@ -71,7 +71,7 @@ export class SmsModalComponent implements OnInit {
 
   }
 
-  logValidationErrorsSimple(group: FormGroup = this.smsForm, fakeTouched: boolean) {
+  logValidationErrorsSimple(group: FormGroup = this.smsForm, fakeTouched: boolean, scrollToError = false) {
     Object.keys(group.controls).forEach((key: string) => {
       const control = group.get(key);
       const messages = ValidationMessages[key];
@@ -88,12 +88,14 @@ export class SmsModalComponent implements OnInit {
         }
       }
     });
-    this.sharedService.scrollToFirstInvalidField();
+    if (scrollToError) {
+      this.sharedService.scrollToFirstInvalidField();
+    }
   }
 
   sendSMS() {
     this.errorMessage = null;
-    this.logValidationErrorsSimple(this.smsForm, true);
+    this.logValidationErrorsSimple(this.smsForm, true, true);
     if (this.smsForm.valid) {
       if (this.smsForm.dirty) {
         const sms = { ...this.sms, ...this.smsForm.value };

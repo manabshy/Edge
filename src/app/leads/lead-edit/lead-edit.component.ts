@@ -216,7 +216,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
   }
 
-  logValidationErrors(group: FormGroup = this.leadEditForm, fakeTouched: boolean) {
+  logValidationErrors(group: FormGroup = this.leadEditForm, fakeTouched: boolean, scrollToError = false) {
     Object.keys(group.controls).forEach((key: string) => {
       const control = group.get(key);
       const messages = ValidationMessages[key];
@@ -236,7 +236,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
         this.logValidationErrors(control, fakeTouched);
       }
     });
-    this.sharedService.scrollToFirstInvalidField();
+  if(scrollToError) {
+      this.sharedService.scrollToFirstInvalidField();
+  }
   }
 
   private getLeadInformation() {
@@ -317,7 +319,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       this.leadEditForm.patchValue({ ownerId: 0 });
     }
 
-    console.log('valuer id here',   this.leadEditForm.get('ownerId').value);
+    console.log('valuer id here', this.leadEditForm.get('ownerId').value);
   }
 
   isObject(val) {
@@ -405,7 +407,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   SaveLead(shouldExit: boolean = false, leadNote = null) {
-    this.logValidationErrors(this.leadEditForm, true);
+    this.logValidationErrors(this.leadEditForm, true, true);
 
     if (this.leadEditForm.valid) {
       this.isSubmitting = true;
