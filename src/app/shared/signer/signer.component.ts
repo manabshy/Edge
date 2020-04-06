@@ -46,6 +46,7 @@ export class SignerComponent implements OnInit, OnChanges {
   noSuggestions: boolean = false;
   applicantsLabel: string;
   hasBeenSearched: boolean;
+  isSale = false;
 
 
   get signerNames(): FormControl {
@@ -67,18 +68,28 @@ export class SignerComponent implements OnInit, OnChanges {
       text$.pipe(
         distinctUntilChanged(),
         switchMap(term =>
-          this.peopleService.getPeopleSuggestions(term).pipe(
-            tap(data => {
-              if (data && !data.length) {
-                this.noSuggestions = true;
-              } else { this.noSuggestions = false; }
-            }),
-            catchError(() => {
-              return EMPTY;
-            }))
+          this.isApplicant ? this.getApplicantSuggestions(term, this.isSale) : this.getPeopleSuggestions(term)
         )
       );
     this.displayExistingSigners();
+  }
+
+  private getPeopleSuggestions(term: string): Observable<any[]> {
+    return this.peopleService.getPeopleSuggestions(term).pipe(tap(data => {
+      if (data && !data.length) {
+        this.noSuggestions = true;
+      } else {
+        this.noSuggestions = false;
+      }
+    }), catchError(() => {
+      return EMPTY;
+    }));
+  }
+
+
+  private getApplicantSuggestions(term: string, isSale: boolean): Observable<any[]> {
+    return this.contactGroupService.getApplicantSuggestions(term, isSale)
+      .pipe(catchError(() => EMPTY));
   }
 
   ngOnChanges() {
@@ -88,6 +99,12 @@ export class SignerComponent implements OnInit, OnChanges {
     if (this.existingPerson) {
       this.signersAutocomplete(this.existingPerson.firstName + ' ' + this.existingPerson.middleName + ' ' + this.existingPerson.lastName);
     }
+    if (this.label && this.label.toLowerCase().startsWith('sales')) {
+      this.isSale = true;
+    } else {
+      this.isSale = false;
+    }
+    console.log('here.....', this.isSale, this.label);
     // if (this.isApplicant) { this.label = 'applicants'; }
   }
 

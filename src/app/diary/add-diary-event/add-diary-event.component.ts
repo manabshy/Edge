@@ -71,7 +71,7 @@ export class AddDiaryEventComponent implements OnInit {
   isBase64Image: boolean;
   searchParams: {};
   searchType: PropertySearchEnum;
-  isApplicant = true;
+  isApplicant = false;
   lockEventTypes: boolean;
 
   get hours() {
@@ -365,18 +365,27 @@ export class AddDiaryEventComponent implements OnInit {
     switch (true) {
       case +eventTypeId === DiaryEventTypesEnum.ViewingSales:
         this.searchType = PropertySearchEnum.SalesViewing;
+        this.isApplicant = true;
         this.contactLabel = 'Sales Applicant';
         this.propertyLabel = 'For Sale';
+        console.log('sales  xxxxxxxx', this.isApplicant)
         break;
       case +eventTypeId === DiaryEventTypesEnum.ViewingLettings:
         this.searchType = PropertySearchEnum.LettingsViewing;
+        this.isApplicant = true;
         this.contactLabel = 'Lettings Applicant';
         this.propertyLabel = 'To Let';
+        console.log('lettings  xxxxxxxx', this.isApplicant)
         break;
 
       default:
         this.searchType = PropertySearchEnum.DiaryEventProperty;
         this.isApplicant = false;
+        // this.propertyLabel = 'Property';
+        // this.contactLabel = 'Contact';
+        console.log('defualt  xxxxxxxx', this.isApplicant)
+        console.log('not reset defualt  ', this.contactLabel)
+        console.log(' not reset defualt ', this.propertyLabel)
         break;
     }
   }
