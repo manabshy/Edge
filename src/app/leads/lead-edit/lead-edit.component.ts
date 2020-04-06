@@ -236,9 +236,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
         this.logValidationErrors(control, fakeTouched);
       }
     });
-  if(scrollToError) {
+    if (scrollToError) {
       this.sharedService.scrollToFirstInvalidField();
-  }
+    }
   }
 
   private getLeadInformation() {
@@ -415,8 +415,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       if (this.leadEditForm.dirty || this.isNoteFormDirty || this.isPropertyAssociated || this.isPropertyRemoved || this.isOwnerChanged) {
         const lead = { ...this.lead, ...this.leadEditForm.value };
         const isNoteRequired = this.isLeadMarkedAsClosed || this.isNewLead || this.isNextChaseDateChanged;
-
-        if ((isNoteRequired) && (this.note.text === '' || this.note.text == null)) {
+        if (this.note === undefined) { this.note = {} as ContactNote; }
+        if (isNoteRequired && !this.note.text) {
           this.noteRequiredWarning = 'Note is required.';
           setTimeout(() => {
             this.sharedService.scrollToFirstInvalidField();
