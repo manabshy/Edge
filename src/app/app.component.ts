@@ -29,7 +29,8 @@ export class AppComponent extends BaseComponent implements OnInit {
   @ViewChild(ToastContainerDirective, { static: true }) toastContainer: ToastContainerDirective;
 
   get isLoggedIn(): boolean {
-    return this.authService.isLoggedIn();
+    return this.authService.checkAccount();
+
   }
 
 
