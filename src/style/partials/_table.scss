@@ -49,8 +49,13 @@
             display: block;
             border: none!important;
         }
-        tr:not(:last-child) {
-            border-bottom: 1px solid $border-color;
+        tr {
+            display: block;
+            padding: spacer(3) 0;
+            
+            &:not(:last-child) {
+                border-bottom: 1px solid $border-color;
+            }
         }
         
         dl {

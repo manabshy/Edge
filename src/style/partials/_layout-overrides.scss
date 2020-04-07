@@ -56,6 +56,11 @@ small {
 
 .list-group-item {
 
+    @include media-breakpoint-down(sm) {
+        padding-top: spacer(4);
+        padding-bottom: spacer(4);
+    }
+
     .card-body &.list-header + .list-group-item {
         @include media-breakpoint-down(sm){
             border-top: 0;
