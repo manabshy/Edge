@@ -38,7 +38,6 @@ export class ContactGroupsComponent implements OnInit {
   searching: boolean;
   searchFailed: boolean;
   suggestedTerm: any;
-  isChangeSearchVisible: boolean = false;
 
   constructor(private contactGroupService: ContactGroupsService,
     private route: ActivatedRoute,
@@ -112,9 +111,6 @@ export class ContactGroupsComponent implements OnInit {
   }
 
   getNextContactGroupsPage(page: number) {
-    if(page > 1) {
-      this.isChangeSearchVisible = true;
-    }
     this.contactGroupService.getAutocompleteContactGroups(this.searchTerm, PAGE_SIZE, page).subscribe(result => {
 
       if (this.searchTerm && this.searchTerm.length) {
@@ -183,6 +179,5 @@ export class ContactGroupsComponent implements OnInit {
 
   scrollElIntoView(className: string) {
     this.sharedService.scrollElIntoView(className);
-    this.isChangeSearchVisible = false;
   }
 }

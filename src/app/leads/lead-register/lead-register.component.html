@@ -3,7 +3,6 @@
     <h4 class="m-0">Leads register</h4>
   </div>
   <div class="col-auto">
-    <button type="button" class="btn btn-light mr-2 d-none" [ngClass]="{'d-sm-inline': isChangeSearchVisible}" (click)="scrollElIntoView('search-form')">Change Search</button>
     <div class="btn-group" dropdown placement="bottom right">
       <button id="actionsToggle" dropdownToggle type="button" class="btn btn-light dropdown-toggle"
         aria-controls="actionsList">
@@ -46,7 +45,13 @@
             #datepickerFrom="bsDatepicker"
             [appNoDoubleTap]='datepickerFrom' formControlName="dateFrom">
         </div>
-        <div class="col-sm form-group">
+        <div class="col-12 form-group d-sm-none">
+          <button class="btn btn-link p-0" (click)="isAdvancedSearchVisible = !isAdvancedSearchVisible">
+            <ng-container *ngIf="!isAdvancedSearchVisible; else hideLabel">Show</ng-container>
+            <ng-template #hideLabel>Hide</ng-template> advanced search
+          </button>
+        </div>
+        <div class="col-sm form-group d-sm-block" [ngClass]="{'d-none': !isAdvancedSearchVisible}">
           <label class="small" for="dateTo">Date To</label>
           <input type="text" id="dateTo" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
             [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY',customTodayClass: 'font-weight-bold'}"
@@ -54,18 +59,18 @@
             #datepickerTo="bsDatepicker"
             [appNoDoubleTap]='datepickerTo' formControlName="dateTo">
         </div>
-        <div class="col-sm form-group">
+        <div class="col-sm form-group d-sm-block" [ngClass]="{'d-none': !isAdvancedSearchVisible}">
           <app-office-finder (selectedOfficeId) ="getSelectedOfficeId($event)" [fullWidth]="true"></app-office-finder>
         </div>
         <div class="w-100"></div>
-        <div class="col-sm-auto">
+        <div class="col-sm-auto d-sm-block" [ngClass]="{'d-none': !isAdvancedSearchVisible}">
           <div class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input" id="closedInclusive"
               formControlName="includeClosedLeads">
             <label class="custom-control-label small" for="closedInclusive">Include closed leads</label>
           </div>
         </div>
-        <div class="col form-group" *ngIf="canSeeUnassignable">
+        <div class="col form-group d-sm-block" [ngClass]="{'d-none': !isAdvancedSearchVisible}" *ngIf="canSeeUnassignable">
           <div class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input" id="unassignedLeadsOnly"
               formControlName="includeUnassignedLeadsOnly">

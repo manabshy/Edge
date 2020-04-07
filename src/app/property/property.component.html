@@ -5,7 +5,6 @@
       <h4 class="m-0">Property centre</h4>
     </div>
     <div class="col-auto">
-      <button type="button" class="btn btn-light mr-2 d-none" [ngClass]="{'d-sm-inline': isChangeSearchVisible}" (click)="scrollElIntoView('search-form')">Change Search</button>
       <a class="btn btn-light" [routerLink]="['detail', 0 , 'edit' ]"  [queryParams]="{isNewProperty: true}" ><i class="fas fa-plus mr-2"></i> Property</a>
     </div>
   </div>

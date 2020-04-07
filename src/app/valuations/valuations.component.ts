@@ -34,7 +34,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
   valuers: StaffMember[];
   offices: Office[];
   statuses: any;
-  isChangeSearchVisible: boolean = false;
+  isAdvancedSearchVisible: boolean = false;
   get searchTermControl() {
     return this.valuationFinderForm.get('searchTerm') as FormControl;
   }
@@ -114,9 +114,6 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
   }
 
   getNextValuationsPage(page: number) {
-    if(page > 1) {
-      this.isChangeSearchVisible = true;
-    }
     const request = {
       page: page,
       searchTerm: this.searchTerm,
@@ -173,7 +170,6 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
 
   scrollElIntoView(className: string) {
     this.sharedService.scrollElIntoView(className);
-    this.isChangeSearchVisible = false;
   }
 }
 

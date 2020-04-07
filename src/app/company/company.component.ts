@@ -27,7 +27,6 @@ export class CompanyComponent implements OnInit {
   searchTerm = '';
   page: number;
   bottomReached: boolean;
-  isChangeSearchVisible: boolean = false;
 
   constructor(private contactGroupService: ContactGroupsService,
     private companyService: CompanyService,
@@ -80,9 +79,6 @@ export class CompanyComponent implements OnInit {
   }
 
   private getNextCompanyListPage(page: number) {
-    if(page > 1) {
-      this.isChangeSearchVisible = true;
-    }
     this.contactGroupService.getAutocompleteCompany(this.searchTerm, PAGE_SIZE, page).subscribe(result => {
       if (this.searchTerm && this.searchTerm.length) {
         if (result && !result.length) {
@@ -133,6 +129,5 @@ export class CompanyComponent implements OnInit {
 
   scrollElIntoView(className: string) {
     this.sharedService.scrollElIntoView(className);
-    this.isChangeSearchVisible = false;
   }
 }

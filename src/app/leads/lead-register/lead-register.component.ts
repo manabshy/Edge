@@ -45,7 +45,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   info: string;
   isClosedIncluded: boolean;
   canSeeUnassignable: boolean;
-  isChangeSearchVisible: boolean = false;
+  isAdvancedSearchVisible: boolean = false;
 
   constructor(private leadService: LeadsService,
     private sharedService: SharedService,
@@ -301,7 +301,6 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
 
     if (isLeadsRegister) {
       if (totalHeight >= scrollHeight && !this.bottomReached) {
-        this.isChangeSearchVisible = true;
         this.page++;
         this.leadSearchInfo.page = this.page;
         this.leadService.pageNumberChanged(this.leadSearchInfo);
@@ -329,6 +328,5 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
 
   scrollElIntoView(className: string) {
     this.sharedService.scrollElIntoView(className);
-    this.isChangeSearchVisible = false;
   }
 }

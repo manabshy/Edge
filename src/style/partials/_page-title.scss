@@ -4,21 +4,8 @@
     padding: spacer(2) 0;
     margin-bottom: spacer(3);
     border-bottom: 1px solid $border-color;
-    position: sticky;
-    top: 0;
-    background: color('white');
-    z-index: 100;
+    background-color: color("white");
     min-height: 3.5rem;
-
-    @include media-breakpoint-down(lg) {
-        top: $top-bar-height;
-    }
-
-    @include media-breakpoint-down(sm) {
-        @media (orientation: landscape) {
-            position: static;
-        }
-    }
 
     &.row {
         @extend .no-gutters;

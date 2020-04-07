@@ -100,3 +100,15 @@ fieldset {
         line-height: 2;
     }
 }
+
+.search-form {
+    padding: spacer(2) 0;
+    position: sticky;
+    top: 0;
+    background: color('white');
+    z-index: 100;
+
+    @include media-breakpoint-down(lg) {
+        top: $top-bar-height;
+    }
+}
