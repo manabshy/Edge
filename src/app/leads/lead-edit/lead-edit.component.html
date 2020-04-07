@@ -11,7 +11,7 @@
         <h5>Person</h5>
         <app-person-details *ngIf="person" [personDetails]="person"></app-person-details>
         <div #spacer></div>
-        <div class="sub-info" stickyThing [spacer]="spacer" marginTop="66">
+        <div class="sub-info" stickyThing [spacer]="spacer" marginTop="20">
           <h5>More Info</h5>
           <accordion [closeOthers]="true">
             <accordion-group *ngFor="let item of subNav">
