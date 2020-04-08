@@ -30,7 +30,8 @@
     </div>
     <textarea #note class="form-control" name="note" id="note{{isModal}}" cols="30" rows="5" placeholder="Comment ..."
       (keydown)="ctrlEnterSubmit($event)"
-      formControlName="text"></textarea>
+      formControlName="text" [ngClass]="{'is-invalid':formErrors.text}"></textarea>
+      <div class="invalid-feedback">{{formErrors.text}}</div>
   </div>
   <div class="mt-4" [ngClass]="{'text-center': isCancelVisible}">
     <button type="button" class="btn btn-light mr-2" (click)="action(false)" *ngIf="isCancelVisible">Cancel</button>

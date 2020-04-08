@@ -37,7 +37,7 @@ export class SharedService {
   back() {
     if (!(window.opener && window.opener !== window)) {
       if (AppUtils.deactivateRoute) {
-        this._router. navigateByUrl(AppUtils.deactivateRoute);
+        this._router.navigateByUrl(AppUtils.deactivateRoute);
         AppUtils.deactivateRoute = '';
       } else {
         this._location.back();
@@ -201,7 +201,7 @@ export class SharedService {
     }
   }
 
-  logValidationErrors(group: FormGroup, fakeTouched: boolean) {
+  logValidationErrors(group: FormGroup, fakeTouched: boolean, scrollToError = false) {
     Object.keys(group.controls).forEach((key: string) => {
       const control = group.get(key);
       const messages = ValidationMessages[key];
@@ -221,7 +221,9 @@ export class SharedService {
         this.logValidationErrors(control, fakeTouched);
       }
     });
-    this.scrollToFirstInvalidField();
+    if (scrollToError) {
+      this.scrollToFirstInvalidField();
+    }
   }
 
   resetForm(form: FormGroup) {
@@ -407,6 +409,6 @@ export class WedgeError {
   technicalDetails: string;
   message: string;
   displayMessage: string;
-  requestUrl?:string;
+  requestUrl?: string;
 }
 
