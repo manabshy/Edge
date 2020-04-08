@@ -1,11 +1,11 @@
 import { Injectable, ApplicationRef } from '@angular/core';
 import { SwUpdate, UpdateAvailableEvent } from '@angular/service-worker';
 import { interval, concat, Subject } from 'rxjs';
-import { first } from 'rxjs/operators';
+import { first, filter, pairwise, tap } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { ConfirmModalComponent } from 'src/app/shared/confirm-modal/confirm-modal.component';
-import { Router } from '@angular/router';
+import { Router, RoutesRecognized } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -31,8 +31,15 @@ export class EdgeServiceWorkerService {
           // });
         }
       })
-      this.router.events.subscribe(event=>{
+      this.router.events.pipe(
+        filter(e => e instanceof RoutesRecognized)
+      ).pipe(
+        pairwise(),
+        tap(data => console.log('events here...', data))
+      ).subscribe((event: any[] | RoutesRecognized[])=>{
         const current = event[1].urlAfterRedirects;
+        const prev = event[0].urlAfterRedirects
+        console.log(prev)
         console.log("router event: ",event)
         if(current=='/'&&this.isUpdateAvailable){
           console.log("App relaod because of update")
