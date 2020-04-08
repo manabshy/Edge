@@ -5,6 +5,7 @@ import { first } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { ConfirmModalComponent } from 'src/app/shared/confirm-modal/confirm-modal.component';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -13,21 +14,31 @@ export class EdgeServiceWorkerService {
 
   private appChangeSubject = new Subject<UpdateAvailableEvent>();
   appChanges$ = this.appChangeSubject.asObservable();
-
+  private isUpdateAvailable=false
   constructor(private appRef: ApplicationRef,
     private updates: SwUpdate,
     private modalService: BsModalService,
+    private router:Router,
     private toastr: ToastrService) {
-    this.updates.available.subscribe(evt => {
-      if (evt) {
-        console.log('event triggered here', evt);
-        this.showWarning().subscribe(res => {
-          if (res) {
-            window.location.reload();
-          }
-        });
-      }
-    })
+      this.updates.available.subscribe(evt => {
+        if (evt) {
+          console.log('event triggered here', evt);
+          this.isUpdateAvailable=true
+          // this.showWarning().subscribe(res => {
+          //   if (res) {
+          //     window.location.reload();
+          //   }
+          // });
+        }
+      })
+      this.router.events.subscribe(event=>{
+        const current = event[1].urlAfterRedirects;
+        console.log("router event: ",event)
+        if(current=='/'&&this.isUpdateAvailable){
+          console.log("App relaod because of update")
+          window.location.reload()
+        }
+      })
   }
 
   appChanged(update: UpdateAvailableEvent) {
