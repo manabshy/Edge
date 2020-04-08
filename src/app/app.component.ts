@@ -43,6 +43,7 @@ export class AppComponent extends BaseComponent implements OnInit {
     private edgeServiceWorker: EdgeServiceWorkerService,
     private renderer: Renderer2,
     private toastr: ToastrService,
+    private serviceWorker: EdgeServiceWorkerService,
     private cdRef: ChangeDetectorRef) {
     super();
     /*  Track previous route for Breadcrumb component  */
@@ -56,6 +57,10 @@ export class AppComponent extends BaseComponent implements OnInit {
       AppUtils.prevRouteBU = AppUtils.prevRoute || '';
       AppUtils.prevRoute = event[0].urlAfterRedirects;
       const current = event[1].urlAfterRedirects;
+      if(current=='/'&&this.serviceWorker.isUpdateAvailable){
+        console.log("App relaod because of update")
+        window.location.reload()
+      }
       // console.log('events before checking current...', event)
       // if (current.indexOf('login') > -1 && current.indexOf('auth-callback') > -1 && current !== '/') {
       //   console.log('before removal', event)

@@ -14,7 +14,7 @@ export class EdgeServiceWorkerService {
 
   private appChangeSubject = new Subject<UpdateAvailableEvent>();
   appChanges$ = this.appChangeSubject.asObservable();
-  private isUpdateAvailable=false
+  public isUpdateAvailable=false
   constructor(private appRef: ApplicationRef,
     private updates: SwUpdate,
     private modalService: BsModalService,
@@ -31,21 +31,21 @@ export class EdgeServiceWorkerService {
           // });
         }
       })
-      this.router.events.pipe(
-        filter(e => e instanceof RoutesRecognized)
-      ).pipe(
-        pairwise(),
-        tap(data => console.log('events here...', data))
-      ).subscribe((event: any[] | RoutesRecognized[])=>{
-        const current = event[1].urlAfterRedirects;
-        const prev = event[0].urlAfterRedirects
-        console.log(prev)
-        console.log("router event: ",event)
-        if(current=='/'&&this.isUpdateAvailable){
-          console.log("App relaod because of update")
-          window.location.reload()
-        }
-      })
+      // this.router.events.pipe(
+      //   filter(e => e instanceof RoutesRecognized)
+      // ).pipe(
+      //   pairwise(),
+      //   tap(data => console.log('events here...', data))
+      // ).subscribe((event: any[] | RoutesRecognized[])=>{
+        // const current = event[1].urlAfterRedirects;
+        // const prev = event[0].urlAfterRedirects
+        // console.log(prev)
+        // console.log("router event: ",event)
+        // if(current=='/'&&this.isUpdateAvailable){
+        //   console.log("App relaod because of update")
+        //   window.location.reload()
+        // }
+      // })
   }
 
   appChanged(update: UpdateAvailableEvent) {
