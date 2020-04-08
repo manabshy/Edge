@@ -241,6 +241,19 @@ export class WedgeValidators {
     return null;
   }
 
+  static noWhitespaceValidator(control: AbstractControl): ValidationErrors | null {
+    const isWhitespace = (control && control.value && control.value.toString() || '').trim().length === 0;
+    const isValid = !isWhitespace;
+    return isValid ? null : { 'whitespace': true };
+  }
+  
+  static cannotContainSpace(control: AbstractControl): ValidationErrors | null {
+    if ((control.value as string).indexOf(' ') >= 0) {
+      return { cannotContainSpace: true };
+    }
+    return null;
+  }
+
 }
 
 function isEmptyInputValue(value: any): boolean {
