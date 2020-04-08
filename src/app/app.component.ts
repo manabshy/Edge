@@ -57,6 +57,9 @@ export class AppComponent extends BaseComponent implements OnInit {
       AppUtils.prevRouteBU = AppUtils.prevRoute || '';
       AppUtils.prevRoute = event[0].urlAfterRedirects;
       const current = event[1].urlAfterRedirects;
+      console.log("isupdateAvailable: ",this.serviceWorker.isUpdateAvailable)
+      console.log("current Patch: ",current)
+      console.log("condition:" ,current=='/'&&this.serviceWorker.isUpdateAvailable)
       if(current=='/'&&this.serviceWorker.isUpdateAvailable){
         console.log("App relaod because of update")
         window.location.reload()
