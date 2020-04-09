@@ -17,7 +17,7 @@
             <label class="small" for="valuationSearch">Search <span class="text-muted">(Name, email, phone or
                 address)</span></label>
             <input type="search" id="valuationSearch" class="form-control form-control-sm" aria-label="Search criteria"
-              (keydown.enter)="enter($event)" [ngbTypeahead]="suggestions" [focusFirst]="false"
+              (keydown.enter)="getValuations(true)" [ngbTypeahead]="suggestions" [focusFirst]="false"
               (selectItem)="suggestionSelected($event)" formControlName="searchTerm">
           </div>
           <div class="col-sm form-group">
