@@ -1,5 +1,5 @@
 import { Component, Renderer2, ChangeDetectorRef, OnInit, AfterViewChecked, ViewChild, ElementRef } from '@angular/core';
-import { Router, RoutesRecognized, ActivatedRoute } from '@angular/router';
+import { Router, RoutesRecognized, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { filter, pairwise, takeUntil, tap } from 'rxjs/operators';
 import { AppUtils } from './core/shared/utils';
 import { AuthService } from './core/services/auth.service';
@@ -57,29 +57,7 @@ export class AppComponent extends BaseComponent implements OnInit {
       AppUtils.prevRouteBU = AppUtils.prevRoute || '';
       AppUtils.prevRoute = event[0].urlAfterRedirects;
       const current = event[1].urlAfterRedirects;
-      console.log('isupdateAvailable: ', this.serviceWorker.isUpdateAvailable)
-      console.log('current Patch: ', current)
-      console.log('condition:', current === '/' && this.serviceWorker.isUpdateAvailable)
-
-      const calendar = '/?selectedTab=0';
-      const homes = [
-        '/',
-        '/contact-centre',
-        calendar,
-        '/leads-register',
-        '/company-centre',
-        '/property-centre',
-        '/valuations-register'
-      ] 
-      const pathEqual = (elem)=>elem===current;
-      if(homes.some(pathEqual)&&this.serviceWorker.getIsupdateAvailable()){
-        console.log('App relaod because of update');
-        window.location.reload();
-      }
-      // if ((current === '/' || (current as string) === calendar) && this.serviceWorker.getIsupdateAvailable()) {
-      //   console.log('App relaod because of update');
-      //   window.location.reload();
-      // }
+     
       // console.log('events before checking current...', event)
       // if (current.indexOf('login') > -1 && current.indexOf('auth-callback') > -1 && current !== '/') {
       //   console.log('before removal', event)
@@ -94,6 +72,31 @@ export class AppComponent extends BaseComponent implements OnInit {
       }, 1200);
       // window.scrollTo(0,0);
     });
+
+    this.router.events.pipe(
+      filter(e => e instanceof NavigationEnd)
+      ).subscribe((event:any | NavigationEnd)=>{
+        const current = event.urlAfterRedirects
+        console.log('isupdateAvailable: ', this.serviceWorker.isUpdateAvailable)
+        console.log('current Patch: ', current)
+        console.log('condition:', current === '/' && this.serviceWorker.isUpdateAvailable)
+  
+        const calendar = '/?selectedTab=0';
+        const homes = [
+          '/',
+          '/contact-centre',
+          calendar,
+          '/leads-register',
+          '/company-centre',
+          '/property-centre',
+          '/valuations-register'
+        ] 
+        const pathEqual = (elem)=>elem===current;
+        if(homes.some(pathEqual)&&this.serviceWorker.getIsupdateAvailable()){
+          console.log('App relaod because of update');
+          window.location.reload();
+        }
+      })
   }
 
   ngOnInit() {
