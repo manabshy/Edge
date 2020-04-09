@@ -70,7 +70,7 @@ export class AppComponent extends BaseComponent implements OnInit {
         '/company-centre',
         '/property-centre',
         '/valuations-register'
-      ]
+      ] 
       const pathEqual = (elem)=>elem===current;
       if(homes.some(pathEqual)&&this.serviceWorker.getIsupdateAvailable()){
         console.log('App relaod because of update');
