@@ -62,10 +62,24 @@ export class AppComponent extends BaseComponent implements OnInit {
       console.log('condition:', current === '/' && this.serviceWorker.isUpdateAvailable)
 
       const calendar = '/?selectedTab=0';
-      if ((current === '/' || (current as string) === calendar) && this.serviceWorker.getIsupdateAvailable()) {
+      const homes = [
+        '/',
+        '/contact-centre',
+        calendar,
+        '/leads-register',
+        '/company-centre',
+        '/property-centre',
+        '/valuations-register'
+      ]
+      const pathEqual = (elem)=>elem===current;
+      if(homes.some(pathEqual)&&this.serviceWorker.getIsupdateAvailable()){
         console.log('App relaod because of update');
         window.location.reload();
       }
+      // if ((current === '/' || (current as string) === calendar) && this.serviceWorker.getIsupdateAvailable()) {
+      //   console.log('App relaod because of update');
+      //   window.location.reload();
+      // }
       // console.log('events before checking current...', event)
       // if (current.indexOf('login') > -1 && current.indexOf('auth-callback') > -1 && current !== '/') {
       //   console.log('before removal', event)
