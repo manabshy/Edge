@@ -73,7 +73,7 @@ fdescribe('PropertyDetailEditComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PropertyDetailEditComponent);
-    propertyService = TestBed.get(PropertyService);
+    propertyService = TestBed.inject(PropertyService);
     component = fixture.componentInstance;
   });
 
