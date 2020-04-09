@@ -22,7 +22,7 @@ export class EdgeServiceWorkerService {
     private toastr: ToastrService) {
       this.updates.available.subscribe(evt => {
         if (evt) {
-          console.log('event triggered here', evt);
+          console.log('event triggered here, update available', evt);
           this.isUpdateAvailable=true
           console.log("update available from service: ", this.isUpdateAvailable)
           // this.showWarning().subscribe(res => {
