@@ -60,7 +60,8 @@ export class AppComponent extends BaseComponent implements OnInit {
       console.log("isupdateAvailable: ",this.serviceWorker.isUpdateAvailable)
       console.log("current Patch: ",current)
       console.log("condition:" ,current=='/'&&this.serviceWorker.isUpdateAvailable)
-      if(current=='/'&&this.serviceWorker.isUpdateAvailable){
+      
+      if(current=='/'&&this.serviceWorker.getIsupdateAvailable()){
         console.log("App relaod because of update")
         window.location.reload()
       }

@@ -24,6 +24,7 @@ export class EdgeServiceWorkerService {
         if (evt) {
           console.log('event triggered here', evt);
           this.isUpdateAvailable=true
+          console.log("update available from service: ", this.isUpdateAvailable)
           // this.showWarning().subscribe(res => {
           //   if (res) {
           //     window.location.reload();
@@ -46,6 +47,9 @@ export class EdgeServiceWorkerService {
         //   window.location.reload()
         // }
       // })
+  }
+  getIsupdateAvailable(){
+    return this.isUpdateAvailable;
   }
 
   appChanged(update: UpdateAvailableEvent) {
