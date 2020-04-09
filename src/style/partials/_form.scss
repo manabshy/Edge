@@ -10,8 +10,11 @@
     -moz-appearance: none;
     -webkit-appearance: none;
     background: none;
-    color: $body-color!important;
     padding-right: $input-padding-x!important;
+
+    &:not(.btn) {
+        color: $body-color!important;
+    }
 
     &::-ms-expand {
         display: none;
