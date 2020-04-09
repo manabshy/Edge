@@ -57,13 +57,14 @@ export class AppComponent extends BaseComponent implements OnInit {
       AppUtils.prevRouteBU = AppUtils.prevRoute || '';
       AppUtils.prevRoute = event[0].urlAfterRedirects;
       const current = event[1].urlAfterRedirects;
-      console.log("isupdateAvailable: ",this.serviceWorker.isUpdateAvailable)
-      console.log("current Patch: ",current)
-      console.log("condition:" ,current=='/'&&this.serviceWorker.isUpdateAvailable)
-      
-      if(current=='/'&&this.serviceWorker.getIsupdateAvailable()){
-        console.log("App relaod because of update")
-        window.location.reload()
+      console.log('isupdateAvailable: ', this.serviceWorker.isUpdateAvailable)
+      console.log('current Patch: ', current)
+      console.log('condition:', current === '/' && this.serviceWorker.isUpdateAvailable)
+
+      const calendar = '/?selectedTab=0';
+      if ((current === '/' || (current as string) === calendar) && this.serviceWorker.getIsupdateAvailable()) {
+        console.log('App relaod because of update');
+        window.location.reload();
       }
       // console.log('events before checking current...', event)
       // if (current.indexOf('login') > -1 && current.indexOf('auth-callback') > -1 && current !== '/') {
@@ -71,7 +72,7 @@ export class AppComponent extends BaseComponent implements OnInit {
       //   event.pop();
       //   console.log('after removal', event.forEach((x:RoutesRecognized)=>x.url))
       // }
-      if(current.indexOf('calendarView') === -1) {
+      if (current.indexOf('calendarView') === -1) {
         this.isFading = true;
       }
       setTimeout(() => {
