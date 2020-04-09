@@ -12,7 +12,15 @@ a {
     color: $body-color;
 }
 
-a:after {
+:host ::ng-deep a {
+    position: relative;
+
+    &:after {
+        z-index: 2;
+    }
+}
+
+a:after, :host ::ng-deep a:after {
 
     content: '';
     display: block;
