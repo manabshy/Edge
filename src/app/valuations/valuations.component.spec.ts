@@ -21,6 +21,7 @@ import { createStorageMapSpy } from '../../testing/test-spies';
 
 fdescribe('ValuationsComponent', () => {
   let component: ValuationsComponent;
+  let valuationService: ValuationService;
   let fixture: ComponentFixture<ValuationsComponent>;
   const storageMapSpy = createStorageMapSpy();
   beforeEach(async(() => {
@@ -48,7 +49,7 @@ fdescribe('ValuationsComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ValuationsComponent);
-    TestBed.inject(ValuationService);
+    valuationService = TestBed.inject(ValuationService);
     storageMapSpy.get.and.returnValue(of(MockDropdownListInfo));
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -19,6 +19,7 @@ import { BsModalService, BsModalRef, ModalDirective, ModalModule } from 'ngx-boo
 import { createStorageMapSpy } from 'src/testing/test-spies';
 import { of } from 'rxjs';
 import { MockDropdownListInfo } from 'src/app/contactgroups/shared/test-helper/dropdown-list-data.json';
+import { PropertyService } from 'src/app/property/shared/property.service';
 
 let component: ValuationDetailEditComponent;
 let fixture: ComponentFixture<ValuationDetailEditComponent>;
@@ -38,15 +39,39 @@ describe('ValuationDetailEditComponent', () => {
         RouterTestingModule.withRoutes([])
       ],
       providers: [
-        { provide: ValuationService, useValue: {} },
+        // { provide: ValuationService, useValue: {} },
         { provide: ContactGroupsService, useValue: {} },
         { provide: SharedService, useValue: SharedServiceStub },
         { provide: StaffMemberService, useValue: {} },
         { provide: ToastrService, useValue: {} },
         { provide: StorageMap, useValue: storageMapSpy },
-        { provide: ActivatedRoute, useValue: activatedRoute },
         { provide: InfoService, useValue: {} },
         { provide: Router, useValue: routerSpy },
+        // { provide: ActivatedRoute, useValue: activatedRoute },
+        {
+          provide: ActivatedRoute, useValue: {
+            snapshot: {
+              paramMap: {
+                get: () => 1
+              },
+              queryParamMap: {
+                get: (key: string) => {
+                  switch (key) {
+                    case 'propertyId':
+                      return 2;
+                    case 'lastKnownOwnerId':
+                      return 12;
+                    case 'isNewValuation':
+                      return true;
+                  }
+                }
+              }
+            },
+            params: of({
+              id: 2,
+            })
+          }
+        },
       ],
       schemas: [NO_ERRORS_SCHEMA]
     })
@@ -54,9 +79,12 @@ describe('ValuationDetailEditComponent', () => {
   }));
 
   beforeEach(() => {
-    activatedRoute = new ActivatedRouteStub();
+    // activatedRoute = new ActivatedRouteStub();
     fixture = TestBed.createComponent(ValuationDetailEditComponent);
     component = fixture.componentInstance;
+    TestBed.inject(ValuationService);
+    TestBed.inject(PropertyService);
+    TestBed.inject(ContactGroupsService);
     storageMapSpy.get.and.returnValue(of(MockDropdownListInfo));
     fixture.detectChanges();
   });
