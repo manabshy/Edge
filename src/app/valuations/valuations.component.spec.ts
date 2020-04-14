@@ -23,7 +23,7 @@ import { ValuationDetailEditComponent } from './valuation-detail-edit/valuation-
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 
-fdescribe('ValuationsComponent', () => {
+describe('ValuationsComponent', () => {
   let component: ValuationsComponent;
   let valuationService: ValuationService;
   let fixture: ComponentFixture<ValuationsComponent>;
