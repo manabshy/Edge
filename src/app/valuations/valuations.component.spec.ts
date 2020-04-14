@@ -88,8 +88,8 @@ describe('ValuationsComponent', () => {
 
   it('should navigate to new valuation ', fakeAsync(() => {
     const createNewValuationButton = debugElement.query(By.css('a')).nativeElement;
+    
     createNewValuationButton.click();
-
     fixture.detectChanges();
 
     fixture.whenStable().then(() => {
