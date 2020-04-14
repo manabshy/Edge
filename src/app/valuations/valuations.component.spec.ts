@@ -1,7 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing';
 
 import { ValuationsComponent } from './valuations.component';
-import { NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA, DebugElement } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BsModalService } from 'ngx-bootstrap/modal';
@@ -18,11 +18,19 @@ import { BsDatepickerModule, DatepickerConfig, BsDatepickerConfig } from 'ngx-bo
 import { of } from 'rxjs';
 import { MockDropdownListInfo } from '../contactgroups/shared/test-helper/dropdown-list-data.json';
 import { createStorageMapSpy } from '../../testing/test-spies';
+import { By } from '@angular/platform-browser';
+import { ValuationDetailEditComponent } from './valuation-detail-edit/valuation-detail-edit.component';
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 fdescribe('ValuationsComponent', () => {
   let component: ValuationsComponent;
   let valuationService: ValuationService;
   let fixture: ComponentFixture<ValuationsComponent>;
+  let debugElement: DebugElement;
+  let location: Location;
+  let router: Router;
+
   const storageMapSpy = createStorageMapSpy();
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -31,7 +39,16 @@ fdescribe('ValuationsComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         BsDatepickerModule.forRoot(),
-        RouterTestingModule.withRoutes([])
+        RouterTestingModule.withRoutes([
+          {
+            path: 'detail/:id',
+            children: [
+              { path: 'edit', component: ValuationDetailEditComponent }
+            ]
+          }
+          // { path: 'valuations-register/:detail/:id/edit', component: ValuationDetailEditComponent }
+          // TODO: add valuations-register to path
+        ])
       ],
       declarations: [ValuationsComponent],
       providers: [
@@ -50,14 +67,35 @@ fdescribe('ValuationsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ValuationsComponent);
     valuationService = TestBed.inject(ValuationService);
+    router = TestBed.inject(Router);
+    location = TestBed.inject(Location);
     storageMapSpy.get.and.returnValue(of(MockDropdownListInfo));
     component = fixture.componentInstance;
+    debugElement = fixture.debugElement;
     fixture.detectChanges();
   });
 
   it('should create', () => {
+
     expect(component).toBeTruthy();
   });
+
+  it('should display page header ', () => {
+    const element = fixture.nativeElement;
+    const header = element.querySelector('h4');
+    expect(header.textContent).toBe('Valuations register');
+  });
+
+  it('should navigate to new valuation ', fakeAsync(() => {
+    const createNewValuationButton = debugElement.query(By.css('a')).nativeElement;
+    createNewValuationButton.click();
+
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      expect(location.path()).toEqual('/detail/0/edit?isNewValuation=true');
+    });
+  }));
 });
 
 
