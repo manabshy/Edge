@@ -8,7 +8,7 @@ import { BsModalService } from 'ngx-bootstrap/modal';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MockBsModalService } from 'src/testing/extended-mock-services';
 
-fdescribe('ValuationsComponent', () => {
+describe('ValuationsComponent', () => {
   let component: ValuationsComponent;
   let fixture: ComponentFixture<ValuationsComponent>;
 
