@@ -11,7 +11,7 @@
       <div class="row">
         <div class="col-sm-3"><strong>Address</strong></div>
         <div class="col-sm"><strong>Status</strong></div>
-        <div class="col-sm"><strong>Sale</strong></div>
+        <div class="col-sm"><strong>Sales</strong></div>
         <div class="col-sm"><strong>Short Let</strong></div>
         <div class="col-sm"><strong>Long Let</strong></div>
         <div class="col-sm"><strong>Lister</strong></div>
@@ -41,9 +41,10 @@
         </div>
         <div class="col-sm col-xl-12">
           <dl class="row">
-            <dt class="col-4 d-sm-none d-xl-block">Sale</dt>
+            <dt class="col-4 d-sm-none d-xl-block">Sales</dt>
             <dd class="col monospace">
-              {{valuation?.suggestedAskingPrice | currency:'GBP':'symbol':'1.0-0' || '-'}}
+              <ng-container *ngIf="valuation?.suggestedAskingPrice, else noValue">
+                {{valuation?.suggestedAskingPrice | currency:'GBP':'symbol':'1.0-0'}}</ng-container>
             </dd>
           </dl>
         </div>
@@ -51,7 +52,8 @@
           <dl class="row">
             <dt class="col-4 d-sm-none d-xl-block">Long Let</dt>
             <dd class="col monospace">
-              {{valuation?.suggestedAskingRentLongLet ? (valuation?.suggestedAskingRentLongLet | currency:'GBP':'symbol':'1.0-0') + ' pw' : '-'}}
+              <ng-container *ngIf="valuation?.suggestedAskingRentLongLet, else noValue">
+                {{valuation?.suggestedAskingRentLongLet | currency:'GBP':'symbol':'1.0-0'}} pw</ng-container>
             </dd>
           </dl>
         </div>
@@ -59,7 +61,8 @@
           <dl class="row">
             <dt class="col-4 d-sm-none d-xl-block">Short Let</dt>
             <dd class="col monospace">
-              {{valuation?.suggestedAskingRentShortLet ?( valuation?.suggestedAskingRentShortLet | currency:'GBP':'symbol':'1.0-0') + ' pw' : '-'}}
+              <ng-container *ngIf="valuation?.suggestedAskingRentShortLet, else noValue">
+                {{valuation?.suggestedAskingRentShortLet | currency:'GBP':'symbol':'1.0-0'}} pw</ng-container>
             </dd>
           </dl>
         </div>
@@ -80,3 +83,5 @@
     </a>
   </ng-container>
 </div>
+
+<ng-template #noValue>-</ng-template>

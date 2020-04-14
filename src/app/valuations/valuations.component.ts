@@ -164,10 +164,6 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
     this.valuerControl.setValue(id);
   }
 
-  enter(event) {
-    console.log('event entered', event);
-  }
-
   scrollElIntoView(className: string) {
     this.sharedService.scrollElIntoView(className);
   }
