@@ -20,7 +20,7 @@ import { ActivatedRouteStub } from 'src/testing/activated-route-stub';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { MockBsModalService } from 'src/testing/extended-mock-services';
 
-fdescribe('PropertyDetailEditComponent', () => {
+describe('PropertyDetailEditComponent', () => {
   let component: PropertyDetailEditComponent;
   let fixture: ComponentFixture<PropertyDetailEditComponent>;
   let propertyService: PropertyService;

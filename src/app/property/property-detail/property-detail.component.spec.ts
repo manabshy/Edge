@@ -12,7 +12,7 @@ import { SharedService } from 'src/app/core/services/shared.service';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
 
-fdescribe('PropertyDetailComponent should', () => {
+describe('PropertyDetailComponent should', () => {
   let component: PropertyDetailComponent;
   let fixture: ComponentFixture<PropertyDetailComponent>;
   let mockPropertyService;

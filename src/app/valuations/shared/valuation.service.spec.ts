@@ -6,7 +6,7 @@ import { ValuationRequestOption } from './valuation';
 import { MockValuations } from 'src/testing/fixture-data/valuations-data';
 import { format } from 'date-fns';
 
-fdescribe('ValuationService', () => {
+describe('ValuationService', () => {
   let service: ValuationService;
   let httpTestingController: HttpTestingController;
   let response = MockValuations;
