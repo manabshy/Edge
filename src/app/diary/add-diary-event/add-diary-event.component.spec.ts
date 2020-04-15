@@ -64,6 +64,7 @@ fdescribe('AddDiaryEventComponent', () => {
   it('should show error when no event is selected', fakeAsync(() => {
     const eventTypeSelect = rootElement.query(By.css('#eventTypeId')).nativeElement;
     const evenTypeValidationError = rootElement.query(By.css('.invalid-feedback'));
+    const eventTypeIdControl = component.diaryEventForm.get('eventTypeId');
 
     spyOn(component, 'onEventTypeChange');
     eventTypeSelect.value = eventTypeSelect.options[0].value;
@@ -71,26 +72,23 @@ fdescribe('AddDiaryEventComponent', () => {
     component.saveDiaryEvent();
     tick();
 
-    expect(evenTypeValidationError).toBeTruthy();
-    console.log('error for no type selected', evenTypeValidationError);
-    // expect(evenTypeValidationError.nativeElement.textContext).toBe('Event Type is required');
+    expect(eventTypeIdControl.valid).toBeFalsy();
   }));
 
-  xit('should clear validation error message when an event is selected', fakeAsync(() => {
+  it('should clear validation error message when an event is selected', fakeAsync(() => {
     const eventTypeSelect = rootElement.query(By.css('#eventTypeId')).nativeElement;
-    const evenTypeValidationError = rootElement.query(By.css('.invalid-feedback'));
+    const eventTypeIdControl = component.diaryEventForm.get('eventTypeId');
 
     spyOn(component, 'onEventTypeChange');
     eventTypeSelect.value = eventTypeSelect.options[0].value;
     fixture.detectChanges();
     component.saveDiaryEvent();
     eventTypeSelect.value = eventTypeSelect.options[2].value;
+    eventTypeSelect.dispatchEvent(new Event('change'));
     fixture.detectChanges();
     tick();
 
-    expect(evenTypeValidationError).toBeFalsy();
-    console.log('no error here', evenTypeValidationError);
-    // expect(evenTypeValidationError.nativeElement.textContext).toBe('Event Type is required');
+    expect(eventTypeIdControl.valid).toBeTruthy();
   }));
 
   xit('should show other elements when type is selected', fakeAsync(() => {
