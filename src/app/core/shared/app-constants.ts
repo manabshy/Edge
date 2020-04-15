@@ -85,8 +85,9 @@ export const FormErrors = {
   'originId': '',
   'originType': '',
   'endDateTime': '',
+  'eventTypeId': '',
   'properties': '',
-  'contacts': ''
+  'contacts': '',
 };
 
 export const ValidationMessages = {
@@ -248,6 +249,10 @@ export const ValidationMessages = {
   },
   'endDateTime': {
     endDateIsBeforeStartDate: 'End date cannot be before start date',
+  },
+  'eventTypeId': {
+    required: 'Event Type is required',
+    min: 'Event Type is required'
   },
   'properties': {
     required: 'Property is required'

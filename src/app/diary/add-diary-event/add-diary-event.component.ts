@@ -268,7 +268,7 @@ export class AddDiaryEventComponent implements OnInit {
       endHour: this.getHours(true),
       startMin: this.getMinutes(),
       endMin: this.getMinutes(),
-      eventTypeId: [0],
+      eventTypeId: [0, [Validators.required, Validators.min(1)]],
       allDay: false,
       isConfirmed: false,
       hasReminder: false,
@@ -544,6 +544,7 @@ export class AddDiaryEventComponent implements OnInit {
 
   onSaveComplete(diaryEvent?: DiaryEvent) {
     if (this.isNewEvent) {
+      console.log(this.diaryEventForm)
       this.toastr.success('Diary event successfully saved');
       this.sharedService.resetUrl(this.diaryEventId, diaryEvent.diaryEventId);
     } else {

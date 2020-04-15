@@ -29,10 +29,14 @@
         <div class="col-sm-3 offset-sm-2">
           <label for="eventTypeId" class="small">Type</label>
           <select class="custom-select custom-select-sm" id="eventTypeId" formControlName="eventTypeId"
-            (change)="onEventTypeChange($event.target.value)" [attr.disabled]="lockEventTypes ? true : null">
+            (change)="onEventTypeChange($event.target.value)" [attr.disabled]="lockEventTypes ? true : null"
+            [ngClass]="{'is-invalid': formErrors?.eventTypeId}">
             <option value="0"></option>
             <option *ngFor="let type of eventTypes" [value]="type.id">{{type.value}}</option>
           </select>
+          <div class="invalid-feedback">
+            {{formErrors?.eventTypeId}}
+          </div>
         </div>
       </div>
       <div *ngIf="showStaffMembers" class="form-group row">
@@ -189,7 +193,7 @@
         <div class="row justify-content-end w-100 no-gutters">
           <div class="col-sm-10 d-flex">
             <button type="button" class="btn btn-light mr-2" (click)="cancel()">Cancel</button>
-            <button type="submit" class="btn btn-secondary">Save</button>
+            <button type="submit" class="btn btn-secondary" >Save</button>
           </div>
         </div>
       </div>
