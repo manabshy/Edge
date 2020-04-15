@@ -1,14 +1,14 @@
 export const MockCountries = [
-  {id: 232, value: 'United Kingdom', parentId: null},
-  {id: 1, value: 'Afghanistan', parentId: null},
-  {id: 2, value: 'Åland Islands', parentId: null},
-  {id: 3, value: 'Albania', parentId: null},
-  {id: 4, value: 'Algeria', parentId: null},
-  {id: 5, value: 'American Samoa', parentId: null},
-  {id: 6, value: 'Andorra', parentId: null},
-  {id: 7, value: 'Angola', parentId: null},
-  {id: 8, value: 'Anguilla', parentId: null},
-  {id: 9, value: 'Antartica', parentId: null}
+  { id: 232, value: 'United Kingdom', parentId: null },
+  { id: 1, value: 'Afghanistan', parentId: null },
+  { id: 2, value: 'Åland Islands', parentId: null },
+  { id: 3, value: 'Albania', parentId: null },
+  { id: 4, value: 'Algeria', parentId: null },
+  { id: 5, value: 'American Samoa', parentId: null },
+  { id: 6, value: 'Andorra', parentId: null },
+  { id: 7, value: 'Angola', parentId: null },
+  { id: 8, value: 'Anguilla', parentId: null },
+  { id: 9, value: 'Antartica', parentId: null }
 ];
 export const MockDropdownListInfo = {
   result: {
@@ -213,6 +213,16 @@ export const MockDropdownListInfo = {
     allOriginTypes: [
       { id: 1, value: 'None', parentId: null },
       { id: 2, value: 'Deceased', parentId: null },
+    ],
+    diaryEventTypes: [
+      { id: 1, value: 'Viewing - Sales' },
+      { id: 1024, value: 'Viewing - Lettings' },
+      { id: 8, value: 'Valuation - Sales' },
+      { id: 2048, value: 'Valuation - Lettings' },
+      { id: 8192, value: 'Preview - Sales' },
+      { id: 16384, value: 'Preview - Lettings' },
+      { id: 16, value: 'No Appointments' },
+      { id: 2, value: 'Meeting' }
     ]
   }
 };
