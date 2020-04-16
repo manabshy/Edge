@@ -167,13 +167,17 @@ fdescribe('AddDiaryEventComponent should', () => {
     expect(component.getSelectedContactGroups).toHaveBeenCalledWith(signer.selectedSigners);
   }));
 
-  xit('get selected staff member', fakeAsync(() => {
-    const staffMemberFinder = rootElement.query(By.directive(StaffMemberFinderComponent));
-    // staffMemberFinder.click();
-    // component.onEventTypeChange(DiaryEventTypesEnum.ViewingLettings);
+  it('get selected staff member from staff member finder', fakeAsync(() => {
+    spyOn(component, 'getSelectedStaffMembers');
+    const staffMemberFinderComponent = rootElement.query(By.directive(StaffMemberFinderComponent)).componentInstance;
+    const staffMemberFinder = (<StaffMemberFinderComponent>staffMemberFinderComponent);
+    fixture.detectChanges();
+
+    staffMemberFinder.selectedStaffMemberList.emit(diaryEvents[0].staffMembers[0]);
     fixture.detectChanges();
     tick();
-    console.log('staff member finder', staffMemberFinder);
+
+    expect(component.getSelectedStaffMembers).toHaveBeenCalledWith(diaryEvents[0].staffMembers[0]);
   }));
 
   function getSignersList(contactList: ContactGroup[]) {
