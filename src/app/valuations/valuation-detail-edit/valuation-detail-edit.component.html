@@ -77,7 +77,7 @@
             </ng-container>
             <ng-template #originValue>
               <div class="col-sm form-group" *ngIf="!isEditable && origins || isOriginUnknown">
-                <small class="text-left mobile-btn">{{origin}}</small>
+                <small>{{origin}}</small>
               </div>
             </ng-template>
           </div>
@@ -264,7 +264,7 @@
                   <label class="small">Date & Time</label>
                   <div class="d-flex d-sm-block">
                     <label for="changeDate"
-                      class="text-left mobile-btn small">{{(selectedDate || valuation?.valuationDate) | date: 'E d MMM yyyy, HH:mm':'+0000'}}</label>
+                      class="mobile-btn small">{{(selectedDate || valuation?.valuationDate) | date: 'E d MMM yyyy, HH:mm':'+0000'}}</label>
                     <button id="changeDate" class="btn btn-light btn-sm ml-2" type="button" (click)="getAvailability()"
                       *ngIf="(isEditable || isNewValuation) && canChangeDate">Change </button>
                   </div>

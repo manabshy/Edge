@@ -130,7 +130,7 @@
         <h5>Associated Property</h5>
         <ng-container *ngIf="lead?.relatedProperty; else noProperty">
           <p class="d-flex d-sm-block mb-4">
-            <a class="text-left mobile-btn"
+            <a class="mobile-btn"
               [routerLink]="['/property-centre/detail/', lead?.relatedProperty?.propertyId]">
               {{lead?.relatedProperty?.address | formatAddress}}
             </a>

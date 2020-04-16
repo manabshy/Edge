@@ -162,8 +162,8 @@ pre {
         padding: $btn-padding-y $btn-padding-x!important;
         border-radius: $btn-border-radius;
         text-align: center;
-        background-color: color("white");
         width: 100%;
+        @include button-variant(theme-color('light'), theme-color('light'));
         border: 1px solid $border-color;
     }
 

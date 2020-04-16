@@ -51,6 +51,12 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
     return this.valuationFinderForm.get('officeId') as FormControl;
   }
 
+  get isAdvancedFilterActive() {
+    if(this.valuationFinderForm) {
+      return +this.statusControl.value || this.valuerControl.value || this.officeControl.value;
+    }
+  }
+
   public keepOriginalOrder = (a) => a.key;
 
   constructor(private valuationService: ValuationService,
@@ -102,15 +108,12 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
     });
   }
 
-  getValuations(submit?: boolean) {
+  getValuations() {
     this.page = 1;
     this.bottomReached = false;
     this.valuations = [];
     this.suggestedTerm ? this.searchTerm = this.suggestedTerm : this.searchTerm = this.searchTermControl.value;
     this.getNextValuationsPage(this.page);
-    if (submit) {
-      this.sharedService.scrollElIntoView('table');
-    }
   }
 
   getNextValuationsPage(page: number) {
@@ -134,6 +137,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
       }
       if (result && result.length) {
         if (request.page === 1) {
+          this.isAdvancedSearchVisible = false;
           this.valuations = result;
         } else {
           this.valuations = this.valuations.concat(result);
@@ -151,7 +155,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
       this.suggestedTerm = event.item;
       console.log('suggestion', this.suggestedTerm);
     }
-    this.getValuations(true);
+    this.getValuations();
     this.suggestedTerm = '';
   }
 
