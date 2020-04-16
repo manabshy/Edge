@@ -29,6 +29,7 @@ fdescribe('AddDiaryEventComponent should', () => {
   let component: AddDiaryEventComponent;
   let fixture: ComponentFixture<AddDiaryEventComponent>;
   let rootElement: DebugElement;
+  let diaryEventService: DiaryEventService;
   const storageMapSpy = createStorageMapSpy();
   const diaryEvents = (mockDiaryEvents as unknown as DiaryEvent[]);
   const mockDiaryEventService = jasmine.createSpyObj('DiaryEventService', ['getDiaryEvents', 'getDiaryEventById'])
@@ -52,6 +53,7 @@ fdescribe('AddDiaryEventComponent should', () => {
         BsModalService,
         BsModalRef,
         ToastrService,
+        DiaryEventService,
         // { provide: DiaryEventService, useValue: mockDiaryEventService }
         { provide: ComponentFixtureAutoDetect, useValue: true }
       ],
@@ -63,6 +65,7 @@ fdescribe('AddDiaryEventComponent should', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(AddDiaryEventComponent);
     component = fixture.componentInstance;
+    diaryEventService = TestBed.inject(DiaryEventService);
     rootElement = fixture.debugElement;
     component.eventTypes = MockDropdownListInfo.result.diaryEventTypes;
     storageMapSpy.get.and.returnValue(of(MockDropdownListInfo));
@@ -74,6 +77,20 @@ fdescribe('AddDiaryEventComponent should', () => {
   it('create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('get diary event from service', fakeAsync(() => {
+    spyOn(diaryEventService, 'getDiaryEventById').and.returnValue(of(diaryEvents[0]));
+    component.diaryEventId = diaryEvents[0].diaryEventId;
+    fixture.detectChanges();
+
+    component.getDiaryEvent();
+    fixture.detectChanges();
+    tick();
+
+    console.log('diary event from service', component.diaryEvent);
+    expect(diaryEventService.getDiaryEventById).toHaveBeenCalledTimes(1);
+    expect(component.diaryEvent).toBe(diaryEvents[0]);
+  }));
 
   it('show error when no event is selected', fakeAsync(() => {
     const eventTypeSelect = rootElement.query(By.css('#eventTypeId')).nativeElement;
