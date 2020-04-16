@@ -690,7 +690,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       if (newProperty) {
         this.property = newProperty;
         this.valuationForm.get('property').setValue(this.property);
-        this.getValuers(this.property.propertyId)
+        this.getValuers(this.property.propertyId);
         this.getSelectedOwner(newProperty.lastKnownOwner);
       }
     });
@@ -723,20 +723,21 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.canSearchAvailability = false;
     this.showCalendar = true;
     const isSalesOrLettings = (this.isLettingsOnly && this.lettingsValuerControl.value) || (this.isSalesOnly && this.salesValuerControl.value);
-    if (this.isSalesAndLettings && this.salesValuerControl.value && this.lettingsValuerControl.value) {
+    if (isSalesOrLettings) {
+      this.availabilityForm.patchValue({
+        staffMemberId1: this.salesValuerControl.value.staffMemberId || this.lettingsValuerControl.value.staffMemberId
+      });
+      this.canSearchAvailability = true;
+      console.log('single', this.availabilityForm.value, 'condit', this.canSearchAvailability);
+    } else if (this.isSalesAndLettings && this.salesValuerControl.value && this.lettingsValuerControl.value) {
       this.availabilityForm.patchValue({
         staffMemberId1: this.salesValuerControl.value.staffMemberId,
         staffMemberId2: this.lettingsValuerControl.value.staffMemberId,
       });
       this.canSearchAvailability = true;
       console.log('all', this.availabilityForm.value, 'condit', this.canSearchAvailability);
-    } else if (isSalesOrLettings) {
-      this.availabilityForm.patchValue({
-        staffMemberId1: this.salesValuerControl.value.staffMemberId || this.lettingsValuerControl.value.staffMemberId
-      });
-      this.canSearchAvailability = true;
-      console.log('single', this.availabilityForm.value, 'condit', this.canSearchAvailability);
     }
+
     console.log('intial', this.availabilityForm.value, 'should be false', this.canSearchAvailability);
   }
 
@@ -1104,18 +1105,18 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.isAvailabilityRequired = true;
         this.isSalesOnly = false;
         this.isLettingsOnly = false;
-        console.log('for both', this.isAvailabilityRequired)
+        console.log('for both', this.isAvailabilityRequired);
       }
       if (this.isSalesOnly && this.salesValuerIdControl.value) {
         this.isAvailabilityRequired = true;
         this.isSalesAndLettings = false;
-        console.log('for lettings only', this.isAvailabilityRequired)
+        console.log('for lettings only', this.isAvailabilityRequired);
       }
       if (this.isLettingsOnly && this.lettingsValuerIdControl.value) {
         this.isAvailabilityRequired = true;
         this.isSalesOnly = false;
         this.isSalesAndLettings = false;
-        console.log('for sales only', this.isAvailabilityRequired)
+        console.log('for sales only', this.isAvailabilityRequired);
 
       }
     }
@@ -1141,6 +1142,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.setLeaseExpiryDate();
     this.isSubmitting = true;
     const valuation = { ...this.valuation, ...this.valuationForm.value };
+    this.checkValuers(valuation);
     if (this.approxLeaseExpiryDate) {
       valuation.approxLeaseExpiryDate = this.approxLeaseExpiryDate;
     }
@@ -1149,7 +1151,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
 
     if (this.isNewValuation) {
-      console.log('%c val', valuation);
+      console.log('%c val', 'color:green', valuation);
       this.valuationService.addValuation(valuation).subscribe(data => {
         if (data) { this.onSaveComplete(data); }
       },
@@ -1165,6 +1167,16 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.errorMessage = error;
           this.isSubmitting = false;
         });
+    }
+  }
+  checkValuers(valuation: any) {
+    switch (valuation.type) {
+      case 'lettings':
+        valuation.salesValuer = null;
+        break;
+      case 'sales':
+        valuation.lettingsValuer = null;
+        break;
     }
   }
 
