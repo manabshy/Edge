@@ -9,23 +9,35 @@ import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { CUSTOM_ELEMENTS_SCHEMA, DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import { DiaryEventTypesEnum } from '../shared/diary';
+import { DiaryEventTypesEnum, DiaryEvent } from '../shared/diary';
 import { PropertyFinderComponent } from 'src/app/shared/property-finder/property-finder.component';
 import { StaffMemberFinderComponent } from 'src/app/shared/staff-member-finder/staff-member-finder.component';
-import { MockComponent } from 'ng-mocks';
+import { MockComponent, MockComponents } from 'ng-mocks';
 import { MockDropdownListInfo } from 'src/app/contactgroups/shared/test-helper/dropdown-list-data.json';
 import { of } from 'rxjs';
 import { createStorageMapSpy } from 'src/testing/test-spies';
+import { DiaryEventService } from '../shared/diary-event.service';
+import { mockDiaryEvents } from 'src/testing/fixture-data/dairy-event-data';
+import { BreadcrumbComponent } from 'src/app/shared/breadcrumb/breadcrumb.component';
+import { NO_ERRORS_SCHEMA } from '@angular/compiler';
+import { FormatAddressPipe } from 'src/app/shared/format-address.pipe';
+import { SignerComponent } from 'src/app/shared/signer/signer.component';
+import { Signer, ContactGroup } from 'src/app/contactgroups/shared/contact-group';
 
 
-fdescribe('AddDiaryEventComponent', () => {
+fdescribe('AddDiaryEventComponent should', () => {
   let component: AddDiaryEventComponent;
   let fixture: ComponentFixture<AddDiaryEventComponent>;
   let rootElement: DebugElement;
   const storageMapSpy = createStorageMapSpy();
+  const diaryEvents = (mockDiaryEvents as unknown as DiaryEvent[]);
+  const mockDiaryEventService = jasmine.createSpyObj('DiaryEventService', ['getDiaryEvents', 'getDiaryEventById'])
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [AddDiaryEventComponent, MockComponent(StaffMemberFinderComponent)],
+      declarations: [AddDiaryEventComponent,
+        // PropertyFinderComponent,
+        MockComponents(BreadcrumbComponent, PropertyFinderComponent, SignerComponent, StaffMemberFinderComponent)
+      ],
       imports: [
         HttpClientTestingModule,
         FormsModule,
@@ -39,10 +51,11 @@ fdescribe('AddDiaryEventComponent', () => {
       providers: [
         BsModalService,
         BsModalRef,
-        ToastrService
-        // { provide: ComponentFixtureAutoDetect, useValue: true }
+        ToastrService,
+        // { provide: DiaryEventService, useValue: mockDiaryEventService }
+        { provide: ComponentFixtureAutoDetect, useValue: true }
       ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   }));
@@ -53,35 +66,35 @@ fdescribe('AddDiaryEventComponent', () => {
     rootElement = fixture.debugElement;
     component.eventTypes = MockDropdownListInfo.result.diaryEventTypes;
     storageMapSpy.get.and.returnValue(of(MockDropdownListInfo));
+    mockDiaryEventService.getDiaryEvents.and.returnValue(of(mockDiaryEvents));
 
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should show error when no event is selected', fakeAsync(() => {
+  it('show error when no event is selected', fakeAsync(() => {
     const eventTypeSelect = rootElement.query(By.css('#eventTypeId')).nativeElement;
-    const evenTypeValidationError = rootElement.query(By.css('.invalid-feedback'));
     const eventTypeIdControl = component.diaryEventForm.get('eventTypeId');
-
     spyOn(component, 'onEventTypeChange');
     eventTypeSelect.value = eventTypeSelect.options[0].value;
     fixture.detectChanges();
+
     component.saveDiaryEvent();
     tick();
 
     expect(eventTypeIdControl.valid).toBeFalsy();
   }));
 
-  it('should clear validation error message when an event is selected', fakeAsync(() => {
+  it('clear validation error message when an event is selected', fakeAsync(() => {
     const eventTypeSelect = rootElement.query(By.css('#eventTypeId')).nativeElement;
     const eventTypeIdControl = component.diaryEventForm.get('eventTypeId');
-
     spyOn(component, 'onEventTypeChange');
     eventTypeSelect.value = eventTypeSelect.options[0].value;
     fixture.detectChanges();
+
     component.saveDiaryEvent();
     eventTypeSelect.value = eventTypeSelect.options[2].value;
     eventTypeSelect.dispatchEvent(new Event('change'));
@@ -91,7 +104,24 @@ fdescribe('AddDiaryEventComponent', () => {
     expect(eventTypeIdControl.valid).toBeTruthy();
   }));
 
-  xit('should show other elements when type is selected', fakeAsync(() => {
+  xit('save a new lettings viewing', fakeAsync(() => {
+    const eventTypeSelect = rootElement.query(By.css('#eventTypeId')).nativeElement;
+    spyOn(component, 'onEventTypeChange');
+    eventTypeSelect.value = eventTypeSelect.options[2].value;
+    const staffMemberFinder = rootElement.query(By.directive(StaffMemberFinderComponent));
+    // staffMemberFinder.click();
+    // component.onEventTypeChange(DiaryEventTypesEnum.ViewingLettings);
+    fixture.detectChanges();
+    tick();
+    console.log('staff member finder', staffMemberFinder);
+    // eventTypeSelect.dispatchEvent(new Event('change'));
+    // component.onEventTypeChange(DiaryEventTypesEnum.ViewingLettings);
+    fixture.detectChanges();
+    tick();
+    console.log('event type select', eventTypeSelect);
+  }));
+
+  xit('show other elements when type is selected', fakeAsync(() => {
     const eventTypeSelect = rootElement.query(By.css('#eventTypeId')).nativeElement;
     spyOn(component, 'onEventTypeChange');
     eventTypeSelect.value = eventTypeSelect.options[2].value;
@@ -105,7 +135,39 @@ fdescribe('AddDiaryEventComponent', () => {
     console.log('event type select', eventTypeSelect);
   }));
 
-  xit('should get selected staff member', fakeAsync(() => {
+  it('get selected property from property finder', fakeAsync(() => {
+    spyOn(component, 'getSelectedProperties');
+    component.showProperties = true;
+    fixture.detectChanges();
+    const propertyFinderComponent = rootElement.query(By.css('app-property-finder')).componentInstance;
+    const propertyFinder = (<PropertyFinderComponent>propertyFinderComponent);
+    propertyFinder.isMultiple = true;
+    propertyFinder.selectedProperties = diaryEvents[0].properties;
+
+    propertyFinder.selectedPropertyList.emit(diaryEvents[0].properties[0]);
+    fixture.detectChanges();
+    tick();
+
+    expect(component.getSelectedProperties).toHaveBeenCalledWith(diaryEvents[0].properties[0]);
+  }));
+
+  it('get selected contact from signer component', fakeAsync(() => {
+    spyOn(component, 'getSelectedContactGroups');
+    component.showContacts = true;
+    fixture.detectChanges();
+    const signerComponent = rootElement.query(By.css('app-signer')).componentInstance;
+    const signer = (<SignerComponent>signerComponent);
+    signer.isMultiple = true;
+    signer.selectedSigners = getSignersList(diaryEvents[0].contacts);
+
+    signer.selectedSignersList.emit(getSignersList(diaryEvents[0].contacts));
+    fixture.detectChanges();
+    tick();
+
+    expect(component.getSelectedContactGroups).toHaveBeenCalledWith(signer.selectedSigners);
+  }));
+
+  xit('get selected staff member', fakeAsync(() => {
     const staffMemberFinder = rootElement.query(By.directive(StaffMemberFinderComponent));
     // staffMemberFinder.click();
     // component.onEventTypeChange(DiaryEventTypesEnum.ViewingLettings);
@@ -114,5 +176,23 @@ fdescribe('AddDiaryEventComponent', () => {
     console.log('staff member finder', staffMemberFinder);
   }));
 
+  function getSignersList(contactList: ContactGroup[]) {
+    if (contactList && contactList.length) {
+      console.log('contact list', contactList);
+      const result: Signer[] = [];
+      let output;
+      contactList.forEach(x => {
+        output = {
+          contactGroupId: x.contactGroupId,
+          contactNames: x.contactPeople.map(p => p.addressee).toString(),
+          phoneNumber: x.contactPeople.map(n => n.phoneNumbers).toString(),
+          emailAddress: x.contactPeople.map(n => n.emailAddresses).toString()
+        };
+        result.push(output);
+      });
+      return result;
+    }
+  }
 
 });
+

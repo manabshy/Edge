@@ -150,7 +150,7 @@
             [attr.disabled]="!isEditable && !isNewEvent ? true : null" />
         </div>
       </div>
-      <div class="form-group row" *ngIf="diaryEvent?.notes.trim() || isEditable || isNewEvent">
+      <div class="form-group row" *ngIf="diaryEvent?.notes?.trim() || isEditable || isNewEvent">
         <ng-container *ngIf="!isBase64Image; else showImage">
           <div class="col-sm-8 col-xl-6 offset-sm-2">
             <label for="notes" class="small">Note<br /><span *ngIf="isEditable || isNewEvent"
