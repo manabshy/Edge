@@ -23,6 +23,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/compiler';
 import { FormatAddressPipe } from 'src/app/shared/format-address.pipe';
 import { SignerComponent } from 'src/app/shared/signer/signer.component';
 import { Signer, ContactGroup } from 'src/app/contactgroups/shared/contact-group';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 
 fdescribe('AddDiaryEventComponent should', () => {
@@ -37,12 +38,14 @@ fdescribe('AddDiaryEventComponent should', () => {
     TestBed.configureTestingModule({
       declarations: [AddDiaryEventComponent,
         // PropertyFinderComponent,
-        MockComponents(BreadcrumbComponent, PropertyFinderComponent, SignerComponent, StaffMemberFinderComponent)
+        MockComponents(BreadcrumbComponent, PropertyFinderComponent,
+          SignerComponent, StaffMemberFinderComponent)
       ],
       imports: [
         HttpClientTestingModule,
         FormsModule,
         ReactiveFormsModule,
+        NoopAnimationsModule,
         RouterTestingModule.withRoutes([]),
         ModalModule.forRoot(),
         ToastrModule.forRoot(),
@@ -87,7 +90,6 @@ fdescribe('AddDiaryEventComponent should', () => {
     fixture.detectChanges();
     tick();
 
-    console.log('diary event from service', component.diaryEvent);
     expect(diaryEventService.getDiaryEventById).toHaveBeenCalledTimes(1);
     expect(component.diaryEvent).toBe(diaryEvents[0]);
   }));
@@ -130,7 +132,6 @@ fdescribe('AddDiaryEventComponent should', () => {
     // component.onEventTypeChange(DiaryEventTypesEnum.ViewingLettings);
     fixture.detectChanges();
     tick();
-    console.log('staff member finder', staffMemberFinder);
     // eventTypeSelect.dispatchEvent(new Event('change'));
     // component.onEventTypeChange(DiaryEventTypesEnum.ViewingLettings);
     fixture.detectChanges();
@@ -197,9 +198,61 @@ fdescribe('AddDiaryEventComponent should', () => {
     expect(component.getSelectedStaffMembers).toHaveBeenCalledWith(diaryEvents[0].staffMembers[0]);
   }));
 
+  it('update an existing diary event', fakeAsync(() => {
+    const updatedDiaryEvent = { ...diaryEvents[0], ...{ notes: 'New note for updated event here' } };
+    spyOn(diaryEventService, 'updateDiaryEvent').and.returnValue(of(updatedDiaryEvent));
+    spyOn(component, 'onSaveComplete');
+    const eventTypeSelect = rootElement.query(By.css('#eventTypeId')).nativeElement;
+    eventTypeSelect.value = eventTypeSelect.options[1].value;
+    const notesControl = component.diaryEventForm.get('notes');
+    clearValidators(component);
+    component.showOthers = true;
+    component.showProperties = true;
+    component.showContacts = true;
+    notesControl.setValue(updatedDiaryEvent.notes);
+    component.diaryEvent = diaryEvents[0];
+    component.diaryEventForm.markAsDirty();
+    fixture.detectChanges();
+
+    component.saveDiaryEvent();
+    fixture.detectChanges();
+    tick();
+
+    expect(component.onSaveComplete).toHaveBeenCalledWith(updatedDiaryEvent);
+  }));
+
+  xit('update an existing diary event async', async(() => {
+    spyOn(diaryEventService, 'updateDiaryEvent').and.returnValue(of(diaryEvents[0]));
+    const eventTypeSelect = rootElement.query(By.css('#eventTypeId')).nativeElement;
+    eventTypeSelect.value = eventTypeSelect.options[2].value;
+    const eventTypeIdControl = component.diaryEventForm.get('eventTypeId');
+    eventTypeIdControl.clearValidators();
+    eventTypeIdControl.updateValueAndValidity();
+    component.showOthers = true;
+    component.showProperties = true;
+    component.showContacts = true;
+    fixture.detectChanges();
+
+
+    const existingEvent = { ...diaryEvents[0], ...{ notes: 'New note for event here' } };
+    component.isNewEvent = false;
+    component.diaryEventForm.markAsDirty();
+    component.diaryEvent = existingEvent;
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      const notesElement = rootElement.query(By.css('#notes')).nativeElement;
+      component.saveDiaryEvent();
+      fixture.detectChanges();
+
+      console.log('notes element 1', notesElement);
+      expect(diaryEventService.updateDiaryEvent).toHaveBeenCalledTimes(1);
+      // expect(component.diaryEvent).toBe(diaryEvents[0]);
+    });
+  }));
+
   function getSignersList(contactList: ContactGroup[]) {
     if (contactList && contactList.length) {
-      console.log('contact list', contactList);
       const result: Signer[] = [];
       let output;
       contactList.forEach(x => {
@@ -216,4 +269,10 @@ fdescribe('AddDiaryEventComponent should', () => {
   }
 
 });
+
+function clearValidators(component: AddDiaryEventComponent) {
+  const eventTypeIdControl = component.diaryEventForm.get('eventTypeId');
+  eventTypeIdControl.clearValidators();
+  eventTypeIdControl.updateValueAndValidity();
+}
 
