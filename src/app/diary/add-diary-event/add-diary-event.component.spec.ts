@@ -12,7 +12,7 @@ import { By } from '@angular/platform-browser';
 import { DiaryEventTypesEnum, DiaryEvent } from '../shared/diary';
 import { PropertyFinderComponent } from 'src/app/shared/property-finder/property-finder.component';
 import { StaffMemberFinderComponent } from 'src/app/shared/staff-member-finder/staff-member-finder.component';
-import { MockComponent, MockComponents } from 'ng-mocks';
+import { MockComponents } from 'ng-mocks';
 import { MockDropdownListInfo } from 'src/app/contactgroups/shared/test-helper/dropdown-list-data.json';
 import { of } from 'rxjs';
 import { createStorageMapSpy } from 'src/testing/test-spies';
@@ -23,7 +23,10 @@ import { NO_ERRORS_SCHEMA } from '@angular/compiler';
 import { FormatAddressPipe } from 'src/app/shared/format-address.pipe';
 import { SignerComponent } from 'src/app/shared/signer/signer.component';
 import { Signer, ContactGroup } from 'src/app/contactgroups/shared/contact-group';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
+import { ConfirmModalComponent } from 'src/app/shared/confirm-modal/confirm-modal.component';
 
 
 fdescribe('AddDiaryEventComponent should', () => {
@@ -45,22 +48,29 @@ fdescribe('AddDiaryEventComponent should', () => {
         HttpClientTestingModule,
         FormsModule,
         ReactiveFormsModule,
+        BrowserAnimationsModule,
         NoopAnimationsModule,
         RouterTestingModule.withRoutes([]),
         ModalModule.forRoot(),
         ToastrModule.forRoot(),
-        BsDatepickerModule.forRoot()
-
+        BsDatepickerModule.forRoot(),
+        BsDropdownModule.forRoot()
       ],
+
       providers: [
         BsModalService,
         BsModalRef,
+
         ToastrService,
         DiaryEventService,
         // { provide: DiaryEventService, useValue: mockDiaryEventService }
         { provide: ComponentFixtureAutoDetect, useValue: true }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+    }).overrideModule(BrowserDynamicTestingModule, {
+      set: {
+        entryComponents: [ConfirmModalComponent],
+      }
     })
       .compileComponents();
   }));
@@ -72,7 +82,7 @@ fdescribe('AddDiaryEventComponent should', () => {
     rootElement = fixture.debugElement;
     component.eventTypes = MockDropdownListInfo.result.diaryEventTypes;
     storageMapSpy.get.and.returnValue(of(MockDropdownListInfo));
-    mockDiaryEventService.getDiaryEvents.and.returnValue(of(mockDiaryEvents));
+    // mockDiaryEventService.getDiaryEvents.and.returnValue(of(mockDiaryEvents));
 
     fixture.detectChanges();
   });
@@ -221,34 +231,48 @@ fdescribe('AddDiaryEventComponent should', () => {
     expect(component.onSaveComplete).toHaveBeenCalledWith(updatedDiaryEvent);
   }));
 
-  xit('update an existing diary event async', async(() => {
-    spyOn(diaryEventService, 'updateDiaryEvent').and.returnValue(of(diaryEvents[0]));
-    const eventTypeSelect = rootElement.query(By.css('#eventTypeId')).nativeElement;
-    eventTypeSelect.value = eventTypeSelect.options[2].value;
-    const eventTypeIdControl = component.diaryEventForm.get('eventTypeId');
-    eventTypeIdControl.clearValidators();
-    eventTypeIdControl.updateValueAndValidity();
-    component.showOthers = true;
-    component.showProperties = true;
-    component.showContacts = true;
+  it('show delete button when actions is clicked', fakeAsync(() => {
+    component.diaryEvent = diaryEvents[0];
     fixture.detectChanges();
 
+    const dropDownButton = rootElement.query(By.css('.btn-group #actionsToggle'))
+    dropDownButton.nativeElement.click();
+    fixture.detectChanges();
+    tick();
 
-    const existingEvent = { ...diaryEvents[0], ...{ notes: 'New note for event here' } };
-    component.isNewEvent = false;
-    component.diaryEventForm.markAsDirty();
-    component.diaryEvent = existingEvent;
+    const deleteButton = rootElement.query(By.css('#delete'));
+    fixture.detectChanges();
+    tick();
+
+    expect(deleteButton.nativeElement.text.trim()).toBe('Delete');
+  }));
+
+  xit('delete an existing diary event', fakeAsync(() => {
+    const diaryEventToDelete = { ...diaryEvents[0], ...{ diaryEventId: 12345, notes: 'New note for deleted event' } };
+    spyOn(diaryEventService, 'deleteDiaryEvent').and.callThrough();
+    spyOn(component, 'deleteEvent');
+    const modalSpy = spyOn(component, 'showWarning').and.callThrough();
+    // component.diaryEvent = diaryEventToDelete;
+    component.diaryEvent = diaryEventToDelete;
     fixture.detectChanges();
 
-    fixture.whenStable().then(() => {
-      const notesElement = rootElement.query(By.css('#notes')).nativeElement;
-      component.saveDiaryEvent();
-      fixture.detectChanges();
+    const dropDownButton = rootElement.query(By.css('.btn-group #actionsToggle'))
+    dropDownButton.nativeElement.click();
+    fixture.detectChanges();
+    tick();
 
-      console.log('notes element 1', notesElement);
-      expect(diaryEventService.updateDiaryEvent).toHaveBeenCalledTimes(1);
-      // expect(component.diaryEvent).toBe(diaryEvents[0]);
-    });
+    const deleteButton = rootElement.query(By.css('#delete'));
+    deleteButton.nativeElement.click();
+    fixture.detectChanges();
+    tick();
+
+    console.log('deelte', deleteButton);
+    // component.deleteEvent(diaryEventToDelete.diaryEventId);
+    // fixture.detectChanges();
+    // tick();
+
+    // expect(modalSpy).toHaveBeenCalledTimes(1);
+    expect(component.deleteEvent).toHaveBeenCalledWith(diaryEventToDelete.diaryEventId);
   }));
 
   function getSignersList(contactList: ContactGroup[]) {

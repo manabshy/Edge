@@ -14,7 +14,7 @@
         <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
           aria-labelledby="actionsToggle">
           <li role="menuitem">
-            <a class="dropdown-item" (click)="deleteEvent(diaryEvent?.diaryEventId)">
+            <a class="dropdown-item" id="delete" (click)="deleteEvent(diaryEvent?.diaryEventId)">
               <i class="far fa-trash-alt fa-fw ml-2"></i>
               Delete
             </a>
