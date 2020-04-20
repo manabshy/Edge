@@ -11,7 +11,7 @@
         </ng-container>
         <div class="form-group d-flex d-sm-block" *ngIf="selectedSignerDetails && !isMultiple">
           <input type="hidden" #selectedSignerInput id="selectedSigner" formControlName="selectedSigner">
-          <a class="small text-left mobile-btn" *ngIf="selectedSignerDetails"
+          <a class="small mobile-btn" *ngIf="selectedSignerDetails"
             [routerLink]="['/contact-centre/detail/0/people/', selectedSignerDetails?.contactGroupId]">
             {{selectedSignerDetails?.contactNames}}
             <ng-container *ngIf="selectedSignerDetails?.companyName">
@@ -19,7 +19,7 @@
               <span class="badge badge-pill badge-primary">{{selectedSignerDetails?.companyName}}</span>
             </ng-container>
           </a>
-          <a class="small text-left mobile-btn" *ngIf="!selectedSignerDetails">
+          <a class="small mobile-btn" *ngIf="!selectedSignerDetails">
             {{selectedSignerDetails?.contactNames}}
             <ng-container *ngIf="selectedSignerDetails?.companyName">
               <br>
@@ -38,7 +38,7 @@
           <div class="form-group d-flex d-sm-block" *ngFor="let signer of selectedSigners">
             <input type="hidden" #selectedSignerInput
             id="selectedSigner" formControlName="selectedSigner">
-            <a class="small text-left mobile-btn"
+            <a class="small mobile-btn"
               [routerLink]="['/contact-centre/detail/0/people/', signer?.contactGroupId]">
               {{signer?.contactNames}}
             </a>

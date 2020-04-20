@@ -9,11 +9,11 @@
         <div class="form-group d-flex d-sm-block">
           <input type="hidden" #selectedPropertyInput id="selectedPropertyAddress"
             formControlName="selectedPropertyAddress">
-          <a class="small text-left mobile-btn" *ngIf="selectedPropertyDetails"
+          <a class="small mobile-btn" *ngIf="selectedPropertyDetails"
             [routerLink]="['/property-centre/detail/', selectedPropertyDetails?.propertyId]">
             {{selectedPropertyDetails?.address | formatAddress}}
           </a>
-          <a class="small text-left mobile-btn" *ngIf="!selectedPropertyDetails">
+          <a class="small mobile-btn" *ngIf="!selectedPropertyDetails">
             {{selectedPropertyDetails?.address | formatAddress}}
           </a>
           <button class="btn btn-light btn-sm ml-2" *ngIf="!readOnly" type="button" (click)="setProperties()">
@@ -23,7 +23,7 @@
       </div>
       <div class="col-sm-10 offset-sm-2" *ngIf="isMultiple && selectedProperties">
         <div class="form-group d-flex d-sm-block" *ngFor="let property of selectedProperties">
-          <a class="small text-left mobile-btn" [routerLink]="['/property-centre/detail/', property?.propertyId]">
+          <a class="small mobile-btn" [routerLink]="['/property-centre/detail/', property?.propertyId]">
             {{property?.address | formatAddress}}
           </a>
           <button class="btn btn-light btn-sm ml-2" type="button" (click)="removeProperty(property?.propertyId)">

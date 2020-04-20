@@ -47,6 +47,15 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   canSeeUnassignable: boolean;
   isAdvancedSearchVisible: boolean = false;
 
+  get isAdvancedFilterActive() {
+    if (this.leadRegisterForm) {
+      return this.leadRegisterForm.get('dateTo').value
+        || this.leadRegisterForm.get('officeId').value
+        || this.leadRegisterForm.get('includeClosedLeads').value
+        || this.leadRegisterForm.get('includeUnassignedLeadsOnly').value
+    }
+  }
+
   constructor(private leadService: LeadsService,
     private sharedService: SharedService,
     private storage: StorageMap,
@@ -220,7 +229,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     if (this.leadSearchInfo) {
       this.isClosedIncluded = this.leadSearchInfo.includeClosedLeads;
     }
-    this.sharedService.scrollElIntoView('table');
+    this.isAdvancedSearchVisible = false;
     this.leadService.pageNumberChanged(this.leadSearchInfo);
   }
 

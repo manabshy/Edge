@@ -53,12 +53,14 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
 
   ngOnInit() {
     this.showNotes = this.route.snapshot.queryParamMap.get('showNotes') === 'true';
-    this.personId = +this.route.snapshot.paramMap.get('personId');
-    if (this.personId) {
-      this.searchedPersonDetails = null;
-      this.searchedPersonContactGroups = null;
-      this.init();
-    }
+    this.route.params.subscribe(param => {
+      this.personId = +param['personId'];
+      if (this.personId) {
+        this.searchedPersonDetails = null;
+        this.searchedPersonContactGroups = null;
+        this.init();
+      }
+    });
   }
 
   init() {

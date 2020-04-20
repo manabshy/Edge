@@ -49,6 +49,7 @@
           <button class="btn btn-link p-0" (click)="isAdvancedSearchVisible = !isAdvancedSearchVisible">
             <ng-container *ngIf="!isAdvancedSearchVisible; else hideLabel">Show</ng-container>
             <ng-template #hideLabel>Hide</ng-template> advanced search
+            <span class="badge badge-pill badge-danger ml-2" *ngIf="!!isAdvancedFilterActive">&nbsp;</span>
           </button>
         </div>
         <div class="col-sm form-group d-sm-block" [ngClass]="{'d-none': !isAdvancedSearchVisible}">

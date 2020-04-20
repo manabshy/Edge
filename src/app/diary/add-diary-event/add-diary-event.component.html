@@ -14,7 +14,7 @@
         <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
           aria-labelledby="actionsToggle">
           <li role="menuitem">
-            <a class="dropdown-item" (click)="deleteEvent(diaryEvent?.diaryEventId)">
+            <a class="dropdown-item" id="delete" (click)="deleteEvent(diaryEvent?.diaryEventId)">
               <i class="far fa-trash-alt fa-fw ml-2"></i>
               Delete
             </a>
@@ -34,9 +34,7 @@
             <option value="0"></option>
             <option *ngFor="let type of eventTypes" [value]="type.id">{{type.value}}</option>
           </select>
-          <div class="invalid-feedback">
-            {{formErrors?.eventTypeId}}
-          </div>
+          <div class="invalid-feedback">{{formErrors?.eventTypeId}}</div>
         </div>
       </div>
       <div *ngIf="showStaffMembers" class="form-group row">
@@ -74,16 +72,16 @@
       <legend class="fieldset-title">Properties {{propertyLabel}}</legend>
       <app-property-finder (selectedPropertyList)="getSelectedProperties($event)"
         (rebookedProperty)="getRebookedPropertyId($event)" [isMultiple]="true" [label]="propertyLabel"
-        [isLabelHidden]="isLabelHidden"
-        [property]="property" [canRebook]="canRebook" [propertyList]="diaryEvent?.properties"
-        [propertyRequiredWarning]="propertyRequiredWarning" [searchType]="searchType">
+        [isLabelHidden]="isLabelHidden" [property]="property" [canRebook]="canRebook"
+        [propertyList]="diaryEvent?.properties" [propertyRequiredWarning]="propertyRequiredWarning"
+        [searchType]="searchType">
       </app-property-finder>
     </fieldset>
     <fieldset *ngIf="showContacts">
       <legend class="fieldset-title">{{contactLabel}}s</legend>
-      <app-signer [label]="contactLabel" [isLabelHidden]="isLabelHidden" [isMultiple]="true" (selectedSignersList)="getSelectedContactGroups($event)"
-        [contactList]="diaryEvent?.contacts" [contactRequiredWarning]="contactRequiredWarning"
-        [isTelRequired]="isTelRequired" [isApplicant]="isApplicant">
+      <app-signer [label]="contactLabel" [isLabelHidden]="isLabelHidden" [isMultiple]="true"
+        (selectedSignersList)="getSelectedContactGroups($event)" [contactList]="diaryEvent?.contacts"
+        [contactRequiredWarning]="contactRequiredWarning" [isTelRequired]="isTelRequired" [isApplicant]="isApplicant">
       </app-signer>
     </fieldset>
     <fieldset *ngIf="showOthers">
@@ -95,10 +93,8 @@
             <input type="text" id="startDateTime" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
               formControlName="startDateTime"
               [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', minDate:minDate, customTodayClass: 'font-weight-bold'}"
-              (bsValueChange)="onStartDateChange($event)" bsDatepicker
-              #datepicker="bsDatepicker"
-              [appNoDoubleTap]='datepicker'
-              [attr.disabled]="!isEditable && !isNewEvent ? true : null">
+              (bsValueChange)="onStartDateChange($event)" bsDatepicker #datepicker="bsDatepicker"
+              [appNoDoubleTap]='datepicker' [attr.disabled]="!isEditable && !isNewEvent ? true : null">
             <select *ngIf="!isAllDay" class="custom-select custom-select-sm" name="startHour" id="startHour"
               formControlName="startHour" [attr.disabled]="!isEditable && !isNewEvent ? true : null">
               <option *ngFor="let hour of hours" [value]='hour'> {{hour}}</option>
@@ -154,7 +150,7 @@
             [attr.disabled]="!isEditable && !isNewEvent ? true : null" />
         </div>
       </div>
-      <div class="form-group row" *ngIf="diaryEvent?.notes.trim() || isEditable || isNewEvent">
+      <div class="form-group row" *ngIf="diaryEvent?.notes?.trim() || isEditable || isNewEvent">
         <ng-container *ngIf="!isBase64Image; else showImage">
           <div class="col-sm-8 col-xl-6 offset-sm-2">
             <label for="notes" class="small">Note<br /><span *ngIf="isEditable || isNewEvent"
@@ -193,7 +189,7 @@
         <div class="row justify-content-end w-100 no-gutters">
           <div class="col-sm-10 d-flex">
             <button type="button" class="btn btn-light mr-2" (click)="cancel()">Cancel</button>
-            <button type="submit" class="btn btn-secondary" >Save</button>
+            <button type="submit" class="btn btn-secondary">Save</button>
           </div>
         </div>
       </div>

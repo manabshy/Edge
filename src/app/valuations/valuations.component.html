@@ -17,11 +17,11 @@
             <label class="small" for="valuationSearch">Search <span class="text-muted">(Name, email, phone or
                 address)</span></label>
             <input type="search" id="valuationSearch" class="form-control form-control-sm" aria-label="Search criteria"
-              (keydown.enter)="getValuations(true)" [ngbTypeahead]="suggestions" [focusFirst]="false"
+              (keydown.enter)="getValuations()" [ngbTypeahead]="suggestions" [focusFirst]="false"
               (selectItem)="suggestionSelected($event)" formControlName="searchTerm">
           </div>
           <div class="col-sm form-group">
-            <label class="small" for="date">Date</label>
+            <label class="small" for="date">Date From</label>
             <input type="text" id="date" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
               [bsConfig]="{showWeekNumbers:false,  dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
               bsDatepicker 
@@ -32,6 +32,7 @@
             <button class="btn btn-link p-0" (click)="isAdvancedSearchVisible = !isAdvancedSearchVisible">
               <ng-container *ngIf="!isAdvancedSearchVisible; else hideLabel">Show</ng-container>
               <ng-template #hideLabel>Hide</ng-template> advanced search
+              <span class="badge badge-pill badge-danger ml-2" *ngIf="!!isAdvancedFilterActive">&nbsp;</span>
             </button>
           </div>
           <div class="col-sm form-group d-sm-block" [ngClass]="{'d-none': !isAdvancedSearchVisible}">
@@ -55,7 +56,7 @@
       </div>
       <div class="col-sm-2">
         <div class="form-group mt-sm-4">
-          <button class="btn btn-block btn-secondary" (click)="getValuations(true)">Search</button>
+          <button class="btn btn-block btn-secondary" (click)="getValuations()">Search</button>
         </div>
       </div>
     </div>

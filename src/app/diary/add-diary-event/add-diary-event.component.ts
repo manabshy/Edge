@@ -194,7 +194,7 @@ export class AddDiaryEventComponent implements OnInit {
     }
   }
 
-  private getDiaryEvent() {
+   getDiaryEvent() {
     if (this.diaryEventId || this.graphEventId || this.staffMemberId) {
       this.diaryEventService.getDiaryEventById(this.diaryEventId, this.graphEventId, this.staffMemberId)
         .subscribe(event => {
