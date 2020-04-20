@@ -316,7 +316,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.setOriginTypes(info.originTypes); // TODO: Issue on refresh
   }
 
-  private getPropertyDetails() {
+   getPropertyDetails() {
     this.propertyService.getProperty(this.propertyId, false, false, true).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       if (result) {
         this.lastKnownOwner = result.lastKnownOwner;
