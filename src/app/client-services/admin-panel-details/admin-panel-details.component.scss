@@ -1,0 +1,17 @@
+@import "../../../style/bootstrap-overrides";
+
+@import "../../../../node_modules/bootstrap/scss/functions";
+@import "../../../../node_modules/bootstrap/scss/variables";
+@import "../../../../node_modules/bootstrap/scss/mixins";
+
+dl {
+    display: flex;
+    flex-flow: column wrap;
+    max-height: 4em;
+    max-width: 16em;
+    margin: 1rem auto;
+
+    @include media-breakpoint-up(sm) {
+      margin-left: 0;
+    }
+  }
