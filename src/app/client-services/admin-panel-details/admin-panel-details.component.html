@@ -66,7 +66,7 @@
         </button>
     </div>
     <div class="modal-body">
-        <form [formGroup]="recordForm" (ngSubmit)="addRecord()">
+        <form [formGroup]="recordForm" autocomplete="off" (ngSubmit)="addRecord()">
             <div class="form-group">
                 <label for="date">Date</label>
                 <input type="text" id="date" placeholder="dd/mm/yyyy" class="form-control" formControlName="recordDate"
