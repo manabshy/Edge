@@ -38,7 +38,9 @@ export class AdminPanelDetailsComponent implements OnInit {
     });
 
     this.searchRecord();
+    this.recordForm.valueChanges.subscribe(() => this.logValidationErrors(this.recordForm, false));
     this.record$ = this.boardService.getCsTeamMemberDetails(this.teamMemberId);
+
   }
 
   openModal(template: TemplateRef<any>) {
@@ -50,6 +52,19 @@ export class AdminPanelDetailsComponent implements OnInit {
       if (input) {
         console.log('search term', input.searchTerm);
       }
+    });
+  }
+
+  clearRecordForm() {
+    if (this.recordForm) {
+      this.recordForm.reset();
+      this.clearFormValidators();
+    }
+  }
+
+  clearFormValidators() {
+    Object.keys(this.recordForm.controls).forEach(key => {
+      this.formErrors[key] = '';
     });
   }
 
