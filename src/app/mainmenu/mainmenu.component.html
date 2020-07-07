@@ -22,6 +22,9 @@
       <li class="nav-item active" (click)="navbarCollapsed = !navbarCollapsed" *ngIf="false">
         <a class="nav-link" routerLink="/" [queryParams]="{selectedTab: 3}"><div><i class="fas fa-tasks fa-fw mr-3"></i>Tasks<span class="badge badge-pill badge-secondary ml-3">15</span></div></a>
       </li>
+      <li class="nav-item active" (click)="navbarCollapsed = !navbarCollapsed">
+        <a class="nav-link" routerLink="/admin-panel"><div><i class="fas fa-user-cog fa-fw mr-3"></i>Admin Panel</div></a>
+      </li>
       <li class="nav-item" dropdown [insideClick]="true">
         <button type="button" class="btn btn-link nav-link dropdown-toggle" dropdownToggle aria-haspopup="true" aria-expanded="false"><div><i class="fas fa-address-book fa-fw mr-3"></i>Contacts</div></button>
         <div class="dropdown-menu" *dropdownMenu (click)="navbarCollapsed = !navbarCollapsed">
