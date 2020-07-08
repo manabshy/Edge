@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { FormErrors, ValidationMessages } from '../../../app/core/shared/app-constants';
 import { CsBoardService } from '../shared/services/cs-board.service';
 import { SharedService } from 'src/app/core/services/shared.service';
+import { PointTypes, PointType } from '../shared/models/team-member';
 
 @Component({
   selector: 'app-admin-panel-details',
@@ -20,6 +21,7 @@ export class AdminPanelDetailsComponent implements OnInit {
   teamMemberId: number;
   formErrors = FormErrors;
   record$ = new Observable<any>();
+  pointTypes = PointTypes;
 
   constructor(private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -32,16 +34,14 @@ export class AdminPanelDetailsComponent implements OnInit {
     this.searchForm = this.fb.group({ searchTerm: ['0'] });
     this.recordForm = this.fb.group({
       recordDate: ['', Validators.required],
-      target: ['', Validators.required],
-      reason: [''],
+      pointType: ['0', Validators.required],
+      reason: ['', Validators.required],
       points: ['', Validators.required]
     });
 
     this.searchRecord();
     this.recordForm.valueChanges.subscribe(() => this.logValidationErrors(this.recordForm, false));
     this.record$ = this.boardService.getCsTeamMemberDetails(this.teamMemberId);
-    this.boardService.getCsTeamMembers().subscribe(data=>console.log('res',data))
-
   }
 
   openModal(template: TemplateRef<any>) {
@@ -54,6 +54,19 @@ export class AdminPanelDetailsComponent implements OnInit {
         console.log('search term', input.searchTerm);
       }
     });
+  }
+
+  populatePointFields(pointTypeId: number) {
+    if (pointTypeId) {
+      const pointType = this.pointTypes.find(x => x.type == pointTypeId);
+      if (pointType) {
+        this.recordForm.get('reason').setValue(pointType.name);
+        this.recordForm.get('points').setValue(pointType.value);
+      } else {
+        this.recordForm.get('reason').setValue(null);
+        this.recordForm.get('points').setValue(null);
+      }
+    }
   }
 
   clearRecordForm() {

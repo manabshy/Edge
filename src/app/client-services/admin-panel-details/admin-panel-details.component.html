@@ -75,11 +75,11 @@
             </div>
             <div class="form-group">
                 <label for="preset">Preset</label>
-                <select class="custom-select" id="preset" formControlName="target" [ngClass]="{'is-invalid': formErrors?.target}">
-                    <option selected>None</option>
-                    <option value="1">Inbound Valuation</option>
+                <select class="custom-select" id="preset" formControlName="pointType" (change)="populatePointFields($event.target.value)" [ngClass]="{'is-invalid': formErrors?.pointType}">
+                    <option value="0" selected>None</option>
+                    <option *ngFor="let type of pointTypes" [value]="type?.type">{{type?.name}}</option>
                 </select>
-                <div class="invalid-feedback">{{formErrors?.target}}</div>
+                <div class="invalid-feedback">{{formErrors?.pointType}}</div>
             </div>
             <div class="form-group">
                 <label for="reason">Reason</label>

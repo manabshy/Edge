@@ -64,7 +64,7 @@ export const FormErrors = {
   'areaId': '',
   'subAreaId': '',
   'recordDate': '',
-  'target': '',
+  'pointType': '',
   'reason': '',
   'points': ''
 
