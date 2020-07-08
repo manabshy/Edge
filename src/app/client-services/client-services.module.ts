@@ -5,6 +5,9 @@ import { ClientServicesRoutingModule } from './client-services-routing.module';
 import { AdminPanelListComponent } from './admin-panel-list/admin-panel-list.component';
 import { AdminPanelDetailsComponent } from './admin-panel-details/admin-panel-details.component';
 import { CoreModule } from '../core/core.module';
+import { InMemoryDbService, HttpClientInMemoryWebApiModule, InMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { AdminPanelInMemoryData } from './shared/in-memory-data';
+
 
 
 @NgModule({
@@ -12,6 +15,7 @@ import { CoreModule } from '../core/core.module';
   imports: [
     CoreModule,
     CommonModule,
+    HttpClientInMemoryWebApiModule.forFeature(AdminPanelInMemoryData),
     ClientServicesRoutingModule
   ]
 })

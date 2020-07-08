@@ -6,12 +6,18 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class CsBoardService {
+private baseUrl = 'api/teamMembers';
 
   constructor(private http: HttpClient) { }
 
+  getCsTeamMembers(): Observable<any> {
+    const url = ``;
+    return this.http.get<any>(this.baseUrl);
+  }
+
   getCsTeamMemberDetails(id: number): Observable<any> {
     const url = ``;
-    return this.http.get<any>(url);
+    return this.http.get<any>(this.baseUrl);
   }
 
   addRecord(record: {}): Observable<any> {

@@ -40,6 +40,7 @@ export class AdminPanelDetailsComponent implements OnInit {
     this.searchRecord();
     this.recordForm.valueChanges.subscribe(() => this.logValidationErrors(this.recordForm, false));
     this.record$ = this.boardService.getCsTeamMemberDetails(this.teamMemberId);
+    this.boardService.getCsTeamMembers().subscribe(data=>console.log('res',data))
 
   }
 
