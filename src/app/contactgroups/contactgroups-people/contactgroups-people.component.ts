@@ -66,8 +66,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isTypePicked = false;
   isNewCompanyContact = false;
   foundCompanies: CompanyAutoCompleteResult[];
-  @ViewChild('selectedCompanyInput', { static: false }) selectedCompanyInput: ElementRef;
-  @ViewChild('companyNameInput', { static: false }) companyNameInput: ElementRef;
+  @ViewChild('selectedCompanyInput') selectedCompanyInput: ElementRef;
+  @ViewChild('companyNameInput') companyNameInput: ElementRef;
   selectedCompany = '';
   selectedCompanyDetails: Company;
   selectedCompanyId: number;
