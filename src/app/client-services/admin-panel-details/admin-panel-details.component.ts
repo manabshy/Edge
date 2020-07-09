@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { FormErrors, ValidationMessages } from '../../../app/core/shared/app-constants';
 import { CsBoardService } from '../shared/services/cs-board.service';
 import { SharedService } from 'src/app/core/services/shared.service';
-import { PointTypes, PointType } from '../shared/models/team-member';
+import { PointType } from '../shared/models/team-member';
 
 @Component({
   selector: 'app-admin-panel-details',
@@ -21,7 +21,7 @@ export class AdminPanelDetailsComponent implements OnInit {
   teamMemberId: number;
   formErrors = FormErrors;
   record$ = new Observable<any>();
-  pointTypes = PointTypes;
+  pointTypes: PointType[];
 
   constructor(private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -42,9 +42,16 @@ export class AdminPanelDetailsComponent implements OnInit {
     this.searchRecord();
     this.recordForm.valueChanges.subscribe(() => this.logValidationErrors(this.recordForm, false));
     this.getTeamMemberDetails();
+    this.getPointTypes();
   }
 
-   getTeamMemberDetails() {
+   getPointTypes() {
+    this.boardService.getPointTypes().subscribe({
+      next: (data: any) => {this.pointTypes = data; console.log('pontypes', data)}
+    });
+  }
+
+  getTeamMemberDetails() {
     this.record$ = this.boardService.getCsTeamMemberDetails(this.teamMemberId);
   }
 
@@ -62,10 +69,11 @@ export class AdminPanelDetailsComponent implements OnInit {
 
   populatePointFields(pointTypeId: number) {
     if (pointTypeId) {
-      const pointType = this.pointTypes.find(x => x.type == pointTypeId);
+      const pointType = this.pointTypes.find(x => x.pointTypeId === +pointTypeId);
+      console.log('point type', pointType)
       if (pointType) {
         this.recordForm.get('reason').setValue(pointType.name);
-        this.recordForm.get('points').setValue(pointType.value);
+        this.recordForm.get('points').setValue(pointType.points);
       } else {
         this.recordForm.get('reason').setValue(null);
         this.recordForm.get('points').setValue(null);

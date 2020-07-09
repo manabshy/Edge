@@ -6,6 +6,7 @@ export class AppConstants {
   public static get leaderboardBaseUrl(): string { return `${environment.baseUrl}/staffmembers/leaderboard`; }
   public static get baseUrl(): string { return `${environment.baseUrl}/staffmembers`; }
   public static get basePropertyUrl(): string { return `${environment.baseUrl}/properties`; }
+  public static get baseCsboardUrl(): string { return `${environment.baseUrl}/csboard`; }
   public static get baseContactGroupUrl(): string { return `${environment.baseUrl}/contactGroups`; }
   public static get baseCompanyUrl(): string { return `${environment.baseUrl}/companies`; }
   public static get basePersonUrl(): string { return `${environment.baseUrl}/people`; }

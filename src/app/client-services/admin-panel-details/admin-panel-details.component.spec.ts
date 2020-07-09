@@ -19,7 +19,7 @@ import { of } from 'rxjs';
 fdescribe('AdminPanelDetailsComponent', () => {
   let component: AdminPanelDetailsComponent;
   let fixture: ComponentFixture<AdminPanelDetailsComponent>;
-  const memberRecords: Record[] = [
+  const memberRecords: any[] = [
     {
       date: '21/06/2020',
       reason: 'Inbound Valuation',

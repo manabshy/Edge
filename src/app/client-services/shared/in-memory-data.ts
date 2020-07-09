@@ -5,7 +5,7 @@ import { TeamMember, Record } from './models/team-member';
 export class AdminPanelInMemoryData implements InMemoryDbService {
 
   createDb() {
-    const memberRecords: Record[] = [
+    const memberRecords: any[] = [
       {
         date: '21/06/2020',
         reason: 'Inbound Valuation',
