@@ -1,5 +1,5 @@
 import { InMemoryDbService } from 'angular-in-memory-web-api';
-import { TeamMember, Record } from './models/team-member';
+import { TeamMember, TeamMemberPoint } from './models/team-member';
 
 
 export class AdminPanelInMemoryData implements InMemoryDbService {

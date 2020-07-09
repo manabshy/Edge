@@ -6,7 +6,7 @@ export interface TeamMember {
   position: number;
   points: number;
   photoUrl: string;
-  records: Record[];
+  records: TeamMemberPoint[];
 }
 
 export interface Badge {
@@ -22,7 +22,7 @@ export interface Badge {
   bonusPoints: number;
 }
 
-export interface Record {
+export interface TeamMemberPoint {
   pointId: number;
   staffMemberId: number;
   pointTypeId: number;

@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { FormErrors, ValidationMessages } from '../../../app/core/shared/app-constants';
 import { CsBoardService } from '../shared/services/cs-board.service';
 import { SharedService } from 'src/app/core/services/shared.service';
-import { PointType } from '../shared/models/team-member';
+import { PointType, TeamMemberPoint } from '../shared/models/team-member';
 
 @Component({
   selector: 'app-admin-panel-details',
@@ -22,6 +22,7 @@ export class AdminPanelDetailsComponent implements OnInit {
   formErrors = FormErrors;
   record$ = new Observable<any>();
   pointTypes: PointType[];
+  points$: Observable<TeamMemberPoint[]>;
 
   constructor(private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -43,11 +44,18 @@ export class AdminPanelDetailsComponent implements OnInit {
     this.recordForm.valueChanges.subscribe(() => this.logValidationErrors(this.recordForm, false));
     this.getTeamMemberDetails();
     this.getPointTypes();
+    if(this.teamMemberId) {
+      this.getTeamMemberPoints();
+    }
+  }
+
+  private getTeamMemberPoints() {
+    this.points$ = this.boardService.getCsTeamMemberPoints(this.teamMemberId);
   }
 
    getPointTypes() {
     this.boardService.getPointTypes().subscribe({
-      next: (data: any) => {this.pointTypes = data; console.log('pontypes', data)}
+      next: (data: any) => {this.pointTypes = data; console.log('pontypes', data);}
     });
   }
 
@@ -70,7 +78,7 @@ export class AdminPanelDetailsComponent implements OnInit {
   populatePointFields(pointTypeId: number) {
     if (pointTypeId) {
       const pointType = this.pointTypes.find(x => x.pointTypeId === +pointTypeId);
-      console.log('point type', pointType)
+      console.log('point type', pointType);
       if (pointType) {
         this.recordForm.get('reason').setValue(pointType.name);
         this.recordForm.get('points').setValue(pointType.points);

@@ -47,10 +47,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>01/08/20</td>
-                        <td>Inbound Instruction</td>
-                        <td>+50</td>
+                    <tr *ngFor="let point of points$|async">
+                        <td>{{point?.dateTime|date}}</td>
+                        <td>{{point?.reason}}</td>
+                        <td>{{point?.points}}</td>
                     </tr>
                 </tbody>
             </table>

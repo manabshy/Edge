@@ -13,7 +13,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { CsBoardService } from '../shared/services/cs-board.service';
 import { SharedService } from 'src/app/core/services/shared.service';
-import { TeamMember, Record } from '../shared/models/team-member';
+import { TeamMember, TeamMemberPoint } from '../shared/models/team-member';
 import { of } from 'rxjs';
 
 fdescribe('AdminPanelDetailsComponent', () => {
