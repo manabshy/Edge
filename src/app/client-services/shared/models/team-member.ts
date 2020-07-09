@@ -9,10 +9,34 @@ export interface TeamMember {
   records: Record[];
 }
 
+export interface Badge {
+  badgeId: number;
+  name: string;
+  photoUrl: string;
+  instructions: number;
+  valuations: number;
+  mortgageReferrals: number;
+  legalReferrals: number;
+  insuranceReferrals: number;
+  recurrence: number;
+  bonusPoints: number;
+}
+
 export interface Record {
-  date: string;
-  reason: string;
+  pointId: number;
+  staffMemberId: number;
+  pointTypeId: number;
   points: number;
+  reason: string;
+  dateTime: Date;
+  propertyEventId: number;
+}
+
+export interface PointType {
+  pointTypeId: number;
+  name: string;
+  points: number;
+  animate?: boolean;
 }
 
 export enum PointTypesEnum {
@@ -21,22 +45,3 @@ export enum PointTypesEnum {
   InboundVal = 3,
   OutboundVal = 4,
 }
-
-export interface PointType {
-  name: string;
-  value: number;
-  type: PointTypesEnum;
-}
-
-export const PointTypes: PointType[] = [
-  {
-    name: 'Inbound Valuation',
-    value: 250,
-    type: PointTypesEnum.InboundInstruction
-  },
-  {
-    name: 'Outbound Valuation',
-    value: 200,
-    type: PointTypesEnum.OutboundVal
-  }
-]
