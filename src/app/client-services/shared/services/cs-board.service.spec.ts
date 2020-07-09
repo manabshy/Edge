@@ -7,7 +7,7 @@ describe('CsBoardService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(CsBoardService);
+    service = TestBed.get(CsBoardService);
   });
 
   it('should be created', () => {
