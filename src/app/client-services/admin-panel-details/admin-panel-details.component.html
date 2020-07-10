@@ -33,7 +33,7 @@
                     </form>
                 </div>
                 <div class="col-auto">
-                    <button class="btn btn-primary" (click)="openModal(template)"><i class="fas fa-plus mr-2"></i> Record</button>
+                    <button class="btn btn-primary" (click)="openModal(template)">Adjust</button>
                 </div>
             </div>
 
@@ -42,6 +42,7 @@
                 <thead>
                     <tr>
                         <th scope="col">Date</th>
+                        <th scope="col">Type</th>
                         <th scope="col">Reason</th>
                         <th scope="col">Points</th>
                     </tr>
@@ -49,8 +50,9 @@
                 <tbody>
                     <tr *ngFor="let point of points$|async">
                         <td>{{point?.dateTime|date:'dd/MM/yyyy'}}</td>
+                        <td>{{point?.type}}</td>
                         <td>{{point?.reason}}</td>
-                        <td>{{point?.points}}</td>
+                        <td><span [ngClass]="{'text-danger': point?.points < 0}">{{point?.points}}</span></td>
                     </tr>
                 </tbody>
             </table>
@@ -60,27 +62,21 @@
 
 <ng-template #template>
     <div class="modal-header">
-        <h4 class="modal-title pull-left">New Record</h4>
+        <h4 class="modal-title pull-left">Adjustment</h4>
         <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide(); clearRecordForm()">
         <span aria-hidden="true">&times;</span>
         </button>
     </div>
     <div class="modal-body">
         <form [formGroup]="recordForm" autocomplete="off" (ngSubmit)="addRecord()">
-            <div class="form-group">
-                <label for="date">Date</label>
-                <input type="text" id="date" placeholder="dd/mm/yyyy" class="form-control" formControlName="recordDate"
-                [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY'}" bsDatepicker [ngClass]="{'is-invalid': formErrors?.recordDate}">
-                <div class="invalid-feedback">{{formErrors?.recordDate}}</div>
-            </div>
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <label for="preset">Preset</label>
                 <select class="custom-select" id="preset" formControlName="pointType" (change)="populatePointFields($event.target.value)" [ngClass]="{'is-invalid': formErrors?.pointType}">
                     <option value="0" selected>None</option>
                     <option *ngFor="let type of pointTypes" [value]="type?.pointTypeId">{{type?.name}}</option>
                 </select>
                 <div class="invalid-feedback">{{formErrors?.pointType}}</div>
-            </div>
+            </div> -->
             <div class="form-group">
                 <label for="reason">Reason</label>
                 <input type="text" id="reason" class="form-control" formControlName="reason" [ngClass]="{'is-invalid': formErrors?.reason}">
@@ -91,7 +87,7 @@
                 <input type="text" id="points" class="form-control" formControlName="points" [ngClass]="{'is-invalid': formErrors?.points}">
                 <div class="invalid-feedback">{{formErrors?.points}}</div>
             </div>
-            <button class="btn btn-primary btn-block mt-4" type="submit">Add Record</button>
+            <button class="btn btn-primary btn-block mt-4" type="submit">Adjust</button>
         </form>
     </div>
 </ng-template>
