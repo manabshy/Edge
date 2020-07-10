@@ -27,7 +27,7 @@
                         <div class="form-group">
                             <select class="custom-select" id="month" aria-label="Month" formControlName="searchTerm">
                                 <option value="0" selected>Month</option>
-                                <option value="1">June 2020</option>
+                                <option *ngFor="let month of thisYearsMonths" [value]="month?.value">{{month?.key}}</option>
                             </select>
                         </div>
                     </form>

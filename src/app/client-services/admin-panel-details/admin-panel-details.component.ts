@@ -9,6 +9,9 @@ import { SharedService } from 'src/app/core/services/shared.service';
 import { PointType, TeamMemberPoint } from '../shared/models/team-member';
 import { tap } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
+import * as moment from 'moment';
+import { getFullYear } from 'ngx-bootstrap/chronos';
+import { getYear } from 'date-fns';
 
 @Component({
   selector: 'app-admin-panel-details',
@@ -25,6 +28,7 @@ export class AdminPanelDetailsComponent implements OnInit {
   record$ = new Observable<any>();
   pointTypes: PointType[];
   points$: Observable<TeamMemberPoint[]>;
+  thisYearsMonths: { key: string, value: string }[] = [];
 
   constructor(private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -42,6 +46,7 @@ export class AdminPanelDetailsComponent implements OnInit {
       points: ['', Validators.required]
     });
 
+    this.getMonths();
     this.searchRecord();
     this.recordForm.valueChanges.subscribe(() => this.logValidationErrors(this.recordForm, false));
     this.getTeamMemberDetails();
@@ -49,10 +54,6 @@ export class AdminPanelDetailsComponent implements OnInit {
     if (this.teamMemberId) {
       this.getTeamMemberPoints();
     }
-  }
-
-  private getTeamMemberPoints() {
-    this.points$ = this.boardService.getCsTeamMemberPoints(this.teamMemberId).pipe(tap(data => this.setPointType(data)));
   }
 
   getPointTypes() {
@@ -71,6 +72,22 @@ export class AdminPanelDetailsComponent implements OnInit {
         .map(x => x.name).toString();
     });
     console.log('new points', points);
+  }
+
+  getMonths() {
+    moment.locale('en');
+    const months = moment.months();
+    const thisYear = getYear(new Date());
+    months.forEach(m => {
+      const key = `${m} ${thisYear}`;
+      const value = `01 ${m} ${thisYear}`;
+      this.thisYearsMonths.push({ key, value });
+    });
+    console.log('months', this.thisYearsMonths);
+  }
+
+  getTeamMemberPoints() {
+    this.points$ = this.boardService.getCsTeamMemberPoints(this.teamMemberId).pipe(tap(data => this.setPointType(data)));
   }
 
   getTeamMemberDetails() {
