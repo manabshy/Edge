@@ -48,7 +48,7 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let point of points$|async">
-                        <td>{{point?.dateTime|date}}</td>
+                        <td>{{point?.dateTime|date:'dd/MM/yyyy'}}</td>
                         <td>{{point?.reason}}</td>
                         <td>{{point?.points}}</td>
                     </tr>
