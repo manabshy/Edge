@@ -23,13 +23,14 @@ export interface Badge {
 }
 
 export interface TeamMemberPoint {
-  pointId: number;
+  pointId?: number;
   staffMemberId: number;
-  pointTypeId: number;
+  pointTypeId?: number;
+  type?: string;
   points: number;
   reason: string;
-  dateTime: Date;
-  propertyEventId: number;
+  dateTime?: Date;
+  propertyEventId?: number;
 }
 
 export interface PointType {

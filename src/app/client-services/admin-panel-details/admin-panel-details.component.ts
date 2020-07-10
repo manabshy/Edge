@@ -7,6 +7,9 @@ import { FormErrors, ValidationMessages } from '../../../app/core/shared/app-con
 import { CsBoardService } from '../shared/services/cs-board.service';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { PointType, TeamMemberPoint } from '../shared/models/team-member';
+import { HttpErrorResponse } from '@angular/common/http';
+import { tap } from 'rxjs/operators';
+import { map } from 'lodash';
 
 @Component({
   selector: 'app-admin-panel-details',
@@ -44,21 +47,33 @@ export class AdminPanelDetailsComponent implements OnInit {
     this.recordForm.valueChanges.subscribe(() => this.logValidationErrors(this.recordForm, false));
     this.getTeamMemberDetails();
     this.getPointTypes();
-    if(this.teamMemberId) {
+    if (this.teamMemberId) {
       this.getTeamMemberPoints();
     }
   }
 
   private getTeamMemberPoints() {
-    this.points$ = this.boardService.getCsTeamMemberPoints(this.teamMemberId);
+    this.points$ = this.boardService.getCsTeamMemberPoints(this.teamMemberId).pipe( tap(data => this.setPointType(data)));
   }
 
-   getPointTypes() {
+  getPointTypes() {
     this.boardService.getPointTypes().subscribe({
-      next: (data: any) => {this.pointTypes = data; console.log('pontypes', data);}
+      next: (data: any) => {
+        this.pointTypes = data;
+        console.log('pontypes', data);
+      }
     });
   }
 
+  setPointType(points: TeamMemberPoint[]) {
+    points.forEach((p, i) => {
+      p.type = this.pointTypes
+        .filter(x => x.pointTypeId === p.pointTypeId)
+        .map(x => x.name).toString();
+    });
+    console.log('new points', points);
+  }
+  
   getTeamMemberDetails() {
     this.record$ = this.boardService.getCsTeamMemberDetails(this.teamMemberId);
   }
