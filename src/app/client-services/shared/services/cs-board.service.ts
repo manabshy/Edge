@@ -22,15 +22,18 @@ export class CsBoardService {
   }
 
 
-  getCsTeamMemberPoints(id: number): Observable<TeamMemberPoint[]> {
+  getCsTeamMemberPoints(id: number, dateTime?: string): Observable<TeamMemberPoint[]> {
+    let date: Date;
+    if (dateTime === 'current' || dateTime === undefined) {
+      date = new Date();
+    } else { date = new Date(dateTime); }
+
+    const url = `${AppConstants.baseCsboardUrl}/points`;
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
-      fromObject: {
-        staffMemberId: id.toString(),
-        DateTime: format(new Date(), 'YYYY-MM-DD')
-      }
+      fromObject: { staffMemberId: id.toString(), dateTime: format((date), 'YYYY-MM-DD') }
     });
-    const url = `${AppConstants.baseCsboardUrl}/points`;
+
     return this.http.get<any>(url, { params: options }).pipe(map(res => res.result));
   }
 

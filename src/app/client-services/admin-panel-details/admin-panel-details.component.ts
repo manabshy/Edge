@@ -39,7 +39,7 @@ export class AdminPanelDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.teamMemberId = +this.route.snapshot.paramMap.get('id');
-    this.searchForm = this.fb.group({ searchTerm: ['0'] });
+    this.searchForm = this.fb.group({ searchTerm: ['current'] });
     this.recordForm = this.fb.group({
       pointType: ['0', Validators.required],
       reason: ['', Validators.required],
@@ -83,11 +83,10 @@ export class AdminPanelDetailsComponent implements OnInit {
       const value = `01 ${m} ${thisYear}`;
       this.thisYearsMonths.push({ key, value });
     });
-    console.log('months', this.thisYearsMonths);
   }
 
-  getTeamMemberPoints() {
-    this.points$ = this.boardService.getCsTeamMemberPoints(this.teamMemberId).pipe(tap(data => this.setPointType(data)));
+  getTeamMemberPoints(dateTime?: string) {
+    this.points$ = this.boardService.getCsTeamMemberPoints(this.teamMemberId, dateTime).pipe(tap(data => this.setPointType(data)));
   }
 
   getTeamMemberDetails() {
@@ -100,8 +99,9 @@ export class AdminPanelDetailsComponent implements OnInit {
 
   searchRecord() {
     this.searchForm.valueChanges.subscribe(input => {
-      if (input) {
+      if (input &&  input.searchTerm) {
         console.log('search term', input.searchTerm);
+        this.getTeamMemberPoints(input.searchTerm);
       }
     });
   }
