@@ -7,9 +7,8 @@ import { FormErrors, ValidationMessages } from '../../../app/core/shared/app-con
 import { CsBoardService } from '../shared/services/cs-board.service';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { PointType, TeamMemberPoint } from '../shared/models/team-member';
-import { HttpErrorResponse } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
-import { map } from 'lodash';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-admin-panel-details',
@@ -31,13 +30,13 @@ export class AdminPanelDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private boardService: CsBoardService,
     private sharedService: SharedService,
+    private toastr: ToastrService,
     private modalService: BsModalService) { }
 
   ngOnInit(): void {
     this.teamMemberId = +this.route.snapshot.paramMap.get('id');
     this.searchForm = this.fb.group({ searchTerm: ['0'] });
     this.recordForm = this.fb.group({
-      recordDate: ['', Validators.required],
       pointType: ['0', Validators.required],
       reason: ['', Validators.required],
       points: ['', Validators.required]
@@ -53,7 +52,7 @@ export class AdminPanelDetailsComponent implements OnInit {
   }
 
   private getTeamMemberPoints() {
-    this.points$ = this.boardService.getCsTeamMemberPoints(this.teamMemberId).pipe( tap(data => this.setPointType(data)));
+    this.points$ = this.boardService.getCsTeamMemberPoints(this.teamMemberId).pipe(tap(data => this.setPointType(data)));
   }
 
   getPointTypes() {
@@ -73,7 +72,7 @@ export class AdminPanelDetailsComponent implements OnInit {
     });
     console.log('new points', points);
   }
-  
+
   getTeamMemberDetails() {
     this.record$ = this.boardService.getCsTeamMemberDetails(this.teamMemberId);
   }
@@ -141,12 +140,23 @@ export class AdminPanelDetailsComponent implements OnInit {
 
 
   addRecord() {
-    console.log('add record');
     this.logValidationErrors(this.recordForm, true);
-    const record = this.recordForm.value;
+    const record = this.recordForm.value as TeamMemberPoint;
+    record.staffMemberId = this.teamMemberId;
+    console.log('tobe added record', record);
+
     if (this.recordForm.valid) {
       if (this.recordForm.dirty) {
-        this.boardService.addRecord(record).subscribe();
+        this.boardService.addRecord(record).subscribe({
+          next: (res: boolean) => {
+            if (res) {
+              this.toastr.success('Adjustment successfully added');
+              this.modalRef.hide();
+              this.clearRecordForm();
+              this.getTeamMemberPoints();
+            }
+          }
+        });
       }
     } else {
       console.log('invalid form');

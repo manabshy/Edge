@@ -46,3 +46,11 @@ export enum PointTypesEnum {
   InboundVal = 3,
   OutboundVal = 4,
 }
+
+export interface ResponseData {
+  message: null;
+  requestId: string;
+  result: string[];
+  status: boolean;
+  technicalDetails: string;
+}

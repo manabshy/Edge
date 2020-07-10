@@ -50,7 +50,7 @@
                 <tbody>
                     <tr *ngFor="let point of points$|async">
                         <td>{{point?.dateTime|date:'dd/MM/yyyy'}}</td>
-                        <td>{{point?.type}}</td>
+                        <td>{{point?.type || 'Adjustment'}}</td>
                         <td>{{point?.reason}}</td>
                         <td><span [ngClass]="{'text-danger': point?.points < 0}">{{point?.points}}</span></td>
                     </tr>

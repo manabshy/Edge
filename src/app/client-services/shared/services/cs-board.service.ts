@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AppConstants } from 'src/app/core/shared/app-constants';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encoder-helper';
 import { TeamMemberPoint } from '../models/team-member';
 import { format } from 'date-fns';
@@ -27,7 +27,7 @@ export class CsBoardService {
       encoder: new CustomQueryEncoderHelper,
       fromObject: {
         staffMemberId: id.toString(),
-        DateTime: format(new Date('2020-07-08'), 'YYYY-MM-DD')
+        DateTime: format(new Date(), 'YYYY-MM-DD')
       }
     });
     const url = `${AppConstants.baseCsboardUrl}/points`;
@@ -39,8 +39,8 @@ export class CsBoardService {
     return this.http.get<any>(this.baseUrl);
   }
 
-  addRecord(record: {}): Observable<any> {
-    const url = ``;
-    return this.http.post<any>(url, record);
+  addRecord(point: TeamMemberPoint): Observable<any> {
+    const url = `${AppConstants.baseCsboardUrl}/points`;
+    return this.http.post<any>(url, point).pipe(map(res => res.status));
   }
 }
