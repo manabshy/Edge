@@ -2,12 +2,12 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, interval } from 'rxjs';
 import { FormErrors, ValidationMessages } from '../../../app/core/shared/app-constants';
 import { CsBoardService } from '../shared/services/cs-board.service';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { PointType, TeamMemberPoint } from '../shared/models/team-member';
-import { tap } from 'rxjs/operators';
+import { tap, switchMap } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import * as moment from 'moment';
 import { getFullYear } from 'ngx-bootstrap/chronos';
@@ -67,9 +67,11 @@ export class AdminPanelDetailsComponent implements OnInit {
 
   setPointType(points: TeamMemberPoint[]) {
     points.forEach((p, i) => {
-      p.type = this.pointTypes
-        .filter(x => x.pointTypeId === p.pointTypeId)
-        .map(x => x.name).toString();
+     if(this.pointTypes && this.pointTypes.length) {
+        p.type = this.pointTypes
+          .filter(x => x.pointTypeId === p.pointTypeId)
+          .map(x => x.name).toString();
+     }
     });
     console.log('new points', points);
   }
