@@ -37,13 +37,9 @@ fdescribe('AdminPanelDetailsComponent', () => {
   const teamMembers: TeamMember[] = [
     {
       id: 1,
-      firstName: 'Melissa',
-      surname: 'D\'Angelo',
-      fullName: 'Melissa D\'Angelo',
-      position: 1,
-      points: 200,
+      name: 'Melissa D\'Angelo',
       photoUrl: 'assets/images/leaf_rake.png',
-      records: memberRecords
+      points: memberRecords
     }
   ];
   const boardServiceSpy = jasmine.createSpyObj('CsBoardService', ['getCsTeamMemberDetails', 'getCsTeamMemberPoints']);

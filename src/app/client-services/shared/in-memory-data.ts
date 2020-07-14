@@ -13,16 +13,15 @@ export class AdminPanelInMemoryData implements InMemoryDbService {
       }
     ];
 
-    const teamMembers: TeamMember[] = [
+    const teamMembers: any[] = [
       {
         id: 1,
         firstName: 'Melissa',
         surname: 'D\'angelo',
         fullName: 'Melissa D\'Angelo',
         position: 1,
-        points: 200,
         photoUrl: 'assets/images/leaf_rake.png',
-        records: memberRecords
+        points: memberRecords
       }
     ];
     return {teamMembers};

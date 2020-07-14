@@ -6,19 +6,19 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-xl-8">
-            <div class="row text-center text-sm-left align-items-center mb-4">
+        <div class="col-xl-8" *ngIf="memberDetails$|async as member">
+            <div class="row text-center text-sm-left align-items-center mb-4" >
                 <div class="col-sm-auto mb-3">
-                    <img class="rounded-circle" src="https://dummyimage.com/150x150/e9ecef/212529&text=no+photo" alt="">
+                    <img class="rounded-circle" [src]="member?.photoUrl" alt="">
                 </div>
                 <div class="col-sm mb-3">
-                    <h5 class="mt-0">Melissa D'Angelo</h5>
-                    <dl>
+                    <h5 class="mt-0">{{member?.name}}</h5>
+                    <!-- <dl>
                         <dt>Position</dt>
                         <dd>1 <i class="fas fa-chevron-up fa-lg ml-2 text-success"></i></dd>
                         <dt>Points</dt>
                         <dd>1230</dd>
-                    </dl>
+                    </dl> -->
                 </div>
             </div>
             <div class="row justify-content-between">
@@ -48,7 +48,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let point of points$|async">
+                    <tr *ngFor="let point of member.points">
                         <td>{{point?.dateTime|date:'dd/MM/yyyy'}}</td>
                         <td>{{point?.type || 'Adjustment'}}</td>
                         <td>{{point?.reason}}</td>

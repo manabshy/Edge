@@ -25,7 +25,7 @@ export class AdminPanelDetailsComponent implements OnInit {
   recordForm: FormGroup;
   teamMemberId: number;
   formErrors = FormErrors;
-  record$ = new Observable<any>();
+  memberDetails$ = new Observable<any>();
   pointTypes: PointType[];
   points$: Observable<TeamMemberPoint[]>;
   thisYearsMonths: { key: string, value: string }[] = [];
@@ -58,22 +58,18 @@ export class AdminPanelDetailsComponent implements OnInit {
 
   getPointTypes() {
     this.boardService.getPointTypes().subscribe({
-      next: (data: any) => {
-        this.pointTypes = data;
-        console.log('pontypes', data);
-      }
+      next: (data: any) => this.pointTypes = data
     });
   }
 
   setPointType(points: TeamMemberPoint[]) {
     points.forEach((p, i) => {
-     if(this.pointTypes && this.pointTypes.length) {
+      if (this.pointTypes && this.pointTypes.length) {
         p.type = this.pointTypes
           .filter(x => x.pointTypeId === p.pointTypeId)
           .map(x => x.name).toString();
-     }
+      }
     });
-    console.log('new points', points);
   }
 
   getMonths() {
@@ -91,8 +87,8 @@ export class AdminPanelDetailsComponent implements OnInit {
     this.points$ = this.boardService.getCsTeamMemberPoints(this.teamMemberId, dateTime).pipe(tap(data => this.setPointType(data)));
   }
 
-  getTeamMemberDetails() {
-    this.record$ = this.boardService.getCsTeamMemberDetails(this.teamMemberId);
+  getTeamMemberDetails(dateTime?: string) {
+    this.memberDetails$ = this.boardService.getCsTeamMemberDetails(this.teamMemberId, dateTime).pipe(tap(data => this.setPointType(data.points)));
   }
 
   openModal(template: TemplateRef<any>) {
@@ -101,25 +97,11 @@ export class AdminPanelDetailsComponent implements OnInit {
 
   searchRecord() {
     this.searchForm.valueChanges.subscribe(input => {
-      if (input &&  input.searchTerm) {
+      if (input && input.searchTerm) {
         console.log('search term', input.searchTerm);
-        this.getTeamMemberPoints(input.searchTerm);
+        this.getTeamMemberDetails(input.searchTerm);
       }
     });
-  }
-
-  populatePointFields(pointTypeId: number) {
-    if (pointTypeId) {
-      const pointType = this.pointTypes.find(x => x.pointTypeId === +pointTypeId);
-      console.log('point type', pointType);
-      if (pointType) {
-        this.recordForm.get('reason').setValue(pointType.name);
-        this.recordForm.get('points').setValue(pointType.points);
-      } else {
-        this.recordForm.get('reason').setValue(null);
-        this.recordForm.get('points').setValue(null);
-      }
-    }
   }
 
   clearRecordForm() {
@@ -166,7 +148,7 @@ export class AdminPanelDetailsComponent implements OnInit {
 
     if (this.recordForm.valid) {
       if (this.recordForm.dirty) {
-        this.boardService.addRecord(record).subscribe({
+        this.boardService.addPoint(record).subscribe({
           next: (res: boolean) => {
             if (res) {
               this.toastr.success('Adjustment successfully added');
