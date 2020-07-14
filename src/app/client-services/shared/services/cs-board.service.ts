@@ -39,7 +39,7 @@ export class CsBoardService {
         tap(() => localStorage.setItem('adminLastCalled', (format(new Date(), 'MM/DD/YYYY')))));
   }
 
-  getCsTeamMemberDetails(id: number, dateTime?: string): Observable<TeamMember[]> {
+  getCsTeamMemberDetails(id: number, dateTime?: string): Observable<TeamMember> {
     let date: Date;
     if (dateTime === 'current' || dateTime === undefined) {
       date = new Date();

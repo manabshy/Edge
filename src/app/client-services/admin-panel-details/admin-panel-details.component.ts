@@ -29,6 +29,7 @@ export class AdminPanelDetailsComponent implements OnInit {
   pointTypes: PointType[];
   points$: Observable<TeamMemberPoint[]>;
   thisYearsMonths: { key: string, value: string }[] = [];
+  teamMemberPoints: TeamMemberPoint[] = [];
 
   constructor(private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -72,6 +73,12 @@ export class AdminPanelDetailsComponent implements OnInit {
     });
   }
 
+  updateTeamMemberPoints(newPoint: TeamMemberPoint) {
+    if (newPoint) {
+      this.teamMemberPoints.push(newPoint);
+    }
+  }
+
   getMonths() {
     moment.locale('en');
     const months = moment.months();
@@ -88,7 +95,11 @@ export class AdminPanelDetailsComponent implements OnInit {
   }
 
   getTeamMemberDetails(dateTime?: string) {
-    this.memberDetails$ = this.boardService.getCsTeamMemberDetails(this.teamMemberId, dateTime).pipe(tap(data => this.setPointType(data.points)));
+    this.memberDetails$ = this.boardService.getCsTeamMemberDetails(this.teamMemberId, dateTime)
+      .pipe(
+        tap(data => this.setPointType(data.points)),
+        tap(data => this.teamMemberPoints = data.points)
+      );
   }
 
   openModal(template: TemplateRef<any>) {
@@ -142,19 +153,21 @@ export class AdminPanelDetailsComponent implements OnInit {
 
   addRecord() {
     this.logValidationErrors(this.recordForm, true);
-    const record = this.recordForm.value as TeamMemberPoint;
-    record.staffMemberId = this.teamMemberId;
-    console.log('tobe added record', record);
+    const point = this.recordForm.value as TeamMemberPoint;
+    point.staffMemberId = this.teamMemberId;
+    console.log('tobe added record', point);
 
     if (this.recordForm.valid) {
       if (this.recordForm.dirty) {
-        this.boardService.addPoint(record).subscribe({
+        this.boardService.addPoint(point).subscribe({
           next: (res: boolean) => {
             if (res) {
               this.toastr.success('Adjustment successfully added');
               this.modalRef.hide();
               this.clearRecordForm();
-              this.getTeamMemberPoints();
+              // this.getTeamMemberDetails();
+              point.dateTime = new Date();
+              this.updateTeamMemberPoints(point);
             }
           }
         });
