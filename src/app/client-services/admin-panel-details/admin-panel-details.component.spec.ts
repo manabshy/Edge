@@ -36,7 +36,7 @@ fdescribe('AdminPanelDetailsComponent', () => {
 
   const teamMembers: TeamMember[] = [
     {
-      id: 1,
+      staffMemberId: 1,
       name: 'Melissa D\'Angelo',
       photoUrl: 'assets/images/leaf_rake.png',
       points: memberRecords
@@ -84,7 +84,7 @@ fdescribe('AdminPanelDetailsComponent', () => {
   });
 
   it('should get team member points when initialised', fakeAsync(() => {
-    const pointsSpy = spyOn(boardService, 'getCsTeamMemberPoints').and.returnValue(of(teamMembers[0].records));
+    const pointsSpy = spyOn(boardService, 'getCsTeamMemberPoints').and.returnValue(of(teamMembers[0].points));
     component.pointTypes = [];
     fixture.detectChanges();
 
@@ -98,7 +98,7 @@ fdescribe('AdminPanelDetailsComponent', () => {
 
   it('should populate two table rows for team member with two points', fakeAsync(() => {
     const pElement = fixture.debugElement.query(By.css('tbody'));
-    spyOn(boardService, 'getCsTeamMemberPoints').and.returnValue(of(teamMembers[0].records));
+    spyOn(boardService, 'getCsTeamMemberPoints').and.returnValue(of(teamMembers[0].points));
     component.pointTypes = [];
     fixture.detectChanges();
 

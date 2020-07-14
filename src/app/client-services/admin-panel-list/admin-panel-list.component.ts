@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { CsBoardService } from '../shared/services/cs-board.service';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { TeamMember } from '../shared/models/team-member';
 
 @Component({
   selector: 'app-admin-panel-list',
@@ -6,10 +10,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./admin-panel-list.component.scss']
 })
 export class AdminPanelListComponent implements OnInit {
+  members$ = new Observable<TeamMember[]>();
 
-  constructor() { }
+  constructor(private boardService: CsBoardService) { }
 
   ngOnInit(): void {
+    this.members$ = this.boardService.getCsBoard();
   }
 
 }

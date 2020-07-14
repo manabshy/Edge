@@ -19,6 +19,21 @@ export class CsBoardService {
     return this.http.get<any>(url).pipe(map(res => res.result));
   }
 
+  getCsBoard(dateTime?: string): Observable<TeamMember[]> {
+    let date: Date;
+    if (dateTime === 'current' || dateTime === undefined) {
+      date = new Date();
+    } else { date = new Date(dateTime); }
+
+    const url = `${AppConstants.baseCsboardUrl}/board`;
+    const options = new HttpParams({
+      encoder: new CustomQueryEncoderHelper,
+      fromObject: { lastCalled: format((date), 'MM/DD/YYYY') }
+    });
+
+    return this.http.get<any>(url, { params: options }).pipe(map(res => res.result));
+  }
+
   getCsTeamMemberDetails(id: number, dateTime?: string): Observable<TeamMember[]> {
     let date: Date;
     if (dateTime === 'current' || dateTime === undefined) {

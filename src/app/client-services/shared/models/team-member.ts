@@ -1,8 +1,11 @@
 export interface TeamMember {
-  id: number;
+  staffMemberId: number;
   name: string;
+  totalPoints?: number;
   photoUrl: string;
-  points: TeamMemberPoint[];
+  position?: number;
+  points?: TeamMemberPoint[];
+  badges?: Badge[];
 }
 
 export interface Badge {

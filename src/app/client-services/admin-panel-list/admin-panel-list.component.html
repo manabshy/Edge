@@ -5,13 +5,13 @@
       <h4 class="m-0">CS Board Admin Panel</h4>
     </div>
   </div>
-  <div class="list-group mb-5">
-    <a routerLink="details/2430" class="list-group-item list-group-item-action pb-2">
+  <div class="list-group mb-5" *ngFor="let member of members$|async">
+    <a [routerLink]="['/admin-panel','details', member?.staffMemberId]" class="list-group-item list-group-item-action pb-2">
         <div class="media">
-            <img class="rounded-circle mr-3" src="https://dummyimage.com/50x50/e9ecef/212529&text=no+photo" alt="">
+            <img class="rounded-circle mr-3" [src]="member?.photoUrl" alt="">
             <div class="media-body">
-                <h5 class="mt-0">Melissa D'Angelo</h5>
-                1230 pts
+                <h5 class="mt-0">{{member?.name}}</h5>
+                {{member?.totalPoints}} pts
             </div>
         </div>
     </a>
