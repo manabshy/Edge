@@ -19,19 +19,24 @@ export class CsBoardService {
     return this.http.get<any>(url).pipe(map(res => res.result));
   }
 
-  getCsBoard(dateTime?: string): Observable<TeamMember[]> {
+  getCsBoard(): Observable<TeamMember[]> {
     let date: Date;
-    if (dateTime === 'current' || dateTime === undefined) {
+    const lastCalled = localStorage.getItem('adminLastCalled') as unknown as Date;
+    if (lastCalled === undefined) {
       date = new Date();
-    } else { date = new Date(dateTime); }
+    } else { date = lastCalled; }
 
+    console.log('last called in service', lastCalled)
     const url = `${AppConstants.baseCsboardUrl}/board`;
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
       fromObject: { lastCalled: format((date), 'MM/DD/YYYY') }
     });
 
-    return this.http.get<any>(url, { params: options }).pipe(map(res => res.result));
+    return this.http.get<any>(url, { params: options })
+      .pipe(
+        map(res => res.result),
+        tap(() => localStorage.setItem('adminLastCalled', (format(new Date(), 'MM/DD/YYYY')))));
   }
 
   getCsTeamMemberDetails(id: number, dateTime?: string): Observable<TeamMember[]> {
