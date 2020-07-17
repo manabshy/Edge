@@ -42,7 +42,6 @@ export class AdminPanelDetailsComponent implements OnInit {
     this.teamMemberId = +this.route.snapshot.paramMap.get('id');
     this.searchForm = this.fb.group({ searchTerm: ['current'] });
     this.recordForm = this.fb.group({
-      pointType: ['0', Validators.required],
       reason: ['', Validators.required],
       points: ['', Validators.required]
     });
@@ -150,12 +149,10 @@ export class AdminPanelDetailsComponent implements OnInit {
     this.sharedService.scrollToFirstInvalidField();
   }
 
-
   addRecord() {
     this.logValidationErrors(this.recordForm, true);
     const point = this.recordForm.value as TeamMemberPoint;
     point.staffMemberId = this.teamMemberId;
-    console.log('tobe added record', point);
 
     if (this.recordForm.valid) {
       if (this.recordForm.dirty) {
@@ -165,7 +162,6 @@ export class AdminPanelDetailsComponent implements OnInit {
               this.toastr.success('Adjustment successfully added');
               this.modalRef.hide();
               this.clearRecordForm();
-              // this.getTeamMemberDetails();
               point.dateTime = new Date();
               this.updateTeamMemberPoints(point);
             }

@@ -69,14 +69,6 @@
     </div>
     <div class="modal-body">
         <form [formGroup]="recordForm" autocomplete="off" (ngSubmit)="addRecord()">
-            <!-- <div class="form-group">
-                <label for="preset">Preset</label>
-                <select class="custom-select" id="preset" formControlName="pointType" (change)="populatePointFields($event.target.value)" [ngClass]="{'is-invalid': formErrors?.pointType}">
-                    <option value="0" selected>None</option>
-                    <option *ngFor="let type of pointTypes" [value]="type?.pointTypeId">{{type?.name}}</option>
-                </select>
-                <div class="invalid-feedback">{{formErrors?.pointType}}</div>
-            </div> -->
             <div class="form-group">
                 <label for="reason">Reason</label>
                 <input type="text" id="reason" class="form-control" formControlName="reason" [ngClass]="{'is-invalid': formErrors?.reason}">

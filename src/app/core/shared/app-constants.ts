@@ -64,8 +64,6 @@ export const FormErrors = {
   'regionId': '',
   'areaId': '',
   'subAreaId': '',
-  'recordDate': '',
-  'pointType': '',
   'reason': '',
   'points': ''
 
@@ -157,13 +155,6 @@ export const ValidationMessages = {
   },
   'subAreaId': {
     required: 'Sub Area is required'
-  },
-  'recordDate': {
-    required: 'Date is required'
-  },
-  'target': {
-    required: 'Target is required',
-    min: 'Target is required'
   },
   'reason': {
     required: 'Reason is required'
