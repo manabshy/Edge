@@ -153,6 +153,7 @@ export class AdminPanelDetailsComponent implements OnInit {
     this.logValidationErrors(this.recordForm, true);
     const point = this.recordForm.value as TeamMemberPoint;
     point.staffMemberId = this.teamMemberId;
+    point.pointTypeId = 9;
 
     if (this.recordForm.valid) {
       if (this.recordForm.dirty) {
