@@ -59,7 +59,6 @@ fdescribe('AdminPanelDetailsComponent', () => {
 
       ],
       providers: [
-        // { provide: CsBoardService, useValue: boardServiceSpy },
         CsBoardService,
         {
           provide: ActivatedRoute, useValue: {
