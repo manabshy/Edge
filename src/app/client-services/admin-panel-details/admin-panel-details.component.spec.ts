@@ -108,4 +108,9 @@ fdescribe('AdminPanelDetailsComponent', () => {
 
     expect(pElement.children.length).toBe(2);
   }));
+
+  it('should add point', () => {
+    expect(component).toBeTruthy();
+  });
+
 });
