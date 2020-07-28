@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { map, tap } from 'rxjs/operators';
 import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encoder-helper';
-import { TeamMemberPoint, TeamMember } from '../models/team-member';
+import { TeamMemberPoint, TeamMember, PointType } from '../models/team-member';
 import { format } from 'date-fns';
 
 @Injectable({
@@ -14,14 +14,9 @@ export class CsBoardService {
 
   constructor(private http: HttpClient) { }
 
-  getPointTypes(): Observable<any> {
-    const url = `${AppConstants.baseCsboardUrl}/pointTypes`;
-    return this.http.get<any>(url).pipe(map(res => res.result));
-  }
-
   getCsBoard(): Observable<TeamMember[]> {
     const url = `${AppConstants.baseCsboardUrl}/board`;
-    return this.http.get<any>(url).pipe( map(res => res.result));
+    return this.http.get<any>(url).pipe(map(res => res.result));
   }
 
   getCsTeamMemberDetails(id: number, dateTime?: string): Observable<TeamMember> {
@@ -39,23 +34,13 @@ export class CsBoardService {
     return this.http.get<any>(url, { params: options }).pipe(map(res => res.result));
   }
 
+  getPointTypes(): Observable<PointType[]> {
+    const url = `${AppConstants.baseCsboardUrl}/pointTypes`;
+    return this.http.get<any>(url).pipe(map(res => res.result));
+  }
+
   addPoint(point: TeamMemberPoint): Observable<any> {
     const url = `${AppConstants.baseCsboardUrl}/points`;
     return this.http.post<any>(url, point).pipe(map(res => res.status));
-  }
-
-  getCsTeamMemberPoints(id: number, dateTime?: string): Observable<TeamMemberPoint[]> {
-    let date: Date;
-    if (dateTime === 'current' || dateTime === undefined) {
-      date = new Date();
-    } else { date = new Date(dateTime); }
-
-    const url = `${AppConstants.baseCsboardUrl}/points`;
-    const options = new HttpParams({
-      encoder: new CustomQueryEncoderHelper,
-      fromObject: { staffMemberId: id.toString(), dateTime: format((date), 'YYYY-MM-DD') }
-    });
-
-    return this.http.get<any>(url, { params: options }).pipe(map(res => res.result));
   }
 }

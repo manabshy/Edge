@@ -2,15 +2,14 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, interval } from 'rxjs';
+import { Observable } from 'rxjs';
 import { FormErrors, ValidationMessages } from '../../../app/core/shared/app-constants';
 import { CsBoardService } from '../shared/services/cs-board.service';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { PointType, TeamMemberPoint } from '../shared/models/team-member';
-import { tap, switchMap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import * as moment from 'moment';
-import { getFullYear } from 'ngx-bootstrap/chronos';
 import { getYear } from 'date-fns';
 
 @Component({
@@ -27,7 +26,6 @@ export class AdminPanelDetailsComponent implements OnInit {
   formErrors = FormErrors;
   memberDetails$ = new Observable<any>();
   pointTypes: PointType[];
-  points$: Observable<TeamMemberPoint[]>;
   thisYearsMonths: { key: string, value: string }[] = [];
   teamMemberPoints: TeamMemberPoint[] = [];
 
@@ -51,9 +49,6 @@ export class AdminPanelDetailsComponent implements OnInit {
     this.recordForm.valueChanges.subscribe(() => this.logValidationErrors(this.recordForm, false));
     this.getTeamMemberDetails();
     this.getPointTypes();
-    if (this.teamMemberId) {
-      this.getTeamMemberPoints();
-    }
   }
 
   getPointTypes() {
@@ -63,13 +58,15 @@ export class AdminPanelDetailsComponent implements OnInit {
   }
 
   setPointType(points: TeamMemberPoint[]) {
-    points.forEach((p, i) => {
-      if (this.pointTypes && this.pointTypes.length) {
-        p.type = this.pointTypes
-          .filter(x => x.pointTypeId === p.pointTypeId)
-          .map(x => x.name).toString();
-      }
-    });
+    if (points && points.length) {
+      points.forEach((p, i) => {
+        if (this.pointTypes && this.pointTypes.length) {
+          p.type = this.pointTypes
+            .filter(x => x.pointTypeId === p.pointTypeId)
+            .map(x => x.name).toString();
+        }
+      });
+    }
   }
 
   updateTeamMemberPoints(newPoint: TeamMemberPoint) {
@@ -89,10 +86,6 @@ export class AdminPanelDetailsComponent implements OnInit {
     });
   }
 
-  getTeamMemberPoints(dateTime?: string) {
-    this.points$ = this.boardService.getCsTeamMemberPoints(this.teamMemberId, dateTime).pipe(tap(data => this.setPointType(data)));
-  }
-
   getTeamMemberDetails(dateTime?: string) {
     this.memberDetails$ = this.boardService.getCsTeamMemberDetails(this.teamMemberId, dateTime)
       .pipe(
@@ -108,7 +101,6 @@ export class AdminPanelDetailsComponent implements OnInit {
   searchRecord() {
     this.searchForm.valueChanges.subscribe(input => {
       if (input && input.searchTerm) {
-        console.log('search term', input.searchTerm);
         this.getTeamMemberDetails(input.searchTerm);
       }
     });
