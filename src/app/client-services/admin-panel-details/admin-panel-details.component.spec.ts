@@ -21,7 +21,7 @@ fdescribe('AdminPanelDetailsComponent', () => {
   let component: AdminPanelDetailsComponent;
   let fixture: ComponentFixture<AdminPanelDetailsComponent>;
   let boardService: CsBoardService;
-  const memberRecords: any[] = [
+  const memberPoints: any[] = [
     {
       date: '21/06/2020',
       reason: 'Inbound Valuation',
@@ -39,10 +39,10 @@ fdescribe('AdminPanelDetailsComponent', () => {
       staffMemberId: 1,
       name: 'Melissa D\'Angelo',
       photoUrl: 'assets/images/leaf_rake.png',
-      points: memberRecords
+      points: memberPoints
     }
   ];
-  const boardServiceSpy = jasmine.createSpyObj('CsBoardService', ['getCsTeamMemberDetails', 'getCsTeamMemberPoints']);
+  const boardServiceSpy = jasmine.createSpyObj('CsBoardService', ['getCsTeamMemberDetails']);
   const teamMemberSpy = boardServiceSpy.getCsTeamMemberDetails.and.returnValue(of(teamMembers[0]));
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -56,7 +56,6 @@ fdescribe('AdminPanelDetailsComponent', () => {
         ToastrModule.forRoot(),
         BsDatepickerModule.forRoot(),
         BsDropdownModule.forRoot()
-
       ],
       providers: [
         CsBoardService,
@@ -82,35 +81,45 @@ fdescribe('AdminPanelDetailsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should get team member points when initialised', fakeAsync(() => {
-    const pointsSpy = spyOn(boardService, 'getCsTeamMemberPoints').and.returnValue(of(teamMembers[0].points));
+  it('should get team member when initialised', fakeAsync(() => {
+    const pointsSpy = spyOn(boardService, 'getCsTeamMemberDetails').and.returnValue(of(teamMembers[0]));
     component.pointTypes = [];
     fixture.detectChanges();
 
-    component.getTeamMemberPoints();
-    component.points$.subscribe();
+    component.getTeamMemberDetails();
     tick();
     fixture.detectChanges();
 
     expect(pointsSpy).toHaveBeenCalled();
   }));
 
-  it('should populate two table rows for team member with two points', fakeAsync(() => {
-    const pElement = fixture.debugElement.query(By.css('tbody'));
-    spyOn(boardService, 'getCsTeamMemberPoints').and.returnValue(of(teamMembers[0].points));
-    component.pointTypes = [];
+  it('should show the name of team member', async(() => {
+    spyOn(boardService, 'getCsTeamMemberDetails').and.returnValue(of(teamMembers[0]));
+    let member;
+    component.ngOnInit();
     fixture.detectChanges();
+    component.memberDetails$.subscribe(res => {
+      console.log('member', res);
+      member = res;
+    });
 
-    component.getTeamMemberPoints();
-    component.points$.subscribe();
-    tick();
-    fixture.detectChanges();
-
-    expect(pElement.children.length).toBe(2);
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      const nameElement = fixture.debugElement.query(By.css('h5'));
+      nameElement.nativeElement.textContent = member.name;
+      expect(nameElement.nativeElement.textContent).toBe(member.name);
+    });
   }));
 
-  it('should add point', () => {
-    expect(component).toBeTruthy();
-  });
+  it('should get two points for team member with two points', fakeAsync(() => {
+    spyOn(boardService, 'getCsTeamMemberDetails').and.returnValue(of(teamMembers[0].points));
+    component.memberDetails$.subscribe(points => {
+      console.log('fake async points', points);
+      expect(points.length).toBe(2);
+    });
+
+    tick();
+
+  }));
 
 });
