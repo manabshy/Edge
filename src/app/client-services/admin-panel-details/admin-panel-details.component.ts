@@ -10,7 +10,7 @@ import { PointType, TeamMemberPoint } from '../shared/models/team-member';
 import { tap } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import * as moment from 'moment';
-import { getYear } from 'date-fns';
+import { getYear, getMonth } from 'date-fns';
 
 @Component({
   selector: 'app-admin-panel-details',
@@ -29,6 +29,7 @@ export class AdminPanelDetailsComponent implements OnInit {
   thisYearsMonths: { key: string, value: string }[] = [];
   teamMemberPoints: TeamMemberPoint[] = [];
   totalPoints: number;
+  currentMonth: string;
 
   constructor(private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -38,18 +39,20 @@ export class AdminPanelDetailsComponent implements OnInit {
     public modalService: BsModalService) { }
 
   ngOnInit(): void {
+    this.getMonths();
     this.teamMemberId = +this.route.snapshot.paramMap.get('id');
-    this.searchForm = this.fb.group({ searchTerm: ['current'] });
+    this.searchForm = this.fb.group({ searchTerm: [this.currentMonth] });
     this.recordForm = this.fb.group({
       reason: ['', Validators.required],
       points: ['', Validators.required]
     });
 
-    this.getMonths();
     this.searchRecord();
     this.recordForm.valueChanges.subscribe(() => this.logValidationErrors(this.recordForm, false));
     this.getTeamMemberDetails();
     this.getPointTypes();
+    console.log('form', this.searchForm.value);
+
   }
 
   getPointTypes() {
@@ -90,11 +93,13 @@ export class AdminPanelDetailsComponent implements OnInit {
     moment.locale('en');
     const months = moment.months();
     const thisYear = getYear(new Date());
+    const currentMonthIndex = getMonth(new Date());
     months.forEach(m => {
       const key = `${m} ${thisYear}`;
       const value = `01 ${m} ${thisYear}`;
       this.thisYearsMonths.push({ key, value });
     });
+    this.currentMonth = this.thisYearsMonths[currentMonthIndex].value;
   }
 
   getTeamMemberDetails(dateTime?: string) {
