@@ -57,6 +57,8 @@ fdescribe('AdminPanelDetailsComponent', () => {
     fixture = TestBed.createComponent(AdminPanelDetailsComponent);
     component = fixture.componentInstance;
     boardService = TestBed.inject(CsBoardService);
+    component.getSelectedMonthPointTotal([]);
+    component.teamMemberPoints = [];
   });
 
 
@@ -127,6 +129,30 @@ fdescribe('AdminPanelDetailsComponent', () => {
       showModalButton.nativeElement.click();
 
       expect(spy).toHaveBeenCalledTimes(1);
+    });
+  }));
+
+  it('should get total points for current month', fakeAsync(() => {
+    spyOn(boardService, 'getCsTeamMemberDetails').and.returnValue(of(teamMembers[0].points));
+    fixture.detectChanges();
+
+    component.memberDetails$.subscribe(points => {
+      component.teamMemberPoints = points;
+      component.getSelectedMonthPointTotal(component.teamMemberPoints);
+
+      expect(component.totalPoints).toBe(620);
+    });
+  }));
+
+  it('should update total points for current month when new point is added', fakeAsync(() => {
+    spyOn(boardService, 'getCsTeamMemberDetails').and.returnValue(of(teamMembers[0].points));
+    fixture.detectChanges();
+
+    component.memberDetails$.subscribe(points => {
+      component.teamMemberPoints = points;
+      component.updateTeamMemberPoints(newPoint);
+
+      expect(component.totalPoints).toBe(720);
     });
   }));
 

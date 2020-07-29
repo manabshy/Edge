@@ -51,8 +51,6 @@ export class AdminPanelDetailsComponent implements OnInit {
     this.recordForm.valueChanges.subscribe(() => this.logValidationErrors(this.recordForm, false));
     this.getTeamMemberDetails();
     this.getPointTypes();
-    console.log('form', this.searchForm.value);
-
   }
 
   getPointTypes() {
@@ -82,11 +80,12 @@ export class AdminPanelDetailsComponent implements OnInit {
 
   getSelectedMonthPointTotal(points: TeamMemberPoint[]) {
     let total = 0;
-    points.forEach(x => {
-      total += x.points;
-    });
-    this.totalPoints = total;
-    console.log('sum of points', total);
+    if (points) {
+      points.forEach(x => {
+        total += x.points;
+      });
+      this.totalPoints = total;
+    }
   }
 
   getMonths() {
