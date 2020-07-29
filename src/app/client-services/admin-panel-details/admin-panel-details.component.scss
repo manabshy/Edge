@@ -15,3 +15,16 @@ dl {
       margin-left: 0;
     }
   }
+
+  table {
+    th,td {
+      &:last-child {
+        text-align: right;
+      }
+    }
+  }
+
+  .table-total {
+    position: sticky;
+    bottom: 0;
+  }

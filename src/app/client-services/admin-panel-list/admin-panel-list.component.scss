@@ -7,6 +7,10 @@
 .media {
     align-items: center;
 
+    img {
+        max-width: 3rem;
+    }
+
     h5 {
         float: left;
         margin: 0 spacer(3) 0 0;
