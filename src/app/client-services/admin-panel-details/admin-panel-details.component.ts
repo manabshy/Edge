@@ -28,6 +28,7 @@ export class AdminPanelDetailsComponent implements OnInit {
   pointTypes: PointType[];
   thisYearsMonths: { key: string, value: string }[] = [];
   teamMemberPoints: TeamMemberPoint[] = [];
+  totalPoints: number;
 
   constructor(private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -72,7 +73,17 @@ export class AdminPanelDetailsComponent implements OnInit {
   updateTeamMemberPoints(newPoint: TeamMemberPoint) {
     if (newPoint) {
       this.teamMemberPoints.push(newPoint);
+      this.getSelectedMonthPointTotal(this.teamMemberPoints);
     }
+  }
+
+  getSelectedMonthPointTotal(points: TeamMemberPoint[]) {
+    let total = 0;
+    points.forEach(x => {
+      total += x.points;
+    });
+    this.totalPoints = total;
+    console.log('sum of points', total);
   }
 
   getMonths() {
@@ -90,7 +101,10 @@ export class AdminPanelDetailsComponent implements OnInit {
     this.memberDetails$ = this.boardService.getCsTeamMemberDetails(this.teamMemberId, dateTime)
       .pipe(
         tap(data => this.setPointType(data.points)),
-        tap(data => this.teamMemberPoints = data.points)
+        tap(data => {
+          this.teamMemberPoints = data.points;
+          this.getSelectedMonthPointTotal(data.points);
+        })
       );
   }
 
@@ -156,13 +170,12 @@ export class AdminPanelDetailsComponent implements OnInit {
               this.modalRef.hide();
               this.clearRecordForm();
               point.dateTime = new Date();
+              point.points = +point.points;
               this.updateTeamMemberPoints(point);
             }
           }
         });
       }
-    } else {
-      console.log('invalid form');
     }
   }
 
