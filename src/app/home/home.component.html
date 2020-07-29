@@ -1,10 +1,10 @@
 <div class="container p-0 home-container pt-sm-3" [ngClass]="containerClass">
   <tabset type="pills" #homeTabs>
-    <tab (select)="onSelect($event)"  *ngIf="false">
+    <tab (select)="onSelect($event)">
       <ng-template tabHeading>
         <i class="fas fa-th-large"></i><span class="nav-label">Dashboard</span>
       </ng-template>
-      <div class="container main">
+      <div class="container main pt-3" style="min-height: 0;">
         <app-dashboard *ngIf='currentStaffMember' [currentStaffMember]='currentStaffMember'></app-dashboard>
       </div>
     </tab>
@@ -20,7 +20,7 @@
       <ng-template tabHeading>
         <i class="fas fa-chalkboard-teacher"></i><span class="nav-label">Leaderboard</span>
       </ng-template>
-      <div class="container main">
+      <div class="container main pt-2" style="min-height: 0;">
         <app-leaderboard  *ngIf='currentStaffMember' [currentStaffMember]='currentStaffMember'></app-leaderboard>
       </div>
     </tab>
