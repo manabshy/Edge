@@ -34,7 +34,7 @@ export class AdminPanelDetailsComponent implements OnInit {
     private boardService: CsBoardService,
     private sharedService: SharedService,
     private toastr: ToastrService,
-    private modalService: BsModalService) { }
+    public modalService: BsModalService) { }
 
   ngOnInit(): void {
     this.teamMemberId = +this.route.snapshot.paramMap.get('id');
