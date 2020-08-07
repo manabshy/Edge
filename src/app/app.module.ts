@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA, APP_INITIALIZER } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { MainmenuComponent } from './mainmenu/mainmenu.component';
@@ -43,6 +43,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
+import { ConfigsLoaderService } from './configs-loader.service';
 
 
 @NgModule({
@@ -94,9 +95,20 @@ import { HttpClientModule } from '@angular/common/http';
   ],
   exports: [
     MainmenuComponent
- ],
-  providers: [],
+  ],
+  providers: [
+    {
+      provide: APP_INITIALIZER,
+      useFactory: appInitializerFactory,
+      deps: [ConfigsLoaderService],
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent],
   schemas: [NO_ERRORS_SCHEMA]
 })
 export class AppModule { }
+
+export function appInitializerFactory(configsLoaderService: ConfigsLoaderService) {
+  return () => configsLoaderService.loadConfigs();
+}

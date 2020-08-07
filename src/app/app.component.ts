@@ -12,6 +12,8 @@ import { EdgeServiceWorkerService } from './core/services/edge-service-worker.se
 import { BaseComponent } from './core/models/base-component';
 import { InfoService } from './core/services/info.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
+import { environment } from 'src/environments/environment';
+import { ConfigsLoaderService } from './configs-loader.service';
 
 @Component({
   selector: 'app-root',
@@ -48,13 +50,14 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
     private infoService: InfoService,
     private storage: StorageMap,
     protected staffMemberService: StaffMemberService,
+    private configLoaderService: ConfigsLoaderService,
     private edgeServiceWorker: EdgeServiceWorkerService,
     private renderer: Renderer2,
     private toastr: ToastrService,
     private cdRef: ChangeDetectorRef) {
     super();
+    this.setupEnvironmentVariables() // setup environment variables for prod;
     /*  Track previous route for Breadcrumb component  */
-
     this.router.events.pipe(
       filter(e => e instanceof RoutesRecognized)
     ).pipe(
@@ -167,4 +170,11 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
 
   }
 
+  private setupEnvironmentVariables() {
+    if (environment.production) {
+      environment.baseUrl = this.configLoaderService.ApiEndpoint;
+      environment.endpointUrl = this.configLoaderService.ApiEndpoint;
+      environment.baseRedirectUri = this.configLoaderService.AppEndpoint;
+    }
+  }
 }
