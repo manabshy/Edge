@@ -19,7 +19,7 @@ export class AuthService {
   private adalConfig = {
     tenant: AppConstants.tenant,
     clientId: AppConstants.clientId,
-    redirectUri: AppConstants.redirectUri || `${this.configLoaderService.AppEndpoint}/auth-callback`,
+    redirectUri: AppConstants.redirectUri.startsWith('http') ? AppConstants.redirectUri : `${this.configLoaderService.AppEndpoint}/auth-callback`,
     postLogoutRedirectUri: AppConstants.postLogoutRedirectUri,
     cacheLocation: 'localStorage',
     // loadFrameTimeout: 600000,
@@ -36,7 +36,7 @@ export class AuthService {
     private modalService: BsModalService,
     private storage: StorageMap,
     private configLoaderService: ConfigsLoaderService,
-    private _router: Router) { this.adalService.init(this.adalConfig); console.log('load config with new uri endpoint', this.adalConfig) }
+    private _router: Router) { this.adalService.init(this.adalConfig); console.log('load config with new uri endpoint', this.adalConfig, 'this.configLoaderService.AppEndpoint...', this.configLoaderService.AppEndpoint )}
 
   public isLoggedIn(): boolean {
     return this.adalService.userInfo.authenticated;

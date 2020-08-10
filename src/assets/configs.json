@@ -1,5 +1,5 @@
 {
   "apiEndpoint": "",
-  "appEndpoint": "",
+  "appEndpoint": "test",
   "configsLoadedFrom": "Local"
 }
