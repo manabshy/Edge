@@ -82,7 +82,7 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
   }
 
   ngOnInit() {
-    console.log('ApiEndpoint in ngonit', environment.baseUrl, 'appEndpoint', environment.baseRedirectUri);
+    console.log('BASEURL in ngonit', environment.baseUrl, 'REDIRECTURI', environment.baseRedirectUri);
     this.toastr.overlayContainer = this.toastContainer;
     console.log('instance initiliased');
     if (this.isLoggedIn) {
@@ -176,7 +176,7 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
       environment.baseUrl = this.configLoaderService.ApiEndpoint;
       environment.endpointUrl = this.configLoaderService.ApiEndpoint;
       environment.baseRedirectUri = this.configLoaderService.AppEndpoint;
-      console.log('ApiEndpoint in if state', this.configLoaderService.ApiEndpoint, 'appEndpoint', this.configLoaderService.AppEndpoint);
+      console.log('ApiEndpoint', this.configLoaderService.ApiEndpoint, 'appEndpoint', this.configLoaderService.AppEndpoint);
     }
   }
 }

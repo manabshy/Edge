@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
   baseUrl: '',
-  baseRedirectUri: '',
+  baseRedirectUri: 'https://dandg-edge-dev.azurewebsites.net',
   endpointUrl: ''
 };
