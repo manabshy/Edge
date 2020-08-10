@@ -1,5 +1,5 @@
 {
-  "ApiEndpoint": "",
-  "AppEndpoint": "",
-  "ConfigsLoadedFrom": "Local"
+  "apiEndpoint": "",
+  "appEndpoint": "",
+  "configsLoadedFrom": "Local"
 }
