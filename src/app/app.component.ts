@@ -56,7 +56,7 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
     private toastr: ToastrService,
     private cdRef: ChangeDetectorRef) {
     super();
-    this.setupEnvironmentVariables() // setup environment variables for prod;
+    this.setupEnvironmentVariables();
     /*  Track previous route for Breadcrumb component  */
     this.router.events.pipe(
       filter(e => e instanceof RoutesRecognized)
@@ -82,7 +82,6 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
   }
 
   ngOnInit() {
-    console.log('BASEURL in ngonit', environment.baseUrl, 'REDIRECTURI', environment.baseRedirectUri);
     this.toastr.overlayContainer = this.toastContainer;
     console.log('instance initiliased');
     if (this.isLoggedIn) {
@@ -176,7 +175,6 @@ export class AppComponent extends BaseComponent implements OnInit, AfterViewChec
       environment.baseUrl = this.configLoaderService.ApiEndpoint;
       environment.endpointUrl = this.configLoaderService.ApiEndpoint;
       environment.baseRedirectUri = this.configLoaderService.AppEndpoint;
-      console.log('ApiEndpoint', this.configLoaderService.ApiEndpoint, 'appEndpoint', this.configLoaderService.AppEndpoint);
     }
   }
 }

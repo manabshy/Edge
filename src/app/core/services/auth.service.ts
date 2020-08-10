@@ -36,7 +36,7 @@ export class AuthService {
     private modalService: BsModalService,
     private storage: StorageMap,
     private configLoaderService: ConfigsLoaderService,
-    private _router: Router) { this.adalService.init(this.adalConfig); console.log('load config with new uri endpoint', this.adalConfig, 'this.configLoaderService.AppEndpoint...', this.configLoaderService.AppEndpoint )}
+    private _router: Router) { this.adalService.init(this.adalConfig); }
 
   public isLoggedIn(): boolean {
     return this.adalService.userInfo.authenticated;
