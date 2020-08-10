@@ -7,6 +7,7 @@ import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component'
 import { Router } from '@angular/router';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { environment } from 'src/environments/environment';
+import { ConfigsLoaderService } from 'src/app/configs-loader.service';
 
 
 @Injectable({
@@ -18,7 +19,7 @@ export class AuthService {
   private adalConfig = {
     tenant: AppConstants.tenant,
     clientId: AppConstants.clientId,
-    redirectUri: AppConstants.redirectUri,
+    redirectUri: AppConstants.redirectUri || `${this.configLoaderService.AppEndpoint}/auth-callback`,
     postLogoutRedirectUri: AppConstants.postLogoutRedirectUri,
     cacheLocation: 'localStorage',
     // loadFrameTimeout: 600000,
@@ -34,7 +35,8 @@ export class AuthService {
   constructor(private adalService: AdalService,
     private modalService: BsModalService,
     private storage: StorageMap,
-    private _router: Router) { this.adalService.init(this.adalConfig); }
+    private configLoaderService: ConfigsLoaderService,
+    private _router: Router) { this.adalService.init(this.adalConfig); console.log('load config with new uri endpoint', this.adalConfig) }
 
   public isLoggedIn(): boolean {
     return this.adalService.userInfo.authenticated;
