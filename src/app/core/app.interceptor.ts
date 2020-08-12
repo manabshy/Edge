@@ -38,10 +38,10 @@ export class AppInterceptor implements HttpInterceptor {
     if (err.error instanceof ErrorEvent) {
       wedgeError.displayMessage = `An error occurred: ${err.error.message}`;
     } else {
-      wedgeError.errorCode = err.status;
-      wedgeError.requestId = err.error.requestId;
-      wedgeError.technicalDetails = err.error.technicalDetails;
-      wedgeError.message = err.error.message;
+      wedgeError.errorCode = err?.status;
+      wedgeError.requestId = err?.error?.requestId;
+      wedgeError.technicalDetails = err?.error?.technicalDetails;
+      wedgeError.message = err?.error?.message;
       if (wedgeError.technicalDetails) {
         wedgeError.displayMessage = `${wedgeError.message}`;
       } else {
