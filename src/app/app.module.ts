@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA, APP_INITIALIZER } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { MainmenuComponent } from './mainmenu/mainmenu.component';
@@ -38,6 +38,7 @@ import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { ImpersonateMemberComponent } from './impersonate-member/impersonate-member.component';
+import { ConfigsLoaderService } from './configs-loader.service';
 
 
 // ngx bootstrap imports
@@ -165,7 +166,22 @@ const externalModulesExports = [
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  exports: [
+    MainmenuComponent
+  ],
+  providers: [
+    {
+      provide: APP_INITIALIZER,
+      useFactory: appInitializerFactory,
+      deps: [ConfigsLoaderService],
+      multi: true
+    }
+  ],
+  bootstrap: [AppComponent],
+  schemas: [NO_ERRORS_SCHEMA]
 })
 export class AppModule { }
+
+export function appInitializerFactory(configsLoaderService: ConfigsLoaderService) {
+  return () => configsLoaderService.loadConfigs();
+}

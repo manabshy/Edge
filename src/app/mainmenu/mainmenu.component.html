@@ -31,6 +31,9 @@
           </div>
         </a>
       </li>
+      <li class="nav-item active" (click)="navbarCollapsed = !navbarCollapsed">
+        <a class="nav-link" routerLink="/admin-panel"><div><i class="fas fa-user-cog fa-fw mr-3"></i>Admin Panel</div></a>
+      </li>
       <li class="nav-item" routerLinkActive #con="routerLinkActive">
         <button type="button" class="btn btn-link nav-link dropdown-toggle" (click)="toggleCollapse('contacts')"
         [attr.aria-expanded]="!con.isActive && !collapsible.contacts" aria-controls="collapseContacts">

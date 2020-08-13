@@ -39,6 +39,10 @@ const routes: Routes = [
     path: 'diary',
     loadChildren: () => import('./diary/diary.module').then(m => m.DiaryModule), canActivate: [AuthGuardService]
   },
+  {
+    path: 'admin-panel',
+    loadChildren: () => import('./client-services/client-services.module').then(m => m.ClientServicesModule), canActivate: [AuthGuardService]
+  },
   { path: '', component: HomeComponent, canActivate: [AuthGuardService] },
   { path: '**', component: NotFoundComponent }
 ];
