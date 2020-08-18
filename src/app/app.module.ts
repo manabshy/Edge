@@ -71,16 +71,15 @@ import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
 import { CalendarSharedModule } from './calendar-shared/calendar-shared.module';
 
-
-// msal
+// import {MsalModule} from '@azure/msal-angular'
 import { MsalModule, MsalInterceptor } from '@azure/msal-angular';
 import { Logger, LogLevel } from 'msal';
 
-export const protectedResourceMap: Map<string, Array<string>> = new Map([
+export const protectedResourceMap:  Map<string, Array<string>> = new Map([
   ['http://localhost:57211/v10', ['https://douglasandgordon.onmicrosoft.com/67f9a9a1-d8de-45bc-af20-43e1e18ccba5/user_impersonation']],
-  ['https://dandg-api-wedge-test.azurewebsites.net/v10', ['https://douglasandgordon.onmicrosoft.com/67f9a9a1-d8de-45bc-af20-43e1e18ccba5/user_impersonation']],
-  ['https://dandg-api-wedge-dev.azurewebsites.net/v10', ['https://douglasandgordon.onmicrosoft.com/67f9a9a1-d8de-45bc-af20-43e1e18ccba5/user_impersonation']],
-  ['https://dandg-api-wedge.azurewebsites.net/v10', ['https://douglasandgordon.onmicrosoft.com/67f9a9a1-d8de-45bc-af20-43e1e18ccba5/user_impersonation']],
+  ['https://dandg-api-wedge-test.azurewebsites.net', ['https://douglasandgordon.onmicrosoft.com/67f9a9a1-d8de-45bc-af20-43e1e18ccba5/user_impersonation']],
+  ['https://dandg-api-wedge-dev.azurewebsites.net', ['https://douglasandgordon.onmicrosoft.com/67f9a9a1-d8de-45bc-af20-43e1e18ccba5/user_impersonation']],
+  ['https://dandg-api-wedge.azurewebsites.net', ['https://douglasandgordon.onmicrosoft.com/67f9a9a1-d8de-45bc-af20-43e1e18ccba5/user_impersonation']],
   ['https://graph.microsoft.com/v1.0/me', ['user.read']]
 ]);
 
@@ -180,6 +179,11 @@ const externalModulesExports = [
     CalendarSharedModule,
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    // MsalModule.forRoot({
+    //   auth: {
+    //       clientId: '03d5d394-2418-42fa-a345-556b8d7ffcdb'
+    //   }
+
     MsalModule.forRoot({
       auth: {
         clientId: '03d5d394-2418-42fa-a345-556b8d7ffcdb',
@@ -189,41 +193,36 @@ const externalModulesExports = [
         postLogoutRedirectUri: 'http://localhost:4200/',
         navigateToLoginRequestUrl: true,
       },
-      cache: {
+      cache:{
         cacheLocation: 'localStorage',
         storeAuthStateInCookie: isIE, // set to true for IE 11
-      },
-      // {
-      //   logger?: Logger;
-      // loadFrameTimeout?: number;
-      // tokenRenewalOffsetSeconds?: number;
-      // navigateFrameWait?: number;
-      // telemetry?: TelemetryOptions;
-      // }
-      framework: {
-        // isAngular?: boolean;
-        unprotectedResources: ['https://www.microsoft.com/en-us/'],
-        protectedResourceMap: protectedResourceMap,
-      },
-      system: {
-        logger: new Logger(loggerCallback, {
-          correlationId: '1234',
-          level: LogLevel.Verbose,
-          piiLoggingEnabled: true,
-        })
-      },
 
-      // logger: loggerCallback,
-      // correlationId: '1234',
-      // piiLoggingEnabled: true
-    }, {
-      consentScopes: ['user.read', 'openid', 'profile',
-        'https://douglasandgordon.onmicrosoft.com/03d5d394-2418-42fa-a345-556b8d7ffcdb/user_impersonation',
-        'https://douglasandgordon.onmicrosoft.com/67f9a9a1-d8de-45bc-af20-43e1e18ccba5/user_impersonation'
-      ],
-      popUp: !isIE,
-      protectedResourceMap: protectedResourceMap,
+      },
+    // {
+    //   logger?: Logger;
+    // loadFrameTimeout?: number;
+    // tokenRenewalOffsetSeconds?: number;
+    // navigateFrameWait?: number;
+    // telemetry?: TelemetryOptions;
+    // }
+    framework:{
+      // isAngular?: boolean;
+      unprotectedResources: ['https://www.microsoft.com/en-us/'],
+    protectedResourceMap: protectedResourceMap,
+    }
+
+    // logger: loggerCallback,
+    // correlationId: '1234',
+    // piiLoggingEnabled: true
+  },{
+    consentScopes: ['user.read', 'openid', 'profile',
+      'https://douglasandgordon.onmicrosoft.com/03d5d394-2418-42fa-a345-556b8d7ffcdb/user_impersonation',
+      'https://douglasandgordon.onmicrosoft.com/67f9a9a1-d8de-45bc-af20-43e1e18ccba5/user_impersonation'
+    ],
+    popUp: !isIE,
+    protectedResourceMap: protectedResourceMap,
     }),
+
   ],
   exports: [
     MainmenuComponent

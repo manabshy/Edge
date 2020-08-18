@@ -8,11 +8,12 @@ import { HomeComponent } from '../home/home.component';
 import { AuthGuardService } from '../core/services/auth-guard.service';
 import { InstructionsAndBusinessDevelopmentComponent } from './dashboard-list/instructions-and-business-development/instructions-and-business-development.component';
 import { ExchangesAndPipelineComponent } from './dashboard-list/exchanges-and-pipeline/exchanges-and-pipeline.component';
+import { MsalGuard } from '@azure/msal-angular';
 
 const routes: Routes = [
-  { path: 'list/:id', component: DashboardListComponent, canActivate: [AuthGuardService] },
-  { path: 'instructionsAndBdd/:id', component: InstructionsAndBusinessDevelopmentComponent, canActivate: [AuthGuardService] },
-  { path: 'exchangesAndPipeline/:id', component: ExchangesAndPipelineComponent, canActivate: [AuthGuardService] },
+  { path: 'list/:id', component: DashboardListComponent, canActivate: [MsalGuard] },
+  { path: 'instructionsAndBdd/:id', component: InstructionsAndBusinessDevelopmentComponent, canActivate: [MsalGuard] },
+  { path: 'exchangesAndPipeline/:id', component: ExchangesAndPipelineComponent, canActivate: [MsalGuard] },
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],

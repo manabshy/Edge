@@ -14,7 +14,10 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
   }
   logIn(): void {
-    this.authService.startAuthentication();
+    // this.authService.startAuthentication();
+    // this.authService.handleRedirect()
+    this.authService.completeAuthentication()
+    this.authService.login()
     this.route.navigateByUrl('/');
   }
 }

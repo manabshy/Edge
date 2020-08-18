@@ -19,7 +19,7 @@ export class HomeComponent implements OnInit {
 
   currentStaffMember: StaffMember;
   get isLoggedIn(): boolean {
-    return this.authService.isLoggedIn();
+    return this.authService.checkAccount();
   }
   get isLeaderboardVisible() {
     if (this.currentStaffMember) {
