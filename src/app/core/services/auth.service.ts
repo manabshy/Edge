@@ -16,7 +16,6 @@ import { CryptoUtils, Logger } from 'msal';
   providedIn: 'root'
 })
 export class AuthService {
-  // private user: UserForAuthentication;
   endPointUrl = AppConstants.endpointUrl;
   private adalConfig = {
     tenant: AppConstants.tenant,
@@ -44,122 +43,57 @@ export class AuthService {
     private authService: MsalService,
     private broadcastService: BroadcastService,
     private configLoaderService: ConfigsLoaderService,
-    private _router: Router) {// this.adalService.init(this.adalConfig);
-      this.isIframe = window !== window.parent && !window.opener;
-
-      // this.checkAccount();
-
-
-
-      /***** */
-
-    //   this.broadcastService.subscribe("msal:loginFailure", payload => {
-    //     // do something here
-    //     console.log("loginfailure:", payload)
-    // });
-
-    // this.broadcastService.subscribe("msal:loginSuccess", payload => {
-    //     // do something here
-    //     console.log("login success:", payload)
-    // });
-    }
-
-    handleRedirect(){
-      this.broadcastService.subscribe('msal:loginSuccess', () => {
-        this.checkAccount();
-      });
-
-      // this.authService.handleRedirectCallback((authError, response) => {
-      //   if (authError) {
-      //     console.error('Redirect Error: ', authError.errorMessage);
-      //     return;
-      //   }
-
-      //   console.log('Redirect Success: ', response.accessToken);
-      // });
-
-      this.authService.setLogger(new Logger((logLevel, message, piiEnabled) => {
-        console.log('MSAL Logging: ', message);
-      }, {
-        correlationId: CryptoUtils.createNewGuid(),
-        piiLoggingEnabled: false
-      }));
-    }
-
-    checkAccount() {
-      this.loggedIn = !!this.authService.getAccount();
-      return this.loggedIn;
-    }
-
-    login() {
-      const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
-   console.log("im logging in")
-      // if (isIE) {
-        this.authService.loginRedirect();
-      // } else {
-      //   this.authService.loginPopup();
-      // }
-    }
-
-    logout() {
-      this.authService.logout();
-    }
-
-    completeAuthentication(){
-      // this.authService.handleRedirectCallback()
-      this.authService.handleRedirectCallback((authError, response) => {
-        if (authError) {
-          console.error('Redirect Error: ', authError.errorMessage);
-          return;
-        }
-
-        console.log('Redirect Success: ', response);
-      });
-    }
-
-    /*
-  public isLoggedIn(): boolean {
-    return this.adalService.userInfo.authenticated;
+    private _router: Router) {
+    this.isIframe = window !== window.parent && !window.opener;
   }
 
-  // TODO: Refactor to add proper env check
-  public signout(): void {
+  handleRedirect() {
+    this.broadcastService.subscribe('msal:loginSuccess', () => {
+      this.checkAccount();
+    });
+
+    this.authService.setLogger(new Logger((logLevel, message, piiEnabled) => {
+      console.log('MSAL Logging: ', message);
+    }, {
+      correlationId: CryptoUtils.createNewGuid(),
+      piiLoggingEnabled: false
+    }));
+  }
+
+  checkAccount() {
+    this.loggedIn = !!this.authService.getAccount();
+    return this.loggedIn;
+  }
+
+  login() {
+    const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
+    console.log("im logging in")
+    // if (isIE) {
+    this.authService.loginRedirect();
+    // } else {
+    //   this.authService.loginPopup();
+    // }
+  }
+
+  logout() {
     this.confirmSignOut().subscribe(res => {
       if (res) {
         if (environment.production) {
           this.storage.delete('currentUser').subscribe();
-          this.storage.delete('info').subscribe();
         }
-        this.adalService.logOut();
+        this.authService.logout();
       }
     });
   }
 
-  public startAuthentication(): any {
-    this.adalService.login();
-  }
-
-  public getName(): string {
-    return this.user.profile.name;
-  }
-  public getFirstname(): string {
-    return this.user.profile.given_name;
-  }
-
-  public getUsername(): string {
-    return this.user.userName;
-  }
-
-  public getToken() {
-    return this.adalService.acquireToken(this.adalConfig.clientId);
-  }
-
-  public completeAuthentication(): void {
-    this.adalService.handleWindowCallback();
-    this.adalService.getUser().subscribe(user => {
-      this.user = user;
+  completeAuthentication() {
+    this.authService.handleRedirectCallback((authError, response) => {
+      if (authError) {
+        console.error('Redirect Error: ', authError.errorMessage);
+        return;
+      }
+      console.log('Redirect Success: ', response);
     });
-
   }
 
   public confirmSignOut() {
@@ -172,20 +106,4 @@ export class AuthService {
     modal.content.subject = subject;
     return subject.asObservable();
   }
-
-}
-
-export interface UserForAuthentication {
-  userName: string;
-  profile: Profile;
-  authenticated: any;
-  error: any;
-  token: any;
-  loginCached: boolean;
-}
-
-export interface Profile {
-  given_name: string;
-  name: string;
-  */
 }
