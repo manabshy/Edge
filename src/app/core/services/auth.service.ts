@@ -1,13 +1,9 @@
 import { Injectable } from '@angular/core';
-// import { AdalService } from 'adal-angular4';
-import { AppConstants } from '../shared/app-constants';
 import { Subject } from 'rxjs';
 import { BsModalService } from 'ngx-bootstrap/modal/';
 import { ConfirmModalComponent } from '../../shared/confirm-modal/confirm-modal.component';
-import { Router } from '@angular/router';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { environment } from 'src/environments/environment';
-import { ConfigsLoaderService } from 'src/app/configs-loader.service';
 
 import { MsalService, BroadcastService } from '@azure/msal-angular';
 import { CryptoUtils, Logger } from 'msal';
@@ -16,36 +12,15 @@ import { CryptoUtils, Logger } from 'msal';
   providedIn: 'root'
 })
 export class AuthService {
-  endPointUrl = AppConstants.endpointUrl;
-  private adalConfig = {
-    tenant: AppConstants.tenant,
-    clientId: AppConstants.clientId,
-    redirectUri: AppConstants.redirectUri.startsWith('http') ? AppConstants.redirectUri : `${this.configLoaderService.AppEndpoint}/auth-callback`,
-    postLogoutRedirectUri: AppConstants.postLogoutRedirectUri,
-    cacheLocation: 'localStorage',
-    // loadFrameTimeout: 600000,
-    loadFrameTimeout: 36000000,
-    endpoints: {
-      'https://dandg-api-wedge.azurewebsites.net': '67f9a9a1-d8de-45bc-af20-43e1e18ccba5',
-      'https://dandg-api-wedge-dev.azurewebsites.net': '67f9a9a1-d8de-45bc-af20-43e1e18ccba5',
-      'https://dandg-api-wedge-test.azurewebsites.net': '67f9a9a1-d8de-45bc-af20-43e1e18ccba5'
-      //  endPointUrl : '67f9a9a1-d8de-45bc-af20-43e1e18ccba5'
-    }
-  };
+
   loggedIn: boolean;
   isIframe: boolean;
-
-
 
   constructor(
     private modalService: BsModalService,
     private storage: StorageMap,
     private authService: MsalService,
-    private broadcastService: BroadcastService,
-    private configLoaderService: ConfigsLoaderService,
-    private _router: Router) {
-    this.isIframe = window !== window.parent && !window.opener;
-  }
+    private broadcastService: BroadcastService) { this.isIframe = window !== window.parent && !window.opener; }
 
   handleRedirect() {
     this.broadcastService.subscribe('msal:loginSuccess', () => {
