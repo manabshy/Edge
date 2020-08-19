@@ -67,7 +67,7 @@
     "@types/lodash": "^4.14.159",
     "@types/node": "^12.11.1",
     "codelyzer": "^5.2.2",
-    "cypress": "^3.8.3",
+    "cypress": "^4.12.1",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~1.7.1",
