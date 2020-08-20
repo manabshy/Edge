@@ -88,7 +88,8 @@ export const FormErrors = {
   'eventTypeId': '',
   'properties': '',
   'contacts': '',
-  'points': ''
+  'points': '',
+  'endHour': ''
 
 };
 
@@ -264,7 +265,10 @@ export const ValidationMessages = {
   },
   'points': {
     required: 'Points are required'
-  }
+  },
+  'endHour': {
+    min: 'End time cannot be before the start time'
+  },
 };
   // 'invalidPhoneNumber': {
   //   required: 'Phone is required',

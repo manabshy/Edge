@@ -5,7 +5,7 @@ import { SharedService, WedgeError } from 'src/app/core/services/shared.service'
 import { DiaryEventService } from '../shared/diary-event.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { DropdownListInfo, InfoDetail, InfoService } from 'src/app/core/services/info.service';
-import { getHours, getMinutes, format, setHours, setMinutes, isAfter } from 'date-fns';
+import { getHours, getMinutes, format, setHours, setMinutes, isAfter, addHours, isSameDay } from 'date-fns';
 import { Property, PropertySearchEnum } from 'src/app/property/shared/property';
 import { Signer, ContactGroup } from 'src/app/contactgroups/shared/contact-group';
 import { ToastrService } from 'ngx-toastr';
@@ -21,6 +21,7 @@ import { ConfirmModalComponent } from 'src/app/shared/confirm-modal/confirm-moda
 import { ResultData } from 'src/app/shared/result-data';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as _ from 'lodash';
+
 @Component({
   selector: 'app-add-diary-event',
   templateUrl: './add-diary-event.component.html',
@@ -194,7 +195,7 @@ export class AddDiaryEventComponent implements OnInit {
     }
   }
 
-   getDiaryEvent() {
+  getDiaryEvent() {
     if (this.diaryEventId || this.graphEventId || this.staffMemberId) {
       this.diaryEventService.getDiaryEventById(this.diaryEventId, this.graphEventId, this.staffMemberId)
         .subscribe(event => {
@@ -265,7 +266,7 @@ export class AddDiaryEventComponent implements OnInit {
       startDateTime: new Date(),
       endDateTime: new Date(),
       startHour: this.getHours(),
-      endHour: this.getHours(true),
+      endHour: [this.getHours(true)],
       startMin: this.getMinutes(),
       endMin: this.getMinutes(),
       eventTypeId: [0, [Validators.required, Validators.min(1)]],
@@ -323,10 +324,10 @@ export class AddDiaryEventComponent implements OnInit {
           break;
       }
     }
-    return minutes.toString().padStart(2, '0');
+    return this.padLeftWithZero(minutes);
   }
 
-  private getHours(addAnHour?: boolean, date?: Date): any {
+  private getHours(addAnHour?: boolean, date?: Date): number {
     let hours: number;
     if (date) {
       hours = getHours(date);
@@ -336,7 +337,11 @@ export class AddDiaryEventComponent implements OnInit {
         hours += 1;
       }
     }
-    return hours.toString().padStart(2, '0');
+    return +(this.padLeftWithZero(hours));
+  }
+
+  private padLeftWithZero(value: number) {
+    return value.toString().padStart(2, '0');
   }
 
   onStartDateChange(startDate) {
@@ -346,6 +351,40 @@ export class AddDiaryEventComponent implements OnInit {
 
   onEndDateChange(endDate) {
     console.log('end', endDate);
+  }
+
+  onStartHourChange(time: string) {
+    const firstDigit = +time?.substr(0, 1);
+    let hour: number;
+    if (firstDigit === 0) {
+      time = time.substr(1, 1);
+      hour = +time + 1;
+      this.diaryEventForm.get('endHour').setValue(this.padLeftWithZero(hour));
+    } else {
+      hour = +time + 1;
+      this.diaryEventForm.get('endHour').setValue(hour);
+    }
+    this.setEndHourValidators();
+  }
+
+  onEndHourChange() {
+    this.setEndHourValidators();
+  }
+
+  private setEndHourValidators() {
+    const startDate = this.startDateTimeControl.value;
+    const endDate = this.endDateTimeControl.value;
+    const startHour = +this.startHourControl.value;
+    const endHour = +this.endHourControl.value;
+    if (isSameDay(startDate, endDate)) {
+      if (startHour > endHour) {
+        this.endHourControl.setValidators(Validators.min(startHour));
+        this.endHourControl.updateValueAndValidity();
+      } else {
+        this.endHourControl.clearValidators();
+        this.endHourControl.updateValueAndValidity();
+      }
+    }
   }
 
   onAllDayCheck(event: any) {
