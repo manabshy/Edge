@@ -9,7 +9,7 @@ import { ImpersonateMemberComponent } from './impersonate-member/impersonate-mem
 import { MsalGuard } from '@azure/msal-angular';
 
 const routes: Routes = [
-  { path: 'impersonate-member', component: ImpersonateMemberComponent, canActivate: [AuthGuardService] },
+  { path: 'impersonate-member', component: ImpersonateMemberComponent, canActivate: [MsalGuard] },
   {
     path: 'leads-register',
     data: { preload: true },
