@@ -71,7 +71,7 @@
     <fieldset *ngIf="showProperties">
       <legend class="fieldset-title">Properties {{propertyLabel}}</legend>
       <app-property-finder (selectedPropertyList)="getSelectedProperties($event)"
-        (rebookedProperty)="getRebookedPropertyId($event)" [isMultiple]="true" [label]="propertyLabel"
+        (rebookedProperty)="getRebookedPropertyId($event)" [isMultiple]="true" [hideCreateNewProperty]='true' [label]="propertyLabel"
         [isLabelHidden]="isLabelHidden" [property]="property" [canRebook]="canRebook"
         [propertyList]="diaryEvent?.properties" [propertyRequiredWarning]="propertyRequiredWarning"
         [searchType]="searchType">

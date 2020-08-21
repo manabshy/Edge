@@ -70,7 +70,7 @@
               </div>
             </div>
             <a class="small d-block mb-3" [routerLink]="['/property-centre/detail/0', 'edit']"
-              *ngIf="noSuggestions && !isMultiple"
+              *ngIf="noSuggestions && !hideCreateNewProperty"
               [queryParams]="{isNewProperty: true, searchedAddress: propertyFinderForm.get('searchTerm').value, getBack: 1}"
               (click)="CreateNewProperty()">
               <i class="fas fa-plus mr-2"></i> Add Property

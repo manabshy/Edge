@@ -667,9 +667,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.lastKnownOwner = property.lastKnownOwner;
       this.valuationForm.get('property').setValue(property);
       this.valuationForm.get('propertyOwner').setValue(this.lastKnownOwner);
-      this.valuationForm.markAsDirty();
       this.getValuers(property.propertyId);
       this.getValuationPropertyInfo(property.propertyId);
+      this.valuationForm.markAsDirty();
+
     }
   }
 
@@ -827,12 +828,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
   }
 
-  private getValuersOld(propId: number) {
-    if (this.valuers && !this.valuers.length) {
-      this.propertyService.getProperty(propId, false, false, true).pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe();
-    }
-  }
 
   onTenureChange(tenureId: number) {
     if (+tenureId === 3) {
@@ -871,6 +866,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   createNewSigner() {
+    console.log('create new signer here....')
 
   }
 
@@ -1234,8 +1230,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   cancel() {
-    this.sharedService.resetForm(this.valuationForm);
-    console.log('form state on cancel', this.valuationForm.valid);
+    // this.sharedService.resetForm(this.valuationForm); // Move this logic
+    // console.log('form state on cancel', this.valuationForm.valid);
+    // this.sharedService.clearFormValidators(this.valuationForm, this.formErrors);
     this.sharedService.back();
   }
 
@@ -1246,6 +1243,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   canDeactivate(): boolean {
     if (this.valuationForm.dirty && !this.isSubmitting) {
+
       return false;
     }
     return true;
