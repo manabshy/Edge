@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA, APP_INITIALIZER } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { MainmenuComponent } from './mainmenu/mainmenu.component';
@@ -36,8 +36,9 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ImpersonateMemberComponent } from './impersonate-member/impersonate-member.component';
+import { ConfigsLoaderService } from './configs-loader.service';
 
 
 // ngx bootstrap imports
@@ -69,6 +70,19 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
 import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
 import { CalendarSharedModule } from './calendar-shared/calendar-shared.module';
+
+import { MsalModule, MsalInterceptor } from '@azure/msal-angular';
+import { Logger, LogLevel } from 'msal';
+
+export const protectedResourceMap: Map<string, Array<string>> = new Map([
+  ['http://localhost:57211/v10', ['https://douglasandgordon.onmicrosoft.com/67f9a9a1-d8de-45bc-af20-43e1e18ccba5/user_impersonation']],
+  ['https://dandg-api-wedge-test.azurewebsites.net', ['https://douglasandgordon.onmicrosoft.com/67f9a9a1-d8de-45bc-af20-43e1e18ccba5/user_impersonation']],
+  ['https://dandg-api-wedge-dev.azurewebsites.net', ['https://douglasandgordon.onmicrosoft.com/67f9a9a1-d8de-45bc-af20-43e1e18ccba5/user_impersonation']],
+  ['https://dandg-api-wedge.azurewebsites.net', ['https://douglasandgordon.onmicrosoft.com/67f9a9a1-d8de-45bc-af20-43e1e18ccba5/user_impersonation']],
+  ['https://graph.microsoft.com/v1.0/me', ['user.read']]
+]);
+
+const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 
 const externalModulesImports = [
   InfiniteScrollModule,
@@ -163,9 +177,67 @@ const externalModulesExports = [
     LeaderboardModule,
     CalendarSharedModule,
     AppRoutingModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    MsalModule.forRoot({
+      auth: {
+        clientId: environment.clientId,
+        authority: environment.authority,
+        validateAuthority: true,
+        redirectUri: `${environment.baseRedirectUri}/auth-callback`,
+        postLogoutRedirectUri: environment.baseRedirectUri,
+        navigateToLoginRequestUrl: true,
+      },
+      cache: {
+        cacheLocation: 'localStorage',
+        storeAuthStateInCookie: isIE, // set to true for IE 11
+
+      },
+      // {
+      //   logger?: Logger;
+      // loadFrameTimeout?: number;
+      // tokenRenewalOffsetSeconds?: number;
+      // navigateFrameWait?: number;
+      // telemetry?: TelemetryOptions;
+      // }
+      framework: {
+        // isAngular?: boolean;
+        unprotectedResources: ['https://www.microsoft.com/en-us/'],
+        protectedResourceMap: protectedResourceMap,
+      }
+
+      // logger: loggerCallback,
+      // correlationId: '1234',
+      // piiLoggingEnabled: true
+    }, {
+      consentScopes: ['user.read', 'openid', 'profile',
+        'https://douglasandgordon.onmicrosoft.com/03d5d394-2418-42fa-a345-556b8d7ffcdb/user_impersonation',
+        'https://douglasandgordon.onmicrosoft.com/67f9a9a1-d8de-45bc-af20-43e1e18ccba5/user_impersonation'
+      ],
+      popUp: !isIE,
+      protectedResourceMap: protectedResourceMap,
+    }),
+
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  exports: [
+    MainmenuComponent
+  ],
+  providers: [
+    {
+      provide: APP_INITIALIZER,
+      useFactory: appInitializerFactory,
+      deps: [ConfigsLoaderService],
+      multi: true
+    }
+  ],
+  bootstrap: [AppComponent],
+  schemas: [NO_ERRORS_SCHEMA]
 })
 export class AppModule { }
+
+export function appInitializerFactory(configsLoaderService: ConfigsLoaderService) {
+  return () => configsLoaderService.loadConfigs();
+}
+
+export function loggerCallback(logLevel, message, piiEnabled) {
+  console.log('msal log messages', message);
+}

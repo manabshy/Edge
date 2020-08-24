@@ -6,40 +6,45 @@ import { AuthGuardService } from './core/services/auth-guard.service';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { SelectiveStrategyService } from './core/services/selective-strategy.service';
 import { ImpersonateMemberComponent } from './impersonate-member/impersonate-member.component';
+import { MsalGuard } from '@azure/msal-angular';
 
 const routes: Routes = [
-  { path: 'impersonate-member', component: ImpersonateMemberComponent, canActivate: [AuthGuardService] },
+  { path: 'impersonate-member', component: ImpersonateMemberComponent, canActivate: [MsalGuard] },
   {
     path: 'leads-register',
     data: { preload: true },
     loadChildren: () => import('./leads/leads.module').then(m => m.LeadsModule),
-    canActivate: [AuthGuardService],
+    canActivate: [MsalGuard],
   },
   {
     path: 'valuations-register',
     data: { preload: true },
     loadChildren: () => import('./valuations/valuations.module').then(m => m.ValuationsModule),
-    canActivate: [AuthGuardService],
+    canActivate: [MsalGuard],
   },
   {
     path: 'property-centre',
     data: { preload: true },
     loadChildren: () => import('./property/property.module').then(m => m.PropertyModule),
-    canActivate: [AuthGuardService],
+    canActivate: [MsalGuard],
   },
   {
     path: 'contact-centre',
-    loadChildren: () => import('./contactgroups/contactgroups.module').then(m => m.ContactgroupsModule), canActivate: [AuthGuardService]
+    loadChildren: () => import('./contactgroups/contactgroups.module').then(m => m.ContactgroupsModule), canActivate: [MsalGuard]
   },
   {
     path: 'company-centre',
-    loadChildren: () => import('./company/company.module').then(m => m.CompanyModule), canActivate: [AuthGuardService]
+    loadChildren: () => import('./company/company.module').then(m => m.CompanyModule), canActivate: [MsalGuard]
   },
   {
     path: 'diary',
-    loadChildren: () => import('./diary/diary.module').then(m => m.DiaryModule), canActivate: [AuthGuardService]
+    loadChildren: () => import('./diary/diary.module').then(m => m.DiaryModule), canActivate: [MsalGuard]
   },
-  { path: '', component: HomeComponent, canActivate: [AuthGuardService] },
+  {
+    path: 'admin-panel',
+    loadChildren: () => import('./client-services/client-services.module').then(m => m.ClientServicesModule), canActivate: [MsalGuard]
+  },
+  { path: '', component: HomeComponent, canActivate: [MsalGuard] },
   { path: '**', component: NotFoundComponent }
 ];
 

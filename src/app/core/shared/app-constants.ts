@@ -1,5 +1,4 @@
 import { environment } from 'src/environments/environment';
-import { FormGroup } from '@angular/forms';
 
 export class AppConstants {
   public static get addressCaptureBaseUrl(): string { return 'https://services.postcodeanywhere.co.uk/Capture/Interactive'; }
@@ -8,6 +7,7 @@ export class AppConstants {
   public static get baseValuationUrl(): string { return `${environment.baseUrl}/valuations`; }
   public static get basePropertyUrl(): string { return `${environment.baseUrl}/properties`; }
   public static get baseDiaryEventUrl(): string { return `${environment.baseUrl}/diaryEvents`; }
+  public static get baseCsboardUrl(): string { return `${environment.baseUrl}/csboard`; }
   public static get baseContactGroupUrl(): string { return `${environment.baseUrl}/contactGroups`; }
   public static get baseApplicantUrl(): string { return `${environment.baseUrl}/applicants`; }
   public static get baseCompanyUrl(): string { return `${environment.baseUrl}/companies`; }
@@ -88,6 +88,9 @@ export const FormErrors = {
   'eventTypeId': '',
   'properties': '',
   'contacts': '',
+  'points': '',
+  'endHour': ''
+
 };
 
 export const ValidationMessages = {
@@ -259,12 +262,19 @@ export const ValidationMessages = {
   },
   'contacts': {
     required: 'Contact is required'
-  }
+  },
+  'points': {
+    required: 'Points are required'
+  },
+  'endHour': {
+    min: 'End time cannot be before the start time'
+  },
+};
   // 'invalidPhoneNumber': {
   //   required: 'Phone is required',
   //   minlength: 'Phone number must be at least 7 characters',
   //   maxlength: 'Phone number cannot be more than 16 characters',
   //   pattern: 'Phone number is not valid'
   // }
-};
+
 

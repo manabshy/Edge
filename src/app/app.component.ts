@@ -13,6 +13,8 @@ import { InfoService } from './core/services/info.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { environment } from 'src/environments/environment';
 import manifest from 'src/manifest.json';
+import { ConfigsLoaderService } from './configs-loader.service';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -29,7 +31,8 @@ export class AppComponent extends BaseComponent implements OnInit {
   @ViewChild(ToastContainerDirective, { static: true }) toastContainer: ToastContainerDirective;
 
   get isLoggedIn(): boolean {
-    return this.authService.isLoggedIn();
+    return this.authService.checkAccount();
+
   }
 
 
@@ -40,14 +43,15 @@ export class AppComponent extends BaseComponent implements OnInit {
     private infoService: InfoService,
     private storage: StorageMap,
     protected staffMemberService: StaffMemberService,
+    private configLoaderService: ConfigsLoaderService,
     private edgeServiceWorker: EdgeServiceWorkerService,
     private renderer: Renderer2,
     private toastr: ToastrService,
     private serviceWorker: EdgeServiceWorkerService,
     private cdRef: ChangeDetectorRef) {
     super();
+    this.setupEnvironmentVariables();
     /*  Track previous route for Breadcrumb component  */
-
     this.router.events.pipe(
       filter(e => e instanceof RoutesRecognized)
     ).pipe(
@@ -57,7 +61,7 @@ export class AppComponent extends BaseComponent implements OnInit {
       AppUtils.prevRouteBU = AppUtils.prevRoute || '';
       AppUtils.prevRoute = event[0].urlAfterRedirects;
       const current = event[1].urlAfterRedirects;
-     
+
       // console.log('events before checking current...', event)
       // if (current.indexOf('login') > -1 && current.indexOf('auth-callback') > -1 && current !== '/') {
       //   console.log('before removal', event)
@@ -80,7 +84,7 @@ export class AppComponent extends BaseComponent implements OnInit {
         console.log('isupdateAvailable: ', this.serviceWorker.isUpdateAvailable)
         console.log('current Patch: ', current)
         console.log('condition:', current === '/' && this.serviceWorker.isUpdateAvailable)
-  
+
         const calendar = '/?selectedTab=0';
         const homes = [
           '/',
@@ -90,7 +94,7 @@ export class AppComponent extends BaseComponent implements OnInit {
           '/company-centre',
           '/property-centre',
           '/valuations-register'
-        ] 
+        ]
         const pathEqual = (elem)=>elem===current;
         if(homes.some(pathEqual)&&this.serviceWorker.getIsupdateAvailable()){
           console.log('App relaod because of update');
@@ -173,6 +177,13 @@ export class AppComponent extends BaseComponent implements OnInit {
         manifest.name = `${name}`;
         manifest.short_name = `${name}`;
         break;
+      }
+    }
+  private setupEnvironmentVariables() {
+    if (environment.production) {
+      environment.baseUrl = this.configLoaderService.ApiEndpoint;
+      environment.endpointUrl = this.configLoaderService.ApiEndpoint;
+      environment.baseRedirectUri = this.configLoaderService.AppEndpoint;
     }
   }
 }

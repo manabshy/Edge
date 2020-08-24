@@ -13,7 +13,7 @@ export class AuthCallbackComponent implements OnInit {
   constructor(private router: Router, private authService: AuthService, private _zone: NgZone) { }
 
   ngOnInit() {
-    this.authService.completeAuthentication();
+    // this.authService.completeAuthentication();
 
     setTimeout(() => {
       this._zone.run(
@@ -21,7 +21,7 @@ export class AuthCallbackComponent implements OnInit {
           // const prev = localStorage.getItem('prev');
           // const url = prev && prev !== '/' ? prev : '/';
 
-          this.router.navigateByUrl('/')
+          this.router.navigateByUrl('/');
         }
       );
     }, 200);

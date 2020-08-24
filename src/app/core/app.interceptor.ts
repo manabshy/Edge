@@ -12,7 +12,7 @@ export class AppInterceptor implements HttpInterceptor {
   impersonatedStaffMemberId: number;
 
   constructor(private storage: StorageMap,
-              private sharedService:SharedService) {
+              private sharedService: SharedService) {
   }
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     this.storage.get('impersonatedStaffMember').subscribe((person: Impersonation) => {
@@ -33,22 +33,22 @@ export class AppInterceptor implements HttpInterceptor {
     return next.handle(jsonReq).pipe(catchError(err => this.handleError(err, req.url)));
   }
 
-  private handleError(err: HttpErrorResponse, url:string): Observable<WedgeError> | Observable<any> {
+  private handleError(err: HttpErrorResponse, url: string): Observable<WedgeError> | Observable<any> {
     const wedgeError = new WedgeError();
     if (err.error instanceof ErrorEvent) {
       wedgeError.displayMessage = `An error occurred: ${err.error.message}`;
     } else {
-      wedgeError.errorCode = err.status;
-      wedgeError.requestId = err.error.requestId;
-      wedgeError.technicalDetails = err.error.technicalDetails;
-      wedgeError.message = err.error.message;
+      wedgeError.errorCode = err?.status;
+      wedgeError.requestId = err?.error?.requestId;
+      wedgeError.technicalDetails = err?.error?.technicalDetails;
+      wedgeError.message = err?.error?.message;
       if (wedgeError.technicalDetails) {
         wedgeError.displayMessage = `${wedgeError.message}`;
       } else {
         wedgeError.displayMessage = `${wedgeError.message}`;
       }
     }
-    wedgeError.requestUrl=url
+    wedgeError.requestUrl = url;
     console.error('errors from api', err);
     console.error(wedgeError);
     this.sharedService.showError(wedgeError, 'app.inteceptor');

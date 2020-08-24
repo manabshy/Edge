@@ -4,10 +4,11 @@ import { AddDiaryEventComponent } from './add-diary-event/add-diary-event.compon
 import { AuthGuardService } from '../core/services/auth-guard.service';
 import { CanDeactivateGuard } from '../core/shared/can-deactivate.guard';
 import { DiaryComponent } from './diary.component';
+import { MsalGuard } from '@azure/msal-angular';
 
 const routes: Routes = [
   { path: '', component: DiaryComponent, data: { shouldDetach: false } },
-  { path: 'edit/:id', component: AddDiaryEventComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateGuard] },
+  { path: 'edit/:id', component: AddDiaryEventComponent, canActivate: [MsalGuard], canDeactivate: [CanDeactivateGuard] },
 ];
 
 @NgModule({

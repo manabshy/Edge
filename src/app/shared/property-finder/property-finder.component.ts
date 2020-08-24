@@ -22,6 +22,7 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
   @Input() propertyRequiredWarning: string;
   @Input() searchType: number;
   @Input() isLabelHidden: boolean;
+  @Input() hideCreateNewProperty = false;
   @Output() selectedProperty = new EventEmitter<any>();
   @Output() selectedPropertyList = new EventEmitter<any>();
   @Output() rebookedProperty = new EventEmitter<number>();

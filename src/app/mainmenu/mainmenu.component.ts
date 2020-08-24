@@ -112,7 +112,8 @@ export class MainmenuComponent implements OnInit {
   }
 
   logOut() {
-    this.authService.signout();
+    // this.authService.signout();
+    this.authService.logout()
   }
 
 }

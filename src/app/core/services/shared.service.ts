@@ -235,6 +235,12 @@ export class SharedService {
     console.log('reset is called after', form)
   }
 
+  clearFormValidators(form: FormGroup, formErrors: any) {
+    Object.keys(form.controls).forEach(key => {
+      formErrors[key] = '';
+    });
+  }
+
   setValuationStatusLabel(vals: Valuation[]) {
     vals.forEach(x => {
       x.valuationStatusLabel = ValuationStatusEnum[x.valuationStatus];
