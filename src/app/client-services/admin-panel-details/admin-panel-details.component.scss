@@ -5,15 +5,16 @@
 @import "../../../../node_modules/bootstrap/scss/mixins";
 
 dl {
-    display: flex;
-    flex-flow: column wrap;
-    max-height: 4em;
-    max-width: 16em;
-    margin: 1rem auto;
+    margin: 0;
+  }
 
-    @include media-breakpoint-up(sm) {
-      margin-left: 0;
-    }
+  .toolbar {
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    background-color: color("white");
+    padding: spacer(2) 0;
   }
 
   table {
