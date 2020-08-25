@@ -7,7 +7,7 @@ import { FormErrors, ValidationMessages } from '../../../app/core/shared/app-con
 import { CsBoardService } from '../shared/services/cs-board.service';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { PointType, TeamMemberPoint } from '../shared/models/team-member';
-import { tap } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import * as moment from 'moment';
 import { getYear, getMonth } from 'date-fns';
@@ -71,10 +71,16 @@ export class AdminPanelDetailsComponent implements OnInit {
     }
   }
 
+  orderPointsByDateDescending(points: TeamMemberPoint[]) {
+    points?.sort((a, b) => new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime());
+
+  }
+
   updateTeamMemberPoints(newPoint: TeamMemberPoint) {
     if (newPoint) {
       this.teamMemberPoints.push(newPoint);
       this.getSelectedMonthPointTotal(this.teamMemberPoints);
+      this.orderPointsByDateDescending(this.teamMemberPoints);
     }
   }
 
@@ -107,6 +113,7 @@ export class AdminPanelDetailsComponent implements OnInit {
         tap(data => this.setPointType(data.points)),
         tap(data => {
           this.teamMemberPoints = data.points;
+          this.orderPointsByDateDescending(data.points);
           this.getSelectedMonthPointTotal(data.points);
         })
       );
