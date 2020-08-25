@@ -6,7 +6,7 @@ html {
 
 body {
     padding-top: $top-bar-height;
-    background: $white url('./assets/dg_bg.svg') right bottom no-repeat;
+    background: $white url('/./assets/dg_bg.svg') right bottom no-repeat;
     background-size: cover;
     background-attachment: fixed;
     min-height: 100vh;
