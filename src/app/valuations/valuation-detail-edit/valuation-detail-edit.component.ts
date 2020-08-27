@@ -867,7 +867,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   createNewSigner() {
     console.log('create new signer here....')
-
+    this.valuationForm.markAsPristine();
   }
 
   startInstruction() {
