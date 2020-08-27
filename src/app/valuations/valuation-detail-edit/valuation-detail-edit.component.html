@@ -44,7 +44,7 @@
   </div>
   <form [formGroup]="valuationForm" (ngSubmit)="saveValuation()" autocompleteOff>
     <fieldset>
-      <app-property-finder [property]="property"  [hideCreateNewProperty]='true' (selectedProperty)="getSelectedProperty($event)"
+      <app-property-finder [property]="property"  (selectedProperty)="getSelectedProperty($event)" (isCreatingNewProperty)="createNewProperty($event)"
         [readOnly]="!isEditable && !isNewValuation">
       </app-property-finder>
       <app-signer label="Last known owner" [createdSigner]="createdSigner" [existingSigner]="lastKnownOwner"

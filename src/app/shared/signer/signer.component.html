@@ -19,7 +19,7 @@
               <span class="badge badge-pill badge-primary">{{selectedSignerDetails?.companyName}}</span>
             </ng-container>
           </a>
-          <a class="small mobile-btn" *ngIf="!selectedSignerDetails">
+          <a class="small mobile-btn" *ngIf="!selectedSignerDetails" >
             {{selectedSignerDetails?.contactNames}}
             <ng-container *ngIf="selectedSignerDetails?.companyName">
               <br>
@@ -110,7 +110,7 @@
               </app-subnav-item>
               <div class="list-group-item text-center text-danger" *ngIf="!signers?.length">
                 No <ng-container *ngIf="!label; else givenLabel2 ">Signers</ng-container>
-                <ng-template #givenLabel2>{{label}}</ng-template> 
+                <ng-template #givenLabel2>{{label}}</ng-template>
                 found
               </div>
               <a [routerLink]="['/contact-centre/detail/0/people', 0]"  *ngIf="!isMultiple"

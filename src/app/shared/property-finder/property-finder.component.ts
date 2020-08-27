@@ -23,6 +23,7 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
   @Input() searchType: number;
   @Input() isLabelHidden: boolean;
   @Input() hideCreateNewProperty = false;
+  @Output() isCreatingNewProperty = new EventEmitter<boolean>();
   @Output() selectedProperty = new EventEmitter<any>();
   @Output() selectedPropertyList = new EventEmitter<any>();
   @Output() rebookedProperty = new EventEmitter<number>();
@@ -191,6 +192,6 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
   }
 
   CreateNewProperty() {
-
+    this.isCreatingNewProperty.emit(true);
   }
 }

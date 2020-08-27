@@ -162,12 +162,13 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
       officeId: property.officeId,
       propertyTypeId: property.propertyTypeId,
       propertyStyleId: property.propertyStyleId,
-      regionId: property.regionId,
+      regionId: property.regionId || 1,
       areaId: property.areaId,
       subAreaId: property.subAreaId,
       address: property.address
     });
     this.lastKnownOwner = property.lastKnownOwner;
+    this.getAreas(property.regionId || 1);
   }
 
   onSelectType(propertyTypeId: number) {
@@ -197,7 +198,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
       propertyTypeId: [0, Validators.required],
       propertyStyleId: [0],
       officeId: [0],
-      regionId: 1,
+      regionId: [1],
       areaId: [0],
       subAreaId: [0],
       address: ['', Validators.required]

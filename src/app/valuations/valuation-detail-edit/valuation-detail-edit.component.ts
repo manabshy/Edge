@@ -316,7 +316,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.setOriginTypes(info.originTypes); // TODO: Issue on refresh
   }
 
-   getPropertyDetails() {
+  getPropertyDetails() {
     this.propertyService.getProperty(this.propertyId, false, false, true).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       if (result) {
         this.lastKnownOwner = result.lastKnownOwner;
@@ -867,6 +867,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   createNewSigner() {
     console.log('create new signer here....')
+    this.valuationForm.markAsPristine();
+  }
+  createNewProperty(isNewProperty: boolean) {
+    console.log('create new PROPERTY here....', isNewProperty)
     this.valuationForm.markAsPristine();
   }
 
