@@ -11,8 +11,8 @@ describe('Property center should', () => {
   it('search for properties using a search term', () => {
     cy.visit('/property-centre');
     cy.get('[type="search"]')
-      .type('road')
-      .should('have.value', 'road');
+      .type('king')
+      .should('have.value', 'king');
     cy.get('.btn-secondary')
       .should('have.text', 'Search')
       .click();
