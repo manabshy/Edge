@@ -332,7 +332,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
 
   setExistingPhoneNumbers(phoneNumbers: PhoneNumber[]): FormArray {
     const phoneArray = new FormArray([]);
-    phoneNumbers.forEach((x) => {
+    phoneNumbers?.forEach((x) => {
       phoneArray.push(this.fb.group({
         number: [x.number, { validators: [WedgeValidators.phoneNumberValidator()] }],
         id: x.id,
@@ -348,7 +348,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
 
   setExistingEmailAddresses(emailAddresses: Email[]): FormArray {
     const emailFormArray = new FormArray([]);
-    emailAddresses.forEach(x => {
+    emailAddresses?.forEach(x => {
       emailFormArray.push(this.fb.group({
         id: x.id,
         email: [x.email, { validators: [Validators.pattern(AppConstants.emailPattern)] }],

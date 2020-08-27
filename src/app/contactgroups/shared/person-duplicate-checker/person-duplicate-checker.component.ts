@@ -50,7 +50,7 @@ export class PersonDuplicateCheckerComponent implements OnInit, OnChanges {
       emailAddress: [''],
       phoneNumber: ['']
     });
-    if(this.searchTerm) {
+    if (this.searchTerm) {
       this.findPotentialDuplicatePerson(this.personFinderForm.value);
     }
     this.personFinderForm.valueChanges
@@ -84,7 +84,7 @@ export class PersonDuplicateCheckerComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    if(this.contactGroupDetails.contactType === ContactType.CompanyContact){
+    if (this.contactGroupDetails.contactType === ContactType.CompanyContact) {
       this.isCompanyContactGroup = true;
     }
     if (this.isOffCanvasVisible) {
@@ -104,11 +104,7 @@ export class PersonDuplicateCheckerComponent implements OnInit, OnChanges {
   findPotentialDuplicatePerson(person: BasicPerson) {
     this.contactGroupService.getPotentialDuplicatePeople(person).subscribe(data => {
       this.potentialDuplicatePeople = data;
-      if (data) {
-        this.newPerson.firstName = data.firstName,
-          this.newPerson.middleName = data.middleName,
-          this.newPerson.lastName = data.lastName;
-      }
+      this.newPerson = { ...data };
       this.checkDuplicatePeople(person);
     });
   }
@@ -163,7 +159,7 @@ export class PersonDuplicateCheckerComponent implements OnInit, OnChanges {
     return this.sharedService.checkDuplicateInContactGroup(this.contactGroupDetails, id);
   }
 
-   // TODO: Replace this with a directive
+  // TODO: Replace this with a directive
   /* Only allow spaces, dashes, the plus sign and digits */
   phoneNumberOnly(event): boolean {
     const charCode = (event.which) ? event.which : event.keyCode;

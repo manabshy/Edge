@@ -40,16 +40,16 @@ export interface PersonWarning {
 }
 
 export interface BasicPerson {
-  personId: number;
+  personId?: number;
   firstName: string;
   lastName: string;
-  middleName: string;
+  middleName?: string;
   fullName: string;
-  title: string;
-  emailAddress: string;
-  phoneNumber: string;
-  emailAddresses: Email[];
-  phoneNumbers: PhoneNumber[];
+  title?: string;
+  emailAddress?: string;
+  phoneNumber?: string;
+  emailAddresses?: Email[];
+  phoneNumbers?: PhoneNumber[];
 }
 export interface Email {
   id?: number;
