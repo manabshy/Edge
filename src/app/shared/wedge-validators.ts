@@ -167,10 +167,10 @@ export class WedgeValidators {
       if (control !== null) {
 
         const controlFullDate = new Date(control.value);
-
         const controlDate = new Date(controlFullDate.getFullYear(), controlFullDate.getMonth(), controlFullDate.getDate());
         const currentDate = new Date(currentFullDate.getFullYear(), currentFullDate.getMonth(), currentFullDate.getDate());
 
+        // (!control.value || isPast(control.value) || isToday(control.value)
         if (controlDate < currentDate) {
           return { 'nextChaseDatePassed': true };
         }
@@ -246,7 +246,7 @@ export class WedgeValidators {
     const isValid = !isWhitespace;
     return isValid ? null : { 'whitespace': true };
   }
-  
+
   static cannotContainSpace(control: AbstractControl): ValidationErrors | null {
     if ((control.value as string).indexOf(' ') >= 0) {
       return { cannotContainSpace: true };

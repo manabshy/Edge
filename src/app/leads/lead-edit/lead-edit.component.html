@@ -93,10 +93,10 @@
                   <label for="chaseDate">Chase date</label>
                   <input type="text" id="chaseDate" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
                     formControlName="nextChaseDate"
-                    [bsConfig]="{showWeekNumbers:false, useUtc: false, dateInputFormat: 'DD/MM/YYYY', minDate:todaysDate, customTodayClass: 'font-weight-bold'}"
+                    [bsConfig]="{showWeekNumbers:false, useUtc: false, dateInputFormat: 'DD/MM/YYYY', minDate:tomorrowsDate, customTodayClass: 'font-weight-bold'}"
                     bsDatepicker [attr.disabled]="isLeadClosed ? true : null"
                     #datepicker="bsDatepicker"
-                    [appNoDoubleTap]='datepicker' 
+                    [appNoDoubleTap]='datepicker'
                     (bsValueChange)="onChaseDateChange($event)"
                     [ngClass]="{'is-invalid': (formErrors?.nextChaseDate)}">
                   <div class="invalid-feedback">{{formErrors?.nextChaseDate}}</div>
