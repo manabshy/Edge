@@ -108,7 +108,7 @@
                   <!-- <app-staffmember-finder [staffMemberId]="lead?.ownerId" (ownerChanged)="onOwnerChanged($event)"
                     [isDisabled]="isLeadClosed ? true : false">
                   </app-staffmember-finder> -->
-                  <app-staff-member-finder [staffMemberId]="lead?.ownerId" [listType]="'activeStaffMembers'"
+                  <app-staff-member-finder [staffMemberId]="lead?.ownerId || leadEditForm.get('ownerId').value" [listType]="'activeStaffMembers'"
                     (selectedStaffMemberId)="getSelectedStaffMemberId($event)"
                     [isRequired]="!leadEditForm.get('ownerId').value"
                     [isDisabled]="isLeadClosed ? true : false"></app-staff-member-finder>
