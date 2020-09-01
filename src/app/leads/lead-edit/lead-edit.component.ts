@@ -321,7 +321,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     if (id) {
       this.leadEditForm.patchValue({ ownerId: id });
     } else {
-      this.leadEditForm.patchValue({ ownerId: 0 });
+      this.leadEditForm.patchValue({ ownerId: null });
     }
 
     console.log('valuer id here', this.leadEditForm.get('ownerId').value);
@@ -333,9 +333,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
   private setupLeadEditForm() {
     this.leadEditForm = this.fb.group({
-      ownerId: null,
+      ownerId: ['', [Validators.required]],
       person: '',
-      leadTypeId: [0, Validators.required],
+      leadTypeId: ['', Validators.required],
       nextChaseDate: ['', [Validators.required, WedgeValidators.nextChaseDateValidator()]],
       closeLead: false
     });
@@ -361,34 +361,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       nextChaseDateControl.updateValueAndValidity();
     }
   }
-
-  clearNextChaseDateValidators() {
-    this.nextChaseDateControl.clearValidators();
-    this.nextChaseDateControl.updateValueAndValidity();
-  }
-
-  setNextChaseDateValidators() {
-
-    console.log('chase date', this.nextChaseDateControl.value);
-
-    // if (this.nextChaseDateControl.value <= new Date() && !this.isValidatorCleared) {
-    //   this.nextChaseDateControl.setValidators(WedgeValidators.nextChaseDateValidator());
-    //   this.nextChaseDateControl.updateValueAndValidity();
-    //   // this.isChaseDateInvalid = true;
-    // }
-
-    // if (this.nextChaseDateControl.value !== '' && this.nextChaseDateControl.value < new Date() && !this.isValidatorCleared) {
-    //   this.isChaseDateInvalid = true;
-    // }
-    if (!this.nextChaseDateControl.value || isPast(this.nextChaseDateControl.value) || isToday(this.nextChaseDateControl.value)) {
-      this.isChaseDateInvalid = true;
-      console.log('NOOOOO...', this.nextChaseDateControl, isPast(this.nextChaseDateControl.value), isToday(this.nextChaseDateControl.value));
-
-    } else {
-      this.isChaseDateInvalid = false;
-    }
-  }
-
 
   removeProperty() {
     const newLead = { ...this.lead, ...{ relatedProperty: null } };

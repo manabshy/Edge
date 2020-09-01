@@ -89,7 +89,8 @@ export const FormErrors = {
   'properties': '',
   'contacts': '',
   'points': '',
-  'endHour': ''
+  'endHour': '',
+  'ownerId': ''
 
 };
 
@@ -268,6 +269,10 @@ export const ValidationMessages = {
   },
   'endHour': {
     min: 'End time cannot be before the start time'
+  },
+  'ownerId': {
+    required: 'Chaser is required',
+    min: 'You need to set a valid chaser'
   },
 };
   // 'invalidPhoneNumber': {
