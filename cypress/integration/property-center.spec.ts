@@ -1,4 +1,3 @@
-// /// <reference types="Cypress" />
 describe('Property center should', () => {
   beforeEach(() => {
   });

@@ -24,7 +24,7 @@
             <label class="small" for="date">Date From</label>
             <input type="text" id="date" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
               [bsConfig]="{showWeekNumbers:false,  dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
-              bsDatepicker 
+              bsDatepicker
               #datepicker="bsDatepicker"
               [appNoDoubleTap]='datepicker' formControlName="date">
           </div>
@@ -56,7 +56,7 @@
       </div>
       <div class="col-sm-2">
         <div class="form-group mt-sm-4">
-          <button class="btn btn-block btn-secondary" (click)="getValuations()">Search</button>
+          <button class="btn btn-block btn-secondary" id="btnSearch" (click)="getValuations()">Search</button>
         </div>
       </div>
     </div>
