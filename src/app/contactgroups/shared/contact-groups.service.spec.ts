@@ -3,9 +3,9 @@ import { HttpClientTestingModule, HttpTestingController, TestRequest  } from '@a
 
 import { ContactGroupsService } from './contact-groups.service';
 import { AppConstants } from 'src/app/core/shared/app-constants';
-import { ContactGroupsAutocompleteMock } from './test-helper/contactgroups-autocomplete.json';
-import { NewPersonNoteMock, AddedPersonNoteMock, PersonNotesMock } from './test-helper/person-note.json';
+import { ContactGroupsAutocompleteMock } from '../../../testing/fixture-data/contactgroups-autocomplete.json';
 import { PersonNote } from './contact-group';
+import { NewPersonNoteMock, AddedPersonNoteMock, PersonNotesMock } from 'src/testing/fixture-data/person-note.json';
 
 describe('ContactGroupsService should', () => {
   let httpTestingController: HttpTestingController;

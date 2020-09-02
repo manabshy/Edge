@@ -6,13 +6,13 @@ import { NO_ERRORS_SCHEMA, DebugElement } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { ContactGroupsService } from '../shared/contact-groups.service';
-import { MockPerson } from '../shared/test-helper/person-data.json';
 import { ToastrService } from 'ngx-toastr';
 import { By } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule, FormGroup, AbstractControl } from '@angular/forms';
 import { of } from 'rxjs';
-import { MockDropdownListInfo } from '../shared/test-helper/dropdown-list-data.json';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MockPerson } from 'src/testing/fixture-data/person-data.json';
+import { MockDropdownListInfo } from 'src/testing/fixture-data/dropdown-list-data.json';
 
 describe('ContactgroupsDetailEditComponent', () => {
   let component: ContactgroupsDetailEditComponent;

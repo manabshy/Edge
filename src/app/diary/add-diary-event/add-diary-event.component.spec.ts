@@ -13,7 +13,6 @@ import { DiaryEventTypesEnum, DiaryEvent } from '../shared/diary';
 import { PropertyFinderComponent } from 'src/app/shared/property-finder/property-finder.component';
 import { StaffMemberFinderComponent } from 'src/app/shared/staff-member-finder/staff-member-finder.component';
 import { MockComponents } from 'ng-mocks';
-import { MockDropdownListInfo } from 'src/app/contactgroups/shared/test-helper/dropdown-list-data.json';
 import { of } from 'rxjs';
 import { createStorageMapSpy } from 'src/testing/test-spies';
 import { DiaryEventService } from '../shared/diary-event.service';
@@ -27,6 +26,7 @@ import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { ConfirmModalComponent } from 'src/app/shared/confirm-modal/confirm-modal.component';
+import { MockDropdownListInfo } from 'src/testing/fixture-data/dropdown-list-data.json';
 
 
 fdescribe('AddDiaryEventComponent should', () => {

@@ -1,4 +1,4 @@
-import { MockDropdownListInfo } from 'src/app/contactgroups/shared/test-helper/dropdown-list-data.json';
+import { MockDropdownListInfo } from 'src/testing/fixture-data/test-helper/dropdown-list-data.json';
 import { of } from 'rxjs';
 import { SharedService } from 'src/app/core/services/shared.service';
 

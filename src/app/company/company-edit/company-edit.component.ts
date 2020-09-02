@@ -274,6 +274,7 @@ export class CompanyEditComponent implements OnInit {
       });
     }
   }
+
   onSaveComplete(company?: Company) {
     this.companyForm.markAsPristine();
     this.isSubmitting = false;

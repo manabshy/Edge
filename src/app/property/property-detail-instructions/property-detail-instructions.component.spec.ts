@@ -9,10 +9,10 @@ import { BrowserModule, By } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SharedService } from 'src/app/core/services/shared.service';
-import { MockDropdownListInfo } from 'src/app/contactgroups/shared/test-helper/dropdown-list-data.json';
 import { MockInstructions } from '../shared/test-helper';
 import { InstructionInfo } from '../shared/property';
 import { PropertyService } from '../shared/property.service';
+import { MockDropdownListInfo } from 'src/testing/fixture-data/dropdown-list-data.json';
 
 describe('PropertyDetailInstructionsComponent should', () => {
   let component: PropertyDetailInstructionsComponent;

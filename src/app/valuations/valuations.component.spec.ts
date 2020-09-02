@@ -16,12 +16,12 @@ import { OfficeService } from '../core/services/office.service';
 import { ValuationService } from './shared/valuation.service';
 import { BsDatepickerModule, DatepickerConfig, BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { of } from 'rxjs';
-import { MockDropdownListInfo } from '../contactgroups/shared/test-helper/dropdown-list-data.json';
 import { createStorageMapSpy } from '../../testing/test-spies';
 import { By } from '@angular/platform-browser';
 import { ValuationDetailEditComponent } from './valuation-detail-edit/valuation-detail-edit.component';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { MockDropdownListInfo } from 'src/testing/fixture-data/dropdown-list-data.json';
 
 describe('ValuationsComponent', () => {
   let component: ValuationsComponent;
@@ -88,7 +88,7 @@ describe('ValuationsComponent', () => {
 
   it('should navigate to new valuation ', fakeAsync(() => {
     const createNewValuationButton = debugElement.query(By.css('a')).nativeElement;
-    
+
     createNewValuationButton.click();
     fixture.detectChanges();
 
