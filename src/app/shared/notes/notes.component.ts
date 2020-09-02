@@ -77,16 +77,14 @@ export class NotesComponent implements OnInit, OnChanges {
   }
 
   setFlag(noteId: number, isImportantFlag: boolean) {
-    if (this.notes.filter(x => x.propertyId)) {
-      return;
-    }
     this.notes.forEach((x) => {
-      if (x.id === noteId) {
+      if (+x.id === noteId) {
         if (isImportantFlag) {
           x.isImportant ? x.isImportant = false : x.isImportant = true;
         } else {
           x.isPinned ? x.isPinned = false : x.isPinned = true;
         }
+
         switch (true) {
           case !!x.contactGroupId:
             this.contactGroupService.updateContactGroupNote(x).subscribe((data) => {
@@ -107,6 +105,11 @@ export class NotesComponent implements OnInit, OnChanges {
       }
     });
 
+
+    if (this.notes.filter(x => x.propertyId)) {
+      return;
+    }
+
   }
 
   onScrollDown() {
@@ -116,7 +119,6 @@ export class NotesComponent implements OnInit, OnChanges {
   onScrollUp() {
   }
 
-  // REFACTOR ASAP
   @HostListener('window:scroll', ['$event'])
   onWindowScroll() {
     let scrollHeight: number, totalHeight: number;
