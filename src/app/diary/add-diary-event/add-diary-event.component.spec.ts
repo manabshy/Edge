@@ -12,7 +12,7 @@ import { By } from '@angular/platform-browser';
 import { DiaryEventTypesEnum, DiaryEvent } from '../shared/diary';
 import { PropertyFinderComponent } from 'src/app/shared/property-finder/property-finder.component';
 import { StaffMemberFinderComponent } from 'src/app/shared/staff-member-finder/staff-member-finder.component';
-import { MockComponents } from 'ng-mocks';
+// import { MockComponents } from 'ng-mocks';
 import { of } from 'rxjs';
 import { createStorageMapSpy } from 'src/testing/test-spies';
 import { DiaryEventService } from '../shared/diary-event.service';
@@ -29,7 +29,7 @@ import { ConfirmModalComponent } from 'src/app/shared/confirm-modal/confirm-moda
 import { MockDropdownListInfo } from 'src/testing/fixture-data/dropdown-list-data.json';
 
 
-fdescribe('AddDiaryEventComponent should', () => {
+describe('AddDiaryEventComponent should', () => {
   let component: AddDiaryEventComponent;
   let fixture: ComponentFixture<AddDiaryEventComponent>;
   let rootElement: DebugElement;
@@ -41,8 +41,8 @@ fdescribe('AddDiaryEventComponent should', () => {
     TestBed.configureTestingModule({
       declarations: [AddDiaryEventComponent,
         // PropertyFinderComponent,
-        MockComponents(BreadcrumbComponent, PropertyFinderComponent,
-          SignerComponent, StaffMemberFinderComponent)
+        // MockComponents(BreadcrumbComponent, PropertyFinderComponent,
+        //   SignerComponent, StaffMemberFinderComponent)
       ],
       imports: [
         HttpClientTestingModule,

@@ -18,7 +18,7 @@ import { of } from 'rxjs';
 import { ToastrModule } from 'ngx-toastr';
 import { TeamMembers, NewPoint } from '../../../testing/admin-panel-data';
 
-fdescribe('AdminPanelDetailsComponent', () => {
+describe('AdminPanelDetailsComponent', () => {
   let component: AdminPanelDetailsComponent;
   let fixture: ComponentFixture<AdminPanelDetailsComponent>;
   let boardService: CsBoardService;

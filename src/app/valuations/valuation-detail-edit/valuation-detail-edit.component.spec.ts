@@ -24,7 +24,7 @@ import { BaseProperty } from 'src/app/shared/models/base-property';
 import { Property } from 'src/app/property/shared/property';
 import { MonthPickerComponent } from 'ngx-bootstrap/datepicker/public_api';
 import { PropertyFinderComponent } from 'src/app/shared/property-finder/property-finder.component';
-import { MockComponent, MockedComponent, MockRender } from 'ng-mocks';
+// import { MockComponent, MockedComponent, MockRender } from 'ng-mocks';
 import { SignerComponent } from 'src/app/shared/signer/signer.component';
 import { BreadcrumbComponent } from 'src/app/shared/breadcrumb/breadcrumb.component';
 import { HttpClient } from '@angular/common/http';
@@ -64,15 +64,16 @@ const tenures = [ {id: 1, value: 'Freehold'},
                 {id: 2, value: 'Share of Freehold'},
                 {id: 3, value: 'Leasehold'}];
 
-fdescribe('ValuationDetailEditComponent', () => {
+describe('ValuationDetailEditComponent', () => {
   const routerSpy = createRouterSpy();
   const storageMapSpy = createStorageMapSpy();
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ValuationDetailEditComponent,
-        MockComponent(PropertyFinderComponent),
-        MockComponent(BreadcrumbComponent),
-        MockComponent(SignerComponent)],
+        // MockComponent(PropertyFinderComponent),
+        // MockComponent(BreadcrumbComponent),
+        // MockComponent(SignerComponent)
+      ],
       imports: [
         HttpClientTestingModule,
         FormsModule,

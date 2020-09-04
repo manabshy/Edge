@@ -11,7 +11,7 @@ import { of, EMPTY } from 'rxjs';
 import { By } from '@angular/platform-browser';
 import { TeamMember } from '../shared/models/team-member';
 
-fdescribe('AdminPanelListComponent', () => {
+describe('AdminPanelListComponent', () => {
   let component: AdminPanelListComponent;
   let fixture: ComponentFixture<AdminPanelListComponent>;
   let boardService: CsBoardService;
