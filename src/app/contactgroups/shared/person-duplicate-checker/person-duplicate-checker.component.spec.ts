@@ -68,7 +68,6 @@ fdescribe('PersonDuplicateCheckerComponent', () => {
 
   it('should set the match score of a duplicate person to 10', fakeAsync(() => {
     person = PotentialDuplicatePersonMock;
-    console.log({ person }, 'before');
     const basicPerson = MockBasicPerson;
     spyOn(contactGroupsService, 'getPotentialDuplicatePeople').and.returnValue(of(person));
 
@@ -85,7 +84,6 @@ fdescribe('PersonDuplicateCheckerComponent', () => {
 
   it('should set the match score of a part duplicate match to 7', fakeAsync(() => {
     person = PotentialDuplicatePersonMock;
-    console.log({ person }, 'before');
     let basicPerson = MockBasicPerson;
     basicPerson = { ...basicPerson, emailAddress: 'test@test.com' };
     spyOn(contactGroupsService, 'getPotentialDuplicatePeople').and.returnValue(of(person));
@@ -98,6 +96,22 @@ fdescribe('PersonDuplicateCheckerComponent', () => {
     const matchStatus = getMatchingDuplicateStatus(component.potentialDuplicatePeople.matches);
     console.log({ res: matchStatus });
     expect(matchStatus).toEqual('Part Match');
+
+  }));
+
+  it('should set the match score of no duplicates to 0', fakeAsync(() => {
+    person = PotentialDuplicatePersonMock;
+    let basicPerson = MockBasicPerson;
+    basicPerson = { ...basicPerson, emailAddress: 'test@test.com', phoneNumber: '07676543236' };
+    console.log({ basicPerson });
+    spyOn(contactGroupsService, 'getPotentialDuplicatePeople').and.returnValue(of(person));
+
+    component.findPotentialDuplicatePerson(basicPerson);
+    tick();
+
+    const matchStatus = getMatchingDuplicateStatus(component.potentialDuplicatePeople.matches);
+    console.log({ res: matchStatus });
+    expect(matchStatus).toEqual('No Match');
 
   }));
 });
