@@ -77,19 +77,37 @@ fdescribe('PersonDuplicateCheckerComponent', () => {
 
     component.isPersonCanvasVisible = true;
     console.log('new person', component.potentialDuplicatePeople);
-    const matchStatus = getMatchingDuplicateStatus(component.potentialDuplicatePeople.matches, 'goodMatch');
+    const matchStatus = getMatchingDuplicateStatus(component.potentialDuplicatePeople.matches);
     console.log({ res: matchStatus });
     expect(matchStatus).toEqual('Good Match');
 
   }));
+
+  it('should set the match score of a part duplicate match to 7', fakeAsync(() => {
+    person = PotentialDuplicatePersonMock;
+    console.log({ person }, 'before');
+    let basicPerson = MockBasicPerson;
+    basicPerson = { ...basicPerson, emailAddress: 'test@test.com' };
+    spyOn(contactGroupsService, 'getPotentialDuplicatePeople').and.returnValue(of(person));
+
+    component.findPotentialDuplicatePerson(basicPerson);
+    tick();
+
+    component.isPersonCanvasVisible = true;
+    console.log('new person', component.potentialDuplicatePeople);
+    const matchStatus = getMatchingDuplicateStatus(component.potentialDuplicatePeople.matches);
+    console.log({ res: matchStatus });
+    expect(matchStatus).toEqual('Part Match');
+
+  }));
 });
 
-const getMatchingDuplicateStatus = (matches: PeopleAutoCompleteResult[], matchType?: string) => {
+const getMatchingDuplicateStatus = (matches: PeopleAutoCompleteResult[]) => {
   let result = 'No Match';
 
   matches.forEach(x => {
-    if (matchType === 'goodMatch' && x.matchScore === 10) { result = 'Good Match'; }
-    if (matchType === 'partMatch' && x.matchScore === 7) { result = 'Part Match'; }
+    if (x.matchScore === 10) { result = 'Good Match'; }
+    if (x.matchScore === 7) { result = 'Part Match'; }
   });
 
   return result;
