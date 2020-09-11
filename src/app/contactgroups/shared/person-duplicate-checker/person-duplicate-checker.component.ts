@@ -37,9 +37,6 @@ export class PersonDuplicateCheckerComponent implements OnInit, OnChanges {
   constructor(private fb: FormBuilder,
     private contactGroupService: ContactGroupsService,
     private sharedService: SharedService,
-    private infoService: InfoService,
-    private storage: StorageMap,
-    private toastr: ToastrService,
     private renderer: Renderer2) { }
 
   ngOnInit() {
@@ -112,29 +109,31 @@ export class PersonDuplicateCheckerComponent implements OnInit, OnChanges {
   checkDuplicatePeople(person: BasicPerson) {
     const matchedPeople = [];
     if (this.potentialDuplicatePeople) {
-      this.potentialDuplicatePeople.matches.forEach((x) => {
-        const firstName = x.firstName ? x.firstName.toLowerCase() : '';
-        const middleName = x.middleNames ? x.middleNames.toLowerCase() : '';
-        const lastName = x.lastName ? x.lastName.toLowerCase() : '';
-        const fullName = middleName ? `${firstName} ${middleName} ${lastName} ` : `${firstName} ${lastName} `;
-        const sameName = fullName.toLowerCase().trim() === person.fullName.toLowerCase().trim();
-        const email = x.emailAddresses ? x.emailAddresses.filter(x => x === person.emailAddress) : [];
-        const phone = x.phoneNumbers ?
-          x.phoneNumbers.filter(x => x === person.phoneNumber ? person.phoneNumber.replace(/\s+/g, '') : '') : [];
-        const samePhone = phone[0] ? phone[0].toString() === person.phoneNumber.replace(/\s+/g, '') : false;
-        const sameEmail = email[0] ? email[0].toLowerCase() === person.emailAddress : false;
-        switch (true) {
-          case sameName && sameEmail && samePhone:
-            x.matchScore = 10;
-            break;
-          case (sameName) && (sameEmail || samePhone):
-            x.matchScore = 7;
-            break;
-          default:
-            x.matchScore = 0;
-        }
-        matchedPeople.push(x);
-      });
+      if (this.potentialDuplicatePeople.matches && this.potentialDuplicatePeople.matches.length) {
+        this.potentialDuplicatePeople.matches.forEach((x) => {
+          const firstName = x.firstName ? x.firstName.toLowerCase() : '';
+          const middleName = x.middleNames ? x.middleNames.toLowerCase() : '';
+          const lastName = x.lastName ? x.lastName.toLowerCase() : '';
+          const fullName = middleName ? `${firstName} ${middleName} ${lastName} ` : `${firstName} ${lastName} `;
+          const sameName = fullName.toLowerCase().trim() === person.fullName.toLowerCase().trim();
+          const email = x.emailAddresses ? x.emailAddresses.filter(x => x === person.emailAddress) : [];
+          const phone = x.phoneNumbers ?
+            x.phoneNumbers.filter(x => x === person.phoneNumber ? person.phoneNumber.replace(/\s+/g, '') : '') : [];
+          const samePhone = phone[0] ? phone[0].toString() === person.phoneNumber.replace(/\s+/g, '') : false;
+          const sameEmail = email[0] ? email[0].toLowerCase() === person.emailAddress : false;
+          switch (true) {
+            case sameName && sameEmail && samePhone:
+              x.matchScore = 10;
+              break;
+            case (sameName) && (sameEmail || samePhone):
+              x.matchScore = 7;
+              break;
+            default:
+              x.matchScore = 0;
+          }
+          matchedPeople.push(x);
+        });
+      }
       this.potentialDuplicatePeople.matches = matchedPeople;
     }
   }

@@ -11,7 +11,7 @@ import { of } from 'rxjs';
 import { contactPersonMock } from 'src/testing/fixture-data/contact-person-data';
 import { Renderer2, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
-fdescribe('ContactgroupsPeopleComponent', () => {
+describe('ContactgroupsPeopleComponent', () => {
   let component: ContactgroupsPeopleComponent;
   let fixture: ComponentFixture<ContactgroupsPeopleComponent>;
   const contactPerson = contactPersonMock;
@@ -44,13 +44,12 @@ fdescribe('ContactgroupsPeopleComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ContactgroupsPeopleComponent);
     component = fixture.componentInstance;
-    // fixture.detectChanges();
-    const getNextContactNotesPage = () => { }
+    fixture.detectChanges();
   });
 
   it('should create', () => {
     // component.getNextContactNotesPage(1);
-    component.ngOnInit()
+    // component.ngOnInit()
     expect(component).toBeTruthy();
   });
 });

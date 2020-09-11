@@ -1,10 +1,17 @@
 import { BasicPerson } from 'src/app/shared/models/person';
 
 export const MockBasicPerson = {
-  firstName: 'John',
-  lastName: 'Don',
-  phoneNumber: '07967888444',
-  emailAddress: 'don@test.com'
+  firstName: 'Wendy',
+  fullName: 'Wendy Younges',
+  lastName: 'Younges',
+  addressee: 'Mrs Wendy Younges',
+  emailAddress: 'wyounge@dng.co.uk',
+  middleName: '',
+  phoneNumber: '07980643194',
+  ranking: 653,
+  salutation: 'Mrs Younges',
+  titleId: 2,
+  titleOther: '',
 } as BasicPerson;
 
 export const MockPerson = {
@@ -81,3 +88,23 @@ export const MockPerson = {
   ],
   info: null
 };
+
+export const PotentialDuplicatePersonMock = {
+  firstName: 'Wendy',
+  fullName: 'Wendy Younges',
+  lastName: 'Younges',
+  matches: [{
+    addressee: 'Mrs Wendy Younges',
+    emailAddresses: ['wyounge@dng.co.uk'],
+    firstName: 'Wendy',
+    lastName: 'Younges',
+    // matchType: 'GoodMatch',
+    middleName: '',
+    personId: 81422,
+    phoneNumbers: ['07980643194'],
+    ranking: 653,
+    salutation: 'Mrs Younges',
+    titleId: 2,
+    titleOther: '',
+  }]
+}
