@@ -16,7 +16,7 @@ import { Person } from 'src/app/shared/models/person';
 import { contactGroupDetailsMock } from 'src/testing/fixture-data/contactgroups-details';
 import { ContactGroup } from '../shared/contact-group';
 
-fdescribe('ContactgroupsPeopleComponent', () => {
+describe('ContactgroupsPeopleComponent', () => {
   let component: ContactgroupsPeopleComponent;
   let fixture: ComponentFixture<ContactgroupsPeopleComponent>;
   let contactGroupsService: ContactGroupsService;

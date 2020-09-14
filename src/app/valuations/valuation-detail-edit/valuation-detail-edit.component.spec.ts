@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing';
 
 import { ValuationDetailEditComponent } from './valuation-detail-edit.component';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule, FormsModule, FormBuilder } from '@angular/forms';
@@ -22,14 +22,14 @@ import { PropertyService } from 'src/app/property/shared/property.service';
 import { By } from '@angular/platform-browser';
 import { BaseProperty } from 'src/app/shared/models/base-property';
 import { Property } from 'src/app/property/shared/property';
-import { MonthPickerComponent } from 'ngx-bootstrap/datepicker/public_api';
+import { BsDatepickerModule, MonthPickerComponent } from 'ngx-bootstrap/datepicker';
 import { PropertyFinderComponent } from 'src/app/shared/property-finder/property-finder.component';
 // import { MockComponent, MockedComponent, MockRender } from 'ng-mocks';
 import { SignerComponent } from 'src/app/shared/signer/signer.component';
 import { BreadcrumbComponent } from 'src/app/shared/breadcrumb/breadcrumb.component';
 import { HttpClient } from '@angular/common/http';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { MockVals, mockAllValuers } from 'src/testing/fixture-data/valuations-data';
+import { MockVals, mockAllValuers, MockValuations } from 'src/testing/fixture-data/valuations-data';
 import { Valuation, Valuer, ValuationStatusEnum } from '../shared/valuation';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { MockDropdownListInfo } from 'src/testing/fixture-data/dropdown-list-data.json';
@@ -37,6 +37,7 @@ import { MockDropdownListInfo } from 'src/testing/fixture-data/dropdown-list-dat
 let component: ValuationDetailEditComponent;
 let fixture: ComponentFixture<ValuationDetailEditComponent>;
 let propertyService;
+let valuationService: ValuationService;
 // let Location :Location
 const property = {
   'propertyId': 68847,
@@ -84,7 +85,8 @@ fdescribe('ValuationDetailEditComponent', () => {
         ModalModule.forRoot(),
         ToastrModule.forRoot(),
         NgSelectModule,
-        ButtonsModule.forRoot()
+        ButtonsModule.forRoot(),
+        BsDatepickerModule.forRoot()
       ],
       providers: [
         // { provide: ValuationService, useValue: {} },
@@ -130,7 +132,7 @@ fdescribe('ValuationDetailEditComponent', () => {
         //   }
         // },
       ],
-      // schemas: [NO_ERRORS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));
@@ -146,6 +148,7 @@ fdescribe('ValuationDetailEditComponent', () => {
     storageMapSpy.get.and.returnValue(of(MockDropdownListInfo));
     fixture.detectChanges();
     propertyService = TestBed.inject(PropertyService);
+    valuationService = TestBed.inject(ValuationService);
 
     // let service = new PropertyService(null)
   });
@@ -330,11 +333,28 @@ fdescribe('ValuationDetailEditComponent', () => {
       spyOn(propertyService, 'getProperty').and.returnValue(of(property));
       component.propertyId = 5;
       fixture.detectChanges();
+
       component.getPropertyDetails();
       fixture.detectChanges();
       tick();
+
       expect(propertyService.getProperty).toHaveBeenCalledTimes(1);
       expect(component.property).toEqual(property);
+    }));
+
+    it('should get valuation', fakeAsync(() => {
+      let valuation = MockValuations[0] as unknown as Valuation;
+     let spy = spyOn(valuationService, 'getValuation').and.returnValue(of(valuation));
+      // component.propertyId = 5;
+      // fixture.detectChanges();
+
+      component.getValuation(1234);
+      fixture.detectChanges();
+      tick();
+      console.log('val', component.valuation);
+
+      // expect(spy).toHaveBeenCalledTimes(1);
+      expect(component.valuation).toEqual(valuation);
     }));
 
   });
