@@ -13,12 +13,11 @@ import { of } from 'rxjs';
 import { PeopleAutoCompleteResult, PotentialDuplicateResult } from '../contact-group';
 import { HighlightPipe } from 'src/app/shared/highlight.pipe';
 
-fdescribe('PersonDuplicateCheckerComponent', () => {
+describe('PersonDuplicateCheckerComponent', () => {
   let component: PersonDuplicateCheckerComponent;
   let fixture: ComponentFixture<PersonDuplicateCheckerComponent>;
   let person;
   let contactGroupsService: ContactGroupsService;
-  // let contactGroupsService = jasmine.createSpyObj<ContactGroupsService>(['getPerson', 'getContactGroupNotes']);
   beforeEach(async(() => {
 
     TestBed.configureTestingModule({
@@ -33,7 +32,6 @@ fdescribe('PersonDuplicateCheckerComponent', () => {
       ],
       providers: [
         BsModalService,
-        // { provide: ContactGroupsService, useValue: contactGroupsService },
         { provide: ToastrService, useValue: {} },
         { provide: Renderer2, useValue: {} },
       ],

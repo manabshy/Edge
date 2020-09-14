@@ -557,7 +557,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     if (this.selectedPeople.length) {
       this.selectedPeople.forEach(x => {
         if (!this.sharedService.checkDuplicateInContactGroup(this.contactGroupDetails, x.personId)) {
-          this.contactGroupDetails.contactPeople.push(x);
+          this.contactGroupDetails.contactPeople?.push(x);
           this.setSalutation();
         }
       });
