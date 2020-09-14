@@ -77,7 +77,6 @@ fdescribe('PersonDuplicateCheckerComponent', () => {
     component.isPersonCanvasVisible = true;
     console.log('new person', component.potentialDuplicatePeople);
     const matchStatus = getMatchingDuplicateStatus(component.potentialDuplicatePeople.matches);
-    console.log({ res: matchStatus });
     expect(matchStatus).toEqual('Good Match');
 
   }));
@@ -94,7 +93,6 @@ fdescribe('PersonDuplicateCheckerComponent', () => {
     component.isPersonCanvasVisible = true;
     console.log('new person', component.potentialDuplicatePeople);
     const matchStatus = getMatchingDuplicateStatus(component.potentialDuplicatePeople.matches);
-    console.log({ res: matchStatus });
     expect(matchStatus).toEqual('Part Match');
 
   }));
@@ -103,15 +101,26 @@ fdescribe('PersonDuplicateCheckerComponent', () => {
     person = PotentialDuplicatePersonMock;
     let basicPerson = MockBasicPerson;
     basicPerson = { ...basicPerson, emailAddress: 'test@test.com', phoneNumber: '07676543236' };
-    console.log({ basicPerson });
     spyOn(contactGroupsService, 'getPotentialDuplicatePeople').and.returnValue(of(person));
 
     component.findPotentialDuplicatePerson(basicPerson);
     tick();
 
     const matchStatus = getMatchingDuplicateStatus(component.potentialDuplicatePeople.matches);
-    console.log({ res: matchStatus });
     expect(matchStatus).toEqual('No Match');
+
+  }));
+
+  it(`should set new person's first name and last name to the entered names`, fakeAsync(() => {
+    person = PotentialDuplicatePersonMock;
+    const basicPerson = MockBasicPerson;
+    spyOn(contactGroupsService, 'getPotentialDuplicatePeople').and.returnValue(of(person));
+
+    component.findPotentialDuplicatePerson(basicPerson);
+    tick();
+
+    expect(component.newPerson.firstName).toEqual(basicPerson.firstName);
+    expect(component.newPerson.lastName).toEqual(basicPerson.lastName);
 
   }));
 });
