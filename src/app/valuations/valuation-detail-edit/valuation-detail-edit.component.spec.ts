@@ -356,15 +356,19 @@ fdescribe('ValuationDetailEditComponent', () => {
 
     // utility functions
     it('should correctly calculate weekly rent given the monthly rent', () => {
-      const expectedRent = component.calculateWeeklyRent(4000);
+      const expectedRent = 923.08;
 
-      expect(+expectedRent).toEqual(923.08);
+      const actualRent = component.calculateWeeklyRent(4000);
+
+      expect(+actualRent).toEqual(expectedRent);
     });
 
-    it('should correctly calculate monthly rent given the weekly', () => {
-      const expectedRent = component.calculateMonthlyRent(1000);
+    it('should correctly calculate monthly rent given the weekly rent', () => {
+      const expectedRent = 4333.33;
 
-      expect(+expectedRent).toEqual(4333.33);
+      const actualRent = component.calculateMonthlyRent(1000);
+
+      expect(+actualRent).toEqual(expectedRent);
     });
   });
 });
