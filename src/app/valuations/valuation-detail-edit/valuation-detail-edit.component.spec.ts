@@ -33,12 +33,15 @@ import { MockVals, mockAllValuers, MockValuations } from 'src/testing/fixture-da
 import { Valuation, Valuer, ValuationStatusEnum } from '../shared/valuation';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { MockDropdownListInfo } from 'src/testing/fixture-data/dropdown-list-data.json';
+import { BasicStaffMember } from 'src/app/dashboard/shared/dashboard';
+import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
 
 let component: ValuationDetailEditComponent;
 let fixture: ComponentFixture<ValuationDetailEditComponent>;
 let propertyService;
 let valuationService: ValuationService;
-// let Location :Location
+const mockVals = MockVals;
+let valuation = mockVals[0] as unknown as Valuation;
 const property = {
   'propertyId': 68847,
   'bedrooms': 1,
@@ -62,7 +65,7 @@ const owner = {
   'emailAddress': null
 };
 
-const mockVals = MockVals;
+
 const tenures = [{ id: 1, value: 'Freehold' },
 { id: 2, value: 'Share of Freehold' },
 { id: 3, value: 'Leasehold' }];
@@ -369,6 +372,40 @@ fdescribe('ValuationDetailEditComponent', () => {
       const actualRent = component.calculateMonthlyRent(1000);
 
       expect(+actualRent).toEqual(expectedRent);
+    });
+
+    it('should correctly set valuation type for a lettings valuation', () => {
+
+      component.setValuationType(valuation);
+
+      expect(component.isLettingsOnly).toEqual(true);
+    });
+
+    it('should correctly set valuation type for a lettings only valuation', () => {
+
+      component.setValuationType(valuation);
+
+      expect(component.isLettingsOnly).toEqual(true);
+    });
+
+    it('should correctly set valuation type for lettings and sales valuation', () => {
+      const salesValuer = { firstName: 'Sophie', fullName: 'Sophie Hayward', lastName: 'Hayward', staffMemberId: 2088 } as unknown as BaseStaffMember;
+      valuation.salesValuer = salesValuer;
+
+      component.setValuationType(valuation);
+
+      expect(component.isSalesAndLettings).toEqual(true);
+    });
+
+    it('should correctly set valuation type for a sales only valuation', () => {
+      const salesValuer = { firstName: 'Sophie', fullName: 'Sophie Hayward', lastName: 'Hayward', staffMemberId: 2088 } as unknown as BaseStaffMember;
+      valuation.salesValuer = salesValuer;
+      valuation.lettingsValuer = null;
+      console.log({ salesValuer }, 'lettings', valuation.lettingsValuer);
+
+      component.setValuationType(valuation);
+
+      expect(component.isSalesOnly).toEqual(true);
     });
   });
 });
