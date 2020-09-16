@@ -384,14 +384,15 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       .subscribe(rent => weeklyControl.setValue(this.calculateWeeklyRent(rent), { emitEvent: false }));
   }
 
-  private calculateMonthlyRent(rent: number): string {
+  calculateMonthlyRent(rent: number): string {
     let monthlyRent: string;
     if (rent > 0) {
       monthlyRent = (rent * (52 / 12)).toFixed(2);
     }
     return monthlyRent;
   }
-  private calculateWeeklyRent(rent: number): string {
+
+  calculateWeeklyRent(rent: number): string {
     let weeklyRent: string;
     if (rent > 0) {
       weeklyRent = (rent * (12 / 52)).toFixed(2);

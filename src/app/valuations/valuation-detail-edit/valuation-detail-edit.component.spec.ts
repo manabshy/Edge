@@ -343,20 +343,29 @@ fdescribe('ValuationDetailEditComponent', () => {
     }));
 
     it('should get valuation', fakeAsync(() => {
-      let valuation = MockValuations[0] as unknown as Valuation;
-     let spy = spyOn(valuationService, 'getValuation').and.returnValue(of(valuation));
-      // component.propertyId = 5;
-      // fixture.detectChanges();
+      const valuation = mockVals[0] as unknown as Valuation;
+      spyOn(valuationService, 'getValuation').and.returnValue(of(valuation));
 
       component.getValuation(1234);
       fixture.detectChanges();
       tick();
       console.log('val', component.valuation);
 
-      // expect(spy).toHaveBeenCalledTimes(1);
       expect(component.valuation).toEqual(valuation);
     }));
 
+    // utility functions
+    it('should correctly calculate weekly rent given the monthly rent', () => {
+      const expectedRent = component.calculateWeeklyRent(4000);
+
+      expect(+expectedRent).toEqual(923.08);
+    });
+
+    it('should correctly calculate monthly rent given the weekly', () => {
+      const expectedRent = component.calculateMonthlyRent(1000);
+
+      expect(+expectedRent).toEqual(4333.33);
+    });
   });
 });
 
