@@ -229,6 +229,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
       });
     if (this.propertyAddress) {
       this.propertyForm.patchValue({ address: this.propertyAddress });
+      this.propertyForm.markAsDirty();
     }
   }
 
@@ -406,6 +407,8 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
   }
 
   canDeactivate(): boolean {
+    console.log('new signer ', this.isCreatingNewSigner, 'is submit', this.isSubmitting, 'dirty form', this.propertyForm.dirty);
+
     if (this.propertyForm.dirty && !this.isSubmitting && !this.isCreatingNewSigner) {
       return false;
     }
