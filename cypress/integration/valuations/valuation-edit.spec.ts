@@ -1,18 +1,16 @@
 describe('Valuation edit should', () => {
 
-  beforeEach(() => { })
+  beforeEach(() => { });
 
-  it('navigate to the valuations register', () => {
-    cy.visit('/valuations-register');
-    cy.get('h4').should('have.text', 'Valuations register')
+  it('update the details of an existing valuation', () => {
+    cy.visit('/valuations-register/detail/162269/edit');
+    cy.get('#reason').clear().type('Cypress testing here');
+    cy.get('#saveVal').click();
   });
 
-  it('update the details of an existing property', () => {
-
+  xit('add a new valuation', () => {
+    cy.visit('/valuations-register/detail/0/edit?isNewValuation=true');
+    cy.get('app-property-finder').click();
   });
 
-  it('add new property ', () => {
-
-    // add new property from the property edit
-  });
-})
+});
