@@ -536,7 +536,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         suggestedAskingRentShortLetMonthly: valuation.suggestedAskingRentShortLetMonthly ? valuation.suggestedAskingRentShortLetMonthly : ''
       });
     }
-    console.log('valuation form xxxxxxxxx', this.valuationForm.value);
   }
 
   setInitialType(): string {
@@ -606,7 +605,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   setOriginTypes(allOriginTypes: InfoDetail[]) {
     this.activeOriginTypes = allOriginTypes.filter((x: InfoDetail) => x.isActive);
-    console.log('%c active origin types', 'color:blue', this.activeOriginTypes);
     // this.isNewValuation ? this.originTypes = this.activeOriginTypes : this.originTypes = allOriginTypes;
   }
 
@@ -711,12 +709,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   onLettingsValuerChange(valuer: BaseStaffMember) {
     this.lettingsValuerControl.setValue(valuer);
-    console.log('lettings valuer in val', this.lettingsValuerControl.value);
-
   }
+
   onSalesValuerChange(valuer: BaseStaffMember) {
     this.salesValuerControl.setValue(valuer);
-    console.log('sales valuer in val', this.salesValuerControl.value);
   }
 
 
@@ -730,22 +726,18 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         staffMemberId1: this.salesValuerControl.value.staffMemberId || this.lettingsValuerControl.value.staffMemberId
       });
       this.canSearchAvailability = true;
-      console.log('single', this.availabilityForm.value, 'condit', this.canSearchAvailability);
     } else if (this.isSalesAndLettings && this.salesValuerControl.value && this.lettingsValuerControl.value) {
       this.availabilityForm.patchValue({
         staffMemberId1: this.salesValuerControl.value.staffMemberId,
         staffMemberId2: this.lettingsValuerControl.value.staffMemberId,
       });
       this.canSearchAvailability = true;
-      console.log('all', this.availabilityForm.value, 'condit', this.canSearchAvailability);
     }
 
-    console.log('intial', this.availabilityForm.value, 'should be false', this.canSearchAvailability);
   }
 
   searchAvailabilty() {
     const availability = { ...this.availabilityForm.value };
-    console.log('here...,searvch', availability);
     const request = {
       fromDate: format(availability.fromDate, 'YYYY-MM-DD'),
       staffMemberId1: availability.staffMemberId1,
@@ -754,8 +746,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
     this.valuationService.getValuersAvailability(request).subscribe(res => {
       this.availableDates = res.valuationStaffMembersCalanderEvents;
-      console.log('res', res);
-      console.log('res', this.availableDates);
     });
   }
 
@@ -769,7 +759,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.valuation.valuationDate = date;
       }
       this.valuationForm.get('valuationDate').setValue(date);
-      console.log('selected available date in val edit', date);
       this.showCalendar = false;
     }
   }
@@ -788,10 +777,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.valuationService.getValuers(propId).pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(data => {
           this.allValuers = data;
-          console.log('for new vals valuers', this.allValuers);
           this.setValuersForSalesAndLettings();
           this.addInactiveValuers();
-          console.log('valuers', this.allValuers);
         });
     }
   }
@@ -809,7 +796,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.canBookAppointment = false;
           this.canChangeDate = false;
         }
-        console.log('is inactive sales VALUER', index, 'can book appoint', this.canBookAppointment);
       }
 
       if (val.lettingsValuer && this.allValuers.lettings && this.allValuers.lettings.length) {
@@ -823,7 +809,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.canBookAppointment = false;
           this.canChangeDate = false;
         }
-        console.log('is inactive lettings VALUER', index, 'can book appoint', this.canBookAppointment);
 
       }
     }
@@ -840,7 +825,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.approxLeaseExpiryDateControl.clearValidators();
         this.approxLeaseExpiryDateControl.updateValueAndValidity();
       }
-      console.log('%c approx lease cleared', 'color:cyan', this.approxLeaseExpiryDateControl);
     }
   }
 
@@ -852,7 +836,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.approxLeaseExpiryDateControl.clearValidators();
       this.approxLeaseExpiryDateControl.updateValueAndValidity();
     }
-    console.log('%c approx lease validator', 'color:green', this.approxLeaseExpiryDateControl);
   }
 
   changeDate() {
@@ -861,17 +844,14 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         staffMemberId1: this.valuationForm.get('salesValuerId').value,
         staffMemberId2: this.valuationForm.get('lettingsValuerId').value,
       });
-      console.log(' avail form here sssssssssss', this.availabilityForm.value);
     }
     this.showCalendar = true;
   }
 
   createNewSigner() {
-    console.log('create new signer here....')
     this.valuationForm.markAsPristine();
   }
   createNewProperty(isNewProperty: boolean) {
-    console.log('create new PROPERTY here....', isNewProperty)
     this.valuationForm.markAsPristine();
   }
 
@@ -891,7 +871,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.instruction = instruction;
     this.populateInstructionForm(instruction);
     this.setInstructionFlags(instruction);
-    console.log('instruction form here....', this.instructionForm.value);
   }
 
   setInstructionFlags(instruction: Instruction) {
@@ -932,7 +911,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.setLettingsAgencyTypeValidator();
         break;
     }
-    console.log('%chere for instruct form', 'color:purple', this.instructionForm);
   }
 
   setValuersValidators() {
@@ -1013,7 +991,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       salesAgencyControl.clearValidators();
       salesAgencyControl.updateValueAndValidity();
     }
-    console.log('%chere for sales type', 'color:green', salesAgencyControl.value);
   }
 
   private setLettingsAgencyTypeValidator() {
@@ -1026,7 +1003,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       lettingsAgencyControl.clearValidators();
       lettingsAgencyControl.updateValueAndValidity();
     }
-    console.log('%chere for lettings type', 'color:blue', lettingsAgencyControl.value);
   }
 
   private setOriginTypeValidator() {
@@ -1037,7 +1013,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.originTypeControl.clearValidators();
       this.originTypeControl.updateValueAndValidity();
     }
-    console.log('%chere for originTypeControl', 'color:blue', this.originTypeControl.value);
   }
 
   private setOriginIdValidator() {
@@ -1048,8 +1023,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.originIdControl.clearValidators();
       this.originIdControl.updateValueAndValidity();
     }
-    console.log('%chere for originIdControl', 'color:purple', this.originIdControl.value);
   }
+
   saveInstruction() {
     this.setAgencyTypeValidator();
     this.setInstructionFormValidators();
@@ -1256,7 +1231,5 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.propertyService.setAddedProperty(null);
     this.sharedService.clearFormValidators(this.valuationForm, this.formErrors);
     this.storage.delete('valuationFormData').subscribe();
-    console.log('form should be cleared', this.valuationForm.value);
-
   }
 }
