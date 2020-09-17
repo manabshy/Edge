@@ -1235,9 +1235,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   cancel() {
-    // this.sharedService.resetForm(this.valuationForm); // Move this logic
-    // console.log('form state on cancel', this.valuationForm.valid);
-    // this.sharedService.clearFormValidators(this.valuationForm, this.formErrors);
     this.sharedService.back();
   }
 
@@ -1257,6 +1254,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   ngOnDestroy() {
     this.property = {} as Property;
     this.propertyService.setAddedProperty(null);
+    this.sharedService.clearFormValidators(this.valuationForm, this.formErrors);
     this.storage.delete('valuationFormData').subscribe();
+    console.log('form should be cleared', this.valuationForm.value);
+
   }
 }
