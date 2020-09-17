@@ -318,13 +318,7 @@ fdescribe('ValuationDetailEditComponent', () => {
       expect(+actualRent).toEqual(expectedRent);
     });
 
-    it('should correctly set valuation type for a lettings valuation', () => {
-      component.setValuationType(valuation);
-
-      expect(component.isLettingsOnly).toEqual(true);
-    });
-
-    it('should correctly set valuation type for a lettings only valuation', () => {
+    it('should correctly set valuation type for lettings only valuation', () => {
       component.setValuationType(valuation);
 
       expect(component.isLettingsOnly).toEqual(true);
@@ -339,7 +333,7 @@ fdescribe('ValuationDetailEditComponent', () => {
       expect(component.isSalesAndLettings).toEqual(true);
     });
 
-    it('should correctly set valuation type for a sales only valuation', () => {
+    it('should correctly set valuation type for sales only valuation', () => {
       const salesValuer = { firstName: 'Sophie', fullName: 'Sophie Hayward', lastName: 'Hayward', staffMemberId: 2088 } as unknown as BaseStaffMember;
       valuation.salesValuer = salesValuer;
       valuation.lettingsValuer = null;
