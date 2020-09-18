@@ -16,8 +16,8 @@ export class PropertyDuplicateCheckerComponent implements OnInit, OnChanges {
   potentialDuplicates: PropertyAutoComplete[] = [];
   showMatches: boolean;
   isDuplicateFound = false;
-  isFullMatch: boolean;
-  isLoading: boolean = false;
+  isFullMatch = false;
+  isLoading = false;
 
   constructor(private propertyService: PropertyService) { }
 
@@ -44,7 +44,7 @@ export class PropertyDuplicateCheckerComponent implements OnInit, OnChanges {
     }
   }
 
-  private getDuplicates() {
+   getDuplicates() {
     this.isLoading = true;
     this.propertyService.getPotentialDuplicateProperties(this.propertyAddress, this.propertyId).subscribe(data => {
       this.isLoading = false;

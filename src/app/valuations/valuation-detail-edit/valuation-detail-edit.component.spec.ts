@@ -62,7 +62,7 @@ const tenures = [{ id: 1, value: 'Freehold' },
 { id: 2, value: 'Share of Freehold' },
 { id: 3, value: 'Leasehold' }];
 
-fdescribe('ValuationDetailEditComponent', () => {
+describe('ValuationDetailEditComponent', () => {
   const storageMapSpy = createStorageMapSpy();
   beforeEach(async(() => {
     TestBed.configureTestingModule({

@@ -33,6 +33,8 @@ describe('Property center should', () => {
     const subArea = '2'; // Other areas(Battersea)
     const postCode = 'sw11 1af';
 
+    // TODO: Add test for potential duplicates and properties without lat and lon
+
     cy.get('#addNewProperty').click();
     cy.visit(`/property-centre/detail/${newPropertyId}/edit?isNewProperty=true`);
     cy.get('#fullAddress').type(postCode);
