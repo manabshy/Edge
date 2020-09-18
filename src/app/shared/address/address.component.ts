@@ -3,10 +3,9 @@ import { SharedService } from '../../core/services/shared.service';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AppConstants } from '../../core/shared/app-constants';
 import { Person } from '../models/person';
-import { Company, BasicContactGroup } from 'src/app/contactgroups/shared/contact-group';
+import { Company } from 'src/app/contactgroups/shared/contact-group';
 import { Property } from 'src/app/property/shared/property';
 import { Address } from '../models/address';
-import { AppUtils } from '../../core/shared/utils';
 import { debounceTime } from 'rxjs/operators';
 import { AddressService, AddressAutoCompleteData } from '../../core/services/address.service';
 import { InfoService } from '../../core/services/info.service';
@@ -76,7 +75,6 @@ export class AddressComponent implements OnInit, OnChanges {
       if (data) {
         this.listInfo = data;
         this.setDropdownLists();
-        console.log('list info in contact people....', this.listInfo);
       }
     });
 
@@ -225,7 +223,6 @@ export class AddressComponent implements OnInit, OnChanges {
         });
       });
     }
-    console.log('form', this.addressForm);
   }
 
   hideOffCanvas() {
@@ -258,7 +255,6 @@ export class AddressComponent implements OnInit, OnChanges {
         }
 
       } else {
-        console.log('should be here for flats', addressData);
         address = {
           addressLine2: addressData.addressLine2,
           flatNumber: addressData.flatNumber,
@@ -274,9 +270,9 @@ export class AddressComponent implements OnInit, OnChanges {
   }
 
   sendAddress() {
-    console.log('send address xxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
     this.emitAddress();
   }
+
   populateAddressForm(person?: Person, company?: Company, property?: Property, companyAddress?: Address) {
     if (this.addressForm) {
       this.addressForm.reset();
@@ -284,32 +280,10 @@ export class AddressComponent implements OnInit, OnChanges {
 
     switch (true) {
       case !!this.personDetails:
-        this.personDetails = person;
-        if (person.address) {
-          if (person.address.postCode) {
-            person.address.postCode = person.address.postCode.trim();
-          }
-          this.addressForm.patchValue({
-            addressLines: person.address.addressLines,
-            postCode: person.address.postCode,
-            countryId: person.address.countryId,
-            country: person.address.country,
-          });
-        }
+        this.patchPersonalAddress(person);
         break;
       case !!this.companyDetails:
-        this.companyDetails = company;
-        if (company.companyAddress) {
-          if (company.companyAddress.postCode) {
-            company.companyAddress.postCode = company.companyAddress.postCode.trim();
-          }
-          this.addressForm.patchValue({
-            addressLines: company.companyAddress.addressLines,
-            postCode: company.companyAddress.postCode,
-            countryId: company.companyAddress.countryId,
-            country: company.companyAddress.country,
-          });
-        }
+        this.patchCompanyAddress(company);
         break;
       case !!this.companyAddress:
         this.companyAddress = companyAddress;
@@ -326,17 +300,52 @@ export class AddressComponent implements OnInit, OnChanges {
         }
         break;
       case !!this.propertyDetails:
-        this.propertyDetails = property;
-        this.addressForm.patchValue({
-          addressLine2: property.address.addressLine2,
-          flatNumber: property.address.flatNumber,
-          houseNumber: property.address.houseNumber,
-          houseBuildingName: property.address.houseBuildingName,
-          streetName: property.address.streetName,
-          town: property.address.town,
-          postCode: property.address.postCode.trim(),
-          countryId: this.defaultCountryCode
-        });
+        this.patchPropertyAddress(property);
+        break;
+    }
+  }
+
+  private patchCompanyAddress(company: Company) {
+    this.companyDetails = company;
+    if (company.companyAddress) {
+      if (company.companyAddress.postCode) {
+        company.companyAddress.postCode = company.companyAddress.postCode.trim();
+      }
+      this.addressForm.patchValue({
+        addressLines: company.companyAddress.addressLines,
+        postCode: company.companyAddress.postCode,
+        countryId: company.companyAddress.countryId,
+        country: company.companyAddress.country,
+      });
+    }
+  }
+
+  private patchPropertyAddress(property: Property) {
+    this.propertyDetails = property;
+    this.addressForm.patchValue({
+      addressLine2: property.address.addressLine2,
+      flatNumber: property.address.flatNumber,
+      houseNumber: property.address.houseNumber,
+      houseBuildingName: property.address.houseBuildingName,
+      streetName: property.address.streetName,
+      town: property.address.town,
+      postCode: property.address.postCode.trim(),
+      countryId: this.defaultCountryCode
+    });
+  }
+
+  private patchPersonalAddress(person: Person) {
+    this.personDetails = person;
+    if (person.address) {
+      if (person.address.postCode) {
+        person.address.postCode = person.address.postCode.trim();
+      }
+      this.addressForm.patchValue({
+        addressLines: person.address.addressLines,
+        postCode: person.address.postCode,
+        countryId: person.address.countryId,
+        country: person.address.country,
+      });
     }
   }
 }
