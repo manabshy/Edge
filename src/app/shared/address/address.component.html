@@ -17,7 +17,7 @@
           [ngClass]="{'border border-warning': personDetails && !addressLines.value && !enterAddressManually, 'is-invalid':addressError}"
           formControlName="fullAddress" (keyup.enter)="$event.stopPropagation(); searchAddress()">
           <div class="input-group-append">
-            <button type="button" class="btn btn-secondary" (click)="searchAddress()">Search</button>
+            <button type="button" id="searchAddress" class="btn btn-secondary" (click)="searchAddress()">Search</button>
           </div>
           <span class="invalid-feedback w-100">{{addressError}}</span>
         <small class="form-text w-100" *ngIf="personDetails && !addressLines.value && !enterAddressManually"><i
