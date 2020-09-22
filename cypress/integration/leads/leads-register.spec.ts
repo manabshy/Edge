@@ -59,9 +59,39 @@ describe('Leads register should', () => {
       .click();
   });
 
-  // it('navigate to create new property from the property center ', () => {
+  it('navigate to lead details page from search results and update an existing', () => {
+    postCode = 'sw12 8ag';
+    const nextChaseDate = '21/01/2022';
+    const leadNote = 'Test for lead';
 
-  //   cy.get('#addNewProperty').click();
-  //   cy.visit(`/property-centre/detail/${newPropertyId}/edit?isNewProperty=true`);
-  // });
-})
+    cy.get('[type="search"]')
+      .type(postCode)
+      .should('have.value', postCode);
+    cy.get('#leadType').select(leadTypeId);
+    cy.wait(2000);
+
+    cy.get('#dateFrom').type(dateFrom);
+    cy.get('#dateTo').type(dateTo);
+
+    cy.get('ng-select').then((selects) => {
+      const select = selects[0];
+      cy.wrap(select).click({ multiple: true })
+        .get('ng-dropdown-panel') // get the opened drop-down panel
+        .get('.ng-option') // Get all the options in drop-down
+        .then((items) => {
+          cy.wrap(items[0]).click({ multiple: false });
+        });
+    });
+
+    cy.get('#search')
+      .should('have.text', 'Search')
+      .click();
+
+    cy.get('tbody').click();
+    cy.get('#chaseDate').clear().type(nextChaseDate).click();
+    cy.get('#note').type(leadNote);
+
+    cy.get('#saveLead').click();
+  });
+
+});
