@@ -96,7 +96,7 @@
               *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value)">
               <label for="reason" class="small">What’s the current situation?</label>
               <textarea class="form-control form-control-sm" name="reason" id="reason" cols="30" rows="3"
-                formControlName="reason" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                formControlName="reason" data-cy="reason" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
                 [ngClass]="{'is-invalid': (formErrors?.reason)}"></textarea>
               <div class="invalid-feedback">{{formErrors?.reason}}</div>
             </div>
@@ -104,7 +104,7 @@
               *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('timeFrame').value)">
               <label for="timeFrame" class="small">When are you looking to market?</label>
               <textarea class="form-control form-control-sm" name="timeFrame" id="timeFrame" cols="30" rows="3"
-                formControlName="timeFrame" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                formControlName="timeFrame" data-cy="timeFrame"  [attr.disabled]="!isEditable && !isNewValuation ? true : null"
                 [ngClass]="{'is-invalid': (formErrors?.timeFrame)}"></textarea>
               <div class="invalid-feedback">{{formErrors?.timeFrame}}</div>
             </div>
@@ -112,7 +112,7 @@
               *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('generalNotes').value)">
               <label for="generalNotes" class="small">Notes (points discussed, other property details)</label>
               <textarea class="form-control form-control-sm" name="generalNotes" id="generalNotes" cols="30" rows="3"
-                formControlName="generalNotes" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                formControlName="generalNotes" data-cy="generalNotes" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
                 [ngClass]="{'is-invalid': (formErrors?.generalNotes)}"></textarea>
               <div class="invalid-feedback">{{formErrors?.generalNotes}}</div>
             </div>
@@ -214,7 +214,7 @@
                   <label id="valuationBoth" btnRadio="both" class="nav-link" tabindex="0" role="button">Both</label>
                 </div>
                 <div class="nav-item">
-                  <label id="valuationSales" btnRadio="sales" class="nav-link" tabindex="0" role="button">Sales</label>
+                  <label id="valuationSales" data-cy="valSales" btnRadio="sales" class="nav-link" tabindex="0" role="button">Sales</label>
                 </div>
                 <div class="nav-item">
                   <label id="valuationLettings" btnRadio="lettings" class="nav-link" tabindex="0" role="button">Lettings</label>
@@ -226,7 +226,7 @@
               <ng-select placeholder="Select Valuer" [items]="salesValuers" bindLabel="fullName"
                 bindValue="staffMemberId" groupBy="staffMembers" [multiple]="false" formControlName="salesValuerId"
                 (change)="onSalesValuerChange($event)" [readonly]="!isEditable && !isNewValuation"
-                [ngClass]="{'is-invalid': formErrors.salesValuerId}">
+                [ngClass]="{'is-invalid': formErrors.salesValuerId}" data-cy="salesValuers">
                 <ng-template ng-optgroup-tmp let-item="item">
                   {{item.office?.name}}
                 </ng-template>
@@ -252,7 +252,7 @@
               <div class="invalid-feedback">{{formErrors.lettingsValuerId}}</div>
             </div>
             <div class="form-group mt-3" *ngIf="(isEditable || isNewValuation) && canBookAppointment">
-              <button class="btn btn-sm btn-light btn-block" type="button" (click)="getAvailability()">Book
+              <button class="btn btn-sm btn-light btn-block" type="button" (click)="getAvailability()" data-cy="getvailability">Book
                 Availability</button>
             </div>
             <div class="form-group alert alert-warning" role="alert" *ngIf="isAvailabilityRequired">
@@ -307,7 +307,7 @@
                           [bsConfig]="{showWeekNumbers:false,  dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
                           bsDatepicker formControlName="fromDate">
                         <div class="input-group-append">
-                          <button class="btn btn-secondary" [attr.disabled]="!canSearchAvailability? true:null">Search</button>
+                          <button class="btn btn-secondary" [attr.disabled]="!canSearchAvailability? true:null" data-cy="searchAvailability">Search</button>
                         </div>
                       </div>
                     </div>
@@ -427,7 +427,7 @@
           <div class="row justify-content-end w-100 no-gutters">
             <div class="col-sm-10 d-flex">
               <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
-              <button *ngIf="isEditable || isNewValuation" type="submit" class="btn btn-secondary mr-2" id="saveVal"
+              <button *ngIf="isEditable || isNewValuation" type="submit" class="btn btn-secondary mr-2" id="saveVal" data-cy="saveVal"
                 [attr.disabled]="isSubmitting ? '' : null">
                 <i class="fas fa-spinner fa-pulse d-inline-block mr-2" *ngIf="isSubmitting"></i>Save
               </button>
