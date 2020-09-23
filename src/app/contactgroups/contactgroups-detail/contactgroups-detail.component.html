@@ -123,7 +123,7 @@
                     [queryParams]="{isNewProperty: true, personId: searchedPersonDetails?.personId,  lastKnownPerson: personParams}"
                     *ngSwitchCase="'properties'">Create</a>
                   <a [routerLink]="['/leads-register/edit/', 0]" [queryParams]="{isNewLead: true, personId: personId}"
-                    *ngSwitchCase="'leads'">Create</a>
+                    *ngSwitchCase="'leads'" data-cy="createLead">Create</a>
                 </ng-container>
               </span>
             </button>
