@@ -5,7 +5,7 @@
       <h4 class="m-0">Valuations register</h4>
     </div>
     <div class="col-auto">
-      <a class="btn btn-light" [routerLink]="['detail', 0 , 'edit' ]" [queryParams]="{isNewValuation: true}"><i
+      <a class="btn btn-light" [routerLink]="['detail', 0 , 'edit' ]" [queryParams]="{isNewValuation: true}" data-cy="newVal"><i
           class="fas fa-plus mr-2"></i> Valuation </a>
     </div>
   </div>
@@ -26,7 +26,7 @@
               [bsConfig]="{showWeekNumbers:false,  dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
               bsDatepicker
               #datepicker="bsDatepicker"
-              [appNoDoubleTap]='datepicker' formControlName="date">
+              [appNoDoubleTap]='datepicker' formControlName="date" data-cy="dateFrom">
           </div>
           <div class="col-12 form-group d-sm-none">
             <button class="btn btn-link p-0" (click)="isAdvancedSearchVisible = !isAdvancedSearchVisible">
@@ -37,7 +37,7 @@
           </div>
           <div class="col-sm form-group d-sm-block" [ngClass]="{'d-none': !isAdvancedSearchVisible}">
             <label class="small" for="statusId">Status</label>
-            <select class="custom-select custom-select-sm" id="statusId" formControlName="statusId">
+            <select class="custom-select custom-select-sm" id="statusId" formControlName="statusId" data-cy="valStatus">
               <option selected value="0"></option>
               <option *ngFor="let status of statuses" [value]='status.id'>
                 {{status.value}}</option>
@@ -56,7 +56,7 @@
       </div>
       <div class="col-sm-2">
         <div class="form-group mt-sm-4">
-          <button class="btn btn-block btn-secondary" id="btnSearch" (click)="getValuations()">Search</button>
+          <button class="btn btn-block btn-secondary" id="btnSearch" (click)="getValuations()" data-cy="searchVal">Search</button>
         </div>
       </div>
     </div>

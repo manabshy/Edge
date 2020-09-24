@@ -4,7 +4,7 @@
       <label for="office" class="small">Office</label>
       <ng-select id="office" placeholder="Select Office" [items]="offices$ |async" [clearable]="isClearable" bindLabel="name" [readonly]="readOnly"
         bindValue="officeId" [virtualScroll]="true" groupBy="category" (change)="onOfficeChange($event)"
-        formControlName="officeId"  [ngClass]="{'is-invalid': isRequired, 'no-style': readOnly}">
+        formControlName="officeId"  [ngClass]="{'is-invalid': isRequired, 'no-style': readOnly}" data-cy="office">
       </ng-select>
       <div class="invalid-feedback">
         Office is required

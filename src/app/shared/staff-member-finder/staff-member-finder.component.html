@@ -16,7 +16,7 @@
   </div>
   <ng-template #valuersPicker>
     <ng-select placeholder="Select Valuer" [items]="valuers" bindLabel="fullName" bindValue="staffMemberId"
-      groupBy="staffMembers" [multiple]="false" formControlName="staffMemberId" (change)="onStaffMemberChange($event)">
+      groupBy="staffMembers" [multiple]="false" formControlName="staffMemberId" (change)="onStaffMemberChange($event)" data-cy="valuers">
 
       <ng-template ng-optgroup-tmp let-item="item">
         {{item.office?.name}}
