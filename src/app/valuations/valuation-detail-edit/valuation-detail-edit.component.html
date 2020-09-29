@@ -166,7 +166,7 @@
                     aria-label="length" placeholder="Approx Length ..." id="approxLeaseExpiryDate"
                     formControlName="approxLeaseExpiryDate"
                     [attr.disabled]="!isEditable && !isNewValuation ? true : null"
-                    [ngClass]="{'is-invalid': (formErrors?.approxLeaseExpiryDate)}">
+                    [ngClass]="{'is-invalid': (formErrors?.approxLeaseExpiryDate)}" data-cy="leaseLength">
                   <div class="invalid-feedback">{{formErrors?.approxLeaseExpiryDate}}</div>
                 </div>
               </div>

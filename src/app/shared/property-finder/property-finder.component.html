@@ -40,7 +40,7 @@
       <div class="col-sm-3 offset-sm-2" [hidden]="!isSearchVisible">
         <div class="form-group">
           <button type="button" class="btn btn-light btn-sm btn-block"
-          [ngClass]="{'is-invalid': propertyRequiredWarning}" (click)="setProperties()">
+          [ngClass]="{'is-invalid': propertyRequiredWarning}" (click)="setProperties()" data-cy="addProperty">
             <i class="fas fa-plus mr-2"></i>
             Property {{label}}
           </button>
@@ -63,9 +63,9 @@
               <div class="input-group input-group-sm">
                 <input #searchPropertyInput type="search" id="propSearchTerm" class="form-control"
                   formControlName="searchTerm" (keydown.enter)="searchProperty()" [ngbTypeahead]="suggestions"
-                  [focusFirst]="false" (selectItem)="selectedSuggestion($event)">
+                  [focusFirst]="false" (selectItem)="selectedSuggestion($event)" data-cy="propSearchTerm">
                 <div class="input-group-append">
-                  <button type="button" class="btn btn-secondary" (click)="searchProperty()">Search</button>
+                  <button type="button" class="btn btn-secondary" (click)="searchProperty()" data-cy="searchProperty">Search</button>
                 </div>
               </div>
             </div>
