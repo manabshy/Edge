@@ -463,7 +463,7 @@
                 <div class="col-sm-4 mb-4" *ngIf="instruction?.askingPrice">
                   <div class="custom-control custom-checkbox form-group" *ngIf="showInstruct">
                     <input type="checkbox" id="instructSale" name="instructSale" class="custom-control-input"
-                      formControlName="instructSale" (change)="onInstructSalesChange($event.target)">
+                      formControlName="instructSale" (change)="onInstructSalesChange($event.target)" data-cy="instructSale">
                     <label class="custom-control-label small" for="instructSale">Instruct for Sales</label>
                   </div>
                   <div class="card" [ngClass]="{'disabled': !instructionForm.get('instructSale').value}">
@@ -479,7 +479,7 @@
                     <legend class="col-form-label text-left">Sales Agency</legend>
                     <div class="custom-control custom-radio">
                       <input type="radio" id="soleAgencySales" value="1" name="salesAgencyType"
-                        class="custom-control-input" formControlName="salesAgencyType">
+                        class="custom-control-input" formControlName="salesAgencyType" data-cy="soleAgencySales">
                       <label class="custom-control-label small" for="soleAgencySales">Sole Agency</label>
                     </div>
                     <div class="custom-control custom-radio">
@@ -496,7 +496,7 @@
                     <div class="col-12">
                       <div class="custom-control custom-checkbox form-group" *ngIf="showInstruct">
                         <input type="checkbox" id="instructLet" name="instructLet" class="custom-control-input"
-                          formControlName="instructLet" (change)="onInstructLettingsChange($event.target)">
+                          formControlName="instructLet" (change)="onInstructLettingsChange($event.target)" data-cy="instructLet">
                         <label class="custom-control-label small" for="instructLet">Instruct for Lettings</label>
                       </div>
                     </div>
@@ -540,12 +540,12 @@
                         <legend class="col-form-label text-left">Lettings Agency</legend>
                         <div class="custom-control custom-radio">
                           <input type="radio" id="soleAgencyLettings" value="1" name="lettingsAgencyType"
-                            class="custom-control-input" formControlName="lettingsAgencyType">
+                            class="custom-control-input" formControlName="lettingsAgencyType" data-cy="soleAgencyLettings">
                           <label class="custom-control-label small" for="soleAgencyLettings">Sole Agency</label>
                         </div>
                         <div class="custom-control custom-radio">
                           <input type="radio" id="multiAgencyLettings" value="2" name="lettingsAgencyType"
-                            class="custom-control-input" formControlName="lettingsAgencyType">
+                            class="custom-control-input" formControlName="lettingsAgencyType" data-cy="multiAgencyLettings">
                           <label class="custom-control-label small" for="multiAgencyLettings">Multi Agency</label>
                         </div>
                         <small *ngIf="instructionForm.get('lettingsAgencyType')?.errors?.required"
@@ -560,7 +560,7 @@
           <div class="mt-4 text-center">
             <button type="button" class="btn btn-light mr-2"
               (click)="instructionModal.hide(); cancelInstruction()">Cancel</button>
-            <button type="submit" class="btn btn-secondary">Instruct</button>
+            <button type="submit" class="btn btn-secondary" data-cy="saveInstruction">Instruct</button>
           </div>
         </form>
         <ng-container *ngIf="valuation?.isExpired">
