@@ -86,6 +86,9 @@ export interface InstructionInfo {
   instructionDate: Date;
   amount: number;
   shortLetAmount: number;
+  askingPrice: number;
+  askingRent: number;
+  askingRentShortLet: number;
   ownerId: number;
   ownerAddressee: string;
   agencyType: string;
@@ -203,7 +206,7 @@ export const PropertyDetailsSubNavItems: SubNavItem[] = PropertyDetailsSubNav.ma
   value: SubNav.subNavValue(x)
 }));
 
-export enum PropertySearchEnum {      
+export enum PropertySearchEnum {
   SalesInstruction = 1,
   LettingsInstruction = 2,
   PropertyManagement = 3,
