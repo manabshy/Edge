@@ -30,20 +30,30 @@ describe('Valuation edit should', () => {
   });
 
   xit('instruct a lettings valuation', () => {
-     valuationId = '162282'; // 162282
+    valuationId = '162276'; // 162282
     cy.visit(`/valuations-register/detail/${valuationId}/edit`);
     cy.get('[data-cy=startInstruction]').click();
     cy.get('[data-cy=instructLet]').check({ force: true });
     cy.get('[data-cy=soleAgencyLettings]').check({ force: true });
     cy.get('[data-cy=saveInstruction]').click();
+
+    cy.get('[data-cy=instructions]').then((ele) => {
+      console.log({ ele });
+    });
   });
 
-  it.only('instruct a sales valuation', () => {
-     valuationId = '162282'; // 162282
+  xit('instruct a sales valuation', () => {
+    valuationId = '161256'; // 162282
     cy.visit(`/valuations-register/detail/${valuationId}/edit`);
     cy.get('[data-cy=startInstruction]').click();
     cy.get('[data-cy=instructSale]').check({ force: true });
     cy.get('[data-cy=soleAgencySales]').check({ force: true });
     cy.get('[data-cy=saveInstruction]').click();
+
+
+    cy.get('[data-cy=instructions]').then((ele) => {
+      console.log({ ele });
+
+    });
   });
 });
