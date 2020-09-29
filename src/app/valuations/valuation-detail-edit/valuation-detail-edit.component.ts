@@ -345,16 +345,16 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   setupInitialRentFigures(val: Valuation) {
-    if (val.suggestedAskingRentShortLet) {
+    if (val.suggestedAskingRentShortLet && !val.suggestedAskingRentShortLetMonthly) {
       this.shortLetMonthlyControl.setValue(this.calculateMonthlyRent(+val.suggestedAskingRentShortLet));
     }
-    if (val.suggestedAskingRentLongLet) {
+    if (val.suggestedAskingRentLongLet && !val.suggestedAskingRentLongLetMonthly) {
       this.longLetMonthlyControl.setValue(this.calculateMonthlyRent(+val.suggestedAskingRentLongLet));
     }
-    if (val.suggestedAskingRentShortLetMonthly) {
+    if (val.suggestedAskingRentShortLetMonthly && !val.suggestedAskingRentShortLet) {
       this.shortLetWeeklyControl.setValue(this.calculateWeeklyRent(+val.suggestedAskingRentShortLetMonthly));
     }
-    if (val.suggestedAskingRentLongLetMonthly) {
+    if (val.suggestedAskingRentLongLetMonthly && !val.suggestedAskingRentLongLet) {
       this.longLetWeeklyControl.setValue(this.calculateMonthlyRent(+val.suggestedAskingRentLongLetMonthly));
     }
 
