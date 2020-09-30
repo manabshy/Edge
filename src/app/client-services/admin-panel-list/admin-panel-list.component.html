@@ -1,8 +1,9 @@
 <app-breadcrumb></app-breadcrumb>
 <div class="container">
   <div class="row page-title">
-    <div class="col">
+    <div class="col d-flex align-items-end">
       <h4 class="m-0">CS Board Admin Panel</h4>
+      <a class="ml-5" [routerLink]="['/admin-panel', 'rules']" >Rules</a>
     </div>
   </div>
   <div class="list-group mb-5">
@@ -16,6 +17,6 @@
               </div>
           </div>
       </a>
-    </ng-container>   
+    </ng-container>
   </div>
 </div>
