@@ -25,7 +25,7 @@
                 {{pointTypes[i]?.name}}
               </td>
               <td style="width: 15ch;">
-                <input type="number" class="form-control" [formcontrol]="control" [value]="control?.value" (change)="getSelected(i, $event?.target?.value)">
+                <input type="number" class="form-control" formcontrol="control" [value]="control?.value" (change)="getSelected(i, $event?.target?.value)">
               </td>
             </tr>
           </tbody>
