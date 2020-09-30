@@ -43,4 +43,9 @@ export class CsBoardService {
     const url = `${AppConstants.baseCsboardUrl}/points`;
     return this.http.post<any>(url, point).pipe(map(res => res.status));
   }
+
+  updatePointTypes(pointTypes: PointType[]): Observable<PointType[]> {
+    const url = `${AppConstants.baseCsboardUrl}/pointTypes`;
+    return this.http.post<any>(url, pointTypes).pipe(map(res => res.result));
+  }
 }
