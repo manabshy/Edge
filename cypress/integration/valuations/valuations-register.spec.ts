@@ -6,6 +6,9 @@ describe('Valuation register should', () => {
   const reason = 'A good reason for e2e testing';
   const timeFrame = 'Late summer';
   const generalNotes = 'Notes for end to end testing';
+  const saleValue = 500000;
+  const shortLetWeeklyRent = 1000;
+  const longLetWeeklyRent = 900;
 
   beforeEach(() => {
     cy.visit('/valuations-register');
@@ -22,7 +25,7 @@ describe('Valuation register should', () => {
     cy.get('[data-cy=valStatusLabel]').first().should('have.text', status);
   });
 
-  it.only('create new valuation ', () => {
+  it('create new valuation ', () => {
 
     cy.get('[data-cy=newVal]').click();
     cy.get('[data-cy=addProperty]').click();
@@ -58,4 +61,34 @@ describe('Valuation register should', () => {
 
     // add new property from the property edit
   });
+
+  it.only('search and value a booked valuation using valution date and status', () => {
+
+    cy.get('[data-cy=dateFrom]').type(dateFrom);
+    cy.get('[data-cy=valStatus]').select(status);
+
+    cy.get('[data-cy=searchVal]').click();
+    cy.get('[data-cy=valuationList]').first().click();
+
+    cy.get('[data-cy=valuationValues]').then(() => {
+      cy.get('[data-cy=sellValue]').clear().type(saleValue.toString());
+      cy.get('[data-cy=shortLetValue]').clear().type(shortLetWeeklyRent.toString());
+      cy.get('[data-cy=longLetValue]').clear().type(longLetWeeklyRent.toString());
+
+      cy.get('#saveVal').click();
+      cy.get('[data-cy=sellValue]').should('have.value', saleValue.toString());
+    });
+
+    cy.get('[data-cy=startInstruction]').click();
+    cy.get('[data-cy=instructSale]').check({ force: true });
+    cy.get('[data-cy=soleAgencySales]').check({ force: true });
+    cy.get('[data-cy=saveInstruction]').click();
+
+
+    cy.get('[data-cy=instructions]').then((ele) => {
+      console.log({ ele });
+
+    });
+  });
+
 });
