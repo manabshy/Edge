@@ -1,3 +1,55 @@
-<p>
-  rules works!
-</p>
+<app-breadcrumb></app-breadcrumb>
+<div class="container">
+  <div class="row page-title">
+    <div class="col d-flex align-items-end">
+      <h4 class="m-0">Rules</h4>
+    </div>
+  </div>
+  <form action="">
+    <div class="row">
+      <div class="col-sm-6 offset-sm-2">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>
+                Goal
+              </th>
+              <th>
+                Points
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                Goal
+              </td>
+              <td style="width: 15ch;">
+                <input type="number" class="form-control">
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Goal
+              </td>
+              <td style="width: 15ch;">
+                <input type="number" class="form-control">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="form-actions">
+      <div class="container px-lg-4">
+        <div class="row justify-content-end w-100 no-gutters">
+          <div class="col-sm-10 d-flex">
+            <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
+            <button type="submit" class="btn btn-secondary" [attr.disabled]="isSubmitting ? '' : null"><i
+                class="fas fa-spinner fa-pulse d-inline-block mr-2" *ngIf="isSubmitting"></i>Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
