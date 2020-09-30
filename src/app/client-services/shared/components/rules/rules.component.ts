@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { SharedService } from 'src/app/core/services/shared.service';
 import { PointType } from '../../models/team-member';
 import { CsBoardService } from '../../services/cs-board.service';
 
@@ -18,7 +19,9 @@ export class RulesComponent implements OnInit {
     return this.rulesForm?.get('pointTypes') as FormArray
   }
 
-  constructor(private boardService: CsBoardService, private fb: FormBuilder,   private toastr: ToastrService,) { }
+  constructor(private boardService:
+    CsBoardService, private fb: FormBuilder,
+    private toastr: ToastrService, private sharedService: SharedService) { }
 
   ngOnInit() {
     this.getPointTypes();
@@ -57,13 +60,17 @@ export class RulesComponent implements OnInit {
     }
   }
 
-  saveRules(){
-    this.boardService.updatePointTypes(this.selectedPointTypes).subscribe(res=>{
-      if(res){
+  saveRules() {
+    this.boardService.updatePointTypes(this.selectedPointTypes).subscribe(res => {
+      if (res) {
         this.pointTypes = res;
         this.toastr.success('Rule(s) successfully changed!');
-        console.log({res})
+        console.log({ res })
       }
     })
+  }
+
+  cancel() {
+    this.sharedService.back();
   }
 }
