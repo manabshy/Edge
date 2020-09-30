@@ -5,7 +5,6 @@ import { ClientServicesRoutingModule } from './client-services-routing.module';
 import { AdminPanelListComponent } from './admin-panel-list/admin-panel-list.component';
 import { AdminPanelDetailsComponent } from './admin-panel-details/admin-panel-details.component';
 import { CoreModule } from '../core/core.module';
-import { AdminPanelInMemoryData } from './shared/in-memory-data';
 
 
 
