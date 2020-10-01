@@ -14,6 +14,7 @@ export class RulesComponent implements OnInit {
   pointTypes: PointType[] = [];
   rulesForm: FormGroup;
   selectedPointTypes: PointType[] = [];
+  isSubmitting = false;
 
   get pointTypesControl(): FormArray {
     return this.rulesForm?.get('pointTypes') as FormArray
@@ -47,6 +48,7 @@ export class RulesComponent implements OnInit {
   }
 
   getSelected(index: number, value: string) {
+    this.rulesForm.markAsDirty();
     let selected = {
       pointTypeId: this.pointTypes[index].pointTypeId,
       points: this.pointTypes[index].points = +value,
@@ -61,13 +63,21 @@ export class RulesComponent implements OnInit {
   }
 
   saveRules() {
+    this.isSubmitting = true;
     this.boardService.updatePointTypes(this.selectedPointTypes).subscribe(res => {
       if (res) {
         this.pointTypes = res;
         this.toastr.success('Rule(s) successfully changed!');
-        console.log({ res })
+        this.isSubmitting = false;
       }
     })
+  }
+
+  canDeactivate(): boolean {
+    if (this.rulesForm.dirty && !this.isSubmitting) {
+      return false;
+    }
+    return true;
   }
 
   cancel() {
