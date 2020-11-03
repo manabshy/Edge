@@ -105,7 +105,7 @@ export class AddressComponent implements OnInit, OnChanges {
             this.postCode.setValue(this.sharedService.formatPostCode(data), { emitEvent: false });
           }
           if (key !== 'fullAddress') {
-            if (key === 'postCode') {
+            if (key === 'postCode' || key === 'addressLines') {
               this.emitAddress();
             }
           }
@@ -236,6 +236,7 @@ export class AddressComponent implements OnInit, OnChanges {
   private hasNumber(number: string) {
     return /\d/.test(number);
   }
+
   private emitAddress() {
     const addressData = this.addressForm.value;
     let address;
