@@ -61,6 +61,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
   officeId: number;
   propertyLocation: PropertyLocation;
   isOfficeIdRequired: boolean;
+  checkPossibleDuplicates = false;
 
   constructor(private route: ActivatedRoute,
     private _router: Router,
@@ -236,6 +237,10 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
   getSelectedOwner(owner: Signer) {
     this.lastKnownOwner = owner;
     this.propertyForm.markAsDirty();
+  }
+
+  setCheckDuplicatesFlag(value: boolean) {
+    this.checkPossibleDuplicates = value;
   }
 
   getSelectedProperty(property: Property) {

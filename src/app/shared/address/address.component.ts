@@ -21,11 +21,13 @@ export class AddressComponent implements OnInit, OnChanges {
   @Input() personDetails: Person;
   @Input() propertyDetails: Property;
   @Input() isNewProperty: boolean;
+  @Input() isCheckingDuplicateProperties = false;
   @Input() companyDetails: Company;
   @Input() companyAddress: Address;
   @Input() addressError: any;
   @Input() searchedAddress: string;
   @Output() addressDetails = new EventEmitter<any>();
+  @Output() checkDuplicateProperties = new EventEmitter<boolean>();
   foundAddress: AddressAutoCompleteData;
   defaultCountryCode = 232;
   addressForm: FormGroup;
@@ -105,9 +107,12 @@ export class AddressComponent implements OnInit, OnChanges {
             this.postCode.setValue(this.sharedService.formatPostCode(data), { emitEvent: false });
           }
           if (key !== 'fullAddress') {
-            if (key === 'postCode' || key === 'addressLines') {
-              this.emitAddress();
+            if (this.isCheckingDuplicateProperties) {
+              if (key === 'postCode') {
+                this.checkDuplicateProperties.emit(true);
+              } else { this.checkDuplicateProperties.emit(false); }
             }
+            this.emitAddress();
           }
         });
     });
@@ -267,6 +272,8 @@ export class AddressComponent implements OnInit, OnChanges {
         };
       }
     }
+    console.log({ address }, 'addresss');
+
     this.addressDetails.emit(address);
   }
 

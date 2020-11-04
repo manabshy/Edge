@@ -9,14 +9,17 @@
   <form *ngIf="propertyDetails || isNewProperty" [formGroup]="propertyForm" (ngSubmit)="saveProperty()"
     (keydown.enter)="$event.preventDefault()" autocompleteOff>
     <app-address [propertyDetails]="propertyDetails" [addressError]="formErrors.address" [isNewProperty]="isNewProperty"
-      (addressDetails)="getAddress($event)" [searchedAddress]="searchedAddress"></app-address>
+      [isCheckingDuplicateProperties]="true" (addressDetails)="getAddress($event)"
+      (checkDuplicateProperties)="setCheckDuplicatesFlag($event)" [searchedAddress]="searchedAddress">
+    </app-address>
     <div class="row justify-content-end">
       <div class="col-sm-10">
         <input type="hidden" id="address" class="form-control" formControlName="address">
       </div>
     </div>
     <app-property-duplicate-checker [propertyAddress]="propertyAddress" [propertyId]="propertyDetails?.propertyId"
-      (selectedProperty)="getSelectedProperty($event)" (fullMatchFound)="checkPropertyMatches($event)">
+      [checkDuplicates]="checkPossibleDuplicates" (selectedProperty)="getSelectedProperty($event)"
+      (fullMatchFound)="checkPropertyMatches($event)">
     </app-property-duplicate-checker>
     <app-office-finder class="d-block form-group" [officeId]="officeId" [isRequired]="isOfficeIdRequired"
       (selectedOfficeId)="getSelectedOfficeId($event)"></app-office-finder>
