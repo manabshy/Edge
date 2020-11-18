@@ -19,7 +19,7 @@ import { BaseComponent } from 'src/app/shared/models/base-component';
 import { LeadNoteComponent } from '../lead-note/lead-note.component';
 import { ValidationMessages, FormErrors } from 'src/app/core/shared/app-constants';
 import { Location } from '@angular/common';
-import { isEqual, isSameDay, addDays, isPast, isToday } from 'date-fns';
+import { isEqual, addDays } from 'date-fns';
 import { WedgeValidators } from 'src/app/shared/wedge-validators';
 import { SubNavItem } from 'src/app/shared/subnav';
 import { ResultData } from 'src/app/shared/result-data';
@@ -137,8 +137,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       this.logValidationErrors(this.leadEditForm, false);
     });
 
-
-
     // Lead Types
     this.storage.get('info').subscribe(data => {
       if (data) {
@@ -160,7 +158,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.storage.get('currentUser').subscribe((data: StaffMember) => {
       if (data) {
         this.currentStaffMember = data;
-
         if (this.isNewLead) {
           this.leadOwner = this.currentStaffMember;
           this.leadEditForm.get('ownerId').setValue(this.leadOwner.staffMemberId);
@@ -173,19 +170,13 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       // receive new lead
       this.leadsService.leadsChanges$.subscribe(lead => {
         this.lead = lead;
-
         if (lead) {
           this.personId = lead.personId;
           this.patchLeadValues(lead);
           this.getPersonInformation();
-
-        } else {
-          this.getLeadInformation();
-        }
+        } else { this.getLeadInformation(); }
       });
-    } else {
-      this.getPersonInformation();
-    }
+    } else { this.getPersonInformation(); }
 
     this.contactGroupService.noteChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
       if (data) {
@@ -203,7 +194,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       }
       this.getNextPersonNotesPage(this.page);
     });
-
   }
 
   getLeadIds(leadId: number) {
@@ -215,19 +205,14 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       if (this.leadIds.length <= 1) {
         this.leadsListCompleted = true;
       }
-    }, () => {
-      this.lead = null;
-    });
-
+    }, () => { this.lead = null; });
   }
 
   logValidationErrors(group: FormGroup = this.leadEditForm, fakeTouched: boolean, scrollToError = false) {
     Object.keys(group.controls).forEach((key: string) => {
       const control = group.get(key);
       const messages = ValidationMessages[key];
-      if (control.valid) {
-        FormErrors[key] = '';
-      }
+      if (control.valid) { FormErrors[key] = ''; }
       if (control && !control.valid && (fakeTouched || control.dirty)) {
         console.log('errors ', control.errors);
         FormErrors[key] = '';
@@ -272,7 +257,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       });
     }
     this.onLoading = false;
-
   }
 
   private getPersonInformation() {
@@ -287,7 +271,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
         this.subNav.forEach(element => {
           element.params.push(this.person.personId);
-
         });
       });
   }
@@ -446,8 +429,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       }
       this.updateLead(lead);
     }
-
-    // adding note
     this.addLeadNote();
   }
 

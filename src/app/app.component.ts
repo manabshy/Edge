@@ -62,12 +62,6 @@ export class AppComponent extends BaseComponent implements OnInit {
       AppUtils.prevRoute = event[0].urlAfterRedirects;
       const current = event[1].urlAfterRedirects;
 
-      // console.log('events before checking current...', event)
-      // if (current.indexOf('login') > -1 && current.indexOf('auth-callback') > -1 && current !== '/') {
-      //   console.log('before removal', event)
-      //   event.pop();
-      //   console.log('after removal', event.forEach((x:RoutesRecognized)=>x.url))
-      // }
       if (current.indexOf('calendarView') === -1) {
         this.isFading = true;
       }
@@ -79,28 +73,28 @@ export class AppComponent extends BaseComponent implements OnInit {
 
     this.router.events.pipe(
       filter(e => e instanceof NavigationEnd)
-      ).subscribe((event:any | NavigationEnd)=>{
-        const current = event.urlAfterRedirects
-        console.log('isupdateAvailable: ', this.serviceWorker.isUpdateAvailable)
-        console.log('current Patch: ', current)
-        console.log('condition:', current === '/' && this.serviceWorker.isUpdateAvailable)
+    ).subscribe((event: any | NavigationEnd) => {
+      const current = event.urlAfterRedirects;
+      console.log('isupdateAvailable: ', this.serviceWorker.isUpdateAvailable);
+      console.log('current Patch: ', current);
+      console.log('condition:', current === '/' && this.serviceWorker.isUpdateAvailable);
 
-        const calendar = '/?selectedTab=0';
-        const homes = [
-          '/',
-          '/contact-centre',
-          calendar,
-          '/leads-register',
-          '/company-centre',
-          '/property-centre',
-          '/valuations-register'
-        ]
-        const pathEqual = (elem)=>elem===current;
-        if(homes.some(pathEqual)&&this.serviceWorker.getIsupdateAvailable()){
-          console.log('App relaod because of update');
-          window.location.reload();
-        }
-      })
+      const calendar = '/?selectedTab=0';
+      const homes = [
+        '/',
+        '/contact-centre',
+        calendar,
+        '/leads-register',
+        '/company-centre',
+        '/property-centre',
+        '/valuations-register'
+      ];
+      const pathEqual = (elem) => elem === current;
+      if (homes.some(pathEqual) && this.serviceWorker.getIsupdateAvailable()) {
+        console.log('App relaod because of update');
+        window.location.reload();
+      }
+    });
   }
 
   ngOnInit() {
@@ -109,7 +103,6 @@ export class AppComponent extends BaseComponent implements OnInit {
 
     if (this.isLoggedIn) {
       this.getCurrentStaffMember();
-
       this.getInfo();
     }
 
@@ -177,8 +170,8 @@ export class AppComponent extends BaseComponent implements OnInit {
         manifest.name = `${name}`;
         manifest.short_name = `${name}`;
         break;
-      }
     }
+  }
   private setupEnvironmentVariables() {
     if (environment.production) {
       environment.baseUrl = this.configLoaderService.ApiEndpoint;
