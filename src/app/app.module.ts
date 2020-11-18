@@ -183,32 +183,18 @@ const externalModulesExports = [
         clientId: environment.clientId,
         authority: environment.authority,
         validateAuthority: true,
-        redirectUri: `https://dandg-edge-test.azurewebsites.net/auth-callback`,
-        // redirectUri: `${environment.baseRedirectUri}/auth-callback`,
+        redirectUri: `${window.location.href}auth-callback`,
         postLogoutRedirectUri: environment.baseRedirectUri,
         navigateToLoginRequestUrl: true,
       },
       cache: {
         cacheLocation: 'localStorage',
         storeAuthStateInCookie: isIE, // set to true for IE 11
-
       },
-      // {
-      //   logger?: Logger;
-      // loadFrameTimeout?: number;
-      // tokenRenewalOffsetSeconds?: number;
-      // navigateFrameWait?: number;
-      // telemetry?: TelemetryOptions;
-      // }
       framework: {
-        // isAngular?: boolean;
         unprotectedResources: ['https://www.microsoft.com/en-us/'],
         protectedResourceMap: protectedResourceMap,
       }
-
-      // logger: loggerCallback,
-      // correlationId: '1234',
-      // piiLoggingEnabled: true
     }, {
       consentScopes: ['user.read', 'openid', 'profile',
         'https://douglasandgordon.onmicrosoft.com/03d5d394-2418-42fa-a345-556b8d7ffcdb/user_impersonation',
