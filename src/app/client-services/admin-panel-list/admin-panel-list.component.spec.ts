@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing';
 
 import { AdminPanelListComponent } from './admin-panel-list.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -17,7 +17,7 @@ describe('AdminPanelListComponent', () => {
   let boardService: CsBoardService;
   const teamMembers = TeamMembers;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [AdminPanelListComponent],
       imports: [
@@ -52,7 +52,7 @@ describe('AdminPanelListComponent', () => {
     tick();
   }));
 
-  it('should show the name of the first team member', async(() => {
+  it('should show the name of the first team member', waitForAsync(() => {
     spyOn(boardService, 'getCsBoard').and.returnValue(of(teamMembers));
     let member: TeamMember;
     component.ngOnInit();
@@ -67,7 +67,7 @@ describe('AdminPanelListComponent', () => {
     });
   }));
 
-  it('should display 2 anchor tags for a team with 2 members', async(() => {
+  it('should display 2 anchor tags for a team with 2 members', waitForAsync(() => {
     spyOn(boardService, 'getCsBoard').and.returnValue(of(teamMembers));
     component.ngOnInit();
     fixture.detectChanges();
@@ -80,7 +80,7 @@ describe('AdminPanelListComponent', () => {
     });
   }));
 
-  it('should not display board when when there are no team members', async(() => {
+  it('should not display board when when there are no team members', waitForAsync(() => {
     spyOn(boardService, 'getCsBoard').and.returnValue(of([]));
     component.ngOnInit();
     fixture.detectChanges();

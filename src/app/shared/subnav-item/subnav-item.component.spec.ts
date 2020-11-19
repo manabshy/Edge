@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { SubnavItemComponent } from './subnav-item.component';
 
@@ -6,7 +6,7 @@ describe('SubnavItemComponent', () => {
   let component: SubnavItemComponent;
   let fixture: ComponentFixture<SubnavItemComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ SubnavItemComponent ]
     })

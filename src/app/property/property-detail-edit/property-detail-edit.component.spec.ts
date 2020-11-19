@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { PropertyDetailEditComponent } from './property-detail-edit.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -42,7 +42,7 @@ describe('PropertyDetailEditComponent', () => {
   // the `id` value is irrelevant because ignored by service stub
   // beforeEach(() =>  activedRouteStub.setParamMap({id: property.propertyId}));
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ PropertyDetailEditComponent ],
       imports: [
@@ -96,7 +96,7 @@ describe('PropertyDetailEditComponent', () => {
   //   });
   // }));
 
-  it('display page header', async(() => {
+  it('display page header', waitForAsync(() => {
     fixture.detectChanges();
 
     fixture.whenStable().then(() => {

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 
 import { ContactgroupsPeopleComponent } from './contactgroups-people.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -22,7 +22,7 @@ describe('ContactgroupsPeopleComponent', () => {
   let contactGroupsService: ContactGroupsService;
   const contactPerson = contactGroupDetailsMock;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     // const contactGroupsService = jasmine.createSpyObj<ContactGroupsService>(['getPerson', 'getContactGroupNotes']);
     //  service.addCompanyContactGroup.and.returnValue(of([]));
     // contactGroupsService.getPerson.and.returnValue(of(contactPerson));

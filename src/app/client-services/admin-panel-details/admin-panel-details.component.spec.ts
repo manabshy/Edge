@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed, fakeAsync, tick, flush, discardPeriodicTasks } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick, flush, discardPeriodicTasks, waitForAsync } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
@@ -27,7 +27,7 @@ describe('AdminPanelDetailsComponent', () => {
 
   const boardServiceSpy = jasmine.createSpyObj('CsBoardService', ['getCsTeamMemberDetails']);
   const teamMemberSpy = boardServiceSpy.getCsTeamMemberDetails.and.returnValue(of(teamMembers[0]));
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [AdminPanelDetailsComponent],
       imports: [
@@ -78,7 +78,7 @@ describe('AdminPanelDetailsComponent', () => {
     expect(pointsSpy).toHaveBeenCalled();
   }));
 
-  it('should show the name of team member', async(() => {
+  it('should show the name of team member', waitForAsync(() => {
     spyOn(boardService, 'getCsTeamMemberDetails').and.returnValue(of(teamMembers[0]));
     let member: TeamMember;
     component.ngOnInit();
@@ -115,7 +115,7 @@ describe('AdminPanelDetailsComponent', () => {
     expect(component.teamMemberPoints.length).toBe(3);
   }));
 
-  it('should show modal for adding an adjustment when the adjust button is clicked', async(() => {
+  it('should show modal for adding an adjustment when the adjust button is clicked', waitForAsync(() => {
     spyOn(boardService, 'getCsTeamMemberDetails').and.returnValue(of(teamMembers[0].points));
     const spy = spyOn(component.modalService, 'show').and.callThrough();
 

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed, fakeAsync, tick, ComponentFixtureAutoDetect } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick, ComponentFixtureAutoDetect, waitForAsync } from '@angular/core/testing';
 
 import { AddDiaryEventComponent } from './add-diary-event.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -37,7 +37,7 @@ describe('AddDiaryEventComponent should', () => {
   const storageMapSpy = createStorageMapSpy();
   const diaryEvents = (mockDiaryEvents as unknown as DiaryEvent[]);
   const mockDiaryEventService = jasmine.createSpyObj('DiaryEventService', ['getDiaryEvents', 'getDiaryEventById'])
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [AddDiaryEventComponent,
         // PropertyFinderComponent,

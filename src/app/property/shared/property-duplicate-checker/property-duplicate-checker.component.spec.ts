@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/compiler';
-import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EMPTY, of } from 'rxjs';
 import { PropertyService } from '../property.service';
@@ -23,7 +23,7 @@ fdescribe('PropertyDuplicateCheckerComponent', () => {
     ranking: 294
   }];
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [PropertyDuplicateCheckerComponent],
       imports: [

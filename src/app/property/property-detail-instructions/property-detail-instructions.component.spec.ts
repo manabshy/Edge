@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { PropertyDetailInstructionsComponent } from './property-detail-instructions.component';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
@@ -27,7 +27,7 @@ describe('PropertyDetailInstructionsComponent should', () => {
     formatPostCode: () => ''
   };
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [PropertyDetailInstructionsComponent],
       imports: [
@@ -65,7 +65,7 @@ describe('PropertyDetailInstructionsComponent should', () => {
     expect(component).toBeTruthy();
   });
 
-  it('set instructions correctly from service', async(() => {
+  it('set instructions correctly from service', waitForAsync(() => {
     const spy = spyOn(propertyService, 'getPropertyInstructions').and.returnValue(of(instructions));
     let response: any;
     component.instructions$
@@ -78,7 +78,7 @@ describe('PropertyDetailInstructionsComponent should', () => {
     expect(spy).toHaveBeenCalledWith(1);
   }));
 
-  it('display the instructions correctly', async(() => {
+  it('display the instructions correctly', waitForAsync(() => {
     spyOn(propertyService, 'getPropertyInstructions').and.returnValue(of(instructions));
     component.instructions$.subscribe();
 

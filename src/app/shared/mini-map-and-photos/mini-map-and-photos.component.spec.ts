@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { MiniMapAndPhotosComponent } from './mini-map-and-photos.component';
 
@@ -6,7 +6,7 @@ describe('MiniMapAndPhotosComponent', () => {
   let component: MiniMapAndPhotosComponent;
   let fixture: ComponentFixture<MiniMapAndPhotosComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ MiniMapAndPhotosComponent ]
     })

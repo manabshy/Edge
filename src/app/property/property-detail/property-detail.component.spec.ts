@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { PropertyDetailComponent } from './property-detail.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -18,7 +18,7 @@ describe('PropertyDetailComponent should', () => {
   let mockPropertyService;
   let mockSharedService;
   let mockToastrService = {};
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ PropertyDetailComponent, FormatAddressPipe ],
       imports: [
@@ -26,7 +26,7 @@ describe('PropertyDetailComponent should', () => {
         // BrowserModule,
         FormsModule,
         ReactiveFormsModule,
-        RouterModule.forRoot([])
+        RouterModule.forRoot([], { relativeLinkResolution: 'legacy' })
       ],
       providers: [
         FormatAddressPipe,

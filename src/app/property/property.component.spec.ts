@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { PropertyComponent } from './property.component';
 import { PropertyService } from './shared/property.service';
@@ -11,7 +11,7 @@ describe('PropertyComponent', () => {
   let mockPropertyService;
   let mockProperties;
   let mockSearchTerm;
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     mockProperties = MockProperties;
     mockSearchTerm = '413 test address';
     mockPropertyService = jasmine.createSpyObj(['autocompleteProperties']);

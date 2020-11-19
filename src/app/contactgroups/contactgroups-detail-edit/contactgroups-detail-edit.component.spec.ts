@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ContactgroupsDetailEditComponent } from './contactgroups-detail-edit.component';
 import { Person } from 'src/app/shared/models/person';
@@ -34,7 +34,7 @@ describe('ContactgroupsDetailEditComponent', () => {
     },
     mockToastrService = {};
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ContactgroupsDetailEditComponent ],
       imports: [
@@ -73,14 +73,14 @@ describe('ContactgroupsDetailEditComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should get person details on initialisation', async(() => {
+  it('should get person details on initialisation', waitForAsync(() => {
     component.ngOnInit();
     const response = component.personDetails;
 
     expect(response).toEqual(person);
   }));
 
-  it('form should display the correct firstName', async( () => {
+  it('form should display the correct firstName', waitForAsync( () => {
     component.ngOnInit();
     const response = component.personDetails;
     personForm.patchValue(MockPerson);

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { OfficeFinderComponent } from './office-finder.component';
 
@@ -6,7 +6,7 @@ describe('OfficeFinderComponent', () => {
   let component: OfficeFinderComponent;
   let fixture: ComponentFixture<OfficeFinderComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ OfficeFinderComponent ]
     })

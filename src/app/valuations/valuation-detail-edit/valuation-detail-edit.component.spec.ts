@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, tick, fakeAsync, waitForAsync } from '@angular/core/testing';
 
 import { ValuationDetailEditComponent } from './valuation-detail-edit.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
@@ -64,7 +64,7 @@ const tenures = [{ id: 1, value: 'Freehold' },
 
 describe('ValuationDetailEditComponent', () => {
   const storageMapSpy = createStorageMapSpy();
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ValuationDetailEditComponent,
         // MockComponent(PropertyFinderComponent),

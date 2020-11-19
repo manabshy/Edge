@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { SharedLeadRegisterComponent } from './shared-lead-register.component';
 
@@ -6,7 +6,7 @@ describe('SharedLeadRegisterComponent', () => {
   let component: SharedLeadRegisterComponent;
   let fixture: ComponentFixture<SharedLeadRegisterComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ SharedLeadRegisterComponent ]
     })

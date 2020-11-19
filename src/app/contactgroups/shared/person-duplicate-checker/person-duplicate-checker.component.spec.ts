@@ -1,4 +1,4 @@
-import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 
 import { PersonDuplicateCheckerComponent } from './person-duplicate-checker.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -18,7 +18,7 @@ describe('PersonDuplicateCheckerComponent', () => {
   let fixture: ComponentFixture<PersonDuplicateCheckerComponent>;
   let person;
   let contactGroupsService: ContactGroupsService;
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
 
     TestBed.configureTestingModule({
       declarations: [PersonDuplicateCheckerComponent, HighlightPipe],
