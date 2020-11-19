@@ -4,7 +4,14 @@
   <div class="row page-title">
     <div class="col">
       <h4 class="mb-0">
-        New Contact Group
+        <ng-container *ngIf="isNewContactGroup;else existingContact">
+          New Contact Group
+        </ng-container>
+        <ng-template #existingContact>
+          <ng-container *ngIf="contactGroupDetails?.contactType === 4; else peopleCG">
+            Company</ng-container>
+          <ng-template #peopleCG>Personal</ng-template> Contact Group
+        </ng-template>
         <span class="badge badge-pill badge-success" *ngIf="isAMLCompleted">AML Completed</span>
       </h4>
     </div>
