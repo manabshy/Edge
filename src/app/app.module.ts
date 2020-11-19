@@ -83,6 +83,9 @@ export const protectedResourceMap: Map<string, Array<string>> = new Map([
 ]);
 
 const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
+const redirectUri = environment.baseRedirectUri ? environment.baseRedirectUri : window.location.origin;
+
+
 
 const externalModulesImports = [
   InfiniteScrollModule,
@@ -183,7 +186,7 @@ const externalModulesExports = [
         clientId: environment.clientId,
         authority: environment.authority,
         validateAuthority: true,
-        redirectUri: `${window.location.href}auth-callback`,
+        redirectUri: `${redirectUri}/auth-callback`,
         postLogoutRedirectUri: environment.baseRedirectUri,
         navigateToLoginRequestUrl: true,
       },
