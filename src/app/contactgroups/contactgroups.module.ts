@@ -21,6 +21,7 @@ import { ContactGroupsComponent } from './contactgroups.component';
 import { ContactgroupsDetailHomeHelperComponent } from '../shared/contactgroups-detail-home-helper/contactgroups-detail-home-helper.component';
 import { PersonDuplicateCheckerComponent } from './shared/person-duplicate-checker/person-duplicate-checker.component';
 import { SharedModule } from '../shared/shared.module';
+import { ContactgroupsRedesignComponent } from './contactgroups-redesign/contactgroups-redesign.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { SharedModule } from '../shared/shared.module';
     // ContactgroupsDetailOffersComponent,
     // ContactgroupsDetaillettingsManagementsComponent,
     // ContactgroupsDetailHomeHelperComponent,
-    PersonDuplicateCheckerComponent
+    PersonDuplicateCheckerComponent,
+    ContactgroupsRedesignComponent
   ],
   imports: [
     CommonModule,
