@@ -1,5 +1,5 @@
 /***** Tables *****/
-.tableCloth                                     { overflow:scroll; overflow-y:hidden; width:100%; -webkit-overflow-scrolling:touch; }
+.table                                          { overflow:auto; overflow-y:hidden; width:100%; -webkit-overflow-scrolling:touch; }
 
 table                                           { width:100%; overflow:visible; text-align:left; display:table; border:none; border-collapse:collapse; border-spacing:0; }
 table, caption, tbody, thead, tr, th, td        { text-align:left; }
