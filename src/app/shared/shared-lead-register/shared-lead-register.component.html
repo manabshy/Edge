@@ -1,23 +1,62 @@
-<div class="list-group list-group-flush" *ngIf="leads$|async as leads">
-  <div class="list-group-item" *ngIf="closedCounter">
-    <div class="custom-control custom-checkbox">
-      <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getLeads()" class="custom-control-input" id="includeClosedLeads">
-      <label class="custom-control-label small" for="includeClosedLeads">Include closed leads</label>
-    </div>
+<h2>Leads</h2>
+<div *ngIf="leads$|async as leads">
+  <div class="custom-control custom-checkbox">
+    <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getLeads()" class="custom-control-input" id="includeClosedLeads">
+    <label class="custom-control-label small" for="includeClosedLeads">Include closed leads</label>
+  </div>
+
+  <div class="list-group-item text-center text-danger" *ngIf="!leads || !leads?.length">
+    <i class="far fa-sad-tear"></i> No Leads
   </div> 
-  <div class="list-group-item list-header d-none d-sm-block d-xl-none" *ngIf="leads && leads?.length">
+
+  <div class="table" *ngIf="leads && leads?.length">
+    <table class="table--mobile table--rowHover">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Next Chase Date</th>
+          <th>Lead Owner</th>
+          <th *ngIf="isClosedIncluded">&nbsp;</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let lead of leads; let i = index;" (click)="leadClicked(lead)">
+          <td data-title="Type">
+            <span class="cell-content">{{lead?.leadType}}</span>
+          </td>
+          <td data-title="Next Chase Date">
+            <span class="cell-content">{{(lead?.nextChaseDate | date: 'dd/MM/yyyy hh:mm') || '-'}}</span>
+          </td>
+          <td data-title="Lead Owner">
+            <span class="cell-content">{{lead?.owner || '-'}}</span>
+          </td>
+          <td data-title="Status" *ngIf="isClosedIncluded">
+            <span class="cell-content">Closed</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
+  <!-- <div class="list-group-item" *ngIf="closedCounter">
+    
+  </div> 
+  <div class="list-group-item list-header d-none d-sm-block d-xl-none" >
     <div class="row">
-      <div class="col-sm-auto" *ngIf="isClosedIncluded"><span class="badge badge-pill badge-primary invisible">Closed</span></div>
+      <div class="col-sm-auto" ><span class="badge badge-pill badge-primary invisible">Closed</span></div>
       <div class="col-sm"><strong>Type</strong></div>
       <div class="col-sm"><strong>Next Chase Date</strong></div>
       <div class="col-sm"><strong>Lead Owner</strong></div>
     </div>
   </div>
-  <div class="list-group-item text-center text-danger" *ngIf="!leads || !leads?.length">
-    <i class="far fa-sad-tear"></i> No Leads
-  </div> 
-  <a (click)="leadClicked(lead)" class="list-group-item list-group-item-action"
-    *ngFor="let lead of leads; let i = index;">
+  
+  
+  
+  <a  class="list-group-item list-group-item-action"
+    >
     <div class="row align-items-center">
       <div class="col-sm-auto mb-2 mb-sm-0 mb-xl-2 col-xl-12" *ngIf="isClosedIncluded">
         <span class="badge badge-pill badge-primary mr-1" [ngClass]="{'invisible': !lead?.closedById}">Closed</span>
@@ -25,21 +64,21 @@
       <div class="col-sm col-xl-12">
         <dl class="row">
           <dt class="col-4 d-sm-none d-xl-block">Type</dt>
-          <dd class="col">{{lead?.leadType}}</dd>
+          <dd class="col"></dd>
         </dl>
       </div>
       <div class="col-sm col-xl-12">
         <dl class="row">
           <dt class="col-4 d-sm-none d-xl-block">Chase Date</dt>
-          <dd class="col monospace">{{(lead?.nextChaseDate | date: 'dd/MM/yyyy hh:mm') || '-'}}</dd>
+          <dd class="col monospace"></dd>
         </dl>
       </div>
       <div class="col-sm col-xl-12">
         <dl class="row">
           <dt class="col-4 d-sm-none d-xl-block">Chaser</dt>
-          <dd class="col">{{lead?.owner || '-'}}</dd>
+          <dd class="col"></dd>
         </dl>
       </div>
     </div>
   </a>
-</div>
+</div> -->
