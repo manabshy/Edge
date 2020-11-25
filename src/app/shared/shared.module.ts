@@ -73,6 +73,7 @@ import { SharedValuationListComponent } from './shared-valuation-list/shared-val
 import { OfficeFinderComponent } from './office-finder/office-finder.component';
 import { StaffMemberFinderComponent } from './staff-member-finder/staff-member-finder.component';
 import { NoDoubleTapDirective } from './no-double-tap.directive';
+import { SharedContactgroupListComponent } from './shared-contactgroup-list/shared-contactgroup-list.component';
 
 
 @NgModule({
@@ -116,8 +117,8 @@ import { NoDoubleTapDirective } from './no-double-tap.directive';
     SharedValuationListComponent,
     OfficeFinderComponent,
     StaffMemberFinderComponent,
-    NoDoubleTapDirective
-
+    NoDoubleTapDirective,
+    SharedContactgroupListComponent
   ],
   imports: [
     CommonModule,
@@ -189,7 +190,8 @@ import { NoDoubleTapDirective } from './no-double-tap.directive';
     SharedValuationListComponent,
     OfficeFinderComponent,
     StaffMemberFinderComponent,
-     // to be refactored
+    SharedContactgroupListComponent,
+    // to be refactored
     InfiniteScrollModule,
     CollapseModule,
     TabsModule,
