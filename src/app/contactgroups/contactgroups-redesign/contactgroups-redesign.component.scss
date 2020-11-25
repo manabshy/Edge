@@ -1315,7 +1315,7 @@ This applies from 992px onwards
 .row__item                                    { flex-grow:1; }
 .row__item+*                                  { margin:0 0 0 30px; }
 
-.row__item--aside                             { max-width:270px; flex-shrink:0; }
+.row__item--aside                             { max-width:270px; flex-shrink:0; align-self:flex-start; position:sticky; top:0; }
 
 .aside                                        { left:0; width:220px; font-size:13px; }
 .nav__item--active:before                     { width:4px; height:4px; top:7px; left:13px; }
