@@ -80,7 +80,7 @@
       </div>
       <div class="card__body">
         <ol class="list list--divider list--hover">
-          <li class="current">
+          <li>
             <a href="" class="overall"></a>
             Notes
             <span class="pill flexRight">17</span>
@@ -90,49 +90,49 @@
             Contact Groups
             <span class="pill flexRight">4</span>
           </li>
-          <li>
-            <a href="" class="overall"></a>
+          <li class="current">
+            <a role="button" class="overall" (click)="setinfoType('properties')"></a>
             Properties
             <span class="pill flexRight">2</span>
           </li>
           <li>
-            <a href="" class="overall"></a>
+            <a role="button" class="overall" (click)="setinfoType('leads')"></a>
             Leads
             <span class="pill pill--positive flexRight">3</span>
             <span class="pill flexRight">2</span>
           </li>
           <li>
-            <a href="" class="overall"></a>
+            <a role="button" class="overall" (click)="setinfoType('instructions')"></a>
             Instructions
             <span class="pill pill--positive flexRight">1</span>
             <span class="pill flexRight">2</span>
           </li>
           <li>
-            <a href="" class="overall"></a>
+            <a role="button" class="overall" (click)="setinfoType('valuations')"></a>
             Valuations
             <span class="pill pill--positive flexRight">0</span>
             <span class="pill flexRight">2</span>
           </li>
           <li>
-            <a href="" class="overall"></a>
+            <a role="button" class="overall" (click)="setinfoType('offers')"></a>
             Offers
             <span class="pill pill--positive flexRight">1</span>
             <span class="pill flexRight">2</span>
           </li>
           <li>
-            <a href="" class="overall"></a>
+            <a role="button" class="overall" (click)="setinfoType('searches')"></a>
             Searches
             <span class="pill pill--positive flexRight">1</span>
             <span class="pill flexRight">8</span>
           </li>
           <li>
-            <a href="" class="overall"></a>
+            <a role="button" class="overall" (click)="setinfoType('lettingsManagements')"></a>
             Lettings Managements
             <span class="pill pill--positive flexRight">0</span>
             <span class="pill flexRight">2</span>
           </li>
           <li>
-            <a href="" class="overall"></a>
+            <a role="button" class="overall" (click)="setinfoType('homeHelpers')"></a>
             Home Helpers
             <span class="pill pill--positive flexRight">0</span>
             <span class="pill flexRight">2</span>
@@ -143,7 +143,7 @@
   </div>
 
   <div class="row__item">
-    <h2>Notes</h2>
+    <!-- <h2>Notes</h2>
     <ol class="timeline">
       <li class="timeline__new">
         <button class="btn btn--positive"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z"/><path class="plus-vertical" d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z"/></svg>Create new note</button>
@@ -253,5 +253,30 @@
 
       <li></li>
     </ol>
-  </div>
+  </div> -->
+  <ng-container [ngSwitch]="moreInfo">
+    <app-shared-property-list *ngSwitchCase="'properties'" [moreInfo]="moreInfo"
+      [personId]="searchedPersonDetails?.personId">
+    </app-shared-property-list>
+    <app-contactgroups-detail-instructions *ngSwitchCase="'instructions'" [moreInfo]="moreInfo"
+      [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.instructions?.inactive"></app-contactgroups-detail-instructions>
+      <app-shared-valuation-list *ngSwitchCase="'valuations'" [moreInfo]="moreInfo"
+      [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.valuations?.inactive">
+    </app-shared-valuation-list>
+    <app-contactgroups-detail-offers *ngSwitchCase="'offers'" [moreInfo]="moreInfo" [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.offers?.inactive">
+    </app-contactgroups-detail-offers>
+    <app-contactgroups-detail-searches *ngSwitchCase="'searches'" [moreInfo]="moreInfo"
+      [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.searches?.inactive">
+    </app-contactgroups-detail-searches>
+    <app-contactgroups-detail-lettings-managements *ngSwitchCase="'lettingsManagements'" [moreInfo]="moreInfo"
+      [personId]="searchedPersonDetails?.personId" [moreInfo]="moreInfo"
+      [closedCounter]="summaryTotals?.lettingsManagements?.inactive">
+    </app-contactgroups-detail-lettings-managements>
+    <app-contactgroups-detail-home-helper *ngSwitchCase="'homeHelpers'" [moreInfo]="moreInfo"
+      [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.homeHelpers?.inactive">
+    </app-contactgroups-detail-home-helper>
+    <app-shared-lead-register *ngSwitchCase="'leads'" [moreInfo]="moreInfo"
+      [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.leads?.inactive">
+    </app-shared-lead-register>
+  </ng-container>
 </div>
