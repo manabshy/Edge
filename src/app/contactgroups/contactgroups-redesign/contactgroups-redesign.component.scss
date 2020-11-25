@@ -1190,7 +1190,7 @@ small+*                                         { margin-top:16px; }
 .nav__item--open .horizontal                    { display:none; }
 
 /***** Body *****/
-.body                                           { padding:85px 20px 20px 20px; width:100%; min-height:100vh; }
+.body                                           { padding:20px; width:100%; min-height:100vh; }
 
 /***** Headers *****/
 .headerMobile                                   { padding:0; display:flex; height:60px; width:100%; background-color:#0A1A4A; position:fixed; top:0; right:0; z-index:10; }
@@ -1311,17 +1311,17 @@ This applies from 992px onwards
 @media (min-width:992px) {
 .wrapper                                      { margin-left:220px; }
 
-.row1                                          { display:flex; flex-wrap: nowrap; }
+.row1                                         { display:flex; flex-wrap: nowrap; }
 .row__item                                    { flex-grow:1; }
 .row__item+*                                  { margin:0 0 0 30px; }
 
-.row__item--aside                             { max-width:270px; flex-shrink:0; align-self:flex-start; position:sticky; top:0; }
+.row__item--aside                             { max-width:270px; flex-shrink:0; align-self:flex-start; }
 
 .aside                                        { left:0; width:220px; font-size:13px; }
 .nav__item--active:before                     { width:4px; height:4px; top:7px; left:13px; }
 
 .logo .icon                                   { display:block; }
-.body                                         { padding:80px 30px 0 30px; }
+.body                                         { padding:30px; }
 
 .headerMobile                                 { display:none; }
 

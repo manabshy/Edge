@@ -1,47 +1,53 @@
-<div class="table">
-  <table class="table--mobile table--rowHover">
-    <thead>
-      <tr>
-        <th>Address</th>
-        <th>&nbsp;</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td data-title="Address">
-          <span class="cell-content">Walpole House, 35 Walpole Street, London, SW3 4QS</span>
-        </td>
-        <td data-title="Action">
-          <span class="cell-content"><button>Create Valuation</button></span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-<div class="list-group list-group-flush" *ngIf="properties$|async as properties">
+<div *ngIf="properties$|async as properties">
   <div class="list-group-item text-center text-danger" *ngIf="!properties || !properties?.length">
     <i class="far fa-sad-tear"></i> No properties
   </div>
-  <a (click)="navigateToDetails(property)" class="list-group-item list-group-item-action pb-2"
-    *ngFor="let property of properties; let i = index;">
+
+  <div class="table">
+    <table class="table--mobile table--rowHover">
+      <thead>
+        <tr>
+          <th>Address</th>
+          <th>&nbsp;</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let property of properties; let i = index;" (click)="navigateToDetails(property)">
+          <td data-title="Address">
+            <span class="cell-content" [innerHTML]="property?.address| formatAddress">Walpole House, 35 Walpole Street, London, SW3 4QS</span>
+            <span *ngIf="!(property.address )">No address</span>
+          </td>
+          <td data-title="Action">
+            <span class="cell-content">
+              <button type="button" class="btn btn-light" *ngIf="isLead && !isLeadClosed" (click)="associateToLead(property)">Associate to lead</button>
+              <button type="button" (click)="navigateToNewValuation(property.propertyId)" class="btn btn-light">Create Valuation</button>
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- <div class="list-group list-group-flush" >
+  
+  <a  class="list-group-item list-group-item-action pb-2">
     <div class="row">
       <div class="col">
         <div class="row align-items-center">
           <div class="col-12">
             <div class="mb-1">
-              <span [innerHTML]="property?.address| formatAddress"></span><span class="text-danger"
-                *ngIf="!(property.address )">No address</span>
+              <span></span><span class="text-danger"
+                </span>
             </div>
           </div>
         </div>
       </div>
       <div class="col-sm-auto col-xl-12">
         <div class="btn-group btn-group-sm w-100" role="group" aria-label="Property actions">
-          <button type="button" class="btn btn-light" *ngIf="isLead && !isLeadClosed" (click)="associateToLead(property)">Associate to lead</button>
-          <button type="button" (click)="navigateToNewValuation(property.propertyId)" class="btn btn-light">Create Valuation</button>
+          
         </div>
       </div>
     </div>
   </a>
-</div>
+</div> -->
