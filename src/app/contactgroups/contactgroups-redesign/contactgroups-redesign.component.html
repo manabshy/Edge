@@ -118,87 +118,31 @@
           <p>Additional Information</p>
         </div>
         <div class="card__body">
-          <ol class="list list--divider list--hover" *ngFor="let item of types;index as i">
-            <li [ngClass]="{current: item.isCurrent}">
+          <ol class="list list--divider list--hover">
+            <li [ngClass]="{current: item.isCurrent}" *ngFor="let item of types;index as i">
               <a role="button" class="overall" (click)="setinfoType(item?.name,i)"></a>
               {{item?.name|toPascalCase}}
-              <span class="pill flexRight">17</span>
+              <ng-container *ngIf="summaryTotals; else loadingInfo">
+                <ng-container *ngIf="isObject(summaryTotals[item?.name]); else simpleValue">
+                  <span *ngIf="summaryTotals[item?.name]?.active" class="pill pill--positive flexRight">
+                    {{summaryTotals[item?.name]?.active}} </span>
+                  <span *ngIf="summaryTotals[item?.name]?.inactive" class="pill flexRight">
+                    {{summaryTotals[item?.name]?.inactive}}</span>
+                </ng-container>
+                <ng-template #simpleValue>
+                  <span *ngIf="summaryTotals[item?.name]" class="pill pill--positive flexRight">
+                    {{summaryTotals[item?.name]}}</span>
+                </ng-template>
+              </ng-container>
+              <ng-template #loadingInfo>
+                <span class="badge badge-pill badge-primary"><i
+                    class="fas fa-spinner fa-pulse d-inline-block"></i></span>
+              </ng-template>
             </li>
-
           </ol>
         </div>
       </div>
     </div>
-
-
-    <!-- <div class="card">
-        <div class="card__header">
-          <p>Additional Information</p>
-        </div>
-        <div class="card__body">
-          <ol class="list list--divider list--hover">
-            <li class="current">
-              <a role="button" class="overall" (click)="setinfoType('notes')"></a>
-              Notes
-              <span class="pill flexRight">17</span>
-            </li>
-            <li>
-              <a role="button" class="overall" (click)="setinfoType('contactGroups')"></a>
-              Contact Groups
-              <span class="pill flexRight">4</span>
-            </li>
-            <li>
-              <a role="button" class="overall" (click)="setinfoType('properties')"></a>
-              Properties
-              <span class="pill flexRight">2</span>
-            </li>
-            <li>
-              <a role="button" class="overall" (click)="setinfoType('leads')"></a>
-              Leads
-              <span class="pill pill--positive flexRight">3</span>
-              <span class="pill flexRight">2</span>
-            </li>
-            <li>
-              <a role="button" class="overall" (click)="setinfoType('instructions')"></a>
-              Instructions
-              <span class="pill pill--positive flexRight">1</span>
-              <span class="pill flexRight">2</span>
-            </li>
-            <li>
-              <a role="button" class="overall" (click)="setinfoType('valuations')"></a>
-              Valuations
-              <span class="pill pill--positive flexRight">0</span>
-              <span class="pill flexRight">2</span>
-            </li>
-            <li>
-              <a role="button" class="overall" (click)="setinfoType('offers')"></a>
-              Offers
-              <span class="pill pill--positive flexRight">1</span>
-              <span class="pill flexRight">2</span>
-            </li>
-            <li>
-              <a role="button" class="overall" (click)="setinfoType('searches')"></a>
-              Searches
-              <span class="pill pill--positive flexRight">1</span>
-              <span class="pill flexRight">8</span>
-            </li>
-            <li>
-              <a role="button" class="overall" (click)="setinfoType('lettingsManagements')"></a>
-              Lettings Managements
-              <span class="pill pill--positive flexRight">0</span>
-              <span class="pill flexRight">2</span>
-            </li>
-            <li>
-              <a role="button" class="overall" (click)="setinfoType('homeHelpers')"></a>
-              Home Helpers
-              <span class="pill pill--positive flexRight">0</span>
-              <span class="pill flexRight">2</span>
-            </li>
-          </ol>
-        </div>
-      </div>
-    </div> -->
-
     <div class="row__item">
       <!-- <h2>Notes</h2>
       <ol class="timeline">
