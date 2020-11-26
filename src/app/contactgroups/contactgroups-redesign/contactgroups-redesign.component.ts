@@ -37,8 +37,21 @@ export class ContactgroupsRedesignComponent extends BaseComponent implements OnI
   subNav = ContactGroupDetailsSubNavItems;
   personParams: string;
   showNotes: boolean;
-  moreInfo = 'properties';
-  type = 'properties';
+  moreInfo = 'notes';
+  type = 'notes';
+  types: { name: string, isCurrent: boolean }[] = [
+    { name: 'notes', isCurrent: true },
+    { name: 'contactGroups', isCurrent: false },
+    { name: 'properties', isCurrent: false },
+    { name: 'leads', isCurrent: false },
+    { name: 'instructions', isCurrent: false },
+    { name: 'valuations', isCurrent: false },
+    { name: 'offers', isCurrent: false },
+    { name: 'searches', isCurrent: false },
+    { name: 'lettingsManagements', isCurrent: false },
+    { name: 'homeHelpers', isCurrent: false }
+  ];
+
 
   get dataNote() {
     return {
@@ -183,8 +196,11 @@ export class ContactgroupsRedesignComponent extends BaseComponent implements OnI
   getMoreInfo(item: SubNavItem) {
     this.moreInfo = item.value;
   }
-  setinfoType(type: string) {
+
+  setinfoType(type: string, index: number) {
     this.moreInfo = type;
+    this.types.map(t => t.isCurrent = false);
+    this.types[index].isCurrent = true;
     console.log('info type', this.moreInfo);
 
   }
