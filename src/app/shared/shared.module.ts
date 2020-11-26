@@ -74,6 +74,7 @@ import { OfficeFinderComponent } from './office-finder/office-finder.component';
 import { StaffMemberFinderComponent } from './staff-member-finder/staff-member-finder.component';
 import { NoDoubleTapDirective } from './no-double-tap.directive';
 import { SharedContactgroupListComponent } from './shared-contactgroup-list/shared-contactgroup-list.component';
+import { ToPascalCasePipe } from './pipes/to-pascal-case.pipe';
 
 
 @NgModule({
@@ -118,7 +119,8 @@ import { SharedContactgroupListComponent } from './shared-contactgroup-list/shar
     OfficeFinderComponent,
     StaffMemberFinderComponent,
     NoDoubleTapDirective,
-    SharedContactgroupListComponent
+    SharedContactgroupListComponent,
+    ToPascalCasePipe
   ],
   imports: [
     CommonModule,
@@ -191,6 +193,7 @@ import { SharedContactgroupListComponent } from './shared-contactgroup-list/shar
     OfficeFinderComponent,
     StaffMemberFinderComponent,
     SharedContactgroupListComponent,
+    ToPascalCasePipe,
     // to be refactored
     InfiniteScrollModule,
     CollapseModule,
