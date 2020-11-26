@@ -1,14 +1,63 @@
-<div class="list-group list-group-flush">
-  <ng-container *ngIf="instructions$ | async as instructions">
-    <div class="list-group-item text-center text-danger" *ngIf="!instructions || !instructions?.length">
-      <i class="far fa-sad-tear"></i> No instructions
+<h2>Instructions</h2>
+<ng-container *ngIf="instructions$ | async as instructions">
+  <div class="list-group-item text-center text-danger" *ngIf="!instructions || !instructions?.length">
+    <i class="far fa-sad-tear"></i> No instructions
+  </div>
+
+  <div class="list-group-item" *ngIf="closedCounter">
+    <div class="custom-control custom-checkbox">
+      <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getInstructions()" class="custom-control-input" id="includeClosedInstructions">
+      <label class="custom-control-label small" for="includeClosedInstructions">Include closed instructions</label>
     </div>
-    <div class="list-group-item" *ngIf="closedCounter">
-      <div class="custom-control custom-checkbox">
-        <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getInstructions()" class="custom-control-input" id="includeClosedInstructions">
-        <label class="custom-control-label small" for="includeClosedInstructions">Include closed instructions</label>
-      </div>
-    </div>
+  </div>
+  
+  <div class="table">
+    <table class="table--mobile table--rowHover">
+      <thead>
+        <tr>
+          <th>Address</th>
+          <th>Status</th>
+          <th>Sales</th>
+          <th>Long Let</th>
+          <th>Short Let</th>
+          <th>Lister</th>
+          <th>Instructed</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let instruction of instructions">
+          <td data-title="Address">
+            <span class="cell-content">{{instruction?.propertyAddress}}</span>
+          </td>
+          <td data-title="Status">
+            <span class="cell-content" *ngIf="instruction.isActive"><span class="pill pill--positive">{{instruction?.status}}</span></span>
+            <span class="cell-content" *ngIf="!instruction.isActive"><span class="pill">{{instruction?.status}}</span></span>
+          </td>
+          <td data-title="Sales">
+            <span class="cell-content" *ngIf="instruction?.askingPrice, else noValue">{{instruction?.askingPrice | currency:'GBP':'symbol':'1.0-0'}}</span>
+          </td>
+          <td data-title="Long Let">
+            <span class="cell-content" *ngIf="instruction?.askingRent, else noValue">{{instruction?.askingRent | currency:'GBP':'symbol':'1.0-0'}} pw</span>
+          </td>
+          <td data-title="Short Let">
+            <span class="cell-content" *ngIf="instruction?.askingRentShortLet, else noValue">{{instruction?.askingRentShortLet | currency:'GBP':'symbol':'1.0-0'}} pw</span>
+          </td>
+          <td data-title="Lister">
+            <span class="cell-content">{{instruction?.staffMember}}</span>
+          </td>
+          <td data-title="Instructed">
+            <span class="cell-content">{{instruction?.instructionDate | date: 'dd/MM/yyyy'}}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</ng-container>
+
+<ng-template #noValue>-</ng-template>
+
+
+<!-- <div class="list-group list-group-flush">
     <div class="list-group-item list-header d-none d-sm-block d-xl-none" *ngIf="instructions && instructions?.length">
       <div class="row">
         <div class="col-sm-3"><strong>Address</strong></div>
@@ -20,27 +69,27 @@
         <div class="col-sm"><strong>Instructed</strong></div>
       </div>
     </div> 
-    <div class="list-group-item list-group-item-action" *ngFor="let instruction of instructions">
+    <div class="list-group-item list-group-item-action">
       <div class="row">
         <div class="col-sm-3 col-xl-12">
           <dl class="row">
             <dt class="col-4 d-sm-none d-xl-block">Address</dt>
-            <dd class="col">{{instruction?.propertyAddress}}</dd>
+            <dd class="col"></dd>
           </dl>
         </div>
         <div class="col-sm col-xl-12">
           <dl class="row">
             <dt class="col-4 d-sm-none d-xl-block">Status</dt>
-            <dd class="col" *ngIf="instruction.isActive"><span class="badge badge-pill badge-success" >{{instruction?.status}}</span></dd>
-            <dd class="col" *ngIf="!instruction.isActive"><span class="badge badge-pill badge-primary" >{{instruction?.status}}</span></dd>
+            <dd class="col"><span class="badge badge-pill badge-success" ></span></dd>
+            <dd class="col" ><span class="badge badge-pill badge-primary" ></span></dd>
           </dl>
         </div>
         <div class="col-sm col-xl-12">
           <dl class="row">
             <dt class="col-4 d-sm-none d-xl-block">Sales</dt>
             <dd class="col monospace">
-              <ng-container *ngIf="instruction?.askingPrice, else noValue">
-                {{instruction?.askingPrice | currency:'GBP':'symbol':'1.0-0'}}</ng-container>
+              <ng-container >
+                </ng-container>
             </dd>
           </dl>
         </div>
@@ -48,8 +97,8 @@
           <dl class="row">
             <dt class="col-4 d-sm-none d-xl-block">Long Let</dt>
             <dd class="col monospace">
-              <ng-container *ngIf="instruction?.askingRent, else noValue">
-                {{instruction?.askingRent | currency:'GBP':'symbol':'1.0-0'}} pw</ng-container>
+              <ng-container >
+                </ng-container>
             </dd>
           </dl>
         </div>
@@ -57,26 +106,25 @@
           <dl class="row">
             <dt class="col-4 d-sm-none d-xl-block">Short Let</dt>
             <dd class="col monospace">
-              <ng-container *ngIf="instruction?.askingRentShortLet, else noValue">
-                {{instruction?.askingRentShortLet | currency:'GBP':'symbol':'1.0-0'}} pw</ng-container>
+              <ng-container>
+                </ng-container>
             </dd>
           </dl>
         </div>
         <div class="col-sm col-xl-12">
           <dl class="row">
             <dt class="col-4 d-sm-none d-xl-block">Lister</dt>
-            <dd class="col">{{instruction?.staffMember}}</dd>
+            <dd class="col"></dd>
           </dl>
         </div>
         <div class="col-sm col-xl-12">
           <dl class="row">
             <dt class="col-4 d-sm-none d-xl-block">Instructed</dt>
-            <dd class="col monospace">{{instruction?.instructionDate | date: 'dd/MM/yyyy'}}</dd>
+            <dd class="col monospace"></dd>
           </dl>
         </div>
       </div>
     </div>
-  </ng-container>
-</div>
+  
+</div> -->
 
-<ng-template #noValue>-</ng-template>
