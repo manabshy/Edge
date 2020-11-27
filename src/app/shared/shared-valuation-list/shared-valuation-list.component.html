@@ -1,41 +1,90 @@
-<div class="list-group list-group-flush">
-  <ng-container *ngIf="valuations$ | async as valuations">
-    <div class="list-group-item" *ngIf="closedCounter">
-      <div class="custom-control custom-checkbox">
-        <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getValuations()" class="custom-control-input"
-          id="includeClosedValuations">
-        <label class="custom-control-label small" for="includeClosedValuations">Include previous valuations</label>
-      </div>
+<h2>Valuations</h2>
+<div class="table" *ngIf="valuations$ | async as valuations">
+  <div class="list-group-item" *ngIf="closedCounter">
+    <div class="custom-control custom-checkbox">
+      <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getValuations()" class="custom-control-input"
+        id="includeClosedValuations">
+      <label class="custom-control-label small" for="includeClosedValuations">Include previous valuations</label>
     </div>
+  </div>
+
+  <div class="list-group-item text-center text-danger" *ngIf="!valuations || !valuations?.length">
+    <i class="far fa-sad-tear"></i> No valuations
+  </div>
+
+  <table class="table--mobile table--rowHover">
+    <thead>
+      <tr>
+        <th>Address</th>
+        <th>Status</th>
+        <th>Sales</th>
+        <th>Short Let</th>
+        <th>Long Let</th>
+        <th>Lister</th>
+        <th>Valued</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr (click)="navigateToDetail(valuation)" *ngFor="let valuation of valuations">
+        <td data-title="Address">
+          <span class="cell-content">{{valuation?.property?.address |formatAddress}}</span>
+        </td>
+        <td data-title="Status">
+          <span class="cell-content" *ngIf="valuation?.isActive"><span class="pill pill--positive">{{valuation?.valuationStatusLabel}}</span></span>
+          <span class="cell-content" *ngIf="!valuation.isActive"><span class="pill">{{valuation?.valuationStatusLabel}}</span></span>
+        </td>
+        <td data-title="Sales">
+          <span class="cell-content" *ngIf="valuation?.suggestedAskingPrice, else noValue">{{valuation?.suggestedAskingPrice | currency:'GBP':'symbol':'1.0-0'}}</span>
+        </td>
+        <td data-title="Long Let">
+          <span class="cell-content" *ngIf="valuation?.suggestedAskingRentLongLet, else noValue">{{valuation?.suggestedAskingRentLongLet | currency:'GBP':'symbol':'1.0-0'}} pw</span>
+        </td>
+        <td data-title="Short Let">
+          <span class="cell-content" *ngIf="valuation?.suggestedAskingRentShortLet, else noValue">{{valuation?.suggestedAskingRentShortLet | currency:'GBP':'symbol':'1.0-0'}} pw</span>
+        </td>
+        <td data-title="Valuer">
+          <span class="cell-content" *ngIf="valuation.salesValuer">{{valuation?.salesValuer?.fullName}}<small *ngIf="valuation.salesValuer && valuation.lettingsValuer">,</small></span>
+          <span class="cell-content" *ngIf="valuation.lettingsValuer">{{valuation?.lettingsValuer?.fullName}}</span>
+        </td>
+        <td data-title="Valued">
+          <span class="cell-content">{{(valuation?.valuationDate | date: 'dd/MM/yyyy') || '-'}}</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<ng-template #noValue>-</ng-template>
+
+<!-- <div class="list-group list-group-flush">
+  <ng-container>
+    
     <div class="list-group-item list-header d-none d-sm-block d-xl-none">
       <div class="row">
         <div class="col-sm-3"><strong>Address</strong></div>
-        <div class="col-sm"><strong>Status</strong></div>
-        <div class="col-sm"><strong>Sales</strong></div>
-        <div class="col-sm"><strong>Short Let</strong></div>
-        <div class="col-sm"><strong>Long Let</strong></div>
-        <div class="col-sm"><strong>Lister</strong></div>
-        <div class="col-sm"><strong>Valued</strong></div>
+        <div class="col-sm"><strong></strong></div>
+        <div class="col-sm"><strong></strong></div>
+        <div class="col-sm"><strong></strong></div>
+        <div class="col-sm"><strong></strong></div>
+        <div class="col-sm"><strong></strong></div>
+        <div class="col-sm"><strong></strong></div>
       </div>
     </div>
-    <div class="list-group-item text-center text-danger" *ngIf="!valuations || !valuations?.length">
-      <i class="far fa-sad-tear"></i> No valuations
-    </div>
-    <a class="list-group-item list-group-item-action" (click)="navigateToDetail(valuation)"
-      *ngFor="let valuation of valuations">
+    
+    <a class="list-group-item list-group-item-action" >
       <div class="row">
         <div class="col-sm-3 col-xl-12">
           <dl class="row">
             <dt class="col-4 d-sm-none d-xl-block">Address</dt>
-            <dd class="col">{{valuation?.property?.address |formatAddress}}</dd>
+            <dd class="col"></dd>
           </dl>
         </div>
         <div class="col-sm col-xl-12">
           <dl class="row">
-            <dt class="col-4 d-sm-none d-xl-block">Status</dt>
-            <dd class="col" *ngIf="valuation?.isActive"><span
-                class="badge badge-pill badge-success">{{valuation?.valuationStatusLabel}}</span></dd>
-            <dd class="col" *ngIf="!valuation.isActive"><span
+            <dt class="col-4 d-sm-none d-xl-block"></dt>
+            <dd class="col"><span
+                class="badge badge-pill badge-success"></span></dd>
+            <dd class="col"><span
                 class="badge badge-pill badge-primary">{{valuation?.valuationStatusLabel}}</span></dd>
           </dl>
         </div>
@@ -43,45 +92,44 @@
           <dl class="row">
             <dt class="col-4 d-sm-none d-xl-block">Sales</dt>
             <dd class="col monospace">
-              <ng-container *ngIf="valuation?.suggestedAskingPrice, else noValue">
-                {{valuation?.suggestedAskingPrice | currency:'GBP':'symbol':'1.0-0'}}</ng-container>
+              <ng-container >
+                </ng-container>
             </dd>
           </dl>
         </div>
         <div class="col-sm col-xl-12">
           <dl class="row">
-            <dt class="col-4 d-sm-none d-xl-block">Long Let</dt>
+            <dt class="col-4 d-sm-none d-xl-block"></dt>
             <dd class="col monospace">
-              <ng-container *ngIf="valuation?.suggestedAskingRentLongLet, else noValue">
-                {{valuation?.suggestedAskingRentLongLet | currency:'GBP':'symbol':'1.0-0'}} pw</ng-container>
+              <ng-container>
+                </ng-container>
             </dd>
           </dl>
         </div>
         <div class="col-sm col-xl-12">
           <dl class="row">
-            <dt class="col-4 d-sm-none d-xl-block">Short Let</dt>
+            <dt class="col-4 d-sm-none d-xl-block"></dt>
             <dd class="col monospace">
-              <ng-container *ngIf="valuation?.suggestedAskingRentShortLet, else noValue">
-                {{valuation?.suggestedAskingRentShortLet | currency:'GBP':'symbol':'1.0-0'}} pw</ng-container>
+              <ng-container>
+                </ng-container>
             </dd>
           </dl>
         </div>
         <div class="col-sm col-xl-12">
           <dl class="row">
-            <dt class="col-4 d-sm-none d-xl-block">Valuer</dt>
-            <dd class="col" *ngIf="valuation.salesValuer">{{valuation?.salesValuer?.fullName}}<small *ngIf="valuation.salesValuer && valuation.lettingsValuer">,</small></dd>
-            <dd class="col" *ngIf="valuation.lettingsValuer">{{valuation?.lettingsValuer?.fullName}}</dd>
+            <dt class="col-4 d-sm-none d-xl-block"></dt>
+            <dd class="col" ></dd>
+            <dd class="col"></dd>
           </dl>
         </div>
         <div class="col-sm col-xl-12">
           <dl class="row">
-            <dt class="col-4 d-sm-none d-xl-block">Valued</dt>
-            <dd class="col monospace">{{(valuation?.valuationDate | date: 'dd/MM/yyyy') || '-'}}</dd>
+            <dt class="col-4 d-sm-none d-xl-block"></dt>
+            <dd class="col monospace"></dd>
           </dl>
         </div>
       </div>
     </a>
   </ng-container>
-</div>
+</div> -->
 
-<ng-template #noValue>-</ng-template>
