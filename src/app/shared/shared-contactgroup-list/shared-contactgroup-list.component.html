@@ -1,16 +1,17 @@
-<div class="table-responsive">
-  <table class="table table-hover border bg-white">
+<h2>Contact Groups</h2>
+
+<div class="table">
+  <table class="table--mobile table--rowHover">
     <thead>
       <tr>
-        <th scope="col">Names</th>
-        <th scope="col">Type</th>
+        <th>Names</th>
+        <th>Type</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let contactGroup of contactGroups" (click)="navigateTo(['people', contactGroup.contactGroupId])">
-        <td>
-          <ng-container *ngFor="let contactPerson of contactGroup?.contactPeople;  last as isLast; first as isFirst">
-            <br class="d-sm-none" *ngIf="!isFirst" />
+        <td data-title="Names" *ngFor="let contactPerson of contactGroup?.contactPeople;  last as isLast; first as isFirst">
+          <span class="cell-content">
             <ng-container *ngIf="contactPerson?.personId === personId; else link">
               {{contactPerson?.addressee}}
             </ng-container>
@@ -19,16 +20,42 @@
                 (click)="$event.stopPropagation();">{{contactPerson?.addressee}}</a>
             </ng-template>
             <ng-container *ngIf="!isLast">, </ng-container>
-          </ng-container>
+          </span>
         </td>
-        <td>
-          <ng-container *ngIf="contactGroup?.isCompany; else peopleIcon"> <i class="fas fa-briefcase mr-2 fa-fw"></i>
-            Company</ng-container>
-          <ng-template #peopleIcon>
-            <i class="fas fa-users mr-2 fa-fw"></i> People
-          </ng-template>
+        <td data-title="Type">
+          <span class="cell-content">
+            <ng-container *ngIf="contactGroup?.isCompany; else peopleIcon"> <i class="fas fa-briefcase mr-2 fa-fw"></i>
+              Company</ng-container>
+            <ng-template #peopleIcon>
+              <i class="fas fa-users mr-2 fa-fw"></i> People
+            </ng-template>
+          </span>
         </td>
       </tr>
     </tbody>
   </table>
 </div>
+
+<!-- <div class="table-responsive">
+  <table class="table table-hover border bg-white">
+    <thead>
+      <tr>
+        <th scope="col">Names</th>
+        <th scope="col">Type</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <ng-container>
+            <br class="d-sm-none" *ngIf="!isFirst" />
+            
+          </ng-container>
+        </td>
+        <td>
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div> -->
