@@ -289,7 +289,7 @@
       </ng-container>
     </div>
 
-    <div class="scroll-to-top">
-      <button class="btn btn-secondary rounded" (click)="scrollTo(contactDetails)"><i class="fas  fa-chevron-up d-inline-block d-sm-none"></i></button>
+    <div class="scroll-to-top" [ngClass]="{'show-scrollTop': windowScrolled}">
+      <button class="btn btn-secondary rounded" (click)="scrollToTop()"><i class="fas  fa-chevron-up d-inline-block d-sm-none"></i></button>
     </div>
   </div>
