@@ -204,6 +204,11 @@ export class ContactgroupsRedesignComponent extends BaseComponent implements OnI
     console.log('info type', this.moreInfo);
 
   }
+
+  scrollTo(el: HTMLElement) {
+    el.scrollIntoView({ block: 'start', behavior: 'smooth' });
+  }
+
   isObject(val) {
     return val instanceof Object;
   }
