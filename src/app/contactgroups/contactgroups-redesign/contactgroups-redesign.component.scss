@@ -1082,6 +1082,14 @@ Font-face setup
 
 }
 
+@font-face {
+  font-family:'redacted';
+  src:  url('../../../assets/font/redacted.woff2') format('woff2'),
+        url('../../../assets/font/redacted.woff') format('woff');
+  font-weight:normal;
+  font-style:normal;
+}
+
 /***** Fonts overrides *****/
 body, form, input, textarea, select, label,
 .select select, .select optgroup option,

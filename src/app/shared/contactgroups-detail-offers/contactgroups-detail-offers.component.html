@@ -1,8 +1,89 @@
+<h2>Offers</h2>
+
 <div class="list-group list-group-flush">
   <ng-container *ngIf="offers$|async as offers">
-    <div class="list-group-item text-center text-danger" *ngIf="!offers || !offers?.length">
-      <i class="far fa-sad-tear"></i> No offers
+    <div class="table" *ngIf="!offers || !offers?.length">
+      <div class="overlay">
+        <div class="card">
+          <div class="card__body"><i class="far fa-sad-tear"></i> No offers</div>
+        </div>
+      </div>
+      <table class="table--mobile table--rowHover txt--redacted">
+        <thead>
+          <tr>
+            <th>Address</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Amount</th>
+            <th>Received</th>
+            <th>Neg</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td data-title="Address">
+              <span class="cell-content">Bushwick etsy pug</span>
+            </td>
+            <td data-title="Type">
+              <span class="cell-content">occupy flexitarian</span>
+            </td>
+            <td data-title="Status">
+              <span class="cell-content">cornhole pitchfork cronut</span>
+            </td>
+            <td data-title="Amount">
+              <span class="cell-content">lo-fi vaporware</span>
+            </td>
+            <td data-title="Received">
+              <span class="cell-content">chambray ethical</span>
+            </td>
+            <td data-title="Neg">
+              <span class="cell-content">Listicle disrupt</span>
+            </td>
+          </tr>
+          <tr>
+            <td data-title="Address">
+              <span class="cell-content">Bushwick etsy pug</span>
+            </td>
+            <td data-title="Type">
+              <span class="cell-content">occupy flexitarian</span>
+            </td>
+            <td data-title="Status">
+              <span class="cell-content">cornhole pitchfork cronut</span>
+            </td>
+            <td data-title="Amount">
+              <span class="cell-content">lo-fi vaporware</span>
+            </td>
+            <td data-title="Received">
+              <span class="cell-content">chambray ethical</span>
+            </td>
+            <td data-title="Neg">
+              <span class="cell-content">Listicle disrupt</span>
+            </td>
+          </tr>
+          <tr>
+            <td data-title="Address">
+              <span class="cell-content">Bushwick etsy pug</span>
+            </td>
+            <td data-title="Type">
+              <span class="cell-content">occupy flexitarian</span>
+            </td>
+            <td data-title="Status">
+              <span class="cell-content">cornhole pitchfork cronut</span>
+            </td>
+            <td data-title="Amount">
+              <span class="cell-content">lo-fi vaporware</span>
+            </td>
+            <td data-title="Received">
+              <span class="cell-content">chambray ethical</span>
+            </td>
+            <td data-title="Neg">
+              <span class="cell-content">Listicle disrupt</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+
     <div class="list-group-item" *ngIf="closedCounter">
       <div class="custom-control custom-checkbox">
         <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getOffers()" class="custom-control-input" id="includeClosedOffers">
