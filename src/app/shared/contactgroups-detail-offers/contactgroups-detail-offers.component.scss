@@ -58,7 +58,7 @@ td:empty                                        { display:none; visibility:hidde
 .icon--s.icon--onRight                          { margin-left:5px; }
 
 .overlay                                        { display:flex; width:100%; height:100%; align-items:center; justify-content:center; position:absolute; top:0; left:0; z-index:6; }
-.overlay .card                                  { width:400px; background-color:#0A1A4A; color:#FFFFFF; box-shadow:none; }
+.overlay .card                                  { width:90%; background-color:#0A1A4A; color:#FFFFFF; box-shadow:none; }
 .txt--redacted                                  { font-family:'redacted'; font-size:18px; line-height:18px; }
 
 /***********************************************
@@ -88,4 +88,13 @@ Tablet - This applies from 768px onwards
     .table--stripes tr:nth-child(odd)             { background-color:#F2FBFE; }
 
     .table--mobile td .cell-content               { width:auto; }
+
+    .overlay .card                                { width:400px; }
   }
+
+  /***********************************************
+Mobile ONLY - This applies from 0px to 767px
+***********************************************/
+@media only screen and (max-width:767px) {
+    .table--mobile tr.hide--mobile                  { display:none; }
+}
