@@ -1363,4 +1363,7 @@ Mobile ONLY - This applies from 0px to 767px
   ;
 }
 .aside .scrollY                                 {padding:0 50px; }
+.scroll-to-top { position: fixed; bottom: 15px; right: 15px; margin: 1rem;opacity: 0;transition: all .2s ease-in-out;
+}
+.show-scrollTop { opacity: 1;transition: all .2s ease-in-out; }
 }

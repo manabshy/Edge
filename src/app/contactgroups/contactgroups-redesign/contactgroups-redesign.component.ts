@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import _ from 'lodash';
@@ -10,6 +10,7 @@ import { Person } from 'src/app/shared/models/person';
 import { SubNavItem } from 'src/app/shared/subnav';
 import { BasicContactGroup, ContactGroup, ContactNote, PersonSummaryFigures, ContactGroupDetailsSubNavItems } from '../shared/contact-group';
 import { ContactGroupsService } from '../shared/contact-groups.service';
+// import { DOCUMENT } from "@angular/platform-browser";
 
 @Component({
   selector: 'app-contactgroups-redesign',
@@ -59,11 +60,30 @@ export class ContactgroupsRedesignComponent extends BaseComponent implements OnI
     };
   }
 
+  windowScrolled: boolean;
   constructor(private contactGroupService: ContactGroupsService,
     private sharedService: SharedService,
     private storage: StorageMap,
     private infoService: InfoService,
     private route: ActivatedRoute) { super(); }
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    if (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop > 100) {
+      this.windowScrolled = true;
+    } else if (this.windowScrolled && window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop < 10) {
+      this.windowScrolled = false;
+    }
+  }
+  scrollToTop() {
+    (function smoothscroll() {
+      const currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
+      if (currentScroll > 0) {
+        window.requestAnimationFrame(smoothscroll);
+        window.scrollTo(0, currentScroll - (currentScroll / 8));
+      }
+    })();
+  }
 
   ngOnInit() {
     this.showNotes = this.route.snapshot.queryParamMap.get('showNotes') === 'true';
@@ -204,6 +224,11 @@ export class ContactgroupsRedesignComponent extends BaseComponent implements OnI
     console.log('info type', this.moreInfo);
 
   }
+
+  scrollTo(el: HTMLElement) {
+    el.scrollIntoView({ block: 'start', behavior: 'smooth' });
+  }
+
   isObject(val) {
     return val instanceof Object;
   }

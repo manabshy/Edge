@@ -1,9 +1,9 @@
 <div class="body">
   <div class="row1">
     <div class="row__item row__item--aside">
-      <div class="card">
+      <div #contactDetails class="card">
         <div class="card__header">
-          <span>
+          <span >
             <sup class="sup--positive">100% Match</sup>
             <p class="txt--title">Mr Bruce Wayne</p>
           </span>
@@ -120,7 +120,7 @@
         <div class="card__body">
           <ol class="list list--divider list--hover">
             <li [ngClass]="{current: item.isCurrent}" *ngFor="let item of types;index as i">
-              <a role="button" class="overall" (click)="setinfoType(item?.name,i)"></a>
+              <a role="button" class="overall" (click)="setinfoType(item?.name,i); scrollTo(mainRowItem)"></a>
               {{item?.name|toPascalCase}}
               <ng-container *ngIf="summaryTotals; else loadingInfo">
                 <ng-container *ngIf="isObject(summaryTotals[item?.name]); else simpleValue">
@@ -143,7 +143,7 @@
         </div>
       </div>
     </div>
-    <div class="row__item">
+    <div #mainRowItem class="row__item">
       <!-- <h2>Notes</h2>
       <ol class="timeline">
         <li class="timeline__new">
@@ -287,5 +287,9 @@
         <app-shared-contactgroup-list *ngSwitchCase="'contactGroups'" [contactGroups]="searchedPersonContactGroups"
           [personId]="searchedPersonDetails?.personId"></app-shared-contactgroup-list>
       </ng-container>
+    </div>
+
+    <div class="scroll-to-top" [ngClass]="{'show-scrollTop': windowScrolled}">
+      <button class="btn btn-secondary rounded" (click)="scrollToTop()"><i class="fas  fa-chevron-up d-inline-block d-sm-none"></i></button>
     </div>
   </div>
