@@ -1,0 +1,44 @@
+/***********************************************
+Color Palette
+***********************************************/
+$color--midnight:       #0A1A4A;
+$color--midnight-70:    #535E80;
+$color--midnight-50:    #848CA4;
+$color--midnight-20:    #CED1DB;
+$color--midnight-10:    #E7E8EE;
+
+$color--info:           #3498DB;
+$color--negative:       #E74C3C;
+$color--warning:        #FFB134;
+
+$color--blue-100:       #BFEBFA;
+$color--blue-20:        #F2FBFE;
+
+$color--positive:       #4DA685;
+$color--positive-50:    #A6D2C2;
+$color--positive-20:    #DBEDE7;
+$color--positive-10:    #EDF6F2;
+
+$color--blossom:        #F9CBDF;
+$color--blossom-10:     #FEF9FB;
+
+$color--snow:           #FFFFFF;
+$color--smoke:          #F3F4F7;
+
+/***** Fills *****/
+.icon--fill-midnight-70                         { fill:$color--midnight-70; }
+.icon--fill-midnight-50                         { fill:$color--midnight-50; }
+.icon--fill-midnight-20                         { fill:$color--midnight-20; }
+
+.icon--fill-info                                { fill:$color--info; }
+.icon--fill-negative                            { fill:$color--negative; }
+.icon--fill-positive                            { fill:$color--positive; }
+
+.icon--fill-snow                                { fill:$color--snow; }
+
+/***** Fills for oredering *****/
+.oredered-asc .icon .asc                        { fill:$color--info; }
+.oredered-asc .icon .des                        { fill:$color--midnight-10; }
+
+.oredered-des .icon .asc                        { fill:$color--midnight-10; }
+.oredered-des .icon .des                        { fill:$color--info; }

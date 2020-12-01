@@ -1,117 +1,280 @@
-.col-form-label{
-    text-align: right;
+/*
+* Amazium (http://www.amazium.co.uk)
+* Copyright 2010 - 2019, Mike Ballan
+* Licensed under MIT (https://github.com/OwlyStuff/Amazium/blob/master/LICENSE)
+*/
 
-    @include media-breakpoint-down(sm){
-        text-align: left;
-    }
+/* Table of contents
+––––––––––––––––––––––––––––––––––––––––––––––––––
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+*/
+
+/*********************************************** 
+Form typography setup
+***********************************************/
+form, label, input, textarea, select, 
+.select select, .select optgroup option, 
+.select optgroup option, 
+.checkbox > span label, .radio > span label, 
+form .message, .btn                            	{ font-family:sans-serif; font-weight:normal; }
+form + *, fieldset + *, fieldset small + *, 
+label + *, .label + *, input + *, 
+textarea + *, .select + *, .inline-parent + *  	{ margin-top:20px; }
+input, textarea, select                        	{ border-color:#d8d9db; }
+
+/*********************************************** 
+Forms with labels
+***********************************************/
+form                                           	{ padding:0; display:inline-block; width:100%; }
+form .invalid > label, 
+form .invalid input:checked + label            	{ color:#e74c3c; }
+form .invalid input:checked + label:before     	{ background-color:#e74c3c; border-color:#e74c3c; }
+form .invalid input, form .invalid textarea, 
+form .invalid select, form .invalid textarea   	{ border-color:#e74c3c; }
+form fieldset .message                         	{ margin:0; border-radius:0 0 3px 3px; top:-2px; }
+form fieldset.invalid .radio input:checked + label:before, 
+form fieldset .invalid .radio input:checked + label:before { background-color:transparent; }
+
+/***** Fieldset *****/
+fieldset                                       	{ padding:0; text-align:left; display:block; max-width:500px; position:relative; top:0; left:0; }
+.fieldset--width-max 							{ max-width:100%; }
+fieldset small                                 	{ display:block; line-height:14px; }
+
+/***** Label *****/
+label, .label                                  	{ width:100%; display:block; color:#0A1A4A; font-weight:500; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; }
+label + input, .label + input, 
+label + textarea, .label + textarea, 
+label + .select, .label + .select              	{ margin-top:6px; }
+label + p, .label + p                          	{ margin:0 0 6px; }
+
+/***** Inputs *****/
+input, textarea, select                        	{ padding:0.4em 0.8em; display:block; border-radius:0; width:100%; min-height:30px; color:#555; border-width:1px; border-radius:3px; border-style:solid; overflow:hidden; position:relative; top:0; left:0; outline:0 none; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; -webkit-appearance:none; transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -moz-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -webkit-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -o-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; }
+textarea                                       	{ resize:none; min-height:100px; overflow-y:auto; }
+input[type="search"]                           	{ -webkit-padding-start:0; }
+
+/*********************************************** 
+Select 
+***********************************************/
+.select                                         { margin-top:6px; padding:0; position:relative; display:block; width:100%; right:0; top:0; background:#fff; overflow:hidden; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; }
+.select:after                                   { margin:0; padding:0; content:''; background-color:#fff; background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QzlFNERGRkExNTgwMTFFNjlCOTU5QjY1QkU5MkYyMDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QzlFNERGRkIxNTgwMTFFNjlCOTU5QjY1QkU5MkYyMDgiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpDOUU0REZGODE1ODAxMUU2OUI5NTlCNjVCRTkyRjIwOCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpDOUU0REZGOTE1ODAxMUU2OUI5NTlCNjVCRTkyRjIwOCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PksuSU4AAADRSURBVHjaxNPNCkFBFMDxeyWPwDtYWLCwkZWQKFE+yhPwFLyCvRVWLJTIV8ra1sbSkhQlRXT91SwG9+rqklO/1XTOzJwzo2qaplgJm2IxLBewl8rVr5yghuAHeVlU5AJO9BAwkZxDAy65QAZzdOF/k5xGHS0U5QJHxLHAAF6d5ASa6KCA6/MUDohhiSE80lpU7DpCHhejMe4RxgpjuBFCG1NxhfPDGHWOukMEE9EXB2ZI4fTyDgyatRE797FFUvRJMVvgHmv4fv6U1b//xpsAAwDgFiuTckGaBAAAAABJRU5ErkJggg=="); background-repeat:no-repeat; background-size:10px; background-position:center; color:#999; line-height:28px; text-align:center; right:0; top:0; width:28px; height:28px; border-radius:3px; position:absolute; top:1px; right:1px; pointer-events:none; }
+.select select                                  { margin:0; background-color:#fff; width:100%; color:#555; border:solid 1px #d8d9db; display:block; -webkit-appearance:none; -moz-appearance:none; appearance:none; -webkit-padding-before:4px; -webkit-padding-start:10px; cursor:pointer; }
+.select option                                  { padding:0 10px; border-bottom:1px solid #f3f3f3; }
+.select optgroup                                { padding:0; color:#1a2730; background-color:#fff; }
+.select optgroup[label]                         { padding-top:10px; background-color:#fff; font-weight:normal; font-style:normal; }
+.select optgroup:first-child                    { margin:10px 0 0 0; border-top:1px solid #f2f2f2; }
+
+/*********************************************** 
+Radios & Checkboxes
+***********************************************/
+.radio, .checkbox                               { margin-top:6px; width:100%; display:block; overflow:hidden; }
+
+/***** Inline Radio & Checkboxes *****/
+.radio input, .checkbox input                   { display:none; }
+.radio > span, .checkbox > span                 { padding:0; position:relative; top:0; left:0; width:auto; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; }
+.radio > span:first-child label, 
+.checkbox > span:first-child label              { margin:0; }
+.radio > span label, 
+.checkbox > span label                          { margin:6px 0 0; padding:0 0 0 30px; width:100%; line-height:22px; text-align:left; cursor:pointer; float:none; display:block; position:relative; left:0; top:0; }
+.radio.radio--inline > span, 
+.checkbox.radio--inline > span, 
+.radio.checkbox--inline > span, 
+.checkbox.checkbox--inline > span               { margin:0; display:inline-block; }
+.radio.radio--inline > span:not(:last-child), 
+.checkbox.radio--inline > span:not(:last-child), 
+.radio.checkbox--inline > span:not(:last-child), 
+.checkbox.checkbox--inline > span:not(:last-child) { margin-right:16px; }
+.radio.radio--inline > span label, 
+.checkbox.radio--inline > span label, 
+.radio.checkbox--inline > span label, 
+.checkbox.checkbox--inline > span label         { margin:0; }
+
+/***** Radio *****/
+.radio input + label:before                     { margin:0; content:''; position:absolute; left:0; top:0; background-color:transparent; border-width:1px; border-style:solid; cursor:pointer; display:inline-block; height:20px; width:20px; text-align:center; line-height:22px; color:#ccc; border-radius:50%; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; transition:all 0.2s linear 0s; -moz-transition:all 0.2s linear 0s; -webkit-transition:all 0.2s linear 0s; -o-transition:all 0.2s linear 0s; }
+.radio input:checked + label:before, 
+.radio input[type="radio"]:checked              { border:6px solid #3498DB; transition:all 0.2s linear 0s; -moz-transition:all 0.2s linear 0s; -webkit-transition:all 0.2s linear 0s; -o-transition:all 0.2s linear 0s; }
+
+/***** Checkboxe *****/
+.checkbox input + label:before                  { margin:0; content:''; background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QTFCRTE4Q0IxNTc5MTFFNjlCOTU5QjY1QkU5MkYyMDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QTFCRTE4Q0MxNTc5MTFFNjlCOTU5QjY1QkU5MkYyMDgiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo0MkMxNjBDNjBFMTYxMUU2OUI5NTlCNjVCRTkyRjIwOCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpBMUJFMThDQTE1NzkxMUU2OUI5NTlCNjVCRTkyRjIwOCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PuFgne4AAADHSURBVHjaYvj//z8DGdgFiL8BcSM5mlWA+N1/CPhDqmY+IL72HwE6SNHMBMSbkDRvBImRYkArkuYLQMwDEidWcziS5hdALAeTAxFsQGyAR7MhNMRB4DsQWyDLg4j1UMkSLJrFgfghku2R6GoYkEwHgTAkSZDLDiHJNWNzIYiIQFL0E4htoZIzkcRXAjEjLgNAOB9J8Wcg3ofEPwPEXLjCCFc0wcATIJbEF0PIHJAT5yJpBoWNEaEoRhdgBuIV0OgKICaNAAQYAPD/2FJuxgMsAAAAAElFTkSuQmCC"); background-repeat:no-repeat; background-size:1px; background-position:center; position:absolute; left:0; top:0; background-color:#fff; border-width:1px; border-radius:3px; border-style:solid; cursor:pointer; display:inline-block; height:20px; width:20px; text-align:center; line-height:22px; color:#ccc; transition:all 0.2s linear 0s; -moz-transition:all 0.2s linear 0s; -webkit-transition:all 0.2s linear 0s; -o-transition:all 0.2s linear 0s; }
+.checkbox input:checked + label:before          { background-color:#3498DB; content:''; background-size:10px; border-color:#3498DB; color:#fff; transition:all 0.2s linear 0s; -moz-transition:all 0.2s linear 0s; -webkit-transition:all 0.2s linear 0s; -o-transition:all 0.2s linear 0s; }
+
+/***** Checkboxe Switch *****/
+.switch > span                                  { display:inline-block; width:auto; }
+.switch > span label                            { padding:0 0 0 46px; }
+.switch input + label:before                    { content:''; background:none; background-color:#d8d9db; display:block; width:36px; height:20px; border:none; border-radius:5px; position:absolute; top:0; left:0; z-index:5; }
+.switch input + label:after                     { content:''; background-color:#fff; display:block; width:16px; height:16px; border:none; border-radius:3px; position:absolute; top:2px; left:2px; z-index:6; transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -moz-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -webkit-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -o-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; }
+.switch input:checked + label:before            { background-color:#3498DB; }
+.switch input:checked + label:after             { left:18px; }
+.switch--right                                  { width:auto; }
+.switch--right > span label                     { width:auto; padding:0 46px 0 0; }
+.switch--right > span label:before              { left:auto; right:0; }
+.switch--right > span label:after               { left:auto; right:18px; }
+.switch--right input:checked + label:after      { left:auto; right:2px; }
+
+/***** Checkboxes & Radios Toggle *****/
+.toggle                                         { padding:2px; border:1px solid #d8d9db; width:100%; display:block; border-radius:3px; }
+.toggle > span                                  { margin:0; padding:0; min-width:100px; }
+.toggle > span label                            { margin:0; padding:2px 20px 0; text-align:center; }
+.toggle > span span                             { position:relative; z-index:9; }
+.toggle input:checked + label                   { color:#fff; }
+.toggle input:checked + label:before            { border:none; }
+.toggle input + label:before                    { background-color:transparent; border:none; width:100%; height:24px; border-radius:3px; position:absolute; z-index:2; transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -moz-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -webkit-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -o-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; }
+.toggle input:checked + label:before            { background-color:#3498DB; content:''; transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -moz-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -webkit-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -o-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; }
+.toggle .positive input:checked + label:before  { background-color:#29b765; }
+.toggle .warning input:checked + label          { color:#333; }
+.toggle .warning input:checked + label:before   { background-color:#ffc82c; }
+.toggle .negative input:checked + label:before  { background-color:#e74c3c; }
+
+/*********************************************** 
+Inline items
+***********************************************/
+.inline-parent                                  { display:flex; align-items:flex-end; }
+.inline-parent input, 
+.inline-parent textarea, 
+.inline-parent select, 
+.inline-parent .select                          { width:100%; }
+.inline-parent .inline-child                    { margin:0 20px 0 0; max-width:100%; display:flex; flex:1; flex-direction:column; vertical-align:bottom; align-self:flex-end; }
+.inline-parent .inline-child + * 		  		{ margin-top:20px; }
+.inline-parent .inline-child .message           { width:100%; }
+.inline-parent .inline-child:last-child         { margin-right:0; }
+
+.inline-parent .inline-child--grid-1            { flex:0 0 calc(10% - 10px); }
+.inline-parent .inline-child--grid-2            { flex:0 0 calc(20% - 10px); }
+.inline-parent .inline-child--grid-3            { flex:0 0 calc(30% - 10px); }
+.inline-parent .inline-child--grid-4            { flex:0 0 calc(40% - 10px); }
+.inline-parent .inline-child--grid-5            { flex:0 0 calc(50% - 10px); }
+.inline-parent .inline-child--grid-6            { flex:0 0 calc(60% - 10px); }
+.inline-parent .inline-child--grid-7            { flex:0 0 calc(70% - 10px); }
+.inline-parent .inline-child--grid-8            { flex:0 0 calc(80% - 10px); }
+.inline-parent .inline-child--grid-9            { flex:0 0 calc(90% - 10px); }
+.flex-grow                                      { flex-grow:1; }
+
+/*********************************************** 
+Inline elements
+***********************************************/
+.has-inline-elements                            { margin-top:6px; position:relative; display:block; border-collapse:separate; width:100%; align-items:flex-end; }
+.has-inline-elements input,
+.has-inline-elements textarea,
+.has-inline-elements select,
+.has-inline-elements .select                    { margin-top:0; }
+.has-inline-elements .btn--container            { margin:6px 0 0; padding:0; display:block; white-space:nowrap; vertical-align:bottom; align-self:flex-end; }
+.has-inline-elements .btn--container .btn       { margin-top:0; }
+
+/*********************************************** 
+Disabled
+***********************************************/
+:disabled                                       { cursor:not-allowed; }
+:disabled::-webkit-input-placeholder            { color:#d8d9db; opacity:1; }
+:disabled:-moz-placeholder                      { color:#d8d9db; opacity:1; }
+:disabled::-moz-placeholder                     { color:#d8d9db; opacity:1; }
+:disabled:-ms-input-placeholder                 { color:#d8d9db; opacity:1; }
+fieldset:disabled                               { opacity:0.5; }
+fieldset:disabled input[type="radio"]           { background-color:transparent; }
+
+/*********************************************** 
+Placeholder
+***********************************************/
+::-webkit-input-placeholder                     { color:#d8d9db; }
+:-moz-placeholder                               { color:#d8d9db; }
+::-moz-placeholder                              { color:#d8d9db; }
+:-ms-input-placeholder                          { color:#d8d9db; }
+input:focus, 
+select:focus, 
+textarea:focus                                  { color:#222; border-color:#3498DB; outline:none; box-shadow:none; outline-color:transparent; outline-style:none; }
+:focus::-webkit-input-placeholder               { color:#555; outline:none; }
+:focus:-moz-placeholder                         { color:#555; outline:none; }
+:focus::-moz-placeholder                        { color:#555; outline:none; }
+:focus:-ms-input-placeholder                    { color:#555; outline:none; }
+
+/*********************************************** 
+Forms with inline labels
+***********************************************/
+.labels--inline label                           { padding:11px 16px 0 0; float:left; width:30%; text-align:right; }
+.labels--inline input, 
+.labels--inline .select, 
+.labels--inline textarea, 
+.labels--inline .message, 
+.labels--inline .toggled                        { width:70%; float:right; }
+.labels--inline button:first-of-type            { margin-left:30%; }
+.labels--inline .checkbox, 
+.labels--inline .radio                          { margin-left:30%; width:70%; }
+.labels--inline .radio input, 
+.labels--inline .checkbox input                 { width:auto; }
+.labels--inline .toggled label                  { width:50px; }
+/*********************************************** 
+Forms without labels
+***********************************************/
+.labels--hidden label                           { display:none; }
+
+/*********************************************** 
+Tablet - This applies from 768px onwards
+***********************************************/
+@media (min-width:768px) {
+   .has-inline-elements                         { display:flex; }
+   .has-inline-elements input,
+   .has-inline-elements textarea,
+   .has-inline-elements select,
+   .has-inline-elements .select                 { flex:1; }
+   .has-inline-elements .btn--container         { margin:0; padding:0 0 0 10px; }
+   .inline-parent .inline-child + * 		  	{ margin-top:0; }
 }
 
-:disabled {
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    background: none;
-    padding-right: $input-padding-x!important;
 
-    &:not(.btn) {
-        color: $body-color!important;
-    }
+/*********************************************** 
+Smaller screen - This applies from 992px onwards
+***********************************************/
+@media (min-width:992px)                        {
+   /***** Checkboxes & Radios Toggle *****/
+   .toggle                                      { display:flex; }
+   .toggle > span                               { flex-grow:1; }
 
-    &::-ms-expand {
-        display: none;
-    }
+   /*********************************************** 
+   Input Widths
+   ***********************************************/
+   .input--grid-1                               { width:calc(10% - 10px); }
+   .input--grid-2                               { width:calc(20% - 10px); }
+   .input--grid-3                               { width:calc(30% - 10px); }
+   .input--grid-4                               { width:calc(40% - 10px); }
+   .input--grid-5                               { width:calc(50% - 10px); }
+   .input--grid-6                               { width:calc(60% - 10px); }
+   .input--grid-7                               { width:calc(70% - 10px); }
+   .input--grid-8                               { width:calc(80% - 10px); }
+   .input--grid-9                               { width:calc(90% - 10px); }
 }
 
-.form-control-plaintext {
-    // -moz-appearance: none;
-    // -webkit-appearance: none;
-    // background-color: transparent !important;
-    // background: none;
-    // font-weight: bold;
-    // border: none;
-    // padding-left: 0!important;
-    // padding-right: 0!important;
-    // color: $body-color!important;
 
-    // &::-ms-expand {
-    //     display: none;
-    // }
-}
-
-.input-group {
-    select:not(.single-select) {
-        flex: 0 0 auto!important;
-        width: auto!important;
-    }
-
-    .input-group-append {
-        .btn:last-child {
-            border-top-right-radius: $border-radius !important;
-            border-bottom-right-radius: $border-radius !important;
-        }
-
-        & + input, & + select, & + textarea {
-            margin-left: -1px!important;
-
-            @include media-breakpoint-down(sm) {
-                border-top-left-radius: $border-radius !important;
-                border-bottom-left-radius: $border-radius !important;
-                flex: 0 0 100%!important;
-                width: 100%!important;
-            }
-        }
-    }
-}
-
-.invalid-feedback {
-    white-space: pre;
-}
-
-.is-invalid {
-    background-image: none!important;
-}
-
-select.is-invalid {
-    background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") $input-bg no-repeat right 0.75rem center/8px 10px !important;
-}
-
-fieldset {
-    .fieldset-title {
-        font-size: $h5-font-size;
-        font-weight: $headings-font-weight;
-        line-height: $headings-line-height;
-        @include media-breakpoint-up(sm){
-            padding: spacer(2);
-            background-color: theme-color("light");
-        }
-    }
-
-    & + fieldset {
-        margin-top: spacer(3);
-    }
-}
-
-.fake-readonly[readonly]{
-    background-color: $input-bg;
-}
-
-.custom-checkbox .custom-control-input:disabled:checked ~ .custom-control-label::before {
-    background-image: none;
-}
-
-.custom-control-label {
-    &.small {
-        line-height: 2;
-    }
-}
-
-.search-form {
-    padding: spacer(2) 0;
-    position: sticky;
-    top: 0;
-    background: color('white');
-    z-index: 100;
-
-    @include media-breakpoint-down(lg) {
-        top: $top-bar-height;
-    }
+/*********************************************** 
+Mobile (portrait 300px)
+***********************************************/
+@media only screen and (max-width:767px)        {
+   .labels--inline label                        { padding:0 0 6px; float:none; width:100%; text-align:left; }
+   .labels--inline input,
+   .labels--inline .select,
+   .labels--inline textarea,
+   .labels--inline .message,
+   .labels--inline .toggled                     { width:100%; float:none; }
+   .labels--inline button:first-of-type         { margin-left:0; }
+   .labels--inline .checkbox,
+   .labels--inline .radio                       { margin-left:0; width:100%; }
+   .inline-parent                               { display:block; }
+   .inline-parent .inline-child,
+   .inline-parent:last-child                    { margin-right:0; }
+   .inline-parent .inline-child--width-1,
+   .inline-parent .inline-child--width-2,
+   .inline-parent .inline-child--width-3,
+   .inline-parent .inline-child--width-4,
+   .inline-parent .inline-child--width-5,
+   .inline-parent .inline-child--width-6,
+   .inline-parent .inline-child--width-7,
+   .inline-parent .inline-child--width-8,
+   .inline-parent .inline-child--width-9        { width:100%; }
 }

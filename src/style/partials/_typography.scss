@@ -1,0 +1,64 @@
+/***********************************************
+Font-face setup
+***********************************************/
+@font-face {
+    font-family:'object-sans';
+    src:    url('../../assets/font/objectsans-bold.woff2') format('woff2'),
+            url('../../assets/font/objectsans-bold.woff') format('woff');
+    font-weight:bold;
+    font-style:bold;
+}
+  
+@font-face {
+    font-family:'object-sans';
+    src: url('../../assets/font/objectsans-medium.woff2') format('woff2'),
+         url('../../assets/font/objectsans-medium.woff') format('woff');
+    font-weight:normal;
+    font-style:normal;
+}
+  
+@font-face {
+    font-family:'redacted';
+    src:    url('../../assets/font/redacted.woff2') format('woff2'),
+            url('../../assets/font/redacted.woff') format('woff');
+    font-weight:normal;
+    font-style:normal;
+}
+
+/***** Fonts overrides *****/
+body, form, input, textarea, select, label,
+.select select, .select optgroup option,
+.select optgroup option, .checkbox > span label,
+.radio > span label, form .message, .btn        { font-family:'object-sans', Sans-Serif; }
+
+html                                            { scroll-behavior:smooth; }
+body                                            { font-size:13px; line-height:17px; letter-spacing:.5px; background-color:$color--snow; color:$color--midnight-70; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+
+/***** Typography *****/
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6                    { padding:0; font-weight:bold; line-height:initial; position:relative; }
+
+h1, .h1                                         { font-size:22px; line-height:18px; color:$color--midnight; }
+h2, .h2                                         { font-size:18px; line-height:18px; color:$color--midnight; }
+h3, .h3                                         { font-size:16px; line-height:18px; color:$color--midnight; }
+h4, .h4                                         { font-size:16px; line-height:18px; }
+h5, .h5                                         { font-size:16px; line-height:18px; }
+h6, .h6                                         { font-size:16px; line-height:18px; font-weight:initial; }
+p+p                                             { margin-top:16px; }
+
+small, .txt--small                              { font-size:1.5rem; }
+
+sup, sub                                        { height:0; line-height:0; vertical-align:baseline; position:relative; font-size:80%; }
+sup                                             { top:-5px; }
+sub                                             { bottom:-5px; }
+
+pre                                             { padding:0; display:table; table-layout:fixed; width:100%; }
+pre code                                        { padding:20px; overflow:auto; width:100%; }
+code                                            { margin:0; padding:0 3px; font-family:'Consolas', Courier, monospace; font-size:12px; text-align:left; text-transform:initial; font-weight:initial; color:$color--snow; display:inline-block; vertical-align:middle; background-color:$color--midnight; border:1px solid $color--midnight; border-radius:3px; overflow:hidden; white-space:pre; }
+
+abbr[title],
+abbr[data-original-title]                       { border-bottom:1px dotted $color--smoke; cursor:help; }
+
+address                                         { margin:26px 0; padding:0; display:block; font-style:normal; line-height:20px; }
+
+hr                                              { padding:0; border:0; border-top:1px solid $color--smoke; height:1px; width:100%; display:block; }

@@ -1,0 +1,271 @@
+/* Table of contents
+––––––––––––––––––––––––––––––––––––––––––––––––––
+- Reset
+- Typography
+- Lists
+- Blockquotes
+- Links
+- Images, iFrames & Videos
+- Tables
+- Icons Setup
+- Message Blocks
+- Utility Classes
+- Media Queries
+*/
+
+/***********************************************
+Mobile First
+***********************************************/
+
+/***** Resets *****/
+html                                            { font-size:100%; overflow:-moz-scrollbars-vertical; overflow-y:scroll; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; box-sizing:border-box; }
+body                                            { margin:0; font-family:sans-serif; font-size:16px; line-height:1.1rem; }
+*, *:before, *:after                            { margin:0; padding:0; border:none; box-sizing:inherit; }
+
+h1+*,h2+*,h3+*,h4+*,h5+*,h6+*,p+*,pre+*,
+address+*,hr+*,.h1+*,.h2+*,.h3+*,.h4+*,.h5+*,
+.h6+*,dt+*,dd+*,figure+*,figcaption+*,ul+*,
+ol+*,dl+*,li+*,.media+*,table+*,caption+*,
+.img-left+*, .img-right+*,.message+*,
+.btn--container+*,.btn--group+*,.btn-group+*    { margin-top:1rem; }
+
+/***** Lists *****/
+ul, ol, dl                                      { margin-left:20px; display:block; }
+ul ul, ul ol, ol ol, ol ul                      { margin-top:1em; }
+ol                                              { padding-left:10px; }
+li                                              { padding:0; }
+
+ul.square, ul.square ul, ul.circle ul.square    { list-style:square; }
+ul.circle, ul.circle ul, ul.square ul.circle    { list-style:circle; }
+ul.disc, ul.disc ul                             { list-style:disc; }
+ul.square li, ul.circle li, ul.disc li          { margin:0 0 5px 0; padding:0; line-height:18px; background:none; }
+
+dl                                              { margin-left:0; padding:0; }
+dt                                              { font-weight:bold; }
+dd                                              { margin-top:6px; }
+
+.dl-inline dt                                   { margin-top:0; padding:0 10px 16px 0; float:left; width:30%; clear:left; }
+.dl-inline dd                                   { margin-top:0; margin-left:30%; padding-bottom:16px; }
+.dl-inline dd:last-child                        { padding:0; }
+
+/***** Blockquotes *****/
+figure                                          { padding:10px 0 10px 20px; border-left:2px solid $color--midnight; position:relative; top:0; left:0; }
+
+blockquote                                      { margin:0; padding:0; }
+blockquote p                                    { font-style:italic; }
+blockquote a                                    { display:inline-block; }
+
+figcaption                                      { padding:0; font-size:14px; }
+figcaption:before                               { content:'\2014'; display:block; }
+figcaption>span                                 { margin:0; padding:0 5px; display:inline-block; background-color:$color--midnight; color:$color--snow; border-radius:3px; }
+
+
+/***** Links *****/
+a                                               { color:inherit; text-decoration:underline; outline:0;
+  transition:
+    color 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s,
+    fill 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s,
+    background 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s
+  ;
+  -moz-transition:
+    color 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s,
+    fill 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s,
+    background 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s
+  ;
+  -webkit-transition:
+    color 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s,
+    fill 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s,
+    background 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s
+  ;
+  -o-transition:
+    color 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s,
+    fill 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s,
+    background 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s
+  ;
+}
+a:focus                                         { outline:none; outline-style:none; -moz-outline-style:none; }
+.overall                                        { width:100%; height:100%; position:absolute; top:0; left:0; z-index:10; cursor:pointer; }
+
+/***** Images, iFrames & Videos *****/
+img                                             { border:0; vertical-align:middle; border:none; -ms-interpolation-mode:bicubic; }
+.img--left,
+.img--right,
+.img--max                                       { margin-bottom:16px; max-width:100%; display:block; }
+
+.img--left                                      { margin-right:30px; float:left; }
+.img--right                                     { margin-left:30px; float:right; }
+.img--max                                       { width:100%; height:auto; }
+
+.media                                          { padding-bottom:53%; padding-top:25px; background-color:$color--smoke; height:0; position:relative; overflow:hidden; }
+.media iframe, .media object, .media embed      { width:100%; height:100%; position:absolute; top:0; left:0; }
+
+/***** Tables *****/
+.table                                          { overflow:scroll; overflow-y:hidden; width:100%; -webkit-overflow-scrolling:touch; }
+
+table                                           { width:100%; overflow:visible; text-align:left; display:table; border:none; border-collapse:collapse; border-spacing:0; }
+table, caption, tbody, thead, tr, th, td        { text-align:left; }
+caption, thead                                  { font-weight:bold; text-align:left; }
+tr                                              { padding:3px; padding:0; }
+tr+tr                                           { margin-top:10px; border-top:1px solid $color--smoke; }
+th, td                                          { padding:10px; min-width:40px; border:none; vertical-align:top; position:relative; top:0; left:0; }
+td:empty                                        { display:none; visibility:hidden; }
+
+.table--rowHover thead tr:hover,
+.table--stripes thead tr:nth-child(odd)         { background-color:transparent; }
+.table--rowHover tr:hover,
+.table--stripes tr:nth-child(odd)               { background-color:$color--blue-20; }
+
+.table--mobile table, 
+.table--mobile tr, 
+.table--mobile td                               { display:block; border:none; }
+.table--mobile thead                            { padding:5px 10px; background-color:$color--snow; border:none; border-bottom:2px solid $color--smoke; font-weight:bold; display:none; }
+.table--mobile tr                               { border-radius:3px; }
+.table--mobile tr:nth-child(odd)                { background-color:$color--smoke; }
+.table--mobile tr:nth-child(odd) td             { border-color:$color--snow; }
+.table--mobile td                               { margin:0; display:block; }
+.table--mobile td+td                            { border-top:1px solid $color--smoke; }
+.table--mobile td[data-title]:before            { padding:0 10px 0 0; content:attr(data-title) ":\00A0"; color:$color--midnight; display:inline-block; width:30%; font-weight:bold; overflow:hidden; }
+.table--mobile td .cell-content                 { display:inline-block; width:68%; vertical-align:top; overflow:hidden; }
+
+/***** Aspect Ratio *****/
+.aspect                                         { position:relative; }
+.aspect:before                                  { display:block; content:''; width:100%; }
+.aspect__content                                { position:absolute; top:0; left:0; right:0; bottom:0; overflow:hidden; }
+
+.aspect--1-1:before                             { padding-top:calc(1 / 1 * 100%); }
+.aspect--4-3:before                             { padding-top:calc(3 / 4 * 100%); }
+.aspect--5-4:before                             { padding-top:calc(4 / 5 * 100%); }
+.aspect--16-9:before                            { padding-top:calc(9 / 16 * 100%); }
+.aspect--16-10:before                           { padding-top:calc(10 / 16 * 100%); }
+
+/***** Message Blocks *****/
+.message                                        { padding:.56em .8em; color:$color--snow; background-color:$color--midnight; border-radius:3px; width:100%; position:relative; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; }
+.message--positive                              { background-color:$color--positive; }
+.message--info                                  { background-color:$color--info; }
+.message--warning                               { background-color:$color--warning; color:$color--midnight; }
+.message--negative                              { background-color:$color--negative; }
+
+/***** Pills *****/
+.pill                                           { padding:0 5px; display:inline-flex; align-items:center; line-height:initial; background-color:$color--midnight-20; fill:$color--snow; color:$color--snow; font-weight:bold; border-radius:5px; vertical-align:middle; }
+.pill+.pill,
+.pill--onRight                                  { margin-left:6px; }
+
+.pill--size-m                                   { font-size:11px; height:16px; }
+.pill--size-s                                   { font-size:9px; height:12px; }
+.pill--negative                                 { background-color:$color--negative; fill:$color--snow; color:$color--snow; }
+.pill--positive                                 { background-color:$color--positive; fill:$color--snow; color:$color--snow; }
+.pill--info                                     { background-color:$color--info; fill:$color--snow; color:$color--snow; }
+.pill--snow                                     { background-color:$color--snow; fill:$color--midnight-20; color:$color--midnight-20; }
+.pill--smoke                                    { background-color:$color--smoke; fill:$color--midnight-20; color:$color--midnight-20; }
+.pill--heather                                  { background-color:$color--midnight-20; fill:$color--snow; color:$color--snow; }
+
+/***********************************************
+Utility Classes
+***********************************************/
+
+/***** Text truncate *****/
+.txt--truncate                                  { white-space:nowrap; text-overflow:ellipsis; overflow:hidden; }
+.txt--noWrap                                    { white-space:nowrap; }
+
+/***** Font weight *****/
+.txt--fontWeight-300                            { font-weight:300; }
+.txt--fontWeight-500                            { font-weight:500; }
+
+/***** Floats *****/
+.float--left                                    { float:left; }
+.float--right                                   { float:right; }
+.float--clear                                   { clear:both; }
+
+/***** Text alignment *****/
+.txt--left                                      { text-align:left; }
+.txt--right                                     { text-align:right; }
+.txt--center                                    { text-align:center; }
+.txt--justify                                   { text-align:justify; }
+
+/***** Border radius *****/
+.rounded                                        { border-radius:50%; }
+.radius                                         { border-radius:3px; }
+
+/***** Resets *****/
+.reset--padding                                 { padding:0; }
+.reset--margin                                  { margin:0; }
+.reset--indent                                  { margin-left:0; padding-left:0; }
+.reset--bullet                                  { list-style:none; list-style-image:none; }
+.reset--styling                                 { margin:0; padding:0; list-style:none; }
+/***** Display *****/
+.inline                                         { display:inline; }
+.block, .show                                   { display:block; }
+.hidden, .hide                                  { display:none; }
+
+/***** Disable Chrome blue border *****/
+input:focus, select:focus,
+textarea:focus, button:focus                    { outline:none; }
+
+/***** Disable Internet Explorer input overlays *****/
+::-ms-clear, ::ms-reveal                        { display:none; }
+
+/***** Visibility *****/
+.invisible                                      { display:none; visibility:hidden; }
+.visible                                        { display:block; visibility:visible; }
+
+/***** Hide *****/
+.hide--mobile                                   { display:none !important; }
+
+/***** Show *****/
+.show--tablet                                   { display:none !important; }
+.show--screen                                   { display:none !important; }
+
+/***********************************************
+Tablet - This applies from 768px onwards
+***********************************************/
+@media (min-width:768px) {
+  table                                         { font-size:inherit; }
+
+  .table--mobile table                          { display:table; }
+  .table--mobile tbody, 
+  .table--mobile thead                          { display:table-row-group; }
+  .table--mobile tr                             { display:table-row; }
+  .table--mobile tr+*                           { border-top:1px solid $color--smoke; }
+  .table--mobile tr:nth-child(odd)              { background-color:transparent; }
+  .table--mobile tr:nth-child(odd) td           { border:none; }
+  .table--mobile tr:nth-child(odd)+tr           { margin-top:0; border-top:1px solid $color--smoke; }
+
+  .table--mobile td                             { display:table-cell; }
+  .table--mobile td+td                          { border-top:none; }
+  .table--mobile td+td[data-title]:before, 
+  .table--mobile th+td[data-title]:before,
+  .table--mobile td[data-title]:before          { display:none; }
+  .table--mobile td .cell-content               { width:auto; }
+
+
+  .table--rowHover thead tr:hover,
+  .table--stripes thead tr:nth-child(odd)       { background-color:transparent; }
+  .table--rowHover tr:hover,
+  .table--stripes tr:nth-child(odd)             { background-color:$color--blue-20; }
+
+  /***** Hide *****/
+  .hide--mobile                                 { display:inherit !important; }
+  .hide--tablet                                 { display:none !important; }
+
+  /***** Show *****/
+  .show--mobile                                 { display:none !important; }
+  .show--tablet                                 { display:inherit !important; }
+}
+
+/***********************************************
+Mobile ONLY - This applies from 0px to 767px
+***********************************************/
+@media only screen and (max-width:767px) {
+  .img--left                                    { margin-bottom:0; margin-right:30px; float:left; }
+  .img--right                                   { margin-bottom:0; margin-left:30px; float:right; }
+
+  .txt--left-mobile                             { text-align:left; }
+
+  /***** Hide *****/
+  .hide--screen                                 { display:none !important; }
+
+  /***** Show *****/
+  .show--mobile                                 { display:inherit !important; }
+  .show--tablet                                 { display:inherit !important; }
+  .show--screen                                 { display:inherit !important; }
+}
