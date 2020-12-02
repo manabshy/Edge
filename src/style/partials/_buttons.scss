@@ -7,14 +7,14 @@ button[aria-disabled="true"]                    { cursor:inherit; }
 input::-moz-focus-inner,
 button::-moz-focus-inner                        { border:0; padding:0; }
 
-.btn                                            { margin:0; padding:5px .8em; background:#0a3749; border:0; color:#FFFFFF; fill:currentColor; font:inherit; line-height:1.1; min-height:30px; display:inline-flex; flex-direction:row; align-items:center; vertical-align:middle; justify-content:center; text-align:center; text-decoration:none; width:auto; flex-wrap:nowrap; position:relative; top:0; left:0; cursor:pointer; border:none; border-radius:3px; overflow:visible; -webkit-appearance:none; -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none;
+.btn                                            { margin:0; padding:5px 10px; background:$color--midnight-70; border:0; color:$color--snow; fill:currentColor; font:inherit; font-size:12px; display:inline-flex; flex-direction:row; align-items:center; vertical-align:middle; justify-content:center; text-align:center; text-decoration:none; width:auto; flex-wrap:nowrap; position:relative; top:0; left:0; cursor:pointer; border:none; border-radius:3px; overflow:visible; -webkit-appearance:none; -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none;
   transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s;
   -moz-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s;
   -webkit-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s;
   -o-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s;
 }
 
-.btn:hover                                      { background-color:#6c8892;
+.btn:hover                                      { background-color:$color--midnight;
   transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s;
   -moz-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s;
   -webkit-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s;
@@ -24,7 +24,7 @@ button::-moz-focus-inner                        { border:0; padding:0; }
 .btn .icon                                      { top:initial; }
 
 .btn[disabled]                                  { cursor:not-allowed; opacity:.4; }       
-.btn:hover[disabled]                            { background-color:#0a3749; }
+.btn:hover[disabled]                            { background-color:$color--midnight-70; }
 
 /***** Sizes *****/
 .btn.btn--xs                                    { min-height:10px; font-size:.7em; }
@@ -46,8 +46,8 @@ button::-moz-focus-inner                        { border:0; padding:0; }
 
 /***** Color - default *****/
 .btn--default,
-.btn--default:hover[disabled]                   { background-color:#0a3749; }
-.btn--default:hover                             { background-color:#6c8892; }
+.btn--default:hover[disabled]                   { background-color:$color--midnight-70; }
+.btn--default:hover                             { background-color:$color--midnight; }
 
 /***** Color - positive *****/
 .btn--positive,
@@ -62,7 +62,7 @@ button::-moz-focus-inner                        { border:0; padding:0; }
 /***** Color - Warning *****/
 .btn--warning,
 .btn--warning:hover[disabled]                   { background-color:#FFC107; color:#444; }
-.btn--warning:hover                             { background-color:#C79100; color:#FFFFFF; }
+.btn--warning:hover                             { background-color:#C79100; color:$color--snow; }
 
 /***** Color - negative *****/
 .btn--negative,
@@ -71,8 +71,8 @@ button::-moz-focus-inner                        { border:0; padding:0; }
 
 /***** Color - snow *****/
 .btn--snow,
-.btn--snow:hover[disabled]                      { color:#848CA4; background-color:#FFFFFF; box-shadow:inset 0px 0px 0px 1px #D8D9DB; }
-.btn--snow:hover                                { background-color:#0a3749; color:#FFFFFF; box-shadow:inset 0px 0px 0px 1px transparent; }
+.btn--snow:hover[disabled]                      { color:#848CA4; background-color:$color--snow; box-shadow:inset 0px 0px 0px 1px #D8D9DB; }
+.btn--snow:hover                                { background-color:$color--midnight-70; color:$color--snow; box-shadow:inset 0px 0px 0px 1px transparent; }
 
 /***** Color - None *****/
 .btn--none,
@@ -80,26 +80,26 @@ button::-moz-focus-inner                        { border:0; padding:0; }
 .btn--none:hover                                { padding:0; background-color:transparent; color:inherit; fill:currentColor; border-radius:0; min-height:20px; }
 
 /***** Ghost *****/
-.btn--ghost                                     { background-color:transparent; color:#0a3749; box-shadow:inset 0px 0px 0px 1px #D8D9DB; }
-.btn--ghost:hover                               { background-color:#0a3749; color:#FFFFFF; fill:#FFFFFF; box-shadow:inset 0px 0px 0px 1px transparent; }
+.btn--ghost                                     { background-color:transparent; color:$color--midnight-70; box-shadow:inset 0px 0px 0px 1px #D8D9DB; }
+.btn--ghost:hover                               { background-color:$color--midnight-70; color:$color--snow; fill:$color--snow; box-shadow:inset 0px 0px 0px 1px transparent; }
 .btn--ghost:hover[disabled],
-.btn--ghost:hover[aria-disabled]                { background-color:transparent; color:#0a3749; box-shadow:inset 0px 0px 0px 1px #D8D9DB; }
+.btn--ghost:hover[aria-disabled]                { background-color:transparent; color:$color--midnight-70; box-shadow:inset 0px 0px 0px 1px #D8D9DB; }
 
 /***** Link *****/
-.btn--link                                      { background-color:transparent; color:#0a3749; fill:#0a3749; border:none; }
+.btn--link                                      { background-color:transparent; color:$color--midnight-70; fill:$color--midnight-70; border:none; }
 .btn--link:hover                                { background-color:transparent; text-decoration:underline; }
 
 /***** Color - Hover *****/
-.btn--hoverPositive:hover                       { background-color:#4DA685; color:#FFFFFF; fill:#FFFFFF; }
-.btn--hoverInfo:hover                           { background-color:#3498DB; color:#FFFFFF; fill:#FFFFFF; }
-.btn--hoverWarning:hover                        { background-color:#FFC107; color:#FFFFFF; fill:#FFFFFF; }
-.btn--hoverWarning:hover[disabled]              { color:#FFFFFF; }
-.btn--hoverNegative:hover                       { background-color:#F44336; color:#FFFFFF; fill:#FFFFFF; }
+.btn--hoverPositive:hover                       { background-color:#4DA685; color:$color--snow; fill:$color--snow; }
+.btn--hoverInfo:hover                           { background-color:#3498DB; color:$color--snow; fill:$color--snow; }
+.btn--hoverWarning:hover                        { background-color:#FFC107; color:$color--snow; fill:$color--snow; }
+.btn--hoverWarning:hover[disabled]              { color:$color--snow; }
+.btn--hoverNegative:hover                       { background-color:#F44336; color:$color--snow; fill:$color--snow; }
 
 /***** Buttons groups *****/
 .btn--group                                     { box-shadow:inset 0px 0px 0px 1px #D8D9DB; border-radius:3px; display:inline-block; overflow:hidden; }
-.btn--group .btn                                { margin:0; float:left; border-radius:0; border-right:1px solid #D8D9DB; color:#0a3749; background-color:transparent; }
-.btn--group .btn:hover                          { background-color:#0a3749; color:#FFFFFF; }
+.btn--group .btn                                { margin:0; float:left; border-radius:0; border-right:1px solid #D8D9DB; color:$color--midnight-70; background-color:transparent; }
+.btn--group .btn:hover                          { background-color:$color--midnight-70; color:$color--snow; }
 .btn--group .btn:last-of-type                   { border:none; }
 
 .btn--container .btn                            { margin-top:0; margin-right:6px; }
@@ -120,14 +120,14 @@ button::-moz-focus-inner                        { border:0; padding:0; }
 
 .btn--loading:before,
 .btn--successful:before,
-.btn--failure:before                            { margin-right:6px; content:''; display:block; width:11px; height:11px; color:#FFFFFF; text-align:center; background-repeat:no-repeat; background-size:100%; background-position:center middle; display:inline-block; }
+.btn--failure:before                            { margin-right:6px; content:''; display:block; width:11px; height:11px; color:$color--snow; text-align:center; background-repeat:no-repeat; background-size:100%; background-position:center middle; display:inline-block; }
 
 .btn--ghost.btn--loading,
 .btn--ghost.btn--successful,
-.btn--ghost.btn--failure                        { color:#FFFFFF; }
+.btn--ghost.btn--failure                        { color:$color--snow; }
 
 .btn--loading,
-.btn--loading:hover                             { background-color:#0a3749; box-shadow:inset 0px 0px 0px 1px #0a3749; }
+.btn--loading:hover                             { background-color:$color--midnight-70; box-shadow:inset 0px 0px 0px 1px $color--midnight-70; }
 .btn--successful,
 .btn--successful:hover                          { background-color:#4DA685; box-shadow:inset 0px 0px 0px 1px #4DA685; }
 .btn--failure,

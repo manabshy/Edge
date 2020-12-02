@@ -11,8 +11,8 @@ Font-face setup
   
 @font-face {
     font-family:'object-sans';
-    src: url('../../assets/font/objectsans-medium.woff2') format('woff2'),
-         url('../../assets/font/objectsans-medium.woff') format('woff');
+    src:    url('../../assets/font/objectsans-medium.woff2') format('woff2'),
+            url('../../assets/font/objectsans-medium.woff') format('woff');
     font-weight:normal;
     font-style:normal;
 }
@@ -46,19 +46,15 @@ h5, .h5                                         { font-size:16px; line-height:18
 h6, .h6                                         { font-size:16px; line-height:18px; font-weight:initial; }
 p+p                                             { margin-top:16px; }
 
-small, .txt--small                              { font-size:1.5rem; }
+.txt--title                                     { font-size:14px; font-weight:bold; }
+.txt--title+small                               { margin:0; }
 
-sup, sub                                        { height:0; line-height:0; vertical-align:baseline; position:relative; font-size:80%; }
-sup                                             { top:-5px; }
-sub                                             { bottom:-5px; }
+sup                                             { display:flex; font-size:10px; line-height:10px; font-weight:normal; color:$color--midnight-50; text-transform:uppercase; height:auto; top:0; }
+sup+p                                           { margin-top:3px; }
+.sup--positive                                  { color:$color--positive; }
 
-pre                                             { padding:0; display:table; table-layout:fixed; width:100%; }
-pre code                                        { padding:20px; overflow:auto; width:100%; }
-code                                            { margin:0; padding:0 3px; font-family:'Consolas', Courier, monospace; font-size:12px; text-align:left; text-transform:initial; font-weight:initial; color:$color--snow; display:inline-block; vertical-align:middle; background-color:$color--midnight; border:1px solid $color--midnight; border-radius:3px; overflow:hidden; white-space:pre; }
+small                                           { display:flex; font-size:10px; line-height:10px; font-weight:normal; color:$color--midnight-50; height:auto; top:0; }
+small+*                                         { margin-top:16px; }
 
-abbr[title],
-abbr[data-original-title]                       { border-bottom:1px dotted $color--smoke; cursor:help; }
-
-address                                         { margin:26px 0; padding:0; display:block; font-style:normal; line-height:20px; }
-
-hr                                              { padding:0; border:0; border-top:1px solid $color--smoke; height:1px; width:100%; display:block; }
+.pill                                           { padding:3px 6px; min-height:auto; font-size:10px; line-height:11px; border-radius:20px; }
+.pill--right                                    { position:absolute; top:0; right:0; left:auto; z-index:9; }

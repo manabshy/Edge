@@ -1,65 +1,123 @@
-.table {
-    table-layout: fixed;
+/***** Tables *****/
+.table                                          { overflow:auto; overflow-y:hidden; width:100%; -webkit-overflow-scrolling:touch; position:relative; }
+.table+*                                        { margin-top:20px; }
 
-    &.table-sortable thead th {
-        &:hover {
-            cursor: pointer;
-        }
+table                                           { width:100%; overflow:visible; text-align:left; display:table; border:none; border-collapse:collapse; border-spacing:0; }
+table, caption, tbody, thead, tr, th, td        { text-align:left; }
+caption, thead                                  { font-weight:bold; text-align:left; }
+tr                                              { padding:3px; padding:0; }
+tr+tr                                           { margin-top:10px; border-top:1px solid $color--midnight-10; }
+th, td                                          { padding:10px; min-width:40px; border:none; vertical-align:top; position:relative; top:0; left:0; }
+td:empty                                        { display:none; visibility:hidden; }
 
-        &.active{
-            span{
-                color: theme-color("secondary");
-            }
-        }
+.table--rowHover thead tr:hover,
+.table--stripes thead tr:nth-child(odd)         { background-color:transparent; }
+.table--rowHover tr:hover,
+.table--stripes tr:nth-child(odd)               { background-color:$color--blue-20; }
 
-        &:not(.active):hover {
-            span:first-child {
-                color: theme-color("secondary");
-            }
-        }
-    }
+.table--mobile table, 
+.table--mobile tr, 
+.table--mobile td                               { display:block; border:none; }
+.table--mobile thead                            { padding:5px 10px; background-color:$color--snow; border:none; border-bottom:2px solid $color--midnight-10; font-weight:bold; display:none; }
+.table--mobile tr                               { border-radius:3px; }
+.table--mobile tr:nth-child(odd)                { background-color:$color--midnight-10; }
+.table--mobile tr:nth-child(odd) td             { border-color:$color--snow; }
+.table--mobile td                               { margin:0; display:block; }
+.table--mobile td+td                            { border-top:1px solid $color--midnight-10; }
+.table--mobile td[data-title]:before            { padding:0 10px 0 0; content:attr(data-title) ":\00A0"; color:$color--midnight; display:inline-block; width:30%; font-weight:bold; overflow:hidden; }
+.table--mobile td .cell-content                 { display:inline-block; width:68%; vertical-align:top; overflow:hidden; }
 
-    .long-content {
-        @include media-breakpoint-up(md) {
-            width: 10rem;
-        }
-    }
-    .values {
-        @include media-breakpoint-up(md) {
-            width: 7.2rem;
-        }
-    }
+/***********************************************
+Tablet - This applies from 768px onwards
+***********************************************/
+@media (min-width:768px) {
+    table                                         { font-size:inherit; }
 
-    .table-link {
-        color: $body-color;
-        text-decoration: none;
-    }
+    .table--mobile table                          { display:table; }
+    .table--mobile tbody, 
+    .table--mobile thead                          { display:table-row-group; }
+    .table--mobile tr                             { display:table-row; }
+    .table--mobile tr+*                           { border-top:1px solid $color--midnight-10; }
+    .table--mobile tr:nth-child(odd)              { background-color:transparent; }
+    .table--mobile tr:nth-child(odd) td           { border:none; }
+    .table--mobile tr:nth-child(odd)+tr           { margin-top:0; border-top:1px solid $color--midnight-10; }
+
+    .table--mobile td                             { display:table-cell; }
+    .table--mobile td+td                          { border-top:none; }
+    .table--mobile td+td[data-title]:before, 
+    .table--mobile th+td[data-title]:before,
+    .table--mobile td[data-title]:before          { display:none; }
+    .table--mobile td .cell-content               { width:auto; }
+
+    .table--rowHover thead tr:hover,
+    .table--stripes thead tr:nth-child(odd)       { background-color:transparent; }
+    .table--rowHover tr:hover,
+    .table--stripes tr:nth-child(odd)             { background-color:$color--blue-20; }
 }
 
-.table-responsive {
-    @include media-breakpoint-up(xl) {
-        overflow-x: unset;
-    }
 
-    @include media-breakpoint-down(md) {
-        thead {
-            display: none;
-        }
-        td {
-            display: block;
-            border: none!important;
-        }
-        tr {
-            display: block;
-            padding: spacer(3) 0;
+// .table {
+//     table-layout: fixed;
+
+//     &.table-sortable thead th {
+//         &:hover {
+//             cursor: pointer;
+//         }
+
+//         &.active{
+//             span{
+//                 color: theme-color("secondary");
+//             }
+//         }
+
+//         &:not(.active):hover {
+//             span:first-child {
+//                 color: theme-color("secondary");
+//             }
+//         }
+//     }
+
+//     .long-content {
+//         @include media-breakpoint-up(md) {
+//             width: 10rem;
+//         }
+//     }
+//     .values {
+//         @include media-breakpoint-up(md) {
+//             width: 7.2rem;
+//         }
+//     }
+
+//     .table-link {
+//         color: $body-color;
+//         text-decoration: none;
+//     }
+// }
+
+// .table-responsive {
+//     @include media-breakpoint-up(xl) {
+//         overflow-x: unset;
+//     }
+
+//     @include media-breakpoint-down(md) {
+//         thead {
+//             display: none;
+//         }
+//         td {
+//             display: block;
+//             border: none!important;
+//         }
+//         tr {
+//             display: block;
+//             padding: spacer(3) 0;
             
-            &:not(:last-child) {
-                border-bottom: 1px solid $border-color;
-            }
-        }
+//             &:not(:last-child) {
+//                 border-bottom: 1px solid $border-color;
+//             }
+//         }
         
-        dl {
-            margin-bottom: 0;
-        }
-    }
-}
+//         dl {
+//             margin-bottom: 0;
+//         }
+//     }
+// }

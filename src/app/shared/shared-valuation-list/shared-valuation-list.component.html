@@ -1,12 +1,21 @@
-<h2>Valuations</h2>
+<div class="title">
+  <h2>Valuations</h2>
+  <span class="checkbox checkbox--rtl" *ngIf="closedCounter">
+    <span>
+      <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getValuations()" class="custom-control-input" id="includeClosedValuations">
+      <label for="includeClosedValuations">Include previous valuations</label>
+    </span>
+  </span>
+</div>
+
 <div class="table" *ngIf="valuations$ | async as valuations">
-  <div class="list-group-item" *ngIf="closedCounter">
+  <!-- <div class="list-group-item" *ngIf="closedCounter">
     <div class="custom-control custom-checkbox">
       <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getValuations()" class="custom-control-input"
         id="includeClosedValuations">
       <label class="custom-control-label small" for="includeClosedValuations">Include previous valuations</label>
     </div>
-  </div>
+  </div> -->
 
   <div class="list-group-item text-center text-danger" *ngIf="!valuations || !valuations?.length">
     <i class="far fa-sad-tear"></i> No valuations

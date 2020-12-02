@@ -1,14 +1,48 @@
-<div class="list-group mb-5">
-  <div class="list-group-item add-note-container py-4" *ngIf="noteData && showNoteInput">
+<h4>Notes</h4>
+
+<div class="list-group-item text-center text-danger" *ngIf="!notes || !notes?.length && !isUpdating">
+  <i class="far fa-sad-tear"></i> No notes
+</div>
+
+<ol class="timeline">
+  <li class="timeline__new" *ngIf="noteData && showNoteInput">
     <app-note-form [data]="noteData"></app-note-form>
-  </div>
-  <div class="list-group-item text-center text-danger" *ngIf="!notes || !notes?.length && !isUpdating">
-    <i class="far fa-sad-tear"></i> No notes
-  </div>
+  </li>
+
+  <li *ngFor="let note of notes">
+    <svg aria-hidden="true" width="7.8" height="15.6" viewBox="0 0 7.8 15.6" class="icon icon--timeline"><polygon class="fill" points="7.8 0 0 7.8 7.8 15.6 "/><polygon class="outline" points="7.8 14.1 1.4 7.8 7.8 1.4 7.8 0 0 7.8 7.8 15.6 "/></svg>
+    <div class="card">
+      <div class="card__header">
+        <span>
+          <!-- <ng-container *ngIf="note?.createdBy !== currentStaffMember?.fullName; else current">
+            {{note?.createdBy}}
+          </ng-container>
+          <ng-template #current>
+            <span class="badge badge-pill badge-primary">You</span>
+          </ng-template> -->
+          
+          <ng-container *ngIf="note?.createdBy !== currentStaffMember?.fullName; else current">
+            <p class="txt--title">{{note?.createdBy}}</p>
+          </ng-container>
+          <small>{{note?.createDate | date: 'dd/MM/yyyy HH:mm'}}</small>
+        </span>
+        <button class="btn btn--none btn--pin flexRight"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" class="icon icon--pin"><path d="M11.4 5.6L11.4 1.6 12.3 1.6C12.8 1.6 13.1 1.2 13.1 0.8L13.1 0.8C13.1 0.4 12.8 0 12.3 0L3.7 0C3.2 0 2.9 0.4 2.9 0.8L2.9 0.8C2.9 1.2 3.2 1.6 3.7 1.6L4.6 1.6 4.6 5.6C4.6 6.9 3.4 8 2 8L2 8 2 9.6 7.1 9.6 7.1 15.2 8 16 8.8 15.2 8.8 9.6 14 9.6 14 8 14 8C12.6 8 11.4 6.9 11.4 5.6Z"/></svg></button>
+        <button class="btn btn--none btn--important flexRight"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" class="icon icon--information"><path d="M8 16C12.4 16 16 12.4 16 8 16 3.6 12.4 0 8 0 3.6 0 0 3.6 0 8 0 12.4 3.6 16 8 16ZM9.5 4L9 9.6 7 9.6 6.5 4 9.5 4ZM8 13.2C7.3 13.2 6.7 12.6 6.7 11.9 6.7 11.2 7.3 10.6 8 10.6 8.7 10.6 9.3 11.2 9.3 11.9 9.3 12.6 8.7 13.2 8 13.2Z"/></svg></button>
+      </div>
+      <div class="card__body">
+        {{note?.text}}
+      </div>
+    </div>
+  </li>
+</ol>
+
+<!-- <div class="list-group mb-5">
   <ng-container *ngIf="notes?.length && !isUpdating">
     <div *ngIf="notes" class="search-results" infiniteScroll [infiniteScrollDistance]="5"
       [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true">
     </div>
+
+
     <div class="list-group-item" *ngFor="let note of notes">
       <div class="row">
         <div class="col-auto pr-0">
@@ -25,37 +59,6 @@
             tooltip="Important" container="body">
           </i>
         </div>
-        <!-- <div class="col text-right" *ngIf="!note?.propertyId">
-          <div class="btn-group" dropdown placement="bottom right">
-            <button id="actionsToggle" dropdownToggle type="button" class="btn btn-link p-0 dropdown-toggle"
-              aria-controls="actionsList">
-              Set as <span class="caret"></span>
-            </button>
-            <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
-              aria-labelledby="actionsToggle">
-              <li role="menuitem">
-                <button type="button" class="dropdown-item" (click)="setFlag(note?.id, true)">
-                  <i class="fas fa-exclamation-circle fa-fw text-danger" [style.opacity]="note?.isImportant ? '0.5' : 1"></i>
-                  <i class="fas fa-times fa-xs align-text-top" *ngIf="note?.isImportant"></i>
-                  <span class="ml-2">
-                    <ng-container *ngIf="note?.isImportant; else important ">Unimportant</ng-container>
-                    <ng-template #important>Important</ng-template>
-                  </span>
-                </button>
-              </li>
-              <li role="menuitem">
-                <button type="button" class="dropdown-item" (click)="setFlag(note?.id, false)">
-                  <i class="fas fa-thumbtack fa-fw" [style.opacity]="note?.isPinned ? '0.5' : 1"></i>
-                  <i class="fas fa-times fa-xs align-text-top" *ngIf="note?.isPinned"></i>
-                  <span class="ml-2">
-                    <ng-container *ngIf="note?.isPinned; else pin ">Unpinned</ng-container>
-                    <ng-template #pin>Pinned to top</ng-template>
-                  </span>
-                </button>
-              </li>
-            </ul>
-          </div>
-        </div> -->
       </div>
       <div class="row">
         <div class="col-12">
@@ -92,6 +95,8 @@
         </div>
       </div>
     </div>
+
+
   </ng-container>
 </div>
-<div style="height: 70px;"></div>
+<div style="height: 70px;"></div> -->

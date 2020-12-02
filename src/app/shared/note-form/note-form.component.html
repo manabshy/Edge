@@ -1,4 +1,49 @@
-<form [formGroup]="noteForm" (ngSubmit)="action(true)" class="text-left">
+
+  <svg aria-hidden="true" width="7.8" height="15.6" viewBox="0 0 7.8 15.6" class="icon icon--timeline"><polygon class="fill" points="7.8 0 0 7.8 7.8 15.6 "/><polygon class="outline" points="7.8 14.1 1.4 7.8 7.8 1.4 7.8 0 0 7.8 7.8 15.6 "/></svg>
+  <div class="card">
+    <div class="card__header">
+      Add Note  
+    </div>
+    <div class="card__body">
+      <form [formGroup]="noteForm" (ngSubmit)="action(true)">
+        <fieldset class="inline-child">
+          <span class="btn--container">
+            <ng-container *ngFor="let shortcut of shortcuts | keyvalue:keepOriginalOrder; last as isLast">
+              <button type="button" class="btn btn--snow" (click)="consumeShortcut(shortcut.value)">{{shortcut.key}}</button>
+            </ng-container>
+          </span>
+        </fieldset>
+
+        <fieldset>
+          <textarea #note class="form-control" name="note" id="note{{isModal}}" cols="30" rows="5" placeholder="Please give as much detail as possible." (keydown)="ctrlEnterSubmit($event)" formControlName="text" [ngClass]="{'is-invalid':formErrors.text}"></textarea>
+        </fieldset>
+
+        <fieldset>
+          <span class="checkbox checkbox--inline">
+            <span>
+              <input type="checkbox" id="important{{isModal}}" formControlName="isImportant">
+              <label for="important{{isModal}}">Set as important</label>
+            </span>
+
+            <span>
+              <input type="checkbox" id="topPinned{{isModal}}" formControlName="isPinned">
+              <label for="topPinned{{isModal}}">Pin to top</label>
+            </span>
+          </span>
+        </fieldset>
+
+        <fieldset>
+          <span class="btn--container" [ngClass]="{'text-center': isCancelVisible}">
+            <button type="button" class="btn btn--positive" (click)="action(true)"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z"/><path class="plus-vertical" d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z"/></svg>Add Note</button>
+            <button type="button" class="btn btn--ghost" (click)="action(false)" *ngIf="isCancelVisible">Cancel</button>
+          </span>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+
+
+<!-- <form [formGroup]="noteForm" (ngSubmit)="action(true)" class="text-left">
   <div class="form-group">
     <div class="custom-control custom-checkbox custom-control-inline">
       <input type="checkbox" class="custom-control-input" id="topPinned{{isModal}}" formControlName="isPinned">
@@ -37,4 +82,4 @@
     <button type="button" class="btn btn-light mr-2" (click)="action(false)" *ngIf="isCancelVisible">Cancel</button>
     <button type="button" class="btn btn-secondary" (click)="action(true)">Add Note</button>
   </div>
-</form>
+</form> -->

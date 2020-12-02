@@ -1,9 +1,20 @@
-<h2>Leads</h2>
+<div class="title">
+  <h2>Leads</h2>
+  <span class="checkbox checkbox--rtl">
+    <span>
+      <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getLeads()" id="includeClosedLeads">
+      <label for="includeClosedLeads">Include closed leads</label>
+    </span>
+  </span>
+</div>
+
 <div *ngIf="leads$|async as leads">
-  <div class="custom-control custom-checkbox">
+  
+  
+  <!-- <div class="custom-control custom-checkbox">
     <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getLeads()" class="custom-control-input" id="includeClosedLeads">
     <label class="custom-control-label small" for="includeClosedLeads">Include closed leads</label>
-  </div>
+  </div> -->
 
   <div class="list-group-item text-center text-danger" *ngIf="!leads || !leads?.length">
     <i class="far fa-sad-tear"></i> No Leads
@@ -16,7 +27,7 @@
           <th>Type</th>
           <th>Next Chase Date</th>
           <th>Lead Owner</th>
-          <th *ngIf="isClosedIncluded">&nbsp;</th>
+          <th *ngIf="isClosedIncluded">Status</th>
         </tr>
       </thead>
       <tbody>
@@ -31,7 +42,7 @@
             <span class="cell-content">{{lead?.owner || '-'}}</span>
           </td>
           <td data-title="Status" *ngIf="isClosedIncluded">
-            <span class="cell-content" [ngClass]="{'invisible': !lead?.closedById}">Closed</span>
+            <span class="cell-content" [ngClass]="{'invisible': !lead?.closedById}"><span class="pill">Closed</span></span>
           </td>
         </tr>
       </tbody>

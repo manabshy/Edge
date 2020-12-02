@@ -1,15 +1,25 @@
-<h2>Instructions</h2>
+<div class="title">
+  <h2>Instructions</h2>
+  <span class="checkbox checkbox--rtl" *ngIf="closedCounter">
+    <span>
+      <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getInstructions()" class="custom-control-input" id="includeClosedInstructions">
+      <label for="includeClosedInstructions">Include closed instructions</label>
+    </span>
+  </span>
+</div>
+
+<h2></h2>
 <ng-container *ngIf="instructions$ | async as instructions">
   <div class="list-group-item text-center text-danger" *ngIf="!instructions || !instructions?.length">
     <i class="far fa-sad-tear"></i> No instructions
   </div>
-
-  <div class="list-group-item" *ngIf="closedCounter">
+  
+  <!-- <div class="list-group-item" *ngIf="closedCounter">
     <div class="custom-control custom-checkbox">
       <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getInstructions()" class="custom-control-input" id="includeClosedInstructions">
       <label class="custom-control-label small" for="includeClosedInstructions">Include closed instructions</label>
     </div>
-  </div>
+  </div> -->
   
   <div class="table">
     <table class="table--mobile table--rowHover">

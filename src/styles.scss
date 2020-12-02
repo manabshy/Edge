@@ -1,16 +1,16 @@
 //reset
 @import "style/partials/colors";
-@import "style/partials/base";
+@import "style/partials/reset";
 @import "style/partials/typography";
 
 //forms
 @import "style/partials/form";
 @import "style/partials/buttons";
 
-//layout
-@import "style/partials/layout";
+//partials
 @import "style/partials/icons";
-
+@import "style/partials/table";
+@import "style/partials/layout";
 
 //overrides
 //@import "style/bootstrap-overrides";
@@ -43,7 +43,6 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 //@import "style/partials/animation";
 //@import "style/partials/nav";
 //@import "style/partials/card";
-//@import "style/partials/table";
 //@import "style/partials/off-canvas";
 //@import "style/partials/ngx-bootstrap";
 //@import "style/partials/toastr";

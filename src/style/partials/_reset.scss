@@ -29,6 +29,24 @@ ol+*,dl+*,li+*,.media+*,table+*,caption+*,
 .img-left+*, .img-right+*,.message+*,
 .btn--container+*,.btn--group+*,.btn-group+*    { margin-top:1rem; }
 
+/***** Typography *****/
+small, .txt--small                              { font-size:1.5rem; }
+
+sup, sub                                        { height:0; line-height:0; vertical-align:baseline; position:relative; font-size:80%; }
+sup                                             { top:-5px; }
+sub                                             { bottom:-5px; }
+
+pre                                             { padding:0; display:table; table-layout:fixed; width:100%; }
+pre code                                        { padding:20px; overflow:auto; width:100%; }
+code                                            { margin:0; padding:0 3px; font-family:'Consolas', Courier, monospace; font-size:12px; text-align:left; text-transform:initial; font-weight:initial; color:$color--snow; display:inline-block; vertical-align:middle; background-color:$color--midnight; border:1px solid $color--midnight; border-radius:3px; overflow:hidden; white-space:pre; }
+
+abbr[title],
+abbr[data-original-title]                       { border-bottom:1px dotted $color--smoke; cursor:help; }
+
+address                                         { margin:26px 0; padding:0; display:block; font-style:normal; line-height:20px; }
+
+hr                                              { padding:0; border:0; border-top:1px solid $color--smoke; height:1px; width:100%; display:block; }
+
 /***** Lists *****/
 ul, ol, dl                                      { margin-left:20px; display:block; }
 ul ul, ul ol, ol ol, ol ul                      { margin-top:1em; }
@@ -98,34 +116,6 @@ img                                             { border:0; vertical-align:middl
 
 .media                                          { padding-bottom:53%; padding-top:25px; background-color:$color--smoke; height:0; position:relative; overflow:hidden; }
 .media iframe, .media object, .media embed      { width:100%; height:100%; position:absolute; top:0; left:0; }
-
-/***** Tables *****/
-.table                                          { overflow:scroll; overflow-y:hidden; width:100%; -webkit-overflow-scrolling:touch; }
-
-table                                           { width:100%; overflow:visible; text-align:left; display:table; border:none; border-collapse:collapse; border-spacing:0; }
-table, caption, tbody, thead, tr, th, td        { text-align:left; }
-caption, thead                                  { font-weight:bold; text-align:left; }
-tr                                              { padding:3px; padding:0; }
-tr+tr                                           { margin-top:10px; border-top:1px solid $color--smoke; }
-th, td                                          { padding:10px; min-width:40px; border:none; vertical-align:top; position:relative; top:0; left:0; }
-td:empty                                        { display:none; visibility:hidden; }
-
-.table--rowHover thead tr:hover,
-.table--stripes thead tr:nth-child(odd)         { background-color:transparent; }
-.table--rowHover tr:hover,
-.table--stripes tr:nth-child(odd)               { background-color:$color--blue-20; }
-
-.table--mobile table, 
-.table--mobile tr, 
-.table--mobile td                               { display:block; border:none; }
-.table--mobile thead                            { padding:5px 10px; background-color:$color--snow; border:none; border-bottom:2px solid $color--smoke; font-weight:bold; display:none; }
-.table--mobile tr                               { border-radius:3px; }
-.table--mobile tr:nth-child(odd)                { background-color:$color--smoke; }
-.table--mobile tr:nth-child(odd) td             { border-color:$color--snow; }
-.table--mobile td                               { margin:0; display:block; }
-.table--mobile td+td                            { border-top:1px solid $color--smoke; }
-.table--mobile td[data-title]:before            { padding:0 10px 0 0; content:attr(data-title) ":\00A0"; color:$color--midnight; display:inline-block; width:30%; font-weight:bold; overflow:hidden; }
-.table--mobile td .cell-content                 { display:inline-block; width:68%; vertical-align:top; overflow:hidden; }
 
 /***** Aspect Ratio *****/
 .aspect                                         { position:relative; }
@@ -219,30 +209,6 @@ textarea:focus, button:focus                    { outline:none; }
 Tablet - This applies from 768px onwards
 ***********************************************/
 @media (min-width:768px) {
-  table                                         { font-size:inherit; }
-
-  .table--mobile table                          { display:table; }
-  .table--mobile tbody, 
-  .table--mobile thead                          { display:table-row-group; }
-  .table--mobile tr                             { display:table-row; }
-  .table--mobile tr+*                           { border-top:1px solid $color--smoke; }
-  .table--mobile tr:nth-child(odd)              { background-color:transparent; }
-  .table--mobile tr:nth-child(odd) td           { border:none; }
-  .table--mobile tr:nth-child(odd)+tr           { margin-top:0; border-top:1px solid $color--smoke; }
-
-  .table--mobile td                             { display:table-cell; }
-  .table--mobile td+td                          { border-top:none; }
-  .table--mobile td+td[data-title]:before, 
-  .table--mobile th+td[data-title]:before,
-  .table--mobile td[data-title]:before          { display:none; }
-  .table--mobile td .cell-content               { width:auto; }
-
-
-  .table--rowHover thead tr:hover,
-  .table--stripes thead tr:nth-child(odd)       { background-color:transparent; }
-  .table--rowHover tr:hover,
-  .table--stripes tr:nth-child(odd)             { background-color:$color--blue-20; }
-
   /***** Hide *****/
   .hide--mobile                                 { display:inherit !important; }
   .hide--tablet                                 { display:none !important; }
