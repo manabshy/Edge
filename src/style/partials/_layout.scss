@@ -1,6 +1,7 @@
-.title                                          { display:flex;
+.title                                          { display:flex; min-height:30px; align-items:center;
   &+*                                           { margin-top:16px; }
-  .checkbox                                     { margin:0 0 0 auto; width:auto; }
+  h2                                            { margin-right:auto; }
+  .checkbox                                     { margin:0; width:auto; }
 }
 
 .scrollY                                        { height:100%; position:relative; overflow-y:auto; }
@@ -105,11 +106,21 @@ details[open]                                   { padding-bottom:10px; }
 details .list                                   { margin:0; }
 details .list > li                              { padding:6px 0 0; }
 
-summary                                         { padding:0; list-style:none; min-width:100%; outline:none; cursor:pointer; }
+summary                                         { padding:10px; padding-left:0; list-style:none; display:flex; align-items:center; align-content:flex-start; outline:none; }
 summary::-webkit-details-marker                 { display:none; }
-summary .flexRight                              { float:right; }
 
-.summary__title                                 { padding:10px; padding-left:0; display:flex; align-items:center; align-content:flex-start; }
+// details                                         { display:block; width:100%; }
+// details[open] .horizontal                       { display:none; }
+// details[open]                                   { padding-bottom:10px; }
+
+// details .list                                   { margin:0; }
+// details .list > li                              { padding:6px 0 0; }
+
+// summary                                         { padding:0; list-style:none; min-width:100%; outline:none; cursor:pointer; }
+// summary::-webkit-details-marker                 { display:none; }
+// summary .flexRight                              { float:right; }
+
+// .summary__title                                 { padding:10px; padding-left:0; display:flex; align-items:center; align-content:flex-start; }
 
 /***** Timelines *****/
 .timeline                                       { margin:0; padding:0; list-style:none; display:flex; flex-direction:column; position:relative; }
@@ -170,7 +181,7 @@ This applies from 992px onwards
   .row__item                                    { flex-grow:1; }
   .row__item+*                                  { margin:0 0 0 30px; }
 
-  .row__item--aside                             { max-width:270px; flex-shrink:0; }
+  .row__item--aside                             { width:240px; max-width:240px; flex-shrink:0; }
 
   .body                                         { padding:80px 30px 0 30px; }
 

@@ -24,21 +24,3 @@ $color--blossom-10:     #FEF9FB;
 
 $color--snow:           #FFFFFF;
 $color--smoke:          #F3F4F7;
-
-/***** Fills *****/
-.icon--fill-midnight-70                         { fill:$color--midnight-70; }
-.icon--fill-midnight-50                         { fill:$color--midnight-50; }
-.icon--fill-midnight-20                         { fill:$color--midnight-20; }
-
-.icon--fill-info                                { fill:$color--info; }
-.icon--fill-negative                            { fill:$color--negative; }
-.icon--fill-positive                            { fill:$color--positive; }
-
-.icon--fill-snow                                { fill:$color--snow; }
-
-/***** Fills for oredering *****/
-.oredered-asc .icon .asc                        { fill:$color--info; }
-.oredered-asc .icon .des                        { fill:$color--midnight-10; }
-
-.oredered-des .icon .asc                        { fill:$color--midnight-10; }
-.oredered-des .icon .des                        { fill:$color--info; }

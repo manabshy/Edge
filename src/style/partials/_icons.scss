@@ -12,3 +12,21 @@
 .icon--s                                        { height:10px; width:10px; top:-2px; }
 .icon--s.icon--onLeft                           { margin-right:5px; }
 .icon--s.icon--onRight                          { margin-left:5px; }
+
+/***** Fills *****/
+.icon--fill-midnight-70                         { color:$color--midnight-70; }
+.icon--fill-midnight-50                         { color:$color--midnight-50; }
+.icon--fill-midnight-20                         { color:$color--midnight-20; }
+
+.icon--fill-info                                { color:$color--info; }
+.icon--fill-negative                            { color:$color--negative; }
+.icon--fill-positive                            { color:$color--positive; }
+
+.icon--fill-snow                                { color:$color--snow; }
+
+/***** Fills for oredering *****/
+.oredered-asc .icon .asc                        { color:$color--info; }
+.oredered-asc .icon .des                        { color:$color--midnight-10; }
+
+.oredered-des .icon .asc                        { color:$color--midnight-10; }
+.oredered-des .icon .des                        { color:$color--info; }

@@ -7,7 +7,7 @@ button[aria-disabled="true"]                    { cursor:inherit; }
 input::-moz-focus-inner,
 button::-moz-focus-inner                        { border:0; padding:0; }
 
-.btn                                            { margin:0; padding:5px 10px; background:$color--midnight-70; border:0; color:$color--snow; fill:currentColor; font:inherit; font-size:12px; display:inline-flex; flex-direction:row; align-items:center; vertical-align:middle; justify-content:center; text-align:center; text-decoration:none; width:auto; flex-wrap:nowrap; position:relative; top:0; left:0; cursor:pointer; border:none; border-radius:3px; overflow:visible; -webkit-appearance:none; -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none;
+.btn                                            { margin:0; padding:5px 10px; background:$color--midnight-70; border:0; color:$color--snow; fill:currentColor; font:inherit; font-size:12px; min-height:30px; display:inline-flex; flex-direction:row; align-items:center; vertical-align:middle; justify-content:center; text-align:center; text-decoration:none; width:auto; flex-wrap:nowrap; position:relative; top:0; left:0; cursor:pointer; border:none; border-radius:3px; overflow:visible; -webkit-appearance:none; -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none;
   transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s;
   -moz-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s;
   -webkit-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s;

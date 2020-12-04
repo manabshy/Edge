@@ -1,8 +1,8 @@
 .ng-select {
     &, &.ng-select-single {
         .ng-select-container {
-            font-size: $font-size-sm;
-            min-height: $input-height-sm;
+            font-size:13px;
+            min-height:30px;
         }
 
         .ng-value-container {
@@ -14,9 +14,9 @@
         .ng-select-container{
             height: 31px;
 
-            @include media-breakpoint-down(sm) {
-                height: 26px;
-            }
+            // @include media-breakpoint-down(sm) {
+            //     height: 26px;
+            // }
 
         }
 
@@ -27,32 +27,32 @@
 
     &.ng-select-opened, &.ng-select-focused {
         .ng-select-container {
-            border-color: $input-focus-border-color!important;
-            box-shadow: $input-focus-box-shadow!important;
+            border-color:#d8d9db;
+            box-shadow:#d8d9db;
         }
     }
 
     .ng-select-container{
-        border-color: $input-border-color;
-        color: $body-color;
+        border-color:#d8d9db;
+        color:#0A1A4A;
 
         .ng-placeholder {
-            color: $input-placeholder-color!important;
+            color:#0A1A4A;
         }
 
         .ng-arrow{
-            border-color: $body-color transparent transparent!important;
+            border-color:#d8d9db;
         }
     }
 }
 
-.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value {
-    @include alert-variant(theme-color-level("primary", $alert-bg-level), theme-color-level("primary", $alert-border-level), theme-color-level("primary", $alert-color-level));
-}
+// .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value {
+//     @include alert-variant(theme-color-level("primary", $alert-bg-level), theme-color-level("primary", $alert-border-level), theme-color-level("primary", $alert-color-level));
+// }
 
 .ng-select.ng-select-disabled {
     &>.ng-select-container{
-        background-color: $input-disabled-bg;
+        background-color:#d8d9db;
     
         &:hover{
             box-shadow: none;
@@ -71,7 +71,7 @@
             .ng-value-container {
                 padding-left: 0;
                 padding-top: 0;
-                margin-top: - spacer(2);
+                margin-top:0;
             }
         }
 
@@ -86,6 +86,6 @@
 
 .ng-select.is-invalid {
     .ng-select-container {
-        border-color: theme-color(danger);
+        border-color:red;
     }
 }
