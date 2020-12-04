@@ -106,21 +106,11 @@ details[open]                                   { padding-bottom:10px; }
 details .list                                   { margin:0; }
 details .list > li                              { padding:6px 0 0; }
 
-summary                                         { padding:10px; padding-left:0; list-style:none; display:flex; align-items:center; align-content:flex-start; outline:none; }
+summary                                         { padding:0; list-style:none; min-width:100%; display:flex; align-items:center; align-content:flex-start; outline:none; cursor:pointer; }
 summary::-webkit-details-marker                 { display:none; }
+summary .flexRight                              { float:right; }
+.summary__title                                 { padding:10px; padding-left:0; display:flex; min-width:100%; align-items:center; align-content:flex-start; }
 
-// details                                         { display:block; width:100%; }
-// details[open] .horizontal                       { display:none; }
-// details[open]                                   { padding-bottom:10px; }
-
-// details .list                                   { margin:0; }
-// details .list > li                              { padding:6px 0 0; }
-
-// summary                                         { padding:0; list-style:none; min-width:100%; outline:none; cursor:pointer; }
-// summary::-webkit-details-marker                 { display:none; }
-// summary .flexRight                              { float:right; }
-
-// .summary__title                                 { padding:10px; padding-left:0; display:flex; align-items:center; align-content:flex-start; }
 
 /***** Timelines *****/
 .timeline                                       { margin:0; padding:0; list-style:none; display:flex; flex-direction:column; position:relative; }
