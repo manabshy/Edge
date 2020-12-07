@@ -11,6 +11,7 @@
 @import "style/partials/icons";
 @import "style/partials/table";
 @import "style/partials/layout";
+@import "style/partials/card";
 
 //overrides
 //@import "style/bootstrap-overrides";
@@ -31,7 +32,7 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 //@import "../node_modules/angular-calendar/css/angular-calendar.css";
 
 /* ng-select theme */
-//@import "~@ng-select/ng-select/themes/default.theme.css";
+@import "~@ng-select/ng-select/themes/default.theme.css";
 @import "style/partials/ng-select";
 
 //partials
@@ -42,9 +43,9 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 //@import "style/partials/page-title";
 //@import "style/partials/animation";
 //@import "style/partials/nav";
-//@import "style/partials/card";
+
 //@import "style/partials/off-canvas";
-//@import "style/partials/ngx-bootstrap";
+// @import "style/partials/ngx-bootstrap";
 //@import "style/partials/toastr";
 //@import "style/partials/loading-bar";
 //@import "style/partials/sub-info";

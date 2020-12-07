@@ -21,6 +21,7 @@ button::-moz-focus-inner                        { border:0; padding:0; }
   -o-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s;
 }
 
+.btn--onRight                                   { margin-left:16px; }
 .btn .icon                                      { top:initial; }
 
 .btn[disabled]                                  { cursor:not-allowed; opacity:.4; }       
@@ -86,7 +87,7 @@ button::-moz-focus-inner                        { border:0; padding:0; }
 .btn--ghost:hover[aria-disabled]                { background-color:transparent; color:$color--midnight-70; box-shadow:inset 0px 0px 0px 1px #D8D9DB; }
 
 /***** Link *****/
-.btn--link                                      { background-color:transparent; color:$color--midnight-70; fill:$color--midnight-70; border:none; }
+.btn--link                                      { padding:0; background-color:transparent; color:$color--midnight-70; fill:$color--midnight-70; border:none; }
 .btn--link:hover                                { background-color:transparent; text-decoration:underline; }
 
 /***** Color - Hover *****/
@@ -104,6 +105,8 @@ button::-moz-focus-inner                        { border:0; padding:0; }
 
 .btn--container .btn                            { margin-top:0; margin-right:6px; }
 .btn--container .btn:last-child                 { margin-right:0; }
+
+.btn--search                                    { @extend .btn--info; border-radius:0 3px 3px 0; }
 
 /***** Loading States *****/
 .btn--loading,

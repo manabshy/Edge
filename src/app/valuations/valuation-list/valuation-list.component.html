@@ -1,50 +1,51 @@
 <div *ngIf="valuations" class="search-results" infiniteScroll [infiniteScrollDistance]="5"
   [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true">
 </div>
-
-<table class="table--mobile table--rowHover">
-  <thead>
-    <tr>
-      <th>Status</th>
-      <th>Address</th>
-      <th>Owner</th>
-      <th>Date</th>
-      <th>Valuer</th>
-      <th>Sale</th>
-      <th>Long Let</th>
-      <th>Short Let</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let val of valuations" (click)="navigateTo(['detail', val?.valuationEventId, 'edit'])" data-cy="valuationList">
-      <td data-title="Status">
-        <span class="cell-content">{{val?.valuationStatusLabel}}</span>
-      </td>
-      <td data-title="Address">
-        <span class="cell-content"><a class="table-link" [routerLink]="['detail', val?.valuationEventId, 'edit']" (click)="$event.stopPropagation()">{{val?.property?.address | formatAddress}}</a></span>
-      </td>
-      <td data-title="Owner">
-        <span class="cell-content">{{val?.propertyOwner?.contactNames || '-'}}</span>
-      </td>
-      <td data-title="Date">
-        <span class="cell-content">{{(val?.valuationDate | date: 'dd/MM/yyyy') || '-'}}</span>
-      </td>
-      <td data-title="Valuer">
-        <span class="cell-content" *ngIf="val?.salesValuer">{{val?.salesValuer?.fullName}}<small *ngIf="val.salesValuer && val.lettingsValuer">,</small></span>
-        <span class="cell-content" *ngIf="val?.lettingsValuer">{{val.lettingsValuer?.fullName}}</span>
-      </td>
-      <td data-title="Sale">
-        <span class="cell-content"><ng-container *ngIf="val?.suggestedAskingPrice, else noValue">{{val?.suggestedAskingPrice | currency:'GBP':'symbol':'1.0-0'}}</ng-container></span>
-      </td>
-      <td data-title="Long Let">
-        <span class="cell-content"><ng-container *ngIf="val?.suggestedAskingRentLongLet, else noValue">{{val?.suggestedAskingRentLongLet | currency:'GBP':'symbol':'1.0-0'}} pw</ng-container></span>
-      </td>
-      <td data-title="Short Let">
-        <span class="cell-content"><ng-container *ngIf="val?.suggestedAskingRentShortLet, else noValue">{{val?.suggestedAskingRentShortLet | currency:'GBP':'symbol':'1.0-0'}} pw</ng-container></span>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<div class="table">
+  <table class="table--mobile table--rowHover">
+    <thead>
+      <tr>
+        <th>Status</th>
+        <th>Address</th>
+        <th>Owner</th>
+        <th>Date</th>
+        <th>Valuer</th>
+        <th>Sale</th>
+        <th>Long Let</th>
+        <th>Short Let</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let val of valuations" (click)="navigateTo(['detail', val?.valuationEventId, 'edit'])" data-cy="valuationList">
+        <td data-title="Status">
+          <span class="cell-content">{{val?.valuationStatusLabel}}</span>
+        </td>
+        <td data-title="Address">
+          <span class="cell-content"><a class="table-link" [routerLink]="['detail', val?.valuationEventId, 'edit']" (click)="$event.stopPropagation()">{{val?.property?.address | formatAddress}}</a></span>
+        </td>
+        <td data-title="Owner">
+          <span class="cell-content">{{val?.propertyOwner?.contactNames || '-'}}</span>
+        </td>
+        <td data-title="Date">
+          <span class="cell-content">{{(val?.valuationDate | date: 'dd/MM/yyyy') || '-'}}</span>
+        </td>
+        <td data-title="Valuer">
+          <span class="cell-content" *ngIf="val?.salesValuer">{{val?.salesValuer?.fullName}}<small *ngIf="val.salesValuer && val.lettingsValuer">,</small></span>
+          <span class="cell-content" *ngIf="val?.lettingsValuer">{{val.lettingsValuer?.fullName}}</span>
+        </td>
+        <td data-title="Sale">
+          <span class="cell-content"><ng-container *ngIf="val?.suggestedAskingPrice, else noValue">{{val?.suggestedAskingPrice | currency:'GBP':'symbol':'1.0-0'}}</ng-container></span>
+        </td>
+        <td data-title="Long Let">
+          <span class="cell-content"><ng-container *ngIf="val?.suggestedAskingRentLongLet, else noValue">{{val?.suggestedAskingRentLongLet | currency:'GBP':'symbol':'1.0-0'}} pw</ng-container></span>
+        </td>
+        <td data-title="Short Let">
+          <span class="cell-content"><ng-container *ngIf="val?.suggestedAskingRentShortLet, else noValue">{{val?.suggestedAskingRentShortLet | currency:'GBP':'symbol':'1.0-0'}} pw</ng-container></span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 
 

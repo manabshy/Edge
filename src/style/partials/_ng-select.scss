@@ -1,3 +1,10 @@
+// .ng-select                          { display:block; border-radius:0; width:100%; min-height:30px; color:#555; border-color:#d8d9db; border-width:1px; border-radius:3px; border-style:solid; position:relative; top:0; left:0; outline:0 none; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; -webkit-appearance:none; transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -moz-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -webkit-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -o-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; }
+// .ng-select-container                {  }
+// .ng-dropdown-panel                  { background-color:#FFF; }
+// .ng-placeholder                     { padding:0.4em 0.8em; width:100%; position:absolute; top:3px; left:0; }
+// .ng-value                           {  }
+// .ng-input                           {  }
+
 .ng-select {
     &, &.ng-select-single {
         .ng-select-container {

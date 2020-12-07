@@ -1,13 +1,13 @@
 timepicker {
     .form-control {
-        @extend .form-control-sm;
+        // @extend .form-control-sm;
     }
 }
 
 bs-datepicker-container {
 
     .bs-datepicker-body table td span.selected, .bs-datepicker-body table td span[class*=select-]:after, .bs-datepicker-body table td.selected span, .bs-datepicker-body table td[class*=select-] span:after, .bs-datepicker-head {
-        background-color: theme-color("dark")!important;
+        // background-color: theme-color("dark")!important;
     }
 
     .is-other-month {
@@ -15,7 +15,7 @@ bs-datepicker-container {
     }
 
     .bs-datepicker {
-        border-radius: $border-radius;
+        border-radius: 3px;
     }
 
     .bs-datepicker-container {
@@ -25,7 +25,7 @@ bs-datepicker-container {
     .bs-datepicker-head {
         height: 55px;
         .current {
-            @extend .custom-select;
+            // @extend .custom-select;
             width: auto;
         }
     }
@@ -36,7 +36,7 @@ popover-container {
     &.alert-warning {
         .arrow{
             &::after {
-                border-top-color: theme-color-level('warning', $alert-bg-level);
+                // border-top-color: theme-color-level('warning', $alert-bg-level);
             }
         }
     }
