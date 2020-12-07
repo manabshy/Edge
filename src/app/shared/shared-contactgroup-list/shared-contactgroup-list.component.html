@@ -10,16 +10,11 @@
     </thead>
     <tbody>
       <tr *ngFor="let contactGroup of contactGroups" (click)="navigateTo(['people', contactGroup.contactGroupId])">
-        <td data-title="Names" *ngFor="let contactPerson of contactGroup?.contactPeople;  last as isLast; first as isFirst">
-          <span class="cell-content">
-            <ng-container *ngIf="contactPerson?.personId === personId; else link">
-              {{contactPerson?.addressee}}
-            </ng-container>
-            <ng-template #link>
-              <a [routerLink]="['../../../detail', contactPerson?.personId ]" [queryParams]="{showNotes: true}"
-                (click)="$event.stopPropagation();">{{contactPerson?.addressee}}</a>
-            </ng-template>
-            <ng-container *ngIf="!isLast">, </ng-container>
+        <td data-title="Names">
+          <span class="cell-content" *ngFor="let contactPerson of contactGroup?.contactPeople;  last as isLast; first as isFirst">
+            <ng-container *ngIf="contactPerson?.personId === personId; else link">{{contactPerson?.addressee}}</ng-container>
+            <ng-template #link><a [routerLink]="['../../../detail', contactPerson?.personId ]" [queryParams]="{showNotes: true}"(click)="$event.stopPropagation();">{{contactPerson?.addressee}}</a></ng-template>
+            <ng-container *ngIf="!isLast">,&nbsp;</ng-container>
           </span>
         </td>
         <td data-title="Type">

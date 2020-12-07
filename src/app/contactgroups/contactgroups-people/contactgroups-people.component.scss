@@ -1,55 +1,55 @@
-@import "../../../style/bootstrap-overrides";
+// @import "../../../style/bootstrap-overrides";
 
-@import "../../../../node_modules/bootstrap/scss/functions";
-@import "../../../../node_modules/bootstrap/scss/variables";
-@import "../../../../node_modules/bootstrap/scss/mixins";
+// @import "../../../../node_modules/bootstrap/scss/functions";
+// @import "../../../../node_modules/bootstrap/scss/variables";
+// @import "../../../../node_modules/bootstrap/scss/mixins";
 
-form {
-    padding-bottom: spacer(5);
+// form {
+//     padding-bottom: spacer(5);
 
-    .form-actions {
-        @include fixed-bottom('xl');
-    }
+//     .form-actions {
+//         @include fixed-bottom('xl');
+//     }
 
-}
+// }
 
-.type-col {
-    @include media-breakpoint-up('sm'){
-        border-left: 1px solid $border-color;
-    }
-}
+// .type-col {
+//     @include media-breakpoint-up('sm'){
+//         border-left: 1px solid $border-color;
+//     }
+// }
 
-.new-person {
-    background: rgba(theme-color('info'), .2);
-}
+// .new-person {
+//     background: rgba(theme-color('info'), .2);
+// }
 
-.results-chip {
-    position: sticky;
-    bottom: - spacer(3);
-    background: rgba(color("white"), .7);
-    z-index: 50;
-    padding: spacer(2) 0 spacer(3);
+// .results-chip {
+//     position: sticky;
+//     bottom: - spacer(3);
+//     background: rgba(color("white"), .7);
+//     z-index: 50;
+//     padding: spacer(2) 0 spacer(3);
 
-    @include media-breakpoint-up(sm){
-        display: none;
-    }
-}
+//     @include media-breakpoint-up(sm){
+//         display: none;
+//     }
+// }
 
-.notes-disabled {
-    position: relative;
-    pointer-events: none;
+// .notes-disabled {
+//     position: relative;
+//     pointer-events: none;
 
-    .alert {
-        position: absolute;
-        top: spacer(3);
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 1;
-        white-space: nowrap;
-    }
+//     .alert {
+//         position: absolute;
+//         top: spacer(3);
+//         left: 50%;
+//         transform: translateX(-50%);
+//         z-index: 1;
+//         white-space: nowrap;
+//     }
 
-    app-notes {
-        opacity: 0.4;
-        display: block;
-    }
-}
+//     app-notes {
+//         opacity: 0.4;
+//         display: block;
+//     }
+// }

@@ -41,7 +41,7 @@ form .invalid input:checked + label            	{ color:$color--negative; }
 form .invalid input:checked + label:before     	{ background-color:$color--negative; border-color:$color--negative; }
 form .invalid input, form .invalid textarea, 
 form .invalid select, form .invalid textarea   	{ border-color:$color--negative; }
-form fieldset .message                         	{ margin:0; border-radius:0 0 3px 3px; top:-2px; }
+form fieldset imput+.message                    { margin:0; border-radius:0 0 3px 3px; top:-2px; }
 form fieldset.invalid .radio input:checked + label:before, 
 form fieldset .invalid .radio input:checked + label:before { background-color:transparent; }
 

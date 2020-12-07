@@ -136,7 +136,7 @@ img                                             { border:0; vertical-align:middl
 .message--negative                              { background-color:$color--negative; }
 
 /***** Pills *****/
-.pill                                           { padding:0 5px; display:inline-flex; align-items:center; line-height:initial; background-color:$color--midnight-20; fill:$color--snow; color:$color--snow; font-weight:bold; border-radius:5px; vertical-align:middle; }
+.pill                                           { padding:0 5px; display:inline-flex; align-items:center; line-height:initial; background-color:$color--midnight-20; fill:currentColor; color:$color--midnight; font-weight:bold; border-radius:5px; vertical-align:middle; }
 .pill+.pill,
 .pill--onRight                                  { margin-left:6px; }
 

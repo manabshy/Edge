@@ -2,7 +2,7 @@
   <div class="row__item row__item--aside">
     <div class="card">
       <div class="card__header">
-        People
+        Main Contact
       </div>
       <div class="card__body">
         <ol class="list">
@@ -66,6 +66,9 @@
       </div>
       <div class="card__body">
         <ol class="list list--divider list--hover">
+          <li class="current">
+            Personal Contact Group
+          </li>
           <li>
             Notes
           </li>
@@ -93,7 +96,7 @@
       You must add <b>1</b> company for a company contact.
     </div>
 
-    <form action="">
+    <!-- <form action="">
       <fieldset class="fieldset--width-max">
         <legend class="fieldset-title">Company</legend>
         <label for="">Company Name</label>
@@ -148,7 +151,7 @@
           </span>
         </span>
       </fieldset>
-    </form>
+    </form> -->
 
 
 
@@ -282,21 +285,19 @@
           </form>
         </fieldset>
       </ng-container>
+      
+      
       <ng-container *ngIf="!isNewContactGroup  || isTypePicked">
         <fieldset>
           <legend class="fieldset-title">People</legend>
-  
-          <div class="row justify-content-end mb-3" *ngIf="importantContactNotes?.length">
-            <div class="col-sm-10">
-              <div class="alert alert-danger small mb-2 mr-2 d-inline-block"
-                *ngFor="let importantNote of importantContactNotes">
-                {{importantNote.text}}
-              </div>
+          <div *ngIf="importantContactNotes?.length">
+            <div class="message message--negative"
+              *ngFor="let importantNote of importantContactNotes">
+              {{importantNote.text}}
             </div>
           </div>
-          <div class="row justify-content-end">
-            <div class="col-sm-10">
-              <div class="list-group mb-3">
+
+          
                 <ng-container>
                   <a [routerLink]="person?.isNewPerson ? null : ['../../../../detail', person?.personId ]"
                     [queryParams]="{showNotes: true}" class="list-group-item list-group-item-action"
@@ -305,12 +306,11 @@
                     <div >
                       <div class="col">
                         <app-score-badge [person]="person"></app-score-badge>
-                        <span class="badge badge-pill badge-danger mb-2 mr-2"
-                          *ngIf="person?.warning && person?.warning?.id !== 1">{{person?.warningStatusComment || person?.warning?.value}}</span>
-                        <span class="badge badge-pill badge-primary mb-2"
-                          *ngIf="person?.isMainPerson && contactGroupDetails.contactType !== 4">Main Person</span>
+                        <span class="pill pill-negative" *ngIf="person?.warning && person?.warning?.id !== 1">{{person?.warningStatusComment || person?.warning?.value}}</span>
+                        <span class="pill pill-positive" *ngIf="person?.isMainPerson && contactGroupDetails.contactType !== 4">Main Person</span>
                       </div>
-                      <div class="col-auto" *ngIf="!person?.isNewPerson; else removeSelectedPerson">
+
+                      <!-- <div class="col-auto" *ngIf="!person?.isNewPerson; else removeSelectedPerson">
                         <div dropdown placement="bottom right">
                           <a class="btn btn-light dropdown-toggle" href [id]="'button' + i" dropdownToggle
                             (click)="$event.stopPropagation(); false" [attr.aria-controls]="'dropdown' + i">Actions <span
@@ -357,8 +357,9 @@
                             </li>
                           </ul>
                         </div>
-                      </div>
-                      <ng-template #removeSelectedPerson>
+                      </div> -->
+
+                      <!-- <ng-template #removeSelectedPerson>
                         <div class="col text-right">
                           <div dropdown placement="bottom right">
                             <a class="btn btn-light dropdown-toggle" href [id]="'button' + i" dropdownToggle
@@ -381,71 +382,69 @@
                             </ul>
                           </div>
                         </div>
-                      </ng-template>
-                      <div class="col-12">
-                        <div *ngIf="!isNewContactGroup">
-                          <ng-container *ngIf="person?.personNotes?.length">
-                            <div class="alert alert-danger small mb-2 mr-2 d-inline-block"
-                              *ngFor="let importantNote of person?.personNotes">
-                              {{importantNote.text}}
-                            </div>
-                          </ng-container>
-                        </div>
-                      </div>
-                      <div class="col-12 mb-2">
-                        <strong>{{person?.firstName | titlecase}} {{person?.lastName | titlecase}}</strong>
-                      </div>
-                      <div class="col-sm-4 mb-2" *ngIf="contactGroupDetails?.contactType !== 4">
-                        <pre>{{person?.address | formatAddress}}</pre><span class="text-danger"
-                          *ngIf="!(person?.address | formatAddress)">No address</span></div>
-                      <div class="col-sm-3 col-xl-4">
-                        <p class="mb-2 text-danger"
-                          *ngIf="!person?.phoneNumbers.length || !person?.phoneNumbers[0].number">
-                          No phone</p>
-                        <ng-container *ngFor="let phoneNumber of person?.phoneNumbers">
-                          <p class="mb-2" *ngIf="phoneNumber?.number">
-                            <app-telephone [person]="person" [number]="phoneNumber.number"
-                              [warning]="person?.warningStatusComment || person?.warning?.value"></app-telephone>
-                          </p>
-                        </ng-container>
-                      </div>
-                      <div class="col-sm-5 col-xl-4">
-                        <p class="mb-2 text-danger"
-                          *ngIf="!person?.emailAddresses.length || !person?.emailAddresses[0].email">
-                          No email</p>
-                        <ng-container *ngFor="let emailAddress of person?.emailAddresses">
-                          <p class="mb-2 text-truncate" *ngIf="emailAddress?.email"><a (click)="$event.stopPropagation()"
-                              class="mobile-btn" href="mailto:{{emailAddress.email}}">{{emailAddress?.email}}</a></p>
-                        </ng-container>
-                      </div>
-                      <div class="col-12">
-                        <hr class="my-1">
-                      </div>
-                      <div class="col-12">
-                        <div class="row align-items-center">
-                          <div class="col">
-                            <a href class="btn btn-link px-0" (click)="showHideMarkPrefs($event, i)"
-                              [attr.aria-expanded]="!isCollapsed[i]" [attr.aria-controls]="'collapseMark' + i">Marketing
-                              Prefs
-                              <span
-                                class="badge badge-pill badge-primary">{{person?.marketingPreferences?.count || 0}}</span>
-                            </a>
+                      </ng-template> -->
+
+                      <!-- <div *ngIf="!isNewContactGroup">
+                        <ng-container *ngIf="person?.personNotes?.length">
+                          <div class="message message--negative" *ngFor="let importantNote of person?.personNotes">
+                            {{importantNote.text}}
                           </div>
-                        </div>
-                        <div [id]="'collapseMark' + i" [collapse]="!isCollapsed[i]">
-                          <ul>
-                            <li *ngIf="person?.marketingPreferences?.marketBulletin">Quarterly bulletin</li>
-                            <li *ngIf="person?.marketingPreferences?.general">Special offers</li>
-                            <li *ngIf="person?.marketingPreferences?.events">Landlord/investor events</li>
-                            <li *ngIf="person?.marketingPreferences?.newHomes">New homes/investments</li>
-                            <li *ngIf="person?.marketingPreferences?.general">Other occasional marketing</li>
-                          </ul>
-                        </div>
-                      </div>
-                      <div class="col-12 text-right">
-                        <small class="text-muted">P-{{person?.personId}}</small>
-                      </div>
+                        </ng-container>
+                      </div> -->
+
+                      <!-- <p class="message message--negative">5 importtant messages</p> -->
+
+                      <ol class="list">
+                        <li>
+                          {{person?.firstName | titlecase}} {{person?.lastName | titlecase}}
+                        </li>
+                        
+                        <li *ngIf="contactGroupDetails?.contactType !== 4">
+                          {{person?.address | formatAddress}}
+                          <p class="message message--negative" *ngIf="!(person?.address | formatAddress)">No address</p>
+                        </li>
+                        
+                        <li *ngIf="!person?.phoneNumbers.length || !person?.phoneNumbers[0].number">
+                          No phone
+                        </li>
+                        
+                        <li *ngFor="let phoneNumber of person?.phoneNumbers">
+                          <p *ngIf="phoneNumber?.number">
+                            <app-telephone [person]="person" [number]="phoneNumber.number" [warning]="person?.warningStatusComment || person?.warning?.value"></app-telephone>
+                          </p>
+                        </li>
+
+                        <li *ngIf="!person?.emailAddresses.length || !person?.emailAddresses[0].email">
+                          No email
+                        </li>
+
+                        <li *ngFor="let emailAddress of person?.emailAddresses">
+                          <p *ngIf="emailAddress?.email">
+                            <a (click)="$event.stopPropagation()" href="mailto:{{emailAddress.email}}">{{emailAddress?.email}}</a>
+                          </p>
+                        </li>
+
+                        <li>
+                          <a href class="btn btn-link px-0" (click)="showHideMarkPrefs($event, i)" [attr.aria-expanded]="!isCollapsed[i]" [attr.aria-controls]="'collapseMark' + i">Marketing
+                            Prefs <span class="pill">{{person?.marketingPreferences?.count || 0}}</span>
+                          </a>
+                          <div [id]="'collapseMark' + i" [collapse]="!isCollapsed[i]">
+                            <ul>
+                              <li *ngIf="person?.marketingPreferences?.marketBulletin">Quarterly bulletin</li>
+                              <li *ngIf="person?.marketingPreferences?.general">Special offers</li>
+                              <li *ngIf="person?.marketingPreferences?.events">Landlord/investor events</li>
+                              <li *ngIf="person?.marketingPreferences?.newHomes">New homes/investments</li>
+                              <li *ngIf="person?.marketingPreferences?.general">Other occasional marketing</li>
+                            </ul>
+                          </div>
+                        </li>
+
+                        <li><small>P-{{person?.personId}}</small></li>
+                      </ol>
+
                     </div>
+
+                
                   </a>
                 </ng-container>
                 <a href (click)="showHideOffCanvas($event)"
@@ -466,9 +465,7 @@
                   *ngIf="!(contactGroupDetails?.contactPeople.length < 8)">
                   You can add max 8 People per contact group.
                 </div>
-              </div>
-            </div>
-          </div>
+
         </fieldset>
         <ng-container *ngIf="contactGroupDetails?.contactPeople.length">
           <fieldset>
