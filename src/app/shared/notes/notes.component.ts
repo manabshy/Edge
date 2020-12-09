@@ -42,6 +42,7 @@ export class NotesComponent implements OnInit, OnChanges {
   isPersonNote: boolean;
   isUpdating: boolean;
   currentStaffMember: StaffMember;
+  showNotesForm: boolean = false;
 
   constructor(private sharedService: SharedService,
     private contactGroupService: ContactGroupsService,
@@ -164,5 +165,10 @@ export class NotesComponent implements OnInit, OnChanges {
     if (this.noteData) {
       this.sharedService.addNote(this.noteData);
     }
+  }
+
+  toggleNotes(){
+    
+    this.showNotesForm = !this.showNotesForm;
   }
 }
