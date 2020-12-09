@@ -20,14 +20,14 @@
           <ng-template #current>
             <span class="badge badge-pill badge-primary">You</span>
           </ng-template> -->
-          
+
           <ng-container *ngIf="note?.createdBy !== currentStaffMember?.fullName; else current">
             <p class="txt--title">{{note?.createdBy}}</p>
           </ng-container>
           <small>{{note?.createDate | date: 'dd/MM/yyyy HH:mm'}}</small>
         </span>
-        <button class="btn btn--none btn--pin flexRight"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" class="icon icon--pin"><path d="M11.4 5.6L11.4 1.6 12.3 1.6C12.8 1.6 13.1 1.2 13.1 0.8L13.1 0.8C13.1 0.4 12.8 0 12.3 0L3.7 0C3.2 0 2.9 0.4 2.9 0.8L2.9 0.8C2.9 1.2 3.2 1.6 3.7 1.6L4.6 1.6 4.6 5.6C4.6 6.9 3.4 8 2 8L2 8 2 9.6 7.1 9.6 7.1 15.2 8 16 8.8 15.2 8.8 9.6 14 9.6 14 8 14 8C12.6 8 11.4 6.9 11.4 5.6Z"/></svg></button>
-        <button class="btn btn--none btn--important flexRight"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" class="icon icon--information"><path d="M8 16C12.4 16 16 12.4 16 8 16 3.6 12.4 0 8 0 3.6 0 0 3.6 0 8 0 12.4 3.6 16 8 16ZM9.5 4L9 9.6 7 9.6 6.5 4 9.5 4ZM8 13.2C7.3 13.2 6.7 12.6 6.7 11.9 6.7 11.2 7.3 10.6 8 10.6 8.7 10.6 9.3 11.2 9.3 11.9 9.3 12.6 8.7 13.2 8 13.2Z"/></svg></button>
+        <button class="btn btn--none btn--pin flexRight" (click)="setFlag(note?.id, false)"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" class="icon icon--pin"  [ngClass]="{'icon--pin': note.isPinned}"><path d="M11.4 5.6L11.4 1.6 12.3 1.6C12.8 1.6 13.1 1.2 13.1 0.8L13.1 0.8C13.1 0.4 12.8 0 12.3 0L3.7 0C3.2 0 2.9 0.4 2.9 0.8L2.9 0.8C2.9 1.2 3.2 1.6 3.7 1.6L4.6 1.6 4.6 5.6C4.6 6.9 3.4 8 2 8L2 8 2 9.6 7.1 9.6 7.1 15.2 8 16 8.8 15.2 8.8 9.6 14 9.6 14 8 14 8C12.6 8 11.4 6.9 11.4 5.6Z"/></svg></button>
+        <button class="btn btn--none btn--important flexRight" (click)="setFlag(note?.id, true)" ><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" class="icon icon--information" [ngClass]="{'icon--information': note.isImportant}"><path d="M8 16C12.4 16 16 12.4 16 8 16 3.6 12.4 0 8 0 3.6 0 0 3.6 0 8 0 12.4 3.6 16 8 16ZM9.5 4L9 9.6 7 9.6 6.5 4 9.5 4ZM8 13.2C7.3 13.2 6.7 12.6 6.7 11.9 6.7 11.2 7.3 10.6 8 10.6 8.7 10.6 9.3 11.2 9.3 11.9 9.3 12.6 8.7 13.2 8 13.2Z"/></svg></button>
       </div>
       <div class="card__body">
         {{note?.text}}
