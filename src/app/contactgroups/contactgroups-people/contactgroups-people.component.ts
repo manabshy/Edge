@@ -115,6 +115,11 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   public keepOriginalOrder = (a) => a.key;
 
+  info = '';
+  infoTypes: { name: string, isCurrent: boolean }[] = [
+    { name: 'contactGroup', isCurrent: true },
+    { name: 'notes', isCurrent: false }
+  ];
   constructor(
     private contactGroupService: ContactGroupsService,
     private fb: FormBuilder,
@@ -745,6 +750,16 @@ export class ContactgroupsPeopleComponent implements OnInit {
     }, { onlySelf: false });
     this.contactGroupDetailsForm.markAsDirty();
   }
+
+
+  setinfoType(type: string, index: number) {
+    this.info = type;
+    this.infoTypes.map(t => t.isCurrent = false);
+    this.infoTypes[index].isCurrent = true;
+    console.log('info type', this.info);
+
+  }
+
 
   hideCanvas(event) {
     this.isOffCanvasVisible = event;
