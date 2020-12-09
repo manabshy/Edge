@@ -1,10 +1,10 @@
-$border-radius:3px;
-
 .title                                          { display:flex; min-height:30px; align-items:center;
   &+*                                           { margin-top:16px; }
   h2                                            { margin-right:auto; }
   .checkbox                                     { margin:0; width:auto; }
 }
+
+app-telephone                                   { width:100%; display:flex; align-items:center; align-content:flex-start; position:relative; top:0; left:0; }
 
 .scrollY                                        { height:100%; position:relative; overflow-y:auto; }
 
@@ -64,26 +64,33 @@ $border-radius:3px;
 .header-navigation .icon--onRight               { position:relative; left:10px; }
 
 /***** Lists *****/
-.list                                           { margin:0; padding:0; list-style:none; color:$color--midnight; }
 *+.list                                         { margin-top:20px; }
+.list                                           { margin:0; padding:0; list-style:none; color:$color--midnight;}
+
 .list li .icon--s                               { top:auto; }
-.list > li                                      { margin:0; padding:0; display:flex; align-items:center; align-content:flex-start; position:relative; top:0; left:0; }
-.list > li+*                                    { margin-top:6px; }
-.list > li+* sup                                { margin-top:6px; }
+.list > li                                      { margin:0; padding:10px 0; display:flex; align-items:center; align-content:flex-start; position:relative; top:0; left:0; }
 .list > li:first-child                          { padding-top:0; }
 .list > li:last-child                           { padding-bottom:0; }
 
-.list--divider > li                             { box-shadow:inset 0 1px 0px 0px $color--midnight-10; -webkit-box-shadow:inset 0 1px 0px 0px $color--midnight-10; }
-.list--divider > li+*                           { margin-top:0; }
+.list--simple                                   {
+  li                                            { padding:0;
+    &+*                                         { margin-top:6px; }
+  }
+}
+
+.list--divider > li                             { box-shadow:inset 0 1px 0px 0px $color--midnight-10; -webkit-box-shadow:inset 0 1px 0px 0px $color--midnight-10;
+  &:only-child                                  { border-bottom:1px solid $color--midnight-10; }
+}
 
 .list--details > li                             { padding:0; }
 
 .list--hover > li,
 .list--hover > li:first-child                   { padding:10px; padding-left:0; }
-.list--hover > li+*                             { margin-top:0; }
 .list--hover > li.current,
 .list--hover > li.current:hover                 { padding:10px; background-color:$color--info; color:$color--snow; box-shadow:none; -webkit-box-shadow:none; border-radius:3px; }
 .list--hover > li:hover                         { color:$color--info; }
+
+.flexBottom                                     { margin-top:auto; }
 
 .flexRight                                      { margin-left:auto; }
 .flexRight+.flexRight                           { margin-left:8px; }
@@ -94,6 +101,7 @@ details[open] .horizontal                       { display:none; }
 details[open]                                   { padding-bottom:10px; }
 
 details .list                                   { margin:0; }
+details .list > li                              { padding:6px 0 0; }
 
 summary                                         { padding:0; list-style:none; min-width:100%; display:flex; align-items:center; align-content:flex-start; outline:none; cursor:pointer; }
 summary::-webkit-details-marker                 { display:none; }
@@ -151,6 +159,15 @@ summary .flexRight                              { float:right; }
 
 .grid                                           { margin:0; padding:0; list-style:none;
   li                                            { margin:0; padding:0; border-right:solid 1px $color--smoke; }
+}
+
+.open .dropdown-menu                            { display:block; }
+.dropdown-menu                                  { margin:0; padding:0; list-style:none; display:none; background-color:$color--midnight; color:$color--snow; border-radius:3px; position:absolute; right:0; z-index:10;
+  &-right                                       {  }
+  li                                            { margin:0; padding:0;
+    &+* .dropdown-item                          { border-top:1px solid $color--snow; }
+    .dropdown-item                              { padding:10px; display:block; }
+  }
 }
 
 /***********************************************

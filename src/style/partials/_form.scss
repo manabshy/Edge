@@ -26,7 +26,7 @@ form, label, input, textarea, select,
 .select select, .select optgroup option, 
 .select optgroup option, 
 .checkbox > span label, .radio > span label, 
-form .message, .btn                            	{ font-family:sans-serif; font-weight:normal; }
+form .message, .btn                            	{ font-weight:normal; }
 form + *, fieldset + *, fieldset small + *, 
 label + *, .label + *, input + *, 
 textarea + *, .select + *, .inline-parent + *  	{ margin-top:20px; }

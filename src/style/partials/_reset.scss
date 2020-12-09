@@ -132,7 +132,7 @@ img                                             { border:0; vertical-align:middl
 .message                                        { padding:.56em .8em; color:$color--snow; background-color:$color--midnight; border-radius:3px; width:100%; position:relative; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; }
 .message--positive                              { background-color:$color--positive; }
 .message--info                                  { background-color:$color--info; }
-.message--warning                               { background-color:$color--warning; color:$color--midnight; }
+.message--warning                               { background-color:$color--yellow; color:$color--midnight; border:1px solid $color--warning; }
 .message--negative                              { background-color:$color--negative; }
 
 /***** Pills *****/
