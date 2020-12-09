@@ -234,6 +234,8 @@
           </div>
 
           <ol class="cards">
+            <li>Me</li>
+            <li>You</li>
             <li *ngFor="let person of contactGroupDetails?.contactPeople ; index as i" [ngClass]="{'new-person': person?.isNewPerson, 'list-group-item-danger': person?.warning && person?.warning?.id !== 1}">
               <!-- <a [routerLink]="person?.isNewPerson ? null : ['../../../../detail', person?.personId ]" [queryParams]="{showNotes: true}"></a> -->
               <ol class="list">
@@ -244,7 +246,6 @@
                   </span>
                   <span class="pill pill--negative flexRight" *ngIf="person?.warning && person?.warning?.id !== 1">{{person?.warningStatusComment || person?.warning?.value}}</span>
                   <span class="pill pill--positive flexRight" *ngIf="person?.isMainPerson && contactGroupDetails.contactType !== 4">Main Person</span>
-
                   <div class="flexRight" *ngIf="!person?.isNewPerson; else removeSelectedPerson">
                     <div dropdown placement="bottom right">
                       <a class="btn btn-light dropdown-toggle" href [id]="'button' + i" dropdownToggle (click)="$event.stopPropagation(); false" [attr.aria-controls]="'dropdown' + i"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s"><ellipse class="st0" cx="32" cy="10.5" rx="5.9" ry="6"/><ellipse class="st0" cx="32" cy="32" rx="5.9" ry="6"/><ellipse class="st0" cx="32" cy="53.5" rx="5.9" ry="6"/></svg></a>
@@ -282,7 +283,6 @@
 
                 <li *ngIf="contactGroupDetails?.contactType !== 4">
                   <span>
-                    <sup>Address</sup>
                     {{person?.address | formatAddress}}
                     <p class="txt--negative" *ngIf="!(person?.address | formatAddress)">No address</p>
                   </span>

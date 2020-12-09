@@ -44,6 +44,7 @@ form .invalid select, form .invalid textarea   	{ border-color:$color--negative;
 form fieldset imput+.message                    { margin:0; border-radius:0 0 3px 3px; top:-2px; }
 form fieldset.invalid .radio input:checked + label:before, 
 form fieldset .invalid .radio input:checked + label:before { background-color:transparent; }
+.form--widthAuto                                { width:auto; }
 
 /***** Fieldset *****/
 fieldset                                       	{ padding:0; text-align:left; display:block; max-width:500px; position:relative; top:0; left:0; }
@@ -223,6 +224,7 @@ Forms with inline labels
 .labels--inline .radio input, 
 .labels--inline .checkbox input                 { width:auto; }
 .labels--inline .toggled label                  { width:50px; }
+
 /*********************************************** 
 Forms without labels
 ***********************************************/

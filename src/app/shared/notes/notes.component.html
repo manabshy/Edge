@@ -1,4 +1,20 @@
-<h4>Notes</h4>
+<div class="title">
+  <h2>Notes</h2>
+  <form action="">
+    <div class="inline-parent">
+      <fieldset class="inline-child">
+        <span class="checkbox checkbox--rtl">
+          <span>
+            <input type="checkbox"id="check01">
+            <label for="check01">Show My Notes</label>
+          </span>
+        </span>
+      </fieldset>
+    </div>
+  </form>
+</div>
+
+
 
 <div class="list-group-item text-center text-danger" *ngIf="!notes || !notes?.length && !isUpdating">
   <i class="far fa-sad-tear"></i> No notes
