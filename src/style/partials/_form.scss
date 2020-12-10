@@ -240,7 +240,7 @@ Tablet - This applies from 768px onwards
    .has-inline-elements select,
    .has-inline-elements .select                 { flex:1; }
    .has-inline-elements .btn--container         { margin:0; padding:0 0 0 10px; }
-   .inline-parent .inline-child + * 		  	{ margin-top:0; }
+   .inline-parent .inline-child + * 		  	   { margin-top:0; }
 }
 
 
@@ -281,6 +281,7 @@ Mobile (portrait 300px)
    .labels--inline .checkbox,
    .labels--inline .radio                       { margin-left:0; width:100%; }
    .inline-parent                               { display:block; }
+   .inline-parent--search                       { display:flex; }
    .inline-parent .inline-child,
    .inline-parent:last-child                    { margin-right:0; }
    .inline-parent .inline-child--width-1,

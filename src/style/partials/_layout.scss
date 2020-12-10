@@ -172,7 +172,7 @@ summary .flexRight                              { float:right; }
   &.show                                        { padding:6px 0;  border-radius:0 0 3px 3px; display:flex; flex-direction:column; }
   
   .dropdown-item                                { padding:6px 10px; text-align:left; background-color:$color--snow;
-    &.active                                    { background-color:$color--info; }
+    &.active                                    { background-color:$color--blue-20; }
   }
   
   li                                            { margin:0; padding:0;
