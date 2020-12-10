@@ -1,4 +1,158 @@
-<div class="row page-title">
+<div class="row">
+  <div class="row__item">
+    <div class="title">
+      <h2>Leads register</h2>
+      <div class="btn-group" dropdown placement="bottom right">
+        <button id="actionsToggle" dropdownToggle type="button" class="btn dropdown-toggle" aria-controls="actionsList">
+          <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon"><ellipse cx="32" cy="10.5" rx="5.9" ry="6"></ellipse><ellipse cx="32" cy="32" rx="5.9" ry="6"></ellipse><ellipse cx="32" cy="53.5" rx="5.9" ry="6"></ellipse></svg>
+        </button>
+        <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+          aria-labelledby="actionsToggle">
+          <li role="menuitem">
+            <a class="dropdown-item" href (click)="assignLeads()">
+              <span class="dropdown-icon">
+                <i class="fas fa-arrow-right fa-xs align-text-top"></i><i class="fas fa-user fa-fw"></i>
+              </span>
+              Assign
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <form [formGroup]="leadRegisterForm" *ngIf="showFilterOptions" autocompleteOff>
+      <fieldset>
+        <app-lead-finder [leadSuggestion]="leadRegisterForm.get('leadSearchTerm').value" (leadSearchTerm)="setLeadSearchTerm($event)"></app-lead-finder>
+      </fieldset>
+
+      <fieldset>
+        <label for="leadType">Type</label>
+        <span class="select">
+          <select id="leadType" formControlName="leadTypeId">
+            <option value="">All</option>
+            <option selected *ngFor="let leadType of leadTypes" [value]=leadType.id>{{leadType?.value}}</option>
+          </select>
+        </span>
+      </fieldset>
+
+      <fieldset>
+        <label for="dateFrom">Date From</label>
+        <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}" bsDatepicker #datepickerFrom="bsDatepicker" [appNoDoubleTap]='datepickerFrom' formControlName="dateFrom">
+      </fieldset>
+
+      <fieldset>
+        <label for="dateTo">Date To</label>
+        <input type="text" id="dateTo" placeholder="dd/mm/yyyy" [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY',customTodayClass: 'font-weight-bold'}" bsDatepicker #datepickerTo="bsDatepicker" [appNoDoubleTap]='datepickerTo' formControlName="dateTo">
+      </fieldset>
+
+      <app-office-finder (selectedOfficeId) ="getSelectedOfficeId($event)" [fullWidth]="true"></app-office-finder>
+      
+      <fieldset>
+        <span class="checkbox">
+          <span>
+            <input type="checkbox" id="closedInclusive" formControlName="includeClosedLeads">
+            <label for="closedInclusive">Include closed leads</label>
+          </span>
+        </span>
+      </fieldset>
+
+      <fieldset>
+        <button class="btn" id="search" (click)="PerformSearch()">Search</button>
+      </fieldset>
+    </form>
+
+    <form (ngSubmit)="showLeadsAssignmentModal()">
+      <div class="row" *ngIf="areLeadsAssignable">
+        <div class="col">
+          <h5>Select to assign</h5>
+        </div>
+        <div class="col-auto d-lg-none">
+          <button type="button" class="btn btn-link p-0" (click)="selectAllLeadsForAssignment($event)">
+            {{selectedLeadsForAssignment?.length ? 'Unselect' : 'Select'}} all
+          </button>
+        </div>
+      </div>
+    
+      <div *ngIf="leads" infiniteScroll [infiniteScrollDistance]="5" [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"></div>
+      
+      <div class="table">
+        <table class="table--mobile table--rowHover">
+          <thead>
+            <tr>
+              <th *ngIf="areLeadsAssignable">
+                <a href *ngIf="areLeadsAssignable" (click)="selectAllLeadsForAssignment($event)">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="assignAll" [attr.checked]="isSelectAllChecked ? 'checked' : null">
+                    <label class="custom-control-label small" for="assignAll"><span class="sr-only">Assign all</span></label>
+                  </div>
+                </a>
+              </th>
+              <th *ngIf="isClosedIncluded">Status</th>
+              <th>Type</th>
+              <th>Person</th>
+              <th>Chase Date</th>
+              <th>Chaser</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let lead of filteredLeads; let i = index;" (click)="selectLeadForAssignment($event, lead); navigateToEdit(lead)" [ngClass]="{'table-info': selectedLeadIndex(lead) >= 0}">
+              <td *ngIf="areLeadsAssignable">
+                <div class="custom-control custom-checkbox d-inline-block" (click)="$event.stopPropagation()">
+                  <input type="checkbox" class="custom-control-input" [attr.id]="'assign'+i"
+                    [attr.checked]="selectedLeadsForAssignment?.indexOf(lead) >= 0 ? 'checked' : null"
+                    (click)="selectLeadForAssignment($event, lead)">
+                  <label class="custom-control-label small" [attr.for]="'assign'+i"><span class="sr-only">Assign</span></label>
+                </div>
+              </td>
+              <td *ngIf="isClosedIncluded">
+                <span class="cell-content">
+                  <span class="pill">Closed</span>
+                </span>
+              </td>
+              <td data-title="Type">
+                <span class="cell-content">
+                  {{lead?.leadType}}
+                </span>
+              </td>
+              <td data-title="Person">
+                <span class="cell-content">
+                  <a class="table-link" href (click)="navigateToEdit(lead)">
+                    {{lead?.person}}
+                  </a>
+                </span>
+              </td>
+              <td data-title="Chase Date">
+                <span class="cell-content">
+                  {{(lead?.nextChaseDate | date: 'dd/MM/yyyy') || '-'}}
+                </span>
+              </td>
+              <td data-title="Chaser">
+                <span class="cell-content">
+                  {{lead?.owner}}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="text-center text-danger" *ngIf="!filteredLeads?.length">
+        <i class="far fa-sad-tear"></i> No results for your current search
+      </div>
+      <div class="form-actions" *ngIf="areLeadsAssignable">
+        <div class="container">
+          <div class="row justify-content-end w-100 no-gutters">
+            <div class="col-sm-10 d-flex">
+              <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
+              <button type="submit" class="btn btn-secondary">Assign <span class="badge badge-pill badge-primary">{{selectedLeadsForAssignment?.length}}</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- <div class="row page-title">
   <div class="col">
     <h4 class="m-0">Leads register</h4>
   </div>
@@ -21,14 +175,15 @@
       </ul>
     </div>
   </div>
-</div>
-<form class="pb-0 search-form" [formGroup]="leadRegisterForm" *ngIf="showFilterOptions" autocompleteOff>
+</div> -->
+
+<!-- <form class="pb-0 search-form" [formGroup]="leadRegisterForm" *ngIf="showFilterOptions" autocompleteOff>
   <div class="row align-items-center">
     <div class="col-sm">
       <div class="row">
-        <div class="col-12 form-group">
+        <div class="col-12 form-group"> -->
           <!-- <app-staffmember-finder (ownerChanged)="onOwnerChanged($event)"></app-staffmember-finder> -->
-          <app-lead-finder [leadSuggestion]="leadRegisterForm.get('leadSearchTerm').value" (leadSearchTerm)="setLeadSearchTerm($event)"></app-lead-finder>
+          <!-- <app-lead-finder [leadSuggestion]="leadRegisterForm.get('leadSearchTerm').value" (leadSearchTerm)="setLeadSearchTerm($event)"></app-lead-finder>
         </div>
         <div class="col-sm form-group">
           <label class="small" for="leadType">Type</label>
@@ -86,8 +241,9 @@
       </div>
     </div>
   </div>
-</form>
-<form class="pb-0" (ngSubmit)="showLeadsAssignmentModal()">
+</form> -->
+
+<!-- <form class="pb-0" (ngSubmit)="showLeadsAssignmentModal()">
   <div class="row" *ngIf="areLeadsAssignable">
     <div class="col">
       <h5>Select to assign</h5>
@@ -183,4 +339,4 @@
       </div>
     </div>
   </div>
-</form>
+</form> -->
