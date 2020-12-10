@@ -10,12 +10,6 @@
             <a role="button" class="overall" (click)="setinfoType(item?.name,i)"></a>
             {{item?.name|toPascalCase}}
           </li>
-          <!-- <li class="current">
-            Personal Contact Group
-          </li> -->
-          <!-- <li>
-            Notes
-          </li> -->
         </ol>
       </div>
     </div>
@@ -320,6 +314,13 @@
                           </ul>
                         </div>
                       </div>
+                    </li>
+                    <li *ngIf="!isNewContactGroup">
+                      <span *ngIf="person?.personNotes?.length">
+                        <div class="message message--negative" *ngFor="let importantNote of person?.personNotes">
+                          {{importantNote.text}}
+                        </div>
+                      </span>
                     </li>
 
                     <li *ngIf="contactGroupDetails?.contactType !== 4">
