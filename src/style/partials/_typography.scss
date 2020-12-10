@@ -52,6 +52,8 @@ p+p                                             { margin-top:16px; }
 .txt--title                                     { font-size:14px; font-weight:bold; }
 .txt--title+small                               { margin:0; }
 
+mark                                            { padding:0 2px; background-color:$color--info; color:$color--snow; border-radius:3px; }
+
 sup                                             { display:flex; font-size:10px; line-height:10px; font-weight:normal; color:$color--midnight-50; text-transform:uppercase; height:auto; top:0; }
 sup+p                                           { margin-top:3px; }
 .sup--positive                                  { color:$color--positive; }
