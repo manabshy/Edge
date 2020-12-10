@@ -25,7 +25,7 @@ export class NotesComponent implements OnInit, OnChanges {
   @Input() personNotes: ContactNote[];
   @Input() contactGroupNotes: ContactNote[];
   @Input() propertyNotes: PropertyNote[];
-  @Input() showNoteInput: boolean = true;
+  @Input() showNoteInput = true;
 
   notes = [];
   tests: any;
@@ -42,7 +42,8 @@ export class NotesComponent implements OnInit, OnChanges {
   isPersonNote: boolean;
   isUpdating: boolean;
   currentStaffMember: StaffMember;
-  showNotesForm: boolean = false;
+  showNotesForm = false;
+  showCreateNoteButton = true;
 
   constructor(private sharedService: SharedService,
     private contactGroupService: ContactGroupsService,
@@ -167,8 +168,13 @@ export class NotesComponent implements OnInit, OnChanges {
     }
   }
 
-  toggleNotes(){
-    
+  toggleNoteCreation() {
     this.showNotesForm = !this.showNotesForm;
+    this.showCreateNoteButton = false;
+  }
+
+  noteSaved() {
+    this.showCreateNoteButton = true;
+    this.showNotesForm = false;
   }
 }

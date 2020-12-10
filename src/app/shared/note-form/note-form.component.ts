@@ -24,6 +24,7 @@ export class NoteFormComponent implements OnInit {
   @Input() data;
   @Input() isCancelVisible = false;
   @Output() actionEmit = new EventEmitter<boolean>();
+  @Output() noteSaved = new EventEmitter<boolean>();
   @ViewChild('note', { static: true }) noteComponent: ElementRef;
   shortcuts = {
     'Left Message': 'Left message',
@@ -163,9 +164,7 @@ export class NoteFormComponent implements OnInit {
     if (note) {
       this.contactGroupService.addPersonNote(note).subscribe(data => {
         if (data) {
-          this.formReset();
-          this.contactGroupService.notesChanged(data);
-          this.toastr.success('Note successfully added');
+          this.onSaveComplete(data);
         }
       });
     }
@@ -181,12 +180,17 @@ export class NoteFormComponent implements OnInit {
     if (note && note.text) {
       this.contactGroupService.addContactGroupNote(note).subscribe(data => {
         if (data) {
-          this.formReset();
-          this.contactGroupService.notesChanged(data);
-          this.toastr.success('Note successfully added');
+          this.onSaveComplete(data);
         }
       });
     }
+  }
+
+  private onSaveComplete(data: any) {
+    this.formReset();
+    this.contactGroupService.notesChanged(data);
+    this.toastr.success('Note successfully added');
+    this.noteSaved.emit(true);
   }
 
   private formReset() {
