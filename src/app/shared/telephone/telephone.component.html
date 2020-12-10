@@ -1,5 +1,5 @@
 <span>
-  <sup>Phone Number</sup>
+  <!-- <sup>Phone Number</sup> -->
   <button type="button" class="btn btn--none" (click)="callOrText(true)" [attr.disabled]="isDialing || isFax ? true : null">
     <i class="fas fa-spinner fa-pulse d-inline-block mr-2" *ngIf="isDialing"></i> <span [innerHTML]="number | highlight : searchTerm"></span>
   </button>

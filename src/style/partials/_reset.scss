@@ -134,6 +134,7 @@ img                                             { border:0; vertical-align:middl
 .message--info                                  { background-color:$color--info; }
 .message--warning                               { background-color:$color--yellow; color:$color--midnight; border:1px solid $color--warning; }
 .message--negative                              { background-color:$color--negative; }
+.message--smoke                                 { background-color:$color--smoke; }
 
 /***** Pills *****/
 .pill                                           { padding:0 5px; display:inline-flex; align-items:center; line-height:initial; background-color:$color--midnight-20; fill:currentColor; color:$color--midnight; font-weight:bold; border-radius:5px; vertical-align:middle; }

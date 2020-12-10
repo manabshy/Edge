@@ -78,7 +78,7 @@ button::-moz-focus-inner                        { border:0; padding:0; }
 /***** Color - None *****/
 .btn--none,
 .btn--none:hover[disabled],
-.btn--none:hover                                { padding:0; background-color:transparent; color:inherit; fill:currentColor; border-radius:0; min-height:20px; }
+.btn--none:hover                                { padding:0; background-color:transparent; color:inherit; fill:currentColor; border-radius:0; min-height:auto; }
 
 /***** Ghost *****/
 .btn--ghost                                     { background-color:transparent; color:$color--midnight-70; box-shadow:inset 0px 0px 0px 1px #D8D9DB; }
