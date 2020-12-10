@@ -40,6 +40,7 @@
           </ng-container>
           <ng-template #current>
             <span class="pill pill--positive flexRight">You</span>
+            <p class="txt--title">{{note?.createdBy}}</p>
           </ng-template>
 
           <!-- <ng-container *ngIf="note?.createdBy !== currentStaffMember?.fullName; else current">
