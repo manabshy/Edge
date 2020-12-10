@@ -161,18 +161,19 @@ summary .flexRight                              { float:right; }
 }
 
 /***** Dropdowns *****/
-.dropdown-toggle                                { padding:5px 6px; background-color:$color--snow; border:1px solid $color--midnight-20; color:$color--midnight;
- &:hover                                        { background-color:$color--midnight-10; }
+.dropdown-toggle                                { padding:0; background-color:transparent; border:none; min-width:30px; color:$color--midnight;
+  &:hover                                       { background-color:$color--midnight-10; }
 }
 .open                                           { border-radius:3px 3px 0 0; position:relative;
+  .dropdown-toggle                              { background-color:$color--midnight-10; }
   .dropdown-menu                                { display:block; }
 }
 
-.dropdown-menu                                  { margin:0; padding:0; list-style:none; min-width:150px; display:none; background-color:$color--snow; color:$color--midnight; border-radius:3px; border:1px solid $color--midnight-30; position:absolute; right:0; z-index:10;
+.dropdown-menu                                  { margin:0; padding:0; list-style:none; min-width:150px; display:none; background-color:$color--snow; color:$color--midnight; border-radius:3px; border:1px solid $color--midnight-20; position:absolute; right:0; z-index:10;
   &.show                                        { padding:6px 0;  border-radius:0 0 3px 3px; display:flex; flex-direction:column; }
   
-  .dropdown-item                                { padding:6px 10px; text-align:left; background-color:$color--snow;
-    &.active                                    { background-color:$color--blue-20; }
+  .dropdown-item                                { padding:6px 10px; text-align:left; background-color:$color--snow; cursor:pointer; text-decoration:none;
+    &.active, &:hover                           { background-color:$color--blue-20; }
   }
   
   li                                            { margin:0; padding:0;
