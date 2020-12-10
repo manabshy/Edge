@@ -1,6 +1,6 @@
   <div class="row">
     <div #contactDetails class="row__item row__item--aside">
-      <div  class="card">
+      <!-- <div  class="card">
         <div class="card__header">
           <span >
             <sup class="sup--positive">100% Match</sup>
@@ -114,7 +114,8 @@
             </li>
           </ol>
         </div>
-      </div>
+      </div> -->
+      <app-person-details [personDetails]="searchedPersonDetails" [isClickable]="false"></app-person-details>
       <div class="card">
         <div class="card__header">
           <p>Additional Information</p>

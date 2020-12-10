@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Person } from '../models/person';
+import { MarketingPreferences, Person } from '../models/person';
 import { Router } from '@angular/router';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 
@@ -29,5 +29,11 @@ export class PersonDetailsComponent implements OnInit {
 
   navigate() {
     this.router.navigate(['/contact-centre/detail/', this.personDetails.personId, 'edit']);
+  }
+  getMarketingPrefClass(pref: boolean) {
+    return {
+      'icon--fill-positive': pref,
+      'icon--fill-negative': !pref
+    };
   }
 }
