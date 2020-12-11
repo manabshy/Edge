@@ -1,11 +1,11 @@
 <form [formGroup]="leadFinderForm">
-    <label class="small" for="leadSearch">Search <span class="text-muted">(Name, email, phone or address)</span></label>
-    <input type="search" id="leadSearch"
-        class="form-control form-control-sm"
-        aria-label="Search criteria"
-        (keyup)="onKeyup($event)"
-        (keydown.enter)="submit($event)"
-        [ngbTypeahead]="suggestions"
-        [focusFirst]="false"
-        (selectItem)="suggestionSelected($event)"
-        formControlName="leadSuggestion"></form>
+<label for="leadSearch">Name, email, phone or address</label>
+<input type="search" id="leadSearch"
+    aria-label="Search criteria"
+    (keyup)="onKeyup($event)"
+    (keydown.enter)="submit($event)"
+    [ngbTypeahead]="suggestions"
+    [focusFirst]="false"
+    (selectItem)="suggestionSelected($event)"
+    formControlName="leadSuggestion">
+</form>

@@ -1,7 +1,7 @@
 <div class="row">
   <div class="row__item row__item--aside">
     <div class="card">
-      <div class="card__header"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><path d="M45.6 36.9c1.9-3.6 3.2-7.8 3.2-12.4C48.8 11.1 37.8 0 24.4 0S0 11.1 0 24.5 11 49 24.4 49c4.5 0 8.8-1 12.3-3.3L54.9 64l9.1-8.5L45.6 36.9zM24.5 40.8c-9.1 0-16.2-7.2-16.2-16.3S15.4 8.2 24.5 8.2s16.2 7.2 16.2 16.3C40.7 33.6 33.6 40.8 24.5 40.8z"/></svg>Search Valuations</div>
+      <div class="card__header"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><path d="M45.6 36.9c1.9-3.6 3.2-7.8 3.2-12.4C48.8 11.1 37.8 0 24.4 0S0 11.1 0 24.5 11 49 24.4 49c4.5 0 8.8-1 12.3-3.3L54.9 64l9.1-8.5L45.6 36.9zM24.5 40.8c-9.1 0-16.2-7.2-16.2-16.3S15.4 8.2 24.5 8.2s16.2 7.2 16.2 16.3C40.7 33.6 33.6 40.8 24.5 40.8z"/></svg>Search Leads</div>
       <div class="card__body">
         <form [formGroup]="leadRegisterForm" *ngIf="showFilterOptions" autocompleteOff>
           <fieldset>
@@ -17,16 +17,18 @@
               </select>
             </span>
           </fieldset>
-    
-          <fieldset>
-            <label for="dateFrom">Date From</label>
-            <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}" bsDatepicker #datepickerFrom="bsDatepicker" [appNoDoubleTap]='datepickerFrom' formControlName="dateFrom">
-          </fieldset>
-    
-          <fieldset>
-            <label for="dateTo">Date To</label>
-            <input type="text" id="dateTo" placeholder="dd/mm/yyyy" [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY',customTodayClass: 'font-weight-bold'}" bsDatepicker #datepickerTo="bsDatepicker" [appNoDoubleTap]='datepickerTo' formControlName="dateTo">
-          </fieldset>
+          
+          <div class="inline-parent">
+            <fieldset class="inline-child">
+              <label for="dateFrom">Date From</label>
+              <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}" bsDatepicker #datepickerFrom="bsDatepicker" [appNoDoubleTap]='datepickerFrom' formControlName="dateFrom">
+            </fieldset>
+      
+            <fieldset class="inline-child">
+              <label for="dateTo">Date To</label>
+              <input type="text" id="dateTo" placeholder="dd/mm/yyyy" [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY',customTodayClass: 'font-weight-bold'}" bsDatepicker #datepickerTo="bsDatepicker" [appNoDoubleTap]='datepickerTo' formControlName="dateTo">
+            </fieldset>
+          </div>
     
           <app-office-finder (selectedOfficeId) ="getSelectedOfficeId($event)" [fullWidth]="true" class="displayBlock"></app-office-finder>
           
@@ -40,7 +42,7 @@
           </fieldset>
     
           <fieldset>
-            <button class="btn" id="search" (click)="PerformSearch()">Search</button>
+            <button class="btn btn--info" id="search" (click)="PerformSearch()">Search</button>
           </fieldset>
         </form>
       </div>
@@ -50,7 +52,8 @@
   <div class="row__item">
     <div class="title">
       <h2>Leads register</h2>
-      <div dropdown placement="bottom right">
+      <a class="btn btn--info" href (click)="assignLeads()">Assign Lead</a>
+      <!-- <div dropdown placement="bottom right">
         <button id="actionsToggle" dropdownToggle type="button" class="btn dropdown-toggle" aria-controls="actionsList">
           <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon"><ellipse cx="32" cy="10.5" rx="5.9" ry="6"></ellipse><ellipse cx="32" cy="32" rx="5.9" ry="6"></ellipse><ellipse cx="32" cy="53.5" rx="5.9" ry="6"></ellipse></svg>
         </button>
@@ -65,21 +68,12 @@
             </a>
           </li>
         </ul>
-      </div>
+      </div> -->
     </div>
 
-   
-
     <form (ngSubmit)="showLeadsAssignmentModal()">
-      <div class="row" *ngIf="areLeadsAssignable">
-        <div class="col">
-          <h5>Select to assign</h5>
-        </div>
-        <div class="col-auto d-lg-none">
-          <button type="button" class="btn btn-link p-0" (click)="selectAllLeadsForAssignment($event)">
-            {{selectedLeadsForAssignment?.length ? 'Unselect' : 'Select'}} all
-          </button>
-        </div>
+      <div class="message message--smoke" *ngIf="areLeadsAssignable">
+        Select to assign <button type="button" class="btn btn--onRight btn--link" (click)="selectAllLeadsForAssignment($event)">{{selectedLeadsForAssignment?.length ? 'Unselect' : 'Select'}} all</button>
       </div>
     
       <div *ngIf="leads" infiniteScroll [infiniteScrollDistance]="5" [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"></div>
@@ -88,13 +82,15 @@
         <table class="table--mobile table--rowHover">
           <thead>
             <tr>
-              <th *ngIf="areLeadsAssignable">
-                <a href *ngIf="areLeadsAssignable" (click)="selectAllLeadsForAssignment($event)">
-                  <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="assignAll" [attr.checked]="isSelectAllChecked ? 'checked' : null">
-                    <label class="custom-control-label small" for="assignAll"><span class="sr-only">Assign all</span></label>
-                  </div>
-                </a>
+              <th *ngIf="areLeadsAssignable" class="has--checkbox">
+                <!-- <a href *ngIf="areLeadsAssignable" (click)="selectAllLeadsForAssignment($event)"> -->
+                  <span class="checkbox checkbox--noMargin">
+                    <span>
+                      <input type="checkbox" id="assignAll" [attr.checked]="isSelectAllChecked ? 'checked' : null">
+                      <label for="assignAll"><!--Assign all-->&nbsp;</label>
+                    </span>
+                  </span>
+                <!-- </a> -->
               </th>
               <th *ngIf="isClosedIncluded">Status</th>
               <th>Type</th>
@@ -105,13 +101,15 @@
           </thead>
           <tbody>
             <tr *ngFor="let lead of filteredLeads; let i = index;" (click)="selectLeadForAssignment($event, lead); navigateToEdit(lead)" [ngClass]="{'table-info': selectedLeadIndex(lead) >= 0}">
-              <td *ngIf="areLeadsAssignable">
-                <div class="custom-control custom-checkbox d-inline-block" (click)="$event.stopPropagation()">
-                  <input type="checkbox" class="custom-control-input" [attr.id]="'assign'+i"
-                    [attr.checked]="selectedLeadsForAssignment?.indexOf(lead) >= 0 ? 'checked' : null"
-                    (click)="selectLeadForAssignment($event, lead)">
-                  <label class="custom-control-label small" [attr.for]="'assign'+i"><span class="sr-only">Assign</span></label>
-                </div>
+              <td data-title="Assign" *ngIf="areLeadsAssignable" class="has--checkbox">
+                <span class="cell-content">
+                  <span class="checkbox checkbox--noMargin checkbox--only" (click)="$event.stopPropagation()">
+                    <span>
+                      <input type="checkbox" [attr.id]="'assign'+i" [attr.checked]="selectedLeadsForAssignment?.indexOf(lead) >= 0 ? 'checked' : null" (click)="selectLeadForAssignment($event, lead)">
+                      <label [attr.for]="'assign'+i"><!--Assign-->&nbsp;</label>
+                    </span>
+                  </span>
+                </span>
               </td>
               <td *ngIf="isClosedIncluded">
                 <span class="cell-content">
@@ -144,18 +142,14 @@
           </tbody>
         </table>
       </div>
+      
       <div class="text-center text-danger" *ngIf="!filteredLeads?.length">
         <i class="far fa-sad-tear"></i> No results for your current search
       </div>
-      <div class="form-actions" *ngIf="areLeadsAssignable">
-        <div class="container">
-          <div class="row justify-content-end w-100 no-gutters">
-            <div class="col-sm-10 d-flex">
-              <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
-              <button type="submit" class="btn btn-secondary">Assign <span class="badge badge-pill badge-primary">{{selectedLeadsForAssignment?.length}}</span></button>
-            </div>
-          </div>
-        </div>
+
+      <div class="btn--container" *ngIf="areLeadsAssignable">
+        <button type="submit" class="btn btn--positive">Assign <span class="pill pill--snow pill--onRight">{{selectedLeadsForAssignment?.length}}</span></button>
+        <button (click)="cancel()" type="button" class="btn btn--ghost">Cancel</button>
       </div>
     </form>
   </div>

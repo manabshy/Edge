@@ -47,12 +47,14 @@ Tablet - This applies from 768px onwards
     .table--mobile td+td[data-title]:before, 
     .table--mobile th+td[data-title]:before,
     .table--mobile td[data-title]:before          { display:none; }
-    .table--mobile td .cell-content               { width:auto; }
+    .table--mobile td .cell-content               { width:100%; }
 
     .table--rowHover thead tr:hover,
     .table--stripes thead tr:nth-child(odd)       { background-color:transparent; }
     .table--rowHover tr:hover,
     .table--stripes tr:nth-child(odd)             { background-color:$color--smoke; }
+
+    .has--checkbox                                { width:20px; min-width:20px; }
 }
 
 

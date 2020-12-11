@@ -87,7 +87,7 @@ button::-moz-focus-inner                        { border:0; padding:0; }
 .btn--ghost:hover[aria-disabled]                { background-color:transparent; color:$color--midnight-70; box-shadow:inset 0px 0px 0px 1px #D8D9DB; }
 
 /***** Link *****/
-.btn--link                                      { padding:0; background-color:transparent; color:$color--midnight-70; fill:$color--midnight-70; border:none; }
+.btn--link                                      { padding:0; min-height:auto; background-color:transparent; color:$color--midnight-70; fill:$color--midnight-70; border:none; }
 .btn--link:hover                                { background-color:transparent; text-decoration:underline; }
 
 /***** Color - Hover *****/

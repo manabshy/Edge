@@ -5,51 +5,26 @@
 // .ng-value                           {  }
 // .ng-input                           {  }
 
-ng-select {
-    &, &.ng-select-single {
-        .ng-select-container {
-            font-size:13px;
-            min-height:30px;
-        }
-
-        .ng-value-container {
-            padding-top: 0;
-        }
+ng-select                               {
+    &, 
+    &.ng-select-single                  {
+        .ng-select-container            { min-height:30px; }
+        .ng-value-container             { padding-top: 0; }
     }
 
-    &.ng-select-single{
-        .ng-select-container{
-            height: 31px;
-
-            // @include media-breakpoint-down(sm) {
-            //     height: 26px;
-            // }
-
-        }
-
-        .ng-input {
-            top: 3px!important;
-        }
+    &.ng-select-single                  {
+        .ng-select-container            { height: 31px; }
+        .ng-input                       { top: 3px!important; }
     }
 
-    &.ng-select-opened, &.ng-select-focused {
-        .ng-select-container {
-            border-color:#d8d9db;
-            box-shadow:#d8d9db;
-        }
+    &.ng-select-opened, 
+    &.ng-select-focused                 {
+        .ng-select-container            { border-color:#d8d9db; box-shadow:#d8d9db; }
     }
 
-    .ng-select-container{
-        border-color:#d8d9db;
-        color:#0A1A4A;
-
-        .ng-placeholder {
-            color:#0A1A4A;
-        }
-
-        .ng-arrow{
-            border-color:#d8d9db;
-        }
+    .ng-select-container                { border-color:#d8d9db; color:#0A1A4A;
+        .ng-placeholder                 { color:#0A1A4A; }
+        .ng-arrow                       { border-color:#d8d9db; }
     }
 }
 
