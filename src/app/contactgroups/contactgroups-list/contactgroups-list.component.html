@@ -10,28 +10,25 @@
     </thead>
     <tbody>
       <!-- Added id="row-item" to fix infinite scroll -->
-      <tr (click)="navigateToDetail(contactGroup.personId)" id="row-item" [ngClass]="{'list-group-item-danger': contactGroup?.warning && contactGroup?.warning?.id !== 1}" *ngFor="let contactGroup of contactGroups; let i = index; last as isLast">
+      <tr (click)="navigateToDetail(contactGroup.personId)" id="row-item"
+        [ngClass]="{'list-group-item-danger': contactGroup?.warning && contactGroup?.warning?.id !== 1}"
+        *ngFor="let contactGroup of contactGroups; let i = index; last as isLast">
         <td data-title="Full Name">
           <span class="cell-content">
             <p [innerHTML]="contactGroup?.addressee | highlight : searchTerm"></p>
-            <!-- <a [routerLink]="['detail', contactGroup.personId ]" [queryParams]="{showNotes: true}">
-              <p [innerHTML]="contactGroup?.addressee | highlight : searchTerm"></p>
-            </a> -->
-
-            <!-- <ol class="list list--simple">
-              <li><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><path d="M46 32c4.3 0 7.7-3.5 7.7-7.8s-3.4-7.8-7.7-7.8 -7.8 3.5-7.8 7.8S41.7 32 46 32zM22.7 28.9c5.1 0 9.3-4.2 9.3-9.3s-4.1-9.3-9.3-9.3 -9.3 4.2-9.3 9.3S17.6 28.9 22.7 28.9zM46 38.2c-5.7 0-17.1 2.9-17.1 8.5v7H63v-7C63 41.1 51.6 38.2 46 38.2zM22.7 35.1C15.5 35.1 1 38.7 1 46v7.8h21.7v-7c0-2.6 1-7.2 7.3-10.8C27.4 35.4 24.7 35.1 22.7 35.1z"/></svg>Mike Ballan, Bruce Wayne, Alex Agyapong</li>
-            </ol> -->
-            <ng-container *ngFor="let cG of contactGroup?.contactGroups">
-              <ng-container *ngIf="cG?.isCompany">
-                <i class="fas fa-briefcase mr-1 fa-fw"></i>
-                <span [innerHTML]="cG?.companyName | highlight : searchTerm"></span>
-              </ng-container>
-              <i class="fas fa-users mr-1 fa-fw" *ngIf="cG?.contactPeople.length"></i>
-              <ng-container *ngFor="let people of cG.contactPeople; last as isLast">
-                <span [innerHTML]="people.addressee | highlight : searchTerm"></span>
-                <ng-container *ngIf="!isLast">, </ng-container>
-              </ng-container>
-            </ng-container>
+            <ol class="list list--simple">
+              <li *ngFor="let cG of contactGroup?.contactGroups">
+                <ng-container *ngIf="cG?.isCompany">
+                  <i class="fas fa-briefcase mr-1 fa-fw"></i>
+                  <span [innerHTML]="cG?.companyName | highlight : searchTerm"></span>
+                </ng-container>
+                <i class="fas fa-users mr-1 fa-fw" *ngIf="cG?.contactPeople.length"></i>
+                <ng-container *ngFor="let people of cG.contactPeople; last as isLast">
+                  <span [innerHTML]="people.addressee | highlight : searchTerm"></span>
+                  <ng-container *ngIf="!isLast">, </ng-container>
+                </ng-container>
+              </li>
+            </ol>
             <!-- <a class="v-o-h" [routerLink]="['detail', contactGroup?.personId, 'edit' ]"><i class="fas fa-edit"></i>Edit</a> -->
             <!-- <a class="d-xl-none" [routerLink]="['detail', contactGroup?.personId ]">View <i class="fas fa-arrow-right"></i></a> -->
           </span>
@@ -40,18 +37,22 @@
           <span class="cell-content">
             <span *ngIf="contactGroup?.postCode" [innerHTML]="contactGroup?.postCode | highlight : searchTerm"></span>
             <br class="d-sm-none" />
-            <span class="badge badge-pill badge-danger mb-2" *ngIf="contactGroup?.warning && contactGroup?.warning?.id !== 1">{{contactGroup?.warningStatusComment || contactGroup?.warning?.value}}</span>
+            <span class="badge badge-pill badge-danger mb-2"
+              *ngIf="contactGroup?.warning && contactGroup?.warning?.id !== 1">{{contactGroup?.warningStatusComment || contactGroup?.warning?.value}}</span>
           </span>
         </td>
         <td data-title="Telephone">
           <span class="cell-content">
-            <app-telephone [person]="contactGroup" [number]="contactGroup?.phoneNumbers[0]" [searchTerm]="searchTerm" [warning]="contactGroup?.warningStatusComment || contactGroup?.warning?.value"></app-telephone>
+            <app-telephone [person]="contactGroup" [number]="contactGroup?.phoneNumbers[0]" [searchTerm]="searchTerm"
+              [warning]="contactGroup?.warningStatusComment || contactGroup?.warning?.value"></app-telephone>
             <p class="txt--negative" *ngIf="!contactGroup?.phoneNumbers[0]">No Phone</p>
           </span>
         </td>
         <td data-title="Email">
           <span class="cell-content">
-            <a (click)="$event.stopPropagation()" *ngIf="contactGroup?.emailAddresses[0]" href="mailto:{{contactGroup?.emailAddresses[0]}}" [innerHTML]="contactGroup?.emailAddresses[0] | highlight : searchTerm"></a>
+            <a (click)="$event.stopPropagation()" *ngIf="contactGroup?.emailAddresses[0]"
+              href="mailto:{{contactGroup?.emailAddresses[0]}}"
+              [innerHTML]="contactGroup?.emailAddresses[0] | highlight : searchTerm"></a>
             <p class="txt--negative" *ngIf="!contactGroup?.emailAddresses[0]">No Email</p>
           </span>
         </td>
@@ -60,7 +61,20 @@
   </table>
 </div>
 
-
+<!-- <a [routerLink]="['detail', contactGroup.personId ]" [queryParams]="{showNotes: true}">
+              <p [innerHTML]="contactGroup?.addressee | highlight : searchTerm"></p>
+            </a> -->
+<!-- <ng-container *ngFor="let cG of contactGroup?.contactGroups">
+  <ng-container *ngIf="cG?.isCompany">
+    <i class="fas fa-briefcase mr-1 fa-fw"></i>
+    <span [innerHTML]="cG?.companyName | highlight : searchTerm"></span>
+  </ng-container>
+  <i class="fas fa-users mr-1 fa-fw" *ngIf="cG?.contactPeople.length"></i>
+  <ng-container *ngFor="let people of cG.contactPeople; last as isLast">
+    <span [innerHTML]="people.addressee | highlight : searchTerm"></span>
+    <ng-container *ngIf="!isLast">, </ng-container>
+  </ng-container>
+</ng-container> -->
 
 <!-- <div class="list-group">
   <div  class="search-results">
