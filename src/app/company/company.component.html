@@ -1,5 +1,39 @@
-<app-breadcrumb></app-breadcrumb>
-<div class="container main">
+<div class="row">
+  <div class="row__item">
+    <div class="title">
+      <h2>Company centre</h2>
+      <a class="btn btn--positive"[routerLink]="['detail', 0 , 'edit' ]" [queryParams]="{isNewCompany: true}"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z"></path><path d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" class="plus-vertical"></path></svg>Company</a>
+    </div>
+  
+
+    <form [formGroup]="companyFinderForm" (ngSubmit)="companiesResults(true)">
+      <fieldset>
+        <label for="">Search contacts</label>
+        <div class="inline-parent inline-parent--search">
+          <input type="search" formControlName="companyName" placeholder="Company Name" aria-label="Company Name" (keyup)="onKeyup($event)" [ngbTypeahead]="suggestions" [focusFirst]="false" (selectItem)="selectedSuggestion($event)">
+          <button class="btn btn--search">Search</button>
+        </div>
+      </fieldset>
+    </form>
+
+    <div class="message message--info" *ngIf="isHintVisible">
+      <i class="far fa-smile-wink"></i> Type at least <strong>3 characters</strong> to get results
+    </div>
+
+    <app-company-list *ngIf="!isHintVisible" [companies]='companies' [pageNumber]="page" [searchTerm]='searchTerm' [bottomReached]="bottomReached"></app-company-list>
+    
+    <div class="message message--negative" *ngIf="isMessageVisible && !isHintVisible && page === 1">
+      <i class="far fa-sad-tear"></i> No results for '<strong>{{companyFinderForm.value.companyName || ' '}}</strong>'
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!-- <app-breadcrumb></app-breadcrumb> -->
+<!-- <div class="container main">
   <div class="row page-title">
     <div class="col">
       <h4 class="m-0">Company centre</h4>
@@ -19,20 +53,20 @@
           <div class="input-group-append">
             <button class="btn btn-secondary">Search</button>
           </div>
-        </div>
+        </div> -->
         <!-- <button class="btn btn-link px-0" type="button" id="button-advanced" (click)="advSearchCollapsed = !advSearchCollapsed"
         [attr.aria-expanded]="!advSearchCollapsed" aria-controls="advSearch">Advanced search</button> -->
-      </div>
-    </div>
-    <div class="row">
+      <!-- </div>
+    </div> -->
+    <!-- <div class="row">
       <div class="col">
         <div id="advSearch" [collapse]="!advSearchCollapsed">
           <div class="row">
             <div class="col-md-auto pr-0">
               Must be one of:
-            </div>
+            </div> -->
             <!-- TODO: Change to populate from list -->
-            <div class="col">
+            <!-- <div class="col">
               <div class="form-group form-check">
                 <div class="row">
                   <div class="custom-control custom-checkbox col-6 col-md-auto">
@@ -62,13 +96,13 @@
         </div>
       </div>
     </div>
-  </form>
-  <div class="text-center" *ngIf="isHintVisible">
+  </form> -->
+  <!-- <div class="text-center" *ngIf="isHintVisible">
     <i class="far fa-smile-wink"></i> Type at least <strong>3 characters</strong> to get results
   </div>
   <app-company-list *ngIf="!isHintVisible" [companies]='companies' [pageNumber]="page"
     [searchTerm]='searchTerm' [bottomReached]="bottomReached"></app-company-list>
   <div class="text-center text-danger" *ngIf="isMessageVisible && !isHintVisible && page === 1">
     <i class="far fa-sad-tear"></i> No results for '<strong>{{companyFinderForm.value.companyName || ' '}}</strong>'
-  </div>
-</div>
+  </div> -->
+<!-- </div> -->

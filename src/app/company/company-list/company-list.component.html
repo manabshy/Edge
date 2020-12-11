@@ -1,4 +1,34 @@
-<div class="list-group">
+<div class="table">
+  <table class="table--mobile table--rowHover">
+    <thead>
+      <tr>
+        <th>Company Name</th>
+        <th>Address</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let company of companies; let i = index;">
+        <td>
+          <span class="cell-content">
+            <a class="d-xl-none" [routerLink]="['detail',  company.companyId ]">{{company.companyName}}</a>
+          </span>
+        </td>
+        <td>
+          <span class="cell-content">
+            {{company.companyAddress | formatAddress}}
+            <span class="txt--negative" *ngIf="!(company.companyAddress | formatAddress)">No address</span>
+          </span>
+        </td>
+        <td>
+          <a class="v-o-h" [routerLink]="['detail',  company.companyId, 'edit' ]"><i class="fas fa-edit"></i> Edit</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- <div class="list-group">
   <div *ngIf="companies" class="search-results" infiniteScroll [infiniteScrollDistance]="5"
     [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true">
   </div>
@@ -24,4 +54,4 @@
       </div>
     </div>
   </a>
-</div>
+</div> -->
