@@ -40,8 +40,9 @@ form .invalid > label,
 form .invalid input:checked + label            	{ color:$color--negative; }
 form .invalid input:checked + label:before     	{ background-color:$color--negative; border-color:$color--negative; }
 form .invalid input, form .invalid textarea, 
-form .invalid select, form .invalid textarea   	{ border-color:$color--negative; }
-form fieldset imput+.message                    { margin:0; border-radius:0 0 3px 3px; top:-2px; }
+form .invalid select, form .invalid textarea,   { border-color:$color--negative; }
+form fieldset imput+.message,
+form fieldset ng-select+.message                { margin:0; border-radius:0 0 3px 3px; top:-2px; }
 form fieldset.invalid .radio input:checked + label:before, 
 form fieldset .invalid .radio input:checked + label:before { background-color:transparent; }
 .form--widthAuto                                { width:auto; }
@@ -57,7 +58,8 @@ fieldset small                                 	{ display:block; line-height:14p
 label, .label                                  	{ width:100%; display:block; color:$color--midnight; font-weight:500; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; }
 label + input, .label + input, 
 label + textarea, .label + textarea, 
-label + .select, .label + .select              	{ margin-top:6px; }
+label + .select, .label + .select,
+label + .ng-select                             	{ margin-top:6px; }
 label + p, .label + p                          	{ margin:0 0 6px; }
 
 /***** Inputs *****/

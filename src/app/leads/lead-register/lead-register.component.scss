@@ -1,14 +1,14 @@
-@import "../../../style/bootstrap-overrides";
+// @import "../../../style/bootstrap-overrides";
 
-@import "../../../../node_modules/bootstrap/scss/functions";
-@import "../../../../node_modules/bootstrap/scss/variables";
-@import "../../../../node_modules/bootstrap/scss/mixins";
+// @import "../../../../node_modules/bootstrap/scss/functions";
+// @import "../../../../node_modules/bootstrap/scss/variables";
+// @import "../../../../node_modules/bootstrap/scss/mixins";
 
-form {
-    padding-bottom: spacer(5);
+// form {
+//     padding-bottom: spacer(5);
 
-    .form-actions {
-        @include fixed-bottom('xl');
-    }
+//     .form-actions {
+//         @include fixed-bottom('xl');
+//     }
 
-}
+// }
