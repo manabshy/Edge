@@ -4,6 +4,7 @@ import { AppUtils } from 'src/app/core/shared/utils';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import * as _ from 'lodash';
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-contactgroups-list',
   templateUrl: './contactgroups-list.component.html',
@@ -19,7 +20,7 @@ export class ContactgroupsListComponent implements OnInit, OnChanges {
   page: number;
   groupsLength: number;
 
-  constructor(private contactGroupService: ContactGroupsService) { }
+  constructor(private contactGroupService: ContactGroupsService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
   }
@@ -29,8 +30,8 @@ export class ContactgroupsListComponent implements OnInit, OnChanges {
     if (this.originalContactGroups) {
       this.contactGroups = this.originalContactGroups;
     }
-    if(this.groupsLength !== this.contactGroups.length - 1) {
-      setTimeout(()=>{
+    if (this.groupsLength !== this.contactGroups.length - 1) {
+      setTimeout(() => {
         this.groupsLength = this.contactGroups.length - 1;
         this.itemIntoView(this.groupsLength);
       });
@@ -43,7 +44,7 @@ export class ContactgroupsListComponent implements OnInit, OnChanges {
     let observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.intersectionRatio > 0) {
-          setTimeout(()=>{
+          setTimeout(() => {
             this.onWindowScroll();
             observer.unobserve(entry.target);
           })
@@ -51,16 +52,22 @@ export class ContactgroupsListComponent implements OnInit, OnChanges {
       });
     });
 
-    if(index > 0) {
+    if (index > 0) {
       observer.observe(items[index]);
     }
   }
-  
+
   onWindowScroll() {
     if (!this.bottomReached) {
-      this.page ++;
+      this.page++;
       this.contactGroupService.pageNumberChanged(this.page);
       console.log('bottom here...', this.page);
+    }
+  }
+
+  navigateToDetail(id: number) {
+    if (id) {
+      this.router.navigate(['detail', id], { queryParams: { showNotes: true }, relativeTo: this.route });
     }
   }
 }

@@ -30,7 +30,7 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 //@import '~ngx-toastr/toastr-bs4-alert';
 
 /* new calender lib css - angular-cli file: src/styles.css */
-//@import "../node_modules/angular-calendar/css/angular-calendar.css";
+@import "../node_modules/angular-calendar/css/angular-calendar.css";
 
 /* ng-select theme */
 @import "~@ng-select/ng-select/themes/default.theme.css";
