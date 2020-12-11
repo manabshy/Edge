@@ -20,6 +20,8 @@ export class ContactgroupsListComponent implements OnInit, OnChanges {
   page: number;
   groupsLength: number;
 
+  private readonly className = '.list-group-item';
+
   constructor(private contactGroupService: ContactGroupsService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
@@ -39,15 +41,17 @@ export class ContactgroupsListComponent implements OnInit, OnChanges {
   }
 
   itemIntoView(index: number) {
-    const items = document.querySelectorAll('.list-group-item');
+    const tableRow = '#row-item';
+    // const items = document.querySelectorAll(this.className);
+    const items = document.querySelectorAll(tableRow);
 
-    let observer = new IntersectionObserver((entries) => {
+    const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.intersectionRatio > 0) {
           setTimeout(() => {
             this.onWindowScroll();
             observer.unobserve(entry.target);
-          })
+          });
         }
       });
     });
