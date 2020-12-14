@@ -35,7 +35,7 @@ body, form, input, textarea, select, label,
 .radio > span label, form .message, .btn        { font-family:'object-sans', Sans-Serif; }
 
 html                                            { scroll-behavior:smooth; }
-body                                            { font-size:13px; line-height:17px; letter-spacing:.5px; background-color:$color--snow; color:$color--midnight-70; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+body, .body                                     { font-size:13px; line-height:17px; letter-spacing:.5px; background-color:$color--snow; color:$color--midnight-70; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 
 /***** Typography *****/
 h1, h2, h3, h4, h5, h6,
@@ -47,8 +47,10 @@ h3, .h3                                         { font-size:16px; line-height:18
 h4, .h4                                         { font-size:16px; line-height:18px; }
 h5, .h5                                         { font-size:16px; line-height:18px; }
 h6, .h6                                         { font-size:16px; line-height:18px; font-weight:initial; }
+
 p+p                                             { margin-top:16px; }
 
+.txt--reset                                     { font-size:13px; font-weight:normal; color:$color--midnight-70; }
 .txt--title                                     { font-size:14px; font-weight:bold; }
 .txt--title+small                               { margin:0; }
 

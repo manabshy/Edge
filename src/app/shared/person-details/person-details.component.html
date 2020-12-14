@@ -19,6 +19,8 @@
             *ngIf="personDetails?.warning && personDetails?.warning?.id !== 1">{{personDetails?.warningStatusComment || personDetails?.warning?.value}}</span>
         </sup>
         <p class="txt--title">{{personDetails?.addressee}}</p>
+        <p class="txt--reset">{{personDetails?.address | formatAddress}}</p>
+        <p class="txt--negative" *ngIf="!(personDetails?.address | formatAddress)">No address</p>
       </span>
       <div class="flexRight">
         <div dropdown placement="bottom right">
@@ -48,18 +50,10 @@
       <ol class="list">
         <li>
           <span>
-            <sup>Address</sup>
-            {{personDetails?.address | formatAddress}}
-            <p class="txt--negative" *ngIf="!(personDetails?.address | formatAddress)">No address</p>
-          </span>
-        </li>
-        <li>
-          <span>
-            <sup>Phone Number</sup>
             <p class="txt--negative"
               *ngIf="!personDetails.phoneNumbers.length || !personDetails.phoneNumbers[0].number">No phone</p>
             <ng-container *ngFor="let phoneNumber of personDetails?.phoneNumbers">
-              <p class="mb-2" *ngIf="phoneNumber?.number">
+              <p *ngIf="phoneNumber?.number">
                 <app-telephone [person]="personDetails" [number]="phoneNumber?.number"
                   [warning]="personDetails?.warningStatusComment || personDetails?.warning?.value">
                 </app-telephone>
