@@ -38,7 +38,6 @@
         <td data-title="Postcode">
           <span class="cell-content">
             <span *ngIf="contactGroup?.postCode" [innerHTML]="contactGroup?.postCode | highlight : searchTerm" class="txt--nowrap"></span>
-            <p class="txt--negative" *ngIf="!contactGroup?.postCode[0]">No Postcode</p>
             <br class="d-sm-none" />
             <span class="badge badge-pill badge-danger mb-2" *ngIf="contactGroup?.warning && contactGroup?.warning?.id !== 1">{{contactGroup?.warningStatusComment || contactGroup?.warning?.value}}</span>
           </span>
