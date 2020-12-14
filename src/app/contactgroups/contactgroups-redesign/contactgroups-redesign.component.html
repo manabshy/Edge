@@ -116,10 +116,7 @@
         </div>
       </div> -->
       <app-person-details [personDetails]="searchedPersonDetails" [isClickable]="false"></app-person-details>
-      <div class="card">
-        <div class="card__header">
-          <p>Additional Information</p>
-        </div>
+      <div class="card card--marginTop card--sticky">
         <div class="card__body">
           <ol class="list list--divider list--hover">
             <li [ngClass]="{current: item.isCurrent}" *ngFor="let item of types;index as i">
@@ -146,6 +143,7 @@
         </div>
       </div>
     </div>
+    
     <div #mainRowItem class="row__item">
       <!-- <h2>Notes</h2>
       <ol class="timeline">

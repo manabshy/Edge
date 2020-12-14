@@ -20,7 +20,19 @@
           </span>
         </td>
         <td>
-          <a class="v-o-h" [routerLink]="['detail',  company.companyId, 'edit' ]"><i class="fas fa-edit"></i> Edit</a>
+          <div dropdown placement="bottom right">
+            <a class="btn btn-light dropdown-toggle" href [id]="'button' + i" dropdownToggle (click)="$event.stopPropagation(); false" [attr.aria-controls]="'dropdown' + i"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon"><ellipse class="st0" cx="32" cy="10.5" rx="5.9" ry="6" /><ellipse class="st0" cx="32" cy="32" rx="5.9" ry="6" /><ellipse class="st0" cx="32" cy="53.5" rx="5.9" ry="6" /></svg></a>
+            <ul [id]="'dropdown' + i" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+              [attr.aria-labelledby]="'button' + i">
+              <li role="menuitem">
+                <a class="dropdown-item" [routerLink]="['detail',  company.companyId, 'edit' ]">
+                  <span class="dropdown-icon"><i class="fas fa-edit fa-fw"></i></span>Edit
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- <a class="v-o-h" [routerLink]="['detail',  company.companyId, 'edit' ]"><i class="fas fa-edit"></i> Edit</a> -->
         </td>
       </tr>
     </tbody>

@@ -1,23 +1,26 @@
 /***** Cards *****/
-.card                                           { margin-bottom:1px; width:100%; background-color:$color--snow; border-radius:5px; box-shadow:0px 0px 0px 1px $color--midnight-20; -webkit-box-shadow:0px 0px 0px 1px $color--midnight-20; position:relative; }
+.card                                           { margin-bottom:1px; width:100%; background-color:$color--snow; border-radius:5px; box-shadow:0px 0px 0px 1px $color--midnight-20; -webkit-box-shadow:0px 0px 0px 1px $color--midnight-20; position:relative;
+    &--sticky                                   { position:sticky; top:80px; }
+    &--marginTop                                { margin-top:16px; }
+}
 .card+*                                         { margin-top:30px; }
 .card p                                         { position:relative; }
 
-.card__header                                   { padding:20px 20px 0; font-size:14px; font-weight:bold; color:$color--midnight; display:flex; }
-.card__header+*                                 { margin-top:16px; padding:0 20px 20px; }
+.card__header                                   { padding:16px 16px 0; font-size:14px; font-weight:bold; color:$color--midnight; display:flex; }
+.card__header+*                                 { margin-top:16px; padding:0 16px 16px; }
 
 .card__headerImg                                {
     img                                         { width:100%; height:auto; }
-    &+*                                         { margin-top:16px; padding:0 20px 20px; }
+    &+*                                         { margin-top:16px; padding:0 16px 16px; }
 }
 
-.card__body                                     { padding:20px; }
+.card__body                                     { padding:16px; }
 
-.card__footer                                   { padding:20px; }
+.card__footer                                   { padding:16px; }
 
 .card > div:first-child                         { padding-bottom:0; }
 .card > div:last-child                          { padding-top:0; }
-.card > div:only-child                          { padding:20px; }
+.card > div:only-child                          { padding:16px; }
 
 /***** Card *****/
 .cards                                          { margin:0; padding:0; list-style-type:none; display:grid; grid-gap:60px; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); overflow:hidden;

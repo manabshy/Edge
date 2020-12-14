@@ -1,6 +1,6 @@
 <div class="row">
   <div class="row__item row__item--aside">
-    <div class="card">
+    <div class="card card--sticky">
       <div class="card__header"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><path d="M45.6 36.9c1.9-3.6 3.2-7.8 3.2-12.4C48.8 11.1 37.8 0 24.4 0S0 11.1 0 24.5 11 49 24.4 49c4.5 0 8.8-1 12.3-3.3L54.9 64l9.1-8.5L45.6 36.9zM24.5 40.8c-9.1 0-16.2-7.2-16.2-16.3S15.4 8.2 24.5 8.2s16.2 7.2 16.2 16.3C40.7 33.6 33.6 40.8 24.5 40.8z"/></svg>Search contacts</div>
       <div class="card__body">
         <form [formGroup]="contactFinderForm" (ngSubmit)="contactGroupsResults(true)">
