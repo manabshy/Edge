@@ -73,6 +73,7 @@ import { CalendarSharedModule } from './calendar-shared/calendar-shared.module';
 
 import { MsalModule, MsalInterceptor } from '@azure/msal-angular';
 import { Logger, LogLevel } from 'msal';
+import { HeaderComponent } from './header/header.component';
 
 export const protectedResourceMap: Map<string, Array<string>> = new Map([
   ['http://localhost:57211/v10', ['https://douglasandgordon.onmicrosoft.com/67f9a9a1-d8de-45bc-af20-43e1e18ccba5/user_impersonation']],
@@ -165,7 +166,8 @@ const externalModulesExports = [
     PropertyChecklistLettingComponent,
     PropertyChecklistItemComponent,
     NotFoundComponent,
-    ImpersonateMemberComponent
+    ImpersonateMemberComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,

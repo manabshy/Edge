@@ -1,0 +1,48 @@
+<header class="header">
+  <ol class="header-title">
+    <li><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
+        <path
+          d="M13.4 1C10 1 7.2 3.8 7.2 7.2l0 49.6c0 3.4 2.7 6.2 6.2 6.2h37.2c3.4 0 6.2-2.8 6.2-6.2V19.6L38.2 1H13.4zM35.1 22.7V5.7l17 17.1H35.1z" />
+      </svg>
+    </li>
+    <li>Contacts</li>
+    <li>Contact centre</li>
+  </ol>
+  <ol class="header-navigation">
+    <!-- <li><a href="" class="circle"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+          class="icon icon--fill-midnight-70">
+          <path
+            d="M26.1 57.1c0 3.2 2.6 5.9 5.9 5.9s5.9-2.6 5.9-5.9H26.1zM52.3 44.8V27.6c0-9.6-6.6-17.6-15.6-19.8V5.7C36.7 3.1 34.6 1 32 1s-4.7 2.1-4.7 4.7v2.1c-9 2.1-15.6 10.2-15.6 19.8v17.2L5.5 51v3.1h53V51L52.3 44.8z" />
+        </svg></a>
+    </li>
+    <li><a href="" class="circle"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+          class="icon icon--fill-midnight-70">
+          <path
+            d="M54.9 35c0.1-1 0.2-2 0.2-3 0-1-0.1-2-0.2-3l6.5-5.1c0.6-0.5 0.8-1.3 0.4-2l-6.2-10.7c-0.4-0.7-1.2-0.9-1.9-0.7l-7.7 3.1c-1.6-1.2-3.3-2.3-5.2-3.1l-1.2-8.2C39.6 1.6 38.9 1 38.2 1H25.8c-0.8 0-1.4 0.6-1.5 1.3l-1.2 8.2c-1.9 0.8-3.6 1.8-5.2 3.1l-7.7-3.1c-0.7-0.3-1.5 0-1.9 0.7L2.2 21.9c-0.4 0.7-0.2 1.5 0.4 2L9.1 29c-0.1 1-0.2 2-0.2 3 0 1 0.1 2 0.2 3l-6.5 5.1c-0.6 0.5-0.8 1.3-0.4 2l6.2 10.7c0.4 0.7 1.2 0.9 1.9 0.7l7.7-3.1c1.6 1.2 3.3 2.3 5.2 3.1l1.2 8.2c0.1 0.7 0.8 1.3 1.5 1.3h12.3c0.8 0 1.4-0.6 1.5-1.3l1.2-8.2c1.9-0.8 3.6-1.8 5.2-3.1l7.7 3.1c0.7 0.3 1.5 0 1.9-0.7l6.2-10.7c0.4-0.7 0.2-1.5-0.4-2L54.9 35zM32 42.8c-6 0-10.8-4.9-10.8-10.8S26 21.1 32 21.1 42.8 26 42.8 32 38 42.8 32 42.8z" />
+        </svg></a>
+    </li> -->
+    <li class="profile">
+      <span class="circle">
+        <img [src]="currentStaffMember?.thumbnailUrl" alt="" class="circle"
+          *ngIf="currentStaffMember?.thumbnailUrl; else noPhoto">
+        <ng-template #noPhoto>
+          <img src="https://dummyimage.com/75x75/e9ecef/212529&text=no+photo" alt="">
+        </ng-template>
+      </span>
+      <span>{{currentStaffMember?.fullName}}</span>
+     <div dropdown placement="bottom right">
+        <a class="btn btn-light dropdown-toggle" id="headerMenu" dropdownToggle  (click)="$event.stopPropagation();" attr.aria-controls="headerMenu">
+          <!-- removed from svg icon--onRight -->
+          <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s">
+            <path
+              d="M59.6 15c-0.7 0.1-1.3 0.4-1.9 0.9 -3.3 3.4-19.6 19.8-23.6 23.8 -0.7 0.7-1.6 1.1-2.5 1s-1.3-0.7-2.2-1.6L6.4 16c-0.6-0.6-1.1-0.9-1.9-1 -3-0.3-4.7 3.2-2.5 5.4l26.8 27.3c1.8 1.8 4.5 1.8 6.3 0l27-27.3C64.1 18.4 62.5 14.8 59.6 15z" />
+          </svg>
+        </a>
+        <ul id="headerMenu" *dropdownMenu class="dropdown-menu"
+        role="menu" aria-labelledby="headerMenu">
+      <li role="menuitem"><a class="dropdown-item" (click)="logOut()">Logout</a></li>
+    </ul>
+  </div>
+    </li>
+  </ol>
+</header>
