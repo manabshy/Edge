@@ -1,4 +1,68 @@
-<div class="list-group list-group-flush">
+<div class="title">
+  <h2>Searches</h2>
+  <span class="checkbox checkbox--rtl" *ngIf="closedCounter">
+    <span>
+      <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getSearches()"  id="includeClosedSearches">
+      <label for="includeClosedSearches">Include closed searches</label>
+    </span>
+  </span>
+</div>
+
+<div class="table" *ngIf="searches$ | async as searches">
+  <div class="list-group-item text-center text-danger" *ngIf="!searches || !searches?.length">
+    <i class="far fa-sad-tear"></i> No searches
+  </div>
+  
+  <table class="table--mobile table--rowHover">
+    <thead *ngIf="searches && searches?.length">
+      <tr>
+        <th>Type</th>
+        <th>Areas</th>
+        <th>Status</th>
+        <th>Price</th>
+        <th>Min Beds</th>
+        <th>Created</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let search of searches">
+        <td data-title="Type">
+          <span class="cell-content">
+            {{search?.type}}
+          </span>
+        </td>
+        <td data-title="Areas">
+          <span class="cell-content">
+            {{search?.areas}}
+          </span>
+        </td>
+        <td data-title="Status">
+          <span class="cell-content">
+            <span *ngIf="search.isActive" class="pill pill--positive" >{{search?.isActive ? 'Active' : 'Not Active'}}</span>
+            <span *ngIf="!search.isActive" class="pill" >{{search?.isActive ? 'Active' : 'Not Active'}}</span>
+          </span>
+        </td>
+        <td data-title="Price">
+          <span class="cell-content">
+            {{search?.maxAmount | currency:'GBP':'symbol':'1.0-0'}}
+          </span>
+        </td>
+        <td data-title="Min Beds">
+          <span class="cell-content">
+            {{search?.minBeds || '-'}}
+          </span>
+        </td>
+        <td data-title="Created">
+          <span class="cell-content">
+            {{search?.createDate| date: 'dd/MM/yyyy'}}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- <div class="list-group list-group-flush">
   <ng-container *ngIf="searches$ | async as searches">
     <div class="list-group-item text-center text-danger" *ngIf="!searches || !searches?.length">
       <i class="far fa-sad-tear"></i> No searches
@@ -61,4 +125,4 @@
       </div>
     </div>
   </ng-container>
-</div>
+</div> -->

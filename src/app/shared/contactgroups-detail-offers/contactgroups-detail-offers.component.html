@@ -3,7 +3,7 @@
   <span class="checkbox checkbox--rtl" *ngIf="closedCounter">
     <span>
       <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getOffers()" id="includeClosedOffers">
-    <label for="includeClosedOffers">Include closed offers</label>
+      <label for="includeClosedOffers">Include closed offers</label>
     </span>
   </span>
 </div>
@@ -117,7 +117,7 @@
           </td>
           <td data-title="Status">
             <span class="cell-content">
-              <span class="pill pill--success" *ngIf="offer.isActive">{{offer?.status}}</span>
+              <span class="pill pill--positive" *ngIf="offer.isActive">{{offer?.status}}</span>
               <span class="pill" *ngIf="!offer.isActive">{{offer?.status}}</span>
             </span>
           </td>
