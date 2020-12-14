@@ -68,16 +68,17 @@ app-telephone                                   { width:100%; display:flex; alig
 .header-navigation .icon--onRight               { position:relative; left:10px; }
 
 /***** Lists *****/
+.list                                           { margin:0; padding:0; list-style:none; }
 *+.list                                         { margin-top:20px; }
-.list                                           { margin:0; padding:0; list-style:none; color:$color--midnight;}
 
 .list li .icon--s                               { top:auto; }
 .list > li                                      { margin:0; padding:10px 0; display:flex; align-items:center; align-content:flex-start; position:relative; top:0; left:0; }
 .list > li:first-child                          { padding-top:0; }
 
 .list--simple                                   {
-  li                                            { padding:0;
+  li                                            { padding:0; flex-wrap:wrap;
     &+*                                         { margin-top:6px; }
+    &:empty                                     { margin:0; }
   }
 }
 
