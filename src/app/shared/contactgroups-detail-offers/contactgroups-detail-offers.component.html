@@ -1,4 +1,148 @@
-<h2>Offers</h2>
+<div class="title">
+  <h2>Offers</h2>
+  <span class="checkbox checkbox--rtl" *ngIf="closedCounter">
+    <span>
+      <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getOffers()" id="includeClosedOffers">
+    <label for="includeClosedOffers">Include closed offers</label>
+    </span>
+  </span>
+</div>
+
+<ng-container *ngIf="offers$|async as offers">
+  <div class="table" *ngIf="!offers || !offers?.length">
+    <div class="overlay">
+      <div class="card">
+        <div class="card__body"><i class="far fa-sad-tear"></i> No offers</div>
+      </div>
+    </div>
+    <table class="table--mobile table--rowHover txt--redacted">
+      <thead>
+        <tr>
+          <th>Address</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Amount</th>
+          <th>Received</th>
+          <th>Neg</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td data-title="Address">
+            <span class="cell-content">221b Baker St, Marylebone, London NW1 6XE</span>
+          </td>
+          <td data-title="Type">
+            <span class="cell-content">occupy flexitarian</span>
+          </td>
+          <td data-title="Status">
+            <span class="cell-content">cornhole pitchfork cronut</span>
+          </td>
+          <td data-title="Amount">
+            <span class="cell-content">lo-fi vaporware</span>
+          </td>
+          <td data-title="Received">
+            <span class="cell-content">chambray ethical</span>
+          </td>
+          <td data-title="Neg">
+            <span class="cell-content">Listicle disrupt</span>
+          </td>
+        </tr>
+        <tr>
+          <td data-title="Address">
+            <span class="cell-content">Bushwick etsy pug</span>
+          </td>
+          <td data-title="Type">
+            <span class="cell-content">occupy flexitarian</span>
+          </td>
+          <td data-title="Status">
+            <span class="cell-content">cornhole pitchfork cronut</span>
+          </td>
+          <td data-title="Amount">
+            <span class="cell-content">lo-fi vaporware</span>
+          </td>
+          <td data-title="Received">
+            <span class="cell-content">chambray ethical</span>
+          </td>
+          <td data-title="Neg">
+            <span class="cell-content">Listicle disrupt</span>
+          </td>
+        </tr>
+        <tr>
+          <td data-title="Address">
+            <span class="cell-content">Bushwick etsy pug</span>
+          </td>
+          <td data-title="Type">
+            <span class="cell-content">occupy flexitarian</span>
+          </td>
+          <td data-title="Status">
+            <span class="cell-content">cornhole pitchfork cronut</span>
+          </td>
+          <td data-title="Amount">
+            <span class="cell-content">lo-fi vaporware</span>
+          </td>
+          <td data-title="Received">
+            <span class="cell-content">chambray ethical</span>
+          </td>
+          <td data-title="Neg">
+            <span class="cell-content">Listicle disrupt</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <div class="table" *ngIf="offers && offers?.length">
+    <table class="table--mobile table--rowHover">
+      <thead>
+        <tr>
+          <th>Address</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Amount</th>
+          <th>Received</th>
+          <th>Neg</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let offer of offers">
+          <td data-title="Address">
+            <span class="cell-content">
+              {{offer?.propertyAddress}}
+            </span>
+          </td>
+          <td data-title="Type">
+            <span class="cell-content">
+              {{offer?.type}}
+            </span>
+          </td>
+          <td data-title="Status">
+            <span class="cell-content">
+              <span class="pill pill--success" *ngIf="offer.isActive">{{offer?.status}}</span>
+              <span class="pill" *ngIf="!offer.isActive">{{offer?.status}}</span>
+            </span>
+          </td>
+          <td data-title="Amount">
+            <span class="cell-content">
+              {{offer?.amount | currency:'GBP':'symbol':'1.0-0'}}
+            </span>
+          </td>
+          <td data-title="Received">
+            <span class="cell-content">
+              {{offer?.offerReceivedDate| date: 'dd/MM/yyyy'}}
+            </span>
+          </td>
+          <td data-title="Neg">
+            <span class="cell-content">
+              {{offer?.staffMember}}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</ng-container>
+
+<!-- <h2>Offers</h2>
 
 <div class="list-group list-group-flush">
   <ng-container *ngIf="offers$|async as offers">
@@ -7,8 +151,8 @@
         <div class="card">
           <div class="card__body"><i class="far fa-sad-tear"></i> No offers</div>
         </div>
-      </div>
-      <table class="table--mobile table--rowHover txt--redacted">
+      </div>-->
+      <!--<table class="table--mobile table--rowHover txt--redacted">
         <thead>
           <tr>
             <th>Address</th>
@@ -81,8 +225,8 @@
             </td>
           </tr>
         </tbody>
-      </table>
-    </div>
+      </table>-->
+    <!--</div>
 
     <div class="list-group-item" *ngIf="closedCounter">
       <div class="custom-control custom-checkbox">
@@ -142,4 +286,4 @@
       </div>
     </div>
   </ng-container>
-</div>
+</div> -->
