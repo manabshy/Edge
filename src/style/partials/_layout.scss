@@ -13,7 +13,7 @@ app-telephone                                   { width:100%; display:flex; alig
 .scrollY                                        { height:100%; position:relative; overflow-y:auto; }
 
 .row+*,
-.row__item+*                                    { margin-top:20px; }
+.row__item+*                                    { margin-top:16px; }
 
 .wrapper                                        { display:flex; height:100vh; }
 
@@ -31,7 +31,7 @@ app-telephone                                   { width:100%; display:flex; alig
 .menu_open .mobile_nav .line-bottom             { display:none; }
 
 /***** Body *****/
-.body                                           { padding:85px 20px 20px 20px; width:100%; min-height:100vh; }
+.body                                           { padding:85px 16px 16px 16px; width:100%; min-height:100vh; }
 
 /***** Headers *****/
 .headerMobile                                   { padding:0; display:flex; height:60px; width:100%; background-color:$color--midnight; position:fixed; top:0; right:0; z-index:10; }
@@ -68,12 +68,14 @@ app-telephone                                   { width:100%; display:flex; alig
 .header-navigation .icon--onRight               { position:relative; left:10px; }
 
 /***** Lists *****/
-.list                                           { margin:0; padding:0; list-style:none; }
-*+.list                                         { margin-top:20px; }
+.list                                           { margin:0; padding:0; list-style:none;
+  p                                             { width:100%; }
+}
+*+.list                                         { margin-top:16px; }
 sup+.list                                       { margin-top:6px; }
 
 .list li .icon--s                               { top:auto; }
-.list > li                                      { margin:0; padding:10px 0; display:flex; align-items:center; align-content:flex-start; position:relative; top:0; left:0; }
+.list > li                                      { margin:0; padding:8px 0; display:flex; align-items:center; align-content:flex-start; position:relative; top:0; left:0; }
 .list > li:first-child                          { padding-top:0; }
 
 .list--simple                                   {
@@ -116,12 +118,12 @@ summary .flexRight                              { float:right; }
 
 /***** Timelines *****/
 .timeline                                       { margin:0; padding:0; list-style:none; display:flex; flex-direction:column; position:relative; }
-*+.timeline                                     { margin-top:20px; }
-.timeline+*                                     { margin-top:20px; }
+*+.timeline                                     { margin-top:16px; }
+.timeline+*                                     { margin-top:16px; }
 
 .timeline li                                    { margin:0; padding:0 0 0 30px; min-height:24px; position:relative; }
-.timeline li+*                                  { margin-top:20px; }
-.timeline li:before                             { content:''; width:1px; height:calc(100% + 20px); display:block; background-color:$color--midnight-20; position:absolute; top:8px; left:7px; }
+.timeline li+*                                  { margin-top:16px; }
+.timeline li:before                             { content:''; width:1px; height:calc(100% + 16px); display:block; background-color:$color--midnight-20; position:absolute; top:8px; left:7px; }
 .timeline li:last-child:before                  { display:none; }
 .timeline li:after                              { content:''; width:15px; height:15px; display:block; background-color:$color--midnight-20; border-radius:50%; position:absolute; top:8px; left:0; }
 
@@ -152,7 +154,7 @@ summary .flexRight                              { float:right; }
 .timeline .timeline__important .icon--information       { fill:$color--negative; }
 
 .timeline .timeline__positive+*:after           { background-color:$color--warning; border:1px solid $color--warning; }
-.timeline--condensed li                         { padding-left:20px; min-height:17px; }
+.timeline--condensed li                         { padding-left:16px; min-height:17px; }
 .timeline--condensed li+*                       { margin-top:10px; }
 .timeline--condensed li:before                  { height:calc(100% + 10px); left:4px; top:5px; }
 .timeline--condensed li:after                   { width:9px; height:9px; background-color:$color--snow; border:1px solid $color--midnight-20; top:5px; }
@@ -193,7 +195,7 @@ This applies from 992px onwards
 ***********************************************/
 @media (min-width:992px) {
   .scroll-to-top                                { display:none; }
-  .wrapper                                      { margin-left:220px; }
+  .wrapper                                      { margin-left:216px; }
   
   .row                                          { display:flex; }
   .row__item                                    { flex-grow:1; }
