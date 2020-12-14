@@ -50,7 +50,7 @@
           <span class="cell-content">
             <span *ngIf="contactGroup?.postCode"  [innerHTML]="contactGroup?.postCode | highlight : searchTerm"
               class="txt--nowrap"></span>
-              <p *ngIf="!contactGroup?.postCode">-</p>
+              <span *ngIf="!contactGroup?.postCode">-</span>
             <br class="d-sm-none" />
             <span class="badge badge-pill badge-danger mb-2"
               *ngIf="contactGroup?.warning && contactGroup?.warning?.id !== 1">{{contactGroup?.warningStatusComment || contactGroup?.warning?.value}}</span>
@@ -62,7 +62,7 @@
               <app-telephone [person]="contactGroup" [number]="contactGroup?.phoneNumbers[0]" [searchTerm]="searchTerm"
                 [warning]="contactGroup?.warningStatusComment || contactGroup?.warning?.value"></app-telephone>
             </ng-container>
-            <ng-template #noPhone><p>-</p></ng-template>
+            <ng-template #noPhone><span>-</span></ng-template>
           </span>
         </td>
         <td data-title="Email">
@@ -71,7 +71,7 @@
               href="mailto:{{contactGroup?.emailAddresses[0]}}"
               [innerHTML]="contactGroup?.emailAddresses[0] | highlight : searchTerm">
             </a>
-            <p *ngIf="!contactGroup?.emailAddresses[0]">-</p>
+            <span *ngIf="!contactGroup?.emailAddresses[0]">-</span>
           </span>
         </td>
       </tr>
