@@ -1,10 +1,113 @@
-<app-breadcrumb></app-breadcrumb>
-<div class="container main">
+<div class="row">
+  <div class="row__item row__item--aside">
+    <app-person-details *ngIf="person" [personDetails]="person" [isClickable]="false"></app-person-details>
+    
+    <div class="card card--marginTop card--sticky">
+      <div class="card__body">
+        <ol class="list list--divider list--hover">
+          <li>
+            <a role="button" class="overall"></a>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="row__item">
+    <div class="title">
+      <h2>Lead<span class="pill pill--onRight" *ngIf="lead?.closedById">Closed</span></h2>
+      <!-- <a class="btn btn--positive"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z"></path><path d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" class="plus-vertical"></path></svg>Contact Group</a> -->
+    </div>
+
+    <form action="">
+      <fieldset>
+        <label for="leadType">Type</label>
+        <span class="select">
+          <select id="leadType" formControlName="leadTypeId"
+            [attr.disabled]="isLeadClosed ? true : null" [ngClass]="{'is-invalid': formErrors?.leadTypeId}">
+            <option value=""></option>
+            <option selected *ngFor="let leadType of leadTypes" [value]=leadType.id>{{leadType?.value}}</option>
+          </select>
+        </span>
+        {{formErrors?.leadTypeId}}
+      </fieldset>
+
+      <fieldset>
+        <label for="chaseDate">Chase date</label>
+        <input type="text" id="chaseDate" placeholder="dd/mm/yyyy" formControlName="nextChaseDate" [bsConfig]="{showWeekNumbers:false, useUtc: false, dateInputFormat: 'DD/MM/YYYY', minDate:tomorrowsDate, customTodayClass: 'font-weight-bold'}" bsDatepicker [attr.disabled]="isLeadClosed ? true : null" #datepicker="bsDatepicker" [appNoDoubleTap]='datepicker' (bsValueChange)="onChaseDateChange($event)" [ngClass]="{'is-invalid': (formErrors?.nextChaseDate)}">
+        {{formErrors?.nextChaseDate}}
+      </fieldset>
+
+      <fieldset>
+        <label for="chaser">Chaser</label>
+        <app-staff-member-finder [staffMemberId]="lead?.ownerId || leadEditForm.get('ownerId').value" [listType]="'activeStaffMembers'" (selectedStaffMemberId)="getSelectedStaffMemberId($event)" [isRequired]="!leadEditForm.get('ownerId').value" [isDisabled]="isLeadClosed ? true : false"></app-staff-member-finder>
+      </fieldset>
+
+      <fieldset *ngIf="!isLeadClosed">
+        <span class="checkbox">
+          <span>
+            <input type="checkbox" id="closeLead" formControlName="closeLead" (change)="closeLeadChanged(lead)">
+            <label for="closeLead">Mark as <span class="badge badge-pill badge-primary">Closed</span></label>
+          </span>
+        </span>
+      </fieldset>
+    </form>
+
+    <h3>Associated Property</h3>
+    <div class="table" *ngIf="lead?.relatedProperty; else noProperty">
+      <div *ngIf="properties" class="search-results" infiniteScroll [infiniteScrollDistance]="5" [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"></div>
+      <table class="table--mobile table--rowHover">
+        <thead>
+          <tr>
+            <th colspan="2">Address</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr [routerLink]="['/property-centre/detail/', lead?.relatedProperty?.propertyId]">
+            <td data-title="Address">
+              <span class="cell-content">
+                {{lead?.relatedProperty?.address | formatAddress}}
+              </span>
+            </td>
+            <td data-title="Actions">
+              <span class="cell-content">
+                <div dropdown placement="bottom right" class="dropdown">
+                  <a class="btn dropdown-toggle" href [id]="'button' + i" dropdownToggle (click)="$event.stopPropagation(); false" [attr.aria-controls]="'dropdown' + i"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon"><ellipse class="st0" cx="32" cy="10.5" rx="5.9" ry="6" /><ellipse class="st0" cx="32" cy="32" rx="5.9" ry="6" /><ellipse class="st0" cx="32" cy="53.5" rx="5.9" ry="6" /></svg></a>
+                  <ul [id]="'dropdown' + i" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" [attr.aria-labelledby]="'button' + i">
+                    <li role="menuitem">
+                      <a class="dropdown-item">View Property</a>
+                    </li>
+                    <li *ngIf="!isMessageVisible && !isLeadClosed">
+                      <button class="btn btn-light btn-sm ml-2" type="button" aria-label="remove" (click)="removeProperty()">Remove Property</button>
+                    </li>
+                    <li *ngIf="!isMessageVisible">
+                      <button class="btn btn-light btn-sm ml-2" type="button" data-cy="createVal" (click)="navigateToNewValuation(lead?.relatedProperty?.propertyId)">Create Val.</button>
+                    </li>
+                  </ul>
+                </div>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #noProperty>
+      <p>No property associated to this lead</p>
+    </ng-template>
+  </div>
+</div>
+
+
+
+
+<!-- <app-breadcrumb></app-breadcrumb> -->
+<!-- <div class="container main">
   <div class="row page-title">
     <div class="col">
       <h4 class="m-0">Lead <span class="badge badge-pill badge-primary" *ngIf="lead?.closedById">Closed</span></h4>
     </div>
   </div>
+
   <form [formGroup]="leadEditForm" (ngSubmit)="SaveLead(true, leadNote)" autocompleteOff>
     <div class="row align-items-start">
       <div class="col-xl-8">
@@ -73,6 +176,9 @@
           </accordion>
         </div>
         <div class="mb-4 d-xl-none"></div>
+
+
+
         <h5>Lead Info</h5>
         <div class="list-group mb-4">
           <div class="list-group-item pt-4 pb-3">
@@ -104,11 +210,11 @@
               </div>
               <div class="col-lg">
                 <div class="form-group">
-                  <label for="chaser">Chaser</label>
+                  <label for="chaser">Chaser</label> -->
                   <!-- <app-staffmember-finder [staffMemberId]="lead?.ownerId" (ownerChanged)="onOwnerChanged($event)"
                     [isDisabled]="isLeadClosed ? true : false">
                   </app-staffmember-finder> -->
-                  <app-staff-member-finder [staffMemberId]="lead?.ownerId || leadEditForm.get('ownerId').value" [listType]="'activeStaffMembers'"
+                  <!-- <app-staff-member-finder [staffMemberId]="lead?.ownerId || leadEditForm.get('ownerId').value" [listType]="'activeStaffMembers'"
                     (selectedStaffMemberId)="getSelectedStaffMemberId($event)"
                     [isRequired]="!leadEditForm.get('ownerId').value"
                     [isDisabled]="isLeadClosed ? true : false"></app-staff-member-finder>
@@ -127,6 +233,9 @@
             </div>
           </div>
         </div>
+
+
+
         <h5>Associated Property</h5>
         <ng-container *ngIf="lead?.relatedProperty; else noProperty">
           <p class="d-flex d-sm-block mb-4">
@@ -160,6 +269,8 @@
         </div>
         <app-notes [personNotes]="personNotes" [person]="person" [pageNumber]="page" [bottomReached]="bottomReached"
           [showNoteInput]="false"></app-notes>
+
+
       </div>
     </div>
     <div class="form-actions">
@@ -180,4 +291,4 @@
     </div>
   </form>
 </div>
-<app-additional-info [id]="lead?.leadId ? 'L-'+lead?.leadId : ''"></app-additional-info>
+<app-additional-info [id]="lead?.leadId ? 'L-'+lead?.leadId : ''"></app-additional-info> -->

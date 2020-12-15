@@ -8,7 +8,7 @@
     </thead>
     <tbody>
       <tr [routerLink]="['detail', property?.propertyId]" [queryParams]="{searchTerm: searchTerm, showNotes:true}" (click)="onPropertySelected(property.propertyId)"[routerLink]="['detail', property?.propertyId]" [queryParams]="{searchTerm: searchTerm, showNotes:true}" (click)="onPropertySelected(property.propertyId)" *ngFor="let property of properties; let i = index;">
-        <td data-title="Assign">
+        <td data-title="Address">
           <span class="cell-content">
        
               <strong [innerHTML]="property?.propertyAddress | highlight : searchTerm"></strong>

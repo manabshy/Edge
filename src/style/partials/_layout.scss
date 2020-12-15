@@ -172,10 +172,10 @@ summary .flexRight                              { float:right; }
 
 /***** Dropdowns *****/
 .dropdown-toggle                                { padding:0; background-color:transparent; border:none; min-width:30px; color:$color--midnight;
-  &:hover                                       { background-color:$color--midnight-10; }
+  &:hover                                       { background-color:transparent; color:$color--midnight; }
 }
 .open                                           { border-radius:3px 3px 0 0; position:relative;
-  .dropdown-toggle                              { background-color:$color--midnight-10; }
+  .dropdown-toggle                              { background-color:transparent; }
   .dropdown-menu                                { display:block; }
 }
 

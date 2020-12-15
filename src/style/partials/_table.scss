@@ -5,7 +5,9 @@
 table                                           { width:100%; overflow:visible; text-align:left; display:table; border:none; border-collapse:collapse; border-spacing:0; }
 table, caption, tbody, thead, tr, th, td        { text-align:left; }
 caption, thead                                  { font-weight:bold; text-align:left; }
-tr                                              { padding:3px; padding:0; }
+tr                                              { padding:3px; padding:0; 
+    &:focus                                     { border:none; outline:none; }
+}
 tr+tr                                           { margin-top:10px; border-top:1px solid $color--midnight-10; }
 th, td                                          { padding:10px; min-width:40px; border:none; vertical-align:top; position:relative; top:0; left:0; }
 td:empty                                        { display:none; visibility:hidden; }
@@ -31,6 +33,7 @@ td:empty                                        { display:none; visibility:hidde
 Tablet - This applies from 768px onwards
 ***********************************************/
 @media (min-width:768px) {
+    .table                                        { overflow:visible; }
     table                                         { font-size:inherit; }
 
     .table--mobile table                          { display:table; }
@@ -47,7 +50,11 @@ Tablet - This applies from 768px onwards
     .table--mobile td+td[data-title]:before, 
     .table--mobile th+td[data-title]:before,
     .table--mobile td[data-title]:before          { display:none; }
-    .table--mobile td .cell-content               { width:100%; }
+    .table--mobile td .cell-content               { width:100%; overflow:visible;
+        .dropdown                                 { position: absolute;
+            top: 3px;
+            right: 5px; }
+    }
 
     .table--rowHover thead tr:hover,
     .table--stripes thead tr:nth-child(odd)       { background-color:transparent; }
