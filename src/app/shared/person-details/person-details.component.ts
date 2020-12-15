@@ -10,7 +10,7 @@ import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-group
 })
 export class PersonDetailsComponent implements OnInit {
   @Input() personDetails: Person;
-  @Input() isClickable = true;
+  @Input() isClickable = false;
   @Input() isNewContactGroup = false;
   @Input() isPersonInfoOnly = true;
   @Input() contactType: number;

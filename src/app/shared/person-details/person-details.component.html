@@ -2,11 +2,11 @@
   *ngIf="personDetails && !isClickable">
   <ng-container *ngTemplateOutlet="content"></ng-container>
 </ng-container>
-<a [routerLink]="['/contact-centre/detail/', personDetails?.personId]" [queryParams]="{showNotes: true}"
+<!-- <a [routerLink]="['/contact-centre/detail/', personDetails?.personId]" [queryParams]="{showNotes: true}"
   [ngClass]="{'list-group-item-danger': personDetails?.warning && personDetails?.warning?.id !== 1}"
   *ngIf="personDetails && isClickable">
   <ng-container *ngTemplateOutlet="content"></ng-container>
-</a>
+</a> -->
 
 <!-- <ng-template #content>
   <div class="card">
@@ -185,7 +185,7 @@
       <div class="flexRight" *ngIf="!personDetails?.isNewPerson; else removeSelectedPerson">
         <div dropdown placement="bottom right">
           <a class="btn btn-light dropdown-toggle" href [id]="'button' + index" dropdownToggle
-            (click)="$event.stopPropagation(); false" [attr.aria-controls]="'dropdown' + i"><svg aria-hidden="true"
+            (click)="$event.stopPropagation(); false" [attr.aria-controls]="'dropdown' + index"><svg aria-hidden="true"
               width="64" height="64" viewBox="0 0 64 64" class="icon">
               <ellipse class="st0" cx="32" cy="10.5" rx="5.9" ry="6" />
               <ellipse class="st0" cx="32" cy="32" rx="5.9" ry="6" />
