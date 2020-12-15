@@ -1,4 +1,28 @@
-<div class="list-group">
+<div class="table">
+  <div *ngIf="properties" class="search-results" infiniteScroll [infiniteScrollDistance]="5" [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"></div>
+  <table class="table--mobile table--rowHover">
+    <thead>
+      <tr>
+        <th>Address</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let property of properties; let i = index;">
+        <td data-title="Assign">
+          <span class="cell-content">
+            <a [routerLink]="['detail', property?.propertyId]" [queryParams]="{searchTerm: searchTerm, showNotes:true}" (click)="onPropertySelected(property.propertyId)">
+              <strong [innerHTML]="property?.propertyAddress | highlight : searchTerm"></strong>
+              <span class="text-danger" *ngIf="!(property.propertyAddress )">No address</span>
+            </a>
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- <div class="list-group">
   <div *ngIf="properties" class="search-results" infiniteScroll [infiniteScrollDistance]="5"
     [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true">
   </div>
@@ -14,4 +38,4 @@
       </div>
     </div>
   </a>
-</div>
+</div> -->
