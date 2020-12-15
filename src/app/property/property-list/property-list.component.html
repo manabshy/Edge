@@ -7,13 +7,13 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let property of properties; let i = index;">
+      <tr [routerLink]="['detail', property?.propertyId]" [queryParams]="{searchTerm: searchTerm, showNotes:true}" (click)="onPropertySelected(property.propertyId)"[routerLink]="['detail', property?.propertyId]" [queryParams]="{searchTerm: searchTerm, showNotes:true}" (click)="onPropertySelected(property.propertyId)" *ngFor="let property of properties; let i = index;">
         <td data-title="Assign">
           <span class="cell-content">
-            <a [routerLink]="['detail', property?.propertyId]" [queryParams]="{searchTerm: searchTerm, showNotes:true}" (click)="onPropertySelected(property.propertyId)">
+       
               <strong [innerHTML]="property?.propertyAddress | highlight : searchTerm"></strong>
               <span class="text-danger" *ngIf="!(property.propertyAddress )">No address</span>
-            </a>
+        
           </span>
         </td>
       </tr>
