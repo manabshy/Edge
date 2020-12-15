@@ -1,4 +1,63 @@
-<div class="list-group list-group-flush">
+<ng-container *ngIf="homeHelpers$ | async as homeHelpers">
+  <div class="title">
+    <h2>Home helpers</h2>
+    <span class="checkbox checkbox--rtl" *ngIf="closedCounter">
+      <span>
+        <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getHomeHelpers()" id="includeClosedHomeHelpers">
+        <label for="includeClosedHomeHelpers">Include closed home helpers</label>
+      </span>
+    </span>
+  </div>
+
+  <div class="table">
+    <div class="list-group-item text-center text-danger" *ngIf="!homeHelpers || !homeHelpers?.length">
+      <i class="far fa-sad-tear"></i> No home helpers
+    </div>
+
+    <table class="table--mobile table--rowHover">
+      <thead *ngIf="homeHelpers && homeHelpers?.length">
+        <tr>
+          <th>Address</th>
+          <th>Start date</th>
+          <th>End date</th>
+          <th>Status</th>
+          <th>Prop. Man.</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of homeHelpers">
+          <td data-title="Address">
+            <span class="cell-content">
+              {{item?.propertyAddress}}
+            </span>
+          </td>
+          <td data-title="Start date">
+            <span class="cell-content">
+              {{(item?.managedStartDate | date: 'dd/MM/yyyy') || "-"}}
+            </span>
+          </td>
+          <td data-title="End date">
+            <span class="cell-content">
+              {{(item?.managedEndDate | date: 'dd/MM/yyyy') || "-"}}
+            </span>
+          </td>
+          <td data-title="Status">
+            <span class="cell-content">
+              <span class="badge badge-pill" [ngClass]="item?.isActive ? 'badge-success' : 'badge-primary'" [innerHTML]="item?.status | bracketsNewLine"></span>
+            </span>
+          </td>
+          <td data-title="Prop. Man.">
+            <span class="cell-content">
+              {{item?.propertyManager}}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</ng-container>
+
+<!-- <div class="list-group list-group-flush">
   <ng-container *ngIf="homeHelpers$ | async as homeHelpers">
     <div class="list-group-item text-center text-danger" *ngIf="!homeHelpers || !homeHelpers?.length">
       <i class="far fa-sad-tear"></i> No home helpers
@@ -55,4 +114,4 @@
       </div>
     </div>
   </ng-container>
-</div>
+</div> -->
