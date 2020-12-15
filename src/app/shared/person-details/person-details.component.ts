@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MarketingPreferences, Person } from '../models/person';
 import { Router } from '@angular/router';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
@@ -11,6 +11,14 @@ import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-group
 export class PersonDetailsComponent implements OnInit {
   @Input() personDetails: Person;
   @Input() isClickable = true;
+  @Input() isNewContactGroup = false;
+  @Input() isPersonInfoOnly = true;
+  @Input() contactType: number;
+  @Input() referenceCount: number;
+  @Input() index: number = 0;
+  @Output() selectedPersonId = new EventEmitter<number>();
+  @Output() removedPersonPersonId = new EventEmitter<number>();
+  @Output() mainPersonPersonId = new EventEmitter<number>();
   constructor(private router: Router, private contactGroupService: ContactGroupsService) { }
 
   ngOnInit() {
@@ -27,9 +35,18 @@ export class PersonDetailsComponent implements OnInit {
     });
   }
 
-  navigate() {
+  navigateToEdit() {
     this.router.navigate(['/contact-centre/detail/', this.personDetails.personId, 'edit']);
   }
+
+  navigateToView() {
+    this.router.navigate(['/contact-centre/detail/', this.personDetails.personId]);
+  }
+
+  editSelectedPerson() {
+    this.isPersonInfoOnly ? this.navigateToEdit() : this.selectedPersonId.emit(this.personDetails.personId);
+  }
+
   getMarketingPrefClass(pref: boolean) {
     return {
       'icon--fill-positive': pref,
