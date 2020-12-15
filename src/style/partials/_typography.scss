@@ -3,16 +3,16 @@ Font-face setup
 ***********************************************/
 @font-face {
     font-family:'object-sans';
-    src:    url('../../assets/font/objectsans-bold.woff2') format('woff2'),
-            url('../../assets/font/objectsans-bold.woff') format('woff');
+    src:    url('../../assets/font/objectsans-medium.woff2') format('woff2'),
+            url('../../assets/font/objectsans-medium.woff') format('woff');
     font-weight:bold;
     font-style:bold;
 }
   
 @font-face {
     font-family:'object-sans';
-    src:    url('../../assets/font/objectsans-medium.woff2') format('woff2'),
-            url('../../assets/font/objectsans-medium.woff') format('woff');
+    src:    url('../../assets/font/objectsans-light.woff2') format('woff2'),
+            url('../../assets/font/objectsans-light.woff') format('woff');
     font-weight:normal;
     font-style:normal;
 }
@@ -35,7 +35,7 @@ body, form, input, textarea, select, label,
 .radio > span label, form .message, .btn        { font-family:'object-sans', Sans-Serif; }
 
 html                                            { scroll-behavior:smooth; }
-body, .body                                     { font-size:13px; line-height:17px; letter-spacing:.5px; background-color:$color--snow; color:$color--midnight-70; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+body, .body                                     { font-size:13px; line-height:17px; letter-spacing:.5px; background-color:$color--snow; font-weight:normal; color:$color--midnight-70; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 
 /***** Typography *****/
 h1, h2, h3, h4, h5, h6,

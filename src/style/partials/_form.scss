@@ -35,7 +35,7 @@ input, textarea, select                        	{ border-color:$color--midnight-
 /*********************************************** 
 Forms with labels
 ***********************************************/
-form                                           	{ padding:0; display:inline-block; width:100%; font-size:12px; }
+form                                           	{ padding:0; display:inline-block; width:100%; }
 form .invalid > label, 
 form .invalid input:checked + label            	{ color:$color--negative; }
 form .invalid input:checked + label:before     	{ background-color:$color--negative; border-color:$color--negative; }
