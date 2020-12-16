@@ -119,8 +119,8 @@
       <div class="card card--marginTop card--sticky">
         <div class="card__body">
           <ol class="list list--divider list--hover">
-            <li [ngClass]="{current: item.isCurrent}" *ngFor="let item of types;index as i">
-              <a role="button" class="overall" (click)="setinfoType(item?.name,i); scrollTo(mainRowItem)"></a>
+            <li [ngClass]="{current: item.isCurrent}" *ngFor="let item of sideNavItems;index as i">
+              <a role="button" class="overall" (click)="setSideNavItem(item?.name,i); scrollTo(mainRowItem)"></a>
               {{item?.name|toPascalCase}}
               <ng-container *ngIf="summaryTotals; else loadingInfo">
                 <ng-container *ngIf="isObject(summaryTotals[item?.name]); else simpleValue">
@@ -143,7 +143,7 @@
         </div>
       </div>
     </div>
-    
+
     <div #mainRowItem class="row__item">
       <!-- <h2>Notes</h2>
       <ol class="timeline">
