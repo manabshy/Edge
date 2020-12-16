@@ -56,7 +56,7 @@ p+p                                             { margin-top:16px; }
 
 mark                                            { padding:0 2px; background-color:$color--yellow; border-radius:3px; }
 
-sup                                             { display:flex; font-size:10px; line-height:10px; font-weight:normal; color:$color--midnight-50; text-transform:uppercase; height:auto; top:0; }
+sup                                             { display:flex; align-items:center; font-size:10px; line-height:10px; font-weight:normal; color:$color--midnight-50; text-transform:uppercase; height:auto; top:0; }
 sup+p                                           { margin-top:3px; }
 .sup--positive                                  { color:$color--positive; }
 
@@ -64,6 +64,8 @@ small                                           { display:flex; font-size:10px; 
 small+*                                         { margin-top:16px; }
 
 .pill                                           { padding:3px 6px; min-height:auto; font-size:10px; line-height:11px; border-radius:20px; }
+.pill--onLeft                                   { margin-right:6px; }
+
 .pill--right                                    { position:absolute; top:0; right:0; left:auto; z-index:9; }
 
 .txt--positive                                  { color:$color--positive; }

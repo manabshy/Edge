@@ -156,14 +156,11 @@
     <div class="card__header">
       <span>
         <sup>
-          <app-score-badge [person]="personDetails"></app-score-badge> <span class="pill pill--negative"
-            *ngIf="personDetails?.warning && personDetails?.warning?.id !== 1">{{personDetails?.warningStatusComment ||
-            personDetails?.warning?.value}}</span>
+          <span class="pill pill--positive pill--onLeft" *ngIf="personDetails?.isMainPerson && contactType !== 4">Main Contact</span>
+          <app-score-badge [person]="personDetails"></app-score-badge> <span class="pill pill--negative" *ngIf="personDetails?.warning && personDetails?.warning?.id !== 1">{{personDetails?.warningStatusComment || personDetails?.warning?.value}}</span> 
         </sup>
         <p class="txt--title">{{personDetails?.addressee}}</p>
       </span>
-      <span class="pill pill--positive flexRight" *ngIf="personDetails?.isMainPerson && contactType !== 4">Main
-        Person</span>
       <!-- <div class="flexRight">
         <div dropdown placement="bottom right">
           <a class="btn btn-light dropdown-toggle" href [id]="'button'" dropdownToggle

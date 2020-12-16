@@ -1,9 +1,6 @@
 <div class="row">
   <div class="row__item row__item--aside">
     <div class="card card--sticky">
-      <div class="card__header">
-        <p>Additional Information</p>
-      </div>
       <div class="card__body">
         <ol class="list list--divider list--hover">
           <li [ngClass]="{current: item.isCurrent}" *ngFor="let item of infoTypes;index as i">
@@ -398,7 +395,8 @@
                     [referenceCount]="contactGroupDetails?.referenceCount" [isPersonInfoOnly]="false"
                     (selectedPersonId)="editSelectedPerson($event)" (mainPersonPersonId)="setMainPerson($event)"
                     (removedPersonPersonId)="removePerson($event)"></app-person-details>
-                  <small class="flexBottom">P-{{person?.personId}}</small>
+                  
+                  <p><small class="flexBottom">P-{{person?.personId}}</small></p>
 
                   <!-- <div class="flexBottom">
                 <ol class="list list--divider list--details">
@@ -500,16 +498,11 @@
 
 
                 </li>
-                <li>
-                  Add New Contact
+                <li class="card__new" *ngIf="contactGroupDetails?.contactPeople.length < 8 && !contactGroupDetails?.referenceCount && !isMaxPeople">
+                  <a href (click)="showHideOffCanvas($event)" class="overall"></a>
+                  <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--l icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z"></path><path d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" class="plus-vertical"></path></svg>Add New Contact
                 </li>
               </ol>
-
-              <a href (click)="showHideOffCanvas($event)"
-                class="list-group-item list-group-item-action text-center py-4"
-                *ngIf="contactGroupDetails?.contactPeople.length < 8 && !contactGroupDetails?.referenceCount && !isMaxPeople">
-                <span class="btn-link"><i class="fas fa-user-plus mr-2"></i>Add Person</span>
-              </a>
 
               <div class="message message--warning" *ngIf="contactGroupDetails?.referenceCount && !isCloned"
                 (click)="cloneContactGroup()">
