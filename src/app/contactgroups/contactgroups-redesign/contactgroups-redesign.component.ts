@@ -1,4 +1,4 @@
-import { Component, HostListener, Inject, OnInit } from '@angular/core';
+import { Component, HostListener, Inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import _ from 'lodash';
@@ -18,7 +18,7 @@ import { ContactGroupsService } from '../shared/contact-groups.service';
   templateUrl: './contactgroups-redesign.component.html',
   styleUrls: ['./contactgroups-redesign.component.scss']
 })
-export class ContactgroupsRedesignComponent extends BaseComponent implements OnInit {
+export class ContactgroupsRedesignComponent extends BaseComponent implements OnInit, OnDestroy {
 
   listInfo: any;
   warnings: any;
@@ -39,7 +39,7 @@ export class ContactgroupsRedesignComponent extends BaseComponent implements OnI
   subNav = ContactGroupDetailsSubNavItems;
   personParams: string;
   showNotes: boolean;
-  moreInfo = this.sidenavService.selectedItem;
+  moreInfo = this.sidenavService.selectedItem = 'notes';
   // type = 'notes';
   // types: { name: string, isCurrent: boolean }[] = [
   //   { name: 'notes', isCurrent: true },
@@ -95,6 +95,11 @@ export class ContactgroupsRedesignComponent extends BaseComponent implements OnI
         this.searchedPersonDetails = null;
         this.searchedPersonContactGroups = null;
         this.init();
+      }
+      // Set notes as current side nav item if non is selected
+      const noCurrentItem = this.sideNavItems.every(x => x.isCurrent === false);
+      if (noCurrentItem) {
+        this.sideNavItems.find(x => x.name === 'notes').isCurrent = true;
       }
     });
   }
@@ -224,7 +229,7 @@ export class ContactgroupsRedesignComponent extends BaseComponent implements OnI
     // this.types.map(t => t.isCurrent = false);
     // this.types[index].isCurrent = true;
     // console.log('info type', this.moreInfo);
-   this.moreInfo = this.sidenavService.getSelectedItem(type, index);
+    this.moreInfo = this.sidenavService.getSelectedItem(type, index);
     console.log('%cmore info compo', this.moreInfo);
 
   }
@@ -237,4 +242,7 @@ export class ContactgroupsRedesignComponent extends BaseComponent implements OnI
     return val instanceof Object;
   }
 
+  ngOnDestroy(){
+    this.sidenavService.resetCurrentFlag();
+  }
 }

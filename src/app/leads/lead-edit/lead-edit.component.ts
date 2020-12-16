@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { AppUtils } from '../../core/shared/utils';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LeadsService } from '../shared/leads.service';
@@ -23,13 +23,14 @@ import { isEqual, addDays } from 'date-fns';
 import { WedgeValidators } from 'src/app/shared/wedge-validators';
 import { SubNavItem } from 'src/app/shared/subnav';
 import { ResultData } from 'src/app/shared/result-data';
+import { SideNavItem, SidenavService } from 'src/app/core/services/sidenav.service';
 
 @Component({
   selector: 'app-lead-edit',
   templateUrl: '../lead-edit/lead-edit.component.html',
   styleUrls: ['../lead-edit/lead-edit.component.scss']
 })
-export class LeadEditComponent extends BaseComponent implements OnInit, AfterViewInit {
+export class LeadEditComponent extends BaseComponent implements OnInit, AfterViewInit, OnDestroy {
 
   listInfo: any;
   leadId: number;
@@ -81,7 +82,10 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   isSaveAndNext: boolean;
   showSaveAndNext: boolean;
   showNotes: boolean;
-  moreInfo = '';
+  // moreInfo = '';
+  moreInfo = this.sidenavService.selectedItem;
+  sideNavItems = this.sidenavService.sideNavItems;
+
   get nextChaseDateControl() {
     return this.leadEditForm.get('nextChaseDate') as FormControl;
   }
@@ -94,6 +98,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     private fb: FormBuilder,
     private infoService: InfoService,
     private sharedService: SharedService,
+    private sidenavService: SidenavService,
     private contactGroupService: ContactGroupsService,
     private toastr: ToastrService) {
     super();
@@ -122,6 +127,13 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.leadEditForm.valueChanges.subscribe(data => {
       data.closeLead ? this.isLeadMarkedAsClosed = true : this.isLeadMarkedAsClosed = false;
     });
+
+    // Remove contact groups from side nav items
+    this.sideNavItems.splice(this.sideNavItems.findIndex(x => x.name === 'contactGroups'), 1);
+    // add lead edit item
+    const contactGroups: SideNavItem = { name: 'contactGroups', isCurrent: false };
+    const editForm: SideNavItem = { name: 'editLead', isCurrent: true };
+    this.sideNavItems.unshift(editForm);
 
   }
 
@@ -573,10 +585,29 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.moreInfo = item.value;
   }
 
+  setSideNavItem(type: string, index: number) {
+    this.moreInfo = this.sidenavService.getSelectedItem(type, index);
+    console.log('%cmore info compo', this.moreInfo);
+
+  }
+
+  scrollTo(el: HTMLElement) {
+    el.scrollIntoView({ block: 'start', behavior: 'smooth' });
+  }
+
+
+
   canDeactivate(): boolean {
     if (this.leadEditForm.dirty && !this.isSubmitting || this.isPropertyAssociated || this.isPropertyRemoved) {
       return false;
     }
     return true;
+  }
+
+  ngOnDestroy() {
+    this.sideNavItems.splice(this.sideNavItems.findIndex(x => x.name === 'editLead'), 1);
+    const contactGroups: SideNavItem = { name: 'contactGroups', isCurrent: false };
+    this.sideNavItems.splice(1, 0, contactGroups);
+    this.sidenavService.resetCurrentFlag();
   }
 }
