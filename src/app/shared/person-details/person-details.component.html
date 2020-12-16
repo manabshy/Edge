@@ -156,7 +156,7 @@
     <div class="card__header">
       <span>
         <sup>
-          <span class="pill pill--positive pill--onLeft" *ngIf="personDetails?.isMainPerson && contactType !== 4">Main Contact</span><span class="pill pill--negative" *ngIf="personDetails?.warning && personDetails?.warning?.id !== 1">{{personDetails?.warningStatusComment || personDetails?.warning?.value}}</span> 
+          <span class="pill pill--positive pill--onLeft" *ngIf="personDetails?.isMainPerson && contactType !== 4">Main Contact</span><span class="pill pill--negative" *ngIf="personDetails?.warning && personDetails?.warning?.id !== 1">{{personDetails?.warningStatusComment || personDetails?.warning?.value}}</span>
         </sup>
         <p class="txt--title">{{personDetails?.addressee}}</p>
         <small><app-score-badge [person]="personDetails"></app-score-badge></small>
@@ -226,12 +226,12 @@
     </div>
     <div class="card__body">
       <ol class="list">
-        <li *ngIf="!isNewContactGroup"><!-- Alex, can we make this hidden is no messages? -->
-          <span *ngIf="personDetails?.personNotes?.length">
+        <li *ngIf="!isNewContactGroup && personDetails?.personNotes?.length">
+         <span>
             <div class="message message--negative" *ngFor="let importantNote of personDetails?.personNotes">
               {{importantNote.text}}
             </div>
-          </span>
+         </span>
         </li>
         <li *ngIf="contactType !== 4">
           <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
