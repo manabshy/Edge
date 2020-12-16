@@ -23,7 +23,7 @@ const routes: Routes = [
     path: 'detail/:personId',
     children: [
       // { path: '', component: ContactgroupsDetailComponent, data: { shouldDetach: true } },
-      { path: '', component: ContactgroupsRedesignComponent, data: { shouldDetach: true } },
+      { path: '', component: ContactgroupsRedesignComponent, data: { shouldDetach: false } }, // do not cache page
       { path: 'people/:contactGroupId', component: ContactgroupsPeopleComponent, canDeactivate: [CanDeactivateGuard]},
       { path: 'edit', component: ContactgroupsDetailEditComponent, canDeactivate: [CanDeactivateGuard] },
       { path: 'leads', component: ContactgroupsDetailLeadsComponent },

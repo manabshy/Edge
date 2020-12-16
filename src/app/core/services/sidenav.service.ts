@@ -4,9 +4,9 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class SidenavService {
-selectedItem = 'notes';
+  selectedItem = '';
   sideNavItems: SideNavItem[] = [
-    { name: 'notes', isCurrent: true },
+    { name: 'notes', isCurrent: false },
     { name: 'contactGroups', isCurrent: false },
     { name: 'properties', isCurrent: false },
     { name: 'leads', isCurrent: false },
@@ -24,12 +24,23 @@ selectedItem = 'notes';
     this.sideNavItems.map(t => t.isCurrent = false);
     this.sideNavItems[index].isCurrent = true;
     console.log('selected item in service', this.selectedItem);
-   return this.selectedItem = type;
+    return this.selectedItem = type;
+  }
+
+  resetCurrentFlag() {
+    this.selectedItem = '';
+    this.sideNavItems.forEach(x => {
+      if (x.isCurrent) { x.isCurrent = false; }
+    });
+  }
+
+  scrollTo(el: HTMLElement) {
+    el.scrollIntoView({ block: 'start', behavior: 'smooth' });
   }
 
 }
 
-interface SideNavItem {
+export interface SideNavItem {
   name: string;
   isCurrent: boolean;
 }

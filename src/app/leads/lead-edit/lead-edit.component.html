@@ -1,106 +1,265 @@
 <div class="row">
   <div class="row__item row__item--aside">
     <app-person-details *ngIf="person" [personDetails]="person" [isClickable]="false"></app-person-details>
-    
+
     <div class="card card--marginTop card--sticky">
       <div class="card__body">
         <ol class="list list--divider list--hover">
-          <li>
-            <a role="button" class="overall"></a>
+          <li [ngClass]="{current: item.isCurrent}" *ngFor="let item of sideNavItems;index as i">
+            <a role="button" class="overall" (click)="setSideNavItem(item?.name,i); scrollTo(mainRowItem)"></a>
+            {{item?.name|toPascalCase}}
+            <ng-container *ngIf="summaryTotals; else loadingInfo">
+              <ng-container *ngIf="isObject(summaryTotals[item?.name]); else simpleValue">
+                <span *ngIf="summaryTotals[item?.name]?.active" class="pill pill--positive flexRight">
+                  {{summaryTotals[item?.name]?.active}} </span>
+                <span *ngIf="summaryTotals[item?.name]?.inactive" class="pill flexRight">
+                  {{summaryTotals[item?.name]?.inactive}}</span>
+              </ng-container>
+              <ng-template #simpleValue>
+                <span *ngIf="summaryTotals[item?.name]" class="pill pill--positive flexRight">
+                  {{summaryTotals[item?.name]}}</span>
+              </ng-template>
+            </ng-container>
+            <ng-template #loadingInfo>
+              <span class="badge badge-pill badge-primary"><i class="fas fa-spinner fa-pulse d-inline-block"></i></span>
+            </ng-template>
           </li>
         </ol>
       </div>
     </div>
   </div>
 
-  <div class="row__item">
-    <div class="title">
-      <h2>Lead<span class="pill pill--onRight" *ngIf="lead?.closedById">Closed</span></h2>
-      <!-- <a class="btn btn--positive"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z"></path><path d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" class="plus-vertical"></path></svg>Contact Group</a> -->
-    </div>
+  <div #mainRowItem class="row__item">
+    <ng-container [ngSwitch]="moreInfo">
+      <app-shared-property-list *ngSwitchCase="'properties'" [moreInfo]="moreInfo" [isLeadClosed]="isLeadClosed"
+        [isLead]="true" [personId]="person?.personId" (associatedProperty)="getAssociatedProperty($event)">
+      </app-shared-property-list>
+      <app-contactgroups-detail-instructions *ngSwitchCase="'instructions'" [moreInfo]="moreInfo"
+        [personId]="person?.personId" [closedCounter]="summaryTotals?.instructions?.inactive">
+      </app-contactgroups-detail-instructions>
+      <app-contactgroups-detail-offers *ngSwitchCase="'offers'" [moreInfo]="moreInfo" [personId]="person?.personId"
+        [closedCounter]="summaryTotals?.offers?.inactive">
+      </app-contactgroups-detail-offers>
+      <app-contactgroups-detail-searches *ngSwitchCase="'searches'" [moreInfo]="moreInfo" [personId]="person?.personId"
+        [closedCounter]="summaryTotals?.searches?.inactive">
+      </app-contactgroups-detail-searches>
+      <app-shared-valuation-list *ngSwitchCase="'valuations'" [moreInfo]="moreInfo" [personId]="person?.personId"
+        [closedCounter]="summaryTotals?.valuations?.inactive">
+      </app-shared-valuation-list>
+      <app-contactgroups-detail-lettings-managements *ngSwitchCase="'lettingsManagements'" [moreInfo]="moreInfo"
+        [personId]="person?.personId" [closedCounter]="summaryTotals?.lettingsManagements?.inactive">
+      </app-contactgroups-detail-lettings-managements>
+      <app-contactgroups-detail-home-helper *ngSwitchCase="'homeHelpers'" [moreInfo]="moreInfo"
+        [personId]="person?.personId" [closedCounter]="summaryTotals?.homeHelpers?.inactive">
+      </app-contactgroups-detail-home-helper>
+      <app-shared-lead-register *ngSwitchCase="'leads'" [moreInfo]="moreInfo" [personId]="person?.personId"
+        [closedCounter]="summaryTotals?.leads?.inactive">
+      </app-shared-lead-register>
+      <app-notes *ngSwitchCase="'notes'" [personNotes]="personNotes" [person]="person" [pageNumber]="page" [bottomReached]="bottomReached"
+        [showNoteInput]="false"></app-notes>
+      <ng-container *ngSwitchDefault>
+        <div class="title">
+          <h2>Lead<span class="pill pill--onRight" *ngIf="lead?.closedById">Closed</span></h2>
+          <!-- <a class="btn btn--positive"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z"></path><path d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" class="plus-vertical"></path></svg>Contact Group</a> -->
+        </div>
+        <form [formGroup]="leadEditForm" (ngSubmit)="SaveLead(true, leadNote)" autocompleteOff>
+          <fieldset>
+            <label for="leadType">Type</label>
+            <span class="select">
+              <select id="leadType" formControlName="leadTypeId" [attr.disabled]="isLeadClosed ? true : null"
+                [ngClass]="{'is-invalid': formErrors?.leadTypeId}">
+                <option value=""></option>
+                <option selected *ngFor="let leadType of leadTypes" [value]=leadType.id>{{leadType?.value}}</option>
+              </select>
+            </span>
+            {{formErrors?.leadTypeId}}
+          </fieldset>
 
-    <form [formGroup]="leadEditForm" (ngSubmit)="SaveLead(true, leadNote)" autocompleteOff>
-      <fieldset>
-        <label for="leadType">Type</label>
-        <span class="select">
-          <select id="leadType" formControlName="leadTypeId"
-            [attr.disabled]="isLeadClosed ? true : null" [ngClass]="{'is-invalid': formErrors?.leadTypeId}">
-            <option value=""></option>
-            <option selected *ngFor="let leadType of leadTypes" [value]=leadType.id>{{leadType?.value}}</option>
-          </select>
-        </span>
-        {{formErrors?.leadTypeId}}
-      </fieldset>
+          <fieldset>
+            <label for="chaseDate">Chase date</label>
+            <input type="text" id="chaseDate" placeholder="dd/mm/yyyy" formControlName="nextChaseDate"
+              [bsConfig]="{showWeekNumbers:false, useUtc: false, dateInputFormat: 'DD/MM/YYYY', minDate:tomorrowsDate, customTodayClass: 'font-weight-bold'}"
+              bsDatepicker [attr.disabled]="isLeadClosed ? true : null" #datepicker="bsDatepicker"
+              [appNoDoubleTap]='datepicker' (bsValueChange)="onChaseDateChange($event)"
+              [ngClass]="{'is-invalid': (formErrors?.nextChaseDate)}">
+            {{formErrors?.nextChaseDate}}
+          </fieldset>
 
-      <fieldset>
-        <label for="chaseDate">Chase date</label>
-        <input type="text" id="chaseDate" placeholder="dd/mm/yyyy" formControlName="nextChaseDate" [bsConfig]="{showWeekNumbers:false, useUtc: false, dateInputFormat: 'DD/MM/YYYY', minDate:tomorrowsDate, customTodayClass: 'font-weight-bold'}" bsDatepicker [attr.disabled]="isLeadClosed ? true : null" #datepicker="bsDatepicker" [appNoDoubleTap]='datepicker' (bsValueChange)="onChaseDateChange($event)" [ngClass]="{'is-invalid': (formErrors?.nextChaseDate)}">
-        {{formErrors?.nextChaseDate}}
-      </fieldset>
+          <fieldset>
+            <label for="chaser">Chaser</label>
+            <app-staff-member-finder [staffMemberId]="lead?.ownerId || leadEditForm.get('ownerId').value"
+              [listType]="'activeStaffMembers'" (selectedStaffMemberId)="getSelectedStaffMemberId($event)"
+              [isRequired]="!leadEditForm.get('ownerId').value" [isDisabled]="isLeadClosed ? true : false">
+            </app-staff-member-finder>
+          </fieldset>
 
-      <fieldset>
-        <label for="chaser">Chaser</label>
-        <app-staff-member-finder [staffMemberId]="lead?.ownerId || leadEditForm.get('ownerId').value" [listType]="'activeStaffMembers'" (selectedStaffMemberId)="getSelectedStaffMemberId($event)" [isRequired]="!leadEditForm.get('ownerId').value" [isDisabled]="isLeadClosed ? true : false"></app-staff-member-finder>
-      </fieldset>
+          <fieldset *ngIf="!isLeadClosed">
+            <span class="checkbox">
+              <span>
+                <input type="checkbox" id="closeLead" formControlName="closeLead" (change)="closeLeadChanged(lead)">
+                <label for="closeLead">Mark as <span class="badge badge-pill badge-primary">Closed</span></label>
+              </span>
+            </span>
+          </fieldset>
 
-      <fieldset *ngIf="!isLeadClosed">
-        <span class="checkbox">
-          <span>
-            <input type="checkbox" id="closeLead" formControlName="closeLead" (change)="closeLeadChanged(lead)">
-            <label for="closeLead">Mark as <span class="badge badge-pill badge-primary">Closed</span></label>
-          </span>
-        </span>
-      </fieldset>
-    
-      <h3>Associated Property</h3>
-      <div class="table" *ngIf="lead?.relatedProperty; else noProperty">
-        <div *ngIf="properties" class="search-results" infiniteScroll [infiniteScrollDistance]="5" [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"></div>
-        <table class="table--mobile table--rowHover">
-          <thead>
-            <tr>
-              <th colspan="2">Address</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr [routerLink]="['/property-centre/detail/', lead?.relatedProperty?.propertyId]">
-              <td data-title="Address">
-                <span class="cell-content">
-                  {{lead?.relatedProperty?.address | formatAddress}}
-                </span>
-              </td>
-              <td data-title="Actions">
-                <span class="cell-content">
-                  <div dropdown placement="bottom right" class="dropdown">
-                    <a class="btn dropdown-toggle" href [id]="'button' + i" dropdownToggle (click)="$event.stopPropagation(); false" [attr.aria-controls]="'dropdown' + i"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon"><ellipse class="st0" cx="32" cy="10.5" rx="5.9" ry="6" /><ellipse class="st0" cx="32" cy="32" rx="5.9" ry="6" /><ellipse class="st0" cx="32" cy="53.5" rx="5.9" ry="6" /></svg></a>
-                    <ul [id]="'dropdown' + i" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" [attr.aria-labelledby]="'button' + i">
-                      <li role="menuitem">
-                        <a class="dropdown-item">View Property</a>
-                      </li>
-                      <li *ngIf="!isMessageVisible && !isLeadClosed">
-                        <button class="btn btn-light btn-sm ml-2" type="button" aria-label="remove" (click)="removeProperty()">Remove Property</button>
-                      </li>
-                      <li *ngIf="!isMessageVisible">
-                        <button class="btn btn-light btn-sm ml-2" type="button" data-cy="createVal" (click)="navigateToNewValuation(lead?.relatedProperty?.propertyId)">Create Val.</button>
-                      </li>
-                    </ul>
-                  </div>
-                </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <ng-template #noProperty>
-        <p>No property associated to this lead</p>
-      </ng-template>
-    
-        <!-- <div class="footer">Hi, I'm a footer..!</div> -->
-    </form>
+          <h3>Associated Property</h3>
+          <div class="table" *ngIf="lead?.relatedProperty; else noProperty">
+            <!-- <div *ngIf="properties" class="search-results" infiniteScroll [infiniteScrollDistance]="5" [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"></div> -->
+            <table class="table--mobile table--rowHover">
+              <thead>
+                <tr>
+                  <th colspan="2">Address</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr [routerLink]="['/property-centre/detail/', lead?.relatedProperty?.propertyId]">
+                  <td data-title="Address">
+                    <span class="cell-content">
+                      {{lead?.relatedProperty?.address | formatAddress}}
+                    </span>
+                  </td>
+                  <td data-title="Actions">
+                    <span class="cell-content">
+                      <div dropdown placement="bottom right" class="dropdown">
+                        <a class="btn dropdown-toggle" href [id]="'button'" dropdownToggle
+                          (click)="$event.stopPropagation(); false" [attr.aria-controls]="'dropdown'"><svg aria-hidden="true"
+                            width="64" height="64" viewBox="0 0 64 64" class="icon">
+                            <ellipse class="st0" cx="32" cy="10.5" rx="5.9" ry="6" />
+                            <ellipse class="st0" cx="32" cy="32" rx="5.9" ry="6" />
+                            <ellipse class="st0" cx="32" cy="53.5" rx="5.9" ry="6" />
+                          </svg></a>
+                        <ul [id]="'dropdown'" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+                          [attr.aria-labelledby]="'button'">
+                          <li role="menuitem">
+                            <a class="dropdown-item">View Property</a>
+                          </li>
+                          <li *ngIf="!isMessageVisible && !isLeadClosed">
+                            <button class="btn btn-light btn-sm ml-2" type="button" aria-label="remove"
+                              (click)="removeProperty()">Remove Property</button>
+                          </li>
+                          <li *ngIf="!isMessageVisible">
+                            <button class="btn btn-light btn-sm ml-2" type="button" data-cy="createVal"
+                              (click)="navigateToNewValuation(lead?.relatedProperty?.propertyId)">Create Val.</button>
+                          </li>
+                        </ul>
+                      </div>
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <ng-template #noProperty>
+            <p>No property associated to this lead</p>
+          </ng-template>
+
+          <!-- <div class="footer">Hi, I'm a footer..!</div> -->
+        </form>
+      </ng-container>
+    </ng-container>
   </div>
 </div>
 
 
+<ng-template #editForm>
+  <div class="title">
+    <h2>Lead<span class="pill pill--onRight" *ngIf="lead?.closedById">Closed</span></h2>
+    <!-- <a class="btn btn--positive"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z"></path><path d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" class="plus-vertical"></path></svg>Contact Group</a> -->
+  </div>
+  <form [formGroup]="leadEditForm" (ngSubmit)="SaveLead(true, leadNote)" autocompleteOff>
+    <fieldset>
+      <label for="leadType">Type</label>
+      <span class="select">
+        <select id="leadType" formControlName="leadTypeId" [attr.disabled]="isLeadClosed ? true : null"
+          [ngClass]="{'is-invalid': formErrors?.leadTypeId}">
+          <option value=""></option>
+          <option selected *ngFor="let leadType of leadTypes" [value]=leadType.id>{{leadType?.value}}</option>
+        </select>
+      </span>
+      {{formErrors?.leadTypeId}}
+    </fieldset>
 
+    <fieldset>
+      <label for="chaseDate">Chase date</label>
+      <input type="text" id="chaseDate" placeholder="dd/mm/yyyy" formControlName="nextChaseDate"
+        [bsConfig]="{showWeekNumbers:false, useUtc: false, dateInputFormat: 'DD/MM/YYYY', minDate:tomorrowsDate, customTodayClass: 'font-weight-bold'}"
+        bsDatepicker [attr.disabled]="isLeadClosed ? true : null" #datepicker="bsDatepicker"
+        [appNoDoubleTap]='datepicker' (bsValueChange)="onChaseDateChange($event)"
+        [ngClass]="{'is-invalid': (formErrors?.nextChaseDate)}">
+      {{formErrors?.nextChaseDate}}
+    </fieldset>
+
+    <fieldset>
+      <label for="chaser">Chaser</label>
+      <app-staff-member-finder [staffMemberId]="lead?.ownerId || leadEditForm.get('ownerId').value"
+        [listType]="'activeStaffMembers'" (selectedStaffMemberId)="getSelectedStaffMemberId($event)"
+        [isRequired]="!leadEditForm.get('ownerId').value" [isDisabled]="isLeadClosed ? true : false">
+      </app-staff-member-finder>
+    </fieldset>
+
+    <fieldset *ngIf="!isLeadClosed">
+      <span class="checkbox">
+        <span>
+          <input type="checkbox" id="closeLead" formControlName="closeLead" (change)="closeLeadChanged(lead)">
+          <label for="closeLead">Mark as <span class="badge badge-pill badge-primary">Closed</span></label>
+        </span>
+      </span>
+    </fieldset>
+
+    <h3>Associated Property</h3>
+    <div class="table" *ngIf="lead?.relatedProperty; else noProperty">
+      <!-- <div *ngIf="properties" class="search-results" infiniteScroll [infiniteScrollDistance]="5" [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"></div> -->
+      <table class="table--mobile table--rowHover">
+        <thead>
+          <tr>
+            <th colspan="2">Address</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr [routerLink]="['/property-centre/detail/', lead?.relatedProperty?.propertyId]">
+            <td data-title="Address">
+              <span class="cell-content">
+                {{lead?.relatedProperty?.address | formatAddress}}
+              </span>
+            </td>
+            <td data-title="Actions">
+              <span class="cell-content">
+                <div dropdown placement="bottom right" class="dropdown">
+                  <a class="btn dropdown-toggle" href [id]="'button'" dropdownToggle
+                    (click)="$event.stopPropagation(); false" [attr.aria-controls]="'dropdown'"><svg aria-hidden="true"
+                      width="64" height="64" viewBox="0 0 64 64" class="icon">
+                      <ellipse class="st0" cx="32" cy="10.5" rx="5.9" ry="6" />
+                      <ellipse class="st0" cx="32" cy="32" rx="5.9" ry="6" />
+                      <ellipse class="st0" cx="32" cy="53.5" rx="5.9" ry="6" />
+                    </svg></a>
+                  <ul [id]="'dropdown'" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+                    [attr.aria-labelledby]="'button'">
+                    <li role="menuitem">
+                      <a class="dropdown-item">View Property</a>
+                    </li>
+                    <li *ngIf="!isMessageVisible && !isLeadClosed">
+                      <button class="btn btn-light btn-sm ml-2" type="button" aria-label="remove"
+                        (click)="removeProperty()">Remove Property</button>
+                    </li>
+                    <li *ngIf="!isMessageVisible">
+                      <button class="btn btn-light btn-sm ml-2" type="button" data-cy="createVal"
+                        (click)="navigateToNewValuation(lead?.relatedProperty?.propertyId)">Create Val.</button>
+                    </li>
+                  </ul>
+                </div>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #noProperty>
+      <p>No property associated to this lead</p>
+    </ng-template>
+
+    <!-- <div class="footer">Hi, I'm a footer..!</div> -->
+  </form>
+</ng-template>
 
 
 
@@ -216,10 +375,10 @@
               <div class="col-lg">
                 <div class="form-group">
                   <label for="chaser">Chaser</label> -->
-                  <!-- <app-staffmember-finder [staffMemberId]="lead?.ownerId" (ownerChanged)="onOwnerChanged($event)"
+<!-- <app-staffmember-finder [staffMemberId]="lead?.ownerId" (ownerChanged)="onOwnerChanged($event)"
                     [isDisabled]="isLeadClosed ? true : false">
                   </app-staffmember-finder> -->
-                  <!-- <app-staff-member-finder [staffMemberId]="lead?.ownerId || leadEditForm.get('ownerId').value" [listType]="'activeStaffMembers'"
+<!-- <app-staff-member-finder [staffMemberId]="lead?.ownerId || leadEditForm.get('ownerId').value" [listType]="'activeStaffMembers'"
                     (selectedStaffMemberId)="getSelectedStaffMemberId($event)"
                     [isRequired]="!leadEditForm.get('ownerId').value"
                     [isDisabled]="isLeadClosed ? true : false"></app-staff-member-finder>
