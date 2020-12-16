@@ -50,7 +50,7 @@
 
         <!-- <form action="">
       <fieldset class="fieldset--width-max">
-        <legend class="fieldset-title">Company</legend>
+        <legend class="legend">Company</legend>
         <label for="">Company Name</label>
         <button class="btn btn--link">Name here</button><button class="btn btn--ghost btn--onRight">Change</button>
       </fieldset>
@@ -123,9 +123,10 @@
               </div>
             </div>
           </ng-container>
+          
+          
           <ng-container *ngIf="contactGroupDetails?.contactType === 4">
             <fieldset class="fieldset--width-max">
-              <legend class="fieldset-title">Company</legend>
               <form class="pb-3" [formGroup]="companyFinderForm" autocompleteOff>
                 <div [hidden]="!selectedCompanyDetails">
                   <div class="col-sm-10 offset-sm-2">
@@ -141,6 +142,8 @@
                     </div>
                   </div>
                 </div>
+
+
                 <div>
                   <div class="col-sm-3 offset-sm-2" [hidden]="!isSearchCompanyVisible || isExistingCompany">
                     <div class="form-group">
@@ -241,14 +244,14 @@
 
           <ng-container *ngIf="!isNewContactGroup  || isTypePicked">
             <fieldset class="fieldset--width-max">
-              <legend class="fieldset-title">People</legend>
+              <!-- <legend class="legend">People</legend> -->
               <div *ngIf="importantContactNotes?.length">
                 <div class="message message--negative" *ngFor="let importantNote of importantContactNotes">
                   {{importantNote.text}}
                 </div>
               </div>
 
-              <ol class="cards">
+              <ol class="cards cards--marginBottom">
                 <li *ngFor="let person of contactGroupDetails?.contactPeople ; index as i"
                   [ngClass]="{'new-person': person?.isNewPerson, 'list-group-item-danger': person?.warning && person?.warning?.id !== 1}">
                   <!-- <a [routerLink]="person?.isNewPerson ? null : ['../../../../detail', person?.personId ]" [queryParams]="{showNotes: true}"></a> -->
@@ -395,9 +398,7 @@
                     [referenceCount]="contactGroupDetails?.referenceCount" [isPersonInfoOnly]="false"
                     (selectedPersonId)="editSelectedPerson($event)" (mainPersonPersonId)="setMainPerson($event)"
                     (removedPersonPersonId)="removePerson($event)"></app-person-details>
-                  
                   <p><small class="flexBottom">P-{{person?.personId}}</small></p>
-
                   <!-- <div class="flexBottom">
                 <ol class="list list--divider list--details">
                   <li>
@@ -417,8 +418,6 @@
                   </li>
                 </ol>
               </div> -->
-
-
                   <!-- <div>
                 <div class="col-auto" *ngIf="!person?.isNewPerson; else removeSelectedPerson">
                   <div dropdown placement="bottom right">
@@ -454,9 +453,6 @@
                   </div>
                 </div>
               </div>  -->
-
-
-
                   <!-- <ng-template #removeSelectedPerson>
                     <div class="col text-right">
                       <div dropdown placement="bottom right">
@@ -481,7 +477,6 @@
                       </div>
                     </div>
                   </ng-template> -->
-
                   <!-- <div *ngIf="!isNewContactGroup">
                     <ng-container *ngIf="person?.personNotes?.length">
                       <div class="message message--negative" *ngFor="let importantNote of person?.personNotes">
@@ -489,53 +484,47 @@
                       </div>
                     </ng-container>
                   </div> -->
-
                   <!-- <p class="message message--negative">5 importtant messages</p>
 
 
                 </div>
 -->
-
-
                 </li>
                 <li class="card__new" *ngIf="contactGroupDetails?.contactPeople.length < 8 && !contactGroupDetails?.referenceCount && !isMaxPeople">
                   <a href (click)="showHideOffCanvas($event)" class="overall"></a>
                   <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--l icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z"></path><path d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" class="plus-vertical"></path></svg>Add New Contact
                 </li>
+                <li *ngIf="contactGroupDetails?.referenceCount && !isCloned" (click)="cloneContactGroup()">
+                  <div class="message message--warning">
+                    Transaction history present. You can't add or remove people from this Contact Group.<br>If you want to add or remove a person, <a [routerLink]="['../', contactGroupId]">create a new Contact Group</a>
+                  </div>
+                </li>
+                <li *ngIf="!(contactGroupDetails?.contactPeople.length < 8)">
+                  <div class="message message--warning">
+                    You can add max 8 People per contact group.
+                  </div>
+                </li>
               </ol>
-
-              <div class="message message--warning" *ngIf="contactGroupDetails?.referenceCount && !isCloned"
-                (click)="cloneContactGroup()">
-                Transaction history present. You can't add or remove people from this Contact Group.<br>If you want to
-                add
-                or remove a person, <a [routerLink]="['../', contactGroupId]">create a new Contact Group</a>
-              </div>
-
-              <div class="message message--warning" *ngIf="!(contactGroupDetails?.contactPeople.length < 8)">
-                You can add max 8 People per contact group.
-              </div>
             </fieldset>
 
             <ng-container *ngIf="contactGroupDetails?.contactPeople.length">
               <fieldset class="fieldset--width-max">
-                <legend class="fieldset-title">Details</legend>
-                <form [formGroup]="contactGroupDetailsForm" class="pb-3">
+                <legend class="legend">Details</legend>
+                <form [formGroup]="contactGroupDetailsForm">
                   <fieldset>
-                    <label for="salutation" class="small">Salutation</label>
-                    <input type="text" id="salutation" class="form-control form-control-sm"
-                      formControlName="salutation">
+                    <label for="salutation">Salutation</label>
+                    <input type="text" id="salutation" formControlName="salutation">
                   </fieldset>
 
                   <fieldset>
-                    <label for="addressee" class="small">Addressee</label>
-                    <input type="text" id="addressee" class="form-control form-control-sm" formControlName="addressee">
+                    <label for="addressee">Addressee</label>
+                    <input type="text" id="addressee" formControlName="addressee">
                   </fieldset>
 
                   <fieldset>
                     <span class="checkbox">
                       <span>
-                        <input type="checkbox" class="custom-control-input" id="isRelocationAgent"
-                          formControlName="isRelocationAgent">
+                        <input type="checkbox" id="isRelocationAgent" formControlName="isRelocationAgent">
                         <label for="isRelocationAgent">Is Relocation Agent</label>
                       </span>
                     </span>

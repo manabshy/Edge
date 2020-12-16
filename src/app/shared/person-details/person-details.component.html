@@ -156,10 +156,10 @@
     <div class="card__header">
       <span>
         <sup>
-          <span class="pill pill--positive pill--onLeft" *ngIf="personDetails?.isMainPerson && contactType !== 4">Main Contact</span>
-          <app-score-badge [person]="personDetails"></app-score-badge> <span class="pill pill--negative" *ngIf="personDetails?.warning && personDetails?.warning?.id !== 1">{{personDetails?.warningStatusComment || personDetails?.warning?.value}}</span> 
+          <span class="pill pill--positive pill--onLeft" *ngIf="personDetails?.isMainPerson && contactType !== 4">Main Contact</span><span class="pill pill--negative" *ngIf="personDetails?.warning && personDetails?.warning?.id !== 1">{{personDetails?.warningStatusComment || personDetails?.warning?.value}}</span> 
         </sup>
         <p class="txt--title">{{personDetails?.addressee}}</p>
+        <small><app-score-badge [person]="personDetails"></app-score-badge></small>
       </span>
       <!-- <div class="flexRight">
         <div dropdown placement="bottom right">
@@ -226,7 +226,7 @@
     </div>
     <div class="card__body">
       <ol class="list">
-        <li *ngIf="!isNewContactGroup">
+        <li *ngIf="!isNewContactGroup"><!-- Alex, can we make this hidden is no messages? -->
           <span *ngIf="personDetails?.personNotes?.length">
             <div class="message message--negative" *ngFor="let importantNote of personDetails?.personNotes">
               {{importantNote.text}}

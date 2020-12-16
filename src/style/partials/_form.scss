@@ -49,10 +49,14 @@ form fieldset .invalid .radio input:checked + label:before { background-color:tr
 
 /***** Fieldset *****/
 fieldset                                       	{ padding:0; text-align:left; display:block; max-width:500px; position:relative; top:0; left:0; }
-.fieldset--width-max 							      { max-width:100%; }
 fieldset small                                 	{ display:block; line-height:14px; }
 
-.fieldset-title                                 { @extend h3; padding:6px 12px; width:100%; background-color:$color--smoke; border-radius:3px; }
+.fieldset--width-max 							      { max-width:100%; }
+.legend                                         { @extend h3; margin-top:50px; padding:6px 12px; width:100%; background-color:$color--smoke; border-radius:3px; }
+
+fieldset:first-of-type                          { 
+   .legend                                      { margin-top:0; }
+}
 
 /***** Label *****/
 label, .label                                  	{ width:100%; display:block; color:$color--midnight-70; font-weight:500; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; }
@@ -238,6 +242,8 @@ Forms without labels
 .labels--hidden label                           { display:none; }
 
 .ng-valid+.message                              { display:none; }   
+
+.form-actions                                   { margin-top:50px; }
 
 /*********************************************** 
 Tablet - This applies from 768px onwards
