@@ -43,7 +43,7 @@ export class NotesComponent implements OnInit, OnChanges {
   isUpdating: boolean;
   currentStaffMember: StaffMember;
   showNotesForm = false;
-  showCreateNoteButton = true;
+  @Input() showCreateNoteButton = true;
 
   constructor(private sharedService: SharedService,
     private contactGroupService: ContactGroupsService,
