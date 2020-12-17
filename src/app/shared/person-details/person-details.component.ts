@@ -47,10 +47,4 @@ export class PersonDetailsComponent implements OnInit {
     this.isPersonInfoOnly ? this.navigateToEdit() : this.selectedPersonId.emit(this.personDetails.personId);
   }
 
-  getMarketingPrefClass(pref: boolean) {
-    return {
-      'icon--fill-positive': pref,
-      'icon--fill-negative': !pref
-    };
-  }
 }
