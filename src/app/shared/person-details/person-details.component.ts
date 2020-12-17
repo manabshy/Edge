@@ -12,6 +12,9 @@ export class PersonDetailsComponent implements OnInit {
   @Input() personDetails: Person;
   @Input() isClickable = false;
   @Input() isNewContactGroup = false;
+  @Input() showSetMainPerson = false;
+  @Input() showViewPerson = false;
+  @Input() showRemovePerson = false;
   @Input() isPersonInfoOnly = true;
   @Input() contactType: number;
   @Input() referenceCount: number;

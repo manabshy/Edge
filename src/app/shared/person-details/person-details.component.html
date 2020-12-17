@@ -196,12 +196,12 @@
                 <span class="dropdown-icon"><i class="fas fa-edit fa-fw"></i></span>Edit
               </a>
             </li>
-            <li *ngIf="!isPersonInfoOnly" role="menuitem">
+            <li *ngIf="showViewPerson" role="menuitem">
               <a class="dropdown-item" (click)="$event.stopPropagation(); navigateToView()">
                 <span class="dropdown-icon"><i class="fas fa-address-card fa-fw"></i></span>View
               </a>
             </li>
-            <li *ngIf="!isPersonInfoOnly" role="menuitem">
+            <li *ngIf="showSetMainPerson" role="menuitem">
               <a class="dropdown-item" (click)="mainPersonPersonId.emit(personDetails?.personId)"
                 *ngIf="!personDetails?.isMainPerson">
                 <span class="dropdown-icon"><i class="fas fa-user-shield fa-fw"></i></span>Set Main Person
@@ -214,7 +214,7 @@
                     class="fas fa-share-alt fa-xs align-text-top"></i></span>Create Lead
               </a>
             </li>
-            <li *ngIf="!isPersonInfoOnly" role="menuitem">
+            <li *ngIf="showRemovePerson" role="menuitem">
               <a class="dropdown-item" href (click)="removedPersonPersonId.emit(personDetails?.personId)"
                 *ngIf="!referenceCount">
                 <span class="dropdown-icon"><i class="fas fa-user-times fa-fw"></i></span>

@@ -752,7 +752,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
 
-  setinfoType(type: string, index: number) {
+  setInfoType(type: string, index: number) {
     this.info = type;
     this.infoTypes.map(t => t.isCurrent = false);
     this.infoTypes[index].isCurrent = true;
