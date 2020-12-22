@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, Renderer2, AfterViewInit, AfterContentInit, AfterContentChecked } from '@angular/core';
+import { Component, OnInit, Input, Output, Renderer2, AfterViewInit, AfterContentInit, AfterContentChecked, OnDestroy } from '@angular/core';
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractControl, ValidatorFn } from '@angular/forms';
 import { ContactGroupsService } from '../shared/contact-groups.service';
@@ -17,13 +17,14 @@ import { StaffMember, Permission } from 'src/app/shared/models/staff-member';
 import { AddressService, AddressAutoCompleteData } from 'src/app/core/services/address.service';
 import { InfoService, InfoDetail, DropdownListInfo } from 'src/app/core/services/info.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
+import { SubSink } from 'subsink';
 
 @Component({
   selector: 'app-contactgroups-detail-edit',
   templateUrl: './contactgroups-detail-edit.component.html',
   styleUrls: ['./contactgroups-detail-edit.component.scss']
 })
-export class ContactgroupsDetailEditComponent implements OnInit {
+export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
   @Output() addedPersonDetails = new EventEmitter<any>();
   @Output() addedPersonId = new EventEmitter<number>();
   @Output() hideCanvas = new EventEmitter<boolean>();
@@ -71,7 +72,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
   currentStaffMember: StaffMember;
   isWarningsEnabled = false;
   warningStatus: number;
-
+  private subs = new SubSink();
   // get showPostCode(): boolean {
   //   return this.address.get('countryId').value === this.defaultCountryCode;
   // }
@@ -119,14 +120,14 @@ export class ContactgroupsDetailEditComponent implements OnInit {
     private renderer: Renderer2) { }
 
   ngOnInit() {
-    this.storage.get('currentUser').subscribe((data: StaffMember) => {
+    this.subs.sink = this.storage.get('currentUser').subscribe((data: StaffMember) => {
       if (data) {
         this.currentStaffMember = data;
       }
       console.log('current user info here....', data);
     });
 
-    this.storage.get('info').subscribe((data: DropdownListInfo) => {
+    this.subs.sink = this.storage.get('info').subscribe((data: DropdownListInfo) => {
       if (data) {
         this.listInfo = data;
         this.setDropdownLists();
@@ -134,8 +135,8 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       }
     });
 
-    this.route.params.subscribe(params => this.personId = +params['personId'] || 0);
-    this.route.queryParams.subscribe(params => {
+    this.subs.sink = this.route.params.subscribe(params => this.personId = +params['personId'] || 0);
+    this.subs.sink = this.route.queryParams.subscribe(params => {
       this.groupPersonId = +params['groupPersonId'] || 0;
       this.isEditingSelectedPerson = params['isEditingSelectedPerson'] || false;
     });
@@ -147,14 +148,14 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       this.getPersonDetails(id);
     }
     this.logValidationErrors(this.personForm, true);
-    this.personForm.valueChanges
+    this.subs.sink = this.personForm.valueChanges
       .pipe(debounceTime(400)).subscribe((data) => {
         this.postCode.setValue(this.sharedService.formatPostCode(data.address.postCode), { emitEvent: false });
         this.logValidationErrors(this.personForm, false);
       });
 
 
-    this.warningStatusIdControl.valueChanges.subscribe(() => this.togglePersonWarnings());
+    this.subs.sink = this.warningStatusIdControl.valueChanges.subscribe(() => this.togglePersonWarnings());
   }
 
   setDropdownLists() {
@@ -544,13 +545,13 @@ export class ContactgroupsDetailEditComponent implements OnInit {
         }
         // person.address.addressLines = this.removeDuplicateAdressLines();
         if (!this.basicPerson) {
-          this.contactGroupService.updatePerson(person).subscribe(res => this.onSaveComplete(res.result, otherPersonToAdd),
+          this.subs.sink = this.contactGroupService.updatePerson(person).subscribe(res => this.onSaveComplete(res.result, otherPersonToAdd),
             (error: WedgeError) => {
               this.isSubmitting = false;
               this.isSubmittingAndAdd = false;
             });
         } else {
-          this.contactGroupService.addPerson(person).subscribe((data) => {
+          this.subs.sink = this.contactGroupService.addPerson(person).subscribe((data) => {
             this.newPersonId = data.personId;
             this.onSaveComplete(data, otherPersonToAdd);
           },
@@ -587,7 +588,7 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       const personEmitter = {
         person: person,
         otherPersonToAdd: otherPersonToAdd
-      }
+      };
       this.addedPersonDetails.emit(personEmitter);
       this.backToFinder.emit(otherPersonToAdd);
       if (!personEmitter.otherPersonToAdd) {
@@ -609,5 +610,9 @@ export class ContactgroupsDetailEditComponent implements OnInit {
       return false;
     }
     return true;
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 }
