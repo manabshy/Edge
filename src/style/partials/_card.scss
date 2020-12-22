@@ -6,6 +6,8 @@
     &__new                                      { min-height:300px; align-items:center; justify-content:center; border-radius:3px; transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -moz-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -webkit-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -o-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s;
         &:hover                                 { background-color:$color--smoke; }
     }
+
+    &--property                                 { display:flex; flex-direction:row; }
 }
 .card+*                                         { margin-top:30px; }
 .card p                                         { position:relative; }
@@ -18,7 +20,11 @@
     img                                         { width:100%; height:auto; }
 }
 
-.card__body                                     { padding:16px; }
+.card__photo                                    { min-width:30%; border-radius:3px 0 0 3px; display:flex; align-items:center; justify-content:center; overflow:hidden; background-color:$color--smoke; background-size:cover; background-position:center; background-repeat:no-repeat; position:relative;
+    .pill                                       { position:absolute; top:6px; left:6px; }
+}
+
+.card__body                                     { padding:16px; flex:0 1 100%; }
 
 .card__footer                                   { padding:16px; }
 

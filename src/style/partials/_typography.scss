@@ -63,11 +63,6 @@ sup+p                                           { margin-top:3px; }
 small                                           { display:flex; font-size:10px; line-height:10px; font-weight:normal; color:$color--midnight-50; height:auto; top:0; }
 small+*                                         { margin-top:16px; }
 
-.pill                                           { padding:3px 6px; min-height:auto; font-size:10px; line-height:11px; border-radius:20px; }
-.pill--onLeft                                   { margin-right:6px; }
-
-.pill--right                                    { position:absolute; top:0; right:0; left:auto; z-index:9; }
-
 .txt--positive                                  { color:$color--positive; }
 .txt--negative                                  { color:$color--negative; }
 .txt--warning                                   { color:$color--warning; }
@@ -75,3 +70,5 @@ small+*                                         { margin-top:16px; }
 .txt--midnight-30                               { color:$color--midnight-30; }
 
 .txt--nowrap                                    { white-space:nowrap; }
+
+.block+*                                        { margin-top:16px; }

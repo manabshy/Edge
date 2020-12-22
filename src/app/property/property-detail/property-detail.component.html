@@ -1,5 +1,166 @@
-<app-breadcrumb></app-breadcrumb>
-<div class="container main">
+<div class="row">
+  <div class="row__item row__item--aside">
+    <div class="card">
+      <div class="card__body">
+        <ol class="list list--divider list--hover">
+          <li class="current"><a role="button" class="overall"></a>Notes <span class="pill pill--positive flexRight">57</span></li>
+          <li><a role="button" class="overall"></a>Instructions <span class="pill pill--positive flexRight">1</span><span class="pill flexRight">12</span></li>
+          <li><a role="button" class="overall"></a>Offers <span class="pill flexRight">12</span></li>
+          <li><a role="button" class="overall"></a>Valuations  <span class="pill pill--positive flexRight">1</span></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="row__item">
+    <div class="title">
+      <h2>Property</h2>
+      <div class="flexRight" *ngIf="propertyDetails">
+        <div dropdown placement="bottom right">
+          <a class="btn dropdown-toggle" href [id]="'button' + index" dropdownToggle (click)="$event.stopPropagation(); false" [attr.aria-controls]="'dropdown' + index">
+            <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
+              <ellipse class="st0" cx="32" cy="10.5" rx="5.9" ry="6" />
+              <ellipse class="st0" cx="32" cy="32" rx="5.9" ry="6" />
+              <ellipse class="st0" cx="32" cy="53.5" rx="5.9" ry="6" />
+            </svg>
+          </a>
+          <ul [id]="'dropdown' + index" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" [attr.aria-labelledby]="'button' + index">
+            <li role="menuitem">
+              <a class="dropdown-item" [routerLink]="['edit']">
+                <span class="dropdown-icon">
+                  <i class="fas fa-edit fa-fw"></i>
+                </span>
+                Edit Property
+              </a>
+            </li>
+            <li role="menuitem">
+              <a class="dropdown-item" (click)="navigateToNewValuation(propertyDetails?.propertyId)">
+                <span class="dropdown-icon">
+                  <i class="fas fa-city"></i><i class="fas fa-pound-sign fa-xs align-text-top"></i>
+                </span>
+                Create Valuation
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card--property" *ngIf="propertyDetails">
+      <div class="card__photo" *ngIf="propertyDetails?.photo?.azureResourceURL; else noPhoto" style="background-image:url('https://dandglive.blob.core.windows.net/document-storage/p-29598%5Cphotos%5Csmallphotos%5Cphoto_29598_11.jpg?sv=2019-02-02&sr=b&si=EdgePhotos&sig=jwU3GHMr0t11F%2Fyf%2FzpAfbH5ZAdVGVg8QXI0ZwHndvg%3D');">
+        <a [routerLink]="['property-photos']" class="overall"></a>
+        <span class="pill pill--info"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" class="icon icon--onLeft"><path d="M0 0h24v24H0z" fill="none"/><path d="M22 16V4c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2zm-11-4l2.03 2.71L16 11l4 5H8l3-4zM2 6v14c0 1.1.9 2 2 2h14v-2H4V6H2z"/></svg>{{propertyDetails?.info?.propertyPhotos}}</span>
+        <!-- <img class="card-img" [src]="propertyDetails?.photo?.azureResourceURL" alt="" *ngIf="propertyDetails?.photo?.azureResourceURL; else noPhoto"> -->
+      </div>
+
+      <ng-template #noPhoto>
+        <div class="card__photo">
+          <p>No Photos available</p>
+        </div>
+      </ng-template>
+      
+      <div class="card__body">
+        <div class="flex txt--title">
+          {{propertyDetails?.address | formatAddress}}
+          <div class="flexRight">
+            <div dropdown placement="bottom right">
+              <a class="btn dropdown-toggle" href [id]="'button' + index" dropdownToggle (click)="$event.stopPropagation(); false" [attr.aria-controls]="'dropdown' + index">
+                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
+                  <ellipse class="st0" cx="32" cy="10.5" rx="5.9" ry="6" />
+                  <ellipse class="st0" cx="32" cy="32" rx="5.9" ry="6" />
+                  <ellipse class="st0" cx="32" cy="53.5" rx="5.9" ry="6" />
+                </svg>
+              </a>
+              <ul [id]="'dropdown' + index" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" [attr.aria-labelledby]="'button' + index">
+                <li role="menuitem">
+                  <a routerLink="edit" class="dropdown-item"><i class="fas fa-edit"></i> Edit</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <app-office-finder [officeId]="propertyDetails?.officeId" [fullWidth]="true" [readOnly]="true" class="block"></app-office-finder>
+
+        <ng-container *ngIf="propertyDetails?.lastKnownOwner?.contactGroupId">
+          <app-signer label="Last known owner" [existingSigner]="propertyDetails?.lastKnownOwner" [readOnly]="true" [fullWidth]="true" class="block"></app-signer>
+        </ng-container>
+        
+        <ol class="pills">
+          <li>{{propertyTypes.get(propertyDetails?.propertyTypeId)}}</li>
+          <li>{{propertyStyles.get(propertyDetails?.propertyStyleId)}}</li>
+          <li>{{region}}</li>
+          <li>{{area}}</li>
+          <li>{{subArea}}</li>
+        </ol>
+        
+      </div>
+    </div>
+
+    <p><app-additional-info [id]="propertyDetails?.propertyId ? 'PR-'+propertyDetails?.propertyId : ''"></app-additional-info></p>
+
+    <!-- <div class="list-group">
+      <div class="list-group-item mb-4">
+        <div class="row" *ngIf="propertyDetails">
+          <div class="col-sm-4 mb-2 mb-sm-0">
+            <a [routerLink]="['property-photos']">
+              <div class="card bg-dark text-white">
+                <img class="card-img" [src]="propertyDetails?.photo?.azureResourceURL" alt=""
+                  *ngIf="propertyDetails?.photo?.azureResourceURL; else noPhoto">
+                <ng-template #noPhoto>
+                  <img class="card-img" src="https://dummyimage.com/400x300/e9ecef/212529&text=no+photos" alt="">
+                </ng-template>
+                <div class="card-img-overlay clearfix" *ngIf="propertyDetails?.photo?.azureResourceURL">
+                  <span class="float left pull-left">{{propertyDetails?.info?.propertyPhotos}} Photos</span>
+                  <span class="float-right pull-right"><i class="fas fa-arrow-right"></i></span>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col">
+            <pre class="mb-2"><strong>{{propertyDetails?.address | formatAddress}}</strong></pre>
+            <div class="row">
+              <div class="col-sm mb-2">
+                <app-office-finder [officeId]="propertyDetails?.officeId" [fullWidth]="true" [readOnly]="true"></app-office-finder>
+              </div>
+              <div class="col-sm" *ngIf="propertyDetails?.lastKnownOwner?.contactGroupId">
+                <app-signer label="Last known owner" [existingSigner]="propertyDetails?.lastKnownOwner" [readOnly]="true" [fullWidth]="true"></app-signer>
+              </div>
+            </div>
+          </div>
+          <div class="col-auto">
+            <a routerLink="edit"><i class="fas fa-edit"></i> Edit</a>
+          </div>
+          <div class="col-12">
+            <hr class="mb-2">
+          </div>
+          <div class="col-12">
+            <div class="row mb-2">
+              <div class="col-auto">
+                <span
+                  class="badge badge-pill badge-primary mr-1">{{propertyTypes.get(propertyDetails?.propertyTypeId)}}</span>
+                <span
+                  class="badge badge-pill badge-primary">{{propertyStyles.get(propertyDetails?.propertyStyleId)}}</span>
+              </div>
+            </div>
+            <div class="row align-items-center">
+              <div class="col">
+                <span class="badge badge-pill badge-primary mr-1">{{region}}</span>
+                <span class="badge badge-pill badge-primary mr-1">{{area}}</span>
+                <span class="badge badge-pill badge-primary">{{subArea}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+  </div>
+</div>
+
+
+
+<!-- <app-breadcrumb></app-breadcrumb> -->
+<!-- <div class="container main">
   <div class="row page-title">
     <div class="col">
       <h4 class="mb-0">Property</h4>
@@ -36,7 +197,6 @@
     <div class="col-xl-8">
       <h5>Detail</h5>
       <div class="list-group">
-
         <div class="list-group-item mb-4">
           <div class="row" *ngIf="propertyDetails">
             <div class="col-sm-4 mb-2 mb-sm-0">
@@ -143,5 +303,5 @@
       <app-notes [propertyNotes]="propertyNotes" [pageNumber]="page" [bottomReached]="bottomReached"></app-notes>
     </div>
   </div>
-</div>
-<app-additional-info [id]="propertyDetails?.propertyId ? 'PR-'+propertyDetails?.propertyId : ''"></app-additional-info>
+</div> -->
+<!-- <app-additional-info [id]="propertyDetails?.propertyId ? 'PR-'+propertyDetails?.propertyId : ''"></app-additional-info> -->

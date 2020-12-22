@@ -1,5 +1,5 @@
 <ng-container>
-  <form class="pb-0" [formGroup]="signerFinderForm" autocompleteOff>
+  <form [formGroup]="signerFinderForm" autocompleteOff>
     <div [ngClass]="{'row': !fullWidth}" [hidden]="!(selectedSignerDetails||selectedSigners && selectedSigners.length)">
       <div [ngClass]="{'col-sm-8 col-xl-6 offset-sm-2': !fullWidth}">
         <ng-container *ngIf="!isLabelHidden">

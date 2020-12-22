@@ -1,0 +1,8 @@
+.pill                                           { padding:3px 6px; min-height:auto; font-size:10px; line-height:11px; border-radius:20px; }
+.pill--onLeft                                   { margin-right:6px; }
+
+.pill--right                                    { position:absolute; top:0; right:0; left:auto; z-index:9; }
+
+.pills                                          { margin-left:0; padding:0; list-style:none; display:flex;
+    li                                          { @extend .pill; margin-top:0; }
+}

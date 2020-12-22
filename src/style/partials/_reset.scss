@@ -185,6 +185,7 @@ Utility Classes
 .reset--bullet                                  { list-style:none; list-style-image:none; }
 .reset--styling                                 { margin:0; padding:0; list-style:none; }
 /***** Display *****/
+.flex                                           { display:flex; }
 .inline                                         { display:inline; }
 .block, .show                                   { display:block; }
 .hidden, .hide                                  { display:none; }
