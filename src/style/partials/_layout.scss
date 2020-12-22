@@ -15,7 +15,7 @@ app-telephone                                   { width:100%; display:flex; alig
 .row+*,
 .row__item+*                                    { margin-top:16px; }
 
-.wrapper                                        { display:flex; height:100vh; }
+.wrapper                                        { display:flex; min-height:100vh; }
 
 /***** Mobile Menu *****/
 .menu_open .aside                               { left:0; }
@@ -205,11 +205,11 @@ This applies from 992px onwards
 
   .row__item--aside                             { width:240px; max-width:240px; flex-shrink:0; }
 
-  .body                                         { padding:80px 30px 0 30px; }
+  .body                                         { padding:80px 30px 30px 30px; }
 
   .headerMobile                                 { display:none; }
 
-  .header                                       { padding:10px 0; display:flex; height:56px; width:calc(100% - 280px); position:fixed; top:0; right:30px; border-bottom:1px solid $color--midnight-10; z-index:10; }
+  .header                                       { padding:10px 0; display:flex; height:56px; width:calc(100% - 276px); position:fixed; top:0; right:30px; border-bottom:1px solid $color--midnight-10; z-index:10; }
   .header-title                                 { height:36px; font-size:16px; font-weight:bold; }
   .header-title li:nth-child(1n+3):before       { width:2px; height:18px; }
   .header-navigation                            { display:flex; }

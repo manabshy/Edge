@@ -157,6 +157,7 @@ Utility Classes
 /***** Text truncate *****/
 .txt--truncate                                  { white-space:nowrap; text-overflow:ellipsis; overflow:hidden; }
 .txt--noWrap                                    { white-space:nowrap; }
+.txt--breakword                                 { word-break:break-all; }
 
 /***** Font weight *****/
 .txt--fontWeight-300                            { font-weight:300; }
