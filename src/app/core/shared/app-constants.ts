@@ -44,9 +44,11 @@ export const FormErrors = {
   'email': '',
   'fax': '',
   'titleId': '',
+  'titleOther': '',
   'firstName': '',
   'lastName': '',
   'middleName': '',
+  'warningStatusComment': '',
   'emailAddresses': {
     'email': '',
   },
@@ -115,6 +117,9 @@ export const ValidationMessages = {
   'titleId': {
     required: 'Title is required'
   },
+  'titleOther': {
+    required: 'Please enter a Title'
+  },
   'firstName': {
     required: 'First Name is required',
     minlength: 'First Name must be greater than 2 characters',
@@ -127,6 +132,10 @@ export const ValidationMessages = {
     required: 'Last name is required',
     minlength: 'Last name must be greater than 2 characters',
     maxlength: 'Last name must be less than 80 characters',
+  },
+  'warningStatusComment': {
+    required: 'Please enter a Comment',
+    maxlength: 'Comment cannot be more than 20 characters',
   },
   'emailAddress': {
     'email': {
@@ -167,9 +176,6 @@ export const ValidationMessages = {
   'text': {
     required: 'Note is required',
     whitespace: 'Note is required'
-  },
-  'warningStatusComment': {
-    maxlength: 'Comment cannot be more than 20 characters',
   },
   'officeId': {
     required: 'Office is required'
