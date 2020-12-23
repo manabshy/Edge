@@ -4,6 +4,7 @@ import { PersonOffer } from 'src/app/shared/models/person';
 import { PeopleService } from 'src/app/core/services/people.service';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { PropertyService } from 'src/app/property/shared/property.service';
 
 @Component({
   selector: 'app-contactgroups-detail-offers',
@@ -12,21 +13,26 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ContactgroupsDetailOffersComponent implements OnChanges {
   @Input() personId: number;
+  @Input() propertyId: number;
   @Input() closedCounter: number;
   @Input() moreInfo: string;
   isClosedIncluded: boolean = false;
-  offers$ = new Observable<PersonOffer[]>();
+  offers$ = new Observable<any>();
 
-  constructor(private route: ActivatedRoute, private peopleService: PeopleService) { }
+  constructor(private route: ActivatedRoute, private peopleService: PeopleService, private propertyService: PropertyService) { }
 
   ngOnChanges() {
-    if (this.personId && this.moreInfo && this.moreInfo.includes('offers')) {
+    if (this.moreInfo?.includes('offers')) {
       this.getOffers();
     }
   }
 
   getOffers() {
-    this.offers$ = this.peopleService.getOffers(this.personId, this.isClosedIncluded);
+    if (this.personId) {
+      this.offers$ = this.peopleService.getOffers(this.personId, this.isClosedIncluded);
+    } else if (this.propertyId) {
+      this.offers$ = this.propertyService.getPropertyOffers(this.propertyId, this.isClosedIncluded);
+    }
   }
 
 }

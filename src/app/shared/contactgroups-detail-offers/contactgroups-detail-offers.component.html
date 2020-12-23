@@ -90,13 +90,13 @@
       </tbody>
     </table>
   </div>
-  
+
   <div class="table" *ngIf="offers && offers?.length">
     <table class="table--mobile table--rowHover">
       <thead>
         <tr>
-          <th>Address</th>
-          <th>Type</th>
+          <th *ngIf="offers[0]?.propertyAddress">Address</th>
+          <th *ngIf="offers[0]?.type">Type</th>
           <th>Status</th>
           <th>Amount</th>
           <th>Received</th>
@@ -105,12 +105,12 @@
       </thead>
       <tbody>
         <tr *ngFor="let offer of offers">
-          <td data-title="Address">
+          <td *ngIf="offer?.propertyAddress" data-title="Address">
             <span class="cell-content">
               {{offer?.propertyAddress}}
             </span>
           </td>
-          <td data-title="Type">
+          <td *ngIf="offer?.type" data-title="Type">
             <span class="cell-content">
               {{offer?.type}}
             </span>
