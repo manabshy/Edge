@@ -88,7 +88,6 @@ sup+.list                                       { margin-top:6px; }
 *+.list--divider                                { border-top:1px solid $color--midnight-10; }
 .list--divider > li                             { box-shadow:inset 0 1px 0px 0px $color--midnight-10; -webkit-box-shadow:inset 0 1px 0px 0px $color--midnight-10;
   &:first-child                                 { box-shadow:none; }
-  &:only-child                                  { border-bottom:1px solid $color--midnight-10; }
 }
 
 .list--details > li                             { padding:0; }

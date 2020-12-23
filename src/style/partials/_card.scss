@@ -12,12 +12,13 @@
 .card+*                                         { margin-top:30px; }
 .card p                                         { position:relative; }
 
-.card__header                                   { padding:16px 16px 0; font-size:14px; font-weight:bold; color:$color--midnight; display:flex; align-items:flex-start;
+.card__header                                   { padding:16px 16px 0; font-size:14px; font-weight:bold; color:$color--midnight; display:flex; align-items:flex-start; position:relative;
     &+.card__body                               { margin-top:16px; padding-top:0; }
 }
 
-.card__headerImg                                {
+.card__headerImg                                { height:159px; display:flex; align-items:center; justify-content:center; position:relative; background-color:$color--smoke;
     img                                         { width:100%; height:auto; }
+    .alignTopRight                              { position:absolute; top:6px; right:6px; }
 }
 
 .card__photo                                    { min-width:30%; border-radius:3px 0 0 3px; display:flex; align-items:center; justify-content:center; overflow:hidden; background-color:$color--smoke; background-size:cover; background-position:center; background-repeat:no-repeat; position:relative;
