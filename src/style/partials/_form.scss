@@ -65,6 +65,7 @@ label + textarea, .label + textarea,
 label + .select, .label + .select,
 label + .ng-select                             	{ margin-top:6px; }
 label + p, .label + p                          	{ margin:0 0 6px; }
+.hideLabel label                                { display:none; }
 
 /***** Inputs *****/
 input, textarea, select                        	{ padding:0.4em 0.8em; display:block; border-radius:0; width:100%; min-height:30px; font-size:inherit; color:$color--midnight-70; border-width:1px; border-radius:3px; border-style:solid; overflow:hidden; position:relative; top:0; left:0; outline:0 none; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; -webkit-appearance:none; transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -moz-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -webkit-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -o-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; }

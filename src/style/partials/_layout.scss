@@ -114,7 +114,7 @@ details .list > li                              { padding:6px 0 0; }
 summary                                         { padding:0; list-style:none; min-width:100%; display:flex; align-items:center; align-content:flex-start; outline:none; cursor:pointer; }
 summary::-webkit-details-marker                 { display:none; }
 summary .flexRight                              { float:right; }
-.summary__title                                 { padding:10px; padding-left:0; display:flex; min-width:100%; align-items:center; align-content:flex-start; }
+.summary__title                                 { padding:10px; padding-left:0; display:flex; min-width:100%; align-items:center; font-weight:bold; color:$color--midnight; align-content:flex-start; }
 
 
 /***** Timelines *****/
@@ -170,11 +170,11 @@ summary .flexRight                              { float:right; }
 }
 
 /***** Dropdowns *****/
-.dropdown-toggle                                { padding:0; background-color:transparent; border:none; min-width:30px; color:$color--midnight;
-  &:hover                                       { background-color:transparent; color:$color--midnight; }
+.dropdown-toggle                                { padding:0; background-color:$color--snow; border:none; min-width:30px; color:$color--midnight;
+  &:hover                                       { background-color:$color--snow; color:$color--midnight; }
 }
 .open                                           { border-radius:3px 3px 0 0; position:relative;
-  .dropdown-toggle                              { background-color:transparent; }
+  // .dropdown-toggle                              { background-color:transparent; }
   .dropdown-menu                                { display:block; }
 }
 
