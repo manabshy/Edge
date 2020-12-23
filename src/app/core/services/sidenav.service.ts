@@ -20,7 +20,9 @@ export class SidenavService {
 
   constructor() { }
 
-  getSelectedItem(type: string, index: number) {
+  getSelectedItem(type: string, index: number, items?: SideNavItem[]) {
+    if (items?.length) { this.sideNavItems = items; }
+
     this.sideNavItems.map(t => t.isCurrent = false);
     this.sideNavItems[index].isCurrent = true;
     console.log('selected item in service', this.selectedItem);
