@@ -38,9 +38,9 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit, On
   pageSize = 10;
   bottomReached = false;
   noteTypes: Record<number, string>;
-  moreInfo = this.sidenavService.selectedItem;
+  moreInfo = this.sidenavService.selectedItem = 'notes';
   sideNavItems: SideNavItem[] = [
-    { name: 'notes', isCurrent: false },
+    { name: 'notes', isCurrent: true },
     { name: 'instructions', isCurrent: false },
     { name: 'valuations', isCurrent: false },
     { name: 'offers', isCurrent: false },

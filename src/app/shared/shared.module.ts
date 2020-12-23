@@ -75,6 +75,7 @@ import { StaffMemberFinderComponent } from './staff-member-finder/staff-member-f
 import { NoDoubleTapDirective } from './no-double-tap.directive';
 import { SharedContactgroupListComponent } from './shared-contactgroup-list/shared-contactgroup-list.component';
 import { ToPascalCasePipe } from './pipes/to-pascal-case.pipe';
+import { SidenavItemComponent } from './components/sidenav-item/sidenav-item.component';
 
 
 @NgModule({
@@ -120,7 +121,8 @@ import { ToPascalCasePipe } from './pipes/to-pascal-case.pipe';
     StaffMemberFinderComponent,
     NoDoubleTapDirective,
     SharedContactgroupListComponent,
-    ToPascalCasePipe
+    ToPascalCasePipe,
+    SidenavItemComponent
   ],
   imports: [
     CommonModule,
