@@ -71,6 +71,7 @@ export class NotesComponent implements OnInit, OnChanges {
       this.noteData.group ? this.groupAddressee = this.noteData.group.addressee : this.groupAddressee = [];
     }
     if (this.propertyNotes) {
+      this.showCreateNoteButton = false;
       this.propertyNotes.filter(x => x.text) ? this.isPropertyNote = true : this.isPropertyNote = false;
     }
     if (this.personNotes) {
