@@ -12,19 +12,19 @@
   <div class="list-group-item text-center text-danger" *ngIf="!instructions || !instructions?.length">
     <i class="far fa-sad-tear"></i> No instructions
   </div>
-  
+
   <!-- <div class="list-group-item" *ngIf="closedCounter">
     <div class="custom-control custom-checkbox">
       <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getInstructions()" class="custom-control-input" id="includeClosedInstructions">
       <label class="custom-control-label small" for="includeClosedInstructions">Include closed instructions</label>
     </div>
   </div> -->
-  
+
   <div class="table">
     <table class="table--mobile table--rowHover">
       <thead>
         <tr>
-          <th>Address</th>
+          <th *ngIf="instructions[0]?.propertyAddress">Address</th>
           <th>Status</th>
           <th>Sales</th>
           <th>Long Let</th>
@@ -35,7 +35,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let instruction of instructions">
-          <td data-title="Address">
+          <td *ngIf="instruction?.propertyAddress" data-title="Address">
             <span class="cell-content">{{instruction?.propertyAddress}}</span>
           </td>
           <td data-title="Status">
@@ -77,7 +77,7 @@
         <div class="col-sm"><strong>Lister</strong></div>
         <div class="col-sm"><strong>Instructed</strong></div>
       </div>
-    </div> 
+    </div>
     <div class="list-group-item list-group-item-action">
       <div class="row">
         <div class="col-sm-3 col-xl-12">
@@ -134,6 +134,6 @@
         </div>
       </div>
     </div>
-  
+
 </div> -->
 
