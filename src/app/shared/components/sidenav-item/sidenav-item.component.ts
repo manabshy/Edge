@@ -28,6 +28,8 @@ export class SidenavItemComponent implements OnInit {
   }
 
   scrollTo(el: HTMLElement) {
-    this.sidenavService.scrollTo(el);
+    if (el) {
+      this.sidenavService.scrollTo(el);
+    }
   }
 }

@@ -40,19 +40,6 @@ export class ContactgroupsRedesignComponent extends BaseComponent implements OnI
   personParams: string;
   showNotes: boolean;
   moreInfo = this.sidenavService.selectedItem = 'notes';
-  // type = 'notes';
-  // types: { name: string, isCurrent: boolean }[] = [
-  //   { name: 'notes', isCurrent: true },
-  //   { name: 'contactGroups', isCurrent: false },
-  //   { name: 'properties', isCurrent: false },
-  //   { name: 'leads', isCurrent: false },
-  //   { name: 'instructions', isCurrent: false },
-  //   { name: 'valuations', isCurrent: false },
-  //   { name: 'offers', isCurrent: false },
-  //   { name: 'searches', isCurrent: false },
-  //   { name: 'lettingsManagements', isCurrent: false },
-  //   { name: 'homeHelpers', isCurrent: false }
-  // ];
   sideNavItems = this.sidenavService.sideNavItems;
 
   get dataNote() {
@@ -194,20 +181,7 @@ export class ContactgroupsRedesignComponent extends BaseComponent implements OnI
         console.log('data', data);
         console.log('bottom reached for id', this.personId, 'condition', this.bottomReached);
       }
-      // if (data) {
-      //   if (page === 1) {
-      //     this.personNotes = data;
-      //   } else {
-      //     this.personNotes = _.concat(this.personNotes, data);
-      //   }
-      //   console.log('person Notes', this.personNotes);
-      // }
-      // if (data && (!data.length || data.length < this.pageSize)) {
 
-      //   this.bottomReached = true;
-      //   console.log('data', data);
-      //   console.log('bottom reached', this.bottomReached);
-      // }
     });
   }
 
@@ -220,29 +194,12 @@ export class ContactgroupsRedesignComponent extends BaseComponent implements OnI
     this.sharedService.addNote(data);
   }
 
-  getMoreInfo(item: SubNavItem) {
-    this.moreInfo = item.value;
+  getSelectedItem(item: any) {
+    this.moreInfo = this.sidenavService.getSelectedItem(item?.type, item?.index);
+    console.log({ item });
   }
 
-  setSideNavItem(type: string, index: number) {
-    // this.moreInfo = type;
-    // this.types.map(t => t.isCurrent = false);
-    // this.types[index].isCurrent = true;
-    // console.log('info type', this.moreInfo);
-    this.moreInfo = this.sidenavService.getSelectedItem(type, index);
-    console.log('%cmore info compo', this.moreInfo);
-
-  }
-
-  scrollTo(el: HTMLElement) {
-    el.scrollIntoView({ block: 'start', behavior: 'smooth' });
-  }
-
-  isObject(val) {
-    return val instanceof Object;
-  }
-
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.sidenavService.resetCurrentFlag();
   }
 }

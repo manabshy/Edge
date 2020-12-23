@@ -195,6 +195,7 @@ import { SidenavItemComponent } from './components/sidenav-item/sidenav-item.com
     OfficeFinderComponent,
     StaffMemberFinderComponent,
     SharedContactgroupListComponent,
+    SidenavItemComponent,
     ToPascalCasePipe,
     // to be refactored
     InfiniteScrollModule,
