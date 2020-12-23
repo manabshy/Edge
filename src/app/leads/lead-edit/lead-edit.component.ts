@@ -581,21 +581,10 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     console.log('related prop', propertyId);
   }
 
-  getMoreInfo(item: SubNavItem) {
-    this.moreInfo = item.value;
+  getSelectedItem(item: any) {
+    this.moreInfo = this.sidenavService.getSelectedItem(item?.type, item?.index);
+    console.log({ item });
   }
-
-  setSideNavItem(type: string, index: number) {
-    this.moreInfo = this.sidenavService.getSelectedItem(type, index);
-    console.log('%cmore info compo', this.moreInfo);
-
-  }
-
-  scrollTo(el: HTMLElement) {
-    el.scrollIntoView({ block: 'start', behavior: 'smooth' });
-  }
-
-
 
   canDeactivate(): boolean {
     if (this.leadEditForm.dirty && !this.isSubmitting || this.isPropertyAssociated || this.isPropertyRemoved) {
