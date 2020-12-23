@@ -3,28 +3,49 @@
     <div class="card">
       <div class="card__body">
         <ol class="list list--divider list--hover">
-          <li class="current"><a role="button" class="overall"></a>Notes <span class="pill pill--positive flexRight">57</span></li>
+          <!-- <li class="current"><a role="button" class="overall"></a>Notes <span class="pill pill--positive flexRight">57</span></li>
           <li><a role="button" class="overall"></a>Instructions <span class="pill pill--positive flexRight">1</span><span class="pill flexRight">12</span></li>
           <li><a role="button" class="overall"></a>Offers <span class="pill flexRight">12</span></li>
-          <li><a role="button" class="overall"></a>Valuations  <span class="pill pill--positive flexRight">1</span></li>
+          <li><a role="button" class="overall"></a>Valuations  <span class="pill pill--positive flexRight">1</span></li> -->
+          <li [ngClass]="{current: item.isCurrent}" *ngFor="let item of sideNavItems;index as i">
+            <a role="button" class="overall" (click)="setSideNavItem(item?.name,i); scrollTo(mainRowItem)"></a>
+            {{item?.name|toPascalCase}}
+            <ng-container *ngIf="summaryTotals; else loadingInfo">
+              <ng-container *ngIf="isObject(summaryTotals[item?.name]); else simpleValue">
+                <span *ngIf="summaryTotals[item?.name]?.active" class="pill pill--positive flexRight">
+                  {{summaryTotals[item?.name]?.active}} </span>
+                <span *ngIf="summaryTotals[item?.name]?.inactive" class="pill flexRight">
+                  {{summaryTotals[item?.name]?.inactive}}</span>
+              </ng-container>
+              <ng-template #simpleValue>
+                <span *ngIf="summaryTotals[item?.name]" class="pill pill--positive flexRight">
+                  {{summaryTotals[item?.name]}}</span>
+              </ng-template>
+            </ng-container>
+            <ng-template #loadingInfo>
+              <span class="badge badge-pill badge-primary"><i class="fas fa-spinner fa-pulse d-inline-block"></i></span>
+            </ng-template>
+          </li>
         </ol>
       </div>
     </div>
   </div>
 
-  <div class="row__item">
+  <div #mainRowItem class="row__item">
     <div class="title">
       <h2>Property</h2>
       <div class="flexRight" *ngIf="propertyDetails">
         <div dropdown placement="bottom right">
-          <a class="btn dropdown-toggle" href [id]="'button' + index" dropdownToggle (click)="$event.stopPropagation(); false" [attr.aria-controls]="'dropdown' + index">
+          <a class="btn dropdown-toggle" href [id]="'button' + index" dropdownToggle
+            (click)="$event.stopPropagation(); false" [attr.aria-controls]="'dropdown' + index">
             <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
               <ellipse class="st0" cx="32" cy="10.5" rx="5.9" ry="6" />
               <ellipse class="st0" cx="32" cy="32" rx="5.9" ry="6" />
               <ellipse class="st0" cx="32" cy="53.5" rx="5.9" ry="6" />
             </svg>
           </a>
-          <ul [id]="'dropdown' + index" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" [attr.aria-labelledby]="'button' + index">
+          <ul [id]="'dropdown' + index" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+            [attr.aria-labelledby]="'button' + index">
             <li role="menuitem">
               <a class="dropdown-item" [routerLink]="['edit']">
                 <span class="dropdown-icon">
@@ -47,9 +68,15 @@
     </div>
 
     <div class="card card--property" *ngIf="propertyDetails">
-      <div class="card__photo" *ngIf="propertyDetails?.photo?.azureResourceURL; else noPhoto" style="background-image:url('https://dandglive.blob.core.windows.net/document-storage/p-29598%5Cphotos%5Csmallphotos%5Cphoto_29598_11.jpg?sv=2019-02-02&sr=b&si=EdgePhotos&sig=jwU3GHMr0t11F%2Fyf%2FzpAfbH5ZAdVGVg8QXI0ZwHndvg%3D');">
+      <div class="card__photo" *ngIf="propertyDetails?.photo?.azureResourceURL; else noPhoto"
+        style="background-image:url('https://dandglive.blob.core.windows.net/document-storage/p-29598%5Cphotos%5Csmallphotos%5Cphoto_29598_11.jpg?sv=2019-02-02&sr=b&si=EdgePhotos&sig=jwU3GHMr0t11F%2Fyf%2FzpAfbH5ZAdVGVg8QXI0ZwHndvg%3D');">
         <a [routerLink]="['property-photos']" class="overall"></a>
-        <span class="pill pill--info"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" class="icon icon--onLeft"><path d="M0 0h24v24H0z" fill="none"/><path d="M22 16V4c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2zm-11-4l2.03 2.71L16 11l4 5H8l3-4zM2 6v14c0 1.1.9 2 2 2h14v-2H4V6H2z"/></svg>{{propertyDetails?.info?.propertyPhotos}}</span>
+        <span class="pill pill--info"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24"
+            class="icon icon--onLeft">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path
+              d="M22 16V4c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2zm-11-4l2.03 2.71L16 11l4 5H8l3-4zM2 6v14c0 1.1.9 2 2 2h14v-2H4V6H2z" />
+          </svg>{{propertyDetails?.info?.propertyPhotos}}</span>
         <!-- <img class="card-img" [src]="propertyDetails?.photo?.azureResourceURL" alt="" *ngIf="propertyDetails?.photo?.azureResourceURL; else noPhoto"> -->
       </div>
 
@@ -58,20 +85,22 @@
           <p>No Photos available</p>
         </div>
       </ng-template>
-      
+
       <div class="card__body">
         <div class="flex txt--title">
           {{propertyDetails?.address | formatAddress}}
           <div class="flexRight">
             <div dropdown placement="bottom right">
-              <a class="btn dropdown-toggle" href [id]="'button' + index" dropdownToggle (click)="$event.stopPropagation(); false" [attr.aria-controls]="'dropdown' + index">
+              <a class="btn dropdown-toggle" href [id]="'button' + index" dropdownToggle
+                (click)="$event.stopPropagation(); false" [attr.aria-controls]="'dropdown' + index">
                 <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
                   <ellipse class="st0" cx="32" cy="10.5" rx="5.9" ry="6" />
                   <ellipse class="st0" cx="32" cy="32" rx="5.9" ry="6" />
                   <ellipse class="st0" cx="32" cy="53.5" rx="5.9" ry="6" />
                 </svg>
               </a>
-              <ul [id]="'dropdown' + index" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" [attr.aria-labelledby]="'button' + index">
+              <ul [id]="'dropdown' + index" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+                [attr.aria-labelledby]="'button' + index">
                 <li role="menuitem">
                   <a routerLink="edit" class="dropdown-item"><i class="fas fa-edit"></i> Edit</a>
                 </li>
@@ -80,12 +109,14 @@
           </div>
         </div>
 
-        <app-office-finder [officeId]="propertyDetails?.officeId" [fullWidth]="true" [readOnly]="true" class="block"></app-office-finder>
+        <app-office-finder [officeId]="propertyDetails?.officeId" [fullWidth]="true" [readOnly]="true" class="block">
+        </app-office-finder>
 
         <ng-container *ngIf="propertyDetails?.lastKnownOwner?.contactGroupId">
-          <app-signer label="Last known owner" [existingSigner]="propertyDetails?.lastKnownOwner" [readOnly]="true" [fullWidth]="true" class="block"></app-signer>
+          <app-signer label="Last known owner" [existingSigner]="propertyDetails?.lastKnownOwner" [readOnly]="true"
+            [fullWidth]="true" class="block"></app-signer>
         </ng-container>
-        
+
         <ol class="pills">
           <li>{{propertyTypes.get(propertyDetails?.propertyTypeId)}}</li>
           <li>{{propertyStyles.get(propertyDetails?.propertyStyleId)}}</li>
@@ -93,11 +124,27 @@
           <li>{{area}}</li>
           <li>{{subArea}}</li>
         </ol>
-        
-      </div>
-    </div>
 
-    <p><app-additional-info [id]="propertyDetails?.propertyId ? 'PR-'+propertyDetails?.propertyId : ''"></app-additional-info></p>
+      </div>
+
+    </div>
+    <p>
+      <app-additional-info [id]="propertyDetails?.propertyId ? 'PR-'+propertyDetails?.propertyId : ''">
+      </app-additional-info>
+    </p>
+    <ng-container [ngSwitch]="moreInfo">
+      <app-contactgroups-detail-instructions *ngSwitchCase="'instructions'" [moreInfo]="moreInfo"
+        [propertyId]="propertyDetails?.propertyId" [closedCounter]="summaryTotals?.instructions?.inactive">
+      </app-contactgroups-detail-instructions>
+      <app-shared-valuation-list *ngSwitchCase="'valuations'" [moreInfo]="moreInfo"
+        [closedCounter]="summaryTotals?.valuations?.inactive" [propertyId]="propertyDetails?.propertyId">
+      </app-shared-valuation-list>
+      <app-contactgroups-detail-offers *ngSwitchCase="'offers'" [moreInfo]="moreInfo"
+        [propertyId]="propertyDetails?.propertyId" [closedCounter]="summaryTotals?.offers?.inactive">
+      </app-contactgroups-detail-offers>
+      <app-notes *ngSwitchCase="'notes'" [propertyNotes]="propertyNotes" [pageNumber]="page"
+        [bottomReached]="bottomReached"></app-notes>
+    </ng-container>
 
     <!-- <div class="list-group">
       <div class="list-group-item mb-4">

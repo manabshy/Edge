@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PropertyService } from '../shared/property.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Property, PropertyTypes, PropertyStyles, PropertyDetailsSubNavItems, PropertySummaryFigures, PropertyNote } from '../shared/property';
@@ -11,13 +11,14 @@ import { takeUntil } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { BaseComponent } from 'src/app/shared/models/base-component';
 import { SubNavItem } from 'src/app/shared/subnav';
+import { SideNavItem, SidenavService } from 'src/app/core/services/sidenav.service';
 
 @Component({
   selector: 'app-property-detail',
   templateUrl: './property-detail.component.html',
   styleUrls: ['./property-detail.component.scss']
 })
-export class PropertyDetailComponent extends BaseComponent implements OnInit {
+export class PropertyDetailComponent extends BaseComponent implements OnInit, OnDestroy {
   propertyId: number;
   propertyDetails: Property;
   summaryTotals: PropertySummaryFigures;
@@ -37,7 +38,14 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit {
   pageSize = 10;
   bottomReached = false;
   noteTypes: Record<number, string>;
-  moreInfo: string;
+  moreInfo = this.sidenavService.selectedItem;
+  sideNavItems: SideNavItem[] = [
+    { name: 'notes', isCurrent: false },
+    { name: 'instructions', isCurrent: false },
+    { name: 'valuations', isCurrent: false },
+    { name: 'offers', isCurrent: false },
+  ];
+
 
   // get region() {
   //   if (this.propertyDetails && this.regions) {
@@ -67,6 +75,7 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit {
     private router: Router,
     private infoService: InfoService,
     private storage: StorageMap,
+    private sidenavService: SidenavService,
     private sharedService: SharedService) { super(); }
 
   ngOnInit() {
@@ -197,6 +206,16 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit {
     this.moreInfo = item.value;
   }
 
+  setSideNavItem(type: string, index: number) {
+    this.moreInfo = this.sidenavService.getSelectedItem(type, index, this.sideNavItems);
+    console.log('%cmore info property', 'color:red', this.moreInfo);
+
+  }
+
+  scrollTo(el: HTMLElement) {
+   this.sidenavService.scrollTo(el);
+  }
+
   navigateToNewValuation(propertyId: number) {
     event.stopPropagation();
     this.router.navigate(['valuations-register/detail/', 0, 'edit'], {
@@ -205,6 +224,12 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit {
         isNewValuation: true,
       }
     });
+  }
+
+  ngOnDestroy(){
+    this.sidenavService.resetCurrentFlag();
+    console.log('jere before closing', this.sidenavService.selectedItem);
+
   }
 }
 
