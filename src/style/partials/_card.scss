@@ -9,7 +9,7 @@
 
     &--property                                 { display:flex; flex-direction:row; }
 }
-.card+*                                         { margin-top:30px; }
+.card+*                                         { margin-top:16px; }
 .card p                                         { position:relative; }
 
 .card__header                                   { padding:16px 16px 0; font-size:14px; font-weight:bold; color:$color--midnight; display:flex; align-items:flex-start; position:relative;

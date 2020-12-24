@@ -52,7 +52,7 @@ p+p                                             { margin-top:16px; }
 
 .txt--reset                                     { font-size:13px; font-weight:normal; color:$color--midnight-70; }
 .txt--title                                     { font-size:14px; font-weight:bold; }
-.txt--title+small                               { margin:0; }
+.txt--title+small                               { margin:4px 0 0; }
 
 mark                                            { padding:0 2px; background-color:$color--yellow; border-radius:3px; }
 
