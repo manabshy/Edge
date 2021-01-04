@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 export class SidenavService {
   selectedItem = '';
   sideNavItems: SideNavItem[] = [
-    { name: 'notes', isCurrent: false },
+    { name: 'notes', isCurrent: true },
     { name: 'contactGroups', isCurrent: false },
     { name: 'properties', isCurrent: false },
     { name: 'leads', isCurrent: false },
