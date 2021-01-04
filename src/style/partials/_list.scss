@@ -4,7 +4,7 @@
         &+*                                     { padding-top:10px; }
         &+.expandable                           { padding-top:12px; }
         &.expandable                            {
-            &:first-of-type                     { 
+            &:first-of-type                     {
                 details                         { box-shadow:none; }
                 .summary__title                 { padding-top:0; }
             }
@@ -22,7 +22,7 @@
         &:first-child                           { padding-top:0; box-shadow:none; }
         &:last-child                            { padding-bottom:0; }
     }
-    
+
     p                                           { width:100%; }
     .icon--s                                    { margin-top:6px; }
     .message .icon--s                           { margin-top:0; }
@@ -35,12 +35,18 @@
         &+*                                     { margin-top:6px; }
         &:empty                                 { margin:0; }
     }
+
 }
+
+.list--hover > li.current,
+.list--hover > li.current:hover                 { padding:10px; background-color:$color--info; color:$color--snow; box-shadow:none; -webkit-box-shadow:none; border-radius:3px; }
+.list--hover > li:hover                         { color:$color--info; }
+
 
 
 
 // .list                                           { margin:0; padding:0; list-style:none;
-//   
+//
 // }
 // *+.list                                         { margin-top:16px; }
 // sup+.list                                       { margin-top:6px; }
