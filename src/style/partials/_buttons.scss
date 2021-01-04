@@ -22,7 +22,7 @@ button::-moz-focus-inner                        { border:0; padding:0; }
 }
 
 .btn--onRight                                   { margin-left:16px; }
-.btn .icon                                      { top:initial; }
+.btn .icon                                      { top:initial; align-self:center; }
 
 .btn[disabled]                                  { cursor:not-allowed; opacity:.4; }       
 .btn:hover[disabled]                            { background-color:$color--midnight-70; }

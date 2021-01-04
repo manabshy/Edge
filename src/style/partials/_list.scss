@@ -29,11 +29,11 @@
 *+.list                                         { margin-top:20px; }
 
 .list--simple                                   {
-      li                                            { padding:0; flex-wrap:wrap;
-        &+*                                         { margin-top:6px; }
-        &:empty                                     { margin:0; }
-      }
+    li                                          { padding:0; flex-wrap:wrap;
+        &+*                                     { margin-top:6px; }
+        &:empty                                 { margin:0; }
     }
+}
 
 
 
