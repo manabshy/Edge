@@ -21,6 +21,7 @@ button::-moz-focus-inner                        { border:0; padding:0; }
   -o-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s;
 }
 
+.btn--onLeft                                    { margin-right:16px; }
 .btn--onRight                                   { margin-left:16px; }
 .btn .icon                                      { top:initial; align-self:center; }
 

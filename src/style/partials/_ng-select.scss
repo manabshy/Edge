@@ -1,4 +1,4 @@
-.ng-select                                  {
+.ng-select                                  { min-width:200px;
     .ng-select-opened>.ng-select-container  { border-color:initial; }
     &.ng-select-single .ng-select-container { height:30px; min-height:auto; }
     
