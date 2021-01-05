@@ -142,14 +142,20 @@ app-telephone                                   { width:100%; display:flex; alig
   
   li                                            { margin:0; padding:0;
     &+* .dropdown-item                          { border-top:1px solid $color--snow; }
-    .dropdown-item                              { padding:10px; display:block; }
+    .dropdown-item                              { padding:10px; display:block; width:100%; }
+  }
+
+  &__calendar                                   {
+    li                                          { padding:10px;
+      &+*                                       { padding-top:0; }
+    }
   }
 }
 
 .btn--daterange                                 { font-weight:bold; font-size:18px; }
 .tab-content                { margin:0; }
 .calNav                                         { margin:0; padding:10px 0; list-style:none; display:flex;
-  li                                            { margin:0; padding:0; display:flex; flex:1 1 0px;
+  >li                                           { margin:0; padding:0; display:flex; flex:1 1 0px;
     &.calNav__range                             { justify-content:center; }
     &.calNav__add                               { justify-content:flex-end; }
   }

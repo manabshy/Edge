@@ -22,17 +22,34 @@
 
           <!-- Dropdown - Date select -->
           <div dropdown #datepickerDropdown="bs-dropdown">
-            <button id="filter" dropdownToggle type="button" class="btn btn--daterange dropdown-toggle"
-              aria-controls="dropdown-custom-html">
-              {{ viewDate | calendarDate: (view + 'ViewTitle'):locale:weekStartsOn:excludeDays:daysInWeek }}
-            </button>
-            <div id="dropdown-custom-html" *dropdownMenu class="dropdown-menu" role="menu"
-              aria-labelledby="filter">
+            <button id="filter" dropdownToggle type="button" class="btn btn--daterange dropdown-toggle" aria-controls="dropdown-custom-html">{{ viewDate | calendarDate: (view + 'ViewTitle'):locale:weekStartsOn:excludeDays:daysInWeek }}</button>
+            <ul id="dropdown-custom-html" *dropdownMenu class="dropdown-menu dropdown-menu__calendar" role="menu" aria-labelledby="filter">
+              <li>
+                <ng-container *ngTemplateOutlet="goToButton"></ng-container>
+              </li>
+              <li (click)="$event.stopPropagation()">
+                <label class="small" for="viewMode">Calendar View</label>
+                <ng-container *ngTemplateOutlet="calendarChangeView"></ng-container>
+              </li>
+              <li (click)="$event.stopPropagation()">
+                <label class="small" for="dateFrom">Go to Date</label>
+                <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
+                  [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
+                  bsDatepicker 
+                  #datepicker="bsDatepicker"
+                  [appNoDoubleTap]='datepicker' 
+                  (bsValueChange)="onDateChange($event)" 
+                  formControlName="dateFilter"
+                >
+              </li>
+            </ul>
+
+            <!-- <div>
               <div class="p-3">
                 <div class="form-group d-sm-none">
                   <ng-container *ngTemplateOutlet="goToButton"></ng-container>
                 </div>
-                <div class="form-group d-sm-none" (click)="$event.stopPropagation()">
+                <div class="form-group d-sm-none">
                   <label class="small" for="viewMode">Calendar View</label>
                   <ng-container *ngTemplateOutlet="calendarChangeView"></ng-container>
                 </div>
@@ -47,7 +64,7 @@
                     formControlName="dateFilter">
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
 
           <!-- Btn - Next -->
@@ -58,7 +75,6 @@
         <li class="calNav__add">
           <a class="btn btn--positive" [routerLink]="['/diary/edit', 0]" [queryParams]="{isNewEvent: true}" *ngIf="!myCalendarOnly" aria-label="Add event"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z"></path><path class="plus-vertical" d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z"></path></svg>Create Event</a>
         </li>
-        
       </ol>
 
       <!-- Btn - This Week -->

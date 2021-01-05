@@ -23,6 +23,24 @@
             &:nth-child(21)~.cal-hour   { background-color:#FFFCF7; }
         }
     }
+
+    .cal-month-view {
+                 .cal-cell {
+                     width: 14%;
+                 }
+        
+        
+                 .cal-event {
+                     border-radius: 5px;
+                     width: calc(100% - 2px);
+                     height: auto;
+                     margin: 1px;
+                     padding: 5px;
+                     line-height: 1;
+                     font-size: 12px;
+                }
+    }
+        
 }
 
 // @import "../../../style/bootstrap-overrides";
