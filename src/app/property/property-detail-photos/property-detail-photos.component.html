@@ -1,7 +1,7 @@
 
 <div *ngIf="photos$ | async as photos">
   <p-galleria [value]="photos" [visible]="showPhotos" [responsiveOptions]="responsiveOptions2"
-    [containerStyle]="{'max-width': '100%'}" [numVisible]="9" [circular]="false" [fullScreen]="true"
+    [containerStyle]="{'max-width': '60%'}" [numVisible]="9" [circular]="false" [fullScreen]="true"
     [showItemNavigators]="true" [showThumbnails]="false"  [baseZIndex]="100000" (visibleChange)="hideModal($event)">
     <ng-template pTemplate="item" let-item>
       <img [src]="item?.azureResourceURL" style="width: 100%; display: block;" />

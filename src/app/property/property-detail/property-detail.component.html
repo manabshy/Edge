@@ -69,13 +69,21 @@
                     <path
                       d="M56 24c0 17.5-20.3 38-21.2 38.8C34 63.6 33 64 32 64c-1 0-2-0.4-2.8-1.2C28.3 62 8 41.5 8 24 8 10.8 18.8 0 32 0S56 10.8 56 24zM32 36c6.6 0 12-5.4 12-12 0-6.6-5.4-12-12-12s-12 5.4-12 12C20 30.6 25.4 36 32 36z" />
                   </svg>{{propertyDetails?.address | formatAddress}}</li>
+                <li *ngIf="propertyDetails?.map"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                    class="icon icon--onLeft">
+                    <path
+                      d="M61.3 1c-0.2 0-0.4 0-0.5 0.1L42.3 8.2 21.7 1 2.3 7.5C1.5 7.8 1 8.4 1 9.2v52.1C1 62.2 1.8 63 2.7 63c0.2 0 0.4 0 0.5-0.1l18.4-7.1L42.3 63l19.4-6.5c0.7-0.3 1.2-0.9 1.2-1.7V2.7C63 1.8 62.2 1 61.3 1zM42.3 56.1l-20.7-7.3v-41l20.7 7.3V56.1z">
+                    </path>
+                  </svg>
+                  <a role="link" (click)="showMap = true"> View map</a>
+                </li>
                 <li *ngIf="propertyDetails?.photo?.azureResourceURL"><svg aria-hidden="true" width="24" height="24"
                     viewBox="0 0 24 24" class="icon icon--onLeft">
                     <path d="M0 0h24v24H0z" fill="none" />
                     <path
                       d="M22 16V4c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2zm-11-4l2.03 2.71L16 11l4 5H8l3-4zM2 6v14c0 1.1.9 2 2 2h14v-2H4V6H2z" />
                   </svg>
-                  <a role="button" (click)="showPhotosModal()">{{propertyDetails?.info?.propertyPhotos}} Photos</a>
+                  <a role="link" (click)="showPhotosModal()">{{propertyDetails?.info?.propertyPhotos}} Photos</a>
                 </li>
                 <li class="hideLabel"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
                     class="icon icon--onLeft">
@@ -300,7 +308,13 @@
     </div> -->
   </div>
 </div>
-<app-property-detail-photos [propertyId]="propertyDetails?.propertyId" [showPhotos]="showPhotos" (photosClosed)="hidePhotosModal()"></app-property-detail-photos>
+<!-- Property Photos Modal -->
+<app-property-detail-photos [propertyId]="propertyDetails?.propertyId" [showPhotos]="showPhotos"
+  (photosClosed)="hidePhotosModal()"></app-property-detail-photos>
+
+  <!-- Property Map Modal -->
+  <app-property-detail-map [propertyMap]="propertyDetails?.map" [showMap]="showMap" (mapClosed)="showMap=false"></app-property-detail-map>
+
 <!-- <app-breadcrumb></app-breadcrumb> -->
 <!-- <div class="container main">
   <div class="row page-title">

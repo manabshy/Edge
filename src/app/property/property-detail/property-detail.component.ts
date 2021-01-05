@@ -38,6 +38,7 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit, On
   pageSize = 10;
   bottomReached = false;
   showPhotos = false;
+  showMap = false;
   noteTypes: Record<number, string>;
   moreInfo = this.sidenavService.selectedItem = 'notes';
   sideNavItems: SideNavItem[] = [
@@ -164,7 +165,7 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit, On
   }
 
   getPropertyDetails(propertyId: number) {
-    this.propertyService.getProperty(propertyId, true, true, false).subscribe(data => {
+    this.propertyService.getProperty(propertyId, true, true, false, true).subscribe(data => {
       if (data) {
         this.propertyDetails = data;
         this.sharedService.setTitle(this.formatAddressPipe.transform(this.propertyDetails.address));
