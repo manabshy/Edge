@@ -206,14 +206,14 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit, On
     this.moreInfo = item.value;
   }
 
-  setSideNavItem(type: string, index: number) {
-    this.moreInfo = this.sidenavService.getSelectedItem(type, index, this.sideNavItems);
+  getSelectedItem(item: any) {
+    this.moreInfo = this.sidenavService.getSelectedItem(item?.type, item?.index);
+    console.log({ item });
     console.log('%cmore info property', 'color:red', this.moreInfo);
-
   }
 
   scrollTo(el: HTMLElement) {
-   this.sidenavService.scrollTo(el);
+    this.sidenavService.scrollTo(el);
   }
 
   navigateToNewValuation(propertyId: number) {
@@ -226,7 +226,7 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit, On
     });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.sidenavService.resetCurrentFlag();
     console.log('jere before closing', this.sidenavService.selectedItem);
 

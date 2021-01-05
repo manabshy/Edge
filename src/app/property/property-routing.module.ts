@@ -18,8 +18,8 @@ const routes: Routes = [
     children: [
       { path: '', component: PropertyDetailComponent, data: { shouldDetach: false } }, // do not cache page
       { path: 'edit', component: PropertyDetailEditComponent , data: { shouldDetach: false }, canDeactivate: [CanDeactivateGuard] },
-      { path: 'instructions', component: PropertyDetailInstructionsComponent, data: { shouldDetach: true } },
-      { path: 'offers', component: PropertyDetailOffersComponent , data: { shouldDetach: true }},
+      { path: 'instructions', component: PropertyDetailInstructionsComponent, data: { shouldDetach: false } },
+      { path: 'offers', component: PropertyDetailOffersComponent , data: { shouldDetach: false }},
       { path: 'documents', component: PropertyDetailDocumentsComponent, data: { shouldDetach: true } },
       { path: 'property-photos', component: PropertyDetailPhotosComponent, data: { shouldDetach: true } },
       { path: 'map', component: PropertyDetailMapComponent, data: { shouldDetach: true } },

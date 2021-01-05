@@ -4,16 +4,16 @@
       <div class="card__headerImg">
         <div class="alignTopRight">
           <div dropdown placement="bottom right">
-            <a class="btn dropdown-toggle" href [id]="'button' + index" dropdownToggle
-              (click)="$event.stopPropagation(); false" [attr.aria-controls]="'dropdown' + index">
+            <a class="btn dropdown-toggle" href [id]="'button'" dropdownToggle
+              (click)="$event.stopPropagation(); false" [attr.aria-controls]="'dropdown'">
               <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
                 <ellipse class="st0" cx="32" cy="10.5" rx="5.9" ry="6" />
                 <ellipse class="st0" cx="32" cy="32" rx="5.9" ry="6" />
                 <ellipse class="st0" cx="32" cy="53.5" rx="5.9" ry="6" />
               </svg>
             </a>
-            <ul [id]="'dropdown' + index" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
-              [attr.aria-labelledby]="'button' + index">
+            <ul [id]="'dropdown'" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+              [attr.aria-labelledby]="'button'">
               <li role="menuitem">
                 <a routerLink="edit" class="dropdown-item">
                   <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><polygon points="42.7 6.7 57.3 21.3 64 14.5 49.7 0 "/><path d="M40.3 9.6l-38 38L0 64l16.9-2 38-37.9L40.3 9.6zM4 59.9l1.9-11.7 9.8 9.8L4 59.9z"/></svg>
@@ -38,7 +38,7 @@
           <p>No Photos available</p>
         </ng-template>
       </div>
-      
+
       <div class="card__body">
         <ol class="list">
           <li class="expandable">
@@ -85,32 +85,7 @@
         </ol>
       </div>
     </div>
-
-    <div class="card">
-      <div class="card__body">
-        <ol class="list list--divider list--hover">
-          <li [ngClass]="{current: item.isCurrent}" *ngFor="let item of sideNavItems;index as i">
-            <a role="button" class="overall" (click)="setSideNavItem(item?.name,i); scrollTo(mainRowItem)"></a>
-            {{item?.name|toPascalCase}}
-            <ng-container *ngIf="summaryTotals; else loadingInfo">
-              <ng-container *ngIf="isObject(summaryTotals[item?.name]); else simpleValue">
-                <span *ngIf="summaryTotals[item?.name]?.active" class="pill pill--positive flexRight">
-                  {{summaryTotals[item?.name]?.active}} </span>
-                <span *ngIf="summaryTotals[item?.name]?.inactive" class="pill flexRight">
-                  {{summaryTotals[item?.name]?.inactive}}</span>
-              </ng-container>
-              <ng-template #simpleValue>
-                <span *ngIf="summaryTotals[item?.name]" class="pill pill--positive flexRight">
-                  {{summaryTotals[item?.name]}}</span>
-              </ng-template>
-            </ng-container>
-            <ng-template #loadingInfo>
-              <span class="badge badge-pill badge-primary"><i class="fas fa-spinner fa-pulse d-inline-block"></i></span>
-            </ng-template>
-          </li>
-        </ol>
-      </div>
-    </div>
+    <app-sidenav-item [sideNavItems]="sideNavItems" [summaryTotals]="summaryTotals" [scrollToItem]="mainRowItem" (selectedItem)="getSelectedItem($event)"></app-sidenav-item>
     <app-additional-info [id]="propertyDetails?.propertyId ? 'PR-'+propertyDetails?.propertyId : ''" class="block"></app-additional-info>
   </div>
 
