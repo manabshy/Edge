@@ -37,6 +37,7 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit, On
   page = 1;
   pageSize = 10;
   bottomReached = false;
+  showPhotos = false;
   noteTypes: Record<number, string>;
   moreInfo = this.sidenavService.selectedItem = 'notes';
   sideNavItems: SideNavItem[] = [
@@ -224,6 +225,14 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit, On
         isNewValuation: true,
       }
     });
+  }
+
+  showPhotosModal() {
+    this.showPhotos = true;
+  }
+
+  hidePhotosModal() {
+    this.showPhotos = false;
   }
 
   ngOnDestroy() {

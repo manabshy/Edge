@@ -21,7 +21,7 @@ const routes: Routes = [
       { path: 'instructions', component: PropertyDetailInstructionsComponent, data: { shouldDetach: false } },
       { path: 'offers', component: PropertyDetailOffersComponent , data: { shouldDetach: false }},
       { path: 'documents', component: PropertyDetailDocumentsComponent, data: { shouldDetach: true } },
-      { path: 'property-photos', component: PropertyDetailPhotosComponent, data: { shouldDetach: true } },
+      { path: 'property-photos', component: PropertyDetailPhotosComponent, data: { shouldDetach: false } },
       { path: 'map', component: PropertyDetailMapComponent, data: { shouldDetach: true } },
     ]
   }
