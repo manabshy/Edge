@@ -25,7 +25,6 @@ export class SidenavService {
 
     this.sideNavItems.map(t => t.isCurrent = false);
     this.sideNavItems[index].isCurrent = true;
-    console.log('selected item in service', this.selectedItem);
     return this.selectedItem = type;
   }
 

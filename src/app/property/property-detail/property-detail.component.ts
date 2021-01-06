@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Property, PropertyTypes, PropertyStyles, PropertyDetailsSubNavItems, PropertySummaryFigures, PropertyNote } from '../shared/property';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { Observable } from 'rxjs';
-import { FormatAddressPipe } from 'src/app/shared/format-address.pipe';
+import { FormatAddressPipe } from 'src/app/shared/pipes/format-address.pipe';
 import { InfoService, DropdownListInfo, InfoDetail } from 'src/app/core/services/info.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { takeUntil } from 'rxjs/operators';
@@ -209,7 +209,7 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit, On
   }
 
   getSelectedItem(item: any) {
-    this.moreInfo = this.sidenavService.getSelectedItem(item?.type, item?.index);
+    this.moreInfo = this.sidenavService.getSelectedItem(item?.type, item?.index, this.sideNavItems);
     console.log({ item });
     console.log('%cmore info property', 'color:red', this.moreInfo);
   }

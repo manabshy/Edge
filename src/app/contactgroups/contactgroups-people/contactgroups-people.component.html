@@ -28,7 +28,7 @@
       <ng-container *ngSwitchDefault>
         <!-- <app-breadcrumb></app-breadcrumb> -->
         <h2>
-          <ng-container *ngIf="isNewContactGroup;else existingContact">New Contact Group</ng-container>
+          <ng-container *ngIf="isNewContactGroup;else existingContact">{{newContactGroupLabel}}</ng-container>
           <ng-template #existingContact>
             <ng-container *ngIf="contactGroupDetails?.contactType === 4; else peopleCG">Company</ng-container>
             <ng-template #peopleCG>Personal</ng-template> Contact Group
@@ -561,7 +561,7 @@
                 <div class="col-sm-10 d-flex">
                   <button type="button" class="btn btn-light mr-2" (click)="cancel()">Cancel</button>
                   <button type="submit" class="btn btn-secondary" (click)="saveContactGroup()"
-                    [attr.disabled]="!contactGroupDetails?.contactPeople.length || (isSubmitting && !errorMessage) ? '' : null">
+                    [attr.disabled]="!contactGroupDetails?.contactPeople.length || (isSubmitting && !errorMessage) || !contactGroupDetailsForm?.dirty? '' : null">
                     <i class="fas fa-spinner fa-pulse d-inline-block mr-2"
                       *ngIf="isSubmitting && !errorMessage"></i>Save
                   </button>
