@@ -77,6 +77,7 @@ import { SharedContactgroupListComponent } from './shared-contactgroup-list/shar
 import { ToPascalCasePipe } from './pipes/to-pascal-case.pipe';
 import { SidenavItemComponent } from './components/sidenav-item/sidenav-item.component';
 
+import {GalleriaModule} from 'primeng/galleria';
 
 @NgModule({
   declarations: [
@@ -153,7 +154,8 @@ import { SidenavItemComponent } from './components/sidenav-item/sidenav-item.com
     NgbModule,
     LoadingBarHttpClientModule,
     AngularStickyThingsModule,
-    NgSelectModule
+    NgSelectModule,
+    GalleriaModule
   ],
   exports: [
     RoundingPipe,
@@ -222,7 +224,8 @@ import { SidenavItemComponent } from './components/sidenav-item/sidenav-item.com
     AngularStickyThingsModule,
     NgSelectModule,
     SharedLeadRegisterComponent,
-    NoDoubleTapDirective
+    NoDoubleTapDirective,
+    GalleriaModule
   ],
   entryComponents: [
     ConfirmModalComponent,

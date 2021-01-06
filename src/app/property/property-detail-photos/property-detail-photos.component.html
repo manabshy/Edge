@@ -1,12 +1,28 @@
-<app-breadcrumb [title]="navPlaceholder"></app-breadcrumb>
-<div class="container main">
+
+<div *ngIf="photos$ | async as photos">
+  <p-galleria [value]="photos" [visible]="showPhotos" [responsiveOptions]="responsiveOptions2"
+    [containerStyle]="{'max-width': '60%'}" [numVisible]="9" [circular]="false" [fullScreen]="true"
+    [showItemNavigators]="true" [showThumbnails]="false"  [baseZIndex]="100000" (visibleChange)="hideModal($event)">
+    <ng-template pTemplate="item" let-item>
+      <img [src]="item?.azureResourceURL" style="width: 100%; display: block;" />
+    </ng-template>
+    <!-- <ng-template pTemplate="thumbnail" let-item>
+      <div class="p-grid p-nogutter p-justify-center">
+          <img [src]="item.azureResourceURL" style="display: block;"/>
+      </div>
+  </ng-template> -->
+  </p-galleria>
+</div>
+
+
+<!-- <app-breadcrumb [title]="navPlaceholder"></app-breadcrumb> -->
+<!-- <div class="container main">
   <div class="row page-title">
     <div class="col">
       <h4 class="mb-0">Photos</h4>
     </div>
   </div>
-
- <div *ngIf="photos$ | async as photos">
+  <div *ngIf="photos$ | async as photos">
     <carousel [itemsPerSlide]="itemsPerSlide" [singleSlideOffset]="singleSlideOffset" [interval]="false"
       [noWrap]="noWrap">
       <slide *ngFor="let photo of photos; let index=index">
@@ -14,4 +30,4 @@
       </slide>
     </carousel>
  </div>
-</div>
+</div> -->

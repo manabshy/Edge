@@ -4,8 +4,8 @@
       <div class="card__headerImg">
         <div class="alignTopRight">
           <div dropdown placement="bottom right">
-            <a class="btn dropdown-toggle" href [id]="'button'" dropdownToggle
-              (click)="$event.stopPropagation(); false" [attr.aria-controls]="'dropdown'">
+            <a class="btn dropdown-toggle" href [id]="'button'" dropdownToggle (click)="$event.stopPropagation(); false"
+              [attr.aria-controls]="'dropdown'">
               <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
                 <ellipse class="st0" cx="32" cy="10.5" rx="5.9" ry="6" />
                 <ellipse class="st0" cx="32" cy="32" rx="5.9" ry="6" />
@@ -16,13 +16,21 @@
               [attr.aria-labelledby]="'button'">
               <li role="menuitem">
                 <a routerLink="edit" class="dropdown-item">
-                  <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><polygon points="42.7 6.7 57.3 21.3 64 14.5 49.7 0 "/><path d="M40.3 9.6l-38 38L0 64l16.9-2 38-37.9L40.3 9.6zM4 59.9l1.9-11.7 9.8 9.8L4 59.9z"/></svg>
+                  <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
+                    <polygon points="42.7 6.7 57.3 21.3 64 14.5 49.7 0 " />
+                    <path d="M40.3 9.6l-38 38L0 64l16.9-2 38-37.9L40.3 9.6zM4 59.9l1.9-11.7 9.8 9.8L4 59.9z" />
+                  </svg>
                   Edit Property
                 </a>
               </li>
               <li role="menuitem">
                 <a class="dropdown-item" (click)="navigateToNewValuation(propertyDetails?.propertyId)">
-                  <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><path d="M16.1 58.4l7.3-18.4h19.9l2.2-5.8H11.9l-2.2 5.8h7.7L11.1 56c-0.6 1.5-0.9 3.2-0.9 4.8v1.9c0 0.7 0.6 1.2 1.2 1.2H54v-5.6H16.1z"/><path d="M40.7 6.4c1.8-0.7 3.9-1 6.2-0.7l6.7 0.9L54.3 1l-6.7-0.9c-3.2-0.4-6.3 0-9 1 -4.3 1.7-7.7 5-9.6 9.4l-5 12.6h-7.4l-2.2 5.7h32.2l2.2-5.7H30.1l4.1-10.4C35.5 9.8 37.8 7.6 40.7 6.4z"/></svg>
+                  <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
+                    <path
+                      d="M16.1 58.4l7.3-18.4h19.9l2.2-5.8H11.9l-2.2 5.8h7.7L11.1 56c-0.6 1.5-0.9 3.2-0.9 4.8v1.9c0 0.7 0.6 1.2 1.2 1.2H54v-5.6H16.1z" />
+                    <path
+                      d="M40.7 6.4c1.8-0.7 3.9-1 6.2-0.7l6.7 0.9L54.3 1l-6.7-0.9c-3.2-0.4-6.3 0-9 1 -4.3 1.7-7.7 5-9.6 9.4l-5 12.6h-7.4l-2.2 5.7h32.2l2.2-5.7H30.1l4.1-10.4C35.5 9.8 37.8 7.6 40.7 6.4z" />
+                  </svg>
                   Create Valuation
                 </a>
               </li>
@@ -31,7 +39,8 @@
         </div>
 
         <ng-container *ngIf="propertyDetails?.photo?.azureResourceURL; else noPhoto">
-          <img [src]="propertyDetails?.photo?.azureResourceURL" alt="" *ngIf="propertyDetails?.photo?.azureResourceURL; else noPhoto">
+          <img [src]="propertyDetails?.photo?.azureResourceURL" alt=""
+            *ngIf="propertyDetails?.photo?.azureResourceURL; else noPhoto">
         </ng-container>
 
         <ng-template #noPhoto>
@@ -47,17 +56,50 @@
                 <div class="summary__title">
                   Property details
                   <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s flexRight">
-                    <path class="vertical" d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z"/>
-                    <path class="horizontal" d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z"/>
+                    <path class="vertical"
+                      d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z" />
+                    <path class="horizontal"
+                      d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z" />
                   </svg>
                 </div>
               </summary>
               <ol class="list">
                 <!-- Address -->
-                <li><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><path d="M56 24c0 17.5-20.3 38-21.2 38.8C34 63.6 33 64 32 64c-1 0-2-0.4-2.8-1.2C28.3 62 8 41.5 8 24 8 10.8 18.8 0 32 0S56 10.8 56 24zM32 36c6.6 0 12-5.4 12-12 0-6.6-5.4-12-12-12s-12 5.4-12 12C20 30.6 25.4 36 32 36z"/></svg>{{propertyDetails?.address | formatAddress}}</li>
-                <li *ngIf="propertyDetails?.photo?.azureResourceURL"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" class="icon icon--onLeft"><path d="M0 0h24v24H0z" fill="none" /><path d="M22 16V4c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2zm-11-4l2.03 2.71L16 11l4 5H8l3-4zM2 6v14c0 1.1.9 2 2 2h14v-2H4V6H2z" /></svg><a [routerLink]="['property-photos']">{{propertyDetails?.info?.propertyPhotos}} Photos</a></li>
-                <li class="hideLabel"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><path d="M32 16.5V4.1H1v55.8h62V16.5H32zM13.4 53.7H7.2v-6.2h6.2V53.7zM13.4 41.3H7.2v-6.2h6.2V41.3zM13.4 28.9H7.2v-6.2h6.2V28.9zM13.4 16.5H7.2v-6.2h6.2V16.5zM25.8 53.7h-6.2v-6.2h6.2V53.7zM25.8 41.3h-6.2v-6.2h6.2V41.3zM25.8 28.9h-6.2v-6.2h6.2V28.9zM25.8 16.5h-6.2v-6.2h6.2V16.5zM56.8 53.7H32v-6.2h6.2v-6.2H32v-6.2h6.2v-6.2H32v-6.2h24.8V53.7zM50.6 28.9h-6.2v6.2h6.2V28.9zM50.6 41.3h-6.2v6.2h6.2V41.3z"/></svg><app-office-finder [officeId]="propertyDetails?.officeId" [fullWidth]="true" [readOnly]="true"></app-office-finder></li>
-                <li *ngIf="propertyDetails?.lastKnownOwner?.contactGroupId"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><path d="M32 0L0 36.1h8V64h6.8v-4.3c0-5.7 11.5-8.6 17.2-8.6s17.2 2.8 17.2 8.5V64H56V36.1h8L32 0zM32 46.8c-4.8 0-8.6-3.9-8.6-8.6 0-4.8 3.8-8.6 8.6-8.6s8.6 3.8 8.6 8.6C40.6 42.9 36.8 46.8 32 46.8z"/></svg><a [routerLink]="['/contact-centre/detail/0/people/', propertyDetails?.lastKnownOwner?.contactGroupId]">{{propertyDetails?.lastKnownOwner?.contactNames}}</a></li>
+                <li><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
+                    <path
+                      d="M56 24c0 17.5-20.3 38-21.2 38.8C34 63.6 33 64 32 64c-1 0-2-0.4-2.8-1.2C28.3 62 8 41.5 8 24 8 10.8 18.8 0 32 0S56 10.8 56 24zM32 36c6.6 0 12-5.4 12-12 0-6.6-5.4-12-12-12s-12 5.4-12 12C20 30.6 25.4 36 32 36z" />
+                  </svg>{{propertyDetails?.address | formatAddress}}</li>
+                <li *ngIf="propertyDetails?.map"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                    class="icon icon--onLeft">
+                    <path
+                      d="M61.3 1c-0.2 0-0.4 0-0.5 0.1L42.3 8.2 21.7 1 2.3 7.5C1.5 7.8 1 8.4 1 9.2v52.1C1 62.2 1.8 63 2.7 63c0.2 0 0.4 0 0.5-0.1l18.4-7.1L42.3 63l19.4-6.5c0.7-0.3 1.2-0.9 1.2-1.7V2.7C63 1.8 62.2 1 61.3 1zM42.3 56.1l-20.7-7.3v-41l20.7 7.3V56.1z">
+                    </path>
+                  </svg>
+                  <a role="link" (click)="showMap = true"> View map</a>
+                </li>
+                <li *ngIf="propertyDetails?.photo?.azureResourceURL"><svg aria-hidden="true" width="24" height="24"
+                    viewBox="0 0 24 24" class="icon icon--onLeft">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path
+                      d="M22 16V4c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2zm-11-4l2.03 2.71L16 11l4 5H8l3-4zM2 6v14c0 1.1.9 2 2 2h14v-2H4V6H2z" />
+                  </svg>
+                  <a role="link" (click)="showPhotosModal()">{{propertyDetails?.info?.propertyPhotos}} Photos</a>
+                </li>
+                <li class="hideLabel"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                    class="icon icon--onLeft">
+                    <path
+                      d="M32 16.5V4.1H1v55.8h62V16.5H32zM13.4 53.7H7.2v-6.2h6.2V53.7zM13.4 41.3H7.2v-6.2h6.2V41.3zM13.4 28.9H7.2v-6.2h6.2V28.9zM13.4 16.5H7.2v-6.2h6.2V16.5zM25.8 53.7h-6.2v-6.2h6.2V53.7zM25.8 41.3h-6.2v-6.2h6.2V41.3zM25.8 28.9h-6.2v-6.2h6.2V28.9zM25.8 16.5h-6.2v-6.2h6.2V16.5zM56.8 53.7H32v-6.2h6.2v-6.2H32v-6.2h6.2v-6.2H32v-6.2h24.8V53.7zM50.6 28.9h-6.2v6.2h6.2V28.9zM50.6 41.3h-6.2v6.2h6.2V41.3z" />
+                  </svg>
+                  <app-office-finder [officeId]="propertyDetails?.officeId" [fullWidth]="true" [readOnly]="true">
+                  </app-office-finder>
+                </li>
+                <li *ngIf="propertyDetails?.lastKnownOwner?.contactGroupId"><svg aria-hidden="true" width="64"
+                    height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
+                    <path
+                      d="M32 0L0 36.1h8V64h6.8v-4.3c0-5.7 11.5-8.6 17.2-8.6s17.2 2.8 17.2 8.5V64H56V36.1h8L32 0zM32 46.8c-4.8 0-8.6-3.9-8.6-8.6 0-4.8 3.8-8.6 8.6-8.6s8.6 3.8 8.6 8.6C40.6 42.9 36.8 46.8 32 46.8z" />
+                  </svg><a
+                    [routerLink]="['/contact-centre/detail/0/people/', propertyDetails?.lastKnownOwner?.contactGroupId]">{{propertyDetails?.lastKnownOwner?.contactNames}}</a>
+                </li>
               </ol>
             </details>
           </li>
@@ -68,14 +110,18 @@
                 <div class="summary__title">
                   Additional details
                   <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s flexRight">
-                    <path class="vertical" d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z"/>
-                    <path class="horizontal" d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z"/>
+                    <path class="vertical"
+                      d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z" />
+                    <path class="horizontal"
+                      d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z" />
                   </svg>
                 </div>
               </summary>
               <ol class="list">
-                <li *ngIf="propertyDetails?.propertyTypeId"><span class="txt--midnight">Property Type</span>: {{propertyTypes.get(propertyDetails?.propertyTypeId)}}</li>
-                <li *ngIf="propertyDetails?.propertyStyleId"><span class="txt--midnight">Property Style</span>: {{propertyStyles.get(propertyDetails?.propertyStyleId)}}</li>
+                <li *ngIf="propertyDetails?.propertyTypeId"><span class="txt--midnight">Property Type</span>:
+                  {{propertyTypes.get(propertyDetails?.propertyTypeId)}}</li>
+                <li *ngIf="propertyDetails?.propertyStyleId"><span class="txt--midnight">Property Style</span>:
+                  {{propertyStyles.get(propertyDetails?.propertyStyleId)}}</li>
                 <li *ngIf="region"><span class="txt--midnight">Region</span>: {{region}}</li>
                 <li *ngIf="area"><span class="txt--midnight">Area</span>: {{area}}</li>
                 <li *ngIf="subArea"><span class="txt--midnight">Sub-Area</span>: {{subArea}}</li>
@@ -85,8 +131,10 @@
         </ol>
       </div>
     </div>
-    <app-sidenav-item [sideNavItems]="sideNavItems" [summaryTotals]="summaryTotals" [scrollToItem]="mainRowItem" (selectedItem)="getSelectedItem($event)"></app-sidenav-item>
-    <app-additional-info [id]="propertyDetails?.propertyId ? 'PR-'+propertyDetails?.propertyId : ''" class="block"></app-additional-info>
+    <app-sidenav-item [sideNavItems]="sideNavItems" [summaryTotals]="summaryTotals" [scrollToItem]="mainRowItem"
+      (selectedItem)="getSelectedItem($event)"></app-sidenav-item>
+    <app-additional-info [id]="propertyDetails?.propertyId ? 'PR-'+propertyDetails?.propertyId : ''" class="block">
+    </app-additional-info>
   </div>
 
   <div #mainRowItem class="row__item">
@@ -260,6 +308,12 @@
     </div> -->
   </div>
 </div>
+<!-- Property Photos Modal -->
+<app-property-detail-photos [propertyId]="propertyDetails?.propertyId" [showPhotos]="showPhotos"
+  (photosClosed)="hidePhotosModal()"></app-property-detail-photos>
+
+  <!-- Property Map Modal -->
+  <app-property-detail-map [propertyMap]="propertyDetails?.map" [showMap]="showMap" (mapClosed)="showMap=false"></app-property-detail-map>
 
 <!-- <app-breadcrumb></app-breadcrumb> -->
 <!-- <div class="container main">
