@@ -209,7 +209,7 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit, On
   }
 
   getSelectedItem(item: any) {
-    this.moreInfo = this.sidenavService.getSelectedItem(item?.type, item?.index);
+    this.moreInfo = this.sidenavService.getSelectedItem(item?.type, item?.index, this.sideNavItems);
     console.log({ item });
     console.log('%cmore info property', 'color:red', this.moreInfo);
   }
