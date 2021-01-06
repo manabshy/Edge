@@ -28,7 +28,7 @@
       <ng-container *ngSwitchDefault>
         <!-- <app-breadcrumb></app-breadcrumb> -->
         <h2>
-          <ng-container *ngIf="isNewContactGroup;else existingContact">New Contact Group</ng-container>
+          <ng-container *ngIf="isNewContactGroup;else existingContact">{{newContactGroupLabel}}</ng-container>
           <ng-template #existingContact>
             <ng-container *ngIf="contactGroupDetails?.contactType === 4; else peopleCG">Company</ng-container>
             <ng-template #peopleCG>Personal</ng-template> Contact Group

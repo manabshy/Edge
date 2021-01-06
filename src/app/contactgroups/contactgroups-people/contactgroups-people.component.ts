@@ -115,6 +115,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   public keepOriginalOrder = (a) => a.key;
 
+  newContactGroupLabel = 'New Contact Group';
   info = '';
   infoTypes: { name: string, isCurrent: boolean }[] = [
     { name: 'contactGroup', isCurrent: true },
@@ -271,8 +272,10 @@ export class ContactgroupsPeopleComponent implements OnInit {
     if (isSelectedTypeCompany) {
       this.contactGroupDetails.contactType = ContactType.CompanyContact;
       this.isNewCompanyContact = true;
+      this.newContactGroupLabel = 'Company Contact Group';
     } else {
       this.contactGroupDetails.contactType = ContactType.Individual;
+      this.newContactGroupLabel = 'Personal Contact Group';
     }
     if (this.personId) {
       this.getContactGroupFirstPerson(this.personId, isSelectedTypeCompany);
