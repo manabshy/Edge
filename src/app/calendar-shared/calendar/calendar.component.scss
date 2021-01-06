@@ -12,8 +12,8 @@
     }
 }
 
-:host ::ng-deep             {
-    .cal-day-headers        { background-color:#fff; position:sticky; top:106px; z-index:10; }
+:host ::ng-deep                         {
+    .cal-day-headers                    { background-color:#fff; position:sticky; top:106px; z-index:10; }
     .cal-day-column                     {
         .cal-hour                       { background-color:#FFFCF7;
             &:nth-child(10)~.cal-hour   { background-color:#EDF6F2; }
@@ -24,23 +24,23 @@
         }
     }
 
-    .cal-month-view {
-                 .cal-cell {
-                     width: 14%;
-                 }
-        
-        
-                 .cal-event {
-                     border-radius: 5px;
-                     width: calc(100% - 2px);
-                     height: auto;
-                     margin: 1px;
-                     padding: 5px;
-                     line-height: 1;
-                     font-size: 12px;
-                }
+    .cal-week-view                      {
+        .text-truncate                  { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .cal-event                      { background-color:#3498DB; color:#FFFFFF; border:none; }
+        .cal-header.cal-weekend span    { color:#848CA4; }
     }
-        
+
+    .cal-month-view                     {
+        .cal-cell                       { width:14%; }
+        .cal-event                      { margin:1px; padding:5px; height:auto; line-height:1; font-size:11px; background-color:#3498DB; border-radius:5px; width:calc(100% - 2px); }
+        .cal-weekend,        
+        .cal-day-cell                   {
+            &.cal-weekend               {
+                .cal-day-number         { color:#848CA4; }
+            }
+            &.cal-today                 { background-color:#EDF6F2; }
+        }
+    }   
 }
 
 // @import "../../../style/bootstrap-overrides";
