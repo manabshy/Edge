@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Person } from '../models/person';
-import { FormatAddressPipe } from '../format-address.pipe';
+import { FormatAddressPipe } from '../pipes/format-address.pipe';
 
 @Component({
   selector: 'app-score-badge',

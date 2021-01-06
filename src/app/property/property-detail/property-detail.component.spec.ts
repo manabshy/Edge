@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { PropertyDetailComponent } from './property-detail.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { FormatAddressPipe } from 'src/app/shared/format-address.pipe';
+import { FormatAddressPipe } from 'src/app/shared/pipes/format-address.pipe';
 import { PropertyService } from '../shared/property.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BrowserModule } from '@angular/platform-browser';

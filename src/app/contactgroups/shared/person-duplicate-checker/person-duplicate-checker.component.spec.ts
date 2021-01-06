@@ -11,7 +11,7 @@ import { Renderer2, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MockBasicPerson, PotentialDuplicatePersonMock } from 'src/testing/fixture-data/person-data.json';
 import { of } from 'rxjs';
 import { PeopleAutoCompleteResult, PotentialDuplicateResult } from '../contact-group';
-import { HighlightPipe } from 'src/app/shared/highlight.pipe';
+import { HighlightPipe } from 'src/app/shared/pipes/highlight.pipe';
 
 describe('PersonDuplicateCheckerComponent', () => {
   let component: PersonDuplicateCheckerComponent;

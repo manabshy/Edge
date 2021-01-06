@@ -19,7 +19,7 @@ import { DiaryEventService } from '../shared/diary-event.service';
 import { mockDiaryEvents } from 'src/testing/fixture-data/dairy-event-data';
 import { BreadcrumbComponent } from 'src/app/shared/breadcrumb/breadcrumb.component';
 import { NO_ERRORS_SCHEMA } from '@angular/compiler';
-import { FormatAddressPipe } from 'src/app/shared/format-address.pipe';
+import { FormatAddressPipe } from 'src/app/shared/pipes/format-address.pipe';
 import { SignerComponent } from 'src/app/shared/signer/signer.component';
 import { Signer, ContactGroup } from 'src/app/contactgroups/shared/contact-group';
 import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform-browser/animations';
