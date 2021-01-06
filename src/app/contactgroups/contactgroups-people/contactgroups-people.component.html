@@ -247,7 +247,7 @@
               <!-- <legend class="legend">People</legend> -->
               <div *ngIf="importantContactNotes?.length">
                 <div class="message message--negative" *ngFor="let importantNote of importantContactNotes">
-                  {{importantNote.text}}
+                  {{importantNote?.text}}
                 </div>
               </div>
 
@@ -501,7 +501,7 @@
                     <path
                       d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z"
                       class="plus-vertical"></path>
-                  </svg>Add New Contact
+                  </svg>Add Person
                 </li>
                 <li *ngIf="contactGroupDetails?.referenceCount && !isCloned" (click)="cloneContactGroup()">
                   <div class="message message--warning">

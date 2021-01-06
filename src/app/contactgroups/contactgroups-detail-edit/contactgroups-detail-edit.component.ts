@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, Renderer2, AfterViewInit, AfterContentInit, AfterContentChecked, OnDestroy } from '@angular/core';
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
-import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractControl, ValidatorFn } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractControl, ValidatorFn, EmailValidator } from '@angular/forms';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { Person, Email, PhoneNumber, BasicPerson, TelephoneTypeId } from 'src/app/shared/models/person';
 import { ActivatedRoute } from '@angular/router';
@@ -143,6 +143,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
     this.setupEditForm();
     const id = this.groupPersonId !== 0 ? this.groupPersonId : this.personId;
     if (this.basicPerson !== undefined) {
+      console.log('basic person in edit form', this.basicPerson);
       this.populateNewPersonDetails();
     } else {
       this.getPersonDetails(id);
@@ -266,6 +267,9 @@ export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
   }
 
   populateNewPersonDetails() {
+    const emailAddresses: Email[] = [];
+    const phoneNumbers: PhoneNumber[] = [];
+
     this.personForm.patchValue({
       warningStatusId: 1,
       firstName: this.basicPerson.firstName,
@@ -281,8 +285,16 @@ export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
         general: false
       }
     });
-    this.personForm.setControl('emailAddresses', this.setExistingEmailAddresses(this.basicPerson.emailAddresses));
-    this.personForm.setControl('phoneNumbers', this.setExistingPhoneNumbers(this.basicPerson.phoneNumbers));
+
+    if (this.basicPerson.emailAddress) {
+      emailAddresses.push({ email: this.basicPerson.emailAddress } as Email);
+      this.personForm.setControl('emailAddresses', this.setExistingEmailAddresses(emailAddresses));
+    }
+
+    if (this.basicPerson.phoneNumber) {
+      phoneNumbers.push({ number: this.basicPerson.phoneNumber } as PhoneNumber)
+      this.personForm.setControl('phoneNumbers', this.setExistingPhoneNumbers(phoneNumbers));
+    }
     this.personForm.updateValueAndValidity();
     this.personForm.markAsDirty();
   }
@@ -331,10 +343,10 @@ export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
     phoneNumbers?.forEach((x) => {
       phoneArray.push(this.fb.group({
         number: [x.number, { validators: [WedgeValidators.phoneNumberValidator()] }],
-        id: x.id,
-        typeId: x.typeId,
-        sendSMS: x.sendSMS || true,
-        isPreferred: x.isPreferred,
+        id: x.id || 0,
+        typeId: x.typeId || 3, // cross check this asap
+        sendSMS: x.sendSMS || this.sharedService.isUKMobile(x.number) ? true : false,
+        isPreferred: x.isPreferred || false,
         comments: x.comments
       }, { validators: WedgeValidators.phoneTypeValidator(this) }));
     });
@@ -346,10 +358,10 @@ export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
     const emailFormArray = new FormArray([]);
     emailAddresses?.forEach(x => {
       emailFormArray.push(this.fb.group({
-        id: x.id,
+        id: x.id || 0,
         email: [x.email, { validators: [Validators.pattern(AppConstants.emailPattern)] }],
-        isPreferred: x.isPreferred,
-        isPrimaryWebEmail: x.isPrimaryWebEmail
+        isPreferred: x.isPreferred || false,
+        isPrimaryWebEmail: x.isPrimaryWebEmail || false
       }));
     });
     emailFormArray.push(this.createEmailItem());

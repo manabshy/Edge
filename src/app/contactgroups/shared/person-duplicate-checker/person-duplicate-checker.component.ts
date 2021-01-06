@@ -75,7 +75,7 @@ export class PersonDuplicateCheckerComponent implements OnInit, OnChanges {
           isPreferred: true,
           comments: ''
         });
-        this.newPerson = data;
+        // this.newPerson = data;
         this.findPotentialDuplicatePerson(data);
       });
   }
@@ -101,7 +101,11 @@ export class PersonDuplicateCheckerComponent implements OnInit, OnChanges {
   findPotentialDuplicatePerson(person: BasicPerson) {
     this.contactGroupService.getPotentialDuplicatePeople(person).subscribe(data => {
       this.potentialDuplicatePeople = data;
+
       this.newPerson = { ...data };
+      this.newPerson.emailAddress = this.personFinderForm.get('emailAddress')?.value;
+      this.newPerson.phoneNumber = this.personFinderForm.get('phoneNumber')?.value;
+      console.log({ data }, this.newPerson, 'newPerson');
       this.checkDuplicatePeople(person);
     });
   }
