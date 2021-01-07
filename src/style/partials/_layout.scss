@@ -153,7 +153,7 @@ app-telephone                                   { width:100%; display:flex; alig
 }
 
 .btn--daterange                                 { font-weight:bold; font-size:18px; }
-.tab-content                { margin:0; }
+.tab-content                                    { margin:0; }
 .calNav                                         { margin:0; padding:10px 0; list-style:none; display:flex;
   >li                                           { margin:0; padding:0; display:flex; flex:1 1 0px;
     &.calNav__range                             { justify-content:center; }
