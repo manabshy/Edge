@@ -239,7 +239,6 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit, On
   ngOnDestroy() {
     this.sidenavService.resetCurrentFlag();
     console.log('jere before closing', this.sidenavService.selectedItem);
-
   }
 }
 

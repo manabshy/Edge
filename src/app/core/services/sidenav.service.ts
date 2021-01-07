@@ -20,11 +20,12 @@ export class SidenavService {
 
   constructor() { }
 
-  getSelectedItem(type: string, index: number, items?: SideNavItem[]) {
-    if (items?.length) { this.sideNavItems = items; }
+  getSelectedItem(type: string, index: number, newItems?: SideNavItem[]) {
+    let items: SideNavItem[];
 
-    this.sideNavItems.map(t => t.isCurrent = false);
-    this.sideNavItems[index].isCurrent = true;
+    newItems?.length ? items = newItems : items = this.sideNavItems;
+    items.map(t => t.isCurrent = false);
+    items[index].isCurrent = true;
     return this.selectedItem = type;
   }
 
