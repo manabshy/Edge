@@ -163,7 +163,7 @@ Radio & Checkbox
 Inline items
 ***********************************************/
 label + .inline-parent                          { margin-top:6px; }
-.inline-parent                                  { display:flex; align-items:flex-end; }
+.inline-parent                                  { display:flex; align-items:flex-end; max-width:500px; }
 .inline-parent input, 
 .inline-parent textarea, 
 .inline-parent select, 
