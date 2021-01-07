@@ -83,7 +83,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   showSaveAndNext: boolean;
   showNotes: boolean;
   // moreInfo = '';
-  moreInfo = this.sidenavService.selectedItem;
+  moreInfo = this.sidenavService.selectedItem = 'notes';
   sideNavItems = this.sidenavService.sideNavItems;
 
   get nextChaseDateControl() {
@@ -130,11 +130,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
     // Remove contact groups from side nav items
     this.sideNavItems.splice(this.sideNavItems.findIndex(x => x.name === 'contactGroups'), 1);
-    // add lead edit item
-    const contactGroups: SideNavItem = { name: 'contactGroups', isCurrent: false };
-    // const editForm: SideNavItem = { name: 'editLead', isCurrent: true };
-    // this.sideNavItems.unshift(editForm);
-
+    // Set notes as current item
+    const noteIndex = this.sideNavItems.findIndex(x => x.name === 'notes');
+    this.sideNavItems[noteIndex].isCurrent = true;
   }
 
   ngAfterViewInit() {
@@ -594,7 +592,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   ngOnDestroy() {
-    // this.sideNavItems.splice(this.sideNavItems.findIndex(x => x.name === 'editLead'), 1);
     const contactGroups: SideNavItem = { name: 'contactGroups', isCurrent: false };
     this.sideNavItems.splice(1, 0, contactGroups);
     this.sidenavService.resetCurrentFlag();
