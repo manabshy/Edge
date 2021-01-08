@@ -610,9 +610,11 @@ export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
       this.sharedService.back();
     }
   }
+
   addNewPerson(id: number) {
     this.addedPersonId.emit(id);
   }
+  
   makeCanvasInvisible(close: boolean) {
     this.hideCanvas.emit(close);
   }
