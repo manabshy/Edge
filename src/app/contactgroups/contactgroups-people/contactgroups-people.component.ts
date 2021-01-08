@@ -589,18 +589,26 @@ export class ContactgroupsPeopleComponent implements OnInit {
     if (personEmitter) {
       personEmitter.person.isNewPerson = true;
       this.addedPerson = personEmitter.person;
-      if (this.contactGroupDetails && this.contactGroupDetails.contactPeople.length || this.isExistingCompany) {
-        this.collectSelectedPeople(personEmitter.person);
-      } else {
-        this.contactGroupDetails = {} as ContactGroup;
-        const people = this.contactGroupDetails.contactPeople = [];
-        people.push(personEmitter.person);
-        this.setSalutation();
-        if(!personEmitter.otherPersonToAdd) {
-          this.saveContactGroup();
-        }
-      }
+      const people = this.contactGroupDetails.contactPeople;
+      people?.push(personEmitter.person);
+      this.setSalutation();
+      this.saveContactGroup();
     }
+    // if (personEmitter) {
+    //   personEmitter.person.isNewPerson = true;
+    //   this.addedPerson = personEmitter.person;
+    //   if (this.contactGroupDetails && this.contactGroupDetails.contactPeople.length || this.isExistingCompany) {
+    //     this.collectSelectedPeople(personEmitter.person);
+    //   } else {
+    //     this.contactGroupDetails = {} as ContactGroup;
+    //     const people = this.contactGroupDetails.contactPeople = [];
+    //     people.push(personEmitter.person);
+    //     this.setSalutation();
+    //     if(!personEmitter.otherPersonToAdd) {
+    //       this.saveContactGroup();
+    //     }
+    //   }
+    // }
   }
 
   cloneContactGroup() {
@@ -689,6 +697,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.contactGroupService
       .updateContactGroup(contactGroup)
       .subscribe(res => {
+        console.log({res}, 'results from update');
+
         this.onSaveComplete(res.result.contactGroupId);
       }, (error: WedgeError) => {
         this.isSubmitting = false;
