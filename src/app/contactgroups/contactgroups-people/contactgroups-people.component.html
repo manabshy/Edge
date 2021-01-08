@@ -108,6 +108,25 @@
         <form action="">
           <ng-container *ngIf="isNewContactGroup && !isTypePicked">
             <h5>Type of Contact Group?</h5>
+            <fieldset>
+              <span class="radio radio--boxed">
+                <span>
+                  <input type="radio" name="radio1" id="radio1" checked="">
+                  <label for="radio1">
+                    <h4>Personal Contact Group</h4>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                  </label>
+                </span>
+                <span>
+                  <input type="radio" name="radio1" id="radio2">
+                  <label for="radio2">
+                    <h4>Company Contact Group</h4>
+                    <p>Ut cumque omnis similique totam numquam eos accusantium possimus ea in.</p>
+                  </label>
+                </span>
+              </span>
+            </fieldset>
+            
             <div class="list-group list-group-horizontal-sm mb-3">
               <div class="list-group-item list-group-item-action text-center" (click)="isCompanyContactGroup(false)">
                 <span class="btn btn-link">
