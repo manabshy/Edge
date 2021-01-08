@@ -402,7 +402,7 @@
                     [referenceCount]="contactGroupDetails?.referenceCount" [isPersonInfoOnly]="false"
                     [showViewPerson]="true" [showSetMainPerson]="true" [showRemovePerson]="true"
                     (selectedPersonId)="editSelectedPerson($event)" (mainPersonPersonId)="setMainPerson($event)"
-                    (removedPersonPersonId)="removePerson($event)"></app-person-details>
+                    (removedPersonPersonId)="removePerson($event, true)"></app-person-details>
                   <p><small class="flexBottom">P-{{person?.personId}}</small></p>
                   <!-- <div class="flexBottom">
                 <ol class="list list--divider list--details">
