@@ -118,12 +118,21 @@ Radio & Checkbox
 .radio input[type="radio"]:checked              { border:6px solid $color--info; transition:all 0.2s linear 0s; -moz-transition:all 0.2s linear 0s; -webkit-transition:all 0.2s linear 0s; -o-transition:all 0.2s linear 0s; }
 
 /***** Boxed Radios *****/
-.radio--boxed                                   { display:flex;
-   > span                                       { flex:1 1 0px;
+.radio--boxed                                   { display:flex; overflow:initial;
+   > span                                       { display:flex; flex:1 1 0px;
       &+*                                       { margin-left:16px; }
-      label                                     { margin:0; padding:16px; border-radius:5px; box-shadow:0px 0px 0px 1px inset $color--midnight-20; -webkit-box-shadow:0px 0px 0px 1px inset $color--midnight-20;
-         h4                                     {
-            &+*                                 { margin-top:10px; }
+      input                                     {
+         &+label                                { margin:0; padding:16px; border-radius:5px; box-shadow:0px 0px 0px 1px inset $color--midnight-20; -webkit-box-shadow:0px 0px 0px 1px inset $color--midnight-20;
+            &:before                            { border:none; background-color:$color--snow; display:none; background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QTFCRTE4Q0IxNTc5MTFFNjlCOTU5QjY1QkU5MkYyMDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QTFCRTE4Q0MxNTc5MTFFNjlCOTU5QjY1QkU5MkYyMDgiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo0MkMxNjBDNjBFMTYxMUU2OUI5NTlCNjVCRTkyRjIwOCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpBMUJFMThDQTE1NzkxMUU2OUI5NTlCNjVCRTkyRjIwOCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PuFgne4AAADHSURBVHjaYvj//z8DGdgFiL8BcSM5mlWA+N1/CPhDqmY+IL72HwE6SNHMBMSbkDRvBImRYkArkuYLQMwDEidWcziS5hdALAeTAxFsQGyAR7MhNMRB4DsQWyDLg4j1UMkSLJrFgfghku2R6GoYkEwHgTAkSZDLDiHJNWNzIYiIQFL0E4htoZIzkcRXAjEjLgNAOB9J8Wcg3ofEPwPEXLjCCFc0wcATIJbEF0PIHJAT5yJpBoWNEaEoRhdgBuIV0OgKICaNAAQYAPD/2FJuxgMsAAAAAElFTkSuQmCC"); background-repeat:no-repeat; background-size:1px; background-position:center; left:auto; top:-7px; right:-7px; }
+            h4                                  {
+               &+*                              { margin-top:10px; }
+            }
+         }
+         
+         &:checked                              {
+            &+label                             { background-color:$color--blue-20; box-shadow:0px 0px 0px 2px inset $color--info; -webkit-box-shadow:0px 0px 0px 2px inset $color--info;
+               &:before                         { background-size:8px; background-color:$color--info; border:none; display:block; }
+            }
          }
       }
    }
