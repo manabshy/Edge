@@ -797,8 +797,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
     }
   }
 
-  resetCanvasFlag(event) {
-    this.isOffCanvasVisible = event;
+  resetCanvasFlag() {
+    this.isOffCanvasVisible = false;
   }
 
   addNote() {

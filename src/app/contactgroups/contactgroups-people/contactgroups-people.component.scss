@@ -53,3 +53,13 @@
 //         display: block;
 //     }
 // }
+
+.quickfinder-dialog {
+  width: 50vw;
+}
+
+@media screen and (max-width: 40em) {
+  .quickfinder-dialog {
+      width: 75vw;
+  }
+}

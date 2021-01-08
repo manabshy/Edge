@@ -81,7 +81,7 @@ export class PersonDuplicateCheckerComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    if (this.contactGroupDetails.contactType === ContactType.CompanyContact) {
+    if (this.contactGroupDetails?.contactType === ContactType.CompanyContact) {
       this.isCompanyContactGroup = true;
     }
     if (this.isOffCanvasVisible) {
@@ -105,7 +105,6 @@ export class PersonDuplicateCheckerComponent implements OnInit, OnChanges {
       this.newPerson = { ...data };
       this.newPerson.emailAddress = this.personFinderForm.get('emailAddress')?.value;
       this.newPerson.phoneNumber = this.personFinderForm.get('phoneNumber')?.value;
-      console.log({ data }, this.newPerson, 'newPerson');
       this.checkDuplicatePeople(person);
     });
   }
@@ -206,6 +205,7 @@ export class PersonDuplicateCheckerComponent implements OnInit, OnChanges {
   }
   hideCanvas(event) {
     this.isPersonCanvasVisible = event;
+    this.isCanvasHidden.emit(true);
     console.log('is canvas visible here', event);
     this.personFinderForm.reset();
     this.renderer.removeClass(document.body, 'no-scroll');

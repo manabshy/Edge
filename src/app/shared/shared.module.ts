@@ -78,6 +78,8 @@ import { ToPascalCasePipe } from './pipes/to-pascal-case.pipe';
 import { SidenavItemComponent } from './components/sidenav-item/sidenav-item.component';
 
 import {GalleriaModule} from 'primeng/galleria';
+import {DialogModule} from 'primeng/dialog';
+
 
 @NgModule({
   declarations: [
@@ -155,7 +157,8 @@ import {GalleriaModule} from 'primeng/galleria';
     LoadingBarHttpClientModule,
     AngularStickyThingsModule,
     NgSelectModule,
-    GalleriaModule
+    GalleriaModule,
+    DialogModule
   ],
   exports: [
     RoundingPipe,
@@ -225,7 +228,8 @@ import {GalleriaModule} from 'primeng/galleria';
     NgSelectModule,
     SharedLeadRegisterComponent,
     NoDoubleTapDirective,
-    GalleriaModule
+    GalleriaModule,
+    DialogModule
   ],
   entryComponents: [
     ConfirmModalComponent,

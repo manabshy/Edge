@@ -126,7 +126,7 @@
                 </span>
               </span>
             </fieldset>
-            
+
             <div class="list-group list-group-horizontal-sm mb-3">
               <div class="list-group-item list-group-item-action text-center" (click)="isCompanyContactGroup(false)">
                 <span class="btn btn-link">
@@ -589,11 +589,20 @@
             </div>
           </div>
         </form>
-        <app-person-duplicate-checker *ngIf="isOffCanvasVisible" [isOffCanvasVisible]="isOffCanvasVisible"
+        <!--Add  [showHeader]="false" to hide header -->
+        <p-dialog header="Find Person" [(visible)]="isOffCanvasVisible" styleClass="quickfinder-dialog">
+          <app-person-duplicate-checker [isOffCanvasVisible]="isOffCanvasVisible"
+          [contactGroupDetails]="contactGroupDetails" [searchTerm]="signer"
+          (addedPersonDetails)="getAddedPersonDetails($event)" (selectedPerson)="getSelectedPerson($event)"
+          (isCanvasHidden)="resetCanvasFlag()">
+        </app-person-duplicate-checker>
+        </p-dialog>
+
+        <!-- <app-person-duplicate-checker *ngIf="isOffCanvasVisible" [isOffCanvasVisible]="isOffCanvasVisible"
           [contactGroupDetails]="contactGroupDetails" [searchTerm]="signer"
           (addedPersonDetails)="getAddedPersonDetails($event)" (selectedPerson)="getSelectedPerson($event)"
           (isCanvasHidden)="resetCanvasFlag($event)">
-        </app-person-duplicate-checker>
+        </app-person-duplicate-checker> -->
         <app-additional-info
           [id]="contactGroupDetails?.contactGroupId ? 'CG-'+contactGroupDetails?.contactGroupId : ''">
         </app-additional-info>
