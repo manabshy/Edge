@@ -52,7 +52,7 @@ export class PersonDuplicateCheckerComponent implements OnInit, OnChanges {
     }
     this.personFinderForm.valueChanges
       .pipe(debounceTime(750))
-      .subscribe(data => {
+      .subscribe((data: BasicPerson) => {
         if (
           data.fullName &&
           (data.phoneNumber || data.emailAddress)
@@ -61,20 +61,20 @@ export class PersonDuplicateCheckerComponent implements OnInit, OnChanges {
         } else {
           this.isCreateNewPersonVisible = false;
         }
-        data.emailAddresses = [];
-        data.emailAddresses.push({
-          id: 0,
-          email: data.emailAddress,
-          isPreferred: true,
-          isPrimaryWebEmail: true
-        });
-        data.phoneNumbers = [];
-        data.phoneNumbers.push({
-          number: data.phoneNumber,
-          typeId: 3,
-          isPreferred: true,
-          comments: ''
-        });
+        // data.emailAddresses = [];
+        // data.emailAddresses.push({
+        //   id: 0,
+        //   email: data.emailAddress,
+        //   isPreferred: true,
+        //   isPrimaryWebEmail: true
+        // });
+        // data.phoneNumbers = [];
+        // data.phoneNumbers.push({
+        //   number: data.phoneNumber,
+        //   typeId: 3,
+        //   isPreferred: true,
+        //   comments: ''
+        // });
         // this.newPerson = data;
         this.findPotentialDuplicatePerson(data);
       });
@@ -99,14 +99,16 @@ export class PersonDuplicateCheckerComponent implements OnInit, OnChanges {
   }
 
   findPotentialDuplicatePerson(person: BasicPerson) {
-    this.contactGroupService.getPotentialDuplicatePeople(person).subscribe(data => {
-      this.potentialDuplicatePeople = data;
+    if (person?.fullName) {
+      this.contactGroupService.getPotentialDuplicatePeople(person).subscribe(data => {
+        this.potentialDuplicatePeople = data;
 
-      this.newPerson = { ...data };
-      this.newPerson.emailAddress = this.personFinderForm.get('emailAddress')?.value;
-      this.newPerson.phoneNumber = this.personFinderForm.get('phoneNumber')?.value;
-      this.checkDuplicatePeople(person);
-    });
+        this.newPerson = { ...data };
+        this.newPerson.emailAddress = this.personFinderForm.get('emailAddress')?.value;
+        this.newPerson.phoneNumber = this.personFinderForm.get('phoneNumber')?.value;
+        this.checkDuplicatePeople(person);
+      });
+    }
   }
 
   checkDuplicatePeople(person: BasicPerson) {
