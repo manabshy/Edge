@@ -115,7 +115,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   public keepOriginalOrder = (a) => a.key;
-
+  isLastPerson = false;
   newContactGroupLabel = 'New Contact Group';
   info = '';
   infoTypes: { name: string, isCurrent: boolean }[] = [
@@ -462,6 +462,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
   removePerson(id: number, isDialogVisible = false) {
     event.preventDefault();
     event.stopPropagation();
+    const isCompanyContact = this.contactGroupDetails.contactType === ContactType.CompanyContact;
+    if (this.contactGroupDetails?.contactPeople?.length === 1 && !isCompanyContact) { this.isLastPerson = true; return; }
     let index;
     index = this.contactGroupDetails.contactPeople.findIndex(x => x.personId === id);
     const fullName = this.contactGroupDetails.contactPeople[index] !== undefined ?

@@ -40,8 +40,11 @@
           There are pending changes on the people list. Save to make them effective.
         </div>
         <div class="message message--negative"
-          *ngIf="contactGroupDetails?.contactPeople && !contactGroupDetails?.contactPeople.length && !isNewContactGroup && !isExistingCompany">
+          *ngIf="!contactGroupDetails?.contactPeople?.length && !isNewContactGroup && !isExistingCompany">
           You must add at least <b>1</b> person in the contact group.
+        </div>
+        <div class="message message--negative" *ngIf="isLastPerson && !companyAlert">
+          You must have at least <b>1</b> person in the contact group.
         </div>
         <div class="alert alert-danger"
           *ngIf="contactGroupDetails?.contactPeople && companyAlert && !isNewContactGroup && !isExistingCompany">
