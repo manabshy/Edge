@@ -16,14 +16,6 @@ Font-face setup
     font-weight:normal;
     font-style:normal;
 }
-  
-@font-face {
-    font-family:'redacted';
-    src:    url('../../assets/font/redacted.woff2') format('woff2'),
-            url('../../assets/font/redacted.woff') format('woff');
-    font-weight:normal;
-    font-style:normal;
-}
 
 $font-size-sm:13px;
 $input-height-sm:30px;
@@ -88,3 +80,29 @@ summary::-webkit-details-marker                 { display:none; }
 summary .flexRight                              { float:right; }
 
 .summary__title                                 { padding:10px 0; font-weight:bold; color:$color--midnight; display:flex; align-items:center; align-content:flex-start; }
+
+/***** Redacted text effect *****/
+.wrapper--redacted                              { position:relative;
+    .message                                    { position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); }
+}
+
+.redacted                                       { background-color:$color--midnight-10; height:10px; min-width:20px; border-radius:20px; display:block;
+    &.redacted--10pc                            { width:10%; }
+    &.redacted--20pc                            { width:20%; }
+    &.redacted--50pc                            { width:50%; }
+    &.redacted--70pc                            { width:70%; }
+    &.redacted--90pc                            { width:90%; }
+    &.redacted--100pc                           { width:100%; }
+    &+.redacted                                 { margin-left:6px; }
+}
+
+.txt--title, th                                 {
+    .redacted                                   { background-color:$color--midnight-20; height:13px; }
+}
+
+.pill--positive, .txt--positive                 {
+    &.redacted                                  { background-color:$color--positive; flex-shrink:initial; }
+}
+.pill--negative                                 { 
+    &.redacted                                  { background-color:$color--negative; flex-shrink:initial; }
+}

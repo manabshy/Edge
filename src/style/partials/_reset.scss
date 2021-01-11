@@ -214,6 +214,7 @@ Tablet - This applies from 768px onwards
 @media (min-width:768px) {
   /***** Hide *****/
   .hide--mobile                                 { display:inherit !important; }
+  table.hide--mobile                            { display:table !important; }
   .hide--tablet                                 { display:none !important; }
 
   /***** Show *****/

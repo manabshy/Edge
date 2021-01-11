@@ -9,86 +9,62 @@
 </div>
 
 <ng-container *ngIf="offers$|async as offers">
-  <div class="table" *ngIf="!offers || !offers?.length">
+  <div class="wrapper--redacted" *ngIf="!offers || !offers?.length">
     <div class="overlay">
       <div class="card">
-        <div class="card__body"><i class="far fa-sad-tear"></i> No offers</div>
+        <div class="card__body">
+          No offers
+        </div>
       </div>
     </div>
-    <table class="table--mobile table--rowHover txt--redacted">
+
+    <table class="table--mobile table--rowHover hide--mobile">
       <thead>
         <tr>
-          <th>Address</th>
-          <th>Type</th>
-          <th>Status</th>
-          <th>Amount</th>
-          <th>Received</th>
-          <th>Neg</th>
+          <th><span class="redacted redacted--100pc"></span></th>
+          <th><span class="redacted redacted--50pc"></span></th>
+          <th><span class="redacted redacted--20pc"></span></th>
+          <th><span class="redacted redacted--20pc"></span></th>
+          <th><span class="redacted redacted--90pc"></span></th>
+          <th><span class="redacted redacted--50pc"></span></th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td data-title="Address">
-            <span class="cell-content">221b Baker St, Marylebone, London NW1 6XE</span>
-          </td>
-          <td data-title="Type">
-            <span class="cell-content">occupy flexitarian</span>
-          </td>
-          <td data-title="Status">
-            <span class="cell-content">cornhole pitchfork cronut</span>
-          </td>
-          <td data-title="Amount">
-            <span class="cell-content">lo-fi vaporware</span>
-          </td>
-          <td data-title="Received">
-            <span class="cell-content">chambray ethical</span>
-          </td>
-          <td data-title="Neg">
-            <span class="cell-content">Listicle disrupt</span>
-          </td>
+          <td><span class="redacted"></span></td>
+          <td><span class="redacted redacted--90pc"></span></td>
+          <td><span class="redacted redacted--90pc"></span></td>
+          <td><span class="redacted redacted--50pc"></span></td>
+          <td><span class="redacted redacted--100pc"></span></td>
+          <td><span class="redacted redacted--20pc"></span></td>
         </tr>
         <tr>
-          <td data-title="Address">
-            <span class="cell-content">Bushwick etsy pug</span>
-          </td>
-          <td data-title="Type">
-            <span class="cell-content">occupy flexitarian</span>
-          </td>
-          <td data-title="Status">
-            <span class="cell-content">cornhole pitchfork cronut</span>
-          </td>
-          <td data-title="Amount">
-            <span class="cell-content">lo-fi vaporware</span>
-          </td>
-          <td data-title="Received">
-            <span class="cell-content">chambray ethical</span>
-          </td>
-          <td data-title="Neg">
-            <span class="cell-content">Listicle disrupt</span>
-          </td>
+          <td><span class="redacted redacted--50pc"></span></td>
+          <td><span class="redacted redacted--10pc"></span></td>
+          <td><span class="redacted redacted--70pc"></span></td>
+          <td><span class="redacted redacted--50pc"></span></td>
+          <td><span class="redacted redacted--70pc"></span></td>
+          <td><span class="redacted redacted--10pc"></span></td>
         </tr>
         <tr>
-          <td data-title="Address">
-            <span class="cell-content">Bushwick etsy pug</span>
-          </td>
-          <td data-title="Type">
-            <span class="cell-content">occupy flexitarian</span>
-          </td>
-          <td data-title="Status">
-            <span class="cell-content">cornhole pitchfork cronut</span>
-          </td>
-          <td data-title="Amount">
-            <span class="cell-content">lo-fi vaporware</span>
-          </td>
-          <td data-title="Received">
-            <span class="cell-content">chambray ethical</span>
-          </td>
-          <td data-title="Neg">
-            <span class="cell-content">Listicle disrupt</span>
-          </td>
+          <td><span class="redacted redacted--90pc"></span></td>
+          <td><span class="redacted redacted--20pc"></span></td>
+          <td><span class="redacted redacted--50pc"></span></td>
+          <td><span class="redacted redacted--50pc"></span></td>
+          <td><span class="redacted redacted--80pc"></span></td>
+          <td><span class="redacted redacted--90pc"></span></td>
+        </tr>
+        <tr>
+          <td><span class="redacted redacted--50pc"></span></td>
+          <td><span class="redacted redacted--20pc"></span></td>
+          <td><span class="redacted redacted--50pc"></span></td>
+          <td><span class="redacted redacted--50pc"></span></td>
+          <td><span class="redacted redacted--100pc"></span></td>
+          <td><span class="redacted redacted--70pc"></span></td>
         </tr>
       </tbody>
     </table>
+
   </div>
 
   <div class="table" *ngIf="offers && offers?.length">

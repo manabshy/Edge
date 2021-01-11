@@ -15,7 +15,9 @@
             }
             &+*                                 { padding:0; }
         }
-        &.title                                 { font-size:14px; font-weight:bold; color:#0A1A4A; }
+        &.title                                 { font-size:14px; font-weight:bold; color:#0A1A4A;
+            &>span                                { flex-grow:1; }
+        }
     }
 
     &--divider > li                             { padding:10px 10px 10px 0; box-shadow:inset 0 1px 0px 0px $color--midnight-10; -webkit-box-shadow:inset 0 1px 0px 0px $color--midnight-10;
