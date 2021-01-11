@@ -52,6 +52,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isEditingSelectedCompany = false;
   isCreateNewPerson = false;
   isNewContactGroup = false;
+  isNewPersonalContact = false;
   isSigner = false;
   potentialDuplicatePeople: PotentialDuplicateResult;
   initialContactGroupLength = 0;
@@ -196,12 +197,13 @@ export class ContactgroupsPeopleComponent implements OnInit {
     if (!this.contactGroupId) {
       this.route.queryParams.subscribe(params => {
         this.isNewContactGroup = (!AppUtils.holdingSelectedPeople && params['isNewContactGroup']) || false;
+        this.isNewPersonalContact = params['isNewPersonalContact'] || false;
         this.isNewCompanyContact = params['isNewCompanyContact'] || false;
         this.isSigner = params['isSigner'] || false;
         this.isExistingCompany = params['isExistingCompany'] || false;
         this.existingCompanyId = params['existingCompanyId'] || 0;
         this.signer = params['signer'] || '';
-        if (this.isExistingCompany) {
+        if (this.isExistingCompany || this.isNewPersonalContact) {
           this.isOffCanvasVisible = true;
         }
       });
@@ -276,6 +278,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     } else {
       this.contactGroupDetails.contactType = ContactType.Individual;
       this.newContactGroupLabel = 'Personal Contact Group';
+      this.isOffCanvasVisible = true;
     }
     if (this.personId) {
       this.getContactGroupFirstPerson(this.personId, isSelectedTypeCompany);
