@@ -200,7 +200,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
         this.isSigner = params['isSigner'] || false;
         this.isExistingCompany = params['isExistingCompany'] || false;
         this.existingCompanyId = params['existingCompanyId'] || 0;
-        this.signer =  params['signer'] || '';
+        this.signer = params['signer'] || '';
         if (this.isExistingCompany) {
           this.isOffCanvasVisible = true;
         }
@@ -456,7 +456,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     AppUtils.holdingCloned = this.isCloned;
   }
 
-  removePerson(id: number, isDialogVisible) {
+  removePerson(id: number, isDialogVisible = false) {
     event.preventDefault();
     event.stopPropagation();
     let index;
@@ -467,15 +467,28 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.confirmRemove(fullName).subscribe(res => {
         if (res) {
           this.removeSelectedPeople(this.contactGroupDetails.contactPeople, index);
-          this.removedPersonIds.push(id);
+          this.saveContactGroup();
         }
       });
-    } else {
-      this.removeSelectedPeople(this.contactGroupDetails.contactPeople, index);
-      if (this.removedPersonIds.indexOf(id) < 0) {
-        this.removedPersonIds.push(id);
-      }
     }
+
+    // let index;
+    // index = this.contactGroupDetails.contactPeople.findIndex(x => x.personId === id);
+    // const fullName = this.contactGroupDetails.contactPeople[index] !== undefined ?
+    //   this.contactGroupDetails.contactPeople[index].firstName + ' ' + this.contactGroupDetails.contactPeople[index].lastName : '';
+    // if (isDialogVisible) {
+    //   this.confirmRemove(fullName).subscribe(res => {
+    //     if (res) {
+    //       this.removeSelectedPeople(this.contactGroupDetails.contactPeople, index);
+    //       this.removedPersonIds.push(id);
+    //     }
+    //   });
+    // } else {
+    //   this.removeSelectedPeople(this.contactGroupDetails.contactPeople, index);
+    //   if (this.removedPersonIds.indexOf(id) < 0) {
+    //     this.removedPersonIds.push(id);
+    //   }
+    // }
   }
 
   confirmRemove(fullName: string) {
@@ -534,18 +547,28 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   getSelectedPerson(person: Person) {
-    if (this.removedPersonIds.indexOf(person.personId) >= 0) {
-      this.removedPersonIds.splice(this.removedPersonIds.indexOf(person.personId), 1);
-    }
-    if (person && person.personId !== 0 && !this.sharedService.checkDuplicateInContactGroup(this.contactGroupDetails, person.personId)) {
-      this.selectedPersonId = person.personId;
-      this.collectSelectedPeople(person);
+    if (person) {
+      this.contactGroupDetails.contactPeople?.push(person);
+      console.log({ person });
+      console.log(this.contactGroupDetails.contactPeople, 'people');
+
+      this.setSalutation();
+      this.saveContactGroup();
     }
 
-    this.isOffCanvasVisible = false;
-    this.renderer.removeClass(document.body, 'no-scroll');
-    window.scrollTo(0, 0);
-    this.selectedPersonId = 0;
+    // if (this.removedPersonIds.indexOf(person.personId) >= 0) {
+    //   this.removedPersonIds.splice(this.removedPersonIds.indexOf(person.personId), 1);
+    // }
+    // if (person && person.personId !== 0 && !this.sharedService.checkDuplicateInContactGroup(this.contactGroupDetails, person.personId)) {
+    //   this.selectedPersonId = person.personId;
+    //   this.collectSelectedPeople(person);
+    // }
+
+    // this.isOffCanvasVisible = false;
+    // this.renderer.removeClass(document.body, 'no-scroll');
+    // window.scrollTo(0, 0);
+    // this.selectedPersonId = 0;
+
   }
 
   collectSelectedPeople(person: Person) {
@@ -697,7 +720,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.contactGroupService
       .updateContactGroup(contactGroup)
       .subscribe(res => {
-        console.log({res}, 'results from update');
+        console.log({ res }, 'results from update');
 
         this.onSaveComplete(res.result.contactGroupId);
       }, (error: WedgeError) => {
