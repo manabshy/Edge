@@ -77,7 +77,7 @@ details .list                                   { margin:0; }
 
 summary                                         { padding:0; list-style:none; min-width:100%; outline:none; cursor:pointer; }
 summary::-webkit-details-marker                 { display:none; }
-summary .flexRight                              { float:right; }
+summary .flexRight                              { float:right; align-self:flex-start; }
 
 .summary__title                                 { padding:10px 0; font-weight:bold; color:$color--midnight; display:flex; align-items:center; align-content:flex-start; }
 

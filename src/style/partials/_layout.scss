@@ -17,19 +17,6 @@ app-telephone                                   { width:100%; display:flex; alig
 
 .wrapper                                        { display:flex; min-height:100vh; }
 
-/***** Mobile Menu *****/
-.menu_open .aside                               { left:0; }
-
-.mobile_nav .cross                              { display:none; }
-.mobile_nav .line-top,
-.mobile_nav .line-middle,
-.mobile_nav .line-bottom                        { display:block; }
-
-.menu_open .mobile_nav .cross                   { display:block; }
-.menu_open .mobile_nav .line-top,
-.menu_open .mobile_nav .line-middle,
-.menu_open .mobile_nav .line-bottom             { display:none; }
-
 /***** Body *****/
 .body                                           { padding:85px 16px 16px 16px; width:100%; min-height:100vh; }
 
@@ -69,7 +56,7 @@ app-telephone                                   { width:100%; display:flex; alig
 
 .flexBottom                                     { margin-top:auto; }
 
-.flexRight                                      { margin-left:auto; }
+.flexRight                                      { margin-left:auto; align-self:flex-start; }
 .flexRight+.flexRight                           { margin-left:8px; }
 
 /***** Timelines *****/

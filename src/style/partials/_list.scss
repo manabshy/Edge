@@ -16,7 +16,8 @@
             &+*                                 { padding:0; }
         }
         &.title                                 { font-size:14px; font-weight:bold; color:#0A1A4A;
-            &>span                                { flex-grow:1; }
+            &>span                              { flex-grow:1; }
+            .flexRight                          { position:relative; top:-5px; left:10px; }
         }
     }
 
