@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ContactGroupsService } from './shared/contact-groups.service';
 import { ContactGroupAutoCompleteResult } from './shared/contact-group';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AppUtils } from '../core/shared/utils';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { SharedService } from '../core/services/shared.service';
@@ -41,6 +41,7 @@ export class ContactGroupsComponent implements OnInit {
 
   constructor(private contactGroupService: ContactGroupsService,
     private route: ActivatedRoute,
+    private router: Router,
     private fb: FormBuilder,
     private infoService: InfoService,
     private peopleService: PeopleService,
@@ -179,5 +180,13 @@ export class ContactGroupsComponent implements OnInit {
 
   scrollElIntoView(className: string) {
     this.sharedService.scrollElIntoView(className);
+  }
+
+  navigateToNewGroup(contactType: string) {
+    if (contactType === 'personal') {
+      this.router.navigate(['detail', 0, 'people', 0], { queryParams: { isNewPersonalContact: true }, relativeTo: this.route });
+    } else {
+      this.router.navigate(['detail', 0, 'people', 0], { queryParams: { isNewCompanyContact: true }, relativeTo: this.route });
+    }
   }
 }

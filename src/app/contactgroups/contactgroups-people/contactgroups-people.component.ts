@@ -52,6 +52,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isEditingSelectedCompany = false;
   isCreateNewPerson = false;
   isNewContactGroup = false;
+  isNewPersonalContact = false;
   isSigner = false;
   potentialDuplicatePeople: PotentialDuplicateResult;
   initialContactGroupLength = 0;
@@ -114,7 +115,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   public keepOriginalOrder = (a) => a.key;
-
+  isLastPerson = false;
   newContactGroupLabel = 'New Contact Group';
   info = '';
   infoTypes: { name: string, isCurrent: boolean }[] = [
@@ -196,12 +197,13 @@ export class ContactgroupsPeopleComponent implements OnInit {
     if (!this.contactGroupId) {
       this.route.queryParams.subscribe(params => {
         this.isNewContactGroup = (!AppUtils.holdingSelectedPeople && params['isNewContactGroup']) || false;
+        this.isNewPersonalContact = params['isNewPersonalContact'] || false;
         this.isNewCompanyContact = params['isNewCompanyContact'] || false;
         this.isSigner = params['isSigner'] || false;
         this.isExistingCompany = params['isExistingCompany'] || false;
         this.existingCompanyId = params['existingCompanyId'] || 0;
         this.signer = params['signer'] || '';
-        if (this.isExistingCompany) {
+        if (this.isExistingCompany || this.isNewPersonalContact) {
           this.isOffCanvasVisible = true;
         }
       });
@@ -276,6 +278,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     } else {
       this.contactGroupDetails.contactType = ContactType.Individual;
       this.newContactGroupLabel = 'Personal Contact Group';
+      this.isOffCanvasVisible = true;
     }
     if (this.personId) {
       this.getContactGroupFirstPerson(this.personId, isSelectedTypeCompany);
@@ -459,6 +462,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
   removePerson(id: number, isDialogVisible = false) {
     event.preventDefault();
     event.stopPropagation();
+    const isCompanyContact = this.contactGroupDetails.contactType === ContactType.CompanyContact;
+    if (this.contactGroupDetails?.contactPeople?.length === 1 && !isCompanyContact) { this.isLastPerson = true; return; }
     let index;
     index = this.contactGroupDetails.contactPeople.findIndex(x => x.personId === id);
     const fullName = this.contactGroupDetails.contactPeople[index] !== undefined ?
