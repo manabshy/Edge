@@ -464,7 +464,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     event.stopPropagation();
     const isCompanyContact = this.contactGroupDetails.contactType === ContactType.CompanyContact;
     if (this.contactGroupDetails?.contactPeople?.length === 1 && !isCompanyContact) { this.isLastPerson = true; return; }
-    let index;
+    let index: number;
     index = this.contactGroupDetails.contactPeople.findIndex(x => x.personId === id);
     const fullName = this.contactGroupDetails.contactPeople[index] !== undefined ?
       this.contactGroupDetails.contactPeople[index].firstName + ' ' + this.contactGroupDetails.contactPeople[index].lastName : '';
