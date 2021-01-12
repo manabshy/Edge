@@ -1,3 +1,113 @@
+<ng-container *ngIf="!selectedPersonId && !isCreateNewPerson; else createNewPerson">
+  <div class="row">
+    <div class="grid grid--25">
+      <form [formGroup]="personFinderForm"[ngClass]="potentialDuplicatePeople?.matches?.length ? 'pb-0 pb-sm-3' : 'pb-3'">
+        <fieldset>
+          <label for="fullName">Full Name</label>
+          <input type="text" id="fullName" autofocus formControlName="fullName" autocompleteOff>
+        </fieldset>
+        <fieldset>
+          <label for="phone">Phone</label>
+          <input type="text" id="phone" (keypress)="phoneNumberOnly($event)" formControlName="phoneNumber">
+        </fieldset>
+        <fieldset>
+          <label for="email">Email</label>
+          <input type="text" id="email" formControlName="emailAddress">
+        </fieldset>
+      </form>
+    </div>
+    <div class="grid grid--75 grid--dividerLeft">
+      <div class="table">
+        <table class="table--mobile table--rowHover">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Telephone</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="potentialDuplicatePeople?.matches?.length">
+              <td colspan="3">{{potentialDuplicatePeople?.matches?.length}} Results found</td>
+            </tr>
+            <tr>
+              <td data-title="Name">
+                <span class="cell-content">Mike Ballan<small class="txt--positive">Full Match</small></span>
+              </td>
+              <td data-title="Telephone">
+                <span class="cell-content">0123456789</span>
+              </td>
+              <td data-title="Email">
+                <span class="cell-content">mike.ballan@mikeballan.com</span>
+              </td>
+            </tr>
+
+            <!-- <app-subnav>
+              <app-subnav-item *ngFor="let foundPerson of potentialDuplicatePeople?.matches" [ngClass]="{'disabled': isAlreadyInContactgroup(foundPerson?.personId)}" (click)="selectPerson(foundPerson?.personId)">
+                <tr *ngIf="isAlreadyInContactgroup(foundPerson?.personId); else badge">
+                  <td colspan="3">Already in this group</td>
+                </tr>
+
+                <ng-template #badge>
+                  <span *ngIf="foundPerson?.matchType">
+                    <span class="pill pill--positive" *ngIf="foundPerson?.matchType == 'FullMatch'">Full Match</span>
+                    <span class="pill pill--warning" *ngIf="foundPerson?.matchType == 'GoodMatch'">Good Match</span>
+                  </span>
+                </ng-template>
+                
+                <div class="row">
+                  <div class="col-sm-4">
+                    <b>
+                      {{foundPerson?.title}}
+                      <span class="mr-1"
+                        [innerHTML]="foundPerson?.firstName | highlight : personFinderForm.value.firstName"></span>
+                      <span [innerHTML]="foundPerson?.lastName | highlight : personFinderForm.value.lastName"></span>
+                    </b>
+                  </div>
+                  <div class="col-sm-4">
+                    <ng-container *ngFor="let phoneNumber of foundPerson?.phoneNumbers">
+                      <div [innerHTML]="phoneNumber | highlight : personFinderForm.value.phoneNumber:true"></div>
+                    </ng-container>
+                  </div>
+                  <div class="col-sm-4">
+                    <ng-container *ngFor="let email of foundPerson?.emailAddresses">
+                      <div class="text-truncate" [innerHTML]="email | highlight : personFinderForm.value.emailAddress">
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </app-subnav-item>
+              
+              <tr *ngIf="potentialDuplicatePeople && !potentialDuplicatePeople?.matches?.length">
+                <td colspan="3">
+                  No Person found.
+                  <ng-container *ngIf="isCreateNewPersonVisible; else fillDetails">Create a new one with the details provided above</ng-container>
+                  <ng-template #fillDetails>Fill the details above to continue</ng-template>.
+                </td>    
+              </tr>
+
+              <tr>
+                <td colspan="3">
+                  <a href class="btn btn--positive" *ngIf="isCreateNewPersonVisible" (click)="createNewContactGroupPerson($event)">Create New Person</a>
+                </td>
+              </tr>
+            </app-subnav> -->
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #createNewPerson>
+  <app-contactgroups-detail-edit (addedPersonDetails)="getAddedPersonDetails($event)"
+    (hideCanvas)="hideCanvas($event)"
+    (backToFinder)="backToFinder($event)" *ngIf="isCreateNewPerson && newPerson" [basicPerson]="newPerson" [isCompanyContactGroup]="isCompanyContactGroup">
+  </app-contactgroups-detail-edit>
+</ng-template>
+
+<!-- 
 <div class="off-canvas" [hidden]="!isPersonCanvasVisible" (click)="showHideOffCanvas($event)">
   <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
     <h4 class="page-title text-left pt-3" [ngClass]="{'m-0': isCreateNewPerson}">
@@ -106,4 +216,4 @@
       </app-contactgroups-detail-edit>
     </ng-template>
   </div>
-</div>
+</div> -->

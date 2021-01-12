@@ -1399,7 +1399,7 @@
           </div>
         </form>
         <!--Add  [showHeader]="false" to hide header -->
-        <p-dialog header="Find Person" [(visible)]="isOffCanvasVisible" styleClass="quickfinder-dialog">
+        <p-dialog header="Find Person" [(visible)]="isOffCanvasVisible" [modal]="true">
           <app-person-duplicate-checker [isOffCanvasVisible]="isOffCanvasVisible"
             [contactGroupDetails]="contactGroupDetails" [searchTerm]="signer"
             (addedPersonDetails)="getAddedPersonDetails($event)" (selectedPerson)="getSelectedPerson($event)"

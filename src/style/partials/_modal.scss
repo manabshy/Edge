@@ -5,3 +5,6 @@
 
 // Add the important to the fade as inline block is being applied.
 .fade                   { display:flex!important; }
+
+.p-dialog               { min-width:700px; font-size:12px; }
+.p-dialog-mask.p-component-overlay { background-color:rgba($color--midnight, .5); }
