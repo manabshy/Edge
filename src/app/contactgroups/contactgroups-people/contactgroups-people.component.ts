@@ -141,6 +141,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.contactGroupId = +params['contactGroupId'] || 0;
       this.groupPersonId = +params['groupPersonId'] || 0;
       this.personId = +params['personId'] || 0;
+      if (this.personId) {
+        this.getContactGroupFirstPerson(this.personId, false);
+      } // Delete isCompanyContactGroup() on confirmation
     });
     this.init();
     this.getContactNotes();
@@ -303,7 +306,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       });
   }
 
-  getContactGroupFirstPerson(personId: number, isSelectedTypeCompany: boolean) {
+  getContactGroupFirstPerson(personId: number, isSelectedTypeCompany?: boolean) {
     this.contactGroupService.getPerson(personId).subscribe(data => {
       data.isMainPerson = true;
       this.firstContactGroupPerson = data;
