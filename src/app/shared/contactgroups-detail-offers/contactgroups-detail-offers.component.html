@@ -9,64 +9,7 @@
 </div>
 
 <ng-container *ngIf="offers$|async as offers">
-  <div class="wrapper--redacted" *ngIf="!offers || !offers?.length">
-    <div class="overlay">
-      <div class="card">
-        <div class="card__body">
-          <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><path d="M32 6c14.3 0 26 11.7 26 26S46.3 58 32 58 6 46.3 6 32 17.7 6 32 6M32 1C14.9 1 1 14.9 1 32s13.9 31 31 31 31-13.9 31-31S49.1 1 32 1L32 1z"/><path d="M43 20c-2.7 0-4.9 2.2-4.9 4.9s2.2 4.9 4.9 4.9 4.9-2.2 4.9-4.9S45.7 20 43 20L43 20z"/><path d="M21 20c-2.7 0-4.9 2.2-4.9 4.9s2.2 4.9 4.9 4.9 4.9-2.2 4.9-4.9S23.7 20 21 20L21 20z"/><path d="M32 51.6c7.2 0 13.4-4.5 15.8-10.8H16.2C18.6 47.1 24.8 51.6 32 51.6z"/></svg>No offers
-        </div>
-      </div>
-    </div>
-
-    <table class="table--mobile table--rowHover hide--mobile">
-      <thead>
-        <tr>
-          <th><span class="redacted redacted--100pc"></span></th>
-          <th><span class="redacted redacted--50pc"></span></th>
-          <th><span class="redacted redacted--20pc"></span></th>
-          <th><span class="redacted redacted--20pc"></span></th>
-          <th><span class="redacted redacted--90pc"></span></th>
-          <th><span class="redacted redacted--50pc"></span></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><span class="redacted"></span></td>
-          <td><span class="redacted redacted--90pc"></span></td>
-          <td><span class="redacted redacted--90pc"></span></td>
-          <td><span class="redacted redacted--50pc"></span></td>
-          <td><span class="redacted redacted--100pc"></span></td>
-          <td><span class="redacted redacted--20pc"></span></td>
-        </tr>
-        <tr>
-          <td><span class="redacted redacted--50pc"></span></td>
-          <td><span class="redacted redacted--10pc"></span></td>
-          <td><span class="redacted redacted--70pc"></span></td>
-          <td><span class="redacted redacted--50pc"></span></td>
-          <td><span class="redacted redacted--70pc"></span></td>
-          <td><span class="redacted redacted--10pc"></span></td>
-        </tr>
-        <tr>
-          <td><span class="redacted redacted--90pc"></span></td>
-          <td><span class="redacted redacted--20pc"></span></td>
-          <td><span class="redacted redacted--50pc"></span></td>
-          <td><span class="redacted redacted--50pc"></span></td>
-          <td><span class="redacted redacted--80pc"></span></td>
-          <td><span class="redacted redacted--90pc"></span></td>
-        </tr>
-        <tr>
-          <td><span class="redacted redacted--50pc"></span></td>
-          <td><span class="redacted redacted--20pc"></span></td>
-          <td><span class="redacted redacted--50pc"></span></td>
-          <td><span class="redacted redacted--50pc"></span></td>
-          <td><span class="redacted redacted--100pc"></span></td>
-          <td><span class="redacted redacted--70pc"></span></td>
-        </tr>
-      </tbody>
-    </table>
-
-  </div>
-
+  <app-redacted-table *ngIf="!offers || !offers?.length" message="No offers"></app-redacted-table>
   <div class="table" *ngIf="offers && offers?.length">
     <table class="table--mobile table--rowHover">
       <thead>
@@ -128,7 +71,7 @@
           <div class="card__body"><i class="far fa-sad-tear"></i> No offers</div>
         </div>
       </div>-->
-      <!--<table class="table--mobile table--rowHover txt--redacted">
+<!--<table class="table--mobile table--rowHover txt--redacted">
         <thead>
           <tr>
             <th>Address</th>
@@ -202,7 +145,7 @@
           </tr>
         </tbody>
       </table>-->
-    <!--</div>
+<!--</div>
 
     <div class="list-group-item" *ngIf="closedCounter">
       <div class="custom-control custom-checkbox">
