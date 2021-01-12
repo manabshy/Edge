@@ -9,10 +9,7 @@
 </div>
 
 <div class="table" *ngIf="searches$ | async as searches">
-  <div class="list-group-item text-center text-danger" *ngIf="!searches || !searches?.length">
-    <i class="far fa-sad-tear"></i> No searches
-  </div>
-  
+  <app-redacted-table *ngIf="!searches || !searches?.length" message="No searches"></app-redacted-table>
   <table class="table--mobile table--rowHover">
     <thead *ngIf="searches && searches?.length">
       <tr>
