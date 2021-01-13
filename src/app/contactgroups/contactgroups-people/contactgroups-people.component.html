@@ -792,7 +792,7 @@
 -->
                 </li>
                 <li class="card__new"
-                  *ngIf="contactGroupDetails?.contactPeople.length < 8 && !contactGroupDetails?.referenceCount && !isMaxPeople">
+                  *ngIf="contactGroupDetails?.contactPeople?.length && !contactGroupDetails?.referenceCount && !isMaxPeople">
                   <a href (click)="showHideOffCanvas($event)" class="overall"></a>
                   <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--l">
                     <path
