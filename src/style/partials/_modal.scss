@@ -22,7 +22,7 @@
 This applies from 992px onwards
 ***********************************************/
 @media (min-width:992px)        {
-    .p-dialog                   { min-width:700px; min-height:auto;
+    .p-dialog                   { min-width:60%; min-height:auto;
         .p-dialog-header        { border-radius:3px 3px 0 0; }
         .p-dialog-footer        { border-radius:0 0 3px 3px; }
     }

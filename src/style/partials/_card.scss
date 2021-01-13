@@ -5,6 +5,11 @@
 
     &--sticky                                   { position:sticky; top:80px; }
     &--marginTop                                { margin-top:16px; }
+    &--horizontal                               { display:flex;
+        .card__headerImg                        { width:30%; height:100%; border-radius:3px 0 0 3px;
+            img                                 { height:100%; height:auto; }
+        }
+    }
 
     &__header                                   { padding:20px 20px 0; font-size:14px; font-weight:bold; color:$color--midnight; display:flex;
         &+*                                     { margin-top:16px; padding:0 20px 20px; }

@@ -14,7 +14,15 @@ app-telephone                                   { width:100%; display:flex; alig
 
 .row+*,
 .row__item+*                                    { margin-top:16px; }
-.grid+.grid                                     { margin-top:20px; }
+.grid                                           {
+  li                                            { margin:0; padding:0; }
+  &--inline                                     { display:flex;
+    li                                          {
+      &+*                                       { margin-left:6px; padding-left:6px; border-left:solid 1px $color--smoke; }
+    }
+  }
+  &+.grid                                       { margin-top:20px; }
+}
 
 .wrapper                                        { display:flex; min-height:100vh; }
 
@@ -101,7 +109,7 @@ app-telephone                                   { width:100%; display:flex; alig
 .timeline--condensed li                         { padding-left:16px; min-height:17px; }
 .timeline--condensed li+*                       { margin-top:10px; }
 .timeline--condensed li:before                  { height:calc(100% + 10px); left:4px; top:5px; }
-.timeline--condensed li:after                   { width:9px; height:9px; background-color:$color--snow; border:1px solid $color--midnight-20; top:5px; }
+.timeline--condensed li:after                   { width:9px; height:9px; background-color:$color--snow; border:1px solid $color--midnight-20; top:4px; }
 .timeline .timeline__positive:after             { background-color:$color--positive-20; border:1px solid $color--positive-20; }
 
 .overlay                                        { display:flex; width:100%; height:100%; align-items:center; justify-content:center; 
@@ -165,9 +173,7 @@ This applies from 992px onwards
   .row__item--aside                             { width:240px; max-width:240px; flex-shrink:0; }
 
   .grid                                         { margin:0; padding:0; list-style:none;
-    &+.grid                                     { margin:0; }
-    li                                          { margin:0; padding:0; border-right:solid 1px $color--smoke; }
-  
+    &+.grid                                     { margin:0; } 
     &--2                                        { flex-basis:20%; max-width:20%; }
     &--25                                       { flex-basis:25%; max-width:25%; }
     &--3                                        { flex-basis:40%; max-width:40%; }

@@ -15,6 +15,9 @@
           <input type="text" id="email" formControlName="emailAddress">
         </fieldset>
       </form>
+      <p *ngIf="potentialDuplicatePeople?.matches?.length">
+        {{potentialDuplicatePeople?.matches?.length}} Results found
+      </p>
     </div>
     <div class="grid grid--75 grid--dividerLeft">
       <div class="table">
@@ -27,9 +30,6 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngIf="potentialDuplicatePeople?.matches?.length">
-              <td colspan="4">{{potentialDuplicatePeople?.matches?.length}} Results found</td>
-            </tr>
             <tr *ngIf="potentialDuplicatePeople && !potentialDuplicatePeople?.matches?.length">
               <td colspan="3">
                 No Person found.
