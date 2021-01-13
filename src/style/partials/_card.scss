@@ -20,7 +20,7 @@
 
     &__footer                                   { padding:20px; }
 
-    &__new                                      { min-height:300px; align-items:center; justify-content:center; border-radius:3px; transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -moz-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -webkit-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -o-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s;
+    &__new                                      { min-height:300px; align-items:center; justify-content:center; background-color:rgba($color--smoke, .5); border-radius:3px; transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -moz-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -webkit-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -o-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s;
         &:hover                                 { background-color:$color--smoke; }
     }
     

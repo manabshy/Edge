@@ -23,12 +23,12 @@
             <tr>
               <th>Name</th>
               <th>Telephone</th>
-              <th>Email</th>
+              <th colspan="2">Email</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngIf="potentialDuplicatePeople?.matches?.length">
-              <td colspan="3">{{potentialDuplicatePeople?.matches?.length}} Results found</td>
+              <td colspan="4">{{potentialDuplicatePeople?.matches?.length}} Results found</td>
             </tr>
             <tr>
               <td data-title="Name">
@@ -39,6 +39,54 @@
               </td>
               <td data-title="Email">
                 <span class="cell-content">mike.ballan@mikeballan.com</span>
+              </td>
+              <td>
+                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s"><path d="M1 35.4h48.8L37.5 47.8l4.9 4.9L63 32 42.3 11.3l-4.9 4.9 12.3 12.3H1V35.4z"></path></svg>
+              </td>
+            </tr>
+
+            <tr>
+              <td data-title="Name">
+                <span class="cell-content">Mike Ball<small class="txt--warning">Good Match</small></span>
+              </td>
+              <td data-title="Telephone">
+                <span class="cell-content">---</span>
+              </td>
+              <td data-title="Email">
+                <span class="cell-content">mike@mike.com</span>
+              </td>
+              <td>
+                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s"><path d="M1 35.4h48.8L37.5 47.8l4.9 4.9L63 32 42.3 11.3l-4.9 4.9 12.3 12.3H1V35.4z"></path></svg>
+              </td>
+            </tr>
+
+            <tr>
+              <td data-title="Name">
+                <span class="cell-content">Mike B</span>
+              </td>
+              <td data-title="Telephone">
+                <span class="cell-content">---</span>
+              </td>
+              <td data-title="Email">
+                <span class="cell-content">test@test.eu</span>
+              </td>
+              <td>
+                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s"><path d="M1 35.4h48.8L37.5 47.8l4.9 4.9L63 32 42.3 11.3l-4.9 4.9 12.3 12.3H1V35.4z"></path></svg>
+              </td>
+            </tr>
+
+            <tr>
+              <td data-title="Name">
+                <span class="cell-content">Mike Ballon</span>
+              </td>
+              <td data-title="Telephone">
+                <span class="cell-content">---</span>
+              </td>
+              <td data-title="Email">
+                <span class="cell-content">---</span>
+              </td>
+              <td>
+                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s"><path d="M1 35.4h48.8L37.5 47.8l4.9 4.9L63 32 42.3 11.3l-4.9 4.9 12.3 12.3H1V35.4z"></path></svg>
               </td>
             </tr>
 

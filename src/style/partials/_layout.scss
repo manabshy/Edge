@@ -15,23 +15,6 @@ app-telephone                                   { width:100%; display:flex; alig
 .row+*,
 .row__item+*                                    { margin-top:16px; }
 
-.grid                                           { margin:0; padding:0; list-style:none;
-  li                                            { margin:0; padding:0; border-right:solid 1px $color--smoke; }
-
-  &--2                                          { flex-basis:20%; max-width:20%; }
-  &--25                                         { flex-basis:25%; max-width:25%; }
-  &--3                                          { flex-basis:40%; max-width:40%; }
-  &--4                                          { flex-basis:40%; max-width:40%; }
-  &--6                                          { flex-basis:60%; max-width:60%; }
-  &--7                                          { flex-basis:70%; max-width:70%; }
-  &--75                                         { flex-basis:75%; max-width:75%; }
-  &--8                                          { flex-basis:80%; max-width:80%; }
-
-  &--dividerLeft                                { padding-left:40px; position:relative;
-    &:before                                    { content:''; display:block; width:1px; height:100%; background-color:$color--midnight-10; position:absolute; top:0; left:20px; }
-  }
-}
-
 .wrapper                                        { display:flex; min-height:100vh; }
 
 /***** Body *****/
@@ -179,6 +162,23 @@ This applies from 992px onwards
   .row__item+*                                  { margin:0 0 0 30px; }
 
   .row__item--aside                             { width:240px; max-width:240px; flex-shrink:0; }
+
+  .grid                                           { margin:0; padding:0; list-style:none;
+    li                                            { margin:0; padding:0; border-right:solid 1px $color--smoke; }
+  
+    &--2                                          { flex-basis:20%; max-width:20%; }
+    &--25                                         { flex-basis:25%; max-width:25%; }
+    &--3                                          { flex-basis:40%; max-width:40%; }
+    &--4                                          { flex-basis:40%; max-width:40%; }
+    &--6                                          { flex-basis:60%; max-width:60%; }
+    &--7                                          { flex-basis:70%; max-width:70%; }
+    &--75                                         { flex-basis:75%; max-width:75%; }
+    &--8                                          { flex-basis:80%; max-width:80%; }
+  
+    &--dividerLeft                                { padding-left:40px; position:relative;
+      &:before                                    { content:''; display:block; width:1px; height:100%; background-color:$color--midnight-10; position:absolute; top:0; left:20px; }
+    }
+  }
 
   .body                                         { padding:80px 30px 30px 30px; }
 
