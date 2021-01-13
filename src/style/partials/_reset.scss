@@ -215,6 +215,7 @@ Tablet - This applies from 768px onwards
   /***** Hide *****/
   .hide--mobile                                 { display:inherit !important; }
   table.hide--mobile                            { display:table !important; }
+  td.hide--mobile                               { display:table-cell !important; }
   .hide--tablet                                 { display:none !important; }
 
   /***** Show *****/
