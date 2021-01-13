@@ -20,10 +20,12 @@ import { debounceTime } from 'rxjs/operators';
 export class PersonDuplicateCheckerComponent implements OnInit, OnChanges {
   @Input() contactGroupDetails: ContactGroup;
   @Input() isOffCanvasVisible: boolean;
+  @Input() isCreateNewPerson = false;
   @Input() searchTerm: string;
   @Output() addedPersonDetails = new EventEmitter<Person>();
   @Output() selectedPerson = new EventEmitter<Person>();
   @Output() isCanvasHidden = new EventEmitter<boolean>();
+  @Output() makeButtonVisible = new EventEmitter<boolean>();
   // selectedPerson: Person;
   isCompanyContactGroup: boolean = false;
   personFinderForm: FormGroup;
@@ -31,7 +33,6 @@ export class PersonDuplicateCheckerComponent implements OnInit, OnChanges {
   selectedPersonId: number;
   isPersonCanvasVisible = false;
   isCreateNewPersonVisible = false;
-  isCreateNewPerson = false;
   newPerson: BasicPerson;
 
   constructor(private fb: FormBuilder,
@@ -58,8 +59,10 @@ export class PersonDuplicateCheckerComponent implements OnInit, OnChanges {
           (data.phoneNumber || data.emailAddress)
         ) {
           this.isCreateNewPersonVisible = true;
+          this.makeButtonVisible.emit(true);
         } else {
           this.isCreateNewPersonVisible = false;
+          this.makeButtonVisible.emit(false);
         }
         // data.emailAddresses = [];
         // data.emailAddresses.push({

@@ -873,12 +873,12 @@
         <!--Add  [showHeader]="false" to hide header -->
         <p-dialog header="Find Person" [(visible)]="isOffCanvasVisible" [modal]="true" [draggable]="false">
           <app-person-duplicate-checker [isOffCanvasVisible]="isOffCanvasVisible"
-            [contactGroupDetails]="contactGroupDetails" [searchTerm]="signer"
+            [contactGroupDetails]="contactGroupDetails" [searchTerm]="signer" [isCreateNewPerson]="isCreateNewPerson"
             (addedPersonDetails)="getAddedPersonDetails($event)" (selectedPerson)="getSelectedPerson($event)"
-            (isCanvasHidden)="resetCanvasFlag()">
+            (isCanvasHidden)="resetCanvasFlag()" (makeButtonVisible)="toggleNewPersonVisibility($event)">
           </app-person-duplicate-checker>
-          <p-footer>
-            <button class="btn btn--ghost">Create new person</button>
+          <p-footer >
+            <button *ngIf="isCreateNewPersonVisible" class="btn btn--ghost" (click)="createNewContactGroupPerson()">Create new person</button>
           </p-footer>
         </p-dialog>
 

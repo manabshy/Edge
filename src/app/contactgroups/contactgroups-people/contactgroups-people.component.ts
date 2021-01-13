@@ -375,14 +375,14 @@ export class ContactgroupsPeopleComponent implements OnInit {
     });
   }
 
-  createNewContactGroupPerson(event) {
-    event.preventDefault();
-    event.stopPropagation();
+  createNewContactGroupPerson() {
+    // event.preventDefault();
+    // event.stopPropagation();
     this.isCreateNewPerson = true;
 
-    setTimeout(() => {
-      this.offCanvasContent.nativeElement.scrollTo(0, 0);
-    });
+    // setTimeout(() => {
+    //   this.offCanvasContent.nativeElement.scrollTo(0, 0);
+    // });
   }
 
   setMainPerson(id: number) {
@@ -840,6 +840,11 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   resetCanvasFlag() {
     this.isOffCanvasVisible = false;
+  }
+
+  toggleNewPersonVisibility(condition){
+    this.isCreateNewPersonVisible = condition;
+    console.log({condition}, 'in people', this.isCreateNewPersonVisible);
   }
 
   addNote() {
