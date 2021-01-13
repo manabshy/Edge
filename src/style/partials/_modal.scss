@@ -6,17 +6,24 @@
 // Add the important to the fade as inline block is being applied.
 .fade                       { display:flex!important; }
 
-.p-dialog                   { min-width:100%; font-size:12px;
+
+
+/***** Prime NG Modal/Dialogs *****/
+.p-dialog                   { min-width:100%; min-height:100%; font-size:12px;
     &.p-component-overlay   { background-color:rgba($color--midnight, .5); }
-    .p-dialog-content       { padding:16px; }
-    .p-dialog-header        { padding:16px;
-        &+.p-dialog-content { padding-top:0; }
+    .p-dialog-content       { padding:16px; border-radius:0; }
+    .p-dialog-header        { padding:16px; border-radius:0;
+        &+.p-dialog-content { padding-top:0; border-radius:0; }
     }
+    .p-dialog-footer        { padding:16px;  border-radius:0; }
 }
 
 /***********************************************
 This applies from 992px onwards
 ***********************************************/
-@media (min-width:992px) {
-    .p-dialog              { min-width:700px; }
+@media (min-width:992px)        {
+    .p-dialog                   { min-width:700px; min-height:auto;
+        .p-dialog-header        { border-radius:3px 3px 0 0; }
+        .p-dialog-footer        { border-radius:0 0 3px 3px; }
+    }
 }
