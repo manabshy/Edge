@@ -1,10 +1,10 @@
 <ng-container *ngIf="!selectedPersonId && !isCreateNewPerson; else createNewPerson">
   <div class="row">
     <div class="grid grid--25">
-      <form [formGroup]="personFinderForm"[ngClass]="potentialDuplicatePeople?.matches?.length ? 'pb-0 pb-sm-3' : 'pb-3'">
+      <form [formGroup]="personFinderForm" autocomplete="off">
         <fieldset>
           <label for="fullName">Full Name</label>
-          <input type="text" id="fullName" autofocus formControlName="fullName" autocompleteOff>
+          <input type="text" id="fullName" autofocus formControlName="fullName">
         </fieldset>
         <fieldset>
           <label for="phone">Phone</label>

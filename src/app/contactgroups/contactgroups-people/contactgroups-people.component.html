@@ -877,6 +877,9 @@
             (addedPersonDetails)="getAddedPersonDetails($event)" (selectedPerson)="getSelectedPerson($event)"
             (isCanvasHidden)="resetCanvasFlag()">
           </app-person-duplicate-checker>
+          <p-footer>
+            <button class="btn btn--ghost">Create new person</button>
+          </p-footer>
         </p-dialog>
 
         <!-- <app-person-duplicate-checker *ngIf="isOffCanvasVisible" [isOffCanvasVisible]="isOffCanvasVisible"
