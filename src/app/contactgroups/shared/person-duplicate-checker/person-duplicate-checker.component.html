@@ -33,7 +33,8 @@
             <tr *ngIf="potentialDuplicatePeople && !potentialDuplicatePeople?.matches?.length">
               <td colspan="3">
                 No Person found.
-                <ng-container *ngIf="isCreateNewPersonVisible; else fillDetails">Create a new one with the details provided above</ng-container>
+                <ng-container *ngIf="isCreateNewPersonVisible; else fillDetails">Create a new one with the details
+                  provided above</ng-container>
                 <ng-template #fillDetails>Fill in the details to continue</ng-template>.
               </td>
             </tr>
@@ -61,10 +62,13 @@
                 </ng-template>
               </td>
               <td data-title="Telephone">
-                <ng-container *ngFor="let phoneNumber of foundPerson?.phoneNumbers"> <span
-                    class="cell-content">{{phoneNumber}}</span></ng-container>
+                <span *ngIf="!foundPerson?.phoneNumbers?.length">-</span>
+                <ng-container *ngFor="let phoneNumber of foundPerson?.phoneNumbers">
+                  <span class="cell-content">{{phoneNumber}}</span>
+                </ng-container>
               </td>
               <td data-title="Email">
+                <span *ngIf="!foundPerson?.emailAddresses?.length">-</span>
                 <ng-container *ngFor="let email of foundPerson?.emailAddresses">
                   <span class="cell-content">{{email}}</span>
                 </ng-container>
