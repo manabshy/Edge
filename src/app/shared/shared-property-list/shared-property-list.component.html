@@ -1,11 +1,8 @@
 <h2>Properties</h2>
 <div *ngIf="properties$|async as properties">
-  <div class="list-group-item text-center text-danger" *ngIf="!properties || !properties?.length">
-    <i class="far fa-sad-tear"></i> No properties
-  </div>
-
   <div class="table">
-    <table class="table--mobile table--rowHover">
+    <app-redacted-table *ngIf="!properties || !properties?.length" message="No properties"></app-redacted-table>
+    <table class="table--mobile table--rowHover" *ngIf="properties && properties?.length">
       <thead>
         <tr>
           <th>Address</th>

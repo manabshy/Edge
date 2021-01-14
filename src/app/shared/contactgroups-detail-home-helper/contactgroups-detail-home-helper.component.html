@@ -10,10 +10,8 @@
   </div>
 
   <div class="table">
-    <div class="list-group-item text-center text-danger" *ngIf="!homeHelpers || !homeHelpers?.length">
-      <i class="far fa-sad-tear"></i> No home helpers
-    </div>
-
+    <app-redacted-table *ngIf="!homeHelpers || !homeHelpers?.length" message="No home helpers"></app-redacted-table>
+    
     <table class="table--mobile table--rowHover">
       <thead *ngIf="homeHelpers && homeHelpers?.length">
         <tr>

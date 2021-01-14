@@ -16,12 +16,10 @@
     <label class="custom-control-label small" for="includeClosedLeads">Include closed leads</label>
   </div> -->
 
-  <div class="list-group-item text-center text-danger" *ngIf="!leads || !leads?.length">
-    <i class="far fa-sad-tear"></i> No Leads
-  </div>
+  <div class="table">
+    <app-redacted-table *ngIf="!leads || !leads?.length" message="No leads"></app-redacted-table>
 
-  <div class="table" *ngIf="leads && leads?.length">
-    <table class="table--mobile table--rowHover">
+    <table class="table--mobile table--rowHover" *ngIf="leads && leads?.length">
       <thead>
         <tr>
           <th>Type</th>

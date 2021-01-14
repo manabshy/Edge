@@ -9,10 +9,6 @@
 </div>
 
 <ng-container *ngIf="instructions$ | async as instructions">
-  <div class="list-group-item text-center text-danger" *ngIf="!instructions || !instructions?.length">
-    <i class="far fa-sad-tear"></i> No instructions
-  </div>
-
   <!-- <div class="list-group-item" *ngIf="closedCounter">
     <div class="custom-control custom-checkbox">
       <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getInstructions()" class="custom-control-input" id="includeClosedInstructions">
@@ -21,7 +17,8 @@
   </div> -->
 
   <div class="table">
-    <table class="table--mobile table--rowHover">
+    <app-redacted-table *ngIf="!instructions || !instructions?.length" message="No instructions"></app-redacted-table>
+    <table class="table--mobile table--rowHover" *ngIf="instructions && instructions?.length">
       <thead>
         <tr>
           <th *ngIf="instructions[0]?.propertyAddress">Address</th>

@@ -16,12 +16,9 @@
       <label class="custom-control-label small" for="includeClosedValuations">Include previous valuations</label>
     </div>
   </div> -->
+  <app-redacted-table *ngIf="!valuations || !valuations?.length" message="No valuations"></app-redacted-table>
 
-  <div class="list-group-item text-center text-danger" *ngIf="!valuations || !valuations?.length">
-    <i class="far fa-sad-tear"></i> No valuations
-  </div>
-
-  <table class="table--mobile table--rowHover">
+  <table class="table--mobile table--rowHover" *ngIf="valuations && valuations?.length">
     <thead>
       <tr>
         <th>Address</th>

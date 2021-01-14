@@ -9,9 +9,10 @@
 </div>
 
 <ng-container *ngIf="offers$|async as offers">
-  <app-redacted-table *ngIf="!offers || !offers?.length" message="No offers"></app-redacted-table>
-  <div class="table" *ngIf="offers && offers?.length">
-    <table class="table--mobile table--rowHover">
+  <div class="table">
+    <app-redacted-table *ngIf="!offers || !offers?.length" message="No offers"></app-redacted-table>
+    
+    <table class="table--mobile table--rowHover" *ngIf="offers && offers?.length">
       <thead>
         <tr>
           <th *ngIf="offers[0]?.propertyAddress">Address</th>

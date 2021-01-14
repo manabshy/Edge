@@ -1,5 +1,5 @@
 <div class="card card--marginTop card--sticky">
-  <div class="card__body">
+  <div class="card__body card__body--list">
     <ol class="list list--divider list--hover">
       <li [ngClass]="{current: item.isCurrent}" *ngFor="let item of sideNavItems;index as i">
         <a role="button" class="overall" (click)="setSideNavItem(item?.name,i); scrollTo(scrollToItem)"></a>
