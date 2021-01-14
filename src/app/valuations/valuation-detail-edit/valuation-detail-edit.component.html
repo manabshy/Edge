@@ -61,7 +61,7 @@
               </ol>
             </details>
           </li>
-          
+
           <li class="expandable">
             <details>
               <summary>
@@ -167,6 +167,8 @@
       </div>
     </div>
 
+    <app-property-card [propertyDetails]="property"></app-property-card>
+
     <div class="card card--horizontal">
       <div class="card__headerImg" style="background-image: url(https://dandg.azureedge.net/dandgweb/p-67242/photos/original/photo_67242_21.jpg/400x300.jpg);"></div>
 
@@ -174,7 +176,7 @@
         <div class="title txt--title">
           Property details<button class="btn btn--ghost flexRight">Change property</button>
         </div>
-        
+
         <ol class="cards">
           <li>
             <ol class="list">
@@ -216,7 +218,7 @@
     <form [formGroup]="valuationForm" (ngSubmit)="saveValuation()" autocompleteOff>
       <fieldset>
         <app-property-finder [property]="property"  (selectedProperty)="getSelectedProperty($event)" (isCreatingNewProperty)="createNewProperty($event)"
-          [readOnly]="!isEditable && !isNewValuation">
+          [readOnly]="!isEditable && !isNewValuation" [includePhoto]="true" [includeMap]="true">
         </app-property-finder>
         <app-signer label="Last known owner" [createdSigner]="createdSigner" [existingSigner]="lastKnownOwner"
           (selectedSigner)="getSelectedOwner($event)" (newSigner)="createNewSigner()"
@@ -619,7 +621,7 @@
       <h4 class="m-0">Valuation</h4>
     </div>
     <div class="col-auto">
-      
+
     </div>
   </div
 </div>> -->

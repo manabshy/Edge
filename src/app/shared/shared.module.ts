@@ -80,6 +80,7 @@ import { SidenavItemComponent } from './components/sidenav-item/sidenav-item.com
 import { GalleriaModule } from 'primeng/galleria';
 import { DialogModule } from 'primeng/dialog';
 import { RedactedTableComponent } from './components/redacted-table/redacted-table.component';
+import { PropertyCardComponent } from './components/property-card/property-card.component';
 
 const components = [
   BreadcrumbComponent,
@@ -116,7 +117,8 @@ const components = [
   StaffMemberFinderComponent,
   SharedContactgroupListComponent,
   SidenavItemComponent,
-  RedactedTableComponent
+  RedactedTableComponent,
+  PropertyCardComponent
 ];
 const pipes = [
   RoundingPipe,
@@ -163,6 +165,7 @@ const externalModules = [
     components,
     pipes,
     directives,
+
     // RoundingPipe,
     // TruncatingPipe,
     // ShortenNamePipe,

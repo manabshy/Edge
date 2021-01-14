@@ -23,6 +23,8 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
   @Input() searchType: number;
   @Input() isLabelHidden: boolean;
   @Input() hideCreateNewProperty = false;
+  @Input() includePhoto = false;
+  @Input() includeMap = false;
   @Output() isCreatingNewProperty = new EventEmitter<boolean>();
   @Output() selectedProperty = new EventEmitter<any>();
   @Output() selectedPropertyList = new EventEmitter<any>();
@@ -112,7 +114,7 @@ export class PropertyFinderComponent implements OnInit, OnChanges {
     console.log('search visible should be true here', this.isSearchVisible);
     this.property = null;
     if (propertyId) {
-      this.propertyService.getProperty(propertyId, false, false, true).subscribe(data => {
+      this.propertyService.getProperty(propertyId, false, this.includePhoto, true, this.includeMap).subscribe(data => {
         if (data) {
           if (this.isMultiple) {
             console.log('selected prop here', data);
