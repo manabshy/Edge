@@ -125,7 +125,7 @@ export class ValuationService {
       requestOption.page = 1;
     }
     if (requestOption.pageSize == null) {
-      requestOption.pageSize = 10;
+      requestOption.pageSize = 20;
     }
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
