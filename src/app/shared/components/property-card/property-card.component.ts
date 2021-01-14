@@ -23,6 +23,7 @@ export class PropertyCardComponent implements OnInit, OnChanges {
   subArea: string;
   showPhotos = false;
   showMap = false;
+
   constructor(private router: Router, private storage: StorageMap) { }
 
   ngOnInit(): void {
@@ -42,7 +43,7 @@ export class PropertyCardComponent implements OnInit, OnChanges {
   ngOnChanges() {
     if (this.propertyDetails) { this.setupRegionalValues(this.propertyDetails); }
   }
-  
+
   showPhotosModal() {
     this.showPhotos = true;
   }
