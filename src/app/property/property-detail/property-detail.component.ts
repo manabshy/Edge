@@ -232,6 +232,10 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit, On
     this.showPhotos = true;
   }
 
+  showMapModal() {
+    this.showMap = true;
+  }
+
   hidePhotosModal() {
     this.showPhotos = false;
   }

@@ -73,7 +73,7 @@
                   d="M61.3 1c-0.2 0-0.4 0-0.5 0.1L42.3 8.2 21.7 1 2.3 7.5C1.5 7.8 1 8.4 1 9.2v52.1C1 62.2 1.8 63 2.7 63c0.2 0 0.4 0 0.5-0.1l18.4-7.1L42.3 63l19.4-6.5c0.7-0.3 1.2-0.9 1.2-1.7V2.7C63 1.8 62.2 1 61.3 1zM42.3 56.1l-20.7-7.3v-41l20.7 7.3V56.1z">
                 </path>
               </svg>
-              <a role="link" (click)="showMap = true"> View map</a>
+              <a role="link" (click)="showMap.emit()"> View map</a>
             </li>
             <li *ngIf="propertyDetails?.photo?.azureResourceURL"><svg aria-hidden="true" width="24" height="24"
                 viewBox="0 0 24 24" class="icon icon--onLeft">
@@ -81,7 +81,7 @@
                 <path
                   d="M22 16V4c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2zm-11-4l2.03 2.71L16 11l4 5H8l3-4zM2 6v14c0 1.1.9 2 2 2h14v-2H4V6H2z" />
               </svg>
-              <a role="link" (click)="showPhotosModal()">{{propertyDetails?.info?.propertyPhotos}} Photos</a>
+              <a role="link" (click)="showPhotos.emit()">{{propertyDetails?.info?.propertyPhotos}} Photos</a>
             </li>
             <li class="hideLabel">
               <ng-container *ngIf="propertyDetails?.officeId">

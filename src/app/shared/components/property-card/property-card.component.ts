@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { DropdownListInfo, InfoDetail } from 'src/app/core/services/info.service';
@@ -21,8 +21,8 @@ export class PropertyCardComponent implements OnInit, OnChanges {
   region: string;
   area: string;
   subArea: string;
-  showPhotos = false;
-  showMap = false;
+ @Output() showPhotos = new EventEmitter<boolean>();
+ @Output() showMap = new EventEmitter<boolean>();
 
   constructor(private router: Router, private storage: StorageMap) { }
 
@@ -45,11 +45,11 @@ export class PropertyCardComponent implements OnInit, OnChanges {
   }
 
   showPhotosModal() {
-    this.showPhotos = true;
+    // this.showPhotos = true;
   }
 
   hidePhotosModal() {
-    this.showPhotos = false;
+    // this.showPhotos = false;
   }
 
   setupRegionalValues(propertyDetails: Property) {
