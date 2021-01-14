@@ -5,9 +5,10 @@
 
 :host {
     display: block;
-    position: sticky;
-    top:56px;
+    position: fixed;
+    top:60px;
     background-color:#FFF;
+    width:calc(100% - 32px);
     z-index:11;
 }
 
@@ -15,8 +16,22 @@
     top: 56px;
 }
 
-.dropdown-menu {
-    // @include media-breakpoint-down(sm) {
-    //     margin-left: - 2rem;
-    // }
+.cal-day-headers            { top:156px; }
+
+/***********************************************
+This applies from 992px onwards
+***********************************************/
+@media (min-width:992px) {
+    :host {
+        display: block;
+        position: fixed;
+        top:56px;
+        background-color:#FFF;
+        width:calc(100% - 276px);
+        z-index:11;
+    }
+    
+    :host-context(.off-canvas) {
+        top:56px;
+    }
 }

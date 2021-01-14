@@ -13,7 +13,7 @@
 }
 
 :host ::ng-deep                         {
-    .cal-day-headers                    { background-color:#fff; position:sticky; top:106px; z-index:10; }
+    .cal-day-headers                    { background-color:#fff; position:sticky; top:150px; z-index:10; }
     .cal-day-column                     {
         .cal-hour                       { background-color:#FFFCF7;
             &:nth-child(10)~.cal-hour   { background-color:#EDF6F2; }
@@ -42,6 +42,17 @@
         }
     }   
 }
+
+/***********************************************
+This applies from 992px onwards
+***********************************************/
+@media (min-width:992px) {
+    :host ::ng-deep                         {
+        .cal-day-headers                    { top:120px; }
+    }
+}
+
+
 
 // @import "../../../style/bootstrap-overrides";
 // @import "../../../../node_modules/bootstrap/scss/functions";
