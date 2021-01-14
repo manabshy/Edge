@@ -9,7 +9,7 @@
     .scrollY                                    { margin-bottom:20px; padding:0 20px; flex-grow:1; }
     
     .nav                                        { margin:30px 0 0; padding:0; list-style:none; color:#FFFFFF;
-        a                                       { color:#848CA4; text-decoration:none;
+        a                                       { color:#848CA4; display:block; text-decoration:none;
             &:hover                             { color:#FFFFFF; }
         }
 
