@@ -30,7 +30,7 @@ const mockVals = MockVals;
 let valuation = mockVals[0] as unknown as Valuation;
 const property = {
   'propertyId': 68847,
-  'bedrooms': 1,
+  // 'bedrooms': 1,
   'bathrooms': null,
   'receptions': 1,
   'sqFt': null,
