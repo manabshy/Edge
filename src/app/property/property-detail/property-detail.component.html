@@ -1,6 +1,8 @@
 <div class="row">
   <div class="row__item row__item--aside">
-    <div class="card" *ngIf="propertyDetails">
+    <app-property-card [propertyDetails]="propertyDetails" (showPhotos)="showPhotosModal()" (showMap)="showMapModal()"
+      [showActions]="true"></app-property-card>
+    <!-- <div class="card" *ngIf="propertyDetails">
       <div class="card__headerImg">
         <div class="alignTopRight">
           <div dropdown placement="bottom right">
@@ -64,7 +66,6 @@
                 </div>
               </summary>
               <ol class="list">
-                <!-- Address -->
                 <li><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
                     <path
                       d="M56 24c0 17.5-20.3 38-21.2 38.8C34 63.6 33 64 32 64c-1 0-2-0.4-2.8-1.2C28.3 62 8 41.5 8 24 8 10.8 18.8 0 32 0S56 10.8 56 24zM32 36c6.6 0 12-5.4 12-12 0-6.6-5.4-12-12-12s-12 5.4-12 12C20 30.6 25.4 36 32 36z" />
@@ -130,7 +131,7 @@
           </li>
         </ol>
       </div>
-    </div>
+    </div> -->
     <app-sidenav-item [sideNavItems]="sideNavItems" [summaryTotals]="summaryTotals" [scrollToItem]="mainRowItem"
       (selectedItem)="getSelectedItem($event)"></app-sidenav-item>
     <app-additional-info [id]="propertyDetails?.propertyId ? 'PR-'+propertyDetails?.propertyId : ''" class="block">
@@ -312,8 +313,9 @@
 <app-property-detail-photos [propertyId]="propertyDetails?.propertyId" [showPhotos]="showPhotos"
   (photosClosed)="hidePhotosModal()"></app-property-detail-photos>
 
-  <!-- Property Map Modal -->
-  <app-property-detail-map [propertyMap]="propertyDetails?.map" [showMap]="showMap" (mapClosed)="showMap=false"></app-property-detail-map>
+<!-- Property Map Modal -->
+<app-property-detail-map [propertyMap]="propertyDetails?.map" [showMap]="showMap" (mapClosed)="showMap=false">
+</app-property-detail-map>
 
 <!-- <app-breadcrumb></app-breadcrumb> -->
 <!-- <div class="container main">
