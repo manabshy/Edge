@@ -1,4 +1,4 @@
-<div class="card" *ngIf="propertyDetails">
+<div class="card" *ngIf="propertyDetails" [ngClass]="{'card--horizontal': isHorizontalCard}">
   <div class="card__headerImg">
     <div class="alignTopRight" *ngIf="showActions">
       <div dropdown placement="bottom right">

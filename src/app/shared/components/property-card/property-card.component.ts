@@ -11,6 +11,7 @@ import { Property, PropertyStyles, PropertyTypes } from 'src/app/property/shared
 })
 export class PropertyCardComponent implements OnInit, OnChanges {
   @Input() propertyDetails: Property;
+  @Input() isHorizontalCard = false;
   @Input() showActions = false;
   propertyTypes = PropertyTypes;
   propertyStyles = PropertyStyles;
