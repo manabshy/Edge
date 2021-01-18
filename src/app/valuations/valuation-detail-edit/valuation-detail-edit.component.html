@@ -623,7 +623,7 @@
 </div>
 
 <!-- Property Photos Modal -->
-<app-property-detail-photos [propertyId]="property?.propertyId" [showPhotos]="showPhotos"
+<app-property-detail-photos [propertyId]="property?.propertyId" [showPhotos]="showPhotos" *ngIf="showPhotos"
   (photosClosed)="hidePhotosModal()"></app-property-detail-photos>
 
 <!-- Property Map Modal -->
