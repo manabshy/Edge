@@ -333,7 +333,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   getContactGroup(contactGroupId: number) {
-    this.contactGroup$ = this.contactGroupService.getContactGroupbyId(contactGroupId);
+    this.contactGroup$ = this.contactGroupService.getContactGroupbyId(contactGroupId, true);
   }
 
   setInstructionRentFigures() {

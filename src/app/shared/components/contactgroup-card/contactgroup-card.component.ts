@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ContactGroup } from 'src/app/contactgroups/shared/contact-group';
+import { Person } from '../../models/person';
 
 @Component({
   selector: 'app-contactgroup-card',
@@ -10,6 +11,7 @@ export class ContactgroupCardComponent implements OnInit, OnChanges {
   @Input() contactGroup: ContactGroup;
   numOfPeople: number;
   showAdditionalPeople = false;
+  firstPerson: Person;
   constructor() { }
   ngOnInit(): void {
   }
@@ -19,6 +21,7 @@ export class ContactgroupCardComponent implements OnInit, OnChanges {
 
     this.numOfPeople = this.contactGroup?.contactPeople?.length;
     this.numOfPeople > 1 ? this.showAdditionalPeople = true : this.showAdditionalPeople = false;
+    this.firstPerson = this.contactGroup?.contactPeople[0];
   }
 
   viewDetails(personId: number) {
