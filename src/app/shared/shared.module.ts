@@ -83,6 +83,8 @@ import { RedactedTableComponent } from './components/redacted-table/redacted-tab
 import { PropertyCardComponent } from './components/property-card/property-card.component';
 import { ContactgroupCardComponent } from './components/contactgroup-card/contactgroup-card.component';
 import { MarketingPreferencesComponent } from './components/marketing-preferences/marketing-preferences.component';
+import { PropertyDetailPhotosComponent } from './components/property-detail-photos/property-detail-photos.component';
+import { PropertyDetailMapComponent } from './components/property-detail-map/property-detail-map.component';
 
 const components = [
   BreadcrumbComponent,
@@ -123,6 +125,8 @@ const components = [
   PropertyCardComponent,
   ContactgroupCardComponent,
   MarketingPreferencesComponent,
+  PropertyDetailPhotosComponent,
+  PropertyDetailMapComponent,
 ];
 const pipes = [
   RoundingPipe,

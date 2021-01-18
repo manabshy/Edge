@@ -6,8 +6,6 @@ import { PropertyDetailComponent } from './property-detail/property-detail.compo
 import { PropertyDetailInstructionsComponent } from './property-detail-instructions/property-detail-instructions.component';
 import { PropertyDetailOffersComponent } from './property-detail-offers/property-detail-offers.component';
 import { PropertyDetailDocumentsComponent } from './property-detail-documents/property-detail-documents.component';
-import { PropertyDetailPhotosComponent } from './property-detail-photos/property-detail-photos.component';
-import { PropertyDetailMapComponent } from './property-detail-map/property-detail-map.component';
 import { PropertyDetailEditComponent } from './property-detail-edit/property-detail-edit.component';
 
 
@@ -21,8 +19,6 @@ const routes: Routes = [
       { path: 'instructions', component: PropertyDetailInstructionsComponent, data: { shouldDetach: false } },
       { path: 'offers', component: PropertyDetailOffersComponent , data: { shouldDetach: false }},
       { path: 'documents', component: PropertyDetailDocumentsComponent, data: { shouldDetach: true } },
-      { path: 'property-photos', component: PropertyDetailPhotosComponent, data: { shouldDetach: false } },
-      { path: 'map', component: PropertyDetailMapComponent, data: { shouldDetach: false } },
     ]
   }
 ];

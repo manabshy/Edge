@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { PropertyService } from '../shared/property.service';
+import { PropertyService } from '../../../property/shared/property.service';
 import { Observable } from 'rxjs';
-import { Photo } from '../shared/property';
+import { Photo } from '../../../property/shared/property';
 import { AppUtils } from 'src/app/core/shared/utils';
 
 @Component({
@@ -33,7 +33,7 @@ export class PropertyDetailMapComponent implements OnInit, OnChanges {
       this.maps.push(this.propertyMap);
     }
   }
-  
+
   hideModal() {
     this.mapClosed.emit();
   }

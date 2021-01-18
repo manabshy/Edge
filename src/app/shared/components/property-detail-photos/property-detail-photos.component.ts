@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
-import { PropertyService } from '../shared/property.service';
+import { PropertyService } from '../../../property/shared/property.service';
 import { FormatAddressPipe } from 'src/app/shared/pipes/format-address.pipe';
 import { ActivatedRoute } from '@angular/router';
 import { SharedService } from 'src/app/core/services/shared.service';
-import { Photo } from '../shared/property';
+import { Photo } from '../../../property/shared/property';
 import { Observable } from 'rxjs';
 import { AppUtils } from 'src/app/core/shared/utils';
 
