@@ -81,6 +81,7 @@ import { GalleriaModule } from 'primeng/galleria';
 import { DialogModule } from 'primeng/dialog';
 import { RedactedTableComponent } from './components/redacted-table/redacted-table.component';
 import { PropertyCardComponent } from './components/property-card/property-card.component';
+import { ContactgroupCardComponent } from './components/contactgroup-card/contactgroup-card.component';
 
 const components = [
   BreadcrumbComponent,
@@ -118,7 +119,8 @@ const components = [
   SharedContactgroupListComponent,
   SidenavItemComponent,
   RedactedTableComponent,
-  PropertyCardComponent
+  PropertyCardComponent,
+  ContactgroupCardComponent
 ];
 const pipes = [
   RoundingPipe,
@@ -165,6 +167,7 @@ const externalModules = [
     components,
     pipes,
     directives,
+
 
     // RoundingPipe,
     // TruncatingPipe,

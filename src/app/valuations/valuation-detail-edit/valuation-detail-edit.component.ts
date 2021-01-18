@@ -6,7 +6,7 @@ import addYears from 'date-fns/add_years';
 import differenceInCalendarYears from 'date-fns/difference_in_calendar_years';
 import { ToastrService } from 'ngx-toastr';
 import { debounceTime, takeUntil, distinctUntilChanged } from 'rxjs/operators';
-import { Signer } from 'src/app/contactgroups/shared/contact-group';
+import { ContactGroup, Signer } from 'src/app/contactgroups/shared/contact-group';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { DropdownListInfo, InfoDetail, InfoService } from 'src/app/core/services/info.service';
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
@@ -24,6 +24,7 @@ import { ResultData } from 'src/app/shared/result-data';
 import { StaffMember } from 'src/app/shared/models/staff-member';
 import { TabDirective } from 'ngx-bootstrap/tabs/ngx-bootstrap-tabs';
 import format from 'date-fns/format';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-valuation-detail-edit',
@@ -97,6 +98,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   isAvailabilityRequired = false;
   canChangeDate: boolean;
   canSearchAvailability = false;
+  contactGroup$: Observable<ContactGroup>;
 
 
   get originTypeControl() {
@@ -317,7 +319,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   getPropertyDetails() {
-    this.propertyService.getProperty(this.propertyId, false, false, true).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+    this.propertyService.getProperty(this.propertyId, false, true, false, true).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       if (result) {
         this.lastKnownOwner = result.lastKnownOwner;
         this.property = result;
@@ -327,6 +329,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         console.log('base property', this.valuationForm.get('property').value);
       }
     });
+  }
+
+  getContactGroup(contactGroupId: number) {
+   this.contactGroup$ = this.contactGroupService.getContactGroupbyId(contactGroupId);
   }
 
   setInstructionRentFigures() {
