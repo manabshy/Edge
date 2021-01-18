@@ -1,41 +1,41 @@
 <div class="card" *ngIf="propertyDetails" [ngClass]="{'card--horizontal': isHorizontalCard}">
-  <div class="card__headerImg">
-    <div class="alignTopRight" *ngIf="showActions">
-      <div dropdown placement="bottom right">
-        <a class="btn dropdown-toggle" href [id]="'button'" dropdownToggle (click)="$event.stopPropagation(); false"
-          [attr.aria-controls]="'dropdown'">
-          <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
-            <ellipse class="st0" cx="32" cy="10.5" rx="5.9" ry="6" />
-            <ellipse class="st0" cx="32" cy="32" rx="5.9" ry="6" />
-            <ellipse class="st0" cx="32" cy="53.5" rx="5.9" ry="6" />
-          </svg>
-        </a>
-        <ul [id]="'dropdown'" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
-          [attr.aria-labelledby]="'button'">
-          <li role="menuitem">
-            <a routerLink="edit" class="dropdown-item">
-              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
-                <polygon points="42.7 6.7 57.3 21.3 64 14.5 49.7 0 " />
-                <path d="M40.3 9.6l-38 38L0 64l16.9-2 38-37.9L40.3 9.6zM4 59.9l1.9-11.7 9.8 9.8L4 59.9z" />
-              </svg>
-              Edit Property
-            </a>
-          </li>
-          <li role="menuitem">
-            <a class="dropdown-item" (click)="navigateToNewValuation(propertyDetails?.propertyId)">
-              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
-                <path
-                  d="M16.1 58.4l7.3-18.4h19.9l2.2-5.8H11.9l-2.2 5.8h7.7L11.1 56c-0.6 1.5-0.9 3.2-0.9 4.8v1.9c0 0.7 0.6 1.2 1.2 1.2H54v-5.6H16.1z" />
-                <path
-                  d="M40.7 6.4c1.8-0.7 3.9-1 6.2-0.7l6.7 0.9L54.3 1l-6.7-0.9c-3.2-0.4-6.3 0-9 1 -4.3 1.7-7.7 5-9.6 9.4l-5 12.6h-7.4l-2.2 5.7h32.2l2.2-5.7H30.1l4.1-10.4C35.5 9.8 37.8 7.6 40.7 6.4z" />
-              </svg>
-              Create Valuation
-            </a>
-          </li>
-        </ul>
-      </div>
+  <div class="positionTopRight" *ngIf="showActions">
+    <div dropdown placement="bottom right">
+      <a class="btn dropdown-toggle" href [id]="'button'" dropdownToggle (click)="$event.stopPropagation(); false"
+        [attr.aria-controls]="'dropdown'">
+        <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
+          <ellipse class="st0" cx="32" cy="10.5" rx="5.9" ry="6" />
+          <ellipse class="st0" cx="32" cy="32" rx="5.9" ry="6" />
+          <ellipse class="st0" cx="32" cy="53.5" rx="5.9" ry="6" />
+        </svg>
+      </a>
+      <ul [id]="'dropdown'" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+        [attr.aria-labelledby]="'button'">
+        <li role="menuitem">
+          <a routerLink="edit" class="dropdown-item">
+            <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
+              <polygon points="42.7 6.7 57.3 21.3 64 14.5 49.7 0 " />
+              <path d="M40.3 9.6l-38 38L0 64l16.9-2 38-37.9L40.3 9.6zM4 59.9l1.9-11.7 9.8 9.8L4 59.9z" />
+            </svg>
+            Edit Property
+          </a>
+        </li>
+        <li role="menuitem">
+          <a class="dropdown-item" (click)="navigateToNewValuation(propertyDetails?.propertyId)">
+            <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
+              <path
+                d="M16.1 58.4l7.3-18.4h19.9l2.2-5.8H11.9l-2.2 5.8h7.7L11.1 56c-0.6 1.5-0.9 3.2-0.9 4.8v1.9c0 0.7 0.6 1.2 1.2 1.2H54v-5.6H16.1z" />
+              <path
+                d="M40.7 6.4c1.8-0.7 3.9-1 6.2-0.7l6.7 0.9L54.3 1l-6.7-0.9c-3.2-0.4-6.3 0-9 1 -4.3 1.7-7.7 5-9.6 9.4l-5 12.6h-7.4l-2.2 5.7h32.2l2.2-5.7H30.1l4.1-10.4C35.5 9.8 37.8 7.6 40.7 6.4z" />
+            </svg>
+            Create Valuation
+          </a>
+        </li>
+      </ul>
     </div>
+  </div>
 
+  <div class="card__headerImg">
     <ng-container *ngIf="propertyDetails?.photo?.azureResourceURL; else noPhoto">
       <img [src]="propertyDetails?.photo?.azureResourceURL" alt=""
         *ngIf="propertyDetails?.photo?.azureResourceURL; else noPhoto">
