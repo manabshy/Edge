@@ -333,7 +333,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   getContactGroup(contactGroupId: number) {
-   this.contactGroup$ = this.contactGroupService.getContactGroupbyId(contactGroupId);
+    this.contactGroup$ = this.contactGroupService.getContactGroupbyId(contactGroupId);
   }
 
   setInstructionRentFigures() {
@@ -698,6 +698,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.property = newProperty;
         this.valuationForm.get('property').setValue(this.property);
         this.getValuers(this.property.propertyId);
+        // this.getContactGroup(newProperty.lastKnownOwner?.contactGroupId);
         this.getSelectedOwner(newProperty.lastKnownOwner);
       }
     });
@@ -707,6 +708,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     if (owner) {
       this.lastKnownOwner = owner;
       this.isOwnerChanged = true;
+      this.getContactGroup(this.lastKnownOwner?.contactGroupId);
       this.valuationForm.get('propertyOwner').setValue(owner);
       if (this.isEditable || this.isNewValuation) {
         this.valuationForm.markAsDirty();
