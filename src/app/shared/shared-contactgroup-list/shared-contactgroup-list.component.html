@@ -58,10 +58,11 @@
         </td>
         <td data-title="Type">
           <span class="cell-content">
-            <ng-container *ngIf="contactGroup?.isCompany; else peopleIcon"> <i class="fas fa-briefcase mr-2 fa-fw"></i>
+            <ng-container *ngIf="contactGroup?.isCompany; else peopleIcon">
+              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><path d="M56.8 15H44.4v-6.2c0-3.4-2.8-6.2-6.2-6.2H25.8c-3.4 0-6.2 2.8-6.2 6.2v6.2H7.2c-3.4 0-6.2 2.8-6.2 6.2L1 55.3c0 3.4 2.8 6.2 6.2 6.2h49.6c3.4 0 6.2-2.8 6.2-6.2v-34.1C63 17.7 60.2 15 56.8 15zM38.2 15H25.8v-6.2h12.4V15z"></path></svg>
               Company</ng-container>
             <ng-template #peopleIcon>
-              <i class="fas fa-users mr-2 fa-fw"></i> People
+              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><path d="M46 32c4.3 0 7.7-3.5 7.7-7.8s-3.4-7.8-7.7-7.8 -7.8 3.5-7.8 7.8S41.7 32 46 32zM22.7 28.9c5.1 0 9.3-4.2 9.3-9.3s-4.1-9.3-9.3-9.3 -9.3 4.2-9.3 9.3S17.6 28.9 22.7 28.9zM46 38.2c-5.7 0-17.1 2.9-17.1 8.5v7H63v-7C63 41.1 51.6 38.2 46 38.2zM22.7 35.1C15.5 35.1 1 38.7 1 46v7.8h21.7v-7c0-2.6 1-7.2 7.3-10.8C27.4 35.4 24.7 35.1 22.7 35.1z" /></svg> People
             </ng-template>
           </span>
         </td>

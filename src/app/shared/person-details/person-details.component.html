@@ -38,33 +38,31 @@
                 [attr.aria-labelledby]="'button' + index">
                 <li role="menuitem">
                   <a class="dropdown-item" (click)="editSelectedPerson()">
-                    <span class="dropdown-icon"><i class="fas fa-edit fa-fw"></i></span>Edit
+                    <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><polygon points="42.7 6.7 57.3 21.3 64 14.5 49.7 0 "></polygon><path d="M40.3 9.6l-38 38L0 64l16.9-2 38-37.9L40.3 9.6zM4 59.9l1.9-11.7 9.8 9.8L4 59.9z"></path></svg>Edit
                   </a>
                 </li>
                 <li *ngIf="showViewPerson" role="menuitem">
                   <a class="dropdown-item" (click)="$event.stopPropagation(); navigateToView()">
-                    <span class="dropdown-icon"><i class="fas fa-address-card fa-fw"></i></span>View
+                    <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><path d="M32 10.2c-14.5 0-27 9-32 21.8 5 12.8 17.5 21.8 32 21.8s27-9 32-21.8C59 19.2 46.5 10.2 32 10.2zM32 46.5c-8 0-14.5-6.5-14.5-14.5S24 17.5 32 17.5 46.5 24 46.5 32 40 46.5 32 46.5zM32 23.3c-4.8 0-8.7 3.9-8.7 8.7s3.9 8.7 8.7 8.7 8.7-3.9 8.7-8.7S36.8 23.3 32 23.3z"></path></svg>View
                   </a>
                 </li>
                 <li *ngIf="showSetMainPerson" role="menuitem">
                   <a class="dropdown-item" (click)="mainPersonPersonId.emit(personDetails?.personId)"
                     *ngIf="!personDetails?.isMainPerson">
-                    <span class="dropdown-icon"><i class="fas fa-user-shield fa-fw"></i></span>Set Main Person
+                    <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><path d="M32 32c8.6 0 15.5-7 15.5-15.5C47.5 7.9 40.6 1 32 1S16.5 7.9 16.5 16.5C16.5 25 23.4 32 32 32zM32 39.8c-10.3 0-31 5.2-31 15.5V63h62v-7.8C63 44.9 42.3 39.8 32 39.8z"></path></svg>Set Main Person
                   </a>
                 </li>
                 <li *ngIf="!isPersonInfoOnly" role="menuitem">
                   <a class="dropdown-item" (click)="$event.stopPropagation();"
                     [routerLink]="['/leads-register/edit/', 0]"
                     [queryParams]="{isNewLead: true, personId: personDetails?.personId}">
-                    <span class="dropdown-icon"><i class="fas fa-user"></i><i
-                        class="fas fa-share-alt fa-xs align-text-top"></i></span>Create Lead
+                    <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><path d="M38.8 5.9L38 1.6C37.8 0.7 37 0 36 0H3.8v62c0 1.1 0.9 2 2 2h3.5c1.1 0 2-0.9 2-2V37.6h19.4c1 0 1.8 0.7 2 1.6l0.9 4.3c0.2 0.9 1 1.6 2 1.6h22.7c1.1 0 2-0.9 2-2V9.5c0-1.1-0.9-2-2-2H40.8C39.8 7.5 39 6.9 38.8 5.9z"></path></svg>Create Lead
                   </a>
                 </li>
                 <li *ngIf="showRemovePerson" role="menuitem">
                   <a class="dropdown-item" href (click)="removedPersonPersonId.emit(personDetails?.personId)"
                     *ngIf="!referenceCount">
-                    <span class="dropdown-icon"><i class="fas fa-user-times fa-fw"></i></span>
-                    Remove
+                    <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><path d="M11.4 56.1c0 3.8 3.1 6.9 6.9 6.9h27.4c3.8 0 6.9-3.1 6.9-6.9V14.8H11.4V56.1zM19.9 31.6l4.9-4.9L32 34l7.3-7.3 4.9 4.9 -7.3 7.3 7.3 7.3 -4.9 4.9L32 43.8l-7.3 7.3 -4.9-4.9 7.3-7.3L19.9 31.6zM44 4.4L40.6 1H23.4L20 4.4H8v6.9h48V4.4H44z"></path></svg>Remove
                   </a>
                 </li>
               </ul>
