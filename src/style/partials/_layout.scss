@@ -177,8 +177,7 @@ This applies from 992px onwards
   .row__item+*                                  { margin:0 0 0 30px; }
 
   .row__item--aside                             { width:240px; max-width:240px; flex-shrink:0;
-    > * .card:first-child                       { margin:0; }
-    .card                                       { margin-top:16px; }
+    .card                                       { margin:0 0 16px 0; }
   }
 
   .grid                                         { margin:0; padding:0; list-style:none;

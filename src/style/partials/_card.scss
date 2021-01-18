@@ -1,11 +1,11 @@
 /***** Cards *****/
 .card                                           { margin-bottom:1px; width:100%; background-color:$color--snow; border-radius:5px; box-shadow:0px 0px 0px 1px $color--midnight-20; -webkit-box-shadow:0px 0px 0px 1px $color--midnight-20; position:relative;
-    &+*                                         { margin-top:16px; }
+    &+*,
+    &--marginTop                                { margin-top:16px; }
     p                                           { position:relative; }
     .positionTopRight                           { position:absolute; top:5px; right:5px; z-index:10; }
 
     &--sticky                                   { position:sticky; top:80px; }
-    &--marginTop                                { margin-top:16px; }
     
     &--horizontal                               { display:flex;
         .card__headerImg                        { width:30%; height:initial; border-radius:3px 0 0 3px; }
