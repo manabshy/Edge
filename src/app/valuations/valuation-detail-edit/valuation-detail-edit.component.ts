@@ -324,6 +324,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.lastKnownOwner = result.lastKnownOwner;
         this.property = result;
         // this.valuers = result.valuers;
+        this.getContactGroup(result?.lastKnownOwner?.contactGroupId);
         const baseProperty = { propertyId: this.property.propertyId, address: this.property.address } as BaseProperty;
         this.valuationForm.get('property').setValue(baseProperty);
         console.log('base property', this.valuationForm.get('property').value);
@@ -332,7 +333,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
 
   getContactGroup(contactGroupId: number) {
-   this.contactGroup$ = this.contactGroupService.getContactGroupbyId(contactGroupId);
+    this.contactGroup$ = this.contactGroupService.getContactGroupbyId(contactGroupId, true);
   }
 
   setInstructionRentFigures() {
@@ -491,7 +492,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.lastKnownOwner = this.valuation.propertyOwner;
           this.property = this.valuation.property;
         }
-
+        this.getContactGroup(this.lastKnownOwner?.contactGroupId); // get contact group for last know owner
         this.getValuers(this.property.propertyId);
         this.setValuationType(data);
         this.populateForm(data);
@@ -697,6 +698,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
         this.property = newProperty;
         this.valuationForm.get('property').setValue(this.property);
         this.getValuers(this.property.propertyId);
+        // this.getContactGroup(newProperty.lastKnownOwner?.contactGroupId);
         this.getSelectedOwner(newProperty.lastKnownOwner);
       }
     });
@@ -706,6 +708,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     if (owner) {
       this.lastKnownOwner = owner;
       this.isOwnerChanged = true;
+      this.getContactGroup(this.lastKnownOwner?.contactGroupId);
       this.valuationForm.get('propertyOwner').setValue(owner);
       if (this.isEditable || this.isNewValuation) {
         this.valuationForm.markAsDirty();
