@@ -9,6 +9,7 @@ import { ContactGroup } from 'src/app/contactgroups/shared/contact-group';
 export class ContactgroupCardComponent implements OnInit, OnChanges {
   @Input() contactGroup: ContactGroup;
   numOfPeople: number;
+  showAdditionalPeople = false;
   constructor() { }
   ngOnInit(): void {
   }
@@ -17,6 +18,7 @@ export class ContactgroupCardComponent implements OnInit, OnChanges {
     console.log('contact groups in the card', this.contactGroup);
 
     this.numOfPeople = this.contactGroup?.contactPeople?.length;
+    this.numOfPeople > 1 ? this.showAdditionalPeople = true : this.showAdditionalPeople = false;
   }
 
   viewDetails(personId: number) {
