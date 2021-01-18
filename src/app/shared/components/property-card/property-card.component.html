@@ -1,5 +1,5 @@
 <div class="card" *ngIf="propertyDetails" [ngClass]="{'card--horizontal': isHorizontalCard}">
-  <div class="positionTopRight" *ngIf="showActions">
+  <div class="positionTopRight">
     <div dropdown placement="bottom right">
       <a class="btn dropdown-toggle" href [id]="'button'" dropdownToggle (click)="$event.stopPropagation(); false"
         [attr.aria-controls]="'dropdown'">
@@ -11,26 +11,49 @@
       </a>
       <ul [id]="'dropdown'" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
         [attr.aria-labelledby]="'button'">
-        <li role="menuitem">
-          <a routerLink="edit" class="dropdown-item">
-            <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
-              <polygon points="42.7 6.7 57.3 21.3 64 14.5 49.7 0 " />
-              <path d="M40.3 9.6l-38 38L0 64l16.9-2 38-37.9L40.3 9.6zM4 59.9l1.9-11.7 9.8 9.8L4 59.9z" />
-            </svg>
-            Edit Property
-          </a>
-        </li>
-        <li role="menuitem">
-          <a class="dropdown-item" (click)="navigateToNewValuation(propertyDetails?.propertyId)">
-            <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
-              <path
-                d="M16.1 58.4l7.3-18.4h19.9l2.2-5.8H11.9l-2.2 5.8h7.7L11.1 56c-0.6 1.5-0.9 3.2-0.9 4.8v1.9c0 0.7 0.6 1.2 1.2 1.2H54v-5.6H16.1z" />
-              <path
-                d="M40.7 6.4c1.8-0.7 3.9-1 6.2-0.7l6.7 0.9L54.3 1l-6.7-0.9c-3.2-0.4-6.3 0-9 1 -4.3 1.7-7.7 5-9.6 9.4l-5 12.6h-7.4l-2.2 5.7h32.2l2.2-5.7H30.1l4.1-10.4C35.5 9.8 37.8 7.6 40.7 6.4z" />
-            </svg>
-            Create Valuation
-          </a>
-        </li>
+        <ng-container *ngIf="showPropertyDetailActions">
+          <li role="menuitem">
+            <a routerLink="edit" class="dropdown-item">
+              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
+                <polygon points="42.7 6.7 57.3 21.3 64 14.5 49.7 0 " />
+                <path d="M40.3 9.6l-38 38L0 64l16.9-2 38-37.9L40.3 9.6zM4 59.9l1.9-11.7 9.8 9.8L4 59.9z" />
+              </svg>
+              Edit Property
+            </a>
+          </li>
+          <li role="menuitem">
+            <a class="dropdown-item" (click)="navigateToNewValuation(propertyDetails?.propertyId)">
+              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
+                <path
+                  d="M16.1 58.4l7.3-18.4h19.9l2.2-5.8H11.9l-2.2 5.8h7.7L11.1 56c-0.6 1.5-0.9 3.2-0.9 4.8v1.9c0 0.7 0.6 1.2 1.2 1.2H54v-5.6H16.1z" />
+                <path
+                  d="M40.7 6.4c1.8-0.7 3.9-1 6.2-0.7l6.7 0.9L54.3 1l-6.7-0.9c-3.2-0.4-6.3 0-9 1 -4.3 1.7-7.7 5-9.6 9.4l-5 12.6h-7.4l-2.2 5.7h32.2l2.2-5.7H30.1l4.1-10.4C35.5 9.8 37.8 7.6 40.7 6.4z" />
+              </svg>
+              Create Valuation
+            </a>
+          </li>
+        </ng-container>
+        <ng-container *ngIf="showValuationActions">
+          <li role="menuitem">
+            <a (click)="changeProperty.emit()" class="dropdown-item">
+              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
+                <polygon points="42.7 6.7 57.3 21.3 64 14.5 49.7 0 " />
+                <path d="M40.3 9.6l-38 38L0 64l16.9-2 38-37.9L40.3 9.6zM4 59.9l1.9-11.7 9.8 9.8L4 59.9z" />
+              </svg>
+              Change Property
+            </a>
+          </li>
+          <li role="menuitem">
+            <a (click)="changeLastknownOwner.emit()" class="dropdown-item">
+              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
+                <polygon points="42.7 6.7 57.3 21.3 64 14.5 49.7 0 " />
+                <path d="M40.3 9.6l-38 38L0 64l16.9-2 38-37.9L40.3 9.6zM4 59.9l1.9-11.7 9.8 9.8L4 59.9z" />
+              </svg>
+              Change Last known owner
+            </a>
+          </li>
+        </ng-container>
+
       </ul>
     </div>
   </div>
@@ -73,17 +96,16 @@
           </li>
           <li class="hideLabel">
             <ng-container *ngIf="propertyDetails?.officeId">
-              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
-                class="icon icon--s icon--onLeft">
+              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
                 <path
                   d="M32 16.5V4.1H1v55.8h62V16.5H32zM13.4 53.7H7.2v-6.2h6.2V53.7zM13.4 41.3H7.2v-6.2h6.2V41.3zM13.4 28.9H7.2v-6.2h6.2V28.9zM13.4 16.5H7.2v-6.2h6.2V16.5zM25.8 53.7h-6.2v-6.2h6.2V53.7zM25.8 41.3h-6.2v-6.2h6.2V41.3zM25.8 28.9h-6.2v-6.2h6.2V28.9zM25.8 16.5h-6.2v-6.2h6.2V16.5zM56.8 53.7H32v-6.2h6.2v-6.2H32v-6.2h6.2v-6.2H32v-6.2h24.8V53.7zM50.6 28.9h-6.2v6.2h6.2V28.9zM50.6 41.3h-6.2v6.2h6.2V41.3z" />
               </svg>
-              <app-office-finder [officeId]="propertyDetails?.officeId" [fullWidth]="true" [readOnly]="true" >
+              <app-office-finder [officeId]="propertyDetails?.officeId" [fullWidth]="true" [readOnly]="true">
               </app-office-finder>
             </ng-container>
           </li>
-          <li *ngIf="propertyDetails?.lastKnownOwner?.contactGroupId"><svg aria-hidden="true" width="64"
-              height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
+          <li *ngIf="propertyDetails?.lastKnownOwner?.contactGroupId"><svg aria-hidden="true" width="64" height="64"
+              viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
               <path
                 d="M32 0L0 36.1h8V64h6.8v-4.3c0-5.7 11.5-8.6 17.2-8.6s17.2 2.8 17.2 8.5V64H56V36.1h8L32 0zM32 46.8c-4.8 0-8.6-3.9-8.6-8.6 0-4.8 3.8-8.6 8.6-8.6s8.6 3.8 8.6 8.6C40.6 42.9 36.8 46.8 32 46.8z" />
             </svg><a
@@ -97,12 +119,19 @@
           <summary>
             <div class="summary__title">
               Additional details
-              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s flexRight"> <path class="vertical" d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z" /> <path class="horizontal" d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z" /></svg>
+              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s flexRight">
+                <path class="vertical"
+                  d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z" />
+                <path class="horizontal"
+                  d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z" />
+              </svg>
             </div>
             <div class="summary__body">
               <ol class="list">
-                <li *ngIf="propertyDetails?.propertyTypeId"><span class="txt--midnight">Property Type</span>: {{propertyTypes.get(propertyDetails?.propertyTypeId)}}</li>
-                <li *ngIf="propertyDetails?.propertyStyleId"><span class="txt--midnight">Property Style</span>: {{propertyStyles.get(propertyDetails?.propertyStyleId)}}</li>
+                <li *ngIf="propertyDetails?.propertyTypeId"><span class="txt--midnight">Property Type</span>:
+                  {{propertyTypes.get(propertyDetails?.propertyTypeId)}}</li>
+                <li *ngIf="propertyDetails?.propertyStyleId"><span class="txt--midnight">Property Style</span>:
+                  {{propertyStyles.get(propertyDetails?.propertyStyleId)}}</li>
                 <li *ngIf="region"><span class="txt--midnight">Region</span>: {{region}}</li>
                 <li *ngIf="area"><span class="txt--midnight">Area</span>: {{area}}</li>
                 <li *ngIf="subArea"><span class="txt--midnight">Sub-Area</span>: {{subArea}}</li>
