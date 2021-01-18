@@ -99,8 +99,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   canChangeDate: boolean;
   canSearchAvailability = false;
   contactGroup$: Observable<ContactGroup>;
-  showPhotos: boolean = false;
-  showMap: boolean = false;
+  showPhotos = false;
+  showMap = false;
+  showProperty = false;
 
 
   get originTypeControl() {
@@ -876,6 +877,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   hidePhotosModal() {
     this.showPhotos = false;
+  }
+  changeProperty() {
+    this.showProperty = true;
   }
   startInstruction() {
     let val: Valuation;

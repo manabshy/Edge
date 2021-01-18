@@ -12,7 +12,8 @@ import { Property, PropertyStyles, PropertyTypes } from 'src/app/property/shared
 export class PropertyCardComponent implements OnInit, OnChanges {
   @Input() propertyDetails: Property;
   @Input() isHorizontalCard = false;
-  @Input() showActions = false;
+  @Input() showValuationActions = false;
+  @Input() showPropertyDetailActions = true;
   propertyTypes = PropertyTypes;
   propertyStyles = PropertyStyles;
   listInfo: DropdownListInfo;
@@ -24,6 +25,8 @@ export class PropertyCardComponent implements OnInit, OnChanges {
   subArea: string;
  @Output() showPhotos = new EventEmitter<boolean>();
  @Output() showMap = new EventEmitter<boolean>();
+ @Output() changeProperty = new EventEmitter<boolean>();
+ @Output() changeLastknownOwner = new EventEmitter<boolean>();
 
   constructor(private router: Router, private storage: StorageMap) { }
 
