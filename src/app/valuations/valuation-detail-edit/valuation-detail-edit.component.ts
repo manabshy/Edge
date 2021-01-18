@@ -99,6 +99,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   canChangeDate: boolean;
   canSearchAvailability = false;
   contactGroup$: Observable<ContactGroup>;
+  showPhotos: boolean = false;
+  showMap: boolean = false;
 
 
   get originTypeControl() {
@@ -864,6 +866,17 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.valuationForm.markAsPristine();
   }
 
+  showPhotosModal() {
+    this.showPhotos = true;
+  }
+
+  showMapModal() {
+    this.showMap = true;
+  }
+
+  hidePhotosModal() {
+    this.showPhotos = false;
+  }
   startInstruction() {
     let val: Valuation;
     val = { ...this.valuation, ...this.valuationForm.value };
