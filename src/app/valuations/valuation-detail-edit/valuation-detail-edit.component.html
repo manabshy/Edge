@@ -568,6 +568,11 @@
 <app-property-detail-photos [propertyId]="property?.propertyId" [showPhotos]="showPhotos"
   (photosClosed)="hidePhotosModal()"></app-property-detail-photos>
 
+  <!-- Property Map Modal -->
+<app-property-detail-map [propertyMap]="property?.map" [showMap]="showMap" (mapClosed)="showMap=false">
+</app-property-detail-map>
+
+
 <!-- <div class="container main">
   <div class="row page-title">
     <div class="col">

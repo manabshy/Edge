@@ -9,7 +9,6 @@ import { PropertyDetailComponent } from './property-detail/property-detail.compo
 import { PropertyDetailInstructionsComponent } from './property-detail-instructions/property-detail-instructions.component';
 import { PropertyDetailOffersComponent } from './property-detail-offers/property-detail-offers.component';
 import { PropertyDetailDocumentsComponent } from './property-detail-documents/property-detail-documents.component';
-import { PropertyDetailMapComponent } from './property-detail-map/property-detail-map.component';
 import { PropertyDetailEditComponent } from './property-detail-edit/property-detail-edit.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { PropertyDuplicateCheckerComponent } from './shared/property-duplicate-checker/property-duplicate-checker.component';
@@ -23,8 +22,6 @@ import { SharedModule } from '../shared/shared.module';
     PropertyDetailInstructionsComponent,
     PropertyDetailOffersComponent,
     PropertyDetailDocumentsComponent,
-
-    PropertyDetailMapComponent,
     PropertyDetailEditComponent,
     PropertyDuplicateCheckerComponent
   ],
