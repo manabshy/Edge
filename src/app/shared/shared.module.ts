@@ -82,6 +82,7 @@ import { DialogModule } from 'primeng/dialog';
 import { RedactedTableComponent } from './components/redacted-table/redacted-table.component';
 import { PropertyCardComponent } from './components/property-card/property-card.component';
 import { ContactgroupCardComponent } from './components/contactgroup-card/contactgroup-card.component';
+import { MarketingPreferencesComponent } from './components/marketing-preferences/marketing-preferences.component';
 
 const components = [
   BreadcrumbComponent,
@@ -120,7 +121,8 @@ const components = [
   SidenavItemComponent,
   RedactedTableComponent,
   PropertyCardComponent,
-  ContactgroupCardComponent
+  ContactgroupCardComponent,
+  MarketingPreferencesComponent,
 ];
 const pipes = [
   RoundingPipe,
@@ -167,6 +169,7 @@ const externalModules = [
     components,
     pipes,
     directives,
+
 
 
     // RoundingPipe,
