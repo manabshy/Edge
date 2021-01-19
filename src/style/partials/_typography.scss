@@ -98,6 +98,7 @@ summary                                         { padding:0; list-style:none; mi
     &.redacted--90pc                            { width:90%; }
     &.redacted--100pc                           { width:100%; }
     &+.redacted                                 { margin-left:6px; }
+    &--title                                    { background-color:$color--midnight-20; }
 }
 
 .txt--title, th                                 {
