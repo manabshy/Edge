@@ -26,7 +26,9 @@ export class ContactgroupCardComponent implements OnInit, OnChanges {
     this.numOfPeople = this.contactGroup?.contactPeople?.length;
     this.numOfPeople > 1 ? this.showAdditionalPeople = true : this.showAdditionalPeople = false;
     this.firstPerson = this.contactGroup?.contactPeople[0];
-    this.getPersonNotes(this.firstPerson?.personId);
+    if (this.firstPerson?.personId) {
+      this.getPersonNotes(this.firstPerson?.personId);
+    }
   }
 
   viewDetails(personId: number) {
