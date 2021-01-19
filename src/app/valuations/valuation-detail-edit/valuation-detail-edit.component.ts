@@ -701,6 +701,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.propertyService.newPropertyAdded$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(newProperty => {
       if (newProperty) {
         this.property = newProperty;
+        this.showProperty = false;
         this.valuationForm.get('property').setValue(this.property);
         this.getValuers(this.property.propertyId);
         // this.getContactGroup(newProperty.lastKnownOwner?.contactGroupId);
@@ -886,7 +887,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   showPropertyModal(){
     this.showProperty = true;
   }
-  
+
   startInstruction() {
     let val: Valuation;
     val = { ...this.valuation, ...this.valuationForm.value };
