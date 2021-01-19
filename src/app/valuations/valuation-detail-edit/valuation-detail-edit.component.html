@@ -582,7 +582,7 @@
       </fieldset>
 
       <ng-container *ngIf="(createdSigner || lastKnownOwner) && property">
-        <fieldset class="fieldset--width-max"
+        <!-- <fieldset class="fieldset--width-max"
           *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value) || (!isEditable && valuationForm.get('timeFrame').value) || (!isEditable && valuationForm.get('generalNotes').value)">
           <legend><span class="legend">Valuation Notes</span></legend>
           <fieldset *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value)">
@@ -608,8 +608,8 @@
               [ngClass]="{'is-invalid': (formErrors?.generalNotes)}"></textarea>
             {{formErrors?.generalNotes}}
           </fieldset>
-        </fieldset>
-
+        </fieldset> -->
+<!--
         <fieldset class="fieldset--width-max">
           <legend><span class="legend">Property Info</span></legend>
           <div class="inline-parent">
@@ -709,9 +709,9 @@
               </ng-template>
             </ng-select>
           </fieldset>
-        </fieldset>
+        </fieldset> -->
 
-        <fieldset *ngIf="allValuers" class="fieldset--width-max">
+        <!-- <fieldset *ngIf="allValuers" class="fieldset--width-max">
           <legend><span class="legend">Appointment</span></legend>
           <fieldset *ngIf="isEditable || isNewValuation">
             <span class="radio radio--boxed">
@@ -729,19 +729,6 @@
                   role="button"><span>Lettings</span></label>
               </span>
             </span>
-
-            <!-- <div class="nav nav-tabs" btnRadioGroup formControlName="type">
-              <div class="nav-item">
-                <label id="valuationBoth" btnRadio="both" class="nav-link" tabindex="0" role="button">Both</label>
-              </div>
-              <div class="nav-item">
-                <label id="valuationSales" data-cy="valSales" btnRadio="sales" class="nav-link" tabindex="0" role="button">Sales</label>
-              </div>
-              <div class="nav-item">
-                <label id="valuationLettings" btnRadio="lettings" class="nav-link" tabindex="0" role="button">Lettings</label>
-              </div>
-            </div> -->
-
           </fieldset>
 
           <fieldset [hidden]="!(isSalesOnly || isSalesAndLettings)">
@@ -845,7 +832,6 @@
                         </div>
                       </div>
                     </div>
-                    <!-- Refactor ASAP -->
                     <app-subnav>
                       <ng-container *ngIf="availableDates">
                         <div class="form-group" *ngIf="availableDates?.thisWeek">
@@ -891,9 +877,9 @@
               </div>
             </div>
           </div>
-        </fieldset>
+        </fieldset> -->
 
-        <fieldset *ngIf="areValuesVisible" data-cy="valuationValues" class="fieldset--width-max">
+        <!-- <fieldset *ngIf="areValuesVisible" data-cy="valuationValues" class="fieldset--width-max">
           <legend><span class="legend">Values</span></legend>
           <ol class="cards">
             <li
@@ -948,7 +934,7 @@
               </fieldset>
             </li>
           </ol>
-        </fieldset>
+        </fieldset> -->
 
         <footer class="footer">
           <button (click)="cancel()" type="button" class="btn btn--ghost" data-cy="cancelVal">Cancel</button>
