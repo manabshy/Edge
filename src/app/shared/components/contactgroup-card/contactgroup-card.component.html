@@ -25,6 +25,7 @@
               </path>
             </svg>
             {{contactGroup?.contactPeople[0]?.addressee}}
+            <span class="pill pill--positive pill--onRight flexRight">Main</span>
           </li>
           <li>
             <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
@@ -112,7 +113,8 @@
           <app-marketing-preferences [personDetails]="contactGroup?.contactPeople[0]"></app-marketing-preferences>
         </details>
       </li>
-
+      
+      <!-- Expandable - Referrals -->
       <li class="expandable">
         <details>
           <summary>
@@ -134,6 +136,7 @@
         </details>
       </li>
 
+      <!-- Expandable - Additional People -->
       <li class="expandable" *ngIf="showAdditionalPeople">
         <details>
           <summary>
@@ -151,7 +154,8 @@
           </summary>
           <ol class="list">
             <li *ngFor="let person of contactGroup?.contactPeople.slice(1,numOfPeople)">
-              <a (click)="viewDetails(person?.personId)">{{person?.addressee}}</a>
+              <a (click)="viewDetails(person?.personId)" class="overall"></a>
+              <svg _ngcontent-aap-c297="" aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path _ngcontent-aap-c297="" d="M32 32c8.6 0 15.5-7 15.5-15.5C47.5 7.9 40.6 1 32 1S16.5 7.9 16.5 16.5C16.5 25 23.4 32 32 32zM32 39.8c-10.3 0-31 5.2-31 15.5V63h62v-7.8C63 44.9 42.3 39.8 32 39.8z"></path></svg>{{person?.addressee}}
             </li>
           </ol>
         </details>
