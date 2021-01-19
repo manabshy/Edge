@@ -60,7 +60,7 @@ fieldset:first-of-type                          {
 }
 
 /***** Label *****/
-label, .label                                  	{ width:100%; display:block; color:$color--midnight-70; font-weight:500; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; }
+label, .label                                  	{ width:100%; display:flex; color:$color--midnight-70; font-weight:500; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; }
 label + input, .label + input, 
 label + textarea, .label + textarea, 
 label + .select, .label + .select,
