@@ -498,7 +498,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.getPropertyDetails(this.valuation.property.propertyId);
         }
         this.getContactGroup(this.lastKnownOwner?.contactGroupId); // get contact group for last know owner
-        this.getValuers(this.property.propertyId);
+        if (this.property?.propertyId) {
+          this.getValuers(this.property.propertyId);
+        }
         this.setValuationType(data);
         this.populateForm(data);
         this.setupInitialRentFigures(data);
@@ -884,7 +886,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   changeProperty() {
     this.showProperty = true;
   }
-  showPropertyModal(){
+  showPropertyModal() {
     this.showProperty = true;
   }
 

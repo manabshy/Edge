@@ -118,8 +118,8 @@ export class ContactGroupsService {
     return this.http.get<ContactGroupData>(url, { params: options })
       .pipe(
         map(response => response.result),
-        tap(data => this.contactGroupNotes = data.contactNotes),
-        tap(data => console.log('contact group details here...', JSON.stringify(data)))
+        tap(data => this.contactGroupNotes = data.contactNotes)
+        // tap(data => console.log('contact group details here...', JSON.stringify(data)))
       );
   }
 
