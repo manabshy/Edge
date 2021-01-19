@@ -224,7 +224,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
 
     if (this.propertyId) {
-      this.getPropertyDetails();
+      this.getPropertyDetails(this.propertyId);
       this.getValuationPropertyInfo(this.propertyId);
       this.getValuers(this.propertyId);
     }
@@ -321,8 +321,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.setOriginTypes(info.originTypes); // TODO: Issue on refresh
   }
 
-  getPropertyDetails() {
-    this.propertyService.getProperty(this.propertyId, false, true, false, true).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+  getPropertyDetails(propertyId: number) {
+    this.propertyService.getProperty(propertyId, false, true, false, true).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       if (result) {
         this.lastKnownOwner = result.lastKnownOwner;
         this.property = result;
@@ -493,7 +493,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
           this.property = this.property;
         } else {
           this.lastKnownOwner = this.valuation.propertyOwner;
-          this.property = this.valuation.property;
+          // this.property = this.valuation.property; // Fix this with Gabor on the API
+          this.getPropertyDetails(this.valuation.property.propertyId);
         }
         this.getContactGroup(this.lastKnownOwner?.contactGroupId); // get contact group for last know owner
         this.getValuers(this.property.propertyId);
