@@ -87,7 +87,7 @@ summary                                         { padding:0; list-style:none; mi
 
 /***** Redacted text effect *****/
 .wrapper--redacted                              { position:relative;
-    .message                                    { position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); }
+    .message, .btn                                    { width:400px; position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); z-index:9; }
 }
 
 .redacted                                       { background-color:$color--midnight-10; height:10px; min-width:20px; border-radius:20px; display:block;
