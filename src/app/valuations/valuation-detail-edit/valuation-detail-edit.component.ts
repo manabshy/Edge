@@ -883,6 +883,10 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   changeProperty() {
     this.showProperty = true;
   }
+  showPropertyModal(){
+    this.showProperty = true;
+  }
+  
   startInstruction() {
     let val: Valuation;
     val = { ...this.valuation, ...this.valuationForm.value };
