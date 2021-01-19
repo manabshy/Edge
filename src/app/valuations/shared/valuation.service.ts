@@ -44,8 +44,8 @@ export class ValuationService {
     const url = `${AppConstants.baseValuationUrl}/${valuationId}`;
     return this.http.get<any>(url)
       .pipe(
-        map(response => response.result),
-        tap(data => console.log('valuation', JSON.stringify(data)))
+        map(response => response.result)
+        // tap(data => console.log('valuation', JSON.stringify(data)))
       );
   }
 
