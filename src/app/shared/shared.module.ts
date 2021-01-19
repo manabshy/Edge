@@ -55,7 +55,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ModalModule } from 'ngx-bootstrap/modal/';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
-import { AccordionModule } from 'ngx-bootstrap/accordion';
+// import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
 
@@ -79,6 +79,8 @@ import { SidenavItemComponent } from './components/sidenav-item/sidenav-item.com
 
 import { GalleriaModule } from 'primeng/galleria';
 import { DialogModule } from 'primeng/dialog';
+import {AccordionModule} from 'primeng/accordion';
+
 import { RedactedTableComponent } from './components/redacted-table/redacted-table.component';
 import { PropertyCardComponent } from './components/property-card/property-card.component';
 import { ContactgroupCardComponent } from './components/contactgroup-card/contactgroup-card.component';
@@ -153,7 +155,6 @@ const externalModules = [
   PopoverModule,
   NgPipesModule,
   TooltipModule,
-  AccordionModule,
   ButtonsModule,
   OrderModule,
   ToastrModule,
@@ -165,7 +166,8 @@ const externalModules = [
   AngularStickyThingsModule,
   NgSelectModule,
   GalleriaModule,
-  DialogModule
+  DialogModule,
+  AccordionModule
 ];
 
 @NgModule({
@@ -173,8 +175,6 @@ const externalModules = [
     components,
     pipes,
     directives,
-
-
 
     // RoundingPipe,
     // TruncatingPipe,
