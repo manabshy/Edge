@@ -1,5 +1,8 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { ContactGroup } from 'src/app/contactgroups/shared/contact-group';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { ContactGroup, ContactNote } from 'src/app/contactgroups/shared/contact-group';
+import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { Person } from '../../models/person';
 
 @Component({
@@ -12,7 +15,8 @@ export class ContactgroupCardComponent implements OnInit, OnChanges {
   numOfPeople: number;
   showAdditionalPeople = false;
   firstPerson: Person;
-  constructor() { }
+  importantNotes$: Observable<ContactNote[]>;
+  constructor(private contactGroupService: ContactGroupsService) { }
   ngOnInit(): void {
   }
 
@@ -22,6 +26,7 @@ export class ContactgroupCardComponent implements OnInit, OnChanges {
     this.numOfPeople = this.contactGroup?.contactPeople?.length;
     this.numOfPeople > 1 ? this.showAdditionalPeople = true : this.showAdditionalPeople = false;
     this.firstPerson = this.contactGroup?.contactPeople[0];
+    this.getPersonNotes(this.firstPerson?.personId);
   }
 
   viewDetails(personId: number) {
@@ -29,12 +34,16 @@ export class ContactgroupCardComponent implements OnInit, OnChanges {
       const people = this.contactGroup?.contactPeople;
       const index = people.findIndex(x => x.personId === personId);
       const person = people.find(x => x.personId === personId);
-
+      this.getPersonNotes(person.personId);
       people.splice(index, 1);
       people.unshift(person);
       console.log({ person }, { people });
     }
 
+  }
+
+  getPersonNotes(personId: number) {
+    this.importantNotes$ = this.contactGroupService.getPersonNotes(personId).pipe(map(x => x.filter(n => n.isImportant)));
   }
 
 }
