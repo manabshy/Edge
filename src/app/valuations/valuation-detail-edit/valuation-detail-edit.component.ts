@@ -219,6 +219,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.propertyId = +this.route.snapshot.queryParamMap.get('propertyId');
     this.lastKnownOwnerId = +this.route.snapshot.queryParamMap.get('lastKnownOwnerId');
     this.isNewValuation = this.route.snapshot.queryParamMap.get('isNewValuation') as unknown as boolean;
+    this.isNewValuation ? this.showProperty = true : this.showProperty = false;
     if (this.valuationId) {
       this.getValuation(this.valuationId);
     }
@@ -671,6 +672,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   getSelectedProperty(property: Property) {
     if (property) {
+      this.showProperty = false;
       this.valuers = [];
       this.property = property;
       this.isPropertyChanged = true;
@@ -680,7 +682,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.getValuers(property.propertyId);
       this.getValuationPropertyInfo(property.propertyId);
       this.valuationForm.markAsDirty();
-
     }
   }
 
