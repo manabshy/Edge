@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="row__item row__item--aside">
+  <div class="row__item row__item--aside">    
     <app-contactgroup-card [contactGroup]="contactGroup$|async" *ngIf="contactGroup$|async"></app-contactgroup-card>
     <div class="card">
       <div class="card__body card__body--list">
@@ -63,7 +63,7 @@
         </ul>
       </div>
     </div>
-
+    
     <div class="wrapper--redacted">
       <button class="btn btn--redacted btn--positive"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><path class="horizontal" d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z"></path><path class="vertical" d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z"></path></svg>New Property</button>
       <div class="card card--horizontal">
@@ -100,7 +100,7 @@
       [showValuationActions]="true" (showPhotos)="showPhotosModal()" (showMap)="showMapModal()"
       (changeProperty)="changeProperty()"></app-property-card>
 
-
+    
 
     <form [formGroup]="valuationForm" (ngSubmit)="saveValuation()" autocompleteOff>
       <p-dialog header="Find Property" [(visible)]="showProperty" [modal]="true" [draggable]="false">
@@ -214,7 +214,7 @@
             <fieldset class="inline-child">
               <label for="receptions"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
                   class="icon icon--onLeft">
-                  <path class="st0"
+                  <path
                     d="M58.2 26.2c-3.2 0-5.8 2.6-5.8 5.8v8.7H11.6V32c0-3.2-2.6-5.8-5.8-5.8S0 28.8 0 32v14.5c0 3.2 2.6 5.8 5.8 5.8h52.4c3.2 0 5.8-2.6 5.8-5.8V32C64 28.8 61.4 26.2 58.2 26.2zM49.5 11.6h-35c-3.2 0-5.8 2.6-5.8 5.8v6.3c3.4 1.2 5.8 4.4 5.8 8.2v5.9h34.9v-5.9c0-3.8 2.4-7 5.8-8.2v-6.3C55.3 14.3 52.7 11.6 49.5 11.6z" />
                 </svg>Receptions</label>
               <input type="number" name="receptions" id="receptions" formControlName="receptions" min="0" max="99"
@@ -289,15 +289,15 @@
           <fieldset *ngIf="isEditable || isNewValuation">
             <span class="radio radio--boxed">
               <span>
-                <input type="radio" checked="checked" tabindex="2" name="radio-toggle3" id="valuationBoth">
+                <input type="radio" checked="checked" tabindex="2" name="appointments" id="valuationBoth">
                 <label for="valuationBoth" btnRadio="both" role="button"><span>Both</span></label>
               </span>
               <span>
-                <input type="radio" tabindex="3" name="radio-toggle3" id="valuationSales">
+                <input type="radio" tabindex="3" name="appointments" id="valuationSales">
                 <label for="valuationSales" data-cy="valSales" btnRadio="sales" role="button"><span>Sales</span></label>
               </span>
               <span>
-                <input type="radio" tabindex="3" name="radio-toggle3" id="valuationLettings">
+                <input type="radio" tabindex="3" name="appointments" id="valuationLettings">
                 <label for="valuationLettings" btnRadio="lettings" tabindex="0" role="button"><span>Lettings</span></label>
               </span>
             </span>
@@ -313,10 +313,11 @@
                 <label id="valuationLettings" btnRadio="lettings" class="nav-link" tabindex="0" role="button">Lettings</label>
               </div>
             </div> -->
+
           </fieldset>
 
           <fieldset [hidden]="!(isSalesOnly || isSalesAndLettings)">
-            <label for="salesValuer" class="small">Sales Valuer</label>
+            <label for="salesValuer">Sales Valuer</label>
             <ng-select placeholder="Select Valuer" [items]="salesValuers" bindLabel="fullName" bindValue="staffMemberId"
               groupBy="staffMembers" [multiple]="false" formControlName="salesValuerId"
               (change)="onSalesValuerChange($event)" [readonly]="!isEditable && !isNewValuation"
@@ -332,7 +333,7 @@
           </fieldset>
 
           <fieldset [hidden]="!(isLettingsOnly || isSalesAndLettings)">
-            <label for="lettingsValuer" class="small">Lettings Valuer</label>
+            <label for="lettingsValuer">Lettings Valuer</label>
             <ng-select placeholder="Select Valuer" [items]="lettingsValuers" bindLabel="fullName"
               bindValue="staffMemberId" groupBy="staffMembers" [multiple]="false" formControlName="lettingsValuerId"
               (change)="onLettingsValuerChange($event)" [readonly]="!isEditable && !isNewValuation"
@@ -362,7 +363,7 @@
               <fieldset *ngIf="selectedDate || showDateAndDuration">
                 <div class="form-group row">
                   <div class="col-sm-10" [ngClass]="{'mt-2':'!canBookAppointment'}">
-                    <label class="small">Date & Time</label>
+                    <label>Date & Time</label>
                     <div class="d-flex d-sm-block">
                       <label for="changeDate" class="mobile-btn small">{{(selectedDate || valuation?.valuationDate) |
                         date: 'E d MMM yyyy, HH:mm':'+0000'}}</label>
@@ -467,92 +468,58 @@
         <fieldset *ngIf="areValuesVisible" data-cy="valuationValues" class="fieldset--width-max">
           <legend><span class="legend">Values</span></legend>
           <ol class="cards">
-            <li
-              *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('suggestedAskingPrice').value)">
-              <h5 class="card-title">Sell</h5>
-              <label class="small" for="sellValue">Value</label>
-              <input type="text" name="sellValue" id="sellValue" class="form-control form-control-sm"
-                formControlName="suggestedAskingPrice" *ngIf="!(!isEditable && !isNewValuation)" data-cy="sellValue">
-              <div class="small" *ngIf="!isEditable && !isNewValuation">
-                <strong>{{valuationForm.get('suggestedAskingPrice').value | currency:'GBP':'symbol':'1.0-0'}}</strong>
-              </div>
+            <li *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('suggestedAskingPrice').value)">
+              <h5 class="txt--title">Sell</h5>
+              <fieldset>
+                <label for="sellValue">Value</label>
+                <input type="text" name="sellValue" id="sellValue" formControlName="suggestedAskingPrice" *ngIf="!(!isEditable && !isNewValuation)" data-cy="sellValue">
+                <strong *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingPrice').value | currency:'GBP':'symbol':'1.0-0'}}</strong>
+              </fieldset>
             </li>
-            <li
-              *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('suggestedAskingRentLongLet').value)">
-              <h5 class="card-title">Long Let</h5>
-              <div class="form-group">
-                <label class="small" for="longLetValue">Value (per week)</label>
-                <input type="text" name="longLetValue" id="longLetValue" class="form-control form-control-sm"
-                  formControlName="suggestedAskingRentLongLet" *ngIf="!(!isEditable && !isNewValuation)"
-                  data-cy="longLetValue">
-                <div class="small" *ngIf="!isEditable && !isNewValuation">
-                  <strong>{{valuationForm.get('suggestedAskingRentLongLet').value |
-                    currency:'GBP':'symbol':'1.0-0'}}</strong>
-                </div>
-              </div>
-              <label class="small" for="longLetMonthlyValue">Value (per month)</label>
-              <input type="text" name="longLetMonthlyValue" id="longLetMonthlyValue"
-                class="form-control form-control-sm" formControlName="suggestedAskingRentLongLetMonthly"
-                *ngIf="!(!isEditable && !isNewValuation)" data-cy="longLetMonthlyValue">
-              <div class="small" *ngIf="!isEditable && !isNewValuation">
-                <strong>{{valuationForm.get('suggestedAskingRentLongLetMonthly').value |
-                  currency:'GBP':'symbol':'1.0-0'}}</strong>
-              </div>
+            <li *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('suggestedAskingRentLongLet').value)">
+              <h5 class="txt--title">Long Let</h5>
+              <fieldset>
+                <label for="longLetValue">Value (per week)</label>
+                <input type="text" name="longLetValue" id="longLetValue" formControlName="suggestedAskingRentLongLet" *ngIf="!(!isEditable && !isNewValuation)" data-cy="longLetValue">
+                <strong *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingRentLongLet').value | currency:'GBP':'symbol':'1.0-0'}}</strong>
+              </fieldset>
+              <fieldset>
+                <label for="longLetMonthlyValue">Value (per month)</label>
+                <input type="text" name="longLetMonthlyValue" id="longLetMonthlyValue" formControlName="suggestedAskingRentLongLetMonthly" *ngIf="!(!isEditable && !isNewValuation)" data-cy="longLetMonthlyValue">
+                <strong *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingRentLongLetMonthly').value | currency:'GBP':'symbol':'1.0-0'}}</strong>
+              </fieldset>
             </li>
-            <li
-              *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('suggestedAskingRentShortLet').value)">
-              <h5 class="card-title">Short Let</h5>
-              <div class="form-group">
-                <label class="small" for="shortLetValue">Value (per week)</label>
-                <input type="text" name="shortLetValue" id="shortLetValue" class="form-control form-control-sm"
-                  formControlName="suggestedAskingRentShortLet" *ngIf="!(!isEditable && !isNewValuation)"
-                  data-cy="shortLetValue">
-                <div class="small" *ngIf="!isEditable && !isNewValuation">
-                  <strong>{{valuationForm.get('suggestedAskingRentShortLet').value |
-                    currency:'GBP':'symbol':'1.0-0'}}</strong>
-                </div>
-              </div>
-              <label class="small" for="shortLetMonthlyValue">Value (per month)</label>
-              <input type="text" name="shortLetMonthlyValue" id="shortLetMonthlyValue"
-                class="form-control form-control-sm" formControlName="suggestedAskingRentShortLetMonthly"
-                *ngIf="!(!isEditable && !isNewValuation)" data-cy="shortLetMonthlyValue">
-              <div class="small" *ngIf="!isEditable && !isNewValuation">
-                <strong>{{valuationForm.get('suggestedAskingRentShortLetMonthly').value |
-                  currency:'GBP':'symbol':'1.0-0'}}</strong>
-              </div>
+            <li *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('suggestedAskingRentShortLet').value)">
+              <h5 class="txt--title">Short Let</h5>
+              <fieldset>
+                <label for="shortLetValue">Value (per week)</label>
+                <input type="text" name="shortLetValue" id="shortLetValue" formControlName="suggestedAskingRentShortLet" *ngIf="!(!isEditable && !isNewValuation)" data-cy="shortLetValue">
+                <strong *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingRentShortLet').value | currency:'GBP':'symbol':'1.0-0'}}</strong>
+              </fieldset>
+              <fieldset>
+                <label for="shortLetMonthlyValue">Value (per month)</label>
+                <input type="text" name="shortLetMonthlyValue" id="shortLetMonthlyValue" formControlName="suggestedAskingRentShortLetMonthly" *ngIf="!(!isEditable && !isNewValuation)" data-cy="shortLetMonthlyValue">
+                <strong *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingRentShortLetMonthly').value | currency:'GBP':'symbol':'1.0-0'}}</strong>
+              </fieldset>
             </li>
           </ol>
         </fieldset>
 
-
-        <div class="form-actions">
-          <div class="container">
-            <div class="row justify-content-end w-100 no-gutters">
-              <div class="col-sm-10 d-flex">
-                <button (click)="cancel()" type="button" class="btn btn-light mr-2" data-cy="cancelVal">Cancel</button>
-                <button *ngIf="isEditable || isNewValuation" type="submit" class="btn btn-secondary mr-2" id="saveVal"
-                  data-cy="saveVal" [attr.disabled]="isSubmitting ? '' : null">
-                  <i class="fas fa-spinner fa-pulse d-inline-block mr-2" *ngIf="isSubmitting"></i>Save
-                </button>
-                <button *ngIf="canInstruct" type="button" class="btn btn-secondary"
-                  (click)="instructionModal.show(); startInstruction()" data-cy="startInstruction">Instruct</button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <footer class="footer">
+          <button (click)="cancel()" type="button" class="btn btn--ghost" data-cy="cancelVal">Cancel</button>
+          <button *ngIf="isEditable || isNewValuation" type="submit" class="btn btn--positive" id="saveVal" data-cy="saveVal" [attr.disabled]="isSubmitting ? '' : null"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="loading" *ngIf="isSubmitting"><path d="M11.9 48.4c-4.1-5-6.3-11.5-5.8-18.6C7.1 17.6 16.8 7.5 29 6.2 44.7 4.4 58 16.7 58 32c0 6.2-2.2 11.8-5.8 16.3 -1 1.2-0.8 2.9 0.3 4l0 0c1.3 1.3 3.4 1.1 4.5-0.3 4.8-6 7.5-13.8 7-22.2C62.9 14 50.1 1.2 34.3 0.1 15.6-1.2 0 13.6 0 32c0 7.7 2.7 14.8 7.3 20.3 1.1 1.3 3 1.4 4.2 0.2l0.2-0.2C12.8 51.2 12.8 49.6 11.9 48.4z"></path></svg>Save</button>
+          <button *ngIf="canInstruct" type="button" class="btn btn--info" (click)="instructionModal.show(); startInstruction()" data-cy="startInstruction">Instruct</button>
+        </footer>
       </ng-container>
     </form>
   </div>
 </div>
 
 <!-- Property Photos Modal -->
-<app-property-detail-photos [propertyId]="property?.propertyId" [showPhotos]="showPhotos" *ngIf="showPhotos"
-  (photosClosed)="hidePhotosModal()"></app-property-detail-photos>
+<app-property-detail-photos [propertyId]="property?.propertyId" [showPhotos]="showPhotos" *ngIf="showPhotos" (photosClosed)="hidePhotosModal()"></app-property-detail-photos>
 
 <!-- Property Map Modal -->
-<app-property-detail-map [propertyMap]="property?.map" [showMap]="showMap" (mapClosed)="showMap=false">
-</app-property-detail-map>
-
+<app-property-detail-map [propertyMap]="property?.map" [showMap]="showMap" (mapClosed)="showMap=false"></app-property-detail-map>
 
 <!-- <div class="container main">
   <div class="row page-title">

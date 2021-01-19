@@ -174,7 +174,7 @@ This applies from 992px onwards
   
   .row                                          { display:flex; }
   .row__item                                    { flex-grow:1; }
-  .row__item+*                                  { margin:0 0 0 30px; }
+  .row__item+*                                  { margin:0 0 60px 30px; }
 
   .row__item--aside                             { width:240px; max-width:240px; flex-shrink:0;
     .card                                       { margin:0 0 16px 0; }
@@ -214,14 +214,20 @@ This applies from 992px onwards
     }
   }
   .calendar-container                           { margin-top:40px; }
+
+  .footer                                       { margin:0; padding:10px 0; border-top:1px solid #E7E8EE; display:flex; justify-content:flex-end; width:calc(100% - 276px); background-color:$color--snow; position:fixed; bottom:0; right:30px; box-shadow:0px 0px 0px 1px $color--snow; -webkit-box-shadow:0px 0px 0px 1px $color--snow;
+    .btn                                        {
+      &+*                                       { margin-left:10px; }
+    }
+  }
 }
 
 /***********************************************
 Mobile ONLY - This applies from 0px to 767px
 ***********************************************/
 @media only screen and (max-width:767px) {
-  .header                                         { margin-bottom:6px; }
-  .header-title li .icon                          { height:10px; width:10px; }
-  .header-title li+*                              { margin-left:4px; }
-  .header-title li:nth-child(1n+3):before         { left:2px; }
+  .header                                       { margin-bottom:6px; }
+  .header-title li .icon                        { height:10px; width:10px; }
+  .header-title li+*                            { margin-left:4px; }
+  .header-title li:nth-child(1n+3):before       { left:2px; }
 }
