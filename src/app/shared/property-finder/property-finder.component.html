@@ -1,10 +1,62 @@
 <ng-container>
+  <div class="row">
+    <div class="grid grid--25">
+      <form [formGroup]="propertyFinderForm" autocomplete="off">
+        <fieldset>
+          <label for="searchTerm">Property Address or Id</label>
+          <input #searchPropertyInput type="search" id="searchTerm" autofocus formControlName="searchTerm" (keydown.enter)="searchProperty()"
+            [ngbTypeahead]="suggestions" [focusFirst]="false" (selectItem)="selectedSuggestion($event)"
+            data-cy="propSearchTerm">
+        </fieldset>
+        <fieldset>
+          <button class="btn btn--info" (click)="searchProperty()" data-cy="searchProperty">Search</button>
+        </fieldset>
+      </form>
+      <p *ngIf="properties?.length">
+        {{properties?.length}} Results found
+      </p>
+    </div>
+    <div class="grid grid--75 grid--dividerLeft">
+      <div class="table">
+        <table class="table--mobile table--rowHover">
+          <!-- <thead>
+            <tr>
+              <th>Name</th>
+              <th>Telephone</th>
+              <th colspan="2">Email</th>
+            </tr>
+          </thead> -->
+          <tbody>
+            <tr *ngIf="!properties?.length">
+              <td colspan="4">
+                No Property {{label}} found
+              </td>
+            </tr>
+            <tr *ngFor="let property of properties" (click)="selectProperty(property?.propertyId); properties = null">
+              <td data-title="Address">
+                <span class="cell-content">
+                  {{property?.propertyAddress}}
+                </span>
+              </td>
+              <td class="hide--mobile">
+                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s">
+                  <path d="M1 35.4h48.8L37.5 47.8l4.9 4.9L63 32 42.3 11.3l-4.9 4.9 12.3 12.3H1V35.4z"></path>
+                </svg>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<!-- <ng-container>
   <form class="pb-0" [formGroup]="propertyFinderForm" autocompleteOff>
     <div class="row" [hidden]="!(selectedPropertyDetails||selectedProperties && selectedProperties.length)">
       <div class="col-sm-10 offset-sm-2" *ngIf="selectedPropertyDetails">
         <ng-container *ngIf="!isLabelHidden">
-          <label for="propSearchTerm"
-            class="small">Property {{label}}</label>
+          <label for="propSearchTerm" class="small">Property {{label}}</label>
         </ng-container>
         <div class="form-group d-flex d-sm-block">
           <input type="hidden" #selectedPropertyInput id="selectedPropertyAddress"
@@ -40,7 +92,7 @@
       <div class="col-sm-3 offset-sm-2" [hidden]="!isSearchVisible">
         <div class="form-group">
           <button type="button" class="btn btn-light btn-sm btn-block"
-          [ngClass]="{'is-invalid': propertyRequiredWarning}" (click)="setProperties()" data-cy="addProperty">
+            [ngClass]="{'is-invalid': propertyRequiredWarning}" (click)="setProperties()" data-cy="addProperty">
             <i class="fas fa-plus mr-2"></i>
             Property {{label}}
           </button>
@@ -58,14 +110,14 @@
               </button>
             </h4>
             <div class="form-group">
-              <label for="propSearchTerm"
-              class="small">Find</label>
+              <label for="propSearchTerm" class="small">Find</label>
               <div class="input-group input-group-sm">
                 <input #searchPropertyInput type="search" id="propSearchTerm" class="form-control"
                   formControlName="searchTerm" (keydown.enter)="searchProperty()" [ngbTypeahead]="suggestions"
                   [focusFirst]="false" (selectItem)="selectedSuggestion($event)" data-cy="propSearchTerm">
                 <div class="input-group-append">
-                  <button type="button" class="btn btn-secondary" (click)="searchProperty()" data-cy="searchProperty">Search</button>
+                  <button type="button" class="btn btn-secondary" (click)="searchProperty()"
+                    data-cy="searchProperty">Search</button>
                 </div>
               </div>
             </div>
@@ -80,9 +132,6 @@
                 <app-subnav-item *ngFor="let property of properties"
                   (click)="selectProperty(property?.propertyId); properties = null">
                   <div class="row">
-                    <!-- <div class="col-12 mb-2" *ngIf="property?.propertyId">
-                      <small class="text-muted mr-2">PR-{{property?.propertyId}}</small>
-                    </div> -->
                     <div class="col-sm">
                       {{property?.propertyAddress}}
                     </div>
@@ -105,4 +154,4 @@
       </div>
     </div>
   </form>
-</ng-container>
+</ng-container> -->
