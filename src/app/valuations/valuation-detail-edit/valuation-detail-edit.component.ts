@@ -185,6 +185,18 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     { staffMemberId: 2537, fullName: 'Mansoor Malik', emailAddress: 'mmalik@dng.co.uk', hasReminder: null }
   ];
 
+  activeState: boolean[] = [false, false, false, false];
+  statuses = [
+    { name: 'valuationNotes', value: 0 },
+    { name: 'propertyInfo', value: 1 },
+    { name: 'appointment', value: 2 },
+    { name: 'values', value: 3 },
+    { name: 'termsOfBusinessues', value: 4 },
+    { name: 'antiMoneyLaundering', value: 5 },
+    { name: 'landRegistery', value: 6 },
+    { name: 'status', value: 7 },
+    { name: 'instruct', value: 8 },
+  ];
   constructor(private valuationService: ValuationService,
     private propertyService: PropertyService,
     private contactGroupService: ContactGroupsService,
@@ -888,6 +900,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   }
   showPropertyModal() {
     this.showProperty = true;
+  }
+
+
+  toggleAccordion(index: number) {
+    this.activeState[index] = !this.activeState[index];
   }
 
   startInstruction() {
