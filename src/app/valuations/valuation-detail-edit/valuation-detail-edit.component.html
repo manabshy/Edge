@@ -174,22 +174,21 @@
               {{formErrors?.reason}}
             </fieldset>
 
-              <fieldset *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('timeFrame').value)">
-                <label for="timeFrame">When are you looking to market?</label>
-                <textarea name="timeFrame" id="timeFrame" cols="30" rows="3" formControlName="timeFrame"
-                  data-cy="timeFrame" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
-                  [ngClass]="{'is-invalid': (formErrors?.timeFrame)}"></textarea>
-                {{formErrors?.timeFrame}}
-              </fieldset>
+            <fieldset *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('timeFrame').value)">
+              <label for="timeFrame">When are you looking to market?</label>
+              <textarea name="timeFrame" id="timeFrame" cols="30" rows="3" formControlName="timeFrame"
+                data-cy="timeFrame" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                [ngClass]="{'is-invalid': (formErrors?.timeFrame)}"></textarea>
+              {{formErrors?.timeFrame}}
+            </fieldset>
 
-              <fieldset *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('generalNotes').value)">
-                <label for="generalNotes">Notes (points discussed, other property details)</label>
-                <textarea name="generalNotes" id="generalNotes" cols="30" rows="3" formControlName="generalNotes"
-                  data-cy="generalNotes" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
-                  [ngClass]="{'is-invalid': (formErrors?.generalNotes)}"></textarea>
-                {{formErrors?.generalNotes}}
-              </fieldset>
-            </ng-container>
+            <fieldset *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('generalNotes').value)">
+              <label for="generalNotes">Notes (points discussed, other property details)</label>
+              <textarea name="generalNotes" id="generalNotes" cols="30" rows="3" formControlName="generalNotes"
+                data-cy="generalNotes" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                [ngClass]="{'is-invalid': (formErrors?.generalNotes)}"></textarea>
+              {{formErrors?.generalNotes}}
+            </fieldset>
           </p-accordionTab>
 
           <p-accordionTab header="Property Info" [(selected)]="activeState[1]">
@@ -374,33 +373,30 @@
                       <div class="col-sm-10" [ngClass]="{'mt-2':'!canBookAppointment'}">
                         <label>Date & Time</label>
                         <div class="d-flex d-sm-block">
-                          <label for="changeDate" class="mobile-btn small">{{(selectedDate || valuation?.valuationDate) |
-                            date: 'E d MMM yyyy, HH:mm':'+0000'}}</label>
-                          <button id="changeDate" class="btn btn-light btn-sm ml-2" type="button"
-                            (click)="getAvailability()" *ngIf="(isEditable || isNewValuation) && canChangeDate">Change
-                          </button>
+                          <label for="changeDate" class="mobile-btn small">{{(selectedDate || valuation?.valuationDate) | date: 'E d MMM yyyy, HH:mm':'+0000'}}</label>
+                          <button id="changeDate" class="btn btn-light btn-sm ml-2" type="button" (click)="getAvailability()" *ngIf="(isEditable || isNewValuation) && canChangeDate">Change</button>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-sm-4 col-xl-6 form-group">
-                      <label for="valuationDuration" class="small">Duration</label>
-                      <select class="custom-select custom-select-sm single-select" name="valuationDuration"
-                        id="valuationDuration" formControlName="totalHours"
-                        [attr.disabled]="!isEditable && !isNewValuation ? true : null">
-                        <option value="0.5">30 mins</option>
-                        <option value="0.75">45 mins</option>
-                        <option value="1" selected>1 hour</option>
-                        <option value="1.25" selected>1 hour 15 mins</option>
-                        <option value="1.50" selected>1 hour 30 mins</option>
-                        <option value="1.75" selected>1 hour 45 mins</option>
-                        <option value="2" selected>2 hours</option>
-                      </select>
+                  
+                    <div class="row">
+                      <div class="col-sm-4 col-xl-6 form-group">
+                        <label for="valuationDuration" class="small">Duration</label>
+                        <select class="custom-select custom-select-sm single-select" name="valuationDuration"
+                          id="valuationDuration" formControlName="totalHours"
+                          [attr.disabled]="!isEditable && !isNewValuation ? true : null">
+                          <option value="0.5">30 mins</option>
+                          <option value="0.75">45 mins</option>
+                          <option value="1" selected>1 hour</option>
+                          <option value="1.25" selected>1 hour 15 mins</option>
+                          <option value="1.50" selected>1 hour 30 mins</option>
+                          <option value="1.75" selected>1 hour 45 mins</option>
+                          <option value="2" selected>2 hours</option>
+                        </select>
+                      </div>
                     </div>
-                  </div>
-                </fieldset>
-
+                  </fieldset>
+                </div>
               </div>
             </ng-container>
           </p-accordionTab>
