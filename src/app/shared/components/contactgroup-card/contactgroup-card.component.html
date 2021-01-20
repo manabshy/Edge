@@ -25,7 +25,7 @@
               </path>
             </svg>
             {{contactGroup?.contactPeople[0]?.addressee}}
-            <span class="pill pill--positive pill--onRight flexRight">Main</span>
+            <span *ngIf="contactGroup?.contactPeople[0]?.isMainPerson" class="pill pill--positive pill--onRight flexRight">Main</span>
           </li>
           <li>
             <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
@@ -113,7 +113,7 @@
           <app-marketing-preferences [personDetails]="contactGroup?.contactPeople[0]"></app-marketing-preferences>
         </details>
       </li>
-      
+
       <!-- Expandable - Referrals -->
       <li class="expandable">
         <details>
