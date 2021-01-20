@@ -30,7 +30,7 @@ button::-moz-focus-inner                        { border:0; padding:0; }
 
 /***** Sizes *****/
 .btn.btn--xs                                    { min-height:10px; font-size:.7em; }
-.btn.btn--s                                     { min-height:20px; font-size:.9em; }
+.btn.btn--s                                     { min-height:20px; font-size:.9em; padding:0 6px; }
 .btn.btn--m                                     { font-size:1em; }
 .btn.btn--l                                     { font-size:1.25em; }
 .btn.btn--xl                                    { font-size:1.5em; }

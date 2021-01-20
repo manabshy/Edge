@@ -30,6 +30,7 @@ form .message, .btn                            	{ font-weight:normal; }
 form + *, fieldset + *, fieldset small + *, 
 label + *, .label + *, input + *, 
 textarea + *, .select + *, .inline-parent + *  	{ margin-top:12px; }
+*+h3                                            { margin-top:30px; }
 input, textarea, select                        	{ border-color:$color--midnight-20; }
 
 /*********************************************** 
@@ -192,7 +193,9 @@ label + .inline-parent                          { margin-top:6px; }
 .inline-parent textarea, 
 .inline-parent select, 
 .inline-parent .select                          { width:100%; }
-.inline-parent .inline-child                    { margin:0 20px 0 0; max-width:100%; display:flex; flex:1; flex-direction:column; vertical-align:bottom; align-self:flex-end; }
+.inline-parent .inline-child                    { margin:0 20px 0 0; max-width:100%; display:flex; flex:1; flex-direction:column; vertical-align:bottom; align-self:flex-end;
+   label+*                                      { margin-top:6px; }
+}
 .inline-parent .inline-child + * 		  		   { margin-top:20px; }
 .inline-parent .inline-child .message           { width:100%; }
 .inline-parent .inline-child:last-child         { margin-right:0; }

@@ -112,6 +112,10 @@ app-telephone                                   { width:100%; display:flex; alig
 .timeline--condensed li:after                   { width:9px; height:9px; background-color:$color--snow; border:1px solid $color--midnight-20; top:4px; }
 .timeline .timeline__positive:after             { background-color:$color--positive-20; border:1px solid $color--positive-20; }
 
+.wrapper--note                                  {
+  .icon--timeline                               { display:none; }
+}
+
 .overlay                                        { display:flex; width:100%; height:100%; align-items:center; justify-content:center; 
   .card                                         { width:400px; background-color:$color--midnight; color:$color--snow; box-shadow:none; }
 }
@@ -215,7 +219,7 @@ This applies from 992px onwards
   }
   .calendar-container                           { margin-top:40px; }
 
-  .footer                                       { margin:0; padding:10px 0; border-top:1px solid #E7E8EE; display:flex; justify-content:flex-end; width:calc(100% - 276px); background-color:$color--snow; position:fixed; bottom:0; right:30px; box-shadow:0px 0px 0px 1px $color--snow; -webkit-box-shadow:0px 0px 0px 1px $color--snow;
+  .footer                                       { margin:0; padding:10px 0; border-top:1px solid #E7E8EE; display:flex; justify-content:flex-end; width:calc(100% - 276px); background-color:$color--snow; position:fixed; bottom:0; right:30px; box-shadow:0px 0px 0px 1px $color--snow; -webkit-box-shadow:0px 0px 0px 1px $color--snow; z-index:10;
     .btn                                        {
       &+*                                       { margin-left:10px; }
     }
