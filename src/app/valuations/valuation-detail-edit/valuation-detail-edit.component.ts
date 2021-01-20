@@ -102,6 +102,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   showPhotos = false;
   showMap = false;
   showProperty = false;
+  isInstructVisible = false;
 
 
   get originTypeControl() {
