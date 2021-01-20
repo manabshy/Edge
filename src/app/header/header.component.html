@@ -22,27 +22,24 @@
         </svg></a>
     </li>
     <li class="profile">
-      <span class="circle">
-        <img [src]="currentStaffMember?.thumbnailUrl" alt="" class="circle"
-          *ngIf="currentStaffMember?.thumbnailUrl; else noPhoto">
-        <ng-template #noPhoto>
-          <img src="https://dummyimage.com/75x75/e9ecef/212529&text=no+photo" alt="">
-        </ng-template>
-      </span>
-      <span>{{currentStaffMember?.fullName}}</span>
-     <div dropdown placement="bottom right">
+      <div dropdown placement="bottom right">
         <a class="btn btn-light dropdown-toggle" id="headerMenu" dropdownToggle  (click)="$event.stopPropagation();" attr.aria-controls="headerMenu">
+          <span class="circle">
+            <img [src]="currentStaffMember?.thumbnailUrl" alt="" class="circle" *ngIf="currentStaffMember?.thumbnailUrl; else noPhoto">
+            <ng-template #noPhoto>
+              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon"><path d="M22.7 31.2c-2.1 0-3.9 1.7-3.9 3.9s1.7 3.9 3.9 3.9 3.9-1.7 3.9-3.9S24.8 31.2 22.7 31.2zM41.3 31.2c-2.1 0-3.9 1.7-3.9 3.9s1.7 3.9 3.9 3.9 3.9-1.7 3.9-3.9S43.4 31.2 41.3 31.2zM32 1C14.9 1 1 14.9 1 32s13.9 31 31 31 31-13.9 31-31S49.1 1 32 1zM32 56.8C18.3 56.8 7.2 45.7 7.2 32c0-0.9 0.1-1.8 0.2-2.7 7.3-3.2 13.1-9.2 16.2-16.6 5.6 7.9 14.8 13.1 25.3 13.1 2.4 0 4.7-0.3 7-0.8 0.7 2.2 1 4.6 1 7C56.8 45.7 45.7 56.8 32 56.8z"></path></svg>
+              <!-- <img src="https://dummyimage.com/75x75/e9ecef/212529&text=no+photo" alt=""> -->
+            </ng-template>
+          </span>
+          <span>{{currentStaffMember?.fullName}}</span>
+     
           <!-- removed from svg icon--onRight -->
-          <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s">
-            <path
-              d="M59.6 15c-0.7 0.1-1.3 0.4-1.9 0.9 -3.3 3.4-19.6 19.8-23.6 23.8 -0.7 0.7-1.6 1.1-2.5 1s-1.3-0.7-2.2-1.6L6.4 16c-0.6-0.6-1.1-0.9-1.9-1 -3-0.3-4.7 3.2-2.5 5.4l26.8 27.3c1.8 1.8 4.5 1.8 6.3 0l27-27.3C64.1 18.4 62.5 14.8 59.6 15z" />
-          </svg>
+          <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onRight"><path d="M59.6 15c-0.7 0.1-1.3 0.4-1.9 0.9 -3.3 3.4-19.6 19.8-23.6 23.8 -0.7 0.7-1.6 1.1-2.5 1s-1.3-0.7-2.2-1.6L6.4 16c-0.6-0.6-1.1-0.9-1.9-1 -3-0.3-4.7 3.2-2.5 5.4l26.8 27.3c1.8 1.8 4.5 1.8 6.3 0l27-27.3C64.1 18.4 62.5 14.8 59.6 15z" /></svg>
         </a>
-        <ul id="headerMenu" *dropdownMenu class="dropdown-menu"
-        role="menu" aria-labelledby="headerMenu">
-      <li role="menuitem"><a class="dropdown-item" (click)="logOut()">Logout</a></li>
-    </ul>
-  </div>
+        <ul id="headerMenu" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="headerMenu">
+          <li role="menuitem"><a class="dropdown-item" (click)="logOut()"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><path d="M49.7 21.7h-3v-5.9C46.8 7.6 40.1 1 32 1S17.2 7.6 17.2 15.8v5.9h-3c-3.3 0-5.9 2.6-5.9 5.9v29.5c0 3.3 2.6 5.9 5.9 5.9h35.4c3.3 0 5.9-2.6 5.9-5.9V27.6C55.6 24.3 53 21.7 49.7 21.7zM32 48.2c-3.3 0-5.9-2.6-5.9-5.9 0-3.3 2.6-5.9 5.9-5.9s5.9 2.6 5.9 5.9C37.9 45.6 35.3 48.2 32 48.2zM41.2 21.7H22.8v-5.9c0-5 4.1-9.2 9.2-9.2s9.2 4.1 9.2 9.2V21.7z"></path></svg>Logout</a></li>
+        </ul>
+      </div>
     </li>
   </ol>
 </header>

@@ -24,7 +24,7 @@
         }
 
         &__title                                { padding:0; display:flex; align-items:center; align-content:flex-start; width:100%; line-height:17px; font-weight:bold; color:#FFFFFF; fill:#FFFFFF; position:relative; top:0; left:0;
-            .icon--onLeft                       { margin-right:11px; }
+            .icon--onLeft                       { margin-right:11px; flex-shrink:0; }
             .icon--onRight                      { top:4px; right:0; }
         }
 

@@ -53,15 +53,18 @@ app-telephone                                   { width:100%; display:flex; alig
 
 .header-navigation                              { margin:0 0 0 auto; padding:0; list-style:none; display:none; height:36px; font-size:13px; line-height:14px; font-weight:bold; }
 .header-navigation li                           { margin:0; padding:0; display:flex; align-items:center; }
-.header-navigation li+*                         { margin-left:16px; }
+.header-navigation li+*                         { margin-left:10px; }
 
-.header-navigation .circle                      { display:flex; justify-content:center; align-items:center; width:30px; height:30px; background-color:$color--midnight-10; border-radius:30px; }
+.header-navigation .circle                      { display:flex; justify-content:center; align-items:center; width:30px; height:30px; border:1px solid $color--midnight-10; border-radius:30px;
+  .icon                                         { width:15px; height:auto; }
+}
 .header-navigation .circle+*                    { margin-left:8px; }
 
-.header-navigation .profile                     { padding:0 10px 0 0; }
-.header-navigation .profile .circle             { background-color:$color--positive; color:$color--snow; position:relative; overflow:hidden; }
+.header-navigation .profile                     { padding:0; }
+.header-navigation .profile .circle             { border-color:$color--positive; background-color:$color--positive; color:$color--snow; position:relative; overflow:hidden;
+  .icon                                         { top:-1px; }
+}
 .header-navigation .profile .circle img         { width:30px; position:absolute; top:0; left:0; }
-.header-navigation .icon--onRight               { position:relative; left:10px; }
 
 .flexBottom                                     { margin-top:auto; }
 
@@ -135,8 +138,9 @@ app-telephone                                   { width:100%; display:flex; alig
 .dropdown-menu                                  { margin:0; padding:0; list-style:none; min-width:200px; display:none; background-color:$color--snow; color:$color--midnight; border-radius:3px; border:1px solid $color--midnight-20; position:absolute; right:0; z-index:10;
   &.show                                        { padding:6px 0;  border-radius:0 0 3px 3px; display:flex; flex-direction:column; }
 
-  .dropdown-item                                { padding:6px 10px; text-align:left; background-color:$color--snow; cursor:pointer; text-decoration:none;
+  .dropdown-item                                { padding:6px 10px; text-align:left; font-weight:initial; background-color:$color--snow; cursor:pointer; text-decoration:none;
     &.active, &:hover                           { background-color:$color--blue-20; }
+    .icon                                       { top:auto; }
   }
   
   li                                            { margin:0; padding:0;
@@ -206,7 +210,7 @@ This applies from 992px onwards
 
   .headerMobile                                 { display:none; }
 
-  .header                                       { padding:10px 0; display:flex; height:56px; width:calc(100% - 276px); position:fixed; top:0; right:30px; border-bottom:1px solid $color--midnight-10; z-index:10; }
+  .header                                       { padding:10px 0; display:flex; height:56px; width:calc(100% - 276px); position:fixed; top:0; right:30px; border-bottom:1px solid $color--midnight-10; z-index:12; }
   .header-title                                 { height:36px; font-size:16px; font-weight:bold; }
   .header-title li:nth-child(1n+3):before       { width:2px; height:18px; }
   .header-navigation                            { display:flex; }
