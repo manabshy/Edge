@@ -102,6 +102,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   showPhotos = false;
   showMap = false;
   showProperty = false;
+  isInstructVisible = false;
+  isAppointmentVisible = false;
 
 
   get originTypeControl() {
@@ -749,6 +751,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.availableDates = {} as any;
     this.canSearchAvailability = false;
     this.showCalendar = true;
+    this.isAppointmentVisible = true;
     const isSalesOrLettings = (this.isLettingsOnly && this.lettingsValuerControl.value) || (this.isSalesOnly && this.salesValuerControl.value);
     if (isSalesOrLettings) {
       this.availabilityForm.patchValue({
@@ -789,6 +792,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       }
       this.valuationForm.get('valuationDate').setValue(date);
       this.showCalendar = false;
+      this.isAppointmentVisible = false;
     }
   }
 
@@ -875,6 +879,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       });
     }
     this.showCalendar = true;
+
   }
 
   createNewSigner() {
