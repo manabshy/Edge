@@ -162,9 +162,10 @@
     </fieldset>
 
     <form [formGroup]="valuationForm" (ngSubmit)="saveValuation()" autocompleteOff>
-     <ng-container  *ngIf="(createdSigner || lastKnownOwner) && property">
+      <ng-container *ngIf="(createdSigner || lastKnownOwner) && property">
         <p-accordion [multiple]="true">
-          <p-accordionTab header="Valuation Notes" [(selected)]="activeState[0]" *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value) || (!isEditable && valuationForm.get('timeFrame').value) || (!isEditable && valuationForm.get('generalNotes').value)">
+          <p-accordionTab header="Valuation Notes" [(selected)]="activeState[0]"
+            *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value) || (!isEditable && valuationForm.get('timeFrame').value) || (!isEditable && valuationForm.get('generalNotes').value)">
             <fieldset *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value)">
               <label for="reason">What’s the current situation?</label>
               <textarea name="reason" id="reason" cols="30" rows="3" formControlName="reason" data-cy="reason"
@@ -396,82 +397,13 @@
                     </div>
                   </div>
                 </fieldset>
-                <div class="off-canvas" [hidden]="!showCalendar" (click)="closeCalendar()">
-                  <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()"
-                    #offCanvasContent>
-                    <p class="page-title text-left pt-3">
-                      Pick availability
-                      <button type="button" class="close mr-2" aria-label="Close" (click)="closeCalendar()">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </p>
-                    <div class="alert alert-info" role="alert" *ngIf="!canSearchAvailability">
-                      Please select valuer(s)
-                    </div>
-                    <form [formGroup]="availabilityForm" (ngSubmit)="searchAvailabilty()">
-                      <div class="form-group row">
-                        <div class="col-sm-4">
-                          <label class="small" for="fromDate">Date From</label>
-                          <div class="input-group input-group-sm">
-                            <input type="text" id="date" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
-                              [bsConfig]="{showWeekNumbers:false,  dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
-                              bsDatepicker formControlName="fromDate">
-                            <div class="input-group-append">
-                              <button class="btn btn-secondary" [attr.disabled]="!canSearchAvailability? true:null"
-                                data-cy="searchAvailability">Search</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <!-- Refactor ASAP -->
-                      <app-subnav>
-                        <ng-container *ngIf="availableDates">
-                          <div class="form-group" *ngIf="availableDates?.thisWeek">
-                            <strong>This Week</strong>
-                            <app-subnav-item *ngFor="let slot of availableDates?.thisWeek"
-                              (click)="selectAvailableDate(slot); properties = null">
-                              <div class="row">
-                                <div class="col-sm">
-                                  {{slot| date: 'E d MMM yyyy, HH:mm' : '+0000'}}
-                                </div>
-                              </div>
-                            </app-subnav-item>
-                          </div>
-                          <div class="form-group" *ngIf="availableDates?.nextWeek">
-                            <strong>Next Week</strong>
-                            <app-subnav-item *ngFor="let slot of availableDates?.nextWeek"
-                              (click)="selectAvailableDate(slot); properties = null">
-                              <div class="row">
-                                <div class="col-sm">
-                                  {{slot| date: 'E d MMM yyyy, HH:mm' : '+0000'}}
-                                </div>
-                              </div>
-                            </app-subnav-item>
-                          </div>
-                          <div class="form-group" *ngIf="availableDates?.next2Weeks">
-                            <strong>Next Two Weeks</strong>
-                            <app-subnav-item *ngFor="let slot of availableDates?.next2Weeks"
-                              (click)="selectAvailableDate(slot); properties = null">
-                              <div class="row">
-                                <div class="col-sm">
-                                  {{slot| date: 'E d MMM yyyy, HH:mm' : '+0000'}}
-                                </div>
-                              </div>
-                            </app-subnav-item>
-                          </div>
-                          <div class="list-group-item text-center text-danger" *ngIf="!availableDates">
-                            No available dates found
-                          </div>
-                        </ng-container>
-                      </app-subnav>
-                    </form>
-                  </div>
-                </div>
+
               </div>
             </div>
           </p-accordionTab>
 
-          <p-accordionTab header="Values" [(selected)]="activeState[3]" *ngIf="areValuesVisible" data-cy="valuationValues">
+          <p-accordionTab header="Values" [(selected)]="activeState[3]" *ngIf="areValuesVisible"
+            data-cy="valuationValues">
             <ol class="cards">
               <li
                 *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('suggestedAskingPrice').value)">
@@ -529,7 +461,7 @@
             </ol>
           </p-accordionTab>
         </p-accordion>
-     </ng-container>
+      </ng-container>
 
 
       <fieldset>
@@ -597,7 +529,7 @@
             {{formErrors?.generalNotes}}
           </fieldset>
         </fieldset> -->
-<!--
+        <!--
         <fieldset class="fieldset--width-max">
           <legend><span class="legend">Property Info</span></legend>
           <div class="inline-parent">
@@ -956,6 +888,70 @@
     (isCreatingNewProperty)="createNewProperty($event)"></app-property-finder>
 </p-dialog>
 
+<!-- Appointment Modal -->
+<p-dialog header=" Pick availability" [(visible)]="isAppointmentVisible" [modal]="true" [draggable]="false">
+  <div class="alert alert-info" role="alert" *ngIf="!canSearchAvailability">
+    Please select valuer(s)
+  </div>
+  <form [formGroup]="availabilityForm" (ngSubmit)="searchAvailabilty()">
+    <div class="form-group row">
+      <div class="col-sm-4">
+        <label class="small" for="fromDate">Date From</label>
+        <div class="input-group input-group-sm">
+          <input type="text" id="date" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
+            [bsConfig]="{showWeekNumbers:false,  dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
+            bsDatepicker formControlName="fromDate">
+          <div class="input-group-append">
+            <button class="btn btn-secondary" [attr.disabled]="!canSearchAvailability? true:null"
+              data-cy="searchAvailability">Search</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Refactor ASAP -->
+    <app-subnav>
+      <ng-container *ngIf="availableDates">
+        <div class="form-group" *ngIf="availableDates?.thisWeek">
+          <strong>This Week</strong>
+          <app-subnav-item *ngFor="let slot of availableDates?.thisWeek"
+            (click)="selectAvailableDate(slot); properties = null">
+            <div class="row">
+              <div class="col-sm">
+                {{slot| date: 'E d MMM yyyy, HH:mm' : '+0000'}}
+              </div>
+            </div>
+          </app-subnav-item>
+        </div>
+        <div class="form-group" *ngIf="availableDates?.nextWeek">
+          <strong>Next Week</strong>
+          <app-subnav-item *ngFor="let slot of availableDates?.nextWeek"
+            (click)="selectAvailableDate(slot); properties = null">
+            <div class="row">
+              <div class="col-sm">
+                {{slot| date: 'E d MMM yyyy, HH:mm' : '+0000'}}
+              </div>
+            </div>
+          </app-subnav-item>
+        </div>
+        <div class="form-group" *ngIf="availableDates?.next2Weeks">
+          <strong>Next Two Weeks</strong>
+          <app-subnav-item *ngFor="let slot of availableDates?.next2Weeks"
+            (click)="selectAvailableDate(slot); properties = null">
+            <div class="row">
+              <div class="col-sm">
+                {{slot| date: 'E d MMM yyyy, HH:mm' : '+0000'}}
+              </div>
+            </div>
+          </app-subnav-item>
+        </div>
+        <div class="list-group-item text-center text-danger" *ngIf="!availableDates">
+          No available dates found
+        </div>
+      </ng-container>
+    </app-subnav>
+  </form>
+</p-dialog>
+
 <!-- Instruct Modal -->
 <p-dialog header="Find Property" [(visible)]="isInstructVisible" [modal]="true" [draggable]="false">
   <form [formGroup]="instructionForm" (ngSubmit)="saveInstruction()" autocompleteOff *ngIf="!valuation?.isExpired">
@@ -980,13 +976,13 @@
             <fieldset class="form-group mt-3" *ngIf="instructionForm.get('instructSale').value">
               <legend class="col-form-label text-left">Sales Agency</legend>
               <div class="custom-control custom-radio">
-                <input type="radio" id="soleAgencySales" value="1" name="salesAgencyType"
-                  class="custom-control-input" formControlName="salesAgencyType" data-cy="soleAgencySales">
+                <input type="radio" id="soleAgencySales" value="1" name="salesAgencyType" class="custom-control-input"
+                  formControlName="salesAgencyType" data-cy="soleAgencySales">
                 <label class="custom-control-label small" for="soleAgencySales">Sole Agency</label>
               </div>
               <div class="custom-control custom-radio">
-                <input type="radio" id="multiAgencySales" value="4" name="salesAgencyType"
-                  class="custom-control-input" formControlName="salesAgencyType">
+                <input type="radio" id="multiAgencySales" value="4" name="salesAgencyType" class="custom-control-input"
+                  formControlName="salesAgencyType">
                 <label class="custom-control-label small" for="multiAgencySales">Multi Agency</label>
               </div>
               <small *ngIf="instructionForm.get('salesAgencyType')?.errors?.required"
@@ -998,7 +994,8 @@
               <div class="col-12">
                 <div class="custom-control custom-checkbox form-group" *ngIf="showInstruct">
                   <input type="checkbox" id="instructLet" name="instructLet" class="custom-control-input"
-                    formControlName="instructLet" (change)="onInstructLettingsChange($event.target)" data-cy="instructLet">
+                    formControlName="instructLet" (change)="onInstructLettingsChange($event.target)"
+                    data-cy="instructLet">
                   <label class="custom-control-label small" for="instructLet">Instruct for Lettings</label>
                 </div>
               </div>
@@ -1009,9 +1006,8 @@
                     <h5 class="card-title">Long Let</h5>
                     <div class="form-group">
                       <label class="small" for="longLetValue">Value (per week)</label>
-                      <input type="text" name="longLetValue" id="longLetValue"
-                        class="form-control form-control-sm" formControlName="askingRentLongLet"
-                        [ngClass]="{'is-invalid':formErrors.askingRentLongLet}">
+                      <input type="text" name="longLetValue" id="longLetValue" class="form-control form-control-sm"
+                        formControlName="askingRentLongLet" [ngClass]="{'is-invalid':formErrors.askingRentLongLet}">
                       <span class="invalid-feedback">{{formErrors?.askingRentLongLet}}</span>
                     </div>
                     <label class="small" for="longLetMonthlyValue">Value (per month)</label>
@@ -1026,9 +1022,8 @@
                     <h5 class="card-title">Short Let</h5>
                     <div class="form-group">
                       <label class="small" for="shortLetValue">Value (per week)</label>
-                      <input type="text" name="shortLetValue" id="shortLetValue"
-                        class="form-control form-control-sm" formControlName="askingRentShortLet"
-                        [ngClass]="{'is-invalid':formErrors.askingRentShortLet}">
+                      <input type="text" name="shortLetValue" id="shortLetValue" class="form-control form-control-sm"
+                        formControlName="askingRentShortLet" [ngClass]="{'is-invalid':formErrors.askingRentShortLet}">
                       <span class="invalid-feedback">{{formErrors?.askingRentShortLet}}</span>
                     </div>
                     <label class="small" for="shortLetMonthlyValue">Value (per month)</label>
