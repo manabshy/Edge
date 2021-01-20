@@ -102,6 +102,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   showPhotos = false;
   showMap = false;
   showProperty = false;
+  isLastknownOwnerVisible = false;
   isInstructVisible = false;
   isAppointmentVisible = false;
 
@@ -689,6 +690,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   getSelectedProperty(property: Property) {
     if (property) {
       this.showProperty = false;
+
       this.valuers = [];
       this.property = property;
       this.isPropertyChanged = true;
@@ -730,6 +732,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     if (owner) {
       this.lastKnownOwner = owner;
       this.isOwnerChanged = true;
+      this.isLastknownOwnerVisible = false;
       this.getContactGroup(this.lastKnownOwner?.contactGroupId);
       this.valuationForm.get('propertyOwner').setValue(owner);
       if (this.isEditable || this.isNewValuation) {
@@ -903,6 +906,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   changeProperty() {
     this.showProperty = true;
   }
+
   showPropertyModal() {
     this.showProperty = true;
   }

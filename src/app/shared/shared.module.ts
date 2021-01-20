@@ -87,6 +87,7 @@ import { ContactgroupCardComponent } from './components/contactgroup-card/contac
 import { MarketingPreferencesComponent } from './components/marketing-preferences/marketing-preferences.component';
 import { PropertyDetailPhotosComponent } from './components/property-detail-photos/property-detail-photos.component';
 import { PropertyDetailMapComponent } from './components/property-detail-map/property-detail-map.component';
+import { ContactgroupFinderComponent } from './components/contactgroup-finder/contactgroup-finder.component';
 
 const components = [
   BreadcrumbComponent,
@@ -129,6 +130,7 @@ const components = [
   MarketingPreferencesComponent,
   PropertyDetailPhotosComponent,
   PropertyDetailMapComponent,
+  ContactgroupFinderComponent,
 ];
 const pipes = [
   RoundingPipe,
@@ -175,6 +177,7 @@ const externalModules = [
     components,
     pipes,
     directives,
+
 
     // RoundingPipe,
     // TruncatingPipe,
