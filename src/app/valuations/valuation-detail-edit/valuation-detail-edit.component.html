@@ -153,14 +153,9 @@
 
     <app-property-card [propertyDetails]="property" [isHorizontalCard]="true" [showPropertyDetailActions]="false"
       [showValuationActions]="true" (showPhotos)="showPhotosModal()" (showMap)="showMapModal()"
-      (changeProperty)="changeProperty()"></app-property-card>
+      (changeProperty)="changeProperty()" (changeLastknownOwner)="isLastknownOwnerVisible = true"></app-property-card>
 
-    <fieldset>
-      <app-signer label="Last known owner" [createdSigner]="createdSigner" [existingSigner]="lastKnownOwner"
-        (selectedSigner)="getSelectedOwner($event)" (newSigner)="createNewSigner()"
-        [readOnly]="!isEditable && !isNewValuation"></app-signer>
-    </fieldset>
-
+   
     <form [formGroup]="valuationForm" (ngSubmit)="saveValuation()" autocompleteOff>
       <ng-container *ngIf="(createdSigner || lastKnownOwner) && property">
         <p-accordion [multiple]="true">
@@ -292,7 +287,7 @@
           </p-accordionTab>
 
           <p-accordionTab header="Appointment" [(selected)]="activeState[2]">
-            <ng-container *ngIf="allValuers">            
+            <ng-container *ngIf="allValuers">
               <fieldset *ngIf="isEditable || isNewValuation">
                 <span class="radio radio--boxed">
                   <span>
@@ -378,7 +373,7 @@
                         </div>
                       </div>
                     </div>
-                  
+
                     <div class="row">
                       <div class="col-sm-4 col-xl-6 form-group">
                         <label for="valuationDuration" class="small">Duration</label>
@@ -886,6 +881,11 @@
 <!-- Property Map Modal -->
 <app-property-detail-map [propertyMap]="property?.map" [showMap]="showMap" (mapClosed)="showMap=false"></app-property-detail-map>
 
+<!-- Contactgroup Finder Modal -->
+<p-dialog header="Last known owner" [(visible)]="isLastknownOwnerVisible" [modal]="true" [draggable]="false">
+  <app-contactgroup-finder (selectedContactGroup)="getSelectedOwner($event)" ></app-contactgroup-finder>
+</p-dialog>
+
 <!-- Property Finder Modal -->
 <p-dialog header="Find Property" [(visible)]="showProperty" [modal]="true" [draggable]="false">
   <app-property-finder [property]="property" [readOnly]="!isEditable && !isNewValuation" [includePhoto]="true" [includeMap]="true" (selectedProperty)="getSelectedProperty($event)" (isCreatingNewProperty)="createNewProperty($event)"></app-property-finder>
@@ -1062,12 +1062,12 @@
       <button type="submit" class="btn btn-secondary" data-cy="saveInstruction">Instruct</button>
     </div>
   </form>
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
   <!-- <form [formGroup]="instructionForm" (ngSubmit)="saveInstruction()" autocompleteOff *ngIf="!valuation?.isExpired">
     <fieldset class="form-group row">
       <div class="col-12">
