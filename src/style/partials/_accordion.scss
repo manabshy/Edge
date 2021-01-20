@@ -1,0 +1,13 @@
+.p-accordion                                { font-family:'opensans', Sans-Serif; font-size:12px; line-height:17px; letter-spacing:.5px; 
+    .p-accordion-header:not(.p-disabled)    {
+        .p-accordion-header-link:focus      { box-shadow:none;  }
+    }
+    &-toggle-icon                           { font-size:.5rem; }
+}
+
+/***********************************************
+This applies from 992px onwards
+***********************************************/
+@media (min-width:992px)        {
+    
+}
