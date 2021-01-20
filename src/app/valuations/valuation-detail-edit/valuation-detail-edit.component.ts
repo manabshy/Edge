@@ -695,6 +695,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.property = property;
       this.isPropertyChanged = true;
       this.lastKnownOwner = property.lastKnownOwner;
+      this.getContactGroup(this.property?.lastKnownOwner?.contactGroupId);
       this.valuationForm.get('property').setValue(property);
       this.valuationForm.get('propertyOwner').setValue(this.lastKnownOwner);
       this.getValuers(property.propertyId);
