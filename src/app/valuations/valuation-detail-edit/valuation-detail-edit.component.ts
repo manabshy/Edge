@@ -792,6 +792,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       }
       this.valuationForm.get('valuationDate').setValue(date);
       this.showCalendar = false;
+      this.isAppointmentVisible = false;
     }
   }
 
@@ -878,6 +879,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       });
     }
     this.showCalendar = true;
+
   }
 
   createNewSigner() {
