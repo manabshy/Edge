@@ -23,7 +23,9 @@ button::-moz-focus-inner                        { border:0; padding:0; }
 
 .btn--onLeft                                    { margin-right:16px; }
 .btn--onRight                                   { margin-left:16px; }
-.btn .icon                                      { top:initial; align-self:center; }
+.btn .icon                                      { top:initial; align-self:center; 
+  &.icon--s                                     { margin-top:0;  }
+}
 
 .btn[disabled]                                  { cursor:not-allowed; opacity:.4; }       
 .btn:hover[disabled]                            { background-color:$color--midnight-70; }
@@ -100,7 +102,6 @@ button::-moz-focus-inner                        { border:0; padding:0; }
 .btn--group .btn:hover                          { background-color:$color--midnight-70; color:$color--snow; }
 .btn--group .btn:last-of-type                   { border:none; }
 
-.btn--container                                 { display:flex; }
 .btn--container .btn                            { margin-top:0; margin-right:6px; }
 .btn--container .btn:last-child                 { margin-right:0; }
 

@@ -7,15 +7,17 @@
 
     &--sticky                                   { position:sticky; top:80px; }
     
-    &--horizontal                               { margin-bottom:30px; display:flex;
-        .card__headerImg                        { width:30%; height:initial; border-radius:3px 0 0 3px; }
-        .card__body                             { display:flex; flex:1 1 0px; 
+    &--horizontal                               { margin-bottom:30px;
+        .card__headerImg                        { border-radius:3px 3px 0 0; }
+        .card__body                             {
             > .list                             {
                 > li                            { align-items:initial; flex-direction:column;
                     &.expandable                { padding:0;
                         &:last-of-type .list    { margin:0; }
                     }
-                    &+*:before                  { content:""; width:1px; height:100%; background-color:#F3F4F7; position:absolute; top:0; left:-30px; }
+                    &+*, &+.expandable          { padding-top:20px;
+                        &:before                { content:""; width:100%; height:1px; background-color:#F3F4F7; position:absolute; top:10px; left:0; }
+                    }
                     details                     { box-shadow:none; }
                     .summary__title             { display:none; }
                     .summary__body              { display:block; }
@@ -58,3 +60,24 @@
     &--marginBottom                             { margin-bottom:50px; }
 }
 *+.cards                                        { margin-top:16px; }
+
+
+/***********************************************
+This applies from 992px onwards
+***********************************************/
+@media (min-width:992px)                        {
+    .card {
+        &--horizontal                           { display:flex;
+            .card__headerImg                    { width:30%; height:initial; border-radius:3px 0 0 3px; }
+            .card__body                         { display:flex; flex:1 1 0px; 
+                > .list                         {
+                    > li                        {
+                        &+*, &+.expandable      { padding-top:0;
+                            &:before            { width:1px; height:100%; top:0; left:-30px; }
+                        }
+                    }
+                }
+            }
+        }
+    } 
+}

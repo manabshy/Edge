@@ -178,6 +178,11 @@ app-telephone                                   { width:100%; display:flex; alig
 }
 .calendar-container                             { margin-top:64px; }
 
+.footer                                         { margin:0; padding:10px; border-top:1px solid #E7E8EE; display:flex; justify-content:flex-end; width:100%; background-color:$color--snow; position:fixed; bottom:0; right:0; box-shadow:0px 0px 0px 1px $color--snow; -webkit-box-shadow:0px 0px 0px 1px $color--snow; z-index:10;
+  .btn                                          {
+    &+*                                         { margin-left:10px; }
+  }
+}
 
 /***********************************************
 This applies from 992px onwards
@@ -229,11 +234,7 @@ This applies from 992px onwards
   }
   .calendar-container                           { margin-top:40px; }
 
-  .footer                                       { margin:0; padding:10px 0; border-top:1px solid #E7E8EE; display:flex; justify-content:flex-end; width:calc(100% - 276px); background-color:$color--snow; position:fixed; bottom:0; right:30px; box-shadow:0px 0px 0px 1px $color--snow; -webkit-box-shadow:0px 0px 0px 1px $color--snow; z-index:10;
-    .btn                                        {
-      &+*                                       { margin-left:10px; }
-    }
-  }
+  .footer                                       { padding:10px 0; width:calc(100% - 276px);right:30px; }
 }
 
 /***********************************************

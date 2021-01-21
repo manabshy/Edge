@@ -17,8 +17,10 @@
           </td>
           <td data-title="Action">
             <span class="cell-content">
-              <button type="button" class="btn btn-light" *ngIf="isLead && !isLeadClosed" (click)="associateToLead(property)">Associate to lead</button>
-              <button type="button" (click)="navigateToNewValuation(property.propertyId)" class="btn btn--ghost">Create Valuation</button>
+              <div class="btn--container txt--right">
+                <button type="button" class="btn btn--ghost" *ngIf="isLead && !isLeadClosed" (click)="associateToLead(property)">Associate to lead</button>
+                <button type="button" (click)="navigateToNewValuation(property.propertyId)" class="btn btn--positive"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path class="horizontal" d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z"></path><path class="vertical" d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z"></path></svg>Valuation</button>
+              </div>
             </span>
           </td>
         </tr>

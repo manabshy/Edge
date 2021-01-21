@@ -36,8 +36,10 @@
           <span class="cell-content">{{valuation?.property?.address |formatAddress}}</span>
         </td>
         <td data-title="Status">
-          <span class="cell-content" *ngIf="valuation?.isActive"><span class="pill pill--positive">{{valuation?.valuationStatusLabel}}</span></span>
-          <span class="cell-content" *ngIf="!valuation.isActive"><span class="pill">{{valuation?.valuationStatusLabel}}</span></span>
+          <span class="cell-content">
+            <span class="pill pill--positive" *ngIf="valuation?.isActive">{{valuation?.valuationStatusLabel}}</span>
+            <span class="pill" *ngIf="!valuation.isActive">{{valuation?.valuationStatusLabel}}</span>
+          </span>
         </td>
         <td data-title="Sales">
           <span class="cell-content" *ngIf="valuation?.suggestedAskingPrice, else noValue">{{valuation?.suggestedAskingPrice | currency:'GBP':'symbol':'1.0-0'}}</span>
@@ -49,8 +51,11 @@
           <span class="cell-content" *ngIf="valuation?.suggestedAskingRentShortLet, else noValue">{{valuation?.suggestedAskingRentShortLet | currency:'GBP':'symbol':'1.0-0'}} pw</span>
         </td>
         <td data-title="Valuer">
-          <span class="cell-content" *ngIf="valuation.salesValuer">{{valuation?.salesValuer?.fullName}}<small *ngIf="valuation.salesValuer && valuation.lettingsValuer">,</small></span>
-          <span class="cell-content" *ngIf="valuation.lettingsValuer">{{valuation?.lettingsValuer?.fullName}}</span>
+          <span class="cell-content">
+            <ng-container *ngIf="valuation.salesValuer">{{valuation?.salesValuer?.fullName}}</ng-container>
+            <ng-container *ngIf="valuation.salesValuer && valuation.lettingsValuer">, </ng-container>
+            <ng-container *ngIf="valuation.lettingsValuer">{{valuation?.lettingsValuer?.fullName}}</ng-container>
+          </span>
         </td>
         <td data-title="Valued">
           <span class="cell-content">{{(valuation?.valuationDate | date: 'dd/MM/yyyy') || '-'}}</span>
