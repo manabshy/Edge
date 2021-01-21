@@ -63,6 +63,7 @@ fieldset:first-of-type                          {
 /***** Label *****/
 label, .label                                  	{ width:100%; display:flex; align-items:center; color:$color--midnight-70; font-weight:500; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box;
    .icon--s                                     { align-self:center; }
+   &:focus                                      { outline:none; }
 }
 label + input, .label + input, 
 label + textarea, .label + textarea, 

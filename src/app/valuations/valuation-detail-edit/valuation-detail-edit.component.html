@@ -887,15 +887,154 @@
 
 <!-- Appointment Modal -->
 <p-dialog header=" Pick availability" [(visible)]="isAppointmentVisible" [modal]="true" [draggable]="false">
-  <div class="alert alert-info" role="alert" *ngIf="!canSearchAvailability">Please select valuer(s)</div>
   <form [formGroup]="availabilityForm" (ngSubmit)="searchAvailabilty()">
+    <div class="row">
+      <div class="grid grid--25">
+        <div class="alert alert-info" role="alert" *ngIf="!canSearchAvailability">Please select valuer(s)</div>
+        <fieldset>
+          <label for="fromDate">Date From</label>
+          <input type="text" id="date" placeholder="dd/mm/yyyy" [bsConfig]="{showWeekNumbers:false,  dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}" bsDatepicker formControlName="fromDate">
+        </fieldset>
+        <fieldset>
+          <button class="btn btn--positive" [attr.disabled]="!canSearchAvailability? true:null" data-cy="searchAvailability">Search</button>
+        </fieldset>
+      </div>
+      <div class="grid grid--75 grid--dividerLeft">
+        <p class="txt--title">This Week</p>
+        <ol class="list list--dates">
+          <li>
+            <span class="txt--date">Thu 21th Jan 2021</span>
+            <ol class="cards cards--small">
+              <li><a href="">13:00</a></li>
+              <li><a href="">16:00</a></li>
+              <li><a href="">17:00</a></li>
+              <li><a href="">19:00</a></li>
+            </ol>
+          </li>
+          <li>
+            <span class="txt--date">Fri 22nd Jan 2021</span>
+            <ol class="cards cards--small">
+              <li><a href="">12:00</a></li>
+              <li><a href="">13:00</a></li>
+              <li><a href="">14:00</a></li>
+              <li><a href="">16:00</a></li>
+              <li><a href="">17:00</a></li>
+              <li><a href="">18:00</a></li>
+              <li><a href="">19:00</a></li>
+            </ol>
+          </li>
+        </ol>
+
+        <p class="txt--title">Next Week</p>
+        <ol class="list list--dates">
+          <li>
+            <span class="txt--date">Mon 25th Jan 2021</span>
+            <ol class="cards cards--small">
+              <li><a href="">12:00</a></li>
+              <li><a href="">13:00</a></li>
+              <li><a href="">14:00</a></li>
+              <li><a href="">16:00</a></li>
+              <li><a href="">17:00</a></li>
+              <li><a href="">18:00</a></li>
+              <li><a href="">19:00</a></li>
+            </ol>
+          </li>
+          <li>
+            <span class="txt--date">Tue 26th Jan 2021</span>
+            <ol class="cards cards--small">
+              <li><a href="">12:00</a></li>
+              <li><a href="">13:00</a></li>
+              <li><a href="">14:00</a></li>
+              <li><a href="">16:00</a></li>
+              <li><a href="">17:00</a></li>
+              <li><a href="">18:00</a></li>
+              <li><a href="">19:00</a></li>
+            </ol>
+          </li>
+          <li>
+            <span class="txt--date">Wed 27th Jan 2021</span>
+            <ol class="cards cards--small">
+              <li><a href="">12:00</a></li>
+              <li><a href="">13:00</a></li>
+              <li><a href="">14:00</a></li>
+              <li><a href="">16:00</a></li>
+              <li><a href="">17:00</a></li>
+              <li><a href="">18:00</a></li>
+              <li><a href="">19:00</a></li>
+            </ol>
+          </li>
+          <li>
+            <span class="txt--date">Thu 28th Jan 2021</span>
+            <ol class="cards cards--small">
+              <li><a href="">12:00</a></li>
+              <li><a href="">13:00</a></li>
+              <li><a href="">14:00</a></li>
+              <li><a href="">16:00</a></li>
+              <li><a href="">17:00</a></li>
+              <li><a href="">18:00</a></li>
+              <li><a href="">19:00</a></li>
+            </ol>
+          </li>
+          <li>
+            <span class="txt--date">Fri 29th Jan 2021</span>
+            <ol class="cards cards--small">
+              <li><a href="">12:00</a></li>
+              <li><a href="">13:00</a></li>
+              <li><a href="">14:00</a></li>
+              <li><a href="">16:00</a></li>
+              <li><a href="">17:00</a></li>
+              <li><a href="">18:00</a></li>
+              <li><a href="">19:00</a></li>
+            </ol>
+          </li>
+        </ol>
+
+        <app-subnav>
+          <ng-container *ngIf="availableDates">
+            <ng-container *ngIf="availableDates?.thisWeek">
+              <p class="txt--title">This Week</p>
+              <ol class="list">
+                <app-subnav-item *ngFor="let slot of availableDates?.thisWeek" (click)="selectAvailableDate(slot); properties = null">
+                  <li>{{slot| date: 'E d MMM yyyy, HH:mm' : '+0000'}}</li>
+                </app-subnav-item>
+              </ol>
+            </ng-container>
+              
+            <ng-container *ngIf="availableDates?.nextWeek">
+              <p class="txt--title">Next Week</p>
+              <ol class="list">
+                <app-subnav-item *ngFor="let slot of availableDates?.nextWeek" (click)="selectAvailableDate(slot); properties = null">
+                  <li>{{slot| date: 'E d MMM yyyy, HH:mm' : '+0000'}}</li>
+                </app-subnav-item>
+              </ol>
+            </ng-container>
+            
+            <ng-container *ngIf="availableDates?.next2Weeks">
+              <p class="txt--title">Next Two Weeks</p>
+              <ol class="list">
+                <app-subnav-item *ngFor="let slot of availableDates?.next2Weeks" (click)="selectAvailableDate(slot); properties = null">
+                  <li>{{slot| date: 'E d MMM yyyy, HH:mm' : '+0000'}}</li>
+                </app-subnav-item>
+              </ol>
+            </ng-container>
+
+            <ng-container *ngIf="!availableDates">
+              No available dates found
+            </ng-container>
+          </ng-container>
+        </app-subnav>
+      </div>
+    </div>
+  </form>
+  
+  
+  <!-- <div class="alert alert-info" role="alert" *ngIf="!canSearchAvailability">Please select valuer(s)</div> -->
+  <!-- <form [formGroup]="availabilityForm" (ngSubmit)="searchAvailabilty()">
     <div class="form-group row">
       <div class="col-sm-4">
         <label class="small" for="fromDate">Date From</label>
         <div class="input-group input-group-sm">
-          <input type="text" id="date" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
-            [bsConfig]="{showWeekNumbers:false,  dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
-            bsDatepicker formControlName="fromDate">
+          <input type="text" id="date" placeholder="dd/mm/yyyy" class="form-control form-control-sm" [bsConfig]="{showWeekNumbers:false,  dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}" bsDatepicker formControlName="fromDate">
           <div class="input-group-append">
             <button class="btn btn-secondary" [attr.disabled]="!canSearchAvailability? true:null"
               data-cy="searchAvailability">Search</button>
@@ -903,7 +1042,7 @@
         </div>
       </div>
     </div>
-    <!-- Refactor ASAP -->
+    
     <app-subnav>
       <ng-container *ngIf="availableDates">
         <div class="form-group" *ngIf="availableDates?.thisWeek">
@@ -944,7 +1083,7 @@
         </div>
       </ng-container>
     </app-subnav>
-  </form>
+  </form> -->
 </p-dialog>
 
 <!-- Instruct Modal -->

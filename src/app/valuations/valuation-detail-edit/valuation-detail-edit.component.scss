@@ -1,43 +1,43 @@
-@import "../../../style/bootstrap-overrides";
+// @import "../../../style/bootstrap-overrides";
 
-@import "../../../../node_modules/bootstrap/scss/functions";
-@import "../../../../node_modules/bootstrap/scss/variables";
-@import "../../../../node_modules/bootstrap/scss/mixins";
+// @import "../../../../node_modules/bootstrap/scss/functions";
+// @import "../../../../node_modules/bootstrap/scss/variables";
+// @import "../../../../node_modules/bootstrap/scss/mixins";
 
-form {
-    padding-bottom: spacer(5);
+// form {
+//     padding-bottom: spacer(5);
 
-    .form-actions {
-        @include fixed-bottom('xl');
-    }
+//     .form-actions {
+//         @include fixed-bottom('xl');
+//     }
 
-}
+// }
 
-.attendee-picker {
-    .btn {
-        @include border-left-radius(0);
-    }
-}
+// .attendee-picker {
+//     .btn {
+//         @include border-left-radius(0);
+//     }
+// }
 
-.nav-link {
-    margin-bottom: -1px;
-    color: $link-color;
+// .nav-link {
+//     margin-bottom: -1px;
+//     color: $link-color;
 
-    &.active {
-        outline: none;
-    }
-}
+//     &.active {
+//         outline: none;
+//     }
+// }
 
-.card-deck {
-    .card:first-child:last-child {
-        @include media-breakpoint-up(sm) {
-            max-width: 45%;
-        }
-    }
-}
+// .card-deck {
+//     .card:first-child:last-child {
+//         @include media-breakpoint-up(sm) {
+//             max-width: 45%;
+//         }
+//     }
+// }
 
-.modal-body {
-    .card {
-        min-height: 14rem;
-    }
-}
+// .modal-body {
+//     .card {
+//         min-height: 14rem;
+//     }
+// }

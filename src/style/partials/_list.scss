@@ -28,6 +28,14 @@
         &:first-child                           { box-shadow:none; }
     }
 
+    &--dates                                    {
+        > li                                    { display:flex; flex-direction:row; align-items:flex-start;
+            &+*                                 { margin-top:10px; border-top:1px solid $color--midnight-10; }
+            *+.cards                            { margin-top:0; width:100%; }
+            .txt--date                          { min-width:200px; }
+        }
+    }
+
     p                                           { width:100%; }
     .icon--s                                    { margin-top:6px; }
     .icon--onRight,
