@@ -87,6 +87,7 @@ export class PropertyCardComponent implements OnInit, OnChanges {
       queryParams: {
         propertyId: propertyId,
         isNewValuation: true,
+        isFromLead: true
       }
     });
   }
