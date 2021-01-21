@@ -736,6 +736,9 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
       this.isLastknownOwnerVisible = false;
       this.getContactGroup(this.lastKnownOwner?.contactGroupId);
       this.valuationForm.get('propertyOwner').setValue(owner);
+      if (this.property) {
+        this.property.lastKnownOwner = owner;
+      }
       if (this.isEditable || this.isNewValuation) {
         this.valuationForm.markAsDirty();
       }
