@@ -10,8 +10,8 @@
     &--horizontal                               { margin-bottom:30px; display:flex;
         .card__headerImg                        { width:30%; height:initial; border-radius:3px 0 0 3px; }
         .card__body                             { display:flex; flex:1 1 0px; 
-            > .list                             { display:grid; grid-gap:60px; grid-template-columns:repeat(auto-fit, minmax(100px, 1fr));
-                > li                            { align-items:initial;
+            > .list                             {
+                > li                            { align-items:initial; flex-direction:column;
                     &.expandable                { padding:0;
                         &:last-of-type .list    { margin:0; }
                     }

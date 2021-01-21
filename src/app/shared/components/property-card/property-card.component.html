@@ -63,7 +63,7 @@
   </div>
 
   <div class="card__body">
-    <ol class="list">
+    <ol class="list" *ngIf="propertyDetails" [ngClass]="{'list--split': isHorizontalCard}">
       <li>
         <ol class="list">
           <!-- Address -->

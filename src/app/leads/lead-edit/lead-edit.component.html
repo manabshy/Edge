@@ -7,32 +7,15 @@
   <div #mainRowItem class="row__item">
     <ng-container *ngTemplateOutlet="editForm"></ng-container>
     <ng-container [ngSwitch]="moreInfo">
-      <app-shared-property-list *ngSwitchCase="'properties'" [moreInfo]="moreInfo" [isLeadClosed]="isLeadClosed"
-        [isLead]="true" [personId]="person?.personId" (associatedProperty)="getAssociatedProperty($event)">
-      </app-shared-property-list>
-      <app-contactgroups-detail-instructions *ngSwitchCase="'instructions'" [moreInfo]="moreInfo"
-        [personId]="person?.personId" [closedCounter]="summaryTotals?.instructions?.inactive">
-      </app-contactgroups-detail-instructions>
-      <app-contactgroups-detail-offers *ngSwitchCase="'offers'" [moreInfo]="moreInfo" [personId]="person?.personId"
-        [closedCounter]="summaryTotals?.offers?.inactive">
-      </app-contactgroups-detail-offers>
-      <app-contactgroups-detail-searches *ngSwitchCase="'searches'" [moreInfo]="moreInfo" [personId]="person?.personId"
-        [closedCounter]="summaryTotals?.searches?.inactive">
-      </app-contactgroups-detail-searches>
-      <app-shared-valuation-list *ngSwitchCase="'valuations'" [moreInfo]="moreInfo" [personId]="person?.personId"
-        [closedCounter]="summaryTotals?.valuations?.inactive">
-      </app-shared-valuation-list>
-      <app-contactgroups-detail-lettings-managements *ngSwitchCase="'lettingsManagements'" [moreInfo]="moreInfo"
-        [personId]="person?.personId" [closedCounter]="summaryTotals?.lettingsManagements?.inactive">
-      </app-contactgroups-detail-lettings-managements>
-      <app-contactgroups-detail-home-helper *ngSwitchCase="'homeHelpers'" [moreInfo]="moreInfo"
-        [personId]="person?.personId" [closedCounter]="summaryTotals?.homeHelpers?.inactive">
-      </app-contactgroups-detail-home-helper>
-      <app-shared-lead-register *ngSwitchCase="'leads'" [moreInfo]="moreInfo" [personId]="person?.personId"
-        [closedCounter]="summaryTotals?.leads?.inactive">
-      </app-shared-lead-register>
-      <app-notes *ngSwitchCase="'notes'" [personNotes]="personNotes" [person]="person" [pageNumber]="page" [bottomReached]="bottomReached"
-        [showNoteInput]="false" [showCreateNoteButton]="false"></app-notes>
+      <app-shared-property-list *ngSwitchCase="'properties'" [moreInfo]="moreInfo" [isLeadClosed]="isLeadClosed" [isLead]="true" [personId]="person?.personId" (associatedProperty)="getAssociatedProperty($event)"></app-shared-property-list>
+      <app-contactgroups-detail-instructions *ngSwitchCase="'instructions'" [moreInfo]="moreInfo" [personId]="person?.personId" [closedCounter]="summaryTotals?.instructions?.inactive"></app-contactgroups-detail-instructions>
+      <app-contactgroups-detail-offers *ngSwitchCase="'offers'" [moreInfo]="moreInfo" [personId]="person?.personId" [closedCounter]="summaryTotals?.offers?.inactive"></app-contactgroups-detail-offers>
+      <app-contactgroups-detail-searches *ngSwitchCase="'searches'" [moreInfo]="moreInfo" [personId]="person?.personId" [closedCounter]="summaryTotals?.searches?.inactive"></app-contactgroups-detail-searches>
+      <app-shared-valuation-list *ngSwitchCase="'valuations'" [moreInfo]="moreInfo" [personId]="person?.personId" [closedCounter]="summaryTotals?.valuations?.inactive"></app-shared-valuation-list>
+      <app-contactgroups-detail-lettings-managements *ngSwitchCase="'lettingsManagements'" [moreInfo]="moreInfo" [personId]="person?.personId" [closedCounter]="summaryTotals?.lettingsManagements?.inactive"></app-contactgroups-detail-lettings-managements>
+      <app-contactgroups-detail-home-helper *ngSwitchCase="'homeHelpers'" [moreInfo]="moreInfo" [personId]="person?.personId" [closedCounter]="summaryTotals?.homeHelpers?.inactive"></app-contactgroups-detail-home-helper>
+      <app-shared-lead-register *ngSwitchCase="'leads'" [moreInfo]="moreInfo" [personId]="person?.personId" [closedCounter]="summaryTotals?.leads?.inactive"></app-shared-lead-register>
+      <app-notes *ngSwitchCase="'notes'" [personNotes]="personNotes" [person]="person" [pageNumber]="page" [bottomReached]="bottomReached" [showNoteInput]="false" [showCreateNoteButton]="false"></app-notes>
       <!-- <ng-container *ngSwitchDefault>
         <div class="title">
           <h2>Lead<span class="pill pill--onRight" *ngIf="lead?.closedById">Closed</span></h2>
@@ -140,76 +123,90 @@
     <!-- <a class="btn btn--positive"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z"></path><path d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" class="plus-vertical"></path></svg>Contact Group</a> -->
   </div>
   <form [formGroup]="leadEditForm" (ngSubmit)="SaveLead(true, leadNote)" autocompleteOff>
-    <div class="inline-parent">
-      <fieldset class="inline-child">
-        <label for="leadType">Type</label>
-        <span class="select">
-          <select id="leadType" formControlName="leadTypeId" [attr.disabled]="isLeadClosed ? true : null"
-            [ngClass]="{'is-invalid': formErrors?.leadTypeId}">
-            <option value=""></option>
-            <option selected *ngFor="let leadType of leadTypes" [value]=leadType.id>{{leadType?.value}}</option>
-          </select>
-        </span>
-        {{formErrors?.leadTypeId}}
-      </fieldset>
-
-      <fieldset class="inline-child">
-        <label for="chaseDate">Chase date</label>
-        <input type="text" id="chaseDate" placeholder="dd/mm/yyyy" formControlName="nextChaseDate"
-          [bsConfig]="{showWeekNumbers:false, useUtc: false, dateInputFormat: 'DD/MM/YYYY', minDate:tomorrowsDate, customTodayClass: 'font-weight-bold'}"
-          bsDatepicker [attr.disabled]="isLeadClosed ? true : null" #datepicker="bsDatepicker"
-          [appNoDoubleTap]='datepicker' (bsValueChange)="onChaseDateChange($event)"
-          [ngClass]="{'is-invalid': (formErrors?.nextChaseDate)}">
-        {{formErrors?.nextChaseDate}}
-      </fieldset>
-
-      <fieldset class="inline-child">
-        <label for="chaser">Chaser</label>
-        <app-staff-member-finder [staffMemberId]="lead?.ownerId || leadEditForm.get('ownerId').value"
-          [listType]="'activeStaffMembers'" (selectedStaffMemberId)="getSelectedStaffMemberId($event)"
-          [isRequired]="!leadEditForm.get('ownerId').value" [isDisabled]="isLeadClosed ? true : false">
-        </app-staff-member-finder>
-      </fieldset>
-    </div>
-
-    <fieldset *ngIf="!isLeadClosed">
-      <span class="checkbox">
-        <span>
-          <input type="checkbox" id="closeLead" formControlName="closeLead" (change)="closeLeadChanged(lead)">
-          <label for="closeLead">Mark as <span class="badge badge-pill badge-primary">Closed</span></label>
-        </span>
-      </span>
-    </fieldset>
-
-    <h3>Associated Property</h3>
-    <div class="table" *ngIf="lead?.relatedProperty; else noProperty">
-      <!-- <div *ngIf="properties" class="search-results" infiniteScroll [infiniteScrollDistance]="5" [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"></div> -->
-      <table class="table--mobile table--rowHover">
-        <tbody>
-          <tr [routerLink]="['/property-centre/detail/', lead?.relatedProperty?.propertyId]">
-            <td data-title="Address">
-              <span class="cell-content">
-                {{lead?.relatedProperty?.address | formatAddress}}
+    <div class="card card--horizontal">
+      <div class="card__body">
+        <ol class="list list--split list--split-60-40">
+          <li>
+            <div class="inline-parent">
+              <fieldset class="inline-child">
+                <label for="leadType">Type</label>
+                <span class="select">
+                  <select id="leadType" formControlName="leadTypeId" [attr.disabled]="isLeadClosed ? true : null"
+                    [ngClass]="{'is-invalid': formErrors?.leadTypeId}">
+                    <option value=""></option>
+                    <option selected *ngFor="let leadType of leadTypes" [value]=leadType.id>{{leadType?.value}}</option>
+                  </select>
+                </span>
+                {{formErrors?.leadTypeId}}
+              </fieldset>
+        
+              <fieldset class="inline-child">
+                <label for="chaseDate">Chase date</label>
+                <input type="text" id="chaseDate" placeholder="dd/mm/yyyy" formControlName="nextChaseDate"
+                  [bsConfig]="{showWeekNumbers:false, useUtc: false, dateInputFormat: 'DD/MM/YYYY', minDate:tomorrowsDate, customTodayClass: 'font-weight-bold'}"
+                  bsDatepicker [attr.disabled]="isLeadClosed ? true : null" #datepicker="bsDatepicker"
+                  [appNoDoubleTap]='datepicker' (bsValueChange)="onChaseDateChange($event)"
+                  [ngClass]="{'is-invalid': (formErrors?.nextChaseDate)}">
+                {{formErrors?.nextChaseDate}}
+              </fieldset>
+        
+              <fieldset class="inline-child">
+                <label for="chaser">Chaser</label>
+                <app-staff-member-finder [staffMemberId]="lead?.ownerId || leadEditForm.get('ownerId').value"
+                  [listType]="'activeStaffMembers'" (selectedStaffMemberId)="getSelectedStaffMemberId($event)"
+                  [isRequired]="!leadEditForm.get('ownerId').value" [isDisabled]="isLeadClosed ? true : false">
+                </app-staff-member-finder>
+              </fieldset>
+            </div>
+        
+            <fieldset *ngIf="!isLeadClosed">
+              <span class="checkbox">
+                <span>
+                  <input type="checkbox" id="closeLead" formControlName="closeLead" (change)="closeLeadChanged(lead)">
+                  <label for="closeLead">Mark as <span class="badge badge-pill badge-primary">Closed</span></label>
+                </span>
               </span>
-            </td>
-            <td data-title="Actions">
-              <span class="cell-content txt--right">
-                <div class="btn--container">
-                  <button class="btn btn--s btn--ghost btn--hoverNegative" type="button" aria-label="remove" (click)="removeProperty()" *ngIf="!isMessageVisible && !isLeadClosed">Remove Property</button>
-                  <button class="btn btn--s btn--positive" type="button" data-cy="createVal" (click)="navigateToNewValuation(lead?.relatedProperty?.propertyId)" *ngIf="!isMessageVisible">Create Valuation</button>
-                </div>
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="wrapper--note" *ngIf="!isLeadClosed">
-        <app-lead-note #leadNote [selectedPerson]="person" (leadNote)="getNewPersonNote($event)" [noteRequiredWarning]="noteRequiredWarning" [isUpdateComplete]="isUpdateComplete"></app-lead-note>
+            </fieldset>
+
+            <h3>Associated Property</h3>
+            <div class="table" *ngIf="lead?.relatedProperty; else noProperty">
+              <!-- <div *ngIf="properties" class="search-results" infiniteScroll [infiniteScrollDistance]="5" [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"></div> -->
+              <table class="table--mobile table--rowHover">
+                <tbody>
+                  <tr [routerLink]="['/property-centre/detail/', lead?.relatedProperty?.propertyId]">
+                    <td data-title="Address">
+                      <span class="cell-content">
+                        {{lead?.relatedProperty?.address | formatAddress}}
+                      </span>
+                    </td>
+                    <td data-title="Actions">
+                      <span class="cell-content txt--right">
+                        <div class="btn--container">
+                          <button class="btn btn--s btn--ghost btn--hoverNegative" type="button" aria-label="remove" (click)="removeProperty()" *ngIf="!isMessageVisible && !isLeadClosed">Remove Property</button>
+                          <button class="btn btn--s btn--positive" type="button" data-cy="createVal" (click)="navigateToNewValuation(lead?.relatedProperty?.propertyId)" *ngIf="!isMessageVisible">Create Valuation</button>
+                        </div>
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <ng-template #noProperty>
+              <p>No property associated to this lead</p>
+            </ng-template>
+          </li>
+          <li class="width30pc" *ngIf="lead?.relatedProperty; else noProperty">
+            <div class="wrapper--note" *ngIf="!isLeadClosed">
+              <app-lead-note #leadNote [selectedPerson]="person" (leadNote)="getNewPersonNote($event)" [noteRequiredWarning]="noteRequiredWarning" [isUpdateComplete]="isUpdateComplete"></app-lead-note>
+            </div>
+          </li>
+        </ol>
       </div>
     </div>
-    <ng-template #noProperty>
-      <p>No property associated to this lead</p>
-    </ng-template>
+
+    
+
+    
 
     <footer class="footer">
       <button (click)="cancel()" type="button" class="btn btn--ghost" *ngIf="!isLeadClosed">Cancel</button>
