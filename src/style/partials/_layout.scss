@@ -14,6 +14,9 @@ app-telephone                                   { width:100%; display:flex; alig
 
 .row+*,
 .row__item+*                                    { margin-top:16px; }
+.row__item--aside                               {
+  .card                                         { margin:0 0 16px 0; }
+}
 .grid                                           {
   li                                            { margin:0; padding:0; }
   &--inline                                     { display:flex;
@@ -195,9 +198,7 @@ This applies from 992px onwards
   .row__item                                    { flex-grow:1; }
   .row__item+*                                  { margin:0 0 60px 30px; }
 
-  .row__item--aside                             { width:240px; max-width:240px; flex-shrink:0;
-    .card                                       { margin:0 0 16px 0; }
-  }
+  .row__item--aside                             { width:240px; max-width:240px; flex-shrink:0; }
 
   .grid                                         { margin:0; padding:0; list-style:none;
     &+.grid                                     { margin:0; } 
