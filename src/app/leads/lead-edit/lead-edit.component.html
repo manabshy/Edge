@@ -127,6 +127,7 @@
       <div class="card__body">
         <ol class="list list--split list--split-60-40">
           <li>
+            <h3 class="txt--title">Lead details</h3>
             <div class="inline-parent">
               <fieldset class="inline-child">
                 <label for="leadType">Type</label>
@@ -168,29 +169,19 @@
               </span>
             </fieldset>
 
-            <h3>Associated Property</h3>
-            <div class="table" *ngIf="lead?.relatedProperty; else noProperty">
+            <h3 class="txt--title">Associated Property</h3>
+            <ng-container *ngIf="lead?.relatedProperty; else noProperty">
               <!-- <div *ngIf="properties" class="search-results" infiniteScroll [infiniteScrollDistance]="5" [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"></div> -->
-              <table class="table--mobile table--rowHover">
-                <tbody>
-                  <tr [routerLink]="['/property-centre/detail/', lead?.relatedProperty?.propertyId]">
-                    <td data-title="Address">
-                      <span class="cell-content">
-                        {{lead?.relatedProperty?.address | formatAddress}}
-                      </span>
-                    </td>
-                    <td data-title="Actions">
-                      <span class="cell-content txt--right">
-                        <div class="btn--container">
-                          <button class="btn btn--s btn--ghost btn--hoverNegative" type="button" aria-label="remove" (click)="removeProperty()" *ngIf="!isMessageVisible && !isLeadClosed">Remove Property</button>
-                          <button class="btn btn--s btn--positive" type="button" data-cy="createVal" (click)="navigateToNewValuation(lead?.relatedProperty?.propertyId)" *ngIf="!isMessageVisible">Create Valuation</button>
-                        </div>
-                      </span>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+              <ol class="list list--simple">
+                <li [routerLink]="['/property-centre/detail/', lead?.relatedProperty?.propertyId]">
+                  {{lead?.relatedProperty?.address | formatAddress}}
+                  <div class="btn--container">
+                    <button class="btn btn--s btn--ghost btn--hoverNegative" type="button" aria-label="remove" (click)="removeProperty()" *ngIf="!isMessageVisible && !isLeadClosed">Remove Property</button>
+                    <button class="btn btn--s btn--positive" type="button" data-cy="createVal" (click)="navigateToNewValuation(lead?.relatedProperty?.propertyId)" *ngIf="!isMessageVisible">Create Valuation</button>
+                  </div>
+                </li>
+              </ol>
+            </ng-container>
             <ng-template #noProperty>
               <p>No property associated to this lead</p>
             </ng-template>
