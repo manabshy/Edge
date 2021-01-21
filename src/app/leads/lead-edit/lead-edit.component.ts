@@ -572,7 +572,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       queryParams: {
         propertyId: propertyId,
         lastKnownOwnerId: lastKnownOwnerId,
-        isNewValuation: true
+        isNewValuation: true,
+        isFromLead: true
       }
     });
 
