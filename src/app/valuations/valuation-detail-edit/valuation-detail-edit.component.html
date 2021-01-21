@@ -155,7 +155,7 @@
       [showValuationActions]="true" (showPhotos)="showPhotosModal()" (showMap)="showMapModal()"
       (changeProperty)="changeProperty()" (changeLastknownOwner)="isLastknownOwnerVisible = true"></app-property-card>
 
-   
+
     <form [formGroup]="valuationForm" (ngSubmit)="saveValuation()" autocompleteOff>
       <ng-container *ngIf="(createdSigner || lastKnownOwner) && property">
         <p-accordion [multiple]="true">
@@ -289,14 +289,14 @@
           <p-accordionTab header="Appointment" [(selected)]="activeState[2]">
             <ng-container *ngIf="allValuers">
               <fieldset *ngIf="isEditable || isNewValuation">
-                <span class="radio radio--boxed">
+                <span class="radio radio--boxed" btnRadioGroup formControlName="type">
                   <span>
                     <input type="radio" checked="checked" tabindex="2" name="appointments" id="valuationBoth">
-                    <label for="valuationBoth" btnRadio="both" role="button"><span>Both</span></label>
+                    <label for="valuationBoth" btnRadio="both" tabindex="0" role="button" ><span>Both</span></label>
                   </span>
                   <span>
                     <input type="radio" tabindex="3" name="appointments" id="valuationSales">
-                    <label for="valuationSales" data-cy="valSales" btnRadio="sales"
+                    <label for="valuationSales" data-cy="valSales" btnRadio="sales" tabindex="0"
                       role="button"><span>Sales</span></label>
                   </span>
                   <span>
@@ -320,7 +320,8 @@
 
               </fieldset>
 
-              <fieldset [hidden]="!(isSalesOnly || isSalesAndLettings)">
+              <fieldset *ngIf="(isSalesOnly || isSalesAndLettings)">
+              <!-- <fieldset [hidden]="!(isSalesOnly || isSalesAndLettings)"> -->
                 <label for="salesValuer">Sales Valuer</label>
                 <ng-select placeholder="Select Valuer" [items]="salesValuers" bindLabel="fullName"
                   bindValue="staffMemberId" groupBy="staffMembers" [multiple]="false" formControlName="salesValuerId"
@@ -336,7 +337,7 @@
                 {{formErrors.salesValuerId}}
               </fieldset>
 
-              <fieldset [hidden]="!(isLettingsOnly || isSalesAndLettings)">
+              <fieldset  *ngIf="(isLettingsOnly || isSalesAndLettings)">
                 <label for="lettingsValuer">Lettings Valuer</label>
                 <ng-select placeholder="Select Valuer" [items]="lettingsValuers" bindLabel="fullName"
                   bindValue="staffMemberId" groupBy="staffMembers" [multiple]="false" formControlName="lettingsValuerId"
