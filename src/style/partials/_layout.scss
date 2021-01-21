@@ -119,7 +119,7 @@ app-telephone                                   { width:100%; display:flex; alig
   .icon--timeline                               { display:none; }
   .card                                         { box-shadow:none;
     &__header                                   { padding:0;
-      &+.card__body                             { margin-top:1rem; }
+      &+.card__body                             { margin-top:10px; }
     }
     &__body                                     { padding:0; }
   }

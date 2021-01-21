@@ -47,8 +47,10 @@ h6, .h6                                         { font-size:16px; line-height:18
 p+p                                             { margin-top:16px; }
 
 .txt--reset                                     { font-size:13px; font-weight:normal; color:$color--midnight-70; }
-.txt--title                                     { font-size:14px; font-weight:bold; }
-.txt--title+small                               { margin:4px 0 0; }
+.txt--title                                     { font-size:14px; font-weight:bold;
+    &+*, &+.list                                { margin-top:10px; }
+    &+small                                     { margin:4px 0 0; }
+}
 
 mark                                            { padding:0 2px; background-color:$color--yellow; border-radius:3px; }
 
