@@ -25,6 +25,8 @@
     &--fill-snow                                { color:$color--snow; }
 }
 
+.loading                                        { height:16px; width:16px; }
+
 /***** Fills for oredering *****/
 .oredered-asc .icon .asc                        { color:$color--info; }
 .oredered-asc .icon .des                        { color:$color--midnight-10; }
