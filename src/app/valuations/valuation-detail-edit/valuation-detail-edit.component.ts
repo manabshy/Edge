@@ -105,6 +105,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   isLastknownOwnerVisible = false;
   isInstructVisible = false;
   isAppointmentVisible = false;
+  isFromLead = false;
 
 
   get originTypeControl() {
@@ -234,7 +235,8 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.propertyId = +this.route.snapshot.queryParamMap.get('propertyId');
     this.lastKnownOwnerId = +this.route.snapshot.queryParamMap.get('lastKnownOwnerId');
     this.isNewValuation = this.route.snapshot.queryParamMap.get('isNewValuation') as unknown as boolean;
-    this.isNewValuation ? this.showProperty = true : this.showProperty = false;
+    this.isFromLead = this.route.snapshot.queryParamMap.get('isFromLead') as unknown as boolean;
+    this.isNewValuation && !this.isFromLead ? this.showProperty = true : this.showProperty = false;
     if (this.valuationId) {
       this.getValuation(this.valuationId);
     }
