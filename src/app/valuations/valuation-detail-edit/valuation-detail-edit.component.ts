@@ -188,7 +188,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     { staffMemberId: 2537, fullName: 'Mansoor Malik', emailAddress: 'mmalik@dng.co.uk', hasReminder: null }
   ];
 
-  activeState: boolean[] = [false, false, false, false];
+  activeState: boolean[] = [true, true, true, false];
   statuses = [
     { name: 'valuationNotes', value: 0 },
     { name: 'propertyInfo', value: 1 },
