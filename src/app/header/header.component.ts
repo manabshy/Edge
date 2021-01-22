@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { StorageMap } from '@ngx-pwa/local-storage';
+import { filter } from 'rxjs/operators';
 import { AuthService } from '../core/services/auth.service';
 import { StaffMemberService } from '../core/services/staff-member.service';
 import { StaffMember } from '../shared/models/staff-member';
@@ -11,9 +13,23 @@ import { StaffMember } from '../shared/models/staff-member';
 })
 export class HeaderComponent implements OnInit {
   currentStaffMember: any;
+  navTitle: string;
 
   constructor(public authService: AuthService,
-    private storage: StorageMap, private staffMemberService: StaffMemberService) { }
+    private storage: StorageMap, private staffMemberService: StaffMemberService, private route: ActivatedRoute, private router: Router) {
+    this.setRouteTitle();
+  }
+
+  private setRouteTitle() {
+    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(() => {
+    // this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(() => {
+      const childRoute = this.getChildRoute(this.route);
+      childRoute.data.subscribe((route) => {
+        console.log('title and route', route);
+        this.navTitle = route?.title;
+      });
+    });
+  }
 
   ngOnInit(): void {
     this.storage.get('currentUser').subscribe((data: StaffMember) => {
@@ -29,5 +45,13 @@ export class HeaderComponent implements OnInit {
 
   logOut() {
     this.authService.logout();
+  }
+
+  getChildRoute(route: ActivatedRoute): ActivatedRoute {
+    if (route.firstChild) {
+      return this.getChildRoute(route.firstChild);
+    } else {
+      return route;
+    }
   }
 }
