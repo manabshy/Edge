@@ -1026,8 +1026,6 @@
       </div>
     </div>
   </form>
-  
-  
   <!-- <div class="alert alert-info" role="alert" *ngIf="!canSearchAvailability">Please select valuer(s)</div> -->
   <!-- <form [formGroup]="availabilityForm" (ngSubmit)="searchAvailabilty()">
     <div class="form-group row">
@@ -1087,9 +1085,103 @@
 </p-dialog>
 
 <!-- Instruct Modal -->
-<p-dialog header="Find Property" [(visible)]="isInstructVisible" [modal]="true" [draggable]="false">
+<p-dialog header="Confirm values and choose instruction type" [(visible)]="isInstructVisible" [modal]="true" [draggable]="false" [style]="{width:'500px'}">
   <form [formGroup]="instructionForm" (ngSubmit)="saveInstruction()" autocompleteOff *ngIf="!valuation?.isExpired">
-    <fieldset class="form-group row">
+    <ng-container *ngIf="instruction?.askingPrice">
+      <fieldset *ngIf="showInstruct">
+        <span class="checkbox">
+          <span>
+            <input type="checkbox" id="instructSale" name="instructSale" formControlName="instructSale" (change)="onInstructSalesChange($event.target)" data-cy="instructSale">
+            <label for="instructSale">Instruct for Sales</label>
+          </span>
+        </span>
+      </fieldset>
+
+      <ol class="cards" [ngClass]="{'disabled': !instructionForm.get('instructSale').value}">
+        <li>
+          <h5>Sell</h5>
+          <fieldset>
+            <label for="sellValue">Value</label>
+            <input type="text" name="sellValue" id="sellValue" formControlName="askingPrice" [ngClass]="{'is-invalid':formErrors.askingPrice}">
+            <span class="invalid-feedback">{{formErrors?.askingPrice}}</span>
+          </fieldset>
+        </li>
+      </ol>
+
+      <ng-container *ngIf="instructionForm.get('instructSale').value">
+        <fieldset>
+          <label>Sales Agency</label>
+          <span class="radio">
+            <span>
+              <input type="radio" id="soleAgencySales" value="1" name="salesAgencyType" formControlName="salesAgencyType" data-cy="soleAgencySales">
+              <label for="soleAgencySales">Sole Agency</label>
+            </span>
+            <span>
+              <input type="radio" id="multiAgencySales" value="4" name="salesAgencyType" formControlName="salesAgencyType">
+              <label for="multiAgencySales">Multi Agency</label>
+            </span>
+          </span>
+          <small *ngIf="instructionForm.get('salesAgencyType')?.errors?.required" class="text-danger">{{formErrors?.salesAgencyType}}</small>
+        </fieldset>
+      </ng-container>
+    </ng-container>
+    
+    <ng-container *ngIf="instruction?.askingRentShortLet || instruction?.askingRentLongLet">
+      <fieldset *ngIf="showInstruct">
+        <span class="checkbox">
+          <input type="checkbox" id="instructLet" name="instructLet" formControlName="instructLet" (change)="onInstructLettingsChange($event.target)" data-cy="instructLet">
+          <label for="instructLet">Instruct for Lettings</label>
+        </span>
+      </fieldset>
+
+      <ol class="cards" *ngIf="instruction?.askingRentLongLet">
+        <li [ngClass]="{'disabled': !instructionForm.get('instructLet').value}">
+          <h5>Long Let</h5>
+          <fieldset>
+            <label for="longLetValue">Value (per week)</label>
+            <input type="text" name="longLetValue" id="longLetValue" formControlName="askingRentLongLet" [ngClass]="{'is-invalid':formErrors.askingRentLongLet}">
+            <span class="invalid-feedback">{{formErrors?.askingRentLongLet}}</span>
+          </fieldset>
+          
+          <fieldset>
+            <label for="longLetMonthlyValue">Value (per month)</label>
+            <input type="text" name="longLetMonthlyValue" id="longLetMonthlyValue" formControlName="askingRentLongLetMonthly">
+          </fieldset>
+        </li>
+
+        <li [ngClass]="{'disabled': !instructionForm.get('instructLet').value}">
+          <h5>Short Let</h5>
+          <fieldset>
+            <label for="shortLetValue">Value (per week)</label>
+            <input type="text" name="shortLetValue" id="shortLetValue" formControlName="askingRentShortLet" [ngClass]="{'is-invalid':formErrors.askingRentShortLet}">
+            <span class="invalid-feedback">{{formErrors?.askingRentShortLet}}</span>
+          </fieldset>
+
+          <fieldset>
+            <label for="shortLetMonthlyValue">Value (per month)</label>
+            <input type="text" name="shortLetMonthlyValue" id="shortLetMonthlyValue" formControlName="askingRentShortLetMonthly">
+          </fieldset>
+        </li>
+      </ol>
+
+      <fieldset *ngIf="instructionForm.get('instructLet').value">
+        <label>Lettings Agency</label>
+        <span class="radio">
+          <span>
+            <input type="radio" id="soleAgencyLettings" value="1" name="lettingsAgencyType" formControlName="lettingsAgencyType" data-cy="soleAgencyLettings">
+            <label for="soleAgencyLettings">Sole Agency</label>
+          </span>
+          <span>
+            <input type="radio" id="multiAgencyLettings" value="2" name="lettingsAgencyType" formControlName="lettingsAgencyType" data-cy="multiAgencyLettings">
+            <label for="multiAgencyLettings">Multi Agency</label>
+          </span>
+        </span>
+        <small *ngIf="instructionForm.get('lettingsAgencyType')?.errors?.required" class="text-danger">{{formErrors?.lettingsAgencyType}}</small>   
+      </fieldset>
+    </ng-container>
+
+    <!-- This is for both sale and let but not needed right..? -->
+    <!-- <fieldset class="form-group row">
       <div class="col-12">
         <div class="row">
           <div class="col-sm-4 mb-4" *ngIf="instruction?.askingPrice">
@@ -1124,6 +1216,7 @@
                 class="text-danger">{{formErrors?.salesAgencyType}}</small>
             </fieldset>
           </div>
+          
           <div class="col-sm-8 mb-4" *ngIf="instruction?.askingRentShortLet || instruction?.askingRentLongLet">
             <div class="row">
               <div class="col-12">
@@ -1186,20 +1279,17 @@
               </div>
             </div>
           </div>
+          
         </div>
       </div>
+    
+    </fieldset> -->
+
+    <fieldset>
+      <button type="button" class="btn btn--ghost" (click)="isInstructVisible = false; cancelInstruction()">Cancel</button>
+      <button type="submit" class="btn btn--info" data-cy="saveInstruction">Instruct</button>
     </fieldset>
-    <div class="mt-4 text-center">
-      <button type="button" class="btn btn-light mr-2"
-        (click)="isInstructVisible = false; cancelInstruction()">Cancel</button>
-      <button type="submit" class="btn btn-secondary" data-cy="saveInstruction">Instruct</button>
-    </div>
   </form>
-
-
-
-
-
 
   <!-- <form [formGroup]="instructionForm" (ngSubmit)="saveInstruction()" autocompleteOff *ngIf="!valuation?.isExpired">
     <fieldset class="form-group row">
@@ -1308,150 +1398,6 @@
     </div>
   </form> -->
 </p-dialog>
-
-
-<!-- <div class="container main">
-  <div class="row page-title">
-    <div class="col">
-      <h4 class="m-0">Valuation</h4>
-    </div>
-    <div class="col-auto">
-
-    </div>
-  </div
-</div>> -->
-
-<!-- NEW but not ready -->
-<!-- <bs-modal-backdrop class="modal-backdrop fade in"></bs-modal-backdrop>
-<modal-container bsModal #instructionModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
-  <div role="document" class="modal-dialog" [ngClass]="{'modal-lg': !valuation?.isExpired}">
-    <div class="modal-content">
-      <ng-container *ngIf="!valuation?.isExpired; else expiredTitle">
-        Confirm values and choose instruction type
-      </ng-container>
-      <ng-template #expiredTitle>Valuation Expired</ng-template>
-      <button type="button" class="close pull-right" (click)="instructionModal.hide()" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-
-      <div class="modal-body" [ngClass]="{'text-center': valuation?.isExpired}">
-        <form [formGroup]="instructionForm" (ngSubmit)="saveInstruction()" autocompleteOff *ngIf="!valuation?.isExpired">
-          <fieldset class="form-group row">
-            <div class="col-12">
-              <div class="row">
-                <div class="col-sm-4 mb-4" *ngIf="instruction?.askingPrice">
-                  <div class="custom-control custom-checkbox form-group" *ngIf="showInstruct">
-                    <input type="checkbox" id="instructSale" name="instructSale" class="custom-control-input"
-                      formControlName="instructSale" (change)="onInstructSalesChange($event.target)" data-cy="instructSale">
-                    <label class="custom-control-label small" for="instructSale">Instruct for Sales</label>
-                  </div>
-                  <div class="card" [ngClass]="{'disabled': !instructionForm.get('instructSale').value}">
-                    <div class="card-body">
-                      <h5 class="card-title">Sell</h5>
-                      <label class="small" for="sellValue">Value</label>
-                      <input type="text" name="sellValue" id="sellValue" class="form-control form-control-sm"
-                        formControlName="askingPrice" [ngClass]="{'is-invalid':formErrors.askingPrice}">
-                      <span class="invalid-feedback">{{formErrors?.askingPrice}}</span>
-                    </div>
-                  </div>
-                  <fieldset class="form-group mt-3" *ngIf="instructionForm.get('instructSale').value">
-                    <legend class="col-form-label text-left">Sales Agency</legend>
-                    <div class="custom-control custom-radio">
-                      <input type="radio" id="soleAgencySales" value="1" name="salesAgencyType"
-                        class="custom-control-input" formControlName="salesAgencyType" data-cy="soleAgencySales">
-                      <label class="custom-control-label small" for="soleAgencySales">Sole Agency</label>
-                    </div>
-                    <div class="custom-control custom-radio">
-                      <input type="radio" id="multiAgencySales" value="4" name="salesAgencyType"
-                        class="custom-control-input" formControlName="salesAgencyType">
-                      <label class="custom-control-label small" for="multiAgencySales">Multi Agency</label>
-                    </div>
-                    <small *ngIf="instructionForm.get('salesAgencyType')?.errors?.required"
-                      class="text-danger">{{formErrors?.salesAgencyType}}</small>
-                  </fieldset>
-                </div>
-                <div class="col-sm-8 mb-4" *ngIf="instruction?.askingRentShortLet || instruction?.askingRentLongLet">
-                  <div class="row">
-                    <div class="col-12">
-                      <div class="custom-control custom-checkbox form-group" *ngIf="showInstruct">
-                        <input type="checkbox" id="instructLet" name="instructLet" class="custom-control-input"
-                          formControlName="instructLet" (change)="onInstructLettingsChange($event.target)" data-cy="instructLet">
-                        <label class="custom-control-label small" for="instructLet">Instruct for Lettings</label>
-                      </div>
-                    </div>
-                    <div class="col-sm-6">
-                      <div class="card" *ngIf="instruction?.askingRentLongLet"
-                        [ngClass]="{'disabled': !instructionForm.get('instructLet').value}">
-                        <div class="card-body">
-                          <h5 class="card-title">Long Let</h5>
-                          <div class="form-group">
-                            <label class="small" for="longLetValue">Value (per week)</label>
-                            <input type="text" name="longLetValue" id="longLetValue"
-                              class="form-control form-control-sm" formControlName="askingRentLongLet"
-                              [ngClass]="{'is-invalid':formErrors.askingRentLongLet}">
-                            <span class="invalid-feedback">{{formErrors?.askingRentLongLet}}</span>
-                          </div>
-                          <label class="small" for="longLetMonthlyValue">Value (per month)</label>
-                          <input type="text" name="longLetMonthlyValue" id="longLetMonthlyValue"
-                            class="form-control form-control-sm" formControlName="askingRentLongLetMonthly">
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-sm-6">
-                      <div class="card" [ngClass]="{'disabled': !instructionForm.get('instructLet').value}">
-                        <div class="card-body">
-                          <h5 class="card-title">Short Let</h5>
-                          <div class="form-group">
-                            <label class="small" for="shortLetValue">Value (per week)</label>
-                            <input type="text" name="shortLetValue" id="shortLetValue"
-                              class="form-control form-control-sm" formControlName="askingRentShortLet"
-                              [ngClass]="{'is-invalid':formErrors.askingRentShortLet}">
-                            <span class="invalid-feedback">{{formErrors?.askingRentShortLet}}</span>
-                          </div>
-                          <label class="small" for="shortLetMonthlyValue">Value (per month)</label>
-                          <input type="text" name="shortLetMonthlyValue" id="shortLetMonthlyValue"
-                            class="form-control form-control-sm" formControlName="askingRentShortLetMonthly">
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-12">
-                      <fieldset class="form-group mt-3" *ngIf="instructionForm.get('instructLet').value">
-                        <legend class="col-form-label text-left">Lettings Agency</legend>
-                        <div class="custom-control custom-radio">
-                          <input type="radio" id="soleAgencyLettings" value="1" name="lettingsAgencyType"
-                            class="custom-control-input" formControlName="lettingsAgencyType" data-cy="soleAgencyLettings">
-                          <label class="custom-control-label small" for="soleAgencyLettings">Sole Agency</label>
-                        </div>
-                        <div class="custom-control custom-radio">
-                          <input type="radio" id="multiAgencyLettings" value="2" name="lettingsAgencyType"
-                            class="custom-control-input" formControlName="lettingsAgencyType" data-cy="multiAgencyLettings">
-                          <label class="custom-control-label small" for="multiAgencyLettings">Multi Agency</label>
-                        </div>
-                        <small *ngIf="instructionForm.get('lettingsAgencyType')?.errors?.required"
-                          class="text-danger">{{formErrors?.lettingsAgencyType}}</small>
-                      </fieldset>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </fieldset>
-          <div class="mt-4 text-center">
-            <button type="button" class="btn btn-light mr-2"
-              (click)="instructionModal.hide(); cancelInstruction()">Cancel</button>
-            <button type="submit" class="btn btn-secondary" data-cy="saveInstruction">Instruct</button>
-          </div>
-        </form>
-        <ng-container *ngIf="valuation?.isExpired">
-          <p>
-            The Valuation is older than 6 months and it can't be instructed
-          </p>
-          <button type="button" class="btn btn-secondary" (click)="duplicateValuation()">New Valuation</button>
-        </ng-container>
-      </div>
-    </div>
-  </div>
-</modal-container> -->
 
 <!-- OLD -->
 <!-- <div bsModal #instructionModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
