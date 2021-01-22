@@ -1,13 +1,18 @@
 <div class="row">
   <div class="row__item row__item--aside">
     <div class="card card--sticky">
-      <div class="card__header"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><path d="M45.6 36.9c1.9-3.6 3.2-7.8 3.2-12.4C48.8 11.1 37.8 0 24.4 0S0 11.1 0 24.5 11 49 24.4 49c4.5 0 8.8-1 12.3-3.3L54.9 64l9.1-8.5L45.6 36.9zM24.5 40.8c-9.1 0-16.2-7.2-16.2-16.3S15.4 8.2 24.5 8.2s16.2 7.2 16.2 16.3C40.7 33.6 33.6 40.8 24.5 40.8z"/></svg>Search Leads</div>
+      <div class="card__header"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+          class="icon icon--onLeft">
+          <path
+            d="M45.6 36.9c1.9-3.6 3.2-7.8 3.2-12.4C48.8 11.1 37.8 0 24.4 0S0 11.1 0 24.5 11 49 24.4 49c4.5 0 8.8-1 12.3-3.3L54.9 64l9.1-8.5L45.6 36.9zM24.5 40.8c-9.1 0-16.2-7.2-16.2-16.3S15.4 8.2 24.5 8.2s16.2 7.2 16.2 16.3C40.7 33.6 33.6 40.8 24.5 40.8z" />
+        </svg>Search Leads</div>
       <div class="card__body">
         <form [formGroup]="leadRegisterForm" *ngIf="showFilterOptions" autocompleteOff>
           <fieldset>
-            <app-lead-finder [leadSuggestion]="leadRegisterForm.get('leadSearchTerm').value" (leadSearchTerm)="setLeadSearchTerm($event)"></app-lead-finder>
+            <app-lead-finder [leadSuggestion]="leadRegisterForm.get('leadSearchTerm').value"
+              (leadSearchTerm)="setLeadSearchTerm($event)"></app-lead-finder>
           </fieldset>
-    
+
           <fieldset>
             <label for="leadType">Type</label>
             <span class="select">
@@ -17,21 +22,27 @@
               </select>
             </span>
           </fieldset>
-          
+
           <div class="inline-parent">
             <fieldset class="inline-child">
               <label for="dateFrom">Date From</label>
-              <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}" bsDatepicker #datepickerFrom="bsDatepicker" [appNoDoubleTap]='datepickerFrom' formControlName="dateFrom">
+              <input type="text" id="dateFrom" placeholder="dd/mm/yyyy"
+                [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
+                bsDatepicker #datepickerFrom="bsDatepicker" [appNoDoubleTap]='datepickerFrom'
+                formControlName="dateFrom">
             </fieldset>
-      
+
             <fieldset class="inline-child">
               <label for="dateTo">Date To</label>
-              <input type="text" id="dateTo" placeholder="dd/mm/yyyy" [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY',customTodayClass: 'font-weight-bold'}" bsDatepicker #datepickerTo="bsDatepicker" [appNoDoubleTap]='datepickerTo' formControlName="dateTo">
+              <input type="text" id="dateTo" placeholder="dd/mm/yyyy"
+                [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY',customTodayClass: 'font-weight-bold'}"
+                bsDatepicker #datepickerTo="bsDatepicker" [appNoDoubleTap]='datepickerTo' formControlName="dateTo">
             </fieldset>
           </div>
-    
-          <app-office-finder (selectedOfficeId) ="getSelectedOfficeId($event)" [fullWidth]="true" class="displayBlock"></app-office-finder>
-          
+
+          <app-office-finder (selectedOfficeId)="getSelectedOfficeId($event)" [fullWidth]="true" class="displayBlock">
+          </app-office-finder>
+
           <fieldset>
             <span class="checkbox">
               <span>
@@ -40,7 +51,7 @@
               </span>
             </span>
           </fieldset>
-    
+
           <fieldset>
             <button class="btn btn--info" id="search" (click)="PerformSearch()">Search</button>
           </fieldset>
@@ -52,7 +63,12 @@
   <div class="row__item">
     <div class="title">
       <h2>Leads register</h2>
-      <a class="btn btn--positive" href (click)="assignLeads()"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z"/><path class="plus-vertical" d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z"/></svg>Assign Lead</a>
+      <a class="btn btn--positive" href (click)="assignLeads()"><svg aria-hidden="true" width="64" height="64"
+          viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
+          <path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" />
+          <path class="plus-vertical"
+            d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" />
+        </svg>Assign Lead</a>
       <!-- <div dropdown placement="bottom right">
         <button id="actionsToggle" dropdownToggle type="button" class="btn dropdown-toggle" aria-controls="actionsList">
           <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon"><ellipse cx="32" cy="10.5" rx="5.9" ry="6"></ellipse><ellipse cx="32" cy="32" rx="5.9" ry="6"></ellipse><ellipse cx="32" cy="53.5" rx="5.9" ry="6"></ellipse></svg>
@@ -73,23 +89,28 @@
 
     <form (ngSubmit)="showLeadsAssignmentModal()">
       <div class="message message--smoke" *ngIf="areLeadsAssignable">
-        Select to assign <button type="button" class="btn btn--onRight btn--link" (click)="selectAllLeadsForAssignment($event)">{{selectedLeadsForAssignment?.length ? 'Unselect' : 'Select'}} all</button>
+        Select to assign <button type="button" class="btn btn--onRight btn--link"
+          (click)="selectAllLeadsForAssignment($event)">{{selectedLeadsForAssignment?.length ? 'Unselect' : 'Select'}}
+          all</button>
       </div>
-    
-      <div *ngIf="leads" infiniteScroll [infiniteScrollDistance]="5" [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"></div>
-      
+
+      <div *ngIf="leads" infiniteScroll [infiniteScrollDistance]="5" [infiniteScrollUpDistance]="1.5"
+        [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"></div>
+
       <div class="table">
         <table class="table--mobile table--rowHover">
           <thead>
             <tr>
               <th *ngIf="areLeadsAssignable" class="has--checkbox">
                 <!-- <a href *ngIf="areLeadsAssignable" (click)="selectAllLeadsForAssignment($event)"> -->
-                  <span class="checkbox checkbox--noMargin">
-                    <span>
-                      <input type="checkbox" id="assignAll" [attr.checked]="isSelectAllChecked ? 'checked' : null">
-                      <label for="assignAll"><!--Assign all-->&nbsp;</label>
-                    </span>
+                <span class="checkbox checkbox--noMargin">
+                  <span>
+                    <input type="checkbox" id="assignAll" [attr.checked]="isSelectAllChecked ? 'checked' : null">
+                    <label for="assignAll">
+                      <!--Assign all-->&nbsp;
+                    </label>
                   </span>
+                </span>
                 <!-- </a> -->
               </th>
               <th *ngIf="isClosedIncluded">Status</th>
@@ -100,13 +121,19 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let lead of filteredLeads; let i = index;" (click)="selectLeadForAssignment($event, lead); navigateToEdit(lead)" [ngClass]="{'table-info': selectedLeadIndex(lead) >= 0}">
+            <tr *ngFor="let lead of filteredLeads; let i = index;"
+              (click)="selectLeadForAssignment($event, lead); navigateToEdit(lead)"
+              [ngClass]="{'table-info': selectedLeadIndex(lead) >= 0}">
               <td data-title="Assign" *ngIf="areLeadsAssignable" class="has--checkbox">
                 <span class="cell-content">
                   <span class="checkbox checkbox--noMargin checkbox--only" (click)="$event.stopPropagation()">
                     <span>
-                      <input type="checkbox" [attr.id]="'assign'+i" [attr.checked]="selectedLeadsForAssignment?.indexOf(lead) >= 0 ? 'checked' : null" (click)="selectLeadForAssignment($event, lead)">
-                      <label [attr.for]="'assign'+i"><!--Assign-->&nbsp;</label>
+                      <input type="checkbox" [attr.id]="'assign'+i"
+                        [attr.checked]="selectedLeadsForAssignment?.indexOf(lead) >= 0 ? 'checked' : null"
+                        (click)="selectLeadForAssignment($event, lead)">
+                      <label [attr.for]="'assign'+i">
+                        <!--Assign-->&nbsp;
+                      </label>
                     </span>
                   </span>
                 </span>
@@ -123,7 +150,7 @@
               </td>
               <td data-title="Person">
                 <span class="cell-content">
-                  <a class="table-link" href (click)="navigateToEdit(lead)">
+                  <a class="table-link" [routerLink]="['edit', lead?.leadId]" [queryParams]="{ showNotes: true,showSaveAndNext: true,leadSearchInfo: this.info}">
                     {{lead?.person}}
                   </a>
                 </span>
@@ -142,13 +169,14 @@
           </tbody>
         </table>
       </div>
-      
+
       <div class="text-center text-danger" *ngIf="!filteredLeads?.length">
         <i class="far fa-sad-tear"></i> No results for your current search
       </div>
 
       <div class="btn--container" *ngIf="areLeadsAssignable">
-        <button type="submit" class="btn btn--positive">Assign <span class="pill pill--snow pill--onRight">{{selectedLeadsForAssignment?.length}}</span></button>
+        <button type="submit" class="btn btn--positive">Assign <span
+            class="pill pill--snow pill--onRight">{{selectedLeadsForAssignment?.length}}</span></button>
         <button (click)="cancel()" type="button" class="btn btn--ghost">Cancel</button>
       </div>
     </form>
@@ -185,8 +213,8 @@
     <div class="col-sm">
       <div class="row">
         <div class="col-12 form-group"> -->
-          <!-- <app-staffmember-finder (ownerChanged)="onOwnerChanged($event)"></app-staffmember-finder> -->
-          <!-- <app-lead-finder [leadSuggestion]="leadRegisterForm.get('leadSearchTerm').value" (leadSearchTerm)="setLeadSearchTerm($event)"></app-lead-finder>
+<!-- <app-staffmember-finder (ownerChanged)="onOwnerChanged($event)"></app-staffmember-finder> -->
+<!-- <app-lead-finder [leadSuggestion]="leadRegisterForm.get('leadSearchTerm').value" (leadSearchTerm)="setLeadSearchTerm($event)"></app-lead-finder>
         </div>
         <div class="col-sm form-group">
           <label class="small" for="leadType">Type</label>

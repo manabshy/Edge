@@ -31,7 +31,7 @@ export class ValuationListComponent implements OnInit, OnChanges, OnDestroy {
     this.page = this.pageNumber;
   }
 
-  navigateTo(path) {
+  navigateTo(path: any[]) {
     this.router.navigate(path, { relativeTo: this.activatedRoute });
   }
 
