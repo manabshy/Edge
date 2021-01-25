@@ -1,9 +1,53 @@
-.p-accordion                                { font-family:'opensans', Sans-Serif; font-size:12px; line-height:17px; letter-spacing:.5px; 
-    .p-accordion-header:not(.p-disabled)    {
-        .p-accordion-header-link:focus      { box-shadow:none;  }
+.p-accordion                                    { font-family:'opensans', Sans-Serif; font-size:12px; line-height:17px; letter-spacing:.5px; 
+    p-accordiontab                              {
+        .p-accordion-tab                        { margin-bottom:20px; }
+
+        .p-accordion-header                     {
+            .p-accordion-header-link            { border:1px solid $color--midnight-20; border-radius:3px; }
+            
+            &:not(.p-disabled)                  {
+                .p-accordion-header-link:focus  { box-shadow:none; }
+                &.p-highlight                   {
+                    .p-accordion-header-link    { background-color:$color--smoke; }
+                }
+                &.p-highlight:hover             {
+                    .p-accordion-header-link    { border:1px solid $color--midnight-20; background-color:$color--smoke; }
+                }
+            }
+
+            &:not(.p-highlight):not(.p-disabled):hover  {
+                .p-accordion-header-link                { border:1px solid $color--midnight-20; background-color:$color--smoke; }
+            }
+        }
+
+        .p-accordion-content                    { border-radius:0 0 3px 3px; }
+
+        &:not(:first-child)                     {
+            .p-accordion-header                 {
+                &:not(.p-highlight):not(.p-disabled) {
+                    &:hover .p-accordion-header-link  { border:1px solid $color--midnight-20; }
+                }
+
+                &:not(.p-disabled).p-highlight:hover .p-accordion-header-link { border:1px solid $color--midnight-20; }
+
+                .p-accordion-header-link        { border:1px solid $color--midnight-20; }
+            }
+        }
+
+        &:not(.p-disabled)                      {
+            .p-accordion-header-link            { 
+                &:focus                         { box-shadow:none; }
+            }
+        }
     }
-    &-toggle-icon                           { font-size:.5rem; }
+
+    // .p-accordion-header:not(.p-highlight):not(.p-disabled):hover .p-accordion-header-link { border:1px solid $color--midnight-20; }
+
+    // p-accordiontab:not(:first-child) .p-accordion-header:not(.p-disabled).p-highlight:hover .p-accordion-header-link { border:1px solid $color--midnight-20; }
+
+    &-toggle-icon                               { font-size:.5rem; }
 }
+
 
 /***********************************************
 This applies from 992px onwards

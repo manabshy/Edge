@@ -67,7 +67,6 @@
       </div>
     </div>
 
-
     <div class="wrapper--redacted" *ngIf="!property">
       <button class="btn btn--redacted btn--positive" (click)="showProperty=true"><svg aria-hidden="true" width="64"
           height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
@@ -155,12 +154,10 @@
       [showValuationActions]="true" (showPhotos)="showPhotosModal()" (showMap)="showMapModal()"
       (changeProperty)="changeProperty()" (changeLastknownOwner)="isLastknownOwnerVisible = true"></app-property-card>
 
-
     <form [formGroup]="valuationForm" (ngSubmit)="saveValuation()" autocompleteOff>
       <ng-container *ngIf="(createdSigner || lastKnownOwner) && property">
         <p-accordion [multiple]="true">
-          <p-accordionTab header="Valuation Notes" [(selected)]="activeState[0]"
-            *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value) || (!isEditable && valuationForm.get('timeFrame').value) || (!isEditable && valuationForm.get('generalNotes').value)">
+          <p-accordionTab header="Valuation Notes" [(selected)]="activeState[0]" *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value) || (!isEditable && valuationForm.get('timeFrame').value) || (!isEditable && valuationForm.get('generalNotes').value)">           
             <fieldset *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value)">
               <label for="reason">What’s the current situation?</label>
               <textarea name="reason" id="reason" cols="30" rows="3" formControlName="reason" data-cy="reason"
@@ -467,7 +464,6 @@
           <!-- <p-accordionTab header="Instruct" [(selected)]="activeState[8]"></p-accordionTab> -->
         </p-accordion>
       </ng-container>
-
 
       <fieldset>
         <div class="row" *ngIf="isClientService">
