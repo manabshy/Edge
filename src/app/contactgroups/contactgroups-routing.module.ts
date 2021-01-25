@@ -18,7 +18,7 @@ import { AuthGuardService } from '../core/services/auth-guard.service';
 import { ContactgroupsRedesignComponent } from './contactgroups-redesign/contactgroups-redesign.component';
 
 const routes: Routes = [
-  { path: '', component: ContactGroupsComponent, data: { shouldDetach: true } },
+  { path: '', component: ContactGroupsComponent, data: { shouldDetach: true, title: 'Contact centre' } },
   {
     path: 'detail/:personId',
     children: [

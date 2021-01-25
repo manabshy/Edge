@@ -5,7 +5,7 @@ import { LeadComponent } from './lead.component';
 import { CanDeactivateGuard } from '../core/shared/can-deactivate.guard';
 
 const routes: Routes = [
-  { path: '', component: LeadComponent, data: { shouldDetach: true } },
+  { path: '', component: LeadComponent, data: { shouldDetach: true, title: 'Leads register' } },
   { path: 'edit/:leadId', component: LeadEditComponent, canDeactivate: [CanDeactivateGuard], data: { shouldDetach: false, title: 'Lead' } }
 
 ];
