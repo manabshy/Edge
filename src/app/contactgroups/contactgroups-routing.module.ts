@@ -18,13 +18,13 @@ import { AuthGuardService } from '../core/services/auth-guard.service';
 import { ContactgroupsRedesignComponent } from './contactgroups-redesign/contactgroups-redesign.component';
 
 const routes: Routes = [
-  { path: '', component: ContactGroupsComponent, data: { shouldDetach: true } },
+  { path: '', component: ContactGroupsComponent, data: { shouldDetach: true, title: 'Contact centre' } },
   {
     path: 'detail/:personId',
     children: [
       // { path: '', component: ContactgroupsDetailComponent, data: { shouldDetach: true } },
-      { path: '', component: ContactgroupsRedesignComponent, data: { shouldDetach: false } }, // do not cache page
-      { path: 'people/:contactGroupId', component: ContactgroupsPeopleComponent, canDeactivate: [CanDeactivateGuard]},
+      { path: '', component: ContactgroupsDetailComponent, data: { shouldDetach: false, title: 'Contact centre' } }, // do not cache page
+      { path: 'people/:contactGroupId', component: ContactgroupsPeopleComponent, canDeactivate: [CanDeactivateGuard] },
       { path: 'edit', component: ContactgroupsDetailEditComponent, canDeactivate: [CanDeactivateGuard] },
       { path: 'leads', component: ContactgroupsDetailLeadsComponent },
       { path: 'notes', component: ContactgroupsDetailNotesComponent },

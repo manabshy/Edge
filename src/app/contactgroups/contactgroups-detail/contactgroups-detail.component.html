@@ -1,165 +1,44 @@
-<app-breadcrumb></app-breadcrumb>
-<div class="container main">
-  <div class="row page-title">
-    <div class="col">
-      <h4 class="mb-0">Person</h4>
-    </div>
-    <div class="col-auto">
-      <div class="btn-group" dropdown placement="bottom right">
-        <button id="actionsToggle" dropdownToggle type="button" class="btn btn-light dropdown-toggle"
-          aria-controls="actionsList">
-          Actions <span class="caret"></span>
-        </button>
-        <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
-          aria-labelledby="actionsToggle">
-          <li role="menuitem" *ngIf="searchedPersonDetails">
-            <a class="dropdown-item" [routerLink]="['edit']">
-              <span class="dropdown-icon">
-                <i class="fas fa-edit fa-fw"></i>
-              </span>
-              Edit Person
-            </a>
-          </li>
-          <li role="menuitem" *ngIf="searchedPersonDetails">
-            <a class="dropdown-item" (click)="createNewContactGroup(); $event.stopPropagation()"
-              [routerLink]="['people', 0]" [queryParams]="{isNewContactGroup: true}">
-              <span class="dropdown-icon">
-                <i class="fas fa-users"></i><i class="fas fa-plus fa-xs align-text-top"></i>
-              </span>
-              New Contact Group
-            </a>
-          </li>
-          <li role="menuitem">
-            <button type="button" class="dropdown-item" (click)="addNote()">
-              <span class="dropdown-icon">
-                <i class="fas fa-sticky-note fa-fw"></i>
-              </span>
-              Add Note
-            </button>
-          </li>
-          <li role="menuitem">
-            <a class="dropdown-item" [routerLink]="['/leads-register/edit/', 0]"
-              [queryParams]="{isNewLead: true, personId: personId}">
-              <span class="dropdown-icon">
-                <i class="fas fa-user"></i><i class="fas fa-share-alt fa-xs align-text-top"></i>
-              </span>
-              Create Lead
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
+<div class="row">
+  <div #contactDetails class="row__item row__item--aside">
+    <app-person-details [personDetails]="searchedPersonDetails" [isClickable]="false" ></app-person-details>
+    <app-sidenav-item [sideNavItems]="sideNavItems" [summaryTotals]="summaryTotals" [scrollToItem]="mainRowItem" (selectedItem)="getSelectedItem($event)"></app-sidenav-item>
   </div>
-  <div class="row align-items-start">
-    <div class="col-xl-8">
-      <h5>Detail</h5>
-      <app-person-details [personDetails]="searchedPersonDetails" [isClickable]="false"></app-person-details>
-      <div class="row mb-4">
-        <div class="col-12">
-          <h5>Contact groups</h5>
-          <app-subnav>
-            <app-subnav-item *ngFor="let searchedPersonContactGroup of searchedPersonContactGroups"
-              [navLink]="'people/'+searchedPersonContactGroup.contactGroupId"
-              [params]="{docTitle: 'Contact Group | '+searchedPersonDetails?.addressee,  showNotes: true}">
-              <i class="fas fa-briefcase mr-2 fa-fw" *ngIf="searchedPersonContactGroup?.isCompany; else peopleIcon"></i>
-              <ng-template #peopleIcon>
-                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft" *ngIf="cG?.contactPeople.length"><path d="M46 32c4.3 0 7.7-3.5 7.7-7.8s-3.4-7.8-7.7-7.8 -7.8 3.5-7.8 7.8S41.7 32 46 32zM22.7 28.9c5.1 0 9.3-4.2 9.3-9.3s-4.1-9.3-9.3-9.3 -9.3 4.2-9.3 9.3S17.6 28.9 22.7 28.9zM46 38.2c-5.7 0-17.1 2.9-17.1 8.5v7H63v-7C63 41.1 51.6 38.2 46 38.2zM22.7 35.1C15.5 35.1 1 38.7 1 46v7.8h21.7v-7c0-2.6 1-7.2 7.3-10.8C27.4 35.4 24.7 35.1 22.7 35.1z" /></svg>
-              </ng-template>
-              <span class="d-inline-block mr-2 align-top">
-                <ng-container
-                  *ngFor="let contactPerson of searchedPersonContactGroup.contactPeople; last as isLast; first as isFirst">
-                  <br class="d-sm-none" *ngIf="!isFirst" />
-                  <ng-container *ngIf="contactPerson?.personId === searchedPersonDetails?.personId; else link">
-                    {{contactPerson.addressee}}
-                  </ng-container>
-                  <ng-template #link>
-                    <a [routerLink]="['../../../detail', contactPerson.personId ]" [queryParams]="{showNotes: true}"
-                      (click)="$event.stopPropagation();">{{contactPerson.addressee}}</a>
-                  </ng-template>
-                  <ng-container *ngIf="!isLast">, </ng-container>
-                </ng-container>
-                <ng-container *ngIf="searchedPersonContactGroup?.isCompany">
-                  <br class="d-sm-none" /><span
-                    class="badge badge-pill badge-primary">{{searchedPersonContactGroup?.companyName}}</span>
-                </ng-container>
-              </span>
-            </app-subnav-item>
-            <a class="list-group-item list-group-item-action text-center py-4"
-              (click)="createNewContactGroup(); $event.stopPropagation()" *ngIf="searchedPersonDetails"
-              [routerLink]="['people', 0]" [queryParams]="{isNewContactGroup: true}">
-              <span class="btn-link">
-                <i class="fas fa-users"></i><i class="fas fa-plus fa-xs align-text-top"></i> New Contact Group
-              </span>
-            </a>
-          </app-subnav>
 
-        </div>
-      </div>
-      <div #spacer></div>
-      <!-- <div class="sub-info mb-4" stickyThing [spacer]="spacer" marginTop="20">
-        <h5>More Info</h5>
-        <accordion [closeOthers]="true">
-          <accordion-group *ngFor="let item of subNav">
-            <button class="btn btn-link btn-block clearfix" accordion-heading type="button" (click)="getMoreInfo(item)">
-              <div class="pull-left float-left">
-                {{item?.label}}
-                <ng-container *ngIf="summaryTotals; else loadingInfo">
-                  <ng-container *ngIf="isObject(summaryTotals[item?.value]); else simpleValue">
-                    <span class="badge badge-pill badge-success mr-1"> {{summaryTotals[item?.value]?.active}} </span>
-                    <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value]?.inactive}}</span>
-                  </ng-container>
-                  <ng-template #simpleValue>
-                    <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value] || '0'}}</span>
-                  </ng-template>
-                </ng-container>
-                <ng-template #loadingInfo>
-                  <span class="badge badge-pill badge-primary"><i
-                      class="fas fa-spinner fa-pulse d-inline-block"></i></span>
-                </ng-template>
-              </div>
-              <span class="float-right pull-right" (click)="$event.stopPropgation()">
-                <ng-container [ngSwitch]="item?.value">
-                  <a [routerLink]="['/property-centre/detail', 0, 'edit']"
-                    [queryParams]="{isNewProperty: true, personId: searchedPersonDetails?.personId,  lastKnownPerson: personParams}"
-                    *ngSwitchCase="'properties'">Create</a>
-                  <a [routerLink]="['/leads-register/edit/', 0]" [queryParams]="{isNewLead: true, personId: personId}"
-                    *ngSwitchCase="'leads'" data-cy="createLead">Create</a>
-                </ng-container>
-              </span>
-            </button>
-            <ng-container [ngSwitch]="item?.value">
-              <app-shared-property-list *ngSwitchCase="'properties'" [moreInfo]="moreInfo"
-                [personId]="searchedPersonDetails?.personId">
-              </app-shared-property-list>
-              <app-contactgroups-detail-instructions *ngSwitchCase="'instructions'" [moreInfo]="moreInfo"
-                [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.instructions?.inactive"></app-contactgroups-detail-instructions>
-                <app-shared-valuation-list *ngSwitchCase="'valuations'" [moreInfo]="moreInfo"
-                [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.valuations?.inactive">
-              </app-shared-valuation-list>
-              <app-contactgroups-detail-offers *ngSwitchCase="'offers'" [moreInfo]="moreInfo" [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.offers?.inactive">
-              </app-contactgroups-detail-offers>
-              <app-contactgroups-detail-searches *ngSwitchCase="'searches'" [moreInfo]="moreInfo"
-                [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.searches?.inactive">
-              </app-contactgroups-detail-searches>
-              <app-contactgroups-detail-lettings-managements *ngSwitchCase="'lettingsManagements'" [moreInfo]="moreInfo"
-                [personId]="searchedPersonDetails?.personId" [moreInfo]="moreInfo"
-                [closedCounter]="summaryTotals?.lettingsManagements?.inactive">
-              </app-contactgroups-detail-lettings-managements>
-              <app-contactgroups-detail-home-helper *ngSwitchCase="'homeHelpers'" [moreInfo]="moreInfo"
-                [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.homeHelpers?.inactive">
-              </app-contactgroups-detail-home-helper>
-              <app-shared-lead-register *ngSwitchCase="'leads'" [moreInfo]="moreInfo"
-                [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.leads?.inactive">
-              </app-shared-lead-register>
-            </ng-container>
-          </accordion-group>
-        </accordion>
-      </div> -->
-      <h5>Notes</h5>
-      <app-notes [personNotes]="personNotes" [noteData]="dataNote" [pageNumber]="page" [bottomReached]="bottomReached">
+  <div #mainRowItem class="row__item">
+    <ng-container [ngSwitch]="moreInfo">
+      <app-shared-property-list *ngSwitchCase="'properties'" [moreInfo]="moreInfo"
+        [personId]="searchedPersonDetails?.personId">
+      </app-shared-property-list>
+      <app-contactgroups-detail-instructions *ngSwitchCase="'instructions'" [moreInfo]="moreInfo"
+        [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.instructions?.inactive">
+      </app-contactgroups-detail-instructions>
+      <app-shared-valuation-list *ngSwitchCase="'valuations'" [moreInfo]="moreInfo"
+        [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.valuations?.inactive">
+      </app-shared-valuation-list>
+      <app-contactgroups-detail-offers *ngSwitchCase="'offers'" [moreInfo]="moreInfo"
+        [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.offers?.inactive">
+      </app-contactgroups-detail-offers>
+      <app-contactgroups-detail-searches *ngSwitchCase="'searches'" [moreInfo]="moreInfo"
+        [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.searches?.inactive">
+      </app-contactgroups-detail-searches>
+      <app-contactgroups-detail-lettings-managements *ngSwitchCase="'lettingsManagements'" [moreInfo]="moreInfo"
+        [personId]="searchedPersonDetails?.personId" [moreInfo]="moreInfo"
+        [closedCounter]="summaryTotals?.lettingsManagements?.inactive">
+      </app-contactgroups-detail-lettings-managements>
+      <app-contactgroups-detail-home-helper *ngSwitchCase="'homeHelpers'" [moreInfo]="moreInfo"
+        [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.homeHelpers?.inactive">
+      </app-contactgroups-detail-home-helper>
+      <app-shared-lead-register *ngSwitchCase="'leads'" [moreInfo]="moreInfo"
+        [personId]="searchedPersonDetails?.personId" [closedCounter]="summaryTotals?.leads?.inactive">
+      </app-shared-lead-register>
+      <app-notes *ngSwitchCase="'notes'" [personNotes]="personNotes" [noteData]="dataNote" [pageNumber]="page"
+        [bottomReached]="bottomReached">
       </app-notes>
-    </div>
+      <app-shared-contactgroup-list *ngSwitchCase="'contactGroups'" [contactGroups]="searchedPersonContactGroups"
+        [personId]="searchedPersonDetails?.personId"></app-shared-contactgroup-list>
+    </ng-container>
   </div>
-</div>
-<app-additional-info [id]="searchedPersonDetails?.personId ? 'P-'+searchedPersonDetails?.personId : ''">
-</app-additional-info>
+
+  <div class="scroll-to-top" [ngClass]="{'show-scrollTop': windowScrolled}">
+    <button class="btn btn--default d-inline-block d-sm-none" (click)="scrollToTop()"><i class="fas  fa-chevron-up"></i></button>
+  </div>
