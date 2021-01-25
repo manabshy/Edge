@@ -195,7 +195,10 @@ label + .inline-parent                          { margin-top:6px; }
 .inline-parent select, 
 .inline-parent .select                          { width:100%; }
 .inline-parent .inline-child                    { margin:0 20px 0 0; max-width:100%; display:flex; flex:1; flex-direction:column; vertical-align:bottom; align-self:flex-start;
-   label+*                                      { margin-top:6px; }
+   input                                        { margin-top:23px; }
+   label                                        { min-height:17px;
+      &+*                                       { margin-top:6px; }
+   }
 }
 .inline-parent .inline-child + * 		  		   { margin-top:20px; }
 .inline-parent .inline-child .message           { width:100%; }
