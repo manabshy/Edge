@@ -805,16 +805,14 @@
                       class="plus-vertical"></path>
                   </svg>Add Person
                 </li>
-                <li *ngIf="contactGroupDetails?.referenceCount && !isCloned" (click)="cloneContactGroup()">
-                  <div class="message message--warning">
-                    Transaction history present. You can't add or remove people from this Contact Group.<br>If you want
-                    to add or remove a person, <a [routerLink]="['../', contactGroupId]">create a new Contact Group</a>
-                  </div>
+                <li class="card__warning" *ngIf="contactGroupDetails?.referenceCount && !isCloned" (click)="cloneContactGroup()">
+                  <span>
+                    <p>Transaction history present. You can't add or remove people from this Contact Group.</p>
+                    <p>If you want to add or remove a person, <a [routerLink]="['../', contactGroupId]">create a new Contact Group</a></p>
+                  </span>
                 </li>
-                <li *ngIf="!(contactGroupDetails?.contactPeople.length < 8)">
-                  <div class="message message--warning">
-                    You can add max 8 People per contact group.
-                  </div>
+                <li class="card__warning" *ngIf="!(contactGroupDetails?.contactPeople.length < 8)">
+                  <p>You can add max 8 People per contact group.</p>
                 </li>
               </ol>
             </fieldset>
