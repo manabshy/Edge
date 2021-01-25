@@ -181,6 +181,7 @@ app-telephone                                   { width:100%; display:flex; alig
   }
 }
 .calendar-container                             { margin-top:64px; }
+.theme-green .bs-datepicker-head                { background-color:$color--midnight; }
 
 .footer                                         { margin:0; padding:10px; border-top:1px solid #E7E8EE; display:flex; justify-content:flex-end; width:100%; background-color:$color--snow; position:fixed; bottom:0; right:0; box-shadow:0px 0px 0px 1px $color--snow; -webkit-box-shadow:0px 0px 0px 1px $color--snow; z-index:10;
   .btn                                          {
