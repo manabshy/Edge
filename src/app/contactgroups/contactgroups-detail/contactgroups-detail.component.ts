@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ContactGroup, BasicContactGroup, PersonSummaryFigures, ContactGroupDetailsSubNavItems, ContactNote } from '../shared/contact-group';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ActivatedRoute } from '@angular/router';
@@ -11,13 +11,15 @@ import { BaseComponent } from 'src/app/shared/models/base-component';
 import * as _ from 'lodash';
 import { takeUntil } from 'rxjs/operators';
 import { SubNavItem } from 'src/app/shared/subnav';
+import { SidenavService } from 'src/app/core/services/sidenav.service';
 
 @Component({
   selector: 'app-contactgroups-detail',
   templateUrl: './contactgroups-detail.component.html',
   styleUrls: ['./contactgroups-detail.component.scss']
 })
-export class ContactgroupsDetailComponent extends BaseComponent implements OnInit {
+export class ContactgroupsDetailComponent extends BaseComponent implements OnInit, OnDestroy {
+
   listInfo: any;
   warnings: any;
   searchedPersonContactGroups: BasicContactGroup[];
@@ -37,7 +39,8 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
   subNav = ContactGroupDetailsSubNavItems;
   personParams: string;
   showNotes: boolean;
-  moreInfo: any;
+  moreInfo = this.sidenavService.selectedItem = 'notes';
+  sideNavItems = this.sidenavService.sideNavItems;
 
   get dataNote() {
     return {
@@ -45,11 +48,32 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
     };
   }
 
+  windowScrolled: boolean;
   constructor(private contactGroupService: ContactGroupsService,
     private sharedService: SharedService,
     private storage: StorageMap,
     private infoService: InfoService,
+    private sidenavService: SidenavService,
     private route: ActivatedRoute) { super(); }
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    if (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop > 100) {
+      this.windowScrolled = true;
+    } else if (this.windowScrolled && window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop < 10) {
+      this.windowScrolled = false;
+    }
+  }
+
+  scrollToTop() {
+    (function smoothscroll() {
+      const currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
+      if (currentScroll > 0) {
+        window.requestAnimationFrame(smoothscroll);
+        window.scrollTo(0, currentScroll - (currentScroll / 8));
+      }
+    })();
+  }
 
   ngOnInit() {
     this.showNotes = this.route.snapshot.queryParamMap.get('showNotes') === 'true';
@@ -59,6 +83,11 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
         this.searchedPersonDetails = null;
         this.searchedPersonContactGroups = null;
         this.init();
+      }
+      // Set notes as current side nav item if non is selected
+      const noCurrentItem = this.sideNavItems.every(x => x.isCurrent === false);
+      if (noCurrentItem) {
+        this.sideNavItems.find(x => x.name === 'notes').isCurrent = true;
       }
     });
   }
@@ -153,20 +182,7 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
         console.log('data', data);
         console.log('bottom reached for id', this.personId, 'condition', this.bottomReached);
       }
-      // if (data) {
-      //   if (page === 1) {
-      //     this.personNotes = data;
-      //   } else {
-      //     this.personNotes = _.concat(this.personNotes, data);
-      //   }
-      //   console.log('person Notes', this.personNotes);
-      // }
-      // if (data && (!data.length || data.length < this.pageSize)) {
 
-      //   this.bottomReached = true;
-      //   console.log('data', data);
-      //   console.log('bottom reached', this.bottomReached);
-      // }
     });
   }
 
@@ -179,11 +195,13 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
     this.sharedService.addNote(data);
   }
 
-  getMoreInfo(item: SubNavItem) {
-    this.moreInfo = item.value;
+  getSelectedItem(item: any) {
+    this.moreInfo = this.sidenavService.getSelectedItem(item?.type, item?.index);
+    console.log({ item });
   }
-  isObject(val) {
-    return val instanceof Object;
+
+  ngOnDestroy() {
+    this.sidenavService.resetCurrentFlag();
   }
 
 }
