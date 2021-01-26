@@ -71,7 +71,7 @@ button::-moz-focus-inner                        { border:0; padding:0; }
 
 /***** Color - snow *****/
 .btn--snow,
-.btn--snow:hover[disabled]                      { color:#848CA4; background-color:$color--snow; box-shadow:inset 0px 0px 0px 1px #D8D9DB; }
+.btn--snow:hover[disabled]                      { color:#848CA4; background-color:$color--snow; box-shadow:inset 0px 0px 0px 1px $color--midnight-20; }
 .btn--snow:hover                                { background-color:$color--midnight-70; color:$color--snow; box-shadow:inset 0px 0px 0px 1px transparent; }
 
 /***** Color - None *****/
@@ -80,10 +80,10 @@ button::-moz-focus-inner                        { border:0; padding:0; }
 .btn--none:hover                                { padding:0; background-color:transparent; color:inherit; fill:currentColor; border-radius:0; min-height:auto; }
 
 /***** Ghost *****/
-.btn--ghost                                     { background-color:transparent; color:$color--midnight-70; box-shadow:inset 0px 0px 0px 1px #D8D9DB; }
+.btn--ghost                                     { background-color:transparent; color:$color--midnight-70; box-shadow:inset 0px 0px 0px 1px $color--midnight-20; }
 .btn--ghost:hover                               { background-color:$color--midnight-70; color:$color--snow; fill:$color--snow; box-shadow:inset 0px 0px 0px 1px transparent; }
 .btn--ghost:hover[disabled],
-.btn--ghost:hover[aria-disabled]                { background-color:transparent; color:$color--midnight-70; box-shadow:inset 0px 0px 0px 1px #D8D9DB; }
+.btn--ghost:hover[aria-disabled]                { background-color:transparent; color:$color--midnight-70; box-shadow:inset 0px 0px 0px 1px $color--midnight-20; }
 
 /***** Link *****/
 .btn--link                                      { padding:0; min-height:auto; background-color:transparent; color:$color--midnight-70; fill:$color--midnight-70; border:none; }
@@ -97,8 +97,8 @@ button::-moz-focus-inner                        { border:0; padding:0; }
 .btn--hoverNegative:hover                       { background-color:#F44336; color:$color--snow; fill:$color--snow; }
 
 /***** Buttons groups *****/
-.btn--group                                     { box-shadow:inset 0px 0px 0px 1px #D8D9DB; border-radius:3px; display:inline-block; overflow:hidden; }
-.btn--group .btn                                { margin:0; float:left; border-radius:0; border-right:1px solid #D8D9DB; color:$color--midnight-70; background-color:transparent; }
+.btn--group                                     { box-shadow:inset 0px 0px 0px 1px $color--midnight-20; border-radius:3px; display:inline-block; overflow:hidden; }
+.btn--group .btn                                { margin:0; float:left; border-radius:0; border-right:1px solid $color--midnight-20; color:$color--midnight-70; background-color:transparent; }
 .btn--group .btn:hover                          { background-color:$color--midnight-70; color:$color--snow; }
 .btn--group .btn:last-of-type                   { border:none; }
 

@@ -1,12 +1,91 @@
-<app-breadcrumb *ngIf="!basicPerson"></app-breadcrumb>
+<div class="row">
+  <div class="row__item">
+    <app-score-badge [bar]="true" [person]="personForm?.value"></app-score-badge>
+    <form *ngIf="personDetails || basicPerson" [formGroup]="personForm" (ngSubmit)="savePerson(false)" (keydown.enter)="$event.preventDefault()" autocompleteOff>
+      <ng-container [hidden]="basicPerson">
+        <fieldset>
+          <label for="warningStatus">Warning</label>
+          <div class="message message--warning" *ngIf="!isWarningsEnabled">You don't have the permission to change the warning.</div>
+          <span class="select">
+            <select id="warningStatus" name="warningStatus" formControlName="warningStatusId">
+              <option selected *ngFor="let warning of warnings" [value]=warning.id [attr.disabled]="(!isWarningsEnabled) ? '' : null">{{warning.value}}</option>
+            </select>
+          </span>
+          
+        </fieldset>
+        
+        <fieldset *ngIf="isWarningCommentVisible">
+          <input type="text" [ngClass]="{'is-invalid': formErrors.warningStatusComment || personForm.errors?.warningStatusRequired}" formControlName="warningStatusComment" placeholder="Comment ...">
+          <div class="invalid-feedback">{{formErrors.warningStatusComment}}</div>
+          <div class="invalid-feedback" *ngIf="personForm.errors?.warningStatusRequired">Please enter a Comment</div>
+        </fieldset>
+      </ng-container>
+      
+        
+
+      <fieldset>
+        <label for="title">Title</label>
+        <span class="select">
+          <select id="title" name="title" formControlName="titleId" [ngClass]="{'is-invalid':formErrors.titleId}">
+            <option value=""></option>
+            <option *ngFor="let title of titles | keyvalue:keepOriginalOrder" [value]=title.key>{{title.value}}</option>
+          </select>
+        </span>
+        <input type="text"[ngClass]="{'is-invalid': formErrors.titleOther || personForm.errors?.titleOther}" formControlName="titleOther" placeholder="Title ..." *ngIf="isTitleOtherVisible">
+        <div class="invalid-feedback" *ngIf="personForm.errors?.titleOther">Please enter a Title</div>
+        <span class="invalid-feedback">{{formErrors.titleId}}</span>
+      </fieldset>
+
+      <fieldset>
+        <label for="name">First Name</label>
+        <input type="text" id="name" formControlName="firstName" [ngClass]="{'is-invalid':formErrors.firstName}">
+        <span class="invalid-feedback">{{formErrors.firstName}}</span>
+      </fieldset>
+
+      <fieldset>
+        <label for="middleName">Middle Name</label>
+        <input type="text" id="middleName" formControlName="middleName" [ngClass]="{'is-invalid':formErrors.middleName}">
+        <span class="invalid-feedback">{{formErrors.middleName}}</span>
+      </fieldset>
+
+      <fieldset>
+        <label for="lastName">Last Name</label>
+        <input type="text" id="lastName" formControlName="lastName" [ngClass]="{'is-invalid':formErrors?.lastName}" autocomplete="false">
+        <span class="invalid-feedback">{{formErrors?.lastName}}</span>
+      </fieldset>
+
+      <legend class="legend">Address</legend>
+      <app-address [personDetails]="personDetails || basicPerson" (addressDetails)="getAddress($event)"></app-address>
+      
+      <legend class="legend">Contact details</legend>
+      <fieldset>
+        <div class="message message--warning" *ngIf="personForm.errors?.emailOrPhone" id="contact-error">Please enter an email OR a phone number</div>
+      </fieldset>
+
+      <fieldset>
+        <label for="">Email Address</label>
+        <span class="joined">
+          <input type="text">
+          <span class="btn--container"><button class="btn btn--ghost"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon"><polygon points="32 0 41.9 21.1 64 24.4 48 40.8 51.8 64 32 53.1 12.2 64 16 40.8 0 24.4 22.1 21.1 "></polygon></svg></button></span>
+        </span>
+      </fieldset>
+
+    </form>
+  </div>
+</div>
+
+
+
+
+
+<!-- <app-breadcrumb *ngIf="!basicPerson"></app-breadcrumb> -->
 <div class="container main" [ngClass]="{'p-0': basicPerson}">
-  <div class="page-title sticky-top" [ngClass]="{'pt-3': basicPerson}">
+  <!-- <div class="page-title sticky-top" [ngClass]="{'pt-3': basicPerson}">
     <h4 *ngIf="!basicPerson">Edit Person</h4>
     <app-score-badge [bar]="true" [person]="personForm?.value"></app-score-badge>
-  </div>
-  <form *ngIf="personDetails || basicPerson" [formGroup]="personForm" (ngSubmit)="savePerson(false)"
-    (keydown.enter)="$event.preventDefault()" autocompleteOff>
-    <fieldset>
+  </div> -->
+  <form *ngIf="personDetails || basicPerson" [formGroup]="personForm" (ngSubmit)="savePerson(false)" (keydown.enter)="$event.preventDefault()" autocompleteOff>
+    <!-- <fieldset>
       <div class="form-group row" [hidden]="basicPerson">
         <div class="col-sm-3 offset-sm-2">
           <label for="warningStatus" class="small">Warning <br>
@@ -26,6 +105,7 @@
           <div class="invalid-feedback" *ngIf="personForm.errors?.warningStatusRequired">Please enter a Comment</div>
         </div>
       </div>
+
       <div class="form-group row">
         <div class="col-sm-3 offset-sm-2">
           <label for="title" class="small">Title</label>
@@ -41,6 +121,7 @@
           <span class="invalid-feedback">{{formErrors.titleId}}</span>
         </div>
       </div>
+
       <div class="form-group row">
         <div class="col-sm-8 col-xl-6 offset-sm-2">
           <label for="name" class="small">First Name</label>
@@ -49,6 +130,7 @@
           <span class="invalid-feedback">{{formErrors.firstName}}</span>
         </div>
       </div>
+
       <div class="form-group row">
         <div class="col-sm-8 col-xl-6 offset-sm-2">
           <label for="middleName" class="small">Middle Name</label>
@@ -57,6 +139,7 @@
           <span class="invalid-feedback">{{formErrors.middleName}}</span>
         </div>
       </div>
+
       <div class="form-group row">
         <div class="col-sm-8 col-xl-6 offset-sm-2">
           <label for="lastName" class="small">Last Name</label>
@@ -66,20 +149,21 @@
         </div>
       </div>
     </fieldset>
+
     <fieldset>
       <legend class="fieldset-title">Address</legend>
       <app-address [personDetails]="personDetails || basicPerson" (addressDetails)="getAddress($event)"></app-address>
-    </fieldset>
+    </fieldset> -->
     <fieldset>
-      <legend class="fieldset-title">Contact details</legend>
+      <!-- <legend class="fieldset-title">Contact details</legend> -->
 
-      <div class="row justify-content-end" *ngIf="personForm.errors?.emailOrPhone" id="contact-error">
+      <!-- <div class="row justify-content-end" *ngIf="personForm.errors?.emailOrPhone" id="contact-error">
         <div class="col-sm-8 col-xl-6 offset-sm-2">
           <div class="alert alert-danger">Please enter an email OR a phone number</div>
         </div>
-      </div>
-      <div formArrayName="emailAddresses"
-        *ngFor="let emailAddress of emailAddresses.controls; let i = index; first as isFirst">
+      </div> -->
+
+      <div formArrayName="emailAddresses" *ngFor="let emailAddress of emailAddresses.controls; let i = index; first as isFirst">
         <div [formGroupName]="i">
           <div class="form-group row">
             <div class="col-sm-8 col-xl-6 offset-sm-2">

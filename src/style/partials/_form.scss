@@ -49,7 +49,9 @@ form fieldset .invalid .radio input:checked + label:before { background-color:tr
 .form--widthAuto                                { width:auto; }
 
 /***** Fieldset *****/
-fieldset                                       	{ padding:0; text-align:left; display:block; max-width:500px; position:relative; top:0; left:0; }
+fieldset                                       	{ padding:0; text-align:left; display:block; max-width:500px; position:relative; top:0; left:0;
+  .message+.select                              { margin-top:6px; }
+}
 fieldset small                                 	{ display:block; line-height:14px; }
 
 .fieldset--width-max 							      { max-width:100%; }
@@ -64,6 +66,7 @@ fieldset:first-of-type                          {
 label, .label                                  	{ width:100%; display:flex; align-items:center; color:$color--midnight-70; font-weight:500; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box;
    .icon--s                                     { align-self:center; }
    &:focus                                      { outline:none; }
+   &+.message                                   { margin-top:6px; }
 }
 label + input, .label + input, 
 label + textarea, .label + textarea, 
@@ -228,6 +231,17 @@ Inline elements
 
 .inline-parent--search                          {
    input                                        { border-right:none; border-radius:3px 0 0 3px; }
+}
+/*********************************************** 
+Joined elements
+***********************************************/
+.joined                                         { display:flex;
+   input, textarea,  select, .select            { border-radius:3px 0 0 3px; border-right:none;
+      &+*                                       { margin-top:0; }
+   }
+   .btn--container                              { 
+      .btn                                      { border-radius:0 3px 3px 0; }
+   }
 }
 
 /*********************************************** 
