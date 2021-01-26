@@ -48,7 +48,7 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
       console.log(this.preferredNumber, 'pref');
     }
 
-    if (this.personDetails?.emailAddresses) {
+    if (this.personDetails?.emailAddresses?.length) {
       this.preferredEmail = this.personDetails.emailAddresses.find(x => x.isPreferred).email;
     }
   }
