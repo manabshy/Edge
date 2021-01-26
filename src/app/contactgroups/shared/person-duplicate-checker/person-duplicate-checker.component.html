@@ -3,6 +3,19 @@
     <div class="grid grid--25">
       <form [formGroup]="personFinderForm" autocomplete="off">
         <fieldset>
+          <label for="text">Type</label>
+          <span class="radio toggle">
+            <span>
+              <input type="radio" checked="checked" name="radio-toggle" id="personal">
+              <label for="personal"><span>Personal</span></label>
+            </span>
+            <span>
+              <input type="radio" name="radio-toggle" id="company">
+              <label for="company"><span>Company</span></label>
+            </span>
+          </span>
+        </fieldset>
+        <fieldset>
           <label for="fullName">Full Name</label>
           <input type="text" id="fullName" autofocus formControlName="fullName">
         </fieldset>
