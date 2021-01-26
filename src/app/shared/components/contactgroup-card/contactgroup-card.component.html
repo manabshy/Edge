@@ -58,7 +58,7 @@
         </ol>
       </li>
 
-      <li class="expandable">
+      <!-- <li class="expandable">
         <details>
           <summary>
             <div class="summary__title">
@@ -93,7 +93,9 @@
             </li>
           </ol>
         </details>
-      </li>
+      </li> -->
+     <!-- Expandable - Important Messages -->
+      <app-important-messages [importantNotes]="importantNotes$|async" *ngIf="(importantNotes$|async)?.length" ></app-important-messages>
 
       <!-- Expandable - Marketing Preferences -->
       <app-marketing-preferences [personDetails]="contactGroup?.contactPeople[0]"></app-marketing-preferences>

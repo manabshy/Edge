@@ -157,7 +157,8 @@
         </li>
 
         <!-- Expandable - Important Messages -->
-        <li class="expandable" *ngIf="!isNewContactGroup">
+        <app-important-messages [importantNotes]="personDetails?.personNotes" *ngIf="!isNewContactGroup && personDetails?.personNotes?.length"></app-important-messages>
+        <!-- <li class="expandable" *ngIf="!isNewContactGroup">
           <details open>
             <summary>
               <div class="summary__title">
@@ -187,7 +188,7 @@
                   </svg>No messages found</span></li>
             </ol>
           </details>
-        </li>
+        </li> -->
 
         <!-- Expandable - Marketing Preferences -->
         <app-marketing-preferences [personDetails]="personDetails"></app-marketing-preferences>

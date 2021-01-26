@@ -88,6 +88,7 @@ import { MarketingPreferencesComponent } from './components/marketing-preference
 import { PropertyDetailPhotosComponent } from './components/property-detail-photos/property-detail-photos.component';
 import { PropertyDetailMapComponent } from './components/property-detail-map/property-detail-map.component';
 import { ContactgroupFinderComponent } from './components/contactgroup-finder/contactgroup-finder.component';
+import { ImportantMessagesComponent } from './components/important-messages/important-messages.component';
 
 const components = [
   BreadcrumbComponent,
@@ -131,6 +132,7 @@ const components = [
   PropertyDetailPhotosComponent,
   PropertyDetailMapComponent,
   ContactgroupFinderComponent,
+  ImportantMessagesComponent,
 ];
 const pipes = [
   RoundingPipe,
@@ -177,6 +179,7 @@ const externalModules = [
     components,
     pipes,
     directives,
+
 
 
     // RoundingPipe,
