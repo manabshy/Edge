@@ -697,8 +697,8 @@
                   </ol> -->
                   <app-person-details [personDetails]="person" [index]="i"
                     [contactType]="contactGroupDetails?.contactType"
-                    [referenceCount]="contactGroupDetails?.referenceCount" [isPersonInfoOnly]="false"
-                    [showViewPerson]="true" [showSetMainPerson]="true" [showRemovePerson]="true"
+                    [referenceCount]="contactGroupDetails?.referenceCount" [isPersonInfoOnly]="false" [isClickable]="true"
+                    [showEditOnly]="false" [showViewPerson]="true" [showSetMainPerson]="true" [showRemovePerson]="true"
                     (selectedPersonId)="editSelectedPerson($event)" (mainPersonPersonId)="setMainPerson($event)"
                     (removedPersonPersonId)="removePerson($event, true)"></app-person-details>
                   <p><small class="flexBottom">P-{{person?.personId}}</small></p>
@@ -805,10 +805,12 @@
                       class="plus-vertical"></path>
                   </svg>Add Person
                 </li>
-                <li class="card__warning" *ngIf="contactGroupDetails?.referenceCount && !isCloned" (click)="cloneContactGroup()">
+                <li class="card__warning" *ngIf="contactGroupDetails?.referenceCount && !isCloned"
+                  (click)="cloneContactGroup()">
                   <span>
                     <p>Transaction history present. You can't add or remove people from this Contact Group.</p>
-                    <p>If you want to add or remove a person, <a [routerLink]="['../', contactGroupId]">create a new Contact Group</a></p>
+                    <p>If you want to add or remove a person, <a [routerLink]="['../', contactGroupId]">create a new
+                        Contact Group</a></p>
                   </span>
                 </li>
                 <li class="card__warning" *ngIf="!(contactGroupDetails?.contactPeople.length < 8)">
@@ -857,11 +859,17 @@
 
           <footer class="footer">
             <button type="button" class="btn btn--ghost" (click)="cancel()">Cancel</button>
-            <button type="submit" class="btn btn--positive" (click)="saveContactGroup()" [attr.disabled]="!contactGroupDetails?.contactPeople.length || (isSubmitting && !errorMessage) || !contactGroupDetailsForm?.dirty? '' : null">
-              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="loading" *ngIf="isSubmitting && !errorMessage"><path d="M11.9 48.4c-4.1-5-6.3-11.5-5.8-18.6C7.1 17.6 16.8 7.5 29 6.2 44.7 4.4 58 16.7 58 32c0 6.2-2.2 11.8-5.8 16.3 -1 1.2-0.8 2.9 0.3 4l0 0c1.3 1.3 3.4 1.1 4.5-0.3 4.8-6 7.5-13.8 7-22.2C62.9 14 50.1 1.2 34.3 0.1 15.6-1.2 0 13.6 0 32c0 7.7 2.7 14.8 7.3 20.3 1.1 1.3 3 1.4 4.2 0.2l0.2-0.2C12.8 51.2 12.8 49.6 11.9 48.4z"></path></svg>
+            <button type="submit" class="btn btn--positive" (click)="saveContactGroup()"
+              [attr.disabled]="!contactGroupDetails?.contactPeople.length || (isSubmitting && !errorMessage) || !contactGroupDetailsForm?.dirty? '' : null">
+              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="loading"
+                *ngIf="isSubmitting && !errorMessage">
+                <path
+                  d="M11.9 48.4c-4.1-5-6.3-11.5-5.8-18.6C7.1 17.6 16.8 7.5 29 6.2 44.7 4.4 58 16.7 58 32c0 6.2-2.2 11.8-5.8 16.3 -1 1.2-0.8 2.9 0.3 4l0 0c1.3 1.3 3.4 1.1 4.5-0.3 4.8-6 7.5-13.8 7-22.2C62.9 14 50.1 1.2 34.3 0.1 15.6-1.2 0 13.6 0 32c0 7.7 2.7 14.8 7.3 20.3 1.1 1.3 3 1.4 4.2 0.2l0.2-0.2C12.8 51.2 12.8 49.6 11.9 48.4z">
+                </path>
+              </svg>
               Save
             </button>
-          </footer>          
+          </footer>
         </form>
         <!--Add  [showHeader]="false" to hide header -->
         <p-dialog header="Find Person" [(visible)]="isOffCanvasVisible" [modal]="true" [draggable]="false">
@@ -870,8 +878,9 @@
             (addedPersonDetails)="getAddedPersonDetails($event)" (selectedPerson)="getSelectedPerson($event)"
             (isCanvasHidden)="resetCanvasFlag()" (makeButtonVisible)="toggleNewPersonVisibility($event)">
           </app-person-duplicate-checker>
-          <p-footer >
-            <button *ngIf="isCreateNewPersonVisible" class="btn btn--ghost" (click)="createNewContactGroupPerson()">Create new person</button>
+          <p-footer>
+            <button *ngIf="isCreateNewPersonVisible" class="btn btn--ghost"
+              (click)="createNewContactGroupPerson()">Create new person</button>
           </p-footer>
         </p-dialog>
 

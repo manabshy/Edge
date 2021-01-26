@@ -16,9 +16,10 @@ export class PersonDetailsComponent implements OnInit {
   @Input() showViewPerson = false;
   @Input() showRemovePerson = false;
   @Input() isPersonInfoOnly = true;
+  @Input() showEditOnly = true;
   @Input() contactType: number;
   @Input() referenceCount: number;
-  @Input() index: number = 0;
+  @Input() index = 0;
   @Output() selectedPersonId = new EventEmitter<number>();
   @Output() removedPersonPersonId = new EventEmitter<number>();
   @Output() mainPersonPersonId = new EventEmitter<number>();
