@@ -20,8 +20,10 @@
                 || personDetails?.warning?.value}}</span>
             </sup>
             <ng-container *ngIf="isClickable;else addressee">
-              <a class="txt--title" [routerLink]="['/contact-centre/detail/', personDetails?.personId]"
-                [queryParams]="{showNotes: true}">{{personDetails?.addressee}}</a>
+              <p class="txt--title">
+                <a [routerLink]="['/contact-centre/detail/', personDetails?.personId]"
+                  [queryParams]="{showNotes: true}">{{personDetails?.addressee}}</a>
+              </p>
             </ng-container>
             <ng-template #addressee><p class="txt--title">{{personDetails?.addressee}}</p></ng-template>
 
