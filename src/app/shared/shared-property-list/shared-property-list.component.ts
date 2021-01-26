@@ -39,6 +39,7 @@ export class SharedPropertyListComponent implements OnChanges {
       queryParams: {
         propertyId: propertyId,
         isNewValuation: true,
+        isFromProperty: true,
         lastKnownOwnerId: this.personId
       }
     });
