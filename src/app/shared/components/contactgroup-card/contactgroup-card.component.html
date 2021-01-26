@@ -60,12 +60,12 @@
 
       <!-- Expandable - Important Messages -->
       <li class="expandable" *ngIf="(importantNotes$|async)?.length" >
-        <app-important-messages [importantNotes]="importantNotes$|async"></app-important-messages>
+        <app-important-messages [importantNotes]="importantNotes$|async" class="component"></app-important-messages>
       </li>
 
       <!-- Expandable - Marketing Preferences -->
       <li class="expandable">
-        <app-marketing-preferences [personDetails]="contactGroup?.contactPeople[0]"></app-marketing-preferences>
+        <app-marketing-preferences [personDetails]="contactGroup?.contactPeople[0]" class="component"></app-marketing-preferences>
       </li>
 
       <!-- Expandable - Referrals -->

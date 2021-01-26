@@ -158,12 +158,12 @@
 
         <!-- Expandable - Important Messages -->
         <li class="expandable" *ngIf="!isNewContactGroup && personDetails?.personNotes?.length">
-          <app-important-messages [importantNotes]="personDetails?.personNotes" ></app-important-messages>
+          <app-important-messages [importantNotes]="personDetails?.personNotes" class="component"></app-important-messages>
         </li>
 
         <!-- Expandable - Marketing Preferences -->
         <li class="expandable">
-          <app-marketing-preferences [personDetails]="personDetails"></app-marketing-preferences>
+          <app-marketing-preferences [personDetails]="personDetails" class="component"></app-marketing-preferences>
         </li>
 
         <!-- Expandable - Referrals -->
