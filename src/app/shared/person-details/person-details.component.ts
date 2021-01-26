@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { MarketingPreferences, Person } from '../models/person';
 import { Router } from '@angular/router';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
@@ -8,7 +8,7 @@ import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-group
   templateUrl: './person-details.component.html',
   styleUrls: ['./person-details.component.scss']
 })
-export class PersonDetailsComponent implements OnInit {
+export class PersonDetailsComponent implements OnInit, OnChanges {
   @Input() personDetails: Person;
   @Input() isClickable = false;
   @Input() isNewContactGroup = false;
@@ -23,6 +23,9 @@ export class PersonDetailsComponent implements OnInit {
   @Output() selectedPersonId = new EventEmitter<number>();
   @Output() removedPersonPersonId = new EventEmitter<number>();
   @Output() mainPersonPersonId = new EventEmitter<number>();
+  preferredNumber: string;
+  preferredEmail: string;
+
   constructor(private router: Router, private contactGroupService: ContactGroupsService) { }
 
   ngOnInit() {
@@ -37,6 +40,17 @@ export class PersonDetailsComponent implements OnInit {
         notes.splice(index, 1);
       }
     });
+  }
+
+  ngOnChanges() {
+    if (this.personDetails?.phoneNumbers?.length) {
+      this.preferredNumber = this.personDetails.phoneNumbers.find(x => x.isPreferred).number;
+      console.log(this.preferredNumber, 'pref');
+    }
+
+    if (this.personDetails?.emailAddresses) {
+      this.preferredEmail = this.personDetails.emailAddresses.find(x => x.isPreferred).email;
+    }
   }
 
   navigateToEdit() {
