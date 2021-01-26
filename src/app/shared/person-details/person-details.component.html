@@ -157,14 +157,15 @@
 
             <!-- Email -->
             <li>
-              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
-                <path
-                  d="M-0.3 13.8v-3.6c0-1.1 0.9-2.1 2.1-2.1h59.9c1.1 0 2.1 0.9 2.1 2.1v3.6l-32 20L-0.3 13.8zM32.8 37.9c-0.3 0.2-0.7 0.3-1.1 0.3 -0.4 0-0.7-0.1-1.1-0.3L-0.3 18.5v35.6c0 1.1 0.9 2.1 2.1 2.1h59.9c1.1 0 2.1-0.9 2.1-2.1V18.5L32.8 37.9z" />
-              </svg>
-              <span class="txt--negative"
-                *ngIf="!personDetails?.emailAddresses?.length">No email</span>
-              <ol class="list" *ngIf="preferredEmail">
-                <li class="txt--breakword">
+              <ol class="list" >
+                <li *ngIf="!preferredEmail">
+                  <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
+                    <path
+                      d="M-0.3 13.8v-3.6c0-1.1 0.9-2.1 2.1-2.1h59.9c1.1 0 2.1 0.9 2.1 2.1v3.6l-32 20L-0.3 13.8zM32.8 37.9c-0.3 0.2-0.7 0.3-1.1 0.3 -0.4 0-0.7-0.1-1.1-0.3L-0.3 18.5v35.6c0 1.1 0.9 2.1 2.1 2.1h59.9c1.1 0 2.1-0.9 2.1-2.1V18.5L32.8 37.9z" />
+                  </svg>
+                  <span class="txt--negative">No email</span>
+                </li>
+                <li *ngIf="preferredEmail" class="txt--breakword">
                   <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
                     <path
                       d="M-0.3 13.8v-3.6c0-1.1 0.9-2.1 2.1-2.1h59.9c1.1 0 2.1 0.9 2.1 2.1v3.6l-32 20L-0.3 13.8zM32.8 37.9c-0.3 0.2-0.7 0.3-1.1 0.3 -0.4 0-0.7-0.1-1.1-0.3L-0.3 18.5v35.6c0 1.1 0.9 2.1 2.1 2.1h59.9c1.1 0 2.1-0.9 2.1-2.1V18.5L32.8 37.9z" />
