@@ -157,7 +157,7 @@
     <form [formGroup]="valuationForm" (ngSubmit)="saveValuation()" autocompleteOff>
       <ng-container *ngIf="(createdSigner || lastKnownOwner) && property">
         <p-accordion [multiple]="true">
-          <p-accordionTab header="Valuation Notes" [(selected)]="activeState[0]" *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value) || (!isEditable && valuationForm.get('timeFrame').value) || (!isEditable && valuationForm.get('generalNotes').value)">           
+          <p-accordionTab header="Valuation Notes" [(selected)]="activeState[0]" *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value) || (!isEditable && valuationForm.get('timeFrame').value) || (!isEditable && valuationForm.get('generalNotes').value)">
             <fieldset *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value)">
               <label for="reason">What’s the current situation?</label>
               <textarea name="reason" id="reason" cols="30" rows="3" formControlName="reason" data-cy="reason"
@@ -873,7 +873,7 @@
 
 <!-- Contactgroup Finder Modal -->
 <p-dialog header="Last known owner" [(visible)]="isLastknownOwnerVisible" [modal]="true" [draggable]="false">
-  <app-contactgroup-finder (selectedContactGroup)="getSelectedOwner($event)" ></app-contactgroup-finder>
+  <app-contactgroup-finder (selectedContactGroup)="getSelectedOwner($event)" (isCreatingNewGroup)="createNewLastKnownOwner()" ></app-contactgroup-finder>
 </p-dialog>
 
 <!-- Property Finder Modal -->
@@ -995,7 +995,7 @@
                 </app-subnav-item>
               </ol>
             </ng-container>
-              
+
             <ng-container *ngIf="availableDates?.nextWeek">
               <p class="txt--title">Next Week</p>
               <ol class="list">
@@ -1004,7 +1004,7 @@
                 </app-subnav-item>
               </ol>
             </ng-container>
-            
+
             <ng-container *ngIf="availableDates?.next2Weeks">
               <p class="txt--title">Next Two Weeks</p>
               <ol class="list">
@@ -1036,7 +1036,7 @@
         </div>
       </div>
     </div>
-    
+
     <app-subnav>
       <ng-container *ngIf="availableDates">
         <div class="form-group" *ngIf="availableDates?.thisWeek">
@@ -1121,7 +1121,7 @@
         </fieldset>
       </ng-container>
     </ng-container>
-    
+
     <ng-container *ngIf="instruction?.askingRentShortLet || instruction?.askingRentLongLet">
       <fieldset *ngIf="showInstruct">
         <span class="checkbox">
@@ -1138,7 +1138,7 @@
             <input type="text" name="longLetValue" id="longLetValue" formControlName="askingRentLongLet" [ngClass]="{'is-invalid':formErrors.askingRentLongLet}">
             <span class="invalid-feedback">{{formErrors?.askingRentLongLet}}</span>
           </fieldset>
-          
+
           <fieldset>
             <label for="longLetMonthlyValue">Value (per month)</label>
             <input type="text" name="longLetMonthlyValue" id="longLetMonthlyValue" formControlName="askingRentLongLetMonthly">
@@ -1172,7 +1172,7 @@
             <label for="multiAgencyLettings">Multi Agency</label>
           </span>
         </span>
-        <small *ngIf="instructionForm.get('lettingsAgencyType')?.errors?.required" class="text-danger">{{formErrors?.lettingsAgencyType}}</small>   
+        <small *ngIf="instructionForm.get('lettingsAgencyType')?.errors?.required" class="text-danger">{{formErrors?.lettingsAgencyType}}</small>
       </fieldset>
     </ng-container>
 
@@ -1212,7 +1212,7 @@
                 class="text-danger">{{formErrors?.salesAgencyType}}</small>
             </fieldset>
           </div>
-          
+
           <div class="col-sm-8 mb-4" *ngIf="instruction?.askingRentShortLet || instruction?.askingRentLongLet">
             <div class="row">
               <div class="col-12">
@@ -1275,10 +1275,10 @@
               </div>
             </div>
           </div>
-          
+
         </div>
       </div>
-    
+
     </fieldset> -->
 
     <fieldset>

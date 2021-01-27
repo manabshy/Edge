@@ -15,6 +15,7 @@ import { SignerComponent } from '../../signer/signer.component';
 export class ContactgroupFinderComponent implements OnInit {
   @Input() label: string;
   @Output() selectedContactGroup = new EventEmitter<Signer>();
+  @Output() isCreatingNewGroup = new EventEmitter<boolean>();
   contactGroupFinderForm: FormGroup;
   noSuggestions: boolean;
   suggestions: (text$: Observable<string>) => Observable<any[]>;

@@ -894,6 +894,13 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
   createNewSigner() {
     this.valuationForm.markAsPristine();
   }
+
+
+  createNewLastKnownOwner() {
+    this.isLastknownOwnerVisible = false;
+    this.valuationForm.markAsPristine();
+  }
+
   createNewProperty(isNewProperty: boolean) {
     this.valuationForm.markAsPristine();
   }
