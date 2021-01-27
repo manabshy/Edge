@@ -176,9 +176,8 @@
 
     <footer class="footer">
         <div class="btn--container" *ngIf="areLeadsAssignable">
-          <button type="submit" class="btn btn--positive">Assign <span
-              class="pill pill--snow pill--onRight">{{selectedLeadsForAssignment?.length}}</span></button>
           <button (click)="cancel()" type="button" class="btn btn--ghost">Cancel</button>
+          <button type="submit" class="btn btn--positive">Assign {{selectedLeadsForAssignment?.length}}</button>
         </div>
     </footer>
     </form>
