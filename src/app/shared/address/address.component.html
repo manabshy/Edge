@@ -1,32 +1,27 @@
 <form [formGroup]="addressForm" (keydown.enter)="$event.preventDefault()" autocompleteOff>
-  <div class="form-group row" *ngIf="!(propertyDetails || isNewProperty)">
-    <div class="col-sm-3 offset-sm-2">
-      <label for="country" class="small">Country</label>
-      <select class="custom-select custom-select-sm" id="country" formControlName="countryId">
+  <fieldset *ngIf="!(propertyDetails || isNewProperty)">
+    <label for="country" class="small">Country</label>
+    <span class="select">
+      <select id="country" formControlName="countryId">
         <option selected *ngFor="let country of countries " [ngValue]=country.id>{{country.value}}</option>
       </select>
-    </div>
-  </div>
+    </span>
+  </fieldset>
+
+  <fieldset>
+    <label for="property">Find Address (Postcode)</label>
+    <span class="joined">
+      <input type="search" id="fullAddress" class="form-control" placeholder="" [ngClass]="{'border border-warning': personDetails && !addressLines.value && !enterAddressManually, 'is-invalid':addressError}" formControlName="fullAddress" (keyup.enter)="$event.stopPropagation(); searchAddress()">
+      <div class="btn--container">
+        <button type="button" id="searchAddress" class="btn btn--info" (click)="searchAddress()">Search</button>
+      </div>
+    </span>
+    <p class="message message--negative">{{addressError}}</p>
+    <p class="message message--info" *ngIf="personDetails && !addressLines.value && !enterAddressManually"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><path d="M32 6c14.3 0 26 11.7 26 26S46.3 58 32 58 6 46.3 6 32 17.7 6 32 6M32 1C14.9 1 1 14.9 1 32s13.9 31 31 31 31-13.9 31-31S49.1 1 32 1L32 1z"></path><path d="M43 20c-2.7 0-4.9 2.2-4.9 4.9s2.2 4.9 4.9 4.9 4.9-2.2 4.9-4.9S45.7 20 43 20L43 20z"></path><path d="M21 20c-2.7 0-4.9 2.2-4.9 4.9s2.2 4.9 4.9 4.9 4.9-2.2 4.9-4.9S23.7 20 21 20L21 20z"></path><path d="M32 51.6c7.2 0 13.4-4.5 15.8-10.8H16.2C18.6 47.1 24.8 51.6 32 51.6z"></path></svg>Complete to increase your app-score-badge</p>
+  </fieldset>
 
   <div class="form-group row">
     <div class="col-sm-3 offset-sm-2">
-      <label for="property" class="small">
-        Find Address <span class="text-muted">(Postcode)</span>
-      </label>
-      
-      <div class="input-group input-group-sm">
-        <input type="search" id="fullAddress" class="form-control" placeholder=""
-          [ngClass]="{'border border-warning': personDetails && !addressLines.value && !enterAddressManually, 'is-invalid':addressError}"
-          formControlName="fullAddress" (keyup.enter)="$event.stopPropagation(); searchAddress()">
-          <div class="input-group-append">
-            <button type="button" id="searchAddress" class="btn btn-secondary" (click)="searchAddress()">Search</button>
-          </div>
-          <span class="invalid-feedback w-100">{{addressError}}</span>
-        <small class="form-text w-100" *ngIf="personDetails && !addressLines.value && !enterAddressManually"><i
-            class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your
-            score</span></small>
-      </div>
-
       <div class="off-canvas" [hidden]="!foundAddress" (click)="hideOffCanvas()">
         <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
           <h4 class="page-title text-left pt-3">
@@ -63,58 +58,45 @@
     </div>
   </div>
 
-  <ng-container *ngIf="propertyDetails || addressLines.value || enterAddressManually">
-    <div class="form-group row">
-      <div class="offset-sm-2" [ngClass]="propertyDetails || isNewProperty ? 'col-sm-10' : 'col-sm-8 col-xl-6'">
-        <div class="form-group" *ngIf="!(propertyDetails || isNewProperty)">
-          <label class="small" for="postcode">Address Lines</label>
-          <textarea type="textarea" class="form-control form-control-sm" formControlName="addressLines" id="addressLines"
-            (keydown.enter)="$event.stopPropagation()" rows="5" cols="10" maxlength="500"
-            [ngClass]="{'border border-warning': personDetails && !addressLines.value && enterAddressManually}"></textarea>
-          <small class="form-text" *ngIf="personDetails && !addressLines.value && enterAddressManually"><i
-              class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your
-              score</span></small>
-        </div>
-        <ng-container *ngIf="propertyDetails || isNewProperty">
-          <div class="row">
-            <div class="form-group col-6 col-sm-2">
-              <label class="small" for="postcode">Flat Number</label>
-              <input type="text" class="form-control form-control-sm" formControlName="flatNumber" id="flatNumber" />
-            </div>
-            <div class="form-group col-6 col-sm-2">
-              <label class="small" for="postcode">House Number</label>
-              <input type="text" class="form-control form-control-sm" formControlName="houseNumber" id="houseNumber" />
-            </div>
-            <div class="form-group col-sm-8">
-              <label class="small" for="postcode">Building Name</label>
-              <input type="text" class="form-control form-control-sm" formControlName="houseBuildingName" id="houseBuildingName" />
-            </div>
-            <div class="form-group col-sm-8 col-xl-6">
-              <label class="small" for="postcode">Street</label>
-              <input type="text" class="form-control form-control-sm" formControlName="streetName" id="streetName" />
-            </div>
-            <div class="form-group col-sm-8 col-xl-6">
-              <label class="small" for="postcode">Address Line 2</label>
-              <input type="text" class="form-control form-control-sm" formControlName="addressLine2" id="addressLine2" />
-            </div>
-            <div class="form-group col-sm-12">
-              <label class="small" for="postcode">Town</label>
-              <input type="text" class="form-control form-control-sm" formControlName="town" id="town" />
-            </div>
-          </div>
-        </ng-container>
-        <div class="form-group" *ngIf="showPostCode || propertyDetails">
-          <label class="small" for="postcode">Postcode</label>
-          <div class="input-group">
-            <input type="text" class="form-control form-control-sm" id="postcode" formControlName="postCode"
-              [ngClass]="{'border border-warning': personDetails && !postCode.value}">
-            <!-- <span class="invalid-feedback">{{formErrors.postCode}}</span> -->
-            <small class="form-text w-100" *ngIf="personDetails && !postCode.value"><i
-                class="fas fa-smile-wink mr-2 text-warning"></i><span class="text-muted">Complete to increase your
-                score</span></small>
-          </div>
-        </div>
-      </div>
-    </div>
+  <ng-container *ngIf="propertyDetails || addressLines.value || enterAddressManually">   
+    <fieldset *ngIf="!(propertyDetails || isNewProperty)">
+      <label class="small" for="postcode">Address Lines</label>
+      <textarea type="textarea" class="form-control form-control-sm" formControlName="addressLines" id="addressLines" (keydown.enter)="$event.stopPropagation()" rows="5" cols="10" maxlength="500" [ngClass]="{'border border-warning': personDetails && !addressLines.value && enterAddressManually}"></textarea>
+      <p class="message message--info" *ngIf="personDetails && !addressLines.value && enterAddressManually"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><path d="M32 6c14.3 0 26 11.7 26 26S46.3 58 32 58 6 46.3 6 32 17.7 6 32 6M32 1C14.9 1 1 14.9 1 32s13.9 31 31 31 31-13.9 31-31S49.1 1 32 1L32 1z"></path><path d="M43 20c-2.7 0-4.9 2.2-4.9 4.9s2.2 4.9 4.9 4.9 4.9-2.2 4.9-4.9S45.7 20 43 20L43 20z"></path><path d="M21 20c-2.7 0-4.9 2.2-4.9 4.9s2.2 4.9 4.9 4.9 4.9-2.2 4.9-4.9S23.7 20 21 20L21 20z"></path><path d="M32 51.6c7.2 0 13.4-4.5 15.8-10.8H16.2C18.6 47.1 24.8 51.6 32 51.6z"></path></svg>Complete to increase your score</p>
+    </fieldset>
+
+    <ng-container *ngIf="propertyDetails || isNewProperty">
+      <fieldset>
+        <label class="small" for="postcode">Flat Number</label>
+        <input type="text" class="form-control form-control-sm" formControlName="flatNumber" id="flatNumber" />
+      </fieldset>
+      <fieldset>
+        <label class="small" for="postcode">House Number</label>
+        <input type="text" class="form-control form-control-sm" formControlName="houseNumber" id="houseNumber" />
+      </fieldset>
+      <fieldset>
+        <label class="small" for="postcode">Building Name</label>
+        <input type="text" class="form-control form-control-sm" formControlName="houseBuildingName" id="houseBuildingName" />
+      </fieldset>
+      <fieldset>
+        <label class="small" for="postcode">Street</label>
+        <input type="text" class="form-control form-control-sm" formControlName="streetName" id="streetName" />
+      </fieldset>
+      <fieldset>
+        <label class="small" for="postcode">Address Line 2</label>
+        <input type="text" class="form-control form-control-sm" formControlName="addressLine2" id="addressLine2" />
+      </fieldset>
+      <fieldset>
+        <label class="small" for="postcode">Town</label>
+        <input type="text" class="form-control form-control-sm" formControlName="town" id="town" />
+      </fieldset>
+    </ng-container>
+
+    <fieldset *ngIf="showPostCode || propertyDetails">
+      <label class="small" for="postcode">Postcode</label>
+      <input type="text" class="form-control form-control-sm" id="postcode" formControlName="postCode" [ngClass]="{'border border-warning': personDetails && !postCode.value}">
+      <!-- <span class="invalid-feedback">{{formErrors.postCode}}</span> -->
+      <p class="message message--info" *ngIf="personDetails && !postCode.value"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><path d="M32 6c14.3 0 26 11.7 26 26S46.3 58 32 58 6 46.3 6 32 17.7 6 32 6M32 1C14.9 1 1 14.9 1 32s13.9 31 31 31 31-13.9 31-31S49.1 1 32 1L32 1z"></path><path d="M43 20c-2.7 0-4.9 2.2-4.9 4.9s2.2 4.9 4.9 4.9 4.9-2.2 4.9-4.9S45.7 20 43 20L43 20z"></path><path d="M21 20c-2.7 0-4.9 2.2-4.9 4.9s2.2 4.9 4.9 4.9 4.9-2.2 4.9-4.9S23.7 20 21 20L21 20z"></path><path d="M32 51.6c7.2 0 13.4-4.5 15.8-10.8H16.2C18.6 47.1 24.8 51.6 32 51.6z"></path></svg>Complete to increase your score</p>
+    </fieldset>
   </ng-container>
-  </form>
+</form>
