@@ -61,7 +61,7 @@
       <ng-container *ngIf="hasBeenSearched || noSuggestions">
           <a [routerLink]="['/contact-centre/detail/0/people', 0]"
           [queryParams]="{isNewContactGroup: true, isContactGroupFinder: true, contactGroup: contactGroupFinderForm.get('searchTerm').value}"
-          (click)="createNewContactGroup()">
+          (click)="isCreatingNewGroup.emit()">
             <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
               <path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" />
               <path class="plus-vertical"
