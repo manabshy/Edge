@@ -3,7 +3,7 @@
     <app-score-badge [bar]="true" [person]="personForm?.value"></app-score-badge>
     <form *ngIf="personDetails || basicPerson" [formGroup]="personForm" (ngSubmit)="savePerson(false)" (keydown.enter)="$event.preventDefault()" autocompleteOff>
       <ng-container [hidden]="basicPerson">
-        <fieldset class="warning">
+        <fieldset [ngClass]="{'warning':!isWarningsEnabled}">
           <label for="warningStatus">Warning</label>
           <span class="select">
             <select id="warningStatus" name="warningStatus" formControlName="warningStatusId">
@@ -114,6 +114,7 @@
           </span>
         </fieldset>
 
+        <legend class="legend">Marketing Preferences</legend>
         <fieldset formGroupName="marketingPreferences">
           <label>Marketing</label>
           <span class="checkbox">
@@ -141,6 +142,7 @@
           </span>
         </fieldset>
 
+        <legend class="legend">AML</legend>
         <div class="inline-parent">
           <fieldset class="inline-child">
             <label for="amlDate">AML Completed</label>
