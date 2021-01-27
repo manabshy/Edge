@@ -31,4 +31,12 @@ This applies from 992px onwards
         }
         .p-dialog-footer        { border-radius:0 0 3px 3px; }
     }
+
+    .modal--small               {
+        .p-dialog               { width:250px;
+            .p-dialog-content   { min-height:auto;
+                .row            { min-height:auto; }
+            }
+        }
+    }
 }

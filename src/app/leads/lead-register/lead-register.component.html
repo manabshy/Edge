@@ -186,8 +186,10 @@
 </div>
 
 <!-- Lead Owner Assignment Modal -->
-<p-dialog header="Choose an owner for the selected leads:" [(visible)]="showModal" [modal]="true" [draggable]="false">
-  <fieldset><app-staff-member-finder placeholder="Select owner" (selectedStaffMemberId)="getSelectedOwner($event)"></app-staff-member-finder></fieldset>
+<p-dialog header="Lead Owner" [(visible)]="showModal" [modal]="true" [draggable]="false" class="modal--small">
+  <fieldset>
+    <app-staff-member-finder label="Choose an owner for the selected leads:" placeholder="Select owner" (selectedStaffMemberId)="getSelectedOwner($event)"></app-staff-member-finder>
+  </fieldset>
   <fieldset>
    <div class="btn--container">
      <button (click)="showModal=false" type="button" class="btn btn--ghost">Cancel</button>
