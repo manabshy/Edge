@@ -21,6 +21,7 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
   @Input() isRequired: boolean;
   @Input() isMultiple: boolean;
   @Input() isReadOnly: boolean;
+  @Input() placeholder = 'Select Staff Member';
   @Input() label: string;
   @Input() valuers: OfficeMember[];
   @Input() isSalesAndLettings: boolean;

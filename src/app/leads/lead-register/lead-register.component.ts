@@ -45,7 +45,9 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   info: string;
   isClosedIncluded: boolean;
   canSeeUnassignable: boolean;
-  isAdvancedSearchVisible: boolean = false;
+  isAdvancedSearchVisible = false;
+  showModal = false;
+  newLeadOwnerId: number;
 
   get isAdvancedFilterActive() {
     if (this.leadRegisterForm) {
@@ -250,20 +252,42 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   }
 
   showLeadsAssignmentModal() {
-    const subject = new Subject<number>();
-    const modal = this.modalService.show(LeadAssignmentModalComponent, { ignoreBackdropClick: true });
-    modal.content.subject = subject;
+    // const subject = new Subject<number>();
+    // const modal = this.modalService.show(LeadAssignmentModalComponent, { ignoreBackdropClick: true });
+    // modal.content.subject = subject;
 
-    subject.subscribe(leadOwner => {
-      if (leadOwner) {
-        console.log('lead Owner selected', leadOwner);
-        console.log('leads selected for assignment', this.selectedLeadsForAssignment);
-        this.processLeadsAssignment(leadOwner, this.selectedLeadsForAssignment);
-      }
-    });
+    // subject.subscribe(leadOwner => {
+    //   if (leadOwner) {
+    //     console.log('lead Owner selected', leadOwner);
+    //     console.log('leads selected for assignment', this.selectedLeadsForAssignment);
+    //     this.processLeadsAssignment(leadOwner, this.selectedLeadsForAssignment);
+    //   }
+    // });
 
-    return subject.asObservable();
+    // return subject.asObservable();
 
+    this.showModal = true;
+
+  }
+
+  getSelectedOwner(id: number) {
+    console.log({ id }, 'sleected owener');
+    if (id) { this.newLeadOwnerId = id; }
+  }
+
+  // TODO: CHANGE NAME ASAP
+  assignLeadsToOwner() {
+    if (this.newLeadOwnerId) {
+      this.leadService.assignLeads(this.newLeadOwnerId, this.selectedLeadsForAssignment).subscribe(result => {
+        if (result) {
+          this.toastr.success('Lead(s) successfully assigned!');
+          this.areLeadsAssignable = false;
+          this.selectedLeadsForAssignment = [];
+          this.replaceLeadsWithNewOwners(result);
+          this.showModal = false;
+        }
+      });
+    }
   }
 
   navigateToEdit(lead: Lead) {

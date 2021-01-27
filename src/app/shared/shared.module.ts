@@ -318,7 +318,7 @@ const externalModules = [
     NoteModalComponent,
     TelephoneModalComponent,
     SmsModalComponent,
-    LeadAssignmentModalComponent // To be moved. Decide ASAP
+    // LeadAssignmentModalComponent // To be moved. Decide ASAP
   ]
 })
 export class SharedModule { }
