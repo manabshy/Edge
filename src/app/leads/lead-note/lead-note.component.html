@@ -17,11 +17,11 @@
         </span>
       </fieldset>
 
-      <fieldset>
+      <fieldset [ngClass]="{'invalid': noteRequiredWarning}">
         <textarea #note class="form-control" name="note" id="note" cols="30" rows="5"
           placeholder="Please give as much detail as possible." (keydown)="ctrlEnterSubmit($event)"
-          formControlName="text" [attr.disabled] = "isDisabled ? true : null" [ngClass]="{'is-invalid': noteRequiredWarning}"></textarea>
-          <div class="invalid-feedback">{{noteRequiredWarning}}</div>
+          formControlName="text" [attr.disabled] = "isDisabled ? true : null" ></textarea>
+          <p class="message message--negative">{{noteRequiredWarning}}</p>
       </fieldset>
 
       <fieldset>
