@@ -174,11 +174,13 @@
         <i class="far fa-sad-tear"></i> No results for your current search
       </div>
 
-      <div class="btn--container" *ngIf="areLeadsAssignable">
-        <button type="submit" class="btn btn--positive">Assign <span
-            class="pill pill--snow pill--onRight">{{selectedLeadsForAssignment?.length}}</span></button>
-        <button (click)="cancel()" type="button" class="btn btn--ghost">Cancel</button>
-      </div>
+    <footer class="footer">
+        <div class="btn--container" *ngIf="areLeadsAssignable">
+          <button type="submit" class="btn btn--positive">Assign <span
+              class="pill pill--snow pill--onRight">{{selectedLeadsForAssignment?.length}}</span></button>
+          <button (click)="cancel()" type="button" class="btn btn--ghost">Cancel</button>
+        </div>
+    </footer>
     </form>
   </div>
 </div>
