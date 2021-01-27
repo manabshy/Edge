@@ -87,21 +87,22 @@ form                                            { padding:0; display:inline-bloc
 
 /***** Fieldset *****/
 fieldset                                       	{ padding:0; text-align:left; display:block; max-width:500px; position:relative; top:0; left:0;
-  .message+.select                              { margin-top:6px; }
-  .message                                      { margin:0; border-radius:0 0 3px 3px; top:-2px; }
+   &--width-max 							            { max-width:100%; }
+   &:first-of-type                              { 
+      .legend                                   { margin-top:0; }
+   }
+  .message                                      { margin:0; border-radius:0 0 3px 3px; top:-2px;
+      &+.select                                 { margin-top:6px; }
+   }
+  small                                 	      { display:block; line-height:14px; }
 }
-fieldset small                                 	{ display:block; line-height:14px; }
 
-.fieldset--width-max 							      { max-width:100%; }
+/***** Legend *****/
 legend                                          { width:100%; }
 .legend                                         { @extend h3; margin:50px 0 16px; padding:6px 12px; display:block; width:100%; background-color:$color--smoke; border-radius:3px; }
 
-fieldset:first-of-type                          { 
-   .legend                                      { margin-top:0; }
-}
-
 /***** Label *****/
-label, .label                                  	{ width:100%; display:flex; align-items:center; color:$color--midnight-70; font-weight:500; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box;
+label, .label                                  	{ width:100%; display:flex; align-items:center; color:$color--midnight-70; font-weight:bold; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box;
    .icon--s                                     { align-self:center; }
    &:focus                                      { outline:none; }
    &+.message, &+.joined                        { margin-top:6px; }
