@@ -185,16 +185,16 @@
 </div>
 
 <!-- Lead Owner Assignment Modal -->
-<p-dialog header="Lead Owner" [(visible)]="showModal" [modal]="true" [draggable]="false" class="modal--small">
+<p-dialog header="Lead Owner" [(visible)]="showModal" [modal]="true" [draggable]="false" class="modal--small modal--hasFooter">
   <fieldset>
     <app-staff-member-finder label="Choose an owner for the selected leads:" placeholder="Select owner" (selectedStaffMemberId)="getSelectedOwner($event)"></app-staff-member-finder>
   </fieldset>
-  <fieldset>
+  <footer class="modal-footer">
    <div class="btn--container">
      <button (click)="showModal=false" type="button" class="btn btn--ghost">Cancel</button>
      <button type="button" class="btn btn--positive" (click)="assignLeadsToOwner()">Assign</button>
    </div>
-  </fieldset>
+  </footer>
 </p-dialog>
 
 <!-- <div class="row page-title">
