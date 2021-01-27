@@ -23,7 +23,7 @@
       
       <fieldset>
         <label for="title">Title</label>
-        <span class="select">
+        <span class="select input--grid-5">
           <select id="title" name="title" formControlName="titleId" [ngClass]="{'is-invalid':formErrors.titleId}">
             <option value=""></option>
             <option *ngFor="let title of titles | keyvalue:keepOriginalOrder" [value]=title.key>{{title.value}}</option>
