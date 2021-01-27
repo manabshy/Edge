@@ -61,8 +61,8 @@ button::-moz-focus-inner                        { border:0; padding:0; }
 
 /***** Color - Warning *****/
 .btn--warning,
-.btn--warning:hover[disabled]                   { background-color:#FFC107; color:#444; }
-.btn--warning:hover                             { background-color:#C79100; color:$color--snow; }
+.btn--warning:hover[disabled]                   { background-color:#FFC107; }
+.btn--warning:hover                             { background-color:#C79100; }
 
 /***** Color - negative *****/
 .btn--negative,

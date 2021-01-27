@@ -27,30 +27,68 @@ form, label, input, textarea, select,
 .select optgroup option, 
 .checkbox > span label, .radio > span label, 
 form .message, .btn                            	{ font-weight:normal; }
-form + *, fieldset + *, fieldset small + *, 
-label + *, .label + *, input + *, 
-textarea + *, .select + *, .inline-parent + *  	{ margin-top:12px; }
+
+form, fieldset, .fieldset, fieldset small, 
+label, .label, input, textarea, .select, 
+.inline-parent  	                              { 
+   &+*                                          { margin-top:12px; }
+}
+
 *+h3                                            { margin-top:30px; }
 input, textarea, select                        	{ border-color:$color--midnight-20; }
 
 /*********************************************** 
 Forms with labels
 ***********************************************/
-form                                           	{ padding:0; display:inline-block; width:100%; }
-form .invalid > label, 
-form .invalid input:checked + label            	{ color:$color--negative; }
-form .invalid input:checked + label:before     	{ background-color:$color--negative; border-color:$color--negative; }
-form .invalid input, form .invalid textarea, 
-form .invalid select, form .invalid textarea,   { border-color:$color--negative; }
-form fieldset imput+.message,
-form fieldset ng-select+.message                { margin:0; border-radius:0 0 3px 3px; top:-2px; }
-form fieldset.invalid .radio input:checked + label:before, 
-form fieldset .invalid .radio input:checked + label:before { background-color:transparent; }
-.form--widthAuto                                { width:auto; }
+form                                            { padding:0; display:inline-block; width:100%;
+   &--widthAuto                                 { width:auto; }
+   .message                                     { display:none; }
+
+   .invalid                                     {
+      > label,
+      input:checked + label                     { color:$color--negative;
+         &:before     	                        { background-color:$color--negative; border-color:$color--negative; }
+      }
+
+      input, textarea, select, textarea         { border-color:$color--negative; }
+      .joined .btn                              { box-shadow: inset 0px 0px 0px 1px $color--negative; }
+   }
+   
+   .warning                                     {
+      > label,
+      input:checked + label                     { color:$color--warning;
+         &:before     	                        { background-color:$color--warning; border-color:$color--warning; }
+      }
+
+      input, textarea, select, textarea         { border-color:$color--warning; }
+      .joined .btn                              { box-shadow: inset 0px 0px 0px 1px $color--warning; }
+   }
+
+   .info                                        {
+      > label,
+      input:checked + label                     { color:$color--info;
+         &:before     	                        { background-color:$color--info; border-color:$color--info; }
+      }
+
+      input, textarea, select, textarea         { border-color:$color--info; }
+      .joined .btn                              { box-shadow: inset 0px 0px 0px 1px $color--info; }
+   }
+
+   .invalid, .warning, .info                    {
+      imput+.message,
+      ng-select+.message                        { margin:0; border-radius:0 0 3px 3px; top:-2px; }
+
+      .radio input:checked + label:before, 
+      .radio input:checked + label:before       { background-color:transparent; }
+
+      .message                                  { display:inherit; }
+   }
+}
 
 /***** Fieldset *****/
 fieldset                                       	{ padding:0; text-align:left; display:block; max-width:500px; position:relative; top:0; left:0;
   .message+.select                              { margin-top:6px; }
+  .message                                      { margin:0; border-radius:0 0 3px 3px; top:-2px; }
 }
 fieldset small                                 	{ display:block; line-height:14px; }
 
@@ -66,7 +104,7 @@ fieldset:first-of-type                          {
 label, .label                                  	{ width:100%; display:flex; align-items:center; color:$color--midnight-70; font-weight:500; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box;
    .icon--s                                     { align-self:center; }
    &:focus                                      { outline:none; }
-   &+.message                                   { margin-top:6px; }
+   &+.message, &+.joined                        { margin-top:6px; }
 }
 label + input, .label + input, 
 label + textarea, .label + textarea, 
@@ -236,11 +274,17 @@ Inline elements
 Joined elements
 ***********************************************/
 .joined                                         { display:flex;
-   input, textarea,  select, .select            { border-radius:3px 0 0 3px; border-right:none;
+   input, textarea,  select, .select            { border-radius:0; border-right:none;
       &+*                                       { margin-top:0; }
    }
+   
+   >:first-child                                { border-radius:3px 0 0 3px; }
+   >:last-child                                 { border-radius:0 3px 3px 0; }
+   
    .btn--container                              { 
-      .btn                                      { border-radius:0 3px 3px 0; }
+      .btn                                      { border-radius:0;
+         &:last-child                           { border-radius:0 3px 3px 0; }
+      }
    }
 }
 

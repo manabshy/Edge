@@ -131,9 +131,9 @@ img                                             { border:0; vertical-align:middl
 /***** Message Blocks *****/
 .message                                        { padding:.56em .8em; color:$color--snow; background-color:$color--midnight; border-radius:3px; width:100%; position:relative; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; }
 .message--positive                              { background-color:$color--positive; }
-.message--info                                  { background-color:$color--blue-50; color:$color--midnight; border:1px solid $color--info; }
-.message--warning                               { background-color:$color--yellow; color:$color--midnight; border:1px solid $color--warning; }
-.message--negative                              { background-color:$color--blossom; color:$color--midnight; border:1px solid $color--negative; }
+.message--info                                  { background-color:$color--info; border:1px solid $color--info; }
+.message--warning                               { background-color:$color--warning; color:$color--midnight; border:1px solid $color--warning; }
+.message--negative                              { background-color:$color--negative; border:1px solid $color--negative; }
 .message--smoke                                 { background-color:$color--smoke; color:$color--midnight; border:1px solid $color--midnight-10; }
 
 /***** Pills *****/
