@@ -87,7 +87,6 @@ form                                            { padding:0; display:inline-bloc
 
 /***** Fieldset *****/
 fieldset                                       	{ padding:0; text-align:left; display:block; max-width:500px; position:relative; top:0; left:0;
-   &--width-max 							            { max-width:100%; }
    &:first-of-type                              { 
       .legend                                   { margin-top:0; }
    }
@@ -96,6 +95,7 @@ fieldset                                       	{ padding:0; text-align:left; di
    }
   small                                 	      { display:block; line-height:14px; }
 }
+.fieldset--width-max 							      { max-width:100%; }
 
 /***** Legend *****/
 legend                                          { width:100%; }
@@ -236,7 +236,7 @@ label + .inline-parent                          { margin-top:6px; }
 .inline-parent textarea, 
 .inline-parent select, 
 .inline-parent .select                          { width:100%; }
-.inline-parent .inline-child                    { margin:0 20px 0 0; max-width:100%; display:flex; flex:1; flex-direction:column; vertical-align:bottom; align-self:flex-start;
+.inline-parent .inline-child                    { margin:0 20px 0 0; max-width:100%; display:flex; flex:1; flex-direction:column; vertical-align:bottom; align-self:flex-end;
    input                                        { margin-top:23px; }
    label                                        { min-height:17px;
       &+*                                       { margin-top:6px; }
