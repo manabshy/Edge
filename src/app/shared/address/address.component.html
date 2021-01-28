@@ -11,16 +11,26 @@
   <fieldset>
     <label for="property">Find Address (Postcode)</label>
     <span class="joined">
-      <input type="search" id="fullAddress" class="form-control" placeholder="" [ngClass]="{'border border-warning': personDetails && !addressLines.value && !enterAddressManually, 'is-invalid':addressError}" formControlName="fullAddress" (keyup.enter)="$event.stopPropagation(); searchAddress()">
+      <input type="search" id="fullAddress" class="form-control" placeholder=""
+        [ngClass]="{'border border-warning': personDetails && !addressLines.value && !enterAddressManually, 'is-invalid':addressError}"
+        formControlName="fullAddress" (keyup.enter)="$event.stopPropagation(); searchAddress()">
       <div class="btn--container">
         <button type="button" id="searchAddress" class="btn btn--info" (click)="searchAddress()">Search</button>
       </div>
     </span>
     <p class="message message--negative">{{addressError}}</p>
-    <p class="message message--info" *ngIf="personDetails && !addressLines.value && !enterAddressManually"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><path d="M32 6c14.3 0 26 11.7 26 26S46.3 58 32 58 6 46.3 6 32 17.7 6 32 6M32 1C14.9 1 1 14.9 1 32s13.9 31 31 31 31-13.9 31-31S49.1 1 32 1L32 1z"></path><path d="M43 20c-2.7 0-4.9 2.2-4.9 4.9s2.2 4.9 4.9 4.9 4.9-2.2 4.9-4.9S45.7 20 43 20L43 20z"></path><path d="M21 20c-2.7 0-4.9 2.2-4.9 4.9s2.2 4.9 4.9 4.9 4.9-2.2 4.9-4.9S23.7 20 21 20L21 20z"></path><path d="M32 51.6c7.2 0 13.4-4.5 15.8-10.8H16.2C18.6 47.1 24.8 51.6 32 51.6z"></path></svg>Complete to increase your app-score-badge</p>
+    <p class="message message--info" *ngIf="personDetails && !addressLines.value && !enterAddressManually"><svg
+        aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
+        <path
+          d="M32 6c14.3 0 26 11.7 26 26S46.3 58 32 58 6 46.3 6 32 17.7 6 32 6M32 1C14.9 1 1 14.9 1 32s13.9 31 31 31 31-13.9 31-31S49.1 1 32 1L32 1z">
+        </path>
+        <path d="M43 20c-2.7 0-4.9 2.2-4.9 4.9s2.2 4.9 4.9 4.9 4.9-2.2 4.9-4.9S45.7 20 43 20L43 20z"></path>
+        <path d="M21 20c-2.7 0-4.9 2.2-4.9 4.9s2.2 4.9 4.9 4.9 4.9-2.2 4.9-4.9S23.7 20 21 20L21 20z"></path>
+        <path d="M32 51.6c7.2 0 13.4-4.5 15.8-10.8H16.2C18.6 47.1 24.8 51.6 32 51.6z"></path>
+      </svg>Complete to increase your app-score-badge</p>
   </fieldset>
 
-  <div class="form-group row">
+  <!-- <div class="form-group row">
     <div class="col-sm-3 offset-sm-2">
       <div class="off-canvas" [hidden]="!foundAddress" (click)="hideOffCanvas()">
         <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
@@ -39,8 +49,7 @@
                 (click)="address?.Action ? findAddress(searchTermBK, address?.Id) : retrieveAddress(address?.Id)">
                 <div *ngIf="!address?.Error">{{address?.Text}}, {{address?.Description}}</div>
               </app-subnav-item>
-              <div class="list-group-item list-group-item-action text-center py-4"
-                (click)="enterAddress($event)">
+              <div class="list-group-item list-group-item-action text-center py-4" (click)="enterAddress($event)">
                 <a href (click)="$event.preventDefault()"><i class="fas fa-plus mr-2"></i> Enter Manually</a>
               </div>
             </ng-container>
@@ -56,13 +65,24 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
-  <ng-container *ngIf="propertyDetails || addressLines.value || enterAddressManually">   
-    <fieldset *ngIf="!(propertyDetails || isNewProperty)" [ngClass]="{'invalid': personDetails && !addressLines.value && enterAddressManually}">
+  <ng-container *ngIf="propertyDetails || addressLines.value || enterAddressManually">
+    <fieldset *ngIf="!(propertyDetails || isNewProperty)"
+      [ngClass]="{'invalid': personDetails && !addressLines.value && enterAddressManually}">
       <label for="postcode">Address Lines</label>
-      <textarea type="textarea" formControlName="addressLines" id="addressLines" (keydown.enter)="$event.stopPropagation()" rows="5" cols="10" maxlength="500" [ngClass]="{'border border-warning': personDetails && !addressLines.value && enterAddressManually}"></textarea>
-      <p class="message message--info" *ngIf="personDetails && !addressLines.value && enterAddressManually"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><path d="M32 6c14.3 0 26 11.7 26 26S46.3 58 32 58 6 46.3 6 32 17.7 6 32 6M32 1C14.9 1 1 14.9 1 32s13.9 31 31 31 31-13.9 31-31S49.1 1 32 1L32 1z"></path><path d="M43 20c-2.7 0-4.9 2.2-4.9 4.9s2.2 4.9 4.9 4.9 4.9-2.2 4.9-4.9S45.7 20 43 20L43 20z"></path><path d="M21 20c-2.7 0-4.9 2.2-4.9 4.9s2.2 4.9 4.9 4.9 4.9-2.2 4.9-4.9S23.7 20 21 20L21 20z"></path><path d="M32 51.6c7.2 0 13.4-4.5 15.8-10.8H16.2C18.6 47.1 24.8 51.6 32 51.6z"></path></svg>Complete to increase your score</p>
+      <textarea type="textarea" formControlName="addressLines" id="addressLines"
+        (keydown.enter)="$event.stopPropagation()" rows="5" cols="10" maxlength="500"
+        [ngClass]="{'border border-warning': personDetails && !addressLines.value && enterAddressManually}"></textarea>
+      <p class="message message--info" *ngIf="personDetails && !addressLines.value && enterAddressManually"><svg
+          aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
+          <path
+            d="M32 6c14.3 0 26 11.7 26 26S46.3 58 32 58 6 46.3 6 32 17.7 6 32 6M32 1C14.9 1 1 14.9 1 32s13.9 31 31 31 31-13.9 31-31S49.1 1 32 1L32 1z">
+          </path>
+          <path d="M43 20c-2.7 0-4.9 2.2-4.9 4.9s2.2 4.9 4.9 4.9 4.9-2.2 4.9-4.9S45.7 20 43 20L43 20z"></path>
+          <path d="M21 20c-2.7 0-4.9 2.2-4.9 4.9s2.2 4.9 4.9 4.9 4.9-2.2 4.9-4.9S23.7 20 21 20L21 20z"></path>
+          <path d="M32 51.6c7.2 0 13.4-4.5 15.8-10.8H16.2C18.6 47.1 24.8 51.6 32 51.6z"></path>
+        </svg>Complete to increase your score</p>
     </fieldset>
 
     <ng-container *ngIf="propertyDetails || isNewProperty">
@@ -96,7 +116,99 @@
       <label for="postcode">Postcode</label>
       <input type="text" id="postcode" formControlName="postCode">
       <!-- <span class="invalid-feedback">{{formErrors.postCode}}</span> -->
-      <p class="message message--info" *ngIf="personDetails && !postCode.value"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><path d="M32 6c14.3 0 26 11.7 26 26S46.3 58 32 58 6 46.3 6 32 17.7 6 32 6M32 1C14.9 1 1 14.9 1 32s13.9 31 31 31 31-13.9 31-31S49.1 1 32 1L32 1z"></path><path d="M43 20c-2.7 0-4.9 2.2-4.9 4.9s2.2 4.9 4.9 4.9 4.9-2.2 4.9-4.9S45.7 20 43 20L43 20z"></path><path d="M21 20c-2.7 0-4.9 2.2-4.9 4.9s2.2 4.9 4.9 4.9 4.9-2.2 4.9-4.9S23.7 20 21 20L21 20z"></path><path d="M32 51.6c7.2 0 13.4-4.5 15.8-10.8H16.2C18.6 47.1 24.8 51.6 32 51.6z"></path></svg>Complete to increase your score</p>
+      <p class="message message--info" *ngIf="personDetails && !postCode.value"><svg aria-hidden="true" width="64"
+          height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
+          <path
+            d="M32 6c14.3 0 26 11.7 26 26S46.3 58 32 58 6 46.3 6 32 17.7 6 32 6M32 1C14.9 1 1 14.9 1 32s13.9 31 31 31 31-13.9 31-31S49.1 1 32 1L32 1z">
+          </path>
+          <path d="M43 20c-2.7 0-4.9 2.2-4.9 4.9s2.2 4.9 4.9 4.9 4.9-2.2 4.9-4.9S45.7 20 43 20L43 20z"></path>
+          <path d="M21 20c-2.7 0-4.9 2.2-4.9 4.9s2.2 4.9 4.9 4.9 4.9-2.2 4.9-4.9S23.7 20 21 20L21 20z"></path>
+          <path d="M32 51.6c7.2 0 13.4-4.5 15.8-10.8H16.2C18.6 47.1 24.8 51.6 32 51.6z"></path>
+        </svg>Complete to increase your score</p>
     </fieldset>
   </ng-container>
 </form>
+
+<!-- Address Lookup Modal -->
+<p-dialog header="Address Lookup" [(visible)]="foundAddress" [modal]="true" [draggable]="false">
+  <fieldset>
+    <!-- <div class="row">
+      <div class="grid grid--25">
+        <ng-container *ngIf="foundAddress?.Items?.length">
+          <span *ngFor="let address of foundAddress?.Items"
+          (click)="address?.Action ? findAddress(searchTermBK, address?.Id) :  retrieveAddress(address?.Id)">
+            <div *ngIf="!address?.Error">{{address?.Text}}, {{address?.Description}}</div>
+        </span>
+          <div
+            (click)="enterAddress($event)">
+            <a href (click)="$event.preventDefault()"><i class="fas fa-plus mr-2"></i> Enter Manually</a>
+          </div>
+        </ng-container>
+      </div>
+      <div class="grid grid--75 grid--dividerLeft">
+        <div class="table">
+          <table class="table--mobile table--rowHover">
+            <tbody>
+              <tr *ngIf="!foundAddress?.Items?.length">
+                <td colspan="4">
+                  No Address Found.
+                </td>
+              </tr>
+              <tr *ngFor="let address of foundAddress?.Items">
+                <td >
+                  <span class="cell-content">
+                    {{address?.Text}}, {{address?.Description}}
+                  </span>
+                </td>
+                <td class="hide--mobile">
+                  <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s">
+                    <path d="M1 35.4h48.8L37.5 47.8l4.9 4.9L63 32 42.3 11.3l-4.9 4.9 12.3 12.3H1V35.4z"></path>
+                  </svg>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div> -->
+    <div>
+      <a href (click)="$event.preventDefault()" *ngIf="backToAddressesList" (click)="findAddress(searchTermBK, '')"><i
+          class="fas fa-arrow-left mr-2"></i> Back</a>
+    </div>
+    <div class="table">
+      <table class="table--mobile table--rowHover">
+        <tbody>
+          <tr *ngIf="!foundAddress?.Items?.length">
+            <td colspan="4">
+              No Address Found.
+              <div class="list-group-item list-group-item-action text-center py-4" (click)="enterAddress($event)">
+                <a href (click)="$event.preventDefault()"><i class="fas fa-plus mr-2"></i> New Address</a>
+              </div>
+            </td>
+          </tr>
+          <tr *ngFor="let address of foundAddress?.Items"
+            (click)="address?.Action ? findAddress(searchTermBK, address?.Id) :  retrieveAddress(address?.Id)">
+            <td>
+              <span class="cell-content" *ngIf="!address?.Error">
+                {{address?.Text}}, {{address?.Description}}
+              </span>
+            </td>
+            <td class="hide--mobile">
+              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s">
+                <path d="M1 35.4h48.8L37.5 47.8l4.9 4.9L63 32 42.3 11.3l-4.9 4.9 12.3 12.3H1V35.4z"></path>
+              </svg>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div (click)="enterAddress($event)">
+        <a href (click)="$event.preventDefault()"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+            class="icon icon--s icon--onLeft">
+            <path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" />
+            <path class="plus-vertical"
+              d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" />
+          </svg> Enter Manually</a>
+      </div>
+    </div>
+  </fieldset>
+</p-dialog>
