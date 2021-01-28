@@ -3,7 +3,7 @@
     <app-score-badge [bar]="true" [person]="personForm?.value"></app-score-badge>
     <form *ngIf="personDetails || basicPerson" [formGroup]="personForm" (ngSubmit)="savePerson(false)"
       (keydown.enter)="$event.preventDefault()" autocompleteOff>
-      <ng-container *ngIf="basicPerson?.firstName">
+      <ng-container *ngIf="!basicPerson?.firstName">
         <fieldset [ngClass]="{'warning':!isWarningsEnabled}">
           <label for="warningStatus">Warning</label>
           <span class="select">
@@ -16,12 +16,11 @@
             warning.</p>
         </fieldset>
 
-        <fieldset class="invalid" *ngIf="isWarningCommentVisible">
+        <fieldset *ngIf="isWarningCommentVisible"  [ngClass]="{'invalid': formErrors.warningStatusComment || personForm.errors?.warningStatusRequired}">
           <label>Enter comment (max 20 characters)</label>
           <input type="text"
-            [ngClass]="{'is-invalid': formErrors.warningStatusComment || personForm.errors?.warningStatusRequired}"
             formControlName="warningStatusComment" placeholder="Comment ...">
-          <p class="message message--negative">{{formErrors.warningStatusComment}}</p>
+          <p class="message message--negative" >{{formErrors.warningStatusComment}}</p>
           <p class="message message--negative" *ngIf="personForm.errors?.warningStatusRequired">Please enter a Comment
           </p>
         </fieldset>
