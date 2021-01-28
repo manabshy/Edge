@@ -10,6 +10,7 @@ tr                                              { padding:3px; padding:0;
 }
 tr+tr                                           { margin-top:10px; border-top:1px solid $color--midnight-10; }
 th, td                                          { padding:10px; min-width:40px; border:none; vertical-align:top; position:relative; top:0; left:0; }
+th.hasBtn                                       { padding:0; text-align:right; }
 td:empty                                        { display:none; visibility:hidden; }
 
 .table--rowHover thead tr:hover,
