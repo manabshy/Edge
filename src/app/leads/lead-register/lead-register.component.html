@@ -103,7 +103,7 @@
             <tr>
               <th *ngIf="areLeadsAssignable" class="has--checkbox">
                 <!-- <a href *ngIf="areLeadsAssignable" (click)="selectAllLeadsForAssignment($event)"> -->
-                <span class="checkbox checkbox--noMargin">
+                <span class="checkbox checkbox--noMargin" (click)="selectAllLeadsForAssignment($event)">
                   <span>
                     <input type="checkbox" id="assignAll" [attr.checked]="isSelectAllChecked ? 'checked' : null">
                     <label for="assignAll">
