@@ -1,6 +1,6 @@
 <form [formGroup]="addressForm" (keydown.enter)="$event.preventDefault()" autocompleteOff>
   <fieldset *ngIf="!(propertyDetails || isNewProperty)">
-    <label for="country" class="small">Country</label>
+    <label for="country">Country</label>
     <span class="select">
       <select id="country" formControlName="countryId">
         <option selected *ngFor="let country of countries " [ngValue]=country.id>{{country.value}}</option>
@@ -59,42 +59,42 @@
   </div>
 
   <ng-container *ngIf="propertyDetails || addressLines.value || enterAddressManually">   
-    <fieldset *ngIf="!(propertyDetails || isNewProperty)">
-      <label class="small" for="postcode">Address Lines</label>
-      <textarea type="textarea" class="form-control form-control-sm" formControlName="addressLines" id="addressLines" (keydown.enter)="$event.stopPropagation()" rows="5" cols="10" maxlength="500" [ngClass]="{'border border-warning': personDetails && !addressLines.value && enterAddressManually}"></textarea>
+    <fieldset *ngIf="!(propertyDetails || isNewProperty)" [ngClass]="{'invalid': personDetails && !addressLines.value && enterAddressManually}">
+      <label for="postcode">Address Lines</label>
+      <textarea type="textarea" formControlName="addressLines" id="addressLines" (keydown.enter)="$event.stopPropagation()" rows="5" cols="10" maxlength="500" [ngClass]="{'border border-warning': personDetails && !addressLines.value && enterAddressManually}"></textarea>
       <p class="message message--info" *ngIf="personDetails && !addressLines.value && enterAddressManually"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><path d="M32 6c14.3 0 26 11.7 26 26S46.3 58 32 58 6 46.3 6 32 17.7 6 32 6M32 1C14.9 1 1 14.9 1 32s13.9 31 31 31 31-13.9 31-31S49.1 1 32 1L32 1z"></path><path d="M43 20c-2.7 0-4.9 2.2-4.9 4.9s2.2 4.9 4.9 4.9 4.9-2.2 4.9-4.9S45.7 20 43 20L43 20z"></path><path d="M21 20c-2.7 0-4.9 2.2-4.9 4.9s2.2 4.9 4.9 4.9 4.9-2.2 4.9-4.9S23.7 20 21 20L21 20z"></path><path d="M32 51.6c7.2 0 13.4-4.5 15.8-10.8H16.2C18.6 47.1 24.8 51.6 32 51.6z"></path></svg>Complete to increase your score</p>
     </fieldset>
 
     <ng-container *ngIf="propertyDetails || isNewProperty">
       <fieldset>
-        <label class="small" for="postcode">Flat Number</label>
-        <input type="text" class="form-control form-control-sm" formControlName="flatNumber" id="flatNumber" />
+        <label for="postcode">Flat Number</label>
+        <input type="text" formControlName="flatNumber" id="flatNumber" />
       </fieldset>
       <fieldset>
-        <label class="small" for="postcode">House Number</label>
-        <input type="text" class="form-control form-control-sm" formControlName="houseNumber" id="houseNumber" />
+        <label for="postcode">House Number</label>
+        <input type="text" formControlName="houseNumber" id="houseNumber" />
       </fieldset>
       <fieldset>
-        <label class="small" for="postcode">Building Name</label>
-        <input type="text" class="form-control form-control-sm" formControlName="houseBuildingName" id="houseBuildingName" />
+        <label for="postcode">Building Name</label>
+        <input type="text" formControlName="houseBuildingName" id="houseBuildingName" />
       </fieldset>
       <fieldset>
-        <label class="small" for="postcode">Street</label>
-        <input type="text" class="form-control form-control-sm" formControlName="streetName" id="streetName" />
+        <label for="postcode">Street</label>
+        <input type="text" formControlName="streetName" id="streetName" />
       </fieldset>
       <fieldset>
-        <label class="small" for="postcode">Address Line 2</label>
-        <input type="text" class="form-control form-control-sm" formControlName="addressLine2" id="addressLine2" />
+        <label for="postcode">Address Line 2</label>
+        <input type="text" formControlName="addressLine2" id="addressLine2" />
       </fieldset>
       <fieldset>
-        <label class="small" for="postcode">Town</label>
-        <input type="text" class="form-control form-control-sm" formControlName="town" id="town" />
+        <label for="postcode">Town</label>
+        <input type="text" formControlName="town" id="town" />
       </fieldset>
     </ng-container>
 
-    <fieldset *ngIf="showPostCode || propertyDetails">
-      <label class="small" for="postcode">Postcode</label>
-      <input type="text" class="form-control form-control-sm" id="postcode" formControlName="postCode" [ngClass]="{'border border-warning': personDetails && !postCode.value}">
+    <fieldset *ngIf="showPostCode || propertyDetails" [ngClass]="{'invalid': personDetails && !postCode.value}">
+      <label for="postcode">Postcode</label>
+      <input type="text" id="postcode" formControlName="postCode">
       <!-- <span class="invalid-feedback">{{formErrors.postCode}}</span> -->
       <p class="message message--info" *ngIf="personDetails && !postCode.value"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><path d="M32 6c14.3 0 26 11.7 26 26S46.3 58 32 58 6 46.3 6 32 17.7 6 32 6M32 1C14.9 1 1 14.9 1 32s13.9 31 31 31 31-13.9 31-31S49.1 1 32 1L32 1z"></path><path d="M43 20c-2.7 0-4.9 2.2-4.9 4.9s2.2 4.9 4.9 4.9 4.9-2.2 4.9-4.9S45.7 20 43 20L43 20z"></path><path d="M21 20c-2.7 0-4.9 2.2-4.9 4.9s2.2 4.9 4.9 4.9 4.9-2.2 4.9-4.9S23.7 20 21 20L21 20z"></path><path d="M32 51.6c7.2 0 13.4-4.5 15.8-10.8H16.2C18.6 47.1 24.8 51.6 32 51.6z"></path></svg>Complete to increase your score</p>
     </fieldset>
