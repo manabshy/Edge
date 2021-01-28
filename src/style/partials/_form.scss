@@ -279,12 +279,19 @@ Inline elements
 Joined elements
 ***********************************************/
 .joined                                         { display:flex;
-   input, textarea,  select, .select            { border-radius:0; border-right:none;
+   input, textarea                              { border-radius:0;
+      &+*                                       { border-left:none; margin-top:0; }
+   }
+
+   .select                                      {
       &+*                                       { margin-top:0; }
+      select                                    { border-left:none; border-radius:0; }
    }
    
    >:first-child                                { border-radius:3px 0 0 3px; }
-   >:last-child                                 { border-radius:0 3px 3px 0; }
+   >:last-child                                 { border-radius:0 3px 3px 0;
+      select                                    { border-radius:0 3px 3px 0; }
+   }
    
    .btn--container                              { 
       .btn                                      { border-radius:0;

@@ -72,7 +72,7 @@ app-telephone                                   { width:100%; display:flex; alig
 
 .flexBottom                                     { margin-top:auto; }
 
-.flexRight                                      { margin-left:auto; align-self:flex-start; }
+.flexRight                                      { margin-left:auto; align-self:flex-start; display:flex; flex-wrap:nowrap; }
 .flexRight+.flexRight                           { margin-left:8px; }
 
 /***** Timelines *****/
