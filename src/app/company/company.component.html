@@ -5,7 +5,7 @@
       <div class="card__body">
         <form [formGroup]="companyFinderForm" (ngSubmit)="companiesResults(true)">
           <fieldset>
-            <label for="">Search contacts</label>
+            <label for="">Search companies</label>
             <input type="search" formControlName="companyName" placeholder="Company Name" aria-label="Company Name" (keyup)="onKeyup($event)" [ngbTypeahead]="suggestions" [focusFirst]="false" (selectItem)="selectedSuggestion($event)">
           </fieldset>
           <fieldset>
@@ -18,12 +18,25 @@
         </div>
       </div>
     </div>
+    <div class="card">
+      <div class="card__header">
+        Quick links
+      </div>
+      <div class="card__body card__body--list">
+        <ol class="list list--divider list--hover">
+          <li>
+            <a class="overall" [routerLink]="['detail', 0 , 'edit' ]" [queryParams]="{isNewCompany: true}"></a>
+            <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--fill-positive icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z"></path><path d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" class="plus-vertical"></path></svg>New Company
+          </li>
+        </ol>
+      </div>
+    </div>
   </div>
   <div class="row__item">
-    <div class="title">
+    <!-- <div class="title">
       <h2>Company centre</h2>
       <a class="btn btn--positive"[routerLink]="['detail', 0 , 'edit' ]" [queryParams]="{isNewCompany: true}"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z"></path><path d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" class="plus-vertical"></path></svg>Company</a>
-    </div>
+    </div> -->
 
     <app-company-list *ngIf="!isHintVisible" [companies]='companies' [pageNumber]="page" [searchTerm]='searchTerm' [bottomReached]="bottomReached"></app-company-list>
     

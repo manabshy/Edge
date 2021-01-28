@@ -55,12 +55,28 @@
         </div>
       </div>
     </div>
+    <div class="card">
+      <div class="card__header">
+        Quick links
+      </div>
+      <div class="card__body card__body--list">
+        <ol class="list list--divider list--hover">
+          <li>
+            <a class="overall" (click)="navigateToNewGroup('personal')"></a>
+            <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M32 32c8.6 0 15.5-7 15.5-15.5C47.5 7.9 40.6 1 32 1S16.5 7.9 16.5 16.5C16.5 25 23.4 32 32 32zM32 39.8c-10.3 0-31 5.2-31 15.5V63h62v-7.8C63 44.9 42.3 39.8 32 39.8z"></path></svg>New Personal Contact Group
+          </li>
+          <li>
+            <a class="overall" (click)="navigateToNewGroup('company')"></a>
+            <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M56.8 14.9H44.4V8.8c0-3.4-2.8-6.2-6.2-6.2H25.8c-3.4 0-6.2 2.8-6.2 6.2v6.2H7.2c-3.4 0-6.2 2.8-6.2 6.2l0 34.1c0 3.4 2.8 6.2 6.2 6.2h49.6c3.4 0 6.2-2.8 6.2-6.2V21.1C63 17.7 60.2 14.9 56.8 14.9zM38.2 14.9H25.8V8.8h12.4V14.9z"></path></svg>New Company Contact Group
+          </li>
+        </ol>
+      </div>
+    </div>
   </div>
 
   <div class="row__item">
-    <div class="title">
+    <!-- <div class="title">
       <h2>Contact centre</h2>
-
       <div dropdown placement="bottom right">
         <button id="actionsToggle" dropdownToggle type="button" class="btn btn--positive dropdown-toggle"
           aria-controls="actionsList">
@@ -93,10 +109,7 @@
           </li>
         </ul>
       </div>
-
-      <!-- <a class="btn btn--positive" [routerLink]="['detail/0/people', 0]"  [queryParams]="{isNewContactGroup: true}" ><svg _ngcontent-sbe-c166="" aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path _ngcontent-sbe-c166="" d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z"></path><path _ngcontent-sbe-c166="" d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" class="plus-vertical"></path></svg>Contact Group</a> -->
-    </div>
-
+    </div> -->
     <!-- <app-breadcrumb></app-breadcrumb> -->
     <app-contactgroups-list [originalContactGroups]='contactGroups' [pageNumber]="page"
       [searchTerm]='contactFinderForm.value.searchTerm' [bottomReached]="bottomReached" *ngIf="!isHintVisible">

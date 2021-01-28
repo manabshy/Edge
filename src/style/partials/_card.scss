@@ -5,7 +5,7 @@
     p                                           { position:relative; }
     .positionTopRight                           { position:absolute; top:5px; right:5px; z-index:9; }
 
-    &--sticky                                   { position:sticky; top:80px; }
+    &--sticky                                   { position:sticky; top:80px; z-index:10; }
     
     &--horizontal                               { margin-bottom:30px;
         .card__headerImg                        { border-radius:3px 3px 0 0; }
