@@ -1,26 +1,31 @@
 <div class="row">
   <div class="row__item">
     <app-score-badge [bar]="true" [person]="personForm?.value"></app-score-badge>
-    <form *ngIf="personDetails || basicPerson" [formGroup]="personForm" (ngSubmit)="savePerson(false)" (keydown.enter)="$event.preventDefault()" autocompleteOff>
-      <ng-container [hidden]="basicPerson">
+    <form *ngIf="personDetails || basicPerson" [formGroup]="personForm" (ngSubmit)="savePerson(false)"
+      (keydown.enter)="$event.preventDefault()" autocompleteOff>
+      <ng-container *ngIf="!basicPerson?.firstName">
         <fieldset [ngClass]="{'warning':!isWarningsEnabled}">
           <label for="warningStatus">Warning</label>
           <span class="select">
             <select id="warningStatus" name="warningStatus" formControlName="warningStatusId">
-              <option selected *ngFor="let warning of warnings" [value]=warning.id [attr.disabled]="(!isWarningsEnabled) ? '' : null">{{warning.value}}</option>
+              <option selected *ngFor="let warning of warnings" [value]=warning.id
+                [attr.disabled]="(!isWarningsEnabled) ? '' : null">{{warning.value}}</option>
             </select>
           </span>
-          <p class="message message--warning" *ngIf="!isWarningsEnabled">You don't have the permission to change the warning.</p>
+          <p class="message message--warning" *ngIf="!isWarningsEnabled">You don't have the permission to change the
+            warning.</p>
         </fieldset>
-        
-        <fieldset class="invalid" *ngIf="isWarningCommentVisible">
+
+        <fieldset *ngIf="isWarningCommentVisible"  [ngClass]="{'invalid': formErrors.warningStatusComment || personForm.errors?.warningStatusRequired}">
           <label>Enter comment (max 20 characters)</label>
-          <input type="text" [ngClass]="{'is-invalid': formErrors.warningStatusComment || personForm.errors?.warningStatusRequired}" formControlName="warningStatusComment" placeholder="Comment ...">
-          <p class="message message--negative">{{formErrors.warningStatusComment}}</p>
-          <p class="message message--negative" *ngIf="personForm.errors?.warningStatusRequired">Please enter a Comment</p>
+          <input type="text"
+            formControlName="warningStatusComment" placeholder="Comment ...">
+          <p class="message message--negative" >{{formErrors.warningStatusComment}}</p>
+          <p class="message message--negative" *ngIf="personForm.errors?.warningStatusRequired">Please enter a Comment
+          </p>
         </fieldset>
       </ng-container>
-      
+
       <fieldset>
         <label for="title">Title</label>
         <span class="select input--grid-5">
@@ -29,7 +34,8 @@
             <option *ngFor="let title of titles | keyvalue:keepOriginalOrder" [value]=title.key>{{title.value}}</option>
           </select>
         </span>
-        <input type="text"[ngClass]="{'is-invalid': formErrors.titleOther || personForm.errors?.titleOther}" formControlName="titleOther" placeholder="Title ..." *ngIf="isTitleOtherVisible">
+        <input type="text" [ngClass]="{'is-invalid': formErrors.titleOther || personForm.errors?.titleOther}"
+          formControlName="titleOther" placeholder="Title ..." *ngIf="isTitleOtherVisible">
         <p class="message message--negative" *ngIf="personForm.errors?.titleOther">Please enter a Title</p>
         <p class="message message--negative">{{formErrors.titleId}}</p>
       </fieldset>
@@ -42,130 +48,207 @@
 
       <fieldset>
         <label for="middleName">Middle Name</label>
-        <input type="text" id="middleName" formControlName="middleName" [ngClass]="{'is-invalid':formErrors.middleName}">
+        <input type="text" id="middleName" formControlName="middleName"
+          [ngClass]="{'is-invalid':formErrors.middleName}">
         <p class="message message--negative">{{formErrors.middleName}}</p>
       </fieldset>
 
       <fieldset>
         <label for="lastName">Last Name</label>
-        <input type="text" id="lastName" formControlName="lastName" [ngClass]="{'is-invalid':formErrors?.lastName}" autocomplete="false">
+        <input type="text" id="lastName" formControlName="lastName" [ngClass]="{'is-invalid':formErrors?.lastName}"
+          autocomplete="false">
         <p class="message message--negative">{{formErrors?.lastName}}</p>
       </fieldset>
 
       <legend class="legend">Address</legend>
       <app-address [personDetails]="personDetails || basicPerson" (addressDetails)="getAddress($event)"></app-address>
-      
+
       <legend class="legend">Contact details</legend>
       <fieldset class="warning" *ngIf="personForm.errors?.emailOrPhone">
         <div class="message message--warning" id="contact-error">Please enter an email OR a phone number</div>
       </fieldset>
 
-      <div class="fieldset" formArrayName="emailAddresses" *ngFor="let emailAddress of emailAddresses.controls; let i = index; first as isFirst">
+      <div class="fieldset" formArrayName="emailAddresses"
+        *ngFor="let emailAddress of emailAddresses.controls; let i = index; first as isFirst">
         <fieldset [formGroupName]="i">
           <label [for]="'email' + i" class="col small" [ngClass]="{'sr-only': !isFirst}">Email Address</label>
           <span class="joined">
-            <input type="text" [id]="'email' + i" [placeholder]="!isFirst ? 'Additional Email' : ''" class="form-control" formControlName="email" (keyup)="addRemoveEmailItem(i, false)" (blur)="addRemoveEmailItem(i, true)" [ngClass]="{'border border-warning': !personForm.controls.emailAddresses.controls[0].controls.email.value && isFirst && !personForm.errors?.emailOrPhone, 'is-invalid': isValid('email', i) || personForm.errors?.emailOrPhone}">
+            <input type="text" [id]="'email' + i" [placeholder]="!isFirst ? 'Additional Email' : ''"
+              class="form-control" formControlName="email" (keyup)="addRemoveEmailItem(i, false)"
+              (blur)="addRemoveEmailItem(i, true)"
+              [ngClass]="{'border border-warning': !personForm.controls.emailAddresses.controls[0].controls.email.value
+              && isFirst && !personForm.errors?.emailOrPhone, 'is-invalid': isValid('email', i) || personForm.errors?.emailOrPhone}">
             <span class="btn--container">
-              <button class="btn" btnCheckbox formControlName="isPreferred" tabindex="0" (click)="togglePreferences(i, emailAddresses)" role="button" [ngClass]="!!personForm.value.emailAddresses[i].isPreferred ? 'btn--warning txt--snow' : 'btn--ghost  btn--hoverWarning'">
-                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon"><polygon points="32 0 41.9 21.1 64 24.4 48 40.8 51.8 64 32 53.1 12.2 64 16 40.8 0 24.4 22.1 21.1 "></polygon></svg>
+              <button class="btn" btnCheckbox formControlName="isPreferred" tabindex="0"
+                (click)="togglePreferences(i, emailAddresses)" role="button"
+                [ngClass]="!!personForm.value.emailAddresses[i].isPreferred ? 'btn--warning txt--snow' : 'btn--ghost  btn--hoverWarning'">
+                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
+                  <polygon points="32 0 41.9 21.1 64 24.4 48 40.8 51.8 64 32 53.1 12.2 64 16 40.8 0 24.4 22.1 21.1 ">
+                  </polygon>
+                </svg>
               </button>
             </span>
           </span>
-          <p class="message message--negative" *ngIf="personForm.controls.emailAddresses.controls[i].controls.email.value && !!personForm.controls.emailAddresses.controls[i].controls.email.errors">Please enter a valid email address.</p>
-          <p class="message message--info" *ngIf="!personForm.controls.emailAddresses.controls[0].controls.email.value && isFirst"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><path d="M32 6c14.3 0 26 11.7 26 26S46.3 58 32 58 6 46.3 6 32 17.7 6 32 6M32 1C14.9 1 1 14.9 1 32s13.9 31 31 31 31-13.9 31-31S49.1 1 32 1L32 1z"></path><path d="M43 20c-2.7 0-4.9 2.2-4.9 4.9s2.2 4.9 4.9 4.9 4.9-2.2 4.9-4.9S45.7 20 43 20L43 20z"></path><path d="M21 20c-2.7 0-4.9 2.2-4.9 4.9s2.2 4.9 4.9 4.9 4.9-2.2 4.9-4.9S23.7 20 21 20L21 20z"></path><path d="M32 51.6c7.2 0 13.4-4.5 15.8-10.8H16.2C18.6 47.1 24.8 51.6 32 51.6z"></path></svg>Complete to increase your score</p>
+          <p class="message message--negative"
+            *ngIf="personForm.controls.emailAddresses.controls[i].controls.email.value && !!personForm.controls.emailAddresses.controls[i].controls.email.errors">
+            Please enter a valid email address.</p>
+          <p class="message message--info"
+            *ngIf="!personForm.controls.emailAddresses.controls[0].controls.email.value && isFirst"><svg
+              aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
+              <path
+                d="M32 6c14.3 0 26 11.7 26 26S46.3 58 32 58 6 46.3 6 32 17.7 6 32 6M32 1C14.9 1 1 14.9 1 32s13.9 31 31 31 31-13.9 31-31S49.1 1 32 1L32 1z">
+              </path>
+              <path d="M43 20c-2.7 0-4.9 2.2-4.9 4.9s2.2 4.9 4.9 4.9 4.9-2.2 4.9-4.9S45.7 20 43 20L43 20z"></path>
+              <path d="M21 20c-2.7 0-4.9 2.2-4.9 4.9s2.2 4.9 4.9 4.9 4.9-2.2 4.9-4.9S23.7 20 21 20L21 20z"></path>
+              <path d="M32 51.6c7.2 0 13.4-4.5 15.8-10.8H16.2C18.6 47.1 24.8 51.6 32 51.6z"></path>
+            </svg>Complete to increase your score</p>
         </fieldset>
       </div>
 
-      <div class="fieldset" formArrayName="phoneNumbers" *ngFor="let phoneNumber of phoneNumbers.controls; let i = index; first as isFirst;">
+      <div class="fieldset" formArrayName="phoneNumbers"
+        *ngFor="let phoneNumber of phoneNumbers.controls; let i = index; first as isFirst;">
         <fieldset [formGroupName]="i">
           <label [for]="'phone' + i" [ngClass]="{'sr-only': !isFirst}">Phone</label>
           <span class="joined">
-            <input type="text" [id]="'phone' + i" [placeholder]="!isFirst ? 'Additional phone' : ''" formControlName="number" (keyup)="addRemovePhoneNumberItem(i, false)" (blur)="addRemovePhoneNumberItem(i, true)" [ngClass]="{'border border-warning': !personForm.controls.phoneNumbers.controls[0].controls.number.value && isFirst && !personForm.errors?.emailOrPhone, 'is-invalid': isValid('number', i) || personForm.errors?.emailOrPhone || personForm.controls.phoneNumbers.controls[i].errors?.mismatch}">
+            <input type="text" [id]="'phone' + i" [placeholder]="!isFirst ? 'Additional phone' : ''"
+              formControlName="number" (keyup)="addRemovePhoneNumberItem(i, false)"
+              (blur)="addRemovePhoneNumberItem(i, true)"
+              [ngClass]="{'border border-warning': !personForm.controls.phoneNumbers.controls[0].controls.number.value && isFirst
+              && !personForm.errors?.emailOrPhone, 'is-invalid': isValid('number', i) || personForm.errors?.emailOrPhone || personForm.controls.phoneNumbers.controls[i].errors?.mismatch}">
             <span class="select">
-              <select formControlName="typeId" [ngClass]="{'is-invalid': personForm.controls.phoneNumbers.controls[i].errors?.mismatch}">
-                <option *ngFor="let telephoneType of telephoneTypes | keyvalue:keepOriginalOrder" [value]=telephoneType.key>{{telephoneType.value}} </option>
+              <select formControlName="typeId"
+                [ngClass]="{'is-invalid': personForm.controls.phoneNumbers.controls[i].errors?.mismatch}">
+                <option *ngFor="let telephoneType of telephoneTypes | keyvalue:keepOriginalOrder"
+                  [value]=telephoneType.key>{{telephoneType.value}} </option>
               </select>
             </span>
             <!-- <label class="btn btn-light" btnCheckbox formControlName="sendSMS" tabindex="0" role="button" [hidden]="true" [ngClass]="{'font-weight-bold': personForm.value.phoneNumbers[i].sendSMS}" [style.visibility]="!sharedService.isUKMobile(personForm.value.phoneNumbers[i].number) ? 'hidden' : 'visible'">SMS</label> -->
             <input type="text" placeholder="Comments" formControlName="comments">
             <span class="btn--container">
-              <button class="btn" btnCheckbox formControlName="isPreferred" tabindex="0" (click)="togglePreferences(i, phoneNumbers)" role="button" [ngClass]="!!personForm.value.phoneNumbers[i].isPreferred ? 'btn--warning txt--snow' : 'btn--ghost  btn--hoverWarning'">
-                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon"><polygon points="32 0 41.9 21.1 64 24.4 48 40.8 51.8 64 32 53.1 12.2 64 16 40.8 0 24.4 22.1 21.1 "></polygon></svg>
+              <button class="btn" btnCheckbox formControlName="isPreferred" tabindex="0"
+                (click)="togglePreferences(i, phoneNumbers)" role="button"
+                [ngClass]="!!personForm.value.phoneNumbers[i].isPreferred ? 'btn--warning txt--snow' : 'btn--ghost  btn--hoverWarning'">
+                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
+                  <polygon points="32 0 41.9 21.1 64 24.4 48 40.8 51.8 64 32 53.1 12.2 64 16 40.8 0 24.4 22.1 21.1 ">
+                  </polygon>
+                </svg>
               </button>
             </span>
           </span>
-          <p class="message message--negative" *ngIf="personForm.controls.phoneNumbers.controls[i].controls.number.errors?.invalidPhoneNumber">{{validationMessages.telephone.invalidPhoneNumber}}</p>
-          <p class="message message--negative" *ngIf="personForm.controls.phoneNumbers.controls[i].controls.number.errors?.international">{{validationMessages.telephone.international}}</p>
-          <p class="message message--negative" *ngIf="personForm.controls.phoneNumbers.controls[i].errors?.mismatch">Telephone number doesn't match the type</p>
-          <p class="message message--info" *ngIf="!personForm.controls.phoneNumbers.controls[0].controls.number.value && isFirst"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><path d="M32 6c14.3 0 26 11.7 26 26S46.3 58 32 58 6 46.3 6 32 17.7 6 32 6M32 1C14.9 1 1 14.9 1 32s13.9 31 31 31 31-13.9 31-31S49.1 1 32 1L32 1z"></path><path d="M43 20c-2.7 0-4.9 2.2-4.9 4.9s2.2 4.9 4.9 4.9 4.9-2.2 4.9-4.9S45.7 20 43 20L43 20z"></path><path d="M21 20c-2.7 0-4.9 2.2-4.9 4.9s2.2 4.9 4.9 4.9 4.9-2.2 4.9-4.9S23.7 20 21 20L21 20z"></path><path d="M32 51.6c7.2 0 13.4-4.5 15.8-10.8H16.2C18.6 47.1 24.8 51.6 32 51.6z"></path></svg>Complete to increase your score</p>
+          <p class="message message--negative"
+            *ngIf="personForm.controls.phoneNumbers?.controls[i]?.controls.number.errors?.invalidPhoneNumber">
+            {{validationMessages.telephone.invalidPhoneNumber}}</p>
+          <p class="message message--negative"
+            *ngIf="personForm.controls.phoneNumbers?.controls[i]?.controls.number.errors?.international">
+            {{validationMessages.telephone.international}}</p>
+          <p class="message message--negative" *ngIf="personForm.controls.phoneNumbers?.controls[i]?.errors?.mismatch">
+            Telephone number doesn't match the type</p>
+          <p class="message message--info"
+            *ngIf="!personForm.controls.phoneNumbers?.controls[0]?.controls.number.value && isFirst"><svg
+              aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
+              <path
+                d="M32 6c14.3 0 26 11.7 26 26S46.3 58 32 58 6 46.3 6 32 17.7 6 32 6M32 1C14.9 1 1 14.9 1 32s13.9 31 31 31 31-13.9 31-31S49.1 1 32 1L32 1z">
+              </path>
+              <path d="M43 20c-2.7 0-4.9 2.2-4.9 4.9s2.2 4.9 4.9 4.9 4.9-2.2 4.9-4.9S45.7 20 43 20L43 20z"></path>
+              <path d="M21 20c-2.7 0-4.9 2.2-4.9 4.9s2.2 4.9 4.9 4.9 4.9-2.2 4.9-4.9S23.7 20 21 20L21 20z"></path>
+              <path d="M32 51.6c7.2 0 13.4-4.5 15.8-10.8H16.2C18.6 47.1 24.8 51.6 32 51.6z"></path>
+            </svg>Complete to increase your score</p>
         </fieldset>
 
-        <fieldset>
-          <label>Contact by</label>
-          <span class="checkbox">
-            <span>
-              <input type="checkbox" id="contactByEmail" formControlName="contactByEmail">
-              <label for="contactByEmail">Email</label>
-            </span>
-            <span>
-              <input type="checkbox" id="contactByPhone" formControlName="contactByPhone">
-              <label for="contactByPhone">Phone</label>
-            </span>
-          </span>
-        </fieldset>
-
-        <legend class="legend">Marketing Preferences</legend>
-        <fieldset formGroupName="marketingPreferences">
-          <label>Marketing</label>
-          <span class="checkbox">
-            <span>
-              <input class="custom-control-input" type="checkbox" name="marketBulletin" id="quarterly" formControlName="marketBulletin">
-              <label class="custom-control-label small" for="quarterly">Quarterly Market Bulletin</label>
-            </span>
-            <span>
-              <input class="custom-control-input" type="checkbox" name="events" id="events" formControlName="events">
-              <label class="custom-control-label small" for="events">Landlord & Investor Events</label>
-            </span>
-            <span>
-              <input class="custom-control-input" type="checkbox" name="newHomes" id="newHomes" formControlName="newHomes">
-              <label class="custom-control-label small" for="newHomes">New Home and Investments</label>
-            </span>
-            <span>
-              <input class="custom-control-input" type="checkbox" name="offersSurveys" id="offersSurveys" formControlName="offersSurveys">
-              <label class="custom-control-label small" for="offersSurveys">Special Offers and Surveys</label>
-            </span>
-            <span>
-              <input class="custom-control-input" type="checkbox" name="general" id="occasional" formControlName="general">
-              <label class="custom-control-label small" for="occasional">Other Occasional Marketing</label>
-            </span>
-            <span></span>
-          </span>
-        </fieldset>
-
-        <legend class="legend">AML</legend>
-        <div class="inline-parent">
-          <fieldset class="inline-child">
-            <label for="amlDate">AML Completed</label>
-            <input type="text" id="amlDate" placeholder="dd/mm/yyyy" class="form-control fake-readonly" formControlName="amlCompletedDate" [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', maxDate:todaysDate, customTodayClass: 'font-weight-bold'}" bsDatepicker #datepicker="bsDatepicker" [appNoDoubleTap]='datepicker' readonly>
-          </fieldset>
-          <fieldset class="inline-child" *ngIf="personForm.value.amlCompletedDate">
-            <button type="button" class="btn btn-ghost" (click)="clearControlValue(personForm.get('amlCompletedDate'))">Clear</button>
-          </fieldset>
-        </div>
       </div>
-    </form>
-    <app-additional-info [id]="personDetails?.personId ? 'P-'+personDetails?.personId : ''" *ngIf="!basicPerson"></app-additional-info>
+      <fieldset>
+        <label>Contact by</label>
+        <span class="checkbox">
+          <span>
+            <input type="checkbox" id="contactByEmail" formControlName="contactByEmail">
+            <label for="contactByEmail">Email</label>
+          </span>
+          <span>
+            <input type="checkbox" id="contactByPhone" formControlName="contactByPhone">
+            <label for="contactByPhone">Phone</label>
+          </span>
+        </span>
+      </fieldset>
 
-    <footer class="footer" [ngClass]="{'px-0': basicPerson}">
-      <button (click)="cancel()" type="button" class="btn btn--ghost">Cancel</button>
-      <button type="submit" class="btn btn--positive" [tooltip]="!personForm.valid ? errorMessage?.displayMessage : ''" placement="top" [attr.disabled]="isSubmitting ? '' : null"><i class="fas fa-spinner fa-pulse d-inline-block mr-2" *ngIf="isSubmitting"></i>
-        <ng-container *ngIf="!basicPerson; else addPersonLabel">Save</ng-container>
-        <ng-template #addPersonLabel><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><path class="horizontal" d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z"></path><path class="vertical" d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z"></path></svg>Add</ng-template>
-      </button>
-      <button type="button" (click)="savePerson(true)" class="btn btn--positive" [tooltip]="!personForm.valid ? errorMessage?.displayMessage : ''" placement="top" [attr.disabled]="isSubmittingAndAdd ? '' : null" *ngIf="basicPerson && !isCompanyContactGroup">
-        <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><path class="horizontal" d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z"></path><path class="vertical" d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z"></path></svg>Add Another
-      </button>
-    </footer>
+      <legend class="legend">Marketing Preferences</legend>
+      <fieldset formGroupName="marketingPreferences">
+        <label>Marketing</label>
+        <span class="checkbox">
+          <span>
+            <input class="custom-control-input" type="checkbox" name="marketBulletin" id="quarterly"
+              formControlName="marketBulletin">
+            <label class="custom-control-label small" for="quarterly">Quarterly Market Bulletin</label>
+          </span>
+          <span>
+            <input class="custom-control-input" type="checkbox" name="events" id="events" formControlName="events">
+            <label class="custom-control-label small" for="events">Landlord & Investor Events</label>
+          </span>
+          <span>
+            <input class="custom-control-input" type="checkbox" name="newHomes" id="newHomes"
+              formControlName="newHomes">
+            <label class="custom-control-label small" for="newHomes">New Home and Investments</label>
+          </span>
+          <span>
+            <input class="custom-control-input" type="checkbox" name="offersSurveys" id="offersSurveys"
+              formControlName="offersSurveys">
+            <label class="custom-control-label small" for="offersSurveys">Special Offers and Surveys</label>
+          </span>
+          <span>
+            <input class="custom-control-input" type="checkbox" name="general" id="occasional"
+              formControlName="general">
+            <label class="custom-control-label small" for="occasional">Other Occasional Marketing</label>
+          </span>
+          <span></span>
+        </span>
+      </fieldset>
+
+      <legend class="legend">AML</legend>
+      <div class="inline-parent">
+        <fieldset class="inline-child">
+          <label for="amlDate">AML Completed</label>
+          <input type="text" id="amlDate" placeholder="dd/mm/yyyy" class="form-control fake-readonly"
+            formControlName="amlCompletedDate"
+            [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', maxDate:todaysDate, customTodayClass: 'font-weight-bold'}"
+            bsDatepicker #datepicker="bsDatepicker" [appNoDoubleTap]='datepicker' readonly>
+        </fieldset>
+        <fieldset class="inline-child" *ngIf="personForm.value.amlCompletedDate">
+          <button type="button" class="btn btn-ghost"
+            (click)="clearControlValue(personForm.get('amlCompletedDate'))">Clear</button>
+        </fieldset>
+      </div>
+      <footer class="footer" [ngClass]="{'px-0': basicPerson}">
+        <button (click)="cancel()" type="button" class="btn btn--ghost">Cancel</button>
+        <button type="submit" class="btn btn--positive" [tooltip]="!personForm.valid ? errorMessage?.displayMessage : ''"
+          placement="top" [attr.disabled]="isSubmitting ? '' : null"><i
+            class="fas fa-spinner fa-pulse d-inline-block mr-2" *ngIf="isSubmitting"></i>
+          <ng-container *ngIf="!basicPerson; else addPersonLabel">Save</ng-container>
+          <ng-template #addPersonLabel><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+              class="icon icon--onLeft">
+              <path class="horizontal"
+                d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z">
+              </path>
+              <path class="vertical"
+                d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z">
+              </path>
+            </svg>Add</ng-template>
+        </button>
+        <button type="button" (click)="savePerson(true)" class="btn btn--positive"
+          [tooltip]="!personForm.valid ? errorMessage?.displayMessage : ''" placement="top"
+          [attr.disabled]="isSubmittingAndAdd ? '' : null" *ngIf="basicPerson && !isCompanyContactGroup">
+          <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
+            <path class="horizontal"
+              d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z">
+            </path>
+            <path class="vertical"
+              d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z">
+            </path>
+          </svg>Add Another
+        </button>
+      </footer>
+    </form>
+    <app-additional-info [id]="personDetails?.personId ? 'P-'+personDetails?.personId : ''" *ngIf="!basicPerson">
+    </app-additional-info>
+
   </div>
 </div>
 
@@ -174,13 +257,13 @@
 
 
 <!-- <app-breadcrumb *ngIf="!basicPerson"></app-breadcrumb> -->
-<div class="container main" [ngClass]="{'p-0': basicPerson}">
-  <!-- <div class="page-title sticky-top" [ngClass]="{'pt-3': basicPerson}">
+<!-- <div class="container main" [ngClass]="{'p-0': basicPerson}">
+  <div class="page-title sticky-top" [ngClass]="{'pt-3': basicPerson}">
     <h4 *ngIf="!basicPerson">Edit Person</h4>
     <app-score-badge [bar]="true" [person]="personForm?.value"></app-score-badge>
-  </div> -->
+  </div>
   <form *ngIf="personDetails || basicPerson" [formGroup]="personForm" (ngSubmit)="savePerson(false)" (keydown.enter)="$event.preventDefault()" autocompleteOff>
-    <!-- <fieldset>
+    <fieldset>
       <div class="form-group row" [hidden]="basicPerson">
         <div class="col-sm-3 offset-sm-2">
           <label for="warningStatus" class="small">Warning <br>
@@ -248,15 +331,15 @@
     <fieldset>
       <legend class="fieldset-title">Address</legend>
       <app-address [personDetails]="personDetails || basicPerson" (addressDetails)="getAddress($event)"></app-address>
-    </fieldset> -->
+    </fieldset>
     <fieldset>
-      <!-- <legend class="fieldset-title">Contact details</legend> -->
-      <!-- <div class="row justify-content-end" *ngIf="personForm.errors?.emailOrPhone" id="contact-error">
+      <legend class="fieldset-title">Contact details</legend>
+      <div class="row justify-content-end" *ngIf="personForm.errors?.emailOrPhone" id="contact-error">
         <div class="col-sm-8 col-xl-6 offset-sm-2">
           <div class="alert alert-danger">Please enter an email OR a phone number</div>
         </div>
-      </div> -->
-      <!-- <div formArrayName="emailAddresses" *ngFor="let emailAddress of emailAddresses.controls; let i = index; first as isFirst">
+      </div>
+      <div formArrayName="emailAddresses" *ngFor="let emailAddress of emailAddresses.controls; let i = index; first as isFirst">
         <div [formGroupName]="i">
           <div class="form-group row">
             <div class="col-sm-8 col-xl-6 offset-sm-2">
@@ -290,8 +373,8 @@
             </div>
           </div>
         </div>
-      </div> -->
-      <!-- <div formArrayName="phoneNumbers"
+      </div>
+      <div formArrayName="phoneNumbers"
         *ngFor="let phoneNumber of phoneNumbers.controls; let i = index; first as isFirst;">
         <div [formGroupName]="i">
           <div class="form-group row">
@@ -341,8 +424,8 @@
             </div>
           </div>
         </div>
-      </div> -->
-      <!-- <div class="form-group row">
+      </div>
+      <div class="form-group row">
         <div class="col-sm-8 col-xl-6 offset-sm-2">
           <label class="small">Contact by</label>
 
@@ -359,8 +442,8 @@
             </label>
           </div>
         </div>
-      </div> -->
-      <!-- <div formGroupName="marketingPreferences">
+      </div>
+      <div formGroupName="marketingPreferences">
         <div class="form-group row">
           <div class="col-sm-8 col-xl-6 offset-sm-2">
             <label class="small">Marketing</label>
@@ -401,8 +484,8 @@
             </div>
           </div>
         </div>
-      </div> -->
-      <!-- <div class="form-group row">
+      </div>
+      <div class="form-group row">
         <div class="col-sm-3 offset-sm-2">
           <label for="amlDate" class="small">AML Completed</label>
 
@@ -422,9 +505,9 @@
             </div>
           </div>
         </div>
-      </div> -->
+      </div>
     </fieldset>
-    <!-- <div class="form-actions" [ngClass]="{'px-0': basicPerson}">
+    <div class="form-actions" [ngClass]="{'px-0': basicPerson}">
       <div class="container">
         <div class="row justify-content-end w-100 no-gutters">
           <div class="col-sm-10 d-flex">
@@ -443,8 +526,8 @@
           </div>
         </div>
       </div>
-    </div> -->
+    </div>
   </form>
-</div>
+</div> -->
 <!-- <app-additional-info [id]="personDetails?.personId ? 'P-'+personDetails?.personId : ''" *ngIf="!basicPerson">
 </app-additional-info> -->
