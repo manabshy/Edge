@@ -116,18 +116,18 @@
   </div>
 </div>
 
-
 <ng-template #editForm>
-  <div class="title">
+  <!-- <div class="title">
     <h2>Lead<span class="pill pill--onRight" *ngIf="lead?.closedById">Closed</span></h2>
-    <!-- <a class="btn btn--positive"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z"></path><path d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" class="plus-vertical"></path></svg>Contact Group</a> -->
-  </div>
+    <a class="btn btn--positive"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z"></path><path d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" class="plus-vertical"></path></svg>Contact Group</a>
+  </div> -->
   <form [formGroup]="leadEditForm" (ngSubmit)="SaveLead(true, leadNote)" autocompleteOff>
     <div class="card card--horizontal">
       <div class="card__body">
         <ol class="list list--split list--split-60-40">
           <li>
             <h3 class="txt--title">Lead details</h3>
+            <span class="pill" *ngIf="lead?.closedById">Closed</span>
             <div class="inline-parent inline-parent__hasLabels">
               <fieldset class="inline-child">
                 <label for="leadType">Type</label>
