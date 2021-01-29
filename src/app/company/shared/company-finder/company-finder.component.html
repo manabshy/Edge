@@ -45,16 +45,10 @@
     </div>
   </div>
   <ng-container *ngIf="(!foundCompanies && isCompanyAdded) || enterManually || existingCompany">
-    <div class="row">
-      <div class="col-sm-8 col-xl-6 offset-sm-2">
-          <div class="form-group">
-            <label for="company" class="small">Company name</label>
-            <input type="text" class="form-control form-control-sm"
-              [ngClass]="{'is-invalid': companyNameError && enterManually}"
-              id="selectedCompany" formControlName="selectedCompany">
-            <div class="invalid-feedback w-100">{{companyNameError}}</div>
-          </div>
-      </div>
-    </div>
+    <fieldset>
+      <label for="company">Company name</label>
+      <input type="text" [ngClass]="{'is-invalid': companyNameError && enterManually}" id="selectedCompany" formControlName="selectedCompany">
+      <p class="message message--invalid">{{companyNameError}}</p>
+    </fieldset>
   </ng-container>
 </form>
