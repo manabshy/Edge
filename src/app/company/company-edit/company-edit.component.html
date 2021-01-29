@@ -1,56 +1,66 @@
-<h2><ng-container *ngIf="isNewCompany; else editLabel">New</ng-container><ng-template #editLabel>Edit</ng-template> Company</h2>
-<ng-container *ngIf="companyDetails || isNewCompany">
-  <form [formGroup]="companyForm" (ngSubmit)="saveCompany()" autocompleteOff>
-    <app-company-finder [existingCompany]="companyDetails" [companyNameError]="formErrors.companyName" (companyName)="getCompanyName($event)" (selectedCompanyDetails)="navigateToCompany($event)"></app-company-finder>
-    <input type="hidden" id="companyName" class="form-control" formControlName="companyName">
-    
-    <fieldset>
-      <label for="companyType">Company Type</label>
-      <span class="select">
-        <select id="companyType" formControlName="companyTypeId">
-          <option *ngFor="let type of companyTypes" [value]=type.id>{{type.value}}</option>
-        </select>
-      </span>
-    </fieldset>
+<div class="row">
+  <div class="row__item">
+    <!-- <h2><ng-container *ngIf="isNewCompany; else editLabel">New</ng-container><ng-template #editLabel>Edit</ng-template> Company</h2> -->
 
-    <app-signer (selectedSigner)="getSelectedSigner($event)" (newSigner)="createNewSigner($event)" [existingSigner]="existingSigner"></app-signer>
+    <ng-container *ngIf="companyDetails || isNewCompany">
+      <form [formGroup]="companyForm" (ngSubmit)="saveCompany()" autocompleteOff>
+        
+        <app-company-finder [existingCompany]="companyDetails" [companyNameError]="formErrors.companyName" (companyName)="getCompanyName($event)" (selectedCompanyDetails)="navigateToCompany($event)"></app-company-finder>
+        
+        <input type="hidden" id="companyName" class="form-control" formControlName="companyName">
+        
+        <fieldset>
+          <label for="companyType">Company Type</label>
+          <span class="select">
+            <select id="companyType" formControlName="companyTypeId">
+              <option *ngFor="let type of companyTypes" [value]=type.id>{{type.value}}</option>
+            </select>
+          </span>
+        </fieldset>
 
-    <fieldset>
-      <label for="amlDate">AML Completed</label>
-      <input type="text" id="amlDate" placeholder="dd/mm/yyyy" class="form-control fake-readonly" formControlName="amlCompletedDate" [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', maxDate:todaysDate, customTodayClass: 'font-weight-bold'}" bsDatepicker #datepicker="bsDatepicker" [appNoDoubleTap]='datepicker' readonly>
-      <button type="button" class="btn btn--ghost" (click)="clearControlValue(companyForm.get('amlCompletedDate'))" *ngIf="companyForm.value.amlCompletedDate">Clear</button>
-    </fieldset>
+        <ledgend class="legend">Signer</ledgend>
+        <app-signer (selectedSigner)="getSelectedSigner($event)" (newSigner)="createNewSigner($event)" [existingSigner]="existingSigner"></app-signer>
 
-    <fieldset>
-      <label>Address</label>
-      <app-address [companyDetails]="companyDetails" (addressDetails)="getAddress($event)"></app-address>
-    </fieldset>
-    
-    <ledgend class="legend">Contact Details</ledgend>
+        <ledgend class="legend">Company Address</ledgend>
+        <fieldset>
+          <label>Address</label>
+          <app-address [companyDetails]="companyDetails" (addressDetails)="getAddress($event)"></app-address>
+        </fieldset>
+        
+        <ledgend class="legend">Contact Details</ledgend>
 
-    <fieldset>
-      <label for="companyTelephone" class="small">Telephone</label>
-      <input type="text" id="companyTelephone" placeholder="" class="form-control form-control-sm" formControlName="telephone" [ngClass]="{'is-invalid':formErrors.telephone}">
-      <span class="invalid-feedback">{{formErrors?.telephone}}</span>
-    </fieldset>
+        <fieldset>
+          <label for="companyTelephone" class="small">Telephone</label>
+          <input type="text" id="companyTelephone" placeholder="" class="form-control form-control-sm" formControlName="telephone" [ngClass]="{'is-invalid':formErrors.telephone}">
+          <span class="invalid-feedback">{{formErrors?.telephone}}</span>
+        </fieldset>
 
-    <fieldset>
-      <label for="companyFax" class="small">Fax</label>
-      <input type="text" id="companyFax" placeholder="" class="form-control form-control-sm" formControlName="fax" [ngClass]="{'is-invalid':formErrors.fax}">
-      <span class="invalid-feedback">{{formErrors?.fax}}</span>
-    </fieldset>
+        <fieldset>
+          <label for="companyFax" class="small">Fax</label>
+          <input type="text" id="companyFax" placeholder="" class="form-control form-control-sm" formControlName="fax" [ngClass]="{'is-invalid':formErrors.fax}">
+          <span class="invalid-feedback">{{formErrors?.fax}}</span>
+        </fieldset>
 
-    <fieldset>
-      <label for="companyWebsite" class="small">Website</label>
-      <input type="text" id="companyWebsite" placeholder="" class="form-control form-control-sm" formControlName="website">
-    </fieldset>
+        <fieldset>
+          <label for="companyWebsite" class="small">Website</label>
+          <input type="text" id="companyWebsite" placeholder="" class="form-control form-control-sm" formControlName="website">
+        </fieldset>
 
-    <fieldset>
-      <label for="companyEmail" class="small">Email</label>
-      <input type="text" id="companyEmail" placeholder="" class="form-control form-control-sm" formControlName="email" [ngClass]="{'is-invalid':formErrors.email}">
-      <span class="invalid-feedback">{{formErrors?.email}}</span>
-    </fieldset>
-  </form>
-</ng-container>
+        <fieldset>
+          <label for="companyEmail" class="small">Email</label>
+          <input type="text" id="companyEmail" placeholder="" class="form-control form-control-sm" formControlName="email" [ngClass]="{'is-invalid':formErrors.email}">
+          <span class="invalid-feedback">{{formErrors?.email}}</span>
+        </fieldset>
 
-<app-additional-info [id]="companyDetails?.companyId ? 'CO-'+companyDetails?.companyId : ''"></app-additional-info>
+        <ledgend class="legend">AML</ledgend>
+        <fieldset>
+          <label for="amlDate">AML Completed</label>
+          <input type="text" id="amlDate" placeholder="dd/mm/yyyy" class="form-control fake-readonly" formControlName="amlCompletedDate" [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', maxDate:todaysDate, customTodayClass: 'font-weight-bold'}" bsDatepicker #datepicker="bsDatepicker" [appNoDoubleTap]='datepicker' readonly>
+          <button type="button" class="btn btn--ghost" (click)="clearControlValue(companyForm.get('amlCompletedDate'))" *ngIf="companyForm.value.amlCompletedDate">Clear</button>
+        </fieldset>
+      </form>
+    </ng-container>
+
+    <app-additional-info [id]="companyDetails?.companyId ? 'CO-'+companyDetails?.companyId : ''"></app-additional-info>
+  </div>
+</div>

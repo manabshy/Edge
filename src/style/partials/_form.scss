@@ -284,7 +284,7 @@ Joined elements
    }
 
    .select                                      {
-      &+*                                       { margin-top:0; }
+      &+*                                       { margin-top:0; border-left:none; }
       select                                    { border-left:none; border-radius:0; }
    }
    
