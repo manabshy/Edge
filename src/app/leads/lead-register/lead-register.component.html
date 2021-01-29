@@ -52,6 +52,15 @@
             </span>
           </fieldset>
 
+          <fieldset *ngIf="canSeeUnassignable">
+            <span class="checkbox">
+              <span>
+                <input type="checkbox" id="includeUnassignedLeadsOnly" formControlName="includeUnassignedLeadsOnly">
+                <label for="includeUnassignedLeadsOnly">Show unassigned leads only</label>
+              </span>
+            </span>
+          </fieldset>
+
           <fieldset>
             <button class="btn btn--info" id="search" (click)="PerformSearch()">Search</button>
           </fieldset>
