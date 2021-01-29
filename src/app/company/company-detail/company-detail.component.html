@@ -23,7 +23,7 @@
     <h4>Company</h4>
     <div class="card">
       <div class="card__body">
-        
+
         <!-- <ol class="list">
           <li class="title">
             <span>
@@ -79,7 +79,7 @@
                   *ngFor="let contactPerson of companyContact?.contactPeople; last as isLast; first as isFirst">
                   <br class="d-sm-none" *ngIf="!isFirst" />
                   <ng-container *ngIf="contactPerson">
-                    <a [routerLink]="['/contact-centre/detail', contactPerson?.personId,'people',0 ]" [queryParams]="{showNotes: true}" (click)="$event.stopPropagation()">{{contactPerson?.addressee}}</a>
+                    <a [routerLink]="['/contact-centre/detail',0,'people',companyContact.contactGroupId ]" [queryParams]="{showNotes: true}" (click)="$event.stopPropagation()">{{contactPerson?.addressee}}</a>
                     <!-- <a [routerLink]="['/contact-centre/detail/', contactPerson.personId ]" [queryParams]="{showNotes: true}" (click)="$event.stopPropagation()">{{contactPerson?.addressee}}</a> -->
                   </ng-container>
                   <ng-container *ngIf="!isLast">, </ng-container>
