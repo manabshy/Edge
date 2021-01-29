@@ -11,15 +11,18 @@ export class ConfirmModalComponent implements OnInit {
   @Input() danger;
   @Input() actions = [];
   @Input() isSingleAction = false;
+  @Input() showModal = false;
   subject: Subject<boolean>;
 
-  constructor(public bsModalRef: BsModalRef) { }
+  constructor(public bsModalRef: BsModalRef, private bsModalService:BsModalService) { }
 
   ngOnInit() {
   }
 
   action(value: boolean) {
+    this.bsModalService.config.animated = false;
     this.bsModalRef.hide();
+    // this.showModal = false;
     this.subject.next(value);
     this.subject.complete();
   }
