@@ -508,7 +508,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       title: 'Are you sure you want to remove ' + fullName + '?',
       actions: ['No', 'Remove']
     };
-    this.dialogRef = this.dialogService.open(ConfirmModalComponent, { data, styleClass:'dialog dialog--hasFooter', showHeader: false });
+    this.dialogRef = this.dialogService.open(ConfirmModalComponent, { data, styleClass: 'dialog dialog--hasFooter', showHeader: false });
     this.dialogRef.onClose.subscribe((res) => { if (res) { subject.next(true); subject.complete(); } });
     return subject.asObservable();
   }

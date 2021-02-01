@@ -17,6 +17,7 @@ import { Subject } from 'rxjs';
 import { ConfirmModalComponent } from 'src/app/shared/confirm-modal/confirm-modal.component';
 import { BaseComponent } from 'src/app/shared/models/base-component';
 import { takeUntil } from 'rxjs/operators';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-property-detail-edit',
@@ -62,6 +63,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
   propertyLocation: PropertyLocation;
   isOfficeIdRequired: boolean;
   checkPossibleDuplicates = false;
+  dialogRef: DynamicDialogRef;
 
   constructor(private route: ActivatedRoute,
     private _router: Router,
@@ -71,6 +73,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
     private storage: StorageMap,
     private contactGroupService: ContactGroupsService,
     private toastr: ToastrService,
+    private dialogService: DialogService,
     private fb: FormBuilder,
     private _location: Location) { super(); }
 
@@ -426,12 +429,13 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
 
   showWarning() {
     const subject = new Subject<boolean>();
-    const initialState = {
+    const data = {
       title: 'It looks like you haven\'t set the property owner. Do you want to save anyway?',
       actions: ['No', 'Yes, save']
     };
-    const modal = this.modalService.show(ConfirmModalComponent, { ignoreBackdropClick: true, initialState });
-    modal.content.subject = subject;
+  
+    this.dialogRef = this.dialogService.open(ConfirmModalComponent, { data, styleClass: 'dialog dialog--hasFooter', showHeader: false });
+    this.dialogRef.onClose.subscribe((res) => { if (res) { subject.next(true); subject.complete(); } });
     return subject.asObservable();
   }
 }
