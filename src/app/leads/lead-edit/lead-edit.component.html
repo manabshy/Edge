@@ -193,11 +193,6 @@
         </ol>
       </div>
     </div>
-
-
-
-
-
     <footer class="footer">
       <button (click)="cancel()" type="button" class="btn btn--ghost" *ngIf="!isLeadClosed">Cancel</button>
       <button (click)="cancel()" type="button" class="btn btn--ghost" *ngIf="isLeadClosed">Back</button>
@@ -207,6 +202,8 @@
   </form>
 </ng-template>
 
+<!--Success Messages -->
+<p-toast></p-toast>
 
 
 

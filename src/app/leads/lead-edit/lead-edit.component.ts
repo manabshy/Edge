@@ -24,6 +24,7 @@ import { WedgeValidators } from 'src/app/shared/wedge-validators';
 import { SubNavItem } from 'src/app/shared/subnav';
 import { ResultData } from 'src/app/shared/result-data';
 import { SideNavItem, SidenavService } from 'src/app/core/services/sidenav.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-lead-edit',
@@ -100,6 +101,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     private sharedService: SharedService,
     private sidenavService: SidenavService,
     private contactGroupService: ContactGroupsService,
+    private messageService: MessageService,
     private toastr: ToastrService) {
     super();
   }
@@ -480,8 +482,11 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     console.log('i am here in OnUpdateCompleted');
 
     let time: number;
-    if (this.isNewLead) { this.toastr.success('Lead successfully saved'); } else {
-      this.isSaveAndNext ? time = 2000 : time = 5000;
+    if (this.isNewLead) {
+      this.messageService.add({ severity: 'success', summary: 'Lead successfully saved', closable: false});
+    } else {
+      this.isSaveAndNext ? time = 2000 : time = 3000;
+      this.messageService.add({ severity: 'success', summary: 'Lead successfully updated', closable: false, life: time });
       this.toastr.success('Lead successfully updated', '', { timeOut: time });
     }
 

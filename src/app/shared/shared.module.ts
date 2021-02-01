@@ -81,6 +81,9 @@ import { GalleriaModule } from 'primeng/galleria';
 import { DialogModule } from 'primeng/dialog';
 import { AccordionModule } from 'primeng/accordion';
 import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
+import {ToastModule} from 'primeng/toast';
+import { ConfirmationService, MessageService } from 'primeng/api';
+
 
 
 import { RedactedTableComponent } from './components/redacted-table/redacted-table.component';
@@ -91,7 +94,6 @@ import { PropertyDetailPhotosComponent } from './components/property-detail-phot
 import { PropertyDetailMapComponent } from './components/property-detail-map/property-detail-map.component';
 import { ContactgroupFinderComponent } from './components/contactgroup-finder/contactgroup-finder.component';
 import { ImportantMessagesComponent } from './components/important-messages/important-messages.component';
-import { ConfirmationService } from 'primeng/api';
 
 const components = [
   BreadcrumbComponent,
@@ -175,7 +177,8 @@ const externalModules = [
   GalleriaModule,
   DialogModule,
   AccordionModule,
-  DynamicDialogModule
+  DynamicDialogModule,
+  ToastModule
 ];
 
 @NgModule({
@@ -316,7 +319,7 @@ const externalModules = [
     // SharedLeadRegisterComponent,
     // NoDoubleTapDirective,
   ],
-  providers: [ConfirmationService, DialogService],
+  providers: [ConfirmationService, DialogService,MessageService],
 
   entryComponents: [
     ConfirmModalComponent,
