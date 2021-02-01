@@ -32,6 +32,11 @@ This applies from 992px onwards
         .p-dialog-footer        { border-radius:0 0 3px 3px; }
     }
 
+    .modal--default             {
+        .p-dialog               { width:250px; }
+        .p-dialog-content       { flex-grow:0; min-height:inherit;
+    }
+
     .modal--small               {
         .p-dialog               { width:250px; }
     }
