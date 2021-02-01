@@ -184,6 +184,7 @@ Utility Classes
 .reset--indent                                  { margin-left:0; padding-left:0; }
 .reset--bullet                                  { list-style:none; list-style-image:none; }
 .reset--styling                                 { margin:0; padding:0; list-style:none; }
+
 /***** Display *****/
 .flex                                           { display:flex; }
 .inline                                         { display:inline; }
@@ -207,6 +208,8 @@ textarea:focus, button:focus                    { outline:none; }
 /***** Show *****/
 .show--tablet                                   { display:none !important; }
 .show--screen                                   { display:none !important; }
+
+.zindex-11                                      { z-index:11; }
 
 /***********************************************
 Tablet - This applies from 768px onwards

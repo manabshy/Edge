@@ -55,7 +55,9 @@
 .list--hover                                    {
     > li                                        {
         &.current,
-        &.current:hover                         { background-color:$color--info; color:$color--snow; box-shadow:none; -webkit-box-shadow:none; }
+        &.current:hover                         { background-color:$color--info; color:$color--snow; box-shadow:none; -webkit-box-shadow:none;
+            .pill--positive                     { background-color:$color--snow; color:$color--positive; }
+        }
         &:hover                                 { color:$color--info; }
 
         &:first-child                           {
