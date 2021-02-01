@@ -10,15 +10,14 @@
 
 
 <!-- Lead Owner Assignment Modal -->
-<p-dialog [showHeader]="false" [(visible)]="showModal" [modal]="true" [draggable]="false"
-  class="modal--small ">
+<p-dialog [showHeader]="false" [(visible)]="showModal" [modal]="true" [draggable]="false" class="modal--small modal--hasFooter">
   <fieldset>
     <p [innerHtml]="title"></p>
   </fieldset>
   <footer class="modal-footer">
     <div class="btn--container">
       <button *ngIf="!isSingleAction" type="button" class="btn btn--ghost" (click)="action(false)">{{actions[0]}}</button>
-      <button type="button" id="confirm" class="btn btn--positive" (click)="action(true)">{{actions[1]}}</button>
+      <button type="button" id="confirm" class="btn btn--info" (click)="action(true)">{{actions[1]}}</button>
     </div>
   </footer>
 </p-dialog>
