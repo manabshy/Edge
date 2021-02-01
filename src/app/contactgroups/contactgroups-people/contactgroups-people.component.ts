@@ -18,6 +18,7 @@ import { AppUtils } from 'src/app/core/shared/utils';
 import { ToastrService } from 'ngx-toastr';
 import * as _ from 'lodash';
 import { StorageMap } from '@ngx-pwa/local-storage';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 @Component({
   selector: 'app-contactgroups-people',
   templateUrl: './contactgroups-people.component.html',
@@ -122,12 +123,14 @@ export class ContactgroupsPeopleComponent implements OnInit {
     { name: 'contactGroup', isCurrent: true },
     { name: 'notes', isCurrent: false }
   ];
+  dialogRef: DynamicDialogRef;
   constructor(
     private contactGroupService: ContactGroupsService,
     private fb: FormBuilder,
     private _router: Router,
     private route: ActivatedRoute,
     private modalService: BsModalService,
+    private dialogService: DialogService,
     private _location: Location,
     private sharedService: SharedService,
     private storage: StorageMap,
@@ -501,12 +504,12 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   confirmRemove(fullName: string) {
     const subject = new Subject<boolean>();
-    const initialState = {
+    const data = {
       title: 'Are you sure you want to remove ' + fullName + '?',
       actions: ['No', 'Remove']
     };
-    const modal = this.modalService.show(ConfirmModalComponent, { ignoreBackdropClick: true, initialState });
-    modal.content.subject = subject;
+    this.dialogRef = this.dialogService.open(ConfirmModalComponent, { data, width: '30%', showHeader: false });
+    this.dialogRef.onClose.subscribe((res) => { if (res) { subject.next(true); subject.complete(); } });
     return subject.asObservable();
   }
 
@@ -842,9 +845,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.isOffCanvasVisible = false;
   }
 
-  toggleNewPersonVisibility(condition){
+  toggleNewPersonVisibility(condition) {
     this.isCreateNewPersonVisible = condition;
-    console.log({condition}, 'in people', this.isCreateNewPersonVisible);
+    console.log({ condition }, 'in people', this.isCreateNewPersonVisible);
   }
 
   addNote() {
