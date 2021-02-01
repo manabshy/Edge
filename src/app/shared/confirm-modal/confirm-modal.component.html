@@ -7,16 +7,12 @@
     <button type="button" id="confirm" class="btn btn-secondary" (click)="action(true)">{{actions[1]}}</button>
 </div>
  -->
-
-
 <!-- Lead Owner Assignment Modal -->
-<!-- <p-dialog [showHeader]="false" [(visible)]="data.showModal" [modal]="true" [draggable]="false" class="modal--small modal--hasFooter">
-</p-dialog> -->
-<fieldset>
-  <p>{{data?.title}}</p>
-  <!-- <p [innerHtml]="data?.title"></p> -->
-</fieldset>
-<footer class="modal-footer">
+<!-- <p-dialog [showHeader]="false" [(visible)]="data.showModal" [modal]="true" [draggable]="false" class="modal--small modal--hasFooter"></p-dialog> -->
+<!-- <p [innerHtml]="data?.title"></p> -->
+
+<p>{{data?.title}}</p>
+<footer class="footer footer--modal">
   <div class="btn--container">
     <button *ngIf="!isSingleAction" type="button" class="btn btn--ghost" (click)="action(false)">{{data?.actions[0]}}</button>
     <button type="button" id="confirm" class="btn btn--info" (click)="action(true)">{{data?.actions[1]}}</button>

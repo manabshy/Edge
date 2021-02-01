@@ -102,8 +102,11 @@ button::-moz-focus-inner                        { border:0; padding:0; }
 .btn--group .btn:hover                          { background-color:$color--midnight-70; color:$color--snow; }
 .btn--group .btn:last-of-type                   { border:none; }
 
-.btn--container .btn                            { margin-top:0; margin-right:6px; }
-.btn--container .btn:last-child                 { margin-right:0; }
+.btn--container                                 {
+  .btn                                          { margin-top:0;
+    &+*                                         { margin-left: 10px; }
+  }
+}
 
 .btn--search                                    { @extend .btn--info; border-radius:0 3px 3px 0; }
 

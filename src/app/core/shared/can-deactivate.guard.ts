@@ -46,7 +46,7 @@ export class CanDeactivateGuard implements CanDeactivate<CanComponentDeactivate>
         title: 'If you leave your current changes will be lost',
         actions: ['Stay', 'Leave']
       };
-      this.ref = this.dialogService.open(ConfirmModalComponent, { data, width: '30%', showHeader: false });
+      this.ref = this.dialogService.open(ConfirmModalComponent, { data, styleClass:'dialog dialog--hasFooter', showHeader: false });
       this.ref.onClose.subscribe((res) => { if (res) { subject.next(true); subject.complete(); } });
       console.log(this.ref, 'res');
       return subject.asObservable();

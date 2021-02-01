@@ -895,7 +895,7 @@
           </footer>
         </form>
         <!--Add  [showHeader]="false" to hide header -->
-        <p-dialog header="Find Person" [(visible)]="isOffCanvasVisible" [modal]="true" [draggable]="false">
+        <p-dialog header="Find Person" [(visible)]="isOffCanvasVisible" [modal]="true" [draggable]="false" class="modal--medium modal--hasFooter">
           <app-person-duplicate-checker [isOffCanvasVisible]="isOffCanvasVisible"
             [contactGroupDetails]="contactGroupDetails" [searchTerm]="signer" [isCreateNewPerson]="isCreateNewPerson"
             (addedPersonDetails)="getAddedPersonDetails($event)" (selectedPerson)="getSelectedPerson($event)"

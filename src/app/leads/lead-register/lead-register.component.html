@@ -185,7 +185,7 @@
   <fieldset>
     <app-staff-member-finder label="Choose an owner for the selected leads:" placeholder="Select owner" (selectedStaffMemberId)="getSelectedOwner($event)"></app-staff-member-finder>
   </fieldset>
-  <footer class="modal-footer">
+  <footer class="footer--modal">
    <div class="btn--container">
      <button (click)="showModal=false" type="button" class="btn btn--ghost">Cancel</button>
      <button type="button" class="btn btn--positive" (click)="assignLeadsToOwner()">Assign</button>
