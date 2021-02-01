@@ -872,17 +872,17 @@
 <app-property-detail-map [propertyMap]="property?.map" [showMap]="showMap" (mapClosed)="showMap=false"></app-property-detail-map>
 
 <!-- Contactgroup Finder Modal -->
-<p-dialog header="Last known owner" [(visible)]="isLastknownOwnerVisible" [modal]="true" [draggable]="false">
+<p-dialog header="Last known owner" [(visible)]="isLastknownOwnerVisible" [modal]="true" [draggable]="false" class="modal--medium">
   <app-contactgroup-finder (selectedContactGroup)="getSelectedOwner($event)" (isCreatingNewGroup)="createNewLastKnownOwner()" ></app-contactgroup-finder>
 </p-dialog>
 
 <!-- Property Finder Modal -->
-<p-dialog header="Find Property" [(visible)]="showProperty" [modal]="true" [draggable]="false">
+<p-dialog header="Find Property" [(visible)]="showProperty" [modal]="true" [draggable]="false" class="modal--medium">
   <app-property-finder [property]="property" [readOnly]="!isEditable && !isNewValuation" [includePhoto]="true" [includeMap]="true" (selectedProperty)="getSelectedProperty($event)" (isCreatingNewProperty)="createNewProperty($event)"></app-property-finder>
 </p-dialog>
 
 <!-- Appointment Modal -->
-<p-dialog header=" Pick availability" [(visible)]="isAppointmentVisible" [modal]="true" [draggable]="false">
+<p-dialog header=" Pick availability" [(visible)]="isAppointmentVisible" [modal]="true" [draggable]="false" class="modal--medium">
   <form [formGroup]="availabilityForm" (ngSubmit)="searchAvailabilty()">
     <div class="row">
       <div class="grid grid--25">
@@ -1081,7 +1081,7 @@
 </p-dialog>
 
 <!-- Instruct Modal -->
-<p-dialog header="Confirm values and choose instruction type" [(visible)]="isInstructVisible" [modal]="true" [draggable]="false" [style]="{width:'500px'}">
+<p-dialog header="Confirm values and choose instruction type" [(visible)]="isInstructVisible" [modal]="true" [draggable]="false" class="modal--small modal--hasFooter">
   <form [formGroup]="instructionForm" (ngSubmit)="saveInstruction()" autocompleteOff *ngIf="!valuation?.isExpired">
     <ng-container *ngIf="instruction?.askingPrice">
       <fieldset *ngIf="showInstruct">
@@ -1281,10 +1281,12 @@
 
     </fieldset> -->
 
-    <fieldset>
-      <button type="button" class="btn btn--ghost" (click)="isInstructVisible = false; cancelInstruction()">Cancel</button>
-      <button type="submit" class="btn btn--info" data-cy="saveInstruction">Instruct</button>
-    </fieldset>
+    <footer class="footer--modal">
+      <div class="btn--container">
+        <button type="button" class="btn btn--ghost" (click)="isInstructVisible = false; cancelInstruction()">Cancel</button>
+        <button type="submit" class="btn btn--info" data-cy="saveInstruction">Instruct</button>
+      </div>
+    </footer>
   </form>
 
   <!-- <form [formGroup]="instructionForm" (ngSubmit)="saveInstruction()" autocompleteOff *ngIf="!valuation?.isExpired">
