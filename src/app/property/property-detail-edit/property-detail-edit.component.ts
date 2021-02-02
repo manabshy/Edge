@@ -62,7 +62,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
   getBack: number;
   officeId: number;
   propertyLocation: PropertyLocation;
-  isOfficeIdRequired: boolean;
+  isOfficeIdRequired = false;
   checkPossibleDuplicates = false;
   dialogRef: DynamicDialogRef;
 
@@ -213,6 +213,8 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
 
   getSelectedOfficeId(id: number) {
     this.propertyForm.get('officeId').setValue(id);
+    console.log({id});
+
     id ? this.isOfficeIdRequired = false : this.isOfficeIdRequired = true;
   }
 

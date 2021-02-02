@@ -1,4 +1,21 @@
 <form [formGroup]="officeFinderForm">
+  <fieldset  [ngClass]="{'invalid': isRequired}">
+    <label for="office">Office</label>
+    <p-dropdown [options]="offices$ |async" formControlName="officeId" optionLabel="name" [showClear]="true"
+      placeholder="Select Office" [filter]="true" filterBy="name" (onChange)="onOfficeChange($event)"
+      [ngClass]="{'no-style': readOnly}" data-cy="office">
+      <!-- <ng-template let-office pTemplate="item">
+        <div class="office-item">
+          <div>{{office?.name}}</div>
+        </div>
+      </ng-template> -->
+    </p-dropdown>
+    <p class="message message--negative">Office is required</p>
+  </fieldset>
+</form>
+
+
+<!-- <form [formGroup]="officeFinderForm">
   <fieldset>
     <label for="office">Office</label>
     <ng-select id="office" placeholder="Select Office" [items]="offices$ |async" [clearable]="isClearable" bindLabel="name" [readonly]="readOnly" bindValue="officeId" [virtualScroll]="true" groupBy="category" (change)="onOfficeChange($event)" formControlName="officeId"  [ngClass]="{'is-invalid': isRequired, 'no-style': readOnly}" data-cy="office"></ng-select>
@@ -6,4 +23,4 @@
       Office is required
     </div>
   </fieldset>
-</form>
+</form> -->
