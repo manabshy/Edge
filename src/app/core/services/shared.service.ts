@@ -17,6 +17,7 @@ import { StorageMap } from '@ngx-pwa/local-storage';
 import { ContactGroup } from 'src/app/contactgroups/shared/contact-group';
 import { ValidationMessages, FormErrors } from '../shared/app-constants';
 import { Valuation, ValuationStatusEnum } from 'src/app/valuations/shared/valuation';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Injectable({
   providedIn: 'root'
@@ -26,11 +27,13 @@ export class SharedService {
   lastCallNoteToast: any;
   lastCallEndCallToast: any;
   formErrors: any;
+  ref: DynamicDialogRef;
 
   constructor(private _location: Location,
     private _router: Router,
     private titleService: Title,
     private storage: StorageMap,
+    private dialogService: DialogService,
     private modalService: BsModalService) {
   }
 
@@ -83,15 +86,19 @@ export class SharedService {
 
   showError(error: WedgeError, triggeredBy) {
     const subject = new Subject<boolean>();
-    const initialState = {
-      title: error.requestId,
-      desc: error.displayMessage,
-      techDet: error.technicalDetails,
+    const data = {
+      // title: error.requestId,
+      // desc: error.displayMessage,
+      // techDet: error.technicalDetails,
       triggeredBy,
       error
     };
-    const modal = this.modalService.show(ErrorModalComponent, { ignoreBackdropClick: true, initialState });
-    modal.content.subject = subject;
+    console.log({data});
+
+    // const modal = this.modalService.show(ErrorModalComponent, { ignoreBackdropClick: true, initialState });
+    // modal.content.subject = subject;
+    this.ref = this.dialogService.open(ErrorModalComponent, { data, styleClass: 'dialog dialog--hasFooter', header: 'Error' });
+    // this.ref.onClose.subscribe((res) => { if (res) { subject.next(true); subject.complete(); } });
     return subject.asObservable();
   }
 

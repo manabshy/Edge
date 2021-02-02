@@ -1,4 +1,4 @@
-<div class="modal-header bg-danger text-light">
+<!-- <div class="modal-header bg-danger text-light">
   Error
 </div>
 <div class="modal-body text-center">
@@ -20,7 +20,25 @@
       <p *ngFor="let e of error | keyvalue">
         {{e.key}} : {{e.value}}
       </p>
-    </div> 
+    </div>
     <p *ngIf="triggeredBy">triggeredby:{{triggeredBy | json}} </p>
   </div>
-</div>
+</div> -->
+
+<fieldset>
+  <p *ngIf="data?.error?.displayMessage">{{data?.error?.displayMessage}}</p>
+  <pre *ngIf="data?.error?.technicalDetails">{{data?.error?.technicalDetails}}</pre>
+</fieldset>
+<fieldset>
+  <a [href]="'mailto:helpdesk@dng.co.uk?subject=Error '+title+'&body='+desc+'%0D%0D'+(techDet||'')+'%0D%0D'+url">Contact Helpdesk</a>
+</fieldset>
+<fieldset *ngIf="data?.error?.requestId" class="text-left text-muted">
+  <small>IT REF: {{data?.error?.requestId}}</small>
+</fieldset>
+<fieldset><p *ngIf="data?.triggeredBy">triggeredby:{{data?.triggeredBy | json}} </p></fieldset>
+
+<footer class="footer footer--modal">
+  <div class="btn--container">
+    <button type="button" class="btn btn--info" (click)="action(false)">Close</button>
+  </div>
+</footer>
