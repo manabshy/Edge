@@ -8,20 +8,26 @@
   </div>
 
   <div class="row__item">
-    <h2><ng-container *ngIf="propertyDetails else newProperty ">Edit</ng-container> Property <ng-template #newProperty>Add</ng-template></h2>
-    <form *ngIf="propertyDetails || isNewProperty" [formGroup]="propertyForm" (ngSubmit)="saveProperty()" (keydown.enter)="$event.preventDefault()" autocompleteOff>
-      <app-address [propertyDetails]="propertyDetails" [addressError]="formErrors.address" [isNewProperty]="isNewProperty" [isCheckingDuplicateProperties]="true" (addressDetails)="getAddress($event)" (checkDuplicateProperties)="setCheckDuplicatesFlag($event)" [searchedAddress]="searchedAddress"></app-address>
+    <h2>
+      <ng-container *ngIf="propertyDetails else newProperty ">Edit</ng-container> Property <ng-template #newProperty>Add
+      </ng-template>
+    </h2>
+    <form *ngIf="propertyDetails || isNewProperty" [formGroup]="propertyForm" (ngSubmit)="saveProperty()"
+      (keydown.enter)="$event.preventDefault()" autocompleteOff>
+      <app-address [propertyDetails]="propertyDetails" [addressError]="formErrors.address"
+        [isNewProperty]="isNewProperty" [isCheckingDuplicateProperties]="true" (addressDetails)="getAddress($event)"
+        (checkDuplicateProperties)="setCheckDuplicatesFlag($event)" [searchedAddress]="searchedAddress"></app-address>
 
       <input type="hidden" id="address" class="form-control" formControlName="address">
-
-      <app-property-duplicate-checker [propertyAddress]="propertyAddress" [propertyId]="propertyDetails?.propertyId" [checkDuplicates]="checkPossibleDuplicates" (selectedProperty)="getSelectedProperty($event)" (fullMatchFound)="checkPropertyMatches($event)"></app-property-duplicate-checker>
-
-      <app-office-finder class="d-block form-group" [officeId]="officeId" [isRequired]="isOfficeIdRequired" (selectedOfficeId)="getSelectedOfficeId($event)"></app-office-finder>
+      <app-office-finder class="d-block form-group" [officeId]="officeId" [isRequired]="isOfficeIdRequired"
+        (selectedOfficeId)="getSelectedOfficeId($event)"></app-office-finder>
 
       <fieldset>
         <label for="propertyTypeId" class="small">Property Type</label>
         <span class="select">
-          <select class="custom-select custom-select-sm" id="propertyTypeId" name="propertyTypeId" formControlName="propertyTypeId" (change)="onSelectType($event.target.value) " [ngClass]="{'is-invalid':formErrors.propertyTypeId}">
+          <select class="custom-select custom-select-sm" id="propertyTypeId" name="propertyTypeId"
+            formControlName="propertyTypeId" (change)="onSelectType($event.target.value) "
+            [ngClass]="{'is-invalid':formErrors.propertyTypeId}">
             <option selected value="0"></option>
             <option *ngFor="let propertyType of propertyTypes" [value]=propertyType.id>{{propertyType.value}}</option>
           </select>
@@ -32,9 +38,11 @@
       <fieldset>
         <label for="propertyTypeId" class="small">Property Style</label>
         <span class="select">
-          <select #propStyle class="custom-select custom-select-sm" id="propertyStyleId" name="propertyStyleId" formControlName="propertyStyleId" [ngClass]="{'is-invalid':formErrors.propertyStyleId}">
+          <select #propStyle class="custom-select custom-select-sm" id="propertyStyleId" name="propertyStyleId"
+            formControlName="propertyStyleId" [ngClass]="{'is-invalid':formErrors.propertyStyleId}">
             <option selected [value]="defaultStyle"></option>
-            <option *ngFor="let propertyStyle of propertyStyles" [value]=propertyStyle.id>{{propertyStyle.value}}</option>
+            <option *ngFor="let propertyStyle of propertyStyles" [value]=propertyStyle.id>{{propertyStyle.value}}
+            </option>
           </select>
         </span>
         <span class="invalid-feedback">{{formErrors?.propertyStyleId}}</span>
@@ -43,7 +51,8 @@
       <fieldset>
         <label for="region" class="small">Region</label>
         <span class="select">
-          <select class="custom-select custom-select-sm" id="region" name="region" formControlName="regionId" (change)="onSelectRegion($event.target.value)" [ngClass]="{'is-invalid':formErrors.regionId}">
+          <select class="custom-select custom-select-sm" id="region" name="region" formControlName="regionId"
+            (change)="onSelectRegion($event.target.value)" [ngClass]="{'is-invalid':formErrors.regionId}">
             <!-- <option selected value="0"></option> -->
             <option *ngFor="let region of regions" [value]=region.id>{{region.value}}</option>
           </select>
@@ -54,7 +63,8 @@
       <fieldset>
         <label for="area" class="small">Area</label>
         <span class="select">
-          <select class="custom-select custom-select-sm" id="area" name="area" formControlName="areaId" (change)="onSelectArea($event.target.value)" [ngClass]="{'is-invalid':formErrors.areaId}">
+          <select class="custom-select custom-select-sm" id="area" name="area" formControlName="areaId"
+            (change)="onSelectArea($event.target.value)" [ngClass]="{'is-invalid':formErrors.areaId}">
             <option selected value="0"></option>
             <option *ngFor="let area of areas" [value]=area.id>{{area.value}}</option>
           </select>
@@ -65,7 +75,8 @@
       <fieldset>
         <label for="subArea" class="small">Sub-Area</label>
         <span class="select">
-          <select class="custom-select custom-select-sm" id="subArea" name="subArea" formControlName="subAreaId" [ngClass]="{'is-invalid':formErrors.subAreaId}">
+          <select class="custom-select custom-select-sm" id="subArea" name="subArea" formControlName="subAreaId"
+            [ngClass]="{'is-invalid':formErrors.subAreaId}">
             <option selected value="0"></option>
             <option *ngFor="let subArea of subAreas" [value]=subArea.id>{{subArea.value}}</option>
           </select>
@@ -73,7 +84,9 @@
         <span class="invalid-feedback">{{formErrors?.subAreaId}}</span>
       </fieldset>
 
-      <app-signer label="Last known owner" [createdSigner]="createdSigner" [existingSigner]="lastKnownOwner" [existingPerson]="lastKnownPerson" (selectedSigner)="getSelectedOwner($event)" (newSigner)="createNewSigner($event)"></app-signer>
+      <app-signer label="Last known owner" [createdSigner]="createdSigner" [existingSigner]="lastKnownOwner"
+        [existingPerson]="lastKnownPerson" (selectedSigner)="getSelectedOwner($event)"
+        (newSigner)="createNewSigner($event)"></app-signer>
       <div class="form-actions">
         <div class="container">
           <div class="row justify-content-end w-100 no-gutters">
@@ -89,12 +102,21 @@
       </div>
     </form>
 
-    <app-additional-info [id]="propertyDetails?.propertyId ? 'PR-'+propertyDetails?.propertyId : ''"></app-additional-info>
+    <app-additional-info [id]="propertyDetails?.propertyId ? 'PR-'+propertyDetails?.propertyId : ''">
+    </app-additional-info>
   </div>
 </div>
 
 <!--Success Messages -->
 <p-toast></p-toast>
+
+<!--Property Duplicate Checker Modal -->
+<p-dialog header="Quick finder" [(visible)]="checkPossibleDuplicates" [modal]="true" [draggable]="false">
+  <app-property-duplicate-checker [propertyAddress]="propertyAddress" [propertyId]="propertyDetails?.propertyId"
+    [checkDuplicates]="checkPossibleDuplicates" (selectedProperty)="getSelectedProperty($event)"
+    (hideModal)="checkPossibleDuplicates=false" (fullMatchFound)="checkPropertyMatches($event)">
+  </app-property-duplicate-checker>
+</p-dialog>
 
 
 <!-- <app-breadcrumb></app-breadcrumb>

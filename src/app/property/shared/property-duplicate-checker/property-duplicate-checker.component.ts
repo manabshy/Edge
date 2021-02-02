@@ -14,6 +14,7 @@ export class PropertyDuplicateCheckerComponent implements OnInit, OnChanges {
   @Input() checkDuplicates = false;
   @Output() selectedProperty = new EventEmitter<any>();
   @Output() fullMatchFound = new EventEmitter<boolean>();
+  @Output() hideModal = new EventEmitter<boolean>();
   potentialDuplicates: PropertyAutoComplete[] = [];
   showMatches = false;
   isDuplicateFound = false;

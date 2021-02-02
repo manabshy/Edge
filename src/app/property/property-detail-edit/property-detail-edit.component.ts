@@ -347,7 +347,9 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
     console.log('property to be added', property)
     if (this.isNewProperty) {
       if (this.isMatchFound) {
-        this.showMatches = true;
+        this.showMatches = true; // To be removed
+        this.checkPossibleDuplicates = true;
+
         this.propertyService.displayDuplicates(this.showMatches);
       } else {
         this.isSubmitting = true;
@@ -379,7 +381,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
   onSaveComplete(property?: any) {
     this.propertyForm.markAsPristine();
     this.isSubmitting = false;
-    this.messageService.add({ severity: 'success', summary: 'Property successfully saved', closable: false});
+    this.messageService.add({ severity: 'success', summary: 'Property successfully saved', closable: false });
     let url = this._router.url;
     let id = this.propertyId;
 
