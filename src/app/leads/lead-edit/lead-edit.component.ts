@@ -487,7 +487,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     } else {
       this.isSaveAndNext ? time = 2000 : time = 3000;
       this.messageService.add({ severity: 'success', summary: 'Lead successfully updated', closable: false, life: time });
-      this.toastr.success('Lead successfully updated', '', { timeOut: time });
     }
 
     this.isSaveAndNext = false;

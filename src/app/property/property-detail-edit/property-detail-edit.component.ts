@@ -18,6 +18,7 @@ import { ConfirmModalComponent } from 'src/app/shared/confirm-modal/confirm-moda
 import { BaseComponent } from 'src/app/shared/models/base-component';
 import { takeUntil } from 'rxjs/operators';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-property-detail-edit',
@@ -73,6 +74,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
     private storage: StorageMap,
     private contactGroupService: ContactGroupsService,
     private toastr: ToastrService,
+    private messageService: MessageService,
     private dialogService: DialogService,
     private fb: FormBuilder,
     private _location: Location) { super(); }
@@ -377,7 +379,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
   onSaveComplete(property?: any) {
     this.propertyForm.markAsPristine();
     this.isSubmitting = false;
-    this.toastr.success('Property successfully saved');
+    this.messageService.add({ severity: 'success', summary: 'Property successfully saved', closable: false});
     let url = this._router.url;
     let id = this.propertyId;
 
@@ -433,7 +435,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
       title: 'It looks like you haven\'t set the property owner. Do you want to save anyway?',
       actions: ['No', 'Yes, save']
     };
-  
+
     this.dialogRef = this.dialogService.open(ConfirmModalComponent, { data, styleClass: 'dialog dialog--hasFooter', showHeader: false });
     this.dialogRef.onClose.subscribe((res) => { if (res) { subject.next(true); subject.complete(); } });
     return subject.asObservable();

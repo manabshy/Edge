@@ -25,6 +25,7 @@ import { StaffMember } from 'src/app/shared/models/staff-member';
 import { TabDirective } from 'ngx-bootstrap/tabs/ngx-bootstrap-tabs';
 import format from 'date-fns/format';
 import { Observable } from 'rxjs';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-valuation-detail-edit',
@@ -207,6 +208,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     private sharedService: SharedService,
     private staffMemberService: StaffMemberService,
     private toastr: ToastrService,
+    private messageService: MessageService,
     private storage: StorageMap,
     private route: ActivatedRoute,
     private infoService: InfoService,
@@ -1262,10 +1264,12 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.isSubmitting = false;
     this.errorMessage = null;
     if (this.isNewValuation) {
-      this.toastr.success('Valuation successfully saved');
+      // this.toastr.success('Valuation successfully saved');
+      this.messageService.add({ severity: 'success', summary: 'Valuation successfully saved', closable: false});
       this.sharedService.resetUrl(this.valuationId, valuation.valuationEventId);
     } else {
-      this.toastr.success('Valuation successfully updated');
+      // this.toastr.success('Valuation successfully updated');
+      this.messageService.add({ severity: 'success', summary: 'Valuation successfully updated', closable: false});
     }
 
     this.router.navigateByUrl('/', { skipLocationChange: true })
@@ -1278,7 +1282,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.isSubmitting = false;
     this.errorMessage = null;
     if (status) {
-      this.toastr.success('Instruction successfully saved');
+      this.messageService.add({ severity: 'success', summary: 'Instruction successfully saved', closable: false});
       this.router.navigate(['/property-centre/detail', this.property.propertyId]);
     }
   }

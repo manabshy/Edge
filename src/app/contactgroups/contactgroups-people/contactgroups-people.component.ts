@@ -19,6 +19,7 @@ import { ToastrService } from 'ngx-toastr';
 import * as _ from 'lodash';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { MessageService } from 'primeng/api';
 @Component({
   selector: 'app-contactgroups-people',
   templateUrl: './contactgroups-people.component.html',
@@ -135,6 +136,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     private sharedService: SharedService,
     private storage: StorageMap,
     private toastr: ToastrService,
+    private messageService: MessageService,
     private renderer: Renderer2
   ) { }
 
@@ -740,8 +742,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   onSaveComplete(contactGroupId): void {
-    this.toastr.success('Contact Group successfully saved');
-
+    this.messageService.add({ severity: 'success', summary: 'Contact Group successfully saved', closable: false});
     if (!contactGroupId) {
       this.sharedService.back();
     } else {

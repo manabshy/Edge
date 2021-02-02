@@ -15,6 +15,7 @@ import { AppUtils } from 'src/app/core/shared/utils';
 import { ToastrService } from 'ngx-toastr';
 import * as _ from 'lodash';
 import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-lead-register',
@@ -64,6 +65,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     private officeService: OfficeService,
     private modalService: BsModalService,
     private toastr: ToastrService,
+    private messageService: MessageService,
     private router: Router,
     private fb: FormBuilder) { }
 
@@ -243,7 +245,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   processLeadsAssignment(leadOwner: number, leadsForAssignment: Lead[]) {
     this.leadService.assignLeads(leadOwner, leadsForAssignment).subscribe(result => {
       if (result) {
-        this.toastr.success('Lead(s) successfully assigned!');
+        this.messageService.add({ severity: 'success', summary: 'Lead(s) successfully assigned!', closable: false});
         this.areLeadsAssignable = false;
         this.selectedLeadsForAssignment = [];
         this.replaceLeadsWithNewOwners(result);
@@ -280,7 +282,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     if (this.newLeadOwnerId) {
       this.leadService.assignLeads(this.newLeadOwnerId, this.selectedLeadsForAssignment).subscribe(result => {
         if (result) {
-          this.toastr.success('Lead(s) successfully assigned!');
+          this.messageService.add({ severity: 'success', summary: 'Lead(s) successfully assigned!', closable: false});
           this.areLeadsAssignable = false;
           this.selectedLeadsForAssignment = [];
           this.replaceLeadsWithNewOwners(result);

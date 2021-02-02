@@ -11,13 +11,13 @@
     <h2><ng-container *ngIf="propertyDetails else newProperty ">Edit</ng-container> Property <ng-template #newProperty>Add</ng-template></h2>
     <form *ngIf="propertyDetails || isNewProperty" [formGroup]="propertyForm" (ngSubmit)="saveProperty()" (keydown.enter)="$event.preventDefault()" autocompleteOff>
       <app-address [propertyDetails]="propertyDetails" [addressError]="formErrors.address" [isNewProperty]="isNewProperty" [isCheckingDuplicateProperties]="true" (addressDetails)="getAddress($event)" (checkDuplicateProperties)="setCheckDuplicatesFlag($event)" [searchedAddress]="searchedAddress"></app-address>
-      
+
       <input type="hidden" id="address" class="form-control" formControlName="address">
-      
+
       <app-property-duplicate-checker [propertyAddress]="propertyAddress" [propertyId]="propertyDetails?.propertyId" [checkDuplicates]="checkPossibleDuplicates" (selectedProperty)="getSelectedProperty($event)" (fullMatchFound)="checkPropertyMatches($event)"></app-property-duplicate-checker>
-      
+
       <app-office-finder class="d-block form-group" [officeId]="officeId" [isRequired]="isOfficeIdRequired" (selectedOfficeId)="getSelectedOfficeId($event)"></app-office-finder>
-      
+
       <fieldset>
         <label for="propertyTypeId" class="small">Property Type</label>
         <span class="select">
@@ -92,6 +92,10 @@
     <app-additional-info [id]="propertyDetails?.propertyId ? 'PR-'+propertyDetails?.propertyId : ''"></app-additional-info>
   </div>
 </div>
+
+<!--Success Messages -->
+<p-toast></p-toast>
+
 
 <!-- <app-breadcrumb></app-breadcrumb>
 <div class="container main">
@@ -173,7 +177,7 @@
         <span class="invalid-feedback">{{formErrors?.subAreaId}}</span>
       </div>
     </div>
-    
+
     <app-signer label="Last known owner" [createdSigner]="createdSigner" [existingSigner]="lastKnownOwner"
       [existingPerson]="lastKnownPerson" (selectedSigner)="getSelectedOwner($event)"
       (newSigner)="createNewSigner($event)">

@@ -2,7 +2,7 @@
   <svg aria-hidden="true" width="7.8" height="15.6" viewBox="0 0 7.8 15.6" class="icon icon--timeline"><polygon class="fill" points="7.8 0 0 7.8 7.8 15.6 "/><polygon class="outline" points="7.8 14.1 1.4 7.8 7.8 1.4 7.8 0 0 7.8 7.8 15.6 "/></svg>
   <div class="card">
     <div class="card__header">
-      Add Note  
+      Add Note
     </div>
     <div class="card__body">
       <form [formGroup]="noteForm" (ngSubmit)="action(true)">
@@ -41,6 +41,9 @@
       </form>
     </div>
   </div>
+
+<!--Success Messages -->
+<p-toast></p-toast>
 
 
 <!-- <form [formGroup]="noteForm" (ngSubmit)="action(true)" class="text-left">
