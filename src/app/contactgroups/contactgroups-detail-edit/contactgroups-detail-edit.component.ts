@@ -18,6 +18,7 @@ import { AddressService, AddressAutoCompleteData } from 'src/app/core/services/a
 import { InfoService, InfoDetail, DropdownListInfo } from 'src/app/core/services/info.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { SubSink } from 'subsink';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-contactgroups-detail-edit',
@@ -110,6 +111,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
   public keepOriginalOrder = (a) => a.key;
   constructor(public sharedService: SharedService,
     private toastr: ToastrService,
+    private messageService: MessageService,
     private addressService: AddressService,
     private infoService: InfoService,
     private storage: StorageMap,
@@ -585,7 +587,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
     this.isSubmitting = false;
     this.isSubmittingAndAdd = false;
     this.errorMessage = null;
-    this.toastr.success('Person successfully saved');
+    this.messageService.add({ severity: 'success', summary: 'Person successfully saved', closable: false});
     if (this.isEditingSelectedPerson && AppUtils.holdingSelectedPeople) {
       const holdingPeople = AppUtils.holdingSelectedPeople;
       holdingPeople.forEach((x, index) => {
@@ -614,7 +616,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
   addNewPerson(id: number) {
     this.addedPersonId.emit(id);
   }
-  
+
   makeCanvasInvisible(close: boolean) {
     this.hideCanvas.emit(close);
   }

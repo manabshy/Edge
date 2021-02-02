@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { FormErrors, ValidationMessages } from 'src/app/core/shared/app-constants';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { WedgeValidators } from '../wedge-validators';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-note-form',
@@ -41,6 +42,7 @@ export class NoteFormComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
     private contactGroupService: ContactGroupsService,
+    private messageService: MessageService,
     private toastr: ToastrService) { }
 
   ngOnInit() {
@@ -189,7 +191,8 @@ export class NoteFormComponent implements OnInit {
   private onSaveComplete(data: any) {
     this.formReset();
     this.contactGroupService.notesChanged(data);
-    this.toastr.success('Note successfully added');
+    // this.toastr.success('Note successfully added');
+    this.messageService.add({ severity: 'success', summary: 'Note successfully added', closable: false});
     this.noteSaved.emit(true);
   }
 
