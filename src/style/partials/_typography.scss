@@ -25,7 +25,7 @@ body, form, input, textarea, select, label,
 .select select, .select optgroup option,
 .select optgroup option, .checkbox > span label,
 .radio > span label, form .message, .btn,
-.p-accordion, .p-toast                          { font-family:'opensans', Sans-Serif; }
+.p-accordion, .p-toast, .p-component            { font-family:'opensans', Sans-Serif; }
 
 html                                            { scroll-behavior:smooth; }
 body, .body                                     { font-size:12px; line-height:17px; letter-spacing:.5px; background-color:$color--snow; font-weight:normal; color:$color--midnight-70; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
