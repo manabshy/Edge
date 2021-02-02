@@ -2,7 +2,7 @@
   <fieldset  [ngClass]="{'invalid': isRequired}">
     <label for="office">Office</label>
     <p-dropdown [options]="offices$ |async" formControlName="officeId" optionLabel="name" [showClear]="true"
-      placeholder="Select Office" [filter]="true" filterBy="name" (onChange)="onOfficeChange($event)"
+      placeholder="Select Office" [filter]="true" filterBy="name" [readonly]="readOnly" (onChange)="onOfficeChange($event)"
       [ngClass]="{'no-style': readOnly}" data-cy="office">
       <!-- <ng-template let-office pTemplate="item">
         <div class="office-item">
