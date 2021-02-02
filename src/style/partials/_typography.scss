@@ -24,7 +24,8 @@ $input-height-sm:30px;
 body, form, input, textarea, select, label,
 .select select, .select optgroup option,
 .select optgroup option, .checkbox > span label,
-.radio > span label, form .message, .btn        { font-family:'opensans', Sans-Serif; }
+.radio > span label, form .message, .btn,
+.p-accordion, .p-toast                          { font-family:'opensans', Sans-Serif; }
 
 html                                            { scroll-behavior:smooth; }
 body, .body                                     { font-size:12px; line-height:17px; letter-spacing:.5px; background-color:$color--snow; font-weight:normal; color:$color--midnight-70; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
@@ -73,8 +74,6 @@ small+*                                         { margin-top:16px; }
 .block+*                                        { margin-top:16px; }
 
 /***** Details - Accordion Magic..! *****/
-.p-accordion                                    { font-family:'opensans', Sans-Serif; }
-
 details                                         { display:block; width:100%; box-shadow:inset 0 1px 0px 0px $color--midnight-10; -webkit-box-shadow:inset 0 1px 0px 0px $color--midnight-10;
     &[open]                                     { padding-bottom:10px;
         .summary__body                          { display:block; }

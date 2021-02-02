@@ -40,6 +40,19 @@
     }
 }
 
+p-toast                                         {
+    .p-toast                                    { width:calc(100% - 40px); opacity:1;
+        .p-toast-message                        { color:$color--snow;
+            &.p-toast-message-success           { background-color:$color--positive-10; border-color:$color--positive; color:$color--midnight;
+                .p-toast-message-icon,
+                .p-toast-icon-close             { color:$color--midnight; }
+            }
+        }
+        &.p-component                           { font-size:12px; line-height:17px; letter-spacing:.5px; }
+        .p-toast-detail:empty                   { display:none; }
+    }
+}
+
 
 /***********************************************
 This applies from 992px onwards
@@ -64,5 +77,9 @@ This applies from 992px onwards
         .p-dialog                               { width:500px;
             .p-dialog-content                   { flex-grow:0; }
         }
+    }
+
+    p-toast                                     {
+        .p-toast                                { width:300px; }
     }
 }
