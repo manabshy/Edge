@@ -35,7 +35,7 @@ label, .label, input, textarea, .select,
 }
 
 *+h3                                            { margin-top:30px; }
-input, textarea, select                        	{ border-color:$color--midnight-20; }
+input, textarea, select, .p-dropdown           	{ border-color:$color--midnight-20; }
 
 /*********************************************** 
 Forms with labels
@@ -50,7 +50,9 @@ form                                            { padding:0; display:inline-bloc
          &:before     	                        { background-color:$color--negative; border-color:$color--negative; }
       }
 
-      input, textarea, select, textarea         { border-color:$color--negative; }
+      input, textarea, select, textarea, 
+      .p-dropdown, 
+      .p-dropdown:not(.p-disabled):hover        { border-color:$color--negative; }
       .joined .btn                              { box-shadow: inset 0px 0px 0px 1px $color--negative; }
    }
    
@@ -118,7 +120,7 @@ label + p, .label + p                          	{ margin:0 0 6px; }
 }
 
 /***** Inputs *****/
-input, textarea, select                        	{ padding:0.4em 0.8em; display:block; border-radius:0; width:100%; min-height:30px; font-size:inherit; color:$color--midnight-70; border-width:1px; border-radius:3px; border-style:solid; overflow:hidden; position:relative; top:0; left:0; outline:0 none; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; -webkit-appearance:none; transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -moz-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -webkit-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -o-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; }
+input, textarea, select, .p-inputtext          	{ padding:0.4em 0.8em; display:block; border-radius:0; width:100%; min-height:30px; font-size:inherit; color:$color--midnight-70; border-width:1px; border-radius:3px; border-style:solid; overflow:hidden; position:relative; top:0; left:0; outline:0 none; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; -webkit-appearance:none; transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -moz-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -webkit-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -o-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; }
 textarea                                       	{ resize:none; min-height:100px; overflow-y:auto; }
 input[type="search"]                           	{ -webkit-padding-start:0; padding-inline-start:0.8em; }
 
@@ -133,6 +135,21 @@ label+.select                                   { margin-top:6px; }
 .select optgroup                                { padding:0; color:$color--midnight-70; background-color:$color--snow; }
 .select optgroup[label]                         { padding-top:10px; background-color:$color--snow; font-weight:normal; font-style:normal; }
 .select optgroup:first-child                    { margin:10px 0 0 0; border-top:1px solid $color--smoke; }
+
+/***** Prime NG select *****/
+.p-inputtext                                    { font-size:12px; }
+.p-dropdown                                     { width:100%;
+   .p-dropdown-trigger                          { width:28px; color:#BBB; }
+   .p-dropdown-clear-icon                       { margin-top:-0.3rem; }
+}
+.p-dropdown-filter-container                    {
+   .p-dropdown-filter-icon                      { margin-top:-0.3rem; }
+}
+.pi                                             { font-size:10px; }
+.p-component                                    { font-size:inherit; }
+.p-inputtext:enabled:focus,
+.p-dropdown:not(.p-disabled).p-focus            { box-shadow:none; }
+.p-dropdown:not(.p-disabled):hover              { border-color:$color--midnight-20; }
 
 /*********************************************** 
 Radio & Checkbox
