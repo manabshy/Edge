@@ -31,7 +31,11 @@
         .p-dialog-content                       { min-height:inherit; border-radius:3px; }
     }
 
-    .footer--modal                              { margin:0; padding:10px 16px 0 16px; width:100%; display:flex; flex-direction:column; align-items:flex-end; position:absolute; left:0; bottom:10px; box-shadow:none; }
+    .footer--modal                              { margin:0; padding:10px 16px 0 16px; width:100%; display:flex; flex-direction:column; align-items:flex-end; position:absolute; left:0; bottom:10px; box-shadow:none;
+        .btn--container                         { width:100%; display:flex; justify-content:flex-end;
+            .btn--alignRight                    { margin-right:auto; }
+        }
+    }
 }
 
 .modal--hasFooter                               {
