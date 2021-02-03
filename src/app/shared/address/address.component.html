@@ -86,18 +86,21 @@
     </fieldset>
 
     <ng-container *ngIf="propertyDetails || isNewProperty">
-      <fieldset>
-        <label for="postcode">Flat Number</label>
-        <input type="text" formControlName="flatNumber" id="flatNumber" />
-      </fieldset>
-      <fieldset>
-        <label for="postcode">House Number</label>
-        <input type="text" formControlName="houseNumber" id="houseNumber" />
-      </fieldset>
-      <fieldset>
-        <label for="postcode">Building Name</label>
-        <input type="text" formControlName="houseBuildingName" id="houseBuildingName" />
-      </fieldset>
+      <div class="inline-parent">
+        <fieldset class="inline-child">
+          <label for="postcode">Flat Number</label>
+          <input type="text" formControlName="flatNumber" id="flatNumber" />
+        </fieldset>
+        <fieldset class="inline-child">
+          <label for="postcode">House Number</label>
+          <input type="text" formControlName="houseNumber" id="houseNumber" />
+        </fieldset>
+        <fieldset class="inline-child inline-child--grid-6">
+          <label for="postcode">Building Name</label>
+          <input type="text" formControlName="houseBuildingName" id="houseBuildingName" />
+        </fieldset>
+      </div>
+      
       <fieldset>
         <label for="postcode">Street</label>
         <input type="text" formControlName="streetName" id="streetName" />
