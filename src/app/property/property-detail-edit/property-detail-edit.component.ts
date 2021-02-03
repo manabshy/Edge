@@ -65,6 +65,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
   isOfficeIdRequired = false;
   checkPossibleDuplicates = false;
   dialogRef: DynamicDialogRef;
+  isLastknownOwnerVisible = false;
 
   constructor(private route: ActivatedRoute,
     private _router: Router,
@@ -213,7 +214,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
 
   getSelectedOfficeId(id: number) {
     this.propertyForm.get('officeId').setValue(id);
-    console.log({id});
+    console.log({ id });
 
     id ? this.isOfficeIdRequired = false : this.isOfficeIdRequired = true;
   }
@@ -244,6 +245,18 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
   getSelectedOwner(owner: Signer) {
     this.lastKnownOwner = owner;
     this.propertyForm.markAsDirty();
+    if (!this.propertyDetails) {
+      this.propertyDetails = {} as Property;
+      this.propertyDetails.lastKnownOwner = owner;
+    } else {
+      this.propertyDetails.lastKnownOwner = owner;
+    }
+    this.isLastknownOwnerVisible = false;
+  }
+
+  createNewLastKnownOwner() {
+    this.isLastknownOwnerVisible = false;
+    this.propertyForm.markAsPristine();
   }
 
   setCheckDuplicatesFlag(value: boolean) {
