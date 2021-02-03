@@ -872,7 +872,7 @@
 <app-property-detail-map [propertyMap]="property?.map" [showMap]="showMap" (mapClosed)="showMap=false"></app-property-detail-map>
 
 <!-- Contactgroup Finder Modal -->
-<p-dialog header="Last known owner" [(visible)]="isLastknownOwnerVisible" [modal]="true" [draggable]="false" class="modal--medium">
+<p-dialog header="Last known owner" [(visible)]="isLastknownOwnerVisible" [modal]="true" [draggable]="false" class="modal--medium modal--hasFooter">
   <app-contactgroup-finder (selectedContactGroup)="getSelectedOwner($event)" (isCreatingNewGroup)="createNewLastKnownOwner()" ></app-contactgroup-finder>
 </p-dialog>
 

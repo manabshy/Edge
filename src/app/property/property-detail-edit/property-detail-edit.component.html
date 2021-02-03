@@ -122,7 +122,7 @@
 </p-dialog>
 
 <!-- Contactgroup Finder Modal -->
-<p-dialog header="Last known owner" [(visible)]="isLastknownOwnerVisible" [modal]="true" [draggable]="false" class="modal--medium">
+<p-dialog header="Last known owner" [(visible)]="isLastknownOwnerVisible" [modal]="true" [draggable]="false" class="modal--medium modal--hasFooter">
   <app-contactgroup-finder (selectedContactGroup)="getSelectedOwner($event)" (isCreatingNewGroup)="createNewLastKnownOwner()" ></app-contactgroup-finder>
 </p-dialog>
 

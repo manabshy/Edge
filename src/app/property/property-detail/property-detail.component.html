@@ -1,7 +1,6 @@
 <div class="row">
   <div class="row__item row__item--aside">
-    <app-property-card [propertyDetails]="propertyDetails" (showPhotos)="showPhotosModal()" (showMap)="showMapModal()"
-      ></app-property-card>
+    <app-property-card [propertyDetails]="propertyDetails" (showPhotos)="showPhotosModal()" (showMap)="showMapModal()"></app-property-card>
     <!-- <div class="card" *ngIf="propertyDetails">
       <div class="card__headerImg">
         <div class="alignTopRight">
@@ -132,10 +131,8 @@
         </ol>
       </div>
     </div> -->
-    <app-sidenav-item [sideNavItems]="sideNavItems" [summaryTotals]="summaryTotals" [scrollToItem]="mainRowItem"
-      (selectedItem)="getSelectedItem($event)"></app-sidenav-item>
-    <app-additional-info [id]="propertyDetails?.propertyId ? 'PR-'+propertyDetails?.propertyId : ''" class="block">
-    </app-additional-info>
+    <app-sidenav-item [sideNavItems]="sideNavItems" [summaryTotals]="summaryTotals" [scrollToItem]="mainRowItem" (selectedItem)="getSelectedItem($event)"></app-sidenav-item>
+    <app-additional-info [id]="propertyDetails?.propertyId ? 'PR-'+propertyDetails?.propertyId : ''" class="block"></app-additional-info>
   </div>
 
   <div #mainRowItem class="row__item">
@@ -173,7 +170,6 @@
         </div>
       </div>
     </div> -->
-
     <!-- <div class="card card--property" *ngIf="propertyDetails">
       <div class="card__photo" *ngIf="propertyDetails?.photo?.azureResourceURL; else noPhoto"
         style="background-image:url('https://dandglive.blob.core.windows.net/document-storage/p-29598%5Cphotos%5Csmallphotos%5Cphoto_29598_11.jpg?sv=2019-02-02&sr=b&si=EdgePhotos&sig=jwU3GHMr0t11F%2Fyf%2FzpAfbH5ZAdVGVg8QXI0ZwHndvg%3D');">
@@ -239,17 +235,10 @@
       </app-additional-info>
     </p> -->
     <ng-container [ngSwitch]="moreInfo">
-      <app-contactgroups-detail-instructions *ngSwitchCase="'instructions'" [moreInfo]="moreInfo"
-        [propertyId]="propertyDetails?.propertyId" [closedCounter]="summaryTotals?.instructions?.inactive">
-      </app-contactgroups-detail-instructions>
-      <app-shared-valuation-list *ngSwitchCase="'valuations'" [moreInfo]="moreInfo"
-        [closedCounter]="summaryTotals?.valuations?.inactive" [propertyId]="propertyDetails?.propertyId">
-      </app-shared-valuation-list>
-      <app-contactgroups-detail-offers *ngSwitchCase="'offers'" [moreInfo]="moreInfo"
-        [propertyId]="propertyDetails?.propertyId" [closedCounter]="summaryTotals?.offers?.inactive">
-      </app-contactgroups-detail-offers>
-      <app-notes *ngSwitchCase="'notes'" [propertyNotes]="propertyNotes" [pageNumber]="page"
-        [bottomReached]="bottomReached"></app-notes>
+      <app-contactgroups-detail-instructions *ngSwitchCase="'instructions'" [moreInfo]="moreInfo" [propertyId]="propertyDetails?.propertyId" [closedCounter]="summaryTotals?.instructions?.inactive"></app-contactgroups-detail-instructions>
+      <app-shared-valuation-list *ngSwitchCase="'valuations'" [moreInfo]="moreInfo" [closedCounter]="summaryTotals?.valuations?.inactive" [propertyId]="propertyDetails?.propertyId"></app-shared-valuation-list>
+      <app-contactgroups-detail-offers *ngSwitchCase="'offers'" [moreInfo]="moreInfo" [propertyId]="propertyDetails?.propertyId" [closedCounter]="summaryTotals?.offers?.inactive"></app-contactgroups-detail-offers>
+      <app-notes *ngSwitchCase="'notes'" [propertyNotes]="propertyNotes" [pageNumber]="page" [bottomReached]="bottomReached"></app-notes>
     </ng-container>
 
     <!-- <div class="list-group">
@@ -310,12 +299,10 @@
   </div>
 </div>
 <!-- Property Photos Modal -->
-<app-property-detail-photos [propertyId]="propertyDetails?.propertyId" [showPhotos]="showPhotos"
-  (photosClosed)="hidePhotosModal()"></app-property-detail-photos>
+<app-property-detail-photos [propertyId]="propertyDetails?.propertyId" [showPhotos]="showPhotos" (photosClosed)="hidePhotosModal()"></app-property-detail-photos>
 
 <!-- Property Map Modal -->
-<app-property-detail-map [propertyMap]="propertyDetails?.map" [showMap]="showMap" (mapClosed)="showMap=false">
-</app-property-detail-map>
+<app-property-detail-map [propertyMap]="propertyDetails?.map" [showMap]="showMap" (mapClosed)="showMap=false"></app-property-detail-map>
 
 <!-- <app-breadcrumb></app-breadcrumb> -->
 <!-- <div class="container main">

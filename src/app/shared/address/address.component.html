@@ -130,7 +130,7 @@
 </form>
 
 <!-- Address Lookup Modal -->
-<p-dialog header="Address Lookup" [(visible)]="foundAddress" [modal]="true" [draggable]="false">
+<p-dialog header="Address Lookup" [(visible)]="foundAddress" [modal]="true" [draggable]="false" class="modal--small modal--hasFooter">
   <fieldset>
     <!-- <div class="row">
       <div class="grid grid--25">
@@ -171,10 +171,7 @@
         </div>
       </div>
     </div> -->
-    <div>
-      <a href (click)="$event.preventDefault()" *ngIf="backToAddressesList" (click)="findAddress(searchTermBK, '')"><i
-          class="fas fa-arrow-left mr-2"></i> Back</a>
-    </div>
+    
     <div class="table">
       <table class="table--mobile table--rowHover">
         <tbody>
@@ -193,22 +190,21 @@
                 {{address?.Text}}, {{address?.Description}}
               </span>
             </td>
-            <td class="hide--mobile">
+            <td class="hide--mobile txt--right">
               <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s">
                 <path d="M1 35.4h48.8L37.5 47.8l4.9 4.9L63 32 42.3 11.3l-4.9 4.9 12.3 12.3H1V35.4z"></path>
               </svg>
             </td>
           </tr>
         </tbody>
-      </table>
-      <div (click)="enterAddress($event)">
-        <a href (click)="$event.preventDefault()"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
-            class="icon icon--s icon--onLeft">
-            <path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" />
-            <path class="plus-vertical"
-              d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" />
-          </svg> Enter Manually</a>
-      </div>
+      </table>    
     </div>
   </fieldset>
+  
+  <footer class="footer footer--modal">
+    <span class="btn--container">
+      <a href (click)="$event.preventDefault()" class="btn btn--alignRight btn--ghost" *ngIf="backToAddressesList" (click)="findAddress(searchTermBK, '')"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M63 28.6H14.2l12.3-12.3 -4.9-4.9L1 32l20.7 20.7 4.9-4.9L14.2 35.4H63V28.6z"></path></svg>Back</a>
+      <span (click)="enterAddress($event)"><a href (click)="$event.preventDefault()" class="btn btn--ghost"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" /><path class="plus-vertical" d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" /></svg> Enter Manually</a></span>
+    </span>
+  </footer>
 </p-dialog>
