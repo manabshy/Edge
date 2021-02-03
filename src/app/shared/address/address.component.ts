@@ -21,6 +21,7 @@ export class AddressComponent implements OnInit, OnChanges {
   @Input() personDetails: Person;
   @Input() propertyDetails: Property;
   @Input() isNewProperty: boolean;
+  @Input() isRequired = false;
   @Input() isCheckingDuplicateProperties = false;
   @Input() companyDetails: Company;
   @Input() companyAddress: Address;
@@ -69,7 +70,7 @@ export class AddressComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    this.init();
+    // this.init(); TODO: Check asap
   }
 
   init() {
@@ -264,19 +265,19 @@ export class AddressComponent implements OnInit, OnChanges {
 
       } else {
         address = {
-          addressLine2: addressData.addressLine2,
-          flatNumber: addressData.flatNumber,
-          houseNumber: addressData.houseNumber,
-          houseBuildingName: addressData.houseBuildingName,
-          streetName: addressData.streetName,
-          town: addressData.town,
-          postCode: addressData.postCode
+          addressLine2: addressData?.addressLine2,
+          flatNumber: addressData?.flatNumber,
+          houseNumber: addressData?.houseNumber,
+          houseBuildingName: addressData?.houseBuildingName,
+          streetName: addressData?.streetName,
+          town: addressData?.town,
+          postCode: addressData?.postCode
         };
       }
+      this.addressDetails.emit(address);
+      console.log({ address }, 'addresss new list');
     }
-    console.log({ address }, 'addresss');
 
-    this.addressDetails.emit(address);
   }
 
   sendAddress() {
@@ -333,13 +334,13 @@ export class AddressComponent implements OnInit, OnChanges {
   private patchPropertyAddress(property: Property) {
     this.propertyDetails = property;
     this.addressForm.patchValue({
-      addressLine2: property.address.addressLine2,
-      flatNumber: property.address.flatNumber,
-      houseNumber: property.address.houseNumber,
-      houseBuildingName: property.address.houseBuildingName,
-      streetName: property.address.streetName,
-      town: property.address.town,
-      postCode: property.address.postCode.trim(),
+      addressLine2: property.address?.addressLine2,
+      flatNumber: property.address?.flatNumber,
+      houseNumber: property.address?.houseNumber,
+      houseBuildingName: property.address?.houseBuildingName,
+      streetName: property.address?.streetName,
+      town: property.address?.town,
+      postCode: property.address?.postCode?.trim(),
       countryId: this.defaultCountryCode
     });
   }

@@ -8,7 +8,7 @@
     </span>
   </fieldset>
 
-  <fieldset>
+  <fieldset [ngClass]="{'invalid':isRequired}">
     <label for="property">Find Address (Postcode)</label>
     <span class="joined">
       <input type="search" id="fullAddress" class="form-control" placeholder=""
@@ -18,7 +18,7 @@
         <button type="button" id="searchAddress" class="btn btn--info" (click)="searchAddress()">Search</button>
       </div>
     </span>
-    <p class="message message--negative">{{addressError}}</p>
+    <p class="message message--negative">Address is required</p>
     <p class="message message--info" *ngIf="personDetails && !addressLines.value && !enterAddressManually"><svg
         aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
         <path

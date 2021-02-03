@@ -5,9 +5,9 @@
       </ng-template>
     </h2>
     <form *ngIf="propertyDetails || isNewProperty" [formGroup]="propertyForm" (ngSubmit)="saveProperty()" (keydown.enter)="$event.preventDefault()" autocompleteOff>
-      <app-address [propertyDetails]="propertyDetails" [addressError]="formErrors.address" [isNewProperty]="isNewProperty" [isCheckingDuplicateProperties]="true" (addressDetails)="getAddress($event)" (checkDuplicateProperties)="setCheckDuplicatesFlag($event)" [searchedAddress]="searchedAddress"></app-address>
+      <app-address [propertyDetails]="propertyDetails" [addressError]="formErrors.address" [isRequired]="isAddressRequired" [isNewProperty]="isNewProperty" [isCheckingDuplicateProperties]="true" (addressDetails)="getAddress($event)" (checkDuplicateProperties)="setCheckDuplicatesFlag($event)" [searchedAddress]="searchedAddress"></app-address>
       <input type="hidden" id="address" class="form-control" formControlName="address">
-      
+
       <legend class="legend">Office</legend>
       <app-office-finder class="d-block form-group" [officeId]="officeId" [isRequired]="isOfficeIdRequired" (selectedOfficeId)="getSelectedOfficeId($event)"></app-office-finder>
 
@@ -85,11 +85,11 @@
           <p><a [routerLink]="['/contact-centre/detail/0/people/', propertyDetails?.lastKnownOwner?.contactGroupId]">{{propertyDetails?.lastKnownOwner?.contactNames}}</a></p>
           <p><button (click)="isLastknownOwnerVisible=true" type="button" class="btn btn--info"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><polygon points="42.7 6.7 57.3 21.3 64 14.5 49.7 0 "></polygon><path d="M40.3 9.6l-38 38L0 64l16.9-2 38-37.9L40.3 9.6zM4 59.9l1.9-11.7 9.8 9.8L4 59.9z"></path></svg>Change owner</button></p>
         </ng-container>
-        
+
         <ng-template #newOwner>
           <p><button (click)="isLastknownOwnerVisible=true" type="button" class="btn btn--positive"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" /><path class="plus-vertical" d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" /></svg>Last known owner</button></p>
         </ng-template>
-      
+
         <!-- <app-signer label="Last known owner" [createdSigner]="createdSigner" [existingSigner]="lastKnownOwner"
           [existingPerson]="lastKnownPerson" (selectedSigner)="getSelectedOwner($event)"
           (newSigner)="createNewSigner($event)"></app-signer> -->

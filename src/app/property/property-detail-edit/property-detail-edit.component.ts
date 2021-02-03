@@ -66,6 +66,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
   checkPossibleDuplicates = false;
   dialogRef: DynamicDialogRef;
   isLastknownOwnerVisible = false;
+  isAddressRequired = false;
 
   constructor(private route: ActivatedRoute,
     private _router: Router,
@@ -233,11 +234,13 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
           this.officeId = result.officeId;
           this.propertyLocation = result;
           this.propertyForm.get('officeId').setValue(result.officeId);
+          this.isOfficeIdRequired = false;
           console.log('officeId from db', this.officeId);
         }
       });
     if (this.propertyAddress) {
-      this.propertyForm.patchValue({ address: this.propertyAddress });
+      // this.propertyForm.patchValue({ address: this.propertyAddress });
+      this.isAddressRequired = false;
       this.propertyForm.markAsDirty();
     }
   }
@@ -315,6 +318,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
     console.log(this.lastKnownOwner);
     const control = this.propertyForm.get('address');
     this.setOfficeIdValidator();
+    this.setAddressValidator();
     this.logValidationErrors(this.propertyForm, true, true);
     control.clearValidators();
     control.updateValueAndValidity();
@@ -384,6 +388,14 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
     }
   }
 
+  setAddressValidator() {
+    const addressControl = this.propertyForm.get('address');
+    if (!addressControl.value) {
+      this.isAddressRequired = true;
+      addressControl.setValidators(Validators.required);
+      addressControl.updateValueAndValidity();
+    }
+  }
   setOfficeIdValidator() {
     const officeIdControl = this.propertyForm.get('officeId');
     if (!officeIdControl.value) {
