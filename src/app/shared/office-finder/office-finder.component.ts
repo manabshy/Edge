@@ -16,8 +16,11 @@ export class OfficeFinderComponent implements OnInit, OnChanges {
   @Input() officeId: number;
   @Input() fullWidth: boolean;
   @Input() readOnly: boolean;
+  @Input() isMultiSelect = false;
   @Input() isRequired = false;
   @Output() selectedOfficeId = new EventEmitter<number>();
+  @Output() selectedOfficeIdList = new EventEmitter<number[]>();
+
   offices$ = new Observable<Office[]>();
   officeFinderForm: FormGroup;
   isInvisible: boolean;
@@ -27,7 +30,8 @@ export class OfficeFinderComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.officeFinderForm = new FormGroup({
-      officeId: new FormControl()
+      officeId: new FormControl(),
+      officeIds: new FormControl(),
     });
     this.populateForm();
     this.getOffices();
@@ -62,11 +66,19 @@ export class OfficeFinderComponent implements OnInit, OnChanges {
     });
   }
 
+  onOfficeIdsSelected(event: any) {
+    if (event?.value?.length) {
+      this.selectedOfficeId.emit(event?.value);
+    } else {
+      this.selectedOfficeId.emit(0);
+    }
+    // this.officeFinderForm.patchValue({ officeId: this.officeId });
+  }
   onOfficeChange(event: any) {
     if (event?.value) {
       this.officeId = event?.value;
       this.selectedOfficeId.emit(this.officeId);
-      console.log({event});
+      console.log({ event });
 
     } else {
       this.officeId = 0;

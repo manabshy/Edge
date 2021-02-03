@@ -81,9 +81,10 @@ import { GalleriaModule } from 'primeng/galleria';
 import { DialogModule } from 'primeng/dialog';
 import { AccordionModule } from 'primeng/accordion';
 import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
-import {ToastModule} from 'primeng/toast';
+import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import {DropdownModule} from 'primeng/dropdown';
+import { DropdownModule } from 'primeng/dropdown';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 
 
@@ -180,7 +181,8 @@ const externalModules = [
   AccordionModule,
   DynamicDialogModule,
   ToastModule,
-  DropdownModule
+  DropdownModule,
+  MultiSelectModule
 ];
 
 @NgModule({
@@ -188,52 +190,6 @@ const externalModules = [
     components,
     pipes,
     directives,
-
-
-
-    // RoundingPipe,
-    // TruncatingPipe,
-    // ShortenNamePipe,
-    // BreadcrumbComponent,
-    // ConfirmModalComponent,
-    // PropertyFinderComponent,
-    // FormatAddressPipe,
-    // ScoreBadgeComponent,
-    // ErrorModalComponent,
-    // AddressComponent,
-    // SignerComponent,
-    // AutocompleteOffDirective,
-    // HighlightPipe,
-    // NoteModalComponent,
-    // NotesComponent, TelephoneComponent,
-    // TelephoneModalComponent,
-    // SubnavItemComponent,
-    // SubnavComponent,
-    // SmsModalComponent,
-    // BracketsNewLinePipe,
-    // PersonDetailsComponent,
-    // CompanyInfoComponent,
-    // NoteFormComponent,
-    // ContactgroupsDetailHomeHelperComponent,
-    // ContactgroupsDetailInstructionsComponent,
-    // ContactgroupsDetailOffersComponent,
-    // ContactgroupsDetailLeadsComponent,
-    // ContactgroupsDetaillettingsManagementsComponent,
-    // ContactgroupsDetailValuationsComponent,
-    // ContactgroupsDetailTenanciesComponent,
-    // ContactgroupsDetailSearchesComponent,
-    // SharedPropertyListComponent,
-    // SharedLeadRegisterComponent,
-    // LeadAssignmentModalComponent,
-    // StaffmemberFinderComponent,
-    // AdditionalInfoComponent,
-    // SharedValuationListComponent,
-    // OfficeFinderComponent,
-    // StaffMemberFinderComponent,
-    // NoDoubleTapDirective,
-    // SharedContactgroupListComponent,
-    // ToPascalCasePipe,
-    // SidenavItemComponent
   ],
   imports: [
     CommonModule,
@@ -241,32 +197,6 @@ const externalModules = [
     RouterModule,
     FormsModule,
     externalModules,
-    // to be refactored
-    // InfiniteScrollModule,
-    // CollapseModule,
-    // TabsModule,
-    // TypeaheadModule,
-    // BsDropdownModule,
-    // BsDatepickerModule,
-    // ModalModule,
-    // PopoverModule,
-    // NgPipesModule,
-    // TooltipModule,
-    // AccordionModule,
-    // ButtonsModule,
-    // ReactiveFormsModule,
-    // FormsModule,
-    // OrderModule,
-    // ToastrModule,
-    // ToastContainerModule,
-    // AgmCoreModule,
-    // CarouselModule,
-    // NgbModule,
-    // LoadingBarHttpClientModule,
-    // AngularStickyThingsModule,
-    // NgSelectModule,
-    // GalleriaModule,
-    // DialogModule
   ],
   exports: [
     CommonModule,
@@ -277,51 +207,8 @@ const externalModules = [
     pipes,
     directives,
     externalModules
-    // RoundingPipe,
-    // TruncatingPipe,
-    // ShortenNamePipe,
-    // FormatAddressPipe,
-    // HighlightPipe,
-    // BracketsNewLinePipe,
-    // AutocompleteOffDirective,
-    // BreadcrumbComponent,
-    // NoteModalComponent,
-    // NotesComponent,
-    // SmsModalComponent,
-    // ConfirmModalComponent,
-    // ErrorModalComponent,
-    // PropertyFinderComponent,
-    // ScoreBadgeComponent,
-    // AddressComponent,
-    // SignerComponent,
-    // TelephoneComponent,
-    // TelephoneModalComponent,
-    // SubnavComponent,
-    // SubnavItemComponent,
-    // PersonDetailsComponent,
-    // CompanyInfoComponent,
-    // NoteFormComponent,
-    // ContactgroupsDetailHomeHelperComponent,
-    // ContactgroupsDetailInstructionsComponent,
-    // ContactgroupsDetailOffersComponent,
-    // ContactgroupsDetailLeadsComponent,
-    // ContactgroupsDetaillettingsManagementsComponent,
-    // ContactgroupsDetailValuationsComponent,
-    // ContactgroupsDetailTenanciesComponent,
-    // ContactgroupsDetailSearchesComponent,
-    // SharedPropertyListComponent,
-    // StaffmemberFinderComponent,
-    // AdditionalInfoComponent,
-    // SharedValuationListComponent,
-    // OfficeFinderComponent,
-    // StaffMemberFinderComponent,
-    // SharedContactgroupListComponent,
-    // SidenavItemComponent,
-    // ToPascalCasePipe,
-    // SharedLeadRegisterComponent,
-    // NoDoubleTapDirective,
   ],
-  providers: [ConfirmationService, DialogService,MessageService],
+  providers: [ConfirmationService, DialogService, MessageService],
 
   entryComponents: [
     ConfirmModalComponent,
@@ -329,7 +216,6 @@ const externalModules = [
     NoteModalComponent,
     TelephoneModalComponent,
     SmsModalComponent,
-    // LeadAssignmentModalComponent // To be moved. Decide ASAP
   ]
 })
 export class SharedModule { }
