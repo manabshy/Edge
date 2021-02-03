@@ -126,7 +126,9 @@ export class AddressComponent implements OnInit, OnChanges {
 
   searchAddress() {
     const addressSearchTerm = this.addressForm.get('fullAddress').value;
-    this.findAddress(addressSearchTerm, '');
+    if (addressSearchTerm) {
+      this.findAddress(addressSearchTerm, '');
+    }
   }
 
   enterAddress(event) {
