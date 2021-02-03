@@ -10,6 +10,7 @@ import { StaffmemberFinderComponent } from '../shared/staffmember-finder/staffme
 import { LeadFinderComponent } from './lead-finder/lead-finder.component';
 import { SharedModule } from '../shared/shared.module';
 import { LeadNoteComponent } from './lead-note/lead-note.component';
+import { LeadTypeFinderComponent } from './lead-type-finder/lead-type-finder.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { LeadNoteComponent } from './lead-note/lead-note.component';
     LeadEditComponent,
     LeadComponent,
     LeadFinderComponent,
-    LeadNoteComponent
+    LeadNoteComponent,
+    LeadTypeFinderComponent
   ],
   imports: [
     CommonModule,
