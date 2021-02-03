@@ -1,12 +1,4 @@
 <div class="row">
-  <div class="row__item row__item--aside">
-    <div class="card">
-      <div class="card__body">
-        ??
-      </div>
-    </div>
-  </div>
-
   <div class="row__item">
     <h2>
       <ng-container *ngIf="propertyDetails else newProperty ">Edit</ng-container> Property <ng-template #newProperty>Add
@@ -84,26 +76,37 @@
         <span class="invalid-feedback">{{formErrors?.subAreaId}}</span>
       </fieldset>
 
-      <app-signer label="Last known owner" [createdSigner]="createdSigner" [existingSigner]="lastKnownOwner"
-        [existingPerson]="lastKnownPerson" (selectedSigner)="getSelectedOwner($event)"
-        (newSigner)="createNewSigner($event)"></app-signer>
-      <div class="form-actions">
-        <div class="container">
-          <div class="row justify-content-end w-100 no-gutters">
-            <div class="col-sm-10 d-flex">
-              <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
-              <button type="submit" class="btn btn-secondary" id="saveProperty"
-                [tooltip]="!propertyForm.valid ? errorMessage?.displayMessage : ''" placement="top"
-                [attr.disabled]="isSubmitting ? '' : null"><i class="fas fa-spinner fa-pulse d-inline-block mr-2"
-                  *ngIf="isSubmitting"></i>Save</button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <fieldset>
+        <label for="area" class="small">Last known owner</label>
+        <a [routerLink]="['/contact-centre/detail/0/people/', propertyDetails?.lastKnownOwner?.contactGroupId]">{{propertyDetails?.lastKnownOwner?.contactNames}}</a>
+        <ng-container *ngIf="propertyDetails?.lastKnownOwner?.contactNames; else newOwner">
+          <button (click)="isLastknownOwnerVisible=true" type="button" class="btn btn-secondary">Change</button>
+        </ng-container>
+        <ng-template #newOwner><button (click)="isLastknownOwnerVisible=true" type="button" class="btn btn-secondary">
+          <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
+            <path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" />
+            <path class="plus-vertical"
+              d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" />
+          </svg>Last known owner</button>
+        </ng-template>
+        <!-- <app-signer label="Last known owner" [createdSigner]="createdSigner" [existingSigner]="lastKnownOwner"
+          [existingPerson]="lastKnownPerson" (selectedSigner)="getSelectedOwner($event)"
+          (newSigner)="createNewSigner($event)"></app-signer> -->
+      </fieldset>
+
+      <footer class="footer">
+        <button (click)="cancel()" type="button" class="btn btn--ghost">Cancel</button>
+        <button type="submit" class="btn btn--positive" id="saveProperty"
+          [tooltip]="!propertyForm.valid ? errorMessage?.displayMessage : ''" placement="top"
+          [attr.disabled]="isSubmitting ? '' : null"><i class="fas fa-spinner fa-pulse d-inline-block mr-2"
+            *ngIf="isSubmitting"></i>Save</button>
+      </footer>
     </form>
 
-    <app-additional-info [id]="propertyDetails?.propertyId ? 'PR-'+propertyDetails?.propertyId : ''">
-    </app-additional-info>
+   <fieldset>
+      <app-additional-info [id]="propertyDetails?.propertyId ? 'PR-'+propertyDetails?.propertyId : ''">
+      </app-additional-info>
+   </fieldset>
   </div>
 </div>
 
@@ -116,6 +119,11 @@
     [checkDuplicates]="checkPossibleDuplicates" (selectedProperty)="getSelectedProperty($event)"
     (hideModal)="checkPossibleDuplicates=false" (fullMatchFound)="checkPropertyMatches($event)">
   </app-property-duplicate-checker>
+</p-dialog>
+
+<!-- Contactgroup Finder Modal -->
+<p-dialog header="Last known owner" [(visible)]="isLastknownOwnerVisible" [modal]="true" [draggable]="false" class="modal--medium">
+  <app-contactgroup-finder (selectedContactGroup)="getSelectedOwner($event)" (isCreatingNewGroup)="createNewLastKnownOwner()" ></app-contactgroup-finder>
 </p-dialog>
 
 
