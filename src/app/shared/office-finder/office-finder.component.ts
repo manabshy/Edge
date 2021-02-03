@@ -64,7 +64,7 @@ export class OfficeFinderComponent implements OnInit, OnChanges {
 
   onOfficeChange(event: any) {
     if (event?.value) {
-      this.officeId = event?.value?.officeId;
+      this.officeId = event?.value;
       this.selectedOfficeId.emit(this.officeId);
       console.log({event});
 
