@@ -57,7 +57,7 @@ export class OfficeFinderComponent implements OnInit, OnChanges {
           .pipe((map(response => response as ResultData),
             tap(res => {
               if (res) { this.offices$ = of(res.result); }
-            }))).subscribe();
+            }))).subscribe(); // Remove subscripton
       }
     });
   }
