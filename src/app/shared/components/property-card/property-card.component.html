@@ -51,15 +51,15 @@
     </div>
   </div>
 
-  <div class="card__headerImg">
-    <ng-container *ngIf="propertyDetails?.photo?.azureResourceURL; else noPhoto">
+  <div class="card__headerImg" [ngStyle]="{'background-image':'url('+propertyDetails?.photo?.azureResourceURL+')'}">
+    <!-- <ng-container *ngIf="propertyDetails?.photo?.azureResourceURL; else noPhoto">
       <img [src]="propertyDetails?.photo?.azureResourceURL" alt=""
         *ngIf="propertyDetails?.photo?.azureResourceURL; else noPhoto">
-    </ng-container>
+    </ng-container> -->
 
-    <ng-template #noPhoto>
+    <!-- <ng-template #noPhoto>
       <p>No Photos available</p>
-    </ng-template>
+    </ng-template> -->
   </div>
 
   <div class="card__body">
