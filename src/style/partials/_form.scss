@@ -101,7 +101,7 @@ fieldset                                       	{ padding:0; text-align:left; di
 
 /***** Legend *****/
 legend                                          { width:100%; }
-.legend                                         { @extend h3; margin:50px 0 16px; padding:6px 12px; display:block; width:100%; background-color:$color--smoke; border-radius:3px; }
+.legend                                         { @extend h3; margin:32px 0 16px; padding:6px 12px; display:block; width:100%; background-color:$color--smoke; border-radius:3px; }
 
 /***** Label *****/
 label, .label                                  	{ width:100%; display:flex; align-items:center; color:$color--midnight-70; font-weight:bold; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box;
