@@ -35,7 +35,8 @@ label, .label, input, textarea, .select,
 }
 
 *+h3                                            { margin-top:30px; }
-input, textarea, select, .p-dropdown           	{ border-color:$color--midnight-20; }
+input, textarea, select,
+.p-dropdown, .p-multiselect           	         { border-color:$color--midnight-20; }
 
 /*********************************************** 
 Forms with labels
@@ -120,14 +121,15 @@ label + p, .label + p                          	{ margin:0 0 6px; }
 }
 
 /***** Inputs *****/
-input, textarea, select, .p-inputtext          	{ padding:0.4em 0.8em; display:block; border-radius:0; width:100%; min-height:30px; font-size:inherit; color:$color--midnight-70; border-width:1px; border-radius:3px; border-style:solid; overflow:hidden; position:relative; top:0; left:0; outline:0 none; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; -webkit-appearance:none; transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -moz-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -webkit-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -o-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; }
+input, textarea, select, .p-inputtext           { padding:0.4em 0.8em; display:block; border-radius:0; width:100%; min-height:30px; font-size:inherit; color:$color--midnight-70; border-width:1px; border-radius:3px; border-style:solid; overflow:hidden; position:relative; top:0; left:0; outline:0 none; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; -webkit-appearance:none; transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -moz-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -webkit-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; -o-transition:all 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s; }
 textarea                                       	{ resize:none; min-height:100px; overflow-y:auto; }
 input[type="search"]                           	{ -webkit-padding-start:0; padding-inline-start:0.8em; }
 
 /*********************************************** 
 Select 
 ***********************************************/
-label+.select                                   { margin-top:6px; }
+label+.select, label+p-multiselect,
+label+p-dropdown                                { margin-top:6px; }
 .select                                         { padding:0; position:relative; display:block; width:100%; right:0; top:0; background:$color--snow; overflow:hidden; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; }
 .select:after                                   { margin:0; padding:0; content:''; background-color:$color--snow; background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QzlFNERGRkExNTgwMTFFNjlCOTU5QjY1QkU5MkYyMDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QzlFNERGRkIxNTgwMTFFNjlCOTU5QjY1QkU5MkYyMDgiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpDOUU0REZGODE1ODAxMUU2OUI5NTlCNjVCRTkyRjIwOCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpDOUU0REZGOTE1ODAxMUU2OUI5NTlCNjVCRTkyRjIwOCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PksuSU4AAADRSURBVHjaxNPNCkFBFMDxeyWPwDtYWLCwkZWQKFE+yhPwFLyCvRVWLJTIV8ra1sbSkhQlRXT91SwG9+rqklO/1XTOzJwzo2qaplgJm2IxLBewl8rVr5yghuAHeVlU5AJO9BAwkZxDAy65QAZzdOF/k5xGHS0U5QJHxLHAAF6d5ASa6KCA6/MUDohhiSE80lpU7DpCHhejMe4RxgpjuBFCG1NxhfPDGHWOukMEE9EXB2ZI4fTyDgyatRE797FFUvRJMVvgHmv4fv6U1b//xpsAAwDgFiuTckGaBAAAAABJRU5ErkJggg=="); background-repeat:no-repeat; background-size:10px; background-position:center; color:#999; line-height:28px; text-align:center; right:0; top:0; width:28px; height:28px; border-radius:3px; position:absolute; top:1px; right:1px; pointer-events:none; }
 .select select                                  { margin:0 28px 0 0; background-color:$color--snow; width:100%; color:$color--midnight-70; border:solid 1px $color--midnight-20; display:block; -webkit-appearance:none; -moz-appearance:none; appearance:none; -webkit-padding-before:4px; -webkit-padding-start:10px; cursor:pointer;
@@ -139,19 +141,34 @@ label+.select                                   { margin-top:6px; }
 .select optgroup:first-child                    { margin:10px 0 0 0; border-top:1px solid $color--smoke; }
 
 /***** Prime NG select *****/
-.p-inputtext                                    { font-size:12px; }
-.p-dropdown                                     { width:100%;
-   .p-dropdown-trigger                          { width:28px; color:#BBB; }
+.p-inputtext,  .p-multiselect                   { font-size:12px; }
+.p-dropdown, .p-multiselect                     { width:100%;
+   .p-dropdown-trigger, .p-multiselect-trigger  { width:28px; height:28px; color:#BBB; }
    .p-dropdown-clear-icon                       { margin-top:-0.3rem; }
 }
 .p-dropdown-filter-container                    {
    .p-dropdown-filter-icon                      { margin-top:-0.3rem; }
 }
+
 .pi                                             { font-size:10px; }
 .p-component                                    { font-size:inherit; }
 .p-inputtext:enabled:focus,
 .p-dropdown:not(.p-disabled).p-focus            { box-shadow:none; }
 .p-dropdown:not(.p-disabled):hover              { border-color:$color--midnight-20; }
+
+p-multiselect , p-dropdown                      { display:block; }
+
+.p-multiselect-filter-container                 {
+   .p-dropdown-filter-icon                      { margin-top:-0.3rem; }
+}
+.p-multiselect .p-multiselect-label,
+.p-inputwrapper-filled .p-multiselect.p-multiselect-chip .p-multiselect-label    { padding:0.4em 0.8em; display:flex; flex-wrap:wrap; }
+.p-multiselect.p-multiselect-chip .p-multiselect-token                           { margin:0 6px 6px 0; background-color:$color--smoke; }
+.p-multiselect-panel .p-multiselect-header      {
+   .p-multiselect-close                         { width:28px; height: 28px; }
+}
+.p-multiselect-panel .p-multiselect-header .p-multiselect-filter-container .p-multiselect-filter-icon { margin-top:-0.3rem; }
+.row__item--aside .p-multiselect                { max-width:208px; }
 
 /*********************************************** 
 Radio & Checkbox

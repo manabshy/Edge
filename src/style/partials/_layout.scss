@@ -14,7 +14,7 @@ app-telephone                                   { width:100%; display:flex; alig
 
 .row+*,
 .row__item+*                                    { margin-top:16px; }
-.row__item--aside                               {
+.row__item--aside                               { z-index:1;
   .card                                         { margin:0 0 16px 0; }
   &+.row__item                                  { padding-bottom:50px; }
 }
