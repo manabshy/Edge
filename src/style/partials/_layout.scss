@@ -31,7 +31,7 @@ app-telephone                                   { width:100%; display:flex; alig
 .wrapper                                        { display:flex; min-height:100vh; }
 
 /***** Body *****/
-.body                                           { padding:85px 16px 16px 16px; width:100%; min-height:100vh; }
+.body                                           { padding:85px 16px 50px 16px; width:100%; min-height:100vh; }
 
 /***** Headers *****/
 .headerMobile                                   { padding:0; display:flex; height:60px; width:100%; background-color:$color--midnight; position:fixed; top:0; right:0; z-index:21; }
@@ -222,7 +222,7 @@ This applies from 992px onwards
     }
   }
 
-  .body                                         { padding:80px 30px 30px 30px; }
+  .body                                         { padding:80px 30px 50px 30px; }
 
   .overlay                                      { position:absolute; top:0; left:0; z-index:6; }
 

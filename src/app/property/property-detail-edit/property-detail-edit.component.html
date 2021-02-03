@@ -4,41 +4,41 @@
       <ng-container *ngIf="propertyDetails else newProperty ">Edit</ng-container> Property <ng-template #newProperty>Add
       </ng-template>
     </h2>
-    <form *ngIf="propertyDetails || isNewProperty" [formGroup]="propertyForm" (ngSubmit)="saveProperty()"
-      (keydown.enter)="$event.preventDefault()" autocompleteOff>
-      <app-address [propertyDetails]="propertyDetails" [addressError]="formErrors.address"
-        [isNewProperty]="isNewProperty" [isCheckingDuplicateProperties]="true" (addressDetails)="getAddress($event)"
-        (checkDuplicateProperties)="setCheckDuplicatesFlag($event)" [searchedAddress]="searchedAddress"></app-address>
-
+    <form *ngIf="propertyDetails || isNewProperty" [formGroup]="propertyForm" (ngSubmit)="saveProperty()" (keydown.enter)="$event.preventDefault()" autocompleteOff>
+      <app-address [propertyDetails]="propertyDetails" [addressError]="formErrors.address" [isNewProperty]="isNewProperty" [isCheckingDuplicateProperties]="true" (addressDetails)="getAddress($event)" (checkDuplicateProperties)="setCheckDuplicatesFlag($event)" [searchedAddress]="searchedAddress"></app-address>
       <input type="hidden" id="address" class="form-control" formControlName="address">
-      <app-office-finder class="d-block form-group" [officeId]="officeId" [isRequired]="isOfficeIdRequired"
-        (selectedOfficeId)="getSelectedOfficeId($event)"></app-office-finder>
+      
+      <legend class="legend">Office</legend>
+      <app-office-finder class="d-block form-group" [officeId]="officeId" [isRequired]="isOfficeIdRequired" (selectedOfficeId)="getSelectedOfficeId($event)"></app-office-finder>
 
-      <fieldset>
-        <label for="propertyTypeId" class="small">Property Type</label>
-        <span class="select">
-          <select class="custom-select custom-select-sm" id="propertyTypeId" name="propertyTypeId"
-            formControlName="propertyTypeId" (change)="onSelectType($event.target.value) "
-            [ngClass]="{'is-invalid':formErrors.propertyTypeId}">
-            <option selected value="0"></option>
-            <option *ngFor="let propertyType of propertyTypes" [value]=propertyType.id>{{propertyType.value}}</option>
-          </select>
-        </span>
-        <span class="invalid-feedback">{{formErrors?.propertyTypeId}}</span>
-      </fieldset>
+      <legend class="legend">Property details</legend>
+      <div class="inline-parent">
+        <fieldset class="inline-child">
+          <label for="propertyTypeId" class="small">Property Type</label>
+          <span class="select">
+            <select class="custom-select custom-select-sm" id="propertyTypeId" name="propertyTypeId"
+              formControlName="propertyTypeId" (change)="onSelectType($event.target.value) "
+              [ngClass]="{'is-invalid':formErrors.propertyTypeId}">
+              <option selected value="0"></option>
+              <option *ngFor="let propertyType of propertyTypes" [value]=propertyType.id>{{propertyType.value}}</option>
+            </select>
+          </span>
+          <p class="message message--negative">{{formErrors?.propertyTypeId}}</p>
+        </fieldset>
 
-      <fieldset>
-        <label for="propertyTypeId" class="small">Property Style</label>
-        <span class="select">
-          <select #propStyle class="custom-select custom-select-sm" id="propertyStyleId" name="propertyStyleId"
-            formControlName="propertyStyleId" [ngClass]="{'is-invalid':formErrors.propertyStyleId}">
-            <option selected [value]="defaultStyle"></option>
-            <option *ngFor="let propertyStyle of propertyStyles" [value]=propertyStyle.id>{{propertyStyle.value}}
-            </option>
-          </select>
-        </span>
-        <span class="invalid-feedback">{{formErrors?.propertyStyleId}}</span>
-      </fieldset>
+        <fieldset class="inline-child">
+          <label for="propertyTypeId" class="small">Property Style</label>
+          <span class="select">
+            <select #propStyle class="custom-select custom-select-sm" id="propertyStyleId" name="propertyStyleId"
+              formControlName="propertyStyleId" [ngClass]="{'is-invalid':formErrors.propertyStyleId}">
+              <option selected [value]="defaultStyle"></option>
+              <option *ngFor="let propertyStyle of propertyStyles" [value]=propertyStyle.id>{{propertyStyle.value}}
+              </option>
+            </select>
+          </span>
+          <p class="message message--negative">{{formErrors?.propertyStyleId}}</p>
+        </fieldset>
+      </div>
 
       <fieldset>
         <label for="region" class="small">Region</label>
@@ -49,46 +49,47 @@
             <option *ngFor="let region of regions" [value]=region.id>{{region.value}}</option>
           </select>
         </span>
-        <span class="invalid-feedback">{{formErrors?.regionId}}</span>
+        <p class="message message--negative">{{formErrors?.regionId}}</p>
       </fieldset>
 
-      <fieldset>
-        <label for="area" class="small">Area</label>
-        <span class="select">
-          <select class="custom-select custom-select-sm" id="area" name="area" formControlName="areaId"
-            (change)="onSelectArea($event.target.value)" [ngClass]="{'is-invalid':formErrors.areaId}">
-            <option selected value="0"></option>
-            <option *ngFor="let area of areas" [value]=area.id>{{area.value}}</option>
-          </select>
-        </span>
-        <span class="invalid-feedback">{{formErrors?.areaId}}</span>
-      </fieldset>
+      <div class="inline-parent">
+        <fieldset class="inline-child">
+          <label for="area" class="small">Area</label>
+          <span class="select">
+            <select class="custom-select custom-select-sm" id="area" name="area" formControlName="areaId"
+              (change)="onSelectArea($event.target.value)" [ngClass]="{'is-invalid':formErrors.areaId}">
+              <option selected value="0"></option>
+              <option *ngFor="let area of areas" [value]=area.id>{{area.value}}</option>
+            </select>
+          </span>
+          <p class="message message--negative">{{formErrors?.areaId}}</p>
+        </fieldset>
 
-      <fieldset>
-        <label for="subArea" class="small">Sub-Area</label>
-        <span class="select">
-          <select class="custom-select custom-select-sm" id="subArea" name="subArea" formControlName="subAreaId"
-            [ngClass]="{'is-invalid':formErrors.subAreaId}">
-            <option selected value="0"></option>
-            <option *ngFor="let subArea of subAreas" [value]=subArea.id>{{subArea.value}}</option>
-          </select>
-        </span>
-        <span class="invalid-feedback">{{formErrors?.subAreaId}}</span>
-      </fieldset>
+        <fieldset class="inline-child">
+          <label for="subArea" class="small">Sub-Area</label>
+          <span class="select">
+            <select class="custom-select custom-select-sm" id="subArea" name="subArea" formControlName="subAreaId"
+              [ngClass]="{'is-invalid':formErrors.subAreaId}">
+              <option selected value="0"></option>
+              <option *ngFor="let subArea of subAreas" [value]=subArea.id>{{subArea.value}}</option>
+            </select>
+          </span>
+          <p class="message message--negative">{{formErrors?.subAreaId}}</p>
+        </fieldset>
+      </div>
 
+      <legend class="legend">Owner</legend>
       <fieldset>
         <label for="area" class="small">Last known owner</label>
-        <a [routerLink]="['/contact-centre/detail/0/people/', propertyDetails?.lastKnownOwner?.contactGroupId]">{{propertyDetails?.lastKnownOwner?.contactNames}}</a>
         <ng-container *ngIf="propertyDetails?.lastKnownOwner?.contactNames; else newOwner">
-          <button (click)="isLastknownOwnerVisible=true" type="button" class="btn btn-secondary">Change</button>
+          <p><a [routerLink]="['/contact-centre/detail/0/people/', propertyDetails?.lastKnownOwner?.contactGroupId]">{{propertyDetails?.lastKnownOwner?.contactNames}}</a></p>
+          <p><button (click)="isLastknownOwnerVisible=true" type="button" class="btn btn--info"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><polygon points="42.7 6.7 57.3 21.3 64 14.5 49.7 0 "></polygon><path d="M40.3 9.6l-38 38L0 64l16.9-2 38-37.9L40.3 9.6zM4 59.9l1.9-11.7 9.8 9.8L4 59.9z"></path></svg>Change owner</button></p>
         </ng-container>
-        <ng-template #newOwner><button (click)="isLastknownOwnerVisible=true" type="button" class="btn btn-secondary">
-          <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
-            <path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" />
-            <path class="plus-vertical"
-              d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" />
-          </svg>Last known owner</button>
+        
+        <ng-template #newOwner>
+          <p><button (click)="isLastknownOwnerVisible=true" type="button" class="btn btn--positive"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" /><path class="plus-vertical" d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" /></svg>Last known owner</button></p>
         </ng-template>
+      
         <!-- <app-signer label="Last known owner" [createdSigner]="createdSigner" [existingSigner]="lastKnownOwner"
           [existingPerson]="lastKnownPerson" (selectedSigner)="getSelectedOwner($event)"
           (newSigner)="createNewSigner($event)"></app-signer> -->
@@ -104,8 +105,7 @@
     </form>
 
    <fieldset>
-      <app-additional-info [id]="propertyDetails?.propertyId ? 'PR-'+propertyDetails?.propertyId : ''">
-      </app-additional-info>
+      <app-additional-info [id]="propertyDetails?.propertyId ? 'PR-'+propertyDetails?.propertyId : ''"></app-additional-info>
    </fieldset>
   </div>
 </div>
@@ -125,7 +125,6 @@
 <p-dialog header="Last known owner" [(visible)]="isLastknownOwnerVisible" [modal]="true" [draggable]="false" class="modal--medium">
   <app-contactgroup-finder (selectedContactGroup)="getSelectedOwner($event)" (isCreatingNewGroup)="createNewLastKnownOwner()" ></app-contactgroup-finder>
 </p-dialog>
-
 
 <!-- <app-breadcrumb></app-breadcrumb>
 <div class="container main">

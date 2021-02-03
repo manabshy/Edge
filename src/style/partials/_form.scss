@@ -265,7 +265,7 @@ label + .inline-parent                          { margin-top:6px; }
       &+*                                       { margin-top:6px; }
    }
 
-   &+* 		  		                              { margin-top:20px; }
+   &+* 		  		                              { margin-top:12px; }
    &:last-child                                 { margin-right:0; }
    &--grid-1                                    { flex:0 0 calc(10% - 10px); }
    &--grid-2                                    { flex:0 0 calc(20% - 10px); }
