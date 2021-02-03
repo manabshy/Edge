@@ -84,6 +84,7 @@ import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
 import {ToastModule} from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import {DropdownModule} from 'primeng/dropdown';
+import {MultiSelectModule} from 'primeng/multiselect';
 
 
 
@@ -180,7 +181,8 @@ const externalModules = [
   AccordionModule,
   DynamicDialogModule,
   ToastModule,
-  DropdownModule
+  DropdownModule,
+  MultiSelectModule
 ];
 
 @NgModule({
