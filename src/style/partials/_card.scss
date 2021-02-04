@@ -31,7 +31,7 @@
         &+.card__body                           { margin-top:0; }
     }
 
-    &__headerImg                                { height:159px; display:flex; align-items:center; justify-content:center; position:relative; background-color:$color--smoke; background-repeat:no-repeat; background-size:cover; border-radius:3px 3px 0 0; overflow:hidden;
+    &__headerImg                                { height:159px; display:flex; align-items:center; justify-content:center; position:relative; background-color:$color--smoke; background-repeat:no-repeat; background-size:cover; background-position:center; border-radius:3px 3px 0 0; overflow:hidden;
         img                                     { width:100%; height:auto; }
         .alignTopRight                          { position:absolute; top:6px; right:6px; }
     }
@@ -78,8 +78,7 @@ This applies from 992px onwards
 ***********************************************/
 @media (min-width:992px)                        {
     .card {
-        &--horizontal                           { display:flex;
-            .card__headerImg                    { width:30%; height:initial; border-radius:3px 0 0 3px; }
+        &--horizontal                           {
             .card__body                         { display:flex; flex:1 1 0px; 
                 > .list                         {
                     > li                        {
@@ -92,3 +91,25 @@ This applies from 992px onwards
         }
     } 
 }
+
+
+/***********************************************
+This applies from 1200px onwards
+***********************************************/
+@media (min-width:1200px)                       {
+    .card {
+        &--horizontal                           { display:flex;
+            .card__headerImg                    { width:250px; height:initial; border-radius:3px 0 0 3px; }
+            .card__body                         { display:flex; flex:1 1 0px; 
+                > .list                         {
+                    > li                        {
+                        &+*, &+.expandable      { padding-top:0;
+                            &:before            { width:1px; height:100%; top:0; left:-30px; }
+                        }
+                    }
+                }
+            }
+        }
+    } 
+}
+
