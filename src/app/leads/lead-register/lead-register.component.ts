@@ -5,7 +5,7 @@ import { Lead, LeadSearchInfo } from '../shared/lead';
 import { StaffMember, Office } from 'src/app/shared/models/staff-member';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { InfoDetail } from 'src/app/core/services/info.service';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { OfficeService } from 'src/app/core/services/office.service';
 import { BsModalService } from 'ngx-bootstrap/modal';
@@ -57,6 +57,10 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
         || this.leadRegisterForm.get('includeClosedLeads').value
         || this.leadRegisterForm.get('includeUnassignedLeadsOnly').value
     }
+  }
+
+  get LeadTypeIdControl(): FormControl {
+    return this.leadRegisterForm.get('leadTypeId') as FormControl;
   }
 
   constructor(private leadService: LeadsService,
@@ -245,7 +249,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   processLeadsAssignment(leadOwner: number, leadsForAssignment: Lead[]) {
     this.leadService.assignLeads(leadOwner, leadsForAssignment).subscribe(result => {
       if (result) {
-        this.messageService.add({ severity: 'success', summary: 'Lead(s) successfully assigned!', closable: false});
+        this.messageService.add({ severity: 'success', summary: 'Lead(s) successfully assigned!', closable: false });
         this.areLeadsAssignable = false;
         this.selectedLeadsForAssignment = [];
         this.replaceLeadsWithNewOwners(result);
@@ -282,7 +286,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     if (this.newLeadOwnerId) {
       this.leadService.assignLeads(this.newLeadOwnerId, this.selectedLeadsForAssignment).subscribe(result => {
         if (result) {
-          this.messageService.add({ severity: 'success', summary: 'Lead(s) successfully assigned!', closable: false});
+          this.messageService.add({ severity: 'success', summary: 'Lead(s) successfully assigned!', closable: false });
           this.areLeadsAssignable = false;
           this.selectedLeadsForAssignment = [];
           this.replaceLeadsWithNewOwners(result);
@@ -317,6 +321,12 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
 
   getSelectedOfficeId(officeId: number) {
     this.leadRegisterForm.get('officeId').setValue(officeId);
+  }
+
+  getSelectedTypes(types: number[]) {
+    console.log({types});
+
+    this.LeadTypeIdControl.setValue(types[0]);
   }
 
   onScrollDown() {
