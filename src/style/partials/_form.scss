@@ -156,6 +156,7 @@ label+p-dropdown                                { margin-top:6px; }
 .p-dropdown:not(.p-disabled).p-focus            { box-shadow:none; }
 .p-dropdown:not(.p-disabled):hover              { border-color:$color--midnight-20; }
 
+/***** Prime NG multiselect *****/
 p-multiselect , p-dropdown                      { display:block; }
 
 .p-multiselect-filter-container                 {
