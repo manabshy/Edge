@@ -30,7 +30,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
   propertyDetails: Property;
   propertyForm: FormGroup;
   propertyAddress: Address;
-  isSubmitting: boolean;
+  isSubmitting = false;
   isNewProperty: boolean;
   listInfo: any;
   propertyTypes: any[];
@@ -227,6 +227,8 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
       this.propertyForm.markAsPristine();
     }
     this.propertyAddress = address;
+    this.propertyForm.get('address').setValue(address);
+
     this.isMatchFound = false;
     this.propertyService.getPropertyOfficeId(address).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
@@ -238,8 +240,8 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
           console.log('officeId from db', this.officeId);
         }
       });
+
     if (this.propertyAddress) {
-      // this.propertyForm.patchValue({ address: this.propertyAddress });
       this.isAddressRequired = false;
       this.propertyForm.markAsDirty();
     }
@@ -315,28 +317,18 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
 
   saveProperty() {
     const isOwnerChanged = this.lastKnownOwner || this.lastKnownOwner == null;
-    console.log(this.lastKnownOwner);
-    const control = this.propertyForm.get('address');
     this.setOfficeIdValidator();
     this.setAddressValidator();
     this.logValidationErrors(this.propertyForm, true, true);
-    control.clearValidators();
-    control.updateValueAndValidity();
+    console.log(this.propertyForm);
+
     this.propertyAddress ? this.isAddressFormValid = true : this.isAddressFormValid = false;
     if (this.propertyForm.valid) {
       if (this.propertyForm.dirty || isOwnerChanged) {
         if (!this.lastKnownOwner) {
-          this.showWarning().subscribe(res => {
-            if (res) {
-              this.AddOrUpdateProperty();
-            }
-          });
-        } else {
-          this.AddOrUpdateProperty();
-        }
-      } else {
-        this.onSaveComplete();
-      }
+          this.showWarning().subscribe(res => { if (res) { this.AddOrUpdateProperty(); } });
+        } else { this.AddOrUpdateProperty(); }
+      } else { this.onSaveComplete(); }
     } else {
       this.errorMessage = {} as WedgeError;
       this.errorMessage.displayMessage = 'Please correct validation errors';
