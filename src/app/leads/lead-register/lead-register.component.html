@@ -24,7 +24,7 @@
               </span>
             </fieldset>
 
-           <fieldset> <app-lead-type-finder [fullWidth]="true" [isMultiSelect]="true" ></app-lead-type-finder></fieldset>
+           <fieldset *ngIf="false"> <app-lead-type-finder [fullWidth]="true" [isMultiSelect]="true" (selectedLeadTypeIdList)="getSelectedTypes($event)" ></app-lead-type-finder></fieldset>
 
             <div class="inline-parent">
               <fieldset class="inline-child">
@@ -43,7 +43,7 @@
               </fieldset>
             </div>
 
-            <app-office-finder (selectedOfficeId)="getSelectedOfficeId($event)" [fullWidth]="true" [isMultiSelect]="true" class="displayBlock">
+            <app-office-finder (selectedOfficeId)="getSelectedOfficeId($event)" [fullWidth]="true" [isMultiSelect]="false" class="displayBlock">
             </app-office-finder>
 
             <fieldset>
