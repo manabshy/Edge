@@ -170,13 +170,16 @@ p-multiselect , p-dropdown                      { display:block; }
 }
 .p-multiselect-panel .p-multiselect-header .p-multiselect-filter-container .p-multiselect-filter-icon { margin-top:-0.3rem; }
 
-.row__item--aside .p-multiselect                { max-width:100%; }
+.row__item--aside                               {
+   .p-multiselect                               { max-width:100%; }
+   app-office-finder                            { display:inherit; }
+}
 
 /***** Prime NG no-style *****/
 .no-style                                       {
-   p-multiselect, +p-dropdown                   {
-
-   }
+   .p-dropdown, .p-multiselect                  { border:none; }
+   .p-inputtext                                 { padding:0; min-height:auto; }
+   .p-dropdown .p-dropdown-trigger              { display:none; }
 }
 
 
