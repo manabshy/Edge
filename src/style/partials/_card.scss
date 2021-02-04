@@ -100,15 +100,6 @@ This applies from 1200px onwards
     .card {
         &--horizontal                           { display:flex;
             .card__headerImg                    { width:250px; height:initial; border-radius:3px 0 0 3px; }
-            .card__body                         { display:flex; flex:1 1 0px; 
-                > .list                         {
-                    > li                        {
-                        &+*, &+.expandable      { padding-top:0;
-                            &:before            { width:1px; height:100%; top:0; left:-30px; }
-                        }
-                    }
-                }
-            }
         }
     } 
 }
