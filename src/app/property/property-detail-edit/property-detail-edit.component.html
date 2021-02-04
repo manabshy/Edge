@@ -8,7 +8,7 @@
       <app-address [propertyDetails]="propertyDetails" [addressError]="formErrors.address" [isRequired]="isAddressRequired" [isNewProperty]="isNewProperty" [isCheckingDuplicateProperties]="true" (addressDetails)="getAddress($event)" (checkDuplicateProperties)="setCheckDuplicatesFlag($event)" [searchedAddress]="searchedAddress"></app-address>
 
       <legend class="legend">Office</legend>
-      <app-office-finder class="d-block form-group" [officeId]="officeId" [isRequired]="isOfficeIdRequired" (selectedOfficeId)="getSelectedOfficeId($event)"></app-office-finder>
+      <app-office-finder class="appWrapper" [officeId]="officeId" [isRequired]="isOfficeIdRequired" (selectedOfficeId)="getSelectedOfficeId($event)"></app-office-finder>
 
       <legend class="legend">Property details</legend>
       <div class="inline-parent">
@@ -104,7 +104,7 @@
     </form>
 
    <fieldset>
-      <app-additional-info [id]="propertyDetails?.propertyId ? 'PR-'+propertyDetails?.propertyId : ''"></app-additional-info>
+      <app-additional-info class="appWrapper" [id]="propertyDetails?.propertyId ? 'PR-'+propertyDetails?.propertyId : ''"></app-additional-info>
    </fieldset>
   </div>
 </div>
@@ -114,7 +114,7 @@
 
 <!--Property Duplicate Checker Modal -->
 <p-dialog header="Quick finder" [(visible)]="checkPossibleDuplicates" [modal]="true" [draggable]="false">
-  <app-property-duplicate-checker [propertyAddress]="propertyAddress" [propertyId]="propertyDetails?.propertyId"
+  <app-property-duplicate-checker class="appWrapper" [propertyAddress]="propertyAddress" [propertyId]="propertyDetails?.propertyId"
     [checkDuplicates]="checkPossibleDuplicates" (selectedProperty)="getSelectedProperty($event)"
     (hideModal)="checkPossibleDuplicates=false" (fullMatchFound)="checkPropertyMatches($event)">
   </app-property-duplicate-checker>
@@ -122,7 +122,7 @@
 
 <!-- Contactgroup Finder Modal -->
 <p-dialog header="Last known owner" [(visible)]="isLastknownOwnerVisible" [modal]="true" [draggable]="false" class="modal--medium modal--hasFooter">
-  <app-contactgroup-finder (selectedContactGroup)="getSelectedOwner($event)" (isCreatingNewGroup)="createNewLastKnownOwner()" ></app-contactgroup-finder>
+  <app-contactgroup-finder class="appWrapper" (selectedContactGroup)="getSelectedOwner($event)" (isCreatingNewGroup)="createNewLastKnownOwner()" ></app-contactgroup-finder>
 </p-dialog>
 
 <!-- <app-breadcrumb></app-breadcrumb>

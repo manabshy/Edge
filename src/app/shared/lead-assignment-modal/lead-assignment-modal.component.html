@@ -3,7 +3,7 @@
 
   <div class="col-sm form-group">
     <label class="small" for="owner">Lead Owner</label>
-    <app-staffmember-finder (ownerChanged)="onOwnerChanged($event)"></app-staffmember-finder>
+    <app-staffmember-finder class="appWrapper" (ownerChanged)="onOwnerChanged($event)"></app-staffmember-finder>
   </div>
 
   <button type="button" class="btn btn-light mr-2" (click)="action(false)">Cancel</button>

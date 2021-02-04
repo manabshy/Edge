@@ -40,7 +40,7 @@
       <a class="btn btn--positive" id="addNewProperty" [routerLink]="['detail', 0 , 'edit' ]"  [queryParams]="{isNewProperty: true}" ><svg _ngcontent-sbe-c166="" aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path _ngcontent-sbe-c166="" d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z"></path><path _ngcontent-sbe-c166="" d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" class="plus-vertical"></path></svg>Property</a>
     </div> -->
 
-    <app-property-list *ngIf="!isHintVisible" [pageNumber]="page" [properties]='properties' [bottomReached]="bottomReached" [searchTerm]='searchTerm'></app-property-list>
+    <app-property-list class="appWrapper" *ngIf="!isHintVisible" [pageNumber]="page" [properties]='properties' [bottomReached]="bottomReached" [searchTerm]='searchTerm'></app-property-list>
     
     <div class="text-center text-danger" *ngIf="isMessageVisible && !isHintVisible && page === 1">
       <i class="far fa-sad-tear"></i> No results for '<strong>{{propertyFinderForm.value.searchTerm || ' '}}</strong>'

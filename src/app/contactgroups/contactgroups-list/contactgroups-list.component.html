@@ -55,7 +55,7 @@
         <td data-title="Telephone">
           <span class="cell-content">
             <ng-container *ngIf="contactGroup?.phoneNumbers[0] else noPhone">
-              <app-telephone [person]="contactGroup" [number]="contactGroup?.phoneNumbers[0]" [searchTerm]="searchTerm"
+              <app-telephone class="appWrapper" [person]="contactGroup" [number]="contactGroup?.phoneNumbers[0]" [searchTerm]="searchTerm"
                 [warning]="contactGroup?.warningStatusComment || contactGroup?.warning?.value"></app-telephone>
             </ng-container>
             <ng-template #noPhone><span>-</span></ng-template>

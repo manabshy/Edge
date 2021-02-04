@@ -5,7 +5,7 @@
     <ng-container *ngIf="companyDetails || isNewCompany">
       <form [formGroup]="companyForm" (ngSubmit)="saveCompany()" autocompleteOff>
 
-        <app-company-finder [existingCompany]="companyDetails" [companyNameError]="formErrors.companyName" (companyName)="getCompanyName($event)" (selectedCompanyDetails)="navigateToCompany($event)"></app-company-finder>
+        <app-company-finder class="appWrapper" [existingCompany]="companyDetails" [companyNameError]="formErrors.companyName" (companyName)="getCompanyName($event)" (selectedCompanyDetails)="navigateToCompany($event)"></app-company-finder>
 
         <input type="hidden" id="companyName" class="form-control" formControlName="companyName">
 
@@ -19,12 +19,12 @@
         </fieldset>
 
         <ledgend class="legend">Signer</ledgend>
-        <app-signer (selectedSigner)="getSelectedSigner($event)" (newSigner)="createNewSigner($event)" [existingSigner]="existingSigner"></app-signer>
+        <app-signer class="appWrapper" (selectedSigner)="getSelectedSigner($event)" (newSigner)="createNewSigner($event)" [existingSigner]="existingSigner"></app-signer>
 
         <ledgend class="legend">Company Address</ledgend>
         <fieldset>
           <label>Address</label>
-          <app-address [companyDetails]="companyDetails" (addressDetails)="getAddress($event)"></app-address>
+          <app-address class="appWrapper" [companyDetails]="companyDetails" (addressDetails)="getAddress($event)"></app-address>
         </fieldset>
 
         <ledgend class="legend">Contact Details</ledgend>
@@ -65,6 +65,6 @@
       </form>
     </ng-container>
 
-    <app-additional-info [id]="companyDetails?.companyId ? 'CO-'+companyDetails?.companyId : ''"></app-additional-info>
+    <app-additional-info class="appWrapper" [id]="companyDetails?.companyId ? 'CO-'+companyDetails?.companyId : ''"></app-additional-info>
   </div>
 </div>

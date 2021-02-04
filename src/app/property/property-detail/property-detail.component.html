@@ -131,8 +131,8 @@
         </ol>
       </div>
     </div> -->
-    <app-sidenav-item [sideNavItems]="sideNavItems" [summaryTotals]="summaryTotals" [scrollToItem]="mainRowItem" (selectedItem)="getSelectedItem($event)"></app-sidenav-item>
-    <app-additional-info [id]="propertyDetails?.propertyId ? 'PR-'+propertyDetails?.propertyId : ''" class="block"></app-additional-info>
+    <app-sidenav-item class="appWrapper" [sideNavItems]="sideNavItems" [summaryTotals]="summaryTotals" [scrollToItem]="mainRowItem" (selectedItem)="getSelectedItem($event)"></app-sidenav-item>
+    <app-additional-info class="appWrapper" [id]="propertyDetails?.propertyId ? 'PR-'+propertyDetails?.propertyId : ''"></app-additional-info>
   </div>
 
   <div #mainRowItem class="row__item">

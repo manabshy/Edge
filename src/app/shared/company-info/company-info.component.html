@@ -23,7 +23,7 @@
             <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M57.6 43.2c-4 0-7.8-0.6-11.4-1.8 -1.1-0.4-2.4-0.1-3.3 0.8l-7 7c-9.1-4.6-16.5-12-21.1-21.1l7-7.1c0.9-0.8 1.2-2.1 0.8-3.2 -1.2-3.6-1.8-7.4-1.8-11.4 0-1.8-1.4-3.2-3.2-3.2H6.4c-1.8 0-3.2 1.4-3.2 3.2 0 30 24.4 54.4 54.4 54.4 1.8 0 3.2-1.4 3.2-3.2V46.4C60.8 44.6 59.4 43.2 57.6 43.2z" /></svg>
             <span class=" txt--negative" *ngIf="!companyDetails?.telephone; else phoneNumber">No phone</span>
             <ng-template #phoneNumber>
-              <app-telephone [company]="companyDetails" [number]="companyDetails?.telephone"></app-telephone>
+              <app-telephone class="appWrapper" [company]="companyDetails" [number]="companyDetails?.telephone"></app-telephone>
             </ng-template>
           </li>
 
@@ -32,7 +32,7 @@
             <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M57.6 43.2c-4 0-7.8-0.6-11.4-1.8 -1.1-0.4-2.4-0.1-3.3 0.8l-7 7c-9.1-4.6-16.5-12-21.1-21.1l7-7.1c0.9-0.8 1.2-2.1 0.8-3.2 -1.2-3.6-1.8-7.4-1.8-11.4 0-1.8-1.4-3.2-3.2-3.2H6.4c-1.8 0-3.2 1.4-3.2 3.2 0 30 24.4 54.4 54.4 54.4 1.8 0 3.2-1.4 3.2-3.2V46.4C60.8 44.6 59.4 43.2 57.6 43.2z" /></svg>
             <span class=" txt--negative" *ngIf="!companyDetails?.fax; else faxNumber">No fax</span>
             <ng-template #faxNumber>
-              <app-telephone [company]="companyDetails" [isFax]="true" [number]="companyDetails?.fax"></app-telephone>
+              <app-telephone class="appWrapper" [company]="companyDetails" [isFax]="true" [number]="companyDetails?.fax"></app-telephone>
             </ng-template>
           </li>
 
@@ -63,7 +63,7 @@
             <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M32 32c8.6 0 15.5-7 15.5-15.5C47.5 7.9 40.6 1 32 1S16.5 7.9 16.5 16.5C16.5 25 23.4 32 32 32zM32 39.8c-10.3 0-31 5.2-31 15.5V63h62v-7.8C63 44.9 42.3 39.8 32 39.8z"></path></svg>
             <span class=" txt--negative"  *ngIf="!companyDetails?.signer; else signerDetails">No signer</span>
             <ng-template #signerDetails>
-              <app-signer [readOnly]="true" [fullWidth]="true" [existingSigner]="companyDetails?.signer"></app-signer>
+              <app-signer class="appWrapper" [readOnly]="true" [fullWidth]="true" [existingSigner]="companyDetails?.signer"></app-signer>
             </ng-template>
           </li>
         </ol>

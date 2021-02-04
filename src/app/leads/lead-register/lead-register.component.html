@@ -10,8 +10,7 @@
         <div class="card__body">
           <form [formGroup]="leadRegisterForm" *ngIf="showFilterOptions" autocompleteOff>
             <fieldset>
-              <app-lead-finder [leadSuggestion]="leadRegisterForm.get('leadSearchTerm').value"
-                (leadSearchTerm)="setLeadSearchTerm($event)"></app-lead-finder>
+              <app-lead-finder class="appWrapper" [leadSuggestion]="leadRegisterForm.get('leadSearchTerm').value" (leadSearchTerm)="setLeadSearchTerm($event)"></app-lead-finder>
             </fieldset>
 
             <fieldset>
@@ -24,7 +23,9 @@
               </span>
             </fieldset>
 
-           <fieldset *ngIf="false"> <app-lead-type-finder [fullWidth]="true" [isMultiSelect]="true" (selectedLeadTypeIdList)="getSelectedTypes($event)" ></app-lead-type-finder></fieldset>
+           <fieldset *ngIf="false">
+             <app-lead-type-finder class="appWrapper" [fullWidth]="true" [isMultiSelect]="true" (selectedLeadTypeIdList)="getSelectedTypes($event)" ></app-lead-type-finder>
+            </fieldset>
 
             <div class="inline-parent">
               <fieldset class="inline-child">
@@ -43,8 +44,7 @@
               </fieldset>
             </div>
 
-            <app-office-finder (selectedOfficeId)="getSelectedOfficeId($event)" [fullWidth]="true" [isMultiSelect]="false" class="displayBlock">
-            </app-office-finder>
+            <app-office-finder class="appWrapper" (selectedOfficeId)="getSelectedOfficeId($event)" [fullWidth]="true" [isMultiSelect]="false"></app-office-finder>
 
             <fieldset>
               <span class="checkbox">
@@ -187,7 +187,7 @@
 <!-- Lead Owner Assignment Modal -->
 <p-dialog header="Lead Owner" [(visible)]="showModal" [modal]="true" [draggable]="false" class="modal--smallWithHeight modal--hasFooter">
   <fieldset>
-    <app-staff-member-finder label="Choose an owner for the selected leads:" placeholder="Select owner" (selectedStaffMemberId)="getSelectedOwner($event)"></app-staff-member-finder>
+    <app-staff-member-finder class="appWrapper" label="Choose an owner for the selected leads:" placeholder="Select owner" (selectedStaffMemberId)="getSelectedOwner($event)"></app-staff-member-finder>
   </fieldset>
   <footer class="footer--modal">
    <div class="btn--container">
@@ -224,7 +224,6 @@
     </div>
   </div>
 </div> -->
-
 <!-- <form class="pb-0 search-form" [formGroup]="leadRegisterForm" *ngIf="showFilterOptions" autocompleteOff>
   <div class="row align-items-center">
     <div class="col-sm">
@@ -290,7 +289,6 @@
     </div>
   </div>
 </form> -->
-
 <!-- <form class="pb-0" (ngSubmit)="showLeadsAssignmentModal()">
   <div class="row" *ngIf="areLeadsAssignable">
     <div class="col">

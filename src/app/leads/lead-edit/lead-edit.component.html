@@ -1,7 +1,7 @@
 <div class="row">
   <div class="row__item row__item--aside">
-    <app-person-details *ngIf="person" [personDetails]="person" [isClickable]="true" [showViewPerson]="true"></app-person-details>
-    <app-sidenav-item [sideNavItems]="sideNavItems" [summaryTotals]="summaryTotals" [scrollToItem]="mainRowItem" (selectedItem)="getSelectedItem($event)"></app-sidenav-item>
+    <app-person-details class="appWrapper" *ngIf="person" [personDetails]="person" [isClickable]="true" [showViewPerson]="true"></app-person-details>
+    <app-sidenav-item class="appWrapper" [sideNavItems]="sideNavItems" [summaryTotals]="summaryTotals" [scrollToItem]="mainRowItem" (selectedItem)="getSelectedItem($event)"></app-sidenav-item>
   </div>
 
   <div #mainRowItem class="row__item">
@@ -152,7 +152,7 @@
 
               <fieldset class="inline-child">
                 <label for="chaser">Chaser</label>
-                <app-staff-member-finder [staffMemberId]="lead?.ownerId || leadEditForm.get('ownerId').value"
+                <app-staff-member-finder class="appWrapper" [staffMemberId]="lead?.ownerId || leadEditForm.get('ownerId').value"
                   [listType]="'activeStaffMembers'" (selectedStaffMemberId)="getSelectedStaffMemberId($event)"
                   [isRequired]="!leadEditForm.get('ownerId').value" [isDisabled]="isLeadClosed ? true : false">
                 </app-staff-member-finder>

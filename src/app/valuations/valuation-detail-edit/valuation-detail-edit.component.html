@@ -1,6 +1,6 @@
 <div class="row">
   <div class="row__item row__item--aside">
-    <app-contactgroup-card [contactGroup]="contactGroup$|async" *ngIf="contactGroup$|async"></app-contactgroup-card>
+    <app-contactgroup-card class="appWrapper" [contactGroup]="contactGroup$|async" *ngIf="contactGroup$|async"></app-contactgroup-card>
     <div class="card">
       <div class="card__body card__body--list">
         <ol class="list list--divider list--hover">
@@ -150,7 +150,7 @@
       </div>
     </div>
 
-    <app-property-card [propertyDetails]="property" [isHorizontalCard]="true" [showPropertyDetailActions]="false"
+    <app-property-card class="appWrapper" [propertyDetails]="property" [isHorizontalCard]="true" [showPropertyDetailActions]="false"
       [showValuationActions]="true" (showPhotos)="showPhotosModal()" (showMap)="showMapModal()"
       (changeProperty)="changeProperty()" (changeLastknownOwner)="isLastknownOwnerVisible = true"></app-property-card>
 

@@ -45,11 +45,11 @@
 
             <fieldset>
               <label for="valuerId">Valuer</label>
-              <app-staff-member-finder [isMultiple]="false" (selectedStaffMemberId)="getSelectedStaffMemberId($event)" [listType]="'allValuers'"></app-staff-member-finder>
+              <app-staff-member-finder class="appWrapper" [isMultiple]="false" (selectedStaffMemberId)="getSelectedStaffMemberId($event)" [listType]="'allValuers'"></app-staff-member-finder>
             </fieldset>
 
             <fieldset>
-              <app-office-finder [officeId]="officeId" (selectedOfficeId)="getSelectedOfficeId($event)" [fullWidth]="true"></app-office-finder>
+              <app-office-finder class="appWrapper" [officeId]="officeId" (selectedOfficeId)="getSelectedOfficeId($event)" [fullWidth]="true"></app-office-finder>
             </fieldset>
 
             <fieldset>
@@ -82,7 +82,7 @@
     </div> -->
     
     <div class="table">
-      <app-valuation-list *ngIf="!isHintVisible" [pageNumber]="page" [valuations]='valuations' [bottomReached]="bottomReached" [searchTerm]='searchTerm'></app-valuation-list>
+      <app-valuation-list class="appWrapper" *ngIf="!isHintVisible" [pageNumber]="page" [valuations]='valuations' [bottomReached]="bottomReached" [searchTerm]='searchTerm'></app-valuation-list>
 
       <div class="text-center text-danger" *ngIf="isMessageVisible && page === 1">
         <i class="far fa-sad-tear"></i> No results for your current search

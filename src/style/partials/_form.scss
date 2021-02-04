@@ -108,7 +108,7 @@ legend                                          { width:100%; }
 label, .label                                  	{ width:100%; display:flex; align-items:center; color:$color--midnight-70; font-weight:bold; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box;
    .icon--s                                     { align-self:center; }
    &:focus                                      { outline:none; }
-   &+.message, &+.joined                        { margin-top:6px; }
+   &+.message, &+.joined, &+.appWrapper         { margin-top:6px; }
 }
 label + input, .label + input, 
 label + textarea, .label + textarea, 
@@ -172,7 +172,6 @@ p-multiselect , p-dropdown                      { display:block; }
 
 .row__item--aside                               {
    .p-multiselect                               { max-width:100%; }
-   app-office-finder                            { display:inherit; }
 }
 
 /***** Prime NG no-style *****/

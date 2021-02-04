@@ -61,7 +61,7 @@
       </fieldset>
 
       <legend class="legend">Address</legend>
-      <app-address [personDetails]="personDetails || basicPerson" (addressDetails)="getAddress($event)"></app-address>
+      <app-address class="appWrapper" [personDetails]="personDetails || basicPerson" (addressDetails)="getAddress($event)"></app-address>
 
       <legend class="legend">Contact details</legend>
       <fieldset class="warning" *ngIf="personForm.errors?.emailOrPhone">
@@ -246,8 +246,7 @@
         </button>
       </footer>
     </form>
-    <app-additional-info [id]="personDetails?.personId ? 'P-'+personDetails?.personId : ''" *ngIf="!basicPerson">
-    </app-additional-info>
+    <app-additional-info class="appWrapper" [id]="personDetails?.personId ? 'P-'+personDetails?.personId : ''" *ngIf="!basicPerson"></app-additional-info>
 
   </div>
 </div>

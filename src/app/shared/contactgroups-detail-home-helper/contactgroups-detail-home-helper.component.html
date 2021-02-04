@@ -10,7 +10,7 @@
   </div>
 
   <div class="table">
-    <app-redacted-table *ngIf="!homeHelpers || !homeHelpers?.length" message="No home helpers"></app-redacted-table>
+    <app-redacted-table class="appWrapper" *ngIf="!homeHelpers || !homeHelpers?.length" message="No home helpers"></app-redacted-table>
     
     <table class="table--mobile table--rowHover">
       <thead *ngIf="homeHelpers && homeHelpers?.length">
