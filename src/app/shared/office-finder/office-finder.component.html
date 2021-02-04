@@ -3,7 +3,7 @@
     <label for="office">Office</label>
     <ng-container *ngIf="isMultiSelect;else dropDown">
       <p-multiSelect [options]="offices$ |async" formControlName="officeIds" optionLabel="name" optionValue="officeId"
-        display="chip" placeholder="Select Office(s)" (onChange)="onOfficeIdsSelected($event)"></p-multiSelect>
+        placeholder="Select Office(s)" (onChange)="onOfficeIdsSelected($event)"></p-multiSelect>
     </ng-container>
 
     <ng-template #dropDown>
