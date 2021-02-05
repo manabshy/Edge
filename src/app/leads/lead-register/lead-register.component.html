@@ -191,7 +191,7 @@
 
 <!-- Lead Owner Assignment Modal -->
 <p-dialog header="Lead Owner" [(visible)]="showModal" [modal]="true" [draggable]="false"
-  class="modal--smallWithHeight modal--hasFooter">
+  class="modal--small modal--hasFooter">
   <fieldset>
     <app-staff-member-finder class="appWrapper" label="Choose an owner for the selected leads:" placeholder="Select owner"
       (selectedStaffMemberId)="getSelectedOwner($event)"></app-staff-member-finder>
