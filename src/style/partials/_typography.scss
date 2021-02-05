@@ -1,6 +1,22 @@
 /***********************************************
 Font-face setup
 ***********************************************/
+// @font-face {
+//     font-family:'opensans';
+//     src:    url('../../assets/font/objectsans-bold.woff2') format('woff2'),
+//             url('../../assets/font/objectsans-bold.woff') format('woff');
+//     font-weight:bold;
+//     font-style:bold;
+// }
+  
+// @font-face {
+//     font-family:'opensans';
+//     src:    url('../../assets/font/objectsans-medium.woff2') format('woff2'),
+//             url('../../assets/font/objectsans-medium.woff') format('woff');
+//     font-weight:normal;
+//     font-style:normal;
+// }
+
 @font-face {
     font-family:'opensans';
     src:    url('../../assets/font/opensans-semibold.woff2') format('woff2'),
@@ -17,7 +33,7 @@ Font-face setup
     font-style:normal;
 }
 
-$font-size-sm:13px;
+$font-size-sm:12px;
 $input-height-sm:30px;
 
 /***** Fonts overrides *****/
@@ -26,9 +42,9 @@ body, form, input, textarea, select, label,
 .select optgroup option, .checkbox > span label,
 .radio > span label, form .message, .btn,
 .p-accordion, .p-toast, .p-component, 
-.p-inputtext                                    { font-family:'opensans', Sans-Serif; }
+.p-inputtext                                    { font-family:'opensans', Sans-Serif; -webkit-font-smoothing: antialiased; }
 
-html                                            { scroll-behavior:smooth; }
+html                                            { scroll-behavior:smooth; text-rendering:optimizeLegibility !important; -webkit-font-smoothing:antialiased !important; }
 body, .body                                     { font-size:12px; line-height:17px; letter-spacing:.5px; background-color:$color--snow; font-weight:normal; color:$color--midnight-70; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 
 /***** Typography *****/

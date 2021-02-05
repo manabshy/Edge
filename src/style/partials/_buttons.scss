@@ -46,8 +46,8 @@ button::-moz-focus-inner                        { border:0; padding:0; }
 
 /***** Color - default *****/
 .btn--default,
-.btn--default:hover[disabled]                   { background-color:$color--midnight-70; }
-.btn--default:hover                             { background-color:$color--midnight; }
+.btn--default:hover[disabled]                   { background-color:$color--midnight-10; color:$color--midnight-70; }
+.btn--default:hover                             { background-color:$color--midnight-20; }
 
 /***** Color - positive *****/
 .btn--positive,
@@ -56,8 +56,8 @@ button::-moz-focus-inner                        { border:0; padding:0; }
 
 /***** Color - Information *****/
 .btn--info,
-.btn--info:hover[disabled]                      { background-color:#3498DB; }
-.btn--info:hover                                { background-color:#0069C0; }
+.btn--info:hover[disabled]                      { background-color:$color--info; }
+.btn--info:hover                                { background-color:$color--info-dark; }
 
 /***** Color - Warning *****/
 .btn--warning,
