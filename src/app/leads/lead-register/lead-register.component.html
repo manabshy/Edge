@@ -88,11 +88,11 @@
 
   <div class="row__item">
     <form (ngSubmit)="showLeadsAssignmentModal()">
-      <div class="message message--smoke" *ngIf="areLeadsAssignable">
+      <!-- <div class="message message--smoke" *ngIf="areLeadsAssignable">
         Select to assign <button type="button" class="btn btn--onRight btn--link"
           (click)="selectAllLeadsForAssignment($event)">{{selectedLeadsForAssignment?.length ? 'Unselect' : 'Select'}}
           all</button>
-      </div>
+      </div> -->
 
       <div *ngIf="leads" infiniteScroll [infiniteScrollDistance]="5" [infiniteScrollUpDistance]="1.5"
         [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"></div>
@@ -103,7 +103,7 @@
             <tr>
               <th *ngIf="areLeadsAssignable" class="has--checkbox">
                 <!-- <a href *ngIf="areLeadsAssignable" (click)="selectAllLeadsForAssignment($event)"> -->
-                <span class="checkbox checkbox--noMargin" (click)="selectAllLeadsForAssignment($event)">
+                <span class="checkbox checkbox--noMargin" (change)="toggleSelectAllLeads()">
                   <span>
                     <input type="checkbox" id="assignAll" [attr.checked]="isSelectAllChecked ? 'checked' : null">
                     <label for="assignAll">
@@ -122,15 +122,15 @@
           </thead>
           <tbody>
             <tr *ngFor="let lead of filteredLeads; let i = index;"
-              (click)="selectLeadForAssignment($event, lead); navigateToEdit(lead)"
+              (click)="navigateToEdit(lead)"
               [ngClass]="{'table-info': selectedLeadIndex(lead) >= 0}">
               <td data-title="Assign" *ngIf="areLeadsAssignable" class="has--checkbox">
                 <span class="cell-content">
                   <span class="checkbox checkbox--noMargin checkbox--only" (click)="$event.stopPropagation()">
                     <span>
                       <input type="checkbox" [attr.id]="'assign'+i"
-                        [attr.checked]="selectedLeadsForAssignment?.indexOf(lead) >= 0 ? 'checked' : null"
-                        (click)="selectLeadForAssignment($event, lead)">
+                        [checked]="lead?.isChecked ? 'checked' : null"
+                        (change)="selectLeadForAssignment($event, lead)">
                       <label [attr.for]="'assign'+i">
                         <!--Assign-->&nbsp;
                       </label>

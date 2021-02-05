@@ -36,6 +36,7 @@ export interface Lead {
   createdBy: number;
   updatedDate: Date;
   updatedBy: number;
+  isChecked?: boolean;
 }
 
 export interface LeadSearchInfo {

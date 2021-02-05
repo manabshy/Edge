@@ -135,6 +135,11 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     this.areLeadsAssignable = true;
   }
 
+  toggleSelectAllLeads() {
+    this.isSelectAllChecked = !this.isSelectAllChecked;
+    this.selectAllLeadsForAssignment(this.isSelectAllChecked);
+  }
+
   assignSelected() {
     console.log('show popup to assign leads');
   }
@@ -144,40 +149,21 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     this.leadService.leadsChanged(lead);
   }
 
-  selectedLeadIndex(lead: Lead) {
-    return this.selectedLeadsForAssignment != null ? this.selectedLeadsForAssignment.indexOf(lead) : -1;
-  }
-
   selectLeadForAssignment(event, lead?: Lead) {
-    let leadIndex = -1;
-
-    if (this.areLeadsAssignable) {
-      event.stopPropagation();
-    }
-
-    if (this.areLeadsAssignable) {
-      leadIndex = this.selectedLeadIndex(lead);
-      if (leadIndex < 0) {
-        this.selectedLeadsForAssignment.push(lead);
-      } else {
-        this.selectedLeadsForAssignment.splice(leadIndex, 1);
-      }
-    }
+    lead.isChecked = !lead.isChecked;
+    this.getSelectedLeads();
   }
 
-  selectAllLeadsForAssignment(event) {
-    event.preventDefault();
-    if (this.selectedLeadsForAssignment.length) {
-      this.selectedLeadsForAssignment = [];
-      this.isSelectAllChecked = false;
-    } else {
-      if (this.filteredLeads) {
-        this.filteredLeads.forEach(lead => {
-          this.selectLeadForAssignment(event, lead);
-        });
-      }
-      this.isSelectAllChecked = true;
-    }
+  selectAllLeadsForAssignment(isSelectAllChecked: boolean) {
+    if (isSelectAllChecked) {
+      this.filteredLeads.forEach(x => { x.isChecked = true; });
+    } else { this.filteredLeads.forEach(x => { x.isChecked = false; }); }
+
+    this.getSelectedLeads();
+  }
+
+  getSelectedLeads() {
+    this.selectedLeadsForAssignment = this.filteredLeads.filter(x => x.isChecked);
   }
 
   private setupLeadRegisterForm() {
@@ -324,7 +310,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   }
 
   getSelectedTypes(types: number[]) {
-    console.log({types});
+    console.log({ types });
 
     this.LeadTypeIdControl.setValue(types[0]);
   }
