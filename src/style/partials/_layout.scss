@@ -169,6 +169,11 @@ app-telephone                                   { width:100%; display:flex; alig
   }
 }
 
+.bs-datepicker-container                        { padding:0; }
+.bs-datepicker                                  { background-color:transparent; box-shadow:0 0 10px 0 $color--midnight; border-radius:3px; overflow:hidden; }
+.bs-datepicker-body                             { min-width:334px; background-color:$color--snow; border:none; }
+.bs-datepicker-head                             { min-width:334px; }
+
 .btn--daterange                                 { font-weight:bold; font-size:18px; }
 .tab-content                                    { margin:0; }
 
@@ -184,7 +189,7 @@ app-telephone                                   { width:100%; display:flex; alig
   }
 }
 .calendar-container                             { margin-top:64px; }
-.theme-green .bs-datepicker-head                { background-color:$color--midnight; }
+.theme-green .bs-datepicker-head                { background-color:$color--midnight-70; }
 
 .footer                                         { margin:0; padding:10px; border-top:1px solid #E7E8EE; display:flex; justify-content:flex-end; width:100%; background-color:$color--snow; position:fixed; bottom:0; right:0; box-shadow:0px 0px 0px 1px $color--snow; -webkit-box-shadow:0px 0px 0px 1px $color--snow; z-index:10;
   .btn                                          {
