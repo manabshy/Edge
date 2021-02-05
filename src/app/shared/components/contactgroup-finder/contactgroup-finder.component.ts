@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Observable, EMPTY } from 'rxjs';
 import { tap, catchError, distinctUntilChanged, switchMap } from 'rxjs/operators';
@@ -12,8 +12,9 @@ import { SignerComponent } from '../../signer/signer.component';
   templateUrl: './contactgroup-finder.component.html',
   styleUrls: ['./contactgroup-finder.component.scss']
 })
-export class ContactgroupFinderComponent implements OnInit {
+export class ContactgroupFinderComponent implements OnInit, OnChanges {
   @Input() label: string;
+  @Input() fullName: string;
   @Output() selectedContactGroup = new EventEmitter<Signer>();
   @Output() isCreatingNewGroup = new EventEmitter<boolean>();
   contactGroupFinderForm: FormGroup;
@@ -25,7 +26,7 @@ export class ContactgroupFinderComponent implements OnInit {
   searchTerm = '';
 
   constructor(private fb: FormBuilder,
-    private contactGroupService: ContactGroupsService, private peopleService: PeopleService,) { }
+    private contactGroupService: ContactGroupsService, private peopleService: PeopleService) { }
 
   ngOnInit(): void {
     this.contactGroupFinderForm = this.fb.group({
@@ -33,6 +34,10 @@ export class ContactgroupFinderComponent implements OnInit {
       selectedSigner: [''],
     });
 
+    // console.log('here', this.searchTerm);
+    // if (this.searchTerm) {
+    //   this.getContactGroups(this.searchTerm);
+    // }
     this.suggestions = (text$: Observable<string>) =>
       text$.pipe(
         distinctUntilChanged(),
@@ -40,6 +45,13 @@ export class ContactgroupFinderComponent implements OnInit {
           this.getPeopleSuggestions(term)
         )
       );
+  }
+
+  ngOnChanges() {
+    if (this.fullName) {
+      // this.searchTerm = this.fullName;
+      this.getContactGroups(this.fullName);
+    }
   }
 
   private getPeopleSuggestions(term: string): Observable<any[]> {
@@ -80,6 +92,5 @@ export class ContactgroupFinderComponent implements OnInit {
 
   selectContactGroup(contactGroup: Signer) { this.selectedContactGroup.emit(contactGroup); }
   createNewContactGroup() { }
-
 
 }
