@@ -15,7 +15,7 @@ const routes: Routes = [
     path: 'detail/:id',
     children: [
       { path: '', component: PropertyDetailComponent, data: { shouldDetach: false } }, // do not cache page
-      { path: 'edit', component: PropertyDetailEditComponent , data: { shouldDetach: false }, canDeactivate: [CanDeactivateGuard] },
+      { path: 'edit', component: PropertyDetailEditComponent , data: { shouldDetach: false,  title: 'Property'}, canDeactivate: [CanDeactivateGuard] },
       { path: 'instructions', component: PropertyDetailInstructionsComponent, data: { shouldDetach: false } },
       { path: 'offers', component: PropertyDetailOffersComponent , data: { shouldDetach: false }},
       { path: 'documents', component: PropertyDetailDocumentsComponent, data: { shouldDetach: true } },

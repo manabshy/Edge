@@ -23,8 +23,9 @@
               </span>
             </fieldset>
 
-           <fieldset *ngIf="false">
-             <app-lead-type-finder class="appWrapper" [fullWidth]="true" [isMultiSelect]="true" (selectedLeadTypeIdList)="getSelectedTypes($event)" ></app-lead-type-finder>
+            <fieldset *ngIf="false">
+              <app-lead-type-finder class="appWrapper" [fullWidth]="true" [isMultiSelect]="true"
+                (selectedLeadTypeIdList)="getSelectedTypes($event)"></app-lead-type-finder>
             </fieldset>
 
             <div class="inline-parent">
@@ -44,7 +45,9 @@
               </fieldset>
             </div>
 
-            <app-office-finder class="appWrapper" (selectedOfficeId)="getSelectedOfficeId($event)" [fullWidth]="true" [isMultiSelect]="false"></app-office-finder>
+            <app-office-finder class="appWrapper" (selectedOfficeId)="getSelectedOfficeId($event)" [fullWidth]="true"
+              [isMultiSelect]="false" class="displayBlock">
+            </app-office-finder>
 
             <fieldset>
               <span class="checkbox">
@@ -78,7 +81,11 @@
           <ol class="list list--divider list--hover">
             <li>
               <a class="overall" href (click)="assignLeads()"></a>
-              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M32 32c8.6 0 15.5-7 15.5-15.5C47.5 7.9 40.6 1 32 1S16.5 7.9 16.5 16.5C16.5 25 23.4 32 32 32zM32 39.8c-10.3 0-31 5.2-31 15.5V63h62v-7.8C63 44.9 42.3 39.8 32 39.8z"></path></svg>Assign Leads
+              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
+                <path
+                  d="M32 32c8.6 0 15.5-7 15.5-15.5C47.5 7.9 40.6 1 32 1S16.5 7.9 16.5 16.5C16.5 25 23.4 32 32 32zM32 39.8c-10.3 0-31 5.2-31 15.5V63h62v-7.8C63 44.9 42.3 39.8 32 39.8z">
+                </path>
+              </svg>Assign Leads
             </li>
           </ol>
         </div>
@@ -88,11 +95,11 @@
 
   <div class="row__item">
     <form (ngSubmit)="showLeadsAssignmentModal()">
-      <div class="message message--smoke" *ngIf="areLeadsAssignable">
+      <!-- <div class="message message--smoke" *ngIf="areLeadsAssignable">
         Select to assign <button type="button" class="btn btn--onRight btn--link"
           (click)="selectAllLeadsForAssignment($event)">{{selectedLeadsForAssignment?.length ? 'Unselect' : 'Select'}}
           all</button>
-      </div>
+      </div> -->
 
       <div *ngIf="leads" infiniteScroll [infiniteScrollDistance]="5" [infiniteScrollUpDistance]="1.5"
         [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"></div>
@@ -103,7 +110,7 @@
             <tr>
               <th *ngIf="areLeadsAssignable" class="has--checkbox">
                 <!-- <a href *ngIf="areLeadsAssignable" (click)="selectAllLeadsForAssignment($event)"> -->
-                <span class="checkbox checkbox--noMargin" (click)="selectAllLeadsForAssignment($event)">
+                <span class="checkbox checkbox--noMargin" (change)="toggleSelectAllLeads()">
                   <span>
                     <input type="checkbox" id="assignAll" [attr.checked]="isSelectAllChecked ? 'checked' : null">
                     <label for="assignAll">
@@ -121,16 +128,13 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let lead of filteredLeads; let i = index;"
-              (click)="selectLeadForAssignment($event, lead); navigateToEdit(lead)"
-              [ngClass]="{'table-info': selectedLeadIndex(lead) >= 0}">
+            <tr *ngFor="let lead of filteredLeads; let i = index;" (click)="navigateToEdit(lead)">
               <td data-title="Assign" *ngIf="areLeadsAssignable" class="has--checkbox">
                 <span class="cell-content">
                   <span class="checkbox checkbox--noMargin checkbox--only" (click)="$event.stopPropagation()">
                     <span>
-                      <input type="checkbox" [attr.id]="'assign'+i"
-                        [attr.checked]="selectedLeadsForAssignment?.indexOf(lead) >= 0 ? 'checked' : null"
-                        (click)="selectLeadForAssignment($event, lead)">
+                      <input type="checkbox" [attr.id]="'assign'+i" [checked]="lead?.isChecked ? 'checked' : null"
+                        (change)="selectLeadForAssignment($event, lead)">
                       <label [attr.for]="'assign'+i">
                         <!--Assign-->&nbsp;
                       </label>
@@ -150,7 +154,8 @@
               </td>
               <td data-title="Person">
                 <span class="cell-content">
-                  <a class="table-link" [routerLink]="['edit', lead?.leadId]" [queryParams]="{ showNotes: true,showSaveAndNext: true,leadSearchInfo: this.info}">
+                  <a class="table-link" [routerLink]="['edit', lead?.leadId]"
+                    [queryParams]="{ showNotes: true,showSaveAndNext: true,leadSearchInfo: this.info}">
                     {{lead?.person}}
                   </a>
                 </span>
@@ -174,26 +179,28 @@
         <i class="far fa-sad-tear"></i> No results for your current search
       </div>
 
-    <footer class="footer">
+      <footer class="footer">
         <div class="btn--container" *ngIf="areLeadsAssignable">
           <button (click)="cancel()" type="button" class="btn btn--ghost">Cancel</button>
           <button type="submit" class="btn btn--positive">Assign {{selectedLeadsForAssignment?.length}}</button>
         </div>
-    </footer>
+      </footer>
     </form>
   </div>
 </div>
 
 <!-- Lead Owner Assignment Modal -->
-<p-dialog header="Lead Owner" [(visible)]="showModal" [modal]="true" [draggable]="false" class="modal--smallWithHeight modal--hasFooter">
+<p-dialog header="Lead Owner" [(visible)]="showModal" [modal]="true" [draggable]="false"
+  class="modal--smallWithHeight modal--hasFooter">
   <fieldset>
-    <app-staff-member-finder class="appWrapper" label="Choose an owner for the selected leads:" placeholder="Select owner" (selectedStaffMemberId)="getSelectedOwner($event)"></app-staff-member-finder>
+    <app-staff-member-finder class="appWrapper" label="Choose an owner for the selected leads:" placeholder="Select owner"
+      (selectedStaffMemberId)="getSelectedOwner($event)"></app-staff-member-finder>
   </fieldset>
   <footer class="footer--modal">
-   <div class="btn--container">
-     <button (click)="showModal=false" type="button" class="btn btn--ghost">Cancel</button>
-     <button type="button" class="btn btn--positive" (click)="assignLeadsToOwner()">Assign</button>
-   </div>
+    <div class="btn--container">
+      <button (click)="showModal=false" type="button" class="btn btn--ghost">Cancel</button>
+      <button type="button" class="btn btn--positive" (click)="assignLeadsToOwner()">Assign</button>
+    </div>
   </footer>
 </p-dialog>
 

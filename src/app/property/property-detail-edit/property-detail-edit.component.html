@@ -1,9 +1,9 @@
 <div class="row">
   <div class="row__item">
-    <h2>
+    <!-- <h2>
       <ng-container *ngIf="propertyDetails else newProperty ">Edit</ng-container> Property <ng-template #newProperty>Add
       </ng-template>
-    </h2>
+    </h2> -->
     <form *ngIf="propertyDetails || isNewProperty" [formGroup]="propertyForm" (ngSubmit)="saveProperty()" (keydown.enter)="$event.preventDefault()" autocompleteOff>
       <app-address [propertyDetails]="propertyDetails" [addressError]="formErrors.address" [isRequired]="isAddressRequired" [isNewProperty]="isNewProperty" [isCheckingDuplicateProperties]="true" (addressDetails)="getAddress($event)" (checkDuplicateProperties)="setCheckDuplicatesFlag($event)" [searchedAddress]="searchedAddress"></app-address>
 
