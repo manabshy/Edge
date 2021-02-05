@@ -8,8 +8,8 @@ export class SidenavService {
   sideNavItems: SideNavItem[] = [
     { name: 'notes', isCurrent: true },
     { name: 'contactGroups', isCurrent: false },
-    { name: 'properties', isCurrent: false },
-    { name: 'leads', isCurrent: false },
+    { name: 'properties', isCurrent: false, showButton: true },
+    { name: 'leads', isCurrent: false, showButton: true },
     { name: 'instructions', isCurrent: false },
     { name: 'valuations', isCurrent: false },
     { name: 'offers', isCurrent: false },
@@ -45,4 +45,5 @@ export class SidenavService {
 export interface SideNavItem {
   name: string;
   isCurrent: boolean;
+  showButton?: boolean;
 }

@@ -16,7 +16,7 @@
         <ng-template #loadingInfo>
           <span class="badge badge-pill badge-primary"><i class="fas fa-spinner fa-pulse d-inline-block"></i></span>
         </ng-template>
-        <!-- <a href="" class="flexRight zindex-11">Create</a> -->
+        <a *ngIf="item?.showButton"  class="flexRight zindex-11" (click)="createNewItem($event, item?.name)">Create</a>
       </li>
     </ol>
   </div>

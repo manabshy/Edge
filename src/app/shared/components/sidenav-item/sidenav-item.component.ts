@@ -13,6 +13,7 @@ export class SidenavItemComponent implements OnInit {
   @Input() sideNavItems: SideNavItem[] = [];
   @Input() scrollToItem = '';
   @Output() selectedItem = new EventEmitter<any>();
+  @Output() create = new EventEmitter<string>();
 
   constructor(private sidenavService: SidenavService) { }
 
@@ -31,5 +32,10 @@ export class SidenavItemComponent implements OnInit {
     if (el) {
       this.sidenavService.scrollTo(el);
     }
+  }
+
+  createNewItem(event: any, type: string) {
+    event.stopPropagation();
+    this.create.emit(type?.toLowerCase());
   }
 }
