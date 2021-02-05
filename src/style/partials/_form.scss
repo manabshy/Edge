@@ -149,6 +149,7 @@ label+p-dropdown                                { margin-top:6px; }
 .p-dropdown-filter-container                    {
    .p-dropdown-filter-icon                      { margin-top:-0.3rem; }
 }
+.dropdown-menu.show                             { z-index:11; }
 
 .pi                                             { font-size:10px; }
 .p-component                                    { font-size:inherit; }
