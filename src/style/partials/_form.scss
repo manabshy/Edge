@@ -93,7 +93,7 @@ fieldset                                       	{ padding:0; text-align:left; di
    &:first-of-type                              { 
       .legend                                   { margin-top:0; }
    }
-  .message                                      { margin:0; border-radius:0 0 3px 3px; top:-2px;
+  *+.message                                    { margin:0; border-radius:0 0 3px 3px; top:-2px;
       &+.select                                 { margin-top:6px; }
    }
   small                                 	      { display:block; line-height:14px; }
