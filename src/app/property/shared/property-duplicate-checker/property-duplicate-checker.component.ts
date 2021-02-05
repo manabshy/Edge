@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { PropertyService } from '../property.service';
 import { Address } from 'src/app/shared/models/address';
 import { PropertyAutoComplete } from '../property';
@@ -8,13 +8,14 @@ import { PropertyAutoComplete } from '../property';
   templateUrl: './property-duplicate-checker.component.html',
   styleUrls: ['./property-duplicate-checker.component.scss']
 })
-export class PropertyDuplicateCheckerComponent implements OnInit, OnChanges {
+export class PropertyDuplicateCheckerComponent implements OnInit, OnChanges, OnDestroy {
   @Input() propertyAddress: Address;
   @Input() propertyId: number;
   @Input() checkDuplicates = false;
   @Output() selectedProperty = new EventEmitter<any>();
   @Output() fullMatchFound = new EventEmitter<boolean>();
   @Output() hideModal = new EventEmitter<boolean>();
+  @Output() showModal = new EventEmitter<boolean>();
   potentialDuplicates: PropertyAutoComplete[] = [];
   showMatches = false;
   isDuplicateFound = false;
@@ -27,6 +28,8 @@ export class PropertyDuplicateCheckerComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
+    this.potentialDuplicates = [];
+    this.isFullMatch = false;
     this.propertyService.showPropertyDuplicatesChanges$.subscribe(data => {
       this.showMatches = data;
     });
@@ -54,6 +57,7 @@ export class PropertyDuplicateCheckerComponent implements OnInit, OnChanges {
         this.potentialDuplicates = data;
         this.isDuplicateFound = true;
         this.getFullMatches(data);
+        this.showModal.emit();
       } else { this.hideModal.emit(); }
     });
   }
@@ -66,6 +70,10 @@ export class PropertyDuplicateCheckerComponent implements OnInit, OnChanges {
       this.isFullMatch = false;
     }
     this.fullMatchFound.emit(this.isFullMatch);
+  }
+
+  ngOnDestroy() {
+    this.potentialDuplicates = [];
   }
 }
 

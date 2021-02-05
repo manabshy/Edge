@@ -52,6 +52,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
   createdSigner: Signer;
   isMatchFound = false;
   showMatches = false;
+  isDuplicateCheckerVisible = false;
   lastKnownPerson: any;
   leadId: number;
   personId: number;

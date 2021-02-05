@@ -1,6 +1,5 @@
-<fieldset>
-  <p class="message message--info" *ngIf="isFullMatch">There is already a property with this address. Select it from the
-    list or <a href (click)="$event.preventDefault(); hideModal.emit()">search again</a>.
+<fieldset *ngIf="isFullMatch">
+  <p class="message message--warning">There is already a property with this address. Use the link below to navigate to it or <a href (click)="$event.preventDefault(); hideModal.emit()">search again</a>.
   </p>
 </fieldset>
 <div class="table">
@@ -13,7 +12,7 @@
           </span>
           <span *ngIf="foundProperty?.ranking">
             <small class="txt--positive" *ngIf="foundProperty?.matchType == 'FullMatch'">Full Match</small>
-            <small class="txt--warning" *ngIf="foundProperty?.matchType == 'PartMatch'">Good Match</small>
+            <small class="txt--warning" *ngIf="foundProperty?.matchType == 'PartMatch'">Part Match</small>
           </span>
         </td>
         <td class="hide--mobile">

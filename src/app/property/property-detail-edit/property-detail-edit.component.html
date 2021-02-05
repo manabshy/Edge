@@ -113,10 +113,10 @@
 <p-toast></p-toast>
 
 <!--Property Duplicate Checker Modal -->
-<p-dialog header="Quick finder" [(visible)]="checkPossibleDuplicates" [modal]="true" [draggable]="false">
+<p-dialog header="Duplicate Record Warning" [(visible)]="isDuplicateCheckerVisible" [modal]="true" [draggable]="false">
   <app-property-duplicate-checker class="appWrapper" [propertyAddress]="propertyAddress" [propertyId]="propertyDetails?.propertyId"
     [checkDuplicates]="checkPossibleDuplicates" (selectedProperty)="getSelectedProperty($event)"
-    (hideModal)="checkPossibleDuplicates=false" (fullMatchFound)="checkPropertyMatches($event)">
+    (hideModal)="isDuplicateCheckerVisible=false" (fullMatchFound)="checkPropertyMatches($event)" (showModal)="isDuplicateCheckerVisible=true">
   </app-property-duplicate-checker>
 </p-dialog>
 
