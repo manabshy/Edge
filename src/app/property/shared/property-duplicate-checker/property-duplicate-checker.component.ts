@@ -54,7 +54,7 @@ export class PropertyDuplicateCheckerComponent implements OnInit, OnChanges {
         this.potentialDuplicates = data;
         this.isDuplicateFound = true;
         this.getFullMatches(data);
-      }
+      } else { this.hideModal.emit(); }
     });
   }
 
