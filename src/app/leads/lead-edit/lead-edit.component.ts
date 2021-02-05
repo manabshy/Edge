@@ -387,6 +387,18 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     }
   }
 
+  create(item: string) {
+    if (item === 'leads') {
+      this.router.navigateByUrl('/', { skipLocationChange: true })
+        .then(() => this.router.navigate(['leads-register/edit', 0], { queryParams: { isNewLead: true, showNotes: true, personId: this.person?.personId } }));
+    } else {
+      const fullName = `${this.person?.firstName} ${this.person?.middleName} ${this.person?.lastName}`;
+      this.router.navigate(['property-centre', 'detail', 0, 'edit'],
+        { queryParams: { isNewProperty: true, personId: this.person?.personId, lastKnownPerson: fullName } });
+    }
+
+  }
+
   SaveLead(shouldExit: boolean = false, leadNote = null) {
     this.logValidationErrors(this.leadEditForm, true, true);
 
@@ -483,7 +495,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
     let time: number;
     if (this.isNewLead) {
-      this.messageService.add({ severity: 'success', summary: 'Lead successfully saved', closable: false});
+      this.messageService.add({ severity: 'success', summary: 'Lead successfully saved', closable: false });
     } else {
       this.isSaveAndNext ? time = 2000 : time = 3000;
       this.messageService.add({ severity: 'success', summary: 'Lead successfully updated', closable: false, life: time });
