@@ -55,7 +55,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
   lastKnownPerson: any;
   leadId: number;
   personId: number;
-  lastKnownPersonParam: any;
+  // lastKnownPerson: any;
   defaultStyle: number;
   defaultRegionId = 1;
   searchedAddress: string;
@@ -67,6 +67,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
   dialogRef: DynamicDialogRef;
   isLastknownOwnerVisible = false;
   isAddressRequired = false;
+  lastKnownOwnerModalHeader = 'Last known owner';
 
   constructor(private route: ActivatedRoute,
     private _router: Router,
@@ -110,13 +111,17 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
       this.leadId = +params['leadId'] || 0;
       this.personId = +params['personId'] || 0;
       this.getBack = +params['getBack'] || 0;
-      this.lastKnownPersonParam = params['lastKnownPerson'];
+      this.lastKnownPerson = params['lastKnownPerson'];
       if (this.isNewProperty) {
         this.propertyForm.reset();
         this.setupEditForm();
       }
-      if (this.lastKnownPersonParam) {
-        this.lastKnownPerson = JSON.parse(params['lastKnownPerson']);
+      if (this.lastKnownPerson) {
+        // this.lastKnownPerson = JSON.parse(params['lastKnownPerson']);
+        this.isLastknownOwnerVisible = true;
+        this.lastKnownOwnerModalHeader = 'Select last known owner from the list';
+        console.log('here....');
+
       }
     });
 
@@ -259,6 +264,10 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
     this.isLastknownOwnerVisible = false;
   }
 
+  showLastKnowOwnerModal(){
+    this.isLastknownOwnerVisible = true;
+    this.lastKnownOwnerModalHeader = 'Last known owner';
+  }
   createNewLastKnownOwner() {
     this.isLastknownOwnerVisible = false;
     this.propertyForm.markAsPristine();

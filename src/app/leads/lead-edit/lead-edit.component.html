@@ -185,7 +185,7 @@
               <p>No property associated to this lead</p>
             </ng-template>
           </li>
-          <li class="width30pc" *ngIf="lead?.relatedProperty; else noProperty">
+          <li class="width30pc">
             <div class="wrapper--note" *ngIf="!isLeadClosed">
               <app-lead-note #leadNote [selectedPerson]="person" (leadNote)="getNewPersonNote($event)" [noteRequiredWarning]="noteRequiredWarning" [isUpdateComplete]="isUpdateComplete"></app-lead-note>
             </div>

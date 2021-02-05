@@ -1,7 +1,7 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ContactGroup, BasicContactGroup, PersonSummaryFigures, ContactGroupDetailsSubNavItems, ContactNote } from '../shared/contact-group';
 import { ContactGroupsService } from '../shared/contact-groups.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Person } from 'src/app/shared/models/person';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { AppUtils } from 'src/app/core/shared/utils';
@@ -54,6 +54,7 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
     private storage: StorageMap,
     private infoService: InfoService,
     private sidenavService: SidenavService,
+    private router: Router,
     private route: ActivatedRoute) { super(); }
 
   @HostListener('window:scroll', [])
@@ -200,6 +201,17 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
     console.log({ item });
   }
 
+  create(item: string) {
+    console.log({ item }, 'item to create');
+    if (item === 'leads') {
+      this.router.navigate(['leads-register', 'edit', 0], { queryParams: { isNewLead: true, personId: this.searchedPersonDetails?.personId } });
+    } else {
+      const fullName = `${this.searchedPersonDetails.firstName} ${this.searchedPersonDetails?.middleName} ${this.searchedPersonDetails?.lastName}`;
+      this.router.navigate(['property-centre', 'detail', 0, 'edit'],
+        { queryParams: { isNewProperty: true, personId: this.searchedPersonDetails?.personId, lastKnownPerson: fullName } });
+    }
+
+  }
   ngOnDestroy() {
     this.sidenavService.resetCurrentFlag();
   }
