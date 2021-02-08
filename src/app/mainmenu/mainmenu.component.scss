@@ -52,10 +52,10 @@
 .mobile_nav .line-middle,
 .mobile_nav .line-bottom                        { display:block; }
 
-.menu_open .mobile_nav .cross                   { display:block; }
-.menu_open .mobile_nav .line-top,
-.menu_open .mobile_nav .line-middle,
-.menu_open .mobile_nav .line-bottom             { display:none; }
+.menu_open + .headerMobile .cross               { display:block; }
+.menu_open + .headerMobile .line-top,
+.menu_open + .headerMobile .line-middle,
+.menu_open + .headerMobile .line-bottom         { display:none; }
 
 /***********************************************
 This applies from 992px onwards
@@ -84,7 +84,7 @@ Mobile ONLY - This applies from 0px to 767px
         -webkit-transition:left 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s;
         -o-transition:left 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s;
     }
-    .aside .scrollY                             { padding:0 50px; }
+    .aside .scrollY                             { padding:0 30px; }
 }
 
 // @import "../../style/bootstrap-overrides";
