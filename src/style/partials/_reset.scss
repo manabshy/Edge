@@ -107,6 +107,7 @@ a                                               { color:inherit; text-decoration
     background 0.2s cubic-bezier(0.33, 0, 0.2, 1) 0s
   ;
 }
+a:hover                                         { cursor:pointer; }
 a:focus                                         { outline:none; outline-style:none; -moz-outline-style:none; }
 .overall                                        { width:100%; height:100%; position:absolute; top:0; left:0; z-index:10; cursor:pointer; }
 
