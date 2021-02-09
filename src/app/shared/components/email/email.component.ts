@@ -37,7 +37,7 @@ export class EmailComponent implements OnInit, OnChanges {
   private setupForm() {
     this.emailForm = this.fb.group(({
       senderEmail: [this?.currentStaffMember?.email],
-      recipientEmail: [''],
+      recipientEmail: ['', Validators.required],
       ccInternalEmail: [''],
       ccExternalEmail: [''],
       subject: [''],

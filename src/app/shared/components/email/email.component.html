@@ -1,7 +1,7 @@
 <form [formGroup]="emailForm" (ngSubmit)="send()" autocomplete="off">
   <fieldset>
     <label for="senderEmail">From</label>
-    <span class="radio">
+    <span class="radio radio--inline">
       <span>
         <input type="radio" id="individualEmail" [value]="currentStaffMember?.email" name="senderEmail"
           formControlName="senderEmail" data-cy="individualEmail">
@@ -14,7 +14,7 @@
       </span>
     </span>
   </fieldset>
-  <fieldset>
+  <fieldset class="fieldset fieldset--width-max">
     <label for="recipientEmail">To (External)</label>
     <p-multiSelect [options]="groupedPeople" [group]="true" formControlName="recipientEmail" optionLabel="name"
       optionValue="value" defaultLabel="Select recipient email" crollHeight="250px" display="chip">
@@ -38,25 +38,41 @@
       </ng-template>
     </p-multiSelect>
   </fieldset>
-  <fieldset><label for="ccExternalEmail">Cc (External)</label><input type="email" id="ccExternalEmail" formControlName="ccExternalEmail"></fieldset>
+  <fieldset><label for="ccExternalEmail">Cc (External)</label><input type="email" id="ccExternalEmail"
+      formControlName="ccExternalEmail"></fieldset>
   <fieldset><label for="subject">Subject</label><input type="text" id="subject" formControlName="subject"></fieldset>
   <fieldset><button class="btn btn--info" data-cy="searchProperty">Attach</button></fieldset>
-  <fieldset></fieldset>
-  <p-editor formControlName="body" [style]="{'height':'320px'}">
-    <p-header>
+
+  <fieldset  class="fieldset fieldset--width-max">
+    <p-editor formControlName="body" [style]="{'height':'320px'}">
+      <p-header>
         <span class="ql-formats">
-            <button class="ql-bold" aria-label="Bold"></button>
-            <button class="ql-italic" aria-label="Italic"></button>
-            <button class="ql-underline" aria-label="Underline"></button>
+          <button class="ql-bold" aria-label="Bold"></button>
+          <button class="ql-italic" aria-label="Italic"></button>
+          <button class="ql-underline" aria-label="Underline"></button>
         </span>
-    </p-header>
-</p-editor>
-<footer class="footer--modal">
-  <div class="btn--container">
-    <button type="button" class="btn btn--ghost" (click)="cancel()">Cancel</button>
-    <button type="submit" class="btn btn--positive">Send</button>
-  </div>
-</footer>
+        <!-- <span class="ql-formats">
+          <button class="ql-align" value="left"></button>
+        </span> -->
+        <span class="ql-formats">
+          <button class="ql-align" value="center"></button>
+        </span>
+        <span class="ql-formats">
+          <button class="ql-list" value="ordered"></button>
+          <button class="ql-list" value="bullet"></button>
+        </span>
+        <span class="ql-formats">
+          <button class="ql-link" aria-label="Hypertext"></button>
+        </span>
+      </p-header>
+    </p-editor>
+  </fieldset>
+  <footer class="footer--modal">
+    <div class="btn--container">
+      <button type="button" class="btn btn--ghost" (click)="cancel()">Cancel</button>
+      <button type="submit" class="btn btn--positive">Send</button>
+    </div>
+  </footer>
 </form>
 
 <!-- <ng-template>
