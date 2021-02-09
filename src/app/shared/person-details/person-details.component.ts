@@ -20,6 +20,7 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
   @Input() contactType: number;
   @Input() referenceCount: number;
   @Input() index = 0;
+  @Input() showEmailModal = false;
   @Output() selectedPersonId = new EventEmitter<number>();
   @Output() removedPersonPersonId = new EventEmitter<number>();
   @Output() mainPersonPersonId = new EventEmitter<number>();
