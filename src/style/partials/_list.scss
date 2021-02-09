@@ -43,6 +43,7 @@
 }
 
 *+.list                                         { margin-top:20px; }
+sup+.list                                       { margin-top:6px; }
 
 .list--simple                                   {
     li                                          { padding:0; flex-wrap:wrap;
