@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ContactGroup } from 'src/app/contactgroups/shared/contact-group';
+import { Email, Person } from '../../models/person';
 
 @Component({
   selector: 'app-email',
@@ -10,37 +11,7 @@ import { ContactGroup } from 'src/app/contactgroups/shared/contact-group';
 export class EmailComponent implements OnInit, OnChanges {
   @Input() contactGroup: ContactGroup;
   emailFormGroup: FormGroup;
- 
-  selectedCities3 =''
-  groupedCities = [
-    {
-        label: 'Germany', value: 'de',
-        items: [
-            {label: 'Berlin', value: 'Berlin'},
-            {label: 'Frankfurt', value: 'Frankfurt'},
-            {label: 'Hamburg', value: 'Hamburg'},
-            {label: 'Munich', value: 'Munich'}
-        ]
-    },
-    {
-        label: 'USA', value: 'us',
-        items: [
-            {name: 'Chicago', value: 'Chicago'},
-            {name: 'Los Angeles', value: 'Los Angeles'},
-            {name: 'New York', value: 'New York'},
-            {name: 'San Francisco', value: 'San Francisco'}
-        ]
-    },
-    {
-        label: 'Japan', value: 'jp',
-        items: [
-            {name: 'Kyoto', value: 'Kyoto'},
-            {name: 'Osaka', value: 'Osaka'},
-            {name: 'Tokyo', value: 'Tokyo'},
-            {name: 'Yokohama', value: 'Yokohama'}
-        ]
-    }
-];
+  groupedPeople = [];
 
   constructor(private fb: FormBuilder) { }
 
@@ -55,13 +26,26 @@ export class EmailComponent implements OnInit, OnChanges {
     }));
   }
 
-  ngOnChanges(){
-    if(this.contactGroup){
+  ngOnChanges() {
+    if (this.contactGroup) {
       console.log(this.contactGroup, 'group');
-
+      this.getGroupedPeople(this.contactGroup.contactPeople);
     }
   }
 
+  getGroupedPeople(people: Person[]) {
+    people?.forEach(x => {
+      const item = { label: x.addressee, value: x.addressee, items: this.getEmails(x.emailAddresses) };
+      this.groupedPeople.push(item);
+      console.log('group', this.groupedPeople);
+    });
+  }
+
+  getEmails(emailAddresses: Email[]) {
+    const emails = [];
+    emailAddresses.forEach(x => emails.push({ name: x.email, value: x.email }));
+    return emails;
+  }
 
   send() { }
 }

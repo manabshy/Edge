@@ -16,8 +16,15 @@
   </fieldset>
   <fieldset>
     <label for="recipientEmail">To</label>
-    <p-multiSelect [options]="contactGroup?.contactPeople" formControlName="recipientEmail" optionLabel="addressee"
-      optionValue="addressee" placeholder="Select recipient email" display="chip"></p-multiSelect>
+    <p-multiSelect [options]="groupedPeople" [group]="true" formControlName="recipientEmail" optionLabel="name"
+      optionValue="value" defaultLabel="Select recipient email" crollHeight="250px" display="chip">
+      <ng-template let-group pTemplate="group">
+        <div class="p-d-flex p-ai-center">
+          <!-- <img src="assets/showcase/images/demo/flag/flag_placeholder.png" [class]="'p-mr-2 flag flag-' + group.value" style="width: 20px"/> -->
+          <span>{{group.label}}</span>
+        </div>
+      </ng-template>
+    </p-multiSelect>
   </fieldset>
   <fieldset><label for="subject">Subject</label><input type="text" id="subject" formArrayName="subject"></fieldset>
   <fieldset><button class="btn btn--info" data-cy="searchProperty">Attach</button></fieldset>
@@ -35,30 +42,30 @@
   </ng-template>
   </p-editor></fieldset> -->
   <fieldset></fieldset>
-  <p-editor [style]="{'height':'320px'}">
+  <!-- <p-editor [style]="{'height':'320px'}">
     <ng-template pTemplate="header">
-        <span class="ql-format-group">
-            <span title="Bold" class="ql-format-button ql-bold"></span>
-            <span class="ql-format-separator"></span>
-            <span title="Italic" class="ql-format-button ql-italic"></span>
-            <span class="ql-format-separator"></span>
-            <span title="Underline" class="ql-format-button ql-underline"></span>
-            <span class="ql-format-separator"></span>
-            <span title="Strikethrough" class="ql-format-button ql-strike"></span>
-        </span>
+      <span class="ql-format-group">
+        <span title="Bold" class="ql-format-button ql-bold"></span>
+        <span class="ql-format-separator"></span>
+        <span title="Italic" class="ql-format-button ql-italic"></span>
+        <span class="ql-format-separator"></span>
+        <span title="Underline" class="ql-format-button ql-underline"></span>
+        <span class="ql-format-separator"></span>
+        <span title="Strikethrough" class="ql-format-button ql-strike"></span>
+      </span>
     </ng-template>
-  </p-editor>
-</form>
+  </p-editor> -->
 
-<!-- <h5>Grouped</h5>
-<p-multiSelect [options]="groupedCities" [group]="true" [(ngModel)]="selectedCities3" defaultLabel="Select a City" crollHeight="250px" display="chip">
-    <ng-template let-group pTemplate="group">
-        <div class="p-d-flex p-ai-center">
-            <img src="assets/showcase/images/demo/flag/flag_placeholder.png" [class]="'p-mr-2 flag flag-' + group.value" style="width: 20px"/>
-            <span>{{group.label}}</span>
-        </div>
-    </ng-template>
-</p-multiSelect> -->
+  <p-editor formControlName="body" [style]="{'height':'320px'}">
+    <p-header>
+        <span class="ql-formats">
+            <button class="ql-bold" aria-label="Bold"></button>
+            <button class="ql-italic" aria-label="Italic"></button>
+            <button class="ql-underline" aria-label="Underline"></button>
+        </span>
+    </p-header>
+</p-editor>
+</form>
 
 <!-- <ng-template>
   <p-multiSelect [options]="countries" [(ngModel)]="selectedCountries" defaultLabel="Select a Country" optionLabel="name" class="multiselect-custom">
