@@ -51,16 +51,16 @@ app-telephone                                   { width:100%; display:flex; alig
 .headerMobile-nav li                            { margin:0; padding:0; width:50px; height:60px; flex-grow:1; display:flex; align-items:center; }
 .headerMobile-nav li.backLink .icon             { width:24px; height:24px; }
 
-.headerMobile-nav li.stag                       { justify-content:center; color:$color--snow; }
+.headerMobile-nav li.stag                       { padding-left:10px; justify-content:flex-start; flex-grow:2; color:$color--snow; }
 .headerMobile-nav li.stag a                     { justify-content:center; align-items:flex-end; }
 .headerMobile-nav li.stag .icon                 { height:50px; width:auto; top:0; }
 
-.headerMobile-nav li.menuToggle                 { justify-content:flex-end; }
+.headerMobile-nav li.menuToggle                 { padding-right:5px; justify-content:flex-end; }
 .headerMobile-nav li.menuToggle .icon           { width:24px; height:24px; }
 
 .header                                         { background-color:$color--snow; box-shadow:0px 0px 0px 1px $color--snow; -webkit-box-shadow:0px 0px 0px 1px $color--snow; }
 
-.header-title                                   { margin:0; padding:0; list-style:none; display:flex; font-size:13px; }
+.header-title                                   { margin:0; padding:0; list-style:none; display:flex; font-size:16px; }
 .header-title li                                { margin:0; padding:0; color:$color--midnight; display:flex; align-items:center; position:relative; }
 .header-title li:nth-child(1n+3)                { padding-left:10px; color:$color--midnight-50; }
 .header-title li:nth-child(1n+3):before         { content:''; display:block; width:1px; height:9px; background-color:$color--midnight-70; border-radius:10px; position:absolute; left:0; -webkit-transform:rotate(25deg); -moz-transform:rotate(25deg); -ms-transform:rotate(25deg); -o-transform:rotate(25deg); transform:rotate(25deg); }
@@ -267,7 +267,7 @@ This applies from 992px onwards
 Mobile ONLY - This applies from 0px to 767px
 ***********************************************/
 @media only screen and (max-width:767px) {
-  .header                                       { margin-bottom:6px; }
+  .header                                       { margin-bottom:16px; }
   .header-title li .icon                        { height:10px; width:10px; }
   .header-title li+*                            { margin-left:4px; }
   .header-title li:nth-child(1n+3):before       { left:2px; }
