@@ -10,7 +10,38 @@ import { ContactGroup } from 'src/app/contactgroups/shared/contact-group';
 export class EmailComponent implements OnInit, OnChanges {
   @Input() contactGroup: ContactGroup;
   emailFormGroup: FormGroup;
-  text1: string = '<div>Hello World!</div><div>PrimeNG <b>Editor</b> Rocks</div><div><br></div>';
+ 
+  selectedCities3 =''
+  groupedCities = [
+    {
+        label: 'Germany', value: 'de',
+        items: [
+            {label: 'Berlin', value: 'Berlin'},
+            {label: 'Frankfurt', value: 'Frankfurt'},
+            {label: 'Hamburg', value: 'Hamburg'},
+            {label: 'Munich', value: 'Munich'}
+        ]
+    },
+    {
+        label: 'USA', value: 'us',
+        items: [
+            {name: 'Chicago', value: 'Chicago'},
+            {name: 'Los Angeles', value: 'Los Angeles'},
+            {name: 'New York', value: 'New York'},
+            {name: 'San Francisco', value: 'San Francisco'}
+        ]
+    },
+    {
+        label: 'Japan', value: 'jp',
+        items: [
+            {name: 'Kyoto', value: 'Kyoto'},
+            {name: 'Osaka', value: 'Osaka'},
+            {name: 'Tokyo', value: 'Tokyo'},
+            {name: 'Yokohama', value: 'Yokohama'}
+        ]
+    }
+];
+
   constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {

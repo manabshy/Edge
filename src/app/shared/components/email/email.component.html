@@ -50,6 +50,15 @@
   </p-editor>
 </form>
 
+<!-- <h5>Grouped</h5>
+<p-multiSelect [options]="groupedCities" [group]="true" [(ngModel)]="selectedCities3" defaultLabel="Select a City" crollHeight="250px" display="chip">
+    <ng-template let-group pTemplate="group">
+        <div class="p-d-flex p-ai-center">
+            <img src="assets/showcase/images/demo/flag/flag_placeholder.png" [class]="'p-mr-2 flag flag-' + group.value" style="width: 20px"/>
+            <span>{{group.label}}</span>
+        </div>
+    </ng-template>
+</p-multiSelect> -->
 
 <!-- <ng-template>
   <p-multiSelect [options]="countries" [(ngModel)]="selectedCountries" defaultLabel="Select a Country" optionLabel="name" class="multiselect-custom">
