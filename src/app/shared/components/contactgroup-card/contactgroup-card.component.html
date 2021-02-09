@@ -8,7 +8,7 @@
           </p>
         </span>
         <div class="flexRight">
-          
+
             <div dropdown placement="bottom right">
               <a class="btn dropdown-toggle" href [id]="'button'" dropdownToggle (click)="$event.stopPropagation(); false"
                 [attr.aria-controls]="'dropdown'">
@@ -27,7 +27,7 @@
                 </li>
               </ul>
             </div>
-          
+
         </div>
       </li>
 
@@ -67,7 +67,7 @@
                 d="M-0.3 13.8v-3.6c0-1.1 0.9-2.1 2.1-2.1h59.9c1.1 0 2.1 0.9 2.1 2.1v3.6l-32 20L-0.3 13.8zM32.8 37.9c-0.3 0.2-0.7 0.3-1.1 0.3 -0.4 0-0.7-0.1-1.1-0.3L-0.3 18.5v35.6c0 1.1 0.9 2.1 2.1 2.1h59.9c1.1 0 2.1-0.9 2.1-2.1V18.5L32.8 37.9z">
               </path>
             </svg>
-            <a href="mailto:contactGroup?.contactPeople[0]?.emailAddresses[0]?.email" class="ng-star-inserted">
+            <a  class="ng-star-inserted" (click)="showEmailModal=true">
               {{contactGroup?.contactPeople[0]?.emailAddresses[0]?.email}}</a>
           </li>
         </ol>
@@ -132,3 +132,8 @@
     </ol>
   </div>
 </div>
+
+<!-- Email Modal -->
+<p-dialog [showHeader]="false" [(visible)]="showEmailModal" [modal]="true" [draggable]="false" class="modal--medium modal--hasFooter">
+  <app-email [contactGroup]="contactGroup"></app-email>
+</p-dialog>

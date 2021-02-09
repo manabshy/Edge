@@ -12,6 +12,7 @@ import { Person } from '../../models/person';
 })
 export class ContactgroupCardComponent implements OnInit, OnChanges {
   @Input() contactGroup: ContactGroup;
+  @Input() showEmailModal = false;
   numOfPeople: number;
   showAdditionalPeople = false;
   firstPerson: Person;
