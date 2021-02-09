@@ -54,8 +54,8 @@
     <div class="row">
       <div class="col-sm-3 offset-sm-2" [hidden]="!isSearchVisible">
         <div class="form-group">
-          <button type="button" class="btn btn-light btn-sm btn-block" [ngClass]="{'is-invalid': contactRequiredWarning}" (click)="setSigners()">
-            <i class="fas fa-plus mr-2"></i>
+          <button type="button" class="btn btn--info" [ngClass]="{'is-invalid': contactRequiredWarning}" (click)="setSigners()">
+            <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft icon--s"><path class="horizontal" d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z"></path><path class="vertical" d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z"></path></svg>
             <ng-container *ngIf="!label; else givenLabel3">Signer</ng-container>
               <ng-template #givenLabel3>{{label}}</ng-template>
           </button>
