@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { ContactGroup } from 'src/app/contactgroups/shared/contact-group';
@@ -13,6 +13,7 @@ import { StaffMember } from '../../models/staff-member';
 })
 export class EmailComponent implements OnInit, OnChanges {
   @Input() contactGroup: ContactGroup;
+  @Output() hideModal = new EventEmitter<boolean>();
   emailForm: FormGroup;
   groupedPeople = [];
   currentStaffMember: StaffMember;
@@ -67,5 +68,10 @@ export class EmailComponent implements OnInit, OnChanges {
 
   send() {
     console.log(this.emailForm?.value, 'send email form');
+  }
+
+  cancel() {
+    this.emailForm?.reset();
+    this.hideModal.emit();
   }
 }

@@ -135,5 +135,5 @@
 
 <!-- Email Modal -->
 <p-dialog [showHeader]="false" [(visible)]="showEmailModal" [modal]="true" [draggable]="false" class="modal--medium modal--hasFooter">
-  <app-email [contactGroup]="contactGroup"></app-email>
+  <app-email [contactGroup]="contactGroup" (hideModal)="showEmailModal=false"></app-email>
 </p-dialog>
