@@ -77,6 +77,7 @@ import { SharedContactgroupListComponent } from './shared-contactgroup-list/shar
 import { ToPascalCasePipe } from './pipes/to-pascal-case.pipe';
 import { SidenavItemComponent } from './components/sidenav-item/sidenav-item.component';
 
+//Primeng
 import { GalleriaModule } from 'primeng/galleria';
 import { DialogModule } from 'primeng/dialog';
 import { AccordionModule } from 'primeng/accordion';
@@ -85,9 +86,10 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DropdownModule } from 'primeng/dropdown';
 import { MultiSelectModule } from 'primeng/multiselect';
+import {EditorModule} from 'primeng/editor';
 
 
-
+// Components
 import { RedactedTableComponent } from './components/redacted-table/redacted-table.component';
 import { PropertyCardComponent } from './components/property-card/property-card.component';
 import { ContactgroupCardComponent } from './components/contactgroup-card/contactgroup-card.component';
@@ -96,6 +98,7 @@ import { PropertyDetailPhotosComponent } from './components/property-detail-phot
 import { PropertyDetailMapComponent } from './components/property-detail-map/property-detail-map.component';
 import { ContactgroupFinderComponent } from './components/contactgroup-finder/contactgroup-finder.component';
 import { ImportantMessagesComponent } from './components/important-messages/important-messages.component';
+import { EmailComponent } from './components/email/email.component';
 
 const components = [
   BreadcrumbComponent,
@@ -140,6 +143,7 @@ const components = [
   PropertyDetailMapComponent,
   ContactgroupFinderComponent,
   ImportantMessagesComponent,
+  EmailComponent,
 ];
 const pipes = [
   RoundingPipe,
@@ -182,7 +186,8 @@ const externalModules = [
   DynamicDialogModule,
   ToastModule,
   DropdownModule,
-  MultiSelectModule
+  MultiSelectModule,
+  EditorModule
 ];
 
 @NgModule({
@@ -190,6 +195,7 @@ const externalModules = [
     components,
     pipes,
     directives,
+
   ],
   imports: [
     CommonModule,
