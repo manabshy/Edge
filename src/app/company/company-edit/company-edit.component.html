@@ -22,13 +22,9 @@
         <app-signer class="appWrapper" (selectedSigner)="getSelectedSigner($event)" (newSigner)="createNewSigner($event)" [existingSigner]="existingSigner"></app-signer>
 
         <ledgend class="legend">Company Address</ledgend>
-        <fieldset>
-          <label>Address</label>
-          <app-address class="appWrapper" [companyDetails]="companyDetails" (addressDetails)="getAddress($event)"></app-address>
-        </fieldset>
+        <app-address class="appWrapper" [companyDetails]="companyDetails" (addressDetails)="getAddress($event)"></app-address>
 
         <ledgend class="legend">Contact Details</ledgend>
-
         <fieldset>
           <label for="companyTelephone" class="small">Telephone</label>
           <input type="text" id="companyTelephone" placeholder="" class="form-control form-control-sm" formControlName="telephone" [ngClass]="{'is-invalid':formErrors.telephone}">

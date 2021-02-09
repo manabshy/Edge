@@ -1,5 +1,43 @@
 <form class="p-0" [formGroup]="companyFinderForm" autocompleteOff>
-  <div class="row" *ngIf="!existingCompany">
+  <fieldset>
+    <label for="company">Find Company</label>
+    <span class="joined">
+      <input #companyNameInput type="search" id="company" formControlName="companyName" [ngClass]="{'is-invalid': companyNameError && !enterManually && !companyFinderForm.value.companyName}" (keydown.enter)="searchCompany()"[ngbTypeahead]="suggestions" [focusFirst]="false" (selectItem)="selectedSuggestion($event)">
+      <div class="btn--container">
+        <button type="button" class="btn btn--info" (click)="searchCompany()">Search</button>
+      </div>
+    </span>
+    <p class="message message--info">Search for a Company</p>
+    <p *ngIf="noSuggestions">No Company Found. <a href (click)="enterCompany()">Enter it manually</a>.</p>
+  </fieldset>
+
+  <div class="off-canvas" [hidden]="!foundCompanies" (click)="foundCompanies = null">
+    <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
+      <h4 class="page-title text-left pt-3">
+        Pick Company
+        <button type="button" class="close mr-2" aria-label="Close" (click)="foundCompanies = null">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </h4>
+      <div class="list-group small mb-3">
+        <div class="list-group-item list-group-item-action" *ngFor="let company of foundCompanies"
+          (click)="selectCompany(company)">
+          <div class="row align-items-center">
+            <div class="col"
+              [innerHTML]="company.companyName | highlight : companyFinderForm.value.companyName"></div>
+            <div class="col-auto">
+              <button class="btn btn-block btn-sm btn-link">Select</button>
+            </div>
+          </div>
+        </div>
+        <div class="list-group-item text-center">
+          No Company Found? Try again or <a href (click)="enterCompany()">enter it manually</a>.
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- <div class="row" *ngIf="!existingCompany">
     <div class="col-sm-8 col-xl-6 offset-sm-2">
       <div class="form-group">
         <label for="company" class="small">Find Company</label>
@@ -43,7 +81,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
   <ng-container *ngIf="(!foundCompanies && isCompanyAdded) || enterManually || existingCompany">
     <fieldset>
       <label for="company">Company name</label>
