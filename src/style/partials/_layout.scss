@@ -15,7 +15,7 @@ app-telephone                                   { width:100%; display:flex; alig
 
 .row+*,
 .row__item+*                                    { margin-top:16px; }
-.row__item--aside                               { z-index:1;
+.row__item--aside                               {
   .card                                         { margin:0 0 16px 0; }
   &+.row__item                                  { padding-bottom:50px; }
 }
@@ -213,7 +213,7 @@ This applies from 992px onwards
 @media (min-width:992px) {
   .scroll-to-top                                { display:none; }
   .wrapper                                      { margin-left:216px;
-    &--sticky                                   { position:sticky; top:80px; }
+    &--sticky                                   { position:sticky; top:80px; z-index:1; }
     &--filters                                  { margin:0;
       &+*                                       { margin-top:30px; }
     }
