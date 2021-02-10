@@ -157,8 +157,11 @@ label+p-dropdown                                { margin-top:6px; }
 .p-dropdown:not(.p-disabled).p-focus            { box-shadow:none; }
 .p-dropdown:not(.p-disabled):hover              { border-color:$color--midnight-20; }
 
+
 /***** Prime NG multiselect *****/
-p-multiselect , p-dropdown                      { display:block; }
+p-multiselect , p-dropdown                      { display:block;
+   .p-dropdown-label                            { white-space:initial; }
+}
 
 .p-multiselect-filter-container                 {
    .p-dropdown-filter-icon                      { margin-top:-0.3rem; }
@@ -411,7 +414,6 @@ Tablet - This applies from 768px onwards
    .has-inline-elements .select                 { flex:1; }
    .has-inline-elements .btn--container         { margin:0; padding:0 0 0 10px; }
    .inline-parent .inline-child + * 		  	   { margin-top:0; }
-   .row__item--aside .p-multiselect             { max-width:208px; }
 }
 
 
