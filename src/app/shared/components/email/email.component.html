@@ -14,18 +14,22 @@
       </span>
     </span>
   </fieldset>
-  <fieldset class="fieldset fieldset--width-max">
-    <label for="recipientEmail">To (External)</label>
-    <p-multiSelect [options]="groupedPeople" [group]="true" formControlName="recipientEmail" optionLabel="name"
-      optionValue="value" defaultLabel="Select recipient email" crollHeight="250px" display="chip">
-      <ng-template let-group pTemplate="group">
-        <div class="p-d-flex p-ai-center">
-          <!-- <img src="assets/showcase/images/demo/flag/flag_placeholder.png" [class]="'p-mr-2 flag flag-' + group.value" style="width: 20px"/> -->
-          <span>{{group.label}}</span>
-        </div>
-      </ng-template>
-    </p-multiSelect>
-  </fieldset>
+ <div class="inline-parent">
+    <fieldset class="inline-child">
+    <!-- <fieldset class="fieldset fieldset--width-max"> -->
+      <label for="recipientEmail">To (External)</label>
+      <p-multiSelect [options]="groupedPeople" [group]="true" [filter]="false" [showHeader]="false" formControlName="recipientEmail" optionLabel="name"
+        optionValue="value" defaultLabel="Select recipient email" crollHeight="250px" display="chip" (onClick)="showButton=true">
+        <ng-template let-group pTemplate="group">
+          <div class="p-d-flex p-ai-center">
+            <!-- <img src="assets/showcase/images/demo/flag/flag_placeholder.png" [class]="'p-mr-2 flag flag-' + group.value" style="width: 20px"/> -->
+            <span>{{group.label}}</span>
+          </div>
+        </ng-template>
+      </p-multiSelect>
+    </fieldset>
+    <fieldset *ngIf="showButton" class="inline-child"> <button type="button" class="btn btn--info" (click)="isContactGroupFinderVisible=true">Add Contact Group</button></fieldset>
+ </div>
   <fieldset>
     <label for="ccInternalEmail">Cc (Internal)</label>
     <p-multiSelect [options]="groupedPeople" [group]="true" formControlName="ccInternalEmail" optionLabel="name"
@@ -43,7 +47,7 @@
   <fieldset><label for="subject">Subject</label><input type="text" id="subject" formControlName="subject"></fieldset>
   <fieldset><button class="btn btn--info" data-cy="searchProperty">Attach</button></fieldset>
 
-  <fieldset  class="fieldset fieldset--width-max">
+  <fieldset class="fieldset fieldset--width-max">
     <p-editor formControlName="body" [style]="{'height':'320px'}">
       <p-header>
         <span class="ql-formats">
@@ -61,7 +65,7 @@
             <option value="center"></option>
             <option value="right"></option>
             <option value="justify"></option>
-        </select> 
+          </select>
         </span>
         <span class="ql-formats">
           <button class="ql-list" value="ordered"></button>
@@ -80,6 +84,14 @@
     </div>
   </footer>
 </form>
+
+
+<!-- Contactgroup Finder Modal -->
+<p-dialog header="Find contact group" [(visible)]="isContactGroupFinderVisible" [modal]="true" [draggable]="false"
+  class="modal--medium modal--hasFooter">
+  <app-contactgroup-finder class="appWrapper" [isFull]="true" (fullSelectedContactGroup)="getSelectedContactGroup($event)"
+    (isCreatingNewGroup)="isContactGroupFinderVisible=false"></app-contactgroup-finder>
+</p-dialog>
 
 <!-- <ng-template>
   <p-multiSelect [options]="countries" [(ngModel)]="selectedCountries" defaultLabel="Select a Country" optionLabel="name" class="multiselect-custom">

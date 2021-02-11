@@ -5,6 +5,7 @@ import { ContactGroup } from 'src/app/contactgroups/shared/contact-group';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
 import { Email, Person } from '../../models/person';
 import { StaffMember } from '../../models/staff-member';
+import lodash from "lodash";
 
 @Component({
   selector: 'app-email',
@@ -17,7 +18,8 @@ export class EmailComponent implements OnInit, OnChanges {
   emailForm: FormGroup;
   groupedPeople = [];
   currentStaffMember: StaffMember;
-
+  isContactGroupFinderVisible = false;
+  showButton = false;
   constructor(private fb: FormBuilder, private storage: StorageMap,
     public staffMemberService: StaffMemberService) { }
 
@@ -53,6 +55,7 @@ export class EmailComponent implements OnInit, OnChanges {
   }
 
   getGroupedPeople(people: Person[]) {
+    this.groupedPeople = [];
     people?.forEach(x => {
       const item = { label: x.addressee, value: x.addressee, items: this.getEmails(x.emailAddresses) };
       this.groupedPeople.push(item);
@@ -64,6 +67,19 @@ export class EmailComponent implements OnInit, OnChanges {
     const emails = [];
     emailAddresses.forEach(x => emails.push({ name: x.email, value: x.email }));
     return emails;
+  }
+
+  getSelectedContactGroup(group: ContactGroup) {
+    if (group) {
+      this.isContactGroupFinderVisible = false;
+
+      this.contactGroup.contactPeople = [...this.contactGroup.contactPeople, ...group.contactPeople];
+      const people = lodash.uniqBy(this.contactGroup.contactPeople, 'personId');
+      console.log({people });
+
+      this.getGroupedPeople(people);
+    }
+
   }
 
   send() {
