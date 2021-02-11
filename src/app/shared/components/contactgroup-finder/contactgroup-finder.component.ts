@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angu
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Observable, EMPTY } from 'rxjs';
 import { tap, catchError, distinctUntilChanged, switchMap } from 'rxjs/operators';
-import { BasicContactGroup, Signer } from 'src/app/contactgroups/shared/contact-group';
+import { BasicContactGroup, ContactGroup, Signer } from 'src/app/contactgroups/shared/contact-group';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { PeopleService } from 'src/app/core/services/people.service';
 import { SignerComponent } from '../../signer/signer.component';
@@ -15,7 +15,9 @@ import { SignerComponent } from '../../signer/signer.component';
 export class ContactgroupFinderComponent implements OnInit, OnChanges {
   @Input() label: string;
   @Input() fullName: string;
+  @Input() isFull = false;
   @Output() selectedContactGroup = new EventEmitter<Signer>();
+  @Output() fullSelectedContactGroup = new EventEmitter<ContactGroup>();
   @Output() isCreatingNewGroup = new EventEmitter<boolean>();
   contactGroupFinderForm: FormGroup;
   noSuggestions: boolean;
@@ -77,6 +79,15 @@ export class ContactgroupFinderComponent implements OnInit, OnChanges {
     });
   }
 
+
+  getContactGroupDetails(contactGroupId: number) {
+    this.contactGroupService.getContactGroupbyId(contactGroupId).subscribe(data => {
+      console.log({ data });
+
+      if (data) { this.fullSelectedContactGroup.emit(data); }
+    });
+  }
+
   selectedSuggestion(event: any) {
     if (event.item != null) {
       this.suggestedTerm = event.item;
@@ -90,7 +101,13 @@ export class ContactgroupFinderComponent implements OnInit, OnChanges {
     this.getContactGroups(this.searchTerm);
   }
 
-  selectContactGroup(contactGroup: Signer) { this.selectedContactGroup.emit(contactGroup); }
+  selectContactGroup(contactGroup: Signer) {
+    if (this.isFull) {
+      this.getContactGroupDetails(contactGroup.contactGroupId);
+    } else {
+      this.selectedContactGroup.emit(contactGroup);
+    }
+  }
   createNewContactGroup() { }
 
 }
