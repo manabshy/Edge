@@ -1,92 +1,180 @@
 <form [formGroup]="emailForm" (ngSubmit)="send()" autocomplete="off">
-  <fieldset>
-    <label for="senderEmail">From</label>
-    <span class="radio radio--inline">
-      <span>
-        <input type="radio" id="individualEmail" [value]="currentStaffMember?.email" name="senderEmail"
-          formControlName="senderEmail" data-cy="individualEmail">
-        <label for="individualEmail">{{currentStaffMember?.email}}</label>
-      </span>
-      <span>
-        <input type="radio" id="departmentEmail" value="helpdesk@dng.co.uk" name="senderEmail"
-          formControlName="senderEmail">
-        <label for="departmentEmail">helpdesk@dng.co.uk</label>
-      </span>
-    </span>
-  </fieldset>
-  <div class="inline-parent">
-    <fieldset class="inline-child">
-      <!-- <fieldset class="fieldset fieldset--width-max"> -->
-      <label for="recipientEmail">To (External)</label>
-      <ng-container *ngIf="personOnly; else group">
-        <p-multiSelect [options]="personalEmails" [filter]="false" [showHeader]="false" formControlName="recipientEmail"
-          optionLabel="name" optionValue="value" defaultLabel="Select recipient email" crollHeight="250px"
-          display="chip" (onClick)="showButton=true">
-        </p-multiSelect>
-      </ng-container>
-      <ng-template #group>
-        <p-multiSelect [options]="groupedPeople" [group]="true" [filter]="false" [showHeader]="false"
-          formControlName="recipientEmail" optionLabel="name" optionValue="value" defaultLabel="Select recipient email"
-          crollHeight="250px" display="chip" (onClick)="showButton=true">
-          <ng-template let-group pTemplate="group">
-            <div class="p-d-flex p-ai-center">
-              <!-- <img src="assets/showcase/images/demo/flag/flag_placeholder.png" [class]="'p-mr-2 flag flag-' + group.value" style="width: 20px"/> -->
-              <span>{{group.label}}</span>
-            </div>
-          </ng-template>
-        </p-multiSelect>
-      </ng-template>
-    </fieldset>
-    <fieldset *ngIf="showButton" class="inline-child"> <button type="button" class="btn btn--info"
-        (click)="isContactGroupFinderVisible=true">Add Contact Group</button></fieldset>
-  </div>
-  <fieldset>
-    <label for="ccInternalEmail">Cc (Internal)</label>
-    <p-multiSelect [options]="groupedPeople" [group]="true" formControlName="ccInternalEmail" optionLabel="name"
-      optionValue="value" defaultLabel="Select email" crollHeight="250px" display="chip">
-      <ng-template let-group pTemplate="group">
-        <div class="p-d-flex p-ai-center">
-          <!-- <img src="assets/showcase/images/demo/flag/flag_placeholder.png" [class]="'p-mr-2 flag flag-' + group.value" style="width: 20px"/> -->
-          <span>{{group.label}}</span>
+  <p-tabView>
+    <p-tabPanel header="MESSAGE DETAILS">
+      <div class="row">
+        <div class="grid grid--25">
+          <fieldset>
+            <label for="senderEmail">From</label>
+            <span class="radio radio--inline">
+              <span>
+                <input type="radio" id="individualEmail" [value]="currentStaffMember?.email" name="senderEmail"
+                  formControlName="senderEmail" data-cy="individualEmail">
+                <label for="individualEmail">{{currentStaffMember?.email}}</label>
+              </span>
+              <span>
+                <input type="radio" id="departmentEmail" value="helpdesk@dng.co.uk" name="senderEmail"
+                  formControlName="senderEmail">
+                <label for="departmentEmail">helpdesk@dng.co.uk</label>
+              </span>
+            </span>
+          </fieldset>
+          <div class="inline-parent">
+            <fieldset class="inline-child">
+              <label for="recipientEmail">To (External)</label>
+              <ng-container *ngIf="personOnly; else group">
+                <p-multiSelect [options]="personalEmails" [filter]="false" [showHeader]="false" formControlName="recipientEmail"
+                  optionLabel="name" optionValue="value" defaultLabel="Select recipient email" crollHeight="250px"
+                  display="chip" (onClick)="showButton=true">
+                </p-multiSelect>
+              </ng-container>
+              <ng-template #group>
+                <p-multiSelect [options]="groupedPeople" [group]="true" [filter]="false" [showHeader]="false"
+                  formControlName="recipientEmail" optionLabel="name" optionValue="value" defaultLabel="Select recipient email"
+                  crollHeight="250px" display="chip" (onClick)="showButton=true">
+                  <ng-template let-group pTemplate="group">
+                    <div class="p-d-flex p-ai-center">
+                      <span>{{group.label}}</span>
+                    </div>
+                  </ng-template>
+                </p-multiSelect>
+              </ng-template>
+            </fieldset>
+            <!-- <fieldset *ngIf="showButton" class="inline-child"> <button type="button" class="btn btn--info"
+                (click)="isContactGroupFinderVisible=true">Add Contact Group</button></fieldset> -->
+          </div>
+          <fieldset>
+            <label for="ccInternalEmail">Cc (Internal)</label>
+            <p-multiSelect [options]="groupedPeople" [group]="true" formControlName="ccInternalEmail" optionLabel="name"
+              optionValue="value" defaultLabel="Select email" crollHeight="250px" display="chip">
+              <ng-template let-group pTemplate="group">
+                <div class="p-d-flex p-ai-center">
+                  <span>{{group.label}}</span>
+                </div>
+              </ng-template>
+            </p-multiSelect>
+          </fieldset>
+          <fieldset><label for="ccExternalEmail">Cc (External)</label><input type="email" id="ccExternalEmail"
+              formControlName="ccExternalEmail"></fieldset>
+              <fieldset><button class="btn btn--info" data-cy="searchProperty" (click)="showFileUploader=true">Add Attachments</button></fieldset>
         </div>
-      </ng-template>
-    </p-multiSelect>
-  </fieldset>
-  <fieldset><label for="ccExternalEmail">Cc (External)</label><input type="email" id="ccExternalEmail"
-      formControlName="ccExternalEmail"></fieldset>
-  <fieldset><label for="subject">Subject</label><input type="text" id="subject" formControlName="subject"></fieldset>
-  <fieldset><button class="btn btn--info" data-cy="searchProperty" (click)="showFileUploader=true">Attach</button></fieldset>
-
-  <fieldset class="fieldset fieldset--width-max">
-    <p-editor formControlName="body" [style]="{'height':'320px'}">
-      <p-header>
-        <span class="ql-formats">
-          <button class="ql-bold" aria-label="Bold"></button>
-          <button class="ql-italic" aria-label="Italic"></button>
-          <button class="ql-underline" aria-label="Underline"></button>
-        </span>
-        <!-- <span class="ql-formats">
-          <button class="ql-align" value="left"></button>
-        </span> -->
-        <span class="ql-formats">
-          <!-- <button class="ql-align" value="center"></button> -->
-          <select class="ql-align">
-            <option selected></option>
-            <option value="center"></option>
-            <option value="right"></option>
-            <option value="justify"></option>
-          </select>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-list" value="ordered"></button>
-          <button class="ql-list" value="bullet"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-link" aria-label="Hypertext"></button>
-        </span>
-      </p-header>
-    </p-editor>
-  </fieldset>
+        <div class="grid grid--75 grid--dividerLeft">
+          <fieldset><label for="subject">Subject</label><input type="text" id="subject" formControlName="subject"></fieldset>
+          <fieldset class="fieldset fieldset--width-max">
+            <p-editor formControlName="body" [style]="{'height':'320px'}">
+              <p-header>
+                <span class="ql-formats">
+                  <button class="ql-bold" aria-label="Bold"></button>
+                  <button class="ql-italic" aria-label="Italic"></button>
+                  <button class="ql-underline" aria-label="Underline"></button>
+                </span>
+                <span class="ql-formats">
+                  <select class="ql-align">
+                    <option selected></option>
+                    <option value="center"></option>
+                    <option value="right"></option>
+                    <option value="justify"></option>
+                  </select>
+                </span>
+                <span class="ql-formats">
+                  <button class="ql-list" value="ordered"></button>
+                  <button class="ql-list" value="bullet"></button>
+                </span>
+                <span class="ql-formats">
+                  <button class="ql-link" aria-label="Hypertext"></button>
+                </span>
+              </p-header>
+            </p-editor>
+          </fieldset>
+        </div>
+      </div>
+    </p-tabPanel>
+    <p-tabPanel header="ATTACHMENTS(0)">
+     <div class="row">
+       <div class="grid grid--25">
+        <fieldset>
+          <label for="text">Search type</label>
+          <span class="radio toggle">
+            <span>
+              <input type="radio" checked="checked" name="radio-toggle" id="contact">
+              <label for="contact"><span>Contact</span></label>
+            </span>
+            <span>
+              <input type="radio" name="radio-toggle" id="property">
+              <label for="property"><span>Property</span></label>
+            </span>
+          </span>
+        </fieldset>
+        <fieldset>
+          <label for="search">Search</label>
+          <input type="search" id="search" [placeholder]="searchPlaceholder">
+        </fieldset>
+        <fieldset>
+          <label for="type">Type</label>
+          <span class="select">
+            <select class="custom-select custom-select-sm" id="type" name="type" formControlName="typeId">
+              <option selected value="0">Select type</option>
+              <option *ngFor="let type of propertyTypes" [value]=type.id>{{type.value}}</option>
+            </select>
+          </span>
+        </fieldset>
+        <fieldset>
+          <label for="type">Offer</label>
+          <span class="select">
+            <select class="custom-select custom-select-sm" id="offer" name="offer" formControlName="offer">
+              <option selected value="0">Select offer</option>
+              <option *ngFor="let offer of offers" [value]=offer.id>{{offer.value}}</option>
+            </select>
+          </span>
+        </fieldset>
+        <fieldset>
+          <div class="btn--container">
+            <button type="submit" class="btn btn--info">Search</button>
+            <button type="button" class="btn btn--ghost" (click)="cancel()">Clear</button>
+          </div>
+        </fieldset>
+       </div>
+       <div class="grid grid--75 grid--dividerLeft">
+         <div class="table">
+           <table class="table--mobile table--rowHover">
+             <thead>
+               <tr>
+                 <th>File Name / Description</th>
+                 <th>Type</th>
+                 <th colspan="2">Uploaded By / Date</th>
+               </tr>
+             </thead>
+             <tbody>
+               <tr *ngFor="let doc of documents">
+                 <td data-title="File Name / Description">
+                   <span class="cell-content">
+                       <span class="displayBlock">{{doc?.fileName}}</span>
+                       <small>{{doc?.description}}</small>
+                   </span>
+                 </td>
+                 <td data-title="Type">
+                   <span class="cell-content">
+                       <span class="displayBlock">{{doc?.type}}</span>
+                   </span>
+                 </td>
+                 <td data-title="Uploaded By / Date">
+                   <span class="cell-content">
+                       <span class="displayBlock">{{doc?.uploadBy}}</span>
+                       <small>{{doc?.dateUploaded}}</small>
+                   </span>
+                 </td>
+                 <td class="hide--mobile">
+                   <a (click)="selectDocument(doc)">
+                     <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" /><path class="plus-vertical"d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" /></svg>
+                    </a>
+                 </td>
+               </tr>
+             </tbody>
+           </table>
+         </div>
+       </div>
+     </div>
+    </p-tabPanel>
+  </p-tabView>
   <footer class="footer--modal">
     <div class="btn--container">
       <button type="button" class="btn btn--ghost" (click)="cancel()">Cancel</button>

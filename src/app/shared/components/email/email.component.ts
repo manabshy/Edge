@@ -27,7 +27,15 @@ export class EmailComponent implements OnInit, OnChanges {
   existingPeople: Person[] = [];
   showFileUploader = false;
   uploadedFiles: any[] = [];
-
+  searchPlaceholder = 'Property Address or Id';
+  propertyTypes = [];
+  offers = [];
+  isDocSelected = false;
+  documents: UploadDocument[] = [
+    { fileName: '2345.html', description: 'Property List', type: 'Property Lettings', uploadBy: 'Emma Seckel', dateUploaded: '27/05/2015 13:14' },
+    { fileName: '12345.docx', description: 'Instruction Letter', type: 'Property Sales', uploadBy: 'Emma Seckel', dateUploaded: '27/05/2015 13:14' },
+    { fileName: '2345 00.docx', description: 'Property List', type: 'Property Lettings', uploadBy: 'Emma Seckel', dateUploaded: '27/05/2015 13:14' },
+  ];
   constructor(private fb: FormBuilder, private storage: StorageMap,
     public staffMemberService: StaffMemberService) { }
 
@@ -134,6 +142,13 @@ export class EmailComponent implements OnInit, OnChanges {
     }
 
   }
+
+  selectDocument(doc: UploadDocument) {
+    console.log({ doc });
+
+    this.isDocSelected = !this.isDocSelected;
+  }
+  
   send() {
     console.log(this.emailForm?.value, 'send email form');
   }
@@ -142,4 +157,14 @@ export class EmailComponent implements OnInit, OnChanges {
     // this.emailForm?.reset();
     this.hideModal.emit();
   }
+}
+
+
+export interface UploadDocument {
+  fileName: string;
+  description: string;
+  type: string;
+  uploadBy: string;
+  dateUploaded: string;
+  isSelected?: boolean;
 }
