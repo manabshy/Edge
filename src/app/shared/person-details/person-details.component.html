@@ -236,6 +236,6 @@
 </ng-template>
 
 <!-- Email Modal -->
-<p-dialog  [(visible)]="showEmailModal" [modal]="true" [draggable]="false" class="modal--medium modal--hasFooter">
-  <app-email></app-email>
+<p-dialog [showHeader]="false" [(visible)]="showEmailModal" [modal]="true" [draggable]="false" class="modal--medium modal--hasFooter">
+  <app-email [person]="personDetails" (hideModal)="showEmailModal=false"></app-email>
 </p-dialog>
