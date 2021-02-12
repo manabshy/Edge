@@ -55,7 +55,7 @@
   <fieldset><label for="ccExternalEmail">Cc (External)</label><input type="email" id="ccExternalEmail"
       formControlName="ccExternalEmail"></fieldset>
   <fieldset><label for="subject">Subject</label><input type="text" id="subject" formControlName="subject"></fieldset>
-  <fieldset><button class="btn btn--info" data-cy="searchProperty">Attach</button></fieldset>
+  <fieldset><button class="btn btn--info" data-cy="searchProperty" (click)="showFileUploader=true">Attach</button></fieldset>
 
   <fieldset class="fieldset fieldset--width-max">
     <p-editor formControlName="body" [style]="{'height':'320px'}">
@@ -104,6 +104,17 @@
     (isCreatingNewGroup)="isContactGroupFinderVisible=false"></app-contactgroup-finder>
 </p-dialog>
 
+<!-- Contactgroup Finder Modal -->
+<p-dialog header="Add files" [(visible)]="showFileUploader" [modal]="true" [draggable]="false">
+  <p-fileUpload name="demo[]" [showCancelButton]="false" [showUploadButton]="false" url="./upload.php" (onUpload)="onUpload($event)"
+            multiple="multiple" maxFileSize="1000000">
+            <ng-template pTemplate="content">
+                <ul *ngIf="uploadedFiles.length">
+                    <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+                </ul>
+            </ng-template>
+    </p-fileUpload>
+</p-dialog>
 <!-- <ng-template>
   <p-multiSelect [options]="countries" [(ngModel)]="selectedCountries" defaultLabel="Select a Country" optionLabel="name" class="multiselect-custom">
     <ng-template pTemplate="header">

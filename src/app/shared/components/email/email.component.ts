@@ -25,6 +25,9 @@ export class EmailComponent implements OnInit, OnChanges {
   personOnly = false;
   personalEmails: { name: string, value: string }[] = [];
   existingPeople: Person[] = [];
+  showFileUploader = false;
+  uploadedFiles: any[] = [];
+
   constructor(private fb: FormBuilder, private storage: StorageMap,
     public staffMemberService: StaffMemberService) { }
 
@@ -125,6 +128,12 @@ export class EmailComponent implements OnInit, OnChanges {
 
   }
 
+  onUpload(event) {
+    for (let file of event.files) {
+      this.uploadedFiles.push(file);
+    }
+
+  }
   send() {
     console.log(this.emailForm?.value, 'send email form');
   }

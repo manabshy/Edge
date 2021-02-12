@@ -87,6 +87,8 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { DropdownModule } from 'primeng/dropdown';
 import { MultiSelectModule } from 'primeng/multiselect';
 import {EditorModule} from 'primeng/editor';
+import {FileUploadModule} from 'primeng/fileupload';
+
 
 
 // Components
@@ -187,7 +189,8 @@ const externalModules = [
   ToastModule,
   DropdownModule,
   MultiSelectModule,
-  EditorModule
+  EditorModule,
+  FileUploadModule
 ];
 
 @NgModule({
