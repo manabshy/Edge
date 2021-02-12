@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { StorageMap } from '@ngx-pwa/local-storage';
+import { NgxFileDropEntry, FileSystemFileEntry, FileSystemDirectoryEntry } from 'ngx-file-drop';
 import { ContactGroup } from 'src/app/contactgroups/shared/contact-group';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
 import { Email, Person } from '../../models/person';
 import { StaffMember } from '../../models/staff-member';
 import lodash from 'lodash';
-import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-email',
@@ -27,6 +27,7 @@ export class EmailComponent implements OnInit, OnChanges {
   existingPeople: Person[] = [];
   showFileUploader = false;
   uploadedFiles: any[] = [];
+  public files: NgxFileDropEntry[] = [];
   searchPlaceholder = 'Property Address or Id';
   propertyTypes = [];
   offers = [];
@@ -142,6 +143,56 @@ export class EmailComponent implements OnInit, OnChanges {
     for (let file of event.files) {
       this.uploadedFiles.push(file);
     }
+  }
+
+  public fileOver(event){
+    console.log(event);
+  }
+
+  public fileLeave(event){
+    console.log(event);
+  }
+
+  public dropped(files: NgxFileDropEntry[]) {
+    this.files = files;
+    for (const droppedFile of files) {
+
+      // Is it a file?
+      if (droppedFile.fileEntry.isFile) {
+        const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
+        fileEntry.file((file: File) => {
+
+          // Here you can access the real file
+          console.log(droppedFile.relativePath, file);
+
+          /**
+          // You could upload it like this:
+          const formData = new FormData()
+          formData.append('logo', file, relativePath)
+
+          // Headers
+          const headers = new HttpHeaders({
+            'security-token': 'mytoken'
+          })
+
+          this.http.post('https://mybackend.com/api/upload/sanitize-and-save-logo', formData, { headers: headers, responseType: 'blob' })
+          .subscribe(data => {
+            // Sanitized logo returned from backend
+          })
+          **/
+
+        });
+      } else {
+        // It was a directory (empty directories are added, otherwise only files)
+        const fileEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
+        console.log(droppedFile.relativePath, fileEntry);
+      }
+    }
+  }
+
+  removeFile(file:any){
+    console.log({file}, 'to be removed');
+
   }
 
   selectDocument(doc: UploadDocument) {
