@@ -31,6 +31,7 @@ export class EmailComponent implements OnInit, OnChanges {
   searchPlaceholder = 'Property Address or Id';
   propertyTypes = [];
   offers = [];
+  index = 0;
   isDocSelected = false;
   documents: UploadDocument[] = [
     { fileName: '2345.html', description: 'Property List', type: 'Property Lettings', uploadBy: 'Emma Seckel', dateUploaded: '27/05/2015 13:14' },
@@ -39,6 +40,7 @@ export class EmailComponent implements OnInit, OnChanges {
   ];
 
   selectedDocuments: UploadDocument[] = [];
+
   constructor(private fb: FormBuilder, private storage: StorageMap,
     public staffMemberService: StaffMemberService) { }
 

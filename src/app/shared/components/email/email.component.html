@@ -1,5 +1,5 @@
 <form [formGroup]="emailForm" (ngSubmit)="send()" autocomplete="off">
-  <p-tabView>
+  <p-tabView [(activeIndex)]="index">
     <p-tabPanel header="MESSAGE DETAILS">
       <div class="row">
         <div class="grid grid--25">
@@ -55,7 +55,7 @@
           </fieldset>
           <fieldset><label for="ccExternalEmail">Cc (External)</label><input type="email" id="ccExternalEmail"
               formControlName="ccExternalEmail"></fieldset>
-              <fieldset><button class="btn btn--info" data-cy="searchProperty" (click)="showFileUploader=true">Add Attachments</button></fieldset>
+              <fieldset><button class="btn btn--info" data-cy="searchProperty" (click)="index=1">Add Attachments from Edge</button></fieldset>
               <fieldset>
                 <div class="center">
                   <ngx-file-drop dropZoneLabel="Drop files here" (onFileDrop)="dropped($event)"
