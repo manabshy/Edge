@@ -36,6 +36,8 @@ export class EmailComponent implements OnInit, OnChanges {
     { fileName: '12345.docx', description: 'Instruction Letter', type: 'Property Sales', uploadBy: 'Emma Seckel', dateUploaded: '27/05/2015 13:14' },
     { fileName: '2345 00.docx', description: 'Property List', type: 'Property Lettings', uploadBy: 'Emma Seckel', dateUploaded: '27/05/2015 13:14' },
   ];
+
+  selectedDocuments: UploadDocument[] = [];
   constructor(private fb: FormBuilder, private storage: StorageMap,
     public staffMemberService: StaffMemberService) { }
 
@@ -140,15 +142,26 @@ export class EmailComponent implements OnInit, OnChanges {
     for (let file of event.files) {
       this.uploadedFiles.push(file);
     }
-
   }
 
   selectDocument(doc: UploadDocument) {
     console.log({ doc });
+    const index = this.documents.findIndex(x => x.fileName === doc.fileName);
+    doc?.isSelected ? this.documents[index].isSelected = false : this.documents[index].isSelected = true;
 
-    this.isDocSelected = !this.isDocSelected;
+    this.getSelectedDocuments(this.documents);
+    // this.isDocSelected = !this.isDocSelected;
   }
-  
+
+  removeDocument(doc: any) {
+    console.log({ doc }, 'removed');
+    console.log(this.selectedDocuments, 'remainging');
+
+
+  }
+  getSelectedDocuments(docs: UploadDocument[]) {
+    this.selectedDocuments = docs.filter(x => x.isSelected);
+  }
   send() {
     console.log(this.emailForm?.value, 'send email form');
   }

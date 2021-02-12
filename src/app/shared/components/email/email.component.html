@@ -134,6 +134,14 @@
         </fieldset>
        </div>
        <div class="grid grid--75 grid--dividerLeft">
+        <fieldset class="fieldset fieldset--width-max">
+          <label for="selected">Files(s) selected</label>
+         <ng-container *ngIf="selectedDocuments.length;else NoFilesSelected">
+            <p-chip id="selected" *ngFor="let item of selectedDocuments" [label]="item.fileName" [removable]="true" (onRemove)="removeDocument($event)"></p-chip>
+          </ng-container>
+          <ng-template #NoFilesSelected>No files selected</ng-template>
+          <!-- <div *ngFor="let item of documents"><p-chip [label]="item.fileName" [removable]="true"></p-chip></div> -->
+        </fieldset>
          <div class="table">
            <table class="table--mobile table--rowHover">
              <thead>
@@ -164,7 +172,14 @@
                  </td>
                  <td class="hide--mobile">
                    <a (click)="selectDocument(doc)">
-                     <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" /><path class="plus-vertical"d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" /></svg>
+                     <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft" *ngIf="!doc.isSelected"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" />
+                      <path class="plus-vertical"d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" /></svg>
+                     <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                     class="icon icon--s icon--onLeft icon--fill-positive"
+                     *ngIf="doc.isSelected">
+                     <path
+                       d="M62.8 9.3l-1.9-1.7c-1.5-1.4-3.8-1.2-5.2 0.3L23.9 43.1c-1.4 1.5-3.6 1.5-5.1 0.2L8.1 32.3c-1.4-1.4-3.7-1.4-5.2 0l-1.9 1.9c-1.4 1.4-1.4 3.7 0 5.2l16.7 16.7c1.9 1.9 5.1 1.9 7-0.1L63 14.5C64.4 13 64.3 10.7 62.8 9.3z" />
+                   </svg>
                     </a>
                  </td>
                </tr>

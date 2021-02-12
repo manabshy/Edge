@@ -89,6 +89,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import {EditorModule} from 'primeng/editor';
 import {FileUploadModule} from 'primeng/fileupload';
 import {TabViewModule} from 'primeng/tabview';
+import { ChipModule } from 'primeng/chip';
 
 
 
@@ -192,7 +193,8 @@ const externalModules = [
   MultiSelectModule,
   EditorModule,
   FileUploadModule,
-  TabViewModule
+  TabViewModule,
+  ChipModule
 ];
 
 @NgModule({
