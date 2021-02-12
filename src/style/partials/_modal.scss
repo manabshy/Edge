@@ -16,11 +16,16 @@
     /***** Modal *****/
     .p-dialog-content                           { padding:16px; border-radius:0; flex-grow:1; }
 
-    .p-dialog-header                            { padding:16px; border-radius:0;
-        &+.p-dialog-content                     { padding-top:0; border-radius:0; }
+    .p-dialog-header                            { padding:16px; border-radius:0; border-bottom:1px solid $color--midnight-10;
+        &+.p-dialog-content                     { border-radius:0; }
+        .p-dialog-title                         { font-size:16px; }
+        .p-dialog-header-icon                   { border-radius:3px; }
+        .pi                                     { font-size:13px; }
     }
 
-    .p-dialog-footer                            { padding:16px;  border-radius:0; }
+    .p-dialog-header-icons                      { position:absolute; right:10px; top:8px; }
+
+    .p-dialog-footer                            { padding:16px; border-radius:0; }
 
     /***** Dialog *****/
     &.dialog                                    { width:300px; min-width:auto; min-height:auto;
