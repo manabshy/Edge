@@ -84,6 +84,14 @@ This applies from 992px onwards
         .p-dialog-content                       { border-radius:3px; }
     }
 
+    .modal--large                              {
+        .p-dialog                               { width:70%;
+            .p-dialog-content                   { flex-grow:0; min-height:530px;
+                .row                            { min-height:450px; }
+            }
+        }
+    }
+
     .modal--medium                              {
         .p-dialog                               { width:60%;
             .p-dialog-content                   { flex-grow:0; min-height:350px;

@@ -207,6 +207,11 @@ app-telephone                                   { width:100%; display:flex; alig
   }
 }
 
+.dropzone .ngx-file-drop__drop-zone             { border:none !important; border-radius:none !important; }
+.wrapperDropzone                                { padding:20px; color:initial; background-color:$color--blue-30; display:flex; border:1px dashed$color--info !important; border-radius:3px !important;
+  a                                             { color:$color--info; }
+}
+
 /***********************************************
 This applies from 992px onwards
 ***********************************************/
@@ -235,6 +240,7 @@ This applies from 992px onwards
     &--7                                        { flex-basis:70%; max-width:70%; }
     &--75                                       { flex-basis:75%; max-width:75%; }
     &--8                                        { flex-basis:80%; max-width:80%; }
+    &--flexColumn                               { display:flex; flex-direction:column; }
   
     &--dividerLeft                              { padding-left:40px; position:relative;
       &:before                                  { content:''; display:block; width:1px; height:100%; background-color:$color--midnight-10; position:absolute; top:0; left:20px; }

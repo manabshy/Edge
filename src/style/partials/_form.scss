@@ -99,6 +99,7 @@ fieldset                                       	{ padding:0; text-align:left; di
   small                                 	      { display:block; line-height:14px; }
 }
 .fieldset--width-max 							      { max-width:100%; }
+.fieldset--flexBottom                           { margin-top:auto; }
 
 /***** Legend *****/
 legend                                          { width:100%; }
