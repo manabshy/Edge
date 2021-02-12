@@ -49,6 +49,7 @@
     "lodash": "^4.17.20",
     "msal": "^1.4.6",
     "ngx-bootstrap": "^5.6.2",
+    "ngx-file-drop": "^11.0.0",
     "ngx-infinite-scroll": "^7.1.0",
     "ngx-order-pipe": "^2.1.1",
     "ngx-pipes": "^2.7.5",

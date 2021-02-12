@@ -77,6 +77,8 @@ import { SharedContactgroupListComponent } from './shared-contactgroup-list/shar
 import { ToPascalCasePipe } from './pipes/to-pascal-case.pipe';
 import { SidenavItemComponent } from './components/sidenav-item/sidenav-item.component';
 
+import { NgxFileDropModule } from 'ngx-file-drop';
+
 //Primeng
 import { GalleriaModule } from 'primeng/galleria';
 import { DialogModule } from 'primeng/dialog';
@@ -89,6 +91,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import {EditorModule} from 'primeng/editor';
 import {FileUploadModule} from 'primeng/fileupload';
 import {TabViewModule} from 'primeng/tabview';
+import { ChipModule } from 'primeng/chip';
 
 
 
@@ -183,6 +186,7 @@ const externalModules = [
   LoadingBarHttpClientModule,
   AngularStickyThingsModule,
   NgSelectModule,
+  NgxFileDropModule,
   GalleriaModule,
   DialogModule,
   AccordionModule,
@@ -192,7 +196,8 @@ const externalModules = [
   MultiSelectModule,
   EditorModule,
   FileUploadModule,
-  TabViewModule
+  TabViewModule,
+  ChipModule
 ];
 
 @NgModule({
