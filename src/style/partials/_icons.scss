@@ -34,3 +34,7 @@
 
 .oredered-des .icon .asc                        { color:$color--midnight-10; }
 .oredered-des .icon .des                        { color:$color--info; }
+
+.folderOpen                                     { color:$color--info-lite; }
+.folder                                         { color:$color--info-dark; }
+.fileFold                                       { fill:rgba($color--snow, .5); }
