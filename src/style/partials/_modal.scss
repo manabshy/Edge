@@ -62,6 +62,17 @@ p-toast                                         {
     }
 }
 
+.p-tabview                                      {
+    .p-tabview-nav                              { border:none; position:relative;
+        &:before                                { content:''; width:calc(100% + 28px); height:1px; background-color:$color--midnight-10; position:absolute; bottom:-2px; left:-13px; }
+        li                                      { 
+            &+*                                 { margin:0 0 0 30px; }
+            .p-tabview-nav-link                 { padding:0 0 16px 0; border-width:0 0 1px 0; }
+            .p-tabview-nav-link:not(.p-disabled):focus { box-shadow:none; }
+        }
+    }
+    .p-tabview-panels                           { padding:0; }
+}
 
 /***********************************************
 This applies from 992px onwards
