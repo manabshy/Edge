@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { NgxFileDropEntry, FileSystemFileEntry, FileSystemDirectoryEntry } from 'ngx-file-drop';
@@ -7,17 +7,18 @@ import { StaffMemberService } from 'src/app/core/services/staff-member.service';
 import { Email, Person } from '../../models/person';
 import { StaffMember } from '../../models/staff-member';
 import lodash from 'lodash';
-
+import { SubSink } from 'subsink';
 @Component({
   selector: 'app-email',
   templateUrl: './email.component.html',
   styleUrls: ['./email.component.scss']
 })
-export class EmailComponent implements OnInit, OnChanges {
+export class EmailComponent implements OnInit, OnChanges, OnDestroy {
   @Input() contactGroup: ContactGroup;
   @Input() person: Person;
   @Output() hideModal = new EventEmitter<boolean>();
   emailForm: FormGroup;
+  searchForm: FormGroup;
   groupedPeople = [];
   currentStaffMember: StaffMember;
   isContactGroupFinderVisible = false;
@@ -41,6 +42,9 @@ export class EmailComponent implements OnInit, OnChanges {
 
   selectedDocuments: UploadDocument[] = [];
 
+  isPropertySearch = true;
+  private subs = new SubSink();
+
   constructor(private fb: FormBuilder, private storage: StorageMap,
     public staffMemberService: StaffMemberService) { }
 
@@ -56,6 +60,26 @@ export class EmailComponent implements OnInit, OnChanges {
 
     this.setupForm();
     this.populateForm();
+    this.setupAttachmentForm();
+
+    // Attachment searches
+    // this.searchForm.valueChanges.subscribe(input => {
+    //   if (input) {
+    //     console.log({ input });
+
+    //   }
+    // });
+
+    this.searchForm.get('searchType').valueChanges.subscribe((data) => {
+      this.searchForm.get('searchTerm').setValue('');
+      if (data === 'contact') {
+        this.isPropertySearch = false;
+        this.searchPlaceholder = 'Name, email or phone number';
+      } else {
+        this.isPropertySearch = true;
+        this.searchPlaceholder = 'Property Address or Id';
+      }
+    });
   }
 
   private setupForm() {
@@ -67,6 +91,15 @@ export class EmailComponent implements OnInit, OnChanges {
       subject: [''],
       body: ['', Validators.required]
     }));
+  }
+
+  private setupAttachmentForm() {
+    this.searchForm = this.fb.group({
+      searchType: ['property'],
+      searchTerm: [''],
+      propertyType: [''],
+      offer: ['']
+    });
   }
 
   ngOnChanges() {
@@ -141,17 +174,29 @@ export class EmailComponent implements OnInit, OnChanges {
 
   }
 
+  // Search Form
+
+  search() {
+    console.log(this.searchForm?.value);
+  }
+
+  clear() {
+    this.searchForm?.reset();
+    // this.setupAttachmentForm();
+  }
+
+  // Uploading files
   onUpload(event) {
-    for (let file of event.files) {
+    for (const file of event.files) {
       this.uploadedFiles.push(file);
     }
   }
 
-  public fileOver(event){
+  public fileOver(event) {
     console.log(event);
   }
 
-  public fileLeave(event){
+  public fileLeave(event) {
     console.log(event);
   }
 
@@ -192,8 +237,8 @@ export class EmailComponent implements OnInit, OnChanges {
     }
   }
 
-  removeFile(file:any){
-    console.log({file}, 'to be removed');
+  removeFile(file: any) {
+    console.log({ file }, 'to be removed');
 
   }
 
@@ -215,6 +260,7 @@ export class EmailComponent implements OnInit, OnChanges {
   getSelectedDocuments(docs: UploadDocument[]) {
     this.selectedDocuments = docs.filter(x => x.isSelected);
   }
+
   send() {
     console.log(this.emailForm?.value, 'send email form');
   }
@@ -222,6 +268,10 @@ export class EmailComponent implements OnInit, OnChanges {
   cancel() {
     // this.emailForm?.reset();
     this.hideModal.emit();
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 }
 

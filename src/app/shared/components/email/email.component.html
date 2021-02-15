@@ -98,47 +98,51 @@
     <p-tabPanel header="Attachments (0)">
      <div class="row">
        <div class="grid grid--flexColumn grid--25">
-        <fieldset>
-          <label for="text">Search type</label>
-          <span class="radio toggle">
-            <span>
-              <input type="radio" checked="checked" name="radio-toggle" id="contact">
-              <label for="contact"><span>Contact</span></label>
+       <form [formGroup]="searchForm" (ngSubmit)="search()">
+          <fieldset>
+            <label for="text">Search type</label>
+            <span class="radio toggle">
+              <span>
+                <input type="radio" name="searchType" id="contact" value="contact" formControlName="searchType">
+                <label for="contact"><span>Contact</span></label>
+              </span>
+              <span>
+                <input type="radio" name="searchType" id="property" value="property" formControlName="searchType">
+                <label for="property"><span>Property</span></label>
+              </span>
             </span>
-            <span>
-              <input type="radio" name="radio-toggle" id="property">
-              <label for="property"><span>Property</span></label>
-            </span>
-          </span>
-        </fieldset>
-        <fieldset>
-          <label for="search">Search</label>
-          <input type="search" id="search" [placeholder]="searchPlaceholder">
-        </fieldset>
-        <fieldset>
-          <label for="type">Type</label>
-          <span class="select">
-            <select class="custom-select custom-select-sm" id="type" name="type" formControlName="typeId">
-              <option selected value="0">Select type</option>
-              <option *ngFor="let type of propertyTypes" [value]=type.id>{{type.value}}</option>
-            </select>
-          </span>
-        </fieldset>
-        <fieldset>
-          <label for="type">Offer</label>
-          <span class="select">
-            <select class="custom-select custom-select-sm" id="offer" name="offer" formControlName="offer">
-              <option selected value="0">Select offer</option>
-              <option *ngFor="let offer of offers" [value]=offer.id>{{offer.value}}</option>
-            </select>
-          </span>
-        </fieldset>
-        <fieldset>
-          <div class="btn--container">
-            <button type="submit" class="btn btn--info">Search</button>
-            <button type="button" class="btn btn--ghost" (click)="cancel()">Clear</button>
-          </div>
-        </fieldset>
+          </fieldset>
+          <fieldset>
+            <label for="search">Search</label>
+            <input type="search" id="search" [placeholder]="searchPlaceholder" formControlName="searchTerm">
+          </fieldset>
+         <ng-container *ngIf="isPropertySearch">
+            <fieldset>
+              <label for="type">Type</label>
+              <span class="select">
+                <select class="custom-select custom-select-sm" id="propertyType" name="propertyType" formControlName="propertyType">
+                  <option selected value="0">Select type</option>
+                  <option *ngFor="let type of propertyTypes" [value]=type.id>{{type.value}}</option>
+                </select>
+              </span>
+            </fieldset>
+            <fieldset>
+              <label for="type">Offer</label>
+              <span class="select">
+                <select class="custom-select custom-select-sm" id="offer" name="offer" formControlName="offer">
+                  <option selected value="0">Select offer</option>
+                  <option *ngFor="let offer of offers" [value]=offer.id>{{offer.value}}</option>
+                </select>
+              </span>
+            </fieldset>
+         </ng-container>
+          <fieldset>
+            <div class="btn--container">
+              <button type="submit" class="btn btn--info">Search</button>
+              <button type="button" class="btn btn--ghost" (click)="clear()">Clear</button>
+            </div>
+          </fieldset>
+       </form>
         <fieldset class="fieldset--flexBottom">
           <ngx-file-drop dropZoneLabel="Drop files here" (onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)" class="dropzone">
             <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
@@ -150,7 +154,7 @@
                 </svg>
                 <p>Drop your files here or,  <a role="button" (click)="openFileSelector()">Browse</a></p>
               </div>
-              
+
             </ng-template>
           </ngx-file-drop>
           <div class="upload-table" *ngIf="files?.length">
