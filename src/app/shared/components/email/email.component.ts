@@ -33,14 +33,26 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy {
   uploadedFiles: any[] = [];
   public files: NgxFileDropEntry[] = [];
   searchPlaceholder = 'Property Address or Id';
-  propertyTypes = [];
-  offers = [];
+
   index = 0;
   isDocSelected = false;
+
+  // Dummy Data
   documents: UploadDocument[] = [
     { fileName: '2345.html', description: 'Property List', type: 'Property Lettings', uploadBy: 'Emma Seckel', dateUploaded: '27/05/2015 13:14' },
     { fileName: '12345.docx', description: 'Instruction Letter', type: 'Property Sales', uploadBy: 'Emma Seckel', dateUploaded: '27/05/2015 13:14' },
     { fileName: '2345 00.docx', description: 'Property List', type: 'Property Lettings', uploadBy: 'Emma Seckel', dateUploaded: '27/05/2015 13:14' },
+  ];
+
+  propertyTypes: PropertyType[] = [
+    { typeId: 2, type: 'Property Lettings', status: 'Let', statusDate: '27/05/2015' },
+    { typeId: 3, type: 'Property Lettings', status: 'Let', statusDate: '27/05/2015' },
+    { typeId: 4, type: 'Property Sales', status: 'WDN', statusDate: '27/05/2019' },
+    { typeId: 5, type: 'Property Lettings', status: 'END', statusDate: '27/05/2020' },
+  ];
+
+  offers: BasicOffer[] = [
+    { offerId: 10, offeredBy: 'Emma Seckel', status: 'OA', statusDate: '09/05/2019' },
   ];
 
   selectedDocuments: UploadDocument[] = [];
@@ -104,8 +116,8 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy {
     this.searchForm = this.fb.group({
       searchType: ['property'],
       searchTerm: [''],
-      propertyType: [''],
-      offer: ['']
+      propertyType: ['0'],
+      offer: ['0']
     });
   }
 
@@ -314,4 +326,18 @@ export interface UploadDocument {
   uploadBy: string;
   dateUploaded: string;
   isSelected?: boolean;
+}
+
+export interface PropertyType {
+  typeId: number;
+  type?: string;
+  status?: string;
+  statusDate?: string;
+}
+
+export interface BasicOffer {
+  offerId: number;
+  offeredBy?: string;
+  status?: string;
+  statusDate?: string;
 }

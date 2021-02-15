@@ -135,7 +135,7 @@
                   <select class="custom-select custom-select-sm" id="propertyType" name="propertyType"
                     formControlName="propertyType">
                     <option selected value="0">Select type</option>
-                    <option *ngFor="let type of propertyTypes" [value]=type.id>{{type.value}}</option>
+                    <option *ngFor="let type of propertyTypes" [value]=type?.typeId>{{type?.type}}, {{type?.status}}, {{type?.statusDate}}</option>
                   </select>
                 </span>
               </fieldset>
@@ -144,7 +144,7 @@
                 <span class="select">
                   <select class="custom-select custom-select-sm" id="offer" name="offer" formControlName="offer">
                     <option selected value="0">Select offer</option>
-                    <option *ngFor="let offer of offers" [value]=offer.id>{{offer.value}}</option>
+                    <option *ngFor="let offer of offers" [value]=offer.offerId>{{offer?.offeredBy}}, {{offer?.status}}, {{offer?.statusDate}}</option>
                   </select>
                 </span>
               </fieldset>
