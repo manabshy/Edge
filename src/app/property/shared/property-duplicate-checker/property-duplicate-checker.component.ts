@@ -21,6 +21,7 @@ export class PropertyDuplicateCheckerComponent implements OnInit, OnChanges, OnD
   isDuplicateFound = false;
   isFullMatch = false;
   isLoading = false;
+  isPartialMatch = false;
 
   constructor(private propertyService: PropertyService) { }
 
@@ -64,6 +65,7 @@ export class PropertyDuplicateCheckerComponent implements OnInit, OnChanges, OnD
 
   private getFullMatches(matches: PropertyAutoComplete[]) {
     const properties = matches.filter(x => x.matchType === 'FullMatch');
+    matches?.filter(x => x.matchType === 'PartMatch')?.length ? this.isPartialMatch = true : this.isPartialMatch = false;
     if (properties && properties.length) {
       this.isFullMatch = true;
     } else {

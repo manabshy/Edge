@@ -1,5 +1,9 @@
-<fieldset *ngIf="isFullMatch">
-  <p class="message message--warning">There is already a property with this address. Use the link below to navigate to it or <a href (click)="$event.preventDefault(); hideModal.emit()">search again</a>.
+<fieldset *ngIf="isFullMatch || isPartialMatch">
+  <p class="message message--warning">
+   <ng-container *ngIf="isFullMatch; else partialMatch">
+     There is already a property with this address. Use the link below to navigate to it or <a href (click)="$event.preventDefault(); hideModal.emit()">search again</a>.
+    </ng-container>
+    <ng-template #partialMatch>Please check the property you're looking for isn't in the list below, before creating a new record</ng-template>
   </p>
 </fieldset>
 <div class="table">
