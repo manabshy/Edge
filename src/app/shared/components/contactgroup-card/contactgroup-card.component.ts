@@ -13,11 +13,15 @@ import { Person } from '../../models/person';
 export class ContactgroupCardComponent implements OnInit, OnChanges {
   @Input() contactGroup: ContactGroup;
   @Input() showEmailModal = false;
+  @Input() showValuationActions = true;
+
   numOfPeople: number;
   showAdditionalPeople = false;
   firstPerson: Person;
   importantNotes$: Observable<ContactNote[]>;
+
   constructor(private contactGroupService: ContactGroupsService) { }
+
   ngOnInit(): void {
   }
 

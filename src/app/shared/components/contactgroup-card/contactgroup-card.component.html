@@ -25,9 +25,22 @@
                     Edit contact
                   </a>
                 </li>
+                <ng-container *ngIf="showValuationActions">
+                  <li role="menuitem">
+                    <a class="dropdown-item"><span class="dropdown-icon"><i class="fas fa-file-contract"></i></span>Sales Terms
+                      Of Business</a>
+                  </li>
+                  <li role="menuitem">
+                    <a class="dropdown-item"><span class="dropdown-icon"><i class="fas fa-file-contract"></i></span>Lettings
+                      Terms Of Business</a>
+                  </li>
+                  <li role="menuitem">
+                    <a class="dropdown-item"><span class="dropdown-icon"><i class="fas fa-file-contract"></i></span>Landlord
+                      Questionnaire</a>
+                  </li>
+                </ng-container>
               </ul>
             </div>
-
         </div>
       </li>
 
