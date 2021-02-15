@@ -92,6 +92,7 @@ import {EditorModule} from 'primeng/editor';
 import {FileUploadModule} from 'primeng/fileupload';
 import {TabViewModule} from 'primeng/tabview';
 import { ChipModule } from 'primeng/chip';
+import {AutoCompleteModule} from 'primeng/autocomplete';
 
 
 
@@ -197,7 +198,8 @@ const externalModules = [
   EditorModule,
   FileUploadModule,
   TabViewModule,
-  ChipModule
+  ChipModule,
+  AutoCompleteModule
 ];
 
 @NgModule({

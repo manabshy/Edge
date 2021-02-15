@@ -8,6 +8,9 @@ import { Email, Person } from '../../models/person';
 import { StaffMember } from '../../models/staff-member';
 import lodash from 'lodash';
 import { SubSink } from 'subsink';
+import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
+import { RequestOption } from 'src/app/core/shared/utils';
+import { PropertyService } from 'src/app/property/shared/property.service';
 @Component({
   selector: 'app-email',
   templateUrl: './email.component.html',
@@ -43,10 +46,14 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy {
   selectedDocuments: UploadDocument[] = [];
 
   isPropertySearch = true;
+  suggestions = [];
+  suggestionsDisplayName = 'propertyAddress';
   private subs = new SubSink();
 
   constructor(private fb: FormBuilder, private storage: StorageMap,
-    public staffMemberService: StaffMemberService) { }
+    public staffMemberService: StaffMemberService,
+    private contactGroupService: ContactGroupsService,
+    private propertyService: PropertyService) { }
 
   ngOnInit(): void {
     this.storage.get('currentUser').subscribe((data: StaffMember) => {
@@ -175,6 +182,30 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   // Search Form
+
+  getSuggestions(event) {
+    if (this.isPropertySearch) {
+      this.getProperties(event.query);
+    } else {
+      this.suggestionsDisplayName = 'contactNames';
+      this.contactGroupService.getAutocompleteSigners(event?.query).subscribe((result) => {
+        console.log('contact groups here', result);
+        this.suggestions = result;
+      });
+    }
+  }
+
+  getProperties(searchTerm: string) {
+    this.suggestionsDisplayName = 'propertyAddress';
+    const requestOptions = {
+      // page: page,
+      // pageSize: this.PAGE_SIZE,
+      searchTerm: searchTerm
+    } as RequestOption;
+    this.propertyService.autocompleteProperties(requestOptions).subscribe(result => {
+      this.suggestions = result;
+    });
+  }
 
   search() {
     console.log(this.searchForm?.value);
