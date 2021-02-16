@@ -68,12 +68,13 @@ export class OfficeFinderComponent implements OnInit, OnChanges {
 
   onOfficeIdsSelected(event: any) {
     if (event?.value?.length) {
-      this.selectedOfficeId.emit(event?.value);
+      this.selectedOfficeIdList.emit(event?.value);
     } else {
-      this.selectedOfficeId.emit(0);
+      this.selectedOfficeIdList.emit([]);
     }
     // this.officeFinderForm.patchValue({ officeId: this.officeId });
   }
+
   onOfficeChange(event: any) {
     if (event?.value) {
       this.officeId = event?.value;

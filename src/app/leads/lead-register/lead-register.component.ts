@@ -53,7 +53,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   get isAdvancedFilterActive() {
     if (this.leadRegisterForm) {
       return this.leadRegisterForm.get('dateTo').value
-        || this.leadRegisterForm.get('officeId').value
+        || this.leadRegisterForm.get('officeIds').value
         || this.leadRegisterForm.get('includeClosedLeads').value
         || this.leadRegisterForm.get('includeUnassignedLeadsOnly').value
     }
@@ -169,7 +169,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   private setupLeadRegisterForm() {
     this.leadRegisterForm = this.fb.group({
       ownerId: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo.ownerId : (this.currentStaffMember ? this.currentStaffMember.staffMemberId : null),
-      officeId: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo.officeId : 0,
+      officeIds: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo?.officeIds : 0,
       leadTypeId: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo.leadTypeId : 0,
       includeClosedLeads: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo.includeClosedLeads : false,
       dateFrom: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo.dateFrom : null,
@@ -210,7 +210,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       page: !newSearch ? this.pageNumber : 1,
       ownerId: this.currentStaffMember ? this.currentStaffMember.staffMemberId : null,
       leadTypeId: this.leadRegisterForm != null ? this.leadRegisterForm.get('leadTypeId').value : null ? AppUtils.leadSearchInfo.leadTypeId : null,
-      officeId: this.leadRegisterForm != null ? this.leadRegisterForm.get('officeId').value : null ? AppUtils.leadSearchInfo.officeId : null,
+      officeIds: this.leadRegisterForm != null ? this.leadRegisterForm.get('officeIds').value : null ? AppUtils.leadSearchInfo.officeIds : null,
       dateFrom: this.leadRegisterForm != null ? this.leadRegisterForm.get('dateFrom').value : null ? AppUtils.leadSearchInfo.dateFrom : null,
       dateTo: this.leadRegisterForm != null ? this.leadRegisterForm.get('dateTo').value : null ? AppUtils.leadSearchInfo.dateTo : null,
       includeClosedLeads: this.leadRegisterForm != null ? this.leadRegisterForm.get('includeClosedLeads').value : null ? AppUtils.leadSearchInfo.includeClosedLeads : null,
@@ -305,8 +305,10 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     }
   }
 
-  getSelectedOfficeId(officeId: number) {
-    this.leadRegisterForm.get('officeId').setValue(officeId);
+  getSelectedOfficeId(officeIds: number[]) {
+    console.log({officeIds}, 'list array');
+
+    this.leadRegisterForm.get('officeIds').setValue(officeIds);
   }
 
   getSelectedTypes(types: number[]) {

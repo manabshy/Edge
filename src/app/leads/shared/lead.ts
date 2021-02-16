@@ -29,9 +29,11 @@ export interface Lead {
   closedById?: any;
   closedBy?: any;
   leadTypeId: number;
+  leadTypeIds?: number[];
   leadType: string;
   relatedProperty: LeadProperty;
   officeId: number;
+  officeIds?: number[];
   createdDate: Date;
   createdBy: number;
   updatedDate: Date;
@@ -41,9 +43,11 @@ export interface Lead {
 
 export interface LeadSearchInfo {
   leadTypeId?: number;
+  leadTypeIds?: number[];
   ownerId?: number;
   personId?: number;
   officeId?: number;
+  officeIds?: number[];
   dateFrom?: Date;
   dateTo?: Date;
   includeClosedLeads?: boolean;

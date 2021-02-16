@@ -45,8 +45,8 @@
               </fieldset>
             </div>
 
-            <app-office-finder class="appWrapper" (selectedOfficeId)="getSelectedOfficeId($event)" [fullWidth]="true"
-              [isMultiSelect]="false" class="displayBlock">
+            <app-office-finder class="appWrapper" (selectedOfficeIdList)="getSelectedOfficeId($event)" [fullWidth]="true"
+              [isMultiSelect]="true" class="displayBlock">
             </app-office-finder>
 
             <fieldset>
