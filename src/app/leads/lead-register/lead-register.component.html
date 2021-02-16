@@ -13,7 +13,7 @@
               <app-lead-finder class="appWrapper" [leadSuggestion]="leadRegisterForm.get('leadSearchTerm').value" (leadSearchTerm)="setLeadSearchTerm($event)"></app-lead-finder>
             </fieldset>
 
-            <fieldset>
+            <!-- <fieldset>
               <label for="leadType">Type</label>
               <span class="select">
                 <select id="leadType" formControlName="leadTypeId">
@@ -21,9 +21,9 @@
                   <option selected *ngFor="let leadType of leadTypes" [value]=leadType.id>{{leadType?.value}}</option>
                 </select>
               </span>
-            </fieldset>
+            </fieldset> -->
 
-            <fieldset *ngIf="false">
+            <fieldset>
               <app-lead-type-finder class="appWrapper" [fullWidth]="true" [isMultiSelect]="true"
                 (selectedLeadTypeIdList)="getSelectedTypes($event)"></app-lead-type-finder>
             </fieldset>

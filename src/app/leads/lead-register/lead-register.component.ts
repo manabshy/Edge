@@ -59,8 +59,8 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     }
   }
 
-  get LeadTypeIdControl(): FormControl {
-    return this.leadRegisterForm.get('leadTypeId') as FormControl;
+  get leadTypeIdsControl(): FormControl {
+    return this.leadRegisterForm.get('leadTypeIds') as FormControl;
   }
 
   constructor(private leadService: LeadsService,
@@ -169,8 +169,8 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   private setupLeadRegisterForm() {
     this.leadRegisterForm = this.fb.group({
       ownerId: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo.ownerId : (this.currentStaffMember ? this.currentStaffMember.staffMemberId : null),
-      officeIds: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo?.officeIds : 0,
-      leadTypeId: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo.leadTypeId : 0,
+      officeIds: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo?.officeIds : null,
+      leadTypeIds: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo.leadTypeIds : null,
       includeClosedLeads: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo.includeClosedLeads : false,
       dateFrom: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo.dateFrom : null,
       dateTo: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo.dateTo : null,
@@ -209,7 +209,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     return {
       page: !newSearch ? this.pageNumber : 1,
       ownerId: this.currentStaffMember ? this.currentStaffMember.staffMemberId : null,
-      leadTypeId: this.leadRegisterForm != null ? this.leadRegisterForm.get('leadTypeId').value : null ? AppUtils.leadSearchInfo.leadTypeId : null,
+      leadTypeIds: this.leadRegisterForm != null ? this.leadRegisterForm.get('leadTypeIds').value : null ? AppUtils.leadSearchInfo.leadTypeIds : null,
       officeIds: this.leadRegisterForm != null ? this.leadRegisterForm.get('officeIds').value : null ? AppUtils.leadSearchInfo.officeIds : null,
       dateFrom: this.leadRegisterForm != null ? this.leadRegisterForm.get('dateFrom').value : null ? AppUtils.leadSearchInfo.dateFrom : null,
       dateTo: this.leadRegisterForm != null ? this.leadRegisterForm.get('dateTo').value : null ? AppUtils.leadSearchInfo.dateTo : null,
@@ -314,7 +314,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   getSelectedTypes(types: number[]) {
     console.log({ types });
 
-    this.LeadTypeIdControl.setValue(types[0]);
+    this.leadTypeIdsControl.setValue(types);
   }
 
   onScrollDown() {
