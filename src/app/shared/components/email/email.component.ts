@@ -111,7 +111,7 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy {
       senderEmail: [this?.currentStaffMember?.email],
       recipientEmail: ['', Validators.required],
       ccInternalEmail: [''],
-      ccExternalEmail: [''],
+      ccExternalEmail: [[]],
       subject: [''],
       body: ['', Validators.required]
     }));
@@ -289,29 +289,28 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy {
 
   removeFile(file: File, index: number) {
     this.files?.splice(index, 1);
-    console.log(this.files, 'after', { index });
   }
 
-  selectDocument(doc: UploadDocument) {
-    console.log({ doc });
-    const index = this.documents.findIndex(x => x.fileName === doc.fileName);
+  selectDocument(doc: UploadDocument, index: number) {
+    // const index = this.documents.findIndex(x => x.fileName === doc.fileName);
     doc?.isSelected ? this.documents[index].isSelected = false : this.documents[index].isSelected = true;
 
     this.getSelectedDocuments(this.documents);
-    // this.isDocSelected = !this.isDocSelected;
   }
 
-  removeDocument(doc: any) {
-    console.log({ doc }, 'removed');
-    console.log(this.selectedDocuments, 'remainging');
-
-
+  removeDocument(event: any, index: number) {
+    this.documents[index].isSelected = false;
+    this.getSelectedDocuments(this.documents);
   }
+
   getSelectedDocuments(docs: UploadDocument[]) {
     this.selectedDocuments = docs.filter(x => x.isSelected);
   }
 
   send() {
+    let filesToUpload = [...this.files, ...this.selectedDocuments];
+    console.log({ filesToUpload }, 'all files to upload');
+
     console.log(this.emailForm?.value, 'send email form');
   }
 
