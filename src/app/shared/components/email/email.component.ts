@@ -62,6 +62,11 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy {
   suggestionsDisplayName = 'propertyAddress';
   private subs = new SubSink();
 
+  get attachments() {
+    const total = this.selectedDocuments?.length + this.files?.length;
+    return `Attachments (${total})`;
+  }
+
   constructor(private fb: FormBuilder, private storage: StorageMap,
     public staffMemberService: StaffMemberService,
     private contactGroupService: ContactGroupsService,
@@ -276,13 +281,15 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy {
         // It was a directory (empty directories are added, otherwise only files)
         const fileEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
         console.log(droppedFile.relativePath, fileEntry);
+        console.log('folders herell...');
+
       }
     }
   }
 
-  removeFile(file: any) {
-    console.log({ file }, 'to be removed');
-
+  removeFile(file: File, index: number) {
+    this.files?.splice(index, 1);
+    console.log(this.files, 'after', { index });
   }
 
   selectDocument(doc: UploadDocument) {
