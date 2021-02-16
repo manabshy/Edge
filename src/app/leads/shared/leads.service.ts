@@ -82,7 +82,7 @@ export class LeadsService {
         ownerId: leadSearchInfo.ownerId != null ? leadSearchInfo.ownerId.toString() : '',
         personId: leadSearchInfo.personId != null ? leadSearchInfo.personId.toString() : '',
         leadTypeIds: leadSearchInfo.leadTypeIds != null ? leadSearchInfo?.leadTypeIds?.toString() : '',
-        officeIds: leadSearchInfo.officeIds != null ? leadSearchInfo.officeId?.toString() : '',
+        officeIds: leadSearchInfo.officeIds != null ? leadSearchInfo.officeIds?.toString() : '',
         dateFrom: leadSearchInfo.dateFrom != null ? dateFrom.toString() : '',
         dateTo: leadSearchInfo.dateTo != null ? dateTo.toString() : '',
         includeClosedLeads: leadSearchInfo.includeClosedLeads != null ? (String)(leadSearchInfo.includeClosedLeads) : '',
