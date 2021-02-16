@@ -111,7 +111,7 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy {
       senderEmail: [this?.currentStaffMember?.email],
       recipientEmail: ['', Validators.required],
       ccInternalEmail: [''],
-      ccExternalEmail: [[]],
+      ccExternalEmail: ['', [Validators.required]],
       subject: [''],
       body: ['', Validators.required]
     }));
