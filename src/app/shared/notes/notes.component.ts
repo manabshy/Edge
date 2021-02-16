@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, HostListener } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, HostListener, Output, EventEmitter } from '@angular/core';
 import { ContactNote, BasicContactGroup } from 'src/app/contactgroups/shared/contact-group';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
@@ -26,6 +26,8 @@ export class NotesComponent implements OnInit, OnChanges {
   @Input() contactGroupNotes: ContactNote[];
   @Input() propertyNotes: PropertyNote[];
   @Input() showNoteInput = true;
+
+  @Output() showMyNotes = new EventEmitter<boolean>();
 
   notes = [];
   tests: any;
@@ -172,6 +174,10 @@ export class NotesComponent implements OnInit, OnChanges {
   toggleNoteCreation() {
     this.showNotesForm = !this.showNotesForm;
     this.showCreateNoteButton = false;
+  }
+
+  toggleShowMyNotes(event: boolean) {
+    this.showMyNotes.emit(event);
   }
 
   noteSaved() {

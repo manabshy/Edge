@@ -23,7 +23,7 @@
             <small class="alert alert-info" *ngIf="!contactGroupDetails?.contactGroupId">Save to enable
               Notes</small>
             <app-notes [noteData]="dataNote" [contactGroupNotes]="dataNote?.notes" [bottomReached]="bottomReached"
-              [pageNumber]="page"></app-notes>
+              [pageNumber]="page" (showMyNotes)="setShowMyNotesFlag($event)"></app-notes>
           </div>
         </div>
       </ng-container>

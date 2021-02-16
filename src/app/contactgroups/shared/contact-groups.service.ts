@@ -240,14 +240,15 @@ export class ContactGroupsService {
       tap(data => console.log('added company contact details here...', JSON.stringify(data))));
   }
 
-  getPersonNotes(personId: number, pageSize?: number, page?: number): Observable<ContactNote[]> {
+  getPersonNotes(personId: number, pageSize?: number, page?: number, myNotesOnly = false): Observable<ContactNote[]> {
     if (!page || +page === 0) { page = 1; }
     if (pageSize == null) { pageSize = 10; }
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
       fromObject: {
         pageSize: pageSize.toString(),
-        page: page.toString()
+        page: page.toString(),
+        myNotesOnly: myNotesOnly.toString()
       }
     });
     const url = `${AppConstants.basePersonUrl}/${personId}/notes`;
@@ -259,14 +260,15 @@ export class ContactGroupsService {
     );
   }
 
-  getContactGroupNotes(contactGroupId: number, pageSize?: number, page?: number): Observable<ContactNote[]> {
+  getContactGroupNotes(contactGroupId: number, pageSize?: number, page?: number,  myNotesOnly = false): Observable<ContactNote[]> {
     if (!page || +page === 0) { page = 1; }
     if (pageSize == null) { pageSize = 10; }
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
       fromObject: {
         pageSize: pageSize.toString(),
-        page: page.toString()
+        page: page.toString(),
+        myNotesOnly: myNotesOnly.toString()
       }
     });
     const url = `${AppConstants.baseContactGroupUrl}/${contactGroupId}/notes`;

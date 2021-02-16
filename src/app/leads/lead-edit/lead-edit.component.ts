@@ -86,6 +86,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   // moreInfo = '';
   moreInfo = this.sidenavService.selectedItem = 'notes';
   sideNavItems = this.sidenavService.sideNavItems;
+  showOnlyMyNotes = false;
 
   get nextChaseDateControl() {
     return this.leadEditForm.get('nextChaseDate') as FormControl;
@@ -387,6 +388,13 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     }
   }
 
+  setShowMyNotesFlag(onlyMyNotes: boolean) {
+    this.showOnlyMyNotes = onlyMyNotes;
+    this.personNotes = [];
+    this.page = 1;
+    this.getPersonNotes();
+  }
+
   create(item: string) {
     if (item === 'leads') {
       this.router.navigateByUrl('/', { skipLocationChange: true })
@@ -536,9 +544,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.getNextPersonNotesPage(this.page);
   }
 
-  private getNextPersonNotesPage(page) {
+  private getNextPersonNotesPage(page: number) {
 
-    this.contactGroupService.getPersonNotes(this.personId, this.pageSize, page).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
+    this.contactGroupService.getPersonNotes(this.personId, this.pageSize, page, this.showOnlyMyNotes).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
       if (data) {
         if (page === 1) {
           this.personNotes = data;

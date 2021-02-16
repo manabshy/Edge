@@ -91,6 +91,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   isNewAddress: boolean;
   signer: string;
   companiesSearched: boolean;
+  showOnlyMyNotes = false;
   get dataNote() {
     if (this.contactGroupDetails) {
       return {
@@ -424,7 +425,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   private getNextContactNotesPage(page) {
     this.contactGroupService
-      .getContactGroupNotes(this.contactGroupId, this.pageSize, page)
+      .getContactGroupNotes(this.contactGroupId, this.pageSize, page, this.showOnlyMyNotes)
       .subscribe(data => {
         if (data) {
           this.contactNotes = _.concat(this.contactNotes, data);
@@ -559,6 +560,13 @@ export class ContactgroupsPeopleComponent implements OnInit {
     }
   }
 
+  setShowMyNotesFlag(onlyMyNotes: boolean) {
+    this.showOnlyMyNotes = onlyMyNotes;
+    this.contactNotes = [];
+    this.page = 1;
+    this.getContactNotes();
+  }
+  
   getSelectedPerson(person: Person) {
     if (person) {
       this.contactGroupDetails.contactPeople?.push(person);
@@ -614,6 +622,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     }
     this.showPersonWarning();
   }
+
   removeSelectedPeople(people, index: number) {
     people.splice(index, 1);
     this.errorMessage = null;

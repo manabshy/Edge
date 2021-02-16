@@ -41,6 +41,7 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
   showNotes: boolean;
   moreInfo = this.sidenavService.selectedItem = 'notes';
   sideNavItems = this.sidenavService.sideNavItems;
+  showOnlyMyNotes = false;
 
   get dataNote() {
     return {
@@ -172,10 +173,10 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
     this.getNextPersonNotesPage(this.page);
   }
 
-  private getNextPersonNotesPage(page) {
+  private getNextPersonNotesPage(page: number) {
 
 
-    this.contactGroupService.getPersonNotes(this.personId, this.pageSize, page).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
+    this.contactGroupService.getPersonNotes(this.personId, this.pageSize, page, this.showOnlyMyNotes).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
       if (data && data.length) {
         this.personNotes = _.concat(this.personNotes, data);
       } else if (!data.length || data.length < this.pageSize) {
@@ -199,6 +200,13 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
   getSelectedItem(item: any) {
     this.moreInfo = this.sidenavService.getSelectedItem(item?.type, item?.index);
     console.log({ item });
+  }
+
+  setShowMyNotesFlag(onlyMyNotes: boolean) {
+    this.showOnlyMyNotes = onlyMyNotes;
+    this.personNotes = [];
+    this.page = 1;
+    this.getPersonNotes();
   }
 
   create(item: string) {
