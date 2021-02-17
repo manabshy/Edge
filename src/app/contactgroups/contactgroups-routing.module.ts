@@ -16,14 +16,14 @@ import { ContactgroupsDetaillettingsManagementsComponent } from '../shared/conta
 import { ContactgroupsDetailHomeHelperComponent } from '../shared/contactgroups-detail-home-helper/contactgroups-detail-home-helper.component';
 
 const routes: Routes = [
-  { path: '', component: ContactGroupsComponent, data: { shouldDetach: true, title: 'Contact centre' } },
+  { path: '', component: ContactGroupsComponent, data: { shouldDetach: true, title: 'Contact Centre' } },
   {
     path: 'detail/:personId',
     children: [
       // { path: '', component: ContactgroupsDetailComponent, data: { shouldDetach: true } },
       { path: '', component: ContactgroupsDetailComponent, data: { shouldDetach: false, title: 'Person' } }, // do not cache page
-      { path: 'people/:contactGroupId', component: ContactgroupsPeopleComponent, canDeactivate: [CanDeactivateGuard], data: { title: 'Contact group' } },
-      { path: 'edit', component: ContactgroupsDetailEditComponent, canDeactivate: [CanDeactivateGuard], data: { title: 'Person edit' } },
+      { path: 'people/:contactGroupId', component: ContactgroupsPeopleComponent, canDeactivate: [CanDeactivateGuard] },
+      { path: 'edit', component: ContactgroupsDetailEditComponent, canDeactivate: [CanDeactivateGuard], data: { title: 'Person Edit' } },
       { path: 'leads', component: ContactgroupsDetailLeadsComponent },
       { path: 'notes', component: ContactgroupsDetailNotesComponent },
       { path: 'searches', component: ContactgroupsDetailSearchesComponent },

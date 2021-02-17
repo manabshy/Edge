@@ -48,8 +48,6 @@ export class HeaderComponent implements OnInit {
     });
 
     this.getLabel();
-    console.log('here......');
-
   }
 
   logOut() {
