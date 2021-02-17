@@ -22,10 +22,21 @@
             <fieldset class="inline-child" [ngClass]="{invalid: formErrors?.recipientEmail}">
               <label for="recipientEmail">To (External)</label>
               <ng-container *ngIf="personOnly; else group">
-                <p-multiSelect [options]="personalEmails" [filter]="false" [showHeader]="false"
+                <p-multiSelect [options]="person?.emailAddresses" [filter]="false" [showHeader]="false"
+                  formControlName="recipientEmail" optionLabel="email" optionValue="email"
+                  defaultLabel="Select recipient email" crollHeight="250px" display="chip" (onClick)="showButton=true">
+                  <ng-template let-emailAddress pTemplate="item">
+                    <!-- <span *ngIf="emailAddress?.isPreferred"> <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
+                      <polygon points="32 0 41.9 21.1 64 24.4 48 40.8 51.8 64 32 53.1 12.2 64 16 40.8 0 24.4 22.1 21.1 ">
+                      </polygon>
+                    </svg></span> -->
+                    <span>{{emailAddress?.email}}</span>
+                  </ng-template>
+                </p-multiSelect>
+                <!-- <p-multiSelect [options]="personalEmails" [filter]="false" [showHeader]="false"
                   formControlName="recipientEmail" optionLabel="name" optionValue="value"
                   defaultLabel="Select recipient email" crollHeight="250px" display="chip" (onClick)="showButton=true">
-                </p-multiSelect>
+                </p-multiSelect> -->
               </ng-container>
               <ng-template #group>
                 <p-multiSelect [options]="groupedPeople" [group]="true" [filter]="false" [showHeader]="false"
