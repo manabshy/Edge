@@ -182,6 +182,10 @@ p-multiselect , p-dropdown                      { display:block;
    .p-multiselect                               { max-width:100%; }
 }
 
+.p-dialog-content                               {
+   p-multiselect                                { width:100%; }
+}
+
 /***** Prime NG no-style *****/
 .no-style                                       {
    .p-dropdown, .p-multiselect                  { border:none; }
