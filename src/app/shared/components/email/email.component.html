@@ -19,7 +19,7 @@
             </span>
           </fieldset>
           <div class="inline-parent">
-            <fieldset class="inline-child">
+            <fieldset class="inline-child" [ngClass]="{invalid: formErrors?.recipientEmail}">
               <label for="recipientEmail">To (External)</label>
               <ng-container *ngIf="personOnly; else group">
                 <p-multiSelect [options]="personalEmails" [filter]="false" [showHeader]="false"
@@ -38,6 +38,7 @@
                   </ng-template>
                 </p-multiSelect>
               </ng-template>
+              <p class="message message--negative">{{formErrors?.recipientEmail}}</p>
             </fieldset>
             <!-- <fieldset *ngIf="showButton" class="inline-child"> <button type="button" class="btn btn--info"
                 (click)="isContactGroupFinderVisible=true">Add Contact Group</button></fieldset> -->
@@ -53,11 +54,12 @@
               </ng-template>
             </p-multiSelect>
           </fieldset>
-          <fieldset>
+          <fieldset [ngClass]="{invalid: formErrors?.ccExternalEmail}">
             <label for="ccExternalEmail">Cc (External)</label>
             <!-- <input type="email" id="ccExternalEmail" formControlName="ccExternalEmail"> -->
             <!-- Remove Inline styling -->
             <p-chips inputId="ccExternalEmail" formControlName="ccExternalEmail" separator="," [allowDuplicate]="false" [style]="{'width':'100%'}"></p-chips>
+            <p class="message message--negative">{{formErrors?.ccExternalEmail}}</p>
           </fieldset>
           <fieldset>
             <button class="btn btn--info" data-cy="searchProperty" (click)="index=1"><svg aria-hidden="true" width="64"
@@ -72,11 +74,12 @@
           </fieldset>
         </div>
         <div class="grid grid--75 grid--dividerLeft">
-          <fieldset class="fieldset--width-max">
+          <fieldset class="fieldset--width-max" [ngClass]="{invalid: formErrors?.subject}">
             <label for="subject">Subject</label>
             <input type="text" id="subject" formControlName="subject">
+            <p class="message message--negative">{{formErrors?.subject}}</p>
           </fieldset>
-          <fieldset class="fieldset--width-max">
+          <fieldset class="fieldset--width-max" [ngClass]="{invalid: formErrors?.body}">
             <p-editor formControlName="body" [style]="{'height':'320px'}">
               <p-header>
                 <span class="ql-formats">
@@ -101,6 +104,7 @@
                 </span>
               </p-header>
             </p-editor>
+            <p class="message message--negative">{{formErrors?.body}}</p>
           </fieldset>
         </div>
       </div>

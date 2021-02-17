@@ -11,6 +11,8 @@ import { SubSink } from 'subsink';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { RequestOption } from 'src/app/core/shared/utils';
 import { PropertyService } from 'src/app/property/shared/property.service';
+import { ValidationService } from 'src/app/core/services/validation.service';
+import { AppConstants, FormErrors } from 'src/app/core/shared/app-constants';
 @Component({
   selector: 'app-email',
   templateUrl: './email.component.html',
@@ -56,10 +58,11 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy {
   ];
 
   selectedDocuments: UploadDocument[] = [];
-
   isPropertySearch = true;
   suggestions = [];
   suggestionsDisplayName = 'propertyAddress';
+  formErrors = FormErrors;
+
   private subs = new SubSink();
 
   get attachments() {
@@ -70,7 +73,7 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy {
   constructor(private fb: FormBuilder, private storage: StorageMap,
     public staffMemberService: StaffMemberService,
     private contactGroupService: ContactGroupsService,
-    private propertyService: PropertyService) { }
+    private propertyService: PropertyService, private validationService: ValidationService) { }
 
   ngOnInit(): void {
     this.storage.get('currentUser').subscribe((data: StaffMember) => {
@@ -86,14 +89,10 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy {
     this.populateForm();
     this.setupAttachmentForm();
 
+    // Email form
+    this.emailForm.valueChanges.subscribe(() => this.validationService.logValidationErrors(this.emailForm, false));
+
     // Attachment searches
-    // this.searchForm.valueChanges.subscribe(input => {
-    //   if (input) {
-    //     console.log({ input });
-
-    //   }
-    // });
-
     this.searchForm.get('searchType').valueChanges.subscribe((data) => {
       this.searchForm.get('searchTerm').setValue('');
       if (data === 'contact') {
@@ -111,8 +110,8 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy {
       senderEmail: [this?.currentStaffMember?.email],
       recipientEmail: ['', Validators.required],
       ccInternalEmail: [''],
-      ccExternalEmail: ['', [Validators.required]],
-      subject: [''],
+      ccExternalEmail: ['', [Validators.pattern(AppConstants.emailPattern)]],
+      subject: ['', [Validators.required]],
       body: ['', Validators.required]
     }));
   }
@@ -309,6 +308,8 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   send() {
+    this.index = 0; // Switch to message details tab
+    this.validationService.logValidationErrors(this.emailForm, true);
     const filesToUpload = [...this.files, ...this.selectedDocuments];
     console.log({ filesToUpload }, 'all files to upload');
 

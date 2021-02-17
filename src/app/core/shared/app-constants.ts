@@ -92,9 +92,13 @@ export const FormErrors = {
   'contacts': '',
   'points': '',
   'endHour': '',
-  'ownerId': ''
-
+  'ownerId': '',
+  recipientEmail: '',
+  ccExternalEmail: '',
+  subject: '',
+  body: '',
 };
+
 
 export const ValidationMessages = {
   'searchTerm': {
@@ -280,7 +284,25 @@ export const ValidationMessages = {
     required: 'Chaser is required',
     min: 'You need to set a valid chaser'
   },
+  recipientEmail: {
+    required: 'Please add a Recipient',
+    pattern: 'Email is not valid'
+  },
+  ccExternalEmail: {
+    pattern: 'Email is not valid'
+  },
+  subject: {
+    required: 'Please add a Subject'
+  },
+  body: {
+    required: 'Please add a Body'
+  },
 };
+
+// recipientEmail: '',
+// ccExternalEmail: '',
+// subject: '',
+// body: '',
   // 'invalidPhoneNumber': {
   //   required: 'Phone is required',
   //   minlength: 'Phone number must be at least 7 characters',
