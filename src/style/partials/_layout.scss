@@ -7,7 +7,9 @@
 }
 
 .displayBlock,
-.appWrapper                                     { display:flex; width:100%; }
+.appWrapper                                     { display:flex; width:100%;
+  &+*                                           { margin-top:12px; }
+}
 
 app-telephone                                   { width:100%; display:flex; align-items:center; align-content:flex-start; position:relative; top:0; left:0; }
 
