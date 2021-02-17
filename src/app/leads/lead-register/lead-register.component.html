@@ -31,17 +31,23 @@
             <div class="inline-parent">
               <fieldset class="inline-child">
                 <label for="dateFrom">Date From</label>
-                <input type="text" id="dateFrom" placeholder="dd/mm/yyyy"
-                  [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
-                  bsDatepicker #datepickerFrom="bsDatepicker" [appNoDoubleTap]='datepickerFrom'
-                  formControlName="dateFrom">
+                <div class="date-container">
+                  <input type="text" id="dateFrom" placeholder="dd/mm/yyyy"
+                    [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
+                    bsDatepicker #datepickerFrom="bsDatepicker" [appNoDoubleTap]='datepickerFrom'
+                    formControlName="dateFrom">
+                    <a *ngIf="dateFromControl?.value" (click)="clearDate('from')">x</a>
+                </div>
               </fieldset>
 
               <fieldset class="inline-child">
                 <label for="dateTo">Date To</label>
-                <input type="text" id="dateTo" placeholder="dd/mm/yyyy"
-                  [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY',customTodayClass: 'font-weight-bold'}"
-                  bsDatepicker #datepickerTo="bsDatepicker" [appNoDoubleTap]='datepickerTo' formControlName="dateTo">
+               <div class="date-container">
+                  <input type="text" id="dateTo" placeholder="dd/mm/yyyy"
+                    [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY',customTodayClass: 'font-weight-bold'}"
+                    bsDatepicker #datepickerTo="bsDatepicker" [appNoDoubleTap]='datepickerTo' formControlName="dateTo">
+                    <a *ngIf="dateToControl?.value" (click)="clearDate('to')">x</a>
+               </div>
               </fieldset>
             </div>
 

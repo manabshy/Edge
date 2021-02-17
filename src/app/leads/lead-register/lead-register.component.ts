@@ -55,12 +55,20 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       return this.leadRegisterForm.get('dateTo').value
         || this.leadRegisterForm.get('officeIds').value
         || this.leadRegisterForm.get('includeClosedLeads').value
-        || this.leadRegisterForm.get('includeUnassignedLeadsOnly').value
+        || this.leadRegisterForm.get('includeUnassignedLeadsOnly').value;
     }
   }
 
   get leadTypeIdsControl(): FormControl {
     return this.leadRegisterForm.get('leadTypeIds') as FormControl;
+  }
+
+  get dateFromControl(): FormControl {
+    return this.leadRegisterForm.get('dateFrom') as FormControl;
+  }
+
+  get dateToControl(): FormControl {
+    return this.leadRegisterForm.get('dateTo') as FormControl;
   }
 
   constructor(private leadService: LeadsService,
@@ -291,9 +299,9 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       newInfo.ownerId = lead.ownerId;
       this.info = JSON.stringify(newInfo);
       AppUtils.leadSearchInfo = newInfo;
-      console.log('set in app utils', AppUtils.leadSearchInfo)
-      console.log('Lead Register App utils', lead.leadId)
-      console.log('Lead Register App utils INFO: ', this.info)
+      console.log('set in app utils', AppUtils.leadSearchInfo);
+      console.log('Lead Register App utils', lead.leadId);
+      console.log('Lead Register App utils INFO: ', this.info);
       this.router.navigate(['/leads-register/edit', lead.leadId],
         {
           queryParams: {
@@ -306,7 +314,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   }
 
   getSelectedOfficeId(officeIds: number[]) {
-    console.log({officeIds}, 'list array');
+    console.log({ officeIds }, 'list array');
 
     this.leadRegisterForm.get('officeIds').setValue(officeIds);
   }
@@ -361,5 +369,11 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
 
   scrollElIntoView(className: string) {
     this.sharedService.scrollElIntoView(className);
+  }
+
+  clearDate(type: string) {
+    if (type === 'to') {
+      this.dateToControl.setValue('');
+    } else if (type === 'from') { this.dateFromControl.setValue(''); }
   }
 }
