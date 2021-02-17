@@ -11,8 +11,8 @@ const routes: Routes = [
   {
     path: 'detail/:id',
     children: [
-      { path: '', component: CompanyDetailComponent, data: { shouldDetach: true }},
-      { path: 'edit', component: CompanyEditComponent, canDeactivate: [CanDeactivateGuard], data: { shouldDetach: true } },
+      { path: '', component: CompanyDetailComponent, data: { shouldDetach: true, title: 'Company' } },
+      { path: 'edit', component: CompanyEditComponent, canDeactivate: [CanDeactivateGuard], data: { shouldDetach: true, title: ' edit' } },
     ]
   }
 ]

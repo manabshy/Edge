@@ -14,8 +14,6 @@ import { ContactgroupsDetailOffersComponent } from '../shared/contactgroups-deta
 import { ContactgroupsDetailTenanciesComponent } from '../shared/contactgroups-detail-tenancies/contactgroups-detail-tenancies.component';
 import { ContactgroupsDetaillettingsManagementsComponent } from '../shared/contactgroups-detail-lettings-managements/contactgroups-detail-lettings-managements.component';
 import { ContactgroupsDetailHomeHelperComponent } from '../shared/contactgroups-detail-home-helper/contactgroups-detail-home-helper.component';
-import { AuthGuardService } from '../core/services/auth-guard.service';
-import { ContactgroupsRedesignComponent } from './contactgroups-redesign/contactgroups-redesign.component';
 
 const routes: Routes = [
   { path: '', component: ContactGroupsComponent, data: { shouldDetach: true, title: 'Contact centre' } },
@@ -23,9 +21,9 @@ const routes: Routes = [
     path: 'detail/:personId',
     children: [
       // { path: '', component: ContactgroupsDetailComponent, data: { shouldDetach: true } },
-      { path: '', component: ContactgroupsDetailComponent, data: { shouldDetach: false, title: 'Contact centre' } }, // do not cache page
-      { path: 'people/:contactGroupId', component: ContactgroupsPeopleComponent, canDeactivate: [CanDeactivateGuard] },
-      { path: 'edit', component: ContactgroupsDetailEditComponent, canDeactivate: [CanDeactivateGuard] },
+      { path: '', component: ContactgroupsDetailComponent, data: { shouldDetach: false, title: 'Person' } }, // do not cache page
+      { path: 'people/:contactGroupId', component: ContactgroupsPeopleComponent, canDeactivate: [CanDeactivateGuard], data: { title: 'Contact group' } },
+      { path: 'edit', component: ContactgroupsDetailEditComponent, canDeactivate: [CanDeactivateGuard], data: { title: 'Person edit' } },
       { path: 'leads', component: ContactgroupsDetailLeadsComponent },
       { path: 'notes', component: ContactgroupsDetailNotesComponent },
       { path: 'searches', component: ContactgroupsDetailSearchesComponent },
@@ -35,7 +33,6 @@ const routes: Routes = [
       { path: 'tenancies', component: ContactgroupsDetailTenanciesComponent },
       { path: 'lettings-managements', component: ContactgroupsDetaillettingsManagementsComponent },
       { path: 'home-helpers', component: ContactgroupsDetailHomeHelperComponent },
-
     ]
   },
 ];
