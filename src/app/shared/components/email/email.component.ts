@@ -323,6 +323,7 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy() {
     this.subs.unsubscribe();
+    this.validationService.clearFormValidators(this.emailForm, this.formErrors);
   }
 }
 
