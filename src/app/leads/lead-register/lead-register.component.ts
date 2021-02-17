@@ -373,7 +373,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
 
   clearDate(type: string) {
     if (type === 'to') {
-      this.dateToControl.setValue('');
-    } else if (type === 'from') { this.dateFromControl.setValue(''); }
+      this.dateToControl.setValue(null);
+    } else if (type === 'from') { this.dateFromControl.setValue(null); }
   }
 }

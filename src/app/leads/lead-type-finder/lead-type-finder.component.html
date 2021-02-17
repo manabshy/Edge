@@ -2,7 +2,7 @@
   <fieldset [ngClass]="{'invalid': isRequired}">
     <label for="leadTypeId">Type</label>
     <ng-container *ngIf="isMultiSelect;else dropDown">
-      <p-multiSelect [options]="leadTypes" formControlName="leadTypeIds" optionLabel="value" optionValue="id"
+      <p-multiSelect [options]="leadTypes" [maxSelectedLabels]="1" formControlName="leadTypeIds" optionLabel="value" optionValue="id"
          placeholder="Select Type(s)" (onChange)="onLeadIdsSelected($event)"></p-multiSelect>
     </ng-container>
 
