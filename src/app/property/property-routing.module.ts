@@ -10,12 +10,12 @@ import { PropertyDetailEditComponent } from './property-detail-edit/property-det
 
 
 const routes: Routes = [
-  { path: '', component: PropertyComponent, data: { shouldDetach: true , title: 'Property centre'} },
+  { path: '', component: PropertyComponent, data: { shouldDetach: true , title: 'Property Centre'} },
   {
     path: 'detail/:id',
     children: [
-      { path: '', component: PropertyDetailComponent, data: { shouldDetach: false } }, // do not cache page
-      { path: 'edit', component: PropertyDetailEditComponent , data: { shouldDetach: false,  title: 'Property'}, canDeactivate: [CanDeactivateGuard] },
+      { path: '', component: PropertyDetailComponent, data: { shouldDetach: false, title: 'Property' } }, // do not cache page
+      { path: 'edit', component: PropertyDetailEditComponent , data: { shouldDetach: false,  title: 'Property Edit'}, canDeactivate: [CanDeactivateGuard] },
       { path: 'instructions', component: PropertyDetailInstructionsComponent, data: { shouldDetach: false } },
       { path: 'offers', component: PropertyDetailOffersComponent , data: { shouldDetach: false }},
       { path: 'documents', component: PropertyDetailDocumentsComponent, data: { shouldDetach: true } },
