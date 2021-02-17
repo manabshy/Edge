@@ -3,6 +3,7 @@ import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { filter } from 'rxjs/operators';
 import { AuthService } from '../core/services/auth.service';
+import { HeaderService } from '../core/services/header.service';
 import { StaffMemberService } from '../core/services/staff-member.service';
 import { StaffMember } from '../shared/models/staff-member';
 
@@ -14,15 +15,20 @@ import { StaffMember } from '../shared/models/staff-member';
 export class HeaderComponent implements OnInit {
   currentStaffMember: any;
   navTitle: string;
+  headerLabel: string;
 
   constructor(public authService: AuthService,
-    private storage: StorageMap, private staffMemberService: StaffMemberService, private route: ActivatedRoute, private router: Router) {
+    private storage: StorageMap,
+    private staffMemberService: StaffMemberService,
+    private headerService: HeaderService,
+    private route: ActivatedRoute,
+    private router: Router) {
     this.setRouteTitle();
   }
 
   private setRouteTitle() {
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(() => {
-    // this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(() => {
+      // this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(() => {
       const childRoute = this.getChildRoute(this.route);
       childRoute.data.subscribe((route) => {
         console.log('title and route', route);
@@ -41,6 +47,9 @@ export class HeaderComponent implements OnInit {
       console.log('current user from storage in main menu....', this.currentStaffMember);
     });
 
+    this.getLabel();
+    console.log('here......');
+
   }
 
   logOut() {
@@ -53,5 +62,10 @@ export class HeaderComponent implements OnInit {
     } else {
       return route;
     }
+  }
+
+  getLabel() {
+    this.headerService.label$.subscribe(label => {this.headerLabel = label; console.log({label});
+    });
   }
 }

@@ -6,7 +6,10 @@
       </svg>
     </li>
     <li>Contacts</li> -->
-    <li>{{navTitle}}</li>
+    <li>
+      <ng-container *ngIf="headerLabel; else labelFromRoute">{{headerLabel}}</ng-container>
+      <ng-template #labelFromRoute> {{navTitle}}</ng-template>
+    </li>
   </ol>
   <ol class="header-navigation">
     <li><a href="" class="circle"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"

@@ -29,14 +29,14 @@
       </ng-container>
       <ng-container *ngSwitchDefault>
         <!-- <app-breadcrumb></app-breadcrumb> -->
-        <h2>
+        <!-- <h2>
           <ng-container *ngIf="isNewContactGroup;else existingContact">{{newContactGroupLabel}}</ng-container>
           <ng-template #existingContact>
             <ng-container *ngIf="contactGroupDetails?.contactType === 4; else peopleCG">Company</ng-container>
             <ng-template #peopleCG>Personal</ng-template> Contact Group
           </ng-template>
           <span class="pill pill--positive" *ngIf="isAMLCompleted">AML Completed</span>
-        </h2>
+        </h2> -->
         <div class="message message--warning"
           *ngIf="contactGroupDetails?.contactPeople && (contactGroupDetails?.contactPeople.length !== initialContactGroupLength) && isTypePicked">
           There are pending changes on the people list. Save to make them effective.

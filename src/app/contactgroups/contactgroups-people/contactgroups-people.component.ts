@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Renderer2, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { ContactGroupsService } from '../shared/contact-groups.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Person, BasicPerson } from 'src/app/shared/models/person';
@@ -20,12 +20,13 @@ import * as _ from 'lodash';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { MessageService } from 'primeng/api';
+import { HeaderService } from 'src/app/core/services/header.service';
 @Component({
   selector: 'app-contactgroups-people',
   templateUrl: './contactgroups-people.component.html',
   styleUrls: ['./contactgroups-people.component.scss']
 })
-export class ContactgroupsPeopleComponent implements OnInit {
+export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
   listInfo: any;
   warnings: any;
   isCollapsed = {};
@@ -138,7 +139,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
     private storage: StorageMap,
     private toastr: ToastrService,
     private messageService: MessageService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private headerService: HeaderService,
   ) { }
 
   ngOnInit() {
@@ -193,6 +195,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.searchCompany();
     this.suggestedTerm = '';
   }
+
   init() {
     this.storage.get('info').subscribe(data => {
       if (data) {
@@ -216,12 +219,16 @@ export class ContactgroupsPeopleComponent implements OnInit {
           this.isOffCanvasVisible = true;
         }
       });
+
+      // Set page label
+      this.setPageLabel();
     }
     this.isSubmitting = false;
     this.companyFinderForm = this.fb.group({
       companyName: [''],
       selectedCompany: ['', Validators.required],
     });
+
     this.contactGroupDetailsForm = this.fb.group({
       salutation: [''],
       addressee: [''],
@@ -277,6 +284,23 @@ export class ContactgroupsPeopleComponent implements OnInit {
     }
   }
 
+  setPageLabel(clearLabel?: boolean) {
+    let label: string;
+    const isPersonal = this.contactGroupDetails?.contactType === ContactType.Individual;
+    const isCompany = this.contactGroupDetails?.contactType === ContactType.CompanyContact;
+
+    if (isPersonal || this.isNewPersonalContact) {
+      label = 'Personal Contact Group';
+    }
+
+    if (isCompany || this.isNewCompanyContact) {
+      label = 'Company Contact Group';
+    }
+
+    if (clearLabel) { label = null; }
+    this.headerService.setheaderLabel(label);
+  }
+
   isCompanyContactGroup(isSelectedTypeCompany: boolean) {
     this.contactGroupDetails = {} as ContactGroup;
     this.contactGroupDetails.contactPeople = [];
@@ -293,6 +317,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
       this.getContactGroupFirstPerson(this.personId, isSelectedTypeCompany);
     }
     this.isTypePicked = true;
+
   }
 
   getContactGroupById(contactGroupId: number) {
@@ -309,6 +334,8 @@ export class ContactgroupsPeopleComponent implements OnInit {
           this.contactGroupDetails.contactGroupId = 0;
         }
         this.isTypePicked = true;
+
+        this.setPageLabel();
       });
   }
 
@@ -566,7 +593,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
     this.page = 1;
     this.getContactNotes();
   }
-  
+
   getSelectedPerson(person: Person) {
     if (person) {
       this.contactGroupDetails.contactPeople?.push(person);
@@ -751,7 +778,7 @@ export class ContactgroupsPeopleComponent implements OnInit {
   }
 
   onSaveComplete(contactGroupId): void {
-    this.messageService.add({ severity: 'success', summary: 'Contact Group successfully saved', closable: false});
+    this.messageService.add({ severity: 'success', summary: 'Contact Group successfully saved', closable: false });
     if (!contactGroupId) {
       this.sharedService.back();
     } else {
@@ -874,5 +901,9 @@ export class ContactgroupsPeopleComponent implements OnInit {
 
   cancel() {
     this.sharedService.back();
+  }
+
+  ngOnDestroy() {
+    this.setPageLabel(true);
   }
 }
