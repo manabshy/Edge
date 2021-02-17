@@ -249,7 +249,9 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public dropped(files: NgxFileDropEntry[]) {
-    this.files = files;
+    const newFiles = [...this.files, ...files];
+    this.files = lodash.uniqBy(newFiles, 'relativePath');
+
     for (const droppedFile of files) {
 
       // Is it a file?
@@ -292,7 +294,6 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   selectDocument(doc: UploadDocument, index: number) {
-    // const index = this.documents.findIndex(x => x.fileName === doc.fileName);
     doc?.isSelected ? this.documents[index].isSelected = false : this.documents[index].isSelected = true;
 
     this.getSelectedDocuments(this.documents);
@@ -308,7 +309,7 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   send() {
-    let filesToUpload = [...this.files, ...this.selectedDocuments];
+    const filesToUpload = [...this.files, ...this.selectedDocuments];
     console.log({ filesToUpload }, 'all files to upload');
 
     console.log(this.emailForm?.value, 'send email form');
