@@ -300,9 +300,7 @@ label + .inline-parent                          { margin-top:6px; }
    label                                        { min-height:17px;
       &+*                                       { margin-top:6px; }
    }
-   .date-container                              {
-      input                                     { margin:0; }
-   }
+   
 
    &+* 		  		                              { margin-top:12px; }
    &:last-child                                 { margin-right:0; }
@@ -318,6 +316,11 @@ label + .inline-parent                          { margin-top:6px; }
 }
 
 .flex-grow                                      { flex-grow:1; }
+
+.date-container                              { position:relative;
+   input                                     { margin:0; position:relative; }
+   & a                                       { margin:0; text-decoration:none; position:absolute; top:6px; right:6px; }
+}
 
 /*********************************************** 
 Inline elements
