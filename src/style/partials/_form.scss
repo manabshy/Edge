@@ -170,7 +170,7 @@ p-multiselect , p-dropdown                      { display:block;
    .p-dropdown-filter-icon                      { margin-top:-0.3rem; }
 }
 .p-multiselect .p-multiselect-label,
-.p-inputwrapper-filled .p-multiselect.p-multiselect-chip .p-multiselect-label    { padding:0.4em 0.8em; display:flex; flex-wrap:wrap; }
+.p-inputwrapper-filled .p-multiselect.p-multiselect-chip .p-multiselect-label    { padding:0.4em 0.8em; display:flex; flex-wrap:wrap; white-space:inherit; }
 .p-multiselect.p-multiselect-chip .p-multiselect-token                           { margin:0 6px 6px 0; background-color:$color--smoke; }
 .p-multiselect-panel .p-multiselect-header      {
    .p-multiselect-close                         { width:28px; height: 28px; }
@@ -178,6 +178,7 @@ p-multiselect , p-dropdown                      { display:block;
 .p-multiselect-panel .p-multiselect-header .p-multiselect-filter-container .p-multiselect-filter-icon { margin-top:-0.3rem; }
 
 .row__item--aside                               {
+   p-multiselect                                { width:208px; }
    .p-multiselect                               { max-width:100%; }
 }
 
