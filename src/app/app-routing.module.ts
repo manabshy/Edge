@@ -44,7 +44,7 @@ const routes: Routes = [
     path: 'admin-panel',
     loadChildren: () => import('./client-services/client-services.module').then(m => m.ClientServicesModule), canActivate: [MsalGuard]
   },
-  { path: '', component: HomeComponent, canActivate: [MsalGuard] },
+  { path: '', component: HomeComponent, canActivate: [MsalGuard], data: { title: 'Calendar' } },
   { path: '**', component: NotFoundComponent }
 ];
 
