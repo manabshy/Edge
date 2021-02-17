@@ -109,7 +109,9 @@ legend                                          { width:100%; }
 label, .label                                  	{ width:100%; display:flex; align-items:center; color:$color--midnight-70; font-weight:bold; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box;
    .icon--s                                     { align-self:center; }
    &:focus                                      { outline:none; }
-   &+.message, &+.joined, &+.appWrapper         { margin-top:6px; }
+   &+.message, &+.joined, &+.appWrappe,
+   &+.marginTop                                 { margin-top:6px; }
+   &+.labelMessage                              { margin:9px 0 0 0; }
 }
 label + input, .label + input, 
 label + textarea, .label + textarea, 

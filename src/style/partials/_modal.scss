@@ -74,6 +74,11 @@ p-toast                                         {
     .p-tabview-panels                           { padding:0; }
 }
 
+p-chip                                          { margin:6px 6px 0 0; display:inline-flex; 
+    .pi-chip-remove-icon                        { line-height:0; }
+    .p-chip .p-chip-text                        { margin:0; padding:2px 0; font-size:11px; }
+}
+
 /***********************************************
 This applies from 992px onwards
 ***********************************************/

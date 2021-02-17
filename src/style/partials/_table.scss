@@ -48,7 +48,9 @@ Tablet - This applies from 768px onwards
     .table--mobile tr:nth-child(odd) td           { border:none; }
     .table--mobile tr:nth-child(odd)+tr           { margin-top:0; border-top:1px solid $color--midnight-10; }
 
-    .table--mobile td                             { display:table-cell; }
+    .table--mobile td                             { display:table-cell;
+        &.vAlign--center                          { vertical-align:middle; }
+    }
     .table--mobile td+td                          { border-top:none; }
     .table--mobile td+td[data-title]:before, 
     .table--mobile th+td[data-title]:before,
