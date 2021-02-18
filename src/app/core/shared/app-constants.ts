@@ -295,7 +295,7 @@ export const ValidationMessages = {
     required: 'Please add a Subject'
   },
   body: {
-    required: 'Please add a Body'
+    required: 'Please add a Message'
   },
 };
 
