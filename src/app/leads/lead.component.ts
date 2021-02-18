@@ -54,7 +54,7 @@ export class LeadComponent implements OnInit {
           this.leadSearchInfo = AppUtils.leadSearchInfo;
           // this.searchTerm = AppUtils.leadSearchInfo.leadSearchTerm;
         }
-        this.getLeads(this.leadSearchInfo);
+        // this.getLeads(this.leadSearchInfo);
       }
     });
 
@@ -62,7 +62,7 @@ export class LeadComponent implements OnInit {
     this.leadService.pageChanges$.subscribe(leadSearchInfo => {
       if (leadSearchInfo) {
         this.page = leadSearchInfo.page;
-        this.getLeads(leadSearchInfo);
+        // this.getLeads(leadSearchInfo);
         // console.log('calling from here 2', this.leadSearchInfo.leadSearchTerm);
       }
     });

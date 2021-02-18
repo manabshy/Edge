@@ -10,7 +10,7 @@
         <div class="card__body">
           <form [formGroup]="leadRegisterForm" *ngIf="showFilterOptions" autocompleteOff>
             <fieldset>
-              <app-lead-finder class="appWrapper" [leadSuggestion]="leadRegisterForm.get('leadSearchTerm').value" (leadSearchTerm)="setLeadSearchTerm($event)"></app-lead-finder>
+              <app-lead-finder class="appWrapper" [leadSuggestion]="leadRegisterForm?.get('leadSearchTerm')?.value" (leadSearchTerm)="setLeadSearchTerm($event)"></app-lead-finder>
             </fieldset>
 
             <!-- <fieldset>
@@ -23,8 +23,9 @@
               </span>
             </fieldset> -->
 
+
             <fieldset>
-              <app-lead-type-finder class="appWrapper" [fullWidth]="true" [isMultiSelect]="true"
+              <app-lead-type-finder class="appWrapper" [fullWidth]="true" [isMultiSelect]="true" [leadTypeIds]="leadTypeIdsControl?.value"
                 (selectedLeadTypeIdList)="getSelectedTypes($event)"></app-lead-type-finder>
             </fieldset>
 
@@ -51,7 +52,7 @@
               </fieldset>
             </div>
 
-            <app-office-finder class="appWrapper" (selectedOfficeIdList)="getSelectedOfficeId($event)" [fullWidth]="true"
+            <app-office-finder class="appWrapper" [officeIds]="officeIdsControl?.value" (selectedOfficeIdList)="getSelectedOfficeId($event)" [fullWidth]="true"
               [isMultiSelect]="true" class="displayBlock">
             </app-office-finder>
 

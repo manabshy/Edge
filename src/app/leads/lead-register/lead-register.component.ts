@@ -4,7 +4,7 @@ import { StaffMemberService } from 'src/app/core/services/staff-member.service';
 import { Lead, LeadSearchInfo } from '../shared/lead';
 import { StaffMember, Office } from 'src/app/shared/models/staff-member';
 import { StorageMap } from '@ngx-pwa/local-storage';
-import { InfoDetail } from 'src/app/core/services/info.service';
+import { DropdownListInfo, InfoDetail, InfoService } from 'src/app/core/services/info.service';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { OfficeService } from 'src/app/core/services/office.service';
@@ -16,14 +16,16 @@ import { ToastrService } from 'ngx-toastr';
 import * as _ from 'lodash';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { map, tap } from 'rxjs/operators';
 
+const PAGE_SIZE = 20;
 @Component({
   selector: 'app-lead-register',
   templateUrl: '../lead-register/lead-register.component.html',
   styleUrls: ['../lead-register/lead-register.component.scss']
 })
 export class LeadRegisterComponent implements OnInit, OnChanges {
-  @Input() leads: Lead[];
+  // @Input() leads: Lead[];
   @Input() pageNumber: number;
   @Input() bottomReached: boolean;
   @Input() showFilterOptions = true;
@@ -34,9 +36,10 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   leadRegisterForm: FormGroup;
   staffMembers: StaffMember[];
   offices: Office[];
-  page: number;
+  page: number = 1;
   groupsLength: number;
   filteredLeads: Lead[];
+  leads: Lead[];
   leadSearchInfo: LeadSearchInfo;
   enableOwnerFilter = true;
   selectedLeadsForAssignment: Lead[] = [];
@@ -59,56 +62,37 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     }
   }
 
+  get officeIdsControl(): FormControl {
+    return this.leadRegisterForm?.get('officeIds') as FormControl;
+  }
   get leadTypeIdsControl(): FormControl {
-    return this.leadRegisterForm.get('leadTypeIds') as FormControl;
+    return this.leadRegisterForm?.get('leadTypeIds') as FormControl;
   }
 
   get dateFromControl(): FormControl {
-    return this.leadRegisterForm.get('dateFrom') as FormControl;
+    return this.leadRegisterForm?.get('dateFrom') as FormControl;
   }
 
   get dateToControl(): FormControl {
-    return this.leadRegisterForm.get('dateTo') as FormControl;
+    return this.leadRegisterForm?.get('dateTo') as FormControl;
   }
 
   constructor(private leadService: LeadsService,
     private sharedService: SharedService,
     private storage: StorageMap,
+    private infoService: InfoService,
     private officeService: OfficeService,
     private modalService: BsModalService,
     private toastr: ToastrService,
+    private staffMemberService: StaffMemberService,
     private messageService: MessageService,
     private router: Router,
     private fb: FormBuilder) { }
 
   ngOnInit() {
-
     this.setupLeadRegisterForm();
-
-    // Lead Types
-    this.storage.get('info').subscribe(data => {
-      if (data) {
-        this.listInfo = data;
-        this.leadTypes = this.listInfo.leadTypes;
-      }
-    });
-
-    // All Active Staffmembers
-    this.storage.get('activeStaffmembers').subscribe(data => {
-      if (data) {
-        this.staffMembers = data as StaffMember[];
-      }
-    });
-
-    // Current Logged in staffmember
-    this.storage.get('currentUser').subscribe((data: StaffMember) => {
-      if (data) {
-        this.currentStaffMember = data;
-        const seeAllLeadsPermission = this.currentStaffMember.permissions.find(x => x.permissionId === 69);
-        seeAllLeadsPermission ? this.canSeeUnassignable = true : this.canSeeUnassignable = false;
-        this.leadSearchInfo = this.getSearchInfo(true);
-      }
-    });
+    this.getLeadsForCurrentUser();
+    this.getInfoFromLocalStorage();
 
     // New search term
     this.leadService.leadSearchTermChanges$.subscribe(newSearchTerm => {
@@ -138,6 +122,128 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     // this.leadResults();
   }
 
+  getLeadsForCurrentUser() {
+    this.storage.get('currentUser').subscribe((data: StaffMember) => {
+      if (data) {
+        this.currentStaffMember = data;
+        this.bottomReached = false;
+        const seeAllLeadsPermission = this.currentStaffMember.permissions.find(x => x.permissionId === 69);
+        seeAllLeadsPermission ? this.canSeeUnassignable = true : this.canSeeUnassignable = false;
+        this.leadSearchInfo = {
+          page: this.page,
+          ownerId: this.currentStaffMember.staffMemberId,
+          personId: null,
+          leadTypeId: null,
+          officeId: null,
+          dateFrom: null,
+          dateTo: null,
+          includeClosedLeads: false,
+          includeUnassignedLeadsOnly: false,
+          leadSearchTerm: this.searchTerm ? this.searchTerm : ''
+        };
+
+        if (AppUtils.leadSearchInfo) {
+          console.log('from app utils', AppUtils.leadSearchInfo);
+          this.leadSearchInfo = AppUtils.leadSearchInfo;
+          // this.searchTerm = AppUtils.leadSearchInfo.leadSearchTerm;
+        }
+      } else {
+        this.leadSearchInfo = this.getSearchInfo(true);
+        console.log(this.leadSearchInfo, 'infos....xx');
+      }
+      this.leadRegisterForm.patchValue(this.leadSearchInfo);
+      console.log('lead form after patch', this.leadRegisterForm.value);
+
+      this.getLeads(this.leadSearchInfo);
+    });
+  }
+
+  getInfoFromLocalStorage() {
+    // Lead Types
+    this.storage.get('info').subscribe((data: DropdownListInfo) => {
+      if (data) {
+        this.leadTypes = data.leadTypes;
+        console.log('lead yptes in register', this.leadTypes);
+      } else {
+        this.infoService.getDropdownListInfo()
+          .pipe((map(response => response),
+            tap(res => {
+              if (res) { this.leadTypes = res.leadTypes; }
+            }))).subscribe();
+      }
+    });
+
+    // All Active Staffmembers
+    this.storage.get('activeStaffmembers').subscribe(data => {
+      if (data) {
+        this.staffMembers = data as StaffMember[];
+      }
+    });
+
+    // Current Logged in staffmember
+    // this.storage.get('currentUser').subscribe((data: StaffMember) => {
+    //   if (data) {
+    //     this.currentStaffMember = data;
+    //     const seeAllLeadsPermission = this.currentStaffMember.permissions.find(x => x.permissionId === 69);
+    //     seeAllLeadsPermission ? this.canSeeUnassignable = true : this.canSeeUnassignable = false;
+    //     this.leadSearchInfo = this.getSearchInfo(true);
+    //     console.log(this.leadSearchInfo, 'infos....xx');
+    //   }
+    // });
+
+  }
+
+  // Setup Form
+  setupLeadRegisterForm() {
+    this.leadRegisterForm = this.fb.group({
+      ownerId: [],
+      officeIds: [''],
+      leadTypeIds: [],
+      includeClosedLeads: [],
+      dateFrom: [],
+      dateTo: [],
+      includeUnassignedLeadsOnly:  [false],
+      leadSearchTerm: ['']
+    });
+    // this.leadRegisterForm = this.fb.group({
+    //   ownerId: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo.ownerId : (this.currentStaffMember ? this.currentStaffMember.staffMemberId : null),
+    //   officeIds: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo?.officeIds : null,
+    //   leadTypeIds: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo.leadTypeIds : null,
+    //   includeClosedLeads: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo.includeClosedLeads : false,
+    //   dateFrom: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo.dateFrom : null,
+    //   dateTo: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo.dateTo : null,
+    //   includeUnassignedLeadsOnly: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo.includeUnassignedLeadsOnly : false,
+    //   leadSearchTerm: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo.leadSearchTerm : ''
+    // });
+  }
+
+  getLeads(leadSearchInfo: LeadSearchInfo) {
+    console.log('get leads search info: ', leadSearchInfo);
+    this.leadService.getLeads(leadSearchInfo, PAGE_SIZE).subscribe(result => {
+
+      if (leadSearchInfo.page === 1) {
+        this.filteredLeads = result;
+      } else {
+        if (this.filteredLeads) {
+          this.filteredLeads = this.filteredLeads.concat(result);
+        } else {
+          this.filteredLeads = result;
+        }
+      }
+      this.setBottomReachedFlag(result);
+
+    }, () => {
+      this.leads = [];
+    });
+  }
+
+  private setBottomReachedFlag(result: any) {
+    if (result && (!result.length || result.length < +PAGE_SIZE)) {
+      this.bottomReached = true;
+    } else {
+      this.bottomReached = false;
+    }
+  }
   assignLeads() {
     event.preventDefault();
     this.areLeadsAssignable = true;
@@ -174,19 +280,6 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     this.selectedLeadsForAssignment = this.filteredLeads.filter(x => x.isChecked);
   }
 
-  private setupLeadRegisterForm() {
-    this.leadRegisterForm = this.fb.group({
-      ownerId: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo.ownerId : (this.currentStaffMember ? this.currentStaffMember.staffMemberId : null),
-      officeIds: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo?.officeIds : null,
-      leadTypeIds: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo.leadTypeIds : null,
-      includeClosedLeads: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo.includeClosedLeads : false,
-      dateFrom: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo.dateFrom : null,
-      dateTo: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo.dateTo : null,
-      includeUnassignedLeadsOnly: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo.includeUnassignedLeadsOnly : false,
-      leadSearchTerm: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo.leadSearchTerm : ''
-    });
-  }
-
   onOwnerChanged(event: any) {
     console.log(event);
   }
@@ -205,11 +298,11 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    this.page = this.pageNumber;
+    // this.page = this.pageNumber;
 
-    if (this.leads) {
-      this.filteredLeads = this.leads;
-    }
+    // if (this.leads) {
+    //   this.filteredLeads = this.leads;
+    // }
   }
 
   // TODO: Refactor asap
@@ -228,11 +321,13 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   }
 
   PerformSearch() {
+    this.leadSearchInfo = { ...this.leadSearchInfo, ...this.leadRegisterForm.value };
     if (this.leadSearchInfo) {
       this.isClosedIncluded = this.leadSearchInfo.includeClosedLeads;
     }
     this.isAdvancedSearchVisible = false;
-    this.leadService.pageNumberChanged(this.leadSearchInfo);
+    this.getLeads(this.leadSearchInfo);
+    // this.leadService.pageNumberChanged(this.leadSearchInfo);
   }
 
   cancel() {
@@ -317,12 +412,15 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     console.log({ officeIds }, 'list array');
 
     this.leadRegisterForm.get('officeIds').setValue(officeIds);
+    console.log(this.leadRegisterForm.value, 'when office ids selected');
+
   }
 
   getSelectedTypes(types: number[]) {
     console.log({ types });
 
     this.leadTypeIdsControl.setValue(types);
+    console.log(this.leadRegisterForm.value, 'when type ids selected');
   }
 
   onScrollDown() {
@@ -345,6 +443,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
         this.page++;
         this.leadSearchInfo.page = this.page;
         this.leadService.pageNumberChanged(this.leadSearchInfo);
+        this.getLeads(this.leadSearchInfo);
         console.log('leads page number', this.page);
         console.log('leads page number params', this.leadSearchInfo);
       }
