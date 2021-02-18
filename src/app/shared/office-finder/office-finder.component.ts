@@ -6,7 +6,6 @@ import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { ResultData } from '../result-data';
 import { FormGroup, FormControl } from '@angular/forms';
-
 @Component({
   selector: 'app-office-finder',
   templateUrl: './office-finder.component.html',
@@ -14,6 +13,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 })
 export class OfficeFinderComponent implements OnInit, OnChanges {
   @Input() officeId: number;
+  @Input() officeIds: any;
   @Input() fullWidth: boolean;
   @Input() readOnly: boolean;
   @Input() isMultiSelect = false;
@@ -26,6 +26,7 @@ export class OfficeFinderComponent implements OnInit, OnChanges {
   isInvisible: boolean;
   isClearable = true;
 
+
   constructor(private officeService: OfficeService, private storage: StorageMap) { }
 
   ngOnInit(): void {
@@ -35,10 +36,14 @@ export class OfficeFinderComponent implements OnInit, OnChanges {
     });
     this.populateForm();
     this.getOffices();
+
+    console.log('form in init', this.officeFinderForm?.value);
+
   }
 
   ngOnChanges() {
     this.populateForm();
+    console.log('form in onchanges', this.officeFinderForm?.value);
   }
 
   private populateForm() {
@@ -48,6 +53,13 @@ export class OfficeFinderComponent implements OnInit, OnChanges {
         this.officeFinderForm.patchValue({ officeId: this.officeId });
       } else {
         this.officeFinderForm.get('officeId').setValue(null);
+      }
+      if (this.officeIds) {
+        console.log('office ids in finder', this.officeIds);
+        this.officeId = this.officeIds;
+        this.officeFinderForm.patchValue({ officeIds: this.officeId });
+      } else {
+        this.officeFinderForm.get('officeIds').setValue(null);
       }
     }
   }
