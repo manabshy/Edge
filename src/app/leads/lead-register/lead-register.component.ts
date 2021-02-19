@@ -149,7 +149,6 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
         }
       } else {
         this.leadSearchInfo = this.getSearchInfo(true);
-        console.log(this.leadSearchInfo, 'infos....xx');
       }
       this.leadRegisterForm.patchValue(this.leadSearchInfo);
       console.log('lead form after patch', this.leadRegisterForm.value);
@@ -163,7 +162,6 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     this.storage.get('info').subscribe((data: DropdownListInfo) => {
       if (data) {
         this.leadTypes = data.leadTypes;
-        console.log('lead yptes in register', this.leadTypes);
       } else {
         this.infoService.getDropdownListInfo()
           .pipe((map(response => response),
