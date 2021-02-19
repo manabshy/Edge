@@ -78,6 +78,16 @@ p-chip                                          { margin:6px 6px 0 0; display:in
     .pi-chip-remove-icon                        { line-height:0; }
     .p-chip .p-chip-text                        { margin:0; padding:2px 0; font-size:11px; }
 }
+label+p-chips                                   { margin-top:6px; }
+p-chips                                         { display:block }
+.p-chips .p-chips-multiple-container .p-chips-input-token input     { font-size:12px; }
+.p-chips .p-chips-multiple-container                                { padding:3px; }
+.p-chips .p-chips-multiple-container .p-chips-token,
+.p-chips .p-chips-multiple-container .p-chips-input-token           { margin:3px; }
+.p-chips .p-chips-multiple-container .p-chips-input-token.ng-star-inserted           { padding:0.25rem 0.5rem; }
+.p-chips-input-token input                                          { min-height:auto; }
+.p-chips .p-chips-multiple-container .p-chips-input-token input     { padding:3px 6px; }
+.p-chips .p-chips-multiple-container:not(.p-disabled).p-focus { box-shadow:none; }
 
 /***********************************************
 This applies from 992px onwards
