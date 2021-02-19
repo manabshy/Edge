@@ -145,7 +145,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
         if (AppUtils.leadSearchInfo) {
           console.log('from app utils', AppUtils.leadSearchInfo);
           this.leadSearchInfo = AppUtils.leadSearchInfo;
-          // this.searchTerm = AppUtils.leadSearchInfo.leadSearchTerm;
+          this.searchTerm = AppUtils.leadSearchInfo.leadSearchTerm;
         }
       } else {
         this.leadSearchInfo = this.getSearchInfo(true);
@@ -283,6 +283,8 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   }
 
   setLeadSearchTerm(term: string) {
+    console.log({term});
+
     if (term) {
       this.leadRegisterForm.patchValue({
         leadSearchTerm: term

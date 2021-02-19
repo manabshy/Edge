@@ -25,8 +25,10 @@ export class LeadFinderComponent implements OnInit {
   ngOnInit() {
 
     this.leadFinderForm = this.fb.group({
-      leadSuggestion: this.leadSuggestion || ''
+      leadSuggestion: this.leadSuggestion || AppUtils?.leadSearchInfo?.leadSearchTerm || ''
     });
+
+    console.log(this.leadFinderForm.value, 'lead finder form');
 
     this.leadFinderForm.valueChanges.subscribe(data => {
       if (data && data.leadSuggestion) {
