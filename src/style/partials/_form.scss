@@ -170,7 +170,7 @@ p-multiselect , p-dropdown                      { display:block;
    .p-dropdown-filter-icon                      { margin-top:-0.3rem; }
 }
 .p-multiselect .p-multiselect-label,
-.p-inputwrapper-filled .p-multiselect.p-multiselect-chip .p-multiselect-label    { padding:3px; display:flex; flex-wrap:wrap; white-space:inherit; }
+.p-inputwrapper-filled .p-multiselect.p-multiselect-chip .p-multiselect-label    { padding:3px 6px; display:flex; flex-wrap:wrap; align-items:center; white-space:inherit; }
 .p-multiselect.p-multiselect-chip .p-multiselect-token                           { margin:3px; background-color:$color--smoke; flex:0 1 auto; flex-direction:row; flex-wrap:nowrap; word-break:break-all; }
 .p-multiselect-panel .p-multiselect-header      {
    .p-multiselect-close                         { width:28px; height: 28px; }
@@ -178,7 +178,7 @@ p-multiselect , p-dropdown                      { display:block;
 .p-multiselect-panel .p-multiselect-header .p-multiselect-filter-container .p-multiselect-filter-icon { margin-top:-0.3rem; }
 .p-multiselect-label-container                        { display:flex; }
 .p-multiselect .p-multiselect-label.p-placeholder     { padding-left:6px; align-items:center; }
-
+.p-multiselect-label                                  { padding:0 6px; }
 .p-chips .p-chips-multiple-container .p-chips-token { flex:0 1 auto; flex-direction:row; flex-wrap:nowrap; word-break:break-all; }
 
 .row__item--aside                               {
