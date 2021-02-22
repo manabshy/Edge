@@ -5,6 +5,7 @@ export interface StaffMember {
   fullName: string;
   jobTitle: string;
   email: string;
+  exchangeUsername?: string;
   username: string;
   phone: string;
   mobile: string;
@@ -66,6 +67,7 @@ export interface Department {
   staffMemberId: number;
   officeId: number;
   roleId: number;
+  emailAddress?: string;
 }
 
 export enum DefaultViews {

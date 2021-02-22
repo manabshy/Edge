@@ -67,7 +67,7 @@ export class LeadComponent implements OnInit {
       }
     });
 
-    this.getActiveStaffmembers();
+    // this.getActiveStaffmembers(); Remove ASAP 22/02/21
   }
 
   getLeads(leadSearchInfo: LeadSearchInfo) {

@@ -89,7 +89,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     private messageService: MessageService,
     private localeService: BsLocaleService,
     private router: Router,
-    private fb: FormBuilder) { this.localeService.use(this.locale);}
+    private fb: FormBuilder) { this.localeService.use(this.locale); }
 
   ngOnInit() {
     this.setupLeadRegisterForm();
@@ -202,7 +202,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       includeClosedLeads: [],
       dateFrom: [],
       dateTo: [],
-      includeUnassignedLeadsOnly:  [false],
+      includeUnassignedLeadsOnly: [false],
       leadSearchTerm: ['']
     });
     // this.leadRegisterForm = this.fb.group({
@@ -285,7 +285,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   }
 
   setLeadSearchTerm(term: string) {
-    console.log({term});
+    console.log({ term });
 
     if (term) {
       this.leadRegisterForm.patchValue({
