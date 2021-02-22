@@ -86,6 +86,13 @@ export const protectedResourceMap: Map<string, Array<string>> = new Map([
 const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 const redirectUri = environment.baseRedirectUri ? environment.baseRedirectUri : window.location.origin;
 
+// Date Picker Locale
+import { defineLocale } from 'ngx-bootstrap/chronos';
+import { deLocale, frLocale, plLocale, enGbLocale } from 'ngx-bootstrap/locale';
+defineLocale('de', deLocale);
+defineLocale('fr', frLocale);
+defineLocale('pl', plLocale);
+defineLocale('en-gb', enGbLocale);
 
 
 const externalModulesImports = [

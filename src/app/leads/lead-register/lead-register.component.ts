@@ -17,6 +17,7 @@ import * as _ from 'lodash';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { map, tap } from 'rxjs/operators';
+import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 
 const PAGE_SIZE = 20;
 @Component({
@@ -52,7 +53,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   isAdvancedSearchVisible = false;
   showModal = false;
   newLeadOwnerId: number;
-
+  locale = 'en-gb';
   get isAdvancedFilterActive() {
     if (this.leadRegisterForm) {
       return this.leadRegisterForm.get('dateTo').value
@@ -86,8 +87,9 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     private toastr: ToastrService,
     private staffMemberService: StaffMemberService,
     private messageService: MessageService,
+    private localeService: BsLocaleService,
     private router: Router,
-    private fb: FormBuilder) { }
+    private fb: FormBuilder) { this.localeService.use(this.locale);}
 
   ngOnInit() {
     this.setupLeadRegisterForm();
