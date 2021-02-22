@@ -7,6 +7,7 @@ import { environment } from 'src/environments/environment';
 
 import { MsalService, BroadcastService } from '@azure/msal-angular';
 import { CryptoUtils, Logger } from 'msal';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Injectable({
   providedIn: 'root'
@@ -15,11 +16,13 @@ export class AuthService {
 
   loggedIn: boolean;
   isIframe: boolean;
+  ref: DynamicDialogRef;
 
   constructor(
     private modalService: BsModalService,
     private storage: StorageMap,
     private authService: MsalService,
+    private dialogService: DialogService,
     private broadcastService: BroadcastService) { this.isIframe = window !== window.parent && !window.opener; }
 
   handleRedirect() {
@@ -73,12 +76,13 @@ export class AuthService {
 
   public confirmSignOut() {
     const subject = new Subject<boolean>();
-    const initialState = {
-      title: 'Are you sure you want to log out? <br /> The ongoing changes will be lost.',
+    const data = {
+      title: 'Are you sure you want to log out? The ongoing changes will be lost.',
       actions: ['Stay', 'Log out']
     };
-    const modal = this.modalService.show(ConfirmModalComponent, { ignoreBackdropClick: true, initialState });
-    modal.content.subject = subject;
+   
+    this.ref = this.dialogService.open(ConfirmModalComponent, { data, styleClass: 'dialog dialog--hasFooter', showHeader: false });
+    this.ref.onClose.subscribe((res) => { if (res) { subject.next(true); subject.complete(); } });
     return subject.asObservable();
   }
 }
