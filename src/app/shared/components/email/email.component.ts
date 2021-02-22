@@ -5,7 +5,7 @@ import { NgxFileDropEntry, FileSystemFileEntry, FileSystemDirectoryEntry } from 
 import { ContactGroup } from 'src/app/contactgroups/shared/contact-group';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
 import { Email, Person } from '../../models/person';
-import { StaffMember } from '../../models/staff-member';
+import { Office, StaffMember } from '../../models/staff-member';
 import lodash from 'lodash';
 import { SubSink } from 'subsink';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
@@ -13,6 +13,12 @@ import { RequestOption } from 'src/app/core/shared/utils';
 import { PropertyService } from 'src/app/property/shared/property.service';
 import { ValidationService } from 'src/app/core/services/validation.service';
 import { AppConstants, FormErrors } from 'src/app/core/shared/app-constants';
+import { Observable, of } from 'rxjs';
+import { BasicStaffMember } from 'src/app/dashboard/shared/dashboard';
+import { BaseStaffMember } from '../../models/base-staff-member';
+import { ResultData } from '../../result-data';
+import { map, tap } from 'rxjs/operators';
+import { OfficeService } from 'src/app/core/services/office.service';
 @Component({
   selector: 'app-email',
   templateUrl: './email.component.html',
@@ -25,11 +31,12 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy {
   emailForm: FormGroup;
   searchForm: FormGroup;
   groupedPeople = [];
+  groupedStaffMembers = [];
   currentStaffMember: StaffMember;
   isContactGroupFinderVisible = false;
   showButton = false;
   personOnly = false;
-  personalEmails: { name: string, value: string }[] = [];
+  personalEmails: { name: string, value: { personId: number, email: string } }[] = [];
   existingPeople: Person[] = [];
   showFileUploader = false;
   uploadedFiles: any[] = [];
@@ -64,6 +71,8 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy {
   formErrors = FormErrors;
 
   private subs = new SubSink();
+  staffMembers: StaffMember[] = [];
+  offices: Office[];
 
   get attachments() {
     const total = this.selectedDocuments?.length + this.files?.length;
@@ -71,6 +80,7 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   constructor(private fb: FormBuilder, private storage: StorageMap,
+    private officeService: OfficeService,
     public staffMemberService: StaffMemberService,
     private contactGroupService: ContactGroupsService,
     private propertyService: PropertyService, private validationService: ValidationService) { }
@@ -84,6 +94,8 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy {
       }
       console.log('current user from storage in email....', this.currentStaffMember);
     });
+    this.getActiveStaffMembers();
+    this.getOffices();
 
     this.setupForm();
     this.populateForm();
@@ -133,7 +145,7 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy {
     } else if (this.person) {
       this.personOnly = true;
       this.person.emailAddresses.forEach(x => {
-        this.personalEmails.push({ name: x.email, value: x.email });
+        this.personalEmails.push({ name: x.email, value: { personId: this.person.personId, email: x.email } });
       });
       this.populateForm();
       // this.getGroupedPeople([], this.person);
@@ -149,6 +161,56 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  getActiveStaffMembers() {
+    this.storage.get('activeStaffmembers').subscribe(data => {
+      if (data) {
+        this.staffMembers = (data as StaffMember[]);
+        this.getGroupedStaffMembers(this.staffMembers);
+      } else {
+        this.staffMemberService.getActiveStaffMembers().subscribe(
+          (res: ResultData) => {
+            this.staffMembers = res.result;
+            this.getGroupedStaffMembers(this.staffMembers);
+            console.log(this.staffMembers, 'active members in email from db');
+          }
+        );
+      }
+    });
+  }
+
+  private getOffices() {
+    this.storage.get('offices').subscribe(data => {
+      if (data) {
+        this.offices = data as Office[];
+      } else {
+        this.officeService.getOffices()
+          .pipe((map(response => response as ResultData),
+            tap(res => {
+              if (res) { this.offices = res.result; }
+            }))).subscribe(); // Remove subscripton
+      }
+    });
+  }
+
+  getGroupedStaffMembers(staffMembers: StaffMember[]) {
+
+    let officeMembers: lodash.Dictionary<StaffMember[]> | ArrayLike<StaffMember[]>;
+    officeMembers = lodash.groupBy(staffMembers, x => x.activeDepartments[0]?.officeId);
+    const groups = Object.values(officeMembers) as StaffMember[][];
+
+    groups?.forEach(group => {
+      const item = {
+        label: this.getOfficeName(group[0]?.activeDepartments[0]?.officeId), value: group[0]?.activeDepartments[0]?.officeId,
+        items: this.getStaffEmails(group)
+      };
+
+      this.groupedStaffMembers = [...this.groupedStaffMembers, item];
+    });
+    console.log(this.groupedStaffMembers, 'grouped staffmembers');
+
+  }
+
+
   getGroupedPeople(people?: Person[], person?: Person) {
     this.groupedPeople = [];
     // if (person) {
@@ -157,15 +219,27 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy {
     //   return;
     // }
     people?.forEach(x => {
-      const item = { label: x.addressee, value: x.addressee, items: this.getEmails(x.emailAddresses) };
+      const item = { label: x.addressee, value: x.addressee, items: this.getEmails(x.emailAddresses, x.personId) };
       this.groupedPeople.push(item);
       console.log('group', this.groupedPeople);
     });
   }
 
-  getEmails(emailAddresses: Email[]) {
+  getOfficeName(officeId: number) {
+    return this.offices.find(x => x.officeId === officeId)?.name;
+  }
+
+  getStaffEmails(staffMembers: StaffMember[]) {
     const emails = [];
-    emailAddresses.forEach(x => emails.push({ name: x.email, value: x.email }));
+    staffMembers.forEach(x => emails.push({ name: x.fullName, value: { id: x.staffMemberId, email: x.exchangeUsername } }));
+    return emails;
+  }
+
+  getEmails(emailAddresses: Email[], personId: number) {
+    const emails = [];
+    emailAddresses.forEach(x => emails.push({ name: x.email, value: { personId, value: x.email } }));
+    console.log({ emails });
+
     return emails;
   }
 

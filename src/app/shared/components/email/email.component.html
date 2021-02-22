@@ -56,7 +56,7 @@
           </div>
           <fieldset>
             <label for="ccInternalEmail">Cc (Internal)</label>
-            <p-multiSelect [options]="groupedPeople" [group]="true" formControlName="ccInternalEmail" optionLabel="name"
+            <p-multiSelect [options]="groupedStaffMembers" [group]="true" [maxSelectedLabels]="1" formControlName="ccInternalEmail" optionLabel="name"
               optionValue="value" defaultLabel="Select email" crollHeight="250px" display="chip">
               <ng-template let-group pTemplate="group">
                 <div class="p-d-flex p-ai-center">
