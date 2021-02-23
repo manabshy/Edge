@@ -162,7 +162,7 @@
                 </span>
                 <!-- </a> -->
               </th>
-              <th *ngIf="isClosedIncluded">Status</th>
+              <th *ngIf="isClosedLeadFound">Status</th>
               <th>Type</th>
               <th>Person</th>
               <th>Chase Date</th>
@@ -184,7 +184,7 @@
                   </span>
                 </span>
               </td>
-              <td *ngIf="isClosedIncluded">
+              <td *ngIf="lead?.closedById">
                 <span class="cell-content">
                   <span class="pill">Closed</span>
                 </span>

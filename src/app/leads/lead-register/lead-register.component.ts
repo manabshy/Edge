@@ -54,6 +54,8 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   showModal = false;
   newLeadOwnerId: number;
   locale = 'en-gb';
+  isLoading = false;
+  isClosedLeadFound = false;
   get isAdvancedFilterActive() {
     if (this.leadRegisterForm) {
       return this.leadRegisterForm.get('dateTo').value
@@ -218,23 +220,32 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   }
 
   getLeads(leadSearchInfo: LeadSearchInfo) {
+    this.isLoading = true;
     console.log('get leads search info: ', leadSearchInfo);
     this.leadService.getLeads(leadSearchInfo, PAGE_SIZE).subscribe(result => {
 
-      if (leadSearchInfo.page === 1) {
-        this.filteredLeads = result;
-      } else {
-        if (this.filteredLeads) {
-          this.filteredLeads = this.filteredLeads.concat(result);
-        } else {
+      if (result) {
+        this.isLoading = false;
+        if (leadSearchInfo.page === 1) {
           this.filteredLeads = result;
+        } else {
+          if (this.filteredLeads) {
+            this.filteredLeads = this.filteredLeads.concat(result);
+          } else {
+            this.filteredLeads = result;
+          }
         }
+        this.isClosedLeadFound = this.checkClosedLead(this.filteredLeads);
+        this.setBottomReachedFlag(result);
       }
-      this.setBottomReachedFlag(result);
 
     }, () => {
       this.leads = [];
     });
+  }
+
+  checkClosedLead(leads: Lead[]) {
+    return leads?.every(x => x.closedById);
   }
 
   private setBottomReachedFlag(result: any) {
@@ -244,6 +255,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       this.bottomReached = false;
     }
   }
+
   assignLeads() {
     event.preventDefault();
     this.areLeadsAssignable = true;
