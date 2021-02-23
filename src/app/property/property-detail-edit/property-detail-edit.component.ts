@@ -69,6 +69,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
   isLastknownOwnerVisible = false;
   isAddressRequired = false;
   lastKnownOwnerModalHeader = 'Last known owner';
+  backToOrigin = false;
 
   constructor(private route: ActivatedRoute,
     private _router: Router,
@@ -112,7 +113,10 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
       this.leadId = +params['leadId'] || 0;
       this.personId = +params['personId'] || 0;
       this.getBack = +params['getBack'] || 0;
+      this.backToOrigin = params['backToOrigin'] || false;
       this.lastKnownPerson = params['lastKnownPerson'];
+      console.log('back to orgin', this.backToOrigin);
+
       if (this.isNewProperty) {
         this.propertyForm.reset();
         this.setupEditForm();
@@ -425,26 +429,35 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
 
     this.propertyId = property.propertyId;
     this.propertyService.currentPropertyChanged(+this.propertyId);
-    if (this.lastKnownPerson) {
-      if (this.personId) {
-        this._router.navigate(['/contact-centre/detail/', this.personId]);
-      } else {
-        if (this.leadId) {
-          this._router.navigate(['/leads-register/edit/', this.leadId]);
-        } else {
-          this._router.navigate(['/leads-register/edit/', this.leadId],
-            { queryParams: { isNewLead: true, personId: this.lastKnownPerson.personId } });
-        }
-      }
+    if (this.getBack || this.backToOrigin) {
+      this.propertyService.setAddedProperty(property);
+      console.log('property in edit.........xxxxxxxxx', property);
+      this._location.back();
     } else {
-      if (this.getBack) {
-        this.propertyService.setAddedProperty(property);
-        console.log('property in edit.........xxxxxxxxx', property);
-        this._location.back();
-      } else {
-        this._router.navigate(['/property-centre/detail', this.propertyId]);
-      }
+      this._router.navigate(['/property-centre/detail', this.propertyId]);
     }
+
+    // TEST AND REMOVE ASAP 23/02/2021
+    // if (this.lastKnownPerson) {
+    //   if (this.personId) {
+    //     this._router.navigate(['/contact-centre/detail/', this.personId]);
+    //   } else {
+    //     if (this.leadId) {
+    //       this._router.navigate(['/leads-register/edit/', this.leadId]);
+    //     } else {
+    //       this._router.navigate(['/leads-register/edit/', this.leadId],
+    //         { queryParams: { isNewLead: true, personId: this.lastKnownPerson.personId } });
+    //     }
+    //   }
+    // } else {
+    //   if (this.getBack || this.backToOrigin) {
+    //     this.propertyService.setAddedProperty(property);
+    //     console.log('property in edit.........xxxxxxxxx', property);
+    //     this._location.back();
+    //   } else {
+    //     this._router.navigate(['/property-centre/detail', this.propertyId]);
+    //   }
+    // }
   }
 
   canDeactivate(): boolean {

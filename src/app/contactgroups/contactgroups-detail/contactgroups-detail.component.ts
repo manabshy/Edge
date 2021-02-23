@@ -212,11 +212,12 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
   create(item: string) {
     console.log({ item }, 'item to create');
     if (item === 'leads') {
-      this.router.navigate(['leads-register', 'edit', 0], { queryParams: { isNewLead: true, personId: this.searchedPersonDetails?.personId } });
+      this.router.navigate(['leads-register', 'edit', 0],
+        { queryParams: { isNewLead: true, personId: this.searchedPersonDetails?.personId, backToOrigin: true } });
     } else {
       const fullName = `${this.searchedPersonDetails.firstName} ${this.searchedPersonDetails?.middleName} ${this.searchedPersonDetails?.lastName}`;
       this.router.navigate(['property-centre', 'detail', 0, 'edit'],
-        { queryParams: { isNewProperty: true, personId: this.searchedPersonDetails?.personId, lastKnownPerson: fullName } });
+        { queryParams: { isNewProperty: true, personId: this.searchedPersonDetails?.personId, lastKnownPerson: fullName, backToOrigin: true } });
     }
 
   }

@@ -87,6 +87,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   moreInfo = this.sidenavService.selectedItem = 'notes';
   sideNavItems = this.sidenavService.sideNavItems;
   showOnlyMyNotes = false;
+  backToOrigin = false;
 
   get nextChaseDateControl() {
     return this.leadEditForm.get('nextChaseDate') as FormControl;
@@ -113,8 +114,10 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.infoParam = this.route.snapshot.queryParamMap.get('leadSearchInfo');
     this.showSaveAndNext = this.route.snapshot.queryParamMap.get('showSaveAndNext') === 'true';
     this.showNotes = this.route.snapshot.queryParamMap.get('showNotes') === 'true';
+    this.backToOrigin = this.route.snapshot.queryParamMap.get('backToOrigin') === 'true';
     this.route.params.subscribe(params => {
       this.leadId = +params['leadId'] || 0;
+
       if (this.leadId && this.showSaveAndNext) {
         this.getLeadIds(this.leadId);
       }
@@ -398,11 +401,12 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   create(item: string) {
     if (item === 'leads') {
       this.router.navigateByUrl('/', { skipLocationChange: true })
-        .then(() => this.router.navigate(['leads-register/edit', 0], { queryParams: { isNewLead: true, showNotes: true, personId: this.person?.personId } }));
+        .then(() => this.router.navigate(['leads-register/edit', 0],
+          { queryParams: { isNewLead: true, showNotes: true, personId: this.person?.personId } }));
     } else {
       const fullName = `${this.person?.firstName} ${this.person?.middleName} ${this.person?.lastName}`;
       this.router.navigate(['property-centre', 'detail', 0, 'edit'],
-        { queryParams: { isNewProperty: true, personId: this.person?.personId, lastKnownPerson: fullName } });
+        { queryParams: { isNewProperty: true, personId: this.person?.personId, lastKnownPerson: fullName, backToOrigin: true } });
     }
 
   }
@@ -504,10 +508,12 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     let time: number;
     if (this.isNewLead) {
       this.messageService.add({ severity: 'success', summary: 'Lead successfully saved', closable: false });
+      if (this.backToOrigin) { this.sharedService.back(); }
     } else {
       this.isSaveAndNext ? time = 2000 : time = 3000;
       this.messageService.add({ severity: 'success', summary: 'Lead successfully updated', closable: false, life: time });
     }
+
 
     this.isSaveAndNext = false;
     this.isUpdateComplete = true;
@@ -530,7 +536,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       this.router.navigate(['/leads-register/edit/', this.leadId]);
       this.init();
     }
-
   }
 
   cancel() {

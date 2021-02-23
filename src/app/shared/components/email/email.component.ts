@@ -226,7 +226,7 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getOfficeName(officeId: number) {
-    return this.offices.find(x => x.officeId === officeId)?.name;
+    return this.offices?.find(x => x.officeId === officeId)?.name;
   }
 
   getStaffEmails(staffMembers: StaffMember[]) {
