@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { NgxFileDropEntry, FileSystemFileEntry, FileSystemDirectoryEntry } from 'ngx-file-drop';
@@ -24,7 +24,7 @@ import { OfficeService } from 'src/app/core/services/office.service';
   templateUrl: './email.component.html',
   styleUrls: ['./email.component.scss']
 })
-export class EmailComponent implements OnInit, OnChanges, OnDestroy {
+export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
   @Input() contactGroup: ContactGroup;
   @Input() person: Person;
   @Output() hideModal = new EventEmitter<boolean>();
@@ -42,7 +42,6 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy {
   uploadedFiles: any[] = [];
   public files: NgxFileDropEntry[] = [];
   searchPlaceholder = 'Property Address or Id';
-
   index = 0;
   isDocSelected = false;
 
@@ -79,6 +78,7 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy {
     return `Attachments (${total})`;
   }
 
+  @ViewChild('pEditor') pEditor: any;
   constructor(private fb: FormBuilder, private storage: StorageMap,
     private officeService: OfficeService,
     public staffMemberService: StaffMemberService,
@@ -150,6 +150,17 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy {
       this.populateForm();
       // this.getGroupedPeople([], this.person);
     }
+  }
+
+  ngAfterViewInit() {
+    console.log(this.pEditor?.getQuill(), ' p ditor');
+    let quill = this.pEditor?.getQuill();
+    quill.setContents([
+      { insert: 'Dear ' },
+      { insert: '{salutation}', attributes: { bold: true } },
+      { insert: '\n' }
+    ]);
+    // quill.setText('Hello\n');
   }
 
   private populateForm() {

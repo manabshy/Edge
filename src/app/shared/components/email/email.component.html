@@ -91,7 +91,7 @@
             <p class="message message--negative">{{formErrors?.subject}}</p>
           </fieldset>
           <fieldset class="fieldset--width-max" [ngClass]="{invalid: formErrors?.body}">
-            <p-editor formControlName="body" [style]="{'height':'320px'}">
+            <p-editor #pEditor formControlName="body" [style]="{'height':'320px'}">
               <p-header>
                 <span class="ql-formats">
                   <button class="ql-bold" aria-label="Bold"></button>
