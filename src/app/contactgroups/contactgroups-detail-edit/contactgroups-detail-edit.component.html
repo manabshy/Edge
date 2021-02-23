@@ -78,14 +78,14 @@
               [ngClass]="{'border border-warning': !personForm.controls.emailAddresses.controls[0].controls.email.value
               && isFirst && !personForm.errors?.emailOrPhone, 'is-invalid': isValid('email', i) || personForm.errors?.emailOrPhone}">
             <span class="btn--container">
-              <button class="btn" btnCheckbox formControlName="isPreferred" tabindex="0"
+              <a class="btn" btnCheckbox formControlName="isPreferred" tabindex="0"
                 (click)="togglePreferences(i, emailAddresses)" role="button"
                 [ngClass]="!!personForm.value.emailAddresses[i].isPreferred ? 'btn--warning txt--snow' : 'btn--ghost  btn--hoverWarning'">
                 <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
                   <polygon points="32 0 41.9 21.1 64 24.4 48 40.8 51.8 64 32 53.1 12.2 64 16 40.8 0 24.4 22.1 21.1 ">
                   </polygon>
                 </svg>
-              </button>
+              </a>
             </span>
           </span>
           <p class="message message--negative"
@@ -124,14 +124,14 @@
             <!-- <label class="btn btn-light" btnCheckbox formControlName="sendSMS" tabindex="0" role="button" [hidden]="true" [ngClass]="{'font-weight-bold': personForm.value.phoneNumbers[i].sendSMS}" [style.visibility]="!sharedService.isUKMobile(personForm.value.phoneNumbers[i].number) ? 'hidden' : 'visible'">SMS</label> -->
             <input type="text" placeholder="Comments" formControlName="comments">
             <span class="btn--container">
-              <button class="btn" btnCheckbox formControlName="isPreferred" tabindex="0"
+              <a class="btn" btnCheckbox formControlName="isPreferred" tabindex="0"
                 (click)="togglePreferences(i, phoneNumbers)" role="button"
                 [ngClass]="!!personForm.value.phoneNumbers[i].isPreferred ? 'btn--warning txt--snow' : 'btn--ghost  btn--hoverWarning'">
                 <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
                   <polygon points="32 0 41.9 21.1 64 24.4 48 40.8 51.8 64 32 53.1 12.2 64 16 40.8 0 24.4 22.1 21.1 ">
                   </polygon>
                 </svg>
-              </button>
+              </a>
             </span>
           </span>
           <p class="message message--negative"
