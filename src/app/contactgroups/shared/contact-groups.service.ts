@@ -29,6 +29,7 @@ export class ContactGroupsService {
   private pageChangeSubject = new Subject<number | null>();
   private personNotePageChangeSubject = new Subject<number | null>();
   private contactNotePageChangeSubject = new Subject<number | null>();
+  private newPersonSubject = new Subject<Person | null>()
   noteChanges$ = this.notesSubject.asObservable();
   contactInfoForNotes$ = this.contactInfoAction$.asObservable();
   personNotesChanges$ = this.personNotesSubject.asObservable();
@@ -38,6 +39,7 @@ export class ContactGroupsService {
   personNotePageChanges$ = this.personNotePageChangeSubject.asObservable();
   contactNotePageChanges$ = this.contactNotePageChangeSubject.asObservable();
   signer$ = this.signerSubject.asObservable();
+  newPerson$ = this.newPersonSubject.asObservable();
 
   constructor(private http: HttpClient) { }
 
@@ -260,7 +262,7 @@ export class ContactGroupsService {
     );
   }
 
-  getContactGroupNotes(contactGroupId: number, pageSize?: number, page?: number,  myNotesOnly = false): Observable<ContactNote[]> {
+  getContactGroupNotes(contactGroupId: number, pageSize?: number, page?: number, myNotesOnly = false): Observable<ContactNote[]> {
     if (!page || +page === 0) { page = 1; }
     if (pageSize == null) { pageSize = 10; }
     const options = new HttpParams({
@@ -352,5 +354,8 @@ export class ContactGroupsService {
     }
   }
 
+  getAddedPerson(person: Person) {
+    this.newPersonSubject.next(person);
+  }
 }
 
