@@ -186,6 +186,9 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
             }))
         )
       );
+
+    // Get newly added person
+    this.getNewlyAddedPerson();
   }
 
   selectedSuggestion(event: any) {
@@ -255,6 +258,8 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
     }
 
     if (this.contactGroupId) {
+      console.log('hree..for new group', this.contactGroupDetails);
+
       this.getContactGroupById(this.contactGroupId);
 
     } else {
@@ -317,6 +322,20 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
       this.getContactGroupFirstPerson(this.personId, isSelectedTypeCompany);
     }
     this.isTypePicked = true;
+
+  }
+
+  getNewlyAddedPerson() {
+    this.contactGroupService.newPerson$.subscribe(person => {
+      if (person) {
+        person.isNewPerson = true;
+        this.isOffCanvasVisible = false;
+        this.contactGroupDetails?.contactPeople?.push(person);
+        this.setSalutation();
+        this.saveContactGroup();
+        console.log({ person }, 'newly added', this.contactGroupDetails, 'details for new group');
+      }
+    });
 
   }
 
@@ -787,23 +806,26 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
         this.getSignerDetails(contactGroupId);
         this.sharedService.back();
       }
-      let url = this._router.url;
-      let replacedId = this.contactGroupId;
+      // Remove after Testing 23/02/21 ASAP
+      // let url = this._router.url;
+      // let replacedId = this.contactGroupId;
 
-      if (url.indexOf('people/' + replacedId) === -1) {
-        replacedId = 0;
-      }
+      // if (url.indexOf('people/' + replacedId) === -1) {
+      //   replacedId = 0;
+      // }
 
-      if (url.indexOf('?') >= 0) {
-        url = url.substring(0, url.indexOf('?'));
-      }
+      // if (url.indexOf('?') >= 0) {
+      //   url = url.substring(0, url.indexOf('?'));
+      // }
 
-      url = url.replace('people/' + replacedId, 'people/' + contactGroupId);
+      // url = url.replace('people/' + replacedId, 'people/' + contactGroupId);
 
-      this._location.replaceState(url);
-      this.contactGroupId = contactGroupId;
-      this.init();
-
+      // this._location.replaceState(url);
+      // this.contactGroupId = contactGroupId;
+      // this.init();
+      this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+        this._router.navigate(['/contact-centre/detail/', 0, 'people', contactGroupId]);
+      });
       if (this.isExistingCompany && this.existingCompanyId) {
         this._router.navigate(['/company-centre/detail', this.existingCompanyId]);
       }

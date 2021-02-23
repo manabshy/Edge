@@ -26,16 +26,15 @@
         </fieldset>
       </ng-container>
 
-      <fieldset>
+      <fieldset [ngClass]="{'invalid':formErrors.titleId || formErrors.titleOther || personForm.errors?.titleOther}">
         <label for="title">Title</label>
         <span class="select input--grid-5">
-          <select id="title" name="title" formControlName="titleId" [ngClass]="{'is-invalid':formErrors.titleId}">
+          <select id="title" name="title" formControlName="titleId" >
             <option value=""></option>
             <option *ngFor="let title of titles | keyvalue:keepOriginalOrder" [value]=title.key>{{title.value}}</option>
           </select>
         </span>
-        <input type="text" [ngClass]="{'is-invalid': formErrors.titleOther || personForm.errors?.titleOther}"
-          formControlName="titleOther" placeholder="Title ..." *ngIf="isTitleOtherVisible">
+        <input type="text" formControlName="titleOther" placeholder="Title ..." *ngIf="isTitleOtherVisible">
         <p class="message message--negative" *ngIf="personForm.errors?.titleOther">Please enter a Title</p>
         <p class="message message--negative">{{formErrors.titleId}}</p>
       </fieldset>
@@ -219,6 +218,12 @@
       <footer class="footer" [ngClass]="{'px-0': basicPerson}">
         <button (click)="cancel()" type="button" class="btn btn--ghost">Cancel</button>
         <button type="submit" class="btn btn--positive" [tooltip]="!personForm.valid ? errorMessage?.displayMessage : ''"
+          placement="top" [attr.disabled]="isSubmitting ? '' : null">Save
+        </button>
+      </footer>
+      <!-- <footer class="footer" [ngClass]="{'px-0': basicPerson}">
+        <button (click)="cancel()" type="button" class="btn btn--ghost">Cancel</button>
+        <button type="submit" class="btn btn--positive" [tooltip]="!personForm.valid ? errorMessage?.displayMessage : ''"
           placement="top" [attr.disabled]="isSubmitting ? '' : null"><i
             class="fas fa-spinner fa-pulse d-inline-block mr-2" *ngIf="isSubmitting"></i>
           <ng-container *ngIf="!basicPerson; else addPersonLabel">Save</ng-container>
@@ -244,7 +249,7 @@
             </path>
           </svg>Add Another
         </button>
-      </footer>
+      </footer> -->
     </form>
     <app-additional-info class="appWrapper" [id]="personDetails?.personId ? 'P-'+personDetails?.personId : ''" *ngIf="!basicPerson"></app-additional-info>
 

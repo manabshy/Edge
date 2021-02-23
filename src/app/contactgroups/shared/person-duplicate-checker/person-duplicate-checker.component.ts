@@ -38,6 +38,7 @@ export class PersonDuplicateCheckerComponent implements OnInit, OnChanges {
   constructor(private fb: FormBuilder,
     private contactGroupService: ContactGroupsService,
     private sharedService: SharedService,
+    private router: Router,
     private renderer: Renderer2) { }
 
   ngOnInit() {
@@ -200,13 +201,11 @@ export class PersonDuplicateCheckerComponent implements OnInit, OnChanges {
   }
 
   createNewContactGroupPerson(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    this.isCreateNewPerson = true;
+    // event.preventDefault();
+    // event.stopPropagation();
+    // this.isCreateNewPerson = true;
+    this.router.navigate(['contact-centre', 'detail', 0, 'edit'], { queryParams: { newPerson: JSON.stringify(this.newPerson) } })
 
-    setTimeout(() => {
-      // this.offCanvasContent.nativeElement.scrollTo(0, 0);
-    });
   }
   hideCanvas(event) {
     this.isPersonCanvasVisible = event;

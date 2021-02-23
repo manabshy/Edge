@@ -30,8 +30,9 @@ export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
   @Output() addedPersonId = new EventEmitter<number>();
   @Output() hideCanvas = new EventEmitter<boolean>();
   @Output() backToFinder = new EventEmitter<boolean>();
-  @Input() basicPerson: BasicPerson;
+  // @Input() basicPerson: BasicPerson;
   @Input() isCompanyContactGroup = false;
+  basicPerson: BasicPerson;
   prefToggleStatus = false;
   countries: InfoDetail[] = [];
   titles: Record<number, string>;
@@ -141,6 +142,10 @@ export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
     this.subs.sink = this.route.queryParams.subscribe(params => {
       this.groupPersonId = +params['groupPersonId'] || 0;
       this.isEditingSelectedPerson = params['isEditingSelectedPerson'] || false;
+      const newPerson = params['newPerson'];
+      if (newPerson) {
+        this.basicPerson = JSON.parse(newPerson) as BasicPerson;
+      }
     });
     this.setupEditForm();
     const id = this.groupPersonId !== 0 ? this.groupPersonId : this.personId;
@@ -557,7 +562,6 @@ export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
         if (!person.titleId) {
           person.titleId = 100;
         }
-        // person.address.addressLines = this.removeDuplicateAdressLines();
         if (!this.basicPerson) {
           this.subs.sink = this.contactGroupService.updatePerson(person).subscribe(res => this.onSaveComplete(res.result, otherPersonToAdd),
             (error: WedgeError) => {
@@ -587,7 +591,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
     this.isSubmitting = false;
     this.isSubmittingAndAdd = false;
     this.errorMessage = null;
-    this.messageService.add({ severity: 'success', summary: 'Person successfully saved', closable: false});
+    this.messageService.add({ severity: 'success', summary: 'Person successfully saved', closable: false });
     if (this.isEditingSelectedPerson && AppUtils.holdingSelectedPeople) {
       const holdingPeople = AppUtils.holdingSelectedPeople;
       holdingPeople.forEach((x, index) => {
@@ -598,16 +602,18 @@ export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
       });
     }
     if (this.newPersonId) {
-      this.addNewPerson(this.newPersonId);
-      const personEmitter = {
-        person: person,
-        otherPersonToAdd: otherPersonToAdd
-      };
-      this.addedPersonDetails.emit(personEmitter);
-      this.backToFinder.emit(otherPersonToAdd);
-      if (!personEmitter.otherPersonToAdd) {
-        this.makeCanvasInvisible(this.isOffCanvasVisible);
-      }
+      this.contactGroupService.getAddedPerson(person);
+      this.sharedService.back();
+      // this.addNewPerson(this.newPersonId);
+      // const personEmitter = {
+      //   person: person,
+      //   otherPersonToAdd: otherPersonToAdd
+      // };
+      // this.addedPersonDetails.emit(personEmitter);
+      // this.backToFinder.emit(otherPersonToAdd);
+      // if (!personEmitter.otherPersonToAdd) {
+      //   this.makeCanvasInvisible(this.isOffCanvasVisible);
+      // }
     } else {
       this.sharedService.back();
     }
