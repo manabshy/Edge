@@ -37,8 +37,7 @@
           </ng-template>
           <span class="pill pill--positive" *ngIf="isAMLCompleted">AML Completed</span>
         </h2> -->
-        <div class="message message--warning"
-          *ngIf="contactGroupDetails?.contactPeople && (contactGroupDetails?.contactPeople.length !== initialContactGroupLength) && isTypePicked">
+        <div class="message message--warning" *ngIf="pendingChanges">
           There are pending changes on the people list. Save to make them effective.
         </div>
         <div class="message message--negative"
@@ -890,8 +889,8 @@
         <!--Add  [showHeader]="false" to hide header -->
         <p-dialog header="Find Person" [(visible)]="isOffCanvasVisible" [modal]="true" [draggable]="false" class="modal--medium modal--hasFooter">
           <app-person-duplicate-checker
-            [contactGroupDetails]="contactGroupDetails" [searchTerm]="signer" [isCreateNewPerson]="isCreateNewPerson"
-            (addedPersonDetails)="getAddedPersonDetails($event)" (selectedPerson)="getSelectedPerson($event)"
+            [contactGroupDetails]="contactGroupDetails" [searchTerm]="signer"
+            (addedPersonDetails)="getAddedPersonDetails($event)" (selectedPerson)="getSelectedPerson($event)" (creatingNewPerson)="createNewPerson()"
             >
           </app-person-duplicate-checker>
           <!-- <footer class="footer footer--modal" *ngIf="isCreateNewPersonVisible">

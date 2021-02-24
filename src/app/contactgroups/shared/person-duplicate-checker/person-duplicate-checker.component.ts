@@ -26,6 +26,7 @@ export class PersonDuplicateCheckerComponent implements OnInit, OnChanges {
   @Output() selectedPerson = new EventEmitter<Person>();
   @Output() isCanvasHidden = new EventEmitter<boolean>();
   @Output() makeButtonVisible = new EventEmitter<boolean>();
+  @Output() creatingNewPerson = new EventEmitter<boolean>();
   // selectedPerson: Person;
   isCompanyContactGroup: boolean = false;
   personFinderForm: FormGroup;
@@ -204,6 +205,7 @@ export class PersonDuplicateCheckerComponent implements OnInit, OnChanges {
     // event.preventDefault();
     // event.stopPropagation();
     // this.isCreateNewPerson = true;
+    this.creatingNewPerson.emit();
     this.router.navigate(['contact-centre', 'detail', 0, 'edit'], { queryParams: { newPerson: JSON.stringify(this.newPerson) } })
 
   }
