@@ -165,6 +165,7 @@
               <th *ngIf="isClosedLeadFound">Status</th>
               <th>Type</th>
               <th>Person</th>
+              <th>Property</th>
               <th>Chase Date</th>
               <th>Chaser</th>
             </tr>
@@ -200,6 +201,11 @@
                     [queryParams]="{ showNotes: true,showSaveAndNext: true,leadSearchInfo: this.info}">
                     {{lead?.person}}
                   </a>
+                </span>
+              </td>
+              <td data-title="Property">
+                <span class="cell-content">
+                  {{lead?.relatedProperty?.address|formatAddress}}
                 </span>
               </td>
               <td data-title="Chase Date">

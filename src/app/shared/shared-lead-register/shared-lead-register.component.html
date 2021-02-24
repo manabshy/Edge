@@ -9,8 +9,8 @@
 </div>
 
 <div *ngIf="leads$|async as leads">
-  
-  
+
+
   <!-- <div class="custom-control custom-checkbox">
     <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getLeads()" class="custom-control-input" id="includeClosedLeads">
     <label class="custom-control-label small" for="includeClosedLeads">Include closed leads</label>
@@ -23,6 +23,7 @@
       <thead>
         <tr>
           <th>Type</th>
+          <th>Property</th>
           <th>Next Chase Date</th>
           <th>Lead Owner</th>
           <th *ngIf="isClosedIncluded">Status</th>
@@ -32,6 +33,11 @@
         <tr *ngFor="let lead of leads; let i = index;" (click)="leadClicked(lead)">
           <td data-title="Type">
             <span class="cell-content">{{lead?.leadType}}</span>
+          </td>
+          <td data-title="Property">
+            <span class="cell-content">
+              {{lead?.relatedProperty?.address|formatAddress}}
+            </span>
           </td>
           <td data-title="Next Chase Date">
             <span class="cell-content">{{(lead?.nextChaseDate | date: 'dd/MM/yyyy hh:mm') || '-'}}</span>
