@@ -139,7 +139,6 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
 
   ngOnChanges() {
     if (this.contactGroup) {
-      console.log(this.contactGroup, 'group');
       this.getGroupedPeople(this.contactGroup.contactPeople);
 
     } else if (this.person) {
@@ -153,7 +152,6 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
   }
 
   ngAfterViewInit() {
-    console.log(this.pEditor?.getQuill(), ' p ditor');
     let quill = this.pEditor?.getQuill();
     quill.setContents([
       { insert: 'Dear ' },
@@ -167,8 +165,6 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
     if (this.person) {
       const preferredEmail = this.person.emailAddresses.find(x => x.isPreferred)?.email;
       this.emailForm?.patchValue({ recipientEmail: [preferredEmail] });
-      console.log(this.emailForm?.value, 'Email form');
-      console.log('person', this.person);
     }
   }
 
@@ -182,7 +178,6 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
           (res: ResultData) => {
             this.staffMembers = res.result;
             this.getGroupedStaffMembers(this.staffMembers);
-            console.log(this.staffMembers, 'active members in email from db');
           }
         );
       }
@@ -217,7 +212,6 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
 
       this.groupedStaffMembers = [...this.groupedStaffMembers, item];
     });
-    console.log(this.groupedStaffMembers, 'grouped staffmembers');
 
   }
 
@@ -232,7 +226,6 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
     people?.forEach(x => {
       const item = { label: x.addressee, value: x.addressee, items: this.getEmails(x.emailAddresses, x.personId) };
       this.groupedPeople.push(item);
-      console.log('group', this.groupedPeople);
     });
   }
 
@@ -290,7 +283,6 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
     } else {
       this.suggestionsDisplayName = 'contactNames';
       this.contactGroupService.getAutocompleteSigners(event?.query).subscribe((result) => {
-        console.log('contact groups here', result);
         this.suggestions = result;
       });
     }
@@ -396,7 +388,6 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
     this.index = 0; // Switch to message details tab
     this.validationService.logValidationErrors(this.emailForm, true);
     const filesToUpload = [...this.files, ...this.selectedDocuments];
-    console.log({ filesToUpload }, 'all files to upload');
 
     console.log(this.emailForm?.value, 'send email form');
   }
