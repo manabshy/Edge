@@ -980,7 +980,7 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
   canDeactivate(): boolean {
     if (!this.pendingChanges) { this.contactGroupDetailsForm.markAsPristine(); }
     if ((this.contactGroupDetailsForm.dirty || this.companyFinderForm.dirty) &&
-      !this.isSubmitting && !this.isEditingSelectedPerson && !this.isEditingSelectedCompany && !this.isCreatingNewPerson) {
+      !this.isSubmitting &&  !this.isEditingSelectedCompany && !this.isCreatingNewPerson) {
       return false;
     }
     return true;
