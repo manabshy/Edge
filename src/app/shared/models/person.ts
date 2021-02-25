@@ -1,5 +1,5 @@
 import { Address } from './address';
-import { ContactNote } from 'src/app/contactgroups/shared/contact-group';
+import { ContactNote, Signer } from 'src/app/contactgroups/shared/contact-group';
 
 export interface Person extends PersonWarning {
   personId: number;
@@ -109,6 +109,7 @@ export interface PersonOffer {
 export interface PersonProperty {
   propertyId: number;
   address: Address;
+  lastKnownOwner: Signer;
 }
 export interface PersonInstruction {
   propertyEventId: number;
