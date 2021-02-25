@@ -4,14 +4,14 @@
     <span class="checkbox checkbox--rtl" *ngIf="closedCounter">
       <span>
         <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getHomeHelpers()" id="includeClosedHomeHelpers">
-        <label for="includeClosedHomeHelpers">Include closed home helpers</label>
+        <label for="includeClosedHomeHelpers">Hide closed home helpers</label>
       </span>
     </span>
   </div>
 
   <div class="table">
     <app-redacted-table class="appWrapper" *ngIf="!homeHelpers || !homeHelpers?.length" message="No home helpers"></app-redacted-table>
-    
+
     <table class="table--mobile table--rowHover">
       <thead *ngIf="homeHelpers && homeHelpers?.length">
         <tr>

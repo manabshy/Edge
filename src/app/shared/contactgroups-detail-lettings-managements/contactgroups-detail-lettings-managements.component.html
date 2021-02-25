@@ -3,14 +3,14 @@
   <span class="checkbox checkbox--rtl" *ngIf="closedCounter">
     <span>
       <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getLettingsManagements()" id="includeClosedLettingManagements">
-      <label for="includeClosedLettingManagements">Include closed letting managements</label>
+      <label for="includeClosedLettingManagements">Hide closed letting managements</label>
     </span>
   </span>
 </div>
 
 <div class="table" *ngIf="managements$ | async as managements">
   <app-redacted-table *ngIf="!managements || !managements?.length" message="No lettings managements"></app-redacted-table>
-  
+
   <table class="table--mobile table--rowHover">
     <thead *ngIf="managements && managements?.length">
       <tr>

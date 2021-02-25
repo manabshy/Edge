@@ -3,7 +3,7 @@
   <span class="checkbox checkbox--rtl" *ngIf="closedCounter">
     <span>
       <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getValuations()" class="custom-control-input" id="includeClosedValuations">
-      <label for="includeClosedValuations">Include previous valuations</label>
+      <label for="includeClosedValuations">Hide previous valuations</label>
     </span>
   </span>
 </div>
@@ -69,7 +69,7 @@
 
 <!-- <div class="list-group list-group-flush">
   <ng-container>
-    
+
     <div class="list-group-item list-header d-none d-sm-block d-xl-none">
       <div class="row">
         <div class="col-sm-3"><strong>Address</strong></div>
@@ -81,7 +81,7 @@
         <div class="col-sm"><strong></strong></div>
       </div>
     </div>
-    
+
     <a class="list-group-item list-group-item-action" >
       <div class="row">
         <div class="col-sm-3 col-xl-12">

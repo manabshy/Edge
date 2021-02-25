@@ -3,7 +3,7 @@
   <span class="checkbox checkbox--rtl" *ngIf="closedCounter">
     <span>
       <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getOffers()" id="includeClosedOffers">
-      <label for="includeClosedOffers">Include closed offers</label>
+      <label for="includeClosedOffers">Hide closed offers</label>
     </span>
   </span>
 </div>
@@ -11,7 +11,7 @@
 <ng-container *ngIf="offers$|async as offers">
   <div class="table">
     <app-redacted-table *ngIf="!offers || !offers?.length" message="No offers"></app-redacted-table>
-    
+
     <table class="table--mobile table--rowHover" *ngIf="offers && offers?.length">
       <thead>
         <tr>
