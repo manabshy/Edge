@@ -531,6 +531,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
     }
     personAddress.setValue(address);
   }
+
   removeSMSLandlines() {
     this.phoneNumbers.controls.forEach(x => {
       if (!this.sharedService.isUKMobile(x.value.number)) {
@@ -591,6 +592,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
       this.errorMessage.displayMessage = 'Please correct validation errors';
     }
   }
+  
   onSaveComplete(person?: Person, otherPersonToAdd?: boolean) {
     this.personForm.markAsPristine();
     this.isSubmitting = false;

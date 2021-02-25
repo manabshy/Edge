@@ -108,14 +108,14 @@
 
       <div class="fieldset" formArrayName="phoneNumbers"
         *ngFor="let phoneNumber of phoneNumbers.controls; let i = index; first as isFirst;">
-        <fieldset [formGroupName]="i">
+        <fieldset [formGroupName]="i"
+          [ngClass]="{'border border-warning': !personForm.controls.phoneNumbers.controls[0].controls.number.value && isFirst
+        && !personForm.errors?.emailOrPhone, 'invalid': isValid('number', i) || personForm.errors?.emailOrPhone || personForm.controls.phoneNumbers.controls[i].errors?.mismatch}">
           <label [for]="'phone' + i" [ngClass]="{'sr-only': !isFirst}">Phone</label>
           <span class="joined">
             <input type="search" [id]="'phone' + i" [placeholder]="!isFirst ? 'Additional phone' : ''"
               formControlName="number" (keyup)="addRemovePhoneNumberItem(i, false)"
-              (blur)="addRemovePhoneNumberItem(i, true)"
-              [ngClass]="{'border border-warning': !personForm.controls.phoneNumbers.controls[0].controls.number.value && isFirst
-              && !personForm.errors?.emailOrPhone, 'is-invalid': isValid('number', i) || personForm.errors?.emailOrPhone || personForm.controls.phoneNumbers.controls[i].errors?.mismatch}">
+              (blur)="addRemovePhoneNumberItem(i, true)">
             <span class="select">
               <select formControlName="typeId"
                 [ngClass]="{'is-invalid': personForm.controls.phoneNumbers.controls[i].errors?.mismatch}">
