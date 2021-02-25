@@ -16,11 +16,11 @@
             warning.</p>
         </fieldset>
 
-        <fieldset *ngIf="isWarningCommentVisible"  [ngClass]="{'invalid': formErrors.warningStatusComment || personForm.errors?.warningStatusRequired}">
+        <fieldset *ngIf="isWarningCommentVisible"
+          [ngClass]="{'invalid': formErrors.warningStatusComment || personForm.errors?.warningStatusRequired}">
           <label>Enter comment (max 20 characters)</label>
-          <input type="text"
-            formControlName="warningStatusComment" placeholder="Comment ...">
-          <p class="message message--negative" >{{formErrors.warningStatusComment}}</p>
+          <input type="text" formControlName="warningStatusComment" placeholder="Comment ...">
+          <p class="message message--negative">{{formErrors.warningStatusComment}}</p>
           <p class="message message--negative" *ngIf="personForm.errors?.warningStatusRequired">Please enter a Comment
           </p>
         </fieldset>
@@ -29,7 +29,7 @@
       <fieldset [ngClass]="{'invalid':formErrors.titleId || formErrors.titleOther || personForm.errors?.titleOther}">
         <label for="title">Title</label>
         <span class="select input--grid-5">
-          <select id="title" name="title" formControlName="titleId" >
+          <select id="title" name="title" formControlName="titleId">
             <option value=""></option>
             <option *ngFor="let title of titles | keyvalue:keepOriginalOrder" [value]=title.key>{{title.value}}</option>
           </select>
@@ -60,7 +60,8 @@
       </fieldset>
 
       <legend class="legend">Address</legend>
-      <app-address class="appWrapper" [personDetails]="personDetails || basicPerson" (addressDetails)="getAddress($event)"></app-address>
+      <app-address class="appWrapper" [personDetails]="personDetails || basicPerson"
+        (addressDetails)="getAddress($event)"></app-address>
 
       <legend class="legend">Contact details</legend>
       <fieldset class="warning" *ngIf="personForm.errors?.emailOrPhone">
@@ -69,10 +70,11 @@
 
       <div class="fieldset" formArrayName="emailAddresses"
         *ngFor="let emailAddress of emailAddresses.controls; let i = index; first as isFirst">
-        <fieldset [formGroupName]="i">
+        <fieldset [formGroupName]="i"
+          [ngClass]="{invalid: personForm.controls.emailAddresses.controls[i].controls.email.value && !!personForm.controls.emailAddresses.controls[i].controls.email.errors}">
           <label [for]="'email' + i" class="col small" [ngClass]="{'sr-only': !isFirst}">Email Address</label>
           <span class="joined">
-            <input type="text" [id]="'email' + i" [placeholder]="!isFirst ? 'Additional Email' : ''"
+            <input type="search" [id]="'email' + i" [placeholder]="!isFirst ? 'Additional Email' : ''"
               class="form-control" formControlName="email" (keyup)="addRemoveEmailItem(i, false)"
               (blur)="addRemoveEmailItem(i, true)"
               [ngClass]="{'border border-warning': !personForm.controls.emailAddresses.controls[0].controls.email.value
@@ -109,7 +111,7 @@
         <fieldset [formGroupName]="i">
           <label [for]="'phone' + i" [ngClass]="{'sr-only': !isFirst}">Phone</label>
           <span class="joined">
-            <input type="text" [id]="'phone' + i" [placeholder]="!isFirst ? 'Additional phone' : ''"
+            <input type="search" [id]="'phone' + i" [placeholder]="!isFirst ? 'Additional phone' : ''"
               formControlName="number" (keyup)="addRemovePhoneNumberItem(i, false)"
               (blur)="addRemovePhoneNumberItem(i, true)"
               [ngClass]="{'border border-warning': !personForm.controls.phoneNumbers.controls[0].controls.number.value && isFirst
@@ -215,10 +217,9 @@
             (click)="clearControlValue(personForm.get('amlCompletedDate'))">Clear</button>
         </fieldset>
       </div>
-      <footer class="footer" [ngClass]="{'px-0': basicPerson}">
+      <footer class="footer">
         <button (click)="cancel()" type="button" class="btn btn--ghost">Cancel</button>
-        <button type="submit" class="btn btn--positive" [tooltip]="!personForm.valid ? errorMessage?.displayMessage : ''"
-          placement="top" [attr.disabled]="isSubmitting ? '' : null">Save
+        <button type="submit" class="btn btn--positive" [attr.disabled]="isSubmitting ? '' : null">Save
         </button>
       </footer>
       <!-- <footer class="footer" [ngClass]="{'px-0': basicPerson}">
@@ -251,7 +252,8 @@
         </button>
       </footer> -->
     </form>
-    <app-additional-info class="appWrapper" [id]="personDetails?.personId ? 'P-'+personDetails?.personId : ''" *ngIf="!basicPerson"></app-additional-info>
+    <app-additional-info class="appWrapper" [id]="personDetails?.personId ? 'P-'+personDetails?.personId : ''"
+      *ngIf="!basicPerson"></app-additional-info>
 
   </div>
 </div>
