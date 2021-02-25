@@ -419,6 +419,9 @@ export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
       otherPhoneNumbers.forEach(x => {
         x.isPreferred = false;
       });
+
+      this.personForm.get('phoneNumbers').setValue(phoneNumberPrefs);
+
     } else {
       const emailPrefs = [];
       const emailFormGroups = this.emailAddresses.controls;
@@ -430,6 +433,8 @@ export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
       otherEmails.forEach(x => {
         x.isPreferred = false;
       });
+
+      this.personForm.get('emailAddresses').setValue(emailPrefs);
     }
   }
 
