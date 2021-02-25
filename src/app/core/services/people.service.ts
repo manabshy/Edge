@@ -28,37 +28,37 @@ export class PeopleService {
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
 
-  getInstructions(personId: number, isClosedIncluded: boolean = true): Observable<PersonInstruction[]> {
-    const url = `${AppConstants.basePersonUrl}/${personId}/instructions?activeOnly=${isClosedIncluded}`;
+  getInstructions(personId: number, hidePrevious: boolean): Observable<PersonInstruction[]> {
+    const url = `${AppConstants.basePersonUrl}/${personId}/instructions?activeOnly=${hidePrevious}`;
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
-  getValuations(personId: number, isClosedIncluded: boolean = true): Observable<Valuation[]> {
-    const url = `${AppConstants.basePersonUrl}/${personId}/valuations?activeOnly=${isClosedIncluded}`;
-    return this.http.get<any>(url).pipe(map(response => response.result));
-  }
-
-  getSearches(personId: number, isClosedIncluded: boolean = true): Observable<PersonSearch[]> {
-    const url = `${AppConstants.basePersonUrl}/${personId}/searches?activeOnly=${isClosedIncluded}`;
+  getValuations(personId: number, hidePrevious: boolean): Observable<Valuation[]> {
+    const url = `${AppConstants.basePersonUrl}/${personId}/valuations?activeOnly=${hidePrevious}`;
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
 
-  getOffers(personId: number, isClosedIncluded: boolean = true): Observable<PersonOffer[]> {
-    const url = `${AppConstants.basePersonUrl}/${personId}/offers?activeOnly=${isClosedIncluded}`;
+  getSearches(personId: number, hidePrevious: boolean): Observable<PersonSearch[]> {
+    const url = `${AppConstants.basePersonUrl}/${personId}/searches?activeOnly=${hidePrevious}`;
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
 
-  getLettingsManagements(personId: number, isClosedIncluded: boolean = true): Observable<PersonLettingsManagement[]> {
-    const url = `${AppConstants.basePersonUrl}/${personId}/lettingsManagements?activeOnly=${isClosedIncluded}`;
+  getOffers(personId: number, hidePrevious: boolean): Observable<PersonOffer[]> {
+    const url = `${AppConstants.basePersonUrl}/${personId}/offers?activeOnly=${hidePrevious}`;
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
 
-  getHomeHelpers(personId: number, isClosedIncluded = true): Observable<PersonHomeHelper[]> {
-    const url = `${AppConstants.basePersonUrl}/${personId}/homeHelpers?activeOnly=${isClosedIncluded}`;
+  getLettingsManagements(personId: number, hidePrevious?: boolean): Observable<PersonLettingsManagement[]> {
+    const url = `${AppConstants.basePersonUrl}/${personId}/lettingsManagements?activeOnly=${hidePrevious}`;
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
 
-  getLeads(personId: number, isClosedIncluded: boolean = true): Observable<any> {
-    const url = `${AppConstants.basePersonUrl}/${personId}/leads?activeOnly=${isClosedIncluded}`;
+  getHomeHelpers(personId: number, hidePrevious?: boolean): Observable<PersonHomeHelper[]> {
+    const url = `${AppConstants.basePersonUrl}/${personId}/homeHelpers?activeOnly=${hidePrevious}`;
+    return this.http.get<any>(url).pipe(map(response => response.result));
+  }
+
+  getLeads(personId: number, hidePrevious?: boolean): Observable<any> {
+    const url = `${AppConstants.basePersonUrl}/${personId}/leads?activeOnly=${hidePrevious}`;
     return this.http.get<any>(url).pipe(
       map(response => response.result),
       tap(data => {

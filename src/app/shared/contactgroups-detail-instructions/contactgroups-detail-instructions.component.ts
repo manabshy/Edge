@@ -16,7 +16,7 @@ import { InstructionInfo } from 'src/app/property/shared/property';
 export class ContactgroupsDetailInstructionsComponent implements OnChanges {
   instructions$ = new Observable<any>();
   isShortLet: boolean;
-  isClosedIncluded: boolean = false;
+  hidePrevious: boolean = false;
   @Input() moreInfo: string;
   @Input() personId: number;
   @Input() propertyId: number;
@@ -32,14 +32,14 @@ export class ContactgroupsDetailInstructionsComponent implements OnChanges {
 
   getInstructions() {
     if (this.personId) {
-      this.instructions$ = this.peopleService.getInstructions(this.personId, this.isClosedIncluded);
+      this.instructions$ = this.peopleService.getInstructions(this.personId, this.hidePrevious);
       tap((data: PersonInstruction[]) => {
         if (data && data.length) {
           data.find(x => +x.shortLetAmount > 0) ? this.isShortLet = true : this.isShortLet = false;
         }
       });
     } else if (this.propertyId) {
-      this.instructions$ = this.propertyService.getPropertyInstructions(this.propertyId, this.isClosedIncluded)
+      this.instructions$ = this.propertyService.getPropertyInstructions(this.propertyId, this.hidePrevious)
         .pipe(
           tap((data: InstructionInfo[]) => {
             if (data && data.length) {

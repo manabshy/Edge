@@ -13,7 +13,7 @@ export class ContactgroupsDetailSearchesComponent implements OnInit, OnChanges {
   @Input() closedCounter: number;
   @Input() moreInfo: string;
   navPlaceholder: string;
-  isClosedIncluded: boolean = false;
+  hidePrevious: boolean = false;
   searches$ = new Observable<PersonSearch[]>();
 
   constructor(private peopleService: PeopleService) { }
@@ -28,7 +28,7 @@ export class ContactgroupsDetailSearchesComponent implements OnInit, OnChanges {
   }
 
   getSearches() {
-    this.searches$ = this.peopleService.getSearches(this.personId, this.isClosedIncluded);
+    this.searches$ = this.peopleService.getSearches(this.personId, this.hidePrevious);
   }
 
 }

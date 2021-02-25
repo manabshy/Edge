@@ -14,7 +14,7 @@ export class SharedLeadRegisterComponent implements OnChanges {
   @Input() personId: number;
   @Input() closedCounter: number;
   @Input() moreInfo: string;
-  isClosedIncluded: boolean = false;
+  hidePrevious: boolean = false;
   leads$ = new Observable<Lead[]>();
 
   constructor(private peopleService: PeopleService, private router: Router) { }
@@ -31,7 +31,7 @@ export class SharedLeadRegisterComponent implements OnChanges {
   }
 
   getLeads() {
-    this.leads$ = this.peopleService.getLeads(this.personId, this.isClosedIncluded);
+    this.leads$ = this.peopleService.getLeads(this.personId, this.hidePrevious);
   }
 
 }

@@ -2,8 +2,8 @@
   <h2>Searches</h2>
   <span class="checkbox checkbox--rtl" *ngIf="closedCounter">
     <span>
-      <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getSearches()"  id="includeClosedSearches">
-      <label for="includeClosedSearches">Hide closed searches</label>
+      <input type="checkbox" [(ngModel)]="hidePrevious" (change)="getSearches()"  id="previousSearches">
+      <label for="previousSearches">Hide previous searches</label>
     </span>
   </span>
 </div>
@@ -58,68 +58,3 @@
     </tbody>
   </table>
 </div>
-
-<!-- <div class="list-group list-group-flush">
-  <ng-container *ngIf="searches$ | async as searches">
-    <div class="list-group-item text-center text-danger" *ngIf="!searches || !searches?.length">
-      <i class="far fa-sad-tear"></i> No searches
-    </div>
-    <div class="list-group-item" *ngIf="closedCounter">
-      <div class="custom-control custom-checkbox">
-        <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getSearches()" class="custom-control-input" id="includeClosedSearches">
-        <label class="custom-control-label small" for="includeClosedSearches">Include closed searches</label>
-      </div>
-    </div>
-    <div class="list-group-item list-header d-none d-sm-block d-xl-none" *ngIf="searches && searches?.length">
-      <div class="row">
-        <div class="col-sm"><strong>Type</strong></div>
-        <div class="col-sm"><strong>Areas</strong></div>
-        <div class="col-sm"><strong>Status</strong></div>
-        <div class="col-sm"><strong>Price</strong></div>
-        <div class="col-sm"><strong>Min Beds</strong></div>
-        <div class="col-sm"><strong>Created</strong></div>
-      </div>
-    </div>
-    <div class="list-group-item list-group-item-action" *ngFor="let search of searches">
-      <div class="row">
-        <div class="col-sm col-xl-12">
-          <dl class="row">
-            <dt class="col-4 d-sm-none d-xl-block">Type</dt>
-            <dd class="col">{{search?.type}}</dd>
-          </dl>
-        </div>
-        <div class="col-sm col-xl-12">
-          <dl class="row">
-            <dt class="col-4 d-sm-none d-xl-block">Areas</dt>
-            <dd class="col">{{search?.areas}}</dd>
-          </dl>
-        </div>
-        <div class="col-sm col-xl-12">
-          <dl class="row">
-            <dt class="col-4 d-sm-none d-xl-block">Status</dt>
-            <dd class="col" *ngIf="search.isActive"><span class="badge badge-pill badge-success" >{{search?.isActive ? 'Active' : 'Not Active'}}</span></dd>
-            <dd class="col" *ngIf="!search.isActive"><span class="badge badge-pill badge-primary" >{{search?.isActive ? 'Active' : 'Not Active'}}</span></dd>
-          </dl>
-        </div>
-        <div class="col-sm col-xl-12">
-          <dl class="row">
-            <dt class="col-4 d-sm-none d-xl-block">Price</dt>
-            <dd class="col monospace">{{search?.maxAmount | currency:'GBP':'symbol':'1.0-0'}}</dd>
-          </dl>
-        </div>
-        <div class="col-sm col-xl-12">
-          <dl class="row">
-            <dt class="col-4 d-sm-none d-xl-block">Min Beds</dt>
-            <dd class="col monospace"> {{search?.minBeds || '-'}}</dd>
-          </dl>
-        </div>
-        <div class="col-sm col-xl-12">
-          <dl class="row">
-            <dt class="col-4 d-sm-none d-xl-block">Created</dt>
-            <dd class="col monospace">{{search?.createDate| date: 'dd/MM/yyyy'}}</dd>
-          </dl>
-        </div>
-      </div>
-    </div>
-  </ng-container>
-</div> -->

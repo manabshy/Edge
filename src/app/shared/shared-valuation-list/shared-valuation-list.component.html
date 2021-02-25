@@ -2,20 +2,13 @@
   <h2>Valuations</h2>
   <span class="checkbox checkbox--rtl" *ngIf="closedCounter">
     <span>
-      <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getValuations()" class="custom-control-input" id="includeClosedValuations">
-      <label for="includeClosedValuations">Hide previous valuations</label>
+      <input type="checkbox" [(ngModel)]="hidePrevious" (change)="getValuations()" class="custom-control-input" id="hidePreviousValuations">
+      <label for="hidePreviousValuations">Hide previous valuations</label>
     </span>
   </span>
 </div>
 
 <div class="table" *ngIf="valuations$ | async as valuations">
-  <!-- <div class="list-group-item" *ngIf="closedCounter">
-    <div class="custom-control custom-checkbox">
-      <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getValuations()" class="custom-control-input"
-        id="includeClosedValuations">
-      <label class="custom-control-label small" for="includeClosedValuations">Include previous valuations</label>
-    </div>
-  </div> -->
   <app-redacted-table *ngIf="!valuations || !valuations?.length" message="No valuations"></app-redacted-table>
 
   <table class="table--mobile table--rowHover" *ngIf="valuations && valuations?.length">
@@ -66,81 +59,3 @@
 </div>
 
 <ng-template #noValue>-</ng-template>
-
-<!-- <div class="list-group list-group-flush">
-  <ng-container>
-
-    <div class="list-group-item list-header d-none d-sm-block d-xl-none">
-      <div class="row">
-        <div class="col-sm-3"><strong>Address</strong></div>
-        <div class="col-sm"><strong></strong></div>
-        <div class="col-sm"><strong></strong></div>
-        <div class="col-sm"><strong></strong></div>
-        <div class="col-sm"><strong></strong></div>
-        <div class="col-sm"><strong></strong></div>
-        <div class="col-sm"><strong></strong></div>
-      </div>
-    </div>
-
-    <a class="list-group-item list-group-item-action" >
-      <div class="row">
-        <div class="col-sm-3 col-xl-12">
-          <dl class="row">
-            <dt class="col-4 d-sm-none d-xl-block">Address</dt>
-            <dd class="col"></dd>
-          </dl>
-        </div>
-        <div class="col-sm col-xl-12">
-          <dl class="row">
-            <dt class="col-4 d-sm-none d-xl-block"></dt>
-            <dd class="col"><span
-                class="badge badge-pill badge-success"></span></dd>
-            <dd class="col"><span
-                class="badge badge-pill badge-primary">{{valuation?.valuationStatusLabel}}</span></dd>
-          </dl>
-        </div>
-        <div class="col-sm col-xl-12">
-          <dl class="row">
-            <dt class="col-4 d-sm-none d-xl-block">Sales</dt>
-            <dd class="col monospace">
-              <ng-container >
-                </ng-container>
-            </dd>
-          </dl>
-        </div>
-        <div class="col-sm col-xl-12">
-          <dl class="row">
-            <dt class="col-4 d-sm-none d-xl-block"></dt>
-            <dd class="col monospace">
-              <ng-container>
-                </ng-container>
-            </dd>
-          </dl>
-        </div>
-        <div class="col-sm col-xl-12">
-          <dl class="row">
-            <dt class="col-4 d-sm-none d-xl-block"></dt>
-            <dd class="col monospace">
-              <ng-container>
-                </ng-container>
-            </dd>
-          </dl>
-        </div>
-        <div class="col-sm col-xl-12">
-          <dl class="row">
-            <dt class="col-4 d-sm-none d-xl-block"></dt>
-            <dd class="col" ></dd>
-            <dd class="col"></dd>
-          </dl>
-        </div>
-        <div class="col-sm col-xl-12">
-          <dl class="row">
-            <dt class="col-4 d-sm-none d-xl-block"></dt>
-            <dd class="col monospace"></dd>
-          </dl>
-        </div>
-      </div>
-    </a>
-  </ng-container>
-</div> -->
-

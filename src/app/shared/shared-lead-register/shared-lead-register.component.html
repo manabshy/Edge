@@ -2,18 +2,13 @@
   <h2>Leads</h2>
   <span class="checkbox checkbox--rtl">
     <span>
-      <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getLeads()" id="includeClosedLeads">
-      <label for="includeClosedLeads">Hide closed leads</label>
+      <input type="checkbox" [(ngModel)]="hidePrevious" (change)="getLeads()" id="includeClosedLeads">
+      <label for="includeClosedLeads">Hide previous leads</label>
     </span>
   </span>
 </div>
 
 <div *ngIf="leads$|async as leads">
-  <!-- <div class="custom-control custom-checkbox">
-    <input type="checkbox" [(ngModel)]="isClosedIncluded" (change)="getLeads()" class="custom-control-input" id="includeClosedLeads">
-    <label class="custom-control-label small" for="includeClosedLeads">Include closed leads</label>
-  </div> -->
-
   <div class="table">
     <app-redacted-table *ngIf="!leads || !leads?.length" message="No leads"></app-redacted-table>
 
@@ -24,7 +19,7 @@
           <th>Property</th>
           <th>Next Chase Date</th>
           <th>Lead Owner</th>
-          <th *ngIf="!isClosedIncluded">Status</th>
+          <th *ngIf="!hidePrevious">Status</th>
         </tr>
       </thead>
       <tbody>
@@ -43,7 +38,7 @@
           <td data-title="Lead Owner">
             <span class="cell-content">{{lead?.owner || '-'}}</span>
           </td>
-          <td data-title="Status" *ngIf="!isClosedIncluded">
+          <td data-title="Status" *ngIf="!hidePrevious">
             <span class="cell-content" [ngClass]="{'invisible': !lead?.closedById}"><span class="pill">Closed</span></span>
           </td>
         </tr>
@@ -51,47 +46,3 @@
     </table>
   </div>
 </div>
-
-
-
-  <!-- <div class="list-group-item" *ngIf="closedCounter">
-
-  </div>
-  <div class="list-group-item list-header d-none d-sm-block d-xl-none" >
-    <div class="row">
-      <div class="col-sm-auto" ><span class="badge badge-pill badge-primary invisible">Closed</span></div>
-      <div class="col-sm"><strong>Type</strong></div>
-      <div class="col-sm"><strong>Next Chase Date</strong></div>
-      <div class="col-sm"><strong>Lead Owner</strong></div>
-    </div>
-  </div>
-
-
-
-  <a  class="list-group-item list-group-item-action"
-    >
-    <div class="row align-items-center">
-      <div class="col-sm-auto mb-2 mb-sm-0 mb-xl-2 col-xl-12" *ngIf="isClosedIncluded">
-        <span class="badge badge-pill badge-primary mr-1" [ngClass]="{'invisible': !lead?.closedById}">Closed</span>
-      </div>
-      <div class="col-sm col-xl-12">
-        <dl class="row">
-          <dt class="col-4 d-sm-none d-xl-block">Type</dt>
-          <dd class="col"></dd>
-        </dl>
-      </div>
-      <div class="col-sm col-xl-12">
-        <dl class="row">
-          <dt class="col-4 d-sm-none d-xl-block">Chase Date</dt>
-          <dd class="col monospace"></dd>
-        </dl>
-      </div>
-      <div class="col-sm col-xl-12">
-        <dl class="row">
-          <dt class="col-4 d-sm-none d-xl-block">Chaser</dt>
-          <dd class="col"></dd>
-        </dl>
-      </div>
-    </div>
-  </a>
-</div> -->

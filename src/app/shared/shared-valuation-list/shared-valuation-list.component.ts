@@ -19,7 +19,7 @@ export class SharedValuationListComponent implements OnChanges {
   @Input() propertyId: number;
   @Input() moreInfo: string;
   @Input() closedCounter: number;
-  isClosedIncluded: boolean = false;
+  hidePrevious: boolean = false;
   constructor(private peopleService: PeopleService,
     private sharedService: SharedService,
     private propertyService: PropertyService,
@@ -33,13 +33,13 @@ export class SharedValuationListComponent implements OnChanges {
 
   private getValuations() {
     if (this.personId) {
-      this.valuations$ = this.peopleService.getValuations(this.personId, this.isClosedIncluded)
+      this.valuations$ = this.peopleService.getValuations(this.personId, this.hidePrevious)
         .pipe(tap(vals => {
           this.sharedService.setValuationStatusLabel(vals);
         }));
     }
     if (this.propertyId) {
-      this.valuations$ = this.propertyService.getValuations(this.propertyId, this.isClosedIncluded)
+      this.valuations$ = this.propertyService.getValuations(this.propertyId, this.hidePrevious)
         .pipe(tap(vals => {
           this.sharedService.setValuationStatusLabel(vals);
         }));

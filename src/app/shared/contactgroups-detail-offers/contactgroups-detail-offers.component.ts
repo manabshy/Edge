@@ -16,7 +16,7 @@ export class ContactgroupsDetailOffersComponent implements OnChanges {
   @Input() propertyId: number;
   @Input() closedCounter: number;
   @Input() moreInfo: string;
-  isClosedIncluded: boolean = false;
+  hidePrevious: boolean = false;
   offers$ = new Observable<any>();
 
   constructor(private route: ActivatedRoute, private peopleService: PeopleService, private propertyService: PropertyService) { }
@@ -29,9 +29,9 @@ export class ContactgroupsDetailOffersComponent implements OnChanges {
 
   getOffers() {
     if (this.personId) {
-      this.offers$ = this.peopleService.getOffers(this.personId, this.isClosedIncluded);
+      this.offers$ = this.peopleService.getOffers(this.personId, this.hidePrevious);
     } else if (this.propertyId) {
-      this.offers$ = this.propertyService.getPropertyOffers(this.propertyId, this.isClosedIncluded);
+      this.offers$ = this.propertyService.getPropertyOffers(this.propertyId, this.hidePrevious);
     }
   }
 
