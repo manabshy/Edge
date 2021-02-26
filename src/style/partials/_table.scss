@@ -25,7 +25,8 @@ td:empty                                        { display:none; visibility:hidde
 .table--mobile td                               { display:block; border:none; }
 .table--mobile thead                            { padding:5px 10px; background-color:$color--snow; border:none; border-bottom:2px solid $color--midnight-10; font-weight:bold; display:none; }
 .table--mobile tr                               { border-radius:3px; }
-.table--mobile tr:nth-child(odd)                { background-color:$color--smoke; }
+.table--mobile tr:nth-child(odd)                { background-color:rgba($color--smoke, .5); }
+.table--mobile thead tr:nth-child(odd)          { background-color:$color--snow; }
 .table--mobile tr:nth-child(odd) td             { border-color:$color--snow; }
 .table--mobile td                               { margin:0; display:block; }
 .table--mobile td+td                            { border-top:1px solid $color--midnight-10; }
@@ -44,7 +45,6 @@ Tablet - This applies from 768px onwards
     .table--mobile thead                          { display:table-row-group; }
     .table--mobile tr                             { display:table-row; }
     .table--mobile tr+*                           { border-top:1px solid $color--midnight-10; }
-    .table--mobile tr:nth-child(odd)              { background-color:transparent; }
     .table--mobile tr:nth-child(odd) td           { border:none; }
     .table--mobile tr:nth-child(odd)+tr           { margin-top:0; border-top:1px solid $color--midnight-10; }
 
@@ -64,7 +64,7 @@ Tablet - This applies from 768px onwards
     .table--rowHover thead tr:hover,
     .table--stripes thead tr:nth-child(odd)       { background-color:transparent; }
     .table--rowHover tr:hover,
-    .table--stripes tr:nth-child(odd)             { background-color:$color--smoke; }
+    .table--stripes tr:nth-child(odd)             { background-color:$color--midnight-10; }
 
     .has--checkbox                                { width:20px; min-width:20px; }
 }
