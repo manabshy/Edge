@@ -142,8 +142,8 @@
       <div class="card__body">
         <ol class="list list--split list--split-60-40">
           <li>
-            <h3 class="txt--title">Lead details</h3>
-            <span class="pill" *ngIf="lead?.closedById">Closed</span>
+            <h3 class="txt--title">Lead details<span class="pill pill--onRight" *ngIf="lead?.closedById">Closed</span></h3>
+            
             <div class="inline-parent inline-parent__hasLabels">
               <fieldset class="inline-child">
                 <label for="leadType">Type</label>
