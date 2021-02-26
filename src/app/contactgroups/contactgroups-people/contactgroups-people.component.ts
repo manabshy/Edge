@@ -412,7 +412,7 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
             this.pendingChanges = true;
             this.contactGroupDetails.contactPeople = [...contactPeople];
             console.log(this.contactGroupDetails.contactPeople, 'new group from merged with stroage', contactPeople, 'from storage');
-          }else{
+          } else {
             this.contactGroupDetails.contactPeople = [];
             this.contactGroupDetails.contactPeople.push(this.firstContactGroupPerson);
           }
@@ -998,5 +998,7 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.setPageLabel(true);
+    console.log('destroy component now');
+
   }
 }
