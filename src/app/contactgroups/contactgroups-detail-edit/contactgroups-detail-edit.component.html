@@ -45,17 +45,15 @@
         <p class="message message--negative">{{formErrors.firstName}}</p>
       </fieldset>
 
-      <fieldset>
+      <fieldset [ngClass]="{'invalid':formErrors.middleName}">
         <label for="middleName">Middle Name</label>
-        <input type="text" id="middleName" formControlName="middleName"
-          [ngClass]="{'is-invalid':formErrors.middleName}">
+        <input type="text" id="middleName" formControlName="middleName">
         <p class="message message--negative">{{formErrors.middleName}}</p>
       </fieldset>
 
-      <fieldset>
+      <fieldset [ngClass]="{'invalid':formErrors?.lastName}">
         <label for="lastName">Last Name</label>
-        <input type="text" id="lastName" formControlName="lastName" [ngClass]="{'is-invalid':formErrors?.lastName}"
-          autocomplete="false">
+        <input type="text" id="lastName" formControlName="lastName" autocomplete="false">
         <p class="message message--negative">{{formErrors?.lastName}}</p>
       </fieldset>
 

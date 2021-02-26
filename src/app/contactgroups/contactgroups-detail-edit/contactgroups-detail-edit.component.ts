@@ -252,11 +252,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
 
 
   cancel() {
-    if (this.basicPerson) {
-      this.backToFinder.emit(false);
-    } else {
-      this.sharedService.back();
-    }
+    this.sharedService.back();
   }
 
   clearControlValue(control: AbstractControl) {
@@ -592,7 +588,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
       this.errorMessage.displayMessage = 'Please correct validation errors';
     }
   }
-  
+
   onSaveComplete(person?: Person, otherPersonToAdd?: boolean) {
     this.personForm.markAsPristine();
     this.isSubmitting = false;
