@@ -264,10 +264,17 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
 
     if (this.contactGroupId) {
       this.getContactGroupById(this.contactGroupId);
-
     } else {
       this.contactGroupDetails = {} as ContactGroup;
       this.contactGroupDetails.contactPeople = [];
+      const contactPeople = this.getContactPeopleFromStorage();
+      if (contactPeople) {
+        this.pendingChanges = true;
+        // this.contactGroupDetails = {} as ContactGroup;
+        this.contactGroupDetails.contactPeople = [...contactPeople];
+        this.isOffCanvasVisible = false;
+        this.setSalutation();
+      }
       this.contactGroupDetails.contactType = AppUtils.holdingContactType || ContactType.Individual;
       if (this.isNewCompanyContact && this.isExistingCompany) {
         this.isTypePicked = true;
@@ -337,28 +344,17 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
           this.contactGroupDetails?.contactPeople?.push(person);
           this.storeContactPeople(this.contactGroupDetails.contactPeople);
         } else {
-          const people = this.contactGroupDetails.contactPeople = [];
+          const people: Person[] = [];
           people.push(person);
+          console.log({ person }, 'new herer', { people });
+          this.storeContactPeople(people);
+          // this.contactGroupDetails = {} as ContactGroup; TEST AND REMOVE
+          // const people = this.contactGroupDetails.contactPeople = [];
+          // people.push(person);
+          // this.setSalutation();
         }
       }
     });
-
-    // if (personEmitter) {
-    //   personEmitter.person.isNewPerson = true;
-    //   this.addedPerson = personEmitter.person;
-    //   if (this.contactGroupDetails && this.contactGroupDetails.contactPeople.length || this.isExistingCompany) {
-    //     this.collectSelectedPeople(personEmitter.person);
-    //   } else {
-    //     this.contactGroupDetails = {} as ContactGroup;
-    //     const people = this.contactGroupDetails.contactPeople = [];
-    //     people.push(personEmitter.person);
-    //     this.setSalutation();
-    //     if(!personEmitter.otherPersonToAdd) {
-    //       this.saveContactGroup();
-    //     }
-    //   }
-    // }
-
   }
 
   storeContactPeople(contactPeople: Person[]) {
@@ -401,16 +397,25 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
   }
 
   getContactGroupFirstPerson(personId: number, isSelectedTypeCompany?: boolean) {
+    const contactPeople = this.getContactPeopleFromStorage();
     this.contactGroupService.getPerson(personId).subscribe(data => {
       data.isMainPerson = true;
       this.firstContactGroupPerson = data;
       if (this.contactGroupId === 0) {
         if (this.contactGroupDetails) {
+          console.log('details hre...', this.contactGroupDetails);
+
           if (!isSelectedTypeCompany) {
             this.contactGroupDetails.contactType = ContactType.Individual;
           }
-          this.contactGroupDetails.contactPeople = [];
-          this.contactGroupDetails.contactPeople.push(this.firstContactGroupPerson);
+          if (contactPeople?.length) {
+            this.pendingChanges = true;
+            this.contactGroupDetails.contactPeople = [...contactPeople];
+            console.log(this.contactGroupDetails.contactPeople, 'new group from merged with stroage', contactPeople, 'from storage');
+          }else{
+            this.contactGroupDetails.contactPeople = [];
+            this.contactGroupDetails.contactPeople.push(this.firstContactGroupPerson);
+          }
           this.showPersonWarning();
           this.setSalutation();
         }
@@ -980,9 +985,10 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
   canDeactivate(): boolean {
     if (!this.pendingChanges) { this.contactGroupDetailsForm.markAsPristine(); }
     if ((this.contactGroupDetailsForm.dirty || this.companyFinderForm.dirty) &&
-      !this.isSubmitting &&  !this.isEditingSelectedCompany && !this.isCreatingNewPerson) {
+      !this.isSubmitting && !this.isEditingSelectedCompany && !this.isCreatingNewPerson) {
       return false;
     }
+
     return true;
   }
 
