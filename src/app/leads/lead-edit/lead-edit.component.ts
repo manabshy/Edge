@@ -297,21 +297,21 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     });
   }
 
-  onOwnerChanged(event: any) {
-    this.isOwnerChanged = true;
-    console.log('from child', event);
-    if (event && event.item != null || event) {
-      let ownerId = 0;
-      event.item ? ownerId = event.item.staffMemberId : ownerId = event.staffMemberId;
-      this.leadEditForm.patchValue({
-        ownerId: ownerId
-      });
-    } else {
-      this.leadEditForm.patchValue({
-        ownerId: ''
-      });
-    }
-  }
+  // onOwnerChanged(event: any) {
+  //   this.isOwnerChanged = true;
+  //   console.log('from child', event);
+  //   if (event && event.item != null || event) {
+  //     let ownerId = 0;
+  //     event.item ? ownerId = event.item.staffMemberId : ownerId = event.staffMemberId;
+  //     this.leadEditForm.patchValue({
+  //       ownerId: ownerId
+  //     });
+  //   } else {
+  //     this.leadEditForm.patchValue({
+  //       ownerId: ''
+  //     });
+  //   }
+  // }
 
   getSelectedStaffMemberId(id: number) {
     console.log('valuer id here', id);
@@ -319,11 +319,12 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.leadEditForm.markAsDirty();
     if (id) {
       this.leadEditForm.patchValue({ ownerId: id });
+      console.log('chaser id here', this.leadEditForm.get('ownerId').value);
     } else {
       this.leadEditForm.patchValue({ ownerId: null });
+      console.log('no chaser id id here', this.leadEditForm.get('ownerId').value);
     }
 
-    console.log('valuer id here', this.leadEditForm.get('ownerId').value);
   }
 
   isObject(val) {

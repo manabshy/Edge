@@ -20,7 +20,7 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
   @Input() isDisabled: boolean;
   @Input() isRequired: boolean;
   @Input() isMultiple: boolean;
-  @Input() isReadOnly: boolean;
+  @Input() isReadOnly: boolean = false;
   @Input() placeholder = 'Select Staff Member';
   @Input() label: string;
   @Input() valuers: OfficeMember[];
@@ -82,15 +82,20 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
     }
   }
 
-  onStaffMemberChange(staffMember: BaseStaffMember) {
-    if (staffMember) {
-      this.staffMemberId = staffMember.staffMemberId;
-      this.selectedStaffMemberId.emit(this.staffMemberId);
-      this.selectedStaffMemberList.emit(staffMember);
-      console.log('selected', staffMember);
+  onStaffMemberChange(event: any) {
+    if (this.isMultiple) {
+      event?.value?.length ? this.selectedStaffMemberList.emit(event.value) : this.selectedStaffMemberList.emit([]);
     } else {
-      this.selectedStaffMemberId.emit(0);
+      event?.value ? this.selectedStaffMemberId.emit(event?.value) : this.selectedStaffMemberId.emit(0);
     }
+    // if (staffMember) {
+    //   this.staffMemberId = staffMember.staffMemberId;
+    //   this.selectedStaffMemberId.emit(this.staffMemberId);
+    //   this.selectedStaffMemberList.emit(staffMember);
+    //   console.log('selected', staffMember);
+    // } else {
+    //   this.selectedStaffMemberId.emit(0);
+    // }
   }
 
   private getStaffMembers(listType?: string) {
