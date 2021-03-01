@@ -40,6 +40,8 @@ export class CompanyEditComponent implements OnInit {
   formErrors = FormErrors;
   info: any;
   isCreatingNewSigner: boolean;
+  showCompanyFinder = false;
+  isManualEntry = false;
 
   constructor(private contactGroupService: ContactGroupsService,
     private companyService: CompanyService,
@@ -71,6 +73,7 @@ export class CompanyEditComponent implements OnInit {
       this.isNewCompany = this.companyId ? false : params['isNewCompany'];
       this.isEditingSelectedCompany = params['isEditingSelectedCompany'] || false;
       this.companyName = params['companyName'] || null;
+      if(this.isNewCompany){this.showCompanyFinder = true}
     });
     this.setupCompanyForm(this.companyName);
     const id = this.isNewCompany ? 0 : this.companyId;
@@ -218,8 +221,8 @@ export class CompanyEditComponent implements OnInit {
     this.address = address;
   }
 
-  getCompanyName(name: any) {
-    this.companyForm.get('companyName').setValue(name.selectedCompany);
+  getCompanyName(name: string) {
+    this.companyForm.get('companyName').setValue(name);
   }
 
   navigateToCompany(company: Company) {
@@ -235,6 +238,7 @@ export class CompanyEditComponent implements OnInit {
     this._location.replaceState(url);
     this.companyId = company.companyId;
     this.init();
+    this.showCompanyFinder = false;
   }
 
   saveCompany() {

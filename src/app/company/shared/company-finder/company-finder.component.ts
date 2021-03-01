@@ -1,5 +1,5 @@
-import { Component, OnInit, OnChanges, Renderer2, ViewChild, ElementRef, Output, EventEmitter, Input } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, OnInit, OnChanges, Renderer2, ViewChild, ElementRef, Output, EventEmitter, Input, OnDestroy } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, FormControlName, FormControl } from '@angular/forms';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { Company, CompanyAutoCompleteResult } from 'src/app/contactgroups/shared/contact-group';
@@ -11,23 +11,28 @@ import { Observable, EMPTY } from 'rxjs';
   templateUrl: './company-finder.component.html',
   styleUrls: ['./company-finder.component.scss']
 })
-export class CompanyFinderComponent implements OnInit, OnChanges {
+export class CompanyFinderComponent implements OnInit, OnChanges, OnDestroy {
+  @Input() companyNameError = false;
+  @Input() existingCompany: Company;
+  @Output() companyName = new EventEmitter<any>();
+  @Output() selectedCompanyDetails = new EventEmitter<Company>();
+  @Output() isManualEntry = new EventEmitter<boolean>();
   companyFinderForm: FormGroup;
   foundCompanies: CompanyAutoCompleteResult[];
-  selectedCompany: any;
+  selectedCompany: Company;
   selectedCompanyId: number;
   isCompanyAdded: boolean;
   enterManually = false;
-  @Output() companyName = new EventEmitter<any>();
-  @Output() selectedCompanyDetails = new EventEmitter<Company>();
-  @Input() companyNameError = false;
-  @Input() existingCompany: Company;
   @ViewChild('companyNameInput', { static: true }) companyNameInput: ElementRef;
   suggestions: (text$: Observable<string>) => Observable<any[]>;
   noSuggestions = false;
   suggestedTerm: '';
   searchTerm = '';
+  hasBeenSearched = false;
 
+  get companyNameControl(): FormControl {
+    return this.companyFinderForm.get('companyName') as FormControl;
+  }
   constructor(
     private contactGroupService: ContactGroupsService,
     private fb: FormBuilder,
@@ -71,8 +76,8 @@ export class CompanyFinderComponent implements OnInit, OnChanges {
   init() {
     let companyName = '';
     switch (true) {
-      case this.selectedCompany:
-        companyName = this.selectedCompany.selectedCompany;
+      case !!this.selectedCompany:
+        companyName = this.selectedCompany.companyName;
         break;
       case !!this.existingCompany:
         companyName = this.existingCompany.companyName;
@@ -84,9 +89,10 @@ export class CompanyFinderComponent implements OnInit, OnChanges {
       companyName: [''],
       selectedCompany: [companyName, Validators.required],
     });
-    this.companyFinderForm.valueChanges.subscribe(data => {
+
+    this.companyFinderForm.valueChanges.pipe(debounceTime(500)).subscribe(data => {
       this.selectedCompany = data;
-      this.companyName.emit(this.selectedCompany);
+      // this.companyName.emit(this.selectedCompany.companyName);
     });
   }
 
@@ -103,6 +109,7 @@ export class CompanyFinderComponent implements OnInit, OnChanges {
   selectCompany(company: Company) {
     this.isCompanyAdded = true;
     this.foundCompanies = null;
+    this.hasBeenSearched = false;
     this.selectedCompanyDetails.emit(company);
   }
 
@@ -117,6 +124,7 @@ export class CompanyFinderComponent implements OnInit, OnChanges {
 
   findCompany(searchTerm: any) {
     this.contactGroupService.getAutocompleteCompany(searchTerm).subscribe(data => {
+      this.hasBeenSearched = true;
       this.foundCompanies = data;
       this.checkDuplicateCompanies(searchTerm);
     });
@@ -134,5 +142,18 @@ export class CompanyFinderComponent implements OnInit, OnChanges {
       });
       this.foundCompanies = matchedCompanies;
     }
+  }
+
+  enterDetailsManually() {
+
+    console.log(this.companyNameControl.value);
+
+    this.companyName.emit(this.companyNameControl.value);
+    this.isManualEntry.emit();
+  }
+
+  ngOnDestroy() {
+    console.log('destroyed');
+
   }
 }
