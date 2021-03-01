@@ -128,4 +128,12 @@ export class StaffMemberService {
         }
       }));
   }
+
+  getCurrentStaffMemberSignature(): Observable<string> {
+    return this.http.get<any>(`${AppConstants.baseUrl}/current/signature`).pipe(
+      map(response => response.result),
+      tap(data => {
+        if (data) { this.storage.set('signature', data).subscribe(); }
+      }));
+  }
 }

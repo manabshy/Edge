@@ -12,9 +12,9 @@ export interface ResultData {
   technicalDetails: string;
   result: any;
   cacheStatus: CacheStatus;
-  resultCount: number;
-  page: number;
-  totalPages: number;
-  totalResultCount: number;
+  resultCount?: number;
+  page?: number;
+  totalPages?: number;
+  totalResultCount?: number;
 }
 
