@@ -107,6 +107,7 @@ import { PropertyDetailMapComponent } from './components/property-detail-map/pro
 import { ContactgroupFinderComponent } from './components/contactgroup-finder/contactgroup-finder.component';
 import { ImportantMessagesComponent } from './components/important-messages/important-messages.component';
 import { EmailComponent } from './components/email/email.component';
+import { EmailSignatureComponent } from './components/email-signature/email-signature.component';
 
 const components = [
   BreadcrumbComponent,
@@ -152,6 +153,7 @@ const components = [
   ContactgroupFinderComponent,
   ImportantMessagesComponent,
   EmailComponent,
+  EmailSignatureComponent,
 ];
 const pipes = [
   RoundingPipe,
@@ -209,6 +211,7 @@ const externalModules = [
     components,
     pipes,
     directives,
+
 
   ],
   imports: [

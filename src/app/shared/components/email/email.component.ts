@@ -72,6 +72,7 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
   private subs = new SubSink();
   staffMembers: StaffMember[] = [];
   offices: Office[];
+  currentStaffMemberSignature: string;
 
   get attachments() {
     const total = this.selectedDocuments?.length + this.files?.length;
@@ -86,14 +87,7 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
     private propertyService: PropertyService, private validationService: ValidationService) { }
 
   ngOnInit(): void {
-    this.storage.get('currentUser').subscribe((data: StaffMember) => {
-      if (data) {
-        this.currentStaffMember = data;
-      } else {
-        this.staffMemberService.getCurrentStaffMember().subscribe(res => this.currentStaffMember = res);
-      }
-      console.log('current user from storage in email....', this.currentStaffMember);
-    });
+    this.getCurrentUserInfo();
     this.getActiveStaffMembers();
     this.getOffices();
 
@@ -114,6 +108,26 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
         this.isPropertySearch = true;
         this.searchPlaceholder = 'Property Address or Id';
       }
+    });
+  }
+
+  private getCurrentUserInfo() {
+    this.storage.get('currentUser').subscribe((data: StaffMember) => {
+      if (data) {
+        this.currentStaffMember = data;
+      } else {
+        this.staffMemberService.getCurrentStaffMember().subscribe(res => this.currentStaffMember = res);
+      }
+      console.log('current user from storage in email....', this.currentStaffMember);
+    });
+
+    this.storage.get('signature').subscribe((data: string) => {
+      if (data) {
+        this.currentStaffMemberSignature = data;
+      } else {
+        this.staffMemberService.getCurrentStaffMemberSignature().subscribe(res => this.currentStaffMemberSignature = res);
+      }
+      // console.log('current user signature from storage in email....', this.currentStaffMemberSignature);
     });
   }
 
