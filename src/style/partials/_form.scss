@@ -100,6 +100,7 @@ fieldset                                       	{ padding:0; text-align:left; di
 }
 .fieldset--width-max 							      { max-width:100%; }
 .fieldset--flexBottom                           { margin-top:auto; }
+.fieldset--signature                            { padding:20px; max-width:100%; border:1px solid $color--midnight-20; border-radius:3px; }
 
 /***** Legend *****/
 legend                                          { width:100%; }

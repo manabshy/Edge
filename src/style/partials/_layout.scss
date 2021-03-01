@@ -214,6 +214,13 @@ app-telephone                                   { width:100%; display:flex; alig
   a                                             { color:$color--info; }
 }
 
+.wrapper--signature {
+  table           { table-layout:fixed; width:auto;
+    tr+tr         { border-top:none; }
+    td            { padding:inherit; min-width:initial; }
+  }
+}
+
 /***********************************************
 This applies from 992px onwards
 ***********************************************/
