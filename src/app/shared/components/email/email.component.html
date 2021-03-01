@@ -115,10 +115,10 @@
                 </span>
               </p-header>
             </p-editor>
-            <fieldset>
-              <app-email-signature [signature]="currentStaffMemberSignature"></app-email-signature>
-            </fieldset>
             <p class="message message--negative">{{formErrors?.body}}</p>
+          </fieldset>
+          <fieldset>
+            <app-email-signature [signature]="currentStaffMemberSignature"></app-email-signature>
           </fieldset>
         </div>
       </div>
