@@ -217,7 +217,9 @@ app-telephone                                   { width:100%; display:flex; alig
 .wrapper--signature {
   table           { table-layout:fixed; width:auto;
     tr+tr         { border-top:none; }
-    td            { padding:inherit; min-width:initial; }
+    td            { padding:inherit; min-width:initial;
+      p+*         { margin-top:inherit; }
+    }
   }
 }
 
