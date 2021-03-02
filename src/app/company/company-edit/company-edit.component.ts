@@ -42,7 +42,7 @@ export class CompanyEditComponent implements OnInit {
   isCreatingNewSigner: boolean;
   showCompanyFinder = false;
   isManualEntry = false;
-
+  isSignerVisible = false;
   constructor(private contactGroupService: ContactGroupsService,
     private companyService: CompanyService,
     private fb: FormBuilder,
@@ -73,7 +73,7 @@ export class CompanyEditComponent implements OnInit {
       this.isNewCompany = this.companyId ? false : params['isNewCompany'];
       this.isEditingSelectedCompany = params['isEditingSelectedCompany'] || false;
       this.companyName = params['companyName'] || null;
-      if(this.isNewCompany){this.showCompanyFinder = true}
+      if (this.isNewCompany) { this.showCompanyFinder = true }
     });
     this.setupCompanyForm(this.companyName);
     const id = this.isNewCompany ? 0 : this.companyId;
@@ -95,12 +95,13 @@ export class CompanyEditComponent implements OnInit {
   getCompanyDetails(id: number) {
     this.contactGroupService.getCompany(id).subscribe(data => {
       this.companyDetails = data;
+      this.signer = data?.signer;
       this.sharedService.setTitle(this.companyDetails.companyName);
       this.displayCompanyDetails(data);
     });
   }
 
-  createNewSigner(event) {
+  createNewSigner(event?: any) {
     if (event) {
       this.isCreatingNewSigner = true;
     }
@@ -204,12 +205,18 @@ export class CompanyEditComponent implements OnInit {
   }
 
   getSelectedSigner(signer: Signer) {
-    if (this.signer !== signer) {
+    // if (this.signer !== signer) {
+    //   this.companyForm.markAsDirty();
+    // } else {
+    //   this.companyForm.markAsPristine();
+    // }
+    if (signer) {
+      console.log({signer});
+
+      this.signer = signer;
+      this.isSignerVisible = false;
       this.companyForm.markAsDirty();
-    } else {
-      this.companyForm.markAsPristine();
     }
-    this.signer = signer;
   }
 
   getAddress(address: Address) {

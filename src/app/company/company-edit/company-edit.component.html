@@ -22,9 +22,27 @@
         </fieldset>
 
         <ledgend class="legend">Signer</ledgend>
-        <app-signer class="appWrapper" (selectedSigner)="getSelectedSigner($event)"
-          (newSigner)="createNewSigner($event)" [existingSigner]="existingSigner"></app-signer>
+        <fieldset>
+          <label for="area" class="small">Signer</label>
+          <ng-container *ngIf="signer?.contactNames; else newSigner">
+            <p><a [routerLink]="['/contact-centre/detail/0/people/', signer?.contactGroupId]">{{signer?.contactNames}}</a></p>
+            <p><button (click)="isSignerVisible = true" type="button" class="btn btn--info"><svg aria-hidden="true"
+                  width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
+                  <polygon points="42.7 6.7 57.3 21.3 64 14.5 49.7 0 "></polygon>
+                  <path d="M40.3 9.6l-38 38L0 64l16.9-2 38-37.9L40.3 9.6zM4 59.9l1.9-11.7 9.8 9.8L4 59.9z"></path>
+                </svg>Change signer</button></p>
+          </ng-container>
 
+          <ng-template #newSigner>
+            <p><button (click)="isSignerVisible = true" type="button" class="btn btn--positive"><svg
+                  aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
+                  <path
+                    d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" />
+                  <path class="plus-vertical"
+                    d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" />
+                </svg>Signer</button></p>
+          </ng-template>
+        </fieldset>
         <ledgend class="legend">Company Address</ledgend>
         <app-address class="appWrapper" [companyDetails]="companyDetails" (addressDetails)="getAddress($event)">
         </app-address>
@@ -60,12 +78,14 @@
         <ledgend class="legend">AML</ledgend>
         <fieldset>
           <label for="amlDate">AML Completed</label>
-          <input type="text" id="amlDate" placeholder="dd/mm/yyyy" class="form-control fake-readonly"
-            formControlName="amlCompletedDate"
-            [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', maxDate:todaysDate, customTodayClass: 'font-weight-bold'}"
-            bsDatepicker #datepicker="bsDatepicker" [appNoDoubleTap]='datepicker' readonly>
-          <button type="button" class="btn btn--ghost" (click)="clearControlValue(companyForm.get('amlCompletedDate'))"
-            *ngIf="companyForm.value.amlCompletedDate">Clear</button>
+          <span class="joined">
+            <input type="text" id="amlDate" placeholder="dd/mm/yyyy" class="form-control fake-readonly"
+              formControlName="amlCompletedDate"
+              [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', maxDate:todaysDate, customTodayClass: 'font-weight-bold'}"
+              bsDatepicker #datepicker="bsDatepicker" [appNoDoubleTap]='datepicker' readonly>
+            <button type="button" class="btn btn--ghost" (click)="clearControlValue(companyForm.get('amlCompletedDate'))"
+              *ngIf="companyForm.value.amlCompletedDate">Clear</button>
+          </span>
         </fieldset>
         <footer class="footer">
           <button (click)="cancel()" type="button" class="btn btn--ghost">Cancel</button>
@@ -81,8 +101,8 @@
 
     <ng-template #redactedCards>
       <div class="wrapper--redacted" *ngIf="isNewCompany && !companyDetails ">
-        <button class="btn btn--redacted btn--positive" (click)="showCompanyFinder=true"><svg aria-hidden="true" width="64"
-            height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
+        <button class="btn btn--redacted btn--positive" (click)="showCompanyFinder=true"><svg aria-hidden="true"
+            width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
             <path class="horizontal"
               d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z">
             </path>
@@ -176,4 +196,11 @@
   <app-company-finder [existingCompany]="companyDetails" [companyNameError]="formErrors.companyName"
     (companyName)="getCompanyName($event)" (selectedCompanyDetails)="navigateToCompany($event)"
     (isManualEntry)="showCompanyFinder=false; isManualEntry=true"></app-company-finder>
+</p-dialog>
+
+<!-- Contactgroup Finder Modal -->
+<p-dialog header="Signer" [(visible)]="isSignerVisible" [modal]="true" [draggable]="false"
+  class="modal--medium modal--hasFooter">
+  <app-contactgroup-finder (selectedContactGroup)="getSelectedSigner($event)" (isCreatingNewGroup)="createNewSigner()">
+  </app-contactgroup-finder>
 </p-dialog>
