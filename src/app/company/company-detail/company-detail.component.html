@@ -9,7 +9,13 @@
         <ol class="list list--divider list--hover">
           <li *ngIf="companyDetails">
             <a class="overall" (click)="createNewCompanyOrContact('newContact'); $event.stopPropagation()"></a>
-            <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--fill-positive icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z"></path><path d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" class="plus-vertical"></path></svg>New Company Contact
+            <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+              class="icon icon--s icon--fill-positive icon--onLeft">
+              <path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z">
+              </path>
+              <path d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z"
+                class="plus-vertical"></path>
+            </svg>New Company Contact
           </li>
         </ol>
       </div>
@@ -25,162 +31,26 @@
           </tr>
         </thead>
         <tbody>
-          <app-subnav>
-            <app-subnav-item *ngFor="let companyContact of companyDetails?.companyContacts" [noBaseLink]="true" [navLink]="'/contact-centre/detail/'+0+'/people/'+companyContact.contactGroupId" [params]="{docTitle: 'Contact Group | '+companyDetails?.addressee}">
-              <tr>
-                <td>
-                  <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft" *ngIf="companyContact?.isCompany; else peopleIcon"><path d="M56.8 14.9H44.4V8.8c0-3.4-2.8-6.2-6.2-6.2H25.8c-3.4 0-6.2 2.8-6.2 6.2v6.2H7.2c-3.4 0-6.2 2.8-6.2 6.2l0 34.1c0 3.4 2.8 6.2 6.2 6.2h49.6c3.4 0 6.2-2.8 6.2-6.2V21.1C63 17.7 60.2 14.9 56.8 14.9zM38.2 14.9H25.8V8.8h12.4V14.9z"></path></svg>
-                  <ng-template #peopleIcon>
-                    <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft" *ngIf="cG?.contactPeople.length"><path d="M46 32c4.3 0 7.7-3.5 7.7-7.8s-3.4-7.8-7.7-7.8 -7.8 3.5-7.8 7.8S41.7 32 46 32zM22.7 28.9c5.1 0 9.3-4.2 9.3-9.3s-4.1-9.3-9.3-9.3 -9.3 4.2-9.3 9.3S17.6 28.9 22.7 28.9zM46 38.2c-5.7 0-17.1 2.9-17.1 8.5v7H63v-7C63 41.1 51.6 38.2 46 38.2zM22.7 35.1C15.5 35.1 1 38.7 1 46v7.8h21.7v-7c0-2.6 1-7.2 7.3-10.8C27.4 35.4 24.7 35.1 22.7 35.1z" /></svg>
-                  </ng-template>
-                  
-                  <ng-container *ngFor="let contactPerson of companyContact?.contactPeople; last as isLast; first as isFirst">
-                    <ng-container *ngIf="contactPerson">
-                      <a [routerLink]="['/contact-centre/detail',0,'people',companyContact.contactGroupId ]" [queryParams]="{showNotes: true}" (click)="$event.stopPropagation()">{{contactPerson?.addressee}}</a>
-                    </ng-container>
-                    <ng-container *ngIf="!isLast">, </ng-container>
-                  </ng-container>
-                  
-                  <ng-container *ngIf="companyContact?.isCompany">
-                    {{companyContact?.companyName}}
-                  </ng-container>
-                </td>
-              </tr>
-            </app-subnav-item>
-          </app-subnav>
+          <tr *ngFor="let companyContact of companyDetails?.companyContacts">
+            <td>
+              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
+                <path
+                  d="M56.8 14.9H44.4V8.8c0-3.4-2.8-6.2-6.2-6.2H25.8c-3.4 0-6.2 2.8-6.2 6.2v6.2H7.2c-3.4 0-6.2 2.8-6.2 6.2l0 34.1c0 3.4 2.8 6.2 6.2 6.2h49.6c3.4 0 6.2-2.8 6.2-6.2V21.1C63 17.7 60.2 14.9 56.8 14.9zM38.2 14.9H25.8V8.8h12.4V14.9z">
+                </path>
+              </svg>
+              <ng-container
+                *ngFor="let contactPerson of companyContact?.contactPeople; last as isLast; first as isFirst">
+                <ng-container *ngIf="contactPerson">
+                  <a [routerLink]="['/contact-centre/detail',0,'people',companyContact.contactGroupId ]"
+                    [queryParams]="{showNotes: true}"
+                    (click)="$event.stopPropagation()">{{contactPerson?.addressee}}</a>
+                </ng-container>
+              </ng-container>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
   </div>
 </div>
-
-
-
-
-<!-- <app-breadcrumb></app-breadcrumb>
-<div class="container main">
-  <div class="row page-title">
-    <div class="col">
-      <h4 class="mb-0">Company</h4>
-    </div>
-    <div class="col-auto">
-      <div class="btn-group" dropdown placement="bottom right">
-        <button id="actionsToggle" dropdownToggle type="button" class="btn btn-light dropdown-toggle"
-          aria-controls="actionsList">
-          Actions <span class="caret">
-
-          </span>
-        </button>
-        <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
-          aria-labelledby="actionsToggle">
-          <li role="menuitem" *ngIf="companyDetails">
-            <a class="dropdown-item"
-              [routerLink]="['edit']" >
-              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
-                <polygon points="42.7 6.7 57.3 21.3 64 14.5 49.7 0 ">
-
-              </polygon>
-                <path d="M40.3 9.6l-38 38L0 64l16.9-2 38-37.9L40.3 9.6zM4 59.9l1.9-11.7 9.8 9.8L4 59.9z">
-
-              </path>
-              </svg>Edit Company
-            </a>
-          </li>
-          <li role="menuitem" *ngIf="companyDetails">
-            <a class="dropdown-item"
-              (click)="createNewCompanyOrContact('newContact'); $event.stopPropagation()">
-              <i class="fas fa-briefcase">
-
-              </i>
-              <i class="fas fa-plus fa-xs align-text-top">
-
-              </i> New Company Contact
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  <div class="row align-items-start">
-    <div class="col-xl-8">
-      <h5>Detail</h5>
-      <app-company-info [companyDetails]="companyDetails"></app-company-info>
-      <div class="row mb-4">
-        <div class="col-12">
-          <h5>Company contacts</h5>
-          <app-subnav>
-            <app-subnav-item *ngFor="let companyContact of companyDetails?.companyContacts" [noBaseLink]="true"
-              [navLink]="'/contact-centre/detail/'+0+'/people/'+companyContact.contactGroupId" [params]="{docTitle: 'Contact Group | '+companyDetails?.addressee}">
-              <i class="fas fa-briefcase mr-2 fa-fw" *ngIf="companyContact?.isCompany; else peopleIcon">
-
-              </i>
-              <ng-template #peopleIcon>
-                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft" *ngIf="cG?.contactPeople.length">
-                  <path d="M46 32c4.3 0 7.7-3.5 7.7-7.8s-3.4-7.8-7.7-7.8 -7.8 3.5-7.8 7.8S41.7 32 46 32zM22.7 28.9c5.1 0 9.3-4.2 9.3-9.3s-4.1-9.3-9.3-9.3 -9.3 4.2-9.3 9.3S17.6 28.9 22.7 28.9zM46 38.2c-5.7 0-17.1 2.9-17.1 8.5v7H63v-7C63 41.1 51.6 38.2 46 38.2zM22.7 35.1C15.5 35.1 1 38.7 1 46v7.8h21.7v-7c0-2.6 1-7.2 7.3-10.8C27.4 35.4 24.7 35.1 22.7 35.1z" />
-                </svg>
-              </ng-template>
-              <span class="d-inline-block mr-2 align-top">
-                <ng-container
-                  *ngFor="let contactPerson of companyContact?.contactPeople; last as isLast; first as isFirst">
-                  <br class="d-sm-none" *ngIf="!isFirst" />
-                  <ng-container *ngIf="contactPerson">
-                    <a [routerLink]="['/', contactPerson.personId ]" [queryParams]="{showNotes: true}"
-                      (click)="$event.stopPropagation()">{{contactPerson?.addressee}}</a>
-                  </ng-container>
-                  <ng-container *ngIf="!isLast">, </ng-container>
-                </ng-container>
-                <ng-container *ngIf="companyContact?.isCompany">
-                  <br class="d-sm-none" />
-                  <span
-                    class="badge badge-pill badge-primary">{{companyContact?.companyName}}</span>
-                </ng-container>
-              </span>
-            </app-subnav-item>
-            <a class="list-group-item list-group-item-action text-center py-4"
-              (click)="createNewCompanyOrContact('newContact'); $event.stopPropagation()" *ngIf="companyDetails">
-              <span class="btn-link">
-                <i class="fas fa-briefcase">
-
-                </i>
-                <i class="fas fa-plus fa-xs align-text-top">
-
-                </i> New Company Contact
-              </span>
-            </a>
-          </app-subnav>
-
-        </div>
-      </div>
-    </div>-->
-
-    <!-- <div class="col-xl-4 aside sticky-top-xl">
-      <div class="mb-3">
-        <h5>Info</h5>
-        <app-subnav>
-          <app-subnav-item *ngFor="let item of subNav"
-            [navLink]="item?.link" [params]="{docTitle: item?.label+' | '+companyDetails?.addressee}">
-            {{item?.label}}
-            <ng-container *ngIf="summaryTotals; else loadingInfo">
-              <ng-container *ngIf="isObject(summaryTotals[item?.value]); else simpleValue">
-                <span class="badge badge-pill badge-success mr-1"> {{summaryTotals[item?.value]?.active}} </span>
-                <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value]?.total}}</span>
-              </ng-container>
-              <ng-template #simpleValue>
-                <span class="badge badge-pill badge-primary"> {{summaryTotals[item?.value] || '0'}}</span>
-              </ng-template>
-            </ng-container>
-            <ng-template #loadingInfo>
-              <span class="badge badge-pill badge-primary">
-                <i class="fas fa-spinner fa-pulse d-inline-block">
-              </i>
-              </span>
-            </ng-template>
-          </app-subnav-item>
-        </app-subnav>
-      </div>
-    </div>
-  </div>
-</div> -->
-<app-additional-info [id]="companyDetails?.companyId ? 'CO-'+companyDetails?.companyId : ''">
-
-</app-additional-info>
+<app-additional-info [id]="companyDetails?.companyId ? 'CO-'+companyDetails?.companyId : ''"></app-additional-info>
