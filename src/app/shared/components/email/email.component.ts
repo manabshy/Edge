@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { NgxFileDropEntry, FileSystemFileEntry, FileSystemDirectoryEntry } from 'ngx-file-drop';
 import { ContactGroup } from 'src/app/contactgroups/shared/contact-group';
@@ -19,6 +19,8 @@ import { BaseStaffMember } from '../../models/base-staff-member';
 import { ResultData } from '../../result-data';
 import { map, tap } from 'rxjs/operators';
 import { OfficeService } from 'src/app/core/services/office.service';
+import { EmailInfo } from '../../models/email';
+import { EmailService } from 'src/app/core/services/email.service';
 @Component({
   selector: 'app-email',
   templateUrl: './email.component.html',
@@ -36,7 +38,7 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
   isContactGroupFinderVisible = false;
   showButton = false;
   personOnly = false;
-  personalEmails: { name: string, value: { personId: number, email: string } }[] = [];
+  personalEmails: { name: string, value: { personId: number, emailAddress: string }, isPreferred?: boolean }[] = [];
   existingPeople: Person[] = [];
   showFileUploader = false;
   uploadedFiles: any[] = [];
@@ -80,12 +82,16 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
     return `Attachments (${total})`;
   }
 
+  get recipientEmailControl(): FormControl {
+    return this.emailForm.get('recipientEmail') as FormControl;
+  }
+
   @ViewChild('pEditor') pEditor: any;
   constructor(private fb: FormBuilder, private storage: StorageMap,
     private officeService: OfficeService,
     public staffMemberService: StaffMemberService,
     private contactGroupService: ContactGroupsService,
-    private propertyService: PropertyService, private validationService: ValidationService) { }
+    private propertyService: PropertyService, private validationService: ValidationService, private emailService: EmailService) { }
 
   ngOnInit(): void {
     this.getCurrentUserInfo();
@@ -160,7 +166,7 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
       this.personOnly = true;
       this.noEmailContact = !this.person.contactByEmail;
       this.person.emailAddresses.forEach(x => {
-        this.personalEmails.push({ name: x.email, value: { personId: this.person.personId, email: x.email } });
+        this.personalEmails.push({ name: x.email, value: { personId: this.person.personId, emailAddress: x.email } });
       });
       this.populateForm();
       // this.getGroupedPeople([], this.person);
@@ -171,7 +177,7 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
     let quill = this.pEditor?.getQuill();
     quill.setContents([
       { insert: 'Dear ' },
-      { insert: '{salutation}', attributes: { bold: true } },
+      { insert: '{salutation}'},
       { insert: '\n' }
     ]);
     // quill.setText('Hello\n');
@@ -251,13 +257,17 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
 
   getStaffEmails(staffMembers: StaffMember[]) {
     const emails = [];
-    staffMembers.forEach(x => emails.push({ name: x.fullName, value: { id: x.staffMemberId, email: x.exchangeUsername } }));
+    staffMembers.forEach(x => emails.push({ name: x.fullName, value: { staffMemberId: x.staffMemberId, emailAddress: x.exchangeUsername } }));
     return emails;
   }
 
   getEmails(emailAddresses: Email[], personId: number) {
     const emails = [];
-    emailAddresses.forEach(x => emails.push({ name: x.email, value: { personId, value: x.email }, isPreferred: x.isPreferred }));
+    emailAddresses.forEach(x => emails.push({
+      name: x.email,
+      value: { personId, contactId: this.contactGroup.contactGroupId, emailAddress: x.email } as EmailInfo,
+      isPreferred: x.isPreferred
+    }));
     console.log({ emails });
 
     return emails;
@@ -404,8 +414,22 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
     this.index = 0; // Switch to message details tab
     this.validationService.logValidationErrors(this.emailForm, true);
     const filesToUpload = [...this.files, ...this.selectedDocuments];
+    let email = { ...this.emailForm.value };
+    this.emailService.sendEmail(email).subscribe(res => console.log({ res }));
+    //  email = this.getPersonEmailInfo(email);
+    console.log(this.emailForm?.value, 'send email form', { email });
+  }
 
-    console.log(this.emailForm?.value, 'send email form');
+  getPersonEmailInfo(email: Email) {
+    const emailValue = this.recipientEmailControl.value;
+    let personalEmail;
+    if (this.person && email) {
+      console.log({ email });
+
+      const emailInfo: EmailInfo = { personId: this.person.personId, emailAddress: email[0] };
+      personalEmail = emailInfo;
+    }
+    return personalEmail;
   }
 
   cancel() {

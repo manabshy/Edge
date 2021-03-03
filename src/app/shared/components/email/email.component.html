@@ -24,7 +24,7 @@
               formControlName="recipientEmail" optionLabel="email" optionValue="email"
               defaultLabel="Select recipient email" crollHeight="250px" display="chip" (onClick)="showButton=true">
               <ng-template let-emailAddress pTemplate="item">
-                <span [ngClass]="{'message--negative': noEmailContact}">
+                <span [ngClass]="{'txt--negative': noEmailContact}">
                   <ng-container *ngIf="emailAddress?.isPreferred"> <svg aria-hidden="true" width="64" height="64"
                       viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
                       <polygon
