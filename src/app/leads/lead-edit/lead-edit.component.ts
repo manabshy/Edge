@@ -71,7 +71,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   isMessageVisible: boolean;
   isPropertyRemoved: boolean;
   isOwnerChanged: boolean;
-  isLeadClosed: boolean;
+  isLeadClosed = false;
   isNextChaseDateChanged = false;
   isLeadMarkedAsClosed: boolean;
   isValidatorCleared = false;
@@ -226,6 +226,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.leadsService.getLeadIds(this.leadSearchInfo).subscribe(result => {
       this.leadIds = result;
       this.currentLeadIndex = this.leadIds.indexOf(this.leadSearchInfo.startLeadId);
+      console.log({result});
 
       if (this.leadIds.length <= 1) {
         this.leadsListCompleted = true;

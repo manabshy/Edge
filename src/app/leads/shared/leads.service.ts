@@ -123,6 +123,7 @@ export class LeadsService {
         officeIds: leadSearchInfo.officeIds != null ? leadSearchInfo.officeIds.toString() : '',
         dateFrom: leadSearchInfo.dateFrom != null ? dateFrom.toString() : '',
         dateTo: leadSearchInfo.dateTo != null ? dateTo.toString() : '',
+        listingType: leadSearchInfo.listingType != null ? leadSearchInfo.listingType.toString() : '',
         includeClosedLeads: leadSearchInfo.includeClosedLeads != null ? (String)(leadSearchInfo.includeClosedLeads) : '',
         // includeUnassignedLeadsOnly: leadSearchInfo.includeUnassignedLeadsOnly != null
         //   ? (String)(leadSearchInfo.includeUnassignedLeadsOnly) : '',
