@@ -73,6 +73,7 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
   staffMembers: StaffMember[] = [];
   offices: Office[];
   currentStaffMemberSignature: string;
+  noEmailContact: boolean;
 
   get attachments() {
     const total = this.selectedDocuments?.length + this.files?.length;
@@ -157,6 +158,7 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
 
     } else if (this.person) {
       this.personOnly = true;
+      this.noEmailContact = !this.person.contactByEmail;
       this.person.emailAddresses.forEach(x => {
         this.personalEmails.push({ name: x.email, value: { personId: this.person.personId, email: x.email } });
       });
@@ -255,7 +257,7 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
 
   getEmails(emailAddresses: Email[], personId: number) {
     const emails = [];
-    emailAddresses.forEach(x => emails.push({ name: x.email, value: { personId, value: x.email } }));
+    emailAddresses.forEach(x => emails.push({ name: x.email, value: { personId, value: x.email }, isPreferred: x.isPreferred }));
     console.log({ emails });
 
     return emails;

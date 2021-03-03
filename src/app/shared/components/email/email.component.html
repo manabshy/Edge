@@ -10,9 +10,9 @@
             <label for="individualEmail">{{currentStaffMember?.email}}</label>
           </span>
           <span>
-            <input type="radio" id="departmentEmail" value="helpdesk@dng.co.uk" name="senderEmail"
-              formControlName="senderEmail">
-            <label for="departmentEmail">helpdesk@dng.co.uk</label>
+            <input type="radio" id="departmentEmail" [value]="currentStaffMember?.activeDepartments[0]?.emailAddress"
+              name="senderEmail" formControlName="senderEmail">
+            <label for="departmentEmail">{{currentStaffMember?.activeDepartments[0]?.emailAddress}}</label>
           </span>
         </span>
       </fieldset>
@@ -24,7 +24,15 @@
               formControlName="recipientEmail" optionLabel="email" optionValue="email"
               defaultLabel="Select recipient email" crollHeight="250px" display="chip" (onClick)="showButton=true">
               <ng-template let-emailAddress pTemplate="item">
-                <span>{{emailAddress?.email}}</span>
+                <span [ngClass]="{'message--negative': noEmailContact}">
+                  <ng-container *ngIf="emailAddress?.isPreferred"> <svg aria-hidden="true" width="64" height="64"
+                      viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
+                      <polygon
+                        points="32 0 41.9 21.1 64 24.4 48 40.8 51.8 64 32 53.1 12.2 64 16 40.8 0 24.4 22.1 21.1 ">
+                      </polygon>
+                    </svg>
+                  </ng-container>{{emailAddress?.email}}
+                </span>
               </ng-template>
             </p-multiSelect>
           </ng-container>
@@ -46,8 +54,9 @@
       </div>
       <fieldset>
         <label for="ccInternalEmail">Cc (Internal)</label>
-        <p-multiSelect [options]="groupedStaffMembers" [group]="true" [maxSelectedLabels]="1" formControlName="ccInternalEmail" optionLabel="name"
-          optionValue="value" defaultLabel="Select email" crollHeight="250px" display="chip">
+        <p-multiSelect [options]="groupedStaffMembers" [group]="true" [maxSelectedLabels]="1"
+          formControlName="ccInternalEmail" optionLabel="name" optionValue="value" defaultLabel="Select email"
+          crollHeight="250px" display="chip">
           <ng-template let-group pTemplate="group">
             <div class="p-d-flex p-ai-center">
               <span>{{group.label}}</span>
@@ -57,7 +66,8 @@
       </fieldset>
       <fieldset [ngClass]="{invalid: formErrors?.ccExternalEmail}">
         <label for="ccExternalEmail">Cc (External)</label>
-        <p-chips inputId="ccExternalEmail" formControlName="ccExternalEmail" separator="," [allowDuplicate]="false" [style]="{'width':'100%'}"></p-chips>
+        <p-chips inputId="ccExternalEmail" formControlName="ccExternalEmail" separator="," [allowDuplicate]="false"
+          [style]="{'width':'100%'}"></p-chips>
         <p class="message message--negative">{{formErrors?.ccExternalEmail}}</p>
       </fieldset>
       <fieldset *ngIf="false">
