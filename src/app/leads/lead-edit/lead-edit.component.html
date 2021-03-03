@@ -31,7 +31,8 @@
       <app-shared-lead-register *ngSwitchCase="'leads'" [moreInfo]="moreInfo" [personId]="person?.personId"
         [closedCounter]="summaryTotals?.leads?.inactive"></app-shared-lead-register>
       <app-notes *ngSwitchCase="'notes'" [personNotes]="personNotes" [person]="person" [pageNumber]="page"
-        [bottomReached]="bottomReached" [showNoteInput]="false" [showCreateNoteButton]="false" (showMyNotes)="setShowMyNotesFlag($event)"></app-notes>
+        [bottomReached]="bottomReached" [showNoteInput]="false" [showCreateNoteButton]="false"
+        (showMyNotes)="setShowMyNotesFlag($event)"></app-notes>
       <!-- <ng-container *ngSwitchDefault>
         <div class="title">
           <h2>Lead<span class="pill pill--onRight" *ngIf="lead?.closedById">Closed</span></h2>
@@ -138,11 +139,12 @@
     <a class="btn btn--positive"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z"></path><path d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" class="plus-vertical"></path></svg>Contact Group</a>
   </div> -->
   <form [formGroup]="leadEditForm" (ngSubmit)="SaveLead(true, leadNote)" autocompleteOff>
-    <div class="card card--horizontal">
+    <div class="card card--horizontal" [ngClass]="{'disable-card': !canEditLead}">
       <div class="card__body">
         <ol class="list list--split list--split-60-40">
           <li>
-            <h3 class="txt--title">Lead details<span class="pill pill--onRight" *ngIf="lead?.closedById">Closed</span></h3>
+            <h3 class="txt--title">Lead details<span class="pill pill--onRight" *ngIf="lead?.closedById">Closed</span>
+            </h3>
             <div class="inline-parent inline-parent__hasLabels">
               <fieldset class="inline-child">
                 <label for="leadType">Type</label>
@@ -226,14 +228,22 @@
       </div>
     </div>
     <footer class="footer">
-      <button (click)="cancel()" type="button" class="btn btn--ghost" *ngIf="!isLeadClosed">Cancel</button>
-      <button (click)="cancel()" type="button" class="btn btn--ghost" *ngIf="isLeadClosed">Back</button>
-      <button type="submit" class="btn btn--positive" id="saveLead" data-cy="saveLead"
-        *ngIf="!isLeadClosed">Save</button>
-      <button *ngIf="showSaveAndNext && !leadsListCompleted && !isLeadClosed" (click)="traverseLeads()" type="button"
-        class="btn btn--positive" [isOpen]="leadsListCompleted"
-        [tooltip]="leadsListCompleted ? 'You have reached the end of the list' : null || !leadEditForm.valid? errorMessage?.displayMessage : ''"
-        placement="top">Save & Next</button>
+      <ng-container *ngIf="canEditLead;else noEdit">
+        <button (click)="cancel()" type="button" class="btn btn--ghost" *ngIf="!isLeadClosed">Cancel</button>
+        <button (click)="cancel()" type="button" class="btn btn--ghost" *ngIf="isLeadClosed">Back</button>
+        <button type="submit" class="btn btn--positive" id="saveLead" data-cy="saveLead"
+          *ngIf="!isLeadClosed">Save</button>
+        <button *ngIf="showSaveAndNext && !leadsListCompleted && !isLeadClosed" (click)="traverseLeads(true)"
+          type="button" class="btn btn--positive" [isOpen]="leadsListCompleted"
+          [tooltip]="leadsListCompleted ? 'You have reached the end of the list' : null || !leadEditForm.valid? errorMessage?.displayMessage : ''"
+          placement="top">Save & Next</button>
+      </ng-container>
+      <ng-template #noEdit>
+        <button (click)="traverseLeads(false, true)" type="button" class="btn btn--ghost"
+          [attr.disabled]="disablePrevious ? '':null">Previous</button>
+        <button (click)="traverseLeads(false, false)" type="button" class="btn btn--positive"
+          [attr.disabled]="disableNext ? '':null">Next</button>
+      </ng-template>
     </footer>
   </form>
 </ng-template>

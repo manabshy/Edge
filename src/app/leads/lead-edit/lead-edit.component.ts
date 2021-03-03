@@ -88,6 +88,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   sideNavItems = this.sidenavService.sideNavItems;
   showOnlyMyNotes = false;
   backToOrigin = false;
+  canEditLead = true;
+  disablePrevious = true;
+  disableNext = false;
 
   get nextChaseDateControl() {
     return this.leadEditForm.get('nextChaseDate') as FormControl;
@@ -115,6 +118,12 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.showSaveAndNext = this.route.snapshot.queryParamMap.get('showSaveAndNext') === 'true';
     this.showNotes = this.route.snapshot.queryParamMap.get('showNotes') === 'true';
     this.backToOrigin = this.route.snapshot.queryParamMap.get('backToOrigin') === 'true';
+    if (this.infoParam) {
+      this.leadSearchInfo = JSON.parse(this.infoParam) as LeadSearchInfo;
+      this.canEditLead = +this.leadSearchInfo.listingType !== 1 ? false : true;
+      console.log('can edit lead', this.canEditLead);
+
+    }
     this.route.params.subscribe(params => {
       this.leadId = +params['leadId'] || 0;
 
@@ -213,7 +222,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   getLeadIds(leadId: number) {
-    this.leadSearchInfo = JSON.parse(this.infoParam) as LeadSearchInfo;
+    // this.leadSearchInfo = JSON.parse(this.infoParam) as LeadSearchInfo;
     this.leadsService.getLeadIds(this.leadSearchInfo).subscribe(result => {
       this.leadIds = result;
       this.currentLeadIndex = this.leadIds.indexOf(this.leadSearchInfo.startLeadId);
@@ -572,29 +581,61 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     }
   }
 
-  moveToNextLead() {
+  moveToNextLead(previous?: boolean) {
+    console.log({ previous });
     window.scrollTo(0, 0);
+    previous ? this.moveToPrevious() : this.moveToNext();
+  }
+
+  private moveToNext() {
     if (this.currentLeadIndex++ <= this.leadIds.length - 1) {
-      this.leadId = this.leadIds[this.currentLeadIndex];
-      this.onLoading = true;
-      this.page = 1;
-      this.personId = null;
-      this.person = null;
-      this.personNotes = [];
-      this.getLeadInformation();
-      // this.getPersonNotes();
+      console.log('curent index', this.currentLeadIndex);
+      this.disablePrevious = false;
+      this.getLeadTraversalInfo();
       if (this.currentLeadIndex === this.leadIds.length - 1) {
         this.leadsListCompleted = true;
+        this.disableNext = true;
       }
     } else {
       this.leadsListCompleted = true;
+      this.disableNext = true;
     }
   }
 
-  traverseLeads() {
-    this.isSaveAndNext = true;
-    this.SaveLead(true, this.note);
-    console.log('note', this.note);
+  private moveToPrevious() {
+    if (this.currentLeadIndex-- >= 0) {
+      console.log('curent index', this.currentLeadIndex);
+      this.disableNext = false;
+      this.getLeadTraversalInfo();
+      // this.getPersonNotes();
+      if (this.currentLeadIndex === 0) {
+        this.disablePrevious = true;
+      }
+    } else {
+      this.disablePrevious = true;
+    }
+  }
+
+  private getLeadTraversalInfo() {
+    this.leadId = this.leadIds[this.currentLeadIndex];
+    this.onLoading = true;
+    this.page = 1;
+    this.personId = null;
+    this.person = null;
+    this.personNotes = [];
+    this.getLeadInformation();
+  }
+
+  traverseLeads(save?: boolean, previous?: boolean) {
+    if (save) {
+      this.isSaveAndNext = true;
+      this.SaveLead(true, this.note);
+      console.log('note', this.note);
+    } else {
+      console.log('move without saving');
+
+      this.moveToNextLead(previous);
+    }
   }
 
   navigateToNewValuation(propertyId: number, lastKnownOwnerId?: number) {
