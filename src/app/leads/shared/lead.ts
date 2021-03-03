@@ -63,3 +63,10 @@ export interface LeadProperty {
   propertyId: number;
   address: Address;
 }
+
+
+export enum ListingType {
+  MyLeads = 1,
+  OtherUserLeads = 2,
+  UnassignedLeads = 4
+}

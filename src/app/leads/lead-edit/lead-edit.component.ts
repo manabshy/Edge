@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular
 import { AppUtils } from '../../core/shared/utils';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LeadsService } from '../shared/leads.service';
-import { Lead, LeadEditSubNavItems, LeadSearchInfo } from '../shared/lead';
+import { Lead, LeadEditSubNavItems, LeadSearchInfo, ListingType } from '../shared/lead';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { InfoDetail, InfoService } from 'src/app/core/services/info.service';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
@@ -120,8 +120,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.backToOrigin = this.route.snapshot.queryParamMap.get('backToOrigin') === 'true';
     if (this.infoParam) {
       this.leadSearchInfo = JSON.parse(this.infoParam) as LeadSearchInfo;
-      this.canEditLead = +this.leadSearchInfo.listingType !== 1 ? false : true;
-      console.log('can edit lead', this.canEditLead);
+      // this.canEditLead = +this.leadSearchInfo.listingType !== 1 ? false : true;
+      // console.log('can edit lead', this.canEditLead);
 
     }
     this.route.params.subscribe(params => {
@@ -226,7 +226,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.leadsService.getLeadIds(this.leadSearchInfo).subscribe(result => {
       this.leadIds = result;
       this.currentLeadIndex = this.leadIds.indexOf(this.leadSearchInfo.startLeadId);
-      console.log({result});
+      console.log({ result });
 
       if (this.leadIds.length <= 1) {
         this.leadsListCompleted = true;
@@ -263,8 +263,15 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       this.personId = result.personId;
       this.patchLeadValues(result);
       this.getPersonInformation();
-      // this.getPersonNotes();
-      this.lead.dateClosed ? this.isLeadClosed = true : this.isLeadClosed = false;
+      this.lead?.closedById ? this.isLeadClosed = true : this.isLeadClosed = false;
+      if (+this.leadSearchInfo.listingType !== ListingType.MyLeads) {
+        this.canEditLead = false;
+      } else if (+this.leadSearchInfo.listingType === ListingType.MyLeads && !this.isLeadClosed) {
+        this.canEditLead = true;
+      } else { this.canEditLead = false; }
+
+      console.log(this.isLeadClosed, 'closed', this.canEditLead, 'canedit');
+
     }, () => {
       this.lead = null;
     });

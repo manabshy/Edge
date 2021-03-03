@@ -6,9 +6,10 @@
       [placeholder]="placeholder"  (onChange)="onStaffMemberChange($event)"></p-multiSelect>
     </ng-container>
 
+    <!-- Warning in browser console after adding the disabled property - Investigate 03/03/21 -->
     <ng-template #dropDown>
       <p-dropdown [options]="staffMembers$|async" formControlName="staffMemberId" optionLabel="fullName" optionValue="staffMemberId"
-         [placeholder]="placeholder" [filter]="true" filterBy="fullName" [readOnly]="isReadOnly"
+         [placeholder]="placeholder" [filter]="true" filterBy="fullName" [readOnly]="isReadOnly" [disabled]="isDisabled"
         (onChange)="onStaffMemberChange($event)" [ngClass]="{'no-style': isReadOnly}" data-cy="staffMembers">
       </p-dropdown>
     </ng-template>

@@ -215,7 +215,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       includeClosedLeads: [],
       dateFrom: [],
       dateTo: [],
-      listingType: [],
+      listingType: [1],
       includeUnassignedLeadsOnly: [false],
       leadSearchTerm: ['']
     });
