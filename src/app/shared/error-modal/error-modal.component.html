@@ -25,7 +25,7 @@
   </div>
 </div> -->
 
-<fieldset>
+<fieldset class="overflow">
   <p *ngIf="data?.error?.displayMessage">{{data?.error?.displayMessage}}</p>
   <pre *ngIf="data?.error?.technicalDetails">{{data?.error?.technicalDetails}}</pre>
 </fieldset>
