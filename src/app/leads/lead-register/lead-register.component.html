@@ -193,9 +193,10 @@
                   </span>
                 </span>
               </td>
-              <td *ngIf="lead?.closedById">
+              <td *ngIf="isClosedLeadFound">
                 <span class="cell-content">
-                  <span class="pill">Closed</span>
+                  <span *ngIf="lead?.closedById" class="pill">Closed</span>
+                  <span *ngIf="!lead?.closedById" class="pill pill--positive">Active</span>
                 </span>
               </td>
               <td data-title="Type">

@@ -257,7 +257,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   }
 
   checkClosedLead(leads: Lead[]) {
-    return leads?.every(x => x.closedById);
+    return !!leads?.find(x => x.closedById);
   }
 
   private setBottomReachedFlag(result: any) {
