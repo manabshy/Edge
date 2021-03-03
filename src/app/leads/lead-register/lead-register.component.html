@@ -64,15 +64,23 @@
                 </span>
               </span>
             </fieldset>
+            <label for="companyType">Only Show:</label>
+            <span class="select">
+              <select id="listingType" formControlName="listingType">
+                <option *ngFor="let filter of leadFilters" [value]="filter.value">{{filter.name}}</option>
+              </select>
+            </span>
+            <fieldset>
 
-            <fieldset *ngIf="canSeeUnassignable">
+            </fieldset>
+            <!-- <fieldset *ngIf="canSeeUnassignable">
               <span class="checkbox">
                 <span>
                   <input type="checkbox" id="includeUnassignedLeadsOnly" formControlName="includeUnassignedLeadsOnly">
                   <label for="includeUnassignedLeadsOnly">Show unassigned leads only</label>
                 </span>
               </span>
-            </fieldset>
+            </fieldset> -->
 
             <fieldset>
               <button class="btn btn--info" id="search" (click)="PerformSearch()">Search</button>

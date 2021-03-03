@@ -49,13 +49,18 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   errorMessage: WedgeError;
   info: string;
   isClosedIncluded: boolean;
-  canSeeUnassignable: boolean;
+  canSeeUnassignable: boolean = false;
   isAdvancedSearchVisible = false;
   showModal = false;
   newLeadOwnerId: number;
   locale = 'en-gb';
   isLoading = false;
   isClosedLeadFound = false;
+  leadFilters: { name: string; value: number }[] = [
+    { value: 1, name: 'My leads' },
+    { value: 2, name: 'Other user leads' },
+    { value: 4, name: 'Unassigned leads' },
+  ];
   get isAdvancedFilterActive() {
     if (this.leadRegisterForm) {
       return this.leadRegisterForm.get('dateTo').value
@@ -79,6 +84,9 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   get dateToControl(): FormControl {
     return this.leadRegisterForm?.get('dateTo') as FormControl;
   }
+  get listingTypeControl(): FormControl {
+    return this.leadRegisterForm?.get('listingType') as FormControl;
+  }
 
   constructor(private leadService: LeadsService,
     private sharedService: SharedService,
@@ -94,8 +102,10 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     private fb: FormBuilder) { this.localeService.use(this.locale); }
 
   ngOnInit() {
-    this.setupLeadRegisterForm();
     this.getLeadsForCurrentUser();
+    console.log(this.canSeeUnassignable, 'can see assingle');
+    this.setupLeadRegisterForm();
+
     this.getInfoFromLocalStorage();
 
     // New search term
@@ -119,7 +129,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
 
     this.leadRegisterForm.valueChanges.subscribe(() => {
       this.leadSearchInfo = this.getSearchInfo(true);
-      console.log('form group changes', this.leadSearchInfo);
+      console.log('form group changes', this.leadSearchInfo, 'form here', this.leadRegisterForm.value);
       // this.leadService.pageNumberChanged(this.leadSearchInfo);
     });
 
@@ -141,6 +151,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
           officeId: null,
           dateFrom: null,
           dateTo: null,
+          listingType: this.canSeeUnassignable ? 2 : 1,
           includeClosedLeads: false,
           includeUnassignedLeadsOnly: false,
           leadSearchTerm: this.searchTerm ? this.searchTerm : ''
@@ -204,6 +215,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       includeClosedLeads: [],
       dateFrom: [],
       dateTo: [],
+      listingType: [],
       includeUnassignedLeadsOnly: [false],
       leadSearchTerm: ['']
     });
@@ -319,19 +331,29 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     // }
   }
 
-  // TODO: Refactor asap
   private getSearchInfo(newSearch: boolean) {
-    return {
-      page: !newSearch ? this.pageNumber : 1,
-      ownerId: this.currentStaffMember ? this.currentStaffMember.staffMemberId : null,
-      leadTypeIds: this.leadRegisterForm != null ? this.leadRegisterForm.get('leadTypeIds').value : null ? AppUtils.leadSearchInfo.leadTypeIds : null,
-      officeIds: this.leadRegisterForm != null ? this.leadRegisterForm.get('officeIds').value : null ? AppUtils.leadSearchInfo.officeIds : null,
-      dateFrom: this.leadRegisterForm != null ? this.leadRegisterForm.get('dateFrom').value : null ? AppUtils.leadSearchInfo.dateFrom : null,
-      dateTo: this.leadRegisterForm != null ? this.leadRegisterForm.get('dateTo').value : null ? AppUtils.leadSearchInfo.dateTo : null,
-      includeClosedLeads: this.leadRegisterForm != null ? this.leadRegisterForm.get('includeClosedLeads').value : null ? AppUtils.leadSearchInfo.includeClosedLeads : null,
-      includeUnassignedLeadsOnly: this.leadRegisterForm != null ? this.leadRegisterForm.get('includeUnassignedLeadsOnly').value : null ? AppUtils.leadSearchInfo.includeUnassignedLeadsOnly : null,
-      leadSearchTerm: this.leadRegisterForm != null ? this.leadRegisterForm.get('leadSearchTerm').value : null ? AppUtils.leadSearchInfo.leadSearchTerm : null
-    };
+    let info: LeadSearchInfo;
+    if (this.leadRegisterForm) { info = { ...this.leadRegisterForm.value }; } else if (AppUtils.leadSearchInfo) { info = { ...AppUtils.leadSearchInfo }; }
+    info.page = !newSearch ? this.pageNumber : 1;
+    console.log({ info });
+    return info;
+
+    // TODO: Remove asap
+    // return {
+    //   page: !newSearch ? this.pageNumber : 1,
+    //   ownerId: this.currentStaffMember ? this.currentStaffMember.staffMemberId : null,
+    //   leadTypeIds: this.leadRegisterForm != null ? this.leadRegisterForm.get('leadTypeIds').value : null ? AppUtils.leadSearchInfo.leadTypeIds : null,
+    //   officeIds: this.leadRegisterForm != null ? this.leadRegisterForm.get('officeIds').value : null ? AppUtils.leadSearchInfo.officeIds : null,
+    //   dateFrom: this.leadRegisterForm != null ? this.leadRegisterForm.get('dateFrom').value : null ? AppUtils.leadSearchInfo.dateFrom : null,
+    //   dateTo: this.leadRegisterForm != null ? this.leadRegisterForm.get('dateTo').value : null ? AppUtils.leadSearchInfo.dateTo : null,
+    //   listingType: this.leadRegisterForm != null ? this.leadRegisterForm.get('listingType').value : null ? AppUtils.leadSearchInfo.listingType : null,
+    //   includeClosedLeads: this.leadRegisterForm != null ?
+    //   this.leadRegisterForm.get('includeClosedLeads').value : null ? AppUtils.leadSearchInfo.includeClosedLeads : null,
+    //   includeUnassignedLeadsOnly: this.leadRegisterForm != null ?
+    //   this.leadRegisterForm.get('includeUnassignedLeadsOnly').value : null ? AppUtils.leadSearchInfo.includeUnassignedLeadsOnly : null,
+    //   leadSearchTerm: this.leadRegisterForm != null ?
+    //   this.leadRegisterForm.get('leadSearchTerm').value : null ? AppUtils.leadSearchInfo.leadSearchTerm : null
+    // };
   }
 
   PerformSearch() {
@@ -448,7 +470,9 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     scrollHeight = document.body.scrollHeight;
     totalHeight = window.scrollY + window.innerHeight;
 
-    this.leadSearchInfo = this.getSearchInfo(false);
+    if (!this.bottomReached) {
+      this.leadSearchInfo = this.getSearchInfo(false);
+    }
     const url = this.router.url;
     const isLeadsRegister = url.endsWith('/leads-register');
 

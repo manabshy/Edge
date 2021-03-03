@@ -85,9 +85,10 @@ export class LeadsService {
         officeIds: leadSearchInfo.officeIds != null ? leadSearchInfo.officeIds?.toString() : '',
         dateFrom: leadSearchInfo.dateFrom != null ? dateFrom.toString() : '',
         dateTo: leadSearchInfo.dateTo != null ? dateTo.toString() : '',
+        listingType: leadSearchInfo.listingType != null ? leadSearchInfo.listingType.toString() : '',
         includeClosedLeads: leadSearchInfo.includeClosedLeads != null ? (String)(leadSearchInfo.includeClosedLeads) : '',
-        includeUnassignedLeadsOnly: leadSearchInfo.includeUnassignedLeadsOnly != null
-          ? (String)(leadSearchInfo.includeUnassignedLeadsOnly) : '',
+        // includeUnassignedLeadsOnly: leadSearchInfo.includeUnassignedLeadsOnly != null
+        //   ? (String)(leadSearchInfo.includeUnassignedLeadsOnly) : '',
         page: leadSearchInfo.page.toString(),
         pageSize: pageSize.toString(),
         searchTerm: leadSearchInfo.leadSearchTerm != null ? leadSearchInfo.leadSearchTerm : '',
@@ -123,8 +124,8 @@ export class LeadsService {
         dateFrom: leadSearchInfo.dateFrom != null ? dateFrom.toString() : '',
         dateTo: leadSearchInfo.dateTo != null ? dateTo.toString() : '',
         includeClosedLeads: leadSearchInfo.includeClosedLeads != null ? (String)(leadSearchInfo.includeClosedLeads) : '',
-        includeUnassignedLeadsOnly: leadSearchInfo.includeUnassignedLeadsOnly != null
-          ? (String)(leadSearchInfo.includeUnassignedLeadsOnly) : '',
+        // includeUnassignedLeadsOnly: leadSearchInfo.includeUnassignedLeadsOnly != null
+        //   ? (String)(leadSearchInfo.includeUnassignedLeadsOnly) : '',
         startLeadId: leadSearchInfo.startLeadId != null ? leadSearchInfo.startLeadId.toString() : '',
         searchTerm: leadSearchInfo.leadSearchTerm != null ? leadSearchInfo.leadSearchTerm : '',
         allowPaging: 'false',
@@ -162,6 +163,32 @@ export class LeadsService {
       tap(data => console.log('Updated Lead details here...', JSON.stringify(data))));
   }
 
+  setQueryParams(leadSearchInfo: LeadSearchInfo, pageSize?: number) {
+    const dateTo = format(leadSearchInfo.dateTo, 'YYYY-MM-DD');
+    const dateFrom = format(leadSearchInfo.dateFrom, 'YYYY-MM-DD');
+    console.log('date params', leadSearchInfo);
+    const options = new HttpParams({
+      encoder: new CustomQueryEncoderHelper,
+      fromObject: {
+        ownerId: leadSearchInfo.ownerId != null ? leadSearchInfo.ownerId.toString() : '',
+        personId: leadSearchInfo.personId != null ? leadSearchInfo.personId.toString() : '',
+        leadTypeIds: leadSearchInfo.leadTypeIds != null ? leadSearchInfo?.leadTypeIds?.toString() : '',
+        officeIds: leadSearchInfo.officeIds != null ? leadSearchInfo.officeIds?.toString() : '',
+        dateFrom: leadSearchInfo.dateFrom != null ? dateFrom.toString() : '',
+        dateTo: leadSearchInfo.dateTo != null ? dateTo.toString() : '',
+        listingType: leadSearchInfo.listingType != null ? leadSearchInfo.listingType.toString() : '',
+        includeClosedLeads: leadSearchInfo.includeClosedLeads != null ? (String)(leadSearchInfo.includeClosedLeads) : '',
+        // includeUnassignedLeadsOnly: leadSearchInfo.includeUnassignedLeadsOnly != null
+        //   ? (String)(leadSearchInfo.includeUnassignedLeadsOnly) : '',
+        page: leadSearchInfo.page.toString(),
+        pageSize: pageSize.toString(),
+        searchTerm: leadSearchInfo.leadSearchTerm != null ? leadSearchInfo.leadSearchTerm : '',
+        allowPaging: 'true'
+      }
+    });
+
+    return options;
+  }
 
 }
 

@@ -50,6 +50,7 @@ export interface LeadSearchInfo {
   officeIds?: number[];
   dateFrom?: Date;
   dateTo?: Date;
+  listingType?: number;
   includeClosedLeads?: boolean;
   page: number;
   includeUnassignedLeadsOnly?: boolean;
