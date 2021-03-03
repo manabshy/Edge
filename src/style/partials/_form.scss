@@ -98,8 +98,7 @@ fieldset                                       	{ padding:0; text-align:left; di
    }
   small                                 	      { display:block; line-height:14px; }
 }
-.fieldset--width-max,
-.inline-parent--width-max 		   			      { max-width:100%; }
+.fieldset--width-max    		   			      { max-width:100%; }
 .fieldset--flexBottom                           { margin-top:auto; }
 .fieldset--signature                            { padding:20px; max-width:100%; border:1px solid $color--midnight-20; border-radius:3px; }
 
@@ -298,6 +297,7 @@ Inline items
 ***********************************************/
 label + .inline-parent                          { margin-top:6px; }
 .inline-parent                                  { display:flex; align-items:flex-end; max-width:500px;
+   &--width-max 		   			               { max-width:100%; }
    &__hasLabels                                 { align-items:flex-start;
       .inline-child                             { align-self:flex-start; }
    }
