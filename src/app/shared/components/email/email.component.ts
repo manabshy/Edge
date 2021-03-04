@@ -22,6 +22,7 @@ import { OfficeService } from 'src/app/core/services/office.service';
 import { BaseEmail, EmailInfo } from '../../models/base-email';
 import { EmailService } from 'src/app/core/services/email.service';
 import { MessageService } from 'primeng/api';
+import { WedgeValidators } from '../../wedge-validators';
 @Component({
   selector: 'app-email',
   templateUrl: './email.component.html',
@@ -77,6 +78,7 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
   offices: Office[];
   currentStaffMemberSignature: string;
   noEmailContact: boolean;
+  isInvalidEmail: boolean;
 
   get attachments() {
     const total = this.selectedDocuments?.length + this.files?.length;
@@ -279,6 +281,19 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
     return emails;
   }
 
+  validateMultipleEmails(event?: any) {
+    // let email = event.value as string;
+    if (!this.ccExternalEmailControl?.value?.length) {
+      this.isInvalidEmail = false; return;
+    }
+    this.ccExternalEmailControl?.value?.forEach((email: string) => {
+      email?.match(AppConstants.emailPattern) ? this.isInvalidEmail = false : this.isInvalidEmail = true;
+    });
+  }
+
+  onEmailAdded(event: any) { this.validateMultipleEmails(event); }
+  onEmailRemoved(event: any) { this.validateMultipleEmails(event); }
+
   getSelectedContactGroup(group: ContactGroup) {
     this.personOnly = false;
     let people: Person[] = [];
@@ -419,6 +434,7 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
   send() {
     this.index = 0; // Switch to message details tab
     this.validationService.logValidationErrors(this.emailForm, true);
+    this.validateMultipleEmails();
     if (this.emailForm.invalid) { return; }
     if (this.emailForm.dirty) {
       const email = { ...this.emailForm.value } as BaseEmail;

@@ -6,12 +6,13 @@
         <span class="radio">
           <span>
             <input type="radio" id="individualEmail" [value]="currentStaffMember?.email" name="senderEmail"
-              formControlName="senderEmail" data-cy="individualEmail" [checked]="currentStaffMember?.email ? 'checked' : null">
+              formControlName="senderEmail" data-cy="individualEmail"
+              [checked]="currentStaffMember?.email ? 'checked' : null">
             <label for="individualEmail">{{currentStaffMember?.email}}</label>
           </span>
           <span>
             <input type="radio" id="departmentEmail" [value]="currentStaffMember?.activeDepartments[0]?.emailAddress"
-              name="senderEmail" formControlName="senderEmail" >
+              name="senderEmail" formControlName="senderEmail">
             <label for="departmentEmail">{{currentStaffMember?.activeDepartments[0]?.emailAddress}}</label>
           </span>
         </span>
@@ -64,11 +65,11 @@
           </ng-template>
         </p-multiSelect>
       </fieldset>
-      <fieldset [ngClass]="{invalid: formErrors?.ccExternalEmail}">
+      <fieldset [ngClass]="{invalid: isInvalidEmail}">
         <label for="ccExternalEmail">Cc (External)</label>
         <p-chips inputId="ccExternalEmail" formControlName="ccExternalEmail" separator="," [allowDuplicate]="false"
-          [style]="{'width':'100%'}"></p-chips>
-        <p class="message message--negative">{{formErrors?.ccExternalEmail}}</p>
+          [style]="{'width':'100%'}" (onAdd)="onEmailAdded($event)" (onRemove)="onEmailRemoved($event)"></p-chips>
+        <p class="message message--negative">Email is not valid</p>
       </fieldset>
       <fieldset *ngIf="false">
         <button class="btn btn--info" data-cy="searchProperty" (click)="index=1"><svg aria-hidden="true" width="64"
