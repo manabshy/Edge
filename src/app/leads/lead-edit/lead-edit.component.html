@@ -10,7 +10,7 @@
   <div #mainRowItem class="row__item">
     <ng-container *ngTemplateOutlet="editForm"></ng-container>
     <ng-container [ngSwitch]="moreInfo">
-      <app-shared-property-list *ngSwitchCase="'properties'" [moreInfo]="moreInfo" [isLeadClosed]="isLeadClosed"
+      <app-shared-property-list *ngSwitchCase="'properties'" [moreInfo]="moreInfo" [canEditLead]="canEditLead" [isLeadClosed]="isLeadClosed"
         [isLead]="true" [personId]="person?.personId" (associatedProperty)="getAssociatedProperty($event)">
       </app-shared-property-list>
       <app-contactgroups-detail-instructions *ngSwitchCase="'instructions'" [moreInfo]="moreInfo"

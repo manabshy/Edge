@@ -14,6 +14,7 @@ export class SharedPropertyListComponent implements OnChanges {
   @Input() personId: number;
   @Input() isLead: boolean;
   @Input() isLeadClosed: boolean;
+  @Input() canEditLead: boolean;
   @Input() moreInfo: string;
   @Output() associatedProperty = new EventEmitter<PersonProperty>();
   properties$ = new Observable<PersonProperty[]>();
