@@ -19,8 +19,9 @@ import { BaseStaffMember } from '../../models/base-staff-member';
 import { ResultData } from '../../result-data';
 import { map, tap } from 'rxjs/operators';
 import { OfficeService } from 'src/app/core/services/office.service';
-import { EmailInfo } from '../../models/email';
+import { BaseEmail, EmailInfo } from '../../models/base-email';
 import { EmailService } from 'src/app/core/services/email.service';
+import { MessageService } from 'primeng/api';
 @Component({
   selector: 'app-email',
   templateUrl: './email.component.html',
@@ -85,12 +86,16 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
   get recipientEmailControl(): FormControl {
     return this.emailForm.get('recipientEmail') as FormControl;
   }
+  get ccExternalEmailControl(): FormControl {
+    return this.emailForm.get('ccExternalEmail') as FormControl;
+  }
 
   @ViewChild('pEditor') pEditor: any;
   constructor(private fb: FormBuilder, private storage: StorageMap,
     private officeService: OfficeService,
     public staffMemberService: StaffMemberService,
     private contactGroupService: ContactGroupsService,
+    private messageService: MessageService,
     private propertyService: PropertyService, private validationService: ValidationService, private emailService: EmailService) { }
 
   ngOnInit(): void {
@@ -125,7 +130,8 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
       } else {
         this.staffMemberService.getCurrentStaffMember().subscribe(res => this.currentStaffMember = res);
       }
-      console.log('current user from storage in email....', this.currentStaffMember);
+      this.emailForm.patchValue({ senderEmail: this.currentStaffMember?.email.toString() })
+      console.log('current user from storage in email....', this.currentStaffMember, 'form here', this.emailForm.value);
     });
 
     this.storage.get('signature').subscribe((data: string) => {
@@ -140,10 +146,11 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
 
   private setupForm() {
     this.emailForm = this.fb.group(({
-      senderEmail: [this?.currentStaffMember?.email],
+      senderEmail: [''],
       recipientEmail: ['', Validators.required],
       ccInternalEmail: [''],
-      ccExternalEmail: ['', [Validators.pattern(AppConstants.emailPattern)]],
+      ccExternalEmail: [''],
+      // ccExternalEmail: ['', [Validators.pattern(AppConstants.emailPattern)]],
       subject: ['', [Validators.required]],
       body: ['', Validators.required]
     }));
@@ -174,13 +181,12 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
   }
 
   ngAfterViewInit() {
-    let quill = this.pEditor?.getQuill();
+    const quill = this.pEditor?.getQuill();
     quill.setContents([
       { insert: 'Dear ' },
-      { insert: '{salutation}'},
-      { insert: '\n' }
+      { insert: '{{salutation}}' },
+      { insert: '\n\n\n' }
     ]);
-    // quill.setText('Hello\n');
   }
 
   private populateForm() {
@@ -413,23 +419,24 @@ export class EmailComponent implements OnInit, OnChanges, OnDestroy, AfterViewIn
   send() {
     this.index = 0; // Switch to message details tab
     this.validationService.logValidationErrors(this.emailForm, true);
-    const filesToUpload = [...this.files, ...this.selectedDocuments];
-    let email = { ...this.emailForm.value };
-    this.emailService.sendEmail(email).subscribe(res => console.log({ res }));
-    //  email = this.getPersonEmailInfo(email);
-    console.log(this.emailForm?.value, 'send email form', { email });
+    if (this.emailForm.invalid) { return; }
+    if (this.emailForm.dirty) {
+      const email = { ...this.emailForm.value } as BaseEmail;
+      if (this.person) {
+        const recipientEmail = [];
+        recipientEmail.push({ personId: this.person.personId, emailAddress: this.recipientEmailControl?.value[0] } as EmailInfo);
+        email.recipientEmail = recipientEmail;
+        console.log(this.emailForm?.value, 'send email form', { email });
+      }
+      this.emailService.sendEmail(email).subscribe(res => { this.onSavecomplete(res), console.log({ res }); });
+    }
   }
 
-  getPersonEmailInfo(email: Email) {
-    const emailValue = this.recipientEmailControl.value;
-    let personalEmail;
-    if (this.person && email) {
-      console.log({ email });
-
-      const emailInfo: EmailInfo = { personId: this.person.personId, emailAddress: email[0] };
-      personalEmail = emailInfo;
+  onSavecomplete(isSaved?: boolean) {
+    if (isSaved) {
+      this.messageService.add({ severity: 'success', summary: 'Email successfully sent', closable: false });
+      this.hideModal.emit();
     }
-    return personalEmail;
   }
 
   cancel() {

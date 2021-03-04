@@ -11,7 +11,7 @@ export interface EmailInfo {
   emailAddress?: string;
 }
 
-export interface Email {
+export interface BaseEmail {
   senderEmail: string;
   subject: string;
   body: string;

@@ -6,12 +6,12 @@
         <span class="radio">
           <span>
             <input type="radio" id="individualEmail" [value]="currentStaffMember?.email" name="senderEmail"
-              formControlName="senderEmail" data-cy="individualEmail">
+              formControlName="senderEmail" data-cy="individualEmail" [checked]="currentStaffMember?.email ? 'checked' : null">
             <label for="individualEmail">{{currentStaffMember?.email}}</label>
           </span>
           <span>
             <input type="radio" id="departmentEmail" [value]="currentStaffMember?.activeDepartments[0]?.emailAddress"
-              name="senderEmail" formControlName="senderEmail">
+              name="senderEmail" formControlName="senderEmail" >
             <label for="departmentEmail">{{currentStaffMember?.activeDepartments[0]?.emailAddress}}</label>
           </span>
         </span>
@@ -152,6 +152,9 @@
     </ng-template>
   </p-fileUpload>
 </p-dialog>
+
+<!--Success Messages -->
+<p-toast></p-toast>
 
 
 <!-- Tab View -->

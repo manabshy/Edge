@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { Observable } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
-import { Email } from 'src/app/shared/models/email';
+import { BaseEmail } from 'src/app/shared/models/base-email';
 import { AppConstants } from '../shared/app-constants';
 
 @Injectable({
@@ -13,7 +13,7 @@ export class EmailService {
 
   constructor(private http: HttpClient, private storage: StorageMap) { }
 
-  sendEmail(email: Email): Observable< Email|any> {
+  sendEmail(email: BaseEmail): Observable< BaseEmail|any> {
     const url = `${AppConstants.baseEmailUrl}`;
     return this.http.post<any>(url, email).pipe(
       tap(data => console.log('sent...', JSON.stringify(data))),
