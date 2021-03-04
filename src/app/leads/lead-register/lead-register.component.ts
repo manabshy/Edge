@@ -240,6 +240,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
         this.isLoading = false;
         if (leadSearchInfo.page === 1) {
           this.filteredLeads = result;
+          window.scrollTo(0, 0);
         } else {
           if (this.filteredLeads) {
             this.filteredLeads = this.filteredLeads.concat(result);
