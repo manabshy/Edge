@@ -421,20 +421,42 @@
               </li>
             </ol>
           </div>
-          <ng-container *ngIf="isNewCompanyContact && !isExistingCompany; else companyDetails">
+          <ng-container *ngIf="isNewCompanyContact && !isExistingCompany; else details">
             <app-redacted-card cardButtonLabel="New Company" (cardButtonClicked)="showCompanyFinder = true"></app-redacted-card>
           </ng-container>
-          <ng-template #companyDetails >
+          <ng-template #details >
             <fieldset class="fieldset--width-max">
-              <form class="pb-3" [formGroup]="companyFinderForm" autocompleteOff>
-                <div [hidden]="!selectedCompanyDetails">
+              <ledgend class="legend">Company Name</ledgend>
+              <fieldset>
+                <label for="area" class="small">Company Name</label>
+                <ng-container *ngIf="companyDetails?.companyName">
+                  <p><a [routerLink]="['/company-centre/detail', companyDetails?.companyId]">{{companyDetails?.companyName}}</a></p>
+                  <p><button (click)="showCompanyFinder = true" type="button" class="btn btn--info"><svg aria-hidden="true"
+                        width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
+                        <polygon points="42.7 6.7 57.3 21.3 64 14.5 49.7 0 "></polygon>
+                        <path d="M40.3 9.6l-38 38L0 64l16.9-2 38-37.9L40.3 9.6zM4 59.9l1.9-11.7 9.8 9.8L4 59.9z"></path>
+                      </svg>Change company</button></p>
+                </ng-container>
+
+                <!-- <ng-template #newSigner>
+                  <p><button (click)="isSignerVisible = true" type="button" class="btn btn--positive"><svg
+                        aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
+                        <path
+                          d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" />
+                        <path class="plus-vertical"
+                          d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" />
+                      </svg>Signer</button></p>
+                </ng-template> -->
+              </fieldset>
+              <!-- <form class="pb-3" [formGroup]="companyFinderForm" autocompleteOff>
+                <div [hidden]="!companyDetails">
                   <div class="col-sm-10 offset-sm-2">
                     <label for="selectedCompany" class="small">Company Name</label>
                     <div class="form-group d-flex d-sm-block">
                       <input type="hidden" #selectedCompanyInput id="selectedCompany" formControlName="selectedCompany">
                       <button type="button" class="btn btn-link btn-sm p-0 mobile-btn"
-                        (click)="editSelectedCompany(selectedCompanyDetails?.companyId)">
-                        {{selectedCompanyDetails?.companyName}}
+                        (click)="editSelectedCompany(companyDetails?.companyId)">
+                        {{companyDetails?.companyName}}
                       </button>
                       <button type="button" *ngIf="!isExistingCompany" class="btn btn-light btn-sm ml-2"
                         (click)="setCompanies()">Change</button>
@@ -494,15 +516,15 @@
                     </div>
                   </div>
                 </div>
-                <ng-container *ngIf="contactGroupDetails?.companyAddress?.postCode; else showCompanyAddress">
-                  <app-address *ngIf="contactGroupDetails" [companyAddress]="contactGroupDetails.companyAddress"
-                    (addressDetails)="getAddress($event)"></app-address>
-                </ng-container>
-                <ng-template #showCompanyAddress>
-                  <app-address *ngIf="(isCompanyAdded && companyFinderForm.value.selectedCompany) || isExistingCompany"
-                    [companyDetails]="selectedCompanyDetails" (addressDetails)="getAddress($event)"></app-address>
-                </ng-template>
-              </form>
+              </form> -->
+              <ng-container *ngIf="contactGroupDetails?.companyAddress?.postCode; else showCompanyAddress">
+                <app-address *ngIf="contactGroupDetails" [companyAddress]="contactGroupDetails.companyAddress"
+                  (addressDetails)="getAddress($event)"></app-address>
+              </ng-container>
+              <ng-template #showCompanyAddress>
+                <app-address *ngIf="(isCompanyAdded && companyFinderForm.value.selectedCompany) || isExistingCompany"
+                  [companyDetails]="companyDetails" (addressDetails)="getAddress($event)"></app-address>
+              </ng-template>
               <form [formGroup]="contactGroupDetailsForm" autocompleteOff>
                 <fieldset>
                   <label>Type</label>
@@ -905,7 +927,7 @@
         <p-dialog header="Find Company" [(visible)]="showCompanyFinder" [modal]="true" [draggable]="false"
           class="modal--medium modal--hasFooter">
           <app-company-finder [existingCompany]="companyDetails" [companyNameError]="formErrors.companyName"
-            (companyName)="getCompanyName($event)" (selectedCompanyDetails)="navigateToCompany($event)"
+            (companyName)="getCompanyName($event)" (selectedCompanyDetails)="selectCompany($event)"
             (isManualEntry)="setManualEntryFlag()"></app-company-finder>
         </p-dialog>
 
