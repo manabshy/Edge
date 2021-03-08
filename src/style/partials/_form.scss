@@ -6,31 +6,31 @@
 
 /* Table of contents
 ––––––––––––––––––––––––––––––––––––––––––––––––––
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
-- 
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
 */
 
-/*********************************************** 
+/***********************************************
 Form typography setup
 ***********************************************/
-form, label, input, textarea, select, 
-.select select, .select optgroup option, 
-.select optgroup option, 
-.checkbox > span label, .radio > span label, 
+form, label, input, textarea, select,
+.select select, .select optgroup option,
+.select optgroup option,
+.checkbox > span label, .radio > span label,
 form .message, .btn                            	{ font-weight:normal; }
 
-form, fieldset, .fieldset, fieldset small, 
-label, .label, input, textarea, .select, 
-.inline-parent  	                              { 
+form, fieldset, .fieldset, fieldset small,
+label, .label, input, textarea, .select,
+.inline-parent  	                              {
    &+*                                          { margin-top:12px; }
 }
 
@@ -38,7 +38,7 @@ label, .label, input, textarea, .select,
 input, textarea, select,
 .p-dropdown, .p-multiselect           	         { border-color:$color--midnight-20; }
 
-/*********************************************** 
+/***********************************************
 Forms with labels
 ***********************************************/
 form                                            { padding:0; display:inline-block; width:100%;
@@ -51,12 +51,12 @@ form                                            { padding:0; display:inline-bloc
          &:before     	                        { background-color:$color--negative; border-color:$color--negative; }
       }
 
-      input, textarea, select, textarea, 
-      .p-dropdown, 
+      input, textarea, select, textarea,
+      .p-dropdown,
       .p-dropdown:not(.p-disabled):hover        { border-color:$color--negative; }
       .joined .btn                              { box-shadow: inset 0px 0px 0px 1px $color--negative; }
    }
-   
+
    .warning                                     {
       > label,
       input:checked + label                     { color:$color--warning;
@@ -81,7 +81,7 @@ form                                            { padding:0; display:inline-bloc
       imput+.message,
       ng-select+.message                        { margin:0; border-radius:0 0 3px 3px; top:-2px; }
 
-      .radio input:checked + label:before, 
+      .radio input:checked + label:before,
       .radio input:checked + label:before       { background-color:transparent; }
 
       .message                                  { display:inherit; }
@@ -90,7 +90,7 @@ form                                            { padding:0; display:inline-bloc
 
 /***** Fieldset *****/
 fieldset                                       	{ padding:0; text-align:left; display:block; max-width:500px; position:relative; top:0; left:0;
-   &:first-of-type                              { 
+   &:first-of-type                              {
       .legend                                   { margin-top:0; }
    }
   *+.message                                    { margin:0; border-radius:0 0 3px 3px; top:-2px;
@@ -114,8 +114,8 @@ label, .label                                  	{ width:100%; display:flex; alig
    &+.marginTop                                 { margin-top:6px; }
    &+.labelMessage                              { margin:9px 0 0 0; }
 }
-label + input, .label + input, 
-label + textarea, .label + textarea, 
+label + input, .label + input,
+label + textarea, .label + textarea,
 label + .select, .label + .select,
 label + .ng-select                             	{ margin-top:6px; }
 label + p, .label + p                          	{ margin:0 0 6px; }
@@ -129,8 +129,8 @@ input, textarea, select, .p-inputtext           { padding:0.4em 0.8em; display:b
 textarea                                       	{ resize:none; min-height:100px; overflow-y:auto; }
 input[type="search"]                           	{ -webkit-padding-start:0; padding-inline-start:0.8em; }
 
-/*********************************************** 
-Select 
+/***********************************************
+Select
 ***********************************************/
 label+.select, label+p-multiselect,
 label+p-dropdown                                { margin-top:6px; }
@@ -173,7 +173,7 @@ p-multiselect , p-dropdown                      { display:block;
 .p-multiselect .p-multiselect-label,
 .p-inputwrapper-filled .p-multiselect.p-multiselect-chip .p-multiselect-label    { padding:3px 6px; display:flex; flex-wrap:wrap; align-items:center; white-space:inherit; }
 .p-multiselect.p-multiselect-chip .p-multiselect-token                           { margin:3px; background-color:$color--smoke; flex:0 1 auto; flex-direction:row; flex-wrap:nowrap; word-break:break-all; }
-.p-multiselect.p-multiselect-chip .p-multiselect-token.txt--negative             { @extend .txt--negative; }
+.txt--negative .p-multiselect.p-multiselect-chip .p-multiselect-token             { @extend .txt--negative; }
 .p-multiselect-panel .p-multiselect-header      {
    .p-multiselect-close                         { width:28px; height: 28px; }
 }
@@ -200,7 +200,7 @@ p-multiselect , p-dropdown                      { display:block;
 }
 
 
-/*********************************************** 
+/***********************************************
 Radio & Checkbox
 ***********************************************/
 .radio, .checkbox                               { margin-top:6px; width:100%; display:block; overflow:hidden; }
@@ -208,26 +208,26 @@ Radio & Checkbox
 /***** Inline Radio & Checkbox *****/
 .radio input, .checkbox input                   { display:none; }
 .radio > span, .checkbox > span                 { padding:0; position:relative; top:0; left:0; width:auto; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; }
-.radio > span:first-child label, 
+.radio > span:first-child label,
 .checkbox > span:first-child label              { margin:0; }
-.radio > span label, 
+.radio > span label,
 .checkbox > span label                          { margin:6px 0 0; padding:0 0 0 26px; width:100%; text-align:left; cursor:pointer; float:none; display:block; position:relative; left:0; top:0; }
-.radio.radio--inline > span, 
-.checkbox.radio--inline > span, 
-.radio.checkbox--inline > span, 
+.radio.radio--inline > span,
+.checkbox.radio--inline > span,
+.radio.checkbox--inline > span,
 .checkbox.checkbox--inline > span               { margin:0; display:inline-block; }
-.radio.radio--inline > span:not(:last-child), 
-.checkbox.radio--inline > span:not(:last-child), 
-.radio.checkbox--inline > span:not(:last-child), 
+.radio.radio--inline > span:not(:last-child),
+.checkbox.radio--inline > span:not(:last-child),
+.radio.checkbox--inline > span:not(:last-child),
 .checkbox.checkbox--inline > span:not(:last-child) { margin-right:16px; }
-.radio.radio--inline > span label, 
-.checkbox.radio--inline > span label, 
-.radio.checkbox--inline > span label, 
+.radio.radio--inline > span label,
+.checkbox.radio--inline > span label,
+.radio.checkbox--inline > span label,
 .checkbox.checkbox--inline > span label         { margin:0; }
 
 /***** Radio *****/
 .radio input + label:before                     { margin:0; content:''; position:absolute; left:0; top:0; background-color:transparent; border-width:1px; border-style:solid; cursor:pointer; display:inline-block; height:17px; width:17px; text-align:center; line-height:22px; color:#ccc; border-radius:50%; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; transition:all 0.2s linear 0s; -moz-transition:all 0.2s linear 0s; -webkit-transition:all 0.2s linear 0s; -o-transition:all 0.2s linear 0s; }
-.radio input:checked + label:before, 
+.radio input:checked + label:before,
 .radio input[type="radio"]:checked              { border:6px solid $color--info; transition:all 0.2s linear 0s; -moz-transition:all 0.2s linear 0s; -webkit-transition:all 0.2s linear 0s; -o-transition:all 0.2s linear 0s; }
 
 /***** Boxed Radios *****/
@@ -241,7 +241,7 @@ Radio & Checkbox
                &+*                              { margin-top:10px; }
             }
          }
-         
+
          &:checked                              {
             &+label                             { background-color:$color--blue-20; box-shadow:0px 0px 0px 2px inset $color--info; -webkit-box-shadow:0px 0px 0px 2px inset $color--info;
                &:before                         { background-size:8px; background-color:$color--info; border:none; display:block; }
@@ -293,7 +293,7 @@ Radio & Checkbox
 .toggle .warning input:checked + label:before   { background-color:$color--warning; }
 .toggle .negative input:checked + label:before  { background-color:$color--negative; }
 
-/*********************************************** 
+/***********************************************
 Inline items
 ***********************************************/
 label + .inline-parent                          { margin-top:6px; }
@@ -302,7 +302,7 @@ label + .inline-parent                          { margin-top:6px; }
    &__hasLabels                                 { align-items:flex-start;
       .inline-child                             { align-self:flex-start; }
    }
-   
+
    input, textarea, select, .select             { width:100%; }
 }
 
@@ -313,7 +313,7 @@ label + .inline-parent                          { margin-top:6px; }
    label                                        { min-height:17px;
       &+*                                       { margin-top:6px; }
    }
-   
+
 
    &+* 		  		                              { margin-top:12px; }
    &:last-child                                 { margin-right:0; }
@@ -335,7 +335,7 @@ label + .inline-parent                          { margin-top:6px; }
    & a                                       { margin:0; text-decoration:none; position:absolute; top:6px; right:6px; }
 }
 
-/*********************************************** 
+/***********************************************
 Inline elements
 ***********************************************/
 .has-inline-elements                            { margin-top:6px; position:relative; display:block; border-collapse:separate; width:100%; align-items:flex-end; }
@@ -349,7 +349,7 @@ Inline elements
 .inline-parent--search                          {
    input                                        { border-right:none; border-radius:3px 0 0 3px; }
 }
-/*********************************************** 
+/***********************************************
 Joined elements
 ***********************************************/
 .joined                                         { display:flex;
@@ -361,20 +361,20 @@ Joined elements
       &+*                                       { margin-top:0; border-left:none; }
       select                                    { border-left:none; border-radius:0; }
    }
-   
+
    >:first-child                                { border-radius:3px 0 0 3px; }
    >:last-child                                 { border-radius:0 3px 3px 0;
       select                                    { border-radius:0 3px 3px 0; }
    }
-   
-   .btn--container                              { 
+
+   .btn--container                              {
       .btn                                      { border-radius:0;
          &:last-child                           { border-radius:0 3px 3px 0; }
       }
    }
 }
 
-/*********************************************** 
+/***********************************************
 Disabled
 ***********************************************/
 :disabled                                       { cursor:not-allowed; }
@@ -385,47 +385,47 @@ Disabled
 fieldset:disabled                               { opacity:0.5; }
 fieldset:disabled input[type="radio"]           { background-color:transparent; }
 
-/*********************************************** 
+/***********************************************
 Placeholder
 ***********************************************/
 ::-webkit-input-placeholder                     { color:$color--midnight-20; }
 :-moz-placeholder                               { color:$color--midnight-20; }
 ::-moz-placeholder                              { color:$color--midnight-20; }
 :-ms-input-placeholder                          { color:$color--midnight-20; }
-input:focus, 
-select:focus, 
+input:focus,
+select:focus,
 textarea:focus                                  { color:#222; border-color:$color--info; outline:none; box-shadow:none; outline-color:transparent; outline-style:none; }
 :focus::-webkit-input-placeholder               { color:$color--midnight-70; outline:none; }
 :focus:-moz-placeholder                         { color:$color--midnight-70; outline:none; }
 :focus::-moz-placeholder                        { color:$color--midnight-70; outline:none; }
 :focus:-ms-input-placeholder                    { color:$color--midnight-70; outline:none; }
 
-/*********************************************** 
+/***********************************************
 Forms with inline labels
 ***********************************************/
 .labels--inline label                           { padding:11px 16px 0 0; float:left; width:30%; text-align:right; }
-.labels--inline input, 
-.labels--inline .select, 
-.labels--inline textarea, 
-.labels--inline .message, 
+.labels--inline input,
+.labels--inline .select,
+.labels--inline textarea,
+.labels--inline .message,
 .labels--inline .toggled                        { width:70%; float:right; }
 .labels--inline button:first-of-type            { margin-left:30%; }
-.labels--inline .checkbox, 
+.labels--inline .checkbox,
 .labels--inline .radio                          { margin-left:30%; width:70%; }
-.labels--inline .radio input, 
+.labels--inline .radio input,
 .labels--inline .checkbox input                 { width:auto; }
 .labels--inline .toggled label                  { width:50px; }
 
-/*********************************************** 
+/***********************************************
 Forms without labels
 ***********************************************/
 .labels--hidden label                           { display:none; }
 
-.ng-valid+.message                              { display:none; }   
+.ng-valid+.message                              { display:none; }
 
 .form-actions                                   { margin-top:50px; }
 
-/*********************************************** 
+/***********************************************
 Tablet - This applies from 768px onwards
 ***********************************************/
 @media (min-width:768px) {
@@ -439,7 +439,7 @@ Tablet - This applies from 768px onwards
 }
 
 
-/*********************************************** 
+/***********************************************
 Smaller screen - This applies from 992px onwards
 ***********************************************/
 @media (min-width:992px)                        {
@@ -447,7 +447,7 @@ Smaller screen - This applies from 992px onwards
    .toggle                                      { display:flex; }
    .toggle > span                               { flex-grow:1; }
 
-   /*********************************************** 
+   /***********************************************
    Input Widths
    ***********************************************/
    .input--grid-1                               { width:calc(10% - 10px); }
@@ -462,7 +462,7 @@ Smaller screen - This applies from 992px onwards
 }
 
 
-/*********************************************** 
+/***********************************************
 Mobile (portrait 300px)
 ***********************************************/
 @media only screen and (max-width:767px)        {
