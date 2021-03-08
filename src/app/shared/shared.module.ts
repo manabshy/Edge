@@ -108,6 +108,7 @@ import { ContactgroupFinderComponent } from './components/contactgroup-finder/co
 import { ImportantMessagesComponent } from './components/important-messages/important-messages.component';
 import { EmailComponent } from './components/email/email.component';
 import { EmailSignatureComponent } from './components/email-signature/email-signature.component';
+import { RedactedCardComponent } from './components/redacted-card/redacted-card.component';
 
 const components = [
   BreadcrumbComponent,
@@ -154,6 +155,7 @@ const components = [
   ImportantMessagesComponent,
   EmailComponent,
   EmailSignatureComponent,
+  RedactedCardComponent,
 ];
 const pipes = [
   RoundingPipe,
@@ -211,8 +213,6 @@ const externalModules = [
     components,
     pipes,
     directives,
-
-
   ],
   imports: [
     CommonModule,
