@@ -73,7 +73,7 @@ export class CompanyEditComponent implements OnInit {
       this.isNewCompany = this.companyId ? false : params['isNewCompany'];
       this.isEditingSelectedCompany = params['isEditingSelectedCompany'] || false;
       this.companyName = params['companyName'] || null;
-      if (this.isNewCompany) { this.showCompanyFinder = true }
+      if (this.isNewCompany) { this.showCompanyFinder = true; }
     });
     this.setupCompanyForm(this.companyName);
     const id = this.isNewCompany ? 0 : this.companyId;
@@ -211,7 +211,7 @@ export class CompanyEditComponent implements OnInit {
     //   this.companyForm.markAsPristine();
     // }
     if (signer) {
-      console.log({signer});
+      console.log({ signer });
 
       this.signer = signer;
       this.isSignerVisible = false;
@@ -230,6 +230,12 @@ export class CompanyEditComponent implements OnInit {
 
   getCompanyName(name: string) {
     this.companyForm.get('companyName').setValue(name);
+    this.companyForm.markAsDirty();
+  }
+
+  setManualEntryFlag() {
+    this.showCompanyFinder = false;
+    this.isManualEntry = true;
   }
 
   navigateToCompany(company: Company) {

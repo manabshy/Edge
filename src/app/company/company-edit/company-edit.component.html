@@ -2,15 +2,11 @@
   <div class="row__item">
     <!-- <h2><ng-container *ngIf="isNewCompany; else editLabel">New</ng-container><ng-template #editLabel>Edit</ng-template> Company</h2> -->
 
-    <ng-container *ngIf="companyDetails; else redactedCards">
+    <ng-container *ngIf="companyDetails || isManualEntry; else redactedCards">
       <form [formGroup]="companyForm" (ngSubmit)="saveCompany()" autocompleteOff>
-        <fieldset *ngIf="companyDetails?.companyName">
+        <fieldset *ngIf="companyDetails?.companyName ||isManualEntry">
           <label for="companyType">Company Name</label>
-          <span span class="joined">
-            <input type="text" [attr.disabled]="!isManualEntry ?'':null" id="companyName" class="form-control"
-              formControlName="companyName">
-            <button type="button" class="btn btn--info" (click)="showCompanyFinder=true">Change</button>
-          </span>
+          <input type="text"  id="companyName" class="form-control" formControlName="companyName">
         </fieldset>
         <fieldset>
           <label for="companyType">Company Type</label>
@@ -195,7 +191,7 @@
   class="modal--medium modal--hasFooter">
   <app-company-finder [existingCompany]="companyDetails" [companyNameError]="formErrors.companyName"
     (companyName)="getCompanyName($event)" (selectedCompanyDetails)="navigateToCompany($event)"
-    (isManualEntry)="showCompanyFinder=false; isManualEntry=true"></app-company-finder>
+    (isManualEntry)="setManualEntryFlag()"></app-company-finder>
 </p-dialog>
 
 <!-- Contactgroup Finder Modal -->

@@ -94,6 +94,8 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
   showOnlyMyNotes = false;
   isCreatingNewPerson: boolean = false;
   pendingChanges = false;
+  showCompanyFinder = false;
+  
   get dataNote() {
     if (this.contactGroupDetails) {
       return {
@@ -648,6 +650,10 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
       this.contactGroupDetails.companyAddress = address;
       this.isNewAddress = true;
     }
+  }
+
+  addCompany(){
+
   }
 
   setShowMyNotesFlag(onlyMyNotes: boolean) {
