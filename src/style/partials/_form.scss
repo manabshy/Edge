@@ -173,6 +173,7 @@ p-multiselect , p-dropdown                      { display:block;
 .p-multiselect .p-multiselect-label,
 .p-inputwrapper-filled .p-multiselect.p-multiselect-chip .p-multiselect-label    { padding:3px 6px; display:flex; flex-wrap:wrap; align-items:center; white-space:inherit; }
 .p-multiselect.p-multiselect-chip .p-multiselect-token                           { margin:3px; background-color:$color--smoke; flex:0 1 auto; flex-direction:row; flex-wrap:nowrap; word-break:break-all; }
+.p-multiselect.p-multiselect-chip .p-multiselect-token.txt--negative             { @extend .txt--negative; }
 .p-multiselect-panel .p-multiselect-header      {
    .p-multiselect-close                         { width:28px; height: 28px; }
 }
