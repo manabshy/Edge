@@ -21,7 +21,7 @@
         <fieldset class="inline-child" [ngClass]="{invalid: formErrors?.recipientEmail}">
           <label for="recipientEmail">To (External)</label>
           <ng-container *ngIf="personOnly; else group">
-            <p-multiSelect [options]="person?.emailAddresses" [filter]="false" [showHeader]="false"
+            <p-multiSelect [options]="person?.emailAddresses" [filter]="false" [showHeader]="false" [ngClass]="{'txt--negative': noEmailContact}"
               formControlName="recipientEmail" optionLabel="email" optionValue="email"
               defaultLabel="Select recipient email" crollHeight="250px" display="chip" (onClick)="showButton=true">
               <ng-template let-emailAddress pTemplate="item">
