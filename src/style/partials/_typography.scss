@@ -1,37 +1,37 @@
 /***********************************************
 Font-face setup
 ***********************************************/
+@font-face {
+    font-family:'objectsans';
+    src:    url('../../assets/font/ObjectSans-Medium.woff2') format('woff2'),
+            url('../../assets/font/ObjectSans-Medium.woff') format('woff');
+    font-weight:bold;
+    font-style:bold;
+}
+  
+@font-face {
+    font-family:'objectsans';
+    src:    url('../../assets/font/ObjectSans-Light.woff2') format('woff2'),
+            url('../../assets/font/ObjectSans-Light.woff') format('woff');
+    font-weight:normal;
+    font-style:normal;
+}
+
 // @font-face {
 //     font-family:'opensans';
-//     src:    url('../../assets/font/ObjectSans-Heavy.woff2') format('woff2'),
-//             url('../../assets/font/ObjectSans-Heavy.woff') format('woff');
+//     src:    url('../../assets/font/opensans-semibold.woff2') format('woff2'),
+//             url('../../assets/font/opensans-semibold.woff') format('woff');
 //     font-weight:bold;
 //     font-style:bold;
 // }
   
 // @font-face {
 //     font-family:'opensans';
-//     src:    url('../../assets/font/ObjectSans-Regular.woff2') format('woff2'),
-//             url('../../assets/font/ObjectSans-Regular.woff') format('woff');
+//     src:    url('../../assets/font/opensans-regular.woff2') format('woff2'),
+//             url('../../assets/font/opensans-regular.woff') format('woff');
 //     font-weight:normal;
 //     font-style:normal;
 // }
-
-@font-face {
-    font-family:'opensans';
-    src:    url('../../assets/font/opensans-semibold.woff2') format('woff2'),
-            url('../../assets/font/opensans-semibold.woff') format('woff');
-    font-weight:bold;
-    font-style:bold;
-}
-  
-@font-face {
-    font-family:'opensans';
-    src:    url('../../assets/font/opensans-regular.woff2') format('woff2'),
-            url('../../assets/font/opensans-regular.woff') format('woff');
-    font-weight:normal;
-    font-style:normal;
-}
 
 $font-size-sm:12px;
 $input-height-sm:30px;
@@ -42,9 +42,9 @@ body, form, input, textarea, select, label,
 .select optgroup option, .checkbox > span label,
 .radio > span label, form .message, .btn,
 .p-accordion, .p-toast, .p-component, 
-.p-inputtext, .p-chips .p-chips-multiple-container .p-chips-input-token input   { font-family:'opensans', Sans-Serif; -webkit-font-smoothing: antialiased; }
+.p-inputtext, .p-chips .p-chips-multiple-container .p-chips-input-token input   { font-display:optional; text-rendering:optimizeLegibility; font-family:'objectsans', Sans-Serif; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility !important; -webkit-font-smoothing:antialiased !important; }
 
-html                                            { scroll-behavior:smooth; text-rendering:optimizeLegibility !important; -webkit-font-smoothing:antialiased !important; }
+html                                            { scroll-behavior:smooth;  }
 body, .body                                     { font-size:12px; line-height:17px; letter-spacing:.5px; background-color:$color--snow; font-weight:normal; color:$color--midnight-70; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 
 /***** Typography *****/
