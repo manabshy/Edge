@@ -109,6 +109,7 @@ import { ImportantMessagesComponent } from './components/important-messages/impo
 import { EmailComponent } from './components/email/email.component';
 import { EmailSignatureComponent } from './components/email-signature/email-signature.component';
 import { RedactedCardComponent } from './components/redacted-card/redacted-card.component';
+import { CompanyFinderComponent } from './components/company-finder/company-finder.component';
 
 const components = [
   BreadcrumbComponent,
@@ -156,6 +157,7 @@ const components = [
   EmailComponent,
   EmailSignatureComponent,
   RedactedCardComponent,
+  CompanyFinderComponent
 ];
 const pipes = [
   RoundingPipe,

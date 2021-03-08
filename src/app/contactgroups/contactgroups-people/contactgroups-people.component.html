@@ -904,7 +904,6 @@
         <!--Add  [showHeader]="false" to hide header -->
         <p-dialog header="Find Company" [(visible)]="showCompanyFinder" [modal]="true" [draggable]="false"
           class="modal--medium modal--hasFooter">
-          <p>Test here .....</p>
           <app-company-finder [existingCompany]="companyDetails" [companyNameError]="formErrors.companyName"
             (companyName)="getCompanyName($event)" (selectedCompanyDetails)="navigateToCompany($event)"
             (isManualEntry)="setManualEntryFlag()"></app-company-finder>
