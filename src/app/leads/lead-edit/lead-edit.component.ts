@@ -89,7 +89,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   showOnlyMyNotes = false;
   backToOrigin = false;
   canEditLead = true;
-  disablePrevious = true;
+  disablePrevious = false;
   disableNext = false;
 
   get nextChaseDateControl() {
@@ -223,10 +223,16 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
   getLeadIds(leadId: number) {
     // this.leadSearchInfo = JSON.parse(this.infoParam) as LeadSearchInfo;
-    this.leadsService.getLeadIds(this.leadSearchInfo).subscribe(result => {
-      this.leadIds = result;
+    this.leadsService.getLeadIds(this.leadSearchInfo).subscribe((result: number[]) => {
+      if (this.canEditLead) {
+        this.leadIds = result?.slice(result?.findIndex(x => x === leadId));
+        console.log(this.leadIds, 'can edit ids');
+
+      } else { this.leadIds = result; console.log(this.leadIds, 'cannot edit ids'); }
+
       this.currentLeadIndex = this.leadIds.indexOf(this.leadSearchInfo.startLeadId);
-      console.log({ result });
+      this.currentLeadIndex === 0 ? this.disablePrevious = true : this.disablePrevious = false;
+      console.log({ result }, 'lead ids', this.currentLeadIndex, 'current idex');
 
       if (this.leadIds.length <= 1) {
         this.leadsListCompleted = true;
