@@ -58,6 +58,7 @@ export class AuthService {
       if (res) {
         if (environment.production) {
           this.storage.delete('currentUser').subscribe();
+          this.storage.delete('signature').subscribe();
         }
         this.authService.logout();
       }
@@ -80,7 +81,7 @@ export class AuthService {
       title: 'Are you sure you want to log out? The ongoing changes will be lost.',
       actions: ['Stay', 'Log out']
     };
-   
+
     this.ref = this.dialogService.open(ConfirmModalComponent, { data, styleClass: 'dialog dialog--hasFooter', showHeader: false });
     this.ref.onClose.subscribe((res) => { if (res) { subject.next(true); subject.complete(); } });
     return subject.asObservable();
