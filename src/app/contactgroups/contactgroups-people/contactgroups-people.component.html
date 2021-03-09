@@ -535,7 +535,7 @@
         <!--Add  [showHeader]="false" to hide header -->
         <p-dialog header="Find Company" [(visible)]="showCompanyFinder" [modal]="true" [draggable]="false"
           class="modal--medium modal--hasFooter">
-          <app-company-finder [existingCompany]="companyDetails" [companyNameError]="formErrors.companyName"
+          <app-company-finder [existingCompany]="companyDetails" [companyNameError]="formErrors.companyName" [canCreateNewCompany]="true"
             (companyName)="getCompanyName($event)" (selectedCompanyDetails)="selectCompany($event)"
             (isManualEntry)="setManualEntryFlag()"></app-company-finder>
         </p-dialog>

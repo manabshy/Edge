@@ -5,6 +5,7 @@ import { SharedService } from 'src/app/core/services/shared.service';
 import { Company, CompanyAutoCompleteResult } from 'src/app/contactgroups/shared/contact-group';
 import { debounceTime, distinctUntilChanged, switchMap, tap, catchError } from 'rxjs/operators';
 import { Observable, EMPTY } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-company-finder',
@@ -14,6 +15,7 @@ import { Observable, EMPTY } from 'rxjs';
 export class CompanyFinderComponent implements OnInit, OnChanges, OnDestroy {
   @Input() companyNameError = false;
   @Input() existingCompany: Company;
+  @Input() canCreateNewCompany = false;
   @Output() companyName = new EventEmitter<any>();
   @Output() selectedCompanyDetails = new EventEmitter<Company>();
   @Output() isManualEntry = new EventEmitter<boolean>();
@@ -37,7 +39,8 @@ export class CompanyFinderComponent implements OnInit, OnChanges, OnDestroy {
     private contactGroupService: ContactGroupsService,
     private fb: FormBuilder,
     private sharedService: SharedService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -144,12 +147,17 @@ export class CompanyFinderComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  enterDetailsManually() {
+  enterDetailsManually(isNewCompany?: boolean) {
+    console.log({ isNewCompany });
 
-    console.log(this.companyNameControl.value);
-
-    this.companyName.emit(this.companyNameControl.value);
-    this.isManualEntry.emit();
+    if (isNewCompany) {
+      this.router.navigate(['/company-centre/detail', 0, 'edit'],
+        { queryParams: { isNewCompany: true, backToOrigin: true, companyName: this.companyNameControl?.value } });
+    } else {
+      console.log(this.companyNameControl.value);
+      this.isManualEntry.emit();
+      this.companyName.emit(this.companyNameControl.value);
+    }
   }
 
   ngOnDestroy() {

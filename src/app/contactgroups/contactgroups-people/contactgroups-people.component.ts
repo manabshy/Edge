@@ -21,6 +21,7 @@ import { StorageMap } from '@ngx-pwa/local-storage';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { MessageService } from 'primeng/api';
 import { HeaderService } from 'src/app/core/services/header.service';
+import { CompanyService } from 'src/app/company/shared/company.service';
 @Component({
   selector: 'app-contactgroups-people',
   templateUrl: './contactgroups-people.component.html',
@@ -98,6 +99,7 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
   showSetMainPerson = true;
   groupType: string;
   backToOrigin = false;
+  addedCompany: Company;
 
   get dataNote() {
     if (this.contactGroupDetails) {
@@ -143,6 +145,7 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
   dialogRef: DynamicDialogRef;
   constructor(
     private contactGroupService: ContactGroupsService,
+    private companyService: CompanyService,
     private fb: FormBuilder,
     private _router: Router,
     private route: ActivatedRoute,
@@ -203,6 +206,9 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
 
     // Get newly added person
     this.getNewlyAddedPerson();
+
+    // Get newly added company
+    this.getNewlyAddedCompany();
   }
 
   selectedSuggestion(event: any) {
@@ -293,8 +299,10 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
         this.getCompanyDetails(this.existingCompanyId);
       }
       if (this.isNewCompanyContact) {
+        const newCompany = JSON.parse(localStorage.getItem('newCompany')) as Company;
         this.isTypePicked = true;
         this.contactGroupDetails.contactType = ContactType.CompanyContact;
+        if (newCompany) { this.companyDetails = newCompany; }
       }
       if (AppUtils.holdingContactType === ContactType.CompanyContact) {
         this.isNewCompanyContact = true;
@@ -371,6 +379,10 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
         }
       }
     });
+  }
+
+  getNewlyAddedCompany() {
+    this.companyService.newCompanyChanges$.subscribe(company => localStorage.setItem('newCompany', JSON.stringify(company)));
   }
 
   storeContactPeople(contactPeople: Person[]) {
@@ -894,6 +906,7 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
 
   onSaveComplete(contactGroupId): void {
     localStorage.removeItem('contactPeople');
+    localStorage.removeItem('newCompany');
     this.pendingChanges = false;
     this.messageService.add({ severity: 'success', summary: 'Contact Group successfully saved', closable: false });
     if (this.backToOrigin) { this.sharedService.back(); }
@@ -1020,11 +1033,13 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
   }
 
   cancel() {
+    localStorage.removeItem('newCompany');
     this.sharedService.back();
   }
 
   ngOnDestroy() {
     this.setPageLabel(true);
+
     console.log('destroy component now');
 
   }

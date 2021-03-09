@@ -10,9 +10,9 @@ import { HttpClient } from '@angular/common/http';
 })
 export class CompanyService {
   private companyPageChangeSubject = new Subject<number | null>();
-  private companySubject = new Subject<Company | null>();
+  private newCompanySubject = new Subject<Company | null>();
   companyPageChanges$ = this.companyPageChangeSubject.asObservable();
-  companyChanges$ = this.companySubject.asObservable();
+  newCompanyChanges$ = this.newCompanySubject.asObservable();
 
   constructor(private http: HttpClient) { }
 
@@ -21,9 +21,9 @@ export class CompanyService {
   }
 
   companyChanged(company: Company) {
-    this.companySubject.next(company);
+    this.newCompanySubject.next(company);
   }
-  
+
   addCompany(company: Company): Observable<any> {
     const url = `${AppConstants.baseCompanyUrl}`;
     return this.http.post(url, company).pipe(
@@ -31,6 +31,7 @@ export class CompanyService {
       tap(data => console.log('added company details here...', JSON.stringify(data)))
     );
   }
+
   updateCompany(company: Company): Observable<any> {
     const url = `${AppConstants.baseCompanyUrl}/${company.companyId}`;
     return this.http.put(url, company).pipe(

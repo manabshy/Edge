@@ -43,6 +43,8 @@ export class CompanyEditComponent implements OnInit {
   showCompanyFinder = false;
   isManualEntry = false;
   isSignerVisible = false;
+  backToOrigin = false;
+
   constructor(private contactGroupService: ContactGroupsService,
     private companyService: CompanyService,
     private fb: FormBuilder,
@@ -72,8 +74,9 @@ export class CompanyEditComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.isNewCompany = this.companyId ? false : params['isNewCompany'];
       this.isEditingSelectedCompany = params['isEditingSelectedCompany'] || false;
+      this.backToOrigin = params['backToOrigin'] || false;
       this.companyName = params['companyName'] || null;
-      if (this.isNewCompany) { this.showCompanyFinder = true; }
+      if (this.isNewCompany && !this.companyName) { this.showCompanyFinder = true; }
     });
     this.setupCompanyForm(this.companyName);
     const id = this.isNewCompany ? 0 : this.companyId;
@@ -297,6 +300,7 @@ export class CompanyEditComponent implements OnInit {
     this.isSubmitting = false;
     this.toastr.success('Company successfully saved');
 
+    if (this.backToOrigin) { this.companyService.companyChanged(company); this.sharedService.back(); }
     if (this.isEditingSelectedCompany && company) {
       AppUtils.holdingSelectedCompany = company;
       console.log(AppUtils.holdingSelectedCompany);

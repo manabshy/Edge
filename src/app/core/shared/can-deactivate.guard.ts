@@ -47,7 +47,13 @@ export class CanDeactivateGuard implements CanDeactivate<CanComponentDeactivate>
         actions: ['Stay', 'Leave']
       };
       this.ref = this.dialogService.open(ConfirmModalComponent, { data, styleClass: 'dialog dialog--hasFooter', showHeader: false });
-      this.ref.onClose.subscribe((res) => { if (res) { subject.next(true); subject.complete(); localStorage.removeItem('contactPeople'); } });
+      this.ref.onClose.subscribe((res) => {
+        if (res) {
+          subject.next(true);
+          subject.complete(); localStorage.removeItem('contactPeople');
+          localStorage.removeItem('newCompany');
+        }
+      });
       console.log(this.ref, 'res');
       return subject.asObservable();
     }
