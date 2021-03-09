@@ -97,6 +97,8 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
   showCompanyFinder = false;
   showSetMainPerson = true;
   groupType: string;
+  backToOrigin = false;
+
   get dataNote() {
     if (this.contactGroupDetails) {
       return {
@@ -230,6 +232,8 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
         this.isExistingCompany = params['isExistingCompany'] || false;
         this.existingCompanyId = params['existingCompanyId'] || 0;
         this.signer = params['signer'] || '';
+        this.backToOrigin = params['backToOrigin'] || false;
+
         if (this.isExistingCompany || this.isNewPersonalContact) {
           this.isOffCanvasVisible = true;
         }
@@ -627,7 +631,7 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
   }
 
   selectCompany(company: Company) {
-    console.log({company});
+    console.log({ company });
 
     this.foundCompanies = null;
     this.companyDetails = company;
@@ -668,7 +672,7 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
     }
   }
 
-  addCompany(){
+  addCompany() {
 
   }
 
@@ -892,6 +896,7 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
     localStorage.removeItem('contactPeople');
     this.pendingChanges = false;
     this.messageService.add({ severity: 'success', summary: 'Contact Group successfully saved', closable: false });
+    if (this.backToOrigin) { this.sharedService.back(); }
     if (!contactGroupId) {
       this.sharedService.back();
     } else {
