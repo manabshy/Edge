@@ -270,9 +270,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       this.patchLeadValues(result);
       this.getPersonInformation();
       this.lead?.closedById ? this.isLeadClosed = true : this.isLeadClosed = false;
-      if (+this.leadSearchInfo.listingType !== ListingType.MyLeads) {
+      if (+this.leadSearchInfo?.listingType !== ListingType.MyLeads) {
         this.canEditLead = false;
-      } else if (+this.leadSearchInfo.listingType === ListingType.MyLeads && !this.isLeadClosed) {
+      } else if (+this.leadSearchInfo?.listingType === ListingType.MyLeads && !this.isLeadClosed) {
         this.canEditLead = true;
       } else { this.canEditLead = false; }
 
