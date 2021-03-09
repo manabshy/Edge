@@ -434,7 +434,7 @@
               </div>
             </div>
 
-            <ol class="cards cards--marginBottom">
+            <ol class="cards">
               <li *ngFor="let person of contactGroupDetails?.contactPeople ; index as i"
                 [ngClass]="{'new-person': person?.isNewPerson, 'list-group-item-danger': person?.warning && person?.warning?.id !== 1}">
                 <app-person-details [personDetails]="person" [index]="i"
@@ -473,40 +473,38 @@
           </fieldset>
 
           <ng-container *ngIf="contactGroupDetails?.contactPeople.length">
-            <fieldset class="fieldset--width-max">
-              <legend class="legend">Details</legend>
-              <form [formGroup]="contactGroupDetailsForm">
-                <fieldset>
-                  <label for="salutation">Salutation</label>
-                  <input type="text" id="salutation" formControlName="salutation">
-                </fieldset>
+            <legend class="legend">Details</legend>
+            <form [formGroup]="contactGroupDetailsForm">
+              <fieldset>
+                <label for="salutation">Salutation</label>
+                <input type="text" id="salutation" formControlName="salutation">
+              </fieldset>
 
-                <fieldset>
-                  <label for="addressee">Addressee</label>
-                  <input type="text" id="addressee" formControlName="addressee">
-                </fieldset>
+              <fieldset>
+                <label for="addressee">Addressee</label>
+                <input type="text" id="addressee" formControlName="addressee">
+              </fieldset>
 
-                <fieldset>
-                  <span class="checkbox">
-                    <span>
-                      <input type="checkbox" id="isRelocationAgent" formControlName="isRelocationAgent">
-                      <label for="isRelocationAgent">Is Relocation Agent</label>
-                    </span>
+              <fieldset>
+                <span class="checkbox">
+                  <span>
+                    <input type="checkbox" id="isRelocationAgent" formControlName="isRelocationAgent">
+                    <label for="isRelocationAgent">Is Relocation Agent</label>
                   </span>
-                </fieldset>
+                </span>
+              </fieldset>
 
-                <!-- <div>
-                  <div class="col-sm-10 offset-sm-2"
-                    [ngClass]="{'notes-disabled': !contactGroupDetails?.contactGroupId}">
-                    <label class="small">Notes</label>
-                    <small class="alert alert-info" *ngIf="!contactGroupDetails?.contactGroupId">Save to enable
-                      Notes</small>
-                    <app-notes [noteData]="dataNote" [contactGroupNotes]="dataNote?.notes"
-                      [bottomReached]="bottomReached" [pageNumber]="page"></app-notes>
-                  </div>
-                </div> -->
-              </form>
-            </fieldset>
+              <!-- <div>
+                <div class="col-sm-10 offset-sm-2"
+                  [ngClass]="{'notes-disabled': !contactGroupDetails?.contactGroupId}">
+                  <label class="small">Notes</label>
+                  <small class="alert alert-info" *ngIf="!contactGroupDetails?.contactGroupId">Save to enable
+                    Notes</small>
+                  <app-notes [noteData]="dataNote" [contactGroupNotes]="dataNote?.notes"
+                    [bottomReached]="bottomReached" [pageNumber]="page"></app-notes>
+                </div>
+              </div> -->
+            </form>
           </ng-container>
         </ng-container>
 
@@ -554,6 +552,7 @@
     </div>
 
   </div>
+</div>
 
 
   <!--Success Messages -->
