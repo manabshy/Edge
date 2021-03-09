@@ -95,7 +95,8 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
   isCreatingNewPerson: boolean = false;
   pendingChanges = false;
   showCompanyFinder = false;
-
+  showSetMainPerson = true;
+  groupType: string;
   get dataNote() {
     if (this.contactGroupDetails) {
       return {
@@ -312,10 +313,15 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
 
     if (isPersonal || this.isNewPersonalContact) {
       label = 'Personal Contact Group';
+      this.groupType = 'personal';
+      console.log('personal here...,', this.groupType);
+
     }
 
     if (isCompany || this.isNewCompanyContact) {
       label = 'Company Contact Group';
+      this.groupType = 'company';
+      console.log('company here...,', this.groupType);
     }
 
     if (clearLabel) { label = null; }
@@ -630,6 +636,7 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
     this.selectedCompany = this.companyFinderForm.get('selectedCompany').value;
     this.isSearchCompanyVisible = false;
     this.showCompanyFinder = false;
+    this.showSetMainPerson = false;
     setTimeout(() => {
       if (this.selectedCompanyInput) {
         this.selectedCompanyInput.nativeElement.scrollIntoView({ block: 'center' });
@@ -642,6 +649,7 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
       this.companyDetails = data;
       console.log(this.companyDetails, 'company details');
       this.isSearchCompanyVisible = false;
+      this.showSetMainPerson = false;
     });
   }
 

@@ -26,15 +26,6 @@
         </div>
       </ng-container>
       <ng-container *ngSwitchDefault>
-        <!-- <app-breadcrumb></app-breadcrumb> -->
-        <!-- <h2>
-          <ng-container *ngIf="isNewContactGroup;else existingContact">{{newContactGroupLabel}}</ng-container>
-          <ng-template #existingContact>
-            <ng-container *ngIf="contactGroupDetails?.contactType === 4; else peopleCG">Company</ng-container>
-            <ng-template #peopleCG>Personal</ng-template> Contact Group
-          </ng-template>
-          <span class="pill pill--positive" *ngIf="isAMLCompleted">AML Completed</span>
-        </h2> -->
         <div class="message message--warning" *ngIf="pendingChanges">
           There are pending changes on the people list. Save to make them effective.
         </div>
@@ -50,64 +41,362 @@
           You must add <b>1</b> company for a company contact.
         </div>
 
-        <!-- <form action="">
-      <fieldset class="fieldset--width-max">
-        <legend class="legend">Company</legend>
-        <label for="">Company Name</label>
-        <button class="btn btn--link">Name here</button><button class="btn btn--ghost btn--onRight">Change</button>
-      </fieldset>
+        <div [ngSwitch]="groupType">
+          <ng-container *ngSwitchCase="'company'">
+            <ng-container *ngIf="isNewCompanyContact && !(isExistingCompany || companyDetails); else details">
+              <app-redacted-card cardButtonLabel="New Company" (cardButtonClicked)="showCompanyFinder = true">
+              </app-redacted-card>
+            </ng-container>
+            <ng-template #details>
+              <ledgend class="legend">Company Name</ledgend>
+              <fieldset>
+                <ng-container *ngIf="companyDetails?.companyName">
+                  <p><a
+                      [routerLink]="['/company-centre/detail', companyDetails?.companyId]">{{companyDetails?.companyName}}</a>
+                  </p>
+                  <p><button (click)="showCompanyFinder = true" type="button" class="btn btn--info"><svg
+                        aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
+                        <polygon points="42.7 6.7 57.3 21.3 64 14.5 49.7 0 "></polygon>
+                        <path d="M40.3 9.6l-38 38L0 64l16.9-2 38-37.9L40.3 9.6zM4 59.9l1.9-11.7 9.8 9.8L4 59.9z"></path>
+                      </svg>Change company</button></p>
+                </ng-container>
+              </fieldset>
 
-      <fieldset>
-        <label for="">Country</label>
-        <span class="select">
-          <select>
-            <option>United Kingdom</option>
-          </select>
-        </span>
-      </fieldset>
+              <ledgend class="legend">Company Address</ledgend>
+              <fieldset>
+                <ng-container *ngIf="contactGroupDetails?.companyAddress?.postCode; else showCompanyAddress">
+                  <app-address *ngIf="contactGroupDetails" [companyAddress]="contactGroupDetails.companyAddress"
+                    (addressDetails)="getAddress($event)"></app-address>
+                </ng-container>
+                <ng-template #showCompanyAddress>
+                  <app-address *ngIf="(isCompanyAdded && companyFinderForm.value.selectedCompany) || isExistingCompany"
+                    [companyDetails]="companyDetails" (addressDetails)="getAddress($event)"></app-address>
+                </ng-template>
+              </fieldset>
+              <form [formGroup]="contactGroupDetailsForm" autocompleteOff>
+                <fieldset>
+                  <label>Type</label>
+                  <span class="checkbox">
+                    <span>
+                      <input type="checkbox" id="solicitor" formControlName="isSolicitor">
+                      <label for="solicitor">Solicitor</label>
+                    </span>
+                    <span>
+                      <input type="checkbox" id="invClerk" formControlName="isInventoryClerk">
+                      <label for="invClerk">Inventory Clerk</label>
+                    </span>
+                    <span>
+                      <input type="checkbox" id="estateAgent" formControlName="isEstateAgent">
+                      <label for="estateAgent">Estate Agent</label>
+                    </span>
+                    <span>
+                      <input type="checkbox" id="mortgageAdvisor" formControlName="isMortgageAdvisor">
+                      <label for="mortgageAdvisor">Mortgage Advisor</label>
+                    </span>
+                  </span>
+                </fieldset>
+              </form>
+              <fieldset *ngIf="!contactGroupDetails?.contactPeople?.length">
+                <p><button (click)="isOffCanvasVisible = true" type="button" class="btn btn--positive"><svg
+                      aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
+                      <path
+                        d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" />
+                      <path class="plus-vertical"
+                        d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" />
+                    </svg>Person</button></p>
+              </fieldset>
 
-      <fieldset>
-        <label for="">Find Address (Postcode)</label>
-        <div class="inline-parent inline-parent--search">
-          <input type="text">
-          <button class="btn btn--search">Search</button>
+            </ng-template>
+
+          </ng-container>
+          <ng-container *ngSwitchDefault>
+            <div class="wrapper--redacted" *ngIf="isNewPersonalContact && !contactGroupDetails?.contactPeople.length">
+              <ol class="cards cards--marginBottom">
+                <li>
+                  <div class="card">
+                    <div class="card__body">
+                      <ol class="list">
+                        <li class="title">
+                          <span>
+                            <sup>
+                              <span class="pill pill--positive redacted"></span>
+                              <span class="pill pill--negative redacted"></span>
+                            </sup>
+                            <p class="txt--title"><span class="redacted"></span></p>
+                            <small>
+                              <span class="txt--positive redacted redacted--50pc"></span>
+                            </small>
+                          </span>
+                        </li>
+                        <li class="expandable">
+                          <details onclick="return false;" open="">
+                            <summary>
+                              <div class="summary__title">
+                                <span class="redacted redacted--90pc"></span>
+                                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                                  class="icon icon--s flexRight">
+                                  <path
+                                    d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z"
+                                    class="vertical"></path>
+                                  <path
+                                    d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z"
+                                    class="horizontal"></path>
+                                </svg>
+                              </div>
+                            </summary>
+                            <ol class="list">
+                              <li>
+                                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                                  class="icon icon--onLeft">
+                                  <path
+                                    d="M56 24c0 17.5-20.3 38-21.2 38.8C34 63.6 33 64 32 64c-1 0-2-0.4-2.8-1.2C28.3 62 8 41.5 8 24 8 10.8 18.8 0 32 0S56 10.8 56 24zM32 36c6.6 0 12-5.4 12-12 0-6.6-5.4-12-12-12s-12 5.4-12 12C20 30.6 25.4 36 32 36z">
+                                  </path>
+                                </svg>
+                                <span class="redacted redacted--50pc"></span>
+                                <span class="redacted redacted--10pc"></span>
+                                <span class="redacted redacted--50pc"></span>
+                              </li>
+                              <li>
+                                <ol class="list">
+                                  <li>
+                                    <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                                      class="icon icon--onLeft">
+                                      <path
+                                        d="M57.6 43.2c-4 0-7.8-0.6-11.4-1.8 -1.1-0.4-2.4-0.1-3.3 0.8l-7 7c-9.1-4.6-16.5-12-21.1-21.1l7-7.1c0.9-0.8 1.2-2.1 0.8-3.2 -1.2-3.6-1.8-7.4-1.8-11.4 0-1.8-1.4-3.2-3.2-3.2H6.4c-1.8 0-3.2 1.4-3.2 3.2 0 30 24.4 54.4 54.4 54.4 1.8 0 3.2-1.4 3.2-3.2V46.4C60.8 44.6 59.4 43.2 57.6 43.2z">
+                                      </path>
+                                    </svg>
+                                    <span class="redacted redacted--70pc"></span>
+                                  </li>
+                                </ol>
+                              </li>
+                              <li>
+                                <ol class="list">
+                                  <li class="txt--breakword">
+                                    <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                                      class="icon icon--onLeft">
+                                      <path
+                                        d="M-0.3 13.8v-3.6c0-1.1 0.9-2.1 2.1-2.1h59.9c1.1 0 2.1 0.9 2.1 2.1v3.6l-32 20L-0.3 13.8zM32.8 37.9c-0.3 0.2-0.7 0.3-1.1 0.3 -0.4 0-0.7-0.1-1.1-0.3L-0.3 18.5v35.6c0 1.1 0.9 2.1 2.1 2.1h59.9c1.1 0 2.1-0.9 2.1-2.1V18.5L32.8 37.9z">
+                                      </path>
+                                    </svg>
+                                    <span class="redacted redacted--50pc"></span>
+                                  </li>
+                                </ol>
+                              </li>
+                            </ol>
+                          </details>
+                        </li>
+
+                        <li class="expandable">
+                          <details onclick="return false;">
+                            <summary>
+                              <div class="summary__title">
+                                <span class="redacted redacted--50pc"></span>
+                                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                                  class="icon icon--s flexRight">
+                                  <path
+                                    d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z"
+                                    class="vertical"></path>
+                                  <path
+                                    d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z"
+                                    class="horizontal"></path>
+                                </svg>
+                              </div>
+                            </summary>
+                          </details>
+                        </li>
+
+                        <li class="expandable">
+                          <details onclick="return false;">
+                            <summary>
+                              <div class="summary__title">
+                                <span class="redacted redacted--90pc"></span>
+                                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                                  class="icon icon--s flexRight">
+                                  <path
+                                    d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z"
+                                    class="vertical"></path>
+                                  <path
+                                    d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z"
+                                    class="horizontal"></path>
+                                </svg>
+                              </div>
+                            </summary>
+                          </details>
+                        </li>
+
+                        <li class="expandable">
+                          <details onclick="return false;">
+                            <summary>
+                              <div class="summary__title">
+                                <span class="redacted redacted--70pc"></span>
+                                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                                  class="icon icon--s flexRight">
+                                  <path
+                                    d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z"
+                                    class="vertical"></path>
+                                  <path
+                                    d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z"
+                                    class="horizontal"></path>
+                                </svg>
+                              </div>
+                            </summary>
+                          </details>
+                        </li>
+                      </ol>
+                    </div>
+                  </div>
+                </li>
+
+                <li>
+                  <div class="card">
+                    <div class="card__body">
+                      <ol class="list">
+                        <li class="title">
+                          <span>
+                            <sup>
+                              <span class="pill pill--negative redacted"></span>
+                            </sup>
+                            <p class="txt--title"><span class="redacted redacted--50pc"></span></p>
+                            <small>
+                              <span class="txt--positive redacted redacted--70pc"></span>
+                            </small>
+                          </span>
+                        </li>
+                        <li class="expandable">
+                          <details onclick="return false;" open="">
+                            <summary>
+                              <div class="summary__title">
+                                <span class="redacted redacted--90pc"></span>
+                                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                                  class="icon icon--s flexRight">
+                                  <path
+                                    d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z"
+                                    class="vertical"></path>
+                                  <path
+                                    d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z"
+                                    class="horizontal"></path>
+                                </svg>
+                              </div>
+                            </summary>
+                            <ol class="list">
+                              <li>
+                                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                                  class="icon icon--onLeft">
+                                  <path
+                                    d="M56 24c0 17.5-20.3 38-21.2 38.8C34 63.6 33 64 32 64c-1 0-2-0.4-2.8-1.2C28.3 62 8 41.5 8 24 8 10.8 18.8 0 32 0S56 10.8 56 24zM32 36c6.6 0 12-5.4 12-12 0-6.6-5.4-12-12-12s-12 5.4-12 12C20 30.6 25.4 36 32 36z">
+                                  </path>
+                                </svg>
+                                <span class="redacted redacted--50pc"></span>
+                                <span class="redacted redacted--20pc"></span>
+                              </li>
+                              <li>
+                                <ol class="list">
+                                  <li>
+                                    <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                                      class="icon icon--onLeft">
+                                      <path
+                                        d="M57.6 43.2c-4 0-7.8-0.6-11.4-1.8 -1.1-0.4-2.4-0.1-3.3 0.8l-7 7c-9.1-4.6-16.5-12-21.1-21.1l7-7.1c0.9-0.8 1.2-2.1 0.8-3.2 -1.2-3.6-1.8-7.4-1.8-11.4 0-1.8-1.4-3.2-3.2-3.2H6.4c-1.8 0-3.2 1.4-3.2 3.2 0 30 24.4 54.4 54.4 54.4 1.8 0 3.2-1.4 3.2-3.2V46.4C60.8 44.6 59.4 43.2 57.6 43.2z">
+                                      </path>
+                                    </svg>
+                                    <span class="redacted redacted--70pc"></span>
+                                  </li>
+                                </ol>
+                              </li>
+                              <li>
+                                <ol class="list">
+                                  <li class="txt--breakword">
+                                    <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                                      class="icon icon--onLeft">
+                                      <path
+                                        d="M-0.3 13.8v-3.6c0-1.1 0.9-2.1 2.1-2.1h59.9c1.1 0 2.1 0.9 2.1 2.1v3.6l-32 20L-0.3 13.8zM32.8 37.9c-0.3 0.2-0.7 0.3-1.1 0.3 -0.4 0-0.7-0.1-1.1-0.3L-0.3 18.5v35.6c0 1.1 0.9 2.1 2.1 2.1h59.9c1.1 0 2.1-0.9 2.1-2.1V18.5L32.8 37.9z">
+                                      </path>
+                                    </svg>
+                                    <span class="redacted redacted--50pc"></span>
+                                  </li>
+                                </ol>
+                              </li>
+                            </ol>
+                          </details>
+                        </li>
+
+                        <li class="expandable">
+                          <details onclick="return false;">
+                            <summary>
+                              <div class="summary__title">
+                                <span class="redacted redacted--50pc"></span>
+                                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                                  class="icon icon--s flexRight">
+                                  <path
+                                    d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z"
+                                    class="vertical"></path>
+                                  <path
+                                    d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z"
+                                    class="horizontal"></path>
+                                </svg>
+                              </div>
+                            </summary>
+                          </details>
+                        </li>
+
+                        <li class="expandable">
+                          <details onclick="return false;">
+                            <summary>
+                              <div class="summary__title">
+                                <span class="redacted redacted--90pc"></span>
+                                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                                  class="icon icon--s flexRight">
+                                  <path
+                                    d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z"
+                                    class="vertical"></path>
+                                  <path
+                                    d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z"
+                                    class="horizontal"></path>
+                                </svg>
+                              </div>
+                            </summary>
+                          </details>
+                        </li>
+
+                        <li class="expandable">
+                          <details onclick="return false;">
+                            <summary>
+                              <div class="summary__title">
+                                <span class="redacted redacted--70pc"></span>
+                                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                                  class="icon icon--s flexRight">
+                                  <path
+                                    d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z"
+                                    class="vertical"></path>
+                                  <path
+                                    d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z"
+                                    class="horizontal"></path>
+                                </svg>
+                              </div>
+                            </summary>
+                          </details>
+                        </li>
+                      </ol>
+                    </div>
+                  </div>
+                </li>
+
+                <li class="card__new"
+                  *ngIf="contactGroupDetails?.contactPeople.length < 8 && !contactGroupDetails?.referenceCount && !isMaxPeople">
+                  <a href (click)="showHideOffCanvas($event)" class="overall"></a>
+                  <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--l">
+                    <path
+                      d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z">
+                    </path>
+                    <path
+                      d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z"
+                      class="plus-vertical"></path>
+                  </svg>Add Person
+                </li>
+              </ol>
+            </div>
+          </ng-container>
         </div>
-      </fieldset>
-
-      <fieldset>
-        <label for="">Address Lines</label>
-        <textarea></textarea>
-      </fieldset>
-
-      <fieldset>
-        <label for="">Postcode</label>
-        <input type="text">
-      </fieldset>
-
-      <fieldset>
-        <label for="">Type</label>
-        <span class="checkbox">
-          <span>
-            <input type="checkbox" tabindex="" name="" id="solicitor">
-            <label for="solicitor">Solicitor</label>
-          </span>
-          <span>
-            <input type="checkbox" tabindex="" name="" id="invClerk">
-            <label for="invClerk">Inventory Clerk</label>
-          </span>
-          <span>
-            <input type="checkbox" tabindex="" name="" id="estateAgent">
-            <label for="estateAgent">Estate Agent</label>
-          </span>
-          <span>
-            <input type="checkbox" tabindex="" name="" id="mortgageAdvisor">
-            <label for="mortgageAdvisor">Mortgage Advisor</label>
-          </span>
-        </span>
-      </fieldset>
-    </form> -->
-
-        <ng-container *ngIf="isNewContactGroup && !isTypePicked">
+        <!-- <ng-container *ngIf="isNewContactGroup && !isTypePicked">
           <h5>Type of Contact Group?</h5>
           <fieldset>
             <span class="radio radio--boxed">
@@ -134,432 +423,7 @@
               </span>
             </span>
           </fieldset>
-        </ng-container>
-
-        <div class="wrapper--redacted" *ngIf="isNewPersonalContact && !contactGroupDetails?.contactPeople.length">
-          <ol class="cards cards--marginBottom">
-            <li>
-              <div class="card">
-                <div class="card__body">
-                  <ol class="list">
-                    <li class="title">
-                      <span>
-                        <sup>
-                          <span class="pill pill--positive redacted"></span>
-                          <span class="pill pill--negative redacted"></span>
-                        </sup>
-                        <p class="txt--title"><span class="redacted"></span></p>
-                        <small>
-                          <span class="txt--positive redacted redacted--50pc"></span>
-                        </small>
-                      </span>
-                    </li>
-                    <li class="expandable">
-                      <details onclick="return false;" open="">
-                        <summary>
-                          <div class="summary__title">
-                            <span class="redacted redacted--90pc"></span>
-                            <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
-                              class="icon icon--s flexRight">
-                              <path
-                                d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z"
-                                class="vertical"></path>
-                              <path
-                                d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z"
-                                class="horizontal"></path>
-                            </svg>
-                          </div>
-                        </summary>
-                        <ol class="list">
-                          <li>
-                            <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
-                              class="icon icon--onLeft">
-                              <path
-                                d="M56 24c0 17.5-20.3 38-21.2 38.8C34 63.6 33 64 32 64c-1 0-2-0.4-2.8-1.2C28.3 62 8 41.5 8 24 8 10.8 18.8 0 32 0S56 10.8 56 24zM32 36c6.6 0 12-5.4 12-12 0-6.6-5.4-12-12-12s-12 5.4-12 12C20 30.6 25.4 36 32 36z">
-                              </path>
-                            </svg>
-                            <span class="redacted redacted--50pc"></span>
-                            <span class="redacted redacted--10pc"></span>
-                            <span class="redacted redacted--50pc"></span>
-                          </li>
-                          <li>
-                            <ol class="list">
-                              <li>
-                                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
-                                  class="icon icon--onLeft">
-                                  <path
-                                    d="M57.6 43.2c-4 0-7.8-0.6-11.4-1.8 -1.1-0.4-2.4-0.1-3.3 0.8l-7 7c-9.1-4.6-16.5-12-21.1-21.1l7-7.1c0.9-0.8 1.2-2.1 0.8-3.2 -1.2-3.6-1.8-7.4-1.8-11.4 0-1.8-1.4-3.2-3.2-3.2H6.4c-1.8 0-3.2 1.4-3.2 3.2 0 30 24.4 54.4 54.4 54.4 1.8 0 3.2-1.4 3.2-3.2V46.4C60.8 44.6 59.4 43.2 57.6 43.2z">
-                                  </path>
-                                </svg>
-                                <span class="redacted redacted--70pc"></span>
-                              </li>
-                            </ol>
-                          </li>
-                          <li>
-                            <ol class="list">
-                              <li class="txt--breakword">
-                                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
-                                  class="icon icon--onLeft">
-                                  <path
-                                    d="M-0.3 13.8v-3.6c0-1.1 0.9-2.1 2.1-2.1h59.9c1.1 0 2.1 0.9 2.1 2.1v3.6l-32 20L-0.3 13.8zM32.8 37.9c-0.3 0.2-0.7 0.3-1.1 0.3 -0.4 0-0.7-0.1-1.1-0.3L-0.3 18.5v35.6c0 1.1 0.9 2.1 2.1 2.1h59.9c1.1 0 2.1-0.9 2.1-2.1V18.5L32.8 37.9z">
-                                  </path>
-                                </svg>
-                                <span class="redacted redacted--50pc"></span>
-                              </li>
-                            </ol>
-                          </li>
-                        </ol>
-                      </details>
-                    </li>
-
-                    <li class="expandable">
-                      <details onclick="return false;">
-                        <summary>
-                          <div class="summary__title">
-                            <span class="redacted redacted--50pc"></span>
-                            <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
-                              class="icon icon--s flexRight">
-                              <path
-                                d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z"
-                                class="vertical"></path>
-                              <path
-                                d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z"
-                                class="horizontal"></path>
-                            </svg>
-                          </div>
-                        </summary>
-                      </details>
-                    </li>
-
-                    <li class="expandable">
-                      <details onclick="return false;">
-                        <summary>
-                          <div class="summary__title">
-                            <span class="redacted redacted--90pc"></span>
-                            <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
-                              class="icon icon--s flexRight">
-                              <path
-                                d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z"
-                                class="vertical"></path>
-                              <path
-                                d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z"
-                                class="horizontal"></path>
-                            </svg>
-                          </div>
-                        </summary>
-                      </details>
-                    </li>
-
-                    <li class="expandable">
-                      <details onclick="return false;">
-                        <summary>
-                          <div class="summary__title">
-                            <span class="redacted redacted--70pc"></span>
-                            <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
-                              class="icon icon--s flexRight">
-                              <path
-                                d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z"
-                                class="vertical"></path>
-                              <path
-                                d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z"
-                                class="horizontal"></path>
-                            </svg>
-                          </div>
-                        </summary>
-                      </details>
-                    </li>
-                  </ol>
-                </div>
-              </div>
-            </li>
-
-            <li>
-              <div class="card">
-                <div class="card__body">
-                  <ol class="list">
-                    <li class="title">
-                      <span>
-                        <sup>
-                          <span class="pill pill--negative redacted"></span>
-                        </sup>
-                        <p class="txt--title"><span class="redacted redacted--50pc"></span></p>
-                        <small>
-                          <span class="txt--positive redacted redacted--70pc"></span>
-                        </small>
-                      </span>
-                    </li>
-                    <li class="expandable">
-                      <details onclick="return false;" open="">
-                        <summary>
-                          <div class="summary__title">
-                            <span class="redacted redacted--90pc"></span>
-                            <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
-                              class="icon icon--s flexRight">
-                              <path
-                                d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z"
-                                class="vertical"></path>
-                              <path
-                                d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z"
-                                class="horizontal"></path>
-                            </svg>
-                          </div>
-                        </summary>
-                        <ol class="list">
-                          <li>
-                            <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
-                              class="icon icon--onLeft">
-                              <path
-                                d="M56 24c0 17.5-20.3 38-21.2 38.8C34 63.6 33 64 32 64c-1 0-2-0.4-2.8-1.2C28.3 62 8 41.5 8 24 8 10.8 18.8 0 32 0S56 10.8 56 24zM32 36c6.6 0 12-5.4 12-12 0-6.6-5.4-12-12-12s-12 5.4-12 12C20 30.6 25.4 36 32 36z">
-                              </path>
-                            </svg>
-                            <span class="redacted redacted--50pc"></span>
-                            <span class="redacted redacted--20pc"></span>
-                          </li>
-                          <li>
-                            <ol class="list">
-                              <li>
-                                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
-                                  class="icon icon--onLeft">
-                                  <path
-                                    d="M57.6 43.2c-4 0-7.8-0.6-11.4-1.8 -1.1-0.4-2.4-0.1-3.3 0.8l-7 7c-9.1-4.6-16.5-12-21.1-21.1l7-7.1c0.9-0.8 1.2-2.1 0.8-3.2 -1.2-3.6-1.8-7.4-1.8-11.4 0-1.8-1.4-3.2-3.2-3.2H6.4c-1.8 0-3.2 1.4-3.2 3.2 0 30 24.4 54.4 54.4 54.4 1.8 0 3.2-1.4 3.2-3.2V46.4C60.8 44.6 59.4 43.2 57.6 43.2z">
-                                  </path>
-                                </svg>
-                                <span class="redacted redacted--70pc"></span>
-                              </li>
-                            </ol>
-                          </li>
-                          <li>
-                            <ol class="list">
-                              <li class="txt--breakword">
-                                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
-                                  class="icon icon--onLeft">
-                                  <path
-                                    d="M-0.3 13.8v-3.6c0-1.1 0.9-2.1 2.1-2.1h59.9c1.1 0 2.1 0.9 2.1 2.1v3.6l-32 20L-0.3 13.8zM32.8 37.9c-0.3 0.2-0.7 0.3-1.1 0.3 -0.4 0-0.7-0.1-1.1-0.3L-0.3 18.5v35.6c0 1.1 0.9 2.1 2.1 2.1h59.9c1.1 0 2.1-0.9 2.1-2.1V18.5L32.8 37.9z">
-                                  </path>
-                                </svg>
-                                <span class="redacted redacted--50pc"></span>
-                              </li>
-                            </ol>
-                          </li>
-                        </ol>
-                      </details>
-                    </li>
-
-                    <li class="expandable">
-                      <details onclick="return false;">
-                        <summary>
-                          <div class="summary__title">
-                            <span class="redacted redacted--50pc"></span>
-                            <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
-                              class="icon icon--s flexRight">
-                              <path
-                                d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z"
-                                class="vertical"></path>
-                              <path
-                                d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z"
-                                class="horizontal"></path>
-                            </svg>
-                          </div>
-                        </summary>
-                      </details>
-                    </li>
-
-                    <li class="expandable">
-                      <details onclick="return false;">
-                        <summary>
-                          <div class="summary__title">
-                            <span class="redacted redacted--90pc"></span>
-                            <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
-                              class="icon icon--s flexRight">
-                              <path
-                                d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z"
-                                class="vertical"></path>
-                              <path
-                                d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z"
-                                class="horizontal"></path>
-                            </svg>
-                          </div>
-                        </summary>
-                      </details>
-                    </li>
-
-                    <li class="expandable">
-                      <details onclick="return false;">
-                        <summary>
-                          <div class="summary__title">
-                            <span class="redacted redacted--70pc"></span>
-                            <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
-                              class="icon icon--s flexRight">
-                              <path
-                                d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z"
-                                class="vertical"></path>
-                              <path
-                                d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z"
-                                class="horizontal"></path>
-                            </svg>
-                          </div>
-                        </summary>
-                      </details>
-                    </li>
-                  </ol>
-                </div>
-              </div>
-            </li>
-
-            <li class="card__new"
-              *ngIf="contactGroupDetails?.contactPeople.length < 8 && !contactGroupDetails?.referenceCount && !isMaxPeople">
-              <a href (click)="showHideOffCanvas($event)" class="overall"></a>
-              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--l">
-                <path
-                  d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z">
-                </path>
-                <path
-                  d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z"
-                  class="plus-vertical"></path>
-              </svg>Add Person
-            </li>
-          </ol>
-        </div>
-        <ng-container *ngIf="isNewCompanyContact && !(isExistingCompany || companyDetails); else details">
-          <app-redacted-card cardButtonLabel="New Company" (cardButtonClicked)="showCompanyFinder = true"></app-redacted-card>
-        </ng-container>
-        <ng-template #details >
-          <ledgend class="legend">Company Name</ledgend>
-          <fieldset>
-            <label for="area" class="small">Company Name</label>
-            <ng-container *ngIf="companyDetails?.companyName">
-              <p><a [routerLink]="['/company-centre/detail', companyDetails?.companyId]">{{companyDetails?.companyName}}</a></p>
-              <p><button (click)="showCompanyFinder = true" type="button" class="btn btn--info"><svg aria-hidden="true"
-                    width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
-                    <polygon points="42.7 6.7 57.3 21.3 64 14.5 49.7 0 "></polygon>
-                    <path d="M40.3 9.6l-38 38L0 64l16.9-2 38-37.9L40.3 9.6zM4 59.9l1.9-11.7 9.8 9.8L4 59.9z"></path>
-                  </svg>Change company</button></p>
-            </ng-container>
-
-            <!-- <ng-template #newSigner>
-              <p><button (click)="isSignerVisible = true" type="button" class="btn btn--positive"><svg
-                    aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
-                    <path
-                      d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" />
-                    <path class="plus-vertical"
-                      d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" />
-                  </svg>Signer</button></p>
-            </ng-template> -->
-          </fieldset>
-          <!-- <form class="pb-3" [formGroup]="companyFinderForm" autocompleteOff>
-            <div [hidden]="!companyDetails">
-              <div class="col-sm-10 offset-sm-2">
-                <label for="selectedCompany" class="small">Company Name</label>
-                <div class="form-group d-flex d-sm-block">
-                  <input type="hidden" #selectedCompanyInput id="selectedCompany" formControlName="selectedCompany">
-                  <button type="button" class="btn btn-link btn-sm p-0 mobile-btn"
-                    (click)="editSelectedCompany(companyDetails?.companyId)">
-                    {{companyDetails?.companyName}}
-                  </button>
-                  <button type="button" *ngIf="!isExistingCompany" class="btn btn-light btn-sm ml-2"
-                    (click)="setCompanies()">Change</button>
-                </div>
-              </div>
-            </div>
-            <div>
-              <div class="col-sm-3 offset-sm-2" [hidden]="!isSearchCompanyVisible || isExistingCompany">
-                <div class="form-group">
-                  <button type="button" class="btn btn-light btn-sm btn-block" (click)="setCompanies()">
-                    <i class="fas fa-plus mr-2"></i>
-                    Company
-                  </button>
-                </div>
-              </div>
-              <div class="col-sm-8 col-xl-6 offset-sm-2">
-                <div class="off-canvas" [hidden]="!foundCompanies" (click)="foundCompanies = null">
-                  <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()"
-                    #offCanvasContent>
-                    <h4 class="page-title text-left pt-3">
-                      Company
-                      <button type="button" class="close mr-2" aria-label="Close" (click)="foundCompanies = null">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </h4>
-                    <div class="form-group">
-                      <label for="company" class="small">Find</label>
-                      <div class="input-group input-group-sm">
-                        <input #companyNameInput type="search" id="company" class="form-control"
-                          formControlName="companyName" (keydown.enter)="searchCompany()"
-                          [ngbTypeahead]="suggestions" [focusFirst]="false"
-                          (selectItem)="selectedSuggestion($event)">
-                        <div class="input-group-append">
-                          <button type="button" class="btn btn-secondary" (click)="searchCompany()">Search</button>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="btn-link btn-sm p-0 mb-3" *ngIf="noSuggestions"
-                      (click)="editSelectedCompany(0, true)">
-                      <i class="fas fa-plus mr-2"></i>New Company
-                    </div>
-                    <app-subnav *ngIf="companiesSearched">
-                      <app-subnav-item *ngFor="let company of foundCompanies" (click)="selectCompany(company)">
-                        <div [innerHTML]="company.companyName | highlight : companyFinderForm.value.companyName">
-                        </div>
-                      </app-subnav-item>
-                      <div class="list-group-item list-group-item-action text-center"
-                        *ngIf="!foundCompanies?.length && companyFinderForm.value.companyName">
-                        No company found. Try again or create a new one.
-                      </div>
-                      <div class="list-group-item list-group-item-action text-center py-4"
-                        (click)="editSelectedCompany(0, true)">
-                        <span class="btn-link"><i class="fas fa-plus mr-2"></i>New Company</span>
-                      </div>
-                    </app-subnav>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </form> -->
-          <ledgend class="legend">Company Address</ledgend>
-          <fieldset>
-            <ng-container *ngIf="contactGroupDetails?.companyAddress?.postCode; else showCompanyAddress">
-              <app-address *ngIf="contactGroupDetails" [companyAddress]="contactGroupDetails.companyAddress"
-                (addressDetails)="getAddress($event)"></app-address>
-            </ng-container>
-            <ng-template #showCompanyAddress>
-              <app-address *ngIf="(isCompanyAdded && companyFinderForm.value.selectedCompany) || isExistingCompany"
-                [companyDetails]="companyDetails" (addressDetails)="getAddress($event)"></app-address>
-            </ng-template>
-          </fieldset>
-            <form [formGroup]="contactGroupDetailsForm" autocompleteOff>
-              <fieldset>
-                <label>Type</label>
-                <span class="checkbox">
-                  <span>
-                    <input type="checkbox" id="solicitor" formControlName="isSolicitor">
-                    <label for="solicitor">Solicitor</label>
-                  </span>
-                  <span>
-                    <input type="checkbox" id="invClerk" formControlName="isInventoryClerk">
-                    <label for="invClerk">Inventory Clerk</label>
-                  </span>
-                  <span>
-                    <input type="checkbox" id="estateAgent" formControlName="isEstateAgent">
-                    <label for="estateAgent">Estate Agent</label>
-                  </span>
-                  <span>
-                    <input type="checkbox" id="mortgageAdvisor" formControlName="isMortgageAdvisor">
-                    <label for="mortgageAdvisor">Mortgage Advisor</label>
-                  </span>
-                </span>
-              </fieldset>
-            </form>
-            <fieldset *ngIf="!contactGroupDetails?.contactPeople?.length">
-              <p><button (click)="isOffCanvasVisible = true" type="button" class="btn btn--positive"><svg
-                aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
-                <path
-                  d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" />
-                <path class="plus-vertical"
-                  d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" />
-              </svg>Person</button></p>
-            </fieldset>
-
-        </ng-template>
+        </ng-container> -->
 
         <ng-container *ngIf="!isNewContactGroup  || isTypePicked">
           <legend *ngIf="companyDetails" class="legend">Contact Details</legend>
@@ -575,8 +439,8 @@
                 [ngClass]="{'new-person': person?.isNewPerson, 'list-group-item-danger': person?.warning && person?.warning?.id !== 1}">
                 <app-person-details [personDetails]="person" [index]="i"
                   [contactType]="contactGroupDetails?.contactType"
-                  [referenceCount]="contactGroupDetails?.referenceCount" [isPersonInfoOnly]="false"
-                  [isClickable]="true" [showEditOnly]="false" [showViewPerson]="true" [showSetMainPerson]="true"
+                  [referenceCount]="contactGroupDetails?.referenceCount" [isPersonInfoOnly]="false" [isClickable]="true"
+                  [showEditOnly]="false" [showViewPerson]="true" [showSetMainPerson]="showSetMainPerson"
                   [showRemovePerson]="true" (selectedPersonId)="editSelectedPerson($event)"
                   (mainPersonPersonId)="setMainPerson($event)" (removedPersonPersonId)="removePerson($event, true)">
                 </app-person-details>
