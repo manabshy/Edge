@@ -117,6 +117,10 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
     return this.contactGroupDetails.contactType === ContactType.CompanyContact && !this.companyDetails;
   }
 
+  get isCompanyPerson() {
+    return this.contactGroupDetails.contactType === ContactType.CompanyContact && !this.contactGroupDetails.contactPeople;
+  }
+
   get isAMLCompleted() {
     return this.contactGroupDetails && (!!this.contactGroupDetails.companyAmlCompletedDate || this.contactGroupDetails.isAmlCompleted);
   }
