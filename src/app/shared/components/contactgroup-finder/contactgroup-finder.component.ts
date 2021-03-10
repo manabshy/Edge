@@ -16,6 +16,7 @@ export class ContactgroupFinderComponent implements OnInit, OnChanges {
   @Input() label: string;
   @Input() fullName: string;
   @Input() isFull = false;
+  @Input() showCreateNewCompanyContact = true;
   @Output() selectedContactGroup = new EventEmitter<Signer>();
   @Output() fullSelectedContactGroup = new EventEmitter<ContactGroup>();
   @Output() isCreatingNewGroup = new EventEmitter<boolean>();
