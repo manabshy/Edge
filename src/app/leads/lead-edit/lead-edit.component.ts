@@ -232,10 +232,13 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
       this.currentLeadIndex = this.leadIds.indexOf(this.leadSearchInfo.startLeadId);
       this.currentLeadIndex === 0 ? this.disablePrevious = true : this.disablePrevious = false;
+      this.currentLeadIndex === this.leadIds?.length - 1 ? this.disableNext = true : this.disableNext = false;
+
       console.log({ result }, 'lead ids', this.currentLeadIndex, 'current idex');
 
       if (this.leadIds.length <= 1) {
         this.leadsListCompleted = true;
+        this.disableNext = true;
       }
     }, () => { this.lead = null; });
   }
