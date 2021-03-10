@@ -3,16 +3,16 @@ Font-face setup
 ***********************************************/
 @font-face {
     font-family:'objectsans';
-    src:    url('../../assets/font/ObjectSans-Medium.woff2') format('woff2'),
-            url('../../assets/font/ObjectSans-Medium.woff') format('woff');
+    src:    url('~/assets/font/ObjectSans-Medium.woff2') format('woff2'),
+            url('~/assets/font/ObjectSans-Medium.woff') format('woff');
     font-weight:bold;
     font-style:bold;
 }
-  
+
 @font-face {
     font-family:'objectsans';
-    src:    url('../../assets/font/ObjectSans-Light.woff2') format('woff2'),
-            url('../../assets/font/ObjectSans-Light.woff') format('woff');
+    src:    url('~/assets/font/ObjectSans-Light.woff2') format('woff2'),
+            url('~/assets/font/ObjectSans-Light.woff') format('woff');
     font-weight:normal;
     font-style:normal;
 }
@@ -24,7 +24,7 @@ Font-face setup
 //     font-weight:bold;
 //     font-style:bold;
 // }
-  
+
 // @font-face {
 //     font-family:'opensans';
 //     src:    url('../../assets/font/opensans-regular.woff2') format('woff2'),
@@ -41,7 +41,7 @@ body, form, input, textarea, select, label,
 .select select, .select optgroup option,
 .select optgroup option, .checkbox > span label,
 .radio > span label, form .message, .btn,
-.p-accordion, .p-toast, .p-component, 
+.p-accordion, .p-toast, .p-component,
 .p-inputtext, .p-chips .p-chips-multiple-container .p-chips-input-token input   { font-display:optional; text-rendering:optimizeLegibility; font-family:'objectsans', Sans-Serif; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility !important; -webkit-font-smoothing:antialiased !important; }
 
 html                                            { scroll-behavior:smooth;  }
@@ -131,6 +131,6 @@ summary                                         { padding:0; list-style:none; mi
 .pill--positive, .txt--positive                 {
     &.redacted                                  { background-color:$color--positive; flex-shrink:initial; }
 }
-.pill--negative                                 { 
+.pill--negative                                 {
     &.redacted                                  { background-color:$color--negative; flex-shrink:initial; }
 }
