@@ -7,7 +7,7 @@ trigger:
 - feature/updated-design
 
 pool:
-  vmImage: 'ubuntu-18.04'
+  vmImage: 'ubuntu-latest'
 
 steps:
 - task: NodeTool@0
