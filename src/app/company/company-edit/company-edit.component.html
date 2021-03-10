@@ -44,18 +44,18 @@
         </app-address>
 
         <ledgend class="legend">Contact Details</ledgend>
-        <fieldset>
+        <fieldset  [ngClass]="{'invalid':formErrors.telephone}">
           <label for="companyTelephone" class="small">Telephone</label>
           <input type="text" id="companyTelephone" placeholder="" class="form-control form-control-sm"
-            formControlName="telephone" [ngClass]="{'is-invalid':formErrors.telephone}">
-          <span class="invalid-feedback">{{formErrors?.telephone}}</span>
+            formControlName="telephone">
+          <p class="message message--negative">{{formErrors?.telephone}}</p>
         </fieldset>
 
-        <fieldset>
+        <fieldset  [ngClass]="{'invalid':formErrors.fax}">
           <label for="companyFax" class="small">Fax</label>
           <input type="text" id="companyFax" placeholder="" class="form-control form-control-sm" formControlName="fax"
-            [ngClass]="{'is-invalid':formErrors.fax}">
-          <span class="invalid-feedback">{{formErrors?.fax}}</span>
+           >
+          <p class="message message--negative">{{formErrors?.fax}}</p>
         </fieldset>
 
         <fieldset>
@@ -64,11 +64,11 @@
             formControlName="website">
         </fieldset>
 
-        <fieldset>
+        <fieldset [ngClass]="{'invalid':formErrors.email}">
           <label for="companyEmail" class="small">Email</label>
           <input type="text" id="companyEmail" placeholder="" class="form-control form-control-sm"
-            formControlName="email" [ngClass]="{'is-invalid':formErrors.email}">
-          <span class="invalid-feedback">{{formErrors?.email}}</span>
+            formControlName="email" >
+            <p class="message message--negative">{{formErrors?.email}}</p>
         </fieldset>
 
         <ledgend class="legend">AML</ledgend>
