@@ -3,16 +3,16 @@ Font-face setup
 ***********************************************/
 @font-face {
     font-family:'objectsans';
-    src:    url('~/assets/font/ObjectSans-Medium.woff2') format('woff2'),
-            url('~/assets/font/ObjectSans-Medium.woff') format('woff');
+    src:    url('~/assets/font/objectsans-medium.woff2') format('woff2'),
+            url('~/assets/font/objectsans-medium.woff') format('woff');
     font-weight:bold;
     font-style:bold;
 }
 
 @font-face {
     font-family:'objectsans';
-    src:    url('~/assets/font/ObjectSans-Light.woff2') format('woff2'),
-            url('~/assets/font/ObjectSans-Light.woff') format('woff');
+    src:    url('~/assets/font/objectsans-light.woff2') format('woff2'),
+            url('~/assets/font/objectsans-light.woff') format('woff');
     font-weight:normal;
     font-style:normal;
 }
