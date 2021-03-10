@@ -935,9 +935,10 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
       // this._location.replaceState(url);
       // this.contactGroupId = contactGroupId;
       // this.init();
-      this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this._router.navigate(['/contact-centre/detail/', 0, 'people', contactGroupId]);
-      });
+      this._router.navigate(['/contact-centre/detail/', 0, 'people', contactGroupId], { replaceUrl: true });
+      // this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      //   this._router.navigate(['/contact-centre/detail/', 0, 'people', contactGroupId]);
+      // });
       if (this.isExistingCompany && this.existingCompanyId) {
         this._router.navigate(['/company-centre/detail', this.existingCompanyId]);
       }
