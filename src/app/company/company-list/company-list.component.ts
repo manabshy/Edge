@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, OnChanges, HostListener } from '@angular/core';
 import { CompanyAutoCompleteResult } from 'src/app/contactgroups/shared/contact-group';
 import { CompanyService } from '../shared/company.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-company-list',
@@ -10,13 +10,13 @@ import { Router } from '@angular/router';
 })
 export class CompanyListComponent implements OnInit, OnChanges {
 
-@Input()  companies: CompanyAutoCompleteResult[];
-@Input() companyName: string;
-@Input() searchTerm: string;
-@Input() bottomReached: boolean;
-@Input() pageNumber: number;
-page: number;
-  constructor(  private companyService: CompanyService, private router: Router ) { }
+  @Input() companies: CompanyAutoCompleteResult[];
+  @Input() companyName: string;
+  @Input() searchTerm: string;
+  @Input() bottomReached: boolean;
+  @Input() pageNumber: number;
+  page: number;
+  constructor(private companyService: CompanyService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
   }
@@ -37,12 +37,16 @@ page: number;
     totalHeight = window.scrollY + window.innerHeight;
     const url = this.router.url;
     const isCompanyCentre = url.endsWith('/company-centre');
-   if(isCompanyCentre) {
+    if (isCompanyCentre) {
       if (totalHeight >= scrollHeight && !this.bottomReached) {
         this.page++;
         this.companyService.companyPageChanged(this.page);
         console.log('companies page number', this.page);
       }
-   }
+    }
+  }
+
+  navigateToDetails(companyId: number) {
+    this.router.navigate(['detail', companyId], { relativeTo: this.route })
   }
 }
