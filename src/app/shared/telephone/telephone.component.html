@@ -2,5 +2,5 @@
   <i class="fas fa-spinner fa-pulse d-inline-block mr-2" *ngIf="isDialing"></i> <span [innerHTML]="number | highlight : searchTerm"></span>
 </button>
 
-<sup class="ml-2 py-2 sms-btn" *ngIf="isFax">Fax</sup>
+<sup class="pill flexRight" *ngIf="isFax">Fax</sup>
 <button type="button" *ngIf="sms" (click)="callOrText(false)" class="btn btn--info btn--pill flexRight">SMS</button>
