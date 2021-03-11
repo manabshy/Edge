@@ -14,6 +14,7 @@ import { Address } from 'src/app/shared/models/address';
 import { ToastrService } from 'ngx-toastr';
 import { InfoService } from 'src/app/core/services/info.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
+import { MessageService } from 'primeng/api';
 
 
 @Component({
@@ -39,7 +40,7 @@ export class CompanyEditComponent implements OnInit {
   todaysDate = new Date();
   formErrors = FormErrors;
   info: any;
-  isCreatingNewSigner: boolean;
+  isCreatingNewSigner: boolean = false;
   showCompanyFinder = false;
   isManualEntry = false;
   isSignerVisible = false;
@@ -54,7 +55,8 @@ export class CompanyEditComponent implements OnInit {
     private toastr: ToastrService,
     private _location: Location,
     private route: ActivatedRoute,
-    private _router: Router
+    private _router: Router,
+    private messageService: MessageService,
   ) { }
 
   ngOnInit() {
@@ -83,9 +85,10 @@ export class CompanyEditComponent implements OnInit {
     if (id) {
       this.getCompanyDetails(id);
     }
-    if (AppUtils.newSignerId) {
-      this.getSignerDetails(AppUtils.newSignerId);
-    }
+    // if (AppUtils.newSignerId) {
+    //   this.getSignerDetails(AppUtils.newSignerId);
+    // }
+    this.getSignerDetails();
     this.companyForm.valueChanges.pipe(debounceTime(400)).subscribe(() => this.logValidationErrors(this.companyForm, false));
   }
 
@@ -98,22 +101,26 @@ export class CompanyEditComponent implements OnInit {
   getCompanyDetails(id: number) {
     this.contactGroupService.getCompany(id).subscribe(data => {
       this.companyDetails = data;
-      this.signer = data?.signer;
+      if (!this.signer) {
+        this.signer = data?.signer;
+      }
       this.sharedService.setTitle(this.companyDetails.companyName);
       this.displayCompanyDetails(data);
     });
   }
 
-  createNewSigner(event?: any) {
-    if (event) {
-      this.isCreatingNewSigner = true;
-    }
+  createNewSigner() {
+    this.isCreatingNewSigner = true;
   }
 
-  getSignerDetails(id: number) {
-    this.contactGroupService.getSignerbyId(id).subscribe(data => {
-      this.existingSigner = data;
-      this.companyForm.markAsDirty();
+  getSignerDetails(id?: number) {
+    this.contactGroupService.signer$.subscribe(data => {
+      if (data) {
+        this.signer = data;
+        this.isCreatingNewSigner = false;
+        console.log({ data }, 'new signer shoud be here');
+
+      }
     });
   }
 
@@ -298,8 +305,8 @@ export class CompanyEditComponent implements OnInit {
   onSaveComplete(company?: Company) {
     this.companyForm.markAsPristine();
     this.isSubmitting = false;
-    this.toastr.success('Company successfully saved');
-
+    // this.toastr.success('Company successfully saved');
+    this.messageService.add({ severity: 'success', summary: 'Company successfully saved', closable: false });
     if (this.backToOrigin) { this.companyService.companyChanged(company); this.sharedService.back(); }
     if (this.isEditingSelectedCompany && company) {
       AppUtils.holdingSelectedCompany = company;
