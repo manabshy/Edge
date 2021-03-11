@@ -211,14 +211,6 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
     this.getNewlyAddedCompany();
   }
 
-  selectedSuggestion(event: any) {
-    if (event.item != null) {
-      this.suggestedTerm = event.item;
-    }
-    this.searchCompany();
-    this.suggestedTerm = '';
-  }
-
   init() {
     this.storage.get('info').subscribe(data => {
       if (data) {
@@ -238,6 +230,7 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
         this.isExistingCompany = params['isExistingCompany'] || false;
         this.existingCompanyId = params['existingCompanyId'] || 0;
         this.signer = params['signer'] || '';
+        this.searchTerm = params['searchTerm'] || '';
         this.backToOrigin = params['backToOrigin'] || false;
 
         if (this.isExistingCompany || this.isNewPersonalContact) {
@@ -478,28 +471,6 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
       isEstateAgent: contactGroup.isEstateAgent,
       isMortgageAdvisor: contactGroup.isMortgageAdvisor,
       contactType: contactGroup.contactType
-    });
-  }
-
-  setCompanies() {
-    this.foundCompanies = [];
-    this.companiesSearched = false;
-    setTimeout(() => {
-      this.companyNameInput.nativeElement.focus();
-    });
-  }
-
-  searchCompany() {
-    event.preventDefault();
-    event.stopPropagation();
-    this.suggestedTerm ? this.searchTerm = this.suggestedTerm : this.searchTerm = this.companyFinderForm.value.companyName;
-    this.findCompany(this.searchTerm);
-  }
-
-  findCompany(searchTerm: any) {
-    this.contactGroupService.getAutocompleteCompany(searchTerm).subscribe(data => {
-      this.companiesSearched = true;
-      this.foundCompanies = data;
     });
   }
 
@@ -909,15 +880,14 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
     localStorage.removeItem('newCompany');
     this.pendingChanges = false;
     this.messageService.add({ severity: 'success', summary: 'Contact Group successfully saved', closable: false });
-    if (this.backToOrigin) { this.sharedService.back(); }
+    if (this.backToOrigin) {
+      if (this.isSigner) { this.getSignerDetails(contactGroupId); }
+      this.sharedService.back();
+    }
     if (!contactGroupId) {
       this.sharedService.back();
     } else {
-      if (this.isSigner) {
-        AppUtils.newSignerId = contactGroupId;
-        this.getSignerDetails(contactGroupId);
-        this.sharedService.back();
-      }
+
       // Remove after Testing 23/02/21 ASAP
       // let url = this._router.url;
       // let replacedId = this.contactGroupId;
