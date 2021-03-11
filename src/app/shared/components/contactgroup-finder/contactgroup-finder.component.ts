@@ -17,6 +17,7 @@ export class ContactgroupFinderComponent implements OnInit, OnChanges {
   @Input() fullName: string;
   @Input() isFull = false;
   @Input() showCreateNewCompanyContact = true;
+  @Input() isSigner = false;
   @Output() selectedContactGroup = new EventEmitter<Signer>();
   @Output() fullSelectedContactGroup = new EventEmitter<ContactGroup>();
   @Output() isCreatingNewGroup = new EventEmitter<boolean>();
@@ -109,6 +110,7 @@ export class ContactgroupFinderComponent implements OnInit, OnChanges {
       this.selectedContactGroup.emit(contactGroup);
     }
   }
+  
   createNewContactGroup() { }
 
 }
