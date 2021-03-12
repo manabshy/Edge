@@ -91,6 +91,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   canEditLead = true;
   disablePrevious = false;
   disableNext = false;
+  currentUrl: string;
+  useExistingIds = false;
 
   get nextChaseDateControl() {
     return this.leadEditForm.get('nextChaseDate') as FormControl;
@@ -113,21 +115,41 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
   ngOnInit() {
     AppUtils.parentRoute = AppUtils.prevRoute;
-    this.selectedLeadTypeId = +this.route.snapshot.queryParamMap.get('leadTypeId');
-    this.infoParam = this.route.snapshot.queryParamMap.get('leadSearchInfo');
-    this.showSaveAndNext = this.route.snapshot.queryParamMap.get('showSaveAndNext') === 'true';
-    this.showNotes = this.route.snapshot.queryParamMap.get('showNotes') === 'true';
-    this.backToOrigin = this.route.snapshot.queryParamMap.get('backToOrigin') === 'true';
-    if (this.infoParam) {
-      this.leadSearchInfo = JSON.parse(this.infoParam) as LeadSearchInfo;
-      // this.canEditLead = +this.leadSearchInfo.listingType !== 1 ? false : true;
-      // console.log('can edit lead', this.canEditLead);
+    // this.selectedLeadTypeId = +this.route.snapshot.queryParamMap.get('leadTypeId');
+    // this.infoParam = this.route.snapshot.queryParamMap.get('leadSearchInfo');
+    // this.showSaveAndNext = this.route.snapshot.queryParamMap.get('showSaveAndNext') === 'true';
+    // this.showNotes = this.route.snapshot.queryParamMap.get('showNotes') === 'true';
+    // this.backToOrigin = this.route.snapshot.queryParamMap.get('backToOrigin') === 'true';
+    // if (this.infoParam) {
+    //   this.leadSearchInfo = JSON.parse(this.infoParam) as LeadSearchInfo;
+    //   // this.canEditLead = +this.leadSearchInfo.listingType !== 1 ? false : true;
+    //   // console.log('can edit lead', this.canEditLead);
 
-    }
+    // }
+    this.route.queryParamMap.subscribe(params => {
+      this.personId = +params.get('personId') || 0;
+      this.isNewLead = params.get('isNewLead') as unknown as boolean || false;
+      this.selectedLeadTypeId = +params.get('leadTypeId');
+      this.infoParam = params.get('leadSearchInfo');
+      this.showSaveAndNext = params.get('showSaveAndNext') as unknown as boolean || false;
+      this.showNotes = params.get('showNotes') === 'true';
+      this.backToOrigin = params.get('backToOrigin') === 'false';
+      this.useExistingIds = params['useExistingIds'] || false;
+      console.log('use existing ids', this.useExistingIds);
+
+      if (this.infoParam) {
+        this.leadSearchInfo = JSON.parse(this.infoParam) as LeadSearchInfo;
+        // this.canEditLead = +this.leadSearchInfo.listingType !== 1 ? false : true;
+        // console.log('can edit lead', this.canEditLead);
+
+      }
+    });
     this.route.params.subscribe(params => {
       this.leadId = +params['leadId'] || 0;
 
-      if (this.leadId && this.showSaveAndNext) {
+      console.log('save and next may be false', this.showSaveAndNext);
+
+      if (this.leadId && this.showSaveAndNext && !this.leadIds?.length) {
         this.getLeadIds(this.leadId);
       }
     });
@@ -222,7 +244,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   getLeadIds(leadId: number) {
-    // this.leadSearchInfo = JSON.parse(this.infoParam) as LeadSearchInfo;
     this.leadsService.getLeadIds(this.leadSearchInfo).subscribe((result: number[]) => {
       if (this.canEditLead) {
         this.leadIds = result?.slice(result?.findIndex(x => x === leadId));
@@ -244,6 +265,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   logValidationErrors(group: FormGroup = this.leadEditForm, fakeTouched: boolean, scrollToError = false) {
+    if (!this.canEditLead) { return; }
     Object.keys(group.controls).forEach((key: string) => {
       const control = group.get(key);
       const messages = ValidationMessages[key];
@@ -323,21 +345,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     });
   }
 
-  // onOwnerChanged(event: any) {
-  //   this.isOwnerChanged = true;
-  //   console.log('from child', event);
-  //   if (event && event.item != null || event) {
-  //     let ownerId = 0;
-  //     event.item ? ownerId = event.item.staffMemberId : ownerId = event.staffMemberId;
-  //     this.leadEditForm.patchValue({
-  //       ownerId: ownerId
-  //     });
-  //   } else {
-  //     this.leadEditForm.patchValue({
-  //       ownerId: ''
-  //     });
-  //   }
-  // }
 
   getSelectedStaffMemberId(id: number) {
     console.log('valuer id here', id);
@@ -427,6 +434,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
   create(item: string) {
     if (item === 'leads') {
+      localStorage.setItem('currentUrl', this.router.url);
       this.router.navigateByUrl('/', { skipLocationChange: true })
         .then(() => this.router.navigate(['leads-register/edit', 0],
           { queryParams: { isNewLead: true, showNotes: true, personId: this.person?.personId } }));
@@ -462,8 +470,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
         if (!this.isChaseDateInvalid && this.isSaveAndNext) {
           this.moveToNextLead();
         }
-
-        this.onUpdateCompleted();
       }
     } else {
       this.errorMessage = {} as WedgeError;
@@ -549,19 +555,35 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       this.isNextChaseDateChanged = false;
     }
 
-    let url = this.router.url;
-    let id = this.leadId;
-    if (url.indexOf('edit/' + id) === -1) {
-      id = 0;
-    }
-    if (url.indexOf('?') >= 0 && this.isNewLead) {
-      url = url.substring(0, url.indexOf('?'));
-      url = url.replace('edit/' + id, 'edit/' + lead.leadId);
-      this.location.replaceState(url);
-      this.isNewLead = false;
+    // let url = this.router.url;
+    // let id = this.leadId;
+    // if (url.indexOf('edit/' + id) === -1) {
+    //   id = 0;
+    // }
+    // if (url.indexOf('?') >= 0 && this.isNewLead) {
+    //   url = url.substring(0, url.indexOf('?'));
+    //   url = url.replace('edit/' + id, 'edit/' + lead.leadId);
+    //   this.location.replaceState(url);
+    //   this.isNewLead = false;
+    //   this.leadId = lead.leadId;
+    //   this.router.navigate(['/leads-register/edit/', this.leadId]);
+    //   this.init();
+    // }
+    if (lead) {
       this.leadId = lead.leadId;
-      this.router.navigate(['/leads-register/edit/', this.leadId]);
-      this.init();
+      this.currentUrl = localStorage.getItem('currentUrl');
+      console.log('current route', this.currentUrl);
+      if (this.currentUrl) {
+        this.router.navigateByUrl(this.currentUrl, { replaceUrl: true });
+
+        localStorage.removeItem('currentUrl');
+        // this.init();
+        this.canEditLead = false;
+      } else {
+        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+          this.router.navigate(['/leads-register/edit/', this.leadId]);
+        });
+      }
     }
   }
 
@@ -633,6 +655,14 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     }
   }
 
+  replaceLeadIdInRoute(id: number) {
+    this.router.navigate(['/leads-register/edit/', id], {
+      queryParams:
+        { showNotes: true, showSaveAndNext: true, leadSearchInfo: JSON.stringify(this.leadSearchInfo) }
+        // { showNotes: true, showSaveAndNext: true, useExistingIds: true, leadSearchInfo: JSON.stringify(this.leadSearchInfo) } Add useexistingIds flag later
+    });
+  }
+
   private getLeadTraversalInfo() {
     this.leadId = this.leadIds[this.currentLeadIndex];
     this.onLoading = true;
@@ -640,6 +670,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.personId = null;
     this.person = null;
     this.personNotes = [];
+    this.replaceLeadIdInRoute(this.leadId);
     this.getLeadInformation();
   }
 
