@@ -50,13 +50,19 @@ export class CanDeactivateGuard implements CanDeactivate<CanComponentDeactivate>
       this.ref.onClose.subscribe((res) => {
         if (res) {
           subject.next(true);
-          subject.complete(); localStorage.removeItem('contactPeople');
-          localStorage.removeItem('newCompany');
+          subject.complete();
+          this.removeFromLocalStorage();
         }
       });
       console.log(this.ref, 'res');
       return subject.asObservable();
     }
     return true;
+  }
+
+  removeFromLocalStorage() {
+    localStorage.removeItem('contactPeople');
+    localStorage.removeItem('newCompany');
+    localStorage.removeItem('currentUrl');
   }
 }
