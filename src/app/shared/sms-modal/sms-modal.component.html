@@ -4,67 +4,29 @@
     <input type="hidden" formControlName="personId">
     <input type="hidden" formControlName="phoneNumber" name="number">
   </fieldset>
-  
-  <div [ngClass]="{'is-invalid':formErrors.message || formErrors.senderName || formErrors.senderPhoneNumber}">
-    <fieldset>
-      <label>{{header}}</label>
-      <input type="hidden" formControlName="header">
-    </fieldset>
 
-    <fieldset>
-      <textarea formControlName="message" cols="30" rows="5" [maxlength]="smsMaxLength" placeholder="Message ..." [ngClass]="{'is-invalid':formErrors.message}"></textarea>
-      <small class="txt--right" [ngClass]="smsLength === smsMaxLength ? 'text-danger' : 'text-muted'">{{smsLength}}/{{smsMaxLength}}</small>
-    </fieldset>
+  <fieldset>
+    <label>{{header}}</label>
+    <input type="hidden" formControlName="header">
+  </fieldset>
 
-    <fieldset>
-      <label>Contact</label>
-      <input type="text" id="user" formControlName="senderName" placeholder="Name" [ngClass]="{'is-invalid':formErrors.senderName}">
-    </fieldset>
+  <fieldset  [ngClass]="{'invalid':formErrors.message}">
+    <textarea formControlName="message" cols="30" rows="5" [maxlength]="smsMaxLength" placeholder="Message ..."></textarea>
+    <small class="txt--right" [ngClass]="smsLength === smsMaxLength ? 'text-danger' : 'text-muted'">{{smsLength}}/{{smsMaxLength}}</small>
+    <p class="message message--negative">{{formErrors?.message}}</p>
+  </fieldset>
 
-    <fieldset>
-      <label>On</label>
-      <input type="text" id="userNumber" formControlName="senderPhoneNumber" placeholder="Number" [ngClass]="{'is-invalid':formErrors.senderPhoneNumber}">
-    </fieldset>
-    
-    <span class="invalid-feedback">{{formErrors?.message}}</span>
-    <span class="invalid-feedback">{{formErrors?.senderPhoneNumber}}</span>
-    <span class="invalid-feedback">{{formErrors?.senderName}}</span>
-  </div>
+  <fieldset [ngClass]="{'invalid':formErrors.senderName}">
+    <label>Contact</label>
+    <input type="text" id="user" formControlName="senderName" placeholder="Name" >
+    <p class="message message--negative">{{formErrors?.senderName}}</p>
+  </fieldset>
 
-  <!-- <div class="form-group mb-4">
-    <div class="fixed-text" [ngClass]="{'is-invalid':formErrors.message || formErrors.senderName || formErrors.senderPhoneNumber}">
-      <label class="fixed-text-header">{{header}}</label>
-      <input type="hidden" formControlName="header">
-      
-      <textarea formControlName="message" class="form-control" cols="30" rows="5" [maxlength]="smsMaxLength" placeholder="Message ..." [ngClass]="{'is-invalid':formErrors.message}"></textarea>
-      
-      <div class="fixed-text-footer">
-        <div class="form-row align-items-center">
-          <label class="col-auto m-0">
-            Contact
-          </label>
-          <div class="col">
-            <input type="text" id="user" formControlName="senderName" class="form-control" placeholder="Name"
-              [ngClass]="{'is-invalid':formErrors.senderName}">
-          </div>
-        </div>
-        <div class="form-row align-items-center">
-          <label class="col-auto m-0">
-            On
-          </label>
-          <div class="col">
-            <input type="text" id="userNumber" formControlName="senderPhoneNumber" class="form-control"
-              placeholder="Number" [ngClass]="{'is-invalid':formErrors.senderPhoneNumber}">
-          </div>
-        </div>
-      </div>
-    </div>
-    <small class="form-text"
-      [ngClass]="smsLength === smsMaxLength ? 'text-danger' : 'text-muted'">{{smsLength}}/{{smsMaxLength}}</small>
-    <span class="invalid-feedback">{{formErrors?.message}}</span>
-    <span class="invalid-feedback">{{formErrors?.senderPhoneNumber}}</span>
-    <span class="invalid-feedback">{{formErrors?.senderName}}</span>
-  </div> -->
+  <fieldset [ngClass]="{'invalid':formErrors.senderPhoneNumber}">
+    <label>On</label>
+    <input type="text" id="userNumber" formControlName="senderPhoneNumber" placeholder="Number" >
+    <p class="message message--negative">{{formErrors?.senderPhoneNumber}}</p>
+  </fieldset>
   <footer class="footer footer--modal">
     <div class="btn--container">
       <button type="button" class="btn btn--ghost" (click)="cancel()">Cancel</button>

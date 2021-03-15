@@ -49,13 +49,11 @@ export class WedgeValidators {
   static phoneNumberValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
       let validNumber = false;
-      let errors = { 'invalidPhoneNumber': { value: control.value } }
+      const errors = { 'invalidPhoneNumber': { value: control.value } }
       const regionCode = 'GB';
       const isNumber = /^([+]?[0-9 ]*)$/.test(control.value);
       // let regionCode = this.sharedService.getRegionCode(control.value);
-      if (control.value === '') {
-        return null;
-      }
+      if (control.value === '' || control.value === null) { return null; }
 
       if (isNumber) {
         const phoneNumberUtil = PhoneNumberUtil.getInstance();

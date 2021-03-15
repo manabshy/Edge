@@ -75,43 +75,19 @@ export class SmsModalComponent implements OnInit {
       }
     });
 
+    this.smsForm.valueChanges.subscribe(() => this.validationService.logValidationErrors(this.smsForm, false));
   }
 
-  logValidationErrorsSimple(group: FormGroup = this.smsForm, fakeTouched: boolean, scrollToError = false) {
-    Object.keys(group.controls).forEach((key: string) => {
-      const control = group.get(key);
-      const messages = ValidationMessages[key];
-      if (control.valid) {
-        this.formErrors[key] = '';
-      }
-      if (control && !control.valid && !control.disabled && (fakeTouched || control.dirty)) {
-        this.formErrors[key] = '';
-        for (const errorKey in control.errors) {
-          if (errorKey) {
-            console.log(errorKey, messages[errorKey]);
-            this.formErrors[key] += messages[errorKey] + '\n';
-          }
-        }
-      }
-    });
-    if (scrollToError) {
-      this.sharedService.scrollToFirstInvalidField();
-    }
-  }
+
 
   sendSMS() {
     this.validationService.logValidationErrors(this.smsForm, true, true);
     if (this.smsForm.invalid) { return; }
     if (this.smsForm.dirty) {
-      const sms = { ...this.sms, ...this.smsForm.value };
       this.smsService.sendSMS(this.smsForm?.value).subscribe(status =>
         this.onSaveComplete(status),
-        () => {
-          this.isSubmitting = false;
-        });
-    } else {
-      this.onSaveComplete(false);
-    }
+        () => { this.isSubmitting = false; });
+    } else { this.onSaveComplete(false); }
   }
 
   onSaveComplete(status: any): void {
@@ -123,6 +99,7 @@ export class SmsModalComponent implements OnInit {
 
   cancel() {
     this.ref.close();
+    this.validationService.clearFormValidators(this.smsForm, this.formErrors);
   }
 
 }
