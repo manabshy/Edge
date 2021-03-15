@@ -233,7 +233,7 @@
         <button *ngIf="!isNewLead" (click)="traverseLeads(false, true)" type="button" class="btn btn--ghost"
           [attr.disabled]="disablePrevious ? '':null">Previous</button>
         <button (click)="cancel()" type="button" class="btn btn--ghost" *ngIf="!isLeadClosed">Cancel</button>
-        <span class="txt--center" *ngIf="!isNewLead"><strong>no. {{currentLeadIndex + 1}}</strong></span>
+        <span class="txt--center" *ngIf="!isNewLead"><strong>{{currentLeadIndex + 1}} of {{leadIds?.length}}</strong></span>
         <button type="submit" class="btn btn--positive" id="saveLead" data-cy="saveLead"
           *ngIf="!isLeadClosed">Save</button>
         <button *ngIf="showSaveAndNext && !leadsListCompleted && !isLeadClosed" (click)="traverseLeads(true)"
