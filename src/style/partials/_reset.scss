@@ -194,6 +194,7 @@ Utility Classes
 
 /***** Display *****/
 .flex                                           { display:flex; }
+.flex--marginXAuto                              { margin:0 auto; }
 .inline                                         { display:inline; }
 .block, .show                                   { display:block; }
 .hidden, .hide                                  { display:none; }
