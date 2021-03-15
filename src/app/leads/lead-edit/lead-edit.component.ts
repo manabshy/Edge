@@ -658,6 +658,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   replaceLeadIdInRoute(id: number) {
+    this.leadSearchInfo.startLeadId = id;
     this.router.navigate(['/leads-register/edit/', id], {
       queryParams:
         { showNotes: true, showSaveAndNext: true, leadSearchInfo: JSON.stringify(this.leadSearchInfo) }
