@@ -12,6 +12,8 @@ import { WedgeError, SharedService } from '../../core/services/shared.service';
 import { FormErrors, ValidationMessages } from '../../core/shared/app-constants';
 import { WedgeValidators } from '../wedge-validators';
 import { StorageMap } from '@ngx-pwa/local-storage';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { ValidationService } from 'src/app/core/services/validation.service';
 
 @Component({
   selector: 'app-sms-modal',
@@ -23,7 +25,7 @@ export class SmsModalComponent implements OnInit {
   @Input() number;
   @Input() person;
   @Input() actions;
-  header = 'From D & G';
+  header = 'From Douglas&Gordon';
   smsMaxLength = 700;
   smsForm: FormGroup;
   subject: Subject<string>;
@@ -33,20 +35,24 @@ export class SmsModalComponent implements OnInit {
   isSubmitting: boolean;
   formErrors = FormErrors;
   validationMessages = ValidationMessages;
+  data: any;
 
   get smsLength() {
     return +this.smsForm.get('message').value.length;
   }
 
-  constructor(public bsModalRef: BsModalRef,
+  constructor(
     private fb: FormBuilder,
     private toastr: ToastrService,
     private storage: StorageMap,
     private sharedService: SharedService,
     private smsService: SmsService,
+    public config: DynamicDialogConfig, public ref: DynamicDialogRef, private validationService: ValidationService,
     private staffMemberService: StaffMemberService) { }
 
   ngOnInit() {
+    this.data = this.config?.data;
+    console.log(this.config.data, 'sms config here');
 
     this.smsForm = this.fb.group({
       personId: 0,
@@ -63,8 +69,8 @@ export class SmsModalComponent implements OnInit {
         this.smsForm.patchValue({
           senderName: this.currentStaffMember.fullName,
           senderPhoneNumber: this.currentStaffMember.mobile,
-          phoneNumber: this.number,
-          personId: this.person.personId
+          phoneNumber: this.data?.number,
+          personId: this.data?.person?.personId
         });
       }
     });
@@ -94,36 +100,29 @@ export class SmsModalComponent implements OnInit {
   }
 
   sendSMS() {
-    this.errorMessage = null;
-    this.logValidationErrorsSimple(this.smsForm, true, true);
-    if (this.smsForm.valid) {
-      if (this.smsForm.dirty) {
-        const sms = { ...this.sms, ...this.smsForm.value };
-        this.smsService.sendSMS(sms).subscribe(status =>
-          this.onSaveComplete(status),
-          (error: WedgeError) => {
-            this.isSubmitting = false;
-          });
-      } else {
-        this.onSaveComplete(false);
-      }
+    this.validationService.logValidationErrors(this.smsForm, true, true);
+    if (this.smsForm.invalid) { return; }
+    if (this.smsForm.dirty) {
+      const sms = { ...this.sms, ...this.smsForm.value };
+      this.smsService.sendSMS(this.smsForm?.value).subscribe(status =>
+        this.onSaveComplete(status),
+        () => {
+          this.isSubmitting = false;
+        });
     } else {
-      this.errorMessage = {} as WedgeError;
-      this.errorMessage.displayMessage = 'Please correct validation errors';
-      this.isSubmitting = false;
-      console.log(this.errorMessage.displayMessage);
+      this.onSaveComplete(false);
     }
   }
 
   onSaveComplete(status: any): void {
     if (status) {
-      this.bsModalRef.hide();
       this.toastr.success('SMS successfully sent');
+      this.ref.close();
     }
   }
 
   cancel() {
-    this.bsModalRef.hide();
+    this.ref.close();
   }
 
 }

@@ -14,6 +14,7 @@ import { StaffMember } from '../models/staff-member';
 import { StaffMemberService } from '../../core/services/staff-member.service';
 import { Company } from 'src/app/contactgroups/shared/contact-group';
 import { StorageMap } from '@ngx-pwa/local-storage';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-telephone',
@@ -32,12 +33,14 @@ export class TelephoneComponent implements OnInit {
   sms = true;
   currentStaffMember: StaffMember;
   tapiInfo: TapiRequestInfo;
+  ref: DynamicDialogRef;
 
   constructor(private modalService: BsModalService,
     private tapiService: TapiService,
     private sharedService: SharedService,
     private toastr: ToastrService,
     private storage: StorageMap,
+    private dialogService: DialogService,
     private staffMemberService: StaffMemberService) { }
 
   ngOnInit() {
@@ -114,15 +117,30 @@ export class TelephoneComponent implements OnInit {
 
   sendSMS() {
     const subject = new Subject<boolean>();
-    const initialState = {
+    // const initialState = {
+    //   person: this.person,
+    //   company: this.company,
+    //   number: this.number,
+    //   salutation: this.person ? this.person.salutation : this.company.companyName,
+    //   actions: ['Cancel', 'Send SMS']
+    // };
+    // const modal = this.modalService.show(SmsModalComponent, { initialState });
+    // modal.content.subject = subject;
+    const data = {
       person: this.person,
       company: this.company,
       number: this.number,
       salutation: this.person ? this.person.salutation : this.company.companyName,
       actions: ['Cancel', 'Send SMS']
     };
-    const modal = this.modalService.show(SmsModalComponent, { initialState });
-    modal.content.subject = subject;
+    this.ref = this.dialogService.open(SmsModalComponent, { data, styleClass: 'dialog dialog--hasFooter', header: 'Send SMS' });
+    this.ref.onClose.subscribe((res) => {
+      if (res) {
+        subject.next(true);
+        subject.complete();
+      }
+    });
+    console.log(this.ref, 'res');
     return subject.asObservable();
   }
 

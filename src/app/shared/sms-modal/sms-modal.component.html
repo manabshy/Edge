@@ -1,10 +1,58 @@
-<div class="modal-header">
-    Send SMS
-  <button type="button" class="close pull-right" aria-label="Close" (click)="cancel()">
-    <span aria-hidden="true">&times;</span>
-  </button>
-</div>
-<div class="modal-body text-center">
+<form [formGroup]="smsForm" action="" class="text-left" (ngSubmit)="sendSMS()">
+  <fieldset>
+
+  </fieldset>
+  <div class="form-group">
+    To: <strong>{{data?.salutation}}</strong> - <span class="txt--midnight-30">{{data?.number}}</span>
+    <input type="hidden" formControlName="personId">
+    <input type="hidden" formControlName="phoneNumber" name="number">
+  </div>
+  <div class="form-group mb-4">
+    <div class="fixed-text"
+      [ngClass]="{'is-invalid':formErrors.message || formErrors.senderName || formErrors.senderPhoneNumber}">
+      <label class="fixed-text-header">{{header}}</label>
+      <input type="hidden" formControlName="header">
+      <textarea formControlName="message" class="form-control" cols="30" rows="5" [maxlength]="smsMaxLength"
+        placeholder="Message ..." [ngClass]="{'is-invalid':formErrors.message}"></textarea>
+      <div class="fixed-text-footer">
+        <div class="form-row align-items-center">
+          <label class="col-auto m-0">
+            Contact
+          </label>
+          <div class="col">
+            <input type="text" id="user" formControlName="senderName" class="form-control" placeholder="Name"
+              [ngClass]="{'is-invalid':formErrors.senderName}">
+          </div>
+        </div>
+        <div class="form-row align-items-center">
+          <label class="col-auto m-0">
+            On
+          </label>
+          <div class="col">
+            <input type="text" id="userNumber" formControlName="senderPhoneNumber" class="form-control"
+              placeholder="Number" [ngClass]="{'is-invalid':formErrors.senderPhoneNumber}">
+          </div>
+        </div>
+      </div>
+    </div>
+    <small class="form-text"
+      [ngClass]="smsLength === smsMaxLength ? 'text-danger' : 'text-muted'">{{smsLength}}/{{smsMaxLength}}</small>
+    <span class="invalid-feedback">{{formErrors?.message}}</span>
+    <span class="invalid-feedback">{{formErrors?.senderPhoneNumber}}</span>
+    <span class="invalid-feedback">{{formErrors?.senderName}}</span>
+  </div>
+  <footer class="footer footer--modal">
+    <div class="btn--container">
+      <button type="button" class="btn btn--ghost" (click)="cancel()">Cancel</button>
+      <button type="submit" class="btn btn--positive" [attr.disabled]="isSubmitting ? '' : null"><svg aria-hidden="true"
+          width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
+          <path d="M2.2 57.8l60-25.7L2.2 6.4l0 20L45 32.1 2.1 37.8 2.2 57.8z" />
+        </svg>Send SMS</button>
+    </div>
+  </footer>
+</form>
+
+<!-- <div class="modal-body text-center">
     <form [formGroup]="smsForm" action="" class="text-left">
       <div class="form-group">
         To: <strong class="mr-1">{{salutation}}</strong> - <br class="d-sm-none" /><span class="text-muted">{{number}}</span>
@@ -46,4 +94,4 @@
     </form>
     <button type="button" class="btn btn-light mr-2" (click)="cancel()">Cancel</button>
     <button type="button" class="btn btn-secondary" [attr.disabled]="isSubmitting ? '' : null" (click)="sendSMS()">Send SMS</button>
-</div>
+</div> -->
