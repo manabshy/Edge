@@ -28,7 +28,7 @@
     .p-dialog-footer                            { padding:16px; border-radius:0; }
 
     /***** Dialog *****/
-    &.dialog                                    { width:300px; min-width:auto; min-height:auto;
+    &.dialog                                    { 
         &--hasFooter                            {
             .p-dialog-content                   { padding-bottom:60px; }
         }
@@ -97,6 +97,7 @@ This applies from 992px onwards
         .p-dialog-header                        { border-radius:3px 3px 0 0; }
         .p-dialog-footer                        { border-radius:0 0 3px 3px; }
         .p-dialog-content                       { border-radius:3px; }
+        &.dialog                                { width:300px; min-width:auto; min-height:auto; }
     }
 
     .modal--large                              {
