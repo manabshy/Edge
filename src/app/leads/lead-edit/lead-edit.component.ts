@@ -245,12 +245,13 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
   getLeadIds(leadId: number) {
     this.leadsService.getLeadIds(this.leadSearchInfo).subscribe((result: number[]) => {
-      if (this.canEditLead) {
-        this.leadIds = result?.slice(result?.findIndex(x => x === leadId));
-        console.log(this.leadIds, 'can edit ids');
+      // if (this.canEditLead) {
+      //   this.leadIds = result?.slice(result?.findIndex(x => x === leadId));
+      //   console.log(this.leadIds, 'can edit ids');
 
-      } else { this.leadIds = result; console.log(this.leadIds, 'cannot edit ids'); }
+      // } else { this.leadIds = result; console.log(this.leadIds, 'cannot edit ids'); }
 
+      this.leadIds = result; console.log(this.leadIds, 'all lead ids');
       this.currentLeadIndex = this.leadIds.indexOf(this.leadSearchInfo.startLeadId);
       this.currentLeadIndex === 0 ? this.disablePrevious = true : this.disablePrevious = false;
       this.currentLeadIndex === this.leadIds?.length - 1 ? this.disableNext = true : this.disableNext = false;
@@ -588,9 +589,10 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   cancel() {
-    if (false) {
-    } else {
+    if (this.isNewLead) {
       this.sharedService.back();
+    } else {
+      this.router.navigateByUrl('leads-register');
     }
   }
 
