@@ -1,7 +1,7 @@
 <div class="card">
-  <div class="card__header">
-    <span class="txt--title">Rankings</span>
-    <div dropdown placement="bottom right">
+  <div class="card__header card__header--divider">
+    <span>Rankings</span>
+    <div class="flexRight" dropdown placement="bottom right">
       <a class="btn dropdown-toggle" href [id]="'button'" dropdownToggle (click)="$event.stopPropagation(); false"
         [attr.aria-controls]="'dropdown'">
         <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
@@ -25,14 +25,14 @@
     </div>
   </div>
   <div class="card__body">
-    <ol>
+    <ol class="list list--rankings">
       <li *ngFor="let member of members; let position=index">
         <span class="avatar">
           <img class="circle" [src]="member?.photoUrl" alt="">
         </span>
         <span>
           <strong>{{member?.name}}</strong>
-          <small class="txt--warning">{{position+1}}</small>
+          <small class="txt--warning">£390k<!-- {{position+1}} --></small>
         </span>
       </li>
     </ol>
