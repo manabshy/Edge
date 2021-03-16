@@ -36,7 +36,7 @@ export class LeadNoteComponent implements OnInit, OnChanges {
     this.leadService.isLeadUpdated$.subscribe(data => {
       if (data) {
         console.log('is updated in note', data)
-        this.noteForm.reset();
+        this.noteForm?.reset();
       }
     });
 

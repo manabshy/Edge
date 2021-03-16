@@ -25,6 +25,7 @@ import { SubNavItem } from 'src/app/shared/subnav';
 import { ResultData } from 'src/app/shared/result-data';
 import { SideNavItem, SidenavService } from 'src/app/core/services/sidenav.service';
 import { MessageService } from 'primeng/api';
+import { ValidationService } from 'src/app/core/services/validation.service';
 
 @Component({
   selector: 'app-lead-edit',
@@ -93,6 +94,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   disableNext = false;
   currentUrl: string;
   useExistingIds = false;
+  exitOnSave: boolean;
 
   get nextChaseDateControl() {
     return this.leadEditForm.get('nextChaseDate') as FormControl;
@@ -109,6 +111,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     private sidenavService: SidenavService,
     private contactGroupService: ContactGroupsService,
     private messageService: MessageService,
+    private validationService: ValidationService,
     private toastr: ToastrService) {
     super();
   }
@@ -449,7 +452,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
   SaveLead(shouldExit: boolean = false, leadNote = null) {
     this.logValidationErrors(this.leadEditForm, true, true);
-
+    this.exitOnSave = shouldExit;
     if (this.leadEditForm.valid) {
       this.isSubmitting = true;
 
@@ -488,7 +491,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       lead.updatedDate = new Date;
 
       this.leadsService.addLead(lead).subscribe((result) => {
-        if (result) { this.lead = lead; this.onUpdateCompleted(result); }
+        if (result) { this.lead = lead; this.onSaveComplete(result); }
       }, (error: WedgeError) => {
         this.isSubmitting = false;
       });
@@ -530,16 +533,18 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
           console.log('dont want to move to next lead');
         }
       }
-      this.onUpdateCompleted(result);
+      this.onSaveComplete(result);
     }, (error: WedgeError) => {
       this.isSubmitting = false;
     });
   }
 
-  private onUpdateCompleted(lead?: Lead) {
+  private onSaveComplete(lead?: Lead) {
     console.log('i am here in OnUpdateCompleted');
 
     let time: number;
+    this.isPropertyAssociated = false;
+    this.isPropertyRemoved = false;
     if (this.isNewLead) {
       this.messageService.add({ severity: 'success', summary: 'Lead successfully saved', closable: false });
       if (this.backToOrigin) { this.sharedService.back(); }
@@ -581,14 +586,20 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
         // this.init();
         this.canEditLead = false;
       } else {
-        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-          this.router.navigate(['/leads-register/edit/', this.leadId]);
-        });
+        if (this.exitOnSave) {
+          this.replaceLeadIdInRoute(this.leadId);
+          // this.router.navigateByUrl('leads-register');
+          // this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+          //   this.router.navigate(['/leads-register/edit/', this.leadId]);
+          // });
+        }
+
       }
     }
   }
 
   cancel() {
+    this.validationService.clearFormValidators(this.leadEditForm, this.formErrors);
     if (this.isNewLead) {
       this.sharedService.back();
     } else {
@@ -662,7 +673,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.router.navigate(['/leads-register/edit/', id], {
       queryParams:
         { showNotes: true, showSaveAndNext: true, leadSearchInfo: JSON.stringify(this.leadSearchInfo) }
-        // { showNotes: true, showSaveAndNext: true, useExistingIds: true, leadSearchInfo: JSON.stringify(this.leadSearchInfo) } Add useexistingIds flag later
+      // { showNotes: true, showSaveAndNext: true, useExistingIds: true, leadSearchInfo: JSON.stringify(this.leadSearchInfo) } Add useexistingIds flag later
     });
   }
 
@@ -680,7 +691,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   traverseLeads(save?: boolean, previous?: boolean) {
     if (save) {
       this.isSaveAndNext = true;
-      this.SaveLead(true, this.note);
+      this.SaveLead(false, this.note);
       console.log('note', this.note);
     } else {
       console.log('move without saving');
