@@ -19,7 +19,8 @@ import { getYear, getMonth } from 'date-fns';
 })
 export class AdminPanelDetailsComponent implements OnInit {
 
-  @Input() member:TeamMember;
+  @Input() member: TeamMember;
+  // @Input() teamMemberId: number;
   modalRef: BsModalRef;
   searchForm: FormGroup;
   recordForm: FormGroup;
@@ -61,6 +62,8 @@ export class AdminPanelDetailsComponent implements OnInit {
   }
 
   setPointType(points: TeamMemberPoint[]) {
+    console.log('href or pont type');
+
     if (points && points.length) {
       points.forEach((p, i) => {
         if (this.pointTypes && this.pointTypes.length) {

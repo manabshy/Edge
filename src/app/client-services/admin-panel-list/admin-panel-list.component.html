@@ -26,55 +26,15 @@
   </div>
   <div class="card__body">
     <ol class="list list--rankings">
-      <li *ngFor="let member of members; let position=index">
+      <li *ngFor="let member of members; let position=index" (click)="selectedMember.emit(member)">
         <span class="avatar">
           <img class="circle" [src]="member?.photoUrl" alt="">
         </span>
         <span>
           <strong>{{member?.name}}</strong>
-          <small class="txt--warning">£390k<!-- {{position+1}} --></small>
+          <small class="txt--warning">{{member?.totalPoints}}</small>
         </span>
       </li>
     </ol>
-    
-    
-    
-    <!-- <div class="table">
-      <table class="table--rowHover">
-        <thead>
-          <tr>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let member of members; let position=index">
-            <td><img class="circle" [src]="member?.photoUrl" alt=""></td>
-            <td>{{member?.name}}</td>
-            <td>{{position+1}}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div> -->
   </div>
 </div>
-
-<!-- <div class="container">
-  <div class="row page-title">
-    <div class="col">
-      <h4 class="m-0">CS Board Admin Panel</h4>
-    </div>
-  </div>
-  <div class="list-group mb-5">
-    <ng-container *ngFor="let member of members">
-      <a [routerLink]="['/admin-panel','details', member?.staffMemberId]" class="list-group-item list-group-item-action pb-2">
-          <div class="media">
-              <img class="rounded-circle mr-3" [src]="member?.photoUrl" alt="">
-              <div class="media-body">
-                  <h5 class="mt-0">{{member?.name}}</h5>
-                  {{member?.totalPoints}} pts
-              </div>
-          </div>
-      </a>
-    </ng-container>
-  </div>
-</div> -->

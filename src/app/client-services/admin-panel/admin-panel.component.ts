@@ -19,9 +19,10 @@ export class AdminPanelComponent implements OnInit {
   ngOnInit(): void {
     console.log('here');
 
-    // this.members$ = this.boardService.getCsBoard();
-    this.members$ = of(TeamMembers).pipe(tap(data => { this.selectedMember = data[0]; console.log('selected ', data[0]) }));
+    this.members$ = this.boardService.getCsBoard().pipe(tap(data => { this.selectedMember = data[0]; console.log('selected ', data[0]) }));
+    // this.members$ = of(TeamMembers).pipe(tap(data => { this.selectedMember = data[0]; console.log('selected ', data[0]) }));
   }
 
+  getSelectedMember(member: TeamMember) { this.selectedMember = member; }
 
 }

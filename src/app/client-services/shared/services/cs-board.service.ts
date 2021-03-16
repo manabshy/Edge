@@ -28,7 +28,7 @@ export class CsBoardService {
     const url = `${AppConstants.baseCsboardUrl}/points`;
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
-      fromObject: { staffMemberId: id.toString(), dateTime: format((date), 'YYYY-MM-DD') }
+      fromObject: { staffMemberId: id?.toString(), dateTime: format((date), 'YYYY-MM-DD') }
     });
 
     return this.http.get<any>(url, { params: options }).pipe(map(res => res.result));
@@ -42,5 +42,10 @@ export class CsBoardService {
   addPoint(point: TeamMemberPoint): Observable<any> {
     const url = `${AppConstants.baseCsboardUrl}/points`;
     return this.http.post<any>(url, point).pipe(map(res => res.status));
+  }
+
+  updatePointTypes(pointTypes: PointType[]): Observable<PointType[]> {
+    const url = `${AppConstants.baseCsboardUrl}/pointTypes`;
+    return this.http.post<any>(url, pointTypes).pipe(map(res => res.result));
   }
 }

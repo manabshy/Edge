@@ -14,21 +14,21 @@
     <button class="btn btn--info" (click)="openModal(template)">Adjust</button>
   </div>
 </div>
-
 <ng-container *ngIf="member?.points?.length; else noPoints">
   <div class="table-responsive">
     <table class="table table-striped m-0">
       <thead>
         <tr>
-          <th scope="col">Date</th>
+          <!-- <th scope="col">Date</th> -->
           <th scope="col">Type</th>
           <th scope="col">Reason</th>
           <th scope="col">Points</th>
         </tr>
       </thead>
       <tbody>
+
         <tr *ngFor="let point of member.points">
-          <td>{{point?.dateTime|date:'dd/MM/yyyy'}}</td>
+          <!-- <td>{{point?.dateTime|date:'dd/MM/yyyy'}}</td> -->
           <td>{{point?.type || 'Adjustment'}}</td>
           <td>{{point?.reason}}</td>
           <td><span [ngClass]="{'txt--negative': point?.points < 0}">{{point?.points}}</span></td>
@@ -38,7 +38,7 @@
   </div>
 </ng-container>
 <ng-template #noPoints>
-  <app-redacted-table></app-redacted-table>
+ <fieldset class="fieldset fieldset--width-max"> <app-redacted-table message="No points"></app-redacted-table></fieldset>
 </ng-template>
 
 <ng-template #template>

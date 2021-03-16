@@ -6,11 +6,11 @@
           <img [src]="selectedMember?.photoUrl" alt="" *ngIf="selectedMember?.photoUrl;"></span>
           <span class="h4 txt--rankings">
             <p>{{selectedMember?.name}}</p>
-            <p class="txt--warning">1355 <small class="txt--midnight-30">Total Points</small></p>
+            <p class="txt--warning">{{selectedMember?.totalPoints}} <small class="txt--midnight-30">Total Points</small></p>
           </span>
       </div>
     </div>
-    <app-admin-panel-list [members]="members$|async" (showRules)="showRules = true"></app-admin-panel-list>
+    <app-admin-panel-list [members]="members$|async" (showRules)="showRules = true" (selectedMember)="getSelectedMember($event)"></app-admin-panel-list>
   </div>
   <div class="row__item">
     <app-admin-panel-details [member]="selectedMember"></app-admin-panel-details>

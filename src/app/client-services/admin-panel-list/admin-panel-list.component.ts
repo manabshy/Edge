@@ -9,6 +9,7 @@ import { TeamMember } from '../shared/models/team-member';
 export class AdminPanelListComponent implements OnInit {
   @Input() members: TeamMember[];
   @Output() showRules = new EventEmitter<boolean>();
+  @Output() selectedMember = new EventEmitter<TeamMember>();
   constructor() { }
 
   ngOnInit(): void {
