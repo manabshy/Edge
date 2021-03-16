@@ -1,12 +1,12 @@
 <div class="row">
   <div class="row__item row__item--aside">
     <div class="card">
-      <div class="card__body">
+      <div class="card__body card__body--avatar">
         <span class="avatar avatar--l">
           <img [src]="selectedMember?.photoUrl" alt="" *ngIf="selectedMember?.photoUrl;"></span>
-          <span>
-            <h3>{{selectedMember?.name}}</h3>
-            <p class="h3 txt--warning">1355 <small class="txt--midnight-30">Total Points</small></p>
+          <span class="h4 txt--rankings">
+            <p>{{selectedMember?.name}}</p>
+            <p class="txt--warning">1355 <small class="txt--midnight-30">Total Points</small></p>
           </span>
       </div>
     </div>

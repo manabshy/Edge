@@ -51,8 +51,6 @@
             &:first-child:after                 { color:$color--snow; background-color:$color--warning; }
             &:nth-child(2):after                { color:$color--snow; background-color:$color--midnight-50; }
             &:nth-child(3):after                { color:$color--snow; background-color:#CFA86B; }
-            
-            .avatar+*                           { margin-left:10px; }
         }
     }
 }
