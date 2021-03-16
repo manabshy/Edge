@@ -2,8 +2,12 @@
   <div class="row__item row__item--aside">
     <div class="card">
       <div class="card__body">
-       <span class="avatar"> <img [src]="selectedMember?.photoUrl" alt="" *ngIf="selectedMember?.photoUrl;"></span>
-        <span>{{selectedMember?.name}}</span>
+        <span class="avatar avatar--l">
+          <img [src]="selectedMember?.photoUrl" alt="" *ngIf="selectedMember?.photoUrl;"></span>
+          <span>
+            <h3>{{selectedMember?.name}}</h3>
+            <p class="h3 txt--warning">1355 <small class="txt--midnight-30">Total Points</small></p>
+          </span>
       </div>
     </div>
     <app-admin-panel-list [members]="members$|async" (showRules)="showRules = true"></app-admin-panel-list>

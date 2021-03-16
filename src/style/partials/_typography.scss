@@ -134,3 +134,5 @@ summary                                         { padding:0; list-style:none; mi
 .pill--negative                                 {
     &.redacted                                  { background-color:$color--negative; flex-shrink:initial; }
 }
+
+.avatar                                         { border-radius:50%; overflow:hidden; }
