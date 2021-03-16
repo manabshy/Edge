@@ -1,7 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { CsBoardService } from '../shared/services/cs-board.service';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TeamMember } from '../shared/models/team-member';
 
 @Component({
@@ -10,12 +7,11 @@ import { TeamMember } from '../shared/models/team-member';
   styleUrls: ['./admin-panel-list.component.scss']
 })
 export class AdminPanelListComponent implements OnInit {
-  members$ = new Observable<TeamMember[]>();
-
-  constructor(private boardService: CsBoardService) { }
+  @Input() members: TeamMember[];
+  @Output() showRules = new EventEmitter<boolean>();
+  constructor() { }
 
   ngOnInit(): void {
-    this.members$ = this.boardService.getCsBoard();
   }
 
 }

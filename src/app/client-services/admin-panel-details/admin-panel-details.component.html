@@ -1,107 +1,68 @@
-<app-breadcrumb></app-breadcrumb>
-<div class="container">
-    <div class="row page-title">
-        <div class="col">
-            <h4 class="m-0">Player</h4>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xl-8" *ngIf="memberDetails$|async as member">
-            <div class="row text-center text-sm-left align-items-center mb-4">
-                <div class="col-sm-auto mb-3">
-                    <img class="rounded-circle" [src]="member?.photoUrl" alt="">
-                </div>
-                <div class="col-sm mb-3">
-                    <h5 class="mt-0">{{member?.name}}</h5>
-                    <!-- <dl>
-                        <dt>Position</dt>
-                        <dd>1 <i class="fas fa-chevron-up fa-lg ml-2 text-success"></i></dd>
-                        <dt>Points</dt>
-                        <dd>1230</dd>
-                    </dl> -->
-                </div>
-            </div>
-            <div class="row justify-content-between">
-                <div class="col col-sm-6">
-                    <form [formGroup]="searchForm">
-                        <div class="form-group">
-                            <select class="custom-select" id="month" aria-label="Month" formControlName="searchTerm">
-                                <option value="current" selected>Month</option>
-                                <option *ngFor="let month of thisYearsMonths" [value]="month?.value">{{month?.key}}
-                                </option>
-                            </select>
-                        </div>
-                    </form>
-                </div>
-                <div class="col-auto">
-                    <button class="btn btn-primary" (click)="openModal(template)">Adjust</button>
-                </div>
-            </div>
-
-            <ng-container *ngIf="member?.points?.length; else noPoints">
-                <div class="table-responsive">
-                    <table class="table table-striped m-0">
-                        <thead>
-                            <tr>
-                                <th scope="col">Date</th>
-                                <th scope="col">Type</th>
-                                <th scope="col">Reason</th>
-                                <th scope="col">Points</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let point of member.points">
-                                <td>{{point?.dateTime|date:'dd/MM/yyyy'}}</td>
-                                <td>{{point?.type || 'Adjustment'}}</td>
-                                <td>{{point?.reason}}</td>
-                                <td><span [ngClass]="{'text-danger': point?.points < 0}">{{point?.points}}</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <table class="table table-dark table-total">
-                    <tbody>
-                        <tr class="bg-dark">
-                            <th scope="row">
-                                Total
-                            </th>
-                            <td>
-                                {{totalPoints}}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </ng-container>
-            <ng-template #noPoints>
-                <p>It seems there are no points for this month</p>
-                <div style="width:100%;height:0;padding-bottom:50%;position:relative;"><iframe src="https://giphy.com/embed/6uGhT1O4sxpi8" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p><a href="https://giphy.com/gifs/awkward-pulp-fiction-john-travolta-6uGhT1O4sxpi8">via GIPHY</a></p>
-            </ng-template>
-        </div>
-    </div>
+<div class="row ">
+  <div>
+    <form [formGroup]="searchForm">
+      <div>
+        <select class="custom-select" id="month" aria-label="Month" formControlName="searchTerm">
+          <option value="current" selected>Month</option>
+          <option *ngFor="let month of thisYearsMonths" [value]="month?.value">{{month?.key}}
+          </option>
+        </select>
+      </div>
+    </form>
+  </div>
+  <div class="flexRight">
+    <button class="btn btn--info" (click)="openModal(template)">Adjust</button>
+  </div>
 </div>
 
+<ng-container *ngIf="member?.points?.length; else noPoints">
+  <div class="table-responsive">
+    <table class="table table-striped m-0">
+      <thead>
+        <tr>
+          <th scope="col">Date</th>
+          <th scope="col">Type</th>
+          <th scope="col">Reason</th>
+          <th scope="col">Points</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let point of member.points">
+          <td>{{point?.dateTime|date:'dd/MM/yyyy'}}</td>
+          <td>{{point?.type || 'Adjustment'}}</td>
+          <td>{{point?.reason}}</td>
+          <td><span [ngClass]="{'txt--negative': point?.points < 0}">{{point?.points}}</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</ng-container>
+<ng-template #noPoints>
+  <app-redacted-table></app-redacted-table>
+</ng-template>
+
 <ng-template #template>
-    <div class="modal-header">
-        <h4 class="modal-title pull-left">Adjustment</h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide(); clearRecordForm()">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div class="modal-body">
-        <form [formGroup]="recordForm" autocomplete="off" (ngSubmit)="addRecord()">
-            <div class="form-group">
-                <label for="reason">Reason</label>
-                <input type="text" id="reason" class="form-control" formControlName="reason"
-                    [ngClass]="{'is-invalid': formErrors?.reason}">
-                <div class="invalid-feedback">{{formErrors?.reason}}</div>
-            </div>
-            <div class="form-group">
-                <label for="points">Points</label>
-                <input type="text" id="points" class="form-control" formControlName="points"
-                    [ngClass]="{'is-invalid': formErrors?.points}">
-                <div class="invalid-feedback">{{formErrors?.points}}</div>
-            </div>
-            <button class="btn btn-primary btn-block mt-4" type="submit">Adjust</button>
-        </form>
-    </div>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Adjustment</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide(); clearRecordForm()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="recordForm" autocomplete="off" (ngSubmit)="addRecord()">
+      <div class="form-group">
+        <label for="reason">Reason</label>
+        <input type="text" id="reason" class="form-control" formControlName="reason"
+          [ngClass]="{'is-invalid': formErrors?.reason}">
+        <div class="invalid-feedback">{{formErrors?.reason}}</div>
+      </div>
+      <div class="form-group">
+        <label for="points">Points</label>
+        <input type="text" id="points" class="form-control" formControlName="points"
+          [ngClass]="{'is-invalid': formErrors?.points}">
+        <div class="invalid-feedback">{{formErrors?.points}}</div>
+      </div>
+      <button class="btn btn-primary btn-block mt-4" type="submit">Adjust</button>
+    </form>
+  </div>
 </ng-template>

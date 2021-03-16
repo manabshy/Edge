@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, Input, OnInit, TemplateRef } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { FormErrors, ValidationMessages } from '../../../app/core/shared/app-constants';
 import { CsBoardService } from '../shared/services/cs-board.service';
 import { SharedService } from 'src/app/core/services/shared.service';
-import { PointType, TeamMemberPoint } from '../shared/models/team-member';
+import { PointType, TeamMember, TeamMemberPoint } from '../shared/models/team-member';
 import { tap, map } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import * as moment from 'moment';
@@ -19,6 +19,7 @@ import { getYear, getMonth } from 'date-fns';
 })
 export class AdminPanelDetailsComponent implements OnInit {
 
+  @Input() member:TeamMember;
   modalRef: BsModalRef;
   searchForm: FormGroup;
   recordForm: FormGroup;

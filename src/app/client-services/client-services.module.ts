@@ -6,11 +6,12 @@ import { AdminPanelListComponent } from './admin-panel-list/admin-panel-list.com
 import { AdminPanelDetailsComponent } from './admin-panel-details/admin-panel-details.component';
 import { CoreModule } from '../core/core.module';
 import { SharedModule } from '../shared/shared.module';
+import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 
 
 
 @NgModule({
-  declarations: [AdminPanelListComponent, AdminPanelDetailsComponent],
+  declarations: [AdminPanelListComponent, AdminPanelDetailsComponent, AdminPanelComponent],
   imports: [
     CoreModule,
     CommonModule,
