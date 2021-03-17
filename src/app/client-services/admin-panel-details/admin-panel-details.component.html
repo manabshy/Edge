@@ -15,8 +15,8 @@
   </div>
 </div>
 <ng-container *ngIf="member?.points?.length; else noPoints">
-  <div class="table-responsive">
-    <table class="table table-striped m-0">
+  <div class="table">
+    <table class="table--mobile table--rowHover">
       <thead>
         <tr>
           <!-- <th scope="col">Date</th> -->
@@ -31,7 +31,7 @@
           <!-- <td>{{point?.dateTime|date:'dd/MM/yyyy'}}</td> -->
           <td>{{point?.type || 'Adjustment'}}</td>
           <td>{{point?.reason}}</td>
-          <td><span [ngClass]="{'txt--negative': point?.points < 0}">{{point?.points}}</span></td>
+          <td><strong [ngClass]="{'txt--negative': point?.points < 0}">{{point?.points}}</strong></td>
         </tr>
       </tbody>
     </table>
