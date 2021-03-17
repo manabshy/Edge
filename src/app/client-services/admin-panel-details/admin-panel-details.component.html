@@ -22,16 +22,24 @@
           <!-- <th scope="col">Date</th> -->
           <th scope="col">Type</th>
           <th scope="col">Reason</th>
-          <th scope="col">Points</th>
+          <th scope="col" class="txt--center">Points</th>
         </tr>
       </thead>
       <tbody>
 
         <tr *ngFor="let point of member.points">
-          <!-- <td>{{point?.dateTime|date:'dd/MM/yyyy'}}</td> -->
-          <td>{{point?.type || 'Adjustment'}}</td>
-          <td>{{point?.reason}}</td>
-          <td><strong [ngClass]="{'txt--negative': point?.points < 0}">{{point?.points}}</strong></td>
+          <!-- <td data-title="Date">
+            <span class="cell-content">{{point?.dateTime|date:'dd/MM/yyyy'}}</span>
+          </td> -->
+          <td data-title="Type">
+            <span class="cell-content">{{point?.type || 'Adjustment'}}</span>
+          </td>
+          <td data-title="Reason">
+            <span class="cell-content">{{point?.reason}}</span>
+          </td>
+          <td data-title="Points" class="txt--center txt--left-mobile">
+            <span class="cell-content"><strong [ngClass]="{'txt--negative': point?.points < 0}">{{point?.points}}</strong></span>
+          </td>
         </tr>
       </tbody>
     </table>

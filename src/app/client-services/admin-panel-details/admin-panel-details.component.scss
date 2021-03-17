@@ -1,30 +1,30 @@
-@import "../../../style/bootstrap-overrides";
+// @import "../../../style/bootstrap-overrides";
 
-@import "../../../../node_modules/bootstrap/scss/functions";
-@import "../../../../node_modules/bootstrap/scss/variables";
-@import "../../../../node_modules/bootstrap/scss/mixins";
+// @import "../../../../node_modules/bootstrap/scss/functions";
+// @import "../../../../node_modules/bootstrap/scss/variables";
+// @import "../../../../node_modules/bootstrap/scss/mixins";
 
-dl {
-    display: flex;
-    flex-flow: column wrap;
-    max-height: 4em;
-    max-width: 16em;
-    margin: 1rem auto;
+// dl {
+//     display: flex;
+//     flex-flow: column wrap;
+//     max-height: 4em;
+//     max-width: 16em;
+//     margin: 1rem auto;
 
-    @include media-breakpoint-up(sm) {
-      margin-left: 0;
-    }
-  }
+//     @include media-breakpoint-up(sm) {
+//       margin-left: 0;
+//     }
+//   }
 
-  table {
-    th,td {
-      &:last-child {
-        text-align: right;
-      }
-    }
-  }
+//   table {
+//     th,td {
+//       &:last-child {
+//         text-align: right;
+//       }
+//     }
+//   }
 
-  .table-total {
-    position: sticky;
-    bottom: 0;
-  }
+//   .table-total {
+//     position: sticky;
+//     bottom: 0;
+//   }
