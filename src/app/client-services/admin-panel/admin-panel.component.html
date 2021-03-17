@@ -16,3 +16,9 @@
     <app-admin-panel-details [member]="selectedMember" (updatedTeamMember)="getSelectedMember($event)"></app-admin-panel-details>
   </div>
 </div>
+
+
+<!-- Rules component -->
+<p-dialog header="Rules" [(visible)]="showRules" [modal]="true" [draggable]="false" [blockScroll]="true" class="modal--small modal--hasFooter">
+  <app-rules (hideModal)="showRules=false"></app-rules>
+</p-dialog>
