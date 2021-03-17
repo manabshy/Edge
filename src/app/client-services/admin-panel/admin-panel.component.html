@@ -13,6 +13,6 @@
     <app-admin-panel-list [members]="members$|async" (showRules)="showRules = true" (selectedMember)="getSelectedMember($event)"></app-admin-panel-list>
   </div>
   <div class="row__item">
-    <app-admin-panel-details [member]="selectedMember"></app-admin-panel-details>
+    <app-admin-panel-details [member]="selectedMember" (updatedTeamMember)="getSelectedMember($event)"></app-admin-panel-details>
   </div>
 </div>

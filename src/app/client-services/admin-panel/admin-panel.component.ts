@@ -23,6 +23,8 @@ export class AdminPanelComponent implements OnInit {
     // this.members$ = of(TeamMembers).pipe(tap(data => { this.selectedMember = data[0]; console.log('selected ', data[0]) }));
   }
 
-  getSelectedMember(member: TeamMember) { this.selectedMember = member; }
+  getSelectedMember(member: TeamMember) { this.selectedMember = member; console.log({member});
+  }
+
 
 }

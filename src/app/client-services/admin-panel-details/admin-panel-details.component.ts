@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, TemplateRef } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, TemplateRef } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -11,15 +11,17 @@ import { tap, map } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import * as moment from 'moment';
 import { getYear, getMonth } from 'date-fns';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-admin-panel-details',
   templateUrl: './admin-panel-details.component.html',
   styleUrls: ['./admin-panel-details.component.scss']
 })
-export class AdminPanelDetailsComponent implements OnInit {
+export class AdminPanelDetailsComponent implements OnInit, OnChanges {
 
   @Input() member: TeamMember;
+  @Output() updatedTeamMember = new EventEmitter<TeamMember>();
   // @Input() teamMemberId: number;
   modalRef: BsModalRef;
   searchForm: FormGroup;
@@ -32,12 +34,15 @@ export class AdminPanelDetailsComponent implements OnInit {
   teamMemberPoints: TeamMemberPoint[] = [];
   totalPoints: number;
   currentMonth: string;
+  showAdjustment = false;
+  teamMember: TeamMember;
 
   constructor(private fb: FormBuilder,
     private route: ActivatedRoute,
     private boardService: CsBoardService,
     private sharedService: SharedService,
     private toastr: ToastrService,
+    private messageService: MessageService,
     public modalService: BsModalService) { }
 
   ngOnInit(): void {
@@ -54,6 +59,8 @@ export class AdminPanelDetailsComponent implements OnInit {
     this.getTeamMemberDetails();
     this.getPointTypes();
   }
+
+  ngOnChanges() { if (this.member) { this.teamMember = this.member; this.teamMemberPoints = [...this.member.points]; } }
 
   getPointTypes() {
     this.boardService.getPointTypes().subscribe({
@@ -85,6 +92,8 @@ export class AdminPanelDetailsComponent implements OnInit {
       this.teamMemberPoints.push(newPoint);
       this.getSelectedMonthPointTotal(this.teamMemberPoints);
       this.orderPointsByDateDescending(this.teamMemberPoints);
+      this.teamMember.points = this.teamMemberPoints;
+      this.updatedTeamMember.emit(this.teamMember);
     }
   }
 
@@ -95,6 +104,7 @@ export class AdminPanelDetailsComponent implements OnInit {
         total += x.points;
       });
       this.totalPoints = total;
+      this.teamMember.totalPoints = total;
     }
   }
 
@@ -137,7 +147,7 @@ export class AdminPanelDetailsComponent implements OnInit {
 
   clearRecordForm() {
     if (this.recordForm) {
-      this.recordForm.reset();
+      this.recordForm?.reset();
       this.clearFormValidators();
     }
   }
@@ -173,7 +183,7 @@ export class AdminPanelDetailsComponent implements OnInit {
   addRecord() {
     this.logValidationErrors(this.recordForm, true);
     const point = this.recordForm.value as TeamMemberPoint;
-    point.staffMemberId = this.teamMemberId;
+    point.staffMemberId = this.member.staffMemberId;
     point.pointTypeId = 9;
 
     if (this.recordForm.valid) {
@@ -181,12 +191,14 @@ export class AdminPanelDetailsComponent implements OnInit {
         this.boardService.addPoint(point).subscribe({
           next: (res: boolean) => {
             if (res) {
-              this.toastr.success('Adjustment successfully added');
-              this.modalRef.hide();
+              // this.toastr.success('Adjustment successfully added');
+              this.showAdjustment = false;
+              this.messageService.add({ severity: 'success', summary: 'Adjustment successfully added', closable: false });
               this.clearRecordForm();
               point.dateTime = new Date();
               point.points = +point.points;
               this.updateTeamMemberPoints(point);
+              // this.boardService.getCsTeamMemberDetails(this.teamMemberId).subscribe((data)=>console.log({data}));
             }
           }
         });
@@ -194,4 +206,5 @@ export class AdminPanelDetailsComponent implements OnInit {
     }
   }
 
+  cancel() { this.showAdjustment = false; this.clearRecordForm(); }
 }

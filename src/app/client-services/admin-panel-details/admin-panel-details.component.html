@@ -11,7 +11,7 @@
     </form>
   </div>
   <div class="flexRight">
-    <button class="btn btn--info" (click)="openModal(template)">Adjust</button>
+    <button class="btn btn--info" (click)="showAdjustment=true">Adjust</button>
   </div>
 </div>
 <ng-container *ngIf="member?.points?.length; else noPoints">
@@ -38,7 +38,8 @@
             <span class="cell-content">{{point?.reason}}</span>
           </td>
           <td data-title="Points" class="txt--center txt--left-mobile">
-            <span class="cell-content"><strong [ngClass]="{'txt--negative': point?.points < 0}">{{point?.points}}</strong></span>
+            <span class="cell-content"><strong
+                [ngClass]="{'txt--negative': point?.points < 0}">{{point?.points}}</strong></span>
           </td>
         </tr>
       </tbody>
@@ -46,31 +47,33 @@
   </div>
 </ng-container>
 <ng-template #noPoints>
- <fieldset class="fieldset fieldset--width-max"> <app-redacted-table message="No points"></app-redacted-table></fieldset>
+  <fieldset class="fieldset fieldset--width-max">
+    <app-redacted-table message="No points"></app-redacted-table>
+  </fieldset>
 </ng-template>
 
-<ng-template #template>
-  <div class="modal-header">
-    <h4 class="modal-title pull-left">Adjustment</h4>
-    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide(); clearRecordForm()">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <form [formGroup]="recordForm" autocomplete="off" (ngSubmit)="addRecord()">
-      <div class="form-group">
-        <label for="reason">Reason</label>
-        <input type="text" id="reason" class="form-control" formControlName="reason"
-          [ngClass]="{'is-invalid': formErrors?.reason}">
-        <div class="invalid-feedback">{{formErrors?.reason}}</div>
+<p-dialog header="Adjustment" [(visible)]="showAdjustment" [modal]="true" [draggable]="false"
+  class="modal--small modal--hasFooter">
+  <form [formGroup]="recordForm" autocomplete="off" (ngSubmit)="addRecord()">
+    <fieldset [ngClass]="{'invalid': formErrors?.reason}">
+      <label for="reason">Reason</label>
+      <textarea type="text" id="reason" formControlName="reason" cols="10" rows="5"></textarea>
+      <p class="message message--negative">{{formErrors?.reason}}</p>
+    </fieldset>
+    <fieldset [ngClass]="{'invalid': formErrors?.points}">
+      <label for="points">Points</label>
+      <input type="text" id="points" formControlName="points">
+      <p class="message message--negative">{{formErrors?.points}}</p>
+    </fieldset>
+    <footer class="footer footer--modal">
+      <div class="btn--container">
+        <button type="button" class="btn btn--ghost" (click)="cancel()">Cancel</button>
+        <button class="btn btn--positive" type="submit">Adjust</button>
       </div>
-      <div class="form-group">
-        <label for="points">Points</label>
-        <input type="text" id="points" class="form-control" formControlName="points"
-          [ngClass]="{'is-invalid': formErrors?.points}">
-        <div class="invalid-feedback">{{formErrors?.points}}</div>
-      </div>
-      <button class="btn btn-primary btn-block mt-4" type="submit">Adjust</button>
-    </form>
-  </div>
-</ng-template>
+    </footer>
+  </form>
+</p-dialog>
+
+<!--Success Messages -->
+<p-toast></p-toast>
+
