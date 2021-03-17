@@ -19,7 +19,7 @@
     <table class="table--mobile table--rowHover">
       <thead>
         <tr>
-          <!-- <th scope="col">Date</th> -->
+          <th scope="col">Date</th>
           <th scope="col">Type</th>
           <th scope="col">Reason</th>
           <th scope="col" class="txt--center">Points</th>
@@ -28,9 +28,9 @@
       <tbody>
 
         <tr *ngFor="let point of member.points">
-          <!-- <td data-title="Date">
+          <td data-title="Date">
             <span class="cell-content">{{point?.dateTime|date:'dd/MM/yyyy'}}</span>
-          </td> -->
+          </td>
           <td data-title="Type">
             <span class="cell-content">{{point?.type || 'Adjustment'}}</span>
           </td>

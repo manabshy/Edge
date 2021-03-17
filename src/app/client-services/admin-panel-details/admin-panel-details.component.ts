@@ -198,7 +198,7 @@ export class AdminPanelDetailsComponent implements OnInit, OnChanges {
               point.dateTime = new Date();
               point.points = +point.points;
               this.updateTeamMemberPoints(point);
-              // this.boardService.getCsTeamMemberDetails(this.teamMemberId).subscribe((data)=>console.log({data}));
+              this.boardService.getCsTeamMemberDetails(this.member?.staffMemberId).subscribe((data)=>console.log({data}));
             }
           }
         });
