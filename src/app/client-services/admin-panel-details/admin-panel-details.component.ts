@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import * as moment from 'moment';
 import { getYear, getMonth, addYears, subYears } from 'date-fns';
 import { MessageService } from 'primeng/api';
+import { StorageMap } from '@ngx-pwa/local-storage';
 
 @Component({
   selector: 'app-admin-panel-details',
@@ -36,6 +37,7 @@ export class AdminPanelDetailsComponent implements OnInit, OnChanges {
   currentMonth: string;
   showAdjustment = false;
   teamMember: TeamMember;
+  message: string;
 
   get searchTermControl(): FormControl {
     return this.searchForm.get('searchTerm') as FormControl;
@@ -44,6 +46,7 @@ export class AdminPanelDetailsComponent implements OnInit, OnChanges {
     private route: ActivatedRoute,
     private boardService: CsBoardService,
     private sharedService: SharedService,
+    private storage: StorageMap,
     private toastr: ToastrService,
     private messageService: MessageService,
     public modalService: BsModalService) { }
@@ -105,6 +108,7 @@ export class AdminPanelDetailsComponent implements OnInit, OnChanges {
       this.orderPointsByDateDescending(this.teamMemberPoints);
       this.teamMember.points = this.teamMemberPoints;
       this.updatedTeamMember.emit(this.teamMember);
+      this.searchForm.patchValue({ searchTerm: this.currentMonth });
     }
   }
 
@@ -151,6 +155,7 @@ export class AdminPanelDetailsComponent implements OnInit, OnChanges {
           this.updatedTeamMember.emit(this.teamMember);
           this.orderPointsByDateDescending(data.points);
           this.getSelectedMonthPointTotal(data.points);
+          data?.points?.length ? this.message = '' : this.message = 'No points';
         })
       ).subscribe();
   }
@@ -225,6 +230,7 @@ export class AdminPanelDetailsComponent implements OnInit, OnChanges {
               point.dateTime = new Date();
               point.points = +point.points;
               this.updateTeamMemberPoints(point);
+              // this.storage.delete('adminPanelBoard').subscribe();
             }
           }
         });

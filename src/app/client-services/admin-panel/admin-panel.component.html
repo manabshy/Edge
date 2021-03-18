@@ -10,7 +10,7 @@
           </span>
       </div>
     </div>
-    <app-admin-panel-list [members]="members$|async" (showRules)="showRules = true" (selectedMember)="getSelectedMember($event)"></app-admin-panel-list>
+    <app-admin-panel-list [members]="members$|async" (showRules)="showRules = true" (selectedMember)="getSelectedMember($event, 'list')"></app-admin-panel-list>
   </div>
   <div class="row__item">
     <app-admin-panel-details [member]="selectedMember" (updatedTeamMember)="getSelectedMember($event)"></app-admin-panel-details>
