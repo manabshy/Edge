@@ -10,9 +10,9 @@ import { PointType, TeamMember, TeamMemberPoint } from '../shared/models/team-me
 import { tap, map } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import * as moment from 'moment';
-import { getYear, getMonth, addYears, subYears } from 'date-fns';
 import { MessageService } from 'primeng/api';
 import { StorageMap } from '@ngx-pwa/local-storage';
+import { addYears, eachMonthOfInterval, getMonth, getYear, subYears, format, compareDesc } from 'date-fns';
 
 @Component({
   selector: 'app-admin-panel-details',
@@ -31,7 +31,7 @@ export class AdminPanelDetailsComponent implements OnInit, OnChanges {
   formErrors = FormErrors;
   memberDetails$ = new Observable<any>();
   pointTypes: PointType[];
-  thisYearsMonths: { key: string, value: string }[] = [];
+  monthsYears: { key: string, value: string }[] = [];
   teamMemberPoints: TeamMemberPoint[] = [];
   totalPoints: number;
   currentMonth: string;
@@ -124,26 +124,18 @@ export class AdminPanelDetailsComponent implements OnInit, OnChanges {
   }
 
   getMonths() {
-    moment.locale('en');
-    const months = moment.months();
-    const lastYear = getYear(subYears(new Date(), 1));
     const thisYear = getYear(new Date());
-    const nextYear = getYear(addYears(new Date(), 1));
-    const currentMonthIndex = getMonth(new Date());
-    const current = `${months[currentMonthIndex]} ${thisYear}`;
-    console.log(months[currentMonthIndex], this.currentMonth);
+    const thisMonth = format(new Date(), 'MMMM');
+    const current = `${thisMonth} ${thisYear}`;
 
-    this.setMonths(months, lastYear);
-    this.setMonths(months, thisYear);
-    this.currentMonth = this.thisYearsMonths.find(x => x.key === current).value;
-  }
-
-  private setMonths(months: string[], thisYear: number) {
-    months.forEach(m => {
-      const key = `${m} ${thisYear}`;
-      const value = `01 ${m} ${thisYear}`;
-      this.thisYearsMonths.push({ key, value });
+    const dates = eachMonthOfInterval({ start: subYears(new Date(), 2), end: new Date() });
+    dates.sort(compareDesc).forEach(d => {
+      const item = { key: format(d, 'MMMM yyyy'), value: format(d, 'yyyy/MM/dd') };
+      this.monthsYears.push(item);
     });
+
+    this.currentMonth = this.monthsYears?.find(x => x.key === current)?.value;
+
   }
 
   getTeamMemberDetails(dateTime?: string) {

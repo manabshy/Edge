@@ -28,7 +28,7 @@ export class CsBoardService {
     const url = `${AppConstants.baseCsboardUrl}/points`;
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
-      fromObject: { staffMemberId: id?.toString(), dateTime: format((date), 'YYYY-MM-DD') }
+      fromObject: { staffMemberId: id?.toString(), dateTime: format((date), 'yyyy-MM-dd') }
     });
 
     return this.http.get<any>(url, { params: options }).pipe(map(res => res.result));

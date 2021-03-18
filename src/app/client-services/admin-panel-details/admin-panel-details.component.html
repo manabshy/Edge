@@ -4,7 +4,7 @@
       <div>
         <select class="custom-select" id="month" aria-label="Month" formControlName="searchTerm" (change)="onDateChanged()">
           <!-- <option value="current" selected>Month</option> -->
-          <option *ngFor="let month of thisYearsMonths" [value]="month?.value">{{month?.key}}
+          <option *ngFor="let month of monthsYears" [value]="month?.value">{{month?.key}}
           </option>
         </select>
       </div>
