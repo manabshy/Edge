@@ -6,7 +6,7 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./redacted-table.component.scss']
 })
 export class RedactedTableComponent implements OnInit {
-@Input() message:string;
+  @Input() message: string;
   constructor() { }
 
   ngOnInit(): void {
