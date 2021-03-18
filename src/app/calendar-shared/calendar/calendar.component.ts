@@ -216,16 +216,16 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
 
     const request = {
       staffMemberId: this.selectedStaffMemberId || this.id || 0,
-      startDate: format(getStart(this.viewDate), 'YYYY-MM-DD'),
-      endDate: format(getEnd(this.viewDate), 'YYYY-MM-DD'),
+      startDate: format(getStart(this.viewDate), 'yyyy-MM-dd'),
+      endDate: format(getEnd(this.viewDate), 'yyyy-MM-dd'),
     } as BasicEventRequest;
 
     if (this.view === CalendarView.ThreeDays) {
-      request.startDate = format((this.viewDate), 'YYYY-MM-DD');
-      request.endDate = format((addDays(this.viewDate, 3)), 'YYYY-MM-DD');
+      request.startDate = format((this.viewDate), 'yyyy-MM-dd');
+      request.endDate = format((addDays(this.viewDate, 3)), 'yyyy-MM-dd');
     } else if (this.view === CalendarView.Week) {
-      request.startDate = format(addDays(getStart(this.viewDate), 1), 'YYYY-MM-DD');
-      request.endDate = format(addDays(getEnd(this.viewDate), 1), 'YYYY-MM-DD');
+      request.startDate = format(addDays(getStart(this.viewDate), 1), 'yyyy-MM-dd');
+      request.endDate = format(addDays(getEnd(this.viewDate), 1), 'yyyy-MM-dd');
     }
     this.getDiaryEvents(request, isLoaderVisible);
 
@@ -249,8 +249,8 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
     //   this.id = this.selectedStaffMemberId
     //   const request = {
     //     staffMemberId: this.selectedStaffMemberId || this.id || 0,
-    //     startDate: format(monthStart, 'YYYY-MM-DD'),
-    //     endDate: format(monthEnd, 'YYYY-MM-DD'),
+    //     startDate: format(monthStart, 'yyyy-MM-DD'),
+    //     endDate: format(monthEnd, 'yyyy-MM-DD'),
     //   }
     //   this.getDiaryEvents(request, isLoaderVisible)
     // }
