@@ -65,8 +65,8 @@ export class LeadsService {
   }
 
   getLeads(leadSearchInfo: LeadSearchInfo, pageSize?: number): Observable<any> {
-    const dateTo = format(leadSearchInfo.dateTo, 'YYYY-MM-DD');
-    const dateFrom = format(leadSearchInfo.dateFrom, 'YYYY-MM-DD');
+    const dateTo = leadSearchInfo.dateTo ? format(leadSearchInfo?.dateTo, 'yyyy-MM-dd') : '';
+    const dateFrom = leadSearchInfo.dateFrom ? format(leadSearchInfo?.dateFrom, 'yyyy-MM-dd') : '';
     if (!leadSearchInfo.page || +leadSearchInfo.page === 0) {
       leadSearchInfo.page = 1;
     }
@@ -110,8 +110,10 @@ export class LeadsService {
 
   // Returning list of Lead Ids
   getLeadIds(leadSearchInfo: LeadSearchInfo, pageSize?: number): Observable<any> {
-    const dateTo = format(leadSearchInfo.dateTo, 'YYYY-MM-DD');
-    const dateFrom = format(leadSearchInfo.dateFrom, 'YYYY-MM-DD');
+    // const dateTo = format(leadSearchInfo.dateTo, 'yyyy-MM-dd');
+    // const dateFrom = format(leadSearchInfo.dateFrom, 'yyyy-MM-dd');
+    const dateTo = leadSearchInfo.dateTo ? format(leadSearchInfo?.dateTo, 'yyyy-MM-dd') : '';
+    const dateFrom = leadSearchInfo.dateFrom ? format(leadSearchInfo?.dateFrom, 'yyyy-MM-dd') : '';
     console.log('date params', leadSearchInfo);
 
     const options = new HttpParams({
@@ -165,8 +167,9 @@ export class LeadsService {
   }
 
   setQueryParams(leadSearchInfo: LeadSearchInfo, pageSize?: number) {
-    const dateTo = format(leadSearchInfo.dateTo, 'YYYY-MM-DD');
-    const dateFrom = format(leadSearchInfo.dateFrom, 'YYYY-MM-DD');
+    const dateTo = leadSearchInfo.dateTo ? format(leadSearchInfo?.dateTo, 'yyyy-MM-dd') : '';
+    const dateFrom = leadSearchInfo.dateFrom ? format(leadSearchInfo?.dateFrom, 'yyyy-MM-dd') : '';
+    
     console.log('date params', leadSearchInfo);
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
