@@ -145,3 +145,32 @@ summary                                         { padding:0; list-style:none; mi
     p+*                                         { margin-top:0; }
     small                                       { display: inline; }
 }
+
+.progressBar                                    { display:block; height:10px; width:100%; max-width:500px; background-color:$color--smoke; border-radius:10px; position:relative; top:0; left:0;
+    &:after                                     { content:''; display:block; height:10px; width:50%; border-radius:10px; position:absolute; top:0; left:0; }
+    &+*                                         { margin-top:16px; }
+}
+
+@for $i from 0 through 100  {
+    .progressBar#{$i}       {
+        &:after             { width:round(percentage($i/100)); }
+    }
+}
+
+@for $i from 0 through 30   {
+    .progressBar#{$i}       {
+        &:after             { background-color:$color--negative; }
+    }
+}
+
+@for $i from 31 through 70  {
+    .progressBar#{$i}       {
+        &:after             { background-color:$color--warning; }
+    }
+}
+
+@for $i from 71 through 100 {
+    .progressBar#{$i}       {
+        &:after             { background-color:$color--positive; }
+    }
+}
