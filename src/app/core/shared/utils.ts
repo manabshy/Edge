@@ -77,7 +77,8 @@ export class AppUtils {
    */
   public static getMomentDate(date?: Date): string {
     const moDate = isDate(date) ? date : (date);
-    return format(moDate ? null : 'YYYY-MM-DD');
+    return null;
+    // return format(moDate ? null : 'YYYY-MM-DD');
   }
 
   /**

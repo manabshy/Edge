@@ -19,8 +19,8 @@ import {
   addHours,
   getDaysInMonth,
   subDays,
-  eachDay,
-  differenceInDays
+  differenceInDays,
+  eachDayOfInterval
 } from 'date-fns';
 import { CustomDateFormatter } from '../custom-date-formatter.provider';
 import { Observable, fromEvent, of, combineLatest, merge, Subscription } from 'rxjs';
@@ -295,7 +295,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
     let allDays = [];
     const allEvents: DiaryEvent[] = [];
     if (differenceInDays(event.endDateTime, event.startDateTime) > 0) {
-      allDays = eachDay(event.startDateTime, event.endDateTime);
+      allDays = eachDayOfInterval({ start: new Date(event.startDateTime), end: new Date(event.endDateTime) });
       const starts = allDays.splice(1);
 
       starts.forEach(start => {
@@ -307,7 +307,7 @@ export class CalendarComponent implements OnInit, OnChanges, AfterViewChecked, O
     }
 
   }
-  
+
   eventClicked({ event }: { event: CalendarEvent }) {
     const clickedEvent = { ...event.meta } as DiaryEvent;
     this.scrollPosition = this.calendarContainer.nativeElement.scrollTop;

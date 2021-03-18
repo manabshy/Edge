@@ -2,8 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StorageMap } from '@ngx-pwa/local-storage';
-import addYears from 'date-fns/add_years';
-import differenceInCalendarYears from 'date-fns/difference_in_calendar_years';
 import { ToastrService } from 'ngx-toastr';
 import { debounceTime, takeUntil, distinctUntilChanged } from 'rxjs/operators';
 import { ContactGroup, Signer } from 'src/app/contactgroups/shared/contact-group';
@@ -26,6 +24,7 @@ import { TabDirective } from 'ngx-bootstrap/tabs/ngx-bootstrap-tabs';
 import format from 'date-fns/format';
 import { Observable } from 'rxjs';
 import { MessageService } from 'primeng/api';
+import { addYears, differenceInCalendarYears } from 'date-fns';
 
 @Component({
   selector: 'app-valuation-detail-edit',
@@ -1239,7 +1238,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     }
 
   }
-  private changeLeaseExpiryDateToYears(approxLeaseExpiryDate: string | number | Date) {
+  private changeLeaseExpiryDateToYears(approxLeaseExpiryDate: any) {
     if (approxLeaseExpiryDate) {
       return differenceInCalendarYears(approxLeaseExpiryDate, new Date());
     }
@@ -1265,11 +1264,11 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.errorMessage = null;
     if (this.isNewValuation) {
       // this.toastr.success('Valuation successfully saved');
-      this.messageService.add({ severity: 'success', summary: 'Valuation successfully saved', closable: false});
+      this.messageService.add({ severity: 'success', summary: 'Valuation successfully saved', closable: false });
       this.sharedService.resetUrl(this.valuationId, valuation.valuationEventId);
     } else {
       // this.toastr.success('Valuation successfully updated');
-      this.messageService.add({ severity: 'success', summary: 'Valuation successfully updated', closable: false});
+      this.messageService.add({ severity: 'success', summary: 'Valuation successfully updated', closable: false });
     }
 
     this.router.navigateByUrl('/', { skipLocationChange: true })
@@ -1282,7 +1281,7 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
     this.isSubmitting = false;
     this.errorMessage = null;
     if (status) {
-      this.messageService.add({ severity: 'success', summary: 'Instruction successfully saved', closable: false});
+      this.messageService.add({ severity: 'success', summary: 'Instruction successfully saved', closable: false });
       this.router.navigate(['/property-centre/detail', this.property.propertyId]);
     }
   }
