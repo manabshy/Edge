@@ -40,6 +40,8 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ImpersonateMemberComponent } from './impersonate-member/impersonate-member.component';
 import { ConfigsLoaderService } from './configs-loader.service';
 
+// ADDED SHARED MODULE ON 19/03 BUT REMOVE ASAP
+import { SharedModule } from './shared/shared.module';
 
 // ngx bootstrap imports
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
@@ -89,6 +91,7 @@ const redirectUri = environment.baseRedirectUri ? environment.baseRedirectUri : 
 // Date Picker Locale
 import { defineLocale } from 'ngx-bootstrap/chronos';
 import { deLocale, frLocale, plLocale, enGbLocale } from 'ngx-bootstrap/locale';
+
 defineLocale('de', deLocale);
 defineLocale('fr', frLocale);
 defineLocale('pl', plLocale);
@@ -188,6 +191,7 @@ const externalModulesExports = [
     DashboardModule,
     LeaderboardModule,
     CalendarSharedModule,
+    SharedModule,
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     MsalModule.forRoot({
