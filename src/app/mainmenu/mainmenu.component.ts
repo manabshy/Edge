@@ -51,21 +51,22 @@ export class MainmenuComponent implements OnInit {
       console.log('current user from storage in main menu....', this.currentStaffMember);
     });
 
-    this.storage.get('impersonatedStaffMember').subscribe((staffMember: Impersonation) => {
-      if (staffMember) {
-        this.impersonatedStaffMember = staffMember;
-        console.log('selected id:', staffMember);
-        this.showImpersonateBanner(this.impersonatedStaffMember, true);
-      }
-    });
+    // REMOVE ASAP 19/03
+    // this.storage.get('impersonatedStaffMember').subscribe((staffMember: Impersonation) => {
+    //   if (staffMember) {
+    //     this.impersonatedStaffMember = staffMember;
+    //     console.log('selected id:', staffMember);
+    //     this.showImpersonateBanner(this.impersonatedStaffMember, true);
+    //   }
+    // });
 
-    this.staffMemberService.impersonatedStaffMember$.subscribe(data => {
-      if (data) {
-        this.impersonatedStaffMember = data;
-        console.log('person', data);
-        this.showImpersonateBanner(this.impersonatedStaffMember);
-      }
-    });
+    // this.staffMemberService.impersonatedStaffMember$.subscribe(data => {
+    //   if (data) {
+    //     this.impersonatedStaffMember = data;
+    //     console.log('person', data);
+    //     this.showImpersonateBanner(this.impersonatedStaffMember);
+    //   }
+    // });
   }
 
   toggleNavCollapse() {

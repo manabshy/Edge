@@ -16,13 +16,13 @@ export class StaffMemberService {
   private staffMember$: Observable<StaffMember>;
   private staffMembers$: Observable<StaffMember[] | any>;
   private activeStaffMembers$: Observable<StaffMember[] | any>;
-  private impersonationSubject = new BehaviorSubject<Impersonation | null>(null);
+  private impersonationSubject = new BehaviorSubject<BaseStaffMember | null>(null);
   impersonatedStaffMember$ = this.impersonationSubject.asObservable();
   currentStaffMember$ = this.currentStaffMemberSubject.asObservable();
 
   constructor(private http: HttpClient, private storage: StorageMap) { }
 
-  impersonatedStaffMemberChanged(person: Impersonation) {
+  impersonatedStaffMemberChanged(person: BaseStaffMember) {
     this.impersonationSubject.next(person);
   }
 
