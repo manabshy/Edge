@@ -24,7 +24,7 @@ export class AppInterceptor implements HttpInterceptor {
     const jsonReq: HttpRequest<any> = req.clone({
       setHeaders: {
         'Content-Type': 'application/json',
-        'work-as': this.impersonatedStaffMemberId ? this.impersonatedStaffMemberId.toString() : ''
+        'Impersonate': this.impersonatedStaffMemberId ? this.impersonatedStaffMemberId.toString() : ''
       }
     });
     if (req.method !== 'GET') {
