@@ -1,14 +1,5 @@
 <p><strong>{{percent}} Complete</strong></p>
-<div class="progressBar progressBar{{percent}}"></div>
-<div class="progressBar progressBar50"></div>
-<p>Message here</p>
-
-<!-- <ng-container *ngIf="!bar; else progessBar">
-  <span class="{{bg}}" [tooltip]="message" placement="right" container="body">{{percent}} Complete</span>
+<ng-container *ngIf="bar;">
+  <div class="progressBar progressBar{{percentValue}}"></div>
+  <p>{{message}}</p>
 </ng-container>
-
-<ng-template #progessBar> 
-  <div class="progress" [tooltip]="message" placement="bottom">
-    <div class="{{bg}}" role="progressbar" [style.width]="percent" aria-valuenow="percent" aria-valuemin="0" aria-valuemax="100"></div>
-  </div>
-</ng-template> -->

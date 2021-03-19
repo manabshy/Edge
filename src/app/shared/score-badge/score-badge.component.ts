@@ -15,6 +15,7 @@ export class ScoreBadgeComponent implements OnInit {
   bg: string;
   percent: string;
   message: string;
+  percentValue: number;
 
   constructor() { }
 
@@ -31,37 +32,40 @@ export class ScoreBadgeComponent implements OnInit {
     let percentRange = 20;
     let message = 'Complete'
 
-    if(this.person) {
+    if (this.person) {
 
-      if(this.person.address.countryId != 232) {
+      if (this.person.address.countryId != 232) {
         percentRange = 25;
       } else {
-        if(this.person.address.postCode) {
+        if (this.person.address.postCode) {
           percent += percentRange;
         } else {
           message += ', Postcode';
         }
       }
 
-      if(this.person.firstName && this.person.lastName) {
+      if (this.person.firstName && this.person.lastName) {
         percent += percentRange;
+        console.log({ percent });
+
       } else {
         message += ', Profile';
       }
 
-      if(this.person.address.addressLines) {
+      if (this.person.address.addressLines) {
         percent += percentRange;
       } else {
         message += ', Address';
       }
 
-      if(this.person.phoneNumbers.length  && this.person.phoneNumbers[0].number) {
+      if (this.person.phoneNumbers.length && this.person.phoneNumbers[0].number) {
         percent += percentRange;
+        console.log({ percent });
       } else {
         message += ', Phone number';
       }
 
-      if(this.person.emailAddresses.length && this.person.emailAddresses[0].email) {
+      if (this.person.emailAddresses.length && this.person.emailAddresses[0].email) {
         percent += percentRange;
       } else {
         message += ', Email address';
@@ -70,13 +74,13 @@ export class ScoreBadgeComponent implements OnInit {
 
     message += ' to have a 100% score';
 
-    this.message = message.replace(',','');
+    this.message = message.replace(',', '');
 
     this.percent = (percent || 15) + '%';
+    this.percentValue = percent;
 
-
-    switch(true) {
-      case percent == 100:
+    switch (true) {
+      case percent === 100:
         this.bg = 'txt--positive';
         this.message = 'Good Job! You\'ve completed this person details.';
         break;
