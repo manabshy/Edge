@@ -2,13 +2,13 @@
   <fieldset [ngClass]="{'invalid': isRequired}">
     <label *ngIf="label" for="staffMemberId">{{label}}</label>
     <ng-container *ngIf="isMultiple;else dropDown">
-      <p-multiSelect #multiSelect [options]="staffMembers$|async"  [maxSelectedLabels]="1" formControlName="staffMemberIds" optionLabel="fullName" optionValue="staffMemberId"
+      <p-multiSelect #multiSelect [options]="staffMembers"  [maxSelectedLabels]="1" formControlName="staffMemberIds" optionLabel="fullName" optionValue="staffMemberId"
       [placeholder]="placeholder"  (onChange)="onStaffMemberChange($event)"></p-multiSelect>
     </ng-container>
 
     <!-- Warning in browser console after adding the disabled property - Investigate 03/03/21 -->
     <ng-template #dropDown>
-      <p-dropdown [options]="staffMembers$|async" formControlName="staffMemberId" optionLabel="fullName" optionValue="staffMemberId"
+      <p-dropdown [options]="staffMembers" formControlName="staffMemberId" optionLabel="fullName" optionValue="staffMemberId"
          [placeholder]="placeholder" [filter]="true" filterBy="fullName" [readOnly]="isReadOnly" [disabled]="isDisabled"
         (onChange)="onStaffMemberChange($event)" [ngClass]="{'no-style': isReadOnly}" data-cy="staffMembers">
       </p-dropdown>

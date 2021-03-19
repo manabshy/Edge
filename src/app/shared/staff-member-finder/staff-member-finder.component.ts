@@ -21,10 +21,12 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
   @Input() isRequired: boolean;
   @Input() isMultiple: boolean;
   @Input() isReadOnly: boolean = false;
+  @Input() isFullStaffMember = false;
   @Input() placeholder = 'Select Staff Member';
   @Input() label: string;
   @Input() valuers: OfficeMember[];
   @Input() isSalesAndLettings: boolean;
+  @Output() selectedStaffMember = new EventEmitter<BaseStaffMember>();
   @Output() selectedStaffMemberId = new EventEmitter<number>();
   @Output() selectedStaffMemberList = new EventEmitter<BaseStaffMember[] | any>();
   staffMembers$ = new Observable<any>();
@@ -50,6 +52,7 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
     }]
   }] as OfficeMember[];
   valuersIds: number[] = [];
+  staffMembers: any[] = [];
   constructor(private staffMemberService: StaffMemberService, private storage: StorageMap) { }
 
   ngOnInit(): void {
@@ -86,16 +89,12 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
     if (this.isMultiple) {
       event?.value?.length ? this.selectedStaffMemberList.emit(event.value) : this.selectedStaffMemberList.emit([]);
     } else {
-      event?.value ? this.selectedStaffMemberId.emit(event?.value) : this.selectedStaffMemberId.emit(0);
+      // event?.value ? this.selectedStaffMemberId.emit(event?.value) : this.selectedStaffMemberId.emit(0);
+      if (event.value) {
+        const staffMember = this.staffMembers?.find(x => x.staffMemberId === +event.value);
+        this.isFullStaffMember ? this.selectedStaffMember.emit(staffMember) : this.selectedStaffMemberId.emit(event?.value);
+      } else { this.selectedStaffMemberId.emit(0); }
     }
-    // if (staffMember) {
-    //   this.staffMemberId = staffMember.staffMemberId;
-    //   this.selectedStaffMemberId.emit(this.staffMemberId);
-    //   this.selectedStaffMemberList.emit(staffMember);
-    //   console.log('selected', staffMember);
-    // } else {
-    //   this.selectedStaffMemberId.emit(0);
-    // }
   }
 
   private getStaffMembers(listType?: string) {
@@ -114,11 +113,11 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
   getActiveStaffMembers() {
     this.storage.get('activeStaffmembers').subscribe(data => {
       if (data) {
-        this.staffMembers$ = of(data as BaseStaffMember[]);
+        this.staffMembers = data as BaseStaffMember[];
       } else {
         this.staffMemberService.getActiveStaffMembers().subscribe(
           (res: ResultData) => {
-            this.staffMembers$ = of(res.result);
+            this.staffMembers = res.result;
             console.log('%cmembers from shared replay', 'color:green', res.result);
           }
         );
@@ -129,9 +128,9 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
   getAllCalendarStaffMembers() {
     this.storage.get('calendarStaffMembers').subscribe(data => {
       if (data) {
-        this.staffMembers$ = of(data as BaseStaffMember[]);
+        this.staffMembers = data as BaseStaffMember[];
       } else {
-        this.staffMemberService.getStaffMembersForCalendar().subscribe(res => this.staffMembers$ = of(res));
+        this.staffMemberService.getStaffMembersForCalendar().subscribe(res => this.staffMembers = res);
       }
     });
   }
@@ -139,9 +138,9 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
   private getAllValuers() {
     this.storage.get('allListers').subscribe(data => {
       if (data) {
-        this.staffMembers$ = of(data as BaseStaffMember[]);
+        this.staffMembers = data as BaseStaffMember[];
       } else {
-        this.staffMemberService.getValuers().subscribe(res => this.staffMembers$ = of(res));
+        this.staffMemberService.getValuers().subscribe(res => this.staffMembers = res);
       }
     });
   }
