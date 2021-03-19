@@ -12,7 +12,7 @@ export class AppInterceptor implements HttpInterceptor {
   impersonatedStaffMemberId: number;
 
   constructor(private storage: StorageMap,
-              private sharedService: SharedService) {
+    private sharedService: SharedService) {
   }
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     this.storage.get('impersonatedStaffMember').subscribe((person: Impersonation) => {
@@ -34,6 +34,7 @@ export class AppInterceptor implements HttpInterceptor {
   }
 
   private handleError(err: HttpErrorResponse, url: string): Observable<WedgeError> | Observable<any> {
+    const message = 'Unable to retrieve infromation from the server';
     const wedgeError = new WedgeError();
     if (err.error instanceof ErrorEvent) {
       wedgeError.displayMessage = `An error occurred: ${err.error.message}`;
@@ -41,7 +42,7 @@ export class AppInterceptor implements HttpInterceptor {
       wedgeError.errorCode = err?.status;
       wedgeError.requestId = err?.error?.requestId;
       wedgeError.technicalDetails = err?.error?.technicalDetails;
-      wedgeError.message = err?.error?.message;
+      wedgeError.message = err?.error?.message === undefined ? message : err?.error?.message;
       if (wedgeError.technicalDetails) {
         wedgeError.displayMessage = `${wedgeError.message}`;
       } else {
