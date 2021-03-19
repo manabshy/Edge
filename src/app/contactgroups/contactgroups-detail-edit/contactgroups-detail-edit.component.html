@@ -1,6 +1,6 @@
 <div class="row">
   <div class="row__item">   
-    <app-score-badge [bar]="true" [person]="personForm?.value"></app-score-badge>
+    <app-score-badge [bar]="true" [person]="personForm?.value" class="scoreWrapper"></app-score-badge>
     
     <form *ngIf="personDetails || basicPerson" [formGroup]="personForm" (ngSubmit)="savePerson(false)"
       (keydown.enter)="$event.preventDefault()" autocompleteOff>
