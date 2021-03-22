@@ -1,5 +1,9 @@
-<p><strong>{{percent}} Complete</strong></p>
-<ng-container *ngIf="bar;">
+<ng-container *ngIf="!bar; else progessBar">
+  <p class="{{bg}}">{{percent}} Complete</p>
+</ng-container>
+
+<ng-template #progessBar>
+  <p><strong>{{percent}} Complete</strong></p>
   <div class="progressBar progressBar{{percentValue}}"></div>
   <p>{{message}}</p>
-</ng-container>
+</ng-template>
