@@ -6,31 +6,53 @@ import { catchError } from 'rxjs/operators';
 import { AppUtils, ICachedRoute } from './shared/utils';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { Impersonation } from '../shared/models/staff-member';
+import { BaseStaffMember } from '../shared/models/base-staff-member';
+import { StaffMemberService } from './services/staff-member.service';
 
 @Injectable()
 export class AppInterceptor implements HttpInterceptor {
   impersonatedStaffMemberId: number;
 
   constructor(private storage: StorageMap,
-    private sharedService: SharedService) {
+    private sharedService: SharedService, private staffMemberService: StaffMemberService) {
+    this.setImpersonatedStaffMemberIdId();
+    // this.storage.get('impersonatedStaffMember').subscribe((person: BaseStaffMember) => {
+    //   if (person) {
+    //     this.impersonatedStaffMemberId = person.staffMemberId;
+    //     console.log('id  in service here....:', this.impersonatedStaffMemberId);
+    //   }
+    // });
+    // this.staffMemberService.impersonatedStaffMember$.subscribe((person: BaseStaffMember) => {
+    //     if (person) {
+    //       this.impersonatedStaffMemberId = person.staffMemberId;
+    //       console.log('id  in service here....:', this.impersonatedStaffMemberId);
+    //     }
+    //   });
   }
+
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    this.storage.get('impersonatedStaffMember').subscribe((person: Impersonation) => {
-      if (person) {
-        this.impersonatedStaffMemberId = person.staffMemberId;
-        console.log('id  in service here....:', this.impersonatedStaffMemberId);
-      }
-    });
-    const jsonReq: HttpRequest<any> = req.clone({
+    req = req.clone({
       setHeaders: {
         'Content-Type': 'application/json',
-        'Impersonate': this.impersonatedStaffMemberId ? this.impersonatedStaffMemberId.toString() : ''
       }
     });
-    if (req.method !== 'GET') {
-      AppUtils.routeCache = new Map<string, ICachedRoute>();
-    }
-    return next.handle(jsonReq).pipe(catchError(err => this.handleError(err, req.url)));
+
+    if (this.impersonatedStaffMemberId) { req = this.addImpersonateHeader(req); }
+    // if (req.method !== 'GET') {
+    //   AppUtils.routeCache = new Map<string, ICachedRoute>();
+    // }
+    return next.handle(req).pipe(catchError(err => this.handleError(err, req.url)));
+  }
+
+  setImpersonatedStaffMemberIdId() {
+    this.impersonatedStaffMemberId = +localStorage.getItem('impersonatedStaffMemberId');
+  }
+
+  private addImpersonateHeader(req: HttpRequest<any>) {
+    console.log({ req }, 'before', this.impersonatedStaffMemberId);
+    return req.clone({
+      setHeaders: { 'Impersonate': this.impersonatedStaffMemberId ? this.impersonatedStaffMemberId.toString() : '' }
+    });
   }
 
   private handleError(err: HttpErrorResponse, url: string): Observable<WedgeError> | Observable<any> {
