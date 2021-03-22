@@ -2,6 +2,9 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angu
 import { MarketingPreferences, Person } from '../models/person';
 import { Router } from '@angular/router';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
+import { StorageMap } from '@ngx-pwa/local-storage';
+import { DropdownListInfo, InfoDetail, InfoService } from 'src/app/core/services/info.service';
+import { ResultData } from '../result-data';
 
 @Component({
   selector: 'app-person-details',
@@ -26,8 +29,11 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
   @Output() mainPersonPersonId = new EventEmitter<number>();
   preferredNumber: string;
   preferredEmail: string;
+  showRefDialog = false;
+  referralCompanies: InfoDetail[];
+  selectedCompany: InfoDetail;
 
-  constructor(private router: Router, private contactGroupService: ContactGroupsService) { }
+  constructor(private router: Router, private contactGroupService: ContactGroupsService, private storage: StorageMap, private infoService: InfoService) { }
 
   ngOnInit() {
     this.contactGroupService.noteChanges$.subscribe(note => {
@@ -41,6 +47,9 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
         notes.splice(index, 1);
       }
     });
+
+    // Get referral Companies
+    this.getReferralCompanies();
   }
 
   ngOnChanges() {
@@ -53,6 +62,26 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
       this.preferredEmail = this.personDetails.emailAddresses.find(x => x.isPreferred).email;
     }
   }
+
+  getReferralCompanies() {
+    // Lead Types
+    this.storage.get('info').subscribe((data: DropdownListInfo) => {
+      if (data) {
+        this.referralCompanies = data.referralCompanies;
+      } else {
+        this.infoService.getDropdownListInfo().subscribe((info: ResultData | any) => {
+          if (info) {
+            this.referralCompanies = data.referralCompanies;
+          }
+        });
+      }
+    });
+  }
+  startReferral(company: InfoDetail) {
+    this.showRefDialog = true;
+    this.selectedCompany = company;
+  }
+  sendReferral() { }
 
   navigateToEdit() {
     this.router.navigate(['/contact-centre/detail/', this.personDetails.personId, 'edit']);
