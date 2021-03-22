@@ -46,7 +46,7 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-     this.storage.get('impersonatedStaffMember').subscribe((staffMember: BaseStaffMember) => {
+    this.storage.get('impersonatedStaffMember').subscribe((staffMember: BaseStaffMember) => {
       if (staffMember) {
         this.impersonatedStaffMember = staffMember;
         this.isImpersonating = true;
@@ -64,6 +64,8 @@ export class HeaderComponent implements OnInit {
     });
 
     this.getLabel();
+    console.log(this.isImpersonating, 'is impersonationg');
+
   }
 
   logOut() {
@@ -89,7 +91,16 @@ export class HeaderComponent implements OnInit {
     if (stop) {
       this.showImpersonation = false;
       this.isImpersonating = false;
+      localStorage.removeItem('impersonatedStaffMemberId');
       this.storage.delete('impersonatedStaffMember').subscribe();
+      this.storage.get('originalUser').subscribe((data: StaffMember) => {
+        if (data) {
+          this.currentStaffMember = data;
+          this.storage.set('currentUser', data).subscribe();
+          this.storage.delete('originalUser').subscribe();
+          location.reload();
+        }
+      });
     } else {
       this.showImpersonation = true;
     }
@@ -105,11 +116,26 @@ export class HeaderComponent implements OnInit {
   }
 
   startImpersonation() {
+    this.storage.set('originalUser', this.currentStaffMember).subscribe();
+    this.storage.delete('currentUser').subscribe();
+    this.storage.delete('signature').subscribe();
     this.isImpersonating = true;
     this.showImpersonation = false;
+
     // this.currentStaffMember.fullName = this.impersonatedStaffMember.fullName;
     // this.currentStaffMember.photoUrl = null;
     this.storage.set('impersonatedStaffMember', this.impersonatedStaffMember).subscribe();
+    localStorage.setItem('impersonatedStaffMemberId', JSON.stringify(this.impersonatedStaffMember.staffMemberId));
     this.staffMemberService.impersonatedStaffMemberChanged(this.impersonatedStaffMember);
+    this.getCurrentUser();
+
+  }
+
+  private getCurrentUser() {
+    this.staffMemberService.getCurrentStaffMember().subscribe(res => {
+      this.currentStaffMember = res;
+      console.log({ res }, 'new person');
+      location.reload();
+    });
   }
 }
