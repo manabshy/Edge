@@ -89,13 +89,13 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
       refs.push(ref);
       this.personReferrals = refs;
     });
-    this.setPersonReferrals();
+    this.setPersonReferrals(this.personDetails?.referrals);
     console.log('person refs', this.personReferrals);
   }
 
-  setPersonReferrals() {
-    if (this.personDetails?.referrals?.length) {
-      this.personDetails?.referrals.forEach(r => {
+  setPersonReferrals(referrals: Referral[]) {
+    if (referrals?.length) {
+      referrals.forEach(r => {
         this.personReferrals?.forEach(p => {
           if (r.referralCompanyId === p.referralCompanyId) { p.referralDate = r.referralDate; }
         });
@@ -111,13 +111,13 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
   sendReferral() {
     if (this.personDetails?.personId && this.selectedCompany?.referralCompanyId) {
       this.contactGroupService.createPersonReferral(this.personDetails, this.selectedCompany.referralCompanyId)
-        .subscribe((res: ResultData) => this.onSaveComplete(res.result[0]));
+        .subscribe((res: ResultData) => this.onSaveComplete(res.result));
     }
   }
 
-  onSaveComplete(res: Referral): void {
+  onSaveComplete(res: Referral[]): void {
     if (res) {
-      this.personReferrals.find(x => x.referralCompanyId === res.referralCompanyId).referralDate = res.referralDate;
+      this.setPersonReferrals(res);
       this.messageService.add({ severity: 'success', summary: 'Referral successfully sent', closable: false });
       this.showRefDialog = false;
     }
