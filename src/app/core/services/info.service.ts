@@ -66,11 +66,18 @@ export interface DropdownListInfo {
   originTypes: InfoDetail[];
   origins: InfoDetail[];
   diaryEventTypes: InfoDetail[];
+  referralCompanies: InfoDetail[];
 }
 
-export interface InfoDetail {
+export interface InfoDetail extends LeadTypeInfo{
   id: number;
   value: string;
   parentId?: number;
   isActive?: boolean;
+}
+
+export interface LeadTypeInfo {
+  canClose?: boolean;
+  canConvertTo?: number[];
+  canCreate?: boolean;
 }

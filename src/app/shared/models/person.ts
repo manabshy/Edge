@@ -26,6 +26,7 @@ export interface Person extends PersonWarning {
   amlCompleted: boolean;
   amlCompletedDate?: Date;
   marketingPreferences: MarketingPreferences;
+  referrals: Referral[];
   neverMarket: boolean;
   uKResident: boolean;
   addressFull: string;
@@ -83,10 +84,11 @@ export interface Referees {
 }
 
 export interface Referral {
-  personId: number;
-  staffMemberId: number;
-  referredTo: string;
-  currentStaffMemberId: number;
+  personId?: number;
+  referralCompanyId: number;
+  referralDate?: string;
+  referralCompany?: string;
+  // currentStaffMemberId: number;
 }
 export interface SmsInfo {
   personId: string;

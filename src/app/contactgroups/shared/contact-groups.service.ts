@@ -130,14 +130,15 @@ export class ContactGroupsService {
     return this.http.get<PersonContactData>(url).pipe(map(response => response.result));
   }
 
-  getPerson(personId: number, includeOnlyImportantNotes?: boolean): Observable<Person> {
+  getPerson(personId: number, includeReferrals = true, includeOnlyImportantNotes?: boolean): Observable<Person> {
     if (!includeOnlyImportantNotes) {
       includeOnlyImportantNotes = false;
     }
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
       fromObject: {
-        includeOnlyImportantNotes: includeOnlyImportantNotes.toString()
+        includeOnlyImportantNotes: includeOnlyImportantNotes.toString(),
+        includeReferrals: includeReferrals.toString(),
       }
     });
     const url = `${AppConstants.basePersonUrl}/${personId}`;
@@ -183,6 +184,12 @@ export class ContactGroupsService {
     return this.http.put(url, person).pipe(
       map(response => response),
       tap(data => console.log('updated person details here...', JSON.stringify(data))));
+  }
+  createPersonReferral(person: Person, referralCompanyId: number): Observable<any> {
+    const url = encodeURI(`${AppConstants.basePersonUrl}/${person?.personId}/referralCompany/${referralCompanyId}`);
+    return this.http.put(url, person).pipe(
+      map(response => response),
+      tap(data => console.log('referral created', JSON.stringify(data))));
   }
 
   addContactGroup(contactGroup: ContactGroup): Observable<any> {
