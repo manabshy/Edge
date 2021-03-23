@@ -39,7 +39,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   personId: number;
   isNewLead: boolean;
   lead: Lead;
-  leadTypes: InfoDetail[];
+  allLeadTypes: InfoDetail[];
   leadEditForm: FormGroup;
   personNotes: ContactNote[] = [];
   staffMembers: StaffMember[];
@@ -95,6 +95,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   currentUrl: string;
   useExistingIds = false;
   exitOnSave: boolean;
+  leadTypes: InfoDetail[];
+  canClose = false;
 
   get nextChaseDateControl() {
     return this.leadEditForm.get('nextChaseDate') as FormControl;
@@ -191,18 +193,20 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.storage.get('info').subscribe(data => {
       if (data) {
         this.listInfo = data;
-        this.leadTypes = this.listInfo.leadTypes;
+        this.allLeadTypes = this.listInfo.leadTypes;
         console.log(' list info in lead edit from db', data);
       } else {
         this.infoService.getDropdownListInfo().subscribe((info: ResultData | any) => {
           if (info) {
             this.listInfo = info.result;
-            this.leadTypes = this.listInfo.leadTypes;
+            this.allLeadTypes = this.listInfo.leadTypes;
             console.log(' list info in lead edit from db', info.result);
           }
         });
       }
+      this.setLeadTypes();
     });
+
 
     // Current Logged in staffmember
     this.storage.get('currentUser').subscribe((data: StaffMember) => {
@@ -244,6 +248,19 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       }
       this.getNextPersonNotesPage(this.page);
     });
+  }
+
+  setLeadTypes(existingLead?: Lead) {
+    this.leadTypes = this.allLeadTypes.filter(x => x.canCreate);
+
+    if (existingLead) {
+      const existingType = this.allLeadTypes.find(x => x.id === existingLead.leadTypeId);
+      this.canClose = existingType.canClose ? true : false;
+      this.leadTypes = this.allLeadTypes.filter(x => existingType.canConvertTo.includes(x.id));
+      this.leadTypes = [...this.leadTypes, existingType];
+      console.log({existingType}, this.canClose, 'can close');
+
+    }
   }
 
   getLeadIds(leadId: number) {
@@ -293,7 +310,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   private getLeadInformation() {
-    this.leadsService.getLead(this.leadId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+    this.leadsService.getLead(this.leadId).pipe(takeUntil(this.ngUnsubscribe)).subscribe((result: Lead) => {
       this.lead = result;
       this.personId = result.personId;
       this.patchLeadValues(result);
@@ -305,6 +322,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
         this.canEditLead = true;
       } else { this.canEditLead = false; }
 
+      this.setLeadTypes(this.lead);
       console.log(this.isLeadClosed, 'closed', this.canEditLead, 'canedit');
 
     }, () => {

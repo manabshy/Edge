@@ -152,7 +152,7 @@
                 <span class="select">
                   <select id="leadType" formControlName="leadTypeId" [attr.disabled]="!canEditLead ? true : null">
                     <option value=""></option>
-                    <option selected *ngFor="let leadType of leadTypes" [value]=leadType.id>{{leadType?.value}}</option>
+                    <option selected *ngFor="let leadType of leadTypes" [value]='leadType?.id'>{{leadType?.value}}</option>
                   </select>
                 </span>
                 <p class="message message--negative"> {{formErrors?.leadTypeId}}</p>
@@ -180,7 +180,7 @@
             <fieldset *ngIf="canEditLead">
               <span class="checkbox">
                 <span>
-                  <input type="checkbox" id="closeLead" formControlName="closeLead" (change)="closeLeadChanged(lead)">
+                  <input type="checkbox" id="closeLead" formControlName="closeLead" (change)="closeLeadChanged(lead)"  [attr.disabled]="!canClose ? '':null">
                   <label for="closeLead">Mark as <span class="badge badge-pill badge-primary">Closed</span></label>
                 </span>
               </span>
