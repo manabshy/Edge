@@ -6,6 +6,7 @@ import { StorageMap } from '@ngx-pwa/local-storage';
 import { DropdownListInfo, InfoDetail, InfoService } from 'src/app/core/services/info.service';
 import { ResultData } from '../result-data';
 import { MessageService } from 'primeng/api';
+import lodash from 'lodash';
 
 @Component({
   selector: 'app-person-details',
@@ -72,13 +73,9 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
   getReferralCompanies() {
     // Lead Types
     this.storage.get('info').subscribe((data: DropdownListInfo) => {
-      if (data) {
-        this.referralCompanies = data.referralCompanies;
-      } else {
+      if (data) { this.referralCompanies = data.referralCompanies; } else {
         this.infoService.getDropdownListInfo().subscribe((info: ResultData | any) => {
-          if (info) {
-            this.referralCompanies = data.referralCompanies;
-          }
+          if (info) { this.referralCompanies = data.referralCompanies; }
         });
       }
       this.setReferralCompanies();
@@ -86,11 +83,14 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
   }
 
   private setReferralCompanies() {
+    const refs = [];
     this.referralCompanies?.forEach(x => {
       const ref: Referral = { referralCompanyId: x.id, referralCompany: x.value, referralDate: null };
-      this.personReferrals.push(ref);
+      refs.push(ref);
+      this.personReferrals = refs;
     });
     this.setPersonReferrals();
+    console.log('person refs', this.personReferrals);
   }
 
   setPersonReferrals() {
