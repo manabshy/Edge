@@ -157,20 +157,19 @@ summary                                         { padding:0; list-style:none; mi
     }
 }
 
-@for $i from 0 through 45   {
+@for $i from 0 through 74   {
     .progressBar#{$i}       {
         &:after             { background-color:$color--negative; }
     }
 }
 
-@for $i from 46 through 70  {
+@for $i from 75 through 99  {
     .progressBar#{$i}       {
         &:after             { background-color:$color--warning; }
     }
 }
 
-@for $i from 71 through 100 {
-    .progressBar#{$i}       {
-        &:after             { background-color:$color--positive; }
-    }
+
+.progressBar100             {
+    &:after                 { background-color:$color--positive; }
 }
