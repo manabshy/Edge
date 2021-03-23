@@ -185,6 +185,14 @@ export class ContactGroupsService {
       map(response => response),
       tap(data => console.log('updated person details here...', JSON.stringify(data))));
   }
+  // /v10​/people​/{personId}​/referralCompany​/{referralCompanyId}
+  createPersonReferral(person: Person, referralCompanyId: number): Observable<any> {
+    const url = encodeURI(`${AppConstants.basePersonUrl}/${person?.personId}/referralCompany/1`);
+    // const url = AppConstants.basePersonUrl + '/' + personId.toString() + '​/referralCompany/' + referralCompanyId;
+    return this.http.put(url, person).pipe(
+      map(response => response),
+      tap(data => console.log('referral created', JSON.stringify(data))));
+  }
 
   addContactGroup(contactGroup: ContactGroup): Observable<any> {
     const url = `${AppConstants.baseContactGroupUrl}`;

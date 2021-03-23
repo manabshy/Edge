@@ -84,9 +84,10 @@ export interface Referees {
 }
 
 export interface Referral {
-  personId: number;
+  personId?: number;
   referralCompanyId: number;
-  referralDate: string;
+  referralDate?: string;
+  referralCompany?: string;
   // currentStaffMemberId: number;
 }
 export interface SmsInfo {

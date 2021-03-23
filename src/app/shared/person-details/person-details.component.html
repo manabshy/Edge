@@ -196,7 +196,7 @@
               </div>
             </summary>
             <ol class="list">
-              <li *ngFor="let refCompany of referralCompanies"><a (click)="startReferral(refCompany)">{{refCompany?.value}}<svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+              <li *ngFor="let referral of personReferrals"><a (click)="startReferral(referral)">{{referral?.referralCompany}}<svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
                 class="icon icon--s icon--onRight icon--fill-info">
                 <path
                   d="M62.5 16L48 1.5c-2-2-5.3-2-7.3 0L27.6 14.6c-2 2-2 5.3 0 7.3l3.2 3.2 13.5-13.5 8.2 8.2L39 33.2l3.2 3.2c2 2 5.3 2 7.3 0l13.1-13.1C64.5 21.3 64.5 18 62.5 16z">
@@ -204,7 +204,7 @@
                 <path
                   d="M1.5 48L16 62.5c2 2 5.3 2 7.3 0l13.1-13.1c2-2 2-5.3 0-7.3L33.2 39 19.7 52.5l-8.2-8.2L25 30.8l-3.2-3.2c-2-2-5.3-2-7.3 0L1.5 40.7C-0.5 42.7-0.5 46 1.5 48z">
                 </path>
-              </svg></a></li>
+              </svg></a> <span *ngIf="referral?.referralDate" class="pill flexRight">{{referral?.referralDate|date}}</span></li>
               <!-- <li>
                 <a href="">
                   Prestige<svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
@@ -253,7 +253,7 @@
 <p-dialog header="Referral" [(visible)]="showRefDialog" [modal]="true" [draggable]="false" class=" modal--hasFooter">
   <!-- <fieldset>
   </fieldset> -->
-  <p>Click OK to send a referral from {{personDetails?.addressee}} to {{selectedCompany?.value}}</p>
+  <p>Click OK to refer {{personDetails?.addressee}} to {{selectedCompany?.referralCompany}}</p>
   <footer class="footer--modal">
     <div class="btn--container">
       <button (click)="showRefDialog=false" type="button" class="btn btn--ghost">Cancel</button>
