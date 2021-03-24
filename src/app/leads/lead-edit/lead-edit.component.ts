@@ -257,7 +257,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       const existingType = this.allLeadTypes.find(x => x.id === existingLead.leadTypeId);
       this.canClose = existingType.canClose ? true : false;
       this.leadTypes = this.allLeadTypes.filter(x => existingType.canConvertTo.includes(x.id));
-      this.leadTypes = [...this.leadTypes, existingType];
+      this.leadTypes.unshift(existingType);
+      // this.leadTypes = [...this.leadTypes, existingType];
       console.log({existingType}, this.canClose, 'can close');
 
     }
