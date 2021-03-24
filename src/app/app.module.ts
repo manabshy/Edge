@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, NO_ERRORS_SCHEMA, APP_INITIALIZER } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA, APP_INITIALIZER, ErrorHandler } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { MainmenuComponent } from './mainmenu/mainmenu.component';
@@ -39,6 +39,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ImpersonateMemberComponent } from './impersonate-member/impersonate-member.component';
 import { ConfigsLoaderService } from './configs-loader.service';
+import { GlobalErrorHandlerService } from './core/services/global-error-handler.service';
 
 // ADDED SHARED MODULE ON 19/03 BUT REMOVE ASAP
 import { SharedModule } from './shared/shared.module';
@@ -91,6 +92,7 @@ const redirectUri = environment.baseRedirectUri ? environment.baseRedirectUri : 
 // Date Picker Locale
 import { defineLocale } from 'ngx-bootstrap/chronos';
 import { deLocale, frLocale, plLocale, enGbLocale } from 'ngx-bootstrap/locale';
+
 
 defineLocale('de', deLocale);
 defineLocale('fr', frLocale);
@@ -191,7 +193,7 @@ const externalModulesExports = [
     DashboardModule,
     LeaderboardModule,
     CalendarSharedModule,
-    SharedModule,
+    SharedModule, // ADD forRoot Investigate 24/03/2021
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     MsalModule.forRoot({
@@ -230,7 +232,8 @@ const externalModulesExports = [
       useFactory: appInitializerFactory,
       deps: [ConfigsLoaderService],
       multi: true
-    }
+    },
+    {provide: ErrorHandler, useClass: GlobalErrorHandlerService}
   ],
   bootstrap: [AppComponent],
   schemas: [NO_ERRORS_SCHEMA]
