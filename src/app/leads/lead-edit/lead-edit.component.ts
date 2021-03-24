@@ -399,9 +399,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
   onChaseDateChange(newChaseDate: Date) {
     if (this.lead && this.lead.nextChaseDate) {
-      if (!isEqual(newChaseDate, this.lead.nextChaseDate)) {
+      if (!isEqual(newChaseDate, this.lead.nextChaseDate) && this.nextChaseDateControl.touched) {
         this.isNextChaseDateChanged = true;
-        console.log('note here', this.note);
+        console.log('note here', this.note, {newChaseDate}, this.lead.nextChaseDate);
         this.note ? this.noteRequiredWarning = '' : this.noteRequiredWarning = 'Note is required.';
       } else {
         this.noteRequiredWarning = '';
