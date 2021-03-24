@@ -40,12 +40,9 @@ export class OfficeFinderComponent implements OnInit, OnChanges, AfterViewInit {
 
   ngOnChanges() {
     this.populateForm();
-    console.log('form in onchanges', this.officeFinderForm?.value);
   }
 
   ngAfterViewInit(): void {
-    console.log(this.multiSelect, 'multi select');
-
     this.multiSelect?.updateLabel();
     // const selectedOffices = this.offices.filter(x => this.officeIds.includes(x.officeId));
     // console.log({selectedOffices});
@@ -74,7 +71,6 @@ export class OfficeFinderComponent implements OnInit, OnChanges, AfterViewInit {
     if (this.officeIds?.length === 1) {
       const label = this.offices[this.officeIds[0]]?.name;
       this.multiSelect.valuesAsString = label;
-      console.log('value as string', this.multiSelect.valuesAsString, { label });
       this.multiSelect.updateLabel();
     }
   }

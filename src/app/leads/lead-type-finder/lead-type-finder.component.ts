@@ -41,7 +41,6 @@ export class LeadTypeFinderComponent implements OnInit, OnChanges, AfterViewInit
   }
 
   ngAfterViewInit(): void {
-    console.log(this.multiSelect, 'multi select in lead types');
     this.multiSelect?.updateLabel();
   }
 
@@ -70,7 +69,6 @@ export class LeadTypeFinderComponent implements OnInit, OnChanges, AfterViewInit
     this.storage.get('info').subscribe((data: DropdownListInfo) => {
       if (data) {
         this.leadTypes = data.leadTypes;
-        console.log('lead yptes', this.leadTypes);
         this.updateTypeLabel();
       } else {
         this.infoService.getDropdownListInfo()

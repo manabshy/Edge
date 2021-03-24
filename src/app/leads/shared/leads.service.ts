@@ -74,8 +74,6 @@ export class LeadsService {
       pageSize = 10;
     }
 
-    console.log('get leads date params', leadSearchInfo);
-
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
       fromObject: {
@@ -96,16 +94,9 @@ export class LeadsService {
       }
     });
 
-    console.log('get leads options', options);
     const url = `${AppConstants.baseLeadsUrl}/search`;
 
-    return this.http.get<any>(url, { params: options }).pipe(
-      map(response => response.result),
-      tap(data => {
-        if (data) {
-          console.log('lead search redult:', data);
-        }
-      }));
+    return this.http.get<any>(url, { params: options }).pipe(map(response => response.result));
   }
 
   // Returning list of Lead Ids
@@ -114,7 +105,6 @@ export class LeadsService {
     // const dateFrom = format(leadSearchInfo.dateFrom, 'yyyy-MM-dd');
     const dateTo = leadSearchInfo.dateTo ? format(leadSearchInfo?.dateTo, 'yyyy-MM-dd') : '';
     const dateFrom = leadSearchInfo.dateFrom ? format(leadSearchInfo?.dateFrom, 'yyyy-MM-dd') : '';
-    console.log('date params', leadSearchInfo);
 
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
@@ -159,7 +149,6 @@ export class LeadsService {
     const url = `${AppConstants.baseLeadsUrl}/assign`;
 
     const leadAssignmentInfo = { leadOwnerId: leadOwner, leads: leads };
-    console.log('lead assignment object:', leadAssignmentInfo);
 
     return this.http.put<any>(url, leadAssignmentInfo).pipe(
       map(response => response.result),
@@ -169,7 +158,7 @@ export class LeadsService {
   setQueryParams(leadSearchInfo: LeadSearchInfo, pageSize?: number) {
     const dateTo = leadSearchInfo.dateTo ? format(leadSearchInfo?.dateTo, 'yyyy-MM-dd') : '';
     const dateFrom = leadSearchInfo.dateFrom ? format(leadSearchInfo?.dateFrom, 'yyyy-MM-dd') : '';
-    
+
     console.log('date params', leadSearchInfo);
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,

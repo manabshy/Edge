@@ -28,8 +28,6 @@ export class LeadFinderComponent implements OnInit {
       leadSuggestion: this.leadSuggestion || AppUtils?.leadSearchInfo?.leadSearchTerm || ''
     });
 
-    console.log(this.leadFinderForm.value, 'lead finder form');
-
     this.leadFinderForm.valueChanges.subscribe(data => {
       if (data && data.leadSuggestion) {
         this.leadSearchTerm.emit(data.leadSuggestion);
@@ -67,7 +65,6 @@ export class LeadFinderComponent implements OnInit {
 
   suggestionSelected(event: any) {
     if (event && event.item) {
-      console.log('event  here', event);
       this.suggestedTerm = event.item;
       this.leadService.leadsSearchTermChanged(event.item);
     }
