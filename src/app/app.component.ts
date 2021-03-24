@@ -9,11 +9,12 @@ import { StaffMember } from './shared/models/staff-member';
 import { ToastContainerDirective, ToastrService } from 'ngx-toastr';
 import { EdgeServiceWorkerService } from './core/services/edge-service-worker.service';
 import { BaseComponent } from './shared/models/base-component';
-import { InfoService } from './core/services/info.service';
+import { DropdownListInfo, InfoService } from './core/services/info.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { environment } from 'src/environments/environment';
 import manifest from 'src/manifest.json';
 import { ConfigsLoaderService } from './configs-loader.service';
+import { BaseStaffMember } from './shared/models/base-staff-member';
 
 @Component({
   selector: 'app-root',
@@ -102,7 +103,14 @@ export class AppComponent extends BaseComponent implements OnInit {
     this.setManifestName();
 
     if (this.isLoggedIn) {
-      this.getCurrentStaffMember();
+      // this.getCurrentStaffMember();
+      this.staffMemberService.impersonatedStaffMember$.subscribe((person: BaseStaffMember) => {
+        if (person) {
+          console.log({ person });
+          this.storage.delete('currentUser').subscribe();
+        } else { this.getCurrentStaffMember(); }
+      });
+
       this.getInfo();
     }
 
@@ -136,7 +144,7 @@ export class AppComponent extends BaseComponent implements OnInit {
   }
 
   private getInfo() {
-    this.storage.get('info').subscribe(info => {
+    this.storage.get('info').subscribe((info: DropdownListInfo) => {
       if (info) {
         this.listInfo = info;
         console.log('app info in from storage....', info);
@@ -144,7 +152,7 @@ export class AppComponent extends BaseComponent implements OnInit {
         this.infoService.getDropdownListInfo().pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
           if (data) {
             this.listInfo = data;
-            console.log('new sub i napp component list info', data);
+            console.log('app info from db', data);
           }
         });
       }
