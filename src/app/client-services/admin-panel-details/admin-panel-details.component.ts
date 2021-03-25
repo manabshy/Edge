@@ -73,7 +73,7 @@ export class AdminPanelDetailsComponent implements OnInit, OnChanges {
       this.teamMember = this.member;
       this.teamMemberPoints = [...this.member.points];
       this.setPointType(this.teamMemberPoints);
-      // this.getTeamMemberDetails();
+      this.getTeamMemberDetails();
       this.searchForm.patchValue({ searchTerm: this.currentMonth });
     }
   }
