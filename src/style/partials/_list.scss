@@ -48,9 +48,18 @@
                 &:before                        { content:''; height:1px; width:100%; background-color:$color--midnight-10; position:absolute; top:-4px; left:0; }
             }
             &:after                             { content:counter(rankings); font-weight:bold; display:flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:50%; position:absolute; right:6px; }
-            &:first-child:after                 { color:$color--snow; background-color:$color--warning; }
-            &:nth-child(2):after                { color:$color--snow; background-color:$color--midnight-50; }
-            &:nth-child(3):after                { color:$color--snow; background-color:#CFA86B; }
+            &:first-child {
+                &:after                         { color:$color--snow; background-color:$color--warning; }
+                .avatar                         { width:50px; height:50px; }
+            }
+            &:nth-child(2)                      {
+                &:after                         { color:$color--snow; background-color:$color--midnight-50; }
+                .avatar                         { width:50px; height:50px; }
+            }
+            &:nth-child(3)                      {
+                &:after                         { color:$color--snow; background-color:#CFA86B; }
+                .avatar                         { width:50px; height:50px; }    
+            }
         }
     }
 }
