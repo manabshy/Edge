@@ -16,6 +16,7 @@ export class StaffMemberService {
   private staffMember$: Observable<StaffMember>;
   private staffMembers$: Observable<StaffMember[] | any>;
   private activeStaffMembers$: Observable<StaffMember[] | any>;
+  private signature$: Observable<string | any>;
   private impersonationSubject = new BehaviorSubject<BaseStaffMember | null>(null);
   impersonatedStaffMember$ = this.impersonationSubject.asObservable();
   currentStaffMember$ = this.currentStaffMemberSubject.asObservable();
@@ -130,6 +131,13 @@ export class StaffMemberService {
   }
 
   getCurrentStaffMemberSignature(): Observable<string> {
+    if (!this.signature$) {
+      this.signature$ = this.requestStaffMemberSignature().pipe(shareReplay(CACHE_SIZE));
+    }
+    return this.signature$;
+  }
+
+  requestStaffMemberSignature(): Observable<string> {
     return this.http.get<any>(`${AppConstants.baseUrl}/current/signature`).pipe(
       map(response => response.result),
       tap(data => {
