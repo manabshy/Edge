@@ -52,7 +52,12 @@ export class AppComponent extends BaseComponent implements OnInit {
     private cdRef: ChangeDetectorRef) {
     super();
     this.setupEnvironmentVariables();
-    /*  Track previous route for Breadcrumb component  */
+    this.setIsFadingFlag();
+    this.updateOnAllowedRoutes();
+  }
+
+  /*  DELETE ASAP IF NOT USED 25/03/21  */
+  private setIsFadingFlag() {
     this.router.events.pipe(
       filter(e => e instanceof RoutesRecognized)
     ).pipe(
@@ -69,9 +74,10 @@ export class AppComponent extends BaseComponent implements OnInit {
       setTimeout(() => {
         this.isFading = false;
       }, 1200);
-      // window.scrollTo(0,0);
     });
+  }
 
+  private updateOnAllowedRoutes() {
     this.router.events.pipe(
       filter(e => e instanceof NavigationEnd)
     ).subscribe((event: any | NavigationEnd) => {
@@ -106,9 +112,11 @@ export class AppComponent extends BaseComponent implements OnInit {
       // this.getCurrentStaffMember();
       this.staffMemberService.impersonatedStaffMember$.subscribe((person: BaseStaffMember) => {
         if (person) {
-          console.log({ person });
+          console.log({ person }, 'for new impersonated person');
           this.storage.delete('currentUser').subscribe();
-        } else { this.getCurrentStaffMember(); }
+        } else {
+          this.getCurrentStaffMember(); console.log('read from local storage');
+        }
       });
 
       this.getInfo();
