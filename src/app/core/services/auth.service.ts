@@ -59,6 +59,7 @@ export class AuthService {
         if (environment.production) {
           this.storage.delete('currentUser').subscribe();
           this.storage.delete('signature').subscribe();
+          localStorage.removeItem('impersonatedStaffMemberId');
         }
         this.authService.logout();
       }
