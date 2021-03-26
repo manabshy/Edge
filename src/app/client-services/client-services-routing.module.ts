@@ -6,7 +6,7 @@ import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 
 
 const routes: Routes = [
-  { path: '', component: AdminPanelComponent },
+  { path: '', component: AdminPanelComponent, data: { title: 'Client Services Board' } },
   { path: 'details/:id', component: AdminPanelDetailsComponent }
 ];
 
