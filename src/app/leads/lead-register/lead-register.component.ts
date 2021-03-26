@@ -56,11 +56,15 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   locale = 'en-gb';
   isLoading = false;
   isClosedLeadFound = false;
+  isSubmitting = false;
+  defaultListingType: number;
+
   leadFilters: { name: string; value: number }[] = [
     { value: 1, name: 'My leads' },
     { value: 2, name: 'Other user leads' },
     { value: 4, name: 'Unassigned leads' },
   ];
+
   get isAdvancedFilterActive() {
     if (this.leadRegisterForm) {
       return this.leadRegisterForm.get('dateTo').value
@@ -103,7 +107,6 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.getLeadsForCurrentUser();
-    console.log(this.canSeeUnassignable, 'can see assingle');
     this.setupLeadRegisterForm();
 
     this.getInfoFromLocalStorage();
@@ -127,13 +130,16 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     });
     console.log('INIT: ', this.leadSearchInfo);
 
-    this.leadRegisterForm.valueChanges.subscribe(() => {
-      this.leadSearchInfo = this.getSearchInfo(true);
-      console.log('form group changes', this.leadSearchInfo, 'form here', this.leadRegisterForm.value);
-      // this.leadService.pageNumberChanged(this.leadSearchInfo);
-    });
+    // this.leadRegisterForm.valueChanges.subscribe(() => {
+    //   // this.leadSearchInfo = this.getSearchInfo(true);
+    //   // console.log('form group changes', this.leadSearchInfo, 'form here', this.leadRegisterForm.value);
+    //   // this.leadService.pageNumberChanged(this.leadSearchInfo);
+    // });
 
-    // this.leadResults();
+    this.listingTypeControl.valueChanges.subscribe((input) => {
+      console.log({ input });
+      this.isSubmitting = false;
+    });
   }
 
   getLeadsForCurrentUser() {
@@ -143,6 +149,9 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
         this.bottomReached = false;
         const seeAllLeadsPermission = this.currentStaffMember.permissions.find(x => x.permissionId === 69);
         seeAllLeadsPermission ? this.canSeeUnassignable = true : this.canSeeUnassignable = false;
+        this.defaultListingType = this.canSeeUnassignable ? 2 : 1;
+        localStorage.setItem('listingType', this.defaultListingType.toString());
+
         this.leadSearchInfo = {
           page: this.page,
           ownerId: this.currentStaffMember.staffMemberId,
@@ -151,20 +160,25 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
           officeId: null,
           dateFrom: null,
           dateTo: null,
-          listingType: this.canSeeUnassignable ? 2 : 1,
+          listingType: this.defaultListingType,
           includeClosedLeads: false,
           includeUnassignedLeadsOnly: false,
           leadSearchTerm: this.searchTerm ? this.searchTerm : ''
         };
-
+        console.log(this.leadSearchInfo, 'is current user');
         if (AppUtils.leadSearchInfo) {
           console.log('from app utils', AppUtils.leadSearchInfo);
           this.leadSearchInfo = AppUtils.leadSearchInfo;
           this.searchTerm = AppUtils.leadSearchInfo.leadSearchTerm;
         }
       } else {
+        console.log('here..');
+
         this.leadSearchInfo = this.getSearchInfo(true);
+        console.log(this.leadSearchInfo, 'not current user');
+
       }
+      console.log(this.leadSearchInfo, 'not current user BEFORE PATCH');
       this.leadRegisterForm.patchValue(this.leadSearchInfo);
       console.log('lead form after patch', this.leadRegisterForm.value);
 
@@ -219,21 +233,10 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       includeUnassignedLeadsOnly: [false],
       leadSearchTerm: ['']
     });
-    // this.leadRegisterForm = this.fb.group({
-    //   ownerId: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo.ownerId : (this.currentStaffMember ? this.currentStaffMember.staffMemberId : null),
-    //   officeIds: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo?.officeIds : null,
-    //   leadTypeIds: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo.leadTypeIds : null,
-    //   includeClosedLeads: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo.includeClosedLeads : false,
-    //   dateFrom: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo.dateFrom : null,
-    //   dateTo: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo.dateTo : null,
-    //   includeUnassignedLeadsOnly: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo.includeUnassignedLeadsOnly : false,
-    //   leadSearchTerm: AppUtils.leadSearchInfo ? AppUtils.leadSearchInfo.leadSearchTerm : ''
-    // });
   }
 
   getLeads(leadSearchInfo: LeadSearchInfo) {
     this.isLoading = true;
-    console.log('get leads search info: ', leadSearchInfo);
     this.leadService.getLeads(leadSearchInfo, PAGE_SIZE).subscribe(result => {
 
       if (result) {
@@ -338,33 +341,19 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     info.page = !newSearch ? this.pageNumber : 1;
     console.log({ info });
     return info;
-
-    // TODO: Remove asap
-    // return {
-    //   page: !newSearch ? this.pageNumber : 1,
-    //   ownerId: this.currentStaffMember ? this.currentStaffMember.staffMemberId : null,
-    //   leadTypeIds: this.leadRegisterForm != null ? this.leadRegisterForm.get('leadTypeIds').value : null ? AppUtils.leadSearchInfo.leadTypeIds : null,
-    //   officeIds: this.leadRegisterForm != null ? this.leadRegisterForm.get('officeIds').value : null ? AppUtils.leadSearchInfo.officeIds : null,
-    //   dateFrom: this.leadRegisterForm != null ? this.leadRegisterForm.get('dateFrom').value : null ? AppUtils.leadSearchInfo.dateFrom : null,
-    //   dateTo: this.leadRegisterForm != null ? this.leadRegisterForm.get('dateTo').value : null ? AppUtils.leadSearchInfo.dateTo : null,
-    //   listingType: this.leadRegisterForm != null ? this.leadRegisterForm.get('listingType').value : null ? AppUtils.leadSearchInfo.listingType : null,
-    //   includeClosedLeads: this.leadRegisterForm != null ?
-    //   this.leadRegisterForm.get('includeClosedLeads').value : null ? AppUtils.leadSearchInfo.includeClosedLeads : null,
-    //   includeUnassignedLeadsOnly: this.leadRegisterForm != null ?
-    //   this.leadRegisterForm.get('includeUnassignedLeadsOnly').value : null ? AppUtils.leadSearchInfo.includeUnassignedLeadsOnly : null,
-    //   leadSearchTerm: this.leadRegisterForm != null ?
-    //   this.leadRegisterForm.get('leadSearchTerm').value : null ? AppUtils.leadSearchInfo.leadSearchTerm : null
-    // };
   }
 
-  PerformSearch() {
+  PerformSearch(isSubmitting?: boolean) {
+    this.isSubmitting = isSubmitting;
+    console.log({ isSubmitting });
+
     this.leadSearchInfo = { ...this.leadSearchInfo, ...this.leadRegisterForm.value };
+    // if (isSubmitting) { this.leadSearchInfo = this.getSearchInfo(true); }
     if (this.leadSearchInfo) {
       this.isClosedIncluded = this.leadSearchInfo.includeClosedLeads;
     }
     this.isAdvancedSearchVisible = false;
     this.getLeads(this.leadSearchInfo);
-    // this.leadService.pageNumberChanged(this.leadSearchInfo);
   }
 
   cancel() {
@@ -384,22 +373,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   }
 
   showLeadsAssignmentModal() {
-    // const subject = new Subject<number>();
-    // const modal = this.modalService.show(LeadAssignmentModalComponent, { ignoreBackdropClick: true });
-    // modal.content.subject = subject;
-
-    // subject.subscribe(leadOwner => {
-    //   if (leadOwner) {
-    //     console.log('lead Owner selected', leadOwner);
-    //     console.log('leads selected for assignment', this.selectedLeadsForAssignment);
-    //     this.processLeadsAssignment(leadOwner, this.selectedLeadsForAssignment);
-    //   }
-    // });
-
-    // return subject.asObservable();
-
     this.showModal = true;
-
   }
 
   getSelectedOwner(id: number) {
@@ -422,11 +396,21 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     }
   }
 
+  // Refactor to cater for when a lead is not clicked 26/03/21
   navigateToEdit(lead: Lead) {
     event.preventDefault();
     event.stopPropagation();
     if (!this.areLeadsAssignable) {
-      const newInfo = { ...this.leadSearchInfo, ...this.leadRegisterForm.value } as LeadSearchInfo;
+      let newInfo: LeadSearchInfo;
+      if (this.isSubmitting) {
+        newInfo = { ...this.leadSearchInfo, ...this.leadRegisterForm.value };
+        localStorage.setItem('listingType', this.leadSearchInfo.listingType.toString());
+      } else {
+        const listingType = +localStorage.getItem('listingType');
+        newInfo = { ...this.leadSearchInfo, listingType };
+        this.listingTypeControl.setValue(listingType);
+        console.log({ newInfo }, { listingType }, 'not submitting');
+      }
       newInfo.startLeadId = lead.leadId;
       newInfo.ownerId = lead.ownerId;
       this.info = JSON.stringify(newInfo);
@@ -446,18 +430,11 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   }
 
   getSelectedOfficeId(officeIds: number[]) {
-    console.log({ officeIds }, 'list array');
-
     this.leadRegisterForm.get('officeIds').setValue(officeIds);
-    console.log(this.leadRegisterForm.value, 'when office ids selected');
-
   }
 
   getSelectedTypes(types: number[]) {
-    console.log({ types });
-
     this.leadTypeIdsControl.setValue(types);
-    console.log(this.leadRegisterForm.value, 'when type ids selected');
   }
 
   onScrollDown() {
