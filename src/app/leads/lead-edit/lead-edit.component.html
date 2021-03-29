@@ -50,6 +50,7 @@
           <li>
             <h3 class="txt--title">Lead details<span class="pill pill--onRight" *ngIf="lead?.closedById">Closed</span>
             </h3>
+            <!-- {{canEditLead}} ..candedit -->
             <div class="inline-parent inline-parent__hasLabels inline-parent--width-max">
               <fieldset class="inline-child" [ngClass]="{'invalid': formErrors?.leadTypeId}">
                 <label for="leadType">Type</label>
@@ -133,8 +134,8 @@
       </div>
     </div>
     <footer class="footer">
-      <button (click)="cancel()" type="button" class="btn btn--ghost">Register</button>
-      <ng-container *ngIf="leadSearchInfo || isNewLead">
+      <ng-container *ngIf="leadSearchInfo || isNewLead; else myLead">
+        <button (click)="cancel()" type="button" class="btn btn--ghost">View Register</button>
         <button *ngIf="!isNewLead" (click)="traverseLeads(false, true)" type="button" class="btn btn--ghost" [attr.disabled]="disablePrevious ? '':null">Previous</button>
         <span class="txt--center" *ngIf="!isNewLead"><strong>{{currentLeadIndex + 1}} of {{leadIds?.length}}</strong></span>
         <ng-container *ngIf="canEditLead;else noEdit">
@@ -150,6 +151,7 @@
             [attr.disabled]="disableNext ? '':null">Next</button>
         </ng-template>
       </ng-container>
+      <ng-template  #myLead><button type="submit" class="btn btn--positive" id="saveLead" data-cy="saveLead" *ngIf="!isLeadClosed && isMyLead">Save</button></ng-template>
     </footer>
   </form>
 </ng-template>

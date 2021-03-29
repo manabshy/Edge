@@ -97,6 +97,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   exitOnSave: boolean;
   leadTypes: InfoDetail[];
   canClose = false;
+  isMyLead = false;
 
   get nextChaseDateControl() {
     return this.leadEditForm.get('nextChaseDate') as FormControl;
@@ -140,6 +141,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       this.showNotes = params.get('showNotes') === 'true';
       this.backToOrigin = params.get('backToOrigin') === 'false';
       this.useExistingIds = params['useExistingIds'] || false;
+      // this.isMyLead =  params['isMyLead'];
+      this.isMyLead = JSON.parse(params.get('isMyLead'));
       console.log('use existing ids', this.useExistingIds);
 
       if (this.infoParam) {
@@ -194,7 +197,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       if (data) {
         this.listInfo = data;
         this.allLeadTypes = this.listInfo.leadTypes;
-        console.log(' list info in lead edit from db', data);
+        console.log(' list info in lead edit from storage', data);
       } else {
         this.infoService.getDropdownListInfo().subscribe((info: ResultData | any) => {
           if (info) {
@@ -251,15 +254,15 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   setLeadTypes(existingLead?: Lead) {
-    this.leadTypes = this.allLeadTypes.filter(x => x.canCreate);
+    this.leadTypes = this.allLeadTypes?.filter(x => x.canCreate);
 
     if (existingLead) {
-      const existingType = this.allLeadTypes.find(x => x.id === existingLead.leadTypeId);
-      this.canClose = existingType.canClose ? true : false;
-      this.leadTypes = this.allLeadTypes.filter(x => existingType.canConvertTo.includes(x.id));
-      this.leadTypes.unshift(existingType);
+      const existingType = this.allLeadTypes?.find(x => x.id === existingLead.leadTypeId);
+      this.canClose = existingType?.canClose ? true : false;
+      this.leadTypes = this.allLeadTypes?.filter(x => existingType.canConvertTo.includes(x.id));
+      this.leadTypes?.unshift(existingType);
       // this.leadTypes = [...this.leadTypes, existingType];
-      console.log({existingType}, this.canClose, 'can close');
+      console.log({ existingType }, this.canClose, 'can close');
 
     }
   }
@@ -314,14 +317,11 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.leadsService.getLead(this.leadId).pipe(takeUntil(this.ngUnsubscribe)).subscribe((result: Lead) => {
       this.lead = result;
       this.personId = result.personId;
+
       this.patchLeadValues(result);
       this.getPersonInformation();
       this.lead?.closedById ? this.isLeadClosed = true : this.isLeadClosed = false;
-      if (+this.leadSearchInfo?.listingType !== ListingType.MyLeads) {
-        this.canEditLead = false;
-      } else if (+this.leadSearchInfo?.listingType === ListingType.MyLeads && !this.isLeadClosed) {
-        this.canEditLead = true;
-      } else { this.canEditLead = false; }
+      this.setCanEditFlag();
 
       this.setLeadTypes(this.lead);
       console.log(this.isLeadClosed, 'closed', this.canEditLead, 'canedit');
@@ -330,6 +330,23 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       this.lead = null;
     });
 
+  }
+
+  private setCanEditFlag() {
+    const listingType = this.leadSearchInfo?.listingType ?? 0;
+    switch (true) {
+      case this.isMyLead && !this.isLeadClosed:
+        this.canEditLead = true;
+        break;
+
+      default:
+        if (+listingType !== ListingType.MyLeads) {
+          this.canEditLead = false;
+        } else if ((+listingType === ListingType.MyLeads) && !this.isLeadClosed) {
+          this.canEditLead = true;
+        } else { this.canEditLead = false; }
+        break;
+    }
   }
 
   private patchLeadValues(lead: Lead) {
@@ -401,7 +418,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     if (this.lead && this.lead.nextChaseDate) {
       if (!isEqual(newChaseDate, this.lead.nextChaseDate) && this.nextChaseDateControl.touched) {
         this.isNextChaseDateChanged = true;
-        console.log('note here', this.note, {newChaseDate}, this.lead.nextChaseDate);
+        console.log('note here', this.note, { newChaseDate }, this.lead.nextChaseDate);
         this.note ? this.noteRequiredWarning = '' : this.noteRequiredWarning = 'Note is required.';
       } else {
         this.noteRequiredWarning = '';
@@ -565,6 +582,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.isPropertyAssociated = false;
     this.isPropertyRemoved = false;
     if (this.isNewLead) {
+      this.canEditLead = true;
+      console.log(this.canEditLead, 'can edit for new lead');
+
       this.messageService.add({ severity: 'success', summary: 'Lead successfully saved', closable: false });
       if (this.backToOrigin) { this.sharedService.back(); }
     } else {
@@ -603,7 +623,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
         localStorage.removeItem('currentUrl');
         // this.init();
-        this.canEditLead = false;
+        this.canEditLead = this.isMyLead ? true : false;
       } else {
         if (this.exitOnSave) {
           this.replaceLeadIdInRoute(this.leadId);
