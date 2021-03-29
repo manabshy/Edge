@@ -275,6 +275,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   assignLeads() {
     event.preventDefault();
     this.areLeadsAssignable = true;
+    this.filteredLeads?.forEach(x => x.isChecked = false);
   }
 
   toggleSelectAllLeads() {
@@ -373,6 +374,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   }
 
   showLeadsAssignmentModal() {
+    // this.newLeadOwnerId = 0;
     this.showModal = true;
   }
 
