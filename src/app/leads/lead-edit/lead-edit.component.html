@@ -55,7 +55,7 @@
               <fieldset class="inline-child" [ngClass]="{'invalid': formErrors?.leadTypeId}">
                 <label for="leadType">Type</label>
                 <span class="select">
-                  <select id="leadType" formControlName="leadTypeId" [attr.disabled]="!canEditLead ? true : null">
+                  <select id="leadType" formControlName="leadTypeId" [attr.disabled]="!canEditLead ||leadTypes?.length === 1 ? true : null">
                     <option value=""></option>
                     <option selected *ngFor="let leadType of leadTypes" [value]='leadType?.id'>{{leadType?.value}}</option>
                   </select>
