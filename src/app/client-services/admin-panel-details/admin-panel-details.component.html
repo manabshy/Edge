@@ -62,7 +62,7 @@
     </fieldset>
     <fieldset [ngClass]="{'invalid': formErrors?.points}">
       <label for="points">Points</label>
-      <input type="text" id="points" formControlName="points">
+      <input type="number" id="points" formControlName="points" oninput="this.value=(parseInt(this.value)||0)">
       <p class="message message--negative">{{formErrors?.points}}</p>
     </fieldset>
     <footer class="footer footer--modal">
