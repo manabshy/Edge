@@ -118,7 +118,7 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
   onSaveComplete(res: Referral[]): void {
     if (res) {
       this.setPersonReferrals(res);
-      this.messageService.add({ severity: 'success', summary: 'Referral successfully sent', closable: false });
+      this.messageService.add({ severity: 'success', summary: 'Referral successfully sent', closable: false, key: 'referralMessage' });
       this.showRefDialog = false;
     }
   }
