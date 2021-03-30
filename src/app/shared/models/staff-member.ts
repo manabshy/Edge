@@ -69,6 +69,9 @@ export interface Department {
   roleId: number;
   emailAddress?: string;
 }
+export enum PermissionEnum {
+  CsBoardAccess = 72,
+}
 
 export enum DefaultViews {
   CreateAppointment = 'appointment',
