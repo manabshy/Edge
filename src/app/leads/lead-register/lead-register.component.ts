@@ -40,7 +40,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   page: number = 1;
   groupsLength: number;
   filteredLeads: Lead[];
-  leads: Lead[];
+  // leads: Lead[];
   leadSearchInfo: LeadSearchInfo;
   enableOwnerFilter = true;
   selectedLeadsForAssignment: Lead[] = [];
@@ -256,7 +256,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       }
 
     }, () => {
-      this.leads = [];
+      this.filteredLeads = [];
     });
   }
 
@@ -469,14 +469,14 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   }
 
   private replaceLeadsWithNewOwners(newLeads: Lead[]) {
-    if (this.leads && this.leads.length) {
+    if (this.filteredLeads && this.filteredLeads.length) {
       let index = -1;
-      for (const lead of this.leads) {
+      for (const lead of this.filteredLeads) {
         newLeads.forEach(x => {
           if (x.leadId === lead.leadId) {
-            index = this.leads.findIndex(l => l.leadId === lead.leadId);
-            if (this.leads[index]) {
-              this.leads[index] = x;
+            index = this.filteredLeads.findIndex(l => l.leadId === lead.leadId);
+            if (this.filteredLeads[index]) {
+              this.filteredLeads[index] = x;
             }
           }
         });
