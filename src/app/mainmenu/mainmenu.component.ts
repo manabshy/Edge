@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { AuthService } from '../core/services/auth.service';
 import { StaffMemberService } from '../core/services/staff-member.service';
-import { StaffMember, Impersonation, ApiRole } from '../shared/models/staff-member';
+import { StaffMember, Impersonation, ApiRole, Permissions, Permission, PermissionEnum } from '../shared/models/staff-member';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { take } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
@@ -27,6 +27,7 @@ export class MainmenuComponent implements OnInit {
     properties: true
   };
   showMobileMenu = false;
+  canSeeCsBoard = false;
 
   get isLeaderboardVisible() {
     if (this.currentStaffMember) {
@@ -48,25 +49,14 @@ export class MainmenuComponent implements OnInit {
       } else {
         this.staffMemberService.getCurrentStaffMember().subscribe(res => this.currentStaffMember = res);
       }
+      this.setAdminPanelAccess(this.currentStaffMember?.permissions);
       console.log('current user from storage in main menu....', this.currentStaffMember);
     });
+  }
 
-    // REMOVE ASAP 19/03
-    // this.storage.get('impersonatedStaffMember').subscribe((staffMember: Impersonation) => {
-    //   if (staffMember) {
-    //     this.impersonatedStaffMember = staffMember;
-    //     console.log('selected id:', staffMember);
-    //     this.showImpersonateBanner(this.impersonatedStaffMember, true);
-    //   }
-    // });
-
-    // this.staffMemberService.impersonatedStaffMember$.subscribe(data => {
-    //   if (data) {
-    //     this.impersonatedStaffMember = data;
-    //     console.log('person', data);
-    //     this.showImpersonateBanner(this.impersonatedStaffMember);
-    //   }
-    // });
+  setAdminPanelAccess(permissions: Permission[]) {
+    const csBoardAccess = permissions?.find(x => x.permissionId === PermissionEnum.CsBoardAccess);
+    this.canSeeCsBoard = csBoardAccess ? true : false;
   }
 
   toggleNavCollapse() {

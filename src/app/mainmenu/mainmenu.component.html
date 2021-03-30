@@ -50,7 +50,7 @@
             </ol>
           </details>
         </li>
-        <li class="nav__item" routerLinkActive #con="routerLinkActive">
+        <li class="nav__item" routerLinkActive #con="routerLinkActive" *ngIf="canSeeCsBoard">
           <details open="open">
             <summary>
               <div class="nav__title">

@@ -388,7 +388,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     if (this.newLeadOwnerId) {
       this.leadService.assignLeads(this.newLeadOwnerId, this.selectedLeadsForAssignment).subscribe(result => {
         if (result) {
-          this.messageService.add({ severity: 'success', summary: 'Lead(s) successfully assigned!', closable: false });
+          this.messageService.add({ severity: 'success', summary: 'Lead(s) successfully assigned!', closable: false, key: 'assignmentMessage' });
           this.areLeadsAssignable = false;
           this.selectedLeadsForAssignment = [];
           this.replaceLeadsWithNewOwners(result);
