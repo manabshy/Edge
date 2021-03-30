@@ -1,19 +1,26 @@
-<div class="row ">
-  <div>
+<ol class="filters">
+  <li class="filter--item">
     <form [formGroup]="searchForm">
-      <div>
-        <select class="custom-select" id="month" aria-label="Month" formControlName="searchTerm" (change)="onDateChanged()">
-          <!-- <option value="current" selected>Month</option> -->
-          <option *ngFor="let month of monthsYears" [value]="month?.value">{{month?.key}}
-          </option>
+      <span class="select">
+        <select id="month" aria-label="Month" formControlName="searchTerm" (change)="onDateChanged()">
+          <option *ngFor="let month of monthsYears" [value]="month?.value">{{month?.key}}</option>
         </select>
-      </div>
+      </span>
     </form>
+  </li>
+  <li class="alignRight">
+    <button class="btn btn--info" (click)="showAdjustment=true">Adjust</button>
+  </li>
+</ol>
+
+<!-- <div class="row ">
+  <div>
+    
   </div>
   <div class="flexRight">
-    <button class="btn btn--info" (click)="showAdjustment=true">Adjust</button>
+    
   </div>
-</div>
+</div> -->
 <ng-container *ngIf="member?.points?.length; else noPoints">
   <div class="table">
     <table class="table--mobile table--rowHover">

@@ -50,15 +50,12 @@
             &:after                             { content:counter(rankings); font-weight:bold; display:flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:50%; position:absolute; right:6px; }
             &:first-child {
                 &:after                         { color:$color--snow; background-color:$color--warning; }
-                .avatar                         { width:50px; height:50px; }
             }
             &:nth-child(2)                      {
                 &:after                         { color:$color--snow; background-color:$color--midnight-50; }
-                .avatar                         { width:50px; height:50px; }
             }
             &:nth-child(3)                      {
-                &:after                         { color:$color--snow; background-color:#CFA86B; }
-                .avatar                         { width:50px; height:50px; }    
+                &:after                         { color:$color--snow; background-color:#CFA86B; }   
             }
         }
     }
@@ -100,6 +97,20 @@ This applies from 992px onwards
         &--split                                { display:grid; grid-gap:60px; grid-template-columns:repeat(auto-fit, minmax(100px, 1fr));
             &-60-40                             { grid-template-columns:6fr 4fr; }
             >li+*                               { padding-top:0; }
+        }
+
+        &--rankings                                 { counter-reset:rankings;
+            li                                      { margin:0 0 3px 0;  padding:3px 30px 3px 6px; position:relative; counter-increment:rankings;
+                &:first-child {
+                    .avatar                         { width:50px; height:50px; }
+                }
+                &:nth-child(2)                      {
+                    .avatar                         { width:50px; height:50px; }
+                }
+                &:nth-child(3)                      {
+                    .avatar                         { width:50px; height:50px; }    
+                }
+            }
         }
     }
 }

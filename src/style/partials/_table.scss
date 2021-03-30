@@ -39,7 +39,7 @@ Tablet - This applies from 768px onwards
 @media (min-width:768px) {
     .table                                        { overflow:visible; }
     table                                         { font-size:inherit; }
-
+    
     .table--mobile table                          { display:table; }
     .table--mobile tbody, 
     .table--mobile thead                          { display:table-row-group; }
