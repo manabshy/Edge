@@ -99,17 +99,9 @@ This applies from 992px onwards
             >li+*                               { padding-top:0; }
         }
 
-        &--rankings                                 { counter-reset:rankings;
-            li                                      { margin:0 0 3px 0;  padding:3px 30px 3px 6px; position:relative; counter-increment:rankings;
-                &:first-child {
-                    .avatar                         { width:50px; height:50px; }
-                }
-                &:nth-child(2)                      {
-                    .avatar                         { width:50px; height:50px; }
-                }
-                &:nth-child(3)                      {
-                    .avatar                         { width:50px; height:50px; }    
-                }
+        &--rankings                             { 
+            li                                  {
+                &:nth-child(-n+3) .avatar       { width:50px; height:50px; }
             }
         }
     }
