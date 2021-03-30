@@ -14,6 +14,7 @@ import { WedgeValidators } from '../wedge-validators';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ValidationService } from 'src/app/core/services/validation.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-sms-modal',
@@ -44,6 +45,7 @@ export class SmsModalComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private toastr: ToastrService,
+    private messageService: MessageService,
     private storage: StorageMap,
     private sharedService: SharedService,
     private smsService: SmsService,
@@ -92,7 +94,7 @@ export class SmsModalComponent implements OnInit {
 
   onSaveComplete(status: any): void {
     if (status) {
-      this.toastr.success('SMS successfully sent');
+      this.messageService.add({ severity: 'success', summary: 'SMS successfully sent', closable: false });
       this.ref.close();
     }
   }
