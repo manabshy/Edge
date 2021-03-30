@@ -27,7 +27,6 @@ const PAGE_SIZE = 20;
 })
 export class LeadRegisterComponent implements OnInit, OnChanges {
   // @Input() leads: Lead[];
-  @Input() pageNumber: number;
   @Input() bottomReached: boolean;
   @Input() showFilterOptions = true;
   areLeadsAssignable = false;
@@ -264,7 +263,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     return !!leads?.find(x => x.closedById);
   }
 
-  private setBottomReachedFlag(result: any) {
+  private setBottomReachedFlag(result: Lead[]) {
     if (result && (!result.length || result.length < +PAGE_SIZE)) {
       this.bottomReached = true;
     } else {
@@ -339,8 +338,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   private getSearchInfo(newSearch: boolean) {
     let info: LeadSearchInfo;
     if (this.leadRegisterForm) { info = { ...this.leadRegisterForm.value }; } else if (AppUtils.leadSearchInfo) { info = { ...AppUtils.leadSearchInfo }; }
-    info.page = !newSearch ? this.pageNumber : 1;
-    console.log({ info });
+    info.page = !newSearch ? this.page : 1;
     return info;
   }
 
@@ -348,8 +346,14 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     this.isSubmitting = isSubmitting;
     console.log({ isSubmitting });
 
-    this.leadSearchInfo = { ...this.leadSearchInfo, ...this.leadRegisterForm.value };
-    // if (isSubmitting) { this.leadSearchInfo = this.getSearchInfo(true); }
+    if (isSubmitting) {
+      this.leadSearchInfo = this.getSearchInfo(true);
+      this.filteredLeads = [];
+      // this.leadSearchInfo.page = 1;
+      this.page = 1;
+    } else {
+      this.leadSearchInfo = { ...this.leadSearchInfo, ...this.leadRegisterForm.value };
+    }
     if (this.leadSearchInfo) {
       this.isClosedIncluded = this.leadSearchInfo.includeClosedLeads;
     }

@@ -64,7 +64,7 @@ export class LeadsService {
       map(response => response.result));
   }
 
-  getLeads(leadSearchInfo: LeadSearchInfo, pageSize?: number): Observable<any> {
+  getLeads(leadSearchInfo: LeadSearchInfo, pageSize?: number): Observable<Lead[]> {
     const dateTo = leadSearchInfo.dateTo ? format(leadSearchInfo?.dateTo, 'yyyy-MM-dd') : '';
     const dateFrom = leadSearchInfo.dateFrom ? format(leadSearchInfo?.dateFrom, 'yyyy-MM-dd') : '';
     if (!leadSearchInfo.page || +leadSearchInfo.page === 0) {
