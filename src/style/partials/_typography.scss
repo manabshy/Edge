@@ -79,6 +79,8 @@ sup+p                                           { margin-top:3px; }
 small                                           { display:flex; font-size:10px; line-height:10px; font-weight:normal; color:$color--midnight-50; height:auto; top:0; }
 small+*                                         { margin-top:16px; }
 
+.hoverPointer:hover                             { cursor:pointer; }
+
 .txt--positive                                  { color:$color--positive; }
 .txt--negative                                  { color:$color--negative; }
 .txt--warning                                   { color:$color--warning; }
