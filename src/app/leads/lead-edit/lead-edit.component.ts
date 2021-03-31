@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { AppUtils } from '../../core/shared/utils';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LeadsService } from '../shared/leads.service';
@@ -26,13 +26,16 @@ import { ResultData } from 'src/app/shared/result-data';
 import { SideNavItem, SidenavService } from 'src/app/core/services/sidenav.service';
 import { MessageService } from 'primeng/api';
 import { ValidationService } from 'src/app/core/services/validation.service';
+import { zonedTimeToUtc } from 'date-fns-tz';
+import enGB from 'date-fns/locale/en-GB';
+const londonTimeZone = 'Europe/London';
 
 @Component({
   selector: 'app-lead-edit',
   templateUrl: '../lead-edit/lead-edit.component.html',
   styleUrls: ['../lead-edit/lead-edit.component.scss']
 })
-export class LeadEditComponent extends BaseComponent implements OnInit, AfterViewInit, OnDestroy {
+export class LeadEditComponent extends BaseComponent implements OnInit, OnDestroy {
 
   listInfo: any;
   leadId: number;
@@ -59,10 +62,11 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   contactGroups: BasicContactGroup[];
   addressees: any[] = [];
   noteRequiredWarning: string;
+  noteIsRequired = false;
   personParams: string;
   formErrors = FormErrors;
   public keepOriginalOrder = (a) => a.key;
-  @ViewChild('leadNote', { static: true }) leadNote: LeadNoteComponent;
+  // @ViewChild('leadNote', { static: true }) leadNote: LeadNoteComponent;
   note: ContactNote;
   todaysDate = new Date();
   tomorrowsDate = addDays(new Date(), 1);
@@ -94,10 +98,11 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   disableNext = false;
   currentUrl: string;
   useExistingIds = false;
-  exitOnSave: boolean;
+  exitOnSave: boolean = false;
   leadTypes: InfoDetail[];
   canClose = false;
   isMyLead = false;
+  hideFooter: boolean = false;
 
   get nextChaseDateControl() {
     return this.leadEditForm.get('nextChaseDate') as FormControl;
@@ -139,7 +144,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       this.infoParam = params.get('leadSearchInfo');
       this.showSaveAndNext = params.get('showSaveAndNext') as unknown as boolean || false;
       this.showNotes = params.get('showNotes') === 'true';
-      this.backToOrigin = params.get('backToOrigin') === 'false';
+      this.backToOrigin = JSON.parse(params.get('backToOrigin'));
+      this.exitOnSave = JSON.parse(params.get('exitOnSave'));
       this.useExistingIds = params['useExistingIds'] || false;
       // this.isMyLead =  params['isMyLead'];
       this.isMyLead = JSON.parse(params.get('isMyLead'));
@@ -151,7 +157,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
         // console.log('can edit lead', this.canEditLead);
 
       }
+      this.hideFooter = !(this.leadSearchInfo || this.isNewLead || this.isMyLead) ? true : false;
     });
+    
     this.route.params.subscribe(params => {
       this.leadId = +params['leadId'] || 0;
 
@@ -180,11 +188,11 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.sideNavItems[noteIndex].isCurrent = true;
   }
 
-  ngAfterViewInit() {
-    if (this.leadNote) {
-      this.note = this.leadNote.getNote();
-    }
-  }
+  // ngAfterViewInit() {
+  //   if (this.leadNote) {
+  //     this.note = this.leadNote.getNote();
+  //   }
+  // }
 
   init() {
     this.setupLeadEditForm();
@@ -290,7 +298,10 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   logValidationErrors(group: FormGroup = this.leadEditForm, fakeTouched: boolean, scrollToError = false) {
-    if (!this.canEditLead) { return; }
+    if (!this.canEditLead) {
+      console.log('return here...');
+      return;
+    }
     Object.keys(group.controls).forEach((key: string) => {
       const control = group.get(key);
       const messages = ValidationMessages[key];
@@ -419,9 +430,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       if (!isEqual(newChaseDate, this.lead.nextChaseDate) && this.nextChaseDateControl.touched) {
         this.isNextChaseDateChanged = true;
         console.log('note here', this.note, { newChaseDate }, this.lead.nextChaseDate);
-        this.note ? this.noteRequiredWarning = '' : this.noteRequiredWarning = 'Note is required.';
+        this.note?.text ? this.noteIsRequired = false : this.noteIsRequired = true;
       } else {
-        this.noteRequiredWarning = '';
+        this.noteIsRequired = false;
       }
     }
   }
@@ -461,8 +472,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     if (leadNote) {
       this.note = leadNote;
       this.isNoteFormDirty = true;
-      this.noteRequiredWarning = '';
-    }
+      this.noteIsRequired = false;
+    } else { this.noteIsRequired = true; }
   }
 
   setShowMyNotesFlag(onlyMyNotes: boolean) {
@@ -477,7 +488,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
       localStorage.setItem('currentUrl', this.router.url);
       this.router.navigateByUrl('/', { skipLocationChange: true })
         .then(() => this.router.navigate(['leads-register/edit', 0],
-          { queryParams: { isNewLead: true, showNotes: true, personId: this.person?.personId } }));
+          { queryParams: { isNewLead: true, showNotes: true, backToOrigin: true, exitOnSave: this.exitOnSave, personId: this.person?.personId } }));
     } else {
       const fullName = `${this.person?.firstName} ${this.person?.middleName} ${this.person?.lastName}`;
       this.router.navigate(['property-centre', 'detail', 0, 'edit'],
@@ -488,22 +499,27 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
 
   SaveLead(shouldExit: boolean = false, leadNote = null) {
     this.logValidationErrors(this.leadEditForm, true, true);
-    this.exitOnSave = shouldExit;
+    // this.exitOnSave = shouldExit;
     if (this.leadEditForm.valid) {
       this.isSubmitting = true;
 
       if (this.leadEditForm.dirty || this.isNoteFormDirty || this.isPropertyAssociated || this.isPropertyRemoved || this.isOwnerChanged) {
-        const lead = { ...this.lead, ...this.leadEditForm.value };
+        const lead = { ...this.lead, ...this.leadEditForm.value } as Lead;
+        // let test = zonedTimeToUtc( lead.nextChaseDate, londonTimeZone);
+        // let iso = lead.nextChaseDate.getUTCDate();
+        // // lead.nextChaseDate = zonedTimeToUtc( lead.nextChaseDate, londonTimeZone);
+        // console.log({lead}, {test},{iso});
+
         const isNoteRequired = this.isLeadMarkedAsClosed || this.isNewLead || this.isNextChaseDateChanged;
         if (this.note === undefined) { this.note = {} as ContactNote; }
         if (isNoteRequired && !this.note.text) {
-          this.noteRequiredWarning = 'Note is required.';
+          this.noteIsRequired = true;
           setTimeout(() => {
             this.sharedService.scrollToFirstInvalidField();
           });
           return;
         } else {
-          this.noteRequiredWarning = '';
+          this.noteIsRequired = false;
         }
         this.AddOrUpdateLead(lead);
       } else {
@@ -583,10 +599,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.isPropertyRemoved = false;
     if (this.isNewLead) {
       this.canEditLead = true;
-      console.log(this.canEditLead, 'can edit for new lead');
-
       this.messageService.add({ severity: 'success', summary: 'Lead successfully saved', closable: false });
-      if (this.backToOrigin) { this.sharedService.back(); }
     } else {
       this.isSaveAndNext ? time = 2000 : time = 3000;
       this.messageService.add({ severity: 'success', summary: 'Lead successfully updated', closable: false, life: time });
@@ -616,24 +629,34 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     // }
     if (lead) {
       this.leadId = lead.leadId;
+      this.lead = lead;
       this.currentUrl = localStorage.getItem('currentUrl');
-      console.log('current route', this.currentUrl);
-      if (this.currentUrl) {
+      console.log('current route BEFORE', this.currentUrl);
+      if (this.exitOnSave && this.backToOrigin) {
+        console.log('exist on save', this.exitOnSave);
+        this.router.navigate(['/leads-register/edit/', this.leadId], {
+          queryParams:
+            { showNotes: true, isMyLead: true, exitOnSave: this.exitOnSave }
+        });
+      } else if (this.currentUrl) {
         this.router.navigateByUrl(this.currentUrl, { replaceUrl: true });
 
         localStorage.removeItem('currentUrl');
-        // this.init();
-        this.canEditLead = this.isMyLead ? true : false;
-      } else {
-        if (this.exitOnSave) {
-          this.replaceLeadIdInRoute(this.leadId);
-          // this.router.navigateByUrl('leads-register');
-          // this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-          //   this.router.navigate(['/leads-register/edit/', this.leadId]);
-          // });
-        }
+        this.canEditLead = true;
+        // this.canEditLead = this.isMyLead ? true : false;
+        console.log('CAN EDIT ', this.canEditLead);
 
       }
+      //  else {
+      //   if (this.exitOnSave) {
+      //     this.replaceLeadIdInRoute(this.leadId);
+      //     // this.router.navigateByUrl('leads-register');
+      //     // this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      //     //   this.router.navigate(['/leads-register/edit/', this.leadId]);
+      //     // });
+      //   }
+
+      // }
     }
   }
 
@@ -770,3 +793,5 @@ export class LeadEditComponent extends BaseComponent implements OnInit, AfterVie
     this.sidenavService.resetCurrentFlag();
   }
 }
+
+

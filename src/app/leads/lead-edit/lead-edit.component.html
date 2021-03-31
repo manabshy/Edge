@@ -127,13 +127,13 @@
           <li class="width30pc">
             <div class="wrapper--note" *ngIf="canEditLead">
               <app-lead-note #leadNote [selectedPerson]="person" (leadNote)="getNewPersonNote($event)"
-                [noteRequiredWarning]="noteRequiredWarning" [isUpdateComplete]="isUpdateComplete"></app-lead-note>
+                [noteIsRequired]="noteIsRequired" [isUpdateComplete]="isUpdateComplete"></app-lead-note>
             </div>
           </li>
         </ol>
       </div>
     </div>
-    <footer class="footer">
+    <footer class="footer" [ngClass]="{'hide-footer': hideFooter}">
       <ng-container *ngIf="leadSearchInfo || isNewLead; else myLead">
         <button (click)="cancel()" type="button" class="btn btn--ghost">View Register</button>
         <button *ngIf="!isNewLead" (click)="traverseLeads(false, true)" type="button" class="btn btn--ghost" [attr.disabled]="disablePrevious ? '':null">Previous</button>
