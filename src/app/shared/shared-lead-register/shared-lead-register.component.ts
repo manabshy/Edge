@@ -41,7 +41,7 @@ export class SharedLeadRegisterComponent implements OnInit, OnChanges {
   leadClicked(lead: Lead) {
     const isMyLead = lead.ownerId === this.staffMemberId;
     this.router.navigateByUrl('/', { skipLocationChange: true })
-      .then(() => this.router.navigate(['leads-register/edit', lead.leadId], { queryParams: { showNotes: true, isMyLead } }));
+      .then(() => this.router.navigate(['leads-register/edit', lead.leadId], { queryParams: { showNotes: true, isMyLead, exitOnSave: true } }));
   }
 
   getLeads() {
