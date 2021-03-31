@@ -191,11 +191,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       if (data) {
         this.leadTypes = data.leadTypes;
       } else {
-        this.infoService.getDropdownListInfo()
-          .pipe((map(response => response),
-            tap(res => {
-              if (res) { this.leadTypes = res.leadTypes; }
-            }))).subscribe();
+        this.infoService.getDropdownListInfo().subscribe((res) => this.leadTypes = res.leadTypes);
       }
     });
 
