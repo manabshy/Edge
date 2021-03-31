@@ -14,6 +14,7 @@ export class LeadNoteComponent implements OnInit, OnChanges {
   @Input() isDisabled: boolean;
   @Input() isUpdateComplete: boolean;
   @Input() noteRequiredWarning: string;
+  @Input() noteIsRequired = false;
   @Output() leadNote = new EventEmitter<ContactNote>();
   @ViewChild('note', {static: true}) noteComponent: ElementRef;
   public keepOriginalOrder = (a) => a.key;
