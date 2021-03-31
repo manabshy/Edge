@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { AppConstants } from '../shared/app-constants';
 import { map, shareReplay, tap } from 'rxjs/operators';
@@ -17,7 +17,7 @@ export class StaffMemberService {
   private staffMembers$: Observable<StaffMember[] | any>;
   private activeStaffMembers$: Observable<StaffMember[] | any>;
   private signature$: Observable<string | any>;
-  private impersonationSubject = new BehaviorSubject<BaseStaffMember | null>(null);
+  private impersonationSubject = new Subject<BaseStaffMember | null>();
   impersonatedStaffMember$ = this.impersonationSubject.asObservable();
   currentStaffMember$ = this.currentStaffMemberSubject.asObservable();
 

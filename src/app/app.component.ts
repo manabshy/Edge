@@ -107,18 +107,10 @@ export class AppComponent extends BaseComponent implements OnInit {
   ngOnInit() {
     this.toastr.overlayContainer = this.toastContainer;
     this.setManifestName();
+    this.setImpersonatedAsCurrentUser();
 
     if (this.isLoggedIn) {
-      // this.getCurrentStaffMember();
-      this.staffMemberService.impersonatedStaffMember$.subscribe((person: BaseStaffMember) => {
-        if (person) {
-          console.log({ person }, 'for new impersonated person');
-          this.storage.delete('currentUser').subscribe();
-        } else {
-          this.getCurrentStaffMember(); console.log('read from local storage');
-        }
-      });
-
+      this.getCurrentStaffMember();
       this.getInfo();
     }
 
@@ -128,6 +120,18 @@ export class AppComponent extends BaseComponent implements OnInit {
         this.sharedService.setTitle(params['docTitle']);
         AppUtils.navPlaceholder = params['docTitle'];
         AppUtils.navPlaceholder = AppUtils.navPlaceholder.substring(AppUtils.navPlaceholder.indexOf('|') + 1).trim();
+      }
+    });
+  }
+
+  private setImpersonatedAsCurrentUser() {
+    this.staffMemberService.impersonatedStaffMember$.subscribe((person: BaseStaffMember) => {
+      if (person) {
+        console.log({ person }, 'for new impersonated person');
+        this.storage.delete('currentUser').subscribe(() => {
+          this.getCurrentStaffMember();
+          window.location.reload();
+        });
       }
     });
   }
