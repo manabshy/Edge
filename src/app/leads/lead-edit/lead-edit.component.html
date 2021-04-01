@@ -142,7 +142,7 @@
           <button type="submit" class="btn btn--positive" id="saveLead" data-cy="saveLead" *ngIf="!isLeadClosed">Save</button>
           <button *ngIf="showSaveAndNext && !isLeadClosed" (click)="traverseLeads(true)"
             type="button" class="btn btn--positive" [isOpen]="leadsListCompleted"
-            [attr.disabled]="leadsListCompleted ? '':null">Save & Next</button>
+            [attr.disabled]="disableNext ? '':null">Save & Next</button>
         </ng-container>
         <ng-template #noEdit>
           <!-- <button (click)="traverseLeads(false, true)" type="button" class="btn btn--ghost"
