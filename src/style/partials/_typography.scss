@@ -2,36 +2,28 @@
 Font-face setup
 ***********************************************/
 @font-face {
-    font-family:'objectsans';
-    src:    url('~/assets/font/objectsans-medium.woff2') format('woff2'),
-            url('~/assets/font/objectsans-medium.woff') format('woff');
+    font-family:'poppins';
+    src:    url('~/assets/font/poppins-medium.woff2') format('woff2'),
+            url('~/assets/font/poppins-medium.woff') format('woff');
     font-weight:bold;
     font-style:bold;
 }
 
 @font-face {
-    font-family:'objectsans';
-    src:    url('~/assets/font/objectsans-light.woff2') format('woff2'),
-            url('~/assets/font/objectsans-light.woff') format('woff');
+    font-family:'poppins';
+    src:    url('~/assets/font/poppins-medium.woff2') format('woff2'),
+            url('~/assets/font/poppins-medium.woff') format('woff');
+    font-weight:400;
+    font-style:400;
+}
+
+@font-face {
+    font-family:'poppins';
+    src:    url('~/assets/font/poppins-light.woff2') format('woff2'),
+            url('~/assets/font/poppins-light.woff') format('woff');
     font-weight:normal;
     font-style:normal;
 }
-
-// @font-face {
-//     font-family:'opensans';
-//     src:    url('../../assets/font/opensans-semibold.woff2') format('woff2'),
-//             url('../../assets/font/opensans-semibold.woff') format('woff');
-//     font-weight:bold;
-//     font-style:bold;
-// }
-
-// @font-face {
-//     font-family:'opensans';
-//     src:    url('../../assets/font/opensans-regular.woff2') format('woff2'),
-//             url('../../assets/font/opensans-regular.woff') format('woff');
-//     font-weight:normal;
-//     font-style:normal;
-// }
 
 $font-size-sm:12px;
 $input-height-sm:30px;
@@ -42,10 +34,10 @@ body, form, input, textarea, select, label,
 .select optgroup option, .checkbox > span label,
 .radio > span label, form .message, .btn,
 .p-accordion, .p-toast, .p-component,
-.p-inputtext, .p-chips .p-chips-multiple-container .p-chips-input-token input   { font-display:optional; text-rendering:optimizeLegibility; font-family:'objectsans', Sans-Serif; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility !important; -webkit-font-smoothing:antialiased !important; }
+.p-inputtext, .p-chips .p-chips-multiple-container .p-chips-input-token input   { font-display:optional; text-rendering:optimizeLegibility; font-family:'poppins', Sans-Serif; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility !important; -webkit-font-smoothing:antialiased !important; }
 
 html                                            { scroll-behavior:smooth;  }
-body, .body                                     { font-size:12px; line-height:17px; letter-spacing:.5px; background-color:$color--snow; font-weight:normal; color:$color--midnight-70; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+body, .body                                     { font-size:12px; line-height:17px; letter-spacing:.5px; background-color:$color--snow; font-weight:normal; color:$color--midnight; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 
 /***** Typography *****/
 h1, h2, h3, h4, h5, h6,
