@@ -11,7 +11,7 @@ export class SidenavService {
     { name: 'properties', isCurrent: false, showButton: true },
     { name: 'leads', isCurrent: false, showButton: true },
     { name: 'instructions', isCurrent: false },
-    { name: 'valuations', isCurrent: false },
+    // { name: 'valuations', isCurrent: false }, Hide for release 06/04/21
     { name: 'offers', isCurrent: false },
     { name: 'searches', isCurrent: false },
     { name: 'lettingsManagements', isCurrent: false },
