@@ -96,9 +96,10 @@ export class HeaderComponent implements OnInit {
       this.storage.get('originalUser').subscribe((data: StaffMember) => {
         if (data) {
           this.currentStaffMember = data;
-          this.storage.set('currentUser', data).subscribe();
-          this.storage.delete('originalUser').subscribe();
-          location.reload();
+          this.storage.set('currentUser', data).subscribe(() => {
+            this.storage.delete('originalUser').subscribe();
+            location.reload();
+          });
         }
       });
     } else {
@@ -127,7 +128,7 @@ export class HeaderComponent implements OnInit {
     this.storage.set('impersonatedStaffMember', this.impersonatedStaffMember).subscribe();
     localStorage.setItem('impersonatedStaffMemberId', JSON.stringify(this.impersonatedStaffMember.staffMemberId));
     this.staffMemberService.impersonatedStaffMemberChanged(this.impersonatedStaffMember);
-    this.getCurrentUser();
+    // this.getCurrentUser();
 
   }
 

@@ -106,16 +106,18 @@
                           d="M11.4 56.1c0 3.8 3.1 6.9 6.9 6.9h27.4c3.8 0 6.9-3.1 6.9-6.9V14.8H11.4V56.1zM19.9 31.6l4.9-4.9L32 34l7.3-7.3 4.9 4.9 -7.3 7.3 7.3 7.3 -4.9 4.9L32 43.8l-7.3 7.3 -4.9-4.9 7.3-7.3L19.9 31.6zM44 4.4L40.6 1H23.4L20 4.4H8v6.9h48V4.4H44z">
                         </path>
                       </svg>Remove</button>
-                    <button class="btn btn--positive" type="button" data-cy="createVal"
-                      (click)="navigateToNewValuation(lead?.relatedProperty?.propertyId)" *ngIf="!isMessageVisible"><svg
-                        aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
-                        <path class="horizontal"
-                          d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z">
-                        </path>
-                        <path class="vertical"
-                          d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z">
-                        </path>
-                      </svg>Valuation</button>
+                   <ng-component  *ngIf="false">
+                      <button  class="btn btn--positive" type="button" data-cy="createVal"
+                        (click)="navigateToNewValuation(lead?.relatedProperty?.propertyId)" *ngIf="!isMessageVisible"><svg
+                          aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
+                          <path class="horizontal"
+                            d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z">
+                          </path>
+                          <path class="vertical"
+                            d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z">
+                          </path>
+                        </svg>Valuation</button>
+                   </ng-component>
                   </div>
                 </li>
               </ol>
@@ -127,13 +129,13 @@
           <li class="width30pc">
             <div class="wrapper--note" *ngIf="canEditLead">
               <app-lead-note #leadNote [selectedPerson]="person" (leadNote)="getNewPersonNote($event)"
-                [noteRequiredWarning]="noteRequiredWarning" [isUpdateComplete]="isUpdateComplete"></app-lead-note>
+                [noteIsRequired]="noteIsRequired" [isUpdateComplete]="isUpdateComplete"></app-lead-note>
             </div>
           </li>
         </ol>
       </div>
     </div>
-    <footer class="footer">
+    <footer class="footer" [ngClass]="{'hide-footer': hideFooter}">
       <ng-container *ngIf="leadSearchInfo || isNewLead; else myLead">
         <button (click)="cancel()" type="button" class="btn btn--ghost">View Register</button>
         <button *ngIf="!isNewLead" (click)="traverseLeads(false, true)" type="button" class="btn btn--ghost" [attr.disabled]="disablePrevious ? '':null">Previous</button>
@@ -142,7 +144,7 @@
           <button type="submit" class="btn btn--positive" id="saveLead" data-cy="saveLead" *ngIf="!isLeadClosed">Save</button>
           <button *ngIf="showSaveAndNext && !isLeadClosed" (click)="traverseLeads(true)"
             type="button" class="btn btn--positive" [isOpen]="leadsListCompleted"
-            [attr.disabled]="leadsListCompleted ? '':null">Save & Next</button>
+            [attr.disabled]="disableNext ? '':null">Save & Next</button>
         </ng-container>
         <ng-template #noEdit>
           <!-- <button (click)="traverseLeads(false, true)" type="button" class="btn btn--ghost"

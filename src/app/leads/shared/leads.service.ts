@@ -5,7 +5,7 @@ import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encoder-helper';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 @Injectable({
   providedIn: 'root'
 })
@@ -64,10 +64,10 @@ export class LeadsService {
       map(response => response.result));
   }
 
-  getLeads(leadSearchInfo: LeadSearchInfo, pageSize?: number): Observable<any> {
-    const dateTo = leadSearchInfo.dateTo ? format(leadSearchInfo?.dateTo, 'yyyy-MM-dd') : '';
-    const dateFrom = leadSearchInfo.dateFrom ? format(leadSearchInfo?.dateFrom, 'yyyy-MM-dd') : '';
-    if (!leadSearchInfo.page || +leadSearchInfo.page === 0) {
+  getLeads(leadSearchInfo: LeadSearchInfo, pageSize?: number): Observable<Lead[]> {
+    const dateTo = leadSearchInfo?.dateTo ? format(leadSearchInfo?.dateTo, 'yyyy-MM-dd') : '';
+    const dateFrom = leadSearchInfo?.dateFrom ? format(leadSearchInfo?.dateFrom, 'yyyy-MM-dd') : '';
+    if (!leadSearchInfo?.page || +leadSearchInfo?.page === 0) {
       leadSearchInfo.page = 1;
     }
     if (pageSize == null) {
@@ -103,8 +103,9 @@ export class LeadsService {
   getLeadIds(leadSearchInfo: LeadSearchInfo, pageSize?: number): Observable<any> {
     // const dateTo = format(leadSearchInfo.dateTo, 'yyyy-MM-dd');
     // const dateFrom = format(leadSearchInfo.dateFrom, 'yyyy-MM-dd');
-    const dateTo = leadSearchInfo.dateTo ? format(leadSearchInfo?.dateTo, 'yyyy-MM-dd') : '';
-    const dateFrom = leadSearchInfo.dateFrom ? format(leadSearchInfo?.dateFrom, 'yyyy-MM-dd') : '';
+
+    const dateTo = leadSearchInfo?.dateTo ? format(parseISO(leadSearchInfo?.dateTo?.toString()), 'yyyy-MM-dd') : '';
+    const dateFrom = leadSearchInfo?.dateFrom ? format(parseISO(leadSearchInfo?.dateFrom?.toString()), 'yyyy-MM-dd') : '';
 
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
@@ -156,8 +157,10 @@ export class LeadsService {
   }
 
   setQueryParams(leadSearchInfo: LeadSearchInfo, pageSize?: number) {
-    const dateTo = leadSearchInfo.dateTo ? format(leadSearchInfo?.dateTo, 'yyyy-MM-dd') : '';
-    const dateFrom = leadSearchInfo.dateFrom ? format(leadSearchInfo?.dateFrom, 'yyyy-MM-dd') : '';
+    // const dateTo = leadSearchInfo.dateTo ? format(leadSearchInfo?.dateTo, 'yyyy-MM-dd') : '';
+    // const dateFrom = leadSearchInfo.dateFrom ? format(leadSearchInfo?.dateFrom, 'yyyy-MM-dd') : '';
+    const dateTo = leadSearchInfo?.dateTo ? format(parseISO(leadSearchInfo?.dateTo?.toString()), 'yyyy-MM-dd') : '';
+    const dateFrom = leadSearchInfo?.dateFrom ? format(parseISO(leadSearchInfo?.dateFrom?.toString()), 'yyyy-MM-dd') : '';
 
     console.log('date params', leadSearchInfo);
     const options = new HttpParams({

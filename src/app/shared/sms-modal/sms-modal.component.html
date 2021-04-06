@@ -12,8 +12,8 @@
 
   <fieldset  [ngClass]="{'invalid':formErrors.message}">
     <textarea formControlName="message" cols="30" rows="5" [maxlength]="smsMaxLength" placeholder="Message ..."></textarea>
-    <small class="txt--right" [ngClass]="smsLength === smsMaxLength ? 'text-danger' : 'text-muted'">{{smsLength}}/{{smsMaxLength}}</small>
     <p class="message message--negative">{{formErrors?.message}}</p>
+    <small class="txt--right" [ngClass]="smsLength === smsMaxLength ? 'text-danger' : 'text-muted'">{{smsLength}}/{{smsMaxLength}}</small>
   </fieldset>
 
   <fieldset [ngClass]="{'invalid':formErrors.senderName}">

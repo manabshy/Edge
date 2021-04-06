@@ -17,9 +17,6 @@
       <ng-container *ngSwitchCase="'notes'">
         <div>
           <div class="col-sm-10 offset-sm-2" [ngClass]="{'notes-disabled': !contactGroupDetails?.contactGroupId}">
-            <!-- <label class="small">Notes</label> -->
-            <small class="alert alert-info" *ngIf="!contactGroupDetails?.contactGroupId">Save to enable
-              Notes</small>
             <app-notes [noteData]="dataNote" [contactGroupNotes]="dataNote?.notes" [bottomReached]="bottomReached"
               [pageNumber]="page" (showMyNotes)="setShowMyNotesFlag($event)"></app-notes>
           </div>

@@ -75,7 +75,7 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
     this.storage.get('info').subscribe((data: DropdownListInfo) => {
       if (data) { this.referralCompanies = data.referralCompanies; } else {
         this.infoService.getDropdownListInfo().subscribe((info: ResultData | any) => {
-          if (info) { this.referralCompanies = data.referralCompanies; }
+          if (info) { this.referralCompanies = info.referralCompanies; }
         });
       }
       this.setReferralCompanies();
@@ -118,7 +118,7 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
   onSaveComplete(res: Referral[]): void {
     if (res) {
       this.setPersonReferrals(res);
-      this.messageService.add({ severity: 'success', summary: 'Referral successfully sent', closable: false });
+      this.messageService.add({ severity: 'success', summary: 'Referral successfully sent', closable: false, key: 'referralMessage' });
       this.showRefDialog = false;
     }
   }
