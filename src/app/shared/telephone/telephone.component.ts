@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { Subject } from 'rxjs';
 import { BsModalService } from 'ngx-bootstrap/modal/';
 import { TelephoneModalComponent } from '../telephone-modal/telephone-modal.component';
@@ -21,7 +21,7 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
   templateUrl: './telephone.component.html',
   styleUrls: ['./telephone.component.scss']
 })
-export class TelephoneComponent implements OnInit {
+export class TelephoneComponent implements OnInit, OnChanges {
   @Input() person: Person;
   @Input() company: Company;
   @Input() number: string;
@@ -34,6 +34,7 @@ export class TelephoneComponent implements OnInit {
   currentStaffMember: StaffMember;
   tapiInfo: TapiRequestInfo;
   ref: DynamicDialogRef;
+  showMessage: boolean = false;
 
   constructor(private modalService: BsModalService,
     private tapiService: TapiService,
@@ -61,6 +62,10 @@ export class TelephoneComponent implements OnInit {
     // });
   }
 
+  ngOnChanges() {
+    if (this.person) { this.showMessage = this.person.warningStatusId !== 1 || !this.person.contactByPhone ? true : false; }
+  }
+
   callOrText(call: boolean) {
     event.stopPropagation();
     event.preventDefault();
@@ -85,6 +90,26 @@ export class TelephoneComponent implements OnInit {
         this.sendSMS();
       }
     }
+  }
+
+  showWarningMessage() {
+    if (!this.showMessage) { return; }
+    const data = {
+      isSingleAction: true,
+      title: this.getWarningMessage(this.person),
+      actions: ['Cancel']
+    };
+
+    this.ref = this.dialogService.open(ConfirmModalComponent, { data, styleClass: 'dialog dialog--hasFooter', header: 'Phone Call Warning' });
+    this.ref.onClose.subscribe();
+  }
+
+  getWarningMessage(person: Person) {
+    console.log({ person }, this.warning);
+
+    if (person?.warningStatusId !== 1 && !person?.contactByPhone) { return `This person has phone calls switched off and a ${person?.warning} warning, please check their history before phoning`; }
+    if (!person?.contactByPhone) { return 'This person has phone calls switched off, please check their history before phoning'; }
+    if (person?.warningStatusId) { return `This person has a ${person?.warning} warning, please check their history before phoning`; }
   }
 
   showWarning() {
