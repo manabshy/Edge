@@ -71,6 +71,7 @@ export interface Department {
 }
 export enum PermissionEnum {
   CsBoardAccess = 72,
+  GdprRemoval = 75,
 }
 
 export enum DefaultViews {
