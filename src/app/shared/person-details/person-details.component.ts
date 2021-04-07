@@ -7,6 +7,12 @@ import { DropdownListInfo, InfoDetail, InfoService } from 'src/app/core/services
 import { ResultData } from '../result-data';
 import { MessageService } from 'primeng/api';
 import lodash from 'lodash';
+import { DialogService } from 'primeng/dynamicdialog';
+import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
+import { Subject } from 'rxjs';
+import { PeopleService } from 'src/app/core/services/people.service';
+import { Permission, PermissionEnum, StaffMember } from '../models/staff-member';
+import { StaffMemberService } from 'src/app/core/services/staff-member.service';
 
 @Component({
   selector: 'app-person-details',
@@ -35,9 +41,14 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
   referralCompanies: InfoDetail[];
   selectedCompany: Referral;
   personReferrals: Referral[] = [];
+  canRemove = true;
+  dialogRef: any;
+  currentStaffMember: any;
+  warnings: InfoDetail[];
 
-  constructor(private router: Router, private contactGroupService: ContactGroupsService, private storage: StorageMap,
-    private infoService: InfoService, private messageService: MessageService) { }
+  constructor(private router: Router, private contactGroupService: ContactGroupsService, private peopleService: PeopleService,
+    public staffMemberService: StaffMemberService, private storage: StorageMap,
+    private infoService: InfoService, private messageService: MessageService, private dialogService: DialogService) { }
 
   ngOnInit() {
     this.contactGroupService.noteChanges$.subscribe(note => {
@@ -52,13 +63,19 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
       }
     });
 
+    // this.performRemoval().subscribe(res => {
+    //   let save = res ? 'save' : 'not saved';
+    //   console.log({ res }, { save }, 'here.. for response')
+    // });
     // Get referral Companies
     // this.getReferralCompanies();
   }
 
   ngOnChanges() {
     // Get referral Companies
-    this.getReferralCompanies();
+    this.getInfo();
+    this.getCurrentUser();
+    console.log(this.referenceCount, 'refs current count');
 
     if (this.personDetails?.phoneNumbers?.length) {
       this.preferredNumber = this.personDetails.phoneNumbers.find(x => x.isPreferred).number;
@@ -70,16 +87,40 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
     }
   }
 
-  getReferralCompanies() {
-    // Lead Types
+  getCurrentUser() {
+    this.storage.get('currentUser').subscribe((data: StaffMember) => {
+      if (data) {
+        this.currentStaffMember = data;
+      } else { this.staffMemberService.getCurrentStaffMember().subscribe(res => this.currentStaffMember = res); }
+      this.setCanRemoveFlag(this.currentStaffMember?.permissions);
+    });
+  }
+
+  setCanRemoveFlag(permissions: Permission[]) {
+    this.canRemove = permissions?.find(x => x.permissionId === PermissionEnum.GdprRemoval) ? true : false;
+  }
+
+  getInfo() {
     this.storage.get('info').subscribe((data: DropdownListInfo) => {
-      if (data) { this.referralCompanies = data.referralCompanies; } else {
+      if (data) { this.referralCompanies = data.referralCompanies; this.warnings = data.personWarningStatuses; } else {
         this.infoService.getDropdownListInfo().subscribe((info: ResultData | any) => {
-          if (info) { this.referralCompanies = info.referralCompanies; }
+          if (info) { this.referralCompanies = info.referralCompanies; this.warnings = data.personWarningStatuses; }
         });
       }
       this.setReferralCompanies();
+      this.setPersonWarning(this.personDetails, this.warnings);
     });
+  }
+
+  setPersonWarning(person: Person, warnings: InfoDetail[]) {
+    console.log(person, 'status');
+    if (person) {
+      if (person.warningStatusId !== 1) {
+        console.log('status here.....');
+        person.warning = warnings?.find(x => x.id === person.warningStatusId)?.value || person.warningStatusComment;
+      } else { person.warning = null; }
+    }
+    console.log('status here 2.....', person);
   }
 
   private setReferralCompanies() {
@@ -135,5 +176,24 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
     this.isPersonInfoOnly ? this.navigateToEdit() : this.selectedPersonId.emit(this.personDetails.personId);
   }
 
+  performRemoval() {
+    const subject = new Subject<boolean>();
+    const data = {
+      title: `Are you sure you want to permanently remove ${this.personDetails?.addressee} from the EDGE database? This is an irreversible action!`,
+      actions: ['Cancel', 'OK']
+    };
+
+    this.dialogRef = this.dialogService.open(ConfirmModalComponent, { data, styleClass: 'dialog dialog--hasFooter', showHeader: false });
+    this.dialogRef.onClose.subscribe((res) => {
+      if (res) {
+        //  subject.next(true); subject.complete();
+        this.peopleService.performGdprRemoval(this.personDetails).subscribe((result) => console.log({ res })
+        );
+        console.log({ res }, 'test confirm');
+
+      }
+    });
+    // return subject.asObservable();
+  }
 }
 

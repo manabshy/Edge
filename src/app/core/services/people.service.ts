@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AppConstants } from '../shared/app-constants';
 import { map, tap } from 'rxjs/operators';
-import { PersonInstruction, PersonSearch, PersonOffer, PersonLettingsManagement, PersonHomeHelper, PersonProperty } from '../../shared/models/person';
+import { PersonInstruction, PersonSearch, PersonOffer, PersonLettingsManagement, PersonHomeHelper, PersonProperty, Person } from '../../shared/models/person';
 import { Valuation } from 'src/app/valuations/shared/valuation';
 
 @Injectable({
@@ -68,4 +68,8 @@ export class PeopleService {
       }));
   }
 
+  performGdprRemoval(person: Person): Observable<Person | any> {
+    const url = `${AppConstants.basePersonUrl}/${person.personId}/gdpr`;
+    return this.http.put<any>(url, person).pipe(map(response => response.result));
+  }
 }
