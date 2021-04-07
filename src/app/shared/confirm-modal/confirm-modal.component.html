@@ -14,7 +14,7 @@
 <p>{{data?.title}}</p>
 <footer class="footer footer--modal">
   <div class="btn--container">
-    <button *ngIf="!isSingleAction" type="button" class="btn btn--ghost" (click)="action(false)">{{data?.actions[0]}}</button>
-    <button type="button" id="confirm" class="btn btn--info" (click)="action(true)">{{data?.actions[1]}}</button>
+    <button  type="button" class="btn btn--ghost" (click)="action(false)">{{data?.actions[0]}}</button>
+    <button *ngIf="!data?.isSingleAction" type="button" id="confirm" class="btn btn--info" (click)="action(true)">{{data?.actions[1]}}</button>
   </div>
 </footer>
