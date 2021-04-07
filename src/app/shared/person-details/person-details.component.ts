@@ -176,24 +176,46 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
     this.isPersonInfoOnly ? this.navigateToEdit() : this.selectedPersonId.emit(this.personDetails.personId);
   }
 
-  performRemoval() {
-    const subject = new Subject<boolean>();
+  showTransactionMessage() {
     const data = {
-      title: `Are you sure you want to permanently remove ${this.personDetails?.addressee} from the EDGE database? This is an irreversible action!`,
-      actions: ['Cancel', 'OK']
+      isSingleAction: true,
+      title: `You are unable to perform this action, because ${this.personDetails?.addressee} is involved in a live transaction. Please rectify before completing this action`,
+      actions: ['OK']
     };
 
-    this.dialogRef = this.dialogService.open(ConfirmModalComponent, { data, styleClass: 'dialog dialog--hasFooter', showHeader: false });
-    this.dialogRef.onClose.subscribe((res) => {
-      if (res) {
-        //  subject.next(true); subject.complete();
-        this.peopleService.performGdprRemoval(this.personDetails).subscribe((result) => console.log({ res })
-        );
-        console.log({ res }, 'test confirm');
+    this.dialogRef = this.dialogService.open(ConfirmModalComponent, { data, styleClass: 'dialog dialog--hasFooter', header: 'GDPR Removal Warning' });
+    this.dialogRef.onClose.subscribe();
 
-      }
-    });
-    // return subject.asObservable();
+  }
+
+  performRemoval() {
+    if (this.referenceCount) {
+      this.showTransactionMessage();
+    } else {
+
+      const data = {
+        title: `Are you sure you want to permanently remove ${this.personDetails?.addressee} from the EDGE database? This is an irreversible action!`,
+        actions: ['Cancel', 'OK']
+      };
+
+      this.dialogRef = this.dialogService.open(ConfirmModalComponent, { data, styleClass: 'dialog dialog--hasFooter', showHeader: false });
+      this.dialogRef.onClose.subscribe((res) => {
+        if (res) {
+          this.peopleService.performGdprRemoval(this.personDetails).subscribe((result) => {
+            if (result) {
+              this.messageService.add({
+                severity: 'success',
+                summary: `${this.personDetails?.addressee} has been removed from the EDGE database.`,
+                closable: false
+              });
+              setTimeout(() => {
+                this.router.navigate(['/contact-centre']);
+              }, 2000);
+            }
+          });
+        }
+      });
+    }
   }
 }
 
