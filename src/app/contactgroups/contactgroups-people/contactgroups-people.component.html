@@ -24,7 +24,7 @@
       </ng-container>
       <ng-container *ngSwitchDefault>
         <div class="message message--warning" *ngIf="pendingChanges">
-          There are pending changes on the people list. Save to make them effective.
+          There are pending changes to this contact group. Press save to make them effective
         </div>
         <div class="message message--negative"
           *ngIf="!contactGroupDetails?.contactPeople?.length && !isNewContactGroup && !isExistingCompany">
