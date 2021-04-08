@@ -6,12 +6,27 @@
 
     <div class="scrollY">
       <ol class="nav">
-        <li class="nav__item" (click)="toggleMobileMenu()" routerLinkActive="active">
+        <li class="nav__item" routerLinkActive #con="routerLinkActive">
+          <details open="open">
+            <summary>
+              <div class="nav__title">
+                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><path d="M32 6.4C14.4 6.4 0 21.8 0 40.6c0 5.1 1 9.9 3.2 14.7 0.6 1.3 1.9 2.2 3.5 2.2h50.6c1.6 0 2.9-1 3.5-2.6 1.9-4.5 3.2-9.6 3.2-14.7C64 21.8 49.6 6.4 32 6.4zM49 25.3L37.8 39.7c0.3 1.9-0.3 3.8-1.6 5.4 -2.2 2.6-6.1 2.6-8.6 0 -2.2-2.6-2.2-6.4 0-9 1.3-1.6 3.2-2.2 5.1-1.9l13.8-11.8c0.6-0.6 1.9-0.6 2.6 0C49.6 23.4 49.6 24.3 49 25.3z"></path></svg>
+                Dashboard
+                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s flexRight"><path d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z" class="vertical"></path><path d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z" class="horizontal"></path></svg>
+              </div>
+            </summary>
+            <ol class="nav nav--secondary">
+              <li class="nav__item" (click)="toggleMobileMenu()"><a routerLink="/" routerLinkActive="active">Calendar</a></li>
+            </ol>
+          </details>
+        </li>
+        
+        <!-- <li class="nav__item" (click)="toggleMobileMenu()" routerLinkActive="active">
           <a class="nav__title" routerLink="/" [queryParams]="{selectedTab: 0}">
             <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"class="icon icon--onLeft"><polygon points="50.3 6.1 50.3 1 44.5 1 44.5 6.1 19.5 6.1 19.5 1 13.7 1 13.7 6.1 4.5 6.1 4.5 17.2 59.5 17.2 59.5 6.1 "/><path d="M4.5 22.6V63h55V22.6H4.5zM20.7 57.2H9.2V45.6h11.5V57.2zM20.7 40H9.2V28.5h11.5V40zM37.8 57.2H26.2V45.6h11.5V57.2zM37.8 40H26.2V28.5h11.5V40zM54.8 57.2H43.3V45.6h11.5V57.2zM54.8 40H43.3V28.5h11.5V40z"/></svg>
             Calendar
           </a>
-        </li>
+        </li> -->
 
         <li class="nav__item" routerLinkActive #con="routerLinkActive">
           <details open="open">
