@@ -179,7 +179,7 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
   showTransactionMessage() {
     const data = {
       isSingleAction: true,
-      title: `You are unable to perform this action, because ${this.personDetails?.addressee} is involved in a live transaction. Please rectify before completing this action`,
+      title: `${this.personDetails?.addressee} is involved in a live transaction. Please rectify before completing this action`,
       actions: ['OK']
     };
 
@@ -198,7 +198,7 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
         actions: ['Cancel', 'OK']
       };
 
-      this.dialogRef = this.dialogService.open(ConfirmModalComponent, { data, styleClass: 'dialog dialog--hasFooter', showHeader: false });
+      this.dialogRef = this.dialogService.open(ConfirmModalComponent, { data, styleClass: 'dialog dialog--hasFooter', header: 'GDPR Removal Warning'  });
       this.dialogRef.onClose.subscribe((res) => {
         if (res) {
           this.peopleService.performGdprRemoval(this.personDetails).subscribe((result) => {

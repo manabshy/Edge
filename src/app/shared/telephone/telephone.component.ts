@@ -97,7 +97,7 @@ export class TelephoneComponent implements OnInit, OnChanges {
     const data = {
       isSingleAction: true,
       title: this.getWarningMessage(this.person),
-      actions: ['Cancel']
+      actions: ['OK']
     };
 
     this.ref = this.dialogService.open(ConfirmModalComponent, { data, styleClass: 'dialog dialog--hasFooter', header: 'Phone Call Warning' });
