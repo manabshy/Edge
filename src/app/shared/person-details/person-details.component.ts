@@ -179,7 +179,7 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
   showTransactionMessage() {
     const data = {
       isSingleAction: true,
-      title: `You are unable to perform this action, because ${this.personDetails?.addressee} is involved in a live transaction. Please rectify before completing this action`,
+      title: `<p>You are unable to perform this action, because ${this.personDetails?.addressee} is involved in a live transaction.</p> <p><strong>Please rectify before completing this action.</strong></p>`,
       actions: ['OK']
     };
 
@@ -194,7 +194,7 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
     } else {
 
       const data = {
-        title: `Are you sure you want to permanently remove ${this.personDetails?.addressee} from the EDGE database? This is an irreversible action!`,
+        title: `<p>Are you sure you want to permanently remove ${this.personDetails?.addressee} from the EDGE database?</p> <p><strong>This is an irreversible action!</strong></p>`,
         actions: ['Cancel', 'OK']
       };
 
@@ -205,7 +205,7 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
             if (result) {
               this.messageService.add({
                 severity: 'success',
-                summary: `${this.personDetails?.addressee} has been removed from the EDGE database.`,
+                summary: `GDPR Removal Completed`,
                 closable: false
               });
               setTimeout(() => {

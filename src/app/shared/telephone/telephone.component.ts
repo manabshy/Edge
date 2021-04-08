@@ -107,9 +107,9 @@ export class TelephoneComponent implements OnInit, OnChanges {
   getWarningMessage(person: Person) {
     console.log({ person }, this.warning);
 
-    if (person?.warningStatusId !== 1 && !person?.contactByPhone) { return `This person has phone calls switched off and a ${person?.warning} warning, please check their history before phoning`; }
-    if (!person?.contactByPhone) { return 'This person has phone calls switched off, please check their history before phoning'; }
-    if (person?.warningStatusId) { return `This person has a ${person?.warning} warning, please check their history before phoning`; }
+    if (person?.warningStatusId !== 1 && !person?.contactByPhone) { return `<p>This person has phone calls switched off and a ${person?.warning} warning.</p> <p><strong>Please check their history before phoning.</strong></p>`; }
+    if (!person?.contactByPhone) { return '<p>This person has phone calls switched off.</p> <p><strong>Please check their history before phoning.</strong></p>'; }
+    if (person?.warningStatusId) { return `<p>This person has a ${person?.warning} warning.</p> <p><strong>Please check their history before phoning.</strong></p>`; }
   }
 
   showWarning() {
