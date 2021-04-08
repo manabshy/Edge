@@ -110,6 +110,7 @@ import { EmailComponent } from './components/email/email.component';
 import { EmailSignatureComponent } from './components/email-signature/email-signature.component';
 import { RedactedCardComponent } from './components/redacted-card/redacted-card.component';
 import { CompanyFinderComponent } from './components/company-finder/company-finder.component';
+import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 
 const components = [
   BreadcrumbComponent,
@@ -215,6 +216,7 @@ const externalModules = [
     components,
     pipes,
     directives,
+    SafeHtmlPipe,
   ],
   imports: [
     CommonModule,
