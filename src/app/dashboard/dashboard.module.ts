@@ -12,6 +12,7 @@ import { ValuationsAndInstructionsComponent } from './dashboard-list/valuations-
 import { InstructionsAndBusinessDevelopmentComponent } from './dashboard-list/instructions-and-business-development/instructions-and-business-development.component';
 import { ExchangesAndPipelineComponent } from './dashboard-list/exchanges-and-pipeline/exchanges-and-pipeline.component';
 import { SharedModule } from '../shared/shared.module';
+import { OverviewComponent } from './overview/overview.component';
 
 @NgModule({
   declarations: [MyDashboardComponent,
@@ -19,7 +20,8 @@ import { SharedModule } from '../shared/shared.module';
     DashboardListComponent,
     ValuationsAndInstructionsComponent,
     InstructionsAndBusinessDevelopmentComponent,
-    ExchangesAndPipelineComponent],
+    ExchangesAndPipelineComponent,
+    OverviewComponent],
   imports: [
     CommonModule,
     SharedModule,
