@@ -107,16 +107,16 @@ export class PropertyService {
   }
 
   getPropertyInstructions(propertyId: number, isClosedIncluded: boolean): Observable<InstructionInfo[]> {
-    const url = `${AppConstants.basePropertyUrl}/${propertyId}/instructions?activeOnly=${!isClosedIncluded}`;
+    const url = `${AppConstants.basePropertyUrl}/${propertyId}/instructions?activeOnly=${isClosedIncluded}`;
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
 
   getPropertyOffers(propertyId: number, isClosedIncluded: boolean): Observable<OfferInfo[]> {
-    const url = `${AppConstants.basePropertyUrl}/${propertyId}/offers?activeOnly=${!isClosedIncluded}`;
+    const url = `${AppConstants.basePropertyUrl}/${propertyId}/offers?activeOnly=${isClosedIncluded}`;
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
   getValuations(propertyId: number, isClosedIncluded?: boolean): Observable<any[]> {
-    const url = `${AppConstants.basePropertyUrl}/${propertyId}/valuations?activeOnly=${!isClosedIncluded}`;
+    const url = `${AppConstants.basePropertyUrl}/${propertyId}/valuations?activeOnly=${isClosedIncluded}`;
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
   getPotentialDuplicateProperties(address: Address, propertyId?: number): Observable<PropertyAutoComplete[]> {

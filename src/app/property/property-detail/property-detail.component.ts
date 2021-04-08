@@ -44,7 +44,7 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit, On
   sideNavItems: SideNavItem[] = [
     { name: 'notes', isCurrent: true },
     { name: 'instructions', isCurrent: false },
-    // { name: 'valuations', isCurrent: false },  Hide for release 06/04/21
+    { name: 'valuations', isCurrent: false },
     { name: 'offers', isCurrent: false },
   ];
 
