@@ -183,11 +183,11 @@ app-telephone                                   { width:100%; display:flex; alig
   }
 }
 
-.gridReport                                     { display:grid; grid-template-columns:1fr; grid-auto-rows:180px; gap:20px; }
+.gridReport                                     { display:grid; grid-template-columns:1fr; gap:20px; }
 
 .unit                                           { display:flex; flex-direction:column; border:1px solid $color--midnight-10; border-radius:3px;
-  &__header                                     { padding:10px 16px; border-bottom:1px solid $color--midnight-10; }
-  &__body                                       { padding:10px 16px; display:flex; flex:1; }
+  &__header                                     { padding:10px 16px; border-bottom:1px solid $color--midnight-10; @extend .txt--title; }
+  &__body                                       { padding:10px 16px; display:flex; flex-wrap:wrap; @extend .scrollY; }
   &__footer                                     { margin-top:auto; padding:10px 16px; border-top:1px solid $color--midnight-10; }
 }
 

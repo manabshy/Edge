@@ -18,7 +18,7 @@ Font-face setup
     font-style:normal;
 }
 
-$font-size-sm:12px;
+$font-size-sm:13px;
 $input-height-sm:30px;
 
 /***** Fonts overrides *****/
@@ -30,7 +30,7 @@ body, form, input, textarea, select, label,
 .p-inputtext, .p-chips .p-chips-multiple-container .p-chips-input-token input   { font-display:optional; font-family:'poppins', Sans-Serif; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility !important; -webkit-font-smoothing:antialiased !important; }
 
 html                                            { scroll-behavior:smooth;  }
-body, .body                                     { font-size:12px; line-height:17px; letter-spacing:.5px; background-color:$color--snow; font-weight:normal; color:$color--midnight; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+body, .body                                     { font-size:13px; line-height:17px; letter-spacing:.5px; background-color:$color--snow; font-weight:normal; color:$color--midnight; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 
 /***** Typography *****/
 h1, h2, h3, h4, h5, h6,
