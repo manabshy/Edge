@@ -12,6 +12,9 @@
         &.icon--onLeft                          { margin-right:6px; }
         &.icon--onRight                         { margin-left:6px; }
     }
+    &--xs                                       { height:6px; width:6px; top:0;
+        &.icon--onLeft                          { margin-right:6px; align-self:center; top:-2px; }
+    }
 
     /***** Fills *****/
     &--fill-midnight-70                         { color:$color--midnight-70; }
