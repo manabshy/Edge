@@ -269,6 +269,7 @@ height is smaller than 830px to help better UX
 @media (min-height:830px) {
   .wrapper                                      {
     &--sticky                                   { position:sticky; top:80px; z-index:1;
+      &DialogActive                             { position:initial; }
       &Top:before                               { content:''; display:block; width:100%; background-color:$color--snow; position:absolute; top:-40px; left:0; height:50px; }
     }
   }
