@@ -200,7 +200,6 @@ This applies from 992px onwards
 @media (min-width:992px) {
   .scroll-to-top                                { display:none; }
   .wrapper                                      { margin-left:216px;
-    &--sticky                                   { position:sticky; top:80px; z-index:1; }
     &--filters                                  { margin:0;
       &+*                                       { margin-top:30px; }
     }
@@ -260,8 +259,19 @@ This applies from 992px onwards
     &--width4                                   { grid-column-end:span 4; }
   }
 
-
   .footer                                       { padding:10px 0; width:calc(100% - 276px);right:30px; }
+}
+
+/***********************************************
+This stops the sticky wrapper class when screen 
+height is smaller than 830px to help better UX
+***********************************************/
+@media (min-height:830px) {
+  .wrapper                                      {
+    &--sticky                                   { position:sticky; top:80px; z-index:1;
+      &Top:before                               { content:''; display:block; width:100%; background-color:$color--snow; position:absolute; top:-40px; left:0; height:50px; }
+    }
+  }
 }
 
 /***********************************************
