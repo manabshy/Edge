@@ -103,8 +103,8 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
   getInfo() {
     this.storage.get('info').subscribe((data: DropdownListInfo) => {
       if (data) { this.referralCompanies = data.referralCompanies; this.warnings = data.personWarningStatuses; } else {
-        this.infoService.getDropdownListInfo().subscribe((info: ResultData | any) => {
-          if (info) { this.referralCompanies = info.referralCompanies; this.warnings = data.personWarningStatuses; }
+        this.infoService.getDropdownListInfo().subscribe((info: DropdownListInfo) => {
+          if (info) { this.referralCompanies = info.referralCompanies; this.warnings = info.personWarningStatuses; }
         });
       }
       this.setReferralCompanies();

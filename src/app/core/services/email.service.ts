@@ -20,4 +20,10 @@ export class EmailService {
       map(response => response.status),
       tap(data => console.log('status received...', JSON.stringify(data))));
   }
+
+  getEmailForNotes(noteId: number): Observable<any> {
+    const url = `${AppConstants.baseEmailUrl}/${noteId}`;
+    return this.http.get<any>(url).pipe(
+      map(response => response.result));
+  }
 }

@@ -110,6 +110,7 @@ export interface BaseNote {
   isPinned: boolean;
   createDate: Date;
   createdBy: number;
+  noteType?: number;
 }
 export interface ContactNote extends BaseNote {
   contactGroupId?: number;
@@ -200,6 +201,11 @@ export enum CompanyTypeId {
   PropertyDeveloper = 16,
   ReloAgent = 4,
   Tradesmen = 8
+}
+export enum NoteType {
+  Notes = 0,
+  Emails = 1,
+  SMS = 2,
 }
 export interface CompanyContactDetails {
   telephone: string;

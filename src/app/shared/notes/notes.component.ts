@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnChanges, HostListener, Output, EventEmitter } from '@angular/core';
-import { ContactNote, BasicContactGroup } from 'src/app/contactgroups/shared/contact-group';
+import { ContactNote, BasicContactGroup, NoteType } from 'src/app/contactgroups/shared/contact-group';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { Person } from '../models/person';
@@ -8,6 +8,7 @@ import { PropertyService } from 'src/app/property/shared/property.service';
 import { StaffMember } from '../models/staff-member';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { Router } from '@angular/router';
+import { EmailService } from 'src/app/core/services/email.service';
 
 @Component({
   selector: 'app-notes',
@@ -46,12 +47,16 @@ export class NotesComponent implements OnInit, OnChanges {
   currentStaffMember: StaffMember;
   showNotesForm = false;
   @Input() showCreateNoteButton = true;
+  emailBody$: any;
+  emailBody: any;
+  showMoreLabel = 'SHOW MORE';
+  toggleShowMoreLabel: boolean = false;
 
   constructor(private sharedService: SharedService,
     private contactGroupService: ContactGroupsService,
     private storage: StorageMap,
     private router: Router,
-    private propertyService: PropertyService) { }
+    private propertyService: PropertyService, private emailService: EmailService) { }
 
   ngOnInit() {
     this.storage.get('currentUser').subscribe((staffMember: StaffMember) => {
@@ -78,6 +83,12 @@ export class NotesComponent implements OnInit, OnChanges {
     }
     if (this.personNotes) {
       this.personNotes.filter(x => x.text) ? this.isPersonNote = true : this.isPersonNote = false;
+      this.personNotes.forEach(x => {
+        if (x.noteType === NoteType.Emails) {
+          let allText = x.text.split('\n');
+          console.log({ allText });
+        }
+      })
     }
   }
 
@@ -183,5 +194,14 @@ export class NotesComponent implements OnInit, OnChanges {
   noteSaved() {
     this.showCreateNoteButton = true;
     this.showNotesForm = false;
+  }
+
+  getEmailBody(noteId: number) {
+    console.log('showmore before', this.toggleShowMoreLabel);
+
+    this.toggleShowMoreLabel = !this.toggleShowMoreLabel;
+    console.log('showmore AFTER', this.toggleShowMoreLabel);
+    // this.showMoreLabel = this.toggleShowMoreLabel ? 'SHOW LESS' : 'SHOW MORE';
+    this.emailService.getEmailForNotes(noteId).subscribe(res => this.emailBody = res);
   }
 }
