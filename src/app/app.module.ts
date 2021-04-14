@@ -81,6 +81,7 @@ import { HeaderComponent } from './header/header.component';
 // SVG ICONS
 import { SvgIconsModule } from '@ngneat/svg-icon';
 import { appPaperclipIcon } from './svg/paperclip';
+import { appEmailIcon } from './svg/email';
 
 export const protectedResourceMap: Map<string, Array<string>> = new Map([
   ['http://localhost:57211/v10', ['https://douglasandgordon.onmicrosoft.com/67f9a9a1-d8de-45bc-af20-43e1e18ccba5/user_impersonation']],
@@ -226,7 +227,7 @@ const externalModulesExports = [
       protectedResourceMap: protectedResourceMap,
     }),
     SvgIconsModule.forRoot({
-      icons: [appPaperclipIcon],
+      icons: [appPaperclipIcon, appEmailIcon],
     }),
 
   ],
