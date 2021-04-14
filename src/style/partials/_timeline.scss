@@ -20,8 +20,8 @@
 
 .timeline .timeline__new:after                          { background-color:$color--positive; }
 .timeline .timeline__new                                { order:-2; }
-.timeline .timeline__new .card                          { background-color:$color--positive-10; box-shadow:0px 0px 0px 1px inset $color--positive-20; -webkit-box-shadow:0px 0px 0px 1px inset $color--positive-20; }
-.timeline .timeline__new .icon--timeline .outline       { fill:$color--positive-20; }
+.timeline .timeline__new .card                          { background-color:$color--positive-10; box-shadow:0px 0px 0px 1px inset $color--positive-50; -webkit-box-shadow:0px 0px 0px 1px inset $color--positive-50; }
+.timeline .timeline__new .icon--timeline .outline       { fill:$color--positive-50; }
 .timeline .timeline__new .icon--timeline .fill          { fill:$color--positive-10; }
 
 .timeline .timeline__pinned:after                       { background-color:$color--info; }
