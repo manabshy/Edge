@@ -47,7 +47,6 @@ export class NotesComponent implements OnInit, OnChanges {
   currentStaffMember: StaffMember;
   showNotesForm = false;
   @Input() showCreateNoteButton = true;
-  emailBody$: any;
   emailBody: any;
   showMoreLabel = 'SHOW MORE';
   toggleShowMoreLabel: boolean = false;
