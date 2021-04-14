@@ -1,0 +1,6 @@
+<svg aria-hidden="true" x="0px" y="0px" width="64px" height="64px" viewBox="0 0 64 64">
+  <rect x="1" y="44" width="62" height="8" class="line-top"/>
+  <rect x="1" y="28" width="62" height="8" class="line-middle"/>
+  <rect x="1" y="12" width="62" height="8" class="line-bottom"/>
+  <path d="M57 12l-5-5c0 0-10.2 10.1-20 20L12 7l-5 5 20 20c-10 9.9-20 20-20 20l5 5 20-20 20 20 5-5L37 32 57 12z" class="cross"/>
+</svg>
