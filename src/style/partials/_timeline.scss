@@ -24,10 +24,11 @@
 .timeline .timeline__new .icon--timeline .outline       { fill:$color--positive-20; }
 .timeline .timeline__new .icon--timeline .fill          { fill:$color--positive-10; }
 
-.timeline .timeline__pinned:after                       { background-color:$color--midnight; }
-.timeline .timeline__pinned .card                       { box-shadow:0px 0px 0px 1px inset $color--midnight-50; -webkit-box-shadow:0px 0px 0px 1px inset $color--midnight-50; }
-.timeline .timeline__pinned .icon--timeline .outline    { fill:$color--midnight-50; }
-.timeline .timeline__pinned .icon--pin                  { fill:$color--midnight-70; }
+.timeline .timeline__pinned:after                       { background-color:$color--info; }
+.timeline .timeline__pinned .card                       { background-color:$color--blue-10; box-shadow:0px 0px 0px 1px inset $color--info; -webkit-box-shadow:0px 0px 0px 1px inset $color--info; }
+.timeline .timeline__pinned .icon--timeline .outline    { fill:$color--info; }
+.timeline .timeline__pinned .icon--timeline .fill       { fill:$color--blue-10; }
+.timeline .timeline__pinned .icon--pin                  { fill:$color--info; }
 .timeline .timeline__pinned                             { order:-1; }
 
 .timeline .timeline__important:after                    { background-color:$color--negative; }
