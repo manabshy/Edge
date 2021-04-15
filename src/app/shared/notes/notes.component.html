@@ -61,11 +61,7 @@
       <div class="card__body">
         <ng-container [ngSwitch]="note?.noteType">
           <ng-container *ngSwitchCase="1">
-            <!-- <p>
-              <strong>To: </strong>Message<br>
-              <strong>Subject: </strong>Message<br>
-           </p> -->
-             <p [innerText]="note?.text"></p>
+             <p [innerHTML]="note?.text"></p>
            <details>
              <summary>
                <div class="summary__title">
@@ -73,9 +69,8 @@
                    <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s flexLeft"><path d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z" class="vertical"></path><path d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z" class="horizontal"></path></svg>
                    <span (click)="getEmailBody(note)">
                     <ng-container *ngIf="note?.hasEmailBody ; else showMore"> SHOW LESS</ng-container>
-                    <ng-template #showMore>SHOW MORE</ng-template>
+                    <ng-template #showMore> SHOW MORE</ng-template>
                     </span>
-                   <!-- <label [attr.for]="i" (click)="getEmailBody(note?.id)"> {{showMoreLabel}}</label> -->
                  </p>
                </div>
             </summary>
@@ -83,7 +78,7 @@
            </details>
 
           </ng-container>
-          <ng-container *ngSwitchCase="2"><p><strong>Sent to: </strong>{{note?.addressee}}</p><p [innerText]="note?.text"></p></ng-container>
+          <ng-container *ngSwitchCase="2"><p><strong>Sent to: </strong>{{note?.addressee}}</p><p [innerHTML]="note?.text"></p></ng-container>
           <ng-container *ngSwitchDefault><p [innerText]="note?.text"></p></ng-container>
         </ng-container>
 
@@ -99,69 +94,3 @@
     </div>
   </li>
 </ol>
-
-
-<!-- <div class="list-group mb-5">
-  <ng-container *ngIf="notes?.length && !isUpdating">
-    <div *ngIf="notes" class="search-results" infiniteScroll [infiniteScrollDistance]="5"
-      [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true">
-    </div>
-
-
-    <div class="list-group-item" *ngFor="let note of notes">
-      <div class="row">
-        <div class="col-auto pr-0">
-          <i class="fas fa-thumbtack fa-fw" role="button" data-toggle="button" (click)="setFlag(note?.id, false)"
-            [attr.aria-pressed]="!note?.isPinned ? false : true"
-            [ngClass]="{'unset': !note?.isPinned, 'd-none': !note?.isPinned && note?.propertyId}" tooltip="Pin to top"
-            container="body">
-          </i>
-        </div>
-        <div class="col-auto">
-          <i class="fas fa-exclamation-circle text-danger fa-fw" role="button" data-toggle="button"
-            (click)="setFlag(note?.id, true)" [attr.aria-pressed]="!note?.isImportant ? false : true"
-            [ngClass]="{'unset': !note?.isImportant, 'd-none': !note?.isImportant && note?.propertyId}"
-            tooltip="Important" container="body">
-          </i>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-12">
-          <div class="row">
-            <div class="col-11 col-sm-3" *ngIf="note?.contactGroupId || note?.personId">
-              <ng-container *ngIf="note?.contactGroupId; else personInfo">
-                <a class="mb-2"
-                  [routerLink]="['/contact-centre/detail', note?.personId || 0, 'people', note?.contactGroupId]"
-                  [queryParams]="{showNotes: true}" *ngIf="note?.contactGroupId">{{note?.addressee}}
-                </a>
-              </ng-container>
-              <ng-template #personInfo>
-                <a class="mb-2" [routerLink]="['/contact-centre/detail', note?.personId]"
-                  [queryParams]="{showNotes: true}" *ngIf="note?.personId">{{note?.addressee}}</a>
-              </ng-template>
-            </div>
-            <div class="col-sm-3 mb-2" *ngIf="note?.propertyId">
-              <span class="badge badge-pill badge-success" *ngIf="note.type < 3">{{note?.typeDescription}}</span>
-              <span class="badge badge-pill badge-warning" *ngIf="note.type > 2">{{note?.typeDescription}}</span>
-            </div>
-            <div class="col-sm mb-2 note-content">
-              {{note?.text}}
-            </div>
-            <div class="col-sm-3 text-muted">
-              <ng-container *ngIf="note?.createdBy !== currentStaffMember?.fullName; else current">
-                {{note?.createdBy}}
-              </ng-container>
-              <ng-template #current>
-                <span class="badge badge-pill badge-primary">You</span>
-              </ng-template><br>
-              <span class="monospace">{{note?.createDate | date: 'dd/MM/yyyy HH:mm'}}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-  </ng-container>
-</div>
-<div style="height: 70px;"></div> -->

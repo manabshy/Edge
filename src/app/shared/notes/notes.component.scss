@@ -19,3 +19,12 @@
 //     word-wrap: break-word;
 //     word-break: break-word;
 // }
+
+// ::ng-deep span.note-email-label{
+//   font-weight: bold;
+// }
+::ng-deep span {
+  &.note-email-label {
+    font-weight: bold;
+  }
+}

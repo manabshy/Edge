@@ -19,7 +19,7 @@
         <path
           d="M8 16C12.4 16 16 12.4 16 8 16 3.6 12.4 0 8 0 3.6 0 0 3.6 0 8 0 12.4 3.6 16 8 16ZM9.5 4L9 9.6 7 9.6 6.5 4 9.5 4ZM8 13.2C7.3 13.2 6.7 12.6 6.7 11.9 6.7 11.2 7.3 10.6 8 10.6 8.7 10.6 9.3 11.2 9.3 11.9 9.3 12.6 8.7 13.2 8 13.2Z">
         </path>
-      </svg><span>{{importantNote?.text}}</span>
+      </svg><span [innerHTML]="importantNote?.text"></span>
     </li>
     <li *ngIf="!importantNotes?.length"><span class="message message--warning"><svg
           aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
@@ -29,3 +29,5 @@
         </svg>No messages found</span></li>
   </ol>
 </details>
+
+<!-- <span >{{importantNote?.text}}</span> -->
