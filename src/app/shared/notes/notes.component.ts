@@ -82,12 +82,12 @@ export class NotesComponent implements OnInit, OnChanges {
     }
     if (this.personNotes) {
       this.personNotes.filter(x => x.text) ? this.isPersonNote = true : this.isPersonNote = false;
-      this.personNotes.forEach(x => {
-        if (x.noteType === NoteType.Emails) {
-          let allText = x.text.split('\n');
-          console.log({ allText });
-        }
-      })
+      // this.personNotes.forEach(x => {
+      //   if (x.noteType === NoteType.Emails) {
+      //     let allText = x.text.split('\n');
+      //     console.log({ allText });
+      //   }
+      // })
     }
   }
 
@@ -195,12 +195,13 @@ export class NotesComponent implements OnInit, OnChanges {
     this.showNotesForm = false;
   }
 
-  getEmailBody(noteId: number) {
-    console.log('showmore before', this.toggleShowMoreLabel);
+  getEmailBody(note: ContactNote) {
 
-    this.toggleShowMoreLabel = !this.toggleShowMoreLabel;
-    console.log('showmore AFTER', this.toggleShowMoreLabel);
-    // this.showMoreLabel = this.toggleShowMoreLabel ? 'SHOW LESS' : 'SHOW MORE';
-    this.emailService.getEmailForNotes(noteId).subscribe(res => this.emailBody = res);
+    console.log({ note });
+    note.hasEmailBody ? this.notes.find(x => +x.id === note.id).hasEmailBody = false : this.notes.find(x => +x.id === note.id).hasEmailBody = true;
+    console.log(this.notes, 'new notes with flag');
+
+    // this.showMoreLabel = this.toggleShowMoreLabel && note.hasEmailBody ? 'SHOW LESS' : 'SHOW MORE';
+    this.emailService.getEmailForNotes(note.id).subscribe(res => this.emailBody = res);
   }
 }
