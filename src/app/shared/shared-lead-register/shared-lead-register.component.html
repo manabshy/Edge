@@ -33,7 +33,7 @@
             </span>
           </td>
           <td data-title="Next Chase Date">
-            <span class="cell-content">{{(lead?.nextChaseDate | date: 'dd/MM/yyyy hh:mm') || '-'}}</span>
+            <span class="cell-content">{{(lead?.nextChaseDate | date: 'dd/MM/yyyy') || '-'}}</span>
           </td>
           <td data-title="Lead Owner">
             <span class="cell-content">{{lead?.owner || '-'}}</span>
