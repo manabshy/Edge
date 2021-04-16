@@ -40,9 +40,9 @@
         <p class="message message--negative  input--grid-5" *ngIf="!personForm?.errors?.titleOther">{{formErrors.titleId}}</p>
       </fieldset>
 
-      <fieldset>
+      <fieldset [ngClass]="{'invalid':formErrors.firstName}">
         <label for="name">First Name</label>
-        <input type="text" id="name" formControlName="firstName" [ngClass]="{'is-invalid':formErrors.firstName}">
+        <input type="text" id="name" formControlName="firstName" >
         <p class="message message--negative">{{formErrors.firstName}}</p>
       </fieldset>
 
