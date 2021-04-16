@@ -18,6 +18,7 @@ import { ContactGroup } from 'src/app/contactgroups/shared/contact-group';
 import { ValidationMessages, FormErrors } from '../shared/app-constants';
 import { Valuation, ValuationStatusEnum } from 'src/app/valuations/shared/valuation';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { InfoDetail } from './info.service';
 
 @Injectable({
   providedIn: 'root'
@@ -76,12 +77,8 @@ export class SharedService {
     });
   }
 
-  showWarning(id: number, warnings: any, comment?: string): any {
-    let warns = [];
-    if (warnings) {
-      warns = warnings.filter(x => x.id === id);
-    }
-    return warns[0];
+  showWarning(id: number, warnings: InfoDetail[], comment?: string): string {
+    return warnings?.find(x => x.id === id).value || comment;
   }
 
   showError(error: WedgeError, triggeredBy) {
@@ -93,7 +90,7 @@ export class SharedService {
       triggeredBy,
       error
     };
-    console.log({data});
+    console.log({ data });
 
     // const modal = this.modalService.show(ErrorModalComponent, { ignoreBackdropClick: true, initialState });
     // modal.content.subject = subject;
