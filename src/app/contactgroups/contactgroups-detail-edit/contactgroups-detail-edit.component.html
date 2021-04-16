@@ -36,8 +36,8 @@
           </select>
         </span>
         <input type="text" formControlName="titleOther" placeholder="Title ..." *ngIf="isTitleOtherVisible">
-        <p class="message message--negative" *ngIf="personForm.errors?.titleOther">Please enter a Title</p>
-        <p class="message message--negative">{{formErrors.titleId}}</p>
+        <p class="message message--negative" *ngIf="personForm?.errors?.titleOther">Please enter a Title</p>
+        <p class="message message--negative  input--grid-5" *ngIf="!personForm?.errors?.titleOther">{{formErrors.titleId}}</p>
       </fieldset>
 
       <fieldset>
