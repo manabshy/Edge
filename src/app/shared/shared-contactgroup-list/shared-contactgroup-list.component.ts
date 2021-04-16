@@ -17,7 +17,7 @@ export class SharedContactgroupListComponent implements OnInit {
 
 
   navigateTo(path: any) {
-    this.router.navigate(path, { relativeTo: this.route, queryParams: { showNotes: true } });
+    this.router.navigate(path, { relativeTo: this.route, queryParams: { showNotes: true, backToOrigin: true } });
   }
 
 }

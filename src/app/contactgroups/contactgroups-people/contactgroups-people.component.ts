@@ -220,26 +220,44 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
     });
     this.removedPersonIds = [];
     this.selectedPeople = [];
-    if (!this.contactGroupId) {
-      this.route.queryParams.subscribe(params => {
-        this.isNewContactGroup = (!AppUtils.holdingSelectedPeople && params['isNewContactGroup']) || false;
-        this.isNewPersonalContact = params['isNewPersonalContact'] || false;
-        this.isNewCompanyContact = params['isNewCompanyContact'] || false;
-        this.isSigner = params['isSigner'] || false;
-        this.isExistingCompany = params['isExistingCompany'] || false;
-        this.existingCompanyId = params['existingCompanyId'] || 0;
-        this.signer = params['signer'] || '';
-        this.searchTerm = params['searchTerm'] || '';
-        this.backToOrigin = params['backToOrigin'] || false;
+    // Remove After testing 16/04/21
+    // if (!this.contactGroupId) {
+    //   this.route.queryParams.subscribe(params => {
+    //     this.isNewContactGroup = (!AppUtils.holdingSelectedPeople && params['isNewContactGroup']) || false;
+    //     this.isNewPersonalContact = params['isNewPersonalContact'] || false;
+    //     this.isNewCompanyContact = params['isNewCompanyContact'] || false;
+    //     this.isSigner = params['isSigner'] || false;
+    //     this.isExistingCompany = params['isExistingCompany'] || false;
+    //     this.existingCompanyId = params['existingCompanyId'] || 0;
+    //     this.signer = params['signer'] || '';
+    //     this.searchTerm = params['searchTerm'] || '';
+    //     this.backToOrigin = params['backToOrigin'] || false;
+    //       console.log(this.backToOrigin, 'back to orign');
 
-        if (this.isExistingCompany || this.isNewPersonalContact) {
-          this.isOffCanvasVisible = true;
-        }
-      });
+    //     if (this.isExistingCompany || this.isNewPersonalContact) {
+    //       this.isOffCanvasVisible = true;
+    //     }
+    //   });
 
-      // Set page label
-      this.setPageLabel();
-    }
+    //   // Set page label
+    //   this.setPageLabel();
+    // }
+    this.route.queryParams.subscribe(params => {
+      this.isNewContactGroup = (!AppUtils.holdingSelectedPeople && params['isNewContactGroup']) || false;
+      this.isNewPersonalContact = params['isNewPersonalContact'] || false;
+      this.isNewCompanyContact = params['isNewCompanyContact'] || false;
+      this.isSigner = params['isSigner'] || false;
+      this.isExistingCompany = params['isExistingCompany'] || false;
+      this.existingCompanyId = params['existingCompanyId'] || 0;
+      this.signer = params['signer'] || '';
+      this.searchTerm = params['searchTerm'] || '';
+      this.backToOrigin = params['backToOrigin'] || false;
+
+      if (this.isExistingCompany || this.isNewPersonalContact) {
+        this.isOffCanvasVisible = true;
+      }
+    });
+    this.setPageLabel();
     this.isSubmitting = false;
     this.companyFinderForm = this.fb.group({
       companyName: [''],
