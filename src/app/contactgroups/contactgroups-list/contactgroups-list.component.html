@@ -17,9 +17,9 @@
           <span class="cell-content">
             <p>
               <span [innerHTML]="contactGroup?.addressee | highlight : searchTerm"></span>
-              <span class="pill pill--onRight pill--negative" *ngIf="contactGroup?.warning && contactGroup?.warning?.id !== 1">{{contactGroup?.warningStatusComment || contactGroup?.warning?.value}}</span>
+              <span class="pill pill--onRight pill--negative" *ngIf="contactGroup?.warningStatus">{{contactGroup?.warningStatus}}</span>
             </p>
-            
+
             <ng-container *ngIf=" contactGroup?.contactGroups?.length > 1">
               <sup>Contact Groups</sup>
               <ol class="list list--simple">
@@ -56,7 +56,7 @@
           <span class="cell-content">
             <ng-container *ngIf="contactGroup?.phoneNumbers[0] else noPhone">
               <app-telephone class="appWrapper" [person]="contactGroup" [number]="contactGroup?.phoneNumbers[0]" [searchTerm]="searchTerm"
-                [warning]="contactGroup?.warningStatusComment || contactGroup?.warning?.value"></app-telephone>
+                [warning]="contactGroup?.warningStatus"></app-telephone>
             </ng-container>
             <ng-template #noPhone><span>-</span></ng-template>
           </span>

@@ -140,7 +140,7 @@ export interface CompanyAutoCompleteResult extends Company {
   companyName: string;
 }
 
-export interface ContactGroupAutoCompleteResult extends PersonWarning {
+export interface ContactGroupAutoCompleteResult {
   personId: number;
   title: string;
   firstName: string;
@@ -156,6 +156,7 @@ export interface ContactGroupAutoCompleteResult extends PersonWarning {
   postCode: string;
   warningStatusId: number;
   warningStatusComment: string;
+  warningStatus?: string;
   contactGroups: BasicContactGroup[];
 }
 export interface PeopleAutoCompleteResult {

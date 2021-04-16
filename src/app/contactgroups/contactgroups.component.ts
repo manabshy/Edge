@@ -6,7 +6,7 @@ import { AppUtils } from '../core/shared/utils';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { SharedService } from '../core/services/shared.service';
 import { AppConstants } from '../core/shared/app-constants';
-import { InfoService } from '../core/services/info.service';
+import { InfoDetail, InfoService } from '../core/services/info.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import * as _ from 'lodash';
 import { Observable, of, EMPTY } from 'rxjs';
@@ -29,7 +29,7 @@ export class ContactGroupsComponent implements OnInit {
   contactPeople: any[];
   contactGroupId: number;
   listInfo: any;
-  warnings: any;
+  warnings: InfoDetail[] = [];
   differentSearchSuggestions: string[];
   page = 1;
   searchTerm = '';
@@ -135,7 +135,9 @@ export class ContactGroupsComponent implements OnInit {
         }
         if (this.contactGroups && this.contactGroups.length) {
           this.contactGroups.forEach(x => {
-            x.warning = this.sharedService.showWarning(x.warningStatusId, this.warnings, x.warningStatusComment);
+            if (x.warningStatusId !== 1) {
+              x.warningStatus = this.sharedService.showWarning(x.warningStatusId, this.warnings, x.warningStatusComment);
+            }
           });
         }
       }

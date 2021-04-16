@@ -45,6 +45,7 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
   dialogRef: any;
   currentStaffMember: any;
   warnings: InfoDetail[];
+  warningStatus: string;
 
   constructor(private router: Router, private contactGroupService: ContactGroupsService, private peopleService: PeopleService,
     public staffMemberService: StaffMemberService, private storage: StorageMap,
@@ -75,16 +76,15 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
     // Get referral Companies
     this.getInfo();
     this.getCurrentUser();
-    console.log(this.referenceCount, 'refs current count');
 
     if (this.personDetails?.phoneNumbers?.length) {
       this.preferredNumber = this.personDetails.phoneNumbers.find(x => x.isPreferred).number;
-      console.log(this.preferredNumber, 'pref');
     }
 
     if (this.personDetails?.emailAddresses?.length) {
       this.preferredEmail = this.personDetails.emailAddresses.find(x => x.isPreferred).email;
     }
+    if (this.warnings) { console.log('warnings here as input', this.warnings) }
   }
 
   getCurrentUser() {
@@ -107,18 +107,18 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
           if (info) { this.referralCompanies = info.referralCompanies; this.warnings = info.personWarningStatuses; }
         });
       }
-      this.setReferralCompanies();
       this.setPersonWarning(this.personDetails, this.warnings);
+      this.setReferralCompanies();
     });
   }
 
   setPersonWarning(person: Person, warnings: InfoDetail[]) {
-    console.log(person, 'status');
+    console.log({ person }, 'person status', { warnings });
     if (person) {
       if (person.warningStatusId !== 1) {
         console.log('status here.....');
-        person.warning = warnings?.find(x => x.id === person.warningStatusId)?.value || person.warningStatusComment;
-      } else { person.warning = null; }
+        this.warningStatus = warnings?.find(x => x.id === person.warningStatusId)?.value || person.warningStatusComment;
+      }
     }
     console.log('status here 2.....', person);
   }
@@ -198,7 +198,7 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
         actions: ['Cancel', 'OK']
       };
 
-      this.dialogRef = this.dialogService.open(ConfirmModalComponent, { data, styleClass: 'dialog dialog--hasFooter', header: 'GDPR Removal Warning'  });
+      this.dialogRef = this.dialogService.open(ConfirmModalComponent, { data, styleClass: 'dialog dialog--hasFooter', header: 'GDPR Removal Warning' });
       this.dialogRef.onClose.subscribe((res) => {
         if (res) {
           this.peopleService.performGdprRemoval(this.personDetails).subscribe((result) => {

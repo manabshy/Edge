@@ -46,7 +46,6 @@ export class ScoreBadgeComponent implements OnInit {
 
       if (this.person.firstName && this.person.lastName) {
         percent += percentRange;
-        console.log({ percent });
 
       } else {
         message += ', Profile';
@@ -60,7 +59,6 @@ export class ScoreBadgeComponent implements OnInit {
 
       if (this.person.phoneNumbers.length && this.person.phoneNumbers[0].number) {
         percent += percentRange;
-        console.log({ percent });
       } else {
         message += ', Phone number';
       }
