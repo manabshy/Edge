@@ -1,7 +1,7 @@
 <div class="row">
-  <div class="row__item">   
+  <div class="row__item">
     <app-score-badge [bar]="true" [person]="personForm?.value" class="scoreWrapper"></app-score-badge>
-    
+
     <form *ngIf="personDetails || basicPerson" [formGroup]="personForm" (ngSubmit)="savePerson(false)"
       (keydown.enter)="$event.preventDefault()" autocompleteOff>
       <ng-container *ngIf="!basicPerson?.firstName">
@@ -134,6 +134,12 @@
                 </svg>
               </a>
             </span>
+            <!-- <span class="checkbox">
+              <span>
+                <input type="checkbox" id="contactByPhone" formControlName="contactByPhone">
+                <label for="contactByPhone">SMS</label>
+              </span>
+            </span> -->
           </span>
           <p class="message message--negative"
             *ngIf="personForm.controls.phoneNumbers?.controls[i]?.controls.number.errors?.invalidPhoneNumber">

@@ -60,7 +60,6 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
   potentialDuplicatePeople: PotentialDuplicateResult;
   initialContactGroupLength = 0;
   isSubmitting = false;
-  errorMessage: WedgeError;
   isSearchCompanyVisible = true;
   orderFoundPeople = 'matchScore';
   reverse = true;
@@ -681,7 +680,7 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
       this.renderer.removeClass(document.body, 'no-scroll');
       window.scrollTo(0, 0);
       this.selectedPersonId = 0;
-
+      this.contactGroupDetailsForm.markAsDirty();
 
       // this.contactGroupDetails.contactPeople?.push(person);
       // console.log({ person });
@@ -743,14 +742,12 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
           this.removePerson(x, false);
         });
       }
-      this.errorMessage = null;
     }
     this.showPersonWarning();
   }
 
   removeSelectedPeople(people, index: number) {
     people.splice(index, 1);
-    this.errorMessage = null;
     this.setSalutation();
   }
 
@@ -792,33 +789,28 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
   }
 
   saveContactGroup() {
-    console.log('contact details', this.contactGroupDetailsForm.value)
+    console.log('contact details', this.contactGroupDetailsForm.dirty)
     const validForm = this.contactGroupDetailsForm.valid;
-    // if (this.contactGroupDetails.contactType === ContactType.CompanyContact && !this.isExistingCompany) {
-    //   validForm = this.contactGroupDetailsForm.valid && this.companyFinderForm.valid;
-    // }
-    if (validForm) {
-      if (this.contactGroupDetailsForm.dirty || this.companyFinderForm.dirty || this.isExistingCompany || this.isNewAddress) {
-        const contactPeople = this.contactGroupDetails.contactPeople.length;
-        if (this.selectedPeople.length || contactPeople) {
-          const contactGroup = { ...this.contactGroupDetails, ...this.contactGroupDetailsForm.value };
-          this.isSubmitting = true;
-          this.isOffCanvasVisible = false;
-          this.errorMessage = null;
-          if (contactGroup.contactGroupId) {
-            this.updateContactGroup(contactGroup);
-          } else {
-            this.addNewContactGroup(contactGroup);
-          }
+
+    if (this.contactGroupDetailsForm.invalid) { return; }
+    if (this.contactGroupDetailsForm.dirty || this.companyFinderForm.dirty || this.isExistingCompany || this.isNewAddress) {
+      const contactPeople = this.contactGroupDetails.contactPeople.length;
+      if (this.selectedPeople.length || contactPeople) {
+        const contactGroup = { ...this.contactGroupDetails, ...this.contactGroupDetailsForm.value };
+        this.isSubmitting = true;
+        this.isOffCanvasVisible = false;
+        if (contactGroup.contactGroupId) {
+          this.updateContactGroup(contactGroup);
+        } else {
+          this.addNewContactGroup(contactGroup);
         }
-      } else {
-        this.onSaveComplete(this.contactGroupId);
       }
-    } else {
-      this.errorMessage = {} as WedgeError;
-      this.errorMessage.displayMessage = 'Please correct validation errors';
     }
+    // else {
+    //   this.onSaveComplete(this.contactGroupId);
+    // }
   }
+
   private addNewContactGroup(contactGroup: ContactGroup) {
     if (this.isNewCompanyContact) {
       if (!this.contactGroupDetails) {
@@ -879,6 +871,7 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
     localStorage.removeItem('contactPeople');
     localStorage.removeItem('newCompany');
     this.pendingChanges = false;
+    this.isSubmitting = false;
     this.messageService.add({ severity: 'success', summary: 'Contact Group successfully saved', closable: false });
     if (this.backToOrigin) {
       if (this.isSigner) { this.getSignerDetails(contactGroupId); }
