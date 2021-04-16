@@ -513,7 +513,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
         // // lead.nextChaseDate = zonedTimeToUtc( lead.nextChaseDate, londonTimeZone);
         // console.log({lead}, {test},{iso});
 
-        const isNoteRequired = this.isLeadMarkedAsClosed || this.isNewLead || this.isNextChaseDateChanged;
+        const isNoteRequired = this.isLeadMarkedAsClosed || this.isNextChaseDateChanged;
         if (this.note === undefined) { this.note = {} as ContactNote; }
         if (isNoteRequired && !this.note.text) {
           this.noteIsRequired = true;
