@@ -91,6 +91,7 @@ export class HeaderComponent implements OnInit {
     if (stop) {
       this.showImpersonation = false;
       this.isImpersonating = false;
+      this.storage.delete('signature').subscribe();
       localStorage.removeItem('impersonatedStaffMemberId');
       this.storage.delete('impersonatedStaffMember').subscribe();
       this.storage.get('originalUser').subscribe((data: StaffMember) => {
