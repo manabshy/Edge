@@ -103,6 +103,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
   canClose = false;
   isMyLead = false;
   hideFooter: boolean = false;
+  isUnassignedLead: boolean;
 
   get nextChaseDateControl() {
     return this.leadEditForm.get('nextChaseDate') as FormControl;
@@ -153,13 +154,15 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
 
       if (this.infoParam) {
         this.leadSearchInfo = JSON.parse(this.infoParam) as LeadSearchInfo;
+        this.isUnassignedLead = +this.leadSearchInfo?.listingType === ListingType.UnassignedLeads;
+
         // this.canEditLead = +this.leadSearchInfo.listingType !== 1 ? false : true;
         // console.log('can edit lead', this.canEditLead);
 
       }
       this.hideFooter = !(this.leadSearchInfo || this.isNewLead || this.isMyLead) ? true : false;
     });
-    
+
     this.route.params.subscribe(params => {
       this.leadId = +params['leadId'] || 0;
 
