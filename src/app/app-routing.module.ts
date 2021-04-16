@@ -7,6 +7,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { SelectiveStrategyService } from './core/services/selective-strategy.service';
 import { ImpersonateMemberComponent } from './impersonate-member/impersonate-member.component';
 import { MsalGuard } from '@azure/msal-angular';
+import { CalendarComponent } from './calendar-shared/calendar/calendar.component';
 
 const routes: Routes = [
   { path: 'impersonate-member', component: ImpersonateMemberComponent, canActivate: [MsalGuard] },
@@ -44,7 +45,8 @@ const routes: Routes = [
     path: 'admin-panel',
     loadChildren: () => import('./client-services/client-services.module').then(m => m.ClientServicesModule), canActivate: [MsalGuard]
   },
-  { path: '', component: HomeComponent, canActivate: [MsalGuard], data: { title: 'Calendar' } },
+  { path: '', component: CalendarComponent, canActivate: [MsalGuard], data: { title: 'Calendar' } },
+  // { path: '', component: HomeComponent, canActivate: [MsalGuard], data: { title: 'Calendar' } },
   { path: '**', component: NotFoundComponent }
 ];
 
