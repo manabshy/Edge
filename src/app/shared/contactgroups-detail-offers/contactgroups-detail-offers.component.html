@@ -15,9 +15,9 @@
     <table class="table--mobile table--rowHover" *ngIf="offers && offers?.length">
       <thead>
         <tr>
+          <th>Status</th>
           <th *ngIf="offers[0]?.propertyAddress">Address</th>
           <th *ngIf="offers[0]?.type">Type</th>
-          <th>Status</th>
           <th>Amount</th>
           <th>Received</th>
           <th>Neg</th>
@@ -25,6 +25,12 @@
       </thead>
       <tbody>
         <tr *ngFor="let offer of offers">
+          <td data-title="Status">
+            <span class="cell-content">
+              <span class="pill pill--positive" *ngIf="offer.isActive">{{offer?.status}}</span>
+              <span class="pill" *ngIf="!offer.isActive">{{offer?.status}}</span>
+            </span>
+          </td>
           <td *ngIf="offer?.propertyAddress" data-title="Address">
             <span class="cell-content">
               {{offer?.propertyAddress}}
@@ -33,12 +39,6 @@
           <td *ngIf="offer?.type" data-title="Type">
             <span class="cell-content">
               {{offer?.type}}
-            </span>
-          </td>
-          <td data-title="Status">
-            <span class="cell-content">
-              <span class="pill pill--positive" *ngIf="offer.isActive">{{offer?.status}}</span>
-              <span class="pill" *ngIf="!offer.isActive">{{offer?.status}}</span>
             </span>
           </td>
           <td data-title="Amount">

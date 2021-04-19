@@ -14,8 +14,8 @@
     <table class="table--mobile table--rowHover" *ngIf="instructions && instructions?.length">
       <thead>
         <tr>
-          <th *ngIf="instructions[0]?.propertyAddress">Address</th>
           <th>Status</th>
+          <th *ngIf="instructions[0]?.propertyAddress">Address</th>
           <th>Sales</th>
           <th>Long Let</th>
           <th>Short Let</th>
@@ -25,12 +25,12 @@
       </thead>
       <tbody>
         <tr *ngFor="let instruction of instructions">
-          <td *ngIf="instruction?.propertyAddress" data-title="Address">
-            <span class="cell-content">{{instruction?.propertyAddress}}</span>
-          </td>
           <td data-title="Status">
             <span class="cell-content" *ngIf="instruction.isActive"><span class="pill pill--positive">{{instruction?.status}}</span></span>
             <span class="cell-content" *ngIf="!instruction.isActive"><span class="pill">{{instruction?.status}}</span></span>
+          </td>
+          <td *ngIf="instruction?.propertyAddress" data-title="Address">
+            <span class="cell-content">{{instruction?.propertyAddress}}</span>
           </td>
           <td data-title="Sales">
             <span class="cell-content" *ngIf="instruction?.askingPrice, else noValue">{{instruction?.askingPrice | currency:'GBP':'symbol':'1.0-0'}}</span>

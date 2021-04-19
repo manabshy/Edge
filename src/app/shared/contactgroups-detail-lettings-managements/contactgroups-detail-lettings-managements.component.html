@@ -14,15 +14,20 @@
   <table class="table--mobile table--rowHover">
     <thead *ngIf="managements && managements?.length">
       <tr>
+        <th>Status</th>
         <th>Address</th>
         <th>Start date</th>
         <th>End date</th>
-        <th>Status</th>
         <th>Prop. Man.</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let item of managements">
+        <td data-title="Status">
+          <span class="cell-content">
+            <span class="pill" [ngClass]="item?.isActive ? 'badge-success' : 'badge-primary'" [innerHTML]="item?.status | bracketsNewLine"></span>
+          </span>
+        </td>
         <td data-title="Address">
           <span class="cell-content">
             {{item?.propertyAddress}}
@@ -36,11 +41,6 @@
         <td data-title="End date">
           <span class="cell-content">
             {{(item?.managedEndDate | date: 'dd/MM/yyyy') || "-"}}
-          </span>
-        </td>
-        <td data-title="Status">
-          <span class="cell-content">
-            <span class="pill" [ngClass]="item?.isActive ? 'badge-success' : 'badge-primary'" [innerHTML]="item?.status | bracketsNewLine"></span>
           </span>
         </td>
         <td data-title="Prop. Man.">
