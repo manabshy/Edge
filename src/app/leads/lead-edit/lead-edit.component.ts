@@ -104,7 +104,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
   isMyLead = false;
   hideFooter: boolean = false;
   isUnassignedLead: boolean;
-
+  removeSticky = false;
   get nextChaseDateControl() {
     return this.leadEditForm.get('nextChaseDate') as FormControl;
   }
@@ -189,6 +189,11 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     // Set notes as current item
     const noteIndex = this.sideNavItems.findIndex(x => x.name === 'notes');
     this.sideNavItems[noteIndex].isCurrent = true;
+
+    // Listen to changes to toggle remove sticky class
+    this.sharedService.removeSticky$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(res => {
+      res ? this.removeSticky = true : this.removeSticky = false;
+    });
   }
 
   // ngAfterViewInit() {

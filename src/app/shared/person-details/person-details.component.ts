@@ -13,6 +13,7 @@ import { Subject } from 'rxjs';
 import { PeopleService } from 'src/app/core/services/people.service';
 import { Permission, PermissionEnum, StaffMember } from '../models/staff-member';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
+import { SharedService } from 'src/app/core/services/shared.service';
 
 @Component({
   selector: 'app-person-details',
@@ -47,8 +48,9 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
   warnings: InfoDetail[];
   warningStatus: string;
 
-  constructor(private router: Router, private contactGroupService: ContactGroupsService, private peopleService: PeopleService,
-    public staffMemberService: StaffMemberService, private storage: StorageMap,
+  constructor(private router: Router, private contactGroupService: ContactGroupsService,
+    private peopleService: PeopleService,
+    public staffMemberService: StaffMemberService, private storage: StorageMap, private sharedService: SharedService,
     private infoService: InfoService, private messageService: MessageService, private dialogService: DialogService) { }
 
   ngOnInit() {
@@ -162,6 +164,13 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
       this.messageService.add({ severity: 'success', summary: 'Referral successfully sent', closable: false, key: 'referralMessage' });
       this.showRefDialog = false;
     }
+  }
+
+  toggleShowEmailModal(shouldSet: boolean) {
+    shouldSet ? this.showEmailModal = true : this.showEmailModal = false;
+    console.log({shouldSet});
+
+    this.sharedService.setRemoveSticky(this.showEmailModal);
   }
 
   navigateToEdit() {

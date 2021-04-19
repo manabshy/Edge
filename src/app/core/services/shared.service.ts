@@ -29,6 +29,8 @@ export class SharedService {
   lastCallEndCallToast: any;
   formErrors: any;
   ref: DynamicDialogRef;
+  private removeStickySubject = new Subject<boolean>();
+  removeSticky$ = this.removeStickySubject.asObservable();
 
   constructor(private _location: Location,
     private _router: Router,
@@ -36,6 +38,10 @@ export class SharedService {
     private storage: StorageMap,
     private dialogService: DialogService,
     private modalService: BsModalService) {
+  }
+
+  setRemoveSticky(removed: boolean) {
+    this.removeStickySubject.next(removed);
   }
 
   back() {
