@@ -5,6 +5,7 @@ import { PeopleService } from 'src/app/core/services/people.service';
 import { Router } from '@angular/router';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { StaffMember } from '../models/staff-member';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-shared-lead-register',
@@ -20,6 +21,7 @@ export class SharedLeadRegisterComponent implements OnInit, OnChanges {
   leads$ = new Observable<Lead[]>();
   staffMemberId: number;
   isMyLead: boolean;
+  isClosedLeadFound = false;
 
   constructor(private peopleService: PeopleService, private router: Router, private storage: StorageMap) { }
 
@@ -45,7 +47,15 @@ export class SharedLeadRegisterComponent implements OnInit, OnChanges {
   }
 
   getLeads() {
-    this.leads$ = this.peopleService.getLeads(this.personId, this.hidePrevious);
+    this.leads$ = this.peopleService.getLeads(this.personId, this.hidePrevious)
+      .pipe(tap(res => {
+        this.isClosedLeadFound = this.checkClosedLead(res);
+      }));
   }
+
+  checkClosedLead(leads: Lead[]) {
+    return !!leads?.find(x => x.closedById);
+  }
+
 
 }

@@ -15,21 +15,27 @@
     <table class="table--mobile table--rowHover" *ngIf="leads && leads?.length">
       <thead>
         <tr>
+          <th *ngIf="isClosedLeadFound">Status</th>
           <th>Type</th>
           <th>Property</th>
           <th>Chase Date</th>
           <th>Lead Owner</th>
-          <th *ngIf="!hidePrevious">Status</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let lead of leads; let i = index;" (click)="leadClicked(lead)">
+          <td data-title="Status" *ngIf="isClosedLeadFound">
+            <span class="cell-content">
+              <span *ngIf="lead?.closedById" class="pill">Closed</span>
+              <span *ngIf="!lead?.closedById" class="pill pill--positive">Active</span>
+            </span>
+          </td>
           <td data-title="Type">
             <span class="cell-content">{{lead?.leadType}}</span>
           </td>
           <td data-title="Property">
             <span class="cell-content">
-              {{lead?.relatedProperty?.address|formatAddress}}
+              {{(lead?.relatedProperty?.address|formatAddress) || '-'}}
             </span>
           </td>
           <td data-title="Next Chase Date">
@@ -37,9 +43,6 @@
           </td>
           <td data-title="Lead Owner">
             <span class="cell-content">{{lead?.owner || '-'}}</span>
-          </td>
-          <td data-title="Status" *ngIf="!hidePrevious">
-            <span class="cell-content" [ngClass]="{'invisible': !lead?.closedById}"><span class="pill">Closed</span></span>
           </td>
         </tr>
       </tbody>
