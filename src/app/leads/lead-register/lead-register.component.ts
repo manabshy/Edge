@@ -447,7 +447,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   @HostListener('window:scroll', ['$event'])
   onWindowScroll() {
     let scrollHeight: number, totalHeight: number;
-    scrollHeight = document.body.scrollHeight;
+    scrollHeight = document.body.scrollHeight - 100; // Subtract 100 to fix zoom issues
     totalHeight = window.scrollY + window.innerHeight;
 
     if (!this.bottomReached) {
