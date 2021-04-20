@@ -112,7 +112,7 @@ export class AppComponent extends BaseComponent implements OnInit {
     if (this.isLoggedIn) {
       this.getCurrentStaffMember();
       this.getInfo();
-    }
+    } else { this.authService.login(); }
 
 
     this.route.queryParams.subscribe(params => {
