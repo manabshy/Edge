@@ -27,6 +27,8 @@
     &--fill-warning                             { color:$color--warning; }
 
     &--fill-snow                                { color:$color--snow; }
+
+    svg                                         { height:100%; width:100%; }
 }
 
 .loading                                        { height:16px; width:16px; }
