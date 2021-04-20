@@ -68,6 +68,10 @@ export class HeaderComponent implements OnInit {
 
   }
 
+  logIn() {
+    this.authService.login();
+  }
+
   logOut() {
     this.authService.logout();
   }
