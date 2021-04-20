@@ -56,7 +56,7 @@
           <span class="cell-content">
             <ng-container *ngIf="contactGroup?.phoneNumbers[0] else noPhone">
               <app-telephone class="appWrapper" [person]="contactGroup" [number]="contactGroup?.phoneNumbers[0]" [searchTerm]="searchTerm"
-                [warning]="contactGroup?.warningStatus"></app-telephone>
+                [warning]="contactGroup?.warningStatus" [isCallAllowed]="false"></app-telephone>
             </ng-container>
             <ng-template #noPhone><span>-</span></ng-template>
           </span>
@@ -64,7 +64,6 @@
         <td data-title="Email">
           <span class="cell-content">
             <a (click)="$event.stopPropagation()" *ngIf="contactGroup?.emailAddresses[0]"
-              href="mailto:{{contactGroup?.emailAddresses[0]}}"
               [innerHTML]="contactGroup?.emailAddresses[0] | highlight : searchTerm">
             </a>
             <span *ngIf="!contactGroup?.emailAddresses[0]">-</span>
