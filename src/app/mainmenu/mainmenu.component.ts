@@ -28,6 +28,7 @@ export class MainmenuComponent implements OnInit {
   };
   showMobileMenu = false;
   canSeeCsBoard = false;
+  showMobileProfile: boolean;
 
   get isLeaderboardVisible() {
     if (this.currentStaffMember) {
@@ -75,6 +76,12 @@ export class MainmenuComponent implements OnInit {
     });
 
     console.log(this.collapsible);
+  }
+
+  toggleMobileProfile() {
+    this.showMobileProfile = !this.showMobileProfile;
+    console.log('mobile profile', this.showMobileProfile);
+
   }
 
   toggleMobileMenu() {
