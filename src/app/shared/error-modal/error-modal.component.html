@@ -26,8 +26,8 @@
 </div> -->
 
 <fieldset class="overflow">
-  <p *ngIf="data?.error?.displayMessage">{{data?.error?.displayMessage}}</p>
-  <pre *ngIf="data?.error?.technicalDetails">{{data?.error?.technicalDetails}}</pre>
+  <p *ngIf="data?.error?.displayMessage" [innerHtml]="data?.error?.displayMessage"></p>
+  <pre *ngIf="data?.error?.technicalDetails" [innerHtml]="data?.error?.technicalDetails"></pre>
 </fieldset>
 <fieldset>
   <a [href]="'mailto:helpdesk@dng.co.uk?subject=Error '+title+'&body='+desc+'%0D%0D'+(techDet||'')+'%0D%0D'+url">Contact Helpdesk</a>
