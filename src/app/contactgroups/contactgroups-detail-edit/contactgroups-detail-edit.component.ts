@@ -350,6 +350,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
         typeId: x.typeId || 3, // cross check this asap
         sendSMS: x.sendSMS || this.sharedService.isUKMobile(x.number) ? true : false,
         isPreferred: x.isPreferred || false,
+        isUKMobileNumber: this.sharedService.isUKMobile(x.number) ? true : false,
         comments: x.comments
       }, { validators: WedgeValidators.phoneTypeValidator(this) }));
     });
@@ -403,7 +404,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
     // this.warningStatusId.disable();
   }
 
-  togglePreferences(index: number, group: FormArray) {
+  togglePreferences(index: number, group: FormArray, toggleSendSMS = false) {
     if (group === this.phoneNumbers) {
       const phoneNumberPrefs = [];
       const numberFormGroups = this.phoneNumbers.controls;
@@ -415,7 +416,9 @@ export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
       otherPhoneNumbers.forEach(x => {
         x.isPreferred = false;
       });
-
+      if (toggleSendSMS) {
+        phoneNumberPrefs[index] = selectedPhoneNumber; console.log({ selectedPhoneNumber }, 'selected', phoneNumberPrefs, { index });
+      }
       this.personForm.get('phoneNumbers').setValue(phoneNumberPrefs);
 
     } else {
@@ -475,25 +478,35 @@ export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
   }
 
   addRemovePhoneNumberItem(i, remove) {
-    const currPhoneNumber = this.phoneNumbers.controls[i];
+    const currPhoneNumber = this.phoneNumbers.controls[i] as FormGroup;
     const lastPhoneNumber = this.phoneNumbers.controls[this.phoneNumbers.controls.length - 1];
-
+    const numberControl = currPhoneNumber?.controls as unknown as AbstractControl;
+    // let number;
+    // let isUKMobile = false;
+    // if (numberControl) {
+    //   number = numberControl['number'].value;
+    //   isUKMobile = this.sharedService.isUKMobile(number) ? true : false;
+    // }
     if (currPhoneNumber === lastPhoneNumber) {
       this.phoneNumbers.push(this.createPhoneNumberItem());
     }
     if (!currPhoneNumber.value.number && currPhoneNumber !== lastPhoneNumber && remove) {
       this.phoneNumbers.removeAt(i);
     }
+
   }
-  createPhoneNumberItem(): FormGroup {
+  createPhoneNumberItem(isUKMobileNumber?: boolean): FormGroup {
+    console.log({ isUKMobileNumber });
+
     return this.fb.group({
       id: 0,
       typeId: 3,
       number: ['', { validators: [WedgeValidators.phoneNumberValidator()] }],
       orderNumber: 0,
-      sendSMS: [true],
+      sendSMS: [false],
       isPreferred: [false],
-      comments: ['']
+      comments: [''],
+      isUKMobileNumber: isUKMobileNumber
     }, { validators: WedgeValidators.phoneTypeValidator(this) });
   }
 
@@ -530,9 +543,9 @@ export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
 
   removeSMSLandlines() {
     this.phoneNumbers.controls.forEach(x => {
-      if (!this.sharedService.isUKMobile(x.value.number)) {
+      if (this.sharedService.isUKMobile(x.value.number)) {
         x.patchValue({
-          sendSMS: false
+          sendSMS: true
         });
       }
     });

@@ -67,6 +67,7 @@ export interface PhoneNumber {
   orderNumber: number;
   sendSMS: boolean;
   isPreferred: boolean;
+  isUKMobileNumber?: boolean;
   comments: string;
 }
 

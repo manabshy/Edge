@@ -387,7 +387,7 @@ export class SharedService {
 
   isUKMobile(number: string) {
     if (number) {
-      const formattedNumber = number.replace(' ', '');
+      const formattedNumber = number?.replace(' ', '');
       return (formattedNumber.startsWith('07') || formattedNumber.startsWith('00') || formattedNumber.startsWith('+')) &&
         !formattedNumber.startsWith('070') && !formattedNumber.startsWith('076');
     } else {

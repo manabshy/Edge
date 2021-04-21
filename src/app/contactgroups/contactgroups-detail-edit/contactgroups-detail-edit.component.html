@@ -77,8 +77,8 @@
               <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon"><polygon points="32 0 41.9 21.1 64 24.4 48 40.8 51.8 64 32 53.1 12.2 64 16 40.8 0 24.4 22.1 21.1 "></polygon></svg>
             </a>
             <input type="search" [id]="'email' + i" [placeholder]="!isFirst ? 'Additional Email' : ''" class="form-control" formControlName="email" (keyup)="addRemoveEmailItem(i, false)" (blur)="addRemoveEmailItem(i, true)" [ngClass]="{'border border-warning': !personForm.controls.emailAddresses.controls[0].controls.email.value && isFirst && !personForm.errors?.emailOrPhone, 'is-invalid': isValid('email', i) || personForm.errors?.emailOrPhone}">
-            <span class="joined--child">
-              <span class="icon icon--fill-midnight-50">
+            <span class="joined--child" *ngIf="!!personForm.value.emailAddresses[i].isPrimaryWebEmail">
+              <span class="icon " [ngClass]="!!personForm.value.emailAddresses[i].isPrimaryWebEmail ? 'icon--fill-midnight-50' : 'icon--fill-midnight-20'">
                 <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"><path d="M32 1C14.9 1 1 14.9 1 32s13.9 31 31 31 31-13.9 31-31S49.1 1 32 1zM28.9 56.6C16.7 55.1 7.2 44.6 7.2 32c0-1.9 0.2-3.8 0.7-5.5l14.8 14.8v3.1c0 3.4 2.8 6.2 6.2 6.2V56.6zM50.3 48.7c-0.8-2.5-3.1-4.3-5.9-4.3h-3.1v-9.3c0-1.7-1.4-3.1-3.1-3.1H19.6v-6.2h6.2c1.7 0 3.1-1.4 3.1-3.1v-6.2h6.2c3.4 0 6.2-2.8 6.2-6.2V9c9.1 3.7 15.5 12.6 15.5 23C56.8 38.4 54.3 44.3 50.3 48.7z"></path></svg>
               </span>
             </span>
@@ -122,19 +122,15 @@
                   [value]=telephoneType.key>{{telephoneType.value}} </option>
               </select>
             </span>
-            <!-- <label class="btn btn-light" btnCheckbox formControlName="sendSMS" tabindex="0" role="button" [hidden]="true" [ngClass]="{'font-weight-bold': personForm.value.phoneNumbers[i].sendSMS}" [style.visibility]="!sharedService.isUKMobile(personForm.value.phoneNumbers[i].number) ? 'hidden' : 'visible'">SMS</label> -->
             <input type="text" placeholder="Comments" formControlName="comments">
-            
-            <!-- <span class="checkbox">
-              <span>
-                <input type="checkbox" id="contactByPhone" formControlName="contactByPhone">
-                <label for="contactByPhone">SMS</label>
-              </span>
-            </span> -->
-            <span class="joined--child">
-              <span class="icon icon--fill-midnight-20">
-                <svg  aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"><path d="M39 9L10 9 10 52 39 52 39 43 45 43 45 62C45 63.1 44.1 64 43 64L6 64C4.9 64 4 63.1 4 62L4 2C4 0.9 4.9 0 6 0L43 0C44.1 0 45 0.9 45 2L45 12 39 12 39 9ZM25 55C23.3 55 22 56.3 22 58 22 59.7 23.3 61 25 61 26.7 61 28 59.7 28 58 28 56.3 26.7 55 25 55Z"/><path d="M25.9 46.2L33.3 39.9 56.8 39.9C58.6 39.9 60 38.5 60 36.7L60 18.4C60 16.6 58.6 15.2 56.8 15.2L29.1 15.2C27.3 15.2 25.9 16.6 25.9 18.4L25.9 46.2Z"/></svg>
-              </span>
+
+            <span class="joined--child" *ngIf="!!personForm.value.phoneNumbers[i]?.isUKMobileNumber">
+              <a btnCheckbox formControlName="sendSMS" tabindex="0"  (click)="togglePreferences(i, phoneNumbers, true)" role="button"
+              [attr.disabled]="!!!personForm.value.phoneNumbers[i]?.isUKMobileNumber ? '':null">
+                <span class="icon" [ngClass]="!!personForm.value.phoneNumbers[i].sendSMS ? 'icon--fill-midnight-50' : 'icon--fill-midnight-20'">
+                  <svg  aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"><path d="M39 9L10 9 10 52 39 52 39 43 45 43 45 62C45 63.1 44.1 64 43 64L6 64C4.9 64 4 63.1 4 62L4 2C4 0.9 4.9 0 6 0L43 0C44.1 0 45 0.9 45 2L45 12 39 12 39 9ZM25 55C23.3 55 22 56.3 22 58 22 59.7 23.3 61 25 61 26.7 61 28 59.7 28 58 28 56.3 26.7 55 25 55Z"/><path d="M25.9 46.2L33.3 39.9 56.8 39.9C58.6 39.9 60 38.5 60 36.7L60 18.4C60 16.6 58.6 15.2 56.8 15.2L29.1 15.2C27.3 15.2 25.9 16.6 25.9 18.4L25.9 46.2Z"/></svg>
+                </span>
+              </a>
             </span>
           </span>
           <p class="message message--negative"
