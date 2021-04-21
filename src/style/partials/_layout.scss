@@ -88,6 +88,19 @@ app-telephone                                   { width:100%; display:flex; alig
 }
 .header-navigation .profile .circle img         { width:30px; position:absolute; top:0; left:0; }
 
+.headerMobile                                   {
+  .header-navigation                            { display:flex; height:auto;
+    a, 
+    button                                      { width:auto; background-color:transparent; }
+    .dropdown-toggle:hover                      { background-color:transparent; color:$color--snow; }
+    .dropdown-item                              { height:auto; color:$color--midnight; justify-content:flex-start; }
+  }
+  .headerMobile-nav li                          { width:auto; }
+  .dropdown-menu li                             { height:auto; }
+  .staffname                                    { display:none; }
+  .menuProfile                                  { padding-right:10px; justify-content:flex-end; }
+}
+
 .flexBottom                                     { margin-top:auto; }
 
 .flexRight                                      { margin-left:auto; align-self:flex-start; display:flex; flex-wrap:nowrap; }
@@ -122,7 +135,7 @@ app-telephone                                   { width:100%; display:flex; alig
 .dropdown-menu                                  { margin:0; padding:0; list-style:none; min-width:200px; display:none; background-color:$color--snow; color:$color--midnight; border-radius:3px; border:1px solid $color--midnight-20; position:absolute; right:0; z-index:10;
   &.show                                        { padding:6px 0;  border-radius:0 0 3px 3px; display:flex; flex-direction:column; }
 
-  .dropdown-item                                { padding:6px 10px; text-align:left; font-weight:initial; background-color:$color--snow; cursor:pointer; text-decoration:none;
+  .dropdown-item                                { padding:6px 10px; text-align:left; font-weight:initial; background-color:$color--snow; cursor:pointer; text-decoration:none; align-items:center;
     &.active, &:hover                           { background-color:$color--blue-20; }
     .icon                                       { top:auto; }
   }
