@@ -61,9 +61,9 @@
             <ng-template #noPhone><span>-</span></ng-template>
           </span>
         </td>
-        <td data-title="Email">
+        <td data-title="Email" >
           <span class="cell-content">
-            <a (click)="$event.stopPropagation()" *ngIf="contactGroup?.emailAddresses[0]"
+            <a id="email" (click)="$event.stopPropagation()" *ngIf="contactGroup?.emailAddresses[0]"
               [innerHTML]="contactGroup?.emailAddresses[0] | highlight : searchTerm">
             </a>
             <span *ngIf="!contactGroup?.emailAddresses[0]">-</span>
