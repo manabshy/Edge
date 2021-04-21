@@ -148,6 +148,7 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
 
   startReferral(company: Referral) {
     this.showRefDialog = true;
+    this.sharedService.setRemoveSticky(this.showRefDialog);
     this.selectedCompany = company;
   }
 
@@ -163,12 +164,18 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
       this.setPersonReferrals(res);
       this.messageService.add({ severity: 'success', summary: 'Referral successfully sent', closable: false, key: 'referralMessage' });
       this.showRefDialog = false;
+      this.sharedService.setRemoveSticky(this.showRefDialog);
     }
+  }
+
+  cancelReferral() {
+    this.showRefDialog = false;
+    this.sharedService.setRemoveSticky(this.showRefDialog);
   }
 
   toggleShowEmailModal(shouldSet: boolean) {
     shouldSet ? this.showEmailModal = true : this.showEmailModal = false;
-    console.log({shouldSet});
+    console.log({ shouldSet });
 
     this.sharedService.setRemoveSticky(this.showEmailModal);
   }
