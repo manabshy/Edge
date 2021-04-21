@@ -97,6 +97,7 @@ const redirectUri = environment.baseRedirectUri ? environment.baseRedirectUri : 
 // Date Picker Locale
 import { defineLocale } from 'ngx-bootstrap/chronos';
 import { deLocale, frLocale, plLocale, enGbLocale } from 'ngx-bootstrap/locale';
+import { ProfileComponent } from './profile/profile.component';
 
 
 defineLocale('de', deLocale);
@@ -184,7 +185,8 @@ const externalModulesExports = [
     PropertyChecklistItemComponent,
     NotFoundComponent,
     ImpersonateMemberComponent,
-    HeaderComponent
+    HeaderComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
