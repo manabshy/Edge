@@ -1,8 +1,7 @@
 /***** Aside *****/
 .menu_open .aside                               { left:0 !important; }
 
-.aside                                          { background-color:#0A1A4A; color:#848CA4; width:100vw; height:100vh; font-size:17px; line-height:21px; display:flex; flex-direction:column; position:fixed; top:0; left:100vw; z-index:20;
-  &--onLeft                                     { left:-100vw; right:auto;}
+.aside                                          { background-color:#0A1A4A; color:#848CA4; width:100vw; height:100vh; font-size:17px; line-height:21px; display:flex; flex-direction:column; position:fixed; top:0; left:-100vw; z-index:20;
     .logo                                       { margin:0 20px; padding:0; min-height:56px; color:#FFF; display:flex; align-items:center; justify-content:center; box-shadow:0px 1px 0px 0px #535E80; -webkit-box-shadow:0px 1px 0px 0px #535E80;
         .icon                                   { height:30px; width:auto; display:none; }
     }
