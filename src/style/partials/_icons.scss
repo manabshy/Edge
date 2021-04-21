@@ -28,7 +28,7 @@
 
     &--fill-snow                                { color:$color--snow; }
 
-    svg                                         { height:100%; width:100%; }
+    svg                                         { height:100%; width:100%; fill:currentColor; }
 }
 
 .loading                                        { height:16px; width:16px; }
