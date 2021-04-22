@@ -168,7 +168,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
 
       console.log('save and next may be false', this.showSaveAndNext);
 
-      if (this.leadId && this.showSaveAndNext && !this.leadIds?.length) {
+      if (this.leadId && this.leadSearchInfo?.ownerId && this.showSaveAndNext ) {
+        console.log(this.leadSearchInfo, 'TEST NOW')
         this.getLeadIds(this.leadId);
       }
     });
@@ -196,6 +197,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     });
   }
 
+  isIdInCurrentList(leadId: number) {
+    return this.leadIds?.findIndex(x => x === leadId);
+  }
   // ngAfterViewInit() {
   //   if (this.leadNote) {
   //     this.note = this.leadNote.getNote();
