@@ -64,23 +64,6 @@ export class LeadNoteComponent implements OnInit, OnChanges {
     }
   }
 
-  consumeShortcut(shortcut: string) {
-    const textControl = this.noteForm.get('text');
-    let textValue = textControl.value || '';
-    if (textValue.includes(shortcut)) {
-      if (textValue.includes(shortcut + ', ')) {
-        textValue = textValue.replace(shortcut + ', ', '');
-      } else {
-        textValue = textValue.replace(shortcut, '');
-      }
-    } else {
-      textValue = textValue.slice(0, 0) + shortcut + ', ' + textValue.slice(0);
-    }
-    textValue = textValue.replace(/,\s*$/, '');
-    textControl.setValue(textValue.replace(/\s+$/g, '') + ' ');
-    this.noteComponent.nativeElement.focus();
-  }
-
   ctrlEnterSubmit(e) {
     if (e.ctrlKey && e.keyCode == 13) {
       //this.action(true);

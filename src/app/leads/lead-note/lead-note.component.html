@@ -8,14 +8,6 @@
   </div>
   <div class="card__body">
     <form [formGroup]="noteForm" (ngSubmit)="action(true)">
-      <fieldset class="inline-child">
-        <span class="btn--container">
-          <ng-container *ngFor="let shortcut of shortcuts | keyvalue:keepOriginalOrder; last as isLast">
-            <button type="button" class="btn btn--snow"
-              (click)="consumeShortcut(shortcut.value)">{{shortcut.key}}</button>
-          </ng-container>
-        </span>
-      </fieldset>
 
       <fieldset [ngClass]="{'invalid': noteIsRequired}">
         <textarea #note class="form-control" name="note" id="note" cols="30" rows="5"
