@@ -13,7 +13,7 @@ import { ContactNote, PersonSummaryFigures, BasicContactGroup } from 'src/app/co
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { Person, PersonProperty } from 'src/app/shared/models/person';
 import { ToastrService } from 'ngx-toastr';
-import { takeUntil, debounceTime } from 'rxjs/operators';
+import { takeUntil, debounceTime, map } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { BaseComponent } from 'src/app/shared/models/base-component';
 import { LeadNoteComponent } from '../lead-note/lead-note.component';
@@ -28,6 +28,7 @@ import { MessageService } from 'primeng/api';
 import { ValidationService } from 'src/app/core/services/validation.service';
 import { zonedTimeToUtc } from 'date-fns-tz';
 import enGB from 'date-fns/locale/en-GB';
+import { combineLatest } from 'rxjs';
 const londonTimeZone = 'Europe/London';
 
 @Component({
@@ -98,11 +99,11 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
   disableNext = false;
   currentUrl: string;
   useExistingIds = false;
-  exitOnSave: boolean = false;
+  exitOnSave = false;
   leadTypes: InfoDetail[];
   canClose = false;
   isMyLead = false;
-  hideFooter: boolean = false;
+  hideFooter = false;
   isUnassignedLead: boolean;
   removeSticky = false;
   get nextChaseDateControl() {
@@ -127,57 +128,24 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
 
   ngOnInit() {
     AppUtils.parentRoute = AppUtils.prevRoute;
-    // this.selectedLeadTypeId = +this.route.snapshot.queryParamMap.get('leadTypeId');
-    // this.infoParam = this.route.snapshot.queryParamMap.get('leadSearchInfo');
-    // this.showSaveAndNext = this.route.snapshot.queryParamMap.get('showSaveAndNext') === 'true';
-    // this.showNotes = this.route.snapshot.queryParamMap.get('showNotes') === 'true';
-    // this.backToOrigin = this.route.snapshot.queryParamMap.get('backToOrigin') === 'true';
-    // if (this.infoParam) {
-    //   this.leadSearchInfo = JSON.parse(this.infoParam) as LeadSearchInfo;
-    //   // this.canEditLead = +this.leadSearchInfo.listingType !== 1 ? false : true;
-    //   // console.log('can edit lead', this.canEditLead);
+    const allParams$ = combineLatest([this.route.params, this.route.queryParamMap])
+      .pipe(
+        map(([params, queryParams]) => ({ params, queryParams })));
 
-    // }
-    this.route.queryParamMap.subscribe(params => {
-      this.personId = +params.get('personId') || 0;
-      this.isNewLead = params.get('isNewLead') as unknown as boolean || false;
-      this.selectedLeadTypeId = +params.get('leadTypeId');
-      this.infoParam = params.get('leadSearchInfo');
-      this.showSaveAndNext = params.get('showSaveAndNext') as unknown as boolean || false;
-      this.showNotes = params.get('showNotes') === 'true';
-      this.backToOrigin = JSON.parse(params.get('backToOrigin'));
-      this.exitOnSave = JSON.parse(params.get('exitOnSave'));
-      this.useExistingIds = params['useExistingIds'] || false;
-      // this.isMyLead =  params['isMyLead'];
-      this.isMyLead = JSON.parse(params.get('isMyLead'));
-      console.log('use existing ids', this.useExistingIds);
+    allParams$.subscribe(res => {
+      this.setupQueryParams(res.queryParams);
+      this.leadId = +res.params['leadId'] || 0;
 
-      if (this.infoParam) {
-        this.leadSearchInfo = JSON.parse(this.infoParam) as LeadSearchInfo;
-        this.isUnassignedLead = +this.leadSearchInfo?.listingType === ListingType.UnassignedLeads;
-
-        // this.canEditLead = +this.leadSearchInfo.listingType !== 1 ? false : true;
-        // console.log('can edit lead', this.canEditLead);
-
-      }
-      this.hideFooter = !(this.leadSearchInfo || this.isNewLead || this.isMyLead) ? true : false;
-    });
-
-    this.route.params.subscribe(params => {
-      this.leadId = +params['leadId'] || 0;
-
-      console.log('save and next may be false', this.showSaveAndNext);
-
-      if (this.leadId && this.leadSearchInfo?.ownerId && this.showSaveAndNext ) {
-        console.log(this.leadSearchInfo, 'TEST NOW')
+      // Add !this.isIdInCurrentList(this.leadId) to reduce API calls. combineLatest (2 API calls)
+      if (this.leadId && this.showSaveAndNext && !this.isIdInCurrentList(this.leadId)) {
         this.getLeadIds(this.leadId);
       }
-    });
 
-    this.route.queryParamMap.subscribe(params => {
-      this.personId = +params.get('personId') || 0;
-      this.isNewLead = params.get('isNewLead') as unknown as boolean || false;
-    });
+      this.hideFooter = !(this.leadSearchInfo || this.isNewLead || this.isMyLead) ? true : false;
+    }
+    );
+
+
     this.onLoading = true;
     this.init();
 
@@ -197,8 +165,34 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     });
   }
 
+  private setupQueryParams(params) {
+    this.personId = +params.get('personId') || 0;
+    this.isNewLead = params.get('isNewLead') as unknown as boolean || false;
+    this.selectedLeadTypeId = +params.get('leadTypeId');
+    this.infoParam = params.get('leadSearchInfo');
+    this.showSaveAndNext = params.get('showSaveAndNext') as unknown as boolean || false;
+    this.showNotes = params.get('showNotes') === 'true';
+    this.backToOrigin = JSON.parse(params.get('backToOrigin'));
+    this.exitOnSave = JSON.parse(params.get('exitOnSave'));
+    this.useExistingIds = params['useExistingIds'] || false;
+    // this.isMyLead =  params['isMyLead'];
+    this.isMyLead = JSON.parse(params.get('isMyLead'));
+    console.log('use existing ids', this.useExistingIds);
+
+    if (this.infoParam) {
+      this.leadSearchInfo = JSON.parse(this.infoParam) as LeadSearchInfo;
+      this.isUnassignedLead = +this.leadSearchInfo?.listingType === ListingType.UnassignedLeads;
+
+      // this.canEditLead = +this.leadSearchInfo.listingType !== 1 ? false : true;
+      // console.log('can edit lead', this.canEditLead);
+    }
+  }
+
   isIdInCurrentList(leadId: number) {
-    return this.leadIds?.findIndex(x => x === leadId);
+    let exists = false;
+    console.log('in list', this.leadIds?.find(x => x === leadId));
+
+    return exists = this.leadIds?.find(x => x === leadId) ? true : false;
   }
   // ngAfterViewInit() {
   //   if (this.leadNote) {
