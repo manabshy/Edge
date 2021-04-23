@@ -90,8 +90,7 @@ app-telephone                                   { width:100%; display:flex; alig
 
 .headerMobile                                   {
   .header-navigation                            { display:flex; height:auto;
-    a, 
-    button                                      { width:auto; background-color:transparent; }
+    .btn--light                                      { width:auto; background-color:transparent; }
     .dropdown-toggle:hover                      { background-color:transparent; color:$color--snow; }
     .dropdown-item                              { height:auto; color:$color--midnight; justify-content:flex-start; }
   }
