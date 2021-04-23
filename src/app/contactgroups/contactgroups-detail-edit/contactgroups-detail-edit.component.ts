@@ -472,13 +472,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
   addRemovePhoneNumberItem(i, remove) {
     const currPhoneNumber = this.phoneNumbers.controls[i] as FormGroup;
     const lastPhoneNumber = this.phoneNumbers.controls[this.phoneNumbers.controls.length - 1];
-    const numberControl = currPhoneNumber?.controls as unknown as AbstractControl;
-    // let number;
-    // let isUKMobile = false;
-    // if (numberControl) {
-    //   number = numberControl['number'].value;
-    //   isUKMobile = this.sharedService.isUKMobile(number) ? true : false;
-    // }
+
     if (currPhoneNumber === lastPhoneNumber) {
       this.phoneNumbers.push(this.createPhoneNumberItem());
     }

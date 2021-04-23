@@ -123,8 +123,7 @@
               </select>
             </span>
             <input type="text" placeholder="Comments" formControlName="comments">
-
-            <span class="joined--child" *ngIf="!!personForm.value.phoneNumbers[i]?.isUKMobileNumber">
+            <span class="joined--child" *ngIf="personForm.value.phoneNumbers[i]?.typeId==3">
               <a btnCheckbox formControlName="sendSMS" tabindex="0"  (click)="togglePreferences(i, phoneNumbers, true)" role="button"
               [attr.disabled]="!!!personForm.value.phoneNumbers[i]?.isUKMobileNumber ? '':null">
                 <span class="icon" [ngClass]="!!personForm.value.phoneNumbers[i].sendSMS ? 'icon--fill-info' : 'icon--fill-midnight-20'">
