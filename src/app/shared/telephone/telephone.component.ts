@@ -31,7 +31,7 @@ export class TelephoneComponent implements OnInit, OnChanges {
   @Input() warning: any;
   @Input() isCallAllowed = true;
   isDialing: boolean;
-  sms = true;
+  sms = false;
   currentStaffMember: StaffMember;
   tapiInfo: TapiRequestInfo;
   ref: DynamicDialogRef;
@@ -46,9 +46,9 @@ export class TelephoneComponent implements OnInit, OnChanges {
     private staffMemberService: StaffMemberService) { }
 
   ngOnInit() {
-    if (!this.sharedService.isUKMobile(this.number)) {
-      this.sms = false;
-    }
+    // if (!this.sharedService.isUKMobile(this.number)) {
+    //   this.sms = false;
+    // }
     this.storage.get('currentUser').subscribe((data: StaffMember) => {
       if (data) {
         this.currentStaffMember = data;
@@ -64,7 +64,11 @@ export class TelephoneComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    if (this.person) { this.showMessage = this.person.warningStatusId !== 1 || !this.person.contactByPhone ? true : false; }
+    if (this.person) {
+      this.sms = !!this.person.phoneNumbers?.find(x => x.sendSMS) && this.sharedService.isUKMobile(this.number);
+
+      this.showMessage = this.person.warningStatusId !== 1 || !this.person.contactByPhone ? true : false;
+    }
   }
 
   callOrText(call: boolean) {
