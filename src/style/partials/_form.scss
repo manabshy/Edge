@@ -362,8 +362,10 @@ Joined elements
       select                                    { border-left:none; }
    }
 
+   select                                       { height:100%; }
+
    .btn--container                              {
-      .btn                                      { border-radius:0; }
+      .btn                                      { border-radius:0; height:100%; }
    }
 
    >:first-child                                { border-radius:3px 0 0 3px;
