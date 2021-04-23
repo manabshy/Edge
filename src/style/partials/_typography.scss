@@ -40,27 +40,6 @@ Font-face setup
          url('~/assets/font/poppins-v15-latin-500.ttf') format('truetype'), /* Safari, Android, iOS */
          url('~/assets/font/poppins-v15-latin-500.svg#Poppins') format('svg'); /* Legacy iOS */
   }
-  
-
-
-
-
-// @font-face {
-//     font-family:'poppins';
-//     src:    url('~/assets/font/poppins-medium.woff2') format('woff2'),
-//             url('~/assets/font/poppins-medium.woff') format('woff');
-//     font-weight:500;
-//     font-style:500;
-// }
-
-// @font-face {
-//     font-family:'poppins';
-//     src:    url('~/assets/font/poppins-light.woff2') format('woff2'),
-//             url('~/assets/font/poppins-light.woff') format('woff');
-//     font-weight:normal;
-//     font-weight:400;
-//     font-style:normal;
-// }
 
 $font-size-sm:13px;
 $input-height-sm:30px;
