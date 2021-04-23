@@ -348,7 +348,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
         number: [x.number, { validators: [WedgeValidators.phoneNumberValidator()] }],
         id: x.id || 0,
         typeId: x.typeId || 3, // cross check this asap
-        sendSMS: x.sendSMS || this.sharedService.isUKMobile(x.number) ? true : false,
+        sendSMS: x.sendSMS || false,
         isPreferred: x.isPreferred || false,
         isUKMobileNumber: this.sharedService.isUKMobile(x.number) ? true : false,
         comments: x.comments
@@ -413,25 +413,17 @@ export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
         phoneNumberPrefs.push(numberFormGroups[i].value);
       }
       const otherPhoneNumbers = phoneNumberPrefs.filter(x => x !== selectedPhoneNumber);
-      otherPhoneNumbers.forEach(x => {
-        x.isPreferred = false;
-      });
-      if (toggleSendSMS) {
-        phoneNumberPrefs[index] = selectedPhoneNumber; console.log({ selectedPhoneNumber }, 'selected', phoneNumberPrefs, { index });
-      }
+      otherPhoneNumbers.forEach(x => { x.isPreferred = false; });
+      if (toggleSendSMS) { phoneNumberPrefs[index] = selectedPhoneNumber; }
       this.personForm.get('phoneNumbers').setValue(phoneNumberPrefs);
 
     } else {
       const emailPrefs = [];
       const emailFormGroups = this.emailAddresses.controls;
       const selectedEmail = emailFormGroups[index].value;
-      for (let i = 0; i < emailFormGroups.length; i++) {
-        emailPrefs.push(emailFormGroups[i].value);
-      }
+      for (let i = 0; i < emailFormGroups.length; i++) { emailPrefs.push(emailFormGroups[i].value); }
       const otherEmails = emailPrefs.filter(x => x !== selectedEmail);
-      otherEmails.forEach(x => {
-        x.isPreferred = false;
-      });
+      otherEmails.forEach(x => { x.isPreferred = false; });
 
       this.personForm.get('emailAddresses').setValue(emailPrefs);
     }
@@ -563,7 +555,6 @@ export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
 
   savePerson(otherPersonToAdd) {
     this.errorMessage = null;
-    this.removeSMSLandlines();
     this.removeOthers();
     this.logValidationErrors(this.personForm, true, true);
     if (this.personForm.valid) {
@@ -574,6 +565,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
       }
       if (this.personForm.dirty) {
         const person = { ...this.personDetails, ...this.personForm.value };
+
         if (!person.titleId) {
           person.titleId = 100;
         }
