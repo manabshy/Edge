@@ -6,14 +6,6 @@
     </div>
     <div class="card__body">
       <form [formGroup]="noteForm" (ngSubmit)="action(true)">
-        <fieldset class="inline-child">
-          <span class="btn--container">
-            <ng-container *ngFor="let shortcut of shortcuts | keyvalue:keepOriginalOrder; last as isLast">
-              <button type="button" class="btn btn--snow" (click)="consumeShortcut(shortcut.value)">{{shortcut.key}}</button>
-            </ng-container>
-          </span>
-        </fieldset>
-
         <fieldset>
           <textarea #note class="form-control" name="note" id="note{{isModal}}" cols="30" rows="5" placeholder="Please give as much detail as possible." (keydown)="ctrlEnterSubmit($event)" formControlName="text" [ngClass]="{'is-invalid':formErrors.text}"></textarea>
         </fieldset>

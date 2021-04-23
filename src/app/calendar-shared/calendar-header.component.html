@@ -35,10 +35,10 @@
                 <label class="small" for="dateFrom">Go to Date</label>
                 <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
                   [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
-                  bsDatepicker 
+                  bsDatepicker
                   #datepicker="bsDatepicker"
-                  [appNoDoubleTap]='datepicker' 
-                  (bsValueChange)="onDateChange($event)" 
+                  [appNoDoubleTap]='datepicker'
+                  (bsValueChange)="onDateChange($event)"
                   formControlName="dateFilter"
                 >
               </li>
@@ -57,10 +57,10 @@
                   <label class="small" for="dateFrom">Go to Date</label>
                   <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
                     [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
-                    bsDatepicker 
+                    bsDatepicker
                     #datepicker="bsDatepicker"
-                    [appNoDoubleTap]='datepicker' 
-                    (bsValueChange)="onDateChange($event)" 
+                    [appNoDoubleTap]='datepicker'
+                    (bsValueChange)="onDateChange($event)"
                     formControlName="dateFilter">
                 </div>
               </div>
@@ -72,7 +72,8 @@
             <!--Next--><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onRight"><path d="M46 29.2L21.6 4.8c-1.8-1.8-5.1-0.4-4.8 2.3 0.1 0.6 0.4 1.2 0.8 1.7L39 30.1c0.6 0.6 1 1.4 0.9 2.3 -0.1 0.9-0.6 1.2-1.4 2L17.7 55.1c-0.5 0.5-0.8 1-0.8 1.7 -0.3 2.8 2.9 4.2 4.8 2.4L46 34.9C47.6 33.3 47.6 30.8 46 29.2z"></path></svg>
           </button>
         </li>
-        <li class="calNav__add">
+        <!-- Hide create event for release 22/04/21 -->
+        <li class="calNav__add" *ngIf="false">
           <a class="btn btn--positive" [routerLink]="['/diary/edit', 0]" [queryParams]="{isNewEvent: true}" *ngIf="!myCalendarOnly" aria-label="Add event"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z"></path><path class="plus-vertical" d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z"></path></svg>Create Event</a>
         </li>
       </ol>
@@ -84,7 +85,7 @@
       <div class="col-auto pr-0" *ngIf="isShowMeVisible">
         <button type="button" class="btn btn-sm btn-light" (click)="getCurrentStaffMemberCalendar()">Show me</button>
       </div>
-      
+
       <!--  -->
       <ng-template #goToButton>
         <button type="button" class="btn btn--ghost" mwlCalendarToday [(viewDate)]="viewDate"
@@ -104,8 +105,8 @@
             <option value="month">Month</option>
           </select>
         </span>
-      </ng-template>      
-      
+      </ng-template>
+
     </form>
   </div>
 </div>
@@ -151,10 +152,10 @@
                   <label class="small" for="dateFrom">Go to Date</label>
                   <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
                     [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
-                    bsDatepicker 
+                    bsDatepicker
                     #datepicker="bsDatepicker"
-                    [appNoDoubleTap]='datepicker' 
-                    (bsValueChange)="onDateChange($event)" 
+                    [appNoDoubleTap]='datepicker'
+                    (bsValueChange)="onDateChange($event)"
                     formControlName="dateFilter">
                 </div>
               </div>
@@ -244,10 +245,10 @@
                   <label class="small" for="dateFrom">Go to Date</label>
                   <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
                     [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
-                    bsDatepicker 
+                    bsDatepicker
                     #datepicker="bsDatepicker"
-                    [appNoDoubleTap]='datepicker' 
-                    (bsValueChange)="onDateChange($event)" 
+                    [appNoDoubleTap]='datepicker'
+                    (bsValueChange)="onDateChange($event)"
                     formControlName="dateFilter">
                 </div>
               </div>

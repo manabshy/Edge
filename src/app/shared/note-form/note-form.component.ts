@@ -59,34 +59,15 @@ export class NoteFormComponent implements OnInit {
   }
 
 
-  consumeShortcut(shortcut: string) {
-    this.noteForm.markAsDirty();
-    let textValue = this.textControl.value || '';
-    if (textValue.includes(shortcut)) {
-      if (textValue.includes(shortcut + ', ')) {
-        textValue = textValue.replace(shortcut + ', ', '');
-      } else {
-        textValue = textValue.replace(shortcut, '');
-      }
-    } else {
-      textValue = textValue.slice(0, 0) + shortcut + ', ' + textValue.slice(0);
-    }
-
-    textValue = textValue.replace(/,\s*$/, '');
-    this.textControl.setValue(textValue.replace(/,\s*$/, '') + ' ');
-    this.setNoWhiteSpaceValidator(this.textControl);
-    this.noteComponent.nativeElement.focus();
-  }
-
-  setNoWhiteSpaceValidator(control: AbstractControl) {
-    if (control.value.trim().length === 0) {
-      control.setValidators(WedgeValidators.noWhitespaceValidator);
-      control.updateValueAndValidity();
-    } else {
-      control.clearValidators();
-      control.updateValueAndValidity();
-    }
-  }
+  // setNoWhiteSpaceValidator(control: AbstractControl) {
+  //   if (control.value.trim().length === 0) {
+  //     control.setValidators(WedgeValidators.noWhitespaceValidator);
+  //     control.updateValueAndValidity();
+  //   } else {
+  //     control.clearValidators();
+  //     control.updateValueAndValidity();
+  //   }
+  // }
 
   ctrlEnterSubmit(e) {
     if (e.ctrlKey && e.keyCode === 13) {
