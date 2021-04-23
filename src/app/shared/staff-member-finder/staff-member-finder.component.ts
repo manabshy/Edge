@@ -102,9 +102,10 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
       case 'allValuers':
         this.getAllValuers();
         break;
-      case 'calendarStaffMembers':
-        this.getAllCalendarStaffMembers();
-        break;
+      // Not needed: DELETE ASAP 23/04/21
+      // case 'calendarStaffMembers':
+      //   this.getAllCalendarStaffMembers();
+      //   break;
       default:
         this.getActiveStaffMembers();
     }

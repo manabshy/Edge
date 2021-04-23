@@ -5,7 +5,7 @@
       <ol class="calNav">
         <li class="calNav__search">
           <!-- Change staff member -->
-          <ng-select placeholder="Select Staff Member" [items]="staffMembers$|async" [clearable]="false" bindLabel="fullName" bindValue="staffMemberId" groupBy="category" (change)="onStaffMemberChange($event)" formControlName="staffMember">
+          <ng-select placeholder="Select Staff Member" [items]="staffMembers" [clearable]="false" bindLabel="fullName" bindValue="staffMemberId" groupBy="category" (change)="onStaffMemberChange($event)" formControlName="staffMember">
             <ng-template ng-optgroup-tmp let-item="item">
               <!-- {{item.category || 'Unnamed group'}} -->
             </ng-template>

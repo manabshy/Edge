@@ -8,6 +8,9 @@ import { CalendarView } from './shared/calendar-shared';
 import { StaffMember } from '../shared/models/staff-member';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
+import { tap } from 'rxjs/operators';
+import { ResultData } from '../shared/result-data';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-calendar-header',
@@ -35,6 +38,7 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
   fakeView: string;
   currentStaffMember: any;
   staffMemberId: number;
+  staffMembers: BaseStaffMember[];
 
   get isShowMeVisible() {
     if (this.diaryHeaderForm && this.currentStaffMember) {
@@ -75,9 +79,7 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
       }
     });
 
-
-
-    this.getStaffMembersForCalendar();
+    this.getActiveStaffMembers();
   }
 
   private patchForm(id: number) {
@@ -92,11 +94,11 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
         viewMode: this.view
       })
       this.getLabel();
-      this.diaryHeaderForm.patchValue({ 
+      this.diaryHeaderForm.patchValue({
         dateFilter: this.viewDate
       },
       //  {emitEvent: false, onlySelf: true}
-       ) 
+       )
        this.datepickerDropdown.hide();
     }
   }
@@ -106,7 +108,21 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
       if (staffMembers) {
         this.staffMembers$ = of(staffMembers as BaseStaffMember[]);
       } else {
-        this.staffMembers$ = this.staffMemberService.getStaffMembersForCalendar();
+        this.staffMembers$ = this.staffMemberService.getStaffMembersForCalendar().pipe(tap(res=>console.log({res}, 'calendar memebers')));
+      }
+    });
+  }
+  getActiveStaffMembers() {
+    this.storage.get('activeStaffmembers').subscribe(data => {
+      if (data) {
+        this.staffMembers = data as BaseStaffMember[];
+      } else {
+        this.staffMemberService.getActiveStaffMembers().subscribe(
+          (res: ResultData) => {
+            this.staffMembers = res.result;
+            console.log('%cmembers from shared replay', 'color:green', res.result);
+          }
+        );
       }
     });
   }
@@ -148,7 +164,7 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
   }
 
   onDateChange(date){
-    if(date!=this.viewDate){  
+    if(date!=this.viewDate){
       this.dateChange.emit(date)
     }
   }
