@@ -51,7 +51,7 @@ app-telephone                                   { width:100%; display:flex; alig
 
 /***** Headers *****/
 .headerMobile                                   { padding:0; display:flex; height:60px; width:100%; background-color:$color--midnight; position:fixed; top:0; right:0; z-index:21; }
-.headerMobile a, .headerMobile button           { display:flex; width:50px; height:60px; align-items:center; background-color:transparent; color:$color--snow; justify-content:center; text-decoration:none; }
+.headerMobile .mobile_nav           { display:flex; width:50px; height:60px; align-items:center; background-color:transparent; color:$color--snow; justify-content:center; text-decoration:none; }
 .headerMobile-nav                               { margin:0; padding:0; list-style:none; display:flex; width:100%; color:$color--snow; }
 .headerMobile-nav li                            { margin:0; padding:0; width:50px; height:60px; flex-grow:1; display:flex; align-items:center; }
 .headerMobile-nav li.backLink .icon             { width:24px; height:24px; }
@@ -90,7 +90,7 @@ app-telephone                                   { width:100%; display:flex; alig
 
 .headerMobile                                   {
   .header-navigation                            { display:flex; height:auto;
-    .btn--light                                      { width:auto; background-color:transparent; }
+    .btn--light                                 { width:auto; background-color:transparent; }
     .dropdown-toggle:hover                      { background-color:transparent; color:$color--snow; }
     .dropdown-item                              { height:auto; color:$color--midnight; justify-content:flex-start; }
   }
