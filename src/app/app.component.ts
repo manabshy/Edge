@@ -108,7 +108,7 @@ export class AppComponent extends BaseComponent implements OnInit {
     this.toastr.overlayContainer = this.toastContainer;
     this.setManifestName();
     this.setImpersonatedAsCurrentUser();
-
+    this.storage.delete('calendarStaffMembers').subscribe(() => console.log('calendar staff members deleted')); // Remove from localstorage
     if (this.isLoggedIn) {
       this.getCurrentStaffMember();
       this.getInfo();
