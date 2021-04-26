@@ -42,6 +42,7 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
   moreInfo = this.sidenavService.selectedItem = 'notes';
   sideNavItems = this.sidenavService.sideNavItems;
   showOnlyMyNotes = false;
+  removeSticky: boolean = false;
 
   get dataNote() {
     return {
@@ -91,6 +92,11 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
       if (noCurrentItem) {
         this.sideNavItems.find(x => x.name === 'notes').isCurrent = true;
       }
+
+       // Listen to changes to toggle remove sticky class
+    this.sharedService.removeSticky$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(res => {
+      res ? this.removeSticky = true : this.removeSticky = false;
+    });
     });
   }
 
