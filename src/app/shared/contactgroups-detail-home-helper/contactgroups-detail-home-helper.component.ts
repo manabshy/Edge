@@ -29,7 +29,7 @@ export class ContactgroupsDetailHomeHelperComponent implements OnChanges {
   }
 
   getHomeHelpers() {
-    this.homeHelpers$ = this.peopleService.getHomeHelpers(0, this.isClosedIncluded)
+    this.homeHelpers$ = this.peopleService.getHomeHelpers(this.personId, this.isClosedIncluded)
       .pipe(
         catchError((error: WedgeError) => {
           return EMPTY;
