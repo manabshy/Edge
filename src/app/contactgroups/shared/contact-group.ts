@@ -112,6 +112,7 @@ export interface BaseNote {
   createdBy: number;
   noteType?: number;
   hasEmailBody?: boolean;
+  emailBody?: string;
 }
 export interface ContactNote extends BaseNote {
   contactGroupId?: number;

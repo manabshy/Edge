@@ -202,6 +202,11 @@ export class NotesComponent implements OnInit, OnChanges {
     console.log(this.notes, 'new notes with flag');
 
     // this.showMoreLabel = this.toggleShowMoreLabel && note.hasEmailBody ? 'SHOW LESS' : 'SHOW MORE';
-    this.emailService.getEmailForNotes(note.id).subscribe(res => this.emailBody = res);
+    if (!note?.emailBody) {
+      this.emailService.getEmailForNotes(note.id).subscribe(res => {
+        this.emailBody = res;
+        note.emailBody = res;
+      });
+    }
   }
 }
