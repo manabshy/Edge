@@ -19,7 +19,7 @@ import { MessageService } from 'primeng/api';
 import { map, tap } from 'rxjs/operators';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 
-const PAGE_SIZE = 20;
+const PAGE_SIZE = 40;
 @Component({
   selector: 'app-lead-register',
   templateUrl: '../lead-register/lead-register.component.html',
