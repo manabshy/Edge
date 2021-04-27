@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { Subject } from 'rxjs';
 import { ValidationMessages, FormErrors } from '../shared/app-constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ValidationService {
+  noteIsRequiredSubject = new Subject<boolean>();
+  noteIsRequired$ = this.noteIsRequiredSubject.asObservable();
+
 
   constructor() { }
 
@@ -54,4 +58,7 @@ export class ValidationService {
     });
   }
 
+  setNoteIsRequired(required: boolean) {
+    this.noteIsRequiredSubject.next(required);
+  }
 }
