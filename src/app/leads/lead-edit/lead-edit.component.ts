@@ -135,6 +135,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     allParams$.subscribe(res => {
       this.setupQueryParams(res.queryParams);
       this.leadId = +res.params['leadId'] || 0;
+      console.log(this.isIdInCurrentList(this.leadId), 'in list');
 
       // Add !this.isIdInCurrentList(this.leadId) to reduce API calls. combineLatest (2 API calls)
       if (this.leadId && this.showSaveAndNext && !this.isIdInCurrentList(this.leadId)) {
@@ -190,7 +191,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
 
   isIdInCurrentList(leadId: number) {
     let exists = false;
-    console.log('in list', this.leadIds?.find(x => x === leadId));
+    console.log('in list', this.leadIds?.find(x => x === leadId),{leadId}, this.leadIds);
 
     return exists = this.leadIds?.find(x => x === leadId) ? true : false;
   }
@@ -726,6 +727,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     if (this.currentLeadIndex-- >= 0) {
       console.log('curent index', this.currentLeadIndex);
       this.disableNext = false;
+      this.noteIsRequired = false;
+
       this.getLeadTraversalInfo();
       // this.getPersonNotes();
       if (this.currentLeadIndex === 0) {

@@ -88,12 +88,12 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DropdownModule } from 'primeng/dropdown';
 import { MultiSelectModule } from 'primeng/multiselect';
-import {EditorModule} from 'primeng/editor';
-import {FileUploadModule} from 'primeng/fileupload';
-import {TabViewModule} from 'primeng/tabview';
+import { EditorModule } from 'primeng/editor';
+import { FileUploadModule } from 'primeng/fileupload';
+import { TabViewModule } from 'primeng/tabview';
 import { ChipModule } from 'primeng/chip';
-import {AutoCompleteModule} from 'primeng/autocomplete';
-import {ChipsModule} from 'primeng/chips';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { ChipsModule } from 'primeng/chips';
 
 
 
@@ -111,6 +111,7 @@ import { EmailSignatureComponent } from './components/email-signature/email-sign
 import { RedactedCardComponent } from './components/redacted-card/redacted-card.component';
 import { CompanyFinderComponent } from './components/company-finder/company-finder.component';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
+import { InfiniteScrollComponent } from './components/infinite-scroll/infinite-scroll.component';
 
 const components = [
   BreadcrumbComponent,
@@ -158,7 +159,8 @@ const components = [
   EmailComponent,
   EmailSignatureComponent,
   RedactedCardComponent,
-  CompanyFinderComponent
+  CompanyFinderComponent,
+  InfiniteScrollComponent,
 ];
 const pipes = [
   RoundingPipe,
@@ -168,7 +170,7 @@ const pipes = [
   HighlightPipe,
   BracketsNewLinePipe,
   ToPascalCasePipe,
-
+  SafeHtmlPipe,
 ];
 const directives = [
   AutocompleteOffDirective,
@@ -216,8 +218,8 @@ const externalModules = [
     components,
     pipes,
     directives,
-    SafeHtmlPipe,
   ],
+  
   imports: [
     CommonModule,
     ReactiveFormsModule,

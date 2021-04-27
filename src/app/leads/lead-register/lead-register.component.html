@@ -154,83 +154,85 @@
       <!-- <div *ngIf="filteredLeads" infiniteScroll [infiniteScrollDistance]="5" [infiniteScrollUpDistance]="1.5"
         [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"></div> -->
 
-      <div class="table">
-        <table class="table--mobile table--rowHover">
-          <thead>
-            <tr>
-              <th *ngIf="areLeadsAssignable" class="has--checkbox">
-                <!-- <a href *ngIf="areLeadsAssignable" (click)="selectAllLeadsForAssignment($event)"> -->
-                <span class="checkbox checkbox--noMargin" (change)="toggleSelectAllLeads()">
-                  <span>
-                    <input type="checkbox" id="assignAll" [attr.checked]="isSelectAllChecked ? 'checked' : null">
-                    <label for="assignAll">
-                      <!--Assign all-->&nbsp;
-                    </label>
-                  </span>
-                </span>
-                <!-- </a> -->
-              </th>
-              <th *ngIf="isClosedLeadFound">Status</th>
-              <th>Type</th>
-              <th>Person</th>
-              <th>Property</th>
-              <th>Chase Date</th>
-              <th>Chaser</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let lead of filteredLeads; let i = index;" (click)="navigateToEdit(lead)">
-              <td data-title="Assign" *ngIf="areLeadsAssignable" class="has--checkbox">
-                <span class="cell-content">
-                  <span class="checkbox checkbox--noMargin checkbox--only" (click)="$event.stopPropagation()">
+      <app-infinite-scroll (scrolled)="onScrollDown()">
+        <div class="table">
+          <table class="table--mobile table--rowHover">
+            <thead>
+              <tr>
+                <th *ngIf="areLeadsAssignable" class="has--checkbox">
+                  <!-- <a href *ngIf="areLeadsAssignable" (click)="selectAllLeadsForAssignment($event)"> -->
+                  <span class="checkbox checkbox--noMargin" (change)="toggleSelectAllLeads()">
                     <span>
-                      <input type="checkbox" [attr.id]="'assign'+i" [checked]="lead?.isChecked ? 'checked' : null"
-                        (change)="selectLeadForAssignment($event, lead)">
-                      <label [attr.for]="'assign'+i">
-                        <!--Assign-->&nbsp;
+                      <input type="checkbox" id="assignAll" [attr.checked]="isSelectAllChecked ? 'checked' : null">
+                      <label for="assignAll">
+                        <!--Assign all-->&nbsp;
                       </label>
                     </span>
                   </span>
-                </span>
-              </td>
-              <td *ngIf="isClosedLeadFound">
-                <span class="cell-content">
-                  <span *ngIf="lead?.closedById" class="pill">Closed</span>
-                  <span *ngIf="!lead?.closedById" class="pill pill--positive">Active</span>
-                </span>
-              </td>
-              <td data-title="Type">
-                <span class="cell-content">
-                  {{lead?.leadType}}
-                </span>
-              </td>
-              <td data-title="Person">
-                <span class="cell-content">
-                  <a class="table-link" [routerLink]="['edit', lead?.leadId]"
-                    [queryParams]="{ showNotes: true,showSaveAndNext: true,leadSearchInfo: this.info}">
-                    {{lead?.person}}
-                  </a>
-                </span>
-              </td>
-              <td data-title="Property">
-                <span class="cell-content">
-                  {{(lead?.relatedProperty?.address|formatAddress) || '-'}}
-                </span>
-              </td>
-              <td data-title="Chase Date">
-                <span class="cell-content">
-                  {{(lead?.nextChaseDate | date: 'dd/MM/yyyy') || '-'}}
-                </span>
-              </td>
-              <td data-title="Chaser">
-                <span class="cell-content">
-                  {{lead?.owner || '-'}}
-                </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+                  <!-- </a> -->
+                </th>
+                <th *ngIf="isClosedLeadFound">Status</th>
+                <th>Type</th>
+                <th>Person</th>
+                <th>Property</th>
+                <th>Chase Date</th>
+                <th>Chaser</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let lead of filteredLeads; let i = index;" (click)="navigateToEdit(lead)">
+                <td data-title="Assign" *ngIf="areLeadsAssignable" class="has--checkbox">
+                  <span class="cell-content">
+                    <span class="checkbox checkbox--noMargin checkbox--only" (click)="$event.stopPropagation()">
+                      <span>
+                        <input type="checkbox" [attr.id]="'assign'+i" [checked]="lead?.isChecked ? 'checked' : null"
+                          (change)="selectLeadForAssignment($event, lead)">
+                        <label [attr.for]="'assign'+i">
+                          <!--Assign-->&nbsp;
+                        </label>
+                      </span>
+                    </span>
+                  </span>
+                </td>
+                <td *ngIf="isClosedLeadFound">
+                  <span class="cell-content">
+                    <span *ngIf="lead?.closedById" class="pill">Closed</span>
+                    <span *ngIf="!lead?.closedById" class="pill pill--positive">Active</span>
+                  </span>
+                </td>
+                <td data-title="Type">
+                  <span class="cell-content">
+                    {{lead?.leadType}}
+                  </span>
+                </td>
+                <td data-title="Person">
+                  <span class="cell-content">
+                    <a class="table-link" [routerLink]="['edit', lead?.leadId]"
+                      [queryParams]="{ showNotes: true,showSaveAndNext: true,leadSearchInfo: this.info}">
+                      {{lead?.person}}
+                    </a>
+                  </span>
+                </td>
+                <td data-title="Property">
+                  <span class="cell-content">
+                    {{(lead?.relatedProperty?.address|formatAddress) || '-'}}
+                  </span>
+                </td>
+                <td data-title="Chase Date">
+                  <span class="cell-content">
+                    {{(lead?.nextChaseDate | date: 'dd/MM/yyyy') || '-'}}
+                  </span>
+                </td>
+                <td data-title="Chaser">
+                  <span class="cell-content">
+                    {{lead?.owner || '-'}}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </app-infinite-scroll>
 
       <div class="text-center text-danger" *ngIf="!filteredLeads?.length">
         <i class="far fa-sad-tear"></i> No results for your current search
