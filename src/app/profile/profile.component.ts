@@ -65,6 +65,7 @@ export class ProfileComponent implements OnInit {
       this.isImpersonating = false;
       this.storage.delete('signature').subscribe();
       localStorage.removeItem('impersonatedStaffMemberId');
+      localStorage.removeItem('listingType');
       this.storage.delete('impersonatedStaffMember').subscribe();
       this.storage.get('originalUser').subscribe((data: StaffMember) => {
         if (data) {
@@ -93,6 +94,7 @@ export class ProfileComponent implements OnInit {
     this.storage.set('originalUser', this.currentStaffMember).subscribe();
     this.storage.delete('currentUser').subscribe();
     this.storage.delete('signature').subscribe();
+    localStorage.removeItem('listingType');
     this.isImpersonating = true;
     this.showImpersonation = false;
 

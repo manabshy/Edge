@@ -181,7 +181,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       this.leadRegisterForm.patchValue(this.leadSearchInfo);
       console.log('lead form after patch', this.leadRegisterForm.value);
 
-      // this.getLeads(this.leadSearchInfo);
+      this.getLeads(this.leadSearchInfo); // Investigate asap
     });
   }
 
