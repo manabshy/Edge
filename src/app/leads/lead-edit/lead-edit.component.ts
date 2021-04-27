@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy, ChangeDetectorRef, AfterContentChecked } from '@angular/core';
 import { AppUtils } from '../../core/shared/utils';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LeadsService } from '../shared/leads.service';
 import { Lead, LeadEditSubNavItems, LeadSearchInfo, ListingType } from '../shared/lead';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { InfoDetail, InfoService } from 'src/app/core/services/info.service';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl } from '@angular/forms';
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
 import { StaffMember } from 'src/app/shared/models/staff-member';
@@ -106,13 +106,18 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
   hideFooter = false;
   isUnassignedLead: boolean;
   removeSticky = false;
+  clearValidationErrors = false;
   get nextChaseDateControl() {
     return this.leadEditForm.get('nextChaseDate') as FormControl;
+  }
+  get leadTypeControl() {
+    return this.leadEditForm.get('leadTypeId') as FormControl;
   }
 
   constructor(private leadsService: LeadsService,
     private route: ActivatedRoute,
     private router: Router,
+    private ref: ChangeDetectorRef,
     private location: Location,
     private storage: StorageMap,
     private fb: FormBuilder,
@@ -154,6 +159,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
       data.closeLead ? this.isLeadMarkedAsClosed = true : this.isLeadMarkedAsClosed = false;
     });
 
+    this.setValidationForLeadType(this.leadTypeControl);
+
     // Remove contact groups from side nav items
     this.sideNavItems.splice(this.sideNavItems.findIndex(x => x.name === 'contactGroups'), 1);
     // Set notes as current item
@@ -163,6 +170,15 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     // Listen to changes to toggle remove sticky class
     this.sharedService.removeSticky$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(res => {
       res ? this.removeSticky = true : this.removeSticky = false;
+    });
+  }
+
+  private setValidationForLeadType(control: AbstractControl) {
+    control?.valueChanges.subscribe(data => {
+      if (control.dirty) {
+        this.validationService.setNoteIsRequired(true);
+        this.logValidationErrors(this.leadEditForm, true);
+      }
     });
   }
 
@@ -191,7 +207,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
 
   isIdInCurrentList(leadId: number) {
     let exists = false;
-    console.log('in list', this.leadIds?.find(x => x === leadId),{leadId}, this.leadIds);
+    console.log('in list', this.leadIds?.find(x => x === leadId), { leadId }, this.leadIds);
 
     return exists = this.leadIds?.find(x => x === leadId) ? true : false;
   }
@@ -312,7 +328,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     Object.keys(group.controls).forEach((key: string) => {
       const control = group.get(key);
       const messages = ValidationMessages[key];
-      if (control.valid) { FormErrors[key] = ''; }
+      if (control.valid || this.clearValidationErrors) { FormErrors[key] = ''; }
       if (control && !control.valid && (fakeTouched || control.dirty)) {
         console.log('errors ', control.errors);
         FormErrors[key] = '';
@@ -411,6 +427,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     if (id) {
       this.leadEditForm.patchValue({ ownerId: id });
       console.log('chaser id here', this.leadEditForm.get('ownerId').value);
+      this.validationService.setNoteIsRequired(true);
+      this.logValidationErrors(this.leadEditForm, true);
     } else {
       this.leadEditForm.patchValue({ ownerId: null });
       console.log('no chaser id id here', this.leadEditForm.get('ownerId').value);
@@ -437,7 +455,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
       if (!isEqual(newChaseDate, this.lead.nextChaseDate) && this.nextChaseDateControl.touched) {
         this.isNextChaseDateChanged = true;
         console.log('note here', this.note, { newChaseDate }, this.lead.nextChaseDate);
-        this.note?.text ? this.noteIsRequired = false : this.noteIsRequired = true;
+        // this.note?.text ? this.noteIsRequired = false : this.noteIsRequired = true;
+        this.validationService.setNoteIsRequired(true);
       } else {
         this.noteIsRequired = false;
       }
@@ -728,7 +747,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
       console.log('curent index', this.currentLeadIndex);
       this.disableNext = false;
       this.noteIsRequired = false;
-
+      this.clearValidationErrors = true;
       this.getLeadTraversalInfo();
       // this.getPersonNotes();
       if (this.currentLeadIndex === 0) {

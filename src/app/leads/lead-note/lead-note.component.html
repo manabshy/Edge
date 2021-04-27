@@ -9,7 +9,7 @@
   <div class="card__body">
     <form [formGroup]="noteForm" (ngSubmit)="action(true)">
 
-      <fieldset [ngClass]="{'invalid': noteIsRequired}">
+      <fieldset [ngClass]="{'invalid': showErrorMessage}">
         <textarea #note class="form-control" name="note" id="note" cols="30" rows="5"
           placeholder="Please give as much detail as possible." (keydown)="ctrlEnterSubmit($event)"
           formControlName="text" [attr.disabled] = "isDisabled ? true : null" ></textarea>
