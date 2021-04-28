@@ -56,7 +56,7 @@ export class AppInterceptor implements HttpInterceptor {
   }
 
   private handleError(err: HttpErrorResponse, url: string): Observable<WedgeError> | Observable<any> {
-    const message = 'Unable to retrieve infromation from the server';
+    const message = 'Unable to retrieve information from the server';
     const wedgeError = new WedgeError();
     if (err.error instanceof ErrorEvent) {
       wedgeError.displayMessage = `An error occurred: ${err.error.message}`;

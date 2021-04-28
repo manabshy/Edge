@@ -470,6 +470,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
       nextChaseDateControl.clearValidators();
       nextChaseDateControl.updateValueAndValidity();
     }
+    this.validationService.setNoteIsRequired(true);
   }
 
   removeProperty() {
