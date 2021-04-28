@@ -36,7 +36,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   leadRegisterForm: FormGroup;
   staffMembers: StaffMember[];
   offices: Office[];
-  page: number = 0;
+  page = 0;
   groupsLength: number;
   filteredLeads: Lead[];
   // leads: Lead[];
@@ -48,7 +48,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   errorMessage: WedgeError;
   info: string;
   isClosedIncluded: boolean;
-  canSeeUnassignable: boolean = false;
+  canSeeUnassignable = false;
   isAdvancedSearchVisible = false;
   showModal = false;
   newLeadOwnerId: number;
@@ -56,7 +56,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   isLoading = false;
   isClosedLeadFound = false;
   isSubmitting = false;
-  defaultListingType: number;
+  defaultListingType = 1;
 
   leadFilters: { name: string; value: number }[] = [
     { value: 1, name: 'My leads' },

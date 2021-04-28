@@ -527,36 +527,34 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
   SaveLead(shouldExit: boolean = false, leadNote = null) {
     this.logValidationErrors(this.leadEditForm, true, true);
     // this.exitOnSave = shouldExit;
-    if (this.leadEditForm.valid) {
+    console.log(this.leadEditForm, 'form here');
+
+    if (this.leadEditForm.invalid) { return; }
+
+    if (this.leadEditForm.dirty || this.isNoteFormDirty || this.isPropertyAssociated || this.isPropertyRemoved || this.isOwnerChanged) {
+      const lead = { ...this.lead, ...this.leadEditForm.value } as Lead;
       this.isSubmitting = true;
+      // let test = zonedTimeToUtc( lead.nextChaseDate, londonTimeZone);
+      // let iso = lead.nextChaseDate.getUTCDate();
+      // // lead.nextChaseDate = zonedTimeToUtc( lead.nextChaseDate, londonTimeZone);
+      // console.log({lead}, {test},{iso});
 
-      if (this.leadEditForm.dirty || this.isNoteFormDirty || this.isPropertyAssociated || this.isPropertyRemoved || this.isOwnerChanged) {
-        const lead = { ...this.lead, ...this.leadEditForm.value } as Lead;
-        // let test = zonedTimeToUtc( lead.nextChaseDate, londonTimeZone);
-        // let iso = lead.nextChaseDate.getUTCDate();
-        // // lead.nextChaseDate = zonedTimeToUtc( lead.nextChaseDate, londonTimeZone);
-        // console.log({lead}, {test},{iso});
-
-        const isNoteRequired = this.isLeadMarkedAsClosed || this.isNextChaseDateChanged;
-        if (this.note === undefined) { this.note = {} as ContactNote; }
-        if (isNoteRequired && !this.note.text) {
-          this.noteIsRequired = true;
-          setTimeout(() => {
-            this.sharedService.scrollToFirstInvalidField();
-          });
-          return;
-        } else {
-          this.noteIsRequired = false;
-        }
-        this.AddOrUpdateLead(lead);
+      const isNoteRequired = this.isLeadMarkedAsClosed || this.isNextChaseDateChanged;
+      if (this.note === undefined) { this.note = {} as ContactNote; }
+      if (isNoteRequired && !this.note.text) {
+        this.noteIsRequired = true;
+        setTimeout(() => {
+          this.sharedService.scrollToFirstInvalidField();
+        });
+        return;
       } else {
-        if (!this.isChaseDateInvalid && this.isSaveAndNext) {
-          this.moveToNextLead();
-        }
+        this.noteIsRequired = false;
       }
+      this.AddOrUpdateLead(lead);
     } else {
-      this.errorMessage = {} as WedgeError;
-      this.errorMessage.displayMessage = 'Please correct validation errors';
+      if (!this.isChaseDateInvalid && this.isSaveAndNext) {
+        this.moveToNextLead();
+      }
     }
 
   }
