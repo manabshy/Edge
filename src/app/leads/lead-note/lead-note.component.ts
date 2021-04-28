@@ -62,7 +62,11 @@ export class LeadNoteComponent extends BaseComponent implements OnInit, OnChange
       if (val) {
         this.showErrorMessage = false;
         this.note = val.text;
-        this.leadNote.emit(this.getNote());
+        console.log({ val });
+
+        if (val.text) {
+          this.leadNote.emit(this.getNote());
+        }
       }
     });
 
