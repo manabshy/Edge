@@ -56,7 +56,7 @@ app-telephone                                   { width:100%; display:flex; alig
 .headerMobile-nav li                            { margin:0; padding:0; width:50px; height:60px; flex-grow:1; display:flex; align-items:center; }
 .headerMobile-nav li.backLink .icon             { width:24px; height:24px; }
 
-.headerMobile-nav li.stag                       { justify-content:center; flex-grow:2; color:$color--snow; }
+.headerMobile-nav li.stag                       { justify-content:center; align-items:flex-end; flex-grow:2; color:$color--snow; }
 .headerMobile-nav li.stag a                     { justify-content:center; align-items:flex-end; }
 .headerMobile-nav li.stag .icon                 { height:50px; width:auto; top:0; }
 
