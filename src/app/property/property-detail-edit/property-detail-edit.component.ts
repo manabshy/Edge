@@ -372,12 +372,12 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
       property.mapCentre.longitude = this.propertyLocation.longitude;
     }
 
-    console.log('property to be added', property)
     if (this.isNewProperty) {
       if (this.isMatchFound) {
+        console.log('property to be added when full match is found', property)
         this.showMatches = true; // To be removed
         this.checkPossibleDuplicates = true;
-
+        this.isDuplicateCheckerVisible = true;
         this.propertyService.displayDuplicates(this.showMatches);
       } else {
         this.isSubmitting = true;
