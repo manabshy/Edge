@@ -107,6 +107,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
   isUnassignedLead: boolean;
   removeSticky = false;
   clearValidationErrors = false;
+  isLeadTypeChanged = false;
   get nextChaseDateControl() {
     return this.leadEditForm.get('nextChaseDate') as FormControl;
   }
@@ -160,7 +161,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     });
 
     this.setValidationFor(this.nextChaseDateControl);
-    this.setValidationFor(this.leadTypeControl);
+    this.setValidationFor(this.leadTypeControl, true);
 
     // Remove contact groups from side nav items
     this.sideNavItems.splice(this.sideNavItems.findIndex(x => x.name === 'contactGroups'), 1);
@@ -174,11 +175,12 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     });
   }
 
-  private setValidationFor(control: AbstractControl) {
+  private setValidationFor(control: AbstractControl, setLeadTypeChangeFlag?: boolean) {
     control?.valueChanges.subscribe(data => {
       if (control.dirty) {
         this.validationService.setNoteIsRequired(true);
         this.logValidationErrors(this.leadEditForm, true);
+        if (setLeadTypeChangeFlag) { this.isLeadTypeChanged = true; }
       }
     });
   }
@@ -539,9 +541,13 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
       const formattedDate = format(lead.nextChaseDate, 'yyyy-MM-dd');
       lead.nextChaseDate = new Date(formattedDate);
 
-      const isNoteRequired = this.isLeadMarkedAsClosed || this.isNextChaseDateChanged;
+      const isNoteRequired = this.isLeadMarkedAsClosed || this.isNextChaseDateChanged || this.isOwnerChanged || this.isLeadTypeChanged;
+      console.log(this.isLeadTypeChanged, 'type change');
+
       if (this.note === undefined) { this.note = {} as ContactNote; }
-      if (isNoteRequired && !this.note.text) {
+
+      if (isNoteRequired && !this.note?.text && !this.isNewLead) {
+        console.log(this.note, 'note');
         this.noteIsRequired = true;
         setTimeout(() => {
           this.sharedService.scrollToFirstInvalidField();
@@ -638,6 +644,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
       this.isNextChaseDateChanged = false;
     }
 
+    if (this.isLeadTypeChanged) { this.isLeadTypeChanged = false; }
     if (this.isLeadMarkedAsClosed) { this.canEditLead = false; }
 
     this.redirectOnSave(lead);
