@@ -616,8 +616,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
   }
 
   private onSaveComplete(lead?: Lead) {
-    console.log('i am here in OnUpdateCompleted');
-
+    this.note = null;
+    console.log('i am here in OnUpdateCompleted', this.note);
     let time: number;
     this.isPropertyAssociated = false;
     this.isPropertyRemoved = false;
