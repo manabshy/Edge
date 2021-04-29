@@ -86,11 +86,9 @@ export class AppComponent extends BaseComponent implements OnInit {
       console.log('current Patch: ', current);
       console.log('condition:', current === '/' && this.serviceWorker.isUpdateAvailable);
 
-      const calendar = '/?selectedTab=0';
       const homes = [
         '/',
         '/contact-centre',
-        calendar,
         '/leads-register',
         '/company-centre',
         '/property-centre',

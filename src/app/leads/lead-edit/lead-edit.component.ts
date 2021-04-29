@@ -368,7 +368,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
   }
 
   private setCanEditFlag() {
-    const listingType = this.leadSearchInfo?.listingType ?? 0;
+    const listingType = this.leadSearchInfo?.listingType ?? 1;
+    console.log(this.leadSearchInfo, 'info', listingType, 'listing type');
     switch (true) {
       case this.isMyLead && !this.isLeadClosed:
         this.canEditLead = true;
@@ -602,7 +603,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
           this.isChaseDateInvalid = false;
         }
         console.log('is chase date invalid', this.isChaseDateInvalid);
-        if (!this.isChaseDateInvalid && this.isSaveAndNext) {
+        if (!this.isChaseDateInvalid && this.isSaveAndNext && !this.isLeadMarkedAsClosed) {
           console.log('is chase date invalid 2', this.isChaseDateInvalid);
           this.moveToNextLead();
         } else {
@@ -771,7 +772,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
       this.isSaveAndNext = true;
       this.SaveLead(false, this.note);
       this.note = null;
-      console.log('note', this.note);
     } else {
       console.log('move without saving');
 
