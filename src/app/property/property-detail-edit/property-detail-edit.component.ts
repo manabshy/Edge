@@ -190,7 +190,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
   }
 
   onSelectType(propertyTypeId: number) {
-    this.propertyStyles = this.allPropertyStyles.filter((x: InfoDetail) => +x.parentId === +propertyTypeId);
+    this.propertyStyles = this.allPropertyStyles?.filter((x: InfoDetail) => +x.parentId === +propertyTypeId);
     this.propertyForm.get('propertyStyleId').setValue(0);
   }
 
@@ -201,7 +201,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
   }
 
   onSelectArea(areaId: number) {
-    this.subAreas = this.allSubAreas.filter((x: InfoDetail) => +x.parentId === +areaId);
+    this.subAreas = this.allSubAreas?.filter((x: InfoDetail) => +x.parentId === +areaId);
     this.propertyForm.get('subAreaId').setValue(0);
   }
 
@@ -269,7 +269,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
     this.isLastknownOwnerVisible = false;
   }
 
-  showLastKnowOwnerModal(){
+  showLastKnowOwnerModal() {
     this.isLastknownOwnerVisible = true;
     this.lastKnownOwnerModalHeader = 'Last known owner';
   }
@@ -287,12 +287,15 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
       this.propertyForm.markAsPristine();
       this.propertyForm.clearValidators();
       this.propertyForm.updateValueAndValidity();
-    }
-    if (this.lastKnownPerson) {
-      this._router.navigate(['/property-centre/detail', property.propertyId, 'edit'],
-        { queryParams: { leadId: this.leadId, personId: this.personId, lastKnownPerson: JSON.stringify(this.lastKnownPerson) } });
-    } else {
+      this.isLastknownOwnerVisible = false;
       this._router.navigate(['/property-centre/detail', property.propertyId]);
+      // if (this.lastKnownPerson) {
+      // this.lastKnownOwner = property.lastKnownOwner;
+      //   this._router.navigate(['/property-centre/detail', property.propertyId, 'edit'],
+      //     { queryParams: { leadId: this.leadId, personId: this.personId, lastKnownPerson: JSON.stringify(this.lastKnownPerson) } });
+      // } else {
+      //   this._router.navigate(['/property-centre/detail', property.propertyId]);
+      // }
     }
   }
 
