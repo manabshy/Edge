@@ -160,8 +160,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
       data.closeLead ? this.isLeadMarkedAsClosed = true : this.isLeadMarkedAsClosed = false;
     });
 
-    this.setValidationFor(this.nextChaseDateControl);
-    this.setValidationFor(this.leadTypeControl, true);
+    this.setValidationFor(this.nextChaseDateControl, 'chaseDate');
+    this.setValidationFor(this.leadTypeControl, 'leadType');
 
     // Remove contact groups from side nav items
     this.sideNavItems.splice(this.sideNavItems.findIndex(x => x.name === 'contactGroups'), 1);
@@ -175,12 +175,13 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     });
   }
 
-  private setValidationFor(control: AbstractControl, setLeadTypeChangeFlag?: boolean) {
+  private setValidationFor(control: AbstractControl, flagType: string) {
     control?.valueChanges.subscribe(data => {
       if (control.dirty) {
+        if (flagType === 'leadType') { this.isLeadTypeChanged = true; }
+        if (flagType === 'chaseDate') { this.isNextChaseDateChanged = true; }
         this.validationService.setNoteIsRequired(true);
         this.logValidationErrors(this.leadEditForm, true);
-        if (setLeadTypeChangeFlag) { this.isLeadTypeChanged = true; }
       }
     });
   }
