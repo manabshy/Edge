@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, OnChanges, HostListener, ViewChild, AfterViewInit } from '@angular/core';
 import { LeadsService } from '../shared/leads.service';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
-import { Lead, LeadSearchInfo } from '../shared/lead';
+import { Lead, LeadSearchInfo, ListingType } from '../shared/lead';
 import { StaffMember, Office } from 'src/app/shared/models/staff-member';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { DropdownListInfo, InfoDetail, InfoService } from 'src/app/core/services/info.service';
@@ -56,7 +56,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   isLoading = false;
   isClosedLeadFound = false;
   isSubmitting = false;
-  defaultListingType = 1;
+  defaultListingType = ListingType.MyLeads;
 
   leadFilters: { name: string; value: number }[] = [
     { value: 1, name: 'My leads' },
@@ -148,7 +148,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
         this.bottomReached = false;
         const seeAllLeadsPermission = this.currentStaffMember.permissions.find(x => x.permissionId === 69);
         seeAllLeadsPermission ? this.canSeeUnassignable = true : this.canSeeUnassignable = false;
-        this.defaultListingType = this.canSeeUnassignable ? 2 : 1;
+        this.defaultListingType = this.canSeeUnassignable ? ListingType.OtherUserLeads : ListingType.MyLeads;
         localStorage.setItem('listingType', this.defaultListingType.toString());
         this.page = 0;
         this.leadSearchInfo = {
@@ -224,7 +224,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       includeClosedLeads: [],
       dateFrom: [],
       dateTo: [],
-      listingType: [1],
+      listingType: [this.defaultListingType],
       includeUnassignedLeadsOnly: [false],
       leadSearchTerm: ['']
     });
