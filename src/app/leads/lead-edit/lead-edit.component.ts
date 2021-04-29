@@ -780,6 +780,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     if (save) {
       this.isSaveAndNext = true;
       this.SaveLead(false, this.note);
+      this.note = null;
       console.log('note', this.note);
     } else {
       console.log('move without saving');
