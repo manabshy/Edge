@@ -32,6 +32,7 @@ export interface Lead {
   leadTypeIds?: number[];
   leadType: string;
   relatedProperty: LeadProperty;
+  isPropertyOwner?: boolean;
   officeId: number;
   officeIds?: number[];
   createdDate: Date;

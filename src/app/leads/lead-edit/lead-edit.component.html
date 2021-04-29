@@ -101,6 +101,7 @@
               <ol class="list">
                 <li [routerLink]="['/property-centre/detail/', lead?.relatedProperty?.propertyId]">
                   {{lead?.relatedProperty?.address | formatAddress}}
+                  <span class="pill pill--negative pill--onRight" *ngIf="!lead?.isPropertyOwner">Not the Owner</span>
                   <div class="btn--container flexRight">
                     <button class="btn btn--ghost btn--hoverNegative" type="button" aria-label="remove"
                       (click)="removeProperty()" *ngIf="!isMessageVisible && !isLeadClosed"
