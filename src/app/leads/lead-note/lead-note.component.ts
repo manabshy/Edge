@@ -75,7 +75,7 @@ export class LeadNoteComponent extends BaseComponent implements OnInit, OnChange
 
   ngOnChanges() {
     if (this.isUpdateComplete) {
-      this.noteForm.reset();
+      this.noteForm?.reset();
     }
   }
 

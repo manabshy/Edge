@@ -144,7 +144,7 @@
         <button (click)="cancel()" type="button" class="btn btn--ghost">View Register</button>
         <button *ngIf="!isNewLead" (click)="traverseLeads(false, true)" type="button" class="btn btn--ghost" [attr.disabled]="disablePrevious ? '':null">Previous</button>
         <span class="txt--center" *ngIf="!isNewLead"><strong>{{currentLeadIndex + 1}} of {{leadIds?.length}}</strong></span>
-        <ng-container *ngIf="canEditLead;else noEdit">
+        <ng-container *ngIf="canEditLead; else noEdit">
           <button type="submit" class="btn btn--positive" id="saveLead" data-cy="saveLead" *ngIf="!isLeadClosed">Save</button>
           <button *ngIf="showSaveAndNext && !isLeadClosed" (click)="traverseLeads(true)"
             type="button" class="btn btn--positive" [isOpen]="leadsListCompleted"

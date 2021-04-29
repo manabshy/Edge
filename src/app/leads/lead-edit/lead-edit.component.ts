@@ -637,20 +637,12 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
       this.isNextChaseDateChanged = false;
     }
 
-    // let url = this.router.url;
-    // let id = this.leadId;
-    // if (url.indexOf('edit/' + id) === -1) {
-    //   id = 0;
-    // }
-    // if (url.indexOf('?') >= 0 && this.isNewLead) {
-    //   url = url.substring(0, url.indexOf('?'));
-    //   url = url.replace('edit/' + id, 'edit/' + lead.leadId);
-    //   this.location.replaceState(url);
-    //   this.isNewLead = false;
-    //   this.leadId = lead.leadId;
-    //   this.router.navigate(['/leads-register/edit/', this.leadId]);
-    //   this.init();
-    // }
+    if (this.isLeadMarkedAsClosed) { this.canEditLead = false; }
+
+    this.redirectOnSave(lead);
+  }
+
+  private redirectOnSave(lead: Lead) {
     if (lead) {
       this.leadId = lead.leadId;
       this.lead = lead;
@@ -659,8 +651,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
       if (this.exitOnSave && this.backToOrigin) {
         console.log('exist on save', this.exitOnSave);
         this.router.navigate(['/leads-register/edit/', this.leadId], {
-          queryParams:
-            { showNotes: true, isMyLead: true, exitOnSave: this.exitOnSave }
+          queryParams: { showNotes: true, isMyLead: true, exitOnSave: this.exitOnSave }
         });
       } else if (this.currentUrl) {
         this.router.navigateByUrl(this.currentUrl, { replaceUrl: true });
@@ -679,7 +670,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
       //     //   this.router.navigate(['/leads-register/edit/', this.leadId]);
       //     // });
       //   }
-
       // }
     }
   }
