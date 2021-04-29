@@ -19,7 +19,7 @@ import { BaseComponent } from 'src/app/shared/models/base-component';
 import { LeadNoteComponent } from '../lead-note/lead-note.component';
 import { ValidationMessages, FormErrors } from 'src/app/core/shared/app-constants';
 import { Location } from '@angular/common';
-import { isEqual, addDays } from 'date-fns';
+import { isEqual, addDays, format } from 'date-fns';
 import { WedgeValidators } from 'src/app/shared/wedge-validators';
 import { SubNavItem } from 'src/app/shared/subnav';
 import { ResultData } from 'src/app/shared/result-data';
@@ -535,10 +535,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     if (this.leadEditForm.dirty || this.isNoteFormDirty || this.isPropertyAssociated || this.isPropertyRemoved || this.isOwnerChanged) {
       const lead = { ...this.lead, ...this.leadEditForm.value } as Lead;
       this.isSubmitting = true;
-      // let test = zonedTimeToUtc( lead.nextChaseDate, londonTimeZone);
-      // let iso = lead.nextChaseDate.getUTCDate();
-      // // lead.nextChaseDate = zonedTimeToUtc( lead.nextChaseDate, londonTimeZone);
-      // console.log({lead}, {test},{iso});
+      const formattedDate = format(lead.nextChaseDate, 'yyyy-MM-dd');
+      lead.nextChaseDate = new Date(formattedDate);
 
       const isNoteRequired = this.isLeadMarkedAsClosed || this.isNextChaseDateChanged;
       if (this.note === undefined) { this.note = {} as ContactNote; }
