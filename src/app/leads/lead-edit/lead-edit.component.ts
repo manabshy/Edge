@@ -159,7 +159,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
       data.closeLead ? this.isLeadMarkedAsClosed = true : this.isLeadMarkedAsClosed = false;
     });
 
-    this.setValidationForLeadType(this.leadTypeControl);
+    this.setValidationFor(this.nextChaseDateControl);
+    this.setValidationFor(this.leadTypeControl);
 
     // Remove contact groups from side nav items
     this.sideNavItems.splice(this.sideNavItems.findIndex(x => x.name === 'contactGroups'), 1);
@@ -173,7 +174,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     });
   }
 
-  private setValidationForLeadType(control: AbstractControl) {
+  private setValidationFor(control: AbstractControl) {
     control?.valueChanges.subscribe(data => {
       if (control.dirty) {
         this.validationService.setNoteIsRequired(true);
