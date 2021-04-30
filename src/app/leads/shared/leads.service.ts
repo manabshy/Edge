@@ -110,7 +110,7 @@ export class LeadsService {
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
       fromObject: {
-        ownerId: leadSearchInfo.ownerId != null ? leadSearchInfo.ownerId.toString() : '',
+        ownerId: leadSearchInfo?.ownerId != null ? leadSearchInfo?.ownerId?.toString() : '',
         personId: leadSearchInfo.personId != null ? leadSearchInfo.personId.toString() : '',
         leadTypeIds: leadSearchInfo.leadTypeIds != null ? leadSearchInfo.leadTypeIds.toString() : '',
         officeIds: leadSearchInfo.officeIds != null ? leadSearchInfo.officeIds.toString() : '',
