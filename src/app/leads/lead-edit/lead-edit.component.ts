@@ -19,7 +19,7 @@ import { BaseComponent } from 'src/app/shared/models/base-component';
 import { LeadNoteComponent } from '../lead-note/lead-note.component';
 import { ValidationMessages, FormErrors } from 'src/app/core/shared/app-constants';
 import { Location } from '@angular/common';
-import { isEqual, addDays, format } from 'date-fns';
+import { isEqual, addDays, format, isPast, parseISO } from 'date-fns';
 import { WedgeValidators } from 'src/app/shared/wedge-validators';
 import { SubNavItem } from 'src/app/shared/subnav';
 import { ResultData } from 'src/app/shared/result-data';
@@ -141,14 +141,16 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     allParams$.subscribe(res => {
       this.setupQueryParams(res.queryParams);
       this.leadId = +res.params['leadId'] || 0;
-      console.log(this.isIdInCurrentList(this.leadId), 'in list');
+      console.log('showSaveAndNext', this.showSaveAndNext);
 
       // Add !this.isIdInCurrentList(this.leadId) to reduce API calls. combineLatest (2 API calls)
       if (this.leadId && this.showSaveAndNext && !this.isIdInCurrentList(this.leadId)) {
         this.getLeadIds(this.leadId);
       }
 
-      this.hideFooter = !(this.leadSearchInfo || this.isNewLead || this.isMyLead) ? true : false;
+      this.hideFooter = !(this.showSaveAndNext || this.isNewLead || this.isMyLead) ? true : false;
+      console.log(this.hideFooter, 'hide footer');
+
     }
     );
 
@@ -178,8 +180,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
   private setValidationFor(control: AbstractControl, flagType: string) {
     control?.valueChanges.subscribe(data => {
       if (control.dirty) {
-        if (flagType === 'leadType') { this.isLeadTypeChanged = true; }
-        if (flagType === 'chaseDate') { this.isNextChaseDateChanged = true; }
+        // if (flagType === 'leadType') { this.isLeadTypeChanged = true; }
+        // if (flagType === 'chaseDate') { this.isNextChaseDateChanged = true; }
         this.validationService.setNoteIsRequired(true);
         this.logValidationErrors(this.leadEditForm, true);
       }
@@ -457,13 +459,15 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
 
   onChaseDateChange(newChaseDate: Date) {
     if (this.lead && this.lead.nextChaseDate) {
-      if (!isEqual(newChaseDate, this.lead.nextChaseDate) && this.nextChaseDateControl.touched) {
+      // if (!isEqual(newChaseDate, this.lead.nextChaseDate) && this.nextChaseDateControl.touched) {
+      if (isPast(parseISO(this.lead.nextChaseDate.toString())) && this.nextChaseDateControl.touched) {
         this.isNextChaseDateChanged = true;
-        console.log('note here', this.note, { newChaseDate }, this.lead.nextChaseDate);
+        console.log('next chase date changes', this.note, { newChaseDate }, this.lead.nextChaseDate);
         // this.note?.text ? this.noteIsRequired = false : this.noteIsRequired = true;
         this.validationService.setNoteIsRequired(true);
       } else {
-        this.noteIsRequired = false;
+        this.isNextChaseDateChanged = false;
+        console.log('next chase date changes shuld be valid', this.note, { newChaseDate }, this.lead.nextChaseDate);
       }
     }
   }
@@ -543,6 +547,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
       lead.nextChaseDate = new Date(formattedDate);
 
       const isNoteRequired = this.isLeadMarkedAsClosed || this.isNextChaseDateChanged || this.isOwnerChanged || this.isLeadTypeChanged;
+      console.log(this.isLeadMarkedAsClosed, 'CLOSED', this.isNextChaseDateChanged, 'CHASE', this.isOwnerChanged, 'OWNER', this.isLeadTypeChanged, 'type');
+
       console.log(this.isLeadTypeChanged, 'type change');
 
       if (this.note === undefined) { this.note = {} as ContactNote; }
@@ -641,9 +647,10 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     this.isSaveAndNext = false;
     this.isUpdateComplete = true;
     this.leadsService.isLeadUpdated(true);
-    if (this.isNextChaseDateChanged) {
-      this.isNextChaseDateChanged = false;
-    }
+    this.isNextChaseDateChanged = false;
+
+    console.log('change 2', this.isNextChaseDateChanged);
+
 
     if (this.isLeadTypeChanged) { this.isLeadTypeChanged = false; }
     if (this.isLeadMarkedAsClosed) { this.canEditLead = false; }
