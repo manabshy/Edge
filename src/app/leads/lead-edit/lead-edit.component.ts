@@ -473,13 +473,17 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
   }
 
   closeLeadChanged(lead: Lead) {
+
     const nextChaseDateControl = this.leadEditForm.get('nextChaseDate');
-    if (lead.nextChaseDate == null || nextChaseDateControl.value < new Date()) {
-      this.isValidatorCleared = true;
+    lead.isClosed = !lead.isClosed;
+    this.validationService.setNoteIsRequired(lead.isClosed);
+    if (lead.isClosed) {
       nextChaseDateControl.clearValidators();
-      nextChaseDateControl.updateValueAndValidity();
+    } else {
+      nextChaseDateControl.setValidators([Validators.required, WedgeValidators.nextChaseDateValidator()]);
     }
-    this.validationService.setNoteIsRequired(true);
+    nextChaseDateControl.updateValueAndValidity();
+
   }
 
   removeProperty() {

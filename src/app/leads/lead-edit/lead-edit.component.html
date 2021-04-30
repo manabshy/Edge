@@ -86,7 +86,7 @@
               </fieldset>
             </div>
 
-            <fieldset *ngIf="canEditLead">
+            <fieldset *ngIf="canEditLead" class="close-lead">
               <span class="checkbox">
                 <span>
                   <input type="checkbox" id="closeLead" formControlName="closeLead" (change)="closeLeadChanged(lead)"  [attr.disabled]="!canClose ? '':null">
