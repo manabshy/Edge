@@ -1,8 +1,8 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { PropertyDetailComponent } from './property-detail.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { FormatAddressPipe } from 'src/app/core/shared/format-address.pipe';
+import { FormatAddressPipe } from 'src/app/shared/pipes/format-address.pipe';
 import { PropertyService } from '../shared/property.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BrowserModule } from '@angular/platform-browser';
@@ -12,13 +12,13 @@ import { SharedService } from 'src/app/core/services/shared.service';
 import { ToastrService } from 'ngx-toastr';
 import { of } from 'rxjs';
 
-fdescribe('PropertyDetailComponent should', () => {
+describe('PropertyDetailComponent should', () => {
   let component: PropertyDetailComponent;
   let fixture: ComponentFixture<PropertyDetailComponent>;
   let mockPropertyService;
   let mockSharedService;
   let mockToastrService = {};
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ PropertyDetailComponent, FormatAddressPipe ],
       imports: [
@@ -26,7 +26,7 @@ fdescribe('PropertyDetailComponent should', () => {
         // BrowserModule,
         FormsModule,
         ReactiveFormsModule,
-        RouterModule.forRoot([])
+        RouterModule.forRoot([], { relativeLinkResolution: 'legacy' })
       ],
       providers: [
         FormatAddressPipe,

@@ -1,0 +1,56 @@
+<div class="title">
+  <h2>Instructions</h2>
+  <span class="checkbox checkbox--rtl" *ngIf="closedCounter">
+    <span>
+      <input type="checkbox" [(ngModel)]="hidePrevious" (change)="getInstructions()" class="custom-control-input" id="previousInstructions">
+      <label for="previousInstructions">Hide previous instructions</label>
+    </span>
+  </span>
+</div>
+
+<ng-container *ngIf="instructions$ | async as instructions">
+  <div class="table">
+    <app-redacted-table *ngIf="!instructions || !instructions?.length" message="No instructions"></app-redacted-table>
+    <table class="table--mobile table--rowHover" *ngIf="instructions && instructions?.length">
+      <thead>
+        <tr>
+          <th>Status</th>
+          <th *ngIf="instructions[0]?.propertyAddress">Address</th>
+          <th>Sales</th>
+          <th>Long Let</th>
+          <th>Short Let</th>
+          <th>Lister</th>
+          <th>Instructed</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let instruction of instructions">
+          <td data-title="Status">
+            <span class="cell-content" *ngIf="instruction.isActive"><span class="pill pill--positive">{{instruction?.status}}</span></span>
+            <span class="cell-content" *ngIf="!instruction.isActive"><span class="pill">{{instruction?.status}}</span></span>
+          </td>
+          <td *ngIf="instruction?.propertyAddress" data-title="Address">
+            <span class="cell-content">{{instruction?.propertyAddress}}</span>
+          </td>
+          <td data-title="Sales">
+            <span class="cell-content" *ngIf="instruction?.askingPrice, else noValue">{{instruction?.askingPrice | currency:'GBP':'symbol':'1.0-0'}}</span>
+          </td>
+          <td data-title="Long Let">
+            <span class="cell-content" *ngIf="instruction?.askingRent, else noValue">{{instruction?.askingRent | currency:'GBP':'symbol':'1.0-0'}} pw</span>
+          </td>
+          <td data-title="Short Let">
+            <span class="cell-content" *ngIf="instruction?.askingRentShortLet, else noValue">{{instruction?.askingRentShortLet | currency:'GBP':'symbol':'1.0-0'}} pw</span>
+          </td>
+          <td data-title="Lister">
+            <span class="cell-content">{{instruction?.staffMember}}</span>
+          </td>
+          <td data-title="Instructed">
+            <span class="cell-content">{{instruction?.instructionDate | date: 'dd/MM/yyyy'}}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</ng-container>
+
+<ng-template #noValue>-</ng-template>

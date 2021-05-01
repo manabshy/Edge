@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { AppConstants } from '../shared/app-constants';
 import { map, shareReplay, tap } from 'rxjs/operators';
-import { StaffMember, StaffMemberResult } from '../models/staff-member';
-import { Staff } from 'src/app/diary/shared/diary';
+import { StaffMember, StaffMemberResult, Impersonation, StaffMemberListResult } from '../../shared/models/staff-member';
 import { StorageMap } from '@ngx-pwa/local-storage';
+import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
 
 const CACHE_SIZE = 1;
 @Injectable({
@@ -14,9 +14,18 @@ const CACHE_SIZE = 1;
 export class StaffMemberService {
   private currentStaffMemberSubject = new BehaviorSubject<StaffMember | null>(null);
   private staffMember$: Observable<StaffMember>;
+  private staffMembers$: Observable<StaffMember[] | any>;
+  private activeStaffMembers$: Observable<StaffMember[] | any>;
+  private signature$: Observable<string | any>;
+  private impersonationSubject = new Subject<BaseStaffMember | null>();
+  impersonatedStaffMember$ = this.impersonationSubject.asObservable();
   currentStaffMember$ = this.currentStaffMemberSubject.asObservable();
 
   constructor(private http: HttpClient, private storage: StorageMap) { }
+
+  impersonatedStaffMemberChanged(person: BaseStaffMember) {
+    this.impersonationSubject.next(person);
+  }
 
   public getCurrentStaffMember(): Observable<StaffMember> {
     if (!this.staffMember$) {
@@ -39,5 +48,100 @@ export class StaffMemberService {
 
   currentStaffMemberChange(staffMember: StaffMember) {
     this.currentStaffMemberSubject.next(staffMember);
+  }
+
+  getActiveStaffMembers() {
+    if (!this.activeStaffMembers$) {
+      this.activeStaffMembers$ = this.requestActiveStaffMembers().pipe(shareReplay(CACHE_SIZE));
+    }
+    return this.activeStaffMembers$;
+  }
+
+  requestActiveStaffMembers() {
+    return this.http.get<StaffMemberListResult | any>(`${AppConstants.baseUrl}/active`).pipe(
+      map(response => response),
+      tap(data => {
+        if (data) {
+          console.log('active staff members in service:', data);
+          this.storage.set('activeStaffmembers', data.result).subscribe();
+          this.storage.set('cacheStatus', data.cacheStatus).subscribe();
+        }
+      }));
+  }
+
+  getAllStaffMembers() {
+    if (!this.staffMembers$) {
+      this.staffMembers$ = this.requestAllStaffMembers().pipe(shareReplay(CACHE_SIZE));
+    }
+    return this.staffMembers$;
+  }
+
+  requestAllStaffMembers() {
+    return this.http.get<StaffMemberListResult | any>(`${AppConstants.baseUrl}/all`).pipe(
+      map(response => response),
+      tap(data => {
+        if (data) {
+          console.log('all staff members in servuce:', data);
+          this.storage.set('allstaffmembers', data.result).subscribe();
+          this.storage.set('cacheStatus', data.cacheStatus).subscribe();
+        }
+      }));
+  }
+
+  getValuers(): Observable<StaffMember[]> {
+    return this.http.get<any>(`${AppConstants.baseUrl}/listers`).pipe(
+      map(response => response.result),
+      tap(data => {
+        if (data) {
+          this.storage.set('allListers', data).subscribe();
+        }
+      }));
+  }
+  getValuationAttendees(): Observable<BaseStaffMember[]> {
+    return this.http.get<any>(`${AppConstants.baseUrl}/attendees`).pipe(
+      map(response => response.result),
+      tap(data => {
+        if (data) {
+          this.storage.set('allAttendees', data).subscribe();
+        }
+      }));
+  }
+
+  getStaffMemberSuggestions(searchTerm): Observable<any> {
+    console.log('search Term:', searchTerm);
+    return this.http.get<StaffMemberResult>(`${AppConstants.baseUrl}/suggestions?SearchTerm=${searchTerm}`, {
+      headers: { ignoreLoadingBar: '' }
+    }).pipe(
+      map(response => response.result),
+      tap(data => {
+        if (data) {
+          console.log('suggestions:', data);
+        }
+      }));
+  }
+
+  getStaffMembersForCalendar(): Observable<BaseStaffMember[]> {
+    return this.http.get<any>(`${AppConstants.baseUrl}/calendars`).pipe(
+      map(response => response.result),
+      tap(data => {
+        if (data && data.length) {
+          this.storage.set('calendarStaffMembers', data).subscribe();
+        }
+      }));
+  }
+
+  getCurrentStaffMemberSignature(): Observable<string> {
+    if (!this.signature$) {
+      this.signature$ = this.requestStaffMemberSignature().pipe(shareReplay(CACHE_SIZE));
+    }
+    return this.signature$;
+  }
+
+  requestStaffMemberSignature(): Observable<string> {
+    return this.http.get<any>(`${AppConstants.baseUrl}/current/signature`).pipe(
+      map(response => response.result),
+      tap(data => {
+        if (data) { this.storage.set('signature', data).subscribe(); }
+      }));
   }
 }

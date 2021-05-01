@@ -5,7 +5,7 @@ import { PropertyService } from './property.service';
 import { Property } from './property';
 import { MockProperty } from './test-helper';
 
-fdescribe('PropertyService', () => {
+describe('PropertyService', () => {
   let httpTestingController: HttpTestingController;
   let service: PropertyService;
   const baseUrl = `https://dandg-api-wedge-dev.azurewebsites.net/v10/properties`;
@@ -17,8 +17,8 @@ fdescribe('PropertyService', () => {
       providers: [PropertyService]
     });
 
-    service = TestBed.get(PropertyService);
-    httpTestingController = TestBed.get(HttpTestingController);
+    service = TestBed.inject(PropertyService);
+    httpTestingController = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {

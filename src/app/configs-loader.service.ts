@@ -28,6 +28,8 @@ export class ConfigsLoaderService {
       .then(settings => {
         this.configs = settings as Configs;
         console.log('configs here to be replaced', this.configs);
+        console.log('origin:', window.location.origin);
+
       });
   }
 }

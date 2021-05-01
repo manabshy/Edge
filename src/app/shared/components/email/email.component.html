@@ -1,0 +1,403 @@
+<form [formGroup]="emailForm" (ngSubmit)="send()" autocomplete="off">
+  <div class="row">
+    <div class="grid grid--25">
+      <fieldset>
+        <label for="senderEmail">From</label>
+        <span class="radio">
+          <span>
+            <input type="radio" id="individualEmail" [value]="currentStaffMember?.email" name="senderEmail"
+              formControlName="senderEmail" data-cy="individualEmail"
+              [checked]="currentStaffMember?.email ? 'checked' : null">
+            <label for="individualEmail">{{currentStaffMember?.email}}</label>
+          </span>
+          <span>
+            <input type="radio" id="departmentEmail" [value]="currentStaffMember?.activeDepartments[0]?.emailAddress"
+              name="senderEmail" formControlName="senderEmail">
+            <label for="departmentEmail">{{currentStaffMember?.activeDepartments[0]?.emailAddress}}</label>
+          </span>
+        </span>
+      </fieldset>
+      <div class="inline-parent">
+        <fieldset class="inline-child" [ngClass]="{invalid: formErrors?.recipientEmail}">
+          <label for="recipientEmail">To (External)</label>
+          <ng-container *ngIf="personOnly; else group">
+            <p-multiSelect [options]="person?.emailAddresses" [filter]="false" [showHeader]="false" [ngClass]="{'txt--negative': noEmailContact}"
+              formControlName="recipientEmail" optionLabel="email" optionValue="email"
+              defaultLabel="Select recipient email" crollHeight="250px" display="chip" (onClick)="showButton=true">
+              <ng-template let-emailAddress pTemplate="item">
+                <span [ngClass]="{'txt--negative': noEmailContact}">
+                  <ng-container *ngIf="emailAddress?.isPreferred"> <svg aria-hidden="true" width="64" height="64"
+                      viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
+                      <polygon
+                        points="32 0 41.9 21.1 64 24.4 48 40.8 51.8 64 32 53.1 12.2 64 16 40.8 0 24.4 22.1 21.1 ">
+                      </polygon>
+                    </svg>
+                  </ng-container>{{emailAddress?.email}}
+                </span>
+              </ng-template>
+            </p-multiSelect>
+          </ng-container>
+          <ng-template #group>
+            <p-multiSelect [options]="groupedPeople" [group]="true" [filter]="false" [showHeader]="false"
+              formControlName="recipientEmail" optionLabel="name" optionValue="value"
+              defaultLabel="Select recipient email" crollHeight="250px" display="chip" (onClick)="showButton=true">
+              <ng-template let-group pTemplate="group">
+                <div class="p-d-flex p-ai-center">
+                  <span>{{group.label}}</span>
+                </div>
+              </ng-template>
+            </p-multiSelect>
+          </ng-template>
+          <p class="message message--negative">{{formErrors?.recipientEmail}}</p>
+        </fieldset>
+        <!-- <fieldset *ngIf="showButton" class="inline-child"> <button type="button" class="btn btn--info"
+            (click)="isContactGroupFinderVisible=true">Add Contact Group</button></fieldset> -->
+      </div>
+      <fieldset>
+        <label for="ccInternalEmail">Cc (Internal)</label>
+        <p-multiSelect [options]="groupedStaffMembers" [group]="true" [maxSelectedLabels]="1"
+          formControlName="ccInternalEmail" optionLabel="name" optionValue="value" defaultLabel="Select email"
+          crollHeight="250px" display="chip">
+          <ng-template let-group pTemplate="group">
+            <div class="p-d-flex p-ai-center">
+              <span>{{group.label}}</span>
+            </div>
+          </ng-template>
+        </p-multiSelect>
+      </fieldset>
+      <fieldset [ngClass]="{invalid: isInvalidEmail}">
+        <label for="ccExternalEmail">Cc (External)</label>
+        <p-chips inputId="ccExternalEmail" formControlName="ccExternalEmail" separator="," [allowDuplicate]="false"
+          [style]="{'width':'100%'}" (onAdd)="onEmailAdded($event)" (onRemove)="onEmailRemoved($event)"></p-chips>
+        <p class="message message--negative">Email is not valid</p>
+      </fieldset>
+      <fieldset *ngIf="false">
+        <button class="btn btn--info" data-cy="searchProperty" (click)="index=1"><svg aria-hidden="true" width="64"
+            height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
+            <path
+              d="M38.7 23v24c0 6-4.9 10.9-10.9 10.9S16.9 53 16.9 47V12.9c0-3.8 3.1-6.8 6.8-6.8s6.8 3.1 6.8 6.8v28.6c0 1.5-1.2 2.7-2.7 2.7s-2.7-1.2-2.7-2.7V15.7H21v25.9c0 3.8 3.1 6.8 6.8 6.8s6.8-3.1 6.8-6.8V12.9c0-6-4.9-10.9-10.9-10.9S12.8 6.9 12.8 12.9V47c0 8.3 6.7 15 15 15s15-6.7 15-15V23H38.7z" />
+            <path
+              d="M62 12.7H39.8c-0.7 0-1.2 0.7-1.2 1.3v0.4c0 0.6 0.5 1.3 1.2 1.3H62c0.7 0 1.2-0.7 1.2-1.3v-0.4C63.2 13.4 62.7 12.7 62 12.7z" />
+            <path
+              d="M52.4 25.4V3.2c0-0.7-0.7-1.2-1.3-1.2h-0.4c-0.6 0-1.3 0.5-1.3 1.2v22.2c0 0.7 0.7 1.2 1.3 1.2h0.4C51.7 26.5 52.4 26 52.4 25.4z" />
+          </svg>Add Attachments</button>
+      </fieldset>
+    </div>
+    <div class="grid grid--75 grid--dividerLeft">
+      <fieldset class="fieldset--width-max" [ngClass]="{invalid: formErrors?.subject}">
+        <label for="subject">Subject</label>
+        <input type="text" id="subject" formControlName="subject">
+        <p class="message message--negative">{{formErrors?.subject}}</p>
+      </fieldset>
+      <fieldset class="fieldset--width-max" [ngClass]="{invalid: formErrors?.body}">
+        <p-editor #pEditor formControlName="body" [style]="{'height':'320px', 'font-size':'12px', 'font-family':'poppins'}">
+          <p-header>
+            <span class="ql-formats">
+              <button class="ql-bold" aria-label="Bold"></button>
+              <button class="ql-italic" aria-label="Italic"></button>
+              <button class="ql-underline" aria-label="Underline"></button>
+            </span>
+            <span class="ql-formats">
+              <select class="ql-align">
+                <option selected></option>
+                <option value="center"></option>
+                <option value="right"></option>
+                <option value="justify"></option>
+              </select>
+            </span>
+            <span class="ql-formats">
+              <button class="ql-list" value="ordered"></button>
+              <button class="ql-list" value="bullet"></button>
+            </span>
+            <span class="ql-formats">
+              <button class="ql-link" aria-label="Hypertext"></button>
+            </span>
+          </p-header>
+        </p-editor>
+        <p class="message message--negative">{{formErrors?.body}}</p>
+      </fieldset>
+      <fieldset class="fieldset--signature">
+        <app-email-signature [signature]="currentStaffMemberSignature"></app-email-signature>
+      </fieldset>
+    </div>
+  </div>
+
+  <footer class="footer footer--modal">
+    <div class="btn--container">
+      <button type="button" class="btn btn--ghost" (click)="cancel()">Cancel</button>
+      <button type="submit" class="btn btn--positive"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+          class="icon icon--onLeft">
+          <path d="M2.2 57.8l60-25.7L2.2 6.4l0 20L45 32.1 2.1 37.8 2.2 57.8z" />
+        </svg>Send</button>
+    </div>
+  </footer>
+</form>
+
+
+<!-- Contactgroup Finder Modal -->
+<p-dialog header="Find contact group" [(visible)]="isContactGroupFinderVisible" [modal]="true" [draggable]="false"
+  class="modal--medium modal--hasFooter">
+  <app-contactgroup-finder class="appWrapper" [isFull]="true"
+    (fullSelectedContactGroup)="getSelectedContactGroup($event)"
+    (isCreatingNewGroup)="isContactGroupFinderVisible=false"></app-contactgroup-finder>
+</p-dialog>
+
+<!-- Contactgroup Finder Modal -->
+<p-dialog header="Add files" [(visible)]="showFileUploader" [modal]="true" [draggable]="false">
+  <p-fileUpload name="demo[]" [showCancelButton]="false" [showUploadButton]="false" url="./upload.php"
+    (onUpload)="onUpload($event)" multiple="multiple" maxFileSize="1000000">
+    <ng-template pTemplate="content">
+      <ul *ngIf="uploadedFiles.length">
+        <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+      </ul>
+    </ng-template>
+  </p-fileUpload>
+</p-dialog>
+
+<!--Success Messages -->
+<p-toast></p-toast>
+
+
+<!-- Tab View -->
+<!-- <p-tabView [(activeIndex)]="index">
+  <p-tabPanel header="Message Details">
+    <div class="row">
+      <div class="grid grid--25">
+        <fieldset>
+          <label for="senderEmail">From</label>
+          <span class="radio">
+            <span>
+              <input type="radio" id="individualEmail" [value]="currentStaffMember?.email" name="senderEmail"
+                formControlName="senderEmail" data-cy="individualEmail">
+              <label for="individualEmail">{{currentStaffMember?.email}}</label>
+            </span>
+            <span>
+              <input type="radio" id="departmentEmail" value="helpdesk@dng.co.uk" name="senderEmail"
+                formControlName="senderEmail">
+              <label for="departmentEmail">helpdesk@dng.co.uk</label>
+            </span>
+          </span>
+        </fieldset>
+        <div class="inline-parent">
+          <fieldset class="inline-child" [ngClass]="{invalid: formErrors?.recipientEmail}">
+            <label for="recipientEmail">To (External)</label>
+            <ng-container *ngIf="personOnly; else group">
+              <p-multiSelect [options]="person?.emailAddresses" [filter]="false" [showHeader]="false"
+                formControlName="recipientEmail" optionLabel="email" optionValue="email"
+                defaultLabel="Select recipient email" crollHeight="250px" display="chip" (onClick)="showButton=true">
+                <ng-template let-emailAddress pTemplate="item">
+                  <span>{{emailAddress?.email}}</span>
+                </ng-template>
+              </p-multiSelect>
+            </ng-container>
+            <ng-template #group>
+              <p-multiSelect [options]="groupedPeople" [group]="true" [filter]="false" [showHeader]="false"
+                formControlName="recipientEmail" optionLabel="name" optionValue="value"
+                defaultLabel="Select recipient email" crollHeight="250px" display="chip" (onClick)="showButton=true">
+                <ng-template let-group pTemplate="group">
+                  <div class="p-d-flex p-ai-center">
+                    <span>{{group.label}}</span>
+                  </div>
+                </ng-template>
+              </p-multiSelect>
+            </ng-template>
+            <p class="message message--negative">{{formErrors?.recipientEmail}}</p>
+          </fieldset>
+        </div>
+        <fieldset>
+          <label for="ccInternalEmail">Cc (Internal)</label>
+          <p-multiSelect [options]="groupedStaffMembers" [group]="true" [maxSelectedLabels]="1" formControlName="ccInternalEmail" optionLabel="name"
+            optionValue="value" defaultLabel="Select email" crollHeight="250px" display="chip">
+            <ng-template let-group pTemplate="group">
+              <div class="p-d-flex p-ai-center">
+                <span>{{group.label}}</span>
+              </div>
+            </ng-template>
+          </p-multiSelect>
+        </fieldset>
+        <fieldset [ngClass]="{invalid: formErrors?.ccExternalEmail}">
+          <label for="ccExternalEmail">Cc (External)</label>
+          <p-chips inputId="ccExternalEmail" formControlName="ccExternalEmail" separator="," [allowDuplicate]="false" [style]="{'width':'100%'}"></p-chips>
+          <p class="message message--negative">{{formErrors?.ccExternalEmail}}</p>
+        </fieldset>
+        <fieldset>
+          <button class="btn btn--info" data-cy="searchProperty" (click)="index=1"><svg aria-hidden="true" width="64"
+              height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
+              <path
+                d="M38.7 23v24c0 6-4.9 10.9-10.9 10.9S16.9 53 16.9 47V12.9c0-3.8 3.1-6.8 6.8-6.8s6.8 3.1 6.8 6.8v28.6c0 1.5-1.2 2.7-2.7 2.7s-2.7-1.2-2.7-2.7V15.7H21v25.9c0 3.8 3.1 6.8 6.8 6.8s6.8-3.1 6.8-6.8V12.9c0-6-4.9-10.9-10.9-10.9S12.8 6.9 12.8 12.9V47c0 8.3 6.7 15 15 15s15-6.7 15-15V23H38.7z" />
+              <path
+                d="M62 12.7H39.8c-0.7 0-1.2 0.7-1.2 1.3v0.4c0 0.6 0.5 1.3 1.2 1.3H62c0.7 0 1.2-0.7 1.2-1.3v-0.4C63.2 13.4 62.7 12.7 62 12.7z" />
+              <path
+                d="M52.4 25.4V3.2c0-0.7-0.7-1.2-1.3-1.2h-0.4c-0.6 0-1.3 0.5-1.3 1.2v22.2c0 0.7 0.7 1.2 1.3 1.2h0.4C51.7 26.5 52.4 26 52.4 25.4z" />
+            </svg>Add Attachments</button>
+        </fieldset>
+      </div>
+      <div class="grid grid--75 grid--dividerLeft">
+        <fieldset class="fieldset--width-max" [ngClass]="{invalid: formErrors?.subject}">
+          <label for="subject">Subject</label>
+          <input type="text" id="subject" formControlName="subject">
+          <p class="message message--negative">{{formErrors?.subject}}</p>
+        </fieldset>
+        <fieldset class="fieldset--width-max" [ngClass]="{invalid: formErrors?.body}">
+          <p-editor #pEditor formControlName="body" [style]="{'height':'320px'}">
+            <p-header>
+              <span class="ql-formats">
+                <button class="ql-bold" aria-label="Bold"></button>
+                <button class="ql-italic" aria-label="Italic"></button>
+                <button class="ql-underline" aria-label="Underline"></button>
+              </span>
+              <span class="ql-formats">
+                <select class="ql-align">
+                  <option selected></option>
+                  <option value="center"></option>
+                  <option value="right"></option>
+                  <option value="justify"></option>
+                </select>
+              </span>
+              <span class="ql-formats">
+                <button class="ql-list" value="ordered"></button>
+                <button class="ql-list" value="bullet"></button>
+              </span>
+              <span class="ql-formats">
+                <button class="ql-link" aria-label="Hypertext"></button>
+              </span>
+            </p-header>
+          </p-editor>
+          <p class="message message--negative">{{formErrors?.body}}</p>
+        </fieldset>
+        <fieldset class="fieldset--signature">
+          <app-email-signature [signature]="currentStaffMemberSignature"></app-email-signature>
+        </fieldset>
+      </div>
+    </div>
+  </p-tabPanel>
+  <p-tabPanel [header]="attachments">
+    <div class="row">
+      <div class="grid grid--flexColumn grid--25">
+        <form [formGroup]="searchForm" (ngSubmit)="search()">
+          <fieldset>
+            <label for="text">Search type</label>
+            <span class="radio toggle">
+              <span>
+                <input type="radio" name="searchType" id="contact" value="contact" formControlName="searchType">
+                <label for="contact"><span>Contact</span></label>
+              </span>
+              <span>
+                <input type="radio" name="searchType" id="property" value="property" formControlName="searchType">
+                <label for="property"><span>Property</span></label>
+              </span>
+            </span>
+          </fieldset>
+          <fieldset>
+            <label for="search">Search</label>
+            <p-autoComplete inputId="search" [placeholder]="searchPlaceholder" formControlName="searchTerm"
+              [dropdown]="false" type="search" minLength="3" [autofocus]="true" [field]="suggestionsDisplayName"
+              [suggestions]="suggestions" (completeMethod)="getSuggestions($event)" [style]="{'width':'100%'}">
+            </p-autoComplete>
+          </fieldset>
+          <ng-container *ngIf="isPropertySearch">
+            <fieldset>
+              <label for="type">Type</label>
+              <span class="select">
+                <select class="custom-select custom-select-sm" id="propertyType" name="propertyType"
+                  formControlName="propertyType">
+                  <option selected value="0">Select type</option>
+                  <option *ngFor="let type of propertyTypes" [value]=type?.typeId>{{type?.type}}, {{type?.status}}, {{type?.statusDate}}</option>
+                </select>
+              </span>
+            </fieldset>
+            <fieldset>
+              <label for="type">Offer</label>
+              <span class="select">
+                <select class="custom-select custom-select-sm" id="offer" name="offer" formControlName="offer">
+                  <option selected value="0">Select offer</option>
+                  <option *ngFor="let offer of offers" [value]=offer.offerId>{{offer?.offeredBy}}, {{offer?.status}}, {{offer?.statusDate}}</option>
+                </select>
+              </span>
+            </fieldset>
+          </ng-container>
+          <fieldset>
+            <div class="btn--container">
+              <button type="submit" class="btn btn--info">Search</button>
+              <button type="button" class="btn btn--ghost" (click)="clear()">Clear</button>
+            </div>
+          </fieldset>
+        </form>
+        <fieldset class="fieldset--flexBottom hide--mobile">
+          <ngx-file-drop dropZoneLabel="Drop files here" (onFileDrop)="dropped($event)"
+            (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)" class="dropzone">
+            <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+              <div class="wrapperDropzone">
+                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--xl icon--onLeft">
+                  <path class="folder"
+                    d="M8.8 9.7h15.5c1.5 0 2.8 0.8 3.5 2.1l2.9 5.4h24.8c1.7 0 3 1.3 3 3v31.1c0 1.7-1.3 3-3 3H8.8c-1.7 0-3-1.3-3-3V12.7C5.8 11 7.1 9.7 8.8 9.7z" />
+                  <path class="folderOpen"
+                    d="M55.9 54.3H8.3c-1.5 0-2.7-1.1-3-2.5l-4-23.3c-0.3-1.8 1.1-3.5 3-3.5h55.3c1.8 0 3.3 1.7 3 3.5l-3.7 23.3C58.6 53.2 57.4 54.3 55.9 54.3z" />
+                </svg>
+                <p>Drop your files here or, <a role="button" (click)="openFileSelector()">Browse</a></p>
+              </div>
+
+            </ng-template>
+          </ngx-file-drop>
+        </fieldset>
+      </div>
+      <div class="grid grid--75 grid--dividerLeft">
+        <fieldset class="fieldset fieldset--width-max">
+          <label for="selected">Files(s) selected</label>
+         <ng-container *ngIf="selectedDocuments?.length || files?.length; else NoFilesSelected">
+            <ng-container *ngIf="selectedDocuments?.length">
+              <p-chip id="selected" *ngFor="let item of selectedDocuments; let i=index" [label]="item.fileName" [removable]="true"
+                (onRemove)="removeDocument($event, i)"></p-chip>
+            </ng-container>
+            <ng-container *ngIf="files?.length">
+              <p-chip *ngFor="let item of files; let i=index" [label]=" item?.relativePath" [removable]="true"
+                (onRemove)="removeFile($event, i)"></p-chip>
+            </ng-container>
+         </ng-container>
+          <ng-template #NoFilesSelected><p class="labelMessage">No files selected</p></ng-template>
+        </fieldset>
+        <div class="table">
+          <table class="table--mobile table--rowHover">
+            <thead>
+              <tr>
+                <th colspan="2">File Name / Description</th>
+                <th>Type</th>
+                <th>Uploaded By / Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let doc of documents; let i=index" (click)="selectDocument(doc,i)">
+                <td width="40" class="vAlign--center hide--mobile">
+                  <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--fill-midnight-20" *ngIf="!doc.isSelected">
+                    <path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" />
+                    <path class="plus-vertical" d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" />
+                  </svg>
+                  <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--fill-positive" *ngIf="doc.isSelected">
+                    <path d="M62.8 9.3l-1.9-1.7c-1.5-1.4-3.8-1.2-5.2 0.3L23.9 43.1c-1.4 1.5-3.6 1.5-5.1 0.2L8.1 32.3c-1.4-1.4-3.7-1.4-5.2 0l-1.9 1.9c-1.4 1.4-1.4 3.7 0 5.2l16.7 16.7c1.9 1.9 5.1 1.9 7-0.1L63 14.5C64.4 13 64.3 10.7 62.8 9.3z" />
+                  </svg>
+                </td>
+                <td data-title="File Name / Description">
+                  <span class="cell-content">
+                    {{doc?.fileName}}
+                    <small>{{doc?.description}}</small>
+                  </span>
+                </td>
+                <td data-title="Type">
+                  <span class="cell-content">
+                    {{doc?.type}}
+                  </span>
+                </td>
+                <td data-title="Uploaded By / Date">
+                  <span class="cell-content">
+                    {{doc?.uploadBy}}
+                    <small>{{doc?.dateUploaded}}</small>
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </p-tabPanel>
+</p-tabView> -->

@@ -1,7 +1,7 @@
-import { Address } from 'src/app/core/models/address';
-import { Person, BasicPerson, PersonWarning } from 'src/app/core/models/person';
-import { ResultData } from 'src/app/core/shared/result-data';
-import { SubNavItem, SubNav } from 'src/app/core/shared/subnav';
+import { Address } from 'src/app/shared/models/address';
+import { Person, BasicPerson, PersonWarning } from 'src/app/shared/models/person';
+import { ResultData } from 'src/app/shared/result-data';
+import { SubNavItem, SubNav } from 'src/app/shared/subnav';
 
 export interface ContactGroup {
   contactType: ContactType;
@@ -18,6 +18,10 @@ export interface ContactGroup {
   companyName: string;
   companyAddress: Address;
   referenceCount: number;
+  isSolicitor: boolean;
+  isInventoryClerk: boolean;
+  isEstateAgent: boolean;
+  isMortgageAdvisor: boolean;
   relocationContactName?: string;
   isRelocationAgent: boolean;
   assignedContactType?: string;
@@ -28,8 +32,16 @@ export interface ContactGroup {
   companyAmlCompletedDate?: string;
   isAmlCompleted: boolean;
 }
-export const ContactGroupDetailsSubNav = ['notes', 'instructions', 'offers', 'searches', 'lettings-managements', 'home-helpers'];
-// export const ContactGroupDetailsSubNav = ['notes','leads','searches','valuations', 'instructions', 'offers', 'tenancies', 'lettings-managements', 'home-managements'];
+export const ContactGroupDetailsSubNav = [
+  'properties',
+  'leads',
+  'instructions',
+  'valuations',
+  'offers',
+  'searches',
+  'lettings-managements',
+  'home-helpers'
+];
 
 export const ContactGroupDetailsSubNavItems: SubNavItem[] = ContactGroupDetailsSubNav.map(x => ({
   link: x,
@@ -57,24 +69,26 @@ export class SignerRequest {
 export interface Summary {
   active: number;
   total: number;
+  inactive: number;
 }
 export interface PersonSummaryFigures {
   personId: number;
-  leads: number;
+  leads: Summary;
   notes: number;
-  searches: number;
+  searches: Summary;
   valuations: Summary;
   instructions: Summary;
   offers: Summary;
   tenancies: Summary;
-  lettingsManagements: number;
-  homeManagements: number;
+  lettingsManagements: Summary;
+  homeHelpers: Summary;
 }
 export interface Company {
   companyId: number;
   companyName: string;
   companyTypeId: CompanyTypeId;
   signer: Signer;
+  companyContacts: BasicContactGroup[];
   companyAddress: Address;
   telephone: string;
   fax: string;
@@ -89,12 +103,16 @@ export interface ContactAddress extends Address {
   countryId: number;
 }
 export interface BaseNote {
+  addressee: string;
   id: number;
   text: string;
   isImportant: boolean;
   isPinned: boolean;
   createDate: Date;
   createdBy: number;
+  noteType?: number;
+  hasEmailBody?: boolean;
+  emailBody?: string;
 }
 export interface ContactNote extends BaseNote {
   contactGroupId?: number;
@@ -102,12 +120,6 @@ export interface ContactNote extends BaseNote {
 }
 export interface PersonNote extends BaseNote {
   personId: number;
-}
-export interface RequestOption {
-  isNameSearch: boolean;
-  searchTerm: string;
-  pageSize: number;
-  page: number;
 }
 
 export interface AutoCompleteResult {
@@ -129,7 +141,7 @@ export interface CompanyAutoCompleteResult extends Company {
   companyName: string;
 }
 
-export interface ContactGroupAutoCompleteResult extends PersonWarning {
+export interface ContactGroupAutoCompleteResult {
   personId: number;
   title: string;
   firstName: string;
@@ -145,6 +157,7 @@ export interface ContactGroupAutoCompleteResult extends PersonWarning {
   postCode: string;
   warningStatusId: number;
   warningStatusComment: string;
+  warningStatus?: string;
   contactGroups: BasicContactGroup[];
 }
 export interface PeopleAutoCompleteResult {
@@ -191,6 +204,11 @@ export enum CompanyTypeId {
   PropertyDeveloper = 16,
   ReloAgent = 4,
   Tradesmen = 8
+}
+export enum NoteType {
+  Notes = 0,
+  Emails = 1,
+  SMS = 2,
 }
 export interface CompanyContactDetails {
   telephone: string;

@@ -1,0 +1,296 @@
+<div class="row">
+  <div class="row__item">
+    <form [formGroup]="diaryHeaderForm">
+
+      <ol class="calNav">
+        <li class="calNav__search">
+          <!-- Change staff member -->
+          <ng-select placeholder="Select Staff Member" [items]="staffMembers" [clearable]="false" bindLabel="fullName" bindValue="staffMemberId" groupBy="category" (change)="onStaffMemberChange($event)" formControlName="staffMember">
+            <ng-template ng-optgroup-tmp let-item="item">
+              <!-- {{item.category || 'Unnamed group'}} -->
+            </ng-template>
+          </ng-select>
+
+          <!-- Btn - Change view -->
+          <!-- <ng-container *ngTemplateOutlet="calendarChangeView"></ng-container> -->
+        </li>
+        <li class="calNav__range">
+          <!-- Btn - Previous -->
+          <button type="button" class="btn btn--none btn--onLeft" mwlCalendarPreviousView [daysInWeek]="daysInWeek" [view]="fakeView" [(viewDate)]="viewDate" (viewDateChange)="viewDateChange.next(viewDate)">
+            <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><path d="M46.3 55.2L25 33.9c-0.6-0.6-1-1.4-0.9-2.3 0.1-0.9 0.6-1.2 1.4-2L46.3 8.9c0.5-0.5 0.8-1 0.9-1.7 0.3-2.7-2.9-4.2-4.8-2.3L18 29.1c-1.6 1.6-1.6 4.1 0 5.7l24.4 24.4c1.8 1.8 5 0.4 4.8-2.3C47.1 56.2 46.8 55.6 46.3 55.2z"></path></svg><!--Previous-->
+          </button>
+
+          <!-- Dropdown - Date select -->
+          <div dropdown #datepickerDropdown="bs-dropdown">
+            <button id="filter" dropdownToggle type="button" class="btn btn--daterange dropdown-toggle" aria-controls="dropdown-custom-html">{{ viewDate | calendarDate: (view + 'ViewTitle'):locale:weekStartsOn:excludeDays:daysInWeek }}</button>
+            <ul id="dropdown-custom-html" *dropdownMenu class="dropdown-menu dropdown-menu__calendar" role="menu" aria-labelledby="filter">
+              <li>
+                <ng-container *ngTemplateOutlet="goToButton"></ng-container>
+              </li>
+              <li (click)="$event.stopPropagation()">
+                <label class="small" for="viewMode">Calendar View</label>
+                <ng-container *ngTemplateOutlet="calendarChangeView"></ng-container>
+              </li>
+              <li (click)="$event.stopPropagation()">
+                <label class="small" for="dateFrom">Go to Date</label>
+                <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
+                  [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
+                  bsDatepicker
+                  #datepicker="bsDatepicker"
+                  [appNoDoubleTap]='datepicker'
+                  (bsValueChange)="onDateChange($event)"
+                  formControlName="dateFilter"
+                >
+              </li>
+            </ul>
+
+            <!-- <div>
+              <div class="p-3">
+                <div class="form-group d-sm-none">
+                  <ng-container *ngTemplateOutlet="goToButton"></ng-container>
+                </div>
+                <div class="form-group d-sm-none">
+                  <label class="small" for="viewMode">Calendar View</label>
+                  <ng-container *ngTemplateOutlet="calendarChangeView"></ng-container>
+                </div>
+                <div class="form-group" (click)="$event.stopPropagation()">
+                  <label class="small" for="dateFrom">Go to Date</label>
+                  <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
+                    [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
+                    bsDatepicker
+                    #datepicker="bsDatepicker"
+                    [appNoDoubleTap]='datepicker'
+                    (bsValueChange)="onDateChange($event)"
+                    formControlName="dateFilter">
+                </div>
+              </div>
+            </div> -->
+          </div>
+
+          <!-- Btn - Next -->
+          <button type="button" class="btn btn--none btn--onRight" mwlCalendarNextView [daysInWeek]="daysInWeek" [view]="fakeView" [(viewDate)]="viewDate" (viewDateChange)="viewDateChange.next(viewDate)">
+            <!--Next--><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onRight"><path d="M46 29.2L21.6 4.8c-1.8-1.8-5.1-0.4-4.8 2.3 0.1 0.6 0.4 1.2 0.8 1.7L39 30.1c0.6 0.6 1 1.4 0.9 2.3 -0.1 0.9-0.6 1.2-1.4 2L17.7 55.1c-0.5 0.5-0.8 1-0.8 1.7 -0.3 2.8 2.9 4.2 4.8 2.4L46 34.9C47.6 33.3 47.6 30.8 46 29.2z"></path></svg>
+          </button>
+        </li>
+        <!-- Hide create event for release 22/04/21 -->
+        <li class="calNav__add" *ngIf="false">
+          <a class="btn btn--positive" [routerLink]="['/diary/edit', 0]" [queryParams]="{isNewEvent: true}" *ngIf="!myCalendarOnly" aria-label="Add event"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z"></path><path class="plus-vertical" d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z"></path></svg>Create Event</a>
+        </li>
+      </ol>
+
+      <!-- Btn - This Week -->
+      <!-- <ng-container *ngTemplateOutlet="goToButton"></ng-container> -->
+
+      <!-- Btn - Show me -->
+      <div class="col-auto pr-0" *ngIf="isShowMeVisible">
+        <button type="button" class="btn btn-sm btn-light" (click)="getCurrentStaffMemberCalendar()">Show me</button>
+      </div>
+
+      <!--  -->
+      <ng-template #goToButton>
+        <button type="button" class="btn btn--ghost" mwlCalendarToday [(viewDate)]="viewDate"
+          (viewDateChange)="viewDateChange.next(viewDate)">
+          {{label}}
+        </button>
+      </ng-template>
+
+      <!-- Select - Change view -->
+      <ng-template #calendarChangeView>
+        <span class="select">
+          <select name="viewMode" id="viewMode" formControlName="viewMode" (change)="viewChange.emit($event.target.value)"
+            class="custom-select custom-select-sm">
+            <option value="day">Day</option>
+            <option value="threeDays">3 Days</option>
+            <option value="week">Week</option>
+            <option value="month">Month</option>
+          </select>
+        </span>
+      </ng-template>
+
+    </form>
+  </div>
+</div>
+
+
+
+<!-- <form [formGroup]="diaryHeaderForm">
+  <div class="row align-items-center">
+    <div class="col col-md-auto pr-sm-0 mr-md-2 order-md-1">
+      <div class="row align-items-center">
+        <div class="col-auto pr-2 d-none d-sm-block">
+          <ng-container *ngTemplateOutlet="goToButton"></ng-container>
+        </div>
+        <div class="col-auto px-sm-0">
+          <button type="button" class="btn btn--ghost" mwlCalendarPreviousView [daysInWeek]="daysInWeek"
+            [view]="fakeView" [(viewDate)]="viewDate" (viewDateChange)="viewDateChange.next(viewDate)">
+            <i class="fas fa-chevron-left fa-fw"></i>
+            <span class="sr-only">Previous</span>
+          </button>
+          <button type="button" class="btn btn--ghost" mwlCalendarNextView [daysInWeek]="daysInWeek"
+            [view]="fakeView" [(viewDate)]="viewDate" (viewDateChange)="viewDateChange.next(viewDate)">
+            <i class="fas fa-chevron-right fa-fw"></i>
+            <span class="sr-only">Next</span>
+          </button>
+        </div>
+        <div class="col">
+          <div class="mb-0 btn-group w-100" dropdown #datepickerDropdown="bs-dropdown">
+            <button id="filter" dropdownToggle type="button" class="btn btn--ghost dropdown-toggle"
+              aria-controls="dropdown-custom-html">
+              {{ viewDate | calendarDate: (view + 'ViewTitle'):locale:weekStartsOn:excludeDays:daysInWeek }}
+            </button>
+            <div id="dropdown-custom-html" *dropdownMenu class="dropdown-menu" role="menu"
+              aria-labelledby="filter">
+              <div class="p-3">
+                <div class="form-group d-sm-none">
+                  <ng-container *ngTemplateOutlet="goToButton"></ng-container>
+                </div>
+                <div class="form-group d-sm-none" (click)="$event.stopPropagation()">
+                  <label class="small" for="viewMode">Calendar View</label>
+                  <ng-container *ngTemplateOutlet="calendarChangeView"></ng-container>
+                </div>
+                <div class="form-group" (click)="$event.stopPropagation()">
+                  <label class="small" for="dateFrom">Go to Date</label>
+                  <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
+                    [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
+                    bsDatepicker
+                    #datepicker="bsDatepicker"
+                    [appNoDoubleTap]='datepicker'
+                    (bsValueChange)="onDateChange($event)"
+                    formControlName="dateFilter">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-auto d-none d-sm-block order-md-3">
+      <ng-container *ngTemplateOutlet="calendarChangeView"></ng-container>
+    </div>
+    <div class="col-md order-md-2 mt-1 mt-md-0">
+      <div class="row justify-content-end">
+        <div class="col-auto pr-0" *ngIf="isShowMeVisible">
+          <button type="button" class="btn btn-sm btn-light" (click)="getCurrentStaffMemberCalendar()">Show
+            me</button>
+        </div>
+        <div class="col col-md-7">
+          <ng-select placeholder="Select Staff Member" [items]="staffMembers$|async" [clearable]="false"
+            bindLabel="fullName" bindValue="staffMemberId" groupBy="category" (change)="onStaffMemberChange($event)"
+            formControlName="staffMember">
+            <ng-template ng-optgroup-tmp let-item="item"> -->
+              <!-- {{item.category || 'Unnamed group'}} -->
+            <!-- </ng-template>
+          </ng-select>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #goToButton>
+    <button type="button" class="btn btn-sm btn-light btn-block" mwlCalendarToday [(viewDate)]="viewDate"
+      (viewDateChange)="viewDateChange.next(viewDate)">
+      {{label}}
+    </button>
+  </ng-template>
+  <ng-template #calendarChangeView>
+    <span class="select">
+      <select name="viewMode" id="viewMode" formControlName="viewMode" (change)="viewChange.emit($event.target.value)"
+        class="custom-select custom-select-sm">
+        <option value="day">Day</option>
+        <option value="threeDays">3 Days</option>
+        <option value="week">Week</option>
+        <option value="month">Month</option>
+      </select>
+    </span>
+  </ng-template>
+</form> -->
+
+
+<!-- Older -->
+<!-- <form [formGroup]="diaryHeaderForm">
+  <div class="row align-items-center">
+    <div class="col col-md-auto pr-sm-0 mr-md-2 order-md-1">
+      <div class="row align-items-center">
+        <div class="col-auto pr-2 d-none d-sm-block">
+          <ng-container *ngTemplateOutlet="goToButton"></ng-container>
+        </div>
+        <div class="col-auto px-sm-0">
+          <button type="button" class="btn btn-sm btn-light mr-1" mwlCalendarPreviousView [daysInWeek]="daysInWeek"
+            [view]="fakeView" [(viewDate)]="viewDate" (viewDateChange)="viewDateChange.next(viewDate)">
+            <i class="fas fa-chevron-left fa-fw"></i>
+            <span class="sr-only">Previous</span>
+          </button>
+          <button type="button" class="btn btn-sm btn-light" mwlCalendarNextView [daysInWeek]="daysInWeek"
+            [view]="fakeView" [(viewDate)]="viewDate" (viewDateChange)="viewDateChange.next(viewDate)">
+            <i class="fas fa-chevron-right fa-fw"></i>
+            <span class="sr-only">Next</span>
+          </button>
+        </div>
+        <div class="col">
+          <div class="mb-0 btn-group w-100" dropdown #datepickerDropdown="bs-dropdown">
+            <button id="filter" dropdownToggle type="button" class="btn btn-sm btn-light dropdown-toggle"
+              aria-controls="dropdown-custom-html">
+              {{ viewDate | calendarDate: (view + 'ViewTitle'):locale:weekStartsOn:excludeDays:daysInWeek }}
+            </button>
+            <div id="dropdown-custom-html" *dropdownMenu class="dropdown-menu" role="menu"
+              aria-labelledby="filter">
+              <div class="p-3">
+                <div class="form-group d-sm-none">
+                  <ng-container *ngTemplateOutlet="goToButton"></ng-container>
+                </div>
+                <div class="form-group d-sm-none" (click)="$event.stopPropagation()">
+                  <label class="small" for="viewMode">Calendar View</label>
+                  <ng-container *ngTemplateOutlet="calendarChangeView"></ng-container>
+                </div>
+                <div class="form-group" (click)="$event.stopPropagation()">
+                  <label class="small" for="dateFrom">Go to Date</label>
+                  <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
+                    [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
+                    bsDatepicker
+                    #datepicker="bsDatepicker"
+                    [appNoDoubleTap]='datepicker'
+                    (bsValueChange)="onDateChange($event)"
+                    formControlName="dateFilter">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-auto d-none d-sm-block order-md-3">
+      <ng-container *ngTemplateOutlet="calendarChangeView"></ng-container>
+    </div>
+    <div class="col-md order-md-2 mt-1 mt-md-0">
+      <div class="row justify-content-end">
+        <div class="col-auto pr-0" *ngIf="isShowMeVisible">
+          <button type="button" class="btn btn-sm btn-light" (click)="getCurrentStaffMemberCalendar()">Show
+            me</button>
+        </div>
+        <div class="col col-md-7">
+          <ng-select placeholder="Select Staff Member" [items]="staffMembers$|async" [clearable]="false"
+            bindLabel="fullName" bindValue="staffMemberId" groupBy="category" (change)="onStaffMemberChange($event)"
+            formControlName="staffMember">
+            <ng-template ng-optgroup-tmp let-item="item">-->
+              <!-- {{item.category || 'Unnamed group'}} -->
+            <!-- </ng-template>
+          </ng-select>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #goToButton>
+    <button type="button" class="btn btn-sm btn-light btn-block" mwlCalendarToday [(viewDate)]="viewDate"
+      (viewDateChange)="viewDateChange.next(viewDate)">
+      {{label}}
+    </button>
+  </ng-template>
+  <ng-template #calendarChangeView>
+    <select name="viewMode" id="viewMode" formControlName="viewMode" (change)="viewChange.emit($event.target.value)"
+      class="custom-select custom-select-sm">
+      <option value="day">Day</option>
+      <option value="threeDays">3 Days</option>
+      <option value="week">Week</option>
+      <option value="month">Month</option>
+    </select>
+  </ng-template>
+</form> -->

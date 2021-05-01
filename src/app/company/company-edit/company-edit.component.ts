@@ -8,12 +8,13 @@ import { Location } from '@angular/common';
 import { Company, Signer } from 'src/app/contactgroups/shared/contact-group';
 import { CompanyService } from '../shared/company.service';
 import { debounceTime } from 'rxjs/operators';
-import { WedgeValidators } from 'src/app/core/shared/wedge-validators';
+import { WedgeValidators } from 'src/app/shared/wedge-validators';
 import { AppUtils } from 'src/app/core/shared/utils';
-import { Address } from 'src/app/core/models/address';
+import { Address } from 'src/app/shared/models/address';
 import { ToastrService } from 'ngx-toastr';
 import { InfoService } from 'src/app/core/services/info.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
+import { MessageService } from 'primeng/api';
 
 
 @Component({
@@ -39,7 +40,11 @@ export class CompanyEditComponent implements OnInit {
   todaysDate = new Date();
   formErrors = FormErrors;
   info: any;
-  isCreatingNewSigner: boolean;
+  isCreatingNewSigner: boolean = false;
+  showCompanyFinder = false;
+  isManualEntry = false;
+  isSignerVisible = false;
+  backToOrigin = false;
 
   constructor(private contactGroupService: ContactGroupsService,
     private companyService: CompanyService,
@@ -50,7 +55,8 @@ export class CompanyEditComponent implements OnInit {
     private toastr: ToastrService,
     private _location: Location,
     private route: ActivatedRoute,
-    private _router: Router
+    private _router: Router,
+    private messageService: MessageService,
   ) { }
 
   ngOnInit() {
@@ -70,16 +76,19 @@ export class CompanyEditComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.isNewCompany = this.companyId ? false : params['isNewCompany'];
       this.isEditingSelectedCompany = params['isEditingSelectedCompany'] || false;
+      this.backToOrigin = params['backToOrigin'] || false;
       this.companyName = params['companyName'] || null;
+      if (this.isNewCompany && !this.companyName) { this.showCompanyFinder = true; }
     });
     this.setupCompanyForm(this.companyName);
     const id = this.isNewCompany ? 0 : this.companyId;
     if (id) {
       this.getCompanyDetails(id);
     }
-    if (AppUtils.newSignerId) {
-      this.getSignerDetails(AppUtils.newSignerId);
-    }
+    // if (AppUtils.newSignerId) {
+    //   this.getSignerDetails(AppUtils.newSignerId);
+    // }
+    this.getSignerDetails();
     this.companyForm.valueChanges.pipe(debounceTime(400)).subscribe(() => this.logValidationErrors(this.companyForm, false));
   }
 
@@ -92,27 +101,26 @@ export class CompanyEditComponent implements OnInit {
   getCompanyDetails(id: number) {
     this.contactGroupService.getCompany(id).subscribe(data => {
       this.companyDetails = data;
+      if (!this.signer) {
+        this.signer = data?.signer;
+      }
       this.sharedService.setTitle(this.companyDetails.companyName);
       this.displayCompanyDetails(data);
-    }, error => {
-      this.errorMessage = <any>error;
-      this.sharedService.showError(this.errorMessage);
     });
   }
 
-  createNewSigner(event) {
-    if(event) {
-      this.isCreatingNewSigner = true;
-    }
+  createNewSigner() {
+    this.isCreatingNewSigner = true;
   }
 
-  getSignerDetails(id: number) {
-    this.contactGroupService.getSignerbyId(id).subscribe(data => {
-      this.existingSigner = data;
-      this.companyForm.markAsDirty();
-    }, error => {
-      this.errorMessage = <any>error;
-      this.sharedService.showError(this.errorMessage);
+  getSignerDetails(id?: number) {
+    this.contactGroupService.signer$.subscribe(data => {
+      if (data) {
+        this.signer = data;
+        this.isCreatingNewSigner = false;
+        console.log({ data }, 'new signer shoud be here');
+
+      }
     });
   }
 
@@ -182,7 +190,7 @@ export class CompanyEditComponent implements OnInit {
     }
   }
 
-  logValidationErrors(group: FormGroup = this.companyForm, fakeTouched: boolean) {
+  logValidationErrors(group: FormGroup = this.companyForm, fakeTouched: boolean, scrollToError = false) {
     Object.keys(group.controls).forEach((key: string) => {
       const control = group.get(key);
       const messages = ValidationMessages[key];
@@ -201,16 +209,24 @@ export class CompanyEditComponent implements OnInit {
         this.logValidationErrors(control, fakeTouched);
       }
     });
-    this.sharedService.scrollToFirstInvalidField();
+    if (scrollToError) {
+      this.sharedService.scrollToFirstInvalidField();
+    }
   }
 
   getSelectedSigner(signer: Signer) {
-    if (this.signer && this.signer !== signer) {
+    // if (this.signer !== signer) {
+    //   this.companyForm.markAsDirty();
+    // } else {
+    //   this.companyForm.markAsPristine();
+    // }
+    if (signer) {
+      console.log({ signer });
+
+      this.signer = signer;
+      this.isSignerVisible = false;
       this.companyForm.markAsDirty();
-    } else {
-      this.companyForm.markAsPristine();
     }
-    this.signer = signer;
   }
 
   getAddress(address: Address) {
@@ -222,8 +238,14 @@ export class CompanyEditComponent implements OnInit {
     this.address = address;
   }
 
-  getCompanyName(name: any) {
-    this.companyForm.get('companyName').setValue(name.selectedCompany);
+  getCompanyName(name: string) {
+    this.companyForm.get('companyName').setValue(name);
+    this.companyForm.markAsDirty();
+  }
+
+  setManualEntryFlag() {
+    this.showCompanyFinder = false;
+    this.isManualEntry = true;
   }
 
   navigateToCompany(company: Company) {
@@ -239,11 +261,12 @@ export class CompanyEditComponent implements OnInit {
     this._location.replaceState(url);
     this.companyId = company.companyId;
     this.init();
+    this.showCompanyFinder = false;
   }
 
   saveCompany() {
     const isSignerChanged = this.signer || this.signer == null;
-    this.logValidationErrors(this.companyForm, true);
+    this.logValidationErrors(this.companyForm, true, true);
     if (this.companyForm.valid) {
       if (this.companyForm.dirty || isSignerChanged) {
         this.AddOrUpdateCompany();
@@ -260,7 +283,7 @@ export class CompanyEditComponent implements OnInit {
     const company = { ...this.companyDetails, ...this.companyForm.value };
     if (this.companyDetails) {
       companyAddress = { ...this.companyDetails.companyAddress, ...this.address };
-      this.signer ? company.signer = this.signer : company.signer = this.companyDetails.signer;
+      company.signer = this.signer;
       company.companyAddress = companyAddress;
     } else {
       company.signer = this.signer;
@@ -270,27 +293,28 @@ export class CompanyEditComponent implements OnInit {
     if (this.isNewCompany) {
       console.log('add company', company);
       this.companyService.addCompany(company).subscribe(res => this.onSaveComplete(res.result), (error: WedgeError) => {
-        this.errorMessage = error;
-        this.sharedService.showError(this.errorMessage);
         this.isSubmitting = false;
       });
     } else {
       this.companyService.updateCompany(company).subscribe(res => this.onSaveComplete(res.result), (error: WedgeError) => {
-        this.errorMessage = error;
-        this.sharedService.showError(this.errorMessage);
         this.isSubmitting = false;
       });
     }
   }
+
   onSaveComplete(company?: Company) {
+    this.companyForm.markAsPristine();
+    this.isSubmitting = false;
+    // this.toastr.success('Company successfully saved');
+    this.messageService.add({ severity: 'success', summary: 'Company successfully saved', closable: false });
+    if (this.backToOrigin) { this.companyService.companyChanged(company); this.sharedService.back(); }
     if (this.isEditingSelectedCompany && company) {
       AppUtils.holdingSelectedCompany = company;
       console.log(AppUtils.holdingSelectedCompany);
+      this.sharedService.back();
     }
-    this.companyForm.markAsPristine();
-    this.isSubmitting = false;
-    this.toastr.success('Company successfully saved');
-    this.sharedService.back();
+
+    this._router.navigate(['company-centre/detail', company.companyId]);
     console.log('complete');
   }
   canDeactivate(): boolean {

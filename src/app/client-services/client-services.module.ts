@@ -5,15 +5,18 @@ import { ClientServicesRoutingModule } from './client-services-routing.module';
 import { AdminPanelListComponent } from './admin-panel-list/admin-panel-list.component';
 import { AdminPanelDetailsComponent } from './admin-panel-details/admin-panel-details.component';
 import { CoreModule } from '../core/core.module';
+import { SharedModule } from '../shared/shared.module';
+import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 import { RulesComponent } from './shared/components/rules/rules.component';
 
 
 
 @NgModule({
-  declarations: [AdminPanelListComponent, AdminPanelDetailsComponent, RulesComponent],
+  declarations: [AdminPanelListComponent, AdminPanelDetailsComponent, AdminPanelComponent, RulesComponent],
   imports: [
     CoreModule,
     CommonModule,
+    SharedModule,
     ClientServicesRoutingModule
   ]
 })

@@ -1,97 +1,386 @@
-<app-breadcrumb></app-breadcrumb>
-<div class="container">
-  <h4 class="page-title">Add appointment</h4>
-  <form [formGroup]="diaryEventForm">
-    <div class="form-group row">
-      <label for="appointmentType" class="col-sm-2 col-form-label col-form-label-sm">Type</label>
-      <div class="col-sm-3">
-        <select class="custom-select custom-select-sm" formControlName="eventType">
-          <option *ngFor="let type of eventTypes">{{type.name}}</option>
-        </select>
-      </div>
+<div class="row">
+  <div class="row__item">
+    <h2>New Event <span class="pill pill-positive" *ngIf="diaryEvent?.isConfirmed">Confirmed</span></h2>
+    
+    <div dropdown placement="bottom right" *ngIf="diaryEvent">
+      <button id="actionsToggle" dropdownToggle type="button" class="btn btn-light dropdown-toggle" aria-controls="actionsList">Actions <span class="caret"></span></button>
+      <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="actionsToggle">
+        <li role="menuitem">
+          <a class="dropdown-item" id="delete" (click)="deleteEvent(diaryEvent?.diaryEventId)">Delete</a>
+        </li>
+      </ul>
     </div>
-    <div class="form-group row">
-      <label for="property" class="col-sm-2 col-form-label col-form-label-sm">Property</label>
-      <div class="col-sm-10">
-        <input type="text" class="form-control form-control-sm" id="property" placeholder="Property">
-      </div>
-    </div>
-    <!-- <div formArrayName="properties" *ngFor="let property of properties.controls; let i=index">
-      <div [formGroupName]="i">
-          <div class="form-group row">
-            <div class="col-sm-10">
-              <input type="text" formControlName="propertyId" class="form-control form-control-sm" id="propertyId" placeholder="PropertyId">
-            </div>
-            <div class="col-sm-10">
-              <input type="text" formControlName="address" class="form-control form-control-sm" id="propertyAddress" placeholder="Property Address">
-            </div>
-          </div>
-          <button type="button" class="btn btn-sm btn-link p-0" (click)="deleteProperty(i)" name="remove" *ngIf="i >= 1 "><i class="fas fa-plus"></i></button>
-      </div>
-    </div> -->
-    <div  *ngFor="let child of childItems; let i=index">
-      <app-basic-search></app-basic-search>
-      <div class="col-sm-10">
-        <button type="button" class="btn btn-sm btn-link p-0" (click)="onRemove()"><i class="fas fa-minus"></i></button>
-      </div>
-    </div>
-    <div class="form-group row justify-content-end">
 
-      <div class="col-sm-10">
-        <button type="button" class="btn btn-sm btn-link p-0"(click)="onDuplicate()"><i class="fas fa-plus"></i> Add Property</button>
+    <form [formGroup]="diaryEventForm" (ngSubmit)="saveDiaryEvent()" autocompleteOff>
+      <ng-container *ngIf="showTypes || showStaffMembers">
+        <fieldset *ngIf="showTypes">
+          <label for="eventTypeId">Type</label>
+          <span class="select">
+            <select id="eventTypeId" formControlName="eventTypeId" (change)="onEventTypeChange($event.target.value)" [attr.disabled]="lockEventTypes ? true : null" [ngClass]="{'is-invalid': formErrors?.eventTypeId}">
+              <option value="0"></option>
+              <option *ngFor="let type of eventTypes" [value]="type.id">{{type.value}}</option>
+            </select>
+          </span>
+          {{formErrors?.eventTypeId}}
+        </fieldset>
+        
+        <fieldset *ngIf="showStaffMembers">
+          <label for="property">Staff Members</label>
+          <ng-container *ngIf="!diaryEvent?.onOutlook;else staffList">
+            <app-staff-member-finder [listType]="'calendarStaffMembers'" [isMultiple]="true" [isReadOnly]="diaryEvent?.onOutlook" [staffMemberIdList]="staffMemberIdList" (selectedStaffMemberList)="getSelectedStaffMembers($event)"></app-staff-member-finder>
+          </ng-container>
+
+          <ng-template #staffList>
+            <ng-container *ngFor="let member of diaryEvent?.staffMembers; last as isLast; first as isFirst trackBy:trackByFn">
+              <ng-container *ngIf="eventStaffMembers?.length < 6; else moreMembers">
+                <div>{{member?.fullName}}</div>
+              </ng-container>
+              
+              <ng-template #moreMembers>
+                <div>{{member?.fullName}}</div>
+                <button type="button" class="btn btn-link px-0" (click)="showAllMembers()" *ngIf="isLast && showMorePeople">+ {{NumberOfPeopleLabel}}</button>
+                <button type="button" class="btn btn-link px-0" (click)="showFewMembers()" *ngIf="isLast &&!showMorePeople">show less</button>
+              </ng-template>
+            </ng-container>
+          </ng-template>
+        </fieldset>
+      </ng-container>
+      
+      <fieldset *ngIf="showProperties">
+        <label>Properties {{propertyLabel}}</label>
+        <app-property-finder (selectedPropertyList)="getSelectedProperties($event)"
+          (rebookedProperty)="getRebookedPropertyId($event)" [isMultiple]="true" [hideCreateNewProperty]='true' [label]="propertyLabel"
+          [isLabelHidden]="isLabelHidden" [property]="property" [canRebook]="canRebook"
+          [propertyList]="diaryEvent?.properties" [propertyRequiredWarning]="propertyRequiredWarning"
+          [searchType]="searchType">
+        </app-property-finder>
+      </fieldset>
+      
+      <fieldset *ngIf="showContacts">
+        <label>{{contactLabel}}s</label>
+        <app-signer [label]="contactLabel" [isLabelHidden]="isLabelHidden" [isMultiple]="true"
+          (selectedSignersList)="getSelectedContactGroups($event)" [contactList]="diaryEvent?.contacts"
+          [contactRequiredWarning]="contactRequiredWarning" [isTelRequired]="isTelRequired" [isApplicant]="isApplicant">
+        </app-signer>
+      </fieldset>
+      
+      <ng-container *ngIf="showOthers">
+        <legend class="legend">Detail</legend>
+        
+        <ng-container [ngClass]="{'mb-2':!(!isEditable && !isNewEvent)}">
+          <fieldset *ngIf="diaryEvent?.allDay || isEditable || isNewEvent">
+            <span class="checkbox">
+              <span>
+                <input type="checkbox" id="allDay" formControlName="allDay" (change)="onAllDayCheck($event)">
+                <label for="allDay">All Day Event</label>
+              </span>
+            </span>
+          </fieldset>
+          
+          <fieldset>
+            <label for="startDateTime">Start Date</label>
+            <span class="joined">
+              <input type="text" id="startDateTime" placeholder="dd/mm/yyyy" formControlName="startDateTime" [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', minDate:minDate, customTodayClass: 'font-weight-bold'}" (bsValueChange)="onStartDateChange($event)" bsDatepicker #datepicker="bsDatepicker" [appNoDoubleTap]='datepicker' [attr.disabled]="!isEditable && !isNewEvent ? true : null">
+              <span class="select input--grid-3" *ngIf="!isAllDay">
+                <select name="startHour" id="startHour" formControlName="startHour" [attr.disabled]="!isEditable && !isNewEvent ? true : null" (change)="onStartHourChange($event.target.value)">
+                  <option *ngFor="let hour of hours" [value]='hour'> {{hour}}</option>
+                </select>
+              </span>
+              <span class="select input--grid-3" *ngIf="!isAllDay">
+                <select  name="startMin" id="startMin" formControlName="startMin" [attr.disabled]="!isEditable && !isNewEvent ? true : null">
+                  <option *ngFor="let min of minutes" [value]='min'> {{min}}</option>
+                </select>
+              </span>
+            </span>
+          </fieldset>
+        </ng-container>
+        
+        <ng-container *ngIf="!isAllDay">
+          <fieldset [ngClass]="{'invalid': formErrors?.endHour}">
+            <label for="endDateTime">End Date</label>
+            <span class="joined">
+              <input type="text" id="endDateTime" placeholder="dd/mm/yyyy" formControlName="endDateTime" [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', minDate:minDate, customTodayClass: 'font-weight-bold'}" (bsValueChange)="onEndDateChange($event)" bsDatepicker [attr.disabled]="!isEditable && !isNewEvent ? true : null" [ngClass]="{'is-invalid': diaryEventForm.errors?.endDateIsBeforeStartDate}">
+              <span class="select input--grid-3">
+                <select name="endHour" id="endHour" formControlName="endHour" [attr.disabled]="!isEditable && !isNewEvent ? true : null" (change)="onEndHourChange($event.target.value)">
+                  <option *ngFor="let hour of hours" [value]='hour'>{{hour}}</option>
+                </select>
+              </span>
+              <span class="select input--grid-3">
+                <select name="endMin" id="endMin" formControlName="endMin" [attr.disabled]="!isEditable && !isNewEvent ? true : null">
+                  <option *ngFor="let min of minutes" [value]='min'>{{min}}</option>
+                </select>
+              </span>
+            </span>
+            <p class="message message--negative">{{formErrors?.endHour}}</p>
+            <p class="message message--negative" *ngIf="diaryEventForm?.errors?.endDateIsBeforeStartDate">End date should be after start date</p>
+          </fieldset>
+          
+        </ng-container>
+
+        <fieldset *ngIf="diaryEvent?.isConfirmed || isEditable || isNewEvent">
+          <span class="checkbox">
+            <span>
+              <input type="checkbox" id="isConfirmed" name="isConfirmed" formControlName="isConfirmed" [attr.disabled]="!isEditable && !isNewEvent ? true : null">
+              <label for="isConfirmed">Confirm</label>
+            </span>
+          </span>
+        </fieldset>
+
+        <fieldset *ngIf="diaryEvent?.subject && diaryEvent?.onOutlook">
+          <label for="subject">Subject</label>
+          <input type="text" formControlName="subject" id="subject" name="subject" [attr.disabled]="!isEditable && !isNewEvent ? true : null" />
+        </fieldset>
+
+        <fieldset *ngIf="diaryEvent?.notes?.trim() || isEditable || isNewEvent">
+          <ng-container *ngIf="!isBase64Image; else showImage">
+            <label for="notes" class="small">Note</label>
+            <textarea type="textarea" formControlName="notes" id="notes" name="note" placeholder="Note" maxlength="200" [attr.disabled]="!isEditable && !isNewEvent ? true : null" [ngStyle]="{'min-height.px': diaryEventForm.get('notes').value.length}"></textarea>
+            <small *ngIf="isEditable || isNewEvent" class="form-text text-muted">(200 chars max)</small>
+          </ng-container>
+          <ng-template #showImage><img [src]="imagePath" alt="embedded image" /></ng-template>
+        </fieldset>
+
+        <ng-container *ngIf="isReminder || isEditable || isNewEvent">
+          <fieldset>
+            <span class="checkbox">
+              <span>
+                <input type="checkbox" id="hasReminder" name="hasReminder" formControlName="hasReminder" (change)="onReminderCheck($event)">
+                <label for="hasReminder">Reminder</label>
+              </span>
+            </span>
+          </fieldset>
+
+          <div class="inline-parent" *ngIf="isReminder">
+            <fieldset class="inline-child">
+              <span class="select">
+                <select name="duration" id="duration" formControlName="duration" [attr.disabled]="!isEditable && !isNewEvent ? true : null">
+                  <option value="0">Not Known</option>
+                  <option *ngFor="let duration of durationValues" [value]='duration'> {{duration}}</option>
+                </select>
+              </span>
+            </fieldset>
+
+            <fieldset class="inline-child">
+              <span class="select">
+                <select name="durationType" id="durationType" formControlName="durationType" [attr.disabled]="!isEditable && !isNewEvent ? true : null">
+                  <option *ngFor="let type of durationTypes |keyvalue" [value]='type.key'> {{type.value}}</option>
+                </select>
+              </span>
+            </fieldset>
+            <p class="small" *ngIf="isReminder">Before start</p>
+          </div>
+        </ng-container>
+
+      </ng-container>
+  
+      
+      <footer class="footer">
+        <button type="button" class="btn btn--ghost" (click)="cancel()">Cancel</button>
+        <button type="submit" class="btn btn--positive">Save</button>
+      </footer>
+    </form>
+
+  </div>
+</div>
+
+
+<!-- <app-breadcrumb></app-breadcrumb>
+<div class="container main">
+  <div class="row page-title">
+    <div class="col">
+      <h4 class="m-0">Event <span class="badge badge-pill badge-success"
+          *ngIf="diaryEvent?.isConfirmed">Confirmed</span></h4>
+    </div>
+    <div class="col-auto">
+      <div class="btn-group" dropdown placement="bottom right" *ngIf="diaryEvent">
+        <button id="actionsToggle" dropdownToggle type="button" class="btn btn-light dropdown-toggle"
+          aria-controls="actionsList">
+          Actions <span class="caret"></span>
+        </button>
+        <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+          aria-labelledby="actionsToggle">
+          <li role="menuitem">
+            <a class="dropdown-item" id="delete" (click)="deleteEvent(diaryEvent?.diaryEventId)">
+              <i class="far fa-trash-alt fa-fw ml-2"></i>
+              Delete
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
-    <div class="form-group row">
-      <label for="contact-group" class="col-sm-2 col-form-label col-form-label-sm">Contact Group</label>
-      <div class="col-sm-10">
-        <input type="text" class="form-control form-control-sm" id="contact-group" placeholder="Contact Group">
+  </div>
+  <form [formGroup]="diaryEventForm" (ngSubmit)="saveDiaryEvent()" autocompleteOff>
+    <fieldset *ngIf="showTypes || showStaffMembers">
+      <div class="form-group row" *ngIf="showTypes">
+        <div class="col-sm-3 offset-sm-2">
+          <label for="eventTypeId" class="small">Type</label>
+          <select class="custom-select custom-select-sm" id="eventTypeId" formControlName="eventTypeId"
+            (change)="onEventTypeChange($event.target.value)" [attr.disabled]="lockEventTypes ? true : null"
+            [ngClass]="{'is-invalid': formErrors?.eventTypeId}">
+            <option value="0"></option>
+            <option *ngFor="let type of eventTypes" [value]="type.id">{{type.value}}</option>
+          </select>
+          <div class="invalid-feedback">{{formErrors?.eventTypeId}}</div>
+        </div>
       </div>
-    </div>
-    <div class="form-group row align-items-center">
-      <label for="startDateTime" class="col-sm-2 col-form-label col-form-label-sm">Start time</label>
-      <div class="col-sm-3">
-        <input type="time" formControlName="startDateTime" class="form-control form-control-sm">
+      <div *ngIf="showStaffMembers" class="form-group row">
+        <div class="col-sm-3 offset-sm-2">
+          <label for="property" class="small">Staff Members</label>
+          <ng-container *ngIf="!diaryEvent?.onOutlook;else staffList">
+            <app-staff-member-finder [listType]="'calendarStaffMembers'" [isMultiple]="true"
+              [isReadOnly]="diaryEvent?.onOutlook" [staffMemberIdList]="staffMemberIdList"
+              (selectedStaffMemberList)="getSelectedStaffMembers($event)">
+            </app-staff-member-finder>
+          </ng-container>
+          <ng-template #staffList>
+            <div class="custom-label"
+              *ngFor="let member of diaryEvent?.staffMembers; last as isLast; first as isFirst trackBy:trackByFn">
+              <ng-container *ngIf="eventStaffMembers?.length < 6; else moreMembers">
+                <div>{{member?.fullName}}</div>
+              </ng-container>
+              <ng-template #moreMembers>
+                <div>{{member?.fullName}}</div>
+                <button type="button" class="btn btn-link px-0" (click)="showAllMembers()"
+                  *ngIf="isLast && showMorePeople">+
+                  {{NumberOfPeopleLabel}}
+                </button>
+                <button type="button" class="btn btn-link px-0" (click)="showFewMembers()"
+                  *ngIf="isLast &&!showMorePeople">
+                  show less
+                </button>
+              </ng-template>
+            </div>
+          </ng-template>
+        </div>
       </div>
-    </div>
-    <div class="form-group row align-items-center">
-      <label for="endDateTime" class="col-sm-2 col-form-label col-form-label-sm">End time</label>
-      <div class="col-sm-3">
-        <input type="time" formControlName="endDateTime" class="form-control form-control-sm">
+    </fieldset>
+    <fieldset *ngIf="showProperties">
+      <legend class="fieldset-title">Properties {{propertyLabel}}</legend>
+      <app-property-finder (selectedPropertyList)="getSelectedProperties($event)"
+        (rebookedProperty)="getRebookedPropertyId($event)" [isMultiple]="true" [hideCreateNewProperty]='true' [label]="propertyLabel"
+        [isLabelHidden]="isLabelHidden" [property]="property" [canRebook]="canRebook"
+        [propertyList]="diaryEvent?.properties" [propertyRequiredWarning]="propertyRequiredWarning"
+        [searchType]="searchType">
+      </app-property-finder>
+    </fieldset>
+    <fieldset *ngIf="showContacts">
+      <legend class="fieldset-title">{{contactLabel}}s</legend>
+      <app-signer [label]="contactLabel" [isLabelHidden]="isLabelHidden" [isMultiple]="true"
+        (selectedSignersList)="getSelectedContactGroups($event)" [contactList]="diaryEvent?.contacts"
+        [contactRequiredWarning]="contactRequiredWarning" [isTelRequired]="isTelRequired" [isApplicant]="isApplicant">
+      </app-signer>
+    </fieldset>
+    <fieldset *ngIf="showOthers">
+      <legend class="fieldset-title">Detail</legend>
+      <div class="form-group row">
+        <div class="col-sm-6 col-xl-3 offset-sm-2">
+          <label for="startDateTime" class="small">Start Date</label>
+          <div class="input-group" [ngClass]="{'mb-2':!(!isEditable && !isNewEvent)}">
+            <input type="text" id="startDateTime" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
+              formControlName="startDateTime"
+              [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', minDate:minDate, customTodayClass: 'font-weight-bold'}"
+              (bsValueChange)="onStartDateChange($event)" bsDatepicker #datepicker="bsDatepicker"
+              [appNoDoubleTap]='datepicker' [attr.disabled]="!isEditable && !isNewEvent ? true : null">
+            <select *ngIf="!isAllDay" class="custom-select custom-select-sm" name="startHour" id="startHour"
+              formControlName="startHour" [attr.disabled]="!isEditable && !isNewEvent ? true : null" (change)="onStartHourChange($event.target.value)">
+              <option *ngFor="let hour of hours" [value]='hour'> {{hour}}</option>
+            </select>
+            <select *ngIf="!isAllDay" class="custom-select custom-select-sm" name="startMin" id="startMin"
+              formControlName="startMin" [attr.disabled]="!isEditable && !isNewEvent ? true : null">
+              <option *ngFor="let min of minutes" [value]='min'> {{min}}</option>
+            </select>
+          </div>
+          <div class="custom-control custom-checkbox" *ngIf="diaryEvent?.allDay || isEditable || isNewEvent">
+            <input type="checkbox" class="custom-control-input" id="allDay" formControlName="allDay"
+              (change)="onAllDayCheck($event)">
+            <label class="custom-control-label small" for="allDay">All Day </label>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="form-group row">
-      <label for="date" class="col-sm-2 col-form-label col-form-label-sm">Date</label>
-      <div class="col-sm-3">
-        <input type="text" id="date" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
-          [bsConfig]="{showWeekNumbers:false}" bsDatepicker>
+      <div class="form-group row" *ngIf="!isAllDay">
+        <div class="col-sm-6 col-xl-3 offset-sm-2">
+          <label for="endDateTime" class="small">End Date</label>
+          <div class="input-group">
+            <input type="text" id="endDateTime" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
+              formControlName="endDateTime"
+              [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', minDate:minDate, customTodayClass: 'font-weight-bold'}"
+              (bsValueChange)="onEndDateChange($event)" bsDatepicker
+              [attr.disabled]="!isEditable && !isNewEvent ? true : null"
+              [ngClass]="{'is-invalid': diaryEventForm.errors?.endDateIsBeforeStartDate}">
+            <select class="custom-select custom-select-sm" name="endHour" id="endHour" formControlName="endHour"
+            [ngClass]="{'is-invalid': formErrors?.endHour}"
+              [attr.disabled]="!isEditable && !isNewEvent ? true : null" (change)="onEndHourChange($event.target.value)">
+              <option *ngFor="let hour of hours" [value]='hour'> {{hour}}</option>
+            </select>
+            <select class="custom-select custom-select-sm" name="endMin" id="endMin" formControlName="endMin"
+            [attr.disabled]="!isEditable && !isNewEvent ? true : null">
+            <option *ngFor="let min of minutes" [value]='min'> {{min}}</option>
+          </select>
+          <div class="invalid-feedback">{{formErrors?.endHour}}</div>
+          </div>
+          <small class="text-danger" *ngIf="diaryEventForm?.errors?.endDateIsBeforeStartDate">End date should be after
+            start date</small>
+        </div>
       </div>
-    </div>
-    <div class="form-group row">
-      <label for="smsMessage" class="col-sm-2 col-form-label col-form-label-sm">SMS<br /><span
-          class="form-text text-muted">(500 chars max)</span></label>
-      <div class="col-sm-10">
-        <textarea type="textarea" class="form-control form-control-sm" formControlName="smsMessage" id="smsMessage"
-          name="sms" autocomplete="true" autocorrect="on" spellcheck="true" placeholder="SMS text"
-          maxlength="500"></textarea>
+      <div class="form-group row" *ngIf="diaryEvent?.isConfirmed || isEditable || isNewEvent">
+        <div class="col-sm-6 col-xl-3 offset-sm-2">
+          <div class="custom-control custom-checkbox mb-2">
+            <input type="checkbox" id="isConfirmed" name="isConfirmed" class="custom-control-input"
+              formControlName="isConfirmed" [attr.disabled]="!isEditable && !isNewEvent ? true : null">
+            <label class="custom-control-label small" for="isConfirmed">Confirm</label>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="form-group row">
-      <label for="notes" class="col-sm-2 col-form-label col-form-label-sm">Note<br /><span
-          class="form-text text-muted">(200 chars max)</span></label>
-      <div class="col-sm-10">
-        <textarea type="textarea" class="form-control form-control-sm" formControlName="notes" id="notes" name="note"
-          placeholder="Note" maxlength="200"></textarea>
+      <div class="form-group row" *ngIf="diaryEvent?.subject && diaryEvent?.onOutlook">
+        <div class="col-sm-8 col-xl-6 offset-sm-2">
+          <label for="subject" class="small">Subject</label>
+          <input type="text" class="form-control form-control-sm" formControlName="subject" id="subject" name="subject"
+            [attr.disabled]="!isEditable && !isNewEvent ? true : null" />
+        </div>
       </div>
-    </div>
+      <div class="form-group row" *ngIf="diaryEvent?.notes?.trim() || isEditable || isNewEvent">
+        <ng-container *ngIf="!isBase64Image; else showImage">
+          <div class="col-sm-8 col-xl-6 offset-sm-2">
+            <label for="notes" class="small">Note<br /><span *ngIf="isEditable || isNewEvent"
+                class="form-text text-muted">(200 chars max)</span></label>
+            <textarea type="textarea" class="form-control form-control-sm" formControlName="notes" id="notes"
+              name="note" placeholder="Note" maxlength="200" [attr.disabled]="!isEditable && !isNewEvent ? true : null"
+              [ngStyle]="{'min-height.px': diaryEventForm.get('notes').value.length}"></textarea>
+          </div>
+        </ng-container>
+        <ng-template #showImage> <img [src]="imagePath" alt="embedded image" /></ng-template>
+      </div>
+      <div class="form-group row" *ngIf="isReminder || isEditable || isNewEvent">
+        <div class="col-sm-6 col-xl-3 offset-sm-2">
+          <div class="custom-control custom-checkbox mb-2">
+            <input type="checkbox" id="hasReminder" name="hasReminder" class="custom-control-input"
+              formControlName="hasReminder" (change)="onReminderCheck($event)">
+            <label class="custom-control-label small" for="hasReminder">Reminder</label>
+          </div>
+          <div class="input-group mb-2" *ngIf="isReminder">
+            <select class="custom-select custom-select-sm single-select" name="duration" id="duration"
+              formControlName="duration" [attr.disabled]="!isEditable && !isNewEvent ? true : null">
+              <option value="0">Not Known</option>
+              <option *ngFor="let duration of durationValues" [value]='duration'> {{duration}}</option>
+            </select>
+            <select class="custom-select custom-select-sm single-select" name="durationType" id="durationType"
+              formControlName="durationType" [attr.disabled]="!isEditable && !isNewEvent ? true : null">
+              <option *ngFor="let type of durationTypes |keyvalue" [value]='type.key'> {{type.value}}</option>
+            </select>
+          </div>
+          <p class="small" *ngIf="isReminder">Before start</p>
+        </div>
+      </div>
+    </fieldset>
     <div class="form-actions">
       <div class="container px-lg-1">
         <div class="row justify-content-end w-100 no-gutters">
           <div class="col-sm-10 d-flex">
             <button type="button" class="btn btn-light mr-2" (click)="cancel()">Cancel</button>
-            <button type="submit" class="btn btn-secondary">Add appointment</button>
+            <button type="submit" class="btn btn-secondary">Save</button>
           </div>
         </div>
       </div>
     </div>
   </form>
-</div>
+</div> -->

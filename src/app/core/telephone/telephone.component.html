@@ -1,5 +1,0 @@
-<button type="button" class="btn btn-link p-sm-0 mobile-btn" (click)="callOrText(true)" [attr.disabled]="isDialing ? true : null">
-  <i class="fas fa-spinner fa-pulse d-inline-block mr-2" *ngIf="isDialing"></i> <span [innerHTML]="number | highlight : searchTerm"></span>
-</button>
-<ng-container *ngIf="sms"><button type="button" (click)="callOrText(false)" class="btn btn-light btn-sm ml-2 sms-btn">SMS</button></ng-container>
-

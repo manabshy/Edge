@@ -1,8 +1,20 @@
-import { Address } from 'src/app/core/models/address';
-import { SubNavItem, SubNav } from 'src/app/core/shared/subnav';
+import { Address } from 'src/app/shared/models/address';
+import { SubNavItem, SubNav } from 'src/app/shared/subnav';
 import { Signer } from 'src/app/contactgroups/shared/contact-group';
+import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
 
-export interface Property {
+export interface PropertyInfo {
+  bedrooms?: number;
+  bathrooms?: number;
+  receptions?: number;
+  sqFt?: number;
+  tenureId: number;
+  outsideSpace: string;
+  parking: string;
+  propertyFeature: string;
+}
+export interface Property extends PropertyInfo {
+  officeId: number;
   propertyId: number;
   propertyTypeId: PropertyType;
   propertyStyleId: PropertyStyle;
@@ -18,10 +30,13 @@ export interface Property {
   photo: Photo;
   info: PropertySummaryFigures;
   lastKnownOwner: Signer;
+  valuer?: BaseStaffMember;
+  valuers?: BaseStaffMember[];
 }
+
 export interface MapCentre {
-  longitude: string;
-  latitude: string;
+  longitude: string | number;
+  latitude: string | number;
 }
 export interface Photo {
   propertyId: number;
@@ -31,6 +46,7 @@ export interface Photo {
 }
 export interface Summary {
   active: number;
+  inactive: number;
   total: number;
 }
 export interface PropertySummaryFigures {
@@ -38,6 +54,7 @@ export interface PropertySummaryFigures {
   lettingInstructions: Summary;
   saleInstructions: Summary;
   instructions: Summary;
+  valuations: Summary;
   lettingOffers: Summary;
   saleOffers: Summary;
   offers: Summary;
@@ -59,19 +76,24 @@ export interface OfferInfo {
   applicantId: number;
   applicantAddressee: string;
   staffMember: string;
+  isActive: boolean;
 }
 export interface InstructionInfo {
   propertyEventId: number;
   type: string;
   statusId: number;
   status: string;
-  instuctionDate: Date;
+  instructionDate: Date;
   amount: number;
   shortLetAmount: number;
+  askingPrice: number;
+  askingRent: number;
+  askingRentShortLet: number;
   ownerId: number;
   ownerAddressee: string;
   agencyType: string;
   staffMember: string;
+  isActive: boolean;
 }
 export interface PropertyNote {
   propertyId: number;
@@ -83,6 +105,12 @@ export interface PropertyNote {
   createdBy: number;
   type: number;
   typeDescription: string;
+}
+
+export interface PropertyLocation {
+  latitude: number;
+  longitude: number;
+  officeId: number;
 }
 export interface PropertyData {
   result: Property;
@@ -109,6 +137,15 @@ export interface MinBedroom {
   id: number;
   name: string;
 }
+export interface LeaseType {
+  id: number;
+  name: string;
+}
+
+export const LeaseTypes = <LeaseType[]>[
+  { id: 1, name: 'FreeHold' },
+  { id: 2, name: 'LeaseHold' }
+];
 
 export const MinBedrooms = <MinBedroom[]>[
   // {id: 0, name: 'Any'},
@@ -119,10 +156,12 @@ export const MinBedrooms = <MinBedroom[]>[
   { id: 5, name: '5' },
   { id: 6, name: '6+' }
 ];
+
 export enum PropertyType {
   House = 1,
   Flat = 2
 }
+
 export enum PropertyStyle {
   SemiDetached = 1,
   Detached = 2,
@@ -138,6 +177,7 @@ export enum PropertyStyle {
   Land = 13,
   ParkingSpace = 11,
 }
+
 export const PropertyTypes = new Map([
   [PropertyType.Flat, 'Flat'],
   [PropertyType.House, 'House']
@@ -158,11 +198,20 @@ export const PropertyStyles = new Map([
   [PropertyStyle.ParkingSpace, 'Parking Space'],
 ]);
 
-export const PropertyDetailsSubNav = ['property-notes', 'instructions', 'offers', 'property-photos'];
+export const PropertyDetailsSubNav = ['instructions', 'offers', 'valuations'];
 
 export const PropertyDetailsSubNavItems: SubNavItem[] = PropertyDetailsSubNav.map(x => ({
   link: x,
   label: SubNav.subNavLabel(x),
   value: SubNav.subNavValue(x)
 }));
+
+export enum PropertySearchEnum {
+  SalesInstruction = 1,
+  LettingsInstruction = 2,
+  PropertyManagement = 3,
+  DiaryEventProperty = 4,
+  SalesViewing = 5,
+  LettingsViewing = 6
+}
 

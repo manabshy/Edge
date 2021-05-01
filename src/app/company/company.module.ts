@@ -7,17 +7,16 @@ import { CompanyListComponent } from './company-list/company-list.component';
 import { CompanyEditComponent } from './company-edit/company-edit.component';
 import { CompanyDetailComponent } from './company-detail/company-detail.component';
 import { CoreModule } from '../core/core.module';
-import { CompanyFinderComponent } from './shared/company-finder/company-finder.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
-  declarations: [CompanyComponent, CompanyListComponent, CompanyEditComponent, CompanyDetailComponent, CompanyFinderComponent],
+  declarations: [CompanyComponent, CompanyListComponent, CompanyEditComponent, CompanyDetailComponent],
   imports: [
     CommonModule,
-    CoreModule,
-    InfiniteScrollModule,
+    SharedModule,
     CompanyRoutingModule
   ],
-  exports: [CompanyListComponent, CompanyFinderComponent]
+  exports: [CompanyListComponent]
 })
 export class CompanyModule { }

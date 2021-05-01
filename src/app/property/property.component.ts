@@ -3,11 +3,13 @@ import { PropertyService } from './shared/property.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { distinctUntilChanged, takeUntil, tap, switchMap, catchError } from 'rxjs/operators';
 import { PropertyAutoComplete } from './shared/property';
-import { AppUtils } from '../core/shared/utils';
+import { AppUtils, RequestOption } from '../core/shared/utils';
 import { Observable, EMPTY } from 'rxjs';
-import { BaseComponent } from '../core/models/base-component';
+import { BaseComponent } from '../shared/models/base-component';
 import * as _ from 'lodash';
 import { SharedService } from '../core/services/shared.service';
+import { StorageMap } from '@ngx-pwa/local-storage';
+import { Impersonation } from '../shared/models/staff-member';
 
 @Component({
   selector: 'app-property',
@@ -16,7 +18,6 @@ import { SharedService } from '../core/services/shared.service';
 })
 export class PropertyComponent extends BaseComponent implements OnInit {
   propertyFinderForm: FormGroup;
-  isLoading: boolean;
   properties: PropertyAutoComplete[] = [];
   isMessageVisible: boolean;
   isHintVisible: boolean;
@@ -30,6 +31,7 @@ export class PropertyComponent extends BaseComponent implements OnInit {
 
   constructor(private propertyService: PropertyService,
     private fb: FormBuilder,
+    private storage: StorageMap,
     private sharedService: SharedService) { super(); }
 
   ngOnInit() {
@@ -60,12 +62,10 @@ export class PropertyComponent extends BaseComponent implements OnInit {
             }))
         )
       );
-
   }
 
-  propertiesResults() {
+  propertiesResults(submit?: boolean) {
     if (this.searchTerm) {
-      this.isLoading = true;
       this.suggestions = null;
     }
     this.page = 1;
@@ -74,28 +74,37 @@ export class PropertyComponent extends BaseComponent implements OnInit {
     this.suggestedTerm ? this.searchTerm = this.suggestedTerm : this.searchTerm = this.propertyFinderForm.value.searchTerm;
     AppUtils.propertySearchTerm = this.searchTerm;
     this.getNextPropertyPage(this.page);
+    if (submit) {
+      this.sharedService.scrollElIntoView('list-group');
+    }
   }
 
   getNextPropertyPage(page) {
-    this.isLoading = true;
-    this.propertyService.autocompleteProperties(this.searchTerm, this.PAGE_SIZE, page).subscribe(result => {
-      this.isLoading = false;
+    const requestOptions = {
+      page: page,
+      pageSize: this.PAGE_SIZE,
+      searchTerm: this.searchTerm
+    } as RequestOption;
+    this.propertyService.autocompleteProperties(requestOptions).subscribe(result => {
       if (this.searchTerm && this.searchTerm.length) {
-        if (!result.length) {
+        if (result && !result.length) {
           this.isMessageVisible = true;
           this.bottomReached = true;
         } else {
           this.isMessageVisible = false;
         }
       }
-      if (result) {
-        this.properties = _.concat(this.properties, result);
+      if (result && result.length) {
+        if (requestOptions.page === 1) {
+          this.properties = result;
+        } else {
+          this.properties = _.concat(this.properties, result);
+        }
       }
 
     }, error => {
       this.properties = [];
       this.searchTerm = '';
-      this.isLoading = false;
       this.isHintVisible = true;
     });
   }
@@ -112,14 +121,21 @@ export class PropertyComponent extends BaseComponent implements OnInit {
         this.isHintVisible = true;
       }
     }
+
   }
 
   selectedSuggestion(event: any) {
     if (event.item != null) {
       this.suggestedTerm = event.item;
     }
-    this.propertiesResults();
+    this.propertiesResults(true);
     AppUtils.propertySearchTerm = this.searchTerm;
     this.suggestedTerm = '';
+  }
+
+
+
+  scrollElIntoView(className: string) {
+    this.sharedService.scrollElIntoView(className);
   }
 }

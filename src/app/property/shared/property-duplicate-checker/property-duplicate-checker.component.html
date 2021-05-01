@@ -1,4 +1,36 @@
-<div class="row justify-content-end" *ngIf="isLoading">
+<fieldset *ngIf="isFullMatch || isPartialMatch">
+  <p class="message message--warning">
+   <ng-container *ngIf="isFullMatch; else partialMatch">
+     There is already a property with this address. Use the link below to navigate to it or <a href (click)="$event.preventDefault(); hideModal.emit()">search again</a>.
+    </ng-container>
+    <ng-template #partialMatch>Please check the property you're looking for isn't in the list below, before creating a new record</ng-template>
+  </p>
+</fieldset>
+<div class="table">
+  <table class="table--mobile table--rowHover">
+    <tbody>
+      <tr *ngFor="let foundProperty of potentialDuplicates" (click)="selectProperty(foundProperty?.propertyId)">
+        <td>
+          <span class="cell-content">
+            {{foundProperty?.propertyAddress}}
+          </span>
+          <span *ngIf="foundProperty?.ranking">
+            <small class="txt--positive" *ngIf="foundProperty?.matchType == 'FullMatch'">Full Match</small>
+            <small class="txt--warning" *ngIf="foundProperty?.matchType == 'PartMatch'">Part Match</small>
+          </span>
+        </td>
+        <td class="hide--mobile">
+          <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s">
+            <path d="M1 35.4h48.8L37.5 47.8l4.9 4.9L63 32 42.3 11.3l-4.9 4.9 12.3 12.3H1V35.4z"></path>
+          </svg>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- <div class="row justify-content-end" *ngIf="isLoading">
   <div class="col-sm-10 text-center">
     <i class="fas fa-spinner fa-pulse d-inline-block"></i> Looking for duplicates ...
   </div>
@@ -17,7 +49,6 @@
         <app-subnav-item *ngFor="let foundProperty of potentialDuplicates" (click)="selectProperty(foundProperty?.propertyId)">
           <div class="row">
             <div class="col-12 mb-2" *ngIf="foundProperty?.ranking">
-              <small class="text-muted mr-2">PR-{{foundProperty?.propertyId}}</small>
               <span class="badge badge-pill badge-success" *ngIf="foundProperty?.matchType == 'FullMatch'">Full Match</span>
               <span class="badge badge-pill badge-warning" *ngIf="foundProperty?.matchType == 'PartMatch'">Part Match</span>
             </div>
@@ -29,4 +60,4 @@
       </ng-container>
     </app-subnav>
   </div>
-</div>
+</div> -->

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { PropertyDetailInstructionsComponent } from './property-detail-instructions.component';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
@@ -9,12 +9,12 @@ import { BrowserModule, By } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SharedService } from 'src/app/core/services/shared.service';
-import { MockDropdownListInfo } from 'src/app/contactgroups/shared/test-helper/dropdown-list-data.json';
 import { MockInstructions } from '../shared/test-helper';
 import { InstructionInfo } from '../shared/property';
 import { PropertyService } from '../shared/property.service';
+import { MockDropdownListInfo } from 'src/testing/fixture-data/dropdown-list-data.json';
 
-fdescribe('PropertyDetailInstructionsComponent should', () => {
+describe('PropertyDetailInstructionsComponent should', () => {
   let component: PropertyDetailInstructionsComponent;
   let fixture: ComponentFixture<PropertyDetailInstructionsComponent>;
   let propertyService: PropertyService;
@@ -27,7 +27,7 @@ fdescribe('PropertyDetailInstructionsComponent should', () => {
     formatPostCode: () => ''
   };
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [PropertyDetailInstructionsComponent],
       imports: [
@@ -65,10 +65,9 @@ fdescribe('PropertyDetailInstructionsComponent should', () => {
     expect(component).toBeTruthy();
   });
 
-  it('set instructions correctly from service', async(() => {
+  it('set instructions correctly from service', waitForAsync(() => {
     const spy = spyOn(propertyService, 'getPropertyInstructions').and.returnValue(of(instructions));
     let response: any;
-    component.ngOnInit();
     component.instructions$
       .subscribe(res => {
         response = res;
@@ -79,9 +78,8 @@ fdescribe('PropertyDetailInstructionsComponent should', () => {
     expect(spy).toHaveBeenCalledWith(1);
   }));
 
-  it('display the instructions correctly', async(() => {
+  it('display the instructions correctly', waitForAsync(() => {
     spyOn(propertyService, 'getPropertyInstructions').and.returnValue(of(instructions));
-    component.ngOnInit();
     component.instructions$.subscribe();
 
     fixture.whenStable().then(() => {

@@ -1,23 +1,137 @@
-.table {
-    thead th {
-        border: none;
-    }
+/***** Tables *****/
+.table                                          { overflow:auto; overflow-y:hidden; width:100%; -webkit-overflow-scrolling:touch; position:relative; }
+.table+*                                        { margin-top:20px; }
 
-    &.table-sortable thead th {
-        &:hover {
-            cursor: pointer;
-        }
-
-        &.active{
-            span{
-                color: theme-color("secondary");
-            }
-        }
-
-        &:not(.active):hover {
-            span:first-child {
-                color: theme-color("secondary");
-            }
-        }
-    }
+table                                           { width:100%; overflow:visible; text-align:left; display:table; border:none; border-collapse:collapse; border-spacing:0; }
+table, caption, tbody, thead, tr, th, td        { text-align:left; }
+caption, thead                                  { font-weight:bold; text-align:left; }
+tr                                              { padding:3px; padding:0; 
+    &:focus                                     { border:none; outline:none; }
 }
+tr+tr                                           { margin-top:10px; border-top:1px solid $color--midnight-10; }
+th, td                                          { padding:10px; min-width:40px; border:none; vertical-align:top; position:relative; top:0; left:0; }
+th                                              { padding-top:0;
+    &.hasBtn                                    { padding:0; text-align:right; }
+}
+td:empty                                        { display:none; visibility:hidden; }
+
+.table--rowHover thead tr:hover,
+.table--stripes thead tr:nth-child(odd)         { background-color:transparent; }
+.table--rowHover tr:hover,
+.table--stripes tr:nth-child(odd)               { background-color:$color--smoke; }
+
+.table--mobile table, 
+.table--mobile tr, 
+.table--mobile td                               { display:block; border:none; }
+.table--mobile thead                            { padding:5px 10px; background-color:$color--snow; border:none; border-bottom:2px solid $color--midnight-10; font-weight:bold; display:none; }
+.table--mobile tr                               { border-radius:3px; }
+.table--mobile tr:nth-child(odd)                { background-color:rgba($color--smoke, .5); }
+.table--mobile thead tr:nth-child(odd)          { background-color:$color--snow; }
+.table--mobile tr:nth-child(odd) td             { border-color:$color--snow; }
+.table--mobile td                               { margin:0; display:block; }
+.table--mobile td+td                            { border-top:1px solid $color--midnight-10; }
+.table--mobile td[data-title]:before            { padding:0 10px 0 0; content:attr(data-title) ":\00A0"; color:$color--midnight; display:inline-block; width:30%; font-weight:bold; overflow:hidden; }
+.table--mobile td .cell-content                 { display:inline-block; width:68%; vertical-align:top; overflow:hidden; }
+
+/***********************************************
+Tablet - This applies from 768px onwards
+***********************************************/
+@media (min-width:768px) {
+    .table                                        { overflow:visible; }
+    table                                         { font-size:inherit; }
+    
+    .table--mobile table                          { display:table; }
+    .table--mobile tbody, 
+    .table--mobile thead                          { display:table-row-group; }
+    .table--mobile tr                             { display:table-row; }
+    .table--mobile tr+*                           { border-top:1px solid $color--midnight-10; }
+    .table--mobile tr:nth-child(odd) td           { border:none; }
+    .table--mobile tr:nth-child(odd)+tr           { margin-top:0; border-top:1px solid $color--midnight-10; }
+
+    .table--mobile td                             { display:table-cell;
+        &.vAlign--center                          { vertical-align:middle; }
+    }
+    .table--mobile td+td                          { border-top:none; }
+    .table--mobile td+td[data-title]:before, 
+    .table--mobile th+td[data-title]:before,
+    .table--mobile td[data-title]:before          { display:none; }
+    .table--mobile td .cell-content               { width:100%; overflow:visible;
+        .dropdown                                 { position: absolute;
+            top: 3px;
+            right: 5px; }
+    }
+
+    .table--rowHover thead tr:hover,
+    .table--stripes thead tr:nth-child(odd)       { background-color:transparent; }
+    .table--rowHover tr:hover,
+    .table--stripes tr:nth-child(odd)             { background-color:$color--midnight-10; }
+
+    .has--checkbox                                { width:20px; min-width:20px; }
+}
+
+
+// .table {
+//     table-layout: fixed;
+
+//     &.table-sortable thead th {
+//         &:hover {
+//             cursor: pointer;
+//         }
+
+//         &.active{
+//             span{
+//                 color: theme-color("secondary");
+//             }
+//         }
+
+//         &:not(.active):hover {
+//             span:first-child {
+//                 color: theme-color("secondary");
+//             }
+//         }
+//     }
+
+//     .long-content {
+//         @include media-breakpoint-up(md) {
+//             width: 10rem;
+//         }
+//     }
+//     .values {
+//         @include media-breakpoint-up(md) {
+//             width: 7.2rem;
+//         }
+//     }
+
+//     .table-link {
+//         color: $body-color;
+//         text-decoration: none;
+//     }
+// }
+
+// .table-responsive {
+//     @include media-breakpoint-up(xl) {
+//         overflow-x: unset;
+//     }
+
+//     @include media-breakpoint-down(md) {
+//         thead {
+//             display: none;
+//         }
+//         td {
+//             display: block;
+//             border: none!important;
+//         }
+//         tr {
+//             display: block;
+//             padding: spacer(3) 0;
+            
+//             &:not(:last-child) {
+//                 border-bottom: 1px solid $border-color;
+//             }
+//         }
+        
+//         dl {
+//             margin-bottom: 0;
+//         }
+//     }
+// }

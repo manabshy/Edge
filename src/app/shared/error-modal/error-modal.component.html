@@ -1,0 +1,44 @@
+<!-- <div class="modal-header bg-danger text-light">
+  Error
+</div>
+<div class="modal-body text-center">
+  <p [innerHtml]="desc"></p>
+  <pre class="tech mb-3" *ngIf="techDet" [innerHtml]="techDet"></pre>
+  <div class="mb-3">
+    <a [href]="'mailto:helpdesk@dng.co.uk?subject=Error '+title+'&body='+desc+'%0D%0D'+(techDet||'')+'%0D%0D'+url">Contact Helpdesk</a>
+  </div>
+  <div class="mb-4">
+    <button type="button" class="btn btn-light" (click)="action(false)">Close</button>
+  </div>
+  <div class="text-left text-muted">
+    <small>IT REF: {{title}}</small>
+  </div>
+
+  <div *ngIf="desc=='undefined'" class="overflow">
+    <p *ngIf="url">url: {{requestUrl}}</p>
+    <div *ngIf="error">
+      <p *ngFor="let e of error | keyvalue">
+        {{e.key}} : {{e.value}}
+      </p>
+    </div>
+    <p *ngIf="triggeredBy">triggeredby:{{triggeredBy | json}} </p>
+  </div>
+</div> -->
+
+<fieldset class="overflow">
+  <p *ngIf="data?.error?.displayMessage" [innerText]="data?.error?.displayMessage"></p>
+  <pre *ngIf="data?.error?.technicalDetails" [innerText]="data?.error?.technicalDetails"></pre>
+</fieldset>
+<fieldset>
+  <a [href]="'mailto:helpdesk@dng.co.uk?subject=Error '+title+'&body='+desc+'%0D%0D'+(techDet||'')+'%0D%0D'+url">Contact Helpdesk</a>
+</fieldset>
+<fieldset *ngIf="data?.error?.requestId" class="text-left text-muted">
+  <small>IT REF: {{data?.error?.requestId}}</small>
+</fieldset>
+<fieldset><p *ngIf="data?.triggeredBy">triggeredby:{{data?.triggeredBy | json}} </p></fieldset>
+
+<footer class="footer footer--modal">
+  <div class="btn--container">
+    <button type="button" class="btn btn--info" (click)="action(false)">Close</button>
+  </div>
+</footer>

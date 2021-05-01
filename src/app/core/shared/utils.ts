@@ -1,9 +1,11 @@
-import {format, compareAsc, isDate} from 'date-fns';
-import { isArray, isPlainObject, mapValues, isNull, isUndefined, random  } from 'lodash';
-import { ContactGroup, Company } from 'src/app/contactgroups/shared/contact-group';
-import { Person } from '../models/person';
-import { StaffMember } from '../models/staff-member';
+import { format, isDate } from 'date-fns';
+import { Company } from 'src/app/contactgroups/shared/contact-group';
+import { Person } from '../../shared/models/person';
+import { StaffMember } from '../../shared/models/staff-member';
 import { DetachedRouteHandle } from '@angular/router';
+import { HttpParams } from '@angular/common/http';
+import { CustomQueryEncoderHelper } from './custom-query-encoder-helper';
+import { LeadSearchInfo } from 'src/app/leads/shared/lead';
 
 
 export interface IRouteConfigData {
@@ -13,6 +15,13 @@ export interface IRouteConfigData {
 export interface ICachedRoute {
   handle: DetachedRouteHandle;
   data: IRouteConfigData;
+}
+export interface RequestOption {
+  isNameSearch: boolean;
+  searchTerm: string;
+  searchType: number;
+  pageSize?: number;
+  page?: number;
 }
 
 export class AppUtils {
@@ -32,6 +41,7 @@ export class AppUtils {
   public static holdingContactType: number;
   public static holdingCompany: Company;
   public static holdingCloned: boolean;
+  public static leadSearchTerm: string;
   static firstContactPerson: Person;
   static propertySearchTerm: string;
   static openedWindows: any[] = [];
@@ -39,13 +49,36 @@ export class AppUtils {
   static routeCache = new Map<string, ICachedRoute>();
   static currentStaffMemberGlobal: StaffMember;
   static navPlaceholder: string;
+  static leadSearchInfo: LeadSearchInfo;
+
+
+  public static setQueryParams(requestOption: RequestOption) {
+    if (!requestOption.page) {
+      requestOption.page = 1;
+    }
+    if (requestOption.pageSize == null) {
+      requestOption.pageSize = 10;
+    }
+
+    const options = new HttpParams({
+      encoder: new CustomQueryEncoderHelper,
+      fromObject: {
+        searchTerm: requestOption.searchTerm,
+        searchType: requestOption.searchType ? requestOption.searchType.toString() : '',
+        pageSize: requestOption.pageSize.toString(),
+        page: requestOption.page.toString()
+      }
+    });
+    return options;
+  }
 
   /**
    * Format a date/time into a string
    */
   public static getMomentDate(date?: Date): string {
     const moDate = isDate(date) ? date : (date);
-    return format(moDate ? null : 'YYYY-MM-DD');
+    return null;
+    // return format(moDate ? null : 'YYYY-MM-DD');
   }
 
   /**
@@ -55,7 +88,7 @@ export class AppUtils {
     const moDate = isDate(date) ? date : (date);
     return format(moDate, 'HH:mm');
   }
-  public static capitaliseFirstLetter<T>(value: string): string {
+  public static capitaliseFirstLetter(value: string): string {
     if (value) {
       const result = value.charAt(0).toLocaleUpperCase();
       return result.concat(value.substr(1));
@@ -71,6 +104,5 @@ export class AppUtils {
       }
     }
   }
-
 
 }

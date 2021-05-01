@@ -27,11 +27,12 @@ export class InfoService {
   private requestDropdownListInfo(): Observable<DropdownListInfo> {
     return this.http.get<any>(AppConstants.baseInfoUrl)
       .pipe(
-        map(response => response.result),
+        map(response => response),
         tap(data => {
           if (data) {
-            this.infoData = data;
-            this.storage.set('info', data).subscribe();
+            this.infoData = data.result;
+            this.storage.set('info', this.infoData).subscribe();
+            this.storage.set('cacheStatus', data.cacheStatus).subscribe();
           }
         })
       );
@@ -52,13 +53,31 @@ export interface DropdownListInfo {
   offerSaleStatuses: InfoDetail[];
   propertyLettingStatuses: InfoDetail[];
   propertySaleStatuses: InfoDetail[];
+  valuationStatus: InfoDetail[];
   regions: InfoDetail[];
   areas: InfoDetail[];
   subAreas: InfoDetail[];
+  leadTypes: InfoDetail[];
+  viewingArrangements: InfoDetail[];
+  tenures: InfoDetail[];
+  propertyFeatures: InfoDetail[];
+  parkings: InfoDetail[];
+  outsideSpaces: InfoDetail[];
+  originTypes: InfoDetail[];
+  origins: InfoDetail[];
+  diaryEventTypes: InfoDetail[];
+  referralCompanies: InfoDetail[];
 }
 
-export interface InfoDetail {
+export interface InfoDetail extends LeadTypeInfo{
   id: number;
   value: string;
-  parentId: number;
+  parentId?: number;
+  isActive?: boolean;
+}
+
+export interface LeadTypeInfo {
+  canClose?: boolean;
+  canConvertTo?: number[];
+  canCreate?: boolean;
 }

@@ -1,27 +1,41 @@
-<div class="list-group mb-3">
+<div class="table">
+  <div *ngIf="properties" class="search-results" infiniteScroll [infiniteScrollDistance]="5" [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"></div>
+  <table class="table--mobile table--rowHover">
+    <thead>
+      <tr>
+        <th>Address</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr [routerLink]="['detail', property?.propertyId]" [queryParams]="{searchTerm: searchTerm, showNotes:true}" (click)="onPropertySelected(property.propertyId)"[routerLink]="['detail', property?.propertyId]" [queryParams]="{searchTerm: searchTerm, showNotes:true}" (click)="onPropertySelected(property.propertyId)" *ngFor="let property of properties; let i = index;">
+        <td data-title="Address">
+          <span class="cell-content">
+       
+              <strong [innerHTML]="property?.propertyAddress | highlight : searchTerm"></strong>
+              <span class="text-danger" *ngIf="!(property.propertyAddress )">No address</span>
+        
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- <div class="list-group">
   <div *ngIf="properties" class="search-results" infiniteScroll [infiniteScrollDistance]="5"
-    [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"
-    (scrolled)="onScrollDown()">
+    [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true">
   </div>
-  <a [routerLink]="['detail', property?.propertyId]" [queryParams]="{searchTerm: propertyAddress}"
+  <a [routerLink]="['detail', property?.propertyId]" [queryParams]="{searchTerm: searchTerm, showNotes:true}"
     (click)="onPropertySelected(property.propertyId)" class="list-group-item list-group-item-action pb-2"
     *ngFor="let property of properties; let i = index;">
-    <div class="row">
-      <div class="col order-sm-1">
-        <div class="row align-items-center">
-          <div class="col-12">
-            <div class="mb-1 text-muted">
-              <small>PR-{{property?.propertyId}}</small>
-            </div>
-          </div>
-          <div class="col-12">
-            <div class="mb-1">
-              <strong [innerHTML]="property?.propertyAddress | highlight : searchTerm"></strong><span
-                class="text-danger" *ngIf="!(property.propertyAddress )">No address</span>
-            </div>
-          </div>
+    <div class="row align-items-center">
+      <div class="col-12">
+        <div class="mb-1">
+          <strong [innerHTML]="property?.propertyAddress | highlight : searchTerm"></strong><span class="text-danger"
+            *ngIf="!(property.propertyAddress )">No address</span>
         </div>
       </div>
     </div>
   </a>
-</div>
+</div> -->

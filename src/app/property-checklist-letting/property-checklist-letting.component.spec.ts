@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { PropertyChecklistLettingComponent } from './property-checklist-letting.component';
 
@@ -6,7 +6,7 @@ describe('PropertyChecklistLettingComponent', () => {
   let component: PropertyChecklistLettingComponent;
   let fixture: ComponentFixture<PropertyChecklistLettingComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ PropertyChecklistLettingComponent ]
     })

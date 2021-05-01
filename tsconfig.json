@@ -18,6 +18,11 @@
       "es2017",
       "dom",
       "esnext"
-    ]
+    ],
+    "resolveJsonModule": true,
+    "esModuleInterop": true
+  },
+  "angularCompilerOptions": {
+    "strictTemplates": false
   }
 }

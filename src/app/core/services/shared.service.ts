@@ -1,16 +1,24 @@
-import { Injectable } from '@angular/core';
-import { AppUtils } from '../shared/utils';
-import * as dayjs from 'dayjs';
+import { Injectable, ElementRef } from '@angular/core';
+import { AppUtils, RequestOption } from '../shared/utils';
+import dayjs from 'dayjs';
 import { Subject } from 'rxjs';
 import { map, fill } from 'lodash';
 import { BsModalService } from 'ngx-bootstrap/modal/';
-import { ErrorModalComponent } from '../error-modal/error-modal.component';
-import { NoteModalComponent } from '../note-modal/note-modal.component';
+import { ErrorModalComponent } from '../../shared/error-modal/error-modal.component';
+import { NoteModalComponent } from '../../shared/note-modal/note-modal.component';
 import { PhoneNumberUtil } from 'google-libphonenumber';
 import { Location } from '@angular/common';
 import { Title } from '@angular/platform-browser';
-import { AbstractControl } from '@angular/forms';
+import { AbstractControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { HttpParams } from '@angular/common/http';
+import { CustomQueryEncoderHelper } from '../shared/custom-query-encoder-helper';
+import { StorageMap } from '@ngx-pwa/local-storage';
+import { ContactGroup } from 'src/app/contactgroups/shared/contact-group';
+import { ValidationMessages, FormErrors } from '../shared/app-constants';
+import { Valuation, ValuationStatusEnum } from 'src/app/valuations/shared/valuation';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { InfoDetail } from './info.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,18 +28,26 @@ export class SharedService {
   lastCallNoteToast: any;
   lastCallEndCallToast: any;
   formErrors: any;
+  ref: DynamicDialogRef;
+  private removeStickySubject = new Subject<boolean>();
+  removeSticky$ = this.removeStickySubject.asObservable();
 
   constructor(private _location: Location,
     private _router: Router,
     private titleService: Title,
+    private storage: StorageMap,
+    private dialogService: DialogService,
     private modalService: BsModalService) {
+  }
 
+  setRemoveSticky(removed: boolean) {
+    this.removeStickySubject.next(removed);
   }
 
   back() {
     if (!(window.opener && window.opener !== window)) {
       if (AppUtils.deactivateRoute) {
-        this._router.navigate([AppUtils.deactivateRoute]);
+        this._router.navigateByUrl(AppUtils.deactivateRoute);
         AppUtils.deactivateRoute = '';
       } else {
         this._location.back();
@@ -67,23 +83,25 @@ export class SharedService {
     });
   }
 
-  showWarning(id: number, warnings: any, comment?: string): any {
-    let warns = [];
-    if (warnings) {
-      warns = warnings.filter(x => x.id === id);
-    }
-    return warns[0];
+  showWarning(id: number, warnings: InfoDetail[], comment?: string): string {
+    return warnings?.find(x => x.id === id).value || comment;
   }
 
-  showError(error: WedgeError) {
+  showError(error: WedgeError, triggeredBy) {
     const subject = new Subject<boolean>();
-    const initialState = {
-      title: error.requestId,
-      desc: error.displayMessage,
-      techDet: error.technicalDetails
+    const data = {
+      // title: error.requestId,
+      // desc: error.displayMessage,
+      // techDet: error.technicalDetails,
+      triggeredBy,
+      error
     };
-    const modal = this.modalService.show(ErrorModalComponent, { ignoreBackdropClick: true, initialState });
-    modal.content.subject = subject;
+    console.log({ data });
+
+    // const modal = this.modalService.show(ErrorModalComponent, { ignoreBackdropClick: true, initialState });
+    // modal.content.subject = subject;
+    this.ref = this.dialogService.open(ErrorModalComponent, { data, styleClass: 'dialog dialog--hasFooter', header: 'Error' });
+    // this.ref.onClose.subscribe((res) => { if (res) { subject.next(true); subject.complete(); } });
     return subject.asObservable();
   }
 
@@ -96,6 +114,30 @@ export class SharedService {
     const modal = this.modalService.show(NoteModalComponent, { class: modalClass, initialState });
     modal.content.subject = subject;
     return subject.asObservable();
+  }
+
+  scrollElIntoView(className: string) {
+    const els = document.getElementsByClassName(className);
+    const headerOffset = 130;
+    if (els.length) {
+      const elementPosition = els[0].getBoundingClientRect().top;
+      const offsetPosition = elementPosition - headerOffset;
+
+      if (elementPosition !== offsetPosition) {
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth"
+        });
+      }
+    }
+  }
+
+  scrollIntoView(element: ElementRef) {
+    setTimeout(() => {
+      if (element) {
+        element.nativeElement.scrollIntoView();
+      }
+    })
   }
 
   scrollTodayIntoView() {
@@ -140,6 +182,88 @@ export class SharedService {
       formattedDate = dayjs(date).toDate();
     }
     return formattedDate;
+  }
+
+  checkDuplicateInContactGroup(contactGroupDetails: ContactGroup, personId: number) {
+    let isDuplicate = false;
+    if (contactGroupDetails && contactGroupDetails.contactPeople) {
+      contactGroupDetails.contactPeople.forEach(x => {
+        if (x && x.personId === personId) {
+          isDuplicate = true;
+        }
+      });
+    }
+    return isDuplicate;
+  }
+
+  resetUrl(oldId: number, newId: number, isNew = true) {
+    let url = this._router.url;
+    let id = oldId;
+
+    if (url.indexOf('detail/' + id) === -1) {
+      id = 0;
+    }
+    if (url.indexOf('?') >= 0 && isNew) {
+      url = url.substring(0, url.indexOf('?'));
+      url = url.replace('detail/' + id, 'detail/' + newId);
+      this._location.replaceState(url);
+      oldId = newId;
+    }
+  }
+
+  logValidationErrors(group: FormGroup, fakeTouched: boolean, scrollToError = false) {
+    Object.keys(group.controls).forEach((key: string) => {
+      const control = group.get(key);
+      const messages = ValidationMessages[key];
+      if (control.valid) {
+        FormErrors[key] = '';
+      }
+      if (control && !control.valid && (fakeTouched || control.dirty)) {
+        console.log('control', key, 'errors ', control.errors);
+        FormErrors[key] = '';
+        for (const errorKey in control.errors) {
+          if (errorKey) {
+            FormErrors[key] += messages[errorKey] + '\n';
+          }
+        }
+      }
+      if (control instanceof FormGroup) {
+        this.logValidationErrors(control, fakeTouched);
+      }
+    });
+    if (scrollToError) {
+      this.scrollToFirstInvalidField();
+    }
+  }
+
+  resetForm(form: FormGroup) {
+    console.log('reset is called', form)
+    form.reset();
+    Object.keys(form.controls).forEach(key => {
+      form.get(key).setErrors(null);
+    });
+    console.log('reset is called after', form)
+  }
+
+  clearFormValidators(form: FormGroup, formErrors: any) {
+    Object.keys(form.controls).forEach(key => {
+      formErrors[key] = '';
+    });
+  }
+
+  setValuationStatusLabel(vals: Valuation[]) {
+    vals.forEach(x => {
+      x.valuationStatusLabel = ValuationStatusEnum[x.valuationStatus];
+    });
+  }
+
+  // not working so duplicate in individual components for now. FIX ASAP
+  setBottomReachedFlag(result: any, bottomReached?: boolean, pageSize?: number) {
+    if (result && (!result.length || result.length < +pageSize)) {
+      bottomReached = true;
+    } else {
+      bottomReached = false;
+    }
   }
 
   formatPostCode(postCodeToCheck: string) {
@@ -263,17 +387,19 @@ export class SharedService {
 
   isUKMobile(number: string) {
     if (number) {
-      const formattedNumber = number.replace(' ', '');
+      const formattedNumber = number?.replace(' ', '');
       return (formattedNumber.startsWith('07') || formattedNumber.startsWith('00') || formattedNumber.startsWith('+')) &&
         !formattedNumber.startsWith('070') && !formattedNumber.startsWith('076');
     } else {
       return false;
     }
   }
+
   isInternationalNumber(number: string) {
     const formattedNumber = number.replace(' ', '').replace('+44', '');
     return formattedNumber.startsWith('00') || formattedNumber.startsWith('+');
   }
+
   getRegionCode(number: string) {
     const phoneUtil: PhoneNumberUtil = PhoneNumberUtil.getInstance();
     const rawNumber = phoneUtil.parseAndKeepRawInput(number, 'GB');
@@ -299,5 +425,6 @@ export class WedgeError {
   technicalDetails: string;
   message: string;
   displayMessage: string;
+  requestUrl?: string;
 }
 

@@ -1,7 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { CsBoardService } from '../shared/services/cs-board.service';
-import { EMPTY, Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TeamMember } from '../shared/models/team-member';
 import { SharedService } from 'src/app/core/services/shared.service';
 
@@ -11,11 +8,11 @@ import { SharedService } from 'src/app/core/services/shared.service';
   styleUrls: ['./admin-panel-list.component.scss']
 })
 export class AdminPanelListComponent implements OnInit {
-  members$ = new Observable<TeamMember[]>();
-
-  constructor(private boardService: CsBoardService, private sharedService: SharedService) { }
+  @Input() members: TeamMember[];
+  @Output() showRules = new EventEmitter<boolean>();
+  @Output() selectedMember = new EventEmitter<TeamMember>();
+  constructor() { }
 
   ngOnInit(): void {
-    this.members$ = this.boardService.getCsBoard().pipe(catchError((err) => { this.sharedService.showError(err); return EMPTY }));
   }
 }

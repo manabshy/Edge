@@ -1,0 +1,23 @@
+<div class="card card--marginTop card--sticky">
+  <div class="card__body card__body--list">
+    <ol class="list list--divider list--hover">
+      <li [ngClass]="{current: item.isCurrent}" *ngFor="let item of sideNavItems;index as i">
+        <a role="button" class="overall" (click)="setSideNavItem(item?.name,i); scrollTo(scrollToItem)"></a>
+        <strong style="margin-right:6px;">{{item?.name|toPascalCase}}</strong>
+        <ng-container *ngIf="summaryTotals; else loadingInfo">
+          <ng-container *ngIf="isObject(summaryTotals[item?.name]); else simpleValue">
+            <span *ngIf="summaryTotals[item?.name]?.active" class="pill pill--positive">{{summaryTotals[item?.name]?.active}} </span>
+            <span *ngIf="summaryTotals[item?.name]?.inactive" class="pill">{{summaryTotals[item?.name]?.inactive}}</span>
+          </ng-container>
+          <ng-template #simpleValue>
+            <span *ngIf="summaryTotals[item?.name]" class="pill pill--positive">{{summaryTotals[item?.name]}}</span>
+          </ng-template>
+        </ng-container>
+        <ng-template #loadingInfo>
+          <span class="badge badge-pill badge-primary"><i class="fas fa-spinner fa-pulse d-inline-block"></i></span>
+        </ng-template>
+        <a *ngIf="item?.showButton"  class="flexRight zindex-11" (click)="createNewItem($event, item?.name)">Create</a>
+      </li>
+    </ol>
+  </div>
+</div>

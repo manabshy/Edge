@@ -1,8 +1,0 @@
-<div class="modal-header bg-danger text-light" *ngIf="danger">
-    Pay Attention!
-</div>
-<div class="modal-body text-center">
-    <p class="mb-4" [innerHtml]="title"></p>
-    <button type="button" class="btn btn-light mr-2" (click)="action(false)">{{actions[0]}}</button>
-    <button type="button" class="btn btn-primary" (click)="action(true)">{{actions[1]}}</button>
-</div>

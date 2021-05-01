@@ -11,7 +11,7 @@ import {
   ContactNote, ContactNoteData
 } from './contact-group';
 import { map, tap } from 'rxjs/operators';
-import { Person, BasicPerson } from 'src/app/core/models/person';
+import { Person, BasicPerson } from 'src/app/shared/models/person';
 import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encoder-helper';
 
 @Injectable({
@@ -29,6 +29,7 @@ export class ContactGroupsService {
   private pageChangeSubject = new Subject<number | null>();
   private personNotePageChangeSubject = new Subject<number | null>();
   private contactNotePageChangeSubject = new Subject<number | null>();
+  private newPersonSubject = new Subject<Person | null>()
   noteChanges$ = this.notesSubject.asObservable();
   contactInfoForNotes$ = this.contactInfoAction$.asObservable();
   personNotesChanges$ = this.personNotesSubject.asObservable();
@@ -38,6 +39,7 @@ export class ContactGroupsService {
   personNotePageChanges$ = this.personNotePageChangeSubject.asObservable();
   contactNotePageChanges$ = this.contactNotePageChangeSubject.asObservable();
   signer$ = this.signerSubject.asObservable();
+  newPerson$ = this.newPersonSubject.asObservable();
 
   constructor(private http: HttpClient) { }
 
@@ -65,7 +67,9 @@ export class ContactGroupsService {
   }
   getCompanySuggestions(searchTerm: string): Observable<any[]> {
     const url = `${AppConstants.baseCompanyUrl}/suggestions?SearchTerm=${searchTerm}`;
-    return this.http.get<any>(url)
+    return this.http.get<any>(url, {
+      headers: { ignoreLoadingBar: '' }
+    })
       .pipe(
         map(response => response.result),
         tap(data => console.log(JSON.stringify(data)))
@@ -75,6 +79,24 @@ export class ContactGroupsService {
   getAutocompleteSigners(searchTerm: string): Observable<Signer[]> {
     const url = `${AppConstants.baseContactGroupUrl}/autocomplete?SearchTerm=${searchTerm}`;
     return this.http.get<SignerAutoCompleteData>(url)
+      .pipe(
+        map(response => response.result),
+        tap(data => console.log(JSON.stringify(data)))
+      );
+  }
+
+  getApplicants(searchTerm: string): Observable<Signer[]> {
+    const url = `${AppConstants.baseApplicantUrl}/search?SearchTerm=${searchTerm}`;
+    return this.http.get<any>(url)
+      .pipe(
+        map(response => response.result),
+        tap(data => console.log(JSON.stringify(data)))
+      );
+  }
+
+  getApplicantSuggestions(searchTerm: string, sales: boolean): Observable<any[]> {
+    const url = `${AppConstants.baseApplicantUrl}/suggestions?SearchTerm=${searchTerm}&sales=${sales}`;
+    return this.http.get<any>(url)
       .pipe(
         map(response => response.result),
         tap(data => console.log(JSON.stringify(data)))
@@ -98,8 +120,8 @@ export class ContactGroupsService {
     return this.http.get<ContactGroupData>(url, { params: options })
       .pipe(
         map(response => response.result),
-        tap(data => this.contactGroupNotes = data.contactNotes),
-        tap(data => console.log('contact group details here...', JSON.stringify(data)))
+        tap(data => this.contactGroupNotes = data.contactNotes)
+        // tap(data => console.log('contact group details here...', JSON.stringify(data)))
       );
   }
 
@@ -108,14 +130,15 @@ export class ContactGroupsService {
     return this.http.get<PersonContactData>(url).pipe(map(response => response.result));
   }
 
-  getPerson(personId: number, includeOnlyImportantNotes?: boolean): Observable<Person> {
+  getPerson(personId: number, includeReferrals = true, includeOnlyImportantNotes?: boolean): Observable<Person> {
     if (!includeOnlyImportantNotes) {
       includeOnlyImportantNotes = false;
     }
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
       fromObject: {
-        includeOnlyImportantNotes: includeOnlyImportantNotes.toString()
+        includeOnlyImportantNotes: includeOnlyImportantNotes.toString(),
+        includeReferrals: includeReferrals.toString(),
       }
     });
     const url = `${AppConstants.basePersonUrl}/${personId}`;
@@ -153,7 +176,7 @@ export class ContactGroupsService {
     const url = `${AppConstants.basePersonUrl}`;
     return this.http.post<PersonContactData>(url, person).pipe(
       map(response => response.result),
-      tap(data => console.log('updated person details here...', JSON.stringify(data))));
+      tap(data => console.log('added person details here...', JSON.stringify(data))));
   }
 
   updatePerson(person: Person): Observable<any> {
@@ -161,6 +184,12 @@ export class ContactGroupsService {
     return this.http.put(url, person).pipe(
       map(response => response),
       tap(data => console.log('updated person details here...', JSON.stringify(data))));
+  }
+  createPersonReferral(person: Person, referralCompanyId: number): Observable<any> {
+    const url = encodeURI(`${AppConstants.basePersonUrl}/${person?.personId}/referralCompany/${referralCompanyId}`);
+    return this.http.put(url, person).pipe(
+      map(response => response),
+      tap(data => console.log('referral created', JSON.stringify(data))));
   }
 
   addContactGroup(contactGroup: ContactGroup): Observable<any> {
@@ -199,9 +228,16 @@ export class ContactGroupsService {
     );
   }
 
-  getCompany(companyId: number): Observable<Company | any> {
+  getCompany(companyId: number, includeCompanyContacts?: boolean): Observable<Company | any> {
+    if (!includeCompanyContacts) { includeCompanyContacts = false; }
+    const options = new HttpParams({
+      encoder: new CustomQueryEncoderHelper,
+      fromObject: {
+        includeCompanyContacts: includeCompanyContacts.toString()
+      }
+    });
     const url = `${AppConstants.baseCompanyUrl}/${companyId}`;
-    return this.http.get<CompanyData>(url).pipe(
+    return this.http.get<CompanyData>(url, { params: options }).pipe(
       map(response => response.result),
       tap(data => console.log('company details here...', JSON.stringify(data))));
   }
@@ -210,17 +246,18 @@ export class ContactGroupsService {
     const url = `${AppConstants.baseCompanyUrl}`;
     return this.http.post(url, contactGroup).pipe(
       map(response => response),
-      tap(data => console.log('updated company contact details here...', JSON.stringify(data))));
+      tap(data => console.log('added company contact details here...', JSON.stringify(data))));
   }
 
-  getPersonNotes(personId: number, pageSize?: number, page?: number): Observable<ContactNote[]> {
+  getPersonNotes(personId: number, pageSize?: number, page?: number, myNotesOnly = false): Observable<ContactNote[]> {
     if (!page || +page === 0) { page = 1; }
     if (pageSize == null) { pageSize = 10; }
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
       fromObject: {
         pageSize: pageSize.toString(),
-        page: page.toString()
+        page: page.toString(),
+        myNotesOnly: myNotesOnly.toString()
       }
     });
     const url = `${AppConstants.basePersonUrl}/${personId}/notes`;
@@ -232,14 +269,15 @@ export class ContactGroupsService {
     );
   }
 
-  getContactGroupNotes(contactGroupId: number, pageSize?: number, page?: number): Observable<ContactNote[]> {
+  getContactGroupNotes(contactGroupId: number, pageSize?: number, page?: number, myNotesOnly = false): Observable<ContactNote[]> {
     if (!page || +page === 0) { page = 1; }
     if (pageSize == null) { pageSize = 10; }
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
       fromObject: {
         pageSize: pageSize.toString(),
-        page: page.toString()
+        page: page.toString(),
+        myNotesOnly: myNotesOnly.toString()
       }
     });
     const url = `${AppConstants.baseContactGroupUrl}/${contactGroupId}/notes`;
@@ -251,6 +289,15 @@ export class ContactGroupsService {
   }
 
   addPersonNote(personNote: ContactNote): Observable<ContactNote | any> {
+    if (personNote) {
+      if (personNote.isImportant == null) {
+        personNote.isImportant = false;
+      }
+      if (personNote.isPinned == null) {
+        personNote.isPinned = false;
+      }
+    }
+    console.log('person note in service', personNote)
     const url = `${AppConstants.basePersonUrl}/${personNote.personId}/notes`;
     return this.http.post<ContactNoteData>(url, personNote).pipe(
       map(response => response.result),
@@ -314,5 +361,8 @@ export class ContactGroupsService {
     }
   }
 
+  getAddedPerson(person: Person) {
+    this.newPersonSubject.next(person);
+  }
 }
 

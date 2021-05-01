@@ -5,19 +5,19 @@
 @import "../../node_modules/bootstrap/scss/mixins";
 
 .app-container {
-    @include media-breakpoint-up(lg) {
+    @include media-breakpoint-up(xl) {
         min-height: 100vh;
     }
 
     .side-nav + div {
-        @include media-breakpoint-up(lg){
+        @include media-breakpoint-up(xl){
             padding-left: $side-nav-width;
         }
     }
 }
 
 .side-nav {
-    @include media-breakpoint-up(lg){
+    @include media-breakpoint-up(xl){
         min-width: $side-nav-width;
         max-width: $side-nav-width;
         position: fixed;
@@ -29,23 +29,9 @@
 }
 
 .nav-placeholder {
-    @include media-breakpoint-up(lg) {
+    @include media-breakpoint-up(xl) {
         background-color: $breadcrumb-bg;
     }
-}
-
-.scroll-top {
-    display: block;
-    z-index: 1000;
-    line-height: spacer(3);
-    margin: spacer(4) auto 70px;
-
-    @include media-breakpoint-up(sm) {
-        margin: spacer(4) $grid-gutter-width 70px auto;
-        position: sticky;
-        bottom: spacer(2);
-    }
-
 }
 
 .loader {
@@ -86,7 +72,7 @@
             animation: loading-text 6s linear infinite;
         }
 
-        @include media-breakpoint-up(lg){
+        @include media-breakpoint-up(xl){
             font-size: 3.5rem;
         }
     }

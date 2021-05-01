@@ -1,29 +1,25 @@
-<div class="list-group mb-5">
-  <div *ngIf="companies" class="search-results" infiniteScroll [infiniteScrollDistance]="5"
-    [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true"
-    (scrolled)="onScrollDown()">
-  </div>
-  <a [routerLink]="['detail', company.companyId, 'edit' ]" class="list-group-item list-group-item-action pb-2"
-    *ngFor="let company of companies; let i = index;">
-    <div class="row">
-      <div class="col text-truncate">
-        <div class="row">
-          <div class="col-12">
-            <small class="text-muted">CO-{{company.companyId}}</small>
-          </div>
-          <div class="col-sm-5">
-            <div class="mb-1 text-truncate">
-              <strong>{{company.companyName}}</strong>
-            </div>
-          </div>
-          <div class="col-sm-5">
-            <div class="mb-1 text-truncate">
-              <pre>{{company.companyAddress | formatAddress}}</pre><span class="text-danger"
-                *ngIf="!(company.companyAddress | formatAddress)">No address</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </a>
+<div class="table">
+  <table class="table--mobile table--rowHover">
+    <thead>
+      <tr>
+        <th>Company Name</th>
+        <th colspan="2">Address</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let company of companies; let i = index;" (click)="navigateToDetails(company?.companyId)">
+        <td>
+          <span class="cell-content">
+            <a class="d-xl-none" [routerLink]="['detail',  company?.companyId ]">{{company.companyName}}</a>
+          </span>
+        </td>
+        <td>
+          <span class="cell-content">
+            {{company?.companyAddress | formatAddress}}
+            <span class="txt--negative" *ngIf="!(company?.companyAddress | formatAddress)">No address</span>
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>

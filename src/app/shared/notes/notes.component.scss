@@ -1,0 +1,30 @@
+// @import "../../../style/bootstrap-overrides";
+// @import "../../../../node_modules/bootstrap/scss/functions";
+// @import "../../../../node_modules/bootstrap/scss/variables";
+// @import "../../../../node_modules/bootstrap/scss/mixins";
+
+// [role=button]{
+//     cursor: pointer;
+// }
+
+// .unset {
+//     transition: all .3s;
+//     color: $input-bg!important;
+//     text-shadow: $body-color 0 0 1px, $body-color 0 0 1px, $body-color 0 0 1px, $body-color 0 0 1px, $body-color 0 0 1px, $body-color 0 0 1px, $body-color 0 0 1px, $body-color 0 0 1px, $body-color 0 0 1px, $body-color 0 0 1px, $body-color 0 0 1px, $body-color 0 0 1px, $body-color 0 0 1px;
+// }
+
+// .note-content {
+//     white-space: pre-line;
+//     overflow-wrap: break-word;
+//     word-wrap: break-word;
+//     word-break: break-word;
+// }
+
+// ::ng-deep span.note-email-label{
+//   font-weight: bold;
+// }
+::ng-deep span {
+  &.note-email-label {
+    font-weight: bold;
+  }
+}

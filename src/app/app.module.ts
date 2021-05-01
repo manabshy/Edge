@@ -1,15 +1,14 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, NO_ERRORS_SCHEMA, APP_INITIALIZER } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA, APP_INITIALIZER, ErrorHandler } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { MainmenuComponent } from './mainmenu/mainmenu.component';
 import { HomeComponent } from './home/home.component';
 import { AppRoutingModule } from './/app-routing.module';
-import { ContactGroupsComponent } from './contactgroups/contactgroups.component';
 import { PropertyDetailsLettingComponent } from './property-details-letting/property-details-letting.component';
 import { PropertyDetailsSaleComponent } from './property-details-sale/property-details-sale.component';
 import { PropertyFeaturesComponent } from './property-features/property-features.component';
-import { MiniMapAndPhotosComponent } from './mini-map-and-photos/mini-map-and-photos.component';
+import { MiniMapAndPhotosComponent } from './shared/mini-map-and-photos/mini-map-and-photos.component';
 import { PropertyMarketingComponent } from './property-marketing/property-marketing.component';
 import { PropertyHistoryComponent } from './property-history/property-history.component';
 import { PropertyMediaComponent } from './property-media/property-media.component';
@@ -17,8 +16,6 @@ import { PropertyNotesComponent } from './property-notes/property-notes.componen
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DiaryComponent } from './diary/diary.component';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
-import { LeadEditComponent } from './lead-edit/lead-edit.component';
-import { LeadRegisterComponent } from './lead-register/lead-register.component';
 import { ApplicantRegisterComponent } from './applicant-register/applicant-register.component';
 import { ApplicantViewLettingComponent } from './applicant-view-letting/applicant-view-letting.component';
 import { ViewingsComponent } from './viewings/viewings.component';
@@ -34,17 +31,132 @@ import { CoreModule } from './core/core.module';
 import { AccountModule } from './account/account.module';
 import { LeaderboardModule } from './leaderboard/leaderboard.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { PropertyModule } from './property/property.module';
-import { ContactgroupsModule } from './contactgroups/contactgroups.module';
 import { DiaryModule } from './diary/diary.module';
 import { NotFoundComponent } from './not-found/not-found.component';
-import { CompanyModule } from './company/company.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { ImpersonateMemberComponent } from './impersonate-member/impersonate-member.component';
 import { ConfigsLoaderService } from './configs-loader.service';
+import { GlobalErrorHandlerService } from './core/services/global-error-handler.service';
 
+// ADDED SHARED MODULE ON 19/03 BUT REMOVE ASAP
+import { SharedModule } from './shared/shared.module';
+
+// ngx bootstrap imports
+import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
+import { NgPipesModule } from 'ngx-pipes';
+
+// ng bootstrap imports
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
+// bootstrap
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown/';
+import { CollapseModule } from 'ngx-bootstrap/collapse/';
+import { TabsModule } from 'ngx-bootstrap/tabs/';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { ModalModule } from 'ngx-bootstrap/modal/';
+import { PopoverModule } from 'ngx-bootstrap/popover';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { AccordionModule } from 'ngx-bootstrap/accordion';
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
+import { CarouselModule } from 'ngx-bootstrap/carousel';
+
+// vendor
+import { OrderModule } from 'ngx-order-pipe';
+import { ToastrModule, ToastContainerModule } from 'ngx-toastr';
+import { AgmCoreModule } from '@agm/core';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client';
+import { AngularStickyThingsModule } from '@w11k/angular-sticky-things';
+import { CalendarSharedModule } from './calendar-shared/calendar-shared.module';
+
+import { MsalModule, MsalInterceptor } from '@azure/msal-angular';
+import { Logger, LogLevel } from 'msal';
+import { HeaderComponent } from './header/header.component';
+
+// SVG ICONS
+import { SvgIconsModule } from '@ngneat/svg-icon';
+import { appPaperclipIcon } from './svg/paperclip';
+import { appEmailIcon } from './svg/email';
+
+export const protectedResourceMap: Map<string, Array<string>> = new Map([
+  ['http://localhost:57211/v10', ['https://douglasandgordon.onmicrosoft.com/67f9a9a1-d8de-45bc-af20-43e1e18ccba5/user_impersonation']],
+  ['https://dandg-api-wedge-test.azurewebsites.net', ['https://douglasandgordon.onmicrosoft.com/67f9a9a1-d8de-45bc-af20-43e1e18ccba5/user_impersonation']],
+  ['https://dandg-api-wedge-dev.azurewebsites.net', ['https://douglasandgordon.onmicrosoft.com/67f9a9a1-d8de-45bc-af20-43e1e18ccba5/user_impersonation']],
+  ['https://dandg-api-wedge.azurewebsites.net', ['https://douglasandgordon.onmicrosoft.com/67f9a9a1-d8de-45bc-af20-43e1e18ccba5/user_impersonation']],
+  ['https://graph.microsoft.com/v1.0/me', ['user.read']]
+]);
+
+const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
+const redirectUri = environment.baseRedirectUri ? environment.baseRedirectUri : window.location.origin;
+
+// Date Picker Locale
+import { defineLocale } from 'ngx-bootstrap/chronos';
+import { deLocale, frLocale, plLocale, enGbLocale } from 'ngx-bootstrap/locale';
+import { ProfileComponent } from './profile/profile.component';
+
+
+defineLocale('de', deLocale);
+defineLocale('fr', frLocale);
+defineLocale('pl', plLocale);
+defineLocale('en-gb', enGbLocale);
+
+
+const externalModulesImports = [
+  InfiniteScrollModule,
+  NgbModule,
+  LoadingBarHttpClientModule,
+  AngularStickyThingsModule,
+  BsDropdownModule.forRoot(),
+  CollapseModule.forRoot(),
+  TabsModule.forRoot(),
+  BsDatepickerModule.forRoot(),
+  TypeaheadModule.forRoot(),
+  ModalModule.forRoot(),
+  PopoverModule.forRoot(),
+  TooltipModule.forRoot(),
+  AccordionModule.forRoot(),
+  ButtonsModule.forRoot(),
+  ToastrModule.forRoot({ positionClass: 'inline', enableHtml: true }),
+  ToastContainerModule,
+  CarouselModule.forRoot(),
+  CalendarModule.forRoot({
+    provide: DateAdapter,
+    useFactory: adapterFactory
+  }),
+  AgmCoreModule.forRoot({
+    apiKey: 'AIzaSyC1Hv_vNkUxvvRibyjPbfgNhrTNi30jNtQ'
+  })
+];
+const externalModulesExports = [
+  InfiniteScrollModule,
+  CollapseModule,
+  TabsModule,
+  TypeaheadModule,
+  BsDropdownModule,
+  BsDatepickerModule,
+  ModalModule,
+  PopoverModule,
+  NgPipesModule,
+  TooltipModule,
+  AccordionModule,
+  ButtonsModule,
+  ReactiveFormsModule,
+  FormsModule,
+  OrderModule,
+  ToastrModule,
+  ToastContainerModule,
+  AgmCoreModule,
+  CarouselModule,
+  NgbModule,
+  LoadingBarHttpClientModule,
+  AngularStickyThingsModule
+
+];
 
 @NgModule({
   declarations: [
@@ -60,10 +172,7 @@ import { ConfigsLoaderService } from './configs-loader.service';
     PropertyMediaComponent,
     PropertyNotesComponent,
     DashboardComponent,
-    DiaryComponent,
     LeaderboardComponent,
-    LeadEditComponent,
-    LeadRegisterComponent,
     ApplicantRegisterComponent,
     ApplicantViewLettingComponent,
     ViewingsComponent,
@@ -74,7 +183,10 @@ import { ConfigsLoaderService } from './configs-loader.service';
     SendEdetailsComponent,
     PropertyChecklistLettingComponent,
     PropertyChecklistItemComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    ImpersonateMemberComponent,
+    HeaderComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -82,16 +194,44 @@ import { ConfigsLoaderService } from './configs-loader.service';
     ReactiveFormsModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    externalModulesImports,
     AccountModule,
     CoreModule,
     DashboardModule,
     LeaderboardModule,
-    // PropertyModule,
-    // ContactgroupsModule,
-    DiaryModule,
-    // CompanyModule,
+    CalendarSharedModule,
+    SharedModule, // ADD forRoot Investigate 24/03/2021
     AppRoutingModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    MsalModule.forRoot({
+      auth: {
+        clientId: environment.clientId,
+        authority: environment.authority,
+        validateAuthority: true,
+        redirectUri: `${redirectUri}/auth-callback`,
+        postLogoutRedirectUri: environment.baseRedirectUri,
+        navigateToLoginRequestUrl: true,
+      },
+      cache: {
+        cacheLocation: 'localStorage',
+        storeAuthStateInCookie: isIE, // set to true for IE 11
+      },
+      framework: {
+        unprotectedResources: ['https://www.microsoft.com/en-us/'],
+        protectedResourceMap: protectedResourceMap,
+      }
+    }, {
+      consentScopes: ['user.read', 'openid', 'profile',
+        'https://douglasandgordon.onmicrosoft.com/03d5d394-2418-42fa-a345-556b8d7ffcdb/user_impersonation',
+        'https://douglasandgordon.onmicrosoft.com/67f9a9a1-d8de-45bc-af20-43e1e18ccba5/user_impersonation'
+      ],
+      popUp: !isIE,
+      protectedResourceMap: protectedResourceMap,
+    }),
+    SvgIconsModule.forRoot({
+      icons: [appPaperclipIcon, appEmailIcon],
+    }),
+
   ],
   exports: [
     MainmenuComponent
@@ -102,7 +242,8 @@ import { ConfigsLoaderService } from './configs-loader.service';
       useFactory: appInitializerFactory,
       deps: [ConfigsLoaderService],
       multi: true
-    }
+    },
+    {provide: ErrorHandler, useClass: GlobalErrorHandlerService}
   ],
   bootstrap: [AppComponent],
   schemas: [NO_ERRORS_SCHEMA]
@@ -111,4 +252,8 @@ export class AppModule { }
 
 export function appInitializerFactory(configsLoaderService: ConfigsLoaderService) {
   return () => configsLoaderService.loadConfigs();
+}
+
+export function loggerCallback(logLevel, message, piiEnabled) {
+  console.log('msal log messages', message);
 }

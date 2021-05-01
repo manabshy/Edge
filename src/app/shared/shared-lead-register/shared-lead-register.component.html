@@ -1,0 +1,51 @@
+<div class="title">
+  <h2>Leads</h2>
+  <span class="checkbox checkbox--rtl">
+    <span>
+      <input type="checkbox" [(ngModel)]="hidePrevious" (change)="getLeads()" id="includeClosedLeads">
+      <label for="includeClosedLeads">Hide previous leads</label>
+    </span>
+  </span>
+</div>
+
+<div *ngIf="leads$|async as leads">
+  <div class="table">
+    <app-redacted-table *ngIf="!leads || !leads?.length" message="No leads"></app-redacted-table>
+
+    <table class="table--mobile table--rowHover" *ngIf="leads && leads?.length">
+      <thead>
+        <tr>
+          <th *ngIf="isClosedLeadFound">Status</th>
+          <th>Type</th>
+          <th>Property</th>
+          <th>Chase Date</th>
+          <th>Lead Owner</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let lead of leads; let i = index;" (click)="leadClicked(lead)">
+          <td data-title="Status" *ngIf="isClosedLeadFound">
+            <span class="cell-content">
+              <span *ngIf="lead?.closedById" class="pill">Closed</span>
+              <span *ngIf="!lead?.closedById" class="pill pill--positive">Active</span>
+            </span>
+          </td>
+          <td data-title="Type">
+            <span class="cell-content">{{lead?.leadType}}</span>
+          </td>
+          <td data-title="Property">
+            <span class="cell-content">
+              {{(lead?.relatedProperty?.address|formatAddress) || '-'}}
+            </span>
+          </td>
+          <td data-title="Next Chase Date">
+            <span class="cell-content">{{(lead?.nextChaseDate | date: 'dd/MM/yyyy') || '-'}}</span>
+          </td>
+          <td data-title="Lead Owner">
+            <span class="cell-content">{{lead?.owner || '-'}}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

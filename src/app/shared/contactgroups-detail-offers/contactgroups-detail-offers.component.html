@@ -1,0 +1,63 @@
+<div class="title">
+  <h2>Offers</h2>
+  <span class="checkbox checkbox--rtl" *ngIf="closedCounter">
+    <span>
+      <input type="checkbox" [(ngModel)]="hidePrevious" (change)="getOffers()" id="hidePrevious">
+      <label for="hidePrevious">Hide previous offers</label>
+    </span>
+  </span>
+</div>
+
+<ng-container *ngIf="offers$|async as offers">
+  <div class="table">
+    <app-redacted-table *ngIf="!offers || !offers?.length" message="No offers"></app-redacted-table>
+
+    <table class="table--mobile table--rowHover" *ngIf="offers && offers?.length">
+      <thead>
+        <tr>
+          <th>Status</th>
+          <th *ngIf="offers[0]?.propertyAddress">Address</th>
+          <th *ngIf="offers[0]?.type">Type</th>
+          <th>Amount</th>
+          <th>Received</th>
+          <th>Neg</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let offer of offers">
+          <td data-title="Status">
+            <span class="cell-content">
+              <span class="pill pill--positive" *ngIf="offer.isActive">{{offer?.status}}</span>
+              <span class="pill" *ngIf="!offer.isActive">{{offer?.status}}</span>
+            </span>
+          </td>
+          <td *ngIf="offer?.propertyAddress" data-title="Address">
+            <span class="cell-content">
+              {{offer?.propertyAddress}}
+            </span>
+          </td>
+          <td *ngIf="offer?.type" data-title="Type">
+            <span class="cell-content">
+              {{offer?.type}}
+            </span>
+          </td>
+          <td data-title="Amount">
+            <span class="cell-content">
+              {{offer?.amount | currency:'GBP':'symbol':'1.0-0'}}
+            </span>
+          </td>
+          <td data-title="Received">
+            <span class="cell-content">
+              {{offer?.offerReceivedDate| date: 'dd/MM/yyyy'}}
+            </span>
+          </td>
+          <td data-title="Neg">
+            <span class="cell-content">
+              {{offer?.staffMember}}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</ng-container>

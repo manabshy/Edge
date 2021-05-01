@@ -1,24 +1,29 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, TemplateRef } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { FormErrors, ValidationMessages } from '../../../app/core/shared/app-constants';
 import { CsBoardService } from '../shared/services/cs-board.service';
 import { SharedService } from 'src/app/core/services/shared.service';
-import { PointType, TeamMemberPoint } from '../shared/models/team-member';
+import { PointType, TeamMember, TeamMemberPoint } from '../shared/models/team-member';
 import { tap, map } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import * as moment from 'moment';
-import { getYear, getMonth } from 'date-fns';
+import { MessageService } from 'primeng/api';
+import { StorageMap } from '@ngx-pwa/local-storage';
+import { addYears, eachMonthOfInterval, getMonth, getYear, subYears, format, compareDesc } from 'date-fns';
 
 @Component({
   selector: 'app-admin-panel-details',
   templateUrl: './admin-panel-details.component.html',
   styleUrls: ['./admin-panel-details.component.scss']
 })
-export class AdminPanelDetailsComponent implements OnInit {
+export class AdminPanelDetailsComponent implements OnInit, OnChanges {
 
+  @Input() member: TeamMember;
+  @Output() updatedTeamMember = new EventEmitter<TeamMember>();
+  // @Input() teamMemberId: number;
   modalRef: BsModalRef;
   searchForm: FormGroup;
   recordForm: FormGroup;
@@ -26,16 +31,24 @@ export class AdminPanelDetailsComponent implements OnInit {
   formErrors = FormErrors;
   memberDetails$ = new Observable<any>();
   pointTypes: PointType[];
-  thisYearsMonths: { key: string, value: string }[] = [];
+  monthsYears: { key: string, value: string }[] = [];
   teamMemberPoints: TeamMemberPoint[] = [];
   totalPoints: number;
   currentMonth: string;
+  showAdjustment = false;
+  teamMember: TeamMember;
+  message: string;
 
+  get searchTermControl(): FormControl {
+    return this.searchForm.get('searchTerm') as FormControl;
+  }
   constructor(private fb: FormBuilder,
     private route: ActivatedRoute,
     private boardService: CsBoardService,
     private sharedService: SharedService,
+    private storage: StorageMap,
     private toastr: ToastrService,
+    private messageService: MessageService,
     public modalService: BsModalService) { }
 
   ngOnInit(): void {
@@ -47,10 +60,22 @@ export class AdminPanelDetailsComponent implements OnInit {
       points: ['', Validators.required]
     });
 
-    this.searchRecord();
+    // this.searchRecord();
     this.recordForm.valueChanges.subscribe(() => this.logValidationErrors(this.recordForm, false));
-    this.getTeamMemberDetails();
+    if (this.member) {
+      this.getTeamMemberDetails();
+    }
     this.getPointTypes();
+  }
+
+  ngOnChanges() {
+    if (this.member) {
+      this.teamMember = this.member;
+      this.teamMemberPoints = [...this.member.points];
+      this.setPointType(this.teamMemberPoints);
+      this.getTeamMemberDetails();
+      this.searchForm.patchValue({ searchTerm: this.currentMonth });
+    }
   }
 
   getPointTypes() {
@@ -60,6 +85,8 @@ export class AdminPanelDetailsComponent implements OnInit {
   }
 
   setPointType(points: TeamMemberPoint[]) {
+    console.log('href or pont type');
+
     if (points && points.length) {
       points.forEach((p, i) => {
         if (this.pointTypes && this.pointTypes.length) {
@@ -81,6 +108,9 @@ export class AdminPanelDetailsComponent implements OnInit {
       this.teamMemberPoints.push(newPoint);
       this.getSelectedMonthPointTotal(this.teamMemberPoints);
       this.orderPointsByDateDescending(this.teamMemberPoints);
+      this.teamMember.points = this.teamMemberPoints;
+      this.updatedTeamMember.emit(this.teamMember);
+      this.searchForm.patchValue({ searchTerm: this.currentMonth });
     }
   }
 
@@ -91,32 +121,37 @@ export class AdminPanelDetailsComponent implements OnInit {
         total += x.points;
       });
       this.totalPoints = total;
+      this.teamMember.totalPoints = total;
     }
   }
 
   getMonths() {
-    moment.locale('en');
-    const months = moment.months();
     const thisYear = getYear(new Date());
-    const currentMonthIndex = getMonth(new Date());
-    months.forEach(m => {
-      const key = `${m} ${thisYear}`;
-      const value = `01 ${m} ${thisYear}`;
-      this.thisYearsMonths.push({ key, value });
+    const thisMonth = format(new Date(), 'MMMM');
+    const current = `${thisMonth} ${thisYear}`;
+
+    const dates = eachMonthOfInterval({ start: subYears(new Date(), 2), end: new Date() });
+    dates.sort(compareDesc).forEach(d => {
+      const item = { key: format(d, 'MMMM yyyy'), value: format(d, 'yyyy/MM/dd') };
+      this.monthsYears.push(item);
     });
-    this.currentMonth = this.thisYearsMonths[currentMonthIndex].value;
+
+    this.currentMonth = this.monthsYears?.find(x => x.key === current)?.value;
+
   }
 
   getTeamMemberDetails(dateTime?: string) {
-    this.memberDetails$ = this.boardService.getCsTeamMemberDetails(this.teamMemberId, dateTime)
+    this.boardService.getCsTeamMemberDetails(this.member?.staffMemberId, dateTime)
       .pipe(
         tap(data => this.setPointType(data.points)),
         tap(data => {
-          this.teamMemberPoints = data.points;
+          this.teamMember.points = data.points;
+          this.updatedTeamMember.emit(this.teamMember);
           this.orderPointsByDateDescending(data.points);
           this.getSelectedMonthPointTotal(data.points);
+          data?.points?.length ? this.message = '' : this.message = 'No points';
         })
-      );
+      ).subscribe();
   }
 
   openModal(template: TemplateRef<any>) {
@@ -131,9 +166,15 @@ export class AdminPanelDetailsComponent implements OnInit {
     });
   }
 
+  onDateChanged() {
+    if (this.searchTermControl.value) {
+      this.getTeamMemberDetails(this.searchTermControl.value);
+    }
+  }
+
   clearRecordForm() {
     if (this.recordForm) {
-      this.recordForm.reset();
+      this.recordForm?.reset();
       this.clearFormValidators();
     }
   }
@@ -169,7 +210,7 @@ export class AdminPanelDetailsComponent implements OnInit {
   addRecord() {
     this.logValidationErrors(this.recordForm, true);
     const point = this.recordForm.value as TeamMemberPoint;
-    point.staffMemberId = this.teamMemberId;
+    point.staffMemberId = this.member.staffMemberId;
     point.pointTypeId = 9;
 
     if (this.recordForm.valid) {
@@ -177,12 +218,13 @@ export class AdminPanelDetailsComponent implements OnInit {
         this.boardService.addPoint(point).subscribe({
           next: (res: boolean) => {
             if (res) {
-              this.toastr.success('Adjustment successfully added');
-              this.modalRef.hide();
+              this.showAdjustment = false;
+              this.messageService.add({ severity: 'success', summary: 'Adjustment successfully added', closable: false });
               this.clearRecordForm();
               point.dateTime = new Date();
               point.points = +point.points;
               this.updateTeamMemberPoints(point);
+              // this.storage.delete('adminPanelBoard').subscribe();
             }
           }
         });
@@ -190,4 +232,5 @@ export class AdminPanelDetailsComponent implements OnInit {
     }
   }
 
+  cancel() { this.showAdjustment = false; this.clearRecordForm(); }
 }

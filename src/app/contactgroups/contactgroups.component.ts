@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ContactGroupsService } from './shared/contact-groups.service';
 import { ContactGroupAutoCompleteResult } from './shared/contact-group';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AppUtils } from '../core/shared/utils';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { SharedService } from '../core/services/shared.service';
 import { AppConstants } from '../core/shared/app-constants';
-import { InfoService } from '../core/services/info.service';
+import { InfoDetail, InfoService } from '../core/services/info.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import * as _ from 'lodash';
 import { Observable, of, EMPTY } from 'rxjs';
@@ -23,14 +23,13 @@ export class ContactGroupsComponent implements OnInit {
   advSearchCollapsed = false;
   isMessageVisible = false;
   isHintVisible = false;
-  isLoading = false;
   contactFinderForm: FormGroup;
   contactGroups: ContactGroupAutoCompleteResult[] = [];
   contactGroupDetails: ContactGroupAutoCompleteResult[];
   contactPeople: any[];
   contactGroupId: number;
   listInfo: any;
-  warnings: any;
+  warnings: InfoDetail[] = [];
   differentSearchSuggestions: string[];
   page = 1;
   searchTerm = '';
@@ -42,6 +41,7 @@ export class ContactGroupsComponent implements OnInit {
 
   constructor(private contactGroupService: ContactGroupsService,
     private route: ActivatedRoute,
+    private router: Router,
     private fb: FormBuilder,
     private infoService: InfoService,
     private peopleService: PeopleService,
@@ -97,9 +97,8 @@ export class ContactGroupsComponent implements OnInit {
     }
   }
 
-  contactGroupsResults() {
+  contactGroupsResults(submit?: boolean) {
     if (this.searchTerm) {
-      this.isLoading = true;
       this.suggestions = null;
     }
     this.page = 1;
@@ -107,15 +106,16 @@ export class ContactGroupsComponent implements OnInit {
     this.contactGroups = [];
     this.suggestedTerm ? this.searchTerm = this.suggestedTerm : this.searchTerm = this.contactFinderForm.get('searchTerm').value;
     this.getNextContactGroupsPage(this.page);
+    if (submit) {
+      this.sharedService.scrollElIntoView('list-group');
+    }
   }
 
   getNextContactGroupsPage(page: number) {
-    this.isLoading = true;
     this.contactGroupService.getAutocompleteContactGroups(this.searchTerm, PAGE_SIZE, page).subscribe(result => {
-      this.isLoading = false;
 
       if (this.searchTerm && this.searchTerm.length) {
-        if (!result.length) {
+        if (result && !result.length) {
           this.isMessageVisible = true;
           this.bottomReached = true;
           this.getDifferentSearchSuggestions(this.searchTerm);
@@ -128,17 +128,22 @@ export class ContactGroupsComponent implements OnInit {
       }
 
       if (result) {
-        this.contactGroups = _.concat(this.contactGroups, result);
+        if (page === 1) {
+          this.contactGroups = result;
+        } else {
+          this.contactGroups = _.concat(this.contactGroups, result);
+        }
         if (this.contactGroups && this.contactGroups.length) {
           this.contactGroups.forEach(x => {
-            x.warning = this.sharedService.showWarning(x.warningStatusId, this.warnings, x.warningStatusComment);
+            if (x.warningStatusId !== 1) {
+              x.warningStatus = this.sharedService.showWarning(x.warningStatusId, this.warnings, x.warningStatusComment);
+            }
           });
         }
       }
 
     }, error => {
       this.contactGroups = [];
-      this.isLoading = false;
       this.isHintVisible = true;
     });
   }
@@ -171,7 +176,19 @@ export class ContactGroupsComponent implements OnInit {
     if (event.item != null) {
       this.suggestedTerm = event.item;
     }
-    this.contactGroupsResults();
+    this.contactGroupsResults(true);
     this.suggestedTerm = '';
+  }
+
+  scrollElIntoView(className: string) {
+    this.sharedService.scrollElIntoView(className);
+  }
+
+  navigateToNewGroup(contactType: string) {
+    if (contactType === 'personal') {
+      this.router.navigate(['detail', 0, 'people', 0], { queryParams: { isNewPersonalContact: true }, relativeTo: this.route });
+    } else {
+      this.router.navigate(['detail', 0, 'people', 0], { queryParams: { isNewCompanyContact: true }, relativeTo: this.route });
+    }
   }
 }

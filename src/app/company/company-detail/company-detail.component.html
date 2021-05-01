@@ -1,3 +1,59 @@
-<p>
-  company-detail works!
-</p>
+<div class="row">
+  <div class="row__item row__item--aside">
+    <div class="wrapper--sticky">
+      <app-company-info class="appWrapper" [companyDetails]="companyDetails"></app-company-info>
+      <div class="card">
+        <div class="card__header">
+          Actions
+        </div>
+        <div class="card__body card__body--list">
+          <ol class="list list--divider list--hover">
+            <li *ngIf="companyDetails">
+              <a class="overall" (click)="createNewCompanyOrContact('newContact'); $event.stopPropagation()"></a>
+              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                class="icon icon--s icon--fill-positive icon--onLeft">
+                <path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z">
+                </path>
+                <path d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z"
+                  class="plus-vertical"></path>
+              </svg>New Company Contact
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row__item">
+    <h4>Company contacts</h4>
+    <div class="table">
+      <table class="table--mobile table--rowHover">
+        <thead>
+          <tr>
+            <th>Full Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let companyContact of companyDetails?.companyContacts">
+            <td>
+              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
+                <path
+                  d="M56.8 14.9H44.4V8.8c0-3.4-2.8-6.2-6.2-6.2H25.8c-3.4 0-6.2 2.8-6.2 6.2v6.2H7.2c-3.4 0-6.2 2.8-6.2 6.2l0 34.1c0 3.4 2.8 6.2 6.2 6.2h49.6c3.4 0 6.2-2.8 6.2-6.2V21.1C63 17.7 60.2 14.9 56.8 14.9zM38.2 14.9H25.8V8.8h12.4V14.9z">
+                </path>
+              </svg>
+              <ng-container
+                *ngFor="let contactPerson of companyContact?.contactPeople; last as isLast; first as isFirst">
+                <ng-container *ngIf="contactPerson">
+                  <a [routerLink]="['/contact-centre/detail',0,'people',companyContact.contactGroupId ]"
+                    [queryParams]="{showNotes: true}"
+                    (click)="$event.stopPropagation()">{{contactPerson?.addressee}}</a>
+                </ng-container>
+              </ng-container>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<app-additional-info [id]="companyDetails?.companyId ? 'CO-'+companyDetails?.companyId : ''"></app-additional-info>

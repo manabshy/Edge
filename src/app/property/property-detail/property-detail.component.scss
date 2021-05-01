@@ -1,3 +1,9 @@
+@import "../../../style/bootstrap-overrides";
+
+@import "../../../../node_modules/bootstrap/scss/functions";
+@import "../../../../node_modules/bootstrap/scss/variables";
+@import "../../../../node_modules/bootstrap/scss/mixins";
+
 .property-details {
     border-top: 0;
     border-top-left-radius: 0;

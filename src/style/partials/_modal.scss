@@ -1,0 +1,130 @@
+.modal-backdrop                 { margin:0; background-color:rgba($color--midnight, .5); position:fixed; top:0; right:0; bottom:0; left:0; z-index:10; }
+.modal                          { display:none; align-items:center; justify-content:center; width:100%; height:100%; position:fixed; top:0; right:0; bottom:0; left:0; z-index:11;
+    &-dialog                    { padding:20px; background-color:$color--snow; border-radius:3px; }
+}
+
+// Add the important to the fade as inline block is being applied.
+.fade                           { display:flex!important; }
+
+
+/***********************************************
+ Prime NG Dialog template
+***********************************************/
+.p-dialog-mask.p-component-overlay              { background-color:rgba($color--midnight, .5); }
+
+.p-dialog                                       { min-width:100%; min-height:100%; font-size:12px; background-color:$color--snow;
+    /***** Modal *****/
+    .p-dialog-content                           { padding:16px; border-radius:0; flex-grow:1; }
+
+    .p-dialog-header                            { padding:16px; border-radius:0; border-bottom:1px solid $color--midnight-10;
+        &+.p-dialog-content                     { border-radius:0; }
+        .p-dialog-title                         { font-size:16px; }
+        .p-dialog-header-icon                   { border-radius:3px; }
+        .pi                                     { font-size:13px; }
+    }
+
+    .p-dialog-header-icons                      { position:absolute; right:10px; top:8px; }
+
+    .p-dialog-footer                            { padding:16px; border-radius:0; }
+
+    /***** Dialog *****/
+    &.dialog                                    { 
+        &--hasFooter                            {
+            .p-dialog-content                   { padding-bottom:60px; }
+        }
+
+        .p-dialog-content                       { min-height:inherit; border-radius:3px; }
+    }
+
+    .footer--modal                              { margin:0; padding:10px 16px; width:100%; display:flex; flex-direction:column; align-items:flex-end; position:absolute; left:0; bottom:0; box-shadow:none; border-radius:0 0 3px 3px;
+        .btn--container                         { width:100%; display:flex; justify-content:flex-end;
+            .btn--alignRight                    { margin-right:auto; }
+        }
+    }
+}
+
+.modal--hasFooter                               {
+    .p-dialog                                   {
+        .p-dialog-content                       { margin-bottom:50px; }
+    }
+}
+
+p-toast                                         {
+    .p-toast                                    { width:calc(100% - 40px); opacity:1;
+        .p-toast-message                        { color:$color--snow;
+            &.p-toast-message-success           { background-color:$color--positive-10; border-color:$color--positive; color:$color--midnight;
+                .p-toast-message-icon,
+                .p-toast-icon-close             { color:$color--midnight; }
+            }
+        }
+        &.p-component                           { font-size:12px; line-height:17px; letter-spacing:.5px; }
+        .p-toast-detail:empty                   { display:none; }
+    }
+}
+
+.p-tabview                                      {
+    .p-tabview-nav                              { border:none; position:relative;
+        &:before                                { content:''; width:calc(100% + 28px); height:1px; background-color:$color--midnight-10; position:absolute; bottom:-2px; left:-13px; }
+        li                                      { 
+            &+*                                 { margin:0 0 0 30px; }
+            .p-tabview-nav-link                 { padding:0 0 16px 0; border-width:0 0 1px 0; text-transform:uppercase; }
+            .p-tabview-nav-link:not(.p-disabled):focus { box-shadow:none; }
+        }
+    }
+    .p-tabview-panels                           { padding:0; }
+}
+
+p-chip                                          { margin:6px 6px 0 0; display:inline-flex; 
+    .pi-chip-remove-icon                        { line-height:0; }
+    .p-chip .p-chip-text                        { margin:0; padding:2px 0; font-size:11px; }
+}
+label+p-chips                                   { margin-top:6px; }
+p-chips                                         { display:block }
+.p-chips .p-chips-multiple-container .p-chips-input-token input     { font-size:12px; }
+.p-chips .p-chips-multiple-container                                { padding:3px; }
+.p-chips .p-chips-multiple-container .p-chips-token,
+.p-chips .p-chips-multiple-container .p-chips-input-token           { margin:3px; }
+.p-chips .p-chips-multiple-container .p-chips-input-token.ng-star-inserted           { padding:0.25rem 0.5rem; }
+.p-chips-input-token input                                          { min-height:auto; }
+.p-chips .p-chips-multiple-container .p-chips-input-token input     { padding:3px 6px; }
+.p-chips .p-chips-multiple-container:not(.p-disabled).p-focus { box-shadow:none; }
+
+/***********************************************
+This applies from 992px onwards
+***********************************************/
+@media (min-width:992px)                        {
+    .p-dialog                                   { min-width:auto; min-height:auto; font-size:inherit;
+        .p-dialog-header                        { border-radius:3px 3px 0 0; }
+        .p-dialog-footer                        { border-radius:0 0 3px 3px; }
+        .p-dialog-content                       { border-radius:3px; }
+        &.dialog                                { width:300px; min-width:auto; min-height:auto; }
+    }
+
+    .modal--large                              {
+        .p-dialog                               { width:70%;
+            .p-dialog-content                   { flex-grow:0; min-height:530px;
+                .row                            { min-height:450px; }
+            }
+        }
+    }
+
+    .modal--medium                              {
+        .p-dialog                               { width:60%;
+            .p-dialog-content                   { flex-grow:0; min-height:350px;
+                .row                            { min-height:334px; }
+            }
+        }
+    }
+
+    .modal--small                               {
+        .p-dialog                               { width:500px;
+            .p-dialog-content                   { flex-grow:0; min-height:350px;
+                .row                            { min-height:334px; }
+            }
+        }
+    }
+
+    p-toast                                     {
+        .p-toast                                { width:300px; }
+    }
+}

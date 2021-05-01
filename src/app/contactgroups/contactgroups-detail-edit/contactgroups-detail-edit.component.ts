@@ -1,40 +1,44 @@
-import { Component, OnInit, Input, Output, Renderer2, AfterViewInit, AfterContentInit, AfterContentChecked } from '@angular/core';
+import { Component, OnInit, Input, Output, Renderer2, AfterViewInit, AfterContentInit, AfterContentChecked, OnDestroy } from '@angular/core';
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
-import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractControl, ValidatorFn } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractControl, ValidatorFn, EmailValidator } from '@angular/forms';
 import { ContactGroupsService } from '../shared/contact-groups.service';
-import { Person, Email, PhoneNumber, BasicPerson, TelephoneTypeId } from 'src/app/core/models/person';
+import { Person, Email, PhoneNumber, BasicPerson, TelephoneTypeId } from 'src/app/shared/models/person';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { EventEmitter } from '@angular/core';
 import { debounceTime } from 'rxjs/operators';
 import { AppConstants, FormErrors, ValidationMessages } from 'src/app/core/shared/app-constants';
 import { AppUtils } from 'src/app/core/shared/utils';
-import { WedgeValidators } from 'src/app/core/shared/wedge-validators';
-import { Address } from 'src/app/core/models/address';
+import { WedgeValidators } from 'src/app/shared/wedge-validators';
+import { Address } from 'src/app/shared/models/address';
 import { ToastrService } from 'ngx-toastr';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
-import { StaffMember, Permission } from 'src/app/core/models/staff-member';
+import { StaffMember, Permission } from 'src/app/shared/models/staff-member';
 import { AddressService, AddressAutoCompleteData } from 'src/app/core/services/address.service';
-import { InfoService, InfoDetail } from 'src/app/core/services/info.service';
+import { InfoService, InfoDetail, DropdownListInfo } from 'src/app/core/services/info.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
+import { SubSink } from 'subsink';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-contactgroups-detail-edit',
   templateUrl: './contactgroups-detail-edit.component.html',
   styleUrls: ['./contactgroups-detail-edit.component.scss']
 })
-export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChecked {
-  @Output() addedPersonDetails = new EventEmitter<Person>();
+export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
+  @Output() addedPersonDetails = new EventEmitter<any>();
   @Output() addedPersonId = new EventEmitter<number>();
   @Output() hideCanvas = new EventEmitter<boolean>();
   @Output() backToFinder = new EventEmitter<boolean>();
-  @Input() basicPerson: BasicPerson;
+  // @Input() basicPerson: BasicPerson;
+  @Input() isCompanyContactGroup = false;
+  basicPerson: BasicPerson;
   prefToggleStatus = false;
-  countries: any;
-  titles: any;
-  warnings: any;
-  telephoneTypes: any;
-  listInfo: any;
+  countries: InfoDetail[] = [];
+  titles: Record<number, string>;
+  warnings: InfoDetail[] = [];
+  telephoneTypes: Record<number, string>;
+  listInfo: DropdownListInfo;
   titleSelected = 1;
   // defaultCountryCode = 232;
   telephoneTypeSelected = 1;
@@ -52,7 +56,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
   errorMessage: WedgeError;
   formArraryErrors: string;
   isSubmitting = false;
-  isLoadingAddressVisible = false;
+  isSubmittingAndAdd = false;
   backToAddressesList = false;
   enterAddressManually = false;
   isEditingSelectedPerson = false;
@@ -68,9 +72,9 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
   };
   number: string;
   currentStaffMember: StaffMember;
-  isWarningsEnabled: boolean;
+  isWarningsEnabled = false;
   warningStatus: number;
-
+  private subs = new SubSink();
   // get showPostCode(): boolean {
   //   return this.address.get('countryId').value === this.defaultCountryCode;
   // }
@@ -83,7 +87,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
   get countryId(): FormControl {
     return <FormControl>this.address.get('countryId');
   }
-  get warningStatusId(): FormControl {
+  get warningStatusIdControl(): FormControl {
     return <FormControl>this.personForm.get('warningStatusId');
   }
   get address(): FormGroup {
@@ -108,6 +112,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
   public keepOriginalOrder = (a) => a.key;
   constructor(public sharedService: SharedService,
     private toastr: ToastrService,
+    private messageService: MessageService,
     private addressService: AddressService,
     private infoService: InfoService,
     private storage: StorageMap,
@@ -118,14 +123,14 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
     private renderer: Renderer2) { }
 
   ngOnInit() {
-    this.storage.get('currentUser').subscribe((data: StaffMember) => {
+    this.subs.sink = this.storage.get('currentUser').subscribe((data: StaffMember) => {
       if (data) {
         this.currentStaffMember = data;
       }
       console.log('current user info here....', data);
     });
 
-    this.storage.get('info').subscribe(data => {
+    this.subs.sink = this.storage.get('info').subscribe((data: DropdownListInfo) => {
       if (data) {
         this.listInfo = data;
         this.setDropdownLists();
@@ -133,29 +138,34 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
       }
     });
 
-    this.route.params.subscribe(params => this.personId = +params['personId'] || 0);
-    this.route.queryParams.subscribe(params => {
+    this.subs.sink = this.route.params.subscribe(params => this.personId = +params['personId'] || 0);
+    this.subs.sink = this.route.queryParams.subscribe(params => {
       this.groupPersonId = +params['groupPersonId'] || 0;
       this.isEditingSelectedPerson = params['isEditingSelectedPerson'] || false;
+      const newPerson = params['newPerson'];
+      if (newPerson) {
+        this.basicPerson = JSON.parse(newPerson) as BasicPerson;
+      }
     });
     this.setupEditForm();
     const id = this.groupPersonId !== 0 ? this.groupPersonId : this.personId;
     if (this.basicPerson !== undefined) {
+      console.log('basic person in edit form', this.basicPerson);
       this.populateNewPersonDetails();
     } else {
       this.getPersonDetails(id);
     }
     this.logValidationErrors(this.personForm, true);
-    this.personForm.valueChanges
+    this.subs.sink = this.personForm.valueChanges
       .pipe(debounceTime(400)).subscribe((data) => {
         this.postCode.setValue(this.sharedService.formatPostCode(data.address.postCode), { emitEvent: false });
         this.logValidationErrors(this.personForm, false);
       });
+
+
+    this.subs.sink = this.warningStatusIdControl.valueChanges.subscribe(() => this.togglePersonWarnings());
   }
 
-  ngAfterContentChecked() {
-    this.enablePersonWarnings();
-  }
   setDropdownLists() {
     this.countries = this.listInfo.countries;
     this.titles = this.listInfo.titles;
@@ -163,29 +173,24 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
     this.telephoneTypes = this.listInfo.telephoneTypes;
   }
 
-  enablePersonWarnings() {
+  togglePersonWarnings() {
     let setPermission: Permission;
     let clearPermission: Permission;
-    let isEnabled = false;
-    if (this.currentStaffMember) {
-      if (this.currentStaffMember.permissions) {
-        setPermission = this.currentStaffMember.permissions.find(x => x.permissionId === 67);
-        clearPermission = this.currentStaffMember.permissions.find(x => x.permissionId === 68);
-      }
+    let isEnabled = true;
+    if (this.currentStaffMember?.permissions?.length) {
+      setPermission = this.currentStaffMember.permissions.find(x => x.permissionId === 67);
+      clearPermission = this.currentStaffMember.permissions.find(x => x.permissionId === 68);
     }
-    if (this.personDetails && this.personDetails.warningStatusId > 1) {
-      if (+this.warningStatusId.value > 1) {
-        isEnabled = !!clearPermission;
-      } else {
-        isEnabled = !!setPermission;
-      }
-      this.isWarningsEnabled = isEnabled;
+
+    if (this.personDetails?.warningStatusId > 1) {
+      isEnabled = !!clearPermission;
     } else {
-      this.isWarningsEnabled = true;
+      isEnabled = !!setPermission;
     }
+    this.isWarningsEnabled = isEnabled;
   }
 
-  logValidationErrors(group: FormGroup = this.personForm, fakeTouched: boolean) {
+  logValidationErrors(group: FormGroup = this.personForm, fakeTouched: boolean, scrollToError = false) {
     Object.keys(group.controls).forEach((key: string) => {
       const control = group.get(key);
       const messages = ValidationMessages[key];
@@ -209,7 +214,9 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
         this.logValidationErrorsFormArray(control);
       }
     });
-    this.sharedService.scrollToFirstInvalidField();
+    if (scrollToError) {
+      this.sharedService.scrollToFirstInvalidField();
+    }
   }
 
   logValidationErrorsFormArray(control: AbstractControl) {
@@ -245,11 +252,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
 
 
   cancel() {
-    if (this.basicPerson) {
-      this.backToFinder.emit(true);
-    } else {
-      this.sharedService.back();
-    }
+    this.sharedService.back();
   }
 
   clearControlValue(control: AbstractControl) {
@@ -263,13 +266,13 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
       this.warningStatus = this.personDetails.warningStatusId;
       console.log('person details', this.personDetails);
       this.displayPersonDetails(data);
-    }, error => {
-      this.errorMessage = <any>error;
-      this.sharedService.showError(this.errorMessage);
     });
   }
 
   populateNewPersonDetails() {
+    const emailAddresses: Email[] = [];
+    const phoneNumbers: PhoneNumber[] = [];
+
     this.personForm.patchValue({
       warningStatusId: 1,
       firstName: this.basicPerson.firstName,
@@ -285,8 +288,16 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
         general: false
       }
     });
-    this.personForm.setControl('emailAddresses', this.setExistingEmailAddresses(this.basicPerson.emailAddresses));
-    this.personForm.setControl('phoneNumbers', this.setExistingPhoneNumbers(this.basicPerson.phoneNumbers));
+
+    if (this.basicPerson.emailAddress) {
+      emailAddresses.push({ email: this.basicPerson.emailAddress } as Email);
+      this.personForm.setControl('emailAddresses', this.setExistingEmailAddresses(emailAddresses));
+    }
+
+    if (this.basicPerson.phoneNumber) {
+      phoneNumbers.push({ number: this.basicPerson.phoneNumber } as PhoneNumber)
+      this.personForm.setControl('phoneNumbers', this.setExistingPhoneNumbers(phoneNumbers));
+    }
     this.personForm.updateValueAndValidity();
     this.personForm.markAsDirty();
   }
@@ -332,13 +343,14 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
 
   setExistingPhoneNumbers(phoneNumbers: PhoneNumber[]): FormArray {
     const phoneArray = new FormArray([]);
-    phoneNumbers.forEach((x) => {
+    phoneNumbers?.forEach((x) => {
       phoneArray.push(this.fb.group({
         number: [x.number, { validators: [WedgeValidators.phoneNumberValidator()] }],
-        id: x.id,
-        typeId: x.typeId,
-        sendSMS: x.sendSMS || true,
-        isPreferred: x.isPreferred,
+        id: x.id || 0,
+        typeId: x.typeId || 3, // cross check this asap
+        sendSMS: x.sendSMS || false,
+        isPreferred: x.isPreferred || false,
+        isUKMobileNumber: this.sharedService.isUKMobile(x.number) ? true : false,
         comments: x.comments
       }, { validators: WedgeValidators.phoneTypeValidator(this) }));
     });
@@ -348,12 +360,12 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
 
   setExistingEmailAddresses(emailAddresses: Email[]): FormArray {
     const emailFormArray = new FormArray([]);
-    emailAddresses.forEach(x => {
+    emailAddresses?.forEach(x => {
       emailFormArray.push(this.fb.group({
-        id: x.id,
+        id: x.id || 0,
         email: [x.email, { validators: [Validators.pattern(AppConstants.emailPattern)] }],
-        isPreferred: x.isPreferred,
-        isPrimaryWebEmail: x.isPrimaryWebEmail
+        isPreferred: x.isPreferred || false,
+        isPrimaryWebEmail: x.isPrimaryWebEmail || false
       }));
     });
     emailFormArray.push(this.createEmailItem());
@@ -392,7 +404,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
     // this.warningStatusId.disable();
   }
 
-  togglePreferences(index: number, group: FormArray) {
+  togglePreferences(index: number, group: FormArray, toggleSendSMS = false) {
     if (group === this.phoneNumbers) {
       const phoneNumberPrefs = [];
       const numberFormGroups = this.phoneNumbers.controls;
@@ -401,20 +413,19 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
         phoneNumberPrefs.push(numberFormGroups[i].value);
       }
       const otherPhoneNumbers = phoneNumberPrefs.filter(x => x !== selectedPhoneNumber);
-      otherPhoneNumbers.forEach(x => {
-        x.isPreferred = false;
-      });
+      otherPhoneNumbers.forEach(x => { x.isPreferred = false; });
+      if (toggleSendSMS) { phoneNumberPrefs[index] = selectedPhoneNumber; }
+      this.personForm.get('phoneNumbers').setValue(phoneNumberPrefs);
+
     } else {
       const emailPrefs = [];
       const emailFormGroups = this.emailAddresses.controls;
       const selectedEmail = emailFormGroups[index].value;
-      for (let i = 0; i < emailFormGroups.length; i++) {
-        emailPrefs.push(emailFormGroups[i].value);
-      }
+      for (let i = 0; i < emailFormGroups.length; i++) { emailPrefs.push(emailFormGroups[i].value); }
       const otherEmails = emailPrefs.filter(x => x !== selectedEmail);
-      otherEmails.forEach(x => {
-        x.isPreferred = false;
-      });
+      otherEmails.forEach(x => { x.isPreferred = false; });
+
+      this.personForm.get('emailAddresses').setValue(emailPrefs);
     }
   }
 
@@ -459,7 +470,7 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
   }
 
   addRemovePhoneNumberItem(i, remove) {
-    const currPhoneNumber = this.phoneNumbers.controls[i];
+    const currPhoneNumber = this.phoneNumbers.controls[i] as FormGroup;
     const lastPhoneNumber = this.phoneNumbers.controls[this.phoneNumbers.controls.length - 1];
 
     if (currPhoneNumber === lastPhoneNumber) {
@@ -468,16 +479,20 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
     if (!currPhoneNumber.value.number && currPhoneNumber !== lastPhoneNumber && remove) {
       this.phoneNumbers.removeAt(i);
     }
+
   }
-  createPhoneNumberItem(): FormGroup {
+  createPhoneNumberItem(isUKMobileNumber?: boolean): FormGroup {
+    console.log({ isUKMobileNumber });
+
     return this.fb.group({
       id: 0,
       typeId: 3,
       number: ['', { validators: [WedgeValidators.phoneNumberValidator()] }],
       orderNumber: 0,
-      sendSMS: [true],
+      sendSMS: [false],
       isPreferred: [false],
-      comments: ['']
+      comments: [''],
+      isUKMobileNumber: isUKMobileNumber
     }, { validators: WedgeValidators.phoneTypeValidator(this) });
   }
 
@@ -511,11 +526,12 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
     }
     personAddress.setValue(address);
   }
+
   removeSMSLandlines() {
     this.phoneNumbers.controls.forEach(x => {
-      if (!this.sharedService.isUKMobile(x.value.number)) {
+      if (this.sharedService.isUKMobile(x.value.number)) {
         x.patchValue({
-          sendSMS: false
+          sendSMS: true
         });
       }
     });
@@ -531,50 +547,53 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
     }
   }
 
-  savePerson() {
+  savePerson(otherPersonToAdd) {
     this.errorMessage = null;
-    this.removeSMSLandlines();
     this.removeOthers();
-    this.logValidationErrors(this.personForm, true);
+    this.logValidationErrors(this.personForm, true, true);
     if (this.personForm.valid) {
-      this.isSubmitting = true;
+      if (otherPersonToAdd) {
+        this.isSubmittingAndAdd = true;
+      } else {
+        this.isSubmitting = true;
+      }
       if (this.personForm.dirty) {
         const person = { ...this.personDetails, ...this.personForm.value };
+
         if (!person.titleId) {
           person.titleId = 100;
         }
-        // person.address.addressLines = this.removeDuplicateAdressLines();
         if (!this.basicPerson) {
-          this.contactGroupService.updatePerson(person).subscribe(res => this.onSaveComplete(res.result),
+          this.subs.sink = this.contactGroupService.updatePerson(person).subscribe(res => this.onSaveComplete(res.result, otherPersonToAdd),
             (error: WedgeError) => {
-              this.errorMessage = error;
-              this.sharedService.showError(this.errorMessage);
               this.isSubmitting = false;
+              this.isSubmittingAndAdd = false;
             });
         } else {
-          this.contactGroupService.addPerson(person).subscribe((data) => {
+          this.subs.sink = this.contactGroupService.addPerson(person).subscribe((data) => {
             this.newPersonId = data.personId;
-            this.onSaveComplete(data);
+            this.onSaveComplete(data, otherPersonToAdd);
           },
             (error: WedgeError) => {
-              this.errorMessage = error;
-              this.sharedService.showError(this.errorMessage);
               this.isSubmitting = false;
+              this.isSubmittingAndAdd = false;
             });
         }
       } else {
-        this.onSaveComplete(this.personDetails);
+        this.onSaveComplete(this.personDetails, otherPersonToAdd);
       }
     } else {
       this.errorMessage = {} as WedgeError;
       this.errorMessage.displayMessage = 'Please correct validation errors';
     }
   }
-  onSaveComplete(person?: Person) {
+
+  onSaveComplete(person?: Person, otherPersonToAdd?: boolean) {
     this.personForm.markAsPristine();
     this.isSubmitting = false;
+    this.isSubmittingAndAdd = false;
     this.errorMessage = null;
-    this.toastr.success('Person successfully saved');
+    this.messageService.add({ severity: 'success', summary: 'Person successfully saved', closable: false });
     if (this.isEditingSelectedPerson && AppUtils.holdingSelectedPeople) {
       const holdingPeople = AppUtils.holdingSelectedPeople;
       holdingPeople.forEach((x, index) => {
@@ -585,25 +604,39 @@ export class ContactgroupsDetailEditComponent implements OnInit, AfterContentChe
       });
     }
     if (this.newPersonId) {
-      this.addNewPerson(this.newPersonId);
-      this.addedPersonDetails.emit(person);
-      this.backToFinder.emit(true);
-      this.makeCanvasInvisible(this.isOffCanvasVisible);
+      this.contactGroupService.getAddedPerson(person);
+      this.sharedService.back();
+      // this.addNewPerson(this.newPersonId);
+      // const personEmitter = {
+      //   person: person,
+      //   otherPersonToAdd: otherPersonToAdd
+      // };
+      // this.addedPersonDetails.emit(personEmitter);
+      // this.backToFinder.emit(otherPersonToAdd);
+      // if (!personEmitter.otherPersonToAdd) {
+      //   this.makeCanvasInvisible(this.isOffCanvasVisible);
+      // }
     } else {
       this.sharedService.back();
     }
   }
+
   addNewPerson(id: number) {
     this.addedPersonId.emit(id);
   }
+
   makeCanvasInvisible(close: boolean) {
     this.hideCanvas.emit(close);
   }
 
   canDeactivate(): boolean {
-    if (this.personForm.dirty && !this.isSubmitting) {
+    if (this.personForm.dirty && !this.isSubmitting && !this.isSubmittingAndAdd) {
       return false;
     }
     return true;
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 }

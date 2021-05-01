@@ -1,0 +1,30 @@
+<div class="modal-header">
+  <div>
+    Add Note
+    <ng-container *ngIf="!data?.group || step2">
+      for
+      <ng-container *ngIf="selectedPerson; else noPerson"><strong>{{selectedPerson?.firstName}} {{selectedPerson?.lastName}}</strong></ng-container>
+      <ng-template #noPerson>this Contact Group</ng-template>
+    </ng-container>
+  </div>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="action(false)">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body text-center">
+  <ng-container *ngIf="data?.group && !step2">
+    <p>Pick a person or add a group note</p>
+    <div class="list-group mb-4">
+      <div class="list-group-item list-group-item-action" *ngFor="let person of data?.people" (click)="select(person)">
+        {{person?.firstName}} {{person?.lastName}}
+      </div>
+      <div class="list-group-item list-group-item-action" (click)="selectGroup(data?.group)">
+        <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft" *ngIf="cG?.contactPeople.length"><path d="M46 32c4.3 0 7.7-3.5 7.7-7.8s-3.4-7.8-7.7-7.8 -7.8 3.5-7.8 7.8S41.7 32 46 32zM22.7 28.9c5.1 0 9.3-4.2 9.3-9.3s-4.1-9.3-9.3-9.3 -9.3 4.2-9.3 9.3S17.6 28.9 22.7 28.9zM46 38.2c-5.7 0-17.1 2.9-17.1 8.5v7H63v-7C63 41.1 51.6 38.2 46 38.2zM22.7 35.1C15.5 35.1 1 38.7 1 46v7.8h21.7v-7c0-2.6 1-7.2 7.3-10.8C27.4 35.4 24.7 35.1 22.7 35.1z" /></svg> Group Note
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="!data?.group || step2">
+    <app-note-form [isModal]="1" [selectedPerson]="selectedPerson" [selectedContactGroup]="selectedContactGroup" [data]="data" [isPersonNote]="isPersonNote" [isCancelVisible]="true" (actionEmit)="action($event)">
+    </app-note-form>
+  </ng-container>
+</div>

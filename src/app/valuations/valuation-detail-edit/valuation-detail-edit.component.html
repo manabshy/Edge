@@ -1,0 +1,1535 @@
+<div class="row">
+  <div class="row__item row__item--aside">
+    <app-contactgroup-card class="appWrapper" [contactGroup]="contactGroup$|async" *ngIf="contactGroup$|async"></app-contactgroup-card>
+    <div class="card">
+      <div class="card__body card__body--list">
+        <ol class="list list--divider list--hover">
+          <li class="current">
+            <a href="" class="overall"></a>
+            Valuation Ticket
+          </li>
+          <li>
+            <a href="" class="overall"></a>
+            Market Insight / Comparibles
+          </li>
+          <li>
+            <a href="" class="overall"></a>
+            Notes
+          </li>
+        </ol>
+      </div>
+    </div>
+    <div class="card" *ngIf="property">
+      <div class="card__header">
+        Status <span class="pill pill--positive flexRight">Booked</span>
+      </div>
+      <div class="card__body">
+        <ol class="timeline timeline--condensed">
+          <li *ngFor="let item of statuses index as i">
+            <a (click)="toggleAccordion(i)">{{item?.name|toPascalCase}}</a>
+          </li>
+          <!-- <li class="timeline__positive">Valuation Notes</li>
+          <li>Property Info</li>
+          <li>Appointment</li>
+          <li>Values</li>
+          <li>Terms of Business</li>
+          <li>Anti Money Laundering</li>
+          <li>Land Registery</li>
+          <li>Status</li>
+          <li>Instruct</li> -->
+        </ol>
+      </div>
+    </div>
+  </div>
+  <div class="row__item">
+    <!-- <div class="title">
+      <h2>Valuation</h2>
+      <div class="btn-group" dropdown placement="bottom right" *ngIf="!isNewValuation">
+        <button id="actionsToggle" dropdownToggle type="button" class="btn dropdown-toggle"
+          aria-controls="actionsList">Actions <span class="caret"></span></button>
+        <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+          aria-labelledby="actionsToggle">
+          <li role="menuitem" *ngIf="isEditable || valuationForm.get('suggestedAskingPrice').value">
+            <a class="dropdown-item"><span class="dropdown-icon"><i class="fas fa-file-contract"></i></span>Sales Terms
+              Of Business</a>
+          </li>
+          <li role="menuitem"
+            *ngIf="isEditable || valuationForm.get('suggestedAskingRentLongLet').value || valuationForm.get('suggestedAskingRentShortLet').value">
+            <a class="dropdown-item"><span class="dropdown-icon"><i class="fas fa-file-contract"></i></span>Lettings
+              Terms Of Business</a>
+          </li>
+          <li role="menuitem"
+            *ngIf="isEditable || valuationForm.get('suggestedAskingRentLongLet').value || valuationForm.get('suggestedAskingRentShortLet').value">
+            <a class="dropdown-item"><span class="dropdown-icon"><i class="fas fa-file-contract"></i></span>Landlord
+              Questionnaire</a>
+          </li>
+        </ul>
+      </div>
+    </div> -->
+
+    <div class="wrapper--redacted" *ngIf="!property">
+      <button class="btn btn--redacted btn--positive" (click)="showProperty=true"><svg aria-hidden="true" width="64"
+          height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
+          <path class="horizontal"
+            d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z">
+          </path>
+          <path class="vertical"
+            d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z">
+          </path>
+        </svg>New Property</button>
+      <div class="card card--horizontal">
+        <div class="card__headerImg"><span class="redacted redacted--title redacted--30pc"></span><span
+            class="redacted redacted--50pc"></span></div>
+        <div class="card__body">
+          <ol class="list list--split">
+            <li>
+              <ol class="list">
+                <li><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                    class="icon icon--s icon--onLeft">
+                    <path
+                      d="M56 24c0 17.5-20.3 38-21.2 38.8C34 63.6 33 64 32 64c-1 0-2-0.4-2.8-1.2C28.3 62 8 41.5 8 24 8 10.8 18.8 0 32 0S56 10.8 56 24zM32 36c6.6 0 12-5.4 12-12 0-6.6-5.4-12-12-12s-12 5.4-12 12C20 30.6 25.4 36 32 36z">
+                    </path>
+                  </svg><span class="redacted redacted--100pc"></span><span class="redacted redacted--100pc"></span>
+                </li>
+                <li><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                    class="icon icon--s icon--onLeft">
+                    <path
+                      d="M61.3 1c-0.2 0-0.4 0-0.5 0.1L42.3 8.2 21.7 1 2.3 7.5C1.5 7.8 1 8.4 1 9.2v52.1C1 62.2 1.8 63 2.7 63c0.2 0 0.4 0 0.5-0.1l18.4-7.1L42.3 63l19.4-6.5c0.7-0.3 1.2-0.9 1.2-1.7V2.7C63 1.8 62.2 1 61.3 1zM42.3 56.1l-20.7-7.3v-41l20.7 7.3V56.1z">
+                    </path>
+                  </svg><span class="redacted redacted--50pc"></span></li>
+                <li><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24"
+                    class="icon icon--s icon--onLeft">
+                    <path d="M0 0h24v24H0z" fill="none"></path>
+                    <path
+                      d="M22 16V4c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2zm-11-4l2.03 2.71L16 11l4 5H8l3-4zM2 6v14c0 1.1.9 2 2 2h14v-2H4V6H2z">
+                    </path>
+                  </svg><span class="redacted redacted--20pc"></span></li>
+                <li class="hideLabel"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                    class="icon icon--s icon--onLeft">
+                    <path
+                      d="M32 16.5V4.1H1v55.8h62V16.5H32zM13.4 53.7H7.2v-6.2h6.2V53.7zM13.4 41.3H7.2v-6.2h6.2V41.3zM13.4 28.9H7.2v-6.2h6.2V28.9zM13.4 16.5H7.2v-6.2h6.2V16.5zM25.8 53.7h-6.2v-6.2h6.2V53.7zM25.8 41.3h-6.2v-6.2h6.2V41.3zM25.8 28.9h-6.2v-6.2h6.2V28.9zM25.8 16.5h-6.2v-6.2h6.2V16.5zM56.8 53.7H32v-6.2h6.2v-6.2H32v-6.2h6.2v-6.2H32v-6.2h24.8V53.7zM50.6 28.9h-6.2v6.2h6.2V28.9zM50.6 41.3h-6.2v6.2h6.2V41.3z">
+                    </path>
+                  </svg><span class="redacted redacted--50pc"></span></li>
+                <li><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                    class="icon icon--s icon--onLeft">
+                    <path
+                      d="M32 0L0 36.1h8V64h6.8v-4.3c0-5.7 11.5-8.6 17.2-8.6s17.2 2.8 17.2 8.5V64H56V36.1h8L32 0zM32 46.8c-4.8 0-8.6-3.9-8.6-8.6 0-4.8 3.8-8.6 8.6-8.6s8.6 3.8 8.6 8.6C40.6 42.9 36.8 46.8 32 46.8z">
+                    </path>
+                  </svg><span class="redacted redacted--10pc"></span><span class="redacted redacted--50pc"></span></li>
+              </ol>
+            </li>
+            <li class="expandable">
+              <details open="">
+                <summary>
+                  <div class="summary__title"> Additional details <svg aria-hidden="true" width="64" height="64"
+                      viewBox="0 0 64 64" class="icon icon--s flexRight">
+                      <path
+                        d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z"
+                        class="vertical"></path>
+                      <path
+                        d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z"
+                        class="horizontal"></path>
+                    </svg></div>
+                </summary>
+                <ol class="list">
+                  <li><span class="redacted redacted--title redacted--30pc"></span><span
+                      class="redacted redacted--50pc"></span></li>
+                  <li><span class="redacted redacted--title redacted--20pc"></span><span
+                      class="redacted redacted--50pc"></span></li>
+                  <li><span class="redacted redacted--title redacted--40pc"></span><span
+                      class="redacted redacted--50pc"></span></li>
+                  <li><span class="redacted redacted--title redacted--10pc"></span><span
+                      class="redacted redacted--50pc"></span></li>
+                  <li><span class="redacted redacted--title redacted--50pc"></span><span
+                      class="redacted redacted--50pc"></span></li>
+                </ol>
+              </details>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <app-property-card class="appWrapper" [propertyDetails]="property" [isHorizontalCard]="true" [showPropertyDetailActions]="false"
+      [showValuationActions]="true" (showPhotos)="showPhotosModal()" (showMap)="showMapModal()"
+      (changeProperty)="changeProperty()" (changeLastknownOwner)="isLastknownOwnerVisible = true"></app-property-card>
+
+    <form [formGroup]="valuationForm" (ngSubmit)="saveValuation()" autocompleteOff>
+      <ng-container *ngIf="(createdSigner || lastKnownOwner) && property">
+        <p-accordion [multiple]="true">
+          <p-accordionTab header="Valuation Notes" [(selected)]="activeState[0]" *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value) || (!isEditable && valuationForm.get('timeFrame').value) || (!isEditable && valuationForm.get('generalNotes').value)">
+            <fieldset *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value)">
+              <label for="reason">What’s the current situation?</label>
+              <textarea name="reason" id="reason" cols="30" rows="3" formControlName="reason" data-cy="reason"
+                [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                [ngClass]="{'is-invalid': (formErrors?.reason)}"></textarea>
+              {{formErrors?.reason}}
+            </fieldset>
+
+            <fieldset *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('timeFrame').value)">
+              <label for="timeFrame">When are you looking to market?</label>
+              <textarea name="timeFrame" id="timeFrame" cols="30" rows="3" formControlName="timeFrame"
+                data-cy="timeFrame" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                [ngClass]="{'is-invalid': (formErrors?.timeFrame)}"></textarea>
+              {{formErrors?.timeFrame}}
+            </fieldset>
+
+            <fieldset *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('generalNotes').value)">
+              <label for="generalNotes">Notes (points discussed, other property details)</label>
+              <textarea name="generalNotes" id="generalNotes" cols="30" rows="3" formControlName="generalNotes"
+                data-cy="generalNotes" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                [ngClass]="{'is-invalid': (formErrors?.generalNotes)}"></textarea>
+              {{formErrors?.generalNotes}}
+            </fieldset>
+          </p-accordionTab>
+
+          <p-accordionTab header="Property Info" [(selected)]="activeState[1]">
+            <div class="inline-parent">
+              <fieldset class="inline-child">
+                <label for="bedrooms"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                    class="icon icon--onLeft">
+                    <path
+                      d="M17.9 33.4c4.7 0 8.5-3.8 8.5-8.5s-3.8-8.5-8.5-8.5S9.5 20.3 9.5 25 13.2 33.4 17.9 33.4zM51.7 16.5H29.2v19.7H6.6V10.9H1v42.3h5.6v-8.5h50.7v8.5H63V27.8C63 21.5 58 16.5 51.7 16.5z" />
+                  </svg>Bedrooms</label>
+                <input type="number" name="bedrooms" id="bedrooms" formControlName="bedrooms" min="0" max="99"
+                  [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                  [ngClass]="{'is-invalid': (formErrors?.bedrooms)}" />
+                {{formErrors?.bedrooms}}
+              </fieldset>
+
+              <fieldset class="inline-child">
+                <label for="bathrooms"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                    class="icon icon--onLeft">
+                    <circle cx="16.5" cy="16.5" r="6.2" />
+                    <path
+                      d="M56.8 35.1V9.8C56.8 4.9 52.9 1 48 1c-2.3 0-4.6 0.9-6.2 2.6L38 7.4c-0.5-0.2-1-0.2-1.6-0.2 -1.2 0-2.4 0.4-3.3 1l8.6 8.6c0.6-1 1-2.1 1-3.3 0-0.6-0.1-1.1-0.2-1.6l3.9-3.9c0.5-0.5 1.1-0.7 1.8-0.7 1.4 0 2.6 1.1 2.6 2.6v25.3H29.4c-0.9-0.7-1.8-1.4-2.5-2.2l-4.3-4.8c-0.6-0.7-1.3-1.2-2.1-1.5 -1-0.5-2-0.7-3.1-0.7 -3.8 0-6.9 3.1-6.9 7v2.3H1v18.6c0 3.4 2.8 6.2 6.2 6.2 0 1.7 1.4 3.1 3.1 3.1h43.4c1.7 0 3.1-1.4 3.1-3.1 3.4 0 6.2-2.8 6.2-6.2V35.1H56.8z" />
+                  </svg>Bathrooms</label>
+                <input type="number" name="bathrooms" id="bathrooms" formControlName="bathrooms" min="0" max="99"
+                  [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                  [ngClass]="{'is-invalid': (formErrors?.bathrooms)}" />
+                {{formErrors?.bathrooms}}
+              </fieldset>
+
+              <fieldset class="inline-child">
+                <label for="receptions"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                    class="icon icon--onLeft">
+                    <path
+                      d="M58.2 26.2c-3.2 0-5.8 2.6-5.8 5.8v8.7H11.6V32c0-3.2-2.6-5.8-5.8-5.8S0 28.8 0 32v14.5c0 3.2 2.6 5.8 5.8 5.8h52.4c3.2 0 5.8-2.6 5.8-5.8V32C64 28.8 61.4 26.2 58.2 26.2zM49.5 11.6h-35c-3.2 0-5.8 2.6-5.8 5.8v6.3c3.4 1.2 5.8 4.4 5.8 8.2v5.9h34.9v-5.9c0-3.8 2.4-7 5.8-8.2v-6.3C55.3 14.3 52.7 11.6 49.5 11.6z" />
+                  </svg>Receptions</label>
+                <input type="number" name="receptions" id="receptions" formControlName="receptions" min="0" max="99"
+                  [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                  [ngClass]="{'is-invalid': (formErrors?.receptions)}" />
+                {{formErrors?.receptions}}
+              </fieldset>
+
+              <fieldset class="inline-child">
+                <label for="sqFt"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                    class="icon icon--onLeft">
+                    <path
+                      d="M53.9 53.9L49.8 58l-2.8-2.8 4.1-4.1 -7.5-7.5 -4.1 4.1L36.8 45l4.1-4.1 -7.5-7.5 -4.1 4.1 -2.8-2.8 4.1-4.1 -7.6-7.6L19 27.2l-2.8-2.8 4.1-4.1 -7.5-7.5 -4.1 4.1L6 14.2l4.1-4.1L1 1v54.2C1 59.5 4.5 63 8.8 63H63L53.9 53.9zM12.6 51.4V29.1l22.3 22.3H12.6z" />
+                  </svg>Approx sq. ft</label>
+                <input type="text" name="sqFt" id="sqFt" formControlName="sqFt"
+                  [attr.disabled]="!isEditable && !isNewValuation ? true : null">
+              </fieldset>
+            </div>
+
+            <div class="inline-parent">
+              <fieldset class="inline-child">
+                <label for="tenureId">Tenure</label>
+                <span class="select">
+                  <select name="tenureId" id="tenureId" formControlName="tenureId"
+                    (change)="onTenureChange($event.target.value)"
+                    [attr.disabled]="!isEditable && !isNewValuation ? true : null">
+                    <option value="0">Not Known</option>
+                    <option *ngFor="let tenure of tenures" [value]='tenure.id'> {{tenure.value}}</option>
+                  </select>
+                </span>
+              </fieldset>
+              <fieldset class="inline-child" *ngIf="showLeaseExpiryDate">
+                <input type="text" name="approxLeaseExpiryDate" aria-label="length" placeholder="Approx Length ..."
+                  id="approxLeaseExpiryDate" formControlName="approxLeaseExpiryDate"
+                  [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                  [ngClass]="{'is-invalid': (formErrors?.approxLeaseExpiryDate)}" data-cy="leaseLength">
+                {{formErrors?.approxLeaseExpiryDate}}
+              </fieldset>
+            </div>
+
+            <fieldset *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('outsideSpace').value)">
+              <label for="outsideSpace">Outside Space</label>
+              <ng-select [items]="outsideSpaces" [multiple]="true" bindLabel="value" groupBy="gender"
+                [selectableGroup]="true" [closeOnSelect]="false" [readonly]="!isEditable && !isNewValuation"
+                bindValue="id" formControlName="outsideSpace">
+                <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
+                  <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.gender | uppercase}}
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                  <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.value}}
+                </ng-template>
+              </ng-select>
+            </fieldset>
+
+            <fieldset *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('parking').value)">
+              <label for="Parking">Parking</label>
+              <ng-select [items]="parkings" [multiple]="true" bindLabel="value" groupBy="gender"
+                [selectableGroup]="true" [closeOnSelect]="false" [readonly]="!isEditable && !isNewValuation"
+                bindValue="id" formControlName="parking">
+                <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
+                  <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.gender | uppercase}}
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                  <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.value}}
+                </ng-template>
+              </ng-select>
+            </fieldset>
+          </p-accordionTab>
+
+          <p-accordionTab header="Appointment" [(selected)]="activeState[2]">
+            <ng-container *ngIf="allValuers">
+              <fieldset *ngIf="isEditable || isNewValuation">
+                <span class="radio radio--boxed" btnRadioGroup formControlName="type">
+                  <span>
+                    <input type="radio" checked="checked" tabindex="2" name="appointments" id="valuationBoth">
+                    <label for="valuationBoth" btnRadio="both" tabindex="0" role="button" ><span>Both</span></label>
+                  </span>
+                  <span>
+                    <input type="radio" tabindex="3" name="appointments" id="valuationSales">
+                    <label for="valuationSales" data-cy="valSales" btnRadio="sales" tabindex="0"
+                      role="button"><span>Sales</span></label>
+                  </span>
+                  <span>
+                    <input type="radio" tabindex="3" name="appointments" id="valuationLettings">
+                    <label for="valuationLettings" btnRadio="lettings" tabindex="0"
+                      role="button"><span>Lettings</span></label>
+                  </span>
+                </span>
+
+                <!-- <div class="nav nav-tabs" btnRadioGroup formControlName="type">
+                  <div class="nav-item">
+                    <label id="valuationBoth" btnRadio="both" class="nav-link" tabindex="0" role="button">Both</label>
+                  </div>
+                  <div class="nav-item">
+                    <label id="valuationSales" data-cy="valSales" btnRadio="sales" class="nav-link" tabindex="0" role="button">Sales</label>
+                  </div>
+                  <div class="nav-item">
+                    <label id="valuationLettings" btnRadio="lettings" class="nav-link" tabindex="0" role="button">Lettings</label>
+                  </div>
+                </div> -->
+
+              </fieldset>
+
+              <fieldset *ngIf="(isSalesOnly || isSalesAndLettings)">
+              <!-- <fieldset [hidden]="!(isSalesOnly || isSalesAndLettings)"> -->
+                <label for="salesValuer">Sales Valuer</label>
+                <ng-select placeholder="Select Valuer" [items]="salesValuers" bindLabel="fullName"
+                  bindValue="staffMemberId" groupBy="staffMembers" [multiple]="false" formControlName="salesValuerId"
+                  (change)="onSalesValuerChange($event)" [readonly]="!isEditable && !isNewValuation"
+                  [ngClass]="{'is-invalid': formErrors.salesValuerId}" data-cy="salesValuers">
+                  <ng-template ng-optgroup-tmp let-item="item">
+                    {{item.office?.name}}
+                  </ng-template>
+                  <ng-template ng-option-tmp let-item="item">
+                    {{item.fullName}}
+                  </ng-template>
+                </ng-select>
+                {{formErrors.salesValuerId}}
+              </fieldset>
+
+              <fieldset  *ngIf="(isLettingsOnly || isSalesAndLettings)">
+                <label for="lettingsValuer">Lettings Valuer</label>
+                <ng-select placeholder="Select Valuer" [items]="lettingsValuers" bindLabel="fullName"
+                  bindValue="staffMemberId" groupBy="staffMembers" [multiple]="false" formControlName="lettingsValuerId"
+                  (change)="onLettingsValuerChange($event)" [readonly]="!isEditable && !isNewValuation"
+                  [ngClass]="{'is-invalid': formErrors.lettingsValuerId}">
+                  <ng-template ng-optgroup-tmp let-item="item">
+                    {{item.office?.name}}
+                  </ng-template>
+                  <ng-template ng-option-tmp let-item="item">
+                    {{item.fullName}}
+                  </ng-template>
+                </ng-select>
+                {{formErrors.lettingsValuerId}}
+              </fieldset>
+
+              <fieldset *ngIf="(isEditable || isNewValuation) && canBookAppointment">
+                <button class="btn btn--positive" type="button" (click)="getAvailability()" data-cy="getvailability">Book
+                  Availability</button>
+              </fieldset>
+
+              <fieldset role="alert" *ngIf="isAvailabilityRequired">
+                Please book availability before saving
+              </fieldset>
+
+              <div class="form-group row">
+                <div class="col-sm-8 col-xl-4 offset-sm-2">
+                  <fieldset *ngIf="selectedDate || showDateAndDuration">
+                    <div class="form-group row">
+                      <div class="col-sm-10" [ngClass]="{'mt-2':'!canBookAppointment'}">
+                        <label>Date & Time</label>
+                        <div class="d-flex d-sm-block">
+                          <label for="changeDate" class="mobile-btn small">{{(selectedDate || valuation?.valuationDate) | date: 'E d MMM yyyy, HH:mm':'+0000'}}</label>
+                          <button id="changeDate" class="btn btn-light btn-sm ml-2" type="button" (click)="getAvailability()" *ngIf="(isEditable || isNewValuation) && canChangeDate">Change</button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-sm-4 col-xl-6 form-group">
+                        <label for="valuationDuration" class="small">Duration</label>
+                        <select class="custom-select custom-select-sm single-select" name="valuationDuration"
+                          id="valuationDuration" formControlName="totalHours"
+                          [attr.disabled]="!isEditable && !isNewValuation ? true : null">
+                          <option value="0.5">30 mins</option>
+                          <option value="0.75">45 mins</option>
+                          <option value="1" selected>1 hour</option>
+                          <option value="1.25" selected>1 hour 15 mins</option>
+                          <option value="1.50" selected>1 hour 30 mins</option>
+                          <option value="1.75" selected>1 hour 45 mins</option>
+                          <option value="2" selected>2 hours</option>
+                        </select>
+                      </div>
+                    </div>
+                  </fieldset>
+                </div>
+              </div>
+            </ng-container>
+          </p-accordionTab>
+
+          <p-accordionTab header="Values" [(selected)]="activeState[3]" *ngIf="areValuesVisible"
+            data-cy="valuationValues">
+            <ol class="cards">
+              <li
+                *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('suggestedAskingPrice').value)">
+                <h5 class="txt--title">Sell</h5>
+                <fieldset>
+                  <label for="sellValue">Value</label>
+                  <input type="text" name="sellValue" id="sellValue" formControlName="suggestedAskingPrice"
+                    *ngIf="!(!isEditable && !isNewValuation)" data-cy="sellValue">
+                  <strong *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingPrice').value |
+                    currency:'GBP':'symbol':'1.0-0'}}</strong>
+                </fieldset>
+              </li>
+              <li
+                *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('suggestedAskingRentLongLet').value)">
+                <h5 class="txt--title">Long Let</h5>
+                <fieldset>
+                  <label for="longLetValue">Value (per week)</label>
+                  <input type="text" name="longLetValue" id="longLetValue" formControlName="suggestedAskingRentLongLet"
+                    *ngIf="!(!isEditable && !isNewValuation)" data-cy="longLetValue">
+                  <strong *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingRentLongLet').value
+                    | currency:'GBP':'symbol':'1.0-0'}}</strong>
+                </fieldset>
+                <fieldset>
+                  <label for="longLetMonthlyValue">Value (per month)</label>
+                  <input type="text" name="longLetMonthlyValue" id="longLetMonthlyValue"
+                    formControlName="suggestedAskingRentLongLetMonthly" *ngIf="!(!isEditable && !isNewValuation)"
+                    data-cy="longLetMonthlyValue">
+                  <strong
+                    *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingRentLongLetMonthly').value
+                    | currency:'GBP':'symbol':'1.0-0'}}</strong>
+                </fieldset>
+              </li>
+              <li
+                *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('suggestedAskingRentShortLet').value)">
+                <h5 class="txt--title">Short Let</h5>
+                <fieldset>
+                  <label for="shortLetValue">Value (per week)</label>
+                  <input type="text" name="shortLetValue" id="shortLetValue"
+                    formControlName="suggestedAskingRentShortLet" *ngIf="!(!isEditable && !isNewValuation)"
+                    data-cy="shortLetValue">
+                  <strong
+                    *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingRentShortLet').value |
+                    currency:'GBP':'symbol':'1.0-0'}}</strong>
+                </fieldset>
+                <fieldset>
+                  <label for="shortLetMonthlyValue">Value (per month)</label>
+                  <input type="text" name="shortLetMonthlyValue" id="shortLetMonthlyValue"
+                    formControlName="suggestedAskingRentShortLetMonthly" *ngIf="!(!isEditable && !isNewValuation)"
+                    data-cy="shortLetMonthlyValue">
+                  <strong
+                    *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingRentShortLetMonthly').value
+                    | currency:'GBP':'symbol':'1.0-0'}}</strong>
+                </fieldset>
+              </li>
+            </ol>
+          </p-accordionTab>
+
+          <p-accordionTab header="Terms Of Business" [(selected)]="activeState[4]"></p-accordionTab>
+
+          <p-accordionTab header="Anti Money Laundering" [(selected)]="activeState[5]"></p-accordionTab>
+
+          <p-accordionTab header="Land Registery" [(selected)]="activeState[6]"></p-accordionTab>
+
+          <p-accordionTab header="Status" [(selected)]="activeState[7]"></p-accordionTab>
+
+          <!-- <p-accordionTab header="Instruct" [(selected)]="activeState[8]"></p-accordionTab> -->
+        </p-accordion>
+      </ng-container>
+
+      <fieldset>
+        <div class="row" *ngIf="isClientService">
+          <div class="col-sm-8 col-xl-6 offset-sm-2">
+            <label for="originId" class="small">Vendor Origin</label>
+            <div class="row form-group">
+              <div class="col-sm" *ngIf="(isEditable || isNewValuation)">
+                <select class="custom-select custom-select-sm" name="originTypes" id="originTypes"
+                  formControlName="originType" arial-label="Origin Types" (change)="onSelectType($event.target.value)"
+                  [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                  [ngClass]="{'is-invalid': (formErrors.originType)}">
+                  <option selected value="0">Not Known</option>
+                  <option *ngFor="let type of activeOriginTypes" [value]='type.id'> {{type.value}}</option>
+                </select>
+                {{formErrors?.originType}}
+              </div>
+              <ng-container *ngIf="(showOriginId) else originValue">
+                <div class="col-sm">
+                  <select class="custom-select custom-select-sm" name="originId" id="originId"
+                    formControlName="originId" aria-label="Origins"
+                    [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                    [ngClass]="{'is-invalid': (formErrors.originId)}">
+                    <option value="0">Not Known</option>
+                    <option *ngFor="let origin of origins" [value]='origin.id'> {{origin.value}}</option>
+                  </select>
+                  {{formErrors?.originId}}
+                </div>
+              </ng-container>
+              <ng-template #originValue>
+                <div class="col-sm form-group" *ngIf="!isEditable && origins || isOriginUnknown">
+                  <small>{{origin}}</small>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+      <ng-container *ngIf="(createdSigner || lastKnownOwner) && property">
+        <!-- <fieldset class="fieldset--width-max"
+          *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value) || (!isEditable && valuationForm.get('timeFrame').value) || (!isEditable && valuationForm.get('generalNotes').value)">
+          <legend><span class="legend">Valuation Notes</span></legend>
+          <fieldset *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value)">
+            <label for="reason">What’s the current situation?</label>
+            <textarea name="reason" id="reason" cols="30" rows="3" formControlName="reason" data-cy="reason"
+              [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+              [ngClass]="{'is-invalid': (formErrors?.reason)}"></textarea>
+            {{formErrors?.reason}}
+          </fieldset>
+
+          <fieldset *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('timeFrame').value)">
+            <label for="timeFrame">When are you looking to market?</label>
+            <textarea name="timeFrame" id="timeFrame" cols="30" rows="3" formControlName="timeFrame" data-cy="timeFrame"
+              [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+              [ngClass]="{'is-invalid': (formErrors?.timeFrame)}"></textarea>
+            {{formErrors?.timeFrame}}
+          </fieldset>
+
+          <fieldset *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('generalNotes').value)">
+            <label for="generalNotes">Notes (points discussed, other property details)</label>
+            <textarea name="generalNotes" id="generalNotes" cols="30" rows="3" formControlName="generalNotes"
+              data-cy="generalNotes" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+              [ngClass]="{'is-invalid': (formErrors?.generalNotes)}"></textarea>
+            {{formErrors?.generalNotes}}
+          </fieldset>
+        </fieldset> -->
+        <!--
+        <fieldset class="fieldset--width-max">
+          <legend><span class="legend">Property Info</span></legend>
+          <div class="inline-parent">
+            <fieldset class="inline-child">
+              <label for="bedrooms"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                  class="icon icon--onLeft">
+                  <path
+                    d="M17.9 33.4c4.7 0 8.5-3.8 8.5-8.5s-3.8-8.5-8.5-8.5S9.5 20.3 9.5 25 13.2 33.4 17.9 33.4zM51.7 16.5H29.2v19.7H6.6V10.9H1v42.3h5.6v-8.5h50.7v8.5H63V27.8C63 21.5 58 16.5 51.7 16.5z" />
+                </svg>Bedrooms</label>
+              <input type="number" name="bedrooms" id="bedrooms" formControlName="bedrooms" min="0" max="99"
+                [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                [ngClass]="{'is-invalid': (formErrors?.bedrooms)}" />
+              {{formErrors?.bedrooms}}
+            </fieldset>
+
+            <fieldset class="inline-child">
+              <label for="bathrooms"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                  class="icon icon--onLeft">
+                  <circle cx="16.5" cy="16.5" r="6.2" />
+                  <path
+                    d="M56.8 35.1V9.8C56.8 4.9 52.9 1 48 1c-2.3 0-4.6 0.9-6.2 2.6L38 7.4c-0.5-0.2-1-0.2-1.6-0.2 -1.2 0-2.4 0.4-3.3 1l8.6 8.6c0.6-1 1-2.1 1-3.3 0-0.6-0.1-1.1-0.2-1.6l3.9-3.9c0.5-0.5 1.1-0.7 1.8-0.7 1.4 0 2.6 1.1 2.6 2.6v25.3H29.4c-0.9-0.7-1.8-1.4-2.5-2.2l-4.3-4.8c-0.6-0.7-1.3-1.2-2.1-1.5 -1-0.5-2-0.7-3.1-0.7 -3.8 0-6.9 3.1-6.9 7v2.3H1v18.6c0 3.4 2.8 6.2 6.2 6.2 0 1.7 1.4 3.1 3.1 3.1h43.4c1.7 0 3.1-1.4 3.1-3.1 3.4 0 6.2-2.8 6.2-6.2V35.1H56.8z" />
+                </svg>Bathrooms</label>
+              <input type="number" name="bathrooms" id="bathrooms" formControlName="bathrooms" min="0" max="99"
+                [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                [ngClass]="{'is-invalid': (formErrors?.bathrooms)}" />
+              {{formErrors?.bathrooms}}
+            </fieldset>
+
+            <fieldset class="inline-child">
+              <label for="receptions"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                  class="icon icon--onLeft">
+                  <path
+                    d="M58.2 26.2c-3.2 0-5.8 2.6-5.8 5.8v8.7H11.6V32c0-3.2-2.6-5.8-5.8-5.8S0 28.8 0 32v14.5c0 3.2 2.6 5.8 5.8 5.8h52.4c3.2 0 5.8-2.6 5.8-5.8V32C64 28.8 61.4 26.2 58.2 26.2zM49.5 11.6h-35c-3.2 0-5.8 2.6-5.8 5.8v6.3c3.4 1.2 5.8 4.4 5.8 8.2v5.9h34.9v-5.9c0-3.8 2.4-7 5.8-8.2v-6.3C55.3 14.3 52.7 11.6 49.5 11.6z" />
+                </svg>Receptions</label>
+              <input type="number" name="receptions" id="receptions" formControlName="receptions" min="0" max="99"
+                [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                [ngClass]="{'is-invalid': (formErrors?.receptions)}" />
+              {{formErrors?.receptions}}
+            </fieldset>
+
+            <fieldset class="inline-child">
+              <label for="sqFt"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                  class="icon icon--onLeft">
+                  <path
+                    d="M53.9 53.9L49.8 58l-2.8-2.8 4.1-4.1 -7.5-7.5 -4.1 4.1L36.8 45l4.1-4.1 -7.5-7.5 -4.1 4.1 -2.8-2.8 4.1-4.1 -7.6-7.6L19 27.2l-2.8-2.8 4.1-4.1 -7.5-7.5 -4.1 4.1L6 14.2l4.1-4.1L1 1v54.2C1 59.5 4.5 63 8.8 63H63L53.9 53.9zM12.6 51.4V29.1l22.3 22.3H12.6z" />
+                </svg>Approx sq. ft</label>
+              <input type="text" name="sqFt" id="sqFt" formControlName="sqFt"
+                [attr.disabled]="!isEditable && !isNewValuation ? true : null">
+            </fieldset>
+          </div>
+
+          <div class="inline-parent">
+            <fieldset class="inline-child">
+              <label for="tenureId">Tenure</label>
+              <span class="select">
+                <select name="tenureId" id="tenureId" formControlName="tenureId"
+                  (change)="onTenureChange($event.target.value)"
+                  [attr.disabled]="!isEditable && !isNewValuation ? true : null">
+                  <option value="0">Not Known</option>
+                  <option *ngFor="let tenure of tenures" [value]='tenure.id'> {{tenure.value}}</option>
+                </select>
+              </span>
+            </fieldset>
+            <fieldset class="inline-child" *ngIf="showLeaseExpiryDate">
+              <input type="text" name="approxLeaseExpiryDate" aria-label="length" placeholder="Approx Length ..."
+                id="approxLeaseExpiryDate" formControlName="approxLeaseExpiryDate"
+                [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                [ngClass]="{'is-invalid': (formErrors?.approxLeaseExpiryDate)}" data-cy="leaseLength">
+              {{formErrors?.approxLeaseExpiryDate}}
+            </fieldset>
+          </div>
+
+          <fieldset *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('outsideSpace').value)">
+            <label for="outsideSpace">Outside Space</label>
+            <ng-select [items]="outsideSpaces" [multiple]="true" bindLabel="value" groupBy="gender"
+              [selectableGroup]="true" [closeOnSelect]="false" [readonly]="!isEditable && !isNewValuation"
+              bindValue="id" formControlName="outsideSpace">
+              <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
+                <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.gender | uppercase}}
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.value}}
+              </ng-template>
+            </ng-select>
+          </fieldset>
+
+          <fieldset *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('parking').value)">
+            <label for="Parking">Parking</label>
+            <ng-select [items]="parkings" [multiple]="true" bindLabel="value" groupBy="gender" [selectableGroup]="true"
+              [closeOnSelect]="false" [readonly]="!isEditable && !isNewValuation" bindValue="id"
+              formControlName="parking">
+              <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
+                <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.gender | uppercase}}
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.value}}
+              </ng-template>
+            </ng-select>
+          </fieldset>
+        </fieldset> -->
+        <!-- <fieldset *ngIf="allValuers" class="fieldset--width-max">
+          <legend><span class="legend">Appointment</span></legend>
+          <fieldset *ngIf="isEditable || isNewValuation">
+            <span class="radio radio--boxed">
+              <span>
+                <input type="radio" checked="checked" tabindex="2" name="appointments" id="valuationBoth">
+                <label for="valuationBoth" btnRadio="both" role="button"><span>Both</span></label>
+              </span>
+              <span>
+                <input type="radio" tabindex="3" name="appointments" id="valuationSales">
+                <label for="valuationSales" data-cy="valSales" btnRadio="sales" role="button"><span>Sales</span></label>
+              </span>
+              <span>
+                <input type="radio" tabindex="3" name="appointments" id="valuationLettings">
+                <label for="valuationLettings" btnRadio="lettings" tabindex="0"
+                  role="button"><span>Lettings</span></label>
+              </span>
+            </span>
+          </fieldset>
+
+          <fieldset [hidden]="!(isSalesOnly || isSalesAndLettings)">
+            <label for="salesValuer">Sales Valuer</label>
+            <ng-select placeholder="Select Valuer" [items]="salesValuers" bindLabel="fullName" bindValue="staffMemberId"
+              groupBy="staffMembers" [multiple]="false" formControlName="salesValuerId"
+              (change)="onSalesValuerChange($event)" [readonly]="!isEditable && !isNewValuation"
+              [ngClass]="{'is-invalid': formErrors.salesValuerId}" data-cy="salesValuers">
+              <ng-template ng-optgroup-tmp let-item="item">
+                {{item.office?.name}}
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item">
+                {{item.fullName}}
+              </ng-template>
+            </ng-select>
+            {{formErrors.salesValuerId}}
+          </fieldset>
+
+          <fieldset [hidden]="!(isLettingsOnly || isSalesAndLettings)">
+            <label for="lettingsValuer">Lettings Valuer</label>
+            <ng-select placeholder="Select Valuer" [items]="lettingsValuers" bindLabel="fullName"
+              bindValue="staffMemberId" groupBy="staffMembers" [multiple]="false" formControlName="lettingsValuerId"
+              (change)="onLettingsValuerChange($event)" [readonly]="!isEditable && !isNewValuation"
+              [ngClass]="{'is-invalid': formErrors.lettingsValuerId}">
+              <ng-template ng-optgroup-tmp let-item="item">
+                {{item.office?.name}}
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item">
+                {{item.fullName}}
+              </ng-template>
+            </ng-select>
+            {{formErrors.lettingsValuerId}}
+          </fieldset>
+
+          <fieldset *ngIf="(isEditable || isNewValuation) && canBookAppointment">
+            <button class="btn btn--positive" type="button" (click)="getAvailability()" data-cy="getvailability">Book
+              Availability</button>
+          </fieldset>
+
+          <fieldset role="alert" *ngIf="isAvailabilityRequired">
+            Please book availability before saving
+          </fieldset>
+
+
+          <div class="form-group row">
+            <div class="col-sm-8 col-xl-4 offset-sm-2">
+              <fieldset *ngIf="selectedDate || showDateAndDuration">
+                <div class="form-group row">
+                  <div class="col-sm-10" [ngClass]="{'mt-2':'!canBookAppointment'}">
+                    <label>Date & Time</label>
+                    <div class="d-flex d-sm-block">
+                      <label for="changeDate" class="mobile-btn small">{{(selectedDate || valuation?.valuationDate) |
+                        date: 'E d MMM yyyy, HH:mm':'+0000'}}</label>
+                      <button id="changeDate" class="btn btn-light btn-sm ml-2" type="button"
+                        (click)="getAvailability()" *ngIf="(isEditable || isNewValuation) && canChangeDate">Change
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-4 col-xl-6 form-group">
+                    <label for="valuationDuration" class="small">Duration</label>
+                    <select class="custom-select custom-select-sm single-select" name="valuationDuration"
+                      id="valuationDuration" formControlName="totalHours"
+                      [attr.disabled]="!isEditable && !isNewValuation ? true : null">
+                      <option value="0.5">30 mins</option>
+                      <option value="0.75">45 mins</option>
+                      <option value="1" selected>1 hour</option>
+                      <option value="1.25" selected>1 hour 15 mins</option>
+                      <option value="1.50" selected>1 hour 30 mins</option>
+                      <option value="1.75" selected>1 hour 45 mins</option>
+                      <option value="2" selected>2 hours</option>
+                    </select>
+                  </div>
+                </div>
+              </fieldset>
+              <div class="off-canvas" [hidden]="!showCalendar" (click)="closeCalendar()">
+                <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()"
+                  #offCanvasContent>
+                  <p class="page-title text-left pt-3">
+                    Pick availability
+                    <button type="button" class="close mr-2" aria-label="Close" (click)="closeCalendar()">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </p>
+                  <div class="alert alert-info" role="alert" *ngIf="!canSearchAvailability">
+                    Please select valuer(s)
+                  </div>
+                  <form [formGroup]="availabilityForm" (ngSubmit)="searchAvailabilty()">
+                    <div class="form-group row">
+                      <div class="col-sm-4">
+                        <label class="small" for="fromDate">Date From</label>
+                        <div class="input-group input-group-sm">
+                          <input type="text" id="date" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
+                            [bsConfig]="{showWeekNumbers:false,  dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
+                            bsDatepicker formControlName="fromDate">
+                          <div class="input-group-append">
+                            <button class="btn btn-secondary" [attr.disabled]="!canSearchAvailability? true:null"
+                              data-cy="searchAvailability">Search</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <app-subnav>
+                      <ng-container *ngIf="availableDates">
+                        <div class="form-group" *ngIf="availableDates?.thisWeek">
+                          <strong>This Week</strong>
+                          <app-subnav-item *ngFor="let slot of availableDates?.thisWeek"
+                            (click)="selectAvailableDate(slot); properties = null">
+                            <div class="row">
+                              <div class="col-sm">
+                                {{slot| date: 'E d MMM yyyy, HH:mm' : '+0000'}}
+                              </div>
+                            </div>
+                          </app-subnav-item>
+                        </div>
+                        <div class="form-group" *ngIf="availableDates?.nextWeek">
+                          <strong>Next Week</strong>
+                          <app-subnav-item *ngFor="let slot of availableDates?.nextWeek"
+                            (click)="selectAvailableDate(slot); properties = null">
+                            <div class="row">
+                              <div class="col-sm">
+                                {{slot| date: 'E d MMM yyyy, HH:mm' : '+0000'}}
+                              </div>
+                            </div>
+                          </app-subnav-item>
+                        </div>
+                        <div class="form-group" *ngIf="availableDates?.next2Weeks">
+                          <strong>Next Two Weeks</strong>
+                          <app-subnav-item *ngFor="let slot of availableDates?.next2Weeks"
+                            (click)="selectAvailableDate(slot); properties = null">
+                            <div class="row">
+                              <div class="col-sm">
+                                {{slot| date: 'E d MMM yyyy, HH:mm' : '+0000'}}
+                              </div>
+                            </div>
+                          </app-subnav-item>
+                        </div>
+                        <div class="list-group-item text-center text-danger" *ngIf="!availableDates">
+                          No available dates found
+                        </div>
+                      </ng-container>
+                    </app-subnav>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </fieldset> -->
+        <!-- <fieldset *ngIf="areValuesVisible" data-cy="valuationValues" class="fieldset--width-max">
+          <legend><span class="legend">Values</span></legend>
+          <ol class="cards">
+            <li
+              *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('suggestedAskingPrice').value)">
+              <h5 class="txt--title">Sell</h5>
+              <fieldset>
+                <label for="sellValue">Value</label>
+                <input type="text" name="sellValue" id="sellValue" formControlName="suggestedAskingPrice"
+                  *ngIf="!(!isEditable && !isNewValuation)" data-cy="sellValue">
+                <strong *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingPrice').value |
+                  currency:'GBP':'symbol':'1.0-0'}}</strong>
+              </fieldset>
+            </li>
+            <li
+              *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('suggestedAskingRentLongLet').value)">
+              <h5 class="txt--title">Long Let</h5>
+              <fieldset>
+                <label for="longLetValue">Value (per week)</label>
+                <input type="text" name="longLetValue" id="longLetValue" formControlName="suggestedAskingRentLongLet"
+                  *ngIf="!(!isEditable && !isNewValuation)" data-cy="longLetValue">
+                <strong *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingRentLongLet').value |
+                  currency:'GBP':'symbol':'1.0-0'}}</strong>
+              </fieldset>
+              <fieldset>
+                <label for="longLetMonthlyValue">Value (per month)</label>
+                <input type="text" name="longLetMonthlyValue" id="longLetMonthlyValue"
+                  formControlName="suggestedAskingRentLongLetMonthly" *ngIf="!(!isEditable && !isNewValuation)"
+                  data-cy="longLetMonthlyValue">
+                <strong
+                  *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingRentLongLetMonthly').value
+                  | currency:'GBP':'symbol':'1.0-0'}}</strong>
+              </fieldset>
+            </li>
+            <li
+              *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('suggestedAskingRentShortLet').value)">
+              <h5 class="txt--title">Short Let</h5>
+              <fieldset>
+                <label for="shortLetValue">Value (per week)</label>
+                <input type="text" name="shortLetValue" id="shortLetValue" formControlName="suggestedAskingRentShortLet"
+                  *ngIf="!(!isEditable && !isNewValuation)" data-cy="shortLetValue">
+                <strong *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingRentShortLet').value
+                  | currency:'GBP':'symbol':'1.0-0'}}</strong>
+              </fieldset>
+              <fieldset>
+                <label for="shortLetMonthlyValue">Value (per month)</label>
+                <input type="text" name="shortLetMonthlyValue" id="shortLetMonthlyValue"
+                  formControlName="suggestedAskingRentShortLetMonthly" *ngIf="!(!isEditable && !isNewValuation)"
+                  data-cy="shortLetMonthlyValue">
+                <strong
+                  *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingRentShortLetMonthly').value
+                  | currency:'GBP':'symbol':'1.0-0'}}</strong>
+              </fieldset>
+            </li>
+          </ol>
+        </fieldset> -->
+
+        <footer class="footer">
+          <button (click)="cancel()" type="button" class="btn btn--ghost" data-cy="cancelVal">Cancel</button>
+          <button *ngIf="isEditable || isNewValuation" type="submit" class="btn btn--positive" id="saveVal"data-cy="saveVal" [attr.disabled]="isSubmitting ? '' : null"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="loading" *ngIf="isSubmitting"><path d="M11.9 48.4c-4.1-5-6.3-11.5-5.8-18.6C7.1 17.6 16.8 7.5 29 6.2 44.7 4.4 58 16.7 58 32c0 6.2-2.2 11.8-5.8 16.3 -1 1.2-0.8 2.9 0.3 4l0 0c1.3 1.3 3.4 1.1 4.5-0.3 4.8-6 7.5-13.8 7-22.2C62.9 14 50.1 1.2 34.3 0.1 15.6-1.2 0 13.6 0 32c0 7.7 2.7 14.8 7.3 20.3 1.1 1.3 3 1.4 4.2 0.2l0.2-0.2C12.8 51.2 12.8 49.6 11.9 48.4z"></path></svg>Save Valuation</button>
+          <button *ngIf="canInstruct" type="button" class="btn btn--info" (click)="isInstructVisible = true; startInstruction()" data-cy="startInstruction">Instruct</button>
+        </footer>
+      </ng-container>
+    </form>
+  </div>
+</div>
+
+<!-- Property Photos Modal -->
+<app-property-detail-photos [propertyId]="property?.propertyId" [showPhotos]="showPhotos" *ngIf="showPhotos" (photosClosed)="hidePhotosModal()"></app-property-detail-photos>
+
+<!-- Property Map Modal -->
+<app-property-detail-map [propertyMap]="property?.map" [showMap]="showMap" (mapClosed)="showMap=false"></app-property-detail-map>
+
+<!-- Contactgroup Finder Modal -->
+<p-dialog header="Last known owner" [(visible)]="isLastknownOwnerVisible" [modal]="true" [draggable]="false" class="modal--medium modal--hasFooter">
+  <app-contactgroup-finder (selectedContactGroup)="getSelectedOwner($event)" (isCreatingNewGroup)="createNewLastKnownOwner()" ></app-contactgroup-finder>
+</p-dialog>
+
+<!-- Property Finder Modal -->
+<p-dialog header="Find Property" [(visible)]="showProperty" [modal]="true" [draggable]="false" class="modal--medium">
+  <app-property-finder [property]="property" [readOnly]="!isEditable && !isNewValuation" [includePhoto]="true" [includeMap]="true" (selectedProperty)="getSelectedProperty($event)" (isCreatingNewProperty)="createNewProperty($event)"></app-property-finder>
+</p-dialog>
+
+<!-- Appointment Modal -->
+<p-dialog header=" Pick availability" [(visible)]="isAppointmentVisible" [modal]="true" [draggable]="false" class="modal--medium">
+  <form [formGroup]="availabilityForm" (ngSubmit)="searchAvailabilty()">
+    <div class="row">
+      <div class="grid grid--25">
+        <div class="alert alert-info" role="alert" *ngIf="!canSearchAvailability">Please select valuer(s)</div>
+        <fieldset>
+          <label for="fromDate">Date From</label>
+          <input type="text" id="date" placeholder="dd/mm/yyyy" [bsConfig]="{showWeekNumbers:false,  dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}" bsDatepicker formControlName="fromDate">
+        </fieldset>
+        <fieldset>
+          <button class="btn btn--positive" [attr.disabled]="!canSearchAvailability? true:null" data-cy="searchAvailability">Search</button>
+        </fieldset>
+      </div>
+      <div class="grid grid--75 grid--dividerLeft">
+        <p class="txt--title">This Week</p>
+        <ol class="list list--dates">
+          <li>
+            <span class="txt--date">Thu 21th Jan 2021</span>
+            <ol class="cards cards--small">
+              <li><a href="">13:00</a></li>
+              <li><a href="">16:00</a></li>
+              <li><a href="">17:00</a></li>
+              <li><a href="">19:00</a></li>
+            </ol>
+          </li>
+          <li>
+            <span class="txt--date">Fri 22nd Jan 2021</span>
+            <ol class="cards cards--small">
+              <li><a href="">12:00</a></li>
+              <li><a href="">13:00</a></li>
+              <li><a href="">14:00</a></li>
+              <li><a href="">16:00</a></li>
+              <li><a href="">17:00</a></li>
+              <li><a href="">18:00</a></li>
+              <li><a href="">19:00</a></li>
+            </ol>
+          </li>
+        </ol>
+
+        <p class="txt--title">Next Week</p>
+        <ol class="list list--dates">
+          <li>
+            <span class="txt--date">Mon 25th Jan 2021</span>
+            <ol class="cards cards--small">
+              <li><a href="">12:00</a></li>
+              <li><a href="">13:00</a></li>
+              <li><a href="">14:00</a></li>
+              <li><a href="">16:00</a></li>
+              <li><a href="">17:00</a></li>
+              <li><a href="">18:00</a></li>
+              <li><a href="">19:00</a></li>
+            </ol>
+          </li>
+          <li>
+            <span class="txt--date">Tue 26th Jan 2021</span>
+            <ol class="cards cards--small">
+              <li><a href="">12:00</a></li>
+              <li><a href="">13:00</a></li>
+              <li><a href="">14:00</a></li>
+              <li><a href="">16:00</a></li>
+              <li><a href="">17:00</a></li>
+              <li><a href="">18:00</a></li>
+              <li><a href="">19:00</a></li>
+            </ol>
+          </li>
+          <li>
+            <span class="txt--date">Wed 27th Jan 2021</span>
+            <ol class="cards cards--small">
+              <li><a href="">12:00</a></li>
+              <li><a href="">13:00</a></li>
+              <li><a href="">14:00</a></li>
+              <li><a href="">16:00</a></li>
+              <li><a href="">17:00</a></li>
+              <li><a href="">18:00</a></li>
+              <li><a href="">19:00</a></li>
+            </ol>
+          </li>
+          <li>
+            <span class="txt--date">Thu 28th Jan 2021</span>
+            <ol class="cards cards--small">
+              <li><a href="">12:00</a></li>
+              <li><a href="">13:00</a></li>
+              <li><a href="">14:00</a></li>
+              <li><a href="">16:00</a></li>
+              <li><a href="">17:00</a></li>
+              <li><a href="">18:00</a></li>
+              <li><a href="">19:00</a></li>
+            </ol>
+          </li>
+          <li>
+            <span class="txt--date">Fri 29th Jan 2021</span>
+            <ol class="cards cards--small">
+              <li><a href="">12:00</a></li>
+              <li><a href="">13:00</a></li>
+              <li><a href="">14:00</a></li>
+              <li><a href="">16:00</a></li>
+              <li><a href="">17:00</a></li>
+              <li><a href="">18:00</a></li>
+              <li><a href="">19:00</a></li>
+            </ol>
+          </li>
+        </ol>
+
+        <app-subnav>
+          <ng-container *ngIf="availableDates">
+            <ng-container *ngIf="availableDates?.thisWeek">
+              <p class="txt--title">This Week</p>
+              <ol class="list">
+                <app-subnav-item *ngFor="let slot of availableDates?.thisWeek" (click)="selectAvailableDate(slot); properties = null">
+                  <li>{{slot| date: 'E d MMM yyyy, HH:mm' : '+0000'}}</li>
+                </app-subnav-item>
+              </ol>
+            </ng-container>
+
+            <ng-container *ngIf="availableDates?.nextWeek">
+              <p class="txt--title">Next Week</p>
+              <ol class="list">
+                <app-subnav-item *ngFor="let slot of availableDates?.nextWeek" (click)="selectAvailableDate(slot); properties = null">
+                  <li>{{slot| date: 'E d MMM yyyy, HH:mm' : '+0000'}}</li>
+                </app-subnav-item>
+              </ol>
+            </ng-container>
+
+            <ng-container *ngIf="availableDates?.next2Weeks">
+              <p class="txt--title">Next Two Weeks</p>
+              <ol class="list">
+                <app-subnav-item *ngFor="let slot of availableDates?.next2Weeks" (click)="selectAvailableDate(slot); properties = null">
+                  <li>{{slot| date: 'E d MMM yyyy, HH:mm' : '+0000'}}</li>
+                </app-subnav-item>
+              </ol>
+            </ng-container>
+
+            <ng-container *ngIf="!availableDates">
+              No available dates found
+            </ng-container>
+          </ng-container>
+        </app-subnav>
+      </div>
+    </div>
+  </form>
+  <!-- <div class="alert alert-info" role="alert" *ngIf="!canSearchAvailability">Please select valuer(s)</div> -->
+  <!-- <form [formGroup]="availabilityForm" (ngSubmit)="searchAvailabilty()">
+    <div class="form-group row">
+      <div class="col-sm-4">
+        <label class="small" for="fromDate">Date From</label>
+        <div class="input-group input-group-sm">
+          <input type="text" id="date" placeholder="dd/mm/yyyy" class="form-control form-control-sm" [bsConfig]="{showWeekNumbers:false,  dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}" bsDatepicker formControlName="fromDate">
+          <div class="input-group-append">
+            <button class="btn btn-secondary" [attr.disabled]="!canSearchAvailability? true:null"
+              data-cy="searchAvailability">Search</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <app-subnav>
+      <ng-container *ngIf="availableDates">
+        <div class="form-group" *ngIf="availableDates?.thisWeek">
+          <strong>This Week</strong>
+          <app-subnav-item *ngFor="let slot of availableDates?.thisWeek"
+            (click)="selectAvailableDate(slot); properties = null">
+            <div class="row">
+              <div class="col-sm">
+                {{slot| date: 'E d MMM yyyy, HH:mm' : '+0000'}}
+              </div>
+            </div>
+          </app-subnav-item>
+        </div>
+        <div class="form-group" *ngIf="availableDates?.nextWeek">
+          <strong>Next Week</strong>
+          <app-subnav-item *ngFor="let slot of availableDates?.nextWeek"
+            (click)="selectAvailableDate(slot); properties = null">
+            <div class="row">
+              <div class="col-sm">
+                {{slot| date: 'E d MMM yyyy, HH:mm' : '+0000'}}
+              </div>
+            </div>
+          </app-subnav-item>
+        </div>
+        <div class="form-group" *ngIf="availableDates?.next2Weeks">
+          <strong>Next Two Weeks</strong>
+          <app-subnav-item *ngFor="let slot of availableDates?.next2Weeks"
+            (click)="selectAvailableDate(slot); properties = null">
+            <div class="row">
+              <div class="col-sm">
+                {{slot| date: 'E d MMM yyyy, HH:mm' : '+0000'}}
+              </div>
+            </div>
+          </app-subnav-item>
+        </div>
+        <div class="list-group-item text-center text-danger" *ngIf="!availableDates">
+          No available dates found
+        </div>
+      </ng-container>
+    </app-subnav>
+  </form> -->
+</p-dialog>
+
+<!-- Instruct Modal -->
+<p-dialog header="Confirm values and choose instruction type" [(visible)]="isInstructVisible" [modal]="true" [draggable]="false" class="modal--small modal--hasFooter">
+  <form [formGroup]="instructionForm" (ngSubmit)="saveInstruction()" autocompleteOff *ngIf="!valuation?.isExpired">
+    <ng-container *ngIf="instruction?.askingPrice">
+      <fieldset *ngIf="showInstruct">
+        <span class="checkbox">
+          <span>
+            <input type="checkbox" id="instructSale" name="instructSale" formControlName="instructSale" (change)="onInstructSalesChange($event.target)" data-cy="instructSale">
+            <label for="instructSale">Instruct for Sales</label>
+          </span>
+        </span>
+      </fieldset>
+
+      <ol class="cards" [ngClass]="{'disabled': !instructionForm.get('instructSale').value}">
+        <li>
+          <h5>Sell</h5>
+          <fieldset>
+            <label for="sellValue">Value</label>
+            <input type="text" name="sellValue" id="sellValue" formControlName="askingPrice" [ngClass]="{'is-invalid':formErrors.askingPrice}">
+            <span class="invalid-feedback">{{formErrors?.askingPrice}}</span>
+          </fieldset>
+        </li>
+      </ol>
+
+      <ng-container *ngIf="instructionForm.get('instructSale').value">
+        <fieldset>
+          <label>Sales Agency</label>
+          <span class="radio">
+            <span>
+              <input type="radio" id="soleAgencySales" value="1" name="salesAgencyType" formControlName="salesAgencyType" data-cy="soleAgencySales">
+              <label for="soleAgencySales">Sole Agency</label>
+            </span>
+            <span>
+              <input type="radio" id="multiAgencySales" value="4" name="salesAgencyType" formControlName="salesAgencyType">
+              <label for="multiAgencySales">Multi Agency</label>
+            </span>
+          </span>
+          <small *ngIf="instructionForm.get('salesAgencyType')?.errors?.required" class="text-danger">{{formErrors?.salesAgencyType}}</small>
+        </fieldset>
+      </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="instruction?.askingRentShortLet || instruction?.askingRentLongLet">
+      <fieldset *ngIf="showInstruct">
+        <span class="checkbox">
+          <input type="checkbox" id="instructLet" name="instructLet" formControlName="instructLet" (change)="onInstructLettingsChange($event.target)" data-cy="instructLet">
+          <label for="instructLet">Instruct for Lettings</label>
+        </span>
+      </fieldset>
+
+      <ol class="cards" *ngIf="instruction?.askingRentLongLet">
+        <li [ngClass]="{'disabled': !instructionForm.get('instructLet').value}">
+          <h5>Long Let</h5>
+          <fieldset>
+            <label for="longLetValue">Value (per week)</label>
+            <input type="text" name="longLetValue" id="longLetValue" formControlName="askingRentLongLet" [ngClass]="{'is-invalid':formErrors.askingRentLongLet}">
+            <span class="invalid-feedback">{{formErrors?.askingRentLongLet}}</span>
+          </fieldset>
+
+          <fieldset>
+            <label for="longLetMonthlyValue">Value (per month)</label>
+            <input type="text" name="longLetMonthlyValue" id="longLetMonthlyValue" formControlName="askingRentLongLetMonthly">
+          </fieldset>
+        </li>
+
+        <li [ngClass]="{'disabled': !instructionForm.get('instructLet').value}">
+          <h5>Short Let</h5>
+          <fieldset>
+            <label for="shortLetValue">Value (per week)</label>
+            <input type="text" name="shortLetValue" id="shortLetValue" formControlName="askingRentShortLet" [ngClass]="{'is-invalid':formErrors.askingRentShortLet}">
+            <span class="invalid-feedback">{{formErrors?.askingRentShortLet}}</span>
+          </fieldset>
+
+          <fieldset>
+            <label for="shortLetMonthlyValue">Value (per month)</label>
+            <input type="text" name="shortLetMonthlyValue" id="shortLetMonthlyValue" formControlName="askingRentShortLetMonthly">
+          </fieldset>
+        </li>
+      </ol>
+
+      <fieldset *ngIf="instructionForm.get('instructLet').value">
+        <label>Lettings Agency</label>
+        <span class="radio">
+          <span>
+            <input type="radio" id="soleAgencyLettings" value="1" name="lettingsAgencyType" formControlName="lettingsAgencyType" data-cy="soleAgencyLettings">
+            <label for="soleAgencyLettings">Sole Agency</label>
+          </span>
+          <span>
+            <input type="radio" id="multiAgencyLettings" value="2" name="lettingsAgencyType" formControlName="lettingsAgencyType" data-cy="multiAgencyLettings">
+            <label for="multiAgencyLettings">Multi Agency</label>
+          </span>
+        </span>
+        <small *ngIf="instructionForm.get('lettingsAgencyType')?.errors?.required" class="text-danger">{{formErrors?.lettingsAgencyType}}</small>
+      </fieldset>
+    </ng-container>
+
+    <!-- This is for both sale and let but not needed right..? -->
+    <!-- <fieldset class="form-group row">
+      <div class="col-12">
+        <div class="row">
+          <div class="col-sm-4 mb-4" *ngIf="instruction?.askingPrice">
+            <div class="checkbox" *ngIf="showInstruct">
+              <span>
+                <input type="checkbox" id="instructSale" name="instructSale" formControlName="instructSale" (change)="onInstructSalesChange($event.target)" data-cy="instructSale">
+                <label for="instructSale">Instruct for Sales</label>
+              </span>
+            </div>
+            <div class="card" [ngClass]="{'disabled': !instructionForm.get('instructSale').value}">
+              <div class="card-body">
+                <h5 class="card-title">Sell</h5>
+                <label class="small" for="sellValue">Value</label>
+                <input type="text" name="sellValue" id="sellValue" class="form-control form-control-sm"
+                  formControlName="askingPrice" [ngClass]="{'is-invalid':formErrors.askingPrice}">
+                <span class="invalid-feedback">{{formErrors?.askingPrice}}</span>
+              </div>
+            </div>
+            <fieldset class="form-group mt-3" *ngIf="instructionForm.get('instructSale').value">
+              <legend class="col-form-label text-left">Sales Agency</legend>
+              <div class="custom-control custom-radio">
+                <input type="radio" id="soleAgencySales" value="1" name="salesAgencyType" class="custom-control-input"
+                  formControlName="salesAgencyType" data-cy="soleAgencySales">
+                <label class="custom-control-label small" for="soleAgencySales">Sole Agency</label>
+              </div>
+              <div class="custom-control custom-radio">
+                <input type="radio" id="multiAgencySales" value="4" name="salesAgencyType" class="custom-control-input"
+                  formControlName="salesAgencyType">
+                <label class="custom-control-label small" for="multiAgencySales">Multi Agency</label>
+              </div>
+              <small *ngIf="instructionForm.get('salesAgencyType')?.errors?.required"
+                class="text-danger">{{formErrors?.salesAgencyType}}</small>
+            </fieldset>
+          </div>
+
+          <div class="col-sm-8 mb-4" *ngIf="instruction?.askingRentShortLet || instruction?.askingRentLongLet">
+            <div class="row">
+              <div class="col-12">
+                <div class="custom-control custom-checkbox form-group" *ngIf="showInstruct">
+                  <input type="checkbox" id="instructLet" name="instructLet" class="custom-control-input"
+                    formControlName="instructLet" (change)="onInstructLettingsChange($event.target)"
+                    data-cy="instructLet">
+                  <label class="custom-control-label small" for="instructLet">Instruct for Lettings</label>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="card" *ngIf="instruction?.askingRentLongLet"
+                  [ngClass]="{'disabled': !instructionForm.get('instructLet').value}">
+                  <div class="card-body">
+                    <h5 class="card-title">Long Let</h5>
+                    <div class="form-group">
+                      <label class="small" for="longLetValue">Value (per week)</label>
+                      <input type="text" name="longLetValue" id="longLetValue" class="form-control form-control-sm"
+                        formControlName="askingRentLongLet" [ngClass]="{'is-invalid':formErrors.askingRentLongLet}">
+                      <span class="invalid-feedback">{{formErrors?.askingRentLongLet}}</span>
+                    </div>
+                    <label class="small" for="longLetMonthlyValue">Value (per month)</label>
+                    <input type="text" name="longLetMonthlyValue" id="longLetMonthlyValue"
+                      class="form-control form-control-sm" formControlName="askingRentLongLetMonthly">
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="card" [ngClass]="{'disabled': !instructionForm.get('instructLet').value}">
+                  <div class="card-body">
+                    <h5 class="card-title">Short Let</h5>
+                    <div class="form-group">
+                      <label class="small" for="shortLetValue">Value (per week)</label>
+                      <input type="text" name="shortLetValue" id="shortLetValue" class="form-control form-control-sm"
+                        formControlName="askingRentShortLet" [ngClass]="{'is-invalid':formErrors.askingRentShortLet}">
+                      <span class="invalid-feedback">{{formErrors?.askingRentShortLet}}</span>
+                    </div>
+                    <label class="small" for="shortLetMonthlyValue">Value (per month)</label>
+                    <input type="text" name="shortLetMonthlyValue" id="shortLetMonthlyValue"
+                      class="form-control form-control-sm" formControlName="askingRentShortLetMonthly">
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <fieldset class="form-group mt-3" *ngIf="instructionForm.get('instructLet').value">
+                  <legend class="col-form-label text-left">Lettings Agency</legend>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="soleAgencyLettings" value="1" name="lettingsAgencyType"
+                      class="custom-control-input" formControlName="lettingsAgencyType" data-cy="soleAgencyLettings">
+                    <label class="custom-control-label small" for="soleAgencyLettings">Sole Agency</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="multiAgencyLettings" value="2" name="lettingsAgencyType"
+                      class="custom-control-input" formControlName="lettingsAgencyType" data-cy="multiAgencyLettings">
+                    <label class="custom-control-label small" for="multiAgencyLettings">Multi Agency</label>
+                  </div>
+                  <small *ngIf="instructionForm.get('lettingsAgencyType')?.errors?.required"
+                    class="text-danger">{{formErrors?.lettingsAgencyType}}</small>
+                </fieldset>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </fieldset> -->
+
+    <footer class="footer--modal">
+      <div class="btn--container">
+        <button type="button" class="btn btn--ghost" (click)="isInstructVisible = false; cancelInstruction()">Cancel</button>
+        <button type="submit" class="btn btn--info" data-cy="saveInstruction">Instruct</button>
+      </div>
+    </footer>
+  </form>
+
+  <!-- <form [formGroup]="instructionForm" (ngSubmit)="saveInstruction()" autocompleteOff *ngIf="!valuation?.isExpired">
+    <fieldset class="form-group row">
+      <div class="col-12">
+        <div class="row">
+          <div class="col-sm-4 mb-4" *ngIf="instruction?.askingPrice">
+            <div class="custom-control custom-checkbox form-group" *ngIf="showInstruct">
+              <input type="checkbox" id="instructSale" name="instructSale" class="custom-control-input"
+                formControlName="instructSale" (change)="onInstructSalesChange($event.target)" data-cy="instructSale">
+              <label class="custom-control-label small" for="instructSale">Instruct for Sales</label>
+            </div>
+            <div class="card" [ngClass]="{'disabled': !instructionForm.get('instructSale').value}">
+              <div class="card-body">
+                <h5 class="card-title">Sell</h5>
+                <label class="small" for="sellValue">Value</label>
+                <input type="text" name="sellValue" id="sellValue" class="form-control form-control-sm"
+                  formControlName="askingPrice" [ngClass]="{'is-invalid':formErrors.askingPrice}">
+                <span class="invalid-feedback">{{formErrors?.askingPrice}}</span>
+              </div>
+            </div>
+            <fieldset class="form-group mt-3" *ngIf="instructionForm.get('instructSale').value">
+              <legend class="col-form-label text-left">Sales Agency</legend>
+              <div class="custom-control custom-radio">
+                <input type="radio" id="soleAgencySales" value="1" name="salesAgencyType" class="custom-control-input"
+                  formControlName="salesAgencyType" data-cy="soleAgencySales">
+                <label class="custom-control-label small" for="soleAgencySales">Sole Agency</label>
+              </div>
+              <div class="custom-control custom-radio">
+                <input type="radio" id="multiAgencySales" value="4" name="salesAgencyType" class="custom-control-input"
+                  formControlName="salesAgencyType">
+                <label class="custom-control-label small" for="multiAgencySales">Multi Agency</label>
+              </div>
+              <small *ngIf="instructionForm.get('salesAgencyType')?.errors?.required"
+                class="text-danger">{{formErrors?.salesAgencyType}}</small>
+            </fieldset>
+          </div>
+          <div class="col-sm-8 mb-4" *ngIf="instruction?.askingRentShortLet || instruction?.askingRentLongLet">
+            <div class="row">
+              <div class="col-12">
+                <div class="custom-control custom-checkbox form-group" *ngIf="showInstruct">
+                  <input type="checkbox" id="instructLet" name="instructLet" class="custom-control-input"
+                    formControlName="instructLet" (change)="onInstructLettingsChange($event.target)"
+                    data-cy="instructLet">
+                  <label class="custom-control-label small" for="instructLet">Instruct for Lettings</label>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="card" *ngIf="instruction?.askingRentLongLet"
+                  [ngClass]="{'disabled': !instructionForm.get('instructLet').value}">
+                  <div class="card-body">
+                    <h5 class="card-title">Long Let</h5>
+                    <div class="form-group">
+                      <label class="small" for="longLetValue">Value (per week)</label>
+                      <input type="text" name="longLetValue" id="longLetValue" class="form-control form-control-sm"
+                        formControlName="askingRentLongLet" [ngClass]="{'is-invalid':formErrors.askingRentLongLet}">
+                      <span class="invalid-feedback">{{formErrors?.askingRentLongLet}}</span>
+                    </div>
+                    <label class="small" for="longLetMonthlyValue">Value (per month)</label>
+                    <input type="text" name="longLetMonthlyValue" id="longLetMonthlyValue"
+                      class="form-control form-control-sm" formControlName="askingRentLongLetMonthly">
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="card" [ngClass]="{'disabled': !instructionForm.get('instructLet').value}">
+                  <div class="card-body">
+                    <h5 class="card-title">Short Let</h5>
+                    <div class="form-group">
+                      <label class="small" for="shortLetValue">Value (per week)</label>
+                      <input type="text" name="shortLetValue" id="shortLetValue" class="form-control form-control-sm"
+                        formControlName="askingRentShortLet" [ngClass]="{'is-invalid':formErrors.askingRentShortLet}">
+                      <span class="invalid-feedback">{{formErrors?.askingRentShortLet}}</span>
+                    </div>
+                    <label class="small" for="shortLetMonthlyValue">Value (per month)</label>
+                    <input type="text" name="shortLetMonthlyValue" id="shortLetMonthlyValue"
+                      class="form-control form-control-sm" formControlName="askingRentShortLetMonthly">
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <fieldset class="form-group mt-3" *ngIf="instructionForm.get('instructLet').value">
+                  <legend class="col-form-label text-left">Lettings Agency</legend>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="soleAgencyLettings" value="1" name="lettingsAgencyType"
+                      class="custom-control-input" formControlName="lettingsAgencyType" data-cy="soleAgencyLettings">
+                    <label class="custom-control-label small" for="soleAgencyLettings">Sole Agency</label>
+                  </div>
+                  <div class="custom-control custom-radio">
+                    <input type="radio" id="multiAgencyLettings" value="2" name="lettingsAgencyType"
+                      class="custom-control-input" formControlName="lettingsAgencyType" data-cy="multiAgencyLettings">
+                    <label class="custom-control-label small" for="multiAgencyLettings">Multi Agency</label>
+                  </div>
+                  <small *ngIf="instructionForm.get('lettingsAgencyType')?.errors?.required"
+                    class="text-danger">{{formErrors?.lettingsAgencyType}}</small>
+                </fieldset>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+    <div class="mt-4 text-center">
+      <button type="button" class="btn btn-light mr-2"
+        (click)="isInstructVisible = false; cancelInstruction()">Cancel</button>
+      <button type="submit" class="btn btn-secondary" data-cy="saveInstruction">Instruct</button>
+    </div>
+  </form> -->
+</p-dialog>
+
+<!--Success Messages -->
+<p-toast></p-toast>
+
+<!-- OLD -->
+<!-- <div bsModal #instructionModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
+  <div class="modal-dialog" [ngClass]="{'modal-lg': !valuation?.isExpired}">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="dialog-sizes-name1" class="modal-title pull-left">
+          <ng-container *ngIf="!valuation?.isExpired; else expiredTitle">
+            Confirm values and choose instruction type
+          </ng-container>
+          <ng-template #expiredTitle>Valuation Expired</ng-template>
+        </h4>
+        <button type="button" class="close pull-right" (click)="instructionModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" [ngClass]="{'text-center': valuation?.isExpired}">
+        <form [formGroup]="instructionForm" (ngSubmit)="saveInstruction()" autocompleteOff *ngIf="!valuation?.isExpired">
+          <fieldset class="form-group row">
+            <div class="col-12">
+              <div class="row">
+                <div class="col-sm-4 mb-4" *ngIf="instruction?.askingPrice">
+                  <div class="custom-control custom-checkbox form-group" *ngIf="showInstruct">
+                    <input type="checkbox" id="instructSale" name="instructSale" class="custom-control-input"
+                      formControlName="instructSale" (change)="onInstructSalesChange($event.target)" data-cy="instructSale">
+                    <label class="custom-control-label small" for="instructSale">Instruct for Sales</label>
+                  </div>
+                  <div class="card" [ngClass]="{'disabled': !instructionForm.get('instructSale').value}">
+                    <div class="card-body">
+                      <h5 class="card-title">Sell</h5>
+                      <label class="small" for="sellValue">Value</label>
+                      <input type="text" name="sellValue" id="sellValue" class="form-control form-control-sm"
+                        formControlName="askingPrice" [ngClass]="{'is-invalid':formErrors.askingPrice}">
+                      <span class="invalid-feedback">{{formErrors?.askingPrice}}</span>
+                    </div>
+                  </div>
+                  <fieldset class="form-group mt-3" *ngIf="instructionForm.get('instructSale').value">
+                    <legend class="col-form-label text-left">Sales Agency</legend>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" id="soleAgencySales" value="1" name="salesAgencyType"
+                        class="custom-control-input" formControlName="salesAgencyType" data-cy="soleAgencySales">
+                      <label class="custom-control-label small" for="soleAgencySales">Sole Agency</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" id="multiAgencySales" value="4" name="salesAgencyType"
+                        class="custom-control-input" formControlName="salesAgencyType">
+                      <label class="custom-control-label small" for="multiAgencySales">Multi Agency</label>
+                    </div>
+                    <small *ngIf="instructionForm.get('salesAgencyType')?.errors?.required"
+                      class="text-danger">{{formErrors?.salesAgencyType}}</small>
+                  </fieldset>
+                </div>
+                <div class="col-sm-8 mb-4" *ngIf="instruction?.askingRentShortLet || instruction?.askingRentLongLet">
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="custom-control custom-checkbox form-group" *ngIf="showInstruct">
+                        <input type="checkbox" id="instructLet" name="instructLet" class="custom-control-input"
+                          formControlName="instructLet" (change)="onInstructLettingsChange($event.target)" data-cy="instructLet">
+                        <label class="custom-control-label small" for="instructLet">Instruct for Lettings</label>
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="card" *ngIf="instruction?.askingRentLongLet"
+                        [ngClass]="{'disabled': !instructionForm.get('instructLet').value}">
+                        <div class="card-body">
+                          <h5 class="card-title">Long Let</h5>
+                          <div class="form-group">
+                            <label class="small" for="longLetValue">Value (per week)</label>
+                            <input type="text" name="longLetValue" id="longLetValue"
+                              class="form-control form-control-sm" formControlName="askingRentLongLet"
+                              [ngClass]="{'is-invalid':formErrors.askingRentLongLet}">
+                            <span class="invalid-feedback">{{formErrors?.askingRentLongLet}}</span>
+                          </div>
+                          <label class="small" for="longLetMonthlyValue">Value (per month)</label>
+                          <input type="text" name="longLetMonthlyValue" id="longLetMonthlyValue"
+                            class="form-control form-control-sm" formControlName="askingRentLongLetMonthly">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="card" [ngClass]="{'disabled': !instructionForm.get('instructLet').value}">
+                        <div class="card-body">
+                          <h5 class="card-title">Short Let</h5>
+                          <div class="form-group">
+                            <label class="small" for="shortLetValue">Value (per week)</label>
+                            <input type="text" name="shortLetValue" id="shortLetValue"
+                              class="form-control form-control-sm" formControlName="askingRentShortLet"
+                              [ngClass]="{'is-invalid':formErrors.askingRentShortLet}">
+                            <span class="invalid-feedback">{{formErrors?.askingRentShortLet}}</span>
+                          </div>
+                          <label class="small" for="shortLetMonthlyValue">Value (per month)</label>
+                          <input type="text" name="shortLetMonthlyValue" id="shortLetMonthlyValue"
+                            class="form-control form-control-sm" formControlName="askingRentShortLetMonthly">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <fieldset class="form-group mt-3" *ngIf="instructionForm.get('instructLet').value">
+                        <legend class="col-form-label text-left">Lettings Agency</legend>
+                        <div class="custom-control custom-radio">
+                          <input type="radio" id="soleAgencyLettings" value="1" name="lettingsAgencyType"
+                            class="custom-control-input" formControlName="lettingsAgencyType" data-cy="soleAgencyLettings">
+                          <label class="custom-control-label small" for="soleAgencyLettings">Sole Agency</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                          <input type="radio" id="multiAgencyLettings" value="2" name="lettingsAgencyType"
+                            class="custom-control-input" formControlName="lettingsAgencyType" data-cy="multiAgencyLettings">
+                          <label class="custom-control-label small" for="multiAgencyLettings">Multi Agency</label>
+                        </div>
+                        <small *ngIf="instructionForm.get('lettingsAgencyType')?.errors?.required"
+                          class="text-danger">{{formErrors?.lettingsAgencyType}}</small>
+                      </fieldset>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+          <div class="mt-4 text-center">
+            <button type="button" class="btn btn-light mr-2"
+              (click)="instructionModal.hide(); cancelInstruction()">Cancel</button>
+            <button type="submit" class="btn btn-secondary" data-cy="saveInstruction">Instruct</button>
+          </div>
+        </form>
+        <ng-container *ngIf="valuation?.isExpired">
+          <p>
+            The Valuation is older than 6 months and it can't be instructed
+          </p>
+          <button type="button" class="btn btn-secondary" (click)="duplicateValuation()">New Valuation</button>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div> -->

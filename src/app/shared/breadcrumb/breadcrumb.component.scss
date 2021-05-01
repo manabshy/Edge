@@ -1,0 +1,28 @@
+@import "../../../style/bootstrap-overrides";
+
+@import "../../../../node_modules/bootstrap/scss/functions";
+@import "../../../../node_modules/bootstrap/scss/variables";
+@import "../../../../node_modules/bootstrap/scss/mixins";
+
+@import "../../../style/partials/mixins";
+
+.breadcrumb {
+    border-radius: 0;
+
+    @include media-breakpoint-down(lg) {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1050;
+        display: block;
+        background: transparent;
+        padding: 0;
+        margin: 0!important;
+        color: color("white");
+    }
+
+    .btn-link {
+        @include navbar-mobile-btn();
+    }
+}
+

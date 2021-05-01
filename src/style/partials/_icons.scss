@@ -1,0 +1,45 @@
+ /***** Icons *****/
+.icon                                           { height:16px; width:16px; display:inline-block; fill:currentColor; vertical-align:middle; flex-shrink:0; position:relative; top:-1px; 
+    /***** Icon location *****/
+    &--onLeft                                   { margin-right:6px; align-self:flex-start; top:1px; }
+    &--onRight                                  { margin-left:6px; align-self:flex-start; top:1px; }
+
+    /***** Icons Sizes *****/
+    &--xl                                       { height:36px; width:36px; }
+    &--l                                        { height:26px; width:26px; }
+    &--m                                        { height:16px; width:16px; }
+    &--s                                        { height:10px; width:10px; top:-2px;
+        &.icon--onLeft                          { margin-right:6px; }
+        &.icon--onRight                         { margin-left:6px; }
+    }
+    &--xs                                       { height:6px; width:6px; top:0;
+        &.icon--onLeft                          { margin-right:6px; align-self:center; top:-2px; }
+    }
+
+    /***** Fills *****/
+    &--fill-midnight-70                         { color:$color--midnight-70; }
+    &--fill-midnight-50                         { color:$color--midnight-50; }
+    &--fill-midnight-20                         { color:$color--midnight-20; }
+
+    &--fill-info                                { color:$color--info; }
+    &--fill-negative                            { color:$color--negative; }
+    &--fill-positive                            { color:$color--positive; }
+    &--fill-warning                             { color:$color--warning; }
+
+    &--fill-snow                                { color:$color--snow; }
+
+    svg                                         { height:100%; width:100%; fill:currentColor; }
+}
+
+.loading                                        { height:16px; width:16px; }
+
+/***** Fills for oredering *****/
+.oredered-asc .icon .asc                        { color:$color--info; }
+.oredered-asc .icon .des                        { color:$color--midnight-10; }
+
+.oredered-des .icon .asc                        { color:$color--midnight-10; }
+.oredered-des .icon .des                        { color:$color--info; }
+
+.folderOpen                                     { color:$color--info-lite; }
+.folder                                         { color:$color--info-dark; }
+.fileFold                                       { fill:rgba($color--snow, .5); }

@@ -1,0 +1,182 @@
+<!-- <a class="btn btn--positive" [routerLink]="['/diary/edit', 0]" [queryParams]="{isNewEvent: true}" *ngIf="!myCalendarOnly" aria-label="Add event"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z"></path><path class="plus-vertical" d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z"></path></svg>Event</a> -->
+<app-calendar-header [(view)]="view" [(daysInWeek)]="daysInWeek" [(viewDate)]="viewDate" [weekStartsOn]="weekStartsOn" (viewDateChange)="passDateToRouter()" (viewChange)="passDateToRouter()" (filterChange)="passDateToRouter()" [myCalendarOnly]="myCalendarOnly" (staffMemberChange)="getSelectedStaffMemberDiaryEvents($event)" (dateChange)="getDateChange($event)"></app-calendar-header>
+
+<ng-template #customTooltip let-event="event">
+  <div role="tooltip" class="popover">
+    <div class="popover-arrow arrow"></div>
+    <h3 class="popover-title popover-header">{{event.title}} <span class="badge badge-pill badge-danger ml-1"
+        *ngIf="event.meta.isHighImportance">Important</span></h3>
+    <div class="popover-content popover-body">
+      <div class="row">
+        <div class="col-12 mb-1">
+          <span class="badge badge-pill badge-danger mr-1" *ngIf="event.meta.isCancelled">Cancelled</span>
+          <span class="badge badge-pill badge-success" *ngIf="event.meta.isConfirmed">Confirmed</span>
+        </div>
+        <dl class="col">
+          <dt>Start</dt>
+          <dd>
+            <ng-container
+              *ngIf="(event.start | calendarDate:'dayViewTitle':locale) !== (event.end | calendarDate:'dayViewTitle':locale)">
+              {{ event.start | calendarDate:'dayViewTitle':locale }} <br>
+            </ng-container>
+            <ng-container *ngIf=!event.allDay>
+              {{ event.start | calendarDate:'dayViewHour':locale }}
+            </ng-container>
+          </dd>
+        </dl>
+        <dl class="col" *ngIf="event.end">
+          <dt>End</dt>
+          <dd>
+            <ng-container
+              *ngIf="(event.start | calendarDate:'dayViewTitle':locale) !== (event.end | calendarDate:'dayViewTitle':locale)">
+              {{ event.end | calendarDate:'dayViewTitle':locale }} <br>
+            </ng-container>
+            {{ event.end | calendarDate:'dayViewHour':locale }}
+          </dd>
+        </dl>
+      </div>
+      <dl>
+        <dt>Notes</dt>
+        <dd>{{ event.meta.notes || '-'}}</dd>
+      </dl>
+      <dl *ngIf="event.meta?.properties && event.meta?.properties?.length">
+        <dt>Properties</dt>
+        <dd>
+          <div class="mb-1" *ngFor="let property of event.meta?.properties">
+            <pre>{{property?.address | formatAddress}}</pre>
+            <ng-container *ngIf="property?.viewingArragementId > 0">
+              <span class="badge badge-pill badge-warning"> {{property?.viewingArragement}}</span>
+            </ng-container>
+          </div>
+        </dd>
+      </dl>
+      <dl *ngIf="event.meta?.staffMembers && event.meta?.staffMembers?.length">
+        <dt>Staff Members</dt>
+        <dd>
+          <ng-container class="mb-1" *ngFor="let staffMember of event?.members ; last as isLast; first as isFirst">
+            <ng-container *ngIf="event.meta?.staffMembers?.length < 6; else moreMembers">
+              <div>{{staffMember?.fullName}}</div>
+            </ng-container>
+            <ng-template #moreMembers>
+              <div>{{staffMember?.fullName}}</div>
+              <span *ngIf="isLast">+
+                {{event.meta?.staffMembers?.length - 5 !== 1 ? (event.meta?.staffMembers?.length - 5 + ' people') : (event.meta?.staffMembers?.length - 5 + ' person')}}</span>
+            </ng-template>
+          </ng-container>
+        </dd>
+      </dl>
+      <dl *ngIf="event.meta?.contacts && event.meta.contacts?.length">
+        <dt>Contact Groups</dt>
+        <dd>
+          <ng-container *ngFor="let contact of event.meta?.contacts">
+            <p class="mb-1" *ngFor="let person of contact?.contactPeople">
+              {{person?.addressee}}
+            </p>
+          </ng-container>
+        </dd>
+      </dl>
+      <dl *ngIf="event.meta?.location">
+        <dt>Location</dt>
+        <dd>
+          {{event.meta?.location}}
+        </dd>
+      </dl>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #monthCell let-day="day" let-openDay="openDay" let-locale="locale" let-tooltipPlacement="tooltipPlacement"
+  let-highlightDay="highlightDay" let-unhighlightDay="unhighlightDay" let-eventClicked="eventClicked"
+  let-tooltipTemplate="tooltipTemplate" let-tooltipAppendToBody="tooltipAppendToBody">
+  <div class="cal-cell-top">
+    <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
+    <div class="cal-event-container" [ngClass]="event?.cssClass" *ngFor="let event of day.events; trackBy:trackByFn">
+      <div class="cal-event" [style.backgroundColor]="event.color?.primary"
+        (mouseenter)="highlightDay.emit({event: event})" (mouseleave)="unhighlightDay.emit({event: event})"
+        [mwlCalendarTooltip]="event.title | calendarEventTitle:'monthTooltip':event"
+        [tooltipPlacement]="tooltipPlacement" [tooltipEvent]="event" [tooltipTemplate]="tooltipTemplate"
+        [tooltipAppendToBody]="tooltipAppendToBody" mwlDraggable [class.cal-draggable]="event.draggable"
+        dragActiveClass="cal-drag-active" [dropData]="{event: event, draggedFrom: day}"
+        [dragAxis]="{x: event.draggable, y: event.draggable}" (mwlClick)="eventClicked.emit({ event: event })">
+        <mwl-calendar-event-actions [event]="event" [customTemplate]="eventActionsTemplate">
+        </mwl-calendar-event-actions>
+        &ngsp;
+        <mwl-calendar-event-title [event]="event" [customTemplate]="eventTitleTemplate" view="week">
+        </mwl-calendar-event-title>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #customLabelTemplate let-event="event">
+  <div *ngIf=event.allDay>
+    <p class="text-truncate">
+      {{event.title}}
+    </p>
+  </div>
+  <div *ngIf=!event.allDay >
+    <p class="text-truncate">
+     {{event.start | calendarDate:'weekViewHour':locale }} {{event.title}}
+    </p>
+  </div>
+</ng-template>
+
+<!-- Draggable events here..... -->
+<ng-template #weekViewHourSegmentTemplate let-segment="segment" let-locale="locale" let-segmentHeight="segmentHeight"
+  let-isTimeLabel="isTimeLabel">
+  <div #segmentElement
+    class="cal-hour-segment"
+    [style.height.px]="segmentHeight"
+    [class.cal-hour-start]="segment.isStart"
+    [class.cal-after-hour-start]="!segment.isStart"
+    [ngClass]="segment.cssClass"
+  >
+    <!-- (mousedown)="startDragToCreate(segment, $event, segmentElement)"> Disable mouse down for new events 27/04/21-->
+    <div class="cal-time" *ngIf="isTimeLabel">
+      {{ segment.date | calendarDate:'weekViewHour':locale }}
+    </div>
+  </div>
+</ng-template>
+
+<div class="calendar-container" #calendarContainer>
+  <ng-container *ngIf="diaryEvents as events">
+    <ng-container [ngSwitch]="view">
+      <mwl-calendar-month-view *ngSwitchCase="'month'"
+        [viewDate]="viewDate"
+        [events]="events"
+        (dayClicked)="changeDay($event.day.date)"
+        (beforeViewRender)="beforeMonthViewRender($event)"
+        [cellTemplate]="monthCell"
+        [tooltipTemplate]="customTooltip"
+        [weekStartsOn]="weekStartsOn"
+        (eventClicked)="eventClicked($event)"
+        >
+      </mwl-calendar-month-view>
+      <mwl-calendar-week-view *ngSwitchDefault
+        [viewDate]="viewDate" [events]="events"
+        (dayHeaderClicked)="changeDay($event.day.date)"
+        (beforeViewRender)="beforeWeekViewRender($event)"
+        [tooltipTemplate]="customTooltip"
+        [weekStartsOn]="weekStartsOn"
+        [daysInWeek]="daysInWeek"
+        [hourSegmentTemplate]="weekViewHourSegmentTemplate"
+        (hourSegmentClicked)="getClickedDate($event.date)"
+        (eventClicked)="eventClicked($event)"
+        [eventTitleTemplate]='customLabelTemplate'
+        >
+        <!-- [allDayEventsLabelTemplate]='customLabelTemplate' -->
+      </mwl-calendar-week-view>
+      <mwl-calendar-day-view *ngSwitchCase="'day'"
+        [viewDate]="viewDate"
+        [events]="events"
+        (beforeViewRender)="beforeDayViewRender($event)"
+        [tooltipTemplate]="customTooltip"
+        (hourSegmentClicked)="getClickedDate($event.date)"
+        [hourSegmentTemplate]="weekViewHourSegmentTemplate"
+        (eventClicked)="eventClicked($event)"
+        [eventTitleTemplate]='customLabelTemplate'
+        >
+      </mwl-calendar-day-view>
+    </ng-container>
+  </ng-container>
+</div>

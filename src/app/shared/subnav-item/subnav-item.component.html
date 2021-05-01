@@ -1,0 +1,8 @@
+<a *ngIf="navLink" [routerLink]="link" [queryParams]="params" target="{{target}}">
+    <ng-container *ngTemplateOutlet="content"></ng-container>
+</a>
+<a *ngIf="!navLink" href (click)="$event.preventDefault()">
+    <ng-container *ngTemplateOutlet="content"></ng-container>
+</a>
+
+<ng-template #content><ng-content></ng-content></ng-template>

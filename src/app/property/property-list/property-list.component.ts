@@ -2,6 +2,7 @@ import { Component, OnInit, Input, OnChanges, HostListener, OnDestroy } from '@a
 
 import { PropertyAutoComplete } from '../shared/property';
 import { PropertyService } from '../shared/property.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-property-list',
@@ -15,8 +16,7 @@ export class PropertyListComponent implements OnInit, OnChanges {
   @Input() pageNumber: number;
   page: number;
 
-
-  constructor(private propertyService: PropertyService) { }
+  constructor(private propertyService: PropertyService, private router: Router) { }
 
   ngOnInit() {
   }
@@ -40,11 +40,17 @@ export class PropertyListComponent implements OnInit, OnChanges {
     let scrollHeight: number, totalHeight: number;
     scrollHeight = document.body.scrollHeight;
     totalHeight = window.scrollY + window.innerHeight;
+    const url = this.router.url;
+    const isPropertyCentre = url.endsWith('/property-centre');
 
-    if (totalHeight >= scrollHeight && !this.bottomReached) {
-      this.page++;
-      this.propertyService.propertyPageNumberChanged(this.page);
-      console.log('properties page number', this.page)
+    if (isPropertyCentre) {
+      if (totalHeight >= scrollHeight && !this.bottomReached) {
+        if (this.properties && this.properties.length) {
+          this.page++;
+          this.propertyService.propertyPageNumberChanged(this.page);
+          console.log('properties page number', this.page)
+        }
+      }
     }
   }
 }

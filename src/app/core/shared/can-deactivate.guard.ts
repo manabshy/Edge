@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Observer, Subject } from 'rxjs';
 import { AppUtils } from './utils';
 import { BsModalService } from 'ngx-bootstrap/modal/';
-import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
+import { ConfirmModalComponent } from '../../shared/confirm-modal/confirm-modal.component';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { ConfirmationService } from 'primeng/api';
 
 export interface CanComponentDeactivate {
   canDeactivate: () => Observable<boolean> | Promise<boolean> | boolean;
@@ -15,26 +17,52 @@ export interface CanComponentDeactivate {
 
 export class CanDeactivateGuard implements CanDeactivate<CanComponentDeactivate> {
 
-  constructor(public modalService: BsModalService) {
+  ref: DynamicDialogRef;
+  constructor(public modalService: BsModalService, public dialogService: DialogService) {
   }
 
   canDeactivate(component: CanComponentDeactivate,
     currentRoute: ActivatedRouteSnapshot,
     currentState: RouterStateSnapshot,
     nextState?: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
-      AppUtils.prevRoute = AppUtils.prevRouteBU;
+    AppUtils.prevRoute = AppUtils.prevRouteBU;
 
-      if(!component.canDeactivate()) {
-        AppUtils.deactivateRoute = AppUtils.prevRoute;
-        const subject = new Subject<boolean>();
-        const initialState = {
-          title: 'If you leave your current changes will be lost',
-          actions: ['Stay', 'Leave']
-        };
-        const modal = this.modalService.show(ConfirmModalComponent, {ignoreBackdropClick: true, initialState});
-        modal.content.subject = subject;
-        return subject.asObservable();
-      }
-      return true;
+    // if (!component.canDeactivate()) {
+    //   AppUtils.deactivateRoute = AppUtils.prevRoute;
+    //   const subject = new Subject<boolean>();
+    //   const initialState = {
+    //     title: 'If you leave your current changes will be lost',
+    //     actions: ['Stay', 'Leave'],
+    //     showModal: true
+    //   };
+    //   const modal = this.modalService.show(ConfirmModalComponent, { ignoreBackdropClick: true, initialState });
+    //   modal.content.subject = subject;
+    //   return subject.asObservable();
+    // }
+    if (!component.canDeactivate()) {
+      AppUtils.deactivateRoute = AppUtils.prevRoute;
+      const subject = new Subject<boolean>();
+      const data = {
+        title: 'If you leave your current changes will be lost',
+        actions: ['Stay', 'Leave']
+      };
+      this.ref = this.dialogService.open(ConfirmModalComponent, { data, styleClass: 'dialog dialog--hasFooter', showHeader: false });
+      this.ref.onClose.subscribe((res) => {
+        if (res) {
+          subject.next(true);
+          subject.complete();
+          this.removeFromLocalStorage();
+        }
+      });
+      console.log(this.ref, 'res');
+      return subject.asObservable();
+    }
+    return true;
+  }
+
+  removeFromLocalStorage() {
+    localStorage.removeItem('contactPeople');
+    localStorage.removeItem('newCompany');
+    localStorage.removeItem('currentUrl');
   }
 }

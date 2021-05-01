@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { PropertyDetailEditComponent } from './property-detail-edit.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -7,18 +7,20 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute, Router, Data, convertToParamMap } from '@angular/router';
 import { Location } from '@angular/common';
 import { RouterTestingModule } from '@angular/router/testing';
-import { FormatAddressPipe } from 'src/app/core/shared/format-address.pipe';
+import { FormatAddressPipe } from 'src/app/shared/pipes/format-address.pipe';
 import { PropertyService } from '../shared/property.service';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { ToastrService } from 'ngx-toastr';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MockProperty } from '../shared/test-helper';
 import { of, Observable, from } from 'rxjs';
-import { MockDropdownListInfo } from 'src/app/contactgroups/shared/test-helper/dropdown-list-data.json';
 import { Property } from '../shared/property';
 import { ActivatedRouteStub } from 'src/testing/activated-route-stub';
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { MockBsModalService } from 'src/testing/extended-mock-services';
+import { MockDropdownListInfo } from 'src/testing/fixture-data/dropdown-list-data.json';
 
-fdescribe('PropertyDetailEditComponent', () => {
+describe('PropertyDetailEditComponent', () => {
   let component: PropertyDetailEditComponent;
   let fixture: ComponentFixture<PropertyDetailEditComponent>;
   let propertyService: PropertyService;
@@ -40,7 +42,7 @@ fdescribe('PropertyDetailEditComponent', () => {
   // the `id` value is irrelevant because ignored by service stub
   // beforeEach(() =>  activedRouteStub.setParamMap({id: property.propertyId}));
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ PropertyDetailEditComponent ],
       imports: [
@@ -55,6 +57,7 @@ fdescribe('PropertyDetailEditComponent', () => {
         FormatAddressPipe,
         {provide: SharedService, useValue: mockSharedService},
         {provide: ToastrService, useValue: mockToastrService},
+        { provide: BsModalService, useValue: MockBsModalService }
         // {
         //   provide: ActivatedRoute,
         //   useValue: {
@@ -70,7 +73,7 @@ fdescribe('PropertyDetailEditComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PropertyDetailEditComponent);
-    propertyService = TestBed.get(PropertyService);
+    propertyService = TestBed.inject(PropertyService);
     component = fixture.componentInstance;
   });
 
@@ -93,7 +96,7 @@ fdescribe('PropertyDetailEditComponent', () => {
   //   });
   // }));
 
-  it('display page header', async(() => {
+  it('display page header', waitForAsync(() => {
     fixture.detectChanges();
 
     fixture.whenStable().then(() => {

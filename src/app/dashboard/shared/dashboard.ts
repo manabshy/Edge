@@ -1,5 +1,5 @@
-import { ResultData } from 'src/app/core/shared/result-data';
-import { Address } from 'src/app/core/models/address';
+import { ResultData } from 'src/app/shared/result-data';
+import { Address } from 'src/app/shared/models/address';
 
 export interface Dashboard {
   period: string;
@@ -15,7 +15,7 @@ export interface Dashboard {
   exchanges: DashboardNumbers;
   pipeline: DashboardNumbers;
   liveTenancies: DashboardNumbers;
-  staffMember: StaffMember;
+  staffMember: BasicStaffMember;
 }
 export interface DashboardNumbers {
   periodCount?: number;
@@ -28,7 +28,7 @@ export interface DashboardNumbers {
   totalFees?: number;
   totalPropertyCount?: number;
 }
-export interface StaffMember {
+export interface BasicStaffMember {
   staffMemberId: number;
   staffMemberFullName: string;
 }

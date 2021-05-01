@@ -1,9 +1,6 @@
 <tabset>
   <tab *ngFor="let item of tabs" [heading]=item (selectTab)="changeTab(item)">
     <div class="no-gutters">
-      <div class="text-center" *ngIf="!data">
-        <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading results ...
-      </div>
       <div class="text-center text-danger" *ngIf="data && !data?.length; else results" >
         <i class="far fa-sad-tear"></i> No {{item}}
       </div>
@@ -25,7 +22,7 @@
                 <td class="d-none d-sm-table-cell">{{person?.name}}</td>
                 <ng-container [ngSwitch]="managedOrFees">
                   <ng-container  *ngSwitchCase="'currency'">
-                    <td class="text-right" *ngIf="person?.managedOrFees" [ngClass]="{'font-weight-bold': order === 'totalFees'}" >{{person?.managedOrFees | rounding | currency: "GBP" | truncating}}</td>
+                    <td class="text-right" *ngIf="person?.managedOrFees" [ngClass]="{'font-weight-bold': order === 'totalFees'}" >{{person?.managedOrFees | rounding | currency:'GBP':'symbol':'1.0-0' | truncating}}</td>
                   </ng-container>
                   <ng-container  *ngSwitchCase="'percent'">
                     <td class="text-right" *ngIf="person?.managedOrFees" [ngClass]="{'font-weight-bold': order === 'totalFees'}" >{{person?.managedOrFees | percent}}</td>

@@ -10,12 +10,18 @@ import { HttpClient } from '@angular/common/http';
 })
 export class CompanyService {
   private companyPageChangeSubject = new Subject<number | null>();
+  private newCompanySubject = new Subject<Company | null>();
   companyPageChanges$ = this.companyPageChangeSubject.asObservable();
+  newCompanyChanges$ = this.newCompanySubject.asObservable();
 
   constructor(private http: HttpClient) { }
 
   companyPageChanged(newPage: number) {
     this.companyPageChangeSubject.next(newPage);
+  }
+
+  companyChanged(company: Company) {
+    this.newCompanySubject.next(company);
   }
 
   addCompany(company: Company): Observable<any> {
@@ -25,6 +31,7 @@ export class CompanyService {
       tap(data => console.log('added company details here...', JSON.stringify(data)))
     );
   }
+
   updateCompany(company: Company): Observable<any> {
     const url = `${AppConstants.baseCompanyUrl}/${company.companyId}`;
     return this.http.put(url, company).pipe(

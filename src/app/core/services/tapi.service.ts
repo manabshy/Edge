@@ -3,12 +3,12 @@ import { HttpBackend } from '@angular/common/http';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { map, tap } from 'rxjs/operators';
 import { AppConstants } from '../shared/app-constants';
-import { TapiRequestInfo } from '../models/tapi-request-info';
+import { TapiRequestInfo } from '../../shared/models/tapi-request-info';
 import { Observable } from 'rxjs';
 import { CookieService } from './cookies.service';
 import { Guid } from 'guid-typescript';
 import { StaffMemberService } from './staff-member.service';
-import { StaffMember } from '../models/staff-member';
+import { StaffMember } from '../../shared/models/staff-member';
 
 
 
@@ -21,10 +21,11 @@ export class TapiService {
   constructor(private http: HttpClient, private staffMemberService: StaffMemberService) { }
 
   putCallRequest(tapiRequestInfo: TapiRequestInfo): Observable<any> {
+    console.log('tapi request', tapiRequestInfo);
     const url = `${AppConstants.baseTapiUrl}`;
 
     // User Name
-    this.staffMemberService.getCurrentStaffMember().subscribe(data => this.currentStaffMember = data);    
+    this.staffMemberService.getCurrentStaffMember().subscribe(data => this.currentStaffMember = data);
 
     // getting callRequestsSubscriptionAddress if already exists
     let callRequestsSubscriptionAddress = sessionStorage.getItem('callRequestsSubscriptionAddress');

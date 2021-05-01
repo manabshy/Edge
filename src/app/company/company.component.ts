@@ -18,7 +18,6 @@ const PAGE_SIZE = 10;
 })
 export class CompanyComponent implements OnInit {
   companyFinderForm: FormGroup;
-  isLoading: boolean;
   isHintVisible: boolean;
   companies: CompanyAutoCompleteResult[];
   isMessageVisible: boolean;
@@ -43,7 +42,8 @@ export class CompanyComponent implements OnInit {
 
     if (this.route.snapshot.queryParamMap.get('companyName') || AppUtils.companySearchTerm) {
       const term = this.route.snapshot.queryParamMap.get('companyName') || AppUtils.companySearchTerm;
-      this.companyFinderForm.get('companyName').setValue(term.companyName);
+      console.log('search term in company', term)
+      this.companyFinderForm.get('companyName').setValue(term);
       this.companiesResults();
       this.isHintVisible = false;
       this.isMessageVisible = false;
@@ -64,9 +64,8 @@ export class CompanyComponent implements OnInit {
           }))));
   }
 
-  companiesResults() {
+  companiesResults(submit?: boolean) {
     if (this.searchTerm) {
-      this.isLoading = true;
       this.suggestions = null;
     }
     this.page = 1;
@@ -74,14 +73,15 @@ export class CompanyComponent implements OnInit {
     this.companies = [];
     this.suggestedTerm ? this.searchTerm = this.suggestedTerm : this.searchTerm = this.companyFinderForm.value.companyName;
     this.getNextCompanyListPage(this.page);
+    if(submit) {
+      this.sharedService.scrollElIntoView('list-group');
+    }
   }
 
   private getNextCompanyListPage(page: number) {
-    this.isLoading = true;
     this.contactGroupService.getAutocompleteCompany(this.searchTerm, PAGE_SIZE, page).subscribe(result => {
-      this.isLoading = false;
       if (this.searchTerm && this.searchTerm.length) {
-        if (!result.length) {
+        if (result && !result.length) {
           this.isMessageVisible = true;
           this.bottomReached = true;
           return;
@@ -99,7 +99,6 @@ export class CompanyComponent implements OnInit {
     }, error => {
       this.companies = [];
       this.searchTerm = '';
-      this.isLoading = false;
       this.isHintVisible = true;
     });
   }
@@ -108,7 +107,7 @@ export class CompanyComponent implements OnInit {
     if (event.key !== 'Enter') {
       this.isMessageVisible = false;
     }
-    AppUtils.companySearchTerm = this.companyFinderForm.value;
+    AppUtils.companySearchTerm = this.companyFinderForm.value.companyName;
 
     if (this.companyFinderForm.value.companyName && this.companyFinderForm.value.companyName.length > 2) {
       this.isHintVisible = false;
@@ -123,8 +122,12 @@ export class CompanyComponent implements OnInit {
     if (event.item != null) {
       this.suggestedTerm = event.item;
     }
-    this.companiesResults();
+    this.companiesResults(true);
     AppUtils.companySearchTerm = this.searchTerm;
     this.suggestedTerm = '';
+  }
+
+  scrollElIntoView(className: string) {
+    this.sharedService.scrollElIntoView(className);
   }
 }

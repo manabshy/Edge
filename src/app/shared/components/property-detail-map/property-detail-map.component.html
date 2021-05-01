@@ -1,0 +1,6 @@
+<p-galleria [value]="maps" [visible]="showMap" [containerStyle]="{'max-width': '70%'}" [circular]="false"
+  [fullScreen]="true" [showThumbnails]="false" [baseZIndex]="100000" (visibleChange)="hideModal()">
+  <ng-template pTemplate="item" let-item>
+    <img [src]="item?.azureResourceURL" style="width: 100%; display: block;" />
+  </ng-template>
+</p-galleria>

@@ -3,12 +3,15 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import {
   PropertyAutoComplete, PropertyAutoCompleteData, Property, PropertyData,
-  PropertyPhotoData, Photo, InstructionInfo, OfferInfo, PropertyNote
+  PropertyPhotoData, Photo, InstructionInfo, OfferInfo, PropertyNote, PropertyLocation
 } from './property';
 import { map, tap } from 'rxjs/operators';
 import { AppConstants } from 'src/app/core/shared/app-constants';
 import { CustomQueryEncoderHelper } from 'src/app/core/shared/custom-query-encoder-helper';
-import { Address } from 'src/app/core/models/address';
+import { Address } from 'src/app/shared/models/address';
+import { SharedService } from 'src/app/core/services/shared.service';
+import { RequestOption, AppUtils } from 'src/app/core/shared/utils';
+import { Office } from 'src/app/shared/models/staff-member';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +22,10 @@ export class PropertyService {
   private propertyNoteChangeSubject = new Subject<PropertyNote>();
   private propertyNotePageNumberChangeSubject = new Subject<number>();
   private showPropertyDuplicatesSubject = new Subject<boolean>();
+  // private propertyAddedSubject = new Subject<Property | null>();
+  private propertyAddedSubject = new BehaviorSubject<Property | null>(null);
+
+  newPropertyAdded$ = this.propertyAddedSubject.asObservable();
   showPropertyDuplicatesChanges$ = this.showPropertyDuplicatesSubject.asObservable();
   propertyNoteChanges$ = this.propertyNoteChangeSubject.asObservable();
   propertyNotePageNumberChanges$ = this.propertyNotePageNumberChangeSubject.asObservable();
@@ -27,21 +34,9 @@ export class PropertyService {
 
   constructor(private http: HttpClient) { }
 
-  autocompleteProperties(searchTerm: any, pageSize?: number, page?: number): Observable<PropertyAutoComplete[]> {
-    if (!page) {
-      page = 1;
-    }
-    if (pageSize == null) {
-      pageSize = 10;
-    }
-    const options = new HttpParams({
-      encoder: new CustomQueryEncoderHelper,
-      fromObject: {
-        searchTerm: searchTerm,
-        pageSize: pageSize.toString(),
-        page: page.toString()
-      }
-    });
+  autocompleteProperties(opts: RequestOption): Observable<PropertyAutoComplete[]> {
+    let options: HttpParams;
+    options = AppUtils.setQueryParams(opts);
     const url = `${AppConstants.basePropertyUrl}/autocomplete`;
     return this.http.get<PropertyAutoCompleteData>(url, { params: options })
       .pipe(
@@ -50,9 +45,17 @@ export class PropertyService {
       );
   }
 
-  getPropertySuggestions(searchTerm: string): Observable<any[]> {
-    const url = `${AppConstants.basePropertyUrl}/suggestions?SearchTerm=${searchTerm}`;
-    return this.http.get<any>(url)
+  getPropertySuggestions(searchTerm: string, searchType?: number): Observable<any[]> {
+    const url = `${AppConstants.basePropertyUrl}/suggestions`;
+    const options = new HttpParams({
+      encoder: new CustomQueryEncoderHelper,
+      fromObject: {
+        searchTerm: searchTerm.toString(),
+        searchType: searchType ? searchType.toString() : '',
+      }
+    });
+
+    return this.http.get<any>(url, { params: options })
       .pipe(
         map(response => response.result),
         tap(data => console.log(JSON.stringify(data)))
@@ -73,7 +76,7 @@ export class PropertyService {
       tap(data => console.log('updated property details here...', JSON.stringify(data))));
   }
 
-  getProperty(propertyId: number, includeInfo?: boolean, includePhoto?: boolean): Observable<Property> {
+  getProperty(propertyId: number, includeInfo?: boolean, includePhoto?: boolean, includeValuers?: boolean, includeMap: boolean = false): Observable<Property> {
     if (!includeInfo) {
       includeInfo = false;
     }
@@ -85,6 +88,8 @@ export class PropertyService {
       fromObject: {
         includeInfo: includeInfo.toString(),
         includePhoto: includePhoto.toString(),
+        includeMap: includeMap.toString(),
+        includeValuers: includeValuers.toString()
       }
     });
     const url = `${AppConstants.basePropertyUrl}/${propertyId}`;
@@ -101,16 +106,19 @@ export class PropertyService {
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
 
-  getPropertyInstructions(propertyId: number): Observable<InstructionInfo[]> {
-    const url = `${AppConstants.basePropertyUrl}/${propertyId}/instructions`;
+  getPropertyInstructions(propertyId: number, isClosedIncluded: boolean): Observable<InstructionInfo[]> {
+    const url = `${AppConstants.basePropertyUrl}/${propertyId}/instructions?activeOnly=${isClosedIncluded}`;
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
 
-  getPropertyOffers(propertyId: number): Observable<OfferInfo[]> {
-    const url = `${AppConstants.basePropertyUrl}/${propertyId}/offers`;
+  getPropertyOffers(propertyId: number, isClosedIncluded: boolean): Observable<OfferInfo[]> {
+    const url = `${AppConstants.basePropertyUrl}/${propertyId}/offers?activeOnly=${isClosedIncluded}`;
     return this.http.get<any>(url).pipe(map(response => response.result));
   }
-
+  getValuations(propertyId: number, isClosedIncluded?: boolean): Observable<any[]> {
+    const url = `${AppConstants.basePropertyUrl}/${propertyId}/valuations?activeOnly=${isClosedIncluded}`;
+    return this.http.get<any>(url).pipe(map(response => response.result));
+  }
   getPotentialDuplicateProperties(address: Address, propertyId?: number): Observable<PropertyAutoComplete[]> {
     const options = new HttpParams({
       encoder: new CustomQueryEncoderHelper,
@@ -170,6 +178,11 @@ export class PropertyService {
       tap(data => console.log('updated property note here...', JSON.stringify(data))));
   }
 
+  getPropertyOfficeId(address?: Address): Observable<PropertyLocation | any> {
+    const url = `${AppConstants.basePropertyUrl}/location`;
+    return this.http.post<any>(url, address).pipe(map(response => response.result));
+  }
+
   currentPropertyChanged(propertyId: number) {
     console.log('next value is ', this.currentPropertyIdSubject.getValue())
     this.currentPropertyIdSubject.next(propertyId);
@@ -191,16 +204,8 @@ export class PropertyService {
     this.showPropertyDuplicatesSubject.next(show);
   }
 
-  // propertyDetails$ = this.currentPropertyId$
-  //   .pipe(
-  //     filter(propertyId => Boolean(propertyId)),
-  //     switchMap(propertyId => this.http.get<PropertyData>(`${AppConstants.basePropertyUrl}/${propertyId}?includeInfo=true&includePhoto=true`)
-  //       .pipe(
-  //         map(response => response.result),
-  //         tap(data => console.log('property id of details returned', propertyId)),
-  //         tap(data => console.log('details returned', JSON.stringify(data)))
-  //       )
-  //     ));
-
+  setAddedProperty(property: Property) {
+    this.propertyAddedSubject.next(property);
+  }
 }
 

@@ -1,24 +1,43 @@
-<app-breadcrumb></app-breadcrumb>
-<div class="container">
-  <div class="row page-title">
-    <div class="col d-flex align-items-end">
-      <h4 class="m-0">CS Board Admin Panel</h4>
+<div class="card">
+  <div class="card__header card__header--divider">
+    <span>Current Rankings</span>
+    <div class="flexRight" dropdown placement="bottom right">
+      <a class="btn dropdown-toggle" href [id]="'button'" dropdownToggle (click)="$event.stopPropagation(); false"
+        [attr.aria-controls]="'dropdown'">
+        <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
+          <ellipse class="st0" cx="32" cy="10.5" rx="5.9" ry="6" />
+          <ellipse class="st0" cx="32" cy="32" rx="5.9" ry="6" />
+          <ellipse class="st0" cx="32" cy="53.5" rx="5.9" ry="6" />
+        </svg>
+      </a>
+      <ul [id]="'dropdown'" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+        [attr.aria-labelledby]="'button'">
+        <li role="menuitem">
+          <a (click)="showRules.emit()" class="dropdown-item">
+            <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
+              <polygon points="42.7 6.7 57.3 21.3 64 14.5 49.7 0 "></polygon>
+              <path d="M40.3 9.6l-38 38L0 64l16.9-2 38-37.9L40.3 9.6zM4 59.9l1.9-11.7 9.8 9.8L4 59.9z"></path>
+            </svg>
+            Edit Rules
+          </a>
+        </li>
+      </ul>
     </div>
     <div class="col-auto">
       <a class="ml-5 btn btn-primary" [routerLink]="['/admin-panel', 'rules']" >Rules</a>
     </div>
   </div>
-  <div class="list-group mb-5">
-    <ng-container *ngFor="let member of members$|async">
-      <a [routerLink]="['/admin-panel','details', member?.staffMemberId]" class="list-group-item list-group-item-action pb-2">
-          <div class="media">
-              <img class="rounded-circle mr-3" [src]="member?.photoUrl" alt="">
-              <div class="media-body">
-                  <h5 class="mt-0">{{member?.name}}</h5>
-                  {{member?.totalPoints}} pts
-              </div>
-          </div>
-      </a>
-    </ng-container>
+  <div class="card__body">
+    <ol class="list list--rankings">
+      <li class="hoverPointer" *ngFor="let member of members; let position=index" (click)="selectedMember.emit(member)">
+        <span class="avatar">
+          <img class="circle" [src]="member?.photoUrl" alt="">
+        </span>
+        <span>
+          <strong>{{member?.name}}</strong>
+          <small class="txt--warning">{{member?.totalPoints}}</small>
+        </span>
+      </li>
+    </ol>
   </div>
 </div>

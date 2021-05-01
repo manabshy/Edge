@@ -1,9 +1,31 @@
+//reset
+@import "style/partials/colors";
+@import "style/partials/reset";
+@import "style/partials/typography";
+
+//forms
+@import "style/partials/form";
+@import "style/partials/buttons";
+
+//partials
+@import "style/partials/icons";
+@import "style/partials/table";
+@import "style/partials/layout";
+@import "style/partials/timeline";
+@import "style/partials/card";
+@import "style/partials/list";
+@import "style/partials/modal";
+@import "style/partials/pills";
+@import "style/partials/accordion";
+@import "style/partials/pills";
+@import "style/partials/filters";
+@import "style/partials/charts";
+
 //overrides
-@import "style/bootstrap-overrides";
+//@import "style/bootstrap-overrides";
 
 //bootstrap
-@import "~bootstrap/scss/bootstrap";
-
+//@import "~bootstrap/scss/bootstrap";
 
 //fontAwesome
 $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
@@ -12,17 +34,26 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 @import "~@fortawesome/fontawesome-free/scss/regular";
 
 //toastr
-@import '~ngx-toastr/toastr-bs4-alert';
+//@import '~ngx-toastr/toastr-bs4-alert';
+
+/* new calender lib css - angular-cli file: src/styles.css */
+@import "../node_modules/angular-calendar/css/angular-calendar.css";
+
+/* ng-select theme */
+@import "~@ng-select/ng-select/themes/default.theme.css";
+@import "style/partials/ng-select";
 
 //partials
-@import "style/partials/layout-overrides";
-@import "style/partials/alerts";
-@import "style/partials/badges";
-@import "style/partials/page-title";
-@import "style/partials/animation";
-@import "style/partials/nav";
-@import "style/partials/card";
-@import "style/partials/table";
-@import "style/partials/off-canvas";
-@import "style/partials/ngx-bootstrap";
-@import "style/partials/toastr";
+//@import "style/partials/layout-overrides";
+//@import "style/partials/form";
+//@import "style/partials/alerts";
+//@import "style/partials/badges";
+//@import "style/partials/page-title";
+//@import "style/partials/animation";
+//@import "style/partials/nav";
+
+//@import "style/partials/off-canvas";
+// @import "style/partials/ngx-bootstrap";
+//@import "style/partials/toastr";
+//@import "style/partials/loading-bar";
+//@import "style/partials/sub-info";

@@ -1,0 +1,32 @@
+// @import "../../../style/bootstrap-overrides";
+
+// @import "../../../../node_modules/bootstrap/scss/functions";
+// @import "../../../../node_modules/bootstrap/scss/variables";
+// @import "../../../../node_modules/bootstrap/scss/mixins";
+
+// form {
+//     padding-bottom: spacer(5);
+
+//     .form-actions {
+//         @include fixed-bottom('xl');
+//     }
+
+// }
+
+// .add-note {
+//     border-bottom: none;
+//     border-bottom-left-radius: 0;
+//     border-bottom-right-radius: 0;
+// }
+
+.disable-card{
+  pointer-events: none;
+}
+
+.hide-footer{
+  display: none;
+}
+
+.close-lead{
+  max-width: fit-content;
+}

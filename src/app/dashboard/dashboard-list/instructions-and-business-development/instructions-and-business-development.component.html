@@ -23,11 +23,11 @@
           <div class="input-group">
             <select [(ngModel)]="minPrice" class="custom-select" name="minPrice" id="minPrice">
               <option value="0">No Min</option>
-              <option *ngFor="let salePrice of priceRangeSale" [value]='salePrice'>{{salePrice | currency: 'GBP'}}</option>
+              <option *ngFor="let salePrice of priceRangeSale" [value]='salePrice'>{{salePrice | currency:'GBP':'symbol':'1.0-0'}}</option>
             </select>
             <select  [(ngModel)]="maxPrice" class="custom-select" name="maxPrice" id="maxPrice">
               <option value="0">No Max</option>
-              <option *ngFor="let salePrice of priceRangeSale" [value]='salePrice'>{{salePrice | currency: 'GBP'}}</option>
+              <option *ngFor="let salePrice of priceRangeSale" [value]='salePrice'>{{salePrice | currency:'GBP':'symbol':'1.0-0'}}</option>
             </select>
           </div>
         </div>
@@ -85,7 +85,7 @@
             <div class="col-sm">
               <dl class="row">
                 <dt class="col-4 d-sm-none">Value</dt>
-                <dd class="col">{{ instruction.salesValue || instruction.shortLetValue || instruction.longLetValue  | currency: "GBP" }}</dd>
+                <dd class="col">{{ instruction.salesValue || instruction.shortLetValue || instruction.longLetValue  | currency:'GBP':'symbol':'1.0-0' }}</dd>
               </dl>
             </div>
             <div class="col-sm">
@@ -130,13 +130,13 @@
           <div class="col-sm">
             <dl class="row">
               <dt class="col-4 d-sm-none">Sales</dt>
-              <dd class="col">{{ valuation?.salesValue | currency: "GBP" }}</dd>
+              <dd class="col">{{ valuation?.salesValue | currency:'GBP':'symbol':'1.0-0' }}</dd>
             </dl>
           </div>
           <div class="col-sm">
             <dl class="row">
               <dt class="col-4 d-sm-none">Lettings</dt>
-              <dd class="col">{{ valuation?.shortLetValue || valuation?.longLetValue  | currency: "GBP" }}</dd>
+              <dd class="col">{{ valuation?.shortLetValue || valuation?.longLetValue  | currency:'GBP':'symbol':'1.0-0' }}</dd>
             </dl>
           </div>
           <div class="col-sm">

@@ -1,0 +1,80 @@
+
+  <svg aria-hidden="true" width="8" height="16" viewBox="0 0 8 16" class="icon--timeline"><polygon points="8 0 0 8 8 16" class="fill"/><polygon class="outline" points="8 14.5 1.4 8 8 1.4 8 0 0 8 8 16"/></svg>
+  <div class="card">
+    <div class="card__header">
+      Add Note
+    </div>
+    <div class="card__body">
+      <form [formGroup]="noteForm" (ngSubmit)="action(true)">
+        <fieldset>
+          <textarea #note class="form-control" name="note" id="note{{isModal}}" cols="30" rows="5" placeholder="Please give as much detail as possible." (keydown)="ctrlEnterSubmit($event)" formControlName="text" [ngClass]="{'is-invalid':formErrors.text}"></textarea>
+        </fieldset>
+
+        <fieldset>
+          <span class="checkbox checkbox--inline">
+            <span>
+              <input type="checkbox" id="important{{isModal}}" formControlName="isImportant">
+              <label for="important{{isModal}}">Set as important</label>
+            </span>
+
+            <span>
+              <input type="checkbox" id="topPinned{{isModal}}" formControlName="isPinned">
+              <label for="topPinned{{isModal}}">Pin to top</label>
+            </span>
+          </span>
+        </fieldset>
+
+        <fieldset>
+          <span class="btn--container" [ngClass]="{'text-center': isCancelVisible}">
+            <button type="button" class="btn btn--positive" (click)="action(true)"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z"/><path class="plus-vertical" d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z"/></svg>Add Note</button>
+            <button type="button" class="btn btn--ghost" (click)="action(false)" *ngIf="isCancelVisible">Cancel</button>
+          </span>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+
+<!--Success Messages -->
+<p-toast></p-toast>
+
+
+<!-- <form [formGroup]="noteForm" (ngSubmit)="action(true)" class="text-left">
+  <div class="form-group">
+    <div class="custom-control custom-checkbox custom-control-inline">
+      <input type="checkbox" class="custom-control-input" id="topPinned{{isModal}}" formControlName="isPinned">
+      <label class="custom-control-label small" for="topPinned{{isModal}}">Pin to top</label>
+    </div>
+    <div class="custom-control custom-checkbox custom-control-inline">
+      <input type="checkbox" class="custom-control-input" id="important{{isModal}}" formControlName="isImportant">
+      <label class="custom-control-label small" for="important{{isModal}}">Set as important</label>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="row mb-2">
+      <div class="col">
+        <label for="note{{isModal}}">Note</label>
+      </div>
+      <div class="col-auto">
+        <ng-template #popTemplate>
+          <ng-container *ngFor="let shortcut of shortcuts | keyvalue:keepOriginalOrder; last as isLast">
+            {{shortcut.key}} - {{shortcut.value}} <br *ngIf="!isLast" />
+          </ng-container>
+        </ng-template>
+      </div>
+    </div>
+    <div class="form-group mb-1">
+      <ng-container *ngFor="let shortcut of shortcuts | keyvalue:keepOriginalOrder; last as isLast">
+        <button type="button" class="btn btn-sm btn-outline-primary mr-2 mb-2"
+          (click)="consumeShortcut(shortcut.value)">{{shortcut.key}}</button>
+      </ng-container>
+    </div>
+    <textarea #note class="form-control" name="note" id="note{{isModal}}" cols="30" rows="5" placeholder="Comment ..."
+      (keydown)="ctrlEnterSubmit($event)"
+      formControlName="text" [ngClass]="{'is-invalid':formErrors.text}"></textarea>
+      <div class="invalid-feedback">{{formErrors.text}}</div>
+  </div>
+  <div class="mt-4" [ngClass]="{'text-center': isCancelVisible}">
+    <button type="button" class="btn btn-light mr-2" (click)="action(false)" *ngIf="isCancelVisible">Cancel</button>
+    <button type="button" class="btn btn-secondary" (click)="action(true)">Add Note</button>
+  </div>
+</form> -->

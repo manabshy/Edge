@@ -1,100 +1,206 @@
-<app-breadcrumb [title]="companyDetails?.companyId ? 'CO-'+companyDetails?.companyId : ''"></app-breadcrumb>
-<div class="container">
-  <h4 class="page-title">
-    <ng-container *ngIf="isNewCompany; else editLabel">New</ng-container>
-    <ng-template #editLabel>Edit</ng-template> Company
-  </h4>
-  <div class="text-center" *ngIf="!companyDetails && !isNewCompany">
-    <i class="fas fa-spinner fa-pulse d-inline-block"></i> Loading details ...
-  </div>
-  <ng-container *ngIf="companyDetails || isNewCompany">
-    <form [formGroup]="companyForm" (ngSubmit)="saveCompany()" autocompleteOff>
-      <fieldset>
-        <legend>Company</legend>
-        <app-company-finder [existingCompany]="companyDetails" [companyNameError]="formErrors.companyName"
-          (companyName)="getCompanyName($event)" (selectedCompanyDetails)="navigateToCompany($event)">
-        </app-company-finder>
-        <div class="row justify-content-end">
-          <div class="col-sm-10">
-            <input type="hidden" id="companyName" class="form-control" formControlName="companyName">
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="companyType" class="col-sm-2 col-form-label col-form-label-sm">Company Type</label>
-          <div class="col-sm-3">
-            <select class="custom-select custom-select-sm" id="companyType" formControlName="companyTypeId">
+<div class="row">
+  <div class="row__item">
+    <!-- <h2><ng-container *ngIf="isNewCompany; else editLabel">New</ng-container><ng-template #editLabel>Edit</ng-template> Company</h2> -->
+
+    <ng-container *ngIf="companyDetails || isManualEntry; else redactedCards">
+      <form [formGroup]="companyForm" (ngSubmit)="saveCompany()" autocompleteOff>
+        <fieldset *ngIf="companyDetails?.companyName ||isManualEntry">
+          <label for="companyType">Company Name</label>
+          <input type="text"  id="companyName" class="form-control" formControlName="companyName">
+        </fieldset>
+        <fieldset>
+          <label for="companyType">Company Type</label>
+          <span class="select">
+            <select id="companyType" formControlName="companyTypeId">
               <option *ngFor="let type of companyTypes" [value]=type.id>{{type.value}}</option>
             </select>
-          </div>
-        </div>
-        <app-signer (selectedSigner)="getSelectedSigner($event)" (newSigner)="createNewSigner($event)" [existingSigner]="existingSigner"></app-signer>
-        <div class="form-group row">
-          <label for="amlDate" class="col-sm-2 col-form-label col-form-label-sm">AML Completed</label>
-          <div class="col-sm-3">
-            <div class="input-group input-group-sm">
-              <input type="text" id="amlDate" placeholder="dd/mm/yyyy" class="form-control fake-readonly"
-                formControlName="amlCompletedDate"
-                [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', maxDate:todaysDate}" bsDatepicker
-                readonly>
-              <div class="input-group-append" *ngIf="companyForm.value.amlCompletedDate">
-                <button type="button" class="btn btn-primary" aria-label="clear AML"
-                  (click)="clearControlValue(companyForm.get('amlCompletedDate'))">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </fieldset>
-      <fieldset>
-        <legend>Address</legend>
-        <app-address [companyDetails]="companyDetails" (addressDetails)="getAddress($event)"></app-address>
-      </fieldset>
-      <fieldset>
-        <legend>Contact Details</legend>
-        <div class="form-group row">
-          <label for="companyTelephone" class="col-sm-2 col-form-label col-form-label-sm">Telephone</label>
-          <div class="col-sm-10">
-            <input type="text" id="companyTelephone" placeholder="" class="form-control form-control-sm"
-              formControlName="telephone" [ngClass]="{'is-invalid':formErrors.telephone}">
-            <span class="invalid-feedback">{{formErrors?.telephone}}</span>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="companyFax" class="col-sm-2 col-form-label col-form-label-sm">Fax</label>
-          <div class="col-sm-10">
-            <input type="text" id="companyFax" placeholder="" class="form-control form-control-sm" formControlName="fax"
-              [ngClass]="{'is-invalid':formErrors.fax}">
-            <span class="invalid-feedback">{{formErrors?.fax}}</span>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="companyWebsite" class="col-sm-2 col-form-label col-form-label-sm">Website</label>
-          <div class="col-sm-10">
-            <input type="text" id="companyWebsite" placeholder="" class="form-control form-control-sm"
-              formControlName="website">
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="companyEmail" class="col-sm-2 col-form-label col-form-label-sm">Email</label>
-          <div class="col-sm-10">
-            <input type="text" id="companyEmail" placeholder="" class="form-control form-control-sm"
-              formControlName="email" [ngClass]="{'is-invalid':formErrors.email}">
-            <span class="invalid-feedback">{{formErrors?.email}}</span>
-          </div>
-        </div>
-      </fieldset>
-      <div class="form-actions">
-        <div class="container px-lg-4">
-          <div class="row justify-content-end w-100 no-gutters">
-            <div class="col-sm-10 d-flex">
-              <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
-              <button type="submit" class="btn btn-secondary" [attr.disabled]="isSubmitting ? '' : null"><i
-                  class="fas fa-spinner fa-pulse d-inline-block mr-2" *ngIf="isSubmitting"></i>Save</button>
-            </div>
+          </span>
+        </fieldset>
+
+        <ledgend class="legend">Signer</ledgend>
+        <fieldset>
+          <label for="area" class="small">Signer</label>
+          <ng-container *ngIf="signer?.contactNames; else newSigner">
+            <p><a [routerLink]="['/contact-centre/detail/0/people/', signer?.contactGroupId]">{{signer?.contactNames}}</a></p>
+            <p><button (click)="isSignerVisible = true" type="button" class="btn btn--info"><svg aria-hidden="true"
+                  width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
+                  <polygon points="42.7 6.7 57.3 21.3 64 14.5 49.7 0 "></polygon>
+                  <path d="M40.3 9.6l-38 38L0 64l16.9-2 38-37.9L40.3 9.6zM4 59.9l1.9-11.7 9.8 9.8L4 59.9z"></path>
+                </svg>Change signer</button></p>
+          </ng-container>
+
+          <ng-template #newSigner>
+            <p><button (click)="isSignerVisible = true" type="button" class="btn btn--positive"><svg
+                  aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
+                  <path
+                    d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" />
+                  <path class="plus-vertical"
+                    d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" />
+                </svg>Signer</button></p>
+          </ng-template>
+        </fieldset>
+        <ledgend class="legend">Company Address</ledgend>
+        <app-address class="appWrapper" [companyDetails]="companyDetails" (addressDetails)="getAddress($event)">
+        </app-address>
+
+        <ledgend class="legend">Contact Details</ledgend>
+        <fieldset  [ngClass]="{'invalid':formErrors.telephone}">
+          <label for="companyTelephone" class="small">Telephone</label>
+          <input type="text" id="companyTelephone" placeholder="" class="form-control form-control-sm"
+            formControlName="telephone">
+          <p class="message message--negative">{{formErrors?.telephone}}</p>
+        </fieldset>
+
+        <fieldset  [ngClass]="{'invalid':formErrors.fax}">
+          <label for="companyFax" class="small">Fax</label>
+          <input type="text" id="companyFax" placeholder="" class="form-control form-control-sm" formControlName="fax"
+           >
+          <p class="message message--negative">{{formErrors?.fax}}</p>
+        </fieldset>
+
+        <fieldset>
+          <label for="companyWebsite" class="small">Website</label>
+          <input type="text" id="companyWebsite" placeholder="" class="form-control form-control-sm"
+            formControlName="website">
+        </fieldset>
+
+        <fieldset [ngClass]="{'invalid':formErrors.email}">
+          <label for="companyEmail" class="small">Email</label>
+          <input type="text" id="companyEmail" placeholder="" class="form-control form-control-sm"
+            formControlName="email" >
+            <p class="message message--negative">{{formErrors?.email}}</p>
+        </fieldset>
+
+        <ledgend class="legend">AML</ledgend>
+        <fieldset>
+          <label for="amlDate">AML Completed</label>
+          <span class="joined">
+            <input type="text" id="amlDate" placeholder="dd/mm/yyyy" class="form-control fake-readonly"
+              formControlName="amlCompletedDate"
+              [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', maxDate:todaysDate, customTodayClass: 'font-weight-bold'}"
+              bsDatepicker #datepicker="bsDatepicker" [appNoDoubleTap]='datepicker' readonly>
+            <button type="button" class="btn btn--ghost" (click)="clearControlValue(companyForm.get('amlCompletedDate'))"
+              *ngIf="companyForm.value.amlCompletedDate">Clear</button>
+          </span>
+        </fieldset>
+        <footer class="footer">
+          <button (click)="cancel()" type="button" class="btn btn--ghost">Cancel</button>
+          <button type="submit" class="btn btn--positive" [attr.disabled]="isSubmitting ? '' : null"><svg
+              aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="loading" *ngIf="isSubmitting">
+              <path
+                d="M11.9 48.4c-4.1-5-6.3-11.5-5.8-18.6C7.1 17.6 16.8 7.5 29 6.2 44.7 4.4 58 16.7 58 32c0 6.2-2.2 11.8-5.8 16.3 -1 1.2-0.8 2.9 0.3 4l0 0c1.3 1.3 3.4 1.1 4.5-0.3 4.8-6 7.5-13.8 7-22.2C62.9 14 50.1 1.2 34.3 0.1 15.6-1.2 0 13.6 0 32c0 7.7 2.7 14.8 7.3 20.3 1.1 1.3 3 1.4 4.2 0.2l0.2-0.2C12.8 51.2 12.8 49.6 11.9 48.4z">
+              </path>
+            </svg>Save</button>
+        </footer>
+      </form>
+    </ng-container>
+
+    <ng-template #redactedCards>
+      <div class="wrapper--redacted" *ngIf="isNewCompany && !companyDetails ">
+        <button class="btn btn--redacted btn--positive" (click)="showCompanyFinder=true"><svg aria-hidden="true"
+            width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
+            <path class="horizontal"
+              d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z">
+            </path>
+            <path class="vertical"
+              d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z">
+            </path>
+          </svg>New Company</button>
+        <div class="card card--horizontal">
+          <div class="card__headerImg"><span class="redacted redacted--title redacted--30pc"></span><span
+              class="redacted redacted--50pc"></span></div>
+          <div class="card__body">
+            <ol class="list list--split">
+              <li>
+                <ol class="list">
+                  <li><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                      class="icon icon--s icon--onLeft">
+                      <path
+                        d="M56 24c0 17.5-20.3 38-21.2 38.8C34 63.6 33 64 32 64c-1 0-2-0.4-2.8-1.2C28.3 62 8 41.5 8 24 8 10.8 18.8 0 32 0S56 10.8 56 24zM32 36c6.6 0 12-5.4 12-12 0-6.6-5.4-12-12-12s-12 5.4-12 12C20 30.6 25.4 36 32 36z">
+                      </path>
+                    </svg><span class="redacted redacted--100pc"></span><span class="redacted redacted--100pc"></span>
+                  </li>
+                  <li><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                      class="icon icon--s icon--onLeft">
+                      <path
+                        d="M61.3 1c-0.2 0-0.4 0-0.5 0.1L42.3 8.2 21.7 1 2.3 7.5C1.5 7.8 1 8.4 1 9.2v52.1C1 62.2 1.8 63 2.7 63c0.2 0 0.4 0 0.5-0.1l18.4-7.1L42.3 63l19.4-6.5c0.7-0.3 1.2-0.9 1.2-1.7V2.7C63 1.8 62.2 1 61.3 1zM42.3 56.1l-20.7-7.3v-41l20.7 7.3V56.1z">
+                      </path>
+                    </svg><span class="redacted redacted--50pc"></span></li>
+                  <li><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24"
+                      class="icon icon--s icon--onLeft">
+                      <path d="M0 0h24v24H0z" fill="none"></path>
+                      <path
+                        d="M22 16V4c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2zm-11-4l2.03 2.71L16 11l4 5H8l3-4zM2 6v14c0 1.1.9 2 2 2h14v-2H4V6H2z">
+                      </path>
+                    </svg><span class="redacted redacted--20pc"></span></li>
+                  <li class="hideLabel"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                      class="icon icon--s icon--onLeft">
+                      <path
+                        d="M32 16.5V4.1H1v55.8h62V16.5H32zM13.4 53.7H7.2v-6.2h6.2V53.7zM13.4 41.3H7.2v-6.2h6.2V41.3zM13.4 28.9H7.2v-6.2h6.2V28.9zM13.4 16.5H7.2v-6.2h6.2V16.5zM25.8 53.7h-6.2v-6.2h6.2V53.7zM25.8 41.3h-6.2v-6.2h6.2V41.3zM25.8 28.9h-6.2v-6.2h6.2V28.9zM25.8 16.5h-6.2v-6.2h6.2V16.5zM56.8 53.7H32v-6.2h6.2v-6.2H32v-6.2h6.2v-6.2H32v-6.2h24.8V53.7zM50.6 28.9h-6.2v6.2h6.2V28.9zM50.6 41.3h-6.2v6.2h6.2V41.3z">
+                      </path>
+                    </svg><span class="redacted redacted--50pc"></span></li>
+                  <li><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                      class="icon icon--s icon--onLeft">
+                      <path
+                        d="M32 0L0 36.1h8V64h6.8v-4.3c0-5.7 11.5-8.6 17.2-8.6s17.2 2.8 17.2 8.5V64H56V36.1h8L32 0zM32 46.8c-4.8 0-8.6-3.9-8.6-8.6 0-4.8 3.8-8.6 8.6-8.6s8.6 3.8 8.6 8.6C40.6 42.9 36.8 46.8 32 46.8z">
+                      </path>
+                    </svg><span class="redacted redacted--10pc"></span><span class="redacted redacted--50pc"></span>
+                  </li>
+                </ol>
+              </li>
+              <li class="expandable">
+                <details open="">
+                  <summary>
+                    <div class="summary__title"> Additional details <svg aria-hidden="true" width="64" height="64"
+                        viewBox="0 0 64 64" class="icon icon--s flexRight">
+                        <path
+                          d="M61 28H3c-1.7 0-3 1.8-3 3.5v1.1C0 34.2 1.3 36 3 36h58c1.7 0 3-1.8 3-3.5v-1C64 29.8 62.7 28 61 28z"
+                          class="vertical"></path>
+                        <path
+                          d="M36 61V3c0-1.7-1.8-3-3.5-3l-1.1 0C29.8 0 28 1.3 28 3v58c0 1.7 1.8 3 3.5 3h1C34.2 64 36 62.7 36 61z"
+                          class="horizontal"></path>
+                      </svg></div>
+                  </summary>
+                  <ol class="list">
+                    <li><span class="redacted redacted--title redacted--30pc"></span><span
+                        class="redacted redacted--50pc"></span></li>
+                    <li><span class="redacted redacted--title redacted--20pc"></span><span
+                        class="redacted redacted--50pc"></span></li>
+                    <li><span class="redacted redacted--title redacted--40pc"></span><span
+                        class="redacted redacted--50pc"></span></li>
+                    <li><span class="redacted redacted--title redacted--10pc"></span><span
+                        class="redacted redacted--50pc"></span></li>
+                    <li><span class="redacted redacted--title redacted--50pc"></span><span
+                        class="redacted redacted--50pc"></span></li>
+                  </ol>
+                </details>
+              </li>
+            </ol>
           </div>
         </div>
       </div>
-    </form>
-  </ng-container>
+    </ng-template>
+
+    <app-additional-info class="appWrapper" [id]="companyDetails?.companyId ? 'CO-'+companyDetails?.companyId : ''">
+    </app-additional-info>
+  </div>
 </div>
+
+<!--Add  [showHeader]="false" to hide header -->
+<p-dialog header="Find Company" [(visible)]="showCompanyFinder" [modal]="true" [draggable]="false"
+  class="modal--medium modal--hasFooter">
+  <app-company-finder [existingCompany]="companyDetails" [companyNameError]="formErrors.companyName"
+    (companyName)="getCompanyName($event)" (selectedCompanyDetails)="navigateToCompany($event)"
+    (isManualEntry)="setManualEntryFlag()"></app-company-finder>
+</p-dialog>
+
+<!-- Contactgroup Finder Modal -->
+<p-dialog header="Signer" [(visible)]="isSignerVisible" [modal]="true" [draggable]="false"
+  class="modal--medium modal--hasFooter">
+  <app-contactgroup-finder [showCreateNewCompanyContact]="false" [isSigner] ="true" (selectedContactGroup)="getSelectedSigner($event)" (isCreatingNewGroup)="createNewSigner()">
+  </app-contactgroup-finder>
+</p-dialog>
+
+
+  <!--Success Messages -->
+  <p-toast></p-toast>

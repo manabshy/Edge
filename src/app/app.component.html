@@ -1,12 +1,13 @@
-<div class="row no-gutters app-container" #appContainer>
-  <div class="col-lg-3 col-xl-2 bg-dark side-nav" *ngIf="isLoggedIn"><app-mainmenu></app-mainmenu></div>
-  <div class="col" [ngClass]="{'fade-in': isFading}">
+<ngx-loading-bar [color]="'#4DA685'" [height]="'5px'"></ngx-loading-bar>
+<div class="wrapper" #appContainer>
+  <app-mainmenu></app-mainmenu>
+  <div class="body" [ngClass]="{'fade-in': isFading}">
+    <app-header></app-header>
     <div toastContainer></div>
     <!-- <div class="col text-muted nav-placeholder" *ngIf="navPlaceholder">
       <small>{{navPlaceholder}}</small>
     </div> -->
     <router-outlet></router-outlet>
-    <button type="button" class="btn btn-link scroll-top text-center" (click)="scrollTop()" *ngIf="isScrollTopVisible"><i class="fas fa-chevron-up"></i><br>Scroll top</button>
   </div>
 </div>
 <!-- TODO fix getcurrentuser -->

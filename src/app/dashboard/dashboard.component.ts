@@ -2,12 +2,13 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 
 import { DashboardService } from './shared/dashboard.service';
 import { Dashboard, DashboardResult, TeamDashboardResult, DashboardTotals, OffersResult, Pipeline, Instruction, Tiles } from './shared/dashboard';
-import { User } from '../core/models/user';
-import { Constants } from '../core/shared/period-list';
+import { User } from '../shared/models/user';
+import { Constants } from '../shared/period-list';
 import { TabsetComponent, TabDirective } from 'ngx-bootstrap/tabs/';
 import { AppUtils } from '../core/shared/utils';
-import { StaffMember } from '../core/models/staff-member';
+import { StaffMember } from '../shared/models/staff-member';
 import { ActivatedRoute } from '@angular/router';
+import { WedgeError, SharedService } from '../core/services/shared.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -46,15 +47,15 @@ export class DashboardComponent implements OnInit {
     this.period = this.getSelectedPeriod(this._selectedPeriod);
     this.periodKey = this.getSelectedPeriodKey(this._selectedPeriod);
     // this.getStaffMemberDashboard(this.staffMember.staffMemberId, this.role, this.selectedPeriod);
-    this.getStaffMemberDashboard(2337, this.role, this.selectedPeriod);
-    this.getTeamMembersDashboard(2337, this.role, this.selectedPeriod);
-    this.getDashboardPipeline(2337, this.role, this.selectedPeriod);
-    this.getDashboardInstructions(2337, this.role, this.selectedPeriod);
+    this.getStaffMemberDashboard(2345, this.role, this.selectedPeriod);
+    this.getTeamMembersDashboard(2345, this.role, this.selectedPeriod);
+    this.getDashboardPipeline(2345, this.role, this.selectedPeriod);
+    this.getDashboardInstructions(2345, this.role, this.selectedPeriod);
   }
   get selectedPeriod() {
     return this._selectedPeriod;
   }
-  constructor( private dashboardService: DashboardService, protected route: ActivatedRoute) { }
+  constructor( private dashboardService: DashboardService, private sharedService: SharedService, protected route: ActivatedRoute) { }
 
   ngOnInit() {
       this.route.queryParams.subscribe(params =>  {
@@ -84,8 +85,10 @@ export class DashboardComponent implements OnInit {
       .subscribe(result => {
         this.teamDashboard = result;
         this.getDashboardTotals(result);
-      });
+      }
+      );
   }
+
   getDashboardPipeline(id: number, role: string, period?: string): void {
     this.dashboardService.getDashboardPipeline(id, role, period)
       .subscribe(result => {

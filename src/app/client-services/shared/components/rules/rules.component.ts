@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { FormGroup, FormArray, FormBuilder } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { MessageService } from 'primeng/api';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { PointType } from '../../models/team-member';
 import { CsBoardService } from '../../services/cs-board.service';
@@ -11,17 +12,20 @@ import { CsBoardService } from '../../services/cs-board.service';
   styleUrls: ['./rules.component.scss']
 })
 export class RulesComponent implements OnInit {
+
+  @Output() hideModal = new EventEmitter<boolean>();
   pointTypes: PointType[] = [];
   rulesForm: FormGroup;
   selectedPointTypes: PointType[] = [];
   isSubmitting = false;
 
   get pointTypesControl(): FormArray {
-    return this.rulesForm?.get('pointTypes') as FormArray
+    return this.rulesForm?.get('pointTypes') as FormArray;
   }
 
   constructor(private boardService:
     CsBoardService, private fb: FormBuilder,
+    private messageService: MessageService,
     private toastr: ToastrService, private sharedService: SharedService) { }
 
   ngOnInit() {
@@ -49,12 +53,12 @@ export class RulesComponent implements OnInit {
 
   getSelected(index: number, value: string) {
     this.rulesForm.markAsDirty();
-    let selected = {
+    const selected = {
       pointTypeId: this.pointTypes[index].pointTypeId,
       points: this.pointTypes[index].points = +value,
-    } as PointType
+    } as PointType;
 
-    let existIndex = this.selectedPointTypes?.findIndex(p => p.pointTypeId === selected?.pointTypeId)
+    const existIndex = this.selectedPointTypes?.findIndex(p => p.pointTypeId === selected?.pointTypeId);
     if (existIndex !== -1) {
       this.selectedPointTypes[existIndex] = selected;
     } else {
@@ -67,10 +71,11 @@ export class RulesComponent implements OnInit {
     this.boardService.updatePointTypes(this.selectedPointTypes).subscribe(res => {
       if (res) {
         this.pointTypes = res;
-        this.toastr.success('Rule(s) successfully changed!');
+        this.messageService.add({ severity: 'success', summary: 'Rule(s) successfully changed', closable: false });
         this.isSubmitting = false;
+        this.hideModal.emit();
       }
-    })
+    });
   }
 
   canDeactivate(): boolean {
@@ -81,6 +86,8 @@ export class RulesComponent implements OnInit {
   }
 
   cancel() {
-    this.sharedService.back();
+    this.canDeactivate();
+    this.hideModal.emit();
   }
+
 }
