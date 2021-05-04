@@ -639,6 +639,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     let time: number;
     this.isPropertyAssociated = false;
     this.isPropertyRemoved = false;
+    this.isSubmitting = false;
     if (this.isNewLead) {
       this.canEditLead = true;
       this.messageService.add({ severity: 'success', summary: 'Lead successfully saved', closable: false });
