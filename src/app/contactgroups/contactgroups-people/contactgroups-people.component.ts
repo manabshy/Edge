@@ -101,12 +101,16 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
   addedCompany: Company;
 
   get dataNote() {
-    if (this.contactGroupDetails) {
+
+    if (this.contactGroupDetails?.contactGroupId) {
       return {
-        group: this.contactGroupDetails,
+        contactGroupId: this.contactGroupDetails.contactGroupId,
         people: this.contactGroupDetails.contactPeople,
         notes: this.contactNotes
       };
+    }
+    if (this.contactGroupId) {
+      return { contactGroupId: this.contactGroupId, notes: this.contactNotes };
     }
     return null;
   }
@@ -170,16 +174,15 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
       } // Delete isCompanyContactGroup() on confirmation
     });
     this.init();
-    this.getContactNotes();
+    this.getPagedContactNotes();
     this.contactGroupService.noteChanges$.subscribe(data => {
       if (data) {
         this.contactNotes = [];
         this.page = 1;
-        this.getContactNotes();
-        this.contactGroupService.getContactGroupbyId(this.contactGroupId).subscribe(x => {
-          this.contactGroupDetails.contactNotes = x.contactNotes;
-          this.setImportantNotes();
-        });
+        this.getPagedContactNotes();
+        if (this.contactGroupId) {
+          this.getContactNotes();
+        }
       }
     });
 
@@ -208,6 +211,14 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
 
     // Get newly added company
     this.getNewlyAddedCompany();
+
+  }
+
+  private getContactNotes() {
+    this.contactGroupService.getContactGroupbyId(this.contactGroupId).subscribe(x => {
+      this.contactGroupDetails.contactNotes = x.contactNotes;
+      this.setImportantNotes();
+    });
   }
 
   init() {
@@ -523,7 +534,7 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
     });
   }
 
-  getContactNotes() {
+  getPagedContactNotes() {
     this.bottomReached = false;
     this.getNextContactNotesPage(this.page);
   }
@@ -680,7 +691,7 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
     this.showOnlyMyNotes = onlyMyNotes;
     this.contactNotes = [];
     this.page = 1;
-    this.getContactNotes();
+    this.getPagedContactNotes();
   }
 
   getSelectedPerson(person: Person) {
@@ -1000,6 +1011,8 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
   }
 
   addNote() {
+    console.log(this.dataNote, 'data note...');
+
     this.sharedService.addNote(this.dataNote);
   }
 

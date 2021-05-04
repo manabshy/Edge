@@ -93,10 +93,10 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
         this.sideNavItems.find(x => x.name === 'notes').isCurrent = true;
       }
 
-       // Listen to changes to toggle remove sticky class
-    this.sharedService.removeSticky$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(res => {
-      res ? this.removeSticky = true : this.removeSticky = false;
-    });
+      // Listen to changes to toggle remove sticky class
+      this.sharedService.removeSticky$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(res => {
+        res ? this.removeSticky = true : this.removeSticky = false;
+      });
     });
   }
 
@@ -196,10 +196,18 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
 
   addNote() {
     event.stopPropagation();
-    const data = {
-      person: this.searchedPersonDetails,
-      isPersonNote: true
-    };
+    let data;
+    if (this.contactGroupDetails) {
+      data = {
+        group: this.contactGroupDetails,
+        people: this.contactGroupDetails.contactPeople,
+      };
+    } else {
+      data = {
+        person: this.searchedPersonDetails,
+        isPersonNote: true
+      };
+    }
     this.sharedService.addNote(data);
   }
 
