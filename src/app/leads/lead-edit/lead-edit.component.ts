@@ -695,13 +695,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     }
   }
 
-  cancel() {
+  viewRegister() {
     this.validationService.clearFormValidators(this.leadEditForm, this.formErrors);
-    if (this.isNewLead) {
-      this.sharedService.back();
-    } else {
-      this.router.navigateByUrl('leads-register');
-    }
+    this.router.navigateByUrl('leads-register');
   }
 
   getPersonNotes() {
