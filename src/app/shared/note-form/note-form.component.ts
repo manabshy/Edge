@@ -116,7 +116,7 @@ export class NoteFormComponent implements OnInit {
   }
 
   scrollToFirstInvalidField() {
-    const invalidFields = document.getElementsByClassName('is-invalid');
+    const invalidFields = document.getElementsByClassName('invalid');
     if (invalidFields.length) {
       setTimeout(() => {
         if (invalidFields[0]) {

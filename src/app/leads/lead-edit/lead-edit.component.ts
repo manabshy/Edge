@@ -463,8 +463,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
       if (isPast(parseISO(this.lead.nextChaseDate.toString())) && this.nextChaseDateControl.touched) {
         this.isNextChaseDateChanged = true;
         console.log('next chase date changes', this.note, { newChaseDate }, this.lead.nextChaseDate);
-        // this.note?.text ? this.noteIsRequired = false : this.noteIsRequired = true;
-        this.validationService.setNoteIsRequired(true);
+        const isRequired = this.note?.text ? false : true;
+        this.validationService.setNoteIsRequired(isRequired);
       } else {
         this.isNextChaseDateChanged = false;
         console.log('next chase date changes shuld be valid', this.note, { newChaseDate }, this.lead.nextChaseDate);
