@@ -533,7 +533,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
         .then(() => this.router.navigate(['leads-register/edit', 0],
           { queryParams: { isNewLead: true, showNotes: true, backToOrigin: true, exitOnSave: this.exitOnSave, personId: this.person?.personId } }));
     } else {
-      const fullName = `${this.person?.firstName} ${this.person?.middleName} ${this.person?.lastName}`;
+      const fullName = `${this.person?.firstName} ${this.person?.lastName}`;
       this.router.navigate(['property-centre', 'detail', 0, 'edit'],
         { queryParams: { isNewProperty: true, personId: this.person?.personId, lastKnownPerson: fullName, backToOrigin: true } });
     }
