@@ -159,6 +159,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     this.init();
 
     this.leadEditForm.valueChanges.subscribe(data => {
+      this.isSubmitting = false;
       data.closeLead ? this.isLeadMarkedAsClosed = true : this.isLeadMarkedAsClosed = false;
     });
 
@@ -463,8 +464,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
       if (isPast(parseISO(this.lead.nextChaseDate.toString())) && this.nextChaseDateControl.touched) {
         this.isNextChaseDateChanged = true;
         console.log('next chase date changes', this.note, { newChaseDate }, this.lead.nextChaseDate);
-        // this.note?.text ? this.noteIsRequired = false : this.noteIsRequired = true;
-        this.validationService.setNoteIsRequired(true);
+        const isRequired = this.note?.text ? false : true;
+        this.validationService.setNoteIsRequired(isRequired);
       } else {
         this.isNextChaseDateChanged = false;
         console.log('next chase date changes shuld be valid', this.note, { newChaseDate }, this.lead.nextChaseDate);
@@ -513,6 +514,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
       this.note = leadNote;
       this.isNoteFormDirty = true;
       this.noteIsRequired = false;
+      this.isSubmitting = false;
     } else { this.noteIsRequired = true; }
   }
 
@@ -524,13 +526,14 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
   }
 
   create(item: string) {
+    this.isSubmitting = true;
     if (item === 'leads') {
       localStorage.setItem('currentUrl', this.router.url);
       this.router.navigateByUrl('/', { skipLocationChange: true })
         .then(() => this.router.navigate(['leads-register/edit', 0],
           { queryParams: { isNewLead: true, showNotes: true, backToOrigin: true, exitOnSave: this.exitOnSave, personId: this.person?.personId } }));
     } else {
-      const fullName = `${this.person?.firstName} ${this.person?.middleName} ${this.person?.lastName}`;
+      const fullName = `${this.person?.firstName} ${this.person?.lastName}`;
       this.router.navigate(['property-centre', 'detail', 0, 'edit'],
         { queryParams: { isNewProperty: true, personId: this.person?.personId, lastKnownPerson: fullName, backToOrigin: true } });
     }
@@ -639,6 +642,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     let time: number;
     this.isPropertyAssociated = false;
     this.isPropertyRemoved = false;
+
     if (this.isNewLead) {
       this.canEditLead = true;
       this.messageService.add({ severity: 'success', summary: 'Lead successfully saved', closable: false });
@@ -694,13 +698,10 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     }
   }
 
-  cancel() {
+  viewRegister() {
+    this.isSubmitting = true;
     this.validationService.clearFormValidators(this.leadEditForm, this.formErrors);
-    if (this.isNewLead) {
-      this.sharedService.back();
-    } else {
-      this.router.navigateByUrl('leads-register');
-    }
+    this.router.navigateByUrl('leads-register');
   }
 
   getPersonNotes() {
@@ -730,6 +731,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
   }
 
   moveToNextLead(previous?: boolean) {
+    this.isSubmitting = true;
     console.log({ previous });
     window.scrollTo(0, 0);
     previous ? this.moveToPrevious() : this.moveToNext();

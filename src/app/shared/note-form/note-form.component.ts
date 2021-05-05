@@ -116,7 +116,7 @@ export class NoteFormComponent implements OnInit {
   }
 
   scrollToFirstInvalidField() {
-    const invalidFields = document.getElementsByClassName('is-invalid');
+    const invalidFields = document.getElementsByClassName('invalid');
     if (invalidFields.length) {
       setTimeout(() => {
         if (invalidFields[0]) {
@@ -157,9 +157,10 @@ export class NoteFormComponent implements OnInit {
     const note = { ...this.contactGroupNote, ...this.noteForm.value } as ContactNote;
     if (note && this.selectedContactGroup) {
       note.contactGroupId = this.selectedContactGroup.contactGroupId;
-    } else if (note && this.data.group.contactGroupId) {
-      note.contactGroupId = this.data.group.contactGroupId;
+    } else if (note && this.data.contactGroupId) {
+      note.contactGroupId = this.data.contactGroupId;
     }
+
     if (note && note.text) {
       this.contactGroupService.addContactGroupNote(note).subscribe(data => {
         if (data) {
@@ -173,7 +174,7 @@ export class NoteFormComponent implements OnInit {
     this.formReset();
     this.contactGroupService.notesChanged(data);
     // this.toastr.success('Note successfully added');
-    this.messageService.add({ severity: 'success', summary: 'Note successfully added', closable: false});
+    this.messageService.add({ severity: 'success', summary: 'Note successfully added', closable: false });
     this.noteSaved.emit(true);
   }
 
