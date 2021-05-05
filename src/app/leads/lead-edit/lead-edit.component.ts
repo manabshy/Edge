@@ -159,6 +159,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     this.init();
 
     this.leadEditForm.valueChanges.subscribe(data => {
+      this.isSubmitting = false;
       data.closeLead ? this.isLeadMarkedAsClosed = true : this.isLeadMarkedAsClosed = false;
     });
 
@@ -513,6 +514,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
       this.note = leadNote;
       this.isNoteFormDirty = true;
       this.noteIsRequired = false;
+      this.isSubmitting = false;
     } else { this.noteIsRequired = true; }
   }
 
@@ -524,6 +526,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
   }
 
   create(item: string) {
+    this.isSubmitting = true;
     if (item === 'leads') {
       localStorage.setItem('currentUrl', this.router.url);
       this.router.navigateByUrl('/', { skipLocationChange: true })
@@ -639,7 +642,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     let time: number;
     this.isPropertyAssociated = false;
     this.isPropertyRemoved = false;
-    this.isSubmitting = false;
+
     if (this.isNewLead) {
       this.canEditLead = true;
       this.messageService.add({ severity: 'success', summary: 'Lead successfully saved', closable: false });
@@ -727,6 +730,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
   }
 
   moveToNextLead(previous?: boolean) {
+    this.isSubmitting = true;
     console.log({ previous });
     window.scrollTo(0, 0);
     previous ? this.moveToPrevious() : this.moveToNext();
