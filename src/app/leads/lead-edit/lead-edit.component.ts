@@ -699,6 +699,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
   }
 
   viewRegister() {
+    this.isSubmitting = true;
     this.validationService.clearFormValidators(this.leadEditForm, this.formErrors);
     this.router.navigateByUrl('leads-register');
   }
