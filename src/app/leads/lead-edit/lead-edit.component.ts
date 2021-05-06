@@ -59,7 +59,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
   currentLeadIndex = 0;
   leadsListCompleted = false;
   onLoading = false;
-  isSubmitting: boolean;
+  isSubmitting = false;
   contactGroups: BasicContactGroup[];
   addressees: any[] = [];
   noteRequiredWarning: string;
@@ -506,6 +506,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
       }
       this.lead.isPropertyOwner = true;
       this.isPropertyAssociated = true;
+      this.isSubmitting = false;
       this.isMessageVisible = false;
     }
   }
