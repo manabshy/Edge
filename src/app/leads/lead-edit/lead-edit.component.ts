@@ -504,6 +504,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
         this.lead = {} as Lead;
         this.lead.relatedProperty = property;
       }
+      this.lead.isPropertyOwner = true;
       this.isPropertyAssociated = true;
       this.isMessageVisible = false;
     }
