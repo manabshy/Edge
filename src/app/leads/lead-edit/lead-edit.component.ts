@@ -463,9 +463,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
       // if (!isEqual(newChaseDate, this.lead.nextChaseDate) && this.nextChaseDateControl.touched) {
       if (isPast(parseISO(this.lead.nextChaseDate.toString())) && this.nextChaseDateControl.touched) {
         this.isNextChaseDateChanged = true;
-        console.log('next chase date changes', this.note, { newChaseDate }, this.lead.nextChaseDate);
         const isRequired = this.note?.text ? false : true;
-        this.validationService.setNoteIsRequired(isRequired);
+        console.log('next chase date changes', this.note, { newChaseDate }, this.lead.nextChaseDate, { isRequired });
+        this.validationService.setNoteIsRequired(true);
       } else {
         this.isNextChaseDateChanged = false;
         console.log('next chase date changes shuld be valid', this.note, { newChaseDate }, this.lead.nextChaseDate);
@@ -480,11 +480,11 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     this.validationService.setNoteIsRequired(lead.isClosed);
     if (lead.isClosed) {
       nextChaseDateControl.clearValidators();
+      nextChaseDateControl.updateValueAndValidity();
     } else {
       nextChaseDateControl.setValidators([Validators.required, WedgeValidators.nextChaseDateValidator()]);
+      nextChaseDateControl.updateValueAndValidity();
     }
-    nextChaseDateControl.updateValueAndValidity();
-
   }
 
   removeProperty() {
@@ -625,7 +625,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
           this.isChaseDateInvalid = false;
         }
         console.log('is chase date invalid', this.isChaseDateInvalid);
-        if (!this.isChaseDateInvalid && this.isSaveAndNext && !this.isLeadMarkedAsClosed) {
+        if (!this.isChaseDateInvalid && this.isSaveAndNext) {
           console.log('is chase date invalid 2', this.isChaseDateInvalid);
           this.moveToNextLead();
         } else {
@@ -653,11 +653,11 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
       this.messageService.add({ severity: 'success', summary: 'Lead successfully updated', closable: false, life: time });
     }
 
-
     this.isSaveAndNext = false;
     this.isUpdateComplete = true;
     this.leadsService.isLeadUpdated(true);
     this.isNextChaseDateChanged = false;
+
 
     console.log('change 2', this.isNextChaseDateChanged);
 
@@ -679,6 +679,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
         this.router.navigate(['/leads-register/edit/', this.leadId], {
           queryParams: { showNotes: true, isMyLead: true, exitOnSave: this.exitOnSave }
         });
+        console.log('HERE..', this.currentUrl);
+
       } else if (this.currentUrl) {
         this.router.navigateByUrl(this.currentUrl, { replaceUrl: true });
 
@@ -687,6 +689,10 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
         // this.canEditLead = this.isMyLead ? true : false;
         console.log('CAN EDIT ', this.canEditLead);
 
+      }
+      if (this.isLeadMarkedAsClosed) {
+        this.init();
+        this.isLeadMarkedAsClosed = false;
       }
       //  else {
       //   if (this.exitOnSave) {
