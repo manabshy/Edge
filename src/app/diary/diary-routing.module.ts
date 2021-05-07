@@ -8,7 +8,7 @@ import { MsalGuard } from '@azure/msal-angular';
 
 const routes: Routes = [
   { path: '', component: DiaryComponent, data: { shouldDetach: false, title: 'Calendar' } },
-  { path: 'edit/:id', component: AddDiaryEventComponent, canActivate: [MsalGuard], canDeactivate: [CanDeactivateGuard] },
+  { path: 'edit/:id', component: AddDiaryEventComponent, canActivate: [MsalGuard], canDeactivate: [CanDeactivateGuard] }
 ];
 
 @NgModule({

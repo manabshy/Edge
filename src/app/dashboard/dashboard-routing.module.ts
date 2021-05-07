@@ -12,7 +12,7 @@ import { MsalGuard } from '@azure/msal-angular';
 import { OverviewComponent } from './overview/overview.component';
 
 const routes: Routes = [
-  { path: 'overview', component: OverviewComponent, canActivate: [MsalGuard], data: { title: 'Overview' } },
+  { path: 'overview', component: OverviewComponent, canActivate: [MsalGuard], data: { title: 'Overview' } }
   // { path: 'list/:id', component: DashboardListComponent, canActivate: [MsalGuard] },
   // { path: 'instructionsAndBdd/:id', component: InstructionsAndBusinessDevelopmentComponent, canActivate: [MsalGuard] },
   // { path: 'exchangesAndPipeline/:id', component: ExchangesAndPipelineComponent, canActivate: [MsalGuard] },

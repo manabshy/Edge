@@ -32,7 +32,7 @@ const routes: Routes = [
       { path: 'offers', component: ContactgroupsDetailOffersComponent },
       { path: 'tenancies', component: ContactgroupsDetailTenanciesComponent },
       { path: 'lettings-managements', component: ContactgroupsDetaillettingsManagementsComponent },
-      { path: 'home-helpers', component: ContactgroupsDetailHomeHelperComponent },
+      { path: 'home-helpers', component: ContactgroupsDetailHomeHelperComponent }
     ]
   },
 ];

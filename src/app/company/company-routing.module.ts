@@ -12,7 +12,7 @@ const routes: Routes = [
     path: 'detail/:id',
     children: [
       { path: '', component: CompanyDetailComponent, data: { shouldDetach: true, title: 'Company' } },
-      { path: 'edit', component: CompanyEditComponent, canDeactivate: [CanDeactivateGuard], data: { shouldDetach: false, title: ' Company Edit' } }, // Don't cache route
+      { path: 'edit', component: CompanyEditComponent, canDeactivate: [CanDeactivateGuard], data: { shouldDetach: false, title: ' Company Edit' } } // Don't cache route
     ]
   }
 ]

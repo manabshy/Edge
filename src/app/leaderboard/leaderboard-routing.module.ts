@@ -17,7 +17,7 @@ const routes: Routes = [
       { path: '', pathMatch: 'full', redirectTo: 'pipeline' },
       { path: 'instructions', component: InstructionsComponent },
       { path: 'pipeline', component: PipelineComponent },
-      { path: 'exchanges', component: ExchangesComponent },
+      { path: 'exchanges', component: ExchangesComponent }
       // { path: 'pipeline', component: PipelineComponent, resolve: {pipelineResolver: PipeResolver} },
     ]
   }

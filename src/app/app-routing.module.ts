@@ -21,13 +21,13 @@ const routes: Routes = [
     path: 'valuations-register',
     data: { preload: true },
     loadChildren: () => import('./valuations/valuations.module').then(m => m.ValuationsModule),
-    canActivate: [MsalGuard],
+    canActivate: [MsalGuard]
   },
   {
     path: 'property-centre',
     data: { preload: true },
     loadChildren: () => import('./property/property.module').then(m => m.PropertyModule),
-    canActivate: [MsalGuard],
+    canActivate: [MsalGuard]
   },
   {
     path: 'contact-centre',
