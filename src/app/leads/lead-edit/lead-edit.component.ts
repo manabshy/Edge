@@ -694,15 +694,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
         this.init();
         this.isLeadMarkedAsClosed = false;
       }
-      //  else {
-      //   if (this.exitOnSave) {
-      //     this.replaceLeadIdInRoute(this.leadId);
-      //     // this.router.navigateByUrl('leads-register');
-      //     // this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-      //     //   this.router.navigate(['/leads-register/edit/', this.leadId]);
-      //     // });
-      //   }
-      // }
     }
   }
 
