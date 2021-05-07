@@ -657,7 +657,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     this.isUpdateComplete = true;
     this.leadsService.isLeadUpdated(true);
     this.isNextChaseDateChanged = false;
-
+    this.isOwnerChanged = false;
 
     console.log('change 2', this.isNextChaseDateChanged);
 
