@@ -8,6 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
+    "compodoc": "npx compodoc -p src/tsconfig.doc.json -d docs",
     "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points",
     "generate-icons": "svg-generator"
   },
