@@ -450,19 +450,35 @@ img {
   font-size: 9px;
   height: 12px;
 }
+
 .pill--rounded {
   font-size: 9px;
   height: 12px;
   border-radius: 50%;
+  // border: 1px solid #c4ced4;
   &.manager--color {
-    background-color: $color--info;
-    fill: $color--snow;
-    color: $color--snow;
+    background-color: #f9ccdf;
+    fill: #f9ccdf;
+    color: #f9ccdf;
+    // border: 1px solid #cdb0c7;
   }
   &.neg--color {
-    background-color: $color--blossom;
-    fill: $color--blossom;
-    color: $color--blossom;
+    background-color: #beebfa;
+    fill: #beebfa;
+    color: #beebfa;
+    // border: 1px solid #aacadd;
+  }
+  &.cs--color {
+    background-color: #c9e4da;
+    fill: #c9e4da;
+    color: #c9e4da;
+    // border: 1px solid #a9c2c2;
+  }
+  &.other--color {
+    background-color: #ffefd7;
+    fill: #ffefd7;
+    color: #ffefd7;
+    // border: 1px solid #887866;
   }
 }
 .pill--negative {

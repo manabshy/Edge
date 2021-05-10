@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnChanges, HostListener, Output, EventEmitter } from '@angular/core';
-import { ContactNote, BasicContactGroup, NoteType } from 'src/app/contactgroups/shared/contact-group';
+import { ContactNote, BasicContactGroup, NoteType, JobTypes } from 'src/app/contactgroups/shared/contact-group';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { Person } from '../models/person';
@@ -50,7 +50,7 @@ export class NotesComponent implements OnInit, OnChanges {
   emailBody: any;
   showMoreLabel = 'SHOW MORE';
   toggleShowMoreLabel: boolean = false;
-
+  jobTypes = JobTypes;
   constructor(private sharedService: SharedService,
     private contactGroupService: ContactGroupsService,
     private storage: StorageMap,
@@ -71,6 +71,8 @@ export class NotesComponent implements OnInit, OnChanges {
 
   init() {
     this.notes = this.personNotes || this.contactGroupNotes || this.propertyNotes;
+    this.setJobTypeName(this.notes);
+    console.log(this.notes, 'notes all');
     this.page = this.pageNumber;
     if (this.noteData) {
       this.noteData.people !== undefined ? this.contactPeople = this.noteData.people : this.contactPeople = [];
@@ -90,7 +92,11 @@ export class NotesComponent implements OnInit, OnChanges {
       // })
     }
   }
-
+  setJobTypeName(notes: any[]) {
+    notes.forEach(n => {
+      n.jobTypeName = this.jobTypes.get(n.jobType);
+    });
+  }
   setFlag(noteId: number, isImportantFlag: boolean) {
     this.notes.forEach((x) => {
       if (+x.id === noteId) {
@@ -127,10 +133,11 @@ export class NotesComponent implements OnInit, OnChanges {
 
   }
 
-  getClassName(roleId: number) {
-    const className = 'manager--color';
-    if (roleId === 1) { return 'manager--color'; }
-    if (roleId === 2) { return 'neg--color'; }
+  getClassName(jobType: number) {
+    const className = 'other--color';
+    if (jobType === 1) { return 'cs--color'; }
+    if (jobType === 2) { return 'manager--color'; }
+    if (jobType === 3) { return 'neg--color'; }
     return className;
   }
 
