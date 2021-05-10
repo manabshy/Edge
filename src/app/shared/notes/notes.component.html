@@ -49,7 +49,7 @@
         <span>
 
           <ng-container *ngIf="note?.createdBy !== currentStaffMember?.fullName; else current">
-            <p class="txt--title">{{note?.createdBy}}<span class="pill pill--rounded pill--onRight" [ngClass]="getClassName(note?.roleId)"></span></p>
+            <p class="txt--title">{{note?.createdBy}}<span class="pill pill--rounded pill--onRight" [ngClass]="getClassName(note?.roleId)" pTooltip="Role Here.."></span></p>
           </ng-container>
           <ng-template #current>
             <p class="txt--title">{{note?.createdBy}}<span class="pill pill--rounded pill--onRight" [ngClass]="getClassName(note?.roleId)"></span><span class="pill pill--positive pill--onRight">You</span></p>

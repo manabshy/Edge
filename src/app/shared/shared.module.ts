@@ -54,7 +54,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs/';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ModalModule } from 'ngx-bootstrap/modal/';
 import { PopoverModule } from 'ngx-bootstrap/popover';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
+// import { TooltipModule } from 'ngx-bootstrap/tooltip';
 // import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
@@ -94,6 +94,7 @@ import { TabViewModule } from 'primeng/tabview';
 import { ChipModule } from 'primeng/chip';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ChipsModule } from 'primeng/chips';
+import {TooltipModule} from 'primeng/tooltip';
 
 
 
@@ -219,7 +220,7 @@ const externalModules = [
     pipes,
     directives,
   ],
-  
+
   imports: [
     CommonModule,
     ReactiveFormsModule,
