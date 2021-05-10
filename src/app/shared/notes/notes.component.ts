@@ -127,6 +127,13 @@ export class NotesComponent implements OnInit, OnChanges {
 
   }
 
+  getClassName(roleId: number) {
+    const className = 'manager--color';
+    if (roleId === 1) { return 'manager--color'; }
+    if (roleId === 2) { return 'neg--color'; }
+    return className;
+  }
+
   onScrollDown() {
     this.onWindowScroll();
   }
