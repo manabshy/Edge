@@ -451,36 +451,6 @@ img {
   height: 12px;
 }
 
-.pill--rounded {
-  font-size: 9px;
-  height: 12px;
-  border-radius: 50%;
-  // border: 1px solid #c4ced4;
-  &.manager--color {
-    background-color: #f9ccdf;
-    fill: #f9ccdf;
-    color: #f9ccdf;
-    // border: 1px solid #cdb0c7;
-  }
-  &.neg--color {
-    background-color: #beebfa;
-    fill: #beebfa;
-    color: #beebfa;
-    // border: 1px solid #aacadd;
-  }
-  &.cs--color {
-    background-color: #c9e4da;
-    fill: #c9e4da;
-    color: #c9e4da;
-    // border: 1px solid #a9c2c2;
-  }
-  &.other--color {
-    background-color: #ffefd7;
-    fill: #ffefd7;
-    color: #ffefd7;
-    // border: 1px solid #887866;
-  }
-}
 .pill--negative {
   background-color: $color--negative;
   fill: $color--snow;
@@ -512,6 +482,45 @@ img {
   color: $color--snow;
 }
 
+/***** Blobs for job types in notes *****/
+.pill--rounded {
+  --blossom-primary: #f9ccdf;
+  --blossom-secondary: #cdb0c7;
+  --warning-primary: #ffefd7;
+  --warning-secondary: #887866;
+  --info-primary: #beebfa;
+  --info-secondary: #aacadd;
+  --positive-primary: #c9e4da;
+  --positive-secondary: #a9c2c2;
+
+  font-size: 9px;
+  height: 15px;
+
+  &.blossom--light {
+    background-color: var(--blossom-primary);
+    fill: var(--blossom-primary);
+    color: var(--blossom-primary);
+    border: 1px solid var(--blossom-secondary);
+  }
+  &.info--light {
+    background-color: var(--info-primary);
+    fill: var(--info-primary);
+    color: var(--info-primary);
+    border: 1px solid var(--info-secondary);
+  }
+  &.positive--light {
+    background-color: var(--positive-primary);
+    fill: var(--positive-primary);
+    color: var(--positive-primary);
+    border: 1px solid var(--positive-secondary);
+  }
+  &.warning--light {
+    background-color: var(--warning-primary);
+    fill: var(--warning-primary);
+    color: var(--warning-primary);
+    border: 1px solid var(--warning-secondary);
+  }
+}
 /***********************************************
 Utility Classes
 ***********************************************/

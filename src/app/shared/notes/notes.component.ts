@@ -134,10 +134,10 @@ export class NotesComponent implements OnInit, OnChanges {
   }
 
   getClassName(jobType: number) {
-    const className = 'other--color';
-    if (jobType === 1) { return 'cs--color'; }
-    if (jobType === 2) { return 'manager--color'; }
-    if (jobType === 3) { return 'neg--color'; }
+    const className = 'warning--light';
+    if (jobType === 1) { return 'positive--light'; }
+    if (jobType === 2) { return 'blossom--light'; }
+    if (jobType === 3) { return 'info--light'; }
     return className;
   }
 
