@@ -481,6 +481,17 @@ img {
   fill: $color--snow;
   color: $color--snow;
 }
+/***** Wash out colours for property address and addressee in notes *****/
+.pill--positive-light {
+  background-color: #DBEDE7;
+  fill: $color--midnight-70;
+  color: $color--midnight-70;
+}
+.pill--warning-light {
+  background-color: #FFF4E3;
+  fill: $color--midnight-70;
+  color: $color--midnight-70;
+}
 
 /***** Blobs for job types in notes *****/
 .pill--rounded {

@@ -54,7 +54,7 @@
           <ng-container >
             <p class="txt--title">{{note?.createdBy}}
               <span class="pill pill--rounded pill--onRight" [ngClass]="getClassName(note?.jobType)" [pTooltip]="note?.jobTypeName"></span>
-              <span class="pill pill--onRight">{{note?.addressee}}</span>
+              <span class="pill  pill--onRight" [ngClass]="note?.noteType===3 ? 'pill--positive-light': 'pill--warning-light'">{{note?.addressee}}</span>
               <span *ngIf="note?.createdBy === currentStaffMember?.fullName;" class="pill pill--positive pill--onRight">You</span>
             </p>
           </ng-container>
