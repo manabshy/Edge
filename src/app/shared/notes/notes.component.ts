@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, HostListener, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, HostListener, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { ContactNote, BasicContactGroup, NoteType, JobTypes } from 'src/app/contactgroups/shared/contact-group';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
@@ -15,7 +15,7 @@ import { EmailService } from 'src/app/core/services/email.service';
   templateUrl: './notes.component.html',
   styleUrls: ['./notes.component.scss']
 })
-export class NotesComponent implements OnInit, OnChanges {
+export class NotesComponent implements OnInit, OnChanges, OnDestroy {
   @Input() personId: number;
   @Input() noteData: any;
   @Input() personNotesData: any;
@@ -142,31 +142,37 @@ export class NotesComponent implements OnInit, OnChanges {
   }
 
   onScrollDown() {
-    this.onWindowScroll();
+    if (!this.bottomReached) {
+      this.page++;
+      console.log('here for id page number in notes', this.page);
+      this.setNewContactNotePageNumber();
+      this.setNewPersonNotePageNumber();
+      this.setNewPropertyNotePageNumber();
+    }
   }
 
   onScrollUp() {
   }
 
-  @HostListener('window:scroll', ['$event'])
-  onWindowScroll() {
-    let scrollHeight: number, totalHeight: number;
-    scrollHeight = document.body.scrollHeight;
-    totalHeight = window.scrollY + window.innerHeight;
-    const url = this.router.url;
-    const hasNotes = url.includes('showNotes=true');
-    if (hasNotes) {
-      if (totalHeight >= scrollHeight && !this.bottomReached) {
-        console.log('%c before initial call..........', 'color:green', this.bottomReached)
-        if (this.notes && this.notes.length) {
-          this.page++;
-          this.setNewContactNotePageNumber();
-          this.setNewPersonNotePageNumber();
-          this.setNewPropertyNotePageNumber();
-        }
-      }
-    }
-  }
+  // @HostListener('window:scroll', ['$event'])
+  // onWindowScroll() {
+  //   let scrollHeight: number, totalHeight: number;
+  //   scrollHeight = document.body.scrollHeight;
+  //   totalHeight = window.scrollY + window.innerHeight;
+  //   const url = this.router.url;
+  //   const hasNotes = url.includes('showNotes=true');
+  //   if (hasNotes) {
+  //     if (totalHeight >= scrollHeight && !this.bottomReached) {
+  //       console.log('%c before initial call..........', 'color:green', this.bottomReached)
+  //       if (this.notes && this.notes.length) {
+  //         this.page++;
+  //         this.setNewContactNotePageNumber();
+  //         this.setNewPersonNotePageNumber();
+  //         this.setNewPropertyNotePageNumber();
+  //       }
+  //     }
+  //   }
+  // }
 
   private setNewPropertyNotePageNumber() {
     if (this.isPropertyNote) {
@@ -222,5 +228,9 @@ export class NotesComponent implements OnInit, OnChanges {
         note.emailBody = res;
       });
     }
+  }
+
+  ngOnDestroy() {
+    this.notes = [];
   }
 }

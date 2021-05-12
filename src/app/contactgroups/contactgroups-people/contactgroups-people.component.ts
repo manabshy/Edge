@@ -7,7 +7,7 @@ import {
   ContactType, CompanyAutoCompleteResult, Company, PotentialDuplicateResult, ContactNote
 } from '../shared/contact-group';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { distinctUntilChanged, switchMap, catchError, tap } from 'rxjs/operators';
+import { distinctUntilChanged, switchMap, catchError, tap, takeUntil, take } from 'rxjs/operators';
 import { Subject, Observable, EMPTY } from 'rxjs';
 import { BsModalService } from 'ngx-bootstrap/modal/';
 import { ConfirmModalComponent } from 'src/app/shared/confirm-modal/confirm-modal.component';
@@ -78,7 +78,7 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
   isCompanyAdded = true;
   importantPeopleNotes: ContactNote[];
   contactNotes: ContactNote[] = [];
-  page = 1;
+  page = 0;
   bottomReached: boolean;
   pageSize = 10;
   suggestions: (text$: Observable<string>) => Observable<any[]>;
@@ -99,7 +99,7 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
   groupType: string;
   backToOrigin = false;
   addedCompany: Company;
-
+  destroy = new Subject();
   get dataNote() {
 
     if (this.contactGroupDetails?.contactGroupId) {
@@ -186,7 +186,7 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.contactGroupService.contactNotePageChanges$.subscribe(newPageNumber => {
+    this.contactGroupService.contactNotePageChanges$.pipe(takeUntil(this.destroy)).subscribe(newPageNumber => {
       this.page = newPageNumber;
       this.getNextContactNotesPage(this.page);
     });
@@ -1034,7 +1034,7 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.setPageLabel(true);
-
+    this.destroy.next();
     console.log('destroy component now');
 
   }

@@ -28,7 +28,7 @@ import { MessageService } from 'primeng/api';
 import { ValidationService } from 'src/app/core/services/validation.service';
 import { zonedTimeToUtc } from 'date-fns-tz';
 import enGB from 'date-fns/locale/en-GB';
-import { combineLatest } from 'rxjs';
+import { combineLatest, Subject } from 'rxjs';
 const londonTimeZone = 'Europe/London';
 
 @Component({
@@ -51,7 +51,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
   person: Person;
   subNav = LeadEditSubNavItems;
   summaryTotals: PersonSummaryFigures;
-  page = 1;
+  page = 0;
   pageSize = 20;
   bottomReached = false;
   leadOwner: StaffMember;
@@ -108,6 +108,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
   removeSticky = false;
   clearValidationErrors = false;
   isLeadTypeChanged = false;
+  destroy = new Subject();
+
   get nextChaseDateControl() {
     return this.leadEditForm.get('nextChaseDate') as FormControl;
   }
@@ -282,7 +284,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
       }
     });
 
-    this.contactGroupService.personNotePageChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(newPageNumber => {
+    this.contactGroupService.personNotePageChanges$.pipe(takeUntil(this.destroy)).subscribe(newPageNumber => {
       this.page = newPageNumber;
       if (this.personId == null) {
         this.page = 1;
@@ -831,6 +833,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     const contactGroups: SideNavItem = { name: 'contactGroups', isCurrent: false };
     this.sideNavItems.splice(1, 0, contactGroups);
     this.sidenavService.resetCurrentFlag();
+    this.destroy.next();
   }
 }
 
