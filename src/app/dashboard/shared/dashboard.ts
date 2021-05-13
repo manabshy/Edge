@@ -252,112 +252,133 @@ export enum OfferStatus {
   OffersReceived = 'OffersReceived'
 }
 
-  /**
-   * Tiles available to the sales manager
-   */
-  export const SalesManagerTiles = [
-    [
-      Tiles.Valuations,
-      Tiles.Instructions,
-    ],
-    [
-      Tiles.BusinessDevelopment,
-      Tiles.AllInstructions
-    ],
-    [
-      Tiles.Exchanges,
-      Tiles.Pipeline
-    ]
-  ];
-
-  /**
-   * Available team metrics for the sales manager
-   */
-  export const SalesManagerTeamTiles = [
+/**
+ * Tiles available to the sales manager
+ */
+export const SalesManagerTiles = [
+  [
     Tiles.Valuations,
     Tiles.Instructions,
+  ],
+  [
     Tiles.BusinessDevelopment,
-    Tiles.AllInstructions,
+    Tiles.AllInstructions
+  ],
+  [
     Tiles.Exchanges,
-    Tiles.Pipeline,
+    Tiles.Pipeline
+  ]
+];
 
-  ];
+/**
+ * Available team metrics for the sales manager
+ */
+export const SalesManagerTeamTiles = [
+  Tiles.Valuations,
+  Tiles.Instructions,
+  Tiles.BusinessDevelopment,
+  Tiles.AllInstructions,
+  Tiles.Exchanges,
+  Tiles.Pipeline,
 
-  /**
-   * Tiles available to the lettings manager
-   */
-  export const LettingsManagerTiles = [
-    [
-      Tiles.Valuations,
-      Tiles.NewInstructions,
-      Tiles.ReletInstructions
-    ],
-    [
-      Tiles.BusinessDevelopment,
-      Tiles.AllInstructions
-    ],
-    [
-      Tiles.Exchanges,
-      Tiles.Pipeline
-    ],
-    [
-      Tiles.LiveTenancies
-    ]
-  ];
+];
 
-  /**
-   * Available metrics for the lettings manager
-   */
-  export const LettingsManagerTeamTiles = [
+/**
+ * Tiles available to the lettings manager
+ */
+export const LettingsManagerTiles = [
+  [
     Tiles.Valuations,
     Tiles.NewInstructions,
-    Tiles.ReletInstructions,
+    Tiles.ReletInstructions
+  ],
+  [
     Tiles.BusinessDevelopment,
-    Tiles.AllInstructions,
+    Tiles.AllInstructions
+  ],
+  [
     Tiles.Exchanges,
-    Tiles.Pipeline,
-    Tiles.LiveTenancies,
-  ];
+    Tiles.Pipeline
+  ],
+  [
+    Tiles.LiveTenancies
+  ]
+];
 
-  /**
-   * Tiles available to the negotiator
-   */
-  export const NegotiatorTiles = [
-    [
-      Tiles.Applicants,
-      Tiles.Viewings
-    ],
-    [
-      Tiles.OffersReceived,
-      Tiles.OffersAgreed
-    ],
-    [
-      Tiles.Exchanges,
-      Tiles.Pipeline
-    ]
-  ];
+/**
+ * Available metrics for the lettings manager
+ */
+export const LettingsManagerTeamTiles = [
+  Tiles.Valuations,
+  Tiles.NewInstructions,
+  Tiles.ReletInstructions,
+  Tiles.BusinessDevelopment,
+  Tiles.AllInstructions,
+  Tiles.Exchanges,
+  Tiles.Pipeline,
+  Tiles.LiveTenancies,
+];
 
-  /**
-   * Available metrics for the lettings manager
-   */
-  export const NegotiatorTeamTiles = [
+/**
+ * Tiles available to the negotiator
+ */
+export const NegotiatorTiles = [
+  [
     Tiles.Applicants,
-    Tiles.Viewings,
+    Tiles.Viewings
+  ],
+  [
     Tiles.OffersReceived,
-    Tiles.OffersAgreed,
+    Tiles.OffersAgreed
+  ],
+  [
     Tiles.Exchanges,
-    Tiles.Pipeline,
-  ];
+    Tiles.Pipeline
+  ]
+];
 
-export enum ApiPeriods {
+/**
+ * Available metrics for the lettings manager
+ */
+export const NegotiatorTeamTiles = [
+  Tiles.Applicants,
+  Tiles.Viewings,
+  Tiles.OffersReceived,
+  Tiles.OffersAgreed,
+  Tiles.Exchanges,
+  Tiles.Pipeline,
+];
+
+export interface ReportingMonth {
+  endDate: Date;
+  month: number;
+  startDate: Date;
+  year: number;
+}
+
+export enum PeriodsEnum {
+  Today = 'Today',
   Week = 'ThisWeek',
   Month = 'ThisMonth',
   Quarter = 'ThisQuarter',
   Year = 'ThisYear',
-  All = 'All'
+  Custom = 'Custom'
 }
 
-export enum OfferLettingStatus{
+export const Periods = new Map([
+  [PeriodsEnum.Week, 'This Week']
+]);
+
+export const PeriodList = [
+  { value: 'Today', name: 'Today' },
+  { value: 'ThisWeek', name: 'This Week' },
+  { value: 'ThisMonth', name: 'This Month' },
+  { value: 'ThisQuarter', name: 'This Quarter' },
+  { value: 'ThisYear', name: 'This Year' },
+  { value: 'Custom', name: 'Custom' }
+];
+
+export enum OfferLettingStatus {
   OfferReceived = 1,
   OfferNotAgreed = 2,
   OfferAgreed = 4,
@@ -366,7 +387,7 @@ export enum OfferLettingStatus{
   Let = 16,
   LetEnded = 32
 }
-export enum OfferSaleStatus{
+export enum OfferSaleStatus {
   OfferReceived = 1,
   OfferNotAgreed = 2,
   SaleAgreed = 4,
