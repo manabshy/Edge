@@ -7,6 +7,7 @@ import { StaffMember, Impersonation, ApiRole, Permissions, Permission, Permissio
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { take } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-mainmenu',
@@ -29,7 +30,7 @@ export class MainmenuComponent implements OnInit {
   showMobileMenu = false;
   canSeeCsBoard = false;
   showMobileProfile: boolean;
-  isLiveEnvironment = false;
+  isNonProdEnvironment: boolean;
 
   get isLeaderboardVisible() {
     if (this.currentStaffMember) {
@@ -54,7 +55,10 @@ export class MainmenuComponent implements OnInit {
       this.setAdminPanelAccess(this.currentStaffMember?.permissions);
       console.log('current user from storage in main menu....', this.currentStaffMember);
     });
-    this.isLiveEnvironment = location.href.includes('https://edge.dng.co.uk') ? true : false;
+
+    if (environment.production) {
+      this.isNonProdEnvironment = location.href.includes('https://edge.dng.co.uk') ? false : true;
+    }
   }
 
   setAdminPanelAccess(permissions: Permission[]) {

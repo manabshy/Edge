@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { StorageMap } from '@ngx-pwa/local-storage';
-import { addDays, addHours, isBefore, isEqual, setHours, setMinutes, setSeconds, startOfWeek, subHours, subMonths } from 'date-fns';
-import { isAfter } from 'date-fns/esm';
+import { addDays, addHours, isBefore, isAfter, isEqual, setHours, setMinutes, setSeconds, startOfWeek, subHours, subMonths } from 'date-fns';
+// import { isAfter } from 'date-fns/esm';
 import { PeriodsEnum, ReportingMonth } from 'src/app/dashboard/shared/dashboard';
 import { ResultData } from 'src/app/shared/result-data';
 import { DropdownListInfo, InfoService } from './info.service';
@@ -36,7 +36,6 @@ export class PeriodService {
 
 
   getReportingQuarter(reportingMonth: ReportingMonth) {
-
     const quarterNumber = Math.floor(reportingMonth.month / 4);
     const quarterStartMonth = (quarterNumber * 3) + 1;
     const startOfQuarter = this.reportingMonths.find(x => x.month === quarterStartMonth && x.year === reportingMonth.year);
@@ -45,10 +44,20 @@ export class PeriodService {
     return startOfQuarter?.startDate;
   }
 
+  getEndOfReportingQuarter(reportingMonth: ReportingMonth) {
+    const quarterNumber = Math.floor(reportingMonth.month / 4);
+    const quarterStartMonth = (quarterNumber * 3) + 3;
+    const endOfQuarter = this.reportingMonths.find(x => x.month === quarterStartMonth && x.year === reportingMonth.year);
+    console.log({ endOfQuarter });
+
+    return endOfQuarter?.endDate;
+  }
+
   getReportingYear(reportingMonth: ReportingMonth) {
     const startOfYear = this.reportingMonths.find(x => x.year === reportingMonth.year && x.month === 1);
     return startOfYear.startDate;
   }
+
 
   getInterval(period?: PeriodsEnum, customStartDate?: Date, customEndDate?: Date) {
     if (period == null) { period = PeriodsEnum.ThisMonth; }
@@ -69,7 +78,7 @@ export class PeriodService {
         break;
       case PeriodsEnum.ThisWeek:
         periodStartDate = new Date(startOfWeek(currentDate, { weekStartsOn: 6 })); // 17:00
-        periodEndDate = addDays(new Date(periodStartDate.setHours(16, 59)), 6); // 16:59
+        periodEndDate = addDays(new Date(periodStartDate.setHours(16, 59, 59)), 6); // 16:59
         periodStartDate.setHours(17, 0);
         break;
       case PeriodsEnum.ThisMonth:
@@ -78,11 +87,13 @@ export class PeriodService {
         break;
       case PeriodsEnum.ThisQuarter:
         periodStartDate = addHours(new Date(this.getReportingQuarter(reportingMonth)), 17); // 17:00
-        periodEndDate = this.getCurrentReportingMonthEndDate(reportingMonth); // current reporting month end (16:59)
+        periodEndDate = subHours(new Date(this.getEndOfReportingQuarter(reportingMonth)), 7); // current reporting month end (16:59)
+        // periodEndDate = this.getCurrentReportingMonthEndDate(reportingMonth); // current reporting month end (16:59)
         break;
       case PeriodsEnum.ThisYear:
         periodStartDate = addHours(new Date(this.getReportingYear(reportingMonth)), 17); // 17:00
-        periodEndDate = this.getCurrentReportingMonthEndDate(reportingMonth); // current reporting month end (16:59)
+        periodEndDate = subHours(new Date(this.reportingMonths[this.reportingMonths?.length - 1]?.endDate), 7); // current reporting month end (16:59)
+        // periodEndDate = this.getCurrentReportingMonthEndDate(reportingMonth); // current reporting month end (16:59)
         break;
       case PeriodsEnum.Custom:
         if (isEqual(customStartDate, customEndDate)) {
