@@ -358,15 +358,15 @@ export interface ReportingMonth {
 
 export enum PeriodsEnum {
   Today = 'Today',
-  Week = 'ThisWeek',
-  Month = 'ThisMonth',
-  Quarter = 'ThisQuarter',
-  Year = 'ThisYear',
+  ThisWeek = 'ThisWeek',
+  ThisMonth = 'ThisMonth',
+  ThisQuarter = 'ThisQuarter',
+  ThisYear = 'ThisYear',
   Custom = 'Custom'
 }
 
 export const Periods = new Map([
-  [PeriodsEnum.Week, 'This Week']
+  [PeriodsEnum.ThisWeek, 'This Week']
 ]);
 
 export const PeriodList = [
