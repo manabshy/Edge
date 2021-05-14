@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { StorageMap } from '@ngx-pwa/local-storage';
-import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { AuthService } from '../core/services/auth.service';
-import { HeaderService } from '../core/services/header.service';
 import { StaffMemberService } from '../core/services/staff-member.service';
 import { BaseStaffMember } from '../shared/models/base-staff-member';
 import { StaffMember } from '../shared/models/staff-member';
@@ -21,30 +19,20 @@ export class ProfileComponent implements OnInit {
   impersonatedStaffMember: BaseStaffMember;
   ref: DynamicDialogRef;
   isImpersonating = false;
-  constructor(public authService: AuthService,
-    private storage: StorageMap,
-    private staffMemberService: StaffMemberService,
-    private dialogService: DialogService,
-    private headerService: HeaderService,
-    private route: ActivatedRoute,
-    private router: Router) { }
+  constructor(public authService: AuthService, private storage: StorageMap, private staffMemberService: StaffMemberService) { }
 
   ngOnInit(): void {
     this.storage.get('impersonatedStaffMember').subscribe((staffMember: BaseStaffMember) => {
       if (staffMember) {
         this.impersonatedStaffMember = staffMember;
         this.isImpersonating = true;
-        console.log('selected id:', staffMember);
       }
     });
 
     this.storage.get('currentUser').subscribe((data: StaffMember) => {
       if (data) {
         this.currentStaffMember = data;
-      } else {
-        this.staffMemberService.getCurrentStaffMember().subscribe(res => this.currentStaffMember = res);
-      }
-      console.log('current user from storage in main menu....', this.currentStaffMember);
+      } else { this.staffMemberService.getCurrentStaffMember().subscribe(res => this.currentStaffMember = res); }
     });
 
   }
@@ -67,26 +55,23 @@ export class ProfileComponent implements OnInit {
       localStorage.removeItem('impersonatedStaffMemberId');
       localStorage.removeItem('listingType');
       this.storage.delete('impersonatedStaffMember').subscribe();
-      this.storage.get('originalUser').subscribe((data: StaffMember) => {
-        if (data) {
-          this.currentStaffMember = data;
-          this.storage.set('currentUser', data).subscribe(() => {
-            this.storage.delete('originalUser').subscribe();
-            location.reload();
-          });
-        }
-      });
-    } else {
-      this.showImpersonation = true;
-    }
-    // if (!stop) {
-    //   this.showImpersonation = true;
-    //   // this.ref = this.dialogService.open(ImpersonateMemberComponent,{styleClass: 'dialog dialog--medium', header:'Select Staff Member'})
-    // }
+      this.resetCurrentUser();
+    } else { this.showImpersonation = true; }
+  }
+
+  private resetCurrentUser() {
+    this.storage.get('originalUser').subscribe((data: StaffMember) => {
+      if (data) {
+        this.currentStaffMember = data;
+        this.storage.set('currentUser', data).subscribe(() => {
+          this.storage.delete('originalUser').subscribe();
+          location.reload();
+        });
+      }
+    });
   }
 
   getSelectedStaffMember(member: BaseStaffMember) {
-    console.log({ member });
     this.impersonatedStaffMember = member;
   }
 
@@ -98,13 +83,9 @@ export class ProfileComponent implements OnInit {
     this.isImpersonating = true;
     this.showImpersonation = false;
 
-    // this.currentStaffMember.fullName = this.impersonatedStaffMember.fullName;
-    // this.currentStaffMember.photoUrl = null;
     this.storage.set('impersonatedStaffMember', this.impersonatedStaffMember).subscribe();
     localStorage.setItem('impersonatedStaffMemberId', JSON.stringify(this.impersonatedStaffMember.staffMemberId));
     this.staffMemberService.impersonatedStaffMemberChanged(this.impersonatedStaffMember);
-    // this.getCurrentUser();
-
   }
 
 }

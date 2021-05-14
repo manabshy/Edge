@@ -15,6 +15,7 @@ import { environment } from 'src/environments/environment';
 import manifest from 'src/manifest.json';
 import { ConfigsLoaderService } from './configs-loader.service';
 import { BaseStaffMember } from './shared/models/base-staff-member';
+import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 
 @Component({
   selector: 'app-root',
@@ -27,6 +28,7 @@ export class AppComponent extends BaseComponent implements OnInit {
   isCurrentUserAvailable = false;
   currentStaffMember: StaffMember;
   listInfo: any;
+  locale = 'en-gb';
 
   @ViewChild('appContainer', { static: true }) appContainer: ElementRef;
   @ViewChild(ToastContainerDirective, { static: true }) toastContainer: ToastContainerDirective;
@@ -44,6 +46,7 @@ export class AppComponent extends BaseComponent implements OnInit {
     private infoService: InfoService,
     private storage: StorageMap,
     protected staffMemberService: StaffMemberService,
+    private localeService: BsLocaleService,
     private configLoaderService: ConfigsLoaderService,
     private edgeServiceWorker: EdgeServiceWorkerService,
     private renderer: Renderer2,
@@ -51,6 +54,7 @@ export class AppComponent extends BaseComponent implements OnInit {
     private serviceWorker: EdgeServiceWorkerService,
     private cdRef: ChangeDetectorRef) {
     super();
+    this.localeService.use(this.locale);
     this.setupEnvironmentVariables();
     this.setIsFadingFlag();
     this.updateOnAllowedRoutes();

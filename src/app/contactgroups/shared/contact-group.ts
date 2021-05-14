@@ -111,6 +111,8 @@ export interface BaseNote {
   createDate: Date;
   createdBy: number;
   noteType?: number;
+  jobType?: number;
+  jobTypeName?: string;
   hasEmailBody?: boolean;
   emailBody?: string;
 }
@@ -209,7 +211,21 @@ export enum NoteType {
   Notes = 0,
   Emails = 1,
   SMS = 2,
+  Property = 3
 }
+export enum JobTypeEnum {
+  Other = 0,
+  ClientServices = 1,
+  Manager = 2,
+  Negotiatior = 3
+}
+export const JobTypes = new Map([
+  [JobTypeEnum.Other, 'Other'],
+  [JobTypeEnum.ClientServices, 'Client Services'],
+  [JobTypeEnum.Manager, 'Manager or Broker'],
+  [JobTypeEnum.Negotiatior, 'Negotiator'],
+]);
+
 export interface CompanyContactDetails {
   telephone: string;
   fax: string;

@@ -4,6 +4,7 @@ import { shareReplay, tap, map } from 'rxjs/operators';
 import { AppConstants } from '../shared/app-constants';
 import { HttpClient } from '@angular/common/http';
 import { StorageMap } from '@ngx-pwa/local-storage';
+import { ReportingMonth } from 'src/app/dashboard/shared/dashboard';
 
 const CACHE_SIZE = 1;
 @Injectable({
@@ -67,9 +68,10 @@ export interface DropdownListInfo {
   origins: InfoDetail[];
   diaryEventTypes: InfoDetail[];
   referralCompanies: InfoDetail[];
+  reportingMonths: ReportingMonth[];
 }
 
-export interface InfoDetail extends LeadTypeInfo{
+export interface InfoDetail extends LeadTypeInfo {
   id: number;
   value: string;
   parentId?: number;

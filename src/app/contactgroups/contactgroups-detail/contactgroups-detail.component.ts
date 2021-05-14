@@ -9,9 +9,10 @@ import { InfoService } from 'src/app/core/services/info.service';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { BaseComponent } from 'src/app/shared/models/base-component';
 import * as _ from 'lodash';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { SubNavItem } from 'src/app/shared/subnav';
 import { SidenavService } from 'src/app/core/services/sidenav.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-contactgroups-detail',
@@ -29,7 +30,7 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
   searchedPersonCompanyName: string;
   contactGroupId: number;
   personId = 0;
-  page = 1;
+  page = 0;
   pageSize = 20;
   personNotes: ContactNote[] = [];
   bottomReached = false;
@@ -42,8 +43,8 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
   moreInfo = this.sidenavService.selectedItem = 'notes';
   sideNavItems = this.sidenavService.sideNavItems;
   showOnlyMyNotes = false;
-  removeSticky: boolean = false;
-
+  removeSticky = false;
+  destroy = new Subject();
   get dataNote() {
     return {
       personId: this.personId
@@ -111,7 +112,7 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
     this.getSearchedPersonDetails(this.personId);
     this.getSearchedPersonContactGroups(this.personId);
     this.getSearchedPersonSummaryInfo(this.personId);
-    this.getPersonNotes();
+    // this.getPersonNotes();
 
     this.contactGroupService.noteChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
       if (data) {
@@ -122,7 +123,9 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
       }
     });
 
-    this.contactGroupService.personNotePageChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(newPageNumber => {
+    this.contactGroupService.personNotePageChanges$.pipe(takeUntil(this.destroy)).subscribe(newPageNumber => {
+      console.log({ newPageNumber }, 'here for id page number', this.page);
+
       this.page = newPageNumber;
       this.getNextPersonNotesPage(this.page);
     });
@@ -237,6 +240,7 @@ export class ContactgroupsDetailComponent extends BaseComponent implements OnIni
   }
   ngOnDestroy() {
     this.sidenavService.resetCurrentFlag();
+    this.destroy.next();
   }
 
 }

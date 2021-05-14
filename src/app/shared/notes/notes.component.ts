@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, OnChanges, HostListener, Output, EventEmitter } from '@angular/core';
-import { ContactNote, BasicContactGroup, NoteType } from 'src/app/contactgroups/shared/contact-group';
+import { Component, OnInit, Input, OnChanges, HostListener, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { ContactNote, BasicContactGroup, NoteType, JobTypes } from 'src/app/contactgroups/shared/contact-group';
 import { SharedService } from 'src/app/core/services/shared.service';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
 import { Person } from '../models/person';
@@ -15,7 +15,7 @@ import { EmailService } from 'src/app/core/services/email.service';
   templateUrl: './notes.component.html',
   styleUrls: ['./notes.component.scss']
 })
-export class NotesComponent implements OnInit, OnChanges {
+export class NotesComponent implements OnInit, OnChanges, OnDestroy {
   @Input() personId: number;
   @Input() noteData: any;
   @Input() personNotesData: any;
@@ -50,7 +50,7 @@ export class NotesComponent implements OnInit, OnChanges {
   emailBody: any;
   showMoreLabel = 'SHOW MORE';
   toggleShowMoreLabel: boolean = false;
-
+  jobTypes = JobTypes;
   constructor(private sharedService: SharedService,
     private contactGroupService: ContactGroupsService,
     private storage: StorageMap,
@@ -71,6 +71,8 @@ export class NotesComponent implements OnInit, OnChanges {
 
   init() {
     this.notes = this.personNotes || this.contactGroupNotes || this.propertyNotes;
+    this.setJobTypeName(this.notes);
+    console.log(this.notes, 'notes all');
     this.page = this.pageNumber;
     if (this.noteData) {
       this.noteData.people !== undefined ? this.contactPeople = this.noteData.people : this.contactPeople = [];
@@ -90,7 +92,11 @@ export class NotesComponent implements OnInit, OnChanges {
       // })
     }
   }
-
+  setJobTypeName(notes: any[]) {
+    notes.forEach(n => {
+      n.jobTypeName = this.jobTypes.get(n.jobType);
+    });
+  }
   setFlag(noteId: number, isImportantFlag: boolean) {
     this.notes.forEach((x) => {
       if (+x.id === noteId) {
@@ -127,32 +133,46 @@ export class NotesComponent implements OnInit, OnChanges {
 
   }
 
+  getClassName(jobType: number) {
+    const className = 'warning--light';
+    if (jobType === 1) { return 'positive--light'; }
+    if (jobType === 2) { return 'blossom--light'; }
+    if (jobType === 3) { return 'info--light'; }
+    return className;
+  }
+
   onScrollDown() {
-    this.onWindowScroll();
+    if (!this.bottomReached) {
+      this.page++;
+      console.log('here for id page number in notes', this.page);
+      this.setNewContactNotePageNumber();
+      this.setNewPersonNotePageNumber();
+      this.setNewPropertyNotePageNumber();
+    }
   }
 
   onScrollUp() {
   }
 
-  @HostListener('window:scroll', ['$event'])
-  onWindowScroll() {
-    let scrollHeight: number, totalHeight: number;
-    scrollHeight = document.body.scrollHeight;
-    totalHeight = window.scrollY + window.innerHeight;
-    const url = this.router.url;
-    const hasNotes = url.includes('showNotes=true');
-    if (hasNotes) {
-      if (totalHeight >= scrollHeight && !this.bottomReached) {
-        console.log('%c before initial call..........', 'color:green', this.bottomReached)
-        if (this.notes && this.notes.length) {
-          this.page++;
-          this.setNewContactNotePageNumber();
-          this.setNewPersonNotePageNumber();
-          this.setNewPropertyNotePageNumber();
-        }
-      }
-    }
-  }
+  // @HostListener('window:scroll', ['$event'])
+  // onWindowScroll() {
+  //   let scrollHeight: number, totalHeight: number;
+  //   scrollHeight = document.body.scrollHeight;
+  //   totalHeight = window.scrollY + window.innerHeight;
+  //   const url = this.router.url;
+  //   const hasNotes = url.includes('showNotes=true');
+  //   if (hasNotes) {
+  //     if (totalHeight >= scrollHeight && !this.bottomReached) {
+  //       console.log('%c before initial call..........', 'color:green', this.bottomReached)
+  //       if (this.notes && this.notes.length) {
+  //         this.page++;
+  //         this.setNewContactNotePageNumber();
+  //         this.setNewPersonNotePageNumber();
+  //         this.setNewPropertyNotePageNumber();
+  //       }
+  //     }
+  //   }
+  // }
 
   private setNewPropertyNotePageNumber() {
     if (this.isPropertyNote) {
@@ -208,5 +228,9 @@ export class NotesComponent implements OnInit, OnChanges {
         note.emailBody = res;
       });
     }
+  }
+
+  ngOnDestroy() {
+    this.notes = [];
   }
 }

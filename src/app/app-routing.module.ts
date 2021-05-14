@@ -21,13 +21,13 @@ const routes: Routes = [
     path: 'valuations-register',
     data: { preload: true },
     loadChildren: () => import('./valuations/valuations.module').then(m => m.ValuationsModule),
-    canActivate: [MsalGuard],
+    canActivate: [MsalGuard]
   },
   {
     path: 'property-centre',
     data: { preload: true },
     loadChildren: () => import('./property/property.module').then(m => m.PropertyModule),
-    canActivate: [MsalGuard],
+    canActivate: [MsalGuard]
   },
   {
     path: 'contact-centre',
@@ -44,6 +44,10 @@ const routes: Routes = [
   {
     path: 'admin-panel',
     loadChildren: () => import('./client-services/client-services.module').then(m => m.ClientServicesModule), canActivate: [MsalGuard]
+  },
+  {
+    path: 'dashboard',
+    loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule), canActivate: [MsalGuard]
   },
   { path: '', component: CalendarComponent, canActivate: [MsalGuard], data: { title: 'Calendar' } },
   // { path: '', component: HomeComponent, canActivate: [MsalGuard], data: { title: 'Calendar' } },
