@@ -29,6 +29,7 @@ export class MainmenuComponent implements OnInit {
   showMobileMenu = false;
   canSeeCsBoard = false;
   showMobileProfile: boolean;
+  isLiveEnvironment = false;
 
   get isLeaderboardVisible() {
     if (this.currentStaffMember) {
@@ -53,6 +54,7 @@ export class MainmenuComponent implements OnInit {
       this.setAdminPanelAccess(this.currentStaffMember?.permissions);
       console.log('current user from storage in main menu....', this.currentStaffMember);
     });
+    this.isLiveEnvironment = location.href.includes('https://edge.dng.co.uk') ? true : false;
   }
 
   setAdminPanelAccess(permissions: Permission[]) {
