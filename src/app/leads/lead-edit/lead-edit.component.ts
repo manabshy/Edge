@@ -136,25 +136,32 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
 
   ngOnInit() {
     AppUtils.parentRoute = AppUtils.prevRoute;
-    const allParams$ = combineLatest([this.route.params, this.route.queryParamMap])
-      .pipe(
-        map(([params, queryParams]) => ({ params, queryParams })));
-
-    allParams$.subscribe(res => {
-      this.setupQueryParams(res.queryParams);
-      this.leadId = +res.params['leadId'] || 0;
-      console.log('showSaveAndNext', this.showSaveAndNext);
-
-      // Add !this.isIdInCurrentList(this.leadId) to reduce API calls. combineLatest (2 API calls)
-      if (this.leadId && this.showSaveAndNext && !this.isIdInCurrentList(this.leadId)) {
-        this.getLeadIds(this.leadId);
-      }
-
+    this.route.queryParamMap.subscribe(params => {
+      this.setupQueryParams(params);
+      this.getLeadIdsForTraversal();
       this.hideFooter = !(this.showSaveAndNext || this.isNewLead || this.isMyLead) ? true : false;
       console.log(this.hideFooter, 'hide footer');
+    });
 
-    }
-    );
+    // const allParams$ = combineLatest([this.route.params, this.route.queryParamMap])
+    //   .pipe(
+    //     map(([params, queryParams]) => ({ params, queryParams })));
+
+    // allParams$.subscribe(res => {
+    //   this.setupQueryParams(res.queryParams);
+    //   this.leadId = +res.params['leadId'] || 0;
+    //   console.log('showSaveAndNext', this.showSaveAndNext, this.leadId, 'lead id duplicate');
+
+    //   // Add !this.isIdInCurrentList(this.leadId) to reduce API calls. combineLatest (2 API calls)
+    //   if (this.leadId && this.showSaveAndNext && !this.isIdInCurrentList(this.leadId)) {
+    //     this.getLeadIds(this.leadId);
+    //   }
+
+    //   this.hideFooter = !(this.showSaveAndNext || this.isNewLead || this.isMyLead) ? true : false;
+    //   console.log(this.hideFooter, 'hide footer');
+
+    // }
+    // );
 
 
     this.onLoading = true;
@@ -177,6 +184,15 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     // Listen to changes to toggle remove sticky class
     this.sharedService.removeSticky$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(res => {
       res ? this.removeSticky = true : this.removeSticky = false;
+    });
+  }
+
+  private getLeadIdsForTraversal() {
+    this.route.params.subscribe(params => {
+      this.leadId = +params['leadId'] || 0;
+      if (this.leadId && this.showSaveAndNext && !this.isIdInCurrentList(this.leadId)) {
+        this.getLeadIds(this.leadId);
+      }
     });
   }
 
@@ -714,16 +730,18 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
 
   private getNextPersonNotesPage(page: number) {
 
-    this.contactGroupService.getPersonNotes(this.personId, this.pageSize, page, this.showOnlyMyNotes).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
-      if (data) {
-        if (page === 1) {
-          this.personNotes = data;
-        } else {
-          this.personNotes = _.concat(this.personNotes, data);
+    if (this.personId) {
+      this.contactGroupService.getPersonNotes(this.personId, this.pageSize, page, this.showOnlyMyNotes).pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
+        if (data) {
+          if (page === 1) {
+            this.personNotes = data;
+          } else {
+            this.personNotes = _.concat(this.personNotes, data);
+          }
         }
-      }
-      this.setBottomReachedFlag(data);
-    });
+        this.setBottomReachedFlag(data);
+      });
+    }
   }
 
   private setBottomReachedFlag(result: any) {
