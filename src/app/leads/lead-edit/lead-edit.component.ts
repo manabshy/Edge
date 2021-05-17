@@ -143,6 +143,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
       console.log(this.hideFooter, 'hide footer');
     });
 
+
     // const allParams$ = combineLatest([this.route.params, this.route.queryParamMap])
     //   .pipe(
     //     map(([params, queryParams]) => ({ params, queryParams })));
@@ -294,7 +295,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     this.contactGroupService.noteChanges$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
       if (data) {
         this.personNotes = [];
-        this.page = 1;
+        this.page = 0;
         this.bottomReached = false;
         this.getPersonNotes();
       }
@@ -303,7 +304,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     this.contactGroupService.personNotePageChanges$.pipe(takeUntil(this.destroy)).subscribe(newPageNumber => {
       this.page = newPageNumber;
       if (this.personId == null) {
-        this.page = 1;
+        this.page = 0;
       }
       this.getNextPersonNotesPage(this.page);
     });
@@ -541,7 +542,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
   setShowMyNotesFlag(onlyMyNotes: boolean) {
     this.showOnlyMyNotes = onlyMyNotes;
     this.personNotes = [];
-    this.page = 1;
+    this.page = 0;
     this.getPersonNotes();
   }
 
@@ -802,7 +803,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
   private getLeadTraversalInfo() {
     this.leadId = this.leadIds[this.currentLeadIndex];
     this.onLoading = true;
-    this.page = 1;
+    this.page = 0;
     this.personId = null;
     this.person = null;
     this.personNotes = [];
