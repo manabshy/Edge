@@ -626,7 +626,8 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
   private addLeadNote() {
     if (this.note && this.note.text) {
       this.contactGroupService.addPersonNote(this.note).subscribe(data => {
-        if (data) {
+        if (data && !this.isSaveAndNext) {
+          console.log('get first page when new note added and save and next is false', this.isSaveAndNext);
           this.contactGroupService.notesChanged(data);
         }
       }, (error: WedgeError) => {
