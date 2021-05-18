@@ -30,6 +30,7 @@ export class TelephoneComponent implements OnInit, OnChanges {
   @Input() searchTerm: string;
   @Input() warning: any;
   @Input() isCallAllowed = true;
+  @Input() comment: string;
   isDialing: boolean;
   sms = false;
   currentStaffMember: StaffMember;

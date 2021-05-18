@@ -47,6 +47,7 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
   currentStaffMember: any;
   warnings: InfoDetail[];
   warningStatus: string;
+  preferredNumberComment: string;
 
   constructor(private router: Router, private contactGroupService: ContactGroupsService,
     private peopleService: PeopleService,
@@ -80,7 +81,9 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
     this.getCurrentUser();
 
     if (this.personDetails?.phoneNumbers?.length) {
-      this.preferredNumber = this.personDetails.phoneNumbers.find(x => x.isPreferred).number;
+      const preferredNumberItem = this.personDetails.phoneNumbers.find(x => x.isPreferred);
+      this.preferredNumber = preferredNumberItem.number;
+      this.preferredNumberComment = preferredNumberItem.comments;
     }
 
     if (this.personDetails?.emailAddresses?.length) {
