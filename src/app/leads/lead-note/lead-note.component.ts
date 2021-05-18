@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2, Input, OnChanges, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 import { ContactNote } from 'src/app/contactgroups/shared/contact-group';
@@ -20,15 +20,10 @@ export class LeadNoteComponent extends BaseComponent implements OnInit, OnChange
   @Input() noteIsRequired = false;
   @Output() leadNote = new EventEmitter<ContactNote>();
   @ViewChild('note', { static: true }) noteComponent: ElementRef;
+
   public keepOriginalOrder = (a) => a.key;
+
   showErrorMessage = false;
-
-  shortcuts = {
-    'Left Message': 'Left message',
-    'SMS': 'Sent an SMS',
-    'Emailed': 'Emailed'
-  };
-
   personNote: ContactNote;
   noteForm: FormGroup;
   note: string;
@@ -40,9 +35,9 @@ export class LeadNoteComponent extends BaseComponent implements OnInit, OnChange
 
   ngOnInit() {
     this.formInit();
-    this.leadService.isLeadUpdated$.subscribe(data => {
+    this.leadService.isLeadUpdated$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
       if (data) {
-        console.log('is updated in note', data)
+        console.log('is updated in note', data);
         this.noteForm?.reset();
       }
     });
@@ -70,38 +65,15 @@ export class LeadNoteComponent extends BaseComponent implements OnInit, OnChange
       }
     });
 
-
   }
 
   ngOnChanges() {
-    if (this.isUpdateComplete) {
-      this.noteForm?.reset();
-    }
-  }
-
-  ctrlEnterSubmit(e) {
-    if (e.ctrlKey && e.keyCode == 13) {
-      //this.action(true);
-    }
-  }
-
-  action(value: boolean) {
-    if (value) {
-      //this.saveNote();
-    }
-    //this.actionEmit.emit(value);
-  }
-
-  private formReset() {
-    this.noteForm.reset();
-    this.formInit();
+    if (this.isUpdateComplete) { this.noteForm?.reset(); }
   }
 
   getNote() {
     const note = { ...this.personNote, ...this.noteForm.value } as ContactNote;
-    if (note && this.selectedPerson) {
-      note.personId = this.selectedPerson.personId;
-    }
+    if (note && this.selectedPerson) { note.personId = this.selectedPerson.personId; }
     return note;
   }
 
