@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, HostListener, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { LeadsService } from '../shared/leads.service';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
 import { Lead, LeadSearchInfo, ListingType } from '../shared/lead';
@@ -9,14 +9,11 @@ import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { OfficeService } from 'src/app/core/services/office.service';
 import { BsModalService } from 'ngx-bootstrap/modal';
-import { LeadAssignmentModalComponent } from '../../shared/lead-assignment-modal/lead-assignment-modal.component';
-import { Subject } from 'rxjs';
 import { AppUtils } from 'src/app/core/shared/utils';
 import { ToastrService } from 'ngx-toastr';
 import * as _ from 'lodash';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { map, tap } from 'rxjs/operators';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 
 const PAGE_SIZE = 40;
@@ -25,8 +22,7 @@ const PAGE_SIZE = 40;
   templateUrl: '../lead-register/lead-register.component.html',
   styleUrls: ['../lead-register/lead-register.component.scss']
 })
-export class LeadRegisterComponent implements OnInit, OnChanges {
-  // @Input() leads: Lead[];
+export class LeadRegisterComponent implements OnInit {
   @Input() bottomReached: boolean;
   @Input() showFilterOptions = true;
   areLeadsAssignable = false;
@@ -39,7 +35,6 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   page = 0;
   groupsLength: number;
   filteredLeads: Lead[];
-  // leads: Lead[];
   leadSearchInfo: LeadSearchInfo;
   enableOwnerFilter = true;
   selectedLeadsForAssignment: Lead[] = [];
@@ -64,18 +59,10 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     { value: 4, name: 'Unassigned leads' },
   ];
 
-  get isAdvancedFilterActive() {
-    if (this.leadRegisterForm) {
-      return this.leadRegisterForm.get('dateTo').value
-        || this.leadRegisterForm.get('officeIds').value
-        || this.leadRegisterForm.get('includeClosedLeads').value
-        || this.leadRegisterForm.get('includeUnassignedLeadsOnly').value;
-    }
-  }
-
   get officeIdsControl(): FormControl {
     return this.leadRegisterForm?.get('officeIds') as FormControl;
   }
+
   get leadTypeIdsControl(): FormControl {
     return this.leadRegisterForm?.get('leadTypeIds') as FormControl;
   }
@@ -87,6 +74,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   get dateToControl(): FormControl {
     return this.leadRegisterForm?.get('dateTo') as FormControl;
   }
+
   get listingTypeControl(): FormControl {
     return this.leadRegisterForm?.get('listingType') as FormControl;
   }
@@ -95,10 +83,6 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     private sharedService: SharedService,
     private storage: StorageMap,
     private infoService: InfoService,
-    private officeService: OfficeService,
-    private modalService: BsModalService,
-    private toastr: ToastrService,
-    private staffMemberService: StaffMemberService,
     private messageService: MessageService,
     private localeService: BsLocaleService,
     private router: Router,
@@ -114,26 +98,16 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
     this.leadService.leadSearchTermChanges$.subscribe(newSearchTerm => {
       if (newSearchTerm) {
         this.leadRegisterForm.get('leadSearchTerm').setValue(newSearchTerm);
-        console.log('lead suggestion:', newSearchTerm);
         this.leadSearchInfo = this.getSearchInfo(true);
       } else {
-        console.log('no change in lead suggestion:');
         AppUtils.leadSearchTerm = '';
         this.leadRegisterForm.patchValue({
           leadSearchTerm: ''
         });
 
       }
-      console.log('lead suggestion selected:', this.leadRegisterForm);
       this.PerformSearch();
     });
-    console.log('INIT: ', this.leadSearchInfo);
-
-    // this.leadRegisterForm.valueChanges.subscribe(() => {
-    //   // this.leadSearchInfo = this.getSearchInfo(true);
-    //   // console.log('form group changes', this.leadSearchInfo, 'form here', this.leadRegisterForm.value);
-    //   // this.leadService.pageNumberChanged(this.leadSearchInfo);
-    // });
 
     this.listingTypeControl.valueChanges.subscribe((input) => {
       console.log({ input });
@@ -164,23 +138,14 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
           includeUnassignedLeadsOnly: false,
           leadSearchTerm: this.searchTerm ? this.searchTerm : ''
         };
-        console.log(this.leadSearchInfo, 'is current user');
         if (AppUtils.leadSearchInfo) {
-          console.log('from app utils', AppUtils.leadSearchInfo);
           this.leadSearchInfo = AppUtils.leadSearchInfo;
           this.searchTerm = AppUtils.leadSearchInfo.leadSearchTerm;
         }
       } else {
-        console.log('here..');
-
         this.leadSearchInfo = this.getSearchInfo(true);
-        console.log(this.leadSearchInfo, 'not current user');
-
       }
-      console.log(this.leadSearchInfo, 'not current user BEFORE PATCH');
       this.leadRegisterForm.patchValue(this.leadSearchInfo);
-      console.log('lead form after patch', this.leadRegisterForm.value);
-
       this.getLeads(this.leadSearchInfo); // Investigate asap
     });
   }
@@ -201,17 +166,6 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
         this.staffMembers = data as StaffMember[];
       }
     });
-
-    // Current Logged in staffmember
-    // this.storage.get('currentUser').subscribe((data: StaffMember) => {
-    //   if (data) {
-    //     this.currentStaffMember = data;
-    //     const seeAllLeadsPermission = this.currentStaffMember.permissions.find(x => x.permissionId === 69);
-    //     seeAllLeadsPermission ? this.canSeeUnassignable = true : this.canSeeUnassignable = false;
-    //     this.leadSearchInfo = this.getSearchInfo(true);
-    //     console.log(this.leadSearchInfo, 'infos....xx');
-    //   }
-    // });
 
   }
 
@@ -242,19 +196,13 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
         } else {
           if (this.filteredLeads) {
             this.filteredLeads = this.filteredLeads.concat(result);
-            console.log('all leads', this.filteredLeads);
-
           } else {
             this.filteredLeads = result;
-            console.log('new new leads', this.filteredLeads);
           }
         }
         this.isClosedLeadFound = this.checkClosedLead(this.filteredLeads);
         this.setBottomReachedFlag(result);
       }
-
-    }, () => {
-      this.filteredLeads = [];
     });
   }
 
@@ -265,9 +213,7 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   private setBottomReachedFlag(result: Lead[]) {
     if (result && (!result.length || result.length < +PAGE_SIZE)) {
       this.bottomReached = true;
-    } else {
-      this.bottomReached = false;
-    }
+    } else { this.bottomReached = false; }
   }
 
   assignLeads() {
@@ -286,11 +232,10 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   }
 
   selectLead(lead?: Lead) {
-    console.log('clicked', lead);
     this.leadService.leadsChanged(lead);
   }
 
-  selectLeadForAssignment(event, lead?: Lead) {
+  selectLeadForAssignment(lead?: Lead) {
     lead.isChecked = !lead.isChecked;
     this.getSelectedLeads();
   }
@@ -312,26 +257,12 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   }
 
   setLeadSearchTerm(term: string) {
-    console.log({ term });
-
     if (term) {
       this.leadRegisterForm.patchValue({
         leadSearchTerm: term
       });
       this.leadSearchInfo = this.getSearchInfo(true);
-    } else {
-      this.leadRegisterForm.patchValue({
-        leadSearchTerm: ''
-      });
-    }
-  }
-
-  ngOnChanges() {
-    // this.page = this.pageNumber;
-
-    // if (this.leads) {
-    //   this.filteredLeads = this.leads;
-    // }
+    } else { this.leadRegisterForm.patchValue({ leadSearchTerm: '' }); }
   }
 
   private getSearchInfo(newSearch: boolean) {
@@ -344,7 +275,6 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   PerformSearch(isSubmitting?: boolean) {
     this.filteredLeads = [];
     this.isSubmitting = isSubmitting;
-    console.log({ isSubmitting });
 
     if (isSubmitting) {
       this.leadSearchInfo = this.getSearchInfo(true);
@@ -378,12 +308,10 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
   }
 
   showLeadsAssignmentModal() {
-    // this.newLeadOwnerId = 0;
     this.showModal = true;
   }
 
   getSelectedOwner(id: number) {
-    console.log({ id }, 'sleected owener');
     if (id) { this.newLeadOwnerId = id; }
   }
 
@@ -421,9 +349,6 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       newInfo.ownerId = lead.ownerId;
       this.info = JSON.stringify(newInfo);
       AppUtils.leadSearchInfo = newInfo;
-      console.log('set in app utils', AppUtils.leadSearchInfo);
-      console.log('Lead Register App utils', lead.leadId);
-      console.log('Lead Register App utils INFO: ', this.info);
       this.router.navigate(['/leads-register/edit', lead.leadId],
         {
           queryParams: {
@@ -455,37 +380,10 @@ export class LeadRegisterComponent implements OnInit, OnChanges {
       if (!this.bottomReached) {
         this.page++;
         this.leadSearchInfo.page = this.page;
-        // this.leadService.pageNumberChanged(this.leadSearchInfo);
         this.getLeads(this.leadSearchInfo);
-        console.log('leads page number', this.page);
-        console.log('leads page number params', this.leadSearchInfo);
       }
     }
   }
-
-  // @HostListener('window:scroll', ['$event'])
-  // onWindowScroll() {
-  //   let scrollHeight: number, totalHeight: number;
-  //   scrollHeight = document.body.scrollHeight - 100; // Subtract 100 to fix zoom issues
-  //   totalHeight = window.scrollY + window.innerHeight;
-
-  //   if (!this.bottomReached) {
-  //     this.leadSearchInfo = this.getSearchInfo(false);
-  //   }
-  //   const url = this.router.url;
-  //   const isLeadsRegister = url.endsWith('/leads-register');
-
-  //   if (isLeadsRegister) {
-  //     if (totalHeight >= scrollHeight && !this.bottomReached) {
-  //       this.page++;
-  //       this.leadSearchInfo.page = this.page;
-  //       this.leadService.pageNumberChanged(this.leadSearchInfo);
-  //       this.getLeads(this.leadSearchInfo);
-  //       console.log('leads page number', this.page);
-  //       console.log('leads page number params', this.leadSearchInfo);
-  //     }
-  //   }
-  // }
 
   private replaceLeadsWithNewOwners(newLeads: Lead[]) {
     if (this.filteredLeads && this.filteredLeads.length) {
