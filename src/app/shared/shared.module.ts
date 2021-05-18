@@ -36,8 +36,6 @@ import { ContactgroupsDetailTenanciesComponent } from '../shared/contactgroups-d
 import { ContactgroupsDetailSearchesComponent } from '../shared/contactgroups-detail-searches/contactgroups-detail-searches.component';
 import { SharedPropertyListComponent } from './shared-property-list/shared-property-list.component';
 import { SharedLeadRegisterComponent } from './shared-lead-register/shared-lead-register.component';
-import { LeadAssignmentModalComponent } from './lead-assignment-modal/lead-assignment-modal.component';
-import { StaffmemberFinderComponent } from './staffmember-finder/staffmember-finder.component';
 
 // ngx bootstrap imports
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
@@ -141,8 +139,6 @@ const components = [
   ContactgroupsDetailSearchesComponent,
   SharedPropertyListComponent,
   SharedLeadRegisterComponent,
-  LeadAssignmentModalComponent,
-  StaffmemberFinderComponent,
   AdditionalInfoComponent,
   SharedValuationListComponent,
   OfficeFinderComponent,
