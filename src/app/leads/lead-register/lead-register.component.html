@@ -122,7 +122,7 @@
                     <span class="checkbox checkbox--noMargin checkbox--only" (click)="$event.stopPropagation()">
                       <span>
                         <input type="checkbox" [attr.id]="'assign'+i" [checked]="lead?.isChecked ? 'checked' : null"
-                          (change)="selectLeadForAssignment($event, lead)">
+                          (change)="selectLeadForAssignment(lead)">
                         <label [attr.for]="'assign'+i">
                           <!--Assign-->&nbsp;
                         </label>
