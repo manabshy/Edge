@@ -1,14 +1,15 @@
 <div class="row">
   <div class="row__item">
-    <!-- <h2>
-      <ng-container *ngIf="propertyDetails else newProperty ">Edit</ng-container> Property <ng-template #newProperty>Add
-      </ng-template>
-    </h2> -->
-    <form *ngIf="propertyDetails || isNewProperty" [formGroup]="propertyForm" (ngSubmit)="saveProperty()" (keydown.enter)="$event.preventDefault()" autocompleteOff>
-      <app-address [propertyDetails]="propertyDetails" [addressError]="formErrors.address" [isRequired]="isAddressRequired" [isNewProperty]="isNewProperty" [isCheckingDuplicateProperties]="true" (addressDetails)="getAddress($event)" (checkDuplicateProperties)="setCheckDuplicatesFlag($event)" [searchedAddress]="searchedAddress"></app-address>
+    <form *ngIf="propertyDetails || isNewProperty" [formGroup]="propertyForm" (ngSubmit)="saveProperty()"
+      (keydown.enter)="$event.preventDefault()" autocompleteOff>
+      <app-address [propertyDetails]="propertyDetails" [addressError]="formErrors.address"
+        [isRequired]="isAddressRequired" [isNewProperty]="isNewProperty" [isCheckingDuplicateProperties]="true"
+        (addressDetails)="getAddress($event)" (checkDuplicateProperties)="setCheckDuplicatesFlag($event)"
+        [searchedAddress]="searchedAddress"></app-address>
 
       <legend class="legend">Office</legend>
-      <app-office-finder class="appWrapper" [officeId]="officeId" [isRequired]="isOfficeIdRequired" (selectedOfficeId)="getSelectedOfficeId($event)"></app-office-finder>
+      <app-office-finder class="appWrapper" [officeId]="officeId" [isRequired]="isOfficeIdRequired"
+        (selectedOfficeId)="getSelectedOfficeId($event)"></app-office-finder>
 
       <legend class="legend">Property details</legend>
       <div class="inline-parent">
@@ -81,17 +82,31 @@
       <fieldset>
         <label for="area" class="small">Last known owner</label>
         <ng-container *ngIf="propertyDetails?.lastKnownOwner?.contactNames; else newOwner">
-          <p><a [routerLink]="['/contact-centre/detail/0/people/', propertyDetails?.lastKnownOwner?.contactGroupId]">{{propertyDetails?.lastKnownOwner?.contactNames}}</a></p>
-          <p><button (click)="showLastKnowOwnerModal()" type="button" class="btn btn--info"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><polygon points="42.7 6.7 57.3 21.3 64 14.5 49.7 0 "></polygon><path d="M40.3 9.6l-38 38L0 64l16.9-2 38-37.9L40.3 9.6zM4 59.9l1.9-11.7 9.8 9.8L4 59.9z"></path></svg>Change owner</button></p>
+          <p><a
+              [routerLink]="['/contact-centre/detail/0/people/', propertyDetails?.lastKnownOwner?.contactGroupId]">{{propertyDetails?.lastKnownOwner?.contactNames}}</a>
+            <a *ngIf="  this.propertyDetails?.lastKnownOwner" role="button" (click)="removeLastKnownOwner()"><svg
+                aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onRight-center  icon--fill-negative">
+                <path transform="translate(-1 -1)"
+                  d="M32,63A31,31,0,1,1,63,32,31,31,0,0,1,32,63ZM18.7,15.5a2.73,2.73,0,0,0-1.9.8l-.6.6a2.58,2.58,0,0,0-.3,3.3L28.4,32.6,16,44.9a1.55,1.55,0,0,0-.5,1.4,2.5,2.5,0,0,0,.8,1.8l.5.6a2.73,2.73,0,0,0,1.9.8A1.9,1.9,0,0,0,20,49L32.5,36.6,44.9,49a2.39,2.39,0,0,0,1.4.5,2.73,2.73,0,0,0,1.9-.8l.5-.5a2.5,2.5,0,0,0,.8-1.8,1.54,1.54,0,0,0-.5-1.3L36.5,32.5,48.9,20.1a1.55,1.55,0,0,0,.5-1.4,2.5,2.5,0,0,0-.8-1.8l-.5-.6a2.73,2.73,0,0,0-1.9-.8,1.9,1.9,0,0,0-1.3.5L32.5,28.5,20.1,16A2.39,2.39,0,0,0,18.7,15.5Z"
+                 />
+              </svg></a>
+          </p>
+          <p><button (click)="showLastKnowOwnerModal()" type="button" class="btn btn--info"><svg aria-hidden="true"
+                width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
+                <polygon points="42.7 6.7 57.3 21.3 64 14.5 49.7 0 "></polygon>
+                <path d="M40.3 9.6l-38 38L0 64l16.9-2 38-37.9L40.3 9.6zM4 59.9l1.9-11.7 9.8 9.8L4 59.9z"></path>
+              </svg>Change owner</button></p>
         </ng-container>
 
         <ng-template #newOwner>
-          <p><button (click)="showLastKnowOwnerModal()" type="button" class="btn btn--positive"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" /><path class="plus-vertical" d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" /></svg>Last known owner</button></p>
+          <p><button (click)="showLastKnowOwnerModal()" type="button" class="btn btn--positive"><svg aria-hidden="true"
+                width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
+                <path
+                  d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" />
+                <path class="plus-vertical"
+                  d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" />
+              </svg>Last known owner</button></p>
         </ng-template>
-
-        <!-- <app-signer label="Last known owner" [createdSigner]="createdSigner" [existingSigner]="lastKnownOwner"
-          [existingPerson]="lastKnownPerson" (selectedSigner)="getSelectedOwner($event)"
-          (newSigner)="createNewSigner($event)"></app-signer> -->
       </fieldset>
 
       <footer class="footer">
@@ -103,9 +118,10 @@
       </footer>
     </form>
 
-   <fieldset>
-      <app-additional-info class="appWrapper" [id]="propertyDetails?.propertyId ? 'PR-'+propertyDetails?.propertyId : ''"></app-additional-info>
-   </fieldset>
+    <fieldset>
+      <app-additional-info class="appWrapper"
+        [id]="propertyDetails?.propertyId ? 'PR-'+propertyDetails?.propertyId : ''"></app-additional-info>
+    </fieldset>
   </div>
 </div>
 
@@ -116,113 +132,14 @@
 <p-dialog header="Duplicate Record Warning" [(visible)]="isDuplicateCheckerVisible" [modal]="true" [draggable]="false">
   <app-property-duplicate-checker [propertyAddress]="propertyAddress" [propertyId]="propertyDetails?.propertyId"
     [checkDuplicates]="checkPossibleDuplicates" (selectedProperty)="getSelectedProperty($event)"
-    (hideModal)="isDuplicateCheckerVisible=false" (fullMatchFound)="checkPropertyMatches($event)" (showModal)="isDuplicateCheckerVisible=true">
+    (hideModal)="isDuplicateCheckerVisible=false" (fullMatchFound)="checkPropertyMatches($event)"
+    (showModal)="isDuplicateCheckerVisible=true">
   </app-property-duplicate-checker>
 </p-dialog>
 
 <!-- Contactgroup Finder Modal -->
-<p-dialog [header]="lastKnownOwnerModalHeader" [(visible)]="isLastknownOwnerVisible" [modal]="true" [draggable]="false" class="modal--medium modal--hasFooter">
-  <app-contactgroup-finder [fullName]="lastKnownPerson" (selectedContactGroup)="getSelectedOwner($event)" (isCreatingNewGroup)="createNewLastKnownOwner()" ></app-contactgroup-finder>
+<p-dialog [header]="lastKnownOwnerModalHeader" [(visible)]="isLastknownOwnerVisible" [modal]="true" [draggable]="false"
+  class="modal--medium modal--hasFooter">
+  <app-contactgroup-finder [fullName]="lastKnownPerson" (selectedContactGroup)="getSelectedOwner($event)"
+    (isCreatingNewGroup)="createNewLastKnownOwner()"></app-contactgroup-finder>
 </p-dialog>
-
-<!-- <app-breadcrumb></app-breadcrumb>
-<div class="container main">
-  <div class="page-title sticky-top">
-    <h4>
-      <ng-container *ngIf="propertyDetails else newProperty ">Edit</ng-container> Property
-      <ng-template #newProperty>Add</ng-template>
-    </h4>
-  </div>
-  <form *ngIf="propertyDetails || isNewProperty" [formGroup]="propertyForm" (ngSubmit)="saveProperty()" (keydown.enter)="$event.preventDefault()" autocompleteOff>
-    <app-address [propertyDetails]="propertyDetails" [addressError]="formErrors.address" [isNewProperty]="isNewProperty" [isCheckingDuplicateProperties]="true" (addressDetails)="getAddress($event)" (checkDuplicateProperties)="setCheckDuplicatesFlag($event)" [searchedAddress]="searchedAddress"></app-address>
-    <div class="row justify-content-end">
-      <div class="col-sm-10">
-        <input type="hidden" id="address" class="form-control" formControlName="address">
-      </div>
-    </div>
-    <app-property-duplicate-checker [propertyAddress]="propertyAddress" [propertyId]="propertyDetails?.propertyId"
-      [checkDuplicates]="checkPossibleDuplicates" (selectedProperty)="getSelectedProperty($event)"
-      (fullMatchFound)="checkPropertyMatches($event)">
-    </app-property-duplicate-checker>
-    <app-office-finder class="d-block form-group" [officeId]="officeId" [isRequired]="isOfficeIdRequired"
-      (selectedOfficeId)="getSelectedOfficeId($event)"></app-office-finder>
-    <div class="form-group row">
-      <div class="col-sm-3 offset-sm-2">
-        <label for="propertyTypeId" class="small">Property Type</label>
-
-        <select class="custom-select custom-select-sm" id="propertyTypeId" name="propertyTypeId"
-          formControlName="propertyTypeId" (change)="onSelectType($event.target.value) "
-          [ngClass]="{'is-invalid':formErrors.propertyTypeId}">
-          <option selected value="0"></option>
-          <option *ngFor="let propertyType of propertyTypes" [value]=propertyType.id>{{propertyType.value}}
-          </option>
-        </select>
-        <span class="invalid-feedback">{{formErrors?.propertyTypeId}}</span>
-      </div>
-    </div>
-    <div class="form-group row">
-      <div class="col-sm-3 offset-sm-2">
-        <label for="propertyTypeId" class="small">Property Style</label>
-
-        <select #propStyle class="custom-select custom-select-sm" id="propertyStyleId" name="propertyStyleId"
-          formControlName="propertyStyleId" [ngClass]="{'is-invalid':formErrors.propertyStyleId}">
-          <option selected [value]="defaultStyle"></option>
-          <option *ngFor="let propertyStyle of propertyStyles " [value]=propertyStyle.id>
-            {{propertyStyle.value}}</option>
-        </select>
-        <span class="invalid-feedback">{{formErrors?.propertyStyleId}}</span>
-      </div>
-    </div>
-    <div class="form-group row">
-      <div class="col-sm-3 offset-sm-2">
-        <label for="region" class="small">Region</label>
-        <select class="custom-select custom-select-sm" id="region" name="region" formControlName="regionId"
-          (change)="onSelectRegion($event.target.value)" [ngClass]="{'is-invalid':formErrors.regionId}">
-          <option *ngFor="let region of regions " [value]=region.id>{{region.value}}</option>
-        </select>
-        <span class="invalid-feedback">{{formErrors?.regionId}}</span>
-      </div>
-    </div>
-    <div class="form-group row">
-      <div class="col-sm-3 offset-sm-2">
-        <label for="area" class="small">Area</label>
-        <select class="custom-select custom-select-sm" id="area" name="area" formControlName="areaId"
-          (change)="onSelectArea($event.target.value)" [ngClass]="{'is-invalid':formErrors.areaId}">
-          <option selected value="0"></option>
-          <option *ngFor="let area of areas " [value]=area.id>{{area.value}}</option>
-        </select>
-        <span class="invalid-feedback">{{formErrors?.areaId}}</span>
-      </div>
-    </div>
-    <div class="form-group row">
-      <div class="col-sm-3 offset-sm-2">
-        <label for="subArea" class="small">Sub-Area</label>
-        <select class="custom-select custom-select-sm" id="subArea" name="subArea" formControlName="subAreaId"
-          [ngClass]="{'is-invalid':formErrors.subAreaId}">
-          <option selected value="0"></option>
-          <option *ngFor="let subArea of subAreas " [value]=subArea.id>{{subArea.value}}</option>
-        </select>
-        <span class="invalid-feedback">{{formErrors?.subAreaId}}</span>
-      </div>
-    </div>
-
-    <app-signer label="Last known owner" [createdSigner]="createdSigner" [existingSigner]="lastKnownOwner"
-      [existingPerson]="lastKnownPerson" (selectedSigner)="getSelectedOwner($event)"
-      (newSigner)="createNewSigner($event)">
-    </app-signer>
-    <div class="form-actions">
-      <div class="container">
-        <div class="row justify-content-end w-100 no-gutters">
-          <div class="col-sm-10 d-flex">
-            <button (click)="cancel()" type="button" class="btn btn-light mr-2">Cancel</button>
-            <button type="submit" class="btn btn-secondary" id="saveProperty"
-              [tooltip]="!propertyForm.valid ? errorMessage?.displayMessage : ''" placement="top"
-              [attr.disabled]="isSubmitting ? '' : null"><i class="fas fa-spinner fa-pulse d-inline-block mr-2"
-                *ngIf="isSubmitting"></i>Save</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </form>
-</div>
-<app-additional-info [id]="propertyDetails?.propertyId ? 'PR-'+propertyDetails?.propertyId : ''"></app-additional-info> -->

@@ -70,6 +70,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
   isAddressRequired = false;
   lastKnownOwnerModalHeader = 'Last known owner';
   backToOrigin = false;
+  isOwnerRemoved = false;
 
   constructor(private route: ActivatedRoute,
     private _router: Router,
@@ -278,6 +279,16 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
     this.propertyForm.markAsPristine();
   }
 
+  removeLastKnownOwner() {
+    this.showLastKnownRemovalWarning().subscribe(res => {
+      if (res) {
+        this.propertyDetails.lastKnownOwner = null;
+        this.lastKnownOwner = null;
+        this.propertyForm.markAsDirty();
+        this.isOwnerRemoved = true;
+      }
+    });
+  }
   setCheckDuplicatesFlag(value: boolean) {
     this.checkPossibleDuplicates = value;
   }
@@ -342,7 +353,7 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
     this.propertyAddress ? this.isAddressFormValid = true : this.isAddressFormValid = false;
     if (this.propertyForm.valid) {
       if (this.propertyForm.dirty || isOwnerChanged) {
-        if (!this.lastKnownOwner) {
+        if (!this.lastKnownOwner && !this.isOwnerRemoved) {
           this.showWarning().subscribe(res => { if (res) { this.AddOrUpdateProperty(); } });
         } else { this.AddOrUpdateProperty(); }
       } else { this.onSaveComplete(); }
@@ -434,33 +445,11 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
     this.propertyService.currentPropertyChanged(+this.propertyId);
     if (this.getBack || this.backToOrigin) {
       this.propertyService.setAddedProperty(property);
-      console.log('property in edit.........xxxxxxxxx', property);
       this._location.back();
     } else {
       this._router.navigate(['/property-centre/detail', this.propertyId]);
     }
 
-    // TEST AND REMOVE ASAP 23/02/2021
-    // if (this.lastKnownPerson) {
-    //   if (this.personId) {
-    //     this._router.navigate(['/contact-centre/detail/', this.personId]);
-    //   } else {
-    //     if (this.leadId) {
-    //       this._router.navigate(['/leads-register/edit/', this.leadId]);
-    //     } else {
-    //       this._router.navigate(['/leads-register/edit/', this.leadId],
-    //         { queryParams: { isNewLead: true, personId: this.lastKnownPerson.personId } });
-    //     }
-    //   }
-    // } else {
-    //   if (this.getBack || this.backToOrigin) {
-    //     this.propertyService.setAddedProperty(property);
-    //     console.log('property in edit.........xxxxxxxxx', property);
-    //     this._location.back();
-    //   } else {
-    //     this._router.navigate(['/property-centre/detail', this.propertyId]);
-    //   }
-    // }
   }
 
   canDeactivate(): boolean {
@@ -474,6 +463,23 @@ export class PropertyDetailEditComponent extends BaseComponent implements OnInit
 
   cancel() {
     this.sharedService.back();
+  }
+
+  showLastKnownRemovalWarning() {
+    const subject = new Subject<boolean>();
+    const data = {
+      title: `<p><strong>Are you sure you want to remove ${this.propertyDetails?.lastKnownOwner?.contactNames} as the Last known owner?</strong></p>
+              <p class="message message--warning">You should only clear this field when you are 100% sure they no longer own the property.This field is audited.</p>
+             `,
+      actions: ['No', 'Yes']
+    };
+
+    this.dialogRef = this.dialogService.open(ConfirmModalComponent, {
+      data, styleClass: 'dialog dialog--hasFooter', header: 'Owner Removal Warning'
+    });
+
+    this.dialogRef.onClose.subscribe((res) => { if (res) { subject.next(true); subject.complete(); } });
+    return subject.asObservable();
   }
 
   showWarning() {
