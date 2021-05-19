@@ -109,6 +109,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
   clearValidationErrors = false;
   isLeadTypeChanged = false;
   destroy = new Subject();
+  isOwner = true;
 
   get nextChaseDateControl() {
     return this.leadEditForm.get('nextChaseDate') as FormControl;
@@ -188,6 +189,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     });
   }
 
+  // Add  && !this.isIdInCurrentList(this.leadId) to condition to reduce API calls
   private getLeadIdsForTraversal() {
     this.route.params.subscribe(params => {
       this.leadId = +params['leadId'] || 0;
@@ -225,23 +227,15 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     if (this.infoParam) {
       this.leadSearchInfo = JSON.parse(this.infoParam) as LeadSearchInfo;
       this.isUnassignedLead = +this.leadSearchInfo?.listingType === ListingType.UnassignedLeads;
-
-      // this.canEditLead = +this.leadSearchInfo.listingType !== 1 ? false : true;
-      // console.log('can edit lead', this.canEditLead);
     }
   }
 
   isIdInCurrentList(leadId: number) {
     let exists = false;
-    console.log('in list', this.leadIds?.find(x => x === leadId), { leadId }, this.leadIds);
+    if (!this.isOwner) { return false; }
 
     return exists = this.leadIds?.find(x => x === leadId) ? true : false;
   }
-  // ngAfterViewInit() {
-  //   if (this.leadNote) {
-  //     this.note = this.leadNote.getNote();
-  //   }
-  // }
 
   init() {
     this.setupLeadEditForm();
@@ -326,13 +320,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
 
   getLeadIds(leadId: number) {
     this.leadsService.getLeadIds(this.leadSearchInfo).subscribe((result: number[]) => {
-      // if (this.canEditLead) {
-      //   this.leadIds = result?.slice(result?.findIndex(x => x === leadId));
-      //   console.log(this.leadIds, 'can edit ids');
 
-      // } else { this.leadIds = result; console.log(this.leadIds, 'cannot edit ids'); }
-
-      this.leadIds = result; console.log(this.leadIds, 'all lead ids');
+      this.leadIds = result;
+      console.log(this.leadIds, 'all lead ids');
       this.currentLeadIndex = this.leadIds.indexOf(this.leadSearchInfo.startLeadId);
       this.currentLeadIndex === 0 ? this.disablePrevious = true : this.disablePrevious = false;
       this.currentLeadIndex === this.leadIds?.length - 1 ? this.disableNext = true : this.disableNext = false;
@@ -384,12 +374,20 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
       this.setCanEditFlag();
 
       this.setLeadTypes(this.lead);
-      console.log(this.isLeadClosed, 'closed', this.canEditLead, 'canedit');
+      this.setIsOwnerFlag();
 
-    }, () => {
-      this.lead = null;
+      console.log(this.isLeadClosed, 'closed', this.canEditLead, 'canedit', this.isOwner, 'isowner');
+
     });
 
+  }
+
+  private setIsOwnerFlag() {
+    if (this.isOwnerChanged) {
+      if (this.lead?.ownerId === this.currentStaffMember?.staffMemberId) {
+        this.isOwner = true;
+      } else { this.isOwner = false; this.canEditLead = false; }
+    } else { this.isOwner = true; }
   }
 
   private setCanEditFlag() {
@@ -674,15 +672,16 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     }
 
 
+    this.setIsOwnerFlag();
     this.isSaveAndNext = false;
     this.isUpdateComplete = true;
     this.leadsService.isLeadUpdated(true);
     this.isNextChaseDateChanged = false;
+    this.isOwnerChanged = false;
+    this.isLeadTypeChanged = false;
 
     console.log('change 2', this.isNextChaseDateChanged);
 
-
-    if (this.isLeadTypeChanged) { this.isLeadTypeChanged = false; }
     if (this.isLeadMarkedAsClosed) { this.canEditLead = false; }
 
     this.redirectOnSave(lead);
@@ -700,7 +699,9 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
           queryParams: { showNotes: true, isMyLead: true, exitOnSave: this.exitOnSave }
         });
       } else if (this.currentUrl) {
-        this.router.navigateByUrl(this.currentUrl, { replaceUrl: true });
+        this.location.replaceState(this.currentUrl);
+        window.location.reload();
+        // this.router.navigateByUrl(this.currentUrl);
 
         localStorage.removeItem('currentUrl');
         this.canEditLead = true;
