@@ -48,7 +48,7 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges, OnDestroy 
     this.getStaffMembers();
 
     this.subscription = this.staffMemberService.clearSelectedStaffMember$.subscribe(res => {
-      if (res) { this.staffMemberFinderForm?.reset({ staffMemberId: null }); console.log('remove here..', this.staffMemberFinderForm) }
+      if (res) { this.staffMemberFinderForm?.reset({ staffMemberId: null }); }
     });
   }
 

@@ -7,10 +7,7 @@ import { StorageMap } from '@ngx-pwa/local-storage';
 import { DropdownListInfo, InfoDetail, InfoService } from 'src/app/core/services/info.service';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
-import { OfficeService } from 'src/app/core/services/office.service';
-import { BsModalService } from 'ngx-bootstrap/modal';
 import { AppUtils } from 'src/app/core/shared/utils';
-import { ToastrService } from 'ngx-toastr';
 import * as _ from 'lodash';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
@@ -161,7 +158,6 @@ export class LeadRegisterComponent implements OnInit {
       }
     });
 
-    // All Active Staffmembers
     this.storage.get('activeStaffmembers').subscribe(data => {
       if (data) {
         this.staffMembers = data as StaffMember[];
@@ -170,7 +166,6 @@ export class LeadRegisterComponent implements OnInit {
 
   }
 
-  // Setup Form
   setupLeadRegisterForm() {
     this.leadRegisterForm = this.fb.group({
       ownerId: [],
@@ -226,10 +221,6 @@ export class LeadRegisterComponent implements OnInit {
   toggleSelectAllLeads() {
     this.isSelectAllChecked = !this.isSelectAllChecked;
     this.selectAllLeadsForAssignment(this.isSelectAllChecked);
-  }
-
-  assignSelected() {
-    console.log('show popup to assign leads');
   }
 
   selectLead(lead?: Lead) {
@@ -297,17 +288,6 @@ export class LeadRegisterComponent implements OnInit {
     this.selectedLeadsForAssignment = [];
   }
 
-  processLeadsAssignment(leadOwner: number, leadsForAssignment: Lead[]) {
-    this.leadService.assignLeads(leadOwner, leadsForAssignment).subscribe(result => {
-      if (result) {
-        this.messageService.add({ severity: 'success', summary: 'Lead(s) successfully assigned!', closable: false });
-        this.areLeadsAssignable = false;
-        this.selectedLeadsForAssignment = [];
-        this.replaceLeadsWithNewOwners(result);
-      }
-    });
-  }
-
   showLeadsAssignmentModal() {
     this.showModal = true;
   }
@@ -316,7 +296,6 @@ export class LeadRegisterComponent implements OnInit {
     if (id) { this.newLeadOwnerId = id; }
   }
 
-  // TODO: CHANGE NAME ASAP
   assignLeadsToOwner() {
     if (this.newLeadOwnerId) {
       this.leadService.assignLeads(this.newLeadOwnerId, this.selectedLeadsForAssignment).subscribe(result => {
@@ -332,7 +311,6 @@ export class LeadRegisterComponent implements OnInit {
     }
   }
 
-  // Refactor to cater for when a lead is not clicked 26/03/21
   navigateToEdit(lead: Lead) {
     event.preventDefault();
     event.stopPropagation();
