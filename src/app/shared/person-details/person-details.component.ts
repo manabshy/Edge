@@ -66,13 +66,7 @@ export class PersonDetailsComponent implements OnInit, OnChanges {
         notes.splice(index, 1);
       }
     });
-
-    // this.performRemoval().subscribe(res => {
-    //   let save = res ? 'save' : 'not saved';
-    //   console.log({ res }, { save }, 'here.. for response')
-    // });
-    // Get referral Companies
-    // this.getReferralCompanies();
+    
   }
 
   ngOnChanges() {

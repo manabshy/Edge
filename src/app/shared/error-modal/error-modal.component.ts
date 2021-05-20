@@ -30,8 +30,5 @@ export class ErrorModalComponent implements OnInit {
 
   action(value: boolean) {
     this.ref.close(value);
-    // this.bsModalRef.hide();
-    // this.subject.next(value);
-    // this.subject.complete();
   }
 }

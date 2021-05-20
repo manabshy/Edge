@@ -44,14 +44,6 @@ export class OfficeFinderComponent implements OnInit, OnChanges, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.multiSelect?.updateLabel();
-    // const selectedOffices = this.offices.filter(x => this.officeIds.includes(x.officeId));
-    // console.log({selectedOffices});
-
-    // this._options = val;
-    // this.updateLabel();
-    // this.updateFilledState();
-    // this.checkSelectionLimit();
-    // this.cd.markForCheck();
   }
 
   private populateForm() {

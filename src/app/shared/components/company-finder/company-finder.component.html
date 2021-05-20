@@ -64,57 +64,7 @@
               d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" />
           </svg>Enter Name Manually
         </a>
-        <!-- <a class="btn btn--ghost" [routerLink]="['/contact-centre/detail/0/people', 0]" [queryParams]="{isNewContactGroup: true, isContactGroupFinder: true, contactGroup: contactGroupFinderForm.get('searchTerm').value}" (click)="isCreatingNewGroup.emit()">
-          <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" /><path class="plus-vertical"d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" /></svg>New Contact Group
-        </a> -->
       </span>
     </footer>
   </ng-container>
 </ng-container>
-
-<!-- <form class="p-0" [formGroup]="companyFinderForm" autocompleteOff>
-  <fieldset>
-    <label for="company">Find Company</label>
-    <span class="joined">
-      <input #companyNameInput type="search" id="company" formControlName="companyName" [ngClass]="{'is-invalid': companyNameError && !enterManually && !companyFinderForm.value.companyName}" (keydown.enter)="searchCompany()"[ngbTypeahead]="suggestions" [focusFirst]="false" (selectItem)="selectedSuggestion($event)">
-      <div class="btn--container">
-        <button type="button" class="btn btn--info" (click)="searchCompany()">Search</button>
-      </div>
-    </span>
-    <p class="message message--info">Search for a Company</p>
-    <p *ngIf="noSuggestions">No Company Found. <a href (click)="enterCompany()">Enter it manually</a>.</p>
-  </fieldset>
-
-  <div class="off-canvas" [hidden]="!foundCompanies" (click)="foundCompanies = null">
-    <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
-      <h4 class="page-title text-left pt-3">
-        Pick Company
-        <button type="button" class="close mr-2" aria-label="Close" (click)="foundCompanies = null">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </h4>
-      <div class="list-group small mb-3">
-        <div class="list-group-item list-group-item-action" *ngFor="let company of foundCompanies"
-          (click)="selectCompany(company)">
-          <div class="row align-items-center">
-            <div class="col"
-              [innerHTML]="company.companyName | highlight : companyFinderForm.value.companyName"></div>
-            <div class="col-auto">
-              <button class="btn btn-block btn-sm btn-link">Select</button>
-            </div>
-          </div>
-        </div>
-        <div class="list-group-item text-center">
-          No Company Found? Try again or <a href (click)="enterCompany()">enter it manually</a>.
-        </div>
-      </div>
-    </div>
-  </div>
-  <ng-container *ngIf="(!foundCompanies && isCompanyAdded) || enterManually || existingCompany">
-    <fieldset>
-      <label for="company">Company name</label>
-      <input type="text" [ngClass]="{'is-invalid': companyNameError && enterManually}" id="selectedCompany" formControlName="selectedCompany">
-      <p class="message message--invalid">{{companyNameError}}</p>
-    </fieldset>
-  </ng-container>
-</form> -->
