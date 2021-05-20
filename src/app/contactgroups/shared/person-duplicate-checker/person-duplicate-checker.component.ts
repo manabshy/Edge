@@ -66,21 +66,7 @@ export class PersonDuplicateCheckerComponent implements OnInit, OnChanges {
           this.isCreateNewPersonVisible = false;
           this.makeButtonVisible.emit(false);
         }
-        // data.emailAddresses = [];
-        // data.emailAddresses.push({
-        //   id: 0,
-        //   email: data.emailAddress,
-        //   isPreferred: true,
-        //   isPrimaryWebEmail: true
-        // });
-        // data.phoneNumbers = [];
-        // data.phoneNumbers.push({
-        //   number: data.phoneNumber,
-        //   typeId: 3,
-        //   isPreferred: true,
-        //   comments: ''
-        // });
-        // this.newPerson = data;
+       
         this.findPotentialDuplicatePerson(data);
       });
   }
@@ -202,9 +188,6 @@ export class PersonDuplicateCheckerComponent implements OnInit, OnChanges {
   }
 
   createNewContactGroupPerson(event) {
-    // event.preventDefault();
-    // event.stopPropagation();
-    // this.isCreateNewPerson = true;
     this.creatingNewPerson.emit();
     this.router.navigate(['contact-centre', 'detail', 0, 'edit'], { queryParams: { newPerson: JSON.stringify(this.newPerson) } })
 

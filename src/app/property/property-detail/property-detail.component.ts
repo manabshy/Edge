@@ -49,28 +49,6 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit, On
   ];
 
 
-  // get region() {
-  //   if (this.propertyDetails && this.regions) {
-  //     const getRegion = this.regions.get(this.propertyDetails.regionId.toString()).get('value');
-  //     return getRegion;
-  //   }
-  // }
-
-  // get area() {
-  //   if (this.propertyDetails && this.allAreas) {
-  //     const getArea = this.allAreas.get(this.propertyDetails.areaId.toString()).get('value');
-  //     return getArea;
-  //   }
-  // }
-
-  // get subArea() {
-  //   if (this.propertyDetails && this.allSubAreas) {
-  //     const getSubArea = this.allSubAreas.get(this.propertyDetails.subAreaId.toString()).get('value');
-  //     return getSubArea;
-  //   }
-  // }
-
-
   constructor(private propertyService: PropertyService,
     private formatAddressPipe: FormatAddressPipe,
     private route: ActivatedRoute,
@@ -160,9 +138,6 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit, On
     }
   }
 
-  isObject(val) {
-    return val instanceof Object;
-  }
 
   getPropertyDetails(propertyId: number) {
     this.propertyService.getProperty(propertyId, true, true, false, true).subscribe(data => {
@@ -242,7 +217,6 @@ export class PropertyDetailComponent extends BaseComponent implements OnInit, On
 
   ngOnDestroy() {
     this.sidenavService.resetCurrentFlag();
-    console.log('jere before closing', this.sidenavService.selectedItem);
   }
 }
 

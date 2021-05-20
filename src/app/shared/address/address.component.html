@@ -30,43 +30,6 @@
       </svg>Complete to increase your app-score-badge</p>
   </fieldset>
 
-  <!-- <div class="form-group row">
-    <div class="col-sm-3 offset-sm-2">
-      <div class="off-canvas" [hidden]="!foundAddress" (click)="hideOffCanvas()">
-        <div class="off-canvas-content right slide-in-right" (click)="$event.stopPropagation()" #offCanvasContent>
-          <h4 class="page-title text-left pt-3">
-            Address lookup
-            <button type="button" class="close mr-2" aria-label="Close" (click)="hideOffCanvas()">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </h4>
-          <app-subnav>
-            <div class="list-group-item" *ngIf="backToAddressesList" (click)="findAddress(searchTermBK, '')">
-              <button type="button" class="btn btn-link p-0"><i class="fas fa-arrow-left mr-2"></i> Back</button>
-            </div>
-            <ng-container *ngIf="foundAddress?.Items?.length; else noAddress">
-              <app-subnav-item *ngFor="let address of foundAddress?.Items"
-                (click)="address?.Action ? findAddress(searchTermBK, address?.Id) : retrieveAddress(address?.Id)">
-                <div *ngIf="!address?.Error">{{address?.Text}}, {{address?.Description}}</div>
-              </app-subnav-item>
-              <div class="list-group-item list-group-item-action text-center py-4" (click)="enterAddress($event)">
-                <a href (click)="$event.preventDefault()"><i class="fas fa-plus mr-2"></i> Enter Manually</a>
-              </div>
-            </ng-container>
-            <ng-template #noAddress>
-              <div class="list-group-item text-center text-danger">
-                No Address Found.
-              </div>
-              <div class="list-group-item list-group-item-action text-center py-4" (click)="enterAddress($event)">
-                <a href (click)="$event.preventDefault()"><i class="fas fa-plus mr-2"></i> New Address</a>
-              </div>
-            </ng-template>
-          </app-subnav>
-        </div>
-      </div>
-    </div>
-  </div> -->
-
   <ng-container *ngIf="propertyDetails || addressLines.value || enterAddressManually">
     <fieldset *ngIf="!(propertyDetails || isNewProperty)"
       [ngClass]="{'invalid': personDetails && !addressLines.value && enterAddressManually}">
@@ -135,46 +98,6 @@
 <!-- Address Lookup Modal -->
 <p-dialog header="Address Lookup" [(visible)]="foundAddress" [modal]="true" [draggable]="false" class="modal--small modal--hasFooter">
   <fieldset>
-    <!-- <div class="row">
-      <div class="grid grid--25">
-        <ng-container *ngIf="foundAddress?.Items?.length">
-          <span *ngFor="let address of foundAddress?.Items"
-          (click)="address?.Action ? findAddress(searchTermBK, address?.Id) :  retrieveAddress(address?.Id)">
-            <div *ngIf="!address?.Error">{{address?.Text}}, {{address?.Description}}</div>
-        </span>
-          <div
-            (click)="enterAddress($event)">
-            <a href (click)="$event.preventDefault()"><i class="fas fa-plus mr-2"></i> Enter Manually</a>
-          </div>
-        </ng-container>
-      </div>
-      <div class="grid grid--75 grid--dividerLeft">
-        <div class="table">
-          <table class="table--mobile table--rowHover">
-            <tbody>
-              <tr *ngIf="!foundAddress?.Items?.length">
-                <td colspan="4">
-                  No Address Found.
-                </td>
-              </tr>
-              <tr *ngFor="let address of foundAddress?.Items">
-                <td >
-                  <span class="cell-content">
-                    {{address?.Text}}, {{address?.Description}}
-                  </span>
-                </td>
-                <td class="hide--mobile">
-                  <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s">
-                    <path d="M1 35.4h48.8L37.5 47.8l4.9 4.9L63 32 42.3 11.3l-4.9 4.9 12.3 12.3H1V35.4z"></path>
-                  </svg>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div> -->
-    
     <div class="table">
       <table class="table--mobile table--rowHover">
         <tbody>
