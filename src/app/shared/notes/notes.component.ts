@@ -84,12 +84,6 @@ export class NotesComponent implements OnInit, OnChanges, OnDestroy {
     }
     if (this.personNotes) {
       this.personNotes.filter(x => x.text) ? this.isPersonNote = true : this.isPersonNote = false;
-      // this.personNotes.forEach(x => {
-      //   if (x.noteType === NoteType.Emails) {
-      //     let allText = x.text.split('\n');
-      //     console.log({ allText });
-      //   }
-      // })
     }
   }
   setJobTypeName(notes: any[]) {
@@ -154,26 +148,6 @@ export class NotesComponent implements OnInit, OnChanges, OnDestroy {
   onScrollUp() {
   }
 
-  // @HostListener('window:scroll', ['$event'])
-  // onWindowScroll() {
-  //   let scrollHeight: number, totalHeight: number;
-  //   scrollHeight = document.body.scrollHeight;
-  //   totalHeight = window.scrollY + window.innerHeight;
-  //   const url = this.router.url;
-  //   const hasNotes = url.includes('showNotes=true');
-  //   if (hasNotes) {
-  //     if (totalHeight >= scrollHeight && !this.bottomReached) {
-  //       console.log('%c before initial call..........', 'color:green', this.bottomReached)
-  //       if (this.notes && this.notes.length) {
-  //         this.page++;
-  //         this.setNewContactNotePageNumber();
-  //         this.setNewPersonNotePageNumber();
-  //         this.setNewPropertyNotePageNumber();
-  //       }
-  //     }
-  //   }
-  // }
-
   private setNewPropertyNotePageNumber() {
     if (this.isPropertyNote) {
       this.propertyService.propertyNotePageNumberChanged(this.page);
@@ -221,7 +195,6 @@ export class NotesComponent implements OnInit, OnChanges, OnDestroy {
     note.hasEmailBody ? this.notes.find(x => +x.id === note.id).hasEmailBody = false : this.notes.find(x => +x.id === note.id).hasEmailBody = true;
     console.log(this.notes, 'new notes with flag');
 
-    // this.showMoreLabel = this.toggleShowMoreLabel && note.hasEmailBody ? 'SHOW LESS' : 'SHOW MORE';
     if (!note?.emailBody) {
       this.emailService.getEmailForNotes(note.id).subscribe(res => {
         this.emailBody = res;
