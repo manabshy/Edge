@@ -13,14 +13,9 @@ export class AuthCallbackComponent implements OnInit {
   constructor(private router: Router, private authService: AuthService, private _zone: NgZone) { }
 
   ngOnInit() {
-    // this.authService.completeAuthentication();
-
     setTimeout(() => {
       this._zone.run(
         () => {
-          // const prev = localStorage.getItem('prev');
-          // const url = prev && prev !== '/' ? prev : '/';
-
           this.router.navigateByUrl('/');
         }
       );

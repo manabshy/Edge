@@ -27,12 +27,6 @@
                 data-cy="dateFrom">
             </fieldset>
 
-            <!-- <button class="btn btn--none" (click)="isAdvancedSearchVisible = !isAdvancedSearchVisible">
-              <ng-container *ngIf="!isAdvancedSearchVisible; else hideLabel">Show</ng-container>
-              <ng-template #hideLabel>Hide</ng-template> advanced search
-              <span class="badge badge-pill badge-danger ml-2" *ngIf="!!isAdvancedFilterActive">&nbsp;</span>
-            </button> -->
-
             <fieldset>
               <label for="statusId">Status</label>
               <span class="select">
@@ -75,12 +69,6 @@
   </div>
 
   <div class="row__item">
-    <!-- <app-breadcrumb></app-breadcrumb> -->
-    <!-- <div class="title">
-      <h2>Valuations register</h2>
-      <a class="btn btn--positive" [routerLink]="['detail', 0 , 'edit' ]" [queryParams]="{isNewValuation: true}" data-cy="newVal"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z"/><path class="plus-vertical" d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z"/></svg> Valuation </a>
-    </div> -->
-    
     <div class="table">
       <app-valuation-list class="appWrapper" *ngIf="!isHintVisible" [pageNumber]="page" [valuations]='valuations' [bottomReached]="bottomReached" [searchTerm]='searchTerm'></app-valuation-list>
 
@@ -90,75 +78,6 @@
     </div>
   </div>
 </div>
-
-
-
-  <!-- <div class="container main"><div class="row page-title">
-    <div class="col">
-      <h4 class="m-0">Valuations register</h4>
-    </div>
-    <div class="col-auto">
-      <a class="btn btn-light" [routerLink]="['detail', 0 , 'edit' ]" [queryParams]="{isNewValuation: true}" data-cy="newVal"><i
-          class="fas fa-plus mr-2"></i> Valuation </a>
-    </div>
-  </div> -->
-
-
-
-
-  <!-- <form class="mb-3 search-form" [formGroup]="valuationFinderForm" autocompleteOff>
-    <div class="row align-items-center">
-      <div class="col-sm">
-        <div class="row">
-          <div class="col-12 form-group">
-            <label class="small" for="valuationSearch">Search <span class="text-muted">(Name, email, phone or
-                address)</span></label>
-            <input type="search" id="valuationSearch" class="form-control form-control-sm" aria-label="Search criteria"
-              (keydown.enter)="getValuations()" [ngbTypeahead]="suggestions" [focusFirst]="false"
-              (selectItem)="suggestionSelected($event)" formControlName="searchTerm">
-          </div>
-          <div class="col-sm form-group">
-            <label class="small" for="date">Date From</label>
-            <input type="text" id="date" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
-              [bsConfig]="{showWeekNumbers:false,  dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
-              bsDatepicker
-              #datepicker="bsDatepicker"
-              [appNoDoubleTap]='datepicker' formControlName="date" data-cy="dateFrom">
-          </div>
-          <div class="col-12 form-group d-sm-none">
-            <button class="btn btn-link p-0" (click)="isAdvancedSearchVisible = !isAdvancedSearchVisible">
-              <ng-container *ngIf="!isAdvancedSearchVisible; else hideLabel">Show</ng-container>
-              <ng-template #hideLabel>Hide</ng-template> advanced search
-              <span class="badge badge-pill badge-danger ml-2" *ngIf="!!isAdvancedFilterActive">&nbsp;</span>
-            </button>
-          </div>
-          <div class="col-sm form-group d-sm-block" [ngClass]="{'d-none': !isAdvancedSearchVisible}">
-            <label class="small" for="statusId">Status</label>
-            <select class="custom-select custom-select-sm" id="statusId" formControlName="statusId" data-cy="valStatus">
-              <option selected value="0"></option>
-              <option *ngFor="let status of statuses" [value]='status.id'>
-                {{status.value}}</option>
-            </select>
-          </div>
-          <div class="col-sm form-group d-sm-block" [ngClass]="{'d-none': !isAdvancedSearchVisible}">
-            <label class="small" for="valuerId">Valuer</label>
-            <app-staff-member-finder [isMultiple]="false" (selectedStaffMemberId)="getSelectedStaffMemberId($event)"
-              [listType]="'allValuers'"></app-staff-member-finder>
-          </div>
-          <div class="col-sm form-group d-sm-block" [ngClass]="{'d-none': !isAdvancedSearchVisible}">
-            <app-office-finder [officeId]="officeId" (selectedOfficeId)="getSelectedOfficeId($event)"
-              [fullWidth]="true"></app-office-finder>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-2">
-        <div class="form-group mt-sm-4">
-          <button class="btn btn-block btn-secondary" id="btnSearch" (click)="getValuations()" data-cy="searchVal">Search</button>
-        </div>
-      </div>
-    </div>
-  </form></div> -->
-
 
   
 

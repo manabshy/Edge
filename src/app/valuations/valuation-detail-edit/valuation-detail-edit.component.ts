@@ -1148,10 +1148,6 @@ export class ValuationDetailEditComponent extends BaseComponent implements OnIni
 
   checkAvailabilityBooking() {
     if ((this.isNewValuation || this.isEditable) && !this.valuationForm.get('valuationDate').value) {
-      // if (this.salesValuerIdControl.value || this.lettingsValuerIdControl.value) {
-      //   this.isAvailabilityRequired = true;
-      //   console.log('isAvailabilityRequired', this.isAvailabilityRequired)
-      // }
       if (this.isSalesAndLettings && (this.salesValuerIdControl.valid && this.lettingsValuerIdControl.value)) {
         this.isAvailabilityRequired = true;
         this.isSalesOnly = false;

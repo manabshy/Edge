@@ -4,20 +4,6 @@
   <div class="body" [ngClass]="{'fade-in': isFading}">
     <app-header></app-header>
     <div toastContainer></div>
-    <!-- <div class="col text-muted nav-placeholder" *ngIf="navPlaceholder">
-      <small>{{navPlaceholder}}</small>
-    </div> -->
     <router-outlet></router-outlet>
   </div>
 </div>
-<!-- TODO fix getcurrentuser -->
-<!-- <div class="loader" *ngIf="!isCurrentUserAvailable && isLoggedIn">
-<div class="loader" *ngIf="!currentStaffMember && isLoggedIn">
-  <video autoplay loop>
-    <source src="assets/Boy-21827.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-  </video>
-  <div class="loader-message" data-text="Logging in ...">
-    Logging in ...
-  </div>
-</div> -->
