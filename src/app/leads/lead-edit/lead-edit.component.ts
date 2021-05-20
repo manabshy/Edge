@@ -561,9 +561,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
 
   SaveLead(shouldExit: boolean = false, leadNote = null) {
     this.logValidationErrors(this.leadEditForm, true, true);
-    // this.exitOnSave = shouldExit;
-    console.log(this.leadEditForm, 'form here');
-
     if (this.leadEditForm.invalid) { return; }
 
     if (this.leadEditForm.dirty || this.isNoteFormDirty || this.isPropertyAssociated || this.isPropertyRemoved || this.isOwnerChanged) {
@@ -573,27 +570,18 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
       lead.nextChaseDate = new Date(formattedDate);
 
       const isNoteRequired = this.isLeadMarkedAsClosed || this.isNextChaseDateChanged || this.isOwnerChanged || this.isLeadTypeChanged;
-      console.log(this.isLeadMarkedAsClosed, 'CLOSED', this.isNextChaseDateChanged, 'CHASE', this.isOwnerChanged, 'OWNER', this.isLeadTypeChanged, 'type');
-
-      console.log(this.isLeadTypeChanged, 'type change');
 
       if (this.note === undefined) { this.note = {} as ContactNote; }
 
       if (isNoteRequired && !this.note?.text && !this.isNewLead) {
-        console.log(this.note, 'note');
-        this.noteIsRequired = true;
-        setTimeout(() => {
-          this.sharedService.scrollToFirstInvalidField();
-        });
+        this.isSaveAndNext = false;
+        console.log(this.note, 'note', this.isSaveAndNext, 'save andnext');
+        this.validationService.setNoteIsRequired(true);
         return;
-      } else {
-        this.noteIsRequired = false;
       }
       this.AddOrUpdateLead(lead);
     } else {
-      if (!this.isChaseDateInvalid && this.isSaveAndNext) {
-        this.moveToNextLead();
-      }
+      if (!this.isChaseDateInvalid && this.isSaveAndNext) { this.moveToNextLead(); }
     }
 
   }
@@ -642,13 +630,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
         if (this.isChaseDateInvalid) {
           this.isChaseDateInvalid = false;
         }
-        console.log('is chase date invalid', this.isChaseDateInvalid);
-        if (!this.isChaseDateInvalid && this.isSaveAndNext && !this.isLeadMarkedAsClosed) {
-          console.log('is chase date invalid 2', this.isChaseDateInvalid);
-          this.moveToNextLead();
-        } else {
-          console.log('dont want to move to next lead');
-        }
+        if (!this.isChaseDateInvalid && this.isSaveAndNext) { this.moveToNextLead(); }
       }
       this.onSaveComplete(result);
     }, (error: WedgeError) => {
@@ -680,8 +662,6 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
     this.isOwnerChanged = false;
     this.isLeadTypeChanged = false;
 
-    console.log('change 2', this.isNextChaseDateChanged);
-
     if (this.isLeadMarkedAsClosed) { this.canEditLead = false; }
 
     this.redirectOnSave(lead);
@@ -705,19 +685,7 @@ export class LeadEditComponent extends BaseComponent implements OnInit, OnDestro
 
         localStorage.removeItem('currentUrl');
         this.canEditLead = true;
-        // this.canEditLead = this.isMyLead ? true : false;
-        console.log('CAN EDIT ', this.canEditLead);
-
       }
-      //  else {
-      //   if (this.exitOnSave) {
-      //     this.replaceLeadIdInRoute(this.leadId);
-      //     // this.router.navigateByUrl('leads-register');
-      //     // this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-      //     //   this.router.navigate(['/leads-register/edit/', this.leadId]);
-      //     // });
-      //   }
-      // }
     }
   }
 

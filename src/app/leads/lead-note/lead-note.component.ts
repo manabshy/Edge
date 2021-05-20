@@ -42,7 +42,7 @@ export class LeadNoteComponent extends BaseComponent implements OnInit, OnChange
       }
     });
 
-    this.validationService.noteIsRequired$.pipe(takeUntil(this.ngUnsubscribe)).subscribe((res) => this.showErrorMessage = res);
+    this.validationService.noteIsRequired$.pipe(takeUntil(this.ngUnsubscribe)).subscribe((res) => {this.showErrorMessage = res; console.log({res})});
 
   }
 
@@ -55,11 +55,10 @@ export class LeadNoteComponent extends BaseComponent implements OnInit, OnChange
 
     this.noteForm.valueChanges.subscribe(val => {
       if (val) {
-        this.showErrorMessage = false;
         this.note = val.text;
         console.log({ val });
-
         if (val.text) {
+          this.showErrorMessage = false;
           this.leadNote.emit(this.getNote());
         }
       }
