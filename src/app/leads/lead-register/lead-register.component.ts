@@ -81,6 +81,7 @@ export class LeadRegisterComponent implements OnInit {
 
   constructor(private leadService: LeadsService,
     private sharedService: SharedService,
+    private staffMemberService: StaffMemberService,
     private storage: StorageMap,
     private infoService: InfoService,
     private messageService: MessageService,
@@ -323,6 +324,7 @@ export class LeadRegisterComponent implements OnInit {
           this.messageService.add({ severity: 'success', summary: 'Lead(s) successfully assigned!', closable: false, key: 'assignmentMessage' });
           this.areLeadsAssignable = false;
           this.selectedLeadsForAssignment = [];
+          this.staffMemberService.clearSelectedStaffMember(true);
           this.replaceLeadsWithNewOwners(result);
           this.showModal = false;
         }

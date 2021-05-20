@@ -1,18 +1,18 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
-import { Observable, of, EMPTY } from 'rxjs';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, OnDestroy } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import { BaseStaffMember } from '../models/base-staff-member';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ResultData } from '../result-data';
-import { Valuer, OfficeMember } from 'src/app/valuations/shared/valuation';
+import { OfficeMember } from 'src/app/valuations/shared/valuation';
 
 @Component({
   selector: 'app-staff-member-finder',
   templateUrl: './staff-member-finder.component.html',
   styleUrls: ['./staff-member-finder.component.scss']
 })
-export class StaffMemberFinderComponent implements OnInit, OnChanges {
+export class StaffMemberFinderComponent implements OnInit, OnChanges, OnDestroy {
   @Input() staffMember: BaseStaffMember;
   @Input() staffMemberId: number;
   @Input() staffMemberIdList: number[];
@@ -20,7 +20,7 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
   @Input() isDisabled: boolean;
   @Input() isRequired: boolean;
   @Input() isMultiple: boolean;
-  @Input() isReadOnly: boolean = false;
+  @Input() isReadOnly = false;
   @Input() isFullStaffMember = false;
   @Input() placeholder = 'Select Staff Member';
   @Input() label: string;
@@ -34,25 +34,10 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
   selectedStaffMembers: BaseStaffMember[] = [];
   isClearable = true;
   isValuersPicker = false;
-  test = [{
-    office: {
-      officeId: 52,
-      name: 'Battersea Park'
-    },
-    staffMembers: [{
-      staffMemberId: 2449,
-      firstName: 'Kesha',
-      lastName: 'Foss-Smith',
-      fullName: 'Kesha Foss-Smith'
-    }, {
-      staffMemberId: 2127,
-      firstName: 'Mathew',
-      lastName: 'Easley',
-      fullName: 'Mathew Easley'
-    }]
-  }] as OfficeMember[];
   valuersIds: number[] = [];
   staffMembers: any[] = [];
+  subscription = new Subscription();
+
   constructor(private staffMemberService: StaffMemberService, private storage: StorageMap) { }
 
   ngOnInit(): void {
@@ -61,13 +46,16 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
     });
 
     this.getStaffMembers();
+
+    this.subscription = this.staffMemberService.clearSelectedStaffMember$.subscribe(res => {
+      if (res) { this.staffMemberFinderForm?.reset({ staffMemberId: null }); console.log('remove here..', this.staffMemberFinderForm) }
+    });
   }
 
   ngOnChanges() {
     if (this.valuers) {
       this.isValuersPicker = true;
     } else {
-      console.log('not in here xxxx valuers in', this.valuers);
       this.getStaffMembers(this.listType);
       this.isValuersPicker = false;
     }
@@ -102,10 +90,7 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
       case 'allValuers':
         this.getAllValuers();
         break;
-      // Not needed: DELETE ASAP 23/04/21
-      // case 'calendarStaffMembers':
-      //   this.getAllCalendarStaffMembers();
-      //   break;
+
       default:
         this.getActiveStaffMembers();
     }
@@ -145,4 +130,6 @@ export class StaffMemberFinderComponent implements OnInit, OnChanges {
       }
     });
   }
+
+  ngOnDestroy() { this.subscription.unsubscribe(); }
 }

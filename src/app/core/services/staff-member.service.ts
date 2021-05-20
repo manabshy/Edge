@@ -18,8 +18,10 @@ export class StaffMemberService {
   private activeStaffMembers$: Observable<StaffMember[] | any>;
   private signature$: Observable<string | any>;
   private impersonationSubject = new Subject<BaseStaffMember | null>();
+  private clearSelectedSubject = new Subject<boolean>();
   impersonatedStaffMember$ = this.impersonationSubject.asObservable();
   currentStaffMember$ = this.currentStaffMemberSubject.asObservable();
+  clearSelectedStaffMember$ = this.clearSelectedSubject.asObservable();
 
   constructor(private http: HttpClient, private storage: StorageMap) { }
 
@@ -144,4 +146,6 @@ export class StaffMemberService {
         if (data) { this.storage.set('signature', data).subscribe(); }
       }));
   }
+
+  clearSelectedStaffMember = (clear: boolean) => this.clearSelectedSubject.next(clear);
 }
