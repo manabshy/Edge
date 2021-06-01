@@ -34,7 +34,16 @@ export class LeadNoteComponent
 {
   @Input() selectedPerson: Person;
   @Input() isDisabled: boolean;
-  @Input() isUpdateComplete: boolean;
+  private _isUpdateComplete: boolean;
+  @Input() set isUpdateComplete(value: boolean) {
+    this._isUpdateComplete = value;
+    if (this._isUpdateComplete) {
+      this.noteRequired = false;
+    }
+  }
+  get isUpdateComplete(): boolean {
+    return this._isUpdateComplete;
+  }
   @Input() noteRequiredWarning: string;
   @Input() noteIsRequired = false;
   @Output() leadNote = new EventEmitter<ContactNote>();
@@ -68,6 +77,8 @@ export class LeadNoteComponent
         }
       });
 
+    this.noteRequired = false;
+
     this.validationService.noteIsRequired$
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((res) => {
@@ -92,7 +103,7 @@ export class LeadNoteComponent
     this.noteForm.valueChanges.subscribe((val) => {
       if (val) {
         this.note = val.text;
-        this.note = this.note.trim();
+        this.note = this.note?.trim();
         console.log({ val });
         if (this.note) {
           this.showErrorMessage = false;
