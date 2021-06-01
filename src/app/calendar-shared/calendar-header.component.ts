@@ -1,27 +1,34 @@
-import { Component, Input, Output, EventEmitter, OnChanges, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import { BaseStaffMember } from '../shared/models/base-staff-member';
-import { StaffMemberService } from '../core/services/staff-member.service';
-import { Observable, of, merge, empty } from 'rxjs';
-import { StorageMap } from '@ngx-pwa/local-storage';
-import { CalendarView } from './shared/calendar-shared';
-import { StaffMember } from '../shared/models/staff-member';
-import { Router, ActivatedRoute } from '@angular/router';
-import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
-import { tap } from 'rxjs/operators';
-import { ResultData } from '../shared/result-data';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  OnChanges,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
+import { FormGroup, FormBuilder } from "@angular/forms";
+import { BaseStaffMember } from "../shared/models/base-staff-member";
+import { StaffMemberService } from "../core/services/staff-member.service";
+import { Observable, of, merge, empty } from "rxjs";
+import { StorageMap } from "@ngx-pwa/local-storage";
+import { CalendarView } from "./shared/calendar-shared";
+import { StaffMember } from "../shared/models/staff-member";
+import { Router, ActivatedRoute } from "@angular/router";
+import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
+import { tap } from "rxjs/operators";
+import { ResultData } from "../shared/result-data";
+import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
 
 @Component({
-  selector: 'app-calendar-header',
-  templateUrl: './calendar-header.component.html',
-  styleUrls: ['./calendar-header.component.scss']
+  selector: "app-calendar-header",
+  templateUrl: "./calendar-header.component.html",
+  styleUrls: ["./calendar-header.component.scss"],
 })
 export class CalendarHeaderComponent implements OnInit, OnChanges {
-
-  @Input() view: CalendarView | 'month' | 'week' | 'threeDays' | 'day';
+  @Input() view: CalendarView | "month" | "week" | "threeDays" | "day";
   @Input() viewDate: Date;
-  @Input() locale = 'en';
+  @Input() locale = "en";
   @Input() weekStartsOn;
   @Input() daysInWeek;
   @Input() myCalendarOnly: boolean;
@@ -30,7 +37,8 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
   @Output() filterChange: EventEmitter<boolean> = new EventEmitter();
   @Output() dateChange: EventEmitter<Date> = new EventEmitter();
   @Output() staffMemberChange: EventEmitter<number> = new EventEmitter();
-  @ViewChild('datepickerDropdown') private datepickerDropdown: BsDropdownDirective;
+  @ViewChild("datepickerDropdown")
+  private datepickerDropdown: BsDropdownDirective;
   label: string;
   excludeDays = [];
   diaryHeaderForm: FormGroup;
@@ -42,39 +50,46 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
 
   get isShowMeVisible() {
     if (this.diaryHeaderForm && this.currentStaffMember) {
-      return +this.diaryHeaderForm.get('staffMember').value !== this.currentStaffMember.staffMemberId;
+      return (
+        +this.diaryHeaderForm.get("staffMember").value !==
+        this.currentStaffMember.staffMemberId
+      );
     }
   }
 
-  constructor(private fb: FormBuilder,
+  constructor(
+    private fb: FormBuilder,
     private storage: StorageMap,
     private router: Router,
     private route: ActivatedRoute,
-    private staffMemberService: StaffMemberService) { }
+    private staffMemberService: StaffMemberService
+  ) {}
 
   ngOnInit() {
     this.diaryHeaderForm = this.fb.group({
       viewMode: this.view,
       showCancelled: false,
       staffMember: null,
-      dateFilter: this.viewDate
+      dateFilter: this.viewDate,
     });
 
-    this.storage.get('currentUser').subscribe((data: StaffMember) => {
+    this.storage.get("currentUser").subscribe((data: StaffMember) => {
       if (data) {
         this.currentStaffMember = data;
-        if (this.diaryHeaderForm.get('staffMember').value === 0) {
+        if (this.diaryHeaderForm.get("staffMember").value === 0) {
           this.patchForm(this.currentStaffMember.staffMemberId);
         }
       }
     });
 
-    this.route.queryParams.subscribe(params => {
-      this.staffMemberId = +params['staffMemberId'] || 0;
+    this.route.queryParams.subscribe((params) => {
+      this.staffMemberId = +params["staffMemberId"] || 0;
       if (this.staffMemberId) {
         this.patchForm(this.staffMemberId);
       } else {
-        const currentStaffMemberId = this.currentStaffMember ? this.currentStaffMember.staffMemberId : 0;
+        const currentStaffMemberId = this.currentStaffMember
+          ? this.currentStaffMember.staffMemberId
+          : 0;
         this.patchForm(currentStaffMemberId);
       }
     });
@@ -82,47 +97,58 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
     this.getActiveStaffMembers();
   }
 
+  getSelectedStaffMemberId(memberId: number) {
+    this.currentStaffMember.staffMemberId = memberId;
+  }
+
   private patchForm(id: number) {
     this.diaryHeaderForm.patchValue({
-      staffMember: id
+      staffMember: id,
     });
   }
 
   ngOnChanges() {
     if (this.view && this.diaryHeaderForm) {
       this.diaryHeaderForm.patchValue({
-        viewMode: this.view
-      })
+        viewMode: this.view,
+      });
       this.getLabel();
-      this.diaryHeaderForm.patchValue({
-        dateFilter: this.viewDate
-      },
-      //  {emitEvent: false, onlySelf: true}
-       )
-       this.datepickerDropdown.hide();
+      this.diaryHeaderForm.patchValue(
+        {
+          dateFilter: this.viewDate,
+        }
+        //  {emitEvent: false, onlySelf: true}
+      );
+      this.datepickerDropdown.hide();
     }
   }
 
   getStaffMembersForCalendar() {
-    this.storage.get('calendarStaffMembers').subscribe(staffMembers => {
+    this.storage.get("calendarStaffMembers").subscribe((staffMembers) => {
       if (staffMembers) {
         this.staffMembers$ = of(staffMembers as BaseStaffMember[]);
       } else {
-        this.staffMembers$ = this.staffMemberService.getStaffMembersForCalendar().pipe(tap(res=>console.log({res}, 'calendar memebers')));
+        this.staffMembers$ = this.staffMemberService
+          .getStaffMembersForCalendar()
+          .pipe(tap((res) => console.log({ res }, "calendar memebers")));
       }
     });
   }
   getActiveStaffMembers() {
-    this.storage.get('activeStaffmembers').subscribe(data => {
+    this.storage.get("activeStaffmembers").subscribe((data) => {
       if (data) {
         this.staffMembers = data as BaseStaffMember[];
       } else {
-        this.staffMemberService.getActiveStaffMembers().subscribe(
-          (res: ResultData) => {
+        this.staffMemberService
+          .getActiveStaffMembers()
+          .subscribe((res: ResultData) => {
             this.staffMembers = res.result;
-            console.log('%cmembers from shared replay', 'color:green', res.result);
-          }
-        );
+            console.log(
+              "%cmembers from shared replay",
+              "color:green",
+              res.result
+            );
+          });
       }
     });
   }
@@ -130,60 +156,67 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
   getCurrentStaffMemberCalendar() {
     this.staffMemberChange.emit(this.currentStaffMember.staffMemberId);
     this.diaryHeaderForm.patchValue({
-      staffMember: this.currentStaffMember.staffMemberId
-    })
-    this.router.navigate(['/'],
-      {
-        queryParams: { isCalendarSelected: true, staffMemberId: this.currentStaffMember.staffMemberId },
-        queryParamsHandling: 'merge'
-      })
+      staffMember: this.currentStaffMember.staffMemberId,
+    });
+    this.router.navigate(["/"], {
+      queryParams: {
+        isCalendarSelected: true,
+        staffMemberId: this.currentStaffMember.staffMemberId,
+      },
+      queryParamsHandling: "merge",
+    });
   }
 
   onStaffMemberChange(staffMember: BaseStaffMember) {
     this.staffMemberChange.emit(staffMember.staffMemberId);
-    this.router.navigate(['/'],
-      {
-        queryParams: { isCalendarSelected: true, staffMemberId: staffMember.staffMemberId },
-        queryParamsHandling: 'merge'
-      })
-    console.log('staff member Id', staffMember.staffMemberId);
+    this.router.navigate(["/"], {
+      queryParams: {
+        isCalendarSelected: true,
+        staffMemberId: staffMember.staffMemberId,
+      },
+      queryParamsHandling: "merge",
+    });
+    console.log("staff member Id", staffMember.staffMemberId);
   }
 
   getLabel() {
     switch (this.view) {
-      case 'day':
-        this.label = 'Today';
+      case "day":
+        this.label = "Today";
         break;
-      case 'month':
-        this.label = 'This Month';
+      case "month":
+        this.label = "This Month";
         break;
       default:
-        this.fakeView = 'week';
-        this.label = 'This Week';
+        this.fakeView = "week";
+        this.label = "This Week";
     }
   }
 
-  onDateChange(date){
-    if(date!=this.viewDate){
-      this.dateChange.emit(date)
+  onDateChange(date) {
+    if (date != this.viewDate) {
+      this.dateChange.emit(date);
     }
   }
 
   onShowPicker(event) {
     const dayHoverHandler = event.dayHoverHandler;
     const hoverWrapper = (hoverEvent) => {
-        const { cell, isHovered } = hoverEvent;
+      const { cell, isHovered } = hoverEvent;
 
-        if ((isHovered &&
-          !!navigator.platform &&
-          /iPad|iPhone|iPod/.test(navigator.platform)) &&
-          'ontouchstart' in window
-        ) {
-            (this.datepickerDropdown as any)._datepickerRef.instance.daySelectHandler(cell);
-        }
+      if (
+        isHovered &&
+        !!navigator.platform &&
+        /iPad|iPhone|iPod/.test(navigator.platform) &&
+        "ontouchstart" in window
+      ) {
+        (
+          this.datepickerDropdown as any
+        )._datepickerRef.instance.daySelectHandler(cell);
+      }
 
-        return dayHoverHandler(hoverEvent);
+      return dayHoverHandler(hoverEvent);
     };
     event.dayHoverHandler = hoverWrapper;
-}
+  }
 }
