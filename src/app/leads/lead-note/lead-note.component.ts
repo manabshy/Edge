@@ -39,6 +39,8 @@ export class LeadNoteComponent
     this._isUpdateComplete = value;
     if (this._isUpdateComplete) {
       this.noteRequired = false;
+      this.showErrorMessage = false;
+      this.setTextValidator();
     }
   }
   get isUpdateComplete(): boolean {

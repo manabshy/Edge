@@ -260,8 +260,11 @@ export class LeadEditComponent
       if (control.dirty) {
         // if (flagType === 'leadType') { this.isLeadTypeChanged = true; }
         // if (flagType === 'chaseDate') { this.isNextChaseDateChanged = true; }
-        this.validationService.setNoteIsRequired(true);
+        if (!this.isUpdateComplete || !this.isSaveAndNext) {
+          this.validationService.setNoteIsRequired(true);
+        }
         this.logValidationErrors(this.leadEditForm, true);
+        this.isUpdateComplete = false;
       }
     });
   }
@@ -458,32 +461,34 @@ export class LeadEditComponent
   }
 
   private getLeadInformation() {
-    this.leadsService
-      .getLead(this.leadId)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((result: Lead) => {
-        this.lead = result;
-        this.personId = result.personId;
+    if (this.leadId) {
+      this.leadsService
+        .getLead(this.leadId)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe((result: Lead) => {
+          this.lead = result;
+          this.personId = result.personId;
 
-        this.patchLeadValues(result);
-        this.getPersonInformation();
-        this.lead?.closedById
-          ? (this.isLeadClosed = true)
-          : (this.isLeadClosed = false);
-        this.setCanEditFlag();
+          this.patchLeadValues(result);
+          this.getPersonInformation();
+          this.lead?.closedById
+            ? (this.isLeadClosed = true)
+            : (this.isLeadClosed = false);
+          this.setCanEditFlag();
 
-        this.setLeadTypes(this.lead);
-        this.setIsOwnerFlag();
+          this.setLeadTypes(this.lead);
+          this.setIsOwnerFlag();
 
-        console.log(
-          this.isLeadClosed,
-          "closed",
-          this.canEditLead,
-          "canedit",
-          this.isOwner,
-          "isowner"
-        );
-      });
+          console.log(
+            this.isLeadClosed,
+            "closed",
+            this.canEditLead,
+            "canedit",
+            this.isOwner,
+            "isowner"
+          );
+        });
+    }
   }
 
   private setIsOwnerFlag() {
@@ -702,7 +707,12 @@ export class LeadEditComponent
     }
   }
 
-  SaveLead(shouldExit: boolean = false, leadNote = null) {
+  SaveLead(
+    shouldExit: boolean = false,
+    leadNote = null,
+    traverseLeads = false
+  ) {
+    this.isSaveAndNext = traverseLeads;
     this.logValidationErrors(this.leadEditForm, true, true);
     if (this.leadEditForm.invalid) {
       return;
@@ -716,7 +726,9 @@ export class LeadEditComponent
       this.isOwnerChanged
     ) {
       const lead = { ...this.lead, ...this.leadEditForm.value } as Lead;
-      this.isSubmitting = true;
+
+      // this.isSubmitting = true;
+
       const formattedDate = format(lead.nextChaseDate, "yyyy-MM-dd");
       lead.nextChaseDate = new Date(formattedDate);
 
@@ -736,7 +748,7 @@ export class LeadEditComponent
         this.validationService.setNoteIsRequired(true);
         return;
       }
-      this.AddOrUpdateLead(lead);
+      this.AddOrUpdateLead(lead, traverseLeads);
     } else {
       if (!this.isChaseDateInvalid && this.isSaveAndNext) {
         this.moveToNextLead();
@@ -744,7 +756,7 @@ export class LeadEditComponent
     }
   }
 
-  private AddOrUpdateLead(lead: any) {
+  private AddOrUpdateLead(lead: any, traverseLeads = false) {
     if (this.isNewLead) {
       lead.personId = this.personId;
       lead.createdBy = this.currentStaffMember.staffMemberId;
@@ -768,13 +780,13 @@ export class LeadEditComponent
         lead.closedById = this.currentStaffMember.staffMemberId;
         lead.dateClosed = new Date();
       }
-      this.updateLead(lead);
+      this.updateLead(lead, traverseLeads);
     }
     this.addLeadNote();
   }
 
   private addLeadNote() {
-    if (this.note && this.note.text) {
+    if (this.note && this.note.text && this.note.personId) {
       this.contactGroupService.addPersonNote(this.note).subscribe(
         (data) => {
           if (data && !this.isSaveAndNext) {
@@ -792,7 +804,7 @@ export class LeadEditComponent
     }
   }
 
-  private updateLead(lead: any) {
+  private updateLead(lead: any, traverseLeads = false) {
     this.leadsService.updateLead(lead).subscribe(
       (result) => {
         if (result) {
@@ -807,7 +819,7 @@ export class LeadEditComponent
             this.moveToNextLead();
           }
         }
-        this.onSaveComplete(result);
+        this.onSaveComplete(result, traverseLeads);
       },
       (error: WedgeError) => {
         this.isSubmitting = false;
@@ -815,7 +827,7 @@ export class LeadEditComponent
     );
   }
 
-  private onSaveComplete(lead?: Lead) {
+  private onSaveComplete(lead?: Lead, traverseLeads = false) {
     this.note = null;
     console.log("i am here in OnUpdateCompleted", this.note);
     let time: number;
@@ -840,7 +852,7 @@ export class LeadEditComponent
     }
 
     this.setIsOwnerFlag();
-    this.isSaveAndNext = false;
+    this.isSaveAndNext = traverseLeads;
     this.isUpdateComplete = true;
     this.leadsService.isLeadUpdated(true);
     this.isNextChaseDateChanged = false;
@@ -860,7 +872,7 @@ export class LeadEditComponent
       this.lead = lead;
       this.currentUrl = localStorage.getItem("currentUrl");
       console.log("current route BEFORE", this.currentUrl);
-      if (this.exitOnSave && this.backToOrigin) {
+      if (this.exitOnSave && this.backToOrigin && this.leadId) {
         console.log("exist on save", this.exitOnSave);
         this.router.navigate(["/leads-register/edit/", this.leadId], {
           queryParams: {
@@ -957,6 +969,8 @@ export class LeadEditComponent
       if (this.currentLeadIndex === 0) {
         this.disablePrevious = true;
       }
+      this.isSaveAndNext = true;
+      this.isUpdateComplete = true;
     } else {
       this.disablePrevious = true;
     }
@@ -964,14 +978,16 @@ export class LeadEditComponent
 
   replaceLeadIdInRoute(id: number) {
     this.leadSearchInfo.startLeadId = id;
-    this.router.navigate(["/leads-register/edit/", id], {
-      queryParams: {
-        showNotes: true,
-        showSaveAndNext: true,
-        leadSearchInfo: JSON.stringify(this.leadSearchInfo),
-      },
-      // { showNotes: true, showSaveAndNext: true, useExistingIds: true, leadSearchInfo: JSON.stringify(this.leadSearchInfo) } Add useexistingIds flag later
-    });
+    if (id) {
+      this.router.navigate(["/leads-register/edit/", id], {
+        queryParams: {
+          showNotes: true,
+          showSaveAndNext: true,
+          leadSearchInfo: JSON.stringify(this.leadSearchInfo),
+        },
+        // { showNotes: true, showSaveAndNext: true, useExistingIds: true, leadSearchInfo: JSON.stringify(this.leadSearchInfo) } Add useexistingIds flag later
+      });
+    }
   }
 
   private getLeadTraversalInfo() {
@@ -988,7 +1004,7 @@ export class LeadEditComponent
   traverseLeads(save?: boolean, previous?: boolean) {
     if (save) {
       this.isSaveAndNext = true;
-      this.SaveLead(false, this.note);
+      this.SaveLead(false, this.note, true);
       this.note = null;
     } else {
       console.log("move without saving");

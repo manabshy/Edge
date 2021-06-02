@@ -1,21 +1,22 @@
-import { SubNavItem, SubNav } from 'src/app/shared/subnav';
-import { Address } from 'src/app/shared/models/address';
+import { SubNavItem, SubNav } from "src/app/shared/subnav";
+import { Address } from "src/app/shared/models/address";
 
 export const LeadEditSubNav = [
-  'properties',
-  'leads',
-  'valuations',
-  'instructions',
-  'searches',
-  'offers',
-  'lettings-managements',
-  'home-helpers'];
+  "properties",
+  "leads",
+  "valuations",
+  "instructions",
+  "searches",
+  "offers",
+  "lettings-managements",
+  "home-helpers",
+];
 
-export const LeadEditSubNavItems: SubNavItem[] = LeadEditSubNav.map(x => ({
+export const LeadEditSubNavItems: SubNavItem[] = LeadEditSubNav.map((x) => ({
   link: x,
   label: SubNav.subNavLabel(x),
   value: SubNav.subNavValue(x),
-  params: []
+  params: [],
 }));
 
 export interface Lead {
@@ -66,9 +67,8 @@ export interface LeadProperty {
   address: Address;
 }
 
-
 export enum ListingType {
   MyLeads = 1,
   OtherUserLeads = 2,
-  UnassignedLeads = 4
+  UnassignedLeads = 4,
 }
