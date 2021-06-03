@@ -50,10 +50,7 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
 
   get isShowMeVisible() {
     if (this.diaryHeaderForm && this.currentStaffMember) {
-      return (
-        +this.diaryHeaderForm.get("staffMember").value !==
-        this.currentStaffMember.staffMemberId
-      );
+      return this.staffMemberId !== this.currentStaffMember.staffMemberId;
     }
   }
 
@@ -69,14 +66,15 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
     this.diaryHeaderForm = this.fb.group({
       viewMode: this.view,
       showCancelled: false,
-      staffMember: null,
+      // staffMember: null,
       dateFilter: this.viewDate,
     });
 
     this.storage.get("currentUser").subscribe((data: StaffMember) => {
       if (data) {
         this.currentStaffMember = data;
-        if (this.diaryHeaderForm.get("staffMember").value === 0) {
+
+        if (this.currentStaffMember) {
           this.patchForm(this.currentStaffMember.staffMemberId);
         }
       }
@@ -102,9 +100,7 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
   }
 
   private patchForm(id: number) {
-    this.diaryHeaderForm.patchValue({
-      staffMember: id,
-    });
+    this.staffMemberId = id;
   }
 
   ngOnChanges() {
@@ -194,7 +190,7 @@ export class CalendarHeaderComponent implements OnInit, OnChanges {
   }
 
   onDateChange(date) {
-    if (date != this.viewDate) {
+    if (date !== this.viewDate) {
       this.dateChange.emit(date);
     }
   }

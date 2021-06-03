@@ -5,20 +5,21 @@
       <ol class="calNav">
         <li class="calNav__search">
           <!-- Change staff member -->
-          <ng-select placeholder="Select Staff Member" [items]="staffMembers" [clearable]="false" bindLabel="fullName"
+          <!-- <ng-select placeholder="Select Staff Member" [items]="staffMembers" [clearable]="false" bindLabel="fullName"
             bindValue="staffMemberId" groupBy="category" (change)="onStaffMemberChange($event)"
             formControlName="staffMember">
             <ng-template ng-optgroup-tmp let-item="item">
 
             </ng-template>
-          </ng-select>
+          </ng-select> -->
 
-          <!-- <fieldset class="inline-child">
-            <app-staff-member-finder class="appWrapper" formControlName="staffMember"
-              [staffMemberId]="currentStaffMember?.staffMemberId" [listType]="'activeStaffMembers'"
-              (selectedStaffMember)="onStaffMemberChange($event)" [isDisabled]="false">
+          <fieldset class="inline-child">
+            <app-staff-member-finder class="appWrapper"
+              [staffMemberId]="staffMemberId?staffMemberId:currentStaffMember.staffMemberId"
+              [listType]="'activeStaffMembers'" (selectedStaffMember)="onStaffMemberChange($event)" [isDisabled]="false"
+              [isFullStaffMember]="true">
             </app-staff-member-finder>
-          </fieldset> -->
+          </fieldset>
 
           <!-- Btn - Change view -->
           <!-- <ng-container *ngTemplateOutlet="calendarChangeView"></ng-container> -->
