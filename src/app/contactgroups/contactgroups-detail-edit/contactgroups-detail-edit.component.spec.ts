@@ -1,59 +1,64 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { ContactgroupsDetailEditComponent } from './contactgroups-detail-edit.component';
-import { Person } from 'src/app/shared/models/person';
-import { NO_ERRORS_SCHEMA, DebugElement } from '@angular/core';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { SharedService } from 'src/app/core/services/shared.service';
-import { ContactGroupsService } from '../shared/contact-groups.service';
-import { ToastrService } from 'ngx-toastr';
-import { By } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule, FormGroup, AbstractControl } from '@angular/forms';
-import { of } from 'rxjs';
-import { RouterTestingModule } from '@angular/router/testing';
-import { MockPerson } from 'src/testing/fixture-data/person-data.json';
-import { MockDropdownListInfo } from 'src/testing/fixture-data/dropdown-list-data.json';
+import { ContactgroupsDetailEditComponent } from "./contactgroups-detail-edit.component";
+import { Person } from "src/app/shared/models/person";
+import { NO_ERRORS_SCHEMA, DebugElement } from "@angular/core";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { SharedService } from "src/app/core/services/shared.service";
+import { ContactGroupsService } from "../shared/contact-groups.service";
+import { ToastrService } from "ngx-toastr";
+import { By } from "@angular/platform-browser";
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  FormGroup,
+  AbstractControl,
+} from "@angular/forms";
+import { of } from "rxjs";
+import { RouterTestingModule } from "@angular/router/testing";
+import { MockPerson } from "src/testing/fixture-data/person-data.json";
+import { MockDropdownListInfo } from "src/testing/fixture-data/dropdown-list-data.json";
 
-describe('ContactgroupsDetailEditComponent', () => {
+describe("ContactgroupsDetailEditComponent", () => {
   let component: ContactgroupsDetailEditComponent;
   let fixture: ComponentFixture<ContactgroupsDetailEditComponent>;
   let debugEl: DebugElement;
   let element: HTMLElement;
-  let personForm: FormGroup,
-      firstNameControl: AbstractControl;
+  let personForm: FormGroup, firstNameControl: AbstractControl;
 
   let personSpy: any;
-  const person = <Person> <unknown>MockPerson;
+  const person = <Person>(<unknown>MockPerson);
   let contactGroupService: ContactGroupsService,
     mockSharedService = {
       getDropdownListInfo: () => of(MockDropdownListInfo),
       scrollToFirstInvalidField: () => null,
       ISOToDate: () => Date(),
       isUKMobile: () => false,
-      formatPostCode: () => ''
+      formatPostCode: () => "",
     },
     mockToastrService = {};
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ContactgroupsDetailEditComponent ],
-      imports: [
-        HttpClientTestingModule,
-        // BrowserModule,
-        FormsModule,
-        ReactiveFormsModule,
-        RouterTestingModule.withRoutes([])
-      ],
-      providers: [
-        // {provide: ContactGroupsService, useValue: mockContactGroupService},
-        ContactGroupsService,
-        {provide: SharedService, useValue: mockSharedService},
-        {provide: ToastrService, useValue: mockToastrService}
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ContactgroupsDetailEditComponent],
+        imports: [
+          HttpClientTestingModule,
+          // BrowserModule,
+          FormsModule,
+          ReactiveFormsModule,
+          RouterTestingModule.withRoutes([]),
+        ],
+        providers: [
+          // {provide: ContactGroupsService, useValue: mockContactGroupService},
+          ContactGroupsService,
+          { provide: SharedService, useValue: mockSharedService },
+          { provide: ToastrService, useValue: mockToastrService },
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     contactGroupService = TestBed.get(ContactGroupsService);
@@ -64,31 +69,39 @@ describe('ContactgroupsDetailEditComponent', () => {
     // personForm = component.personForm;
     // firstName = fixture.debugElement.query(By.css('#name')).nativeElement;
     fixture.detectChanges();
-    personSpy = spyOn(contactGroupService, 'getPerson').and.returnValue(of(MockPerson));
+    personSpy = spyOn(contactGroupService, "getPerson").and.returnValue(
+      of(MockPerson)
+    );
     personForm = component.personForm;
-    firstNameControl = personForm.get('firstName');
+    firstNameControl = personForm.get("firstName");
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 
-  it('should get person details on initialisation', waitForAsync(() => {
-    component.ngOnInit();
-    const response = component.personDetails;
+  it(
+    "should get person details on initialisation",
+    waitForAsync(() => {
+      component.ngOnInit();
+      const response = component.personDetails;
 
-    expect(response).toEqual(person);
-  }));
+      expect(response).toEqual(person);
+    })
+  );
 
-  it('form should display the correct firstName', waitForAsync( () => {
-    component.ngOnInit();
-    const response = component.personDetails;
-    personForm.patchValue(MockPerson);
+  it(
+    "form should display the correct firstName",
+    waitForAsync(() => {
+      component.ngOnInit();
+      const response = component.personDetails;
+      personForm.patchValue(MockPerson);
 
-    fixture.whenStable().then(() => {
-      expect(firstNameControl.value).toContain(response.firstName);
-    });
-  }));
+      fixture.whenStable().then(() => {
+        expect(firstNameControl.value).toContain(response.firstName);
+      });
+    })
+  );
 
   // it('form should display the correct firstName', async( () => {
   //   component.getPersonDetails(MockPerson.personId);
@@ -103,5 +116,4 @@ describe('ContactgroupsDetailEditComponent', () => {
   //     expect(firstNameControl.value).toContain(component.personDetails.firstName);
   //   });
   // }));
-
 });
