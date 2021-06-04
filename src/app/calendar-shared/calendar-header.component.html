@@ -15,7 +15,7 @@
 
           <fieldset class="inline-child">
             <app-staff-member-finder class="appWrapper"
-              [staffMemberId]="staffMemberId?staffMemberId:currentStaffMember.staffMemberId"
+              [staffMemberId]="staffMemberId?staffMemberId:currentStaffMember?.staffMemberId"
               [listType]="'activeStaffMembers'" (selectedStaffMember)="onStaffMemberChange($event)" [isDisabled]="false"
               [isFullStaffMember]="true">
             </app-staff-member-finder>
