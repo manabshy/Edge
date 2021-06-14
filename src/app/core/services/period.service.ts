@@ -1,24 +1,45 @@
-import { Injectable } from '@angular/core';
-import { StorageMap } from '@ngx-pwa/local-storage';
-import { addDays, addHours, isBefore, isAfter, isEqual, setHours, setMinutes, setSeconds, startOfWeek, subHours, subMonths } from 'date-fns';
+import { Injectable } from "@angular/core";
+import { StorageMap } from "@ngx-pwa/local-storage";
+import {
+  addDays,
+  addHours,
+  isBefore,
+  isAfter,
+  isEqual,
+  setHours,
+  setMinutes,
+  setSeconds,
+  startOfWeek,
+  subHours,
+  subMonths,
+} from "date-fns";
+import { BehaviorSubject } from "rxjs";
 // import { isAfter } from 'date-fns/esm';
-import { PeriodsEnum, ReportingMonth } from 'src/app/dashboard/shared/dashboard';
-import { ResultData } from 'src/app/shared/result-data';
-import { DropdownListInfo, InfoService } from './info.service';
+import {
+  PeriodsEnum,
+  ReportingMonth,
+} from "src/app/dashboard/shared/dashboard";
+import { ResultData } from "src/app/shared/result-data";
+import { DropdownListInfo, InfoService } from "./info.service";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class PeriodService {
   reportingMonths: ReportingMonth[] = [];
+  onReportingMonthsOnSelected: BehaviorSubject<ReportingMonth[]> =
+    new BehaviorSubject<Array<ReportingMonth>>([]);
 
-  constructor(private infoService: InfoService, private storage: StorageMap) { this.getReportingMonths(); }
+  constructor(private infoService: InfoService, private storage: StorageMap) {
+    this.getReportingMonths();
+  }
 
   getReportingMonths() {
-    this.storage.get('info').subscribe((data: DropdownListInfo) => {
+    this.storage.get("info").subscribe((data: DropdownListInfo) => {
       if (data) {
         this.reportingMonths = data.reportingMonths;
-        console.log(' in period service from storage', data);
+        this.onReportingMonthsOnSelected.next(this.reportingMonths);
+        console.log(" in period service from storage", data);
       } else {
         this.getInfoFromDb();
       }
@@ -26,19 +47,23 @@ export class PeriodService {
   }
 
   private getInfoFromDb() {
-    this.infoService.getDropdownListInfo().subscribe((info: ResultData | any) => {
-      if (info) {
-        this.reportingMonths = info.reportingMonths;
-        console.log(' period service from db', info.result);
-      }
-    });
+    this.infoService
+      .getDropdownListInfo()
+      .subscribe((info: ResultData | any) => {
+        if (info) {
+          this.reportingMonths = info.reportingMonths;
+          this.onReportingMonthsOnSelected.next(this.reportingMonths);
+          console.log(" period service from db", info.result);
+        }
+      });
   }
-
 
   getReportingQuarter(reportingMonth: ReportingMonth) {
     const quarterNumber = Math.floor(reportingMonth.month / 4);
-    const quarterStartMonth = (quarterNumber * 3) + 1;
-    const startOfQuarter = this.reportingMonths.find(x => x.month === quarterStartMonth && x.year === reportingMonth.year);
+    const quarterStartMonth = quarterNumber * 3 + 1;
+    const startOfQuarter = this.reportingMonths.find(
+      (x) => x.month === quarterStartMonth && x.year === reportingMonth.year
+    );
     console.log({ startOfQuarter });
 
     return startOfQuarter?.startDate;
@@ -46,30 +71,42 @@ export class PeriodService {
 
   getEndOfReportingQuarter(reportingMonth: ReportingMonth) {
     const quarterNumber = Math.floor(reportingMonth.month / 4);
-    const quarterStartMonth = (quarterNumber * 3) + 3;
-    const endOfQuarter = this.reportingMonths.find(x => x.month === quarterStartMonth && x.year === reportingMonth.year);
+    const quarterStartMonth = quarterNumber * 3 + 3;
+    const endOfQuarter = this.reportingMonths.find(
+      (x) => x.month === quarterStartMonth && x.year === reportingMonth.year
+    );
     console.log({ endOfQuarter });
 
     return endOfQuarter?.endDate;
   }
 
   getReportingYear(reportingMonth: ReportingMonth) {
-    const startOfYear = this.reportingMonths.find(x => x.year === reportingMonth.year && x.month === 1);
+    const startOfYear = this.reportingMonths.find(
+      (x) => x.year === reportingMonth.year && x.month === 1
+    );
     return startOfYear.startDate;
   }
 
-
-  getInterval(period?: PeriodsEnum, customStartDate?: Date, customEndDate?: Date) {
-    if (period == null) { period = PeriodsEnum.ThisMonth; }
+  getInterval(
+    period?: PeriodsEnum,
+    customStartDate?: Date,
+    customEndDate?: Date
+  ) {
+    if (period == null) {
+      period = PeriodsEnum.ThisMonth;
+    }
     let periodStartDate = new Date(1950, 1, 1);
     let periodEndDate = new Date(1950, 1, 1);
     const currentDate = new Date();
 
-    const reportingMonth =
-      this.reportingMonths.find(x => (isEqual(new Date(x.startDate), currentDate) || isBefore(new Date(x.startDate), currentDate)) &&
-        (isEqual(new Date(x.endDate), currentDate) || isAfter(new Date(x.endDate), currentDate)));
+    const reportingMonth = this.reportingMonths.find(
+      (x) =>
+        (isEqual(new Date(x.startDate), currentDate) ||
+          isBefore(new Date(x.startDate), currentDate)) &&
+        (isEqual(new Date(x.endDate), currentDate) ||
+          isAfter(new Date(x.endDate), currentDate))
+    );
     console.log(this.reportingMonths);
-
 
     switch (period) {
       case PeriodsEnum.Today:
@@ -77,22 +114,40 @@ export class PeriodService {
         periodStartDate = new Date(currentDate.setHours(0, 0, 0)); // 00:00
         break;
       case PeriodsEnum.ThisWeek:
-        periodStartDate = new Date(startOfWeek(currentDate, { weekStartsOn: 6 })); // 17:00
-        periodEndDate = addDays(new Date(periodStartDate.setHours(16, 59, 59)), 6); // 16:59
-        periodStartDate.setHours(17, 0);
+        periodStartDate = new Date(
+          startOfWeek(currentDate, { weekStartsOn: 5 }).setHours(17, 1, 0)
+        ); // 17:00
+        periodEndDate = addDays(
+          new Date(periodStartDate.setHours(17, 0, 0)),
+          7
+        );
         break;
       case PeriodsEnum.ThisMonth:
         periodStartDate = addHours(new Date(reportingMonth?.startDate), 17); // 17:00
         periodEndDate = this.getCurrentReportingMonthEndDate(reportingMonth); // current reporting month end (16:59)
         break;
       case PeriodsEnum.ThisQuarter:
-        periodStartDate = addHours(new Date(this.getReportingQuarter(reportingMonth)), 17); // 17:00
-        periodEndDate = subHours(new Date(this.getEndOfReportingQuarter(reportingMonth)), 7); // current reporting month end (16:59)
+        periodStartDate = addHours(
+          new Date(this.getReportingQuarter(reportingMonth)),
+          17
+        ); // 17:00
+        periodEndDate = subHours(
+          new Date(this.getEndOfReportingQuarter(reportingMonth)),
+          7
+        ); // current reporting month end (16:59)
         // periodEndDate = this.getCurrentReportingMonthEndDate(reportingMonth); // current reporting month end (16:59)
         break;
       case PeriodsEnum.ThisYear:
-        periodStartDate = addHours(new Date(this.getReportingYear(reportingMonth)), 17); // 17:00
-        periodEndDate = subHours(new Date(this.reportingMonths[this.reportingMonths?.length - 1]?.endDate), 7); // current reporting month end (16:59)
+        periodStartDate = addHours(
+          new Date(this.getReportingYear(reportingMonth)),
+          17
+        ); // 17:00
+        periodEndDate = subHours(
+          new Date(
+            this.reportingMonths[this.reportingMonths?.length - 1]?.endDate
+          ),
+          7
+        ); // current reporting month end (16:59)
         // periodEndDate = this.getCurrentReportingMonthEndDate(reportingMonth); // current reporting month end (16:59)
         break;
       case PeriodsEnum.Custom:
@@ -109,5 +164,6 @@ export class PeriodService {
     return { periodStartDate, periodEndDate };
   }
 
-  getCurrentReportingMonthEndDate = (reportingMonth: ReportingMonth) => subHours(new Date(reportingMonth?.endDate), 7);
+  getCurrentReportingMonthEndDate = (reportingMonth: ReportingMonth) =>
+    subHours(new Date(reportingMonth?.endDate), 7);
 }
