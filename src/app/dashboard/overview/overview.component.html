@@ -1,20 +1,67 @@
 <form [formGroup]="filtersForm">
-  <ol class="filters">
-    <li>
-      <p-dropdown [options]="periods" formControlName="period" optionLabel="name" optionValue="value"></p-dropdown>
-    </li>
-    <!-- <li class="alignRight">
-      <p-dropdown [options]="cities" [(ngModel)]="selectedCity" optionLabel="name"></p-dropdown>
-    </li> -->
-  </ol>
+  <div class="grid row">
+    <div class="grid grid--24 row">
+      <input type="text" name="daterangeInput" daterangepicker (selected)="selectedDate($event, daterange)" />
+    </div>
+    <div class="grid grid--25 grid--dividerLeft">
+      <ol class="header-navigation">
+        <li class="profile">
+          <span class="circle">
+            <img [src]="currentStaffMember?.thumbnailUrl " alt="" class="circle"
+              *ngIf="currentStaffMember?.thumbnailUrl; else noPhoto">
+            <ng-template #noPhoto>
+              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
+                <path
+                  d="M22.7 31.2c-2.1 0-3.9 1.7-3.9 3.9s1.7 3.9 3.9 3.9 3.9-1.7 3.9-3.9S24.8 31.2 22.7 31.2zM41.3 31.2c-2.1 0-3.9 1.7-3.9 3.9s1.7 3.9 3.9 3.9 3.9-1.7 3.9-3.9S43.4 31.2 41.3 31.2zM32 1C14.9 1 1 14.9 1 32s13.9 31 31 31 31-13.9 31-31S49.1 1 32 1zM32 56.8C18.3 56.8 7.2 45.7 7.2 32c0-0.9 0.1-1.8 0.2-2.7 7.3-3.2 13.1-9.2 16.2-16.6 5.6 7.9 14.8 13.1 25.3 13.1 2.4 0 4.7-0.3 7-0.8 0.7 2.2 1 4.6 1 7C56.8 45.7 45.7 56.8 32 56.8z">
+                </path>
+              </svg>
+            </ng-template>
+          </span>
+        </li>
+        <fieldset class="inline-child">
+          <app-staff-member-finder class="appWrapper" [placeholder]="searchPlaceHolder" [isFullStaffMember]="true"
+            (selectedStaffMember)="getSelectedOwner($event)"></app-staff-member-finder>
+        </fieldset>
+      </ol>
+    </div>
+    <div class="grid grid--5 row">
+      <div class="grid grid--10 grid--dividerLeft row">
+        <span>
+          <span><strong>Stats Updated</strong></span>
+          <fieldset class="inline-child">
+            <span>{{statsUpdatedString}}</span>
+          </fieldset>
+        </span>
+        <button class="btn btn--info flexRight" (click)="setTargets()">Targets</button>
+      </div>
+    </div>
+  </div>
 </form>
 <div class="gridReport">
+
   <div class="unit unit--height4">
     <div class="unit__header">
-      Header
+      Rankings
     </div>
     <div class="unit__body">
-      Body
+      <div class="grid grid--10">
+        <fieldset class="inline-child">
+          <app-staff-member-finder class="appWrapper" [placeholder]="searchPlaceHolder"
+            (selectedStaffMemberId)="getSelectedOwner($event)"></app-staff-member-finder>
+        </fieldset>
+        <ol class="list list--rankings">
+          <li class="hoverPointer" *ngFor="let member of members$|async; let position=index"
+            (click)="selectedMember.emit(member)">
+            <span class="avatar">
+              <img class="circle" [src]="member?.photoUrl" alt="">
+            </span>
+            <span>
+              <strong>{{member?.name}}</strong>
+              <small class="txt--warning">{{member?.totalPoints}}</small>
+            </span>
+          </li>
+        </ol>
+      </div>
     </div>
     <div class="unit__footer">
       Footer
@@ -178,8 +225,13 @@
     <div class="unit__body">
       Body
     </div>
-    <div class="unit__footer">
-      Footer
+    <div class="footer footer--modal">
+      <div class="btn--container">
+        <label for="statsUpdated">Stats Updated</label>
+        <input type="text" id="statsUpdated" placeholder="dd/mm/yyyy" name="statsUpdated" [(ngModel)]="statsUpdated"
+          [bsConfig]="{ useUtc: false, dateInputFormat: 'MMMM DD YYYY HH:mm A', customTodayClass: 'font-weight-bold'}"
+          bsDatepicker [attr.disabled]="false" #datepicker="bsDatepicker" [appNoDoubleTap]='datepicker'>
+      </div>
     </div>
   </div>
 </div>
