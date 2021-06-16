@@ -1,0 +1,273 @@
+<form [formGroup]="targetsForm" (ngSubmit)="SaveTargets()" autocompleteOff>
+  <div class="card-grid row">
+    <div class="card__body" [style]="{ 'margin-right': '2em'}">
+      <ol class="list">
+        <li class="hoverPointer" (click)="selectGroup(groupNameYou)">
+          <span class="avatar" [ngClass]="{'selected-group':selectedGroup == groupNameYou}">
+            <img class="circle" [src]="selectedMember?.photoUrl" alt="" *ngIf="selectedMember?.photoUrl; else noPhoto">
+            <ng-template #noPhoto>
+              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
+                <path
+                  d="M22.7 31.2c-2.1 0-3.9 1.7-3.9 3.9s1.7 3.9 3.9 3.9 3.9-1.7 3.9-3.9S24.8 31.2 22.7 31.2zM41.3 31.2c-2.1 0-3.9 1.7-3.9 3.9s1.7 3.9 3.9 3.9 3.9-1.7 3.9-3.9S43.4 31.2 41.3 31.2zM32 1C14.9 1 1 14.9 1 32s13.9 31 31 31 31-13.9 31-31S49.1 1 32 1zM32 56.8C18.3 56.8 7.2 45.7 7.2 32c0-0.9 0.1-1.8 0.2-2.7 7.3-3.2 13.1-9.2 16.2-16.6 5.6 7.9 14.8 13.1 25.3 13.1 2.4 0 4.7-0.3 7-0.8 0.7 2.2 1 4.6 1 7C56.8 45.7 45.7 56.8 32 56.8z">
+                </path>
+              </svg>
+            </ng-template>
+          </span>
+          <span>
+            <strong
+              [ngStyle]="{'color': selectedGroup == groupNameYou? 'green':''}">{{selectedMember?.fullName}}</strong>
+          </span>
+        </li>
+      </ol>
+    </div>
+
+    <div class="card__body" [style]="{ 'margin-right': '2em'}">
+      <ol class="list">
+        <li class="hoverPointer" (click)="selectGroup(groupNameAd)">
+          <span class="avatar" [ngClass]="{'selected-group':selectedGroup == groupNameAd}">
+            <img class="circle" [src]="selectedMember?.photoUrl" alt="" *ngIf="selectedMember?.photoUrl; else noPhoto">
+            <ng-template #noPhoto>
+              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
+                <path
+                  d="M22.7 31.2c-2.1 0-3.9 1.7-3.9 3.9s1.7 3.9 3.9 3.9 3.9-1.7 3.9-3.9S24.8 31.2 22.7 31.2zM41.3 31.2c-2.1 0-3.9 1.7-3.9 3.9s1.7 3.9 3.9 3.9 3.9-1.7 3.9-3.9S43.4 31.2 41.3 31.2zM32 1C14.9 1 1 14.9 1 32s13.9 31 31 31 31-13.9 31-31S49.1 1 32 1zM32 56.8C18.3 56.8 7.2 45.7 7.2 32c0-0.9 0.1-1.8 0.2-2.7 7.3-3.2 13.1-9.2 16.2-16.6 5.6 7.9 14.8 13.1 25.3 13.1 2.4 0 4.7-0.3 7-0.8 0.7 2.2 1 4.6 1 7C56.8 45.7 45.7 56.8 32 56.8z">
+                </path>
+              </svg>
+            </ng-template>
+          </span>
+          <span>
+            <strong [ngStyle]="{'color': selectedGroup == groupNameAd? 'green':''}"><b>{{groupNameAd}}</b></strong>
+          </span>
+        </li>
+      </ol>
+    </div>
+
+    <div class="card__body" [style]="{ 'margin-right': '2em'}">
+      <ol class="list">
+        <li class="hoverPointer" (click)="selectGroup(groupNameManager)">
+          <span class="avatar" [ngClass]="{'selected-group':selectedGroup == groupNameManager}">
+            <img class="circle" [src]="selectedMember?.photoUrl" alt="" *ngIf="selectedMember?.photoUrl; else noPhoto">
+            <ng-template #noPhoto>
+              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
+                <path
+                  d="M22.7 31.2c-2.1 0-3.9 1.7-3.9 3.9s1.7 3.9 3.9 3.9 3.9-1.7 3.9-3.9S24.8 31.2 22.7 31.2zM41.3 31.2c-2.1 0-3.9 1.7-3.9 3.9s1.7 3.9 3.9 3.9 3.9-1.7 3.9-3.9S43.4 31.2 41.3 31.2zM32 1C14.9 1 1 14.9 1 32s13.9 31 31 31 31-13.9 31-31S49.1 1 32 1zM32 56.8C18.3 56.8 7.2 45.7 7.2 32c0-0.9 0.1-1.8 0.2-2.7 7.3-3.2 13.1-9.2 16.2-16.6 5.6 7.9 14.8 13.1 25.3 13.1 2.4 0 4.7-0.3 7-0.8 0.7 2.2 1 4.6 1 7C56.8 45.7 45.7 56.8 32 56.8z">
+                </path>
+              </svg>
+            </ng-template>
+          </span>
+          <span>
+            <strong
+              [ngStyle]="{'color': selectedGroup == groupNameManager? 'green':''}"><b>{{groupNameManager}}</b></strong>
+          </span>
+        </li>
+      </ol>
+    </div>
+    <div class="card__body" [style]="{ 'margin-right': '2em'}">
+      <ol class="list">
+        <li class="hoverPointer" (click)="selectGroup(groupNameBroker)">
+          <span class="avatar" [ngClass]="{'selected-group':selectedGroup == groupNameBroker}">
+            <img class="circle" [src]="selectedMember?.photoUrl" alt="" *ngIf="selectedMember?.photoUrl; else noPhoto">
+            <ng-template #noPhoto>
+              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
+                <path
+                  d="M22.7 31.2c-2.1 0-3.9 1.7-3.9 3.9s1.7 3.9 3.9 3.9 3.9-1.7 3.9-3.9S24.8 31.2 22.7 31.2zM41.3 31.2c-2.1 0-3.9 1.7-3.9 3.9s1.7 3.9 3.9 3.9 3.9-1.7 3.9-3.9S43.4 31.2 41.3 31.2zM32 1C14.9 1 1 14.9 1 32s13.9 31 31 31 31-13.9 31-31S49.1 1 32 1zM32 56.8C18.3 56.8 7.2 45.7 7.2 32c0-0.9 0.1-1.8 0.2-2.7 7.3-3.2 13.1-9.2 16.2-16.6 5.6 7.9 14.8 13.1 25.3 13.1 2.4 0 4.7-0.3 7-0.8 0.7 2.2 1 4.6 1 7C56.8 45.7 45.7 56.8 32 56.8z">
+                </path>
+              </svg>
+            </ng-template>
+          </span>
+          <span>
+            <strong
+              [ngStyle]="{'color': selectedGroup == groupNameBroker? 'green':''}"><b>{{groupNameBroker}}</b></strong>
+          </span>
+        </li>
+      </ol>
+    </div>
+    <div class="card__body" [style]="{ 'margin-right': '2em'}">
+      <ol class="list">
+        <li class="hoverPointer" (click)="selectGroup(groupNameNeg)">
+          <span class="avatar" [ngClass]="{'selected-group':selectedGroup == groupNameNeg}">
+            <img [src]="selectedMember?.photoUrl" alt="" *ngIf="selectedMember?.photoUrl; else noPhoto">
+            <ng-template #noPhoto>
+              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
+                <path
+                  d="M22.7 31.2c-2.1 0-3.9 1.7-3.9 3.9s1.7 3.9 3.9 3.9 3.9-1.7 3.9-3.9S24.8 31.2 22.7 31.2zM41.3 31.2c-2.1 0-3.9 1.7-3.9 3.9s1.7 3.9 3.9 3.9 3.9-1.7 3.9-3.9S43.4 31.2 41.3 31.2zM32 1C14.9 1 1 14.9 1 32s13.9 31 31 31 31-13.9 31-31S49.1 1 32 1zM32 56.8C18.3 56.8 7.2 45.7 7.2 32c0-0.9 0.1-1.8 0.2-2.7 7.3-3.2 13.1-9.2 16.2-16.6 5.6 7.9 14.8 13.1 25.3 13.1 2.4 0 4.7-0.3 7-0.8 0.7 2.2 1 4.6 1 7C56.8 45.7 45.7 56.8 32 56.8z">
+                </path>
+              </svg>
+            </ng-template>
+          </span>
+          <span>
+            <strong [ngStyle]="{'color': selectedGroup == groupNameNeg? 'green':''}"><b>{{groupNameNeg}}</b></strong>
+          </span>
+        </li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="card card--horizontal">
+    <div class="card__body">
+      <ol class="list list--split list--split-60-40">
+        <li>
+          <h3 class="txt--title" [style]="{'margin-bottom':'2em'}">Leads</h3>
+          <div class="inline-parent inline-parent__hasLabels inline-parent--width-max">
+            <fieldset class="fieldset fieldset--width-max">
+              <label for="chaser">Target</label>
+              <input type="number" id="targetLeads" formControlName="targetLeads">
+            </fieldset>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </div>
+  <div class="card card--horizontal">
+    <div class="card__body">
+      <ol class="list list--split list--split-60-40">
+        <li>
+          <h3 class="txt--title" [style]="{'margin-bottom':'2em'}">Calls</h3>
+          <div class="inline-parent inline-parent__hasLabels inline-parent--width-max">
+
+            <fieldset class="inline-child">
+              <label for="chaser">Day</label>
+              <input type="number" id="callsDay" formControlName="callsDay">
+            </fieldset>
+
+            <fieldset class="inline-child">
+              <label for="chaser">Week</label>
+              <input type="number" id="callsWeek" formControlName="callsWeek">
+            </fieldset>
+
+            <fieldset class="inline-child">
+              <label for="chaser">Month</label>
+              <input type="number" id="callsMonth" formControlName="callsMonth">
+            </fieldset>
+
+            <fieldset class="inline-child">
+              <label for="chaser">Quarter</label>
+              <input type="number" id="callsQuarter" formControlName="callsQuarter">
+            </fieldset>
+
+            <fieldset class="inline-child">
+              <label for="chaser">Year</label>
+              <input type="number" id="callsYear" formControlName="callsYear">
+            </fieldset>
+
+          </div>
+        </li>
+      </ol>
+    </div>
+  </div>
+  <div class="card card--horizontal">
+    <div class="card__body">
+      <ol class="list list--split list--split-60-40">
+        <li>
+          <h3 class="txt--title" [style]="{'margin-bottom':'2em'}">Valuations</h3>
+          <div class="inline-parent inline-parent__hasLabels inline-parent--width-max">
+
+            <fieldset class="inline-child">
+              <label for="chaser">Day</label>
+              <input type="number" id="valuationsDay" formControlName="valuationsDay">
+            </fieldset>
+
+            <fieldset class="inline-child">
+              <label for="chaser">Week</label>
+              <input type="number" id="valuationsWeek" formControlName="valuationsWeek">
+            </fieldset>
+
+            <fieldset class="inline-child">
+              <label for="chaser">Month</label>
+              <input type="number" id="valuationsMonth" formControlName="valuationsMonth">
+            </fieldset>
+
+            <fieldset class="inline-child">
+              <label for="chaser">Quarter</label>
+              <input type="number" id="valuationsQuarter" formControlName="valuationsQuarter">
+            </fieldset>
+
+            <fieldset class="inline-child">
+              <label for="chaser">Year</label>
+              <input type="number" id="valuationsYear" formControlName="valuationsYear">
+            </fieldset>
+
+          </div>
+        </li>
+      </ol>
+    </div>
+  </div>
+  <div class="card card--horizontal">
+    <div class="card__body">
+      <ol class="list list--split list--split-60-40">
+        <li>
+          <h3 class="txt--title" [style]="{'margin-bottom':'2em'}">Instructions</h3>
+          <div class="inline-parent inline-parent__hasLabels inline-parent--width-max">
+
+            <fieldset class="inline-child">
+              <label for="chaser">Day</label>
+              <input type="number" id="instructionsDay" formControlName="instructionsDay">
+            </fieldset>
+
+            <fieldset class="inline-child">
+              <label for="chaser">Week</label>
+              <input type="number" id="instructionsWeek" formControlName="instructionsWeek">
+            </fieldset>
+
+            <fieldset class="inline-child">
+              <label for="chaser">Month</label>
+              <input type="number" id="instructionsMonth" formControlName="instructionsMonth">
+            </fieldset>
+
+            <fieldset class="inline-child">
+              <label for="chaser">Quarter</label>
+              <input type="number" id="instructionsQuarter" formControlName="instructionsQuarter">
+            </fieldset>
+
+            <fieldset class="inline-child">
+              <label for="chaser">Year</label>
+              <input type="number" id="instructionsYear" formControlName="instructionsYear">
+            </fieldset>
+
+          </div>
+        </li>
+      </ol>
+    </div>
+  </div>
+  <div class="card card--horizontal">
+    <div class="card__body">
+      <ol class="list list--split list--split-60-40">
+        <li>
+          <h3 class="txt--title" [style]="{'margin-bottom':'2em'}">Referrals</h3>
+          <div class="inline-parent inline-parent__hasLabels inline-parent--width-max">
+
+            <fieldset class="inline-child">
+              <label for="chaser">Day</label>
+              <input type="number" id="referralsDay" formControlName="referralsDay">
+            </fieldset>
+
+            <fieldset class="inline-child">
+              <label for="chaser">Week</label>
+              <input type="number" id="referralsWeek" formControlName="referralsWeek">
+            </fieldset>
+
+            <fieldset class="inline-child">
+              <label for="chaser">Month</label>
+              <input type="number" id="referralsMonth" formControlName="referralsMonth">
+            </fieldset>
+
+            <fieldset class="inline-child">
+              <label for="chaser">Quarter</label>
+              <input type="number" id="referralsQuarter" formControlName="referralsQuarter">
+            </fieldset>
+
+            <fieldset class="inline-child">
+              <label for="chaser">Year</label>
+              <input type="number" id="referralsYear" formControlName="referralsYear">
+            </fieldset>
+
+          </div>
+        </li>
+      </ol>
+    </div>
+  </div>
+  <footer class="footer">
+    <ng-template>
+      <button type="submit" class="btn btn--positive" id="saveTarget" data-cy="saveTargets">Save</button>
+    </ng-template>
+  </footer>
+</form>

@@ -86,6 +86,7 @@ app-telephone                                   { width:100%; display:flex; alig
 .header-navigation .profile .circle             { border:none; background-color:$color--positive; color:$color--snow; position:relative; overflow:hidden;
   .icon                                         { top:-1px; }
 }
+.selected-group                                  { background-color:$color--positive ;color:$color--snow; }
 .header-navigation .profile .circle img         { width:30px; position:absolute; top:0; left:0; }
 
 .headerMobile                                   {

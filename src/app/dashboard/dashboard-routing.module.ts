@@ -1,3 +1,4 @@
+import { TargetsComponent } from "./targets/targets.component";
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { MyDashboardComponent } from "./my-dashboard/my-dashboard.component";
@@ -17,6 +18,12 @@ const routes: Routes = [
     component: OverviewComponent,
     canActivate: [MsalGuard],
     data: { title: "Overview" },
+  },
+  {
+    path: "overview/targets",
+    component: TargetsComponent,
+    canActivate: [MsalGuard],
+    data: { title: "Targets" },
   },
   // { path: 'list/:id', component: DashboardListComponent, canActivate: [MsalGuard] },
   // { path: 'instructionsAndBdd/:id', component: InstructionsAndBusinessDevelopmentComponent, canActivate: [MsalGuard] },

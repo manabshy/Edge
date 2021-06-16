@@ -20,6 +20,7 @@ import { StorageMap } from "@ngx-pwa/local-storage";
 import { Observable } from "rxjs";
 import { StaffMember } from "src/app/shared/models/staff-member";
 import { StaffMemberService } from "src/app/core/services/staff-member.service";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
   selector: "app-overview",
@@ -54,7 +55,9 @@ export class OverviewComponent implements OnInit, AfterViewInit {
     private daterangepickerOptions: DaterangepickerConfig,
     private boardService: CsBoardService,
     private storage: StorageMap,
-    private staffMemberService: StaffMemberService
+    private staffMemberService: StaffMemberService,
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.periodService.onReportingMonthsOnSelected.subscribe((data) => {
       console.log(data);
@@ -202,7 +205,9 @@ export class OverviewComponent implements OnInit, AfterViewInit {
     this.showCustomDates = false;
   }
 
-  setTargets() {}
+  setTargets() {
+    this.router.navigate(["targets"], { relativeTo: this.route });
+  }
 
   onDateChange(value: Date): void {
     this.bsRangeValue = value;
