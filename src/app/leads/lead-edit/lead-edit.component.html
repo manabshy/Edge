@@ -75,9 +75,8 @@
 
               <fieldset class="inline-child">
                 <label for="chaser">Chaser</label>
-                <app-staff-member-finder class="appWrapper"
-                  [staffMemberId]="lead?.ownerId || leadEditForm.get('ownerId').value" [listType]="'activeStaffMembers'"
-                  (selectedStaffMemberId)="getSelectedStaffMemberId($event)"
+                <app-staff-member-finder class="appWrapper" [staffMemberId]="leadEditForm.get('ownerId').value"
+                  [listType]="'activeStaffMembers'" (selectedStaffMemberId)="getSelectedStaffMemberId($event)"
                   [isRequired]="!leadEditForm.get('ownerId').value && !isUnassignedLead"
                   [isDisabled]="!canEditLead ? true : false">
                 </app-staff-member-finder>

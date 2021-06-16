@@ -1,3 +1,4 @@
+import { enumDepartments } from "./../../core/shared/departments";
 import {
   AfterViewInit,
   Component,
@@ -9,7 +10,14 @@ import {
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { BsLocaleService } from "ngx-bootstrap/datepicker";
 import { PeriodService } from "src/app/core/services/period.service";
-import { PeriodList, Periods, PeriodsEnum } from "../shared/dashboard";
+import {
+  LeaderboardRankingViewEnum,
+  PeriodList,
+  Periods,
+  PeriodsEnum,
+  RankingOptions,
+  Roles,
+} from "../shared/dashboard";
 import moment from "moment";
 import { DaterangepickerConfig } from "ng2-daterangepicker";
 import { DaterangepickerComponent } from "ng2-daterangepicker";
@@ -21,6 +29,8 @@ import { Observable } from "rxjs";
 import { StaffMember } from "src/app/shared/models/staff-member";
 import { StaffMemberService } from "src/app/core/services/staff-member.service";
 import { ActivatedRoute, Router } from "@angular/router";
+import { Constants } from "src/app/shared/period-list";
+import { LeaderBoardRanking } from "src/app/shared/models/leader-board-ranking";
 
 @Component({
   selector: "app-overview",
@@ -40,8 +50,13 @@ export class OverviewComponent implements OnInit, AfterViewInit {
   // @Output() showRules = new EventEmitter<boolean>();
   @Output() selectedMember = new EventEmitter<TeamMember>();
   members$ = new Observable<TeamMember[]>();
-  searchPlaceHolder = "Navigator";
+  searchPlaceHolder = "Select User";
   currentStaffMember: StaffMember;
+
+  rankingOptions = RankingOptions;
+  rankings: LeaderBoardRanking[] = [];
+  selectedRole = Roles[0];
+  roles = Roles;
 
   // see original project for full list of options
   // can also be setup using the config service to apply to multiple pickers
@@ -168,22 +183,29 @@ export class OverviewComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.filtersForm = this.fb.group({
-      period: [],
+      selectedRankingOption: [RankingOptions[0]],
     });
 
-    this.filtersForm.valueChanges.subscribe((data) => {
-      if (data?.period === "Custom") {
-        console.log("custom...");
-        this.showCustomDates = true;
+    this.filtersForm.valueChanges.subscribe((data) => {});
+  }
+
+  getRankingInformation() {
+    this.storage.get("rankings").subscribe((data: LeaderBoardRanking[]) => {
+      if (data) {
+        this.rankings = data;
       } else {
-        let test = this.periodService.getInterval(data.period);
-        console.log({ test });
+        // todo
+        // this.staffMemberService
+        //   .getRankings(
+        //     this.filtersForm.get("selectedRankingOption").value?.value
+        //   )
+        //   .subscribe((res) => (this.rankings = res));
       }
     });
   }
 
   getSelectedOwner(event: any) {
-    // this.currentStaffMember = event;
+    this.currentStaffMember = event;
     console.log(event);
   }
 
@@ -209,6 +231,39 @@ export class OverviewComponent implements OnInit, AfterViewInit {
     this.router.navigate(["targets"], { relativeTo: this.route });
   }
 
+  selectOptionClass(option: any): string {
+    if (option) {
+      switch (+option.value) {
+        case enumDepartments.lettings:
+          return "fas fa-shipping-fast";
+        case enumDepartments.sales:
+          return "fas fa-store-alt";
+        case enumDepartments.corporate_services:
+          return "fas fa-briefcase";
+        default:
+          break;
+      }
+    }
+  }
+
+<<<<<<< HEAD
+  selectRoleClass(option: any): string {
+    if (option) {
+      switch (+option.value) {
+        case LeaderboardRankingViewEnum.ManagerView:
+          return "fas fa-user-tie";
+        case LeaderboardRankingViewEnum.BrokerView:
+          return "fas fa-hand-holding-usd";
+        case LeaderboardRankingViewEnum.NegView:
+          return "fas fa-people-arrows";
+        default:
+          break;
+      }
+    }
+  }
+
+=======
+>>>>>>> 8cc8a422ab0660f33838041a7ccf4f64f20c1c2f
   onDateChange(value: Date): void {
     this.bsRangeValue = value;
   }

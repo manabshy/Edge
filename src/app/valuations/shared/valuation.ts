@@ -1,10 +1,10 @@
-import { Signer } from 'src/app/contactgroups/shared/contact-group';
-import { DiaryEvent } from 'src/app/diary/shared/diary';
-import { BaseProperty } from 'src/app/shared/models/base-property';
-import { BaseRequestOption } from 'src/app/shared/models/base-request-option';
-import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
-import { Property } from 'src/app/property/shared/property';
-import { Office } from 'src/app/shared/models/staff-member';
+import { Signer } from "src/app/contactgroups/shared/contact-group";
+import { DiaryEvent } from "src/app/diary/shared/diary";
+import { BaseProperty } from "src/app/shared/models/base-property";
+import { BaseRequestOption } from "src/app/shared/models/base-request-option";
+import { BaseStaffMember } from "src/app/shared/models/base-staff-member";
+import { Property } from "src/app/property/shared/property";
+import { Office } from "src/app/shared/models/staff-member";
 
 export interface ValuationInfo {
   reason: string;
@@ -14,6 +14,7 @@ export interface ValuationInfo {
 export interface Valuation extends ValuationInfo {
   valuationEventId: number;
   valuationStatus: number;
+  officeId: number;
   valuationStatusLabel: string;
   property: Property;
   salesValuer?: BaseStaffMember;
@@ -95,10 +96,10 @@ export interface ValuationStatus {
 }
 
 export const ValuationStatuses = <ValuationStatus[]>[
-  { id: 2, value: 'Booked' },
-  { id: 3, value: 'Valued' },
-  { id: 4, value: 'Instructed' },
-  { id: 5, value: 'Cancelled' }
+  { id: 2, value: "Booked" },
+  { id: 3, value: "Valued" },
+  { id: 4, value: "Instructed" },
+  { id: 5, value: "Cancelled" },
 ];
 
 export enum ValuationStatusEnum {
@@ -106,11 +107,9 @@ export enum ValuationStatusEnum {
   Booked = 2,
   Valued = 3,
   Instructed = 4,
-  Cancelled = 5
+  Cancelled = 5,
 }
 
 export function getValuationStatuses() {
-  return Object.keys(ValuationStatusEnum).filter(
-    (type) => isNaN(<any>type)
-  );
+  return Object.keys(ValuationStatusEnum).filter((type) => isNaN(<any>type));
 }

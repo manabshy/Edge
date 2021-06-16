@@ -12,7 +12,6 @@
 
             </ng-template>
           </ng-select> -->
-
           <fieldset class="inline-child">
             <app-staff-member-finder class="appWrapper"
               [staffMemberId]="staffMemberId?staffMemberId:currentStaffMember?.staffMemberId"
@@ -92,8 +91,7 @@
             </svg>
           </button>
         </li>
-        <!-- Hide create event for release 22/04/21 -->
-        <li class="calNav__add" *ngIf="false">
+        <li class="calNav__add">
           <a class="btn btn--positive" [routerLink]="['/diary/edit', 0]" [queryParams]="{isNewEvent: true}"
             *ngIf="!myCalendarOnly" aria-label="Add event"><svg aria-hidden="true" width="64" height="64"
               viewBox="0 0 64 64" class="icon icon--s icon--onLeft">

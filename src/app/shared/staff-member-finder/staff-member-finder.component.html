@@ -1,46 +1,49 @@
 <form [formGroup]="staffMemberFinderForm">
   <fieldset [ngClass]="{'invalid': isRequired}">
     <label *ngIf="label" for="staffMemberId">{{label}}</label>
-    <ng-container *ngIf="isMultiple;else dropDown">
-      <p-multiSelect #multiSelect [options]="staffMembers"  [maxSelectedLabels]="1" formControlName="staffMemberIds" optionLabel="fullName" optionValue="staffMemberId"
-      [placeholder]="placeholder"  (onChange)="onStaffMemberChange($event)"></p-multiSelect>
+    <ng-container *ngIf="isMultiple; else dropDown">
+      <p-multiSelect #multiSelect [options]="staffMembers" [maxSelectedLabels]="1" formControlName="staffMemberIds"
+        optionLabel="fullName" optionValue="staffMemberId" [placeholder]="placeholder"
+        (onChange)="onStaffMemberChange($event)"></p-multiSelect>
     </ng-container>
 
     <!-- Warning in browser console after adding the disabled property - Investigate 03/03/21 -->
     <ng-template #dropDown>
-      <p-dropdown [options]="staffMembers" formControlName="staffMemberId" optionLabel="fullName" optionValue="staffMemberId"
-         [placeholder]="placeholder" [filter]="true" filterBy="fullName" [readOnly]="isReadOnly" [disabled]="isDisabled"
+      <p-dropdown #noMultiple *ngIf="!isDashboardMember;else dropDownDashboard" [options]="staffMembers"
+        formControlName="staffMemberId" optionLabel="fullName" optionValue="staffMemberId" [placeholder]="placeholder"
+        [filter]="true" filterBy="fullName" [readOnly]="isReadOnly" [disabled]="isDisabled"
         (onChange)="onStaffMemberChange($event)" [ngClass]="{'no-style': isReadOnly}" data-cy="staffMembers">
       </p-dropdown>
+
+      <p-dropdown [options]="groupedByRolesMembers" *ngIf="isDashboardMember" formControlName="selectedDashboardMember"
+        optionLabel="label" [filter]="true" filterBy="label,title" [group]="true" [showClear]="true"
+        [placeholder]="placeholder" (onChange)="onStaffMemberChange($event)">
+        <ng-template pTemplate="selectedItem">
+          <div class="country-item country-item-value"
+            *ngIf="staffMemberFinderForm.get('selectedDashboardMember').value">
+            <div>{{staffMemberFinderForm.get('selectedDashboardMember').value?.label}}</div>
+          </div>
+        </ng-template>
+        <ng-template let-country pTemplate="item">
+          <div class="country-item row">
+            <span class="circle">
+              <img [src]="country?.icon " alt="" class="circle" *ngIf="country?.icon; else noPhoto">
+              <ng-template #noPhoto>
+                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
+                  <path
+                    d="M22.7 31.2c-2.1 0-3.9 1.7-3.9 3.9s1.7 3.9 3.9 3.9 3.9-1.7 3.9-3.9S24.8 31.2 22.7 31.2zM41.3 31.2c-2.1 0-3.9 1.7-3.9 3.9s1.7 3.9 3.9 3.9 3.9-1.7 3.9-3.9S43.4 31.2 41.3 31.2zM32 1C14.9 1 1 14.9 1 32s13.9 31 31 31 31-13.9 31-31S49.1 1 32 1zM32 56.8C18.3 56.8 7.2 45.7 7.2 32c0-0.9 0.1-1.8 0.2-2.7 7.3-3.2 13.1-9.2 16.2-16.6 5.6 7.9 14.8 13.1 25.3 13.1 2.4 0 4.7-0.3 7-0.8 0.7 2.2 1 4.6 1 7C56.8 45.7 45.7 56.8 32 56.8z">
+                  </path>
+                </svg>
+              </ng-template>
+            </span>
+            <div style="margin-top:8px">{{country.label}}</div>
+          </div>
+        </ng-template>
+      </p-dropdown>
+
     </ng-template>
+
     <p class="message message--negative">Chaser is required</p>
   </fieldset>
-</form>
-<!-- [showClear]="!isReadOnly" Remove option to leave chaser blank -->
-<!-- <label *ngIf="label" for="staffMemberId" class="small">{{label}}</label>
-<ng-container *ngIf="!isValuersPicker else valuersPicker">
-  <ng-select [placeholder]="placeholder" [items]="staffMembers$|async" [multiple]="isMultiple"
-    [isReadOnly]="isisReadOnly" [closeOnSelect]="!isMultiple" [hideSelected]="true" [clearable]="isClearable"
-    bindLabel="fullName" bindValue="staffMemberId" (change)="onStaffMemberChange($event)"
-    formControlName="staffMemberId" [isReadOnly]="isDisabled ? true : null" [ngClass]="{'invalid': isRequired}"
-    [attr.required]="isRequired ? true : null">
-    <ng-template *ngIf="isMultiple" ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-      <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.fullName}}
-    </ng-template>
-  </ng-select>
-</ng-container>
-<div class="message message--negative">
-  Chaser is required
-</div>
-<ng-template #valuersPicker>
-  <ng-select placeholder="Select Valuer" [items]="valuers" bindLabel="fullName" bindValue="staffMemberId"
-    groupBy="staffMembers" [multiple]="false" formControlName="staffMemberId" (change)="onStaffMemberChange($event)" data-cy="valuers">
 
-    <ng-template ng-optgroup-tmp let-item="item">
-      {{item.office?.name}}
-    </ng-template>
-    <ng-template ng-option-tmp let-item="item">
-      {{item.fullName}}
-    </ng-template>
-  </ng-select>
-</ng-template> -->
+</form>

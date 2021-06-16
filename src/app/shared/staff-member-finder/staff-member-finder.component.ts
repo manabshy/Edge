@@ -14,6 +14,11 @@ import { StaffMemberService } from "src/app/core/services/staff-member.service";
 import { FormGroup, FormControl } from "@angular/forms";
 import { ResultData } from "../result-data";
 import { OfficeMember } from "src/app/valuations/shared/valuation";
+import { StaffMember } from "../models/staff-member";
+import { SelectItem, SelectItemGroup } from "primeng/api";
+import { DashboardMember } from "../models/dashboard-member";
+import _ from "lodash";
+import { SharedService } from "src/app/core/services/shared.service";
 
 @Component({
   selector: "app-staff-member-finder",
@@ -24,12 +29,37 @@ export class StaffMemberFinderComponent
   implements OnInit, OnChanges, OnDestroy
 {
   @Input() staffMember: BaseStaffMember;
-  @Input() staffMemberId: number;
+
+  private _staffMemberId: number;
+  dashboardMembers: DashboardMember[];
+  @Input() set staffMemberId(value: number) {
+    this._staffMemberId = value;
+  }
+  get staffMemberId(): number {
+    return this._staffMemberId;
+  }
+
+  private _deparmentId: number;
+  @Input() set deparmentId(value: number) {
+    if (value != this._deparmentId) {
+      this._deparmentId = value;
+      this.staffMemberService
+        .getDashboardMembers(this.currentStaffMember, +this._deparmentId)
+        .subscribe((res) => {
+          this.setListToGroupMembers(res);
+        });
+    }
+  }
+  get deparmentId(): number {
+    return this._deparmentId;
+  }
+
   @Input() staffMemberIdList: number[];
   @Input() listType: string;
   @Input() isDisabled: boolean;
   @Input() isRequired: boolean;
   @Input() isMultiple: boolean;
+  @Input() isDashboardMember: boolean = false;
   @Input() isReadOnly = false;
   @Input() isFullStaffMember = false;
   @Input() placeholder = "Select Staff Member";
@@ -49,14 +79,29 @@ export class StaffMemberFinderComponent
   valuersIds: number[] = [];
   staffMembers: any[] = [];
   subscription = new Subscription();
+  currentStaffMember: StaffMember;
+  groupedByRolesMembers: SelectItemGroup[] = [];
+  dropDownType: string;
 
   constructor(
     private staffMemberService: StaffMemberService,
-    private storage: StorageMap
+    private storage: StorageMap,
+    private sharedService: SharedService
   ) {
     this.staffMemberFinderForm = new FormGroup({
       staffMemberId: new FormControl(),
+      staffMemberIds: new FormControl(),
+      selectedDashboardMember: new FormControl(),
     });
+
+    if (this.isDashboardMember) {
+      this.dropDownType = "dashboard";
+    } else if (this.isMultiple) {
+      this.dropDownType = "multiple";
+    } else {
+      this.dropDownType = "noMultiple";
+    }
+    this.getCurrentUserInfo();
   }
 
   ngOnInit(): void {
@@ -65,7 +110,10 @@ export class StaffMemberFinderComponent
     this.subscription =
       this.staffMemberService.clearSelectedStaffMember$.subscribe((res) => {
         if (res) {
-          this.staffMemberFinderForm?.reset({ staffMemberId: null });
+          this.staffMemberFinderForm?.reset({
+            staffMemberId: null,
+            staffMemberIds: null,
+          });
         }
       });
   }
@@ -93,15 +141,32 @@ export class StaffMemberFinderComponent
 
   onStaffMemberChange(event: any) {
     if (this.isMultiple) {
-      event?.value?.length
-        ? this.selectedStaffMemberList.emit(event.value)
-        : this.selectedStaffMemberList.emit([]);
+      const staffMemberIdList: number[] = event?.value;
+      let baseStaffMemberList: BaseStaffMember[] = [];
+      staffMemberIdList?.forEach((staffMemberId) => {
+        baseStaffMemberList.push(
+          this.staffMembers?.find((x) => x.staffMemberId === staffMemberId)
+        );
+      });
+      this.selectedStaffMemberList.emit(baseStaffMemberList);
     } else {
       // event?.value ? this.selectedStaffMemberId.emit(event?.value) : this.selectedStaffMemberId.emit(0);
       if (event.value) {
-        const staffMember = this.staffMembers?.find(
-          (x) => x.staffMemberId === +event.value
-        );
+        let staffMember: any;
+        if (this.isDashboardMember) {
+          let dashboardMember = this.dashboardMembers?.find(
+            (x) => x.staffMemberId === +event.value.value
+          );
+          staffMember = {
+            thumbnailUrl: dashboardMember?.photoUrl,
+            ...dashboardMember,
+          };
+        } else {
+          staffMember = this.staffMembers?.find(
+            (x) => x.staffMemberId === +event.value
+          );
+        }
+
         this.isFullStaffMember
           ? this.selectedStaffMember.emit(staffMember)
           : this.selectedStaffMemberId.emit(event?.value);
@@ -116,7 +181,9 @@ export class StaffMemberFinderComponent
       case "allValuers":
         this.getAllValuers();
         break;
-
+      case "dashboardMembers":
+        this.getDashboardMembers();
+        break;
       default:
         this.getActiveStaffMembers();
     }
@@ -125,12 +192,17 @@ export class StaffMemberFinderComponent
   getActiveStaffMembers() {
     this.storage.get("activeStaffmembers").subscribe((data) => {
       if (data) {
-        this.staffMembers = data as BaseStaffMember[];
+        const staffMemberData = data as BaseStaffMember[];
+        this.addStaffMemberId(staffMemberData).then(
+          (result) => (this.staffMembers = result)
+        );
       } else {
         this.staffMemberService
           .getActiveStaffMembers()
           .subscribe((res: ResultData) => {
-            this.staffMembers = res.result;
+            this.addStaffMemberId(res.result).then(
+              (result) => (this.staffMembers = result)
+            );
             console.log(
               "%cmembers from shared replay",
               "color:green",
@@ -141,10 +213,25 @@ export class StaffMemberFinderComponent
     });
   }
 
+  private getCurrentUserInfo() {
+    this.storage.get("currentUser").subscribe((data: StaffMember) => {
+      if (data) {
+        this.currentStaffMember = data;
+      } else {
+        this.staffMemberService
+          .getCurrentStaffMember()
+          .subscribe((res) => (this.currentStaffMember = res));
+      }
+    });
+  }
+
   getAllCalendarStaffMembers() {
     this.storage.get("calendarStaffMembers").subscribe((data) => {
       if (data) {
-        this.staffMembers = data as BaseStaffMember[];
+        const staffMemberData = data as BaseStaffMember[];
+        this.addStaffMemberId(staffMemberData).then(
+          (result) => (this.staffMembers = result)
+        );
       } else {
         this.staffMemberService
           .getStaffMembersForCalendar()
@@ -153,16 +240,91 @@ export class StaffMemberFinderComponent
     });
   }
 
+  private getDashboardMembers() {
+    this.storage.get("dashboardMembers").subscribe((data) => {
+      if (data) {
+        const staffMemberData = data as DashboardMember[];
+        this.setListToGroupMembers(staffMemberData);
+      } else {
+        this.staffMemberService
+          .getDashboardMembers(this.currentStaffMember, this.deparmentId)
+          .subscribe((res) => {
+            this.setListToGroupMembers(res);
+          });
+      }
+    });
+  }
+
+  setListToGroupMembers(data: DashboardMember[]) {
+    this.groupedByRolesMembers = [];
+    if (data && data.length > 0) {
+      this.dashboardMembers = data;
+      const grouped = this.sharedService.groupBy(data, "roleName");
+      console.log(grouped);
+
+      const roles = Object.keys(grouped);
+      console.log(roles);
+
+      for (var role of roles) {
+        if (role == "CEO") continue;
+        const groupMembers: DashboardMember[] = grouped[role];
+        const values: SelectItem[] = [];
+        for (var group of groupMembers) {
+          values.push({
+            label: group.staffMemberFullName,
+            value: group.staffMemberId,
+            icon: group.photoUrl,
+            title: role,
+          });
+        }
+        const item: SelectItemGroup = {
+          label: role,
+          items: values,
+        };
+        console.log(groupMembers);
+        this.groupedByRolesMembers.push(item);
+      }
+    }
+  }
+
   private getAllValuers() {
     this.storage.get("allListers").subscribe((data) => {
       if (data) {
-        this.staffMembers = data as BaseStaffMember[];
+        const staffMemberData = data as BaseStaffMember[];
+        this.addStaffMemberId(staffMemberData).then(
+          (result) => (this.staffMembers = result)
+        );
       } else {
-        this.staffMemberService
-          .getValuers()
-          .subscribe((res) => (this.staffMembers = res));
+        this.staffMemberService.getValuers().subscribe((res) => {
+          this.addStaffMemberId(res).then(
+            (result) => (this.staffMembers = result)
+          );
+        });
       }
     });
+  }
+
+  async addStaffMemberId(staffMembers?: any[]): Promise<any[]> {
+    if (
+      staffMembers &&
+      staffMembers.length > 0 &&
+      this.staffMemberId &&
+      this.staffMemberId > 0 &&
+      !staffMembers.some((x) => x.staffMemberId == this.staffMemberId)
+    ) {
+      await this.staffMemberService
+        .getAllStaffMembers()
+        .toPromise()
+        .then((res) => {
+          const allStaffMembers = res.result;
+          const selectedStaffMember = allStaffMembers.find(
+            (x) => x.staffMemberId == this.staffMemberId
+          );
+          if (selectedStaffMember && selectedStaffMember.staffMemberId > 0)
+            staffMembers.push(selectedStaffMember);
+        });
+    }
+    return staffMembers;
   }
 
   ngOnDestroy() {

@@ -893,12 +893,29 @@ export class LeadEditComponent
   }
 
   viewRegister() {
-    this.isSubmitting = true;
-    this.validationService.clearFormValidators(
-      this.leadEditForm,
-      this.formErrors
-    );
-    this.router.navigateByUrl("leads-register");
+    if (
+      this.isNewLead &&
+      this.leadsService.previousLeadQueryParam &&
+      this.leadsService.previousLeadQueryParam.value
+    ) {
+      const leadSearchInfo =
+        this.leadsService.previousLeadQueryParam.value["leadSearchInfo"];
+      const leadId = JSON.parse(leadSearchInfo)["startLeadId"];
+
+      localStorage.setItem("currentUrl", this.router.url);
+      this.router.navigateByUrl("/", { skipLocationChange: true }).then(() =>
+        this.router.navigate(["leads-register/edit", leadId], {
+          queryParams: this.leadsService.previousLeadQueryParam.value,
+        })
+      );
+    } else {
+      this.isSubmitting = true;
+      this.validationService.clearFormValidators(
+        this.leadEditForm,
+        this.formErrors
+      );
+      this.router.navigateByUrl("leads-register");
+    }
   }
 
   getPersonNotes() {

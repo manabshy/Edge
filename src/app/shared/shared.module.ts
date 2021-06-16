@@ -1,5 +1,5 @@
 import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
+import { CommonModule, CurrencyPipe, DatePipe } from "@angular/common";
 import { RoundingPipe } from "./pipes/rounding.pipe";
 import { TruncatingPipe } from "./pipes/truncating.pipe";
 import { ShortenNamePipe } from "./pipes/shorten-name.pipe";
@@ -86,6 +86,7 @@ import { ToastModule } from "primeng/toast";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { DropdownModule } from "primeng/dropdown";
 import { MultiSelectModule } from "primeng/multiselect";
+import { RadioButtonModule } from "primeng/radiobutton";
 import { EditorModule } from "primeng/editor";
 import { FileUploadModule } from "primeng/fileupload";
 import { TabViewModule } from "primeng/tabview";
@@ -226,7 +227,13 @@ const externalModules = [
     directives,
     externalModules,
   ],
-  providers: [ConfirmationService, DialogService, MessageService],
+  providers: [
+    ConfirmationService,
+    DialogService,
+    MessageService,
+    DatePipe,
+    CurrencyPipe,
+  ],
 
   entryComponents: [
     ConfirmModalComponent,

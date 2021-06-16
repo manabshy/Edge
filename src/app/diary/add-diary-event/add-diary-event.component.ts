@@ -1,38 +1,67 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
-import { DiaryEvent, DiaryEventTypesEnum, reminderUnitTypes } from '../shared/diary';
-import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
-import { DiaryEventService } from '../shared/diary-event.service';
-import { StorageMap } from '@ngx-pwa/local-storage';
-import { DropdownListInfo, InfoDetail, InfoService } from 'src/app/core/services/info.service';
-import { getHours, getMinutes, format, setHours, setMinutes, isAfter, addHours, isSameDay } from 'date-fns';
-import { Property, PropertySearchEnum } from 'src/app/property/shared/property';
-import { Signer, ContactGroup } from 'src/app/contactgroups/shared/contact-group';
-import { ToastrService } from 'ngx-toastr';
-import { Router, ActivatedRoute } from '@angular/router';
-import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
-import { WedgeValidators } from 'src/app/shared/wedge-validators';
-import { FormErrors } from 'src/app/core/shared/app-constants';
-import { PropertyService } from 'src/app/property/shared/property.service';
-import { StaffMember } from 'src/app/shared/models/staff-member';
-import { Subject } from 'rxjs';
-import { BsModalService } from 'ngx-bootstrap/modal';
-import { ConfirmModalComponent } from 'src/app/shared/confirm-modal/confirm-modal.component';
-import { ResultData } from 'src/app/shared/result-data';
-import { DomSanitizer } from '@angular/platform-browser';
-import * as _ from 'lodash';
+import { Component, OnInit } from "@angular/core";
+import {
+  FormBuilder,
+  FormGroup,
+  FormControl,
+  Validators,
+  AbstractControl,
+} from "@angular/forms";
+import {
+  DiaryEvent,
+  DiaryEventTypesEnum,
+  reminderUnitTypes,
+} from "../shared/diary";
+import {
+  SharedService,
+  WedgeError,
+} from "src/app/core/services/shared.service";
+import { DiaryEventService } from "../shared/diary-event.service";
+import { StorageMap } from "@ngx-pwa/local-storage";
+import {
+  DropdownListInfo,
+  InfoDetail,
+  InfoService,
+} from "src/app/core/services/info.service";
+import {
+  getHours,
+  getMinutes,
+  format,
+  setHours,
+  setMinutes,
+  isAfter,
+  addHours,
+  isSameDay,
+} from "date-fns";
+import { Property, PropertySearchEnum } from "src/app/property/shared/property";
+import {
+  Signer,
+  ContactGroup,
+} from "src/app/contactgroups/shared/contact-group";
+import { ToastrService } from "ngx-toastr";
+import { Router, ActivatedRoute } from "@angular/router";
+import { BaseStaffMember } from "src/app/shared/models/base-staff-member";
+import { WedgeValidators } from "src/app/shared/wedge-validators";
+import { FormErrors } from "src/app/core/shared/app-constants";
+import { PropertyService } from "src/app/property/shared/property.service";
+import { StaffMember } from "src/app/shared/models/staff-member";
+import { Subject } from "rxjs";
+import { BsModalService } from "ngx-bootstrap/modal";
+import { ConfirmModalComponent } from "src/app/shared/confirm-modal/confirm-modal.component";
+import { ResultData } from "src/app/shared/result-data";
+import { DomSanitizer } from "@angular/platform-browser";
+import * as _ from "lodash";
 
 @Component({
-  selector: 'app-add-diary-event',
-  templateUrl: './add-diary-event.component.html',
-  styleUrls: ['./add-diary-event.component.scss']
+  selector: "app-add-diary-event",
+  templateUrl: "./add-diary-event.component.html",
+  styleUrls: ["./add-diary-event.component.scss"],
 })
 export class AddDiaryEventComponent implements OnInit {
   eventTypes: InfoDetail[];
   diaryEventForm: FormGroup;
   isSubmitting = false;
   isTelRequired: boolean;
-  minutes = ['00', '15', '30', '45'];
+  minutes = ["00", "15", "30", "45"];
   durationTypes = reminderUnitTypes;
   isNewEvent: boolean;
   diaryEvent: DiaryEvent;
@@ -46,8 +75,8 @@ export class AddDiaryEventComponent implements OnInit {
   maxDate = null;
   minDate = new Date();
   formErrors = FormErrors;
-  propertyLabel = 'Property';
-  contactLabel = 'Contact';
+  propertyLabel = "Property";
+  contactLabel = "Contact";
   isLabelHidden = true;
   eventTypesMap: Map<number, string>;
   property: Property;
@@ -66,7 +95,7 @@ export class AddDiaryEventComponent implements OnInit {
   showMorePeople = true;
   canRebook = false;
   isRebook: boolean;
-  propertyRequiredWarning = '';
+  propertyRequiredWarning = "";
   contactRequiredWarning: string;
   imagePath: any;
   isBase64Image: boolean;
@@ -78,7 +107,7 @@ export class AddDiaryEventComponent implements OnInit {
   get hours() {
     const result = [];
     for (let hr = 0; hr < 24; hr++) {
-      const hrStr = hr.toString().padStart(2, '0');
+      const hrStr = hr.toString().padStart(2, "0");
       result.push(hrStr);
     }
     return result;
@@ -93,25 +122,26 @@ export class AddDiaryEventComponent implements OnInit {
   }
 
   get startHourControl() {
-    return this.diaryEventForm.get('startHour') as FormControl;
+    return this.diaryEventForm.get("startHour") as FormControl;
   }
   get endHourControl() {
-    return this.diaryEventForm.get('endHour') as FormControl;
+    return this.diaryEventForm.get("endHour") as FormControl;
   }
   get startMinControl() {
-    return this.diaryEventForm.get('startMin') as FormControl;
+    return this.diaryEventForm.get("startMin") as FormControl;
   }
   get endMinControl() {
-    return this.diaryEventForm.get('endMin') as FormControl;
+    return this.diaryEventForm.get("endMin") as FormControl;
   }
   get startDateTimeControl() {
-    return this.diaryEventForm.get('startDateTime') as FormControl;
+    return this.diaryEventForm.get("startDateTime") as FormControl;
   }
   get endDateTimeControl() {
-    return this.diaryEventForm.get('endDateTime') as FormControl;
+    return this.diaryEventForm.get("endDateTime") as FormControl;
   }
 
-  constructor(private fb: FormBuilder,
+  constructor(
+    private fb: FormBuilder,
     private diaryEventService: DiaryEventService,
     private propertyService: PropertyService,
     private storage: StorageMap,
@@ -121,25 +151,30 @@ export class AddDiaryEventComponent implements OnInit {
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
     private infoService: InfoService,
-    private sharedService: SharedService) {
-  }
+    private sharedService: SharedService
+  ) {}
 
   ngOnInit() {
     window.scrollTo(0, 0);
-    this.diaryEventId = +this.route.snapshot.paramMap.get('id');
-    this.graphEventId = this.route.snapshot.queryParamMap.get('graphEventId');
-    this.staffMemberId = +this.route.snapshot.queryParamMap.get('staffMemberId');
-    this.isNewEvent = this.route.snapshot.queryParamMap.get('isNewEvent') as unknown as boolean;
+    this.diaryEventId = +this.route.snapshot.paramMap.get("id");
+    this.graphEventId = this.route.snapshot.queryParamMap.get("graphEventId");
+    this.staffMemberId =
+      +this.route.snapshot.queryParamMap.get("staffMemberId");
+    this.isNewEvent = this.route.snapshot.queryParamMap.get(
+      "isNewEvent"
+    ) as unknown as boolean;
     this.setupForm();
 
     // Set current staff as the first member of staff members array.
-    this.storage.get('currentUser').subscribe((data: StaffMember) => {
+    this.storage.get("currentUser").subscribe((data: StaffMember) => {
       if (data) {
-        this.currentStaffMember = [{
-          staffMemberId: data.staffMemberId,
-          emailAddress: data.email,
-          fullName: data.fullName
-        }] as BaseStaffMember[];
+        this.currentStaffMember = [
+          {
+            staffMemberId: data.staffMemberId,
+            emailAddress: data.email,
+            fullName: data.fullName,
+          },
+        ] as BaseStaffMember[];
         const currentStaffMemberId = [];
         this.id = this.staffMemberId || data.staffMemberId;
         currentStaffMemberId.push(this.id);
@@ -147,34 +182,51 @@ export class AddDiaryEventComponent implements OnInit {
       }
     });
 
-    this.storage.get('info').subscribe((info: DropdownListInfo) => {
+    this.storage.get("info").subscribe((info: DropdownListInfo) => {
       if (info) {
         this.setupEventTypes(info);
       } else {
-        this.infoService.getDropdownListInfo().subscribe((data: ResultData | any) => {
-          if (data) {
-            this.setupEventTypes(data.result);
-            console.log(' list info in add event or edit from db', data.result);
-          }
-        });
+        this.infoService
+          .getDropdownListInfo()
+          .subscribe((data: ResultData | any) => {
+            if (data) {
+              this.setupEventTypes(data.result);
+              console.log(
+                " list info in add event or edit from db",
+                data.result
+              );
+            }
+          });
       }
       this.getDiaryEvent();
     });
 
     this.getAddedProperty();
-    this.diaryEventForm.valueChanges.subscribe(data => {
+    this.diaryEventForm.valueChanges.subscribe((data) => {
       this.sharedService.logValidationErrors(this.diaryEventForm, false);
     });
 
-    this.diaryEventService.eventDateChanges$.subscribe(dates => {
+    this.diaryEventService.eventDateChanges$.subscribe((dates) => {
       if (dates) {
         this.diaryEventForm.patchValue({
           startDateTime: new Date(dates.startDate),
           endDateTime: new Date(dates.endDate),
-          startHour: this.getHours(false, dates.startDate),
-          endHour: this.getHours(false, dates.endDate),
-          startMin: this.getMinutes(dates.startDate),
-          endMin: this.getMinutes(dates.endDate),
+          startHour: this.getHours(
+            false,
+            new Date(dates.startDate)
+          ).toLocaleString("en-US", {
+            minimumIntegerDigits: 2,
+            useGrouping: false,
+          }),
+          endHour: this.getHours(false, new Date(dates.endDate)).toLocaleString(
+            "en-US",
+            {
+              minimumIntegerDigits: 2,
+              useGrouping: false,
+            }
+          ),
+          startMin: this.getMinutes(new Date(dates.startDate)),
+          endMin: this.getMinutes(new Date(dates.endDate)),
         });
       }
     });
@@ -182,31 +234,62 @@ export class AddDiaryEventComponent implements OnInit {
 
   private setupEventTypes(info: DropdownListInfo) {
     const allEventTypes = info.diaryEventTypes;
-    this.eventTypes = allEventTypes
-      .filter(x => ![DiaryEventTypesEnum.ValuationSales, DiaryEventTypesEnum.ValuationLettings, DiaryEventTypesEnum.Alert].includes(x.id));
+    this.eventTypes = allEventTypes.filter(
+      (x) =>
+        ![
+          DiaryEventTypesEnum.ValuationSales,
+          DiaryEventTypesEnum.ValuationLettings,
+          DiaryEventTypesEnum.Alert,
+        ].includes(x.id)
+    );
     // Group event into array of parts of the form visbile
     if (this.eventTypes && this.eventTypes.length) {
-      this.showAllEventTypes = this.eventTypes.filter(x => [DiaryEventTypesEnum.ViewingSales, DiaryEventTypesEnum.ViewingLettings,
-      DiaryEventTypesEnum.PropertyManagement, DiaryEventTypesEnum.Reminder, DiaryEventTypesEnum.Other].includes(x.id));
-      this.showOnlyPropertyEventTypes = this.eventTypes
-        .filter(x => [DiaryEventTypesEnum.PreviewSales, DiaryEventTypesEnum.PreviewLettings].includes(x.id));
-      this.showOnlyContactEventTypes = this.eventTypes
-        .filter(x => [DiaryEventTypesEnum.Meeting, DiaryEventTypesEnum.Interview, DiaryEventTypesEnum.Training].includes(x.id));
+      this.showAllEventTypes = this.eventTypes.filter((x) =>
+        [
+          DiaryEventTypesEnum.ViewingSales,
+          DiaryEventTypesEnum.ViewingLettings,
+          DiaryEventTypesEnum.PropertyManagement,
+          DiaryEventTypesEnum.Reminder,
+          DiaryEventTypesEnum.Other,
+        ].includes(x.id)
+      );
+      this.showOnlyPropertyEventTypes = this.eventTypes.filter((x) =>
+        [
+          DiaryEventTypesEnum.PreviewSales,
+          DiaryEventTypesEnum.PreviewLettings,
+        ].includes(x.id)
+      );
+      this.showOnlyContactEventTypes = this.eventTypes.filter((x) =>
+        [
+          DiaryEventTypesEnum.Meeting,
+          DiaryEventTypesEnum.Interview,
+          DiaryEventTypesEnum.Training,
+        ].includes(x.id)
+      );
     }
   }
 
   getDiaryEvent() {
     if (this.diaryEventId || this.graphEventId || this.staffMemberId) {
-      this.diaryEventService.getDiaryEventById(this.diaryEventId, this.graphEventId, this.staffMemberId)
-        .subscribe(event => {
+      this.diaryEventService
+        .getDiaryEventById(
+          this.diaryEventId,
+          this.graphEventId,
+          this.staffMemberId
+        )
+        .subscribe((event) => {
           if (event) {
             this.diaryEvent = event;
             if (event.onOutlook) {
               this.isEditable = false;
-              !event.onEdge ? this.showTypes = false : this.showTypes = true;
+              !event.onEdge
+                ? (this.showTypes = false)
+                : (this.showTypes = true);
               if (event.staffMembers && event.staffMembers.length) {
                 this.eventStaffMembers = event.staffMembers;
-                this.diaryEvent.staffMembers = this.getStaff(event.staffMembers);
+                this.diaryEvent.staffMembers = this.getStaff(
+                  event.staffMembers
+                );
                 this.setPeopleLabel(this.eventStaffMembers);
                 this.getEmbeddedImage(event);
               }
@@ -225,8 +308,13 @@ export class AddDiaryEventComponent implements OnInit {
   }
 
   private rebookViewings(event: DiaryEvent) {
-    if (+event.eventTypeId === DiaryEventTypesEnum.ViewingSales || +event.eventTypeId === DiaryEventTypesEnum.ViewingLettings) {
-      event.properties && event.properties.length ? this.canRebook = true : this.canRebook = false;
+    if (
+      +event.eventTypeId === DiaryEventTypesEnum.ViewingSales ||
+      +event.eventTypeId === DiaryEventTypesEnum.ViewingLettings
+    ) {
+      event.properties && event.properties.length
+        ? (this.canRebook = true)
+        : (this.canRebook = false);
     }
   }
 
@@ -234,9 +322,9 @@ export class AddDiaryEventComponent implements OnInit {
     const difference = staffMembers?.length - 5;
     if (difference > 0) {
       if (difference === 1) {
-        this.NumberOfPeopleLabel = difference + ' person';
+        this.NumberOfPeopleLabel = difference + " person";
       } else {
-        this.NumberOfPeopleLabel = difference + ' people';
+        this.NumberOfPeopleLabel = difference + " people";
       }
     }
   }
@@ -251,7 +339,7 @@ export class AddDiaryEventComponent implements OnInit {
   setStaffMemberIdList(staffMembers: BaseStaffMember[]) {
     const result = [];
     if (staffMembers && staffMembers.length) {
-      staffMembers.forEach(x => {
+      staffMembers.forEach((x) => {
         if (x.staffMemberId) {
           result.push(x.staffMemberId);
         }
@@ -260,27 +348,29 @@ export class AddDiaryEventComponent implements OnInit {
     this.staffMemberIdList = result;
   }
 
-
   setupForm() {
-    this.diaryEventForm = this.fb.group({
-      startDateTime: new Date(),
-      endDateTime: new Date(),
-      startHour: this.getHours(),
-      endHour: [this.getHours(true)],
-      startMin: this.getMinutes(),
-      endMin: this.getMinutes(),
-      eventTypeId: [0, [Validators.required, Validators.min(1)]],
-      allDay: false,
-      isConfirmed: false,
-      hasReminder: false,
-      duration: [30],
-      durationType: [0],
-      staffMembers: [''],
-      properties: [''],
-      contacts: [''],
-      subject: [''],
-      notes: [''],
-    }, { validators: WedgeValidators.diaryEventEndDateValidator() });
+    this.diaryEventForm = this.fb.group(
+      {
+        startDateTime: new Date(),
+        endDateTime: new Date(),
+        startHour: [this.getHours(true)],
+        endHour: [this.getHours(true)],
+        startMin: this.getMinutes(),
+        endMin: this.getMinutes(),
+        eventTypeId: [0, [Validators.required, Validators.min(1)]],
+        allDay: false,
+        isConfirmed: false,
+        hasReminder: false,
+        duration: [30],
+        durationType: [0],
+        staffMembers: [""],
+        properties: [""],
+        contacts: [""],
+        subject: [""],
+        notes: [""],
+      },
+      { validators: WedgeValidators.diaryEventEndDateValidator() }
+    );
   }
 
   populateForm(diaryEvent: DiaryEvent) {
@@ -288,10 +378,22 @@ export class AddDiaryEventComponent implements OnInit {
       this.diaryEventForm.patchValue({
         startDateTime: new Date(diaryEvent.startDateTime),
         endDateTime: new Date(diaryEvent.endDateTime),
-        startHour: this.getHours(false, diaryEvent.startDateTime),
-        endHour: this.getHours(false, diaryEvent.endDateTime),
-        startMin: this.getMinutes(diaryEvent.startDateTime),
-        endMin: this.getMinutes(diaryEvent.endDateTime),
+        startHour: this.getHours(
+          false,
+          new Date(diaryEvent.startDateTime)
+        ).toLocaleString("en-US", {
+          minimumIntegerDigits: 2,
+          useGrouping: false,
+        }),
+        endHour: this.getHours(
+          false,
+          new Date(diaryEvent.endDateTime)
+        ).toLocaleString("en-US", {
+          minimumIntegerDigits: 2,
+          useGrouping: false,
+        }),
+        startMin: this.getMinutes(new Date(diaryEvent.startDateTime)),
+        endMin: this.getMinutes(new Date(diaryEvent.endDateTime)),
         eventTypeId: diaryEvent.eventTypeId,
         allDay: diaryEvent.allDay,
         isConfirmed: diaryEvent.isConfirmed,
@@ -337,20 +439,20 @@ export class AddDiaryEventComponent implements OnInit {
         hours += 1;
       }
     }
-    return +(this.padLeftWithZero(hours));
+    return +this.padLeftWithZero(hours);
   }
 
   private padLeftWithZero(value: number) {
-    return value.toString().padStart(2, '0');
+    return value.toString().padStart(2, "0");
   }
 
   onStartDateChange(startDate) {
-    console.log('start', startDate);
-    this.diaryEventForm.get('endDateTime').setValue(startDate);
+    console.log("start", startDate);
+    this.diaryEventForm.get("endDateTime").setValue(startDate);
   }
 
   onEndDateChange(endDate) {
-    console.log('end', endDate);
+    console.log("end", endDate);
   }
 
   onStartHourChange(time: string) {
@@ -359,10 +461,10 @@ export class AddDiaryEventComponent implements OnInit {
     if (firstDigit === 0) {
       time = time.substr(1, 1);
       hour = +time + 1;
-      this.diaryEventForm.get('endHour').setValue(this.padLeftWithZero(hour));
+      this.diaryEventForm.get("endHour").setValue(this.padLeftWithZero(hour));
     } else {
       hour = +time + 1;
-      this.diaryEventForm.get('endHour').setValue(hour);
+      this.diaryEventForm.get("endHour").setValue(hour);
     }
     this.setEndHourValidators();
   }
@@ -405,31 +507,36 @@ export class AddDiaryEventComponent implements OnInit {
       case +eventTypeId === DiaryEventTypesEnum.ViewingSales:
         this.searchType = PropertySearchEnum.SalesViewing;
         this.isApplicant = true;
-        this.contactLabel = 'Sales Applicant';
-        this.propertyLabel = 'For Sale';
+        this.contactLabel = "Sales Applicant";
+        this.propertyLabel = "For Sale";
         break;
       case +eventTypeId === DiaryEventTypesEnum.ViewingLettings:
         this.searchType = PropertySearchEnum.LettingsViewing;
         this.isApplicant = true;
-        this.contactLabel = 'Lettings Applicant';
-        this.propertyLabel = 'To Let';
+        this.contactLabel = "Lettings Applicant";
+        this.propertyLabel = "To Let";
         break;
 
       default:
         this.searchType = PropertySearchEnum.DiaryEventProperty;
         this.isApplicant = false;
-        this.propertyLabel = '';
-        this.contactLabel = 'Contact';
+        this.propertyLabel = "";
+        this.contactLabel = "Contact";
         break;
     }
   }
 
   private toggleFlags(eventTypeId: number) {
-
     // set flags based on the event type selected
-    const showAllType = this.showAllEventTypes.filter(x => +x.id === +eventTypeId);
-    const showOnlyPropertiesType = this.showOnlyPropertyEventTypes.filter(x => +x.id === +eventTypeId);
-    const showOnlyContactsType = this.showOnlyContactEventTypes.filter(x => +x.id === +eventTypeId);
+    const showAllType = this.showAllEventTypes.filter(
+      (x) => +x.id === +eventTypeId
+    );
+    const showOnlyPropertiesType = this.showOnlyPropertyEventTypes.filter(
+      (x) => +x.id === +eventTypeId
+    );
+    const showOnlyContactsType = this.showOnlyContactEventTypes.filter(
+      (x) => +x.id === +eventTypeId
+    );
 
     switch (true) {
       case !!showAllType.length:
@@ -457,9 +564,11 @@ export class AddDiaryEventComponent implements OnInit {
   getSelectedProperties(properties: Property[]) {
     this.diaryEventForm.markAsDirty();
     if (properties && properties.length) {
-      this.diaryEventForm.get('properties').setValue(properties);
+      this.diaryEventForm.get("properties").setValue(properties);
       this.lockEventTypes = true;
-    } else { this.lockEventTypes = false; }
+    } else {
+      this.lockEventTypes = false;
+    }
     this.setValidators();
   }
 
@@ -475,7 +584,7 @@ export class AddDiaryEventComponent implements OnInit {
   getSelectedContactGroups(contacts: Signer[]) {
     this.diaryEventForm.markAsDirty();
     if (contacts && contacts.length) {
-      this.diaryEventForm.get('contacts').setValue(contacts);
+      this.diaryEventForm.get("contacts").setValue(contacts);
     }
     this.setValidators();
   }
@@ -483,21 +592,21 @@ export class AddDiaryEventComponent implements OnInit {
   getSelectedStaffMembers(staffMembers: BaseStaffMember[]) {
     this.diaryEventForm.markAsDirty();
     if (staffMembers && staffMembers.length) {
-      this.diaryEventForm.get('staffMembers').setValue(staffMembers);
+      this.diaryEventForm.get("staffMembers").setValue(staffMembers);
     }
   }
 
   private getAddedProperty() {
-    this.propertyService.newPropertyAdded$.subscribe(newProperty => {
+    this.propertyService.newPropertyAdded$.subscribe((newProperty) => {
       if (newProperty) {
         this.property = newProperty;
-        console.log('newly created property', newProperty);
+        console.log("newly created property", newProperty);
       }
     });
   }
 
   setTime(hour: number, min: number) {
-    return (`${hour}:${min}`);
+    return `${hour}:${min}`;
   }
 
   saveDiaryEvent() {
@@ -511,61 +620,73 @@ export class AddDiaryEventComponent implements OnInit {
         this.onSaveComplete();
       }
     } else {
-      console.log('form here', this.diaryEventForm);
+      console.log("form here", this.diaryEventForm);
     }
   }
 
   addOrUpdateEvent() {
-    const event = { ...this.diaryEvent, ...this.diaryEventForm.value } as DiaryEvent;
+    const event = {
+      ...this.diaryEvent,
+      ...this.diaryEventForm.value,
+    } as DiaryEvent;
     this.setDateTime(event);
     if (!event.staffMembers) {
       event.staffMembers = [];
       event.staffMembers = this.currentStaffMember;
     }
     this.setReminder(this.id, event.staffMembers);
-    event.startDateTime = this.toUTC(event.startDateTime)
-    event.endDateTime = this.toUTC(event.endDateTime)
+    event.startDateTime = this.toUTC(event.startDateTime);
+    event.endDateTime = this.toUTC(event.endDateTime);
     if (this.isNewEvent || this.isRebook) {
-      this.diaryEventService.addDiaryEvent(event).subscribe(res => {
+      this.diaryEventService.addDiaryEvent(event).subscribe((res) => {
         if (res) {
           this.onSaveComplete(res);
         }
       });
     } else {
-      this.diaryEventService.updateDiaryEvent(event).subscribe(res => {
+      this.diaryEventService.updateDiaryEvent(event).subscribe((res) => {
         if (res) {
           this.onSaveComplete(res);
         }
       });
     }
-    console.log('event added here', event);
+    console.log("event added here", event);
   }
 
   deleteEvent(eventId: number) {
-    this.showWarning().subscribe(res => {
+    this.showWarning().subscribe((res) => {
       if (res) {
-        this.diaryEventService.deleteDiaryEvent(eventId).subscribe((result: ResultData) => {
-          if (result.status) {
-            this.toastr.success('Diary event successfully deleted');
-            this.router.navigate(['/']);
-          }
-        });
+        this.diaryEventService
+          .deleteDiaryEvent(eventId)
+          .subscribe((result: ResultData) => {
+            if (result.status) {
+              this.toastr.success("Diary event successfully deleted");
+              this.router.navigate(["/"]);
+            }
+          });
       }
     });
   }
 
   setReminder(id: number, staffMembers: BaseStaffMember[], isPatch = false) {
     if (staffMembers && staffMembers.length) {
-      const member = staffMembers.find(x => x.staffMemberId === id);
+      const member = staffMembers.find((x) => x.staffMemberId === id);
       if (member) {
         if (isPatch) {
-          this.diaryEventForm.patchValue({ duration: member.reminderUnits, durationType: member.reminderUnitType, hasReminder: member.hasReminder });
-          member.hasReminder ? this.isReminder = true : this.isReminder = false;
+          this.diaryEventForm.patchValue({
+            duration: member.reminderUnits,
+            durationType: member.reminderUnitType,
+            hasReminder: member.hasReminder,
+          });
+          member.hasReminder
+            ? (this.isReminder = true)
+            : (this.isReminder = false);
         } else {
           member.hasReminder = true;
-          member.reminderUnits = +this.diaryEventForm.get('duration').value || 0;
-          member.reminderUnitType = +this.diaryEventForm.get('durationType').value || 0;
-
+          member.reminderUnits =
+            +this.diaryEventForm.get("duration").value || 0;
+          member.reminderUnitType =
+            +this.diaryEventForm.get("durationType").value || 0;
         }
       }
     }
@@ -573,45 +694,66 @@ export class AddDiaryEventComponent implements OnInit {
 
   // REFACTOR
   private setDateTime(event: DiaryEvent) {
-    const startDateWithHour = setHours(event.startDateTime, +this.startHourControl.value);
-    const startDateWithMinutes = setMinutes(startDateWithHour, +this.startMinControl.value);
-    const endDateWithHour = setHours(event.endDateTime, +this.endHourControl.value);
-    const endDateWithMinutes = setMinutes(endDateWithHour, +this.endMinControl.value);
+    const startDateWithHour = setHours(
+      event.startDateTime,
+      +this.startHourControl.value
+    );
+    const startDateWithMinutes = setMinutes(
+      startDateWithHour,
+      +this.startMinControl.value
+    );
+    const endDateWithHour = setHours(
+      event.endDateTime,
+      +this.endHourControl.value
+    );
+    const endDateWithMinutes = setMinutes(
+      endDateWithHour,
+      +this.endMinControl.value
+    );
     event.startDateTime = startDateWithMinutes;
     event.endDateTime = endDateWithMinutes;
   }
 
   onSaveComplete(diaryEvent?: DiaryEvent) {
     if (this.isNewEvent) {
-      console.log(this.diaryEventForm)
-      this.toastr.success('Diary event successfully saved');
+      console.log(this.diaryEventForm);
+      this.toastr.success("Diary event successfully saved");
       this.sharedService.resetUrl(this.diaryEventId, diaryEvent.diaryEventId);
     } else {
-      this.toastr.success('Diary event successfully updated');
+      this.toastr.success("Diary event successfully updated");
     }
-    this.router.navigate(['/'], { queryParamsHandling: "merge" });
+    this.router.navigate(["/"], { queryParamsHandling: "merge" });
     // this.router.navigateByUrl('/', { skipLocationChange: true })
     //   .then(() => this.router.navigate(['/diary/edit', diaryEvent.diaryEventId]));
   }
 
   setValidators() {
-    const propertiesControl = this.diaryEventForm.get('properties');
-    const contactsControl = this.diaryEventForm.get('contacts');
-    const eventTypeIdControl = this.diaryEventForm.get('eventTypeId');
-    if (+eventTypeIdControl.value === DiaryEventTypesEnum.ViewingLettings || +eventTypeIdControl.value === DiaryEventTypesEnum.ViewingSales) {
-      if (!propertiesControl.value || (propertiesControl.value && !propertiesControl.value.length)) {
+    const propertiesControl = this.diaryEventForm.get("properties");
+    const contactsControl = this.diaryEventForm.get("contacts");
+    const eventTypeIdControl = this.diaryEventForm.get("eventTypeId");
+    if (
+      +eventTypeIdControl.value === DiaryEventTypesEnum.ViewingLettings ||
+      +eventTypeIdControl.value === DiaryEventTypesEnum.ViewingSales
+    ) {
+      if (
+        !propertiesControl.value ||
+        (propertiesControl.value && !propertiesControl.value.length)
+      ) {
         propertiesControl.setValidators(Validators.required);
         propertiesControl.updateValueAndValidity();
-        this.propertyRequiredWarning = 'Property is required';
+        this.propertyRequiredWarning = "Property is required";
       } else {
-        this.propertyRequiredWarning = '';
+        this.propertyRequiredWarning = "";
       }
-      if (!contactsControl.value || (contactsControl.value && !contactsControl.value.length)) {
+      if (
+        !contactsControl.value ||
+        (contactsControl.value && !contactsControl.value.length)
+      ) {
         contactsControl.setValidators(Validators.required);
         contactsControl.updateValueAndValidity();
-        this.contactRequiredWarning = 'Contact is required';
+        this.contactRequiredWarning = "Contact is required";
       } else {
-        this.contactRequiredWarning = '';
+        this.contactRequiredWarning = "";
       }
 
       this.setTelephoneValidator(contactsControl);
@@ -629,9 +771,13 @@ export class AddDiaryEventComponent implements OnInit {
       if (contacts[0].contactNames) {
         contacts.forEach((x: Signer) => {
           if (!x.phoneNumber) {
-            console.log('%ctelephone number for signers is required', 'color:green', x);
+            console.log(
+              "%ctelephone number for signers is required",
+              "color:green",
+              x
+            );
             this.isTelRequired = true;
-            contactsControl.setErrors({ 'telephoneRequired': true });
+            contactsControl.setErrors({ telephoneRequired: true });
           }
         });
       } else {
@@ -639,7 +785,7 @@ export class AddDiaryEventComponent implements OnInit {
           for (const person of x.contactPeople) {
             if (!person.phoneNumbers[0]) {
               this.isTelRequired = true;
-              contactsControl.setErrors({ 'telephoneRequired': true });
+              contactsControl.setErrors({ telephoneRequired: true });
             }
           }
         });
@@ -648,27 +794,38 @@ export class AddDiaryEventComponent implements OnInit {
   }
 
   trackByFn(index, item: BaseStaffMember) {
-    if (!item) { return null; }
+    if (!item) {
+      return null;
+    }
     return item.staffMemberId;
   }
 
   showAllMembers() {
     this.showMorePeople = !this.showMorePeople;
     this.diaryEvent.staffMembers = this.eventStaffMembers;
-    console.log('%c this.diaryEvent.staffMembers', 'color: red', this.diaryEvent.staffMembers);
+    console.log(
+      "%c this.diaryEvent.staffMembers",
+      "color: red",
+      this.diaryEvent.staffMembers
+    );
   }
   showFewMembers() {
     this.showMorePeople = !this.showMorePeople;
     this.diaryEvent.staffMembers = this.getStaff(this.eventStaffMembers);
-    console.log('%c this.diaryEvent.staffMembers', 'color: green', this.diaryEvent.staffMembers);
+    console.log(
+      "%c this.diaryEvent.staffMembers",
+      "color: green",
+      this.diaryEvent.staffMembers
+    );
   }
 
   getEmbeddedImage(diaryEvent: DiaryEvent) {
-    if (diaryEvent.notes && diaryEvent.notes.startsWith('[data:image')) {
+    if (diaryEvent.notes && diaryEvent.notes.startsWith("[data:image")) {
       const length = diaryEvent.notes.trimEnd().length;
       const base64Image = diaryEvent.notes.trimEnd().substring(1, length - 3);
       this.isBase64Image = true;
-      this.imagePath = this.sanitizer.bypassSecurityTrustResourceUrl(base64Image);
+      this.imagePath =
+        this.sanitizer.bypassSecurityTrustResourceUrl(base64Image);
 
       // console.log('last text message', diaryEvent.notes.trimEnd().substring(1, 240543))
     }
@@ -687,17 +844,19 @@ export class AddDiaryEventComponent implements OnInit {
   showWarning() {
     const subject = new Subject<boolean>();
     const initialState = {
-      title: 'Are you sure you want to delete the event?',
-      actions: ['No', 'Yes']
+      title: "Are you sure you want to delete the event?",
+      actions: ["No", "Yes"],
     };
-    const modal = this.modalService.show(ConfirmModalComponent, { ignoreBackdropClick: true, initialState });
+    const modal = this.modalService.show(ConfirmModalComponent, {
+      ignoreBackdropClick: true,
+      initialState,
+    });
     modal.content.subject = subject;
     return subject.asObservable();
   }
 
-
   toUTC(date) {
-    const d = new Date(date)
-    return new Date(d.getTime() - d.getTimezoneOffset() * 60 * 1000)
+    const d = new Date(date);
+    return new Date(d.getTime() - d.getTimezoneOffset() * 60 * 1000);
   }
 }

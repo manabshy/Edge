@@ -1,10 +1,12 @@
 <div class="row">
   <div class="row__item">
     <h2>New Event <span class="pill pill-positive" *ngIf="diaryEvent?.isConfirmed">Confirmed</span></h2>
-    
+
     <div dropdown placement="bottom right" *ngIf="diaryEvent">
-      <button id="actionsToggle" dropdownToggle type="button" class="btn btn-light dropdown-toggle" aria-controls="actionsList">Actions <span class="caret"></span></button>
-      <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="actionsToggle">
+      <button id="actionsToggle" dropdownToggle type="button" class="btn btn-light dropdown-toggle"
+        aria-controls="actionsList">Actions <span class="caret"></span></button>
+      <ul id="actionsList" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+        aria-labelledby="actionsToggle">
         <li role="menuitem">
           <a class="dropdown-item" id="delete" (click)="deleteEvent(diaryEvent?.diaryEventId)">Delete</a>
         </li>
@@ -16,46 +18,52 @@
         <fieldset *ngIf="showTypes">
           <label for="eventTypeId">Type</label>
           <span class="select">
-            <select id="eventTypeId" formControlName="eventTypeId" (change)="onEventTypeChange($event.target.value)" [attr.disabled]="lockEventTypes ? true : null" [ngClass]="{'is-invalid': formErrors?.eventTypeId}">
+            <select id="eventTypeId" formControlName="eventTypeId" (change)="onEventTypeChange($event.target.value)"
+              [attr.disabled]="lockEventTypes ? true : null" [ngClass]="{'is-invalid': formErrors?.eventTypeId}">
               <option value="0"></option>
               <option *ngFor="let type of eventTypes" [value]="type.id">{{type.value}}</option>
             </select>
           </span>
           {{formErrors?.eventTypeId}}
         </fieldset>
-        
+
         <fieldset *ngIf="showStaffMembers">
           <label for="property">Staff Members</label>
           <ng-container *ngIf="!diaryEvent?.onOutlook;else staffList">
-            <app-staff-member-finder [listType]="'calendarStaffMembers'" [isMultiple]="true" [isReadOnly]="diaryEvent?.onOutlook" [staffMemberIdList]="staffMemberIdList" (selectedStaffMemberList)="getSelectedStaffMembers($event)"></app-staff-member-finder>
+            <app-staff-member-finder [listType]="'calendarStaffMembers'" [isMultiple]="true"
+              [isReadOnly]="diaryEvent?.onOutlook" [staffMemberIdList]="staffMemberIdList"
+              (selectedStaffMemberList)="getSelectedStaffMembers($event)"></app-staff-member-finder>
           </ng-container>
 
           <ng-template #staffList>
-            <ng-container *ngFor="let member of diaryEvent?.staffMembers; last as isLast; first as isFirst trackBy:trackByFn">
+            <ng-container
+              *ngFor="let member of diaryEvent?.staffMembers; last as isLast; first as isFirst trackBy:trackByFn">
               <ng-container *ngIf="eventStaffMembers?.length < 6; else moreMembers">
                 <div>{{member?.fullName}}</div>
               </ng-container>
-              
+
               <ng-template #moreMembers>
                 <div>{{member?.fullName}}</div>
-                <button type="button" class="btn btn-link px-0" (click)="showAllMembers()" *ngIf="isLast && showMorePeople">+ {{NumberOfPeopleLabel}}</button>
-                <button type="button" class="btn btn-link px-0" (click)="showFewMembers()" *ngIf="isLast &&!showMorePeople">show less</button>
+                <button type="button" class="btn btn-link px-0" (click)="showAllMembers()"
+                  *ngIf="isLast && showMorePeople">+ {{NumberOfPeopleLabel}}</button>
+                <button type="button" class="btn btn-link px-0" (click)="showFewMembers()"
+                  *ngIf="isLast &&!showMorePeople">show less</button>
               </ng-template>
             </ng-container>
           </ng-template>
         </fieldset>
       </ng-container>
-      
+
       <fieldset *ngIf="showProperties">
-        <label>Properties {{propertyLabel}}</label>
+        <label style="color: black; margin-bottom:4px">Properties {{propertyLabel}}</label>
         <app-property-finder (selectedPropertyList)="getSelectedProperties($event)"
-          (rebookedProperty)="getRebookedPropertyId($event)" [isMultiple]="true" [hideCreateNewProperty]='true' [label]="propertyLabel"
-          [isLabelHidden]="isLabelHidden" [property]="property" [canRebook]="canRebook"
+          (rebookedProperty)="getRebookedPropertyId($event)" [isMultiple]="true" [hideCreateNewProperty]='true'
+          [label]="propertyLabel" [isLabelHidden]="isLabelHidden" [property]="property" [canRebook]="canRebook"
           [propertyList]="diaryEvent?.properties" [propertyRequiredWarning]="propertyRequiredWarning"
           [searchType]="searchType">
         </app-property-finder>
       </fieldset>
-      
+
       <fieldset *ngIf="showContacts">
         <label>{{contactLabel}}s</label>
         <app-signer [label]="contactLabel" [isLabelHidden]="isLabelHidden" [isMultiple]="true"
@@ -63,10 +71,10 @@
           [contactRequiredWarning]="contactRequiredWarning" [isTelRequired]="isTelRequired" [isApplicant]="isApplicant">
         </app-signer>
       </fieldset>
-      
+
       <ng-container *ngIf="showOthers">
         <legend class="legend">Detail</legend>
-        
+
         <ng-container [ngClass]="{'mb-2':!(!isEditable && !isNewEvent)}">
           <fieldset *ngIf="diaryEvent?.allDay || isEditable || isNewEvent">
             <span class="checkbox">
@@ -76,51 +84,66 @@
               </span>
             </span>
           </fieldset>
-          
+
           <fieldset>
             <label for="startDateTime">Start Date</label>
             <span class="joined">
-              <input type="text" id="startDateTime" placeholder="dd/mm/yyyy" formControlName="startDateTime" [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', minDate:minDate, customTodayClass: 'font-weight-bold'}" (bsValueChange)="onStartDateChange($event)" bsDatepicker #datepicker="bsDatepicker" [appNoDoubleTap]='datepicker' [attr.disabled]="!isEditable && !isNewEvent ? true : null">
+              <input type="text" id="startDateTime" placeholder="dd/mm/yyyy" formControlName="startDateTime"
+                [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', minDate:minDate, customTodayClass: 'font-weight-bold'}"
+                (bsValueChange)="onStartDateChange($event)" bsDatepicker #datepicker="bsDatepicker"
+                [appNoDoubleTap]='datepicker' [attr.disabled]="!isEditable && !isNewEvent ? true : null">
               <span class="select input--grid-3" *ngIf="!isAllDay">
-                <select name="startHour" id="startHour" formControlName="startHour" [attr.disabled]="!isEditable && !isNewEvent ? true : null" (change)="onStartHourChange($event.target.value)">
+                <select name="startHour" id="startHour" formControlName="startHour"
+                  [attr.disabled]="!isEditable && !isNewEvent ? true : null"
+                  (change)="onStartHourChange($event.target.value)">
                   <option *ngFor="let hour of hours" [value]='hour'> {{hour}}</option>
                 </select>
               </span>
               <span class="select input--grid-3" *ngIf="!isAllDay">
-                <select  name="startMin" id="startMin" formControlName="startMin" [attr.disabled]="!isEditable && !isNewEvent ? true : null">
+                <select name="startMin" id="startMin" formControlName="startMin"
+                  [attr.disabled]="!isEditable && !isNewEvent ? true : null">
                   <option *ngFor="let min of minutes" [value]='min'> {{min}}</option>
                 </select>
               </span>
             </span>
           </fieldset>
         </ng-container>
-        
+
         <ng-container *ngIf="!isAllDay">
           <fieldset [ngClass]="{'invalid': formErrors?.endHour}">
             <label for="endDateTime">End Date</label>
             <span class="joined">
-              <input type="text" id="endDateTime" placeholder="dd/mm/yyyy" formControlName="endDateTime" [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', minDate:minDate, customTodayClass: 'font-weight-bold'}" (bsValueChange)="onEndDateChange($event)" bsDatepicker [attr.disabled]="!isEditable && !isNewEvent ? true : null" [ngClass]="{'is-invalid': diaryEventForm.errors?.endDateIsBeforeStartDate}">
+              <input type="text" id="endDateTime" placeholder="dd/mm/yyyy" formControlName="endDateTime"
+                [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', minDate:minDate, customTodayClass: 'font-weight-bold'}"
+                (bsValueChange)="onEndDateChange($event)" bsDatepicker
+                [attr.disabled]="!isEditable && !isNewEvent ? true : null"
+                [ngClass]="{'is-invalid': diaryEventForm.errors?.endDateIsBeforeStartDate}">
               <span class="select input--grid-3">
-                <select name="endHour" id="endHour" formControlName="endHour" [attr.disabled]="!isEditable && !isNewEvent ? true : null" (change)="onEndHourChange($event.target.value)">
+                <select name="endHour" id="endHour" formControlName="endHour"
+                  [attr.disabled]="!isEditable && !isNewEvent ? true : null"
+                  (change)="onEndHourChange($event.target.value)">
                   <option *ngFor="let hour of hours" [value]='hour'>{{hour}}</option>
                 </select>
               </span>
               <span class="select input--grid-3">
-                <select name="endMin" id="endMin" formControlName="endMin" [attr.disabled]="!isEditable && !isNewEvent ? true : null">
+                <select name="endMin" id="endMin" formControlName="endMin"
+                  [attr.disabled]="!isEditable && !isNewEvent ? true : null">
                   <option *ngFor="let min of minutes" [value]='min'>{{min}}</option>
                 </select>
               </span>
             </span>
             <p class="message message--negative">{{formErrors?.endHour}}</p>
-            <p class="message message--negative" *ngIf="diaryEventForm?.errors?.endDateIsBeforeStartDate">End date should be after start date</p>
+            <p class="message message--negative" *ngIf="diaryEventForm?.errors?.endDateIsBeforeStartDate">End date
+              should be after start date</p>
           </fieldset>
-          
+
         </ng-container>
 
         <fieldset *ngIf="diaryEvent?.isConfirmed || isEditable || isNewEvent">
           <span class="checkbox">
             <span>
-              <input type="checkbox" id="isConfirmed" name="isConfirmed" formControlName="isConfirmed" [attr.disabled]="!isEditable && !isNewEvent ? true : null">
+              <input type="checkbox" id="isConfirmed" name="isConfirmed" formControlName="isConfirmed"
+                [attr.disabled]="!isEditable && !isNewEvent ? true : null">
               <label for="isConfirmed">Confirm</label>
             </span>
           </span>
@@ -128,13 +151,16 @@
 
         <fieldset *ngIf="diaryEvent?.subject && diaryEvent?.onOutlook">
           <label for="subject">Subject</label>
-          <input type="text" formControlName="subject" id="subject" name="subject" [attr.disabled]="!isEditable && !isNewEvent ? true : null" />
+          <input type="text" formControlName="subject" id="subject" name="subject"
+            [attr.disabled]="!isEditable && !isNewEvent ? true : null" />
         </fieldset>
 
         <fieldset *ngIf="diaryEvent?.notes?.trim() || isEditable || isNewEvent">
           <ng-container *ngIf="!isBase64Image; else showImage">
             <label for="notes" class="small">Note</label>
-            <textarea type="textarea" formControlName="notes" id="notes" name="note" placeholder="Note" maxlength="200" [attr.disabled]="!isEditable && !isNewEvent ? true : null" [ngStyle]="{'min-height.px': diaryEventForm.get('notes').value.length}"></textarea>
+            <textarea type="textarea" formControlName="notes" id="notes" name="note" placeholder="Note" maxlength="200"
+              [attr.disabled]="!isEditable && !isNewEvent ? true : null"
+              [ngStyle]="{'min-height.px': diaryEventForm.get('notes').value.length}"></textarea>
             <small *ngIf="isEditable || isNewEvent" class="form-text text-muted">(200 chars max)</small>
           </ng-container>
           <ng-template #showImage><img [src]="imagePath" alt="embedded image" /></ng-template>
@@ -144,7 +170,8 @@
           <fieldset>
             <span class="checkbox">
               <span>
-                <input type="checkbox" id="hasReminder" name="hasReminder" formControlName="hasReminder" (change)="onReminderCheck($event)">
+                <input type="checkbox" id="hasReminder" name="hasReminder" formControlName="hasReminder"
+                  (change)="onReminderCheck($event)">
                 <label for="hasReminder">Reminder</label>
               </span>
             </span>
@@ -153,7 +180,8 @@
           <div class="inline-parent" *ngIf="isReminder">
             <fieldset class="inline-child">
               <span class="select">
-                <select name="duration" id="duration" formControlName="duration" [attr.disabled]="!isEditable && !isNewEvent ? true : null">
+                <select name="duration" id="duration" formControlName="duration"
+                  [attr.disabled]="!isEditable && !isNewEvent ? true : null">
                   <option value="0">Not Known</option>
                   <option *ngFor="let duration of durationValues" [value]='duration'> {{duration}}</option>
                 </select>
@@ -162,7 +190,8 @@
 
             <fieldset class="inline-child">
               <span class="select">
-                <select name="durationType" id="durationType" formControlName="durationType" [attr.disabled]="!isEditable && !isNewEvent ? true : null">
+                <select name="durationType" id="durationType" formControlName="durationType"
+                  [attr.disabled]="!isEditable && !isNewEvent ? true : null">
                   <option *ngFor="let type of durationTypes |keyvalue" [value]='type.key'> {{type.value}}</option>
                 </select>
               </span>
@@ -172,8 +201,8 @@
         </ng-container>
 
       </ng-container>
-  
-      
+
+
       <footer class="footer">
         <button type="button" class="btn btn--ghost" (click)="cancel()">Cancel</button>
         <button type="submit" class="btn btn--positive">Save</button>
