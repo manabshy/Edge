@@ -24,11 +24,8 @@
         </p-dropdown>
       </fieldset>
     </div>
-<<<<<<< HEAD
+
     <div class="grid grid--27 row  grid--dividerLeft">
-=======
-    <div class="grid grid--25 row  grid--dividerLeft">
->>>>>>> 8cc8a422ab0660f33838041a7ccf4f64f20c1c2f
       <input type="text" name="daterangeInput" daterangepicker (selected)="selectedDate($event, daterange)" />
     </div>
     <div class="grid grid--24 grid--dividerLeft">
@@ -76,7 +73,6 @@
     </div>
     <div class="unit__body">
       <div class="grid grid--10">
-<<<<<<< HEAD
         <fieldset>
           <p-dropdown [options]="roles" [(ngModel)]="selectedRole" (ngModelChange)="getRankingInformation()"
             optionLabel="name">
@@ -99,8 +95,6 @@
             </ng-template>
           </p-dropdown>
         </fieldset>
-=======
->>>>>>> 8cc8a422ab0660f33838041a7ccf4f64f20c1c2f
         <ol class="list list--rankings">
           <li class="hoverPointer" *ngFor="let member of members$|async; let position=index"
             (click)="selectedMember.emit(member)">

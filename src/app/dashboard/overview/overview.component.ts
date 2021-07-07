@@ -246,7 +246,6 @@ export class OverviewComponent implements OnInit, AfterViewInit {
     }
   }
 
-<<<<<<< HEAD
   selectRoleClass(option: any): string {
     if (option) {
       switch (+option.value) {
@@ -262,8 +261,6 @@ export class OverviewComponent implements OnInit, AfterViewInit {
     }
   }
 
-=======
->>>>>>> 8cc8a422ab0660f33838041a7ccf4f64f20c1c2f
   onDateChange(value: Date): void {
     this.bsRangeValue = value;
   }

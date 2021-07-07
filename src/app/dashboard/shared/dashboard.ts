@@ -348,15 +348,12 @@ export const RankingOptions = [
   { value: "10", name: "Sales" },
   { value: "11", name: "Lettings" },
   { value: "60", name: "CS" },
-<<<<<<< HEAD
 ];
 
 export const Roles = [
   { value: "1", name: "Manager" },
   { value: "2", name: "Broker" },
   { value: "3", name: "Negotiator" },
-=======
->>>>>>> 8cc8a422ab0660f33838041a7ccf4f64f20c1c2f
 ];
 
 export enum LeaderboardRankingViewEnum {
