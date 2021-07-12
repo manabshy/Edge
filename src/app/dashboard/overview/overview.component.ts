@@ -169,6 +169,7 @@ export class OverviewComponent implements OnInit, AfterViewInit {
     this.storage.get("currentUser").subscribe((data: StaffMember) => {
       if (data) {
         this.currentStaffMember = data;
+        console.log(this.currentStaffMember);
       } else {
         this.staffMemberService
           .getCurrentStaffMember()

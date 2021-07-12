@@ -728,6 +728,12 @@ export class ValuationDetailEditComponent
           } else {
             this.isEditable = true;
           }
+          if (this.valuation.valuationDate)
+            this.sharedService.calculateDateToNowInMonths(
+              new Date(this.valuation.valuationDate)
+            ) >= 6
+              ? (this.canInstruct = false)
+              : (this.canInstruct = true);
 
           if (this.valuation.salesValuer || this.valuation.lettingsValuer) {
             if (this.isEditable) {
