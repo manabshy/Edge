@@ -36,7 +36,6 @@
               "src/styles.scss"
             ],
             "scripts": [
-              "node_modules/chart.js/dist/chart.js",
               "node_modules/quill/dist/quill.js",
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/moment/moment.js"
