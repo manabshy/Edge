@@ -266,6 +266,8 @@ export class ValuationDetailEditComponent
     { name: "status", value: 7 },
     { name: "instruct", value: 8 },
   ];
+
+  interestList: any[] = [];
   constructor(
     private valuationService: ValuationService,
     private propertyService: PropertyService,
@@ -486,6 +488,7 @@ export class ValuationDetailEditComponent
     this.allOrigins = info.origins;
     this.allOriginTypes = info.originTypes;
     this.setOriginTypes(info.originTypes); // TODO: Issue on refresh
+    this.interestList = info.section21Statuses;
   }
 
   getPropertyDetails(propertyId: number) {
@@ -677,8 +680,9 @@ export class ValuationDetailEditComponent
       suggestedAskingRentLongLetMonthly: [],
       suggestedAskingRentShortLetMonthly: [],
       type: ["both"],
-      haveInterest: ["No"],
+      declarableInterest: ["false"],
       ageOfSuggestedAskingPrice: [],
+      section21statusId: [],
     });
   }
 
@@ -728,12 +732,12 @@ export class ValuationDetailEditComponent
           } else {
             this.isEditable = true;
           }
-          if (this.valuation.valuationDate)
-            this.sharedService.calculateDateToNowInMonths(
-              new Date(this.valuation.valuationDate)
-            ) >= 6
-              ? (this.canInstruct = false)
-              : (this.canInstruct = true);
+          // if (this.valuation.valuationDate)
+          //   this.sharedService.calculateDateToNowInMonths(
+          //     new Date(this.valuation.valuationDate)
+          //   ) >= 6
+          //     ? (this.canInstruct = false)
+          //     : (this.canInstruct = true);
 
           if (this.valuation.salesValuer || this.valuation.lettingsValuer) {
             if (this.isEditable) {
@@ -838,6 +842,8 @@ export class ValuationDetailEditComponent
               new Date(valuation.valuationDate)
             )
           : 0,
+        declarableInterest: valuation.declarableInterest,
+        section21statusId: valuation.section21statusId,
       });
     }
   }

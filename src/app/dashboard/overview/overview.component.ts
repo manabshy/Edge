@@ -1,5 +1,6 @@
 import { enumDepartments } from "./../../core/shared/departments";
 import {
+  AfterViewChecked,
   AfterViewInit,
   Component,
   EventEmitter,
@@ -15,7 +16,7 @@ import {
   PeriodList,
   Periods,
   PeriodsEnum,
-  RankingOptions,
+  roleOptions,
   Roles,
 } from "../shared/dashboard";
 import moment from "moment";
@@ -23,7 +24,7 @@ import { DaterangepickerConfig } from "ng2-daterangepicker";
 import { DaterangepickerComponent } from "ng2-daterangepicker";
 import { TeamMember } from "src/app/client-services/shared/models/team-member";
 import { CsBoardService } from "src/app/client-services/shared/services/cs-board.service";
-import { tap } from "rxjs/operators";
+import { map, tap } from "rxjs/operators";
 import { StorageMap } from "@ngx-pwa/local-storage";
 import { Observable } from "rxjs";
 import { StaffMember } from "src/app/shared/models/staff-member";
@@ -37,7 +38,9 @@ import { LeaderBoardRanking } from "src/app/shared/models/leader-board-ranking";
   templateUrl: "./overview.component.html",
   styleUrls: ["./overview.component.scss"],
 })
-export class OverviewComponent implements OnInit, AfterViewInit {
+export class OverviewComponent
+  implements OnInit, AfterViewInit, AfterViewChecked
+{
   bsRangeValue: any;
   filtersForm: FormGroup;
   periods = PeriodList;
@@ -53,10 +56,12 @@ export class OverviewComponent implements OnInit, AfterViewInit {
   searchPlaceHolder = "Select User";
   currentStaffMember: StaffMember;
 
-  rankingOptions = RankingOptions;
+  roleOptions = roleOptions;
   rankings: LeaderBoardRanking[] = [];
   selectedRole = Roles[0];
   roles = Roles;
+  todayRange: any;
+  loadControl = false;
 
   // see original project for full list of options
   // can also be setup using the config service to apply to multiple pickers
@@ -77,7 +82,7 @@ export class OverviewComponent implements OnInit, AfterViewInit {
     this.periodService.onReportingMonthsOnSelected.subscribe((data) => {
       console.log(data);
       if (data && data.length > 0) {
-        let todayRange = this.periodService.getInterval(PeriodsEnum.Today);
+        this.todayRange = this.periodService.getInterval(PeriodsEnum.Today);
         let weekRange = this.periodService.getInterval(PeriodsEnum.ThisWeek);
         let monthRange = this.periodService.getInterval(PeriodsEnum.ThisMonth);
         let yearRange = this.periodService.getInterval(PeriodsEnum.ThisYear);
@@ -91,9 +96,9 @@ export class OverviewComponent implements OnInit, AfterViewInit {
               hour: 0,
               minute: 0,
             }),
-            moment(todayRange.periodEndDate).set({
-              hour: todayRange.periodEndDate.getHours(),
-              minute: todayRange.periodEndDate.getMinutes(),
+            moment(this.todayRange.periodEndDate).set({
+              hour: this.todayRange.periodEndDate.getHours(),
+              minute: this.todayRange.periodEndDate.getMinutes(),
             }),
           ],
           ThisWeek: [
@@ -144,9 +149,9 @@ export class OverviewComponent implements OnInit, AfterViewInit {
             hour: 0,
             minute: 0,
           }),
-          enddate: moment(todayRange.periodEndDate).set({
-            hour: todayRange.periodEndDate.getHours(),
-            minute: todayRange.periodEndDate.getMinutes(),
+          enddate: moment(this.todayRange.periodEndDate).set({
+            hour: this.todayRange.periodEndDate.getHours(),
+            minute: this.todayRange.periodEndDate.getMinutes(),
           }),
           timePickerSeconds: "false",
           opens: "center",
@@ -176,37 +181,55 @@ export class OverviewComponent implements OnInit, AfterViewInit {
           .subscribe((res) => (this.currentStaffMember = res));
       }
     });
-    this.statsUpdatedString = moment(this.statsUpdated).format(
-      "MMMM DD YYYY HH:mm A"
-    );
+    this.filtersForm = this.fb.group({
+      selectedRoleOption: [roleOptions[0]],
+    });
   }
   ngAfterViewInit(): void {}
 
-  ngOnInit(): void {
-    this.filtersForm = this.fb.group({
-      selectedRankingOption: [RankingOptions[0]],
-    });
+  ngAfterViewChecked(): void {
+    if (this.loadControl === false && this.todayRange)
+      this.getDashboardInformation(null);
+  }
 
+  ngOnInit(): void {
     this.filtersForm.valueChanges.subscribe((data) => {});
   }
 
-  getRankingInformation() {
-    this.storage.get("rankings").subscribe((data: LeaderBoardRanking[]) => {
-      if (data) {
-        this.rankings = data;
-      } else {
-        // todo
-        // this.staffMemberService
-        //   .getRankings(
-        //     this.filtersForm.get("selectedRankingOption").value?.value
-        //   )
-        //   .subscribe((res) => (this.rankings = res));
-      }
-    });
+  getDashboardInformation(event: any) {
+    console.log(event);
+    this.loadControl = true;
+    this.staffMemberService
+      .getDashboardData(
+        this.filtersForm.get("selectedRoleOption").value?.value,
+        this.selectedRole?.value,
+        moment(
+          this.daterange.start
+            ? this.daterange.start
+            : this.todayRange.periodStartDate
+        ).format("YYYY-MM-DD HH:mm"),
+        moment(
+          this.daterange.end
+            ? this.daterange.end
+            : this.todayRange.periodEndDate
+        ).format("YYYY-MM-DD HH:mm"),
+        this.currentStaffMember?.staffMemberId
+      )
+      .toPromise()
+      .then((res) => {
+        console.log(res);
+        if (res) {
+          this.statsUpdated = new Date(res.result.statusDate);
+          this.statsUpdatedString = moment(res.result.statusDate).format(
+            "MMMM DD YYYY HH:mm A"
+          );
+        }
+      });
   }
 
   getSelectedOwner(event: any) {
     this.currentStaffMember = event;
+    this.getDashboardInformation(null);
     console.log(event);
   }
 
@@ -222,6 +245,7 @@ export class OverviewComponent implements OnInit, AfterViewInit {
     this.daterange.start = moment().subtract(5, "minutes");
     this.daterange.end = moment();
     this.daterange.label = value.label;
+    this.getDashboardInformation(null);
   }
 
   cancel() {

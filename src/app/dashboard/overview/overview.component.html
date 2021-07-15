@@ -1,15 +1,15 @@
 <form [formGroup]="filtersForm">
   <div class="grid row">
-    <div class="grid grid--1">
+    <div class="grid grid--1" style="margin-top:4px">
       <fieldset>
-        <p-dropdown [options]="rankingOptions" formControlName="selectedRankingOption"
-          (ngModelChange)="getRankingInformation()" optionLabel="name">
+        <p-dropdown [options]="roleOptions" formControlName="selectedRoleOption"
+          (ngModelChange)="getDashboardInformation($event)" optionLabel="name">
           <ng-template pTemplate="selectedItem">
-            <div *ngIf="filtersForm.get('selectedRankingOption').value">
+            <div *ngIf="filtersForm.get('selectedRoleOption').value">
               <div class="row">
-                <i [class]="selectOptionClass(filtersForm.get('selectedRankingOption').value)"
+                <i [class]="selectOptionClass(filtersForm.get('selectedRoleOption').value)"
                   style="padding-right: 8px;font-size: large;color:#4DA685;"></i>
-                <p>{{filtersForm.get('selectedRankingOption').value.name}}</p>
+                <p>{{filtersForm.get('selectedRoleOption').value.name}}</p>
               </div>
             </div>
           </ng-template>
@@ -25,8 +25,9 @@
       </fieldset>
     </div>
 
-    <div class="grid grid--27 row  grid--dividerLeft">
-      <input type="text" name="daterangeInput" daterangepicker (selected)="selectedDate($event, daterange)" />
+    <div class="grid grid--3 row  grid--dividerLeft">
+      <input type="text" name="daterangeInput" daterangepicker (selected)="selectedDate($event, daterange)"
+        (ngModelChange)="getDashboardInformation($event)" />
     </div>
     <div class="grid grid--24 grid--dividerLeft">
       <ol class="header-navigation">
@@ -44,10 +45,9 @@
           </span>
         </li>
         <fieldset class="inline-child">
-          <app-staff-member-finder class="appWrapper"
-            [deparmentId]="filtersForm.get('selectedRankingOption').value?.value" [placeholder]="searchPlaceHolder"
-            [isFullStaffMember]="true" (selectedStaffMember)="getSelectedOwner($event)" [listType]="'dashboardMembers'"
-            [isDashboardMember]="true">
+          <app-staff-member-finder class="appWrapper" [deparmentId]="filtersForm.get('selectedRoleOption').value?.value"
+            [placeholder]="searchPlaceHolder" [isFullStaffMember]="true"
+            (selectedStaffMember)="getSelectedOwner($event)" [listType]="'dashboardMembers'" [isDashboardMember]="true">
           </app-staff-member-finder>
         </fieldset>
       </ol>
@@ -74,7 +74,7 @@
     <div class="unit__body">
       <div class="grid grid--10">
         <fieldset>
-          <p-dropdown [options]="roles" [(ngModel)]="selectedRole" (ngModelChange)="getRankingInformation()"
+          <p-dropdown [options]="roles" [(ngModel)]="selectedRole" (ngModelChange)="getDashboardInformation($event)"
             optionLabel="name">
             <ng-template pTemplate="selectedItem">
               <div *ngIf="selectedRole">
@@ -257,7 +257,9 @@
       Header
     </div>
     <div class="unit__body">
-      Body
+      <p-panel [showHeader]="false">
+        <p-chart type="pie" [data]=""></p-chart>
+      </p-panel>
     </div>
     <div class="unit__footer">
       Footer

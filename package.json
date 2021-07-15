@@ -43,6 +43,8 @@
     "ajv": "^6.12.6",
     "angular-calendar": "^0.28.22",
     "bootstrap": "^4.6.0",
+    "chart.js": "^2.9.4",
+    "child.js": "^0.2.1",
     "core-js": "^2.6.12",
     "date-fns": "^2.19.0",
     "date-fns-tz": "^1.1.3",

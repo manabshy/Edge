@@ -171,6 +171,7 @@ export class StaffMemberFinderComponent
           ? this.selectedStaffMember.emit(staffMember)
           : this.selectedStaffMemberId.emit(event?.value);
       } else {
+        this.selectedStaffMember.emit(null);
         this.selectedStaffMemberId.emit(0);
       }
     }

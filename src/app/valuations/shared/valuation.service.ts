@@ -13,6 +13,7 @@ import { AppConstants } from "src/app/core/shared/app-constants";
 import { map, tap } from "rxjs/operators";
 import { CustomQueryEncoderHelper } from "src/app/core/shared/custom-query-encoder-helper";
 import { Instruction } from "src/app/shared/models/instruction";
+import { StorageMap } from "@ngx-pwa/local-storage";
 
 @Injectable({
   providedIn: "root",
@@ -21,7 +22,7 @@ export class ValuationService {
   private valuationPageNumberSubject = new Subject<number>();
   valuationPageNumberChanges$ = this.valuationPageNumberSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private storage: StorageMap) {}
 
   valuationPageNumberChanged(page: number) {
     this.valuationPageNumberSubject.next(page);

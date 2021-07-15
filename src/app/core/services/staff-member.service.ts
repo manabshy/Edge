@@ -116,6 +116,28 @@ export class StaffMemberService {
       );
   }
 
+  getDashboardData(
+    departmentId: number,
+    rankingView: number,
+    startDate: string,
+    endDate: string,
+    staffMemberId?: number
+  ): Observable<any> {
+    if (staffMemberId) {
+      return this.http.get<any>(
+        `${AppConstants.baseDashboardUrl}?departmentId=${departmentId}&
+        staffMemberId=${staffMemberId}&rankingView=${rankingView}
+        &startDate=${startDate}&endDate=${endDate}`
+      );
+    } else {
+      return this.http.get<any>(
+        `${AppConstants.baseDashboardUrl}?departmentId=${departmentId}
+          &rankingView=${rankingView}
+          &startDate=${startDate}&endDate=${endDate}`
+      );
+    }
+  }
+
   getValuers(): Observable<StaffMember[]> {
     return this.http.get<any>(`${AppConstants.baseUrl}/listers`).pipe(
       map((response) => response.result),

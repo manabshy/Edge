@@ -88,6 +88,8 @@ import { DropdownModule } from "primeng/dropdown";
 import { MultiSelectModule } from "primeng/multiselect";
 import { RadioButtonModule } from "primeng/radiobutton";
 import { EditorModule } from "primeng/editor";
+import { PanelModule } from "primeng/panel";
+import { ChartModule } from "primeng/chart";
 import { FileUploadModule } from "primeng/fileupload";
 import { TabViewModule } from "primeng/tabview";
 import { ChipModule } from "primeng/chip";
@@ -205,6 +207,8 @@ const externalModules = [
   ChipModule,
   AutoCompleteModule,
   ChipsModule,
+  PanelModule,
+  ChartModule,
 ];
 
 @NgModule({

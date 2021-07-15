@@ -1,6 +1,6 @@
 export interface DashboardPieChart {
-  Fees?: number;
-  Title?: string;
-  Deals?: number;
-  Categories?: DashboardPieChart[];
+  fees?: number;
+  title?: string;
+  deals?: number;
+  categories?: DashboardPieChart[];
 }

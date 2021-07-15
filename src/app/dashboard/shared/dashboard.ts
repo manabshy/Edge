@@ -344,16 +344,16 @@ export const PeriodList = [
   { value: "Custom", name: "Custom" },
 ];
 
-export const RankingOptions = [
+export const roleOptions = [
   { value: "10", name: "Sales" },
   { value: "11", name: "Lettings" },
   { value: "60", name: "CS" },
 ];
 
 export const Roles = [
-  { value: "1", name: "Manager" },
-  { value: "2", name: "Broker" },
-  { value: "3", name: "Negotiator" },
+  { value: 1, name: "Manager" },
+  { value: 2, name: "Broker" },
+  { value: 3, name: "Negotiator" },
 ];
 
 export enum LeaderboardRankingViewEnum {

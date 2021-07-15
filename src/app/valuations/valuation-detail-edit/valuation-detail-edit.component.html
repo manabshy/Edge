@@ -465,8 +465,7 @@
                 <fieldset>
                   <div class="row">
                     <label style="width:auto;" for="haveInterest">Does the Owner have a
-                      declarable
-                      interest (Section 21)
+                      declarable interest (Section 21)
                     </label>
                     <span style="display:contents">
                       <i [pTooltip]="informationMessage" class="fa fa-info-circle fa-2x text-blue"
@@ -475,16 +474,22 @@
                   </div>
                   <span class="radio radio--inline">
                     <span style="margin-right: 8px;">
-                      <input type="radio" id="interestYes" value="Yes" name="haveInterest"
-                        formControlName="haveInterest" data-cy="interestYes">
+                      <input type="radio" id="interestYes" value="true" name="declarableInterest"
+                        formControlName="declarableInterest" data-cy="interestYes">
                       <label for="interestYes">Yes</label>
                     </span>
                     <span>
-                      <input type="radio" id="interestNo" value="No" name="haveInterest" formControlName="haveInterest"
-                        data-cy="interestNo">
+                      <input type="radio" id="interestNo" value="false" name="declarableInterest"
+                        formControlName="declarableInterest" data-cy="interestNo">
                       <label for="interestNo">No</label>
                     </span>
                   </span>
+                </fieldset>
+                <fieldset>
+                  <p-dropdown *ngIf="valuationForm.get('declarableInterest').value === 'true'" [options]="interestList"
+                    formControlName="section21statusId" optionLabel="value" optionValue="id" [filter]="false"
+                    data-cy="section21statusId">
+                  </p-dropdown>
                 </fieldset>
               </div>
             </div>
