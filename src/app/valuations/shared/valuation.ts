@@ -46,7 +46,7 @@ export interface Valuation extends ValuationInfo {
   createdBy: BaseStaffMember;
   isActive?: boolean;
   isExpired?: boolean;
-  section21statusId?: number;
+  section21StatusId?: number;
   declarableInterest?: boolean;
 }
 

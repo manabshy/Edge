@@ -379,8 +379,9 @@
                 <div class="inline-parent inline-parent__hasLabels inline-parent--width-max">
                   <fieldset class="inline-child">
                     <label for="sellValue">Value</label>
-                    <input type="text" name="sellValue" id="sellValue" formControlName="suggestedAskingPrice"
-                      *ngIf="!(!isEditable && !isNewValuation)" data-cy="sellValue">
+                    <input type="text" autocomplete="off" name="sellValue" id="sellValue"
+                      formControlName="suggestedAskingPrice" *ngIf="!(!isEditable && !isNewValuation)"
+                      data-cy="sellValue">
                     <strong style="font-size:large"
                       *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingPrice').value
                       }}</strong>
@@ -400,7 +401,7 @@
                 <div class="inline-parent inline-parent__hasLabels inline-parent--width-max">
                   <fieldset class="inline-child">
                     <label style="width:max-content" for="longLetValue">Value (per week)</label>
-                    <input type="text" name="longLetValue" id="longLetValue"
+                    <input autocomplete="off" type="text" name="longLetValue" id="longLetValue"
                       formControlName="suggestedAskingRentLongLet" *ngIf="!(!isEditable && !isNewValuation)"
                       data-cy="longLetValue">
                     <strong style="font-size:large"
@@ -418,7 +419,7 @@
                 </div>
                 <fieldset>
                   <label for="longLetMonthlyValue">Value (per month)</label>
-                  <input type="text" name="longLetMonthlyValue" id="longLetMonthlyValue"
+                  <input type="text" autocomplete="off" name="longLetMonthlyValue" id="longLetMonthlyValue"
                     formControlName="suggestedAskingRentLongLetMonthly" *ngIf="!(!isEditable && !isNewValuation)"
                     data-cy="longLetMonthlyValue">
                   <strong style="font-size:large"
@@ -432,7 +433,7 @@
                 <div class="inline-parent inline-parent__hasLabels inline-parent--width-max">
                   <fieldset class="inline-child">
                     <label style="width:max-content" for="shortLetValue">Value (per week)</label>
-                    <input type="text" name="shortLetValue" id="shortLetValue"
+                    <input autocomplete="off" type="text" name="shortLetValue" id="shortLetValue"
                       formControlName="suggestedAskingRentShortLet" *ngIf="!(!isEditable && !isNewValuation)"
                       data-cy="shortLetValue">
                     <strong style="font-size:large"
@@ -449,7 +450,7 @@
                 </div>
                 <fieldset>
                   <label for="shortLetMonthlyValue">Value (per month)</label>
-                  <input type="text" name="shortLetMonthlyValue" id="shortLetMonthlyValue"
+                  <input autocomplete="off" type="text" name="shortLetMonthlyValue" id="shortLetMonthlyValue"
                     formControlName="suggestedAskingRentShortLetMonthly" *ngIf="!(!isEditable && !isNewValuation)"
                     data-cy="shortLetMonthlyValue">
                   <strong style="font-size:large"
@@ -487,8 +488,8 @@
                 </fieldset>
                 <fieldset>
                   <p-dropdown *ngIf="valuationForm.get('declarableInterest').value === 'true'" [options]="interestList"
-                    formControlName="section21statusId" optionLabel="value" optionValue="id" [filter]="false"
-                    data-cy="section21statusId">
+                    formControlName="section21StatusId" optionLabel="value" optionValue="id" [filter]="false"
+                    data-cy="section21StatusId">
                   </p-dropdown>
                 </fieldset>
               </div>

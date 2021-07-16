@@ -682,7 +682,7 @@ export class ValuationDetailEditComponent
       type: ["both"],
       declarableInterest: ["false"],
       ageOfSuggestedAskingPrice: [],
-      section21statusId: [],
+      section21StatusId: [],
     });
   }
 
@@ -842,8 +842,8 @@ export class ValuationDetailEditComponent
               new Date(valuation.valuationDate)
             )
           : 0,
-        declarableInterest: valuation.declarableInterest,
-        section21statusId: valuation.section21statusId,
+        declarableInterest: valuation.declarableInterest?.toString(),
+        section21StatusId: valuation.section21StatusId,
       });
     }
   }
