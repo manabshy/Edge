@@ -1631,6 +1631,7 @@ export class ValuationDetailEditComponent
     this.setLeaseExpiryDate();
     this.isSubmitting = true;
     const valuation = { ...this.valuation, ...this.valuationForm.value };
+    valuation.OfficeId = this.property.officeId;
     valuation.suggestedAskingRentShortLetMonthly =
       this.sharedService.converStringToNumber(
         valuation.suggestedAskingRentShortLetMonthly

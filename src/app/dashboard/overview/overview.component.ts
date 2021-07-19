@@ -62,6 +62,7 @@ export class OverviewComponent
   roles = Roles;
   todayRange: any;
   loadControl = false;
+  pieChartData: any;
 
   // see original project for full list of options
   // can also be setup using the config service to apply to multiple pickers
@@ -184,6 +185,11 @@ export class OverviewComponent
     this.filtersForm = this.fb.group({
       selectedRoleOption: [roleOptions[0]],
     });
+
+    this.pieChartData = {
+      labels: ["bisi", "bisi2"],
+      datasets: [{ data: [8, 10] }],
+    };
   }
   ngAfterViewInit(): void {}
 

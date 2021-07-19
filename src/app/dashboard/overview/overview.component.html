@@ -257,9 +257,7 @@
       Header
     </div>
     <div class="unit__body">
-      <p-panel [showHeader]="false">
-        <!-- <p-chart type="pie" [data]=""></p-chart> -->
-      </p-panel>
+
     </div>
     <div class="unit__footer">
       Footer
@@ -267,11 +265,10 @@
   </div>
 
   <div class="unit unit--height2 unit--width3">
-    <div class="unit__header">
-      Header
-    </div>
     <div class="unit__body">
-      Body
+      <p-panel header="Deneme">
+        <p-chart type="pie" [data]="pieChartData"></p-chart>
+      </p-panel>
     </div>
     <div class="footer footer--modal">
       <div class="btn--container">
