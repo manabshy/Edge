@@ -949,7 +949,7 @@ export class ValuationDetailEditComponent
   ageColor(value: any): string {
     if (value >= 0) {
       if (value < 4) return "green";
-      if (value < 7) return "amber";
+      if (value < 7) return "#CF5E02";
       return "red";
     }
     return null;
