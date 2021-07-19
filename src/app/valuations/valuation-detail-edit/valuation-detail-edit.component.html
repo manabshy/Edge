@@ -654,7 +654,7 @@
 <!-- Instruct Modal -->
 <p-dialog header="Confirm values and choose instruction type" [(visible)]="isInstructVisible" [modal]="true"
   [draggable]="false" class="modal--small modal--hasFooter">
-  <form [formGroup]="instructionForm" (ngSubmit)="saveInstruction()" autocompleteOff *ngIf="!valuation?.isExpired">
+  <form [formGroup]="instructionForm" (ngSubmit)="saveInstruction()" autocompleteOff>
     <ng-container *ngIf="instruction?.askingPrice">
       <fieldset *ngIf="showInstruct" style="margin-bottom: 4px;">
         <span class="checkbox">
