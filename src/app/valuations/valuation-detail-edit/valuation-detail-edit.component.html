@@ -725,8 +725,7 @@
       </fieldset>
 
       <ol class="cards">
-        <li *ngIf="instruction?.askingRentLongLet"
-          [ngStyle]="{'background-color': !instructionForm.get('isInstructLongLet').value ? 'lightgray':null}">
+        <li [ngStyle]="{'background-color': !instructionForm.get('isInstructLongLet').value ? 'lightgray':null}">
           <span class="checkbox checkbox--rtl" style="margin-bottom: 12px;">
             <span>
               <input type="checkbox" id="isInstructLongLet" name="isInstructLongLet" formControlName="isInstructLongLet"
