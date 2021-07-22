@@ -122,8 +122,8 @@ export class ValuationService {
         fromDate: requestOption.fromDate
           ? requestOption.fromDate.toString()
           : "",
-        staffMemberId1: requestOption.staffMemberId1.toString(),
-        staffMemberId2: requestOption.staffMemberId2.toString(),
+        staffMemberId1: requestOption.salesValuerId.toString(),
+        staffMemberId2: requestOption.lettingsValuerId.toString(),
       },
     });
     return options;

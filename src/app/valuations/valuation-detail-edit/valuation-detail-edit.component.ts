@@ -138,6 +138,7 @@ export class ValuationDetailEditComponent
   thisWeek: any[] = [];
   nextWeek: any[] = [];
   nextTwoWeek: any[] = [];
+  warningForValuer = true;
   informationMessage =
     "If property is owned by a D&G employee, employee relation or business associate e.g. Laurus Law, Prestige, Foxtons Group";
 
@@ -145,16 +146,16 @@ export class ValuationDetailEditComponent
     return this.valuationForm.get("originType") as FormControl;
   }
   get valuationTypeControl() {
-    return this.valuationForm.get("type") as FormControl;
+    return this.availabilityForm.get("type") as FormControl;
   }
   get originIdControl() {
     return this.valuationForm.get("originId") as FormControl;
   }
   get salesValuerIdControl() {
-    return this.valuationForm.get("salesValuerId") as FormControl;
+    return this.availabilityForm.get("salesValuerId") as FormControl;
   }
   get lettingsValuerIdControl() {
-    return this.valuationForm.get("lettingsValuerId") as FormControl;
+    return this.availabilityForm.get("lettingsValuerId") as FormControl;
   }
   get salesValuerControl() {
     return this.valuationForm.get("salesValuer") as FormControl;
@@ -390,7 +391,6 @@ export class ValuationDetailEditComponent
       );
       this.sharedService.logValidationErrors(this.valuationForm, false);
       this.setRentFigures();
-      this.toggleValuerType();
       this.checkAvailabilityBooking();
     });
 
@@ -434,8 +434,24 @@ export class ValuationDetailEditComponent
     // availability form
     this.availabilityForm = this.fb.group({
       fromDate: new Date(),
-      staffMemberId1: 0,
-      staffMemberId2: 0,
+      salesValuerId: 0,
+      lettingsValuerId: 0,
+      type: "both",
+    });
+
+    this.toggleValuerType();
+    this.availabilityForm.valueChanges.subscribe((data) => {
+      this.toggleValuerType();
+      this.warningForValuer = true;
+      this.canSearchAvailability = false;
+      if (
+        (this.isLettingsOnly && data.lettingsValuerId > 0) ||
+        (this.isSalesOnly && data.salesValuerId > 0) ||
+        (data.lettingsValuerId > 0 && data.salesValuerId > 0)
+      )
+        this.warningForValuer = false;
+      if (!this.warningForValuer && data.fromDate)
+        this.canSearchAvailability = true;
     });
   }
   setCanBookAppointmentFlag() {
@@ -667,8 +683,6 @@ export class ValuationDetailEditComponent
       parking: [""],
       propertyFeature: [""],
       approxLeaseExpiryDate: [""],
-      salesValuerId: [null],
-      lettingsValuerId: [null],
       salesValuer: [""],
       lettingsValuer: [""],
       isInvitationSent: true,
@@ -679,10 +693,10 @@ export class ValuationDetailEditComponent
       suggestedAskingRentShortLet: [],
       suggestedAskingRentLongLetMonthly: [],
       suggestedAskingRentShortLetMonthly: [],
-      type: ["both"],
-      declarableInterest: ["false"],
+      declarableInterest: [],
       ageOfSuggestedAskingPrice: [],
       section21StatusId: [],
+      meetingOwner: ["true"],
     });
   }
 
@@ -805,12 +819,12 @@ export class ValuationDetailEditComponent
         propertyFeature: valuation.propertyFeature,
         salesValuer: valuation.salesValuer,
         lettingsValuer: valuation.lettingsValuer,
-        salesValuerId: valuation.salesValuer
-          ? valuation.salesValuer.staffMemberId
-          : 0,
-        lettingsValuerId: valuation.lettingsValuer
-          ? valuation.lettingsValuer.staffMemberId
-          : 0,
+        // salesValuerId: valuation.salesValuer
+        //   ? valuation.salesValuer.staffMemberId
+        //   : 0,
+        // lettingsValuerId: valuation.lettingsValuer
+        //   ? valuation.lettingsValuer.staffMemberId
+        //   : 0,
         type: this.setInitialType(),
         valuationDate: valuation.valuationDate,
         totalHours: valuation.totalHours || 1,
@@ -1091,32 +1105,33 @@ export class ValuationDetailEditComponent
     const isSalesOrLettings =
       (this.isLettingsOnly && this.lettingsValuerControl.value) ||
       (this.isSalesOnly && this.salesValuerControl.value);
-    if (isSalesOrLettings) {
-      this.availabilityForm.patchValue({
-        staffMemberId1:
-          this.salesValuerControl.value.staffMemberId ||
-          this.lettingsValuerControl.value.staffMemberId,
-      });
-      this.canSearchAvailability = true;
-    } else if (
-      this.isSalesAndLettings &&
-      this.salesValuerControl.value &&
-      this.lettingsValuerControl.value
-    ) {
-      this.availabilityForm.patchValue({
-        staffMemberId1: this.salesValuerControl.value.staffMemberId,
-        staffMemberId2: this.lettingsValuerControl.value.staffMemberId,
-      });
-      this.canSearchAvailability = true;
-    }
+
+    //   if (isSalesOrLettings) {
+    //   this.availabilityForm.patchValue({
+    //     staffMemberId1:
+    //       this.salesValuerControl.value.staffMemberId ||
+    //       this.lettingsValuerControl.value.staffMemberId,
+    //   });
+    //   this.canSearchAvailability = true;
+    // } else if (
+    //   this.isSalesAndLettings &&
+    //   this.salesValuerControl.value &&
+    //   this.lettingsValuerControl.value
+    // ) {
+    //   this.availabilityForm.patchValue({
+    //     staffMemberId1: this.salesValuerControl.value.staffMemberId,
+    //     staffMemberId2: this.lettingsValuerControl.value.staffMemberId,
+    //   });
+    //   this.canSearchAvailability = true;
+    // }
   }
 
   searchAvailabilty() {
     const availability = { ...this.availabilityForm.value };
     const request = {
       fromDate: format(availability.fromDate, "yyyy-MM-dd"),
-      staffMemberId1: availability.staffMemberId1,
-      staffMemberId2: availability.staffMemberId2,
+      salesValuerId: availability.salesValuerId,
+      lettingsValuerId: availability.lettingsValuerId,
     } as ValuersAvailabilityOption;
 
     this.valuationService.getValuersAvailability(request).subscribe((res) => {
@@ -1207,7 +1222,7 @@ export class ValuationDetailEditComponent
           .findIndex((s) => s.staffMemberId === val.salesValuer?.staffMemberId);
         if (index < 0) {
           this.allValuers.sales[0].staffMembers.push(val.salesValuer);
-          this.valuationForm
+          this.availabilityForm
             .get("salesValuerId")
             .setValue(val.salesValuer.staffMemberId);
           this.canBookAppointment = false;
@@ -1228,7 +1243,7 @@ export class ValuationDetailEditComponent
         );
         if (index < 0) {
           this.allValuers.lettings[0].staffMembers.push(val.lettingsValuer);
-          this.valuationForm
+          this.availabilityForm
             .get("lettingsValuerId")
             .setValue(val.lettingsValuer.staffMemberId);
           this.canBookAppointment = false;
@@ -1263,10 +1278,10 @@ export class ValuationDetailEditComponent
 
   changeDate() {
     if (this.valuation.salesValuer || this.valuation.lettingsValuer) {
-      this.availabilityForm.patchValue({
-        staffMemberId1: this.valuationForm.get("salesValuerId").value,
-        staffMemberId2: this.valuationForm.get("lettingsValuerId").value,
-      });
+      // this.availabilityForm.patchValue({
+      //   staffMemberId1: this.valuationForm.get("salesValuerId").value,
+      //   staffMemberId2: this.valuationForm.get("lettingsValuerId").value,
+      // });
     }
     this.showCalendar = true;
   }
@@ -1610,6 +1625,16 @@ export class ValuationDetailEditComponent
   saveValuation() {
     this.checkAvailabilityBooking();
     this.setValuersValidators();
+    if (!this.valuationForm.controls["declarableInterest"].value) {
+      this.errorMessage = {} as WedgeError;
+      this.errorMessage.displayMessage =
+        "Please enter Terms Of Business Section";
+      this.sharedService.showError(
+        this.errorMessage,
+        "Terms Of Business Section"
+      );
+      return;
+    }
     this.sharedService.logValidationErrors(this.valuationForm, true);
     if (this.valuationForm.valid && !this.isAvailabilityRequired) {
       if (

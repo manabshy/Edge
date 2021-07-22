@@ -48,6 +48,7 @@ export interface Valuation extends ValuationInfo {
   isExpired?: boolean;
   section21StatusId?: number;
   declarableInterest?: boolean;
+  meetingOwner: boolean;
 }
 
 export interface ValuationPropertyInfo {
@@ -82,8 +83,8 @@ export interface CalendarAvailibility {
 }
 export interface ValuersAvailabilityOption extends BaseRequestOption {
   fromDate?: string;
-  staffMemberId1?: number;
-  staffMemberId2?: number;
+  lettingsValuerId?: number;
+  salesValuerId?: number;
 }
 export interface ValuationRequestOption extends BaseRequestOption {
   status?: number;

@@ -69,13 +69,13 @@ export class SharedService {
   }
 
   calculateDateToNowInMonths(valuationDate: Date): number {
-    const diffInMs = Math.abs(new Date().getTime() - valuationDate.getTime());
-    var d = new Date(
-      valuationDate.getFullYear(),
-      valuationDate.getMonth() + 1,
-      0
-    );
-    return Math.floor(diffInMs / (1000 * 60 * 60 * 24) / d.getDate());
+    let subtractionOfMonths =
+      new Date().getMonth() -
+      valuationDate.getMonth() +
+      12 * (new Date().getFullYear() - valuationDate.getFullYear());
+    if (new Date().getDate() - valuationDate.getDate() < 0)
+      subtractionOfMonths--;
+    return subtractionOfMonths;
   }
 
   setRemoveSticky(removed: boolean) {
