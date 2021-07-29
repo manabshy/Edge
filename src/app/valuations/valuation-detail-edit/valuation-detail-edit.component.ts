@@ -1,4 +1,10 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  ElementRef,
+} from "@angular/core";
 import {
   FormBuilder,
   FormControl,
@@ -47,10 +53,18 @@ import { StaffMember } from "src/app/shared/models/staff-member";
 import { TabDirective } from "ngx-bootstrap/tabs/ngx-bootstrap-tabs";
 import format from "date-fns/format";
 import { Observable } from "rxjs";
-import { MessageService } from "primeng/api";
+import { MessageService, PrimeNGConfig } from "primeng/api";
 import { addYears, differenceInCalendarYears } from "date-fns";
 import _ from "lodash";
 import { CurrencyPipe } from "@angular/common";
+import { CustomDateFormatter } from "src/app/calendar-shared/custom-date-formatter.provider";
+import { CustomEventTitleFormatter } from "src/app/calendar-shared/custom-event-title-formatter.provider";
+import {
+  CalendarDayViewBeforeRenderEvent,
+  CalendarEvent,
+} from "angular-calendar";
+import { BasicEventRequest, DiaryProperty } from "src/app/diary/shared/diary";
+import { DiaryEventService } from "src/app/diary/shared/diary-event.service";
 
 @Component({
   selector: "app-valuation-detail-edit",
@@ -139,6 +153,11 @@ export class ValuationDetailEditComponent
   nextWeek: any[] = [];
   nextTwoWeek: any[] = [];
   warningForValuer = true;
+  sideBarControlVisible = false;
+  selectedCalendarDate = new Date();
+  viewingArrangements: InfoDetail[];
+  secondStaffMemberId: number;
+  selectedStaffMemberId: number = 0;
   informationMessage =
     "If property is owned by a D&G employee, employee relation or business associate e.g. Laurus Law, Prestige, Foxtons Group";
 
@@ -282,12 +301,15 @@ export class ValuationDetailEditComponent
     private infoService: InfoService,
     private router: Router,
     private fb: FormBuilder,
-    private currencyPipe: CurrencyPipe
+    private currencyPipe: CurrencyPipe,
+    private primengConfig: PrimeNGConfig,
+    private diaryEventService: DiaryEventService
   ) {
     super();
   }
 
   ngOnInit() {
+    this.primengConfig.ripple = true;
     this.setupForm();
     this.storage
       .get("currentUser")
@@ -453,7 +475,14 @@ export class ValuationDetailEditComponent
       if (!this.warningForValuer && data.fromDate)
         this.canSearchAvailability = true;
     });
+
+    this.storage.get("info").subscribe((data: DropdownListInfo) => {
+      if (data) {
+        this.viewingArrangements = data.viewingArrangements;
+      }
+    });
   }
+
   setCanBookAppointmentFlag() {
     switch (true) {
       case !!(
@@ -473,6 +502,14 @@ export class ValuationDetailEditComponent
 
         break;
     }
+  }
+
+  selectValuersClick() {
+    this.sideBarControlVisible = true;
+    this.thisWeek = [];
+    this.nextWeek = [];
+    this.nextTwoWeek = [];
+    this.showCalendar = false;
   }
 
   toggleValuerType() {
@@ -714,10 +751,6 @@ export class ValuationDetailEditComponent
       isInstructLongLet: [],
       isInstructShortLet: [],
     });
-  }
-
-  closeCalendar() {
-    this.showCalendar = false;
   }
 
   private setValuersForSalesAndLettings() {
@@ -1100,8 +1133,8 @@ export class ValuationDetailEditComponent
   getAvailability() {
     this.availableDates = {} as any;
     this.canSearchAvailability = false;
-    this.showCalendar = true;
     this.isAppointmentVisible = true;
+    this.sideBarControlVisible = true;
     const isSalesOrLettings =
       (this.isLettingsOnly && this.lettingsValuerControl.value) ||
       (this.isSalesOnly && this.salesValuerControl.value);
@@ -1134,6 +1167,19 @@ export class ValuationDetailEditComponent
       lettingsValuerId: availability.lettingsValuerId,
     } as ValuersAvailabilityOption;
 
+    if (
+      this.isSalesAndLettings &&
+      availability.salesValuerId != availability.lettingsValuerId
+    ) {
+      this.selectedStaffMemberId = availability.salesValuerId;
+      this.secondStaffMemberId = availability.lettingsValuerId;
+    } else {
+      this.selectedStaffMemberId = this.isSalesOnly
+        ? availability.salesValuerId
+        : availability.lettingsValuerId;
+      this.secondStaffMemberId = null;
+    }
+
     this.valuationService.getValuersAvailability(request).subscribe((res) => {
       this.availableDates = res.valuationStaffMembersCalanderEvents;
       console.log(this.availableDates);
@@ -1148,6 +1194,7 @@ export class ValuationDetailEditComponent
         this.nextTwoWeek = this.setWeekData(this.availableDates.next2Weeks);
       }
     });
+    this.sideBarControlVisible = false;
   }
 
   setWeekData(allData: Date[]): any[] {
@@ -1184,6 +1231,33 @@ export class ValuationDetailEditComponent
       this.valuationForm.get("valuationDate").setValue(date);
       this.showCalendar = false;
       this.isAppointmentVisible = false;
+      this.sideBarControlVisible = false;
+    }
+  }
+
+  selectCalendarDate(date: Date) {
+    console.log(date);
+    this.selectedCalendarDate = date;
+    this.showCalendar = true;
+  }
+
+  getStaff(members: BaseStaffMember[]) {
+    if (members && members.length > 5) {
+      return _.take(members, 5);
+    }
+    return members;
+  }
+
+  setViewingArrangement(properties: DiaryProperty[]) {
+    if (this.viewingArrangements && properties && properties.length) {
+      const values = Object.values(this.viewingArrangements);
+      for (const property of properties) {
+        values.forEach((x) => {
+          if (x.id === property.viewingArragementId) {
+            property.viewingArragement = x.value;
+          }
+        });
+      }
     }
   }
 
@@ -1274,16 +1348,6 @@ export class ValuationDetailEditComponent
       this.approxLeaseExpiryDateControl.clearValidators();
       this.approxLeaseExpiryDateControl.updateValueAndValidity();
     }
-  }
-
-  changeDate() {
-    if (this.valuation.salesValuer || this.valuation.lettingsValuer) {
-      // this.availabilityForm.patchValue({
-      //   staffMemberId1: this.valuationForm.get("salesValuerId").value,
-      //   staffMemberId2: this.valuationForm.get("lettingsValuerId").value,
-      // });
-    }
-    this.showCalendar = true;
   }
 
   createNewSigner() {

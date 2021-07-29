@@ -1,10 +1,10 @@
-.popover                    { max-width:240px; background-color:#fff; border:1px solid rgba(0,0,0,.2); word-break: break-word; border-radius:3px; top:0; left:0; z-index:100; 
+.popover                    { max-width:240px; background-color:#fff; border:1px solid rgba(0,0,0,.2); word-break: break-word; border-radius:3px; top:0; left:0; z-index:100;
     &-header                { padding:16px;
         &+*                 { margin-top:0; padding-top:0; }
     }
-    
+
     &-body                  { padding:16px; }
-    
+
     dt                      { font-weight:bold; color:#0A1A4A; }
     .row                    { display:flex; }
     .col                    { flex-grow:1;
@@ -30,17 +30,19 @@
         .cal-header.cal-weekend span    { color:#848CA4; }
     }
 
+    .calendar-forshow{ margin-top: 8px !important;}
+
     .cal-month-view                     {
         .cal-cell                       { width:14%; }
         .cal-event                      { margin:1px; padding:5px; height:auto; line-height:1; font-size:11px; background-color:#3498DB; border-radius:5px; width:calc(100% - 2px); }
-        .cal-weekend,        
+        .cal-weekend,
         .cal-day-cell                   {
             &.cal-weekend               {
                 .cal-day-number         { color:#848CA4; }
             }
             &.cal-today                 { background-color:#EDF6F2; }
         }
-    }   
+    }
 }
 
 /***********************************************
@@ -51,6 +53,7 @@ This applies from 992px onwards
         .cal-day-headers                    { top:120px; }
     }
 }
+
 
 
 

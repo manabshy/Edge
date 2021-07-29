@@ -47,3 +47,23 @@
 //   margin-left: 10px;
 //   vertical-align: super;
 // }
+
+::ng-deep {
+  .p-badge-info{
+    margin-left: 4px;
+    background-color:#F9CBDF !important
+  }
+  .p-badge-success{
+    margin-left: 4px;
+    background-color:#E0D5F3 !important
+  }
+}
+
+.dot {
+  height: 25px;
+  width: 25px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+}
+

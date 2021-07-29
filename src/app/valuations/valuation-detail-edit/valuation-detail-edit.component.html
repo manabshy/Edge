@@ -544,86 +544,121 @@
 </p-dialog>
 
 <!-- Appointment Modal -->
-<p-dialog header=" Pick availability" [(visible)]="isAppointmentVisible" [modal]="true" [draggable]="false"
+<p-dialog #availabiltyDialog [(visible)]="isAppointmentVisible" [modal]="true" [draggable]="false"
   class="modal--medium">
+  <p-header class="row">
+
+    <span class="inline-parent">
+      <span>Pick availability</span>
+      <span
+        style="padding-left:140px;font-size:smaller; padding-right: 8px;">{{salesValuerControl.value?.fullName}}</span>
+      <div class="badges" style="font-size:xx-large">
+        <p-badge severity="info"></p-badge>
+      </div>
+    </span>
+
+    <span class="inline-parent" style="padding-left:60px;">
+      <span style="font-size:smaller; padding-right: 8px;">{{lettingsValuerControl.value?.fullName}}</span>
+      <div class="badges" style="font-size:xx-large">
+        <p-badge severity="success"></p-badge>
+      </div>
+    </span>
+
+  </p-header>
   <form [formGroup]="availabilityForm" (ngSubmit)="searchAvailabilty()">
     <div class="row">
-      <div class="grid grid--3">
+      <div class="grid grid--06">
+        <p-sidebar [modal]="false" [visible]="sideBarControlVisible" position="left">
 
-        <fieldset>
-          <span class="radio radio--boxed" btnRadioGroup formControlName="type">
-            <span>
-              <input type="radio" checked="checked" tabindex="1" name="appointments" id="valuationBoth">
-              <label for="valuationBoth" btnRadio="both" tabindex="0" role="button"><span>Both</span></label>
+          <fieldset>
+            <span class="radio radio--boxed" btnRadioGroup formControlName="type">
+              <span>
+                <input type="radio" checked="checked" tabindex="1" name="appointments" id="valuationBoth">
+                <label for="valuationBoth" btnRadio="both" tabindex="0" role="button"><span>Both</span></label>
+              </span>
+              <span>
+                <input type="radio" tabindex="2" name="appointments" id="valuationSales">
+                <label for="valuationSales" data-cy="valSales" btnRadio="sales" tabindex="0"
+                  role="button"><span>Sales</span></label>
+              </span>
+              <span>
+                <input type="radio" tabindex="2" name="appointments" id="valuationLettings">
+                <label for="valuationLettings" btnRadio="lettings" tabindex="0"
+                  role="button"><span>Lettings</span></label>
+              </span>
             </span>
-            <span>
-              <input type="radio" tabindex="2" name="appointments" id="valuationSales">
-              <label for="valuationSales" data-cy="valSales" btnRadio="sales" tabindex="0"
-                role="button"><span>Sales</span></label>
-            </span>
-            <span>
-              <input type="radio" tabindex="2" name="appointments" id="valuationLettings">
-              <label for="valuationLettings" btnRadio="lettings" tabindex="0"
-                role="button"><span>Lettings</span></label>
-            </span>
+          </fieldset>
+
+          <span *ngIf="(isSalesOnly || isSalesAndLettings)" class="inline-parent">
+            <fieldset style="width:-webkit-fill-available">
+              <!-- <fieldset [hidden]="!(isSalesOnly || isSalesAndLettings)"> -->
+              <label for="salesValuer">Sales Valuer</label>
+              <ng-select placeholder="Select Valuer" [items]="salesValuers" bindLabel="fullName"
+                bindValue="staffMemberId" groupBy="staffMembers" [multiple]="false" formControlName="salesValuerId"
+                (change)="onSalesValuerChange($event)" [readonly]="!isEditable && !isNewValuation"
+                [ngClass]="{'is-invalid': formErrors.salesValuerId}" data-cy="salesValuers">
+                <ng-template ng-optgroup-tmp let-item="item">
+                  {{item.office?.name}}
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item">
+                  {{item.fullName}}
+                </ng-template>
+              </ng-select>
+            </fieldset>
+            <div class="badges">
+              <p-badge severity="info"></p-badge>
+            </div>
           </span>
-        </fieldset>
 
-        <fieldset *ngIf="(isSalesOnly || isSalesAndLettings)">
-          <!-- <fieldset [hidden]="!(isSalesOnly || isSalesAndLettings)"> -->
-          <label for="salesValuer">Sales Valuer</label>
-          <ng-select placeholder="Select Valuer" [items]="salesValuers" bindLabel="fullName" bindValue="staffMemberId"
-            groupBy="staffMembers" [multiple]="false" formControlName="salesValuerId"
-            (change)="onSalesValuerChange($event)" [readonly]="!isEditable && !isNewValuation"
-            [ngClass]="{'is-invalid': formErrors.salesValuerId}" data-cy="salesValuers">
-            <ng-template ng-optgroup-tmp let-item="item">
-              {{item.office?.name}}
-            </ng-template>
-            <ng-template ng-option-tmp let-item="item">
-              {{item.fullName}}
-            </ng-template>
-          </ng-select>
-        </fieldset>
+          <span class="inline-parent" *ngIf="(isLettingsOnly || isSalesAndLettings)">
+            <fieldset style="width:-webkit-fill-available">
+              <label for="lettingsValuer">Lettings Valuer</label>
+              <ng-select placeholder="Select Valuer" [items]="lettingsValuers" bindLabel="fullName"
+                bindValue="staffMemberId" groupBy="staffMembers" [multiple]="false" formControlName="lettingsValuerId"
+                (change)="onLettingsValuerChange($event)" [readonly]="!isEditable && !isNewValuation"
+                [ngClass]="{'is-invalid': formErrors.lettingsValuerId}">
+                <ng-template ng-optgroup-tmp let-item="item">
+                  {{item.office?.name}}
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item">
+                  {{item.fullName}}
+                </ng-template>
+              </ng-select>
+            </fieldset>
+            <div class="badges">
+              <p-badge severity="success"></p-badge>
+            </div>
+          </span>
 
-        <fieldset *ngIf="(isLettingsOnly || isSalesAndLettings)">
-          <label for="lettingsValuer">Lettings Valuer</label>
-          <ng-select placeholder="Select Valuer" [items]="lettingsValuers" bindLabel="fullName"
-            bindValue="staffMemberId" groupBy="staffMembers" [multiple]="false" formControlName="lettingsValuerId"
-            (change)="onLettingsValuerChange($event)" [readonly]="!isEditable && !isNewValuation"
-            [ngClass]="{'is-invalid': formErrors.lettingsValuerId}">
-            <ng-template ng-optgroup-tmp let-item="item">
-              {{item.office?.name}}
-            </ng-template>
-            <ng-template ng-option-tmp let-item="item">
-              {{item.fullName}}
-            </ng-template>
-          </ng-select>
-        </fieldset>
-        <div style="color: red; margin-bottom: 8px;" *ngIf="warningForValuer"> Please select valuer(s)</div>
+          <div style="color: red; margin-bottom: 8px;" *ngIf="warningForValuer"> Please select valuer(s)</div>
 
-        <fieldset>
-          <label for="fromDate">Date From</label>
-          <input type="text" id="date" placeholder="dd/mm/yyyy"
-            [bsConfig]="{showWeekNumbers:false,  dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
-            bsDatepicker formControlName="fromDate">
-        </fieldset>
+          <fieldset>
+            <label for="fromDate">Date From</label>
+            <input type="text" id="date" placeholder="dd/mm/yyyy"
+              [bsConfig]="{showWeekNumbers:false,  dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
+              bsDatepicker formControlName="fromDate">
+          </fieldset>
 
-        <fieldset>
-          <button class="btn btn--positive" [attr.disabled]="!canSearchAvailability? true:null"
-            data-cy="searchAvailability">Search</button>
-        </fieldset>
+          <fieldset>
+            <button class="btn btn--positive" [attr.disabled]="!canSearchAvailability? true:null"
+              data-cy="searchAvailability">Search</button>
+          </fieldset>
+        </p-sidebar>
+        <button type="button" class="btn btn--positive" (click)="selectValuersClick()">Valuers</button>
       </div>
-      <div class="grid grid--7 grid--dividerLeft">
+
+      <div class="grid grid--6 grid--dividerLeft">
         <app-subnav>
           <p class="txt--title" *ngIf="thisWeek">This Week</p>
           <ol class="list list--dates" *ngIf="thisWeek">
             <li *ngFor="let key of thisWeek">
-              <span class="txt--date">{{key['date'] | date:'fullDate'}}</span>
+              <app-subnav-item class="txt--date" (click)="selectCalendarDate(key['date'])">
+                {{key['date'] | date:'fullDate'}}
+              </app-subnav-item>
               <ol class="cards cards--small">
                 <li *ngFor="let hours of key['hours'] ">
-                  <app-subnav-item (click)="selectAvailableDate(key['date']); properties = null">
-                    {{hours | date:'HH:mm'}}
-                  </app-subnav-item>
+                  <button type="button" class="btn btn--ghost"
+                    (click)="selectAvailableDate(key['date']); properties = null">{{hours | date:'HH:mm'}}</button>
                 </li>
               </ol>
             </li>
@@ -632,12 +667,13 @@
           <p class="txt--title" *ngIf="nextWeek">Next Week</p>
           <ol class="list list--dates" *ngIf="nextWeek">
             <li *ngFor="let key of nextWeek">
-              <span class="txt--date">{{key['date'] | date:'fullDate'}}</span>
+              <app-subnav-item class="txt--date" (click)="selectCalendarDate(key['date'])">
+                {{key['date'] | date:'fullDate'}}
+              </app-subnav-item>
               <ol class="cards cards--small">
                 <li *ngFor="let hours of key['hours'] ">
-                  <app-subnav-item (click)="selectAvailableDate(key['date']); properties = null">
-                    {{hours | date:'HH:mm'}}
-                  </app-subnav-item>
+                  <button type="button" class="btn btn--ghost"
+                    (click)="selectAvailableDate(key['date']); properties = null">{{hours | date:'HH:mm'}}</button>
                 </li>
               </ol>
             </li>
@@ -646,18 +682,25 @@
           <p class="txt--title" *ngIf="nextWeek">Next Two Week</p>
           <ol class="list list--dates" *ngIf="nextTwoWeek">
             <li *ngFor="let key of nextTwoWeek">
-              <span class="txt--date">{{key['date'] | date:'fullDate'}}</span>
+              <app-subnav-item class="txt--date" (click)="selectCalendarDate(key['date'])">
+                {{key['date'] | date:'fullDate'}}
+              </app-subnav-item>
+              <!-- <span class="txt--date">{{key['date'] | date:'fullDate'}}</span> -->
               <ol class="cards cards--small">
                 <li *ngFor="let hours of key['hours'] ">
-                  <app-subnav-item (click)="selectAvailableDate(key['date']); properties = null">
-                    {{hours | date:'HH:mm'}}
-                  </app-subnav-item>
+                  <button type="button" class="btn btn--ghost"
+                    (click)="selectAvailableDate(key['date']); properties = null">{{hours | date:'HH:mm'}}</button>
                 </li>
               </ol>
             </li>
           </ol>
         </app-subnav>
+      </div>
 
+      <div *ngIf="showCalendar" class="calendar-container grid grid--4 grid--dividerLeft" #calendarContainer>
+        <p class="txt--title">{{selectedCalendarDate | date:'fullDate'}}</p>
+        <app-calendar [isOnlyShowPurposes]="true" [view]="'day'" [viewDate]="selectedCalendarDate"
+          [selectedStaffMemberId]="selectedStaffMemberId" [secondStaffMemberId]="secondStaffMemberId"></app-calendar>
       </div>
     </div>
   </form>

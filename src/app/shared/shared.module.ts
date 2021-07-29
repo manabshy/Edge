@@ -63,6 +63,7 @@ import { ToastrModule, ToastContainerModule } from "ngx-toastr";
 import { AgmCoreModule } from "@agm/core";
 import { CalendarModule, DateAdapter } from "angular-calendar";
 import { adapterFactory } from "angular-calendar/date-adapters/date-fns";
+import { SidebarModule } from "primeng/sidebar";
 import { LoadingBarHttpClientModule } from "@ngx-loading-bar/http-client";
 import { AngularStickyThingsModule } from "@w11k/angular-sticky-things";
 import { NgSelectModule } from "@ng-select/ng-select";
@@ -87,6 +88,7 @@ import { ConfirmationService, MessageService } from "primeng/api";
 import { DropdownModule } from "primeng/dropdown";
 import { MultiSelectModule } from "primeng/multiselect";
 import { RadioButtonModule } from "primeng/radiobutton";
+import { ButtonModule } from "primeng/button";
 import { EditorModule } from "primeng/editor";
 import { PanelModule } from "primeng/panel";
 import { ChartModule } from "primeng/chart";
@@ -96,6 +98,7 @@ import { ChipModule } from "primeng/chip";
 import { AutoCompleteModule } from "primeng/autocomplete";
 import { ChipsModule } from "primeng/chips";
 import { TooltipModule } from "primeng/tooltip";
+import { BadgeModule } from "primeng/badge";
 
 // Components
 import { RedactedTableComponent } from "./components/redacted-table/redacted-table.component";
@@ -184,6 +187,8 @@ const externalModules = [
   NgPipesModule,
   TooltipModule,
   ButtonsModule,
+  ButtonModule,
+  BadgeModule,
   OrderModule,
   ToastrModule,
   ToastContainerModule,
@@ -209,6 +214,7 @@ const externalModules = [
   ChipsModule,
   PanelModule,
   ChartModule,
+  SidebarModule,
 ];
 
 @NgModule({
