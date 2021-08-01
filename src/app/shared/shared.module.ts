@@ -99,6 +99,7 @@ import { AutoCompleteModule } from "primeng/autocomplete";
 import { ChipsModule } from "primeng/chips";
 import { TooltipModule } from "primeng/tooltip";
 import { BadgeModule } from "primeng/badge";
+import { CardModule } from "primeng/card";
 
 // Components
 import { RedactedTableComponent } from "./components/redacted-table/redacted-table.component";
@@ -215,6 +216,7 @@ const externalModules = [
   PanelModule,
   ChartModule,
   SidebarModule,
+  CardModule,
 ];
 
 @NgModule({

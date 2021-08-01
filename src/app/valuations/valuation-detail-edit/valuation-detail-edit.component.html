@@ -276,57 +276,64 @@
                 Please book availability before saving
               </fieldset>
 
-              <div class="form-group row">
-                <div class="col-sm-8 col-xl-4 offset-sm-2">
-                  <fieldset *ngIf="selectedDate || showDateAndDuration">
-                    <div class="form-group row">
-                      <div class="col-sm-10" [ngClass]="{'mt-2':'!canBookAppointment'}">
-                        <label>Date & Time</label>
-                        <div class="d-flex d-sm-block">
-                          <label for="changeDate" class="mobile-btn small"
-                            [style]="{'margin-bottom':'8px'}">{{(selectedDate || valuation?.valuationDate)
-                            | date: 'E d MMM yyyy, HH:mm':'+0000'}}</label>
-                          <button id="changeDate" class="btn btn-light btn-sm ml-2" type="button"
-                            (click)="getAvailability()"
-                            *ngIf="(isEditable || isNewValuation) && canChangeDate">Change</button>
-                        </div>
-                      </div>
-                    </div>
+              <span class="inline-parent">
 
-                    <!-- [attr.]="!isEditable && !isNewValuation ? true : null" -->
-                    <div class="row">
-                      <div class="col-sm-4 col-xl-6 form-group">
-                        <label for="valuationDuration" class="small">Duration</label>
-                        <select class="custom-select custom-select-sm single-select" name="valuationDuration"
-                          id="valuationDuration" formControlName="totalHours" disabled>
-                          <option value="0.5">30 mins</option>
-                          <option value="0.75">45 mins</option>
-                          <option value="1" selected>1 hour</option>
-                          <option value="1.25" selected>1 hour 15 mins</option>
-                          <option value="1.50" selected>1 hour 30 mins</option>
-                          <option value="1.75" selected>1 hour 45 mins</option>
-                          <option value="2" selected>2 hours</option>
-                        </select>
-                      </div>
-                    </div>
-                  </fieldset>
-                  <fieldset *ngIf="selectedDate || showDateAndDuration">
-                    <label style="width:auto;" for="haveInterest">Are we meeting the Owner?</label>
-                    <span class="radio radio--inline">
-                      <span style="margin-right: 8px;">
-                        <input type="radio" id="ownerYes" value="true" name="meetingOwner"
-                          formControlName="meetingOwner" data-cy="ownerYes">
-                        <label for="ownerYes">Yes</label>
-                      </span>
-                      <span>
-                        <input type="radio" id="ownerNo" value="false" name="meetingOwner"
-                          formControlName="meetingOwner" data-cy="ownerNo">
-                        <label for="ownerNo">No</label>
-                      </span>
+                <fieldset class="inline-child" *ngIf="(isSalesOnly || isSalesAndLettings) && salesValuerControl.value">
+                  <p-card [style]="{'width': '25rem', 'margin-bottom': '2em'}">
+                    <fieldset>
+                      <label for="lettingsValuer">Sales Valuer</label>
+                      <input type="text" id="lettingsValuer" disabled [value]="salesValuerControl.value?.fullName">
+                    </fieldset>
+                    <span class="inline-parent">
+                      <fieldset class="inline-child">
+                        <label for="dateTime">Date & Time</label>
+                        <input type="text" id="dateTime" disabled
+                          value="{{selectedDate | date: 'E d MMM yyyy, HH:mm':'+0000'}}">
+                      </fieldset>
+                      <fieldset class="inline-child">
+                        <label for="duration">Duration</label>
+                        <input type="text" id="duration" disabled
+                          value="{{valuationForm.get('totalHours').value + ' Hour'}}">
+                      </fieldset>
                     </span>
-                  </fieldset>
-                </div>
-              </div>
+                    <fieldset>
+                      <button *ngIf="isSalesOnly" pButton pRipple type="button" icon="fas fa-edit" label="Edit"
+                        class="p-button-success" (click)="getAvailability()"></button>
+                    </fieldset>
+                  </p-card>
+                </fieldset>
+
+                <fieldset class="inline-child"
+                  *ngIf=" (isLettingsOnly|| isSalesAndLettings) && lettingsValuerControl.value">
+                  <p-card [style]="{'width': '25rem', 'margin-bottom': '2em'}">
+                    <fieldset>
+                      <label for="lettingsValuer">Lettings Valuer</label>
+                      <input type="text" id="lettingsValuer" disabled [value]="lettingsValuerControl.value?.fullName">
+                    </fieldset>
+                    <span class="inline-parent">
+                      <fieldset class="inline-child">
+                        <label for="dateTime">Date & Time</label>
+                        <input type="text" id="dateTime" disabled
+                          value="{{selectedDate | date: 'E d MMM yyyy, HH:mm':'+0000'}}">
+                      </fieldset>
+                      <fieldset class="inline-child">
+                        <label for="duration">Duration</label>
+                        <input type="text" id="duration" disabled
+                          value="{{valuationForm.get('totalHours').value + ' Hour'}}">
+                      </fieldset>
+                    </span>
+                    <fieldset>
+                      <button *ngIf="isLettingsOnly" pButton pRipple type="button" icon="fas fa-edit" label="Edit"
+                        class="p-button-success" (click)="getAvailability()"></button>
+                    </fieldset>
+                  </p-card>
+                </fieldset>
+              </span>
+              <fieldset>
+                <button *ngIf="isSalesAndLettings && salesValuerControl.value && lettingsValuerControl.value" pButton
+                  pRipple type="button" icon="fas fa-edit" label="Edit Both" class="p-button-success"
+                  (click)="getAvailability()"></button>
+              </fieldset>
             </ng-container>
           </p-accordionTab>
 
@@ -549,15 +556,16 @@
   <p-header class="row">
 
     <span class="inline-parent">
-      <span>Pick availability</span>
-      <span
-        style="padding-left:140px;font-size:smaller; padding-right: 8px;">{{salesValuerControl.value?.fullName}}</span>
-      <div class="badges" style="font-size:xx-large">
+      <span style="padding-right:140px;">Pick availability</span>
+      <span *ngIf="!isLettingsOnly"
+        style="font-size:smaller; padding-right: 8px;">{{salesValuerControl.value?.fullName}}</span>
+      <div *ngIf="!isLettingsOnly" class="badges" style="font-size:xx-large">
         <p-badge severity="info"></p-badge>
       </div>
     </span>
 
-    <span class="inline-parent" style="padding-left:60px;">
+    <span *ngIf="!isSalesOnly && salesValuerControl.value?.staffMemberId != lettingsValuerControl.value?.staffMemberId"
+      class="inline-parent" style="padding-left:60px;">
       <span style="font-size:smaller; padding-right: 8px;">{{lettingsValuerControl.value?.fullName}}</span>
       <div class="badges" style="font-size:xx-large">
         <p-badge severity="success"></p-badge>

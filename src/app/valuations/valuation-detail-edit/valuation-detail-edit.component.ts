@@ -154,7 +154,7 @@ export class ValuationDetailEditComponent
   nextTwoWeek: any[] = [];
   warningForValuer = true;
   sideBarControlVisible = false;
-  selectedCalendarDate = new Date();
+  selectedCalendarDate: Date = null;
   viewingArrangements: InfoDetail[];
   secondStaffMemberId: number;
   selectedStaffMemberId: number = 0;
@@ -481,27 +481,6 @@ export class ValuationDetailEditComponent
         this.viewingArrangements = data.viewingArrangements;
       }
     });
-  }
-
-  setCanBookAppointmentFlag() {
-    switch (true) {
-      case !!(
-        this.isSalesAndLettings &&
-        this.salesValuerControl.value &&
-        this.lettingsValuerControl.value
-      ):
-        this.canBookAppointment = true;
-        break;
-
-      case !!(this.isSalesOnly && this.salesValuerControl.value):
-        this.canBookAppointment = true;
-
-        break;
-      case !!(this.isLettingsOnly && this.lettingsValuerControl.value):
-        this.canBookAppointment = true;
-
-        break;
-    }
   }
 
   selectValuersClick() {
@@ -1135,28 +1114,25 @@ export class ValuationDetailEditComponent
     this.canSearchAvailability = false;
     this.isAppointmentVisible = true;
     this.sideBarControlVisible = true;
+    this.thisWeek = [];
+    this.nextTwoWeek = [];
+    this.nextWeek = [];
     const isSalesOrLettings =
       (this.isLettingsOnly && this.lettingsValuerControl.value) ||
       (this.isSalesOnly && this.salesValuerControl.value);
 
-    //   if (isSalesOrLettings) {
-    //   this.availabilityForm.patchValue({
-    //     staffMemberId1:
-    //       this.salesValuerControl.value.staffMemberId ||
-    //       this.lettingsValuerControl.value.staffMemberId,
-    //   });
-    //   this.canSearchAvailability = true;
-    // } else if (
-    //   this.isSalesAndLettings &&
-    //   this.salesValuerControl.value &&
-    //   this.lettingsValuerControl.value
-    // ) {
-    //   this.availabilityForm.patchValue({
-    //     staffMemberId1: this.salesValuerControl.value.staffMemberId,
-    //     staffMemberId2: this.lettingsValuerControl.value.staffMemberId,
-    //   });
-    //   this.canSearchAvailability = true;
-    // }
+    if (this.lettingsValuerIdControl.value > 0 && this.isLettingsOnly) {
+      this.canSearchAvailability = true;
+    }
+    if (this.salesValuerIdControl.value > 0 && this.isSalesOnly) {
+      this.canSearchAvailability = true;
+    }
+    if (
+      this.salesValuerIdControl.value > 0 &&
+      this.lettingsValuerIdControl.value > 0
+    ) {
+      this.canSearchAvailability = true;
+    }
   }
 
   searchAvailabilty() {
@@ -1223,7 +1199,7 @@ export class ValuationDetailEditComponent
     if (date) {
       this.selectedDate = date;
       this.isAvailabilityRequired = false;
-      // this.canBookAppointment = false;
+      this.canBookAppointment = false;
       this.canChangeDate = true;
       if (this.valuation && !this.valuation.valuationDate) {
         this.valuation.valuationDate = date;
