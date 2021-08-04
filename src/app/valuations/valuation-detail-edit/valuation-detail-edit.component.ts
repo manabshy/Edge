@@ -147,7 +147,23 @@ export class ValuationDetailEditComponent
   showProperty = false;
   isLastknownOwnerVisible = false;
   isInstructVisible = false;
-  isAppointmentVisible = false;
+
+  _isAppointmentVisible = false;
+  public get isAppointmentVisible(): boolean {
+    return this._isAppointmentVisible;
+  }
+  public set isAppointmentVisible(val: boolean) {
+    // closing
+    this._isAppointmentVisible = val;
+    if (val === false) {
+      this.isSalesEdit = false;
+      this.isLettingsEdit = false;
+      this.isBothEdit = false;
+    }
+  }
+
+  lettingsValuerOpenSlots: ValuationStaffMembersCalanderEvents;
+  salesValuerOpenSlots: ValuationStaffMembersCalanderEvents;
   isFromProperty = false;
   thisWeek: any[] = [];
   nextWeek: any[] = [];
@@ -158,6 +174,11 @@ export class ValuationDetailEditComponent
   viewingArrangements: InfoDetail[];
   secondStaffMemberId: number;
   selectedStaffMemberId: number = 0;
+  isSalesEdit = false;
+  isLettingsEdit = false;
+  isBothEdit = true;
+  isSplitAppointment = false;
+  defaultHours = [12, 13, 14, 16, 17, 18, 19];
   informationMessage =
     "If property is owned by a D&G employee, employee relation or business associate e.g. Laurus Law, Prestige, Foxtons Group";
 
@@ -512,6 +533,10 @@ export class ValuationDetailEditComponent
     }
   }
 
+  onSplitAppointmentChange(event) {
+    console.log(event);
+  }
+
   private setupListInfo(info: DropdownListInfo) {
     this.tenures = info.tenures;
     this.outsideSpaces = info.outsideSpaces;
@@ -653,6 +678,7 @@ export class ValuationDetailEditComponent
       });
     });
   }
+
   private setWeeklyRent(
     weeklyControl: FormControl,
     monthlyControl: FormControl
@@ -1133,14 +1159,30 @@ export class ValuationDetailEditComponent
     ) {
       this.canSearchAvailability = true;
     }
+    if (this.canSearchAvailability) {
+      this.availabilityForm.patchValue({
+        type: this.isLettingsEdit
+          ? "lettings"
+          : this.isSalesEdit
+          ? "sales"
+          : "both",
+      });
+    }
   }
 
   searchAvailabilty() {
     const availability = { ...this.availabilityForm.value };
+
     const request = {
       fromDate: format(availability.fromDate, "yyyy-MM-dd"),
-      salesValuerId: availability.salesValuerId,
-      lettingsValuerId: availability.lettingsValuerId,
+      salesValuerId:
+        (this.isBothEdit || this.isSalesEdit == true) && !this.isLettingsOnly
+          ? availability.salesValuerId
+          : null,
+      lettingsValuerId:
+        (this.isBothEdit || this.isLettingsEdit == true) && !this.isSalesOnly
+          ? availability.lettingsValuerId
+          : null,
     } as ValuersAvailabilityOption;
 
     if (
@@ -1156,21 +1198,92 @@ export class ValuationDetailEditComponent
       this.secondStaffMemberId = null;
     }
 
-    this.valuationService.getValuersAvailability(request).subscribe((res) => {
-      this.availableDates = res.valuationStaffMembersCalanderEvents;
-      console.log(this.availableDates);
+    this.salesValuerOpenSlots = { thisWeek: [], nextWeek: [], next2Weeks: [] };
+    this.lettingsValuerOpenSlots = {
+      thisWeek: [],
+      nextWeek: [],
+      next2Weeks: [],
+    };
 
-      this.thisWeek = [];
-      this.nextWeek = [];
-      this.nextTwoWeek = [];
-
-      if (this.availableDates) {
-        this.thisWeek = this.setWeekData(this.availableDates.thisWeek);
-        this.nextWeek = this.setWeekData(this.availableDates.nextWeek);
-        this.nextTwoWeek = this.setWeekData(this.availableDates.next2Weeks);
-      }
-    });
+    this.getAvailableSlots(request);
     this.sideBarControlVisible = false;
+  }
+
+  removeExtraFromDate(arr: any[]) {
+    if (arr && arr.length > 0) {
+      arr.forEach((x) => {
+        let valueArr = x.split("+");
+        x = new Date(valueArr[0]);
+      });
+    }
+  }
+
+  async getAvailableSlots(request) {
+    // user chooses both sales and lettings
+    let lettingsValuerId;
+    let salesValuerId;
+
+    if (request.salesValuerId) {
+      lettingsValuerId = request.lettingsValuerId;
+      request.lettingsValuerId = null;
+      await this.valuationService
+        .getValuersAvailability(request)
+        .toPromise()
+        .then((res) => {
+          this.salesValuerOpenSlots = res.valuationStaffMembersCalanderEvents;
+          this.removeExtraFromDate(this.salesValuerOpenSlots.thisWeek);
+          this.removeExtraFromDate(this.salesValuerOpenSlots.nextWeek);
+          this.removeExtraFromDate(this.salesValuerOpenSlots.next2Weeks);
+          this.availableDates = { ...this.salesValuerOpenSlots };
+        });
+    }
+
+    request.lettingsValuerId = lettingsValuerId;
+
+    if (request.lettingsValuerId) {
+      salesValuerId = request.salesValuerId;
+      request.lettingsValuerId = lettingsValuerId;
+      request.salesValuerId = null;
+      await this.valuationService
+        .getValuersAvailability(request)
+        .toPromise()
+        .then((res) => {
+          this.lettingsValuerOpenSlots =
+            res.valuationStaffMembersCalanderEvents;
+          this.removeExtraFromDate(this.lettingsValuerOpenSlots.thisWeek);
+          this.removeExtraFromDate(this.lettingsValuerOpenSlots.nextWeek);
+          this.removeExtraFromDate(this.lettingsValuerOpenSlots.next2Weeks);
+          this.availableDates = { ...this.lettingsValuerOpenSlots };
+        });
+    }
+
+    request.salesValuerId = salesValuerId;
+
+    if (
+      request.salesValuerId &&
+      request.lettingsValuerId &&
+      request.salesValuerId != request.lettingsValuerId
+    ) {
+      this.valuationService.getValuersAvailability(request).subscribe((res) => {
+        this.availableDates = res.valuationStaffMembersCalanderEvents;
+        console.log(this.availableDates);
+        this.setWeeks();
+      });
+    } else {
+      this.setWeeks();
+    }
+  }
+
+  setWeeks() {
+    this.thisWeek = [];
+    this.nextWeek = [];
+    this.nextTwoWeek = [];
+
+    if (this.availableDates) {
+      this.thisWeek = this.setWeekData(this.availableDates.thisWeek);
+      this.nextWeek = this.setWeekData(this.availableDates.nextWeek);
+      this.nextTwoWeek = this.setWeekData(this.availableDates.next2Weeks);
+    }
   }
 
   setWeekData(allData: Date[]): any[] {
@@ -1182,9 +1295,55 @@ export class ValuationDetailEditComponent
 
       for (let key in weekData) {
         hours = [];
-        for (let s in weekData[key]) {
-          if (key) hours.push(weekData[key][s]);
+        for (let d in this.defaultHours) {
+          let date: Date = new Date(weekData[key][0]);
+          date.setHours(this.defaultHours[d]);
+          if (date > new Date()) {
+            hours.push({
+              value: date,
+              class: this.isLettingsEdit
+                ? "hourColorsForLettings"
+                : this.isSalesEdit
+                ? "hourColorsForSales"
+                : "hourColorsForBoth",
+            });
+          }
         }
+        console.log(hours);
+
+        for (let i = 0; i < hours.length; i++) {
+          let index = weekData[key].findIndex(
+            (x) => x.getHours() == hours[i].value.getHours()
+          );
+
+          if (index > -1) {
+            hours[i] = {
+              value: hours[i].value,
+              class: "",
+            };
+          } else {
+            let lettingIndex = this.findIndexSlot(
+              hours[i].value,
+              this.lettingsValuerOpenSlots
+            );
+            let salesIndex = this.findIndexSlot(
+              hours[i].value,
+              this.salesValuerOpenSlots
+            );
+            if (lettingIndex == -1 && salesIndex > -1) {
+              hours[i] = {
+                value: hours[i].value,
+                class: "hourColorsForLettings",
+              };
+            } else if (lettingIndex > -1 && salesIndex == -1) {
+              hours[i] = {
+                value: hours[i].value,
+                class: "hourColorsForSales",
+              };
+            }
+          }
+        }
+
         if (key)
           newData.push({
             date: weekData[key][0],
@@ -1193,6 +1352,45 @@ export class ValuationDetailEditComponent
       }
     }
     return newData;
+  }
+
+  findIndexSlot(
+    date: Date,
+    slots: ValuationStaffMembersCalanderEvents
+  ): number {
+    let index = -1;
+    if (
+      slots.thisWeek &&
+      slots.thisWeek.findIndex((x) => new Date(x).getTime() === date.getTime())
+    ) {
+      index = slots.thisWeek.findIndex(
+        (x) => new Date(x).getTime() === date.getTime()
+      );
+      return index;
+    }
+    if (
+      slots.nextWeek &&
+      slots.nextWeek.findIndex(
+        (x) => new Date(x).getTime() === date.getTime()
+      ) > -1
+    ) {
+      index = slots.nextWeek.findIndex(
+        (x) => new Date(x).getTime() === date.getTime()
+      );
+      return index;
+    }
+    if (
+      slots.next2Weeks &&
+      slots.next2Weeks.findIndex(
+        (x) => new Date(x).getTime() === date.getTime()
+      ) > -1
+    ) {
+      index = slots.next2Weeks.findIndex(
+        (x) => new Date(x).getTime() === date.getTime()
+      );
+      return index;
+    }
+    return index;
   }
 
   selectAvailableDate(date: Date) {
@@ -1208,6 +1406,12 @@ export class ValuationDetailEditComponent
       this.showCalendar = false;
       this.isAppointmentVisible = false;
       this.sideBarControlVisible = false;
+
+      if (this.isBothEdit) {
+        if (this.isSalesOnly) {
+          this.lettingsValuerControl.setValue(null);
+        } else if (this.isLettingsOnly) this.salesValuerControl.setValue(null);
+      }
     }
   }
 
@@ -1644,13 +1848,14 @@ export class ValuationDetailEditComponent
         this.lettingsValuerIdControl.value
       ) {
         this.isAvailabilityRequired = true;
-        this.isSalesOnly = false;
-        this.isLettingsOnly = false;
+        // this.isSalesOnly = false;
+        // this.isLettingsOnly = false;
         console.log("for both", this.isAvailabilityRequired);
       }
       if (this.isSalesOnly && this.salesValuerIdControl.value) {
         this.isAvailabilityRequired = true;
         this.isSalesAndLettings = false;
+        this.isLettingsOnly = false;
         console.log("for lettings only", this.isAvailabilityRequired);
       }
       if (this.isLettingsOnly && this.lettingsValuerIdControl.value) {

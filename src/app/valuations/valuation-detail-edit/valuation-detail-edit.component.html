@@ -278,7 +278,7 @@
 
               <span class="inline-parent">
 
-                <fieldset class="inline-child" *ngIf="(isSalesOnly || isSalesAndLettings) && salesValuerControl.value">
+                <fieldset class="inline-child" *ngIf="salesValuerControl.value">
                   <p-card [style]="{'width': '25rem', 'margin-bottom': '2em'}">
                     <fieldset>
                       <label for="lettingsValuer">Sales Valuer</label>
@@ -296,15 +296,25 @@
                           value="{{valuationForm.get('totalHours').value + ' Hour'}}">
                       </fieldset>
                     </span>
+                    <!-- <fieldset>
+                      <button pButton pRipple type="button" icon="fas fa-edit" label="Edit" class="p-button-success"
+                        (click)="getAvailability();isSalesEdit ='true'"></button>
+                    </fieldset> -->
                     <fieldset>
-                      <button *ngIf="isSalesOnly" pButton pRipple type="button" icon="fas fa-edit" label="Edit"
-                        class="p-button-success" (click)="getAvailability()"></button>
+                      <button type="button" class="btn btn--positive"
+                        (click)="isSalesEdit =true;isSalesOnly =true;getAvailability()"
+                        data-cy="openAvailabilitySales">Edit</button>
                     </fieldset>
                   </p-card>
                 </fieldset>
 
-                <fieldset class="inline-child"
-                  *ngIf=" (isLettingsOnly|| isSalesAndLettings) && lettingsValuerControl.value">
+                <fieldset [style]="{'margin-bottom': '8em'}" class="inline-child" *ngIf="salesValuerControl.value">
+                  <button [style]="{'width': '5rem'}" type="button"
+                    *ngIf="salesValuerControl.value && lettingsValuerControl.value" class="btn btn--positive"
+                    (click)="isBothEdit =true;getAvailability()" data-cy="openAvailabilityBoth">Edit Both</button>
+                </fieldset>
+
+                <fieldset class="inline-child" *ngIf="lettingsValuerControl.value">
                   <p-card [style]="{'width': '25rem', 'margin-bottom': '2em'}">
                     <fieldset>
                       <label for="lettingsValuer">Lettings Valuer</label>
@@ -323,17 +333,13 @@
                       </fieldset>
                     </span>
                     <fieldset>
-                      <button *ngIf="isLettingsOnly" pButton pRipple type="button" icon="fas fa-edit" label="Edit"
-                        class="p-button-success" (click)="getAvailability()"></button>
+                      <button type="button" class="btn btn--positive"
+                        (click)="isLettingsEdit =true;isLettingsOnly =true;getAvailability()"
+                        data-cy="openAvailabilityLettings">Edit</button>
                     </fieldset>
                   </p-card>
                 </fieldset>
               </span>
-              <fieldset>
-                <button *ngIf="isSalesAndLettings && salesValuerControl.value && lettingsValuerControl.value" pButton
-                  pRipple type="button" icon="fas fa-edit" label="Edit Both" class="p-button-success"
-                  (click)="getAvailability()"></button>
-              </fieldset>
             </ng-container>
           </p-accordionTab>
 
@@ -555,8 +561,15 @@
   class="modal--medium">
   <p-header class="row">
 
-    <span class="inline-parent">
-      <span style="padding-right:140px;">Pick availability</span>
+    <span class="inline-parent" style="padding-right: 100px;width: -webkit-fill-available;">Pick availability</span>
+    <span class=" inline-parent checkbox">
+      <span style="font-size:smaller">
+        <input type="checkbox" id="splitAppointment" name="splitAppointment" [value]="isSplitAppointment"
+          (change)="onSplitAppointmentChange($event.target)" data-cy="splitAppointment">
+        <label style="font-weight: bolder;" for="splitAppointment">Split Appointment</label>
+      </span>
+    </span>
+    <span class="inline-parent" style="padding-left:20px;">
       <span *ngIf="!isLettingsOnly"
         style="font-size:smaller; padding-right: 8px;">{{salesValuerControl.value?.fullName}}</span>
       <div *ngIf="!isLettingsOnly" class="badges" style="font-size:xx-large">
@@ -580,17 +593,20 @@
 
           <fieldset>
             <span class="radio radio--boxed" btnRadioGroup formControlName="type">
-              <span>
-                <input type="radio" checked="checked" tabindex="1" name="appointments" id="valuationBoth">
+              <span *ngIf="isBothEdit">
+                <input type="radio" [checked]="availabilityForm.controls['type'].value ==='both'?'checked':''"
+                  tabindex="1" name="appointments" id="valuationBoth">
                 <label for="valuationBoth" btnRadio="both" tabindex="0" role="button"><span>Both</span></label>
               </span>
-              <span>
-                <input type="radio" tabindex="2" name="appointments" id="valuationSales">
+              <span *ngIf="isBothEdit || isSalesEdit">
+                <input [checked]="availabilityForm.controls['type'].value ==='sales'?'checked':''" type="radio"
+                  tabindex="2" name="appointments" id="valuationSales">
                 <label for="valuationSales" data-cy="valSales" btnRadio="sales" tabindex="0"
                   role="button"><span>Sales</span></label>
               </span>
-              <span>
-                <input type="radio" tabindex="2" name="appointments" id="valuationLettings">
+              <span *ngIf="isBothEdit || isLettingsEdit">
+                <input [checked]="availabilityForm.controls['type'].value ==='lettings'?'checked':''" type="radio"
+                  tabindex="2" name="appointments" id="valuationLettings">
                 <label for="valuationLettings" btnRadio="lettings" tabindex="0"
                   role="button"><span>Lettings</span></label>
               </span>
@@ -652,7 +668,8 @@
               data-cy="searchAvailability">Search</button>
           </fieldset>
         </p-sidebar>
-        <button type="button" class="btn btn--positive" (click)="selectValuersClick()">Valuers</button>
+        <button type="button" class="btn btn--positive" (click)="selectValuersClick()"
+          style="margin-bottom: 8px">Valuers</button>
       </div>
 
       <div class="grid grid--6 grid--dividerLeft">
@@ -664,9 +681,10 @@
                 {{key['date'] | date:'fullDate'}}
               </app-subnav-item>
               <ol class="cards cards--small">
-                <li *ngFor="let hours of key['hours'] ">
+                <li *ngFor="let hours of key['hours']" [ngClass]="hours.class">
                   <button type="button" class="btn btn--ghost"
-                    (click)="selectAvailableDate(key['date']); properties = null">{{hours | date:'HH:mm'}}</button>
+                    (click)="selectAvailableDate(key['date']); properties = null">{{hours.value |
+                    date:'HH:mm'}}</button>
                 </li>
               </ol>
             </li>
@@ -681,7 +699,8 @@
               <ol class="cards cards--small">
                 <li *ngFor="let hours of key['hours'] ">
                   <button type="button" class="btn btn--ghost"
-                    (click)="selectAvailableDate(key['date']); properties = null">{{hours | date:'HH:mm'}}</button>
+                    (click)="selectAvailableDate(key['date']); properties = null">{{hours.value |
+                    date:'HH:mm'}}</button>
                 </li>
               </ol>
             </li>
@@ -697,7 +716,8 @@
               <ol class="cards cards--small">
                 <li *ngFor="let hours of key['hours'] ">
                   <button type="button" class="btn btn--ghost"
-                    (click)="selectAvailableDate(key['date']); properties = null">{{hours | date:'HH:mm'}}</button>
+                    (click)="selectAvailableDate(key['date']); properties = null">{{hours.value |
+                    date:'HH:mm'}}</button>
                 </li>
               </ol>
             </li>

@@ -51,11 +51,11 @@
 ::ng-deep {
   .p-badge-info{
     margin-left: 4px;
-    background-color:#F9CBDF !important
+    background-color:#CED1DB !important
   }
   .p-badge-success{
     margin-left: 4px;
-    background-color:#E0D5F3 !important
+    background-color:#F1AFA8 !important
   }
 
 }
@@ -66,5 +66,17 @@
   background-color: #bbb;
   border-radius: 50%;
   display: inline-block;
+}
+
+.hourColorsForBoth{
+  background: linear-gradient(to right,#CED1DB 50%,#F1AFA8 50%);
+}
+
+.hourColorsForSales{
+  background: #CED1DB;
+}
+
+.hourColorsForLettings{
+  background: #F1AFA8;
 }
 
