@@ -353,6 +353,27 @@ export const ValidationMessages = {
   body: {
     required: "Please add a Message",
   },
+  salesOwnerAssociateName: {
+    required: "Name is required",
+  },
+  salesOwnerAssociateEmail: {
+    required: "Email is required",
+  },
+  salesOwnerAssociateContactNumber: {
+    required: "Contact number is required",
+  },
+  lettingsOwnerAssociateName: {
+    required: "Name is required",
+  },
+  lettingsOwnerAssociateEmail: {
+    required: "Email is required",
+  },
+  lettingsOwnerAssociateContactNumber: {
+    required: "Contact number is required",
+  },
+  declarableInterest: {
+    required: "Terms of business is required",
+  },
 };
 
 // recipientEmail: '',

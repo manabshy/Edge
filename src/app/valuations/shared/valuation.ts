@@ -7,48 +7,51 @@ import { Property } from "src/app/property/shared/property";
 import { Office } from "src/app/shared/models/staff-member";
 
 export interface ValuationInfo {
-  reason: string;
-  timeFrame: string;
-  generalNotes: string;
+  reason?: string;
+  timeFrame?: string;
+  generalNotes?: string;
 }
 export interface Valuation extends ValuationInfo {
-  valuationEventId: number;
-  valuationStatus: number;
-  officeId: number;
-  valuationStatusLabel: string;
-  property: Property;
+  valuationEventId?: number;
+  valuationStatus?: number;
+  officeId?: number;
+  valuationStatusLabel?: string;
+  property?: Property;
   salesValuer?: BaseStaffMember;
   lettingsValuer?: BaseStaffMember;
   valuationDate?: Date;
   propertyOwner?: Signer;
-  diaryEvent: DiaryEvent;
+  diaryEvent?: DiaryEvent;
   bedrooms?: number;
   bathrooms?: number;
   receptions?: number;
   sqFt?: number;
-  tenureId: number;
-  originId: number;
-  approxLeaseExpiryDate: Date;
-  outsideSpace: string;
-  parking: string;
-  propertyFeature: string;
-  diaryEventId: number;
-  startDateTime: Date;
-  endDateTime: Date;
-  startTime: string;
-  totalHours: number;
+  tenureId?: number;
+  originId?: number;
+  approxLeaseExpiryDate?: Date;
+  outsideSpace?: string;
+  parking?: string;
+  propertyFeature?: string;
+  diaryEventId?: number;
+  startDateTime?: Date;
+  endDateTime?: Date;
+  startTime?: string;
+  totalHours?: number;
   suggestedAskingPrice?: number;
   suggestedAskingRentLongLet?: number;
   suggestedAskingRentShortLet?: number;
   suggestedAskingRentLongLetMonthly?: number;
   suggestedAskingRentShortLetMonthly?: number;
-  createdDate: Date;
-  createdBy: BaseStaffMember;
+  createdDate?: Date;
+  createdBy?: BaseStaffMember;
   isActive?: boolean;
   isExpired?: boolean;
   section21StatusId?: number;
   declarableInterest?: boolean;
-  meetingOwner: boolean;
+  meetingOwner?: boolean;
+  combinedValuationBooking?: ValuationBooking;
+  salesValuationBooking?: ValuationBooking;
+  lettingsValuationBooking?: ValuationBooking;
 }
 
 export interface ValuationPropertyInfo {
@@ -91,6 +94,18 @@ export interface ValuationRequestOption extends BaseRequestOption {
   date?: string;
   valuerId?: number;
   officeId?: number;
+}
+
+export interface ValuationBooking {
+  valuationBookingId?: number;
+  diaryEventId?: number;
+  name?: string;
+  emailAddress?: string;
+  contactNumber?: string;
+  associationId?: number;
+  meetingOwner?: boolean;
+  startDateTime?: Date;
+  totalHours?: number;
 }
 
 export interface ValuationStatus {

@@ -277,7 +277,7 @@ export class SharedService {
         FormErrors[key] = "";
         for (const errorKey in control.errors) {
           if (errorKey) {
-            FormErrors[key] += messages[errorKey] + "\n";
+            FormErrors[key] += messages ? messages[errorKey] + "\n" : "";
           }
         }
       }

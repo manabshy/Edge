@@ -124,7 +124,7 @@
 
     <form [formGroup]="valuationForm" (ngSubmit)="saveValuation()" autocompleteOff>
       <ng-container *ngIf="(createdSigner || lastKnownOwner) && property">
-        <p-accordion [multiple]="true">
+        <p-accordion [multiple]="true" [activeIndex]="accordionIndex">
           <p-accordionTab header="Valuation Notes" [(selected)]="activeState[0]"
             *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value) || (!isEditable && valuationForm.get('timeFrame').value) || (!isEditable && valuationForm.get('generalNotes').value)">
 
@@ -272,13 +272,14 @@
                   data-cy="getvailability">Book Availability</button>
               </fieldset>
 
-              <fieldset role="alert" *ngIf="isAvailabilityRequired">
-                Please book availability before saving
+              <fieldset *ngIf="isAvailabilityRequired">
+                <div style="color: red; margin-bottom: 8px;">Please book
+                  availability before saving
+                </div>
               </fieldset>
 
-              <span class="inline-parent">
-
-                <fieldset class="inline-child" *ngIf="salesValuerControl.value">
+              <div class="inline-parent">
+                <fieldset class="inline-child" *ngIf="valuation?.salesValuationBooking" style="align-self: flex-start">
                   <p-card [style]="{'width': '25rem', 'margin-bottom': '2em'}">
                     <fieldset>
                       <label for="lettingsValuer">Sales Valuer</label>
@@ -288,7 +289,7 @@
                       <fieldset class="inline-child">
                         <label for="dateTime">Date & Time</label>
                         <input type="text" id="dateTime" disabled
-                          value="{{selectedDate | date: 'E d MMM yyyy, HH:mm':'+0000'}}">
+                          value="{{valuation?.salesValuationBooking?.startDateTime | date: 'E d MMM yyyy, HH:mm':'+0100'}}">
                       </fieldset>
                       <fieldset class="inline-child">
                         <label for="duration">Duration</label>
@@ -296,25 +297,97 @@
                           value="{{valuationForm.get('totalHours').value + ' Hour'}}">
                       </fieldset>
                     </span>
-                    <!-- <fieldset>
-                      <button pButton pRipple type="button" icon="fas fa-edit" label="Edit" class="p-button-success"
-                        (click)="getAvailability();isSalesEdit ='true'"></button>
-                    </fieldset> -->
                     <fieldset>
                       <button type="button" class="btn btn--positive"
                         (click)="isSalesEdit =true;isSalesOnly =true;getAvailability()"
                         data-cy="openAvailabilitySales">Edit</button>
                     </fieldset>
+                    <ng-template pTemplate="footer">
+                      <fieldset>
+                        <label>Are we meeting the Owner ?</label>
+                        <span class="radio radio--inline">
+                          <span>
+                            <input type="radio" id="salesMeetingOwnerYes" value="1" name="salesMeetingOwner"
+                              formControlName="salesMeetingOwner" data-cy="salesMeetingOwner">
+                            <label for="salesMeetingOwnerYes">Yes</label>
+                          </span>
+                          <span>
+                            <input type="radio" id="salesMeetingOwnerNo" value="0" name="salesMeetingOwner"
+                              formControlName="salesMeetingOwner">
+                            <label for="salesMeetingOwnerNo">No</label>
+                          </span>
+                        </span>
+                      </fieldset>
+                      <div *ngIf="valuationForm.get('salesMeetingOwner').value ==='0'">
+                        <span class="inline-parent">
+                          <fieldset class="inline-child" [ngClass]="{'invalid': formErrors?.salesOwnerAssociateName}">
+                            <label for="salesOwnerAssociateName">Name</label>
+                            <input type="text" name="salesOwnerAssociateName" id="salesOwnerAssociateName"
+                              formControlName="salesOwnerAssociateName"
+                              [ngClass]="{'is-invalid':formErrors.salesOwnerAssociateName}">
+                            <p class="message message--negative"> {{formErrors?.salesOwnerAssociateName}}</p>
+                          </fieldset>
+                          <fieldset class="inline-child"
+                            [ngClass]="{'invalid': formErrors?.salesOwnerAssociateContactNumber}">
+                            <label for="salesOwnerAssociateContactNumber">Contact Number</label>
+                            <input type="text" pattern="[0-9*#+]+$" name="salesOwnerAssociateContactNumber"
+                              id="salesOwnerAssociateContactNumber" formControlName="salesOwnerAssociateContactNumber"
+                              [ngClass]="{'is-invalid':formErrors.salesOwnerAssociateContactNumber}">
+                            <p class="message message--negative"> {{formErrors?.salesOwnerAssociateContactNumber}}</p>
+                          </fieldset>
+                        </span>
+                        <span class="inline-parent">
+                          <fieldset class="inline-child" [ngClass]="{'invalid': formErrors?.salesOwnerAssociateEmail}">
+                            <label for="salesOwnerAssociateEmail">Email Address</label>
+                            <input type="email" name="salesOwnerAssociateEmail" id="salesOwnerAssociateEmail"
+                              formControlName="salesOwnerAssociateEmail"
+                              [ngClass]="{'is-invalid':formErrors.salesOwnerAssociateEmail}">
+                            <p class="message message--negative"> {{formErrors?.salesOwnerAssociateEmail}}</p>
+
+                          </fieldset>
+
+                          <fieldset class="inline-child">
+                            <label for="salesOwnerAssociateType">Association</label>
+                            <span class="select">
+                              <select id="salesOwnerAssociateType" formControlName="salesOwnerAssociateType">
+                                <option selected *ngFor="let associateType of associateTypes"
+                                  [value]='associateType?.id'>
+                                  {{associateType?.value}}
+                                </option>
+                              </select>
+                            </span>
+                            <p class="message message--negative"> {{formErrors?.salesOwnerAssociateType}}</p>
+                          </fieldset>
+                        </span>
+                        <fieldset>
+                          <label>Does the Owner want text message notifications about the appointment ?</label>
+                          <span class="radio radio--inline">
+                            <span>
+                              <input type="radio" id="salesOwnerWantsMessageYes" value="1" name="salesOwnerWantsMessage"
+                                formControlName="salesOwnerWantsMessage" data-cy="salesOwnerWantsMessage">
+                              <label for="salesOwnerWantsMessageYes">Yes</label>
+                            </span>
+                            <span>
+                              <input type="radio" id="salesOwnerWantsMessageNo" value="0" name="salesOwnerWantsMessage"
+                                formControlName="salesOwnerWantsMessage">
+                              <label for="salesOwnerWantsMessageNo">No</label>
+                            </span>
+                          </span>
+                        </fieldset>
+                      </div>
+                    </ng-template>
                   </p-card>
                 </fieldset>
 
-                <fieldset [style]="{'margin-bottom': '8em'}" class="inline-child" *ngIf="salesValuerControl.value">
+                <fieldset style="align-self: center;margin-bottom: 8em" class="inline-child"
+                  *ngIf="salesValuerControl.value">
                   <button [style]="{'width': '5rem'}" type="button"
                     *ngIf="salesValuerControl.value && lettingsValuerControl.value" class="btn btn--positive"
                     (click)="isBothEdit =true;getAvailability()" data-cy="openAvailabilityBoth">Edit Both</button>
                 </fieldset>
 
-                <fieldset class="inline-child" *ngIf="lettingsValuerControl.value">
+                <fieldset class="inline-child" *ngIf="valuation?.lettingsValuationBooking"
+                  style="align-self: flex-start">
                   <p-card [style]="{'width': '25rem', 'margin-bottom': '2em'}">
                     <fieldset>
                       <label for="lettingsValuer">Lettings Valuer</label>
@@ -324,7 +397,7 @@
                       <fieldset class="inline-child">
                         <label for="dateTime">Date & Time</label>
                         <input type="text" id="dateTime" disabled
-                          value="{{selectedDate | date: 'E d MMM yyyy, HH:mm':'+0000'}}">
+                          value="{{valuation?.lettingsValuationBooking?.startDateTime | date: 'E d MMM yyyy, HH:mm':'+0100'}}">
                       </fieldset>
                       <fieldset class="inline-child">
                         <label for="duration">Duration</label>
@@ -337,9 +410,89 @@
                         (click)="isLettingsEdit =true;isLettingsOnly =true;getAvailability()"
                         data-cy="openAvailabilityLettings">Edit</button>
                     </fieldset>
+                    <ng-template pTemplate="footer">
+                      <div *ngIf="getTimeSalesValuationDate != getTimeLettingsValuationDate">
+                        <fieldset>
+                          <label>Are we meeting the Owner ?</label>
+                          <span class="radio radio--inline">
+                            <span>
+                              <input type="radio" id="lettingsMeetingOwnerYes" value="1" name="lettingsMeetingOwner"
+                                formControlName="lettingsMeetingOwner" data-cy="lettingsMeetingOwner">
+                              <label for="lettingsMeetingOwnerYes">Yes</label>
+                            </span>
+                            <span>
+                              <input type="radio" id="lettingsMeetingOwnerNo" value="0" name="lettingsMeetingOwner"
+                                formControlName="lettingsMeetingOwner">
+                              <label for="lettingsMeetingOwnerNo">No</label>
+                            </span>
+                          </span>
+                        </fieldset>
+                        <div *ngIf="valuationForm.get('lettingsMeetingOwner').value ==='0'">
+                          <span class="inline-parent">
+                            <fieldset class="inline-child"
+                              [ngClass]="{'invalid': formErrors?.lettingsOwnerAssociateName}">
+                              <label for="lettingsOwnerAssociateName">Name</label>
+                              <input type="text" name="lettingsOwnerAssociateName" id="lettingsOwnerAssociateName"
+                                formControlName="lettingsOwnerAssociateName"
+                                [ngClass]="{'is-invalid':formErrors.lettingsOwnerAssociateName}">
+                              <p class="message message--negative"> {{formErrors?.lettingsOwnerAssociateName}}</p>
+                            </fieldset>
+                            <fieldset class="inline-child"
+                              [ngClass]="{'invalid': formErrors?.lettingsOwnerAssociateContactNumber}">
+                              <label for="lettingsOwnerAssociateContactNumber">Contact Number</label>
+                              <input type="text" name="lettingsOwnerAssociateContactNumber"
+                                id="lettingsOwnerAssociateContactNumber"
+                                formControlName="lettingsOwnerAssociateContactNumber"
+                                [ngClass]="{'is-invalid':formErrors.lettingsOwnerAssociateContactNumber}">
+                              <p class="message message--negative"> {{formErrors?.lettingsOwnerAssociateContactNumber}}
+                              </p>
+                            </fieldset>
+                          </span>
+                          <span class="inline-parent">
+                            <fieldset class="inline-child"
+                              [ngClass]="{'invalid': formErrors?.lettingsOwnerAssociateEmail}">
+                              <label for="lettingsOwnerAssociateEmail">Email Address</label>
+                              <input type="email" name="lettingsOwnerAssociateEmail" id="lettingsOwnerAssociateEmail"
+                                formControlName="lettingsOwnerAssociateEmail"
+                                [ngClass]="{'is-invalid':formErrors.lettingsOwnerAssociateEmail}">
+                              <p class="message message--negative"> {{formErrors?.lettingsOwnerAssociateEmail}}</p>
+                            </fieldset>
+
+                            <fieldset class="inline-child">
+                              <label for="lettingsOwnerAssociateType">Association</label>
+                              <span class="select">
+                                <select id="lettingsOwnerAssociateType" formControlName="lettingsOwnerAssociateType">
+                                  <option selected *ngFor="let associateType of associateTypes"
+                                    [value]='associateType?.id'>
+                                    {{associateType?.value}}
+                                  </option>
+                                </select>
+                              </span>
+                              <p class="message message--negative"> {{formErrors?.lettingsOwnerAssociateType}}</p>
+                            </fieldset>
+                          </span>
+                          <fieldset>
+                            <label>Does the Owner want text message notifications about the appointment ?</label>
+                            <span class="radio radio--inline">
+                              <span>
+                                <input type="radio" id="lettingsOwnerWantsMessageYes" value="1"
+                                  name="lettingsOwnerWantsMessage" formControlName="lettingsOwnerWantsMessage"
+                                  data-cy="lettingsOwnerWantsMessage">
+                                <label for="lettingsOwnerWantsMessageYes">Yes</label>
+                              </span>
+                              <span>
+                                <input type="radio" id="lettingsOwnerWantsMessageNo" value="0"
+                                  name="lettingsOwnerWantsMessage" formControlName="lettingsOwnerWantsMessage">
+                                <label for="lettingsOwnerWantsMessageNo">No</label>
+                              </span>
+                            </span>
+                          </fieldset>
+                        </div>
+                      </div>
+                    </ng-template>
                   </p-card>
                 </fieldset>
-              </span>
+              </div>
             </ng-container>
           </p-accordionTab>
 
@@ -467,6 +620,9 @@
                 </fieldset>
               </div>
             </div>
+            <div style="color: red; margin-bottom: 8px;" *ngIf="formErrors.declarableInterest"> Please select terms of
+              bussiness
+            </div>
           </p-accordionTab>
 
           <p-accordionTab header="Anti Money Laundering" [(selected)]="activeState[5]"></p-accordionTab>
@@ -562,18 +718,20 @@
   <p-header class="row">
 
     <span class="inline-parent" style="padding-right: 100px;width: -webkit-fill-available;">Pick availability</span>
-    <span class=" inline-parent checkbox">
+    <span class=" inline-parent checkbox" *ngIf="isSalesAndLettings">
       <span style="font-size:smaller">
-        <input type="checkbox" id="splitAppointment" name="splitAppointment" [value]="isSplitAppointment"
+        <input type="checkbox" id="splitAppointment" name="splitAppointment" [(ngModel)]="isSplitAppointment"
           (change)="onSplitAppointmentChange($event.target)" data-cy="splitAppointment">
         <label style="font-weight: bolder;" for="splitAppointment">Split Appointment</label>
       </span>
     </span>
-    <span class="inline-parent" style="padding-left:20px;">
-      <span *ngIf="!isLettingsOnly"
-        style="font-size:smaller; padding-right: 8px;">{{salesValuerControl.value?.fullName}}</span>
-      <div *ngIf="!isLettingsOnly" class="badges" style="font-size:xx-large">
-        <p-badge severity="info"></p-badge>
+    <span style="padding-left:20px;">
+      <div class="inline-parent" *ngIf="!isLettingsOnly">
+        <span style="font-size:smaller; padding-right: 8px;">{{salesValuerControl.value?.fullName}}
+        </span>
+        <div class="badges" style="font-size:xx-large">
+          <p-badge severity="info"></p-badge>
+        </div>
       </div>
     </span>
 
@@ -672,7 +830,14 @@
           style="margin-bottom: 8px">Valuers</button>
       </div>
 
+
       <div class="grid grid--6 grid--dividerLeft">
+        <label *ngIf="isSplitAppointment && !valuation?.salesValuationBooking"
+          style="color: red;font-size: x-small;display:flex;justify-content:center">
+          Please select a slot for sales </label>
+        <label *ngIf="isSplitAppointment && valuation?.salesValuationBooking && !valuation?.lettingsValuationBooking"
+          style="color: red;font-size: x-small;display:flex;justify-content:center">
+          Please select a slot for lettings </label>
         <app-subnav>
           <p class="txt--title" *ngIf="thisWeek">This Week</p>
           <ol class="list list--dates" *ngIf="thisWeek">
@@ -683,7 +848,7 @@
               <ol class="cards cards--small">
                 <li *ngFor="let hours of key['hours']" [ngClass]="hours.class">
                   <button type="button" class="btn btn--ghost"
-                    (click)="selectAvailableDate(key['date']); properties = null">{{hours.value |
+                    (click)="selectAvailableDate(hours); properties = null">{{hours.value |
                     date:'HH:mm'}}</button>
                 </li>
               </ol>
@@ -697,9 +862,9 @@
                 {{key['date'] | date:'fullDate'}}
               </app-subnav-item>
               <ol class="cards cards--small">
-                <li *ngFor="let hours of key['hours'] ">
+                <li *ngFor="let hours of key['hours'] " [ngClass]="hours.class">
                   <button type="button" class="btn btn--ghost"
-                    (click)="selectAvailableDate(key['date']); properties = null">{{hours.value |
+                    (click)="selectAvailableDate(hours.value); properties = null">{{hours.value |
                     date:'HH:mm'}}</button>
                 </li>
               </ol>
@@ -714,9 +879,9 @@
               </app-subnav-item>
               <!-- <span class="txt--date">{{key['date'] | date:'fullDate'}}</span> -->
               <ol class="cards cards--small">
-                <li *ngFor="let hours of key['hours'] ">
+                <li *ngFor="let hours of key['hours'] " [ngClass]="hours.class">
                   <button type="button" class="btn btn--ghost"
-                    (click)="selectAvailableDate(key['date']); properties = null">{{hours.value |
+                    (click)="selectAvailableDate(hours.value); properties = null">{{hours.value |
                     date:'HH:mm'}}</button>
                 </li>
               </ol>

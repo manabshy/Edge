@@ -120,6 +120,7 @@ export class ValuationDetailEditComponent
   activeOriginId: InfoDetail;
   showOriginId: boolean;
   allOriginTypes: InfoDetail[] = [];
+  associateTypes: InfoDetail[] = [];
   isSelectingDate = false;
   showInstruct: boolean;
   currentStaffMember: StaffMember;
@@ -147,6 +148,7 @@ export class ValuationDetailEditComponent
   showProperty = false;
   isLastknownOwnerVisible = false;
   isInstructVisible = false;
+  accordionIndex: number;
 
   _isAppointmentVisible = false;
   public get isAppointmentVisible(): boolean {
@@ -178,7 +180,10 @@ export class ValuationDetailEditComponent
   isLettingsEdit = false;
   isBothEdit = true;
   isSplitAppointment = false;
-  defaultHours = [12, 13, 14, 16, 17, 18, 19];
+  getTimeSalesValuationDate: number;
+  getTimeLettingsValuationDate: number;
+
+  defaultHours = [12, 13, 16, 17, 18, 19];
   informationMessage =
     "If property is owned by a D&G employee, employee relation or business associate e.g. Laurus Law, Prestige, Foxtons Group";
 
@@ -365,6 +370,8 @@ export class ValuationDetailEditComponent
       : (this.showProperty = false);
     if (this.valuationId) {
       this.getValuation(this.valuationId);
+    } else {
+      this.valuation = {};
     }
 
     if (this.propertyId) {
@@ -437,6 +444,26 @@ export class ValuationDetailEditComponent
       this.checkAvailabilityBooking();
     });
 
+    this.valuationForm.controls["lettingsMeetingOwner"].valueChanges.subscribe(
+      (data) => {
+        if (data == "0") {
+          this.setValidationForLettingsMeetingOwner(true);
+        } else {
+          this.setValidationForLettingsMeetingOwner(false);
+        }
+      }
+    );
+
+    this.valuationForm.controls["salesMeetingOwner"].valueChanges.subscribe(
+      (data) => {
+        if (data == "0") {
+          this.setValidationForSalesMeetingOwner(true);
+        } else {
+          this.setValidationForSalesMeetingOwner(false);
+        }
+      }
+    );
+
     this.instructionForm.valueChanges
       .pipe(debounceTime(100), distinctUntilChanged())
       .subscribe((form) => {
@@ -504,6 +531,52 @@ export class ValuationDetailEditComponent
     });
   }
 
+  setValidationForLettingsMeetingOwner(setValidation: boolean) {
+    this.valuationForm.controls["lettingsOwnerAssociateEmail"].setValidators(
+      setValidation ? Validators.required : []
+    );
+    this.valuationForm.controls[
+      "lettingsOwnerAssociateEmail"
+    ].updateValueAndValidity();
+
+    this.valuationForm.controls["lettingsOwnerAssociateName"].setValidators(
+      setValidation ? Validators.required : []
+    );
+    this.valuationForm.controls[
+      "lettingsOwnerAssociateName"
+    ].updateValueAndValidity();
+
+    this.valuationForm.controls[
+      "lettingsOwnerAssociateContactNumber"
+    ].setValidators(setValidation ? Validators.required : []);
+    this.valuationForm.controls[
+      "lettingsOwnerAssociateContactNumber"
+    ].updateValueAndValidity();
+  }
+
+  setValidationForSalesMeetingOwner(setValidation: boolean) {
+    this.valuationForm.controls["salesOwnerAssociateEmail"].setValidators(
+      setValidation ? Validators.required : []
+    );
+    this.valuationForm.controls[
+      "salesOwnerAssociateEmail"
+    ].updateValueAndValidity();
+
+    this.valuationForm.controls["salesOwnerAssociateName"].setValidators(
+      setValidation ? Validators.required : []
+    );
+    this.valuationForm.controls[
+      "salesOwnerAssociateName"
+    ].updateValueAndValidity();
+
+    this.valuationForm.controls[
+      "salesOwnerAssociateContactNumber"
+    ].setValidators(setValidation ? Validators.required : []);
+    this.valuationForm.controls[
+      "salesOwnerAssociateContactNumber"
+    ].updateValueAndValidity();
+  }
+
   selectValuersClick() {
     this.sideBarControlVisible = true;
     this.thisWeek = [];
@@ -531,10 +604,14 @@ export class ValuationDetailEditComponent
         this.isSalesOnly = false;
         break;
     }
+    this.isSplitAppointment = false;
   }
 
   onSplitAppointmentChange(event) {
     console.log(event);
+    this.isSplitAppointment = event.checked;
+    this.valuation.salesValuationBooking = null;
+    this.valuation.lettingsValuationBooking = null;
   }
 
   private setupListInfo(info: DropdownListInfo) {
@@ -546,6 +623,7 @@ export class ValuationDetailEditComponent
     this.allOriginTypes = info.originTypes;
     this.setOriginTypes(info.originTypes); // TODO: Issue on refresh
     this.interestList = info.section21Statuses;
+    this.associateTypes = info.associations;
   }
 
   getPropertyDetails(propertyId: number) {
@@ -735,10 +813,21 @@ export class ValuationDetailEditComponent
       suggestedAskingRentShortLet: [],
       suggestedAskingRentLongLetMonthly: [],
       suggestedAskingRentShortLetMonthly: [],
-      declarableInterest: [],
+      declarableInterest: [null, Validators.required],
       ageOfSuggestedAskingPrice: [],
       section21StatusId: [],
-      meetingOwner: ["true"],
+      salesMeetingOwner: ["1"],
+      lettingsMeetingOwner: ["1"],
+      salesOwnerAssociateName: [""],
+      salesOwnerAssociateContactNumber: [""],
+      salesOwnerAssociateEmail: [""],
+      salesOwnerAssociateType: ["6"],
+      salesOwnerWantsMessage: ["1"],
+      lettingsOwnerAssociateName: [""],
+      lettingsOwnerAssociateContactNumber: [""],
+      lettingsOwnerAssociateEmail: [""],
+      lettingsOwnerAssociateType: ["6"],
+      lettingsOwnerWantsMessage: ["1"],
     });
   }
 
@@ -1140,6 +1229,7 @@ export class ValuationDetailEditComponent
     this.canSearchAvailability = false;
     this.isAppointmentVisible = true;
     this.sideBarControlVisible = true;
+    this.isSplitAppointment = false;
     this.thisWeek = [];
     this.nextTwoWeek = [];
     this.nextWeek = [];
@@ -1222,9 +1312,8 @@ export class ValuationDetailEditComponent
     // user chooses both sales and lettings
     let lettingsValuerId;
     let salesValuerId;
-
+    lettingsValuerId = request.lettingsValuerId;
     if (request.salesValuerId) {
-      lettingsValuerId = request.lettingsValuerId;
       request.lettingsValuerId = null;
       await this.valuationService
         .getValuersAvailability(request)
@@ -1393,19 +1482,71 @@ export class ValuationDetailEditComponent
     return index;
   }
 
-  selectAvailableDate(date: Date) {
-    if (date) {
-      this.selectedDate = date;
+  selectAvailableDate(hours) {
+    if (hours) {
+      this.selectedDate = hours.value;
       this.isAvailabilityRequired = false;
       this.canBookAppointment = false;
       this.canChangeDate = true;
       if (this.valuation && !this.valuation.valuationDate) {
-        this.valuation.valuationDate = date;
+        this.valuation.valuationDate = hours.value;
       }
-      this.valuationForm.get("valuationDate").setValue(date);
-      this.showCalendar = false;
-      this.isAppointmentVisible = false;
-      this.sideBarControlVisible = false;
+      this.valuationForm.get("valuationDate").setValue(hours.value);
+
+      if (this.isBothEdit) {
+        if (!this.isSplitAppointment) {
+          if (this.isSalesAndLettings) {
+            this.valuation.salesValuationBooking = {
+              startDateTime: hours.value,
+              totalHours: 1,
+            };
+            this.valuation.lettingsValuationBooking = {
+              startDateTime: hours.value,
+              totalHours: 1,
+            };
+          } else if (this.isSalesOnly) {
+            this.valuation.lettingsValuationBooking = null;
+            this.valuation.salesValuationBooking = {
+              startDateTime: hours.value,
+              totalHours: 1,
+            };
+          } else if (this.isLettingsOnly) {
+            this.valuation.salesValuationBooking = null;
+            this.valuation.lettingsValuationBooking = {
+              startDateTime: hours.value,
+              totalHours: 1,
+            };
+          }
+          this.setCloseState();
+        } else {
+          if (!this.valuation.salesValuationBooking) {
+            this.valuation.salesValuationBooking = {
+              startDateTime: hours.value,
+              totalHours: 1,
+            };
+            hours.class = "hourColorsForSales";
+          } else if (!this.valuation.lettingsValuationBooking) {
+            this.valuation.lettingsValuationBooking = {
+              startDateTime: hours.value,
+              totalHours: 1,
+            };
+            hours.class = "hourColorsForLettings";
+            this.setCloseState();
+          }
+        }
+      } else if (this.isSalesEdit) {
+        this.valuation.salesValuationBooking = {
+          startDateTime: hours.value,
+          totalHours: 1,
+        };
+        this.setCloseState();
+      } else if (this.isLettingsEdit) {
+        this.valuation.lettingsValuationBooking = {
+          startDateTime: hours.value,
+          totalHours: 1,
+        };
+        this.setCloseState();
+      }
 
       if (this.isBothEdit) {
         if (this.isSalesOnly) {
@@ -1413,6 +1554,16 @@ export class ValuationDetailEditComponent
         } else if (this.isLettingsOnly) this.salesValuerControl.setValue(null);
       }
     }
+
+    this.getTimeSalesValuationDate =
+      this.valuation?.salesValuationBooking?.startDateTime.getTime();
+    this.getTimeLettingsValuationDate =
+      this.valuation?.lettingsValuationBooking?.startDateTime.getTime();
+  }
+  setCloseState() {
+    this.showCalendar = false;
+    this.isAppointmentVisible = false;
+    this.sideBarControlVisible = false;
   }
 
   selectCalendarDate(date: Date) {
@@ -1844,21 +1995,25 @@ export class ValuationDetailEditComponent
     ) {
       if (
         this.isSalesAndLettings &&
-        this.salesValuerIdControl.valid &&
-        this.lettingsValuerIdControl.value
+        !this.valuation?.lettingsValuationBooking?.startDateTime &&
+        !this.valuation?.salesValuationBooking?.startDateTime
       ) {
         this.isAvailabilityRequired = true;
-        // this.isSalesOnly = false;
-        // this.isLettingsOnly = false;
         console.log("for both", this.isAvailabilityRequired);
       }
-      if (this.isSalesOnly && this.salesValuerIdControl.value) {
+      if (
+        this.isSalesOnly &&
+        !this.valuation?.salesValuationBooking?.startDateTime
+      ) {
         this.isAvailabilityRequired = true;
         this.isSalesAndLettings = false;
         this.isLettingsOnly = false;
         console.log("for lettings only", this.isAvailabilityRequired);
       }
-      if (this.isLettingsOnly && this.lettingsValuerIdControl.value) {
+      if (
+        this.isLettingsOnly &&
+        !this.valuation?.lettingsValuationBooking?.startDateTime
+      ) {
         this.isAvailabilityRequired = true;
         this.isSalesOnly = false;
         this.isSalesAndLettings = false;
@@ -1870,18 +2025,29 @@ export class ValuationDetailEditComponent
   saveValuation() {
     this.checkAvailabilityBooking();
     this.setValuersValidators();
-    if (!this.valuationForm.controls["declarableInterest"].value) {
-      this.errorMessage = {} as WedgeError;
-      this.errorMessage.displayMessage =
-        "Please enter Terms Of Business Section";
-      this.sharedService.showError(
-        this.errorMessage,
-        "Terms Of Business Section"
-      );
+    this.sharedService.logValidationErrors(this.valuationForm, true);
+
+    if (this.formErrors["declarableInterest"]) {
+      this.accordionIndex = 4;
+      this.activeState[4] = true;
+      this.messageService.add({
+        severity: "warn",
+        summary: "You must complete terms of bussiness",
+        closable: false,
+      });
       return;
     }
-    this.sharedService.logValidationErrors(this.valuationForm, true);
-    if (this.valuationForm.valid && !this.isAvailabilityRequired) {
+
+    if (this.isAvailabilityRequired) {
+      this.messageService.add({
+        severity: "warn",
+        summary: "You must make valuation appointments",
+        closable: false,
+      });
+      return;
+    }
+
+    if (this.valuationForm.valid) {
       if (
         this.valuationForm.dirty ||
         this.isOwnerChanged ||
@@ -1930,6 +2096,8 @@ export class ValuationDetailEditComponent
       valuation.sqFt = 0;
     }
 
+    this.setValuers(valuation);
+
     if (this.isNewValuation) {
       console.log("%c val", "color:green", valuation);
       this.valuationService.addValuation(valuation).subscribe(
@@ -1957,6 +2125,83 @@ export class ValuationDetailEditComponent
       );
     }
   }
+
+  setValuers(valuation) {
+    if (
+      valuation.salesValuationBooking?.startDateTime ==
+      valuation.lettingsValuationBooking?.startDateTime
+    ) {
+      valuation.combinedValuationBooking = {
+        name:
+          valuation.salesMeetingOwner == "0"
+            ? valuation.salesOwnerAssociateName
+            : "",
+        emailAddress:
+          valuation.salesMeetingOwner == "0"
+            ? valuation.salesOwnerAssociateEmail
+            : "",
+        contactNumber:
+          valuation.salesMeetingOwner == "0"
+            ? valuation.salesOwnerAssociateContactNumber
+            : "",
+        associationId:
+          valuation.salesMeetingOwner == "0"
+            ? valuation.salesOwnerAssociateType
+            : "",
+        meetingOwner: valuation.salesMeetingOwner,
+        startDateTime: valuation.salesValuationBooking?.startDateTime,
+        totalHours: 1,
+      };
+    } else {
+      if (valuation.salesValuationBooking) {
+        valuation.salesValuationBooking = {
+          name:
+            valuation.salesMeetingOwner == "0"
+              ? valuation.salesOwnerAssociateName
+              : "",
+          emailAddress:
+            valuation.salesMeetingOwner == "0"
+              ? valuation.salesOwnerAssociateEmail
+              : "",
+          contactNumber:
+            valuation.salesMeetingOwner == "0"
+              ? valuation.salesOwnerAssociateContactNumber
+              : "",
+          associationId:
+            valuation.salesMeetingOwner == "0"
+              ? valuation.salesOwnerAssociateType
+              : "",
+          meetingOwner: valuation.salesMeetingOwner,
+          startDateTime: valuation.salesValuationBooking?.startDateTime,
+          totalHours: 1,
+        };
+      }
+      if (valuation.lettingsValuationBooking) {
+        valuation.lettingsValuationBooking = {
+          name:
+            valuation.lettingMeetingOwner == "0"
+              ? valuation.lettingsOwnerAssociateName
+              : "",
+          emailAddress:
+            valuation.lettingMeetingOwner == "0"
+              ? valuation.lettingsOwnerAssociateEmail
+              : "",
+          contactNumber:
+            valuation.lettingMeetingOwner == "0"
+              ? valuation.lettingsOwnerAssociateContactNumber
+              : "",
+          associationId:
+            valuation.lettingMeetingOwner == "0"
+              ? valuation.lettingsOwnerAssociateType
+              : "",
+          meetingOwner: valuation.lettingMeetingOwner,
+          startDateTime: valuation.lettingsValuationBooking?.startDateTime,
+          totalHours: 1,
+        };
+      }
+    }
+  }
+
   checkValuers(valuation: any) {
     switch (valuation.type) {
       case "lettings":
