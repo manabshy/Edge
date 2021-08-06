@@ -2152,6 +2152,8 @@ export class ValuationDetailEditComponent
         startDateTime: valuation.salesValuationBooking?.startDateTime,
         totalHours: 1,
       };
+      valuation.combinedValuationBooking.meetingOwner =
+        valuation.salesMeetingOwner == "0" ? false : true;
     } else {
       if (valuation.salesValuationBooking) {
         valuation.salesValuationBooking = {
@@ -2175,6 +2177,8 @@ export class ValuationDetailEditComponent
           startDateTime: valuation.salesValuationBooking?.startDateTime,
           totalHours: 1,
         };
+        valuation.salesValuationBooking.meetingOwner =
+          valuation.salesMeetingOwner == "0" ? false : true;
       }
       if (valuation.lettingsValuationBooking) {
         valuation.lettingsValuationBooking = {
@@ -2198,6 +2202,8 @@ export class ValuationDetailEditComponent
           startDateTime: valuation.lettingsValuationBooking?.startDateTime,
           totalHours: 1,
         };
+        valuation.lettingsValuationBooking.meetingOwner =
+          valuation.lettingMeetingOwner == "0" ? false : true;
       }
     }
   }
