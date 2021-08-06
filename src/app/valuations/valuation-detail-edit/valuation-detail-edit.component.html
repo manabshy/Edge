@@ -864,7 +864,7 @@
               <ol class="cards cards--small">
                 <li *ngFor="let hours of key['hours'] " [ngClass]="hours.class">
                   <button type="button" class="btn btn--ghost"
-                    (click)="selectAvailableDate(hours.value); properties = null">{{hours.value |
+                    (click)="selectAvailableDate(hours); properties = null">{{hours.value |
                     date:'HH:mm'}}</button>
                 </li>
               </ol>
@@ -881,7 +881,7 @@
               <ol class="cards cards--small">
                 <li *ngFor="let hours of key['hours'] " [ngClass]="hours.class">
                   <button type="button" class="btn btn--ghost"
-                    (click)="selectAvailableDate(hours.value); properties = null">{{hours.value |
+                    (click)="selectAvailableDate(hours); properties = null">{{hours.value |
                     date:'HH:mm'}}</button>
                 </li>
               </ol>
@@ -904,7 +904,7 @@
   [draggable]="false" class="modal--small modal--hasFooter">
   <form [formGroup]="instructionForm" (ngSubmit)="saveInstruction()" autocompleteOff>
     <ng-container *ngIf="instruction?.askingPrice">
-      <fieldset *ngIf="showInstruct" style="margin-bottom: 8px;">
+      <fieldset *ngIf="showInstruct" style="margin-bottom: 4px;">
         <span class="checkbox">
           <span>
             <input type="checkbox" id="instructSale" name="instructSale" formControlName="instructSale"
@@ -914,41 +914,41 @@
         </span>
       </fieldset>
 
-      <ng-container *ngIf="instructionForm.get('instructSale').value">
-        <p-card [style]="{'width': '20rem', 'margin-bottom': '2em'}"
-          [ngStyle]="{'background-color': !instructionForm.get('isInstructLongLet').value ? 'lightgray':null}">
+      <ol class="cards" [ngClass]="{'disabled': !instructionForm.get('instructSale').value}">
+        <li>
+          <h5>Sell</h5>
           <fieldset>
-            <h5>Sell</h5>
-            <fieldset>
-              <label for="askingPrice">Value</label>
-              <input type="text" name="askingPrice" id="askingPrice" formControlName="askingPrice"
-                [ngClass]="{'is-invalid':formErrors.askingPrice}">
-              <p style="color: red; margin-top: 8px;"> {{formErrors?.askingPrice}}</p>
-            </fieldset>
-            <p *ngIf="instructionForm.get('salesAgencyType')?.errors?.required" style="color: red; margin-top: 8px;">
-              {{formErrors?.salesAgencyType}}</p>
+            <label for="askingPrice">Value</label>
+            <input type="text" name="askingPrice" id="askingPrice" formControlName="askingPrice"
+              [ngClass]="{'is-invalid':formErrors.askingPrice}">
+            <p style="color: red; margin-top: 8px;"> {{formErrors?.askingPrice}}</p>
           </fieldset>
-          <ng-template pTemplate="footer">
-            <label>Sales Agency</label>
-            <span class="radio radio--inline">
-              <span style="margin-bottom:4px">
-                <input type="radio" id="soleAgencySales" value="1" name="salesAgencyType"
-                  formControlName="salesAgencyType" data-cy="soleAgencySales">
-                <label for="soleAgencySales">Sole Agency</label>
-              </span>
-              <span style="margin-bottom:4px">
-                <input type="radio" id="multiAgencySales" value="4" name="salesAgencyType"
-                  formControlName="salesAgencyType">
-                <label for="multiAgencySales">Multi Agency</label>
-              </span>
+        </li>
+      </ol>
+
+      <ng-container *ngIf="instructionForm.get('instructSale').value">
+        <fieldset style="margin-bottom: 16px;">
+          <label>Sales Agency</label>
+          <span class="radio radio--inline">
+            <span>
+              <input type="radio" id="soleAgencySales" value="1" name="salesAgencyType"
+                formControlName="salesAgencyType" data-cy="soleAgencySales">
+              <label for="soleAgencySales">Sole Agency</label>
             </span>
-          </ng-template>
-        </p-card>
+            <span>
+              <input type="radio" id="multiAgencySales" value="4" name="salesAgencyType"
+                formControlName="salesAgencyType">
+              <label for="multiAgencySales">Multi Agency</label>
+            </span>
+          </span>
+          <p *ngIf="instructionForm.get('salesAgencyType')?.errors?.required" style="color: red; margin-top: 8px;">
+            {{formErrors?.salesAgencyType}}</p>
+        </fieldset>
       </ng-container>
     </ng-container>
 
     <ng-container *ngIf="instruction?.askingRentShortLet || instruction?.askingRentLongLet">
-      <fieldset *ngIf="showInstruct" style="margin-bottom: 8px;">
+      <fieldset *ngIf="showInstruct" style="margin-bottom: 4px;">
         <span class="checkbox">
           <span>
             <input type="checkbox" id="instructLet" name="instructLet" formControlName="instructLet"
@@ -956,27 +956,37 @@
             <label for="instructLet">Instruct for Lettings</label>
           </span>
         </span>
+        <p *ngIf="instructionForm.get('instructLet').value && !instructionForm.get('isInstructLongLet').value && !instructionForm.get('isInstructShortLet').value"
+          style="color: red; margin-top: 8px;"> Please choose an option</p>
       </fieldset>
-      <div class="inline-parent">
-        <fieldset class="inline-child" *ngIf="showInstruct" style="align-self: flex-start">
-          <p-card [style]="{'width': '15rem', 'margin-bottom': '2em'}"
-            [ngStyle]="{'background-color': !instructionForm.get('isInstructLongLet').value ? 'lightgray':null}">
-            <p *ngIf="instructionForm.get('instructLet').value && !instructionForm.get('isInstructLongLet').value && !instructionForm.get('isInstructShortLet').value"
-              style="color: red; margin-top: 8px;"> Please choose an option</p>
-            <fieldset>
-              <label for="longLetMonthlyValue">Value (per month)</label>
-              <input type="text" name="longLetMonthlyValue" id="longLetMonthlyValue"
-                formControlName="askingRentLongLetMonthly"
-                [attr.disabled]="!instructionForm.get('isInstructLongLet').value?'true':null">
-            </fieldset>
-            <ng-template pTemplate="footer">
-
-            </ng-template>
-          </p-card>
-        </fieldset>
-      </div>
 
       <ol class="cards">
+        <li [ngStyle]="{'background-color': !instructionForm.get('isInstructLongLet').value ? 'lightgray':null}">
+          <span class="checkbox checkbox--rtl" style="margin-bottom: 12px;">
+            <span>
+              <input type="checkbox" id="isInstructLongLet" name="isInstructLongLet" formControlName="isInstructLongLet"
+                data-cy="isInstructLongLet">
+              <label style="margin-bottom:4px; text-align:start" for="isInstructLongLet">
+                <h5>Long Let</h5>
+              </label>
+            </span>
+          </span>
+          <fieldset>
+            <label for="longLetValue">Value (per week)</label>
+            <input type="text" name="longLetValue" id="longLetValue" formControlName="askingRentLongLet"
+              [ngClass]="{'is-invalid':formErrors.askingRentLongLet}"
+              [attr.disabled]="!instructionForm.get('isInstructLongLet').value?'true':null">
+            <p style="color: red; margin-top: 8px;"> {{formErrors?.askingRentLongLet}}</p>
+          </fieldset>
+
+          <fieldset>
+            <label for="longLetMonthlyValue">Value (per month)</label>
+            <input type="text" name="longLetMonthlyValue" id="longLetMonthlyValue"
+              formControlName="askingRentLongLetMonthly"
+              [attr.disabled]="!instructionForm.get('isInstructLongLet').value?'true':null">
+          </fieldset>
+
+        </li>
 
         <li [ngStyle]="{'background-color': !instructionForm.get('isInstructShortLet').value ? 'lightgray':null}">
           <span class="checkbox checkbox--rtl" style="margin-bottom: 12px;">
@@ -1034,6 +1044,5 @@
     </footer>
   </form>
 </p-dialog>
-
 <!--Success Messages -->
 <p-toast></p-toast>
