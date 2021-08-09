@@ -297,13 +297,13 @@
                           value="{{valuationForm.get('totalHours').value + ' Hour'}}">
                       </fieldset>
                     </span>
-                    <fieldset>
+                    <fieldset *ngIf="isEditable">
                       <button type="button" class="btn btn--positive"
                         (click)="isSalesEdit =true;isSalesOnly =true;getAvailability()"
                         data-cy="openAvailabilitySales">Edit</button>
                     </fieldset>
                     <ng-template pTemplate="footer">
-                      <fieldset>
+                      <fieldset [attr.disabled]="!isEditable">
                         <label>Are we meeting the Owner ?</label>
                         <span class="radio radio--inline">
                           <span>
@@ -318,7 +318,7 @@
                           </span>
                         </span>
                       </fieldset>
-                      <div *ngIf="valuationForm.get('salesMeetingOwner').value ==='0'">
+                      <div [attr.disabled]="!isEditable" *ngIf="valuationForm.get('salesMeetingOwner').value ==='0'">
                         <span class="inline-parent">
                           <fieldset class="inline-child" [ngClass]="{'invalid': formErrors?.salesOwnerAssociateName}">
                             <label for="salesOwnerAssociateName">Name</label>
@@ -380,7 +380,7 @@
                 </fieldset>
 
                 <fieldset style="align-self: center;margin-bottom: 8em" class="inline-child"
-                  *ngIf="salesValuerControl.value">
+                  *ngIf="salesValuerControl.value && isEditable">
                   <button [style]="{'width': '5rem'}" type="button"
                     *ngIf="salesValuerControl.value && lettingsValuerControl.value" class="btn btn--positive"
                     (click)="isBothEdit =true;getAvailability()" data-cy="openAvailabilityBoth">Edit Both</button>
@@ -405,14 +405,14 @@
                           value="{{valuationForm.get('totalHours').value + ' Hour'}}">
                       </fieldset>
                     </span>
-                    <fieldset>
+                    <fieldset *ngIf="isEditable">
                       <button type="button" class="btn btn--positive"
                         (click)="isLettingsEdit =true;isLettingsOnly =true;getAvailability()"
                         data-cy="openAvailabilityLettings">Edit</button>
                     </fieldset>
                     <ng-template pTemplate="footer">
                       <div *ngIf="getTimeSalesValuationDate != getTimeLettingsValuationDate">
-                        <fieldset>
+                        <fieldset [attr.disabled]="!isEditable">
                           <label>Are we meeting the Owner ?</label>
                           <span class="radio radio--inline">
                             <span>
@@ -427,7 +427,8 @@
                             </span>
                           </span>
                         </fieldset>
-                        <div *ngIf="valuationForm.get('lettingsMeetingOwner').value ==='0'">
+                        <div [attr.disabled]="!isEditable"
+                          *ngIf="valuationForm.get('lettingsMeetingOwner').value ==='0'">
                           <span class="inline-parent">
                             <fieldset class="inline-child"
                               [ngClass]="{'invalid': formErrors?.lettingsOwnerAssociateName}">
@@ -589,7 +590,7 @@
           <p-accordionTab header="Terms Of Business" [(selected)]="activeState[4]" data-cy="termsOfBusiness">
             <div class="grid grid--9">
               <div>
-                <fieldset>
+                <fieldset [attr.disabled]="!isEditable && !!this.valuationForm.get('declarableInterest').value">
                   <div class="row">
                     <label style="width:auto;" for="haveInterest">Does the Owner have a
                       declarable interest (Section 21)

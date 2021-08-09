@@ -889,6 +889,24 @@ export class ValuationDetailEditComponent
                 this.showDateAndDuration = false;
               }
             }
+            this.salesValuerIdControl.setValue(
+              this.valuation.salesValuer
+                ? this.valuation.salesValuer.staffMemberId
+                : null
+            );
+            this.lettingsValuerIdControl.setValue(
+              this.valuation.salesValuer
+                ? this.valuation.salesValuer.staffMemberId
+                : null
+            );
+            if (this.valuation.combinedValuationBooking) {
+              this.valuation.salesValuationBooking = {
+                ...this.valuation.combinedValuationBooking,
+              };
+              this.valuation.lettingsValuationBooking = {
+                ...this.valuation.combinedValuationBooking,
+              };
+            }
           }
 
           if (this.property) {
