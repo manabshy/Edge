@@ -379,8 +379,7 @@
                   </p-card>
                 </fieldset>
 
-                <fieldset style="align-self: center;margin-bottom: 8em" class="inline-child"
-                  *ngIf="salesValuerControl.value && isEditable">
+                <fieldset style="align-self: center;margin-bottom: 8em" class="inline-child" *ngIf="isEditable">
                   <button [style]="{'width': '5rem'}" type="button"
                     *ngIf="salesValuerControl.value && lettingsValuerControl.value" class="btn btn--positive"
                     (click)="isBothEdit =true;getAvailability()" data-cy="openAvailabilityBoth">Edit Both</button>
@@ -590,8 +589,9 @@
           <p-accordionTab header="Terms Of Business" [(selected)]="activeState[4]" data-cy="termsOfBusiness">
             <div class="grid grid--9">
               <div>
-                <fieldset [attr.disabled]="!isEditable && !!this.valuationForm.get('declarableInterest').value">
-                  <div class="row">
+                <fieldset [attr.disabled]="!isEditable && this.valuationForm.get('declarableInterest').value"
+                  [ngClass]="{'is-invalid':formErrors.declarableInterest}">
+                  <fieldset class="row">
                     <label style="width:auto;" for="haveInterest">Does the Owner have a
                       declarable interest (Section 21)
                     </label>
@@ -599,7 +599,7 @@
                       <i [pTooltip]="informationMessage" class="fa fa-info-circle fa-2x text-blue"
                         style="color:lightblue;"></i>
                     </span>
-                  </div>
+                  </fieldset>
                   <span class="radio radio--inline">
                     <span style="margin-right: 8px;">
                       <input type="radio" id="interestYes" value="true" name="declarableInterest"
@@ -612,6 +612,7 @@
                       <label for="interestNo">No</label>
                     </span>
                   </span>
+                  <p class="message message--negative"> {{formErrors?.declarableInterest}}</p>
                 </fieldset>
                 <fieldset>
                   <p-dropdown *ngIf="valuationForm.get('declarableInterest').value === 'true'" [options]="interestList"
@@ -748,7 +749,7 @@
   <form [formGroup]="availabilityForm" (ngSubmit)="searchAvailabilty()">
     <div class="row">
       <div class="grid grid--06">
-        <p-sidebar [modal]="false" [visible]="sideBarControlVisible" position="left">
+        <p-sidebar [modal]="false" [visible]="sideBarControlVisible" position="left" [showCloseIcon]="false">
 
           <fieldset>
             <span class="radio radio--boxed" btnRadioGroup formControlName="type">

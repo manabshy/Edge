@@ -813,7 +813,7 @@ export class ValuationDetailEditComponent
       suggestedAskingRentShortLet: [],
       suggestedAskingRentLongLetMonthly: [],
       suggestedAskingRentShortLetMonthly: [],
-      declarableInterest: ["", Validators.required],
+      declarableInterest: [null, Validators.required],
       ageOfSuggestedAskingPrice: [],
       section21StatusId: [],
       salesMeetingOwner: ["1"],
