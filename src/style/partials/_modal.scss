@@ -28,7 +28,7 @@
     .p-dialog-footer                            { padding:16px; border-radius:0; }
 
     /***** Dialog *****/
-    &.dialog                                    { 
+    &.dialog                                    {
         &--hasFooter                            {
             .p-dialog-content                   { padding-bottom:60px; }
         }
@@ -65,7 +65,7 @@ p-toast                                         {
 .p-tabview                                      {
     .p-tabview-nav                              { border:none; position:relative;
         &:before                                { content:''; width:calc(100% + 28px); height:1px; background-color:$color--midnight-10; position:absolute; bottom:-2px; left:-13px; }
-        li                                      { 
+        li                                      {
             &+*                                 { margin:0 0 0 30px; }
             .p-tabview-nav-link                 { padding:0 0 16px 0; border-width:0 0 1px 0; text-transform:uppercase; }
             .p-tabview-nav-link:not(.p-disabled):focus { box-shadow:none; }
@@ -74,7 +74,7 @@ p-toast                                         {
     .p-tabview-panels                           { padding:0; }
 }
 
-p-chip                                          { margin:6px 6px 0 0; display:inline-flex; 
+p-chip                                          { margin:6px 6px 0 0; display:inline-flex;
     .pi-chip-remove-icon                        { line-height:0; }
     .p-chip .p-chip-text                        { margin:0; padding:2px 0; font-size:11px; }
 }
@@ -99,6 +99,8 @@ This applies from 992px onwards
         .p-dialog-content                       { border-radius:3px; }
         &.dialog                                { width:300px; min-width:auto; min-height:auto; }
     }
+
+    .p-sidebar                                  { border-radius:3px;}
 
     .modal--large                              {
         .p-dialog                               { width:70%;

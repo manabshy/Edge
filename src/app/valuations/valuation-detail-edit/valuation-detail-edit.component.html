@@ -719,7 +719,8 @@
   class="modal--medium">
   <p-header class="row">
 
-    <span class="inline-parent" style="padding-right: 100px;width: -webkit-fill-available;">Pick availability</span>
+    <span class="inline-parent" style="width: -webkit-fill-available;">Pick availability</span>
+
     <span class=" inline-parent checkbox" *ngIf="isSalesAndLettings">
       <span style="font-size:smaller">
         <input type="checkbox" id="splitAppointment" name="splitAppointment" [(ngModel)]="isSplitAppointment"
@@ -727,9 +728,10 @@
         <label style="font-weight: bolder;" for="splitAppointment">Split Appointment</label>
       </span>
     </span>
-    <span style="padding-left:20px;">
+
+    <span style="width: -webkit-fill-available;">
       <div class="inline-parent" *ngIf="!isLettingsOnly">
-        <span style="font-size:smaller; padding-right: 8px;">{{salesValuerControl.value?.fullName}}
+        <span style="font-size:smaller; padding-right: 8px; margin-bottom: 2px;">{{salesValuerControl.value?.fullName}}
         </span>
         <div class="badges" style="font-size:xx-large">
           <p-badge severity="info"></p-badge>
@@ -738,7 +740,7 @@
     </span>
 
     <span *ngIf="!isSalesOnly && salesValuerControl.value?.staffMemberId != lettingsValuerControl.value?.staffMemberId"
-      class="inline-parent" style="padding-left:60px;">
+      class="inline-parent" style="width: -webkit-fill-available;">
       <span style="font-size:smaller; padding-right: 8px;">{{lettingsValuerControl.value?.fullName}}</span>
       <div class="badges" style="font-size:xx-large">
         <p-badge severity="success"></p-badge>
