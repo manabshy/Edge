@@ -124,7 +124,7 @@
 
     <form [formGroup]="valuationForm" (ngSubmit)="saveValuation()" autocompleteOff>
       <ng-container *ngIf="(createdSigner || lastKnownOwner) && property">
-        <p-accordion [multiple]="true" [activeIndex]="accordionIndex">
+        <p-accordion [multiple]="true">
           <p-accordionTab header="Valuation Notes" [(selected)]="activeState[0]"
             *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value) || (!isEditable && valuationForm.get('timeFrame').value) || (!isEditable && valuationForm.get('generalNotes').value)">
 
@@ -682,8 +682,8 @@
                 d="M11.9 48.4c-4.1-5-6.3-11.5-5.8-18.6C7.1 17.6 16.8 7.5 29 6.2 44.7 4.4 58 16.7 58 32c0 6.2-2.2 11.8-5.8 16.3 -1 1.2-0.8 2.9 0.3 4l0 0c1.3 1.3 3.4 1.1 4.5-0.3 4.8-6 7.5-13.8 7-22.2C62.9 14 50.1 1.2 34.3 0.1 15.6-1.2 0 13.6 0 32c0 7.7 2.7 14.8 7.3 20.3 1.1 1.3 3 1.4 4.2 0.2l0.2-0.2C12.8 51.2 12.8 49.6 11.9 48.4z">
               </path>
             </svg>Save Valuation</button>
-          <button *ngIf="canInstruct" type="button" class="btn btn--info"
-            (click)="isInstructVisible = true; startInstruction()" data-cy="startInstruction">Instruct</button>
+          <button *ngIf="canInstruct" type="button" class="btn btn--info" (click)="startInstruction()"
+            data-cy="startInstruction">Instruct</button>
         </footer>
       </ng-container>
     </form>
@@ -901,9 +901,9 @@
 
 <!-- Instruct Modal -->
 <p-dialog header="Confirm values and choose instruction type" [(visible)]="isInstructVisible" [modal]="true"
-  [draggable]="false" class="modal--small modal--hasFooter">
+  [draggable]="false" class="modal--medium modal--hasFooter">
   <form [formGroup]="instructionForm" (ngSubmit)="saveInstruction()" autocompleteOff>
-    <ng-container *ngIf="instruction?.askingPrice">
+    <!-- <ng-container *ngIf="instruction?.askingPrice">
       <fieldset *ngIf="showInstruct" style="margin-bottom: 4px;">
         <span class="checkbox">
           <span>
@@ -945,10 +945,52 @@
             {{formErrors?.salesAgencyType}}</p>
         </fieldset>
       </ng-container>
+    </ng-container> -->
+
+    <ng-container *ngIf="instruction?.askingPrice">
+      <fieldset *ngIf="showInstruct" style="margin-bottom: 4px;">
+        <span class="checkbox">
+          <span>
+            <input type="checkbox" id="instructSale" name="instructSale" formControlName="instructSale"
+              (change)="onInstructSalesChange($event.target)" data-cy="instructSale">
+            <label for="instructSale">Instruct for Sales</label>
+          </span>
+        </span>
+      </fieldset>
+      <fieldset style="align-self: flex-start">
+        <p-card [style]="{'width': '20rem', 'margin-bottom': '2em'}">
+          <h5>Sell</h5>
+          <fieldset>
+            <label for="askingPrice">Value</label>
+            <input type="text" name="askingPrice" id="askingPrice" formControlName="askingPrice"
+              [ngClass]="{'is-invalid':formErrors.askingPrice}">
+            <p style="color: red; margin-top: 8px;"> {{formErrors?.askingPrice}}</p>
+          </fieldset>
+          <ng-template pTemplate="footer" *ngIf="instructionForm.get('instructSale').value">
+            <fieldset style="margin-bottom: 16px;">
+              <label>Sales Agency</label>
+              <span class="radio radio--inline">
+                <span>
+                  <input type="radio" id="soleAgencySales" value="1" name="salesAgencyType"
+                    formControlName="salesAgencyType" data-cy="soleAgencySales">
+                  <label for="soleAgencySales">Sole Agency</label>
+                </span>
+                <span>
+                  <input type="radio" id="multiAgencySales" value="4" name="salesAgencyType"
+                    formControlName="salesAgencyType">
+                  <label for="multiAgencySales">Multi Agency</label>
+                </span>
+              </span>
+              <p *ngIf="instructionForm.get('salesAgencyType')?.errors?.required" style="color: red; margin-top: 8px;">
+                {{formErrors?.salesAgencyType}}</p>
+            </fieldset>
+          </ng-template>
+        </p-card>
+      </fieldset>
     </ng-container>
 
     <ng-container *ngIf="instruction?.askingRentShortLet || instruction?.askingRentLongLet">
-      <fieldset *ngIf="showInstruct" style="margin-bottom: 4px;">
+      <fieldset style="margin-bottom: 4px;">
         <span class="checkbox">
           <span>
             <input type="checkbox" id="instructLet" name="instructLet" formControlName="instructLet"
@@ -960,7 +1002,65 @@
           style="color: red; margin-top: 8px;"> Please choose an option</p>
       </fieldset>
 
-      <ol class="cards">
+      <div class="inline-parent">
+        <fieldset class="inline-child">
+          <p-card [style]="{'width': '20rem', 'margin-bottom': '1em'}">
+            <div>
+              <span class="checkbox checkbox--rtl" style="margin-bottom: 12px;">
+                <span>
+                  <input type="checkbox" id="isInstructLongLet" name="isInstructLongLet"
+                    formControlName="isInstructLongLet" data-cy="isInstructLongLet">
+                  <label style="margin-bottom:4px; text-align:start" for="isInstructLongLet">
+                    <h5>Long Let</h5>
+                  </label>
+                </span>
+              </span>
+              <fieldset>
+                <label for="longLetValue">Value (per week)</label>
+                <input type="text" name="longLetValue" id="longLetValue" formControlName="askingRentLongLet"
+                  [ngClass]="{'is-invalid':formErrors.askingRentLongLet}"
+                  [attr.disabled]="!instructionForm.get('isInstructLongLet').value?'true':null">
+                <p style="color: red; margin-top: 8px;"> {{formErrors?.askingRentLongLet}}</p>
+              </fieldset>
+              <!-- [ngStyle]="{'background': !instructionForm.get('isInstructLongLet').value?'lightgray':null}" -->
+              <fieldset>
+                <label for="longLetMonthlyValue">Value (per month)</label>
+                <input type="text" name="longLetMonthlyValue" id="longLetMonthlyValue"
+                  formControlName="askingRentLongLetMonthly"
+                  [attr.disabled]="!instructionForm.get('isInstructLongLet').value?'true':null">
+              </fieldset>
+            </div>
+          </p-card>
+        </fieldset>
+        <fieldset class="inline-child">
+          <p-card [style]="{'width': '20rem', 'margin-bottom': '1em'}">
+            <span class="checkbox checkbox--rtl" style="margin-bottom: 12px;">
+              <span>
+                <input type="checkbox" id="isInstructShortLet" name="isInstructShortLet"
+                  formControlName="isInstructShortLet" data-cy="isInstructShortLet">
+                <label style="margin-bottom:4px; text-align:start" for="isInstructShortLet">
+                  <h5>Short Let</h5>
+                </label>
+              </span>
+            </span>
+            <fieldset>
+              <label for="shortLetValue">Value (per week)</label>
+              <input type="text" name="shortLetValue" id="shortLetValue" formControlName="askingRentShortLet"
+                [ngClass]="{'is-invalid':formErrors.askingRentShortLet}"
+                [attr.disabled]="!instructionForm.get('isInstructShortLet').value?'true':null">
+              <p style="color: red; margin-top: 8px;"> {{formErrors?.askingRentShortLet}}</p>
+            </fieldset>
+
+            <fieldset>
+              <label for="shortLetMonthlyValue">Value (per month)</label>
+              <input type="text" name="shortLetMonthlyValue" id="shortLetMonthlyValue"
+                formControlName="askingRentShortLetMonthly"
+                [attr.disabled]="!instructionForm.get('isInstructShortLet').value?'true':null">
+            </fieldset>
+          </p-card>
+        </fieldset>
+      </div>
+      <!-- <ol class="cards">
         <li [ngStyle]="{'background-color': !instructionForm.get('isInstructLongLet').value ? 'lightgray':null}">
           <span class="checkbox checkbox--rtl" style="margin-bottom: 12px;">
             <span>
@@ -1013,9 +1113,9 @@
               [attr.disabled]="!instructionForm.get('isInstructShortLet').value?'true':null">
           </fieldset>
         </li>
-      </ol>
+      </ol> -->
 
-      <fieldset *ngIf="instructionForm.get('instructLet').value" style="margin-bottom: 4px;">
+      <fieldset *ngIf="instructionForm.get('instructLet').value">
         <label>Lettings Agency</label>
         <span class="radio radio--inline">
           <span>

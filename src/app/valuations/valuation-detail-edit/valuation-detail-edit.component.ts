@@ -813,7 +813,7 @@ export class ValuationDetailEditComponent
       suggestedAskingRentShortLet: [],
       suggestedAskingRentLongLetMonthly: [],
       suggestedAskingRentShortLetMonthly: [],
-      declarableInterest: [null, Validators.required],
+      declarableInterest: ["", Validators.required],
       ageOfSuggestedAskingPrice: [],
       section21StatusId: [],
       salesMeetingOwner: ["1"],
@@ -1718,8 +1718,20 @@ export class ValuationDetailEditComponent
   }
 
   startInstruction() {
+    if (this.valuationForm.controls["declarableInterest"].invalid) {
+      this.accordionIndex = 4;
+      this.activeState[4] = true;
+      this.messageService.add({
+        severity: "warn",
+        summary: "You must complete terms of bussiness",
+        closable: false,
+      });
+      return;
+    }
+
     let val: Valuation;
     val = { ...this.valuation, ...this.valuationForm.value };
+
     const instruction = {
       valuationEventId: val.valuationEventId,
       salesAgencyType: "",
@@ -1731,6 +1743,7 @@ export class ValuationDetailEditComponent
       askingRentLongLetMonthly: val.suggestedAskingRentLongLetMonthly,
     } as Instruction;
     this.instruction = instruction;
+    this.isInstructVisible = true;
     this.populateInstructionForm(instruction);
     this.setInstructionFlags(instruction);
   }
@@ -1927,6 +1940,7 @@ export class ValuationDetailEditComponent
   saveInstruction() {
     this.setAgencyTypeValidator();
     this.setInstructionFormValidators();
+
     this.sharedService.logValidationErrors(this.instructionForm, true);
     const instructionSelected =
       this.instructionForm.get("instructSale").value ||
@@ -1952,8 +1966,15 @@ export class ValuationDetailEditComponent
         this.onInstructionSaveComplete();
       }
     } else {
-      this.errorMessage = {} as WedgeError;
-      this.errorMessage.displayMessage = "Please correct validation errors";
+      Object.keys(this.instructionForm.controls).forEach((key: string) => {
+        const control = this.instructionForm.get(key);
+        if (control.invalid)
+          this.messageService.add({
+            severity: "warn",
+            summary: "You must enter " + key + " value",
+            closable: false,
+          });
+      });
     }
   }
   setInstructionValue(instruction: Instruction) {
