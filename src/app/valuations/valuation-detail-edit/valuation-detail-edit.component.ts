@@ -90,7 +90,7 @@ export class ValuationDetailEditComponent
   allStaffMembers: BaseStaffMember[] = [];
   mainStaffMember: BaseStaffMember;
   staffMemberId: number;
-  isNewValuation: boolean;
+  isNewValuation: boolean = false;
   showOnlyMainStaffMember: boolean;
   errorMessage: WedgeError;
   isSubmitting: boolean;
@@ -98,7 +98,7 @@ export class ValuationDetailEditComponent
   property: Property;
   isOwnerChanged: boolean;
   isPropertyChanged: boolean;
-  isEditable: boolean;
+  isEditable: boolean = false;
   showLeaseExpiryDate: boolean;
   canInstruct: boolean;
   propertyId: number;
@@ -407,6 +407,12 @@ export class ValuationDetailEditComponent
     });
 
     this.valuationForm.valueChanges.subscribe((data) => {
+      console.log(this.isNewValuation);
+      console.log(this.isEditable);
+
+      if (!this.isNewValuation && !this.isEditable) {
+        console.log(this.isEditable);
+      }
       this.valuationForm.patchValue(
         {
           suggestedAskingRentShortLetMonthly:
@@ -503,9 +509,9 @@ export class ValuationDetailEditComponent
 
     // availability form
     this.availabilityForm = this.fb.group({
-      fromDate: new Date(),
-      salesValuerId: 0,
-      lettingsValuerId: 0,
+      fromDate: [new Date(), Validators.required],
+      salesValuerId: [null, Validators.required],
+      lettingsValuerId: [null, Validators.required],
       type: "both",
     });
 
@@ -522,6 +528,7 @@ export class ValuationDetailEditComponent
         this.warningForValuer = false;
       if (!this.warningForValuer && data.fromDate)
         this.canSearchAvailability = true;
+      this.sharedService.logValidationErrors(this.availabilityForm, false);
     });
 
     this.storage.get("info").subscribe((data: DropdownListInfo) => {
@@ -822,7 +829,6 @@ export class ValuationDetailEditComponent
       salesOwnerAssociateContactNumber: [""],
       salesOwnerAssociateEmail: [""],
       salesOwnerAssociateType: ["6"],
-      salesOwnerWantsMessage: ["1"],
       lettingsOwnerAssociateName: [""],
       lettingsOwnerAssociateContactNumber: [""],
       lettingsOwnerAssociateEmail: [""],
@@ -1279,6 +1285,12 @@ export class ValuationDetailEditComponent
   }
 
   searchAvailabilty() {
+    this.sharedService.logValidationErrors(this.availabilityForm, true);
+
+    if (this.availabilityForm.invalid) {
+      return;
+    }
+
     const availability = { ...this.availabilityForm.value };
 
     const request = {

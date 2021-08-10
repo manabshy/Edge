@@ -134,7 +134,7 @@
                   *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value)">
                   <label for="reason">What’s the current situation?</label>
                   <textarea name="reason" id="reason" cols="30" rows="3" formControlName="reason" data-cy="reason"
-                    [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                    [disabled]="!isEditable && !isNewValuation ? true : null"
                     [ngClass]="{'is-invalid': (formErrors?.reason)}"></textarea>
                   <p class="message message--negative"> {{formErrors?.reason}}</p>
                 </fieldset>
@@ -145,7 +145,7 @@
                   *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('timeFrame').value)">
                   <label for="timeFrame">When are you looking to market?</label>
                   <textarea name="timeFrame" id="timeFrame" cols="30" rows="3" formControlName="timeFrame"
-                    data-cy="timeFrame" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                    data-cy="timeFrame" [disabled]="!isEditable && !isNewValuation ? true : null"
                     [ngClass]="{'is-invalid': (formErrors?.timeFrame)}"></textarea>
                   <p class="message message--negative"> {{formErrors?.timeFrame}}</p>
                 </fieldset>
@@ -156,7 +156,7 @@
                   *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('generalNotes').value)">
                   <label for="generalNotes">Notes (points discussed, other property details)</label>
                   <textarea name="generalNotes" id="generalNotes" cols="30" rows="3" formControlName="generalNotes"
-                    data-cy="generalNotes" [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                    data-cy="generalNotes" [disabled]="!isEditable && !isNewValuation ? true : null"
                     [ngClass]="{'is-invalid': (formErrors?.generalNotes)}"></textarea>
                   <p class="message message--negative"> {{formErrors?.generalNotes}}</p>
                 </fieldset>
@@ -174,7 +174,7 @@
                       d="M17.9 33.4c4.7 0 8.5-3.8 8.5-8.5s-3.8-8.5-8.5-8.5S9.5 20.3 9.5 25 13.2 33.4 17.9 33.4zM51.7 16.5H29.2v19.7H6.6V10.9H1v42.3h5.6v-8.5h50.7v8.5H63V27.8C63 21.5 58 16.5 51.7 16.5z" />
                   </svg>Bedrooms</label>
                 <input type="number" name="bedrooms" id="bedrooms" formControlName="bedrooms" min="0" max="99"
-                  [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                  [disabled]="!isEditable && !isNewValuation ? true : null"
                   [ngClass]="{'is-invalid': (formErrors?.bedrooms)}" />
                 {{formErrors?.bedrooms}}
               </fieldset>
@@ -187,7 +187,7 @@
                       d="M56.8 35.1V9.8C56.8 4.9 52.9 1 48 1c-2.3 0-4.6 0.9-6.2 2.6L38 7.4c-0.5-0.2-1-0.2-1.6-0.2 -1.2 0-2.4 0.4-3.3 1l8.6 8.6c0.6-1 1-2.1 1-3.3 0-0.6-0.1-1.1-0.2-1.6l3.9-3.9c0.5-0.5 1.1-0.7 1.8-0.7 1.4 0 2.6 1.1 2.6 2.6v25.3H29.4c-0.9-0.7-1.8-1.4-2.5-2.2l-4.3-4.8c-0.6-0.7-1.3-1.2-2.1-1.5 -1-0.5-2-0.7-3.1-0.7 -3.8 0-6.9 3.1-6.9 7v2.3H1v18.6c0 3.4 2.8 6.2 6.2 6.2 0 1.7 1.4 3.1 3.1 3.1h43.4c1.7 0 3.1-1.4 3.1-3.1 3.4 0 6.2-2.8 6.2-6.2V35.1H56.8z" />
                   </svg>Bathrooms</label>
                 <input type="number" name="bathrooms" id="bathrooms" formControlName="bathrooms" min="0" max="99"
-                  [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                  [disabled]="!isEditable && !isNewValuation ? true : null"
                   [ngClass]="{'is-invalid': (formErrors?.bathrooms)}" />
                 {{formErrors?.bathrooms}}
               </fieldset>
@@ -199,7 +199,7 @@
                       d="M58.2 26.2c-3.2 0-5.8 2.6-5.8 5.8v8.7H11.6V32c0-3.2-2.6-5.8-5.8-5.8S0 28.8 0 32v14.5c0 3.2 2.6 5.8 5.8 5.8h52.4c3.2 0 5.8-2.6 5.8-5.8V32C64 28.8 61.4 26.2 58.2 26.2zM49.5 11.6h-35c-3.2 0-5.8 2.6-5.8 5.8v6.3c3.4 1.2 5.8 4.4 5.8 8.2v5.9h34.9v-5.9c0-3.8 2.4-7 5.8-8.2v-6.3C55.3 14.3 52.7 11.6 49.5 11.6z" />
                   </svg>Receptions</label>
                 <input type="number" name="receptions" id="receptions" formControlName="receptions" min="0" max="99"
-                  [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                  [disabled]="!isEditable && !isNewValuation ? true : null"
                   [ngClass]="{'is-invalid': (formErrors?.receptions)}" />
                 {{formErrors?.receptions}}
               </fieldset>
@@ -211,7 +211,7 @@
                       d="M53.9 53.9L49.8 58l-2.8-2.8 4.1-4.1 -7.5-7.5 -4.1 4.1L36.8 45l4.1-4.1 -7.5-7.5 -4.1 4.1 -2.8-2.8 4.1-4.1 -7.6-7.6L19 27.2l-2.8-2.8 4.1-4.1 -7.5-7.5 -4.1 4.1L6 14.2l4.1-4.1L1 1v54.2C1 59.5 4.5 63 8.8 63H63L53.9 53.9zM12.6 51.4V29.1l22.3 22.3H12.6z" />
                   </svg>Approx sq. ft</label>
                 <input type="text" name="sqFt" id="sqFt" formControlName="sqFt"
-                  [attr.disabled]="!isEditable && !isNewValuation ? true : null">
+                  [disabled]="!isEditable && !isNewValuation ? true : null">
               </fieldset>
             </div>
 
@@ -221,7 +221,7 @@
                 <span class="select">
                   <select name="tenureId" id="tenureId" formControlName="tenureId"
                     (change)="onTenureChange($event.target.value)"
-                    [attr.disabled]="!isEditable && !isNewValuation ? true : null">
+                    [disabled]="!isEditable && !isNewValuation ? true : null">
                     <option value="0">Not Known</option>
                     <option *ngFor="let tenure of tenures" [value]='tenure.id'> {{tenure.value}}</option>
                   </select>
@@ -230,7 +230,7 @@
               <fieldset class="inline-child" *ngIf="showLeaseExpiryDate">
                 <input type="text" name="approxLeaseExpiryDate" aria-label="length" placeholder="Approx Length ..."
                   id="approxLeaseExpiryDate" formControlName="approxLeaseExpiryDate"
-                  [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                  [disabled]="!isEditable && !isNewValuation ? true : null"
                   [ngClass]="{'is-invalid': (formErrors?.approxLeaseExpiryDate)}" data-cy="leaseLength">
                 {{formErrors?.approxLeaseExpiryDate}}
               </fieldset>
@@ -297,13 +297,13 @@
                           value="{{valuationForm.get('totalHours').value + ' Hour'}}">
                       </fieldset>
                     </span>
-                    <fieldset *ngIf="isEditable">
+                    <fieldset *ngIf="isEditable||isNewValuation">
                       <button type="button" class="btn btn--positive"
                         (click)="isSalesEdit =true;isSalesOnly =true;getAvailability()"
                         data-cy="openAvailabilitySales">Edit</button>
                     </fieldset>
                     <ng-template pTemplate="footer">
-                      <fieldset [attr.disabled]="!isEditable">
+                      <fieldset [disabled]="!isNewValuation && !isEditable">
                         <label>Are we meeting the Owner ?</label>
                         <span class="radio radio--inline">
                           <span>
@@ -318,7 +318,8 @@
                           </span>
                         </span>
                       </fieldset>
-                      <div [attr.disabled]="!isEditable" *ngIf="valuationForm.get('salesMeetingOwner').value ==='0'">
+                      <div [disabled]="!isNewValuation && !isEditable"
+                        *ngIf="valuationForm.get('salesMeetingOwner').value ==='0'">
                         <span class="inline-parent">
                           <fieldset class="inline-child" [ngClass]="{'invalid': formErrors?.salesOwnerAssociateName}">
                             <label for="salesOwnerAssociateName">Name</label>
@@ -359,7 +360,7 @@
                             <p class="message message--negative"> {{formErrors?.salesOwnerAssociateType}}</p>
                           </fieldset>
                         </span>
-                        <fieldset>
+                        <!-- <fieldset>
                           <label>Does the Owner want text message notifications about the appointment ?</label>
                           <span class="radio radio--inline">
                             <span>
@@ -373,13 +374,14 @@
                               <label for="salesOwnerWantsMessageNo">No</label>
                             </span>
                           </span>
-                        </fieldset>
+                        </fieldset> -->
                       </div>
                     </ng-template>
                   </p-card>
                 </fieldset>
 
-                <fieldset style="align-self: center;margin-bottom: 8em" class="inline-child" *ngIf="isEditable">
+                <fieldset style="align-self: center;margin-bottom: 8em" class="inline-child"
+                  *ngIf="isEditable||isNewValuation">
                   <button [style]="{'width': '5rem'}" type="button"
                     *ngIf="salesValuerControl.value && lettingsValuerControl.value" class="btn btn--positive"
                     (click)="isBothEdit =true;getAvailability()" data-cy="openAvailabilityBoth">Edit Both</button>
@@ -404,14 +406,14 @@
                           value="{{valuationForm.get('totalHours').value + ' Hour'}}">
                       </fieldset>
                     </span>
-                    <fieldset *ngIf="isEditable">
+                    <fieldset *ngIf="isEditable||isNewValuation">
                       <button type="button" class="btn btn--positive"
                         (click)="isLettingsEdit =true;isLettingsOnly =true;getAvailability()"
                         data-cy="openAvailabilityLettings">Edit</button>
                     </fieldset>
                     <ng-template pTemplate="footer">
                       <div *ngIf="getTimeSalesValuationDate != getTimeLettingsValuationDate">
-                        <fieldset [attr.disabled]="!isEditable">
+                        <fieldset [disabled]="!isNewValuation && !isEditable">
                           <label>Are we meeting the Owner ?</label>
                           <span class="radio radio--inline">
                             <span>
@@ -426,7 +428,7 @@
                             </span>
                           </span>
                         </fieldset>
-                        <div [attr.disabled]="!isEditable"
+                        <div [disabled]="!isNewValuation && !isEditable"
                           *ngIf="valuationForm.get('lettingsMeetingOwner').value ==='0'">
                           <span class="inline-parent">
                             <fieldset class="inline-child"
@@ -589,15 +591,14 @@
           <p-accordionTab header="Terms Of Business" [(selected)]="activeState[4]" data-cy="termsOfBusiness">
             <div class="grid grid--9">
               <div>
-                <fieldset [attr.disabled]="!isEditable && this.valuationForm.get('declarableInterest').value"
-                  [ngClass]="{'is-invalid':formErrors.declarableInterest}">
+                <fieldset [disabled]="!isNewValuation && !isEditable">
                   <fieldset class="row">
                     <label style="width:auto;" for="haveInterest">Does the Owner have a
                       declarable interest (Section 21)
                     </label>
                     <span style="display:contents">
                       <i [pTooltip]="informationMessage" class="fa fa-info-circle fa-2x text-blue"
-                        style="color:lightblue;"></i>
+                        style="color:lightblue;padding-left:4px"></i>
                     </span>
                   </fieldset>
                   <span class="radio radio--inline">
@@ -612,7 +613,6 @@
                       <label for="interestNo">No</label>
                     </span>
                   </span>
-                  <p class="message message--negative"> {{formErrors?.declarableInterest}}</p>
                 </fieldset>
                 <fieldset>
                   <p-dropdown *ngIf="valuationForm.get('declarableInterest').value === 'true'" [options]="interestList"
@@ -645,7 +645,7 @@
               <div class="col-sm" *ngIf="(isEditable || isNewValuation)">
                 <select class="custom-select custom-select-sm" name="originTypes" id="originTypes"
                   formControlName="originType" arial-label="Origin Types" (change)="onSelectType($event.target.value)"
-                  [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                  [disabled]="!isEditable && !isNewValuation ? true : null"
                   [ngClass]="{'is-invalid': (formErrors.originType)}">
                   <option selected value="0">Not Known</option>
                   <option *ngFor="let type of activeOriginTypes" [value]='type.id'> {{type.value}}</option>
@@ -656,7 +656,7 @@
                 <div class="col-sm">
                   <select class="custom-select custom-select-sm" name="originId" id="originId"
                     formControlName="originId" aria-label="Origins"
-                    [attr.disabled]="!isEditable && !isNewValuation ? true : null"
+                    [disabled]="!isEditable && !isNewValuation ? true : null"
                     [ngClass]="{'is-invalid': (formErrors.originId)}">
                     <option value="0">Not Known</option>
                     <option *ngFor="let origin of origins" [value]='origin.id'> {{origin.value}}</option>
@@ -678,7 +678,7 @@
         <footer class="footer">
           <button (click)="cancel()" type="button" class="btn btn--ghost" data-cy="cancelVal">Cancel</button>
           <button *ngIf="isEditable || isNewValuation" type="submit" class="btn btn--positive" id="saveVal"
-            data-cy="saveVal" [attr.disabled]="isSubmitting ? '' : null">
+            data-cy="saveVal" [disabled]="isSubmitting ? '' : null">
             <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="loading" *ngIf="isSubmitting">
               <path
                 d="M11.9 48.4c-4.1-5-6.3-11.5-5.8-18.6C7.1 17.6 16.8 7.5 29 6.2 44.7 4.4 58 16.7 58 32c0 6.2-2.2 11.8-5.8 16.3 -1 1.2-0.8 2.9 0.3 4l0 0c1.3 1.3 3.4 1.1 4.5-0.3 4.8-6 7.5-13.8 7-22.2C62.9 14 50.1 1.2 34.3 0.1 15.6-1.2 0 13.6 0 32c0 7.7 2.7 14.8 7.3 20.3 1.1 1.3 3 1.4 4.2 0.2l0.2-0.2C12.8 51.2 12.8 49.6 11.9 48.4z">
@@ -776,13 +776,13 @@
           </fieldset>
 
           <span *ngIf="(isSalesOnly || isSalesAndLettings)" class="inline-parent">
-            <fieldset style="width:-webkit-fill-available">
-              <!-- <fieldset [hidden]="!(isSalesOnly || isSalesAndLettings)"> -->
+            <fieldset style="width:-webkit-fill-available" [ngClass]="{'invalid': formErrors?.salesValuerId}">
               <label for="salesValuer">Sales Valuer</label>
-              <ng-select placeholder="Select Valuer" [items]="salesValuers" bindLabel="fullName"
-                bindValue="staffMemberId" groupBy="staffMembers" [multiple]="false" formControlName="salesValuerId"
-                (change)="onSalesValuerChange($event)" [readonly]="!isEditable && !isNewValuation"
-                [ngClass]="{'is-invalid': formErrors.salesValuerId}" data-cy="salesValuers">
+              <ng-select [ngClass]="{'invalid': formErrors?.salesValuerId}" placeholder="Select Valuer"
+                [items]="salesValuers" bindLabel="fullName" bindValue="staffMemberId" groupBy="staffMembers"
+                [multiple]="false" formControlName="salesValuerId" (change)="onSalesValuerChange($event)"
+                [readonly]="!isEditable && !isNewValuation" [ngClass]="{'is-invalid': formErrors.salesValuerId}"
+                data-cy="salesValuers">
                 <ng-template ng-optgroup-tmp let-item="item">
                   {{item.office?.name}}
                 </ng-template>
@@ -790,6 +790,7 @@
                   {{item.fullName}}
                 </ng-template>
               </ng-select>
+              <p class="message message--negative"> {{formErrors?.salesValuerId}}</p>
             </fieldset>
             <div class="badges">
               <p-badge severity="info"></p-badge>
@@ -797,12 +798,12 @@
           </span>
 
           <span class="inline-parent" *ngIf="(isLettingsOnly || isSalesAndLettings)">
-            <fieldset style="width:-webkit-fill-available">
+            <fieldset [ngClass]="{'invalid': formErrors?.lettingsValuerId}" style="width:-webkit-fill-available">
               <label for="lettingsValuer">Lettings Valuer</label>
-              <ng-select placeholder="Select Valuer" [items]="lettingsValuers" bindLabel="fullName"
-                bindValue="staffMemberId" groupBy="staffMembers" [multiple]="false" formControlName="lettingsValuerId"
-                (change)="onLettingsValuerChange($event)" [readonly]="!isEditable && !isNewValuation"
-                [ngClass]="{'is-invalid': formErrors.lettingsValuerId}">
+              <ng-select [ngClass]="{'invalid': formErrors?.lettingsValuerId}" placeholder="Select Valuer"
+                [items]="lettingsValuers" bindLabel="fullName" bindValue="staffMemberId" groupBy="staffMembers"
+                [multiple]="false" formControlName="lettingsValuerId" (change)="onLettingsValuerChange($event)"
+                [readonly]="!isEditable && !isNewValuation" [ngClass]="{'is-invalid': formErrors.lettingsValuerId}">
                 <ng-template ng-optgroup-tmp let-item="item">
                   {{item.office?.name}}
                 </ng-template>
@@ -810,24 +811,23 @@
                   {{item.fullName}}
                 </ng-template>
               </ng-select>
+              <p class="message message--negative"> {{formErrors?.lettingsValuerId}}</p>
             </fieldset>
             <div class="badges">
               <p-badge severity="success"></p-badge>
             </div>
           </span>
 
-          <div style="color: red; margin-bottom: 8px;" *ngIf="warningForValuer"> Please select valuer(s)</div>
-
-          <fieldset>
+          <fieldset [ngClass]="{'invalid': formErrors?.fromDate}">
             <label for="fromDate">Date From</label>
-            <input type="text" id="date" placeholder="dd/mm/yyyy"
+            <input type="text" id="date" placeholder="dd/mm/yyyy" [ngClass]="{'invalid': formErrors?.fromDate}"
               [bsConfig]="{showWeekNumbers:false,  dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
               bsDatepicker formControlName="fromDate">
+            <p class="message message--negative"> {{formErrors?.fromDate}}</p>
           </fieldset>
 
           <fieldset>
-            <button class="btn btn--positive" [attr.disabled]="!canSearchAvailability? true:null"
-              data-cy="searchAvailability">Search</button>
+            <button class="btn btn--positive" data-cy="searchAvailability">Search</button>
           </fieldset>
         </p-sidebar>
         <button type="button" class="btn btn--positive" (click)="selectValuersClick()"
@@ -1023,7 +1023,7 @@
                 <label for="longLetValue">Value (per week)</label>
                 <input type="text" name="longLetValue" id="longLetValue" formControlName="askingRentLongLet"
                   [ngClass]="{'is-invalid':formErrors.askingRentLongLet}"
-                  [attr.disabled]="!instructionForm.get('isInstructLongLet').value?'true':null">
+                  [disabled]="!instructionForm.get('isInstructLongLet').value?'true':null">
                 <p style="color: red; margin-top: 8px;"> {{formErrors?.askingRentLongLet}}</p>
               </fieldset>
               <!-- [ngStyle]="{'background': !instructionForm.get('isInstructLongLet').value?'lightgray':null}" -->
@@ -1031,7 +1031,7 @@
                 <label for="longLetMonthlyValue">Value (per month)</label>
                 <input type="text" name="longLetMonthlyValue" id="longLetMonthlyValue"
                   formControlName="askingRentLongLetMonthly"
-                  [attr.disabled]="!instructionForm.get('isInstructLongLet').value?'true':null">
+                  [disabled]="!instructionForm.get('isInstructLongLet').value?'true':null">
               </fieldset>
             </div>
           </p-card>
@@ -1051,7 +1051,7 @@
               <label for="shortLetValue">Value (per week)</label>
               <input type="text" name="shortLetValue" id="shortLetValue" formControlName="askingRentShortLet"
                 [ngClass]="{'is-invalid':formErrors.askingRentShortLet}"
-                [attr.disabled]="!instructionForm.get('isInstructShortLet').value?'true':null">
+                [disabled]="!instructionForm.get('isInstructShortLet').value?'true':null">
               <p style="color: red; margin-top: 8px;"> {{formErrors?.askingRentShortLet}}</p>
             </fieldset>
 
@@ -1059,65 +1059,11 @@
               <label for="shortLetMonthlyValue">Value (per month)</label>
               <input type="text" name="shortLetMonthlyValue" id="shortLetMonthlyValue"
                 formControlName="askingRentShortLetMonthly"
-                [attr.disabled]="!instructionForm.get('isInstructShortLet').value?'true':null">
+                [disabled]="!instructionForm.get('isInstructShortLet').value?'true':null">
             </fieldset>
           </p-card>
         </fieldset>
       </div>
-      <!-- <ol class="cards">
-        <li [ngStyle]="{'background-color': !instructionForm.get('isInstructLongLet').value ? 'lightgray':null}">
-          <span class="checkbox checkbox--rtl" style="margin-bottom: 12px;">
-            <span>
-              <input type="checkbox" id="isInstructLongLet" name="isInstructLongLet" formControlName="isInstructLongLet"
-                data-cy="isInstructLongLet">
-              <label style="margin-bottom:4px; text-align:start" for="isInstructLongLet">
-                <h5>Long Let</h5>
-              </label>
-            </span>
-          </span>
-          <fieldset>
-            <label for="longLetValue">Value (per week)</label>
-            <input type="text" name="longLetValue" id="longLetValue" formControlName="askingRentLongLet"
-              [ngClass]="{'is-invalid':formErrors.askingRentLongLet}"
-              [attr.disabled]="!instructionForm.get('isInstructLongLet').value?'true':null">
-            <p style="color: red; margin-top: 8px;"> {{formErrors?.askingRentLongLet}}</p>
-          </fieldset>
-
-          <fieldset>
-            <label for="longLetMonthlyValue">Value (per month)</label>
-            <input type="text" name="longLetMonthlyValue" id="longLetMonthlyValue"
-              formControlName="askingRentLongLetMonthly"
-              [attr.disabled]="!instructionForm.get('isInstructLongLet').value?'true':null">
-          </fieldset>
-
-        </li>
-
-        <li [ngStyle]="{'background-color': !instructionForm.get('isInstructShortLet').value ? 'lightgray':null}">
-          <span class="checkbox checkbox--rtl" style="margin-bottom: 12px;">
-            <span>
-              <input type="checkbox" id="isInstructShortLet" name="isInstructShortLet"
-                formControlName="isInstructShortLet" data-cy="isInstructShortLet">
-              <label style="margin-bottom:4px; text-align:start" for="isInstructShortLet">
-                <h5>Short Let</h5>
-              </label>
-            </span>
-          </span>
-          <fieldset>
-            <label for="shortLetValue">Value (per week)</label>
-            <input type="text" name="shortLetValue" id="shortLetValue" formControlName="askingRentShortLet"
-              [ngClass]="{'is-invalid':formErrors.askingRentShortLet}"
-              [attr.disabled]="!instructionForm.get('isInstructShortLet').value?'true':null">
-            <p style="color: red; margin-top: 8px;"> {{formErrors?.askingRentShortLet}}</p>
-          </fieldset>
-
-          <fieldset>
-            <label for="shortLetMonthlyValue">Value (per month)</label>
-            <input type="text" name="shortLetMonthlyValue" id="shortLetMonthlyValue"
-              formControlName="askingRentShortLetMonthly"
-              [attr.disabled]="!instructionForm.get('isInstructShortLet').value?'true':null">
-          </fieldset>
-        </li>
-      </ol> -->
 
       <fieldset *ngIf="instructionForm.get('instructLet').value">
         <label>Lettings Agency</label>
@@ -1142,7 +1088,7 @@
         <button type="button" class="btn btn--ghost"
           (click)="isInstructVisible = false; cancelInstruction()">Cancel</button>
         <button type="submit" class="btn btn--info"
-          [attr.disabled]="!instructionForm.get('instructLet').value && !instructionForm.get('instructSale').value ? true : null"
+          [disabled]="!instructionForm.get('instructLet').value && !instructionForm.get('instructSale').value ? true : null"
           data-cy="saveInstruction">Instruct</button>
       </div>
     </footer>

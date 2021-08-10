@@ -154,6 +154,7 @@ export const FormErrors = {
   ccExternalEmail: "",
   subject: "",
   body: "",
+  fromDate: "",
 };
 
 export const ValidationMessages = {
@@ -254,6 +255,9 @@ export const ValidationMessages = {
   },
   subAreaId: {
     required: "Sub Area is required",
+  },
+  fromDate: {
+    required: "Date is required",
   },
   leadTypeId: {
     required: "Lead Type is required",
