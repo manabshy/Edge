@@ -100,6 +100,8 @@ import { ChipsModule } from "primeng/chips";
 import { TooltipModule } from "primeng/tooltip";
 import { BadgeModule } from "primeng/badge";
 import { CardModule } from "primeng/card";
+import { MessagesModule } from "primeng/messages";
+import { MessageModule } from "primeng/message";
 
 // Components
 import { RedactedTableComponent } from "./components/redacted-table/redacted-table.component";
@@ -217,6 +219,8 @@ const externalModules = [
   ChartModule,
   SidebarModule,
   CardModule,
+  MessageModule,
+  MessagesModule,
 ];
 
 @NgModule({

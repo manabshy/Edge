@@ -266,19 +266,21 @@
           </p-accordionTab>
 
           <p-accordionTab header="Appointment" [(selected)]="activeState[2]">
+
             <ng-container>
-              <fieldset *ngIf="(isEditable || isNewValuation) && canBookAppointment">
+              <fieldset *ngIf="isNewValuation && canBookAppointment">
                 <button class="btn btn--positive" type="button" (click)="getAvailability()"
                   data-cy="getvailability">Book Availability</button>
               </fieldset>
 
-              <fieldset *ngIf="isAvailabilityRequired">
-                <div style="color: red; margin-bottom: 8px;">Please book
-                  availability before saving
-                </div>
-              </fieldset>
+              <p-messages *ngIf="isAvailabilityRequired" severity="warn">
+                <ng-template pTemplate>
+                  <div class="p-ml-2">Please book
+                    availability before saving</div>
+                </ng-template>
+              </p-messages>
 
-              <div class="inline-parent">
+              <div class="inline-parent" *ngIf="salesValuerControl.value || lettingsValuerControl.value">
                 <fieldset class="inline-child" *ngIf="valuation?.salesValuationBooking" style="align-self: flex-start">
                   <p-card [style]="{'width': '25rem', 'margin-bottom': '2em'}">
                     <fieldset>
@@ -307,19 +309,19 @@
                         <label>Are we meeting the Owner ?</label>
                         <span class="radio radio--inline">
                           <span>
-                            <input type="radio" id="salesMeetingOwnerYes" value="1" name="salesMeetingOwner"
+                            <input type="radio" id="salesMeetingOwnerYes" [value]="true" name="salesMeetingOwner"
                               formControlName="salesMeetingOwner" data-cy="salesMeetingOwner">
                             <label for="salesMeetingOwnerYes">Yes</label>
                           </span>
                           <span>
-                            <input type="radio" id="salesMeetingOwnerNo" value="0" name="salesMeetingOwner"
+                            <input type="radio" id="salesMeetingOwnerNo" [value]="false" name="salesMeetingOwner"
                               formControlName="salesMeetingOwner">
                             <label for="salesMeetingOwnerNo">No</label>
                           </span>
                         </span>
                       </fieldset>
                       <div [disabled]="!isNewValuation && !isEditable"
-                        *ngIf="valuationForm.get('salesMeetingOwner').value ==='0'">
+                        *ngIf="valuationForm.get('salesMeetingOwner').value === false">
                         <span class="inline-parent">
                           <fieldset class="inline-child" [ngClass]="{'invalid': formErrors?.salesOwnerAssociateName}">
                             <label for="salesOwnerAssociateName">Name</label>
@@ -381,9 +383,8 @@
                 </fieldset>
 
                 <fieldset style="align-self: center;margin-bottom: 8em" class="inline-child"
-                  *ngIf="isEditable||isNewValuation">
-                  <button [style]="{'width': '5rem'}" type="button"
-                    *ngIf="salesValuerControl.value && lettingsValuerControl.value" class="btn btn--positive"
+                  *ngIf="salesValuerControl.value && lettingsValuerControl.value">
+                  <button [style]="{'width': '5rem'}" type="button" class="btn btn--positive"
                     (click)="isBothEdit =true;getAvailability()" data-cy="openAvailabilityBoth">Edit Both</button>
                 </fieldset>
 
@@ -417,19 +418,20 @@
                           <label>Are we meeting the Owner ?</label>
                           <span class="radio radio--inline">
                             <span>
-                              <input type="radio" id="lettingsMeetingOwnerYes" value="1" name="lettingsMeetingOwner"
-                                formControlName="lettingsMeetingOwner" data-cy="lettingsMeetingOwner">
+                              <input type="radio" id="lettingsMeetingOwnerYes" [value]="true"
+                                name="lettingsMeetingOwner" formControlName="lettingsMeetingOwner"
+                                data-cy="lettingsMeetingOwner">
                               <label for="lettingsMeetingOwnerYes">Yes</label>
                             </span>
                             <span>
-                              <input type="radio" id="lettingsMeetingOwnerNo" value="0" name="lettingsMeetingOwner"
-                                formControlName="lettingsMeetingOwner">
+                              <input type="radio" id="lettingsMeetingOwnerNo" [value]="false"
+                                name="lettingsMeetingOwner" formControlName="lettingsMeetingOwner">
                               <label for="lettingsMeetingOwnerNo">No</label>
                             </span>
                           </span>
                         </fieldset>
                         <div [disabled]="!isNewValuation && !isEditable"
-                          *ngIf="valuationForm.get('lettingsMeetingOwner').value ==='0'">
+                          *ngIf="valuationForm.get('lettingsMeetingOwner').value ===false">
                           <span class="inline-parent">
                             <fieldset class="inline-child"
                               [ngClass]="{'invalid': formErrors?.lettingsOwnerAssociateName}">
@@ -473,28 +475,13 @@
                               <p class="message message--negative"> {{formErrors?.lettingsOwnerAssociateType}}</p>
                             </fieldset>
                           </span>
-                          <fieldset>
-                            <label>Does the Owner want text message notifications about the appointment ?</label>
-                            <span class="radio radio--inline">
-                              <span>
-                                <input type="radio" id="lettingsOwnerWantsMessageYes" value="1"
-                                  name="lettingsOwnerWantsMessage" formControlName="lettingsOwnerWantsMessage"
-                                  data-cy="lettingsOwnerWantsMessage">
-                                <label for="lettingsOwnerWantsMessageYes">Yes</label>
-                              </span>
-                              <span>
-                                <input type="radio" id="lettingsOwnerWantsMessageNo" value="0"
-                                  name="lettingsOwnerWantsMessage" formControlName="lettingsOwnerWantsMessage">
-                                <label for="lettingsOwnerWantsMessageNo">No</label>
-                              </span>
-                            </span>
-                          </fieldset>
                         </div>
                       </div>
                     </ng-template>
                   </p-card>
                 </fieldset>
               </div>
+
             </ng-container>
           </p-accordionTab>
 
@@ -590,46 +577,49 @@
 
           <p-accordionTab header="Terms Of Business" [(selected)]="activeState[4]" data-cy="termsOfBusiness">
             <div class="grid grid--9">
-              <div>
-                <fieldset [disabled]="!isNewValuation && !isEditable">
-                  <fieldset class="row">
-                    <label style="width:auto;" for="haveInterest">Does the Owner have a
-                      declarable interest (Section 21)
-                    </label>
-                    <span style="display:contents">
-                      <i [pTooltip]="informationMessage" class="fa fa-info-circle fa-2x text-blue"
-                        style="color:lightblue;padding-left:4px"></i>
-                    </span>
-                  </fieldset>
-                  <span class="radio radio--inline">
-                    <span style="margin-right: 8px;">
-                      <input type="radio" id="interestYes" value="true" name="declarableInterest"
-                        formControlName="declarableInterest" data-cy="interestYes">
-                      <label for="interestYes">Yes</label>
-                    </span>
-                    <span>
-                      <input type="radio" id="interestNo" value="false" name="declarableInterest"
-                        formControlName="declarableInterest" data-cy="interestNo">
-                      <label for="interestNo">No</label>
-                    </span>
+              <fieldset [disabled]="!isNewValuation && !isEditable && valuationForm.get('declarableInterest').value"
+                style="margin-bottom: 4px;">
+                <fieldset class="row">
+                  <label style="width:auto;" for="haveInterest">Does the Owner have a
+                    declarable interest (Section 21)
+                  </label>
+                  <span style="display:contents">
+                    <i [pTooltip]="informationMessage" class="fa fa-info-circle fa-2x text-blue"
+                      style="color:lightblue;padding-left:4px"></i>
                   </span>
                 </fieldset>
-                <fieldset>
-                  <p-dropdown *ngIf="valuationForm.get('declarableInterest').value === 'true'" [options]="interestList"
-                    formControlName="section21StatusId" optionLabel="value" optionValue="id" [filter]="false"
-                    data-cy="section21StatusId">
-                  </p-dropdown>
-                </fieldset>
-              </div>
+                <span class="radio radio--inline">
+                  <span style="margin-right: 8px;">
+                    <input type="radio" id="interestYes" value="true" name="declarableInterest"
+                      formControlName="declarableInterest" data-cy="interestYes">
+                    <label for="interestYes">Yes</label>
+                  </span>
+                  <span>
+                    <input type="radio" id="interestNo" value="false" name="declarableInterest"
+                      formControlName="declarableInterest" data-cy="interestNo">
+                    <label for="interestNo">No</label>
+                  </span>
+                </span>
+              </fieldset>
+              <fieldset>
+                <p-dropdown *ngIf="valuationForm.get('declarableInterest').value === 'true'" [options]="interestList"
+                  formControlName="section21StatusId" optionLabel="value" optionValue="id" [filter]="false"
+                  data-cy="section21StatusId">
+                </p-dropdown>
+              </fieldset>
             </div>
-            <div style="color: red; margin-bottom: 8px;" *ngIf="formErrors.declarableInterest"> Please select terms of
-              bussiness
-            </div>
+            <p-messages *ngIf="formErrors.declarableInterest" severity="error">
+              <ng-template pTemplate>
+                <div class="p-ml-2">Please select terms of
+                  bussiness</div>
+              </ng-template>
+            </p-messages>
           </p-accordionTab>
 
-          <p-accordionTab header="Anti Money Laundering" [(selected)]="activeState[5]"></p-accordionTab>
+          <p-accordionTab *ngIf="false" header="Anti Money Laundering" [(selected)]="activeState[5]">
+          </p-accordionTab>
 
-          <p-accordionTab header="Land Registery" [(selected)]="activeState[6]"></p-accordionTab>
+          <p-accordionTab *ngIf="false" header="Land Registery" [(selected)]="activeState[6]"></p-accordionTab>
 
           <!-- <p-accordionTab header="Status" [(selected)]="activeState[7]"></p-accordionTab>
 
@@ -833,7 +823,6 @@
         <button type="button" class="btn btn--positive" (click)="selectValuersClick()"
           style="margin-bottom: 8px">Valuers</button>
       </div>
-
 
       <div class="grid grid--6 grid--dividerLeft">
         <label *ngIf="isSplitAppointment && !valuation?.salesValuationBooking"
