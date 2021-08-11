@@ -233,7 +233,7 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
 
   private getContactNotes() {
     this.contactGroupService
-      .getContactGroupbyId(this.contactGroupId)
+      .getContactGroupById(this.contactGroupId)
       .subscribe((x) => {
         this.contactGroupDetails.contactNotes = x.contactNotes;
         this.setImportantNotes();
@@ -429,7 +429,7 @@ export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
   getContactGroupById(contactGroupId: number) {
     const contactPeople = this.getContactPeopleFromStorage();
     this.contactGroupService
-      .getContactGroupbyId(contactGroupId, true)
+      .getContactGroupById(contactGroupId, true)
       .subscribe((data) => {
         this.contactGroupDetails = data;
         if (contactPeople?.length) {

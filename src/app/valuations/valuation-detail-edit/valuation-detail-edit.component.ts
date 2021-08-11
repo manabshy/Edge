@@ -357,9 +357,7 @@ export class ValuationDetailEditComponent
     }
 
     if (this.propertyId) {
-      this.getPropertyDetails(this.propertyId);
-      this.getValuationPropertyInfo(this.propertyId);
-      this.getValuers(this.propertyId);
+      this.getPropertyInformation(this.propertyId);
     }
 
     this.storage.get("info").subscribe((info: DropdownListInfo) => {
@@ -372,7 +370,6 @@ export class ValuationDetailEditComponent
           .subscribe((data: ResultData | any) => {
             if (data) {
               this.setupListInfo(data.result);
-              console.log(" list info in val edit from db", data.result);
             }
           });
       }
@@ -389,12 +386,6 @@ export class ValuationDetailEditComponent
     });
 
     this.valuationForm.valueChanges.subscribe((data) => {
-      console.log(this.isNewValuation);
-      console.log(this.isEditable);
-
-      if (!this.isNewValuation && !this.isEditable) {
-        console.log(this.isEditable);
-      }
       this.valuationForm.patchValue(
         {
           suggestedAskingRentShortLetMonthly:
@@ -502,6 +493,10 @@ export class ValuationDetailEditComponent
       this.sharedService.logValidationErrors(this.availabilityForm, false);
     });
 
+    this.availabilityForm.controls["type"].valueChanges.subscribe((data) => {
+      this.toggleValuerType();
+    });
+
     this.storage.get("info").subscribe((data: DropdownListInfo) => {
       if (data) {
         this.viewingArrangements = data.viewingArrangements;
@@ -601,7 +596,6 @@ export class ValuationDetailEditComponent
   }
 
   onSplitAppointmentChange(event) {
-    console.log(event);
     this.isSplitAppointment = event.checked;
     this.valuation.salesValuationBooking = null;
     this.valuation.lettingsValuationBooking = null;
@@ -637,16 +631,12 @@ export class ValuationDetailEditComponent
             officeId: this.property.officeId,
           } as BaseProperty;
           this.valuationForm.get("property").setValue(baseProperty);
-          console.log(
-            "base property",
-            this.valuationForm.get("property").value
-          );
         }
       });
   }
 
   getContactGroup(contactGroupId: number) {
-    this.contactGroup$ = this.contactGroupService.getContactGroupbyId(
+    this.contactGroup$ = this.contactGroupService.getContactGroupById(
       contactGroupId,
       true
     );
@@ -743,7 +733,7 @@ export class ValuationDetailEditComponent
     monthlyControl: FormControl
   ) {
     weeklyControl.valueChanges.subscribe((rent) => {
-      rent = this.sharedService.converStringToNumber(rent);
+      rent = this.sharedService.convertStringToNumber(rent);
       monthlyControl.setValue(this.calculateMonthlyRent(rent), {
         emitEvent: false,
       });
@@ -755,7 +745,7 @@ export class ValuationDetailEditComponent
     monthlyControl: FormControl
   ) {
     monthlyControl.valueChanges.subscribe((rent) => {
-      rent = this.sharedService.converStringToNumber(rent);
+      rent = this.sharedService.convertStringToNumber(rent);
       weeklyControl.setValue(this.calculateWeeklyRent(rent), {
         emitEvent: false,
       });
@@ -850,6 +840,9 @@ export class ValuationDetailEditComponent
       .subscribe((data) => {
         if (data) {
           this.valuation = data;
+
+          this.getPropertyInformation(this.valuation.property.propertyId);
+
           this.valuation.valuationStatus === 3
             ? (this.canInstruct = true)
             : (this.canInstruct = false);
@@ -929,6 +922,15 @@ export class ValuationDetailEditComponent
           }
         }
       });
+  }
+
+  getPropertyInformation(propertyId) {
+    this.propertyId = propertyId;
+    if (this.propertyId) {
+      this.getPropertyDetails(this.propertyId);
+      this.getValuationPropertyInfo(this.propertyId);
+      this.getValuers(this.propertyId);
+    }
   }
 
   setValuationInformations(valuationBooking: ValuationBooking, type: string) {
@@ -1101,29 +1103,18 @@ export class ValuationDetailEditComponent
         this.isSalesOnly = true;
         this.isSalesAndLettings = false;
         this.isLettingsOnly = false;
-        console.log("%csales type xxx", "color:cyan", this.isSalesOnly);
         break;
 
       case val.lettingsValuer && !val.salesValuer:
         this.isLettingsOnly = true;
         this.isSalesOnly = false;
         this.isSalesAndLettings = false;
-        console.log(
-          "%c lettings type xxx",
-          "color:purple",
-          this.isLettingsOnly
-        );
         break;
 
       default:
         this.isSalesAndLettings = true;
         this.isLettingsOnly = false;
         this.isSalesOnly = false;
-        console.log(
-          "%csales and lettings type xxx",
-          "color:magenta",
-          this.isSalesAndLettings
-        );
     }
   }
 
@@ -1167,9 +1158,6 @@ export class ValuationDetailEditComponent
   }
 
   setOriginTypeId(originId: number) {
-    console.log("origin id", originId);
-    console.log("all origin types", this.allOriginTypes);
-    console.log("all origins", this.allOrigins);
     if (originId) {
       this.allOrigins.forEach((x) => {
         if (+x.id === originId) {
@@ -1390,7 +1378,6 @@ export class ValuationDetailEditComponent
     ) {
       this.valuationService.getValuersAvailability(request).subscribe((res) => {
         this.availableDates = res.valuationStaffMembersCalanderEvents;
-        console.log(this.availableDates);
         this.setWeeks();
       });
     } else {
@@ -1419,16 +1406,16 @@ export class ValuationDetailEditComponent
 
       for (let key in weekData) {
         hours = [];
-        let date: Date = new Date(weekData[key][0]);
         let defaultHours = [...this.defaultHours];
+        let date: Date = new Date(weekData[key][0]);
         if (date.getDay() == 6) {
           defaultHours = [...this.defaultHoursForWeekend];
         }
         for (let d in defaultHours) {
-          date.setHours(defaultHours[d]);
+          let slotDate = new Date(date.setHours(defaultHours[d]));
           if (date > new Date()) {
             hours.push({
-              value: date,
+              value: slotDate,
               class: this.isLettingsEdit
                 ? "hourColorsForLettings"
                 : this.isSalesEdit
@@ -1605,7 +1592,6 @@ export class ValuationDetailEditComponent
   }
 
   selectCalendarDate(date: Date) {
-    console.log(date);
     this.selectedCalendarDate = date;
     this.showCalendar = true;
   }
@@ -1785,11 +1771,9 @@ export class ValuationDetailEditComponent
     }
   }
 
-  onInstructSalesChange(event) {
-    console.log("sales change", event);
-  }
+  onInstructSalesChange(event) {}
+
   onInstructLettingsChange(event) {
-    console.log("lettins change", event);
     if (this.instructionForm.get("instructLet").value == false) {
       this.instructionForm.patchValue(
         {
@@ -1986,7 +1970,6 @@ export class ValuationDetailEditComponent
             this.isSubmitting = false;
           }
         );
-        console.log("instruction form to save", this.instructionForm.value);
       } else {
         this.onInstructionSaveComplete();
       }
@@ -2012,23 +1995,23 @@ export class ValuationDetailEditComponent
     instruction.askingRentLongLetMonthly = 0;
 
     if (isSale) {
-      instruction.askingPrice = this.sharedService.converStringToNumber(
+      instruction.askingPrice = this.sharedService.convertStringToNumber(
         this.instAskingPriceControl.value
       );
     }
     if (isLet) {
-      instruction.askingRentLongLet = this.sharedService.converStringToNumber(
+      instruction.askingRentLongLet = this.sharedService.convertStringToNumber(
         this.instLongLetWeeklyControl.value
       );
       instruction.askingRentLongLetMonthly =
-        this.sharedService.converStringToNumber(
+        this.sharedService.convertStringToNumber(
           this.instLongLetMonthlyControl.value
         );
-      instruction.askingRentShortLet = this.sharedService.converStringToNumber(
+      instruction.askingRentShortLet = this.sharedService.convertStringToNumber(
         this.instShortLetWeeklyControl.value
       );
       instruction.askingRentShortLetMonthly =
-        this.sharedService.converStringToNumber(
+        this.sharedService.convertStringToNumber(
           this.instShortLetMonthlyControl.value
         );
     }
@@ -2045,7 +2028,6 @@ export class ValuationDetailEditComponent
         !this.valuation?.salesValuationBooking?.startDateTime
       ) {
         this.isAvailabilityRequired = true;
-        console.log("for both", this.isAvailabilityRequired);
       }
       if (
         this.isSalesOnly &&
@@ -2054,7 +2036,6 @@ export class ValuationDetailEditComponent
         this.isAvailabilityRequired = true;
         this.isSalesAndLettings = false;
         this.isLettingsOnly = false;
-        console.log("for lettings only", this.isAvailabilityRequired);
       }
       if (
         this.isLettingsOnly &&
@@ -2063,7 +2044,6 @@ export class ValuationDetailEditComponent
         this.isAvailabilityRequired = true;
         this.isSalesOnly = false;
         this.isSalesAndLettings = false;
-        console.log("for sales only", this.isAvailabilityRequired);
       }
     }
   }
@@ -2078,7 +2058,7 @@ export class ValuationDetailEditComponent
       this.activeState[4] = true;
       this.messageService.add({
         severity: "warn",
-        summary: "You must complete terms of bussiness",
+        summary: "You must complete terms of business",
         closable: false,
       });
       return;
@@ -2115,22 +2095,22 @@ export class ValuationDetailEditComponent
     const valuation = { ...this.valuation, ...this.valuationForm.value };
     valuation.OfficeId = this.property.officeId;
     valuation.suggestedAskingRentShortLetMonthly =
-      this.sharedService.converStringToNumber(
+      this.sharedService.convertStringToNumber(
         valuation.suggestedAskingRentShortLetMonthly
       );
     valuation.suggestedAskingRentLongLetMonthly =
-      this.sharedService.converStringToNumber(
+      this.sharedService.convertStringToNumber(
         valuation.suggestedAskingRentLongLetMonthly
       );
-    valuation.suggestedAskingPrice = this.sharedService.converStringToNumber(
+    valuation.suggestedAskingPrice = this.sharedService.convertStringToNumber(
       valuation.suggestedAskingPrice
     );
     valuation.suggestedAskingRentShortLet =
-      this.sharedService.converStringToNumber(
+      this.sharedService.convertStringToNumber(
         valuation.suggestedAskingRentShortLet
       );
     valuation.suggestedAskingRentLongLet =
-      this.sharedService.converStringToNumber(
+      this.sharedService.convertStringToNumber(
         valuation.suggestedAskingRentLongLet
       );
 
@@ -2145,7 +2125,6 @@ export class ValuationDetailEditComponent
     this.setValuers(valuation);
 
     if (this.isNewValuation) {
-      console.log("%c val", "color:green", valuation);
       this.valuationService.addValuation(valuation).subscribe(
         (data) => {
           if (data) {
@@ -2153,7 +2132,11 @@ export class ValuationDetailEditComponent
           }
         },
         (error: WedgeError) => {
-          this.errorMessage = error;
+          this.messageService.add({
+            severity: "error",
+            summary: error.displayMessage,
+            closable: false,
+          });
           this.isSubmitting = false;
         }
       );
@@ -2348,7 +2331,6 @@ export class ValuationDetailEditComponent
   }
 
   cancelInstruction() {
-    console.log("cancel inst", this.instructionForm.value);
     this.sharedService.resetForm(this.instructionForm);
   }
 

@@ -133,7 +133,7 @@ export class ContactGroupsService {
       .pipe(map((response) => response.result));
   }
 
-  getContactGroupbyId(
+  getContactGroupById(
     contactGroupId: number,
     includeOnlyImportantNotes?: boolean
   ): Observable<ContactGroup> {

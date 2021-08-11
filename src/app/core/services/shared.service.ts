@@ -52,13 +52,13 @@ export class SharedService {
     // )
     //   return value;
     if (value) {
-      let numberValue = this.converStringToNumber(value.toString());
+      let numberValue = this.convertStringToNumber(value.toString());
       return this.currencyPipe.transform(numberValue, "GBP", "symbol", "1.0-0");
     }
     return value;
   }
 
-  converStringToNumber(stringValue: string): number {
+  convertStringToNumber(stringValue: string): number {
     let numberValue = "0";
     if (stringValue) {
       numberValue = stringValue.replace(/\D/g, "");
@@ -138,11 +138,12 @@ export class SharedService {
 
     // const modal = this.modalService.show(ErrorModalComponent, { ignoreBackdropClick: true, initialState });
     // modal.content.subject = subject;
-    this.ref = this.dialogService.open(ErrorModalComponent, {
-      data,
-      styleClass: "dialog dialog--hasFooter",
-      header: "Error",
-    });
+    if (error.errorCode)
+      this.ref = this.dialogService.open(ErrorModalComponent, {
+        data,
+        styleClass: "dialog dialog--hasFooter",
+        header: "Error",
+      });
     // this.ref.onClose.subscribe((res) => { if (res) { subject.next(true); subject.complete(); } });
     return subject.asObservable();
   }
