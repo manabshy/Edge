@@ -741,6 +741,7 @@
   </p-header>
   <form [formGroup]="availabilityForm" (ngSubmit)="searchAvailability()">
     <div class="row">
+
       <div class="grid grid--06">
         <p-sidebar [modal]="false" [visible]="sideBarControlVisible" position="left" [showCloseIcon]="false">
 
@@ -826,70 +827,83 @@
       </div>
 
       <div class="grid grid--6 grid--dividerLeft">
-        <label *ngIf="isSplitAppointment && !valuation?.salesValuationBooking"
-          style="color: red;font-size: x-small;display:flex;justify-content:center">
-          Please select a slot for sales </label>
-        <label *ngIf="isSplitAppointment && valuation?.salesValuationBooking && !valuation?.lettingsValuationBooking"
-          style="color: red;font-size: x-small;display:flex;justify-content:center">
-          Please select a slot for lettings </label>
-        <app-subnav>
-          <p class="txt--title" *ngIf="thisWeek">This Week</p>
-          <ol class="list list--dates" *ngIf="thisWeek">
-            <li *ngFor="let key of thisWeek">
-              <app-subnav-item class="txt--date" (click)="selectCalendarDate(key['date'])">
-                {{key['date'] | date:'fullDate'}}
-              </app-subnav-item>
-              <ol class="cards cards--small">
-                <li *ngFor="let hours of key['hours']" [ngClass]="hours.class">
-                  <button type="button" class="btn btn--ghost"
-                    (click)="selectAvailableDate(hours); properties = null">{{hours.value |
-                    date:'HH:mm'}}</button>
-                </li>
-              </ol>
-            </li>
-          </ol>
+        <p-messages *ngIf="isSplitAppointment && !valuation?.salesValuationBooking" severity="warn"
+          [style]="{'margin-top': '-20px'}">
+          <ng-template pTemplate>
+            <div class="p-ml-2">Please select a slot for sales </div>
+          </ng-template>
+        </p-messages>
+        <p-messages [style]="{'margin-top': '-20px'}"
+          *ngIf="isSplitAppointment && valuation?.salesValuationBooking && !valuation?.lettingsValuationBooking"
+          severity="warn">
+          <ng-template pTemplate>
+            <div class="p-ml-2">Please select a slot for lettings </div>
+          </ng-template>
+        </p-messages>
+        <p-scrollPanel [style]="{width: '100%', height: '450px'}">
+          <app-subnav>
+            <p class="txt--title" *ngIf="thisWeek">This Week</p>
+            <ol class="list list--dates" *ngIf="thisWeek">
+              <li *ngFor="let key of thisWeek">
+                <app-subnav-item class="txt--date" (click)="selectCalendarDate(key['date'])">
+                  {{key['date'] | date:'fullDate'}}
+                </app-subnav-item>
+                <ol class="cards cards--small">
+                  <li *ngFor="let hours of key['hours']" [ngClass]="hours.class">
+                    <button type="button" class="btn btn--ghost"
+                      (click)="selectAvailableDate(hours); properties = null">{{hours.value |
+                      date:'HH:mm'}}</button>
+                  </li>
+                </ol>
+              </li>
+            </ol>
 
-          <p class="txt--title" *ngIf="nextWeek">Next Week</p>
-          <ol class="list list--dates" *ngIf="nextWeek">
-            <li *ngFor="let key of nextWeek">
-              <app-subnav-item class="txt--date" (click)="selectCalendarDate(key['date'])">
-                {{key['date'] | date:'fullDate'}}
-              </app-subnav-item>
-              <ol class="cards cards--small">
-                <li *ngFor="let hours of key['hours'] " [ngClass]="hours.class">
-                  <button type="button" class="btn btn--ghost"
-                    (click)="selectAvailableDate(hours); properties = null">{{hours.value |
-                    date:'HH:mm'}}</button>
-                </li>
-              </ol>
-            </li>
-          </ol>
+            <p class="txt--title" *ngIf="nextWeek">Next Week</p>
+            <ol class="list list--dates" *ngIf="nextWeek">
+              <li *ngFor="let key of nextWeek">
+                <app-subnav-item class="txt--date" (click)="selectCalendarDate(key['date'])">
+                  {{key['date'] | date:'fullDate'}}
+                </app-subnav-item>
+                <ol class="cards cards--small">
+                  <li *ngFor="let hours of key['hours'] " [ngClass]="hours.class">
+                    <button type="button" class="btn btn--ghost"
+                      (click)="selectAvailableDate(hours); properties = null">{{hours.value |
+                      date:'HH:mm'}}</button>
+                  </li>
+                </ol>
+              </li>
+            </ol>
 
-          <p class="txt--title" *ngIf="nextWeek">Next Two Week</p>
-          <ol class="list list--dates" *ngIf="nextTwoWeek">
-            <li *ngFor="let key of nextTwoWeek">
-              <app-subnav-item class="txt--date" (click)="selectCalendarDate(key['date'])">
-                {{key['date'] | date:'fullDate'}}
-              </app-subnav-item>
-              <!-- <span class="txt--date">{{key['date'] | date:'fullDate'}}</span> -->
-              <ol class="cards cards--small">
-                <li *ngFor="let hours of key['hours'] " [ngClass]="hours.class">
-                  <button type="button" class="btn btn--ghost"
-                    (click)="selectAvailableDate(hours); properties = null">{{hours.value |
-                    date:'HH:mm'}}</button>
-                </li>
-              </ol>
-            </li>
-          </ol>
-        </app-subnav>
+            <p class="txt--title" *ngIf="nextWeek">Next Two Week</p>
+            <ol class="list list--dates" *ngIf="nextTwoWeek">
+              <li *ngFor="let key of nextTwoWeek">
+                <app-subnav-item class="txt--date" (click)="selectCalendarDate(key['date'])">
+                  {{key['date'] | date:'fullDate'}}
+                </app-subnav-item>
+                <!-- <span class="txt--date">{{key['date'] | date:'fullDate'}}</span> -->
+                <ol class="cards cards--small">
+                  <li *ngFor="let hours of key['hours'] " [ngClass]="hours.class">
+                    <button type="button" class="btn btn--ghost"
+                      (click)="selectAvailableDate(hours); properties = null">{{hours.value |
+                      date:'HH:mm'}}</button>
+                  </li>
+                </ol>
+              </li>
+            </ol>
+          </app-subnav>
+        </p-scrollPanel>
+
       </div>
 
       <div *ngIf="showCalendar" class="calendar-container grid grid--4 grid--dividerLeft" #calendarContainer>
         <p class="txt--title">{{selectedCalendarDate | date:'fullDate'}}</p>
-        <app-calendar [isOnlyShowPurposes]="true" [view]="'day'" [viewDate]="selectedCalendarDate"
-          [selectedStaffMemberId]="selectedStaffMemberId" [secondStaffMemberId]="secondStaffMemberId"></app-calendar>
+        <p-scrollPanel [style]="{width: '100%', height: '450px'}">
+          <app-calendar [isOnlyShowPurposes]="true" [view]="'day'" [viewDate]="selectedCalendarDate"
+            [selectedStaffMemberId]="selectedStaffMemberId" [secondStaffMemberId]="secondStaffMemberId"></app-calendar>
+        </p-scrollPanel>
       </div>
     </div>
+
   </form>
 </p-dialog>
 
