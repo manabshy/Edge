@@ -193,7 +193,7 @@ export class ValuationDetailEditComponent
   isSplitAppointment = false;
   getTimeSalesValuationDate: number;
   getTimeLettingsValuationDate: number;
-
+  todaysDate = new Date();
   defaultHours = [12, 13, 16, 17, 18, 19];
   defaultHoursForWeekend = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
 
