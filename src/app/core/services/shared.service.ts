@@ -63,7 +63,6 @@ export class SharedService {
     if (stringValue) {
       numberValue = stringValue.replace(/\D/g, "");
       numberValue = numberValue.replace(/\D/g, "").replace(/^0+/, "");
-      console.log(numberValue);
     }
     return +numberValue;
   }
@@ -273,7 +272,6 @@ export class SharedService {
         FormErrors[key] = "";
       }
       if (control && !control.valid && (fakeTouched || control.dirty)) {
-        console.log("control", key, "errors ", control.errors);
         FormErrors[key] = "";
         for (const errorKey in control.errors) {
           if (errorKey) {
@@ -328,7 +326,6 @@ export class SharedService {
         result[new Date(currentValueArr[0]).getDay()] || []).push(
         new Date(currentValueArr[0])
       );
-      console.log(currentValueArr[0]);
       // Return the current iteration `result` value, this will be taken as next iteration `result` value and accumulate
       return result;
     }, []); // empty object is the initial value for result object

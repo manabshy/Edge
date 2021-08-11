@@ -1523,8 +1523,9 @@ export class ValuationDetailEditComponent
       }
       this.valuationForm.get("valuationDate").setValue(hours.value);
 
-      this.salesValuerControl.setValue(this.salesValuer);
-      this.lettingsValuerControl.setValue(this.lettingsValuer);
+      if (this.salesValuer) this.salesValuerControl.setValue(this.salesValuer);
+      if (this.lettingsValuer)
+        this.lettingsValuerControl.setValue(this.lettingsValuer);
 
       if (this.isBothEdit) {
         if (!this.isSplitAppointment) {
