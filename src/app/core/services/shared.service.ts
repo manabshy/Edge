@@ -138,12 +138,11 @@ export class SharedService {
 
     // const modal = this.modalService.show(ErrorModalComponent, { ignoreBackdropClick: true, initialState });
     // modal.content.subject = subject;
-    if (error.errorCode)
-      this.ref = this.dialogService.open(ErrorModalComponent, {
-        data,
-        styleClass: "dialog dialog--hasFooter",
-        header: "Error",
-      });
+    this.ref = this.dialogService.open(ErrorModalComponent, {
+      data,
+      styleClass: "dialog dialog--hasFooter",
+      header: "Error",
+    });
     // this.ref.onClose.subscribe((res) => { if (res) { subject.next(true); subject.complete(); } });
     return subject.asObservable();
   }

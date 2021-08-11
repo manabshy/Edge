@@ -568,7 +568,6 @@ export class ValuationDetailEditComponent
         this.availabilityForm.controls["salesValuerId"].setValidators(
           Validators.required
         );
-
         break;
       case "lettings":
         this.isLettingsOnly = true;
@@ -578,21 +577,23 @@ export class ValuationDetailEditComponent
         this.availabilityForm.controls["lettingsValuerId"].setValidators(
           Validators.required
         );
-        this.availabilityForm.controls[
-          "salesValuerId"
-        ].updateValueAndValidity();
-        this.availabilityForm.controls[
-          "lettingsValuerId"
-        ].updateValueAndValidity();
         break;
 
       default:
         this.isSalesAndLettings = true;
         this.isLettingsOnly = false;
         this.isSalesOnly = false;
+        this.availabilityForm.controls["lettingsValuerId"].setValidators(
+          Validators.required
+        );
+        this.availabilityForm.controls["salesValuerId"].setValidators(
+          Validators.required
+        );
         break;
     }
     this.isSplitAppointment = false;
+    this.availabilityForm.controls["salesValuerId"].updateValueAndValidity();
+    this.availabilityForm.controls["lettingsValuerId"].updateValueAndValidity();
   }
 
   onSplitAppointmentChange(event) {
@@ -1277,7 +1278,7 @@ export class ValuationDetailEditComponent
     });
   }
 
-  searchAvailabilty() {
+  searchAvailability() {
     this.sharedService.logValidationErrors(this.availabilityForm, true);
 
     if (this.availabilityForm.invalid) {
@@ -1585,6 +1586,7 @@ export class ValuationDetailEditComponent
     this.getTimeLettingsValuationDate =
       this.valuation?.lettingsValuationBooking?.startDateTime.getTime();
   }
+
   setCloseState() {
     this.showCalendar = false;
     this.isAppointmentVisible = false;

@@ -269,7 +269,7 @@
 
             <ng-container>
               <fieldset *ngIf="isNewValuation && canBookAppointment">
-                <button class="btn btn--positive" type="button" (click)="getAvailability()"
+                <button class="btn btn--positive" type="button" (click)="isBothEdit = true;getAvailability()"
                   data-cy="getvailability">Book Availability</button>
               </fieldset>
 
@@ -706,7 +706,7 @@
 </p-dialog>
 
 <!-- Appointment Modal -->
-<p-dialog #availabiltyDialog [(visible)]="isAppointmentVisible" [modal]="true" [draggable]="false"
+<p-dialog #availabilityDialog [(visible)]="isAppointmentVisible" [modal]="true" [draggable]="false"
   class="modal--medium">
   <p-header class="row">
 
@@ -739,7 +739,7 @@
     </span>
 
   </p-header>
-  <form [formGroup]="availabilityForm" (ngSubmit)="searchAvailabilty()">
+  <form [formGroup]="availabilityForm" (ngSubmit)="searchAvailability()">
     <div class="row">
       <div class="grid grid--06">
         <p-sidebar [modal]="false" [visible]="sideBarControlVisible" position="left" [showCloseIcon]="false">
