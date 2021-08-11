@@ -385,8 +385,8 @@
                   </p-card>
                 </fieldset>
 
-                <fieldset style="align-self: center;margin-bottom: 8em" class="inline-child" *ngIf="valuation?.salesValuationBooking && valuation?.lettingsValuationBooking &&
-                        (this.valuation.valuationStatus == 0 || this.valuation.valuationStatus == 2)">
+                <fieldset style="align-self: center;margin-bottom: 8em" class="inline-child"
+                  *ngIf="(this.valuation.valuationStatus == 0 || this.valuation.valuationStatus == 2)">
                   <button [style]="{'width': '5rem'}" type="button" class="btn btn--positive"
                     (click)="isBothEdit =true;getAvailability()" data-cy="openAvailabilityBoth">Edit Both</button>
                 </fieldset>

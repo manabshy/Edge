@@ -196,6 +196,8 @@ export class ValuationDetailEditComponent
   todaysDate = new Date();
   defaultHours = [12, 13, 16, 17, 18, 19];
   defaultHoursForWeekend = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
+  lettingsValuer: BaseStaffMember;
+  salesValuer: BaseStaffMember;
 
   informationMessage =
     "If property is owned by a D&G employee, employee relation or business associate e.g. Laurus Law, Prestige, Foxtons Group";
@@ -959,7 +961,9 @@ export class ValuationDetailEditComponent
         valuation.salesValuationBooking
       ) {
         this.setValuationInformations(
-          valuation.combinedValuationBooking,
+          valuation.combinedValuationBooking
+            ? valuation.combinedValuationBooking
+            : valuation.salesValuationBooking,
           "both"
         );
       } else if (valuation.lettingsValuationBooking) {
@@ -1253,11 +1257,11 @@ export class ValuationDetailEditComponent
   }
 
   onLettingsValuerChange(valuer: BaseStaffMember) {
-    this.lettingsValuerControl.setValue(valuer);
+    this.lettingsValuer = valuer;
   }
 
   onSalesValuerChange(valuer: BaseStaffMember) {
-    this.salesValuerControl.setValue(valuer);
+    this.salesValuer = valuer;
   }
 
   getAvailability() {
@@ -1409,7 +1413,7 @@ export class ValuationDetailEditComponent
         hours = [];
         let defaultHours = [...this.defaultHours];
         let date: Date = new Date(weekData[key][0]);
-        if (date.getDay() == 6) {
+        if (date.getDay() == 6 || date.getDay() == 7) {
           defaultHours = [...this.defaultHoursForWeekend];
         }
         for (let d in defaultHours) {
@@ -1518,6 +1522,9 @@ export class ValuationDetailEditComponent
         this.valuation.valuationDate = hours.value;
       }
       this.valuationForm.get("valuationDate").setValue(hours.value);
+
+      this.salesValuerControl.setValue(this.salesValuer);
+      this.lettingsValuerControl.setValue(this.lettingsValuer);
 
       if (this.isBothEdit) {
         if (!this.isSplitAppointment) {
