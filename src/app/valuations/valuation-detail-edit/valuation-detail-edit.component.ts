@@ -2270,7 +2270,10 @@ export class ValuationDetailEditComponent
 
   private changeLeaseExpiryDateToYears(approxLeaseExpiryDate: any) {
     if (approxLeaseExpiryDate) {
-      return differenceInCalendarYears(approxLeaseExpiryDate, new Date());
+      return differenceInCalendarYears(
+        new Date(approxLeaseExpiryDate),
+        new Date()
+      );
     }
   }
 
