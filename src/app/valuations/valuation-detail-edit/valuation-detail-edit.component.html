@@ -231,7 +231,7 @@
                 *ngIf="showLeaseExpiryDate">
                 <input type="text" id="approxLeaseExpiryDate" placeholder="dd/mm/yyyy"
                   [ngClass]="{'invalid': formErrors?.approxLeaseExpiryDate}" name="approxLeaseExpiryDate"
-                  placeholder="Approx Length ..." autocomplete="off"
+                  placeholder="Approx Lease End Date" autocomplete="off"
                   [bsConfig]="{showWeekNumbers:false,  dateInputFormat: 'DD/MM/YYYY',minDate:todaysDate, customTodayClass: 'font-weight-bold'}"
                   bsDatepicker formControlName="approxLeaseExpiryDate" data-cy="leaseLength"
                   [disabled]="!isEditable && !isNewValuation ? true : null">
@@ -914,49 +914,6 @@
 <p-dialog header="Confirm values and choose instruction type" [(visible)]="isInstructVisible" [modal]="true"
   [draggable]="false" class="modal--medium modal--hasFooter">
   <form [formGroup]="instructionForm" (ngSubmit)="saveInstruction()" autocompleteOff>
-    <!-- <ng-container *ngIf="instruction?.askingPrice">
-      <fieldset *ngIf="showInstruct" style="margin-bottom: 4px;">
-        <span class="checkbox">
-          <span>
-            <input type="checkbox" id="instructSale" name="instructSale" formControlName="instructSale"
-              (change)="onInstructSalesChange($event.target)" data-cy="instructSale">
-            <label for="instructSale">Instruct for Sales</label>
-          </span>
-        </span>
-      </fieldset>
-
-      <ol class="cards" [ngClass]="{'disabled': !instructionForm.get('instructSale').value}">
-        <li>
-          <h5>Sell</h5>
-          <fieldset>
-            <label for="askingPrice">Value</label>
-            <input type="text" name="askingPrice" id="askingPrice" formControlName="askingPrice"
-              [ngClass]="{'is-invalid':formErrors.askingPrice}">
-            <p style="color: red; margin-top: 8px;"> {{formErrors?.askingPrice}}</p>
-          </fieldset>
-        </li>
-      </ol>
-
-      <ng-container *ngIf="instructionForm.get('instructSale').value">
-        <fieldset style="margin-bottom: 16px;">
-          <label>Sales Agency</label>
-          <span class="radio radio--inline">
-            <span>
-              <input type="radio" id="soleAgencySales" value="1" name="salesAgencyType"
-                formControlName="salesAgencyType" data-cy="soleAgencySales">
-              <label for="soleAgencySales">Sole Agency</label>
-            </span>
-            <span>
-              <input type="radio" id="multiAgencySales" value="4" name="salesAgencyType"
-                formControlName="salesAgencyType">
-              <label for="multiAgencySales">Multi Agency</label>
-            </span>
-          </span>
-          <p *ngIf="instructionForm.get('salesAgencyType')?.errors?.required" style="color: red; margin-top: 8px;">
-            {{formErrors?.salesAgencyType}}</p>
-        </fieldset>
-      </ng-container>
-    </ng-container> -->
 
     <ng-container *ngIf="instruction?.askingPrice">
       <fieldset *ngIf="showInstruct" style="margin-bottom: 4px;">
@@ -977,27 +934,30 @@
               [ngClass]="{'is-invalid':formErrors.askingPrice}">
             <p style="color: red; margin-top: 8px;"> {{formErrors?.askingPrice}}</p>
           </fieldset>
-          <ng-template pTemplate="footer" *ngIf="instructionForm.get('instructSale').value">
-            <fieldset style="margin-bottom: 16px;">
-              <label>Sales Agency</label>
-              <span class="radio radio--inline">
-                <span>
-                  <input type="radio" id="soleAgencySales" value="1" name="salesAgencyType"
-                    formControlName="salesAgencyType" data-cy="soleAgencySales">
-                  <label for="soleAgencySales">Sole Agency</label>
-                </span>
-                <span>
-                  <input type="radio" id="multiAgencySales" value="4" name="salesAgencyType"
-                    formControlName="salesAgencyType">
-                  <label for="multiAgencySales">Multi Agency</label>
-                </span>
-              </span>
-              <p *ngIf="instructionForm.get('salesAgencyType')?.errors?.required" style="color: red; margin-top: 8px;">
-                {{formErrors?.salesAgencyType}}</p>
-            </fieldset>
-          </ng-template>
         </p-card>
       </fieldset>
+      <div *ngIf="instructionForm.get('instructSale').value" [style]="{'width': '20rem', 'margin-bottom': '1em'}">
+        <fieldset style="margin-bottom: 16px;">
+          <label>Sales Agency</label>
+          <span class="radio radio--inline">
+            <span>
+              <input type="radio" id="soleAgencySales" value="1" name="salesAgencyType"
+                formControlName="salesAgencyType" data-cy="soleAgencySales">
+              <label for="soleAgencySales">Sole Agency</label>
+            </span>
+            <span>
+              <input type="radio" id="multiAgencySales" value="4" name="salesAgencyType"
+                formControlName="salesAgencyType">
+              <label for="multiAgencySales">Multi Agency</label>
+            </span>
+          </span>
+        </fieldset>
+        <p-messages *ngIf="formErrors?.salesAgencyType" severity="warn">
+          <ng-template pTemplate>
+            <div class="p-ml-2">{{formErrors?.salesAgencyType}}</div>
+          </ng-template>
+        </p-messages>
+      </div>
     </ng-container>
 
     <ng-container *ngIf="instruction?.askingRentShortLet || instruction?.askingRentLongLet">
@@ -1009,8 +969,13 @@
             <label for="instructLet">Instruct for Lettings</label>
           </span>
         </span>
-        <p *ngIf="instructionForm.get('instructLet').value && !instructionForm.get('isInstructLongLet').value && !instructionForm.get('isInstructShortLet').value"
-          style="color: red; margin-top: 8px;"> Please choose an option</p>
+        <p-messages
+          *ngIf="instructionForm.get('instructLet').value && !instructionForm.get('isInstructLongLet').value && !instructionForm.get('isInstructShortLet').value"
+          severity="error">
+          <ng-template pTemplate>
+            <div class="p-ml-2">Please choose an option</div>
+          </ng-template>
+        </p-messages>
       </fieldset>
 
       <div class="inline-parent">
@@ -1031,7 +996,7 @@
                 <input type="text" name="longLetValue" id="longLetValue" formControlName="askingRentLongLet"
                   [ngClass]="{'is-invalid':formErrors.askingRentLongLet}"
                   [disabled]="!instructionForm.get('isInstructLongLet').value?'true':null">
-                <p style="color: red; margin-top: 8px;"> {{formErrors?.askingRentLongLet}}</p>
+                <p class="message message--negative"> {{formErrors?.askingRentLongLet}}</p>
               </fieldset>
               <!-- [ngStyle]="{'background': !instructionForm.get('isInstructLongLet').value?'lightgray':null}" -->
               <fieldset>
@@ -1059,7 +1024,7 @@
               <input type="text" name="shortLetValue" id="shortLetValue" formControlName="askingRentShortLet"
                 [ngClass]="{'is-invalid':formErrors.askingRentShortLet}"
                 [disabled]="!instructionForm.get('isInstructShortLet').value?'true':null">
-              <p style="color: red; margin-top: 8px;"> {{formErrors?.askingRentShortLet}}</p>
+              <p class="message message--negative"> {{formErrors?.askingRentShortLet}}</p>
             </fieldset>
 
             <fieldset>
@@ -1072,22 +1037,28 @@
         </fieldset>
       </div>
 
-      <fieldset *ngIf="instructionForm.get('instructLet').value">
-        <label>Lettings Agency</label>
-        <span class="radio radio--inline">
-          <span>
-            <input type="radio" id="soleAgencyLettings" value="1" name="lettingsAgencyType"
-              formControlName="lettingsAgencyType" data-cy="soleAgencyLettings">
-            <label for="soleAgencyLettings">Sole Agency</label>
+      <div [style]="{'width': '20rem', 'margin-bottom': '1em'}">
+        <fieldset *ngIf="instructionForm.get('instructLet').value">
+          <label>Lettings Agency</label>
+          <span class="radio radio--inline">
+            <span>
+              <input type="radio" id="soleAgencyLettings" value="1" name="lettingsAgencyType"
+                formControlName="lettingsAgencyType" data-cy="soleAgencyLettings">
+              <label for="soleAgencyLettings">Sole Agency</label>
+            </span>
+            <span>
+              <input type="radio" id="multiAgencyLettings" value="2" name="lettingsAgencyType"
+                formControlName="lettingsAgencyType" data-cy="multiAgencyLettings">
+              <label for="multiAgencyLettings">Multi Agency</label>
+            </span>
           </span>
-          <span>
-            <input type="radio" id="multiAgencyLettings" value="2" name="lettingsAgencyType"
-              formControlName="lettingsAgencyType" data-cy="multiAgencyLettings">
-            <label for="multiAgencyLettings">Multi Agency</label>
-          </span>
-        </span>
-        <p style="color: red; margin-top: 8px;"> {{formErrors?.lettingsAgencyType}}</p>
-      </fieldset>
+        </fieldset>
+        <p-messages *ngIf="formErrors?.lettingsAgencyType" severity="warn">
+          <ng-template pTemplate>
+            <div class="p-ml-2">{{formErrors?.lettingsAgencyType}}</div>
+          </ng-template>
+        </p-messages>
+      </div>
     </ng-container>
 
     <footer class="footer--modal">

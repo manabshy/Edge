@@ -1801,18 +1801,11 @@ export class ValuationDetailEditComponent
   }
 
   setAgencyTypeValidator() {
-    switch (true) {
-      case this.instructSaleControl.value:
-        this.setSalesAgencyTypeValidator();
-        break;
-      case this.instructLetControl.value:
-        this.setLettingsAgencyTypeValidator();
-        break;
-
-      default:
-        this.setSalesAgencyTypeValidator();
-        this.setLettingsAgencyTypeValidator();
-        break;
+    if (this.instructSaleControl.value) {
+      this.setSalesAgencyTypeValidator();
+    }
+    if (this.instructLetControl.value) {
+      this.setLettingsAgencyTypeValidator();
     }
   }
 
@@ -2307,15 +2300,16 @@ export class ValuationDetailEditComponent
       });
     }
 
-    this.router
-      .navigateByUrl("/", { skipLocationChange: true })
-      .then(() =>
-        this.router.navigate([
-          "/valuations-register/detail",
-          valuation.valuationEventId,
-          "edit",
-        ])
-      );
+    if (valuation && valuation.valuationEventId > 0)
+      this.router
+        .navigateByUrl("/", { skipLocationChange: true })
+        .then(() =>
+          this.router.navigate([
+            "/valuations-register/detail",
+            valuation.valuationEventId,
+            "edit",
+          ])
+        );
   }
 
   onInstructionSaveComplete(status?: boolean) {
