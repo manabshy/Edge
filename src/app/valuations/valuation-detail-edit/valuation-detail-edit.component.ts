@@ -968,7 +968,7 @@ export class ValuationDetailEditComponent
         );
       } else if (valuation.lettingsValuationBooking) {
         this.setValuationInformations(
-          valuation.combinedValuationBooking,
+          valuation.lettingsValuationBooking,
           "lettings"
         );
       }
