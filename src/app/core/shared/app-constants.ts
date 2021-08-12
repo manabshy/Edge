@@ -279,7 +279,7 @@ export const ValidationMessages = {
     required: "Property note is required",
   },
   approxLeaseExpiryDate: {
-    required: "Approximate lease length is required",
+    min: "Approximate lease length cannot be less than 0",
   },
   bedrooms: {
     max: "Bedrooms cannot be more than 99",

@@ -788,7 +788,7 @@ export class ValuationDetailEditComponent
       outsideSpace: [""],
       parking: [""],
       propertyFeature: [""],
-      approxLeaseExpiryDate: [""],
+      approxLeaseExpiryDate: [0, [Validators.max(99), Validators.min(0)]],
       salesValuer: [""],
       lettingsValuer: [""],
       isInvitationSent: true,
@@ -1216,7 +1216,7 @@ export class ValuationDetailEditComponent
         if (res) {
           if (+res.tenureId === 3 || res.approxLeaseExpiryDate) {
             this.showLeaseExpiryDate = true;
-            this.setApproxLeaseLengthValidator();
+            //this.setApproxLeaseLengthValidator();
           } else {
             this.showLeaseExpiryDate = false;
           }
@@ -1682,25 +1682,24 @@ export class ValuationDetailEditComponent
   onTenureChange(tenureId: number) {
     if (+tenureId === 3) {
       this.showLeaseExpiryDate = true;
-      this.setApproxLeaseLengthValidator();
     } else {
       this.showLeaseExpiryDate = false;
-      if (this.approxLeaseExpiryDateControl.errors) {
-        this.approxLeaseExpiryDateControl.clearValidators();
-        this.approxLeaseExpiryDateControl.updateValueAndValidity();
-      }
+      // if (this.approxLeaseExpiryDateControl.errors) {
+      //   this.approxLeaseExpiryDateControl.clearValidators();
+      //   this.approxLeaseExpiryDateControl.updateValueAndValidity();
+      // }
     }
   }
 
-  setApproxLeaseLengthValidator() {
-    if (!this.approxLeaseExpiryDateControl.value) {
-      this.approxLeaseExpiryDateControl.setValidators(Validators.required);
-      this.approxLeaseExpiryDateControl.updateValueAndValidity();
-    } else {
-      this.approxLeaseExpiryDateControl.clearValidators();
-      this.approxLeaseExpiryDateControl.updateValueAndValidity();
-    }
-  }
+  // setApproxLeaseLengthValidator() {
+  //   if (!this.approxLeaseExpiryDateControl.value) {
+  //     this.approxLeaseExpiryDateControl.setValidators(Validators.required);
+  //     this.approxLeaseExpiryDateControl.updateValueAndValidity();
+  //   } else {
+  //     this.approxLeaseExpiryDateControl.clearValidators();
+  //     this.approxLeaseExpiryDateControl.updateValueAndValidity();
+  //   }
+  // }
 
   createNewSigner() {
     this.valuationForm.markAsPristine();
@@ -2259,6 +2258,7 @@ export class ValuationDetailEditComponent
       this.approxLeaseExpiryDate = addYears(new Date(), leaseExpiryDateInYears);
     }
   }
+
   private changeLeaseExpiryDateToYears(approxLeaseExpiryDate: any) {
     if (approxLeaseExpiryDate) {
       return differenceInCalendarYears(approxLeaseExpiryDate, new Date());

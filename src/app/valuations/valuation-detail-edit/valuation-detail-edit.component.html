@@ -227,14 +227,11 @@
                   </select>
                 </span>
               </fieldset>
-              <fieldset class="inline-child" [ngClass]="{'invalid': formErrors?.approxLeaseExpiryDate}"
-                *ngIf="showLeaseExpiryDate">
-                <input type="text" id="approxLeaseExpiryDate" placeholder="dd/mm/yyyy"
-                  [ngClass]="{'invalid': formErrors?.approxLeaseExpiryDate}" name="approxLeaseExpiryDate"
-                  placeholder="Approx Lease End Date" autocomplete="off"
-                  [bsConfig]="{showWeekNumbers:false,  dateInputFormat: 'DD/MM/YYYY',minDate:todaysDate, customTodayClass: 'font-weight-bold'}"
-                  bsDatepicker formControlName="approxLeaseExpiryDate" data-cy="leaseLength"
-                  [disabled]="!isEditable && !isNewValuation ? true : null">
+              <fieldset class="inline-child" *ngIf="showLeaseExpiryDate"
+                [ngClass]="{'invalid': formErrors?.approxLeaseExpiryDate}">
+                <input type="number" name="approxLeaseExpiryDate" autocomplete="off" id="approxLeaseExpiryDate"
+                  formControlName="approxLeaseExpiryDate" [disabled]="!isEditable && !isNewValuation ? true : null"
+                  placeholder="Approx Lease Length" />
                 <p class="message message--negative"> {{formErrors?.approxLeaseExpiryDate}}</p>
               </fieldset>
             </div>
