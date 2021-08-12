@@ -973,6 +973,9 @@ export class ValuationDetailEditComponent
         );
       }
 
+      this.salesValuer = { ...this.valuation.salesValuer };
+      this.lettingsValuer = { ...this.valuation.lettingsValuer };
+
       this.valuationForm.patchValue({
         property: valuation.property,
         propertyOwner: valuation.propertyOwner,
@@ -1274,6 +1277,12 @@ export class ValuationDetailEditComponent
     this.nextWeek = [];
 
     this.availabilityForm.patchValue({
+      lettingsValuerId: this.lettingsValuerControl.value
+        ? this.lettingsValuerControl.value.staffMemberId
+        : "",
+      salesValuerId: this.salesValuerControl.value
+        ? this.salesValuerControl.value.staffMemberId
+        : "",
       type: this.isLettingsEdit
         ? "lettings"
         : this.isSalesEdit

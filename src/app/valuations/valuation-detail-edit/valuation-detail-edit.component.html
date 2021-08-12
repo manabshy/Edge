@@ -720,9 +720,9 @@
       </span>
     </span>
 
-    <span style="width: -webkit-fill-available;">
-      <div class="inline-parent" *ngIf="!isLettingsOnly">
-        <span style="font-size:smaller; padding-right: 8px; margin-bottom: 2px;">{{salesValuerControl.value?.fullName}}
+    <span style="width: -webkit-fill-available;" *ngIf="!isLettingsOnly && salesValuer">
+      <div class="inline-parent">
+        <span style="font-size:smaller; padding-right: 8px; margin-bottom: 2px;">{{salesValuer?.fullName}}
         </span>
         <div class="badges" style="font-size:xx-large">
           <p-badge severity="info"></p-badge>
@@ -730,9 +730,9 @@
       </div>
     </span>
 
-    <span *ngIf="!isSalesOnly && salesValuerControl.value?.staffMemberId != lettingsValuerControl.value?.staffMemberId"
-      class="inline-parent" style="width: -webkit-fill-available;">
-      <span style="font-size:smaller; padding-right: 8px;">{{lettingsValuerControl.value?.fullName}}</span>
+    <span *ngIf="!isSalesOnly && salesValuer?.staffMemberId != lettingsValuer?.staffMemberId" class="inline-parent"
+      style="width: -webkit-fill-available;">
+      <span style="font-size:smaller; padding-right: 8px;">{{lettingsValuer?.fullName}}</span>
       <div class="badges" style="font-size:xx-large">
         <p-badge severity="success"></p-badge>
       </div>

@@ -280,6 +280,7 @@ export const ValidationMessages = {
   },
   approxLeaseExpiryDate: {
     min: "Approximate lease length cannot be less than 0",
+    max: "Approximate lease length cannot be more than 99",
   },
   bedrooms: {
     max: "Bedrooms cannot be more than 99",
