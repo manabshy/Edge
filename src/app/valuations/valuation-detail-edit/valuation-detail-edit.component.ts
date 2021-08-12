@@ -1530,11 +1530,16 @@ export class ValuationDetailEditComponent
       if (this.valuation && !this.valuation.valuationDate) {
         this.valuation.valuationDate = hours.value;
       }
-      this.valuationForm.get("valuationDate").setValue(hours.value);
+      this.valuationForm.controls["valuationDate"].setValue(hours.value);
 
-      if (this.salesValuer) this.salesValuerControl.setValue(this.salesValuer);
-      if (this.lettingsValuer)
+      if (this.salesValuer) {
+        this.salesValuerControl.setValue(this.salesValuer);
+        this.salesValuerControl.updateValueAndValidity();
+      }
+      if (this.lettingsValuer) {
         this.lettingsValuerControl.setValue(this.lettingsValuer);
+        this.lettingsValuerControl.updateValueAndValidity();
+      }
 
       if (this.isBothEdit) {
         if (!this.isSplitAppointment) {
@@ -1596,6 +1601,7 @@ export class ValuationDetailEditComponent
           this.lettingsValuerControl.setValue(null);
         } else if (this.isLettingsOnly) this.salesValuerControl.setValue(null);
       }
+      this.valuationForm.markAsDirty();
     }
 
     this.getTimeSalesValuationDate =
