@@ -156,7 +156,7 @@
       <mwl-calendar-day-view *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events"
         (beforeViewRender)="beforeDayViewRender($event)" [tooltipAppendToBody]="false" [tooltipTemplate]="customTooltip"
         (hourSegmentClicked)="getClickedDate($event.date)" [hourSegmentTemplate]="weekViewHourSegmentTemplate"
-        (eventClicked)="eventClicked($event)" [dayStartHour]="9" [dayEndHour]="19"
+        (eventClicked)="eventClicked($event)" [dayStartHour]="8" [dayEndHour]="19"
         [eventTitleTemplate]='customLabelTemplate'>
       </mwl-calendar-day-view>
     </ng-container>

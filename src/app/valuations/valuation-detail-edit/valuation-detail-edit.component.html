@@ -707,7 +707,7 @@
 
 <!-- Appointment Modal -->
 <p-dialog #availabilityDialog [(visible)]="isAppointmentVisible" [modal]="true" [draggable]="false"
-  class="modal--medium">
+  class="modal--large">
   <p-header class="row">
 
     <span class="inline-parent" style="width: -webkit-fill-available;">Pick availability</span>
@@ -826,16 +826,15 @@
           style="margin-bottom: 8px">Valuers</button>
       </div>
 
-      <div class="grid grid--6 grid--dividerLeft">
-        <p-messages *ngIf="isSplitAppointment && !valuation?.salesValuationBooking" severity="warn"
+      <div class="grid grid--65 grid--dividerLeft">
+        <p-messages *ngIf="isSplitAppointment && !selectedLettingsDate" severity="warn"
           [style]="{'margin-top': '-20px'}">
           <ng-template pTemplate>
             <div class="p-ml-2">Please select a slot for sales </div>
           </ng-template>
         </p-messages>
         <p-messages [style]="{'margin-top': '-20px'}"
-          *ngIf="isSplitAppointment && valuation?.salesValuationBooking && !valuation?.lettingsValuationBooking"
-          severity="warn">
+          *ngIf="isSplitAppointment && selectedLettingsDate && !selectedLettingsDate" severity="warn">
           <ng-template pTemplate>
             <div class="p-ml-2">Please select a slot for lettings </div>
           </ng-template>
@@ -895,7 +894,7 @@
 
       </div>
 
-      <div *ngIf="showCalendar" class="calendar-container grid grid--4 grid--dividerLeft" #calendarContainer>
+      <div *ngIf="showCalendar" class="calendar-container grid grid--35 grid--dividerLeft" #calendarContainer>
         <p class="txt--title">{{selectedCalendarDate | date:'fullDate'}}</p>
         <p-scrollPanel [style]="{width: '100%', height: '450px'}">
           <app-calendar [isOnlyShowPurposes]="true" [view]="'day'" [viewDate]="selectedCalendarDate"
@@ -903,7 +902,13 @@
         </p-scrollPanel>
       </div>
     </div>
-
+    <footer class="footer--modal">
+      <div class="btn--container">
+        <button type="button" class="btn btn--ghost" (click)="cancelBooking()">Cancel</button>
+        <button type="button" class="btn btn--info" data-cy="saveBooking"
+          (click)="makeBooking()">{{bookingButtonLabel}}</button>
+      </div>
+    </footer>
   </form>
 </p-dialog>
 

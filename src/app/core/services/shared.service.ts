@@ -321,11 +321,10 @@ export class SharedService {
     // Return the end result
     return array.reduce((result, currentValue) => {
       // If an array already present for key, push it to the array. Else create an array and push the object
-      let currentValueArr = currentValue.split("+");
-      (result[new Date(currentValueArr[0]).getDay()] =
-        result[new Date(currentValueArr[0]).getDay()] || []).push(
-        new Date(currentValueArr[0])
-      );
+      // let currentValueArr = currentValue.split("+");
+      (result[new Date(new Date(currentValue).toDateString()).getTime()] =
+        result[new Date(new Date(currentValue).toDateString()).getTime()] ||
+        []).push(new Date(currentValue));
       // Return the current iteration `result` value, this will be taken as next iteration `result` value and accumulate
       return result;
     }, []); // empty object is the initial value for result object
