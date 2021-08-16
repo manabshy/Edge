@@ -301,7 +301,7 @@
                     </span>
                     <fieldset *ngIf="isEditable||isNewValuation">
                       <button type="button" class="btn btn--positive"
-                        (click)="isSalesEdit =true;isSalesOnly =true;getAvailability()"
+                        (click)="isBothEdit =false;isLettingsEdit =false;isSalesEdit =true;isSalesOnly =true;getAvailability()"
                         data-cy="openAvailabilitySales">Edit</button>
                     </fieldset>
                     <ng-template pTemplate="footer">
@@ -370,7 +370,8 @@
                 <fieldset style="align-self: center;margin-bottom: 8em" class="inline-child"
                   *ngIf="(this.valuation.valuationStatus == 0 || this.valuation.valuationStatus == 2)">
                   <button [style]="{'width': '5rem'}" type="button" class="btn btn--positive"
-                    (click)="isBothEdit =true;getAvailability()" data-cy="openAvailabilityBoth">Edit Both</button>
+                    (click)="isSalesEdit =false;isLettingsEdit = false;isBothEdit =true;getAvailability()"
+                    data-cy="openAvailabilityBoth">Edit Both</button>
                 </fieldset>
 
                 <fieldset class="inline-child" *ngIf="valuation?.lettingsValuationBooking"
@@ -394,7 +395,7 @@
                     </span>
                     <fieldset *ngIf="isEditable||isNewValuation">
                       <button type="button" class="btn btn--positive"
-                        (click)="isLettingsEdit =true;isLettingsOnly =true;getAvailability()"
+                        (click)="isBothEdit =false;isSalesEdit =false;isLettingsEdit =true;isLettingsOnly =true;getAvailability()"
                         data-cy="openAvailabilityLettings">Edit</button>
                     </fieldset>
                     <ng-template pTemplate="footer">
@@ -890,7 +891,7 @@
     <footer class="footer--modal">
       <div class="btn--container">
         <button type="button" class="btn btn--ghost" (click)="cancelBooking()">Cancel</button>
-        <button type="button" class="btn btn--info" data-cy="saveBooking"
+        <button type="button" class="btn btn--info" [disabled]="sideBarControlVisible" data-cy="saveBooking"
           (click)="makeBooking()">{{bookingButtonLabel}}</button>
       </div>
     </footer>

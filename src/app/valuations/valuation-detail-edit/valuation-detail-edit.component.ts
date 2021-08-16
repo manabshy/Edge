@@ -936,7 +936,9 @@ export class ValuationDetailEditComponent
       this.salesOwnerAssociateEmail = valuationBooking.emailAddress;
       this.salesOwnerAssociateType = valuationBooking.associationId;
     } else if (type == "lettings") {
-      this.lettingsMeetingOwner = valuationBooking.meetingOwner;
+      this.lettingsMeetingOwner = valuationBooking.meetingOwner
+        ? valuationBooking.meetingOwner
+        : true;
       this.lettingsOwnerAssociateName = valuationBooking.name;
       this.lettingsOwnerAssociateContactNumber = valuationBooking.contactNumber;
       this.lettingsOwnerAssociateEmail = valuationBooking.emailAddress;
@@ -1023,8 +1025,12 @@ export class ValuationDetailEditComponent
           : 0,
         declarableInterest: valuation.declarableInterest?.toString(),
         section21StatusId: valuation.section21StatusId,
-        salesMeetingOwner: this.salesMeetingOwner,
-        lettingsMeetingOwner: this.lettingsMeetingOwner,
+        salesMeetingOwner: this.salesMeetingOwner
+          ? this.salesMeetingOwner
+          : true,
+        lettingsMeetingOwner: this.lettingsMeetingOwner
+          ? this.lettingsMeetingOwner
+          : true,
         salesOwnerAssociateName: this.salesOwnerAssociateName,
         salesOwnerAssociateContactNumber: this.salesOwnerAssociateContactNumber,
         salesOwnerAssociateEmail: this.salesOwnerAssociateEmail,
@@ -1269,6 +1275,7 @@ export class ValuationDetailEditComponent
     this.nextWeek = [];
 
     this.availabilityForm.patchValue({
+      fromDate: new Date(),
       lettingsValuerId: this.lettingsValuerControl.value
         ? this.lettingsValuerControl.value.staffMemberId
         : "",
