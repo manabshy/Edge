@@ -84,7 +84,9 @@
 }
 
 .hourColorsForSelected{
-  background: darkseagreen;
+  // background: darkseagreen;
+  background-color:#535E80; color:#FFFFFF; fill:#FFFFFF; box-shadow:inset 0px 0px 0px 1px  #CED1DB;
+ // background-color:transparent; color:#535E80; box-shadow:inset 0px 0px 0px 1px #CED1DB;
 }
 
 .hourColorsForLettings{

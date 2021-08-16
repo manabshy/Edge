@@ -161,21 +161,7 @@ export class ValuationDetailEditComponent
   lettingsOwnerAssociateContactNumber;
   lettingsOwnerAssociateEmail;
   lettingsOwnerAssociateType;
-
-  _isAppointmentVisible = false;
-  public get isAppointmentVisible(): boolean {
-    return this._isAppointmentVisible;
-  }
-  public set isAppointmentVisible(val: boolean) {
-    // closing
-    this._isAppointmentVisible = val;
-    if (val === false) {
-      this.isSalesEdit = false;
-      this.isLettingsEdit = false;
-      this.isBothEdit = false;
-    }
-  }
-
+  isAppointmentVisible = false;
   lettingsValuerOpenSlots: ValuationStaffMembersCalanderEvents;
   salesValuerOpenSlots: ValuationStaffMembersCalanderEvents;
   isFromProperty = false;
@@ -199,7 +185,7 @@ export class ValuationDetailEditComponent
   defaultHoursForWeekend = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
   lettingsValuer: BaseStaffMember;
   salesValuer: BaseStaffMember;
-  bookingButtonLabel = "Book Sales and Lettings";
+  bookingButtonLabel = "Book For Sales and Lettings";
 
   informationMessage =
     "If property is owned by a D&G employee, employee relation or business associate e.g. Laurus Law, Prestige, Foxtons Group";
@@ -572,6 +558,7 @@ export class ValuationDetailEditComponent
         this.availabilityForm.controls["salesValuerId"].setValidators(
           Validators.required
         );
+        this.bookingButtonLabel = "Book For Sales";
         break;
       case "lettings":
         this.isLettingsOnly = true;
@@ -581,6 +568,7 @@ export class ValuationDetailEditComponent
         this.availabilityForm.controls["lettingsValuerId"].setValidators(
           Validators.required
         );
+        this.bookingButtonLabel = "Book For Lettings";
         break;
 
       default:
@@ -593,6 +581,7 @@ export class ValuationDetailEditComponent
         this.availabilityForm.controls["salesValuerId"].setValidators(
           Validators.required
         );
+        this.bookingButtonLabel = "Book For Sales and Lettings";
         break;
     }
     this.isSplitAppointment = false;
@@ -792,7 +781,7 @@ export class ValuationDetailEditComponent
       outsideSpace: [""],
       parking: [""],
       propertyFeature: [""],
-      approxLeaseExpiryDate: [0, [Validators.max(99), Validators.min(0)]],
+      approxLeaseExpiryDate: [0, [Validators.max(999), Validators.min(0)]],
       salesValuer: [""],
       lettingsValuer: [""],
       isInvitationSent: true,
@@ -1413,6 +1402,23 @@ export class ValuationDetailEditComponent
     }
   }
 
+  removeSelectedClass(data: any[]) {
+    let hourIndex = -1;
+    if (data && data.length > 0) {
+      for (let i in data) {
+        if (
+          data[i].hours.findIndex((y) => y.class == "hourColorsForSelected") >
+          -1
+        ) {
+          hourIndex = data[i].hours.findIndex(
+            (y) => y.class == "hourColorsForSelected"
+          );
+          data[i].hours[hourIndex].class = "null";
+        }
+      }
+    }
+  }
+
   setWeekData(allData: Date[]): any[] {
     let weekData;
     let hours: any[] = [];
@@ -1527,13 +1533,15 @@ export class ValuationDetailEditComponent
     if (hours) {
       this.selectedDate = hours.value;
       this.isAvailabilityRequired = false;
-      this.canBookAppointment = false;
+      this.removeSelectedClass(this.thisWeek);
+      this.removeSelectedClass(this.nextWeek);
+      this.removeSelectedClass(this.nextTwoWeek);
 
       if (this.isSplitAppointment) {
         if (!this.selectedSalesDate) {
           this.selectedSalesDate = this.selectedDate;
           this.bookingButtonLabel = "Book For Sales";
-          hours.class = "hourColorsForSelected";
+          hours.class = "btn btn--ghost:hover";
         } else {
           this.selectedLettingsDate = this.selectedDate;
           this.bookingButtonLabel = "Book For Lettings";
@@ -1548,15 +1556,16 @@ export class ValuationDetailEditComponent
         // if (this.isSalesAndLettings) hours.class = "hourColorsForBoth";
       }
     }
-
-    this.getTimeSalesValuationDate = this.selectedSalesDate?.getTime();
-    this.getTimeLettingsValuationDate = this.selectedLettingsDate?.getTime();
   }
 
   setCloseState() {
     this.showCalendar = false;
     this.isAppointmentVisible = false;
     this.sideBarControlVisible = false;
+    this.canBookAppointment = false;
+    this.isSalesEdit = false;
+    this.isLettingsEdit = false;
+    this.isBothEdit = false;
   }
 
   selectCalendarDate(date: Date) {
@@ -2309,31 +2318,44 @@ export class ValuationDetailEditComponent
     this.valuationForm.controls["valuationDate"].setValue(
       this.selectedSalesDate
     );
-    if (this.salesValuer) {
+    if (this.salesValuer && (this.isSalesOnly || this.isSalesAndLettings)) {
       this.salesValuerControl.setValue(this.salesValuer);
       this.salesValuerControl.updateValueAndValidity();
+      this.valuation.salesValuationBooking = {
+        startDateTime: this.selectedSalesDate,
+        totalHours: 1,
+      };
+      this.getTimeSalesValuationDate = this.selectedSalesDate?.getTime();
     }
-    if (this.lettingsValuer) {
+    if (
+      this.lettingsValuer &&
+      (this.isLettingsOnly || this.isSalesAndLettings)
+    ) {
       this.lettingsValuerControl.setValue(this.lettingsValuer);
       this.lettingsValuerControl.updateValueAndValidity();
+      this.valuation.lettingsValuationBooking = {
+        startDateTime: this.selectedLettingsDate,
+        totalHours: 1,
+      };
+      this.getTimeLettingsValuationDate = this.selectedLettingsDate?.getTime();
     }
-
-    this.valuation.salesValuationBooking = {
-      startDateTime: this.selectedSalesDate,
-      totalHours: 1,
-    };
-    this.valuation.lettingsValuationBooking = {
-      startDateTime: this.selectedLettingsDate,
-      totalHours: 1,
-    };
-
-    this.setCloseState();
 
     if (this.isBothEdit) {
       if (this.isSalesOnly) {
-        this.lettingsValuerControl.setValue(null);
-      } else if (this.isLettingsOnly) this.salesValuerControl.setValue(null);
+        {
+          this.lettingsValuerControl.setValue(null);
+          this.valuation.lettingsValuationBooking = null;
+          this.getTimeLettingsValuationDate = null;
+        }
+      } else if (this.isLettingsOnly) {
+        this.salesValuerControl.setValue(null);
+        this.valuation.salesValuationBooking = null;
+        this.getTimeSalesValuationDate = null;
+      }
     }
+
+    this.setCloseState();
+
     this.valuationForm.markAsDirty();
   }
 

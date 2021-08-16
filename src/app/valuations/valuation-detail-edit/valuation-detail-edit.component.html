@@ -362,21 +362,6 @@
                             <p class="message message--negative"> {{formErrors?.salesOwnerAssociateType}}</p>
                           </fieldset>
                         </span>
-                        <!-- <fieldset>
-                          <label>Does the Owner want text message notifications about the appointment ?</label>
-                          <span class="radio radio--inline">
-                            <span>
-                              <input type="radio" id="salesOwnerWantsMessageYes" value="1" name="salesOwnerWantsMessage"
-                                formControlName="salesOwnerWantsMessage" data-cy="salesOwnerWantsMessage">
-                              <label for="salesOwnerWantsMessageYes">Yes</label>
-                            </span>
-                            <span>
-                              <input type="radio" id="salesOwnerWantsMessageNo" value="0" name="salesOwnerWantsMessage"
-                                formControlName="salesOwnerWantsMessage">
-                              <label for="salesOwnerWantsMessageNo">No</label>
-                            </span>
-                          </span>
-                        </fieldset> -->
                       </div>
                     </ng-template>
                   </p-card>
@@ -706,8 +691,8 @@
 </p-dialog>
 
 <!-- Appointment Modal -->
-<p-dialog #availabilityDialog [(visible)]="isAppointmentVisible" [modal]="true" [draggable]="false"
-  class="modal--large">
+<p-dialog #availabilityDialog [(visible)]="isAppointmentVisible" [modal]="true" [draggable]="false" class="modal--large"
+  [closable]="false">
   <p-header class="row">
 
     <span class="inline-parent" style="width: -webkit-fill-available;">Pick availability</span>
@@ -848,8 +833,8 @@
                   {{key['date'] | date:'fullDate'}}
                 </app-subnav-item>
                 <ol class="cards cards--small">
-                  <li *ngFor="let hours of key['hours']" [ngClass]="hours.class">
-                    <button type="button" class="btn btn--ghost"
+                  <li *ngFor="let hours of key['hours']">
+                    <button type="button" class="btn btn--ghost" [ngClass]="hours.class"
                       (click)="selectAvailableDate(hours); properties = null">{{hours.value |
                       date:'HH:mm'}}</button>
                   </li>
@@ -864,8 +849,8 @@
                   {{key['date'] | date:'fullDate'}}
                 </app-subnav-item>
                 <ol class="cards cards--small">
-                  <li *ngFor="let hours of key['hours'] " [ngClass]="hours.class">
-                    <button type="button" class="btn btn--ghost"
+                  <li *ngFor="let hours of key['hours'] ">
+                    <button type="button" class="btn btn--ghost" [ngClass]="hours.class"
                       (click)="selectAvailableDate(hours); properties = null">{{hours.value |
                       date:'HH:mm'}}</button>
                   </li>
@@ -881,8 +866,8 @@
                 </app-subnav-item>
                 <!-- <span class="txt--date">{{key['date'] | date:'fullDate'}}</span> -->
                 <ol class="cards cards--small">
-                  <li *ngFor="let hours of key['hours'] " [ngClass]="hours.class">
-                    <button type="button" class="btn btn--ghost"
+                  <li *ngFor="let hours of key['hours'] ">
+                    <button type="button" class="btn btn--ghost" [ngClass]="hours.class"
                       (click)="selectAvailableDate(hours); properties = null">{{hours.value |
                       date:'HH:mm'}}</button>
                   </li>
