@@ -1539,6 +1539,7 @@ export class ValuationDetailEditComponent
   selectAvailableDate(hours) {
     if (hours) {
       this.selectedDate = hours.value;
+      this.selectCalendarDate(this.selectedDate);
       this.isAvailabilityRequired = false;
       this.removeSelectedClass(this.thisWeek);
       this.removeSelectedClass(this.nextWeek);

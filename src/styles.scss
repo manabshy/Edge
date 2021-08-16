@@ -43,6 +43,10 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 @import "~@ng-select/ng-select/themes/default.theme.css";
 @import "style/partials/ng-select";
 
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
 //partials
 //@import "style/partials/layout-overrides";
 //@import "style/partials/form";
