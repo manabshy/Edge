@@ -4,7 +4,7 @@
       <form [formGroup]="companyFinderForm" autocomplete="off">
         <fieldset>
           <!-- <label for="searchTerm">Find Company</label> -->
-          <input #companyNameInput type="search" id="company" formControlName="companyName" autofocus
+          <input class="p-2" #companyNameInput type="search" id="company" formControlName="companyName" autofocus
             (keydown.enter)="searchCompany()" [ngbTypeahead]="suggestions" [focusFirst]="false"
             (selectItem)="selectedSuggestion($event)">
         </fieldset>

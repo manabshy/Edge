@@ -11,7 +11,7 @@
           <form [formGroup]="contactFinderForm" (ngSubmit)="contactGroupsResults(true)">
             <fieldset>
               <label for="">Name, email, phone or postcode</label>
-              <input type="search" formControlName="searchTerm" placeholder="Name, email, phone or postcode"
+              <input class="p-2" type="search" formControlName="searchTerm" placeholder="Name, email, phone or postcode"
                 aria-label="Search criteria" (keyup)="onKeyup($event)" [ngbTypeahead]="suggestions" [focusFirst]="false"
                 (selectItem)="selectedSuggestion($event)">
             </fieldset>
@@ -64,11 +64,19 @@
           <ol class="list list--divider list--hover">
             <li>
               <a class="overall" (click)="navigateToNewGroup('personal')"></a>
-              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M32 32c8.6 0 15.5-7 15.5-15.5C47.5 7.9 40.6 1 32 1S16.5 7.9 16.5 16.5C16.5 25 23.4 32 32 32zM32 39.8c-10.3 0-31 5.2-31 15.5V63h62v-7.8C63 44.9 42.3 39.8 32 39.8z"></path></svg>New Personal Contact Group
+              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
+                <path
+                  d="M32 32c8.6 0 15.5-7 15.5-15.5C47.5 7.9 40.6 1 32 1S16.5 7.9 16.5 16.5C16.5 25 23.4 32 32 32zM32 39.8c-10.3 0-31 5.2-31 15.5V63h62v-7.8C63 44.9 42.3 39.8 32 39.8z">
+                </path>
+              </svg>New Personal Contact Group
             </li>
             <li>
               <a class="overall" (click)="navigateToNewGroup('company')"></a>
-              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M56.8 14.9H44.4V8.8c0-3.4-2.8-6.2-6.2-6.2H25.8c-3.4 0-6.2 2.8-6.2 6.2v6.2H7.2c-3.4 0-6.2 2.8-6.2 6.2l0 34.1c0 3.4 2.8 6.2 6.2 6.2h49.6c3.4 0 6.2-2.8 6.2-6.2V21.1C63 17.7 60.2 14.9 56.8 14.9zM38.2 14.9H25.8V8.8h12.4V14.9z"></path></svg>New Company Contact Group
+              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
+                <path
+                  d="M56.8 14.9H44.4V8.8c0-3.4-2.8-6.2-6.2-6.2H25.8c-3.4 0-6.2 2.8-6.2 6.2v6.2H7.2c-3.4 0-6.2 2.8-6.2 6.2l0 34.1c0 3.4 2.8 6.2 6.2 6.2h49.6c3.4 0 6.2-2.8 6.2-6.2V21.1C63 17.7 60.2 14.9 56.8 14.9zM38.2 14.9H25.8V8.8h12.4V14.9z">
+                </path>
+              </svg>New Company Contact Group
             </li>
           </ol>
         </div>
@@ -77,7 +85,9 @@
   </div>
 
   <div class="row__item">
-    <app-contactgroups-list class="appWrapper" [originalContactGroups]='contactGroups' [pageNumber]="page" [searchTerm]='contactFinderForm.value.searchTerm' [bottomReached]="bottomReached" *ngIf="!isHintVisible"></app-contactgroups-list>
+    <app-contactgroups-list class="appWrapper" [originalContactGroups]='contactGroups' [pageNumber]="page"
+      [searchTerm]='contactFinderForm.value.searchTerm' [bottomReached]="bottomReached" *ngIf="!isHintVisible">
+    </app-contactgroups-list>
 
     <ng-container *ngIf="isMessageVisible && !isHintVisible && page === 1">
       <div class="text-center text-danger">

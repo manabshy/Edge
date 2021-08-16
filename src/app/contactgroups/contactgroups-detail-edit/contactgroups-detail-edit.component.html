@@ -20,7 +20,7 @@
         <fieldset *ngIf="isWarningCommentVisible"
           [ngClass]="{'invalid': formErrors.warningStatusComment || personForm.errors?.warningStatusRequired}">
           <label>Enter comment (max 20 characters)</label>
-          <input type="text" formControlName="warningStatusComment" placeholder="Comment ...">
+          <input class="p-2" type="text" formControlName="warningStatusComment" placeholder="Comment ...">
           <p class="message message--negative">{{formErrors.warningStatusComment}}</p>
           <p class="message message--negative" *ngIf="personForm.errors?.warningStatusRequired">Please enter a Comment
           </p>
@@ -35,26 +35,27 @@
             <option *ngFor="let title of titles | keyvalue:keepOriginalOrder" [value]=title.key>{{title.value}}</option>
           </select>
         </span>
-        <input type="text" formControlName="titleOther" placeholder="Title ..." *ngIf="isTitleOtherVisible">
+        <input class="p-2" type="text" formControlName="titleOther" placeholder="Title ..." *ngIf="isTitleOtherVisible">
         <p class="message message--negative" *ngIf="personForm?.errors?.titleOther">Please enter a Title</p>
-        <p class="message message--negative  input--grid-5" *ngIf="!personForm?.errors?.titleOther">{{formErrors.titleId}}</p>
+        <p class="message message--negative  input--grid-5" *ngIf="!personForm?.errors?.titleOther">
+          {{formErrors.titleId}}</p>
       </fieldset>
 
       <fieldset [ngClass]="{'invalid':formErrors.firstName}">
         <label for="name">First Name</label>
-        <input type="text" id="name" formControlName="firstName" >
+        <input class="p-2" type="text" id="name" formControlName="firstName">
         <p class="message message--negative">{{formErrors.firstName}}</p>
       </fieldset>
 
       <fieldset [ngClass]="{'invalid':formErrors.middleName}">
         <label for="middleName">Middle Name</label>
-        <input type="text" id="middleName" formControlName="middleName">
+        <input class="p-2" type="text" id="middleName" formControlName="middleName">
         <p class="message message--negative">{{formErrors.middleName}}</p>
       </fieldset>
 
       <fieldset [ngClass]="{'invalid':formErrors?.lastName}">
         <label for="lastName">Last Name</label>
-        <input type="text" id="lastName" formControlName="lastName" autocomplete="false">
+        <input class="p-2" type="text" id="lastName" formControlName="lastName" autocomplete="false">
         <p class="message message--negative">{{formErrors?.lastName}}</p>
       </fieldset>
 
@@ -73,13 +74,26 @@
           [ngClass]="{invalid: personForm.controls.emailAddresses.controls[i].controls.email.value && !!personForm.controls.emailAddresses.controls[i].controls.email.errors}">
           <label [for]="'email' + i" class="col small" [ngClass]="{'sr-only': !isFirst}">Email Address</label>
           <span class="joined">
-            <a class="btn" btnCheckbox formControlName="isPreferred" tabindex="0" (click)="togglePreferences(i, emailAddresses)" role="button" [ngClass]="!!personForm.value.emailAddresses[i].isPreferred ? 'btn--warning txt--snow' : 'btn--ghost  btn--hoverWarning'">
-              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon"><polygon points="32 0 41.9 21.1 64 24.4 48 40.8 51.8 64 32 53.1 12.2 64 16 40.8 0 24.4 22.1 21.1 "></polygon></svg>
+            <a class="btn" btnCheckbox formControlName="isPreferred" tabindex="0"
+              (click)="togglePreferences(i, emailAddresses)" role="button"
+              [ngClass]="!!personForm.value.emailAddresses[i].isPreferred ? 'btn--warning txt--snow' : 'btn--ghost  btn--hoverWarning'">
+              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
+                <polygon points="32 0 41.9 21.1 64 24.4 48 40.8 51.8 64 32 53.1 12.2 64 16 40.8 0 24.4 22.1 21.1 ">
+                </polygon>
+              </svg>
             </a>
-            <input type="search" [id]="'email' + i" [placeholder]="!isFirst ? 'Additional Email' : ''" class="form-control" formControlName="email" (keyup)="addRemoveEmailItem(i, false)" (blur)="addRemoveEmailItem(i, true)" [ngClass]="{'border border-warning': !personForm.controls.emailAddresses.controls[0].controls.email.value && isFirst && !personForm.errors?.emailOrPhone, 'is-invalid': isValid('email', i) || personForm.errors?.emailOrPhone}">
+            <input type="search" [id]="'email' + i" [placeholder]="!isFirst ? 'Additional Email' : ''"
+              class="form-control p-2" formControlName="email" (keyup)="addRemoveEmailItem(i, false)"
+              (blur)="addRemoveEmailItem(i, true)"
+              [ngClass]="{'border border-warning': !personForm.controls.emailAddresses.controls[0].controls.email.value && isFirst && !personForm.errors?.emailOrPhone, 'is-invalid': isValid('email', i) || personForm.errors?.emailOrPhone}">
             <span class="joined--child" *ngIf="!!personForm.value.emailAddresses[i].isPrimaryWebEmail">
-              <span class="icon " [ngClass]="!!personForm.value.emailAddresses[i].isPrimaryWebEmail ? 'icon--fill-info' : 'icon--fill-midnight-20'">
-                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"><path d="M32 1C14.9 1 1 14.9 1 32s13.9 31 31 31 31-13.9 31-31S49.1 1 32 1zM28.9 56.6C16.7 55.1 7.2 44.6 7.2 32c0-1.9 0.2-3.8 0.7-5.5l14.8 14.8v3.1c0 3.4 2.8 6.2 6.2 6.2V56.6zM50.3 48.7c-0.8-2.5-3.1-4.3-5.9-4.3h-3.1v-9.3c0-1.7-1.4-3.1-3.1-3.1H19.6v-6.2h6.2c1.7 0 3.1-1.4 3.1-3.1v-6.2h6.2c3.4 0 6.2-2.8 6.2-6.2V9c9.1 3.7 15.5 12.6 15.5 23C56.8 38.4 54.3 44.3 50.3 48.7z"></path></svg>
+              <span class="icon "
+                [ngClass]="!!personForm.value.emailAddresses[i].isPrimaryWebEmail ? 'icon--fill-info' : 'icon--fill-midnight-20'">
+                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64">
+                  <path
+                    d="M32 1C14.9 1 1 14.9 1 32s13.9 31 31 31 31-13.9 31-31S49.1 1 32 1zM28.9 56.6C16.7 55.1 7.2 44.6 7.2 32c0-1.9 0.2-3.8 0.7-5.5l14.8 14.8v3.1c0 3.4 2.8 6.2 6.2 6.2V56.6zM50.3 48.7c-0.8-2.5-3.1-4.3-5.9-4.3h-3.1v-9.3c0-1.7-1.4-3.1-3.1-3.1H19.6v-6.2h6.2c1.7 0 3.1-1.4 3.1-3.1v-6.2h6.2c3.4 0 6.2-2.8 6.2-6.2V9c9.1 3.7 15.5 12.6 15.5 23C56.8 38.4 54.3 44.3 50.3 48.7z">
+                  </path>
+                </svg>
               </span>
             </span>
           </span>
@@ -114,7 +128,9 @@
                 </polygon>
               </svg>
             </a>
-            <input type="search" [id]="'phone' + i" [placeholder]="!isFirst ? 'Additional phone' : ''" formControlName="number" (keyup)="addRemovePhoneNumberItem(i, false)" (blur)="addRemovePhoneNumberItem(i, true)">
+            <input class="p-2" type="search" [id]="'phone' + i" [placeholder]="!isFirst ? 'Additional phone' : ''"
+              formControlName="number" (keyup)="addRemovePhoneNumberItem(i, false)"
+              (blur)="addRemovePhoneNumberItem(i, true)">
             <span class="select">
               <select formControlName="typeId"
                 [ngClass]="{'is-invalid': personForm.controls.phoneNumbers.controls[i].errors?.mismatch}">
@@ -122,12 +138,18 @@
                   [value]=telephoneType.key>{{telephoneType.value}} </option>
               </select>
             </span>
-            <input type="text" placeholder="Comments" formControlName="comments">
+            <input class="p-2" type="text" placeholder="Comments" formControlName="comments">
             <span class="joined--child" *ngIf="personForm.value.phoneNumbers[i]?.typeId==3">
-              <a btnCheckbox formControlName="sendSMS" tabindex="0"  (click)="togglePreferences(i, phoneNumbers, true)" role="button"
-              [attr.disabled]="!!!personForm.value.phoneNumbers[i]?.isUKMobileNumber ? '':null">
-                <span class="icon" [ngClass]="!!personForm.value.phoneNumbers[i].sendSMS ? 'icon--fill-info' : 'icon--fill-midnight-20'">
-                  <svg  aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"><path d="M39 9L10 9 10 52 39 52 39 43 45 43 45 62C45 63.1 44.1 64 43 64L6 64C4.9 64 4 63.1 4 62L4 2C4 0.9 4.9 0 6 0L43 0C44.1 0 45 0.9 45 2L45 12 39 12 39 9ZM25 55C23.3 55 22 56.3 22 58 22 59.7 23.3 61 25 61 26.7 61 28 59.7 28 58 28 56.3 26.7 55 25 55Z"/><path d="M25.9 46.2L33.3 39.9 56.8 39.9C58.6 39.9 60 38.5 60 36.7L60 18.4C60 16.6 58.6 15.2 56.8 15.2L29.1 15.2C27.3 15.2 25.9 16.6 25.9 18.4L25.9 46.2Z"/></svg>
+              <a btnCheckbox formControlName="sendSMS" tabindex="0" (click)="togglePreferences(i, phoneNumbers, true)"
+                role="button" [attr.disabled]="!!!personForm.value.phoneNumbers[i]?.isUKMobileNumber ? '':null">
+                <span class="icon"
+                  [ngClass]="!!personForm.value.phoneNumbers[i].sendSMS ? 'icon--fill-info' : 'icon--fill-midnight-20'">
+                  <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64">
+                    <path
+                      d="M39 9L10 9 10 52 39 52 39 43 45 43 45 62C45 63.1 44.1 64 43 64L6 64C4.9 64 4 63.1 4 62L4 2C4 0.9 4.9 0 6 0L43 0C44.1 0 45 0.9 45 2L45 12 39 12 39 9ZM25 55C23.3 55 22 56.3 22 58 22 59.7 23.3 61 25 61 26.7 61 28 59.7 28 58 28 56.3 26.7 55 25 55Z" />
+                    <path
+                      d="M25.9 46.2L33.3 39.9 56.8 39.9C58.6 39.9 60 38.5 60 36.7L60 18.4C60 16.6 58.6 15.2 56.8 15.2L29.1 15.2C27.3 15.2 25.9 16.6 25.9 18.4L25.9 46.2Z" />
+                  </svg>
                 </span>
               </a>
             </span>
@@ -172,26 +194,26 @@
         <label>Marketing</label>
         <span class="checkbox">
           <span>
-            <input class="custom-control-input" type="checkbox" name="marketBulletin" id="quarterly"
+            <input class="custom-control-input p-2" type="checkbox" name="marketBulletin" id="quarterly"
               formControlName="marketBulletin">
             <label class="custom-control-label small" for="quarterly">Quarterly Market Bulletin</label>
           </span>
           <span>
-            <input class="custom-control-input" type="checkbox" name="events" id="events" formControlName="events">
+            <input class="custom-control-input p-2" type="checkbox" name="events" id="events" formControlName="events">
             <label class="custom-control-label small" for="events">Landlord & Investor Events</label>
           </span>
           <span>
-            <input class="custom-control-input" type="checkbox" name="newHomes" id="newHomes"
+            <input class="custom-control-input p-2" type="checkbox" name="newHomes" id="newHomes"
               formControlName="newHomes">
             <label class="custom-control-label small" for="newHomes">New Home and Investments</label>
           </span>
           <span>
-            <input class="custom-control-input" type="checkbox" name="offersSurveys" id="offersSurveys"
+            <input class="custom-control-input p-2" type="checkbox" name="offersSurveys" id="offersSurveys"
               formControlName="offersSurveys">
             <label class="custom-control-label small" for="offersSurveys">Special Offers and Surveys</label>
           </span>
           <span>
-            <input class="custom-control-input" type="checkbox" name="general" id="occasional"
+            <input class="custom-control-input p-2" type="checkbox" name="general" id="occasional"
               formControlName="general">
             <label class="custom-control-label small" for="occasional">Other Occasional Marketing</label>
           </span>
@@ -203,7 +225,7 @@
       <div class="inline-parent">
         <fieldset class="inline-child">
           <label for="amlDate">AML Completed</label>
-          <input type="text" id="amlDate" placeholder="dd/mm/yyyy" class="form-control fake-readonly"
+          <input type="text" id="amlDate" placeholder="dd/mm/yyyy" class="form-control fake-readonly p-2"
             formControlName="amlCompletedDate"
             [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', maxDate:todaysDate, customTodayClass: 'font-weight-bold'}"
             bsDatepicker #datepicker="bsDatepicker" [appNoDoubleTap]='datepicker' readonly>

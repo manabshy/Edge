@@ -21,9 +21,10 @@
         <fieldset class="inline-child" [ngClass]="{invalid: formErrors?.recipientEmail}">
           <label for="recipientEmail">To (External)</label>
           <ng-container *ngIf="personOnly; else group">
-            <p-multiSelect [options]="person?.emailAddresses" [filter]="false" [showHeader]="false" [ngClass]="{'txt--negative': noEmailContact}"
-              formControlName="recipientEmail" optionLabel="email" optionValue="email"
-              defaultLabel="Select recipient email" crollHeight="250px" display="chip" (onClick)="showButton=true">
+            <p-multiSelect [options]="person?.emailAddresses" [filter]="false" [showHeader]="false"
+              [ngClass]="{'txt--negative': noEmailContact}" formControlName="recipientEmail" optionLabel="email"
+              optionValue="email" defaultLabel="Select recipient email" crollHeight="250px" display="chip"
+              (onClick)="showButton=true">
               <ng-template let-emailAddress pTemplate="item">
                 <span [ngClass]="{'txt--negative': noEmailContact}">
                   <ng-container *ngIf="emailAddress?.isPreferred"> <svg aria-hidden="true" width="64" height="64"
@@ -86,11 +87,12 @@
     <div class="grid grid--75 grid--dividerLeft">
       <fieldset class="fieldset--width-max" [ngClass]="{invalid: formErrors?.subject}">
         <label for="subject">Subject</label>
-        <input type="text" id="subject" formControlName="subject">
+        <input class="p-2" type="text" id="subject" formControlName="subject">
         <p class="message message--negative">{{formErrors?.subject}}</p>
       </fieldset>
       <fieldset class="fieldset--width-max" [ngClass]="{invalid: formErrors?.body}">
-        <p-editor #pEditor formControlName="body" [style]="{'height':'320px', 'font-size':'12px', 'font-family':'poppins'}">
+        <p-editor #pEditor formControlName="body"
+          [style]="{'height':'320px', 'font-size':'12px', 'font-family':'poppins'}">
           <p-header>
             <span class="ql-formats">
               <button class="ql-bold" aria-label="Bold"></button>

@@ -88,7 +88,7 @@
           <fieldset>
             <label for="startDateTime">Start Date</label>
             <span class="joined">
-              <input type="text" id="startDateTime" placeholder="dd/mm/yyyy" formControlName="startDateTime"
+              <input class="p-2" type="text" id="startDateTime" placeholder="dd/mm/yyyy" formControlName="startDateTime"
                 [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', minDate:minDate, customTodayClass: 'font-weight-bold'}"
                 (bsValueChange)="onStartDateChange($event)" bsDatepicker #datepicker="bsDatepicker"
                 [appNoDoubleTap]='datepicker' [attr.disabled]="!isEditable && !isNewEvent ? true : null">
@@ -113,7 +113,7 @@
           <fieldset [ngClass]="{'invalid': formErrors?.endHour}">
             <label for="endDateTime">End Date</label>
             <span class="joined">
-              <input type="text" id="endDateTime" placeholder="dd/mm/yyyy" formControlName="endDateTime"
+              <input class="p-2" type="text" id="endDateTime" placeholder="dd/mm/yyyy" formControlName="endDateTime"
                 [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', minDate:minDate, customTodayClass: 'font-weight-bold'}"
                 (bsValueChange)="onEndDateChange($event)" bsDatepicker
                 [attr.disabled]="!isEditable && !isNewEvent ? true : null"
@@ -151,15 +151,15 @@
 
         <fieldset *ngIf="diaryEvent?.subject && diaryEvent?.onOutlook">
           <label for="subject">Subject</label>
-          <input type="text" formControlName="subject" id="subject" name="subject"
+          <input class="p-2" type="text" formControlName="subject" id="subject" name="subject"
             [attr.disabled]="!isEditable && !isNewEvent ? true : null" />
         </fieldset>
 
         <fieldset *ngIf="diaryEvent?.notes?.trim() || isEditable || isNewEvent">
           <ng-container *ngIf="!isBase64Image; else showImage">
             <label for="notes" class="small">Note</label>
-            <textarea type="textarea" formControlName="notes" id="notes" name="note" placeholder="Note" maxlength="200"
-              [attr.disabled]="!isEditable && !isNewEvent ? true : null"
+            <textarea class="p-2" type="textarea" formControlName="notes" id="notes" name="note" placeholder="Note"
+              maxlength="200" [attr.disabled]="!isEditable && !isNewEvent ? true : null"
               [ngStyle]="{'min-height.px': diaryEventForm.get('notes').value.length}"></textarea>
             <small *ngIf="isEditable || isNewEvent" class="form-text text-muted">(200 chars max)</small>
           </ng-container>

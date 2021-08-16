@@ -10,45 +10,48 @@
         <div class="card__body">
           <form [formGroup]="leadRegisterForm" *ngIf="showFilterOptions" autocompleteOff>
             <fieldset>
-              <app-lead-finder class="appWrapper" [leadSuggestion]="leadRegisterForm?.get('leadSearchTerm')?.value" (leadSearchTerm)="setLeadSearchTerm($event)"></app-lead-finder>
+              <app-lead-finder class="appWrapper" [leadSuggestion]="leadRegisterForm?.get('leadSearchTerm')?.value"
+                (leadSearchTerm)="setLeadSearchTerm($event)"></app-lead-finder>
             </fieldset>
 
             <fieldset>
-              <app-lead-type-finder class="appWrapper" [fullWidth]="true" [isMultiSelect]="true" [leadTypeIds]="leadTypeIdsControl?.value"
-                (selectedLeadTypeIdList)="getSelectedTypes($event)"></app-lead-type-finder>
+              <app-lead-type-finder class="appWrapper" [fullWidth]="true" [isMultiSelect]="true"
+                [leadTypeIds]="leadTypeIdsControl?.value" (selectedLeadTypeIdList)="getSelectedTypes($event)">
+              </app-lead-type-finder>
             </fieldset>
 
             <div class="inline-parent">
               <fieldset class="inline-child">
                 <label for="dateFrom">Date From</label>
                 <div class="date-container">
-                  <input type="text" id="dateFrom" placeholder="dd/mm/yyyy"
+                  <input class="p-2" type="text" id="dateFrom" placeholder="dd/mm/yyyy"
                     [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
                     bsDatepicker #datepickerFrom="bsDatepicker" [appNoDoubleTap]='datepickerFrom'
                     formControlName="dateFrom">
-                    <a *ngIf="dateFromControl?.value" (click)="clearDate('from')">x</a>
+                  <a *ngIf="dateFromControl?.value" (click)="clearDate('from')">x</a>
                 </div>
               </fieldset>
 
               <fieldset class="inline-child">
                 <label for="dateTo">Date To</label>
-               <div class="date-container">
-                  <input type="text" id="dateTo" placeholder="dd/mm/yyyy"
+                <div class="date-container">
+                  <input class="p-2" type="text" id="dateTo" placeholder="dd/mm/yyyy"
                     [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY',customTodayClass: 'font-weight-bold'}"
                     bsDatepicker #datepickerTo="bsDatepicker" [appNoDoubleTap]='datepickerTo' formControlName="dateTo">
-                    <a *ngIf="dateToControl?.value" (click)="clearDate('to')">x</a>
-               </div>
+                  <a *ngIf="dateToControl?.value" (click)="clearDate('to')">x</a>
+                </div>
               </fieldset>
             </div>
 
-            <app-office-finder class="appWrapper" [officeIds]="officeIdsControl?.value" (selectedOfficeIdList)="getSelectedOfficeId($event)" [fullWidth]="true"
-              [isMultiSelect]="true" class="displayBlock">
+            <app-office-finder class="appWrapper" [officeIds]="officeIdsControl?.value"
+              (selectedOfficeIdList)="getSelectedOfficeId($event)" [fullWidth]="true" [isMultiSelect]="true"
+              class="displayBlock">
             </app-office-finder>
 
             <fieldset>
               <span class="checkbox">
                 <span>
-                  <input type="checkbox" id="closedInclusive" formControlName="includeClosedLeads">
+                  <input class="p-2" type="checkbox" id="closedInclusive" formControlName="includeClosedLeads">
                   <label for="closedInclusive">Include closed leads</label>
                 </span>
               </span>
@@ -72,7 +75,7 @@
         <div class="card__header">
           Actions
         </div>
-        <div class="card__body card__body--list" >
+        <div class="card__body card__body--list">
           <ol class="list list--divider list--hover">
             <li>
               <a class="overall" href (click)="assignLeads()"></a>
@@ -174,7 +177,9 @@
       <footer class="footer">
         <div class="btn--container" *ngIf="areLeadsAssignable">
           <button (click)="cancel()" type="button" class="btn btn--ghost">Cancel</button>
-          <button type="submit" class="btn btn--positive" [attr.disabled]="selectedLeadsForAssignment?.length === 0?'':null">Assign {{selectedLeadsForAssignment?.length}}</button>
+          <button type="submit" class="btn btn--positive"
+            [attr.disabled]="selectedLeadsForAssignment?.length === 0?'':null">Assign
+            {{selectedLeadsForAssignment?.length}}</button>
         </div>
       </footer>
     </form>
@@ -185,13 +190,14 @@
 <p-dialog header="Lead Owner" [(visible)]="showModal" [modal]="true" [draggable]="false"
   class="modal--small modal--hasFooter">
   <fieldset>
-    <app-staff-member-finder class="appWrapper" label="Choose an owner for the selected leads:" placeholder="Select owner"
-      (selectedStaffMemberId)="getSelectedOwner($event)"></app-staff-member-finder>
+    <app-staff-member-finder class="appWrapper" label="Choose an owner for the selected leads:"
+      placeholder="Select owner" (selectedStaffMemberId)="getSelectedOwner($event)"></app-staff-member-finder>
   </fieldset>
   <footer class="footer--modal">
     <div class="btn--container">
       <button (click)="showModal=false" type="button" class="btn btn--ghost">Cancel</button>
-      <button type="button" class="btn btn--positive" (click)="assignLeadsToOwner()" [attr.disabled]="!newLeadOwnerId?'':null">Assign</button>
+      <button type="button" class="btn btn--positive" (click)="assignLeadsToOwner()"
+        [attr.disabled]="!newLeadOwnerId?'':null">Assign</button>
     </div>
   </footer>
 </p-dialog>

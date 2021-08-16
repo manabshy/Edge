@@ -4,7 +4,7 @@
       <form [formGroup]="propertyFinderForm" autocomplete="off">
         <fieldset>
           <label for="searchTerm">Property Address or Id</label>
-          <input #searchPropertyInput type="search" id="searchTerm" autofocus formControlName="searchTerm"
+          <input class="p-2" #searchPropertyInput type="search" id="searchTerm" autofocus formControlName="searchTerm"
             (keydown.enter)="searchProperty()" [ngbTypeahead]="suggestions" [focusFirst]="false"
             (selectItem)="selectedSuggestion($event)" data-cy="propSearchTerm">
         </fieldset>

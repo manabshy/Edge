@@ -4,9 +4,9 @@
       <form [formGroup]="contactGroupFinderForm" autocomplete="off">
         <fieldset>
           <label for="searchTerm">{{label}}</label>
-          <input searchSignerInput type="search" id="searchTerm" autofocus formControlName="searchTerm"
-          (keydown.enter)="searchContactGroup()" [ngbTypeahead]="suggestions" [focusFirst]="false"
-          (selectItem)="selectedSuggestion($event)">
+          <input class="p-2" searchSignerInput type="search" id="searchTerm" autofocus formControlName="searchTerm"
+            (keydown.enter)="searchContactGroup()" [ngbTypeahead]="suggestions" [focusFirst]="false"
+            (selectItem)="selectedSuggestion($event)">
         </fieldset>
         <fieldset>
           <button class="btn btn--info" (click)="searchContactGroup()" data-cy="searchProperty">Search</button>
@@ -32,7 +32,8 @@
                 No {{label}} found
               </td>
             </tr>
-            <tr *ngFor="let contactGroup of contactGroups" (click)="selectContactGroup(contactGroup); contactGroups=null">
+            <tr *ngFor="let contactGroup of contactGroups"
+              (click)="selectContactGroup(contactGroup); contactGroups=null">
               <td data-title="Name">
                 <span class="cell-content">
                   {{contactGroup?.contactNames}}
@@ -64,11 +65,24 @@
   <ng-container *ngIf="hasBeenSearched || noSuggestions">
     <footer class="footer footer--modal">
       <span class="btn--container">
-        <a class="btn btn--ghost" [routerLink]="['/contact-centre/detail/0/people', 0]" [queryParams]="{isNewPersonalContact: true, isContactGroupFinder: true, isSigner:isSigner, backToOrigin:true, searchTerm: contactGroupFinderForm.get('searchTerm').value}" (click)="isCreatingNewGroup.emit()">
-          <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" /><path class="plus-vertical"d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" /></svg>New Personal Contact Group
+        <a class="btn btn--ghost" [routerLink]="['/contact-centre/detail/0/people', 0]"
+          [queryParams]="{isNewPersonalContact: true, isContactGroupFinder: true, isSigner:isSigner, backToOrigin:true, searchTerm: contactGroupFinderForm.get('searchTerm').value}"
+          (click)="isCreatingNewGroup.emit()">
+          <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
+            <path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" />
+            <path class="plus-vertical"
+              d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" />
+          </svg>New Personal Contact Group
         </a>
-        <a class="btn btn--ghost" *ngIf="showCreateNewCompanyContact" [routerLink]="['/contact-centre/detail/0/people', 0]" [queryParams]="{isNewCompanyContact: true, isContactGroupFinder: true, backToOrigin:true, searchTerm: contactGroupFinderForm.get('searchTerm').value}" (click)="isCreatingNewGroup.emit()">
-          <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" /><path class="plus-vertical"d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" /></svg>New Company Contact Group
+        <a class="btn btn--ghost" *ngIf="showCreateNewCompanyContact"
+          [routerLink]="['/contact-centre/detail/0/people', 0]"
+          [queryParams]="{isNewCompanyContact: true, isContactGroupFinder: true, backToOrigin:true, searchTerm: contactGroupFinderForm.get('searchTerm').value}"
+          (click)="isCreatingNewGroup.emit()">
+          <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
+            <path d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" />
+            <path class="plus-vertical"
+              d="M28 59.9v-56c0-2.2 1.8-4 4-4h0c2.2 0 4 1.8 4 4v56c0 2.2-1.8 4-4 4h0C29.8 63.9 28 62.2 28 59.9z" />
+          </svg>New Company Contact Group
         </a>
       </span>
     </footer>

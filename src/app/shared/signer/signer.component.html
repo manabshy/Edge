@@ -9,7 +9,7 @@
           </ng-template>
         </ng-container>
         <div class="form-group d-flex d-sm-block" *ngIf="selectedSignerDetails && !isMultiple">
-          <input type="hidden" #selectedSignerInput id="selectedSigner" formControlName="selectedSigner">
+          <input class="p-2" type="hidden" #selectedSignerInput id="selectedSigner" formControlName="selectedSigner">
           <a class="small mobile-btn" *ngIf="selectedSignerDetails"
             [routerLink]="['/contact-centre/detail/0/people/', selectedSignerDetails?.contactGroupId]">
             {{selectedSignerDetails?.contactNames}}
@@ -82,7 +82,7 @@
             <div class="form-group">
               <label for="searchTerm" class="small">Find</label>
               <div class="input-group input-group-sm">
-                <input #searchSignerInput type="search" id="searchTerm" class="form-control"
+                <input #searchSignerInput type="search" id="searchTerm" class="form-control p-2"
                   formControlName="searchTerm" (keydown.enter)="searchSigner()" [ngbTypeahead]="suggestions"
                   [focusFirst]="false" (selectItem)="selectedSuggestion($event)">
                 <div class="input-group-append">

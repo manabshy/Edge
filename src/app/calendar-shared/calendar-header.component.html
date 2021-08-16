@@ -51,7 +51,7 @@
               </li>
               <li (click)="$event.stopPropagation()">
                 <label class="small" for="dateFrom">Go to Date</label>
-                <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" class="form-control form-control-sm"
+                <input type="text" id="dateFrom" placeholder="dd/mm/yyyy" class="form-control form-control-sm p-2"
                   [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
                   bsDatepicker #datepicker="bsDatepicker" [appNoDoubleTap]='datepicker'
                   (bsValueChange)="onDateChange($event)" formControlName="dateFilter">

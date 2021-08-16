@@ -6,7 +6,7 @@
       <form [formGroup]="companyForm" (ngSubmit)="saveCompany()" autocompleteOff>
         <fieldset *ngIf="companyDetails?.companyName ||isManualEntry">
           <label for="companyType">Company Name</label>
-          <input type="text"  id="companyName" class="form-control" formControlName="companyName">
+          <input type="text" id="companyName" class="form-control p-2" formControlName="companyName">
         </fieldset>
         <fieldset>
           <label for="companyType">Company Type</label>
@@ -21,7 +21,9 @@
         <fieldset>
           <label for="area" class="small">Signer</label>
           <ng-container *ngIf="signer?.contactNames; else newSigner">
-            <p><a [routerLink]="['/contact-centre/detail/0/people/', signer?.contactGroupId]">{{signer?.contactNames}}</a></p>
+            <p><a
+                [routerLink]="['/contact-centre/detail/0/people/', signer?.contactGroupId]">{{signer?.contactNames}}</a>
+            </p>
             <p><button (click)="isSignerVisible = true" type="button" class="btn btn--info"><svg aria-hidden="true"
                   width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
                   <polygon points="42.7 6.7 57.3 21.3 64 14.5 49.7 0 "></polygon>
@@ -30,8 +32,8 @@
           </ng-container>
 
           <ng-template #newSigner>
-            <p><button (click)="isSignerVisible = true" type="button" class="btn btn--positive"><svg
-                  aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
+            <p><button (click)="isSignerVisible = true" type="button" class="btn btn--positive"><svg aria-hidden="true"
+                  width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
                   <path
                     d="M60 35.9H4c-2.2 0-4-1.8-4-4v0c0-2.2 1.8-4 4-4h56c2.2 0 4 1.8 4 4v0C64 34.1 62.2 35.9 60 35.9z" />
                   <path class="plus-vertical"
@@ -44,42 +46,43 @@
         </app-address>
 
         <ledgend class="legend">Contact Details</ledgend>
-        <fieldset  [ngClass]="{'invalid':formErrors.telephone}">
+        <fieldset [ngClass]="{'invalid':formErrors.telephone}">
           <label for="companyTelephone" class="small">Telephone</label>
-          <input type="text" id="companyTelephone" placeholder="" class="form-control form-control-sm"
+          <input type="text" id="companyTelephone" placeholder="" class="form-control form-control-sm p-2"
             formControlName="telephone">
           <p class="message message--negative">{{formErrors?.telephone}}</p>
         </fieldset>
 
-        <fieldset  [ngClass]="{'invalid':formErrors.fax}">
+        <fieldset [ngClass]="{'invalid':formErrors.fax}">
           <label for="companyFax" class="small">Fax</label>
-          <input type="text" id="companyFax" placeholder="" class="form-control form-control-sm" formControlName="fax"
-           >
+          <input type="text" id="companyFax" placeholder="" class="form-control form-control-sm p-2"
+            formControlName="fax">
           <p class="message message--negative">{{formErrors?.fax}}</p>
         </fieldset>
 
         <fieldset>
           <label for="companyWebsite" class="small">Website</label>
-          <input type="text" id="companyWebsite" placeholder="" class="form-control form-control-sm"
+          <input type="text" id="companyWebsite" placeholder="" class="form-control form-control-sm p-2"
             formControlName="website">
         </fieldset>
 
         <fieldset [ngClass]="{'invalid':formErrors.email}">
           <label for="companyEmail" class="small">Email</label>
-          <input type="text" id="companyEmail" placeholder="" class="form-control form-control-sm"
-            formControlName="email" >
-            <p class="message message--negative">{{formErrors?.email}}</p>
+          <input type="text" id="companyEmail" placeholder="" class="form-control form-control-sm p-2"
+            formControlName="email">
+          <p class="message message--negative">{{formErrors?.email}}</p>
         </fieldset>
 
         <ledgend class="legend">AML</ledgend>
         <fieldset>
           <label for="amlDate">AML Completed</label>
           <span class="joined">
-            <input type="text" id="amlDate" placeholder="dd/mm/yyyy" class="form-control fake-readonly"
+            <input type="text" id="amlDate" placeholder="dd/mm/yyyy" class="form-control fake-readonly p-2"
               formControlName="amlCompletedDate"
               [bsConfig]="{showWeekNumbers:false, dateInputFormat: 'DD/MM/YYYY', maxDate:todaysDate, customTodayClass: 'font-weight-bold'}"
               bsDatepicker #datepicker="bsDatepicker" [appNoDoubleTap]='datepicker' readonly>
-            <button type="button" class="btn btn--ghost" (click)="clearControlValue(companyForm.get('amlCompletedDate'))"
+            <button type="button" class="btn btn--ghost"
+              (click)="clearControlValue(companyForm.get('amlCompletedDate'))"
               *ngIf="companyForm.value.amlCompletedDate">Clear</button>
           </span>
         </fieldset>
@@ -197,10 +200,11 @@
 <!-- Contactgroup Finder Modal -->
 <p-dialog header="Signer" [(visible)]="isSignerVisible" [modal]="true" [draggable]="false"
   class="modal--medium modal--hasFooter">
-  <app-contactgroup-finder [showCreateNewCompanyContact]="false" [isSigner] ="true" (selectedContactGroup)="getSelectedSigner($event)" (isCreatingNewGroup)="createNewSigner()">
+  <app-contactgroup-finder [showCreateNewCompanyContact]="false" [isSigner]="true"
+    (selectedContactGroup)="getSelectedSigner($event)" (isCreatingNewGroup)="createNewSigner()">
   </app-contactgroup-finder>
 </p-dialog>
 
 
-  <!--Success Messages -->
-  <p-toast></p-toast>
+<!--Success Messages -->
+<p-toast></p-toast>

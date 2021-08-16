@@ -4,15 +4,15 @@
       <form [formGroup]="personFinderForm" autocomplete="off">
         <fieldset>
           <label for="fullName">Full Name</label>
-          <input type="text" id="fullName" autofocus formControlName="fullName">
+          <input class="p-2" type="text" id="fullName" autofocus formControlName="fullName">
         </fieldset>
         <fieldset>
           <label for="phone">Phone</label>
-          <input type="text" id="phone" (keypress)="phoneNumberOnly($event)" formControlName="phoneNumber">
+          <input class="p-2" type="text" id="phone" (keypress)="phoneNumberOnly($event)" formControlName="phoneNumber">
         </fieldset>
         <fieldset>
           <label for="email">Email</label>
-          <input type="text" id="email" formControlName="emailAddress">
+          <input class="p-2" type="text" id="email" formControlName="emailAddress">
         </fieldset>
       </form>
       <p *ngIf="potentialDuplicatePeople?.matches?.length">

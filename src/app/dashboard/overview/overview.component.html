@@ -26,7 +26,7 @@
     </div>
 
     <div class="grid grid--3 row  grid--dividerLeft">
-      <input type="text" name="daterangeInput" daterangepicker (selected)="selectedDate($event, daterange)"
+      <input class="p-2" type="text" name="daterangeInput" daterangepicker (selected)="selectedDate($event, daterange)"
         (ngModelChange)="getDashboardInformation($event)" />
     </div>
     <div class="grid grid--24 grid--dividerLeft">
@@ -273,7 +273,8 @@
     <div class="footer footer--modal">
       <div class="btn--container">
         <label for="statsUpdated">Stats Updated</label>
-        <input type="text" id="statsUpdated" placeholder="dd/mm/yyyy" name="statsUpdated" [(ngModel)]="statsUpdated"
+        <input class="p-2" type="text" id="statsUpdated" placeholder="dd/mm/yyyy" name="statsUpdated"
+          [(ngModel)]="statsUpdated"
           [bsConfig]="{ useUtc: false, dateInputFormat: 'MMMM DD YYYY HH:mm A', customTodayClass: 'font-weight-bold'}"
           bsDatepicker [attr.disabled]="false" #datepicker="bsDatepicker" [appNoDoubleTap]='datepicker'>
       </div>
