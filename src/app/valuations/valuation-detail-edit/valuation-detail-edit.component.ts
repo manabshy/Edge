@@ -636,6 +636,12 @@ export class ValuationDetailEditComponent
             officeId: this.property.officeId,
           } as BaseProperty;
           this.valuationForm.get("property").setValue(baseProperty);
+
+          this.valuationForm.patchValue({
+            propertyStyle: this.property.propertyStyleId,
+            propertyType: this.property.propertyTypeId,
+            propertyFloor: this.property.floorOther,
+          });
         }
       });
   }
@@ -819,6 +825,7 @@ export class ValuationDetailEditComponent
       propertyFloor: [],
       isRetirementHome: [],
       isNewBuild: [],
+      haveDisabledAccess: [],
     });
   }
 
@@ -1054,6 +1061,12 @@ export class ValuationDetailEditComponent
           this.lettingsOwnerAssociateContactNumber,
         lettingsOwnerAssociateEmail: this.lettingsOwnerAssociateEmail,
         lettingsOwnerAssociateType: this.lettingsOwnerAssociateType,
+        propertyStyle: valuation.property?.propertyStyleId,
+        propertyType: valuation.property?.propertyTypeId,
+        propertyFloor: valuation.property?.floorOther,
+        // isRetirementHome: valuation.property?.retire,
+        // isNewBuild: [],
+        // haveDisabledAccess: [],
       });
     }
   }
@@ -1220,6 +1233,7 @@ export class ValuationDetailEditComponent
       this.valuationForm.get("propertyOwner").setValue(this.lastKnownOwner);
       this.getValuers(property.propertyId);
       this.getValuationPropertyInfo(property.propertyId);
+      this.getPropertyDetails(property.propertyId);
       this.valuationForm.markAsDirty();
     }
   }

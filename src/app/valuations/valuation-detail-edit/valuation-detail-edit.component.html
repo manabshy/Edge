@@ -205,17 +205,18 @@
             </div>
 
             <div class="inline-parent inline-parent__hasLabels">
-              <fieldset class="checkbox mb-3" *ngIf="isSalesAndLettings">
+              <fieldset class="checkbox mb-3">
                 <span>
-                  <input class="p-2" type="checkbox" id="isNewBuild" name="isNewBuild" formControlName="isNewBuild"
-                    data-cy="isNewBuild">
+                  <input [disabled]="!isEditable && !isNewValuation ? true : null" class="p-2" type="checkbox"
+                    id="isNewBuild" name="isNewBuild" formControlName="isNewBuild" data-cy="isNewBuild">
                   <label style="font-weight: bolder;" for="isNewBuild">New Build</label>
                 </span>
               </fieldset>
-              <fieldset class="checkbox mb-3" *ngIf="isSalesAndLettings">
+              <fieldset class="checkbox mb-3">
                 <span>
-                  <input class="p-2" type="checkbox" id="isRetirementHome" name="isRetirementHome"
-                    formControlName="isRetirementHome" data-cy="isRetirementHome">
+                  <input [disabled]="!isEditable && !isNewValuation ? true : null" class="p-2" type="checkbox"
+                    id="isRetirementHome" name="isRetirementHome" formControlName="isRetirementHome"
+                    data-cy="isRetirementHome">
                   <label style="font-weight: bolder;" for="isRetirementHome">Retirement Home</label>
                 </span>
               </fieldset>
@@ -321,6 +322,15 @@
                   <input class="p-2" id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.value}}
                 </ng-template>
               </ng-select>
+            </fieldset>
+
+            <fieldset class="checkbox mb-3" *ngIf="isSalesAndLettings">
+              <span>
+                <input [disabled]="!isEditable && !isNewValuation ? true : null" class="p-2" type="checkbox"
+                  id="haveDisabledAccess" name="haveDisabledAccess" formControlName="haveDisabledAccess"
+                  data-cy="haveDisabledAccess">
+                <label style="font-weight: bolder;" for="haveDisabledAccess">Disabled Access</label>
+              </span>
             </fieldset>
           </p-accordionTab>
 
