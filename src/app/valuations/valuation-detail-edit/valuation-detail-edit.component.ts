@@ -186,6 +186,9 @@ export class ValuationDetailEditComponent
   lettingsValuer: BaseStaffMember;
   salesValuer: BaseStaffMember;
   bookingButtonLabel = "Book For Sales and Lettings";
+  propertyTypes: any[];
+  propertyStyles: any[];
+  propertyFloors: any[];
 
   informationMessage =
     "If property is owned by a D&G employee, employee relation or business associate e.g. Laurus Law, Prestige, Foxtons Group";
@@ -595,6 +598,9 @@ export class ValuationDetailEditComponent
     this.valuation.lettingsValuationBooking = null;
     this.selectedSalesDate = null;
     this.selectedLettingsDate = null;
+    this.selectedDate = null;
+    if (this.isSplitAppointment) this.bookingButtonLabel = "Book For Sales";
+    else this.bookingButtonLabel = "Book For Sales and Lettings";
   }
 
   private setupListInfo(info: DropdownListInfo) {
@@ -607,6 +613,9 @@ export class ValuationDetailEditComponent
     this.setOriginTypes(info.originTypes); // TODO: Issue on refresh
     this.interestList = info.section21Statuses;
     this.associateTypes = info.associations;
+    this.propertyTypes = info.propertyTypes;
+    this.propertyStyles = info.propertyStyles;
+    this.propertyFloors = info.propertyFloors;
   }
 
   getPropertyDetails(propertyId: number) {
@@ -805,6 +814,11 @@ export class ValuationDetailEditComponent
       lettingsOwnerAssociateContactNumber: [""],
       lettingsOwnerAssociateEmail: [""],
       lettingsOwnerAssociateType: ["6"],
+      propertyStyle: [],
+      propertyType: [],
+      propertyFloor: [],
+      isRetirementHome: [],
+      isNewBuild: [],
     });
   }
 
@@ -1297,6 +1311,7 @@ export class ValuationDetailEditComponent
       return;
     }
 
+    this.isSplitAppointment = false;
     const availability = { ...this.availabilityForm.value };
 
     const request = {
@@ -1541,30 +1556,16 @@ export class ValuationDetailEditComponent
       this.selectedDate = hours.value;
       this.selectCalendarDate(this.selectedDate);
       this.isAvailabilityRequired = false;
+
       this.removeSelectedClass(this.thisWeek);
       this.removeSelectedClass(this.nextWeek);
       this.removeSelectedClass(this.nextTwoWeek);
 
-      if (this.isSplitAppointment) {
-        if (!this.selectedSalesDate) {
-          this.selectedSalesDate = this.selectedDate;
-          this.bookingButtonLabel = "Book For Sales";
-          hours.class = "btn btn--ghost:hover";
-        } else {
-          this.selectedLettingsDate = this.selectedDate;
-          this.bookingButtonLabel = "Book For Lettings";
-          hours.class = "hourColorsForSelected";
-        }
-      } else {
-        this.selectedSalesDate = this.selectedDate;
-        this.selectedLettingsDate = this.selectedDate;
-        hours.class = "hourColorsForSelected";
-        // if (this.isLettingsOnly) hours.class = "hourColorsForLettings";
-        // if (this.isSalesOnly) hours.class = "hourColorsForSales";
-        // if (this.isSalesAndLettings) hours.class = "hourColorsForBoth";
-      }
+      hours.class = "hourColorsForSelected";
     }
   }
+
+  onPropertyType(value) {}
 
   setCloseState() {
     this.showCalendar = false;
@@ -1663,16 +1664,6 @@ export class ValuationDetailEditComponent
       // }
     }
   }
-
-  // setApproxLeaseLengthValidator() {
-  //   if (!this.approxLeaseExpiryDateControl.value) {
-  //     this.approxLeaseExpiryDateControl.setValidators(Validators.required);
-  //     this.approxLeaseExpiryDateControl.updateValueAndValidity();
-  //   } else {
-  //     this.approxLeaseExpiryDateControl.clearValidators();
-  //     this.approxLeaseExpiryDateControl.updateValueAndValidity();
-  //   }
-  // }
 
   createNewSigner() {
     this.valuationForm.markAsPristine();
@@ -1960,6 +1951,7 @@ export class ValuationDetailEditComponent
       });
     }
   }
+
   setInstructionValue(instruction: Instruction) {
     const isSale = this.instructionForm.get("instructSale").value;
     const isLet = this.instructionForm.get("instructLet").value;
@@ -2320,6 +2312,19 @@ export class ValuationDetailEditComponent
   }
 
   makeBooking() {
+    if (this.isSplitAppointment == true) {
+      if (!this.selectedSalesDate) {
+        this.bookingButtonLabel = "Book For Lettings";
+        this.selectedSalesDate = this.selectedDate;
+        return;
+      } else {
+        this.selectedLettingsDate = this.selectedDate;
+      }
+    } else {
+      this.selectedLettingsDate = this.selectedDate;
+      this.selectedSalesDate = this.selectedDate;
+    }
+
     if (this.valuation && !this.valuation.valuationDate) {
       this.valuation.valuationDate = this.selectedSalesDate;
     }

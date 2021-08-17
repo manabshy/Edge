@@ -70,6 +70,7 @@ export interface DropdownListInfo {
   reportingMonths: ReportingMonth[];
   section21Statuses: InfoDetail[];
   associations: InfoDetail[];
+  propertyFloors: InfoDetail[];
 }
 
 export interface InfoDetail extends LeadTypeInfo {

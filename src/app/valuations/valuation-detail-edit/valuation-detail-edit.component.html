@@ -167,7 +167,61 @@
           </p-accordionTab>
 
           <p-accordionTab header="Property Info" [(selected)]="activeState[1]">
-            <div class="inline-parent">
+
+            <div class="inline-parent inline-parent__hasLabels">
+              <fieldset class="inline-child">
+                <label for="propertyType">Property Type</label>
+                <span class="select">
+                  <select name="propertyType" id="propertyType" formControlName="propertyType"
+                    (change)="onPropertyType($event.target.value)"
+                    [disabled]="!isEditable && !isNewValuation ? true : null">
+                    <option *ngFor="let propertyType of propertyTypes" [value]='propertyType.id'> {{propertyType.value}}
+                    </option>
+                  </select>
+                </span>
+              </fieldset>
+              <fieldset class="inline-child">
+                <label for="propertyStyle">Property Style</label>
+                <span class="select">
+                  <select name="propertyStyle" id="propertyStyle" formControlName="propertyStyle"
+                    [disabled]="!isEditable && !isNewValuation ? true : null">
+                    <option *ngFor="let propertyStyle of propertyStyles" [value]='propertyStyle.id'>
+                      {{propertyStyle.value}}
+                    </option>
+                  </select>
+                </span>
+              </fieldset>
+              <fieldset class="inline-child">
+                <label for="propertyFloor">Floor</label>
+                <span class="select">
+                  <select name="propertyFloor" id="propertyFloor" formControlName="propertyFloor"
+                    [disabled]="!isEditable && !isNewValuation ? true : null">
+                    <option *ngFor="let propertyFloor of propertyFloors" [value]='propertyFloor.id'>
+                      {{propertyFloor.value}}
+                    </option>
+                  </select>
+                </span>
+              </fieldset>
+            </div>
+
+            <div class="inline-parent inline-parent__hasLabels">
+              <fieldset class="checkbox mb-3" *ngIf="isSalesAndLettings">
+                <span>
+                  <input class="p-2" type="checkbox" id="isNewBuild" name="isNewBuild" formControlName="isNewBuild"
+                    data-cy="isNewBuild">
+                  <label style="font-weight: bolder;" for="isNewBuild">New Build</label>
+                </span>
+              </fieldset>
+              <fieldset class="checkbox mb-3" *ngIf="isSalesAndLettings">
+                <span>
+                  <input class="p-2" type="checkbox" id="isRetirementHome" name="isRetirementHome"
+                    formControlName="isRetirementHome" data-cy="isRetirementHome">
+                  <label style="font-weight: bolder;" for="isRetirementHome">Retirement Home</label>
+                </span>
+              </fieldset>
+            </div>
+
+            <div class="inline-parent inline-parent__hasLabels">
               <fieldset class="inline-child">
                 <label for="bedrooms"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
                     class="icon icon--onLeft">
@@ -826,14 +880,13 @@
       </div>
 
       <div class="grid grid--65 grid--dividerLeft">
-        <p-messages *ngIf="isSplitAppointment && !selectedLettingsDate" severity="warn"
-          [style]="{'margin-top': '-20px'}">
+        <p-messages *ngIf="isSplitAppointment && !selectedSalesDate" severity="warn" [style]="{'margin-top': '-20px'}">
           <ng-template pTemplate>
             <div class="p-ml-2">Please select a slot for sales </div>
           </ng-template>
         </p-messages>
         <p-messages [style]="{'margin-top': '-20px'}"
-          *ngIf="isSplitAppointment && selectedLettingsDate && !selectedLettingsDate" severity="warn">
+          *ngIf="isSplitAppointment && selectedSalesDate && !selectedLettingsDate" severity="warn">
           <ng-template pTemplate>
             <div class="p-ml-2">Please select a slot for lettings </div>
           </ng-template>
