@@ -62,12 +62,12 @@
 <p-dialog header="Adjustment" [(visible)]="showAdjustment" [modal]="true" [draggable]="false"
   class="modal--small modal--hasFooter">
   <form [formGroup]="recordForm" autocomplete="off" (ngSubmit)="addRecord()">
-    <fieldset [ngClass]="{'invalid': formErrors?.reason}">
+    <fieldset class="mb-3" [ngClass]="{'invalid': formErrors?.reason}">
       <label for="reason">Reason</label>
       <textarea class="p-2" type="text" id="reason" formControlName="reason" cols="10" rows="5"></textarea>
       <p class="message message--negative">{{formErrors?.reason}}</p>
     </fieldset>
-    <fieldset [ngClass]="{'invalid': formErrors?.points}">
+    <fieldset class="mb-3" [ngClass]="{'invalid': formErrors?.points}">
       <label for="points">Points</label>
       <input class="p-2" type="number" id="points" formControlName="points">
       <p class="message message--negative">{{formErrors?.points}}</p>

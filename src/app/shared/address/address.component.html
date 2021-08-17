@@ -8,7 +8,7 @@
     </span>
   </fieldset>
 
-  <fieldset [ngClass]="{'invalid':isRequired}">
+  <fieldset class="mb-3" [ngClass]="{'invalid':isRequired}">
     <label for="property">Find Address (Postcode)</label>
     <span class="joined">
       <input type="search" id="fullAddress" class="form-control p-2" placeholder=""
@@ -31,7 +31,7 @@
   </fieldset>
 
   <ng-container *ngIf="propertyDetails || addressLines.value || enterAddressManually">
-    <fieldset *ngIf="!(propertyDetails || isNewProperty)"
+    <fieldset class="mb-3" *ngIf="!(propertyDetails || isNewProperty)"
       [ngClass]="{'invalid': personDetails && !addressLines.value && enterAddressManually}">
       <label for="postcode">Address Lines</label>
       <textarea class="p-2" type="textarea" formControlName="addressLines" id="addressLines"
@@ -64,15 +64,15 @@
         </fieldset>
       </div>
 
-      <fieldset>
+      <fieldset class="mb-3">
         <label for="postcode">Street</label>
         <input class="p-2" type="text" formControlName="streetName" id="streetName" />
       </fieldset>
-      <fieldset>
+      <fieldset class="mb-3">
         <label for="postcode">Address Line 2</label>
         <input class="p-2" type="text" formControlName="addressLine2" id="addressLine2" />
       </fieldset>
-      <fieldset>
+      <fieldset class="mb-3">
         <label for="postcode">Town</label>
         <input class="p-2" type="text" formControlName="town" id="town" />
       </fieldset>

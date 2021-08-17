@@ -130,7 +130,7 @@
 
             <div class="grid grid--9">
               <div>
-                <fieldset class="inline-child" [ngClass]="{'invalid': formErrors?.reason}"
+                <fieldset class="inline-child mb-3" [ngClass]="{'invalid': formErrors?.reason}"
                   *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value)">
                   <label for="reason">What’s the current situation?</label>
                   <textarea class="p-2" name="reason" id="reason" cols="30" rows="3" formControlName="reason"
@@ -141,7 +141,7 @@
               </div>
 
               <div>
-                <fieldset class="inline-child" [ngClass]="{'invalid': formErrors?.timeFrame}"
+                <fieldset class="inline-child mb-3" [ngClass]="{'invalid': formErrors?.timeFrame}"
                   *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('timeFrame').value)">
                   <label for="timeFrame">When are you looking to market?</label>
                   <textarea class="p-2" name="timeFrame" id="timeFrame" cols="30" rows="3" formControlName="timeFrame"
@@ -152,7 +152,7 @@
               </div>
 
               <div>
-                <fieldset class="inline-child" [ngClass]="{'invalid': formErrors?.generalNotes}"
+                <fieldset class="inline-child mb-3" [ngClass]="{'invalid': formErrors?.generalNotes}"
                   *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('generalNotes').value)">
                   <label for="generalNotes">Notes (points discussed, other property details)</label>
                   <textarea class="p-2" name="generalNotes" id="generalNotes" cols="30" rows="3"
@@ -237,7 +237,8 @@
               </fieldset>
             </div>
 
-            <fieldset *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('outsideSpace').value)">
+            <fieldset class="mb-3"
+              *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('outsideSpace').value)">
               <label for="outsideSpace">Outside Space</label>
               <ng-select [items]="outsideSpaces" [multiple]="true" bindLabel="value" groupBy="gender"
                 [selectableGroup]="true" [closeOnSelect]="false" [readonly]="!isEditable && !isNewValuation"
@@ -252,7 +253,8 @@
               </ng-select>
             </fieldset>
 
-            <fieldset *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('parking').value)">
+            <fieldset class="mb-3"
+              *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('parking').value)">
               <label for="Parking">Parking</label>
               <ng-select [items]="parkings" [multiple]="true" bindLabel="value" groupBy="gender"
                 [selectableGroup]="true" [closeOnSelect]="false" [readonly]="!isEditable && !isNewValuation"
@@ -570,7 +572,7 @@
 
           <p-accordionTab header="Terms Of Business" [(selected)]="activeState[4]" data-cy="termsOfBusiness">
             <div class="grid grid--9">
-              <fieldset style="margin-bottom: 4px;">
+              <fieldset class="mb-3">
                 <fieldset class="row">
                   <label style="width:auto;" for="haveInterest">Does the Owner have a
                     declarable interest (Section 21)
@@ -593,7 +595,7 @@
                   </span>
                 </span>
               </fieldset>
-              <fieldset>
+              <fieldset class="mb-3">
                 <p-dropdown *ngIf="valuationForm.get('declarableInterest').value === 'true'" [options]="interestList"
                   formControlName="section21StatusId" optionLabel="value" optionValue="id" [filter]="false"
                   data-cy="section21StatusId">
@@ -619,7 +621,7 @@
         </p-accordion>
       </ng-container>
 
-      <fieldset>
+      <fieldset class="mb-3">
         <div class="row" *ngIf="isClientService">
           <div class="col-sm-8 col-xl-6 offset-sm-2">
             <label for="originId" class="small">Vendor Origin</label>
@@ -738,7 +740,7 @@
         <div *ngIf="sideBarControlVisible">
           <p-sidebar [modal]="false" [visible]="sideBarControlVisible" position="left" [showCloseIcon]="false">
 
-            <fieldset>
+            <fieldset class="mb-3">
               <span class="radio radio--boxed" btnRadioGroup formControlName="type">
                 <span *ngIf="isBothEdit">
                   <input class="p-2" type="radio"
@@ -804,7 +806,7 @@
               </div>
             </span>
 
-            <fieldset [ngClass]="{'invalid': formErrors?.fromDate}">
+            <fieldset class="mb-3" [ngClass]="{'invalid': formErrors?.fromDate}">
               <label for="fromDate">Date From</label>
               <input class="p-2" type="text" id="date" placeholder="dd/mm/yyyy"
                 [ngClass]="{'invalid': formErrors?.fromDate}"
@@ -813,7 +815,7 @@
               <p class="message message--negative"> {{formErrors?.fromDate}}</p>
             </fieldset>
 
-            <fieldset class="mt-2">
+            <fieldset>
               <button class="btn btn--positive" data-cy="searchAvailability">Search</button>
             </fieldset>
           </p-sidebar>
@@ -840,7 +842,7 @@
             <p class="txt--title" *ngIf="thisWeek">This Week</p>
             <ol class="list list--dates" *ngIf="thisWeek">
               <li *ngFor="let key of thisWeek">
-                <app-subnav-item class="txt--date" (click)="selectCalendarDate(key['date'])">
+                <app-subnav-item class="txt--date underline" (click)="selectCalendarDate(key['date'])">
                   {{key['date'] | date:'fullDate'}}
                 </app-subnav-item>
                 <ol class="cards cards--small">
@@ -856,7 +858,7 @@
             <p class="txt--title" *ngIf="nextWeek">Next Week</p>
             <ol class="list list--dates" *ngIf="nextWeek">
               <li *ngFor="let key of nextWeek">
-                <app-subnav-item class="txt--date" (click)="selectCalendarDate(key['date'])">
+                <app-subnav-item class="txt--date underline" (click)="selectCalendarDate(key['date'])">
                   {{key['date'] | date:'fullDate'}}
                 </app-subnav-item>
                 <ol class="cards cards--small">
@@ -872,7 +874,7 @@
             <p class="txt--title" *ngIf="nextWeek">Next Two Week</p>
             <ol class="list list--dates" *ngIf="nextTwoWeek">
               <li *ngFor="let key of nextTwoWeek">
-                <app-subnav-item class="txt--date" (click)="selectCalendarDate(key['date'])">
+                <app-subnav-item class="txt--date underline" (click)="selectCalendarDate(key['date'])">
                   {{key['date'] | date:'fullDate'}}
                 </app-subnav-item>
                 <!-- <span class="txt--date">{{key['date'] | date:'fullDate'}}</span> -->

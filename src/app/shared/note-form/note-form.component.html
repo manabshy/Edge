@@ -8,13 +8,13 @@
   </div>
   <div class="card__body">
     <form [formGroup]="noteForm" (ngSubmit)="action(true)">
-      <fieldset>
+      <fieldset class="mb-3">
         <textarea class="p-2" #note class="form-control p-2" name="note" id="note{{isModal}}" cols="30" rows="5"
           placeholder="Please give as much detail as possible." (keydown)="ctrlEnterSubmit($event)"
           formControlName="text" [ngClass]="{'is-invalid':formErrors.text}"></textarea>
       </fieldset>
 
-      <fieldset>
+      <fieldset class="mb-3">
         <span class="checkbox checkbox--inline">
           <span>
             <input class="p-2" type="checkbox" id="important{{isModal}}" formControlName="isImportant">
@@ -28,7 +28,7 @@
         </span>
       </fieldset>
 
-      <fieldset>
+      <fieldset class="mb-3">
         <span class="btn--container" [ngClass]="{'text-center': isCancelVisible}">
           <button type="button" class="btn btn--positive" (click)="action(true)"><svg aria-hidden="true" width="64"
               height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">

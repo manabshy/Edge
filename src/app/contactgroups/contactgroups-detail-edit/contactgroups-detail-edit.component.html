@@ -5,7 +5,7 @@
     <form *ngIf="personDetails || basicPerson" [formGroup]="personForm" (ngSubmit)="savePerson(false)"
       (keydown.enter)="$event.preventDefault()" autocompleteOff>
       <ng-container *ngIf="!basicPerson?.firstName">
-        <fieldset [ngClass]="{'warning':!isWarningsEnabled}">
+        <fieldset class="mb-3" [ngClass]="{'warning':!isWarningsEnabled}">
           <label for="warningStatus">Warning</label>
           <span class="select">
             <select id="warningStatus" name="warningStatus" formControlName="warningStatusId">
@@ -17,7 +17,7 @@
             warning.</p>
         </fieldset>
 
-        <fieldset *ngIf="isWarningCommentVisible"
+        <fieldset class="mb-3" *ngIf="isWarningCommentVisible"
           [ngClass]="{'invalid': formErrors.warningStatusComment || personForm.errors?.warningStatusRequired}">
           <label>Enter comment (max 20 characters)</label>
           <input class="p-2" type="text" formControlName="warningStatusComment" placeholder="Comment ...">
@@ -27,7 +27,8 @@
         </fieldset>
       </ng-container>
 
-      <fieldset [ngClass]="{'invalid':formErrors.titleId || formErrors.titleOther || personForm.errors?.titleOther}">
+      <fieldset class="mb-3"
+        [ngClass]="{'invalid':formErrors.titleId || formErrors.titleOther || personForm.errors?.titleOther}">
         <label for="title">Title</label>
         <span class="select input--grid-5">
           <select id="title" name="title" formControlName="titleId">
@@ -41,19 +42,19 @@
           {{formErrors.titleId}}</p>
       </fieldset>
 
-      <fieldset [ngClass]="{'invalid':formErrors.firstName}">
+      <fieldset class="mb-3" [ngClass]="{'invalid':formErrors.firstName}">
         <label for="name">First Name</label>
         <input class="p-2" type="text" id="name" formControlName="firstName">
         <p class="message message--negative">{{formErrors.firstName}}</p>
       </fieldset>
 
-      <fieldset [ngClass]="{'invalid':formErrors.middleName}">
+      <fieldset class="mb-3" [ngClass]="{'invalid':formErrors.middleName}">
         <label for="middleName">Middle Name</label>
         <input class="p-2" type="text" id="middleName" formControlName="middleName">
         <p class="message message--negative">{{formErrors.middleName}}</p>
       </fieldset>
 
-      <fieldset [ngClass]="{'invalid':formErrors?.lastName}">
+      <fieldset class="mb-3" [ngClass]="{'invalid':formErrors?.lastName}">
         <label for="lastName">Last Name</label>
         <input class="p-2" type="text" id="lastName" formControlName="lastName" autocomplete="false">
         <p class="message message--negative">{{formErrors?.lastName}}</p>
@@ -175,7 +176,7 @@
         </fieldset>
 
       </div>
-      <fieldset>
+      <fieldset class="mb-3">
         <label>Contact by</label>
         <span class="checkbox">
           <span>
@@ -190,7 +191,7 @@
       </fieldset>
 
       <legend class="legend">Marketing Preferences</legend>
-      <fieldset formGroupName="marketingPreferences">
+      <fieldset class="mb-3" formGroupName="marketingPreferences">
         <label>Marketing</label>
         <span class="checkbox">
           <span>

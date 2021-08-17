@@ -9,14 +9,14 @@
           </svg>Search Valuations</div>
         <div class="card__body">
           <form [formGroup]="valuationFinderForm" autocompleteOff>
-            <fieldset>
+            <fieldset class="mb-3">
               <label for="valuationSearch">Name, email, phone or address</label>
               <input class="p-2" type="search" id="valuationSearch" aria-label="Search criteria"
                 (keydown.enter)="getValuations()" [ngbTypeahead]="suggestions" [focusFirst]="false"
                 (selectItem)="suggestionSelected($event)" formControlName="searchTerm">
             </fieldset>
 
-            <fieldset>
+            <fieldset class="mb-3">
               <label for="date">Date From</label>
               <input class="p-2" type="text" id="date" placeholder="dd/mm/yyyy"
                 [bsConfig]="{showWeekNumbers:false,  dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
@@ -24,7 +24,7 @@
                 data-cy="dateFrom">
             </fieldset>
 
-            <fieldset>
+            <fieldset class="mb-3">
               <label for="statusId">Status</label>
               <span class="select">
                 <select id="statusId" formControlName="statusId" data-cy="valStatus">
@@ -34,19 +34,19 @@
               </span>
             </fieldset>
 
-            <fieldset>
+            <fieldset class="mb-3">
               <label for="valuerId">Valuer</label>
               <app-staff-member-finder class="appWrapper" [isMultiple]="false"
                 (selectedStaffMemberId)="getSelectedStaffMemberId($event)" [listType]="'allValuers'">
               </app-staff-member-finder>
             </fieldset>
 
-            <fieldset>
+            <fieldset class="mb-3">
               <app-office-finder class="appWrapper" [officeId]="officeId"
                 (selectedOfficeId)="getSelectedOfficeId($event)" [fullWidth]="true"></app-office-finder>
             </fieldset>
 
-            <fieldset>
+            <fieldset class="mb-3">
               <button class="btn btn--info" id="btnSearch" (click)="getValuations()" data-cy="searchVal">Search</button>
             </fieldset>
           </form>

@@ -1,7 +1,7 @@
 <form [formGroup]="emailForm" (ngSubmit)="send()" autocomplete="off">
   <div class="row">
     <div class="grid grid--25">
-      <fieldset>
+      <fieldset class="mb-3">
         <label for="senderEmail">From</label>
         <span class="radio">
           <span>
@@ -54,7 +54,7 @@
         <!-- <fieldset *ngIf="showButton" class="inline-child"> <button type="button" class="btn btn--info"
             (click)="isContactGroupFinderVisible=true">Add Contact Group</button></fieldset> -->
       </div>
-      <fieldset>
+      <fieldset class="mb-3">
         <label for="ccInternalEmail">Cc (Internal)</label>
         <p-multiSelect [options]="groupedStaffMembers" [group]="true" [maxSelectedLabels]="1"
           formControlName="ccInternalEmail" optionLabel="name" optionValue="value" defaultLabel="Select email"
@@ -66,13 +66,13 @@
           </ng-template>
         </p-multiSelect>
       </fieldset>
-      <fieldset [ngClass]="{invalid: isInvalidEmail}">
+      <fieldset class="mb-3" [ngClass]="{invalid: isInvalidEmail}">
         <label for="ccExternalEmail">Cc (External)</label>
         <p-chips inputId="ccExternalEmail" formControlName="ccExternalEmail" separator="," [allowDuplicate]="false"
           [style]="{'width':'100%'}" (onAdd)="onEmailAdded($event)" (onRemove)="onEmailRemoved($event)"></p-chips>
         <p class="message message--negative">Email is not valid</p>
       </fieldset>
-      <fieldset *ngIf="false">
+      <fieldset class="mb-3" *ngIf="false">
         <button class="btn btn--info" data-cy="searchProperty" (click)="index=1"><svg aria-hidden="true" width="64"
             height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
             <path
@@ -85,12 +85,12 @@
       </fieldset>
     </div>
     <div class="grid grid--75 grid--dividerLeft">
-      <fieldset class="fieldset--width-max" [ngClass]="{invalid: formErrors?.subject}">
+      <fieldset class="fieldset--width-max mb-3" [ngClass]="{invalid: formErrors?.subject}">
         <label for="subject">Subject</label>
         <input class="p-2" type="text" id="subject" formControlName="subject">
         <p class="message message--negative">{{formErrors?.subject}}</p>
       </fieldset>
-      <fieldset class="fieldset--width-max" [ngClass]="{invalid: formErrors?.body}">
+      <fieldset class="fieldset--width-max mb-3" [ngClass]="{invalid: formErrors?.body}">
         <p-editor #pEditor formControlName="body"
           [style]="{'height':'320px', 'font-size':'12px', 'font-family':'poppins'}">
           <p-header>
@@ -118,7 +118,7 @@
         </p-editor>
         <p class="message message--negative">{{formErrors?.body}}</p>
       </fieldset>
-      <fieldset class="fieldset--signature">
+      <fieldset class="fieldset--signature mb-3">
         <app-email-signature [signature]="currentStaffMemberSignature"></app-email-signature>
       </fieldset>
     </div>

@@ -1,16 +1,16 @@
 <form [formGroup]="smsForm" action="" class="text-left" (ngSubmit)="sendSMS()">
-  <fieldset>
+  <fieldset class="mb-3">
     To: <strong>{{data?.salutation}}</strong> - {{data?.number}}
     <input class="p-2" type="hidden" formControlName="personId">
     <input class="p-2" type="hidden" formControlName="phoneNumber" name="number">
   </fieldset>
 
-  <fieldset>
+  <fieldset class="mb-3">
     <label>{{header}}</label>
     <input class="p-2" type="hidden" formControlName="header">
   </fieldset>
 
-  <fieldset [ngClass]="{'invalid':formErrors.message}">
+  <fieldset class="mb-3" [ngClass]="{'invalid':formErrors.message}">
     <textarea class="p-2" formControlName="message" cols="30" rows="5" [maxlength]="smsMaxLength"
       placeholder="Message ..."></textarea>
     <p class="message message--negative">{{formErrors?.message}}</p>
@@ -18,13 +18,13 @@
       [ngClass]="smsLength === smsMaxLength ? 'text-danger' : 'text-muted'">{{smsLength}}/{{smsMaxLength}}</small>
   </fieldset>
 
-  <fieldset [ngClass]="{'invalid':formErrors.senderName}">
+  <fieldset class="mb-3" [ngClass]="{'invalid':formErrors.senderName}">
     <label>Contact</label>
     <input class="p-2" type="text" id="user" formControlName="senderName" placeholder="Name">
     <p class="message message--negative">{{formErrors?.senderName}}</p>
   </fieldset>
 
-  <fieldset [ngClass]="{'invalid':formErrors.senderPhoneNumber}">
+  <fieldset class="mb-3" [ngClass]="{'invalid':formErrors.senderPhoneNumber}">
     <label>On</label>
     <input class="p-2" type="text" id="userNumber" formControlName="senderPhoneNumber" placeholder="Number">
     <p class="message message--negative">{{formErrors?.senderPhoneNumber}}</p>

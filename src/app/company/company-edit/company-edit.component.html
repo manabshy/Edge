@@ -4,11 +4,11 @@
 
     <ng-container *ngIf="companyDetails || isManualEntry; else redactedCards">
       <form [formGroup]="companyForm" (ngSubmit)="saveCompany()" autocompleteOff>
-        <fieldset *ngIf="companyDetails?.companyName ||isManualEntry">
+        <fieldset class="mb-3" *ngIf="companyDetails?.companyName ||isManualEntry">
           <label for="companyType">Company Name</label>
           <input type="text" id="companyName" class="form-control p-2" formControlName="companyName">
         </fieldset>
-        <fieldset>
+        <fieldset class="mb-3">
           <label for="companyType">Company Type</label>
           <span class="select">
             <select id="companyType" formControlName="companyTypeId">
@@ -18,7 +18,7 @@
         </fieldset>
 
         <ledgend class="legend">Signer</ledgend>
-        <fieldset>
+        <fieldset class="mb-3">
           <label for="area" class="small">Signer</label>
           <ng-container *ngIf="signer?.contactNames; else newSigner">
             <p><a
@@ -46,27 +46,27 @@
         </app-address>
 
         <ledgend class="legend">Contact Details</ledgend>
-        <fieldset [ngClass]="{'invalid':formErrors.telephone}">
+        <fieldset class="mb-3" [ngClass]="{'invalid':formErrors.telephone}">
           <label for="companyTelephone" class="small">Telephone</label>
           <input type="text" id="companyTelephone" placeholder="" class="form-control form-control-sm p-2"
             formControlName="telephone">
           <p class="message message--negative">{{formErrors?.telephone}}</p>
         </fieldset>
 
-        <fieldset [ngClass]="{'invalid':formErrors.fax}">
+        <fieldset class="mb-3" [ngClass]="{'invalid':formErrors.fax}">
           <label for="companyFax" class="small">Fax</label>
           <input type="text" id="companyFax" placeholder="" class="form-control form-control-sm p-2"
             formControlName="fax">
           <p class="message message--negative">{{formErrors?.fax}}</p>
         </fieldset>
 
-        <fieldset>
+        <fieldset class="mb-3">
           <label for="companyWebsite" class="small">Website</label>
           <input type="text" id="companyWebsite" placeholder="" class="form-control form-control-sm p-2"
             formControlName="website">
         </fieldset>
 
-        <fieldset [ngClass]="{'invalid':formErrors.email}">
+        <fieldset class="mb-3" [ngClass]="{'invalid':formErrors.email}">
           <label for="companyEmail" class="small">Email</label>
           <input type="text" id="companyEmail" placeholder="" class="form-control form-control-sm p-2"
             formControlName="email">
@@ -74,7 +74,7 @@
         </fieldset>
 
         <ledgend class="legend">AML</ledgend>
-        <fieldset>
+        <fieldset class="mb-3">
           <label for="amlDate">AML Completed</label>
           <span class="joined">
             <input type="text" id="amlDate" placeholder="dd/mm/yyyy" class="form-control fake-readonly p-2"

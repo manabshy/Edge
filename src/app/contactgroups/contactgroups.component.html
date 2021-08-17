@@ -9,7 +9,7 @@
           </svg>Search contacts</div>
         <div class="card__body">
           <form [formGroup]="contactFinderForm" (ngSubmit)="contactGroupsResults(true)">
-            <fieldset>
+            <fieldset class="mb-3">
               <label for="">Name, email, phone or postcode</label>
               <input class="p-2" type="search" formControlName="searchTerm" placeholder="Name, email, phone or postcode"
                 aria-label="Search criteria" (keyup)="onKeyup($event)" [ngbTypeahead]="suggestions" [focusFirst]="false"

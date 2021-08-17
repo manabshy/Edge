@@ -15,7 +15,7 @@
 
     <form [formGroup]="diaryEventForm" (ngSubmit)="saveDiaryEvent()" autocompleteOff>
       <ng-container *ngIf="showTypes || showStaffMembers">
-        <fieldset *ngIf="showTypes">
+        <fieldset class="mb-3" *ngIf="showTypes">
           <label for="eventTypeId">Type</label>
           <span class="select">
             <select id="eventTypeId" formControlName="eventTypeId" (change)="onEventTypeChange($event.target.value)"
@@ -27,7 +27,7 @@
           {{formErrors?.eventTypeId}}
         </fieldset>
 
-        <fieldset *ngIf="showStaffMembers">
+        <fieldset class="mb-3" *ngIf="showStaffMembers">
           <label for="property">Staff Members</label>
           <ng-container *ngIf="!diaryEvent?.onOutlook;else staffList">
             <app-staff-member-finder [listType]="'calendarStaffMembers'" [isMultiple]="true"
@@ -54,7 +54,7 @@
         </fieldset>
       </ng-container>
 
-      <fieldset *ngIf="showProperties">
+      <fieldset class="mb-3" *ngIf="showProperties">
         <label style="color: black; margin-bottom:4px">Properties {{propertyLabel}}</label>
         <app-property-finder (selectedPropertyList)="getSelectedProperties($event)"
           (rebookedProperty)="getRebookedPropertyId($event)" [isMultiple]="true" [hideCreateNewProperty]='true'
@@ -64,7 +64,7 @@
         </app-property-finder>
       </fieldset>
 
-      <fieldset *ngIf="showContacts">
+      <fieldset class="mb-3" *ngIf="showContacts">
         <label>{{contactLabel}}s</label>
         <app-signer [label]="contactLabel" [isLabelHidden]="isLabelHidden" [isMultiple]="true"
           (selectedSignersList)="getSelectedContactGroups($event)" [contactList]="diaryEvent?.contacts"
@@ -76,7 +76,7 @@
         <legend class="legend">Detail</legend>
 
         <ng-container [ngClass]="{'mb-2':!(!isEditable && !isNewEvent)}">
-          <fieldset *ngIf="diaryEvent?.allDay || isEditable || isNewEvent">
+          <fieldset class="mb-3" *ngIf="diaryEvent?.allDay || isEditable || isNewEvent">
             <span class="checkbox">
               <span>
                 <input type="checkbox" id="allDay" formControlName="allDay" (change)="onAllDayCheck($event)">
@@ -85,7 +85,7 @@
             </span>
           </fieldset>
 
-          <fieldset>
+          <fieldset class="mb-3">
             <label for="startDateTime">Start Date</label>
             <span class="joined">
               <input class="p-2" type="text" id="startDateTime" placeholder="dd/mm/yyyy" formControlName="startDateTime"
@@ -110,7 +110,7 @@
         </ng-container>
 
         <ng-container *ngIf="!isAllDay">
-          <fieldset [ngClass]="{'invalid': formErrors?.endHour}">
+          <fieldset class="mb-3" [ngClass]="{'invalid': formErrors?.endHour}">
             <label for="endDateTime">End Date</label>
             <span class="joined">
               <input class="p-2" type="text" id="endDateTime" placeholder="dd/mm/yyyy" formControlName="endDateTime"
@@ -139,7 +139,7 @@
 
         </ng-container>
 
-        <fieldset *ngIf="diaryEvent?.isConfirmed || isEditable || isNewEvent">
+        <fieldset class="mb-3" *ngIf="diaryEvent?.isConfirmed || isEditable || isNewEvent">
           <span class="checkbox">
             <span>
               <input type="checkbox" id="isConfirmed" name="isConfirmed" formControlName="isConfirmed"
@@ -149,13 +149,13 @@
           </span>
         </fieldset>
 
-        <fieldset *ngIf="diaryEvent?.subject && diaryEvent?.onOutlook">
+        <fieldset class="mb-3" *ngIf="diaryEvent?.subject && diaryEvent?.onOutlook">
           <label for="subject">Subject</label>
           <input class="p-2" type="text" formControlName="subject" id="subject" name="subject"
             [attr.disabled]="!isEditable && !isNewEvent ? true : null" />
         </fieldset>
 
-        <fieldset *ngIf="diaryEvent?.notes?.trim() || isEditable || isNewEvent">
+        <fieldset class="mb-3" *ngIf="diaryEvent?.notes?.trim() || isEditable || isNewEvent">
           <ng-container *ngIf="!isBase64Image; else showImage">
             <label for="notes" class="small">Note</label>
             <textarea class="p-2" type="textarea" formControlName="notes" id="notes" name="note" placeholder="Note"
@@ -167,7 +167,7 @@
         </fieldset>
 
         <ng-container *ngIf="isReminder || isEditable || isNewEvent">
-          <fieldset>
+          <fieldset class="mb-3">
             <span class="checkbox">
               <span>
                 <input type="checkbox" id="hasReminder" name="hasReminder" formControlName="hasReminder"

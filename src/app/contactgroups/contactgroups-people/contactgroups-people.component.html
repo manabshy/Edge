@@ -46,7 +46,7 @@
             </ng-container>
             <ng-template #details>
               <ledgend class="legend">Company Name</ledgend>
-              <fieldset>
+              <fieldset class="mb-3">
                 <ng-container *ngIf="companyDetails?.companyName">
                   <p><a
                       [routerLink]="['/company-centre/detail', companyDetails?.companyId]">{{companyDetails?.companyName}}</a>
@@ -60,7 +60,7 @@
               </fieldset>
 
               <ledgend class="legend">Company Address</ledgend>
-              <fieldset>
+              <fieldset class="mb-3">
                 <ng-container *ngIf="contactGroupDetails?.companyAddress?.postCode; else showCompanyAddress">
                   <app-address *ngIf="contactGroupDetails" [companyAddress]="contactGroupDetails.companyAddress"
                     (addressDetails)="getAddress($event)"></app-address>
@@ -71,7 +71,7 @@
                 </ng-template>
               </fieldset>
               <form [formGroup]="contactGroupDetailsForm" autocompleteOff>
-                <fieldset>
+                <fieldset class="mb-3">
                   <label>Type</label>
                   <span class="checkbox">
                     <span>
@@ -93,7 +93,7 @@
                   </span>
                 </fieldset>
               </form>
-              <fieldset *ngIf="!contactGroupDetails?.contactPeople?.length">
+              <fieldset class="mb-3" *ngIf="!contactGroupDetails?.contactPeople?.length">
                 <p><button (click)="isOffCanvasVisible = true" type="button" class="btn btn--positive"><svg
                       aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
                       <path
@@ -443,17 +443,17 @@
           <ng-container *ngIf="contactGroupDetails?.contactPeople.length">
             <legend class="legend">Details</legend>
             <form [formGroup]="contactGroupDetailsForm">
-              <fieldset>
+              <fieldset class="mb-3">
                 <label for="salutation">Salutation</label>
                 <input class="p-2" type="text" id="salutation" formControlName="salutation">
               </fieldset>
 
-              <fieldset>
+              <fieldset class="mb-3">
                 <label for="addressee">Addressee</label>
                 <input class="p-2" type="text" id="addressee" formControlName="addressee">
               </fieldset>
 
-              <fieldset>
+              <fieldset class="mb-3">
                 <span class="checkbox">
                   <span>
                     <input class="p-2" type="checkbox" id="isRelocationAgent" formControlName="isRelocationAgent">
