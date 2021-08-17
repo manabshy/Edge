@@ -793,8 +793,8 @@ export class ValuationDetailEditComponent
       receptions: [0, Validators.max(99)],
       sqFt: [0],
       tenureId: [0],
-      outsideSpace: [""],
-      parking: [""],
+      outsideSpace: [],
+      parking: [],
       propertyFeature: [""],
       approxLeaseExpiryDate: [0, [Validators.max(999), Validators.min(0)]],
       salesValuer: [""],
@@ -1093,11 +1093,24 @@ export class ValuationDetailEditComponent
           info.approxLeaseExpiryDate
         ),
         sqFt: info.sqFt || 0,
-        outsideSpace: info.outsideSpace,
-        parking: info.parking,
+        outsideSpace: this.getInfoDetailValues(
+          info.outsideSpace,
+          this.outsideSpaces
+        ),
+        parking: this.getInfoDetailValues(info.parking, this.parkings),
         propertyFeature: info.propertyFeature,
       });
     }
+  }
+
+  getInfoDetailValues(propertyInfo: any[], data: InfoDetail[]): InfoDetail[] {
+    let infoDetail: InfoDetail[] = [];
+    if (propertyInfo && propertyInfo.length > 0) {
+      propertyInfo.forEach((value) => {
+        infoDetail.push(data.find((info) => info.id == value));
+      });
+    }
+    return infoDetail;
   }
 
   populateInstructionForm(instruction: Instruction) {

@@ -295,33 +295,15 @@
             <fieldset class="mb-3"
               *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('outsideSpace').value)">
               <label for="outsideSpace">Outside Space</label>
-              <ng-select [items]="outsideSpaces" [multiple]="true" bindLabel="value" groupBy="gender"
-                [selectableGroup]="true" [closeOnSelect]="false" [readonly]="!isEditable && !isNewValuation"
-                bindValue="id" formControlName="outsideSpace">
-                <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
-                  <input class="p-2" id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.gender |
-                  uppercase}}
-                </ng-template>
-                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-                  <input class="p-2" id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.value}}
-                </ng-template>
-              </ng-select>
+              <p-multiSelect [options]="outsideSpaces" formControlName="outsideSpace" optionLabel="value"
+                display="chip"></p-multiSelect>
             </fieldset>
 
             <fieldset class="mb-3"
               *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('parking').value)">
-              <label for="Parking">Parking</label>
-              <ng-select [items]="parkings" [multiple]="true" bindLabel="value" groupBy="gender"
-                [selectableGroup]="true" [closeOnSelect]="false" [readonly]="!isEditable && !isNewValuation"
-                bindValue="id" formControlName="parking">
-                <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
-                  <input class="p-2" id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.gender |
-                  uppercase}}
-                </ng-template>
-                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-                  <input class="p-2" id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.value}}
-                </ng-template>
-              </ng-select>
+              <label for="parking">Parking</label>
+              <p-multiSelect [options]="parkings" formControlName="parking" optionLabel="value" display="chip">
+              </p-multiSelect>
             </fieldset>
 
             <fieldset class="checkbox mb-3" *ngIf="isSalesAndLettings">
