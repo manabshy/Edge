@@ -1,5 +1,5 @@
 <form [formGroup]="addressForm" (keydown.enter)="$event.preventDefault()" autocompleteOff>
-  <fieldset *ngIf="!(propertyDetails || isNewProperty)">
+  <fieldset class="mb-3" *ngIf="!(propertyDetails || isNewProperty)">
     <label for="country">Country</label>
     <span class="select">
       <select id="country" formControlName="countryId">
@@ -78,7 +78,8 @@
       </fieldset>
     </ng-container>
 
-    <fieldset *ngIf="showPostCode || propertyDetails" [ngClass]="{'invalid': personDetails && !postCode.value}">
+    <fieldset class="mb-3" *ngIf="showPostCode || propertyDetails"
+      [ngClass]="{'invalid': personDetails && !postCode.value}">
       <label for="postcode">Postcode</label>
       <input class="p-2" type="text" id="postcode" formControlName="postCode">
       <!-- <span class="invalid-feedback">{{formErrors.postCode}}</span> -->

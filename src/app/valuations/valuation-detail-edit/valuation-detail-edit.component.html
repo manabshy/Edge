@@ -216,7 +216,7 @@
               </fieldset>
             </div>
 
-            <div class="inline-parent">
+            <div class="inline-parent inline-parent__hasLabels">
               <fieldset class="inline-child">
                 <label for="tenureId">Tenure</label>
                 <span class="select">
@@ -285,7 +285,8 @@
                 </ng-template>
               </p-messages>
 
-              <div class="inline-parent" *ngIf="salesValuerControl.value || lettingsValuerControl.value">
+              <div class="inline-parent inline-parent__hasLabels"
+                *ngIf="salesValuerControl.value || lettingsValuerControl.value">
                 <fieldset class="inline-child" *ngIf="valuation?.salesValuationBooking" style="align-self: flex-start">
                   <p-card [style]="{'width': '25rem', 'margin-bottom': '2em'}">
                     <fieldset>
@@ -328,7 +329,7 @@
                       </fieldset>
                       <div [disabled]="!isNewValuation && !isEditable"
                         *ngIf="valuationForm.get('salesMeetingOwner').value === false">
-                        <span class="inline-parent">
+                        <span class="inline-parent inline-parent__hasLabels">
                           <fieldset class="inline-child" [ngClass]="{'invalid': formErrors?.salesOwnerAssociateName}">
                             <label for="salesOwnerAssociateName">Name</label>
                             <input class="p-2" type="text" name="salesOwnerAssociateName" id="salesOwnerAssociateName"
@@ -345,7 +346,7 @@
                             <p class="message message--negative"> {{formErrors?.salesOwnerAssociateContactNumber}}</p>
                           </fieldset>
                         </span>
-                        <span class="inline-parent">
+                        <span class="inline-parent inline-parent__hasLabels">
                           <fieldset class="inline-child" [ngClass]="{'invalid': formErrors?.salesOwnerAssociateEmail}">
                             <label for="salesOwnerAssociateEmail">Email Address</label>
                             <input class="p-2" type="email" name="salesOwnerAssociateEmail"
@@ -425,7 +426,7 @@
                         </fieldset>
                         <div [disabled]="!isNewValuation && !isEditable"
                           *ngIf="valuationForm.get('lettingsMeetingOwner').value ===false">
-                          <span class="inline-parent">
+                          <span class="inline-parent inline-parent__hasLabels">
                             <fieldset class="inline-child"
                               [ngClass]="{'invalid': formErrors?.lettingsOwnerAssociateName}">
                               <label for="lettingsOwnerAssociateName">Name</label>
@@ -445,7 +446,7 @@
                               </p>
                             </fieldset>
                           </span>
-                          <span class="inline-parent">
+                          <span class="inline-parent inline-parent__hasLabels">
                             <fieldset class="inline-child"
                               [ngClass]="{'invalid': formErrors?.lettingsOwnerAssociateEmail}">
                               <label for="lettingsOwnerAssociateEmail">Email Address</label>
