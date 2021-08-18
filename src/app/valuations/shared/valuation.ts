@@ -29,8 +29,8 @@ export interface Valuation extends ValuationInfo {
   tenureId?: number;
   originId?: number;
   approxLeaseExpiryDate?: Date;
-  outsideSpace?: string;
-  parking?: string;
+  outsideSpace?: any;
+  parking?: any;
   propertyFeature?: string;
   diaryEventId?: number;
   startDateTime?: Date;

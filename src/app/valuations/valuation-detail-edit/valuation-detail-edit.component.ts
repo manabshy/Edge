@@ -1008,8 +1008,11 @@ export class ValuationDetailEditComponent
         sqFt: this.isEditable
           ? valuation.sqFt || 0
           : valuation.sqFt || "Not Known",
-        outsideSpace: valuation.outsideSpace,
-        parking: valuation.parking,
+        outsideSpace: this.getInfoDetailValues(
+          valuation.outsideSpace,
+          this.outsideSpaces
+        ),
+        parking: this.getInfoDetailValues(valuation.parking, this.parkings),
         propertyFeature: valuation.propertyFeature,
         salesValuer: valuation.salesValuer,
         lettingsValuer: valuation.lettingsValuer,
@@ -2083,6 +2086,17 @@ export class ValuationDetailEditComponent
     }
   }
 
+  getInfoIdArray(infoArray: InfoDetail[]): number[] {
+    let idArray: number[] = [];
+    if (infoArray && infoArray.length > 0) {
+      infoArray.map((element) => {
+        idArray.push(element.id);
+        return idArray;
+      });
+    }
+    return idArray;
+  }
+
   addOrUpdateValuation() {
     this.setLeaseExpiryDate();
     this.isSubmitting = true;
@@ -2115,6 +2129,13 @@ export class ValuationDetailEditComponent
     if (this.valuationForm.get("sqFt").value === "Not Known") {
       valuation.sqFt = 0;
     }
+
+    valuation.parking = this.getInfoIdArray(
+      this.valuationForm.get("parking").value
+    );
+    valuation.outsideSpace = this.getInfoIdArray(
+      this.valuationForm.get("outsideSpace").value
+    );
 
     this.setValuers(valuation);
 
