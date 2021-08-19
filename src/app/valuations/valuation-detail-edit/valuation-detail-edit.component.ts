@@ -1737,7 +1737,7 @@ export class ValuationDetailEditComponent
       this.activeState[4] = true;
       this.messageService.add({
         severity: "warn",
-        summary: "You must complete terms of bussiness",
+        summary: "You must complete terms of business",
         closable: false,
       });
       return;
@@ -1778,6 +1778,7 @@ export class ValuationDetailEditComponent
 
   onInstructLettingsChange(event) {
     if (this.instructionForm.get("instructLet").value == false) {
+      this.formErrors.lettingsAgencyType = null;
       this.instructionForm.patchValue(
         {
           isInstructLongLet: false,

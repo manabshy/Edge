@@ -205,14 +205,14 @@
             </div>
 
             <div class="inline-parent inline-parent__hasLabels">
-              <fieldset class="checkbox mb-3">
+              <fieldset class="checkbox pb-4">
                 <span>
                   <input [disabled]="!isEditable && !isNewValuation ? true : null" class="p-2" type="checkbox"
                     id="isNewBuild" name="isNewBuild" formControlName="isNewBuild" data-cy="isNewBuild">
                   <label style="font-weight: bolder;" for="isNewBuild">New Build</label>
                 </span>
               </fieldset>
-              <fieldset class="checkbox mb-3">
+              <fieldset class="checkbox pb-4">
                 <span>
                   <input [disabled]="!isEditable && !isNewValuation ? true : null" class="p-2" type="checkbox"
                     id="isRetirementHome" name="isRetirementHome" formControlName="isRetirementHome"
@@ -306,7 +306,7 @@
               </p-multiSelect>
             </fieldset>
 
-            <fieldset class="checkbox mb-3" *ngIf="isSalesAndLettings">
+            <fieldset class="checkbox pb-4">
               <span>
                 <input [disabled]="!isEditable && !isNewValuation ? true : null" class="p-2" type="checkbox"
                   id="haveDisabledAccess" name="haveDisabledAccess" formControlName="haveDisabledAccess"
