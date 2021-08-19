@@ -31,7 +31,11 @@ import {
 } from "src/app/core/services/shared.service";
 import { StaffMemberService } from "src/app/core/services/staff-member.service";
 import { FormErrors } from "src/app/core/shared/app-constants";
-import { MinBedrooms, Property } from "src/app/property/shared/property";
+import {
+  MinBedrooms,
+  Property,
+  PropertyType,
+} from "src/app/property/shared/property";
 import { PropertyService } from "src/app/property/shared/property.service";
 import { BaseComponent } from "src/app/shared/models/base-component";
 import { BaseProperty } from "src/app/shared/models/base-property";
@@ -189,6 +193,7 @@ export class ValuationDetailEditComponent
   propertyTypes: any[];
   propertyStyles: any[];
   propertyFloors: any[];
+  allPropertyStyles: any[];
 
   informationMessage =
     "If property is owned by a D&G employee, employee relation or business associate e.g. Laurus Law, Prestige, Foxtons Group";
@@ -614,6 +619,7 @@ export class ValuationDetailEditComponent
     this.interestList = info.section21Statuses;
     this.associateTypes = info.associations;
     this.propertyTypes = info.propertyTypes;
+    this.allPropertyStyles = info.propertyStyles;
     this.propertyStyles = info.propertyStyles;
     this.propertyFloors = info.propertyFloors;
   }
@@ -825,7 +831,7 @@ export class ValuationDetailEditComponent
       propertyFloor: [],
       isRetirementHome: [],
       isNewBuild: [],
-      haveDisabledAccess: [],
+      hasDisabledAccess: [],
     });
   }
 
@@ -1069,7 +1075,7 @@ export class ValuationDetailEditComponent
         propertyFloor: valuation.property?.floorOther,
         // isRetirementHome: valuation.property?.retire,
         // isNewBuild: [],
-        // haveDisabledAccess: [],
+        // hasDisabledAccess: [],
       });
     }
   }
@@ -1595,7 +1601,15 @@ export class ValuationDetailEditComponent
     }
   }
 
-  onPropertyType(value) {}
+  onPropertyType(value) {
+    this.propertyStyles = this.allPropertyStyles?.filter(
+      (x: InfoDetail) => +x.parentId === +value
+    );
+
+    if (value == PropertyType.House) {
+      this.valuationForm.controls["propertyFloor"].setValue(0);
+    }
+  }
 
   setCloseState() {
     this.showCalendar = false;

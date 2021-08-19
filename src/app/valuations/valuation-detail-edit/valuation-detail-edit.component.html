@@ -130,7 +130,7 @@
 
             <div class="grid grid--9">
               <div>
-                <fieldset class="inline-child mb-3" [ngClass]="{'invalid': formErrors?.reason}"
+                <fieldset class="mb-3 inline-child" [ngClass]="{'invalid': formErrors?.reason}"
                   *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value)">
                   <label for="reason">What’s the current situation?</label>
                   <textarea class="p-2" name="reason" id="reason" cols="30" rows="3" formControlName="reason"
@@ -141,7 +141,7 @@
               </div>
 
               <div>
-                <fieldset class="inline-child mb-3" [ngClass]="{'invalid': formErrors?.timeFrame}"
+                <fieldset class="mb-3 inline-child" [ngClass]="{'invalid': formErrors?.timeFrame}"
                   *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('timeFrame').value)">
                   <label for="timeFrame">When are you looking to market?</label>
                   <textarea class="p-2" name="timeFrame" id="timeFrame" cols="30" rows="3" formControlName="timeFrame"
@@ -152,7 +152,7 @@
               </div>
 
               <div>
-                <fieldset class="inline-child mb-3" [ngClass]="{'invalid': formErrors?.generalNotes}"
+                <fieldset class="mb-3 inline-child" [ngClass]="{'invalid': formErrors?.generalNotes}"
                   *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('generalNotes').value)">
                   <label for="generalNotes">Notes (points discussed, other property details)</label>
                   <textarea class="p-2" name="generalNotes" id="generalNotes" cols="30" rows="3"
@@ -185,17 +185,19 @@
                 <span class="select">
                   <select name="propertyStyle" id="propertyStyle" formControlName="propertyStyle"
                     [disabled]="!isEditable && !isNewValuation ? true : null">
+                    <option selected value="0"></option>
                     <option *ngFor="let propertyStyle of propertyStyles" [value]='propertyStyle.id'>
                       {{propertyStyle.value}}
                     </option>
                   </select>
                 </span>
               </fieldset>
-              <fieldset class="inline-child">
+              <fieldset class="inline-child" *ngIf="valuationForm.get('propertyType').value == 2">
                 <label for="propertyFloor">Floor</label>
                 <span class="select">
                   <select name="propertyFloor" id="propertyFloor" formControlName="propertyFloor"
                     [disabled]="!isEditable && !isNewValuation ? true : null">
+                    <option selected value="0"></option>
                     <option *ngFor="let propertyFloor of propertyFloors" [value]='propertyFloor.id'>
                       {{propertyFloor.value}}
                     </option>
@@ -205,14 +207,14 @@
             </div>
 
             <div class="inline-parent inline-parent__hasLabels">
-              <fieldset class="checkbox pb-4">
+              <fieldset class="pb-4 checkbox">
                 <span>
                   <input [disabled]="!isEditable && !isNewValuation ? true : null" class="p-2" type="checkbox"
                     id="isNewBuild" name="isNewBuild" formControlName="isNewBuild" data-cy="isNewBuild">
                   <label style="font-weight: bolder;" for="isNewBuild">New Build</label>
                 </span>
               </fieldset>
-              <fieldset class="checkbox pb-4">
+              <fieldset class="pb-4 checkbox">
                 <span>
                   <input [disabled]="!isEditable && !isNewValuation ? true : null" class="p-2" type="checkbox"
                     id="isRetirementHome" name="isRetirementHome" formControlName="isRetirementHome"
@@ -306,12 +308,12 @@
               </p-multiSelect>
             </fieldset>
 
-            <fieldset class="checkbox pb-4">
+            <fieldset class="pb-4 checkbox">
               <span>
                 <input [disabled]="!isEditable && !isNewValuation ? true : null" class="p-2" type="checkbox"
-                  id="haveDisabledAccess" name="haveDisabledAccess" formControlName="haveDisabledAccess"
-                  data-cy="haveDisabledAccess">
-                <label style="font-weight: bolder;" for="haveDisabledAccess">Disabled Access</label>
+                  id="hasDisabledAccess" name="hasDisabledAccess" formControlName="hasDisabledAccess"
+                  data-cy="hasDisabledAccess">
+                <label style="font-weight: bolder;" for="hasDisabledAccess">Disabled Access</label>
               </span>
             </fieldset>
           </p-accordionTab>
@@ -888,7 +890,7 @@
             <p class="txt--title" *ngIf="thisWeek">This Week</p>
             <ol class="list list--dates" *ngIf="thisWeek">
               <li *ngFor="let key of thisWeek">
-                <app-subnav-item class="txt--date underline" (click)="selectCalendarDate(key['date'])">
+                <app-subnav-item class="underline txt--date" (click)="selectCalendarDate(key['date'])">
                   {{key['date'] | date:'fullDate'}}
                 </app-subnav-item>
                 <ol class="cards cards--small">
@@ -904,7 +906,7 @@
             <p class="txt--title" *ngIf="nextWeek">Next Week</p>
             <ol class="list list--dates" *ngIf="nextWeek">
               <li *ngFor="let key of nextWeek">
-                <app-subnav-item class="txt--date underline" (click)="selectCalendarDate(key['date'])">
+                <app-subnav-item class="underline txt--date" (click)="selectCalendarDate(key['date'])">
                   {{key['date'] | date:'fullDate'}}
                 </app-subnav-item>
                 <ol class="cards cards--small">
@@ -920,7 +922,7 @@
             <p class="txt--title" *ngIf="nextWeek">Next Two Week</p>
             <ol class="list list--dates" *ngIf="nextTwoWeek">
               <li *ngFor="let key of nextTwoWeek">
-                <app-subnav-item class="txt--date underline" (click)="selectCalendarDate(key['date'])">
+                <app-subnav-item class="underline txt--date" (click)="selectCalendarDate(key['date'])">
                   {{key['date'] | date:'fullDate'}}
                 </app-subnav-item>
                 <!-- <span class="txt--date">{{key['date'] | date:'fullDate'}}</span> -->
@@ -938,7 +940,7 @@
 
       </div>
 
-      <div *ngIf="showCalendar" class="calendar-container grid grid--35 grid--dividerLeft" #calendarContainer>
+      <div *ngIf="showCalendar" class="grid calendar-container grid--35 grid--dividerLeft" #calendarContainer>
         <p class="txt--title">{{selectedCalendarDate | date:'fullDate'}}</p>
         <p-scrollPanel [style]="{width: '100%', height: '430px'}">
           <app-calendar [isOnlyShowPurposes]="true" [view]="'day'" [viewDate]="selectedCalendarDate"

@@ -7,9 +7,10 @@ import { ValuationListComponent } from './valuation-list/valuation-list.componen
 import { SharedModule } from '../shared/shared.module';
 import { ValuationDetailEditComponent } from './valuation-detail-edit/valuation-detail-edit.component';
 import { CalendarSharedModule } from '../calendar-shared/calendar-shared.module';
+import { ValuationsTermsofBusinessComponent } from './valuations-termsof-business/valuations-termsof-business.component';
 
 @NgModule({
-  declarations: [ValuationsComponent, ValuationListComponent, ValuationDetailEditComponent],
+  declarations: [ValuationsComponent, ValuationListComponent, ValuationDetailEditComponent, ValuationsTermsofBusinessComponent],
   imports: [
     CommonModule,
     SharedModule,
