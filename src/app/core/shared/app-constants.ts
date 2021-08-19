@@ -297,6 +297,7 @@ export const ValidationMessages = {
   },
   askingRentShortLet: {
     required: "Short let rent is required",
+    min: "Price must be greater than zero",
   },
   askingRentLongLet: {
     required: "Long let rent is required",

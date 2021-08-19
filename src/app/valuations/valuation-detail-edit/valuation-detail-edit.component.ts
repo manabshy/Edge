@@ -829,9 +829,9 @@ export class ValuationDetailEditComponent
       propertyStyle: [],
       propertyType: [],
       propertyFloor: [],
-      isRetirementHome: [],
-      isNewBuild: [],
-      hasDisabledAccess: [],
+      isRetirementHome: [false],
+      isNewBuild: [false],
+      hasDisabledAccess: [false],
     });
   }
 
@@ -1787,8 +1787,6 @@ export class ValuationDetailEditComponent
       this.showInstruct = true;
     }
   }
-
-  onInstructSalesChange(event) {}
 
   onInstructLettingsChange(event) {
     if (this.instructionForm.get("instructLet").value == false) {

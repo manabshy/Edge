@@ -531,7 +531,7 @@
             data-cy="valuationValues">
             <ol class="cards">
               <li
-                *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('suggestedAskingPrice').value)">
+                *ngIf="valuation?.salesValuationBooking && isEditable || isNewValuation || (!isEditable && valuationForm.get('suggestedAskingPrice').value)">
                 <h5 class="txt--title">Sell</h5>
                 <div class="inline-parent inline-parent__hasLabels inline-parent--width-max">
                   <fieldset class="inline-child">
@@ -539,13 +539,13 @@
                     <input class="p-2" type="text" autocomplete="off" name="sellValue" id="sellValue"
                       formControlName="suggestedAskingPrice" *ngIf="!(!isEditable && !isNewValuation)"
                       data-cy="sellValue">
-                    <strong style="font-size:large"
+                    <strong class="text-lg"
                       *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingPrice').value
                       }}</strong>
                   </fieldset>
                   <fieldset class="inline-child" *ngIf="!isEditable && !isNewValuation">
                     <label style="width:max-content" for="sellValue">Age of valuation</label>
-                    <strong style="font-size:large"
+                    <strong class="text-lg"
                       [ngStyle]="{'color':ageColor(valuationForm.get('ageOfSuggestedAskingPrice').value)}">
                       {{valuationForm.get('ageOfSuggestedAskingPrice').value
                       +" months"}}</strong>
@@ -553,7 +553,7 @@
                 </div>
               </li>
               <li
-                *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('suggestedAskingRentLongLet').value)">
+                *ngIf="valuation?.lettingsValuationBooking &&  isEditable || isNewValuation || (!isEditable && valuationForm.get('suggestedAskingRentLongLet').value)">
                 <h5 class="txt--title">Long Let</h5>
                 <div class="inline-parent inline-parent__hasLabels inline-parent--width-max">
                   <fieldset class="inline-child">
@@ -561,14 +561,14 @@
                     <input class="p-2" autocomplete="off" type="text" name="longLetValue" id="longLetValue"
                       formControlName="suggestedAskingRentLongLet" *ngIf="!(!isEditable && !isNewValuation)"
                       data-cy="longLetValue">
-                    <strong style="font-size:large"
+                    <strong class="text-lg"
                       *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingRentLongLet').value
                       }}</strong>
                   </fieldset>
                   <fieldset class="inline-child"
                     *ngIf="!isEditable && !isNewValuation && !valuationForm.get('suggestedAskingRentShortLet').value">
                     <label style="width:max-content" for="sellValue">Age of valuation</label>
-                    <strong style="font-size:large"
+                    <strong class="text-lg"
                       [ngStyle]="{'color':ageColor(valuationForm.get('ageOfSuggestedAskingPrice').value)}">
                       {{valuationForm.get('ageOfSuggestedAskingPrice').value
                       +" months"}}</strong>
@@ -579,7 +579,7 @@
                   <input class="p-2" type="text" autocomplete="off" name="longLetMonthlyValue" id="longLetMonthlyValue"
                     formControlName="suggestedAskingRentLongLetMonthly" *ngIf="!(!isEditable && !isNewValuation)"
                     data-cy="longLetMonthlyValue">
-                  <strong style="font-size:large"
+                  <strong class="text-lg"
                     *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingRentLongLetMonthly').value
                     }}</strong>
                 </fieldset>
@@ -593,13 +593,13 @@
                     <input class="p-2" autocomplete="off" type="text" name="shortLetValue" id="shortLetValue"
                       formControlName="suggestedAskingRentShortLet" *ngIf="!(!isEditable && !isNewValuation)"
                       data-cy="shortLetValue">
-                    <strong style="font-size:large"
+                    <strong class="text-lg"
                       *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingRentShortLet').value
                       }}</strong>
                   </fieldset>
                   <fieldset class="inline-child" *ngIf="!isEditable && !isNewValuation">
                     <label style="width:max-content" for="sellValue">Age of valuation</label>
-                    <strong style="font-size:large"
+                    <strong class="text-lg"
                       [ngStyle]="{'color':ageColor(valuationForm.get('ageOfSuggestedAskingPrice').value)}">
                       {{valuationForm.get('ageOfSuggestedAskingPrice').value
                       +" months"}}</strong>
@@ -610,7 +610,7 @@
                   <input class="p-2" autocomplete="off" type="text" name="shortLetMonthlyValue"
                     id="shortLetMonthlyValue" formControlName="suggestedAskingRentShortLetMonthly"
                     *ngIf="!(!isEditable && !isNewValuation)" data-cy="shortLetMonthlyValue">
-                  <strong style="font-size:large"
+                  <strong class="text-lg"
                     *ngIf="!isEditable && !isNewValuation">{{valuationForm.get('suggestedAskingRentShortLetMonthly').value}}</strong>
                 </fieldset>
               </li>
@@ -752,10 +752,10 @@
   [closable]="false">
   <p-header class="row">
 
-    <span class="inline-parent" style="width: -webkit-fill-available;">Pick availability</span>
+    <span class="w-screen inline-parent">Pick availability</span>
 
     <span class=" inline-parent checkbox" *ngIf="isSalesAndLettings">
-      <span style="font-size:smaller">
+      <span class="text-sm">
         <input class="p-2" type="checkbox" id="splitAppointment" name="splitAppointment"
           [(ngModel)]="isSplitAppointment" (change)="onSplitAppointmentChange($event.target)"
           data-cy="splitAppointment">
@@ -763,9 +763,9 @@
       </span>
     </span>
 
-    <span style="width: -webkit-fill-available;" *ngIf="!isLettingsOnly && salesValuer">
+    <span class="w-screen" *ngIf="!isLettingsOnly && salesValuer">
       <div class="inline-parent">
-        <span style="font-size:smaller; padding-right: 8px; margin-bottom: 2px;">{{salesValuer?.fullName}}
+        <span class="pr-2 text-sm">{{salesValuer?.fullName}}
         </span>
         <div class="badges" style="font-size:xx-large">
           <p-badge severity="info"></p-badge>
@@ -773,11 +773,13 @@
       </div>
     </span>
 
-    <span *ngIf="!isSalesOnly && salesValuer?.staffMemberId != lettingsValuer?.staffMemberId" class="inline-parent"
-      style="width: -webkit-fill-available;">
-      <span style="font-size:smaller; padding-right: 8px;">{{lettingsValuer?.fullName}}</span>
-      <div class="badges" style="font-size:xx-large">
-        <p-badge severity="success"></p-badge>
+    <span class="w-screen mt-auto" *ngIf="!isSalesOnly && salesValuer?.staffMemberId != lettingsValuer?.staffMemberId">
+      <div class="inline-parent">
+        <span class="pr-2 text-sm">{{lettingsValuer?.fullName}}
+        </span>
+        <div class="badges" style="font-size:xx-large">
+          <p-badge severity="success"></p-badge>
+        </div>
       </div>
     </span>
 
@@ -813,7 +815,7 @@
             </fieldset>
 
             <span *ngIf="(isSalesOnly || isSalesAndLettings)" class="inline-parent">
-              <fieldset style="width:-webkit-fill-available" [ngClass]="{'invalid': formErrors?.salesValuerId}">
+              <fieldset class="w-screen" [ngClass]="{'invalid': formErrors?.salesValuerId}">
                 <label for="salesValuer">Sales Valuer</label>
                 <ng-select [ngClass]="{'invalid': formErrors?.salesValuerId}" placeholder="Select Valuer"
                   [items]="salesValuers" bindLabel="fullName" bindValue="staffMemberId" groupBy="staffMembers"
@@ -835,7 +837,7 @@
             </span>
 
             <span class="inline-parent" *ngIf="(isLettingsOnly || isSalesAndLettings)">
-              <fieldset [ngClass]="{'invalid': formErrors?.lettingsValuerId}" style="width:-webkit-fill-available">
+              <fieldset [ngClass]="{'invalid': formErrors?.lettingsValuerId}" class="w-screen">
                 <label for="lettingsValuer">Lettings Valuer</label>
                 <ng-select [ngClass]="{'invalid': formErrors?.lettingsValuerId}" placeholder="Select Valuer"
                   [items]="lettingsValuers" bindLabel="fullName" bindValue="staffMemberId" groupBy="staffMembers"
@@ -869,8 +871,7 @@
             </fieldset>
           </p-sidebar>
         </div>
-        <button type="button" class="btn btn--info h-2.5" (click)="selectValuersClick()"
-          style="margin-bottom: 8px">Valuers</button>
+        <button type="button" class="btn btn--info h-2.5 mb-2" (click)="selectValuersClick()">Valuers</button>
       </div>
 
       <div class="grid grid--65 grid--dividerLeft">
@@ -964,28 +965,27 @@
   <form [formGroup]="instructionForm" (ngSubmit)="saveInstruction()" autocompleteOff>
 
     <ng-container *ngIf="instruction?.askingPrice">
-      <fieldset *ngIf="showInstruct" style="margin-bottom: 4px;">
+      <fieldset *ngIf="showInstruct" class="mb-2">
         <span class="checkbox">
           <span>
             <input class="p-2" type="checkbox" id="instructSale" name="instructSale" formControlName="instructSale"
-              (change)="onInstructSalesChange($event.target)" data-cy="instructSale">
+              data-cy="instructSale">
             <label for="instructSale">Instruct for Sales</label>
           </span>
         </span>
       </fieldset>
-      <fieldset style="align-self: flex-start">
+      <fieldset class="self-start">
         <p-card [style]="{'width': '20rem', 'margin-bottom': '2em'}">
-          <h5>Sell</h5>
-          <fieldset>
+          <h5 class="mb-4"> Sell</h5>
+          <fieldset [ngClass]="{'invalid':formErrors.askingPrice}">
             <label for="askingPrice">Value</label>
-            <input class="p-2" type="text" name="askingPrice" id="askingPrice" formControlName="askingPrice"
-              [ngClass]="{'is-invalid':formErrors.askingPrice}">
-            <p style="color: red; margin-top: 8px;"> {{formErrors?.askingPrice}}</p>
+            <input class="p-2" type="text" name="askingPrice" id="askingPrice" formControlName="askingPrice">
+            <p class="message message--negative"> {{formErrors?.askingPrice}}</p>
           </fieldset>
         </p-card>
       </fieldset>
       <div *ngIf="instructionForm.get('instructSale').value" [style]="{'width': '20rem', 'margin-bottom': '1em'}">
-        <fieldset style="margin-bottom: 16px;">
+        <fieldset class="mb-4">
           <label>Sales Agency</label>
           <span class="radio radio--inline">
             <span>
@@ -1009,7 +1009,7 @@
     </ng-container>
 
     <ng-container *ngIf="instruction?.askingRentShortLet || instruction?.askingRentLongLet">
-      <fieldset style="margin-bottom: 4px;">
+      <fieldset class="mb-2">
         <span class="checkbox">
           <span>
             <input class="p-2" type="checkbox" id="instructLet" name="instructLet" formControlName="instructLet"
@@ -1034,15 +1034,14 @@
                 <span>
                   <input class="p-2" type="checkbox" id="isInstructLongLet" name="isInstructLongLet"
                     formControlName="isInstructLongLet" data-cy="isInstructLongLet">
-                  <label style="margin-bottom:4px; text-align:start" for="isInstructLongLet">
-                    <h5>Long Let</h5>
-                  </label>
+
+                  <h5 class="mb-4">Long Let</h5>
+
                 </span>
               </span>
-              <fieldset>
+              <fieldset [ngClass]="{'invalid':formErrors.askingRentLongLet}">
                 <label for="longLetValue">Value (per week)</label>
                 <input class="p-2" type="text" name="longLetValue" id="longLetValue" formControlName="askingRentLongLet"
-                  [ngClass]="{'is-invalid':formErrors.askingRentLongLet}"
                   [disabled]="!instructionForm.get('isInstructLongLet').value?'true':null">
                 <p class="message message--negative"> {{formErrors?.askingRentLongLet}}</p>
               </fieldset>
@@ -1062,15 +1061,15 @@
               <span>
                 <input class="p-2" type="checkbox" id="isInstructShortLet" name="isInstructShortLet"
                   formControlName="isInstructShortLet" data-cy="isInstructShortLet">
-                <label style="margin-bottom:4px; text-align:start" for="isInstructShortLet">
-                  <h5>Short Let</h5>
-                </label>
+
+                <h5 class="mb-4">Short Let</h5>
+
               </span>
             </span>
-            <fieldset>
+            <fieldset [ngClass]="{'invalid':formErrors.askingRentShortLet}">
               <label for="shortLetValue">Value (per week)</label>
               <input class="p-2" type="text" name="shortLetValue" id="shortLetValue"
-                formControlName="askingRentShortLet" [ngClass]="{'is-invalid':formErrors.askingRentShortLet}"
+                formControlName="askingRentShortLet"
                 [disabled]="!instructionForm.get('isInstructShortLet').value?'true':null">
               <p class="message message--negative"> {{formErrors?.askingRentShortLet}}</p>
             </fieldset>
