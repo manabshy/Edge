@@ -195,9 +195,6 @@ export class ValuationDetailEditComponent
   propertyFloors: any[];
   allPropertyStyles: any[];
 
-  informationMessage =
-    "If property is owned by a D&G employee, employee relation or business associate e.g. Laurus Law, Prestige, Foxtons Group";
-
   get originTypeControl() {
     return this.valuationForm.get("originType") as FormControl;
   }
@@ -644,9 +641,9 @@ export class ValuationDetailEditComponent
           this.valuationForm.get("property").setValue(baseProperty);
 
           this.valuationForm.patchValue({
-            propertyStyle: this.property.propertyStyleId,
-            propertyType: this.property.propertyTypeId,
-            propertyFloor: this.property.floorOther,
+            propertyStyleId: this.property.propertyStyleId,
+            propertyTypeId: this.property.propertyTypeId,
+            propertyFloorId: this.property.floorOther,
           });
         }
       });
@@ -826,9 +823,9 @@ export class ValuationDetailEditComponent
       lettingsOwnerAssociateContactNumber: [""],
       lettingsOwnerAssociateEmail: [""],
       lettingsOwnerAssociateType: ["6"],
-      propertyStyle: [],
-      propertyType: [],
-      propertyFloor: [],
+      propertyStyleId: [],
+      propertyTypeId: [],
+      propertyFloorId: [],
       isRetirementHome: [false],
       isNewBuild: [false],
       hasDisabledAccess: [false],
@@ -1077,6 +1074,36 @@ export class ValuationDetailEditComponent
         // isNewBuild: [],
         // hasDisabledAccess: [],
       });
+
+      if (!this.isEditable && !this.isNewValuation) {
+        this.valuationForm.get("generalNotes").disable();
+        this.valuationForm.get("timeFrame").disable();
+        this.valuationForm.get("reason").disable();
+        this.valuationForm.get("propertyTypeId").disable();
+        this.valuationForm.get("propertyFloorId").disable();
+        this.valuationForm.get("propertyStyleId").disable();
+        this.valuationForm.get("isNewBuild").disable();
+        this.valuationForm.get("isRetirementHome").disable();
+        this.valuationForm.get("bedrooms").disable();
+        this.valuationForm.get("bathrooms").disable();
+        this.valuationForm.get("receptions").disable();
+        this.valuationForm.get("sqFt").disable();
+        this.valuationForm.get("tenureId").disable();
+        this.valuationForm.get("approxLeaseExpiryDate").disable();
+        this.valuationForm.get("outsideSpace").disable();
+        this.valuationForm.get("parking").disable();
+        this.valuationForm.get("hasDisabledAccess").disable();
+        this.valuationForm.get("salesMeetingOwner").disable();
+        this.valuationForm.get("salesOwnerAssociateName").disable();
+        this.valuationForm.get("salesOwnerAssociateContactNumber").disable();
+        this.valuationForm.get("salesOwnerAssociateEmail").disable();
+        this.valuationForm.get("salesOwnerAssociateType").disable();
+        this.valuationForm.get("lettingsMeetingOwner").disable();
+        this.valuationForm.get("lettingsOwnerAssociateName").disable();
+        this.valuationForm.get("lettingsOwnerAssociateContactNumber").disable();
+        this.valuationForm.get("lettingsOwnerAssociateEmail").disable();
+        this.valuationForm.get("lettingsOwnerAssociateType").disable();
+      }
     }
   }
 

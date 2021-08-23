@@ -128,6 +128,12 @@ export enum ValuationStatusEnum {
   Cancelled = 5,
 }
 
+export enum ValuationTypeEnum {
+  None = 0,
+  Sales = 1,
+  Lettings = 2,
+}
+
 export function getValuationStatuses() {
   return Object.keys(ValuationStatusEnum).filter((type) => isNaN(<any>type));
 }

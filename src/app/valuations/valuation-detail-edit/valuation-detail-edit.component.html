@@ -134,8 +134,7 @@
                   *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('reason').value)">
                   <label for="reason">What’s the current situation?</label>
                   <textarea class="p-2" name="reason" id="reason" cols="30" rows="3" formControlName="reason"
-                    data-cy="reason" [disabled]="!isEditable && !isNewValuation ? true : null"
-                    [ngClass]="{'is-invalid': (formErrors?.reason)}"></textarea>
+                    data-cy="reason" [ngClass]="{'is-invalid': (formErrors?.reason)}"></textarea>
                   <p class="message message--negative"> {{formErrors?.reason}}</p>
                 </fieldset>
               </div>
@@ -145,8 +144,7 @@
                   *ngIf="isEditable || isNewValuation || (!isEditable && valuationForm.get('timeFrame').value)">
                   <label for="timeFrame">When are you looking to market?</label>
                   <textarea class="p-2" name="timeFrame" id="timeFrame" cols="30" rows="3" formControlName="timeFrame"
-                    data-cy="timeFrame" [disabled]="!isEditable && !isNewValuation ? true : null"
-                    [ngClass]="{'is-invalid': (formErrors?.timeFrame)}"></textarea>
+                    data-cy="timeFrame" [ngClass]="{'is-invalid': (formErrors?.timeFrame)}"></textarea>
                   <p class="message message--negative"> {{formErrors?.timeFrame}}</p>
                 </fieldset>
               </div>
@@ -157,7 +155,6 @@
                   <label for="generalNotes">Notes (points discussed, other property details)</label>
                   <textarea class="p-2" name="generalNotes" id="generalNotes" cols="30" rows="3"
                     formControlName="generalNotes" data-cy="generalNotes"
-                    [disabled]="!isEditable && !isNewValuation ? true : null"
                     [ngClass]="{'is-invalid': (formErrors?.generalNotes)}"></textarea>
                   <p class="message message--negative"> {{formErrors?.generalNotes}}</p>
                 </fieldset>
@@ -170,21 +167,19 @@
 
             <div class="inline-parent inline-parent__hasLabels">
               <fieldset class="inline-child">
-                <label for="propertyType">Property Type</label>
+                <label for="propertyTypeId">Property Type</label>
                 <span class="select">
-                  <select name="propertyType" id="propertyType" formControlName="propertyType"
-                    (change)="onPropertyType($event.target.value)"
-                    [disabled]="!isEditable && !isNewValuation ? true : null">
+                  <select name="propertyTypeId" id="propertyTypeId" formControlName="propertyTypeId"
+                    (change)="onPropertyType($event.target.value)">
                     <option *ngFor="let propertyType of propertyTypes" [value]='propertyType.id'> {{propertyType.value}}
                     </option>
                   </select>
                 </span>
               </fieldset>
               <fieldset class="inline-child">
-                <label for="propertyStyle">Property Style</label>
+                <label for="propertyStyleId">Property Style</label>
                 <span class="select">
-                  <select name="propertyStyle" id="propertyStyle" formControlName="propertyStyle"
-                    [disabled]="!isEditable && !isNewValuation ? true : null">
+                  <select name="propertyStyleId" id="propertyStyleId" formControlName="propertyStyleId">
                     <option selected value="0"></option>
                     <option *ngFor="let propertyStyle of propertyStyles" [value]='propertyStyle.id'>
                       {{propertyStyle.value}}
@@ -192,11 +187,10 @@
                   </select>
                 </span>
               </fieldset>
-              <fieldset class="inline-child" *ngIf="valuationForm.get('propertyType').value == 2">
-                <label for="propertyFloor">Floor</label>
+              <fieldset class="inline-child" *ngIf="valuationForm.get('propertyTypeId').value == 2">
+                <label for="propertyFloorId">Floor</label>
                 <span class="select">
-                  <select name="propertyFloor" id="propertyFloor" formControlName="propertyFloor"
-                    [disabled]="!isEditable && !isNewValuation ? true : null">
+                  <select name="propertyFloorId" id="propertyFloorId" formControlName="propertyFloorId">
                     <option selected value="0"></option>
                     <option *ngFor="let propertyFloor of propertyFloors" [value]='propertyFloor.id'>
                       {{propertyFloor.value}}
@@ -209,16 +203,15 @@
             <div class="inline-parent inline-parent__hasLabels">
               <fieldset class="pb-4 checkbox">
                 <span>
-                  <input [disabled]="!isEditable && !isNewValuation ? true : null" class="p-2" type="checkbox"
-                    id="isNewBuild" name="isNewBuild" formControlName="isNewBuild" data-cy="isNewBuild">
+                  <input class="p-2" type="checkbox" id="isNewBuild" name="isNewBuild" formControlName="isNewBuild"
+                    data-cy="isNewBuild">
                   <label style="font-weight: bolder;" for="isNewBuild">New Build</label>
                 </span>
               </fieldset>
               <fieldset class="pb-4 checkbox">
                 <span>
-                  <input [disabled]="!isEditable && !isNewValuation ? true : null" class="p-2" type="checkbox"
-                    id="isRetirementHome" name="isRetirementHome" formControlName="isRetirementHome"
-                    data-cy="isRetirementHome">
+                  <input class="p-2" type="checkbox" id="isRetirementHome" name="isRetirementHome"
+                    formControlName="isRetirementHome" data-cy="isRetirementHome">
                   <label style="font-weight: bolder;" for="isRetirementHome">Retirement Home</label>
                 </span>
               </fieldset>
@@ -232,8 +225,7 @@
                       d="M17.9 33.4c4.7 0 8.5-3.8 8.5-8.5s-3.8-8.5-8.5-8.5S9.5 20.3 9.5 25 13.2 33.4 17.9 33.4zM51.7 16.5H29.2v19.7H6.6V10.9H1v42.3h5.6v-8.5h50.7v8.5H63V27.8C63 21.5 58 16.5 51.7 16.5z" />
                   </svg>Bedrooms</label>
                 <input class="p-2" type="number" name="bedrooms" id="bedrooms" formControlName="bedrooms" min="0"
-                  max="99" [disabled]="!isEditable && !isNewValuation ? true : null"
-                  [ngClass]="{'is-invalid': (formErrors?.bedrooms)}" />
+                  max="99" [ngClass]="{'is-invalid': (formErrors?.bedrooms)}" />
                 {{formErrors?.bedrooms}}
               </fieldset>
 
@@ -245,8 +237,7 @@
                       d="M56.8 35.1V9.8C56.8 4.9 52.9 1 48 1c-2.3 0-4.6 0.9-6.2 2.6L38 7.4c-0.5-0.2-1-0.2-1.6-0.2 -1.2 0-2.4 0.4-3.3 1l8.6 8.6c0.6-1 1-2.1 1-3.3 0-0.6-0.1-1.1-0.2-1.6l3.9-3.9c0.5-0.5 1.1-0.7 1.8-0.7 1.4 0 2.6 1.1 2.6 2.6v25.3H29.4c-0.9-0.7-1.8-1.4-2.5-2.2l-4.3-4.8c-0.6-0.7-1.3-1.2-2.1-1.5 -1-0.5-2-0.7-3.1-0.7 -3.8 0-6.9 3.1-6.9 7v2.3H1v18.6c0 3.4 2.8 6.2 6.2 6.2 0 1.7 1.4 3.1 3.1 3.1h43.4c1.7 0 3.1-1.4 3.1-3.1 3.4 0 6.2-2.8 6.2-6.2V35.1H56.8z" />
                   </svg>Bathrooms</label>
                 <input class="p-2" type="number" name="bathrooms" id="bathrooms" formControlName="bathrooms" min="0"
-                  max="99" [disabled]="!isEditable && !isNewValuation ? true : null"
-                  [ngClass]="{'is-invalid': (formErrors?.bathrooms)}" />
+                  max="99" [ngClass]="{'is-invalid': (formErrors?.bathrooms)}" />
                 {{formErrors?.bathrooms}}
               </fieldset>
 
@@ -257,8 +248,7 @@
                       d="M58.2 26.2c-3.2 0-5.8 2.6-5.8 5.8v8.7H11.6V32c0-3.2-2.6-5.8-5.8-5.8S0 28.8 0 32v14.5c0 3.2 2.6 5.8 5.8 5.8h52.4c3.2 0 5.8-2.6 5.8-5.8V32C64 28.8 61.4 26.2 58.2 26.2zM49.5 11.6h-35c-3.2 0-5.8 2.6-5.8 5.8v6.3c3.4 1.2 5.8 4.4 5.8 8.2v5.9h34.9v-5.9c0-3.8 2.4-7 5.8-8.2v-6.3C55.3 14.3 52.7 11.6 49.5 11.6z" />
                   </svg>Receptions</label>
                 <input class="p-2" type="number" name="receptions" id="receptions" formControlName="receptions" min="0"
-                  max="99" [disabled]="!isEditable && !isNewValuation ? true : null"
-                  [ngClass]="{'is-invalid': (formErrors?.receptions)}" />
+                  max="99" [ngClass]="{'is-invalid': (formErrors?.receptions)}" />
                 {{formErrors?.receptions}}
               </fieldset>
 
@@ -268,8 +258,7 @@
                     <path
                       d="M53.9 53.9L49.8 58l-2.8-2.8 4.1-4.1 -7.5-7.5 -4.1 4.1L36.8 45l4.1-4.1 -7.5-7.5 -4.1 4.1 -2.8-2.8 4.1-4.1 -7.6-7.6L19 27.2l-2.8-2.8 4.1-4.1 -7.5-7.5 -4.1 4.1L6 14.2l4.1-4.1L1 1v54.2C1 59.5 4.5 63 8.8 63H63L53.9 53.9zM12.6 51.4V29.1l22.3 22.3H12.6z" />
                   </svg>Approx sq. ft</label>
-                <input class="p-2" type="text" name="sqFt" id="sqFt" formControlName="sqFt"
-                  [disabled]="!isEditable && !isNewValuation ? true : null">
+                <input class="p-2" type="text" name="sqFt" id="sqFt" formControlName="sqFt">
               </fieldset>
             </div>
 
@@ -278,8 +267,7 @@
                 <label for="tenureId">Tenure</label>
                 <span class="select">
                   <select name="tenureId" id="tenureId" formControlName="tenureId"
-                    (change)="onTenureChange($event.target.value)"
-                    [disabled]="!isEditable && !isNewValuation ? true : null">
+                    (change)="onTenureChange($event.target.value)">
                     <option value="0">Not Known</option>
                     <option *ngFor="let tenure of tenures" [value]='tenure.id'> {{tenure.value}}</option>
                   </select>
@@ -289,7 +277,7 @@
                 [ngClass]="{'invalid': formErrors?.approxLeaseExpiryDate}">
                 <input class="p-2" [style]="{'height': '1.5em'}" type="number" name="approxLeaseExpiryDate"
                   autocomplete="off" id="approxLeaseExpiryDate" formControlName="approxLeaseExpiryDate"
-                  [disabled]="!isEditable && !isNewValuation ? true : null" placeholder="Approx Lease Length" />
+                  placeholder="Approx Lease Length" />
                 <p class="message message--negative"> {{formErrors?.approxLeaseExpiryDate}}</p>
               </fieldset>
             </div>
@@ -310,9 +298,8 @@
 
             <fieldset class="pb-4 checkbox">
               <span>
-                <input [disabled]="!isEditable && !isNewValuation ? true : null" class="p-2" type="checkbox"
-                  id="hasDisabledAccess" name="hasDisabledAccess" formControlName="hasDisabledAccess"
-                  data-cy="hasDisabledAccess">
+                <input class="p-2" type="checkbox" id="hasDisabledAccess" name="hasDisabledAccess"
+                  formControlName="hasDisabledAccess" data-cy="hasDisabledAccess">
                 <label style="font-weight: bolder;" for="hasDisabledAccess">Disabled Access</label>
               </span>
             </fieldset>
@@ -360,7 +347,7 @@
                         data-cy="openAvailabilitySales">Edit</button>
                     </fieldset>
                     <ng-template pTemplate="footer">
-                      <fieldset [disabled]="!isNewValuation && !isEditable">
+                      <fieldset>
                         <label>Are we meeting the Owner ?</label>
                         <span class="radio radio--inline">
                           <span>
@@ -375,8 +362,7 @@
                           </span>
                         </span>
                       </fieldset>
-                      <div [disabled]="!isNewValuation && !isEditable"
-                        *ngIf="valuationForm.get('salesMeetingOwner').value === false">
+                      <div *ngIf="valuationForm.get('salesMeetingOwner').value === false">
                         <span class="inline-parent inline-parent__hasLabels">
                           <fieldset class="inline-child" [ngClass]="{'invalid': formErrors?.salesOwnerAssociateName}">
                             <label for="salesOwnerAssociateName">Name</label>
@@ -456,7 +442,7 @@
                     </fieldset>
                     <ng-template pTemplate="footer">
                       <div *ngIf="getTimeSalesValuationDate != getTimeLettingsValuationDate">
-                        <fieldset [disabled]="!isNewValuation && !isEditable">
+                        <fieldset>
                           <label>Are we meeting the Owner ?</label>
                           <span class="radio radio--inline">
                             <span>
@@ -472,8 +458,7 @@
                             </span>
                           </span>
                         </fieldset>
-                        <div [disabled]="!isNewValuation && !isEditable"
-                          *ngIf="valuationForm.get('lettingsMeetingOwner').value ===false">
+                        <div *ngIf="valuationForm.get('lettingsMeetingOwner').value ===false">
                           <span class="inline-parent inline-parent__hasLabels">
                             <fieldset class="inline-child"
                               [ngClass]="{'invalid': formErrors?.lettingsOwnerAssociateName}">
@@ -620,49 +605,14 @@
           <!-- [disabled]="!isNewValuation && !isEditable && valuationForm.get('declarableInterest').value"-->
 
           <p-accordionTab header="Terms Of Business" [(selected)]="activeState[4]" data-cy="termsOfBusiness">
-            <div class="grid grid--9">
-              <fieldset class="mb-3">
-                <fieldset class="row">
-                  <label style="width:auto;" for="haveInterest">Does the Owner have a
-                    declarable interest (Section 21)
-                  </label>
-                  <span style="display:contents">
-                    <i [pTooltip]="informationMessage" class="fa fa-info-circle fa-2x text-blue"
-                      style="color:lightblue;padding-left:4px"></i>
-                  </span>
-                </fieldset>
-                <span class="radio radio--inline">
-                  <span style="margin-right: 8px;">
-                    <input class="p-2" type="radio" id="interestYes" value="true" name="declarableInterest"
-                      formControlName="declarableInterest" data-cy="interestYes">
-                    <label for="interestYes">Yes</label>
-                  </span>
-                  <span>
-                    <input class="p-2" type="radio" id="interestNo" value="false" name="declarableInterest"
-                      formControlName="declarableInterest" data-cy="interestNo">
-                    <label for="interestNo">No</label>
-                  </span>
-                </span>
-              </fieldset>
-              <fieldset class="mb-3">
-                <p-dropdown *ngIf="valuationForm.get('declarableInterest').value === 'true'" [options]="interestList"
-                  formControlName="section21StatusId" optionLabel="value" optionValue="id" [filter]="false"
-                  data-cy="section21StatusId">
-                </p-dropdown>
-              </fieldset>
-            </div>
-            <p-messages *ngIf="formErrors.declarableInterest" severity="error">
-              <ng-template pTemplate>
-                <div class="p-ml-2">Please select terms of
-                  bussiness</div>
-              </ng-template>
-            </p-messages>
+            <app-valuations-termsof-business [(valuationForm)]="valuationForm" [(interestList)]="interestList"
+              [(valuation)]="valuation" [(formErrors)]="formErrors"></app-valuations-termsof-business>
           </p-accordionTab>
 
           <p-accordionTab *ngIf="false" header="Anti Money Laundering" [(selected)]="activeState[5]">
           </p-accordionTab>
 
-          <p-accordionTab *ngIf="false" header="Land Registery" [(selected)]="activeState[6]"></p-accordionTab>
+          <p-accordionTab *ngIf="false" header="Land Register" [(selected)]="activeState[6]"></p-accordionTab>
 
           <!-- <p-accordionTab header="Status" [(selected)]="activeState[7]"></p-accordionTab>
 
@@ -678,7 +628,6 @@
               <div class="col-sm" *ngIf="(isEditable || isNewValuation)">
                 <select class="custom-select custom-select-sm" name="originTypes" id="originTypes"
                   formControlName="originType" arial-label="Origin Types" (change)="onSelectType($event.target.value)"
-                  [disabled]="!isEditable && !isNewValuation ? true : null"
                   [ngClass]="{'is-invalid': (formErrors.originType)}">
                   <option selected value="0">Not Known</option>
                   <option *ngFor="let type of activeOriginTypes" [value]='type.id'> {{type.value}}</option>
@@ -688,9 +637,7 @@
               <ng-container *ngIf="(showOriginId) else originValue">
                 <div class="col-sm">
                   <select class="custom-select custom-select-sm" name="originId" id="originId"
-                    formControlName="originId" aria-label="Origins"
-                    [disabled]="!isEditable && !isNewValuation ? true : null"
-                    [ngClass]="{'is-invalid': (formErrors.originId)}">
+                    formControlName="originId" aria-label="Origins" [ngClass]="{'is-invalid': (formErrors.originId)}">
                     <option value="0">Not Known</option>
                     <option *ngFor="let origin of origins" [value]='origin.id'> {{origin.value}}</option>
                   </select>
@@ -1039,18 +986,18 @@
 
                 </span>
               </span>
-              <fieldset [ngClass]="{'invalid':formErrors.askingRentLongLet}">
+              <fieldset [disabled]="!instructionForm.get('isInstructLongLet').value?'true':null"
+                [ngClass]="{'invalid':formErrors.askingRentLongLet}">
                 <label for="longLetValue">Value (per week)</label>
-                <input class="p-2" type="text" name="longLetValue" id="longLetValue" formControlName="askingRentLongLet"
-                  [disabled]="!instructionForm.get('isInstructLongLet').value?'true':null">
+                <input class="p-2" type="text" name="longLetValue" id="longLetValue"
+                  formControlName="askingRentLongLet">
                 <p class="message message--negative"> {{formErrors?.askingRentLongLet}}</p>
               </fieldset>
               <!-- [ngStyle]="{'background': !instructionForm.get('isInstructLongLet').value?'lightgray':null}" -->
-              <fieldset>
+              <fieldset [disabled]="!instructionForm.get('isInstructLongLet').value?'true':null">
                 <label for="longLetMonthlyValue">Value (per month)</label>
                 <input class="p-2" type="text" name="longLetMonthlyValue" id="longLetMonthlyValue"
-                  formControlName="askingRentLongLetMonthly"
-                  [disabled]="!instructionForm.get('isInstructLongLet').value?'true':null">
+                  formControlName="askingRentLongLetMonthly">
               </fieldset>
             </div>
           </p-card>
@@ -1066,19 +1013,18 @@
 
               </span>
             </span>
-            <fieldset [ngClass]="{'invalid':formErrors.askingRentShortLet}">
+            <fieldset [ngClass]="{'invalid':formErrors.askingRentShortLet}"
+              [disabled]="!instructionForm.get('isInstructShortLet').value?'true':null">
               <label for="shortLetValue">Value (per week)</label>
               <input class="p-2" type="text" name="shortLetValue" id="shortLetValue"
-                formControlName="askingRentShortLet"
-                [disabled]="!instructionForm.get('isInstructShortLet').value?'true':null">
+                formControlName="askingRentShortLet">
               <p class="message message--negative"> {{formErrors?.askingRentShortLet}}</p>
             </fieldset>
 
-            <fieldset>
+            <fieldset [disabled]="!instructionForm.get('isInstructShortLet').value?'true':null">
               <label for="shortLetMonthlyValue">Value (per month)</label>
               <input class="p-2" type="text" name="shortLetMonthlyValue" id="shortLetMonthlyValue"
-                formControlName="askingRentShortLetMonthly"
-                [disabled]="!instructionForm.get('isInstructShortLet').value?'true':null">
+                formControlName="askingRentShortLetMonthly">
             </fieldset>
           </p-card>
         </fieldset>
