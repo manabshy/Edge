@@ -103,6 +103,7 @@ import { CardModule } from "primeng/card";
 import { MessagesModule } from "primeng/messages";
 import { MessageModule } from "primeng/message";
 import { ScrollPanelModule } from "primeng/scrollpanel";
+import { TableModule } from "primeng/table";
 
 // Components
 import { RedactedTableComponent } from "./components/redacted-table/redacted-table.component";
@@ -223,6 +224,7 @@ const externalModules = [
   MessageModule,
   MessagesModule,
   ScrollPanelModule,
+  TableModule,
 ];
 
 @NgModule({

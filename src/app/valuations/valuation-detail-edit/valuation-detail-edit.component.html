@@ -688,10 +688,74 @@
 </p-dialog>
 
 <!-- Property Finder Modal -->
-<p-dialog header="Find Property" [(visible)]="showProperty" [modal]="true" [draggable]="false" class="modal--medium">
+<p-dialog header="Find Property" [(visible)]="showProperty" [modal]="true" [draggable]="false" class="modal--medium"
+  (onHide)="onClosePropertyFinder()">
   <app-property-finder [property]="property" [readOnly]="!isEditable && !isNewValuation" [includePhoto]="true"
     [includeMap]="true" (selectedProperty)="getSelectedProperty($event)"
     (isCreatingNewProperty)="createNewProperty($event)"></app-property-finder>
+</p-dialog>
+
+<!-- for active valuations -->
+<p-dialog header="Active Valuations" [closable]="false" [(visible)]="isActiveValuationsVisible" [modal]="true"
+  [draggable]="false" class="modal--medium">
+  <p-messages severity="warn">
+    <ng-template pTemplate>
+      <div>There are active valuations you can select one from list or you can select create for new one
+      </div>
+    </ng-template>
+  </p-messages>
+
+  <p-table [value]="activeValuations" selectionMode="single" (onRowSelect)="onSelectActiveValuation($event)"
+    dataKey="ValuationEventId">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Status</th>
+        <th>Date</th>
+        <th>Valuer</th>
+        <th>Sale</th>
+        <th>Long Let</th>
+        <th>Short Let</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-valuation>
+      <tr [pSelectableRow]="valuation">
+        <td>
+          <ng-container *ngIf="valuation?.ValuationStatus, else noValue">
+            {{valuation?.ValuationStatus}}</ng-container>
+        </td>
+        <td><span>{{(valuation?.valuationDate | date: 'dd/MM/yyyy') || '-'}}</span></td>
+        <td>
+          <span *ngIf="valuation?.salesValuer">{{valuation?.salesValuer?.fullName}}<small
+              *ngIf="valuation.salesValuer && valuation.lettingsValuer">,</small></span>
+          <span *ngIf="valuation?.lettingsValuer">{{valuation.lettingsValuer?.fullName}}</span>
+        </td>
+        <td>
+          <ng-container *ngIf="valuation?.suggestedAskingPrice, else noValue">{{valuation?.suggestedAskingPrice |
+            currency:'GBP':'symbol':'1.0-0'}}</ng-container>
+        </td>
+        <td>
+          <ng-container *ngIf="valuation?.suggestedAskingRentLongLet, else noValue">
+            {{valuation?.suggestedAskingRentLongLet |
+            currency:'GBP':'symbol':'1.0-0'}} pw</ng-container>
+        </td>
+        <td>
+          <ng-container *ngIf="valuation?.suggestedAskingRentShortLet, else noValue">
+            {{valuation?.suggestedAskingRentShortLet
+            |
+            currency:'GBP':'symbol':'1.0-0'}} pw</ng-container>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <ng-template #noValue>-</ng-template>
+
+  <footer class="footer--modal">
+    <div class="btn--container">
+      <button type="submit" class="btn btn--info" data-cy="createValuation"
+        (click)="isActiveValuationsVisible = false">Create New
+        Valuation</button>
+    </div>
+  </footer>
 </p-dialog>
 
 <!-- Appointment Modal -->
@@ -822,13 +886,12 @@
       </div>
 
       <div class="grid grid--65 grid--dividerLeft">
-        <p-messages *ngIf="isSplitAppointment && !selectedSalesDate" severity="warn" [style]="{'margin-top': '-20px'}">
+        <p-messages *ngIf="isSplitAppointment && !selectedSalesDate" severity="warn">
           <ng-template pTemplate>
             <div class="p-ml-2">Please select a slot for sales </div>
           </ng-template>
         </p-messages>
-        <p-messages [style]="{'margin-top': '-20px'}"
-          *ngIf="isSplitAppointment && selectedSalesDate && !selectedLettingsDate" severity="warn">
+        <p-messages *ngIf="isSplitAppointment && selectedSalesDate && !selectedLettingsDate" severity="warn">
           <ng-template pTemplate>
             <div class="p-ml-2">Please select a slot for lettings </div>
           </ng-template>

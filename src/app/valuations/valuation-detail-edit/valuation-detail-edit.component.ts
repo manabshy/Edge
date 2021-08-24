@@ -50,6 +50,7 @@ import {
   CalendarAvailibility,
   ValuationStaffMembersCalanderEvents,
   ValuationBooking,
+  ValuationStatuses,
 } from "../shared/valuation";
 import { ValuationService } from "../shared/valuation.service";
 import { Instruction } from "src/app/shared/models/instruction";
@@ -194,6 +195,9 @@ export class ValuationDetailEditComponent
   propertyStyles: any[];
   propertyFloors: any[];
   allPropertyStyles: any[];
+  activeValuations: Valuation[] = [];
+  isActiveValuationsVisible = false;
+  isCanDeactivate = false;
 
   get originTypeControl() {
     return this.valuationForm.get("originType") as FormControl;
@@ -603,6 +607,20 @@ export class ValuationDetailEditComponent
     this.selectedDate = null;
     if (this.isSplitAppointment) this.bookingButtonLabel = "Book For Sales";
     else this.bookingButtonLabel = "Book For Sales and Lettings";
+  }
+
+  onSelectActiveValuation(valuation) {
+    this.isCanDeactivate = true;
+
+    this.router
+      .navigateByUrl("/", { skipLocationChange: false })
+      .then(() =>
+        this.router.navigate([
+          "valuations-register/detail/",
+          valuation?.data?.valuationEventId,
+          "edit",
+        ])
+      );
   }
 
   private setupListInfo(info: DropdownListInfo) {
@@ -1287,6 +1305,27 @@ export class ValuationDetailEditComponent
     }
   }
 
+  onClosePropertyFinder() {
+    if (!(this.property && this.property.propertyId > 0)) {
+      this.router.navigate(["/valuations-register"]);
+    } else {
+      this.propertyService
+        .getValuations(this.property.propertyId, true)
+        .subscribe((valuations: Valuation[]) => {
+          if (valuations && valuations.length > 0) {
+            this.activeValuations = valuations.filter(
+              (x) =>
+                x.valuationStatus == ValuationStatusEnum.Booked ||
+                x.valuationStatus == ValuationStatusEnum.None ||
+                x.valuationStatus == ValuationStatusEnum.Valued
+            );
+            this.isActiveValuationsVisible =
+              this.activeValuations.length > 0 ? true : false;
+          }
+        });
+    }
+  }
+
   private getValuationPropertyInfo(propertyId: number) {
     this.valuationService
       .getValuationPropertyInfo(propertyId)
@@ -1760,6 +1799,7 @@ export class ValuationDetailEditComponent
   hidePhotosModal() {
     this.showPhotos = false;
   }
+
   changeProperty() {
     this.showProperty = true;
   }
@@ -2461,7 +2501,11 @@ export class ValuationDetailEditComponent
   }
 
   canDeactivate(): boolean {
-    if (this.valuationForm.dirty && !this.isSubmitting) {
+    if (
+      !this.isCanDeactivate &&
+      this.valuationForm.dirty &&
+      !this.isSubmitting
+    ) {
       return false;
     }
     return true;
