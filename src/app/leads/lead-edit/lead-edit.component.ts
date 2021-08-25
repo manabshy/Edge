@@ -474,7 +474,15 @@ export class LeadEditComponent
           this.lead?.closedById
             ? (this.isLeadClosed = true)
             : (this.isLeadClosed = false);
-          this.setCanEditFlag();
+
+          let changedListingType = null;
+          if (
+            this.leadSearchInfo?.listingType == ListingType.MyLeads &&
+            this.lead.ownerId != this.currentStaffMember.staffMemberId
+          ) {
+            changedListingType = ListingType.OtherUserLeads;
+          }
+          this.setCanEditFlag(changedListingType);
 
           this.setLeadTypes(this.lead);
           this.setIsOwnerFlag();
@@ -504,8 +512,10 @@ export class LeadEditComponent
     }
   }
 
-  private setCanEditFlag() {
-    const listingType = this.leadSearchInfo?.listingType ?? 1;
+  private setCanEditFlag(changedListingType?: ListingType) {
+    const listingType = changedListingType
+      ? changedListingType
+      : this.leadSearchInfo?.listingType ?? 1;
     console.log(this.leadSearchInfo, "info", listingType, "listing type");
     switch (true) {
       case this.isMyLead && !this.isLeadClosed:
