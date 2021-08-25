@@ -24,10 +24,10 @@
             <div>{{staffMemberFinderForm.get('selectedDashboardMember').value?.label}}</div>
           </div>
         </ng-template>
-        <ng-template let-country pTemplate="item">
+        <ng-template let-staffMember pTemplate="item">
           <div class="country-item row">
             <span class="circle">
-              <img [src]="country?.icon " alt="" class="circle" *ngIf="country?.icon; else noPhoto">
+              <img [src]="staffMember?.icon " alt="" class="circle" *ngIf="staffMember?.icon; else noPhoto">
               <ng-template #noPhoto>
                 <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
                   <path
@@ -36,7 +36,7 @@
                 </svg>
               </ng-template>
             </span>
-            <div style="margin-top:8px">{{country.label}}</div>
+            <div style="margin-top:8px">{{staffMember.label}}</div>
           </div>
         </ng-template>
       </p-dropdown>

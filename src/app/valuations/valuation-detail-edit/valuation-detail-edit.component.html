@@ -853,7 +853,8 @@
                 <ng-select [ngClass]="{'invalid': formErrors?.lettingsValuerId}" placeholder="Select Valuer"
                   [items]="lettingsValuers" bindLabel="fullName" bindValue="staffMemberId" groupBy="staffMembers"
                   [multiple]="false" formControlName="lettingsValuerId" (change)="onLettingsValuerChange($event)"
-                  [readonly]="!isEditable && !isNewValuation" [ngClass]="{'is-invalid': formErrors.lettingsValuerId}">
+                  [readonly]="!isEditable && !isNewValuation" [ngClass]="{'is-invalid': formErrors.lettingsValuerId}"
+                  data-cy="lettingsValuer">
                   <ng-template ng-optgroup-tmp let-item="item">
                     {{item.office?.name}}
                   </ng-template>
