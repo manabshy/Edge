@@ -807,8 +807,9 @@
                 <span *ngIf="isBothEdit">
                   <input class="p-2" type="radio"
                     [checked]="availabilityForm.controls['type'].value ==='both'?'checked':''" tabindex="1"
-                    name="appointments" id="valuationBoth">
-                  <label for="valuationBoth" btnRadio="both" tabindex="0" role="button"><span>Both</span></label>
+                    name="valuationBoth" id="valuationBoth">
+                  <label for="valuationBoth" data-cy="valBoth" btnRadio="both" tabindex="0"
+                    role="button"><span>Both</span></label>
                 </span>
                 <span *ngIf="isBothEdit || isSalesEdit">
                   <input class="p-2" [checked]="availabilityForm.controls['type'].value ==='sales'?'checked':''"
@@ -819,7 +820,7 @@
                 <span *ngIf="isBothEdit || isLettingsEdit">
                   <input class="p-2" [checked]="availabilityForm.controls['type'].value ==='lettings'?'checked':''"
                     type="radio" tabindex="2" name="appointments" id="valuationLettings">
-                  <label for="valuationLettings" btnRadio="lettings" tabindex="0"
+                  <label for="valuationLettings" data-cy="valLet" btnRadio="lettings" tabindex="0"
                     role="button"><span>Lettings</span></label>
                 </span>
               </span>
