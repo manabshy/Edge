@@ -53,6 +53,7 @@ export class LeadRegisterComponent implements OnInit {
   newLeadOwnerId: number;
   locale = "en-gb";
   isLoading = false;
+  queryResultCount: number;
   isClosedLeadFound = false;
   isSubmitting = false;
   defaultListingType = ListingType.MyLeads;
@@ -202,6 +203,9 @@ export class LeadRegisterComponent implements OnInit {
     this.leadService.getLeads(leadSearchInfo, PAGE_SIZE).subscribe((result) => {
       if (result) {
         this.isLoading = false;
+
+        this.queryResultCount = result[0].leadsQueryCount;
+
         if (leadSearchInfo.page === 1) {
           this.filteredLeads = result;
           window.scrollTo(0, 0);

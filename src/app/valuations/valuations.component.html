@@ -46,9 +46,17 @@
                 (selectedOfficeId)="getSelectedOfficeId($event)" [fullWidth]="true"></app-office-finder>
             </fieldset>
 
-            <fieldset class="mb-3">
-              <button class="btn btn--info" id="btnSearch" (click)="getValuations()" data-cy="searchVal">Search</button>
-            </fieldset>
+            <div class="flex">
+              <fieldset class="mr-2">
+                <button class="btn btn--info" id="btnSearch" (click)="getValuations()"
+                  data-cy="searchVal">Search</button>
+              </fieldset>
+              <fieldset class="flex">
+                <span class="font-extrabold !important mt-2">{{valuations?.length}} of {{queryResultCount}}
+                  Val</span>
+              </fieldset>
+            </div>
+
           </form>
         </div>
       </div>

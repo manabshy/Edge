@@ -42,6 +42,7 @@ export interface Lead {
   updatedBy: number;
   isChecked?: boolean;
   isClosed?: boolean;
+  leadsQueryCount?: number;
 }
 
 export interface LeadSearchInfo {

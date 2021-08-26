@@ -65,9 +65,17 @@
             <fieldset>
 
             </fieldset>
-            <fieldset>
-              <button class="btn btn--info" id="search" (click)="PerformSearch(true)">Search</button>
-            </fieldset>
+
+            <div class="flex">
+              <fieldset class="mr-2">
+                <button class="btn btn--info" id="search" (click)="PerformSearch(true)">Search</button>
+              </fieldset>
+              <fieldset class="flex">
+                <span class="font-extrabold !important mt-2">{{filteredLeads?.length}} of {{queryResultCount}}
+                  Leads</span>
+              </fieldset>
+            </div>
+
           </form>
         </div>
       </div>
