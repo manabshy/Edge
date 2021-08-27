@@ -148,6 +148,7 @@ export class ValuationDetailEditComponent
   availableDates: ValuationStaffMembersCalanderEvents;
   canBookAppointment = true;
   isAvailabilityRequired = false;
+  oldClass: string = "null";
   contactGroup$: Observable<ContactGroup>;
   showPhotos = false;
   showMap = false;
@@ -1389,6 +1390,7 @@ export class ValuationDetailEditComponent
     this.thisWeek = [];
     this.nextTwoWeek = [];
     this.nextWeek = [];
+    this.oldClass = "null";
 
     this.availabilityForm.patchValue({
       fromDate: new Date(),
@@ -1526,7 +1528,7 @@ export class ValuationDetailEditComponent
     }
   }
 
-  removeSelectedClass(data: any[]) {
+  removeSelectedClass(data: any[], oldClass: string) {
     let hourIndex = -1;
     if (data && data.length > 0) {
       for (let i in data) {
@@ -1537,7 +1539,7 @@ export class ValuationDetailEditComponent
           hourIndex = data[i].hours.findIndex(
             (y) => y.class == "hourColorsForSelected"
           );
-          data[i].hours[hourIndex].class = "null";
+          data[i].hours[hourIndex].class = oldClass;
         }
       }
     }
@@ -1562,11 +1564,12 @@ export class ValuationDetailEditComponent
           if (date > new Date()) {
             hours.push({
               value: slotDate,
-              class: this.isLettingsEdit
-                ? "hourColorsForLettings"
-                : this.isSalesEdit
-                ? "hourColorsForSales"
-                : "hourColorsForBoth",
+              class:
+                this.isLettingsEdit || this.isLettingsOnly
+                  ? "hourColorsForLettings"
+                  : this.isSalesEdit || this.isSalesOnly
+                  ? "hourColorsForSales"
+                  : "hourColorsForBoth",
             });
           }
         }
@@ -1621,7 +1624,9 @@ export class ValuationDetailEditComponent
     let index = -1;
     if (
       slots.thisWeek &&
-      slots.thisWeek.findIndex((x) => new Date(x).getTime() === date.getTime())
+      slots.thisWeek.findIndex(
+        (x) => new Date(x).getTime() === date.getTime()
+      ) > -1
     ) {
       index = slots.thisWeek.findIndex(
         (x) => new Date(x).getTime() === date.getTime()
@@ -1659,10 +1664,10 @@ export class ValuationDetailEditComponent
       this.selectCalendarDate(this.selectedDate);
       this.isAvailabilityRequired = false;
 
-      this.removeSelectedClass(this.thisWeek);
-      this.removeSelectedClass(this.nextWeek);
-      this.removeSelectedClass(this.nextTwoWeek);
-
+      this.removeSelectedClass(this.thisWeek, this.oldClass);
+      this.removeSelectedClass(this.nextWeek, this.oldClass);
+      this.removeSelectedClass(this.nextTwoWeek, this.oldClass);
+      this.oldClass = hours.class;
       hours.class = "hourColorsForSelected";
     }
   }
@@ -1685,6 +1690,7 @@ export class ValuationDetailEditComponent
     this.isSalesEdit = false;
     this.isLettingsEdit = false;
     this.isBothEdit = false;
+    this.oldClass = "null";
   }
 
   selectCalendarDate(date: Date) {
@@ -2452,6 +2458,8 @@ export class ValuationDetailEditComponent
       this.selectedLettingsDate = this.selectedDate;
       this.selectedSalesDate = this.selectedDate;
     }
+
+    this.oldClass = "null";
 
     if (this.valuation && !this.valuation.valuationDate) {
       this.valuation.valuationDate = this.selectedSalesDate;

@@ -759,8 +759,8 @@
 </p-dialog>
 
 <!-- Appointment Modal -->
-<p-dialog #availabilityDialog [(visible)]="isAppointmentVisible" [modal]="true" [draggable]="false" class="modal--large"
-  [closable]="false">
+<p-dialog #availabilityDialog [(visible)]="isAppointmentVisible" [modal]="true" [draggable]="false"
+  class="modal--xlarge" [closable]="false" [blockScroll]=true>
   <p-header class="row">
 
     <span class="w-screen inline-parent">Pick availability</span>
@@ -798,7 +798,7 @@
   <form [formGroup]="availabilityForm" (ngSubmit)="searchAvailability()">
     <div class="row">
 
-      <div class="grid grid--06">
+      <div class="grid grid--05">
         <div *ngIf="sideBarControlVisible">
           <p-sidebar [modal]="false" [visible]="sideBarControlVisible" position="left" [showCloseIcon]="false">
 
@@ -887,7 +887,7 @@
         <button type="button" class="btn btn--info h-2.5 mb-2" (click)="selectValuersClick()">Valuers</button>
       </div>
 
-      <div class="grid grid--65 grid--dividerLeft">
+      <div class="grid grid--62 grid--dividerLeft">
         <p-messages *ngIf="isSplitAppointment && !selectedSalesDate" severity="warn">
           <ng-template pTemplate>
             <div class="p-ml-2">Please select a slot for sales </div>
@@ -898,7 +898,7 @@
             <div class="p-ml-2">Please select a slot for lettings </div>
           </ng-template>
         </p-messages>
-        <p-scrollPanel [style]="{width: '100%', height: '450px'}">
+        <p-scrollPanel [style]="{width: '100%', height: '650px'}">
           <app-subnav>
             <p class="txt--title" *ngIf="thisWeek">This Week</p>
             <ol class="list list--dates" *ngIf="thisWeek">
@@ -953,13 +953,15 @@
 
       </div>
 
-      <div *ngIf="showCalendar" class="grid calendar-container grid--35 grid--dividerLeft" #calendarContainer>
-        <p class="txt--title">{{selectedCalendarDate | date:'fullDate'}}</p>
-        <p-scrollPanel [style]="{width: '100%', height: '430px'}">
+      <div class="grid--38 grid--dividerLeft" *ngIf="showCalendar">
+        <h2 class="mb-2 txt--title">{{selectedCalendarDate | date:'fullDate'}}</h2>
+        <p-scrollPanel [style]="{width: '100%', height: '580px'}">
           <app-calendar [isOnlyShowPurposes]="true" [view]="'day'" [viewDate]="selectedCalendarDate"
-            [selectedStaffMemberId]="selectedStaffMemberId" [secondStaffMemberId]="secondStaffMemberId"></app-calendar>
+            [selectedStaffMemberId]="selectedStaffMemberId" [secondStaffMemberId]="secondStaffMemberId">
+          </app-calendar>
         </p-scrollPanel>
       </div>
+
     </div>
     <footer class="footer--modal">
       <div class="btn--container">

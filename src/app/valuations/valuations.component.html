@@ -51,7 +51,7 @@
                 <button class="btn btn--info" id="btnSearch" (click)="getValuations()"
                   data-cy="searchVal">Search</button>
               </fieldset>
-              <fieldset class="flex">
+              <fieldset class="flex" *ngIf="queryResultCount">
                 <span class="font-extrabold !important mt-2">{{valuations?.length}} of {{queryResultCount}}
                   Val</span>
               </fieldset>

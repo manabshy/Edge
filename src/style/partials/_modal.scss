@@ -102,6 +102,14 @@ This applies from 992px onwards
 
     .p-sidebar                                  { border-radius:3px;}
 
+    .modal--xlarge                              {
+        .p-dialog                               { width:75%;
+            .p-dialog-content                   { flex-grow:0; min-height:650px;
+                .row                            { min-height:550px; }
+          }
+      }
+  }
+
     .modal--large                              {
         .p-dialog                               { width:70%;
             .p-dialog-content                   { flex-grow:0; min-height:530px;

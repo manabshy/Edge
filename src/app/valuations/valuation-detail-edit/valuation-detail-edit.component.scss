@@ -55,7 +55,7 @@
   }
   .p-badge-success{
     margin-left: 4px;
-    background-color:#F1AFA8 !important
+    background-color:#AFB8CF !important
   }
   .p-dialog-title{
     width: -webkit-fill-available;
@@ -63,12 +63,18 @@
 
   .p-messages{ margin-top: -10px !important;}
 
+  .p-overflow-hidden{ overflow: hidden !important;position: fixed !important}
+
   //.p-tooltip-text		{ background-color:lightblue !important; color:black !important }
+}
+
+.formValuation {
+  overflow-y: hidden;
 }
 
 .instructClass {
   margin-left: 4px;
-  background-color:#F1AFA8 !important
+  background-color:#AFB8CF !important
 }
 
 .dot {
@@ -80,7 +86,7 @@
 }
 
 .hourColorsForBoth{
-  background: linear-gradient(to right,#CED1DB 50%,#F1AFA8 50%);
+  background: linear-gradient(to right,#CED1DB 50%,#AFB8CF 50%);
 }
 
 .hourColorsForSales{
@@ -94,7 +100,7 @@
 }
 
 .hourColorsForLettings{
-  background: #F1AFA8;
+  background: #AFB8CF;
 }
 
 // .info-tooltip{

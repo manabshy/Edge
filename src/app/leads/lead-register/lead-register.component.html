@@ -70,7 +70,7 @@
               <fieldset class="mr-2">
                 <button class="btn btn--info" id="search" (click)="PerformSearch(true)">Search</button>
               </fieldset>
-              <fieldset class="flex">
+              <fieldset class="flex" *ngIf="queryResultCount">
                 <span class="font-extrabold !important mt-2">{{filteredLeads?.length}} of {{queryResultCount}}
                   Leads</span>
               </fieldset>
