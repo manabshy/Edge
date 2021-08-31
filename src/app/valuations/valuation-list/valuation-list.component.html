@@ -8,7 +8,7 @@
         <th>Status</th>
         <th>Address</th>
         <th>Owner</th>
-        <th>Date</th>
+        <th>Valuation Date</th>
         <th>Valuer</th>
         <th>Sale</th>
         <th>Long Let</th>
@@ -22,7 +22,7 @@
           <span class="cell-content">{{val?.valuationStatusLabel}}</span>
         </td>
         <td data-title="Address">
-          <span class="cell-content"><a class="table-link underline"
+          <span class="cell-content"><a class="underline table-link"
               [routerLink]="['detail', val?.valuationEventId, 'edit']"
               (click)="$event.stopPropagation()">{{val?.property?.address | formatAddress}}</a></span>
         </td>

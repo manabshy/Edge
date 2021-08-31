@@ -104,8 +104,8 @@ This applies from 992px onwards
 
     .modal--xlarge                              {
         .p-dialog                               { width:75%;
-            .p-dialog-content                   { flex-grow:0; min-height:650px;
-                .row                            { min-height:550px; }
+            .p-dialog-content                   { flex-grow:0; min-height:600px;
+                .row                            { min-height:500px; }
           }
       }
   }
