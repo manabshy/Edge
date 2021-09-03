@@ -58,7 +58,7 @@ import { ResultData } from "src/app/shared/result-data";
 import { StaffMember } from "src/app/shared/models/staff-member";
 import { TabDirective } from "ngx-bootstrap/tabs/ngx-bootstrap-tabs";
 import format from "date-fns/format";
-import { Observable } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { MessageService, PrimeNGConfig } from "primeng/api";
 import { addYears, differenceInCalendarYears } from "date-fns";
 import _ from "lodash";
@@ -85,6 +85,7 @@ export class ValuationDetailEditComponent
   valuationId: number;
   valuation: Valuation;
   lastKnownOwner: Signer;
+  adminContact: Signer;
   valuationForm: FormGroup;
   tenures: InfoDetail[];
   outsideSpaces: InfoDetail[];
@@ -105,6 +106,7 @@ export class ValuationDetailEditComponent
   formErrors = FormErrors;
   property: Property;
   isOwnerChanged: boolean;
+  isAdminContactChanged: boolean;
   isPropertyChanged: boolean;
   isEditable: boolean = false;
   showLeaseExpiryDate: boolean;
@@ -150,12 +152,15 @@ export class ValuationDetailEditComponent
   isAvailabilityRequired = false;
   oldClass: string = "null";
   contactGroup$: Observable<ContactGroup>;
+  adminContactGroup$: Observable<ContactGroup>;
   showPhotos = false;
   showMap = false;
   showProperty = false;
   isLastknownOwnerVisible = false;
+  isAdminContactVisible = false;
   isInstructVisible = false;
   accordionIndex: number;
+  propertySubsription = new Subscription();
 
   salesMeetingOwner;
   lettingsMeetingOwner;
@@ -199,6 +204,7 @@ export class ValuationDetailEditComponent
   activeValuations: Valuation[] = [];
   isActiveValuationsVisible = false;
   isCanDeactivate = false;
+  openContactGroupSubscription = new Subscription();
 
   get originTypeControl() {
     return this.valuationForm.get("originType") as FormControl;
@@ -502,6 +508,23 @@ export class ValuationDetailEditComponent
         this.viewingArrangements = data.viewingArrangements;
       }
     });
+
+    this.openContactGroupSubscription =
+      this.sharedService.openContactGroupChanged.subscribe((value) => {
+        if (value) {
+          this.isAdminContactVisible = value;
+        }
+      });
+  }
+
+  getSelectedAdminContact(owner: Signer) {
+    if (owner) {
+      this.adminContact = owner;
+      this.isAdminContactChanged = true;
+      this.getAdminContactGroup(this.adminContact?.contactGroupId);
+      this.valuationForm.get("adminContact").setValue(owner);
+      this.isAdminContactVisible = false;
+    }
   }
 
   setValidationForLettingsMeetingOwner(setValidation: boolean) {
@@ -641,7 +664,7 @@ export class ValuationDetailEditComponent
   }
 
   getPropertyDetails(propertyId: number) {
-    this.propertyService
+    this.propertySubsription = this.propertyService
       .getProperty(propertyId, true, true, false, true)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((result) => {
@@ -670,6 +693,13 @@ export class ValuationDetailEditComponent
 
   getContactGroup(contactGroupId: number) {
     this.contactGroup$ = this.contactGroupService.getContactGroupById(
+      contactGroupId,
+      true
+    );
+  }
+
+  getAdminContactGroup(contactGroupId: number) {
+    this.adminContactGroup$ = this.contactGroupService.getContactGroupById(
       contactGroupId,
       true
     );
@@ -848,6 +878,7 @@ export class ValuationDetailEditComponent
       isRetirementHome: [false],
       isNewBuild: [false],
       hasDisabledAccess: [false],
+      adminContact: [],
     });
   }
 
@@ -896,12 +927,6 @@ export class ValuationDetailEditComponent
           } else {
             this.isEditable = true;
           }
-          // if (this.valuation.valuationDate)
-          //   this.sharedService.calculateDateToNowInMonths(
-          //     new Date(this.valuation.valuationDate)
-          //   ) >= 6
-          //     ? (this.canInstruct = false)
-          //     : (this.canInstruct = true);
 
           if (this.valuation.salesValuer || this.valuation.lettingsValuer) {
             if (this.isEditable) {
@@ -1310,7 +1335,7 @@ export class ValuationDetailEditComponent
     if (!(this.property && this.property.propertyId > 0)) {
       this.router.navigate(["/valuations-register"]);
     } else {
-      this.propertyService
+      this.propertySubsription = this.propertyService
         .getValuations(this.property.propertyId, true)
         .subscribe((valuations: Valuation[]) => {
           if (valuations && valuations.length > 0) {
@@ -2160,7 +2185,8 @@ export class ValuationDetailEditComponent
       if (
         this.valuationForm.dirty ||
         this.isOwnerChanged ||
-        this.isPropertyChanged
+        this.isPropertyChanged ||
+        this.isAdminContactChanged
       ) {
         this.addOrUpdateValuation();
       } else {
@@ -2524,5 +2550,7 @@ export class ValuationDetailEditComponent
     this.propertyService.setAddedProperty(null);
     this.sharedService.clearFormValidators(this.valuationForm, this.formErrors);
     this.storage.delete("valuationFormData").subscribe();
+    this.openContactGroupSubscription.unsubscribe();
+    this.propertySubsription.unsubscribe();
   }
 }

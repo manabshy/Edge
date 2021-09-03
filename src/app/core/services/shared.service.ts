@@ -34,6 +34,8 @@ export class SharedService {
   private removeStickySubject = new Subject<boolean>();
   removeSticky$ = this.removeStickySubject.asObservable();
 
+  openContactGroupChanged = new Subject<boolean>();
+
   constructor(
     private _location: Location,
     private _router: Router,

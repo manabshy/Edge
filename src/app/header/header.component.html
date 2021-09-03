@@ -2,8 +2,20 @@
   <ol class="header-title">
     <li>
       <ng-container *ngIf="headerLabel; else labelFromRoute">{{headerLabel}}</ng-container>
-      <ng-template #labelFromRoute> {{navTitle}}</ng-template>
+      <ng-template #labelFromRoute> {{navTitle}}
+        <div dropdown *ngIf="showMenuEditItem">
+          <a #myHref class="btn dropdown-toggle" href [id]="'button'" dropdownToggle
+            (click)="$event.stopPropagation();menu.toggle($event); false" [attr.aria-controls]="'dropdown'">
+            <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
+              <ellipse class="st0" cx="32" cy="10.5" rx="5.9" ry="6" />
+              <ellipse class="st0" cx="32" cy="32" rx="5.9" ry="6" />
+              <ellipse class="st0" cx="32" cy="53.5" rx="5.9" ry="6" />
+            </svg>
+          </a>
+        </div>
+      </ng-template>
     </li>
   </ol>
+  <p-menu *ngIf="showMenuEditItem" [appendTo]="labelFromRoute" #menu [popup]="true" [model]="items"></p-menu>
   <app-profile class="header-navigation"></app-profile>
 </header>

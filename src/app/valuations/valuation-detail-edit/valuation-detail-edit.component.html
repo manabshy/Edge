@@ -517,7 +517,7 @@
             <ol class="cards">
               <li
                 *ngIf="valuation?.salesValuationBooking && isEditable || isNewValuation || (!isEditable && valuationForm.get('suggestedAskingPrice').value)">
-                <h5 class="txt--title">Sell</h5>
+                <h5 class="txt--title">Sales</h5>
                 <div class="inline-parent inline-parent__hasLabels inline-parent--width-max">
                   <fieldset class="inline-child">
                     <label for="sellValue">Value</label>
@@ -685,6 +685,14 @@
   class="modal--medium modal--hasFooter">
   <app-contactgroup-finder (selectedContactGroup)="getSelectedOwner($event)"
     (isCreatingNewGroup)="createNewLastKnownOwner()"></app-contactgroup-finder>
+</p-dialog>
+
+<!-- Contactgroup Finder for admin contact Modal -->
+<p-dialog header="Admin Contact" [(visible)]="isAdminContactVisible" [modal]="true" [draggable]="false"
+  class="modal--medium modal--hasFooter">
+  <app-contactgroup-finder [showCreateNewCompanyContact]="false" [isSinglePerson]="true"
+    (selectedContactGroup)="getSelectedAdminContact($event)" (isCreatingNewGroup)="createNewLastKnownOwner()">
+  </app-contactgroup-finder>
 </p-dialog>
 
 <!-- Property Finder Modal -->
@@ -990,7 +998,7 @@
       </fieldset>
       <fieldset class="self-start">
         <p-card [style]="{'width': '20rem', 'margin-bottom': '2em'}">
-          <h5 class="mb-4"> Sell</h5>
+          <h5 class="mb-4"> Sales</h5>
           <fieldset [ngClass]="{'invalid':formErrors.askingPrice}">
             <label for="askingPrice">Value</label>
             <input class="p-2" type="text" name="askingPrice" id="askingPrice" formControlName="askingPrice">
@@ -1048,9 +1056,7 @@
                 <span>
                   <input class="p-2" type="checkbox" id="isInstructLongLet" name="isInstructLongLet"
                     formControlName="isInstructLongLet" data-cy="isInstructLongLet">
-
-                  <h5 class="mb-4">Long Let</h5>
-
+                  <label class="flex mb-4">Long Let</label>
                 </span>
               </span>
               <fieldset [disabled]="!instructionForm.get('isInstructLongLet').value?'true':null"
@@ -1075,9 +1081,7 @@
               <span>
                 <input class="p-2" type="checkbox" id="isInstructShortLet" name="isInstructShortLet"
                   formControlName="isInstructShortLet" data-cy="isInstructShortLet">
-
-                <h5 class="mb-4">Short Let</h5>
-
+                <label class="flex mb-4">Short Let</label>
               </span>
             </span>
             <fieldset [ngClass]="{'invalid':formErrors.askingRentShortLet}"

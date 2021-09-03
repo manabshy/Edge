@@ -7,7 +7,7 @@ import {
   Output,
 } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
-import { Observable, EMPTY } from "rxjs";
+import { Observable, EMPTY, iif } from "rxjs";
 import {
   tap,
   catchError,
@@ -34,6 +34,7 @@ export class ContactgroupFinderComponent implements OnInit, OnChanges {
   @Input() isFull = false;
   @Input() showCreateNewCompanyContact = true;
   @Input() isSigner = false;
+  @Input() isSinglePerson: false;
   @Output() selectedContactGroup = new EventEmitter<Signer>();
   @Output() fullSelectedContactGroup = new EventEmitter<ContactGroup>();
   @Output() isCreatingNewGroup = new EventEmitter<boolean>();
@@ -94,6 +95,9 @@ export class ContactgroupFinderComponent implements OnInit, OnChanges {
     this.contactGroupService.getAutocompleteSigners(searchTerm).subscribe(
       (result) => {
         this.hasBeenSearched = true;
+        if (this.isSinglePerson) {
+          result = result.filter((x) => x.contactNames.match(",") == null);
+        }
         this.contactGroups = result;
         console.log("contact groups here", this.contactGroups);
       },

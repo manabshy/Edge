@@ -503,6 +503,7 @@ export class LeadEditComponent
     if (this.isOwnerChanged) {
       if (this.lead?.ownerId === this.currentStaffMember?.staffMemberId) {
         this.isOwner = true;
+        this.isMyLead = true;
       } else {
         this.isOwner = false;
         this.canEditLead = false;
@@ -516,6 +517,9 @@ export class LeadEditComponent
     const listingType = changedListingType
       ? changedListingType
       : this.leadSearchInfo?.listingType ?? 1;
+    if (this.lead?.ownerId === this.currentStaffMember?.staffMemberId) {
+      this.isMyLead = true;
+    }
     console.log(this.leadSearchInfo, "info", listingType, "listing type");
     switch (true) {
       case this.isMyLead && !this.isLeadClosed:

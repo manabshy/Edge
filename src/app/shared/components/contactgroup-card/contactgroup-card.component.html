@@ -4,43 +4,52 @@
       <li class="title">
         <span>
           <p class="txt--title">
-            <a [routerLink]="['/contact-centre/detail/0/people/', contactGroup?.contactGroupId]">{{contactGroup?.addressee}}</a>
+            <a
+              [routerLink]="['/contact-centre/detail/0/people/', contactGroup?.contactGroupId]">{{contactGroup?.addressee}}</a>
           </p>
         </span>
         <div class="flexRight">
 
-            <div dropdown placement="bottom right">
-              <a class="btn dropdown-toggle" href [id]="'button'" dropdownToggle (click)="$event.stopPropagation(); false"
-                [attr.aria-controls]="'dropdown'">
-                <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
-                  <ellipse class="st0" cx="32" cy="10.5" rx="5.9" ry="6" />
-                  <ellipse class="st0" cx="32" cy="32" rx="5.9" ry="6" />
-                  <ellipse class="st0" cx="32" cy="53.5" rx="5.9" ry="6" />
-                </svg>
-              </a>
-              <ul [id]="'dropdown'" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" [attr.aria-labelledby]="'button'">
+          <div dropdown placement="bottom right">
+            <a class="btn dropdown-toggle" href [id]="'button'" dropdownToggle (click)="$event.stopPropagation(); false"
+              [attr.aria-controls]="'dropdown'">
+              <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
+                <ellipse class="st0" cx="32" cy="10.5" rx="5.9" ry="6" />
+                <ellipse class="st0" cx="32" cy="32" rx="5.9" ry="6" />
+                <ellipse class="st0" cx="32" cy="53.5" rx="5.9" ry="6" />
+              </svg>
+            </a>
+            <ul [id]="'dropdown'" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+              [attr.aria-labelledby]="'button'">
+              <li role="menuitem">
+                <a [routerLink]="['/contact-centre/detail/0/people/', contactGroup?.contactGroupId]"
+                  class="dropdown-item">
+                  <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft">
+                    <polygon points="42.7 6.7 57.3 21.3 64 14.5 49.7 0 "></polygon>
+                    <path d="M40.3 9.6l-38 38L0 64l16.9-2 38-37.9L40.3 9.6zM4 59.9l1.9-11.7 9.8 9.8L4 59.9z"></path>
+                  </svg>
+                  Edit contact
+                </a>
+              </li>
+              <ng-container *ngIf="showValuationActions">
                 <li role="menuitem">
-                  <a [routerLink]="['/contact-centre/detail/0/people/', contactGroup?.contactGroupId]" class="dropdown-item">
-                    <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--onLeft"><polygon points="42.7 6.7 57.3 21.3 64 14.5 49.7 0 "></polygon><path d="M40.3 9.6l-38 38L0 64l16.9-2 38-37.9L40.3 9.6zM4 59.9l1.9-11.7 9.8 9.8L4 59.9z"></path></svg>
-                    Edit contact
-                  </a>
+                  <a class="dropdown-item"><span class="dropdown-icon"><i class="fas fa-file-contract"></i></span>Sales
+                    Terms
+                    Of Business</a>
                 </li>
-                <ng-container *ngIf="showValuationActions">
-                  <li role="menuitem">
-                    <a class="dropdown-item"><span class="dropdown-icon"><i class="fas fa-file-contract"></i></span>Sales Terms
-                      Of Business</a>
-                  </li>
-                  <li role="menuitem">
-                    <a class="dropdown-item"><span class="dropdown-icon"><i class="fas fa-file-contract"></i></span>Lettings
-                      Terms Of Business</a>
-                  </li>
-                  <li role="menuitem">
-                    <a class="dropdown-item"><span class="dropdown-icon"><i class="fas fa-file-contract"></i></span>Landlord
-                      Questionnaire</a>
-                  </li>
-                </ng-container>
-              </ul>
-            </div>
+                <li role="menuitem">
+                  <a class="dropdown-item"><span class="dropdown-icon"><i
+                        class="fas fa-file-contract"></i></span>Lettings
+                    Terms Of Business</a>
+                </li>
+                <li role="menuitem">
+                  <a class="dropdown-item"><span class="dropdown-icon"><i
+                        class="fas fa-file-contract"></i></span>Landlord
+                    Questionnaire</a>
+                </li>
+              </ng-container>
+            </ul>
+          </div>
         </div>
       </li>
 
@@ -53,7 +62,8 @@
               </path>
             </svg>
             {{contactGroup?.contactPeople[0]?.addressee}}
-            <span *ngIf="contactGroup?.contactPeople[0]?.isMainPerson" class="pill pill--positive pill--onRight flexRight">Main</span>
+            <span *ngIf="contactGroup?.contactPeople[0]?.isMainPerson"
+              class="pill pill--positive pill--onRight flexRight">Main</span>
           </li>
           <li>
             <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
@@ -80,20 +90,21 @@
                 d="M-0.3 13.8v-3.6c0-1.1 0.9-2.1 2.1-2.1h59.9c1.1 0 2.1 0.9 2.1 2.1v3.6l-32 20L-0.3 13.8zM32.8 37.9c-0.3 0.2-0.7 0.3-1.1 0.3 -0.4 0-0.7-0.1-1.1-0.3L-0.3 18.5v35.6c0 1.1 0.9 2.1 2.1 2.1h59.9c1.1 0 2.1-0.9 2.1-2.1V18.5L32.8 37.9z">
               </path>
             </svg>
-            <a  class="ng-star-inserted" (click)="showEmailModal=true">
+            <a class="ng-star-inserted" (click)="showEmailModal=true">
               {{contactGroup?.contactPeople[0]?.emailAddresses[0]?.email}}</a>
           </li>
         </ol>
       </li>
 
       <!-- Expandable - Important Messages -->
-      <li class="expandable" *ngIf="(importantNotes$|async)?.length" >
+      <li class="expandable" *ngIf="(importantNotes$|async)?.length">
         <app-important-messages class="appWrapper" [importantNotes]="importantNotes$|async"></app-important-messages>
       </li>
 
       <!-- Expandable - Marketing Preferences -->
       <li class="expandable">
-        <app-marketing-preferences class="appWrapper" [personDetails]="contactGroup?.contactPeople[0]"></app-marketing-preferences>
+        <app-marketing-preferences class="appWrapper" [personDetails]="contactGroup?.contactPeople[0]">
+        </app-marketing-preferences>
       </li>
 
       <!-- Expandable - Referrals -->
@@ -113,7 +124,15 @@
             </div>
           </summary>
           <ol class="list">
-            <li><a href="">Prestige<svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onRight icon--fill-info"><path d="M62.5 16L48 1.5c-2-2-5.3-2-7.3 0L27.6 14.6c-2 2-2 5.3 0 7.3l3.2 3.2 13.5-13.5 8.2 8.2L39 33.2l3.2 3.2c2 2 5.3 2 7.3 0l13.1-13.1C64.5 21.3 64.5 18 62.5 16z"></path><path d="M1.5 48L16 62.5c2 2 5.3 2 7.3 0l13.1-13.1c2-2 2-5.3 0-7.3L33.2 39 19.7 52.5l-8.2-8.2L25 30.8l-3.2-3.2c-2-2-5.3-2-7.3 0L1.5 40.7C-0.5 42.7-0.5 46 1.5 48z"></path></svg></a></li>
+            <li><a href="">Prestige<svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                  class="icon icon--s icon--onRight icon--fill-info">
+                  <path
+                    d="M62.5 16L48 1.5c-2-2-5.3-2-7.3 0L27.6 14.6c-2 2-2 5.3 0 7.3l3.2 3.2 13.5-13.5 8.2 8.2L39 33.2l3.2 3.2c2 2 5.3 2 7.3 0l13.1-13.1C64.5 21.3 64.5 18 62.5 16z">
+                  </path>
+                  <path
+                    d="M1.5 48L16 62.5c2 2 5.3 2 7.3 0l13.1-13.1c2-2 2-5.3 0-7.3L33.2 39 19.7 52.5l-8.2-8.2L25 30.8l-3.2-3.2c-2-2-5.3-2-7.3 0L1.5 40.7C-0.5 42.7-0.5 46 1.5 48z">
+                  </path>
+                </svg></a></li>
           </ol>
         </details>
       </li>
@@ -137,7 +156,12 @@
           <ol class="list">
             <li *ngFor="let person of contactGroup?.contactPeople?.slice(1,numOfPeople)">
               <a (click)="viewDetails(person?.personId)" class="overall"></a>
-              <svg _ngcontent-aap-c297="" aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft"><path _ngcontent-aap-c297="" d="M32 32c8.6 0 15.5-7 15.5-15.5C47.5 7.9 40.6 1 32 1S16.5 7.9 16.5 16.5C16.5 25 23.4 32 32 32zM32 39.8c-10.3 0-31 5.2-31 15.5V63h62v-7.8C63 44.9 42.3 39.8 32 39.8z"></path></svg>{{person?.addressee}}
+              <svg _ngcontent-aap-c297="" aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
+                class="icon icon--s icon--onLeft">
+                <path _ngcontent-aap-c297=""
+                  d="M32 32c8.6 0 15.5-7 15.5-15.5C47.5 7.9 40.6 1 32 1S16.5 7.9 16.5 16.5C16.5 25 23.4 32 32 32zM32 39.8c-10.3 0-31 5.2-31 15.5V63h62v-7.8C63 44.9 42.3 39.8 32 39.8z">
+                </path>
+              </svg>{{person?.addressee}}
             </li>
           </ol>
         </details>
@@ -147,6 +171,7 @@
 </div>
 
 <!-- Email Modal -->
-<p-dialog  header="Send Email" [(visible)]="showEmailModal" [modal]="true" [draggable]="false" class="modal--medium modal--hasFooter">
+<p-dialog header="Send Email" [(visible)]="showEmailModal" [modal]="true" [draggable]="false"
+  class="modal--medium modal--hasFooter">
   <app-email [contactGroup]="contactGroup" (hideModal)="showEmailModal=false"></app-email>
 </p-dialog>

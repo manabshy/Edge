@@ -16,7 +16,11 @@ const routes: Routes = [
       {
         path: "edit",
         component: ValuationDetailEditComponent,
-        data: { shouldDetach: false, title: "Valuation" },
+        data: {
+          shouldDetach: false,
+          title: "Valuation",
+          showMenuEditItem: true,
+        },
         canDeactivate: [CanDeactivateGuard],
       },
     ],
