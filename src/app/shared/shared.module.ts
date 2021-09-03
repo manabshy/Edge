@@ -105,6 +105,7 @@ import { MessageModule } from "primeng/message";
 import { ScrollPanelModule } from "primeng/scrollpanel";
 import { TableModule } from "primeng/table";
 import { MenuModule } from "primeng/menu";
+import { CheckboxModule } from "primeng/checkbox";
 
 // Components
 import { RedactedTableComponent } from "./components/redacted-table/redacted-table.component";
@@ -227,6 +228,7 @@ const externalModules = [
   ScrollPanelModule,
   TableModule,
   MenuModule,
+  CheckboxModule,
 ];
 
 @NgModule({

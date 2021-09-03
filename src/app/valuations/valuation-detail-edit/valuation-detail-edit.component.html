@@ -999,7 +999,8 @@
       <fieldset class="self-start">
         <p-card [style]="{'width': '20rem', 'margin-bottom': '2em'}">
           <h5 class="mb-4"> Sales</h5>
-          <fieldset [ngClass]="{'invalid':formErrors.askingPrice}">
+          <fieldset [disabled]="!instructionForm.get('instructSale').value?'true':null"
+            [ngClass]="{'invalid':formErrors.askingPrice}">
             <label for="askingPrice">Value</label>
             <input class="p-2" type="text" name="askingPrice" id="askingPrice" formControlName="askingPrice">
             <p class="message message--negative"> {{formErrors?.askingPrice}}</p>
@@ -1052,13 +1053,12 @@
         <fieldset class="inline-child">
           <p-card [style]="{'width': '20rem', 'margin-bottom': '1em'}">
             <div>
-              <span class="checkbox checkbox--rtl" style="margin-bottom: 12px;">
-                <span>
-                  <input class="p-2" type="checkbox" id="isInstructLongLet" name="isInstructLongLet"
-                    formControlName="isInstructLongLet" data-cy="isInstructLongLet">
-                  <label class="flex mb-4">Long Let</label>
-                </span>
-              </span>
+              <div class="flex flex-row p-field-checkbox" style="margin-bottom: 24px;">
+                <label for="isInstructLongLet">Long Let</label>
+                <p-checkbox [disabled]="!instructionForm.get('instructLet').value" formControlName="isInstructLongLet"
+                  data-cy="isInstructLongLet" [binary]="true" inputId="isInstructLongLet">
+                </p-checkbox>
+              </div>
               <fieldset [disabled]="!instructionForm.get('isInstructLongLet').value?'true':null"
                 [ngClass]="{'invalid':formErrors.askingRentLongLet}">
                 <label for="longLetValue">Value (per week)</label>
@@ -1077,13 +1077,12 @@
         </fieldset>
         <fieldset class="inline-child">
           <p-card [style]="{'width': '20rem', 'margin-bottom': '1em'}">
-            <span class="checkbox checkbox--rtl" style="margin-bottom: 12px;">
-              <span>
-                <input class="p-2" type="checkbox" id="isInstructShortLet" name="isInstructShortLet"
-                  formControlName="isInstructShortLet" data-cy="isInstructShortLet">
-                <label class="flex mb-4">Short Let</label>
-              </span>
-            </span>
+            <div class="flex flex-row p-field-checkbox" style="margin-bottom: 24px;">
+              <label for="isInstructLongLet">Short Let</label>
+              <p-checkbox [disabled]="!instructionForm.get('instructLet').value" formControlName="isInstructShortLet"
+                data-cy="isInstructShortLet" [binary]="true" inputId="isInstructShortLet">
+              </p-checkbox>
+            </div>
             <fieldset [ngClass]="{'invalid':formErrors.askingRentShortLet}"
               [disabled]="!instructionForm.get('isInstructShortLet').value?'true':null">
               <label for="shortLetValue">Value (per week)</label>
