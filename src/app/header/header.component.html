@@ -16,6 +16,6 @@
       </ng-template>
     </li>
   </ol>
-  <p-menu *ngIf="showMenuEditItem" [appendTo]="labelFromRoute" #menu [popup]="true" [model]="items"></p-menu>
+  <p-menu *ngIf="showMenuEditItem" [appendTo]="labelFromRoute" #menu [popup]="true" [model]="filteredItems"></p-menu>
   <app-profile class="header-navigation"></app-profile>
 </header>

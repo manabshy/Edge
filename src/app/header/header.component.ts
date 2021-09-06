@@ -3,6 +3,7 @@ import {
   ElementRef,
   HostListener,
   Input,
+  OnDestroy,
   OnInit,
   ViewChild,
 } from "@angular/core";
@@ -17,13 +18,17 @@ import { BaseStaffMember } from "../shared/models/base-staff-member";
 import { StaffMember } from "../shared/models/staff-member";
 import { Menu } from "primeng/menu";
 import { SharedService } from "../core/services/shared.service";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-header",
   templateUrl: "./header.component.html",
   styleUrls: ["./header.component.scss"],
 })
-export class HeaderComponent extends BaseComponent implements OnInit {
+export class HeaderComponent
+  extends BaseComponent
+  implements OnInit, OnDestroy
+{
   currentStaffMember: StaffMember;
   navTitle: string;
   headerLabel: string;
@@ -33,6 +38,8 @@ export class HeaderComponent extends BaseComponent implements OnInit {
   isImpersonating = false;
   showMenuEditItem = false;
   items: MenuItem[];
+  filteredItems: MenuItem[];
+  openContactGroupSubscription = new Subscription();
 
   @HostListener("document:click", ["$event"])
   clickout(event) {
@@ -72,16 +79,42 @@ export class HeaderComponent extends BaseComponent implements OnInit {
     this.getLabel();
 
     this.primengConfig.ripple = true;
+
+    this.openContactGroupSubscription =
+      this.sharedService.openContactGroupChanged.subscribe((value) => {
+        if (!value) {
+          this.filteredItems = [
+            ...this.items.filter((x) => x.id !== "addAdmin"),
+          ];
+        }
+      });
+    this.openContactGroupSubscription =
+      this.sharedService.removeContactGroupChanged.subscribe((value) => {
+        if (!value) {
+          this.filteredItems = [
+            ...this.items.filter((x) => x.id !== "removeAdmin"),
+          ];
+        }
+      });
   }
 
   setItems(navTitle: string) {
     if (navTitle == "Valuation") {
       this.items = [
         {
+          id: "addAdmin",
           label: "Add Admin Contact",
           icon: "pi pi-plus",
           command: () => {
             this.sharedService.openContactGroupChanged.next(true);
+          },
+        },
+        {
+          id: "removeAdmin",
+          label: "Remove Admin Contact",
+          icon: "pi pi-minus",
+          command: () => {
+            this.sharedService.removeContactGroupChanged.next(true);
           },
         },
         {
@@ -113,6 +146,8 @@ export class HeaderComponent extends BaseComponent implements OnInit {
           },
         },
       ];
+
+      this.filteredItems = this.items.slice();
     }
   }
 
@@ -128,5 +163,9 @@ export class HeaderComponent extends BaseComponent implements OnInit {
     this.headerService.label$
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((label) => (this.headerLabel = label));
+  }
+
+  ngOnDestroy() {
+    this.openContactGroupSubscription.unsubscribe();
   }
 }

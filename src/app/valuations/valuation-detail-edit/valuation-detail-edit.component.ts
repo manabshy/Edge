@@ -85,7 +85,7 @@ export class ValuationDetailEditComponent
   valuationId: number;
   valuation: Valuation;
   lastKnownOwner: Signer;
-  adminContact: Signer;
+  adminContact: Signer | null;
   valuationForm: FormGroup;
   tenures: InfoDetail[];
   outsideSpaces: InfoDetail[];
@@ -516,19 +516,35 @@ export class ValuationDetailEditComponent
           this.isAdminContactVisible = value;
         }
       });
+
+    this.openContactGroupSubscription =
+      this.sharedService.removeContactGroupChanged.subscribe((value) => {
+        if (value) {
+          this.removeAdminContact();
+        }
+      });
+  }
+
+  removeAdminContact() {
+    this.adminContact = null;
+    this.isAdminContactChanged = true;
+    this.valuationForm.get("adminContact").setValue(this.adminContact);
+    this.adminContactGroup = null;
+    this.sharedService.removeContactGroupChanged.next(false);
   }
 
   getSelectedAdminContact(owner: Signer) {
     if (owner) {
       this.adminContact = {
         ...owner,
-        ccOwner: false,
-        isPowerOfAttorney: false,
+        ccOwner: this.valuation?.ccOwner,
+        isPowerOfAttorney: this.valuation?.isPowerOfAttorney,
       };
       this.isAdminContactChanged = true;
       this.getAdminContactGroup(this.adminContact?.contactGroupId);
       this.valuationForm.get("adminContact").setValue(this.adminContact);
       this.isAdminContactVisible = false;
+      this.sharedService.openContactGroupChanged.next(false);
     }
   }
 
@@ -1005,10 +1021,15 @@ export class ValuationDetailEditComponent
           if (this.property?.propertyId) {
             this.getValuers(this.property.propertyId);
           }
+
           this.setValuationType(data);
           this.populateForm(data);
           this.setupInitialRentFigures(data);
-          this.getSelectedAdminContact(data.adminContact);
+
+          if (data.adminContact && data.adminContact.contactGroupId > 0)
+            this.getSelectedAdminContact(data.adminContact);
+          else this.sharedService.removeContactGroupChanged.next(false);
+
           if (this.valuation && this.allOrigins) {
             this.activeOriginId = this.allOrigins.find(
               (x) => x.id === +this.valuation.originId
@@ -1018,6 +1039,7 @@ export class ValuationDetailEditComponent
               : (this.showOriginId = false);
             this.setOriginIdValue(this.valuation.originId);
           }
+
           if (this.valuation && this.allOrigins && this.originTypes) {
             this.setOriginTypeId(this.valuation.originId);
           }
