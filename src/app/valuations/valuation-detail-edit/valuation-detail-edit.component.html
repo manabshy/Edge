@@ -413,7 +413,9 @@
                   *ngIf="(this.valuation.valuationStatus == 0 || this.valuation.valuationStatus == 2)">
                   <button [style]="{'width': '5rem'}" type="button" class="btn btn--positive"
                     (click)="isSalesEdit =false;isLettingsEdit = false;isBothEdit =true;getAvailability()"
-                    data-cy="openAvailabilityBoth">Edit Both</button>
+                    data-cy="openAvailabilityBoth">{{valuation?.lettingsValuationBooking &&
+                    valuation?.salesValuationBooking ? 'Edit Both' : (valuation?.salesValuationBooking? 'Add
+                    Lettings':'Add Sales')}}</button>
                 </fieldset>
 
                 <fieldset class="inline-child" *ngIf="valuation?.lettingsValuationBooking"
