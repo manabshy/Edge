@@ -56,6 +56,9 @@ export interface Valuation extends ValuationInfo {
   hasDisabledAccess?: boolean;
   isNewBuild?: boolean;
   isRetirementHome?: boolean;
+  isPowerOfAttorney?: boolean;
+  ccOwner?: boolean;
+  adminContact?: Signer;
 }
 
 export interface ValuationPropertyInfo {

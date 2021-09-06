@@ -10,6 +10,7 @@ import { map } from "rxjs/operators";
 import {
   ContactGroup,
   ContactNote,
+  Signer,
 } from "src/app/contactgroups/shared/contact-group";
 import { ContactGroupsService } from "src/app/contactgroups/shared/contact-groups.service";
 import { Person } from "../../models/person";
@@ -23,6 +24,7 @@ export class ContactgroupCardComponent implements OnInit, OnChanges {
   @Input() contactGroup: ContactGroup;
   @Input() showEmailModal = false;
   @Input() showValuationActions = true;
+  @Input() adminContact: Signer;
 
   numOfPeople: number;
   showAdditionalPeople = false;

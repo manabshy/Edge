@@ -62,8 +62,11 @@
               </path>
             </svg>
             {{contactGroup?.contactPeople[0]?.addressee}}
-            <span *ngIf="contactGroup?.contactPeople[0]?.isMainPerson"
+            <span
+              *ngIf="!contactGroup?.contactPeople[0]?.isAdminContact && contactGroup?.contactPeople[0]?.isMainPerson"
               class="pill pill--positive pill--onRight flexRight">Main</span>
+            <span *ngIf="contactGroup?.contactPeople[0]?.isAdminContact"
+              class="pill pill--positive pill--onRight flexRight">Admin</span>
           </li>
           <li>
             <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
@@ -92,6 +95,24 @@
             </svg>
             <a class="ng-star-inserted" (click)="showEmailModal=true">
               {{contactGroup?.contactPeople[0]?.emailAddresses[0]?.email}}</a>
+          </li>
+          <li class="txt--breakword" *ngIf="contactGroup?.contactPeople[0]?.isAdminContact">
+            <div class="inline-parent inline-parent__hasLabels">
+              <fieldset class="checkbox">
+                <span>
+                  <input class="p-2" type="checkbox" id="ccOwner" data-cy="ccOwner" name="ccOwner"
+                    [(ngModel)]="adminContact.ccOwner">
+                  <label for="ccOwner">CC Owner</label>
+                </span>
+              </fieldset>
+              <fieldset class="checkbox">
+                <span>
+                  <input class="p-2" type="checkbox" id="isPowerOfAttorney" name="isPowerOfAttorney"
+                    data-cy="isPowerOfAttorney" [(ngModel)]="adminContact.isPowerOfAttorney">
+                  <label for="isPowerOfAttorney">Power of Attorney</label>
+                </span>
+              </fieldset>
+            </div>
           </li>
         </ol>
       </li>
@@ -162,6 +183,9 @@
                   d="M32 32c8.6 0 15.5-7 15.5-15.5C47.5 7.9 40.6 1 32 1S16.5 7.9 16.5 16.5C16.5 25 23.4 32 32 32zM32 39.8c-10.3 0-31 5.2-31 15.5V63h62v-7.8C63 44.9 42.3 39.8 32 39.8z">
                 </path>
               </svg>{{person?.addressee}}
+              <span *ngIf="!person?.isAdminContact && person?.isMainPerson"
+                class="pill pill--positive pill--onRight flexRight">Main</span>
+              <span *ngIf="person?.isAdminContact" class="pill pill--positive pill--onRight flexRight">Admin</span>
             </li>
           </ol>
         </details>

@@ -60,7 +60,7 @@ import { TabDirective } from "ngx-bootstrap/tabs/ngx-bootstrap-tabs";
 import format from "date-fns/format";
 import { Observable, Subscription } from "rxjs";
 import { MessageService, PrimeNGConfig } from "primeng/api";
-import { addYears, differenceInCalendarYears } from "date-fns";
+import { addYears, differenceInCalendarYears, isThisHour } from "date-fns";
 import _ from "lodash";
 import { CurrencyPipe } from "@angular/common";
 import { CustomDateFormatter } from "src/app/calendar-shared/custom-date-formatter.provider";
@@ -520,10 +520,14 @@ export class ValuationDetailEditComponent
 
   getSelectedAdminContact(owner: Signer) {
     if (owner) {
-      this.adminContact = owner;
+      this.adminContact = {
+        ...owner,
+        ccOwner: false,
+        isPowerOfAttorney: false,
+      };
       this.isAdminContactChanged = true;
       this.getAdminContactGroup(this.adminContact?.contactGroupId);
-      this.valuationForm.get("adminContact").setValue(owner);
+      this.valuationForm.get("adminContact").setValue(this.adminContact);
       this.isAdminContactVisible = false;
     }
   }
@@ -541,6 +545,7 @@ export class ValuationDetailEditComponent
       if (this.isEditable || this.isNewValuation) {
         this.valuationForm.markAsDirty();
       }
+      this.isAdminContactChanged = false;
     }
   }
 
@@ -721,9 +726,17 @@ export class ValuationDetailEditComponent
       .getContactGroupById(contactGroupId, true)
       .subscribe((result) => {
         this.adminContactGroup = result;
-        this.adminContactGroup.contactPeople.concat(
-          this.contactGroup.contactPeople
-        );
+        if (
+          this.adminContactGroup.contactPeople &&
+          this.adminContactGroup.contactPeople.length > 0
+        ) {
+          this.adminContactGroup.contactPeople[0].isAdminContact = true;
+        }
+        this.adminContactGroup.contactPeople =
+          this.adminContactGroup.contactPeople.concat(
+            this.contactGroup.contactPeople
+          );
+        console.log(this.adminContactGroup.contactPeople);
       });
   }
 
@@ -986,13 +999,16 @@ export class ValuationDetailEditComponent
             // this.property = this.valuation.property; // Fix this with Gabor on the API
             this.getPropertyDetails(this.valuation.property.propertyId);
           }
+
           this.getContactGroup(this.lastKnownOwner?.contactGroupId); // get contact group for last know owner
+
           if (this.property?.propertyId) {
             this.getValuers(this.property.propertyId);
           }
           this.setValuationType(data);
           this.populateForm(data);
           this.setupInitialRentFigures(data);
+          this.getSelectedAdminContact(data.adminContact);
           if (this.valuation && this.allOrigins) {
             this.activeOriginId = this.allOrigins.find(
               (x) => x.id === +this.valuation.originId
@@ -1059,6 +1075,12 @@ export class ValuationDetailEditComponent
 
       this.salesValuer = { ...this.valuation.salesValuer };
       this.lettingsValuer = { ...this.valuation.lettingsValuer };
+
+      this.adminContact = {
+        ...valuation.adminContact,
+        isPowerOfAttorney: valuation.isPowerOfAttorney,
+        ccOwner: valuation.ccOwner,
+      };
 
       this.valuationForm.patchValue({
         property: valuation.property,
@@ -2220,6 +2242,16 @@ export class ValuationDetailEditComponent
     this.isSubmitting = true;
     const valuation = { ...this.valuation, ...this.valuationForm.value };
     valuation.OfficeId = this.property.officeId;
+
+    valuation.isPowerOfAttorney =
+      this.adminContact && this.adminContact.contactGroupId > 0
+        ? this.adminContact?.isPowerOfAttorney
+        : false;
+    valuation.ccOwner =
+      this.adminContact && this.adminContact.contactGroupId > 0
+        ? this.adminContact?.ccOwner
+        : false;
+
     valuation.suggestedAskingRentShortLetMonthly =
       this.sharedService.convertStringToNumber(
         valuation.suggestedAskingRentShortLetMonthly

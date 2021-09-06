@@ -1,5 +1,8 @@
-import { Address } from './address';
-import { ContactNote, Signer } from 'src/app/contactgroups/shared/contact-group';
+import { Address } from "./address";
+import {
+  ContactNote,
+  Signer,
+} from "src/app/contactgroups/shared/contact-group";
 
 export interface Person extends PersonWarning {
   personId: number;
@@ -17,6 +20,7 @@ export interface Person extends PersonWarning {
   personNotes: ContactNote[];
   address: Address;
   isMainPerson: boolean;
+  isAdminContact: boolean;
   contactByEmail: boolean;
   contactByPhone: boolean;
   contactByPost: boolean;
@@ -156,17 +160,16 @@ export interface PersonSearch {
   areas: string;
 }
 export const PeopleTitles = <PersonTitle[]>[
-  { id: 'Mr', name: 'Mr' },
-  { id: 'Mrs', name: 'Mrs' },
-  { id: 'Miss', name: 'Miss' },
-  { id: 'Ms', name: 'Ms' },
-  { id: 'Lady', name: 'Lady' },
-  { id: 'Sir', name: 'Sir' },
-  { id: 'Dr', name: 'Dr' },
-  { id: 'Lord', name: 'Lord' },
-  { id: 'Other', name: 'Other' },
+  { id: "Mr", name: "Mr" },
+  { id: "Mrs", name: "Mrs" },
+  { id: "Miss", name: "Miss" },
+  { id: "Ms", name: "Ms" },
+  { id: "Lady", name: "Lady" },
+  { id: "Sir", name: "Sir" },
+  { id: "Dr", name: "Dr" },
+  { id: "Lord", name: "Lord" },
+  { id: "Other", name: "Other" },
 ];
-
 
 export interface PersonTitle {
   id: string;
@@ -174,9 +177,9 @@ export interface PersonTitle {
 }
 
 export const MarketTypes = <MarketType[]>[
-  { id: 'contactByEmail', name: 'Email', selected: true },
-  { id: 'contactByPost', name: 'Post', selected: false },
-  { id: 'contactByPhone', name: 'Phone', selected: true }
+  { id: "contactByEmail", name: "Email", selected: true },
+  { id: "contactByPost", name: "Post", selected: false },
+  { id: "contactByPhone", name: "Phone", selected: true },
 ];
 
 export interface MarketType {
@@ -202,23 +205,21 @@ export enum TitleId {
   Sir = 6,
   Dr = 7,
   Lord = 8,
-  Other = 100
+  Other = 100,
 }
-export const Titles = new Map<number, string>([
-  [TitleId.Mr, 'Mr'],
-]);
+export const Titles = new Map<number, string>([[TitleId.Mr, "Mr"]]);
 
 export enum TelephoneTypeId {
   Home = 1,
   Work = 2,
   Mobile = 3,
   Fax = 4,
-  Other = 5
+  Other = 5,
 }
 export const PhoneTypes = <PhoneType[]>[
-  { id: 1, name: 'Home', valueStr: 'Home' },
-  { id: 2, name: 'Work', valueStr: 'Work' },
-  { id: 3, name: 'Mobile', valueStr: 'Mobile' },
-  { id: 4, name: 'Fax', valueStr: 'Fax' },
-  { id: 5, name: 'Other', valueStr: 'Other' }
+  { id: 1, name: "Home", valueStr: "Home" },
+  { id: 2, name: "Work", valueStr: "Work" },
+  { id: 3, name: "Mobile", valueStr: "Mobile" },
+  { id: 4, name: "Fax", valueStr: "Fax" },
+  { id: 5, name: "Other", valueStr: "Other" },
 ];

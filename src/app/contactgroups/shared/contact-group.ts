@@ -1,7 +1,11 @@
-import { Address } from 'src/app/shared/models/address';
-import { Person, BasicPerson, PersonWarning } from 'src/app/shared/models/person';
-import { ResultData } from 'src/app/shared/result-data';
-import { SubNavItem, SubNav } from 'src/app/shared/subnav';
+import { Address } from "src/app/shared/models/address";
+import {
+  Person,
+  BasicPerson,
+  PersonWarning,
+} from "src/app/shared/models/person";
+import { ResultData } from "src/app/shared/result-data";
+import { SubNavItem, SubNav } from "src/app/shared/subnav";
 
 export interface ContactGroup {
   contactType: ContactType;
@@ -33,23 +37,22 @@ export interface ContactGroup {
   isAmlCompleted: boolean;
 }
 export const ContactGroupDetailsSubNav = [
-  'properties',
-  'leads',
-  'instructions',
-  'valuations',
-  'offers',
-  'searches',
-  'lettings-managements',
-  'home-helpers'
+  "properties",
+  "leads",
+  "instructions",
+  "valuations",
+  "offers",
+  "searches",
+  "lettings-managements",
+  "home-helpers",
 ];
 
-export const ContactGroupDetailsSubNavItems: SubNavItem[] = ContactGroupDetailsSubNav.map(x => ({
-  link: x,
-  label: SubNav.subNavLabel(x),
-  value: SubNav.subNavValue(x),
-}));
-
-
+export const ContactGroupDetailsSubNavItems: SubNavItem[] =
+  ContactGroupDetailsSubNav.map((x) => ({
+    link: x,
+    label: SubNav.subNavLabel(x),
+    value: SubNav.subNavValue(x),
+  }));
 
 export interface Signer {
   contactGroupId: number;
@@ -57,6 +60,8 @@ export interface Signer {
   companyName: string;
   phoneNumber: string;
   emailAddress: string;
+  ccOwner: boolean;
+  isPowerOfAttorney: boolean;
 }
 export class SignerRequest {
   searchTerm: string;
@@ -189,12 +194,12 @@ export enum ContactType {
   Individual = 1,
   Sharers = 2,
   CompanyContact = 4,
-  ReloContact = 8
+  ReloContact = 8,
 }
 export const ContactGroupsTypes = new Map([
-  [ContactType.Individual, 'Individual/Joint'],
-  [ContactType.Sharers, 'Multi/Sharer'],
-  [ContactType.CompanyContact, 'Company Contact']
+  [ContactType.Individual, "Individual/Joint"],
+  [ContactType.Sharers, "Multi/Sharer"],
+  [ContactType.CompanyContact, "Company Contact"],
 ]);
 export interface ContactGroupsType {
   id: string;
@@ -205,25 +210,25 @@ export enum CompanyTypeId {
   OtherAgent = 2,
   PropertyDeveloper = 16,
   ReloAgent = 4,
-  Tradesmen = 8
+  Tradesmen = 8,
 }
 export enum NoteType {
   Notes = 0,
   Emails = 1,
   SMS = 2,
-  Property = 3
+  Property = 3,
 }
 export enum JobTypeEnum {
   Other = 0,
   ClientServices = 1,
   Manager = 2,
-  Negotiatior = 3
+  Negotiatior = 3,
 }
 export const JobTypes = new Map([
-  [JobTypeEnum.Other, 'Other'],
-  [JobTypeEnum.ClientServices, 'Client Services'],
-  [JobTypeEnum.Manager, 'Manager or Broker'],
-  [JobTypeEnum.Negotiatior, 'Negotiator'],
+  [JobTypeEnum.Other, "Other"],
+  [JobTypeEnum.ClientServices, "Client Services"],
+  [JobTypeEnum.Manager, "Manager or Broker"],
+  [JobTypeEnum.Negotiatior, "Negotiator"],
 ]);
 
 export interface CompanyContactDetails {
@@ -279,4 +284,3 @@ export interface ContactNoteData extends ResultData {
 export interface PersonNoteData extends ResultData {
   result: PersonNote[];
 }
-
