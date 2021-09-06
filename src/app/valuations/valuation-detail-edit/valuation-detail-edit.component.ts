@@ -151,8 +151,9 @@ export class ValuationDetailEditComponent
   canBookAppointment = true;
   isAvailabilityRequired = false;
   oldClass: string = "null";
-  contactGroup$: Observable<ContactGroup>;
-  adminContactGroup$: Observable<ContactGroup>;
+  contactGroup: ContactGroup;
+  adminContactGroup: ContactGroup;
+  contactGroupSubscription = new Subscription();
   showPhotos = false;
   showMap = false;
   showProperty = false;
@@ -527,6 +528,22 @@ export class ValuationDetailEditComponent
     }
   }
 
+  getSelectedOwner(owner: Signer) {
+    if (owner) {
+      this.lastKnownOwner = owner;
+      this.isOwnerChanged = true;
+      this.isLastknownOwnerVisible = false;
+      this.getContactGroup(this.lastKnownOwner?.contactGroupId);
+      this.valuationForm.get("propertyOwner").setValue(owner);
+      if (this.property) {
+        this.property.lastKnownOwner = owner;
+      }
+      if (this.isEditable || this.isNewValuation) {
+        this.valuationForm.markAsDirty();
+      }
+    }
+  }
+
   setValidationForLettingsMeetingOwner(setValidation: boolean) {
     this.valuationForm.controls["lettingsOwnerAssociateEmail"].setValidators(
       setValidation ? Validators.required : []
@@ -692,17 +709,22 @@ export class ValuationDetailEditComponent
   }
 
   getContactGroup(contactGroupId: number) {
-    this.contactGroup$ = this.contactGroupService.getContactGroupById(
-      contactGroupId,
-      true
-    );
+    this.contactGroupSubscription = this.contactGroupService
+      .getContactGroupById(contactGroupId, true)
+      .subscribe((result) => {
+        this.contactGroup = result;
+      });
   }
 
   getAdminContactGroup(contactGroupId: number) {
-    this.adminContactGroup$ = this.contactGroupService.getContactGroupById(
-      contactGroupId,
-      true
-    );
+    this.contactGroupSubscription = this.contactGroupService
+      .getContactGroupById(contactGroupId, true)
+      .subscribe((result) => {
+        this.adminContactGroup = result;
+        this.adminContactGroup.contactPeople.concat(
+          this.contactGroup.contactPeople
+        );
+      });
   }
 
   setInstructionRentFigures() {
@@ -1114,9 +1136,9 @@ export class ValuationDetailEditComponent
         propertyStyle: valuation.property?.propertyStyleId,
         propertyType: valuation.property?.propertyTypeId,
         propertyFloor: valuation.property?.floorOther,
-        // isRetirementHome: valuation.property?.retire,
-        // isNewBuild: [],
-        // hasDisabledAccess: [],
+        isRetirementHome: valuation.isRetirementHome,
+        isNewBuild: valuation.isNewBuild,
+        hasDisabledAccess: valuation.hasDisabledAccess,
       });
 
       if (!this.isEditable && !this.isNewValuation) {
@@ -1381,22 +1403,6 @@ export class ValuationDetailEditComponent
           this.getSelectedOwner(newProperty.lastKnownOwner);
         }
       });
-  }
-
-  getSelectedOwner(owner: Signer) {
-    if (owner) {
-      this.lastKnownOwner = owner;
-      this.isOwnerChanged = true;
-      this.isLastknownOwnerVisible = false;
-      this.getContactGroup(this.lastKnownOwner?.contactGroupId);
-      this.valuationForm.get("propertyOwner").setValue(owner);
-      if (this.property) {
-        this.property.lastKnownOwner = owner;
-      }
-      if (this.isEditable || this.isNewValuation) {
-        this.valuationForm.markAsDirty();
-      }
-    }
   }
 
   onLettingsValuerChange(valuer: BaseStaffMember) {
@@ -1703,7 +1709,7 @@ export class ValuationDetailEditComponent
     );
 
     if (value == PropertyType.House) {
-      this.valuationForm.controls["propertyFloor"].setValue(0);
+      this.valuationForm.controls["propertyFloorId"].setValue(null);
     }
   }
 
@@ -2218,6 +2224,9 @@ export class ValuationDetailEditComponent
       this.sharedService.convertStringToNumber(
         valuation.suggestedAskingRentShortLetMonthly
       );
+    valuation.property.propertyTypeId = valuation.propertyTypeId;
+    valuation.property.propertyStyleId = valuation.propertyStyleId;
+
     valuation.suggestedAskingRentLongLetMonthly =
       this.sharedService.convertStringToNumber(
         valuation.suggestedAskingRentLongLetMonthly
@@ -2552,5 +2561,6 @@ export class ValuationDetailEditComponent
     this.storage.delete("valuationFormData").subscribe();
     this.openContactGroupSubscription.unsubscribe();
     this.propertySubsription.unsubscribe();
+    this.contactGroupSubscription.unsubscribe();
   }
 }

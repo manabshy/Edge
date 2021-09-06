@@ -53,6 +53,9 @@ export interface Valuation extends ValuationInfo {
   salesValuationBooking?: ValuationBooking;
   lettingsValuationBooking?: ValuationBooking;
   queryResultCount?: number;
+  hasDisabledAccess?: boolean;
+  isNewBuild?: boolean;
+  isRetirementHome?: boolean;
 }
 
 export interface ValuationPropertyInfo {
