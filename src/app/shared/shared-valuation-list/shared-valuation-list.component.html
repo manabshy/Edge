@@ -2,7 +2,8 @@
   <h2>Valuations</h2>
   <span class="checkbox checkbox--rtl" *ngIf="closedCounter">
     <span>
-      <input type="checkbox" [(ngModel)]="hidePrevious" (change)="getValuations()" class="custom-control-input" id="hidePreviousValuations">
+      <input type="checkbox" [(ngModel)]="hidePrevious" (change)="getValuations()" class="custom-control-input"
+        id="hidePreviousValuations">
       <label for="hidePreviousValuations">Hide previous valuations</label>
     </span>
   </span>
@@ -35,13 +36,19 @@
           </span>
         </td>
         <td data-title="Sales">
-          <span class="cell-content" *ngIf="valuation?.suggestedAskingPrice; else noValue">{{valuation?.suggestedAskingPrice | currency:'GBP':'symbol':'1.0-0'}}</span>
+          <span class="cell-content"
+            *ngIf="valuation?.suggestedAskingPrice; else noValue">{{valuation?.suggestedAskingPrice |
+            currency:'GBP':'symbol':'1.0-0'}}</span>
         </td>
         <td data-title="Long Let">
-          <span class="cell-content" *ngIf="valuation?.suggestedAskingRentLongLet; else noValue">{{valuation?.suggestedAskingRentLongLet | currency:'GBP':'symbol':'1.0-0'}} pw</span>
+          <span class="cell-content"
+            *ngIf="valuation?.suggestedAskingRentLongLet; else noValue">{{valuation?.suggestedAskingRentLongLet |
+            currency:'GBP':'symbol':'1.0-0'}} pw</span>
         </td>
         <td data-title="Short Let">
-          <span class="cell-content" *ngIf="valuation?.suggestedAskingRentShortLet; else noValue">{{valuation?.suggestedAskingRentShortLet | currency:'GBP':'symbol':'1.0-0'}} pw</span>
+          <span class="cell-content"
+            *ngIf="valuation?.suggestedAskingRentShortLet; else noValue">{{valuation?.suggestedAskingRentShortLet |
+            currency:'GBP':'symbol':'1.0-0'}} pw</span>
         </td>
         <td data-title="Valuer">
           <span class="cell-content">
