@@ -445,4 +445,18 @@ export class LeadRegisterComponent implements OnInit {
       this.dateFromControl.setValue(null);
     }
   }
+
+  isLeadOutDated(lead: Lead, index): string {
+    if (
+      lead &&
+      lead.nextChaseDate &&
+      new Date(lead.nextChaseDate).getTime() < new Date().getTime()
+    ) {
+      if (index % 2 === 0) {
+        return "#F1AFA8";
+      }
+      return "#FAE1DF";
+    }
+    return "";
+  }
 }

@@ -361,6 +361,7 @@ export class ValuationDetailEditComponent
       this.getValuation(this.valuationId);
     } else {
       this.valuation = { valuationStatus: ValuationStatusEnum.None };
+      this.sharedService.removeContactGroupChanged.next(false);
     }
 
     if (this.propertyId) {
@@ -707,34 +708,48 @@ export class ValuationDetailEditComponent
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((result) => {
         if (result) {
-          this.lastKnownOwner = result.lastKnownOwner;
-          this.property = result;
-          this.valuation.property = { ...this.property };
-          this.valuation.officeId = this.property.officeId;
-          // this.valuers = result.valuers;
-          this.getContactGroup(result?.lastKnownOwner?.contactGroupId);
-          const baseProperty = {
-            propertyId: this.property.propertyId,
-            address: this.property.address,
-            officeId: this.property.officeId,
-          } as BaseProperty;
-          this.valuationForm.get("property").setValue(baseProperty);
-
-          this.valuationForm.patchValue({
-            propertyStyleId: this.property.propertyStyleId,
-            propertyTypeId: this.property.propertyTypeId,
-            propertyFloorId: this.property.floorOther,
-          });
+          this.setPropertyDetail(result);
         }
       });
   }
 
-  getContactGroup(contactGroupId: number) {
-    this.contactGroupSubscription = this.contactGroupService
-      .getContactGroupById(contactGroupId, true)
-      .subscribe((result) => {
+  getPropertyDetailsSync(propertyId: number) {
+    return this.propertyService
+      .getProperty(propertyId, true, true, false, true)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .toPromise();
+  }
+
+  setPropertyDetail(propertyDetails) {
+    this.lastKnownOwner = propertyDetails.lastKnownOwner;
+    this.property = propertyDetails;
+    this.valuation.property = { ...this.property };
+    this.valuation.officeId = this.property.officeId;
+    // this.valuers = result.valuers;
+    this.getContactGroup(propertyDetails?.lastKnownOwner?.contactGroupId).then(
+      (result) => {
         this.contactGroup = result;
-      });
+      }
+    );
+
+    const baseProperty = {
+      propertyId: this.property.propertyId,
+      address: this.property.address,
+      officeId: this.property.officeId,
+    } as BaseProperty;
+    this.valuationForm.get("property").setValue(baseProperty);
+
+    this.valuationForm.patchValue({
+      propertyStyleId: this.property.propertyStyleId,
+      propertyTypeId: this.property.propertyTypeId,
+      propertyFloorId: this.property.floorOther,
+    });
+  }
+
+  getContactGroup(contactGroupId: number) {
+    return this.contactGroupService
+      .getContactGroupById(contactGroupId, true)
+      .toPromise();
   }
 
   getAdminContactGroup(contactGroupId: number) {
@@ -750,7 +765,7 @@ export class ValuationDetailEditComponent
         }
         this.adminContactGroup.contactPeople =
           this.adminContactGroup.contactPeople.concat(
-            this.contactGroup.contactPeople
+            this.contactGroup?.contactPeople
           );
         console.log(this.adminContactGroup.contactPeople);
       });
@@ -1010,13 +1025,24 @@ export class ValuationDetailEditComponent
           if (this.property) {
             this.lastKnownOwner = this.property.lastKnownOwner;
             this.property = this.property;
+            this.getContactGroup(this.lastKnownOwner?.contactGroupId).then(
+              (result) => {
+                this.contactGroup = result;
+                this.setAdminContact();
+              }
+            ); // get contact group for last know owner
           } else {
             this.lastKnownOwner = this.valuation.propertyOwner;
             // this.property = this.valuation.property; // Fix this with Gabor on the API
-            this.getPropertyDetails(this.valuation.property.propertyId);
+            this.getPropertyDetailsSync(
+              this.valuation.property.propertyId
+            ).then((result) => {
+              if (result) {
+                this.setPropertyDetail(result);
+                this.setAdminContact();
+              }
+            });
           }
-
-          this.getContactGroup(this.lastKnownOwner?.contactGroupId); // get contact group for last know owner
 
           if (this.property?.propertyId) {
             this.getValuers(this.property.propertyId);
@@ -1025,10 +1051,6 @@ export class ValuationDetailEditComponent
           this.setValuationType(data);
           this.populateForm(data);
           this.setupInitialRentFigures(data);
-
-          if (data.adminContact && data.adminContact.contactGroupId > 0)
-            this.getSelectedAdminContact(data.adminContact);
-          else this.sharedService.removeContactGroupChanged.next(false);
 
           if (this.valuation && this.allOrigins) {
             this.activeOriginId = this.allOrigins.find(
@@ -1045,6 +1067,15 @@ export class ValuationDetailEditComponent
           }
         }
       });
+  }
+
+  setAdminContact() {
+    if (
+      this.valuation.adminContact &&
+      this.valuation.adminContact.contactGroupId > 0
+    )
+      this.getSelectedAdminContact(this.valuation.adminContact);
+    else this.sharedService.removeContactGroupChanged.next(false);
   }
 
   getPropertyInformation(propertyId) {

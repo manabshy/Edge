@@ -103,7 +103,7 @@
     <form (ngSubmit)="showLeadsAssignmentModal()">
       <app-infinite-scroll (scrolled)="onScrollDown()">
         <div class="table">
-          <table class="table--mobile table--rowHover">
+          <table class=" table--mobile table--rowHover">
             <thead>
               <tr>
                 <th *ngIf="areLeadsAssignable" class="has--checkbox">
@@ -127,7 +127,8 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let lead of filteredLeads; let i = index;" (click)="navigateToEdit(lead)">
+              <tr [ngStyle]="{'background-color':  isLeadOutDated(lead,i)}"
+                *ngFor="let lead of filteredLeads; let i = index;" (click)="navigateToEdit(lead)">
                 <td data-title="Assign" *ngIf="areLeadsAssignable" class="has--checkbox">
                   <span class="cell-content">
                     <span class="checkbox checkbox--noMargin checkbox--only" (click)="$event.stopPropagation()">
