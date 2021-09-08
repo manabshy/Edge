@@ -478,7 +478,7 @@ export class LeadEditComponent
           let changedListingType = null;
           if (
             this.leadSearchInfo?.listingType == ListingType.MyLeads &&
-            this.lead.ownerId != this.currentStaffMember.staffMemberId
+            this.lead.ownerId != this.currentStaffMember?.staffMemberId
           ) {
             changedListingType = ListingType.OtherUserLeads;
           }
@@ -1044,17 +1044,16 @@ export class LeadEditComponent
     }
   }
 
-  navigateToNewValuation(propertyId: number, lastKnownOwnerId?: number) {
+  navigateToNewValuation(propertyId: number) {
+    event.stopPropagation();
     this.router.navigate(["valuations-register/detail/", 0, "edit"], {
       queryParams: {
         propertyId: propertyId,
-        lastKnownOwnerId: lastKnownOwnerId,
         isNewValuation: true,
         isFromProperty: true,
+        lastKnownOwnerId: this.personId,
       },
     });
-
-    console.log("related prop", propertyId);
   }
 
   getSelectedItem(item: any) {
