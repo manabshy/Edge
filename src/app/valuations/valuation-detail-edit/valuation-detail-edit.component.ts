@@ -1180,9 +1180,13 @@ export class ValuationDetailEditComponent
         propertyStyle: valuation.property?.propertyStyleId,
         propertyType: valuation.property?.propertyTypeId,
         propertyFloor: valuation.property?.floorOther,
-        isRetirementHome: valuation.isRetirementHome,
-        isNewBuild: valuation.isNewBuild,
-        hasDisabledAccess: valuation.hasDisabledAccess,
+        isRetirementHome: valuation.isRetirementHome
+          ? valuation.isRetirementHome
+          : false,
+        isNewBuild: valuation.isNewBuild ? valuation.isNewBuild : false,
+        hasDisabledAccess: valuation.hasDisabledAccess
+          ? valuation.hasDisabledAccess
+          : false,
       });
 
       if (!this.isEditable && !this.isNewValuation) {
