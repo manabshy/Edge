@@ -17,6 +17,7 @@ import { ToastrService } from "ngx-toastr";
 import { debounceTime, takeUntil, distinctUntilChanged } from "rxjs/operators";
 import {
   ContactGroup,
+  PersonSummaryFigures,
   Signer,
 } from "src/app/contactgroups/shared/contact-group";
 import { ContactGroupsService } from "src/app/contactgroups/shared/contact-groups.service";
@@ -71,6 +72,7 @@ import {
 } from "angular-calendar";
 import { BasicEventRequest, DiaryProperty } from "src/app/diary/shared/diary";
 import { DiaryEventService } from "src/app/diary/shared/diary-event.service";
+import { SidenavService } from "src/app/core/services/sidenav.service";
 
 @Component({
   selector: "app-valuation-detail-edit",
@@ -206,6 +208,9 @@ export class ValuationDetailEditComponent
   isActiveValuationsVisible = false;
   isCanDeactivate = false;
   openContactGroupSubscription = new Subscription();
+  moreInfo = (this.sidenavService.selectedItem = "notes");
+  summaryTotals: PersonSummaryFigures;
+  sideNavItems = this.sidenavService.valuationSideNavItems;
 
   get originTypeControl() {
     return this.valuationForm.get("originType") as FormControl;
@@ -303,6 +308,7 @@ export class ValuationDetailEditComponent
   ];
 
   interestList: any[] = [];
+
   constructor(
     private valuationService: ValuationService,
     private propertyService: PropertyService,
@@ -318,7 +324,8 @@ export class ValuationDetailEditComponent
     private fb: FormBuilder,
     private currencyPipe: CurrencyPipe,
     private primengConfig: PrimeNGConfig,
-    private diaryEventService: DiaryEventService
+    private diaryEventService: DiaryEventService,
+    private sidenavService: SidenavService
   ) {
     super();
   }
@@ -534,6 +541,10 @@ export class ValuationDetailEditComponent
     this.sharedService.removeContactGroupChanged.next(false);
   }
 
+  createSideNavItems(event) {}
+
+  getSelectedSideNavItem(event) {}
+
   getSelectedAdminContact(owner: Signer) {
     if (owner) {
       this.adminContact = {
@@ -742,7 +753,7 @@ export class ValuationDetailEditComponent
     this.valuationForm.patchValue({
       propertyStyleId: this.property.propertyStyleId,
       propertyTypeId: this.property.propertyTypeId,
-      propertyFloorId: this.property.floorOther,
+      propertyFloorId: this.property["propertyFloorId"],
     });
   }
 
@@ -2331,6 +2342,15 @@ export class ValuationDetailEditComponent
       this.sharedService.convertStringToNumber(
         valuation.suggestedAskingRentLongLet
       );
+
+    if (
+      valuation.suggestedAskingRentShortLetMonthly > 0 ||
+      valuation.suggestedAskingRentLongLet > 0 ||
+      valuation.suggestedAskingRentShortLet > 0 ||
+      valuation.suggestedAskingRentLongLetMonthly > 0
+    ) {
+      valuation.valuationDate = new Date();
+    }
 
     this.checkValuers(valuation);
     if (this.approxLeaseExpiryDate) {

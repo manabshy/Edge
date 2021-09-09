@@ -183,6 +183,8 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
             } else {
               this.valuations = this.valuations.concat(result);
             }
+          } else {
+            this.queryResultCount = 0;
           }
         },
         (error: WedgeError) => {
