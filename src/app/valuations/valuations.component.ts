@@ -153,7 +153,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
       date:
         this.dateControl.value === null
           ? null
-          : format(this.dateControl.value, "YYYY-MM-DD"),
+          : format(this.dateControl.value, "yyyy-MM-dd"),
       status: this.statusControl.value,
       valuerId: this.valuerControl.value,
       officeId: this.officeControl.value,
