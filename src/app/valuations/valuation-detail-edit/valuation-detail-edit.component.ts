@@ -74,6 +74,7 @@ import {
 import { BasicEventRequest, DiaryProperty } from "src/app/diary/shared/diary";
 import { DiaryEventService } from "src/app/diary/shared/diary-event.service";
 import { SidenavService } from "src/app/core/services/sidenav.service";
+import { Person } from "src/app/shared/models/person";
 
 @Component({
   selector: "app-valuation-detail-edit",
@@ -212,13 +213,28 @@ export class ValuationDetailEditComponent
   moreInfo = (this.sidenavService.selectedItem = "valuationTicket");
   summaryTotals: PersonSummaryFigures;
   sideNavItems = this.sidenavService.valuationSideNavItems;
-  personId: number;
+  contactId: number;
+  mainPersonId: number;
   showOnlyMyNotes: boolean = false;
-  personNotes: ContactNote[] = [];
+  contactNotes: ContactNote[] = [];
   page = 0;
   pageSize = 20;
   bottomReached = false;
   isNoteSelected = false;
+  person: Person;
+  get dataNote() {
+    if (this.contactGroup?.contactGroupId) {
+      return {
+        contactGroupId: this.contactGroup.contactGroupId,
+        people: this.contactGroup.contactPeople,
+        notes: this.contactNotes,
+      };
+    }
+    if (this.contactGroup) {
+      return { contactGroupId: this.contactGroup, notes: this.contactNotes };
+    }
+    return null;
+  }
 
   get originTypeControl() {
     return this.valuationForm.get("originType") as FormControl;
@@ -539,6 +555,16 @@ export class ValuationDetailEditComponent
           this.removeAdminContact();
         }
       });
+
+    this.contactGroupService.noteChanges$.subscribe((data) => {
+      if (data) {
+        this.contactNotes = [];
+        this.page = 1;
+        if (this.contactId) {
+          this.getContactNotes();
+        }
+      }
+    });
   }
 
   removeAdminContact() {
@@ -551,34 +577,37 @@ export class ValuationDetailEditComponent
 
   setShowMyNotesFlag(onlyMyNotes: boolean) {
     this.showOnlyMyNotes = onlyMyNotes;
-    this.personNotes = [];
+    this.contactNotes = [];
     this.page = 0;
-    this.getPersonNotes();
+    this.getContactNotes();
   }
 
-  getPersonNotes() {
-    this.getNextPersonNotesPage(this.page);
+  getContactNotes() {
+    this.getNextContactNotesPage(this.page);
   }
 
-  private getNextPersonNotesPage(page: number) {
-    if (this.personId) {
+  addNote() {
+    console.log(this.dataNote, "data note...");
+
+    this.sharedService.addNote(this.dataNote);
+  }
+
+  private getNextContactNotesPage(page: number) {
+    if (this.contactId) {
       this.contactGroupService
-        .getPersonNotes(
-          this.personId,
+        .getContactGroupNotes(
+          this.contactId,
           this.pageSize,
           page,
           this.showOnlyMyNotes
         )
-        .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe((data) => {
           if (data) {
-            if (page === 1) {
-              this.personNotes = data;
-            } else {
-              this.personNotes = _.concat(this.personNotes, data);
-            }
+            this.contactNotes = _.concat(this.contactNotes, data);
           }
-          this.setBottomReachedFlag(data);
+          if (data && !data.length) {
+            this.bottomReached = true;
+          }
         });
     }
   }
@@ -627,7 +656,7 @@ export class ValuationDetailEditComponent
       this.getContactGroup(this.lastKnownOwner?.contactGroupId).then(
         (result) => {
           this.contactGroup = result;
-          this.getSearchedPersonSummaryInfo(this.contactGroup.contactGroupId);
+          this.getSearchedPersonSummaryInfo(this.contactGroup);
         }
       );
       this.valuationForm.get("propertyOwner").setValue(owner);
@@ -804,7 +833,7 @@ export class ValuationDetailEditComponent
     this.getContactGroup(propertyDetails?.lastKnownOwner?.contactGroupId).then(
       (result) => {
         this.contactGroup = result;
-        this.getSearchedPersonSummaryInfo(this.contactGroup.contactGroupId);
+        this.getSearchedPersonSummaryInfo(this.contactGroup);
       }
     );
 
@@ -1104,9 +1133,7 @@ export class ValuationDetailEditComponent
             this.getContactGroup(this.lastKnownOwner?.contactGroupId).then(
               (result) => {
                 this.contactGroup = result;
-                this.getSearchedPersonSummaryInfo(
-                  this.lastKnownOwner.contactGroupId
-                );
+                this.getSearchedPersonSummaryInfo(this.contactGroup);
                 this.setAdminContact();
               }
             ); // get contact group for last know owner
@@ -1122,8 +1149,8 @@ export class ValuationDetailEditComponent
               }
             });
           }
-          this.personId = this.lastKnownOwner.contactGroupId;
-          this.getPersonNotes();
+          this.contactId = this.lastKnownOwner.contactGroupId;
+          this.getContactNotes();
 
           if (this.property?.propertyId) {
             this.getValuers(this.property.propertyId);
@@ -1150,24 +1177,37 @@ export class ValuationDetailEditComponent
       });
   }
 
-  getSearchedPersonSummaryInfo(personId: number) {
-    this.personId = personId;
-    console.log(this.personId);
+  getSearchedPersonSummaryInfo(contactGroup: ContactGroup) {
+    this.mainPersonId = this.contactGroup.contactPeople?.find(
+      (x) => x.isMainPerson
+    ).personId;
+    this.contactId = contactGroup.contactGroupId;
+    console.log(this.contactId);
     this.storage
-      .get(personId.toString())
+      .get(this.mainPersonId.toString())
       .subscribe((data: PersonSummaryFigures) => {
         if (data) {
           this.summaryTotals = data;
         } else {
-          this.contactGroupService.getPersonInfo(personId).subscribe((data) => {
-            this.summaryTotals = data;
-            this.storage
-              .set(personId.toString(), this.summaryTotals)
-              .subscribe();
-          });
+          this.contactGroupService
+            .getPersonInfo(this.mainPersonId)
+            .subscribe((data) => {
+              this.summaryTotals = data;
+              this.storage
+                .set(this.mainPersonId.toString(), this.summaryTotals)
+                .subscribe();
+            });
         }
       });
   }
+
+  // getPersonDetails(personId: number) {
+  //   this.contactGroupService.getPerson(personId, true).subscribe((data) => {
+  //     if (data) {
+  //       this.person = data;
+  //     }
+  //   });
+  // }
 
   setAdminContact() {
     if (
@@ -1525,7 +1565,7 @@ export class ValuationDetailEditComponent
       this.getContactGroup(this.property?.lastKnownOwner?.contactGroupId).then(
         (result) => {
           this.contactGroup = result;
-          this.getSearchedPersonSummaryInfo(this.contactGroup.contactGroupId);
+          this.getSearchedPersonSummaryInfo(this.contactGroup);
         }
       );
       this.valuationForm.get("property").setValue(property);
@@ -2756,6 +2796,6 @@ export class ValuationDetailEditComponent
     this.openContactGroupSubscription.unsubscribe();
     this.propertySubsription.unsubscribe();
     this.contactGroupSubscription.unsubscribe();
-    this.storage.delete(this.personId.toString()).subscribe();
+    this.storage.delete(this.mainPersonId.toString()).subscribe();
   }
 }

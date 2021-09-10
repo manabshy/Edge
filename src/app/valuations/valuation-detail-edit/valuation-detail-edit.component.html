@@ -304,7 +304,7 @@
                       data-cy="getvailability">Book Availability</button>
                   </fieldset>
 
-                  <p-messages *ngIf="isAvailabilityRequired" severity="warn">
+                  <p-messages data-cy="availabilityMessage" *ngIf="isAvailabilityRequired" severity="warn">
                     <ng-template pTemplate>
                       <div class="p-ml-2">Please book
                         availability before saving</div>
@@ -675,9 +675,8 @@
       </div>
     </div>
     <ng-container [ngSwitch]="moreInfo">
-      <app-notes *ngSwitchCase="'notes'" [personNotes]="personNotes" [person]="person" [pageNumber]="page"
-        [bottomReached]="bottomReached" [showNoteInput]="false" [showCreateNoteButton]="true"
-        (showMyNotes)="setShowMyNotesFlag($event)"></app-notes>
+      <app-notes *ngSwitchCase="'notes'" [noteData]="dataNote" [contactGroupNotes]="dataNote?.notes" [pageNumber]="page"
+        [bottomReached]="bottomReached" (showMyNotes)="setShowMyNotesFlag($event)"></app-notes>
     </ng-container>
   </div>
 </div>
@@ -716,7 +715,7 @@
 <!-- for active valuations -->
 <p-dialog header="Active Valuations" [closable]="false" [(visible)]="isActiveValuationsVisible" [modal]="true"
   [draggable]="false" class="modal--medium">
-  <p-messages severity="warn">
+  <p-messages data-cy="activeValuationMessage" severity="warn">
     <ng-template pTemplate>
       <div>There are active valuations you can select one from list or you can select create for new one
       </div>
@@ -906,12 +905,13 @@
       </div>
 
       <div class="grid grid--62 grid--dividerLeft">
-        <p-messages *ngIf="isSplitAppointment && !selectedSalesDate" severity="warn">
+        <p-messages data-cy="selectSalesMessage" *ngIf="isSplitAppointment && !selectedSalesDate" severity="warn">
           <ng-template pTemplate>
             <div class="p-ml-2">Please select a slot for sales </div>
           </ng-template>
         </p-messages>
-        <p-messages *ngIf="isSplitAppointment && selectedSalesDate && !selectedLettingsDate" severity="warn">
+        <p-messages data-cy="selectLettingsMessage"
+          *ngIf="isSplitAppointment && selectedSalesDate && !selectedLettingsDate" severity="warn">
           <ng-template pTemplate>
             <div class="p-ml-2">Please select a slot for lettings </div>
           </ng-template>
@@ -1033,7 +1033,7 @@
             </span>
           </span>
         </fieldset>
-        <p-messages *ngIf="formErrors?.salesAgencyType" severity="warn">
+        <p-messages data-cy="agencyMessage" *ngIf="formErrors?.salesAgencyType" severity="warn">
           <ng-template pTemplate>
             <div class="p-ml-2">{{formErrors?.salesAgencyType}}</div>
           </ng-template>
@@ -1050,7 +1050,7 @@
             <label for="instructLet">Instruct for Lettings</label>
           </span>
         </span>
-        <p-messages
+        <p-messages data-cy="optionMessage"
           *ngIf="instructionForm.get('instructLet').value && !instructionForm.get('isInstructLongLet').value && !instructionForm.get('isInstructShortLet').value"
           severity="error">
           <ng-template pTemplate>
@@ -1126,7 +1126,7 @@
             </span>
           </span>
         </fieldset>
-        <p-messages *ngIf="formErrors?.lettingsAgencyType" severity="warn">
+        <p-messages data-cy="lettingAgencyMessage" *ngIf="formErrors?.lettingsAgencyType" severity="warn">
           <ng-template pTemplate>
             <div class="p-ml-2">{{formErrors?.lettingsAgencyType}}</div>
           </ng-template>
