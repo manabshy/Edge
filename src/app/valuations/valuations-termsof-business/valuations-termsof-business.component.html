@@ -2,7 +2,7 @@
   <div class="-mt-4">
     <p-messages *ngIf="!isTermOfBusinessSigned" severity="warn">
       <ng-template pTemplate>
-        <div>
+        <div data-cy="notSignedMessage">
           <div class="p-ml-2">Term of business not yet signed</div>
           <p class="text-xs">Last Emailed : {{lastEmailDate}}</p>
         </div>
@@ -42,7 +42,7 @@
   </div>
   <p-messages *ngIf="formErrors.declarableInterest" severity="error">
     <ng-template pTemplate>
-      <div class="p-ml-2">Please select terms of business</div>
+      <div data-cy="termsofbusinessWarningMessage" class="p-ml-2">Please select terms of business</div>
     </ng-template>
   </p-messages>
 
