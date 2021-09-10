@@ -17,6 +17,7 @@ import { ToastrService } from "ngx-toastr";
 import { debounceTime, takeUntil, distinctUntilChanged } from "rxjs/operators";
 import {
   ContactGroup,
+  ContactNote,
   PersonSummaryFigures,
   Signer,
 } from "src/app/contactgroups/shared/contact-group";
@@ -208,9 +209,16 @@ export class ValuationDetailEditComponent
   isActiveValuationsVisible = false;
   isCanDeactivate = false;
   openContactGroupSubscription = new Subscription();
-  moreInfo = (this.sidenavService.selectedItem = "notes");
+  moreInfo = (this.sidenavService.selectedItem = "valuationTicket");
   summaryTotals: PersonSummaryFigures;
   sideNavItems = this.sidenavService.valuationSideNavItems;
+  personId: number;
+  showOnlyMyNotes: boolean = false;
+  personNotes: ContactNote[] = [];
+  page = 0;
+  pageSize = 20;
+  bottomReached = false;
+  isNoteSelected = false;
 
   get originTypeControl() {
     return this.valuationForm.get("originType") as FormControl;
@@ -541,9 +549,60 @@ export class ValuationDetailEditComponent
     this.sharedService.removeContactGroupChanged.next(false);
   }
 
-  createSideNavItems(event) {}
+  setShowMyNotesFlag(onlyMyNotes: boolean) {
+    this.showOnlyMyNotes = onlyMyNotes;
+    this.personNotes = [];
+    this.page = 0;
+    this.getPersonNotes();
+  }
 
-  getSelectedSideNavItem(event) {}
+  getPersonNotes() {
+    this.getNextPersonNotesPage(this.page);
+  }
+
+  private getNextPersonNotesPage(page: number) {
+    if (this.personId) {
+      this.contactGroupService
+        .getPersonNotes(
+          this.personId,
+          this.pageSize,
+          page,
+          this.showOnlyMyNotes
+        )
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe((data) => {
+          if (data) {
+            if (page === 1) {
+              this.personNotes = data;
+            } else {
+              this.personNotes = _.concat(this.personNotes, data);
+            }
+          }
+          this.setBottomReachedFlag(data);
+        });
+    }
+  }
+
+  private setBottomReachedFlag(result: any) {
+    if (result && (!result.length || result.length < +this.pageSize)) {
+      this.bottomReached = true;
+    } else {
+      this.bottomReached = false;
+    }
+  }
+
+  getSelectedSideNavItem(event) {
+    this.moreInfo = this.sidenavService.getSelectedItem(
+      event?.type,
+      event?.index,
+      this.sideNavItems
+    );
+    if (event?.type == "notes") {
+      this.isNoteSelected = true;
+    } else {
+      this.isNoteSelected = false;
+    }
+  }
 
   getSelectedAdminContact(owner: Signer) {
     if (owner) {
@@ -565,7 +624,12 @@ export class ValuationDetailEditComponent
       this.lastKnownOwner = owner;
       this.isOwnerChanged = true;
       this.isLastknownOwnerVisible = false;
-      this.getContactGroup(this.lastKnownOwner?.contactGroupId);
+      this.getContactGroup(this.lastKnownOwner?.contactGroupId).then(
+        (result) => {
+          this.contactGroup = result;
+          this.getSearchedPersonSummaryInfo(this.contactGroup.contactGroupId);
+        }
+      );
       this.valuationForm.get("propertyOwner").setValue(owner);
       if (this.property) {
         this.property.lastKnownOwner = owner;
@@ -724,7 +788,7 @@ export class ValuationDetailEditComponent
       });
   }
 
-  getPropertyDetailsSync(propertyId: number) {
+  getPropertyDetailsPromise(propertyId: number) {
     return this.propertyService
       .getProperty(propertyId, true, true, false, true)
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -740,6 +804,7 @@ export class ValuationDetailEditComponent
     this.getContactGroup(propertyDetails?.lastKnownOwner?.contactGroupId).then(
       (result) => {
         this.contactGroup = result;
+        this.getSearchedPersonSummaryInfo(this.contactGroup.contactGroupId);
       }
     );
 
@@ -1039,13 +1104,16 @@ export class ValuationDetailEditComponent
             this.getContactGroup(this.lastKnownOwner?.contactGroupId).then(
               (result) => {
                 this.contactGroup = result;
+                this.getSearchedPersonSummaryInfo(
+                  this.lastKnownOwner.contactGroupId
+                );
                 this.setAdminContact();
               }
             ); // get contact group for last know owner
           } else {
             this.lastKnownOwner = this.valuation.propertyOwner;
             // this.property = this.valuation.property; // Fix this with Gabor on the API
-            this.getPropertyDetailsSync(
+            this.getPropertyDetailsPromise(
               this.valuation.property.propertyId
             ).then((result) => {
               if (result) {
@@ -1054,6 +1122,8 @@ export class ValuationDetailEditComponent
               }
             });
           }
+          this.personId = this.lastKnownOwner.contactGroupId;
+          this.getPersonNotes();
 
           if (this.property?.propertyId) {
             this.getValuers(this.property.propertyId);
@@ -1076,6 +1146,25 @@ export class ValuationDetailEditComponent
           if (this.valuation && this.allOrigins && this.originTypes) {
             this.setOriginTypeId(this.valuation.originId);
           }
+        }
+      });
+  }
+
+  getSearchedPersonSummaryInfo(personId: number) {
+    this.personId = personId;
+    console.log(this.personId);
+    this.storage
+      .get(personId.toString())
+      .subscribe((data: PersonSummaryFigures) => {
+        if (data) {
+          this.summaryTotals = data;
+        } else {
+          this.contactGroupService.getPersonInfo(personId).subscribe((data) => {
+            this.summaryTotals = data;
+            this.storage
+              .set(personId.toString(), this.summaryTotals)
+              .subscribe();
+          });
         }
       });
   }
@@ -1297,7 +1386,7 @@ export class ValuationDetailEditComponent
 
   getInfoDetailValues(propertyInfo: any[], data: InfoDetail[]): InfoDetail[] {
     let infoDetail: InfoDetail[] = [];
-    if (propertyInfo && propertyInfo.length > 0) {
+    if (propertyInfo && propertyInfo.length > 0 && data) {
       propertyInfo.forEach((value) => {
         infoDetail.push(data.find((info) => info.id == value));
       });
@@ -1433,7 +1522,12 @@ export class ValuationDetailEditComponent
       this.property = property;
       this.isPropertyChanged = true;
       this.lastKnownOwner = property.lastKnownOwner;
-      this.getContactGroup(this.property?.lastKnownOwner?.contactGroupId);
+      this.getContactGroup(this.property?.lastKnownOwner?.contactGroupId).then(
+        (result) => {
+          this.contactGroup = result;
+          this.getSearchedPersonSummaryInfo(this.contactGroup.contactGroupId);
+        }
+      );
       this.valuationForm.get("property").setValue(property);
       this.valuationForm.get("propertyOwner").setValue(this.lastKnownOwner);
       this.getValuers(property.propertyId);
@@ -2343,15 +2437,6 @@ export class ValuationDetailEditComponent
         valuation.suggestedAskingRentLongLet
       );
 
-    if (
-      valuation.suggestedAskingRentShortLetMonthly > 0 ||
-      valuation.suggestedAskingRentLongLet > 0 ||
-      valuation.suggestedAskingRentShortLet > 0 ||
-      valuation.suggestedAskingRentLongLetMonthly > 0
-    ) {
-      valuation.valuationDate = new Date();
-    }
-
     this.checkValuers(valuation);
     if (this.approxLeaseExpiryDate) {
       valuation.approxLeaseExpiryDate = this.approxLeaseExpiryDate;
@@ -2671,5 +2756,6 @@ export class ValuationDetailEditComponent
     this.openContactGroupSubscription.unsubscribe();
     this.propertySubsription.unsubscribe();
     this.contactGroupSubscription.unsubscribe();
+    this.storage.delete(this.personId.toString()).subscribe();
   }
 }

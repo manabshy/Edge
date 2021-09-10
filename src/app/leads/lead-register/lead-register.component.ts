@@ -19,6 +19,7 @@ import * as _ from "lodash";
 import { Router } from "@angular/router";
 import { MessageService } from "primeng/api";
 import { BsLocaleService } from "ngx-bootstrap/datepicker";
+import { addDays } from "date-fns";
 
 const PAGE_SIZE = 40;
 @Component({
@@ -450,7 +451,7 @@ export class LeadRegisterComponent implements OnInit {
     if (
       lead &&
       lead.nextChaseDate &&
-      new Date(lead.nextChaseDate).getTime() < new Date().getTime()
+      new Date(lead.nextChaseDate).getTime() < addDays(new Date(), -1).getTime()
     ) {
       if (index % 2 === 0) {
         return "#F1AFA8";
