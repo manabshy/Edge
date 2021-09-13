@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
-import { Observable, Subject } from "rxjs";
+import { BehaviorSubject, Observable, Subject } from "rxjs";
 import {
   Valuation,
   ValuationRequestOption,
@@ -21,6 +21,8 @@ import { StorageMap } from "@ngx-pwa/local-storage";
 export class ValuationService {
   private valuationPageNumberSubject = new Subject<number>();
   valuationPageNumberChanges$ = this.valuationPageNumberSubject.asObservable();
+
+  contactGroupBs = new BehaviorSubject(null);
 
   constructor(private http: HttpClient, private storage: StorageMap) {}
 
