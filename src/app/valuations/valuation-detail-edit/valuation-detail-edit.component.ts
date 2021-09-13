@@ -2468,6 +2468,7 @@ export class ValuationDetailEditComponent
     this.setLeaseExpiryDate();
     this.isSubmitting = true;
     const valuation = { ...this.valuation, ...this.valuationForm.value };
+    valuation.propertyOwner = this.lastKnownOwner;
     valuation.OfficeId = this.property.officeId;
 
     valuation.isPowerOfAttorney =
