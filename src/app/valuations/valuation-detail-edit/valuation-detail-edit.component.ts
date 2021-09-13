@@ -60,7 +60,7 @@ import { ResultData } from "src/app/shared/result-data";
 import { StaffMember } from "src/app/shared/models/staff-member";
 import { TabDirective } from "ngx-bootstrap/tabs/ngx-bootstrap-tabs";
 import format from "date-fns/format";
-import { Observable, Subscription } from "rxjs";
+import { Observable, Subject, Subscription } from "rxjs";
 import { MessageService, PrimeNGConfig } from "primeng/api";
 import { addYears, differenceInCalendarYears, isThisHour } from "date-fns";
 import _ from "lodash";
@@ -222,6 +222,8 @@ export class ValuationDetailEditComponent
   bottomReached = false;
   isNoteSelected = false;
   person: Person;
+  destroy = new Subject();
+
   // previousContactGroupId: number;
   get dataNote() {
     if (this.contactGroup?.contactGroupId) {
@@ -573,6 +575,16 @@ export class ValuationDetailEditComponent
         this.getContactNotes();
       }
     });
+
+    this.contactGroupService.contactNotePageChanges$
+      .pipe(takeUntil(this.destroy))
+      .subscribe((newPageNumber) => {
+        this.page = newPageNumber;
+        if (this.contactId == null) {
+          this.page = 0;
+        }
+        this.getNextContactNotesPage(this.page);
+      });
   }
 
   removeAdminContact() {
@@ -612,11 +624,13 @@ export class ValuationDetailEditComponent
         )
         .subscribe((data) => {
           if (data) {
-            this.contactNotes = _.concat(this.contactNotes, data);
+            if (page === 1) {
+              this.contactNotes = data;
+            } else {
+              this.contactNotes = _.concat(this.contactNotes, data);
+            }
           }
-          if (data && !data.length) {
-            this.bottomReached = true;
-          }
+          this.setBottomReachedFlag(data);
         });
     }
   }
@@ -2808,5 +2822,6 @@ export class ValuationDetailEditComponent
     this.propertySubsription.unsubscribe();
     this.contactGroupSubscription.unsubscribe();
     this.storage.delete(this.mainPersonId.toString()).subscribe();
+    this.destroy.unsubscribe();
   }
 }
