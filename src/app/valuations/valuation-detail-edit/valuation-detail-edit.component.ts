@@ -222,6 +222,7 @@ export class ValuationDetailEditComponent
   bottomReached = false;
   isNoteSelected = false;
   person: Person;
+  // previousContactGroupId: number;
   get dataNote() {
     if (this.contactGroup?.contactGroupId) {
       return {
@@ -565,6 +566,13 @@ export class ValuationDetailEditComponent
         }
       }
     });
+
+    this.valuationService.contactGroupBs.subscribe((result: ContactGroup) => {
+      if (result?.contactGroupId && this.contactId != result?.contactGroupId) {
+        this.contactId = result.contactGroupId;
+        this.getContactNotes();
+      }
+    });
   }
 
   removeAdminContact() {
@@ -583,6 +591,7 @@ export class ValuationDetailEditComponent
   }
 
   getContactNotes() {
+    this.contactNotes = [];
     this.getNextContactNotesPage(this.page);
   }
 
@@ -656,6 +665,7 @@ export class ValuationDetailEditComponent
       this.getContactGroup(this.lastKnownOwner?.contactGroupId).then(
         (result) => {
           this.contactGroup = result;
+          this.valuationService.contactGroupBs.next(this.contactGroup);
           this.getSearchedPersonSummaryInfo(this.contactGroup);
         }
       );
@@ -833,6 +843,7 @@ export class ValuationDetailEditComponent
     this.getContactGroup(propertyDetails?.lastKnownOwner?.contactGroupId).then(
       (result) => {
         this.contactGroup = result;
+        this.valuationService.contactGroupBs.next(this.contactGroup);
         this.getSearchedPersonSummaryInfo(this.contactGroup);
       }
     );
@@ -1133,6 +1144,7 @@ export class ValuationDetailEditComponent
             this.getContactGroup(this.lastKnownOwner?.contactGroupId).then(
               (result) => {
                 this.contactGroup = result;
+                this.valuationService.contactGroupBs.next(this.contactGroup);
                 this.getSearchedPersonSummaryInfo(this.contactGroup);
                 this.setAdminContact();
               }
@@ -1149,8 +1161,6 @@ export class ValuationDetailEditComponent
               }
             });
           }
-          this.contactId = this.lastKnownOwner.contactGroupId;
-          this.getContactNotes();
 
           if (this.property?.propertyId) {
             this.getValuers(this.property.propertyId);
@@ -1565,6 +1575,7 @@ export class ValuationDetailEditComponent
       this.getContactGroup(this.property?.lastKnownOwner?.contactGroupId).then(
         (result) => {
           this.contactGroup = result;
+          this.valuationService.contactGroupBs.next(this.contactGroup);
           this.getSearchedPersonSummaryInfo(this.contactGroup);
         }
       );
