@@ -679,10 +679,8 @@
       </div>
     </div>
     <ng-container [ngSwitch]="moreInfo">
-      <div class="mt-3">
-        <app-notes *ngSwitchCase="'notes'" [noteData]="dataNote" [contactGroupNotes]="dataNote?.notes"
-          [pageNumber]="page" [bottomReached]="bottomReached" (showMyNotes)="setShowMyNotesFlag($event)"></app-notes>
-      </div>
+      <app-notes *ngSwitchCase="'notes'" [noteData]="dataNote" [contactGroupNotes]="dataNote?.notes" [pageNumber]="page"
+        [bottomReached]="bottomReached" (showMyNotes)="setShowMyNotesFlag($event)"></app-notes>
     </ng-container>
   </div>
 </div>

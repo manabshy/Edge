@@ -9,6 +9,7 @@ import {
   catchError,
   takeUntil,
   tap,
+  map
 } from "rxjs/operators";
 import {
   Valuation,
@@ -25,6 +26,7 @@ import { StaffMemberService } from "../core/services/staff-member.service";
 import { OfficeService } from "../core/services/office.service";
 import { format } from "date-fns";
 import { BaseStaffMember } from "../shared/models/base-staff-member";
+import { ResultData } from '../shared/result-data';
 
 @Component({
   selector: "app-valuations",
@@ -45,10 +47,16 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
   bottomReached = false;
   suggestions: (text$: Observable<any>) => Observable<any>;
   valuers: StaffMember[];
-  offices: Office[];
+  valuersForSelect: Array<any> = [];
+  offices: Office[] = [];
   statuses: any;
   isAdvancedSearchVisible: boolean = false;
   queryResultCount: number;
+  selectedStatuses: Array<number> = []
+  selectedOfficeIds: Array<number> = []
+  selectedValuerIds: Array<any> = []
+  currentStaffMember: StaffMember
+
   get searchTermControl() {
     return this.valuationFinderForm.get("searchTerm") as FormControl;
   }
@@ -68,9 +76,9 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
   get isAdvancedFilterActive() {
     if (this.valuationFinderForm) {
       return (
-        +this.statusControl.value ||
-        this.valuerControl.value ||
-        this.officeControl.value
+        this.selectedStatuses ||
+        this.selectedValuerIds ||
+        this.selectedOfficeIds
       );
     }
   }
@@ -86,12 +94,15 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
     private fb: FormBuilder
   ) {
     super();
+
   }
 
   ngOnInit() {
     this.setupForm();
     this.getValuations();
-    this.statuses = ValuationStatuses;
+    this.statuses = ValuationStatuses.filter(status => {
+      return status.value === 'Booked' || status.value === 'Valued' // US278
+    });
 
     this.storage.get("activeStaffmembers").subscribe((data) => {
       if (data) {
@@ -102,6 +113,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
           .pipe(takeUntil(this.ngUnsubscribe))
           .subscribe((result) => (this.valuers = result));
       }
+      this.setValuersForSelectControl() // maps valuers to object for generic select control to use US278
     });
 
     this.valuationService.valuationPageNumberChanges$
@@ -124,15 +136,47 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
           )
         )
       );
+
+    this.getOffices();
+    this.staffMemberService.getCurrentStaffMember().toPromise()
+    .then(res => {
+      this.currentStaffMember = res
+      console.log('currentStaffMember:', this.currentStaffMember)
+    })
+  }
+
+  private getOffices() {
+    this.officeService.getOffices().toPromise()
+      .then(res => {
+        // TODO: if user is Office Manager => office = their office(s) US278
+        this.offices = res.result.map(office => {
+          return {
+            id: office.officeId,
+            value: office.name
+          }
+        })
+      })
+  }
+
+  private setValuersForSelectControl() {
+    // TODO if current user = Sales Manager || Lettings Manager || Broker => show themself US278
+    
+    // if current user = Office Manager || CS Consultant || Anyone else => show all options US278
+    this.valuersForSelect = this.valuers.map(valuer => {
+      return {
+        id: valuer.staffMemberId,
+        value: valuer.fullName
+      }
+    })
   }
 
   private setupForm() {
     this.valuationFinderForm = this.fb.group({
       searchTerm: "",
       date: null,
-      statusId: 0,
-      valuerId: 0,
-      officeId: 0,
+      statusId: [0],
+      valuerId: [0],
+      officeId: [0],
     });
   }
 
@@ -157,7 +201,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
       status: this.statusControl.value,
       valuerId: this.valuerControl.value,
       officeId: this.officeControl.value,
-    } as ValuationRequestOption;
+    };
 
     this.valuationService
       .getValuations(request)
@@ -215,5 +259,13 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
 
   scrollElIntoView(className: string) {
     this.sharedService.scrollElIntoView(className);
+  }
+
+  selectionControlChange(fieldId, ev) {
+    console.log('selectionControlChanged', fieldId, ev)
+    this.valuationFinderForm.patchValue({
+      [fieldId]: ev
+    })
+    console.log('this.valuationFinderForm: ', this.valuationFinderForm)
   }
 }
