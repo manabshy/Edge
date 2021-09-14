@@ -4,7 +4,7 @@
       [contactGroup]="adminContactGroup? adminContactGroup: contactGroup" *ngIf="contactGroup">
     </app-contactgroup-card>
     <app-sidenav-item class="appWrapper" [sideNavItems]="sideNavItems" [summaryTotals]="summaryTotals"
-      [scrollToItem]="mainRowItem" (selectedItem)="getSelectedSideNavItem($event)">
+      (selectedItem)="getSelectedSideNavItem($event)">
     </app-sidenav-item>
     <div class="card" *ngIf="property">
       <div class="card__header">
@@ -189,7 +189,7 @@
                       </select>
                     </span>
                   </fieldset>
-                  <fieldset class="inline-child" *ngIf="valuationForm.get('propertyFloorId').value == '10'" >
+                  <fieldset class="inline-child" *ngIf="valuationForm.get('propertyFloorId').value == '10'">
                     <label for="floorOther">Other</label>
                     <input class="p-2" type="text" name="floorOther" id="floorOther" formControlName="floorOther" />
                   </fieldset>
