@@ -1057,6 +1057,7 @@ export class ValuationDetailEditComponent
       propertyStyleId: [],
       propertyTypeId: [],
       propertyFloorId: [],
+      floorOther: [],
       isRetirementHome: [false],
       isNewBuild: [false],
       hasDisabledAccess: [false],
@@ -1360,7 +1361,8 @@ export class ValuationDetailEditComponent
         lettingsOwnerAssociateType: this.lettingsOwnerAssociateType,
         propertyStyle: valuation.property?.propertyStyleId,
         propertyType: valuation.property?.propertyTypeId,
-        propertyFloor: valuation.property?.floorOther,
+        propertyFloor: valuation.property?.propertyFloorId,
+        floorOther: valuation.property?.floorOther,
         isRetirementHome: valuation.isRetirementHome
           ? valuation.isRetirementHome
           : false,
@@ -2471,6 +2473,8 @@ export class ValuationDetailEditComponent
       );
     valuation.property.propertyTypeId = valuation.propertyTypeId;
     valuation.property.propertyStyleId = valuation.propertyStyleId;
+    valuation.property.propertyFloorId = valuation.propertyFloorId;
+    valuation.property.floorOther = valuation.floorOther;
 
     valuation.suggestedAskingRentLongLetMonthly =
       this.sharedService.convertStringToNumber(

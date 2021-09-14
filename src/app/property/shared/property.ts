@@ -19,6 +19,7 @@ export interface Property extends PropertyInfo {
   propertyTypeId: PropertyType;
   propertyStyleId: PropertyStyle;
   address: Address;
+  propertyFloorId:number,
   floorOther: string;
   floorType: string;
   numberOfFloors: number;
