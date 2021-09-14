@@ -42,11 +42,12 @@ export class ValuationService {
   getValuations(
     request: ValuationRequestOption
   ): Observable<Valuation[] | any> {
+    console.log('request for valuations query: ', request)
     const options = this.setQueryParams(request);
     const url = `${AppConstants.baseValuationUrl}/search`;
     return this.http.get<any>(url, { params: options }).pipe(
       map((response) => response.result),
-      tap((data) => console.log("valuations", JSON.stringify(data)))
+      // tap((data) => console.log("valuations", JSON.stringify(data)))
     );
   }
 
@@ -135,6 +136,7 @@ export class ValuationService {
     return options;
   }
   setQueryParams(requestOption: ValuationRequestOption) {
+    console.log('requestOption.status: ', requestOption.status)
     if (!requestOption.page) {
       requestOption.page = 1;
     }

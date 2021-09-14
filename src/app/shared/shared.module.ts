@@ -122,6 +122,7 @@ import { RedactedCardComponent } from "./components/redacted-card/redacted-card.
 import { CompanyFinderComponent } from "./components/company-finder/company-finder.component";
 import { SafeHtmlPipe } from "./pipes/safe-html.pipe";
 import { InfiniteScrollComponent } from "./components/infinite-scroll/infinite-scroll.component";
+import { GenericMultiSelectControlComponent } from './generic-multi-select-control/generic-multi-select-control.component';
 
 const components = [
   BreadcrumbComponent,
@@ -170,6 +171,7 @@ const components = [
   RedactedCardComponent,
   CompanyFinderComponent,
   InfiniteScrollComponent,
+  GenericMultiSelectControlComponent
 ];
 const pipes = [
   RoundingPipe,

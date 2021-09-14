@@ -1,6 +1,6 @@
 <div class="row">
   <div class="row__item row__item--aside">
-    <div class="wrapper--sticky">
+    <div class="wrapper--sticky ">
       <div class="card">
         <div class="card__header"><svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64"
             class="icon icon--onLeft">
@@ -25,25 +25,51 @@
             </fieldset>
 
             <fieldset class="mb-3">
-              <label for="statusId">Status</label>
+              <app-generic-multi-select-control
+                [label]="'Status'"
+                [placeholder]="'Select status'"
+                [options]="statuses"
+                [cyProp]="'valStatus'"
+                (onSelectionChange)="selectionControlChange('statusId', $event)"
+                >
+              </app-generic-multi-select-control>
+
+                <!-- <label for="statusId">Status</label>
               <span class="select">
                 <select id="statusId" formControlName="statusId" data-cy="valStatus">
                   <option selected value="0"></option>
                   <option *ngFor="let status of statuses" [value]='status.id'>{{status.value}}</option>
                 </select>
-              </span>
+              </span> -->
             </fieldset>
 
             <fieldset class="mb-3">
-              <label for="valuerId">Valuer</label>
-              <app-staff-member-finder class="appWrapper" [isMultiple]="false"
+              <!-- <label for="valuerId">Valuer</label>
+              <app-staff-member-finder class="appWrapper" [isMultiple]="true"
                 (selectedStaffMemberId)="getSelectedStaffMemberId($event)" [listType]="'allValuers'">
-              </app-staff-member-finder>
+              </app-staff-member-finder> -->
+              <app-generic-multi-select-control 
+                *ngIf="offices.length"
+                [label]="'Valuer'"
+                [placeholder]="'Select staff member'"
+                [options]="valuersForSelect"
+                [cyProp]="'valuerId'"
+                (onSelectionChange)="selectionControlChange('valuerId', $event)">
+              </app-generic-multi-select-control>
             </fieldset>
 
             <fieldset class="mb-3">
-              <app-office-finder class="appWrapper" [officeId]="officeId"
-                (selectedOfficeId)="getSelectedOfficeId($event)" [fullWidth]="true"></app-office-finder>
+              <app-generic-multi-select-control 
+                *ngIf="offices.length"
+                [label]="'Office'"
+                [placeholder]="'Select Office'"
+                [options]="offices"
+                [cyProp]="'officeId'"
+                (onSelectionChange)="selectionControlChange('officeId', $event)"
+              >
+            </app-generic-multi-select-control>
+              <!-- <app-office-finder class="appWrapper" [officeId]="officeId"
+                (selectedOfficeId)="getSelectedOfficeId($event)" [fullWidth]="true"></app-office-finder> -->
             </fieldset>
 
             <div class="flex">

@@ -189,10 +189,9 @@
                       </select>
                     </span>
                   </fieldset>
-                  <fieldset class="inline-child" *ngIf="valuationForm.get('propertyFloorId').value == '10'">
-                    <label for="propertyFloorIdOther">Other</label>
-                    <input class="p-2" type="text" name="propertyFloorIdOther" id="propertyFloorIdOther"
-                      formControlName="propertyFloorIdOther" [ngClass]="{'is-invalid': (formErrors?.bedrooms)}" />
+                  <fieldset class="inline-child" *ngIf="valuationForm.get('propertyFloorId').value == '10'" >
+                    <label for="floorOther">Other</label>
+                    <input class="p-2" type="text" name="floorOther" id="floorOther" formControlName="floorOther" />
                   </fieldset>
                 </div>
 

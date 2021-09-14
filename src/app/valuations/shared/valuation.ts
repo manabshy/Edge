@@ -97,10 +97,10 @@ export interface ValuersAvailabilityOption extends BaseRequestOption {
   salesValuerId?: number;
 }
 export interface ValuationRequestOption extends BaseRequestOption {
-  status?: number;
+  status?: number[];
   date?: string;
-  valuerId?: number;
-  officeId?: number;
+  valuerId?: number[] ;
+  officeId?: number[];
 }
 
 export interface ValuationBooking {
