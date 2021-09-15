@@ -49,12 +49,14 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
   valuers: StaffMember[];
   valuersForSelect: Array<any> = [];
   offices: Office[] = [];
-  statuses: any;
+  statuses = ValuationStatuses;
   isAdvancedSearchVisible: boolean = false;
   queryResultCount: number;
-  selectedStatuses: Array<number> = []
-  selectedOfficeIds: Array<number> = []
-  selectedValuerIds: Array<any> = []
+  selectControlModels = {
+    statusId: [],
+    valuerId: [],
+    officeId: []
+  }
   currentStaffMember: StaffMember
 
   get searchTermControl() {
@@ -73,16 +75,6 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
     return this.valuationFinderForm.get("officeId") as FormControl;
   }
 
-  get isAdvancedFilterActive() {
-    if (this.valuationFinderForm) {
-      return (
-        this.selectedStatuses ||
-        this.selectedValuerIds ||
-        this.selectedOfficeIds
-      );
-    }
-  }
-
   public keepOriginalOrder = (a) => a.key;
 
   constructor(
@@ -94,93 +86,18 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
     private fb: FormBuilder
   ) {
     super();
-
   }
 
   ngOnInit() {
     this.setupForm();
-    this.getValuations();
-    this.statuses = ValuationStatuses.filter(status => {
-      return status.value === 'Booked' || status.value === 'Valued' // US278
-    });
-
-    this.storage.get("activeStaffmembers").subscribe((data) => {
-      if (data) {
-        this.valuers = data as StaffMember[];
-      } else {
-        this.staffMemberService
-          .getActiveStaffMembers()
-          .pipe(takeUntil(this.ngUnsubscribe))
-          .subscribe((result) => (this.valuers = result));
-      }
-      this.setValuersForSelectControl() // maps valuers to object for generic select control to use US278
-    });
-
-    this.valuationService.valuationPageNumberChanges$
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((newPageNumber) => {
-        this.page = newPageNumber;
-        this.getNextValuationsPage(this.page);
-        console.log("%c HEYYYY", "color: blue", this.page);
-      });
-
-    this.suggestions = (text$: Observable<string>) =>
-      text$.pipe(
-        debounceTime(200),
-        distinctUntilChanged(),
-        switchMap((term) =>
-          this.valuationService.getValuationSuggestions(term).pipe(
-            catchError(() => {
-              return EMPTY;
-            })
-          )
-        )
-      );
-
+    this.getValuers();
+    this.setPage();
+    this.setSuggestions();
     this.getOffices();
-    this.staffMemberService.getCurrentStaffMember().toPromise()
-    .then(res => {
-      this.currentStaffMember = res
-      console.log('currentStaffMember:', this.currentStaffMember)
-    })
-  }
+    this.getCurrentStaffMember();
+   }
 
-  private getOffices() {
-    this.officeService.getOffices().toPromise()
-      .then(res => {
-        // TODO: if user is Office Manager => office = their office(s) US278
-        this.offices = res.result.map(office => {
-          return {
-            id: office.officeId,
-            value: office.name
-          }
-        })
-      })
-  }
-
-  private setValuersForSelectControl() {
-    // TODO if current user = Sales Manager || Lettings Manager || Broker => show themself US278
-    
-    // if current user = Office Manager || CS Consultant || Anyone else => show all options US278
-    this.valuersForSelect = this.valuers.map(valuer => {
-      return {
-        id: valuer.staffMemberId,
-        value: valuer.fullName
-      }
-    })
-  }
-
-  private setupForm() {
-    this.valuationFinderForm = this.fb.group({
-      searchTerm: "",
-      date: null,
-      statusId: [0],
-      valuerId: [0],
-      officeId: [0],
-    });
-  }
-
-  getValuations() {
+  public getValuations() {
     this.page = 1;
     this.bottomReached = false;
     this.valuations = [];
@@ -198,9 +115,9 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
         this.dateControl.value === null
           ? null
           : format(this.dateControl.value, "yyyy-MM-dd"),
-      status: this.statusControl.value,
-      valuerId: this.valuerControl.value,
-      officeId: this.officeControl.value,
+      status: this.selectControlModels.statusId,
+      valuerId: this.selectControlModels.valuerId,
+      officeId: this.selectControlModels.officeId,
     };
 
     this.valuationService
@@ -266,6 +183,122 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
     this.valuationFinderForm.patchValue({
       [fieldId]: ev
     })
+    this.selectControlModels[fieldId] = ev
     console.log('this.valuationFinderForm: ', this.valuationFinderForm)
+    console.log('this.selectControlModels[fieldId]: ', this.selectControlModels[fieldId])
   }
+
+  // PRIVATE
+  private setPage(){
+    this.valuationService.valuationPageNumberChanges$
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe((newPageNumber) => {
+      this.page = newPageNumber;
+      this.getNextValuationsPage(this.page);
+      console.log("%c HEYYYY", "color: blue", this.page);
+    });
+  }
+
+  private setSuggestions(){
+    this.suggestions = (text$: Observable<string>) =>
+      text$.pipe(
+        debounceTime(200),
+        distinctUntilChanged(),
+        switchMap((term) =>
+          this.valuationService.getValuationSuggestions(term).pipe(
+            catchError(() => {
+              return EMPTY;
+            })
+          )
+        )
+      );
+  }
+
+  private getCurrentStaffMember(){
+    this.staffMemberService.getCurrentStaffMember().toPromise()
+    .then(res => {
+      this.currentStaffMember = res
+      console.log('currentStaffMember:', this.currentStaffMember)    
+      this.setInitialSearchValues();
+      this.getValuations();
+    })
+  }
+
+  private getValuers(){
+    this.storage.get("activeStaffmembers").subscribe((data) => {
+      if (data) {
+        this.valuers = data as StaffMember[];
+      } else {
+        this.staffMemberService
+          .getActiveStaffMembers()
+          .pipe(takeUntil(this.ngUnsubscribe))
+          .subscribe((result) => (this.valuers = result));
+      }
+      this.setValuersForSelectControl() // maps valuers to object for generic select control to use US278
+    });
+  }
+
+  private getOffices() {
+    this.officeService.getOffices().toPromise()
+      .then(res => {
+        this.offices = res.result.map(office => {
+          return {
+            id: office.officeId,
+            value: office.name
+          }
+        })
+      })
+  }
+
+  private setValuersForSelectControl() {
+    this.valuersForSelect = this.valuers.map(valuer => {
+      return {
+        id: valuer.staffMemberId,
+        value: valuer.fullName
+      }
+    })
+  }
+
+  private setupForm() {
+    this.valuationFinderForm = this.fb.group({
+      searchTerm: "",
+      date: null,
+      statusId: [0],
+      valuerId: [0],
+      officeId: [0],
+    });
+  }
+
+  private setInitialSearchValues(){
+    this.setInitialStatusId()
+    this.setInitialValuerId()
+    this.setInitialOfficeId()
+  }
+
+  private setInitialStatusId(){
+    this.selectControlModels.statusId = [2,3] // Booked, Valued. Default for all users
+  }
+  
+  private setInitialValuerId(){
+    // TODO if current user role = Sales Manager || Lettings Manager || Broker => preselect themself US278
+    // if current user = Office Manager || CS Consultant || Anyone else => show all options, none preselected US278
+    // if(currentUser.role === 'Sales Manager' || Lettings Manager || Broker){
+    const initialValuerId = this.currentStaffMember.staffMemberId;
+    this.selectControlModels.valuerId = [initialValuerId]
+    // } else {
+    //  this.selectControlModels.valuerId = []
+    // }
+  }
+  
+  private setInitialOfficeId(){
+    // TODO: if user role is Office Manager => office = their office(s) US278
+    // if(currentStaffMember.role === 'Office Manager'){
+      const initialOfficeId = this.currentStaffMember.officeId;
+      this.selectControlModels.officeId = [initialOfficeId]
+    // } else {
+    //  this.selectControlModels.officeId = []
+    // }
+  }
+  
+
 }

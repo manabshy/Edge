@@ -189,9 +189,12 @@
                       </select>
                     </span>
                   </fieldset>
-                  <fieldset class="inline-child" *ngIf="valuationForm.get('propertyFloorId').value == '10'">
+                  <fieldset class="inline-child" *ngIf="valuationForm.get('propertyFloorId').value == '10'"
+                  [ngClass]="{'invalid': formErrors?.floorOther}">
                     <label for="floorOther">Other</label>
-                    <input class="p-2" type="text" name="floorOther" id="floorOther" formControlName="floorOther" />
+                    <input class="px-2" type="text" name="floorOther" id="floorOther" formControlName="floorOther" 
+                    [ngClass]="{'is-invalid': (formErrors?.floorOther)}" />
+                    <p class="message message--negative"> {{formErrors?.floorOther}}</p>
                   </fieldset>
                 </div>
 

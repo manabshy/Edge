@@ -11,17 +11,20 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 @Component({
   selector: 'app-generic-multi-select-control',
   template: `
-  <form [attr.data-cy]="cyProp">
+  <form >
   <fieldset>
     <label>{{label}}</label>
     <ng-container>
       <p-multiSelect 
         #multiSelect
+        [attr.data-cy]="cyProp"
+        [(ngModel)]="model"
         [options]="options" 
         optionLabel="value" 
         optionValue="id"
         placeholder="{{placeholder}}" 
         (onChange)="selectionHasChanged($event)"
+        name="{{label}}"
        >
       </p-multiSelect>
     </ng-container>
@@ -37,6 +40,7 @@ export class GenericMultiSelectControlComponent {
   @Input() placeholder: string
   @Input() options: any
   @Input() cyProp: string
+  @Input() model: any
 
   @Output() onSelectionChange: EventEmitter<Array<any>> = new EventEmitter()
   

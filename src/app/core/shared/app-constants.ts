@@ -155,6 +155,7 @@ export const FormErrors = {
   subject: "",
   body: "",
   fromDate: "",
+  floorOther:""
 };
 
 export const ValidationMessages = {
@@ -379,6 +380,9 @@ export const ValidationMessages = {
   },
   declarableInterest: {
     required: "Terms of business is required",
+  },
+  floorOther: {
+    required: "Please specify a floor",
   },
 };
 
