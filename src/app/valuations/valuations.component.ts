@@ -8,25 +8,19 @@ import {
   switchMap,
   catchError,
   takeUntil,
-  tap,
-  map
+  tap
 } from "rxjs/operators";
 import {
   Valuation,
-  ValuationRequestOption,
-  ValuationStatusEnum,
-  getValuationStatuses,
   ValuationStatuses,
 } from "./shared/valuation";
 import { WedgeError, SharedService } from "../core/services/shared.service";
 import { StorageMap } from "@ngx-pwa/local-storage";
-import { StaffMember, Office } from "../shared/models/staff-member";
+import { StaffMember, Office, RoleName } from "../shared/models/staff-member";
 import { BaseComponent } from "../shared/models/base-component";
 import { StaffMemberService } from "../core/services/staff-member.service";
 import { OfficeService } from "../core/services/office.service";
 import { format } from "date-fns";
-import { BaseStaffMember } from "../shared/models/base-staff-member";
-import { ResultData } from '../shared/result-data';
 
 @Component({
   selector: "app-valuations",
@@ -219,7 +213,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
     .then(res => {
       this.currentStaffMember = res
       console.log('currentStaffMember:', this.currentStaffMember)    
-      this.setInitialSearchValues();
+      this.setInitialFilters();
       this.getValuations();
     })
   }
@@ -228,13 +222,16 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
     this.storage.get("activeStaffmembers").subscribe((data) => {
       if (data) {
         this.valuers = data as StaffMember[];
+        this.setValuersForSelectControl() // maps valuers to object for generic select control to use US278
       } else {
         this.staffMemberService
           .getActiveStaffMembers()
           .pipe(takeUntil(this.ngUnsubscribe))
-          .subscribe((result) => (this.valuers = result));
+          .subscribe((result) => {
+            this.valuers = result
+            this.setValuersForSelectControl() // maps valuers to object for generic select control to use US278
+          });
       }
-      this.setValuersForSelectControl() // maps valuers to object for generic select control to use US278
     });
   }
 
@@ -269,7 +266,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
     });
   }
 
-  private setInitialSearchValues(){
+  private setInitialFilters(){
     this.setInitialStatusId()
     this.setInitialValuerId()
     this.setInitialOfficeId()
@@ -280,24 +277,43 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
   }
   
   private setInitialValuerId(){
-    // TODO if current user role = Sales Manager || Lettings Manager || Broker => preselect themself US278
-    // if current user = Office Manager || CS Consultant || Anyone else => show all options, none preselected US278
-    // if(currentUser.role === 'Sales Manager' || Lettings Manager || Broker){
-    const initialValuerId = this.currentStaffMember.staffMemberId;
-    this.selectControlModels.valuerId = [initialValuerId]
-    // } else {
-    //  this.selectControlModels.valuerId = []
-    // }
+    if(this.currentStaffMember.roles && this.currentStaffMember.roles.length){
+      if(this.isManager() || this.isBroker()){
+        this.selectControlModels.valuerId = [this.currentStaffMember.staffMemberId]
+        } else {
+          this.selectControlModels.valuerId = []
+        }
+    }
   }
-  
+
+  isManager():boolean{
+    if (this.currentStaffMember.roles.findIndex(x=> x.roleName === RoleName.Manager) >-1){
+      return true;
+    }
+    return false;
+  }
+
+  isBroker():boolean{
+    if (this.currentStaffMember.roles.findIndex(x=> x.roleName === RoleName.Broker) >-1){
+      return true;
+    }
+    return false;
+  }
+
+  isOfficeManager():boolean{
+    if (this.currentStaffMember.roles.findIndex(x=> x.roleName === RoleName.OfficeManager) >-1){
+      return true;
+    }
+    return false;
+  }
+
   private setInitialOfficeId(){
-    // TODO: if user role is Office Manager => office = their office(s) US278
-    // if(currentStaffMember.role === 'Office Manager'){
-      const initialOfficeId = this.currentStaffMember.officeId;
-      this.selectControlModels.officeId = [initialOfficeId]
-    // } else {
-    //  this.selectControlModels.officeId = []
-    // }
+ 
+    if(this.isOfficeManager()){
+      this.selectControlModels.officeId = [this.currentStaffMember.officeId]
+    } else {
+     this.selectControlModels.officeId = []
+    }
   }
   
 

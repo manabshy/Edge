@@ -1,4 +1,4 @@
-import { RoleDepartment } from "./../../shared/models/staff-member";
+import { RoleName } from "./../../shared/models/staff-member";
 import { Injectable } from "@angular/core";
 import { Observable, BehaviorSubject, Subject, of } from "rxjs";
 import { HttpClient } from "@angular/common/http";
@@ -7,16 +7,15 @@ import { map, shareReplay, tap } from "rxjs/operators";
 import {
   StaffMember,
   StaffMemberResult,
-  Impersonation,
   StaffMemberListResult,
 } from "../../shared/models/staff-member";
 import { StorageMap } from "@ngx-pwa/local-storage";
 import { BaseStaffMember } from "src/app/shared/models/base-staff-member";
 import { DashboardMember } from "src/app/shared/models/dashboard-member";
-import { result } from "lodash";
 import { enumDepartments } from "../shared/departments";
 import { LeaderBoardRanking } from "src/app/shared/models/leader-board-ranking";
 import { LeaderboardRankingViewEnum } from "src/app/dashboard/shared/dashboard";
+import { enumRoles } from'../shared/roles'
 
 const CACHE_SIZE = 1;
 @Injectable({
@@ -58,6 +57,39 @@ export class StaffMemberService {
         map((response) => response.result),
         tap((data) => {
           if (data) {
+           let roles = [];
+           if(data.securityRoles){
+            data.securityRoles.forEach(role => {
+              switch(role.securityRoleId){
+                
+                case enumRoles.LettingsManager: 
+                case enumRoles.PropertyManager:
+                case enumRoles.SalesManager:
+                roles.push({ roleId:role.securityRoleId, roleName: RoleName.Manager, departments: []});
+                break;
+                
+                case enumRoles.LettingsNegotiator:
+                case enumRoles.SalesNegotiator:
+                case enumRoles.SeniorNegotiator:
+                roles.push({ roleId: role.securityRoleId, roleName: RoleName.Negotiator, departments: []});
+                break;
+
+                case enumRoles.BrokerFull:
+                case enumRoles.BrokerLets:
+                case enumRoles.BrokerSales:
+                case enumRoles.NewHomesBroker:
+                roles.push({roleId: role.securityRoleId, roleName: RoleName.Broker, departments: []});
+                break;
+              
+                case enumRoles.LettingsTeamAssistant:
+                case enumRoles.PropertyTeamAssistant:
+                case enumRoles.SalesTeamAssistant:
+                roles.push({roleId: role.securityRoleId, roleName: RoleName.OfficeManager, departments:[]});
+                break;
+              }
+            })
+          }
+            data.roles = roles
             this.storage.set("currentUser", data).subscribe();
           }
         })

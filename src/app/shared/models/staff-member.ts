@@ -10,6 +10,7 @@ export interface StaffMember {
   phone: string;
   mobile: string;
   roles: Role[];
+  securityRoles: any;
   permissions: Permission[];
   dashboardMode: string;
   impersonations: Impersonation[];
@@ -86,6 +87,8 @@ export enum RoleName {
   Negotiator = "Negotiator",
   Manager = "Manager",
   Broker = "Broker",
+  Consultant ="Constultant",
+  OfficeManager ="OfficeManager"
 }
 
 export enum RoleDepartment {
