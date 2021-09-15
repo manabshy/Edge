@@ -485,6 +485,17 @@ export class ValuationDetailEditComponent
       }
     );
 
+    this.valuationForm.controls["propertyFloorId"].valueChanges.subscribe(
+      (data) => {
+        console.log('propertyFloorId = ', data)
+        if (+data === 10 ) {
+          this.setValidationForPropertyFloorOther(true);
+        } else {
+          this.setValidationForPropertyFloorOther(false);
+        }
+      }
+    );
+
     this.instructionForm.valueChanges
       .pipe(debounceTime(100), distinctUntilChanged())
       .subscribe((form) => {
@@ -737,6 +748,19 @@ export class ValuationDetailEditComponent
     ].setValidators(setValidation ? Validators.required : []);
     this.valuationForm.controls[
       "salesOwnerAssociateContactNumber"
+    ].updateValueAndValidity();
+  }
+
+  setValidationForPropertyFloorOther(isRequired: boolean) {
+    console.log('setValidationForPropertyFloorOther: ', isRequired)
+    this.valuationForm.controls["floorOther"].setValidators(
+      isRequired ? Validators.required : []
+    );
+    if(!isRequired) {
+      this.valuationForm.controls["floorOther"].setValue(null);
+    }
+    this.valuationForm.controls[
+      "floorOther"
     ].updateValueAndValidity();
   }
 
@@ -2412,7 +2436,7 @@ export class ValuationDetailEditComponent
       }
     }
   }
-
+  
   saveValuation() {
     this.checkAvailabilityBooking();
     this.setValuersValidators();
