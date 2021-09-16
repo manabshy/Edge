@@ -3,7 +3,7 @@
     <p-messages *ngIf="!isTermOfBusinessSigned" severity="warn">
       <ng-template pTemplate>
         <div data-cy="notSignedMessage">
-          <div class="p-ml-2">Term of business not yet signed</div>
+          <div class="p-ml-2">Terms of business not yet signed</div>
           <p class="text-xs">Last Emailed : {{lastEmailDate}}</p>
         </div>
       </ng-template>
@@ -50,7 +50,7 @@
     [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true">
   </div>
   <div class="table">
-    <!-- <table class="table--mobile table--rowHover">
+     <table class="table--mobile table--rowHover">
       <thead>
         <tr>
           <th>Signed On</th>
@@ -105,7 +105,7 @@
           </td>
         </tr>
       </tbody>
-    </table> -->
+    </table>
   </div>
 
   <ng-template #noValue>-</ng-template>

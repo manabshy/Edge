@@ -4,11 +4,10 @@ import { FormErrors } from "src/app/core/shared/app-constants";
 import { Valuation } from "../shared/valuation";
 
 @Component({
-  selector: "app-valuations-termsof-business",
-  templateUrl: "./valuations-termsof-business.component.html",
-  styleUrls: ["./valuations-termsof-business.component.scss"],
+  selector: "app-valuations-terms-of-business",
+  templateUrl: "./valuations-termsof-business.component.html"
 })
-export class ValuationsTermsofBusinessComponent implements OnInit {
+export class ValuationsTermsOfBusinessComponent implements OnInit {
   @Input() valuation: Valuation;
   @Input() valuationForm: FormGroup;
   @Input() interestList: any[] = [];
