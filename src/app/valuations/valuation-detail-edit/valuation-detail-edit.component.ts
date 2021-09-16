@@ -14,7 +14,12 @@ import {
 import { ActivatedRoute, Router } from "@angular/router";
 import { StorageMap } from "@ngx-pwa/local-storage";
 import { ToastrService } from "ngx-toastr";
-import { debounceTime, takeUntil, distinctUntilChanged } from "rxjs/operators";
+import {
+  debounceTime,
+  takeUntil,
+  distinctUntilChanged,
+  map,
+} from "rxjs/operators";
 import {
   ContactGroup,
   ContactNote,
@@ -1653,6 +1658,17 @@ export class ValuationDetailEditComponent
     } else {
       this.propertySubsription = this.propertyService
         .getValuations(this.property.propertyId, true)
+        .pipe(
+          map((valuations: Valuation[]) =>
+            valuations.map((valuation: Valuation) => {
+              return {
+                ...valuation,
+                valuationStatusDescription:
+                  ValuationStatusEnum[valuation.valuationStatus],
+              };
+            })
+          )
+        )
         .subscribe((valuations: Valuation[]) => {
           if (valuations && valuations.length > 0) {
             this.activeValuations = valuations.filter(

@@ -14,6 +14,7 @@ export interface ValuationInfo {
 export interface Valuation extends ValuationInfo {
   valuationEventId?: number;
   valuationStatus?: number;
+  valuationStatusDescription?: string;
   officeId?: number;
   valuationStatusLabel?: string;
   property?: Property;
