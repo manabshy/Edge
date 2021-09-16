@@ -222,9 +222,12 @@
                         <path
                           d="M17.9 33.4c4.7 0 8.5-3.8 8.5-8.5s-3.8-8.5-8.5-8.5S9.5 20.3 9.5 25 13.2 33.4 17.9 33.4zM51.7 16.5H29.2v19.7H6.6V10.9H1v42.3h5.6v-8.5h50.7v8.5H63V27.8C63 21.5 58 16.5 51.7 16.5z" />
                       </svg>Bedrooms</label>
-                    <input class="p-2" type="number" name="bedrooms" id="bedrooms" formControlName="bedrooms" min="0"
-                      max="99" [ngClass]="{'is-invalid': (formErrors?.bedrooms)}" />
-                    {{formErrors?.bedrooms}}
+                      <span>
+                        <input class="p-2" style="margin-top:0px;" type="number" name="bedrooms" id="bedrooms" formControlName="bedrooms" 
+                          min="0" max="99" [ngClass]="{'is-invalid': (formErrors?.bedrooms)}" *ngIf="!showStudioLabel" (blur)="studioLabelCheck($event.target.value)" />
+                        <input class="p-2" style="margin-top:0px;" type="text" name="studio" *ngIf="valuationForm.get('bedrooms').value == 0 && showStudioLabel" value="Studio" (click)="showStudioLabel = !showStudioLabel" />
+                        {{formErrors?.bedrooms}}
+                      </span>
                   </fieldset>
 
                   <fieldset class="inline-child">
