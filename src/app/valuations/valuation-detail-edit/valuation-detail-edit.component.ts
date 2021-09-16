@@ -223,6 +223,7 @@ export class ValuationDetailEditComponent
   isNoteSelected = false;
   person: Person;
   destroy = new Subject();
+  showStudioLabel = false;
 
   // previousContactGroupId: number;
   get dataNote() {
@@ -1296,8 +1297,13 @@ export class ValuationDetailEditComponent
     // lettingsOwnerWantsMessage;
   }
 
+  studioLabelCheck(bedroomCount){
+    this.showStudioLabel = bedroomCount == 0;
+  }
+
   populateForm(valuation: Valuation) {
     if (valuation) {
+      this.studioLabelCheck(valuation.bedrooms)
       if (
         valuation.combinedValuationBooking ||
         valuation.salesValuationBooking
