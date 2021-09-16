@@ -35,7 +35,9 @@ import { StaffMemberService } from "src/app/core/services/staff-member.service";
 import { FormErrors } from "src/app/core/shared/app-constants";
 import {
   MinBedrooms,
+  OtherFeatures,
   Property,
+  PropertyFeatures,
   PropertyType,
 } from "src/app/property/shared/property";
 import { PropertyService } from "src/app/property/shared/property.service";
@@ -1294,13 +1296,13 @@ export class ValuationDetailEditComponent
     // lettingsOwnerWantsMessage;
   }
 
-  studioLabelCheck(bedroomCount){
+  studioLabelCheck(bedroomCount) {
     this.showStudioLabel = bedroomCount == 0;
   }
 
   populateForm(valuation: Valuation) {
     if (valuation) {
-      this.studioLabelCheck(valuation.bedrooms)
+      this.studioLabelCheck(valuation.bedrooms);
       if (
         valuation.combinedValuationBooking ||
         valuation.salesValuationBooking
@@ -1404,12 +1406,26 @@ export class ValuationDetailEditComponent
         propertyType: valuation.property?.propertyTypeId,
         propertyFloor: valuation.property?.propertyFloorId,
         floorOther: valuation.property?.floorOther,
-        isRetirementHome: valuation.isRetirementHome
-          ? valuation.isRetirementHome
+        isRetirementHome: valuation.otherFeatures
+          ? valuation.otherFeatures.findIndex(
+              (x) => x === OtherFeatures.Retirement_Home
+            ) > -1
+            ? true
+            : false
           : false,
-        isNewBuild: valuation.isNewBuild ? valuation.isNewBuild : false,
-        hasDisabledAccess: valuation.hasDisabledAccess
-          ? valuation.hasDisabledAccess
+        isNewBuild: valuation.otherFeatures
+          ? valuation.otherFeatures.findIndex(
+              (x) => x === OtherFeatures.New_Build
+            ) > -1
+            ? true
+            : false
+          : false,
+        hasDisabledAccess: valuation.propertyFeature
+          ? valuation.propertyFeature.findIndex(
+              (x) => x === PropertyFeatures.Disabled_Access
+            ) > -1
+            ? true
+            : false
           : false,
       });
 
@@ -2517,6 +2533,15 @@ export class ValuationDetailEditComponent
     valuation.property.propertyStyleId = valuation.propertyStyleId;
     valuation.property.propertyFloorId = valuation.propertyFloorId;
     valuation.property.floorOther = valuation.floorOther;
+    valuation.otherFeatures = [];
+    valuation.propertyFeature = [];
+
+    if (valuation.isNewBuild)
+      valuation.otherFeatures.push(OtherFeatures.New_Build);
+    if (valuation.isRetirementHome)
+      valuation.otherFeatures.push(OtherFeatures.Retirement_Home);
+    if (valuation.hasDisabledAccess)
+      valuation.propertyFeature.push(PropertyFeatures.Disabled_Access);
 
     valuation.suggestedAskingRentLongLetMonthly =
       this.sharedService.convertStringToNumber(
@@ -2611,6 +2636,7 @@ export class ValuationDetailEditComponent
       valuation.combinedValuationBooking.meetingOwner =
         valuation.salesMeetingOwner == false ? false : true;
     } else {
+      valuation.combinedValuationBooking = null;
       if (valuation.salesValuationBooking) {
         valuation.salesValuationBooking = {
           name:

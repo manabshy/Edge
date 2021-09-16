@@ -1,7 +1,7 @@
-import { Address } from 'src/app/shared/models/address';
-import { SubNavItem, SubNav } from 'src/app/shared/subnav';
-import { Signer } from 'src/app/contactgroups/shared/contact-group';
-import { BaseStaffMember } from 'src/app/shared/models/base-staff-member';
+import { Address } from "src/app/shared/models/address";
+import { SubNavItem, SubNav } from "src/app/shared/subnav";
+import { Signer } from "src/app/contactgroups/shared/contact-group";
+import { BaseStaffMember } from "src/app/shared/models/base-staff-member";
 
 export interface PropertyInfo {
   bedrooms?: number;
@@ -19,7 +19,7 @@ export interface Property extends PropertyInfo {
   propertyTypeId: PropertyType;
   propertyStyleId: PropertyStyle;
   address: Address;
-  propertyFloorId:number,
+  propertyFloorId: number;
   floorOther: string;
   floorType: string;
   numberOfFloors: number;
@@ -144,23 +144,23 @@ export interface LeaseType {
 }
 
 export const LeaseTypes = <LeaseType[]>[
-  { id: 1, name: 'FreeHold' },
-  { id: 2, name: 'LeaseHold' }
+  { id: 1, name: "FreeHold" },
+  { id: 2, name: "LeaseHold" },
 ];
 
 export const MinBedrooms = <MinBedroom[]>[
   // {id: 0, name: 'Any'},
-  { id: 1, name: '1' },
-  { id: 2, name: '2' },
-  { id: 3, name: '3' },
-  { id: 4, name: '4' },
-  { id: 5, name: '5' },
-  { id: 6, name: '6+' }
+  { id: 1, name: "1" },
+  { id: 2, name: "2" },
+  { id: 3, name: "3" },
+  { id: 4, name: "4" },
+  { id: 5, name: "5" },
+  { id: 6, name: "6+" },
 ];
 
 export enum PropertyType {
   House = 1,
-  Flat = 2
+  Flat = 2,
 }
 
 export enum PropertyStyle {
@@ -179,33 +179,53 @@ export enum PropertyStyle {
   ParkingSpace = 11,
 }
 
+export enum PropertyFeatures {
+  Kitchen_BreakfastRoom = 1,
+  Cellar = 2,
+  Disabled_Access = 4,
+  Loft = 8,
+}
+
+export enum OtherFeatures {
+  Garden_Flat = 1,
+  Conversion = 2,
+  Parkside = 4,
+  New_Build = 8,
+  Unmodernised = 16,
+  Mansion_Block = 32,
+  Ex_Local_Authority = 64,
+  Riverside = 128,
+  Retirement_Home = 256,
+}
+
 export const PropertyTypes = new Map([
-  [PropertyType.Flat, 'Flat'],
-  [PropertyType.House, 'House']
+  [PropertyType.Flat, "Flat"],
+  [PropertyType.House, "House"],
 ]);
 
 export const PropertyStyles = new Map([
-  [PropertyStyle.SemiDetached, 'Semi-Detached'],
-  [PropertyStyle.Detached, 'Detached'],
-  [PropertyStyle.Terraced, 'Terraced'],
-  [PropertyStyle.EndOfTerrace, 'End Of Terrace'],
-  [PropertyStyle.Mews, 'Mews'],
-  [PropertyStyle.Mansion, 'Mansion'],
-  [PropertyStyle.PurposeBuilt, 'Purpose Built'],
-  [PropertyStyle.Conversion, 'Conversion'],
-  [PropertyStyle.Houseboat, 'Houseboat'],
-  [PropertyStyle.Garage, 'Garage'],
-  [PropertyStyle.Land, 'Land'],
-  [PropertyStyle.ParkingSpace, 'Parking Space'],
+  [PropertyStyle.SemiDetached, "Semi-Detached"],
+  [PropertyStyle.Detached, "Detached"],
+  [PropertyStyle.Terraced, "Terraced"],
+  [PropertyStyle.EndOfTerrace, "End Of Terrace"],
+  [PropertyStyle.Mews, "Mews"],
+  [PropertyStyle.Mansion, "Mansion"],
+  [PropertyStyle.PurposeBuilt, "Purpose Built"],
+  [PropertyStyle.Conversion, "Conversion"],
+  [PropertyStyle.Houseboat, "Houseboat"],
+  [PropertyStyle.Garage, "Garage"],
+  [PropertyStyle.Land, "Land"],
+  [PropertyStyle.ParkingSpace, "Parking Space"],
 ]);
 
-export const PropertyDetailsSubNav = ['instructions', 'offers', 'valuations'];
+export const PropertyDetailsSubNav = ["instructions", "offers", "valuations"];
 
-export const PropertyDetailsSubNavItems: SubNavItem[] = PropertyDetailsSubNav.map(x => ({
-  link: x,
-  label: SubNav.subNavLabel(x),
-  value: SubNav.subNavValue(x)
-}));
+export const PropertyDetailsSubNavItems: SubNavItem[] =
+  PropertyDetailsSubNav.map((x) => ({
+    link: x,
+    label: SubNav.subNavLabel(x),
+    value: SubNav.subNavValue(x),
+  }));
 
 export enum PropertySearchEnum {
   SalesInstruction = 1,
@@ -213,6 +233,5 @@ export enum PropertySearchEnum {
   PropertyManagement = 3,
   DiaryEventProperty = 4,
   SalesViewing = 5,
-  LettingsViewing = 6
+  LettingsViewing = 6,
 }
-
