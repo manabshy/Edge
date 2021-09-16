@@ -488,8 +488,8 @@ export class ValuationDetailEditComponent
 
     this.valuationForm.controls["propertyFloorId"].valueChanges.subscribe(
       (data) => {
-        console.log('propertyFloorId = ', data)
-        if (+data === 10 ) {
+        console.log("propertyFloorId = ", data);
+        if (+data === 10) {
           this.setValidationForPropertyFloorOther(true);
         } else {
           this.setValidationForPropertyFloorOther(false);
@@ -753,16 +753,14 @@ export class ValuationDetailEditComponent
   }
 
   setValidationForPropertyFloorOther(isRequired: boolean) {
-    console.log('setValidationForPropertyFloorOther: ', isRequired)
+    console.log("setValidationForPropertyFloorOther: ", isRequired);
     this.valuationForm.controls["floorOther"].setValidators(
       isRequired ? Validators.required : []
     );
-    if(!isRequired) {
+    if (!isRequired) {
       this.valuationForm.controls["floorOther"].setValue(null);
     }
-    this.valuationForm.controls[
-      "floorOther"
-    ].updateValueAndValidity();
+    this.valuationForm.controls["floorOther"].updateValueAndValidity();
   }
 
   selectValuersClick() {
@@ -874,18 +872,17 @@ export class ValuationDetailEditComponent
   }
 
   setPropertyDetail(propertyDetails) {
-    this.lastKnownOwner = propertyDetails.lastKnownOwner;
+    if (propertyDetails.lastKnownOwner)
+      this.lastKnownOwner = propertyDetails.lastKnownOwner;
     this.property = propertyDetails;
     this.valuation.property = { ...this.property };
     this.valuation.officeId = this.property.officeId;
     // this.valuers = result.valuers;
-    this.getContactGroup(propertyDetails?.lastKnownOwner?.contactGroupId).then(
-      (result) => {
-        this.contactGroup = result;
-        this.valuationService.contactGroupBs.next(this.contactGroup);
-        this.getSearchedPersonSummaryInfo(this.contactGroup);
-      }
-    );
+    this.getContactGroup(this.lastKnownOwner.contactGroupId).then((result) => {
+      this.contactGroup = result;
+      this.valuationService.contactGroupBs.next(this.contactGroup);
+      this.getSearchedPersonSummaryInfo(this.contactGroup);
+    });
 
     const baseProperty = {
       propertyId: this.property.propertyId,
@@ -2442,7 +2439,7 @@ export class ValuationDetailEditComponent
       }
     }
   }
-  
+
   saveValuation() {
     this.checkAvailabilityBooking();
     this.setValuersValidators();
