@@ -39,7 +39,11 @@ export class ValuationsTermsOfBusinessComponent implements OnInit {
       'soleOrMulti',
       'valuationDate',
       'valuationFiles',
-      'valuationType'
+      'valuationType',
+      'shortLetsInstruction',
+      'longLetsInstruction',
+      'management',
+      'zeroDeposit',
       ];
 
     const filtered = Object.keys(this.valuation)

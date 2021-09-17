@@ -8,7 +8,8 @@ import { SharedModule } from "../shared/shared.module";
 import { ValuationDetailEditComponent } from "./valuation-detail-edit/valuation-detail-edit.component";
 import { CalendarSharedModule } from "../calendar-shared/calendar-shared.module";
 import { ValuationsTermsOfBusinessComponent } from "./valuations-terms-of-business/valuations-terms-of-business.component";
-import { TermsOfBusinessTableSalesComponent, TermsOfBusinessTableLettingsComponent } from './shared/terms-of-business-tables.component';
+import { TermsOfBusinessTableSalesComponent } from './shared/terms-of-business-tables/sales/terms-of-business-sales-table.component';
+import { TermsOfBusinessTableLettingsComponent } from './shared/terms-of-business-tables/lettings/terms-of-business-lettings-table.component';
 
 @NgModule({
   declarations: [
