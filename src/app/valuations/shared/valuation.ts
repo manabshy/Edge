@@ -59,6 +59,14 @@ export interface Valuation extends ValuationInfo {
   isPowerOfAttorney?: boolean;
   ccOwner?: boolean;
   adminContact?: Signer;
+  valuationFiles?: ValuationFile[];
+  valuationType?: ValuationTypeEnum;
+}
+
+export interface ValuationFile {
+  blobFileTypeId: number;
+  fileLastModified: Date;
+  fileUri: string;
 }
 
 export interface ValuationPropertyInfo {
