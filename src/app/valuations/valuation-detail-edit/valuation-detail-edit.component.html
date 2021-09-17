@@ -617,8 +617,12 @@
               <!-- [disabled]="!isNewValuation && !isEditable && valuationForm.get('declarableInterest').value"-->
 
               <p-accordionTab header="Terms Of Business" [(selected)]="activeState[4]" data-cy="termsOfBusiness">
-                <app-valuations-termsof-business [(valuationForm)]="valuationForm" [(interestList)]="interestList"
-                  [(valuation)]="valuation" [(formErrors)]="formErrors"></app-valuations-termsof-business>
+                <app-valuations-terms-of-business 
+                  [(valuationForm)]="valuationForm" 
+                  [(interestList)]="interestList"
+                  [(valuation)]="valuation" 
+                  [(formErrors)]="formErrors">
+                </app-valuations-terms-of-business>
               </p-accordionTab>
 
               <p-accordionTab *ngIf="false" header="Anti Money Laundering" [(selected)]="activeState[5]">
