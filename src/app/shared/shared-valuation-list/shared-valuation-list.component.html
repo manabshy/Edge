@@ -25,7 +25,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr (click)="navigateToDetail(valuation)" *ngFor="let valuation of valuations">
+      <tr (click)="navigateToDetail(valuation)" *ngFor="let valuation of valuations" class="cursor-pointer">
         <td data-title="Address">
           <span class="cell-content">{{valuation?.property?.address |formatAddress}}</span>
         </td>

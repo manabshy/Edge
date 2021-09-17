@@ -30,7 +30,7 @@
                 No {{label}} found
               </td>
             </tr>
-            <tr *ngFor="let company of foundCompanies" (click)="selectCompany(company)">
+            <tr *ngFor="let company of foundCompanies" (click)="selectCompany(company)"  class="cursor-pointer">
               <td data-title="Name">
                 <span class="cell-content">
                   {{company?.companyName}}

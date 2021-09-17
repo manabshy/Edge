@@ -48,7 +48,7 @@
                 No Property {{label}} found
               </td>
             </tr>
-            <tr *ngFor="let property of properties" (click)="selectProperty(property?.propertyId); properties = null">
+            <tr *ngFor="let property of properties" (click)="selectProperty(property?.propertyId); properties = null" class="cursor-pointer">
               <td data-title="Address">
                 <span class="cell-content">
                   {{property?.propertyAddress}}

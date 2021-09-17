@@ -112,7 +112,8 @@
             </td>
           </tr>
           <tr *ngFor="let address of foundAddress?.Items"
-            (click)="address?.Action ? findAddress(searchTermBK, address?.Id) :  retrieveAddress(address?.Id)">
+            (click)="address?.Action ? findAddress(searchTermBK, address?.Id) :  retrieveAddress(address?.Id)"
+            class="cursor-pointer">
             <td>
               <span class="cell-content" *ngIf="!address?.Error">
                 {{address?.Text}}, {{address?.Description}}

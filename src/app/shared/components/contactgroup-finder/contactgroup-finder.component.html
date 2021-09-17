@@ -33,7 +33,7 @@
               </td>
             </tr>
             <tr *ngFor="let contactGroup of contactGroups"
-              (click)="selectContactGroup(contactGroup); contactGroups=null">
+              (click)="selectContactGroup(contactGroup); contactGroups=null" class="cursor-pointer">
               <td data-title="Name">
                 <span class="cell-content">
                   {{contactGroup?.contactNames}}
