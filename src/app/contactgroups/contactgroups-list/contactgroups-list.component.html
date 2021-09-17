@@ -12,7 +12,7 @@
       <!-- Added id="row-item" to fix infinite scroll -->
       <tr (click)="navigateToDetail(contactGroup.personId)" id="row-item"
         [ngClass]="{'list-group-item-danger': contactGroup?.warning && contactGroup?.warning?.id !== 1}"
-        *ngFor="let contactGroup of contactGroups; let i = index; last as isLast">
+        *ngFor="let contactGroup of contactGroups; let i = index; last as isLast" class="cursor-pointer">
         <td data-title="Full Name">
           <span class="cell-content">
             <p>

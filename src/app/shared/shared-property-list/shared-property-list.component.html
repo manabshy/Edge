@@ -11,7 +11,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let property of properties; let i = index;" (click)="navigateToDetails(property)">
+        <tr *ngFor="let property of properties; let i = index;" (click)="navigateToDetails(property)" class="cursor-pointer">
           <td data-title="Address">
             <span class="cell-content">{{property?.address| formatAddress}}</span>
             <span *ngIf="!(property?.address )">No address</span>

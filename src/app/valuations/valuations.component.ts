@@ -153,8 +153,7 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
   suggestionSelected(event) {
     if (event.item != null) {
       this.suggestedTerm = event.item;
-      console.log("suggestion", this.suggestedTerm);
-    }
+     }
     this.getValuations();
     this.suggestedTerm = "";
   }
@@ -164,7 +163,6 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
   }
 
   getSelectedStaffMemberId(id: number) {
-    console.log("valuer id here", id);
     this.valuerControl.setValue(id);
   }
 
@@ -173,13 +171,10 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
   }
 
   selectionControlChange(fieldId, ev) {
-    console.log('selectionControlChanged', fieldId, ev)
     this.valuationFinderForm.patchValue({
       [fieldId]: ev
     })
     this.selectControlModels[fieldId] = ev
-    console.log('this.valuationFinderForm: ', this.valuationFinderForm)
-    console.log('this.selectControlModels[fieldId]: ', this.selectControlModels[fieldId])
   }
 
   // PRIVATE
@@ -212,7 +207,6 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
     this.staffMemberService.getCurrentStaffMember().toPromise()
     .then(res => {
       this.currentStaffMember = res
-      console.log('currentStaffMember:', this.currentStaffMember)    
       this.setInitialFilters();
       this.getValuations();
     })
@@ -222,14 +216,14 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
     this.storage.get("activeStaffmembers").subscribe((data) => {
       if (data) {
         this.valuers = data as StaffMember[];
-        this.setValuersForSelectControl() // maps valuers to object for generic select control to use US278
+        this.setValuersForSelectControl()
       } else {
         this.staffMemberService
           .getActiveStaffMembers()
           .pipe(takeUntil(this.ngUnsubscribe))
           .subscribe((result) => {
-            this.valuers = result
-            this.setValuersForSelectControl() // maps valuers to object for generic select control to use US278
+            this.valuers = result.result
+            this.setValuersForSelectControl()
           });
       }
     });
@@ -286,21 +280,21 @@ export class ValuationsComponent extends BaseComponent implements OnInit {
     }
   }
 
-  isManager():boolean{
+  private isManager():boolean{
     if (this.currentStaffMember.roles.findIndex(x=> x.roleName === RoleName.Manager) >-1){
       return true;
     }
     return false;
   }
 
-  isBroker():boolean{
+  private isBroker():boolean{
     if (this.currentStaffMember.roles.findIndex(x=> x.roleName === RoleName.Broker) >-1){
       return true;
     }
     return false;
   }
 
-  isOfficeManager():boolean{
+  private isOfficeManager():boolean{
     if (this.currentStaffMember.roles.findIndex(x=> x.roleName === RoleName.OfficeManager) >-1){
       return true;
     }

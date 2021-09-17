@@ -21,7 +21,7 @@ export class SidenavService {
   valuationSideNavItems: SideNavItem[] = [
     { name: "valuationTicket", isCurrent: true },
     { name: "notes", isCurrent: false },
-    { name: "marketInsight", isCurrent: false },
+    // { name: "marketInsight", isCurrent: false },
   ];
   constructor() {}
 

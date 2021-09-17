@@ -1,21 +1,23 @@
 <div class="row">
   <div class="row__item row__item--aside">
-    <app-contactgroup-card class="appWrapper" [(adminContact)]="adminContact"
-      [contactGroup]="adminContactGroup? adminContactGroup: contactGroup" *ngIf="contactGroup">
-    </app-contactgroup-card>
-    <app-sidenav-item class="appWrapper" [sideNavItems]="sideNavItems" [summaryTotals]="summaryTotals"
-      (selectedItem)="getSelectedSideNavItem($event)">
-    </app-sidenav-item>
-    <div class="card" *ngIf="property">
-      <div class="card__header">
-        Status <span class="pill pill--positive flexRight">Booked</span>
-      </div>
-      <div class="card__body">
-        <ol class="timeline timeline--condensed">
-          <li *ngFor="let item of statuses index as i">
-            <a (click)="toggleAccordion(i)">{{item?.name|toPascalCase}}</a>
-          </li>
-        </ol>
+    <div class="wrapper--sticky">
+      <app-contactgroup-card class="appWrapper" [(adminContact)]="adminContact"
+        [contactGroup]="adminContactGroup? adminContactGroup: contactGroup" *ngIf="contactGroup">
+      </app-contactgroup-card>
+      <app-sidenav-item class="appWrapper" [sideNavItems]="sideNavItems" [summaryTotals]="summaryTotals"
+        (selectedItem)="getSelectedSideNavItem($event)">
+      </app-sidenav-item>
+      <div class="card" *ngIf="property">
+        <div class="card__header">
+          Status <span class="pill pill--positive flexRight">Booked</span>
+        </div>
+        <div class="card__body">
+          <ol class="timeline timeline--condensed">
+            <li *ngFor="let item of statuses index as i">
+              <a (click)="toggleAccordion(i)">{{item?.name|toPascalCase}}</a>
+            </li>
+          </ol>
+        </div>
       </div>
     </div>
   </div>
@@ -620,8 +622,12 @@
               <!-- [disabled]="!isNewValuation && !isEditable && valuationForm.get('declarableInterest').value"-->
 
               <p-accordionTab header="Terms Of Business" [(selected)]="activeState[4]" data-cy="termsOfBusiness">
-                <app-valuations-termsof-business [(valuationForm)]="valuationForm" [(interestList)]="interestList"
-                  [(valuation)]="valuation" [(formErrors)]="formErrors"></app-valuations-termsof-business>
+                <app-valuations-terms-of-business 
+                  [(valuationForm)]="valuationForm" 
+                  [(interestList)]="interestList"
+                  [(valuation)]="valuation" 
+                  [(formErrors)]="formErrors">
+                </app-valuations-terms-of-business>
               </p-accordionTab>
 
               <p-accordionTab *ngIf="false" header="Anti Money Laundering" [(selected)]="activeState[5]">

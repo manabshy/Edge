@@ -16,8 +16,9 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let val of valuations" (click)="navigateTo(['detail', val?.valuationEventId, 'edit'])"
-        data-cy="valuationList">
+      <tr *ngFor="let val of valuations" 
+        (click)="navigateTo(['detail', val?.valuationEventId, 'edit'])"
+        data-cy="valuationList" class="cursor-pointer">
         <td data-title="Status">
           <span class="cell-content">{{val?.valuationStatusLabel}}</span>
         </td>

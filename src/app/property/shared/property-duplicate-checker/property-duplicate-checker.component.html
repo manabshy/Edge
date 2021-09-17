@@ -9,7 +9,7 @@
 <div class="table">
   <table class="table--mobile table--rowHover">
     <tbody>
-      <tr *ngFor="let foundProperty of potentialDuplicates" (click)="selectProperty(foundProperty?.propertyId)">
+      <tr *ngFor="let foundProperty of potentialDuplicates" (click)="selectProperty(foundProperty?.propertyId)" class="cursor-pointer">
         <td>
           <span class="cell-content">
             {{foundProperty?.propertyAddress}}

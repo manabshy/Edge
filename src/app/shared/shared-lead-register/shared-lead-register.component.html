@@ -23,7 +23,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let lead of leads; let i = index;" (click)="leadClicked(lead)">
+        <tr *ngFor="let lead of leads; let i = index;" (click)="leadClicked(lead)" class="cursor-pointer">
           <td data-title="Status" *ngIf="isClosedLeadFound">
             <span class="cell-content">
               <span *ngIf="lead?.closedById" class="pill">Closed</span>

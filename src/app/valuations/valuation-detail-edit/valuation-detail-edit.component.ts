@@ -1136,7 +1136,7 @@ export class ValuationDetailEditComponent
       .subscribe((data) => {
         if (data) {
           this.valuation = data;
-
+          console.log('this.valuation: ', this.valuation)
           this.getPropertyInformation(this.valuation.property.propertyId);
 
           this.valuation.valuationStatus === 3

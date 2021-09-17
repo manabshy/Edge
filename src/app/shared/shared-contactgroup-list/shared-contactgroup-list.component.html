@@ -43,7 +43,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let contactGroup of contactGroups" (click)="navigateTo(['people', contactGroup.contactGroupId])">
+      <tr *ngFor="let contactGroup of contactGroups" (click)="navigateTo(['people', contactGroup.contactGroupId])" class="cursor-pointer">
         <td data-title="Names">
           <span class="cell-content">
             <ng-container *ngFor="let contactPerson of contactGroup?.contactPeople;  last as isLast; first as isFirst">
