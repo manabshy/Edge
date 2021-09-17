@@ -14,6 +14,7 @@ export interface ValuationInfo {
 export interface Valuation extends ValuationInfo {
   valuationEventId?: number;
   valuationStatus?: number;
+  valuationStatusDescription?: string;
   officeId?: number;
   valuationStatusLabel?: string;
   property?: Property;
@@ -31,7 +32,8 @@ export interface Valuation extends ValuationInfo {
   approxLeaseExpiryDate?: Date;
   outsideSpace?: any;
   parking?: any;
-  propertyFeature?: string;
+  propertyFeature?: number[];
+  otherFeatures?: number[];
   diaryEventId?: number;
   startDateTime?: Date;
   endDateTime?: Date;
@@ -53,9 +55,9 @@ export interface Valuation extends ValuationInfo {
   salesValuationBooking?: ValuationBooking;
   lettingsValuationBooking?: ValuationBooking;
   queryResultCount?: number;
-  hasDisabledAccess?: boolean;
-  isNewBuild?: boolean;
-  isRetirementHome?: boolean;
+  // hasDisabledAccess?: boolean;
+  // isNewBuild?: boolean;
+  // isRetirementHome?: boolean;
   isPowerOfAttorney?: boolean;
   ccOwner?: boolean;
   adminContact?: Signer;
@@ -107,7 +109,7 @@ export interface ValuersAvailabilityOption extends BaseRequestOption {
 export interface ValuationRequestOption extends BaseRequestOption {
   status?: number[];
   date?: string;
-  valuerId?: number[] ;
+  valuerId?: number[];
   officeId?: number[];
 }
 
