@@ -280,10 +280,10 @@ This applies from 992px onwards
   .gridReport                                   { grid-template-columns: 1fr 1fr 1fr 1fr; grid-auto-rows:180px; gap:20px; }
 
   .salesEvent                                   {
-    .cal-event                                  { background-color:#CED1DB !important;}
+    .cal-event                                  { background-color: $color--red !important;}
                                                 }
   .lettingsEvent                                {
-     .cal-event                                 { background-color:#AFB8CF !important; }
+     .cal-event                                 { background-color: $color--midnight-20 !important; }
                                                 }
 
   .unit                                         {

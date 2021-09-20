@@ -81,7 +81,7 @@ button::-moz-focus-inner                        { border:0; padding:0; }
 
 /***** Ghost *****/
 .btn--ghost                                     { background-color:transparent; color:$color--midnight-70; box-shadow:inset 0px 0px 0px 1px $color--midnight-20; }
-.btn--ghost:hover                               { background-color:$color--midnight-70; color:$color--snow; fill:$color--snow; box-shadow:inset 0px 0px 0px 1px transparent; }
+.btn--ghost:hover                               { background-color: $color--midnight-0; fill:$color--snow; box-shadow:inset 0px 0px 0px 1px transparent; }
 .btn--ghost:hover[disabled],
 .btn--ghost:hover[aria-disabled]                { background-color:transparent; color:$color--midnight-70; box-shadow:inset 0px 0px 0px 1px $color--midnight-20; }
 

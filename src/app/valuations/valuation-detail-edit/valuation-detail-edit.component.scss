@@ -3,6 +3,7 @@
 // @import "../../../../node_modules/bootstrap/scss/functions";
 // @import "../../../../node_modules/bootstrap/scss/variables";
 // @import "../../../../node_modules/bootstrap/scss/mixins";
+@import "../../../style/partials/colors";
 
 // form {
 //     padding-bottom: spacer(5);
@@ -51,11 +52,11 @@
 ::ng-deep {
   .p-badge-info{
     margin-left: 4px;
-    background-color:#CED1DB !important
+    background-color: $color--midnight-20 !important;
   }
   .p-badge-success{
     margin-left: 4px;
-    background-color:#AFB8CF !important
+    background-color: $color--red !important;
   }
   .p-dialog-title{
     width: -webkit-fill-available;
@@ -86,21 +87,21 @@
 }
 
 .hourColorsForBoth{
-  background: linear-gradient(to right,#CED1DB 50%,#AFB8CF 50%);
+  background: linear-gradient(to right, $color--midnight-20 50%, $color--red 50%,);
 }
 
 .hourColorsForSales{
-  background: #CED1DB;
+  background: $color--red;
 }
 
 .hourColorsForSelected{
   // background: darkseagreen;
-  background-color:#535E80; color:#FFFFFF; fill:#FFFFFF; box-shadow:inset 0px 0px 0px 1px  #CED1DB;
+  background-color: $color--midnight-70; color:#FFFFFF; fill:#FFFFFF; box-shadow:inset 0px 0px 0px 1px  #CED1DB;
  // background-color:transparent; color:#535E80; box-shadow:inset 0px 0px 0px 1px #CED1DB;
 }
 
 .hourColorsForLettings{
-  background: #AFB8CF;
+  background: $color--midnight-20;
 }
 
 // .info-tooltip{
