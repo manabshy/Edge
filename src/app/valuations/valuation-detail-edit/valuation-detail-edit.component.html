@@ -923,7 +923,7 @@
             </fieldset>
           </p-sidebar>
         </div>
-        <button type="button" class="btn btn--info h-2.5 mb-2" (click)="selectValuersClick()">Valuers</button>
+        <button type="button" class="btn h-2.5 mb-2 btn--positive" (click)="selectValuersClick()">Valuers</button>
       </div>
 
       <div class="grid grid--62 grid--dividerLeft">
@@ -1005,7 +1005,7 @@
     <footer class="footer--modal">
       <div class="btn--container">
         <button type="button" class="btn btn--ghost" (click)="cancelBooking()">Cancel</button>
-        <button type="button" class="btn btn--info" [disabled]="sideBarControlVisible" data-cy="saveBooking"
+        <button type="button" class="btn btn--positive" [disabled]="sideBarControlVisible" data-cy="saveBooking"
           (click)="makeBooking()">{{bookingButtonLabel}}</button>
       </div>
     </footer>
