@@ -122,7 +122,7 @@ export class ValuationDetailEditComponent
   isEditable: boolean = false;
   showLeaseExpiryDate: boolean;
   canInstruct: boolean;
-  canSaveValuation: boolean;
+  canSaveValuation: boolean = true;
   propertyId: number;
   lastKnownOwnerId: number;
   approxLeaseExpiryDate: Date;
