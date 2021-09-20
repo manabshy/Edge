@@ -622,11 +622,8 @@
               <!-- [disabled]="!isNewValuation && !isEditable && valuationForm.get('declarableInterest').value"-->
 
               <p-accordionTab header="Terms Of Business" [(selected)]="activeState[4]" data-cy="termsOfBusiness">
-                <app-valuations-terms-of-business 
-                  [(valuationForm)]="valuationForm" 
-                  [(interestList)]="interestList"
-                  [(valuation)]="valuation" 
-                  [(formErrors)]="formErrors">
+                <app-valuations-terms-of-business [(valuationForm)]="valuationForm" [(interestList)]="interestList"
+                  [(valuation)]="valuation" [(formErrors)]="formErrors">
                 </app-valuations-terms-of-business>
               </p-accordionTab>
 
@@ -679,8 +676,8 @@
           <ng-container *ngIf="(createdSigner || lastKnownOwner) && property">
             <footer class="footer">
               <button (click)="cancel()" type="button" class="btn btn--ghost" data-cy="cancelVal">Cancel</button>
-              <button *ngIf="isEditable || isNewValuation" type="submit" class="btn btn--positive" id="saveVal"
-                data-cy="saveVal" [disabled]="isSubmitting ? '' : null">
+              <button *ngIf="canSaveValuation" type="submit" class="btn btn--positive" id="saveVal" data-cy="saveVal"
+                [disabled]="isSubmitting ? '' : null">
                 <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="loading" *ngIf="isSubmitting">
                   <path
                     d="M11.9 48.4c-4.1-5-6.3-11.5-5.8-18.6C7.1 17.6 16.8 7.5 29 6.2 44.7 4.4 58 16.7 58 32c0 6.2-2.2 11.8-5.8 16.3 -1 1.2-0.8 2.9 0.3 4l0 0c1.3 1.3 3.4 1.1 4.5-0.3 4.8-6 7.5-13.8 7-22.2C62.9 14 50.1 1.2 34.3 0.1 15.6-1.2 0 13.6 0 32c0 7.7 2.7 14.8 7.3 20.3 1.1 1.3 3 1.4 4.2 0.2l0.2-0.2C12.8 51.2 12.8 49.6 11.9 48.4z">

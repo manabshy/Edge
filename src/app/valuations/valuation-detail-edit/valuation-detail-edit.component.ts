@@ -122,6 +122,7 @@ export class ValuationDetailEditComponent
   isEditable: boolean = false;
   showLeaseExpiryDate: boolean;
   canInstruct: boolean;
+  canSaveValuation: boolean;
   propertyId: number;
   lastKnownOwnerId: number;
   approxLeaseExpiryDate: Date;
@@ -1136,7 +1137,7 @@ export class ValuationDetailEditComponent
       .subscribe((data) => {
         if (data) {
           this.valuation = data;
-          console.log('this.valuation: ', this.valuation)
+          console.log("this.valuation: ", this.valuation);
           this.getPropertyInformation(this.valuation.property.propertyId);
 
           this.valuation.valuationStatus === 3
@@ -1146,12 +1147,21 @@ export class ValuationDetailEditComponent
             ? (this.showLeaseExpiryDate = true)
             : (this.showLeaseExpiryDate = false);
           if (
-            this.valuation.valuationStatus === 3 ||
-            this.valuation.valuationStatus === 4
+            this.valuation.valuationStatus === ValuationStatusEnum.Instructed ||
+            this.valuation.valuationStatus === ValuationStatusEnum.Valued
           ) {
             this.isEditable = false;
           } else {
             this.isEditable = true;
+          }
+
+          if (
+            this.valuation.valuationStatus === ValuationStatusEnum.Instructed ||
+            this.valuation.valuationStatus === ValuationStatusEnum.Cancelled
+          ) {
+            this.canSaveValuation = false;
+          } else {
+            this.canSaveValuation = true;
           }
 
           if (this.valuation.salesValuer || this.valuation.lettingsValuer) {
