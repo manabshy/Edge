@@ -405,7 +405,7 @@
             <ol class="cards">
               <li *ngFor="let person of contactGroupDetails?.contactPeople ; index as i"
                 [ngClass]="{'new-person': person?.isNewPerson, 'list-group-item-danger': person?.warning && person?.warning?.id !== 1}">
-                <app-person-details [personDetails]="person" [index]="i"
+                <app-person-details class="mt-2" [personDetails]="person" [index]="i"
                   [contactType]="contactGroupDetails?.contactType"
                   [referenceCount]="contactGroupDetails?.referenceCount" [isPersonInfoOnly]="false" [isClickable]="true"
                   [showEditOnly]="false" [showViewPerson]="true" [showSetMainPerson]="showSetMainPerson"
