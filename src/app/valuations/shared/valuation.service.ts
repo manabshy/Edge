@@ -59,6 +59,13 @@ export class ValuationService {
     );
   }
 
+  getToBLink(valuationId: number): Observable<any> {
+    const url = `${AppConstants.esignUrl}/signatureLinks/${valuationId}`;
+    return this.http.get<any>(url).pipe(
+      map((response) => response.result)
+    );
+  }
+
   addValuation(valuation: Valuation): Observable<Valuation | any> {
     const url = `${AppConstants.baseValuationUrl}`;
     return this.http.post<any>(url, valuation).pipe(

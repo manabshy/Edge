@@ -625,8 +625,9 @@
                 <app-valuations-terms-of-business 
                   [(valuationForm)]="valuationForm" 
                   [(interestList)]="interestList"
-                  [(valuation)]="valuation" 
-                  [(formErrors)]="formErrors">
+                  [(valuationFiles)]="valuation.valuationFiles" 
+                  [(formErrors)]="formErrors"
+                  [tableType]="valuation.valuationType">
                 </app-valuations-terms-of-business>
               </p-accordionTab>
 

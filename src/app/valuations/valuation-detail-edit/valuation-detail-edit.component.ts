@@ -1132,8 +1132,8 @@ export class ValuationDetailEditComponent
   getValuation(id: number) {
     this.valuationService
       .getValuation(id)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((data) => {
+      .toPromise()
+      .then((data) => {
         if (data) {
           this.valuation = data;
           console.log('this.valuation: ', this.valuation)
@@ -1228,6 +1228,22 @@ export class ValuationDetailEditComponent
             this.setOriginTypeId(this.valuation.originId);
           }
         }
+      })
+      .then(() =>{
+        this.valuationService.getToBLink(id)
+        .subscribe(data => {
+          console.log('tob link: ', data)
+          if(data.toBSales.length > data.toBLetting.length){
+            this.valuation.valuationFiles = data.toBSales;
+            this.valuation.valuationType = 1;
+          } else {
+            this.valuation.valuationFiles = data.toBLetting;
+            this.valuation.valuationType = 2;
+          }
+        })
+      })
+      .catch(err => {
+        console.log('err: ', err)
       });
   }
 
