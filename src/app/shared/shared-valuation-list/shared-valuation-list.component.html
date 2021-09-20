@@ -15,8 +15,8 @@
   <table class="table--mobile table--rowHover" *ngIf="valuations && valuations?.length">
     <thead>
       <tr>
-        <th>Address</th>
         <th>Status</th>
+        <th>Address</th>
         <th>Sales</th>
         <th>Long Let</th>
         <th>Short Let</th>
@@ -26,14 +26,14 @@
     </thead>
     <tbody>
       <tr (click)="navigateToDetail(valuation)" *ngFor="let valuation of valuations" class="cursor-pointer">
-        <td data-title="Address">
-          <span class="cell-content">{{valuation?.property?.address |formatAddress}}</span>
-        </td>
         <td data-title="Status">
           <span class="cell-content">
             <span class="pill pill--positive" *ngIf="valuation?.isActive">{{valuation?.valuationStatusLabel}}</span>
             <span class="pill" *ngIf="!valuation.isActive">{{valuation?.valuationStatusLabel}}</span>
           </span>
+        </td>
+        <td data-title="Address">
+          <span class="cell-content">{{valuation?.property?.address |formatAddress}}</span>
         </td>
         <td data-title="Sales">
           <span class="cell-content"
