@@ -39,6 +39,8 @@
     "@ngx-loading-bar/http-client": "^4.2.0",
     "@ngx-pwa/local-storage": "^9.0.3",
     "@schematics/angular": "^9.1.14",
+    "@storybook/addons": "^6.3.8",
+    "@storybook/theming": "^6.3.8",
     "@types/chart.js": "^2.9.34",
     "@types/google-libphonenumber": "^7.4.19",
     "@types/jquery": "^3.5.5",
