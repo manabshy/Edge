@@ -28,7 +28,7 @@ export const SingleEntry = SalesTemplate.bind({});
 SingleEntry.args = {
   data: [{
     signedOn: new Date(),
-    instructionPriceDirection: '£890,000',
+    instructionPriceDirection: '890000',
     salesAgencyTypeId: 1,
     signatureFile:{
       fileUri: 'http://www.google.co.uk'
@@ -40,14 +40,14 @@ export const MultipleEntry = SalesTemplate.bind({});
 MultipleEntry.args = {
   data: [{
     signedOn: new Date(),
-    instructionPriceDirection: '£890,000',
+    instructionPriceDirection: '2890000',
     salesAgencyTypeId: 2,
     signatureFile:{
       fileUri: 'http://www.google.co.uk'
     }
   },{
     signedOn: new Date(),
-    instructionPriceDirection: '£1,000,000',
+    instructionPriceDirection: '1000000',
     salesAgencyTypeId: 1,
     signatureFile:{
       fileUri: 'http://www.google.co.uk'
