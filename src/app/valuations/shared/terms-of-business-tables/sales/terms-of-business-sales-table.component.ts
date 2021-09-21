@@ -20,7 +20,7 @@ import { LettingsAgencyTypeEnum } from '../../../shared/valuation'
             <span class="cell-content">{{moment(val?.signedOn).format('Do MMM YYYY (HH:mm)') || '-'}}</span>
           </td>
           <td data-title="Instruction Price Direction">
-            <span class="cell-content">{{val.instructionPriceDirection}}</span>
+            <span class="cell-content">{{val.instructionPriceDirection | currency: 'GBP':'symbol':'3.0'}}</span>
           </td>
           <td data-title="Sole or Multi">
             <span class="cell-content" *ngIf="val.salesAgencyTypeId === LettingsAgencyTypeEnum.Sole">Sole</span>
