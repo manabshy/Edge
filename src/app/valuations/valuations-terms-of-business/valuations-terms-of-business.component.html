@@ -51,12 +51,12 @@
   </div>
 
   <app-terms-of-business-table-sales 
-    *ngIf="tableType == valuationType.Sales"
+    *ngIf="tableType == valuationType.Sales && valuationFiles.length"
     [data]="valuationFiles">
   </app-terms-of-business-table-sales>
 
   <app-terms-of-business-table-lettings 
-    *ngIf="tableType == valuationType.Lettings"
+    *ngIf="tableType == valuationType.Lettings && valuationFiles.length"
     [data]="valuationFiles">
   </app-terms-of-business-table-lettings>
 

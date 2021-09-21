@@ -27,30 +27,30 @@ const SalesTemplate: Story<TermsOfBusinessTableSalesComponent> = (args: TermsOfB
 export const SingleEntry = SalesTemplate.bind({});
 SingleEntry.args = {
   data: [{
-    valuationDate: new Date(),
+    signedOn: new Date(),
     instructionPriceDirection: '£890,000',
-    soleOrMulti: 'Sole',
-    valuationFiles:[{
+    salesAgencyTypeId: 1,
+    signatureFile:{
       fileUri: 'http://www.google.co.uk'
-    }]
+    }
   }],
 };
 
 export const MultipleEntry = SalesTemplate.bind({});
 MultipleEntry.args = {
   data: [{
-    valuationDate: new Date(),
+    signedOn: new Date(),
     instructionPriceDirection: '£890,000',
-    soleOrMulti: 'Sole',
-    valuationFiles:[{
+    salesAgencyTypeId: 2,
+    signatureFile:{
       fileUri: 'http://www.google.co.uk'
-    }]
+    }
   },{
-    valuationDate: new Date(),
+    signedOn: new Date(),
     instructionPriceDirection: '£1,000,000',
-    soleOrMulti: 'Multi',
-    valuationFiles:[{
+    salesAgencyTypeId: 1,
+    signatureFile:{
       fileUri: 'http://www.google.co.uk'
-    }]
+    }
   }],
 };
