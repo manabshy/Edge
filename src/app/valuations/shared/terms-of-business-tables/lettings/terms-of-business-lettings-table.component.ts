@@ -9,7 +9,6 @@ import moment from 'moment';
       <thead>
         <tr>
           <th>Signed On</th>
-          <th>Instruction Price Direction</th>
           <th>Short Lets Instruction</th>
           <th>Long Lets Instruction</th>
           <th>Management</th>
@@ -21,9 +20,6 @@ import moment from 'moment';
         <tr *ngFor="let val of data" data-cy="valuation">
           <td data-title="Signed On">
           <span class="cell-content">{{moment(val?.signedOn).format('Do MMM YYYY (HH:mm)') || '-'}}</span>
-          </td>
-          <td data-title="Instruction Price Direction">
-            <span class="cell-content">{{val.instructionPriceDirection}}</span>
           </td>
           <td data-title="Short Lets Instruction">
             <span class="cell-content">{{ val.isShortLetInstruction ? 'Yes' : 'No' }}</span>

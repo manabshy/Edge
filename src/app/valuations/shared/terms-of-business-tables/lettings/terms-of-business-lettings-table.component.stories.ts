@@ -29,7 +29,6 @@ export const SingleEntry = LettingsTemplate.bind({});
 SingleEntry.args = {
   data: [{
     signedOn: new Date(),
-    instructionPriceDirection: '£890,000',
     isShortLetInstruction: 'Yes',
     isLongLetInstruction: 'Yes',
     isManagement: 'Yes',
@@ -44,7 +43,6 @@ export const MultipleEntry = LettingsTemplate.bind({});
 MultipleEntry.args = {
   data: [{
     signedOn: new Date(),
-    instructionPriceDirection: '£890,000',
     isShortLetInstruction: 'Yes',
     isLongLetInstruction: 'Yes',
     isManagement: 'Yes',
@@ -54,7 +52,6 @@ MultipleEntry.args = {
     }
   },{
     signedOn: new Date(),
-    instructionPriceDirection: '£1,000,000',
     isShortLetInstruction: 'No',
     isLongLetInstruction: 'No',
     isManagement: 'No',
