@@ -11,9 +11,10 @@ export class ValuationsTermsOfBusinessComponent implements OnInit {
   @Input() valuationForm: FormGroup;
   @Input() interestList: any[] = [];
   @Input() formErrors;
+  @Input() tableType: ValuationTypeEnum
+  @Input() valuationStatus: number
   isTermOfBusinessSigned = false;
   lastEmailDate: Date = new Date();
-  @Input() tableType: ValuationTypeEnum
   public get valuationType(): typeof ValuationTypeEnum {
     return ValuationTypeEnum; 
   }

@@ -1,6 +1,6 @@
 <form [formGroup]="valuationForm" autocompleteOff>
   <div class="-mt-4">
-    <p-messages *ngIf="!isTermOfBusinessSigned" severity="warn">
+    <p-messages *ngIf="(valuationStatus == 3 || valuationStatus == 4) && !isTermOfBusinessSigned" severity="warn">
       <ng-template pTemplate>
         <div data-cy="notSignedMessage">
           <div class="p-ml-2">Terms of business not yet signed</div>

@@ -627,7 +627,8 @@
                   [(interestList)]="interestList"
                   [(valuationFiles)]="valuation.valuationFiles" 
                   [(formErrors)]="formErrors"
-                  [tableType]="valuation.valuationType">
+                  [tableType]="valuation.valuationType"
+                  [valuationStatus]="valuation.valuationStatus">
                 </app-valuations-terms-of-business>
               </p-accordionTab>
 
@@ -995,11 +996,13 @@
 
       <div class="grid--38 grid--dividerLeft" *ngIf="showCalendar">
         <h2 class="mb-2 txt--title">{{selectedCalendarDate | date:'fullDate'}}</h2>
-        <p-scrollPanel [style]="{width: '100%', height: '480px'}">
-          <app-calendar [isOnlyShowPurposes]="true" [view]="'day'" [viewDate]="selectedCalendarDate"
+        <!-- <p-scrollPanel [style]="{width: '100%', height: '480px'}"> -->
+          <div>
+            <!-- <app-calendar [isOnlyShowPurposes]="true" [view]="'day'" [viewDate]="selectedCalendarDate"
             [selectedStaffMemberId]="selectedStaffMemberId" [secondStaffMemberId]="secondStaffMemberId">
-          </app-calendar>
-        </p-scrollPanel>
+          </app-calendar> -->
+        </div>
+        <!-- </p-scrollPanel> -->
       </div>
 
     </div>
