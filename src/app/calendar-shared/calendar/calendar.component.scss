@@ -1,4 +1,12 @@
-.popover                    { max-width:240px; background-color:#fff; border:1px solid rgba(0,0,0,.2); word-break: break-word; border-radius:3px; top:0; left:0; z-index:100;
+.popover                    { 
+    width:240px; 
+    background-color:#fff; 
+    border:1px solid rgba(0,0,0,.2); 
+    word-break: break-word; 
+    border-radius:3px;
+    left: -20px !important; 
+    z-index:1001;
+    
     &-header                { padding:16px;
         &+*                 { margin-top:0; padding-top:0; }
     }
@@ -6,10 +14,8 @@
     &-body                  { padding:16px; }
 
     dt                      { font-weight:bold; color:#0A1A4A; }
-    .row                    { display:flex; }
-    .col                    { flex-grow:1;
-        &+*                 { margin:0 0 0 30px; }
-    }
+    // .row                    { display:flex; }
+    
 }
 
 :host ::ng-deep                         {

@@ -107,6 +107,7 @@ export class CalendarComponent
   @Input() view: CalendarView | "month" | "week" | "threeDays" | "day";
   daysInWeek;
   @Input() selectedStaffMemberId: number;
+  @Input() tooltipPlacement: string = 'auto';
 
   private _viewDate: Date = new Date();
   @Input()
