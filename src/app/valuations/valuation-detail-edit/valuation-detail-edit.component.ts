@@ -122,7 +122,6 @@ export class ValuationDetailEditComponent
   isEditable: boolean = false;
   showLeaseExpiryDate: boolean;
   canInstruct: boolean;
-  canSaveValuation: boolean = true;
   propertyId: number;
   lastKnownOwnerId: number;
   approxLeaseExpiryDate: Date;
@@ -1133,11 +1132,11 @@ export class ValuationDetailEditComponent
   getValuation(id: number) {
     this.valuationService
       .getValuation(id)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((data) => {
+      .toPromise()
+      .then((data) => {
         if (data) {
           this.valuation = data;
-          console.log("this.valuation: ", this.valuation);
+          console.log('this.valuation: ', this.valuation)
           this.getPropertyInformation(this.valuation.property.propertyId);
 
           this.valuation.valuationStatus === 3
@@ -1147,21 +1146,12 @@ export class ValuationDetailEditComponent
             ? (this.showLeaseExpiryDate = true)
             : (this.showLeaseExpiryDate = false);
           if (
-            this.valuation.valuationStatus === ValuationStatusEnum.Instructed ||
-            this.valuation.valuationStatus === ValuationStatusEnum.Valued
+            this.valuation.valuationStatus === 3 ||
+            this.valuation.valuationStatus === 4
           ) {
             this.isEditable = false;
           } else {
             this.isEditable = true;
-          }
-
-          if (
-            this.valuation.valuationStatus === ValuationStatusEnum.Instructed ||
-            this.valuation.valuationStatus === ValuationStatusEnum.Cancelled
-          ) {
-            this.canSaveValuation = false;
-          } else {
-            this.canSaveValuation = true;
           }
 
           if (this.valuation.salesValuer || this.valuation.lettingsValuer) {
@@ -1238,6 +1228,22 @@ export class ValuationDetailEditComponent
             this.setOriginTypeId(this.valuation.originId);
           }
         }
+      })
+      .then(() =>{
+        this.valuationService.getToBLink(id)
+        .subscribe(data => {
+          console.log('tob link: ', data)
+          if(data.toBSales.length > data.toBLetting.length){
+            this.valuation.valuationFiles = data.toBSales;
+            this.valuation.valuationType = 1;
+          } else {
+            this.valuation.valuationFiles = data.toBLetting;
+            this.valuation.valuationType = 2;
+          }
+        })
+      })
+      .catch(err => {
+        console.log('err: ', err)
       });
   }
 

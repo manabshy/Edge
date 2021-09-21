@@ -154,3 +154,13 @@ export enum ValuationTypeEnum {
 export function getValuationStatuses() {
   return Object.keys(ValuationStatusEnum).filter((type) => isNaN(<any>type));
 }
+
+export enum SalesAgencyTypeEnum {
+    Sole = 1,
+    Multi = 4
+}
+
+export enum LettingsAgencyTypeEnum {
+    Sole = 1,
+    Multi = 2
+}

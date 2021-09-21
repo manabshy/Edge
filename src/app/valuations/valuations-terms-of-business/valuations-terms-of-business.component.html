@@ -46,18 +46,18 @@
     </ng-template>
   </p-messages>
 
-  <div *ngIf="valuation" class="search-results" infiniteScroll [infiniteScrollDistance]="5"
+  <div *ngIf="valuationFiles" class="search-results" infiniteScroll [infiniteScrollDistance]="5"
     [infiniteScrollUpDistance]="1.5" [infiniteScrollThrottle]="20" [immediateCheck]="true" [alwaysCallback]="true">
   </div>
 
   <app-terms-of-business-table-sales 
-    *ngIf="tableType == valuationType.Sales"
-    [data]="valuation">
+    *ngIf="tableType == valuationType.Sales && valuationFiles.length"
+    [data]="valuationFiles">
   </app-terms-of-business-table-sales>
 
   <app-terms-of-business-table-lettings 
-    *ngIf="tableType == valuationType.Lettings"
-    [data]="valuation">
+    *ngIf="tableType == valuationType.Lettings && valuationFiles.length"
+    [data]="valuationFiles">
   </app-terms-of-business-table-lettings>
 
   <ng-template #noValue>-</ng-template>

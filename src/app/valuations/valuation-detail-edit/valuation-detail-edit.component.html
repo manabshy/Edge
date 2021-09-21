@@ -622,8 +622,12 @@
               <!-- [disabled]="!isNewValuation && !isEditable && valuationForm.get('declarableInterest').value"-->
 
               <p-accordionTab header="Terms Of Business" [(selected)]="activeState[4]" data-cy="termsOfBusiness">
-                <app-valuations-terms-of-business [(valuationForm)]="valuationForm" [(interestList)]="interestList"
-                  [(valuation)]="valuation" [(formErrors)]="formErrors">
+                <app-valuations-terms-of-business 
+                  [(valuationForm)]="valuationForm" 
+                  [(interestList)]="interestList"
+                  [(valuationFiles)]="valuation.valuationFiles" 
+                  [(formErrors)]="formErrors"
+                  [tableType]="valuation.valuationType">
                 </app-valuations-terms-of-business>
               </p-accordionTab>
 

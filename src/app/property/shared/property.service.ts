@@ -13,7 +13,7 @@ import {
   PropertyNote,
   PropertyLocation,
 } from "./property";
-import { debounceTime, map, tap } from "rxjs/operators";
+import { map, tap } from "rxjs/operators";
 import { AppConstants } from "src/app/core/shared/app-constants";
 import { CustomQueryEncoderHelper } from "src/app/core/shared/custom-query-encoder-helper";
 import { Address } from "src/app/shared/models/address";
@@ -53,7 +53,6 @@ export class PropertyService {
     return this.http
       .get<PropertyAutoCompleteData>(url, { params: options })
       .pipe(
-        debounceTime(300),
         map((response) => response.result),
         tap((data) => console.log(JSON.stringify(data)))
       );

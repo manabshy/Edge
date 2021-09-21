@@ -28,39 +28,39 @@ const LettingsTemplate: Story<TermsOfBusinessTableLettingsComponent> = (args: Te
 export const SingleEntry = LettingsTemplate.bind({});
 SingleEntry.args = {
   data: [{
-    valuationDate: new Date(),
+    signedOn: new Date(),
     instructionPriceDirection: '£890,000',
-    shortLetsInstruction: 'Yes',
-    longLetsInstruction: 'Yes',
-    management: 'Yes',
-    zeroDeposit: 'No',
-    valuationFiles:[{
+    isShortLetInstruction: 'Yes',
+    isLongLetInstruction: 'Yes',
+    isManagement: 'Yes',
+    zeroDepositAccepted: 'No',
+    signatureFile:{
       fileUri: 'http://www.google.co.uk'
-    }]
+    }
   }],
 };
 
 export const MultipleEntry = LettingsTemplate.bind({});
 MultipleEntry.args = {
   data: [{
-    valuationDate: new Date(),
+    signedOn: new Date(),
     instructionPriceDirection: '£890,000',
-    shortLetsInstruction: 'Yes',
-    longLetsInstruction: 'Yes',
-    management: 'Yes',
-    zeroDeposit: 'No',
-    valuationFiles:[{
+    isShortLetInstruction: 'Yes',
+    isLongLetInstruction: 'Yes',
+    isManagement: 'Yes',
+    zeroDepositAccepted: 'No',
+    signatureFile:{
       fileUri: 'http://www.google.co.uk'
-    }]
+    }
   },{
-    valuationDate: new Date(),
+    signedOn: new Date(),
     instructionPriceDirection: '£1,000,000',
-    shortLetsInstruction: 'No',
-    longLetsInstruction: 'No',
-    management: 'No',
-    zeroDeposit: 'Yes',
-    valuationFiles:[{
+    isShortLetInstruction: 'No',
+    isLongLetInstruction: 'No',
+    isManagement: 'No',
+    zeroDepositAccepted: 'Yes',
+    signatureFile: {
       fileUri: 'http://www.google.co.uk'
-    }]
+    }
   }],
 };
