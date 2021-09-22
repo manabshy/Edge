@@ -62,12 +62,14 @@ import { EmailSignatureComponent } from "./components/email-signature/email-sign
 import { RedactedCardComponent } from "./components/redacted-card/redacted-card.component";
 import { CompanyFinderComponent } from "./components/company-finder/company-finder.component";
 import { InfiniteScrollComponent } from "./components/infinite-scroll/infinite-scroll.component";
-import { GenericMultiSelectControlComponent } from './generic-multi-select-control/generic-multi-select-control.component';
+import { GenericMultiSelectControlComponent } from "./generic-multi-select-control/generic-multi-select-control.component";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { DialogService } from "primeng/dynamicdialog";
 import { ContactComplianceCardComponent } from "./contact-compliance-card/contact-compliance-card.component";
 import { DocumentInfoComponent } from "./document-info/document-info.component";
 import { VendorsModule } from "./vendors.module";
+import { FileUploadComponent } from "./components/file-upload/file-upload.component";
+import { FileListComponent } from "./components/file-list/file-list.component";
 
 const components = [
   BreadcrumbComponent,
@@ -118,7 +120,9 @@ const components = [
   InfiniteScrollComponent,
   GenericMultiSelectControlComponent,
   ContactComplianceCardComponent,
-  DocumentInfoComponent
+  DocumentInfoComponent,
+  FileUploadComponent,
+  FileListComponent,
 ];
 const pipes = [
   RoundingPipe,
@@ -132,7 +136,6 @@ const pipes = [
 ];
 const directives = [AutocompleteOffDirective, NoDoubleTapDirective];
 
-
 @NgModule({
   declarations: [components, pipes, directives],
   imports: [
@@ -140,14 +143,9 @@ const directives = [AutocompleteOffDirective, NoDoubleTapDirective];
     ReactiveFormsModule,
     RouterModule,
     FormsModule,
-    VendorsModule
-  ],
-  exports: [
     VendorsModule,
-    components,
-    pipes,
-    directives,
   ],
+  exports: [VendorsModule, components, pipes, directives],
   providers: [
     ConfirmationService,
     DialogService,
