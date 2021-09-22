@@ -19,7 +19,6 @@ import { PropertyHistoryComponent } from "./property-history/property-history.co
 import { PropertyMediaComponent } from "./property-media/property-media.component";
 import { PropertyNotesComponent } from "./property-notes/property-notes.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
-import { DiaryComponent } from "./diary/diary.component";
 import { LeaderboardComponent } from "./leaderboard/leaderboard.component";
 import { ApplicantRegisterComponent } from "./applicant-register/applicant-register.component";
 import { ApplicantViewLettingComponent } from "./applicant-view-letting/applicant-view-letting.component";
@@ -36,7 +35,6 @@ import { CoreModule } from "./core/core.module";
 import { AccountModule } from "./account/account.module";
 import { LeaderboardModule } from "./leaderboard/leaderboard.module";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { DiaryModule } from "./diary/diary.module";
 import { NotFoundComponent } from "./not-found/not-found.component";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { environment } from "../environments/environment";
@@ -46,7 +44,6 @@ import { ImpersonateMemberComponent } from "./impersonate-member/impersonate-mem
 import { ConfigsLoaderService } from "./configs-loader.service";
 import { GlobalErrorHandlerService } from "./core/services/global-error-handler.service";
 
-// ADDED SHARED MODULE ON 19/03 BUT REMOVE ASAP
 import { SharedModule } from "./shared/shared.module";
 
 // ngx bootstrap imports
@@ -213,7 +210,7 @@ const externalModulesExports = [
     NotFoundComponent,
     ImpersonateMemberComponent,
     HeaderComponent,
-    ProfileComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -227,7 +224,7 @@ const externalModulesExports = [
     DashboardModule,
     LeaderboardModule,
     CalendarSharedModule,
-    SharedModule, // ADD forRoot Investigate 24/03/2021
+    SharedModule,
     AppRoutingModule,
     ServiceWorkerModule.register("ngsw-worker.js", {
       enabled: environment.production,
