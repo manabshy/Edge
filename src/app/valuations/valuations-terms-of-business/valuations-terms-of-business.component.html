@@ -4,7 +4,7 @@
       <ng-template pTemplate>
         <div data-cy="notSignedMessage">
           <div class="p-ml-2">Terms of business not yet signed</div>
-          <p class="text-xs">Last Emailed : {{lastEmailDate}}</p>
+          <p class="text-xs">Last Emailed : {{ moment(lastEmailDate).format('Do MMM YYYY (HH:mm)')}}</p>
         </div>
       </ng-template>
     </p-messages>

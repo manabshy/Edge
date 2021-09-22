@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { FormGroup } from "@angular/forms";
+import moment from "moment";
 import { ValuationTypeEnum } from "../shared/valuation";
 
 @Component({
@@ -14,7 +15,9 @@ export class ValuationsTermsOfBusinessComponent implements OnInit {
   @Input() tableType: ValuationTypeEnum
   @Input() valuationStatus: number
   isTermOfBusinessSigned = false;
-  lastEmailDate: Date = new Date();
+  lastEmailDate: Date = new Date(); // TODO wire up to correct date
+  moment = moment
+
   public get valuationType(): typeof ValuationTypeEnum {
     return ValuationTypeEnum; 
   }
