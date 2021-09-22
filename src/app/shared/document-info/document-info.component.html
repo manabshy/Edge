@@ -1,9 +1,9 @@
-<div class="rounded-sm border border-grey-100 p-2 cursor-pointer w-72 py-2"
+<div class="rounded-sm border border-grey-100 p-2 cursor-pointer w-full py-2"
   [ngClass]="idHasExpired ? '':'border-red-500 bg-red-100'">
   <div *ngFor="let file of files" 
     class="flex flex-row content-center">
-    <i class="fa fa-file leading-0 text-gray-400 mr-1 mt-1"></i>
-    <span class="mr-2">
+    <i class="fa fa-file tracking-normal text-gray-400 mr-1 mt-1"></i>
+    <span class="mr-2 tracking-tight">
       {{file.label}}
     </span>
     <span *ngIf="documentType == 'ID'" [ngClass]="idHasExpired ? 'text-green-500':'text-red-500'">Exp {{file.expiryDate}}</span>
