@@ -85,12 +85,12 @@
       </fieldset>
     </div>
     <div class="grid grid--75 grid--dividerLeft">
-      <fieldset class="fieldset--width-max mb-3" [ngClass]="{invalid: formErrors?.subject}">
+      <fieldset class="mb-3 fieldset--width-max" [ngClass]="{invalid: formErrors?.subject}">
         <label for="subject">Subject</label>
         <input class="p-2" type="text" id="subject" formControlName="subject">
         <p class="message message--negative">{{formErrors?.subject}}</p>
       </fieldset>
-      <fieldset class="fieldset--width-max mb-3" [ngClass]="{invalid: formErrors?.body}">
+      <fieldset class="mb-3 fieldset--width-max" [ngClass]="{invalid: formErrors?.body}">
         <p-editor #pEditor formControlName="body"
           [style]="{'height':'320px', 'font-size':'12px', 'font-family':'poppins'}">
           <p-header>
@@ -118,7 +118,7 @@
         </p-editor>
         <p class="message message--negative">{{formErrors?.body}}</p>
       </fieldset>
-      <fieldset class="fieldset--signature mb-3">
+      <fieldset class="mb-3 fieldset--signature">
         <app-email-signature [signature]="currentStaffMemberSignature"></app-email-signature>
       </fieldset>
     </div>
@@ -145,7 +145,7 @@
 </p-dialog>
 
 <!-- Contactgroup Finder Modal -->
-<p-dialog header="Add files" [(visible)]="showFileUploader" [modal]="true" [draggable]="false">
+<!-- <p-dialog header="Add files" [(visible)]="showFileUploader" [modal]="true" [draggable]="false">
   <p-fileUpload name="demo[]" [showCancelButton]="false" [showUploadButton]="false" url="./upload.php"
     (onUpload)="onUpload($event)" multiple="multiple" maxFileSize="1000000">
     <ng-template pTemplate="content">
@@ -154,7 +154,7 @@
       </ul>
     </ng-template>
   </p-fileUpload>
-</p-dialog>
+</p-dialog> -->
 
 <!--Success Messages -->
 <p-toast></p-toast>

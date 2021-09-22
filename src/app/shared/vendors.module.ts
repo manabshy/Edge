@@ -36,7 +36,6 @@ import { ButtonModule } from "primeng/button";
 import { EditorModule } from "primeng/editor";
 import { PanelModule } from "primeng/panel";
 import { ChartModule } from "primeng/chart";
-import { FileUploadModule } from "primeng/fileupload";
 import { TabViewModule } from "primeng/tabview";
 import { ChipModule } from "primeng/chip";
 import { AutoCompleteModule } from "primeng/autocomplete";
@@ -50,6 +49,7 @@ import { ScrollPanelModule } from "primeng/scrollpanel";
 import { TableModule } from "primeng/table";
 import { MenuModule } from "primeng/menu";
 import { CheckboxModule } from "primeng/checkbox";
+import { FileUploadModule } from "@iplab/ngx-file-upload";
 
 const externalModules = [
   InfiniteScrollModule,
@@ -83,7 +83,6 @@ const externalModules = [
   DropdownModule,
   MultiSelectModule,
   EditorModule,
-  FileUploadModule,
   TabViewModule,
   ChipModule,
   AutoCompleteModule,
@@ -98,14 +97,11 @@ const externalModules = [
   TableModule,
   MenuModule,
   CheckboxModule,
+  FileUploadModule,
 ];
 
 @NgModule({
-  imports: [
-    externalModules,
-  ],
-  exports: [
-    externalModules,
-  ],
+  imports: [externalModules],
+  exports: [externalModules],
 })
 export class VendorsModule {}
