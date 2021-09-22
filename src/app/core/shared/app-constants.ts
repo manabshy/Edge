@@ -95,6 +95,9 @@ export class AppConstants {
     return /^((\(?0\d{4}\)?\s?\d{3}\s?\d{3})|(\(?0\d{3}\)?\s?\d{3}\s?\d{4})|(\(?0\d{2}\)?\s?\d{4}\s?\d{4}))(\s?\#(\d{4}|\d{3}))?$/;
     // return /^\+?[ \d]+$/g;
   }
+  public static get baseFileUrl(): string {
+    return `${environment.baseUrl}/file`;
+  }
 }
 
 export const FormErrors = {
@@ -158,7 +161,10 @@ export const FormErrors = {
   subject: "",
   body: "",
   fromDate: "",
-  floorOther:""
+  floorOther: "",
+  titleDeedOwners: "",
+  leaseExpiryDate: "",
+  isLegalOwner: "",
 };
 
 export const ValidationMessages = {
@@ -386,6 +392,15 @@ export const ValidationMessages = {
   },
   floorOther: {
     required: "Please specify a floor",
+  },
+  titleDeedOwners: {
+    required: "Title deed owners is required",
+  },
+  leaseExpiryDate: {
+    required: "Lease expiry date is required",
+  },
+  isLegalOwner: {
+    required: "Legal owner selection is required",
   },
 };
 

@@ -619,23 +619,19 @@
                 </ol>
               </p-accordionTab>
 
-              <!-- [disabled]="!isNewValuation && !isEditable && valuationForm.get('declarableInterest').value"-->
-
               <p-accordionTab header="Terms Of Business" [(selected)]="activeState[4]" data-cy="termsOfBusiness">
-                <app-valuations-terms-of-business 
-                  [(valuationForm)]="valuationForm" 
-                  [(interestList)]="interestList"
-                  [(valuationFiles)]="valuation.valuationFiles" 
-                  [(formErrors)]="formErrors"
-                  [tableType]="valuation.valuationType"
-                  [valuationStatus]="valuation.valuationStatus">
+                <app-valuations-terms-of-business [(valuationForm)]="valuationForm" [(interestList)]="interestList"
+                  [(valuationFiles)]="valuation.valuationFiles" [(formErrors)]="formErrors"
+                  [tableType]="valuation.valuationType" [valuationStatus]="valuation.valuationStatus">
                 </app-valuations-terms-of-business>
               </p-accordionTab>
 
               <p-accordionTab *ngIf="false" header="Anti Money Laundering" [(selected)]="activeState[5]">
               </p-accordionTab>
 
-              <p-accordionTab *ngIf="false" header="Land Register" [(selected)]="activeState[6]"></p-accordionTab>
+              <p-accordionTab header="Land Register" [(selected)]="activeState[6]">
+                <app-valuation-land-register></app-valuation-land-register>
+              </p-accordionTab>
 
               <!-- <p-accordionTab header="Status" [(selected)]="activeState[7]"></p-accordionTab>
 
@@ -997,12 +993,8 @@
       <div class="grid--38 grid--dividerLeft" *ngIf="showCalendar">
         <h2 class="mb-2 txt--title">{{selectedCalendarDate | date:'fullDate'}}</h2>
         <p-scrollPanel [style]="{width: '100%', height: '480px'}">
-          <app-calendar 
-            [isOnlyShowPurposes]="true" 
-            [view]="'day'" 
-            [viewDate]="selectedCalendarDate"
-            [selectedStaffMemberId]="selectedStaffMemberId" 
-            [secondStaffMemberId]="secondStaffMemberId"
+          <app-calendar [isOnlyShowPurposes]="true" [view]="'day'" [viewDate]="selectedCalendarDate"
+            [selectedStaffMemberId]="selectedStaffMemberId" [secondStaffMemberId]="secondStaffMemberId"
             [tooltipPlacement]="'left'">
           </app-calendar>
         </p-scrollPanel>

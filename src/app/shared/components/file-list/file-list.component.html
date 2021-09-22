@@ -1,0 +1,36 @@
+<div>
+  <ol class="list" *ngIf="files && files.length > 0,else uploadFile">
+    <li *ngFor="let file of files">
+      <i class="mr-1 fa fa-file"></i>
+      <span class="mr-5">{{file.header}}</span>
+      <span class="mr-1">{{file.description}}</span>
+      <svg aria-hidden="true" width="40" height="40" viewBox="0 0 64 64" class="ml-2 text-gray-400 icon">
+        <path
+          d="M11.4 56.1c0 3.8 3.1 6.9 6.9 6.9h27.4c3.8 0 6.9-3.1 6.9-6.9V14.8H11.4V56.1zM19.9 31.6l4.9-4.9L32 34l7.3-7.3 4.9 4.9 -7.3 7.3 7.3 7.3 -4.9 4.9L32 43.8l-7.3 7.3 -4.9-4.9 7.3-7.3L19.9 31.6zM44 4.4L40.6 1H23.4L20 4.4H8v6.9h48V4.4H44z">
+        </path>
+      </svg>
+    </li>
+  </ol>
+  <ng-template #uploadFile>
+    <div class="mt-2">
+      <a (click)="openFileDialog = true">
+        <i class="mr-2 rounded fa fa-upload" aria-hidden="true"></i>
+        <span>{{'Upload ' +header}}</span></a>
+    </div>
+  </ng-template>
+</div>
+
+<p-dialog header="Select Files" [(visible)]="openFileDialog" [modal]="true" [draggable]="false"
+  class="modal--small modal--hasFooter">
+  <div>
+    <div>
+      <app-file-upload [fileLimit]="fileLimit" (getFiles)="tmpFiles = $event"></app-file-upload>
+    </div>
+    <footer class="footer--modal">
+      <div class="btn--container">
+        <button type="button" class="btn btn--ghost" (click)="openFileDialog = false">Cancel</button>
+        <button type="button" class="btn btn--positive" (click)="setSelectedFile()" data-cy="addFiles">Select</button>
+      </div>
+    </footer>
+  </div>
+</p-dialog>
