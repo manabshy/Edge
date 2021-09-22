@@ -1,22 +1,19 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-contact',
+  selector: 'app-contact-compliance-card',
   templateUrl: './contact-compliance-card.component.html'
 })
 export class ContactComplianceCardComponent implements OnInit {
 
-  @Input() pillLabel: string
-  @Input() name: string
-  @Input() address: string
-  @Input() documents: any
+  @Input() contact: any
 
   pillClass: string
 
   constructor() { }
 
   ngOnInit(): void {
-    this.pillClass = this.pillLabel == 'lead' ? 'pill--positive' : ''
+    this.pillClass = this.contact.pillLabel == 'lead' ? 'pill--positive' : 'bg-gray-400'
   }
 
 }

@@ -67,6 +67,10 @@ import { ConfirmationService, MessageService } from "primeng/api";
 import { DialogService } from "primeng/dynamicdialog";
 import { ContactComplianceCardComponent } from "./contact-compliance-card/contact-compliance-card.component";
 import { DocumentInfoComponent } from "./document-info/document-info.component";
+import { ContactComplianceCardsShellComponent } from "./contact-compliance-cards-shell/contact-compliance-cards-shell.component";
+import { MessagesComponent } from './messages/messages.component'
+
+// Vendors module
 import { VendorsModule } from "./vendors.module";
 
 const components = [
@@ -118,7 +122,9 @@ const components = [
   InfiniteScrollComponent,
   GenericMultiSelectControlComponent,
   ContactComplianceCardComponent,
-  DocumentInfoComponent
+  DocumentInfoComponent,
+  ContactComplianceCardsShellComponent,
+  MessagesComponent
 ];
 const pipes = [
   RoundingPipe,

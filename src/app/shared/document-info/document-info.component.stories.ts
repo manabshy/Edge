@@ -112,32 +112,21 @@ ReportUploadedInvalid.args = {
   }]
 };
 
-export const MultipleReportsUploadedMixed = DocumentInfo.bind({});
-MultipleReportsUploadedMixed.args = {
-  documentType: 'report',
-  label: 'Upload Report',
-  files: [{
-    id:0,
-    label: 'Report',
-    valid: false,
-    uploadDate: '20/09/21'
-  },{
-    id:1,
-    label: 'Report',
-    valid: true,
-    uploadDate: '19/09/21'
-  },{
-    id:2,
-    label: 'Report',
-    valid: true,
-    uploadDate: '19/09/21'
-  }]
-};
-
 export const AdditionalDocumentsBlank = DocumentInfo.bind({});
 AdditionalDocumentsBlank.args = {
   documentType: 'additional-documents',
   label: 'Upload Additional Documents',
   files: []
+};
+
+export const AdditionalDocumentUploaded = DocumentInfo.bind({});
+AdditionalDocumentUploaded.args = {
+  documentType: 'additional-documents',
+  label: 'Upload Additional Documents',
+  files: [{
+    id:0,
+    label: 'Document',
+    uploadDate: '01/09/21'
+  }]
 };
 
