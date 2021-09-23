@@ -17,7 +17,14 @@ export class FileService {
 
     return this.http.post<any>(url, fileArr).pipe(
       tap((data) => console.log("sent...", JSON.stringify(data))),
-      map((response) => response.status)
+      map((response) => response.result)
     );
   }
+}
+
+export enum FileTypeEnum {
+  OnlyDocument = 1,
+  OnlyImage = 2,
+  ImageAndDocument = 3,
+  All = 4,
 }
