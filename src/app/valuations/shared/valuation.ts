@@ -63,6 +63,7 @@ export interface Valuation extends ValuationInfo {
   adminContact?: Signer;
   valuationFiles?: ValuationFile[];
   valuationType?: ValuationTypeEnum;
+  dateRequestSent?: Date;
 }
 
 export interface ValuationFile {

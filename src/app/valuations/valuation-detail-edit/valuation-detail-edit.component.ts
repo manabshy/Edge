@@ -1242,7 +1242,7 @@ export class ValuationDetailEditComponent
       .then(() =>{
         this.valuationService.getToBLink(id)
         .subscribe(data => {
-          console.log('tob link: ', data)
+          this.valuation.dateRequestSent = data.dateRequestSent
           if(data.toBSales.length > data.toBLetting.length){
             this.valuation.valuationFiles = data.toBSales;
             this.valuation.valuationType = 1;

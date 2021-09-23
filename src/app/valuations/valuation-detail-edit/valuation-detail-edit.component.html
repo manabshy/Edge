@@ -620,9 +620,14 @@
               </p-accordionTab>
 
               <p-accordionTab header="Terms Of Business" [(selected)]="activeState[4]" data-cy="termsOfBusiness">
-                <app-valuations-terms-of-business [(valuationForm)]="valuationForm" [(interestList)]="interestList"
-                  [(valuationFiles)]="valuation.valuationFiles" [(formErrors)]="formErrors"
-                  [tableType]="valuation.valuationType" [valuationStatus]="valuation.valuationStatus">
+                <app-valuations-terms-of-business 
+                  [valuationForm]="valuationForm" 
+                  [interestList]="interestList"
+                  [valuationFiles]="valuation.valuationFiles" 
+                  [formErrors]="formErrors"
+                  [tableType]="valuation.valuationType" 
+                  [valuationStatus]="valuation.valuationStatus"
+                  [dateRequestSent]="valuation.dateRequestSent">
                 </app-valuations-terms-of-business>
               </p-accordionTab>
 
