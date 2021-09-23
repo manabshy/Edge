@@ -7,6 +7,7 @@ import {
   OnInit,
   Output,
 } from "@angular/core";
+import { MessageService, PrimeNGConfig } from "primeng/api";
 
 @Component({
   selector: "app-file-list",
@@ -20,18 +21,38 @@ export class FileListComponent implements OnInit, OnDestroy {
   openFileDialog = false;
   tmpFiles: File[];
 
-  constructor(private fileService: FileService) {}
+  constructor(
+    private fileService: FileService,
+    private primengConfig: PrimeNGConfig,
+    private messageService: MessageService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.primengConfig.ripple = true;
+  }
 
   setSelectedFile() {
-    this.openFileDialog = false;
-    this.files = [];
-    this.tmpFiles = [...this.files];
+    if (this.tmpFiles && this.tmpFiles.length > 0) {
+      this.openFileDialog = false;
+      this.files = [];
+      this.files = [...this.tmpFiles];
 
-    this.fileService.saveFileTemp(this.tmpFiles).subscribe((data) => {
-      console.log(data);
-    });
+      const formData = new FormData();
+      this.tmpFiles.forEach((x) => {
+        formData.append("files", x, x.name);
+      });
+
+      this.fileService.saveFileTemp(formData).subscribe((data) => {
+        console.log(data);
+      });
+    } else {
+      this.messageService.add({
+        severity: "warn",
+        summary: "You must add valid documents",
+        closable: false,
+      });
+      return;
+    }
   }
 
   ngOnDestroy(): void {}

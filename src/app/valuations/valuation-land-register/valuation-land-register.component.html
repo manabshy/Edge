@@ -49,14 +49,18 @@
               <app-file-list [header]="'Lease'" [fileLimit]="1"></app-file-list>
             </div>
             <div class="mt-2">
-              <fieldset [ngClass]="{'invalid': formErrors?.leaseExpiryDate}">
-                <label for="leaseExpiryDate">Lease expiry date</label>
-                <input class="w-48 p-2" type="text" id="leaseExpiryDate" placeholder="dd/mm/yyyy"
-                  [ngClass]="{'invalid': formErrors?.leaseExpiryDate}"
-                  [bsConfig]="{showWeekNumbers:false,  dateInputFormat: 'DD/MM/YYYY', customTodayClass: 'font-weight-bold'}"
-                  bsDatepicker formControlName="leaseExpiryDate">
-                <p class="message message--negative"> {{formErrors?.leaseExpiryDate}}</p>
-              </fieldset>
+              <div class="flex flex-col md:flex-row">
+                <fieldset [ngClass]="{'invalid': formErrors?.leaseExpiryDate}">
+                  <label for="leaseExpiryDate">Lease expiry date</label>
+                  <input class="w-48 p-2" type="text" id="leaseExpiryDate" placeholder="dd/mm/yyyy"
+                    [ngClass]="{'invalid': formErrors?.leaseExpiryDate}"
+                    [bsConfig]="{showWeekNumbers:false,  dateInputFormat: 'DD/MM/YYYY',minDate:todaysDate ,customTodayClass: 'font-weight-bold'}"
+                    bsDatepicker formControlName="leaseExpiryDate">
+                  <p class="message message--negative"> {{formErrors?.leaseExpiryDate}}</p>
+                </fieldset>
+                <p *ngIf="landRegistryForm.get('leaseExpiryDate').value" class="ml-8 pt-7">( {{leaseYear}} years
+                  remaining)</p>
+              </div>
             </div>
           </div>
         </div>
