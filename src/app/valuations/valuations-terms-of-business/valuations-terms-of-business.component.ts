@@ -14,8 +14,9 @@ export class ValuationsTermsOfBusinessComponent implements OnInit {
   @Input() formErrors;
   @Input() tableType: ValuationTypeEnum
   @Input() valuationStatus: number
+  @Input() dateRequestSent: Date;
+
   isTermOfBusinessSigned = false;
-  lastEmailDate: Date = new Date(); // TODO wire up to correct date
   moment = moment
 
   public get valuationType(): typeof ValuationTypeEnum {
