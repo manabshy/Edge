@@ -157,11 +157,31 @@ export function getValuationStatuses() {
 }
 
 export enum SalesAgencyTypeEnum {
-    Sole = 1,
-    Multi = 4
+  Sole = 1,
+  Multi = 4,
 }
 
 export enum LettingsAgencyTypeEnum {
-    Sole = 1,
-    Multi = 2
+  Sole = 1,
+  Multi = 2,
+}
+
+export interface deedLandReg {
+  nameChangeFileStoreId: number;
+  blobName: string;
+  updateDate: Date;
+  userEnteredOwner: string;
+  ownerConfirmed: number;
+}
+
+export interface leaseLandReg {
+  nameChangeFileStoreId: number;
+  blobName: string;
+  updateDate: Date;
+  leaseExpiryDate: Date;
+}
+
+export interface landReg {
+  deedLandReg: deedLandReg;
+  leaseLandReg: leaseLandReg;
 }

@@ -11,7 +11,9 @@
         <div class="grid grid--50">
           <div>
             <h1 class="text-lg font-bold"> Title Deed </h1>
-            <app-file-list [header]="'Title Deed'" [fileLimit]="1"></app-file-list>
+            <app-file-list [header]="'Title Deed'" [fileLimit]="1" (getFileNames)="getFileNames($event)"
+              [fileType]="fileType">
+            </app-file-list>
           </div>
           <fieldset class="mt-2" [ngClass]="{'invalid': formErrors?.titleDeedOwners}">
             <label for="titleDeeds">Title Deed Owners</label>

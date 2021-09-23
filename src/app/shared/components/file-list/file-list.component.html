@@ -24,7 +24,8 @@
   class="modal--small modal--hasFooter">
   <div>
     <div>
-      <app-file-upload [fileLimit]="fileLimit" (getFiles)="tmpFiles = $event"></app-file-upload>
+      <app-file-upload [fileLimit]="fileLimit" [fileType]="fileType" (getFiles)="tmpFiles = $event">
+      </app-file-upload>
     </div>
     <footer class="footer--modal">
       <div class="btn--container">

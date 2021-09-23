@@ -3,6 +3,7 @@ import { FormErrors } from "src/app/core/shared/app-constants";
 import { Component, Input, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ValuationTypeEnum } from "../shared/valuation";
+import { FileTypeEnum } from "src/app/core/services/file.service";
 
 @Component({
   selector: "app-valuation-land-register",
@@ -22,6 +23,7 @@ export class ValuationsLandRegisterComponent implements OnInit {
   landRegistryForm: FormGroup;
   todaysDate = new Date();
   leaseYear = 0;
+  fileType = FileTypeEnum.ImageAndDocument;
 
   constructor(private fb: FormBuilder) {}
 
@@ -37,5 +39,9 @@ export class ValuationsLandRegisterComponent implements OnInit {
         this.leaseYear = differenceInCalendarYears(data, new Date());
       }
     );
+  }
+
+  getFileNames(fileNames: string[]) {
+    console.log(fileNames);
   }
 }
