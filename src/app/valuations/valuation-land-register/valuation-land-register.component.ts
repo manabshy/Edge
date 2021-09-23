@@ -1,3 +1,4 @@
+import { differenceInCalendarYears } from "date-fns";
 import { FormErrors } from "src/app/core/shared/app-constants";
 import { Component, Input, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
@@ -19,6 +20,8 @@ export class ValuationsLandRegisterComponent implements OnInit {
 
   formErrors = FormErrors;
   landRegistryForm: FormGroup;
+  todaysDate = new Date();
+  leaseYear = 0;
 
   constructor(private fb: FormBuilder) {}
 
@@ -28,5 +31,11 @@ export class ValuationsLandRegisterComponent implements OnInit {
       isLegalOwner: [null, Validators.required],
       leaseExpiryDate: [null, Validators.required],
     });
+
+    this.landRegistryForm.controls["leaseExpiryDate"].valueChanges.subscribe(
+      (data: Date) => {
+        this.leaseYear = differenceInCalendarYears(data, new Date());
+      }
+    );
   }
 }
