@@ -48,7 +48,26 @@ export class FileUploadComponent implements OnInit, OnDestroy {
     return this._fileType;
   }
 
-  fileUploadControl: FileUploadControl;
+  private _uploadedFiles;
+  set uploadedFiles(value) {
+    if (value && this._uploadedFiles != value) {
+      this._uploadedFiles = value;
+      if (value.length > 0) this.fileUploadControl.setValue(value);
+      else {
+        console.log(this.fileUploadControl.value);
+        this.fileUploadControl.clear();
+      }
+    }
+  }
+
+  @Input() get uploadedFiles() {
+    return this._uploadedFiles;
+  }
+
+  fileUploadControl: FileUploadControl = new FileUploadControl({
+    accept: [this.fileTypes],
+  });
+
   hasValidFiles = false;
   private subscription: Subscription;
   public readonly uploadedFile: BehaviorSubject<any> = new BehaviorSubject(
@@ -64,25 +83,18 @@ export class FileUploadComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.fileUploadControl = new FileUploadControl(
-      {
-        listVisible: true,
-        accept: [this.fileTypes],
-        discardInvalid: true,
-        multiple: false,
-      },
-      [
-        FileUploadValidators.accept([this.fileTypes]),
-        FileUploadValidators.filesLimit(this.fileLimit),
-      ]
-    );
+    this.fileUploadControl.setValidators([
+      FileUploadValidators.accept([this.fileTypes]),
+      FileUploadValidators.filesLimit(this.fileLimit),
+    ]);
+    console.log(this.fileLimit);
     this.subscription = this.fileUploadControl.valueChanges.subscribe(
       (values: Array<File>) => {
         console.log(values);
         if (values && values.length > 0) {
           this.hasValidFiles = true;
         } else this.hasValidFiles = false;
-        this.getFiles.emit(values);
+        this.getFiles.emit(this.fileUploadControl.value);
       }
     );
   }
