@@ -1,14 +1,30 @@
 <div class="w-full border-0 border-grey-100 p-4 rounded-sm">
-  <span class="pill text-white" [ngClass]="pillClass">{{ contact.pillLabel == 'lead' ? 'Lead Contact' : 'Associated Contact'  }}</span>
-  <p class="text-lg tracking-normal mt-2 font-medium">{{ contact.name }}</p>
-  <p class="txt--small text-grey w-full mt-1">
-    <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
-      <path d="M56 24c0 17.5-20.3 38-21.2 38.8C34 63.6 33 64 32 64c-1 0-2-0.4-2.8-1.2C28.3 62 8 41.5 8 24 8 10.8 18.8 0 32 0S56 10.8 56 24zM32 36c6.6 0 12-5.4 12-12 0-6.6-5.4-12-12-12s-12 5.4-12 12C20 30.6 25.4 36 32 36z" />
-    </svg>
-    {{ contact.address }}
-  </p>
+  <div class="flex flex-row ">
+    <div>
+      <span class="pill text-white" [ngClass]="pillClass">{{ contact.pillLabel == 'lead' ? 'Lead Contact' : 'Associated Contact'  }}</span>
+      <p class="text-lg tracking-normal mt-2 font-medium">{{ contact.name }}</p>
+      <p class="text-md tracking-normal mt-0 font-medium text-gray-500" *ngIf="contact.position">{{ contact.position }}</p>
+      <p class="txt--small text-gray-500 w-full mt-1">
+        <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
+          <path d="M56 24c0 17.5-20.3 38-21.2 38.8C34 63.6 33 64 32 64c-1 0-2-0.4-2.8-1.2C28.3 62 8 41.5 8 24 8 10.8 18.8 0 32 0S56 10.8 56 24zM32 36c6.6 0 12-5.4 12-12 0-6.6-5.4-12-12-12s-12 5.4-12 12C20 30.6 25.4 36 32 36z" />
+        </svg>
+        {{ contact.address }}
+      </p>
+    </div>
+    <ng-template #menuTrigger>
+    </ng-template>
+    <span class="flex-1"></span>
+    <button *ngIf="hasMenuBtn" class="hover:shadow-md w-10 h-10 rounded-full" (click)="menu.toggle($event);">
+      <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon">
+        <ellipse class="st0" cx="32" cy="10.5" rx="5.9" ry="6" />
+        <ellipse class="st0" cx="32" cy="32" rx="5.9" ry="6" />
+        <ellipse class="st0" cx="32" cy="53.5" rx="5.9" ry="6" />
+      </svg>
+    </button>
+    <p-menu #menu [popup]="true" [model]="items"></p-menu>
+  </div>
 
-  <p class="font-medium -mb-2">Documents</p>
+  <p class="font-medium -mb-2 mt-3">Documents</p>
   <div class="flex flex-col md:flex-row gap-x-2 gap-y-2 w-100">
     <div class="w-100 md:w-1/2">
       <app-document-info
@@ -42,3 +58,48 @@
     </div>
   </div>
 </div>
+
+<p-dialog header="Edit Contact" 
+  [(visible)]="dialogs.showEditContactDialog" 
+  [modal]="true" 
+  [draggable]="false"
+  class="modal--small">
+  <form [formGroup]="contactForm">
+    <fieldset class="form-control p-2">
+      <label for="name">Name: </label>
+      <input id="name" class="px-2" type="text" formControlName="name" [(ngModel)]="contact.name" />
+    </fieldset>
+    <fieldset class="form-control p-2">
+      <label for="position">Position: </label>
+      <input id="name" class="px-2" type="text" formControlName="position" [(ngModel)]="contact.position" />
+    </fieldset>
+    <fieldset class="form-control p-2">
+      <label for="address">Address: </label>
+      <input id="name" class="px-2" type="text" formControlName="address" [(ngModel)]="contact.address" />
+    </fieldset>
+    <div class="flex flex-row -mb-3">
+      <span class="flex-1"></span>
+      <button (click)="dialogs.showEditContactDialog = false" type="button" class="btn btn--ghost">Cancel</button>
+      <button type="submit" class="btn btn--positive ml-2">
+        Save
+      </button>
+    </div>
+  </form>
+
+</p-dialog>
+
+<p-dialog header="Remove Contact" 
+  [(visible)]="dialogs.showRemoveContactDialog" 
+  [modal]="true" 
+  [draggable]="false">
+  <div class="p-4">
+    <h1>Delete {{contact.name}} from this [thing]?</h1>
+  </div>
+  <div class="flex flex-row mt-4 -mb-1">
+    <span class="flex-1"></span>
+    <button (click)="dialogs.showRemoveContactDialog = false" type="button" class="btn btn--ghost">Cancel</button>
+    <button class="btn btn--positive ml-2" (click)="confirmContactDelete()">
+      Delete
+    </button>
+  </div>
+</p-dialog>

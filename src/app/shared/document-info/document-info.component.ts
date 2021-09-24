@@ -16,7 +16,6 @@ export class DocumentInfoComponent implements OnInit {
 
   ngOnInit(): void {
     this.checkIdIsValid()
-    console.log('label: ', this.label)
   }
 
   openUploadDialog(){

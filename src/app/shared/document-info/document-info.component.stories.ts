@@ -16,7 +16,7 @@ export default {
       imports: [CommonModule, VendorsModule],
     }),
     componentWrapperDecorator((story)=> `
-        <div style="margin: 3em">${story}</div>
+        <div style="margin: 3em" class="w-1/4">${story}</div>
       `
     )
   ],
