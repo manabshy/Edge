@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { ComplianceService } from '../compliance.service';
 
 @Component({
   selector: 'app-compliance-checks-shell',
@@ -19,7 +20,10 @@ export class ComplianceChecksShellComponent {
     showContactDialog: false,
     showCompanyDialog: false
   }
-  constructor() { }
+  
+  constructor(
+    public complianceService: ComplianceService
+    ) { }
   
   openDialog(dialog){
     console.log('open dialog: ', dialog)

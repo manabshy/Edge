@@ -65,13 +65,13 @@ import { InfiniteScrollComponent } from "./components/infinite-scroll/infinite-s
 import { GenericMultiSelectControlComponent } from "./generic-multi-select-control/generic-multi-select-control.component";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { DialogService } from "primeng/dynamicdialog";
-import { ContactComplianceCardComponent } from "./contact-compliance-card/contact-compliance-card.component";
-import { DocumentInfoComponent } from "./document-info/document-info.component";
-import { ComplianceChecksShellComponent } from "./compliance-checks-shell/compliance-checks-shell.component";
-import { MessagesComponent } from './messages/messages.component'
+import { ContactComplianceCardComponent } from "./compliance/contact-compliance-card/contact-compliance-card.component";
+import { DocumentInfoComponent } from "./components/document-info/document-info.component";
+import { ComplianceChecksShellComponent } from "./compliance/compliance-checks-shell/compliance-checks-shell.component";
+import { MessagesComponent } from './components/messages/messages.component'
 import { FileUploadComponent } from "./components/file-upload/file-upload.component";
 import { FileListComponent } from "./components/file-list/file-list.component";
-import { BigButtonComponent } from './big-button/big-button.component'
+import { BigButtonComponent } from './components/big-button/big-button.component'
 
 // Vendors module
 import { VendorsModule } from "./vendors.module";

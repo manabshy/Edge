@@ -1,10 +1,12 @@
 import { moduleMetadata, componentWrapperDecorator  } from '@storybook/angular';
 import { CommonModule } from '@angular/common';
 // also exported from '@storybook/angular' if you can deal with breaking changes in 6.1
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { Story, Meta } from '@storybook/angular/types-6-0';
 import { action } from '@storybook/addon-actions'
 import { DocumentInfoComponent } from './document-info.component';
-import { VendorsModule } from '../vendors.module';
+import { VendorsModule } from '../../vendors.module';
+import { FileUploadComponent } from '../file-upload/file-upload.component';
 
 export default {
   title: 'Components/Shared/DocumentInfo',
@@ -12,8 +14,8 @@ export default {
   excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
-      declarations: [DocumentInfoComponent],
-      imports: [CommonModule, VendorsModule],
+      declarations: [DocumentInfoComponent, FileUploadComponent],
+      imports: [CommonModule, VendorsModule, BrowserAnimationsModule],
     }),
     componentWrapperDecorator((story)=> `
         <div style="margin: 3em" class="w-1/4">${story}</div>
@@ -38,7 +40,9 @@ export const IdBlank = DocumentInfo.bind({});
 IdBlank.args = {
   documentType: 'ID',
   label: 'Upload ID',
-  files: []
+  files: [],
+  fileLimit: 1,
+  fileType: ''
 };
 
 export const IdUploadedValid = DocumentInfo.bind({});

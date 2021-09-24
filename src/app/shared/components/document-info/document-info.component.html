@@ -26,3 +26,23 @@
     <span class="underline ml-2">{{label}}</span>
   </button>
 </div>
+
+
+<p-dialog header="Select File(s)" appendTo="body" [(visible)]="showFileUploadDialog" [modal]="true"
+  [draggable]="false" class="modal--small modal--hasFooter">
+  <div style="min-width:500px;min-height:400px">
+    <div>
+      <app-file-upload 
+        [fileLimit]="fileLimit" 
+        [fileType]="fileType" 
+        (getFiles)="tmpFiles = $event">
+      </app-file-upload>
+    </div>
+    <footer class="footer--modal">
+      <div class="btn--container">
+        <button type="button" class="btn btn--ghost" (click)="showFileUploadDialog = false">Cancel</button>
+        <button type="button" class="btn btn--positive" (click)="setSelectedFile()" data-cy="addFiles">Select</button>
+      </div>
+    </footer>
+  </div>
+</p-dialog>

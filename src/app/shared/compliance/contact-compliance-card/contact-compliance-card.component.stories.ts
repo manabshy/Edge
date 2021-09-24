@@ -4,14 +4,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // also exported from '@storybook/angular' if you can deal with breaking changes in 6.1
 import { Story, Meta } from '@storybook/angular/types-6-0';
-import { VendorsModule } from '../vendors.module';
+import { VendorsModule } from '../../vendors.module';
 
 // component under test
 import { ContactComplianceCardComponent } from './contact-compliance-card.component';
 
-// document-info component
-import { DocumentInfoComponent } from '../document-info/document-info.component'
-// document-info stories
+import { FileUploadComponent } from '../../components/file-upload/file-upload.component';
+// document-info component and stories
+import { DocumentInfoComponent } from '../../components/document-info/document-info.component'
 import { 
   IdBlank,
   IdUploadedValid, 
@@ -23,15 +23,15 @@ import {
   ReportUploadedInvalid,
   AdditionalDocumentsBlank,
   AdditionalDocumentUploaded
-} from '../document-info/document-info.component.stories'
+} from '../../components/document-info/document-info.component.stories'
 
 
 export default {
-  title: 'Components/Shared/ContactComplianceCard',
+  title: 'Components/Shared/Compliance/ContactComplianceCard',
   component: ContactComplianceCardComponent,
   decorators: [
     moduleMetadata({
-      declarations: [ContactComplianceCardComponent, DocumentInfoComponent],
+      declarations: [ContactComplianceCardComponent, DocumentInfoComponent, FileUploadComponent],
       imports: [CommonModule, VendorsModule, BrowserAnimationsModule],
     }),
     componentWrapperDecorator((story)=> `

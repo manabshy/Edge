@@ -1,17 +1,20 @@
-import { SharedModule } from "./../../shared.module";
 import { moduleMetadata, componentWrapperDecorator } from "@storybook/angular";
 import { CommonModule } from "@angular/common";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 // also exported from '@storybook/angular' if you can deal with breaking changes in 6.1
 import { Story, Meta } from "@storybook/angular/types-6-0";
 import { FileUploadComponent } from "./file-upload.component";
+import { action } from "@storybook/addon-actions";
+import { VendorsModule } from "../../vendors.module";
 
 export default {
-  title: "Components/FileUpload",
+  title: "Components/Shared/FileUpload",
   component: FileUploadComponent,
+  excludeStories: /.*Data$/,
   decorators: [
     moduleMetadata({
       declarations: [FileUploadComponent],
-      imports: [CommonModule],
+      imports: [CommonModule, VendorsModule, BrowserAnimationsModule],
     }),
     componentWrapperDecorator(
       (story) => `
@@ -21,27 +24,20 @@ export default {
   ],
 } as Meta;
 
-const LettingsTemplate: Story<FileUploadComponent> = (
+export const actionData = {
+  getFiles: action('getFiles')
+}
+const FileUploadTemplate: Story<FileUploadComponent> = (
   args: FileUploadComponent
 ) => ({
-  props: args,
+  props: {
+    ...args,
+    getFiles: actionData.getFiles
+  }
 });
 
-export const SingleEntry = LettingsTemplate.bind({});
-SingleEntry.args = {
-  data: [
-    {
-      valuationDate: new Date(),
-      instructionPriceDirection: "£890,000",
-      shortLetsInstruction: "Yes",
-      longLetsInstruction: "Yes",
-      management: "Yes",
-      zeroDeposit: "No",
-      valuationFiles: [
-        {
-          fileUri: "http://www.google.co.uk",
-        },
-      ],
-    },
-  ],
+export const Primary = FileUploadTemplate.bind({});
+Primary.args = {
+  fileLimit: 1,
+  fileType: '',
 };

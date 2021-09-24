@@ -638,6 +638,15 @@
                 <app-valuation-land-register></app-valuation-land-register>
               </p-accordionTab>
 
+              <p-accordionTab header="Compliance Checks" [(selected)]="activeState[9]">
+                <app-compliance-checks-shell
+                  [contacts]="complianceChecksTemp.contacts"
+                  [checksAreValid]="complianceChecksTemp.checksAreValid"
+                  [checkType]="complianceChecksTemp.checkType"
+                  [message]="complianceChecksTemp.message" >
+                </app-compliance-checks-shell>
+              </p-accordionTab>
+
               <!-- <p-accordionTab header="Status" [(selected)]="activeState[7]"></p-accordionTab>
 
                 <p-accordionTab header="Instruct" [(selected)]="activeState[8]"></p-accordionTab> -->

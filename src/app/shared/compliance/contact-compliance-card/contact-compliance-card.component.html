@@ -7,7 +7,7 @@
       </div>
       <p class="text-lg tracking-normal mt-2 font-medium">{{ contact.name }}</p>
       <p class="text-md tracking-normal mt-0 font-medium text-gray-500" *ngIf="contact.position">{{ contact.position }}</p>
-      <p class="txt--small text-gray-500 w-full mt-1">
+      <p class="txt--small text-gray-500 w-full mt-1" *ngIf="contact.address">
         <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
           <path d="M56 24c0 17.5-20.3 38-21.2 38.8C34 63.6 33 64 32 64c-1 0-2-0.4-2.8-1.2C28.3 62 8 41.5 8 24 8 10.8 18.8 0 32 0S56 10.8 56 24zM32 36c6.6 0 12-5.4 12-12 0-6.6-5.4-12-12-12s-12 5.4-12 12C20 30.6 25.4 36 32 36z" />
         </svg>
