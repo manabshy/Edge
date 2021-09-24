@@ -1,8 +1,13 @@
 import { differenceInCalendarYears } from "date-fns";
 import { FormErrors } from "src/app/core/shared/app-constants";
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ValuationTypeEnum } from "../shared/valuation";
+import {
+  DeedLandReg,
+  LeaseLandReg,
+  NameChangeReg,
+  ValuationTypeEnum,
+} from "../shared/valuation";
 import { FileTypeEnum } from "src/app/core/services/file.service";
 
 @Component({
@@ -12,6 +17,10 @@ import { FileTypeEnum } from "src/app/core/services/file.service";
 export class ValuationsLandRegisterComponent implements OnInit {
   @Input() interestList: any[] = [];
   @Input() valuationStatus: number;
+  @Input() nameChangeReg: NameChangeReg;
+  @Input() deedLandReg: DeedLandReg;
+  @Input() leaseLandReg: LeaseLandReg;
+  @Output() afterFileOperation: EventEmitter<any> = new EventEmitter();
   isValid: boolean = false;
   isTermOfBusinessSigned = false;
   lastEmailDate: Date = new Date();
@@ -43,5 +52,6 @@ export class ValuationsLandRegisterComponent implements OnInit {
 
   getFileNames(fileNames: string[]) {
     console.log(fileNames);
+    this.afterFileOperation.emit();
   }
 }
