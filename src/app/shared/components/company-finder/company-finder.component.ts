@@ -1,7 +1,6 @@
 import { Component, OnInit, OnChanges, Renderer2, ViewChild, ElementRef, Output, EventEmitter, Input, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControlName, FormControl } from '@angular/forms';
 import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
-import { SharedService } from 'src/app/core/services/shared.service';
 import { Company, CompanyAutoCompleteResult } from 'src/app/contactgroups/shared/contact-group';
 import { debounceTime, distinctUntilChanged, switchMap, tap, catchError } from 'rxjs/operators';
 import { Observable, EMPTY } from 'rxjs';
@@ -14,7 +13,7 @@ import { Router } from '@angular/router';
 })
 export class CompanyFinderComponent implements OnInit, OnChanges, OnDestroy {
   @Input() companyNameError = false;
-  @Input() existingCompany: Company;
+  @Input() existingCompany?: Company;
   @Input() canCreateNewCompany = false;
   @Output() companyName = new EventEmitter<any>();
   @Output() selectedCompanyDetails = new EventEmitter<Company>();
@@ -38,9 +37,7 @@ export class CompanyFinderComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private contactGroupService: ContactGroupsService,
     private fb: FormBuilder,
-    private sharedService: SharedService,
-    private renderer: Renderer2,
-    private router: Router
+    // private router: Router
   ) { }
 
   ngOnInit() {
@@ -150,14 +147,14 @@ export class CompanyFinderComponent implements OnInit, OnChanges, OnDestroy {
   enterDetailsManually(isNewCompany?: boolean) {
     console.log({ isNewCompany });
 
-    if (isNewCompany) {
-      this.router.navigate(['/company-centre/detail', 0, 'edit'],
-        { queryParams: { isNewCompany: true, backToOrigin: true, companyName: this.companyNameControl?.value } });
-    } else {
+    // if (isNewCompany) {
+    //   this.router.navigate(['/company-centre/detail', 0, 'edit'],
+    //     { queryParams: { isNewCompany: true, backToOrigin: true, companyName: this.companyNameControl?.value } });
+    // } else {
       console.log(this.companyNameControl.value);
       this.isManualEntry.emit();
       this.companyName.emit(this.companyNameControl.value);
-    }
+    // }
   }
 
   ngOnDestroy() {

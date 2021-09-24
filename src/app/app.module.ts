@@ -76,8 +76,7 @@ import { LoadingBarHttpClientModule } from "@ngx-loading-bar/http-client";
 import { AngularStickyThingsModule } from "@w11k/angular-sticky-things";
 import { CalendarSharedModule } from "./calendar-shared/calendar-shared.module";
 
-import { MsalModule, MsalInterceptor } from "@azure/msal-angular";
-import { Logger, LogLevel } from "msal";
+import { MsalModule } from "@azure/msal-angular";
 import { HeaderComponent } from "./header/header.component";
 
 // SVG ICONS
@@ -124,7 +123,6 @@ const redirectUri = environment.baseRedirectUri
 import { defineLocale } from "ngx-bootstrap/chronos";
 import { deLocale, frLocale, plLocale, enGbLocale } from "ngx-bootstrap/locale";
 import { ProfileComponent } from "./profile/profile.component";
-import { Daterangepicker } from "ng2-daterangepicker";
 
 defineLocale("de", deLocale);
 defineLocale("fr", frLocale);

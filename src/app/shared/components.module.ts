@@ -67,13 +67,14 @@ import { ConfirmationService, MessageService } from "primeng/api";
 import { DialogService } from "primeng/dynamicdialog";
 import { ContactComplianceCardComponent } from "./contact-compliance-card/contact-compliance-card.component";
 import { DocumentInfoComponent } from "./document-info/document-info.component";
-import { ContactComplianceCardsShellComponent } from "./contact-compliance-cards-shell/contact-compliance-cards-shell.component";
+import { ComplianceChecksShellComponent } from "./compliance-checks-shell/compliance-checks-shell.component";
 import { MessagesComponent } from './messages/messages.component'
+import { FileUploadComponent } from "./components/file-upload/file-upload.component";
+import { FileListComponent } from "./components/file-list/file-list.component";
+import { BigButtonComponent } from './big-button/big-button.component'
 
 // Vendors module
 import { VendorsModule } from "./vendors.module";
-import { FileUploadComponent } from "./components/file-upload/file-upload.component";
-import { FileListComponent } from "./components/file-list/file-list.component";
 
 const components = [
   BreadcrumbComponent,
@@ -125,10 +126,11 @@ const components = [
   GenericMultiSelectControlComponent,
   ContactComplianceCardComponent,
   DocumentInfoComponent,
-  ContactComplianceCardsShellComponent,
+  ComplianceChecksShellComponent,
   MessagesComponent,
   FileUploadComponent,
   FileListComponent,
+  BigButtonComponent
 ];
 const pipes = [
   RoundingPipe,

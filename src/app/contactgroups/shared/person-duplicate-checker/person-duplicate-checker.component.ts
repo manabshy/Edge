@@ -1,15 +1,10 @@
-import { Component, OnInit, Renderer2, Input, Output, EventEmitter, OnChanges, ɵConsole } from '@angular/core';
+import { Component, OnInit, Renderer2, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PotentialDuplicateResult, ContactGroup, ContactType } from '../contact-group';
 import { BasicPerson, Person } from 'src/app/shared/models/person';
 import { ContactGroupsService } from '../contact-groups.service';
-import { CompanyService } from 'src/app/company/shared/company.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import { BsModalService } from 'ngx-bootstrap/modal';
+import { Router } from '@angular/router';
 import { SharedService } from 'src/app/core/services/shared.service';
-import { InfoService } from 'src/app/core/services/info.service';
-import { StorageMap } from '@ngx-pwa/local-storage';
-import { ToastrService } from 'ngx-toastr';
 import { debounceTime } from 'rxjs/operators';
 
 @Component({
