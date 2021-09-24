@@ -196,7 +196,7 @@
 </div>
 
 <!-- Email Modal -->
-<p-dialog header="Send Email" [(visible)]="showEmailModal" [modal]="true" [draggable]="false"
+<p-dialog header="Send Email" appendTo="body" [(visible)]="showEmailModal" [modal]="true" [draggable]="false"
   class="modal--medium modal--hasFooter">
   <app-email [contactGroup]="contactGroup" (hideModal)="showEmailModal=false"></app-email>
 </p-dialog>

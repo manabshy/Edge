@@ -20,11 +20,12 @@
   </ng-template>
 </div>
 
-<p-dialog header="Select Files" [(visible)]="openFileDialog" [modal]="true" [draggable]="false"
-  class="modal--small modal--hasFooter">
-  <div>
+<p-dialog header="Select File(s)" appendTo="body" [baseZIndex]="10000" [(visible)]="openFileDialog" [modal]="true"
+  [draggable]="false" class="modal--small modal--hasFooter">
+  <div style="min-width:500px;min-height:400px">
     <div>
-      <app-file-upload [fileLimit]="fileLimit" (getFiles)="tmpFiles = $event"></app-file-upload>
+      <app-file-upload [fileLimit]="fileLimit" [fileType]="fileType" (getFiles)="tmpFiles = $event">
+      </app-file-upload>
     </div>
     <footer class="footer--modal">
       <div class="btn--container">

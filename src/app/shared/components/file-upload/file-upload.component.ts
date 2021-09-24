@@ -12,51 +12,44 @@ import {
   FileUploadValidators,
 } from "@iplab/ngx-file-upload";
 import { BehaviorSubject, Subscription } from "rxjs";
+import { FileTypeEnum } from "src/app/core/services/file.service";
 
 @Component({
   selector: "app-file-upload",
   templateUrl: "./file-upload.component.html",
+  styleUrls: ["./file-upload.component.scss"],
 })
 export class FileUploadComponent implements OnInit, OnDestroy {
   @Input() fileLimit = 50;
 
   private fileTypes: string = "file_extension|";
 
-  private _onlyAcceptDocument: boolean = false;
-  set onlyAcceptDocument(value: boolean) {
-    this._onlyAcceptDocument = value;
+  private _fileType: FileTypeEnum;
+  set fileType(value: FileTypeEnum) {
     if (value) {
-      this.fileTypes = this.fileTypes.concat(".pdf|.doc|.docx");
+      this._fileType = value;
+      switch (value) {
+        case FileTypeEnum.OnlyDocument:
+          this.fileTypes = this.fileTypes.concat(".pdf|.doc|.docx");
+          break;
+        case FileTypeEnum.OnlyImage:
+          this.fileTypes = this.fileTypes.concat("image/*|media_type");
+        case FileTypeEnum.ImageAndDocument:
+          this.fileTypes = this.fileTypes.concat(".pdf|.doc|.docx|.png|.jpeg");
+        case FileTypeEnum.All:
+          this.fileTypes = "file_extension|.pdf|.doc|.docx|image/*|media_type";
+        default:
+          this.fileTypes = "file_extension|.pdf|.doc|.docx|image/*|media_type";
+      }
     }
-  }
-  @Input() get onlyAcceptDocument() {
-    return this._onlyAcceptDocument;
   }
 
-  private _onlyAcceptImage: boolean = false;
-  set onlyAcceptImage(value: boolean) {
-    this._onlyAcceptImage = value;
-    if (value) {
-      this.fileTypes = this.fileTypes.concat("image/*|media_type");
-    }
-  }
-  @Input() get onlyAcceptImage() {
-    return this._onlyAcceptImage;
-  }
-
-  private _acceptAll: boolean = false;
-  set acceptAll(value: boolean) {
-    this._acceptAll = value;
-    if (value) {
-      this.fileTypes = "file_extension|.pdf|.doc|.docx|image/*|media_type";
-    }
-  }
-  @Input() get acceptAll() {
-    return this._acceptAll;
+  @Input() get fileType() {
+    return this._fileType;
   }
 
   fileUploadControl: FileUploadControl;
-  hasFiles = false;
+  hasValidFiles = false;
   private subscription: Subscription;
   public readonly uploadedFile: BehaviorSubject<any> = new BehaviorSubject(
     null
@@ -87,9 +80,9 @@ export class FileUploadComponent implements OnInit, OnDestroy {
       (values: Array<File>) => {
         console.log(values);
         if (values && values.length > 0) {
-          this.hasFiles = true;
-          this.getFiles.emit(values);
-        } else this.hasFiles = false;
+          this.hasValidFiles = true;
+        } else this.hasValidFiles = false;
+        this.getFiles.emit(values);
       }
     );
   }

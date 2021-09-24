@@ -225,7 +225,7 @@
 </ng-template>
 
 <!-- Email Modal -->
-<p-dialog header="Send Email" [(visible)]="showEmailModal" [modal]="true" [draggable]="false"
+<p-dialog header="Send Email" appendTo="body" [(visible)]="showEmailModal" [modal]="true" [draggable]="false"
   class="modal--large modal--hasFooter">
   <app-email [person]="personDetails" (hideModal)="toggleShowEmailModal(false)"></app-email>
 </p-dialog>
@@ -233,7 +233,8 @@
 <!-- Referral Modal -->
 <p-dialog header="Referral" [(visible)]="showRefDialog" [modal]="true" [draggable]="false" class="modal--hasFooter">
   <p data-cy="referralMessage">Click OK to refer <strong>{{personDetails?.addressee}}</strong> to
-    <strong>{{selectedCompany?.referralCompany}}</strong></p>
+    <strong>{{selectedCompany?.referralCompany}}</strong>
+  </p>
   <footer class="footer footer--modal">
     <div class="btn--container">
       <button (click)="cancelReferral()" type="button" class="btn btn--ghost">Cancel</button>
