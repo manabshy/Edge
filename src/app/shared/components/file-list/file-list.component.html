@@ -1,16 +1,23 @@
 <div>
-  <ol class="list" *ngIf="files && files.length > 0,else uploadFile">
-    <li *ngFor="let file of files">
-      <i class="mr-1 fa fa-file"></i>
-      <span class="mr-5">{{file.header}}</span>
-      <span class="mr-1">{{file.description}}</span>
-      <svg aria-hidden="true" width="40" height="40" viewBox="0 0 64 64" class="ml-2 text-gray-400 icon">
-        <path
-          d="M11.4 56.1c0 3.8 3.1 6.9 6.9 6.9h27.4c3.8 0 6.9-3.1 6.9-6.9V14.8H11.4V56.1zM19.9 31.6l4.9-4.9L32 34l7.3-7.3 4.9 4.9 -7.3 7.3 7.3 7.3 -4.9 4.9L32 43.8l-7.3 7.3 -4.9-4.9 7.3-7.3L19.9 31.6zM44 4.4L40.6 1H23.4L20 4.4H8v6.9h48V4.4H44z">
-        </path>
-      </svg>
-    </li>
-  </ol>
+  <div *ngIf="files && files.length > 0,else uploadFile">
+    <div *ngFor="let file of files" class="flex flex-row content-center mb-1">
+      <span>
+        <i class="mr-1 fa fa-file"></i>
+        <span class="tracking-tight truncate">{{file.name}}</span>
+      </span>
+      <span class="flex-1"></span>
+      <span>
+        <span class="mr-0.5 tracking-tight">{{'Uploaded: ' + getUploadedDate(file.lastModifiedDate)}}</span>
+        <button (click)="deleteFile(file.name)" [pTooltip]="'Delete Document'">
+          <svg aria-hidden="true" width="40" height="40" viewBox="0 0 64 64" class="ml-2 text-gray-400 icon">
+            <path
+              d="M11.4 56.1c0 3.8 3.1 6.9 6.9 6.9h27.4c3.8 0 6.9-3.1 6.9-6.9V14.8H11.4V56.1zM19.9 31.6l4.9-4.9L32 34l7.3-7.3 4.9 4.9 -7.3 7.3 7.3 7.3 -4.9 4.9L32 43.8l-7.3 7.3 -4.9-4.9 7.3-7.3L19.9 31.6zM44 4.4L40.6 1H23.4L20 4.4H8v6.9h48V4.4H44z">
+            </path>
+          </svg>
+        </button>
+      </span>
+    </div>
+  </div>
   <ng-template #uploadFile>
     <div class="mt-2">
       <a (click)="openFileDialog = true">
@@ -20,11 +27,12 @@
   </ng-template>
 </div>
 
-<p-dialog header="Select File(s)" appendTo="body" [baseZIndex]="10000" [(visible)]="openFileDialog" [modal]="true"
-  [draggable]="false" class="modal--small modal--hasFooter">
+<p-dialog header="Select File(s)" appendTo="body" [(visible)]="openFileDialog" [modal]="true" [draggable]="false"
+  class="modal--small modal--hasFooter">
   <div style="min-width:500px;min-height:400px">
     <div>
-      <app-file-upload [fileLimit]="fileLimit" [fileType]="fileType" (getFiles)="tmpFiles = $event">
+      <app-file-upload [uploadedFiles]="files" [fileLimit]="fileLimit" [fileType]="fileType"
+        (getFiles)="getFiles($event)">
       </app-file-upload>
     </div>
     <footer class="footer--modal">

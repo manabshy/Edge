@@ -5,6 +5,7 @@ import { BaseRequestOption } from "src/app/shared/models/base-request-option";
 import { BaseStaffMember } from "src/app/shared/models/base-staff-member";
 import { Property } from "src/app/property/shared/property";
 import { Office } from "src/app/shared/models/staff-member";
+import { File } from "src/app/shared/models/file";
 
 export interface ValuationInfo {
   reason?: string;
@@ -55,9 +56,9 @@ export interface Valuation extends ValuationInfo {
   salesValuationBooking?: ValuationBooking;
   lettingsValuationBooking?: ValuationBooking;
   queryResultCount?: number;
-  // hasDisabledAccess?: boolean;
-  // isNewBuild?: boolean;
-  // isRetirementHome?: boolean;
+  deedLandReg?: DeedLandReg;
+  leaseLandReg?: LeaseLandReg;
+  nameChangeReg?: NameChangeReg;
   isPowerOfAttorney?: boolean;
   ccOwner?: boolean;
   adminContact?: Signer;
@@ -85,6 +86,22 @@ export interface ValuationPropertyInfo {
   propertyFeature?: any;
   valuers: BaseStaffMember[];
 }
+
+export interface DeedLandReg {
+  userEnteredOwner?: string;
+  ownerConfirmed?: number;
+  files: File[];
+}
+
+export interface LeaseLandReg {
+  leaseExpiryDate?: Date;
+  files: File[];
+}
+
+export interface NameChangeReg {
+  files: File[];
+}
+
 export interface OfficeMember {
   office: Office;
   staffMembers: BaseStaffMember[];

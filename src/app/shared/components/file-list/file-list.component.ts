@@ -10,6 +10,7 @@ import {
   OnInit,
   Output,
 } from "@angular/core";
+import moment from "moment";
 import { MessageService, PrimeNGConfig } from "primeng/api";
 
 @Component({
@@ -21,7 +22,7 @@ export class FileListComponent implements OnInit, OnDestroy {
   @Input() fileLimit = 50;
   @Input() fileType: FileTypeEnum;
   @Input() files: any[];
-  @Output() deleteFile: EventEmitter<any> = new EventEmitter();
+  // @Output() deleteFile: EventEmitter<any> = new EventEmitter();
   @Output() getFileNames: EventEmitter<any[]> = new EventEmitter();
   openFileDialog = false;
   tmpFiles: File[];
@@ -46,21 +47,24 @@ export class FileListComponent implements OnInit, OnDestroy {
 
       this.fileService.saveFileTemp(formData).subscribe(
         (data) => {
-          if (data && data.result) {
-            this.getFileNames.emit(data.result.files);
+          if (data && data.files) {
+            this.getFileNames.emit(data.files);
             this.openFileDialog = false;
             this.files = [...this.tmpFiles];
           } else {
+            this.tmpFiles = [];
             this.showWarningMessage("Adding file gets error, please try again");
             return;
           }
         },
         (err) => {
+          this.tmpFiles = [];
           this.showWarningMessage(err.message);
           return;
         }
       );
     } else {
+      this.files = [...this.tmpFiles];
       this.showWarningMessage("You must add valid documents");
       return;
     }
@@ -75,4 +79,19 @@ export class FileListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {}
+
+  deleteFile(fileName: string) {
+    if (this.files && this.files.length > 0) {
+      this.files = this.files.filter((x) => x.name != fileName);
+    }
+  }
+
+  getFiles(files) {
+    this.tmpFiles = files;
+  }
+
+  getUploadedDate(date: Date): string {
+    if (date) return moment(date).format("Do MMM YYYY (HH:mm)");
+    return "-";
+  }
 }

@@ -620,13 +620,9 @@
               </p-accordionTab>
 
               <p-accordionTab header="Terms Of Business" [(selected)]="activeState[4]" data-cy="termsOfBusiness">
-                <app-valuations-terms-of-business 
-                  [valuationForm]="valuationForm" 
-                  [interestList]="interestList"
-                  [valuationFiles]="valuation.valuationFiles" 
-                  [formErrors]="formErrors"
-                  [tableType]="valuation.valuationType" 
-                  [valuationStatus]="valuation.valuationStatus"
+                <app-valuations-terms-of-business [valuationForm]="valuationForm" [interestList]="interestList"
+                  [valuationFiles]="valuation.valuationFiles" [formErrors]="formErrors"
+                  [tableType]="valuation.valuationType" [valuationStatus]="valuation.valuationStatus"
                   [dateRequestSent]="valuation.dateRequestSent">
                 </app-valuations-terms-of-business>
               </p-accordionTab>
@@ -634,8 +630,9 @@
               <p-accordionTab *ngIf="false" header="Anti Money Laundering" [(selected)]="activeState[5]">
               </p-accordionTab>
 
-              <p-accordionTab header="Land Register" [(selected)]="activeState[6]">
-                <app-valuation-land-register></app-valuation-land-register>
+              <p-accordionTab class="landRegister" header="Land Register" [(selected)]="activeState[6]">
+                <app-valuation-land-register (afterFileOperation)="scrollSpecificElement('landRegister')">
+                </app-valuation-land-register>
               </p-accordionTab>
 
               <p-accordionTab header="Compliance Checks" [(selected)]="activeState[9]">

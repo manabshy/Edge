@@ -90,8 +90,7 @@ import { Person } from "src/app/shared/models/person";
 })
 export class ValuationDetailEditComponent
   extends BaseComponent
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   showCalendar = false;
   valuationId: number;
   valuation: Valuation;
@@ -438,14 +437,15 @@ export class ValuationDetailEditComponent
     this.setupInstructionForm();
     this.valuationId = +this.route.snapshot.paramMap.get("id");
     this.propertyId = +this.route.snapshot.queryParamMap.get("propertyId");
-    this.lastKnownOwnerId =
-      +this.route.snapshot.queryParamMap.get("lastKnownOwnerId");
-    this.isNewValuation = this.route.snapshot.queryParamMap.get(
+    this.lastKnownOwnerId = +this.route.snapshot.queryParamMap.get(
+      "lastKnownOwnerId"
+    );
+    this.isNewValuation = (this.route.snapshot.queryParamMap.get(
       "isNewValuation"
-    ) as unknown as boolean;
-    this.isFromProperty = this.route.snapshot.queryParamMap.get(
+    ) as unknown) as boolean;
+    this.isFromProperty = (this.route.snapshot.queryParamMap.get(
       "isFromProperty"
-    ) as unknown as boolean;
+    ) as unknown) as boolean;
     this.isNewValuation && !this.isFromProperty
       ? (this.showProperty = true)
       : (this.showProperty = false);
@@ -488,18 +488,16 @@ export class ValuationDetailEditComponent
     this.valuationForm.valueChanges.subscribe((data) => {
       this.valuationForm.patchValue(
         {
-          suggestedAskingRentShortLetMonthly:
-            data.suggestedAskingRentShortLetMonthly
-              ? this.sharedService.transformCurrency(
-                  this.shortLetMonthlyControl.value
-                )
-              : "",
-          suggestedAskingRentLongLetMonthly:
-            data.suggestedAskingRentLongLetMonthly
-              ? this.sharedService.transformCurrency(
-                  this.longLetMonthlyControl.value
-                )
-              : "",
+          suggestedAskingRentShortLetMonthly: data.suggestedAskingRentShortLetMonthly
+            ? this.sharedService.transformCurrency(
+                this.shortLetMonthlyControl.value
+              )
+            : "",
+          suggestedAskingRentLongLetMonthly: data.suggestedAskingRentLongLetMonthly
+            ? this.sharedService.transformCurrency(
+                this.longLetMonthlyControl.value
+              )
+            : "",
           suggestedAskingPrice: data.suggestedAskingPrice
             ? this.sharedService.transformCurrency(
                 this.suggestedAskingPrice.value
@@ -614,19 +612,21 @@ export class ValuationDetailEditComponent
       }
     });
 
-    this.openContactGroupSubscription =
-      this.sharedService.openContactGroupChanged.subscribe((value) => {
+    this.openContactGroupSubscription = this.sharedService.openContactGroupChanged.subscribe(
+      (value) => {
         if (value) {
           this.isAdminContactVisible = value;
         }
-      });
+      }
+    );
 
-    this.openContactGroupSubscription =
-      this.sharedService.removeContactGroupChanged.subscribe((value) => {
+    this.openContactGroupSubscription = this.sharedService.removeContactGroupChanged.subscribe(
+      (value) => {
         if (value) {
           this.removeAdminContact();
         }
-      });
+      }
+    );
 
     this.contactGroupService.noteChanges$.subscribe((data) => {
       if (data) {
@@ -654,6 +654,13 @@ export class ValuationDetailEditComponent
         }
         this.getNextContactNotesPage(this.page);
       });
+  }
+
+  scrollSpecificElement(className: string) {
+    const scrollElement = document.getElementsByClassName(className);
+    if (scrollElement) {
+      this.sharedService.scrollElIntoView(className);
+    }
   }
 
   removeAdminContact() {
@@ -984,10 +991,9 @@ export class ValuationDetailEditComponent
         ) {
           this.adminContactGroup.contactPeople[0].isAdminContact = true;
         }
-        this.adminContactGroup.contactPeople =
-          this.adminContactGroup.contactPeople.concat(
-            this.contactGroup?.contactPeople
-          );
+        this.adminContactGroup.contactPeople = this.adminContactGroup.contactPeople.concat(
+          this.contactGroup?.contactPeople
+        );
         console.log(this.adminContactGroup.contactPeople);
       });
   }
@@ -1300,21 +1306,20 @@ export class ValuationDetailEditComponent
           }
         }
       })
-      .then(() =>{
-        this.valuationService.getToBLink(id)
-        .subscribe(data => {
-          this.valuation.dateRequestSent = data.dateRequestSent
-          if(data.toBSales.length > data.toBLetting.length){
+      .then(() => {
+        this.valuationService.getToBLink(id).subscribe((data) => {
+          this.valuation.dateRequestSent = data.dateRequestSent;
+          if (data.toBSales.length > data.toBLetting.length) {
             this.valuation.valuationFiles = data.toBSales;
             this.valuation.valuationType = 1;
           } else {
             this.valuation.valuationFiles = data.toBLetting;
             this.valuation.valuationType = 2;
           }
-        })
+        });
       })
-      .catch(err => {
-        console.log('err: ', err)
+      .catch((err) => {
+        console.log("err: ", err);
       });
   }
 
@@ -1455,17 +1460,15 @@ export class ValuationDetailEditComponent
         suggestedAskingRentLongLet: valuation.suggestedAskingRentLongLet
           ? valuation.suggestedAskingRentLongLet
           : "",
-        suggestedAskingRentLongLetMonthly:
-          valuation.suggestedAskingRentLongLetMonthly
-            ? valuation.suggestedAskingRentLongLetMonthly
-            : "",
+        suggestedAskingRentLongLetMonthly: valuation.suggestedAskingRentLongLetMonthly
+          ? valuation.suggestedAskingRentLongLetMonthly
+          : "",
         suggestedAskingRentShortLet: valuation.suggestedAskingRentShortLet
           ? valuation.suggestedAskingRentShortLet
           : "",
-        suggestedAskingRentShortLetMonthly:
-          valuation.suggestedAskingRentShortLetMonthly
-            ? valuation.suggestedAskingRentShortLetMonthly
-            : "",
+        suggestedAskingRentShortLetMonthly: valuation.suggestedAskingRentShortLetMonthly
+          ? valuation.suggestedAskingRentShortLetMonthly
+          : "",
         instructLet:
           valuation.suggestedAskingRentLongLetMonthly ||
           valuation.suggestedAskingRentShortLet
@@ -1490,8 +1493,8 @@ export class ValuationDetailEditComponent
         salesOwnerAssociateEmail: this.salesOwnerAssociateEmail,
         salesOwnerAssociateType: this.salesOwnerAssociateType,
         lettingsOwnerAssociateName: this.lettingsOwnerAssociateName,
-        lettingsOwnerAssociateContactNumber:
-          this.lettingsOwnerAssociateContactNumber,
+        lettingsOwnerAssociateContactNumber: this
+          .lettingsOwnerAssociateContactNumber,
         lettingsOwnerAssociateEmail: this.lettingsOwnerAssociateEmail,
         lettingsOwnerAssociateType: this.lettingsOwnerAssociateType,
         propertyStyle: valuation.property?.propertyStyleId,
@@ -2418,8 +2421,9 @@ export class ValuationDetailEditComponent
   }
 
   private setLettingsAgencyTypeValidator() {
-    const lettingsAgencyControl =
-      this.instructionForm.get("lettingsAgencyType");
+    const lettingsAgencyControl = this.instructionForm.get(
+      "lettingsAgencyType"
+    );
 
     if (this.instructLetControl) {
       lettingsAgencyControl.setValidators(Validators.required);
@@ -2514,17 +2518,15 @@ export class ValuationDetailEditComponent
       instruction.askingRentLongLet = this.sharedService.convertStringToNumber(
         this.instLongLetWeeklyControl.value
       );
-      instruction.askingRentLongLetMonthly =
-        this.sharedService.convertStringToNumber(
-          this.instLongLetMonthlyControl.value
-        );
+      instruction.askingRentLongLetMonthly = this.sharedService.convertStringToNumber(
+        this.instLongLetMonthlyControl.value
+      );
       instruction.askingRentShortLet = this.sharedService.convertStringToNumber(
         this.instShortLetWeeklyControl.value
       );
-      instruction.askingRentShortLetMonthly =
-        this.sharedService.convertStringToNumber(
-          this.instShortLetMonthlyControl.value
-        );
+      instruction.askingRentShortLetMonthly = this.sharedService.convertStringToNumber(
+        this.instShortLetMonthlyControl.value
+      );
     }
   }
 
@@ -2628,10 +2630,9 @@ export class ValuationDetailEditComponent
         ? this.adminContact?.ccOwner
         : false;
 
-    valuation.suggestedAskingRentShortLetMonthly =
-      this.sharedService.convertStringToNumber(
-        valuation.suggestedAskingRentShortLetMonthly
-      );
+    valuation.suggestedAskingRentShortLetMonthly = this.sharedService.convertStringToNumber(
+      valuation.suggestedAskingRentShortLetMonthly
+    );
     valuation.property.propertyTypeId = valuation.propertyTypeId;
     valuation.property.propertyStyleId = valuation.propertyStyleId;
     valuation.property.propertyFloorId = valuation.propertyFloorId;
@@ -2646,21 +2647,18 @@ export class ValuationDetailEditComponent
     if (valuation.hasDisabledAccess)
       valuation.propertyFeature.push(PropertyFeatures.Disabled_Access);
 
-    valuation.suggestedAskingRentLongLetMonthly =
-      this.sharedService.convertStringToNumber(
-        valuation.suggestedAskingRentLongLetMonthly
-      );
+    valuation.suggestedAskingRentLongLetMonthly = this.sharedService.convertStringToNumber(
+      valuation.suggestedAskingRentLongLetMonthly
+    );
     valuation.suggestedAskingPrice = this.sharedService.convertStringToNumber(
       valuation.suggestedAskingPrice
     );
-    valuation.suggestedAskingRentShortLet =
-      this.sharedService.convertStringToNumber(
-        valuation.suggestedAskingRentShortLet
-      );
-    valuation.suggestedAskingRentLongLet =
-      this.sharedService.convertStringToNumber(
-        valuation.suggestedAskingRentLongLet
-      );
+    valuation.suggestedAskingRentShortLet = this.sharedService.convertStringToNumber(
+      valuation.suggestedAskingRentShortLet
+    );
+    valuation.suggestedAskingRentLongLet = this.sharedService.convertStringToNumber(
+      valuation.suggestedAskingRentLongLet
+    );
 
     this.checkValuers(valuation);
     if (this.approxLeaseExpiryDate) {
