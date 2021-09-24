@@ -51,6 +51,7 @@ export const LeadContactBlank = LettingsTemplate.bind({});
 LeadContactBlank.args = {
   hasMenuBtn: false,
   contact: {
+    id: 123,
     pillLabel: 'lead',
     name: 'Andrew Whitbread',
     address: 'Flat 4, Clarendon Square, Leamington Spa, CV32 5QX',
@@ -67,6 +68,25 @@ export const LeadContactValid = LettingsTemplate.bind({});
 LeadContactValid.args = {
   hasMenuBtn: false,
   contact: {
+    id :456,
+    pillLabel: 'lead',
+    name: 'Andrew Whitbread',
+    address: 'Flat 4, Clarendon Square, Leamington Spa, CV32 5QX',
+    documents: {
+      idDoc: IdUploadedValid.args, 
+      proofOfAddressDoc: ProofOfAddressUploaded.args, 
+      reportDocs: ReportUploadedValid.args,
+      additionalDocs: AdditionalDocumentUploaded.args
+    }
+  }
+};
+
+export const LeadContactAndUBO= LettingsTemplate.bind({});
+LeadContactAndUBO.args = {
+  hasMenuBtn: false,
+  contact: {
+    id :456,
+    isUBO: true,
     pillLabel: 'lead',
     name: 'Andrew Whitbread',
     address: 'Flat 4, Clarendon Square, Leamington Spa, CV32 5QX',
@@ -83,6 +103,7 @@ export const LeadContactInvalid = LettingsTemplate.bind({});
 LeadContactInvalid.args = {
   hasMenuBtn: false,
   contact: {
+    id: 789,
     pillLabel: 'lead',
     name: 'Andrew Whitbread',
     address: 'Flat 4, Clarendon Square, Leamington Spa, CV32 5QX',
@@ -99,6 +120,7 @@ export const LeadContactMixed = LettingsTemplate.bind({});
 LeadContactMixed.args = {
   hasMenuBtn: false,
   contact: {
+    id: 101,
     pillLabel: 'lead',
     name: 'Andrew Whitbread',
     address: 'Flat 4, Clarendon Square, Leamington Spa, CV32 5QX',
@@ -116,6 +138,7 @@ export const AssociatedContactBlank = LettingsTemplate.bind({});
 AssociatedContactBlank.args = {
   hasMenuBtn: false,
   contact: {
+    id: 121,
     pillLabel: 'Associated',
     name: 'Eddie Murphy',
     address: 'Scottich Parliament Building, Edinburgh, EH99 1SP',
@@ -132,6 +155,7 @@ export const AssociatedContactValid = LettingsTemplate.bind({});
 AssociatedContactValid.args = {
   hasMenuBtn: false,
   contact: {
+    id: 131,
     pillLabel: 'Associated',
     name: 'Ian Blackford',
     address: 'Scottich Parliament Building, Edinburgh, EH99 1SP',
@@ -148,6 +172,7 @@ export const AssociatedContactInvalid = LettingsTemplate.bind({});
 AssociatedContactInvalid.args = {
   hasMenuBtn: false,
   contact: {
+    id: 415,
     pillLabel: 'Associated',
     name: 'Jack Black',
     address: 'Scottich Parliament Building, Edinburgh, EH99 1SP',
@@ -164,6 +189,7 @@ export const ContactWithMenu = LettingsTemplate.bind({});
 ContactWithMenu.args = {
   hasMenuBtn: true,
   contact: {
+    id: 161,
     pillLabel: 'Associated',
     name: 'Jack Black',
     position: 'Director',

@@ -1,7 +1,10 @@
 <div class="w-full border-0 border-grey-100 p-4 rounded-sm">
   <div class="flex flex-row ">
     <div>
-      <span class="pill text-white" [ngClass]="pillClass">{{ contact.pillLabel == 'lead' ? 'Lead Contact' : 'Associated Contact'  }}</span>
+      <div class="flex flex-row">
+        <span class="pill text-white" [ngClass]="pillClass">{{ contact.pillLabel == 'lead' ? 'Lead Contact' : 'Associated Contact'  }}</span>
+        <span class="pill text-white bg-yellow-400" *ngIf="contact.isUBO">UBO</span>
+      </div>
       <p class="text-lg tracking-normal mt-2 font-medium">{{ contact.name }}</p>
       <p class="text-md tracking-normal mt-0 font-medium text-gray-500" *ngIf="contact.position">{{ contact.position }}</p>
       <p class="txt--small text-gray-500 w-full mt-1">
@@ -67,24 +70,24 @@
   <form [formGroup]="contactForm">
     <fieldset class="form-control p-2">
       <label for="name">Name: </label>
-      <input id="name" class="px-2" type="text" formControlName="name" [(ngModel)]="contact.name" />
+      <input id="name" class="px-2" type="text" formControlName="name" [ngModel]="contact.name" />
     </fieldset>
     <fieldset class="form-control p-2">
       <label for="position">Position: </label>
-      <input id="name" class="px-2" type="text" formControlName="position" [(ngModel)]="contact.position" />
+      <input id="name" class="px-2" type="text" formControlName="position" [ngModel]="contact.position" />
     </fieldset>
     <fieldset class="form-control p-2">
       <label for="address">Address: </label>
-      <input id="name" class="px-2" type="text" formControlName="address" [(ngModel)]="contact.address" />
+      <input id="name" class="px-2" type="text" formControlName="address" [ngModel]="contact.address" />
     </fieldset>
-    <div class="flex flex-row -mb-3">
-      <span class="flex-1"></span>
-      <button (click)="dialogs.showEditContactDialog = false" type="button" class="btn btn--ghost">Cancel</button>
-      <button type="submit" class="btn btn--positive ml-2">
-        Save
-      </button>
-    </div>
   </form>
+  <div class="flex flex-row -mb-3">
+    <span class="flex-1"></span>
+    <button (click)="dialogs.showEditContactDialog = false" type="button" class="btn btn--ghost">Cancel</button>
+    <button type="submit" class="btn btn--positive ml-2" (click)="saveContactChanges()">
+      Save
+    </button>
+  </div>
 
 </p-dialog>
 

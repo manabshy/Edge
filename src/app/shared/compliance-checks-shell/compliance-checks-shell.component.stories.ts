@@ -70,7 +70,7 @@ ContactAMLCompletedAndValid.args = {
   },
   contacts: [
     LeadContactValid.args.contact,
-    {...AssociatedContactValid.args.contact, name: 'Jack Black'},
+    {...AssociatedContactValid.args.contact, name: 'Jack Black' },
     AssociatedContactValid.args.contact,
     {...AssociatedContactValid.args.contact, name: 'Eddie Murphy'}
   ]
@@ -132,11 +132,26 @@ CompanyAMLIncomplete.args = {
   checkType: 'AML',
   companyOrContact: 'company',
   message: {
+    type:'warn',
+    text:['AML incomplete']
+  },
+  contacts: [
+    LeadContactValid.args.contact,
+    AssociatedContactValid.args.contact
+  ]
+};
+
+export const CompanyAMLComplete = LettingsTemplate.bind({});
+CompanyAMLComplete.args = {
+  checksAreValid: false,
+  checkType: 'AML',
+  companyOrContact: 'company',
+  message: {
     type:'success',
     text:['AML Completed', 'SmartSearch added: 7th Sep 2020 (11:45)']
   },
   contacts: [
-    LeadContactValid.args.contact,
+    {...LeadContactValid.args.contact, isUBO: true },
     AssociatedContactValid.args.contact
   ]
 };
