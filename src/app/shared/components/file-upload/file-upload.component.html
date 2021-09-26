@@ -1,13 +1,15 @@
 <file-upload class="h-80" [control]="fileUploadControl">
   <ng-template let-isFileDragDropAvailable="isFileDragDropAvailable" #placeholder>
-    <file-upload-drop-zone class="flex" [ngStyle]="{'justify-content':hasValidFiles ? 'end' : 'center' }">
-      <span class="max-w-sm">
+    <file-upload-drop-zone class="flex justify-end">
+      <span>
         <p class="font-black">Drag and Drop</p> files or click here
       </span>
     </file-upload-drop-zone>
   </ng-template>
 
   <ng-template let-i="index" let-file="file" let-control="control" #item>
-    <file-upload-list-item [index]="i" [file]="file" [control]="control">Files</file-upload-list-item>
+    <file-upload-list-item [index]="i" [file]="file" [control]="control">Files
+    </file-upload-list-item>
   </ng-template>
+
 </file-upload>

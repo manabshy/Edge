@@ -20,15 +20,15 @@
   </div>
   <ng-template #uploadFile>
     <div class="mt-2">
-      <a (click)="openFileDialog = true">
+      <a (click)="openFileDialog = true;">
         <i class="mr-2 rounded fa fa-upload" aria-hidden="true"></i>
         <span>{{'Upload ' +header}}</span></a>
     </div>
   </ng-template>
 </div>
 
-<p-dialog header="Select File(s)" appendTo="body" [(visible)]="openFileDialog" [modal]="true" [draggable]="false"
-  class="modal--small modal--hasFooter">
+<p-dialog header="Select File(s)" appendTo="body" [(visible)]="openFileDialog" #dialog [modal]="true"
+  [draggable]="false" class="modal--small modal--hasFooter">
   <div style="min-width:500px;min-height:400px">
     <div>
       <app-file-upload [uploadedFiles]="files" [fileLimit]="fileLimit" [fileType]="fileType"
@@ -37,7 +37,7 @@
     </div>
     <footer class="footer--modal">
       <div class="btn--container">
-        <button type="button" class="btn btn--ghost" (click)="openFileDialog = false">Cancel</button>
+        <button type="button" class="btn btn--ghost" (click)="cancel()">Cancel</button>
         <button type="button" class="btn btn--positive" (click)="setSelectedFile()" data-cy="addFiles">Select</button>
       </div>
     </footer>
