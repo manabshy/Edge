@@ -1,4 +1,4 @@
-export interface File {
+export interface EdgeFile {
   blobName?: string;
   fileName?: string;
   updateDate?: Date;

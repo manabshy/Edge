@@ -5,7 +5,7 @@ import { BaseRequestOption } from "src/app/shared/models/base-request-option";
 import { BaseStaffMember } from "src/app/shared/models/base-staff-member";
 import { Property } from "src/app/property/shared/property";
 import { Office } from "src/app/shared/models/staff-member";
-import { File } from "src/app/shared/models/file";
+import { EdgeFile } from "src/app/shared/models/edgeFile";
 
 export interface ValuationInfo {
   reason?: string;
@@ -90,16 +90,16 @@ export interface ValuationPropertyInfo {
 export interface DeedLandReg {
   userEnteredOwner?: string;
   ownerConfirmed?: number;
-  files?: File[];
+  files?: EdgeFile[];
 }
 
 export interface LeaseLandReg {
   leaseExpiryDate?: Date;
-  files?: File[];
+  files?: EdgeFile[];
 }
 
 export interface NameChangeReg {
-  files?: File[];
+  files?: EdgeFile[];
 }
 
 export interface OfficeMember {
