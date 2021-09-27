@@ -20,7 +20,7 @@ import { PeopleService } from "../core/services/people.service";
 
 const PAGE_SIZE = 20;
 @Component({
-  selector: "app-contactgroups",
+  selector: "app-contact-groups",
   templateUrl: "./contactgroups.component.html",
   styleUrls: ["./contactgroups.component.scss"],
 })

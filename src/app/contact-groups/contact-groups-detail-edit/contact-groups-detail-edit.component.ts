@@ -60,11 +60,10 @@ import { SubSink } from "subsink";
 import { MessageService } from "primeng/api";
 
 @Component({
-  selector: "app-contactgroups-detail-edit",
-  templateUrl: "./contactgroups-detail-edit.component.html",
-  styleUrls: ["./contactgroups-detail-edit.component.scss"],
+  selector: "app-contact-groups-detail-edit",
+  templateUrl: "./contact-groups-detail-edit.component.html"
 })
-export class ContactgroupsDetailEditComponent implements OnInit, OnDestroy {
+export class ContactGroupsDetailEditComponent implements OnInit, OnDestroy {
   @Output() addedPersonDetails = new EventEmitter<any>();
   @Output() addedPersonId = new EventEmitter<number>();
   @Output() hideCanvas = new EventEmitter<boolean>();

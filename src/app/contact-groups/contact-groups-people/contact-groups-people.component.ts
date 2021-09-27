@@ -46,11 +46,10 @@ import { MessageService } from "primeng/api";
 import { HeaderService } from "src/app/core/services/header.service";
 import { CompanyService } from "src/app/company/shared/company.service";
 @Component({
-  selector: "app-contactgroups-people",
-  templateUrl: "./contactgroups-people.component.html",
-  styleUrls: ["./contactgroups-people.component.scss"],
+  selector: "app-contact-groups-people",
+  templateUrl: "./contact-groups-people.component.html"
 })
-export class ContactgroupsPeopleComponent implements OnInit, OnDestroy {
+export class ContactGroupsPeopleComponent implements OnInit, OnDestroy {
   listInfo: any;
   warnings: any;
   isCollapsed = {};

@@ -6,11 +6,11 @@ import { ContactGroupsService } from '../shared/contact-groups.service';
 import * as _ from 'lodash';
 import { ActivatedRoute, Router } from '@angular/router';
 @Component({
-  selector: 'app-contactgroups-list',
-  templateUrl: './contactgroups-list.component.html',
-  styleUrls: ['./contactgroups-list.component.scss']
+  selector: 'app-contact-groups-list',
+  templateUrl: './contact-groups-list.component.html',
+  styleUrls: ['./contact-groups-list.component.scss']
 })
-export class ContactgroupsListComponent implements OnInit, OnChanges {
+export class ContactGroupsListComponent implements OnInit, OnChanges {
   @Input() originalContactGroups: ContactGroupAutoCompleteResult[];
   @Input() searchTerm: string;
   @Input() pageNumber: number;

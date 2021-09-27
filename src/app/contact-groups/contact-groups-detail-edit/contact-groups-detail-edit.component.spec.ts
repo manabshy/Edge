@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { ContactgroupsDetailEditComponent } from "./contactgroups-detail-edit.component";
+import { ContactGroupsDetailEditComponent } from "./contact-groups-detail-edit.component";
 import { Person } from "src/app/shared/models/person";
 import { NO_ERRORS_SCHEMA, DebugElement } from "@angular/core";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
@@ -19,9 +19,9 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { MockPerson } from "src/testing/fixture-data/person-data.json";
 import { MockDropdownListInfo } from "src/testing/fixture-data/dropdown-list-data.json";
 
-describe("ContactgroupsDetailEditComponent", () => {
-  let component: ContactgroupsDetailEditComponent;
-  let fixture: ComponentFixture<ContactgroupsDetailEditComponent>;
+describe("ContactGroupsDetailEditComponent", () => {
+  let component: ContactGroupsDetailEditComponent;
+  let fixture: ComponentFixture<ContactGroupsDetailEditComponent>;
   let debugEl: DebugElement;
   let element: HTMLElement;
   let personForm: FormGroup, firstNameControl: AbstractControl;
@@ -41,7 +41,7 @@ describe("ContactgroupsDetailEditComponent", () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [ContactgroupsDetailEditComponent],
+        declarations: [ContactGroupsDetailEditComponent],
         imports: [
           HttpClientTestingModule,
           // BrowserModule,
@@ -62,7 +62,7 @@ describe("ContactgroupsDetailEditComponent", () => {
 
   beforeEach(() => {
     contactGroupService = TestBed.get(ContactGroupsService);
-    fixture = TestBed.createComponent(ContactgroupsDetailEditComponent);
+    fixture = TestBed.createComponent(ContactGroupsDetailEditComponent);
     component = fixture.componentInstance;
     element = fixture.nativeElement;
     debugEl = fixture.debugElement;

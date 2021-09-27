@@ -21,9 +21,8 @@ import { SidenavService } from "src/app/core/services/sidenav.service";
 import { Subject } from "rxjs";
 
 @Component({
-  selector: "app-contactgroups-detail",
-  templateUrl: "./contactgroups-detail.component.html",
-  styleUrls: ["./contactgroups-detail.component.scss"],
+  selector: "app-contact-groups-detail",
+  templateUrl: "./contact-groups-detail.component.html"
 })
 export class ContactgroupsDetailComponent
   extends BaseComponent

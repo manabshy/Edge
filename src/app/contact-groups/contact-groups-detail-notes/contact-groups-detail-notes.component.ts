@@ -9,11 +9,11 @@ import { takeUntil } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { AppUtils } from 'src/app/core/shared/utils';
 @Component({
-  selector: 'app-contactgroups-detail-notes',
-  templateUrl: './contactgroups-detail-notes.component.html',
-  styleUrls: ['./contactgroups-detail-notes.component.scss']
+  selector: 'app-contact-groups-detail-notes',
+  templateUrl: './contact-groups-detail-notes.component.html',
+  styleUrls: ['./contact-groups-detail-notes.component.scss']
 })
-export class ContactgroupsDetailNotesComponent extends BaseComponent implements OnInit {
+export class ContactGroupsDetailNotesComponent extends BaseComponent implements OnInit {
   person: Person;
   personId: number;
   personNotes: ContactNote[] = [];

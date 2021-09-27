@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { ContactgroupsDetailComponent } from './contactgroups-detail.component';
+import { ContactGroupsListComponent } from './contact-groups-list.component';
 
-describe('ContactgroupsDetailComponent', () => {
-  let component: ContactgroupsDetailComponent;
-  let fixture: ComponentFixture<ContactgroupsDetailComponent>;
+describe('ContactGroupsListComponent', () => {
+  let component: ContactGroupsListComponent;
+  let fixture: ComponentFixture<ContactGroupsListComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ContactgroupsDetailComponent ]
+      declarations: [ ContactGroupsListComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ContactgroupsDetailComponent);
+    fixture = TestBed.createComponent(ContactGroupsListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

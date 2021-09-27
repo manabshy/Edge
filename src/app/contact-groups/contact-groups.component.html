@@ -85,9 +85,9 @@
   </div>
 
   <div class="row__item">
-    <app-contactgroups-list class="appWrapper" [originalContactGroups]='contactGroups' [pageNumber]="page"
+    <app-contact-groups-list class="appWrapper" [originalContactGroups]='contactGroups' [pageNumber]="page"
       [searchTerm]='contactFinderForm.value.searchTerm' [bottomReached]="bottomReached" *ngIf="!isHintVisible">
-    </app-contactgroups-list>
+    </app-contact-groups-list>
 
     <ng-container *ngIf="isMessageVisible && !isHintVisible && page === 1">
       <div class="text-center text-danger">

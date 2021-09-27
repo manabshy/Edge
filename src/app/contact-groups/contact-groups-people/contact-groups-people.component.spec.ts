@@ -1,6 +1,6 @@
 import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 
-import { ContactgroupsPeopleComponent } from './contactgroups-people.component';
+import { ContactGroupsPeopleComponent } from './contact-groups-people.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ModalModule, BsModalService } from 'ngx-bootstrap/modal';
@@ -16,9 +16,9 @@ import { Person } from 'src/app/shared/models/person';
 import { contactGroupDetailsMock } from 'src/testing/fixture-data/contactgroups-details';
 import { ContactGroup } from '../shared/contact-group';
 
-describe('ContactgroupsPeopleComponent', () => {
-  let component: ContactgroupsPeopleComponent;
-  let fixture: ComponentFixture<ContactgroupsPeopleComponent>;
+describe('ContactGroupsPeopleComponent', () => {
+  let component: ContactGroupsPeopleComponent;
+  let fixture: ComponentFixture<ContactGroupsPeopleComponent>;
   let contactGroupsService: ContactGroupsService;
   const contactPerson = contactGroupDetailsMock;
 
@@ -28,7 +28,7 @@ describe('ContactgroupsPeopleComponent', () => {
     // contactGroupsService.getPerson.and.returnValue(of(contactPerson));
     // contactGroupsService.getContactGroupNotes.and.returnValue(of(contactPerson.personNotes));
     TestBed.configureTestingModule({
-      declarations: [ContactgroupsPeopleComponent],
+      declarations: [ContactGroupsPeopleComponent],
       imports: [
         HttpClientTestingModule,
         FormsModule,
@@ -48,7 +48,7 @@ describe('ContactgroupsPeopleComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ContactgroupsPeopleComponent);
+    fixture = TestBed.createComponent(ContactGroupsPeopleComponent);
     component = fixture.componentInstance;
     contactGroupsService = TestBed.inject(ContactGroupsService);
   });
