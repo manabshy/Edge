@@ -22,10 +22,14 @@ import { MessageService, PrimeNGConfig } from "primeng/api";
 export class FileListComponent implements OnInit, OnDestroy {
   @Input() header;
   @Input() fileLimit = 50;
+  @Input() type: string;
   @Input() fileType: FileTypeEnum;
-  @Input() files: any[];
+  files: any[];
   // @Output() deleteFile: EventEmitter<any> = new EventEmitter();
-  @Output() getFileNames: EventEmitter<any[]> = new EventEmitter();
+  @Output() getFileNames: EventEmitter<{
+    file: any[];
+    type: string;
+  }> = new EventEmitter();
   openFileDialog = false;
   tmpFiles: File[];
   fileNames: string[];
@@ -52,7 +56,7 @@ export class FileListComponent implements OnInit, OnDestroy {
       this.fileService.saveFileTemp(formData).subscribe(
         (data) => {
           if (data && data.files) {
-            this.getFileNames.emit(data.files);
+            this.getFileNames.emit({ file: [...data.files], type: this.type });
             this.files = [...this.tmpFiles];
             this.fileUploadClear();
             this.openFileDialog = false;

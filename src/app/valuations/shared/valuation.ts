@@ -90,16 +90,16 @@ export interface ValuationPropertyInfo {
 export interface DeedLandReg {
   userEnteredOwner?: string;
   ownerConfirmed?: number;
-  files: File[];
+  files?: File[];
 }
 
 export interface LeaseLandReg {
   leaseExpiryDate?: Date;
-  files: File[];
+  files?: File[];
 }
 
 export interface NameChangeReg {
-  files: File[];
+  files?: File[];
 }
 
 export interface OfficeMember {

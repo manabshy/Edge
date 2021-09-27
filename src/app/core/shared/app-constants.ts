@@ -162,9 +162,9 @@ export const FormErrors = {
   body: "",
   fromDate: "",
   floorOther: "",
-  titleDeedOwners: "",
+  userEnteredOwner: "",
   leaseExpiryDate: "",
-  isLegalOwner: "",
+  ownerConfirmed: "",
 };
 
 export const ValidationMessages = {
@@ -393,13 +393,13 @@ export const ValidationMessages = {
   floorOther: {
     required: "Please specify a floor",
   },
-  titleDeedOwners: {
+  userEnteredOwner: {
     required: "Title deed owners is required",
   },
   leaseExpiryDate: {
     required: "Lease expiry date is required",
   },
-  isLegalOwner: {
+  ownerConfirmed: {
     required: "Legal owner selection is required",
   },
 };

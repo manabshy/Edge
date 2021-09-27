@@ -2505,6 +2505,8 @@ export class ValuationDetailEditComponent
     this.setValuersValidators();
     this.sharedService.logValidationErrors(this.valuationForm, true);
 
+    this.valuationService.valuationValidationSubject.next(true);
+
     if (this.formErrors["declarableInterest"]) {
       this.accordionIndex = 4;
       this.activeState[4] = true;
@@ -2525,7 +2527,10 @@ export class ValuationDetailEditComponent
       return;
     }
 
-    if (this.valuationForm.valid) {
+    if (
+      this.valuationForm.valid &&
+      this.valuationService.validationControlBs.getValue()
+    ) {
       if (
         this.valuationForm.dirty ||
         this.isOwnerChanged ||

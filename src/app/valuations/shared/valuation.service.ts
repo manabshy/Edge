@@ -24,6 +24,11 @@ export class ValuationService {
 
   contactGroupBs = new BehaviorSubject(null);
 
+  valuationValidationSubject = new Subject<boolean>();
+  valuationValidation$ = this.valuationValidationSubject.asObservable();
+
+  validationControlBs = new BehaviorSubject(false);
+
   constructor(private http: HttpClient, private storage: StorageMap) {}
 
   valuationPageNumberChanged(page: number) {
@@ -42,13 +47,15 @@ export class ValuationService {
   getValuations(
     request: ValuationRequestOption
   ): Observable<Valuation[] | any> {
-    console.log('request for valuations query: ', request)
+    console.log("request for valuations query: ", request);
     const options = this.setQueryParams(request);
     const url = `${AppConstants.baseValuationUrl}/search`;
-    return this.http.get<any>(url, { params: options }).pipe(
-      map((response) => response.result),
-      // tap((data) => console.log("valuations", JSON.stringify(data)))
-    );
+    return this.http
+      .get<any>(url, { params: options })
+      .pipe(
+        map((response) => response.result)
+        // tap((data) => console.log("valuations", JSON.stringify(data)))
+      );
   }
 
   getValuation(valuationId: number): Observable<Valuation | any> {
@@ -61,9 +68,7 @@ export class ValuationService {
 
   getToBLink(valuationId: number): Observable<any> {
     const url = `${AppConstants.esignUrl}/signatureLinks/${valuationId}`;
-    return this.http.get<any>(url).pipe(
-      map((response) => response.result)
-    );
+    return this.http.get<any>(url).pipe(map((response) => response.result));
   }
 
   addValuation(valuation: Valuation): Observable<Valuation | any> {
@@ -102,10 +107,12 @@ export class ValuationService {
   ): Observable<CalendarAvailibility | any> {
     const options = this.setAvailabilityQueryParams(availability);
     const url = `${AppConstants.baseValuationUrl}/valuers/availability`;
-    return this.http.get<any>(url, { params: options }).pipe(
-      map((response) => response.result),
-      tap((data) => console.log("availability", JSON.stringify(data)))
-    );
+    return this.http
+      .get<any>(url, { params: options })
+      .pipe(
+        map((response) => response.result),
+        tap((data) => console.log("availability", JSON.stringify(data)))
+      );
   }
 
   // Extract to instruction service
@@ -143,7 +150,7 @@ export class ValuationService {
     return options;
   }
   setQueryParams(requestOption: ValuationRequestOption) {
-    console.log('requestOption.status: ', requestOption.status)
+    console.log("requestOption.status: ", requestOption.status);
     if (!requestOption.page) {
       requestOption.page = 1;
     }
