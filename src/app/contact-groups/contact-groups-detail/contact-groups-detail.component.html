@@ -39,8 +39,8 @@
       <app-notes *ngSwitchCase="'notes'" [personNotes]="personNotes" [noteData]="dataNote" [pageNumber]="page"
         [bottomReached]="bottomReached" (showMyNotes)="setShowMyNotesFlag($event)">
       </app-notes>
-      <app-shared-contactgroup-list *ngSwitchCase="'contactGroups'" [contactGroups]="searchedPersonContactGroups"
-        [personId]="searchedPersonDetails?.personId"></app-shared-contactgroup-list>
+      <app-shared-contact-group-list *ngSwitchCase="'contactGroups'" [contactGroups]="searchedPersonContactGroups"
+        [personId]="searchedPersonDetails?.personId"></app-shared-contact-group-list>
     </ng-container>
   </div>
 

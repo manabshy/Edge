@@ -10,10 +10,10 @@ import { ContactGroupsService } from '../shared/contact-groups.service';
 import { of } from 'rxjs';
 import { contactPersonMock } from 'src/testing/fixture-data/contact-person-data';
 import { Renderer2, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { ContactGroupsAutocompleteMock } from 'src/testing/fixture-data/contactgroups-autocomplete.json';
+import { ContactGroupsAutocompleteMock } from 'src/testing/fixture-data/contact-groups-autocomplete.json';
 import { MockPerson } from 'src/testing/fixture-data/person-data.json';
 import { Person } from 'src/app/shared/models/person';
-import { contactGroupDetailsMock } from 'src/testing/fixture-data/contactgroups-details';
+import { contactGroupDetailsMock } from 'src/testing/fixture-data/contact-groups-details';
 import { ContactGroup } from '../shared/contact-group';
 
 describe('ContactGroupsPeopleComponent', () => {

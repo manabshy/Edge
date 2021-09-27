@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
+import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service';
 import { SharedService, WedgeError } from 'src/app/core/services/shared.service';
 import { AppConstants, FormErrors, ValidationMessages } from 'src/app/core/shared/app-constants';
 import { ActivatedRoute, Router } from '@angular/router';

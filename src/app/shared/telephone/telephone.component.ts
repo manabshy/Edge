@@ -12,7 +12,7 @@ import { take } from 'rxjs/operators';
 import { Person } from '../models/person';
 import { StaffMember } from '../models/staff-member';
 import { StaffMemberService } from '../../core/services/staff-member.service';
-import { Company } from 'src/app/contactgroups/shared/contact-group';
+import { Company } from 'src/app/contact-groups/shared/contact-group';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 

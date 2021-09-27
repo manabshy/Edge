@@ -200,9 +200,9 @@
 <!-- Contactgroup Finder Modal -->
 <p-dialog header="Signer" [(visible)]="isSignerVisible" [modal]="true" [draggable]="false"
   class="modal--medium modal--hasFooter">
-  <app-contactgroup-finder [showCreateNewCompanyContact]="false" [isSigner]="true"
+  <app-contact-group-finder [showCreateNewCompanyContact]="false" [isSigner]="true"
     (selectedContactGroup)="getSelectedSigner($event)" (isCreatingNewGroup)="createNewSigner()">
-  </app-contactgroup-finder>
+  </app-contact-group-finder>
 </p-dialog>
 
 

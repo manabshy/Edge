@@ -21,8 +21,8 @@ import { PeopleService } from "../core/services/people.service";
 const PAGE_SIZE = 20;
 @Component({
   selector: "app-contact-groups",
-  templateUrl: "./contactgroups.component.html",
-  styleUrls: ["./contactgroups.component.scss"],
+  templateUrl: "./contact-groups.component.html",
+  styleUrls: ["./contact-groups.component.scss"],
 })
 export class ContactGroupsComponent implements OnInit {
   advSearchCollapsed = false;

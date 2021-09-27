@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+// REDUNDANT?
 @Component({
   selector: 'app-property-details-sale',
   templateUrl: './property-details-sale.component.html',

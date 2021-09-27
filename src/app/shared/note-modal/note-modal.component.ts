@@ -2,7 +2,7 @@ import { Component, OnInit, Input} from '@angular/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { Subject } from 'rxjs';
 import { Person } from '../models/person';
-import { ContactGroup } from 'src/app/contactgroups/shared/contact-group';
+import { ContactGroup } from 'src/app/contact-groups/shared/contact-group';
 
 @Component({
   selector: 'app-note-modal',

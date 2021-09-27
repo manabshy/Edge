@@ -33,14 +33,14 @@ import { CompanyInfoComponent } from "./company-info/company-info.component";
 import { NoteFormComponent } from "./note-form/note-form.component";
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
-import { ContactgroupsDetailHomeHelperComponent } from "../shared/contactgroups-detail-home-helper/contactgroups-detail-home-helper.component";
-import { ContactgroupsDetailInstructionsComponent } from "../shared/contactgroups-detail-instructions/contactgroups-detail-instructions.component";
-import { ContactgroupsDetailOffersComponent } from "../shared/contactgroups-detail-offers/contactgroups-detail-offers.component";
-import { ContactgroupsDetailLeadsComponent } from "../shared/contactgroups-detail-leads/contactgroups-detail-leads.component";
-import { ContactgroupsDetaillettingsManagementsComponent } from "../shared/contactgroups-detail-lettings-managements/contactgroups-detail-lettings-managements.component";
-import { ContactgroupsDetailValuationsComponent } from "../shared/contactgroups-detail-valuations/contactgroups-detail-valuations.component";
-import { ContactgroupsDetailTenanciesComponent } from "../shared/contactgroups-detail-tenancies/contactgroups-detail-tenancies.component";
-import { ContactgroupsDetailSearchesComponent } from "../shared/contactgroups-detail-searches/contactgroups-detail-searches.component";
+import { ContactgroupsDetailHomeHelperComponent } from "./contact-groups-detail-home-helper/contact-groups-detail-home-helper.component";
+import { ContactGroupsDetailInstructionsComponent } from "./contact-groups-detail-instructions/contact-groups-detail-instructions.component";
+import { ContactGroupsDetailOffersComponent } from "./contact-groups-detail-offers/contact-groups-detail-offers.component";
+import { ContactGroupsDetailLeadsComponent } from "./contact-groups-detail-leads/contact-groups-detail-leads.component";
+import { ContactGroupsDetaillettingsManagementsComponent } from "./contact-groups-detail-lettings-managements/contact-groups-detail-lettings-managements.component";
+import { ContactGroupsDetailValuationsComponent } from "./contact-groups-detail-valuations/contact-groups-detail-valuations.component";
+import { ContactGroupsDetailTenanciesComponent } from "./contact-groups-detail-tenancies/contact-groups-detail-tenancies.component";
+import { ContactGroupsDetailSearchesComponent } from "./contact-groups-detail-searches/contactgroups-detail-searches.component";
 import { SharedPropertyListComponent } from "./shared-property-list/shared-property-list.component";
 import { SharedLeadRegisterComponent } from "./shared-lead-register/shared-lead-register.component";
 import { AdditionalInfoComponent } from "./additional-info/additional-info.component";
@@ -65,9 +65,10 @@ import { InfiniteScrollComponent } from "./components/infinite-scroll/infinite-s
 import { GenericMultiSelectControlComponent } from "./generic-multi-select-control/generic-multi-select-control.component";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { DialogService } from "primeng/dynamicdialog";
-import { ContactComplianceCardComponent } from "./compliance/contact-compliance-card/contact-compliance-card.component";
+import { ComplianceCardComponent } from "./compliance/compliance-card/compliance-card.component";
 import { DocumentInfoComponent } from "./components/document-info/document-info.component";
 import { ComplianceChecksShellComponent } from "./compliance/compliance-checks-shell/compliance-checks-shell.component";
+import { PureComplianceChecksShellComponent } from "./compliance/pure-compliance-checks-shell/pure-compliance-checks-shell.component"
 import { MessagesComponent } from './components/messages/messages.component'
 import { FileUploadComponent } from "./components/file-upload/file-upload.component";
 import { FileListComponent } from "./components/file-list/file-list.component";
@@ -95,13 +96,13 @@ const components = [
   CompanyInfoComponent,
   NoteFormComponent,
   ContactgroupsDetailHomeHelperComponent,
-  ContactgroupsDetailInstructionsComponent,
-  ContactgroupsDetailOffersComponent,
-  ContactgroupsDetailLeadsComponent,
-  ContactgroupsDetaillettingsManagementsComponent,
-  ContactgroupsDetailValuationsComponent,
-  ContactgroupsDetailTenanciesComponent,
-  ContactgroupsDetailSearchesComponent,
+  ContactGroupsDetailInstructionsComponent,
+  ContactGroupsDetailOffersComponent,
+  ContactGroupsDetailLeadsComponent,
+  ContactGroupsDetaillettingsManagementsComponent,
+  ContactGroupsDetailValuationsComponent,
+  ContactGroupsDetailTenanciesComponent,
+  ContactGroupsDetailSearchesComponent,
   SharedPropertyListComponent,
   SharedLeadRegisterComponent,
   AdditionalInfoComponent,
@@ -124,9 +125,10 @@ const components = [
   CompanyFinderComponent,
   InfiniteScrollComponent,
   GenericMultiSelectControlComponent,
-  ContactComplianceCardComponent,
+  ComplianceCardComponent,
   DocumentInfoComponent,
   ComplianceChecksShellComponent,
+  PureComplianceChecksShellComponent,
   MessagesComponent,
   FileUploadComponent,
   FileListComponent,

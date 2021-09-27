@@ -2,13 +2,13 @@ import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, On
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { NgxFileDropEntry, FileSystemFileEntry, FileSystemDirectoryEntry } from 'ngx-file-drop';
-import { ContactGroup } from 'src/app/contactgroups/shared/contact-group';
+import { ContactGroup } from 'src/app/contact-groups/shared/contact-group';
 import { StaffMemberService } from 'src/app/core/services/staff-member.service';
 import { Email, Person } from '../../models/person';
 import { Office, StaffMember } from '../../models/staff-member';
 import lodash from 'lodash';
 import { SubSink } from 'subsink';
-import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
+import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service';
 import { RequestOption } from 'src/app/core/shared/utils';
 import { PropertyService } from 'src/app/property/shared/property.service';
 import { ValidationService } from 'src/app/core/services/validation.service';

@@ -1,9 +1,9 @@
 import { Component, OnInit, OnChanges, Output, EventEmitter, Input, ViewChild, ElementRef } from '@angular/core';
-import { ContactGroupsService } from 'src/app/contactgroups/shared/contact-groups.service';
+import { ContactGroupsService } from 'src/app/contact-groups/shared/contact-groups.service';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { AppUtils } from '../../core/shared/utils';
-import { ContactGroupAutoCompleteResult, BasicContactGroup, ContactGroup, Signer } from 'src/app/contactgroups/shared/contact-group';
+import { ContactGroupAutoCompleteResult, BasicContactGroup, ContactGroup, Signer } from 'src/app/contact-groups/shared/contact-group';
 import { distinctUntilChanged, switchMap, catchError, tap } from 'rxjs/operators';
 import { PeopleService } from '../../core/services/people.service';
 import { Observable, EMPTY } from 'rxjs';

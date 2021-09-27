@@ -417,7 +417,7 @@ export class ContactGroupsService {
     return this.http.post<ContactNoteData>(url, contactGroupNote).pipe(
       map((response) => response.result),
       tap((data) =>
-        console.log("added  contactgroup note here...", JSON.stringify(data))
+        console.log("added  contact-group note here...", JSON.stringify(data))
       )
     );
   }
@@ -439,7 +439,7 @@ export class ContactGroupsService {
     return this.http.put<ContactNoteData>(url, contactGroupNote).pipe(
       map((response) => response.result),
       tap((data) =>
-        console.log("updated contactgroup note here...", JSON.stringify(data))
+        console.log("updated contact-group note here...", JSON.stringify(data))
       )
     );
   }
