@@ -10,41 +10,43 @@
       <div class="flex flex-col md:flex-row">
         <div class="grid grid--50">
           <div class="flex flex-col">
-            <div>
+            <fieldset [ngClass]="{'invalid': (showFileUploadForDeedError)}">
               <h1 class="mb-2 text-lg font-bold"> Title Deed </h1>
-              <app-file-list [header]="'Title Deed'" [fileLimit]="1" (getFileNames)="getFileNames($event)"
-                [fileType]="fileType" [files]="deedLandReg?.files">
+              <app-file-list [type]="'D'" [header]="'Title Deed'" [fileLimit]="1" (getFileNames)="getFileNames($event)"
+                [fileType]="fileType">
               </app-file-list>
-            </div>
+              <p class="mt-2 message message--negative"> Please Upload Title Deed files</p>
+            </fieldset>
           </div>
           <div class="mt-2">
-            <fieldset [ngClass]="{'invalid': formErrors?.titleDeedOwners}">
+            <fieldset [ngClass]="{'invalid': formErrors?.userEnteredOwner}">
               <label for="titleDeeds">Title Deed Owners</label>
-              <input id="titleDeeds" class="p-2" type="text" [ngClass]="{'invalid': formErrors?.titleDeedOwners}">
-              <p class="message message--negative"> {{formErrors?.titleDeedOwners}}</p>
+              <input id="titleDeeds" class="p-2" type="text" formControlName="userEnteredOwner"
+                [ngClass]="{'invalid': formErrors?.userEnteredOwner}">
+              <p class="message message--negative"> {{formErrors?.userEnteredOwner}}</p>
             </fieldset>
           </div>
           <div class="mt-3">
-            <fieldset>
+            <fieldset [ngClass]="{'invalid': formErrors?.ownerConfirmed}">
               <span class="font-black">Is/Are[Contact Group] the legal owner(s) on the title deed?</span>
-              <span id="isLegalOwner" class="mt-2 radio radio--inline">
+              <span id="ownerConfirmed" class="mt-2 radio radio--inline">
                 <span>
-                  <input class="p-2" type="radio" id="isLegalOwnerYes" value="1" name="isLegalOwner"
-                    formControlName="isLegalOwner" data-cy="isLegalOwnerYes">
+                  <input class="p-2" type="radio" id="isLegalOwnerYes" value="1" name="ownerConfirmed"
+                    formControlName="ownerConfirmed" data-cy="isLegalOwnerYes">
                   <label for="isLegalOwnerYes">Yes</label>
                 </span>
                 <span>
-                  <input class="p-2" type="radio" id="isLegalOwnerNo" value="0" name="isLegalOwner"
-                    formControlName="isLegalOwner" data-cy="isLegalOwnerNo">
+                  <input class="p-2" type="radio" id="isLegalOwnerNo" value="0" name="ownerConfirmed"
+                    formControlName="ownerConfirmed" data-cy="isLegalOwnerNo">
                   <label for="isLegalOwnerNo">No</label>
                 </span>
                 <span>
-                  <input class="p-2" type="radio" id="isLegalOwnerPartial" value="2" name="isLegalOwner"
-                    formControlName="isLegalOwner" data-cy="isLegalOwnerPartial">
+                  <input class="p-2" type="radio" id="isLegalOwnerPartial" value="2" name="ownerConfirmed"
+                    formControlName="ownerConfirmed" data-cy="isLegalOwnerPartial">
                   <label for="isLegalOwnerPartial">Partial Match (Name Change)</label>
                 </span>
               </span>
-              <p class="message message--negative"> {{formErrors?.isLegalOwner}}</p>
+              <p class="mt-2 message message--negative"> {{formErrors?.ownerConfirmed}}</p>
             </fieldset>
           </div>
         </div>
@@ -52,8 +54,12 @@
         <div class="grid grid--50 grid--dividerLeft">
           <div class="flex flex-col">
             <div>
-              <h1 class="mb-2 text-lg font-bold"> Lease </h1>
-              <app-file-list [files]="leaseLandReg?.files" [header]="'Lease'" [fileLimit]="1"></app-file-list>
+              <fieldset [ngClass]="{'invalid': (showFileUploadForLeaseError)}">
+                <h1 class="mb-2 text-lg font-bold"> Lease </h1>
+                <app-file-list [type]="'L'" [header]="'Lease'" [fileLimit]="1">
+                </app-file-list>
+                <p class="mt-2 message message--negative"> Please Upload Lease files</p>
+              </fieldset>
             </div>
             <div class="mt-2">
               <div class="flex flex-col md:flex-row">
