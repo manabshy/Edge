@@ -2531,16 +2531,17 @@ export class ValuationDetailEditComponent
       this.valuationForm.valid &&
       this.valuationService.validationControlBs.getValue()
     ) {
-      if (
-        this.valuationForm.dirty ||
-        this.isOwnerChanged ||
-        this.isPropertyChanged ||
-        this.isAdminContactChanged
-      ) {
-        this.addOrUpdateValuation();
-      } else {
-        this.onSaveComplete();
-      }
+      this.addOrUpdateValuation();
+      // if (
+      //   this.valuationForm.dirty ||
+      //   this.isOwnerChanged ||
+      //   this.isPropertyChanged ||
+      //   this.isAdminContactChanged
+      // ) {
+      //   this.addOrUpdateValuation();
+      // } else {
+      //   this.onSaveComplete();
+      // }
     } else {
       this.errorMessage = {} as WedgeError;
       this.errorMessage.displayMessage = "Please correct validation errors";

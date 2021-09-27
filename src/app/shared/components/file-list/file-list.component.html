@@ -7,7 +7,7 @@
       </span>
       <span class="flex-1"></span>
       <span>
-        <span class="mr-0.5 tracking-tight">{{'Uploaded: ' + getUploadedDate(file.lastModifiedDate)}}</span>
+        <span class="mr-0.5 tracking-tight">{{'Uploaded: ' + getUploadedDate(file.lastModified)}}</span>
         <button (click)="deleteFile(file.name)" [pTooltip]="'Delete Document'">
           <svg aria-hidden="true" width="40" height="40" viewBox="0 0 64 64" class="ml-2 text-gray-400 icon">
             <path

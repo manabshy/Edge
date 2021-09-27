@@ -14,6 +14,7 @@ import {
 } from "@angular/core";
 import moment from "moment";
 import { MessageService, PrimeNGConfig } from "primeng/api";
+import { EdgeFile } from "../../models/edgeFile";
 
 @Component({
   selector: "app-file-list",
@@ -24,7 +25,26 @@ export class FileListComponent implements OnInit, OnDestroy {
   @Input() fileLimit = 50;
   @Input() type: string;
   @Input() fileType: FileTypeEnum;
-  files: any[];
+
+  private _edgeFileList: EdgeFile[];
+  set edgeFileList(value) {
+    if (value && this._edgeFileList != value) {
+      this.files = [];
+      value.forEach((x) => {
+        this.files.push({
+          name: x.fileName,
+          lastModified: x.updateDate ? new Date(x.updateDate) : null,
+        });
+      });
+      this._edgeFileList = value;
+    }
+  }
+
+  @Input() get edgeFileList(): EdgeFile[] {
+    return this._edgeFileList;
+  }
+
+  files: any[] = [];
   // @Output() deleteFile: EventEmitter<any> = new EventEmitter();
   @Output() getFileNames: EventEmitter<{
     file: any[];
@@ -101,6 +121,9 @@ export class FileListComponent implements OnInit, OnDestroy {
   deleteFile(fileName: string) {
     if (this.files && this.files.length > 0) {
       this.files = this.files.filter((x) => x.name != fileName);
+      this.edgeFileList = this.edgeFileList.filter(
+        (x) => x.fileName != fileName
+      );
       // let file = this.files.find((c) => c.name == fileName);
       // if (file) this.fileUploadComponent.removeFile(file);
     }

@@ -95,9 +95,18 @@ export class ValuationsLandRegisterComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.landRegistryForm = this.fb.group({
-      userEnteredOwner: [null, Validators.required],
-      ownerConfirmed: [null, Validators.required],
-      leaseExpiryDate: [null, Validators.required],
+      userEnteredOwner: [
+        this.deedLandReg.userEnteredOwner,
+        Validators.required,
+      ],
+      ownerConfirmed: [
+        this.deedLandReg.ownerConfirmed?.toString(),
+        Validators.required,
+      ],
+      leaseExpiryDate: [
+        new Date(this.leaseLandReg.leaseExpiryDate),
+        Validators.required,
+      ],
     });
 
     this.landRegistryForm.controls["leaseExpiryDate"].valueChanges.subscribe(
