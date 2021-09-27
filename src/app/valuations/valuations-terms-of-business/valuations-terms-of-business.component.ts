@@ -40,7 +40,12 @@ export class ValuationsTermsOfBusinessComponent implements OnInit, OnChanges {
   }
 
   checkToBIsSigned(){
-    this.isTermOfBusinessSigned = !!this.valuationFiles.length;
+    try{
+      this.isTermOfBusinessSigned = !!this.valuationFiles.length;
+    } catch(e){
+      console.error(e)
+      this.isTermOfBusinessSigned = false
+    }
   }
 
 }

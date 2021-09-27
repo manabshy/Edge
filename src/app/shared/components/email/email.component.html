@@ -139,9 +139,9 @@
 <!-- Contactgroup Finder Modal -->
 <p-dialog header="Find contact group" [(visible)]="isContactGroupFinderVisible" [modal]="true" [draggable]="false"
   class="modal--medium modal--hasFooter">
-  <app-contactgroup-finder class="appWrapper" [isFull]="true"
+  <app-contact-group-finder class="appWrapper" [isFull]="true"
     (fullSelectedContactGroup)="getSelectedContactGroup($event)"
-    (isCreatingNewGroup)="isContactGroupFinderVisible=false"></app-contactgroup-finder>
+    (isCreatingNewGroup)="isContactGroupFinderVisible=false"></app-contact-group-finder>
 </p-dialog>
 
 <!-- Contactgroup Finder Modal -->

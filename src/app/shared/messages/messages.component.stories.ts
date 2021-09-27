@@ -1,7 +1,6 @@
 import { moduleMetadata, componentWrapperDecorator  } from '@storybook/angular';
 import { CommonModule } from '@angular/common';
 import { Story, Meta } from '@storybook/angular/types-6-0';
-import { VendorsModule } from '../../vendors.module';
 
 // component under test
 import { MessagesComponent } from './messages.component';

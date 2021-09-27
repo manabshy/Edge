@@ -1,15 +1,20 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MenuItem } from "primeng/api";
 
+/***
+ * @description shows company or contact compliance data such as ID, proof of address, reports and additional documents
+ */
 @Component({
-  selector: 'app-contact-compliance-card',
-  templateUrl: './contact-compliance-card.component.html'
+  selector: 'app-compliance-card',
+  templateUrl: './compliance-card.component.html'
 })
-export class ContactComplianceCardComponent implements OnInit {
+export class ComplianceCardComponent implements OnInit {
 
-  @Input() contact: any
+  @Input() person: any
   @Input() hasMenuBtn: boolean
+  @Output() fileUploaded: EventEmitter<any> = new EventEmitter
+  @Output() fileDeleted: EventEmitter<any> = new EventEmitter
   
   contactForm: FormGroup = new FormGroup({
     name: new FormControl(),
@@ -26,9 +31,8 @@ export class ContactComplianceCardComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.pillClass = this.contact.pillLabel == 'lead' ? 'pill--positive' : 'bg-gray-400'
+    this.pillClass = this.person.pillLabel == 'lead' ? 'pill--positive' : 'bg-gray-400'
     this.setMenuItems()
-    console.log('this.contact: ', this.contact)
   }
 
   private setMenuItems() {
@@ -37,7 +41,6 @@ export class ContactComplianceCardComponent implements OnInit {
         label: 'Edit Contact',
         icon: 'fa fa-edit',
         command: (ev) => {
-          console.log('edit contact: ', ev)
           this.dialogs.showEditContactDialog = !this.dialogs.showEditContactDialog
         },
       },
@@ -45,16 +48,14 @@ export class ContactComplianceCardComponent implements OnInit {
         label: 'Remove Contact',
         icon: 'fa fa-times',
         command: (ev) => {
-          console.log('Remove contact: ', ev)
           this.dialogs.showRemoveContactDialog = !this.dialogs.showRemoveContactDialog
         },
       },
       {
-        label: this.contact.isUBO ? 'Remove as UBO' : 'Make UBO',
-        icon:  this.contact.isUBO ? 'fa fa-toggle-off' : 'fa fa-toggle-on',
+        label: this.person.isUBO ? 'Remove as UBO' : 'Make UBO',
+        icon:  this.person.isUBO ? 'fa fa-toggle-off' : 'fa fa-toggle-on',
         command: (ev) => {
-          console.log('Toggling UBO: ', ev)
-          this.contact.isUBO = !this.contact.isUBO
+          this.person.isUBO = !this.person.isUBO
           this.setMenuItems() // refreshes options again
           // TODO: save
         },
@@ -63,12 +64,14 @@ export class ContactComplianceCardComponent implements OnInit {
   }
 
   public confirmContactDelete() :void {
-    console.log('user has confirmed deletion of ', this.contact.id)
+    console.log('user has confirmed deletion of ', this.person.id)
     this.dialogs.showRemoveContactDialog = false
+    // TODO wire up contact removal/deletion
   }
 
   public saveContactChanges() :void {
     this.dialogs.showEditContactDialog = false
     console.log('this.contactForm', this.contactForm.value)
+    // TODO wire up save
   }
 }

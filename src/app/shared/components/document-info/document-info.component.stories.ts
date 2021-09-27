@@ -38,7 +38,7 @@ const DocumentInfo: Story<DocumentInfoComponent> = (args: DocumentInfoComponent)
 
 export const IdBlank = DocumentInfo.bind({});
 IdBlank.args = {
-  documentType: 'ID',
+  documentType: 'id',
   label: 'Upload ID',
   files: [],
   fileLimit: 1,
@@ -47,9 +47,9 @@ IdBlank.args = {
 
 export const IdUploadedValid = DocumentInfo.bind({});
 IdUploadedValid.args = {
-  documentType: 'ID',
+  documentType: 'id',
   files: [{
-    id:0,
+    id: 0,
     label: 'ID',
     uploadDate: '07/04/21',
     expiryDate: '12/11/26'
@@ -58,9 +58,9 @@ IdUploadedValid.args = {
 
 export const IdUploadedInvalid = DocumentInfo.bind({});
 IdUploadedInvalid.args = {
-  documentType: 'ID',
+  documentType: 'id',
   files: [{
-    id:0,
+    id: 0,
     label: 'ID',
     uploadDate: '07/04/21',
     expiryDate: '20/09/21'
@@ -79,7 +79,7 @@ ProofOfAddressUploaded.args = {
   documentType: 'proof-of-address',
   label: 'Upload Proof Of Address',
   files: [{
-    id:0,
+    id: 0,
     label: 'Proof of Address',
     uploadDate: '20/09/21'
   }]
@@ -97,7 +97,7 @@ ReportUploadedValid.args = {
   documentType: 'report',
   label: 'Upload Report',
   files: [{
-    id:0,
+    id: 0,
     label: 'Report',
     valid: true,
     uploadDate: '20/09/21'
@@ -109,7 +109,7 @@ ReportUploadedInvalid.args = {
   documentType: 'report',
   label: 'Upload Report',
   files: [{
-    id:0,
+    id: 0,
     label: 'Report',
     valid: false,
     uploadDate: '20/09/21'
@@ -128,7 +128,7 @@ AdditionalDocumentUploaded.args = {
   documentType: 'additional-documents',
   label: 'Upload Additional Documents',
   files: [{
-    id:0,
+    id: 0,
     label: 'Document',
     uploadDate: '01/09/21'
   }]

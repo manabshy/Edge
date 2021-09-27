@@ -1,16 +1,14 @@
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { StorageMap } from "@ngx-pwa/local-storage";
 import { Observable } from "rxjs";
 import { tap, map } from "rxjs/operators";
-import { BaseEmail } from "src/app/shared/models/base-email";
 import { AppConstants } from "../shared/app-constants";
 
 @Injectable({
   providedIn: "root",
 })
 export class FileService {
-  constructor(private http: HttpClient, private storage: StorageMap) {}
+  constructor(private http: HttpClient) {}
 
   saveFileTemp(fileArr: FormData): Observable<File[] | any> {
     const url = `${AppConstants.baseFileUrl}` + "/upload";
@@ -20,6 +18,7 @@ export class FileService {
       map((response) => response.result)
     );
   }
+
 }
 
 export enum FileTypeEnum {

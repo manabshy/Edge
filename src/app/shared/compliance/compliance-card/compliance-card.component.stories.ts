@@ -1,37 +1,26 @@
 import { moduleMetadata, componentWrapperDecorator  } from '@storybook/angular';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 // also exported from '@storybook/angular' if you can deal with breaking changes in 6.1
 import { Story, Meta } from '@storybook/angular/types-6-0';
+import { action } from '@storybook/addon-actions';
 import { VendorsModule } from '../../vendors.module';
 
 // component under test
-import { ContactComplianceCardComponent } from './contact-compliance-card.component';
+import { ComplianceCardComponent } from './compliance-card.component';
 
-import { FileUploadComponent } from '../../components/file-upload/file-upload.component';
 // document-info component and stories
 import { DocumentInfoComponent } from '../../components/document-info/document-info.component'
-import { 
-  IdBlank,
-  IdUploadedValid, 
-  IdUploadedInvalid, 
-  ProofOfAddressBlank,
-  ProofOfAddressUploaded,
-  ReportBlank,
-  ReportUploadedValid, 
-  ReportUploadedInvalid,
-  AdditionalDocumentsBlank,
-  AdditionalDocumentUploaded
-} from '../../components/document-info/document-info.component.stories'
-
+import { IdBlank, IdUploadedValid, IdUploadedInvalid,  ProofOfAddressBlank, ProofOfAddressUploaded, ReportBlank, ReportUploadedValid,  ReportUploadedInvalid, AdditionalDocumentsBlank, AdditionalDocumentUploaded } from '../../components/document-info/document-info.component.stories'
+import { FileUploadComponent } from '../../components/file-upload/file-upload.component';
 
 export default {
-  title: 'Components/Shared/Compliance/ContactComplianceCard',
-  component: ContactComplianceCardComponent,
+  title: 'Components/Shared/Compliance/ComplianceCard',
+  excludeStories: /.*Data$/,
+  component: ComplianceCardComponent,
   decorators: [
     moduleMetadata({
-      declarations: [ContactComplianceCardComponent, DocumentInfoComponent, FileUploadComponent],
+      declarations: [ComplianceCardComponent, DocumentInfoComponent, FileUploadComponent],
       imports: [CommonModule, VendorsModule, BrowserAnimationsModule],
     }),
     componentWrapperDecorator((story)=> `
@@ -39,18 +28,25 @@ export default {
       `
     )
   ],
-  
 } as Meta;
 
-const LettingsTemplate: Story<ContactComplianceCardComponent> = (args: ContactComplianceCardComponent) => ({
-  props: args,
+export const actionsData = {
+  fileUploaded: action('fileUploaded'),
+  fileDeleted: action('fileDeleted'),
+}
+const ComplianceCardTemplate: Story<ComplianceCardComponent> = (args: ComplianceCardComponent) => ({
+  props: {
+    ...args,
+    fileUploaded: actionsData.fileUploaded,
+    fileDeleted: actionsData.fileDeleted
+  }
 });
 
-// Lead contact stories
-export const LeadContactBlank = LettingsTemplate.bind({});
+// Lead person stories
+export const LeadContactBlank = ComplianceCardTemplate.bind({});
 LeadContactBlank.args = {
   hasMenuBtn: false,
-  contact: {
+  person: {
     id: 123,
     pillLabel: 'lead',
     name: 'Andrew Whitbread',
@@ -64,10 +60,10 @@ LeadContactBlank.args = {
   }
 };
 
-export const LeadContactValid = LettingsTemplate.bind({});
+export const LeadContactValid = ComplianceCardTemplate.bind({});
 LeadContactValid.args = {
   hasMenuBtn: false,
-  contact: {
+  person: {
     id :456,
     pillLabel: 'lead',
     name: 'Andrew Whitbread',
@@ -81,10 +77,10 @@ LeadContactValid.args = {
   }
 };
 
-export const LeadContactAndUBO= LettingsTemplate.bind({});
+export const LeadContactAndUBO= ComplianceCardTemplate.bind({});
 LeadContactAndUBO.args = {
   hasMenuBtn: false,
-  contact: {
+  person: {
     id :456,
     isUBO: true,
     pillLabel: 'lead',
@@ -99,10 +95,10 @@ LeadContactAndUBO.args = {
   }
 };
 
-export const LeadContactInvalid = LettingsTemplate.bind({});
+export const LeadContactInvalid = ComplianceCardTemplate.bind({});
 LeadContactInvalid.args = {
   hasMenuBtn: false,
-  contact: {
+  person: {
     id: 789,
     pillLabel: 'lead',
     name: 'Andrew Whitbread',
@@ -116,10 +112,10 @@ LeadContactInvalid.args = {
   }
 };
 
-export const LeadContactMixed = LettingsTemplate.bind({});
+export const LeadContactMixed = ComplianceCardTemplate.bind({});
 LeadContactMixed.args = {
   hasMenuBtn: false,
-  contact: {
+  person: {
     id: 101,
     pillLabel: 'lead',
     name: 'Andrew Whitbread',
@@ -133,11 +129,11 @@ LeadContactMixed.args = {
   }
 };
 
-// Associated contact stories
-export const AssociatedContactBlank = LettingsTemplate.bind({});
+// Associated person stories
+export const AssociatedContactBlank = ComplianceCardTemplate.bind({});
 AssociatedContactBlank.args = {
   hasMenuBtn: false,
-  contact: {
+  person: {
     id: 121,
     pillLabel: 'Associated',
     name: 'Eddie Murphy',
@@ -151,10 +147,10 @@ AssociatedContactBlank.args = {
   }
 };
 
-export const AssociatedContactValid = LettingsTemplate.bind({});
+export const AssociatedContactValid = ComplianceCardTemplate.bind({});
 AssociatedContactValid.args = {
   hasMenuBtn: false,
-  contact: {
+  person: {
     id: 131,
     pillLabel: 'Associated',
     name: 'Ian Blackford',
@@ -168,10 +164,10 @@ AssociatedContactValid.args = {
   }
 };
 
-export const AssociatedContactInvalid = LettingsTemplate.bind({});
+export const AssociatedContactInvalid = ComplianceCardTemplate.bind({});
 AssociatedContactInvalid.args = {
   hasMenuBtn: false,
-  contact: {
+  person: {
     id: 415,
     pillLabel: 'Associated',
     name: 'Jack Black',
@@ -185,10 +181,10 @@ AssociatedContactInvalid.args = {
   }
 };
 
-export const ContactWithMenu = LettingsTemplate.bind({});
+export const ContactWithMenu = ComplianceCardTemplate.bind({});
 ContactWithMenu.args = {
   hasMenuBtn: true,
-  contact: {
+  person: {
     id: 161,
     pillLabel: 'Associated',
     name: 'Jack Black',

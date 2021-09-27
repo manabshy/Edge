@@ -23,6 +23,7 @@ export class ValuationService {
   valuationPageNumberChanges$ = this.valuationPageNumberSubject.asObservable();
 
   contactGroupBs = new BehaviorSubject(null);
+  public readonly contactGroup$ = this.contactGroupBs.asObservable();
 
   valuationValidationSubject = new Subject<boolean>();
   valuationValidation$ = this.valuationValidationSubject.asObservable();

@@ -51,11 +51,11 @@ import { SharedContactgroupListComponent } from "./shared-contactgroup-list/shar
 import { SidenavItemComponent } from "./components/sidenav-item/sidenav-item.component";
 import { RedactedTableComponent } from "./components/redacted-table/redacted-table.component";
 import { PropertyCardComponent } from "./components/property-card/property-card.component";
-import { ContactgroupCardComponent } from "./components/contactgroup-card/contactgroup-card.component";
+import { ContactgroupCardComponent } from "./components/contactgroup-card/contact-group-card.component";
 import { MarketingPreferencesComponent } from "./components/marketing-preferences/marketing-preferences.component";
 import { PropertyDetailPhotosComponent } from "./components/property-detail-photos/property-detail-photos.component";
 import { PropertyDetailMapComponent } from "./components/property-detail-map/property-detail-map.component";
-import { ContactgroupFinderComponent } from "./components/contactgroup-finder/contactgroup-finder.component";
+import { ContactgroupFinderComponent } from "./components/contactgroup-finder/contact-group-finder.component";
 import { ImportantMessagesComponent } from "./components/important-messages/important-messages.component";
 import { EmailComponent } from "./components/email/email.component";
 import { EmailSignatureComponent } from "./components/email-signature/email-signature.component";
@@ -65,7 +65,7 @@ import { InfiniteScrollComponent } from "./components/infinite-scroll/infinite-s
 import { GenericMultiSelectControlComponent } from "./generic-multi-select-control/generic-multi-select-control.component";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { DialogService } from "primeng/dynamicdialog";
-import { ContactComplianceCardComponent } from "./compliance/contact-compliance-card/contact-compliance-card.component";
+import { ComplianceCardComponent } from "./compliance/compliance-card/compliance-card.component";
 import { DocumentInfoComponent } from "./components/document-info/document-info.component";
 import { ComplianceChecksShellComponent } from "./compliance/compliance-checks-shell/compliance-checks-shell.component";
 import { MessagesComponent } from './components/messages/messages.component'
@@ -124,7 +124,7 @@ const components = [
   CompanyFinderComponent,
   InfiniteScrollComponent,
   GenericMultiSelectControlComponent,
-  ContactComplianceCardComponent,
+  ComplianceCardComponent,
   DocumentInfoComponent,
   ComplianceChecksShellComponent,
   MessagesComponent,
@@ -169,4 +169,4 @@ const directives = [AutocompleteOffDirective, NoDoubleTapDirective];
     SmsModalComponent,
   ],
 })
-export class ComponentsModule {}
+export class ComponentsModule { }

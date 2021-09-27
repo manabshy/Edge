@@ -2,16 +2,16 @@
   <div class="flex flex-row ">
     <div>
       <div class="flex flex-row">
-        <span class="pill text-white" [ngClass]="pillClass">{{ contact.pillLabel == 'lead' ? 'Lead Contact' : 'Associated Contact'  }}</span>
-        <span class="pill text-white bg-yellow-400" *ngIf="contact.isUBO">UBO</span>
+        <span class="pill text-white" [ngClass]="pillClass">{{ person.pillLabel == 'lead' ? 'Lead Contact' : 'Associated Contact'  }}</span>
+        <span class="pill text-white bg-yellow-400" *ngIf="person.isUBO">UBO</span>
       </div>
-      <p class="text-lg tracking-normal mt-2 font-medium">{{ contact.name }}</p>
-      <p class="text-md tracking-normal mt-0 font-medium text-gray-500" *ngIf="contact.position">{{ contact.position }}</p>
-      <p class="txt--small text-gray-500 w-full mt-1" *ngIf="contact.address">
+      <p class="text-lg tracking-normal mt-2 font-medium">{{ person.name }}</p>
+      <p class="text-md tracking-normal mt-0 font-medium text-gray-500" *ngIf="person.position">{{ person.position }}</p>
+      <p class="txt--small text-gray-500 w-full mt-1" *ngIf="person.address">
         <svg aria-hidden="true" width="64" height="64" viewBox="0 0 64 64" class="icon icon--s icon--onLeft">
           <path d="M56 24c0 17.5-20.3 38-21.2 38.8C34 63.6 33 64 32 64c-1 0-2-0.4-2.8-1.2C28.3 62 8 41.5 8 24 8 10.8 18.8 0 32 0S56 10.8 56 24zM32 36c6.6 0 12-5.4 12-12 0-6.6-5.4-12-12-12s-12 5.4-12 12C20 30.6 25.4 36 32 36z" />
         </svg>
-        {{ contact.address }}
+        {{ person.address }}
       </p>
     </div>
     <ng-template #menuTrigger>
@@ -31,32 +31,40 @@
   <div class="flex flex-col md:flex-row gap-x-2 gap-y-2 w-100">
     <div class="w-100 md:w-1/2">
       <app-document-info
-        [label]="contact.documents.idDoc.label"
-        [documentType]="contact.documents.idDoc.documentType"
-        [files]="contact.documents.idDoc.files">
+        [label]="person.documents.idDoc.label"
+        [documentType]="person.documents.idDoc.documentType"
+        [files]="person.documents.idDoc.files"
+        (onFileUploaded)="fileUploaded.emit({person: person, ev: $event })"
+        (deleteFile)="fileDeleted.emit({person: person, ev: $event})">
       </app-document-info>
     </div>
     <div class="w-100 md:w-1/2">
       <app-document-info
-        [label]="contact.documents.proofOfAddressDoc.label"
-        [documentType]="contact.documents.proofOfAddressDoc.documentType"
-        [files]="contact.documents.proofOfAddressDoc.files">
+        [label]="person.documents.proofOfAddressDoc.label"
+        [documentType]="person.documents.proofOfAddressDoc.documentType"
+        [files]="person.documents.proofOfAddressDoc.files"
+        (onFileUploaded)="fileUploaded.emit({person: person, ev: $event })"
+        (deleteFile)="fileDeleted.emit({person: person, ev: $event})">
       </app-document-info>
     </div>
   </div>
   <div class="flex flex-col md:flex-row mt-2 gap-x-2 gap-y-2 w-100">
     <div class="w-100 md:w-1/2">
       <app-document-info
-        [label]="contact.documents.reportDocs.label"
-        [documentType]="contact.documents.reportDocs.documentType"
-        [files]="contact.documents.reportDocs.files">
+        [label]="person.documents.reportDocs.label"
+        [documentType]="person.documents.reportDocs.documentType"
+        [files]="person.documents.reportDocs.files"
+        (onFileUploaded)="fileUploaded.emit({person: person, ev: $event })"
+        (deleteFile)="fileDeleted.emit({person: person, ev: $event})">
       </app-document-info>
     </div>
     <div class="w-100 md:w-1/2">
       <app-document-info
-        [label]="contact.documents.additionalDocs.label"
-        [documentType]="contact.documents.additionalDocs.documentType"
-        [files]="contact.documents.additionalDocs.files">
+        [label]="person.documents.additionalDocs.label"
+        [documentType]="person.documents.additionalDocs.documentType"
+        [files]="person.documents.additionalDocs.files"
+        (onFileUploaded)="fileUploaded.emit({person: person, ev: $event })"
+        (deleteFile)="fileDeleted.emit({person: person, ev: $event})">
       </app-document-info>
     </div>
   </div>
@@ -70,15 +78,15 @@
   <form [formGroup]="contactForm">
     <fieldset class="form-control p-2">
       <label for="name">Name: </label>
-      <input id="name" class="px-2" type="text" formControlName="name" [ngModel]="contact.name" />
+      <input id="name" class="px-2" type="text" formControlName="name" [ngModel]="person.name" />
     </fieldset>
     <fieldset class="form-control p-2">
       <label for="position">Position: </label>
-      <input id="name" class="px-2" type="text" formControlName="position" [ngModel]="contact.position" />
+      <input id="name" class="px-2" type="text" formControlName="position" [ngModel]="person.position" />
     </fieldset>
     <fieldset class="form-control p-2">
       <label for="address">Address: </label>
-      <input id="name" class="px-2" type="text" formControlName="address" [ngModel]="contact.address" />
+      <input id="name" class="px-2" type="text" formControlName="address" [ngModel]="person.address" />
     </fieldset>
   </form>
   <div class="flex flex-row -mb-3">
@@ -96,7 +104,7 @@
   [modal]="true" 
   [draggable]="false">
   <div class="p-4">
-    <h1>Delete {{contact.name}} from this [thing]?</h1>
+    <h1>Delete {{person.name}} from this [thing]?</h1>
   </div>
   <div class="flex flex-row mt-4 -mb-1">
     <span class="flex-1"></span>
